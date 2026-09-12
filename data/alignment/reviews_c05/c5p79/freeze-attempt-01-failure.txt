@@ -1,0 +1,13 @@
+Final freeze verification attempt 01 stopped before writing frozen-manifest.json:
+Traceback (most recent call last):
+  File "<stdin>", line 27, in <module>
+AssertionError
+
+Failing check: assert all(str(p.resolve()) in seen for p in inputs)
+It compared every current batch input with the preservation manifest. Root had
+added root-reconciliation-freeze-verification.json after the initial snapshot.
+The only missing file says frozen_files_checked=320, all_pass=true. It was read
+and preserved exactly in the manifest before repeating the freeze. No original
+proposal, final spec/body, source or semantic finding changed. The attempt01
+generator/source-record failure is separately retained with its full script,
+stdout, stderr and exit; this is a later evidence-completeness failure.

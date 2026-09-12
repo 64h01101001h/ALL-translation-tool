@@ -8,15 +8,15 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**190 entries**: **142 document errata** (6 HIGH, 71 MEDIUM, 65 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**192 entries**: **144 document errata** (6 HIGH, 71 MEDIUM, 67 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 102 |
+| Tibetan spelling | 103 |
 | English typo | 26 |
 | Digitisation artefact | 24 |
 | Our banked layer | 9 |
-| English factual error | 7 |
+| English factual error | 8 |
 | Formatting | 7 |
 
 ---
@@ -120,7 +120,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:89` | Neither of the purpose of its ultimate purpose subsumes the other | Neither the purpose nor its ultimate purpose subsumes the other | Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the  | PROBABLE |
 | `C05:92` | dug 'das | dug mdas (dug mda' + instrumental -s) | Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal wi | PROBABLE |
 
-## Low severity &mdash; 65 entries
+## Low severity &mdash; 67 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -180,6 +180,8 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:213` | RAB TU SKYE BO DE DON MED | RAB TU SKYE'O DE DON MED | Independently reopened C05:213 ACIP has RAB TU SKYE BO DE DON MED verbatim. The preceding relative-consciousness subject and immediate commentary RNAM SHES SKYE'O favor the finite verb. C16:790 duplicates all three source text fields, with no established publi | PROBABLE |
 | `C05:218` | How then could there be any sense to saying that there is another basis, a second one, on top of the one mentioned here, where other types of mental s | For human review: the Tibetan closes with an affirmative instruction to apply the two-basis account as appropr | C05:218 contains the exact quoted English question and the ACIP closing DGE MI DGE'I BAG CHAGS LA SOGS PA'I BAG CHAGS GZHAN LA YANG GZHI GNYIS SU 'GYUR BA JI LTAR RIGS PAR SBYAR RO. The affirmative apply-as-appropriate instruction does not license the English  | PROBABLE |
 | `C05:222` | have any affect on anything | have any effect on anything | C05:222 English and its original raw field contain have any affect on anything in a general argument about whether a ceased deed can perform a function. The construction requires a noun denoting causal influence/result; effect supplies that reading. Emotional/ | PROBABLE |
+| `C05:235` | Despite our misunderstanding, could never Disappear, even in conceptions? | Editorial review requested: reconsider whether Despite preserves the causal relation of MI SHES PA LAS KUN BRT | Original ACIP MI SHES PA LAS KUN BRTAGS PAR and wylie mi shes pa las kun brtags par relate conceptual imputation to not-knowing, while Despite our misunderstanding asserts concession. HGM14314 explicitly attests misunderstanding; HGM128 kun brtags pa (glossary | PROBABLE |
+| `C05:237` | THUN MANG BA'I LAS | THUN MONG BA'I LAS (proposed spelling for editorial review; original THUN MANG BA'I LAS retained) | Original C05:237 ACIP THUN MANG BA'I LAS and its faithful Wylie thun mang ba'i las are preserved in the source and physical C05 ASCII file. C16:814 and its physical ASCII file preserve the same three text fields; this establishes no independent publication or  | PROBABLE |
 | `C05:24` | mtshung med | mtshungs med | ACIP source of record reads MTSUNG MED (no final S). The epithet is standardly mtshungs med; the spine has 13 rows with 'mtshungs med' and this is the only row with 'mtshung med'. No parallel witness of this row exists (wylie 'mtshung med lcang skya' occurs on | PROBABLE |
 | `C05:38` | stained or without stain." the first two of the chapters are devoted | stained or without stain." The first two of the chapters are devoted | Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the  | PROBABLE |
 | `C05:68` | mngon ba sde bdun po | mngon pa sde bdun po | ACIP (source of record): 'MNGON BA SDE BDUN PO'. The same row spells the word 'mngon pa'i mdzod' two words later, and the surrounding rows read 'mngon pa'. 'mngon ba' occurs in only 3 of 42,199 rows: C05:68, C16:706 (byte-identical re-ingest of the same file,  | PROBABLE |
@@ -274,7 +276,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 142 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 144 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 24 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 

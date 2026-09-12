@@ -1,0 +1,75 @@
+from pathlib import Path
+import json,sqlite3,subprocess,os,hashlib,shutil,zipfile,re,xml.etree.ElementTree as ET,sys
+BASE=Path(__file__).resolve().parents[2]
+ROOT=BASE.parents[1]; WORK=ROOT/'campaign-worktree'
+OUT=BASE/'reconciled'
+DATA=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP')
+def save(path,obj):
+    path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def sha(b): return hashlib.sha256(b).hexdigest()
+c=sqlite3.connect((WORK/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True); c.row_factory=sqlite3.Row
+paths=[DATA,Path('/Users/adamderickandrade/ACIP Software Developmeent/Gofer Developmetn Files')]+[Path('/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil\'s Development Folder/Mac_OSX')/x for x in ['ACIPHypercontext Tool','LokeshChandraDictionary','CreateLokeshChandraDIctionary','FixLokeshChandra']]+[Path('/Users/adamderickandrade/ACIP Software Developmeent/tibetan-spellchecker'),Path('/Users/adamderickandrade/Tibetan Translation Tool')]
+save(OUT/'235/access-check.json',[{'path':str(p),'readable':os.access(p,os.R_OK)} for p in paths]);assert all(os.access(p,os.R_OK) for p in paths)
+for seq in [235,236,237]:
+    dest=OUT/str(seq); dest.mkdir(parents=True,exist_ok=True)
+    row=dict(c.execute('select * from corpus_segments where course=? and seq=?',('C05',seq)).fetchone());save(dest/'source-original.json',row)
+    snap=next(x for x in json.loads((BASE/'source.json').read_text()) if x['seq']==seq);assert all(row[k]==v for k,v in snap.items())
+    save(dest/'context-original.json',[dict(r) for r in c.execute("select * from corpus_segments where course='C05' and seq between 232 and 241")])
+    for angle in ['tibetan','english']:
+        src=BASE/angle/str(seq); evidence=dest/'proposal-inputs'/angle
+        shutil.copytree(src,evidence,dirs_exist_ok=True)
+        env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+        r=subprocess.run([sys.executable,str(ROOT/'campaign-artifacts/run_generator_readonly.py')],cwd=WORK,env=env,input=(src/'spec.json').read_bytes(),capture_output=True)
+        (evidence/'replayed-body.html').write_bytes(r.stdout);(evidence/'replayed-stderr.txt').write_bytes(r.stderr)
+        save(evidence/'replay-proof.json',{'exit':r.returncode,'stderr_bytes':len(r.stderr),'body_bytes':len(r.stdout),'exact_saved_body':r.stdout==(src/'body.html').read_bytes(),'sha256':sha(r.stdout)})
+        assert r.returncode==0 and not r.stderr and r.stdout==(src/'body.html').read_bytes()
+    ids=set()
+    def visit(x):
+        if isinstance(x,dict):
+            if 'hgm_gloss' in x and 'id' in x:ids.add(x['id'])
+            for v in x.values():visit(v)
+        elif isinstance(x,list):
+            for v in x:visit(v)
+    for p in [*dest.glob('proposal-inputs/*/*glossary*.json'),BASE/'root-lexical-originals.json',BASE/'root-English-proposal-lexical-check.json']:visit(json.loads(p.read_text()))
+    ids.update([25759,25644,11071,20684,128,25333,7479])
+    save(dest/'hgm-originals.json',[dict(c.execute('select * from entries where id=?',(i,)).fetchone()) for i in sorted(ids)])
+    query_files=[BASE/'root-focused-parallel-check.json',BASE/'root-focused-lexical-corpus-queries.json',BASE/'root-collective-variant-query.json',BASE/'english'/str(seq)/'parallel-originals.json']
+    checks=[]
+    for p in query_files:
+        d=json.loads(p.read_text()); qs=d if isinstance(d,list) else d['queries']
+        for q in qs:
+            rows=[dict(r) for r in c.execute(q['query'],q['parameters'])]
+            expected=q.get('measured_count',q.get('row_count'))
+            assert len(rows)==expected and all(r['course']!='C13' for r in rows)
+            checks.append({'source':str(p),'label':q.get('label',q.get('seq')),'query':q['query'],'parameters':q['parameters'],'expected_count':expected,'measured_count':len(rows),'rows':[dict(c.execute('select * from corpus_segments where id=?',(r['id'],)).fetchone()) for r in rows]})
+    save(dest/'query-replays.json',checks)
+    # Full original comparison witnesses, with every field, including raw provenance.
+    save(dest/'material-corpus-originals.json',[dict(r) for r in c.execute("select * from corpus_segments where (course='C16' and seq between 812 and 816) or (course='ILL' and seq between 2675 and 2685) or (course='SVN' and seq in (560,939,1076)) or (course='C04' and seq=127) or (course='C05' and seq=232) order by course,seq")])
+    for p in [WORK/'docs/errata_register.json',WORK/'data/alignment/span_head_allow.json',BASE/'root-review-targets.md',BASE/'reconciliation-brief.md']:
+        shutil.copyfile(p,dest/p.name)
+    for name in ['root-lexical-originals.json','root-English-proposal-lexical-check.json']:
+        shutil.copyfile(BASE/name,dest/name)
+    # Exact original physical bytes, not reserialization of corpus rows.
+    originals=[DATA/'To DO/Formal Courses/ACI Readings In Roman ASCII'/f'{course}ReadingASCII.txt' for course in ['C05','C16']]+[DATA/'Handoff/book_texts/ILL.txt',DATA/'Input/GMR_volumes_2026-08/60 VERSES 11 27 23 (GMR & AN final edit 5 12 25).docx']
+    physical=[]
+    for p in originals:
+        target=dest/'originals'/p.name;target.parent.mkdir(exist_ok=True); b=p.read_bytes();target.write_bytes(b)
+        rec={'original_path':str(p),'copy':str(target),'bytes':len(b),'sha256':sha(b)}
+        if p.suffix=='.docx':
+            with zipfile.ZipFile(p) as z:xml=z.read('word/document.xml')
+            (dest/'originals/SVN-document.xml').write_bytes(xml)
+            paras=[''.join(n.itertext()) for n in []]
+            ns={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+            paras=[''.join(t.text or '' for t in el.findall('.//w:t',ns)) for el in ET.fromstring(xml).findall('.//w:p',ns)]
+            save(dest/'originals/SVN-paragraphs.json',paras)
+            matches=[i for i,t in enumerate(paras) if "MA RIG 'GAGS PAR GYUR" in t or 'Were brought to light' in t]
+            rec['contexts']=[{'paragraph_0based':i,'paragraphs':[{'index':k,'text':paras[k]} for k in range(max(0,i-3),min(len(paras),i+15))]} for i in matches]
+        else:
+            text=b.decode('latin1') if p.name.startswith('C') else b.decode('utf-8')
+            rec['projection']='Latin-1 reversible byte projection; historical encoding not inferred' if p.name.startswith('C') else 'UTF-8'
+            patterns=[r"MA\s+RIG\s+'GAGS\s+PAR\s+GYUR",r"GSAL\s+DU\s+'GRO\s+DGOS",r"THUN\s+M[AO]NG\s+BA'I\s+LAS"]
+            rec['contexts']=[{'pattern':pat,'matches':[{'char_offset':m.start(),'line_1based':text.count('\n',0,m.start())+1,'context':text[max(0,m.start()-350):m.end()+1900]} for m in re.finditer(pat,text)]} for pat in patterns]
+        physical.append(rec)
+    save(dest/'physical-original-proof.json',physical)
+save(OUT/'235/canonical-files.json',[{'path':str(p),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())} for p in [ROOT/'campaign-artifacts/run_generator_readonly.py',WORK/'tools/gen_alignment_page.py',WORK/'tools/build_alignment_layer.py']])
+print('Copied originals; replayed six canonical bodies exactly; all recorded query counts match.')

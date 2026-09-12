@@ -1,0 +1,42 @@
+{
+  "database_uri": "file:/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+  "parameters": [
+    "C05",
+    233,
+    239
+  ],
+  "verified_fields": {
+    "id": {
+      "snapshot": 1617,
+      "original": 1617,
+      "exact": true
+    },
+    "course": {
+      "snapshot": "C05",
+      "original": "C05",
+      "exact": true
+    },
+    "seq": {
+      "snapshot": 235,
+      "original": 235,
+      "exact": true
+    },
+    "acip": {
+      "snapshot": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+      "original": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+      "exact": true
+    },
+    "wylie": {
+      "snapshot": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+      "original": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+      "exact": true
+    },
+    "english": {
+      "snapshot": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in conceptions?",
+      "original": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in conceptions?",
+      "exact": true
+    }
+  },
+  "all_six_exact": true
+}

@@ -1,0 +1,18 @@
+import pathlib,json,subprocess,os,hashlib,sys
+root=pathlib.Path(__file__).resolve().parents[4];base=root/'campaign-artifacts/C05-235-237/tibetan';wt=root/'campaign-worktree'
+sys.path.insert(0,str(wt/'tools'));import gen_alignment_page as G
+for n in (235,236,237):
+ d=base/str(n);spec=json.loads((d/'spec.json').read_text());seg=spec['segments'][0];spans=seg['spans'];src=json.loads((d/'source-original.json').read_text());byid={s['id']:s for s in spans}
+ tib=G.resolve(src['wylie'],spans,'tib',n);eng=G.resolve(src['english'],[byid[x] for x in seg['eng_order']],'eng',n)
+ occurrences=[dict(id=s['id'],tib=s['tib'],eng=s['eng'],tib_range=tib[s['id']],eng_range=eng.get(s['id']),english_context=src['english'][max(0,eng[s['id']][0]-30):eng[s['id']][1]+30]) for s in spans]
+ (d/'resolved-occurrences.json').write_text(json.dumps(occurrences,ensure_ascii=False,indent=2)+'\n')
+ p=subprocess.run(['python3',str(root/'campaign-artifacts/run_generator_readonly.py')],input=(d/'spec.json').read_bytes(),capture_output=True,cwd=wt,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ assert p.returncode==0 and p.stderr==b'',(n,p.stderr)
+ for name,value in [('body.html',p.stdout),('generator.stdout.html',p.stdout),('generator.stderr.txt',p.stderr),('generator.exit.txt',b'0\n'),('attempt-03-spec.json',(d/'spec.json').read_bytes()),('attempt-03-stdout.html',p.stdout),('attempt-03-stderr.txt',p.stderr),('attempt-03-exit.txt',b'0\n')]: (d/name).write_bytes(value)
+ counts={'spans':len(spans),'nulls':sum(s['eng'] is None for s in spans),'d5':sum(s['d']==5 for s in spans),'depths':{str(k):sum(s['d']==k for s in spans) for k in sorted({s['d'] for s in spans})},'errata':len(json.loads((d/'errata.json').read_text())),'body_bytes':len(p.stdout)}
+ proof={'producer':'Codex','angle':'Tibetan-first','course':'C05','seq':n,'counts':counts,'generator_exit':p.returncode,'generator_stderr_bytes':len(p.stderr),'body_equals_stdout':(d/'body.html').read_bytes()==(d/'generator.stdout.html').read_bytes(),'command':['python3',str(root/'campaign-artifacts/run_generator_readonly.py')],'cwd':str(wt),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite':'URI mode=ro enforced by inspected external wrapper; unchanged canonical tool run via runpy','tool_sha256':hashlib.sha256((wt/'tools/gen_alignment_page.py').read_bytes()).hexdigest(),'wrapper_sha256':hashlib.sha256((root/'campaign-artifacts/run_generator_readonly.py').read_bytes()).hexdigest(),'sha256':{f:hashlib.sha256((d/f).read_bytes()).hexdigest() for f in ('spec.json','body.html','errata.json','source-original.json','glossary-originals.json','glossary-span-originals.json','resolved-occurrences.json')}}
+ (d/'proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+ (d/'registry-check.json').write_text(json.dumps({'registry_path':str(wt/'docs/errata_register.json'),'registry_sha256':hashlib.sha256((wt/'docs/errata_register.json').read_bytes()).hexdigest(),'queried_issue_strings':['THUN MANG','thun mang','GSAL MI','Disappear','although they should'],'exact_issue_hits':[],'registered_classes_checked':['E-044 converter escapes','E-071 running-head apparatus','E-076/E-121 footnote fusions','E-107 1500 cap','E-111 row boundary spill','following section heading glue'],'english_length':len(src['english']),'apparatus_in_this_row':'none; verse capitals in 235 are lineation'},indent=2)+'\n')
+ print(n,counts)
+ for x in occurrences:
+  if n==237 and x['id'] in ('w9','w21','w22','w23','w24','w31'):print(x)

@@ -1,0 +1,12 @@
+# C05:236 English-first proposal
+- Codex produced this independent PROVISIONAL proposal; no semantic approval is implied.
+- Full spine row 1618 and context C05:233–239 were read through SQLite URI `mode=ro`; all six snapshot fields match exactly.
+- HGM originals support `ngo bo nyid` → “very essence,” `grub pa` → “existed/exist,” `gnas lugs` → “independent reality,” `'khrul pa` → “mistaken,” `log pa` → “stopped,” and `don` → “meaning.”
+- Corpus queries excluded C13: 1 exact-English parallel outside C05 (C16:813), 22 very-essence hits, and 46 mistaken-state hits; identical fields at C16:813 do not prove publication lineage.
+- Challenge first `de'i tshe` → “If this were so”: it is a contextual depth-3 recast of the temporal connective.
+- Rule 10 omission: `gsal du 'gro dgos kyi`; “although they should have” is elliptical and depends on “disappear,” so no separate non-overlapping exponent was asserted.
+- English order explicitly resolves the fronted `zhes pa'i don no` formula and the predicate/modifier crossings around “existed,” “very essence,” “would exist,” and “independent reality.”
+- Errata: 0; the exact C16 row confirms the published field text, and no unregistered source defect was supported.
+- Final canonical output: `EXIT=0`; stdout/body 2169 bytes; stderr 0 bytes and empty; saved body is byte-identical to stdout.
+- Counts: 9 spans, 0 nulls, 5 d5, 4 d3, 0 d6, 0 d7.
+- SHA-256: spec `7a4de2be7159bd098df3bb7f0192082c17bb5e5a383a1a364e0d372f6bbe9cb8`; body `d7e3d4a60f8671be7686924171f692412c46d0f6047d28ce8b4f65024784d903`; errata `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.

@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. Coverage 234/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. Coverage 237/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -1199,3 +1199,45 @@ spaced form was read and preserved in the retry. Review extraction's failed
 null-marker check and its corrected full replay remain preserved. Rendering
 remains unverified after browser-policy refusal; native/installed-phone execution
 remains verified only through171, locked launch unverified. Main integration open.
+
+
+### c5p79 · C05:235–237 — 2026-09-12 — Codex reconciliation/review
+
+Fresh independent proposals, reconciliation and semantic SPEC/QUALITY APPROVE
+yield67 spans (24/13/30), zero nulls,43 non-null d5 pairs and seven members.
+All original text and PROVISIONAL labels remain; no human editorial acceptance
+or hgm_gloss promotion is implied. Whole Reasoning/Sixty, living-world and
+environment-world units retain defensible members. Repeated minds/karma and
+conditional/cessation predicates have explicit occurrence owners. Nominal
+'khrul pa owns the complete contextual mistaken states of mind, excluding your.
+Supplied pronouns, repeated explanations and disputed relations stay unwrapped.
+
+E-191 retains only a LOW/PROBABLE causal/concessive concern at235; the original
+HIGH broad disappearance correction is rejected. Actual HGM25759 attests
+gsal du 'gro/disappear, defeating categorical clarity-only reasoning. The
+236 concern defaults to refuted under uncertainty and its disputed phrase
+stays unaligned. E-192 retains LOW/PROBABLE THUN MANG/MONG spelling review
+at237 without changing source. Every five-ground check is preserved, with
+full C05/C16/ILL/SVN physical originals and exact counts. Digital sameness
+and filenames prove neither independent publication nor ingestion lineage.
+All190 earlier errata survive; no head allowances are added.
+
+Root corrected four missing apostrophes in reviewer-authored compound-name
+narrative through the original reviewer. Old JSON/report/freeze, exact scoped
+diff and separate SPEC/QUALITY approval survive; all13 accepted inputs and
+all alignment/errata decisions are byte-identical. No new generator run was
+needed for that prose correction. Root verified566 original-copy mappings
+including15 immutable Git snapshots and440 exact copied semantic files.
+All117 proposal decisions,67 final decisions and failed attempts survive.
+
+Coverage237/511. Bank43,886 links (+70 with three anchors),11,877 nulls,
+1,573 notes,11 trees; evidence7,003 heads/15,184 pairs. Main/reverse/course/changes
+CSV rows21,961/21,621/23,419/39, seeded against6232214. Every course-depth group
+matches actual references. A previously empty cis/why depth6 export field gains
+CIS from the new235 d5 source witness; no wording/depth/citation change. All
+previous links/evidence/notes/trees/lexical keys and source/master hashes survive.
+
+All17 targeted suites passed (10.99s). Exact body/range/copy, source-retention,
+export and navigation checks passed. Rendering remains unverified after browser
+policy refusal; native/installed-phone execution remains through171, locked
+launch unverified. Main integration remains open.

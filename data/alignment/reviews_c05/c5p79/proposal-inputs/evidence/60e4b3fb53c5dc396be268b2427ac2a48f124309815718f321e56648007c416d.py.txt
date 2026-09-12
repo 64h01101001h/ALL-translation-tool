@@ -1,0 +1,174 @@
+"""Re-run final specs, record resolved occurrences and hashes, then freeze final files."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+
+BASE = Path(__file__).resolve().parents[1]
+CAMPAIGN_ROOT = BASE.parents[2]
+WORKTREE = CAMPAIGN_ROOT / "campaign-worktree"
+RUNNER = CAMPAIGN_ROOT / "campaign-artifacts" / "run_generator_readonly.py"
+SEQS = (235, 236, 237)
+FINAL_NAMES = (
+    "spec.json",
+    "body.html",
+    "errata.json",
+    "report.md",
+    "generator.stdout.html",
+    "generator.stderr.txt",
+    "generator.exit.txt",
+    "source-original.json",
+    "context-original.json",
+    "snapshot-verification.json",
+    "glossary-originals.json",
+    "parallel-originals.json",
+    "resolved-occurrences.json",
+)
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def resolve(seq_dir: Path, spec: dict, source: dict) -> dict:
+    spans = spec["segments"][0]["spans"]
+    tibetan = source["wylie"]
+    english = source["english"]
+    positions: dict[str, dict] = {span["id"]: {} for span in spans}
+
+    cursor = 0
+    parent_range = None
+    parent_id = None
+    for span in spans:
+        piece = span["tib"]
+        if span["d"] == 7:
+            assert parent_range is not None
+            start = tibetan.find(piece, parent_range[0], parent_range[1])
+            assert start >= 0
+            positions[span["id"]]["tibetan_parent"] = parent_id
+            positions[span["id"]]["tibetan_parent_occurrences"] = tibetan[parent_range[0]:parent_range[1]].count(piece)
+        else:
+            start = tibetan.find(piece, cursor)
+            assert start >= 0
+            cursor = start + len(piece)
+            parent_range = (start, cursor) if span["d"] == 5 else None
+            parent_id = span["id"] if span["d"] == 5 else None
+        positions[span["id"]]["tibetan_start"] = start
+        positions[span["id"]]["tibetan_end"] = start + len(piece)
+        positions[span["id"]]["tibetan_occurrences_in_row"] = tibetan.count(piece)
+
+    by_id = {span["id"]: span for span in spans}
+    english_ranges: dict[str, tuple[int, int]] = {}
+    cursor = 0
+    for span_id in spec["segments"][0]["eng_order"]:
+        span = by_id[span_id]
+        piece = span["eng"]
+        start = english.find(piece, cursor)
+        assert start >= 0
+        cursor = start + len(piece)
+        english_ranges[span_id] = (start, cursor)
+        positions[span_id]["english_start"] = start
+        positions[span_id]["english_end"] = cursor
+        positions[span_id]["english_occurrences_in_row"] = english.count(piece)
+
+    parent_id = None
+    for span in spans:
+        if span["d"] != 7:
+            parent_id = span["id"] if span["d"] == 5 else None
+            continue
+        assert parent_id is not None and parent_id in english_ranges
+        lo, hi = english_ranges[parent_id]
+        piece = span["eng"]
+        start = english.find(piece, lo, hi)
+        assert start >= 0
+        positions[span["id"]]["english_parent"] = parent_id
+        positions[span["id"]]["english_parent_occurrences"] = english[lo:hi].count(piece)
+        positions[span["id"]]["english_start"] = start
+        positions[span["id"]]["english_end"] = start + len(piece)
+        positions[span["id"]]["english_occurrences_in_row"] = english.count(piece)
+
+    result = []
+    for span in spans:
+        item = {key: value for key, value in span.items() if not key.startswith("_")}
+        item.update(positions[span["id"]])
+        result.append(item)
+    return {
+        "seq": source["seq"],
+        "course": source["course"],
+        "method": "Forward-only row offsets following final spec Tibetan order and explicit eng_order; d7 members resolved uniquely inside their d5 parent.",
+        "spans": result,
+    }
+
+
+def main() -> None:
+    env = dict(os.environ)
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    for seq in SEQS:
+        seq_dir = BASE / str(seq)
+        spec_path = seq_dir / "spec.json"
+        prior_body = (seq_dir / "body.html").read_bytes()
+        result = subprocess.run(
+            [sys.executable, str(RUNNER)],
+            cwd=WORKTREE,
+            env=env,
+            input=spec_path.read_bytes(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        assert result.returncode == 0, (seq, result.returncode, result.stderr)
+        assert result.stderr == b"", (seq, result.stderr)
+        assert result.stdout == prior_body, (seq, "final rerun changed body bytes")
+        (seq_dir / "body.html").write_bytes(result.stdout)
+        (seq_dir / "generator.stdout.html").write_bytes(result.stdout)
+        (seq_dir / "generator.stderr.txt").write_bytes(result.stderr)
+        (seq_dir / "generator.exit.txt").write_text("EXIT=0\n", encoding="utf-8")
+
+        spec = json.loads(spec_path.read_text(encoding="utf-8"))
+        source = json.loads((seq_dir / "source-original.json").read_text(encoding="utf-8"))
+        resolved = resolve(seq_dir, spec, source)
+        (seq_dir / "resolved-occurrences.json").write_text(
+            json.dumps(resolved, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+
+        spans = spec["segments"][0]["spans"]
+        proof = {
+            "course": "C05",
+            "seq": seq,
+            "producer": "Codex",
+            "angle": "English-first independent proposal",
+            "status": "PROVISIONAL machine alignment; no semantic approval implied",
+            "future_baseline_captured": False,
+            "sqlite_uri_mode": "ro",
+            "python_bytecode_disabled": True,
+            "canonical_exit": result.returncode,
+            "canonical_stdout_bytes": len(result.stdout),
+            "canonical_stderr_bytes": len(result.stderr),
+            "body_stdout_byte_identical": (seq_dir / "body.html").read_bytes() == (seq_dir / "generator.stdout.html").read_bytes(),
+            "counts": {
+                "spans": len(spans),
+                "nulls": sum(span.get("eng") is None for span in spans),
+                "d3": sum(span["d"] == 3 for span in spans),
+                "d5": sum(span["d"] == 5 for span in spans),
+                "d6": sum(span["d"] == 6 for span in spans),
+                "d7": sum(span["d"] == 7 for span in spans),
+                "errata": len(json.loads((seq_dir / "errata.json").read_text(encoding="utf-8"))),
+            },
+            "sha256": {name: sha256(seq_dir / name) for name in FINAL_NAMES},
+            "frozen_files": list(FINAL_NAMES) + ["proof.json"],
+        }
+        proof_path = seq_dir / "proof.json"
+        proof_path.write_text(json.dumps(proof, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        for name in proof["frozen_files"]:
+            (seq_dir / name).chmod(0o444)
+        print(f"{seq}: EXIT=0 spans={len(spans)} bytes={len(result.stdout)} proof={sha256(proof_path)}")
+
+
+if __name__ == "__main__":
+    main()

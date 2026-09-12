@@ -1,0 +1,152 @@
+"""Collect read-only spine evidence for the independent English-first proposals."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+import sqlite3
+
+
+DB_URI = "file:/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro"
+BASE = Path(__file__).resolve().parents[1]
+SNAPSHOT = BASE.parent / "source.json"
+SEQS = (235, 236, 237)
+
+TERMS = {
+    235: [
+        "rigs pa drug cu pa", "rigs pa", "drug cu", "'jig rten", "ma rig",
+        "rkyen can", "rdzogs pa'i sangs rgyas", "sangs rgyas", "gsung",
+        "rnam rtog", "mi 'thad", "mi shes pa", "kun brtags pa", "gsal",
+    ],
+    236: [
+        "rang gi ngo bo nyid", "ngo bo nyid", "grub pa", "gnas lugs",
+        "'khrul pa", "log pa", "ldog pa", "don",
+    ],
+    237: [
+        "sems", "gtso bo", "bstan pa", "bshad pa", "sems can", "rang gi sems",
+        "bsags pa", "las", "nyon mongs", "bdag gi dngos po", "dngos po",
+        "rnyed pa", "snod kyi 'jig rten", "shin tu", "sna tshogs pa", "de dag",
+        "kho na", "sems nyid", "thun mang ba'i las", "thun mang ba", "'god pa",
+        "skyed pa", "rlung gi dkyil 'khor", "dkyil 'khor", "'og min", "snod",
+        "mthar thug pa",
+    ],
+}
+
+CORPUS_QUERIES = {
+    235: [
+        ("exact English parallel outside C05", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND course <> ? AND english = ? ORDER BY course,seq", ["C13", "C05", None]),
+        ("Sixty Verses title", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND english LIKE ? ORDER BY course,seq", ["C13", "%Sixty Verses on Reasoning%"]),
+        ("ignorance and conceptions", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq", ["C13", "%ma rig%", "%conception%"]),
+        ("verse opening", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq", ["C13", "%jig rten ma rig rkyen can%"]),
+        ("verse close", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq", ["C13", "%gsal mi %gyur%"]),
+    ],
+    236: [
+        ("exact English parallel outside C05", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND course <> ? AND english = ? ORDER BY course,seq", ["C13", "C05", None]),
+        ("very essence", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq", ["C13", "%ngo bo nyid%", "%very essence%"]),
+        ("mistaken states", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq", ["C13", "%khrul pa%", "%mistaken%"]),
+    ],
+    237: [
+        ("exact English parallel outside C05", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND course <> ? AND english = ? ORDER BY course,seq", ["C13", "C05", None]),
+        ("collective karma", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq", ["C13", "%thun mang%las%", "%collective karma%"]),
+        ("disc of wind", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq", ["C13", "%rlung gi dkyil 'khor%", "%disc of wind%"]),
+        ("Below No Other", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq", ["C13", "% 'og min %", "%Below No Other%"]),
+        ("world finds its being", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq", ["C13", "%bdag gi dngos po rnyed pa%"]),
+        ("same beings only", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq", ["C13", "%sems can de dag kho na%"]),
+        ("put and produced", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq", ["C13", "%kyis %god pa ste skyed%"]),
+        ("container limit", "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq", ["C13", "%snod kyi mthar thug%"]),
+    ],
+}
+
+
+def write_json(path: Path, value: object) -> None:
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def rows_as_dicts(cursor: sqlite3.Cursor, rows: list[tuple]) -> list[dict]:
+    columns = [item[0] for item in cursor.description]
+    return [dict(zip(columns, row)) for row in rows]
+
+
+def main() -> None:
+    snapshot_rows = {row["seq"]: row for row in json.loads(SNAPSHOT.read_text(encoding="utf-8"))}
+    connection = sqlite3.connect(DB_URI, uri=True)
+    connection.execute("PRAGMA query_only=ON")
+
+    cursor = connection.execute(
+        "SELECT id,course,seq,acip,wylie,english FROM corpus_segments "
+        "WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+        ("C05", 233, 239),
+    )
+    context_rows = rows_as_dicts(cursor, cursor.fetchall())
+    by_seq = {row["seq"]: row for row in context_rows}
+
+    for seq in SEQS:
+        out = BASE / str(seq)
+        source_row = by_seq[seq]
+        write_json(out / "source-original.json", source_row)
+        write_json(out / "context-original.json", context_rows)
+
+        comparisons = {}
+        for field in ("id", "course", "seq", "acip", "wylie", "english"):
+            comparisons[field] = {
+                "snapshot": snapshot_rows[seq][field],
+                "original": source_row[field],
+                "exact": snapshot_rows[seq][field] == source_row[field],
+            }
+        write_json(
+            out / "snapshot-verification.json",
+            {
+                "database_uri": DB_URI,
+                "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+                "parameters": ["C05", 233, 239],
+                "verified_fields": comparisons,
+                "all_six_exact": all(value["exact"] for value in comparisons.values()),
+            },
+        )
+
+        placeholders = ",".join("?" for _ in TERMS[seq])
+        lexical_sql = (
+            "SELECT id,wylie,tibetan,tibetan_source,acip,pronunciation,pronunciation_source,"
+            "sanskrit,hopkins_english,hgm_gloss,tier,hgm_source,status,tenses,flags,"
+            "corpus_courses,corpus_n_segments,raw FROM entries WHERE wylie IN ("
+            + placeholders
+            + ") ORDER BY wylie,id"
+        )
+        cursor = connection.execute(lexical_sql, TERMS[seq])
+        lexical_rows = rows_as_dicts(cursor, cursor.fetchall())
+        write_json(
+            out / "glossary-originals.json",
+            {
+                "database_uri": DB_URI,
+                "query": lexical_sql,
+                "parameters": TERMS[seq],
+                "requested_term_count": len(TERMS[seq]),
+                "row_count": len(lexical_rows),
+                "rows": lexical_rows,
+            },
+        )
+
+        corpus_evidence = []
+        for label, sql, base_params in CORPUS_QUERIES[seq]:
+            params = list(base_params)
+            if label == "exact English parallel outside C05":
+                params[-1] = source_row["english"]
+            cursor = connection.execute(sql, params)
+            rows = rows_as_dicts(cursor, cursor.fetchall())
+            corpus_evidence.append(
+                {"label": label, "query": sql, "parameters": params, "row_count": len(rows), "rows": rows}
+            )
+        write_json(
+            out / "parallel-originals.json",
+            {
+                "database_uri": DB_URI,
+                "standing_exclusion": "Every semantic corpus query excludes C13.",
+                "queries": corpus_evidence,
+            },
+        )
+
+    connection.close()
+
+
+if __name__ == "__main__":
+    main()

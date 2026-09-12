@@ -1,0 +1,140 @@
+from pathlib import Path
+import os, sys, json, hashlib, subprocess, importlib.util, sqlite3, re, zipfile
+import xml.etree.ElementTree as ET
+R=Path(__file__).resolve().parent
+B=R.parent
+W=B.parent.parent/'campaign-worktree'
+os.environ['PYTHONDONTWRITEBYTECODE']='1'
+def dump(name,x):
+ p=R/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def module(path,name):
+ s=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+helper=module(B.parent/'copy_evidence_once.py','dedup')
+manifest=[]
+def copy(p,rel,pin=None):
+ raw=p.read_bytes();out=R/rel;out.parent.mkdir(parents=True,exist_ok=True)
+ if out.exists():assert out.read_bytes()==raw
+ else:out.write_bytes(raw)
+ record=dict(original=str(p.resolve()),copy=rel,sha256=sha(raw),bytes=len(raw))
+ if pin:record.update(pin)
+ manifest.append(record)
+def git(*args):return subprocess.check_output(['git','-C',str(W),*args])
+head=git('rev-parse','HEAD').decode().strip()
+governing={'errata_register.json':'docs/errata_register.json','span_head_allow.json':'data/alignment/span_head_allow.json'}
+pin_cache={}
+def historical_pin(p,path):
+ raw=p.read_bytes();key=(path,sha(raw))
+ if key not in pin_cache:
+  commits=[head]+git('log','--format=%H','--',path).decode().splitlines()
+  for commit in commits:
+   if git('show',commit+':'+path)==raw:
+    pin_cache[key]=dict(original_git_commit=commit,repository_relative_path=path);break
+  else:raise AssertionError(('No git object for governing snapshot',str(p)))
+ return pin_cache[key]
+inputs=[p for p in B.rglob('*') if p.is_file() and not p.is_relative_to(R) and '__pycache__' not in p.parts]
+evidence=[]
+core_names={'spec.json','body.html','report.md','errata.json','proposal-decisions.json','final-span-decisions.json','errata-five-ground-verdicts.json','decision-occurrence-correction.md','frozen-manifest.json'}
+for p in inputs:
+ rel=p.relative_to(B)
+ pin=historical_pin(p,governing[p.name]) if p.name in governing else None
+ if rel.parts[0]=='reconciled' and len(rel.parts)==3:
+  dest='reviewed-final/'+str(Path(*rel.parts[1:]))
+ elif p.name in core_names or 'attempt' in str(rel) or pin:
+  dest='proposal-inputs/'+str(rel)
+ else:evidence.append(p);continue
+ if p.suffix not in {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}:dest+= '.txt' if p.suffix in {'.py','.xml','.sql','.sh'} else '.bin'
+ copy(p,dest,pin)
+for path in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/errata_register.json','data/alignment/span_head_allow.json','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ p=W/path;dest='governing/'+path+('.txt' if p.suffix=='.py' else '')
+ copy(p,dest,historical_pin(p,path))
+evidence += [B.parent/n for n in ['semantic-review-protocol.md','proposal-protocol.md','copy_evidence_once.py','copy-evidence-once-verification.json','run_generator_readonly.py']]
+evidence += list((B.parent/'policy-history').glob('*'))
+physical=json.loads((B/'reconciled/237/physical-original-proof.json').read_text())
+evidence += [Path(x['original_path']) for x in physical]
+dump('original-to-copy-manifest.json',manifest)
+print(helper.preserve(R,R/'original-to-copy-manifest.json',evidence))
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro');db.row_factory=sqlite3.Row
+source=[dict(x) for x in db.execute("SELECT * FROM corpus_segments WHERE course='C05' AND seq BETWEEN 232 AND 241 ORDER BY seq")]
+dump('independent-source-context.json',source)
+sources={x['seq']:x for x in source}
+for x in json.loads((B/'source.json').read_text()):
+ assert all(sources[x['seq']][k]==v for k,v in x.items())
+G=module(W/'tools/gen_alignment_page.py','canonical')
+resolved=[];proof=[]
+for seq in [235,236,237]:
+ sdir=B/'reconciled'/str(seq);sp=(sdir/'spec.json').read_bytes();spec=json.loads(sp);seg=spec['segments'][0];src=sources[seq]
+ tr=G.resolve(src['wylie'],seg['spans'],'tib',seq);by={s['id']:s for s in seg['spans']}
+ es=G.with_members(seg['spans'],[by[i] for i in seg['eng_order']],src['english']);er=G.resolve(src['english'],es,'eng',seq)
+ rows=[dict(seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(tr[s['id']]),eng_range=list(er[s['id']]) if s['eng'] is not None else None) for s in seg['spans']]
+ for row,old in zip(rows,json.loads((sdir/'final-span-decisions.json').read_text())):
+  assert all(row[k]==old[k] for k in ['id','d','tib','eng','tib_range','eng_range'])
+ resolved+=rows
+ p=subprocess.run([sys.executable,str(B.parent/'run_generator_readonly.py')],input=sp,capture_output=True,cwd=W,env=os.environ)
+ (R/'generator-replay').mkdir(exist_ok=True)
+ (R/f'generator-replay/{seq}.html').write_bytes(p.stdout);(R/f'generator-replay/{seq}.stderr').write_bytes(p.stderr);(R/f'generator-replay/{seq}.exit').write_text(str(p.returncode)+'\n')
+ assert p.returncode==0 and p.stderr==b'' and p.stdout==(sdir/'body.html').read_bytes()
+ proof.append(dict(seq=seq,span_count=len(rows),null_count=sum(s['eng'] is None for s in rows),word_pair_count=sum(s['d']==5 and s['eng'] is not None for s in rows),spec_sha256=sha(sp),spec_bytes=len(sp),body_sha256=sha(p.stdout),body_bytes=len(p.stdout),generator_exit=p.returncode,exact_complete_body=True))
+dump('resolved-spans.json',resolved);dump('generator-proof.json',proof)
+# Verify every embedded corpus/dictionary original in all immutable batch JSON inputs.
+checks=[];seen=set();queries=[];query_seen=set()
+def walk(x,file):
+ if isinstance(x,list):
+  for v in x:walk(v,file)
+ elif isinstance(x,dict):
+  if isinstance(x.get('id'),int) and isinstance(x.get('wylie'),str) and ('english' in x and 'course' in x and 'seq' in x or 'hgm_gloss' in x):
+   table='corpus_segments' if 'seq' in x and 'english' in x else 'entries';key=(table,x['id'],sha(json.dumps(x,sort_keys=True).encode()))
+   if key not in seen:
+    actual=dict(db.execute(f'SELECT * FROM {table} WHERE id=?',(x['id'],)).fetchone())
+    fields=[k for k in x if k in actual]
+    assert all(actual[k]==x[k] for k in fields),(file,table,x['id'],[k for k in fields if actual[k]!=x[k]])
+    checks.append(dict(file=str(file.relative_to(B)),table=table,id=x['id'],fields=fields,exact=True));seen.add(key)
+  if 'query' in x and isinstance(x['query'],str) and x['query'].lstrip().lower().startswith('select'):
+   params=x.get('parameters',x.get('params',[]));key=(x['query'],json.dumps(params))
+   if '?' not in x['query'] or params:
+    if key not in query_seen:
+     actual=[dict(r) for r in db.execute(x['query'],params)]
+     expect=x.get('expected_count',x.get('measured_count',x.get('count')))
+     if isinstance(expect,int):assert len(actual)==expect,(file,x.get('label'),len(actual),expect)
+     queries.append(dict(file=str(file.relative_to(B)),label=x.get('label',x.get('seq')),query=x['query'],parameters=params,measured_count=len(actual),expected_count=expect,rows=actual));query_seen.add(key)
+  for v in x.values():walk(v,file)
+for p in inputs:
+ if p.suffix=='.json':walk(json.loads(p.read_text()),p)
+dump('original-field-verification.json',checks);dump('independent-query-replays.json',queries)
+print('original records',len(checks),'queries',len(queries))
+# Physical source bytes and every saved material context: originals reopened independently.
+physical_checks=[]
+for x in physical:
+ p=Path(x['original_path']);raw=p.read_bytes();assert len(raw)==x['bytes'] and sha(raw)==x['sha256']
+ physical_checks.append(dict(original=str(p),sha256=sha(raw),bytes=len(raw),exact=True))
+ill=next(Path(x['original_path']) for x in physical if Path(x['original_path']).name=='ILL.txt')
+docx=next(Path(x['original_path']) for x in physical if Path(x['original_path']).suffix=='.docx')
+lines=ill.read_text().splitlines()
+with zipfile.ZipFile(docx) as z:xml=z.read('word/document.xml')
+ns={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+paras=[''.join(p.itertext()) for p in []] # actual text nodes only, as in Word display
+paras=[''.join(t.text or '' for t in p.findall('.//w:t',ns)) for p in ET.fromstring(xml).findall('.//w:p',ns)]
+contexts=json.loads((B/'reconciled/237/physical-contexts-complete.json').read_text())
+for group in contexts:
+ for c in group['contexts']:
+  if 'text' in c:
+   actual='\n'.join(lines[c['start_line_1based']-1:c['end_line_1based']]);assert actual==c['text'];physical_checks.append(dict(lines=[c['start_line_1based'],c['end_line_1based']],exact=True))
+  else:
+   for p in c['paragraphs']:assert paras[p['index']]==p['text'];physical_checks.append(dict(paragraph=p['index'],exact=True))
+dump('independent-physical-verification.json',physical_checks)
+dump('independent-physical-contexts.json',contexts)
+# Reopen original raw course bytes and compare every bounded historical projection.
+for x in json.loads((B/'root-raw-originals/source-context-proof.json').read_text()):
+ raw=Path(x['original_path']).read_bytes()
+ for c in x['contexts']:
+  matches=list(re.finditer(c['pattern'],raw.decode('latin1')));assert len(matches)==c['measured_count']
+  for m in c['matches']:
+   a,b=m['context_byte_range'];assert raw[a:b].decode('latin1')==m['original_context_latin1_projection']
+dump('source-byte-context-verification.json',{'course_contexts_exact':True})
+manifest=json.loads((R/'original-to-copy-manifest.json').read_text())
+for r in manifest:
+ raw=(R/r['copy']).read_bytes();assert len(raw)==r['bytes'] and sha(raw)==r['sha256']
+ if 'original_git_commit' in r:assert raw==git('show',r['original_git_commit']+':'+r['repository_relative_path'])
+ else:assert raw==Path(r['original']).read_bytes()
+dump('copy-verification.json',dict(originals=len(manifest),distinct_copies=len({x['copy'] for x in manifest}),all_byte_equal=True,git_pinned_snapshots=sum('original_git_commit' in r for r in manifest)))
+print(json.dumps(proof));print('All source, generator, query, physical and copy checks passed.')

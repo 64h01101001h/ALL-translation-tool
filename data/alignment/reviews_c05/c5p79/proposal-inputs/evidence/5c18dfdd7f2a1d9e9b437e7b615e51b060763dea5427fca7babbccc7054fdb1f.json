@@ -1,0 +1,438 @@
+{
+  "database_uri": "file:/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "standing_exclusion": "Every semantic corpus query excludes C13.",
+  "queries": [
+    {
+      "label": "exact English parallel outside C05",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND course <> ? AND english = ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "C05",
+        "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in conceptions?"
+      ],
+      "row_count": 0,
+      "rows": []
+    },
+    {
+      "label": "Sixty Verses title",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%Sixty Verses on Reasoning%"
+      ],
+      "row_count": 28,
+      "rows": [
+        {
+          "id": 1612,
+          "course": "C05",
+          "seq": 230,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing",
+          "english": "The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our conception."
+        },
+        {
+          "id": 1617,
+          "course": "C05",
+          "seq": 235,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+          "english": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in conceptions?"
+        },
+        {
+          "id": 3003,
+          "course": "C10",
+          "seq": 29,
+          "acip": "DANG POR 'PHAGS PA'I BDEN PA BZHI LA LEN GSUM DU BZLAS SHING RNAM PA BCU GNYIS SU BSKOR BAR MDZAD DO, , NYAN THOS KYI RIGS CAN RGYUD SMIN PA KHA CIG LA NI BDEN PA BZHI BSTAN PA TZAM GYIS KYANG , RTEN 'BYUNG SPROS PA'I MTHA' DANG BRAL BA KHONG DU CHUD PAR 'GYUR LA, MGON PO KLU SGRUB KYI BSTAN BCOS DANG , RIGS PA DRUG CU PA'I 'GREL PA SLOB DPON ZLA BA GRAGS PAS BKRAL PA LTAR, THEG PA DMAN PA'I SDE SNOD RNAMS LAS DNGOS SU YANG BDAG MED PHRA MO LAN DU MAR GSUNGS SO, , DE NAS MDO RGYAS 'BRING BSDUS GSUM SOGS GANG ZAG DANG CHOS LA BDAG MED RGYAS PAR STON PA'I CHOS KYI 'KHOR LO GNYIS PA BSKOR BAR MDZAD DO, , DE NAS THABS KYI CHA RGYA CHEN PO DANG BCAS PA'I PHYIR MI LDOG PA'I 'KHOR LO'I GTAM CHOS KYI 'KHOR LO GSUM PA BSKOR BAR MDZAD DO,",
+          "wylie": "dang por 'phags pa'i bden pa bzhi la len gsum du bzlas shing rnam pa bcu gnyis su bskor bar mdzad do, , nyan thos kyi rigs can rgyud smin pa kha cig la ni bden pa bzhi bstan pa tsam gyis kyang , rten 'byung spros pa'i mtha' dang bral ba khong du chud par 'gyur la, mgon po klu sgrub kyi bstan bcos dang , rigs pa drug cu pa'i 'grel pa slob dpon zla ba grags pas bkral pa ltar, theg pa dman pa'i sde snod rnams las dngos su yang bdag med phra mo lan du mar gsungs so, , de nas mdo rgyas 'bring bsdus gsum sogs gang zag dang chos la bdag med rgyas par ston pa'i chos kyi 'khor lo gnyis pa bskor bar mdzad do, , de nas thabs kyi cha rgya chen po dang bcas pa'i phyir mi ldog pa'i 'khor lo'i gtam chos kyi 'khor lo gsum pa bskor bar mdzad do",
+          "english": "The Buddha first turned the wheel by teaching the Four Truths of Realization three times through in twelve different aspects. From this teaching on the Four Truths alone, some disciples who belonged to the class of Listeners and whose minds were ripe grasped the meaning of dependent origination, free from the extreme of thinking of things as self-existent. It has been explained by the savior Nagarjuna in his treatises, and by Master Chandrakirti in his work on the Commentary on the Sixty Verses on Reasoning, that the scriptures of the Lower Way even describe explicitly the most subtle form of selflessness on many occasions. The second time the Buddha turned the wheel he taught in great detail about the selflessness of both the person and phenomena as is found in the brief, medium-length and extensive sutras on the Perfection of Wisdom, as well as in other works. The third time he turned the wheel he gave the teaching of the Cycle of No Return which deals extensively with the subject of method."
+        },
+        {
+          "id": 6825,
+          "course": "C16",
+          "seq": 807,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing",
+          "english": "The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only projections. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our projections."
+        },
+        {
+          "id": 6830,
+          "course": "C16",
+          "seq": 812,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+          "english": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only projections. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in projections?"
+        },
+        {
+          "id": 27744,
+          "course": "ILL",
+          "seq": 425,
+          "acip": "'DI NI RIGS PA DRUG CU PA LAS, ,GNAS DANG BCAS PA'I SEMS LDAN LA, ,NYON MONGS DUG CHEN CIS MI 'BYUNG, ,ZHES GSUNGS PA'I DON NO,,",
+          "wylie": "'di ni rigs pa drug cu pa las, ,gnas dang bcas pa'i sems ldan la, ,nyon mongs dug chen cis mi 'byung, ,zhes gsungs pa'i don no",
+          "english": "This is also the point being made in The Sixty Verses on Reasoning where it says, Why wouldn't the great venom Of the negative emotions Rise within a person Who possesses a state of mind With an opportunity?"
+        },
+        {
+          "id": 27815,
+          "course": "ILL",
+          "seq": 496,
+          "acip": "RIGS PA DRUG CU PA'I 'GREL PAR DRANGS PA'I THEG DMAN GYI MDO LAS, GANG SDUG BSNGAL 'DI MA LUS PAR SPANGS PA, NGES PAR SPANGS PA, BYANG BAR GYUR PA, ZAD PA 'DOD CHAGS DANG BRAL BA, 'GOG PA, NYE BAR ZHI BA, NUB PA, SDUG BSNGAL GZHAN GYI MTSAMS MI SBYOR ZHING, MI 'BYUNG MI SKYE BA 'DI NI ZHI BA, 'DI NI GYA NOM PA STE,",
+          "wylie": "rigs pa drug cu pa'i 'grel par drangs pa'i theg dman gyi mdo las, gang sdug bsngal 'di ma lus par spangs pa, nges par spangs pa, byang bar gyur pa, zad pa 'dod chags dang bral ba, 'gog pa, nye bar zhi ba, nub pa, sdug bsngal gzhan gyi mtshams mi sbyor zhing, mi 'byung mi skye ba 'di ni zhi ba, 'di ni gya nom pa ste",
+          "english": "We see the following sutra of the lower way quoted in A Commentary to the “Sixty Verses on Reasoning”: Anytime someone is able to eliminate every bit of this suffering; to rid themselves of it forever; to clean it away; to reach the end, free of all desire; to finish it; to put it to a final rest; to see it melt away; never to cross over into more of this suffering; never to see it come again, never to see it rise again—this then is peace, this then is beauty."
+        },
+        {
+          "id": 27824,
+          "course": "ILL",
+          "seq": 505,
+          "acip": "CES GSUNGS PA 'DIS KYANG THEG DMAN GYI MDO LAS MTHA' GNYIS BKAG PA GSUNGS PAR STON TE, MDO 'DI NI LUNG PHRAN TSEGS NA SNANG NGO, ,DE DAG KYANG MTSON PA TZAM YIN GYI, RIN CHEN PHRENG BA NA 'DIR MA DRANGS PA DU MA ZHIG DANG, RIGS PA DRUG CU PA DANG, BSTOD PA'I TSOGS LAS KYANG DU MA ZHIG GSUNGS SO,,",
+          "wylie": "ces gsungs pa 'dis kyang theg dman gyi mdo las mtha' gnyis bkag pa gsungs par ston te, mdo 'di ni lung phran tshegs na snang ngo, ,de dag kyang mtshon pa tsam yin gyi, rin chen phreng ba na 'dir ma drangs pa du ma zhig dang, rigs pa drug cu pa dang, bstod pa'i tshogs las kyang du ma zhig gsungs so",
+          "english": "These lines are also expressing how sutras of the lower way state that both extremes should be denied—and this particular sutra citation appears in The Assorted Topics of the Word. These are all just representative examples; there are many other supporting citations from the String of Precious Jewels that we have not quoted here—as well as many others from the Sixty Verses on Reasoning, and the Collection of Praises. Refuting arguments covered in the autocommentary"
+        },
+        {
+          "id": 28215,
+          "course": "ILL",
+          "seq": 896,
+          "acip": "RIGS PA DRUG CU PA'I 'GREL PA LAS KYANG, MYANG 'DAS DON DAM BDEN PA DANG, BDEN PA GZHAN GSUM KUN RDZOB BDEN PAR GSUNGS TE MYANG 'DAS NI 'GOG BDEN NO,,",
+          "wylie": "rigs pa drug cu pa'i 'grel pa las kyang, myang 'das don dam bden pa dang, bden pa gzhan gsum kun rdzob bden par gsungs te myang 'das ni 'gog bden no",
+          "english": "The commentary to the Sixty Verses on Reasoning states as well that nirvana is ultimate reality, while the other three truths are deceptive reality; and nirvana consists of the truth of the end of pain."
+        },
+        {
+          "id": 28425,
+          "course": "ILL",
+          "seq": 1106,
+          "acip": "RIGS PA DRUG CU PA LAS KYANG, ,'JIG RTEN MA RIG RKYEN CAN DU, ,GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, ,DE YI PHYIR NA 'JIG RTEN 'DI, ,RNAM RTOG YIN ZHES CIS MI 'THAD,",
+          "wylie": "rigs pa drug cu pa las kyang, ,'jig rten ma rig rkyen can du, ,gang phyir rdzogs pa'i sangs rgyas gsungs, ,de yi phyir na 'jig rten 'di, ,rnam rtog yin zhes cis mi 'thad",
+          "english": "The Sixty Verses on Reasoning say as well: The totally enlightened Buddha Himself has stated that this world Was born from misunderstanding. Why then would it be An overstatement to say That the world is just Our imagination?"
+        },
+        {
+          "id": 29231,
+          "course": "ILL",
+          "seq": 1912,
+          "acip": "RIGS PA DRUG CU PA LAS KYANG, ,RGYU ZAD NYID LAS ZHI BA NI, ,ZAD CES BYA BAR DMIGS PA STE,",
+          "wylie": "rigs pa drug cu pa las kyang, ,rgyu zad nyid las zhi ba ni, ,zad ces bya bar dmigs pa ste",
+          "english": "The Sixty Verses on Reasoning says, as well, We observe what we call The wearing out, Or coming to a rest, From the simple wearing out Of the cause."
+        },
+        {
+          "id": 29994,
+          "course": "ILL",
+          "seq": 2675,
+          "acip": "RIGS PA DRUG CU PA LAS KYANG, ,'JIG RTEN MA RIG RKYEN CAN DU, ,GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG, ,DE YI PHYIR NA 'JIG RTEN 'DI, ,RNAM RTOG YIN ZHES CIS MI 'THAD,",
+          "wylie": "rigs pa drug cu pa las kyang, ,'jig rten ma rig rkyen can du, ,gang phyir rdzogs pa'i sangs rgyas gsung, ,de yi phyir na 'jig rten 'di, ,rnam rtog yin zhes cis mi 'thad",
+          "english": "The Sixty Verses on Reasoning also says it like this— The total Buddhas stated That the world is rooted In misunderstanding. Why then would it ever be Incorrect to say That this entire world Is our imagination?"
+        },
+        {
+          "id": 34022,
+          "course": "SOS",
+          "seq": 168,
+          "acip": "KLU SGRUB KYIS KYANG RIGS PA DRUG CU PA LAS, ,BRTEN NAS SKYES PAR MA SKYES PAR, ,DE NYID MKHYEN PA MCHOG GIS GSUNGS, ,ZHES DANG,",
+          "wylie": "klu sgrub kyis kyang rigs pa drug cu pa las, ,brten nas skyes par ma skyes par, ,de nyid mkhyen pa mchog gis gsungs, ,zhes dang",
+          "english": "Arya Nagarjuna has also stated, in his Sixty Verses on Reasoning: Things that start In dependence Never start— This is the very thing That the One with Highest Knowledge Has spoken."
+        },
+        {
+          "id": 36461,
+          "course": "SVN",
+          "seq": 1,
+          "acip": ",RIGS PA DRUG CU PA'I t'IKKA BZHUGS SO,",
+          "wylie": "rigs pa drug cu pa'i TIkka bzhugs so",
+          "english": "Herein lies A Commentary to the \"Sixty Verses on Reasoning.\" An offering of praise, and a promise"
+        },
+        {
+          "id": 36465,
+          "course": "SVN",
+          "seq": 5,
+          "acip": ",DE YI DGONGS DON MA NOR GSAL BAR STON, ,BLA MA MCHOG LA GUS PAS BTUD BYAS TE, ,RIGS PA'I DBANG PHYUG GANG GIS MDZAD PA YI, ,RIGS PA DRUG CU PA NI RNAM PAR DBYE,",
+          "wylie": "de yi dgongs don ma nor gsal bar ston, ,bla ma mchog la gus pas btud byas te, ,rigs pa'i dbang phyug gang gis mdzad pa yi, ,rigs pa drug cu pa ni rnam par dbye",
+          "english": "With reverence I bow to my Lama supreme- To the teacher who made clear, Without any error at all, That master's true intent. And so now I unravel for you The Sixty Verses on Reasoning, Composed by the Lord of Reasoning."
+        },
+        {
+          "id": 36466,
+          "course": "SVN",
+          "seq": 6,
+          "acip": ",DE LA 'DIR BDAG NYID CHEN PO 'PHAGS PA KLU SGRUB KYIS MDZAD PA'I RIGS PA DRUG CU PA NI GANG BSHAD PAR BYA BA'I CHOS SO,,",
+          "wylie": "de la 'dir bdag nyid chen po 'phags pa klu sgrub kyis mdzad pa'i rigs pa drug cu pa ni gang bshad par bya ba'i chos so",
+          "english": "The work that I will be commenting upon in this text is the Sixty Verses on Reasoning, composed by that great being, the Realized One, Nagarjuna."
+        },
+        {
+          "id": 37179,
+          "course": "SVN",
+          "seq": 719,
+          "acip": "MTHA' GNYIS SEL BA'I RIGS PA DRUG CU PA 'DI BRTZAMS PA LAS BYUNG BA'I SGO GSUM GYI DGE BA'I RTZA BA 'DI YIS RGYU BYAS NAS, THOB PAR SHOG CIG GO",
+          "wylie": "mtha' gnyis sel ba'i rigs pa drug cu pa 'di brtsams pa las byung ba'i sgo gsum gyi dge ba'i rtsa ba 'di yis rgyu byas nas, thob par shog cig go",
+          "english": "And so a great goodness, karma of considerable power, has been accomplished here in the actions, words, and thoughts of the author, as he composed the Sixty Verses on Reasoning-which help us to clear away both extremes. And at this point, the author is dedicating this karma, that it might serve as a cause: \"May they, by what I have just done, gain…\""
+        },
+        {
+          "id": 37214,
+          "course": "SVN",
+          "seq": 754,
+          "acip": "*,RIGS PA DRUG CU PA'I ZIN BRIS RJE'I GSUNG BZHIN RGYAL TSAB CHOS RJES BKOD PA BZHUGS SO,,",
+          "wylie": "*,rigs pa drug cu pa'i zin bris rje'i gsung bzhin rgyal tshab chos rjes bkod pa bzhugs so",
+          "english": "Herein contained are notes taken by the Dharma Lord, Gyaltsab Je, upon the occasion of a teaching granted by Lord Tsongkapa on the Sixty Verses on Reasoning."
+        },
+        {
+          "id": 37216,
+          "course": "SVN",
+          "seq": 756,
+          "acip": "RIGS PA DRUG CU PA'I TSIG LE'UR BYAS PA LA GSUM, BSTAN BCOS RTZOM PA'I SNGON 'GRO MCHOD BRJOD, BRTZAM PAR DAM BCA' BA GZHUNG DNGOS, BRTZAMS PA'I DGE BA BYANG CHUB TU BSNGO BA'O,,",
+          "wylie": "rigs pa drug cu pa'i tshig le'ur byas pa la gsum, bstan bcos rtsom pa'i sngon 'gro mchod brjod, brtsam par dam bca' ba gzhung dngos, brtsams pa'i dge ba byang chub tu bsngo ba'o",
+          "english": "The Sixty Verses on Reasoning covers three major topics: (1) the preliminary to composing this classical commentary, which is an offering of praise; (2) the actual text which the author has committed to compose; and (3) the dedication of the good deed of composing the text, to enlightenment."
+        },
+        {
+          "id": 37489,
+          "course": "SVN",
+          "seq": 1029,
+          "acip": "DGE BA GANG LA BRTEN NAS NA, RIGS PA DRUG CU PA BRTZAMS PA'I'O,,",
+          "wylie": "dge ba gang la brten nas na, rigs pa drug cu pa brtsams pa'i'o",
+          "english": "And what good deed will be used to make this dedication? It is the merit of having composed the Sixty Verses on Reasoning."
+        },
+        {
+          "id": 37495,
+          "course": "SVN",
+          "seq": 1035,
+          "acip": ",SARBA MANGGA LAm,,",
+          "wylie": "sarba mangga laM",
+          "english": "Sarva mangalam! May goodness ever prevail! The Root Text of Arya Nagarjuna's Sixty Verses on Reasoning The Sixty Verses on Reasoning Note that for this final, combined presentation of the root text, we have used the Tengyur version of the Tibetan, as found in the Derge edition. Within Gyaltsab Je's commentary, we have retained his version of the root text, which appears to be a different translation from the Sanskrit. That translation thus has considerable value, as most of these \"alternate\" translations that were not included into editions of the Tengyur have been lost-and they may especially give great insight into the original Sanskrit, large portions of which are still missing for this text. For consistency, we retain the English translation of the verses from within the commentary. As described in the introduction to this volume, we have relied for the Sanskrit on the edition by Li Xuexu and Ye Shaoyong; see bibliography entry C1. Unfortunately, only portions of the original Sanskrit are still extant. Sections with major manuscript differences, such as the obeisance, are self-evident from a glance at the differing translations recorded here."
+        },
+        {
+          "id": 37496,
+          "course": "SVN",
+          "seq": 1036,
+          "acip": "*,,RGYA GAR SKAD DU, YUKTI shAshtI K'A K'A RI K'A N'A MA, BOD SKAD DU, RIGS PA DRUG CU PA'I TSIG LE 'UR BYAS PA ZHES BYA BA,",
+          "wylie": "*,,rgya gar skad du, yukti ShaShTi kA kA ri kA nA ma, bod skad du, rigs pa drug cu pa'i tshig le 'ur byas pa zhes bya ba",
+          "english": "In Sanskrit, this work is entitled Yukti Shashtika Karika. In the Tibetan translation, this is Rikpa Drukchupay Tsikleur Jepa. In the English translation, this is Sixty Verses on Reasoning."
+        },
+        {
+          "id": 37559,
+          "course": "SVN",
+          "seq": 1099,
+          "acip": ",RIGS PA DRUG CU PA'I TSIG LE'UR BYAS PA ZHES BYA BA SLOB DPON 'PHAGS PA KLU SGRUB KYI ZHAL SNGA NAS MDZAD PA RDZOGS SO,,",
+          "wylie": "rigs pa drug cu pa'i tshig le'ur byas pa zhes bya ba slob dpon 'phags pa klu sgrub kyi zhal snga nas mdzad pa rdzogs so",
+          "english": "This concludes The Sixty Verses on Reasoning, Set in Verse, which was composed by that holy master, the Realized One, Nagarjuna."
+        },
+        {
+          "id": 37804,
+          "course": "SVN",
+          "seq": 1344,
+          "acip": "BRTZAMS PA'I DGE BA BSNGO BA,",
+          "wylie": "brtsams pa'i dge ba bsngo ba",
+          "english": "(verse 60) III. Arya Nagarjuna's dedication of the virtue created by this composition A Topical Listing of the Writings of Arya Nagarjuna We created this listing of the works of Arya Nagarjuna as more of a biographical exercise, than a definitive, bibliographical one. It is based primarily on three versions of the Tengyur, or collections of traditional Tibetan translations of some 3600 classical commentaries from ancient India: the Derge (widely considered the most authoritative); the Sertri (\"gold calligraphy,\" perhaps older); and the Nartang (a solid alternative edition). We did not attempt a close analysis of additional versions of the Tengyur; and it may be that there are a few other authentic works by Arya Nagarjuna to be found there. We have not generally included works by The Arya which are reported but not actually found in these editions of the Tengyur. In some case the attribution of works to Nagarjuna is questioned by the extremely careful & competent compilers of the various Tengyurs; it was a common corruption in ancient times to say something like \"my book is so good, it may as well have been written by Nagarjuna\"-and then in time the book would actually be credited to him. We have studied these cases in the ancient catalogs, and we agree fully with these compilers' opinions, and have not included those particular titles. We have relied most heavily upon the truly masterful ancient native Tibetan catalog to the Derge edition. The works in the Derge Tengyur have been very admirably listed and analyzed by the creators of the great Tohoku University Catalog of this collection, and we have relied heavily upon their work. We have also availed ourselves of the fine work of Professor Lokesh Chandra in bringing the often corrupt Tibetanized Sanskrit titles into order. The number of folios in the works are patchy in the originals and may be off by one or two pages, but not more-and so they give a good idea of the relative size of each title; although of course with Arya Nagarjuna a work of 20 folios can change the history of a continent for the next 2,000 years. In some cases the same work may be referred to by different names in different editions of the Tengyur; we have tried to avoid listing both titles but a few cases may have snuck in. We have not re-created Sanskrit titles, as we consider this an inexact and potentially misleading exercise; where a title is not mentioned in situ, we have noted that fact. The translations of the titles into English is by the two translators of the present volume. We have broken the titles down into subject categories, according to our judgement and a quick review of the contents of works. In ordering them, we generally follow the lead of the native creators of the Derge Tengyur. These categories may perhaps be polished in time, but for now are very indicative of topics that The Arya considered important; which is the purpose of the exercise for our present volume. Works by Arya Nagarjuna A. Praises A Praise of the Realm of All Things A Praise of the One Beyond All Compare Nirupama Stava dPe med-par bstod-pa Derge Tengyur TD01119, 2ff A Praise of the One Who Went Beyond the World A Praise of the Diamond of the Mind Citta Vajra Stava Sems kyi rdo-rje'i bstod-pa Derge Tengyur TD01121, 2ff A Praise of the Ultimate A Praise of the Three Holy Bodies The Autocommentary to the Work entitled \"A Praise of the Three Holy Bodies\" A Praise to Please All Beings A Praise of the Lady of the Perfection of Wisdom A Praise of the Inconceivable Acintya Stava bSam gyis mi-khyab-par bstod-pa Derge Tengyur TD01128, 3ff A Praise of That Which is Beyond All Praise A Praise of the Unsurpassed Nirutta Stava bLa na med-pa'i bstod-pa Derge Tengyur TD01130, 2ff The Ultimate Praise of the Realized One, the High & Holy Gentle Voice A Praise for the Compassion of the Holy Realized One, Gentle Voice A Praise for the Offering Shrines of the Eight Great Sites A Praise for the Offering Shrines of the Eight Great Sites A Praise for How the Twelve Mighty Deeds were Accomplished A Praise of Prostration A Regular Practice for Lines of Praise to the Holy Buddha A Commentary on the Language of Implication Applications for Under the Arms 1. Relating to Tara, the Lady of Liberation A Ritual for Reaching the Lady of Liberation A General Practice of Realization for the Holy & Realized One, the Lady of Liberation rJe-btzun-ma 'phags-ma sGrol-ma spyi'i mngon-par rtogs-pa Derge Tengyur TD01684, 1f An Abridged Ritual for Reaching the Lady of Liberation sGrol-ma'i sgrub-thabs bsdus-pa Sertri Tengyur ST39b [Please note that this work is mentioned in the Sertri Catalog at folio 39b, but does not seem to have been carved into the actual, corresponding canon.] A Ritual for Reaching the Diamond Lady of Liberation A Ritual for Reaching the Lady of Liberation from the Forest of Sandalwood A Praise in Sixteen Verses of the Lady of Liberation from the Forest of Sandalwood 2. Relating to Mahakala, the Great Ebony One Steps of a Ritual for Reaching the Glorious Protector of Ebony Ritual for Reaching the Glorious, Great Ebony One with Consort Ritual for Reaching the Glorious, Great Ebony One Ritual for Reaching the Glorious, Great Ebony One Ritual for Reaching the Great Ebony One Eight Verses in Praise of the Glorious, Great Ebony One Eight Verses in Praise of the Glorious, Great Ebony One Eight Verses in Praise of the Glorious, Great Ebony One Eight Verses in Praise of the Diamond, Great Ebony One Ritual for the Presentation of Offering Cakes to the Great Ebony One Who Has the Face of a Crow Nag-po chen-po bya-rog gdong-can gyi gtor-mdos Sertri Tengyur ST130b, 12ff A Ritual for Reaching the Lord of the World A Ritual for Reaching the Four-Armed One 3. Relating to Guhya Samaja, the Secret Collection A Secret Commentary to the Secret Root Text of the Glorious Secret Collection An Abbreviated Ritual for Reaching the Glorious Secret Collection A Method for Practicing the Stage of Creation in that Secret Teaching for Mighty Practitioners, the Secret Collection A Ritual for the Secret World of the Glorious Secret Collection A Method to Practice the Combined Stages A Six-Part Deeper Practice 4. Relating to Vajradhara, the Keeper of the Diamond Lines on the Fourth Empowerment 5) Relating to Panchakrama, the Five Stages The Fifth Stage 6) Relating to Krodhadeva Pancha, the Five Angels of Ferocity The Ritual for a Secret World known as \"The Five Angels of the Fierce Diamond\" The Eight-Part Path of the Holder of the Diamond A Method for Reaching the Three Brothers Surrounded by the Spirit Women [the Sanskrit title in situ is corrupt and seems to 7. Relating to Vajrapani, the Holder of the Diamond The Wish-Fulfilling Jewel: A Ritual for Reaching the Holder of the Diamond, Fierce & Wrathful The Lamp of Suchness: A Ritual for Reaching the Holder of the Diamond which is the Crowning Jewel of All Such Rites A Ritual of the Secret World of the Realized One, the Holder of the Diamond Dressed in Blue A Ritual for Reaching the Jewel of Secret Words The Jewel of Consecration A Commentary upon the Incantations of the Work entitled \"A Ritual for the Realized One, the Holder of the Diamond Dressed in Blue\" The Close Attainment of the One Dressed in Blue A Ritual for the Secret World of the Holder of the Diamond 8. Relating to Mudras, or Secret Seals, including the Great Seal (Mahamudra) A Presentation of the Four Seals 9. Relating to bodhisattvas, especially in the context of preparing for secret practice An Explanation of the Wish for Enlightenment A Commentary on the Wish for Enlightenment A Commentary on the Wish for Enlightenment A Ritual for Creating the Wish for Enlightenment A Commentary on Confessing Downfalls for Bodhisattvas The Purification of Entities A Piece in Four and a Half Verses Advices on the Foundation of Things, Where Nothing Exists through Any Nature of Its Own A Presentation on the Stages for an Empowerment The Eight Serious Downfalls in the Commitments of the Diamond Way 12. Relating to the Perfection of Wisdom (as an enlightened embodiment) An Essential Method for Reaching the Perfection of Wisdom 13) Relating to Manjushri, Gentle Voice Increasing the Diamond Wisdom of Gentle Voice 13) Relating to Avalokiteshvara, Loving Eyes A Ritual for Reaching the Realized One, Loving Eyes, with a Thousand Arms 14) Relating to the Stage of Completion Nectar that Clears Away All Harm 15) General rituals of the secret way A Diamond Rite for Dispelling Obstacles A Ritual for Reaching the Lord of the World 16) Relating to Hayagriva, Horse Throat A Ritual for Reaching Horse Throat 17) Relating to assorted categories of the secret teachings A Ritual for Reaching The Holy Woman Who is Victorious Over All the Three Realms of Pain The Nine Stairs of the Turquoise Plain A Ritual for Attaining the Wish-Giving Jewel Who is Accompanied by the Elephant [in situ the Tibetan title is different: Glang-po rin-po-che la nor blang-ba'i man-ngag] Sertri Tengyur ST130b, 3ff A Secret Method for Reaching the Teacher [in situ:] Guhya Siddhi bLa-ma gsang-sgrub Sertri Tengyur ST130b, 3ff The Wish-Fulfilling Cow of Virtue A Method for Purifying the Mind Using the Sacred Syllables of the Realized One, the Great Woman of Wisdom, Read Individually in a Circle A Ritual for Reaching the Angel Who Grants Us Knowledge, Spoken in the Practices for Realization A Prose Presentation of the Ritual for Reaching the Angel Who Grants Us Knowledge, Drawn from the Practices of Realization for the Lady of Liberation A Ritual for Reaching that Lord of Power, the King of the Serpents Lamp of Renouncing Rituals of Offering Cakes Gathered Together from Various Secret Teachings The Profound Way of Secret Words A Ritual for Reaching the Angel Who Grants Us Knowledge Foundational Verses on the Middle Way entitled \"Wisdom\" Sixty Verses on the Logic for Proving Emptiness Smashing Mistaken Ideas to Dust Seventy Verses on Emptiness Verses that End All Argument Nothing to Fear: A Commentary to the \"Root Verses on Wisdom\" Autocommentary to the \"Sixty Verses of Reasoning\" [said in the native catalog to the Derge Tengyur to exist, but not located by them-or since] An Explanation of the Work entitled \"Smashing Mistaken Ideas to Dust\" Zhib-mo rnam-par 'thag-pa zhes-bya-ba'i rab tu byed-pa Derge Tengyur TD03830, 12ff A Commentary to the \"Seventy Verses on Emptiness\" A Commentary to \"Stopping all Argument\" Twenty Verses on the Greater Way A Ritual in Twenty Verses for the Seven-Part Practice A Hundred Words A Commentary to the Work Called \"A Hundred Words\" The Essence of Dependence, Set in Verse An Explanation of the \"Essence of Dependence\" Lines entitled \"Realizing What We Haven't Yet Realized\" A Treasure House of Precious Jewels that Never Started The Move to a New Birth, According to the Middle Way dBu-ma srid-pa 'pho-ba [Tibetan title in situ] Derge Tengyur TD03840, 1f A Method of Entering into the Three Natures The Stages of Meditation [not to be confused with the three works of Master Kamalashila, some 6 centuries later] A Compendium of All the Sutras [not to be confused with Master Atisha's work, some 800 years later] Thusness of the Volume on What Arises in Dependence [Tibetan name in situ is: rTen cing 'brel-bar 'byung-ba'i 'khor] Sertri Tengyur 176b A Hundred Verses on Wisdom A Refutation of the Idea that the Lord of Power was the One Creator of this Universe; or that the All-Present One was the Same F. Commentaries to original sutras Verses in Explanation of the Exalted \"Shoots of Finest Rice\" An Extensive Explanation of the Exalted \"Shoots of Finest Rice,\" a Sutra of the Greater Way A Commentary upon the Exalted Teaching of that Great Queen of All Prayers, the \"Prayer of Samanta Bhadra, the Good\" A Commentary upon the Exalted \"Essence of the Realm of Is\" Fifty Verses on Novice Monks, from the Exalted Teachings of Those Who Assert that All the Foundations Do Exist A Ritual for the Committing to the Ten Trainings The String of Precious Jewels: Words of Advice for the King Wish-Giving Jewels: Words of Advice for the Dream Advice on Sharing Advice for Going Beyond this Life of Pain A Letter to a Friend A Diamond Prayer A Prayer that Enlightenment Should Come A Prayer Composed by the Realized One, Nagarjuna A Prayer in Twenty Verses, Taken from the \"String of Precious Jewels,\" a Letter of Advice to the King A Prayer entitled \"The King of Wishing Jewels\" Verses of Auspiciousness on the Three Jewels, and the Twelve Great Deeds Verses of Auspiciousness The Hundred Applications A Short Work, in Verse, upon Medical Treatments The Chart on Compounding Scents: A Piece on the Preparation of Incense [we also see the alternate Tibetan title: sPos kyi sbyor-ba re'u-char byas-pa] [this text seems to be what is also sometimes referred to as sPos-sbyor rin-po-che'i phreng-ba, The Preparation of a Medicinal Tablet known as \"The Exalted Empress\" Steps to Powerful Medicine: An Exalted Teaching known as the \"Treasury of Medicinal Herbs\" A Ritual for Herbal Medicines: The Abbreviated Essence of the \"Eight Topics of Medicine\" sMan aa-ba'i cho-ga yan-lag brgyad-pa'i snying-po btus-pa Sertri Tengyur ST175b, folio count unknown J. Secular topics The Steadfast Tree of Wisdom: A Classical Treatise on Secular Topics The Sacred Drop which Cures all Beings: A Classical Treatise on Secular Topics [in situ, the Sanskrit title includes a word that may be vyasu, which could mean \"whose life is endangered\"] Lugs kyi bstan-bcos sKye-bo gso-ba'i thigs-pa Derge Tengyur TD04330, 4ff Appendix D A Topical Listing of the Writings of Gyaltsab Je, Darma Rinchen This listing is excerpted directly from the A Catalogue of the Tohoku University Collection of Tibetan Works on Buddhism. These catalog numbers have become standard for the works of major Tibetan authors, and are therefore utilized in the standard catalog numbers of the Asian Legacy Library (ALL). The translations of the titles into English are by the two translators of the present volume, as is the breakdown into subject categories. The folio numbers are as reported in the Tohoku Catalog and are given only to indicate the comparative quantities of material. Works by Gyaltsab Je, Darma Rinchen A. Secret teachings 1. Secret vows An Explanation of the Root Downfalls of the Diamond Way rDo-rje theg-pa'i rtza-ltung gi rnam-bshad Tohoku Tibetan 5452, 5ff 2. Stage of completion Notes on the \"Drop of Springtime, a Treatise on the Practice of the Stage of Completion\" rDzogs-rim dpyid kyi thig-le'i zin-bris Tohoku Tibetan 5430, 19ff The Drop of Springtime, on the Practice of the Stage of Completion rDzogs-rim dpyid kyi thig-le Tohoku Tibetan 5432, 11ff 3. Relating to Guhyasamaja, the Secret Collection The Harvest of Attainments: A Ritual for the Secret World of Gentle Diamond (Manjuvajra) in the Secret Teaching of the Glorious Secret Collection (Guhyasamaja) dPal gSang-ba 'dus-pa 'Jam-pa'i rdo-rje dkyil-'khor gyi cho-ga dNgos-grub kyi snye-ma Tohoku Tibetan 5421, 42ff 4. Relating to Kalachakra, the Wheel of Time A Swift Entry to the Path of Great Bliss: A Description of How to Practice the Two Stages of the Path in the Secret Teaching of the Glorious Wheel of Time (Kalachakra) dPal Dus kyi 'khor-lo'i lam rim-pa gnyis ji-ltar nyams su len-pa'i tsul bDe-ba chen-po'i lam du myur du 'jug-pa Tohoku Tibetan 5422, 58ff Notes on the Four Seals in the Chapter on the Ritual for Reaching the Angel sGrub-thabs le'u phyag-rgya bzhi'i zin-bris Tohoku Tibetan 5423, 10ff A Brief Presentation of the Six-Part Secret Practice in the Teachings of the Glorious Wheel of Time (Kalachakra) dPal Dus kyi 'khor-lo'i rnal-'byor yan-lag drug gi khrid bsdus-pa Tohoku Tibetan 5431, 12ff B. General rituals A Few Points on the Meaning of Selected Terms in the Ritual for Reaching an Angel entitled \"Pure in Every Way,\" sGrub-thabs Kun tu bzang-po'i tsig gi don cung-zad bkod-pa Tohoku Tibetan 5424, 33ff On the Benefits of Reciting the Names of the Thirty-Five Buddhas Sangs-rgyas sum-cu so-lnga'i mtsan gyi phan-yon Tohoku Tibetan 5429, 3ff C. Middle Way (Higher Madhyamika) The String of Precious Jewels, consisting of a Presentation on the Two Truths, and a Book of Instruction on Correct View bDen gnyis kyi rnam-gzhag dang lta-ba'i khrid-yig Rin-po-che'i 'phreng-ba Tohoku Tibetan 5425, 13ff An Explanation of the Eight Most Difficult Points in the \"Root Text on Wisdom\" rTza-ba shes-rab kyi dka'-gnas chen-po brgyad kyi bshad-pa Tohoku Tibetan 5451, 16ff Notes to a Teaching on the Eight Most Difficult Points in the Root Text for the Middle Way dBu-ma'i rtza-ba'i dka'-gnas chen-po brgyad kyi brjed-byang Tohoku Tibetan 5426, 16ff An Illumination of the Essential Meaning of the Treatise on the Middle Way entitled \"A String of Precious Jewels\" dBu-ma Rin-chen 'phreng-ba'i snying-po'i don gsal-bar byed-pa Tohoku Tibetan 5427, 78ff The Essence of Excellent Explanation: An Explication of \"The Four Hundred Verses\" Bzhi-brgya-pa'i rnam-bshad Legs-bshad snying-po Tohoku Tibetan 5428, 121ff The Point of Entry for Bodhisattvas: An Explication of the \"Guide to the Bodhisattva's Way of Life\" Byang-chub sems-dpa'i spyod-pa la 'jug-pa'i rnam-bshad rGyal-sras 'jug-ngogs Tohoku Tibetan 5436, 165ff A Commentary to the \"Sixty Verses on Reasoning\" Rigs-pa drug-cu-pa'i t'ikka Tohoku Tibetan 5443, 36ff Notes to a Teaching on the \"Sixty Verses on Reasoning\" Rigs-pa drug-cu-pa'i zin-bris Tohoku Tibetan 5444, 11ff A Brief Explanation of \"Entering the Middle Way\" dBu-ma la 'jug-pa'i bsdus-don Tohoku Tibetan 5449, 53ff D. Perfection of Wisdom (Lower Madhyamika) The Jewel of the Essence of the Explication: A Commentary which Clarifies the Meaning of the \"Jewel of Realizations, a Classical Commentary of Instruction for the Perfection of Wisdom\" Shes-rab kyi pha-rol tu phyin-pa'i man-ngag gi bstan-bcos mNgon-par rtogs-pa'i rgyan gyi 'Grel-ba don gsal-ba'i rNam-bshad snying-po'i rgyan Tohoku Tibetan 5433, 346ff Opening the Door to the Supreme Way: A Method for Practicing the Stages of Realization mNgon-par rtogs-pa'i rim-pa nyams su len-tsul Theg-mchog sgo-'byed Tohoku Tibetan 5439, 61ff A Commentary on the Eight Subjects, along with the Seventy Topics, in the \"Jewel of Realizations,\" accompanied by Brief Instructions on How to Practice Them mNgon-par rtogs-pa brgyad Don bdun-cu dang bcas-pa'i 'grel-pa nyams su len-tsul mdo-tzam dang bcas-pa Tohoku Tibetan 5440, 25ff The String of Precious Jewels: A Brief Explanation on the \"Jewel of Realizations\" mNgon-par rtogs-pa'i rgyan gyi bsdus-don Rin-po-che'i phreng-ba Tohoku Tibetan 5441, 14 ff E. Mind Only (Chittamatra, or Yogacara) A Commentary to \"The Higher Line,\" a work of the Greater Way Theg-pa chen-po rGyud bla-ma'i t'ikka Tohoku Tibetan 5434, 230ff The Essence of the Very Eloquence of the Ocean of Higher Knowledge: An Explanation of the \"Compendium of Higher Knowledge\" mNgon-pa kun las btus-pa'i rnam-bshad Legs-par bshad-pa'i chos-mngon rgya-mtso'i snying-po Tohoku Tibetan 5425, 215ff D. Logic & Perceptual Theory (Pramana) An Explanation of the \"Sutra on Accurate Perception\" Tsad-ma mdo'i rnam-bshad Tohoku Tibetan 5137, 124ff The Great Book of Notes to Teachings on Accurate Perception Tsad-ma'i brjed-byang chen-mo Tohoku Tibetan 5438, 42ff An Illumination of the Very Essence of the Path to Freedom: A Brief Explanation of the \"Commentary on Accurate Perception\" rNam-'grel gyi bsdus-don Thar-lam gyi de-nyid gsal-byed Tohoku Tibetan 5442, 93ff The Essence of the Sun: An Explanation of \"An Analysis of Relationships\" 'Brel-pa brtag-pa'i rnam-bshad Nyi-ma'i snying-po Tohoku Tibetan 5445, 15ff A Guide to the Path of Accurate Perception Tsad-ma'i lam-khrid Tohoku Tibetan 5446, 21ff A Presentation on Contradiction & Connection 'Gal-'brel gyi rnam-bzhag Tohoku Tibetan 5447, 11ff A Record Made by the Dharma Lord Gyaltsab as He Studied \"The Chapter on Direct Perception\" at the Feet of Je Tsongkapa rGyal-tsab chos-rjes rJe'i drung du gsan-pa'i mNgon-sum le'u'i brjed-byang Tohoku Tibetan 5448, 49ff Unmistaken Sunlight on the Path to Freedom: An Explanation of the \"Commentary on Accurate Perception, Set in Verse\" Tsad-ma rnam-'grel gyi tsig-le'ur byas-pa'i rnam-bshad Thar-lam phyin-ci-ma-log-par gsal-bar byed-pa Tohoku Tibetan 5450, 436ff The First Part of \"Illumination of the True Thought,\" the Great Commentary upon the Classical Commentary entitled \"Ascertaining Accurate Perception\" Bstan-bcos Tsad-ma rnam-nges kyi t'ik-chen dGongs-pa rab-gsal gyi stod-cha Tohoku Tibetan 5453, 307ff The Second Part of \"Illumination of the True Thought,\" the Great Commentary on the Classical Commentary entitled \"Ascertaining Accurate Perception\" Bstan-bcos Tsad-ma rnam-nges kyi t'ik-chen dGongs-pa rab-gsal gyi smad-cha Tohoku Tibetan 5454, 260ff The Essential Goldmine of Fine Explanation: A Commentary to \"A Drop of Logic on Accurate Perception\" Tsad-ma rigs-thigs kyi 'grel-pa Legs-bshad snying-po'i gter Tohoku Tibetan 5455, 63ff Bibliography of works originally written in Sanskrit"
+        },
+        {
+          "id": 37806,
+          "course": "SVN",
+          "seq": 1346,
+          "acip": "B23 B24",
+          "wylie": "b23 b24",
+          "english": "rGyal-tsab rje (Dar-ma rin-chen), 1364-1432, editor. Notes to a Teaching [by Je Tsongkapa] upon the \"Sixty Verses on Reasoning (Rigs-pa drug-cu-pa'i zin-bris, ACIP S05403), ff. 1a-12a."
+        },
+        {
+          "id": 39045,
+          "course": "TITLS",
+          "seq": 733,
+          "acip": "Rigs-pa drug cu pa’i ‘grel pa klu-sgrub dgongs-rgyan",
+          "wylie": "rigS-pa Drug cu pa’i ‘grel pa klu-Sgrub DgoNgS-rgyaN",
+          "english": "The Ornament of the True Thought of Nagarjuna, A Commentary to the Sixty Verses on Reasoning"
+        },
+        {
+          "id": 40525,
+          "course": "TITLT",
+          "seq": 122,
+          "acip": "RIGS PA DRUG CU PA'I TSIG LE'UR BYAS PA",
+          "wylie": "rigs pa drug cu pa'i tshig le'ur byas pa",
+          "english": "Sixty Verses on Reasoning"
+        },
+        {
+          "id": 40566,
+          "course": "TITLT",
+          "seq": 163,
+          "acip": "RIGS PA DRUG CU PA'I 'GREL PA",
+          "wylie": "rigs pa drug cu pa'i 'grel pa",
+          "english": "Commentary to \"The Sixty Verses on Reasoning\""
+        }
+      ]
+    },
+    {
+      "label": "ignorance and conceptions",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%ma rig%",
+        "%conception%"
+      ],
+      "row_count": 2,
+      "rows": [
+        {
+          "id": 1612,
+          "course": "C05",
+          "seq": 230,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing",
+          "english": "The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our conception."
+        },
+        {
+          "id": 1617,
+          "course": "C05",
+          "seq": 235,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+          "english": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in conceptions?"
+        }
+      ]
+    },
+    {
+      "label": "verse opening",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%jig rten ma rig rkyen can%"
+      ],
+      "row_count": 9,
+      "rows": [
+        {
+          "id": 1612,
+          "course": "C05",
+          "seq": 230,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing",
+          "english": "The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our conception."
+        },
+        {
+          "id": 1617,
+          "course": "C05",
+          "seq": 235,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+          "english": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in conceptions?"
+        },
+        {
+          "id": 6825,
+          "course": "C16",
+          "seq": 807,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing",
+          "english": "The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only projections. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our projections."
+        },
+        {
+          "id": 6830,
+          "course": "C16",
+          "seq": 812,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+          "english": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only projections. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in projections?"
+        },
+        {
+          "id": 28425,
+          "course": "ILL",
+          "seq": 1106,
+          "acip": "RIGS PA DRUG CU PA LAS KYANG, ,'JIG RTEN MA RIG RKYEN CAN DU, ,GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, ,DE YI PHYIR NA 'JIG RTEN 'DI, ,RNAM RTOG YIN ZHES CIS MI 'THAD,",
+          "wylie": "rigs pa drug cu pa las kyang, ,'jig rten ma rig rkyen can du, ,gang phyir rdzogs pa'i sangs rgyas gsungs, ,de yi phyir na 'jig rten 'di, ,rnam rtog yin zhes cis mi 'thad",
+          "english": "The Sixty Verses on Reasoning say as well: The totally enlightened Buddha Himself has stated that this world Was born from misunderstanding. Why then would it be An overstatement to say That the world is just Our imagination?"
+        },
+        {
+          "id": 29994,
+          "course": "ILL",
+          "seq": 2675,
+          "acip": "RIGS PA DRUG CU PA LAS KYANG, ,'JIG RTEN MA RIG RKYEN CAN DU, ,GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG, ,DE YI PHYIR NA 'JIG RTEN 'DI, ,RNAM RTOG YIN ZHES CIS MI 'THAD,",
+          "wylie": "rigs pa drug cu pa las kyang, ,'jig rten ma rig rkyen can du, ,gang phyir rdzogs pa'i sangs rgyas gsung, ,de yi phyir na 'jig rten 'di, ,rnam rtog yin zhes cis mi 'thad",
+          "english": "The Sixty Verses on Reasoning also says it like this— The total Buddhas stated That the world is rooted In misunderstanding. Why then would it ever be Incorrect to say That this entire world Is our imagination?"
+        },
+        {
+          "id": 37015,
+          "course": "SVN",
+          "seq": 555,
+          "acip": "'JIG RTEN MA RIG RKYEN CAN DU, GANG PHYIR SANGS RGYAS RNAMS GSUNG BA, DE YI PHYIR NA 'JIG RTEN 'DI, RNAM RTOG YIN ZHES CIS MI 'THAD,",
+          "wylie": "'jig rten ma rig rkyen can du, gang phyir sangs rgyas rnams gsung ba, de yi phyir na 'jig rten 'di, rnam rtog yin zhes cis mi 'thad",
+          "english": "The Buddhas have stated That the world is rooted In misunderstanding. Why then would it ever be Incorrect to say That this entire world Is our imagination?"
+        },
+        {
+          "id": 37396,
+          "course": "SVN",
+          "seq": 936,
+          "acip": "'JIG RTEN MA RIG RKYEN CAN DU, GANG PHYIR SANGS RGYAS RNAMS GSUNG BA, DE YI PHYIR NA 'JIG RTEN 'DI, RNAM RTOG YIN ZHES CIS MI 'THAD,",
+          "wylie": "'jig rten ma rig rkyen can du, gang phyir sangs rgyas rnams gsung ba, de yi phyir na 'jig rten 'di, rnam rtog yin zhes cis mi 'thad",
+          "english": "The Buddhas have stated That the world is rooted In misunderstanding. Why then would it ever be Incorrect to say That this entire world Is our imagination?"
+        },
+        {
+          "id": 37535,
+          "course": "SVN",
+          "seq": 1075,
+          "acip": ",'JIG RTEN MA RIG RKYEN CAN DU, ,GANG PHYIR SANGS RGYAS RNAMS GSUNGS PA, ,'DI YI PHYIR NA 'JIG RTEN 'DI, ,RNAM RTOG YIN ZHES CIS MI 'THAD,",
+          "wylie": "'jig rten ma rig rkyen can du, ,gang phyir sangs rgyas rnams gsungs pa, ,'di yi phyir na 'jig rten 'di, ,rnam rtog yin zhes cis mi 'thad",
+          "english": "The Buddhas have stated That the world is rooted In misunderstanding. Why then would it ever be Incorrect to say That this entire world Is our imagination?"
+        }
+      ]
+    },
+    {
+      "label": "verse close",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%gsal mi %gyur%"
+      ],
+      "row_count": 8,
+      "rows": [
+        {
+          "id": 1617,
+          "course": "C05",
+          "seq": 235,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+          "english": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in conceptions?"
+        },
+        {
+          "id": 4037,
+          "course": "C12",
+          "seq": 134,
+          "acip": "DPE MA GRUB STE MAR ME RANG GIS RANG GSAL BAR BYED PA MA YIN TE MAR ME RANG GIS GSAL BAR BYA BA MIN PA'I PHYIR TE RANG GIS RANG GSAL MI DGOS SHING MI NUS PA'I PHYIR RO, ,DE LTA NA MUN PAS KYANG RANG GZHAN GNYIS KA SGRIB PAR BYED PAR 'GYUR NA DE MI RIGS TE GANG GI PHYIR NA MUN PA LA MUN PAS BSGRIBS PA MED PA'I PHYIR RO, , BSGRIBS NA BUM PA GOS KYIS BSGRIBS PA BZHIN DU MUN PA'ANG MI MTHONG BAR 'GYUR RO, , 'DI DAG NI RTZA SHE LAS GSUNGS PA LTAR RGYAS PAR SHES PAR BYA'O,",
+          "wylie": "dpe ma grub ste mar me rang gis rang gsal bar byed pa ma yin te mar me rang gis gsal bar bya ba min pa'i phyir te rang gis rang gsal mi dgos shing mi nus pa'i phyir ro, ,de lta na mun pas kyang rang gzhan gnyis ka sgrib par byed par 'gyur na de mi rigs te gang gi phyir na mun pa la mun pas bsgribs pa med pa'i phyir ro, , bsgribs na bum pa gos kyis bsgribs pa bzhin du mun pa'ang mi mthong bar 'gyur ro, , 'di dag ni rtsa she las gsungs pa ltar rgyas par shes par bya'o",
+          "english": "But your example does not hold true. A lamp is not something which illuminates itself, because it is not something which is the object illuminated by it. There is no need for it to illuminate itself, and it could never do so anyway. If it could, then darkness too shroud both itself and other objects. This though could never be, for the reason that there is no such thing as darkness shrouding darkness. If it did shroud darkness, then it would be like shrouding a vase with a piece of cloth, and we would be unable to see the darkness itself. For these points I am enlarging upon statements found in the Root Text on Wisdom [by the realized being Nagarjuna]."
+        },
+        {
+          "id": 6830,
+          "course": "C16",
+          "seq": 812,
+          "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+          "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+          "english": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only projections. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in projections?"
+        },
+        {
+          "id": 29995,
+          "course": "ILL",
+          "seq": 2676,
+          "acip": ",MA RIG 'GAGS PAR GYUR NA NI, ,GANG ZHIG 'GAG PAR 'GYUR BA DE, ,MI SHES PA LAS KUN BRTAGS PAR, ,JI LTA BUR NA GSAL MI GYUR,",
+          "wylie": "ma rig 'gags par gyur na ni, ,gang zhig 'gag par 'gyur ba de, ,mi shes pa las kun brtags par, ,ji lta bur na gsal mi gyur",
+          "english": "When misunderstanding Comes to a stop, Why wouldn't those elements Come to a stop, Since all the mistaken Imaginations of failing To understand things Were brought to light?"
+        },
+        {
+          "id": 37020,
+          "course": "SVN",
+          "seq": 560,
+          "acip": ",MA RIG 'GAGS PAR GYUR PA NA, ,GANG ZHIG 'GAG PAR 'GYUR BA DE, ,MI SHES PA LA KUN BRTAGS PAR, ,CI LTA BUR NA GSAL MI 'GYUR,",
+          "wylie": "ma rig 'gags par gyur pa na, ,gang zhig 'gag par 'gyur ba de, ,mi shes pa la kun brtags par, ,ci lta bur na gsal mi 'gyur",
+          "english": "When misunderstanding Comes to a stop, Why wouldn't those elements Come to a stop, Since all the mistaken Imaginations of failing To understand things Were brought to light?"
+        },
+        {
+          "id": 37399,
+          "course": "SVN",
+          "seq": 939,
+          "acip": ",MA RIG 'GAGS PAR GYUR PA NA, ,GANG ZHIG 'GAG PAR 'GYUR BA DE, ,MI SHES PA LA KUN BRTAGS PAR, ,CI LTA BUR NA GSAL MI 'GYUR,",
+          "wylie": "ma rig 'gags par gyur pa na, ,gang zhig 'gag par 'gyur ba de, ,mi shes pa la kun brtags par, ,ci lta bur na gsal mi 'gyur",
+          "english": "When misunderstanding Comes to a stop, Why wouldn't those elements Come to a stop, Since all the mistaken Imaginations of failing To understand things Were brought to light?"
+        },
+        {
+          "id": 37536,
+          "course": "SVN",
+          "seq": 1076,
+          "acip": ",MA RIG 'GAGS PAR GYUR PA NA, ,GANG ZHIG 'GAG PAR 'GYUR BA DE, ,MI SHES PA LAS KUN BRTAGS PAR, ,JI LTA BUR NA GSAL MI 'GYUR,",
+          "wylie": "ma rig 'gags par gyur pa na, ,gang zhig 'gag par 'gyur ba de, ,mi shes pa las kun brtags par, ,ji lta bur na gsal mi 'gyur",
+          "english": "When misunderstanding Comes to a stop, Why wouldn't those elements Come to a stop, Since all the mistaken Imaginations of failing To understand things Were brought to light?"
+        },
+        {
+          "id": 16563,
+          "course": "TCS13",
+          "seq": 14,
+          "acip": "DE LA 'JUG KHAR, ,RANG NYID LHAR GSAL MI DMIGS PA, ,SPROS MED STONG PA'I RANG LA YAL, ,SLAR YANG ZHAL GCIG PHYAG GNYIS PA, ,CHU LAS NYA LDANG LTA BUR GSAL, ,SPYI BOR AOm DANG MGRIN PAR A'A: ,THUGS KAR H'Um GIS MTSAN PAR GYUR, ,CES BYAS TE 'JUG,",
+          "wylie": "de la 'jug khar, ,rang nyid lhar gsal mi dmigs pa, ,spros med stong pa'i rang la yal, ,slar yang zhal gcig phyag gnyis pa, ,chu las nya ldang lta bur gsal, ,spyi bor aoM dang mgrin par a'a: ,thugs kar hUM gis mtshan par gyur, ,ces byas te 'jug",
+          "english": "Just before you start the ritual, recite the following: Pictured as Angel, I disappear, Fade into emptiness, no projections. As quick as a fish flicks on the surface, I see myself once more with one head, two arms; My head's center tip is marked with an om, The throat with an ah, the heart with a hung."
+        }
+      ]
+    }
+  ]
+}

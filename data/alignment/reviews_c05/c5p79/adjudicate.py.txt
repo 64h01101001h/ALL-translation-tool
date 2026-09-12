@@ -1,0 +1,158 @@
+from pathlib import Path
+import json, hashlib, re, subprocess
+R=Path(__file__).resolve().parent; B=R.parent; W=B.parent.parent/'campaign-worktree'
+def dump(p,x):(R/p).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+rows=json.loads((R/'resolved-spans.json').read_text());proof=json.loads((R/'generator-proof.json').read_text())
+reasons={235:[
+'Established work title; the English article remains outside the title unit.',
+'Reasoning is uniquely attributable to rigs pa inside the title; the English member order reverses the Tibetan member order.',
+'drug cu is exactly the number Sixty inside the same title, with a strictly shorter range on both sides.',
+'First world is the ignorance-conditioned world, distinct from the later demonstrative reference.',
+'First ignorance is the cause, rather than the later object of cessation.',
+'The condition rkyen is recast verbally as causes; the source still makes ignorance condition the world. Actual HGM487 includes causes.',
+'gang phyir opens the causal proposition, completed by de yi phyir na; For is licensed, whereas the English standalone Why? adds a rhetorical question.',
+'The Buddhas are the speaker of the verse-internal assertion; neither the article nor rdzogs qualifier is falsely mapped.',
+'gsung selects whole-word say at 107, not says at 34 or say in to say at 155.',
+'The complete consequent expression de yi phyir na corresponds to then; cis, not this expression, licenses why.',
+'Second world is the subject of being conceptions and pairs with the later world, not the first.',
+'The adjacent demonstrative di licenses this in this world, with crossed English order.',
+'rnam rtog supplies the first conceptions predicate; only and the copular frame are not included.',
+'Quotative zhes contributes to say in the rhetorical question. It does not claim either reporting verb.',
+'cis is the question why in And why then, distinct from supplied capitalized Why? earlier.',
+'mi thad is a complete negative lexical predicate, attested by HGM14166 as wrong; the positive stem alone is not mapped to wrong.',
+'Second ma rig belongs to ending ignorance and selects the second ignorance.',
+'The cessation stem gags supplies end; one, were to and his are outside the atom.',
+'na after cessation is conditional If; raw na substrings in rnam or other connectives are irrelevant.',
+'Later gag supplies ended in the relative construction; it does not accidentally rematch the gags stem earlier.',
+'mi shes pa is misunderstanding (HGM14314), without supplied our or the contested Despite.',
+'kun brtags retains the conceptual-imputation lexical content of final conceptions. HGM128 supports the nominal form; HGM126 has constructs. This is no endorsement of the surrounding English assertion.',
+'The complete manner interrogative ji lta bur na licenses how; Then and is it that are outside it.',
+'The closing quotative-reporting phrase owns the fronted says, keeping the verse-internal say separate.'
+],236:[
+'rang gi is the reflexive possessive their in the essence expression; it does not license a participant elsewhere.',
+'ngo bo nyid is the attested whole very essence unit, without their or in.',
+'Instrumental kyis marks the basis of existence; contextual English in realizes this relation in their very essence.',
+'First grub is existed in the antecedent; whole-word boundaries distinguish the next exist.',
+'The first na is If at 40 in the inherent-existence antecedent; the later If is part of a free connective recast.',
+'gnas lugs is attested as independent reality; as some remains outside the unit.',
+'Second grub is whole-word exist at 97 in the consequent; would remains outside.',
+'khrul pa is a nominal error/delusion in the error-ending condition. The whole mistaken states of mind is a contextual nominal equivalent, not merely the adjective mistaken. HGM1615 does not attest the complete English phrase; your is excluded.',
+'log pa is stopping the mistaken state; stopped is licensed while finally and you are not.',
+'The second standalone na is temporal when at 154, after log pa.',
+'ldog is the cessation predicate in the negated consequent and selects disappear; the earlier gsal du gro is not assigned this same English occurrence.',
+'mi supplies negation rendered never; they would is excluded.',
+'don supplies meaning in the fronted explanation; the expanded lines/as follows formula is not a dictionary atom.'
+],237:[
+'Opening sems is mind at 4. It is neither the sems inside sems can nor a later instrumental mind.',
+'gtso bo gives main thing as a whole lexical unit, without supplied the.',
+'yin supplies is, as a copular particle at depth 6; nominal pa is not falsely banked as a separate word.',
+'de nyid bstan pai phyir is the complete purpose phrase to show this; the demonstrative, showing and purpose relation all have a source basis.',
+'bshad pa is the nominal explanation, without the expanded scripture formula.',
+'HGM25644 attests the complete living-world expression. sems can alone would not support the relative locative in it; initial The remains unwrapped.',
+'jig rten/world is a unique tighter member of the complete living-world compound, on both sides.',
+'rang gi sems is a possessive mind unit locally rendered their minds; rang gi licenses their. HGM18356 is only auto-aligned own mind, so exact glossary authority is not claimed.',
+'sems/minds is the unique shorter member within the first possessive mind unit, selecting minds at 229.',
+'First bsags pa is collected, modifying the first karma. The second accumulation has no second collected token.',
+'First las is first karma at 192, describing the beings personal accumulation.',
+'dang joins karma and affliction, selecting and at 236 rather than initial and or the exclusivity recast.',
+'nyon mongs supplies bad thoughts. The following explanatory in their minds has no additional Tibetan sems here.',
+'bdag gi dngos po is a complete possessive existence phrase rendered its very being at depth 3. The auto-aligned HGM9065 through the power is contrary mined evidence, not an authority to displace the local object relation.',
+'rnyed pa gives finds, with living world as subject and its very being as object.',
+'HGM11071 attests the whole environmental-world expression places where these beings live. Earlier worlds is a repeated English expression of that unit; inventing another Tibetan beings here would misattribute the source.',
+'snod/places is the tighter environmental-container member of the whole compound, not the final snod at the upper bound.',
+'shin tu realizes strong degree as vast modifying multitude. No article or all is captured.',
+'sna tshogs pa/multitude is a complete lexical variety expression; actual HGM11001 includes this equivalent.',
+'The demonstrative plural beings and exclusive kho na together license these same beings, and no one else. The internal and is part of the English exclusivity recast; the phrase preserves the correct later beings occurrence.',
+'The source sems nyid and preceding genitive context support the emphatic possessive mind expression. HGM20684 explicitly attests their own minds; the final minds at 504 is selected, not the explanatory minds at 274.',
+'Second las owns karma at 429 in collective karma. THUN MANG is retained in the source but omitted from the alignment; the third explanatory karma at 481 is not given a second source owner.',
+'god pa supplies put; there and have been are supplied and excluded.',
+'skyed supplies produced for the environmental world; have been is excluded.',
+'The whole disc-of-wind cosmographic term is attested by HGM25333 including great. It does not include the planetary explanation.',
+'rlung/wind is unique and shorter on both sides within the disc compound.',
+'dkyil khor/disc is its sibling member. Canonical English member ordering puts disc before wind; Tibetan has wind first.',
+'nas gives from as the lower bound of the cosmographic interval.',
+'og min is the attested proper name Below No Other; highest temporary heaven and one named remain outside it.',
+'snod kyi mthar thug pao is the complete environmental-limit phrase farthest reaches of the world at depth 3, with final snod distinguished from the earlier environmental world.'
+]}
+verdicts=[]
+for seq in [235,236,237]:
+ rr=[r for r in rows if r['seq']==seq];assert len(rr)==len(reasons[seq])
+ for r,reason in zip(rr,reasons[seq]):verdicts.append(dict(**r,verdict='SOUND',reason=reason))
+dump('span-semantic-verdicts.json',verdicts)
+queries=json.loads((R/'independent-query-replays.json').read_text())
+source={s['seq']:s for s in json.loads((R/'independent-source-context.json').read_text())}
+registry=json.loads((R/'governing/docs/errata_register.json').read_text())
+assert len(registry)==190
+reg_checks={}
+for seq in [235,236,237]:
+ matches=[e for e in registry if f'C05:{seq}' in str(e.get('segment',''))]
+ assert not matches
+ reg_checks[seq]={'registry_entry_count':len(registry),'segment_matches':matches,'classes_checked':['converter escape','running head','footnote fusion','folio caption','following heading glue','1500-character cap','row-boundary spill'],'new_claim_is_registered_class':False}
+dump('independent-register-check.json',reg_checks)
+common_b='C16 repeats the disputed reading, but separate course files and field identity do not prove independent publication. The complete physical originals were reopened and preserved. ILL and SVN readings are compared only over their actual shared extents; no provenance record establishes independent publication of the same disputed reading.'
+decisive={
+ '235-original':'Refute the original categorical disappearance/clarity replacement at its stated breadth and HIGH severity. HGM25759 actually attests gsal du gro/disappear; the glossary is not permission to replace the source, but this contrary fact defeats the proposal assertion that GMR cannot use disappearance. The narrower causal/concessive issue is separately assessed below.',
+ '235-narrowed':'The complete mi shes pa las kun brtags par makes ignorance the source of conceptual imputation; Despite instead marks concession. I challenged whether concessive las or argument-level paraphrase could defend it: this nominal causal construction, unlike a concessive completed clause, supplies no such relation. The nearby conditional/rhetorical reconstruction may explain a free translation, but does not provide a source basis for that explicit reversal. Retain LOW/PROBABLE relation-level editorial review only. HGM25759 is material contrary evidence about disappearance and is expressly excluded from the narrower claim; its full compound does not occur in235.',
+ '236-original':'Refute under ground d and the default of refutation under uncertainty. The exact compound gsal du gro has glossary-tier HTG2016 disappear, so the original proposal reliance on bare gsal is inadequate. ILL2677 instead says the truth would have to be brought to light, and the literal clarity reading remains a real concern. Nevertheless the English can express a reductio contrasting hypothetical persistence with expected disappearance after error ends; its although they should have ellipsis is defensible enough that a categorical source correction is not established. No contested positive-compound alignment is accepted.',
+ '237-retained':'Neither missing dictionary entry alone nor raw frequency alone proves a spelling error. I challenged thun mang as a possible compositional many-periods reading: it does not fit the local common-versus-personal karma contrast or the full environmental continuation. HGM7479 thun mong includes collective and7483 has common/shared; physical ILL2674 (spine2680) has THUN MONG BA’I LAS and communal karma in the same continuation. C05/C16 retain MANG, so isolated-ingestion attribution is rejected. MONG is a supported probable spelling proposal, not a verified critical-edition reading.'}
+errata_verdicts=[]
+for label,seq,refuted in [('235-original',235,True),('235-narrowed',235,False),('236-original',236,True),('237-retained',237,False)]:
+ origin=B/('reconciled' if label=='235-narrowed' else 'tibetan')/str(seq)/'errata.json';claim=json.loads(origin.read_text())[0]
+ founds={k:claim['found'] in source[seq][k] for k in ['acip','wylie','english']};assert any(founds.values())
+ q=[{k:v for k,v in x.items() if k!='rows'} for x in queries if (x['label'] is not None and (str(x['file']).startswith('root-') or f'/{seq}/' in str(x['file']))) ]
+ # Every numerical value above is independently measured; complete rows live in independent-query-replays.json.
+ witnesses=[]
+ for e in json.loads((B/f'reconciled/{seq}/errata-five-ground-verdicts.json').read_text())[0]['grounds']['b']['witnesses']:
+  witnesses.append({k:v for k,v in e.items()})
+ grounds={'a':dict(refutes=False,found_verbatim_by_field=founds),'b':dict(refutes=False,reason=common_b,witnesses=witnesses),'c':dict(refutes=False,**reg_checks[seq]),'d':dict(refutes=refuted,reason=decisive[label]),'e':dict(refutes=False,query_proofs=q,complete_original_rows='independent-query-replays.json',original_fields_verified='original-field-verification.json')}
+ errata_verdicts.append(dict(candidate=label,seq=seq,found=claim['found'],refuted=refuted,reason=decisive[label],grounds=grounds,original_claim=claim,suggested_severity=None if refuted else 'LOW',suggested_confidence=None if refuted else 'PROBABLE'))
+dump('independent-five-ground-verdicts.json',errata_verdicts)
+bank=[]
+for seq in [235,237]:
+ e=json.loads((B/f'reconciled/{seq}/errata.json').read_text())[0]
+ e['evidence']+=' Independent Codex semantic review reopened the original spine and physical witness bytes, checked every quoted field, reran the exact queries, and challenged all five refutation grounds. Full original files and original-to-copy mapping are preserved under data/alignment/reviews_c05/c5p79/; see independent-five-ground-verdicts.json and independent-query-replays.json there. Machine review only; no human editorial acceptance.'
+ bank.append(e)
+dump('bank-ready-errata.json',bank);dump('span-head-allow-needed.json',{})
+# Validate complete package input hashes rather than trusting the embedded inventory.
+package=(B/'semantic-input-review-package.txt').read_text();inventory=json.loads(package.split('===== PACKAGE INPUT HASHES =====')[1]);pk=[]
+for x in inventory:
+ raw=(B/x['path']).read_bytes();assert len(raw)==x['bytes'] and sha(raw)==x['sha256'];pk.append(dict(**x,exact=True))
+dump('package-input-verification.json',pk)
+dump('review.json',dict(verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',producer='Codex independent semantic reviewer',page='c5p79',course='C05',segments=proof,total_spans=len(rows),total_nulls=sum(x['null_count'] for x in proof),total_word_pairs=sum(x['word_pair_count'] for x in proof),total_d7=sum(x['d']==7 for x in rows),open_findings=[],errata_count=2,errata_confidence='LOW/PROBABLE',head_allowances={},machine_review_only=True,human_editorial_acceptance=False))
+text='''# C05:235–237 (c5p79): independent semantic review
+
+SPEC: **APPROVE**. QUALITY: **APPROVE** for the reviewed provisional alignment. Open findings: **0**. This is Codex machine review, not human semantic or editorial acceptance. No source/master/repository file was edited.
+
+| Segment | Spans | Nulls | Non-null d5 | d7 | Generator | Complete body bytes |
+|---|---:|---:|---:|---:|---:|---:|
+|235|24|0|16|2|0|4830|
+|236|13|0|9|0|0|3485|
+|237|30|0|18|5|0|6531|
+
+Total: **67 spans, 0 nulls, 43 word pairs, 7 members**. All three real canonical generator outputs equal the complete saved bodies byte for byte, including notes. Every span was independently resolved through the canonical resolver, preserving Tibetan spec order, English order and member ordering. Exact seven-key tuples are in `resolved-spans.json`; all 67 separate semantic dispositions are in `span-semantic-verdicts.json`. Per-file SHA-256/byte pins and generator exits are in `review.json` and `generator-proof.json`. There are no head allowances.
+
+The complete semantic-input-review-package.txt, both original proposal angles, all original/final decisions and six complete diffs were read. All material original source and glossary fields were reopened from the worktree spine using SQLite URI mode=ro. The original-field verifier checked 434 distinct record projections/variants, including raw fields, and 49 distinct saved SQL queries were replayed. Query results and complete rows are preserved, with exact SQL, parameters and counts. The actual producer for these new proposals and reconciliation is Codex; historical Claude role labels were not treated as current authorship. The proposal protocol's pre-refinement and current bytes both survive; the completed proposal readers are not claimed to have seen the later append-only refinement.
+
+235: the causal/consequent/interrogative relations are separate: gang phyir/For, de yi phyir na/then, cis/why. The first standalone Why? is a supplied rhetorical question. rkyen/causes preserves the actual ignorance-to-world conditioning relation despite nominal-to-verbal recasting; HGM487 explicitly attests causes. Both cessation stems and both ignorance occurrences are locally sound. The two conceptions tokens have different source owners: rnam rtog, then kun brtags. HGM128 supports the nominal conceptions sense while HGM126 has constructs; the local atom does not endorse the final English rhetoric. gsung is say at107, while final zhes gsungs is fronted says at34. mi 'thad is an attested complete negative predicate at d5. The title's Reasoning/Sixty members are unique, strictly tighter and correctly reordered in English. The disputed las/Despite relation and disappearance assertion stay unwrapped. The retained LOW/PROBABLE erratum is confined to the causal/concessive relation; the original HIGH categorical replacement is refuted at that breadth.
+
+236: rang gi licenses their, and instrumental kyis locally realizes the relation in their very essence. The two grub occurrences select existed and whole-word exist. The first conditional na is If at40; the later na is when at154. 'khrul pa is a nominal error/delusion in this condition, so its contextual whole equivalent mistaken states of mind is defensible; shrinking it to mistaken would lose the nominal unit. HGM1615 supplies mistaken/delusion, not an exact full-phrase glossary attestation. Supplied your and finally remain outside. ldog owns disappear in the negated clause and mi owns never. Actual HGM25759 has gsal du 'gro, hgm_gloss ["disappear"], glossary/HTG2016, status hgm-attested (not in Great Dictionary). This is material contrary evidence against the original error claim. It does not settle the positive compound's alignment or authorize a replacement, so the compound and elliptical although they should have are omitted. The erratum is refuted under uncertainty; no disputed mapping is accepted by that disposition.
+
+237: the whole living-world and environmental-world units are directly attested by HGM25644 and11071. The narrower sems can/those who live in it would wrongly assign the relative locative to a bare being term; the current whole unit avoids that. The second unit takes places where these beings live; the preceding worlds is a repeated expanded rendering. Its snod/places and the first world's 'jig rten/world members are sound. rang gi sems/their minds is a contextual possessive unit with a unique sems/minds member, not an exact glossary-tier claim: HGM18356 is auto-aligned own mind, support3/of6. bdag gi dngos po/its very being is a complete d3 object phrase; HGM9065's auto-aligned through the power (four attestations) is contrary mined evidence, not a reason to misplace the local object. The later demonstrative/exclusive possessor phrase preserves these same beings, and no one else. HGM20684 expressly attests sems nyid/their own minds in the relevant emphatic genitive context.
+
+The source mind roles are opening sems, rang gi sems, and final sems nyid; English minds at274 after bad thoughts is supplied. The two las/karma pairs select English192 and429; final explanatory karma at481 has no extra source las. First bsags pa selects collected; the second is distributed without a second collected token and is omitted, not falsely nulled. The disputed THUN MANG modifier is likewise omitted without normalization. The complete disc-of-wind term licenses great through actual HGM25333 attestation; its wind and disc members are distinct siblings with crossed order. Below No Other is a proper name. The final environmental-limit phrase licenses farthest reaches of the world; the additional cosmographic prose is excluded.
+
+Omissions were challenged independently, including expanded pronouns/articles/auxiliaries, temporal/conditional recasts, second accumulations and explanatory repetitions. Unresolved or distributed content was not reclassified as absent with nulls. No proposed phrase was accepted merely because it passed generation, and no comparative dictionary English was promoted to GMR evidence.
+
+Errata: `bank-ready-errata.json` contains **two LOW/PROBABLE editorial candidates**,235 causal/concessive relation and237 THUN MANG/MONG spelling. `independent-five-ground-verdicts.json` separately adjudicates original235 at its excessive breadth, narrowed235, original236, and retained237. Every candidate was checked against all three source fields, independent-publication possibility, duplicate/registered classes, defensible alternatives, and actual query/count evidence. The 190-entry Git-pinned registry has no batch duplicate. Registered converter/heading/cap/footnote/running-head/row-spill classes remain intact and were not refiled.
+
+The cessation query has six rows: C05:235, C16:812, ILL:2676, SVN:560/939/1076. Physical ILL [2670] supports only the cessation stanza and carries Since/brought-to-light wording with its own Tibetan variants. Physical SVN [S560]/[N187]/[38] correspond to those three ingestion sequence IDs; the first two have LA/CI and the last LAS/JI. The original DOCX paragraphs were reopened and compared exactly, including neighboring commentary and Sanskrit. C16:812 preserves both Tibetan fields but changes conceptions to projections and retains Despite/Disappear. C05 and C16 physical ASCII source contexts retain those readings. Distinct files or identical digital text establish neither independent publication nor ingestion lineage. No authorized replacement prose is supplied.
+
+The thun mang query has two rows (C05:237/C16:814); the specified thun mong ba'i las OR thun mong gi las query has seven. No exact entries exist for thun mang, thun mang ba or thun mang ba'i las; there is also no exact dictionary entry for the proposed full thun mong ba'i las construction. Lexical HGM7479/7483 and the contextual construction supply the support. Physical ILL [2674], original line25719 (spine2680), has THUN MONG BA’I LAS and communal karma in the full environmental continuation. ILL2679/[2673] stops at the living-world clause and cannot establish that spelling; ILL2682/2685 and C05:238–239 corroborate only their own shared/nonshared-karma contexts. Possible compositional many-periods wording does not fit this construction. This supports probable spelling review, without a critical-edition or isolated-ingestion claim.
+
+Complete C05/C16 ASCII, ILL text and SVN DOCX physical witness bytes are retained through the manifest; unsupported extensions have exact-byte .bin/.txt copies. `independent-physical-verification.json` proves original hashes and every saved ILL line/SVN paragraph context. `source-byte-context-verification.json` proves every bounded C05/C16 projection. The failed historical UTF-8, ASCII-apostrophe and newline-convention attempts remain preserved, along with all proposal generator/order failures and reconciliation occurrence-correction history. This review's first general record-verifier attempt failed on a proof dictionary where id was itself a comparison object, not an original source record. Its exact script/stdout/stderr survive; attempt02 restricts original-record detection to integer IDs and passes all checks. No input or judgment was changed to pass it.
+
+`original-to-copy-manifest.json` maps every selected original path to its exact copy, hash and byte count. Mutable governing snapshots additionally pin repository-relative paths and immutable Git commits; they are checked against those objects, not a later live version. Core final interfaces remain readable under reviewed-final/235–237 and current/historical proposal core files under proposal-inputs/. Identical immutable evidence is deduplicated only after byte comparison. The inspected copy helper's exact bytes and verification record survive. All source, query, physical, generator and manifest checks pass. Approval applies only to these exact frozen artifacts and remains provisional machine review.
+'''
+(R/'review.md').write_text(text)
+print('Wrote review APPROVE, 67/0/43, two LOW/PROBABLE bank-ready candidates.')

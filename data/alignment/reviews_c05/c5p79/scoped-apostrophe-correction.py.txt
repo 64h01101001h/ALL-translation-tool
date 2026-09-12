@@ -1,0 +1,50 @@
+from pathlib import Path
+import hashlib,json,difflib,copy
+R=Path(__file__).resolve().parent
+H=R/'scoped-history/apostrophe-correction-01'
+assert not H.exists();H.mkdir(parents=True)
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def dump(p,obj):p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+preserved=[]
+for n in ['independent-five-ground-verdicts.json','review.md','review.json','frozen-manifest.json','final-hash-verification.json','copy-verification.json']:
+ raw=(R/n).read_bytes();(H/n).write_bytes(raw);preserved.append({'path':n,'sha256':sha(raw),'bytes':len(raw)})
+dump(H/'preserved-artifacts.json',preserved)
+input_paths=[R/'reviewed-final'/str(s)/n for s in [235,236,237] for n in ['spec.json','body.html','errata.json']]
+input_paths += [R/'bank-ready-errata.json',R/'resolved-spans.json',R/'span-semantic-verdicts.json',R/'original-to-copy-manifest.json']
+before={str(p.relative_to(R)):p.read_bytes() for p in input_paths}
+p=R/'independent-five-ground-verdicts.json';old=p.read_bytes();original=json.loads(old);new=copy.deepcopy(original);changes=[]
+for c in new:
+ if c['candidate'] in ['235-original','236-original']:
+  for field,parent,key in [('reason',c,'reason'),('grounds.d.reason',c['grounds']['d'],'reason')]:
+   assert parent[key].count('gsal du gro')==1
+   parent[key]=parent[key].replace('gsal du gro',"gsal du 'gro")
+   changes.append({'candidate':c['candidate'],'field':field,'before':'gsal du gro','after':"gsal du 'gro"})
+assert len(changes)==4
+restored=copy.deepcopy(new)
+for c in restored:
+ if c['candidate'] in ['235-original','236-original']:
+  c['reason']=c['reason'].replace("gsal du 'gro",'gsal du gro')
+  c['grounds']['d']['reason']=c['grounds']['d']['reason'].replace("gsal du 'gro",'gsal du gro')
+assert restored==original
+dump(p,new)
+(H/'exact-narrative.diff').write_text(''.join(difflib.unified_diff(old.decode().splitlines(True),p.read_text().splitlines(True),fromfile='before/independent-five-ground-verdicts.json',tofile='after/independent-five-ground-verdicts.json')))
+for path,raw in before.items():assert (R/path).read_bytes()==raw
+unchanged=[{'path':path,'sha256':sha(raw),'bytes':len(raw),'unchanged':True} for path,raw in before.items()]
+result={'scope':'Restore source apostrophe in four reviewer-authored narrative fields only','spec_verdict':'APPROVE','quality_verdict':'APPROVE','open_findings':[],'changes':changes,'before_sha256':sha(old),'after_sha256':sha(p.read_bytes()),'unchanged_accepted_inputs':unchanged,'all_other_five_ground_values_unchanged':True,'generators_rerun':False,'reason_no_generator_rerun':'Reviewer narrative correction only; accepted specs, bodies, notes, tuples and bank-ready errata are byte-identical.'}
+dump(R/'scoped-apostrophe-correction.json',result)
+(R/'scoped-apostrophe-correction.md').write_text("SPEC: APPROVE. QUALITY: APPROVE. No open findings.\n\nRestored gsal du 'gro in the top-level reason and ground-d reason for235-original and236-original. These are four reviewer narrative corrections, with no decision changes. Complete previous JSON/report/freeze artifacts survive under scoped-history/apostrophe-correction-01; exact-narrative.diff records the complete JSON diff. scoped-apostrophe-correction.json records before/after hashes and the unchanged accepted spec/body/errata, bank-ready errata, resolved tuples, semantic verdicts and preservation manifest. No generators or broad checks were repeated for this prose-only fix.\n")
+review=json.loads((R/'review.json').read_text());review['scoped_narrative_correction']='scoped-apostrophe-correction.json';dump(R/'review.json',review)
+(R/'review.md').write_text((R/'review.md').read_text()+"\nScoped narrative correction: the exact HGM compound is gsal du 'gro. Four narrative fields in independent-five-ground-verdicts.json were corrected to restore its apostrophe; all decisions and accepted inputs are unchanged. SPEC and QUALITY remain APPROVE. Full history and exact diff: scoped-history/apostrophe-correction-01/.\n")
+# Refresh the artifact inventory only; no source queries or generators are repeated.
+files=[]
+for f in sorted(R.rglob('*')):
+ if f.is_file() and f not in [R/'frozen-manifest.json',R/'final-hash-verification.json']:
+  raw=f.read_bytes();files.append({'path':str(f.relative_to(R)),'sha256':sha(raw),'bytes':len(raw)})
+dump(R/'frozen-manifest.json',files)
+for f in files:
+ raw=(R/f['path']).read_bytes();assert sha(raw)==f['sha256'] and len(raw)==f['bytes']
+freeze=(R/'frozen-manifest.json').read_bytes()
+prior=json.loads((H/'final-hash-verification.json').read_text())
+prior.update(frozen_files_verified=len(files),frozen_manifest_sha256=sha(freeze),frozen_manifest_bytes=len(freeze),all_hashes_hold=True,scoped_correction='scoped-apostrophe-correction.json',verification_scope='Artifact hash refresh and accepted-input byte equality; original source and generator proof inherited unchanged from preserved prior final proof.')
+dump(R/'final-hash-verification.json',prior)
+print(json.dumps({'spec_verdict':'APPROVE','quality_verdict':'APPROVE','narrative_fields_corrected':4,'accepted_inputs_unchanged':len(unchanged),'frozen_files_hash_verified':len(files),'frozen_manifest_sha256':sha(freeze)}))

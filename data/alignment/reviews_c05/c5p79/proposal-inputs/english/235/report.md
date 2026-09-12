@@ -1,0 +1,13 @@
+# C05:235 English-first proposal
+- Codex produced this independent PROVISIONAL proposal; no semantic approval is implied.
+- Full spine row 1617 and context C05:233–239 were read through SQLite URI `mode=ro`; all six snapshot fields match exactly.
+- HGM originals support `rigs pa drug cu pa` → “Sixty Verses on Reasoning,” `ma rig` → “ignorance,” `rnam rtog`/`kun brtags pa` → “conceptions,” `mi 'thad` → “wrong,” and `mi shes pa` → “misunderstanding.”
+- Corpus queries excluded C13: 0 exact-English parallels outside C05, 28 title hits, 2 ignorance/conceptions hits, 9 verse-opening hits, and 8 verse-close hits.
+- C16:812 has the same Tibetan but “projections”; ILL:2675–2676 and SVN rows use “imagination”/“brought to light,” so textual comparison supports caution and proves no publication lineage.
+- Challenge first `mi shes pa las` → “Despite our misunderstanding”: it is defensible only as a complete depth-3 recast, not an atomized particle claim.
+- Rule 10 omissions: `rkyen can`, the cessation wording around `'gags par gyur`, and `gsal mi 'gyur`; their English is distributed or conflicts with a safe isolated reading.
+- Repeats are resolved explicitly: two `ma rig`/“ignorance” and two conception spans take their corresponding English occurrences; the closing `gsungs` takes fronted “says.”
+- Errata: 0; checked the local verse parallels and found translation variation, not a supportable source correction or new registered-class filing.
+- Final canonical output: `EXIT=0`; stdout/body 3425 bytes; stderr 0 bytes and empty; saved body is byte-identical to stdout.
+- Counts: 18 spans, 0 nulls, 10 d5, 6 d3, 0 d6, 2 d7.
+- SHA-256: spec `4990abdf86ebfc825c15ff1bb50aa4e3cbb1537eae76f316fd88050b283735a4`; body `9c244e863177973466a3199ecee620d7f8e686419f8b6ebbc7b89f441e8b7b85`; errata `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.

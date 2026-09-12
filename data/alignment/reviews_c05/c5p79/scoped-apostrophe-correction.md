@@ -1,0 +1,3 @@
+SPEC: APPROVE. QUALITY: APPROVE. No open findings.
+
+Restored gsal du 'gro in the top-level reason and ground-d reason for235-original and236-original. These are four reviewer narrative corrections, with no decision changes. Complete previous JSON/report/freeze artifacts survive under scoped-history/apostrophe-correction-01; exact-narrative.diff records the complete JSON diff. scoped-apostrophe-correction.json records before/after hashes and the unchanged accepted spec/body/errata, bank-ready errata, resolved tuples, semantic verdicts and preservation manifest. No generators or broad checks were repeated for this prose-only fix.

@@ -1,0 +1,13 @@
+# C05:237 English-first proposal
+- Codex produced this independent PROVISIONAL proposal; no semantic approval is implied.
+- Full spine row 1619 and context C05:233–239 were read through SQLite URI `mode=ro`; all six snapshot fields match exactly.
+- HGM originals directly support “main thing,” “bad thoughts,” “places where these beings live,” “their own minds,” “collective karma,” “great disc of wind,” “farthest reaches,” and “Below No Other.”
+- Corpus queries excluded C13: 1 exact-English parallel outside C05, 2 collective-karma hits, 7 disc-of-wind hits, 26 Below-No-Other hits, and 3–4 rows for each tested clause-level construction.
+- C16:814 repeats all source fields exactly; ILL:2679–2680 gives related “brought into being,” “communal karma,” and “Below None” wording, without proving publication lineage.
+- Challenge first `bdag gi dngos po` → “its very being”: the contextual phrase is defensible at d3, while the current auto-aligned entry “through the power” is not used as lexical authority.
+- Rule 10 omissions: the second `bsags pa` is distributed into “within their own minds,” and the single collective-karma term owns only its first English rendering despite the later repeated “karma.”
+- Occurrences are explicit: first `rang gi sems` takes the first “their minds”; parent `rlung gi dkyil 'khor` nests unique d7 members `rlung`/“wind” and `dkyil 'khor`/“disc.”
+- Errata: 0; checked exact and related parallels, and found no supportable source correction or new registered-class filing.
+- Final canonical output: `EXIT=0`; stdout/body 4739 bytes; stderr 0 bytes and empty; saved body is byte-identical to stdout.
+- Counts: 26 spans, 0 nulls, 18 d5, 5 d3, 1 d6, 2 d7.
+- SHA-256: spec `968ff342ec17d53e1b7d36aa30dd1121163843a542995d34a2d07bbac03a8713`; body `f3ffa7a5da5ccb7b4d9e97b1e1ac53c051d692e2a6001f68eaeddff04062bbd1`; errata `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.

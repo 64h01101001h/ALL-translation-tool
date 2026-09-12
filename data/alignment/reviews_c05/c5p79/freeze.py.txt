@@ -1,0 +1,33 @@
+from pathlib import Path
+import json,hashlib,subprocess
+R=Path(__file__).resolve().parent
+W=R.parent.parent.parent/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+manifest=json.loads((R/'original-to-copy-manifest.json').read_text());seen=set()
+for x in manifest:
+ assert x['original'] not in seen;seen.add(x['original']);raw=(R/x['copy']).read_bytes()
+ assert len(raw)==x['bytes'] and sha(raw)==x['sha256']
+ if 'original_git_commit' in x:assert raw==subprocess.check_output(['git','-C',str(W),'show',x['original_git_commit']+':'+x['repository_relative_path']])
+ else:assert raw==Path(x['original']).read_bytes()
+review=json.loads((R/'review.json').read_text());spans=json.loads((R/'resolved-spans.json').read_text());verdicts=json.loads((R/'span-semantic-verdicts.json').read_text())
+assert len(spans)==67==len(verdicts)
+assert all(set(x)=={'seq','id','d','tib','eng','tib_range','eng_range'} for x in spans)
+assert review['verdict']=='APPROVE' and not review['open_findings']
+assert sum(x['d']==5 for x in spans)==43 and sum(x['d']==7 for x in spans)==7
+for x in review['segments']:
+ for kind in ['spec','body']:
+  p=R/'reviewed-final'/str(x['seq'])/(kind+('.json' if kind=='spec' else '.html'));raw=p.read_bytes()
+  assert len(raw)==x[kind+'_bytes'] and sha(raw)==x[kind+'_sha256']
+inputs=[p for p in R.parent.rglob('*') if p.is_file() and not p.is_relative_to(R) and '__pycache__' not in p.parts]
+assert all(str(p.resolve()) in seen for p in inputs)
+assert not list(R.rglob('__pycache__'))
+files=[]
+for p in sorted(R.rglob('*')):
+ if p.is_file() and p not in [R/'frozen-manifest.json',R/'final-hash-verification.json']:
+  raw=p.read_bytes();files.append({'path':str(p.relative_to(R)),'sha256':sha(raw),'bytes':len(raw)})
+(R/'frozen-manifest.json').write_text(json.dumps(files,indent=2)+'\n')
+for x in files:
+ raw=(R/x['path']).read_bytes();assert len(raw)==x['bytes'] and sha(raw)==x['sha256']
+freeze=(R/'frozen-manifest.json').read_bytes();result={'verdict':'PASS','frozen_files_verified':len(files),'original_to_copy_records_verified':len(manifest),'all_batch_inputs_preserved':len(inputs),'git_pinned_originals_verified':sum('original_git_commit' in x for x in manifest),'canonical_segments_verified':3,'resolved_tuples_verified':67,'frozen_manifest_sha256':sha(freeze),'frozen_manifest_bytes':len(freeze),'all_hashes_hold':True}
+(R/'final-hash-verification.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result))

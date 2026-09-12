@@ -1,0 +1,42 @@
+{
+  "database_uri": "file:/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+  "parameters": [
+    "C05",
+    233,
+    239
+  ],
+  "verified_fields": {
+    "id": {
+      "snapshot": 1618,
+      "original": 1618,
+      "exact": true
+    },
+    "course": {
+      "snapshot": "C05",
+      "original": "C05",
+      "exact": true
+    },
+    "seq": {
+      "snapshot": 236,
+      "original": 236,
+      "exact": true
+    },
+    "acip": {
+      "snapshot": "RANG GI NGO BO NYID KYIS GRUB NA GNAS LUGS SU GRUB PAR 'GYUR LA, DE'I TSE 'KHRUL PA LOG PA NA GSAL DU 'GRO DGOS KYI, LDOG PAR MI 'GYUR RO, , ZHES PA'I DON NO,",
+      "original": "RANG GI NGO BO NYID KYIS GRUB NA GNAS LUGS SU GRUB PAR 'GYUR LA, DE'I TSE 'KHRUL PA LOG PA NA GSAL DU 'GRO DGOS KYI, LDOG PAR MI 'GYUR RO, , ZHES PA'I DON NO,",
+      "exact": true
+    },
+    "wylie": {
+      "snapshot": "rang gi ngo bo nyid kyis grub na gnas lugs su grub par 'gyur la, de'i tshe 'khrul pa log pa na gsal du 'gro dgos kyi, ldog par mi 'gyur ro, , zhes pa'i don no",
+      "original": "rang gi ngo bo nyid kyis grub na gnas lugs su grub par 'gyur la, de'i tshe 'khrul pa log pa na gsal du 'gro dgos kyi, ldog par mi 'gyur ro, , zhes pa'i don no",
+      "exact": true
+    },
+    "english": {
+      "snapshot": "The meaning of the lines is as follows. If things existed in their very essence, then they would exist as some independent reality. If this were so, then when you finally stopped your mistaken states of mind, they would never disappear, although they should have.",
+      "original": "The meaning of the lines is as follows. If things existed in their very essence, then they would exist as some independent reality. If this were so, then when you finally stopped your mistaken states of mind, they would never disappear, although they should have.",
+      "exact": true
+    }
+  },
+  "all_six_exact": true
+}

@@ -1,0 +1,1 @@
+Original range comparison exited1 at English237 p7 because actual proposal adds cls:case and the root-resolved tuple projection omits that metadata. Tibetan/English ranges were identical [335,338]/[578,582]. Corrected check compares the exact root tuple/range schema while preserving proposal cls metadata separately. No generator failed, and no final spec/body changed.

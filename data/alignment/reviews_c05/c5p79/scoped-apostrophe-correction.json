@@ -1,0 +1,117 @@
+{
+  "scope": "Restore source apostrophe in four reviewer-authored narrative fields only",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "changes": [
+    {
+      "candidate": "235-original",
+      "field": "reason",
+      "before": "gsal du gro",
+      "after": "gsal du 'gro"
+    },
+    {
+      "candidate": "235-original",
+      "field": "grounds.d.reason",
+      "before": "gsal du gro",
+      "after": "gsal du 'gro"
+    },
+    {
+      "candidate": "236-original",
+      "field": "reason",
+      "before": "gsal du gro",
+      "after": "gsal du 'gro"
+    },
+    {
+      "candidate": "236-original",
+      "field": "grounds.d.reason",
+      "before": "gsal du gro",
+      "after": "gsal du 'gro"
+    }
+  ],
+  "before_sha256": "d9b806e3b121ed82059d5c173a42ce10e6e65786b6181bc0ab19ab2c1d76c951",
+  "after_sha256": "2fa932db63dfecc3f4bff5052ac619de232e7fc5e999902b63eea3623195c593",
+  "unchanged_accepted_inputs": [
+    {
+      "path": "reviewed-final/235/spec.json",
+      "sha256": "ac5a0bacd06c833c78c2389ebb514462cc5663a519e6c4ef3392da8f583a1136",
+      "bytes": 4636,
+      "unchanged": true
+    },
+    {
+      "path": "reviewed-final/235/body.html",
+      "sha256": "4f2dae27ee56a00437cbac5a86b73a85b820f686b7a518692f4e41457be33659",
+      "bytes": 4830,
+      "unchanged": true
+    },
+    {
+      "path": "reviewed-final/235/errata.json",
+      "sha256": "5e3ade41643da36897d89c5c454508ebd3f28a7849a1656fa0fcc8bcc8b9f711",
+      "bytes": 1614,
+      "unchanged": true
+    },
+    {
+      "path": "reviewed-final/236/spec.json",
+      "sha256": "765eedc362ea0a44d142d57716c0003dc32913092339b6efc1f68095505b0e04",
+      "bytes": 3245,
+      "unchanged": true
+    },
+    {
+      "path": "reviewed-final/236/body.html",
+      "sha256": "3c5405ef02150273ac974650f8e5e8b920574766b4793091e87d6271869b3d2a",
+      "bytes": 3485,
+      "unchanged": true
+    },
+    {
+      "path": "reviewed-final/236/errata.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "bytes": 3,
+      "unchanged": true
+    },
+    {
+      "path": "reviewed-final/237/spec.json",
+      "sha256": "42b28476787d95dd5c5a29f262ff03cfc7467a1e07635c22817787f352536b5a",
+      "bytes": 6270,
+      "unchanged": true
+    },
+    {
+      "path": "reviewed-final/237/body.html",
+      "sha256": "e573f6a6f88cbc04f248087e2f8c93c004fd8a2964cd35bcd41f1710416ff500",
+      "bytes": 6531,
+      "unchanged": true
+    },
+    {
+      "path": "reviewed-final/237/errata.json",
+      "sha256": "f95b0bbf5d476a674710d8d84020fd4568e709e9e100679774b3d85a7e3ea5bf",
+      "bytes": 1492,
+      "unchanged": true
+    },
+    {
+      "path": "bank-ready-errata.json",
+      "sha256": "75b77e6cede59940f03268b185854dc549c05521025601bb4647d4e782d0a1c5",
+      "bytes": 3957,
+      "unchanged": true
+    },
+    {
+      "path": "resolved-spans.json",
+      "sha256": "2d16f0fd17ed704b17820e6dbfd506804672cf762b7c2030d9e70397ed224f78",
+      "bytes": 12870,
+      "unchanged": true
+    },
+    {
+      "path": "span-semantic-verdicts.json",
+      "sha256": "fffeabd7d715a8c5d2a9ebd6ccf6ca6f360663bbcdc9089baef4d561b8121b91",
+      "bytes": 23250,
+      "unchanged": true
+    },
+    {
+      "path": "original-to-copy-manifest.json",
+      "sha256": "b22c2f52fc7e4a71c9f33203a466cac58bf5fdca299782f4d66ec90007869ccb",
+      "bytes": 210865,
+      "unchanged": true
+    }
+  ],
+  "all_other_five_ground_values_unchanged": true,
+  "generators_rerun": false,
+  "reason_no_generator_rerun": "Reviewer narrative correction only; accepted specs, bodies, notes, tuples and bank-ready errata are byte-identical."
+}

@@ -1,0 +1,40 @@
+import json, pathlib, subprocess, os
+ROOT=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+BASE=ROOT/'campaign-artifacts/C05-235-237/tibetan'
+def make(seq,title,items,note):
+ spans=[];pos={}
+ for i,item in enumerate(items,1):
+  tib,eng,d,*occ=item;sid='w'+str(i);spans.append(dict(id=sid,d=d,tib=tib,eng=eng))
+  if eng is not None:
+   text=json.loads((BASE/str(seq)/'source-original.json').read_text())['english'];start=0
+   for n in range((occ[0] if occ else 1)):start=text.index(eng,start)+(len(eng) if n<(occ[0] if occ else 1)-1 else 0)
+   pos[sid]=start
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':sorted(pos,key=pos.get),'note':'Provisional machine alignment by Codex (Tibetan-first independent proposal); no human semantic approval. '+note}]}
+ (BASE/str(seq)/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+make(235,'ignorance and conceptions',[
+ ('rigs pa drug cu pa','Sixty Verses on Reasoning',5),
+ ("'jig rten",'world',5,1),('ma rig','ignorance',5,1),('rkyen','causes',5),
+ ('gang phyir','Why? For',3),('sangs rgyas','Buddhas',5),('gsung','say',5,1),
+ ("'jig rten",'world',5,2),("'di",'this',5),('rnam rtog','conceptions',5,1),
+ ('zhes','to say',6),('cis','why',5),("mi 'thad",'wrong',3),
+ ('ma rig','ignorance',5,2),("'gags",'end',5),('na','If',6),
+ ("'gag",'ended',5),('mi shes pa','misunderstanding',5),('kun brtags','conceptions',5,2),
+ ('zhes gsungs','says',3),
+],"The title is an established work title. The two worlds, ignorance occurrences and conceptions occurrences are separately resolved by English order; gsung owns verse-internal say and final zhes gsungs owns introductory says. Negative predicate mi 'thad is a phrase recast as wrong. Omit rdzogs pa'i, de yi phyir na, gang zhig and the recast grammatical framework, without asserting absence of their distributed contribution. In particular ji lta bur na gsal mi 'gyur is omitted: gsal does not independently license Disappear, and the sentence's rhetorical scope is disputed. kun brtags owns only the second conceptions as a local conceptual-construction noun, not even in or the disputed disappearance claim. Source verse capitals are lineation. Published English remains verbatim.")
+make(236,'essence and mistaken perception',[
+ ('rang gi','their',5),('ngo bo nyid','very essence',5),('grub','existed',5),('na','If',6,1),
+ ('gnas lugs','independent reality',5),('grub','exist',5,2),
+ ("'khrul pa",'mistaken states of mind',5),('log pa','stopped',5),('na','when',6),
+ ('ldog','disappear',5),('mi','never',6),('don','meaning',5),
+],"gnas lugs is attested in the original HGM glossary as independent reality; ngo bo nyid as very essence. ldog is locally the cessation/disappearance predicate and mi its negation. Omit gsal du 'gro dgos kyi and the English although they should have: the Tibetan expects becoming clear, whereas the English ellipsis appears to repeat disappear. Omission marks unresolved or contradictory correspondence, not an asserted null. Omit the restructured de'i tshe and zhes pa'i frame; don retains meaning. English exist is the whole word after would, not a substring of existed. All source text remains verbatim.")
+make(237,'mind and the two worlds',[
+ ('sems','mind',5,1),('gtso bo','main thing',5),('yin','is',6,1),('de nyid','this',5),('bstan','show',5),
+ ('bshad pa','explanation',5),('sems can','those who live in it',5),("'jig rten",'world',5,1),
+ ('sems','minds',5,1),('bsags','collected',5),('las','karma',5,1),('dang','and',6,2),
+ ('nyon mongs','bad thoughts',5),('bdag gi','its',5),('dngos po','being',5),('rnyed pa','finds',5),
+ ('snod','places',5),("'jig rten",'worlds',5),('shin tu','vast',5),('sna tshogs pa','multitude',5),
+ ('sems can','beings',5,2),('de dag','these',5,2),
+ ('sems','minds',5,3),('las','karma',5,2),("'god pa",'put there',5),('skyed','produced',5),
+ ('rlung','wind',5),("dkyil 'khor",'disc',5),('nas','from',6),("'og min",'Below No Other',5),
+ ('snod','world',5,3),('mthar thug pa','farthest reaches',3),
+],"The source distinguishes sems can (living beings) and snod (their environment); expanded English explanatory participants remain outside narrower spans. The first sems can owns the full identifying paraphrase those who live in it; its later occurrence owns beings after collective karma. Three Tibetan sems occurrences own mind, the first minds, and the final minds; the supplied minds after bad thoughts is unwrapped. The two las occurrences own the first karma and collective karma's noun; the third explanatory karma stays unwrapped. Omit bsags pa's second occurrence because its contribution is compressed into the collective-karma account with no independently licensed collected token. Omit thun mang ba as a probable source spelling issue for thun mong ba rather than silently normalizing it or asserting a null. Also omit exclusivity kho na and emphatic nyid where distributed across no one else and own. 'og min is the attested proper name; the explanatory highest temporary heaven remains unwrapped. mthar thug pa is a phrase recast, not a dictionary compound. All source text remains verbatim.")

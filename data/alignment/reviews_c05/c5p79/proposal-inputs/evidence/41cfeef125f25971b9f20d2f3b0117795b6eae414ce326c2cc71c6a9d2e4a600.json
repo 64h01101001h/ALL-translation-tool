@@ -1,0 +1,490 @@
+{
+  "database_uri": "file:/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "standing_exclusion": "Every semantic corpus query excludes C13.",
+  "queries": [
+    {
+      "label": "exact English parallel outside C05",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND course <> ? AND english = ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "C05",
+        "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+      ],
+      "row_count": 1,
+      "rows": [
+        {
+          "id": 6832,
+          "course": "C16",
+          "seq": 814,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        }
+      ]
+    },
+    {
+      "label": "collective karma",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%thun mang%las%",
+        "%collective karma%"
+      ],
+      "row_count": 2,
+      "rows": [
+        {
+          "id": 1619,
+          "course": "C05",
+          "seq": 237,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 6832,
+          "course": "C16",
+          "seq": 814,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        }
+      ]
+    },
+    {
+      "label": "disc of wind",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%rlung gi dkyil 'khor%",
+        "%disc of wind%"
+      ],
+      "row_count": 7,
+      "rows": [
+        {
+          "id": 1619,
+          "course": "C05",
+          "seq": 237,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 2551,
+          "course": "C08",
+          "seq": 206,
+          "acip": ",GNAS PAR 'DOD PA'I 'OG DAG GI, ,RLUNG GI DKYIL 'KHOR RNGAMS SU NI, ,SA YA DRUG 'BUM GRANGS MED DO,",
+          "wylie": "gnas par 'dod pa'i 'og dag gi, ,rlung gi dkyil 'khor rngams su ni, ,sa ya drug 'bum grangs med do",
+          "english": "Here the beliefs on how it stays, this great Vessel of the world: below, a great Disc of wind, a million six hundred thousand Thick, by another without count."
+        },
+        {
+          "id": 2555,
+          "course": "C08",
+          "seq": 210,
+          "acip": "[III.181-9] ,GNYIS PA NI, RLUNG GI DKYIL 'KHOR DE'I STENG DU CHAR GYI RGYUN SHING RTA'I SROG SHING TZAM BAB PA LA BRTEN NAS, GSER GYI SNYING PO CAN GYI CHU'I DKYIL 'KHOR RNGAMS SU DPAG TSAD 'BUM PHRAG BCU GCIG DANG , STONG PHRAG DAG NI NYI SHU YOD PA CHAGS SO,",
+          "wylie": "[iii.181-9] ,gnyis pa ni, rlung gi dkyil 'khor de'i steng du char gyi rgyun shing rta'i srog shing tsam bab pa la brten nas, gser gyi snying po can gyi chu'i dkyil 'khor rngams su dpag tshad 'bum phrag bcu gcig dang , stong phrag dag ni nyi shu yod pa chags so",
+          "english": "As for the disc of water and gold, a pillar of rain so dense it looks like the shaft of a oxcart falls then upon that massive disc of wind. This causes the formation of a great disc of water possessing an inner base of gold. The measure of this water in its thickness is equal to one million, twenty thousand yojana [about 4.6 million miles]."
+        },
+        {
+          "id": 2635,
+          "course": "C08",
+          "seq": 290,
+          "acip": "DE NAS SNGAR GYI RLUNG DE NYID LO GRANGS DU MA'I BAR DU 'KHRIGS NAS, 'OG GZHI RLUNG GI DKYIL 'KHOR NAS SUM CU RTZA GSUM PA'I BAR MAS RIM NAS 'CHAGS, DE DAG LA BAR BSKAL",
+          "wylie": "de nas sngar gyi rlung de nyid lo grangs du ma'i bar du 'khrigs nas, 'og gzhi rlung gi dkyil 'khor nas sum cu rtsa gsum pa'i bar mas rim nas 'chags, de dag la bar bskal",
+          "english": "This same wind from before then gathers strength over a period of a great many years, until all the parts of the world from the foundation disc of wind up to the land of the Thirty-Three have formed, one by one, working up from the bottom. All these different events require one entire intermediate eon."
+        },
+        {
+          "id": 6832,
+          "course": "C16",
+          "seq": 814,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 7426,
+          "course": "C17",
+          "seq": 388,
+          "acip": "DE NAS SNGAR GYI RLUNG DE NYID LO GRANGS DU MA'I BAR DU 'KHRIGS NAS, 'OG GZHI RLUNG GI DKYIL 'KHOR NAS SUM CU RTZA GSUM PA'I BAR MAS RIM NAS 'CHAGS, DE DAG LA BAR BSKAL",
+          "wylie": "de nas sngar gyi rlung de nyid lo grangs du ma'i bar du 'khrigs nas, 'og gzhi rlung gi dkyil 'khor nas sum cu rtsa gsum pa'i bar mas rim nas 'chags, de dag la bar bskal",
+          "english": "This same wind from before then gathers strength over a period of a great many years, until all the parts of the world from the foundation disc of wind up to the land of the Thirty-Three have formed, one by one, working up from the bottom. All these different events require one entire intermediate eon."
+        },
+        {
+          "id": 38133,
+          "course": "TITLK",
+          "seq": 326,
+          "acip": "'PHAGS PA SPRIN CHEN PO RLUNG GI DKYIL 'KHOR GYI LE'U KLU THAMS CAD KYI SNYING PO ZHES BYA BA THEG PA CHEN PO'I MDO",
+          "wylie": "'phags pa sprin chen po rlung gi dkyil 'khor gyi le'u klu thams cad kyi snying po zhes bya ba theg pa chen po'i mdo",
+          "english": "An Exalted Sutra of the Greater Way entitled The Heart of the Dragons,\" the Section on the Disc of Wind, the Great Cloud.txt\""
+        }
+      ]
+    },
+    {
+      "label": "Below No Other",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "% 'og min %",
+        "%Below No Other%"
+      ],
+      "row_count": 26,
+      "rows": [
+        {
+          "id": 1619,
+          "course": "C05",
+          "seq": 237,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 6832,
+          "course": "C16",
+          "seq": 814,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 24223,
+          "course": "GIE",
+          "seq": 711,
+          "acip": ",LONGS SPYOD RDZOGS PA'I SKU NI GNAS NGES PA 'OG MIN KHO NAR BZHUGS PA SOGS NGES PA LNGA LDAN YIN LA,",
+          "wylie": "longs spyod rdzogs pa'i sku ni gnas nges pa 'og min kho nar bzhugs pa sogs nges pa lnga ldan yin la",
+          "english": "The holy body which is complete in all enjoyments is defined as being fixed, in five different ways.  It is (1) fixed in its location, because it stays only in the enlightened Paradise Below No Other.  The physical body here is also fixed, because (2) it invariably possesses all the signs and marks of an Enlightened Being—and these indications are both distinct and complete, in the sense of never being partial.  The retinue that accompanies this body is (3) invariably composed of bodhisattvas who are also realized beings.  This body is, further, (4) fixed in the sense of what teachings it presents to disciples; invariably, those of the greater way.  And then finally, (5) the duration here is fixed: the body will remain and serve, so long as there is even a single living being who has not yet achieved total enlightenment."
+        },
+        {
+          "id": 24268,
+          "course": "GIE",
+          "seq": 756,
+          "acip": "[A15] NGES PA LNGA YANG YOD DE, GNAS NGES PA 'OG MIN LHUG {%STUG} PO BKOD PA KHO NAR BZHUGS PA, 'KHOR NGES PA BYANG 'PHAGS SHA STAG GIS BSKOR PA, CHOS NGES PA THEG CHEN GYI CHOS 'BA' ZHIG GSUNGS PA, SKU NGES PA MTSAN DPE GSAL RDZOGS KYIS SPRAS PA, DUS NGES PA 'KHOR BA MA STONG GI BAR DU BZHUGS PA RNAMS SU YOD PA'I PHYIR TE,",
+          "wylie": "[a15] nges pa lnga yang yod de, gnas nges pa 'og min lhug {%stug} po bkod pa kho nar bzhugs pa, 'khor nges pa byang 'phags sha stag gis bskor pa, chos nges pa theg chen gyi chos 'ba' zhig gsungs pa, sku nges pa mtshan dpe gsal rdzogs kyis spras pa, dus nges pa 'khor ba ma stong gi bar du bzhugs pa rnams su yod pa'i phyir te",
+          "english": "Here are the five fixed qualities of the paradise body: 1) Its location is fixed, in that the body resides only in that divine realm called “The Mass of Clouds, below No Other.” 2) The beings in attendance to it are fixed, for they are invariably realized beings who are bodhisattvas. 3) The teachings it gives are fixed, for this body speaks only teachings of the greater way. 4) The appearance of this body is fixed, because it is always adorned with clear and complete versions of the physical signs and marks of an Enlightened Being. 5) The duration of this body is fixed, for it will last until the cycle of pain is emptied of living beings."
+        },
+        {
+          "id": 31460,
+          "course": "ILL",
+          "seq": 4141,
+          "acip": "'OG MIN KHO NAR ZHES GSUNGS PAS NI SNGAR SANGS MA RGYAS PA GSAR DU 'TSANG RGYA BA'I RTEN LA 'OG MIN PA DGOS PAR STON LA, SNGON SANGS RGYAS ZIN GSAR DU 'TSANG RGYA BA'I TSUL STON PA 'DOD PA KHAMS SU MDZAD PA YIN TE, PHA ROL TU PHYIN PA'I THEG PA'I LUGS SO,,",
+          "wylie": "'og min kho nar zhes gsungs pas ni sngar sangs ma rgyas pa gsar du 'tshang rgya ba'i rten la 'og min pa dgos par ston la, sngon sangs rgyas zin gsar du 'tshang rgya ba'i tshul ston pa 'dod pa khams su mdzad pa yin te, pha rol tu phyin pa'i theg pa'i lugs so",
+          "english": "When we use the expression “only in the One Below No Other,” what we are indicating is that a person who has never achieved Buddhahood before must first attain this state in a body & mind located in the level of Below No Other. If though a person has already achieved enlightenment, and is going to pretend to reach it anew, then they do so in the desire realm. That is, at least, according to the way of the perfections."
+        },
+        {
+          "id": 13057,
+          "course": "TCS07",
+          "seq": 271,
+          "acip": "PHEEm, RANG GI THUGS KA'I BAm YIG LAS 'OD ZER 'PHROS PAS, 'OG MIN NAS RJE BTZUN RDO RJE RNAL 'BYOR MA LA, BLA MA YI DAM SANGS RGYAS BYANG SEMS DPA' BO MKHA' 'GRO CHOS DANG 'JIG RTEN SKYONG BA'I TSOGS KYIS BSKOR BA MDUN GYI NAM MKHAR SPYAN DRANGS,",
+          "wylie": "pheeM, rang gi thugs ka'i baM yig las 'od zer 'phros pas, 'og min nas rje btsun rdo rje rnal 'byor ma la, bla ma yi dam sangs rgyas byang sems dpa' bo mkha' 'gro chos dang 'jig rten skyong ba'i tshogs kyis bskor ba mdun gyi nam mkhar spyan drangs",
+          "english": "Phem! Light shines forth From the letter vam Within my heart; It flies to the Heaven Below No Other, And brings back the Holy Angel of Diamond, Surrounded by the Lamas, Close Angels, Buddhas, Bodhisattvas, Warriors and their Angels, And the assembled Protectors Of both the Teachings And the world."
+        },
+        {
+          "id": 13274,
+          "course": "TCS07",
+          "seq": 488,
+          "acip": ",H'Um 'OG MIN BDE CHEN DAG PA'I PHO BRANG NAS, ,RNAM SNANG THUGS LAS SPRUL PA'I MTHU BO CHE, ,BSTAN SRUNG KUN GYI GTZO BO RDO RJE GUR, ,DPAL LDAN MGON PO 'DIR BYON MCHOD GTOR BZHES,",
+          "wylie": "hUM 'og min bde chen dag pa'i pho brang nas, ,rnam snang thugs las sprul pa'i mthu bo che, ,bstan srung kun gyi gtso bo rdo rje gur, ,dpal ldan mgon po 'dir byon mchod gtor bzhes",
+          "english": "Hung, Come, Canopy of Diamond, Head of all Protectors of the Teachings, Great Leader, Sent out from the heart Of the Buddha, Appearances, Who sits in the palace Of the Heaven Below No Other, Great bliss, and pure; Glorious Savior, Come, partake, Of the torma offerings."
+        },
+        {
+          "id": 14028,
+          "course": "TCS08PabongkaSadhana",
+          "seq": 290,
+          "acip": "PHEEm; RANG GI THUGS KA'I BAm YIG LAS 'OD ZER 'PHROS PAS, 'OG MIN NAS RJE BTZUN RDO RJE RNAL 'BYOR MA LA BLA MA YI DAM SANGS RGYAS BYANG SEMS DPA' BO MKHA' 'GRO CHOS DANG 'JIG RTEN SKYONG BA'I TSOGS KYIS BSKOR BA MDUN GYI NAM MKHAR SPYAN DRANGS,",
+          "wylie": "pheeM; rang gi thugs ka'i baM yig las 'od zer 'phros pas, 'og min nas rje btsun rdo rje rnal 'byor ma la bla ma yi dam sangs rgyas byang sems dpa' bo mkha' 'gro chos dang 'jig rten skyong ba'i tshogs kyis bskor ba mdun gyi nam mkhar spyan drangs",
+          "english": "Phem! Light shines forth From the letter bam Within my heart; It flies to the Heaven Below No Other, And brings back the Holy Angel of Diamond, Surrounded by the Lamas, Close Angels, Buddhas, Bodhisattvas, Warriors and their Angels, And the assembled Protectors Of both the Teachings And the world."
+        },
+        {
+          "id": 14046,
+          "course": "TCS08PabongkaSadhana",
+          "seq": 308,
+          "acip": "H'Um; 'OG MIN BDE CHEN DAG PA'I PHO BRANG NAS, , RNAM SNANG THUGS LAS SPRUL PA'I MTHU BO CHE, , BSTAN SRUNG KUN GYI GTZO BO RDO RJE GUR, , DPAL LDAN MGON PO 'DIR BYON MCHOD GTOR BZHES, ,",
+          "wylie": "hUM; 'og min bde chen dag pa'i pho brang nas, , rnam snang thugs las sprul pa'i mthu bo che, , bstan srung kun gyi gtso bo rdo rje gur, , dpal ldan mgon po 'dir byon mchod gtor bzhes,",
+          "english": "Hung, Come, Canopy of Diamond, Head of all Protectors of the Teachings, Great Leader, Sent out from the heart Of the Buddha, Appearances, Who sits in the palace Of the Heaven Below No Other, Great bliss, and pure; Glorious Savior, Come, partake, Of the torma offerings."
+        },
+        {
+          "id": 14267,
+          "course": "TCS09",
+          "seq": 38,
+          "acip": "GZHAN LHA MI DANG DRANG SRONG SER SKYA SOGS KYIS KYANG DE LTAR MI NUS, DE YANG BDAG CAG GI STON PA MNYAM MED SH'A KYA'I RGYAL PO DE NYID KYIS 'GRO BA RNAMS KYI DON DU DANG PO THUGS BSKYED, BAR DU TSOGS BSAGS, MTHAR 'OG MIN DU MNGON PAR RDZOGS PAR SANGS RGYAS NAS 'DZAM GLING 'DIR MDZAD PA BCU GNYIS KYI RNAM PAR ROL TE GDUL BYA RNAMS THAR PA DANG THAMS CAD MKHYEN PA THOB PHYIR CHOS 'KHOR BSKOR NAS CHOS GSUNGS PA NI THAR 'DOD RNAMS KYI 'JUG DOGS NYAG GCIG YIN TE,",
+          "wylie": "gzhan lha mi dang drang srong ser skya sogs kyis kyang de ltar mi nus, de yang bdag cag gi ston pa mnyam med shA kya'i rgyal po de nyid kyis 'gro ba rnams kyi don du dang po thugs bskyed, bar du tshogs bsags, mthar 'og min du mngon par rdzogs par sangs rgyas nas 'dzam gling 'dir mdzad pa bcu gnyis kyi rnam par rol te gdul bya rnams thar pa dang thams cad mkhyen pa thob phyir chos 'khor bskor nas chos gsungs pa ni thar 'dod rnams kyi 'jug dogs nyag gcig yin te",
+          "english": "Nobody else--man or god, monk or layman, accomplished saint or whatever--can do it.  For it was only our matchless Teacher, the King of the Shakyas, who for the sake of all living beings first made the Wish; who in the interim collected masses of virtue; who at the end reached total enlightenment in the Heaven Below No Other. He then came here to Earth, to Dzambu, and put on His play of the twelve mighty deeds of the Buddha; and it was here that He turned the Wheel of the Dharma, so that His disciples could reach liberation and omniscience.  The Dharma that He spoke is the one and only entrance for those who hope to achieve liberation."
+        },
+        {
+          "id": 15155,
+          "course": "TCS10",
+          "seq": 356,
+          "acip": "DE LA BRTEN NAS 'OG MIN GYI RNAL 'BYOR MA SOGS KYANG GLING GZHAN LA MI 'BYON PAR 'DZAM BU GLING GI RNAL 'BYOR PHO MO BYIN GYIS RLOB CING GROGS MDZAD CING, DE'I PHYIR LAM SNA MA ZIN PAS TSE GCIG LA SANGS RGYAS THOB NA 'DZAM BU GLING GI MI MNGAL SKYES KHAMS DRUG LDAN PA YIN PAS KHYAB CING, DMIGS BSAL SNGON GYI BAG CHAGS SAD PA RE GNYIS GZUGS KHAMS SOGS LA'ANG 'BYUNG NGO,",
+          "wylie": "de la brten nas 'og min gyi rnal 'byor ma sogs kyang gling gzhan la mi 'byon par 'dzam bu gling gi rnal 'byor pho mo byin gyis rlob cing grogs mdzad cing, de'i phyir lam sna ma zin pas tshe gcig la sangs rgyas thob na 'dzam bu gling gi mi mngal skyes khams drug ldan pa yin pas khyab cing, dmigs bsal sngon gyi bag chags sad pa re gnyis gzugs khams sogs la'ang 'byung ngo",
+          "english": "Due to all this, Angels of Diamond from the Paradise Below No Other don't bother going to other continents.  Rather they come to yogis and yoginis who live in this world of the Jambudvipa, to bless us and befriend us.   We can say then that--if a person who is not already very far along in the path manages to achieve enlightenment within a single lifetime--then they are necessarily someone who is a human, born from the womb, and possessed of the six elements.  There are only very occasional exceptions to this rule: a person or two in the form realm who has seeds from past lives that suddenly ripen, and then they reach Buddhahood."
+        },
+        {
+          "id": 15234,
+          "course": "TCS10",
+          "seq": 435,
+          "acip": "DES PHRA BA BAR DO'I LUS MTSON PA STE GZHI DUS SU BAR SRID SBYONG BAS NA BAR DO LONGS SKU'I LAM 'KHYER ZHES BYA, LAM DUS SU DAG MA DAG GI SGYU LUS DANG, 'BRAS DUS SU 'OG MIN DU LONGS SKU 'GRUB PA'I RGYUR 'GYUR RO,",
+          "wylie": "des phra ba bar do'i lus mtshon pa ste gzhi dus su bar srid sbyong bas na bar do longs sku'i lam 'khyer zhes bya, lam dus su dag ma dag gi sgyu lus dang, 'bras dus su 'og min du longs sku 'grub pa'i rgyur 'gyur ro",
+          "english": "The fact that the vam syllable is so tiny represents the subtle body of an intermediate being.  And so with reference to the original state you are trying to transform your life in the intermediate state, and this is why we call this practice \"using the intermediate state as a path to the Enjoyment Body.\"  This practice acts as a cause for attaining your impure rainbow body and your totally pure rainbow body at the stage of the path.  With reference to the final result, it acts as a cause to achieving the state of the Enjoyment Body in the Paradise Below No Other."
+        },
+        {
+          "id": 15435,
+          "course": "TCS10",
+          "seq": 636,
+          "acip": "TSAR CHEN GYIS, YID 'ONG RGYAL YUM + RTZE DGAS ROL BAR SHOG ,CES GSUNGS TE, PHYI NANG GSANG BA'I RNAL 'BYOR MA'I RANG ZHAL MTHONG BA'I SMON LAM YIN LA, DE YANG SNGAGS SKYES LHAN SKYES PHO NYA'I TSOGS, ZHES GSUNGS PA LTAR, BUD MED LAM THUN MONG BAS RGYUD SBYANGS PA BSKYED RIM GYI RTOGS PA SNE ZIN SKYES PA SNGAGS SKYES DANG, YUL NYER BZHI'I ZHING SKYES KYI RNAL 'BYOR MA DANG, 'OG MIN LHAN SKYES KYI RNAL 'BYOR MA 'DU BA STE MJAL BAR SHOG CES PA DANG,",
+          "wylie": "tshar chen gyis, yid 'ong rgyal yum + rtse dgas rol bar shog ,ces gsungs te, phyi nang gsang ba'i rnal 'byor ma'i rang zhal mthong ba'i smon lam yin la, de yang sngags skyes lhan skyes pho nya'i tshogs, zhes gsungs pa ltar, bud med lam thun mong bas rgyud sbyangs pa bskyed rim gyi rtogs pa sne zin skyes pa sngags skyes dang, yul nyer bzhi'i zhing skyes kyi rnal 'byor ma dang, 'og min lhan skyes kyi rnal 'byor ma 'du ba ste mjal bar shog ces pa dang",
+          "english": "Now Tsarchen has those lines that go, \"May I laugh and play...in the one who steals my heart.\"   This is a prayer for seeing the face of the outer, inner, and secret forms of the Angel. Remember too the lines that talk about \"A crowd of messengers...born of the secret word, the simultaneous.\"  Messengers \"born of the secret word\" are women who have been trained in the shared path, and who have a good foundation in realizations of the creation stage.  Messenger \"born of holy places\" are women who come from the 24 holy places.  Messengers \"born of the simultaneous\" are women who are living in the Heaven Below No Other.  And so what Master Tsarchen is praying for here is that these Messengers can gather together, and that He meets them."
+        },
+        {
+          "id": 15515,
+          "course": "TCS11",
+          "seq": 34,
+          "acip": "YANG SKABS SKABS SU RNAL 'BYOR MA DE DAG KYANG 'OG MIN NA BZHUGS PA'I RNAL 'BYOR MA DANG BDE CHEN 'KHOR LO'I YUM BZHI, PHYI'I YUL NYER BZHI DANG DUR KHROD BRGYAD SOGS NA DA LTA DNGOS SU BZHUGS PA'I DPA' BO MKHA' 'GRO DANG GNYIS SU MED PA'I RNAL 'BYOR MA DE DANG DE DNGOS YIN SNYAM PA STE BSAM BLO GNYIS DGOS,",
+          "wylie": "yang skabs skabs su rnal 'byor ma de dag kyang 'og min na bzhugs pa'i rnal 'byor ma dang bde chen 'khor lo'i yum bzhi, phyi'i yul nyer bzhi dang dur khrod brgyad sogs na da lta dngos su bzhugs pa'i dpa' bo mkha' 'gro dang gnyis su med pa'i rnal 'byor ma de dang de dngos yin snyam pa ste bsam blo gnyis dgos",
+          "english": "From time to time though in the meditation you should also reflect on how each Angel is in truth this or that Angel who already existed; that they are entirely indivisible from the Holy Angel and the four Wives of the Wheel of Great Bliss who even now reside in the Heaven Below No Other, and the various Warriors and Angels who are present in the twenty-four sacred places and the eight burial grounds of the outer world.  Thus there are two states of mind you must retain."
+        },
+        {
+          "id": 15519,
+          "course": "TCS11",
+          "seq": 38,
+          "acip": "SKABS SKABS SU RANG GI GNAS KYANG 'OG MIN DANG YUL NYER BZHI SOGS DNGOS YIN SNYAM PA DANG , KHA t+V'A GA'I MTSON DON RNAMS SHES PAR BYAS NAS DE NYID LA HE RU KA'I RTEN DANG BRTEN PA'I DKYIL 'KHOR GYI GNAD RNAMS KYANG TSANG BAR MOS PA GAL CHE,",
+          "wylie": "skabs skabs su rang gi gnas kyang 'og min dang yul nyer bzhi sogs dngos yin snyam pa dang , kha T+vA ga'i mtshon don rnams shes par byas nas de nyid la he ru ka'i rten dang brten pa'i dkyil 'khor gyi gnad rnams kyang tshang bar mos pa gal che",
+          "english": "Then and again in the meditation as well it is very important for you to think to yourself how your own place is actually the Heaven Below No Other, or the twenty-four sacred lands, or the like.  Learn all the symbolism too of the khatvanga staff, and then keep a strong feeling of how all the essential elements of the entire secret world of Heruka, both the place and the beings that stay there, are all complete in this single object."
+        },
+        {
+          "id": 15543,
+          "course": "TCS11",
+          "seq": 62,
+          "acip": "YANG YI GE GSUM GYIS PHO NYA GSUM MTSON PA NI, RANG RNAL 'BYOR MAR BSGOMS PA DANG SEMS CAN THAMS CAD RNAL 'BYOR MAR GYUR PA NI SNGAGS SKYES KYI PHO NYA, YUL NYER BZHI'I RNAL 'BYOR MA NI ZHING SKYES KYI PHO NYA, 'OG MIN NA ZHUGS PA NI, LHAN SKYES KYI PHO NYA STE DE THAMS CAD GCIG TU BSRE BA LA PHO NYA GSUM BSRE ZHES GSUNGS,",
+          "wylie": "yang yi ge gsum gyis pho nya gsum mtshon pa ni, rang rnal 'byor mar bsgoms pa dang sems can thams cad rnal 'byor mar gyur pa ni sngags skyes kyi pho nya, yul nyer bzhi'i rnal 'byor ma ni zhing skyes kyi pho nya, 'og min na zhugs pa ni, lhan skyes kyi pho nya ste de thams cad gcig tu bsre ba la pho nya gsum bsre zhes gsungs",
+          "english": "You can also say that the three letters represent the three different kinds of Messengers.  The Angel that I am visualizing myself as, and the Angels represented by all the suffering beings who transformed into Her--are Messengers born of the secret word.  The Angels who live in the 24 sacred sites are the Messengers born of the holy places.  The Angels who live in the Heaven Below No Other then are the Messengers born of the simultaneous.  And when They all mix together as one here then we call it the �fusion of the three Messengers.�"
+        },
+        {
+          "id": 15565,
+          "course": "TCS11",
+          "seq": 84,
+          "acip": "YUL NYER BZHI'I DPA' MO RNAMS ZHING SKYES TE PHO NYA 'BRING , 'OG MIN NA BZHUGS PA'I LHAN SKYES KYI RNAL 'BYOR MA PHO NYA RAB STE PHYI'I PHO NYA GSUM DANG ,",
+          "wylie": "yul nyer bzhi'i dpa' mo rnams zhing skyes te pho nya 'bring , 'og min na bzhugs pa'i lhan skyes kyi rnal 'byor ma pho nya rab ste phyi'i pho nya gsum dang",
+          "english": "The woman Warriors of the twenty-four sacred lands are the Messengers we say are \"born of holy places,\" and these are the middling Messengers.  The Holy Angels who reside in the Heaven Below No Other are those we call \"born of the simultaneous,\" and they are the higher Messenger.  These then are the three outer Messengers."
+        },
+        {
+          "id": 16667,
+          "course": "TCS13",
+          "seq": 118,
+          "acip": "BDAG BSKYED RKYANG PA'I SKABS TSOGS 'BUL NA 'OG MIN MA'I GONG DANG, BDAG 'JUG SKABS 'OG TU BYED PA'I KHYAD PAR YOD,",
+          "wylie": "bdag bskyed rkyang pa'i skabs tshogs 'bul na 'og min ma'i gong dang, bdag 'jug skabs 'og tu byed pa'i khyad par yod",
+          "english": "There is a distinction here that you should be aware of.  If you plan to make the offering of the Gathering on an occasion when all you are doing is the practice of turning yourself into the Angel, then you should do so before the section on the Heaven Below No Other.  Whenever you are taking yourself in though, you should make this offering after that section."
+        },
+        {
+          "id": 16733,
+          "course": "TCS13",
+          "seq": 184,
+          "acip": "'DI KHRID KYI TSE NYIN STAR GSAR PA BSHAMS TE 'BREL GTOR GYI 'OG MIN MA'I DUS SU 'BUL, MTSAMS KYI SKABS 'OG MIN MA'I GTOR MA 'DI NYIN RE BZHIN GSAR BRJE MI DGOS PAR GTOR SGAM DU BSHAMS PAS CHOG ,",
+          "wylie": "'di khrid kyi tshe nyin star gsar pa bshams te 'brel gtor gyi 'og min ma'i dus su 'bul, mtshams kyi skabs 'og min ma'i gtor ma 'di nyin re bzhin gsar brje mi dgos par gtor sgam du bshams pas chog",
+          "english": "During periods when a teaching is being delivered on this practice, you should make a new torma of this kind each day, and offer it up during the part of ceremony for the torma of relationship in the section about the Heaven Below No Other.  When you are staying in retreat, you need not replace this torma of the Heaven Below No Other with a new one each day; it is permissible to place it in a special cabinet which protects the torma."
+        },
+        {
+          "id": 16790,
+          "course": "TCS13",
+          "seq": 241,
+          "acip": "DE MDUN RANG GI G-YON NAS 'GO BRTZAMS PA'I BDAG BSKYED KYI CHU GNYIS NYER SPYOD TSAR GCIG LOGS SHIG TU 'OG MIN MA'I DMAR ZLUM SKED PAR PAD 'DAB BZHIS BSKOR BA, BRANG RGYAN LNGA KHRAM, RTZE RGYAN NYI ZLA N'A DA, PHYAG BZHES DPE RIS TSAD LDAN MANG POR YANG 'DI LTAR BYUNG,",
+          "wylie": "de mdun rang gi g-yon nas 'go brtsams pa'i bdag bskyed kyi chu gnyis nyer spyod tshar gcig logs shig tu 'og min ma'i dmar zlum sked par pad 'dab bzhis bskor ba, brang rgyan lnga khram, rtse rgyan nyi zla nA da, phyag bzhes dpe ris tshad ldan mang por yang 'di ltar byung",
+          "english": "Placed before these goes yet another line of offering bowls, these starting from our left.  These are offered to ourselves as the Angel, and again consist of two waters followed by the objects of the senses.  Off to one side here we place the Torma for the Lady of the Heaven Below No Other.  It is red, and conical in shape.  Four lotus petals circle it at the midpoint, and again at the top center it has the five-part ornamentation, along with the additional top adornment, sun, crescent, and nada.  You see it this way in a lot of authentic drawings of the tradition."
+        },
+        {
+          "id": 16816,
+          "course": "TCS13",
+          "seq": 267,
+          "acip": "TSES BCU BSDUS PA NI, BDAG BSKYED KYI, DNGOS GRUB MA LUS PA STZAL DU GSOL, ZHES PA'I MJUG TU TSOGS 'KHOR BYA ZHING, TSOGS LHAG 'OG MIN MA'I MJUG TU BTON PA LAS GZHAN TSANG MA BDAG BSKYED GZHUNG LTAR BYED PA YIN NO,,",
+          "wylie": "tshes bcu bsdus pa ni, bdag bskyed kyi, dngos grub ma lus pa stsal du gsol, zhes pa'i mjug tu tshogs 'khor bya zhing, tshogs lhag 'og min ma'i mjug tu bton pa las gzhan tshang ma bdag bskyed gzhung ltar byed pa yin no",
+          "english": "For an abbreviated version of the Offering of the Tenth, follow the text for turning yourself into Her, up to the point that includes the words, \"Grant us every one of our goals.\"  The Circle of Gathering should come then right after that, and the offering of the remainders of the gathering should be read out after the section dedicated to the Lady of the Heaven Below No Other.  All the rest follows the normal order of the text of the ritual for becoming Her."
+        },
+        {
+          "id": 17379,
+          "course": "TCS13",
+          "seq": 830,
+          "acip": "PHYI ROL 'OG MIN NA BZHUGS PA NI LHAN SKYES KYI RNAL 'BYOR MA STE PHYI'I RNAL 'BYOR MA RAB, 'DZAM BU GLING GI YUL NYER BZHI SOGS NA BZHUGS PA NI ZHING SKYES KYI RNAL 'BYOR MA STE 'BRING, LAM MTHUN MONG DANG MTHUN MONG MIN PA LA RIM GYIS SBYANGS PAS BSKYED RIM GYI RTOGS PA SNE ZIN SKYES PA YAN CHAD NI SNGAGS SKYES KYI RNAL 'BYOR MA STE THA MA YIN LA,",
+          "wylie": "phyi rol 'og min na bzhugs pa ni lhan skyes kyi rnal 'byor ma ste phyi'i rnal 'byor ma rab, 'dzam bu gling gi yul nyer bzhi sogs na bzhugs pa ni zhing skyes kyi rnal 'byor ma ste 'bring, lam mthun mong dang mthun mong min pa la rim gyis sbyangs pas bskyed rim gyi rtogs pa sne zin skyes pa yan chad ni sngags skyes kyi rnal 'byor ma ste tha ma yin la",
+          "english": "Then outside, staying in the Heaven Below No Other, is the spontaneous Diamond Angel--this is the highest form of the outer Angel.  Living in the 24 sacred lands of Earth and the like are the Angels born of holy places--these are the medium type of outer Angel. And one who has at the very least had realizations of the main points of the stage of creation, by becoming adept in the steps of both the shared and unique paths, is an Angel born of the secret word--this is the lowest kind of outer Angel."
+        },
+        {
+          "id": 18193,
+          "course": "TCS15",
+          "seq": 50,
+          "acip": "PHYI'I PHO NYA RAB NI, 'OG MIN NA BZHUGS PA'I LHAN SKYES KYI RGYAL YUM RDO RJE RNAL 'BYOR MA DANG, 'BRING YUL NYER BZHIN BZHUGS PA'I RAB GTUM MA SOGS ZHING SKYES KYI d'A KI MA,",
+          "wylie": "phyi'i pho nya rab ni, 'og min na bzhugs pa'i lhan skyes kyi rgyal yum rdo rje rnal 'byor ma dang, 'bring yul nyer bzhin bzhugs pa'i rab gtum ma sogs zhing skyes kyi DA ki ma",
+          "english": "The highest outer messenger is the simultaneous Mother of the Victors, the Angel of Diamond, who resides in the Heaven Below No Other.  The medium outer messengers are the Angels who are \"born of holy places\": this refers to those--like the Lady of Horrible Wrath--who reside in the 24 sacred lands."
+        },
+        {
+          "id": 18830,
+          "course": "TCS16KaliWang",
+          "seq": 49,
+          "acip": "DE THAMS CAD KYI SPYI BOR AOm, MGRIN PAR A'A: THUGS KAR H'Um, BDAG NYID THUGS KA'I H'Um GI 'OD ZER LCAGS KYU'I RNAM PA CAN GYIS 'OG MIN CHOS KYI PHO BRANG, MU LE TING GI KHRAG MTSO, ,CHOS 'KHOR RGYAL LA SOGS PA NAS DPAL LDAN LHA MO 'KHOR DANG BCAS PA SKAD CIG GI SPYAN DRANGS,",
+          "wylie": "de thams cad kyi spyi bor aoM, mgrin par a'a: thugs kar hUM, bdag nyid thugs ka'i hUM gi 'od zer lcags kyu'i rnam pa can gyis 'og min chos kyi pho brang, mu le ting gi khrag mtsho, ,chos 'khor rgyal la sogs pa nas dpal ldan lha mo 'khor dang bcas pa skad cig gi spyan drangs",
+          "english": "Each of Them has At the tip of Their head A letter om; At Their throat A letter ah; And at Their eminent heart A letter hung. From all these letters Fly our rays of light In the form of hooks. The hooks travel To the palace In the Heaven Below No Other, And to the lake of blood At Mu-Li-Ting, And to Chukor Gyal, and the rest; In a single instant then They draw back with them Shri Devi, the Shining Goddess, And all those in Her circle."
+        },
+        {
+          "id": 19291,
+          "course": "TCS16KaliWang",
+          "seq": 510,
+          "acip": "DE THAMS CAD KYI SPYI BOR AOm, MGRIN PAR A'A: THUGS KAR H'Um, BDAG NYID THUGS KA'I H'Um GI 'OD ZER LCAGS KYU'I RNAM PA CAN GYIS 'OG MIN CHOS KYI PHO BRANG, MU LE TING GI KHRAG MTSO, ,CHOS 'KHOR RGYAL LA SOGS PA NAS DPAL LDAN LHA MO 'KHOR DANG BCAS PA SKAD CIG GI SPYAN DRANGS,",
+          "wylie": "de thams cad kyi spyi bor aoM, mgrin par a'a: thugs kar hUM, bdag nyid thugs ka'i hUM gi 'od zer lcags kyu'i rnam pa can gyis 'og min chos kyi pho brang, mu le ting gi khrag mtsho, ,chos 'khor rgyal la sogs pa nas dpal ldan lha mo 'khor dang bcas pa skad cig gi spyan drangs",
+          "english": "Each of Them has At the tip of Their head A letter om; At Their throat A letter ah; And at Their eminent heart A letter hung. From all these letters Fly out rays of light In the form of hooks. The hooks travel To the palace In the Heaven Below No Other, And to the lake of blood At Mu-Li-Ting, And to Chukor Gyal, and the rest; In a single instant then They draw back with them Shri Devi, the Shining Goddess, And all those in Her circle."
+        },
+        {
+          "id": 21329,
+          "course": "TCS18Commentary",
+          "seq": 100,
+          "acip": "LONGS SKU LA RANG BZHIN GYI GNAS SU BYAS PA DANG, GNAS BYE BRAG PA 'OG MIN SOGS LA RANG BZHIN GYI GNAS SU BYAS PA DE GSUM PO GANG YANG RUNG BA (NAS) BSGOM PA DANG 'DRA BA'I (YE SHES PA) LONGS SPRUL GYI RNAM PA CAN 'KHOR DANG BCAS PA (RNAMS) SKAD CIG GIS 'DIR (SPYAN DRANGS) TE,",
+          "wylie": "longs sku la rang bzhin gyi gnas su byas pa dang, gnas bye brag pa 'og min sogs la rang bzhin gyi gnas su byas pa de gsum po gang yang rung ba (nas) bsgom pa dang 'dra ba'i (ye shes pa) longs sprul gyi rnam pa can 'khor dang bcas pa (rnams) skad cig gis 'dir (spyan drangs) te",
+          "english": "The body of enjoyment is also being called a \"Land of Reality,\" as are certain specific locations such as the Heaven Below No Other.  And the light rays are--within a single instant--beckoning, from any one or more of these three Lands, Beings of Wisdom who have the same appearance as the holy beings we have been visualizing.  Which is to say, They are in the form either of the body of enjoyment or of the emanation body, each with Their own retinue."
+        }
+      ]
+    },
+    {
+      "label": "world finds its being",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%bdag gi dngos po rnyed pa%"
+      ],
+      "row_count": 4,
+      "rows": [
+        {
+          "id": 1619,
+          "course": "C05",
+          "seq": 237,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 6832,
+          "course": "C16",
+          "seq": 814,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 29998,
+          "course": "ILL",
+          "seq": 2679,
+          "acip": "SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la",
+          "english": "The goal here then is to explain this one thing: that the mind is the principal point. To do so, we show how the world of living beings is brought into being as something for them through the karma and the negativities that they have accumulated with their own minds."
+        },
+        {
+          "id": 36620,
+          "course": "SVN",
+          "seq": 160,
+          "acip": "TSIG GSAL GYI STONG THUN DU 'DIR SKYE BA BKAG PA BSGRUB BYA'I CHOS SU 'DOD PA'I TSE DE KHO NAR RTEN CHOS CAN PHYIN CI LOG TZAM GYI BDAG GI DNGOS PO RNYED PA NYAMS PAR 'GYUR BAR RTOG GE PA 'DIS RANG NYID KYIS KHAS BLANGS PA YIN NO ZHES GSUNGS SO,,",
+          "wylie": "tshig gsal gyi stong thun du 'dir skye ba bkag pa bsgrub bya'i chos su 'dod pa'i tshe de kho nar rten chos can phyin ci log tsam gyi bdag gi dngos po rnyed pa nyams par 'gyur bar rtog ge pa 'dis rang nyid kyis khas blangs pa yin no zhes gsungs so",
+          "english": "He expresses this point in his interlude on emptiness known as A Clarification of the Verses: When we take the position here that denying the growth of things is the quality we seek to prove, then this logician has-on his own accord-accepted precisely, with nothing more than this, that the idea that the basis of the quality (the subject under consideration) can be perceived to be a self-existing entity, and thus simply mistaken, has been compromised."
+        }
+      ]
+    },
+    {
+      "label": "same beings only",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%sems can de dag kho na%"
+      ],
+      "row_count": 3,
+      "rows": [
+        {
+          "id": 1619,
+          "course": "C05",
+          "seq": 237,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 6832,
+          "course": "C16",
+          "seq": 814,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 29999,
+          "course": "ILL",
+          "seq": 2680,
+          "acip": "SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MONG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,,",
+          "wylie": "snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mong ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "And the vessel of the outer world, with all its endless variation, is something that has been “set forth”—which is to say, created—only by all these living beings, through the communal karma they have accumulated with nothing other than their own minds. And this refers to the entire universe, up to its very ends—starting from the disk of wind that serves as the foundation of the universe, up to the highest of its levels, known as “Below None.”"
+        }
+      ]
+    },
+    {
+      "label": "put and produced",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%kyis %god pa ste skyed%"
+      ],
+      "row_count": 3,
+      "rows": [
+        {
+          "id": 1619,
+          "course": "C05",
+          "seq": 237,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 6832,
+          "course": "C16",
+          "seq": 814,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 29999,
+          "course": "ILL",
+          "seq": 2680,
+          "acip": "SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MONG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,,",
+          "wylie": "snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mong ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "And the vessel of the outer world, with all its endless variation, is something that has been “set forth”—which is to say, created—only by all these living beings, through the communal karma they have accumulated with nothing other than their own minds. And this refers to the entire universe, up to its very ends—starting from the disk of wind that serves as the foundation of the universe, up to the highest of its levels, known as “Below None.”"
+        }
+      ]
+    },
+    {
+      "label": "container limit",
+      "query": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course <> ? AND wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "C13",
+        "%snod kyi mthar thug%"
+      ],
+      "row_count": 3,
+      "rows": [
+        {
+          "id": 1619,
+          "course": "C05",
+          "seq": 237,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 6832,
+          "course": "C16",
+          "seq": 814,
+          "acip": ",SEMS GTZO BO YIN PA DE NYID BSTAN PA'I PHYIR BSHAD PA DE LA SEMS CAN GYI 'JIG RTEN NI RANG GI SEMS KYIS BSAGS PA'I LAS DANG NYON MONGS PAS BDAG GI DNGOS PO RNYED PA YIN LA, SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,",
+          "wylie": "sems gtso bo yin pa de nyid bstan pa'i phyir bshad pa de la sems can gyi 'jig rten ni rang gi sems kyis bsags pa'i las dang nyon mongs pas bdag gi dngos po rnyed pa yin la, snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "The mind is the main thing; and to show this, the following explanation appears in the scripture: The world, in the form of those who live in it, finds its very being through the power of the karma they have collected with their minds, and through the bad thoughts in their minds. All the vast multitude of worlds too, in the form of the places where these beings live, have been put there, have been produced, by the collective karma of these same beings, and no one else--by the karma within their own minds. This refers to everything up to the farthest reaches of the world, from the great disc of wind that underpins our planet up to the highest temporary heaven, the one named \"Below No Other.\""
+        },
+        {
+          "id": 29999,
+          "course": "ILL",
+          "seq": 2680,
+          "acip": "SNOD KYI 'JIG RTEN SHIN TU SNA TSOGS PA NI SEMS CAN DE DAG KHO NA'I SEMS NYID KYIS BSAGS PA'I THUN MONG BA'I LAS KYIS 'GOD PA STE SKYED DE, RLUNG GI DKYIL 'KHOR NAS 'OG MIN GYI SNOD KYI MTHAR THUG PA'O,,",
+          "wylie": "snod kyi 'jig rten shin tu sna tshogs pa ni sems can de dag kho na'i sems nyid kyis bsags pa'i thun mong ba'i las kyis 'god pa ste skyed de, rlung gi dkyil 'khor nas 'og min gyi snod kyi mthar thug pa'o",
+          "english": "And the vessel of the outer world, with all its endless variation, is something that has been “set forth”—which is to say, created—only by all these living beings, through the communal karma they have accumulated with nothing other than their own minds. And this refers to the entire universe, up to its very ends—starting from the disk of wind that serves as the foundation of the universe, up to the highest of its levels, known as “Below None.”"
+        }
+      ]
+    }
+  ]
+}

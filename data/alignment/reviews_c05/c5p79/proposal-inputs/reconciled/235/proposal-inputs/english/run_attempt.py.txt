@@ -1,0 +1,43 @@
+"""Run one preserved proposal attempt through the read-only canonical generator."""
+
+from __future__ import annotations
+
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+
+BASE = Path(__file__).resolve().parents[1]
+CAMPAIGN_ROOT = BASE.parents[2]
+WORKTREE = CAMPAIGN_ROOT / "campaign-worktree"
+RUNNER = CAMPAIGN_ROOT / "campaign-artifacts" / "run_generator_readonly.py"
+
+
+def main() -> None:
+    if len(sys.argv) != 3:
+        raise SystemExit("usage: run_attempt.py SEQ ATTEMPT")
+    seq, attempt = sys.argv[1:]
+    out = BASE / seq
+    spec = out / f"attempt-{attempt}-spec.json"
+    env = dict(os.environ)
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    result = subprocess.run(
+        [sys.executable, str(RUNNER)],
+        cwd=WORKTREE,
+        env=env,
+        input=spec.read_bytes(),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    (out / f"attempt-{attempt}-stdout.html").write_bytes(result.stdout)
+    (out / f"attempt-{attempt}-stderr.txt").write_bytes(result.stderr)
+    (out / f"attempt-{attempt}-exit.txt").write_text(
+        f"EXIT={result.returncode}\n", encoding="utf-8"
+    )
+    print(f"{seq} attempt {attempt}: EXIT={result.returncode} stdout={len(result.stdout)} stderr={len(result.stderr)}")
+
+
+if __name__ == "__main__":
+    main()

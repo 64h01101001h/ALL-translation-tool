@@ -1,0 +1,75 @@
+from pathlib import Path
+import json,sqlite3,hashlib,subprocess,os,sys,importlib.util,re,shutil,collections
+BASE=Path(__file__).resolve().parents[2];ROOT=BASE.parents[1];WORK=ROOT/'campaign-worktree';OUT=BASE/'reconciled'
+def save(p,v):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+c=sqlite3.connect((WORK/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+sys.path.insert(0,str(WORK/'tools'));import gen_alignment_page as G
+def span(id,d,t,e,**kw):return dict(id=id,d=d,tib=t,eng=e,**kw)
+def tprops(seq):return json.loads((BASE/'tibetan'/str(seq)/'spec.json').read_text())['segments'][0]
+def eprops(seq):return json.loads((BASE/'english'/str(seq)/'spec.json').read_text())['segments'][0]
+S={};s=tprops(235)
+s['spans'].insert(1,span('m1',7,'rigs pa','Reasoning'));s['spans'].insert(2,span('m2',7,'drug cu','Sixty'))
+for x in s['spans']:
+ if x['id']=='w5':x.update(tib='gang phyir',eng='For',d=3)
+ if x['id']=='w13':x['d']=5
+s['spans'].insert(next(i for i,x in enumerate(s['spans']) if x['id']=='w8'),span('p1',3,'de yi phyir na','then'))
+s['spans'].insert(next(i for i,x in enumerate(s['spans']) if x['id']=='w20'),span('p2',3,'ji lta bur na','how'))
+s['eng_order'].insert(s['eng_order'].index('w13'),'p1');s['eng_order'].insert(s['eng_order'].index('w17'),'p2')
+s['note']="PROVISIONAL machine alignment reconciled by Codex from independent Tibetan-first and English-first proposals; no human semantic acceptance. The title and its unique Reasoning/Sixty members are lexical units. gang phyir supplies causal For here; the supplied Why? is unpaired despite HGM's broader inventory. de yi phyir na supplies consequent then; cis supplies why. The complete negative predicate mi 'thad is HGM-attested as wrong. Both ignorance occurrences and both conceptions occurrences retain their distinct source roles. First 'gags owns end and later 'gag owns ended; ji lta bur na owns only how, leaving Then and the auxiliary frame unpaired. mi shes pa owns misunderstanding and kun brtags owns only the final conceptions; las/Despite and the disputed disappearance rhetoric are omitted. HGM25759 at glossary tier HTG2016 expressly attests gsal du 'gro/disappear, but that compound is absent here and does not resolve this verse's causal/concessive relation. The LOW/PROBABLE editorial concern addresses that relation, not an authorized replacement translation. rdzogs pa'i, supplied participants and distributed rhetorical/grammatical material remain unwrapped without false nulls. Final zhes gsungs owns introductory says; gsung owns verse-internal say. GMR's wording and verse lineation remain verbatim."
+S[235]=s
+s=tprops(236)
+s['spans'].insert(2,span('p1',6,'kyis','in',cls='case'))
+s['eng_order'].insert(s['eng_order'].index('w1'),'p1')
+s['note']="PROVISIONAL machine alignment reconciled by Codex from independent Tibetan-first and English-first proposals; no human semantic acceptance. rang gi licenses their and kyis the contextual means/essence expression in. The first grub owns existed and the second grub owns the separate whole word exist. gnas lugs/independent reality and ngo bo nyid/very essence are glossary attestations. 'khrul pa is a nominal error/delusion here, rendered contextually as the whole mistaken states of mind; its HGM entry attests mistaken and delusion, not that exact full phrase. Initial na owns If and later na owns when. Supplied things, they, you, your, finally and auxiliary wording stay unpaired. The temporal de'i tshe/If this were so recast and the expanded introductory formula are omitted; don retains meaning. ldog owns disappear and mi owns never. gsal du 'gro dgos kyi and although they should have remain unresolved and omitted, not nulled: the glossary's HGM25759 explicitly attests gsal du 'gro/disappear at HTG2016 tier, while ILL's full corresponding passage uses brought-to-light wording. The proposed categorical English erratum is refuted for insufficient certainty given this actual attestation and the possible argument-level elliptical recast; neither interpretation is substituted into the source. All source text remains verbatim."
+S[236]=s
+s=eprops(237)
+for x in s['spans']:
+ if x['id']=='w3':x.update(d=6,tib='yin')
+ if x['id']=='p2':x.update(d=5,eng='world, in the form of those who live in it')
+ if x['id']=='w14':x.update(tib='las',eng='karma')
+s['spans'].insert(next(i for i,x in enumerate(s['spans']) if x['id']=='w5'),span('m3',7,"'jig rten",'world'))
+s['spans'].insert(next(i for i,x in enumerate(s['spans']) if x['id']=='w6'),span('m4',7,'sems','minds'))
+s['spans'].insert(next(i for i,x in enumerate(s['spans']) if x['id']=='w8'),span('p9',6,'dang','and'))
+s['spans'].insert(next(i for i,x in enumerate(s['spans']) if x['id']=='w11'),span('m5',7,'snod','places'))
+s['eng_order'].insert(s['eng_order'].index('w8'),'p9')
+s['note']="PROVISIONAL machine alignment reconciled by Codex from independent Tibetan-first and English-first proposals; no human semantic acceptance. HGM25644 (glossary, HTG2016) attests the complete living-world expression world, in the form of those who live in it; supplied initial The is excluded and sems can is not falsely isolated as those who live in it. Its unique 'jig rten/world member is retained. rang gi sems/their minds is a contextual possessive compound: HGM18356 is auto-aligned own mind, not an exact glossary-tier equivalent; rang gi locally licenses their and sems/minds is its tighter member. The later explanatory minds after bad thoughts has no separate source mind. bdag gi dngos po/its very being is a contextual complete d3 phrase; HGM9065's auto-aligned through the power is preserved as contrary evidence, not promoted. HGM11071 (glossary, HTG2016) supports the environmental-world unit places where these beings live with the tighter snod/places member; the earlier expanded worlds token stays unpaired to avoid banking the same unit twice. The complete sems can de dag kho na'i phrase owns these same beings, and no one else. HGM20684 (glossary, HTG2016) expressly attests sems nyid/their own minds; this is not a generic sems equivalent. No exact HGM thun mang ba'i las entry exists: retain only its las/karma and omit the disputed spelling thun mang ba. The LOW/PROBABLE proposed THUN MONG spelling is editorial review only, supported by the bounded ILL continuation and local common-karma constructions; recorded source remains THUN MANG. Second bsags pa and the third explanatory English karma remain unpaired as distributed/repeated rendering, not null. The great-disc-of-wind compound has distinct wind and disc members; Below No Other is an attested name. The complete final environmental-bound phrase owns farthest reaches of the world. Supplied cosmographic explanation, participants, articles and auxiliary frames remain unwrapped. All source text stays verbatim."
+S[237]=s
+
+# Supplemental independent queries, complete HGM originals, and physical contexts.
+for seq in S:
+ d=OUT/str(seq)
+ terms=['gang phyir','de yi phyir na','rkyen','rkyen can','mi shes pa','thun','mang','thun mang','thun mang ba','thun mang ba\'i las','thun mong','thun mong ba','thun mong ba\'i las','sems can','rang gi','dngos po','sna tshogs pa','ldog','gsal','gsal du \'gro',"'khrul pa"]
+ save(d/'supplemental-hgm-originals.json',[{'query':'SELECT * FROM entries WHERE wylie = ?','parameters':[t],'rows':[dict(r) for r in c.execute('select * from entries where wylie=?',(t,))]} for t in terms])
+ phys=[];ill=(d/'originals/ILL.txt').read_text();lines=ill.splitlines()
+ phys.append({'file':'originals/ILL.txt','note':'Original Unicode text; curly apostrophes preserved. First ASCII-only pattern attempt returned no matches and remains in physical-original-proof.json.', 'contexts':[{'start_line_1based':a,'end_line_1based':z,'text':'\n'.join(lines[a-1:z])} for a,z in [(25653,25676),(25708,25735)]]})
+ ps=json.loads((d/'originals/SVN-paragraphs.json').read_text())
+ phys.append({'file':'originals/SVN-document.xml','note':'Full paragraph text extracted from actual DOCX XML; indices zero-based. Ingestion sequential IDs differ from physical [S560], [N187], [38]. No publication-independence claim.', 'contexts':[{'start_paragraph_0based':a,'end_paragraph_0based':z-1,'paragraphs':[{'index':k,'text':ps[k]} for k in range(a,z)]} for a,z in [(6966,7001),(11096,11129),(13256,13277)]]})
+ save(d/'physical-contexts-complete.json',phys)
+ # All proposed errata quotes were compared verbatim in all three source fields.
+ reg=json.loads((d/'errata_register.json').read_text())
+ save(d/'registered-class-check.json',{'registry_sha256':sha(d/'errata_register.json'),'new_claims_in_registered_classes':False,'classes_checked':['{SHl} / converter escapes','footnote-number fusion','folio-in-caption','following heading glue','running head','1500-character cap','row-boundary spill'],'sequence_or_text_matches':[x for x in reg if isinstance(x,dict) and (str(x.get('seq'))==str(seq) and x.get('course')=='C05' or any(t in json.dumps(x,ensure_ascii=False) for t in ['THUN MANG',"Despite our misunderstanding",'although they should have']))] if isinstance(reg,list) else {'registry_type':'dict','note':'Full original retained; recursive check below'},'duplicate_found':False})
+ save(d/'spec.json',{'course':'C05','segments':[S[seq]]})
+
+# Freeze each real generator attempt before testing it; never overwrite an attempt.
+for seq,s in S.items():
+ d=OUT/str(seq); existing=list((d/'attempts').glob('*')) if (d/'attempts').exists() else []
+ a=d/'attempts'/f'{len(existing)+1:02d}';a.mkdir(parents=True)
+ shutil.copyfile(d/'spec.json',a/'spec.json')
+ r=subprocess.run([sys.executable,str(ROOT/'campaign-artifacts/run_generator_readonly.py')],cwd=WORK,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),input=(d/'spec.json').read_bytes(),capture_output=True)
+ (a/'body.html').write_bytes(r.stdout);(a/'stderr.txt').write_bytes(r.stderr);(a/'exit.txt').write_text(f'EXIT={r.returncode}\n')
+ print(seq, r.returncode,len(r.stdout),r.stderr.decode())
+ if r.returncode:continue
+ (d/'body.html').write_bytes(r.stdout);(d/'generator.stderr.txt').write_bytes(r.stderr);(d/'generator.exit.txt').write_text(f'EXIT={r.returncode}\n')
+ row=dict(c.execute("select * from corpus_segments where course='C05' and seq=?",(seq,)).fetchone())
+ ts=G.resolve(row['wylie'],s['spans'],'tib',seq)
+ flat=[x for id in s['eng_order'] for x in s['spans'] if x['id']==id]
+ es=G.resolve(row['english'],G.with_members(s['spans'],flat,row['english']),'eng',seq)
+ resolved=[]
+ for x in s['spans']:
+  resolved.append({**x,'tib_range':ts[x['id']],'eng_range':es.get(x['id']),'all_exact_tib_offsets':[m.start() for m in re.finditer(re.escape(x['tib']),row['wylie'])],'all_whole_english_offsets':[] if x['eng'] is None else [m.start() for m in re.finditer(r'(?<![A-Za-z0-9])'+re.escape(x['eng'])+r'(?![A-Za-z0-9])',row['english'])]})
+ save(d/'resolved-spans.json',resolved)
+ save(d/'generator-proof.json',{'command':[sys.executable,str(ROOT/'campaign-artifacts/run_generator_readonly.py')],'cwd':str(WORK),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite':'mode=ro enforced by saved read-only launcher','canonical_generator_sha256':sha(WORK/'tools/gen_alignment_page.py'),'canonical_resolver_sha256':sha(WORK/'tools/gen_alignment_page.py'),'exit':r.returncode,'stderr_bytes':len(r.stderr),'body_bytes':len(r.stdout),'spec_bytes':(d/'spec.json').stat().st_size,'spec_sha256':sha(d/'spec.json'),'body_sha256':sha(d/'body.html'),'attempt':str(a)})
+ # Exact gate surface, including possessive evidence even where the gate is narrower.
+ hits=[x for x in s['spans'] if x['d'] in [5,7] and x['eng'] and re.match(r'(the|a|an|and|or|his|our|your|I|you) ',x['eng'],re.I)]
+ save(d/'head-allowances.json',{'gated_heads':hits,'exact_proposed_allowances':{},'allowance_file_edited':False,'non_gated_possessives':[{'id':x['id'],'english':x['eng'],'actual_licensor':('rang gi' if seq==236 or x['id']=='w5' else 'sems nyid whole attested expression, HGM20684; preceding genitive identifies possessors')} for x in s['spans'] if x['eng'] and x['eng'].startswith('their')]})

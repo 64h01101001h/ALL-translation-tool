@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-235-237/semantic-review/verify.py.txt", line 102, in <module>
+    if p.suffix=='.json':walk(json.loads(p.read_text()),p)
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-235-237/semantic-review/verify.py.txt", line 100, in walk
+    for v in x.values():walk(v,file)
+                        ~~~~^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-235-237/semantic-review/verify.py.txt", line 87, in walk
+    if key not in seen:
+       ^^^^^^^^^^^^^^^
+TypeError: cannot use 'tuple' as a set element (unhashable type: 'dict')
