@@ -28248,13 +28248,52 @@ public:
                 QString::fromStdString(aiAccum_));
         });
         QObject::connect(aiReply_, &QNetworkReply::finished, [this] {
+            // THE BANNER USED TO SAY the term anchors the model cites are
+            // engine-verified. They are not. The engine pre-pass supplies
+            // verified anchors TO the model (core/src/analysis.cpp:283 says
+            // so in the prompt itself); nothing checks what the model writes
+            // BACK against them. Input verified, output unverified, and the
+            // banner conflated the two — on the one artefact in this pane
+            // that is not his English and not the engine's.
+            //
+            // It also carried no provenance at all: no model, no date. Copied
+            // out of the pane, which is the point of a back-check, it was
+            // indistinguishable from a human note.
+            // (Draft workspace audit, 2026-09-11.)
+            const QString stamp =
+                QString("AI \u2014 %1, %2")
+                    .arg("claude-opus-5",
+                         QDateTime::currentDateTime().toString(Qt::ISODate));
             QString h = "<div style='background:#FBEFEF;color:#2A1A1A;"
-                        "padding:4px'><b>AI "
-                        "coverage diff</b> — model output, labeled AI; the "
-                        "term anchors it cites are engine-verified.</div><hr>"
+                        "padding:4px'><b>AI coverage diff</b> \u2014 model "
+                        "output, labeled AI. It was GIVEN engine-verified "
+                        "term anchors; what it cites back is <b>not</b> "
+                        "checked against them, so treat every reference in "
+                        "it as the model's claim, not the engine's."
+                        "<br><small>" + stamp.toHtmlEscaped() +
+                        "</small></div><hr>"
                         "<pre style='white-space:pre-wrap'>" +
                         QString::fromStdString(aiAccum_).toHtmlEscaped() +
                         "</pre>";
+            // An empty reply with no error used to render as the banner over
+            // an empty box: a confident, finding-free coverage diff that had
+            // examined nothing. Same shape as the terminology all-clear.
+            if (aiAccum_.empty() &&
+                aiReply_->error() == QNetworkReply::NoError) {
+                report_->setHtml(
+                    QString("<div style='background:#FDF3E7;color:#935800;"
+                            "padding:4px'><b>No reply.</b> The request "
+                            "completed but the model returned nothing, so "
+                            "there is no coverage diff \u2014 this is not a "
+                            "clean result, it is an empty one. Run it "
+                            "again.</div><div style='padding-top:6px'>"
+                            "<small>%1</small></div>")
+                        .arg(stamp.toHtmlEscaped()));
+                aiReply_->deleteLater();
+                aiReply_ = nullptr;
+                aiBtn_->setEnabled(true);
+                return;
+            }
             if (aiReply_->error() != QNetworkReply::NoError && aiAccum_.empty())
                 h += "<div style='color:#b00'>network/API error: " +
                      aiReply_->errorString().toHtmlEscaped() + "</div>";
