@@ -1,0 +1,133 @@
+import pathlib,json,copy
+D=pathlib.Path(__file__).resolve().parent; B=D.parents[1]
+def read(p):return json.loads(p.read_text())
+def save(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+originals={(a,s):read(B/a/str(s)/'spec.json')['segments'][0] for a in ['english','tibetan'] for s in [241,242,243]}
+ranges=read(B/'proposal-verification/root-resolved-spans.json')
+plans={s:[] for s in [241,242,243]}
+def take(s,a,i,reason,**changes):
+ sp=copy.deepcopy(next(x for x in originals[a,s]['spans'] if x['id']==i));rr=next(x for x in ranges if (x['angle'],x['seq'],x['id'])==(a,s,i));sp.update(changes);plans[s].append({'span':sp,'eng_offset':rr['eng_range'][0],'origin':{'angle':a,'id':i},'reason':reason});return plans[s][-1]
+reason241={
+'w1':'yan lag names the links of dependent arising; the explanatory chain of interdependence stays unpaired.',
+'w2':'The number bcu gnyis independently gives twelve.',
+'w3':'thams cad expresses exhaustivity; retain the tighter each and every one, leaving the English relational of outside this atom.',
+'w4':'kyang adds the scripture statement as well.',
+'w5':'First sems is the object relied upon: mind after single thing, not an explanatory later repetition.',
+'w6':'gcig supplies single. Although HGM also attests single thing, the tighter number adjective is sufficient here.',
+'w7':'This la governs brten and licenses on in depends on; no agentive issue.',
+'w8':'brten is the dependence verb; the preceding la separately owns on.',
+'w9':'gsungs is the honorific speech verb; stated retains its actual published passive form without adding supplied scripture.',
+'w10':'First tsam is the mentioned word only, not the echoed mind-only expression.',
+'w11':'sgras is the inflected sgra word, with the instrumental kept intact; no split agentive s.',
+'w12':'Complete sems gtso bor gyur par contains mind and becoming primary; mind is the main thing is the whole proposition at d3. The English earlier mind-only is explanatory repetition.',
+'w14':'bshad pa refers to explanations/references; its HGM field explicitly includes scriptural references. In this former/latter construction it owns the first scriptural references, while the latter references repeats the elided head.',
+'w15':'snga ma is former, modifying bshad pa; it does not own references alone or the latter occurrence.',
+'w16':'dgag phyogs is the negative argumentative side, a compound of negation and aspect. C15:61 and ILL:3265 corroborate this lexical side construction; no exact whole HGM entry exists, so this d5 is a contextual provisional attestation.',
+'w17':'dang coordinates the negative and positive accounts and owns the and between them.',
+'w18':'phyi ma supplies latter only; the second references is the English repetition of the elided bshad pa head.',
+'w19':'sgrub phyogs is the positive argumentative side, paired with dgag phyogs. C15:61 and ILL:3265 corroborate the compound role; no exact whole HGM entry exists.',
+'w20':'de\'i phyir is the causal discourse connective Thus, retained at particle depth.',
+'w21':'\'gro ba denotes living beings collectively rendered life; all and causative sets have no separate owner within this lexical noun.',
+'w22':'rab tu \'jug pa expresses entering/engaging and is attested as into motion in HGM. Retain the phrase d3 in the local principal-cause construction; do not add sets all.',
+'w23':'This sems is the principal cause subject, at the mind which is.',
+'w24':'gtso bo supplies principal; the bound genitive is excluded from this adjective atom.',
+'w25':'First rgyu is the cause attributed to mind.',
+'w29':'Second gtso bo supplies principal in the next negated sentence.',
+'w30':'Second rgyu is cause in the sentence excluding an alternative.',
+'w31':'min is the negative copula, a lexical word at d5; only not is selected from the English copular frame.',
+'w32':'mdo owns sutras; speak and when are distributed reporting frames.',
+'w33':'sems in sems tsam owns mind inside the actual mind only quotation, not the subsequent repeated explanation.',
+'w34':'Second tsam owns only within the sutra quotation.',
+'w35':'gtso bor is the inflected primary/main term; main thing is explicitly HGM attested and applies to the explanation following mind only.',
+'w36':'First gzugs is matter contrasted with mind.',
+'w37':'ma yin is the negative copular unit corresponding to not in and not matter; the conjunction is supplied.',
+'w38':'Next gzugs is physical matter in the concession.',
+'w39':'yod is the existence word; exists is its English predicate. Inflection par is omitted without asserting absent meaning.',
+'w40':'\'dod is the admission/acceptance verb; the concession and participant we stay unwrapped.',
+'w41':'Next gzugs is matter in this matter; demonstrative de is separately retained.',
+'w42':'Next sems is mind in in the way that mind is, preserving the comparison target.',
+'w43':'bzhin du is the comparison phrase in the way; its source complement sems is separately linked to mind.',
+'w44':'\'gro ba is sentient beings, the creator\'s domain; bound genitive left outside the noun.',
+'w45':'byed pa po is the creator noun and HGM explicitly attests prime creator. The one and article are not harvested.',
+'w46':'ma yin negates the existential creator assertion. not is the published negative exponent; the preceding yod pa contribution is distributed in the clause and omitted.',
+'w47':'des na provides the concluding Therefore; retained as a causal connective at d6.',
+'w50':'Final byed pa po owns creator in could be the creator, preserving the rejected other-creator argument.',
+'w52':'First bkag supplies denying in the rejection construction; bzlog pa is not securely the English nominal opposite.',
+'w53':'phyi rol supplies outside in the final external-object statement.',
+'w54':'Final gzugs supplies physical objects. The surrounding denial of denial is distributed and omitted.'}
+for sp in originals['english',241]['spans']:
+ i=sp['id']
+ if i=='w26':take(241,'tibetan','w21','Complete sems las gzhan pa expresses something other than the mind. Retain the complete relational phrase d3 rather than separate other/than/mind atoms; this selects mind at the end of that phrase.')
+ if i in ['w26','w27','w28','w49']:continue
+ if i=='w48':take(241,'tibetan','w42','Complete sems las gzhan pa\'i is the other-than-mind creator qualifier. Select the complete something other than the mind at offset 947; the earlier opposite of the mind is the expanded paraphrase. No bzlog pa=opposite claim.');continue
+ changes={}
+ if i=='w3':changes['eng']='each and every one'
+ if i=='w9':changes['tib']='gsungs'
+ if i=='w14':changes['eng']='scriptural references'
+ if i in ['w16','w19']:changes['d']=5
+ if i in ['w20','w47']:changes['d']=6
+ if i in ['w24','w29']:changes['tib']='gtso bo'
+ if i=='w39':changes['tib']='yod'
+ if i=='w44':changes['tib']="'gro ba"
+ p=take(241,'english',i,reason241[i],**changes)
+ if i=='w14':p['eng_offset']=299
+ if i=='w41':take(241,'tibetan','w35','de is the overt demonstrative in gzugs de and independently owns this; restore useful coverage omitted by the English angle.')
+# Whole names can contain a whole proper-name member, without phonetic decomposition.
+take(242,'english','w1','Complete mkhas grub bstan pa dar rgyas mchog is the honorific name title. HGM full-name entry attests Master in one dated name string; local mchog supplies honorific rank but cannot alone securely own Master. The date is biography outside the Tibetan name.')
+take(242,'tibetan','w1','The full personal name is a unique, strictly tighter constituent of the immediately preceding honorific-name parent. HGM and C04:169/C02 attributions establish its identity. This is a whole-name member, not a sound-to-meaning decomposition.',d=7)
+take(242,'english','w2','brtsoms is the exact composition verb from ACIP BRTZOMS. hgm_gloss is null, so composed is only a provisional contextual attestation; do not correct the source spelling.')
+take(242,'english','w3','dbu ma spyi don is the complete published work title, supported by exact HGM title gloss. Article before Overview is supplied and excluded.')
+take(242,'tibetan','w5','dbu ma is the established Middle Way title constituent, explicitly HGM attested; unique and tighter within the immediately preceding d5 title parent.')
+take(242,'tibetan','w6','spyi don is the established Overview title constituent, explicitly HGM attested; unique and tighter in the same immediate d5 parent member group.')
+take(242,'english','w4','nas licenses from in the source attribution; opening selection framing has no source exponent.')
+reason243={
+'w3':'The complete arhat epithet dgra bcom pa is the HGM-attested enemy destroyers; its ordinary enemy/destroyer constituents are independently supported.',
+'w4':'dgra supplies enemy within the immediately preceding d5 epithet; exact HGM enemy field and unique contained English exponent.',
+'w5':'bcom pa supplies destroyers within the same d5 epithet; nominalized destroyer is independently HGM attested and tighter than the whole parent.',
+'w6':'chos can presents the debate subject and HGM explicitly attests consider; Let us first is supplied framing.',
+'w7':'phyi rol pa is the conventional non-Buddhist group, HGM-attested; no subword non mapping is made.',
+'w8':'bzhin du is the comparative postposition like; d6 as a grammatical comparison unit.',
+'w9':'khams gsum is the established exhaustive three-realm unit; HGM explicitly attests all three realms. Its gsum denotes the complete threefold domain; all belongs to this whole unit, not the separate thams cad qualifying afflictions.',
+'w10':'khams supplies realms in the unique immediately preceding d5 three-realm compound.',
+'w11':'gsum supplies three in the same d5 three-realm compound; all is not separately assigned to gsum.',
+'w12':'na governs khams gsum and owns in before all three realms.',
+'w13':'spyod pa supplies operate as activity of afflictions in the three realms; HGM explicitly attests operate.',
+'w14':'phra rgyas is the HGM-established full term widespread mental afflictions; C05:42/C16:691 support this rendering. No speculative phra/widespread split.',
+'w15':'First thams cad owns all before widespread mental afflictions, not the later all before three realms.',
+'w16':'Whole ma spangs par expresses non-elimination; fail to eliminate is a d3 negative verbal recast, with no separate bare ma=fail to claim.',
+'w17':'de points back to the afflictions and owns these in all these afflictions; the repeated noun is English expansion.',
+'w18':'Second thams cad owns all in root of all these afflictions.',
+'w19':'rtsa bar is inflected root; gyur pa\'i relational predication is distributed and omitted.',
+'w20':'First dngos po is things conceived as inherently existing, not the final things known to lack nature.',
+'w21':'First rang bzhin owns the HGM-attested nature of their own in the false-conception clause.',
+'w22':'gyis is the instrumental basis through in existing through some nature; the whole agentive syllable is kept.',
+'w23':'grub par supplies existing in the conception\'s object; some/as are not added.',
+'w24':'\'dzin pa\'i rtog pa is the whole apprehending conception and supports tendency to conceive at d3. No rtog pa=tendency atom is inferred.',
+'w25':'dang joins the conception with its opposed path and supplies with in the incompatibility comparison.',
+'w26':'The whole lexical unit \'dzin stangs has the exact HGM field holds its object. Select that attested d5 expression; reject wider way it holds its object because it introduces the path-referencing participant it without lam inside the span. The manner construction in the way is distributed contextual framing and omitted, not nulled. No \'dzin=holds member is made because stangs contributes to the whole established expression.',
+'w27':'dngos \'gal is exactly HGM-attested directly incompatible; the opposed apprehension context is supported by C01:335 and TCS10:259 without any publication-lineage inference.',
+'w28':'lam is the path to be achieved and whose mode opposes the conception; it is not supplied inside the separate cognition expression.',
+'w29':'Whole ma rnyed pa is the negated attainment phrase, failed to achieve at d3; auxiliary have and participant they stay unpaired.',
+'w30':'First phyir owns Because at the start of the causal English question; the question auxiliaries are supplied.',
+'w31':'der thal combines this with the debate consequence and licenses this is true at d3; preceding And stays outside.',
+'w32':'Second dngos po is things whose lack of nature is to be known.',
+'w33':'Second rang bzhin owns nature of their own in the final negative-nature proposition.',
+'w34':'med is the lexical existential negation and owns no in things have no nature; have stays outside the atom.',
+'w35':'yongs su shes pa is HGM-attested comprehensive knowledge, selected once. Subsequent realize repeats the same cognition and is unpaired.',
+'w36':'bral ba is lack/free-from, here lack of that knowledge; inflected genitive outside this lexical span.',
+'w37':'Second phyir owns for before they lack; repeated causal occurrences remain distinct.'}
+take(243,'english','w1','nyan rang is an established coordinated abbreviation for the two practitioner types, with exact HGM Listener or Self-Made Buddha. or is internal to that lexical whole; the, of and type remain outside.')
+take(243,'tibetan','w1','nyan is the conventional abbreviation of nyan thos and independently HGM-attested Listener. Retain as a unique tighter member of nyan rang, not an unparented flat abbreviation.',d=7)
+take(243,'tibetan','w2','rang is the conventional abbreviation of rang rgyal and its exact HGM field includes Self-Made Buddha. Retain as a unique tighter member of nyan rang.',d=7)
+for sp in originals['tibetan',243]['spans'][2:]:
+ i=sp['id'];ch={}
+ if i=='w26':ch={'d':5,'eng':'holds its object'}
+ if i=='w34':ch={'d':5}
+ p=take(243,'tibetan',i,reason243[i],**ch)
+ if i=='w26':p['eng_offset']=339
+notes={241:'PROVISIONAL machine alignment by Codex (GPT-6 Astra), reconciled from frozen independent Tibetan-first and English-first proposals. The complete mind-is-main proposition selects the mind in Here the point is, not the earlier mind-only echo. bshad pa owns the former scriptural references; the latter references repeats its elided head. Negative/positive-way compounds and the motion phrase preserve their local argument roles. Both other-than-mind relations use complete d3 phrases; the final one selects something other than the mind, leaving the earlier opposite-of-mind paraphrase unwrapped. bzlog pa is not equated with opposite. Distributed reporting frames, emphases, concession and final denial of denial remain omitted, not nulled. Original page 93 and Reading Six heading stay verbatim as registered following-heading apparatus.',242:'PROVISIONAL machine alignment by Codex (GPT-6 Astra), reconciled from frozen independent proposals. The complete honorific-name title is retained, with its independently attested whole personal name as a tighter member; no phonetic name decomposition or isolated mchog-to-Master claim is made. The work title retains its established Middle Way and Overview members. The dated glossary strings establish identity without licensing the biographical dates as Tibetan. gis/by and other distributed grammatical material are omitted, not nulled. Source BRTZOMS/brtsoms remains unchanged; composed is a provisional local corpus attestation, with no hgm_gloss promotion.',243:'PROVISIONAL machine alignment by Codex (GPT-6 Astra), reconciled from frozen independent proposals. nyan rang is the established two-type unit, with independently attested abbreviated members. All three realms is an attested exhaustive compound; its all is distinct from both thams cad occurrences. Enemy-destroyer and three-realm members are unique and tighter within their d5 parents. The full lexical expression holds its object is attested for \'dzin stangs; surrounding manner framing and the supplied subject it remain unpaired, and no separate speculative member is harvested. Negative verbal and conception phrases use d3. Supplied rhetorical participants, auxiliaries, repeated realize and other distributed material are omitted, not nulled. C16:819 field identity establishes text agreement only, not independent publication or ingestion history.'}
+for seq,plan in plans.items():
+ for n,p in enumerate(plan,1):p['span']['id']='w'+str(n)
+ seg={'seq':seq,'title':originals['english',seq]['title'],'spans':[p['span'] for p in plan],'eng_order':[p['span']['id'] for p in sorted(plan,key=lambda p:p['eng_offset']) if p['span']['d']!=7],'note':notes[seq]}
+ d=D.parent/str(seq);save(d/'spec.json',{'course':'C05','segments':[seg]});save(d/'errata.json',[]);save(d/'span-decisions.json',plan)
+ print(seq,len(plan),seg['eng_order'])

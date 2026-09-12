@@ -1,0 +1,41 @@
+import json,pathlib,sys,importlib.util
+D=pathlib.Path(__file__).resolve().parent; B=D.parent;W=D.parents[3]/'campaign-worktree'
+sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+rows={r['seq']:r for r in json.loads((D/'spine-originals.json').read_text())['rows']}
+# d, exact Tibetan, exact English, intended Tibetan occurrence, intended English occurrence
+S={241:[
+(5,'yan lag','links'),(5,'bcu gnyis','twelve'),(5,'thams cad','each and every one of'),(6,'kyang','as well'),(5,'sems','mind',1,1),(5,'gcig','single',1,1),(6,'la','on',1,1),(5,'brten','depends'),(5,'gsungs pa','stated'),
+(6,'tsam','only',1,1),(5,'sgras','word'),(5,'sems','mind',2,3),(5,'gtso bor','main thing',1,1),
+(5,'bshad pa','references',1,2),(5,'snga ma','former'),(5,'dgag phyogs','negative way'),(6,'dang','and',1,3),(5,'phyi ma','latter'),(5,'sgrub phyogs','positive way'),
+(3,"de'i phyir",'Thus'),(5,"'gro ba",'life'),(3,"rab tu 'jug pa",'into motion'),(5,'sems','mind',3,4),(5,"gtso bo'i",'principal',1,1),(5,'rgyu','cause',1,1),
+(5,'sems','mind',4,5),(6,'las','than',1,1),(5,'gzhan pa','other',1,1),(5,"gtso bo'i",'principal',2,2),(5,'rgyu','cause',2,2),(5,'min','not',1,1),
+(5,'mdo','sutras'),(5,'sems','mind',5,6),(6,'tsam','only',2,3),(5,'gtso bor','main thing',2,2),(5,'gzugs','matter',1,1),(5,'ma yin','not',1,2),
+(5,'gzugs','physical matter',2,1),(5,'yod par','exists'),(5,"'dod",'admit'),(5,'gzugs','matter',3,3),(5,'sems','mind',6,8),(3,'bzhin du','in the way'),(5,"'gro ba'i",'sentient beings'),(5,'byed pa po','prime creator',1,1),(5,'ma yin','not',2,3),
+(3,'des na','Therefore',1,2),(5,'sems','mind',7,9),(5,'gzhan','other',1,2),(5,'byed pa po','creator',2,2),(5,'bzlog pa','opposite'),(5,'bkag','denying',1,1),(5,'phyi rol','outside'),(5,'gzugs','physical objects',4,1)
+],242:[(5,'mkhas grub bstan pa dar rgyas mchog','Master Kedrup Tenpa Dargye'),(5,'brtsoms','composed'),(5,'dbu ma spyi don','Overview of the Middle Way'),(6,'nas','from')],243:[
+(5,'nyan rang','Listener or Self-Made Buddha'),(5,'dgra bcom pa','enemy destroyers'),(5,'chos can','consider'),(5,'phyi rol pa','non-Buddhists'),(3,'bzhin du','like'),(5,'khams gsum','three realms'),(6,'na','in',1,1),(5,"spyod pa'i",'operate'),(5,'phra rgyas','widespread mental afflictions'),(5,'thams cad','all',1,1),(3,'ma spangs par','fail to eliminate'),
+(5,'de','these'),(5,'thams cad','all',2,3),(5,'rtsa bar','root'),(5,'dngos po','things',1,1),(5,'rang bzhin','nature of their own',1,1),(6,'gyis','through'),(5,'grub par','existing'),(3,"'dzin pa'i rtog pa",'tendency to conceive'),(6,'dang','with',1,1),(5,"'dzin stangs",'holds its object'),(5,"dngos 'gal",'directly incompatible'),(5,'lam','path'),(3,"ma rnyed pa'i",'failed to achieve'),(6,'phyir','Because',1,1),(3,'der thal','this is true'),
+(5,'dngos po','things',2,2),(5,'rang bzhin','nature of their own',2,2),(5,'med','no'),(5,'yongs su shes pa','comprehensive knowledge'),(5,"bral ba'i",'lack'),(6,'phyir','for',2,1)
+]}
+notes={241:'Provisional machine alignment by Codex, English-first independent proposal. Exact repeated mind occurrences are documented; the added mind-only echo, the second mind in the sutra paraphrase, and the last repeated mind in the creator explanation remain unwrapped. The motion recast is retained at phrase depth. The final denial of denying external matter is distributed across English saying and no; it is omitted rather than falsely nulled. Original page number and following Reading Six heading remain verbatim, unpaired apparatus under the registered following-heading class. No semantic acceptance is implied.',242:'Provisional machine alignment by Codex, English-first independent proposal. The complete name with honorific is one proper-name title; no phonetic name members are harvested. The work title is one title. The agentive gis is omitted while its by treatment remains an open campaign issue. Supplied selection framing and life dates remain unwrapped. Source BRTZOMS / brtsoms is preserved; recurrence alone does not establish a textual defect. No semantic acceptance is implied.',243:'Provisional machine alignment by Codex, English-first independent proposal. The negative verb phrases ma spangs par and ma rnyed pa\'i stay at phrase depth; bare ma is not assigned fail to. The cognition phrase is kept whole at phrase depth. yongs su shes pa owns comprehensive knowledge once; its explanatory English repetition realize stays unwrapped. First thal question framing and du zhugs pa\'i are omitted as distributed constructions, not nulled. Repeated things, all, and nature of their own use the recorded exact occurrences. No semantic acceptance is implied.'}
+titles={241:'mind as the principal cause',242:'selections from kedrup tenpa dargye',243:'the path opposing the root of afflictions'}
+def hits(text,piece):
+ out=[];i=0
+ while True:
+  i=G.find_word(text,piece,i)
+  if i<0:return out
+  out.append(i);i+=1
+for seq,defs in S.items():
+ out=B/str(seq); spans=[];proof=[]
+ for i,v in enumerate(defs,1):
+  dep,t,e,*occ=v;to,eo=occ if occ else (1,1)
+  th=hits(rows[seq]['wylie'],t);eh=hits(rows[seq]['english'],e)
+  assert len(th)>=to,(seq,t,th,to)
+  assert len(eh)>=eo,(seq,e,eh,eo)
+  sp={'id':'w'+str(i),'d':dep,'tib':t,'eng':e};spans.append(sp)
+  proof.append({'id':sp['id'],'tib':t,'eng':e,'tib_all_boundary_offsets':th,'eng_all_boundary_offsets':eh,'intended_tib_occurrence':to,'intended_eng_occurrence':eo,'tib_offset':th[to-1],'eng_offset':eh[eo-1]})
+ # Tibetan occurrence choice is checked independently against canonical cursor below; English order defined from explicit source positions.
+ order=[p['id'] for p in sorted(proof,key=lambda x:x['eng_offset'])]
+ spec={'course':'C05','segments':[{'seq':seq,'title':titles[seq],'spans':spans,'eng_order':order,'note':notes[seq]}]}
+ (out/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(out/'occurrence-intentions.json').write_text(json.dumps(proof,indent=2)+'\n');(out/'errata.json').write_text('[]\n')
+ print(seq,len(spans),order)

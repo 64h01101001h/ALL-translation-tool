@@ -1,0 +1,53 @@
+import pathlib,json,hashlib,sqlite3,gzip,os,subprocess,sys
+D=pathlib.Path(__file__).resolve().parent; B=D.parents[1]; W=B.parents[1]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+refs=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+access=[{'path':str(pathlib.Path.home()/r),'readable':os.access(pathlib.Path.home()/r,os.R_OK)} for r in refs];assert all(r['readable'] for r in access);save(D/'access.json',access)
+obj=D/'originals';obj.mkdir(exist_ok=True);manifest=[]
+paths=[p for a in ['tibetan','english'] for p in (B/a).rglob('*') if p.is_file()]
+paths += [p for p in B.iterdir() if p.is_file()]+[p for p in (B/'proposal-verification').iterdir() if p.is_file()]
+paths += [W/r for r in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/errata_register.json','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']]
+paths += [B.parent/'run_generator_readonly.py',B.parent/'THROUGHPUT_REFINEMENT.md']
+for p in paths:
+ b=p.read_bytes();h=sha(b);o=obj/h
+ if not o.exists():o.write_bytes(b)
+ manifest.append({'original_path':str(p),'resolved_path':str(p.resolve()),'sha256':h,'bytes':len(b),'copy':str(o)})
+save(D/'original-manifest.json',manifest)
+con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+rows=[dict(r) for r in con.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',237,248))]
+save(D/'source-reopened.json',{'mode':'ro','source':str((W/'build/hgm_spine_v27_2.db').resolve()),'query':'select * from corpus_segments where course=? and seq between ? and ? order by seq','parameters':['C05',237,248],'rows':rows})
+for name in ['source.json','context.json']:
+ for s in json.loads((B/name).read_text()):assert all(s[k]==next(r for r in rows if r['seq']==s['seq'])[k] for k in s)
+queries=[]
+for rel in ['tibetan/241/corpus-query-originals.json','english/241/corpus-query-originals.json','english/241/supplementary-corpus-originals.json']:
+ x=json.loads((B/rel).read_text());x=x['queries'] if isinstance(x,dict) else x
+ for q in x:
+  rr=[dict(r) for r in con.execute(q['query'],q['parameters'])]
+  assert rr==q['rows'],(rel,q['parameters']);assert len(rr)==q['count']
+  queries.append({'original_file':str(B/rel),**q,'reopened_equal':True})
+save(D/'queries-reopened.json',queries)
+masterpath=(W/'data/hgm_dictionary_v27_2.json.gz').resolve();m=json.load(gzip.open(masterpath,'rt'));entries=m['unified_entries'];terms=set()
+for rel in ['tibetan/241/master-original.json','english/241/glossary-originals.json']:
+ for q in json.loads((B/rel).read_text())['queries']:
+  term=q.get('term',q.get('query',{}).get('value'));terms.add(term);rr=[e for e in entries if e.get('wylie')==term]
+  assert rr==q.get('entries',q.get('master_entries')),(rel,term)
+terms.update(['mkhas grub bstan pa dar rgyas','yan lag bcu gnyis',"gtso bo'i rgyu",'dgra','bcom pa','khams','gsum','bshad pa','dgag','sgrub','phyogs','bzhin du','min','ma yin','med'])
+lex=[{'term':t,'entries':[e for e in entries if e.get('wylie')==t],'spine_entries':[dict(r) for r in con.execute('select * from entries where wylie=?',(t,))]} for t in sorted(terms)]
+save(D/'lexical-reopened.json',{'source':str(masterpath),'sha256':sha(masterpath.read_bytes()),'queries':lex})
+additional=[]
+for field,term in [('wylie','dgag phyogs'),('wylie','sgrub phyogs'),('wylie',"rab tu 'jug pa"),('wylie','nyan rang'),('wylie',"'dzin stangs"),('wylie','mkhas grub bstan pa dar rgyas')]:
+ sql=f'select * from corpus_segments where {field} like ? order by course,seq';pars=['%'+term+'%'];rr=[dict(r) for r in con.execute(sql,pars)];additional.append({'query':sql,'parameters':pars,'count':len(rr),'rows':rr})
+save(D/'additional-queries.json',additional)
+replays=[]
+for angle in ['tibetan','english']:
+ for seq in [241,242,243]:
+  src=B/angle/str(seq);dest=D.parent/str(seq)/'original-replays';dest.mkdir(exist_ok=True)
+  r=subprocess.run([sys.executable,str(B.parent/'run_generator_readonly.py')],cwd=W,input=(src/'spec.json').read_bytes(),capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+  for name,data in [('stdout',r.stdout),('stderr',r.stderr),('exit',str(r.returncode).encode()+b'\n')]: (dest/(angle+'.'+name)).write_bytes(data)
+  p={'angle':angle,'seq':seq,'exit':r.returncode,'same_saved_body':r.stdout==(src/'body.html').read_bytes(),'stdout_sha256':sha(r.stdout),'body_bytes':len(r.stdout),'stderr_bytes':len(r.stderr)};assert p['same_saved_body'] and r.returncode==0;replays.append(p)
+save(D/'original-replays.json',replays)
+print('Originals',len(manifest),'queries',len(queries),'master terms',len(lex),'six replays PASS')
+for q in lex:
+ if q['term'] in ['mkhas grub bstan pa dar rgyas','dgra','bcom pa','khams','gsum','bshad pa','dgag','sgrub','phyogs','bzhin du','min','ma yin','med']: print(q['term'],[(e.get('hgm_gloss'),e.get('entry_id')) for e in q['entries']])
+for q in additional:print(q['parameters'],q['count'])

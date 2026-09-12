@@ -1,0 +1,48 @@
+import pathlib,json,hashlib,shutil,datetime,subprocess,os
+BASE=pathlib.Path(__file__).resolve().parent;BATCH=BASE.parent;ROOT=BASE.parents[3]/'campaign-worktree'
+def sh(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def save(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+# Independent source snapshots retain raw originals, including their path provenance.
+inputs=[]
+for p in [BASE.parents[1]/'tibetan-brief.md',BASE.parents[2]/'proposal-protocol.md',BASE.parents[1]/'source.json',BASE.parents[1]/'context.json']:
+ dst=BASE/'dispatch-originals'/p.name;dst.parent.mkdir(exist_ok=True);shutil.copyfile(p,dst);inputs.append({'source_path':str(p),'snapshot_path':str(dst),'sha256':sh(dst),'bytes':dst.stat().st_size})
+save(BASE/'dispatch-provenance.json',inputs)
+source=json.load(open(BASE/'source-original.json'));rows={r['seq']:r for r in source['rows']};queries=json.load(open(BASE/'corpus-query-originals.json'))['queries'];register=json.load(open(BASE/'governing/docs/errata_register.json'))
+shared_names=['source-original.json','master-original.json','corpus-query-originals.json','governing-provenance.json','dispatch-provenance.json']
+shared={n:{'path':str(BASE/n),'sha256':sh(BASE/n),'bytes':(BASE/n).stat().st_size} for n in shared_names}
+save(BASE/'evidence-index.json',shared)
+for seq in [241,242,243]:
+ d=BATCH/str(seq);r=rows[seq];o=json.load(open(d/'occurrence-proof.json'));proof=json.load(open(d/'generator-proof.json'));spec=json.load(open(d/'spec.json'))
+ peers={field:next(q for q in queries if q['query']==f'select * from corpus_segments where {field}=?' and q['parameters']==[r[field]]) for field in ['acip','wylie','english']}
+ checks={'seq':seq,'registered_file':{'path':str(BASE/'governing/docs/errata_register.json'),'sha256':sh(BASE/'governing/docs/errata_register.json'),'record_count':len(register)},'exact_field_queries':{f:{'count':q['count'],'rows':[[x['course'],x['seq']] for x in q['rows']]} for f,q in peers.items()},'field_lengths':{f:len(r[f]) for f in ['acip','wylie','english']},'cap_1500':len(r['english'])==1500,'result':'No newly proposed errata; full original text preserved.','publication_limit':'Digital textual recurrence does not establish independent publication or ingestion lineage.'}
+ if seq==241:
+  tail=r['english'][r['english'].index('93 The Asian Classics Institute'):];peer=next(x for x in peers['acip']['rows'] if x['course']=='C16');prefix=r['english'][:r['english'].index('93 The Asian Classics Institute')]
+  checks.update({'registered_class':'following section heading glued onto English; C05 course shape explicitly lists row 241; no refiling','found_verbatim':tail,'counterpart':{'course':'C16','seq':818,'acip_equal':r['acip']==peer['acip'],'wylie_equal':r['wylie']==peer['wylie'],'english_equal':r['english']==peer['english'],'shared_english_prefix':prefix,'prefix_length':len(prefix),'prefix_equal':peer['english'].startswith(prefix),'difference':'Apparatus tail differs; C16 adds its own heading and the next selection attribution.'},'five_ground_disposition':['Exact row quote checked','Corpus peer full fields retained','Registered following-heading class applies','No source correction proposed; local argument closes before heading','Measured fields/prefix and complete query results retained']})
+ elif seq==242:
+  checks.update({'found_verbatim':{'acip':'BRTZOMS','wylie':'brtsoms'},'candidate_considered':'brtsams as a possible spelling alternative; not proposed as a correction','reason':'Exact brtsoms master entry has no HGM gloss, but 14 corpus rows carry this form and authoring context is coherent. C05:190 pairs brtsoms with composed. Different attribution formulas carry brtsams, but those are not witnesses to this exact passage. No authoritative basis for a new erratum.','five_ground_disposition':['ACIP and Wylie form checked','All 14 brtsoms occurrences retained; no exact same-row peer','No new registered-class issue','Coherent composition verb and naming context; no invented gloss/correction','Counts and full results retained']})
+ else:
+  peer=next(x for x in peers['acip']['rows'] if x['course']=='C16')
+  checks.update({'counterpart':{'course':'C16','seq':819,'field_equalities':{f:r[f]==peer[f] for f in ['acip','wylie','english']}},'reason':'Interrogative debate framing and expanded comprehensive-knowledge phrasing are translated recasts, not established source errors. Neither spelling correction nor factual error is proposed.','five_ground_disposition':['Full selected row fields checked','C16:819 full-field match retained','No heading/footnote/converter/cap class present','Terminology corroborated by HGM fields and local argument','All exact counts and resolved occurrences saved']})
+ save(d/'errata-check.json',checks)
+ # Add original byte provenance for source fields and measured body to compact segment proof.
+ summary={'seq':seq,'producer':'Codex','angle':'Tibetan-first','source_path':source['spine']['path'],'source_spine_sha256':source['spine']['sha256'],'source_fields':{f:{'characters':len(r[f]),'utf8_bytes':len(r[f].encode()),'sha256':hashlib.sha256(r[f].encode()).hexdigest()} for f in ['acip','wylie','english']},'spec_sha256':sh(d/'spec.json'),'body_sha256':sh(d/'body.html'),'body_bytes':(d/'body.html').stat().st_size,'span_count':o['span_count'],'d5_count':o['d5_count'],'null_count':o['null_count'],'depth_counts':o['depth_counts'],'generator_exit':proof['exit'],'stderr_bytes':proof['stderr_bytes'],'body_exact_stdout':proof['body_equals_stdout'],'all_intended_english_offsets_exact':not o['intent_offset_failures'],'full_source_unwrap_checks':o['full_source_verbatim_after_unwrap'],'errata_count':0,'attempts_preserved':len(list((d/'attempts').iterdir())),'attempt_note':'Both canonical runs passed; second added before/after checks and actual private Git blob pins for canonical dependencies while root was landing earlier pages.','shared_evidence_index':{'path':str(BASE/'evidence-index.json'),'sha256':sh(BASE/'evidence-index.json')},'semantic_acceptance':False}
+ save(d/'final-proof.json',summary)
+ first={241:'Challenge first: dgag phyogs / sgrub phyogs → negative way / positive way are contextual compound proposals; the full local former/latter argument supports them.',242:'Challenge first: mchog → Master is a contextual honorific proposal; exact master hgm_gloss supplies supreme/highest senses, not this exact English word.',243:'Challenge first: khams gsum → all three realms retains all because the HGM binding field attests that full phrase; thams cad owns the earlier separate all.'}[seq]
+ omitted={241:'The d3 subject-predicate and other-than-mind recasts preserve complete phrase sense. Motion, emphases, contrast and final double-negation wording are distributed and omitted, not nulled.',242:'The author name and title are whole identifiers; title members are unique and tighter. gis/by and bound grammar remain omitted. brtsoms stays verbatim.',243:'Negative verbal phrases, grasping-conception and manner-of-apprehension are d3 recasts. Initial thal and distributed predication remain omitted; comprehensive knowledge is banked once.'}[seq]
+ err={241:'Errata: 0. The original attached Reading Six heading is the registered following-heading class. C16:818 matches ACIP/Wylie and the 1,077-character translation prefix, not full English.',242:'Errata: 0. All 14 brtsoms corpus rows were reopened; coherent composition context and no authoritative correction basis. No exact duplicate source row.',243:'Errata: 0. C16:819 matches ACIP, Wylie and English; this establishes field identity only, not independent publication or ingestion history.'}[seq]
+ if seq==241:err=err.replace('1,077',f"{checks['counterpart']['prefix_length']:,}")
+ report='\n'.join([
+ f'C05:{seq} · Tibetan-first · Codex · PROVISIONAL machine proposal; no semantic acceptance.',
+ first,omitted,
+ f'Source: all six snapshot fields independently equal the original mode=ro spine row; complete local source/context 237–248 and raw records retained.',
+ f'Evidence index: {BASE / "evidence-index.json"} · SHA256 {sh(BASE / "evidence-index.json")}.',
+ 'Exact master records, complete corpus query rows/counts, and governing path/SHA256/Git-object pins are referenced there; every contention/omission is in decisions.json.',
+ f'Counts: {o["span_count"]} spans; {o["d5_count"]} d5; {o["null_count"]} nulls. All intended occurrences match canonical resolution; both full source fields restore verbatim.',
+ err,
+ f'Canonical output: EXIT={proof["exit"]}; stdout/body bytes={proof["stdout_bytes"]}; stderr bytes={proof["stderr_bytes"]}; exact stdout saved in generator.stdout, exact stderr in generator.stderr.',
+ f'Spec SHA256 {sh(d/"spec.json")}; body SHA256 {sh(d/"body.html")}.',
+ 'The original canonical generator ran unchanged via the preserved mode=ro wrapper. Both passing attempts are retained; final dependency files were stable across execution and pinned as actual private Git objects.',
+ 'Final structured proof: final-proof.json; frozen boundary and every artifact hash: SHA256SUMS (no post-freeze edits).'
+ ])+'\n'
+ (d/'report.md').write_text(report)
+print('prepared reports; freeze separately after final inspection')

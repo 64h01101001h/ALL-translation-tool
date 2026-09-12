@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. Coverage 240/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. c5p81 (241–243) landed after independent review. Coverage 243/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -1284,3 +1284,43 @@ integration remains open. Next241–243 independent proposals are preparation
 only until separate reconciliation and semantic review. The throughput refinement
 uses two Astra/high proposal readers and shared identical evidence with full
 provenance; no semantic, generator or fidelity check is removed.
+
+
+### c5p81 · C05:241–243 — 2026-09-12 — Codex reconciliation/review
+
+Fresh independent proposals, reconciliation and semantic SPEC PASS / QUALITY
+APPROVE yield 95 spans (50/7/38), zero nulls, 63 non-null d5 pairs and nine d7
+members. Source wording and PROVISIONAL labels remain; no human editorial
+acceptance or hgm_gloss promotion is implied. Whole mind propositions and
+other-than-mind relations preserve occurrence and argument roles. Actual
+HGM bshad pa/scriptural references, nominal name/title units and abbreviated
+practitioner names support the accepted coverage. The negative/positive-side
+compounds are local provisional attestations with exact corpus corroboration.
+The complete mode-of-apprehension expression holds its object excludes the
+wider supplied path subject it. Distributed negations and repeated explanations
+remain unpaired. Following Reading Six apparatus remains in the source anchor.
+
+No errata or allowances added; all 192 prior records survive. The reconciler
+corrected 42 overbroad structured decision mappings, preserving old records
+and all 178 original proposal dispositions. Root and independent reviewer
+checked every final tuple and the corrected component links. One later reviewer
+reason spelling was corrected from dngos gal to dngos 'gal; preserved history
+and exact diff prove the candidate files, all 95 tuples and semantic verdict
+unchanged. No repeated generator run was needed for that narrative correction.
+The final integration review will independently check its scope. Root verified
+622 original-copy records, including 49 immutable Git snapshots, and 686
+exact copied semantic files. All failed/superseded attempts and sources survive.
+
+Coverage 243/511. Bank 44,064 links (+98 including three source anchors),
+11,877 nulls, 1,579 notes and 11 trees; evidence 7,020 heads / 15,246 pairs.
+Main/reverse/course/changes CSV rows 22,049 / 21,709 / 23,523 / 42, using the
+preceding 499e907 main CSV (also unchanged in incoming 72fe719) as seed. Every
+course-depth group matches the actual main CSV references. No ACIP enrichment
+was needed; prior links, notes, trees, evidence, lexical content and references
+remain. Both source/master hashes are unchanged. All 17 targeted suites passed
+(10.48 seconds); complete canonical body/range/copy, retention and navigation
+checks passed.
+
+Rendering remains unverified after browser-policy refusal. Native/installed
+phone verification remains through171; locked launch and main integration
+remain open. The campaign continues through the authorized Tuesday deadline.

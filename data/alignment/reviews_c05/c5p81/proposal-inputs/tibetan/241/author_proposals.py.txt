@@ -1,0 +1,68 @@
+import pathlib,json
+BASE=pathlib.Path(__file__).resolve().parent
+rows={r['seq']:r for r in json.load(open(BASE/'source-original.json'))['rows']}
+def make(seq,title,items,note,decisions):
+ r=rows[seq];sp=[];positions={};tc=0
+ for i,item in enumerate(items,1):
+  tib,eng,d,*extra=item;opts=extra[0] if extra else {};ident=f'w{i}';s={'id':ident,'d':d,'tib':tib,'eng':eng}
+  # Explicit occurrence intent provided by a surrounding verbatim anchor and optional local offset.
+  anchor=opts.pop('anchor',None);occ=opts.pop('occ',0)
+  if eng is not None:
+   start=r['english'].index(anchor) if anchor else 0
+   at=r['english'].index(eng,start)
+   for _ in range(occ):at=r['english'].index(eng,at+1)
+   positions[ident]=at
+  s.update(opts);sp.append(s)
+ order=sorted([s['id'] for s in sp if s['eng'] is not None and s['d']!=7],key=lambda x:positions[x])
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]}
+ out=BASE.parent/str(seq)
+ for name,value in [('spec.json',spec),('errata.json',[]),('decisions.json',{'producer':'Codex','angle':'Tibetan-first','status':'PROVISIONAL machine proposal; no semantic acceptance','decisions':decisions,'intended_english_offsets':positions,'shared_evidence_directory':str(BASE)})]:
+  (out/name).write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+make(241,'mind as the principal cause',[
+ ('yan lag','links',5),('bcu gnyis','twelve',5),('thams cad','each and every one',5),('kyang','as well',6),('sems','mind',5),('gcig','single thing',5),('brten par','depends on',5),('gsungs','stated',5),
+ ('tsam','only',6),('sgras','word',5),('sems gtso bor gyur par','mind is the main thing',3),
+ ('bshad pa snga ma','former scriptural references',3),('dgag phyogs','negative way',5),('phyi ma','latter',5),('sgrub phyogs','positive way',5),
+ ("de'i phyir",'Thus',6),("'gro ba",'life',5),('sems','mind',5,{'anchor':'Thus we'}),('gtso bo','principal',5),('rgyu','cause',5),
+ ('sems las gzhan pa','something other than the mind',3),('gtso bo','principal',5,{'anchor':'The principal cause'}),('rgyu','cause',5,{'anchor':'The principal cause'}),('min','not',6,{'anchor':'The principal cause'}),
+ ('mdo','sutras',5),('sems','mind',5,{'anchor':'Therefore when'}),('tsam','only',6,{'anchor':'Therefore when'}),('gtso bor','main thing',5,{'anchor':'Therefore when'}),('gzugs','matter',5),('ma yin','not',3,{'anchor':'and not matter'}),
+ ('gzugs','physical matter',5),('yod','exists',5),('dod','admit',5),('gzugs','matter',5,{'anchor':'this matter'}),('de','this',5,{'anchor':'this matter'}),('sems','mind',5,{'anchor':'in the way that mind'}),('bzhin du','in the way',3,{'anchor':'in the way that mind'}),("'gro ba",'sentient beings',5),('byed pa po','prime creator',5),('yod pa ma yin','not',3,{'anchor':'this matter'}),
+ ('des na','Therefore',6,{'anchor':'Therefore all these'}), ("sems las gzhan pa'i",'something other than the mind',3,{'anchor':'Therefore all these'}),('byed pa po','creator',5,{'anchor':'could be the creator'}),('bkag','denying',5),('phyi rol','outside',5),('gzugs','physical objects',5)
+],
+ 'PROVISIONAL machine alignment by Codex, Tibetan-first proposal. The explanatory recast sems gtso bor gyur par is retained at d3; its mind is the occurrence in “Here the point is,” not the preceding supplied repetition in “mind-only.” Other repeated words are resolved in explicit English order. Distributed predication, emphases, conditional/concessive framing and the final denial of a denial are omitted rather than falsely nulled. GMR’s added explanatory repetitions remain unwrapped. The following Reading Six heading, beginning “93 The Asian Classics Institute,” is original apparatus under the registered following-heading class, not a newly filed erratum.',
+ [
+ {'decision':'d3 phrase sems gtso bor gyur par → mind is the main thing','reason':'Full subject-predicate recast preserves the source proposition and avoids the unrelated earlier expression mind-only; no member harvesting from d3.'},
+ {'decision':'bshad pa snga ma → former scriptural references at d3','reason':'Complete contextual nominal phrase; scriptural is contextually explanatory, not a lexical meaning claimed for bshad pa.'},
+ {'decision':'dgag phyogs / sgrub phyogs → negative way / positive way','reason':'Paired established argument-side compounds contextualized by the former/latter reference distinction; no separately composed GMR English.'},
+ {'omitted':"la brten nas; bstan te; rab tu 'jug pa; nyid; bzhag; gal te ... mod kyi ste kyang; bzlog pa; final bkag pa ma yin",'reason':'Distributed or expanded renderings: references convey, sets into motion, emphasis, point-making, Although, opposite/denying and not ... no. No affirmative no-exponent judgment made.'},
+ {'decision':'single thing for gcig; prime creator for byed pa po','reason':'Attested hgm_gloss explicitly includes these exact equivalents; supplied articles remain unwrapped.'},
+ {'omitted':'Remaining unselected grammatical particles and predicative endings','reason':'No separate atom asserted; omission does not assert absence of grammatical meaning.'}
+ ])
+# Source has apostrophe in lexical admit.
+p=BASE/'spec.json';o=json.loads(p.read_text());o['segments'][0]['spans'][32]['tib']="'dod";p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+make(242,'overview of the middle way',[
+ ('mkhas grub bstan pa dar rgyas','Kedrup Tenpa Dargye',5),('mchog','Master',5),('brtsoms','composed',5),('dbu ma spyi don','Overview of the Middle Way',5),('dbu ma','Middle Way',7),('spyi don','Overview',7),('nas','from',6)
+],
+ 'PROVISIONAL machine alignment by Codex, Tibetan-first proposal. The author’s proper name and work title are source-attested identifiers. mchog is aligned to the honorific Master in this attribution. The title has two strictly tighter d7 members; no sound-to-meaning decomposition of the author’s name is claimed. gis and bound genitive/participial material are omitted: agentive by remains an open campaign issue and is not falsely nulled. “The following selections are” and the dates are supplied attribution apparatus and remain verbatim, unpaired. brtsoms is preserved as the actual source reading; corpus recurrence does not establish an independent publication history.',
+ [
+ {'decision':'Whole author proper name','reason':'Source names mkhas grub bstan pa dar rgyas; C04:169 and C02:23/47/53/62 provide matching naming context. C13 offsets are not support.'},
+ {'decision':'mchog → Master','reason':'Honorific rank in author attribution, separately from proper name; greatest/supreme hgm_gloss provides lexical role, not exact equivalent. Exact Master is row-attested; challenge this if the honorific is treated as distributed.'},
+ {'decision':'brtsoms → composed','reason':'14 corpus rows contain brtsoms, including C05:190 with composed; no hgm_gloss for exact brtsoms. No speculative spelling correction.'},
+ {'decision':'Title and two d7 members','reason':'Named work Overview of the Middle Way; dbu ma and spyi don are established title components. Both English members unique and strictly shorter than full title.'},
+ {'omitted':'gis; pa\'i; opening supplied attribution formula; dates','reason':'gis/by open issue; other grammatical or apparatus material left unpaired, not falsely nulled.'}
+ ])
+make(243,'the path incompatible with grasping',[
+ ('nyan','Listener',5),('rang','Self-Made Buddha',5),('dgra bcom pa','enemy destroyers',5),('dgra','enemy',7),('bcom pa','destroyers',7),('chos can','consider',5),('phyi rol pa','non-Buddhists',5),('bzhin du','like',6),('khams gsum','all three realms',5),('khams','realms',7),('gsum','three',7),('na','in',6,{'anchor':'operate in'}),('spyod pa','operate',5),('phra rgyas','widespread mental afflictions',5),('thams cad','all',5,{'anchor':'eliminate all'}),('ma spangs par','fail to eliminate',3),
+ ('de','these',5,{'anchor':'root of all these'}),('thams cad','all',5,{'anchor':'root of all these'}),('rtsa bar','root',5),('dngos po','things',5),('rang bzhin','nature of their own',5),('gyis','through',6),('grub par','existing',5),("'dzin pa'i rtog pa",'tendency to conceive',3),('dang','with',6,{'anchor':'with the root'}),("'dzin stangs",'way it holds its object',3),("dngos 'gal",'directly incompatible',5),('lam','path',5),('ma rnyed pa','failed to achieve',3),('phyir','Because',6),
+ ('der thal','this is true',3),('dngos po','things',5,{'anchor':'where they realize'}),('rang bzhin','nature of their own',5,{'anchor':'where they realize'}),('med','no',6,{'anchor':'where they realize'}),('yongs su shes pa','comprehensive knowledge',5),('bral ba','lack',5),('phyir','for',6,{'anchor':'And this is true'})
+],
+ 'PROVISIONAL machine alignment by Codex, Tibetan-first proposal. nyan and rang are conventional abbreviations for Listener and Self-Made Buddha here. phra rgyas owns the established whole term widespread mental afflictions, with no speculative morpheme split. The negative verb phrases and grasping/manner phrases are d3 contextual recasts; supplied auxiliaries, participants and articles stay outside lexical spans. The first thal and gyur/zhugs predicative material are omitted as distributed debate framing, not nulled. The two dngos po and rang bzhin occurrences and both causal phyir occurrences are separately resolved. C16:819 has identical ACIP, Wylie and English fields; this is textual identity, not evidence of independent publication or ingestion lineage.',
+ [
+ {'decision':'nyan / rang abbreviations','reason':'Local coordinated subject plus exact HGM master equivalents establish Listener / Self-Made Buddha without composing names.'},
+ {'decision':'khams gsum → all three realms','reason':'HGM glossary explicitly attests the full phrase, and no other Tibetan quantifier competes locally; thams cad owns the distinct all before widespread mental afflictions.'},
+ {'decision':'phra rgyas full compound','reason':'HGM binding field includes widespread mental afflictions; C05:42 and C16:691 have the same lexical rendering in a different local argument. phra is not separately aligned to widespread.'},
+ {'decision':'ma spangs par / ma rnyed pa d3','reason':'Complete negated verbal phrases own fail to eliminate / failed to achieve. ma is not incorrectly given fail to as a standalone dictionary equivalent.'},
+ {'decision':"'dzin pa'i rtog pa / 'dzin stangs d3",'reason':'Complete grasping-conception and manner-of-apprehension phrases own tendency to conceive / way it holds its object. Supplies neither new GMR wording nor false rtog pa=tendency atom.'},
+ {'decision':'dngos \'gal → directly incompatible','reason':'Exact HGM glossary support, local opposed manner of apprehension and C01:335/TCS10:259 parallel argument. No independent-publication inference.'},
+ {'omitted':'first thal; rtsa bar gyur predication; du zhugs pa\'i; other unselected endings','reason':'Question form and predication distributed across translation; no false null and no supplied participants/auxiliaries attached to lexical entries.'},
+ {'decision':'yongs su shes pa → comprehensive knowledge','reason':'Exact HGM glossary term; subsequent they realize is the expanded duplicate rendering left unwrapped.'}
+ ])

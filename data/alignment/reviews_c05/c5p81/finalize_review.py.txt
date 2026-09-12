@@ -1,0 +1,201 @@
+from pathlib import Path
+import json,hashlib,sqlite3,re,subprocess,difflib,html
+from html.parser import HTMLParser
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree'
+def load(p):return json.loads(p.read_text())
+def save(n,v):(R/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def h(x):return hashlib.sha256(x).hexdigest()
+rows=load(R/'resolved-spans.json');sources={x['seq']:x for x in load(R/'source-reopened.json')}
+# Verify complete package content against its named immutable inputs; full diff hunks too.
+raw=(B/'semantic-input-review-package.txt').read_bytes();assert h(raw)=='902c547dc3fe67a886bc89dee987882cd826d2431de100cb70171a2f7f28ffa0'
+sections=re.split(r'^===== (.*?) =====\n',raw.decode(),flags=re.M);package=[]
+for i in range(1,len(sections),2):
+ name=sections[i];body=sections[i+1];p=B/name
+ if p.is_file():
+  if p.suffix=='.json':equal=load(p)==json.loads(body)
+  else:equal=p.read_text().strip()==body.strip()
+  assert equal,name
+  package.append({'name':name,'complete_named_input_equal':True})
+ elif name.startswith('COMPLETE '):
+  _,angle,_,_,_,seq=name.split();a=f'{angle}/{seq}/spec.json';z=f'reconciled/{seq}/spec.json'
+  actual=''.join(difflib.unified_diff((B/a).read_text().splitlines(keepends=True),(B/z).read_text().splitlines(keepends=True),fromfile=a,tofile=z,n=10))
+  assert actual.strip()==body.strip(),name
+  package.append({'name':name,'complete_diff_equal':True})
+ else:
+  vals=json.loads(body)
+  package.append({'name':name,'records':len(vals),'read_complete':True})
+save('package-verification.json',{'sha256':h(raw),'bytes':len(raw),'sections':package,'review_projection':'Complete parsed sections, original/final tuple dispositions, corrected decision components, unpaired runs and full change hunks; repeated fields compared exactly.'})
+class Body(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.depth=0;self.root=None;self.txt={};self.spans=[]
+ def handle_starttag(self,t,attrs):
+  a=dict(attrs)
+  if t=='span':
+   if self.depth==0 and a.get('data-d')=='1':self.root=len(self.txt);self.txt[self.root]=[]
+   if self.root is not None:self.depth+=1;self.spans.append(a)
+ def handle_endtag(self,t):
+  if t=='span' and self.root is not None:
+   self.depth-=1
+   if self.depth==0:self.root=None
+ def handle_data(self,t):
+  if self.root is not None:self.txt[self.root].append(t)
+fidelity=[];members=[]
+for seq in (241,242,243):
+ p=Body();p.feed((B/'reconciled'/str(seq)/'body.html').read_text());assert ''.join(p.txt[0])==sources[seq]['wylie'];assert ''.join(p.txt[1])==sources[seq]['english']
+ rr=[x for x in rows if x['seq']==seq];assert len(p.spans)==2*(len(rr)+1)
+ parent=None
+ for x in rr:
+  if x['d']!=7:parent=x;continue
+  assert parent['d']==5
+  for side,field in [('tib','wylie'),('eng','english')]:
+   lo,hi=parent[side+'_range'];a,b=x[side+'_range'];assert lo<=a<b<=hi and b-a<hi-lo
+   assert sources[seq][field][lo:hi].count(x[side])==1
+  members.append({'seq':seq,'id':x['id'],'parent':parent['id'],'unique_strict_containment_both_sides':True})
+ fidelity.append({'seq':seq,'complete_wylie_equal':True,'complete_english_equal':True,'html_span_count_per_side':len(rr)+1})
+save('fidelity-proof.json',fidelity);save('member-proof.json',members)
+# Original database entries and source witnesses read through read-only connection.
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+lex=load(B/'reconciled/241/lexical-reopened.json');checks=[]
+for q in lex['queries']:
+ rr=[dict(x) for x in db.execute('select * from entries where wylie=?',(q['term'],))];assert rr==q['spine_entries'];checks.append({'term':q['term'],'count':len(rr),'exact_spine_entries':True})
+save('spine-lexical-proof.json',checks)
+keys=[('C15',61),('ILL',3265),('C01',335),('TCS10',259),('C05',42),('C16',691),('C04',169),('C02',23),('C02',47),('C02',53),('C02',62),('C16',818),('C16',819),('P7',11),('ILL',2688)]
+witnesses=[dict(db.execute('select * from corpus_segments where course=? and seq=?',k).fetchone()) for k in keys];save('material-witnesses.json',witnesses)
+c16={x['seq']:x for x in witnesses if x['course']=='C16'};prefix=len(__import__('os').path.commonprefix([sources[241]['english'],c16[818]['english']]))
+assert prefix==1078
+# Read actual physical files independently, preserve full files already copied, verify source extents.
+physical=load(R/'physical-verification.json');phys=[]
+for f in physical:
+ data=Path(f['original']).read_bytes();assert h(data)==f['sha256'];text=data.decode('latin-1');collapsed=' '.join(text.split())
+ selected=[]
+ for seq in (241,242,243):
+  acip=sources[seq]['acip'];eng=sources[seq]['english']
+  selected.append({'seq':seq,'acip_exact_contiguous':acip in text,'english_whitespace_normalized_present':eng in collapsed})
+ phys.append({'original':f['original'],'sha256':f['sha256'],'checks':selected})
+save('physical-source-extents.json',phys)
+# Reviewer-authored rationale for every actual span, in spec order.
+reasons={241:[
+'Links is the dependent-arising limb noun; chain of interdependence is explanatory expansion.',
+'The numeral is exactly twelve; the following po does not own another English word.',
+'Exhaustive quantifier licenses each and every one; relational of remains outside.',
+'Additive kyang is as well in the scripture statement.',
+'First sems is the mind depended on, at English 141; it is not an explanatory echo.',
+'gcig is single; the tighter adjective loses no essential numerical content.',
+'la is the complement marker of reliance and owns on, separate from brten.',
+'brten supplies the dependence predicate; no particle is used to claim on twice.',
+'Honorific speech verb licenses stated; in scripture is not attributed to this atom.',
+'The first tsam is the metalinguistically mentioned only at 204, not only inside mind-only.',
+'sgras is the inflected word/sound term; the final s remains attached as required.',
+'The complete subject plus primacy predicate licenses mind is the main thing. The earlier mind-only echo is not the predicate occurrence.',
+'Nominal bshad pa refers to the explanations just cited; actual HGM 20159 includes scriptural references. The source and preceding scripture discussion license the entire attested noun unit.',
+'snga ma modifies the first explanation as former; the later reference head is elided in Tibetan.',
+'dgag phyogs is the negative-side compound. C15:61 and ILL:3265 use the same paired argumentative construction; negative way is the local English. This is contextual attestation, not a new master gloss.',
+'dang coordinates the two argumentative approaches and owns English and at 364.',
+'phyi ma is latter; it does not supply a second lexical reference noun.',
+'sgrub phyogs is the positive-side compound, paired locally and in C15:61/ILL:3265; positive way preserves that established contrast.',
+'The causal connective is Thus; its demonstrative plus reason form functions as a discourse particle.',
+'The collective living-being noun is rendered life in the causal-motion statement; all is not attached.',
+'The complete entering/engaging expression is rendered into motion. HGM has that exact rendering; sets is outside this phrase.',
+'This sems is the principal-cause subject at English 463, not the earlier glossed mind.',
+'gtso bo supplies principal in the affirmative causal statement; bound genitive remains outside.',
+'The first rgyu is cause in that affirmative statement.',
+'The full nominal relation sems las gzhan pa supplies something other than the mind; something reflects nominal gzhan pa and than reflects las. It excludes an alternative cause without reversing roles.',
+'The second gtso bo is principal in the following negative statement.',
+'The second rgyu is cause in the negative statement.',
+'min is a lexical negative copula and gives not at 563. Selecting the negative exponent does not claim that its copular contribution is absent.',
+'mdo is sutras; the English reporting frame is left separate.',
+'This sems belongs to the actual mind only quotation at 634; the next explanatory mind repeats it.',
+'This tsam is only in the second actual quotation at 639.',
+'gtso bor is the inflected primacy term. main thing is attested for gtso bo and occupies the correct second explanatory statement.',
+'First gzugs is matter contrasted with mind at 709.',
+'ma yin is the whole negative-copular lexical unit giving not in and not matter; and is outside.',
+'Second gzugs is the full attested physical matter in the concession.',
+'yod is existence and gives exists, preserving the conceded existence of matter.',
+'The acceptance verb is admit; the supplied we and concession frame are excluded.',
+'Third gzugs is matter in this matter, rather than the previous physical matter.',
+'Overt de licenses this for that same matter and restores useful omitted coverage.',
+'This sems is the standard of comparison at 853, preserving mind as creator.',
+'bzhin du provides the comparison manner in the way; the separately aligned mind remains its complement. d3 records the contextual multiword expression.',
+'This living-being noun is the domain of the creator, sentient beings; the bound genitive stays outside.',
+'The established creator noun has exact HGM prime creator support. The one and article are excluded; primacy is not invented as an isolated morpheme.',
+'This ma yin supplies not at 792 in the matter-as-creator denial. Tightening from the entire existential phrase avoids making yod pa a second negation.',
+'The causal connective des na is Therefore at 862.',
+'The complete other-than-mind qualifier uses the later full nominal English phrase at 947, including mind at 972. The earlier opposite-of-mind paraphrase is left unpaired; no bzlog=opposite assertion results.',
+'The final creator noun belongs to the denied alternative creator, at 991.',
+'The first bkag gives denying; bzlog pa reinforces rejection and does not independently license the English nominal opposite.',
+'phyi rol is outside in the final external-object statement.',
+'The final gzugs is physical objects. The distributed denial-of-denial remains visible in source but is not forced into a false lexical pair.'
+],242:[
+'The full source honorific plus name identifies Master Kedrup Tenpa Dargye. Standing name-title convention permits the whole d5; the date is not part of its Tibetan.',
+'The complete independently attested personal name is a semantic identifier within the honorific-name parent, unique and strictly tighter on both sides. This is not phonetic syllable harvesting.',
+'Original BRTZOMS/brtsoms is the composition verb here and in the reopened composition attributions; master hgm_gloss is null, so composed remains a provisional corpus match.',
+'The work title is Overview of the Middle Way, supported by the HGM title entry; its initial supplied the is excluded.',
+'dbu ma is the named Middle Way constituent, unique and tighter within the title.',
+'spyi don is Overview, the other unique tighter title constituent; canonical English member order reverses the Tibetan order correctly.',
+'The source-attribution particle nas gives from; it does not claim the supplied opening selections formula.'
+],243:[
+'nyan rang is the established coordinated abbreviation for the two practitioner types. HGM attests Listener or Self-Made Buddha; or belongs internally to the named two-type unit.',
+'nyan abbreviates nyan thos here and owns Listener as a unique tighter member, not a generic listen verb.',
+'rang abbreviates rang rgyal here and owns Self-Made Buddha as a unique tighter member, rather than the unrelated reflexive sense.',
+'The whole arhat epithet gives enemy destroyers, supported by HGM and the local subject.',
+'dgra is enemy inside that epithet, unique on both sides.',
+'bcom pa is the nominalized destroyers constituent, HGM-attested and tighter than its parent.',
+'chos can introduces the debate subject as consider; Let us first is supplied and excluded.',
+'phyi rol pa is the conventional non-Buddhist designation, not separate negative morphology.',
+'bzhin du is the comparative postposition like, functioning as a grammatical unit at d6.',
+'The established three-realm unit is exhaustive in this context and HGM explicitly has all three realms. all is part of this full-domain rendering; neither occurrence of thams cad is reassigned to it.',
+'khams is realms within the parent, unique and strictly tighter.',
+'gsum is three within the same parent; no separate all=gsum member is asserted.',
+'na marks location in the three realms and gives in at 208.',
+'spyod pa supplies operate for the afflictions, with bound genitive excluded.',
+'phra rgyas is the whole technical term widespread mental afflictions. HGM plus C05:42 corroborates it; there is no speculative phra=widespread split.',
+'First thams cad is all at 157 quantifying afflictions, not all at 211 before realms.',
+'The whole negated elimination phrase gives fail to eliminate at d3; bare ma is not assigned the disputed fail to equivalent.',
+'de points to the preceding afflictions and gives these at 378; the repeated afflictions noun stays outside.',
+'Second thams cad gives all at 374 in the root phrase.',
+'The inflected root noun gives root. gyur predication is not packed into a lexical root equivalence.',
+'First dngos po gives things as the object of erroneous conception at 434.',
+'First rang bzhin gives the attested nature of their own in that erroneous conception. some is excluded.',
+'Whole gyis marks the basis through which things are conceived to exist and owns through; its s is not detached.',
+'grub par gives existing; the assumption is attributed to conception, not asserted by the alignment as true.',
+'The full apprehending-conception phrase licenses tendency to conceive at d3; no isolated rtog pa=tendency claim is made.',
+'dang marks the relation to the opposed conception and gives with in incompatible with the root; the final dang is a distinct omitted occurrence.',
+'The established mode-of-apprehension unit has exact HGM holds its object support, with actual object-directed cognition corroborated in C01:335/TCS10:259. The supplied it is outside; no isolated member maps its to an invented Tibetan possessive.',
+'dngos gal (source apostrophe preserved) is directly incompatible; the relation is between opposing modes of apprehension.',
+'lam is the path whose attainment is negated and whose mode opposes the misconception, at 288.',
+'The whole negative attainment phrase gives failed to achieve at d3; have and they remain outside.',
+'First phyir supplies Because at 229 and introduces the first reason.',
+'der thal supplies the complete consequential this is true, with And excluded. The source demonstrative licenses this.',
+'Second dngos po gives things at 572 in the absence-of-nature proposition.',
+'Second rang bzhin gives nature of their own at 587; it is distinct from the earlier erroneous conception.',
+'med is lexical existential negation and gives no, not a no-exponent null.',
+'The complete cognition term gives comprehensive knowledge once; realize is a second English formulation of that same Tibetan cognition and stays unpaired.',
+'bral ba gives lack of the knowledge; the bound genitive is excluded.',
+'Second phyir gives for at 505, introducing the reason for the previous consequence.'
+]}
+audit=[]
+for seq,rs in reasons.items():
+ rr=[x for x in rows if x['seq']==seq];assert len(rr)==len(rs)
+ for x,reason in zip(rr,rs):audit.append({**x,'verdict':'SOUND','reason':reason})
+save('span-semantic-review.json',audit)
+# Five-ground scrutiny: no proposed erratum survives, and no correction is manufactured.
+errata=[
+ {'seq':241,'observation':'Following Reading Six heading; possible bzlog/opposite concern','a':'Heading is verbatim in English and original ASCII; bzlog is verbatim Tibetan. Full source fields independently reopened.','b':'C16:818 shares ACIP/Wylie and 1078 English-prefix characters; English apparatus differs. P7:11 and ILL:2688 support only shared extents. This proves textual agreement only, with no independence or ingestion inference.','c':'Following-heading class and C05:241 are already identified in C05 campaign; preserve rather than re-file.','d':'No expected correction established. Local rejection is defensible; an uncertain atom does not make the published English a defect.','e':{'all_original_query_records_exact':28,'additional_query_records_exact':6,'shared_english_prefix':prefix},'refuted':True,'retained':False},
+ {'seq':242,'observation':'BRTZOMS / brtsoms','a':'Exact forms are in original ACIP/Wylie and reopened physical ASCII.','b':'Fourteen brtsoms LIKE rows recur in composition contexts; none establishes independent publication or proves a corruption. C04:169 uses brtsams with the same author in another work attribution, a contextual comparison rather than a correction authority.','c':'Register read; no duplicate or new spelling claim submitted.','d':'Composition is contextually defensible; master brtsoms has null hgm_gloss. No authoritative corrected spelling follows merely from a differing tense/form in another passage.','e':{'brtsoms_like_rows':len(list(db.execute("select * from corpus_segments where wylie like '%brtsoms%'")))},'refuted':True,'retained':False},
+ {'seq':243,'observation':'Rhetorical negation / opposed apprehension','a':'No concrete defect was proposed; full actual ACIP/Wylie/English independently verified.','b':'C16:819 matches all three text fields; C01:335/TCS10:259 corroborate opposed modes of cognition. Digital identity establishes no publication independence.','c':'Register read; no new or duplicate class filed.','d':'Negative elimination, attainment and lack-of-knowledge argument is coherent as a rhetorical objection. No source correction warranted.','e':{'C16_819_field_equality':{f:sources[243][f]==c16[819][f] for f in ('acip','wylie','english')}},'refuted':True,'retained':False}]
+save('errata-independent-scrutiny.json',errata);save('bank-ready-errata.json',[]);save('span-head-allow-needed.json',{})
+segments=[{k:v for k,v in x.items() if k not in ('angle','exact_saved_body')} for x in load(R/'generator-proof.json') if x['angle']=='reconciled']
+review={'verdict':'APPROVE','spec_verdict':'PASS','quality_verdict':'APPROVE','producer':'Codex','review_type':'independent machine semantic review; not human editorial acceptance','open_findings':[],'total_spans':95,'total_nulls':0,'total_word_pairs':63,'segments':segments,'depth7_members':9,'original_proposal_dispositions_reviewed':178,'structured_decisions_reviewed':42,'errata_count':0}
+save('review.json',review)
+# Preserve executable review helper bytes under supported extensions and verify all copies again.
+manifest=load(R/'original-to-copy-manifest.json')
+for p in sorted(R.glob('*.py')):
+ target=Path(str(p)+'.txt');target.write_bytes(p.read_bytes());manifest.append({'original':str(p),'copy':target.name,'sha256':h(p.read_bytes()),'bytes':p.stat().st_size})
+save('original-to-copy-manifest.json',manifest)
+verified=[]
+for a in manifest:
+ raw=(R/a['copy']).read_bytes();assert h(raw)==a['sha256'] and len(raw)==a['bytes']
+ if 'original_git_commit' in a:original=subprocess.check_output(['git','-C',str(W),'show',a['original_git_commit']+':'+a['repository_relative_path']])
+ else:original=Path(a['original']).read_bytes()
+ assert raw==original;verified.append(a['copy'])
+save('preservation-proof.json',{'manifest_records':len(manifest),'all_original_copy_bytes_equal':True,'historical_repository_snapshots_compared_only_to_git_objects':True,'distinct_copies':len(set(verified))})
+print(json.dumps(review,indent=2))

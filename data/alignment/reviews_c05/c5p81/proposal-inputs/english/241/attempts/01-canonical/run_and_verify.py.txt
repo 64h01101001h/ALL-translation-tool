@@ -1,0 +1,31 @@
+import pathlib,json,subprocess,os,hashlib,sys,shutil,re,html
+D=pathlib.Path(__file__).resolve().parent; B=D.parent; ROOT=D.parents[3]; W=ROOT/'campaign-worktree'
+def sha(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+helper=ROOT/'campaign-artifacts/run_generator_readonly.py';shutil.copyfile(helper,D/'originals/run_generator_readonly.py')
+sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+rows={r['seq']:r for r in json.loads((D/'spine-originals.json').read_text())['rows']}
+for seq in [241,242,243]:
+ d=B/str(seq);s=json.loads((d/'spec.json').read_text());seg=s['segments'][0]
+ n=1
+ while (d/f'attempts/{n:02d}-canonical').exists():n+=1
+ a=d/f'attempts/{n:02d}-canonical';a.mkdir(parents=True)
+ for name in ['spec.json','occurrence-intentions.json','errata.json']:shutil.copyfile(d/name,a/name)
+ cmd=[sys.executable,str(helper)];r=subprocess.run(cmd,cwd=W,input=(d/'spec.json').read_bytes(),capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for path in [a,d]:
+  (path/'generator.stdout').write_bytes(r.stdout);(path/'generator.stderr').write_bytes(r.stderr);(path/'generator.exit').write_text(str(r.returncode)+'\n')
+ (a/'invocation.json').write_text(json.dumps({'argv':cmd,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin_path':str(a/'spec.json'),'sqlite':'wrapper forces URI mode=ro','helper_path':str(helper),'helper_sha256':sha(helper),'canonical_generator_path':str(W/'tools/gen_alignment_page.py'),'canonical_generator_sha256':sha(W/'tools/gen_alignment_page.py'),'build_alignment_layer_sha256':sha(W/'tools/build_alignment_layer.py')},indent=2)+'\n')
+ print(seq,'exit',r.returncode,'bytes',len(r.stdout),'stderr',r.stderr.decode())
+ if r.returncode:continue
+ assert not r.stderr
+ (d/'body.html').write_bytes(r.stdout)
+ t=G.resolve(rows[seq]['wylie'],seg['spans'],'tib',seq);by={p['id']:p for p in seg['spans']};es=G.with_members(seg['spans'],[by[k] for k in seg['eng_order']],rows[seq]['english']);e=G.resolve(rows[seq]['english'],es,'eng',seq)
+ intentions=json.loads((d/'occurrence-intentions.json').read_text());occ=[]
+ for p in intentions:
+  x={'id':p['id'],'tib_range':t[p['id']],'eng_range':e[p['id']],'tib_intention_matches':t[p['id']][0]==p['tib_offset'],'eng_intention_matches':e[p['id']][0]==p['eng_offset']};occ.append(x)
+ fidelity={}
+ for side,source in [('tib','wylie'),('eng','english')]:
+  block=r.stdout.decode().split(f'<div class="{side}"><div class="lab">')[1].split('</div>',1)[1].split('\n</div>',1)[0].strip()
+  plain=html.unescape(re.sub('<[^>]*>','',block));fidelity[side]=plain==rows[seq][source]
+ proof={'seq':seq,'exit':r.returncode,'stderr_bytes':len(r.stderr),'body_bytes':len(r.stdout),'stdout_equals_body':r.stdout==(d/'body.html').read_bytes(),'spec_sha256':sha(d/'spec.json'),'body_sha256':sha(d/'body.html'),'counts':{'spans':len(seg['spans']),'d5':sum(p['d']==5 for p in seg['spans']),'d3':sum(p['d']==3 for p in seg['spans']),'d6':sum(p['d']==6 for p in seg['spans']),'nulls':sum(p['eng'] is None for p in seg['spans']),'errata':0},'full_text_fidelity':fidelity,'occurrences':occ,'all_intentions_match':all(p['tib_intention_matches'] and p['eng_intention_matches'] for p in occ)}
+ (d/'mechanical-proof.json').write_text(json.dumps(proof,indent=2)+'\n');shutil.copyfile(d/'mechanical-proof.json',a/'mechanical-proof.json');shutil.copyfile(d/'body.html',a/'body.html')
+ print('fidelity',fidelity,'intention',proof['all_intentions_match']);print([x for x in occ if not(x['tib_intention_matches'] and x['eng_intention_matches'])])

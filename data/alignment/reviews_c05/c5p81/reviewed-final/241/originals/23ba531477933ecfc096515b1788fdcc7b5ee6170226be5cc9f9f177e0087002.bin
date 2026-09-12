@@ -1,0 +1,4569 @@
+{
+  "source": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/hgm_dictionary_v27_2.json.gz",
+    "resolved_path": "/Users/adamderickandrade/ALL-translation-tool/data/hgm_dictionary_v27_2.json.gz",
+    "bytes": 13393560,
+    "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253"
+  },
+  "meta": {
+    "title": "Holy Geshe Michael Roach Dictionary (HGM Lexicon)",
+    "version": "0.27.2",
+    "date": "2026-08-04",
+    "description": "Tibetan-English dictionary strictly anchored to the English equivalents used by Geshe Michael Roach (HGM). Entry format is a hybrid of the Illuminator Tibetan-English Dictionary (Tony Duff) entry style and Jeffrey Hopkins' Tibetan-Sanskrit-English Dictionary structure. Hopkins glosses are included as reference only; the hgm_gloss field is the locked, authoritative equivalent.",
+    "sources": [
+      {
+        "id": "C01",
+        "title": "ACI Course I: The Principal Teachings of Buddhism (Course Readings)",
+        "note": "Root text of the Three Principal Paths (Lam gtso rnam gsum) of Je Tsongkapa with HGM translation; opening prayers; Khen Rinpoche Geshe Lobsang Tharchin foreword."
+      },
+      {
+        "id": "HOPKINS",
+        "title": "Jeffrey Hopkins, Tibetan-Sanskrit-English Dictionary (uma-tibet.org, June 2015)",
+        "note": "Reference comparanda only. Never overrides hgm_gloss."
+      },
+      {
+        "id": "HTG2016",
+        "title": "Geshe Michael Hypertext Glossary (user-compiled, 2016-05-16)",
+        "note": "8,028 ACIP-headword to HGM-English pairings mined from HGM translations. Bulk attestation layer."
+      },
+      {
+        "id": "HOPKINS-SCAFFOLD",
+        "title": "Hopkins Tibetan-Sanskrit-English Dictionary (June 2015) — headword scaffold ('the Great Dictionary')",
+        "note": "21,751 unique headwords parsed span-level (16pt headword font anchor); Hopkins glosses reference-only."
+      },
+      {
+        "id": "C01-ASCII",
+        "title": "Course I Reading, ASCII/ACIP edition (C01ReadingASCII.txt)",
+        "note": "889 ACIP Tibetan lines; 497 aligned Tibetan-English segments; makes the full Tibetan of Course I machine-readable and pairable."
+      },
+      {
+        "id": "C02-C18-ASCII",
+        "title": "Course II–XVIII Readings, ASCII/ACIP editions (17 files)",
+        "note": "Full ACI formal-study corpus. 8983 aligned Tibetan-English segments across 18 courses."
+      },
+      {
+        "id": "TCS-ASCII",
+        "title": "The Course Series supplements (TCS01–TCS09 + practice texts, 16 ASCII/ACIP files)",
+        "note": "Prayers, sadhanas, lama-devotion and long-life texts incl. Thousand Angels (dga' ldan lha brgya ma), Source of All My Good (yon tan gzhir ma), Naropa's Vajra Yogini sadhana, Pabongka sadhana, Naropa's Twelve Trials, Khen Rinpoche long-life prayer."
+      },
+      {
+        "id": "TCS10-18-ASCII",
+        "title": "The Course Series TCS10–TCS18 (11 ASCII/ACIP files)",
+        "note": "Incl. the Lama Chupa (Offering to the Lama) root text and full commentary, Kali Wang initiation text, and TCS10–TCS17 supplements."
+      },
+      {
+        "id": "SUNLIGHT",
+        "title": "Sunlight on the Path to Freedom — Choney Lama Drakpa Shedrup's commentary on the Diamond Cutter Sutra, tr. HGM (Diamond Cutter Classics vol. 72, 2019)",
+        "note": "Book-length translation; 1098 aligned segments incl. the quadrilingual Diamond Cutter Sutra appendix."
+      },
+      {
+        "id": "LSG-C1-C4",
+        "title": "ACI Tibetan Language Study Guides, Courses I–IV (vocabulary card decks, 4 PDFs)",
+        "note": "323 GMR phonetic lines; used as pronunciation ground truth. Tibetan layer font-locked (as C01 PDF)."
+      },
+      {
+        "id": "LSG-C5-C6",
+        "title": "ACI Tibetan Language Study Guides, Courses V–VI (2 PDFs)",
+        "note": "218 GMR phonetic lines; pronunciation ground truth pass 2."
+      },
+      "ACI Tibetan Language Study Guides, Courses VII-XVII (10 PDFs; 1,436 phonetic lines; card pass III)",
+      "Glyph-decode channel (glyph_decoder.py): TibetanMachine glyph runs from 12 guide PDFs decoded to exact wylie+Unicode; C13/C14/C16/C17 PDFs pending re-upload",
+      {
+        "id": "P1",
+        "title": "ACI Daily Practice 1 Reading PDF",
+        "note": "Mandala of the Steps to Enlightenment. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+      },
+      {
+        "id": "P3",
+        "title": "ACI Daily Practice 3 Reading PDF",
+        "note": "Practice III reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+      },
+      {
+        "id": "P4",
+        "title": "ACI Daily Practice 4 Reading PDF",
+        "note": "Practice IV reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+      },
+      {
+        "id": "P5",
+        "title": "ACI Daily Practice 5 Reading PDF",
+        "note": "Death meditation (Lam-rim chen-mo selections). TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+      },
+      {
+        "id": "P6",
+        "title": "ACI Daily Practice 6 Reading PDF",
+        "note": "Sutra practice reading incl. Sutra of the Four Practices. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+      },
+      {
+        "id": "P7",
+        "title": "ACI Daily Practice 7 Reading PDF",
+        "note": "Practice VII reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+      },
+      {
+        "id": "P8",
+        "title": "ACI Daily Practice 8 Reading PDF",
+        "note": "Practice VIII reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+      },
+      {
+        "id": "P9",
+        "title": "ACI Daily Practice 9 Reading PDF",
+        "note": "Practice IX reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+      },
+      {
+        "id": "P10",
+        "title": "ACI Daily Practice 10 Reading PDF",
+        "note": "A Thousand Angels of the Heaven of Bliss (Ganden Hlagyama) prayer book. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+      },
+      {
+        "id": "DDA",
+        "title": "The Devil Debates An Angel (Diamond Cutter Classics Volume 111, (c)2026)",
+        "note": "By the First Panchen Lama, translated by Geshe Michael Roach. A struggle against our tendency to think that things are coming at us. ACIP-English aligned docx ingest, Sunlight/ILL recipe. Ingested v0.25."
+      },
+      {
+        "id": "LC",
+        "title": "Lokesh Chandra Tibetan-Sanskrit Dictionary (main ed. + 1992 Supplementary)",
+        "note": "Extracted from LkChDictionary.dic (Ven. Phil Baker ACIP reader). 88,973 headwords, 83,884 with IAST Sanskrit. Reference layer only, tagged {LC}; never overrides hgm_gloss. Ingested v0.27."
+      }
+    ],
+    "status_codes": {
+      "verified": "HGM English equivalent directly attested in an uploaded HGM source, with citation.",
+      "provisional": "Equivalent inferred from HGM usage patterns but not yet directly attested in uploaded sources; needs confirmation.",
+      "reference": "Entry included for structural completeness; gloss from Hopkins or Illuminator pending HGM attestation."
+    },
+    "pos_tags": [
+      "<noun>",
+      "<noun><phrase>",
+      "<verb>",
+      "<verb><phrase>",
+      "<adj>",
+      "<adj><phrase>",
+      "<adv>",
+      "<gerundial><phrase>",
+      "<particle>",
+      "<title>"
+    ],
+    "stats": {
+      "unified": 105634,
+      "hgm_attested": 12004,
+      "awaiting": 93554,
+      "matched_curated": 89,
+      "matched_glossary": 3857,
+      "hgm_only_appended": 4147,
+      "curated": 115,
+      "glossary": 8028,
+      "c01_attested_curated": 102,
+      "awaiting_present_in_c01_corpus": 648,
+      "pronunciation_flagged": 242,
+      "corpus_segments": 35601,
+      "entries_in_corpus": 29512,
+      "awaiting_with_contexts": 2408,
+      "auto_direct": 8,
+      "auto_mined": 3449,
+      "auto_quoted": 52,
+      "auto_demoted_candidates": 449,
+      "sunlight_new_mined": 370,
+      "sunlight_new_quoted": 8,
+      "card_attested_pronunciations": 1295,
+      "card_derived_entries": 423,
+      "card_attested": 1308,
+      "glyph_decoded_cards": 2044,
+      "books_v21_mined": 224,
+      "books_v21_demoted": 278,
+      "ill_v22_mined": 146,
+      "ill_v22_demoted": 246,
+      "w3_v23_mined": 77,
+      "w3_v23_demoted": 141,
+      "practice_v24_mined": 24,
+      "practice_v24_candidates": 76,
+      "practice_v24_segments": 782,
+      "practice_decoded_cards": 180,
+      "c_ascii_v24_1_segments": 24,
+      "dda_v25_segments": 516,
+      "tcs_v25_repairs": 1467,
+      "tcs_v25_new_segments": 32,
+      "dda_v25_mined": 1,
+      "dda_v25_candidates": 39,
+      "tcs2_v25_1_repairs": 924,
+      "tcs2_v25_1_new_segments": 2,
+      "hopkins_realigned_v26": 13589,
+      "with_sanskrit": 92071,
+      "with_hopkins": 21730,
+      "wylie_repaired_v26_1": 41,
+      "scaffold_added_v26_1": 11,
+      "gd_glossed": 338,
+      "lc_v27_new_entries": 79305,
+      "lc_v27_merged_entries": 8364,
+      "lc_v27_attested_new": 15151,
+      "tibetan_generated_v27_1": 79316,
+      "tibetan_coverage": 105637,
+      "phantoms_deleted_v27_2": 4,
+      "wylie_typos_fixed_v27_2": 31
+    },
+    "deviation_log": [
+      {
+        "id": "DEV-001",
+        "location": "C01 root text homage (ASCII seg 23)",
+        "note": "Source Tibetan reads rje btsun 'jam pa'i dbyangs la phyag 'tshal lo (homage to Gentle Voice), while HGM's English reads 'I bow to all the high and holy lamas' (= rje btsun bla ma rnams la...). Textual variant between the ACIP edition and the translated edition; both homage forms of the Lam gtso are attested in the tradition. Do not force a lexical pairing from this line."
+      },
+      {
+        "id": "DEV-002",
+        "note": "C09 Language Study Guide prints 'pqmpa' for pham pa (pampa) — card typo, not recorded as a pronunciation variant."
+      }
+    ],
+    "pronunciation_standard": "ACIP Standards for Simplified Tibetan and Sanskrit Pronunciation (ACIP Release 4 Catalog, pp. 173-178), refined by GMR course-phonetics conventions where the two diverge (o umlauts only before d/s; suffix-b voiced before voiced onsets; prenasal insertion only after open syllables; junction sandhi: sangs rgyas -> sangye, tshogs kyi -> tsokyi, bdag gis -> dakki). Engine validated 41/41 on catalog examples and 22/22 on course conventions. v0.7: word-segmented output per GMR convention — lexemes joined (ngenjung, semkye), formative suffixes attached (gelukpa), genitive 'i fused (yangdakpay), connective particles standalone (kyi, dang, la, yang), negation fused forward (masong), la-don enclitics fused back (raptu), hyphenated noun compounds via curated list (chu-ku, su-ku). Validated 11/11 screenshots, 17/17 catalog. v0.8: rules refined from 15 GMR vocabulary cards — o+n->u general (dunche, shendun, ngunsum; lexical exceptions ton/kon); du/te/ste/de/ru standalone, tu fused (chiktu), su hyphen-fused (se-su); rnams and tsam standalone; negation absorbs formatives (malupar); prenasal blocked only after p-final (delnjor, tangok, kyabdro); junction k+ng -> ng (tangok); lexical devoicers top/drup/drip. Validated 42/42 on combined card+screenshot+catalog battery."
+  },
+  "queries": [
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "yan lag"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཡན་ལག",
+          "wylie": "yan lag",
+          "wylie_variants": [
+            "yan lag"
+          ],
+          "tenses": null,
+          "sanskrit": "{C,MSA,MV}aṅga; {N}avayava; {LC}aṃga; {LC}vodhyaṃga sapta; {LC}aṃgatā; {LC}avayavatva; {LC}parikara; {LC}pratyaṃga; {LC}maṇḍalaka; {LC}śākhā; {LC}aṅgana; {LC}kalā; {LC}parikara, pratīka; {LC}sthāna",
+          "hopkins_english": "limb; branch; member; part; element; link; secondary color",
+          "hgm_gloss": [
+            "necessary components",
+            "qualities",
+            "ancillary",
+            "secondary",
+            "components",
+            "branches",
+            "the branches",
+            "part",
+            "parts",
+            "limbs",
+            "various elements",
+            "protuberances",
+            "divisions",
+            "link",
+            "detail",
+            "links",
+            "details",
+            "branch",
+            "elements"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "yenlak",
+          "acip": "YAN LAG",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P4",
+              "P6",
+              "P7",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 511
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "bcu gnyis"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "བཅུ་གཉིས",
+          "wylie": "bcu gnyis",
+          "wylie_variants": [
+            "bcu gnyis"
+          ],
+          "tenses": null,
+          "sanskrit": "dvādaśa; {LC}dvādaśadhutaguṇa; {LC}dvādaśaka; {LC}dvādaśārkodaya; {LC}dvādaśāṅga; {LC}dvādaśavarṣaka; {LC}dvādaśavārṣika; {LC}dvādaśāṅgula",
+          "hopkins_english": "twelve",
+          "hgm_gloss": [
+            "twelve",
+            "(twelve"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "chunyi",
+          "acip": "BCU GNYIS",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C04",
+              "C05",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P7",
+              "SOS",
+              "Sunlight",
+              "TCS01",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS17"
+            ],
+            "n_segments": 155
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "thams cad"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཐམས་ཅད",
+          "wylie": "thams cad",
+          "wylie_variants": [
+            "thams cad"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,MSA,MV}sarva; {L} sarvatra; {MSA}sarvatva; {C}pṛthu; {C}sakala(m); {MSA}sakala; {LC}kṛtsna; {LC}yāvat; {LC}viśva; {LC}sarvi; {LC}apāyāḥ; {LC}ye kecit; {LC}sasyāni; {LC}teṣu ruteṣu; {LC}sarvataḥ; {LC}sarvamātra; {LC}sarvāṇi; {LC}sarve; {LC}sākalya",
+          "hopkins_english": "all; all places (everywhere); {C}many; long; very much; broad; vast; large; whole; everywhere; always",
+          "hgm_gloss": [
+            "every",
+            "all",
+            "every single",
+            "each and every",
+            "every form of",
+            "each of these",
+            "every one of",
+            "every ... every",
+            "any",
+            "every sort",
+            "every one of them",
+            "all of them",
+            "anything",
+            "everywhere",
+            "always",
+            "each",
+            "entire",
+            "every ... every ... every",
+            "everyone",
+            "every kind of",
+            "all of",
+            "at all",
+            "everything",
+            "those",
+            "every one",
+            "all things",
+            "any of",
+            "each and every one of",
+            "all the other",
+            "all the different kinds",
+            "everything there is",
+            "each and every knowable thing",
+            "\"it all\"",
+            "every existing thing",
+            "every knowable thing",
+            "world",
+            "every kind of thing there is",
+            "anyone"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "tamche",
+          "acip": "THAMS CAD",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P4",
+              "P5",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaSadhana",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 3128
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "sems"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "སེམས",
+          "wylie": "sems",
+          "wylie_variants": [
+            "sems"
+          ],
+          "tenses": "bsam/ sems/ bsams/ soms",
+          "sanskrit": "bsam/ sems/ bsams/ soms/; {LCh,MV,MSA,C}citta; {C} cittatā; {C,MSA,MV}cetas; {MSA}cetanā; {MSA} cetasika; {MSA}caitasika; {C,MSA}manas; {C} manyate (=samanupaśyati); {C}matī; {MSA} (anv √īkṣ): anvīkṣati; {MSA}(... snyam sems so = (√vṛt): iti vartate); cittam; saṃtāna; citta; {LC}adhimuktika; {LC}ātman; {LC}āśaṃsā; {LC}hitāśaṃsā; {LC}āśaya; {LC}parārthāśaya; {LC}maivaṃ tasya... bhūd... iti; {LC}sa māṃ statītyasambhavaḥ; {LC}cittakalāpa; {LC}apratihatacittatā; {LC}samacittatā; {LC}citti; {LC}mati; {LC}manoratha; {LC}manyati; {LC}manyana; {LC}manyase; {LC}tat kiṃ manyase; {LC}mānasa; {LC}sattva; {LC}bodhisattva; {LC}samanvāhara-apekṣasva; {LC}hṛd; {LC}hṛdaya; {LC}acintayat; {LC}ajñāsīt; {LC}amanyata; {LC}amanyanta; {LC}ūha; {LC}cintana; {LC}cintā; {LC}!!cintin; {LC}ceṣṭā; {LC}tarkayāmi; {LC}dhyāna; {LC}dhyāyat; {LC}dhyāyati; {LC}dhyeya; {LC}pratipatti; {LC}svārthabuddhi; {LC}menire; {LC}mene",
+          "hopkins_english": "verb: think [in the sense of have an opinion]; contemplate; noun: mind; consciousness; thought; continuum; {PH}mind; aspiration; intention; {C}attitude of mind; state of thought; state of mind; heart; inclination to; mind; mental activity; fancies (himself for); thinks of; minds about; thinks about; thinks with regard to; minds; puts his mind to; sets above; feel conceited; cares about; mindf",
+          "hgm_gloss": [
+            "wish",
+            "mind",
+            "think",
+            "minds",
+            "the wish",
+            "the wish for enlightenment",
+            "feelings",
+            "intent",
+            "thoughts",
+            "opinion",
+            "intention",
+            "mental",
+            "our minds",
+            "motivation",
+            "motivations",
+            "mind ... mind",
+            "state of mind",
+            "talk",
+            "mind-only",
+            "states of mind"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "sem",
+          "acip": "SEMS",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "MBL",
+              "P1",
+              "P3",
+              "P4",
+              "P5",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaSadhana",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS08SourceOfAllMyGood",
+              "TCS08ThousandAngels",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 5525
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "gcig"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "གཅིག",
+          "wylie": "gcig",
+          "wylie_variants": [
+            "gcig"
+          ],
+          "tenses": null,
+          "sanskrit": "{MV}eka; {MV}ekatva; {MSA}aikyatas; {C}mitha; abhinna {GD:284}; {LC}ekakṣaṇa; {LC}ekasveraṇa; {LC}ekānte; {LC}ekasmin samaye; {LC}ekārthatā; {LC}ekarasaṃ yathāsyāt; {LC}ekaka; {LC}ekākin; {LC}kṣaṇa; {LC}anyatama; {LC}nikaṣā; {LC}sakṛt; {LC}samīpa; {LC}putra!",
+          "hopkins_english": "one; same; oneness; unitary; single; singular phenomenon; {PH}identity; same; {C}autonomous; first; together; one single; alone; the same as; only one; common; identical; mutual",
+          "hgm_gloss": [
+            "one and only",
+            "one",
+            "single",
+            "someone",
+            "period of 24 hours",
+            "a single",
+            "a certain",
+            "a single being",
+            "a specific",
+            "one ... alone",
+            "a measure",
+            "also",
+            "same",
+            "another",
+            "the same as",
+            "be present with",
+            "a",
+            "exactly the same",
+            "possess",
+            "singular",
+            "one thing",
+            "are one",
+            "an",
+            "there exists no difference",
+            "single thing",
+            "particular"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "chik",
+          "acip": "GCIG",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P4",
+              "P5",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08KhenRinpocheLongLife",
+              "TCS08NaropaSadhana",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 2711
+          },
+          "pronunciation_source": "GMR card (C14 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "brten"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "བརྟེན",
+          "wylie": "brten",
+          "wylie_variants": [
+            "brten"
+          ],
+          "tenses": "brten/ rten/ rtend/ brtend",
+          "sanskrit": "brten/ rten/ rtend/ brtend/; {C}niśrita; (√śri): {MSA}śrayet; {MSA}śrita; {MV}niśri; {MV}sanniśraya; {MV} samāśri; {MSA}viśraya; {C}upaniśrita; {LC}āśritya; {LC}avalambate; {LC}avalambana; {LC}avalambin; {LC}aśiśriyat; {LC}ālambate; {LC}ālalamba; {LC}ālambya; {LC}āśraya; {LC}āśrita; {LC}upāsita; {LC}upāsya; {LC}niśritu; {LC}bhajasva; {LC}ruddha, rodhita; {LC}lambase; {LC}vigāhate; {LC}saṃśraya; {LC}saṃśrita; {LC}samālambate; {LC}seveta",
+          "hopkins_english": "depend; rely; resort to; support; {C}supported; in dependence on; leans on; based upon; inhabiting; dwell on in the mind; dependent on",
+          "hgm_gloss": [
+            "basis",
+            "rely",
+            "reference",
+            "relies",
+            "based"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "ten",
+          "acip": "BRTEN",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "P1",
+              "P3",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 1149
+          },
+          "pronunciation_source": "GMR card (C04 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "tsam"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཙམ",
+          "wylie": "tsam",
+          "wylie_variants": [
+            "tsam"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,C,MV,TN}mātra; {LC}api; {LC}vālāgramapi pramāṇam; {LC}prati; {LC}pramāṇa; {LC}!!mātra; {LC}kiñcinmātram; {LC}puṣpamātram; {LC}sahabodhitamātreṇa; {LC}mātraka; {LC}mātrā; {LC}!!daghna; {LC}lābhamātraka; {LC}saha; {LC}saha darśanena",
+          "hopkins_english": "only; mere; merely; just; {PH}about; approximately",
+          "hgm_gloss": [
+            "only",
+            "just",
+            "no more than",
+            "no less than",
+            "itself",
+            "simply",
+            "the size of",
+            "alone",
+            "merely",
+            "it looks like",
+            "mere",
+            "about",
+            "as such",
+            "nothing but",
+            "all",
+            "simple",
+            "nothing more than",
+            "solely",
+            "in themselves",
+            "themselves",
+            "even",
+            "itself ... itself",
+            "raw",
+            "sole",
+            "only condition",
+            "time",
+            "just ... just ... just",
+            "all it takes",
+            "as soon as",
+            "amount",
+            "exclusively",
+            "nothing more",
+            "bare"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "tsam",
+          "acip": "TZAM",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P10",
+              "P3",
+              "P5",
+              "P6",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS08SourceOfAllMyGood",
+              "TCS08ThousandAngels",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 2496
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "sgra"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "སྒྲ",
+          "wylie": "sgra",
+          "wylie_variants": [
+            "sgra"
+          ],
+          "tenses": null,
+          "sanskrit": "{C,MSA,MV,GD}śabda; {MSA}ghoṣa; {MSA}svara; {C,MSA,MV}ruta; {C}āyatana; {LC}!!kāra; {LC}gīta; {LC}grahaṇa; {LC}garjitamegha-ghoṣa; {LC}ṭaṃkāra; {LC}dhvani; {LC}nāda; {LC}siṃhanāda; {LC}nirghoṣa; {LC}nirṇāda; {LC}praṇāda; {LC}pratidhvani; {LC}vacana; {LC}varṇa; {LC}kīrtiśabdaślokaḥ śramaṇaḥ; {LC}acchaṭāśabda; {LC}sphoṭa; {LC}svana; {LC}garjitasvara; {LC}dundubhisvara; {LC}ākhyāna; {LC}sukhākhyāna; {LC}ārāva; {LC}ālāpa; {LC}sinagdhālāpa; {LC}kvaṇa; {LC}kvaṇita; {LC}garjana; {LC}garjita; {LC}gir; {LC}gīḥ; {LC}dhvāna; {LC}nināda; {LC}nirnāda; {LC}niṣpeṣa; {LC}nisvana; {LC}raṇa; {LC}rava; {LC}rū",
+          "hopkins_english": "sound; term; roar; {PH}grammar; {C}voice; message; sense-field; occasion for; source; voice; meaningful sound; sounds; language; vocal sounds; speech; {GD:681} verbal testimony",
+          "hgm_gloss": [
+            "sound",
+            "voice",
+            "sounds",
+            "roar",
+            "special sounds",
+            "what i said",
+            "words",
+            "word"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "dra",
+          "acip": "SGRA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C05",
+              "C06",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P5",
+              "P6",
+              "P8",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 806
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "gtso bo"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "གཙོ་བོ",
+          "wylie": "gtso bo",
+          "wylie_variants": [
+            "gtso bo"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,MSA}pradhāna; {MSA} prādhānya; {C,MSA}śreṣṭha; {MSA}pramukha; {MSA}prāmukhya; {C}śauṭīra; {LC}ātma; {LC}guru; {LC}suraguru; {LC}grāmaṇī; {LC}jyeṣṭha; {LC}parama; {LC}na śīlaparamaḥ; {LC}prabhu; {LC}praṣṭha; {LC}vṛndāraka; {LC}śreṣṭhin; {LC}agraṇī; {LC}agrya, adhipa, anuttara; {LC}īśa; {LC}uttara; {LC}uddeśa, kakud; {LC}nāga, nābhi",
+          "hopkins_english": "main; chief; principal; {PH}best; primordial substance; {C}valiant; best; a person of authority",
+          "hgm_gloss": [
+            "principal",
+            "main",
+            "primarily",
+            "major",
+            "primary",
+            "primal one",
+            "most",
+            "principal tenet",
+            "core",
+            "mainly",
+            "main point",
+            "main thing"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "tsowo",
+          "acip": "GTZO BO",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P6",
+              "SOS",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary"
+            ],
+            "n_segments": 345
+          },
+          "pronunciation_source": "GMR card (C05 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "snga ma"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "སྔ་མ",
+          "wylie": "snga ma",
+          "wylie_variants": [
+            "snga ma"
+          ],
+          "tenses": null,
+          "sanskrit": "{C,MSA}pūrva; {C}purima; {LC}pūrvaka; {LC}prāk; {LC}prācī; {LC}purataḥ; {LC}prāgjanma",
+          "hopkins_english": "former; earlier; prior; early; {C}first; the first one",
+          "hgm_gloss": [
+            "before",
+            "former",
+            "the former method",
+            "first reference",
+            "what we have just been talking about",
+            "earlier",
+            "last",
+            "previous",
+            "above",
+            "earlier instance",
+            "original",
+            "first part",
+            "just mentioned",
+            "already",
+            "beginning part of this ... section",
+            "past",
+            "previously",
+            "former instances",
+            "first"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "ngama",
+          "acip": "SNGA MA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "P1",
+              "P3",
+              "P5",
+              "P6",
+              "P7",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary"
+            ],
+            "n_segments": 428
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "dgag phyogs"
+      },
+      "count": 0,
+      "entries": []
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "phyi ma"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཕྱི་མ",
+          "wylie": "phyi ma",
+          "wylie_variants": [
+            "phyi ma"
+          ],
+          "tenses": null,
+          "sanskrit": "{C,MSA}paścima; {MV,MSA}uttara; {LC}apara; {LC}avara, āgāmin; {LC}āyati; {LC}uttarottaratṛṣṇayā; {LC}paratra; {LC}paścāt; {LC}amutra; {LC}avara; {LC}āgāmin, āyatyām; {LC}udak; {LC}guhya; {LC}carama; {LC}cūrṇa; {LC}jaghanya; {LC}param; {LC}pārṣṇi",
+          "hopkins_english": "later; subsequent; latter; the latter{D2}; {C}future; last; endng with; final",
+          "hgm_gloss": [
+            "the future",
+            "future",
+            "the latter",
+            "following",
+            "second line",
+            "latter",
+            "next",
+            "into the next moment",
+            "last",
+            "later",
+            "last sense",
+            "above",
+            "later instance",
+            "the latter version",
+            "another",
+            "next life",
+            "future lives",
+            "rebirth?",
+            "new rebirth",
+            "final",
+            "eventual"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "chima",
+          "acip": "PHYI MA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P5",
+              "P6",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary"
+            ],
+            "n_segments": 383
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "sgrub phyogs"
+      },
+      "count": 0,
+      "entries": []
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "'gro ba"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "འགྲོ་བ",
+          "wylie": "'gro ba",
+          "wylie_variants": [
+            "'gro ba"
+          ],
+          "tenses": null,
+          "sanskrit": "{L,MV,MSA,C}gati; gantṛ; {L,MV,MSA,C}gamana; {C}gacchati; {MSA} upaga; {MSA}ga (e.g.: pāra-ga); {MSA}gāmitā; {MSA}gāmin; {C,MSA,MV}jagat; {C}jagatī; {C} saṃkrāmati; {C}prakrāmati; {C}abhikramaṇa; {C}avakrānti; {C}vrajate; {MSA}yāti; {MSA} yāna; {LC}adhigati; {LC}anucaṃkramati; {LC}avakramati; {LC}ākramaṇa; {LC}āgati; {LC}upasaṃkramati; {LC}upasaṃkramitum; {LC}gacchāmi; {LC}gata; {LC}ūrdhvagata; {LC}apāyagati; {LC}svargati; {LC}tiryaggati; {LC}bhavagati; {LC}gantum; {LC}!!gamatā; {LC}pūrvaṃgamatā; {LC}śaraṇagamana; {LC}akvacidgamana; {LC}gāmanī; {LC}!!gāmitā; {LC}viśeṣagāmitā; {LC}gāminī; {LC}caṃkramati; {LC}carat; {LC}jaṃgama; {LC}jana; {LC}jāti; {LC}nipātin; {LC}nirgama; {LC}parāyaṇa; {LC}prakramate; {LC}prayāṇa; {LC}pravṛtti; {LC}samyakprahāṇaprasaṭhāriḥ; {LC}praskanda; {LC}mantraṇā; {LC}yāyāt; {LC}yāyin; {LC}loka; {LC}viprakramaṇa; {LC}saṃgīti; {LC}cārikāṃ carati; {LC}añcati; {LC}ayana; {LC}itvarī; {LC}ṛ, !!ga; {LC}gacchantaḥ; {LC}gacchanti; {LC}gantakāma; {LC}!!gama; {LC}gamanīya; {LC}gamya; {LC}!!gāmin; {LC}gāhamāna; {LC}caṃkrama; {LC}calati; {LC}jaṅgama; {LC}prayāt; {LC}prayāti; {LC}pravāha; {LC}prasarpat; {LC}prasthāna; {LC}bhava; {LC}yātrā; {LC}yāhi; {LC}vraji; {LC}saṅgīta, saṅgīti; {LC}sarvajagatī; {LC}syanna",
+          "hopkins_english": "transmigrator; transmigration; going; go away from; {PH}transmigration; rebirth; {C}goes; go away; walk; go through; come to; journey; the journey will bring to; the world; to pass on; transmigrates; pass away from; come along; going out",
+          "hgm_gloss": [
+            "living being(s)"
+          ],
+          "hgm_evidence": {
+            "tier": "curated",
+            "id": "0031",
+            "status": "verified"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "drowa",
+          "acip": "'GRO BA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P10",
+              "P3",
+              "P5",
+              "P6",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaSadhana",
+              "TCS08PabongkaSadhana",
+              "TCS08SourceOfAllMyGood",
+              "TCS08ThousandAngels",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 744
+          },
+          "pronunciation_source": "GMR card (C14 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "rgyu"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "རྒྱུ",
+          "wylie": "rgyu",
+          "wylie_variants": [
+            "rgyu"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,L,MSA,MV}hetu; {C,MV}hetutva; {LCh,MSA,MV,C}kāraṇa; {C,MSA,MV}upaniṣad; {C}(=hetu-bhāva); {MSA}anvaya; {MSA,MV} nimitta; {MSA}nimittatva; {C}nidāna; {C}etan-nidānā; {C}kiṃ nidānam; {C}tato nidānam; {C}tan-nidānam; {C}pracāra; {C}pravartate (=pravarta; {LC}ātāna; {LC}bhūmikāraṇa-vibhāgottama; {LC}!!cara; {LC}ekacara; {LC}cārikā; {LC}janapadacārikāṃ caramāṇaḥ; {LC}cārin; {LC}bhavādhvacāriṇaḥ; {LC}!!dvāra; {LC}nāsti.. !!vṛṣṭerāya-dvāram, nāsti varṣasyāyadvāram; {LC}nibandhana; {LC}nibandhanatva; {LC}piṇḍa; {LC}pravṛtti; {LC}bīja; {LC}jagadānandabīja; {LC}māyā; {LC}vicaranti; {LC}saṃcarati; {LC}saṃtati; {LC}samudācāra; {LC}vajrahetu; {LC}duḥkhahetu; {LC}puṇyahetu; {LC}hetuka; {LC}hetukī; {LC}cacāra; {LC}caraṇacāriṇaḥ; {LC}caranti; {LC}caret; {LC}javana; {LC}dhāvati; {LC}bandha; {LC}bhramati; {LC}vāgurā; {LC}vicarati; {LC}vicarase; {LC}saṃcārin; {LC}santati; {LC}skanda",
+          "hopkins_english": "cause; [as verb]: wander; move; go; [following a verb, indicates]: to be done; {PH}cause; {C}comparison; reason; for the sake of; linked with; foundation; Origins; because; wherefrom and for what reason?; on the strength of that; as a result of; that link; observation; performance; proceeds; takes place; move forward; spread;causality",
+          "hgm_gloss": [
+            "bring",
+            "cause",
+            "causes",
+            "why",
+            "act as a cause",
+            "a cause",
+            "could force",
+            "caused",
+            "things that would lead",
+            "brought",
+            "ways",
+            "causal point of view",
+            "would cause ... to make",
+            "certain causes",
+            "point",
+            "stage of the cause",
+            "proper cause",
+            "causal form",
+            "causes)",
+            "creations",
+            "make",
+            "causal",
+            "causation",
+            "makes"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "gyu",
+          "acip": "RGYU",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P5",
+              "P6",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 1922
+          },
+          "pronunciation_source": "GMR card (C10 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "gzhan"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "གཞན",
+          "wylie": "gzhan",
+          "wylie_variants": [
+            "gzhan"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,C,L,MSA,MV}para; {LCh,MSA,C}anya; {C}apara; {MSA}parakīya; {MV}anyatva; {LC}antara; {LC}janmāntare; {LC}grāmāntarastha; {LC}deśāntare; {LC}āgamāntara; {LC}bhūmyantara; {LC}anyatra; {LC}anyatra guhāntarasaṃniṣaṇṇa; {LC}anyathā; {LC}anyad; {LC}anyadīya; {LC}anyonya; {LC}aparaparyāya; {LC}yāvadapareṇa samayena; {LC}api; {LC}itara; {LC}kiñcid; {LC}dvitīya; {LC}paratva; {LC}parārtha; {LC}pṛthak; {LC}karā-dibhyaḥ pṛthag nāsti (kāyaḥ); {LC}vyatirikta; {LC}tatkathaṃ hi pramīyatām; {LC}hīnadīna-vadana; {LC}janmāntara; {LC}anyataḥ; {LC}anyatama; {LC}anyatara; {LC}ato&nyathā; {LC}avara; {LC}āyatta; {LC}itarat; {LC}nānā, para; {LC}aparyuṣitakatuka; {LC}pratyak; {LC}yuṣmat; {LC}śeṣa",
+          "hopkins_english": "other; another; {C}the other; foreign; beyond; further; supreme; outshines them all; utmost; any other; this side; later; this; the second; {GD:515} other (as opposed to self, dngos)",
+          "hgm_gloss": [
+            "a bodhisattva"
+          ],
+          "hgm_evidence": {
+            "tier": "auto-aligned",
+            "method": "quote-pattern",
+            "confidence": "high",
+            "course": "Sunlight"
+          },
+          "status": "hgm-auto (quoted)",
+          "pronunciation": "shen",
+          "acip": "GZHAN",
+          "auto_candidate": "problems",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P4",
+              "P5",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08KhenRinpocheLongLife",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 3746
+          },
+          "attestation_contexts": [
+            {
+              "course": "C01",
+              "tibetan_wylie": "gzhan yang snang bas yod mtha' sel ba dang , ,stong pas med mtha' sel zhing stong pa nyid, ,rgyu dang 'bras bur 'char ba'i tshul shes na, ,mthar 'dzin lta ba'i 'phrog par mi 'gyur ro",
+              "hgm_english": "In addition, the appearance prevents the existence extreme; Emptiness that of non-existence, and if You see how emptiness shows in cause and effect You'll never be stolen off by extreme views."
+            },
+            {
+              "course": "C01",
+              "tibetan_wylie": "kun slong bcos tshul rgyud 'khul nges dang , lhag par snod kyi skyon gsum spong , 'du shes drug bsten te nyan lugs dang , snod kyi skyon dri ma can thog mar gsungs pa 'di chos nyan pa tsam du ma zad bsam sgom gzhan la'an",
+              "hgm_english": "These began with the need for us in the audience to truly try to change our hearts, and listen to the teaching with the purest of motivations. We were to avoid with special care the three famous \"problems of the pot,\"16 and to follow the practice where you use"
+            }
+          ],
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "gzugs"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "གཟུགས",
+          "wylie": "gzugs",
+          "wylie_variants": [
+            "gzugs"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,C,MSA,MV}rūpa; {C}vigraha; {MSA}ākṛti; {MSA}bimba; {LC}aṅga; {LC}enas; {LC}chāyā; {LC}tanū; {LC}tviṣ; {LC}pustastrī; {LC}pratikṛti; {LC}pratimā; {LC}maṇḍala; {LC}mūrtti; {LC}rūpaṇa; {LC}rūpin; {LC}rūpya; {LC}vapus",
+          "hopkins_english": "form; body; matter; the atomic; visible form; {C}color; figure; frame; shape",
+          "hgm_gloss": [
+            "physical form",
+            "body",
+            "form",
+            "forms",
+            "bodies",
+            "physical objects",
+            "visible forms",
+            "visible objects",
+            "physical body",
+            "visual matter",
+            "visual",
+            "physical matter",
+            "physical appearance",
+            "physical",
+            "matter",
+            "form realm",
+            "realm of form",
+            "formless realm"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "suk",
+          "acip": "GZUGS",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "MBL",
+              "P5",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 1325
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "byed pa po"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "བྱེད་པ་པོ",
+          "wylie": "byed pa po",
+          "wylie_variants": [
+            "byed pa po"
+          ],
+          "tenses": null,
+          "sanskrit": "{C,MSA}kartṛ; {C,MSA} kāraka; {C}paśyaka; {LC}adhikārin; {LC}!!kara; {LC}vidhi",
+          "hopkins_english": "agent; doer; {C}maker; one who sees",
+          "hgm_gloss": [
+            "someone",
+            "person",
+            "being who created",
+            "creator",
+            "maker",
+            "prime creator",
+            "person who committed",
+            "one who made",
+            "one who commits"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "jepapo",
+          "acip": "BYED PA PO",
+          "corpus_occurrences": {
+            "courses": [
+              "C04",
+              "C05",
+              "C07",
+              "C09",
+              "C12",
+              "C13",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "GIE",
+              "ILL",
+              "P6",
+              "P7",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS05",
+              "TCS09",
+              "TCS10"
+            ],
+            "n_segments": 114
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "bkag"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "བཀག",
+          "wylie": "bkag",
+          "wylie_variants": [
+            "bkag"
+          ],
+          "tenses": "dgag 'gog bkag khogs",
+          "sanskrit": "{LC}āyaṃsita; {LC}avad; {LC}ākṣipta; {LC}dhāraṇa; {LC}niruddha; {LC}niṣiddha; {LC}niṣedha; {LC}nyavārayat; {LC}pithita; {LC}pihita; {LC}pratikṣipta; {LC}pratiṣiddha; {LC}pratihata; {LC}baddha; {LC}baddhamārgasya sarvataḥ; {LC}yatta; {LC}ruddha; {LC}vārita; {LC}vibandhakṛt; {LC}śukrāghāta",
+          "hopkins_english": "stop; negate; refute; negation; negative; limit",
+          "hgm_gloss": [
+            "give up now",
+            "refuting",
+            "denied",
+            "preventing",
+            "disproves",
+            "allay",
+            "denying"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "kak",
+          "acip": "BKAG",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "ILL",
+              "P1",
+              "P5",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary"
+            ],
+            "n_segments": 376
+          },
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "phyi rol"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཕྱི་རོལ",
+          "wylie": "phyi rol",
+          "wylie_variants": [
+            "phyi rol"
+          ],
+          "tenses": null,
+          "sanskrit": "{MSA,MV}bāhya; {MSA}bahirdhā; {LC}bahiḥ; {LC}bahiḥ-karvaṭakasya śānte sthāne; {LC}nepathya; {LC}para",
+          "hopkins_english": "outside; external",
+          "hgm_gloss": [
+            "non-buddhist",
+            "outer",
+            "external objects",
+            "external",
+            "outside",
+            "outer object",
+            "outer objects"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "chirul",
+          "acip": "PHYI ROL",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "P1",
+              "P3",
+              "P5",
+              "P7",
+              "P9",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary"
+            ],
+            "n_segments": 362
+          },
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "mkhas grub"
+      },
+      "count": 2,
+      "entries": [
+        {
+          "tibetan": "མཁས་གྲུབ། མཁས་གྲུབ་རྗེ་དགེ་ལེགས་དཔལ་བཟང་པོ",
+          "wylie": "mkhas grub",
+          "wylie_variants": [
+            "mkhas grub",
+            "mkhas grub rje dge legs dpal bzang po"
+          ],
+          "tenses": null,
+          "sanskrit": null,
+          "hopkins_english": "Khay-drub [1385-1438; one of Tsong-kha-pa's two main students and 3rd abbot of Gan-dan (dga' ldan) monastery]; {PH}Ke-drup Ge-lek-bel-sang-bo (mkhas grub dge legs dpal bzang po; 1385-1438)",
+          "hgm_gloss": [
+            "kedrup",
+            "kedrup je"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "kedrup",
+          "acip": "MKHAS GRUB",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C18",
+              "EM",
+              "GIE",
+              "P1",
+              "P3",
+              "P9",
+              "TCS01",
+              "TCS04Initiation",
+              "TCS06",
+              "TCS07",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS14",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 79
+          },
+          "hopkins_realigned": "uma-v26"
+        },
+        {
+          "tibetan": "མཁས་གྲུབ",
+          "wylie": "mkhas grub",
+          "wylie_variants": [
+            "mkhas grub"
+          ],
+          "tenses": null,
+          "sanskrit": null,
+          "hopkins_english": "Khay-drub [1385-1438; one of Tsong-kha-pa's two main students and 3rd abbot of Gan-dan (dga' ldan) monastery]; {PH}Ke-drup Ge-lek-bel-sang-bo (mkhas grub dge legs dpal bzang po; 1385-1438)",
+          "hgm_gloss": [
+            "kedrup",
+            "kedrup je"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "kedrup",
+          "acip": "MKHAS GRUB",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C18",
+              "EM",
+              "GIE",
+              "P1",
+              "P3",
+              "P9",
+              "TCS01",
+              "TCS04Initiation",
+              "TCS06",
+              "TCS07",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS14",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 79
+          },
+          "hopkins_realigned": "uma-v26"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "bstan pa dar rgyas"
+      },
+      "count": 0,
+      "entries": []
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "mchog"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "མཆོག",
+          "wylie": "mchog",
+          "wylie_variants": [
+            "mchog"
+          ],
+          "tenses": null,
+          "sanskrit": "{C,MSA}uttama; {C,MSA,MV}agra; {MV}agratā; {C,MSA}vara; {C}ukṛṣṭa (=utkṛṣṭa); {MSA}utkarṣa; {MV}utkṛṣṭa(tā); {C}para; {C,MSA} parama; {C,MSA}śreṣṭha; {MSA}uttara; {MSA} tuṣṭatā; {MSA}mahat; {LC}agratara; {LC}agrāmātya; {LC}agradevī; {LC}agrasattvāḥ; {LC}agnya; {LC}alam; {LC}jinottama; {LC}sahadharma-gaṇottamān; {LC}dharmottara; {LC}upama; {LC}!!tama; {LC}arcyatama; {LC}divya; {LC}paramatā; {LC}nirvāṇaparamatā; {LC}pra!!; {LC}pradhāna; {LC}pravara; {LC}pravṛddha; {LC}praṣṭha; {LC}vadatāṃvara; {LC}nagaravarataḥ; {LC}sarvajavavara; {LC}kṣaṇavara; {LC}sutavara; {LC}varavaidya; {LC}putravara; {LC}varāgra; {LC}viśiṣṭa; {LC}śreyas; {LC}sat; {LC}satsārathi; {LC}!!sadvapuḥ; {LC}sāra; {LC}su!!; {LC}suvimalasunirmala!!; {LC}sulocana; {LC}suvaidya; {LC}agraṇī; {LC}agrayu; {LC}agrimatā; {LC}agru; {LC}agrya; {LC}ādya; {LC}kīrtyutkarṣa; {LC}udagra; {LC}udadhi; {LC}udrata; {LC}uddha; {LC}jyeṣṭha; {LC}āścaryatara; {LC}tilaka; {LC}divyaṃ rūpaṃ; {LC}divyakumāra; {LC}dhanya; {LC}prakarṣa; {LC}priya; {LC}preṣṭha; {LC}praḍha; {LC}bala; {LC}vapra; {LC}varya; {LC}varāḥ param; {LC}vṛṣa; {LC}śiṣṭa; {LC}sabhya",
+          "hopkins_english": "supreme. best; superior; {C}foremost; very fine; beginning; highest; boon; choicest; foremost; high; highest; unsurpassed; utmost; finest; very fine; others; (the) other; another; foreign; beyond; further; utmost; outshines them all; highly; exceedingly; completely; foremost; m",
+          "hgm_gloss": [
+            "holiest",
+            "high",
+            "highest",
+            "supreme",
+            "the very highest",
+            "the high",
+            "highest of all objects",
+            "height",
+            "great",
+            "greatest",
+            "very highest",
+            "ultimate",
+            "master dharmakirti",
+            "supreme being",
+            "breathtaking beauty",
+            "highest kind"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "chok",
+          "acip": "MCHOG",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P10",
+              "P3",
+              "P4",
+              "P5",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08KhenRinpocheLongLife",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS08SourceOfAllMyGood",
+              "TCS08ThousandAngels",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 1522
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "brtsoms"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "བརྩོམས",
+          "wylie": "brtsoms",
+          "wylie_variants": [
+            "brtsoms"
+          ],
+          "tenses": null,
+          "sanskrit": "{LC}ārabhasva",
+          "hopkins_english": null,
+          "hgm_gloss": null,
+          "hgm_evidence": null,
+          "status": "awaiting-hgm-equivalent",
+          "acip": "BRTZOMS",
+          "lc_source": [
+            "supplement-1992"
+          ],
+          "lc_refs": [
+            "{sc21}1392"
+          ],
+          "pronunciation": "tsom",
+          "scaffold_added": "lc-v27",
+          "corpus_occurrences": {
+            "courses": [
+              "C04",
+              "C05",
+              "C16"
+            ],
+            "n_segments": 14
+          },
+          "attestation_contexts": [
+            {
+              "course": "C04",
+              "tibetan_wylie": "zhes mchod brjod dang brtsoms par dam bca' ba yin par thar lam gsal byed du gsal ba",
+              "hgm_english": "As elucidated in the Light on the Path to Freedom, these lines present the offering of praise and the pledge to compose the work. . . 15 The Asian Classics Institute Course IV: The Proof of Future Lives Reading Three: The Definition of Correct Perception"
+            },
+            {
+              "course": "C04",
+              "tibetan_wylie": "ser smad dge bshes dge bshes dbang phyug gis brtsoms pa'i tshad ma dgongs rgyan las",
+              "hgm_english": "From Jewel of the True Thought, by Geshe Yeshe Wangchuk of Sera Mey Tibetan Buddhist Monastery:"
+            }
+          ],
+          "tibetan_source": "generated-ewts-v27-1"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "rtsom"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "རྩོམ",
+          "wylie": "rtsom",
+          "wylie_variants": [
+            "rtsom"
+          ],
+          "tenses": "brtsam/ rtsom/ brtsams/ rtsams",
+          "sanskrit": "brtsam/ rtsom/ brtsams/ rtsams/; (ā √rabh): {MV}ārabhate; {MV}ārambha; {L}ārabhya; {LC}ārabhanti; {LC}utsava; {LC}udyata; {LC}udyoga",
+          "hopkins_english": "begin; initiate; compose; write a book",
+          "hgm_gloss": [
+            "labors"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "tsom",
+          "acip": "RTZOM",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "P1",
+              "P6",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS06",
+              "TCS07",
+              "TCS08KhenRinpocheLongLife",
+              "TCS08ThousandAngels",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary"
+            ],
+            "n_segments": 114
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "dbu ma"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "དབུ་མ",
+          "wylie": "dbu ma",
+          "wylie_variants": [
+            "dbu ma"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,N}madhyama; mādhyamika; {LC}madhyamaka; {LC}umā; {LC}madhyamakāvatāra",
+          "hopkins_english": "center; middle; middle way{N}; Mādhyamika [Proponent of the Middle Way]; Middle Way School",
+          "hgm_gloss": [
+            "middle way",
+            "middle-way school",
+            "middle way school",
+            "madhyamika",
+            "middle-way"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "uma",
+          "acip": "DBU MA",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C09",
+              "C11",
+              "C12",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17"
+            ],
+            "n_segments": 376
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "spyi don"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "སྤྱི་དོན",
+          "wylie": "spyi don",
+          "wylie_variants": [
+            "spyi don"
+          ],
+          "tenses": null,
+          "sanskrit": "artha-sāmānya; {LC}samudāyārtha",
+          "hopkins_english": "general meaning commentary; general meaning (textbook)",
+          "hgm_gloss": [
+            "overview"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "chidun",
+          "acip": "SPYI DON",
+          "corpus_occurrences": {
+            "courses": [
+              "C02",
+              "C04",
+              "C05",
+              "C13",
+              "C14",
+              "C16",
+              "C18",
+              "DTE",
+              "GIE",
+              "ILL",
+              "P4",
+              "TCS06",
+              "TCS09",
+              "TCS11",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17"
+            ],
+            "n_segments": 25
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "nyan"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཉན",
+          "wylie": "nyan",
+          "wylie_variants": [
+            "nyan"
+          ],
+          "tenses": "nyan/ nyan/ nyand/ nyond",
+          "sanskrit": "nyan/ nyan/ nyand/ nyond/; {LCh}śrava; {MV}śravaṇa; {C}śruṇamāṇa; {LC}karṇin; {LC}śṛṇuyāt; {LC}dharmaśravaṇa; {LC}śrūyate; {LC}ardita; {LC}udvega; {LC}bhiṣagvaśya; {LC}śṛṇoti; {LC}śṛṇomi; {LC}śruṇamānu; {LC}śrotum; {LC}saṃśrava",
+          "hopkins_english": "hear; listen; {C}when he hears/learns",
+          "hgm_gloss": [
+            "listeners",
+            "listener",
+            "listen",
+            "auditory",
+            "study"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "nyen",
+          "acip": "NYAN",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P5",
+              "P6",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS09",
+              "TCS10",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS17",
+              "TCS18Commentary"
+            ],
+            "n_segments": 472
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "rang"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "རང",
+          "wylie": "rang",
+          "wylie_variants": [
+            "rang"
+          ],
+          "tenses": null,
+          "sanskrit": "{L,MSA}sva; {C,MSA}ātman; {MSA} svaka; {MSA}svayam; {LC}nija; {LC}pratyeka; {LC}sva!!; {LC}svataḥ; {LC}svātmā",
+          "hopkins_english": "own; itself; himself; herself; {PH}it; itself; {C}one's own; self; himself; myself; for themselves; his own",
+          "hgm_gloss": [
+            "i",
+            "you",
+            "himself or herself",
+            "yourself",
+            "your",
+            "own",
+            "my",
+            "oneself",
+            "within",
+            "nature",
+            "self-made buddha",
+            "itself",
+            "its own",
+            "self-made",
+            "their own",
+            "us",
+            "himself",
+            "our own",
+            "those who follow the independent",
+            "independent",
+            "them",
+            "themselves",
+            "auto",
+            "own ... own",
+            "nature of existing",
+            "their",
+            "his own",
+            "it",
+            "one's own",
+            "self",
+            "myself",
+            "me"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "rang",
+          "acip": "RANG",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P10",
+              "P3",
+              "P4",
+              "P5",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaSadhana",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS08SourceOfAllMyGood",
+              "TCS08ThousandAngels",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 5930
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "dgra bcom pa"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "དགྲ་བཅོམ་པ",
+          "wylie": "dgra bcom pa",
+          "wylie_variants": [
+            "dgra bcom pa"
+          ],
+          "tenses": "gzhom 'joms bcom choms",
+          "sanskrit": "{L,MSA}arhat; arhan",
+          "hopkins_english": "Foe Destroyer; Worthy One",
+          "hgm_gloss": [
+            "enemy destroyer",
+            "enemy destroyers",
+            "state of an enemy destroyer",
+            "destroyer of the foe",
+            "foe destroyer",
+            "destroying the enemy"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "drachompa",
+          "acip": "DGRA BCOM PA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C10",
+              "C12",
+              "C13",
+              "C16",
+              "C17",
+              "C18",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P6",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS02",
+              "TCS10",
+              "TCS12",
+              "TCS18Commentary"
+            ],
+            "n_segments": 157
+          },
+          "pronunciation_source": "GMR card (C02 Language Study Guide)"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "chos can"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཆོས་ཅན",
+          "wylie": "chos can",
+          "wylie_variants": [
+            "chos can"
+          ],
+          "tenses": null,
+          "sanskrit": "{C}dharmin; {LC}!!dharma; {LC}dharmaka; {LC}dhārmika",
+          "hopkins_english": "subject; substratum; qualification; quality possessor; logical subject; phenomena; {C}doomed; subject to; character",
+          "hgm_gloss": [
+            "consider now",
+            "consider",
+            "example",
+            "object",
+            "things that exhibit the quality",
+            "subject",
+            "let's consider",
+            "consider ... consider",
+            "take"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "chuchen",
+          "acip": "CHOS CAN",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C08",
+              "C11",
+              "C12",
+              "C13",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "P1",
+              "P5",
+              "P6",
+              "P9",
+              "TCS03",
+              "TCS06",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading"
+            ],
+            "n_segments": 1368
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "phyi rol pa"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཕྱི་རོལ་པ",
+          "wylie": "phyi rol pa",
+          "wylie_variants": [
+            "phyi rol pa"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,L}tīrthika",
+          "hopkins_english": "Non-Buddhist; Outsider",
+          "hgm_gloss": [
+            "non-buddhist",
+            "non-buddhists",
+            "non-buddhist traditions",
+            "non- buddhists"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "chirulpa",
+          "acip": "PHYI ROL PA",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C05",
+              "C08",
+              "C12",
+              "C16",
+              "C18",
+              "EM",
+              "GIE",
+              "ILL",
+              "SPF",
+              "Sunlight",
+              "TCS07",
+              "TCS17"
+            ],
+            "n_segments": 23
+          },
+          "hopkins_realigned": "uma-v26"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "khams gsum"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཁམས་གསུམ",
+          "wylie": "khams gsum",
+          "wylie_variants": [
+            "khams gsum"
+          ],
+          "tenses": "khams gsum pa",
+          "sanskrit": "{C}tridhātu; {C}traidhātuka; {LC}triloka; {LC}trailokya; {LC}dhātutritaya",
+          "hopkins_english": "the three realms [i.e., desire realm ('dod khams, kāmadhātu), form realm (gzugs khams, rūpadhātu), and formless realm (gzugs med khams, arūpyadhātu)]; {C}the triple world; what is in (or: what belongs to) the triple world",
+          "hgm_gloss": [
+            "all three realms",
+            "three different realms",
+            "three realms"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "kamsum",
+          "acip": "KHAMS GSUM",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C08",
+              "C11",
+              "C14",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "P1",
+              "P3",
+              "P5",
+              "TCS02",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS07",
+              "TCS08KhenRinpocheLongLife",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS14",
+              "TCS16KaliWang",
+              "TCS17",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 130
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "spyod pa"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "སྤྱོད་པ",
+          "wylie": "spyod pa",
+          "wylie_variants": [
+            "spyod pa"
+          ],
+          "tenses": "spyad spyod spyad spyod",
+          "sanskrit": "{LCh,MSA,MV,C}caryā; (√car): {MSA} carati; {C}samudācarati; {C}samudācārāt; {L,MV} avacara; {C}caramāṇa; {C}caran; {C}caraṇa(m); {C,MV,MSA}carati; {C}cari; {C,MSA}(-)carita; {C} cārikā; {C,MSA}cāritra; {MSA}cāra; {MSA}cārin; {C}sevā; {C,MSA}upabhoga; {C}anub; {LC}adhikaraṇa; {LC}adhikāra; {LC}kāmāvacara; {LC}rūpāvacara; {LC}ācaraṇa; {LC}apuṇyācaraṇa; {LC}ācāra; {LC}samudācāra; {LC}yogācāra; {LC}upavicāra; {LC}parikarmatā; {LC}kārin; {LC}gati; {LC}tapaścaraṇa; {LC}caritavat; {LC}caritāvin; {LC}carin; {LC}cariyā; {LC}brahmacarya; {LC}kuśalacaryā; {LC}dharmacaryā; {LC}samacaryā; {LC}bodhicaryāṃ; {LC}bodhisattvacaryā; {LC}pracāra; {LC}nāpracāraḥ; {LC}cārānucāraprayoga; {LC}!!cārin; {LC}kṛpāvyākula-cārin; {LC}sabrahmacārin; {LC}ceṣṭita; {LC}śiśuceṣṭita; {LC}dhārā; {LC}nīti; {LC}sarvajñanīti; {LC}paricita; {LC}paribhoga; {LC}kāyapracāra; {LC}bhukta; {LC}bhuja; {LC}paribhuñjīyam; {LC}!!bhoga; {LC}bhojana; {LC}cyutaśīlasya bhojanam; {LC}lokayātrā; {LC}vārtā; {LC}vicaranti; {LC}vihāra; {LC}vṛtta; {LC}vṛtti; {LC}mandavṛtti; {LC}śakti; {LC}samācarat; {LC}sevaka; {LC}saddharmasevakaṃ kāyama; {LC}ākāra; {LC}ācarita; {LC}ācārika; {LC}upacāra; {LC}kalayat; {LC}kriyā; {LC}carate; {LC}caranta; {LC}caranti; {LC}carantu; {LC}caramāṇu; {LC}carāti; {LC}caritra; {LC}caret; {LC}carya; {LC}ceṣṭā; {LC}nirviśat; {LC}pluti; {LC}svakarmapluti; {LC}bhukta??; {LC}bhuñjāna; {LC}vicāra; {LC}vrata; {LC}sadvṛtta; {LC}ātmavṛtta; {LC}vṛttānta; {LC}saṃcāra; {LC}sarpaṇa",
+          "hopkins_english": "deeds; behavior{N}; enjoy; make use of; practice; act out; perform; performance; {C}conceptual proliferation; obstacle; (futile) discoursing; multiplicity; that which displays; named things; nurse; commit to; befall; use; credits with; habitually; tending; use; experiences; inaccessible to discursive thought; activity; course; coursin",
+          "hgm_gloss": [
+            "deeds",
+            "activities",
+            "mate",
+            "mating",
+            "find",
+            "partake",
+            "the activities",
+            "way of life",
+            "way of life followed",
+            "way of life followed by",
+            "life",
+            "behaving",
+            "action",
+            "following",
+            "acts out of",
+            "activity side",
+            "activity",
+            "work",
+            "operate",
+            "offer"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "chupa",
+          "acip": "SPYOD PA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C05",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P5",
+              "P6",
+              "P7",
+              "SOS",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Mantras",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 444
+          },
+          "pronunciation_source": "GMR card (C03 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "phra rgyas"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཕྲ་རྒྱས",
+          "wylie": "phra rgyas",
+          "wylie_variants": [
+            "phra rgyas"
+          ],
+          "tenses": null,
+          "sanskrit": "{LC}anuśaya",
+          "hopkins_english": null,
+          "hgm_gloss": [
+            "afflictions",
+            "widespread",
+            "widespread mental afflictions"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested (not in Great Dictionary)",
+          "pronunciation": "tragye",
+          "acip": "PHRA RGYAS",
+          "corpus_occurrences": {
+            "courses": [
+              "C05",
+              "C16",
+              "ILL"
+            ],
+            "n_segments": 7
+          },
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "spangs"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "སྤངས",
+          "wylie": "spangs",
+          "wylie_variants": [
+            "spangs"
+          ],
+          "tenses": "spang spong spangs spongs",
+          "sanskrit": "{C}varjita; {MSA}(vi √hā): vihāya; {MSA}hīna (e.g.: vipakṣa-hīna); {C}vivarjayati; {LC}avakarṣa; {LC}ujjhita; {LC}upekṣita; {LC}ṛte; {LC}tyakta??; {LC}tyaktvā; {LC}nirasya; {LC}nirvāsita; {LC}nirvāsitaroṣadoṣa; {LC}parihāra, pratikrānta; {LC}prahīṇa; {LC}pṛthu; {LC}varjya; {LC}vijaha; {LC}vinivṛtta; {LC}viprayukta??; {LC}virāma",
+          "hopkins_english": "abandon; give up; eliminate; dispel; {C}avoided; without; having relinquished; avoid; get rid of; reject",
+          "hgm_gloss": [
+            "leave",
+            "give up",
+            "abandonment",
+            "eliminated",
+            "eliminates",
+            "having eliminated",
+            "eliminate",
+            "lacks",
+            "reject"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "pang",
+          "acip": "SPANGS",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P10",
+              "P3",
+              "P5",
+              "P6",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08PabongkaSadhana",
+              "TCS08ThousandAngels",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 509
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "rtsa ba"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "རྩ་བ",
+          "wylie": "rtsa ba",
+          "wylie_variants": [
+            "rtsa ba"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,C,MV,MSA}mūla; {MSA}pada; {MSA}pāda; {LC}pādaka; {LC}kuśalamūla; {LC}mūle&nupahate; {LC}mūlaka; {LC}vṛnta; {LC}skandha; {LC}kaṇḍala; {LC}kanda; {LC}gulma; {LC}nīvī; {LC}bisa; {LC}mṛṇāla; {LC}śiphā",
+          "hopkins_english": "root; basic; fundamental; primary; {C}basis; reality behind; grass; tree",
+          "hgm_gloss": [
+            "root",
+            "very root",
+            "roots",
+            "the very root",
+            "principles",
+            "very roots",
+            "core",
+            "store",
+            "very foundation",
+            "original",
+            "original statement",
+            "1283 root text",
+            "root text",
+            "1659 root text",
+            "major point",
+            "'root'",
+            "most basic",
+            "basic"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "tsawa",
+          "acip": "RTZA BA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P5",
+              "P6",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08KhenRinpocheLongLife",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS08SourceOfAllMyGood",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 378
+          },
+          "pronunciation_source": "GMR card (C08 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "dngos po"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "དངོས་པོ",
+          "wylie": "dngos po",
+          "wylie_variants": [
+            "dngos po"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,MSA,MV,C,L}vastu; {LCh,MSA,MV,C,L}bhāva; {L}dravya; {L}mūla; {MSA}upadhi; {C}padārtha; {GD:106}sat; {LC}artha; {LC}ekabhāva; {LC}dravyatā; {LC}pakṣa; {LC}pada; {LC}bhava; {LC}bhavatva; {LC}bhikṣu-(bhikṣuṇī) bhāva; {LC}bhāvatva; {LC}catuḥsaṃgrahavastu; {LC}viṣayasya vastutvam; {LC}vastutva; {LC}vāstava; {LC}ṛktha; {LC}tadbhava; {LC}vasū",
+          "hopkins_english": "category; thing; [effective] thing; functioning thing; effective thing; functioning actuality; actuality; {N}topic; {C}actual reality; real thing; substantial (entity); root; basis; underlying reality; (objective) entity; objective reality; property; possession; cause; objectively existing entity; objective basis; existence; (= 5 skandhas); positivity; positi",
+          "hgm_gloss": [
+            "things",
+            "functional things",
+            "functioning thing",
+            "thing",
+            "working things",
+            "something",
+            "something that functioned",
+            "functional objects",
+            "things that function",
+            "thing that does function",
+            "thing that did function",
+            "thing which ... function",
+            "working thing",
+            "functioning",
+            "things which function",
+            "things which perform a function",
+            "objects",
+            "substances",
+            "functional thing",
+            "object",
+            "functioning things",
+            "nature of being a thing ... nature of being a thing",
+            "phenomena",
+            "things that perform a function",
+            "acts",
+            "put",
+            "actually",
+            "have any affect",
+            "entities",
+            "produced"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "ngupo",
+          "acip": "DNGOS PO",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P5",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 943
+          },
+          "pronunciation_source": "GMR card (C11 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "rang bzhin"
+      },
+      "count": 2,
+      "entries": [
+        {
+          "tibetan": "རང་བཞིན",
+          "wylie": "rang bzhin",
+          "wylie_variants": [
+            "rang bzhin"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,C,MSA}svabhāva; {C}svabhāvaka; {C} svabhāvatva; {C}svābhāvya; {MSA}svābhāvika; {C}jāta; {LCh,L,MSA,MV}prakṛti; {N}svarūpa; {MSA}-maya (e.g.: pāramitā-maya); {C}-mayin; ātmaka; {LC}ātman; {LC}jāti; {LC}tattva; {LC}tādātmya; {LC}dharma; {LC}!!maya; {LC}vaiḍūryamaya; {LC}amedhyamaya; {LC}!!mayi; {LC}rūpatva; {LC}vastu; {LC}sattva; {LC}!!svabhāvaka; {LC}svabhāvatā; {LC}abhāvasvabhāvatā; {LC}svayameva; {LC}upahita; {LC}nirsaga; {LC}netrasya tejasaḥ; {LC}pratyupta; {LC}prākṛta; {LC}uṣṭra; {LC}tejomaya; {LC}śīla; {LC}saṃsiddhi; {LC}sāra",
+          "hopkins_english": "naturally; nature; inherent existence; natural; {PH}own nature; inherent nature; own-being; exist inherently; fundamental nature; {C}final nature [e.g.: evaṃ svabhāva, of such an own-being; abhāva-svabhāva, non-existent own-nature]; essential; essence; in its own-being; state of own-being; made; consists of; grows; has become; (there has been) born",
+          "hgm_gloss": [
+            "the basic nature",
+            "natural",
+            "basic nature",
+            "in its very essence",
+            "particular",
+            "is made of",
+            "nature",
+            "natures",
+            "nature of their own",
+            "nature of its own",
+            "of any nature to things",
+            "natural state",
+            "nature that comes from their own side",
+            "any nature of their own",
+            "quality of their own",
+            "their very nature",
+            "its very nature",
+            "quality of its own",
+            "nature ... of its own",
+            "very nature",
+            "nature which they have",
+            "its own nature",
+            "definition",
+            "its nature"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "rangshin",
+          "acip": "RANG BZHIN",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P6",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaSadhana",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 1504
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        },
+        {
+          "tibetan": "རང་བཞིན། ངོ་བོ་ཉིད",
+          "wylie": "rang bzhin",
+          "wylie_variants": [
+            "rang bzhin",
+            "ngo bo nyid"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,C,MSA}svabhāva; {C}svabhāvaka; {C} svabhāvatva; {C}svābhāvya; {MSA}svābhāvika; {C}jāta; {LCh,L,MSA,MV}prakṛti; {N}svarūpa; {MSA}-maya (e.g.: pāramitā-maya); {C}-mayin; ātmaka; {LC}rūpatva; {LC}ātman; {LC}bhāve; {LC}jāti; {LC}tattva; {LC}tādātmya; {LC}dharma; {LC}!!maya; {LC}vaiḍūryamaya; {LC}amedhyamaya; {LC}!!mayi; {LC}vastu; {LC}sattva; {LC}!!svabhāvaka; {LC}svabhāvatā; {LC}abhāvasvabhāvatā; {LC}svayameva; {LC}upahita; {LC}nirsaga; {LC}netrasya tejasaḥ; {LC}pratyupta; {LC}prākṛta; {LC}uṣṭra; {LC}tejomaya; {LC}śīla; {LC}saṃsiddhi; {LC}sāra",
+          "hopkins_english": "naturally; nature; inherent existence; natural; {PH}own nature; inherent nature; own-being; exist inherently; fundamental nature; {C}final nature [e.g.: evaṃ svabhāva, of such an own-being; abhāva-svabhāva, non-existent own-nature]; essential; essence; in its own-being; state of own-being; made; consists of; grows; has become; (there has been) born",
+          "hgm_gloss": [
+            "the basic nature",
+            "natural",
+            "basic nature",
+            "in its very essence",
+            "particular",
+            "is made of",
+            "nature",
+            "natures",
+            "nature of their own",
+            "nature of its own",
+            "of any nature to things",
+            "natural state",
+            "nature that comes from their own side",
+            "any nature of their own",
+            "quality of their own",
+            "their very nature",
+            "its very nature",
+            "quality of its own",
+            "nature ... of its own",
+            "very nature",
+            "nature which they have",
+            "its own nature",
+            "definition",
+            "its nature"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "rangshin",
+          "acip": "RANG BZHIN",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P6",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaSadhana",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 1504
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "grub pa"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "གྲུབ་པ",
+          "wylie": "grub pa",
+          "wylie_variants": [
+            "grub pa"
+          ],
+          "tenses": "'grub 'grub 'grubs/grub grubs",
+          "sanskrit": "{L,MV} siddha; {L,MSA}siddhi; samupārjita; {MSA} niṣpatti; {MSA}niṣpanna; {TN}niṣpanna; {LC}anuṣṭhāna; {LC}vidhatte; {LC}sādhaka",
+          "hopkins_english": "be established; be accomplished; establish; exist; achieve; existent; establishment; {C}power; succeed; accomplish; stored up; established; perfected; accomplished; completed",
+          "hgm_gloss": [
+            "can",
+            "exist",
+            "gained",
+            "capable",
+            "proven",
+            "be established",
+            "constitutes",
+            "established",
+            "has",
+            "exists",
+            "existence",
+            "conclusion",
+            "prove",
+            "to be",
+            "had",
+            "accept",
+            "proves",
+            "true",
+            "establish",
+            "fact",
+            "occurring",
+            "would have",
+            "confirmed",
+            "existed",
+            "are",
+            "could exist",
+            "created",
+            "existing",
+            "existed ... existed",
+            "who is",
+            "is",
+            "being",
+            "something proven",
+            "do ... exist",
+            "do exist",
+            "reached",
+            "to exist",
+            "they exist",
+            "comes about",
+            "showing",
+            "achieving"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "druppa",
+          "acip": "GRUB PA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C08",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P3",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary"
+            ],
+            "n_segments": 728
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "'dzin pa"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "འཛིན་པ",
+          "wylie": "'dzin pa",
+          "wylie_variants": [
+            "'dzin pa"
+          ],
+          "tenses": "gzung 'dzin bzung zungs",
+          "sanskrit": "(√grah): {L,MV}gṛhyate; {C,MSA,MV}grāha; {C}graha; {C}grāhaka; {MSA} grāhika; {MV}grāhakatva; {MSA,C}udgrahaṇa; {MSA,MV,C}grahaṇa; {C}grahaṇatā; {C}gṛhṇāti; {C}udgṛhṇāti; {C}parigṛhṇāti (=mamatvena svīkuryāt); {MSA}parigraha; {C,MSA,MV}udgraha; {C,MV,MSA}d; {LC}abhigrahaṇa; {LC}āpadyate; {LC}āharaṇa; {LC}udgṛhīṣyanti; {LC}udvahana; {LC}upasaṃgraha; {LC}gṛhīta; {LC}gṛhṇat; {LC}arthagrahaṇa; {LC}adhyavasanatāgrahaṇa; {LC}ātmagrāha; {LC}na grāhaḥ; {LC}piṇḍagrāha; {LC}grāhitva; {LC}grāhin; {LC}mānagrāhin; {LC}grāhya; {LC}dadhīta; {LC}!!dhara; {LC}śrutadhara; {LC}sragdharā; {LC}dhāraka; {LC}sūtrendradhāraka; {LC}suvarṇabhāsottamasūtrendrarājadhārakāḥ; {LC}dhāraṇa; {LC}!!dhāraya; {LC}karmadhāraya; {LC}dhārayati; {LC}dhārayamāṇa; {LC}dhāri; {LC}dhārin; {LC}dhṛti; {LC}ātmaparigraha; {LC}pragrahaṇa; {LC}pratyavamṛśati; {LC}bandhaka; {LC}!!bhṛt; {LC}vāhin; {LC}śṛṃgāra; {LC}saṃdhāraṇa; {LC}avadhāraṇa; {LC}ātta; {LC}ādadhāna; {LC}ādāna; {LC}ādhāna; {LC}pravrajyāsādana; {LC}bhogopasaṃgraha; {LC}gṛhṇate; {LC}gṛhyante; {LC}dadhāna; {LC}dhāraya, !!dhārin; {LC}dhṛk; {LC}dhṛta; {LC}babhāra; {LC}bibharti; {LC}bibhrāṇa; {LC}bhārabhara; {LC}vahat; {LC}vahati; {LC}vāhinī",
+          "hopkins_english": "conceive; apprehend; conception; consciousness conceiving; apprehension; consciousness apprehending; {C}grasper; receiver; take up; learn; learning; seize; taking hold of; studying; grasp at; take notice; holds; bearing in mind; bear in mind; preserve; carries; seizes; seizure; appropriation; grasping; planet; get hold of; takes hold of; gains; wins; sei",
+          "hgm_gloss": [
+            "hold to",
+            "holding",
+            "take",
+            "bringing",
+            "grasp",
+            "keep",
+            "tendency of looking",
+            "perceives",
+            "idea",
+            "concept",
+            "tendency to view",
+            "focuses ... focuses",
+            "encounter",
+            "hold",
+            "keeping",
+            "taking",
+            "taken",
+            "hold on high",
+            "focusses on",
+            "says that",
+            "grasps",
+            "capture",
+            "considered",
+            "holds",
+            "memory",
+            "possesses",
+            "kept"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "dzinpa",
+          "acip": "'DZIN PA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P5",
+              "P6",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 558
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "rtog pa"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "རྟོག་པ",
+          "wylie": "rtog pa",
+          "wylie_variants": [
+            "rtog pa"
+          ],
+          "tenses": null,
+          "sanskrit": "{MV,MSA}kalpanā; {LCh,MSA,C,MV}kalpa; {C}vikalpa; {C}kalpana; {C}avakalpanatā; {MV}kalpayat; {MV}kalpayati; {MSA,MV}saṃkalpa; {MV}jalpa; {LCh,MSA} parīkṣā; {MSA}nirīkṣaṇā; {MV}pratyavekṣā; {MSA}vitarka; {C}avabodha; {MSA}mīṃāmsā; {MSA}so sor rtog pa = prat; vikalpa/kalpanā; {LC}avakalpanā; {LC}pratyavekṣaṇatā; {LC}bhūtapratyavekṣā; {LC}utprekṣaṇa; {LC}utprekṣā; {LC}avikalpa; {LC}nirvikalpa; {LC}na śīlamanyanā, na śīlakalpanā, na vikalpanā, na saṃkalpanā, na parikalpanā; {LC}mithyākalpanā; {LC}kalpita; {LC}vicāraṇā; {LC}parivitarka; {LC}tarkayāmi; {LC}nitīraṇa; {LC}parīkṣaka; {LC}aparīkṣaka; {LC}ratnaparīkṣaka; {LC}prabodha; {LC}prekṣate; {LC}lepa; {LC}asadvitarka; {LC}vyavasāya; {LC}vyutpanna; {LC}avabodha, āspada; {LC}āho; {LC}gati; {LC}tārkika, naya, niketa; {LC}nidhyāna; {LC}nipuṇa, prekṣate; {LC}prekṣin; {LC}sama",
+          "hopkins_english": "conceptualization; conceptualized; conception; conceptual consciousness; conceptuality; imputation; investigation; conceptual thought; thought; {C}thinker; imagination; conceptualizer; conceptual; to examine; ideation; (false) discrimination; no-construction; consideration; reflection; construction; thought-construction; body of ritual rules; understanding; recognition; trusting confidence; consc",
+          "hgm_gloss": [
+            "thinking",
+            "idea",
+            "conceptual state of mind",
+            "conceptions",
+            "conceptual state",
+            "conceptual",
+            "perception",
+            "mental picture",
+            "ideas",
+            "thought",
+            "thinks",
+            "projections",
+            "awareness",
+            "thoughts",
+            "conceptualization",
+            "conception",
+            "conceive",
+            "conception?",
+            "think"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "tokpa",
+          "acip": "RTOG PA",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C11",
+              "C12",
+              "C13",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P3",
+              "P5",
+              "P6",
+              "P7",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08PabongkaSadhana",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 318
+          },
+          "pronunciation_source": "GMR card (C14 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "'dzin stangs"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "འཛིན་སྟངས",
+          "wylie": "'dzin stangs",
+          "wylie_variants": [
+            "'dzin stangs"
+          ],
+          "tenses": "gzung 'dzin bzung zungs",
+          "sanskrit": "{N}muṣṭi-bandha; muṣtibandha; {LC}muṣṭibandha",
+          "hopkins_english": "mode of apprehension; mode of apprehension{N}; {PH}tying wrists",
+          "hgm_gloss": [
+            "holds its object in a way which is",
+            "holds its object"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "dzintang",
+          "acip": "'DZIN STANGS",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C02",
+              "C05",
+              "C11",
+              "C16",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "GK",
+              "ILL",
+              "TCS03",
+              "TCS06",
+              "TCS10",
+              "TCS11",
+              "TCS13",
+              "TCS17"
+            ],
+            "n_segments": 106
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "dngos 'gal"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "དངོས་འགལ",
+          "wylie": "dngos 'gal",
+          "wylie_variants": [
+            "dngos 'gal"
+          ],
+          "tenses": null,
+          "sanskrit": "sākṣāt-virodha",
+          "hopkins_english": "explicitly contradictory",
+          "hgm_gloss": [
+            "directly incompatible"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "ngungel",
+          "acip": "DNGOS 'GAL",
+          "corpus_occurrences": {
+            "courses": [
+              "C01",
+              "C05",
+              "C13",
+              "C15",
+              "C16",
+              "C18",
+              "DDA",
+              "DTE",
+              "EM",
+              "ILL",
+              "P7",
+              "TCS10",
+              "TCS13"
+            ],
+            "n_segments": 31
+          },
+          "hopkins_realigned": "uma-v26"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "lam"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ལམ",
+          "wylie": "lam",
+          "wylie_variants": [
+            "lam"
+          ],
+          "tenses": null,
+          "sanskrit": "{LCh,C,MSA,MV}mārga; {LCh,C,MSA} patha; {C}vyadhvan; {C}paddhati; {MV}pratipatti; {C,MV}pratipad; {C}pratipad-gata; {C}prahāṇa (=pradhāna); {C,MSA}vartman; {LC}bhavādhvan; {LC}gati; {LC}pṛthupatha; {LC}mārapatha; {LC}īryāpatha; {LC}kaḥ punarvāda uta vākpathodāharaṇena; {LC}pathin; {LC}paripanthaṃ... tiṣṭhati; {LC}panthaka; {LC}madhyamā pratipat; {LC}pratipadgata; {LC}kuśalamārga; {LC}margatiāryamārge; {LC}āryāṣṭāṃgo mārgaḥ; {LC}bodhimārga; {LC}saṃbuddhamārga; {LC}mārgasatya; {LC}vartanī; {LC}saraṇī, setu; {LC}ayana; {LC}utsaṅga; {LC}padavī; {LC}pratipad madhyamā; {LC}pratipada; {LC}pratipadā; {LC}mārgapatha; {LC}vīthi; {LC}vīthikā; {LC}saraṇi; {LC}setu",
+          "hopkins_english": "path; path consciousness; way; road; course; [connective particle:] and; or; {PH}radiant; vivid",
+          "hgm_gloss": [
+            "paths",
+            "path",
+            "travelling",
+            "or",
+            "the paths",
+            "the path",
+            "road",
+            "act",
+            "path knowledge",
+            "ways",
+            "stage",
+            "course",
+            "way"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "lam",
+          "acip": "LAM",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C02",
+              "C03",
+              "C04",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P10",
+              "P3",
+              "P4",
+              "P5",
+              "P6",
+              "P7",
+              "P8",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04Mantras",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08KhenRinpocheLongLife",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS08SourceOfAllMyGood",
+              "TCS08ThousandAngels",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 2846
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "rnyed"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "རྙེད",
+          "wylie": "rnyed",
+          "wylie_variants": [
+            "rnyed"
+          ],
+          "tenses": "brnyed/ rnyed/ brnyes/ rnyes",
+          "sanskrit": "brnyed/ rnyed/ brnyes/ rnyes/; {LCh,L}lābha; {C}labhate; {LC}upalabhya; {LC}upalabhyate; {LC}ṛcchati; {LC}prāpta; {LC}akṣayaprāpta; {LC}prāpti; {LC}labdha; {LC}labdhasukha; {LC}sulabdha; {LC}!!labha; {LC}sulabhātiśaya; {LC}yāvat smṛtiṃ na labhate; {LC}labhanti; {LC}pratilabhante; {LC}labhe; {LC}na labhyate; {LC}labhyante; {LC}yo lābhasatkāraparāmukhaśca; {LC}paralābha; {LC}lābhin; {LC}adhigata; {LC}alābhataḥ; {LC}avāpta; {LC}āpnuvanti; {LC}āsasāda; {LC}āsādya; {LC}prāpya; {LC}prāpyate; {LC}labdhvā; {LC}labhitva; {LC}labhyate; {LC}lobha; {LC}vindati; {LC}saṃprāpya",
+          "hopkins_english": "verb: find; gain; discover7 noun: goods; property; profit",
+          "hgm_gloss": [
+            "to find",
+            "material gain",
+            "find",
+            "locate",
+            "gain",
+            "prosperity",
+            "found",
+            "gains"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "nye",
+          "acip": "RNYED",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C09",
+              "C10",
+              "C11",
+              "C12",
+              "C13",
+              "C14",
+              "C16",
+              "C17",
+              "C18",
+              "DDA",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "P3",
+              "P4",
+              "P5",
+              "P6",
+              "P9",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS03",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08NaropaTrials1_12",
+              "TCS08PabongkaSadhana",
+              "TCS08SourceOfAllMyGood",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS14",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 624
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "yongs su shes pa"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "ཡོངས་སུ་ཤེས་པ",
+          "wylie": "yongs su shes pa",
+          "wylie_variants": [
+            "yongs su shes pa"
+          ],
+          "tenses": null,
+          "sanskrit": "{C,MV,MSA} parijñā; {C}ājñeya; {MV,MSA}parijñāta; {MV,MSA}parijñāna; {LC}ā$jñā; {LC}parijānāti",
+          "hopkins_english": "knowledge; thorough knowledge; (thoroughly) cognize; thorough knowledges; {C}comprehension; investigation; intelligible",
+          "hgm_gloss": [
+            "comprehend",
+            "realize",
+            "comprehending",
+            "comprehensive knowledge"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "yong-su shepa",
+          "acip": "YONGS SU SHES PA",
+          "corpus_occurrences": {
+            "courses": [
+              "C05",
+              "C15",
+              "C16",
+              "C18",
+              "GIE",
+              "ILL",
+              "TCS17"
+            ],
+            "n_segments": 14
+          },
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    },
+    {
+      "query": {
+        "field": "wylie",
+        "operator": "exact",
+        "value": "bral ba"
+      },
+      "count": 1,
+      "entries": [
+        {
+          "tibetan": "བྲལ་བ",
+          "wylie": "bral ba",
+          "wylie_variants": [
+            "bral ba"
+          ],
+          "tenses": null,
+          "sanskrit": "{C}vigama (e.g.: smṛti-vigama); {LCh,C,L}vigata; {MSA,MV}apagama; {L,MSA} viyoga; {MSA}visaṃyuktatva; {MSA,MV} visaṃyoga; {MV}visaṃyogatva; {C}prahāṇa; {C} vikala; {MSA}apakarṣa (e.g.: malāpakarṣa); {MV} virahita; {MSA}rahitatva (e.g.: dharma-kāya-rahitatva); {LC}a!!; {LC}amala; {LC}apagata; {LC}mārgāpagata; {LC}apoḍha; {LC}avidyamāna; {LC}gata!!; {LC}gatabhaya; {LC}cirāyita; {LC}niṣkrānta; {LC}nis!!; {LC}niṣkriya; {LC}prativirata; {LC}vipramukta; {LC}vi!!; {LC}virakta; {LC}virāga; {LC}viraja; {LC}virajaska; {LC}vigacchet; {LC}sarva-kleśamalavigata; {LC}vigataroga; {LC}vinā; {LC}viprayoga; {LC}priyaviprayoga; {LC}vipravāsa; {LC}viprahīṇa; {LC}jalaviprahīṇa; {LC}vimukta; {LC}vimukti; {LC}viyukta; {LC}viyukto&smi priyasutena; {LC}iṣṭajanaviyoga; {LC}putraviyoga; {LC}sutaviyoga; {LC}prāṇaviyoga; {LC}viraha; {LC}janana-maraṇārthairvirahitam; {LC}vivikta; {LC}viśleṣa; {LC}vīta; {LC}vītarāga; {LC}vaikalya; {LC}vyatiricyate; {LC}vyaparopayet; {LC}vyaparopita; {LC}atiga; {LC}antarā, apa!!, apagata; {LC}ujjhita; {LC}ut!!; {LC}utkrānta; {LC}dita; {LC}nir!!; {LC}parihṛta; {LC}pravāsa; {LC}bhinna; {LC}vighaṭana; {LC}vinābhāva; {LC}vini!!; {LC}viyuttka??; {LC}viyogin; {LC}virata; {LC}vivarjita; {LC}vihata; {LC}vyuparama; {LC}śithilita; {LC}hīna",
+          "hopkins_english": "separate; separation; free from; lack; devoid; {C}disconnected; freedom; loss of; disjunction; deficient; forsaking; forsaken; effort(s); instruction; departure; departing; has disappeared; separate from",
+          "hgm_gloss": [
+            "free",
+            "freed",
+            "lacks",
+            "overcome",
+            "free of",
+            "freedom"
+          ],
+          "hgm_evidence": {
+            "tier": "glossary",
+            "source": "HTG2016"
+          },
+          "status": "hgm-attested",
+          "pronunciation": "drelwa",
+          "acip": "BRAL BA",
+          "corpus_occurrences": {
+            "courses": [
+              "AK",
+              "C01",
+              "C03",
+              "C05",
+              "C06",
+              "C07",
+              "C08",
+              "C10",
+              "C12",
+              "C14",
+              "C15",
+              "C16",
+              "C17",
+              "C18",
+              "EM",
+              "GIE",
+              "GK",
+              "ILL",
+              "MB2",
+              "P1",
+              "SOS",
+              "SPF",
+              "Sunlight",
+              "TCS01",
+              "TCS02",
+              "TCS04Initiation",
+              "TCS04PrayerBook",
+              "TCS05",
+              "TCS06",
+              "TCS07",
+              "TCS08PabongkaSadhana",
+              "TCS09",
+              "TCS10",
+              "TCS11",
+              "TCS12",
+              "TCS13",
+              "TCS15",
+              "TCS16KaliWang",
+              "TCS16Reading",
+              "TCS17",
+              "TCS18Commentary",
+              "TCS18LamaChupa"
+            ],
+            "n_segments": 149
+          },
+          "pronunciation_source": "GMR card (C05 Language Study Guide)",
+          "hopkins_realigned": "uma-v26",
+          "lc_merged": "lc-v27"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+import pathlib,sqlite3,json,gzip,hashlib,subprocess
+BASE=pathlib.Path(__file__).resolve().parent
+ROOT=BASE.parents[3]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(name,obj): (BASE/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def provenance(p):
+ b=p.read_bytes();return {'path':str(p),'resolved_path':str(p.resolve()),'bytes':len(b),'sha256':sha(b)}
+files=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']
+prov=[]
+for f in files:
+ p=ROOT/f;b=p.read_bytes();dst=BASE/'governing'/f;dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(b)
+ blob=subprocess.check_output(['git','hash-object','--',f],cwd=ROOT,text=True).strip()
+ head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+ obj=subprocess.check_output(['git','rev-parse',f'{head}:{f}'],cwd=ROOT,text=True).strip()
+ exists=subprocess.run(['git','cat-file','-e',blob],cwd=ROOT,capture_output=True).returncode==0
+ prov.append({**provenance(p),'snapshot_path':str(dst),'git_content_blob':blob,'git_object_exists':exists,'head_at_capture':head,'head_path_object':obj,'matches_head_object':blob==obj})
+save('governing-provenance.json',prov)
+p=ROOT/'build/hgm_spine_v27_2.db';d=sqlite3.connect(p.resolve().as_uri()+'?mode=ro',uri=True);d.row_factory=sqlite3.Row
+rows=[dict(r) for r in d.execute('select * from corpus_segments where course=? and seq between ? and ?',['C05',237,248])]
+ss=json.loads((BASE.parents[1]/'source.json').read_text());cs=json.loads((BASE.parents[1]/'context.json').read_text());indexed={r['seq']:r for r in rows}
+checks=[{'snapshot':n,'seq':r['seq'],'fields':{k:r[k]==indexed[r['seq']][k] for k in ['id','course','seq','acip','wylie','english']}} for n,rr in [('source.json',ss),('context.json',cs)] for r in rr]
+assert all(all(r['fields'].values()) for r in checks)
+save('source-original.json',{'spine':provenance(p),'query':'select * from corpus_segments where course=? and seq between ? and ?','parameters':['C05',237,248],'row_count':len(rows),'rows':rows,'meta':[dict(r) for r in d.execute('select * from meta')],'snapshot_checks':checks})
+terms=['yan lag','bcu gnyis','thams cad','sems','gcig','brten','tsam','sgra','gtso bo','snga ma','dgag phyogs','phyi ma','sgrub phyogs',"'gro ba",'rgyu','gzhan','gzugs','byed pa po','bkag','phyi rol', 'mkhas grub','bstan pa dar rgyas','mchog','brtsoms','rtsom','dbu ma','spyi don','nyan','rang','dgra bcom pa','chos can','phyi rol pa','khams gsum','spyod pa','phra rgyas','spangs','rtsa ba','dngos po','rang bzhin','grub pa',"'dzin pa",'rtog pa',"'dzin stangs","dngos 'gal",'lam','rnyed','yongs su shes pa','bral ba']
+mast=ROOT/'data/hgm_dictionary_v27_2.json.gz';master=json.load(gzip.open(mast,'rt'));entries=master['unified_entries'];print(type(entries))
+if isinstance(entries,dict): entries=list(entries.values())
+records=[]
+for t in terms:
+ results=[e for e in entries if e.get('wylie')==t]
+ records.append({'query':{'field':'wylie','operator':'exact','value':t},'count':len(results),'entries':results})
+save('master-original.json',{'source':provenance(mast),'meta':master['meta'],'queries':records})
+queries=[]
+for seq in [241,242,243]:
+ r=indexed[seq]
+ for field in ['acip','wylie','english']:
+  sql=f'select * from corpus_segments where {field}=?';params=[r[field]];res=[dict(x) for x in d.execute(sql,params)];queries.append({'query':sql,'parameters':params,'count':len(res),'rows':res})
+for fld,term in [('wylie','phra rgyas'),('wylie',"'dzin stangs dngos 'gal"),('wylie','brtsoms'),('wylie','mkhas grub bstan pa dar rgyas'),('english','widespread mental afflictions'),('english','Master Kedrup Tenpa Dargye'),('wylie','sems gtso bo')]:
+ sql=f'select * from corpus_segments where {fld} like ?';params=['%'+term+'%'];res=[dict(x) for x in d.execute(sql,params)];queries.append({'query':sql,'parameters':params,'count':len(res),'rows':res})
+save('corpus-query-originals.json',{'spine':provenance(p),'queries':queries})
+print('verified source and context fields',len(checks),'master records',sum(x['count'] for x in records),'corpus result counts',[(x['parameters'][0][:50],x['count']) for x in queries])
+for q in records:
+ print(q['query']['value'],[(e.get('hgm_gloss'),e.get('tier')) for e in q['entries']])

@@ -1,0 +1,71 @@
+import pathlib,json,hashlib,os,sys,subprocess,html,re,copy,collections
+D=pathlib.Path(__file__).resolve().parent;B=D.parents[1];W=B.parents[1]/'campaign-worktree'
+sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+
+def read(p):return json.loads(p.read_text())
+def save(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def info(p):b=p.read_bytes();return {'path':str(p),'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}
+source={r['seq']:r for r in read(D/'source-reopened.json')['rows']};rootranges=read(B/'proposal-verification/root-resolved-spans.json')
+# Re-derive every frozen original tuple with canonical functions, not root agreement alone.
+original=[]
+for angle in ['english','tibetan']:
+ for seq in [241,242,243]:
+  seg=read(B/angle/str(seq)/'spec.json')['segments'][0];sp=seg['spans'];by={x['id']:x for x in sp}
+  tr=G.resolve(source[seq]['wylie'],sp,'tib',seq);er=G.resolve(source[seq]['english'],G.with_members(sp,[by[k] for k in seg['eng_order']],source[seq]['english']),'eng',seq)
+  for x in sp:
+   r={'angle':angle,'seq':seq,**x,'tib_range':list(tr[x['id']]),'eng_range':list(er[x['id']])};rr=next(q for q in rootranges if (q['angle'],q['seq'],q['id'])==(angle,seq,x['id']));assert all(rr[k]==r[k] for k in rr);original.append(r)
+assert len(original)==178
+save(D/'original-ranges-reopened.json',original)
+for seq in [241,242,243]:
+ d=D.parent/str(seq);seg=read(d/'spec.json')['segments'][0];plan=read(d/'span-decisions.json');sp=seg['spans'];by={x['id']:x for x in sp}
+ n=1
+ while (d/f'attempts/{n:02d}-canonical').exists():n+=1
+ a=d/f'attempts/{n:02d}-canonical';a.mkdir(parents=True)
+ for p in ['spec.json','errata.json','span-decisions.json']:(a/p).write_bytes((d/p).read_bytes())
+ deps=[W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py',B.parent/'run_generator_readonly.py',W/'data/alignment/span_head_allow.json']
+ before=[info(p) for p in deps]
+ cmd=[sys.executable,str(B.parent/'run_generator_readonly.py')];r=subprocess.run(cmd,cwd=W,input=(d/'spec.json').read_bytes(),capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for dest in [a,d]:
+  (dest/'generator.stdout').write_bytes(r.stdout);(dest/'generator.stderr').write_bytes(r.stderr);(dest/'generator.exit').write_text(str(r.returncode)+'\n')
+ after=[info(p) for p in deps];assert before==after
+ save(a/'invocation.json',{'argv':cmd,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite':'all connections forced to URI mode=ro by wrapper','dependencies_before':before,'dependencies_after':after,'stdin':info(a/'spec.json')})
+ if r.returncode:print(seq,'REFUSED',r.stderr.decode());continue
+ (d/'body.html').write_bytes(r.stdout);(a/'body.html').write_bytes(r.stdout)
+ tr=G.resolve(source[seq]['wylie'],sp,'tib',seq);er=G.resolve(source[seq]['english'],G.with_members(sp,[by[k] for k in seg['eng_order']],source[seq]['english']),'eng',seq)
+ tuples=[];parent=None
+ for p in plan:
+  x=p['span'];i=x['id'];orig=next(q for q in original if (q['angle'],q['seq'],q['id'])==(p['origin']['angle'],seq,p['origin']['id']))
+  assert tr[i][0]==orig['tib_range'][0],(seq,i,tr[i],orig)
+  assert er[i][0]==p['eng_offset'],(seq,i,er[i],p['eng_offset'])
+  if x['d']!=7:parent=x
+  rec={**x,'tib_range':list(tr[i]),'eng_range':list(er[i]),'intended_tib_start':orig['tib_range'][0],'intended_eng_start':p['eng_offset'],'intentions_match':True,'reason':p['reason']}
+  if x['d']==7:
+   pi=parent['id'];assert parent['d']==5;assert tr[pi][0]<=tr[i][0]<tr[i][1]<=tr[pi][1] and tr[i]!=tr[pi];assert er[pi][0]<=er[i][0]<er[i][1]<=er[pi][1] and er[i]!=er[pi]
+   rec['parent_id']=pi;rec['unique_tib_in_parent']=source[seq]['wylie'][tr[pi][0]:tr[pi][1]].count(x['tib'])==1;rec['unique_eng_in_parent']=source[seq]['english'][er[pi][0]:er[pi][1]].count(x['eng'])==1;assert rec['unique_tib_in_parent'] and rec['unique_eng_in_parent']
+  tuples.append(rec)
+ fidelity={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  block=r.stdout.decode().split(f'<div class="{side}"><div class="lab">')[1].split('</div>',1)[1].split('\n</div>',1)[0].strip();plain=html.unescape(re.sub('<[^>]*>','',block));fidelity[field]=plain==source[seq][field];assert fidelity[field]
+ gate=[]
+ for x in sp:
+  if x['d'] in [5,7] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',x['eng'] or '',re.I):gate.append(x)
+ assert not gate
+ save(d/'span-head-allowances.json',{'gated_heads':gate,'proposed_allowances':[],'explanation':'No final d5/d7 span begins with a gated English head. No allowance or gate file was edited.','existing_allowance_file':info(W/'data/alignment/span_head_allow.json')})
+ save(d/'final-ordered-tuples.json',{'tibetan_order':tuples,'english_flat_order':seg['eng_order']})
+ dispositions=[]
+ for o in [x for x in original if x['seq']==seq]:
+  overlap=[q for q in tuples if max(o['tib_range'][0],q['tib_range'][0])<min(o['tib_range'][1],q['tib_range'][1])]
+  exact=[q for q in overlap if all(o[k]==q[k] for k in ['d','tib','eng','tib_range','eng_range'])]
+  action='retained' if exact else 'changed' if overlap else 'omitted'
+  linked=exact or overlap
+  reason=' '.join(dict.fromkeys(q['reason'] for q in linked)) if linked else 'Omitted: no defensible independent exponent survives the selected construction; see omissions.json.'
+  changes=[]
+  if action=='changed':
+   for q in linked:
+    changes.append({'final_id':q['id'],'d':q['d'],'tib':q['tib'],'eng':q['eng'],'tib_range':q['tib_range'],'eng_range':q['eng_range']})
+  dispositions.append({'original':o,'disposition':action,'final_ids':[q['id'] for q in linked],'reason':reason,'changed_tuples':changes})
+ save(d/'original-proposal-dispositions.json',dispositions)
+ counts={'spans':len(sp),'depths':dict(sorted(collections.Counter(x['d'] for x in sp).items())),'nulls':sum(x['eng'] is None for x in sp),'errata':0,'original_proposals':len(dispositions),'dispositions':dict(collections.Counter(x['disposition'] for x in dispositions))}
+ proof={'seq':seq,'status':'PASS','exit':r.returncode,'stderr_bytes':len(r.stderr),'stdout_equals_body':r.stdout==(d/'body.html').read_bytes(),'spec':info(d/'spec.json'),'body':info(d/'body.html'),'counts':counts,'full_source_fidelity':fidelity,'all_occurrence_intentions_match':True,'all_members_unique_tighter_contained':True,'dependencies_unchanged':True,'gated_heads':0,'all_original_ranges_equal_root_frozen':True,'invocation':str(a/'invocation.json')}
+ save(d/'final-proof.json',proof);save(a/'final-proof.json',proof)
+ print(seq,counts,proof['spec'],proof['body'])

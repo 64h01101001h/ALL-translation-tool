@@ -1,0 +1,39 @@
+import pathlib,json,subprocess,os,hashlib,shutil,importlib.util,copy
+BASE=pathlib.Path(__file__).resolve().parent;ROOT=BASE.parents[3]/'campaign-worktree';HELPER=BASE.parents[2]/'run_generator_readonly.py'
+ENV={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+# Preserve read-only wrapper bytes and actual original location (its relative path is significant).
+shutil.copyfile(HELPER,BASE/'run_generator_readonly.original.py')
+# Pin every exact captured governing byte sequence as an actual Git blob in an angle-owned object directory.
+objdir=BASE/'git-objects';objdir.mkdir(exist_ok=True)
+prov=json.load(open(BASE/'governing-provenance.json'))
+for p in prov:
+ snap=pathlib.Path(p['snapshot_path']); b=snap.read_bytes()
+ blob=subprocess.check_output(['git','hash-object','-w','--stdin'],input=b,cwd=ROOT,env={**ENV,'GIT_OBJECT_DIRECTORY':str(objdir)}).decode().strip()
+ assert blob==p['git_content_blob']
+ actual=subprocess.check_output(['git','cat-file','blob',blob],cwd=ROOT,env={**ENV,'GIT_OBJECT_DIRECTORY':str(objdir)})
+ assert actual==b
+ p['pinned_git_object_directory']=str(objdir);p['pinned_git_object_path']=str(objdir/blob[:2]/blob[2:]);p['pinned_blob_readback_equals_snapshot']=True
+save(BASE/'governing-provenance.json',prov)
+for seq in [241,242,243]:
+ d=BASE.parent/str(seq);attemptroot=d/'attempts';attemptroot.mkdir(exist_ok=True)
+ attempt=attemptroot/f'{len(list(attemptroot.iterdir()))+1:02d}';attempt.mkdir()
+ for f in ['spec.json','decisions.json','errata.json']:shutil.copyfile(d/f,attempt/f)
+ live=[]
+ for f in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+  b=(ROOT/f).read_bytes();(attempt/pathlib.Path(f).name).write_bytes(b)
+  blob=subprocess.check_output(['git','hash-object','-w','--stdin'],input=b,cwd=ROOT,env={**ENV,'GIT_OBJECT_DIRECTORY':str(objdir)}).decode().strip()
+  assert subprocess.check_output(['git','cat-file','blob',blob],cwd=ROOT,env={**ENV,'GIT_OBJECT_DIRECTORY':str(objdir)})==b
+  live.append({'path':str(ROOT/f),'sha256':sha(b),'bytes':len(b),'git_blob':blob,'git_object_directory':str(objdir),'git_object_path':str(objdir/blob[:2]/blob[2:])})
+ with (d/'spec.json').open('rb') as stdin:
+  p=subprocess.run(['python3',str(HELPER)],cwd=ROOT,env=ENV,stdin=stdin,capture_output=True)
+ for f in live:
+  f['after_execution_sha256']=sha(pathlib.Path(f['path']).read_bytes())
+  f['unchanged_during_execution']=f['sha256']==f['after_execution_sha256']
+  assert f['unchanged_during_execution']
+ for fn,b in [('generator.stdout',p.stdout),('generator.stderr',p.stderr),('generator.exit',str(p.returncode).encode()+b'\n'),('body.html',p.stdout)]:
+  (d/fn).write_bytes(b);(attempt/fn).write_bytes(b)
+ proof={'command':['python3',str(HELPER)],'cwd':str(ROOT),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'wrapper':{'path':str(HELPER),'sha256':sha(HELPER.read_bytes())},'canonical_files_at_execution':live,'exit':p.returncode,'stdout_bytes':len(p.stdout),'stderr_bytes':len(p.stderr),'stdout_sha256':sha(p.stdout),'stderr_sha256':sha(p.stderr),'body_equals_stdout':(d/'body.html').read_bytes()==p.stdout,'attempt':str(attempt)}
+ save(d/'generator-proof.json',proof);save(attempt/'generator-proof.json',proof)
+ print(seq,p.returncode,len(p.stdout),p.stderr.decode())

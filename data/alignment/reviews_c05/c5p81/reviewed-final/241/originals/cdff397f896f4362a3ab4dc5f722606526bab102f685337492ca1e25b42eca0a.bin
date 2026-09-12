@@ -1,0 +1,30 @@
+import pathlib,json,importlib.util,sys,copy,hashlib,re
+BASE=pathlib.Path(__file__).resolve().parent;ROOT=BASE.parents[3]/'campaign-worktree'
+spec=importlib.util.spec_from_file_location('canonical_generator',ROOT/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+rows={r['seq']:r for r in json.load(open(BASE/'source-original.json'))['rows']}
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def hits(text,piece,subword=False):
+ out=[];i=0
+ while True:
+  i=g.find_word(text,piece,i,subword=subword)
+  if i<0:return out
+  out.append(i);i+=1
+for seq in [241,242,243]:
+ d=BASE.parent/str(seq);seg=json.load(open(d/'spec.json'))['segments'][0];r=rows[seq];sp=seg['spans'];by={s['id']:s for s in sp};engsp=g.with_members(sp,[by[i] for i in seg['eng_order']],r['english'])
+ tr=g.resolve(r['wylie'],sp,'tib',seq);er=g.resolve(r['english'],engsp,'eng',seq);intended=json.load(open(d/'decisions.json'))['intended_english_offsets']
+ failures=[];records=[]
+ for s in sp:
+  ident=s['id'];t=tr[ident];e=er.get(ident)
+  if e and e[0]!=intended[ident]:failures.append({'id':ident,'intended':intended[ident],'actual':e[0]})
+  records.append({'span':s,'tib_range':t,'eng_range':e,'tib_context':r['wylie'][max(0,t[0]-30):t[1]+30],'eng_context':r['english'][max(0,e[0]-40):e[1]+40] if e else None,'all_exact_tib_occurrences':hits(r['wylie'],s['tib'],s.get('subword',False)),'all_exact_eng_occurrences':hits(r['english'],s['eng'],s.get('subword',False)) if e else []})
+ body=(d/'body.html').read_text()
+ # Get the generated d1 wrapper; stripping tags must preserve original source bytes (there are no nulls).
+ import html
+ restore={}
+ for lang,field in [('tib','wylie'),('eng','english')]:
+  start=body.index(f'<span class="u" data-d="1" data-l="s{seq}S">',body.index(f'<div class="{lang}">'))
+  stop=body.index('\n</div>',start);plain=html.unescape(re.sub('<[^>]+>','',body[start:stop]));restore[field]=plain==r[field]
+ proof={'canonical_generator_path':str(ROOT/'tools/gen_alignment_page.py'),'canonical_generator_sha256':sha(ROOT/'tools/gen_alignment_page.py'),'span_count':len(sp),'null_count':sum(s['eng'] is None for s in sp),'d5_count':sum(s['d']==5 for s in sp),'depth_counts':{str(x):sum(s['d']==x for s in sp) for x in range(1,8)},'intent_offset_failures':failures,'full_source_verbatim_after_unwrap':restore,'occurrences':records}
+ (d/'occurrence-proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+ print(seq,'counts',proof['span_count'],proof['d5_count'],'failures',failures,'verbatim',restore)
+ for rec in records:print(rec['span']['id'],rec['span']['tib'],'=>',rec['span']['eng'],rec['tib_range'],rec['eng_range'])

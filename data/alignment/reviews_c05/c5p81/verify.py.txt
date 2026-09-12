@@ -1,0 +1,118 @@
+from pathlib import Path
+import os,json,hashlib,subprocess,sys,sqlite3,importlib.util,gzip,re
+R=Path(__file__).resolve().parent; B=R.parent; W=B.parent.parent/'campaign-worktree'
+def h(b):return hashlib.sha256(b).hexdigest()
+def save(n,v):
+ p=R/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def git(*args):return subprocess.check_output(['git','-C',str(W),*args])
+head=git('rev-parse','HEAD').decode().strip()
+pins={}
+for fn in ['english/241/provenance.json','english/241/executed-dependency-pins.json']:
+ for a in json.loads((B/fn).read_text()):
+  if 'git_commit' in a:
+   raw=git('show',a['git_commit']+':'+a['git_path']);assert h(raw)==a['sha256']
+   pins[a['sha256']]=(a['git_commit'],a['git_path'])
+manifest=[]; seen={}
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def copy(p,rel=None,pin=None):
+ p=Path(p).absolute();raw=p.read_bytes();digest=h(raw)
+ if str(p) in seen:return seen[str(p)]
+ if rel is None:rel='proposal-inputs/evidence/'+digest+(p.suffix if p.suffix in allowed else '.bin')
+ rel=Path(rel)
+ if rel.suffix not in allowed:rel=Path(str(rel)+('.txt' if rel.suffix in {'.py','.sh','.sql'} else '.bin'))
+ target=R/rel;target.parent.mkdir(parents=True,exist_ok=True)
+ if target.exists():assert target.read_bytes()==raw
+ else:target.write_bytes(raw)
+ assert target.read_bytes()==p.read_bytes()
+ a={'original':str(p),'copy':str(rel),'sha256':digest,'bytes':len(raw)}
+ pin=pin or (pins.get(digest) if any(z in str(p) for z in ['/governing/','/originals/']) else None)
+ if pin:
+  assert git('show',pin[0]+':'+pin[1])==raw
+  a.update(original_git_commit=pin[0],repository_relative_path=pin[1])
+ manifest.append(a);seen[str(p)]=a;return a
+# Snapshot all inputs and all attempts before interpreting. Unsupported extensions remain exact bytes.
+for p in sorted(B.rglob('*')):
+ if not p.is_file() or p.is_relative_to(R) or '__pycache__' in p.parts:continue
+ rel=p.relative_to(B)
+ if rel.parts[0]=='reconciled':out=Path('reviewed-final')/Path(*rel.parts[1:])
+ else:out=Path('proposal-inputs')/rel
+ copy(p,out)
+# Preserve original physical files separately and independently compare the proposal copies.
+physical=[]
+for a in json.loads((B/'reconciled/241/physical-source-reopened.json').read_text()):
+ p=Path(a['original_path']);raw=p.read_bytes();assert h(raw)==a['sha256'] and raw==Path(a['copy']).read_bytes()
+ c=copy(p);physical.append({**c,'reopened_original_equals_frozen_copy':True})
+save('physical-verification.json',physical)
+# Immutable historical repository files are compared to Git objects, never mutable live files.
+history=[]
+for a in json.loads((B/'reconciled/241/original-manifest.json').read_text()):
+ raw=Path(a['copy']).read_bytes();assert h(raw)==a['sha256'] and len(raw)==a['bytes']
+ pin=pins.get(a['sha256']) if str(W) in a['original_path'] else None
+ if pin:assert raw==git('show',pin[0]+':'+pin[1])
+ elif Path(a['original_path']).is_file() and str(W) not in a['original_path']:
+  # proposal-protocol is deliberately revised; original snapshot kept as its own original path.
+  if Path(a['original_path']).name!='proposal-protocol.md':assert raw==Path(a['original_path']).read_bytes()
+ history.append({'original':a['original_path'],'preserved_original':a['copy'],'sha256':a['sha256'],'bytes':a['bytes'],'git_pin':pin,'checked':True})
+save('original-history-verification.json',history)
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/alignment_briefs/PROPOSE_BRIEF.md','docs/errata_register.json','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ raw=(W/rel).read_bytes();assert raw==git('show',head+':'+rel),rel
+ copy(W/rel,'governing/'+rel,(head,rel))
+for p in [B.parent/'semantic-review-protocol.md',B.parent/'proposal-protocol.md',B.parent/'run_generator_readonly.py',*sorted((B.parent/'policy-history').rglob('*'))]:
+ if p.is_file():copy(p,'governing/campaign/'+str(p.relative_to(B.parent)))
+save('original-to-copy-manifest.json',manifest)
+access=[]
+for a in json.loads((B/'reconciled/241/access.json').read_text()):
+ assert os.access(a['path'],os.R_OK);access.append({'path':a['path'],'readable':True})
+save('access.json',access)
+# Canonical source and resolver.
+sp=importlib.util.spec_from_file_location('canonical_review_generator',W/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(sp);sp.loader.exec_module(G)
+db=sqlite3.connect(Path(G.B.SPINE).resolve().as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+sources=[dict(x) for x in db.execute("select * from corpus_segments where course='C05' and seq between 239 and 245 order by seq")];save('source-reopened.json',sources)
+lookup={x['seq']:x for x in sources}
+assert [{k:x[k] for k in ('id','course','seq','acip','wylie','english')} for x in sources if 241<=x['seq']<=243]==json.loads((B/'source.json').read_text())
+queries=[]
+for fn in ['queries-reopened.json','additional-queries.json']:
+ for a in json.loads((B/'reconciled/241'/fn).read_text()):
+  rows=[dict(x) for x in db.execute(a['query'],a['parameters'])];assert rows==a['rows'] and len(rows)==a['count']
+  queries.append({'input':fn,'query':a['query'],'parameters':a['parameters'],'count':len(rows),'exact_original_rows':True,'rows':rows})
+save('queries-rechecked.json',queries)
+lex=json.loads((B/'reconciled/241/lexical-reopened.json').read_text());raw=Path(lex['source']).read_bytes();assert h(raw)==lex['sha256']
+master=json.loads(gzip.decompress(raw));entries=master['unified_entries'] if isinstance(master,dict) else master
+lexproof=[]
+for q in lex['queries']:
+ matches=[e for e in entries if e.get('wylie')==q['term']];assert matches==q['entries'],q['term']
+ lexproof.append({'term':q['term'],'count':len(matches),'exact_master_rows':True,'entries':matches})
+save('lexical-rechecked.json',{'source':lex['source'],'source_sha256':lex['sha256'],'queries':lexproof})
+replays=[];resolved=[]
+for angle in ('english','tibetan','reconciled'):
+ for seq in (241,242,243):
+  p=B/angle/str(seq);spec_raw=(p/'spec.json').read_bytes();spec=json.loads(spec_raw);seg=spec['segments'][0];src=lookup[seq]
+  env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+  proc=subprocess.run([sys.executable,str(B.parent/'run_generator_readonly.py')],input=spec_raw,cwd=W,env=env,capture_output=True)
+  out=R/'replays'/angle/str(seq);out.mkdir(parents=True,exist_ok=True)
+  (out/'generator.stdout').write_bytes(proc.stdout);(out/'generator.stderr').write_bytes(proc.stderr);(out/'generator.exit').write_text(str(proc.returncode)+'\n')
+  assert proc.returncode==0 and proc.stdout==(p/'body.html').read_bytes()
+  sps=seg['spans'];tr=G.resolve(src['wylie'],sps,'tib',seq);byid={s['id']:s for s in sps};es=G.with_members(sps,[byid[i] for i in seg['eng_order']],src['english']);er=G.resolve(src['english'],es,'eng',seq)
+  rr=[{'seq':seq,'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s['eng'],'tib_range':list(tr[s['id']]),'eng_range':list(er[s['id']]) if s['eng'] is not None else None} for s in sps]
+  save(str(out.relative_to(R)/'resolved-spans.json'),rr)
+  rec={'seq':seq,'span_count':len(sps),'null_count':sum(s['eng'] is None for s in sps),'word_pair_count':sum(s['d']==5 and s['eng'] is not None for s in sps),'spec_sha256':h(spec_raw),'spec_bytes':len(spec_raw),'body_sha256':h(proc.stdout),'body_bytes':len(proc.stdout),'generator_exit':proc.returncode,'exact_saved_body':True,'angle':angle};replays.append(rec)
+  if angle=='reconciled':resolved.extend(rr)
+save('resolved-spans.json',resolved);save('generator-proof.json',replays)
+# Every tuple disposition and structured component is checked against fresh canonical ranges.
+proof=[]
+for seq in (241,242,243):
+ p=B/'reconciled'/str(seq);final={x['id']:x for x in resolved if x['seq']==seq}
+ ds=json.loads((p/'original-proposal-dispositions.json').read_text()); original_seen=[]
+ for d in ds:
+  x=d['original']; rr=json.loads((R/'replays'/x['angle']/str(seq)/'resolved-spans.json').read_text()); orig=next(z for z in rr if z['id']==x['id'])
+  assert {k:x[k] for k in orig}==orig;original_seen.append((x['angle'],x['id']))
+  for fid in d['final_ids']:assert fid in final
+  for c in d['changed_tuples']:
+   assert {k:c[k] for k in ('d','tib','eng','tib_range','eng_range')}=={k:final[c['final_id']][k] for k in ('d','tib','eng','tib_range','eng_range')}
+ structured=json.loads((p/'original-decision-dispositions.json').read_text())
+ for d in structured:
+  union=list(dict.fromkeys(i for c in d['decision_components'] for i in c['final_span_ids']));assert union==d['final_span_ids']
+  for c in d['final_span_correspondences']:assert c=={k:v for k,v in final[c['id']].items() if k!='seq'}
+ proof.append({'seq':seq,'original_dispositions':len(ds),'distinct_originals':len(set(original_seen)),'structured_decisions':len(structured),'component_union_exact':True,'final_correspondence_ranges_exact':True})
+save('decision-mapping-proof.json',proof)
+print(json.dumps({'replays':replays,'manifest_records':len(manifest),'queries':len(queries),'lexical_terms':len(lexproof),'decisions':proof},indent=2))

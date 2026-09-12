@@ -1,0 +1,104 @@
+import pathlib,json,hashlib,sqlite3,os
+D=pathlib.Path(__file__).resolve().parent;B=D.parents[1];W=B.parents[1]/'campaign-worktree'
+def read(p):return json.loads(p.read_text())
+def save(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def info(p):b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+manifest=read(D/'original-manifest.json');source={r['seq']:r for r in read(D/'source-reopened.json')['rows']};lex=read(D/'lexical-reopened.json')['queries'];query=read(D/'queries-reopened.json')+read(D/'additional-queries.json')
+physical=[]
+for course in ['C05','C16']:
+ p=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII')/(course+'ReadingASCII.txt');b=p.read_bytes();h=hashlib.sha256(b).hexdigest();dest=D/'originals'/h
+ if not dest.exists():dest.write_bytes(b)
+ assert b==(B/'english/241/originals'/p.name).read_bytes()
+ record={'original_path':str(p),'resolved_path':str(p.resolve()),'sha256':h,'bytes':len(b),'copy':str(dest)};manifest.append(record)
+ physical.append({**record,'original_matches_frozen_angle':True,'decode':'latin-1 (byte-preserving; original bytes archived)','selected_lines_1_based':[2310,2364] if course=='C05' else None,'excerpt':b.decode('latin-1').splitlines()[2309:2364] if course=='C05' else None})
+save(D/'physical-source-reopened.json',physical);save(D/'original-manifest.json',manifest)
+# Verify every frozen original, including all archived prior proposal attempts.
+for r in manifest:assert pathlib.Path(r['original_path']).read_bytes()==pathlib.Path(r['copy']).read_bytes(),r['original_path']
+save(D/'original-immutability-proof.json',{'checked_original_paths':len(manifest),'all_match_copies':True,'manifest':info(D/'original-manifest.json')})
+omissions={241:[
+ {'tib':'la brten nas; bstan te; bzhag; unselected reporting syntax','english':'These references convey yet another meaning; Here the point is; they are making the point','reason':'Distributed reporting and explanation frames, not separate lexical atoms. A full mind-is-main proposition is retained without importing its supplied surrounding frame.'},
+ {'tib':'bshad pa elided under phyi ma','english':'latter references','reason':'latter is retained for phyi ma; second references repeats the overt bshad pa head in the former branch. One source occurrence is not banked twice.'},
+ {'tib':'po; par; pa; gyi; ni; no; nas; nyid; zhig; remaining unselected particles/inflections','english':'distributed nominal, emphatic and clause framing','reason':'Unselected grammatical matter is omitted. No false no-exponent null is asserted; actual contribution may be fused or distributed.'},
+ {'tib':'gal te ... mod kyi ste kyang','english':'Although we do of course','reason':'Concessive construction and supplied participant/auxiliaries are distributed; no isolated invented dictionary equivalent.'},
+ {'tib':'bzlog pa ste','english':'opposite of the mind','reason':'Local bzlog pa ste bkag describes rejection, while English opposite is nominal and expands the other-than-mind relation. Omit an insecure bzlog=opposite mapping; bkag=denying and the complete other-than-mind phrase remain.'},
+ {'tib':'final bkag pa ma yin no','english':'not though saying that there are no','reason':'Nested denial is distributed across saying and no, with supplied subjects and auxiliaries. Omit without claiming the negative is absent.'},
+ {'tib':'no extra source sems occurrence','english':'mind-only echo; mind in they are making the point that mind; opposite of the mind','reason':'Expanded repetitions are not independently banked. Final sems relation uses the complete something other than the mind, avoiding the earlier expanded nominal counterpart.'},
+ {'tib':None,'english':source[241]['english'][1078:],'reason':'Verbatim page 93 and following Reading Six apparatus under the registered following-heading class; not translated lexical content or a newly filed erratum.'}
+],242:[
+ {'tib':'mchog','english':'Master as a separate atom','reason':'Rank is contextual to the complete honorific name. Its HGM field does not separately attest the word Master; use the complete title and full-name member.'},
+ {'tib':'gis; pa\'i','english':'by; distributed participial attribution','reason':'Agentive by remains an unresolved campaign atom treatment; omitted without a no-exponent assertion. Other bound attribution grammar is not harvested.'},
+ {'tib':None,'english':'The following selections are; the before Overview; (1493-1568)','reason':'Supplied framing/article and biographical dates. Dated HGM glossary name strings establish identity, not the claim that Tibetan names encode life dates.'},
+ {'tib':'mkhas grub; bstan pa; dar rgyas separately','english':'phonetic pieces of Kedrup Tenpa Dargye','reason':'No sound-to-meaning name decomposition. Only the established whole personal name is retained as the tighter member.'}
+],243:[
+ {'tib':'first thal','english':"Aren't you saying then that",'reason':'Debate framing distributed into a rhetorical question with supplied you; no participant-heavy phrase assigned to bare thal.'},
+ {'tib':'gyur pa\'i; du zhugs pa\'i; final dang; remaining unselected endings','english':'distributed predicative and relational grammar','reason':'Not independent lexical atoms; no assertion of zero meaning. The negative verbal phrases are retained complete where local scope is defensible.'},
+ {'tib':"'dzin stangs",'english':'in the way it outside the selected holds its object','reason':'The whole source unit has exact HGM holds its object support. Adding it would import the path participant from lam outside this span; the wider manner recast is omitted and no component of the exact attested whole is separately guessed.'},
+ {'tib':'no extra source yongs su shes pa','english':'where they realize','reason':'Expanded repetition of the retained comprehensive knowledge; do not bank one cognition twice.'},
+ {'tib':None,'english':'Let us first; of the; type; they; have; some; afflictions after all these; articles and question auxiliaries','reason':'Supplied framing, participants, classifiers and repeated content stay unpaired. all three realms is retained as a whole exhaustive HGM term; it is not this category of unsupported extra word.'}
+]}
+# Complete verbatim source ranges are retained separately from adjudicative prose.
+for seq in [241,242,243]:
+ d=D.parent/str(seq);tuples=read(d/'final-ordered-tuples.json')['tibetan_order'];sp=read(d/'spec.json')['segments'][0]['spans']
+ unpaired={}
+ for field,range_key in [('wylie','tib_range'),('english','eng_range')]:
+  spans=sorted(q[range_key] for q in tuples if q['d']!=7);cursor=0;runs=[]
+  for a,b in spans:
+   if cursor<a:runs.append({'range':[cursor,a],'text':source[seq][field][cursor:a]})
+   cursor=b
+  if cursor<len(source[seq][field]):runs.append({'range':[cursor,len(source[seq][field])],'text':source[seq][field][cursor:]})
+  unpaired[field]=runs
+ save(d/'omissions.json',{'policy':'Omission is not a null/no-exponent assertion.','decisions':omissions[seq],'complete_unpaired_runs':unpaired})
+ # Each original structured decision and original omitted group is reviewed explicitly.
+ out=[]
+ for angle in ['tibetan','english']:
+  original=read(B/angle/str(seq)/'decisions.json');items=[]
+  if 'decisions' in original:items=original['decisions']
+  else:items=original.get('contentious',[])+[{'omitted':x} for x in original.get('omissions',[])]+([{'retained_content':original['retained_content']}] if 'retained_content'in original else [])
+  for i,item in enumerate(items):
+   text=json.dumps(item,ensure_ascii=False)
+   refs=[q['id'] for q in tuples if q['tib'] in text or q['eng'] in text]
+   out.append({'angle':angle,'original_file':str(B/angle/str(seq)/'decisions.json'),'original_index':i,'original_decision':item,'reviewed':True,'final_span_ids':refs,'disposition':'Reconciled against all final span decisions and complete omissions, preserving the original claim verbatim.','controlling_final_decisions':str(d/'span-decisions.json'),'controlling_omissions':str(d/'omissions.json'),'specific_segment_rulings':{241:'Motion restored; first scriptural references split from former; negative/positive side compounds kept d5; single and exhaustivity boundaries tightened; both other-than-mind relations kept whole; bzlog opposite and nested denial omitted.',242:'Honorific and name united; whole-name member retained; mchog/Master standalone rejected; both work-title members retained; dates and gis omitted.',243:'nyan rang united with two supported abbreviation members; all three realms retained; enemy-destroyer and realm members retained; exact HGM holds its object retained at d5; wider manner/it recast omitted; negative verbs retained whole.'}[seq]})
+ save(d/'original-decision-dispositions.json',out)
+ # Source evidence references preserve full records; quoted HGM fields are not promoted.
+ lexical=[]
+ for q in lex:
+  term=q['term']
+  if any(term in x['tib'] or x['tib'] in term for x in sp):lexical.append({'term':term,'record_file':str(D/'lexical-reopened.json'),'hgm_fields':[{'wylie':e['wylie'],'hgm_gloss':e.get('hgm_gloss'),'hgm_evidence':e.get('hgm_evidence')} for e in q['entries']]})
+ save(d/'evidence-refs.json',{'source':info(D/'source-reopened.json'),'immutable_originals_manifest':info(D/'original-manifest.json'),'original_generator_replays':info(D/'original-replays.json'),'all_original_occurrences':info(D/'original-ranges-reopened.json'),'lexical_records':info(D/'lexical-reopened.json'),'corpus_records':info(D/'queries-reopened.json'),'additional_corpus_records':info(D/'additional-queries.json'),'physical_sources':info(D/'physical-source-reopened.json'),'selected_hgm_fields':lexical,'limits':'Source and lexical records were reopened directly. Agreement of proposals, glossary recurrence and digital parallel identity are not semantic or independent-publication proof.'})
+ # No candidate is retained. The previously observed source features receive all five checks anyway.
+ checks={
+  241:{'feature':'following Reading Six apparatus / alleged bzlog pa-to-opposite error','a_quote':{'found':source[241]['english'][1078:],'present':True,'acip_and_wylie_present_in_full_source':True},'b_parallel':'C16:818 ACIP/Wylie identical; English translation prefix 1078 characters shared and apparatus tails differ. P7:11 punctuation/apparatus differ; ILL:2688 supports only first three source statements. No independent-publication or ingestion lineage inferred. Full rows are in reopened query records.','c_register':'Following-heading class explicitly lists C05:241 in C05_CAMPAIGN; no duplicate filing. bzlog mapping uncertainty is not an erratum.','d_expected':'No correction proposed. Original heading is documentary apparatus and local creator-rejection proposition remains coherent; insecure atom mapping cannot establish a source defect.','e_counts':'All 28 original query records were rerun with exact row equality. Rechecked C16 shared prefix=1078.','retained':False},
+  242:{'feature':'brtsoms / BRTZOMS spelling','a_quote':{'found':'BRTZOMS','present_in_acip':True,'wylie':'brtsoms','present_in_wylie':True,'physical_ascii_matches':True},'b_parallel':'LIKE %brtsoms% returns 14 full corpus rows, including composition attributions; no exact duplicate of all C05:242 source fields. Searches cover C16/P1/TCS as well as all other courses. Recurrence does not prove an independent publication.','c_register':'Full errata register reopened; no new claim or duplicate filed.','d_expected':'No authoritative expected spelling correction established. Master brtsoms has hgm_gloss null. Coherent local composition reading supports a provisional corpus verb, not a spelling correction.','e_counts':{'brtsoms_like_rows':14,'full_rows_reopened':True},'retained':False},
+  243:{'feature':'possible doctrinal or translation anomaly','a_quote':'Full exact ACIP, Wylie and English reopened; no specific defect quote proposed by either angle.','b_parallel':'C16:819 matches all three textual fields. C01:335 and TCS10:259 support only the shared opposed-apprehension argument. No publication independence inferred.','c_register':'Register reopened; no new candidate or duplicate filed.','d_expected':'The rhetorical argument and negated attainment/knowledge relations are coherent; no defensible correction supplied.','e_counts':'Original query row equality and exact C16:819 field comparison rerun; counts in the archived glossary are not treated as fresh corpus counts.','retained':False}
+ }
+ c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+ if seq in [241,243]:
+  peer=dict(c.execute('select * from corpus_segments where course=? and seq=?',('C16',818 if seq==241 else 819)).fetchone());checks[seq]['parallel_full_row']=peer;checks[seq]['parallel_field_equality']={k:peer[k]==source[seq][k] for k in ['acip','wylie','english']}
+  if seq==241:
+   n=0
+   for a,b in zip(peer['english'],source[seq]['english']):
+    if a!=b:break
+    n+=1
+   assert n==1078;checks[seq]['shared_prefix_length']=n
+ save(d/'errata-scrutiny.json',{'original_errata_lists':[{'angle':a,'path':str(B/a/str(seq)/'errata.json'),'records':read(B/a/str(seq)/'errata.json')} for a in ['tibetan','english']],'retained_claims':[],'five_ground_source_observation_check':checks[seq],'register':info(W/'docs/errata_register.json')})
+ proof=read(d/'final-proof.json');counts=proof['counts'];nr=counts['original_proposals']
+ ruling={241:['bshad pa → scriptural references and snga ma → former retain the first reference head; latter references repeats its elided head.','dgag phyogs / sgrub phyogs stay d5 contextual compounds, corroborated by C15:61 and ILL:3265; motion is retained d3.','The complete mind-is-main statement and both other-than-mind relations select exact intended occurrences. Final sems uses the later complete something-other-than phrase.','Single and each-and-every-one boundaries are tightened; de → this is restored. bzlog pa → opposite and final nested denial remain omitted.'],242:['The honorific and full name stay one d5 title; the independently attested whole name is a d7 member. Standalone mchog → Master is rejected.','The complete work title retains the independently HGM-attested dbu ma/Middle Way and spyi don/Overview members.','Dated HGM name strings establish identity; dates stay unwrapped. brtsoms → composed is provisional corpus evidence with null hgm_gloss; no correction.'],243:['nyan rang stays one d5 coordinated abbreviation with independently attested nyan/Listener and rang/Self-Made Buddha members.','All three realms is the HGM-attested exhaustive unit, distinct from both thams cad occurrences; realm/three and enemy/destroyer members remain.','The exact HGM expression holds its object stays d5 for the whole \'dzin stangs; the wider way-it recast is omitted because it imports lam\'s participant.','Negated verbal and conception phrases stay d3; repeated knowledge/realize, rhetorical participants and distributed framing remain unpaired.']}[seq]
+ lines=[f'C05:{seq} — DONE reconciliation; Codex (GPT-6 Astra), PROVISIONAL.',f'Counts: {counts["spans"]} spans; depths {counts["depths"]}; nulls 0; errata 0.',f'Both frozen angles were reopened; all six original canonical replays match their saved bodies.',f'All {nr} original tuples/IDs/depths/ranges have dispositions in original-proposal-dispositions.json; original decisions are separately preserved and adjudicated.']+ruling+[
+ 'Selected occurrences and final English order: final-ordered-tuples.json; reasons for every final span: span-decisions.json.',
+ 'Complete omissions and every unpaired source run: omissions.json; omission is not a no-exponent null.',
+ 'All d7 members are unique, strictly tighter and contained within their immediate d5 parent group; no gated English heads or proposed allowances.',
+ 'Errata: both original lists and the final list are empty; all five source-observation checks, exact quotes/counts and registered-class checks are in errata-scrutiny.json.',
+ 'Digital identity/difference establishes no independent publication or ingestion lineage; short parallels support only their shared extent.',
+ f'EXIT=0; body byte count={proof["body"]["bytes"]}; stderr=0 bytes. Exact stdout/stderr and invocation are in attempts/01-canonical/.',
+ f'Spec SHA256 {proof["spec"]["sha256"]}; bytes={proof["spec"]["bytes"]}.',
+ f'Body SHA256 {proof["body"]["sha256"]}; bytes={proof["body"]["bytes"]}.',
+ 'Full Wylie/English restoration and all intended occurrence ranges PASS; original canonical generator/dependencies and allowance file were unchanged, using SQLite URI mode=ro.',
+ f'Complete original-to-content-copy map: {D}/original-manifest.json; evidence-refs.json pins sources, exact glossary fields, corpus queries and original files.',
+ 'Concern: this remains a provisional machine reconciliation; a separate skeptical reader must approve before root lands any result.'
+ ]
+ assert 10<=len(lines)<=25
+ (d/'report.md').write_text('\n'.join(lines)+'\n')
+ # Freeze checksum list last; do not modify covered artifacts afterwards.
+ files=sorted(p for p in d.rglob('*') if p.is_file() and p.name!='SHA256SUMS')
+ (d/'SHA256SUMS').write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(d)}\n' for p in files))
+ print(seq,'report lines',len(lines),'files',len(files),'counts',counts)

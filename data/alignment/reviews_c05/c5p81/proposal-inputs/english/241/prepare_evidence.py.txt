@@ -1,0 +1,42 @@
+import json,sqlite3,hashlib,pathlib,subprocess,gzip,shutil
+ROOT=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+W=ROOT/'campaign-worktree'; D=ROOT/'campaign-artifacts/C05-241-243/english/241'; O=D/'originals';O.mkdir(exist_ok=True)
+def sha(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+def save(n,o): (D/n).write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+pin=subprocess.check_output(['git','rev-parse','HEAD'],cwd=W,text=True).strip(); prov=[]
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']:
+ p=W/rel; data=p.read_bytes(); out=O/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(data)
+ blob=subprocess.check_output(['git','rev-parse',pin+':'+rel],cwd=W,text=True).strip(); gitdata=subprocess.check_output(['git','cat-file','blob',blob],cwd=W)
+ prov.append({'path':str(p),'snapshot':str(out),'sha256':sha(p),'git_commit':pin,'git_blob':blob,'git_path':rel,'matches_git_blob':gitdata==data})
+for rel in ['source.json','context.json','english-brief.md']:
+ p=ROOT/'campaign-artifacts/C05-241-243'/rel; out=O/rel;shutil.copyfile(p,out);prov.append({'path':str(p),'snapshot':str(out),'sha256':sha(p)})
+p=ROOT/'campaign-artifacts/proposal-protocol.md';shutil.copyfile(p,O/p.name);prov.append({'path':str(p),'snapshot':str(O/p.name),'sha256':sha(p)})
+db=W/'build/hgm_spine_v27_2.db'; con=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+rows=[dict(r) for r in con.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',237,247))]
+save('spine-originals.json',{'source':str(db),'resolved_path':str(db.resolve()),'sha256':sha(db),'uri_mode':'ro','query':'select * from corpus_segments where course=? and seq between ? and ? order by seq','parameters':['C05',237,247],'count':len(rows),'rows':rows,'meta':[dict(r) for r in con.execute('select * from meta')]})
+checks=[]
+for name in ['source.json','context.json']:
+ for row in json.loads((O/name).read_text()):
+  original=next(r for r in rows if r['seq']==row['seq']); checks.append({'snapshot':name,'seq':row['seq'],'fields':{k:row[k]==original[k] for k in ['id','course','seq','acip','wylie','english']}})
+save('snapshot-verification.json',checks)
+terms=['yan lag','bcu gnyis','thams cad','sems','gtso bo','dgag phyogs','sgrub phyogs',"'gro ba","rab tu 'jug pa",'rgyu','gzugs','byed pa po','phyi rol','bzlog pa','mkhas grub','bstan pa dar rgyas','mchog','brtsoms','brtsom pa','dbu ma spyi don','nyan rang','nyan thos','rang rgyal','dgra bcom pa','chos can','phyi rol pa','khams gsum','phra rgyas','spang ba','rtsa ba','dngos po','rang bzhin','rang bzhin gyis grub pa',"'dzin pa",'rtog pa',"'dzin stangs","dngos 'gal",'lam','rnyed pa','yongs su shes pa','bral ba']
+master=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz'); m=json.load(gzip.open(master,'rt'))
+entries=m['unified_entries']; print(type(entries),len(entries))
+lex=[]
+for t in terms:
+ sr=[dict(r) for r in con.execute('select * from entries where wylie=?',(t,))]
+ mr=[e for e in entries if e.get('wylie')==t]
+ lex.append({'term':t,'sql':'select * from entries where wylie=?','spine_count':len(sr),'spine_entries':sr,'master_count':len(mr),'master_entries':mr})
+save('glossary-originals.json',{'master_path':str(master),'master_sha256':sha(master),'master_meta':m['meta'],'lookup':'exact wylie equality in unified_entries','queries':lex})
+queries=[('wylie','yan lag bcu gnyis po thams cad'),('english','one single principal cause'),('wylie','mkhas grub bstan pa dar rgyas'),('wylie','brtsoms'),('english','Overview of the Middle Way'),('wylie','nyan rang dgra bcom pa chos can'),('english','widespread mental afflictions'),('wylie',"'dzin stangs dngos 'gal"),('english','comprehensive knowledge where they realize')]
+res=[]
+for field,term in queries:
+ sql='select * from corpus_segments where '+field+' like ? order by course,seq'; rr=[dict(r) for r in con.execute(sql,('%'+term+'%',))]
+ res.append({'query':sql,'parameters':['%'+term+'%'],'count':len(rr),'rows':rr})
+save('corpus-query-originals.json',res)
+for course in ['C05','C16']:
+ p=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII')/(course+'ReadingASCII.txt');shutil.copyfile(p,O/p.name);prov.append({'path':str(p),'snapshot':str(O/p.name),'sha256':sha(p)})
+save('provenance.json',prov)
+print('Saved evidence; all snapshot fields match:',all(all(x['fields'].values()) for x in checks))
+for x in lex: print(x['term'],[(e['wylie'],e.get('hgm_gloss')) for e in x['master_entries']])
+for q in res: print(q['parameters'],q['count'],[(r['course'],r['seq']) for r in q['rows']][:35])

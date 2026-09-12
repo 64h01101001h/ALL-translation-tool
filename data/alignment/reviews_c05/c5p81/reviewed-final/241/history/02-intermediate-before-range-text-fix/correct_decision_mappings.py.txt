@@ -1,0 +1,104 @@
+import pathlib,json,hashlib
+D=pathlib.Path(__file__).resolve().parent;B=D.parent
+
+def read(p):return json.loads(p.read_text())
+def save(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def info(p):b=p.read_bytes();return {'path':str(p),'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}
+def item(unit,ids,action,reason):return {'original_decision_subject':unit,'final_span_ids':ids.split() if ids else [],'action':action,'reason':reason}
+# Hand-adjudicated source-unit mappings. No substring, keyword, or token matching.
+M={
+241:{
+('tibetan',0):[item('sems gtso bor gyur par → mind is the main thing','w12','retained','Only w12 is the complete proposition. Other mind, on, only, and conjunction occurrences are not this decision.')],
+('tibetan',1):[item('bshad pa snga ma → former scriptural references','w13 w14','split','The phrase is replaced by bshad pa/scriptural references and snga ma/former, in the same first-reference construction.')],
+('tibetan',2):[item('dgag phyogs → negative way','w15','retained','The negative-side compound stays d5.'),item('sgrub phyogs → positive way','w18','retained','The positive-side compound stays d5.')],
+('tibetan',3):[item("rab tu 'jug pa",'w21','omission_reversed','Motion is restored as a complete d3 phrase.'),item('la brten nas; bstan te; nyid; bzhag; gal te ... mod kyi ste kyang; bzlog pa; final bkag pa ma yin','','omission_retained','These specifically named remaining distributed constructions remain unpaired; they do not map to any final atom.')],
+('tibetan',4):[item('gcig → single thing','w6','tightened','gcig now owns single only.'),item('byed pa po → prime creator','w43','retained','Only the prime-creator occurrence is involved, not the later creator occurrence.')],
+('tibetan',5):[item('Remaining unselected grammatical particles and predicative endings','','omission_retained','This residual omission statement asserts no correspondence to a selected span.')],
+('english',0):[item('sems gtso bor gyur par → mind is the main thing','w12','retained','The complete d3 proposition is one final span.')],
+('english',1):[item("rab tu 'jug pa → into motion",'w21','retained','The motion phrase is one final d3 span.')],
+('english',2):[item('bzlog pa → opposite','','omission_retained','No bzlog/opposite correspondence is banked. The separate bkag span is not this omitted unit.')],
+('english',3):[item('first bkag → denying','w48','retained','Only the first explicit denial verb is retained.'),item('last bkag pa ma yin','','omission_retained','The final nested denial remains distributed and unpaired.')],
+('english',4):[item('second brten; bstan; bzhag explanation frames','','omission_retained','Their distributed explanation frames remain unpaired; the first brten/depends is outside this decision.')],
+('english',5):[item('nyid/zhig emphases; gal te ... mod kyi ste kyang','','omission_retained','These emphatic and concessive constructions remain unpaired.')],
+('english',6):[item('final bkag pa ma yin no','','omission_retained','No final span owns the distributed not/saying/no construction.')],
+('english',7):[item('mind-only echo; paraphrase mind after quoted mind only','','omission_retained','These repeated English words still have no separate span.'),item('final repeated mind in creator explanation','w46','occurrence_selection_changed','The final Tibetan sems is now retained inside the complete something other than the mind phrase at English [947,975), including the later mind at [971,975); the earlier opposite-of-mind echo stays unpaired. No source token is doubled.')],
+('english',8):[item('Unselected particles and nominal endings','','omission_retained','No direct final correspondence is asserted for this residual omission statement.')],
+('english',9):[
+ item('links; twelve','w1 w2','summary_retained','These two specifically named lexical units are retained.'),
+ item('mind occurrences','w5 w12 w22 w25 w30 w40 w46','summary_reconciled','These are the selected source sems realizations, including complete proposition and other-than-mind phrases; final creator-relation occurrence selection is changed as recorded separately.'),
+ item('single; depends; stated; word','w6 w8 w9 w11','summary_reconciled','Single is tightened; the other named lexical heads retain their local realizations.'),
+ item('former/latter references','w13 w14 w17','summary_reconciled','First scriptural references and former are split; latter alone owns phyi ma and its repeated reference head is unpaired.'),
+ item('principal causes','w23 w24 w26 w27','summary_retained','The two principal/cause pairs are separately selected.'),
+ item('sutras; matter; existence','w29 w33 w35 w36 w38','summary_reconciled','These are the specifically named lexical units and their actual source occurrences.'),
+ item('creator; external objects','w43 w47 w49 w50','summary_retained','Both creator occurrences and the final outside/physical-objects pair are retained.'),
+ item('negative/positive method phrases','w15 w18','summary_depth_changed','The two argumentative compounds are d5 in the final candidate, replacing the English proposal summary\'s d3 choice.'),
+ item('mind-is-main/motion statements','w12 w21','summary_retained','Both complete recasts are d3; the duplicate w12 reference across summary components is intentional and unioned only once.')]
+},
+242:{
+('tibetan',0):[item('whole author proper name','w2','depth_changed','The exact full name is now a d7 member of the honorific-name parent; no other title/name member is implied.')],
+('tibetan',1):[item('mchog → Master','','standalone_rejected','No final standalone mchog/Master mapping survives. Honorific material is represented only in the broader name title w1; that parent is an alternative, not the proposed atom.')],
+('tibetan',2):[item('brtsoms → composed','w3','retained','The exact source verb is retained.')],
+('tibetan',3):[item('whole title','w4','retained','The complete work title remains d5.'),item('Middle Way title member','w5','retained','dbu ma is the tighter member.'),item('Overview title member','w6','retained','spyi don is the tighter member.')],
+('tibetan',4):[item("gis; pa'i; supplied attribution formula; dates",'','omission_retained','These specifically named elements remain unpaired; nas/from is not part of this omission decision.')],
+('english',0):[item('complete honorific-name title','w1','retained','The complete source title remains one d5 unit; the added name-only member is separately adjudicated under the Tibetan whole-name decision.')],
+('english',1):[item('brtsoms → composed','w3','retained','Exact local verb correspondence retained.')],
+('english',2):[item('dbu ma spyi don → Overview of the Middle Way','w4','retained','The whole work title is the subject of this decision; its separately added members belong to the Tibetan title/member decision.')],
+('english',3):[item('gis/by','','omission_retained','Agentive treatment remains omitted.')],
+('english',4):[item("selection framing; article; dates; pa'i",'','omission_retained','All specifically named supplied or unselected material remains unpaired.')]
+},
+243:{
+('tibetan',0):[item('nyan → Listener','w2','depth_changed','The abbreviation is now a d7 member of nyan rang.'),item('rang → Self-Made Buddha','w3','depth_changed','The abbreviation is now the second member of the same parent. The parent itself is not either original atom.')],
+('tibetan',1):[item('khams gsum → all three realms','w10','retained','Only the complete three-realm unit is the claimed correspondence.'),item('thams cad owns the separate all before afflictions','w16','retained','This explicitly stated contrast identifies the first thams cad/all; the second thams cad is not the cited occurrence.')],
+('tibetan',2):[item('phra rgyas → widespread mental afflictions','w15','retained','The full technical compound is retained; no phra member is minted.')],
+('tibetan',3):[item('ma spangs par → fail to eliminate','w17','retained','The complete first negative verb phrase remains d3.'),item('ma rnyed pa → failed to achieve','w30','retained','The complete second negative verb phrase remains d3.')],
+('tibetan',4):[item("'dzin pa'i rtog pa → tendency to conceive",'w25','retained','The complete conception phrase remains d3.'),item("'dzin stangs → way it holds its object",'w27','tightened_and_depth_changed','The final whole lexical unit owns holds its object at d5; the wider way-it recast is omitted.')],
+('tibetan',5):[item("dngos 'gal → directly incompatible",'w28','retained','This unique opposed-apprehension term is retained.')],
+('tibetan',6):[item("first thal; gyur predication in rtsa bar gyur; du zhugs pa'i; other unselected endings",'','omission_retained','Only the distributed predicative/framing parts remain omitted. Lexical rtsa bar/root survives independently as w20 and is not a mapping for the omitted gyur predication.')],
+('tibetan',7):[item('yongs su shes pa → comprehensive knowledge','w36','retained','The cognition is banked once.'),item('they realize repetition','','omission_retained','The later English repetition is unpaired.')],
+('english',0):[item('ma spangs par → fail to eliminate','w17','retained','First complete negative verb phrase retained.'),item("ma rnyed pa'i → failed to achieve",'w30','source_boundary_tightened','Bound genitive is removed; the negated attainment phrase remains d3.')],
+('english',1):[item("'dzin pa'i rtog pa → tendency to conceive",'w25','retained','One complete conception phrase.')],
+('english',2):[item("'dzin stangs → holds its object",'w27','retained','The exact HGM-supported whole expression remains d5.')],
+('english',3):[item('yongs su shes pa → comprehensive knowledge','w36','retained','One cognition occurrence is banked; no realize duplicate.')],
+('english',4):[item('first thal question framing','','omission_retained','No final span represents the supplied-participant rhetorical frame.')],
+('english',5):[item("du zhugs pa'i; gyur pa'i",'','omission_retained','The distributed constructional contributions remain unpaired.')],
+('english',6):[item('final dang','','omission_retained','Final dang is unpaired; w26 is the earlier dang and is unrelated to this omission.'),item("bral ba'i → lack",'w37','source_boundary_tightened','The explicitly stated retained lack correspondence survives without bound genitive.')],
+('english',7):[item('all before three realms','w10','omission_reversed','All is now retained inside the whole HGM-attested exhaustive three-realm unit; it is not independently aligned.'),item('type; supplied subjects/auxiliaries/articles; expanded afflictions; realize repetition','','omission_retained','These other specifically named expansions remain unpaired.')]
+}}
+for seq in [241,242,243]:
+ d=B/str(seq);h=d/'history/01-before-decision-mapping-correction';baseline=read(h/'original-decision-dispositions.json');tuples={x['id']:x for x in read(d/'final-ordered-tuples.json')['tibetan_order']}
+ assert set(M[seq])=={(x['angle'],x['original_index']) for x in baseline}
+ revised=[]
+ for old in baseline:
+  x=dict(old);key=(x['angle'],x['original_index']);components=M[seq][key]
+  ids=list(dict.fromkeys(i for component in components for i in component['final_span_ids']))
+  assert all(i in tuples for i in ids)
+  x['final_span_ids']=ids
+  x['mapping_definition']='Exact union of the final span IDs explicitly adjudicated in decision_components for this original structured decision. Includes retained, changed, or omission-reversed realizations only. Empty means no final correspondence survives that component. These are not token hits or context candidates. Components label summaries and replacement/tightening explicitly.'
+  x['decision_components']=components
+  x['final_span_correspondences']=[{k:tuples[i][k] for k in ['id','d','tib','eng','tib_range','eng_range']} for i in ids]
+  x['disposition']='Explicitly adjudicated per source unit in decision_components; original decision text and index remain unchanged.'
+  if seq==242 and key==('tibetan',1):x['separate_broader_alternative']={'final_span_id':'w1','relationship':'honorific-name parent; not a standalone mchog/Master correspondence'}
+  revised.append(x)
+ save(d/'original-decision-dispositions.json',revised)
+ assert len(revised)==len(baseline)
+ assert all(a['original_decision']==b['original_decision'] and a['original_index']==b['original_index'] and a['angle']==b['angle'] for a,b in zip(baseline,revised))
+ # The old report is preserved byte-for-byte. Add only the evidence correction disclosure.
+ text=(h/'report.md').read_text()
+ text += 'Structured-evidence correction: decision_components now gives explicit source-unit-to-final-span mappings; broad token-hit lists were removed. Prior records/freeze are in history/01-before-decision-mapping-correction/; decision-mapping-correction-proof.json proves candidate and tuple dispositions unchanged.\n'
+ (d/'report.md').write_text(text)
+ baseline_files=read(h/'baseline-file-hashes.json');before={pathlib.Path(x['path']).relative_to(d):x for x in baseline_files}
+ invariants=['spec.json','body.html','original-proposal-dispositions.json','final-ordered-tuples.json','span-decisions.json','final-proof.json','errata.json','omissions.json']
+ equality=[]
+ for name in invariants:
+  p=d/name;now=info(p);old=before[pathlib.Path(name)];assert now['sha256']==old['sha256'] and now['bytes']==old['bytes'];equality.append({'file':name,'before':old,'after':now,'byte_identical':True})
+ original_dispositions=read(d/'original-proposal-dispositions.json')
+ proof={'status':'PASS','scope':'Structured decision evidence only; no candidate semantic or generator-input changes.','preserved_history':str(h),'mapping_method':'Hand-adjudicated explicit source-unit mappings; no token matching.','original_structured_decisions':len(baseline),'original_decision_texts_and_indices_unchanged':True,'original_tuple_disposition_count':len(original_dispositions),'unchanged_candidate_and_tuple_records':equality,'changed_records':[{'file':name,'before':before[pathlib.Path(name)],'after':info(d/name)} for name in ['original-decision-dispositions.json','report.md']],'canonical_proof':'Previously saved EXIT=0 proof remains attached to identical spec/body bytes. No generator rerun required or claimed for an evidence-only correction.'}
+ save(d/'decision-mapping-correction-proof.json',proof)
+ evidence=read(h/'evidence-refs.json');evidence['explicit_decision_mappings']=info(d/'original-decision-dispositions.json');evidence['decision_mapping_correction_proof']=info(d/'decision-mapping-correction-proof.json');save(d/'evidence-refs.json',evidence)
+ # Only declared existing files may change; all newly added history/proof/script files are scoped here.
+ allowed={'original-decision-dispositions.json','report.md','evidence-refs.json','SHA256SUMS'}
+ for rel,old in before.items():
+  if str(rel) not in allowed:assert info(d/rel)['sha256']==old['sha256'],str(rel)
+ files=sorted(p for p in d.rglob('*') if p.is_file() and p!=d/'SHA256SUMS')
+ (d/'SHA256SUMS').write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(d)}\n' for p in files))
+ print(seq,'structured decisions',len(revised),'tuple dispositions',len(original_dispositions),'UNCHANGED spec',info(d/'spec.json')['sha256'],'body',info(d/'body.html')['sha256'])
