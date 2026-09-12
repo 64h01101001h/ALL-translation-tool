@@ -25998,6 +25998,35 @@ public:
                       "instruction");
             }
         }
+        // ---- the apparatus banks are found by the resolved root ----------
+        // dataFile() used to count five "../" out of the bundle and then fall
+        // back to the CURRENT WORKING DIRECTORY, so whether the apparatus
+        // search worked depended on where the app was launched from.
+        {
+            const QString keepRoot = dataRoot_;
+            const QString tmp = QDir::temp().filePath("all_datafile_probe");
+            QDir(tmp).removeRecursively();
+            QDir().mkpath(tmp + "/data/extracted");
+            dataRoot_ = tmp;
+            const QString want = tmp + "/data/extracted/probe.json";
+            {
+                QFile f(want);
+                check(f.open(QIODevice::WriteOnly) && f.write("[]") == 2,
+                      "datafile: the probe bank was written under the root");
+            }
+            check(dataFile("extracted/probe.json") == want,
+                  "datafile: a bank under the resolved data root is found "
+                  "there, not by walking out of the bundle");
+            // and a bank that does not exist names where it SHOULD be, rather
+            // than a path built from wherever the process started
+            const QString missing = dataFile("extracted/absent.json");
+            check(missing.startsWith(tmp),
+                  "datafile: a missing bank reports the path under the root, "
+                  "so the message points somewhere a reader can act on");
+            QDir(tmp).removeRecursively();
+            dataRoot_ = keepRoot;
+        }
+
         // ---- an action's confirmation survives long enough to read -------
         // The terminology chip and the File/insert confirmations share one
         // label, and the chip runs off a 1500 ms timer — so every
@@ -27213,11 +27242,32 @@ private:
         loadCandidates();
     }
 
+    // The apparatus, candidate and catalog files, found through the data
+    // root the application already resolved — not by counting "../" out of
+    // the bundle and then falling back to the CURRENT WORKING DIRECTORY.
+    //
+    // The old version did both: five levels up from applicationDirPath (tied
+    // to one bundle layout) and then QDir::currentPath(), so whether "search
+    // the shared apparatus" worked at all depended on where the app happened
+    // to be launched from. Launched from Finder it answers one way, from a
+    // terminal in the repo another. (Draft workspace audit, 2026-09-11.)
+    //
+    // The legacy locations are still tried, last, so an existing install that
+    // has its banks in the old place keeps finding them.
     QString dataFile(const char* name) const {
-        QString p = QCoreApplication::applicationDirPath() +
-                    "/../../../../../data/" + name;
-        if (QFile::exists(p)) return p;
-        return QDir::currentPath() + "/data/" + name;
+        const QString primary = dataRoot_.isEmpty()
+                                    ? QString()
+                                    : dataRoot_ + "/data/" + name;
+        if (!primary.isEmpty() && QFile::exists(primary)) return primary;
+        const QString legacyBundle = QCoreApplication::applicationDirPath() +
+                                     "/../../../../../data/" + name;
+        if (QFile::exists(legacyBundle)) return legacyBundle;
+        const QString legacyCwd = QDir::currentPath() + "/data/" + name;
+        if (QFile::exists(legacyCwd)) return legacyCwd;
+        // Nothing found. Return the path we WANT it at, so a failure names
+        // the place a reader should go looking rather than a path built out
+        // of wherever the process happened to start.
+        return primary.isEmpty() ? legacyCwd : primary;
     }
 
     void searchNotesBank() {
