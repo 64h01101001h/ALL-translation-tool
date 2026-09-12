@@ -25193,11 +25193,13 @@ public:
         tl->addWidget(clauseView_, 1);
         anchors_ = new QTextBrowser;
         anchors_->setOpenLinks(false);
-        anchors_->setHtml(
-            "<i style='color:#6F6F6F'>The Evidence Ribbon \u2014 load a source, "
-            "then click or arrow into any clause. Its anchors, scaffold, "
-            "exact parallels and quotation status appear here on their "
-            "own, with no further clicks.</i>");
+        anchors_->setHtml(anchorsIdleHtml(false));
+        // Belt and braces. The rich two-state text above is what a reader
+        // normally sees, but a placeholder cannot be destroyed by a clear()
+        // — and a clear() is exactly what blanked this pane before. If any
+        // future path empties the document, the box still says what it is.
+        anchors_->setPlaceholderText(
+            "Evidence Ribbon — load a source, then click a clause.");
         tl->addWidget(anchors_, 1);
         split->addWidget(top);
 
@@ -25359,6 +25361,15 @@ public:
         bl->addLayout(draftCol, 1);
         report_ = new QTextBrowser;
         report_->setOpenLinks(false);
+        // This pane had NO placeholder at all: from launch it was a blank
+        // box with nothing naming it, and a reader could not tell whether it
+        // was broken, loading, or waiting for them. It is shared by several
+        // tools, which is exactly why it has to say so — an unlabelled shared
+        // output pane is unreadable by construction.
+        report_->setHtml(reportIdleHtml());
+        report_->setPlaceholderText(
+            "Apparatus & analysis — output from the STRUCTURE and EVIDENCE "
+            "tools on the ribbon lands here.");
         QObject::connect(report_, &QTextBrowser::anchorClicked,
                          [this](const QUrl& u) {
                              const QString s = u.toString();
@@ -25559,6 +25570,50 @@ public:
         return saveDraft();
     }
 
+    // The right-hand panes are EMPTY most of the time, and empty is a state
+    // that has to speak. Adam, 2026-09-11, on finding both blank with a source
+    // loaded: "it doesn't make any sense." He was right — one had its
+    // explanation deleted the moment he loaded a source, and the other never
+    // had one.
+    static QString anchorsIdleHtml(bool sourceLoaded) {
+        const QString head =
+            "<div style='color:#9A7A33;font-size:11px;letter-spacing:2px;"
+            "font-weight:600'>EVIDENCE RIBBON</div>";
+        return head +
+               (sourceLoaded
+                    ? "<div style='color:#6F6F6F;padding-top:6px'>"
+                      "<b>Click any clause in the middle column.</b><br>"
+                      "Its anchors, scaffold, exact parallels and quotation "
+                      "status appear here on their own, with no further "
+                      "clicks.</div>"
+                    : "<div style='color:#6F6F6F;padding-top:6px'>Load a "
+                      "source, then click or arrow into any clause. Its "
+                      "anchors, scaffold, exact parallels and quotation "
+                      "status appear here on their own.</div>");
+    }
+
+    // One pane, several tools. Naming them is the whole point: this is the
+    // only place their output ever lands, so a reader who has run nothing
+    // needs to know what would put something here.
+    static QString reportIdleHtml() {
+        return "<div style='color:#9A7A33;font-size:11px;letter-spacing:2px;"
+               "font-weight:600'>APPARATUS &amp; ANALYSIS</div>"
+               "<div style='color:#6F6F6F;padding-top:6px'>Output from the "
+               "tools on the ribbon above lands here:</div>"
+               "<ul style='color:#6F6F6F;margin-top:4px'>"
+               "<li><b>STRUCTURE</b> \u2014 the sa bcad outline, canonical "
+               "bam po / le'u markers, verse meter</li>"
+               "<li><b>EVIDENCE</b> \u2014 the terminology check against "
+               "Geshe Michael Roach's own equivalents, and the corpus "
+               "concordance for a term you click</li>"
+               "<li>the shared apparatus \u2014 search footnotes and "
+               "bibliography in the box below, then click a result to "
+               "insert it</li></ul>"
+               "<div style='color:#6F6F6F;font-size:11px'>Nothing has been "
+               "run yet, so there is nothing to show. This pane never "
+               "invents content.</div>";
+    }
+
     int selfTest(QStringList& log) {
         int fails = 0;
         auto check = [&](bool ok, const char* what) {
@@ -25570,6 +25625,39 @@ public:
         demo("/ /blo sbyong snyan brgyud chen mo'i 'khrid yig "
              "/sems can thams cad bde ba dang ldan par gyur cig /");
         check(!clauses_.empty(), "clauses split");
+        // ---- an empty pane must still speak (Adam, 2026-09-11) -----------
+        // He opened the Draft workspace with a source loaded and found the two
+        // right-hand panes completely blank: "it doesn't make any sense."
+        // Both were real. anchors_ carried an explanation that load() DELETED
+        // with clear(), so the pane went silent the moment he did the right
+        // thing; report_ never had one at all and was blank from launch.
+        // A blank box tells a reader nothing about whether it is broken,
+        // loading, or waiting for them.
+        {
+            check(!report_->toPlainText().trimmed().isEmpty(),
+                  "the apparatus pane names itself before anything is run");
+            check(report_->toPlainText().contains("STRUCTURE") &&
+                      report_->toPlainText().contains("EVIDENCE"),
+                  "and names WHICH tools would put something in it");
+            // The sequence, step by step. demo() above loads AND selects a
+            // clause, so it cannot show the in-between state — which is
+            // exactly the state Adam was looking at.
+            source_->setPlainText(
+                "/ /sems can thams cad bde ba dang ldan par gyur cig /");
+            load();
+            const QString loaded = anchors_->toPlainText();
+            check(!loaded.trimmed().isEmpty(),
+                  "loading a source does not blank the evidence pane");
+            check(loaded.contains("Click any clause"),
+                  "with a source loaded and no clause chosen, the pane asks "
+                  "for the next step rather than repeating the first");
+            if (!clauses_.empty()) {
+                showAnchors(0);
+                check(!anchors_->toPlainText().contains("Click any clause"),
+                      "and once a clause IS chosen it shows evidence, not the "
+                      "instruction");
+            }
+        }
         const QString a = anchors_->toHtml().toLower();
         check(a.contains("d9efda") || a.contains("d8e9f7") ||
                   a.contains("fae8d8") || a.contains("f7e3ea"),
@@ -25745,7 +25833,11 @@ private:
                      .arg(text.toHtmlEscaped());
         }
         clauseView_->setHtml(h.isEmpty() ? "<i>no clauses</i>" : h);
-        anchors_->clear();
+        // NOT clear(). Loading a source used to blank this pane completely,
+        // destroying the one line that said what it was for — so the moment a
+        // reader did the right thing, the pane stopped explaining itself.
+        // Now it advances to the next instruction instead.
+        anchors_->setHtml(anchorsIdleHtml(true));
         lastClause_ = -1;
     }
 
@@ -26786,8 +26878,32 @@ public:
             return QString::fromStdString(
                 allcore::composeBibliographyEntry(assemble()));
         };
+        // The guards below used to read `if (entry == ".")`. The composer
+        // never returns "." — an all-empty form composes to ".  ." and a
+        // part-filled one to "(Co-ne Bla-ma) Grags-pa.  ." — so the guard was
+        // dead and the junk went straight into the draft under a banner
+        // claiming it conformed to the published house format. Adam found it
+        // sitting in his own draft box on 2026-09-11.
+        //
+        // Test for CONTENT, not for a magic string: strip the punctuation the
+        // composer emits as scaffolding and see whether anything is left.
+        // The buttons are built further down, so the enabling runs through a
+        // hook the dialog fills in once they exist.
+        auto syncBibButtons =
+            std::make_shared<std::function<void(bool)>>();
+        auto bibIsEmpty = [](const QString& entry) {
+            QString bare = entry;
+            bare.remove(QRegularExpression("[.,;:()\\[\\]\\s]"));
+            return bare.isEmpty();
+        };
         auto refresh = [=, this] {
-            preview->setText(composedNow());
+            const QString now = composedNow();
+            preview->setText(now);
+            // A control that cannot produce a valid entry says so by being
+            // unavailable, rather than by accepting the press and inserting
+            // scaffolding. No dialog: an unavailable button with a reason is
+            // quieter and does not add a modal site.
+            if (*syncBibButtons) (*syncBibButtons)(bibIsEmpty(now));
             const auto info = allcore::decodeAcipFilename(
                 ac->text().trimmed().toStdString() + ".ACT");
             const QString url = bdrcScanUrlChecked(info, root_);
@@ -26809,11 +26925,12 @@ public:
         auto* candB = buttons->addButton(
             "Save as candidate (pending GMR approval)",
             QDialogButtonBox::ActionRole);
-        QObject::connect(candB, &QPushButton::clicked, [this, assemble] {
+        QObject::connect(candB, &QPushButton::clicked,
+                         [this, assemble, bibIsEmpty] {
             const auto f = assemble();
             const QString entry = QString::fromStdString(
                 allcore::composeBibliographyEntry(f));
-            if (entry == ".") return;
+            if (bibIsEmpty(entry)) return;   // was `entry == "."` — dead
             QFile fj(dataFile("candidate_bib.json"));
             QJsonArray arr;
             if (fj.open(QIODevice::ReadOnly)) {
@@ -26846,11 +26963,27 @@ public:
                          &QDialog::accept);
         QObject::connect(buttons, &QDialogButtonBox::rejected, &dlg,
                          &QDialog::reject);
-        (void)insertB;
+        *syncBibButtons = [insertB, candB](bool empty) {
+            if (insertB) {
+                insertB->setEnabled(!empty);
+                insertB->setToolTip(
+                    empty ? "Nothing to insert yet \u2014 fill in at least a "
+                            "title."
+                          : "Insert this entry into the draft at the cursor.");
+            }
+            if (candB) {
+                candB->setEnabled(!empty);
+                candB->setToolTip(
+                    empty ? "Nothing to save yet \u2014 fill in at least a "
+                            "title."
+                          : "Queue this entry for Geshe Michael Roach's "
+                            "approval.");
+            }
+        };
         refresh();
         if (dlg.exec() != QDialog::Accepted) return;
         const QString entry = composedNow();
-        if (entry == ".") return;
+        if (bibIsEmpty(entry)) return;   // was `entry == "."`, which never fired
         draft_->textCursor().insertText(
             "[BIBLIOGRAPHY — NEW ENTRY, house format (STD-007 / "
             "DCC guide): " + entry + "]");
