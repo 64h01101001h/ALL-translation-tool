@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. Coverage 180/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. Coverage 183/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -355,3 +355,45 @@ hashes and navigation targets check. Both banks, the dictionary view, four CSV
 exports and the errata document were rebuilt. All 16 targeted CTest fidelity and
 constitution suites passed in 10.45 seconds. Rendering remains unverified;
 native/installed-phone verification remains at the earlier 171 checkpoint.
+
+
+### c5p61 · C05:181–183 — 2026-09-12 — Codex reconciliation/review
+
+Two independent proposal angles and separate reconciliation/semantic review
+approved 101 analyst spans (85 linked, 16 grammatical/fusion nulls), including
+52 d5/d7 pairs. Every tuple, null, source gap and repeated English occurrence
+was checked. Accepted spec and evidence are in `specs_c05/c5p61.json` and
+`reviews_c05/c5p61/`. Final actual generators exited 0 with empty stderr and
+exact bodies, including the corrected 182 spec/body hashes. No allowlist addition.
+
+An upheld overcapture narrowed 182 bsdums from bring the different sides to an
+agreement to agreement. Explicit participant wording stays unwrapped; greater
+depth would not cure the defect. The first mastery predicate retains its relative
+and past-perfect recast, with temporal na explicitly distributed into that
+construction and the former-life frame. Canon-holder and five-hundred compounds
+retain only defensible members. The shortened master title has a justified
+no-separate-numeral null. All repeated monks, women, turned/into pairs and final
+as were checked against actual positions. The old auto-aligned bsdums reference
+conflicts with glossary bsdums pa/agreement; the master was not changed.
+
+Both proposed 183 spelling corrections were refuted independently. SNYING RDZE
+is glossary-attested; intact snying rdzes/with compassion remains a phrase.
+DOD has a defensible wanting sense: the alternate DED reading and English driving
+do not prove a unique error. Driving and the unresolved rescue construction stay
+unpaired; a later causal pas is not forced onto an earlier occurrence. The
+identifiable anaphoric cattle/fate phrases remain phrase-level, not dictionary
+claims. No new erratum. The preceding E-185 citation was corrected to the exact
+committed commentary-local-witnesses.json path; its substance and confidence
+remain unchanged.
+
+Coverage 183/511; full bank 42,340 links (+104, including three sentence anchors),
+11,857 null exponents; evidence 6,799 headwords / 14,646 pairs. All 42,236 prior
+links, prior note/tree values, evidence citations and ACIP mappings are retained.
+All 21,101 prior CSV content records and citations survive. One older phonetic
+row for dge 'dun/gendun gains its previously empty ACIP field from the newly
+cited d5 C05:182 entry; that enrichment was traced to the exact new source link.
+Other old CSV lexical fields are unchanged. Both banks, dictionary HTML and all
+four CSVs were regenerated. All 16 targeted CTest fidelity/constitution suites
+passed in 10.22 seconds; master/corpus hashes and navigation targets check.
+Rendering and native consumption of the newer bank remain unverified; the earlier
+native/installed-phone checkpoint remains 171. Next: 184–186, source snapshot only.
