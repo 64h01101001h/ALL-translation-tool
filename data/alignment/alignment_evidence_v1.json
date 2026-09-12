@@ -4,7 +4,7 @@
   "tier": "TENTATIVE (machine-matched, unreviewed)",
   "generator": "build_alignment_layer.py; source analyses credited on pages and in campaign ledgers",
   "date": "2026-09-12",
-  "source_pages": "banked pages, 5 course(s) (sha256 7201230de44b8d6d)",
+  "source_pages": "banked pages, 5 course(s) (sha256 2a9f4958ad699f90)",
   "source_corpus": "hgm_spine_v27_2 corpus_segments C01+C02+C03+C04+C05",
   "rule": "English is HGM's corpus text verbatim, machine-MATCHED never composed; never enters hgm_gloss",
   "transliteration": "ACIP is the source of record and the join key (acip / acip_index); wylie is the derived display form, proven equal to acip_to_ewts(acip) on 8961/8961 segments of C01-C18 (Adam 2026-08-28)",
@@ -582,9 +582,12 @@
      "C05:175",
      "C05:184",
      "C05:185",
-     "C05:186"
+     "C05:186",
+     "C05:187",
+     "C05:188",
+     "C05:189"
     ],
-    "n": 12,
+    "n": 15,
     "acip": "'BRAS BU"
    },
    {
@@ -596,9 +599,10 @@
      "C05:148",
      "C05:160",
      "C05:178",
-     "C05:179"
+     "C05:179",
+     "C05:189"
     ],
-    "n": 7,
+    "n": 8,
     "acip": "'BRAS BU"
    },
    {
@@ -6957,6 +6961,15 @@
     "acip": "'GYUR"
    },
    {
+    "eng": "lead",
+    "refs": [
+     "C05:188",
+     "C05:189"
+    ],
+    "n": 2,
+    "acip": "'GYUR"
+   },
+   {
     "eng": "would",
     "refs": [
      "C04:72",
@@ -7017,6 +7030,14 @@
     "eng": "escalate",
     "refs": [
      "C03:473"
+    ],
+    "n": 1,
+    "acip": "'GYUR"
+   },
+   {
+    "eng": "leads",
+    "refs": [
+     "C05:187"
     ],
     "n": 1,
     "acip": "'GYUR"
@@ -10689,7 +10710,17 @@
     "eng": "quick",
     "refs": [
      "C05:185",
-     "C05:186"
+     "C05:186",
+     "C05:188"
+    ],
+    "n": 3,
+    "acip": "'PHRAL DU"
+   },
+   {
+    "eng": "speedy",
+    "refs": [
+     "C05:186",
+     "C05:189"
     ],
     "n": 2,
     "acip": "'PHRAL DU"
@@ -10698,14 +10729,6 @@
     "eng": "in the short term",
     "refs": [
      "C03:590"
-    ],
-    "n": 1,
-    "acip": "'PHRAL DU"
-   },
-   {
-    "eng": "speedy",
-    "refs": [
-     "C05:186"
     ],
     "n": 1,
     "acip": "'PHRAL DU"
@@ -27473,6 +27496,14 @@
     "acip": "BYAS"
    },
    {
+    "eng": "acts",
+    "refs": [
+     "C05:188"
+    ],
+    "n": 1,
+    "acip": "BYAS"
+   },
+   {
     "eng": "become",
     "refs": [
      "C01:175"
@@ -27508,6 +27539,14 @@
     "eng": "doing",
     "refs": [
      "C03:416"
+    ],
+    "n": 1,
+    "acip": "BYAS"
+   },
+   {
+    "eng": "done",
+    "refs": [
+     "C05:187"
     ],
     "n": 1,
     "acip": "BYAS"
@@ -27572,6 +27611,14 @@
     "eng": "perform",
     "refs": [
      "C01:101"
+    ],
+    "n": 1,
+    "acip": "BYAS"
+   },
+   {
+    "eng": "performed",
+    "refs": [
+     "C05:189"
     ],
     "n": 1,
     "acip": "BYAS"
@@ -41778,6 +41825,14 @@
     "acip": "DGRA BCOM PA"
    },
    {
+    "eng": "destroying the enemy",
+    "refs": [
+     "C05:188"
+    ],
+    "n": 1,
+    "acip": "DGRA BCOM PA"
+   },
+   {
     "eng": "foe destroyers",
     "refs": [
      "C03:325"
@@ -42825,6 +42880,14 @@
      "C05:97"
     ],
     "n": 2,
+    "acip": "DNGOS"
+   },
+   {
+    "eng": "actual presentation",
+    "refs": [
+     "C05:189"
+    ],
+    "n": 1,
     "acip": "DNGOS"
    },
    {
@@ -45940,6 +46003,16 @@
    }
   ],
   "dri ma med pa": [
+   {
+    "eng": "unstained",
+    "refs": [
+     "C05:187",
+     "C05:188",
+     "C05:189"
+    ],
+    "n": 3,
+    "acip": "DRI MA MED PA"
+   },
    {
     "eng": "immaculate",
     "refs": [
@@ -51046,6 +51119,26 @@
     "acip": "GNAS GSUM PA"
    }
   ],
+  "gnas gyur": [
+   {
+    "eng": "state",
+    "refs": [
+     "C05:187",
+     "C05:188",
+     "C05:189"
+    ],
+    "n": 3,
+    "acip": "GNAS GYUR"
+   },
+   {
+    "eng": "condition",
+    "refs": [
+     "C05:189"
+    ],
+    "n": 1,
+    "acip": "GNAS GYUR"
+   }
+  ],
   "gnas khang": [
    {
     "eng": "the room",
@@ -51450,6 +51543,17 @@
   ],
   "gnod": [
    {
+    "eng": "harm",
+    "refs": [
+     "C05:185",
+     "C05:186",
+     "C05:187",
+     "C05:189"
+    ],
+    "n": 4,
+    "acip": "GNOD"
+   },
+   {
     "eng": "hurt",
     "refs": [
      "C01:119",
@@ -51470,12 +51574,11 @@
     "acip": "GNOD"
    },
    {
-    "eng": "harm",
+    "eng": "harmful",
     "refs": [
-     "C05:185",
-     "C05:186"
+     "C05:188"
     ],
-    "n": 2,
+    "n": 1,
     "acip": "GNOD"
    },
    {
@@ -54437,11 +54540,22 @@
   ],
   "gsar pa": [
    {
+    "eng": "for the first time",
+    "refs": [
+     "C05:187",
+     "C05:188",
+     "C05:189"
+    ],
+    "n": 3,
+    "acip": "GSAR PA"
+   },
+   {
     "eng": "new",
     "refs": [
-     "C01:378"
+     "C01:378",
+     "C05:189"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "GSAR PA"
    }
   ],
@@ -55313,9 +55427,10 @@
      "C05:54",
      "C05:153",
      "C05:158",
-     "C05:160"
+     "C05:160",
+     "C05:189"
     ],
-    "n": 23,
+    "n": 24,
     "acip": "GSUM PA"
    },
    {
@@ -65500,9 +65615,12 @@
    {
     "eng": "come out",
     "refs": [
-     "C05:186"
+     "C05:186",
+     "C05:187",
+     "C05:188",
+     "C05:189"
     ],
-    "n": 1,
+    "n": 4,
     "acip": "LANGS"
    }
   ],
@@ -72206,9 +72324,12 @@
     "eng": "just",
     "refs": [
      "C04:164",
-     "C05:186"
+     "C05:186",
+     "C05:187",
+     "C05:188",
+     "C05:189"
     ],
-    "n": 2,
+    "n": 5,
     "acip": "MA THAG PA"
    },
    {
@@ -81100,9 +81221,10 @@
      "C04:183",
      "C04:185",
      "C05:49",
-     "C05:51"
+     "C05:51",
+     "C05:187"
     ],
-    "n": 4,
+    "n": 5,
     "acip": "MTHONG LAM"
    }
   ],
@@ -81131,6 +81253,22 @@
     "eng": "eliminated by the path of seeing",
     "refs": [
      "C05:135"
+    ],
+    "n": 1,
+    "acip": "MTHONG SPANG"
+   },
+   {
+    "eng": "object eliminated by the path of seeing",
+    "refs": [
+     "C05:187"
+    ],
+    "n": 1,
+    "acip": "MTHONG SPANG"
+   },
+   {
+    "eng": "objects eliminated by the path of seeing",
+    "refs": [
+     "C05:189"
     ],
     "n": 1,
     "acip": "MTHONG SPANG"
@@ -82261,9 +82399,10 @@
      "C05:173",
      "C05:174",
      "C05:185",
-     "C05:186"
+     "C05:186",
+     "C05:188"
     ],
-    "n": 12,
+    "n": 13,
     "acip": "MYONG"
    },
    {
@@ -88408,6 +88547,17 @@
   ],
   "phan": [
    {
+    "eng": "Help",
+    "refs": [
+     "C05:185",
+     "C05:186",
+     "C05:187",
+     "C05:189"
+    ],
+    "n": 4,
+    "acip": "PHAN"
+   },
+   {
     "eng": "help",
     "refs": [
      "C01:119",
@@ -88418,21 +88568,20 @@
     "acip": "PHAN"
    },
    {
-    "eng": "Help",
-    "refs": [
-     "C05:185",
-     "C05:186"
-    ],
-    "n": 2,
-    "acip": "PHAN"
-   },
-   {
     "eng": "helps",
     "refs": [
      "C04:36",
      "C04:88"
     ],
     "n": 2,
+    "acip": "PHAN"
+   },
+   {
+    "eng": "beneficial",
+    "refs": [
+     "C05:188"
+    ],
+    "n": 1,
     "acip": "PHAN"
    },
    {
@@ -91120,6 +91269,16 @@
     "acip": "PHYIR 'CHOS PAR BYED PA'O"
    }
   ],
+  "phyir 'ong": [
+   {
+    "eng": "return",
+    "refs": [
+     "C05:189"
+    ],
+    "n": 1,
+    "acip": "PHYIR 'ONG"
+   }
+  ],
   "phyir du": [
    {
     "eng": "for",
@@ -91145,6 +91304,16 @@
     ],
     "n": 1,
     "acip": "PHYIR DU"
+   }
+  ],
+  "phyir mi 'ong": [
+   {
+    "eng": "not return",
+    "refs": [
+     "C05:189"
+    ],
+    "n": 1,
+    "acip": "PHYIR MI 'ONG"
    }
   ],
   "phyir na": [
@@ -102152,6 +102321,16 @@
     "acip": "RNYING MA"
    }
   ],
+  "rnyings": [
+   {
+    "eng": "old",
+    "refs": [
+     "C05:189"
+    ],
+    "n": 1,
+    "acip": "RNYINGS"
+   }
+  ],
   "ro": [
    {
     "eng": "the body",
@@ -109335,6 +109514,24 @@
     ],
     "n": 1,
     "acip": "SGOM RIN"
+   }
+  ],
+  "sgom spang": [
+   {
+    "eng": "object eliminated by the path of habituation",
+    "refs": [
+     "C05:188"
+    ],
+    "n": 1,
+    "acip": "SGOM SPANG"
+   },
+   {
+    "eng": "objects stopped by the path of habituation",
+    "refs": [
+     "C05:189"
+    ],
+    "n": 1,
+    "acip": "SGOM SPANG"
    }
   ],
   "sgom spangs": [
@@ -119691,6 +119888,15 @@
     "acip": "SPANGS"
    },
    {
+    "eng": "gotten rid of",
+    "refs": [
+     "C05:187",
+     "C05:188"
+    ],
+    "n": 2,
+    "acip": "SPANGS"
+   },
+   {
     "eng": "Abandon",
     "refs": [
      "C01:180"
@@ -119715,6 +119921,14 @@
     "acip": "SPANGS"
    },
    {
+    "eng": "free of",
+    "refs": [
+     "C05:189"
+    ],
+    "n": 1,
+    "acip": "SPANGS"
+   },
+   {
     "eng": "gave it up",
     "refs": [
      "C01:189"
@@ -119734,6 +119948,14 @@
     "eng": "relinquished",
     "refs": [
      "C01:189"
+    ],
+    "n": 1,
+    "acip": "SPANGS"
+   },
+   {
+    "eng": "rid",
+    "refs": [
+     "C05:189"
     ],
     "n": 1,
     "acip": "SPANGS"
@@ -124810,6 +125032,24 @@
     "acip": "THOB"
    },
    {
+    "eng": "achieved",
+    "refs": [
+     "C05:91",
+     "C05:188"
+    ],
+    "n": 2,
+    "acip": "THOB"
+   },
+   {
+    "eng": "attained",
+    "refs": [
+     "C03:404",
+     "C05:187"
+    ],
+    "n": 2,
+    "acip": "THOB"
+   },
+   {
     "eng": "obtain",
     "refs": [
      "C03:605",
@@ -124827,25 +125067,9 @@
     "acip": "THOB"
    },
    {
-    "eng": "achieved",
-    "refs": [
-     "C05:91"
-    ],
-    "n": 1,
-    "acip": "THOB"
-   },
-   {
     "eng": "achieving",
     "refs": [
      "C01:234"
-    ],
-    "n": 1,
-    "acip": "THOB"
-   },
-   {
-    "eng": "attained",
-    "refs": [
-     "C03:404"
     ],
     "n": 1,
     "acip": "THOB"
@@ -139310,6 +139534,7 @@
   "GNAS CHA": "gnas cha",
   "GNAS DRUG PA": "gnas drug pa",
   "GNAS GSUM PA": "gnas gsum pa",
+  "GNAS GYUR": "gnas gyur",
   "GNAS KHANG": "gnas khang",
   "GNAS LUGS": "gnas lugs",
   "GNAS MA BU PA": "gnas ma bu pa",
@@ -141370,7 +141595,9 @@
   "PHYIR": "phyir",
   "PHYIR 'BRANG BA": "phyir 'brang ba",
   "PHYIR 'CHOS PAR BYED PA'O": "phyir 'chos par byed pa'o",
+  "PHYIR 'ONG": "phyir 'ong",
   "PHYIR DU": "phyir du",
+  "PHYIR MI 'ONG": "phyir mi 'ong",
   "PHYIR NA": "phyir na",
   "PHYIR SKYES PA": "phyir skyes pa",
   "PHYIR ZHING": "phyir zhing",
@@ -141957,6 +142184,7 @@
   "RNYED SLA'I": "rnyed sla'i",
   "RNYING": "rnying",
   "RNYING MA": "rnying ma",
+  "RNYINGS": "rnyings",
   "RO": "ro",
   "RO LANGS": "ro langs",
   "RO RGYAB BSNYUNG BA": "ro rgyab bsnyung ba",
@@ -142285,6 +142513,7 @@
   "SGOM RIM BAR PA'I": "sgom rim bar pa'i",
   "SGOM RIM DANG PO": "sgom rim dang po",
   "SGOM RIN": "sgom rin",
+  "SGOM SPANG": "sgom spang",
   "SGOM SPANGS": "sgom spangs",
   "SGOM TSUL": "sgom tshul",
   "SGOR": "sgor",

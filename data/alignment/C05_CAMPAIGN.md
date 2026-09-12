@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. Coverage 186/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. Coverage 189/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -444,3 +444,54 @@ navigation targets check. The alignment spec now names the CSV artifacts and
 this regression. Rendered/native/device limits remain at the earlier checkpoint;
 no new device action or main integration occurred. Next: 187–189, already through
 independent semantic review but not yet banked at this entry.
+
+
+### c5p63 · C05:187–189 — 2026-09-12 — Codex reconciliation/review
+
+Two fresh independent proposal angles, separate reconciliation and skeptical
+semantic review approved 73 analyst spans (all linked, zero nulls), including
+55 d5 word pairs and four tighter d7 members. All six proposal bodies and three
+final individual bodies reproduce exactly; final review tuples and exact source
+ranges agree with the landed spec. Accepted spec: `specs_c05/c5p63.json`;
+source, glossary, skeptical errata evidence and generator proofs: `reviews_c05/c5p63/`.
+
+The seeing/habituation elimination-category compounds are glossary-attested;
+supplied undesirable is excluded. Emergence predicates, temporal just and
+ablative of are separately licensed at their precise occurrences. The 189
+nonreturner name and later predicate negation remain distinct. Complete negative
+attainment and the contextual mental-illness topic stay at phrase depth; no
+lexical illness gloss is invented for g-yengs. C16:768 repeats Tibetan/ACIP but
+has a different English suffix; the proposals' stronger identity claim was
+corrected in reconciliation and independently checked.
+
+Ruling: retain the occurrence-level 'gyur/lead(s) approvals here, alongside the
+conservative distributed omissions in 185/186 — both independent reviewers
+explicitly weighed the construction and glossary #2598, and neither omission
+asserts absent meaning. These are cited translation occurrences, not a universal
+causation definition. The cost of a wrong correspondence remains human review
+and reversible provisional-data correction, not modification of hgm_gloss.
+
+E-186 is LOW/PROBABLE 'BRAL DU→'PHRAL DU at 187. Its original text and quick remain
+unpaired, never corrected or nulled. The independent skeptic rechecked all five
+grounds: actual source, same-passage witnesses, 185 prior register entries, lexical
+sense and every numerical claim. The two SE filenames have identical bytes and
+read BRAL; SL reads PHRAL. Raw contexts, hashes and folio @125A are preserved in
+`reviews_c05/c5p63/commentary-local-witnesses.json`. Digital differences do not
+prove publication independence or local ingestion corruption. All 185 previous
+errata entries remain unchanged; the JSON and generated register are in sync.
+
+Coverage 189/511; full bank 42,514 links (+76 including three sentence anchors),
+11,864 null exponents, 1,525 notes, 11 trees. Evidence 6,812 headwords/14,696 pairs.
+All 42,438 previous links, notes/trees, evidence/ACIP mappings and 21,198 prior main
+CSV lexical records/citations survive unchanged, with no ACIP enrichment.
+Rebuilt both banks, HTML and all four CSVs: main 21,229, reverse 20,889,
+course/depth 22,539, changes 31 new rows versus bb77f01. Every course/depth row,
+metadata field and count matches actual main CSV refs; all 22,506 prior groups
+and occurrence counts survive.
+
+All 17 targeted fidelity/export/constitution suites passed in 10.51 seconds.
+Original master/corpus hashes, accepted body/spec hashes and navigation check.
+Independent fixed-commit reproduction and full-campaign read-only main preflight
+are pending the checkpoint review. No main integration or new native/device
+execution occurred; actual rendering remains unverified after the browser policy
+block. Next 190–192 has source/context snapshots only, no accepted proposals yet.

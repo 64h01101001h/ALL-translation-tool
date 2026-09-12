@@ -1,0 +1,29 @@
+[
+  {
+    "seq": 187,
+    "found": "'BRAL DU",
+    "refuted": false,
+    "reason": "Survives as LOW/PROBABLE spelling candidate: exact source quote; no established independent publication reproduces it; no duplicate/class; separated/free cannot coherently express the immediate result; corrected reading has contextual, glossary and distinct digital-reading support. This is not proof of publication independence or of a local ingest error.",
+    "parallel_witness": "C16:766 has identical Wylie, English and ACIP. SE05525M and SE5525M read 'BRAL DU and are byte-identical; SL05525N reads 'PHRAL DU. These local digital files have unestablished publication independence.",
+    "counts_rechecked": {
+      "found_C05_187_acip_occurrences": 1,
+      "found_C05_187_wylie_occurrences": 1,
+      "found_corpus_rows": 2,
+      "expected_construction_rows": 8,
+      "expected_construction_occurrences": 10,
+      "register_entries": 185,
+      "duplicate_matches": 0,
+      "local_files": 3,
+      "distinct_local_file_hashes": 2
+    },
+    "suggested_severity": "LOW",
+    "suggested_confidence": "PROBABLE",
+    "grounds": {
+      "a": "Actual C05:187 ACIP contains found once; Wylie contains lowercase reading once; English says quick result. sources.json.",
+      "b": "Full-corpus same-passage search yields only C05:187 and C16:766; all three fields identical. No P1/TCS same-passage result. Actual raw local witnesses re-read and exact contexts/hash/folio verified: two SE filenames are one byte-identical witness, SL is a different digital reading. Neither proves an independent publication.",
+      "c": "All 185 register entries checked for disputed and expected spelling plus C05:187/C16:766; zero matches. This lexical spelling is distinct from existing converter, heading, folio and footnote formatting classes.",
+      "d": "Both forms are words; glossary 'bral=separated from/free/avoid versus 'phral du=speedy/quick. In 'bras bu ... myong bar 'gyur, the former supplies no defensible immediate-result reading. The adjacent same construction and SL reading support the latter. Do not silently repair the Tibetan or align it to quick.",
+      "e": "Independently rerun all numerical claims: 2 disputed rows (C05:187/C16:766), 8 expected rows (C05:185,186,188,189/C16:764,765,767,768), 10 occurrences, 185 register entries, zero duplicate matches; three local files but two distinct hashes. C16:768 English actually differs after mental illness; saved exact suffix comparison."
+    }
+  }
+]
