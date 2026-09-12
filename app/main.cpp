@@ -25494,17 +25494,45 @@ public:
                                  const std::string wylie =
                                      s.mid(3).toStdString();
                                  std::string pron;
+                                 bool pronAttested = false;
                                  auto es = spine_.lookup(wylie);
-                                 if (!es.empty()) pron = es.front().pronunciation;
+                                 if (!es.empty()) {
+                                     pron = es.front().pronunciation;
+                                     pronAttested =
+                                         es.front().pronunciation_card_attested;
+                                 }
+                                 // The technical spelling is deterministic
+                                 // from the wylie, so it always goes in. The
+                                 // PRONUNCIATION does not: the entry records
+                                 // whether it is attested on Geshe Michael
+                                 // Roach's own course cards or produced by
+                                 // the engine, and this text lands in a draft
+                                 // that may be published. An engine reading
+                                 // inserted unmarked would be passed off as
+                                 // the established one — rule 3 (never guess)
+                                 // and rule 4 (provenance is sacred), in the
+                                 // one place where the two meet.
+                                 // (Draft workspace audit, 2026-09-11.)
+                                 const bool usePron =
+                                     !pron.empty() && pronAttested;
                                  QString ins =
-                                     (pron.empty()
-                                          ? ""
-                                          : QString::fromStdString(pron) + " ") +
+                                     (usePron
+                                          ? QString::fromStdString(pron) + " "
+                                          : QString()) +
                                      "(technical spelling: " +
                                      QString::fromStdString(
                                          allcore::hgmTechnicalSpelling(wylie)) +
                                      ")";
                                  insertIntoDraft(ins, "Technical spelling");
+                                 if (!pron.empty() && !pronAttested)
+                                     say(QString("Technical spelling inserted "
+                                                 "\u2014 the reading "
+                                                 "\u201c%1\u201d was NOT "
+                                                 "used: it is engine-derived, "
+                                                 "not attested on his cards. "
+                                                 "Add it yourself if you want "
+                                                 "it.")
+                                             .arg(QString::fromStdString(pron)));
                              } else if (s.startsWith("t:"))
                                  showConcordance(s.mid(2).toStdString());
                              else if (s == "back" && lastClause_ >= 0)
