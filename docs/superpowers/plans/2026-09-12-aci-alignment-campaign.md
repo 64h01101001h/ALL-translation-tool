@@ -290,3 +290,38 @@ material decisions and contrary evidence. No semantic stage, canonical generator
 or required fidelity test is removed; no measured overall speedup is claimed.
 Tasks 3/4 retain their explicit limits; hourly continuation remains ACTIVE through
 the authorized Tuesday 07:00 America/Denver cutoff.
+
+
+## Tenth continuation checkpoint — 2026-09-12
+
+Accepted C05 reaches249 in3a88d13 (audit supplement81dbbe4),885c766 and9aa617e:
+286 independently reviewed analyst spans plus nine anchors. Each page passed
+all17 targeted suites; every one of23,652 course/depth groups matches actual
+source references and metadata. Prior links, notes, trees, evidence, lexical
+keys, citations and ACIP metadata survive without enrichment. Source/master,
+hgm_gloss and canonical generator/export implementation remain unchanged.
+
+The 536 original proposal dispositions and286 final correspondences preserve
+technical units, exact occurrences and whole supported recasts. Three affirmative
+nulls are independently justified; distributed or uncertain content is omitted
+with reasons. No errata added,192 older entries retained, one exact sogs allowance.
+Shared-verse attribution remains unresolved. Corrections to structured mappings
+and reviewer narratives retain exact histories and unchanged candidate tuples.
+All source bytes, immutable Git pins and complete original evidence survive;
+whitespace-audit recovery and helper-quoting failures are explicitly recorded.
+
+Final fixed-head output reproduction, original-evidence/correction review,
+committed documentation and full read-only live-main applicability belong in
+sibling `campaign-artifacts/integration/continuation-through249-review.md`.
+Final approval requires that report to name the committed final HEAD and close
+all required checks; it is not inferred here. Main integration and newer native,
+device or rendering proof remain open. Next250–252 has clean baseline9aa617e,
+source/context, separate briefs and two independent proposal readers running.
+No reconciliation or acceptance is implied; resume their precise frozen state.
+
+Preparation, independent reading, reconciliation, review and integration overlap
+while preserving angle independence. Evidence checks now compare each distinct
+file once and retain all diagnostics. No semantic stage or required check is
+removed, and no numerical overall speedup is claimed. Tasks3/4 retain their
+explicit limits; hourly continuation remains ACTIVE to the authorized Tuesday
+07:00 America/Denver cutoff.

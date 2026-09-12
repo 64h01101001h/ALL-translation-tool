@@ -8,6 +8,38 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 249
+
+### Done
+
+- Added 241–243 in `3a88d13` with evidence-only audit supplement `81dbbe4`, 244–246 in `885c766`, and 247–249 in `9aa617e`. Nine segments contain 286 independently reviewed analyst spans and nine sentence anchors. C05 reaches **249/511**, pages1–83. Twenty-eight pages since165 contain 2,418 analyst spans and84 anchors. Separate independent proposal angles, reconciliation and fresh semantic review approve exact frozen files; all alignments remain PROVISIONAL machine attestations.
+- Preserved source-supported technical units, complete titles, paired root/commentary and substance compounds with tighter members. Repeated perceptions, karma and coordinated emotion predicates retain exact occurrence owners. Whole class-distribution and negative-reality recasts are d3. Supplied participants, uncertain/distributed syntax and explanatory repetitions remain unwrapped. Three nulls are independently justified: outer finite-predication fusion, active-agent case and a row-local list continuation. No source/master or hgm_gloss changes.
+- Added no errata; all192 earlier records remain unchanged. The basin, venered and attribution suspicions received full five-ground scrutiny. Shared verse and unequal citation extents leave the internal Chandrakirti/Dharmakirti attribution unresolved, without a unique correction. Digital matches/differences do not establish publication independence or ingestion lineage. Only one exact allowance, c5p83/s249w12, records la sogs pas/and the like with the actual sogs licensor.
+- Preserved all original proposals, failed/superseded attempts, full source/master evidence and immutable governing versions. The 241 reconciliation corrected42 broad structured decision mappings. The 244 reviewer corrected17 reason apostrophes; the 241 reviewer corrected one. Later247 evidence corrections remove a stale ni-ID reason and fix mtha' spelling and covered/with accounting. Actual accepted tuples and verdicts remain unchanged by these narrative fixes; the earlier248 note correction regenerated its body.
+
+### Verified
+
+- Each page passed **all17 targeted fidelity/export/constitution suites** (10.48s,11.78s,12.95s). All18 current original proposal bodies and nine final individual bodies replay exactly. Root read all536 original proposal dispositions and286 final correspondences. Every final tuple/range matches the canonical source and assembled page. Exact semantic copies number686/487/370; original mappings622/590/544 include49/19/53 immutable Git pins. Full sources and whole-source-hash-versus-extract distinctions survive.
+- Bank: **44,261 links,11,880 nulls,1,585 notes,11 trees**. Evidence: **7,042 heads/15,323 pairs**. CSV rows: main22,156; reverse21,816; course/depth23,652; changes48 against885c766. Every course/depth group matches actual source references and metadata. Prior links, notes, trees, evidence, lexical keys, citations and ACIP metadata remain; no old ACIP export field is enriched by this batch.
+- Whitespace audits preserve complete original bytes, including legacy encodings and canonical CSV CRLF. Page81's first UTF-8 audit parser failed and its data commit preceded the completed byte-safe proof, so81dbbe4 records the full recovered audit and history without changing generated data. Page82's initial reviewer-helper scope checker failed on Python quote delimiters; materialization ran before its repair, but exact17-change proof passed before registration/build/commit. Page83's audit initially rejected one blank EOF line in the exact frozen review; the final proof verifies that narrow condition. All failed attempts remain explicit. Later audits compare each file once and account for every diagnostic.
+- The independent whole-checkpoint record belongs in sibling `campaign-artifacts/integration/continuation-through249-review.md` and companion proofs. It covers seven exact outputs at every immutable data head, original evidence and corrections, the full course CSV oracle, committed documentation and the entire original-base-to-final read-only applicability check against live main. Changes seeds are72fe719 (same CSV as499e907),81dbbe4 and885c766. Read-only applicability is not main integration.
+
+### Claims to verify
+
+- Final approval requires that report to name the committed documentation HEAD and close all fixed-head reproductions, original-evidence audits, correction-scope checks and live-main read-only preflight. Root must read it completely and independently check its hashes and unchanged fixtures. The report remains authoritative for the final verdict; no approval is inferred from this preparatory handoff entry.
+- The citation suspicion remains unresolved. Exact source fidelity does not prove a unique philosophical interpretation, editorial correctness or human acceptance. Preserve lexical evidence tiers and shared-witness extent limits.
+
+### In flight
+
+- Next **c5p84,C05:250–252** has clean baseline9aa617e, exact source/context and separate role briefs. Independent Tibetan-first and English-first proposal readers are running. No reconciliation or semantic acceptance yet; resume their actual durable files rather than duplicate them. Root preparation is withheld from both independent readers. C13 remains blocked; no additional source files are needed.
+- Both proposal angles use Astra/high with separate contexts. Original evidence is shared by exact bytes with every path/hash mapped; shorter reports retain full material and contrary evidence. Independent reading, reconciliation, review and ordered integration overlap. All semantic stages, canonical generators and17 required suites remain. Stage timings are recorded; no numerical overall speedup is claimed.
+- Hourly continuation remains ACTIVE through2026-09-15T13:00Z, Tuesday07:00 America/Denver. Native/installed-phone proof remains through171; locked launch and rendered-page inspection remain unverified. Main integration remains open. This closes a bounded checkpoint only after the final independent verdict.
+
+### Do not
+
+- Do not compose GMR English, alter source wording, promote machine matches, treat uncertainty as no exponent or duplicate an English explanation into extra Tibetan occurrences. Preserve all original versions and actual producer identities.
+- Do not bypass browser policy, infer phone unlock, use paid APIs, send messages externally or overwrite unrelated main work. Build the layer then view once so the changes CSV uses the actual preceding export. Use byte-safe diagnostics and stop dependent commands on failure.
+
 ## 2026-09-12 — Codex — continuation checkpoint, C05 through 240
 
 ### Done
