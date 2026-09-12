@@ -8342,20 +8342,41 @@ public:
             const QString g1 = gdir + "/renametest.tsv", g2 = gdir + "/renamed_ok.tsv";
             QFile::remove(g1); QFile::remove(g2);
             check(writeFixture(g1, "sems\tmind\n"), "fixture: the probe glossary was written");
-            // F1: a version-history DIRECTORY sidecar travels with the text too
-            const QString vdir = dataRoot_ + "/library/versions";
-            QDir(vdir + "/renametest").removeRecursively(); QDir(vdir + "/renamed_ok").removeRecursively();
-            QDir().mkpath(vdir + "/renametest");
-            check(writeFixture(vdir + "/renametest/0001.ver", "v"), "fixture: a version-history folder for the probe was written");
+            // F1: a version-history DIRECTORY travels with the text too.
+            //
+            // The fixture plants it at the REAL key, not at the bare base
+            // name. This probe file lives in /tmp — OUTSIDE the data root —
+            // where allcore::versions::docKeyFor returns "<stem>~<path hash>",
+            // so a history filed under the bare stem is a history the product
+            // would never have written. The old mechanism renamed sidecars by
+            // base name and this gate planted them the same way, so the two
+            // agreed with each other and both were wrong about where the
+            // history actually lives (audit 2026-09-11).
+            const QString vFrom = docprops::versionsDir(dataRoot_, f1);
+            const QString vTo =
+                docprops::versionsDir(dataRoot_, tmpDir + "/renamed_ok.txt");
+            QDir(vFrom).removeRecursively(); QDir(vTo).removeRecursively();
+            QDir().mkpath(vFrom);
+            check(writeFixture(vFrom + "/0001.ver", "v"), "fixture: a version-history folder for the probe was written");
             docFile_ = f1;
             const bool ren = renameDocumentTo("renamed_ok");
             check(ren && docFile_ == tmpDir + "/renamed_ok.txt" && QFile::exists(docFile_) &&
                       !QFile::exists(f1) && QFile::exists(g2) && !QFile::exists(g1),
                   "Rename moves the file AND its glossary sidecar to the new base name");
-            check(QFileInfo(vdir + "/renamed_ok").isDir() && QFile::exists(vdir + "/renamed_ok/0001.ver") && !QFileInfo(vdir + "/renametest").exists(),
-                  "Rename carries the version-history folder to the new base name (F1)");
-            QDir(vdir + "/renamed_ok").removeRecursively();
+            check(QFileInfo(vTo).isDir() && QFile::exists(vTo + "/0001.ver") &&
+                      !QFileInfo(vFrom).exists(),
+                  "Rename carries the version history to the new key, and "
+                  "leaves nothing orphaned under the old one (F1)");
+            // and the MOVE below must carry it again: the name does not change,
+            // but outside the data root the key hashes the PATH, so it does
+            const QString vMoved =
+                docprops::versionsDir(dataRoot_, tmpDir + "/sub/renamed_ok.txt");
+            QDir(vMoved).removeRecursively();
             const bool mv = moveDocumentTo(tmpDir + "/sub");
+            check(mv && QFileInfo(vMoved).isDir() &&
+                      QFile::exists(vMoved + "/0001.ver"),
+                  "Move carries the version history too — the file name is "
+                  "unchanged, but outside the data root the key hashes the path");
             check(mv && docFile_ == tmpDir + "/sub/renamed_ok.txt" && QFile::exists(docFile_),
                   "Move relocates the file into the chosen folder and follows it");
             check(writeFixture(tmpDir + "/renamed_ok.txt", "x"), "fixture: the name-collision blocker was written");
@@ -9045,9 +9066,18 @@ public:
         if (docFile_.isEmpty()) return false;
         QString nw;
         if (!docprops::moveFileTo(this, docFile_, dir, nw)) return false;
+        // Same defect the Draft had: moving carried no history at all, so the
+        // Versions window reported "No versions" over work still on disk.
+        QString why;
+        const bool carried =
+            docprops::carryDocHistory(dataRoot_, docFile_, nw, &why);
         docFile_ = nw;
         refreshDocTitle();
-        if (hint_) hint_->setText("Moved to " + QDir::toNativeSeparators(dir));
+        if (hint_)
+            hint_->setText(carried
+                               ? "Moved to " + QDir::toNativeSeparators(dir)
+                               : "Moved to " + QDir::toNativeSeparators(dir) +
+                                     " \u2014 but " + why);
         return true;
     }
     bool moveDocument() {
@@ -9063,13 +9093,19 @@ public:
     bool renameDocumentTo(const QString& newName) {
         if (docFile_.isEmpty()) return false;
         QString nw;
+        // The per-text GLOSSARY is genuinely keyed by base name and stays
+        // here. Properties and versions move to carryDocHistory, which asks
+        // each scheme its own question — the base-name assumption is false for
+        // versions outside the data root.
         if (!docprops::renameFileTo(this, docFile_, newName, nw,
-                                    {dataRoot_ + "/library/glossaries", ".tsv",
-                                     dataRoot_ + "/library/properties", ".json",
-                                     dataRoot_ + "/library/versions", "/"}))   // F1: the history moves with the text
+                                    {dataRoot_ + "/library/glossaries", ".tsv"}))
             return false;
+        QString whyR;
+        const bool carriedR =
+            docprops::carryDocHistory(dataRoot_, docFile_, nw, &whyR);
         docFile_ = nw;
         refreshDocTitle();
+        if (!carriedR && hint_) hint_->setText("Renamed \u2014 but " + whyR);
         loadGlossary();
         if (hint_) hint_->setText("Renamed to " + QFileInfo(nw).fileName());
         return true;
@@ -25534,17 +25570,38 @@ public:
         const QString dir = safeGetExistingDirectory(this, "Move draft to folder");
         QString nw;
         if (dir.isEmpty() || !docprops::moveFileTo(this, draftPath_, dir, nw)) return false;
+        // The history follows the file. Moving used to leave it behind under
+        // the old key, and the Versions window then said "No versions" over
+        // work that was still on disk.
+        QString why;
+        const bool carried =
+            docprops::carryDocHistory(dataRoot_, draftPath_, nw, &why);
         draftPath_ = nw;
-        if (termLive_) termLive_->setText("Moved to " + QDir::toNativeSeparators(dir));
+        if (termLive_)
+            termLive_->setText(
+                carried ? "Moved to " + QDir::toNativeSeparators(dir)
+                        : "Moved to " + QDir::toNativeSeparators(dir) +
+                              " \u2014 but " + why);
         return true;
     }
     bool renameDraft() {
         if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Save the draft first; Rename works on a file."); return false; }
         const QString n = docprops::askName(this, "Rename draft", "New file name:", QFileInfo(draftPath_).fileName());
         QString nw;
-        if (n.isEmpty() || !docprops::renameFileTo(this, draftPath_, n, nw, {dataRoot_ + "/library/properties", ".json", dataRoot_ + "/library/versions", "/"})) return false;
+        // The sidecar pair list is NOT passed any more: it assumed both
+        // histories are keyed by the bare base name, which is true of the
+        // properties sidecar and false of the versions directory outside the
+        // data root. carryDocHistory asks each scheme its own question.
+        if (n.isEmpty() || !docprops::renameFileTo(this, draftPath_, n, nw, {})) return false;
+        QString why;
+        const bool carried =
+            docprops::carryDocHistory(dataRoot_, draftPath_, nw, &why);
         draftPath_ = nw;
-        if (termLive_) termLive_->setText("Renamed to " + QFileInfo(nw).fileName());
+        if (termLive_)
+            termLive_->setText(
+                carried ? "Renamed to " + QFileInfo(nw).fileName()
+                        : "Renamed to " + QFileInfo(nw).fileName() +
+                              " \u2014 but " + why);
         return true;
     }
     void showProperties(int tab = 0) {
@@ -25625,6 +25682,76 @@ public:
         demo("/ /blo sbyong snyan brgyud chen mo'i 'khrid yig "
              "/sems can thams cad bde ba dang ldan par gyur cig /");
         check(!clauses_.empty(), "clauses split");
+        // ---- history follows the document (audit 2026-09-11) -------------
+        // Renaming or moving a draft used to orphan its version history: the
+        // Versions window then says "No versions" over work that is still on
+        // disk under the old key. Run against a TEMP data root, not the
+        // translator's — the same audit found this suite writing real records
+        // into their library.
+        {
+            const QString tmp = QDir::tempPath() + "/all_carry_hist";
+            QDir(tmp).removeRecursively();
+            const QString docs = tmp + "/docs";
+            QDir().mkpath(docs);
+            auto plant = [&](const QString& path) {
+                const QString vd = docprops::versionsDir(tmp, path);
+                QDir().mkpath(vd);
+                QFile v(vd + "/v1.txt");
+                if (v.open(QIODevice::WriteOnly)) v.write("old version");
+                const QString sc = docprops::sidecarPath(tmp, path);
+                QDir().mkpath(QFileInfo(sc).path());
+                QFile p2(sc);
+                if (p2.open(QIODevice::WriteOnly)) p2.write("{\"revision\":7}");
+            };
+
+            // 1. RENAME, outside the data root — the normal case, because
+            //    Save As offers a bare "draft.txt" that lands in Documents.
+            const QString a = docs + "/alpha.txt";
+            const QString b = docs + "/beta.txt";
+            { QFile f(a); f.open(QIODevice::WriteOnly); f.write("x"); }
+            plant(a);
+            QFile::rename(a, b);
+            QString why;
+            const bool ok1 = docprops::carryDocHistory(tmp, a, b, &why);
+            check(ok1, "history: a rename carries cleanly");
+            check(QFile::exists(docprops::versionsDir(tmp, b) + "/v1.txt"),
+                  "history: the versions survive a RENAME under the new key");
+            check(!QDir(docprops::versionsDir(tmp, a)).exists(),
+                  "history: and nothing is left orphaned under the old one");
+            check(QFile::exists(docprops::sidecarPath(tmp, b)),
+                  "history: the properties sidecar follows the new name");
+
+            // 2. MOVE to another folder — the name is unchanged, but outside
+            //    the data root the key carries a hash of the PATH, so the key
+            //    changes anyway. This is the case moveDraft carried nothing
+            //    for at all.
+            const QString other = tmp + "/elsewhere";
+            QDir().mkpath(other);
+            const QString c = other + "/beta.txt";
+            QFile::rename(b, c);
+            const bool ok2 = docprops::carryDocHistory(tmp, b, c, &why);
+            check(ok2, "history: a move carries cleanly");
+            check(QFile::exists(docprops::versionsDir(tmp, c) + "/v1.txt"),
+                  "history: the versions survive a MOVE, even though the file "
+                  "name never changed");
+
+            // 3. A refusal is reported, never swallowed: if a history already
+            //    exists at the destination, nothing is overwritten and the
+            //    caller is told where the old one still is.
+            const QString d = other + "/gamma.txt";
+            { QFile f(d); f.open(QIODevice::WriteOnly); f.write("y"); }
+            plant(d);
+            plant(c);
+            why.clear();
+            const bool ok3 = docprops::carryDocHistory(tmp, c, d, &why);
+            check(!ok3 && !why.isEmpty(),
+                  "history: a collision REFUSES and says where the old history "
+                  "still is, rather than overwriting it");
+            check(QFile::exists(docprops::versionsDir(tmp, c) + "/v1.txt"),
+                  "history: and the old history is still there to recover");
+            QDir(tmp).removeRecursively();
+        }
+
         // ---- an empty pane must still speak (Adam, 2026-09-11) -----------
         // He opened the Draft workspace with a source loaded and found the two
         // right-hand panes completely blank: "it doesn't make any sense."
