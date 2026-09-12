@@ -74,10 +74,13 @@ echo "== 4/4  onto the phone =="
 # serving the previous pack while every step here reports success. Adam caught
 # this on 2026-09-11 — his phone showed a passage that had been refused from
 # the pack hours earlier.
-xcrun devicectl device process terminate --device "$DEVICE" \
-    --bundle-identifier "$BUNDLE" >/dev/null 2>&1 || true
+python3 "$ROOT/tools/ios_terminate_existing.py" --device "$DEVICE" \
+    --bundle-id "$BUNDLE" --executable TibetanTrainer
 xcrun devicectl device install app --device "$DEVICE" "$APP" >/dev/null
-[ "$LAUNCH" = "1" ] && xcrun devicectl device process launch \
-    --device "$DEVICE" "$BUNDLE" >/dev/null && echo "   launched"
+if [ "$LAUNCH" = "1" ]; then
+  xcrun devicectl device process launch \
+      --device "$DEVICE" --terminate-existing "$BUNDLE" >/dev/null
+  echo "   launched"
+fi
 echo
 echo "ON THE PHONE: $STAMP"

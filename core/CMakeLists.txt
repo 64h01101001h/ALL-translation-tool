@@ -596,6 +596,11 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/tools/constitution_check.py
                    --selftest)
 
+  add_test(NAME ios_deploy_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_ios_deploy.py)
+  set_tests_properties(ios_deploy_selftest PROPERTIES SKIP_RETURN_CODE 77)
+
   # Adam 2026-08-28: ACIP is the source of record for the equivalents,
   # not the derived wylie. This proves span-level ACIP recovery and
   # its round-trip, and pins the "shog inside tshogs" regression plus
