@@ -1,3 +1,39 @@
+## 2026-09-12 — Codex private continuation through C05:258
+
+New user authorization to continue through Tuesday07:00 America/Denver remains
+in force. This entry supersedes the older paused-campaign instruction for the
+private alignment work only; historical handoff prose below remains intact.
+No extra source files are needed. Work is isolated on codex/aci-alignment-20260915.
+
+Data48bd9d4 adds91 independently reconciled and skeptically approved spans
+plus3 anchors for256–258:86pages,258/511 source segments. Thirty-one new
+pages since165 contain2,624 analyst spans and93 anchors. All remain PROVISIONAL
+machine attestations; no hgm_gloss promotion or human acceptance. Original
+source/master wording remains exact. No new errata/allowances;192 prior errata
+survive. All17 fidelity/export suites passed, and the course/depth CSV oracle
+checks all23,769 groups. One newly evidenced MI'I index value enriches an older
+mi'i/humans CSV record without changing its words or citations.
+
+The evidence-packaging and whitespace-filter corrections preserve exact prior
+proofs, original helper bytes and source whitespace. Full details are appended
+in C05_CAMPAIGN.md and the page86 landing proofs. Builders ran once each;
+normal view stderr caused a later wrapper assertion, not a builder failure.
+The actual previous CSV seed and all output hashes are retained.
+
+UNVERIFIED at this documentation commit: fresh complete-checkpoint approval
+for this final HEAD, final fixed-head output reproduction and new live MAIN
+patch/fixture preflight. The independent reviewer must close these in
+campaign-artifacts/integration/continuation-through258-review.md; do not infer
+its approval from this entry. Prior closed checkpointed3cac8 remains valid
+for its own scope. MAIN integration is open; rendered inspection remains
+unverified after browser-policy refusal; native/installed-phone proof remains
+through171, and locked launch is unverified. C13 remains blocked.
+
+Next259–261 baseline48bd9d4 is clean; independent readers have not started.
+262–267 is preparation only. Preserve originals, distinctions among unattested
+meanings, explicit omissions versus affirmative nulls, and the tiny glossary
+pilot's actual limits. Continue scheduled work to the authorized Tuesday cutoff.
+
 # Handoff log
 
 The baton. **Newest entry at the top.** Append; never edit a past entry —

@@ -358,3 +358,40 @@ readers or proposals. Resume durable state without contaminating original angles
 Preparation and independent review overlap while all gates remain in place.
 No numerical overall speedup is claimed. Tasks 3/4 retain their existing limits;
 the hourly heartbeat remains ACTIVE through Tuesday 07:00 America/Denver.
+
+## Twelfth continuation checkpoint — 2026-09-12
+
+Data commit48bd9d4587352461bc609fde85b5bfe374a05212 reaches C05:258/511,
+86 pages. Since165,31 new pages contain2,624 independently reviewed analyst
+spans and93 sentence anchors. This batch adds91 spans and3 anchors, no nulls,
+errata or head allowances. All remain PROVISIONAL. All17 required suites
+passed11.16seconds;23,769 course/depth groups match actual main references.
+Prior lexical content/citations survive. One older mi'i/humans record gains
+proven MI'I metadata through the new C05:256 source witness; original archives
+and canonical generation/export logic stay unchanged.
+
+Complete semantic decisions,172 original dispositions, nine five-ground
+refutations and every failed/superseded attempt survive. The original reviewer's
+scoped packaging fix preserves11 Python helpers as exact .py.txt copies and
+retains all prior interfaces. Root verified599 mappings/66 historical Git
+copy records,91 tuples and463 semantic file copies. The two actual builders
+ran once each and exited0; a later overly strict wrapper stderr assertion
+failed, with actual logs and original CSV seed preserved. The whitespace
+preparation/v3 failures and scoped v4 proof survive; all44,036 diagnostics
+were accounted for before commit against exact source/freeze/CRLF bytes.
+
+A fresh fixed-head reviewer must close the complete checkpoint, reproduce
+all seven outputs from Git with the actual previous CSV, verify original
+evidence/corrections/retention/documentation and perform a read-only full
+campaign patch preflight against current MAIN and all fixtures. Its report
+belongs in sibling campaign-artifacts/integration/continuation-through258-review.md.
+This entry does not itself establish final approval. MAIN integration and
+newer native/device/rendering checks remain open. Native/phone proof remains
+through171; locked launch remains unverified.
+
+Next259–261 has clean data baseline48bd9d4, exact source/context and separate
+original-angle briefs; no reader has been dispatched. Root evidence/logic
+leads are withheld.262–264 and265–267 are source preparation only with no
+baseline or proposals. Reuse preserved state without exposing one angle's
+judgments to another. The larger campaign and hourly heartbeat remain ACTIVE
+to Tuesday,September15,2026 at07:00 America/Denver. No speed multiplier claimed.
