@@ -1,0 +1,12 @@
+# C05:231 — English-first proposal
+- Producer: Codex; independent English-first reading; PROVISIONAL machine alignment.
+- Source: read-only spine row C05:231 (id 1613) matches the supplied source snapshot exactly for id/course/seq/ACIP/Wylie/English; full row and C05:227–233 context are preserved locally.
+- Evidence: HGM glossary rows directly support `'dod chags` → “desire,” `sogs` → “and such,” `blo dang ldan pa` → “with a brain,” `su zhig` → “anyone,” `'dzin` → “Believe,” and `gor ma chag par` → “beyond any manner of doubt.” Hopkins fields are comparanda only.
+- Corpus check: C16:808 differs only in conception/projection English vocabulary; ILL:1109 and EM:264 corroborate the existence/rope construction as comparanda, and P7:9 supports only its quoted shared extent. None establishes C05 publication lineage.
+- Contentious: p6 compresses the positive-and-negative `yod pa nyid` construction into “Things that can't even exist in the absence of conceptions”; challenge this complete depth-3 recast first.
+- Reordering: p8 (“absolutely things ... own”) precedes p7 (rope/snake) in GMR's English although the Tibetan order is p7 then p8; `eng_order` records the crossing explicitly.
+- Occurrences: cursor/order resolves first `kyang`, first `rtog pa med par`, verse `yang dag don`/`rtog pa`, and the first and second `zhes gsungs` as “says”/“states.”
+- Counts: 20 spans; d5=9; d7=0; null=0; explicit English order covers all 20 English-bearing top-level spans.
+- Errata: 0; ACIP/Wylie/English, neighbors, focused parallels, and registered classes were checked.
+- FINAL GENERATOR: EXIT=0; STDERR_BYTES=0; BODY_BYTES=4024; `body.html` exactly equals saved `generator.stdout.html` (cmp=0).
+- Frozen core SHA-256: spec `dabf32c9efcf3897182d90391b9bad4629b24445cf35eb895c9d217ea28bc3a2`; body `41dece226f8c42acb8a05f6c6a5e8b97628b55389c0d1384241b9416367df997`; errata `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.

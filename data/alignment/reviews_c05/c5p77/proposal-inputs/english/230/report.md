@@ -1,0 +1,12 @@
+# C05:230 — English-first proposal
+- Producer: Codex; independent English-first reading; PROVISIONAL machine alignment.
+- Source: read-only spine row C05:230 (id 1612) matches the supplied source snapshot exactly for id/course/seq/ACIP/Wylie/English; full row and C05:227–233 context are preserved locally.
+- Evidence: HGM glossary rows directly support the title, `gang phyir` → “Why?”, `rnam rtog` → “conceptions,” `'jig rten rnams` → “many worlds,” and `rang gi ngo bos` → “essence of its own.” Hopkins fields are comparanda only.
+- Contentious: p0 keeps `'jig rten ma rig rkyen can du` as the complete “The world is something that ignorance causes” recast; exact `rkyen can` lacks an HGM atom, while C05:235 repeats the complete wording and ILL/SVN comparanda support the causal construction.
+- Superseded attempts: attempt 1 split `rkyen can` → “causes”; attempt 2 still over-captured unexpressed `rdzogs pa'i` in the “Buddhas” span. Both passed mechanically and both specs, stdout, empty stderr, and exit 0 are preserved.
+- Rule 10: `ma grub pa` is omitted because its negative force is distributed across “none ... does so”; no unresolved correspondence is asserted as null.
+- Occurrences: w7 takes the post-“Buddhas” `gsungs` and the second standalone English “say”; the forward cursors plus explicit `eng_order` resolve it.
+- Counts: 16 spans; d5=9; d7=1; null=0; explicit English order covers all 15 English-bearing top-level spans.
+- Errata: 1 LOW/PROBABLE English punctuation candidate; related C05/C16 rows retain the period, while ILL/SVN render the rhetorical construction as a question; no independence or source history is claimed and no blockprint was checked.
+- FINAL GENERATOR: EXIT=0; STDERR_BYTES=0; BODY_BYTES=3397; `body.html` exactly equals saved `generator.stdout.html` (cmp=0).
+- Frozen core SHA-256: spec `590f93cb3040bbe8a396f9879080f42039caa86b7f9e00c68b9bed3758ba06c6`; body `d0d8fdf469a3a468ea7975895f34f9f2c3a3d8ab28ead876673cca49e277dc6f`; errata `a6cf39392cb6715e5cc6ed8e89556387d0f62f2cabe1fe3e45c1febdd1edb98d`.

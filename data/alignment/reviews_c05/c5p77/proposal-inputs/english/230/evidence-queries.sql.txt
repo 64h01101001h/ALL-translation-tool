@@ -1,0 +1,13 @@
+-- All statements were executed against this SQLite URI:
+-- file:/Users/adamderickandrade/Documents/ChatGPT/Geshe%20Michael%20Roach%20Tib%20_%20Eng%20Alignment/campaign-worktree/build/hgm_spine_v27_2.db?mode=ro
+select * from corpus_segments where course='C05' and seq=230;
+select * from entries where wylie in
+('rigs pa drug cu pa','rigs pa','kyang','''jig rten','ma rig','rkyen can',
+ 'gang phyir','rdzogs pa''i sangs rgyas','sangs rgyas','gsungs',
+ '''jig rten ''di','rnam rtog','mi ''thad','''grel pa','''grel par',
+ '''jig rten rnams','rang gi ngo bos','ma grub','rtog pas btags pa tsam')
+ order by wylie,tier;
+select * from corpus_segments where
+ wylie=(select wylie from corpus_segments where course='C05' and seq=230)
+ or wylie like '%jig rten ma rig rkyen can du%rnam rtog yin zhes cis mi %thad%'
+ order by course,seq;

@@ -1,0 +1,54 @@
+import json,pathlib,re,subprocess,hashlib,os
+BASE=pathlib.Path(__file__).resolve().parents[1]
+ROOT=BASE.parents[2]
+
+def make(seq,title,items,note):
+ p=BASE/str(seq); src=json.loads((p/'source-original.json').read_text()); spans=[]; positions={}; checks=[]; tc=0
+ for n,item in enumerate(items,1):
+  d,tib,eng,*extras=item; opts=extras[0] if extras else {}; occ=opts.pop('occ',1)
+  sid=('m' if d==7 else 'p' if d==6 else 'w')+str(n)
+  sp=dict(id=sid,d=d,tib=tib,eng=eng,**opts); spans.append(sp)
+  if eng is not None and d!=7:
+   hits=[m.start() for m in re.finditer(re.escape(eng),src['english']) if (m.start()==0 or not src['english'][m.start()-1].isalnum() or not eng[0].isalnum()) and (m.end()==len(src['english']) or not src['english'][m.end()].isalnum() or not eng[-1].isalnum())]
+   assert len(hits)>=occ,(seq,eng,occ,hits)
+   positions[sid]=hits[occ-1]
+  if d!=7:
+   t=src['wylie'].find(tib,tc);assert t>=tc,(seq,tib,tc);tc=t+len(tib)
+   checks.append({'id':sid,'tib_start':t,'tib_end':tc,'eng_intended_start':positions.get(sid),'eng_occurrence':occ if eng else None})
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':sorted(positions,key=positions.get),'note':note}]}
+ (p/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(p/'intended-occurrences.json').write_text(json.dumps(checks,indent=2)+'\n')
+
+make(229,'objects established by conceptions',[
+ (5,"'di",'This'),(5,'gnyis','two'),(5,'chos','objects'),(6,'rnams',None,{'nul':'Plural force is fused into the English plural objects; no separate word.','cls':'gram'}),
+ (5,"rtog pa'i",'conceptualization'),(5,'dbang','process'),(6,'gis','through'),(5,"'jog",'established'),(5,'tshul','how'),(6,'dang','and'),
+ (5,'bzlog','opposite'),(5,"'dzin pa'i",'holds'),(5,"bden 'dzin",'grasp to true existence'),(7,"'dzin",'grasp'),(5,"bstan pa'o",'describe'),(5,'dang po','first'),
+ (5,"nye bar 'khor gyis zhus pa",'Sutra Requested by Upali'),(7,"nye bar 'khor",'Upali'),(5,'sna tshogs','splash'),(5,"yid dga'",'pleasing'),(5,'me tog','flowers'),(5,'kha bye','open'),
+ (5,'gser','Golden'),(5,'khang','palaces'),(5,"'bar ba",'blaze'),(5,"yid 'ong ba",'breathtaking beauty'),(5,'byed pa','maker'),(5,'de dag','these'),
+ (5,"rtog pa'i",'conceptions'),(5,'bzhag pa','built'),(5,"rtog pa'i",'conceptions',{'occ':2}),(5,"'jig rten",'world'),(5,'rnam brtags','invention'),
+ (5,'chos','objects',{'occ':2}),(6,'rnams',None,{'nul':'Plural force is fused into the second English objects.','cls':'gram'}),(5,"rtog pa'i",'conceptualization',{'occ':2}),(5,'dbang','process',{'occ':2}),(6,'gis','through',{'occ':2}),(5,'bzhag par','established',{'occ':2}),(5,'gsungs','describing'),
+ (5,'chos','object'),(5,'thams cad','every single'),(5,'rtog pas','conceptions',{'occ':3}),(5,'btags pa','creation'),(6,'tsam','nothing more than'),(5,'gsungs pa','statements'),(5,'gzhan','other'),(6,'yang','as well'),(5,'mang','many')],
+ "Provisional machine alignment by Codex, independent Tibetan-first proposal. The Upali work is treated as a proper title; its name member is literal. rtog pa/dbang and the establishment verbs are matched independently to this row's English, not inferred from comparative dictionary glosses. kha bye is narrowed to open, leaving the supplied possessive in their petals unwrapped. yid 'ong ba is provisionally matched to breathtaking beauty; mchog is omitted because its contribution may be distributed in that poetic wording. The maker-negative is recast as a search: 'ga' med is omitted rather than equated to find or asserted absent. The last two Tibetan conceptual-establishment formulations are compressed into one English creation-of-conceptions formulation; the earlier rtog pas/btags pa/tsam anchors it and the final rtog pa'i dbang gis bzhag par is omitted as distributed repetition. Repeated conception and object spans use explicit English order. Genitive and other omitted grammar is not given invented English. Null rnams marks only plural force fused into objects. C16:806 has matching Tibetan fields but different English vocabulary; no ingestion lineage or independent publication is inferred.")
+
+make(230,'the world and conceptions',[
+ (5,'rigs pa drug cu pa','Sixty Verses on Reasoning'),(7,'drug cu','Sixty'),(6,'kyang','as well'),(5,"'jig rten",'world'),(5,'ma rig','ignorance'),(5,'rkyen','causes'),(6,'can',None,{'cls':'gram','nul':'Possession of a cause is recast in the English causal verb causes; no separate exponent of can.'}),
+ (3,'gang phyir','For'),(5,'sangs rgyas','Buddhas'),(5,'gsungs','say',{'occ':2}),(3,'de yi phyir na','then'),(5,"'jig rten",'world',{'occ':2}),(5,"'di",'this'),(5,'rnam rtog','conceptions'),(6,'yin','is',{'occ':3}),(6,'zhes','to say'),(6,'cis','why'),(3,"mi 'thad",'wrong'),
+ (5,'don','meaning'),(5,"'grel par",'commentary'),(5,"'jig rten",'worlds'),(6,'rnams',None,{'cls':'gram','nul':'Plural force is fused into worlds; the extra many is not claimed.'}),(5,'rang','own'),(6,'gi','of'),(5,'ngo bos','essence'),(6,'ma','none'),(3,'grub pa','does so'),(5,'rtog pas','conception'),(5,'btags pa','products')],
+ "Provisional machine alignment by Codex, independent Tibetan-first proposal. Sixty Verses on Reasoning is a work title, with its literal numeral member. ma rig is the established ignorance compound, not separately negated. rkyen is recast as the causal verb causes; can has no separate exponent in that conversion. gang phyir supplies causal For; the separate Why? is a rhetorical recast and is left unwrapped. mi 'thad is a negative phrase matched whole to wrong, not 'thad alone. The commentary's existence predicate grub pa is the English anaphoric does so, kept at phrase depth. rang/gi/ngo bos target essence of its own in English order; instrumental force lies outside the selected essence word. rnams is null only for plural morphology fused into worlds. tsam is omitted because restriction is distributed over none of them are anything more than, not cleanly isolated. rdzogs pa'i and quotation/description scaffolding without secure separate exponents are omitted. C05:235 repeats the quoted verse; C16:807 changes conceptions to projections, and ILL:1106 supplies a differently worded English rendering. These comparisons do not establish publication or ingestion independence.")
+
+make(231,'reality and conception',[
+ (5,'brgya pa','400 Verses'),(6,'kyang','as well'),(5,'rtog pa','conceptions'),(3,'med par','Without'),(5,"'dod chags",'desire'),(5,'sogs','such'),(3,'yod nyid yod min','Are nothing that can even exist'),
+ (5,'yang dag don','reality'),(6,'dang','and',{'occ':2}),(5,'rtog pa','conception'),(5,'blo dang ldan pa','with a brain'),(5,'su zhig','anyone'),(5,"'dzin",'Believe'),
+ (5,"'grel pa",'commentary'),(3,'rtog pa med par','in the absence of conceptions'),(3,'yod pa nyid med pa',"can't even exist"),(5,'gor ma chag par','beyond any manner of doubt'),(3,'thag pa bsdogs pa','coil of rope'),(5,'btags pa','label'),(5,'sbrul','snake'),(6,'ltar','like'),(5,'rang','their own'),(5,'ngo bos','essence'),(3,'ma grub par','cannot exist'),(5,'nges','absolutely'),
+ (5,'yang dag don','reality',{'occ':2}),(5,'rang','its own'),(5,'ngo bos','essence',{'occ':2}),(5,'grub pa','exist',{'occ':4}),(5,'rtog pa','Conception'),(5,'skye ba','occur')],
+ "Provisional machine alignment by Codex, independent Tibetan-first proposal. brgya pa is the attested abbreviated work title 400 Verses, not a numerical claim that brgya means four hundred; corpus examples of the full bzhi brgya pa title support the title convention. yang dag don is the recurring philosophical expression reality, not a separately banked don-to-reality claim. The commentary's positive rtog pa yod pa kho nas yod pa nyid dang clause is omitted as compressed into the negative English formulation; rtog pa med par is a unique whole phrase to prevent attaching its conceptions to the earlier omitted rtog pa. Existence negatives are complete phrases; no unsupported not-inside-cannot subword is used. thag pa bsdogs pa is a compositional phrase coil of rope, supported also by EM:264's coiled rope, not a d5 compound. The closing de la bltos te dependence construction is unresolved against through the process of conceptualization and is omitted rather than nulled; the clear final rtog pa and skye ba retain Conception and occur. Supplied participants and auxiliaries remain unwrapped. C16:808 shares the Tibetan fields but changes English vocabulary; P7:9 has a shorter English continuation, and ILL:1109 does not translate the closing definitions. Those witnesses do not prove the disputed continuation or any independent ingestion history.")
+
+for seq in (229,230,231):
+ p=BASE/str(seq); (p/'errata.json').write_text('[]\n')
+ n=1
+ while (p/f'attempt-{n}.spec.json').exists(): n+=1
+ data=(p/'spec.json').read_bytes();(p/f'attempt-{n}.spec.json').write_bytes(data)
+ proc=subprocess.run(['python3',str(ROOT/'campaign-artifacts/run_generator_readonly.py')],input=data,capture_output=True,cwd=ROOT/'campaign-worktree',env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for suffix,b in [('stdout.html',proc.stdout),('stderr.txt',proc.stderr),('exit.txt',f'{proc.returncode}\n'.encode())]:
+  (p/f'attempt-{n}.{suffix}').write_bytes(b);(p/f'generator.{suffix}').write_bytes(b)
+ (p/'body.html').write_bytes(proc.stdout)
+ print(seq,proc.returncode,len(proc.stdout),proc.stderr.decode())

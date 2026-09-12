@@ -1,0 +1,12 @@
+# C05:229 — English-first proposal
+- Producer: Codex; independent English-first reading; PROVISIONAL machine alignment.
+- Source: read-only spine row C05:229 (id 1611) matches the supplied source snapshot exactly for id/course/seq/ACIP/Wylie/English; full row and C05:227–233 context are preserved locally.
+- Evidence: HGM glossary rows directly support `sna tshogs` → “splash,” `kha bye` → “open their petals,” `me tog` → “flowers,” `bden 'dzin` → “grasp to true existence,” `rnam brtags` → “invention,” and `chos thams cad` → “every single object in the universe.” Hopkins fields in `glossary-original.json` are comparanda only.
+- Corpus check: C16:806 has byte-identical ACIP/Wylie but uses projection vocabulary; it is recorded only as a differing comparative text field, not proof of independent publication or ingestion lineage.
+- Contentious: p10 maps the reordered closing construction to “there are as well many other statements of the Buddha that describe how”; challenge this phrase recast first because GMR moves it before the object/composition content.
+- Rule 10: supplied “First we will show,” “and then,” verse-introduction prose, particles, and hinges remain unwrapped; no uncertain particle was falsely nulled.
+- Occurrences: every top-level claimed string is unique in its source field; m8 (`chos` → “object”) repeats globally but is unique inside its d5 parent, as required.
+- Counts: 20 spans; d5=8; d7=2; null=0; explicit English order covers all 18 English-bearing top-level spans.
+- Errata: 0; ACIP/Wylie/English, neighbors, focused parallels, and registered classes were checked.
+- FINAL GENERATOR: EXIT=0; STDERR_BYTES=0; BODY_BYTES=4264; `body.html` exactly equals saved `generator.stdout.html` (cmp=0).
+- Frozen core SHA-256: spec `84035d84ae062eabd5cec9f1fd694c4ac9f2f6d788fbb5a8f8749fd0436e20c2`; body `a5165ad4d18069f092fff80059498205d25f30c1d313a83a96cb088cf59c2dbe`; errata `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.

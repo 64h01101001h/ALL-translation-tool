@@ -1,0 +1,275 @@
+[
+  {
+    "seq": 229,
+    "source": {
+      "id": 1611,
+      "course": "C05",
+      "seq": 229,
+      "acip": "'DI LA GNYIS, CHOS RNAMS RTOG PA'I DBANG GIS 'JOG TSUL DANG , DE LAS BZLOG STE 'DZIN PA'I BDEN 'DZIN BSTAN PA'O, , DANG PO NI, NYE BAR 'KHOR GYIS ZHUS PA LAS, SNA TSOGS YID DGA' ME TOG KHA BYE ZHING , , GSER GYI KHANG MCHOG 'BAR BA YID 'ONG BA, , 'DI NA DE LA'ANG BYED PA 'GA' MED DE, , DE DAG RTOG PA'I DBANG GIS BZHAG PA YIN, , RTOG PA'I DBANG GIS 'JIG RTEN RNAM BRTAGS TE, ZHES CHOS RNAMS RTOG PA'I DBANG GIS BZHAG PAR GSUNGS TE, CHOS THAMS CAD RTOG PAS BTAGS PA TZAM DANG RTOG PA'I DBANG GIS BZHAG PAR GSUNGS PA GZHAN YANG MANG NGO ,",
+      "wylie": "'di la gnyis, chos rnams rtog pa'i dbang gis 'jog tshul dang , de las bzlog ste 'dzin pa'i bden 'dzin bstan pa'o, , dang po ni, nye bar 'khor gyis zhus pa las, sna tshogs yid dga' me tog kha bye zhing , , gser gyi khang mchog 'bar ba yid 'ong ba, , 'di na de la'ang byed pa 'ga' med de, , de dag rtog pa'i dbang gis bzhag pa yin, , rtog pa'i dbang gis 'jig rten rnam brtags te, zhes chos rnams rtog pa'i dbang gis bzhag par gsungs te, chos thams cad rtog pas btags pa tsam dang rtog pa'i dbang gis bzhag par gsungs pa gzhan yang mang ngo",
+      "english": "This section [still another one] has two parts to it. First we will show how it is that objects are established through the process of conceptualization, and then describe what it is to grasp to true existence, wherein one holds things as existing in the opposite way. Here is the first. The Sutra Requested by Upali includes the following lines: A splash of pleasing flowers open their petals, Golden palaces blaze in breathtaking beauty; Look for their maker, but you'll never find him, For all of these are built of conceptions-- The world is an invention of conceptions. The verse is describing how objects are established through the process of conceptualization, and there are as well many other statements of the Buddha that describe how every single object in the universe is nothing more than a creation of conceptions.",
+      "raw": "{\"course\": \"C05\", \"acip\": \"'DI LA GNYIS, CHOS RNAMS RTOG PA'I DBANG GIS 'JOG TSUL DANG , DE LAS BZLOG STE 'DZIN PA'I BDEN 'DZIN BSTAN PA'O, , DANG PO NI, NYE BAR 'KHOR GYIS ZHUS PA LAS, SNA TSOGS YID DGA' ME TOG KHA BYE ZHING , , GSER GYI KHANG MCHOG 'BAR BA YID 'ONG BA, , 'DI NA DE LA'ANG BYED PA 'GA' MED DE, , DE DAG RTOG PA'I DBANG GIS BZHAG PA YIN, , RTOG PA'I DBANG GIS 'JIG RTEN RNAM BRTAGS TE, ZHES CHOS RNAMS RTOG PA'I DBANG GIS BZHAG PAR GSUNGS TE, CHOS THAMS CAD RTOG PAS BTAGS PA TZAM DANG RTOG PA'I DBANG GIS BZHAG PAR GSUNGS PA GZHAN YANG MANG NGO ,\", \"wylie\": \"'di la gnyis, chos rnams rtog pa'i dbang gis 'jog tshul dang , de las bzlog ste 'dzin pa'i bden 'dzin bstan pa'o, , dang po ni, nye bar 'khor gyis zhus pa las, sna tshogs yid dga' me tog kha bye zhing , , gser gyi khang mchog 'bar ba yid 'ong ba, , 'di na de la'ang byed pa 'ga' med de, , de dag rtog pa'i dbang gis bzhag pa yin, , rtog pa'i dbang gis 'jig rten rnam brtags te, zhes chos rnams rtog pa'i dbang gis bzhag par gsungs te, chos thams cad rtog pas btags pa tsam dang rtog pa'i dbang gis bzhag par gsungs pa gzhan yang mang ngo\", \"english\": \"This section [still another one] has two parts to it. First we will show how it is that objects are established through the process of conceptualization, and then describe what it is to grasp to true existence, wherein one holds things as existing in the opposite way. Here is the first. The Sutra Requested by Upali includes the following lines: A splash of pleasing flowers open their petals, Golden palaces blaze in breathtaking beauty; Look for their maker, but you'll never find him, For all of these are built of conceptions-- The world is an invention of conceptions. The verse is describing how objects are established through the process of conceptualization, and there are as well many other statements of the Buddha that describe how every single object in the universe is nothing more than a creation of conceptions.\"}"
+    },
+    "query": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 OR instr(english,?)>0 ORDER BY course,seq",
+    "params": [
+      "'di la gnyis, chos rnams rtog pa'i dbang gis 'jog tshul dang , de las bz",
+      "This section [still another one] has two parts to it. First we will show how it is that "
+    ],
+    "matching_rows": [
+      {
+        "id": 1611,
+        "course": "C05",
+        "seq": 229,
+        "acip": "'DI LA GNYIS, CHOS RNAMS RTOG PA'I DBANG GIS 'JOG TSUL DANG , DE LAS BZLOG STE 'DZIN PA'I BDEN 'DZIN BSTAN PA'O, , DANG PO NI, NYE BAR 'KHOR GYIS ZHUS PA LAS, SNA TSOGS YID DGA' ME TOG KHA BYE ZHING , , GSER GYI KHANG MCHOG 'BAR BA YID 'ONG BA, , 'DI NA DE LA'ANG BYED PA 'GA' MED DE, , DE DAG RTOG PA'I DBANG GIS BZHAG PA YIN, , RTOG PA'I DBANG GIS 'JIG RTEN RNAM BRTAGS TE, ZHES CHOS RNAMS RTOG PA'I DBANG GIS BZHAG PAR GSUNGS TE, CHOS THAMS CAD RTOG PAS BTAGS PA TZAM DANG RTOG PA'I DBANG GIS BZHAG PAR GSUNGS PA GZHAN YANG MANG NGO ,",
+        "wylie": "'di la gnyis, chos rnams rtog pa'i dbang gis 'jog tshul dang , de las bzlog ste 'dzin pa'i bden 'dzin bstan pa'o, , dang po ni, nye bar 'khor gyis zhus pa las, sna tshogs yid dga' me tog kha bye zhing , , gser gyi khang mchog 'bar ba yid 'ong ba, , 'di na de la'ang byed pa 'ga' med de, , de dag rtog pa'i dbang gis bzhag pa yin, , rtog pa'i dbang gis 'jig rten rnam brtags te, zhes chos rnams rtog pa'i dbang gis bzhag par gsungs te, chos thams cad rtog pas btags pa tsam dang rtog pa'i dbang gis bzhag par gsungs pa gzhan yang mang ngo",
+        "english": "This section [still another one] has two parts to it. First we will show how it is that objects are established through the process of conceptualization, and then describe what it is to grasp to true existence, wherein one holds things as existing in the opposite way. Here is the first. The Sutra Requested by Upali includes the following lines: A splash of pleasing flowers open their petals, Golden palaces blaze in breathtaking beauty; Look for their maker, but you'll never find him, For all of these are built of conceptions-- The world is an invention of conceptions. The verse is describing how objects are established through the process of conceptualization, and there are as well many other statements of the Buddha that describe how every single object in the universe is nothing more than a creation of conceptions.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"'DI LA GNYIS, CHOS RNAMS RTOG PA'I DBANG GIS 'JOG TSUL DANG , DE LAS BZLOG STE 'DZIN PA'I BDEN 'DZIN BSTAN PA'O, , DANG PO NI, NYE BAR 'KHOR GYIS ZHUS PA LAS, SNA TSOGS YID DGA' ME TOG KHA BYE ZHING , , GSER GYI KHANG MCHOG 'BAR BA YID 'ONG BA, , 'DI NA DE LA'ANG BYED PA 'GA' MED DE, , DE DAG RTOG PA'I DBANG GIS BZHAG PA YIN, , RTOG PA'I DBANG GIS 'JIG RTEN RNAM BRTAGS TE, ZHES CHOS RNAMS RTOG PA'I DBANG GIS BZHAG PAR GSUNGS TE, CHOS THAMS CAD RTOG PAS BTAGS PA TZAM DANG RTOG PA'I DBANG GIS BZHAG PAR GSUNGS PA GZHAN YANG MANG NGO ,\", \"wylie\": \"'di la gnyis, chos rnams rtog pa'i dbang gis 'jog tshul dang , de las bzlog ste 'dzin pa'i bden 'dzin bstan pa'o, , dang po ni, nye bar 'khor gyis zhus pa las, sna tshogs yid dga' me tog kha bye zhing , , gser gyi khang mchog 'bar ba yid 'ong ba, , 'di na de la'ang byed pa 'ga' med de, , de dag rtog pa'i dbang gis bzhag pa yin, , rtog pa'i dbang gis 'jig rten rnam brtags te, zhes chos rnams rtog pa'i dbang gis bzhag par gsungs te, chos thams cad rtog pas btags pa tsam dang rtog pa'i dbang gis bzhag par gsungs pa gzhan yang mang ngo\", \"english\": \"This section [still another one] has two parts to it. First we will show how it is that objects are established through the process of conceptualization, and then describe what it is to grasp to true existence, wherein one holds things as existing in the opposite way. Here is the first. The Sutra Requested by Upali includes the following lines: A splash of pleasing flowers open their petals, Golden palaces blaze in breathtaking beauty; Look for their maker, but you'll never find him, For all of these are built of conceptions-- The world is an invention of conceptions. The verse is describing how objects are established through the process of conceptualization, and there are as well many other statements of the Buddha that describe how every single object in the universe is nothing more than a creation of conceptions.\"}"
+      },
+      {
+        "id": 6824,
+        "course": "C16",
+        "seq": 806,
+        "acip": "'DI LA GNYIS, CHOS RNAMS RTOG PA'I DBANG GIS 'JOG TSUL DANG , DE LAS BZLOG STE 'DZIN PA'I BDEN 'DZIN BSTAN PA'O, , DANG PO NI, NYE BAR 'KHOR GYIS ZHUS PA LAS, SNA TSOGS YID DGA' ME TOG KHA BYE ZHING , , GSER GYI KHANG MCHOG 'BAR BA YID 'ONG BA, , 'DI NA DE LA'ANG BYED PA 'GA' MED DE, , DE DAG RTOG PA'I DBANG GIS BZHAG PA YIN, , RTOG PA'I DBANG GIS 'JIG RTEN RNAM BRTAGS TE, ZHES CHOS RNAMS RTOG PA'I DBANG GIS BZHAG PAR GSUNGS TE, CHOS THAMS CAD RTOG PAS BTAGS PA TZAM DANG RTOG PA'I DBANG GIS BZHAG PAR GSUNGS PA GZHAN YANG MANG NGO ,",
+        "wylie": "'di la gnyis, chos rnams rtog pa'i dbang gis 'jog tshul dang , de las bzlog ste 'dzin pa'i bden 'dzin bstan pa'o, , dang po ni, nye bar 'khor gyis zhus pa las, sna tshogs yid dga' me tog kha bye zhing , , gser gyi khang mchog 'bar ba yid 'ong ba, , 'di na de la'ang byed pa 'ga' med de, , de dag rtog pa'i dbang gis bzhag pa yin, , rtog pa'i dbang gis 'jig rten rnam brtags te, zhes chos rnams rtog pa'i dbang gis bzhag par gsungs te, chos thams cad rtog pas btags pa tsam dang rtog pa'i dbang gis bzhag par gsungs pa gzhan yang mang ngo",
+        "english": "This section [still another one] has two parts to it. First we will show how it is that objects are established through the process of projecting, and then describe what it is to grasp to true existence, wherein one holds things as existing in the opposite way. Here is the first. The Sutra Requested by Upali includes the following lines: A splash of pleasing flowers open their petals, Golden palaces blaze in breathtaking beauty; Look for their maker, but you'll never find him, For all of these are built of projections-- The world is an invention of projections. The verse is describing how objects are established through the process of projection, and there are as well many other statements of the Buddha that describe how every single object in the universe is nothing more than a creation of projections.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"'DI LA GNYIS, CHOS RNAMS RTOG PA'I DBANG GIS 'JOG TSUL DANG , DE LAS BZLOG STE 'DZIN PA'I BDEN 'DZIN BSTAN PA'O, , DANG PO NI, NYE BAR 'KHOR GYIS ZHUS PA LAS, SNA TSOGS YID DGA' ME TOG KHA BYE ZHING , , GSER GYI KHANG MCHOG 'BAR BA YID 'ONG BA, , 'DI NA DE LA'ANG BYED PA 'GA' MED DE, , DE DAG RTOG PA'I DBANG GIS BZHAG PA YIN, , RTOG PA'I DBANG GIS 'JIG RTEN RNAM BRTAGS TE, ZHES CHOS RNAMS RTOG PA'I DBANG GIS BZHAG PAR GSUNGS TE, CHOS THAMS CAD RTOG PAS BTAGS PA TZAM DANG RTOG PA'I DBANG GIS BZHAG PAR GSUNGS PA GZHAN YANG MANG NGO ,\", \"wylie\": \"'di la gnyis, chos rnams rtog pa'i dbang gis 'jog tshul dang , de las bzlog ste 'dzin pa'i bden 'dzin bstan pa'o, , dang po ni, nye bar 'khor gyis zhus pa las, sna tshogs yid dga' me tog kha bye zhing , , gser gyi khang mchog 'bar ba yid 'ong ba, , 'di na de la'ang byed pa 'ga' med de, , de dag rtog pa'i dbang gis bzhag pa yin, , rtog pa'i dbang gis 'jig rten rnam brtags te, zhes chos rnams rtog pa'i dbang gis bzhag par gsungs te, chos thams cad rtog pas btags pa tsam dang rtog pa'i dbang gis bzhag par gsungs pa gzhan yang mang ngo\", \"english\": \"This section [still another one] has two parts to it. First we will show how it is that objects are established through the process of projecting, and then describe what it is to grasp to true existence, wherein one holds things as existing in the opposite way. Here is the first. The Sutra Requested by Upali includes the following lines: A splash of pleasing flowers open their petals, Golden palaces blaze in breathtaking beauty; Look for their maker, but you'll never find him, For all of these are built of projections-- The world is an invention of projections. The verse is describing how objects are established through the process of projection, and there are as well many other statements of the Buddha that describe how every single object in the universe is nothing more than a creation of projections.\"}"
+      }
+    ],
+    "comparisons": [
+      {
+        "course": "C05",
+        "seq": 229,
+        "equal_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": true
+        },
+        "lengths": {
+          "acip": 537,
+          "wylie": 537,
+          "english": 828
+        }
+      },
+      {
+        "course": "C16",
+        "seq": 806,
+        "equal_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": false
+        },
+        "lengths": {
+          "acip": 537,
+          "wylie": 537,
+          "english": 814
+        }
+      }
+    ],
+    "provenance_limit": "Literal digital field comparison only; not proof of independent publication or ingestion lineage."
+  },
+  {
+    "seq": 230,
+    "source": {
+      "id": 1612,
+      "course": "C05",
+      "seq": 230,
+      "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,",
+      "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing",
+      "english": "The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our conception.",
+      "raw": "{\"course\": \"C05\", \"acip\": \",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,\", \"wylie\": \"rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing\", \"english\": \"The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our conception.\"}"
+    },
+    "query": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 OR instr(english,?)>0 ORDER BY course,seq",
+    "params": [
+      "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phy",
+      "The Sixty Verses on Reasoning say as well, The world is something that ignorance causes;"
+    ],
+    "matching_rows": [
+      {
+        "id": 1612,
+        "course": "C05",
+        "seq": 230,
+        "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,",
+        "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing",
+        "english": "The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our conception.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,\", \"wylie\": \"rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing\", \"english\": \"The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our conception.\"}"
+      },
+      {
+        "id": 1617,
+        "course": "C05",
+        "seq": 235,
+        "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+        "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+        "english": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in conceptions?",
+        "raw": "{\"course\": \"C05\", \"acip\": \",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,\", \"wylie\": \"rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te\", \"english\": \"Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only conceptions. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in conceptions?\"}"
+      },
+      {
+        "id": 6825,
+        "course": "C16",
+        "seq": 807,
+        "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,",
+        "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing",
+        "english": "The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only projections. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our projections.",
+        "raw": "{\"course\": \"C16\", \"acip\": \",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNGS, , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , CES GSUNGS PA'I DON 'GREL PAR 'JIG RTEN RNAMS RANG GI NGO BOS MA GRUB PA RTOG PAS BTAGS PA TZAM DU BSHAD CING ,\", \"wylie\": \"rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsungs, , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ces gsungs pa'i don 'grel par 'jig rten rnams rang gi ngo bos ma grub pa rtog pas btags pa tsam du bshad cing\", \"english\": \"The Sixty Verses on Reasoning say as well, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only projections. The meaning of this verse, according to the commentary, is that none of the many worlds that exist does so through some essence of its own: none of them are anything more than products of our projections.\"}"
+      },
+      {
+        "id": 6830,
+        "course": "C16",
+        "seq": 812,
+        "acip": ",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,",
+        "wylie": "rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te",
+        "english": "Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only projections. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in projections?",
+        "raw": "{\"course\": \"C16\", \"acip\": \",RIGS PA DRUG CU PA LAS KYANG , 'JIG RTEN MA RIG RKYEN CAN DU, , GANG PHYIR RDZOGS PA'I SANGS RGYAS GSUNG , , DE YI PHYIR NA 'JIG RTEN 'DI, , RNAM RTOG YIN ZHES CIS MI 'THAD, , MA RIG 'GAGS PAR GYUR NA NI, , GANG ZHIG 'GAG PAR 'GYUR BA DE, , MI SHES PA LAS KUN BRTAGS PAR, , JI LTA BUR NA GSAL MI 'GYUR, , ZHES GSUNGS TE,\", \"wylie\": \"rigs pa drug cu pa las kyang , 'jig rten ma rig rkyen can du, , gang phyir rdzogs pa'i sangs rgyas gsung , , de yi phyir na 'jig rten 'di, , rnam rtog yin zhes cis mi 'thad, , ma rig 'gags par gyur na ni, , gang zhig 'gag par 'gyur ba de, , mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, , zhes gsungs te\", \"english\": \"Now the Sixty Verses on Reasoning says, The world is something that ignorance causes; Why? For the Buddhas say it is so. And why then would it be wrong to say That this world is only projections. If one were to end his ignorance, Then how is it that the thing that's ended, Despite our misunderstanding, could never Disappear, even in projections?\"}"
+      }
+    ],
+    "comparisons": [
+      {
+        "course": "C05",
+        "seq": 230,
+        "equal_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": true
+        },
+        "lengths": {
+          "acip": 288,
+          "wylie": 285,
+          "english": 402
+        }
+      },
+      {
+        "course": "C05",
+        "seq": 235,
+        "equal_fields": {
+          "acip": false,
+          "wylie": false,
+          "english": false
+        },
+        "lengths": {
+          "acip": 321,
+          "wylie": 319,
+          "english": 347
+        }
+      },
+      {
+        "course": "C16",
+        "seq": 807,
+        "equal_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": false
+        },
+        "lengths": {
+          "acip": 288,
+          "wylie": 285,
+          "english": 403
+        }
+      },
+      {
+        "course": "C16",
+        "seq": 812,
+        "equal_fields": {
+          "acip": false,
+          "wylie": false,
+          "english": false
+        },
+        "lengths": {
+          "acip": 321,
+          "wylie": 319,
+          "english": 347
+        }
+      }
+    ],
+    "provenance_limit": "Literal digital field comparison only; not proof of independent publication or ingestion lineage."
+  },
+  {
+    "seq": 231,
+    "source": {
+      "id": 1613,
+      "course": "C05",
+      "seq": 231,
+      "acip": "BRGYA PA LAS KYANG , RTOG PA MED PAR 'DOD CHAGS LA, , SOGS LA YOD NYID YOD MIN NA, , YANG DAG DON DANG RTOG PA ZHES, , BLO DANG LDAN PA SU ZHIG 'DZIN, , ZHES GSUNGS SHING DE'I 'GREL PA LAS KYANG , RTOG PA YOD PA KHO NAS YOD PA NYID DANG , RTOG PA MED PAR YOD PA NYID MED PA DE DAG NI, GOR MA CHAG PAR THAG PA BSDOGS PA LA BTAGS PA'I SBRUL LTAR RANG GI NGO BOS MA GRUB PAR NGES SO, , ZHES GSUNGS TE YANG DAG DON NI RANG GI NGO BOS GRUB PA'O, , RTOG PA NI DE LA BLTOS TE SKYE BA'O,",
+      "wylie": "brgya pa las kyang , rtog pa med par 'dod chags la, , sogs la yod nyid yod min na, , yang dag don dang rtog pa zhes, , blo dang ldan pa su zhig 'dzin, , zhes gsungs shing de'i 'grel pa las kyang , rtog pa yod pa kho nas yod pa nyid dang , rtog pa med par yod pa nyid med pa de dag ni, gor ma chag par thag pa bsdogs pa la btags pa'i sbrul ltar rang gi ngo bos ma grub par nges so, , zhes gsungs te yang dag don ni rang gi ngo bos grub pa'o, , rtog pa ni de la bltos te skye ba'o",
+      "english": "The 400 Verses says as well: Without conceptions, desire and such Are nothing that can even exist; Why then would anyone with a brain Believe in reality and conception? The commentary to the work states that-- Things that can't even exist in the absence of conceptions are, beyond any manner of doubt, absolutely things that cannot exist through any essence of their own: they are like a coil of rope you label with \"snake.\" The expression \"reality\" here refers to something that could exist through its own essence. \"Conception\" is the fact that things occur through the process of conceptualization.",
+      "raw": "{\"course\": \"C05\", \"acip\": \"BRGYA PA LAS KYANG , RTOG PA MED PAR 'DOD CHAGS LA, , SOGS LA YOD NYID YOD MIN NA, , YANG DAG DON DANG RTOG PA ZHES, , BLO DANG LDAN PA SU ZHIG 'DZIN, , ZHES GSUNGS SHING DE'I 'GREL PA LAS KYANG , RTOG PA YOD PA KHO NAS YOD PA NYID DANG , RTOG PA MED PAR YOD PA NYID MED PA DE DAG NI, GOR MA CHAG PAR THAG PA BSDOGS PA LA BTAGS PA'I SBRUL LTAR RANG GI NGO BOS MA GRUB PAR NGES SO, , ZHES GSUNGS TE YANG DAG DON NI RANG GI NGO BOS GRUB PA'O, , RTOG PA NI DE LA BLTOS TE SKYE BA'O,\", \"wylie\": \"brgya pa las kyang , rtog pa med par 'dod chags la, , sogs la yod nyid yod min na, , yang dag don dang rtog pa zhes, , blo dang ldan pa su zhig 'dzin, , zhes gsungs shing de'i 'grel pa las kyang , rtog pa yod pa kho nas yod pa nyid dang , rtog pa med par yod pa nyid med pa de dag ni, gor ma chag par thag pa bsdogs pa la btags pa'i sbrul ltar rang gi ngo bos ma grub par nges so, , zhes gsungs te yang dag don ni rang gi ngo bos grub pa'o, , rtog pa ni de la bltos te skye ba'o\", \"english\": \"The 400 Verses says as well: Without conceptions, desire and such Are nothing that can even exist; Why then would anyone with a brain Believe in reality and conception? The commentary to the work states that-- Things that can't even exist in the absence of conceptions are, beyond any manner of doubt, absolutely things that cannot exist through any essence of their own: they are like a coil of rope you label with \\\"snake.\\\" The expression \\\"reality\\\" here refers to something that could exist through its own essence. \\\"Conception\\\" is the fact that things occur through the process of conceptualization.\"}"
+    },
+    "query": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 OR instr(english,?)>0 ORDER BY course,seq",
+    "params": [
+      "brgya pa las kyang , rtog pa med par 'dod chags la, , sogs la yod nyid y",
+      "The 400 Verses says as well: Without conceptions, desire and such Are nothing that can e"
+    ],
+    "matching_rows": [
+      {
+        "id": 1613,
+        "course": "C05",
+        "seq": 231,
+        "acip": "BRGYA PA LAS KYANG , RTOG PA MED PAR 'DOD CHAGS LA, , SOGS LA YOD NYID YOD MIN NA, , YANG DAG DON DANG RTOG PA ZHES, , BLO DANG LDAN PA SU ZHIG 'DZIN, , ZHES GSUNGS SHING DE'I 'GREL PA LAS KYANG , RTOG PA YOD PA KHO NAS YOD PA NYID DANG , RTOG PA MED PAR YOD PA NYID MED PA DE DAG NI, GOR MA CHAG PAR THAG PA BSDOGS PA LA BTAGS PA'I SBRUL LTAR RANG GI NGO BOS MA GRUB PAR NGES SO, , ZHES GSUNGS TE YANG DAG DON NI RANG GI NGO BOS GRUB PA'O, , RTOG PA NI DE LA BLTOS TE SKYE BA'O,",
+        "wylie": "brgya pa las kyang , rtog pa med par 'dod chags la, , sogs la yod nyid yod min na, , yang dag don dang rtog pa zhes, , blo dang ldan pa su zhig 'dzin, , zhes gsungs shing de'i 'grel pa las kyang , rtog pa yod pa kho nas yod pa nyid dang , rtog pa med par yod pa nyid med pa de dag ni, gor ma chag par thag pa bsdogs pa la btags pa'i sbrul ltar rang gi ngo bos ma grub par nges so, , zhes gsungs te yang dag don ni rang gi ngo bos grub pa'o, , rtog pa ni de la bltos te skye ba'o",
+        "english": "The 400 Verses says as well: Without conceptions, desire and such Are nothing that can even exist; Why then would anyone with a brain Believe in reality and conception? The commentary to the work states that-- Things that can't even exist in the absence of conceptions are, beyond any manner of doubt, absolutely things that cannot exist through any essence of their own: they are like a coil of rope you label with \"snake.\" The expression \"reality\" here refers to something that could exist through its own essence. \"Conception\" is the fact that things occur through the process of conceptualization.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"BRGYA PA LAS KYANG , RTOG PA MED PAR 'DOD CHAGS LA, , SOGS LA YOD NYID YOD MIN NA, , YANG DAG DON DANG RTOG PA ZHES, , BLO DANG LDAN PA SU ZHIG 'DZIN, , ZHES GSUNGS SHING DE'I 'GREL PA LAS KYANG , RTOG PA YOD PA KHO NAS YOD PA NYID DANG , RTOG PA MED PAR YOD PA NYID MED PA DE DAG NI, GOR MA CHAG PAR THAG PA BSDOGS PA LA BTAGS PA'I SBRUL LTAR RANG GI NGO BOS MA GRUB PAR NGES SO, , ZHES GSUNGS TE YANG DAG DON NI RANG GI NGO BOS GRUB PA'O, , RTOG PA NI DE LA BLTOS TE SKYE BA'O,\", \"wylie\": \"brgya pa las kyang , rtog pa med par 'dod chags la, , sogs la yod nyid yod min na, , yang dag don dang rtog pa zhes, , blo dang ldan pa su zhig 'dzin, , zhes gsungs shing de'i 'grel pa las kyang , rtog pa yod pa kho nas yod pa nyid dang , rtog pa med par yod pa nyid med pa de dag ni, gor ma chag par thag pa bsdogs pa la btags pa'i sbrul ltar rang gi ngo bos ma grub par nges so, , zhes gsungs te yang dag don ni rang gi ngo bos grub pa'o, , rtog pa ni de la bltos te skye ba'o\", \"english\": \"The 400 Verses says as well: Without conceptions, desire and such Are nothing that can even exist; Why then would anyone with a brain Believe in reality and conception? The commentary to the work states that-- Things that can't even exist in the absence of conceptions are, beyond any manner of doubt, absolutely things that cannot exist through any essence of their own: they are like a coil of rope you label with \\\"snake.\\\" The expression \\\"reality\\\" here refers to something that could exist through its own essence. \\\"Conception\\\" is the fact that things occur through the process of conceptualization.\"}"
+      },
+      {
+        "id": 6826,
+        "course": "C16",
+        "seq": 808,
+        "acip": "BRGYA PA LAS KYANG , RTOG PA MED PAR 'DOD CHAGS LA, , SOGS LA YOD NYID YOD MIN NA, , YANG DAG DON DANG RTOG PA ZHES, , BLO DANG LDAN PA SU ZHIG 'DZIN, , ZHES GSUNGS SHING DE'I 'GREL PA LAS KYANG , RTOG PA YOD PA KHO NAS YOD PA NYID DANG , RTOG PA MED PAR YOD PA NYID MED PA DE DAG NI, GOR MA CHAG PAR THAG PA BSDOGS PA LA BTAGS PA'I SBRUL LTAR RANG GI NGO BOS MA GRUB PAR NGES SO, , ZHES GSUNGS TE YANG DAG DON NI RANG GI NGO BOS GRUB PA'O, , RTOG PA NI DE LA BLTOS TE SKYE BA'O,",
+        "wylie": "brgya pa las kyang , rtog pa med par 'dod chags la, , sogs la yod nyid yod min na, , yang dag don dang rtog pa zhes, , blo dang ldan pa su zhig 'dzin, , zhes gsungs shing de'i 'grel pa las kyang , rtog pa yod pa kho nas yod pa nyid dang , rtog pa med par yod pa nyid med pa de dag ni, gor ma chag par thag pa bsdogs pa la btags pa'i sbrul ltar rang gi ngo bos ma grub par nges so, , zhes gsungs te yang dag don ni rang gi ngo bos grub pa'o, , rtog pa ni de la bltos te skye ba'o",
+        "english": "The 400 Verses says as well: Without projections, desire and such Are nothing that can even exist; Why then would anyone with a brain Believe in reality and projection? The commentary to the work states that-- Things that can't even exist in the absence of projections are, beyond any manner of doubt, absolutely things that cannot exist through any essence of their own: they are like a coil of rope you label with \"snake.\" The expression \"reality\" here refers to something that could exist through its own essence. \"Projection\" is the fact that things occur through the process of projection.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"BRGYA PA LAS KYANG , RTOG PA MED PAR 'DOD CHAGS LA, , SOGS LA YOD NYID YOD MIN NA, , YANG DAG DON DANG RTOG PA ZHES, , BLO DANG LDAN PA SU ZHIG 'DZIN, , ZHES GSUNGS SHING DE'I 'GREL PA LAS KYANG , RTOG PA YOD PA KHO NAS YOD PA NYID DANG , RTOG PA MED PAR YOD PA NYID MED PA DE DAG NI, GOR MA CHAG PAR THAG PA BSDOGS PA LA BTAGS PA'I SBRUL LTAR RANG GI NGO BOS MA GRUB PAR NGES SO, , ZHES GSUNGS TE YANG DAG DON NI RANG GI NGO BOS GRUB PA'O, , RTOG PA NI DE LA BLTOS TE SKYE BA'O,\", \"wylie\": \"brgya pa las kyang , rtog pa med par 'dod chags la, , sogs la yod nyid yod min na, , yang dag don dang rtog pa zhes, , blo dang ldan pa su zhig 'dzin, , zhes gsungs shing de'i 'grel pa las kyang , rtog pa yod pa kho nas yod pa nyid dang , rtog pa med par yod pa nyid med pa de dag ni, gor ma chag par thag pa bsdogs pa la btags pa'i sbrul ltar rang gi ngo bos ma grub par nges so, , zhes gsungs te yang dag don ni rang gi ngo bos grub pa'o, , rtog pa ni de la bltos te skye ba'o\", \"english\": \"The 400 Verses says as well: Without projections, desire and such Are nothing that can even exist; Why then would anyone with a brain Believe in reality and projection? The commentary to the work states that-- Things that can't even exist in the absence of projections are, beyond any manner of doubt, absolutely things that cannot exist through any essence of their own: they are like a coil of rope you label with \\\"snake.\\\" The expression \\\"reality\\\" here refers to something that could exist through its own essence. \\\"Projection\\\" is the fact that things occur through the process of projection.\"}"
+      },
+      {
+        "id": 34898,
+        "course": "P7",
+        "seq": 9,
+        "acip": "BRGYA PA LAS KYANG RTOG PA MED PAR 'DOD CHAGS LA SOGS LA YOD NYID YOD, MIN NA YANG DAG DON DANG RTOG PA ZHES BLO DANG LDAN PA SU ZHIG 'DZIN ZHES GSUNGS SHING DE'I 'GREL PA LAS KYANG RTOG PA YOD PA KHO NAS YOD PA NYID DANG RTOG PA MED PAR YOD PA NYID MED PA DE DAG NI GOR MA CHAG PAR THAG PA BSDOGS PA LA BTAGS PA'I SBRUL LTAR RANG GI NGO BOS MA GRUB PAR NGES SO ZHES GSUNGS TE YANG DAG DON NI RANG GI NGO BOS GRUB PA'O RTOG PA NI DE LA BLTOS TE SKYE BA'O",
+        "wylie": "brgya pa las kyang rtog pa med par 'dod chags la sogs la yod nyid yod, min na yang dag don dang rtog pa zhes blo dang ldan pa su zhig 'dzin zhes gsungs shing de'i 'grel pa las kyang rtog pa yod pa kho nas yod pa nyid dang rtog pa med par yod pa nyid med pa de dag ni gor ma chag par thag pa bsdogs pa la btags pa'i sbrul ltar rang gi ngo bos ma grub par nges so zhes gsungs te yang dag don ni rang gi ngo bos grub pa'o rtog pa ni de la bltos te skye ba'o",
+        "english": "The 400 Verses says as well: Without conceptions, desire and such Are nothing that can even exist; Why then would anyone with a brain Believe in reality and conception? The commentary to the work states that— Things that can't even exist in the absence of conceptions are, beyond any manner of doubt, absolutely things that cannot exist through any essence of their own: they are like a coil of rope you label with \"snake.\" The expression \"reality\" here refers to something that could exist through its own essence. \"Conception\" is the fact that things occur through the process of",
+        "raw": "{\"course\": \"P7\", \"acip\": \"BRGYA PA LAS KYANG RTOG PA MED PAR 'DOD CHAGS LA SOGS LA YOD NYID YOD, MIN NA YANG DAG DON DANG RTOG PA ZHES BLO DANG LDAN PA SU ZHIG 'DZIN ZHES GSUNGS SHING DE'I 'GREL PA LAS KYANG RTOG PA YOD PA KHO NAS YOD PA NYID DANG RTOG PA MED PAR YOD PA NYID MED PA DE DAG NI GOR MA CHAG PAR THAG PA BSDOGS PA LA BTAGS PA'I SBRUL LTAR RANG GI NGO BOS MA GRUB PAR NGES SO ZHES GSUNGS TE YANG DAG DON NI RANG GI NGO BOS GRUB PA'O RTOG PA NI DE LA BLTOS TE SKYE BA'O\", \"wylie\": \"brgya pa las kyang rtog pa med par 'dod chags la sogs la yod nyid yod, min na yang dag don dang rtog pa zhes blo dang ldan pa su zhig 'dzin zhes gsungs shing de'i 'grel pa las kyang rtog pa yod pa kho nas yod pa nyid dang rtog pa med par yod pa nyid med pa de dag ni gor ma chag par thag pa bsdogs pa la btags pa'i sbrul ltar rang gi ngo bos ma grub par nges so zhes gsungs te yang dag don ni rang gi ngo bos grub pa'o rtog pa ni de la bltos te skye ba'o\", \"english\": \"The 400 Verses says as well: Without conceptions, desire and such Are nothing that can even exist; Why then would anyone with a brain Believe in reality and conception? The commentary to the work states that— Things that can't even exist in the absence of conceptions are, beyond any manner of doubt, absolutely things that cannot exist through any essence of their own: they are like a coil of rope you label with \\\"snake.\\\" The expression \\\"reality\\\" here refers to something that could exist through its own essence. \\\"Conception\\\" is the fact that things occur through the process of\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+      }
+    ],
+    "comparisons": [
+      {
+        "course": "C05",
+        "seq": 231,
+        "equal_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": true
+        },
+        "lengths": {
+          "acip": 479,
+          "wylie": 478,
+          "english": 601
+        }
+      },
+      {
+        "course": "C16",
+        "seq": 808,
+        "equal_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": false
+        },
+        "lengths": {
+          "acip": 479,
+          "wylie": 478,
+          "english": 594
+        }
+      },
+      {
+        "course": "P7",
+        "seq": 9,
+        "equal_fields": {
+          "acip": false,
+          "wylie": false,
+          "english": false
+        },
+        "lengths": {
+          "acip": 454,
+          "wylie": 454,
+          "english": 581
+        }
+      }
+    ],
+    "provenance_limit": "Literal digital field comparison only; not proof of independent publication or ingestion lineage."
+  }
+]

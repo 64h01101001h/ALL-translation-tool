@@ -1,0 +1,13 @@
+{
+  "scope": "Full staged diff; only these two literal preserved diff header lines excluded from whitespace enforcement.",
+  "path": "data/alignment/reviews_c05/c5p77/governing-originals/build_alignment_layer-concurrent-change.diff.txt",
+  "lines": [
+    1,
+    2
+  ],
+  "bytes": 3710,
+  "sha256": "b0885d413fc7cb11fad0f38b19a626be3ece68ac9ff09d91f8c94d2aaee36b51",
+  "reason": "Exact original difflib evidence uses empty file labels followed by a space; changing the original would break byte preservation.",
+  "full_check_output": "data/alignment/reviews_c05/c5p77/governing-originals/build_alignment_layer-concurrent-change.diff.txt:1: trailing whitespace.\n+--- \ndata/alignment/reviews_c05/c5p77/governing-originals/build_alignment_layer-concurrent-change.diff.txt:2: trailing whitespace.\n++++ \n",
+  "all_other_staged_paths_exit": 0
+}

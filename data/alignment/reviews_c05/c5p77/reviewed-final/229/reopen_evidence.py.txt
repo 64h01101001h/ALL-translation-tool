@@ -1,0 +1,68 @@
+import os,sys,json,pathlib,sqlite3,subprocess,hashlib,copy
+ROOT=pathlib.Path(__file__).resolve().parents[4]
+B=ROOT/'campaign-artifacts/C05-229-231'
+WT=ROOT/'campaign-worktree'
+sys.path.insert(0,str(WT/'tools'))
+import gen_alignment_page as G
+db=sqlite3.connect((WT/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True)
+db.row_factory=sqlite3.Row
+def query(sql,params=()): return [dict(x) for x in db.execute(sql,params)]
+def save(p,x): p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+wrapper="import sys,sqlite3,runpy,pathlib; c=sqlite3.connect; sqlite3.connect=lambda p,*a,**k:c(pathlib.Path(p).resolve().as_uri()+'?mode=ro',uri=True); runpy.run_path(sys.argv[1],run_name='__main__')"
+def generate(p):
+ return subprocess.run([sys.executable,'-c',wrapper,str(WT/'tools/gen_alignment_page.py')],input=p.read_bytes(),stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=WT,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+def resolve(spec,src):
+ s=spec['segments'][0]; spans=s['spans']; byid={x['id']:x for x in spans}
+ tr=G.resolve(src['wylie'],spans,'tib',s['seq'])
+ es=G.with_members(spans,[byid[i] for i in s['eng_order']],src['english'])
+ er=G.resolve(src['english'],es,'eng',s['seq'])
+ return [{**x,'tib_range':tr.get(x['id']),'eng_range':er.get(x['id'])} for x in spans]
+def walk(x):
+ if isinstance(x,dict):
+  yield x
+  for v in x.values(): yield from walk(v)
+ elif isinstance(x,list):
+  for v in x: yield from walk(v)
+if __name__=='__main__':
+ for seq in (229,230,231):
+  d=B/'reconciled'/str(seq); d.mkdir(parents=True,exist_ok=True)
+  src=query('SELECT * FROM corpus_segments WHERE course=? AND seq=?',('C05',seq))[0]
+  save(d/'source-original.json',src)
+  save(d/'context-original.json',query('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',227,233)))
+  terms=set(); ids=set(); inputreads=[]; qreplays=[]
+  paths=list((B/'tibetan'/str(seq)).glob('*.json'))+list((B/'english'/str(seq)).glob('*.json'))+list(B.glob('root-*.json'))
+  for p in paths:
+   x=json.loads(p.read_text()); inputreads.append({'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})
+   for o in walk(x):
+    if 'hgm_gloss' in o and 'wylie' in o: terms.add(o['wylie'])
+    if all(k in o for k in ('course','seq','wylie','english')): ids.add((o['course'],o['seq']))
+    if 'query' in o and isinstance(o['query'],str) and o['query'].lower().lstrip().startswith('select'):
+     rows=query(o['query'],o.get('params',[]));qreplays.append({'origin':str(p),'query':o['query'],'params':o.get('params',[]),'claimed_count':o.get('count'),'count':len(rows),'rows':rows})
+    if 'field' in o and 'pattern' in o and o['field'] in ('wylie','english','acip'):
+     sql='SELECT * FROM corpus_segments WHERE '+o['field']+' LIKE ? ORDER BY course,seq'
+     rows=query(sql,(o['pattern'],));qreplays.append({'origin':str(p),'query':sql,'params':[o['pattern']],'count':len(rows),'rows':rows})
+  for p in (B/'english'/str(seq)).glob('*.sql'):
+   sql='\n'.join(x for x in p.read_text().splitlines() if not x.startswith('--'))
+   for statement in sql.split(';'):
+    if statement.strip():
+     rows=query(statement);qreplays.append({'origin':str(p),'query':statement,'params':[],'count':len(rows),'rows':rows})
+     for r in rows:
+      if 'hgm_gloss' in r:terms.add(r['wylie'])
+      if 'course' in r:ids.add((r['course'],r['seq']))
+  terms.update(["kha bye","chos thams cad","'jig rten rnams","rang gi ngo bos","rang gi ngo bo","sogs","de dag","rkyen","rkyen can","can","yid 'ong ba","mchog","khang mchog","khang","gang phyir","de yi phyir na","nges","skye ba","bltos","de la bltos te","bsdogs","bsdogs pa"])
+  gl=[{'query':'SELECT * FROM entries WHERE wylie=? ORDER BY id','params':[t],'count':len(rows:=query('SELECT * FROM entries WHERE wylie=? ORDER BY id',(t,))),'rows':rows} for t in sorted(terms)]
+  save(d/'glossary-original-reopened.json',gl)
+  save(d/'query-replays-original.json',qreplays)
+  save(d/'witnesses-original-reopened.json',[query('SELECT * FROM corpus_segments WHERE course=? AND seq=?',x)[0] for x in sorted(ids)])
+  save(d/'inputs-read-manifest.json',inputreads)
+  proof=[]
+  for angle in ('tibetan','english'):
+   p=B/angle/str(seq)/'spec.json'; r=generate(p)
+   (d/(angle+'-replay.stdout.html')).write_bytes(r.stdout);(d/(angle+'-replay.stderr.txt')).write_bytes(r.stderr)
+   rows=resolve(json.loads(p.read_text()),src);save(d/(angle+'-resolved-spans.json'),rows)
+   proof.append({'angle':angle,'exit':r.returncode,'stderr_bytes':len(r.stderr),'body_bytes':len(r.stdout),'exact_saved_body':r.stdout==(p.parent/'body.html').read_bytes(),'body_sha256':hashlib.sha256(r.stdout).hexdigest()})
+  save(d/'proposal-replay-proof.json',proof)
+  print(seq,'queries',len(qreplays),'glossary terms',len(terms),'witnesses',len(ids),'replays',proof)
+  for g in gl:
+   if g['params'][0] in ["kha bye","chos thams cad","'jig rten rnams","rang gi ngo bos","rang gi ngo bo","de dag","rkyen","rkyen can","can","yid 'ong ba","mchog","khang mchog","khang","gang phyir","de yi phyir na","nges","skye ba","bltos","de la bltos te","bsdogs","bsdogs pa"]:
+    print(g['params'][0],[(r['id'],r['hgm_gloss'],r['hgm_source']) for r in g['rows']])

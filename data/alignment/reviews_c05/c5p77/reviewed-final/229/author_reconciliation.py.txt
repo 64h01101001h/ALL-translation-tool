@@ -1,0 +1,46 @@
+from reopen_evidence import *
+
+notes={
+229: "PROVISIONAL machine alignment reconciled by Codex from independent Tibetan-first and English-first proposals. The bracketed still another one and supplied subjects, articles, auxiliaries, and verse-introduction apparatus remain unwrapped. The Upali expression is a work title, with Upali as its literal name member. kha bye is the attested flower-opening idiom open their petals: petals realizes kha in the floral idiom, and their relates the opening to the flowers; neither is separately assigned as an independent pronoun or body-part gloss. chos thams cad is the established attested whole unit every single object in the universe, with object as its literal chos member. The poetic breathtaking beauty is omitted: mchog and yid 'ong ba both contribute and the complete ornament cannot securely be isolated under one. The maker-search recast is left unwrapped apart from maker. In the final sentence, the earlier rtog pas/btags pa/tsam anchors creation of conceptions and its restriction; the final rtog pa'i dbang gis bzhag par is distributed repetition and is omitted, not falsely nulled. gsungs pa owns statements, with no separate source span for of the Buddha. rnams nulls indicate only plural morphology fused into the two occurrences of objects. All repeated conceptions and conceptualization spans use reviewed exact ranges. C16:806 matches the Tibetan fields but changes English vocabulary; no publication or ingestion lineage is inferred.",
+230: "PROVISIONAL machine alignment reconciled by Codex from independent Tibetan-first and English-first proposals. The work title retains its Reasoning member. The world and ignorance are clear lexical atoms within the causal recast; rkyen can du is omitted as a relational conversion from having ignorance as condition to ignorance causes, not falsely nulled or banked as an isolated dictionary equivalent. gang phyir contributes causal For; the separately inserted Why? remains unwrapped. de yi phyir na contributes then, while cis owns why; mi 'thad is kept whole as wrong. The exact HGM unit 'jig rten rnams owns many worlds, with worlds as its literal member, so rnams is not nulled. rang gi ngo bos owns the attested whole through some essence of its own: rang supplies the reflexive ownership, gi the possessive relation, ngo bo the essence and final -s the instrumental through. Its essence member is literal. ma is the negative exponent in the first none, and grub pa is the anaphoric existential does so at phrase depth; this asserts no separate participant. The later restriction tsam is distributed across none of them are anything more than and is omitted. The supplied our remains unwrapped. The English period is preserved; related corpus punctuation and the interrogative sense do not establish an editorial defect or independent publication history.",
+231: "PROVISIONAL machine alignment reconciled by Codex from independent Tibetan-first and English-first proposals. brgya pa is an abbreviated work title attested here as 400 Verses, not a numeral gloss of brgya. The two retrospective gsungs occurrences own the title-reporting says and commentary-reporting states, with explicit English reordering. sogs owns the established closing gesture and such, including its connective. The positive premise rtog pa yod pa kho nas yod pa nyid dang is not separately rendered by the negative-only English commentary clause and is omitted. The later rtog pa med par is retained whole so its conceptions cannot attach to the omitted earlier positive occurrence. Complete existential negatives remain at phrase depth. thag pa bsdogs pa is the compositional phrase coil of rope; the supplied you is unwrapped. The two rang gi ngo bos units retain their instrumental and reflexive relation to essence; their essence members are literal. The last definition is not banked whole: de la bltos te has a dependency and referent not securely rendered by through the process of conceptualization, and the English things subject cannot be read back into the Tibetan conception predicate. Only the locally secure Conception and occur atoms are retained; this does not endorse the entire relation. C16:808 differs in English vocabulary; P7:9 ends before the last word and ILL:1109 does not translate the closing definitions. Neither supports the unquoted closing relation or proves publication lineage."
+}
+
+for seq in (229,230,231):
+ d=B/'reconciled'/str(seq)
+ spec=json.loads((B/'tibetan'/str(seq)/'spec.json').read_text())
+ s=spec['segments'][0]; spans=s['spans']; order=s['eng_order']
+ def drop(*ids):
+  spans[:]=[x for x in spans if x['id'] not in ids];order[:]=[x for x in order if x not in ids]
+ def change(id,**kwargs): next(x for x in spans if x['id']==id).update(kwargs)
+ def member(after,id,tib,eng):
+  i=next(i for i,x in enumerate(spans) if x['id']==after)
+  spans.insert(i+1,dict(id=id,d=7,tib=tib,eng=eng))
+ if seq==229:
+  change('w22',eng='open their petals');drop('w26')
+  change('w41',tib='chos thams cad',eng='every single object in the universe')
+  drop('w42');member('w41','m42','chos','object')
+ if seq==230:
+  change('m2',tib='rigs pa',eng='Reasoning')
+  drop('w6','p7')
+  change('w21',tib="'jig rten rnams",eng='many worlds');drop('p22')
+  member('w21','m22',"'jig rten",'worlds')
+  change('w23',tib='rang gi ngo bos',eng='through some essence of its own')
+  drop('p24','w25');member('w23','m24','ngo bo','essence')
+ if seq==231:
+  change('w6',eng='and such')
+  spans.insert(next(i for i,x in enumerate(spans) if x['id']=='w14'),dict(id='w13a',d=5,tib='gsungs',eng='says'))
+  spans.insert(next(i for i,x in enumerate(spans) if x['id']=='w26'),dict(id='w25a',d=5,tib='gsungs',eng='states'))
+  order.insert(order.index('p2'),'w13a');order.insert(order.index('w16'),'w25a')
+  change('w22',tib='rang gi ngo bos',eng='through any essence of their own')
+  drop('w23');member('w22','m23','ngo bo','essence')
+  change('w27',tib='rang gi ngo bos',eng='through its own essence')
+  drop('w28');member('w27','m28','ngo bo','essence')
+ s['note']=notes[seq]
+ save(d/'attempt-2.spec.json',spec)
+ r=generate(d/'attempt-2.spec.json')
+ (d/'attempt-2.stdout.html').write_bytes(r.stdout);(d/'attempt-2.stderr.txt').write_bytes(r.stderr);(d/'attempt-2.exit.txt').write_text(str(r.returncode)+'\n')
+ print(seq,r.returncode,len(spans),r.stderr.decode())
+ if r.returncode==0:
+  save(d/'spec.json',spec);(d/'body.html').write_bytes(r.stdout);save(d/'errata.json',[])
+  src=json.loads((d/'source-original.json').read_text());save(d/'resolved-spans.json',resolve(spec,src))

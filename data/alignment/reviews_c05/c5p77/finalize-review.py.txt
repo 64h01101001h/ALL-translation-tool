@@ -1,0 +1,137 @@
+from pathlib import Path
+import json,hashlib,re
+R=Path.cwd();B=R/'campaign-artifacts/C05-229-231';O=B/'semantic-review';W=R/'campaign-worktree'
+def save(n,x):(O/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+rs=json.loads((O/'resolved-spans.json').read_text());proof=json.loads((O/'independent-generator-proof.json').read_text());src={r['seq']:r for r in json.loads((O/'independent-source-context.json').read_text())}
+reasons={229:{
+'w1':'Deictic This belongs to the opening di; section and bracketed apparatus excluded.',
+'w2':'Numeral two; no supplied parts/has frame.',
+'w3':'Phenomena rendered objects in the outline; plural morphology does not invalidate the lexical noun.',
+'p4':'Proven rnams plural fusion into objects at 88:95; no standalone English exponent.',
+'w5':'First conceptualization is the outline rtog pa family occurrence.',
+'w6':'dbang expresses the conceptual process here; exact HGM process supports the contextual use.',
+'p7':'Instrumental gis licenses through in the first process construction.',
+'w8':'Establishment verb jog owns established, retaining the passive recast without its auxiliary.',
+'w9':'tshul manner licenses how.',
+'p10':'Outline conjunction dang owns and.',
+'w11':'bzlog expresses the opposite direction, without claiming the entire supplied existing frame.',
+'w12':'dzin is holding; the inflected source word owns holds, not the earlier true-grasp compound.',
+'w13':'Established bden dzin compound; HGM explicitly supports grasp to true existence.',
+'m14':'Literal grasp member of the preceding true-grasp compound, unique and tighter.',
+'w15':'bstan describes the announced topic; it is used once for describe rather than twice for show/describe.',
+'w16':'The actual dang po after the outline owns the later first.',
+'w17':'Established abbreviated work title. ILL:1104 supplies the same Upali title; no invented Sutra member.',
+'m18':'Literal Upali name member inside the title.',
+'w19':'HGM splash attests the contextual variety image for sna tshogs.',
+'w20':'The pleasing adjective modifies flowers; ILL:1104 reinforces pleasing, not a competing noun.',
+'w21':'Flower noun; number is contextual.',
+'w22':'Whole flower-opening idiom, HGM 1063 open their petals. kha supplies the opening/body aspect of the flower; possessive is internal coreference, not a separately invented actor.',
+'w23':'Gold rendered attributively Golden; gyi not separately banked.',
+'w24':'HGM khang/palaces; mchog ornament excluded.',
+'w25':'HGM bar ba/blaze; ornamental modifiers not hidden inside this verb.',
+'w27':'byed pa is maker; the added imperative, search and you/him participants excluded.',
+'w28':'de dag owns these; not independently an all-of quantifier here.',
+'w29':'First verse conceptions at 519:530, distinct from the outline and following verse.',
+'w30':'Verse bzhag pa is built in the construction of conceptions; no supplied are/of.',
+'w31':'Second verse conceptions at 562:573 belongs to the world-invention line.',
+'w32':'World noun in the second verse line, not commentary objects.',
+'w33':'HGM rnam brtags/invention, nominal designation.',
+'w34':'Second chos/objects in the explanation.',
+'p35':'Second rnams plural fusion into objects at 603:610; no separate plural English word.',
+'w36':'Explanation conceptualization at 650:667; not the omitted final repeated phrase.',
+'w37':'Second dbang/process, parallel to the outline.',
+'p38':'Second instrumental gis/through in the commentary establishment construction.',
+'w39':'bzhag par establishes the objects, contextual verb form not inferred from noisy auto-mined gloss.',
+'w40':'Retrospective gsungs describes the verse statement; no verse noun invented.',
+'w41':'HGM 4747 attests the complete all-phenomena unit every single object in the universe; universe expresses unrestricted scope.',
+'m42':'chos/object member is unique inside both all-phenomena parent ranges.',
+'w43':'Instrumental rtog pas licenses conceptions as the conceptual source of creation; final repeated rtog pai remains omitted.',
+'w44':'HGM btags pa/creation; the nominal result of designation in this context.',
+'p45':'tsam limits the expression: nothing more than. It includes the restriction without a supplied participant.',
+'w46':'Final gsungs pa/statements is reordered before the last English object clause.',
+'w47':'gzhan/other is ordinary contextual adjective; the unrelated auto-quoted bodhisattva gloss is not authority for this occurrence.',
+'p48':'yang/as well in final summation.',
+'w49':'mang/many modifies the statements.'},230:{
+'w1':'Established Sixty Verses on Reasoning title, HGM 18911; The excluded.',
+'m2':'rigs pa/Reasoning literal title member, not the former equally plausible numeral member.',
+'p3':'kyang/as well at title introduction.',
+'w4':'First world is the thing conditioned by ignorance; no reversal of causal roles.',
+'w5':'ma rig is the ignorance compound; not a free ma negative.',
+'w8':'gang phyir introduces the Buddha-speech reason; causal For at phrase depth is correct here despite dictionary Why? alternative.',
+'w9':'Buddhas belongs to sangs rgyas; rdzogs pai has no perfect/fully exponent and remains omitted.',
+'w10':'gsungs is the post-Buddhas say at 110:113, not title say at 30.',
+'w11':'de yi phyir na gives consequential then; cis supplies why independently.',
+'w12':'Second verse world at 172:177.',
+'w13':'di licenses this before second world.',
+'w14':'rnam rtog/conceptions is verse predicate noun; only remains unwrapped.',
+'p15':'yin/is in this-world predicate, not the first is.',
+'p16':'zhes licenses quotative to say in the rhetorical question.',
+'p17':'cis/why, the actual later Tibetan interrogative, not borrowed by de yi phyir na.',
+'w18':'Whole negative mi thad/wrong; affirmative thad alone would reverse meaning.',
+'w19':'don/meaning; the verse-reference frame is not captured.',
+'w20':'grel par/commentary, inflected noun retained without supplied according-to frame.',
+'w21':'Exact HGM jig rten rnams/many worlds; rnams therefore not null in this row.',
+'m22':'jig rten/worlds is unique tighter lexical member of many-worlds parent.',
+'w23':'Exact HGM 18277 whole instrumental-reflexive essence unit. rang is reflexive ownership, gi possessive, ngo bo essence and final s instrumental through; some is internal indefinite realization.',
+'m24':'ngo bo/essence literal unique member, excludes instrumental s.',
+'p26':'ma supplies first none as negative-subject conversion of predicate negation, not a new noun or participant.',
+'w27':'grub pa owns does so as existential pro-verb, whose antecedent is exist. Phrase depth avoids general dictionary does-so equivalence.',
+'w28':'rtog pas/conception in final nominal creation clause, not verse plural conceptions.',
+'w29':'btags pa/products is local nominal creation/designation result; supplied our and distributed tsam restriction excluded.'},231:{
+'w1':'Abbreviated title brgya pa/400 Verses, supported by full bzhi brgya pa title C01:335; no brgya/400 numeral claim.',
+'p2':'First kyang/as well in title introduction.',
+'w3':'First rtog pa/conceptions belongs to verse without construction.',
+'w4':'med par/Without is complete absence phrase.',
+'w5':'dod chags/desire established noun.',
+'w6':'sogs licenses whole closing gesture and such, including and. HGM 20919 supports it; no extra noun.',
+'w7':'Negative existential yod nyid yod min owns Are nothing that can even exist as phrase. Conditional na omitted; no independent can/ability atom.',
+'w8':'yang dag don/reality as philosophical term in the question, not don alone.',
+'p9':'dang/and joins reality and conception.',
+'w10':'Verse rtog pa/conception at 157:167.',
+'w11':'Exact HGM blo dang ldan pa/with a brain; blo brain and ldan possession license the internal phrase.',
+'w12':'su zhig/anyone as rhetorical indefinite question subject.',
+'w13':'dzin/Believe holds to the asserted reality and conception.',
+'w13a':'First retrospective gsungs/says reports the title verse, reordered to English 15:19.',
+'w14':'grel pa/commentary; de i work-reference left unwrapped.',
+'w15':'Whole negative-condition rtog pa med par matches in the absence of conceptions; cursor correctly skips the positive rtog pa at 197.',
+'w16':'Full existential negative yod pa nyid med pa/cant even exist at phrase depth; no illegal not-inside-cannot or missing positive premise hidden.',
+'w17':'HGM 1905 exact beyond any manner of doubt idiom.',
+'w18':'Compositional rope-coiling phrase at d3; C05 actual English and EM:264 coiled rope support it. Not a invented d5 compound.',
+'w19':'btags pa/label is local act of designation; English you unwrapped.',
+'w20':'sbrul/snake is label object.',
+'p21':'ltar/like licenses comparison despite English reordering before rope.',
+'w22':'Exact HGM 18277 through any essence of their own; rang reflexive, gi possessive, ngo bo essence, final s through. any is internal negative-polarity indefinite realization.',
+'m23':'ngo bo/essence unique tighter member of the first essence parent.',
+'w24':'Full ma grub par/cannot exist negative phrase; no affirmative-grub mismatch.',
+'w25':'nges/absolutely licenses certainty without the adjacent supplied things that.',
+'w25a':'Second retrospective gsungs/states reports the commentary, reordered to English 196:202.',
+'w26':'Second yang dag don/reality belongs to the definition.',
+'w27':'Same established instrumental-reflexive essence unit, now through its own essence. All components locally present; different English word order is not new meaning.',
+'m28':'Second ngo bo/essence member, at final parent 508:515 not first essence.',
+'w29':'grub pa/exist in the reality definition; could framing left unwrapped.',
+'w30':'Final rtog pa/Conception lexical topic; does not endorse altered downstream subject/relation.',
+'w31':'skye ba/occur lexical predicate; the disputed dependence/referent remains unaligned.'}}
+dec=[]
+for i,r in enumerate(rs):
+ assert src[r['seq']]['wylie'][slice(*r['tib_range'])]==r['tib']
+ if r['eng'] is not None:assert src[r['seq']]['english'][slice(*r['eng_range'])]==r['eng']
+ if r['d']==7:
+  p=rs[i-1];assert p['seq']==r['seq'] and p['d']==5
+  for k in ['tib_range','eng_range']:assert p[k][0]<=r[k][0]<r[k][1]<=p[k][1] and p[k]!=r[k]
+  assert p['tib'].count(r['tib'])==1 and p['eng'].count(r['eng'])==1
+ dec.append({**r,'verdict':'SOUND','reason':reasons[r['seq']][r['id']]})
+assert len(dec)==sum(len(v) for v in reasons.values())==107
+save('span-semantic-decisions.json',dec)
+allow={'pages_c05':{'c5p77/s231w6':"sogs at original Wylie 54:58 licenses the attested complete closing gesture 'and such', including initial and. HGM entry 20919 (HTG2016) explicitly attests and such; the current verse closes desire and similar cases, with no supplied noun captured. Independently reviewed by Codex."}}
+save('span-head-allow-needed.json',allow);save('bank-ready-errata.json',[])
+reg=json.loads((W/'docs/errata_register.json').read_text());duplicates=[r for r in reg if re.search(r'C05[: ]+(229|230|231)\b',str(r.get('segment','')))]
+searches=[]
+for rel in ['docs/errata_register.json','docs/ERRATA_REGISTER.md','docs/BACKLOG.md','TODO.md']:
+ p=W/rel;lines=p.read_text().splitlines();matches=[{'line':i+1,'text':l} for i,l in enumerate(lines) if re.search(r'C05[: ]+(229|230|231)\b',l)];searches.append({'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'matches':matches})
+save('independent-register-check.json',{'row_specific_duplicates':duplicates,'searches':searches,'classes_examined':['E-044','E-071','E-076','E-107','E-111','E-121'],'disposition':'None applies to the proposed standalone verse-period replacement. No registered class is refiled.'})
+claim=json.loads((B/'english/230/errata.json').read_text())[0];queries=json.loads((O/'independent-query-replays.json').read_text());named=[x for x in queries if any('errata-evidence-original.json' in a for a in x['origins'])];ws=json.loads((O/'independent-witnesses-full-fields.json').read_text());seven={('C05',235),('C16',807),('C16',812),('ILL',1106),('ILL',2675),('SVN',555),('SVN',936)}
+err={'seq':230,'found':claim['found'],'refuted':True,'reason':'Interrogative sense makes a question mark plausible but does not prove an editorial error in the literary verse. With source publication history unresolved, default refutation applies; no correction is banked.','parallel_witness':[r for r in ws if (r['course'],r['seq']) in seven],'counts_rechecked':{'same punctuation':2,'related question verse':9,'C16 P1 TCS verse':2},'suggested_severity':None,'suggested_confidence':None,'all_five_grounds':{'a':{'found_verbatim':{f:claim['found'] in src[230][f] for f in ['acip','wylie','english']},'result':'Holds in the actual English field; this ground does not refute.'},'b':{'result':'C05:235 and C16:807/812 retain the period; ILL:1106/2675 and SVN:555/936 end differently worded interrogatives with question marks. These rows do not establish independent publication or ingestion lineage. No positive independent-publication claim is made.'},'c':{'duplicate_count':len(duplicates),'result':'Register and backlog checks show no row-specific duplicate; conversion, footnote, heading, folio, marker, spill and cap classes do not describe this claim.'},'d':{'result':'Decisive uncertainty: cis and mi thad support an interrogative reading, but dictionary semantics cannot determine printed punctuation. The period is a defensible literary presentation, and physical edition evidence to establish an error is absent.'},'e':{'result':'Reopened all seven full witnesses and replayed actual saved SQL; measured counts 2/9/2 hold. All 252 saved numerical query assertions also match. These counts concern query strings, not independent publications.'}}}
+save('independent-errata-refutation.json',[err]);save('independent-errata-query-proof.json',named)
+review={'producer':'Codex independent adversarial semantic reviewer','course':'C05','page':'c5p77','verdict':'APPROVE','spec_verdict':'PASS','quality_verdict':'APPROVE','status':'PROVISIONAL machine review; not human editorial acceptance','open_findings':[],'segments':proof,'total_spans':107,'total_nulls':2,'total_word_pairs':74,'total_d7':8,'errata_count':0,'head_allowance_count':1}
+save('review.json',review)
+print(json.dumps(review,indent=2))
