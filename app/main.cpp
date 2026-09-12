@@ -25710,6 +25710,28 @@ public:
             }
             }
 
+    // Geshe Michael Roach's published English, shortened to fit a card —
+    // and SAYING so. Five places cut it with a bare .left(N): mid-word,
+    // mid-sentence, with no ellipsis and nothing to tell a reader that what
+    // they were looking at was not the whole of it. On a tool whose entire
+    // claim is that the English on screen is his, an invisible cut is the
+    // wrong kind of silence. (Draft workspace audit, 2026-09-11.)
+    //
+    // Cuts at a word boundary where one is near, so his words are not broken
+    // in half, and marks the cut with a real ellipsis plus a muted note.
+    static QString abridged(const QString& full, int cap) {
+        const QString t = full.trimmed();
+        if (t.size() <= cap) return t.toHtmlEscaped();
+        int at = t.lastIndexOf(' ', cap);
+        if (at < cap / 2) at = cap;          // one very long word: hard cut
+        return t.left(at).trimmed().toHtmlEscaped() +
+               QString("<span style='color:%1'>\u2026 <small>(shortened to "
+                       "fit \u2014 the full line is in the corpus)</small>"
+                       "</span>")
+                   .arg(ux::darkChrome() ? ux::chromeMuted()
+                                         : QString(ux::kMuted));
+    }
+
     // The right-hand panes are EMPTY most of the time, and empty is a state
     // that has to speak. Adam, 2026-09-11, on finding both blank with a source
     // loaded: "it doesn't make any sense." He was right — one had its
@@ -25881,6 +25903,29 @@ public:
                       "instruction");
             }
         }
+        // ---- his English is never cut in silence (audit 2026-09-11) -------
+        {
+            const QString shortLine = "A short line.";
+            check(abridged(shortLine, 220) == shortLine.toHtmlEscaped(),
+                  "abridge: a line that fits is passed through untouched");
+
+            QString longLine;
+            while (longLine.size() < 400) longLine += "the words he wrote ";
+            const QString cut = abridged(longLine, 100);
+            check(cut.contains(QString::fromUtf8("\u2026")),
+                  "abridge: a shortened line carries an ellipsis");
+            check(cut.contains("shortened to fit"),
+                  "abridge: and says in words that it was shortened, because "
+                  "an invisible cut in HIS English is the wrong silence");
+            // the cut lands on a word boundary rather than mid-word
+            const QString textOnly = cut.left(cut.indexOf('<')).trimmed();
+            check(longLine.startsWith(textOnly) && !textOnly.isEmpty(),
+                  "abridge: what is shown is a genuine prefix of what he "
+                  "wrote — nothing is paraphrased to make it fit");
+            check(!textOnly.isEmpty() && longLine.mid(textOnly.size(), 1) == " ",
+                  "abridge: and it breaks at a word boundary, not mid-word");
+        }
+
         // ---- one form, one composer (audit 2026-09-11) -------------------
         // The bibliography dialog is modal, so the SELECTION cannot be driven
         // here — but the thing that made the defect matter can be. With the
@@ -26409,19 +26454,48 @@ private:
                     auto segs =
                         spine_.corpusSearch('"' + q + '"', "", 3);
                     if (!segs.empty()) {
-                        h += "<div style='margin-top:6px'><b>the "
-                             "master has translated this clause</b>"
-                             "</div>";
+                        // The heading used to read "the master has
+                        // translated this clause". It is a CONTAINMENT hit:
+                        // the clause appears somewhere inside these segments,
+                        // and what follows is each segment's WHOLE English,
+                        // which may render a great deal more than the clause.
+                        // Claiming he translated this clause and then showing
+                        // a paragraph is not the same statement, and the
+                        // reader cannot tell which part is the answer. The
+                        // Drills pane already discloses this same
+                        // disproportion; this is that disclosure, carried
+                        // over. (Draft workspace audit, 2026-09-11.)
+                        h += "<div style='margin-top:6px'><b>this clause "
+                             "appears in the corpus</b></div>";
+                        const QString muted =
+                            ux::darkChrome() ? ux::chromeMuted()
+                                             : QString(ux::kMuted);
                         int shown = 0;
                         for (const auto& s : segs) {
                             if (shown++ >= 2) break;
+                            const int clauseLen = (int)q.size();
+                            const int segLen = (int)s.acip.size();
+                            const bool partial =
+                                segLen > 0 && clauseLen * 100 < segLen * 90;
                             h += "<div style='margin:3px 0'><small>[" +
                                  QString::fromStdString(s.course) +
                                  ":" + QString::number(s.seq) +
                                  "]</small> " +
-                                 QString::fromStdString(s.english)
-                                     .left(220)
-                                     .toHtmlEscaped() +
+                                 abridged(QString::fromStdString(s.english),
+                                          220) +
+                                 (partial
+                                      ? QString("<div style='color:%1;"
+                                                "font-size:11px'>His English "
+                                                "for the WHOLE of that "
+                                                "segment \u2014 your clause "
+                                                "is about %2%% of it, so most "
+                                                "of this renders the words "
+                                                "around it.</div>")
+                                            .arg(muted)
+                                            .arg(segLen ? clauseLen * 100 /
+                                                              segLen
+                                                        : 100)
+                                      : QString()) +
                                  "</div>";
                         }
                     }
@@ -26446,9 +26520,7 @@ private:
                      "<b>quotation</b> — attested in [" +
                      QString::fromStdString(m.course) + ":" +
                      QString::number(m.seq) + "] · " +
-                     QString::fromStdString(m.english)
-                         .left(180)
-                         .toHtmlEscaped() +
+                     abridged(QString::fromStdString(m.english), 180) +
                      "</div>";
             }
             // 84000 TM hints (9n-2, 2026-08-20): how the 84000
@@ -26488,9 +26560,8 @@ private:
                                  QString::fromStdString(t2.folio)
                                      .toHtmlEscaped() +
                                  "]</small> <i>" +
-                                 QString::fromStdString(t2.english)
-                                     .left(200)
-                                     .toHtmlEscaped() +
+                                 abridged(QString::fromStdString(t2.english),
+                                          200) +
                                  "</i></div>";
                     }
                 }
@@ -26587,9 +26658,8 @@ private:
                                       ? " <span style='color:#B4540A'>"
                                         "[out of sequence]</span>"
                                       : "")
-                             .arg(QString::fromStdString(node.heading)
-                                      .left(90)
-                                      .toHtmlEscaped())
+                             .arg(abridged(
+                                 QString::fromStdString(node.heading), 90))
                              .arg(node.announced > 0
                                       ? QString(" <small style='color:#777'>"
                                                 "(→ %1 parts)</small>")
@@ -26856,8 +26926,17 @@ private:
                              "tools/extract_mixed_nuts_bibliography.py</i>");
             return;
         }
-        QString h = "<b>Shared apparatus</b> <small>(official tier: "
-                    "published + GMR-approved only; insertions carry their "
+        // The heading used to read "official tier: published +
+        // GMR-approved only" and then listed pending candidates underneath
+        // it. The candidates ARE each labelled "PENDING — not GMR-approved",
+        // so the individual rows were honest; the sentence over the whole
+        // list was not, and a heading is what a reader takes as the claim
+        // about everything below it. The official material and the pending
+        // material now sit under headings that are each true of their own
+        // section. (Draft workspace audit, 2026-09-11.)
+        QString h = "<b>Shared apparatus</b> <small>(published and "
+                    "GMR-approved material first, then anything still "
+                    "pending his approval; every insertion carries its "
                     "citation)</small><br>";
         int found = 0;
         for (int i = 0; i < (int)notesBank_.size() && found < 10; ++i) {
@@ -26900,6 +26979,13 @@ private:
             if (!n.lemma.contains(q, Qt::CaseInsensitive) &&
                 !n.text.contains(q, Qt::CaseInsensitive))
                 continue;
+            if (!candFound)
+                h += QString("<div style='margin-top:10px;color:%1;"
+                             "font-size:11px;letter-spacing:1.5px;"
+                             "font-weight:600'>PENDING \u2014 PROPOSED HERE, "
+                             "NOT YET GESHE MICHAEL ROACH'S</div>")
+                         .arg(ux::darkChrome() ? ux::chromeMachine()
+                                               : QString(ux::kMachine));
             ++candFound;
             h += QString("<div style='margin:6px 0;border-left:3px solid "
                          "#c80;padding-left:6px'><a href='cand:%1'>"
@@ -27018,9 +27104,8 @@ public:
                      .arg(q.syllable_count)
                      .arg(QString::fromStdString(q.matched_wylie)
                               .toHtmlEscaped())
-                     .arg(QString::fromStdString(q.english)
-                              .left(220)
-                              .toHtmlEscaped());
+                     .arg(abridged(QString::fromStdString(q.english),
+                                   220));
             // published footnotes whose lemma appears in the segment's
             // published English are offered too (official tier only)
             int recs = 0;
