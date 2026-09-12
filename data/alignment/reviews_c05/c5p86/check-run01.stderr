@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-256-258/semantic-review/review-tools.py.txt", line 73, in <module>
+    master=json.load(gzip.open(masterpath,'rt'));entries=master if isinstance(master,list) else master['entries']
+                                                                                                ~~~~~~^^^^^^^^^^^
+KeyError: 'entries'

@@ -1,0 +1,20 @@
+import sys,sqlite3,runpy,pathlib,json,subprocess,os,hashlib
+A=pathlib.Path(__file__).resolve().parent;W=A.parents[2]/'campaign-worktree'
+if '--child' in sys.argv:
+ original=sqlite3.connect
+ def ro(database,*args,**kw):
+  database=pathlib.Path(database).resolve().as_uri()+'?mode=ro';kw['uri']=True
+  return original(database,*args,**kw)
+ sqlite3.connect=ro
+ runpy.run_path(str(W/'tools/gen_alignment_page.py'),run_name='__main__')
+else:
+ for seq in [256,257,258]:
+  d=A/str(seq);attempts=d/'attempts';attempts.mkdir(exist_ok=True);n=len(list(attempts.iterdir()))+1;a=attempts/f'{n:02}';a.mkdir()
+  data=(d/'spec.json').read_bytes();(a/'spec.json').write_bytes(data)
+  cmd=[sys.executable,'-B',str(pathlib.Path(__file__).resolve()),'--child'];env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+  p=subprocess.run(cmd,input=data,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=W,env=env)
+  (a/'stdout.html').write_bytes(p.stdout);(a/'stderr.txt').write_bytes(p.stderr);(a/'exit.txt').write_text(str(p.returncode)+'\n')
+  (a/'command.json').write_text(json.dumps({'argv':cmd,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'canonical':str(W/'tools/gen_alignment_page.py'),'adapter':'Only sqlite3.connect is restricted to URI mode=ro; unmodified canonical source executes under runpy.'},indent=2)+'\n')
+  if p.returncode==0:
+   (d/'body.html').write_bytes(p.stdout);(d/'generator-stdout.html').write_bytes(p.stdout);(d/'generator-stderr.txt').write_bytes(p.stderr);(d/'generator-exit.txt').write_text(str(p.returncode)+'\n')
+  print(seq,p.returncode,len(p.stdout),p.stderr.decode())

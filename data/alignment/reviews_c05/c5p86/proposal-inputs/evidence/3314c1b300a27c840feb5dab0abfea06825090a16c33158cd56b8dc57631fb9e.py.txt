@@ -1,0 +1,10 @@
+import pathlib,subprocess,os,json,hashlib,sys,html,re,importlib.util
+O=pathlib.Path(__file__).resolve().parent; W=O.parents[2]/'campaign-worktree'
+env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+for seq in [256,257,258]:
+ D=O/str(seq); runs=list(D.glob('attempt-*'));A=D/('attempt-%02d'%(len(runs)+1));A.mkdir();b=(D/'spec.json').read_bytes();(A/'spec.json').write_bytes(b)
+ args=[sys.executable,str(O/'run_generator.py')];p=subprocess.run(args,input=b,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env,cwd=W)
+ (A/'stdout.html').write_bytes(p.stdout);(A/'stderr.txt').write_bytes(p.stderr);(A/'exit.txt').write_text(str(p.returncode)+'\n');(A/'command.json').write_text(json.dumps({'argv':args,'cwd':str(W),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':str(A/'spec.json'),'readonly':'sqlite3.connect adapter enforces SQLite URI mode=ro; canonical script run unchanged via runpy'},indent=2)+'\n')
+ print(seq,p.returncode,len(p.stdout),p.stderr.decode())
+ if p.returncode==0:
+  (D/'body.html').write_bytes(p.stdout);(D/'generator.stdout.html').write_bytes(p.stdout);(D/'generator.stderr.txt').write_bytes(p.stderr);(D/'generator.exit.txt').write_text(str(p.returncode)+'\n')

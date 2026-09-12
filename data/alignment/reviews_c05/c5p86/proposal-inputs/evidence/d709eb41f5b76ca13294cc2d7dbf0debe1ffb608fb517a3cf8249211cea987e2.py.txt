@@ -1,0 +1,101 @@
+"""Readonly original/final identity, freeze, physical and governance audit."""
+import hashlib
+import json
+import sqlite3
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+b = Path(__file__).resolve().parent
+wt = b.parent.parent / 'campaign-worktree'
+r = b / 'reconciled'
+e = r / '256/evidence'
+out = b / 'root-reconciled-identity-audit.json'
+assert not out.exists()
+def read(p): return json.loads(p.read_text())
+def sha(raw): return hashlib.sha256(raw).hexdigest()
+checked = {}
+def pin(x):
+    p = Path(x['path'])
+    if p not in checked:
+        raw = p.read_bytes()
+        checked[p] = (len(raw), sha(raw))
+    assert checked[p] == (x['bytes'], x['sha256']), p
+
+freeze = read(r / '256/frozen-manifest.json')
+for x in freeze['files']: pin(x)
+supp = read(r / '256/freeze-supplement-02.json')
+pin(supp['prior_freeze'])
+for x in supp['added_files']: pin(x)
+for x in read(e / 'original-proposal-copies.json'):
+    pin(x['original']); pin(x['copy'])
+    assert Path(x['original']['path']).read_bytes() == Path(x['copy']['path']).read_bytes()
+for freeze_check in read(e / 'original-freezes-reverified.json'):
+    pin(freeze_check['manifest'])
+    for x in freeze_check['verified_files']: pin(x)
+gov = read(e / 'current-governing.json')
+for x in gov['files']:
+    pin(x['original']); pin(x['copy'])
+    rel = str(Path(x['original']['path']).relative_to(wt))
+    actual = subprocess.check_output(['git','show',gov['head']+':'+rel],cwd=wt)
+    assert actual == Path(x['copy']['path']).read_bytes()
+for x in read(e / 'historical-git-pins.json'):
+    pin(x['copy'])
+    assert subprocess.check_output(['git','show',x['revision']+':'+x['path']],cwd=wt) == Path(x['copy']['path']).read_bytes()
+
+db = sqlite3.connect((wt/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True)
+db.row_factory=sqlite3.Row
+db.execute('PRAGMA query_only=ON')
+rows={s:dict(db.execute('select * from corpus_segments where course=? and seq=?',('C05',s)).fetchone()) for s in (256,257,258)}
+orig={(x['angle'],x['seq'],x['id']):x for x in read(b/'proposal-verification/root-resolved-spans.json')}
+final={(x['seq'],x['id']):x for x in read(b/'root-reconciliation-verification/resolved-spans.json')}
+seen=set(); targets=set()
+def seven(seq,x):
+    s=x['span']
+    return dict(seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=x['tibetan_range'],eng_range=x['english_range'])
+for seq in (256,257,258):
+    spec=read(r/str(seq)/'spec.json')['segments'][0]
+    ftuples=read(r/str(seq)/'final-ordered-tuples.json')
+    assert [x['span'] for x in ftuples['tibetan_order']] == spec['spans']
+    assert [x['span']['id'] for x in ftuples['english_order']] == spec['eng_order']
+    for x in ftuples['tibetan_order']:
+        assert seven(seq,x)==final[(seq,x['span']['id'])]
+    for x in read(r/str(seq)/'original-span-dispositions.json'):
+        key=(x['angle'],seq,x['span']['id'])
+        assert key not in seen
+        seen.add(key)
+        expected=orig[key]
+        assert {**seven(seq,x),'angle':x['angle']}==expected
+        ospec=read(Path(x['original_spec']))['segments'][0]['spans']
+        assert x['span']==next(s for s in ospec if s['id']==key[2])
+        assert x['optional_fields_present']==[k for k in x['span'] if k not in ('id','d','tib','eng')]
+        assert x['reason'] and x['disposition']
+        assert [s['span']['id'] for s in x['selected_final_tuples']]==x['selected_final_ids']
+        for y in x['selected_final_tuples']:
+            assert seven(seq,y)==final[(seq,y['span']['id'])]
+            targets.add((seq,y['span']['id']))
+    for x in read(r/str(seq)/'material-omissions.json'):
+        assert not x['null_asserted']
+        for lo,hi in x['all_source_substring_ranges']: assert rows[seq]['wylie'][lo:hi]==x['tibetan_expression']
+for x in read(e/'physical-extents.json'):
+    pin(x['original'])
+    lo,hi=x['byte_range']; raw=Path(x['original']['path']).read_bytes()[lo:hi]
+    assert raw.decode('utf-8')==x['exact_physical_text']
+    row=dict(db.execute('select * from corpus_segments where course=? and seq=?',(x['course'],x['seq'])).fetchone())
+    assert ' '.join(raw.decode().split())==row[x['field']]
+for x in read(e/'full-parallel-comparisons.json'):
+    for key in ('source','parallel'):
+        row=x[key]
+        assert row==dict(db.execute('select * from corpus_segments where id=?',(row['id'],)).fetchone())
+    for field,proof in x['fields'].items():
+        a=x['source'][field]; z=x['parallel'][field]
+        n=next((i for i,(u,v) in enumerate(zip(a,z)) if u!=v),min(len(a),len(z)))
+        assert proof==dict(equal=a==z,source_characters=len(a),parallel_characters=len(z),shared_prefix_characters=n,source_tail=a[n:],parallel_tail=z[n:])
+for x in read(e/'independent-lexical-full.json'):
+    got=[dict(y) for y in db.execute(x['sql'],x['params'])]
+    assert got==x['spine_rows'] and len(got)==x['spine_count']
+assert seen==set(orig) and len(seen)==172 and targets==set(final) and len(final)==91
+db.close()
+report=dict(utc=datetime.now(timezone.utc).isoformat(),status='PASS, mechanical evidence only; semantic review remains required',governing_head=gov['head'],frozen_files=len(freeze['files']),additional_files=len(supp['added_files']),distinct_files_verified=len(checked),original_dispositions=172,final_tuples=91,historical_git_pins=16,current_git_pins=len(gov['files']),physical_extents=18,full_parallel_comparisons=8,lexical_queries=27,source_and_original_bytes_unchanged=True)
+out.write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(report))

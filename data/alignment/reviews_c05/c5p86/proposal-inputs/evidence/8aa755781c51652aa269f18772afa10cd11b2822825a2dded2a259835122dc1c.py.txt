@@ -1,0 +1,27 @@
+import pathlib,sqlite3,json,hashlib,subprocess,gzip
+R=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment'); W=R/'campaign-worktree'; O=R/'campaign-artifacts/C05-256-258/english'; E=O/'evidence'
+def save(n,x): (E/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def stamp(p): b=p.read_bytes(); return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+db=W/'build/hgm_spine_v27_2.db'; c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True); c.row_factory=sqlite3.Row
+rows=[dict(r) for r in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',241,271))];save('original-context.json',{'sql':'select * from corpus_segments where course=? and seq between ? and ? order by seq','params':['C05',241,271],'count':len(rows),'rows':rows})
+checks=[]
+for name in ['source.json','context.json']:
+ p=O.parent/name; snap=json.loads(p.read_text()); checks += [{'snapshot':stamp(p),'rows':len(snap),'all_six_fields_equal':all(all(r[k]==dict(c.execute('select * from corpus_segments where course=? and seq=?',(r['course'],r['seq'])).fetchone())[k] for k in ['id','course','seq','acip','wylie','english']) for r in snap)}]
+save('snapshot-check.json',checks)
+terms=['brlan','gsher ba','ngo bo','thad ka','bden pa','rnag khrag','bdud rtsi','mig shes','tshad ma',"'gal ba","'khrul ba",'phan tshun spangs',"dngos 'gal",'phor pa',"'thad",'gsum','la sogs pa']
+queries=[]
+for t in terms:
+ q='select * from entries where wylie=? or wylie like ?'; p=[t,'%'+t+'%']; rr=[dict(r) for r in c.execute(q,p)]; queries.append({'term':t,'sql':q,'params':p,'count':len(rr),'rows':rr})
+save('spine-lexical.json',queries)
+queries=[]
+for t in ['brlan zhing gsher ba', 'thad ka thad kar', "phan tshun spangs 'gal", "dngos 'gal",'visual consciousness of all three','quality of being either one']:
+ q='select * from corpus_segments where wylie like ? or english like ? order by course,seq'; p=['%'+t+'%']*2; rr=[dict(r) for r in c.execute(q,p)]; queries.append({'term':t,'sql':q,'params':p,'count':len(rr),'rows':rr})
+save('corpus-parallels.json',queries)
+master=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz'); j=json.loads(gzip.decompress(master.read_bytes())); ent=j['unified_entries']; ent=list(ent.values()) if isinstance(ent,dict) else ent
+rr=[r for r in ent if any(t in r.get('wylie','') for t in terms)]; save('master-lexical.json',{'source':stamp(master),'total_entries':len(ent),'terms':terms,'count':len(rr),'entries':rr})
+head='ed3cac8f691bee44dd09a03fe2712785901acc03'; docs=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json','docs/NEVER_BANK_A_FALSEHOOD.md']
+manifest=[]
+for f in docs:
+ b=subprocess.check_output(['git','show',head+':'+f],cwd=W); p=E/('governing-'+f.replace('/','__'));p.write_bytes(b);manifest.append({'git_revision':head,'git_path':f,'git_blob':subprocess.check_output(['git','rev-parse',head+':'+f],cwd=W,text=True).strip(),'captured':stamp(p),'worktree':stamp(W/f),'worktree_same':b==(W/f).read_bytes()})
+save('governing-manifest.json',manifest);save('source-manifest.json',[stamp(db),stamp(master)])
+print('captured',len(rows),'context rows; lexical counts',[(x['term'],x['count']) for x in json.loads((E/'spine-lexical.json').read_text())]);print('corpus counts',[(x['term'],x['count']) for x in queries])

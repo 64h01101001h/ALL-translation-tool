@@ -1,0 +1,12 @@
+import pathlib,subprocess,os,sys,json,importlib.util
+R=pathlib.Path.cwd();A=R/'campaign-artifacts/C05-256-258';O=A/'reconciled/256';W=R/'campaign-worktree';E=O/'evidence/original-replays';E.mkdir(exist_ok=True)
+spec=importlib.util.spec_from_file_location('canon',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+rows={r['seq']:r for r in json.loads((O/'evidence/source-context-full.json').read_text())};results=[];resolved=[]
+for angle in ['tibetan','english']:
+ for seq in [256,257,258]:
+  p=A/angle/str(seq);b=(p/'spec.json').read_bytes();cmd=[sys.executable,'-B',str(O/'canonical.py')];run=subprocess.run(cmd,input=b,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),capture_output=True)
+  base=E/f'{angle}-{seq}';base.with_suffix('.stdout.html').write_bytes(run.stdout);base.with_suffix('.stderr.txt').write_bytes(run.stderr);base.with_suffix('.exit.txt').write_text(str(run.returncode)+'\n');assert run.returncode==0 and not run.stderr and run.stdout==(p/'body.html').read_bytes()
+  s=json.loads(b)['segments'][0];sp=s['spans'];by={x['id']:x for x in sp};r=rows[seq];t=g.resolve(r['wylie'],sp,'tib',seq);en=g.resolve(r['english'],g.with_members(sp,[by[i] for i in s['eng_order']],r['english']),'eng',seq)
+  result={'angle':angle,'seq':seq,'exit':run.returncode,'stderr_bytes':len(run.stderr),'body_bytes':len(run.stdout),'saved_body_exact':True,'argv':cmd};results.append(result)
+  for x in sp:resolved.append({'angle':angle,'seq':seq,'original_spec':str(p/'spec.json'),'span':x,'optional_fields_present':[k for k in ['cls','nul','subword'] if k in x],'tibetan_range':t[x['id']],'english_range':en.get(x['id']),'tibetan_exact':r['wylie'][slice(*t[x['id']])],'english_exact':r['english'][slice(*en[x['id']])] if x['id'] in en else None})
+(O/'evidence/original-replay-proof.json').write_text(json.dumps(results,indent=2)+'\n');(O/'evidence/original-resolved-spans.json').write_text(json.dumps(resolved,ensure_ascii=False,indent=2)+'\n');print(results,'original spans',len(resolved))

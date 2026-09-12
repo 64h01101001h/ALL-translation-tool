@@ -1,0 +1,130 @@
+"""Audit every staged whitespace warning without decoding legacy source bytes.
+
+Preserve canonical source and CRLF CSV bytes. Unexpected warnings fail closed.
+Run after staging a reviewed page; stage this proof before committing.
+"""
+from collections import defaultdict
+import datetime
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+art = Path(__file__).resolve().parent
+wt = art.parent / 'campaign-worktree'
+page, first = map(int, sys.argv[1:])
+batch = art / f'C05-{first}-{first+2}'
+out = batch / 'landing'
+target = out / 'source-whitespace-proof.json'
+assert not target.exists(), 'Preserve earlier proof before another audit'
+run = subprocess.run(['git', 'diff', '--cached', '--check'], cwd=wt, capture_output=True)
+(out / 'staged-diff-check.stdout').write_bytes(run.stdout)
+(out / 'staged-diff-check.stderr').write_bytes(run.stderr)
+(out / 'staged-diff-check.exit').write_text(str(run.returncode) + '\n')
+assert run.returncode in (0, 2) and not run.stderr
+manifest = json.loads((batch / 'semantic-review/original-to-copy-manifest.json').read_text())
+physical = defaultdict(list)
+for record in manifest:
+    if record['original'].endswith('ReadingASCII.txt'):
+        raw = Path(record['original']).read_bytes()
+        assert len(raw) == record['bytes'] and hashlib.sha256(raw).hexdigest() == record['sha256']
+        physical[(len(raw), record['sha256'])].append(record['original'])
+csv_paths = {
+    'docs/geshe_michael_roach_dictionary.csv',
+    'docs/geshe_michael_roach_dictionary_reverse.csv',
+    'docs/geshe_michael_roach_dictionary_by_course.csv',
+    'docs/geshe_michael_roach_dictionary_changes.csv',
+}
+issues = defaultdict(lambda: defaultdict(list))
+header = re.compile(rb'^([^+\n]+):([0-9]+): (.+)$')
+for line in run.stdout.split(b'\n'):
+    match = header.match(line)
+    if match:
+        path, number, warning = match.groups()
+        issues[path.decode('utf-8')][warning.decode('ascii')].append(int(number))
+    else:
+        assert not line.strip() or line.startswith(b'+'), repr(line[:160])
+exact_path = out / 'review-whitespace-exact-pins.json'
+exact = json.loads(exact_path.read_text()) if exact_path.exists() else {}
+review_root = batch / 'semantic-review'
+review_freeze = {}
+if exact:
+    for record in json.loads((review_root / 'review-freeze.json').read_text())['files']:
+        recorded_path = Path(record['path'])
+        relative_path = recorded_path.relative_to(review_root) if recorded_path.is_absolute() else recorded_path
+        assert (review_root / relative_path).resolve().is_relative_to(review_root.resolve())
+        assert str(relative_path) not in review_freeze
+        review_freeze[str(relative_path)] = record
+files = {}
+for path, grouped in issues.items():
+    raw = (wt / path).read_bytes()
+    staged = subprocess.check_output(['git', 'show', ':' + path], cwd=wt)
+    assert staged == raw, path
+    digest = hashlib.sha256(raw).hexdigest()
+    if path in csv_paths:
+        assert set(grouped) == {'trailing whitespace.'}, (path, grouped.keys())
+        lines = raw.split(b'\n')
+        assert all(lines[n-1].endswith(b'\r') for n in grouped['trailing whitespace.']), path
+        reason = 'Canonical CSV CRLF; every warning line verified to end in CR before LF'
+        originals = []
+    elif path == f'data/alignment/reviews_c05/c5p{page}/review.md':
+        assert set(grouped) == {'new blank line at EOF.'}, grouped.keys()
+        frozen = (batch / 'semantic-review/review.md').read_bytes()
+        accepted = json.loads((out / 'root-semantic-acceptance-proof.json').read_text())
+        assert raw == frozen and digest == accepted['review_sha256']
+        lines = raw.split(b'\n')
+        assert all(not b''.join(lines[n-1:]).strip() for n in grouped['new blank line at EOF.'])
+        reason = 'Exact accepted review bytes; only verified empty trailing lines at EOF'
+        originals = [str(batch / 'semantic-review/review.md')]
+    elif path.removeprefix(f'data/alignment/reviews_c05/c5p{page}/') in exact:
+        assert path.startswith(f'data/alignment/reviews_c05/c5p{page}/'), path
+        rel = path.removeprefix(f'data/alignment/reviews_c05/c5p{page}/')
+        pin = exact[rel]
+        assert digest == pin['sha256'] == review_freeze[rel]['sha256']
+        assert len(raw) == pin['bytes'] == review_freeze[rel]['bytes']
+        original = review_root / rel
+        assert raw == original.read_bytes()
+        lines = raw.split(b'\n')
+        if pin['kind'] == 'physical_bytes':
+            witness = Path(pin['witness']['path'])
+            witness_raw = witness.read_bytes()
+            assert len(witness_raw) == pin['witness']['bytes']
+            assert hashlib.sha256(witness_raw).hexdigest() == pin['witness']['sha256']
+            lo, hi = pin['byte_range']
+            assert 0 <= lo < hi <= len(witness_raw) and witness_raw[lo:hi] == raw
+            assert set(grouped) <= {'trailing whitespace.', 'space before tab in indent.', 'new blank line at EOF.'}
+        elif pin['kind'] == 'blank_eof':
+            assert set(grouped) == {'new blank line at EOF.'}
+            assert all(not b''.join(lines[n-1:]).strip() for n in grouped['new blank line at EOF.'])
+        else:
+            assert set(grouped) == {'trailing whitespace.'}
+            expected = b' ' if pin['kind'] == 'diff_context' else b'local_after_common_prefix: '
+            assert pin['kind'] in ('diff_context', 'empty_report_field')
+            assert all(lines[n-1] == expected for n in grouped['trailing whitespace.'])
+        reason = 'Exact independently frozen review evidence; each warning is verified empty EOF/diff context/report field, or an exact original physical byte range'
+        if pin['kind'] == 'physical_bytes':
+            originals = [str(original), pin['witness']['path']]
+        else:
+            originals = [str(original)]
+    else:
+        assert path.startswith(f'data/alignment/reviews_c05/c5p{page}/'), path
+        originals = physical[(len(raw), digest)]
+        assert originals, ('Unclassified source warning', path, len(raw), digest)
+        assert raw == Path(originals[0]).read_bytes(), path
+        reason = 'Complete original physical source bytes retained exactly'
+    files[path] = dict(bytes=len(raw), sha256=digest, reason=reason,
+                       original_paths=sorted(set(originals)), issues=dict(grouped))
+assert bool(issues) == (run.returncode == 2)
+proof = dict(checked_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             baseline_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=wt).decode().strip(),
+             git_diff_check_exit=run.returncode,
+             warning_count=sum(len(lines) for groups in issues.values() for lines in groups.values()),
+             all_warnings_accounted_for=True, files=files,
+             raw_log_kept_external=str(out / 'staged-diff-check.stdout'),
+             raw_log_bytes=len(run.stdout), raw_log_sha256=hashlib.sha256(run.stdout).hexdigest(),
+             method='Parse all ASCII diagnostic headers from byte output; compare each cited file once to the index; verify complete source identity, each CSV CRLF line, or exact frozen review evidence with verified empty EOF, empty report fields and unified-diff context lines. No normalization or source mutation.')
+target.write_text(json.dumps(proof, indent=2) + '\n')
+print(json.dumps({k: v for k, v in proof.items() if k != 'files'}, indent=2))
+print(json.dumps({p: sum(map(len, r['issues'].values())) for p, r in files.items()}, indent=2))

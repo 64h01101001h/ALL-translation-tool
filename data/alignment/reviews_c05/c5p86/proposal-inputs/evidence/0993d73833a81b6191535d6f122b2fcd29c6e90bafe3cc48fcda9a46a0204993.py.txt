@@ -1,0 +1,47 @@
+import pathlib,json,sqlite3,gzip,hashlib,subprocess
+A=pathlib.Path(__file__).resolve().parent
+W=A.parents[2]/'campaign-worktree'
+D=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff')
+def save(n,x): (A/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def info(p):
+ b=p.read_bytes();return {'path':str(p),'resolved_path':str(p.resolve()),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+p=W/'build/hgm_spine_v27_2.db'; c=sqlite3.connect(p.resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+rows=[dict(r) for r in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',242,270))]
+save('original-context-full.json',rows)
+checks=[]
+for n in ['source.json','context.json']:
+ x=json.loads((A.parent/n).read_text())
+ for r in x:
+  o=dict(c.execute('select * from corpus_segments where course=? and seq=?',(r['course'],r['seq'])).fetchone())
+  checks.append({'file':str(A.parent/n),'seq':r['seq'],'fields':{k:r[k]==o[k] for k in r}})
+save('snapshot-verification.json',checks)
+queries=[]
+for field,term in [('wylie','brlan zhing gsher ba'),('wylie','phan tshun spangs'),('wylie',"dngos 'gal"),('wylie',"thad ka thad kar"),('english','visual consciousness of all three'),('english','quality of being pus and blood')]:
+ sql='select * from corpus_segments where '+field+' like ? order by course,seq';args=['%'+term+'%'];rs=[dict(r) for r in c.execute(sql,args)]
+ queries.append({'sql':sql,'parameters':args,'row_count':len(rs),'rows':rs})
+save('corpus-queries-full.json',queries)
+terms=['brlan','brlan pa','gsher ba','phor pa','gang','lha','mi','yi dvags','cig car','ngo bo','thad ka','bden','bden pa','rnag khrag','rnag','khrag','bdud rtsi','mig shes','tshad ma',"'ga' zhig",'thams cad',"'gal ba", "ma 'khrul ba", "'khrul ba",'rtogs pa',"phan tshun spangs 'gal", "phan tshun spangs", "dngos 'gal", "mi 'thad pa",'la sogs pa']
+master=D/'release/hgm_dictionary_v27_2.json.gz'; m=json.load(gzip.open(master,'rt'))
+lex=[]
+for t in terms:
+ sr=[dict(r) for r in c.execute('select * from entries where wylie=? order by id',(t,))]
+ mr=[e for e in m['unified_entries'] if e.get('wylie')==t]
+ lex.append({'term':t,'spine_count':len(sr),'spine_rows':sr,'master_count':len(mr),'master_entries':mr})
+save('lexical-full.json',lex)
+par=[]
+for s in range(256,259):
+ r=next(r for r in rows if r['seq']==s)
+ rs=[dict(x) for x in c.execute('select * from corpus_segments where wylie=? or english=? or acip=? order by course,seq',(r['wylie'],r['english'],r['acip']))]
+ par.append({'source_seq':s,'sql':'select * from corpus_segments where wylie=? or english=? or acip=? order by course,seq','parameters':[r['wylie'],r['english'],r['acip']],'count':len(rs),'rows':rs,'comparisons':[{'course':q['course'],'seq':q['seq'],'equal':{f:q[f]==r[f] for f in ['acip','wylie','english']}} for q in rs]})
+save('parallel-full.json',par)
+files=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md']
+head=subprocess.check_output(['git','-C',str(W),'rev-parse','HEAD'],text=True).strip(); pins=[]
+(A/'governing').mkdir(exist_ok=True)
+for f in files:
+ b=subprocess.check_output(['git','-C',str(W),'show',head+':'+f]); dest=A/'governing'/f.replace('/','__');dest.write_bytes(b)
+ pins.append({'git_commit':head,'git_path':f,'git_blob':subprocess.check_output(['git','-C',str(W),'rev-parse',head+':'+f],text=True).strip(),'saved':info(dest),'working':info(W/f),'working_equals_git':(W/f).read_bytes()==b})
+save('governing-pins.json',pins)
+save('original-file-mappings.json',[info(p),info(master),info(D/'data/full_parallel_corpus_v32.json.gz'),info(A.parent/'source.json'),info(A.parent/'context.json'),info(A.parent/'tibetan-brief.md'),info(A.parent.parent/'proposal-protocol.md')])
+print('context',len(rows),'queries',[(q['parameters'],q['row_count']) for q in queries])
+print('lexical',[(x['term'],[(r['hgm_gloss']) for r in x['spine_rows']]) for x in lex])
+print('raw',rows[14]['raw'])

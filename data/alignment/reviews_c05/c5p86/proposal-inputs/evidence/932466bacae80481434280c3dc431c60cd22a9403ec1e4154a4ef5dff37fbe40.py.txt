@@ -1,0 +1,7 @@
+import sqlite3,pathlib,runpy,sys
+connect=sqlite3.connect
+def readonly(database,*a,**kw):
+ p=pathlib.Path(database).resolve();kw['uri']=True
+ return connect(p.as_uri()+'?mode=ro',*a,**kw)
+sqlite3.connect=readonly
+runpy.run_path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py',run_name='__main__')

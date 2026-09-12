@@ -1,0 +1,43 @@
+import pathlib,json,sqlite3,gzip,subprocess,os,hashlib,shutil,sys
+R=pathlib.Path.cwd();A=R/'campaign-artifacts/C05-256-258';O=A/'reconciled/256';W=R/'campaign-worktree';E=O/'evidence';E.mkdir(exist_ok=True)
+def save(n,x): (E/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def info(p):
+ b=p.read_bytes();return {'path':str(p.resolve()),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+rows=[dict(r) for r in c.execute("select * from corpus_segments where course='C05' and seq between 241 and 271 order by seq")];save('source-context-full.json',rows)
+for name in ['source.json','context.json']:
+ for r in json.loads((A/name).read_text()): assert all(r[k]==next(x for x in rows if x['seq']==r['seq'])[k] for k in r)
+# Read every original artifact byte and retain exact copied original evidence, including failed attempts.
+manifest=[]
+for angle in ['tibetan','english']:
+ for p in sorted((A/angle).rglob('*')):
+  if not p.is_file():continue
+  b=p.read_bytes();dst=E/'original-proposals'/p.relative_to(A);dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(b)
+  manifest.append({'original':info(p),'copy':info(dst)})
+save('original-proposal-copies.json',manifest)
+# Independently rerun every original corpus and lexical SQL query; preserve all returned fields.
+queries=[]
+for angle,file in [('tibetan','corpus-queries-full.json'),('tibetan','parallel-full.json'),('english','evidence/corpus-parallels.json'),('english','evidence/spine-lexical.json')]:
+ for q in json.loads((A/angle/file).read_text()):
+  params=q.get('parameters',q.get('params'));rs=[dict(r) for r in c.execute(q['sql'],params)];expected=q.get('rows');assert rs==expected
+  queries.append({'original_path':str(A/angle/file),'sql':q['sql'],'params':params,'count':len(rs),'rows':rs,'equals_original':True})
+save('independent-query-replays-full.json',queries)
+master=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz');m=json.load(gzip.open(master,'rt'))['unified_entries']
+terms=['brlan','brlan zhing gsher ba','gsher ba','gang','gang po','cig car du','ngo bo','ngo bor','thad ka','thad ka thad ka','thad ka thad kar',"'ga' zhig","'gal ba","ma 'khrul ba",'rtogs pa','rtogs par','yod pa','gnyis kar','gsum po',"phan tshun spangs 'gal","dngos 'gal",'rnag khrag','rnag','khrag',"mi 'thad pa",'chur','bdud rtsir']
+lex=[]
+for t in terms:
+ sr=[dict(r) for r in c.execute('select * from entries where wylie=? order by id',(t,))];mr=[r for r in m if r.get('wylie')==t];lex.append({'term':t,'sql':'select * from entries where wylie=? order by id','params':[t],'spine_count':len(sr),'spine_rows':sr,'master_count':len(mr),'master_entries':mr})
+save('independent-lexical-full.json',lex);save('source-manifests.json',[info(master),info(W/'build/hgm_spine_v27_2.db')])
+# Original physical files reopened and copied, exact original-to-copy mappings.
+physical=[]
+for mapping in json.loads((A/'tibetan/original-raw-mappings.json').read_text()):
+ p=pathlib.Path(mapping['original']['path']);dest=E/'physical'/p.name;dest.parent.mkdir(exist_ok=True);b=p.read_bytes();assert info(p)['sha256']==mapping['original']['sha256'];dest.write_bytes(b);physical.append({'original':info(p),'copy':info(dest)})
+save('physical-originals.json',physical)
+# Immutable original governing git pins, inspected independently at pinned revision.
+pins=[]
+for name in ['tibetan/governing-pins.json','english/evidence/governing-manifest.json']:
+ for p in json.loads((A/name).read_text()):
+  rev=p.get('git_commit',p.get('git_revision'));path=p['git_path'];b=subprocess.check_output(['git','-C',str(W),'show',rev+':'+path]);dest=E/'historical-git'/name.split('/')[0]/path.replace('/','__');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(b);assert subprocess.check_output(['git','-C',str(W),'rev-parse',rev+':'+path],text=True).strip()==p['git_blob'];pins.append({'revision':rev,'path':path,'blob':p['git_blob'],'copy':info(dest)})
+save('historical-git-pins.json',pins)
+print('copied',len(manifest),'original files; queries',len(queries),'pins',len(pins))
+for q in lex: print(q['term'],[(r['id'],r['hgm_gloss']) for r in q['spine_rows']])

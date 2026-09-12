@@ -1,0 +1,6 @@
+{
+  "status": "FAILED; no acceptance proof written",
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 campaign-artifacts/verify_semantic_acceptance.py86 256 --landed",
+  "error": "FileNotFoundError: data/alignment/reviews_c05/c5p86/proposal-inputs/reconciled/256/assess-attempt01.py",
+  "reason": "Review manifest includes unsupported helper extensions excluded by the landing copier. Original reviewer is preserving prior proof boundary and mapping helpers to supported exact-byte .py.txt/.bin copies. No source/spec/body changes."
+}

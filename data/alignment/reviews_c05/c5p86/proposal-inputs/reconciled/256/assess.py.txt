@@ -1,0 +1,53 @@
+import pathlib,json,sqlite3,re,gzip,hashlib,os,subprocess,copy
+O=pathlib.Path(__file__).resolve().parent.parent;A=O.parent;R=A.parents[1];W=R/'campaign-worktree';E=O/'256/evidence'
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def stamp(p):b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+rows={r['seq']:r for r in json.loads((E/'source-context-full.json').read_text())}
+paths=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool'];access=[{'path':str(pathlib.Path.home()/p),'readable':os.access(pathlib.Path.home()/p,os.R_OK)} for p in paths];assert all(x['readable'] for x in access);save(E/'access.json',access)
+# Capture actual current governance separately from immutable original historical pins.
+gov=[]
+for f in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','docs/errata_register.json','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ p=W/f;dest=E/('current-'+f.replace('/','__'));dest.write_bytes(p.read_bytes());gov.append({'original':stamp(p),'copy':stamp(dest)})
+save(E/'current-governing.json',{'head':subprocess.check_output(['git','-C',str(W),'rev-parse','HEAD'],text=True).strip(),'files':gov})
+# Validate every recorded original master object directly against the full current master.
+master=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz');mm=json.load(gzip.open(master,'rt'))['unified_entries'];checked=[]
+for q in json.loads((A/'tibetan/lexical-full.json').read_text()):
+ sqlrows=[dict(x) for x in c.execute('select * from entries where wylie=? order by id',(q['term'],))];mr=[x for x in mm if x.get('wylie')==q['term']];assert sqlrows==q['spine_rows'] and mr==q['master_entries'];checked.append({'term':q['term'],'spine_count':len(sqlrows),'master_count':len(mr),'full_equality':True})
+eng=json.loads((A/'english/evidence/master-lexical.json').read_text());mr=[x for x in mm if any(t in x.get('wylie','') for t in eng['terms'])];assert mr==eng['entries'];save(E/'master-rechecks.json',{'tibetan':checked,'english':{'terms':eng['terms'],'count':len(mr),'full_equality':True}})
+# Reopen corpus original and compare full fields for all selected/context and parallel records.
+cp=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/data/full_parallel_corpus_v32.json.gz');cj=json.load(gzip.open(cp,'rt'));save(E/'corpus-structure.json',{'source':stamp(cp),'type':type(cj).__name__,'keys':list(cj) if isinstance(cj,dict) else None})
+# Exact whole-row parallel queries and specific alternative witness searches.
+parallel=[]
+for seq in [256,257,258]:
+ r=rows[seq]
+ for field in ['acip','wylie','english']:
+  sql='select * from corpus_segments where '+field+'=? order by course,seq';rr=[dict(x) for x in c.execute(sql,(r[field],))];parallel.append({'source_seq':seq,'sql':sql,'params':[r[field]],'count':len(rr),'rows':rr})
+ for term in {256:'each different type of being',257:'visual consciousness of all three',258:'quality of being pus and blood'}[seq],:
+  sql='select * from corpus_segments where english like ? order by course,seq';rr=[dict(x) for x in c.execute(sql,('%'+term+'%',))];parallel.append({'source_seq':seq,'sql':sql,'params':['%'+term+'%'],'count':len(rr),'rows':rr,'C16_P1_TCS_hits':[(x['course'],x['seq']) for x in rr if x['course']=='C16' or x['course']=='P1' or x['course'].startswith('TCS')]})
+save(E/'additional-parallels-full.json',parallel)
+# Full fields and exact digital extents; do not infer lineage from equality.
+compare=[]
+for course,seq,target in [('C15',401,256),('C16',832,256),('P7',18,256),('C15',402,257),('C16',833,257),('C15',403,258),('C16',834,258),('P7',19,258)]:
+ p=dict(c.execute('select * from corpus_segments where course=? and seq=?',(course,seq)).fetchone());r=rows[target];fields={}
+ for f in ['acip','wylie','english']:
+  a,b=r[f],p[f];k=0
+  while k<min(len(a),len(b)) and a[k]==b[k]:k+=1
+  fields[f]={'equal':a==b,'source_characters':len(a),'parallel_characters':len(b),'shared_prefix_characters':k,'source_tail':a[k:],'parallel_tail':b[k:]}
+ compare.append({'source':r,'parallel':p,'fields':fields,'lineage':'not established by these digital comparisons'})
+save(E/'full-parallel-comparisons.json',compare)
+# Normalize only whitespace for locating ACIP and English in physical source, recording exact byte extents.
+extents=[]
+for course,sequences in [('C05',[256,257,258]),('C15',[401,402,403]),('C16',[832,833,834])]:
+ p=next(pathlib.Path(x['original']['path']) for x in json.loads((E/'physical-originals.json').read_text()) if pathlib.Path(x['original']['path']).name==course+'ReadingASCII.txt');b=p.read_bytes();txt=b.decode('latin-1');parts=[];bounds=[]
+ for m in re.finditer(r'\S+',txt):
+  if parts:parts.append(' ');bounds.append((m.start(),m.start()))
+  for i,ch in enumerate(m.group()):parts.append(ch);off=m.start()+i;bounds.append((off,off+1))
+ norm=''.join(parts)
+ for seq in sequences:
+  r=dict(c.execute('select * from corpus_segments where course=? and seq=?',(course,seq)).fetchone())
+  for field in ['acip','english']:
+   term=' '.join(r[field].split());pos=norm.find(term);assert pos>=0,(course,seq,field);lo=bounds[pos][0];hi=bounds[pos+len(term)-1][1]
+   extents.append({'course':course,'seq':seq,'field':field,'original':stamp(p),'normalization':'whitespace only','normalized_range':[pos,pos+len(term)],'byte_range':[lo,hi],'exact_physical_text':b[lo:hi].decode('latin-1'),'normalized_equals_spine':True})
+save(E/'physical-extents.json',extents)
+print('master full equality',len(checked),len(mr),'corpus structure',type(cj).__name__,'physical extents',len(extents))

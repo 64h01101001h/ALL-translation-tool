@@ -1,0 +1,9 @@
+C05:258 · English-first · Codex · PROVISIONAL
+Challenge first: phan tshun spangs 'gal → the explicit mutual-exclusion definition (d3), supported by the exact HGM gloss; dngos 'gal → directly incompatible. gsum po is omitted rather than mapped to two; chu yin min retains the complete phrase containing both English water tokens.
+No new erratum. C15:403 agrees; C16:834 adds the following heading (registered apparatus class). P7:19 stops at possess the and supports only that shared extent. C05:258 has no appended heading and is not truncated.
+Final canonical generation: EXIT=0; stderr=0 bytes; body=3106 bytes; spans=13, d5=5, d7=2, null=0; errata=0.
+body SHA-256: 69df54b3401c4b43fc60e47e576993c0884c15839f3e68538d34a6418321eda1
+spec SHA-256: eaa61516b3b3df9ea13ceb5ae9aac2b705c9ad398a6b1a51e4860b25fa672d8f
+Complete resolved offsets, original row, byte fidelity and file hashes: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-256-258/english/258/proof.json (SHA-256 5e5b31431e45c892730db30a6cad78dcb7e44f69ca3955afe4bc80284fb59c3d).
+Shared full original context, all corpus query rows, current master/gloss entries, physical C05/C15/C16 originals and exact historical Git blobs: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-256-258/english/evidence. Exact path/byte/hash map: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-256-258/english/frozen-manifest.json.
+Every canonical attempt is preserved under /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-256-258/english/258/attempt-XX; final stdout equals body bytes. Mechanical fidelity is not semantic approval.

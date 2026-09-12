@@ -1,0 +1,15 @@
+import pathlib,os,subprocess,sys,json,hashlib,importlib.util,html,re
+O=pathlib.Path(__file__).resolve().parent.parent;W=O.parents[2]/'campaign-worktree'
+spec=importlib.util.spec_from_file_location('canonical',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+rows={r['seq']:r for r in json.loads((O/'256/evidence/source-context-full.json').read_text())}
+def info(p):b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+for seq in [256,257,258]:
+ D=O/str(seq);A=D/'attempts';A.mkdir(exist_ok=True);A=A/f'{len(list(A.iterdir()))+1:02}';A.mkdir();b=(D/'spec.json').read_bytes();(A/'spec.json').write_bytes(b)
+ cmd=[sys.executable,'-B',str(O/'256/canonical.py')];p=subprocess.run(cmd,input=b,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),cwd=W,capture_output=True)
+ (A/'stdout.html').write_bytes(p.stdout);(A/'stderr.txt').write_bytes(p.stderr);(A/'exit.txt').write_text(str(p.returncode)+'\n');(A/'command.json').write_text(json.dumps({'argv':cmd,'cwd':str(W),'stdin':str(A/'spec.json'),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'},'canonical_sha256':info(W/'tools/gen_alignment_page.py')['sha256'],'sqlite':'URI mode=ro only adapter; canonical source unchanged'},indent=2)+'\n')
+ print(seq,p.returncode,len(p.stdout),p.stderr.decode());assert p.returncode==0 and not p.stderr
+ for name,data in [('body.html',p.stdout),('generator-stdout.html',p.stdout),('generator-stderr.txt',p.stderr),('generator-exit.txt',b'0\n')]: (D/name).write_bytes(data)
+ s=json.loads(b)['segments'][0];sp=s['spans'];r=rows[seq];by={x['id']:x for x in sp};t=g.resolve(r['wylie'],sp,'tib',seq);e=g.resolve(r['english'],g.with_members(sp,[by[i] for i in s['eng_order']],r['english']),'eng',seq)
+ rr=[{'span':x,'tibetan_range':t[x['id']],'english_range':e.get(x['id']),'tibetan_exact':r['wylie'][slice(*t[x['id']])],'english_exact':r['english'][slice(*e[x['id']])] if x['id'] in e else None} for x in sp]
+ proof={'status':'PROVISIONAL, mechanical verification only','seq':seq,'counts':{'spans':len(sp),'d5':sum(x['d']==5 for x in sp),'d7':sum(x['d']==7 for x in sp),'null':sum(x['eng'] is None for x in sp)},'source':r,'resolved_spans':rr,'eng_order':s['eng_order'],'canonical_exit':p.returncode,'stderr_bytes':len(p.stderr),'body_equals_stdout':True,'final_files':[info(D/f) for f in ['spec.json','body.html','errata.json']],'attempt':str(A)}
+ (D/'proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')

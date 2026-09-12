@@ -1,0 +1,121 @@
+import json,hashlib,re,sqlite3,sys,subprocess
+from pathlib import Path
+from html.parser import HTMLParser
+O=Path(__file__).resolve().parent;B=O.parent;W=B.parent.parent/'campaign-worktree'
+def j(p):return json.loads(Path(p).read_text())
+def write(n,x): (O/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sh(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+src={x['seq']:x for x in j(O/'independent-source.json')};rr=j(O/'resolved-spans.json');lookup={(x['seq'],x['id']):x for x in rr}
+# Every original disposition is checked with the actual canonical resolver again.
+sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+ods=[]
+for seq in (256,257,258):
+ for angle in ['tibetan','english']:
+  sp=j(B/angle/str(seq)/'spec.json')['segments'][0];ss=sp['spans'];by={x['id']:x for x in ss};tr=G.resolve(src[seq]['wylie'],ss,'tib',seq);er=G.resolve(src[seq]['english'],G.with_members(ss,[by[x] for x in sp['eng_order']],src[seq]['english']),'eng',seq)
+  for d in j(B/'reconciled'/str(seq)/'original-span-dispositions.json'):
+   if d['angle']!=angle:continue
+   s=d['span'];assert s==by[s['id']];assert d['tibetan_range']==list(tr[s['id']]);assert d['english_range']==list(er[s['id']]);assert d['reason']
+   for z in d['selected_final_tuples']:
+    t=z['span'];assert lookup[(seq,t['id'])]==dict(seq=seq,id=t['id'],d=t['d'],tib=t['tib'],eng=t['eng'],tib_range=z['tibetan_range'],eng_range=z['english_range'])
+   ods.append({'seq':seq,'angle':angle,'original_id':s['id'],'decision':'CONCUR','final_ids':d['selected_final_ids'],'rationale_location':'review.md; span-semantic-review.json','original_disposition':d['disposition']})
+write('independent-original-dispositions.json',ods);assert len(ods)==172
+# Source-specific semantic judgments; repeated simple lexemes keep their distinct ranges.
+word_reasons={
+ 'yang':'Additive particle: else modifies the new claimant, not the claim content.',
+ 'kha cig':'Indefinite claimant Someone; supplied scenario words remain outside.',
+ 'brlan':'Wet quality of the liquid, at this exact description occurrence.',
+ 'zhing':'Coordinates wet and flowing; this is the description conjunction, not an earlier enumeration and.',
+ 'gsher ba':'Flowing quality paired with brlan; standalone quality word is defensible despite the full definition also being attested.',
+ 'chu':'Water noun in the first/second description; exact English description occurrence rather than the later predicates.',
+ 'phor pa':'Glass/container noun; source fill and liquid words have distinct English exponents.',
+ 'gang':'Fill predicate, excluding complement-link with despite the wider attested HGM rendering.',
+ 'gang po':'Full/filled predicate in this container phrase; the separately translated liquid is not included.',
+ 'lha':'Pleasure being denotes the first member of the three types; article remains outside.',
+ 'mi':'Human in the being enumeration, not a negator.',
+ "mi'i":'Inflected possessed human; English of is distributed in the perspective frame, not asserted absent.',
+ "lha'i":'Inflected possessed pleasure being; article and English of remain outside.',
+ 'yi dvags':'Craving spirit, at the actual first/second source mention; DVAGS convention is unchanged.',
+ 'cig car du':'Together is the simultaneous/joint looking adverb. HGM4169 has wider sit-down renderings, but there is no independent sitting predicate here.',
+ 'bltas pa':'Looking action, distinguished from the simultaneous adverb and supplied sitting scene.',
+ "'gro ba":'Generic being/beings, attached to the corresponding possessors or kind, not the being substring within pleasure being.',
+ 'rang rang':'Distributive each, referring to the respective kind of being.',
+ 'ngo bor':'Complete inflected perspective expression at d3; to the eyes is a standpoint idiom, not a lexical eyes translation of ngo bo.',
+ 'thad ka thad kar':'Reduplicated distributive compound, inflected at final kar, locally recast as different type; full HGM23198 supports the compound, unlike the shorter radius term.',
+ 'bden':'Reality predicate, real/reality as actual adjective/noun realization in its corresponding clause.',
+ 'bden pa':'Final reality predicate, after the pleasure-being/ambrosia relation.',
+ 'pas':'Whole standalone causal nominalizer-plus-case particle; Since, without detaching agentive s.',
+ 'rnag khrag':'Established pus-and-blood compound; the conjunctive English rendering belongs to the combined substance.',
+ 'rnag':'Unique tighter pus member inside the just-preceding rnag khrag parent.',
+ 'khrag':'Unique tighter blood member inside the just-preceding rnag khrag parent.',
+ 'chur':'Intact chu with bound terminative r in the as-water predicate; an absent HGM gloss on this exact inflection does not erase the local exponent.',
+ 'bdud rtsir':'Intact ambrosia noun with bound terminative r; parallel as-substance syntax licenses the local inflected noun.',
+ 'zer':'Claim speech verb; might and conditional setup are not dictionary content.',
+ "de'i tshe na":'Initial in-that-situation phrase, whose demonstrative antecedent is spelled out in the English described-situation recast; d3 does not assert lexical you or describe.',
+ 'gsum po':'Three, precisely the beings numeral; contextual different and the separate English three differing cases remain outside.',
+ 'mig shes':'Established visual-consciousness compound, at the corresponding question/reason occurrence.',
+ 'thams cad':'All quantifies the corresponding consciousnesses/beings; separate same-string occurrences are respected.',
+ 'tshad ma':'Valid perception(s), this actual source occurrence; no sixth source occurrence is invented for the answer restatement.',
+ 'tshad mas':'Whole instrumental-inflected valid perception, in the water/not-water consequence.',
+ 'nam':'Alternative-question particle or; does not claim the or inside one or two.',
+ "'ga' zhig":'Indefinite small subset of three, one or two; the wider HGM2545 is genuine but narrower wording excludes the partitive of them.',
+ 'dang po ltar na':'Complete first-option conditional at d3; first refers to all-three-valid, which GMR spells out. No lexical first/all-three equivalence is created.',
+ 'la sogs pa':'Complete closing-enumeration phrase; each of the others is anaphoric enumeration without a supplied content noun.',
+ 'dngos po':'Things/substances noun in the corresponding enumeration; does not claim contextual number or quality framing.',
+ 'gsum ga':'All three, in the consequence after the antecedent restatement, not an earlier all-three occurrence.',
+ "'gal ba":'Incompatibility term in the second consequence; completely incompatible expresses the incompatibility itself and is explicitly HGM2555-attested.',
+ 'yod pa':'Complete existential-modal phrase at d3: be possible for there to be. It preserves existence and modal recast while leaving consequential must outside.',
+ 'chu yin pa dang chu ma yin pa gnyis kar':'Joint positive/negative/both relation; simultaneously is licensed by holding the contradictory predicates together, without a separate gnyis-kar/time-adverb dictionary entry.',
+ 'rtogs par':'Technical apprehension/realization in the valid-cognition consequence; correctly perceives is a defensible factive realization sense, supported by full base HGM6760 and inflected HGM6787. Earlier ma khrul does not reach across clauses.',
+ 'phyir':'Explicit causal for/Because at the exact reason occurrence.',
+ "'dod":'Agree/accept predicate; supplied try and absurdities remain unwrapped.',
+ 'na':'Conditional if attached to agree.',
+ "mi 'thad par":'Complete negative evaluation, not-tenable rendered wrong, at d3; neither component is falsely given wrong alone.',
+ "'gal ba'i":'Incompatibility word with genitive inflection before its causal phyir.',
+ 'chu yin min gnyis po de':'Entire paired predicates and these-two reference; the shared chu licenses both English water mentions at d3, without a fabricated second noun.',
+ "phan tshun spangs 'gal":'Mutual-exclusion qualifier rendered by its complete definition, including existence restriction and implication. It does not alone claim the separate directly-incompatible label.',
+ "dngos 'gal":'Explicit/direct contradiction head; its distinct English exponent is directly incompatible, qualified by the mutual-exclusion definition.'}
+sr=[]
+for x in rr:
+ reason=word_reasons.get(x['tib'])
+ if x['tib']=='dang':
+  reason='Additive enumeration connective in its local discourse role: '+x['eng']+'. In 257 these are the second and third consequences, so the transition expresses the connective relation and position in that enumeration; no separate temporal/final lexical entry is asserted.' if x['seq']==257 else 'Additive connective introduces the second reason, rendered Moreover; it does not own the following paired-quality content.'
+ assert reason,x
+ sr.append({**x,'judgment':'SOUND','reason':reason})
+write('span-semantic-review.json',sr)
+# Linguistic omission census: exclude substring matches inside lexical syllables.
+om=[]
+for seq in (256,257,258):
+ for z in j(B/'reconciled'/str(seq)/'material-omissions.json'):
+  t=z['tibetan_expression'];ranges=[]
+  for m in re.finditer(re.escape(t),src[seq]['wylie']):
+   a,b=m.span()
+   if (a==0 or src[seq]['wylie'][a-1] in ' ,') and (b==len(src[seq]['wylie']) or src[seq]['wylie'][b] in " ,'" ):ranges.append([a,b])
+  om.append({'seq':seq,'expression':t,'linguistic_ranges_including_bound_genitive_base':ranges,'substring_range_list_is_not_tokenization':True,'decision':'CONCUR_OMISSION_OR_ALREADY_PHRASE_CONTAINED','reason':z['reason']})
+write('independent-omissions.json',om)
+# Nine erratum suspicions: all five independent checks, no witness independence inferred.
+DB=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);DB.row_factory=sqlite3.Row
+register=j(W/'docs/errata_register.json');regitems=register if isinstance(register,list) else register.get('items',register.get('errata',[]))
+refs=[]
+for seq in (256,257,258):
+ for q in j(B/'reconciled'/str(seq)/'five-ground-suspicions.json'):
+  gs=q['grounds'];presence={f:q['found'] in src[seq][f] for f in ('acip','wylie','english')};assert presence==gs['a']['present_by_source_field']
+  qs=[]
+  for z in gs['b']['specific_C16_P1_TCS_searches']:
+   rows=[dict(r) for r in DB.execute(z['sql'],z['params'])];assert rows==z['rows'] and len(rows)==z['count'];qs.append({'sql':z['sql'],'params':z['params'],'count':len(rows),'C16_P1_TCS_hits':z.get('C16_P1_TCS_hits')})
+  refs.append({'seq':seq,'found':q['found'],'claim':q['claim'],'refuted':True,'grounds':{'a':presence,'b':{'queries':qs,'assessment':'Full digital fields and physical extents checked; C15/C16/P7/P9 are not asserted to be independent publications. Equality is not the decisive refutation.'},'c':{'segment_duplicates':gs['c']['segment_duplicates'],'classes_checked':['E-044','E-071','E-076','E-107','E-121'],'assessment':'Existing class snapshots are historical register text, not fresh census claims. No new C05 filing; C16 heading belongs to recognized heading class.'},'d':{'independent_assessment':gs['d']['conclusion'],'full_entries_reopened':True},'e':{'independent_queries':'independent-query-proof.json','source_character_lengths':{f:len(src[seq][f]) for f in ('acip','wylie','english')},'source_and_witness_fields_reopened':True}},'suggested_severity':None,'suggested_confidence':None})
+write('five-ground-independent-review.json',refs);write('bank-ready-errata.json',[]);write('span-head-allow-needed.json',{'pages_c05':{}})
+# Extend all exact historical governance copies with pins, including duplicate paths.
+man=j(O/'original-to-copy-manifest.json');pins=j(O/'historical-git-proof.json');pinby={x['sha256']:{k:x[k] for k in ['original_git_commit','repository_relative_path']} for x in pins}
+for r in man:
+ if r['sha256'] in pinby:r.update(pinby[r['sha256']])
+ raw=(O/r['copy']).read_bytes();assert len(raw)==r['bytes'] and hashlib.sha256(raw).hexdigest()==r['sha256']
+ if 'original_git_commit' in r:assert raw==subprocess.check_output(['git','show',r['original_git_commit']+':'+r['repository_relative_path']],cwd=W)
+ else:assert raw==Path(r['original']).read_bytes()
+write('original-to-copy-manifest.json',man)
+segments=[]
+for seq in (256,257,258):
+ d=O/'reviewed-final'/str(seq);ss=j(d/'spec.json')['segments'][0]['spans'];assert (d/'spec.json').read_bytes()==(B/'reconciled'/str(seq)/'spec.json').read_bytes();assert (d/'body.html').read_bytes()==(B/'reconciled'/str(seq)/'body.html').read_bytes()
+ segments.append(dict(seq=seq,span_count=len(ss),null_count=sum(x['eng'] is None for x in ss),word_pair_count=sum(x['d']==5 and x['eng'] is not None for x in ss),spec_sha256=sh(d/'spec.json'),spec_bytes=(d/'spec.json').stat().st_size,body_sha256=sh(d/'body.html'),body_bytes=(d/'body.html').stat().st_size,generator_exit=0))
+review=dict(verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=[],segments=segments,total_spans=sum(x['span_count'] for x in segments),total_nulls=sum(x['null_count'] for x in segments),total_word_pairs=sum(x['word_pair_count'] for x in segments),producer='Codex independent semantic skeptic',approval_scope='PROVISIONAL machine review; not human editorial acceptance',input_package={'sha256':sh(B/'semantic-input-review-package.txt'),'bytes':(B/'semantic-input-review-package.txt').stat().st_size},input_supplement={'sha256':sh(B/'semantic-input-supplement.json'),'bytes':(B/'semantic-input-supplement.json').stat().st_size})
+write('review.json',review)
+print(json.dumps(review))

@@ -1,0 +1,39 @@
+import json,pathlib,hashlib,gzip,sys,importlib.util,html,re,datetime
+A=pathlib.Path(__file__).resolve().parent;W=A.parents[2]/'campaign-worktree';D=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP')
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def info(p):
+ b=p.read_bytes();return {'path':str(p.resolve()),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+(A/'originals').mkdir(exist_ok=True);maps=[]
+for p in [D/'To DO/Formal Courses/ACI Readings In Roman ASCII'/n for n in ['C05ReadingASCII.txt','C15ReadingASCII.txt','C16ReadingASCII.txt']]+[D/'Handoff/book_texts/ILL.txt']:
+ dest=A/'originals'/p.name;dest.write_bytes(p.read_bytes());maps.append({'original':info(p),'saved':info(dest)})
+save(A/'original-raw-mappings.json',maps)
+source=(A/'originals/C05ReadingASCII.txt').read_bytes();lines=source.splitlines(keepends=True);lo=2467;hi=2525;excerpt=b''.join(lines[lo:hi]);(A/'original-source-excerpt.txt').write_bytes(excerpt)
+save(A/'original-excerpt-location.json',{'path':str(A/'originals/C05ReadingASCII.txt'),'first_line_1based':lo+1,'last_line_1based':hi,'byte_start':sum(map(len,lines[:lo])),'byte_end':sum(map(len,lines[:hi])),'excerpt':info(A/'original-source-excerpt.txt')})
+corpus=json.load(gzip.open(D/'Handoff/data/full_parallel_corpus_v32.json.gz','rt'));rows=json.loads((A/'original-context-full.json').read_text());verification=[]
+for r in rows:
+ matches=[(i,e) for i,e in enumerate(corpus) if e.get('course')==r['course'] and e.get('acip')==r['acip'] and e.get('wylie')==r['wylie'] and e.get('english')==r['english']]
+ verification.append({'spine_id':r['id'],'course':r['course'],'seq':r['seq'],'matching_original_corpus_indexes_zero_based':[i for i,e in matches],'matching_full_original_entries':[e for i,e in matches]})
+ assert matches
+save(A/'original-corpus-verification.json',verification)
+sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+sources={r['seq']:r for r in rows}
+summary=[]
+for seq in [256,257,258]:
+ d=A/str(seq);sp=json.loads((d/'spec.json').read_text());seg=sp['segments'][0];spans=seg['spans'];r=sources[seq]
+ ts=G.resolve(r['wylie'],spans,'tib',seq);by={s['id']:s for s in spans};es=G.resolve(r['english'],G.with_members(spans,[by[i] for i in seg['eng_order']],r['english']),'eng',seq)
+ intended=json.loads((d/'intended-english-positions.json').read_text());assert {k:v[0] for k,v in es.items()}==intended
+ body=(d/'body.html').read_bytes();assert body==(d/'generator-stdout.html').read_bytes();assert (d/'generator-stderr.txt').read_bytes()==b'';assert (d/'generator-exit.txt').read_text()=='0\n'
+ out=body.decode();plain={}
+ for side in ['tib','eng']:
+  block=re.search(r'<div class="'+side+r'"><div class="lab">.*?</div>\n(.*?)\n</div>',out,re.S).group(1);plain[side]=html.unescape(re.sub('<[^>]*>','',block)).strip()
+ assert plain['tib']==r['wylie'];assert plain['eng']==r['english']
+ proof={'producer':'Codex GPT-6; independent Tibetan-first; PROVISIONAL','canonical_exit':0,'stderr_bytes':0,'body':info(d/'body.html'),'spec':info(d/'spec.json'),'span_count':len(spans),'null_count':sum(s['eng'] is None for s in spans),'d5_count':sum(s['d']==5 for s in spans),'depth_counts':{str(k):sum(s['d']==k for s in spans) for k in range(1,8)},'source_plaintext_exact':True,'intended_occurrences_equal_canonical':True,'ranges':[{'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s['eng'],'tib_range':ts[s['id']],'eng_range':es.get(s['id'])} for s in spans],'attempts':[{'attempt':x.name,'exit':(x/'exit.txt').read_text().strip(),'stdout':info(x/'stdout.html'),'stderr':info(x/'stderr.txt'),'spec':info(x/'spec.json')} for x in sorted((d/'attempts').iterdir())]}
+ save(d/'proof.json',proof);summary.append(proof)
+ common='Original six-field snapshot checks, complete original context, full raw rows/parallel fields, corpus/master lexical records and historical Git bytes are retained under the exact shared paths in evidence-manifest.json. Digital text identity does not prove publication independence or re-ingestion.'
+ specific={256:'Challenge first: cig car du → together is limited to joint looking; sit down remains supplied. Perspective/nature expressions are omitted, including thad ka thad kar: its radius glossary sense is inapplicable. All wet/flowing and real/reality occurrences are checked. C15:401 and C16:832 match ACIP/Wylie/English; P7:18 matches only English.',257:'Challenge first: ma \'khrul ba is omitted as distributed within the middle valid-perception account; it does not own later correctly perceives. The latter belongs to rtogs par. The five tshad ma slots and all-three recast are explicitly resolved. C15:402 has the same ACIP/Wylie but different English (glass of something wet and flowing, of water); C16:833 matches all three fields.',258:'Challenge first: phan tshun spangs \'gal owns the complete closing definition at d3; dngos \'gal independently owns directly incompatible. Both HGM glossary and the local logic support this allocation. la sogs pa and numerical recasts are omitted with reasons rather than nulled. C15:403 matches all three fields; C16:834 appends a following heading. P7:19 differs in punctuation/spelling and ends mid-definition; its shared prefix cannot establish the continuation.'}[seq]
+ report='\n'.join([f'C05:{seq} — independent Tibetan-first proposal by Codex GPT-6; PROVISIONAL.',specific,'Source order, intended English occurrence offsets and both complete rendered source texts verified in proof.json.',f'Spans {proof["span_count"]}; d5 {proof["d5_count"]}; nulls {proof["null_count"]}; errata 0. Uncertain/distributed items are omissions, not affirmative nulls.', 'Errata: inspected original C05 ACIP/English, full compared rows and registered systematic classes. No new defensible defect proposed; original wording is unchanged. C05 selected English fields are below 1,500 characters and have no following heading.',common,f'Final canonical generator: EXIT=0; stderr is exactly empty; stdout/body bytes={len(body)}.',f'Body SHA-256 {info(d/"body.html")["sha256"]}; spec SHA-256 {info(d/"spec.json")["sha256"]}.','Full stdout is generator-stdout.html, identical to body.html; all failed/superseded canonical attempts remain under attempts/.','Frozen evidence mappings and file hashes: evidence-manifest.json in the parent tibetan directory. Mechanical success does not establish semantic approval.'])+'\n'
+ (d/'report.md').write_text(report)
+# Manifest created last and deliberately does not hash itself.
+files=sorted(p for p in A.rglob('*') if p.is_file() and p.name!='evidence-manifest.json')
+save(A/'evidence-manifest.json',{'frozen_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'governing_commit':'ed3cac8f691bee44dd09a03fe2712785901acc03','paths':[info(p) for p in files]})
+print(json.dumps([{'seq':s,'spans':x['span_count'],'d5':x['d5_count'],'nulls':x['null_count'],'body_bytes':x['body']['bytes'],'body_sha256':x['body']['sha256']} for s,x in zip([256,257,258],summary)],indent=2))

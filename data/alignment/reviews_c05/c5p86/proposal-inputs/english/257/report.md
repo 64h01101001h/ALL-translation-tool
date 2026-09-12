@@ -1,0 +1,9 @@
+C05:257 · English-first · Codex · PROVISIONAL
+Challenge first: dang po ltar na → Suppose you say all three are valid (d3 first-option expansion). Omit ma 'khrul ba'i and yod pa as distributed; rtogs par owns perceives only. Attempt 01 failed because all three targeted the second occurrence inside an already spanned phrase; final gsum ga targets occurrence 3. Attempt 02 passed but was superseded to remove possible and correctly overcapture.
+No new erratum. Visual consciousness ... are is preserved from the original and recurs in parallel sources; no independent publication or transmission-history claim. C15:402 has a differing glass-of-something phrasing; complete text retained.
+Final canonical generation: EXIT=0; stderr=0 bytes; body=6469 bytes; spans=36, d5=27, d7=2, null=0; errata=0.
+body SHA-256: 51679239cf0151c07445a5325b628e0c3bda888934f7939b53ae4414e4bb843c
+spec SHA-256: d8a951f84f5f6026d5ebe2c8b1c0e886322a285df0378e1f58b340b9f671a437
+Complete resolved offsets, original row, byte fidelity and file hashes: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-256-258/english/257/proof.json (SHA-256 7214c8bdd9cdba98cd0ae6369e297dfd27334be02d59e0cb632557f4d5d06dce).
+Shared full original context, all corpus query rows, current master/gloss entries, physical C05/C15/C16 originals and exact historical Git blobs: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-256-258/english/evidence. Exact path/byte/hash map: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-256-258/english/frozen-manifest.json.
+Every canonical attempt is preserved under /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-256-258/english/257/attempt-XX; final stdout equals body bytes. Mechanical fidelity is not semantic approval.

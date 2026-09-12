@@ -1,0 +1,144 @@
+"""One-time evidence packaging correction. Run with PYTHONDONTWRITEBYTECODE=1."""
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import subprocess
+
+R = Path(__file__).resolve().parent
+REPO = R.parents[2] / 'campaign-worktree'
+ALLOW = {'.json', '.md', '.html', '.stderr', '.stdout', '.log', '.txt', '.bin', '.exit'}
+H = R / 'history' / 'packaging-round1-before'
+INTERFACES = ['original-to-copy-manifest.json', 'review.md', 'review.json', 'review-freeze.json', 'final-review-check.json']
+SCRIPT = Path(__file__).name
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+def measure(path):
+    data = path.read_bytes()
+    return {'path': str(path.relative_to(R)), 'bytes': len(data), 'sha256': sha(data)}
+
+def dump(path, value):
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + '\n')
+
+old_freeze_bytes = (R / 'review-freeze.json').read_bytes()
+old_freeze = json.loads(old_freeze_bytes)
+assert len(old_freeze['files']) == 453
+assert sha(old_freeze_bytes) == '3dc353ece2b6e33e0c7ce7d99ec3f9d3fad73251fd2fb0887ce6eec0aad18617'
+old_entries = {x['path']: x for x in old_freeze['files']}
+for rel, x in old_entries.items():
+    assert measure(R / rel) == x, rel
+assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()} == set(old_entries) | {'review-freeze.json', SCRIPT}
+
+manifest = json.loads((R / 'original-to-copy-manifest.json').read_bytes())
+assert len(manifest) == 599
+bad = sorted(rel for rel in old_entries if Path(rel).suffix not in ALLOW)
+assert len(bad) == 11
+assert sum(Path(x['copy']).suffix not in ALLOW for x in manifest) == 11
+
+# Preserve the complete prior interface boundary before changing any of it.
+assert not H.exists()
+H.mkdir(parents=True)
+boundary = []
+for name in INTERFACES:
+    data = (R / name).read_bytes()
+    target = H / name
+    target.write_bytes(data)
+    assert target.read_bytes() == data
+    boundary.append({'original': name, 'copy': str(target.relative_to(R)), 'bytes': len(data), 'sha256': sha(data)})
+dump(H / 'boundary.json', {'scope': 'Exact pre-correction interfaces; historical paths retain their original meaning.', 'files': boundary})
+
+relocations = []
+for rel in bad:
+    source = R / rel
+    target = R / (rel + '.txt')
+    assert not target.exists()
+    data = source.read_bytes()
+    target.write_bytes(data)
+    assert target.read_bytes() == data
+    source.unlink()
+    relocations.append({'old_copy': rel, 'copy': rel + '.txt', 'bytes': len(data), 'sha256': sha(data)})
+redirect = {x['old_copy']: x['copy'] for x in relocations}
+for x in manifest:
+    if x['copy'] in redirect:
+        x['copy'] = redirect[x['copy']]
+
+# Verify all mapping content, using immutable Git objects for historical inputs.
+git_cache = {}
+verified = []
+for i, x in enumerate(manifest):
+    base = {'original', 'copy', 'sha256', 'bytes'}
+    historical = 'original_git_commit' in x
+    assert set(x) == base | ({'original_git_commit', 'repository_relative_path'} if historical else set())
+    target = R / x['copy']
+    assert target.suffix in ALLOW
+    data = target.read_bytes()
+    assert len(data) == x['bytes'] and sha(data) == x['sha256'], x['copy']
+    if historical:
+        pin = (x['original_git_commit'], x['repository_relative_path'])
+        if pin not in git_cache:
+            git_cache[pin] = subprocess.check_output(['git', '-C', str(REPO), 'show', ':'.join(pin)])
+        original = git_cache[pin]
+    else:
+        original = Path(x['original']).read_bytes()
+    assert original == data, x['original']
+    verified.append({'index': i, 'copy': x['copy'], 'bytes': len(data), 'sha256': sha(data), 'basis': 'immutable Git object' if historical else 'original file'})
+dump(R / 'original-to-copy-manifest.json', manifest)
+
+now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+log_name = 'packaging-correction-round1.json'
+note = ('Evidence packaging correction, round 1: the landing extension filter excluded 11 preserved Python helpers. '
+        'Their exact bytes now reside at .py.txt paths, and all 599 current manifest mappings were verified against '
+        'their original files or immutable Git pins. The previous manifest, review.md, review.json, review-freeze.json '
+        'and final-review-check.json are preserved under history/packaging-round1-before/. '
+        'All 453 previously frozen evidence files retain their bytes, with the 11 helper path relocations and '
+        'explicitly refreshed interfaces accounted for. Approved specs, bodies, notes, span decisions and '
+        'SPEC/QUALITY APPROVE verdicts are unchanged. No source or generator checks were rerun. '
+        'See packaging-correction-round1.json for the exact audit and changed/added/relocated file lists.')
+with (R / 'review.md').open('a') as f:
+    f.write('\n' + note + '\n')
+review = json.loads((R / 'review.json').read_bytes())
+review['evidence_packaging_correction'] = {'round': 1, 'audit': log_name, 'previous_boundary': 'history/packaging-round1-before/boundary.json', 'semantic_change': False}
+dump(R / 'review.json', review)
+check = json.loads((R / 'final-review-check.json').read_bytes())
+check['evidence_packaging_correction'] = {'round': 1, 'audit': log_name, 'manifest_records_verified': len(manifest), 'supported_copy_extensions': True, 'prior_freeze_files_audited': len(old_entries), 'helper_relocations': len(relocations), 'semantic_files_unchanged': True, 'source_generator_rerun': False}
+dump(R / 'final-review-check.json', check)
+
+changed = INTERFACES
+added = sorted([SCRIPT, log_name, 'packaging-correction-round1.md', 'history/packaging-round1-before/boundary.json'] + [str((H / n).relative_to(R)) for n in INTERFACES] + list(redirect.values()))
+dump(R / log_name, {
+    'producer': 'Codex independent semantic skeptic', 'time': now, 'round': 1,
+    'verdict': 'PASS', 'kind': 'evidence packaging correction', 'semantic_change': False,
+    'spec_verdict': 'APPROVE', 'quality_verdict': 'APPROVE', 'open_semantic_findings': [],
+    'cause': 'Unsupported .py copy extensions were excluded by the landing helper; the original brief required .txt or .bin preservation.',
+    'allowed_extensions': sorted(ALLOW),
+    'prior_freeze': {'bytes': len(old_freeze_bytes), 'sha256': sha(old_freeze_bytes), 'file_count': len(old_entries), 'all_files_verified_before_correction': True},
+    'prior_boundary': 'history/packaging-round1-before/boundary.json',
+    'manifest_records_verified': len(manifest), 'historical_records_verified': sum('original_git_commit' in x for x in manifest),
+    'distinct_current_manifest_copies': len({x['copy'] for x in manifest}),
+    'current_manifest': measure(R / 'original-to-copy-manifest.json'),
+    'helper_relocations': relocations, 'mapping_verification': verified,
+    'changed_files': changed, 'added_files': added, 'removed_paths_with_exact_bytes_relocated': bad,
+    'approved_specs_bodies_notes_and_semantic_decisions_unchanged': True,
+    'source_generator_checks_rerun': False,
+    'note': 'Historical manifest/freeze copies intentionally retain prior paths; helper_relocations resolves those paths to the same bytes. The current review-freeze.json covers the complete corrected package excluding itself.'
+})
+(R / 'packaging-correction-round1.md').write_text(note + '\n\nChanged current interfaces:\n\n' + '\n'.join('- `' + x + '`' for x in changed) + '\n\nAdded files:\n\n' + '\n'.join('- `' + x + '`' for x in added) + '\n\nRelocated old paths (identical bytes at appended `.txt` paths):\n\n' + '\n'.join('- `' + x + '`' for x in bad) + '\n')
+
+# Account for every previous byte: refreshed interfaces have exact history copies.
+old_audit = []
+for rel, x in old_entries.items():
+    target = H / rel if rel in INTERFACES else R / redirect.get(rel, rel)
+    data = target.read_bytes()
+    assert len(data) == x['bytes'] and sha(data) == x['sha256'], rel
+    old_audit.append(rel)
+assert (H / 'review-freeze.json').read_bytes() == old_freeze_bytes
+assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()} == (set(old_entries) | {'review-freeze.json'} | set(added)) - set(bad)
+assert not [p for p in R.rglob('*') if p.is_file() and p.suffix not in ALLOW]
+files = sorted([measure(p) for p in R.rglob('*') if p.is_file() and p != R / 'review-freeze.json'], key=lambda x: x['path'])
+dump(R / 'review-freeze.json', {'producer': 'Codex independent semantic skeptic', 'time': now, 'verdict': 'APPROVE', 'evidence_packaging_round': 1, 'correction_audit': log_name, 'files': files})
+for x in files:
+    assert measure(R / x['path']) == x
+assert {x['path'] for x in files} == {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file() and p != R / 'review-freeze.json'}
+print(json.dumps({'verified': True, 'previous_freeze_files_audited': len(old_audit), 'manifest_records_verified': len(verified), 'helper_relocations': len(relocations), 'current_freeze_files': len(files), 'freeze': measure(R / 'review-freeze.json'), 'changed': changed, 'added': added, 'removed_paths': bad}, indent=2))

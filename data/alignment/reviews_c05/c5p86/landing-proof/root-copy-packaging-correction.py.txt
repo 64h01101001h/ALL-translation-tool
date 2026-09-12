@@ -1,0 +1,59 @@
+"""Verify the scoped packaging change and copy only its reviewed results."""
+from pathlib import Path
+import json,hashlib,shutil,datetime
+b=Path(__file__).resolve().parent
+r=b/'semantic-review';w=b.parent.parent/'campaign-worktree'
+d=w/'data/alignment/reviews_c05/c5p86'
+h=r/'history/packaging-round1-before'
+def read(p):return json.loads(p.read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+fix=read(r/'packaging-correction-round1.json')
+assert fix['verdict']=='PASS' and fix['semantic_change'] is False
+assert len(fix['helper_relocations'])==11
+relocations={x['old_copy']:x['copy'] for x in fix['helper_relocations']}
+oldfreeze=read(h/'review-freeze.json')
+newfreeze=read(r/'review-freeze.json')
+raw=(r/'review-freeze.json').read_bytes()
+assert len(raw)==88212 and sha(raw)=='4e8146104e7f80f98067c8d46e64b092310db45d11dfb958c07de60a07a85369'
+def rel(p):
+    p=Path(p)
+    return str(p.relative_to(r)) if p.is_absolute() else str(p)
+for x in oldfreeze['files']:
+    name=rel(x['path'])
+    p=h/name if name in fix['changed_files'] else r/relocations.get(name,name)
+    raw=p.read_bytes();assert len(raw)==x['bytes'] and sha(raw)==x['sha256'],name
+for x in newfreeze['files']:
+    p=r/rel(x['path']);raw=p.read_bytes()
+    assert len(raw)==x['bytes'] and sha(raw)==x['sha256'],p
+    assert p.suffix in fix['allowed_extensions']
+oldmanifest=read(h/'original-to-copy-manifest.json')
+newmanifest=read(r/'original-to-copy-manifest.json')
+assert len(oldmanifest)==len(newmanifest)==599
+changed=0
+for old,new in zip(oldmanifest,newmanifest):
+    expected={**old,'copy':relocations.get(old['copy'],old['copy'])}
+    assert expected==new
+    changed+=old!=new
+assert changed==11
+for name in fix['changed_files']:
+    assert (d/name).read_bytes()==(h/name).read_bytes(),name
+assert (r/'review.md').read_bytes().startswith((h/'review.md').read_bytes())
+oldreview=read(h/'review.json');newreview=read(r/'review.json')
+assert all(newreview[k]==v for k,v in oldreview.items())
+for seq in (256,257,258):
+    for name in ('spec.json','body.html'):
+        p=r/'reviewed-final'/str(seq)/name
+        assert p.read_bytes()==(b/'reconciled'/str(seq)/name).read_bytes()==(d/'reviewed-final'/str(seq)/name).read_bytes()
+copied=[]
+for name in fix['added_files']+fix['changed_files']:
+    source=r/name;target=d/name
+    target.parent.mkdir(parents=True,exist_ok=True)
+    if name in fix['added_files']:assert not target.exists(),name
+    shutil.copy2(source,target);assert source.read_bytes()==target.read_bytes()
+    copied.append(name)
+for x in fix['helper_relocations']:assert not (d/x['old_copy']).exists()
+history=b/'landing/history/packaging-round1-before';history.mkdir(parents=True,exist_ok=False)
+for name in ('root-semantic-acceptance-proof.json','review-copy-and-register-proof.json'):
+    p=b/'landing'/name;shutil.move(p,history/name)
+result=dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='PASS',old_frozen_files_verified=len(oldfreeze['files']),current_frozen_files_verified=len(newfreeze['files']),manifest_records=599,helper_mappings_changed=11,other_manifest_fields_unchanged=True,prior_repo_interfaces_equal_preserved_history=True,approved_specs_bodies_notes_unchanged=True,review_semantics_and_verdict_unchanged=True,copied_files=copied)
+out=b/'landing/root-packaging-correction-proof.json';assert not out.exists();out.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
