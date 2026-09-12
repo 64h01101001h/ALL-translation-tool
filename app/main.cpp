@@ -25472,6 +25472,20 @@ public:
         ribbon->attachTo(this);
         QObject::connect(proposeBtn, &QPushButton::clicked,
                          [this] { proposeNote(); });
+        // The banner tells the reader "the terminology check looks for his
+        // equivalents anywhere in your draft", and the live chip sits
+        // directly under the draft box — but the only control that RUNS the
+        // full check lived on the ribbon, in a group the reader has no reason
+        // to associate with the box they are typing in. A named thing with no
+        // reachable control is a promise the pane cannot keep.
+        // (Draft workspace audit, 2026-09-11.)
+        auto* checkHere = new QPushButton("Check terminology");
+        checkHere->setToolTip(
+            "The same check as EVIDENCE \u25b8 Check terminology on the "
+            "ribbon \u2014 put here because this is the box it reads.");
+        draftCol->addWidget(checkHere);
+        QObject::connect(checkHere, &QPushButton::clicked,
+                         [this] { check_(); });
         aiBtn_ = new QPushButton("AI back-check (API, labeled AI)");
         refreshAiButton();
         draftCol->addWidget(aiBtn_);
@@ -25892,7 +25906,8 @@ public:
     // loaded: "it doesn't make any sense." He was right — one had its
     // explanation deleted the moment he loaded a source, and the other never
     // had one.
-    static QString anchorsIdleHtml(bool sourceLoaded) {
+    static QString anchorsIdleHtml(bool sourceLoaded,
+                                   bool haveClauses = true) {
         const QString head =
             "<div style='color:#9A7A33;font-size:11px;letter-spacing:2px;"
             "font-weight:600'>EVIDENCE RIBBON</div>";
@@ -25904,6 +25919,18 @@ public:
         // pane says nothing, and they conclude it is broken. Saying which
         // two gestures work is cheaper and truer than promising one that
         // needs a gesture nobody made. (Draft workspace audit, 2026-09-11.)
+        // A load that split nothing must not be told to click a clause
+        // there is none of. The middle column says "no clauses"; this pane
+        // used to sit beside it telling the reader to click one, which reads
+        // as the pane being broken rather than the text being unparseable.
+        // (Draft workspace audit, 2026-09-11.)
+        if (sourceLoaded && !haveClauses)
+            return head +
+                   "<div style='color:#6F6F6F;padding-top:6px'>Nothing to "
+                   "show: the source loaded but no clauses could be split "
+                   "out of it, so there is nothing to gather evidence "
+                   "for.<br><br>Check the source box holds ACIP or Tibetan "
+                   "script rather than English or notes.</div>";
         return head +
                (sourceLoaded
                     ? "<div style='color:#6F6F6F;padding-top:6px'>"
@@ -26067,6 +26094,39 @@ public:
                       "instruction");
             }
         }
+        // ---- a load that split nothing does not ask for a click (09-11) ---
+        {
+            source_->setPlainText("this is english prose, not a source");
+            load();
+            const QString a = anchors_->toPlainText();
+            if (clauses_.empty()) {
+                check(!a.contains("Click any clause"),
+                      "evidence: with no clauses, the ribbon does not tell "
+                      "the reader to click one there is none of");
+                check(a.contains("no clauses could be split"),
+                      "evidence: it says what actually happened, so the pane "
+                      "reads as unparseable text rather than a broken pane");
+            }
+            // and the full check is reachable from beside the draft, not only
+            // from a ribbon group the reader has no reason to look in
+            // Identify the one beside the draft by its tooltip, not by
+            // counting: the ribbon wraps ITS copy in a proxy widget, so the
+            // original is not findable as a plain QPushButton child and a
+            // count of two was never going to hold. What matters is that a
+            // reachable control exists next to the box it reads.
+            QPushButton* beside = nullptr;
+            for (QPushButton* b : findChildren<QPushButton*>())
+                if (b->text() == "Check terminology" &&
+                    b->toolTip().contains("this is the box it reads"))
+                    beside = b;
+            check(beside != nullptr,
+                  "terminology: the check the banner names has a control "
+                  "beside the draft box it reads, not only on the ribbon");
+            check(beside && beside->isEnabled(),
+                  "terminology: and it is pressable");
+            source_->setPlainText("");
+        }
+
         // ---- the technical-spelling helper is reversible (audit 09-11) ----
         // It rewrote the Author field in place with no way back and no word
         // about what it had done, on a button whose own label says "review
@@ -26651,7 +26711,7 @@ private:
         // destroying the one line that said what it was for — so the moment a
         // reader did the right thing, the pane stopped explaining itself.
         // Now it advances to the next instruction instead.
-        anchors_->setHtml(anchorsIdleHtml(true));
+        anchors_->setHtml(anchorsIdleHtml(true, !clauses_.empty()));
         lastClause_ = -1;
     }
 
