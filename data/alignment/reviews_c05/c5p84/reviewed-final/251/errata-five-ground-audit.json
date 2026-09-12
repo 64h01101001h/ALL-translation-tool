@@ -1,0 +1,110 @@
+{
+  "retained_errata": [],
+  "all_six_original_proposal_errata_lists_empty": true,
+  "suspicions": [
+    {
+      "seq": 251,
+      "status": "rejected suspicion, not a filed erratum",
+      "candidate": "DVANGS/dvangs allegedly misspelled",
+      "found": "DVANGS",
+      "expected_considered_only": "DWANGS",
+      "quote_occurrences": {
+        "acip": [
+          33
+        ],
+        "wylie": [],
+        "english": []
+      },
+      "five_grounds": {
+        "a": "DVANGS is verbatim in local ACIP; lower-case dvangs occurs in Wylie. P5:125 has DWANGS/dwangs but the original C05 file agrees with DVANGS.",
+        "b": "C15:396/C16:827/C18:1119 have exactly the same three fields. P5:125 differs in spelling, punctuation and completes 'jug go; ILL:2332 uses dvangs and recasts/combines the passage. None proves publication/ingestion lineage.",
+        "c": {
+          "register_original": {
+            "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/reconciled/250/evidence/governing-docs_errata_register.json",
+            "sha256": "dc851e07fe913a904dc8b57f173f0bcbc4f13a884e65136f6560688576dc6c6c",
+            "bytes": 262017
+          },
+          "exact_segment_duplicates": [],
+          "classes_original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/reconciled/250/evidence/registered-class-original-records.json"
+        },
+        "d": "Rejected: HGM 23556 dvangs pa gives clear/clarity, and the proposed dwangs pa form has zero exact master/entries matches under the recorded searches. This does not prove dwangs impossible, but prevents treating the local dictionary-attested form as a confirmed error.",
+        "e": {
+          "exact_english_query": {
+            "sql": "select * from corpus_segments where english=? order by course,seq",
+            "params": [
+              "Humans look at the same thing and perceive it as water--sweet, clear, and cool. They drink of it, they wash themselves with it, and they swim in it."
+            ],
+            "count": 4
+          },
+          "exact_wylie_query": {
+            "sql": "select * from corpus_segments where wylie=? order by course,seq",
+            "params": [
+              "mi rnams kyis ni mngar ba dang , dvangs pa dang , bsil ba'i chur rtogs shing 'thung ngo , , khrus byed do, , der 'jug"
+            ],
+            "count": 4
+          },
+          "english_length": 148,
+          "all_inherited_recorded_query_counts_and_rows_rerun_exact": true
+        }
+      },
+      "refuted": true,
+      "survives_all_five": false
+    },
+    {
+      "seq": 251,
+      "status": "rejected suspicion, not a filed erratum",
+      "candidate": "GO closure split across 251/252",
+      "found": "der 'jug",
+      "expected_considered_only": "der 'jug go",
+      "quote_occurrences": {
+        "acip": [],
+        "wylie": [
+          109
+        ],
+        "english": []
+      },
+      "five_grounds": {
+        "a": "Local Wylie really ends der 'jug, and original 252 begins go,nam. Full source rows and physical bytes are preserved, not repaired.",
+        "b": "P5:125 ends der 'jug go; ILL:2332 also includes it in the combined passage. These show complete closure but not an independent-publication fact.",
+        "c": {
+          "decisive": "Existing E-111 row-boundary-spill class. No new record; no dropped text across the neighboring rows.",
+          "class_original": {
+            "item_id": "E-111",
+            "course": "C03",
+            "segment": "C03:440",
+            "kind": "INGEST_ARTEFACT",
+            "found": "phyi ma'i snang shas",
+            "expected": "the row's Tibetan should close the verse line: \"...YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS LDOG,\"",
+            "evidence": "QUOTED AS FILED BY THE RECONCILER: wylie/ACIP of C03:440 end at \"YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS\" (no closing shad) while the row's English ends \"...And the cycle's suffering: stop desire for the future.\" || Confirmed from this row's own text. (1) The quoted verse is in nine-syllable metre: line 1 of the citation, las 'bras mi slu 'khor ba'i sdug bsngal rnams, has nine syllables; line 2, yang yang bsams pas phyi ma'i snang shas, has eight, so the row ends one syllable short of the line. (2) Every other verse line in the row closes with a shad (\", ,\"); the row ends at snang shas with none. (3) The row's English renders the complete line including its verb (\"stop desire for the future\"), and \"stop\" has no Tibetan anywhere in the row. The missing syllable is ldog: C03:441's wylie begins \"ldog,ces pa ltar thog mar 'khor ba'i phun tshogs...\" while its English begins \"Suppose at first we are able to find...\", so the 440/441 boundary is offset by one word. The undivided line is witnessed at C01:207 and C16:98 (\"...PHYI MA'I SNANG SHAS LDOG,CES PAS BSTAN TE\") and at P1:83 (\"...phyi ma'i snang shas ldog\", same source re-ingested, corroborative only). The same split recurs two rows later: C03:443 ends \"...yid la goms pas tshe 'di'i snang shas\" with English \"...Think it constantly, stop desire for this life.\" and C03:444 opens \"ldogs pa ltar...\". Effect: \"stop\" in this row is necessarily left unwrapped, and ldog in C03:441 has no English on its row. Nothing is lost across the pair, hence LOW. SKEPTIC PASS 2026-09-01 (two independent skeptics, one on each side of the boundary, both survived): C03:440's wylie, ACIP and raw ingest record stop at 'snang shas' and 'ldog,ces' opens 441; the independent witnesses C01:207 and C16:98 carry the undivided line '...phyi ma'i snang shas ldog,ces pas bstan te'. The mirror claim filed from 441 ('ldog,' as the tail of 440's verse) is the same defect and is folded into this record rather than billed twice. THE SAME CUT RECURS at eight C03 row boundaries: 36/37, 163/164, 165/166 (filed as E-062), 440/441, 443/444, 472/473, 594/595, 610/611 - a verse line's final syllable spilling into the next row is a class, not a one-off; recorded here as a list rather than as a class entry so every citation stays checkable.",
+            "severity": "LOW",
+            "confidence": "CONFIRMED",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          },
+          "exact_segment_duplicates": []
+        },
+        "d": "The cross-row closure is intelligible and preserved. Moving GO would edit the source boundary, which this alignment task does not authorize. No spelling correction is warranted.",
+        "e": {
+          "exact_english_query": {
+            "sql": "select * from corpus_segments where english=? order by course,seq",
+            "params": [
+              "Humans look at the same thing and perceive it as water--sweet, clear, and cool. They drink of it, they wash themselves with it, and they swim in it."
+            ],
+            "count": 4
+          },
+          "exact_wylie_query": {
+            "sql": "select * from corpus_segments where wylie=? order by course,seq",
+            "params": [
+              "mi rnams kyis ni mngar ba dang , dvangs pa dang , bsil ba'i chur rtogs shing 'thung ngo , , khrus byed do, , der 'jug"
+            ],
+            "count": 4
+          },
+          "english_length": 148,
+          "all_inherited_recorded_query_counts_and_rows_rerun_exact": true
+        }
+      },
+      "refuted": true,
+      "survives_all_five": false
+    }
+  ],
+  "scope": "All recorded suspicions rejected; no independent human acceptance claimed. Original register counts are archival quotes, not new current-corpus census claims."
+}

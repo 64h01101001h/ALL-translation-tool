@@ -1,0 +1,39 @@
+import os,json,gzip,sqlite3,hashlib,subprocess
+from pathlib import Path
+ROOT=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');WT=ROOT/'campaign-worktree';OUT=ROOT/'campaign-artifacts/C05-250-252/tibetan';BASE='9aa617e7cc3a7a30c3b3fec1d318418d0044f993'
+def save(p,x):
+ p=OUT/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+paths=['AGENTS.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','docs/errata_register.json','docs/NEVER_BANK_A_FALSEHOOD.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py']
+manifest=[]
+for p in paths:
+ b=subprocess.check_output(['git','show',BASE+':'+p],cwd=WT);current=(WT/p).read_bytes();assert b==current,p
+ dest=OUT/'originals'/p;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(b)
+ manifest.append({'original_path':str(WT/p),'commit':BASE,'sha256':sha(b),'saved_path':str(dest),'working_bytes_equal_commit':True})
+for p in ['tibetan-brief.md','source.json','context.json','baseline.json']:
+ src=OUT.parent/p;b=src.read_bytes();d=OUT/'originals/dispatch'/p;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(b);manifest.append({'original_path':str(src),'sha256':sha(b),'saved_path':str(d)})
+p=OUT.parent.parent/'proposal-protocol.md';b=p.read_bytes();d=OUT/'originals/dispatch/proposal-protocol.md';d.write_bytes(b);manifest.append({'original_path':str(p),'sha256':sha(b),'saved_path':str(d)})
+for p in ['HANDOFF.md','README.md']:
+ src=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff')/p;b=src.read_bytes();d=OUT/'originals/project-history'/p;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(b);manifest.append({'original_path':str(src),'sha256':sha(b),'saved_path':str(d)})
+save('originals-manifest.json',manifest)
+db=WT/'build/hgm_spine_v27_2.db';c=sqlite3.connect(db.as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+q='select * from corpus_segments where course=? and seq between ? and ? order by seq';params=['C05',244,258];rows=[dict(x) for x in c.execute(q,params)];save('source-full-originals.json',{'source':str(db),'uri_mode':'ro','sql':q,'parameters':params,'count':len(rows),'rows':rows})
+proof=[]
+for name in ['source','context']:
+ x=json.loads((OUT.parent/(name+'.json')).read_text());matches=[]
+ for r in x:
+  actual=dict(c.execute('select * from corpus_segments where course=? and seq=?',(r['course'],r['seq'])).fetchone());matches.append({'course':r['course'],'seq':r['seq'],'fields':{k:actual[k]==v for k,v in r.items()}})
+ assert all(all(m['fields'].values()) for m in matches);proof.append({'snapshot':name,'matches':matches})
+save('snapshot-verification.json',proof)
+terms=['de nyid',"dud 'gro",'la sogs pa','gnas','blo','gnas par byed pa','mi','mngar ba','dvangs pa','bsil ba','chu','rtogs',"'thung",'khrus','khrus byed',"'jug","nam mkha' mtha' yas skye mched","nam mkha' mtha' yas",'snyoms par zhugs pa','snyoms par zhugs','snyoms par','lha',"nam mkha'",'mthong','gzugs',"'du shes",'rnam par bshig pa','bshig','rnam par']
+master=WT/'data/hgm_dictionary_v27_2.json.gz';b=master.read_bytes();m=json.loads(gzip.decompress(b));entries=m['unified_entries'];results=[]
+for term in terms:
+ matches=[{'ordinal':i,'entry':e} for i,e in enumerate(entries) if e.get('wylie')==term or term in e.get('wylie_variants',[])];results.append({'term':term,'count':len(matches),'matches':matches})
+save('master-lexical-full-originals.json',{'source':str(master),'source_sha256':sha(b),'selection':'exact wylie or exact member of wylie_variants','terms':terms,'entry_count':len(entries),'results':results})
+queries=[]
+for field,term in [('wylie','gnas kyi blos'),('english','An animal or such'),('english','Humans look at the same thing'),('english','Those pleasure beings who'),('wylie','snyoms par zhugs'),('wylie','nam mkhar mthong'),('wylie',"gzugs kyi 'du shes"),('wylie','rnam par bshig'),('wylie','der \'jug')]:
+ q='select * from corpus_segments where '+field+' like ? order by course,seq';p=['%'+term+'%'];rs=[dict(x) for x in c.execute(q,p)];queries.append({'sql':q,'parameters':p,'count':len(rs),'rows':rs})
+save('corpus-queries-full-originals.json',{'source':str(db),'uri_mode':'ro','queries':queries})
+print('saved originals',len(manifest),'context',len(rows),'lexical hits',sum(x['count'] for x in results),'query counts',[(x['parameters'],x['count']) for x in queries])
+for r in results:
+ print(r['term'],[(x['entry'].get('hgm_gloss'),x['entry'].get('hgm_evidence')) for x in r['matches']])

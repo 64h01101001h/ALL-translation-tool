@@ -1,0 +1,13 @@
+C05:250 — Codex (gpt-6-astra), independent Tibetan-first PROVISIONAL proposal.
+Challenge first: the compositional residence predicate gnas → home and byed pa → makes; the complete idiom is gnas par byed pa, while supplied his remains unwrapped.
+First gnas → place to stay and second gnas → home are anchored separately; blos → thinks retains the instrumental ending. De nyid is pronominal this same, not water.
+La sogs pas is an established enumeration compound and licenses the entire closing gesture or such; its agentive ending is not split. This d5 initial or is source-licensed.
+Omitted: la/kyi/par as distributed relations; final dang links to C05:251, not the interior English and. Supplied An, on the other hand, of, as a, his, there and contextual water remain unwrapped.
+Errata: none. C15:395, C16:826 and C18:1118 share ACIP/Wylie/English with this row; ILL:2331 is a related longer reading with nya and different English. Text identity alone establishes no publication independence or ingestion lineage.
+Counts: 7 spans; 7 d5 (7 non-null); 0 null; 0 errata. Depth counts: {'5': 7}.
+EXIT=0; BODY_BYTES=2145; STDERR_BYTES=0. Exact canonical stdout is /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/tibetan/250/attempts/01/stdout.html and equals body.html byte-for-byte.
+Final hashes: spec 38225ca05538e96c7f48d69c9dc8ac6206d2ef8b21d5bf283be8ff2562ddf91f; body cd3c9faa4c5f1ad5cd0cd4084ace1d8e91b62f7282d6c45d170a6101201192fd; errata 37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570.
+Exact source, complete query rows/parameters/counts, current full master entries and immutable governing Git-byte proofs: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/tibetan/evidence-index.json (SHA256 dc81b0883c4a9acde9d20c0f24df9cfceb93ccae9b557cd9d99e79f4f62cc792).
+Resolved occurrences, exact source-block fidelity and counts: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/tibetan/250/proof.json (SHA256 4fcd8b0352f7de012a3ca820e7afb224ed1b4703862fdde2bc8262d081d9114e).
+First canonical attempt passed. Auxiliary HTML verification initially selected the label div; its failure and original script are preserved in ../verification-attempts/01, with corrected successful proof in ../verification-attempts/02. No generator change or gate relaxation.
+Files are frozen at ../freeze.json. Mechanical checks establish exact fidelity only; independent reconciliation and semantic review follow.

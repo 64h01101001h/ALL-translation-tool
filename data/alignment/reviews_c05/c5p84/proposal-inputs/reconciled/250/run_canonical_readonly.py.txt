@@ -1,0 +1,8 @@
+import sqlite3,runpy
+from pathlib import Path
+connect=sqlite3.connect
+def ro(database,*args,**kwargs):
+ kwargs['uri']=True
+ return connect(Path(database).resolve().as_uri()+'?mode=ro',*args,**kwargs)
+sqlite3.connect=ro
+runpy.run_path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py',run_name='__main__')

@@ -1,0 +1,6 @@
+{
+  "exit": 1,
+  "error": "KeyError: 'entries'",
+  "cause": "Root helper assumed master collection key entries. Actual archive uses unified_entries; no source/evidence mutation and no success proof emitted.",
+  "correction": "Use observed unified_entries key; preserve this helper attempt."
+}

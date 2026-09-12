@@ -1,0 +1,166 @@
+import json,hashlib,ast,copy,difflib,subprocess,re,sys
+from pathlib import Path
+sys.dont_write_bytecode=True
+B=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252');R=B/'semantic-review';W=B.parent.parent/'campaign-worktree';F=B/'reconciled/250/scoped-fix-round1';H=R/'history/initial-review';S=R/'scoped-rereview-round1';S.mkdir(exist_ok=True)
+def digest(v):return hashlib.sha256(v).hexdigest()
+def put(p,v):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def verify_pin(p,v):
+ d=p.read_bytes();assert digest(d)==v['sha256'] and len(d)==v['bytes'],str(p);return d
+# Preserve and verify all initial frozen review bytes before refreshing any interface.
+initial_freeze=json.loads((R/'review-freeze.json').read_text());initial_files=initial_freeze['files']+[{'path':'review-freeze.json','sha256':digest((R/'review-freeze.json').read_bytes()),'bytes':(R/'review-freeze.json').stat().st_size}]
+for entry in initial_files:
+ p=R/entry['path'];d=verify_pin(p,entry);dest=H/entry['path'];dest.parent.mkdir(parents=True,exist_ok=True)
+ if dest.exists():assert dest.read_bytes()==d
+ else:dest.write_bytes(d)
+put(S/'initial-review-preservation.json',{'files':len(initial_files),'all_initial_freeze_bytes_preserved':True,'history':'history/initial-review/'})
+oldreview=json.loads((H/'review.json').read_text());oldman=json.loads((H/'original-to-copy-manifest.json').read_text())
+changes=json.loads((F/'changes.json').read_text());identity=json.loads((F/'identity-proof.json').read_text());pres=json.loads((F/'pre-fix-manifest.json').read_text());presby={x['original']['path']:x for x in pres}
+checks=[]
+for x in pres:
+ d=verify_pin(Path(x['preserved']['path']),x['preserved']);assert digest(d)==x['original']['sha256'] and len(d)==x['original']['bytes']
+ checks.append({'producer_original':x['original']['path'],'preserved_original':x['preserved']['path'],'bytes':len(d),'sha256':digest(d),'pre_fix_record_equal':True})
+put(S/'pre-fix-preservation-proof.json',checks)
+# Only independently approved six prose replacements are permitted in four current prose files.
+locations=[loc for f in oldreview['open_findings'] for loc in f['locations']];cfiles={loc['path'] for loc in locations};prosechecks=[]
+for rel in sorted(cfiles):
+ p=B/rel;before=Path(presby[str(p)]['preserved']['path']).read_text();expected=before
+ for loc in [l for l in locations if l['path']==rel]:
+  assert expected.count(loc['old'])==1,(rel,loc)
+  expected=expected.replace(loc['old'],loc['new'])
+ assert p.read_text()==expected,rel
+ assert not re.search(r"(?<!['’])\b(?:jug|du shes)\b",p.read_text())
+ prosechecks.append({'file':rel,'actual_replacements':sum(l['path']==rel for l in locations),'no_other_byte_changes':True,'new_sha256':digest(p.read_bytes()),'new_bytes':p.stat().st_size})
+# Six AST string constants change; every other node, field and constant is identical.
+helper=B/'reconciled/250/finalize_reconciliation.py';oldhelper=Path(presby[str(helper)]['preserved']['path']);oldtree=ast.parse(oldhelper.read_text());newtree=ast.parse(helper.read_text());astchanges=[]
+def compare(a,b,path='Module'):
+ assert type(a)==type(b),(path,type(a),type(b))
+ if isinstance(a,ast.AST):
+  for key in a._fields:compare(getattr(a,key),getattr(b,key),path+'.'+key)
+ elif isinstance(a,list):
+  assert len(a)==len(b),path
+  for i,(av,bv) in enumerate(zip(a,b)):compare(av,bv,path+f'[{i}]')
+ elif a!=b:
+  assert isinstance(a,str) and path.endswith('.value'),(path,a,b)
+  expected=a
+  for loc in locations:expected=expected.replace(loc['old'],loc['new'])
+  assert expected==b,(path,a,b)
+  astchanges.append({'ast_path':path,'old':a,'new':b})
+compare(oldtree,newtree);assert len(astchanges)==6
+assert sorted((x['old'],x['new']) for x in astchanges)==sorted((x['old'],x['new']) for x in changes['helper_literal_semantic_diffs'])
+put(S/'prose-and-helper-ast-proof.json',{'prose':prosechecks,'literal_value_changes':astchanges,'only_six_constant_values_changed':True,'helper_not_executed':True})
+# The supplied textual diff is reproduced exactly from preserved old to current files.
+diff=''
+for ch in changes['changes']:
+ p=Path(ch['file']);before=Path(presby[str(p)]['preserved']['path']);verify_pin(before,ch['original']);verify_pin(p,ch['new']);rel=str(p.relative_to(B/'reconciled'))
+ diff+=''.join(difflib.unified_diff(before.read_text().splitlines(True),p.read_text().splitlines(True),fromfile='pre-fix/'+rel,tofile='current/'+rel))
+assert diff==(F/'scoped.diff').read_text()
+(S/'independently-reproduced-scoped.diff.txt').write_text(diff)
+# Existing files differ only at the five disclosed edit targets plus the three refreshed freezes.
+allowed_changed={str(Path(x['file'])) for x in changes['changes']}|{str(B/f'reconciled/{s}/freeze.json') for s in (250,251,252)}
+unchanged=0;changed=[]
+for x in pres:
+ p=Path(x['original']['path']);old=Path(x['preserved']['path']).read_bytes();new=p.read_bytes()
+ if old!=new:assert str(p) in allowed_changed;changed.append(str(p))
+ else:unchanged+=1
+assert set(changed)==allowed_changed
+original_inputs=0
+for x in oldman:
+ if str(B/'tibetan') in x['original'] or str(B/'english') in x['original']:
+  assert Path(x['original']).read_bytes()==(H/x['copy']).read_bytes();original_inputs+=1
+# Check the reconciler's full candidate/identity pins and all refreshed freeze pins without executing a generator.
+pinchecks=[]
+def recursive_pins(x):
+ if isinstance(x,dict):
+  if all(k in x for k in ['path','sha256','bytes']) and str(x['path']).startswith(str(B)):
+   p=Path(x['path']);verify_pin(p,x);pinchecks.append({'path':str(p),'sha256':x['sha256'],'bytes':x['bytes'],'equal':True})
+  for v in x.values():recursive_pins(v)
+ elif isinstance(x,list):
+  for v in x:recursive_pins(v)
+# The pre-fix semantic-review pins describe immutable historical copies, not later refreshed files.
+for row in identity['semantic_review_pre_fix_manifest']:
+ rel=Path(row['path']).relative_to(R);verify_pin(H/rel,row)
+recursive_pins(identity['candidate_files'])
+for seq in (250,251,252):recursive_pins(json.loads((B/f'reconciled/{seq}/freeze.json').read_text()))
+put(S/'refreshed-freeze-and-candidate-pin-proof.json',pinchecks)
+# Exact prior generator evidence and every candidate byte stay unchanged; retain its measured results.
+for s in oldreview['segments']:
+ for name,fn in [('spec','spec.json'),('body','body.html')]:
+  d=(B/f"reconciled/{s['seq']}"/fn).read_bytes();assert digest(d)==s[name+'_sha256'] and len(d)==s[name+'_bytes']
+ for p in (H/f"reviewed-final/{s['seq']}").rglob('*'):
+  if p.is_file() and any(part in ['attempts','verification-final','proposal-replays'] for part in p.parts):
+   orig=B/'reconciled'/str(s['seq'])/p.relative_to(H/f"reviewed-final/{s['seq']}");assert orig.read_bytes()==p.read_bytes()
+rs=json.loads((R/'resolved-spans.json').read_text());assert rs==json.loads((H/'resolved-spans.json').read_text()) and len(rs)==50
+for seq in (250,251,252):
+ sp=json.loads((B/f'reconciled/{seq}/spec.json').read_text())['segments'][0]['spans'];rr=[r for r in rs if r['seq']==seq]
+ assert len(sp)==len(rr)
+ for a,b in zip(sp,rr):
+  for k in ['id','d','tib','eng']:assert a[k]==b[k]
+for n in ['span-head-allow-needed.json','bank-ready-errata.json','independent-generator-proof.json']:
+ assert (R/n).read_bytes()==(H/n).read_bytes()
+put(S/'scope-identity-proof.json',{'unchanged_preexisting_nonfreeze_files':unchanged,'changed_files':changed,'verified_original_proposal_manifest_records':original_inputs,'specs_notes_bodies_identical':True,'all_50_tuples_identical':True,'counts':{'spans':50,'nulls':13,'word_pairs':25},'prior_generator_replays_retained':9,'generator_reruns':0,'allowance_and_bank_ready_errata_bytes_identical':True})
+# Rebind historical originals to their exact preserved pre-fix files and retain producer path separately.
+manifest=[];rebindings=[]
+for old in oldman:
+ x=copy.deepcopy(old);orig=x['original'];p=Path(orig)
+ if orig in presby and presby[orig]['original']['sha256']==x['sha256']:
+  pre=presby[orig]['preserved']['path']
+  # Rebind ALL reconciliation historical originals; no historical claim depends on a mutable current path.
+  x['original']=pre
+  rebindings.append({'producer_original':orig,'preserved_original':pre,'copy':x['copy'],'sha256':x['sha256'],'bytes':x['bytes']})
+ if x['copy'].startswith('reviewed-final/'):
+  x['copy']='history/initial-review/'+x['copy']
+ assert (R/x['copy']).exists();manifest.append(x)
+# Frozen originals stay in proposal-inputs; complete current reconciliation interfaces are refreshed separately.
+allowed_ext={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def preserve(p,rel):
+ d=p.read_bytes();dest=R/rel
+ if dest.suffix not in allowed_ext:dest=Path(str(dest)+'.txt')
+ dest.parent.mkdir(parents=True,exist_ok=True)
+ # Every replaced current interface has already been preserved under H and rebound above.
+ if dest.exists() and dest.read_bytes()!=d:assert (H/dest.relative_to(R)).exists()
+ dest.write_bytes(d)
+ manifest.append({'original':str(p),'copy':str(dest.relative_to(R)),'sha256':digest(d),'bytes':len(d)})
+for seq in (250,251,252):
+ base=B/f'reconciled/{seq}'
+ for p in sorted(base.rglob('*')):
+  if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc':preserve(p,'reviewed-final/'+str(seq)+'/'+str(p.relative_to(base)))
+# Required new correction source files, helper and all pre-fix evidence are fully preserved through current 250 interface.
+put(S/'historical-original-rebindings.json',rebindings)
+put(R/'original-to-copy-manifest.json',manifest)
+for x in manifest:
+ d=(R/x['copy']).read_bytes()
+ old=subprocess.check_output(['git','show',x['original_git_commit']+':'+x['repository_relative_path']],cwd=W) if 'original_git_commit' in x else Path(x['original']).read_bytes()
+ assert d==old and digest(d)==x['sha256'] and len(d)==x['bytes'],x
+put(R/'preservation-proof.json',{'manifest_records':len(manifest),'all_equal':True,'historical_rebindings':len(rebindings),'rebindings_proof':'scoped-rereview-round1/historical-original-rebindings.json','checks':[{'copy':x['copy'],'bytes_equal':True} for x in manifest]})
+# Refresh current review verdict only after all scoped checks pass.
+review=copy.deepcopy(oldreview);review.update(verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=[],review_round=2)
+review['closed_findings']=[{**f,'disposition':'RESOLVED','resolution':'All three current prose occurrences and matching helper literals corrected exactly; originals preserved. No candidate alignment or prior generator-proof byte changed.'} for f in oldreview['open_findings']]
+review['scoped_rereview']={'round':1,'prose_corrections':6,'helper_literal_corrections':6,'generator_reruns':0,'new_breakage':False,'proof_directory':'scoped-rereview-round1/'}
+put(R/'review.json',review)
+# Retain full initial semantic reasoning while replacing the obsolete open-finding section.
+text=(H/'review.md').read_text();text=text.replace('Overall verdict: **NEEDS_CORRECTION**. SPEC: **APPROVE**. QUALITY: **NEEDS_CORRECTION**.','Overall verdict: **APPROVE**. SPEC: **APPROVE**. QUALITY: **APPROVE**. Scoped re-review round1 completed.')
+text=text.replace('Two grouped source-fidelity findings remain in six current evidence-prose occurrences; the frozen specs and generated bodies need no change.','Both source-fidelity findings are resolved: all six current evidence-prose occurrences and six matching helper literals now preserve the source apostrophes. The frozen specs and generated bodies are byte-identical to the initially approved semantic candidates.')
+start=text.index('## Required evidence-only corrections');end=text.index('## Semantic examination')
+text=text[:start]+'''## Closed findings and scoped verification
+
+**Q251-APOSTROPHE — RESOLVED.** Current 251/report.md lines 5/6 and 251/errata-five-ground-audit.json `/suspicions/0/five_grounds/b` now preserve `'jug` in all three places.
+
+**Q252-APOSTROPHE — RESOLVED.** Current 252/report.md line 4 and 252/errata-five-ground-audit.json `/suspicions/2/five_grounds/b` and `/suspicions/2/five_grounds/d` now preserve `'du shes` in all three places.
+
+I independently reproduced the scoped diff from preserved pre-fix files to current originals. The four prose files differ by exactly the six requested apostrophe additions. The authoring helper AST differs only in the matching six string-constant values; every other AST node and field is identical. The helper was parsed, not executed. Five edited files and three refreshed freeze manifests are the only changed pre-existing reconciliation files; all other pre-existing files remain byte-identical.
+
+All initial review bytes are preserved under `history/initial-review/`, including its original NEEDS_CORRECTION report and freeze. Historical reconciliation paths in the current copy manifest are rebound to exact physical pre-fix files, with original producer paths retained in `scoped-rereview-round1/historical-original-rebindings.json`. Current `reviewed-final/<seq>/` interfaces and new correction evidence are refreshed; the original proposal copies remain intact. Refreshed freeze references and every copy were independently byte-verified.
+
+The three specs, notes, bodies, fifty resolved tuples, counts, original inputs and prior generator evidence are unchanged. No generator or full semantic suite was rerun: the initial nine successful exact-output replays remain the applicable evidence. The proposed source-licensed head allowance and empty bank-ready errata file are byte-identical. No new breakage or open finding remains. Approval remains machine review of PROVISIONAL alignment, not human editorial acceptance.
+
+''' +text[end:]
+text+='\n## Current final review contract\n\nThe initial full semantic assessment above remains in force. Scoped round1 adds only the verified evidence corrections and historical-path rebinding. Current review.json reports APPROVE with an empty open_findings list, three unchanged segment records, 50 spans, 13 nulls and 25 non-null d5 pairs. Exact required seven-key tuples remain in resolved-spans.json. Full scoped proofs and an independently reproduced diff are in scoped-rereview-round1/.\n'
+(R/'review.md').write_text(text)
+# Current errata reasoning no longer describes a resolved prose issue as outstanding.
+audit=json.loads((R/'errata-refutations.json').read_text())
+for item in audit:
+ if item['candidate'].startswith('ability to conceptualize'):
+  item['independent_five_ground_refutation']['e']='Full original HGM cognitive entry and all source/query extents were rechecked in the initial review. Scoped round1 corrects both explanatory apostrophes; the source, mapping, quote ranges and counts remain unchanged.'
+put(R/'errata-refutations.json',audit)
+put(S/'review-contract-proof.json',{'verdict':'APPROVE','closed_findings':['Q251-APOSTROPHE','Q252-APOSTROPHE'],'open_findings':[],'segments':review['segments'],'total_spans':50,'total_nulls':13,'total_word_pairs':25,'seven_key_tuple_identity':True,'prior_generator_exits':[0,0,0],'generator_reruns':0,'bank_ready_errata':[],'manifest_records':len(manifest)})
+print(json.dumps({'verdict':'APPROVE','closed_findings':2,'prose_replacements':6,'helper_ast_changes':6,'pre_fix_records':len(pres),'unchanged_nonfreeze_files':unchanged,'freeze_candidate_pins':len(pinchecks),'historical_rebindings':len(rebindings),'manifest_records':len(manifest)},indent=2))

@@ -1,0 +1,64 @@
+import json,gzip,hashlib,sys,sqlite3,os,importlib.util,html,re
+from pathlib import Path
+from collections import Counter,defaultdict
+from html.parser import HTMLParser
+OUT=Path(__file__).resolve().parent;WT=OUT.parents[2]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(p,x):(OUT/p).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+# Reopen original compressed corpus and compare complete raw original objects.
+source=WT/'data/full_parallel_corpus_v32.json.gz';b=source.read_bytes();original=json.loads(gzip.decompress(b));counters=Counter();indexed={}
+for index,r in enumerate(original):
+ counters[r['course']]+=1;indexed[(r['course'],counters[r['course']])]=(index,r)
+rows=json.loads((OUT/'source-full-originals.json').read_text())['rows'];queries=json.loads((OUT/'corpus-queries-full-originals.json').read_text())['queries']
+unique={r['id']:r for r in rows}
+for q in queries:
+ for r in q['rows']:unique[r['id']]=r
+checks=[]
+for r in unique.values():
+ i,raw=indexed[(r['course'],r['seq'])];eq=raw==json.loads(r['raw']);assert eq,(r['course'],r['seq'])
+ checks.append({'course':r['course'],'seq':r['seq'],'spine_id':r['id'],'corpus_zero_based_index':i,'raw_object_equals_spine_raw':eq,'complete_original':raw})
+save('compressed-corpus-originals.json',{'source':str(source),'sha256':sha(b),'selection':'course plus 1-based within-course occurrence index, matching spine seq','total_original_records':len(original),'count':len(checks),'records':checks})
+# Save exact comparison extents; no claims of publication independence or ingestion history.
+comparisons=[]
+for target in [r for r in rows if 250<=r['seq']<=252]:
+ others=[]
+ for r in unique.values():
+  if r['id']==target['id']:continue
+  if r['english'].startswith(target['english']) or (len(r['english'])>60 and target['english'].startswith(r['english'])):
+   others.append({'course':r['course'],'seq':r['seq'],'field_equalities':{f:r[f]==target[f] for f in ['acip','wylie','english']},'common_english_prefix_characters':len(os.path.commonprefix([r['english'],target['english']])),'english_extra_after_shared_target':r['english'][len(target['english']):] if r['english'].startswith(target['english']) else None})
+ comparisons.append({'target':'C05:'+str(target['seq']),'comparisons':others,'limit':'Text fields only: identity does not establish independent publication or ingestion history.'})
+save('parallel-comparisons.json',comparisons)
+reg=json.loads((OUT/'originals/docs/errata_register.json').read_text());selected=[r for r in reg if r['item_id'] in ['E-044','E-071','E-076','E-107','E-111','E-121']];save('registered-classes-selection.json',{'source':str(WT/'docs/errata_register.json'),'query':'item_id IN E-044,E-071,E-076,E-107,E-111,E-121','count':len(selected),'records':selected})
+# Use canonical resolution functions for exact per-span positions; no generator output added by this read-only import.
+sys.path.insert(0,str(WT/'tools'));import gen_alignment_page as G
+class BlockText(HTMLParser):
+ def __init__(self):super().__init__();self.which=None;self.texts=defaultdict(str)
+ def handle_starttag(self,t,a):
+  if t=='div':
+   cls=dict(a).get('class','')
+   if cls in ('tib','eng'):self.which=cls
+ def handle_endtag(self,t):
+  if t=='div':self.which=None
+ def handle_data(self,d):
+  if self.which:self.texts[self.which]+=d
+reportdata={}
+for seq in [250,251,252]:
+ d=OUT/str(seq);spec=json.loads((d/'spec.json').read_text());s=spec['segments'][0];r=next(r for r in rows if r['seq']==seq);spans=s['spans'];byid={x['id']:x for x in spans}
+ tib=G.resolve(r['wylie'],spans,'tib',seq);eng=G.resolve(r['english'],G.with_members(spans,[byid[i] for i in s['eng_order']],r['english']),'eng',seq)
+ records=[]
+ for sp in spans:
+  i=sp['id'];tr=tib[i];er=eng.get(i);assert r['wylie'][tr[0]:tr[1]]==sp['tib'];assert er is None or r['english'][er[0]:er[1]]==sp['eng']
+  records.append({'span':sp,'tibetan_range':tr,'english_range':er,'tibetan_whole_word_occurrences':G.count_word(r['wylie'],sp['tib']) if sp['d']!=7 else None,'english_whole_word_occurrences':G.count_word(r['english'],sp['eng']) if sp.get('eng') else None})
+ body=(d/'body.html').read_bytes();assert body==(d/'attempts/01/stdout.html').read_bytes();assert (d/'attempts/01/stderr.txt').read_bytes()==b'';assert (d/'attempts/01/exit.txt').read_text()=='0\n'
+ # The canonical HTML div classes are extracted exactly, stripping markup from those source blocks only.
+ bt=body.decode();blocks={}
+ for side in ['tib','eng']:
+  match=re.search(r'<div class="'+side+r'"><div class="lab">.*?</div>\n(.*?)\n</div>',bt,re.S);assert match,(seq,side)
+  inner=match.group(1);inner=re.sub(r'<span class="nul".*?</span>','',inner,flags=re.S)
+  plain=html.unescape(re.sub('<[^>]+>','',inner));blocks[side]=plain
+ # Null markers are emitted after the source blocks by the canonical generator; extraction is exact.
+ assert blocks['tib']==r['wylie'],(seq,'tib',blocks['tib']);assert blocks['eng']==r['english'],(seq,'eng',blocks['eng'])
+ counts={'span_count':len(spans),'null_count':sum(x['eng'] is None for x in spans),'d5_count':sum(x['d']==5 for x in spans),'d5_nonnull_count':sum(x['d']==5 and x['eng'] is not None for x in spans),'by_depth':dict(Counter(x['d'] for x in spans)),'errata_count':0}
+ proof={'course':'C05','seq':seq,'counts':counts,'generator_exit':0,'stderr_bytes':0,'body_bytes':len(body),'body_sha256':sha(body),'spec_sha256':sha((d/'spec.json').read_bytes()),'errata_sha256':sha((d/'errata.json').read_bytes()),'canonical_stdout_exactly_body':True,'source_blocks_exactly_spine':True,'source_lengths':{'wylie':len(r['wylie']),'english':len(r['english'])},'resolutions':records,'semantic_limit':'Mechanical fidelity does not prove correspondence; independent reconciliation and review follow.'}
+ save(str(seq)+'/proof.json',proof);reportdata[seq]=proof
+print(json.dumps({k:{'counts':v['counts'],'body_bytes':v['body_bytes']} for k,v in reportdata.items()},indent=2))

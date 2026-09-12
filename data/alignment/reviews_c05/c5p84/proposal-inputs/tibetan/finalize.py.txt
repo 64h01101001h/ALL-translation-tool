@@ -1,0 +1,42 @@
+import json,hashlib,os,datetime
+from pathlib import Path
+OUT=Path(__file__).resolve().parent
+sha=lambda b:hashlib.sha256(b).hexdigest()
+refs=['/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP','/Users/adamderickandrade/ACIP Software Developmeent/Gofer Developmetn Files',"/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'/Users/adamderickandrade/ACIP Software Developmeent/tibetan-spellchecker','/Users/adamderickandrade/Tibetan Translation Tool']
+refproof=[{'path':p,'exists':Path(p).exists(),'readable':os.access(p,os.R_OK)} for p in refs];assert all(x['readable'] for x in refproof);(OUT/'required-reference-access.json').write_text(json.dumps(refproof,indent=2)+'\n')
+common={250:[
+'Challenge first: the compositional residence predicate gnas → home and byed pa → makes; the complete idiom is gnas par byed pa, while supplied his remains unwrapped.',
+'First gnas → place to stay and second gnas → home are anchored separately; blos → thinks retains the instrumental ending. De nyid is pronominal this same, not water.',
+'La sogs pas is an established enumeration compound and licenses the entire closing gesture or such; its agentive ending is not split. This d5 initial or is source-licensed.',
+'Omitted: la/kyi/par as distributed relations; final dang links to C05:251, not the interior English and. Supplied An, on the other hand, of, as a, his, there and contextual water remain unwrapped.',
+'Errata: none. C15:395, C16:826 and C18:1118 share ACIP/Wylie/English with this row; ILL:2331 is a related longer reading with nya and different English. Text identity alone establishes no publication independence or ingestion lineage.'
+],251:[
+'Challenge first: khrus byed → wash as a conventional light-verb predicate; supplied themselves with it remains unwrapped. The lexical sense swim for \'jug is independently attested in the original HGM master and this water context.',
+'Second Tibetan dang → the English and before cool; explicit eng_order places perceive and water before the three qualities. First dang is omitted. Der → in it has one strict r → in member.',
+'Rnams → null asserts only the lack of a separate plural word: its contribution is fused into Humans. Chur retains its inflection; the case contribution to as is outside water and is not given a false member.',
+'Omitted: kyis/ni, genitive, first dang, shing and clause endings; look at the same thing is a contextual expansion of perception, and rtogs is captured once at perceive. Supplied participants and auxiliaries stay unwrapped.',
+'Errata: none. C15:396/C16:827/C18:1119 share all three text fields. P5:125 has spelling/punctuation differences and completes \'jug go; C05:252 begins that go, a preserved registered E-111 boundary spill. ILL:2332 is a related recast, not an identical full row.'
+],252:[
+'Challenge first: nominal \'du shes → ability to conceptualize, a contextual noun-phrase equivalent of conception; their is excluded. Gzugs owns physical matter separately.',
+'Name compound → realm of limitless space has three strict, unique d7 members. Snyoms par zhugs pa → wrapped in deep meditation is d3; who are remains outside. Rnam par → altogether and bshig pa → dissolved exclude has.',
+'Rnams → null records plurality fused into beings, not absence of plurality. First phyir → for; final zhes gsungs pa\'i phyir is the omitted outer citation/evidence frame, not a second mapping to for.',
+'Omitted: initial go (closes previous-row \'jug, E-111), la and relative/genitive/case relations, kyis, ste, ro and outer quotation frame. Nam mkhar is inflected but aligned lexically to empty space; no case member is forced onto English outside its parent.',
+'Errata: none. C15:397 shares all text fields. C16:828/C18:1120 share ACIP/Wylie and only the C05 English extent before added apparatus; P5:126 shares English with Wylie punctuation differences. P7:15 stops at has and cannot attest the dissolution continuation. ILL:2332 supplies a related complete conception/dissolution recast.'
+]}
+shared_names=['source-full-originals.json','snapshot-verification.json','master-lexical-full-originals.json','corpus-queries-full-originals.json','compressed-corpus-originals.json','parallel-comparisons.json','originals-manifest.json','registered-classes-selection.json']
+evidence=[{'path':str(OUT/n),'sha256':sha((OUT/n).read_bytes())} for n in shared_names]
+(OUT/'evidence-index.json').write_text(json.dumps({'producer':'Codex (gpt-6-astra), Tibetan-first','baseline_commit':'9aa617e7cc3a7a30c3b3fec1d318418d0044f993','files':evidence,'limits':'HGM glosses are evidence, no hgm_gloss edits. Corpus parallels compare only recorded fields and extent. Other-angle and reconciliation evidence was not read. Canonical generation and fidelity do not prove semantic correspondence.'},indent=2)+'\n')
+for seq in [250,251,252]:
+ d=OUT/str(seq);p=json.loads((d/'proof.json').read_text());c=p['counts'];lines=[f'C05:{seq} — Codex (gpt-6-astra), independent Tibetan-first PROVISIONAL proposal.',*common[seq],f"Counts: {c['span_count']} spans; {c['d5_count']} d5 ({c['d5_nonnull_count']} non-null); {c['null_count']} null; 0 errata. Depth counts: {c['by_depth']}.",f"EXIT=0; BODY_BYTES={p['body_bytes']}; STDERR_BYTES=0. Exact canonical stdout is {d/'attempts/01/stdout.html'} and equals body.html byte-for-byte.",f"Final hashes: spec {p['spec_sha256']}; body {p['body_sha256']}; errata {p['errata_sha256']}.",f"Exact source, complete query rows/parameters/counts, current full master entries and immutable governing Git-byte proofs: {OUT/'evidence-index.json'} (SHA256 {sha((OUT/'evidence-index.json').read_bytes())}).",f"Resolved occurrences, exact source-block fidelity and counts: {d/'proof.json'} (SHA256 {sha((d/'proof.json').read_bytes())}).",'First canonical attempt passed. Auxiliary HTML verification initially selected the label div; its failure and original script are preserved in ../verification-attempts/01, with corrected successful proof in ../verification-attempts/02. No generator change or gate relaxation.', 'Files are frozen at ../freeze.json. Mechanical checks establish exact fidelity only; independent reconciliation and semantic review follow.']
+ (d/'report.md').write_text('\n'.join(lines)+'\n')
+# Immutable boundary: hash every material file. Equal physical bytes have one content entry with all original path aliases.
+files=[];objects={}
+for p in sorted(OUT.rglob('*')):
+ if p.is_file() and p.name!='freeze.json':
+  b=p.read_bytes();h=sha(b);files.append({'path':str(p),'sha256':h,'bytes':len(b)})
+  objects.setdefault(h,{'sha256':h,'bytes':len(b),'canonical_path':str(p),'all_paths':[]})['all_paths'].append(str(p))
+freeze={'frozen_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'baseline_commit':'9aa617e7cc3a7a30c3b3fec1d318418d0044f993','role':'independent Tibetan-first proposals only','files':files,'deduplicated_content_map':list(objects.values()),'duplicate_policy':'Same-byte final spec/body and exact canonical-attempt records are preserved as required aliases; content hashes uniquely identify bytes. Governing originals each stored once and mapped to source path/commit/hash in originals-manifest.json. No failed canonical attempts occurred; failed auxiliary verification is preserved.'}
+(OUT/'freeze.json').write_text(json.dumps(freeze,indent=2)+'\n')
+for p in OUT.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+print('FROZEN',OUT/'freeze.json','SHA256',sha((OUT/'freeze.json').read_bytes()),'files',len(files))

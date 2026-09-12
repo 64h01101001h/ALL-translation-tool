@@ -1,0 +1,188 @@
+"""Verify frozen candidate evidence; this does not approve semantic mappings."""
+import sys
+sys.dont_write_bytecode = True
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import sqlite3
+
+B = Path(__file__).resolve().parent
+WT = B.parents[1] / 'campaign-worktree'
+E = B / 'reconciled/250/evidence'
+OUT = B / 'root-reconciliation-evidence-audit.json'
+assert not OUT.exists(), 'Preserve prior proof before a changed-input audit'
+checks = {}
+file_cache = {}
+
+def read(path):
+    return json.loads(Path(path).read_text())
+
+def pin(record):
+    p = Path(record['path'])
+    if p not in file_cache:
+        raw = p.read_bytes()
+        file_cache[p] = (len(raw), hashlib.sha256(raw).hexdigest())
+    assert file_cache[p] == (record['bytes'], record['sha256']), str(p)
+
+for seq in (250, 251, 252):
+    for entry in read(B / f'reconciled/{seq}/freeze.json')['files']:
+        pin(entry)
+for entry in read(E / 'input-file-manifest.json'):
+    pin(entry)
+for entry in read(E / 'original-path-hash-byte-map.json'):
+    pin(entry['original'])
+    pin(entry['copy'])
+    assert file_cache[Path(entry['original']['path'])] == file_cache[Path(entry['copy']['path'])]
+checks['frozen_and_original_files'] = len(file_cache)
+
+original_ranges = {(r['angle'], r['seq'], r['id']): r for r in read(B / 'proposal-verification/root-resolved-spans.json')}
+final_ranges = {(r['seq'], r['id']): r for r in read(B / 'root-reconciliation-verification/resolved-spans.json')}
+checked_originals = []
+checked_finals = []
+field_count = 0
+for seq in (250, 251, 252):
+    base = B / f'reconciled/{seq}'
+    spec = read(base / 'spec.json')['segments'][0]
+    fs = {r['id']: r for r in spec['spans']}
+    decisions = read(base / 'decisions.json')
+    rationales = {r['final_id']: r['rationale'] for r in decisions['final_span_rationales']}
+    assert set(rationales) == set(fs)
+    assert decisions['material_omissions'] == spec['note']
+    originals = {angle: {r['id']: r for r in read(B / f'{angle}/{seq}/spec.json')['segments'][0]['spans']} for angle in ('tibetan', 'english')}
+    expected = {(angle, seq, key) for angle, spans in originals.items() for key in spans}
+    actual = []
+    for row in decisions['dispositions']:
+        angle = row['angle']
+        old = row['original']
+        key = angle, seq, old['id']
+        actual.append(key)
+        assert old['original_span'] == originals[angle][old['id']]
+        orig = original_ranges[key]
+        assert all(old[k] == orig[k] for k in ('id', 'd', 'tib', 'eng', 'tib_range', 'eng_range'))
+        new = fs[row['final_id']]
+        assert row['final_span'] == new
+        rr = final_ranges[seq, row['final_id']]
+        assert row['final_tib_range'] == rr['tib_range']
+        assert row['final_eng_range'] == rr['eng_range']
+        assert row['rationale'] == rationales[row['final_id']]
+        if row['disposition'] == 'retained_exact':
+            assert old['original_span'] == new
+            assert old['tib_range'] == rr['tib_range'] and old['eng_range'] == rr['eng_range']
+        else:
+            assert row['disposition'] == 'recast_to_final'
+            assert old['original_span'] != new or old['tib_range'] != rr['tib_range'] or old['eng_range'] != rr['eng_range']
+    assert len(actual) == len(set(actual)) == decisions['original_span_count']
+    assert set(actual) == expected
+    checked_originals.extend(actual)
+    fields = read(base / 'field-by-field-dispositions.json')
+    assert fields['original_span_count'] == len(actual)
+    field_keys = []
+    for row in fields['records']:
+        key = row['angle'], seq, row['original_id']
+        field_keys.append(key)
+        old = originals[row['angle']][row['original_id']]
+        new = fs[row['final_id']]
+        old_ranges = original_ranges[key]
+        new_ranges = final_ranges[seq, row['final_id']]
+        seen = []
+        for field in row['field_dispositions']:
+            k = field['field']; seen.append(k); field_count += 1
+            if k.endswith('_range'):
+                assert field['original_value'] == old_ranges[k]
+                assert field['final_value'] == new_ranges[k]
+                unchanged = old_ranges[k] == new_ranges[k]
+            else:
+                assert field['original_present'] == (k in old)
+                assert field['final_present'] == (k in new)
+                assert field['original_value'] == old.get(k)
+                assert field['final_value'] == new.get(k)
+                unchanged = (k in old) == (k in new) and old.get(k) == new.get(k)
+            assert (field['disposition'] == 'retained') == unchanged
+            assert field['reason']
+        assert len(seen) == len(set(seen))
+        assert set(old) | set(new) | {'tib_range', 'eng_range'} <= set(seen)
+    assert set(field_keys) == expected and len(field_keys) == len(expected)
+    tuples = read(base / 'final-ordered-tuples.json')
+    assert tuples['eng_order'] == spec['eng_order']
+    for old, candidate in zip(tuples['tibetan_order'], spec['spans'], strict=True):
+        assert old['original_span'] == candidate
+        rr = final_ranges[seq, candidate['id']]
+        assert all(old[k] == rr[k] for k in ('id', 'd', 'tib', 'eng', 'tib_range', 'eng_range'))
+        checked_finals.append((seq, candidate['id']))
+checks.update(original_dispositions=len(checked_originals), field_dispositions=field_count, final_tuples=len(checked_finals), unique_final_rationales_read_by_root=50)
+
+db = WT / 'build/hgm_spine_v27_2.db'
+conn = sqlite3.connect(db.resolve().as_uri() + '?mode=ro', uri=True)
+conn.row_factory = sqlite3.Row
+query_count = row_count = 0
+for name, rowkey in [('corpus-queries.json', 'rows'), ('spine-lexical-rows.json', 'entries')]:
+    data = read(E / name); pin(data['original']); assert data['mode'] == 'ro'
+    for q in data['queries']:
+        assert q['sql'].lstrip().lower().startswith('select ')
+        actual = [dict(r) for r in conn.execute(q['sql'], q['params'])]
+        assert actual == q[rowkey]
+        assert len(actual) == q['count']
+        query_count += 1; row_count += len(actual)
+checks.update(exact_sql_queries=query_count, exact_full_query_rows=row_count)
+master_proof = read(E / 'master-full-entries.json'); pin(master_proof['original'])
+master = json.loads(gzip.decompress(Path(master_proof['original']['path']).read_bytes()))
+entries = master['unified_entries']
+assert len(entries) == master_proof['entry_count']
+master_by_wylie = {}
+for entry in entries:
+    for term in {entry.get('wylie'), *entry.get('wylie_variants', [])}:
+        master_by_wylie.setdefault(term, []).append(entry)
+for q in master_proof['queries']:
+    actual = master_by_wylie.get(q['term'], [])
+    assert actual == q['entries'] and len(actual) == q['count'], q['term']
+checks['full_master_queries'] = len(master_proof['queries'])
+checks['master_query_predicate'] = 'exact wylie OR membership in original wylie_variants, original archive order'
+
+sources = {}
+witnesses = 0
+for seq in (250, 251, 252):
+    data = read(B / f'reconciled/{seq}/witness-extents.json')
+    source = dict(conn.execute('select * from corpus_segments where course=? and seq=?', ('C05', seq)).fetchone())
+    assert source == data['source']; sources[seq] = source
+    for row in data['witnesses']:
+        witness = row['witness']
+        assert dict(conn.execute('select * from corpus_segments where course=? and seq=?', (witness['course'], witness['seq'])).fetchone()) == witness
+        for field, comparison in row['comparisons'].items():
+            a, b = source[field], witness[field]
+            n = 0
+            while n < min(len(a), len(b)) and a[n] == b[n]: n += 1
+            assert comparison == {'local_characters':len(a), 'witness_characters':len(b), 'exact':a == b, 'common_prefix_characters':n, 'local_after_common_prefix':a[n:], 'witness_after_common_prefix':b[n:], 'full_local_in_witness':a in b, 'full_witness_in_local':b in a}
+        witnesses += 1
+checks['complete_witness_rows_and_extents'] = witnesses
+physical = read(E / 'physical-source-proof.json')
+pin(physical['original']); pin(physical['copy'])
+normalized = b' '.join(Path(physical['original']['path']).read_bytes().split())
+for match in physical['matches']:
+    needle = b' '.join(sources[match['seq']][match['field']].encode().split())
+    assert len(needle) == match['matched_bytes']
+    assert normalized.find(needle) == match['normalized_byte_offset']
+checks['physical_original_matches'] = len(physical['matches'])
+
+suspicions = 0
+for seq in (250, 251, 252):
+    data = read(B / f'reconciled/{seq}/errata-five-ground-audit.json')
+    assert data['retained_errata'] == []
+    for row in data['suspicions']:
+        assert set(row['five_grounds']) == set('abcde')
+        for field, offsets in row['quote_occurrences'].items():
+            source = sources[seq][field]; quote = row['found']
+            actual = [i for i in range(len(source)) if source.startswith(quote, i)]
+            assert actual == offsets
+        counts = row['five_grounds']['e']
+        for key in ('exact_english_query', 'exact_wylie_query'):
+            q = counts[key]
+            assert len(conn.execute(q['sql'], q['params']).fetchall()) == q['count']
+        assert counts['english_length'] == len(sources[seq]['english'])
+        assert row['refuted'] is True and row['survives_all_five'] is False
+        suspicions += 1
+checks['five_ground_suspicions_quotes_and_counts'] = suspicions
+conn.close()
+OUT.write_text(json.dumps({'status':'PASS_MECHANICAL_EVIDENCE_ONLY', 'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(), 'checks':checks, 'files':[{'path':str(p),'bytes':size,'sha256':sha} for p,(size,sha) in sorted(file_cache.items())], 'limitations':['Semantic approval is independently pending.', 'Narrative apostrophe omissions in reports and errata prose have been referred to the independent reviewer; actual spans preserve source text.', 'Shared digital text proves no publication or ingestion independence.']}, indent=2) + '\n')
+print(json.dumps(checks))

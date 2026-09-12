@@ -1,0 +1,131 @@
+# C05:250–252 / c5p84 — independent semantic review
+
+Overall verdict: **APPROVE**. SPEC: **APPROVE**. QUALITY: **APPROVE**. Scoped re-review round1 completed.
+
+The 50 optional spans are semantically defensible, including all 13 affirmative nulls and all 25 non-null d5 dictionary pairs. Both source-fidelity findings are resolved: all six current evidence-prose occurrences and six matching helper literals now preserve the source apostrophes. The frozen specs and generated bodies are byte-identical to the initially approved semantic candidates. Approval here concerns PROVISIONAL machine alignment only, never human editorial acceptance or promotion into hgm_gloss.
+
+| Segment | Spans | Nulls | Non-null d5 | Generator exit | Saved body bytes |
+|---|---:|---:|---:|---:|---:|
+| 250 | 8 | 1 | 7 | 0 | 2717 |
+| 251 | 22 | 7 | 10 | 0 | 5051 |
+| 252 | 20 | 5 | 8 | 0 | 5099 |
+| Total | 50 | 13 | 25 | | 12867 |
+
+## Closed findings and scoped verification
+
+**Q251-APOSTROPHE — RESOLVED.** Current 251/report.md lines 5/6 and 251/errata-five-ground-audit.json `/suspicions/0/five_grounds/b` now preserve `'jug` in all three places.
+
+**Q252-APOSTROPHE — RESOLVED.** Current 252/report.md line 4 and 252/errata-five-ground-audit.json `/suspicions/2/five_grounds/b` and `/suspicions/2/five_grounds/d` now preserve `'du shes` in all three places.
+
+I independently reproduced the scoped diff from preserved pre-fix files to current originals. The four prose files differ by exactly the six requested apostrophe additions. The authoring helper AST differs only in the matching six string-constant values; every other AST node and field is identical. The helper was parsed, not executed. Five edited files and three refreshed freeze manifests are the only changed pre-existing reconciliation files; all other pre-existing files remain byte-identical.
+
+All initial review bytes are preserved under `history/initial-review/`, including its original NEEDS_CORRECTION report and freeze. Historical reconciliation paths in the current copy manifest are rebound to exact physical pre-fix files, with original producer paths retained in `scoped-rereview-round1/historical-original-rebindings.json`. Current `reviewed-final/<seq>/` interfaces and new correction evidence are refreshed; the original proposal copies remain intact. Refreshed freeze references and every copy were independently byte-verified.
+
+The three specs, notes, bodies, fifty resolved tuples, counts, original inputs and prior generator evidence are unchanged. No generator or full semantic suite was rerun: the initial nine successful exact-output replays remain the applicable evidence. The proposed source-licensed head allowance and empty bank-ready errata file are byte-identical. No new breakage or open finding remains. Approval remains machine review of PROVISIONAL alignment, not human editorial acceptance.
+
+## Semantic examination
+
+I read both package files, original proposal reports/specs and full structured dispositions, with repeated text deduplicated for a readable review view in `package-unique-text.txt`. Both whole packages and all original individual inputs are preserved byte-for-byte. The exact original-to-final fields and occurrence ranges were checked independently: 84 original spans, 756 field records, and 50 final tuples. The two producer angles are evidence to challenge, not votes that establish truth.
+
+C05:250 keeps the two gnas occurrences distinct. The first names the perceived dwelling; the second conveys residence/home within the light-verb idiom makes his home. Full HGM 23878, 10288 and 12837 support those contextual roles; ILL:2331 recasts residence as want to reside in it, while C08:179/190/193 use gnas par byed for keeping beings alive. That contrast defeats a universal home gloss but does not defeat this local split. Unlike 251's wash, the English explicitly supplies the light verb makes. The split excludes the unlicensed his; par is a constructional relation, not a new lexical atom. Blos/thinks is justified by the nominal-to-verbal recast, despite direct blos/intent contrary evidence. De nyid selects this same, excluding contextual water. La sogs licenses the complete enumerative or such, and intact pas carries wordless agent marking. The source-specific head allowance for `pages_c05/c5p84/s250w3` is warranted and recorded, but was not written into the repository.
+
+C05:251's case forms deserve their whole extents: chur/as water has lexical chu/water and bound r/as; der/in it has de/it and r/in at the final swimming location. Each member is unique, stricter than its d5 parent and immediately grouped under that parent. The second dang selects and after clear; the first dang has a punctuation realization and no separate word. Shing joins perception to drinking, whose English begins a new sentence, so it cannot own the and before perceive. Khrus byed/wash is a complete washing construction; its original master HGM field is null, and the independent C08:61/TCS09:538 corpus evidence supports contextual matching without filling that field. Neither khrus alone nor byed alone should be made a second English wash or invented do. The exact 'jug/swim evidence is HGM 5280 plus the water context. The source boundary ending der 'jug and next row beginning go remains untouched.
+
+C05:252's technical realm name is a d5 compound with three strict lexical members. Its first space belongs to the name; later nam mkhar/as empty space selects the other English space and contains the case-conditioned stem nam mkha plus bound r. The absent apostrophe in this inflected stem is actual source morphology, unlike the erroneous omission in the prose findings above. Snyoms par zhugs pa owns wrapped in deep meditation as a complete d3 participial predicate. This retains the absorption recast while excluding who are and inventing no independent wrapped or deep atom. Original HGM 23065 corroborates the wording, but dictionary inclusion alone does not decide its depth.
+
+The nominal 'du shes is the cognitive faculty/conception that dissolves. Ability to conceptualize is defensible as the full English nominal expression; conceptualize alone would leave its nominal recast unsupported. C05:51 uses ability to discriminate for the same cognitive noun, while ILL:2332 uses conception. No general ability equivalent or separate ability member is inferred. Their remains supplied. Kyi's genitive relation is realized through the English direct object physical matter and receives an explicit grammatical-fusion null. Rnam par/altogether and bshig/dissolved split the local intensifier and predicate; has remains outside. HGM 10855/25566 and ILL:2332 support dissolution, while isolated bshig/destroy and SPF/Sunlight deny contexts limit generalization. Only the internal first phyir owns for.
+
+## Every span and affirmative null
+
+The following judgments are mine; complete original ranges are in `resolved-spans.json`, and the same rationale list is machine-readable in `span-semantic-dispositions.json`.
+
+### C05:250
+
+- **s250w1 d5** `de nyid` → this same: Pronominal de nyid identifies the same object. This same is locally exact; water is an anaphoric addition. HGM 8408/8418 does not force a doctrinal reality reading.
+- **s250w2 d5** `dud 'gro` → animal: The animal noun, HGM 8287; An is supplied.
+- **s250w3 d5** `la sogs` → or such: Source enumeration la sogs corresponds to or such, including or; HGM 25350 supports the whole closing gesture. The following pas is not part of this chosen lexical boundary.
+- **s250p1 d6** `pas` → NULL: Whole pas marks the animate agent. English expresses this through animal or such as subject; no separate by/with word exists. Null is affirmative grammatical realization, with no separated -s.
+- **s250w4 d5** `gnas` → place to stay: First gnas is the object of the dwelling thought: place to stay. HGM 10288 explicitly supports this scope. It precedes kyi blos.
+- **s250w5 d5** `blos` → thinks: Whole blos verbalizes the thought as thinks. Direct blos/intent is contrary evidence, but the source construction and blo/thinks in 12986 support this local recast. Its -s is preserved.
+- **s250w6 d5** `gnas` → home: Second gnas supplies residence/home inside makes his home. The local expression and HGM 10288/23878 support this role, despite other contexts translating the verb as remain or keep alive. His stays out.
+- **s250w7 d5** `byed pa` → makes: Byed pa and makes both serve as light verbs in this particular residence expression. This is not a manufacturing gloss. HGM 12837 supports makes; a complete makes his home parent would include an unlicensed possessor.
+
+### C05:251
+
+- **s251w1 d5** `mi` → Humans: Mi is the human noun here, selected by the plural animate subject, not the homographic negator.
+- **s251p1 d6** `rnams` → NULL: Rnams contributes plural information fused into Humans; there is no standalone plural exponent.
+- **s251p2 d6** `kyis` → NULL: Kyis marks the subject's agency; later with belongs to the washing object phrase and cannot be stolen for this case particle.
+- **s251p3 d6** `ni` → NULL: Ni marks the human topic; the English subject and discourse contrast give no separate topic word.
+- **s251w2 d5** `mngar ba` → sweet: Mngar ba/sweet is the first water quality, HGM 3787.
+- **s251p4 d6** `dang` → NULL: The first dang separates sweet from clear. Its list function appears in comma punctuation, not the earlier and before perceive or the later and before cool.
+- **s251w3 d5** `dvangs pa` → clear: Dvangs pa/clear is HGM 23556. P5's dwangs does not license changing this source spelling.
+- **s251p5 d6** `dang` → and: The second dang after dvangs pa owns and between clear and cool, the second English and token. Both actual ranges distinguish it from the other conjunctions.
+- **s251w4 d5** `bsil ba` → cool: Bsil ba/cool is HGM 21415; postposed adjective order does not change this atom.
+- **s251w5 d5** `chur` → as water: Chur is chu plus bound predicative r under rtogs. As water captures the whole case word without an article, and supports its two members.
+- **s251m1 d7** `chu` → water: Chu/water is the unique lexical stem strictly inside chur/as water.
+- **s251m2 d7** `r` → as: Bound r/as is the predicative case contribution strictly inside chur/as water; d6 would misclassify a bound ending.
+- **s251w6 d5** `rtogs` → perceive: Rtogs/perceive is the actual perception atom, HGM 6756; do not bank it again for the explanatory look at the same thing.
+- **s251p6 d6** `shing` → NULL: Shing links perception onward to drinking. The English starts a new sentence at They drink; and before perceive links an added English perception paraphrase, not this source transition.
+- **s251w7 d5** `'thung` → drink: 'Thung/drink is HGM 8047; repeated subject and of it are not lexical content of the verb.
+- **s251p7 d6** `ngo` → NULL: Ngo is assertive closure after drinking; there is no separate English word.
+- **s251w8 d5** `khrus byed` → wash: Khrus byed is the washing light-verb construction. The compound master HGM field is null, but original C08:61 and TCS09:538 corroborate the complete predicate. Here wash is the only English predicate, so no separate do or make is banked.
+- **s251p8 d6** `do` → NULL: Do closes the washing statement and has no separate English word.
+- **s251w9 d5** `der` → in it: Der carries both the demonstrative and locative, selecting final in it after swim. HGM 8594 supports this inflected word.
+- **s251m3 d7** `de` → it: De/it is the explicit source demonstrative strictly inside der; other supplied its remain outside.
+- **s251m4 d7** `r` → in: Bound r/in is the locative member of der, distinct from the earlier predicative r/as.
+- **s251w10 d5** `'jug` → swim: 'Jug/swim is explicitly HGM 5280 and the water context selects it. ILL:2332 has a different recast and cannot by itself attest a separate swim.
+
+### C05:252
+
+- **s252p1 d6** `go` → NULL: Go closes 251's 'jug across the source boundary. It has no separate lexical English exponent in this row; E-111 applies without moving source text.
+- **s252w1 d5** `nam mkha' mtha' yas skye mched` → realm of limitless space: Nam mkha' mtha' yas skye mched is the established realm name, HGM 10175; a d5 technical compound is defensible. The of relation belongs within this name.
+- **s252m1 d7** `nam mkha'` → space: Nam mkha'/space selects the first English space, strictly inside the realm name.
+- **s252m2 d7** `mtha' yas` → limitless: Mtha' yas/limitless is the unique modifier inside the name, HGM 7841.
+- **s252m3 d7** `skye mched` → realm: Skye mched/realm is the head of this technical name, HGM 692; the other Door rendering in C08 does not displace this actual English.
+- **s252w2 d3** `snyoms par zhugs pa` → wrapped in deep meditation: Snyoms par zhugs pa packages the meditative-absorption predicate. Wrapped in deep meditation is a complete participial phrase at d3, supported by HGM 23065 and contrasting ILL:2332/EM:714. Who are is relative syntax outside it; no independent wrapped/deep mapping is claimed.
+- **s252w3 d5** `lha` → pleasure beings: Lha/pleasure beings is the locally attested noun, HGM 21537; Those and who are are excluded.
+- **s252p2 d6** `rnams` → NULL: Rnams plurality is fused into beings and has no separate English word.
+- **s252p3 d6** `kyis` → NULL: Kyis marks the perceiving beings as agent; subject syntax supplies the English relation, with no separate by word.
+- **s252w4 d5** `nam mkhar` → as empty space: Nam mkhar is the inflected space noun under mthong. Terminative r licenses predicative as; empty space is HGM 10167/10189, making as empty space a complete case unit.
+- **s252m4 d7** `nam mkha` → empty space: Actual case-conditioned nam mkha owns empty space. No apostrophe is added: the exact inflected source stem lacks it. This member selects the second space phrase.
+- **s252m5 d7** `r` → as: The unique final r supplies as within nam mkhar, not another occurrence of as elsewhere in English.
+- **s252w5 d5** `mthong` → see: Mthong/see is HGM 7961. The water is supplied anaphoric object context and is excluded.
+- **s252w6 d5** `gzugs` → physical matter: Gzugs/physical matter is HGM 16759, the content of conception, not a member of the separate following cognitive noun.
+- **s252p4 d6** `kyi` → NULL: Kyi relates matter to conception. English realizes that relationship by conceptualize taking physical matter as direct object; there is no separate genitive exponent. The null does not deny the relation.
+- **s252w7 d5** `'du shes` → ability to conceptualize: 'Du shes is nominal conception/cognitive discrimination, which is said to dissolve. Ability to conceptualize is the complete English nominal faculty expression. C05:51's ability to discriminate and HGM 9528 support this scope. Their is excluded, and no ability-alone definition is created.
+- **s252w8 d5** `rnam par` → altogether: Rnam par/altogether is supported by HGM 10582 and the complete dissolution expression in 10855. Different deny contexts constrain generalization, not this local adverb.
+- **s252w9 d5** `bshig` → dissolved: Bshig/dissolved is the contextually attested stem. Master destroy is contrary isolated evidence; HGM 25566/10855 and ILL:2332 support dissolution. Has is auxiliary and pa'i marks the nominal causal construction, both excluded.
+- **s252p5 d6** `phyir` → for: The first phyir supplies causal for because form-conception has dissolved. The final phyir belongs to the separate outer reported citation and is not selected.
+- **s252p6 d6** `ro` → NULL: Ro is assertive closure of the internal causal statement, with no separate English word.
+
+## Omissions and coverage
+
+250: initial la, kyi after the first gnas and predicate-linking par are distributed relations; omitting them avoids false absence claims. Final dang coordinates onward through the quoted perceiver series and has no securely separate interior English and. An, on the other hand, of, water, as a, and, his and there are left outside lexical spans. The lexical place to stay is a supported noun equivalent, not accidental phrase inflation.
+
+251: the attributive 'i after bsil ba is recast across the reordered adjective list. The added look at the same thing and expands perception/context; rtogs is banked once at perceive. It after perceive, repeated They/they, of it, themselves with it and final coordinating and are supplied/distributed. Explicit der alone owns the final in it. Closure ngo/do and the transferred go have affirmative no-separate-word grounds rather than uncertainty.
+
+252: la after the realm name contributes a relation realized across the English level phrase, while ste, relative/nominal endings and the outer zhes gsungs pa'i phyir are distributed or untranslated framing. Those, who are, at the level we call the, the water, their and has remain outside the chosen atoms. The final citation frame is omitted rather than mapped to the first causal for or forced into null atoms. Broader depths do not hide missing correspondence; d3 here is only the independently defensible meditation predicate.
+
+## Source, witnesses, errata and mechanical limits
+
+The actual worktree SQLite spine was reopened with URI mode=ro. Its original neighboring rows are saved in full. The complete original C05ReadingASCII file was independently reopened and copied, and all six selected ACIP/English passages match after whitespace-only normalization. Full compressed corpus and master bytes are preserved as .bin copies, with complete selected original records and lexical entries. Comparative dictionary fields remain comparanda; only original HGM fields and actual GMR corpus English support mappings.
+
+All 78 recorded SQL queries were independently executed with exact parameter/count/full-row equality; all 42 full-master term/variant queries matched. Twenty-one full witness extent comparisons, including every field length, exactness, prefix and containment assertion, were independently reproduced. The selected 29 complete source/context witness records were also checked against original compressed-corpus objects. Additional unlike residence and dissolution rows remain in the full query records. Exact equality queries for 250 and 251 each return four rows on each side. For 252, exact English returns three (C05/C15/P5) and exact Wylie four (C05/C15/C16/C18).
+
+C16:828 appends its heading beyond C05's full 215-character English; C18:1120 appends asterisks. P5:126 has the same English but different Tibetan punctuation. P7:15 ends at has and cannot support dissolved altogether. ILL:2331–2332 is a different, fuller recast. None of these digital identities, differences or independent searches establishes independent publication or ingestion lineage.
+
+All seven recorded suspicions fail at least one of the independently examined five grounds. Full per-suspicion five-ground reasoning and actual count replays are in `errata-refutations.json`. The residence idiom, DVANGS spelling and cognitive faculty wording are defensible; the GO spill is existing E-111; the heading is absent locally; the dissolution is complete locally and E-107 is already registered. `bank-ready-errata.json` is an empty list. Original register descriptions and historical census figures are preserved as archival text rather than asserted as newly measured census results.
+
+The real canonical resolver produced every range in spec order. Nine actual unmodified-generator processes (three finals plus six original proposals) exited 0, each with empty stderr and exact complete saved-body bytes. All six final rendered source blocks were separately stripped of labels/null markers and compared exactly with their original source fields. The 380 inspected freeze-file references match their recorded bytes. These proofs establish fidelity and reproducibility, not semantic acceptance by themselves. No page84 data was landed during this review.
+
+## Preservation and actual provenance
+
+`original-to-copy-manifest.json` lists exact absolute originals, relative copies, byte counts and SHA-256. All originals, superseded versions, failed producer attempts, six original proposal interfaces, final interfaces, full evidence and consumed helper files are retained under `proposal-inputs/` and `reviewed-final/<seq>/`. Unsupported helper extensions are exact-byte .txt copies; compressed original inputs are .bin copies; Python caches are excluded. Every recorded copy was independently byte-compared. Governing repository snapshots include commit/path pins and were compared with their immutable Git objects, not a later live file. Current governing head is 87a5296a8f2fed8d14f4c7960ac598e00213e083; original producer governing bytes from 9aa617e7cc3a7a30c3b3fec1d318418d0044f993 remain separately identified.
+
+The actual producers are Codex agents in Tibetan-first, replacement English-first, reconciliation and independent semantic-review roles. The first English agent was retired before drafting after an overly broad metadata search exposed prohibited context; the incident and replacement original inputs remain preserved. Actual reader-consumed proposal protocols are identified by hash in `producer-protocol-provenance.json`, including the appended throughput refinement; older policy history is not attributed to those readers. Historical Claude role names are not claimed as executed producers.
+
+My first auxiliary proof attempt assumed the master container used entries; it stopped before generator execution. The actual unified_entries container was reopened and used. A second preservation attempt detected a root helper that changed while I was copying it and refused to overwrite the old bytes. Both observed helper versions and the root's frozen failure history remain, the newest copy uses a hash suffix, and the successful full attempt is `attempt03.stdout` with empty `attempt03.stderr`. No canonical generator, source, repository, master or frozen candidate was modified. No subagent, paid API, browser or device action was used. All Python ran without bytecode and all SQLite reads used mode=ro.
+
+## Current final review contract
+
+The initial full semantic assessment above remains in force. Scoped round1 adds only the verified evidence corrections and historical-path rebinding. Current review.json reports APPROVE with an empty open_findings list, three unchanged segment records, 50 spans, 13 nulls and 25 non-null d5 pairs. Exact required seven-key tuples remain in resolved-spans.json. Full scoped proofs and an independently reproduced diff are in scoped-rereview-round1/.

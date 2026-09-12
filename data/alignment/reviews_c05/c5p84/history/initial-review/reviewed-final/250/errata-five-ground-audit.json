@@ -1,0 +1,55 @@
+{
+  "retained_errata": [],
+  "all_six_original_proposal_errata_lists_empty": true,
+  "suspicions": [
+    {
+      "seq": 250,
+      "status": "rejected suspicion, not a filed erratum",
+      "candidate": "residence idiom is allegedly over-literal or corrupt",
+      "found": "makes his home",
+      "expected_considered_only": "resides",
+      "quote_occurrences": {
+        "acip": [],
+        "wylie": [],
+        "english": [
+          88
+        ]
+      },
+      "five_grounds": {
+        "a": "Found occurs verbatim in this English row, not in ACIP/Wylie; physical original also confirms its presence after whitespace normalization.",
+        "b": "C15:395/C16:826/C18:1118 carry the full same three fields; ILL:2331 is longer with nya/fish and renders the residence predicate want to reside in it. Neither identity nor the altered ILL wording establishes independent publication lineage.",
+        "c": {
+          "register_original": {
+            "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/reconciled/250/evidence/governing-docs_errata_register.json",
+            "sha256": "dc851e07fe913a904dc8b57f173f0bcbc4f13a884e65136f6560688576dc6c6c",
+            "bytes": 262017
+          },
+          "exact_segment_duplicates": [],
+          "classes_original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/reconciled/250/evidence/registered-class-original-records.json"
+        },
+        "d": "Rejected: gnas par byed pa is a defensible residence construction. HGM 23878 explicitly attests makes his home; residence is not manufacturing a building. Wording remains intact; supplied his is only excluded from alignment atoms.",
+        "e": {
+          "exact_english_query": {
+            "sql": "select * from corpus_segments where english=? order by course,seq",
+            "params": [
+              "An animal or such, on the other hand, thinks of this same water as a place to stay, and makes his home there."
+            ],
+            "count": 4
+          },
+          "exact_wylie_query": {
+            "sql": "select * from corpus_segments where wylie=? order by course,seq",
+            "params": [
+              "de nyid la dud 'gro la sogs pas gnas kyi blos gnas par byed pa dang"
+            ],
+            "count": 4
+          },
+          "english_length": 109,
+          "all_inherited_recorded_query_counts_and_rows_rerun_exact": true
+        }
+      },
+      "refuted": true,
+      "survives_all_five": false
+    }
+  ],
+  "scope": "All recorded suspicions rejected; no independent human acceptance claimed. Original register counts are archival quotes, not new current-corpus census claims."
+}

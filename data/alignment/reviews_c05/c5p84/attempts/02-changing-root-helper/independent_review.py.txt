@@ -1,0 +1,156 @@
+import os,sys,json,hashlib,subprocess,sqlite3,runpy,gzip,re
+from pathlib import Path
+os.environ['PYTHONDONTWRITEBYTECODE']='1';sys.dont_write_bytecode=True
+BASE=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+B=BASE/'campaign-artifacts/C05-250-252'; R=B/'semantic-review'; W=BASE/'campaign-worktree'
+def put(name,x):
+ p=R/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(x):return hashlib.sha256(x).hexdigest()
+manifest=[];allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def copy(p,rel,pin=None):
+ data=p.read_bytes(); dest=R/rel
+ if dest.suffix not in allowed:dest=Path(str(dest)+'.txt')
+ dest.parent.mkdir(parents=True,exist_ok=True)
+ if dest.exists():assert dest.read_bytes()==data, str(dest)
+ else:dest.write_bytes(data)
+ rec={'original':str(p),'copy':str(dest.relative_to(R)),'sha256':sha(data),'bytes':len(data)}
+ if pin:rec.update(original_git_commit=pin[0],repository_relative_path=pin[1])
+ manifest.append(rec);return dest
+# All actual inputs, originals, attempted versions and failures preserved verbatim.
+for p in sorted(B.rglob('*')):
+ if p.is_file() and R not in p.parents and '__pycache__' not in p.parts and p.suffix!='.pyc':
+  copy(p,'proposal-inputs/'+str(p.relative_to(B)))
+for seq in (250,251,252):
+ for p in sorted((B/'reconciled'/str(seq)).rglob('*')):
+  if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc':copy(p,'reviewed-final/'+str(seq)+'/'+str(p.relative_to(B/'reconciled'/str(seq))))
+for name in ['semantic-review-protocol.md','proposal-protocol.md']:
+ p=B.parent/name
+ if p.exists():copy(p,'governing-protocols/'+name)
+# Pin live governing inputs to immutable objects. Historical producer snapshots remain copied above.
+head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=W,text=True).strip()
+govs=['AGENTS.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','docs/errata_register.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py','tools/test_no_supplied_span_head.py']
+pins=[]
+for rel in govs:
+ data=subprocess.check_output(['git','show',head+':'+rel],cwd=W); assert data==(W/rel).read_bytes(),rel
+ copy(W/rel,'governing-current/'+head+'/'+rel,(head,rel));pins.append({'commit':head,'path':rel,'sha256':sha(data),'equals_git_object':True})
+# Identify historical governing bytes by their actual object hash, independent of changed live file.
+old='9aa617e7cc3a7a30c3b3fec1d318418d0044f993'
+for commit in [old,head]:
+ for rel in govs+['docs/alignment_briefs/PROPOSE_BRIEF.md']:
+  data=subprocess.check_output(['git','show',commit+':'+rel],cwd=W)
+  for rec in manifest:
+   if ('governing' in rec['original'] or '/governing' in rec['copy']) and rec['sha256']==sha(data) and 'original_git_commit' not in rec:
+    assert (R/rec['copy']).read_bytes()==data
+    rec.update(original_git_commit=commit,repository_relative_path=rel)
+put('governing-git-proof.json',pins)
+refs=json.loads((B/'reconciled/250/evidence/reference-access.json').read_text())
+for row in refs:row['readable']=os.access(row['path'],os.R_OK);assert row['readable']
+put('reference-access.json',refs)
+# Read actual original physical C05 source; preserve complete bytes.
+source=Path(json.loads((B/'reconciled/250/evidence/physical-source-proof.json').read_text())['original']['path'])
+copy(source,'source-originals/C05ReadingASCII.txt')
+physical=source.read_bytes();norm=b' '.join(physical.split())
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+sources=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',247,255))]
+put('source-originals/spine-context.json',sources);byseq={s['seq']:s for s in sources}
+physical_checks=[]
+for seq in (250,251,252):
+ for field in ['acip','english']:
+  needle=b' '.join(byseq[seq][field].encode().split());at=norm.find(needle);assert at>=0
+  physical_checks.append({'seq':seq,'field':field,'normalization':'whitespace only; exact physical file preserved','offset':at,'bytes':len(needle)})
+put('source-originals/physical-source-proof.json',{'original_sha256':sha(physical),'original_bytes':len(physical),'checks':physical_checks})
+# Reopen original compressed corpus; preserve full bytes and verify entire raw objects for material witnesses.
+cp=W/'data/full_parallel_corpus_v32.json.gz'; corpus=json.loads(gzip.decompress(cp.read_bytes()));copy(cp,'source-originals/full_parallel_corpus_v32.json.gz.bin')
+counts={};corpus_index={}
+for i,row in enumerate(corpus):
+ c=row['course'];counts[c]=counts.get(c,0)+1;corpus_index[c,counts[c]]=(i,row)
+# Independently rerun every original recorded query, storing full actual rows and exact count comparisons.
+replays=[]
+for name,key in [('corpus-queries.json','rows'),('spine-lexical-rows.json','entries')]:
+ evidence=json.loads((B/'reconciled/250/evidence'/name).read_text())
+ for q in evidence['queries']:
+  assert q['sql'].lstrip().lower().startswith('select')
+  rows=[dict(r) for r in db.execute(q['sql'],q['params'])]
+  check={'sql':q['sql'],'params':q['params'],'reported_count':q['count'],'actual_count':len(rows),'count_equal':q['count']==len(rows),'rows_equal':q[key]==rows,'rows':rows}
+  assert check['count_equal'] and check['rows_equal'],q
+  replays.append(check)
+put('independent-query-replays.json',replays)
+material={}
+for seq in (250,251,252):
+ wx=json.loads((B/'reconciled'/str(seq)/'witness-extents.json').read_text())
+ def walk(x):
+  if isinstance(x,dict):
+   if all(k in x for k in ['course','seq','wylie','english','acip']):
+    c,s=x['course'],x['seq'];row=dict(db.execute('select * from corpus_segments where course=? and seq=?',(c,s)).fetchone())
+    for f in ['acip','wylie','english']:assert x[f]==row[f]
+    material[c,s]=row
+   for v in x.values():walk(v)
+  elif isinstance(x,list):
+   for v in x:walk(v)
+ walk(wx)
+for c,s in [('C08',179),('C08',190),('C08',193),('C05',312),('SPF',96),('Sunlight',96)]:
+ row=db.execute('select * from corpus_segments where course=? and seq=?',(c,s)).fetchone()
+ if row:material[c,s]=dict(row)
+original_rows=[]
+for (c,s),row in sorted(material.items()):
+ i,obj=corpus_index[c,s];assert obj==json.loads(row['raw'])
+ original_rows.append({'course':c,'seq':s,'corpus_zero_based_index':i,'raw_object_equals_spine_raw':True,'complete_original':obj})
+put('source-originals/witness-full-originals.json',list(material.values()));put('source-originals/compressed-corpus-witness-proof.json',{'total_original_records':len(corpus),'records':original_rows})
+# Full master original, complete entries including contrary and null hgm_gloss; no promotion.
+mp=W/'data/hgm_dictionary_v27_2.json.gz';master=json.loads(gzip.decompress(mp.read_bytes()));copy(mp,'source-originals/hgm_dictionary_v27_2.json.gz.bin')
+entries=master['unified_entries'] if isinstance(master,dict) else master
+morig=json.loads((B/'reconciled/250/evidence/master-full-entries.json').read_text());mq=[]
+for q in morig['queries']:
+ rows=[r for r in entries if r['wylie']==q['term'] or q['term'] in (r.get('wylie_variants') or [])]
+ assert rows==q['entries'] and len(rows)==q['count'],q['term']
+ mq.append({'term':q['term'],'count':len(rows),'entries':rows,'exact_preserved_evidence':True})
+put('source-originals/master-full-entries.json',{'master_entry_count':len(entries),'queries':mq})
+# Canonical functions from the actual generator; actual process executes the unmodified generator too.
+gen=runpy.run_path(str(W/'tools/gen_alignment_page.py'))
+runner=R/'run_canonical_readonly.py.txt'
+runner.write_text("import sys,sqlite3,runpy\nfrom pathlib import Path\nsys.dont_write_bytecode=True\noriginal=sqlite3.connect\ndef ro(database,*args,**kwargs):\n kwargs['uri']=True\n return original(Path(database).resolve().as_uri()+'?mode=ro',*args,**kwargs)\nsqlite3.connect=ro\nrunpy.run_path("+repr(str(W/'tools/gen_alignment_page.py'))+",run_name='__main__')\n")
+resolved=[];segments=[];all_ranges={};gproof=[]
+for angle in ['tibetan','english','reconciled']:
+ for seq in (250,251,252):
+  specpath=B/angle/str(seq)/'spec.json';raw=specpath.read_bytes();spec=json.loads(raw);seg=spec['segments'][0];sps=seg['spans'];src=byseq[seq]
+  tr=gen['resolve'](src['wylie'],sps,'tib',seq);ids={s['id']:s for s in sps}
+  er=gen['resolve'](src['english'],gen['with_members'](sps,[ids[i] for i in seg['eng_order']],src['english']),'eng',seq)
+  tuples=[dict(seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(tr[s['id']]),eng_range=list(er[s['id']]) if s['eng'] is not None else None) for s in sps]
+  all_ranges[angle,seq]=tuples
+  p=subprocess.run([sys.executable,str(runner)],input=raw,cwd=W,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+  outdir=R/'independent-generator-replays'/angle/str(seq);outdir.mkdir(parents=True,exist_ok=True)
+  (outdir/'stdout.html').write_bytes(p.stdout);(outdir/'stderr.txt').write_bytes(p.stderr);(outdir/'exit.txt').write_text(str(p.returncode)+'\n')
+  body=(specpath.parent/'body.html').read_bytes();assert p.returncode==0 and p.stdout==body
+  proof={'angle':angle,'seq':seq,'invocation':[sys.executable,str(runner)],'cwd':str(W),'exit':p.returncode,'stderr_bytes':len(p.stderr),'body_bytes':len(body),'complete_stdout_equals_saved_body':p.stdout==body,'bytecode_disabled':True,'sqlite_mode':'ro'};gproof.append(proof)
+  if angle=='reconciled':
+   resolved.extend(tuples);segments.append({'seq':seq,'span_count':len(sps),'null_count':sum(s['eng'] is None for s in sps),'word_pair_count':sum(s['d']==5 and s['eng'] is not None for s in sps),'spec_sha256':sha(raw),'spec_bytes':len(raw),'body_sha256':sha(body),'body_bytes':len(body),'generator_exit':p.returncode})
+put('resolved-spans.json',resolved);put('independent-generator-proof.json',gproof);put('measured-segments.json',segments)
+put('original-angle-resolved-spans.json',[{'angle':a,**r} for (a,s),rs in all_ranges.items() if a!='reconciled' for r in rs])
+# Check every supplied structured disposition field and both range sets against actual inputs.
+fieldchecks=[]
+for seq in (250,251,252):
+ d=json.loads((B/'reconciled'/str(seq)/'field-by-field-dispositions.json').read_text())
+ for rec in d['records']:
+  a=rec['angle'];origin=json.loads((B/a/str(seq)/'spec.json').read_text())['segments'][0]
+  orig=next(s for s in origin['spans'] if s['id']==rec['original_id'])
+  final=json.loads((B/'reconciled'/str(seq)/'spec.json').read_text())['segments'][0]
+  fs=next(s for s in final['spans'] if s['id']==rec['final_id'])
+  ort=next(s for s in all_ranges[a,seq] if s['id']==rec['original_id']);frt=next(s for s in all_ranges['reconciled',seq] if s['id']==rec['final_id'])
+  for f in rec['field_dispositions']:
+   k=f['field'];o=ort if k.endswith('_range') else orig;v=frt if k.endswith('_range') else fs
+   assert f['original_value']==o.get(k) and f['final_value']==v.get(k),(seq,rec['original_id'],k)
+   if 'original_present' in f:assert f['original_present']==(k in o) and f['final_present']==(k in v)
+  fieldchecks.append({'seq':seq,'angle':a,'original_id':rec['original_id'],'final_id':rec['final_id'],'fields_checked':len(rec['field_dispositions']),'all_actual_values_equal':True})
+put('structured-dispositions-proof.json',fieldchecks)
+# Exact ordered tuple and original witness extent schemas retained, and verified against actual source.
+put('original-to-copy-manifest.json',manifest)
+checks=[]
+for rec in manifest:
+ dest=(R/rec['copy']).read_bytes()
+ if 'original_git_commit' in rec:
+  original=subprocess.check_output(['git','show',rec['original_git_commit']+':'+rec['repository_relative_path']],cwd=W)
+ else:original=Path(rec['original']).read_bytes()
+ assert original==dest and sha(dest)==rec['sha256'] and len(dest)==rec['bytes']
+ checks.append({'copy':rec['copy'],'bytes_equal':True})
+put('preservation-proof.json',{'manifest_records':len(manifest),'all_equal':True,'checks':checks})
+print(json.dumps({'head':head,'segments':segments,'queries':len(replays),'master_queries':len(mq),'witness_rows':len(material),'field_dispositions':len(fieldchecks),'manifest_records':len(manifest)},indent=2))

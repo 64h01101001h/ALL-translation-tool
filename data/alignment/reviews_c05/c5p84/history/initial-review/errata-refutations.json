@@ -1,0 +1,252 @@
+[
+  {
+    "seq": 250,
+    "candidate": "residence idiom is allegedly over-literal or corrupt",
+    "found": "makes his home",
+    "refuted": true,
+    "original_quote_occurrences_rechecked": {
+      "acip": [],
+      "wylie": [],
+      "english": [
+        88
+      ]
+    },
+    "counts_rechecked": [
+      {
+        "sql": "select * from corpus_segments where english=? order by course,seq",
+        "params": [
+          "An animal or such, on the other hand, thinks of this same water as a place to stay, and makes his home there."
+        ],
+        "actual_count": 4
+      },
+      {
+        "sql": "select * from corpus_segments where wylie=? order by course,seq",
+        "params": [
+          "de nyid la dud 'gro la sogs pas gnas kyi blos gnas par byed pa dang"
+        ],
+        "actual_count": 4
+      }
+    ],
+    "independent_five_ground_refutation": {
+      "a": "The exact local English has makes his home at offset 88; physical C05 original agrees after whitespace-only normalization.",
+      "b": "C15:395/C16:826/C18:1118 have identical full fields. ILL:2331 changes the subject to include fish and says want to reside in it. These observations establish no publication or ingestion independence.",
+      "c": "No local duplicate record. No need to invent a corruption class for a defensible idiom.",
+      "d": "The construction expresses residence. HGM 23878 gives makes his home and HGM 10288 includes home; the English is idiomatic, not an assertion of building a house.",
+      "e": "Both exact full-field queries return four rows; full actual queries and rows saved."
+    }
+  },
+  {
+    "seq": 251,
+    "candidate": "DVANGS/dvangs allegedly misspelled",
+    "found": "DVANGS",
+    "refuted": true,
+    "original_quote_occurrences_rechecked": {
+      "acip": [
+        33
+      ],
+      "wylie": [],
+      "english": []
+    },
+    "counts_rechecked": [
+      {
+        "sql": "select * from corpus_segments where english=? order by course,seq",
+        "params": [
+          "Humans look at the same thing and perceive it as water--sweet, clear, and cool. They drink of it, they wash themselves with it, and they swim in it."
+        ],
+        "actual_count": 4
+      },
+      {
+        "sql": "select * from corpus_segments where wylie=? order by course,seq",
+        "params": [
+          "mi rnams kyis ni mngar ba dang , dvangs pa dang , bsil ba'i chur rtogs shing 'thung ngo , , khrus byed do, , der 'jug"
+        ],
+        "actual_count": 4
+      }
+    ],
+    "independent_five_ground_refutation": {
+      "a": "DVANGS is exactly in C05 ACIP and dvangs in its Wylie, also in the complete physical C05 source.",
+      "b": "C15:396/C16:827/C18:1119 reproduce the fields; P5:125 instead has DWANGS/dwangs and finishes der 'jug go. ILL:2332 has dvangs. None proves lineage.",
+      "c": "No existing exact C05:251 record; this need not be filed because ground d refutes the suspicion.",
+      "d": "Original HGM dvangs pa 23556 has clear and clarity. Exact master/entries searches for dwangs pa return zero, not proof that the alternate spelling is impossible. No basis to correct the attested local form.",
+      "e": "Exact local English and Wylie each return four rows; original lexical queries repeated and full rows preserved."
+    }
+  },
+  {
+    "seq": 251,
+    "candidate": "GO closure split across 251/252",
+    "found": "der 'jug",
+    "refuted": true,
+    "original_quote_occurrences_rechecked": {
+      "acip": [],
+      "wylie": [
+        109
+      ],
+      "english": []
+    },
+    "counts_rechecked": [
+      {
+        "sql": "select * from corpus_segments where english=? order by course,seq",
+        "params": [
+          "Humans look at the same thing and perceive it as water--sweet, clear, and cool. They drink of it, they wash themselves with it, and they swim in it."
+        ],
+        "actual_count": 4
+      },
+      {
+        "sql": "select * from corpus_segments where wylie=? order by course,seq",
+        "params": [
+          "mi rnams kyis ni mngar ba dang , dvangs pa dang , bsil ba'i chur rtogs shing 'thung ngo , , khrus byed do, , der 'jug"
+        ],
+        "actual_count": 4
+      }
+    ],
+    "independent_five_ground_refutation": {
+      "a": "C05:251 ends der 'jug and C05:252 begins go,nam exactly; no text is lost across the original pair.",
+      "b": "P5:125 and combined ILL:2332 retain 'jug go. Full fields differ; no publication independence inferred.",
+      "c": "E-111 already registers syllable spill across row boundaries. This is an application of that class, not a new source defect.",
+      "d": "go is grammatical sentence closure of 'jug. Keep the source boundary; do not move it into 251.",
+      "e": "Quote ranges, all full-field comparisons and relevant query counts independently replayed."
+    }
+  },
+  {
+    "seq": 252,
+    "candidate": "initial GO is allegedly stray text",
+    "found": "go",
+    "refuted": true,
+    "original_quote_occurrences_rechecked": {
+      "acip": [],
+      "wylie": [
+        0
+      ],
+      "english": []
+    },
+    "counts_rechecked": [
+      {
+        "sql": "select * from corpus_segments where english=? order by course,seq",
+        "params": [
+          "Those pleasure beings who are wrapped in deep meditation at the level we call the \"realm of limitless space\" see the water as empty space, for their ability to conceptualize physical matter has dissolved altogether."
+        ],
+        "actual_count": 3
+      },
+      {
+        "sql": "select * from corpus_segments where wylie=? order by course,seq",
+        "params": [
+          "go,nam mkha' mtha' yas skye mched la snyoms par zhugs pa'i lha rnams kyis nam mkhar mthong ste, gzugs kyi 'du shes rnam par bshig pa'i phyir ro, , zhes gsungs pa'i phyir"
+        ],
+        "actual_count": 4
+      }
+    ],
+    "independent_five_ground_refutation": {
+      "a": "Initial GO/go occurs at offset zero in C05:252. It is the continuation of the preceding row, not random text.",
+      "b": "C15:397/C16:828/C18:1120 reproduce the boundary; P5:125 and ILL:2332 contain the full verb closure. This does not establish lineage.",
+      "c": "Already registered E-111 class; no new filing.",
+      "d": "Closure function is grammatical; no local lexical English word is needed. The null asserts no separate word, not no grammatical contribution.",
+      "e": "Actual source ranges, counts and witness fields checked."
+    }
+  },
+  {
+    "seq": 252,
+    "candidate": "following heading allegedly contaminates C05 English",
+    "found": "30 Arguments on the Glass of Liquid",
+    "refuted": true,
+    "original_quote_occurrences_rechecked": {
+      "acip": [],
+      "wylie": [],
+      "english": []
+    },
+    "counts_rechecked": [
+      {
+        "sql": "select * from corpus_segments where english=? order by course,seq",
+        "params": [
+          "Those pleasure beings who are wrapped in deep meditation at the level we call the \"realm of limitless space\" see the water as empty space, for their ability to conceptualize physical matter has dissolved altogether."
+        ],
+        "actual_count": 3
+      },
+      {
+        "sql": "select * from corpus_segments where wylie=? order by course,seq",
+        "params": [
+          "go,nam mkha' mtha' yas skye mched la snyoms par zhugs pa'i lha rnams kyis nam mkhar mthong ste, gzugs kyi 'du shes rnam par bshig pa'i phyir ro, , zhes gsungs pa'i phyir"
+        ],
+        "actual_count": 4
+      }
+    ],
+    "independent_five_ground_refutation": {
+      "a": "30 Arguments on the Glass of Liquid is absent from all three C05:252 fields and its physical original. It occurs after the shared C05 English in C16:828.",
+      "b": "C15:397 matches fully; C16:828 appends that heading; C18:1120 appends asterisks; P5:126 shares English with Tibetan punctuation differences; P7:15 is shorter. All extents verified.",
+      "c": "Heading glue is a known governing apparatus class, but this local suspicion already fails quotation ground a.",
+      "d": "No such local text exists to correct.",
+      "e": "Local English length is 215 characters; exact English equals three rows, exact Wylie equals four. Apparatus extent claims are independently checked."
+    }
+  },
+  {
+    "seq": 252,
+    "candidate": "ability to conceptualize is allegedly wrong or supplied enough to require source correction",
+    "found": "ability to conceptualize",
+    "refuted": true,
+    "original_quote_occurrences_rechecked": {
+      "acip": [],
+      "wylie": [],
+      "english": [
+        149
+      ]
+    },
+    "counts_rechecked": [
+      {
+        "sql": "select * from corpus_segments where english=? order by course,seq",
+        "params": [
+          "Those pleasure beings who are wrapped in deep meditation at the level we call the \"realm of limitless space\" see the water as empty space, for their ability to conceptualize physical matter has dissolved altogether."
+        ],
+        "actual_count": 3
+      },
+      {
+        "sql": "select * from corpus_segments where wylie=? order by course,seq",
+        "params": [
+          "go,nam mkha' mtha' yas skye mched la snyoms par zhugs pa'i lha rnams kyis nam mkhar mthong ste, gzugs kyi 'du shes rnam par bshig pa'i phyir ro, , zhes gsungs pa'i phyir"
+        ],
+        "actual_count": 4
+      }
+    ],
+    "independent_five_ground_refutation": {
+      "a": "ability to conceptualize occurs verbatim in the local English and physical original.",
+      "b": "C05:51 uses ability to discriminate for nominal 'du shes, ILL:2332 instead uses conception. P7:15 attests the cognitive expression but ends at has. Alternative renderings establish no independent-publication lineage.",
+      "c": "No exact local duplicate, and no new class is needed for a defensible nominal rendering.",
+      "d": "'du shes names the conception/discrimination faculty here. Ability to conceptualize is an English nominal recast, supported by that noun function and C05:51. A general ability gloss or an isolated ability member would be unsupported, but neither is proposed.",
+      "e": "Full original HGM cognitive entry and all source/query extents rechecked; the current reconciler prose drops the initial apostrophe in two explanations and requires an evidence-only correction."
+    }
+  },
+  {
+    "seq": 252,
+    "candidate": "dissolution continuation allegedly lost at the cap",
+    "found": "has dissolved altogether.",
+    "refuted": true,
+    "original_quote_occurrences_rechecked": {
+      "acip": [],
+      "wylie": [],
+      "english": [
+        190
+      ]
+    },
+    "counts_rechecked": [
+      {
+        "sql": "select * from corpus_segments where english=? order by course,seq",
+        "params": [
+          "Those pleasure beings who are wrapped in deep meditation at the level we call the \"realm of limitless space\" see the water as empty space, for their ability to conceptualize physical matter has dissolved altogether."
+        ],
+        "actual_count": 3
+      },
+      {
+        "sql": "select * from corpus_segments where wylie=? order by course,seq",
+        "params": [
+          "go,nam mkha' mtha' yas skye mched la snyoms par zhugs pa'i lha rnams kyis nam mkhar mthong ste, gzugs kyi 'du shes rnam par bshig pa'i phyir ro, , zhes gsungs pa'i phyir"
+        ],
+        "actual_count": 4
+      }
+    ],
+    "independent_five_ground_refutation": {
+      "a": "has dissolved altogether. occurs completely in C05:252 and its physical original.",
+      "b": "C15/C16/C18/P5 contain the continuation with the saved differences. P7:15 ends at has, so cannot witness dissolved altogether.",
+      "c": "E-107 cap class is already registered; this local row is complete and only 215 characters. No new cap record.",
+      "d": "Dissolution is supported by local syntax, HGM 10855/25566 and ILL:2332. No source-text correction follows from a shorter P7 field.",
+      "e": "All actual equality/length/count claims replayed. Archival register census figures remain explicitly archival; not asserted as a new census."
+    }
+  }
+]

@@ -1,0 +1,88 @@
+{
+  "producer": "Codex",
+  "angle": "English-first independent proposal",
+  "governing_base": "9aa617e7cc3a7a30c3b3fec1d318418d0044f993",
+  "canonical_generator_sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e",
+  "source_role": "Asvabhava quotation introduced in C05:248; C05:247-255 original neighboring rows retained in full including raw.",
+  "source_snapshot_checks": [
+    {
+      "snapshot": "source.json",
+      "count": 3,
+      "fields": [
+        "id",
+        "course",
+        "seq",
+        "acip",
+        "wylie",
+        "english"
+      ],
+      "match": true
+    },
+    {
+      "snapshot": "context.json",
+      "count": 9,
+      "fields": [
+        "id",
+        "course",
+        "seq",
+        "acip",
+        "wylie",
+        "english"
+      ],
+      "match": true
+    }
+  ],
+  "evidence": {
+    "original-corpus-evidence.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/original-corpus-evidence.json",
+      "sha256": "72635fc67fdde0f4d61057f0b6c7f0bcbbe45ae74b3770e2003ca6f61fc91780"
+    },
+    "original-master-evidence.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/original-master-evidence.json",
+      "sha256": "2a68a16fdb33640da027fd14fdb9332419a7c471c193278ddecab943aa44fdd5"
+    },
+    "governing-manifest.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/governing-manifest.json",
+      "sha256": "ed3f326db06915db6d0c804899ff6a5cb6020b282cf88ceeaed33b07bc235123"
+    },
+    "errata-registered-class-evidence.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/errata-registered-class-evidence.json",
+      "sha256": "77810fd8524af6acb02f598edda0063cd04bbf2faf8cfb06042016b465fdc331"
+    },
+    "dispatch-brief.md": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/dispatch-brief.md",
+      "sha256": "dcb899f8a5a09d4014777363b88a6e2a2e56bb89d3c9ff77f851e65ebc9461ae"
+    },
+    "proposal-protocol.md": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/proposal-protocol.md",
+      "sha256": "6cf88efbfe2b7a68ea4d3d7fb507043b595760f9d60fd05b44a47e3268c6f752"
+    }
+  },
+  "independence": "Only own English angle and whitelisted batch files read; no other-angle, reconciliation or root-review judgments used.",
+  "scope": "Proposals only; mechanical verification does not imply semantic approval.",
+  "parallel_limit": "Text-field identity does not establish independent publication or ingestion lineage. Course-shape re-ingestion statements remain metadata claims.",
+  "segment": 250,
+  "source": {
+    "id": 1632,
+    "course": "C05",
+    "seq": 250,
+    "acip": "DE NYID LA DUD 'GRO LA SOGS PAS GNAS KYI BLOS GNAS PAR BYED PA DANG ,",
+    "wylie": "de nyid la dud 'gro la sogs pas gnas kyi blos gnas par byed pa dang",
+    "english": "An animal or such, on the other hand, thinks of this same water as a place to stay, and makes his home there.",
+    "raw": "{\"course\": \"C05\", \"acip\": \"DE NYID LA DUD 'GRO LA SOGS PAS GNAS KYI BLOS GNAS PAR BYED PA DANG ,\", \"wylie\": \"de nyid la dud 'gro la sogs pas gnas kyi blos gnas par byed pa dang\", \"english\": \"An animal or such, on the other hand, thinks of this same water as a place to stay, and makes his home there.\"}"
+  },
+  "content_rationale": [
+    "de nyid is the demonstrative this same in this context, not the philosophical glossary sense reality. Water is an antecedent expansion licensed by C05:249 but is not part of this span.",
+    "dud 'gro/animal, la sogs/or such, gnas/place to stay and byed pa/makes have HGM glossary support.",
+    "Two gnas occurrences resolve separately: first to place to stay, second to home. The complete glossary entry gnas par byed pa/makes his home supports the residence idiom, but does not license supplied his; the split retains home and makes while omitting linking par.",
+    "blos/thinks is a local nominal-to-verbal recast supported by base blo/thinks; direct blos glossary says intent, contrary lexical evidence preserved. Its final s remains inseparable.",
+    "The complete ILL:2331 parallel says home and reside; C05:312 says place to live. Other gnas par byed corpus contexts concern keeping beings alive, so the residence interpretation is specific to this passage."
+  ],
+  "omissions": [
+    "la before dud 'gro, kyi after first gnas, and par before byed pa are distributed grammatical relations in the recast; omitted, not nulled.",
+    "Final dang connects this branch onward; its relationship does not uniquely license the English internal and, which is left unwrapped.",
+    "An, on the other hand, of, water, as a, and, his and there remain unwrapped as supplied/recast wording."
+  ],
+  "errata": "No candidate survives: exact English and Wylie queries each return C05:250/C15:395/C16:826/C18:1118, with matching ACIP as well. None establishes lineage. No 1500-character cap or following heading in this source row.",
+  "challenge": "Second gnas/home and byed pa/makes split of the residence idiom; full HGM glossary favors the complete expression but includes supplied his."
+}

@@ -1,0 +1,79 @@
+import json,runpy,re,sys,hashlib,sqlite3,subprocess,html
+from pathlib import Path
+sys.dont_write_bytecode=True
+B=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252');R=B/'semantic-review';W=B.parent.parent/'campaign-worktree'
+def put(n,d):(R/n).write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+sources=json.loads((R/'source-originals/spine-context.json').read_text());src={r['seq']:r for r in sources};db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+ranges=json.loads((R/'resolved-spans.json').read_text());byid={(r['seq'],r['id']):r for r in ranges}
+extents=[];tuplechecks=[];fidelity=[];suspicions=[]
+for seq in (250,251,252):
+ for row in json.loads((B/f'reconciled/{seq}/witness-extents.json').read_text())['witnesses']:
+  w=row['witness'];actual=dict(db.execute('select * from corpus_segments where course=? and seq=?',(w['course'],w['seq'])).fetchone());assert w==actual
+  for f,old in row['comparisons'].items():
+   a,b=src[seq][f],actual[f];prefix=0
+   while prefix<min(len(a),len(b)) and a[prefix]==b[prefix]:prefix+=1
+   new=dict(local_characters=len(a),witness_characters=len(b),exact=a==b,common_prefix_characters=prefix,local_after_common_prefix=a[prefix:],witness_after_common_prefix=b[prefix:],full_local_in_witness=a in b,full_witness_in_local=b in a)
+   assert new==old,(seq,w['course'],w['seq'],f)
+  extents.append({'seq':seq,'witness_course':w['course'],'witness_seq':w['seq'],'all_three_fields_and_extents_equal':True})
+ for row in json.loads((B/f'reconciled/{seq}/final-ordered-tuples.json').read_text())['tibetan_order']:
+  actual=byid[seq,row['id']]
+  for k in ('id','d','tib','eng','tib_range','eng_range'):assert row[k]==actual[k]
+  tuplechecks.append({'seq':seq,'id':row['id'],'exact_resolver_identity':True})
+ body=(B/f'reconciled/{seq}/body.html').read_text()
+ for side,field in [('tib','wylie'),('eng','english')]:
+  content=re.search(r'<div class="'+side+r'"><div class="lab">.*?</div>\n(.*?)\n</div>',body,re.S).group(1)
+  content=re.sub(r'<span class="nul">.*?</span>','',content,flags=re.S)
+  plain=html.unescape(re.sub(r'<[^>]+>','',content));assert plain==src[seq][field]
+  fidelity.append({'seq':seq,'side':side,'exact_original_source_block':True,'characters':len(plain)})
+ for c in json.loads((B/f'reconciled/{seq}/errata-five-ground-audit.json').read_text())['suspicions']:
+  occ={f:[m.start() for m in re.finditer(re.escape(c['found']),src[seq][f])] for f in ['acip','wylie','english']};assert occ==c['quote_occurrences']
+  qproof=[]
+  def counts(x):
+   if isinstance(x,dict):
+    if 'sql' in x and 'params' in x:
+     rows=list(db.execute(x['sql'],x['params']));assert len(rows)==x['count'];qproof.append({'sql':x['sql'],'params':x['params'],'actual_count':len(rows)})
+    for v in x.values():counts(v)
+   elif isinstance(x,list):
+    for v in x:counts(v)
+  counts(c['five_grounds']['e'])
+  suspicions.append({'seq':seq,'candidate':c['candidate'],'found':c['found'],'refuted':True,'original_quote_occurrences_rechecked':occ,'counts_rechecked':qproof})
+put('witness-extents-proof.json',extents);put('final-tuple-identity-proof.json',tuplechecks);put('source-block-fidelity-proof.json',fidelity)
+# All historical freeze pins are checked; filenames and originals remain as captured.
+freeze=[]
+for p in list((B/'tibetan').rglob('*freeze*.json'))+list((B/'english').rglob('*freeze*.json'))+list((B/'reconciled').rglob('*freeze*.json')):
+ def pin(x):
+  if isinstance(x,dict):
+   if all(k in x for k in ('path','sha256','bytes')) and str(x['path']).startswith(str(B)):
+    q=Path(x['path'])
+    if q.exists():
+     data=q.read_bytes();freeze.append({'freeze':str(p.relative_to(B)),'path':str(q),'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'equals_recorded':hashlib.sha256(data).hexdigest()==x['sha256'] and len(data)==x['bytes']})
+   for v in x.values():pin(v)
+  elif isinstance(x,list):
+   for v in x:pin(v)
+ pin(json.loads(p.read_text()))
+put('freeze-pin-audit.json',freeze)
+# Full register was reopened from its pinned object, exact segment duplicate census is zero.
+register=json.loads((W/'docs/errata_register.json').read_text());records=register if isinstance(register,list) else register.get('entries',[])
+registerproof={'exact_local_segment_records':{str(seq):[r for r in records if re.search(r'\bC05:'+str(seq)+r'\b',r.get('segment',''))] for seq in (250,251,252)},'class_ids_present':[r['item_id'] for r in records if r.get('item_id') in ['E-111','E-107']]}
+put('register-inspection.json',registerproof)
+gate=runpy.run_path(str(W/'tools/test_no_supplied_span_head.py'));hits=[]
+for seq in (250,251,252):
+ for m in gate['PAT'].finditer((B/f'reconciled/{seq}/body.html').read_text()):hits.append({'seq':seq,'d':int(m.group(1)),'id':m.group(2)})
+assert hits==[{'seq':250,'d':5,'id':'s250w3'}]
+put('span-head-gate-proof.json',{'actual_gate_hits':hits,'existing_allowance':json.loads((W/'data/alignment/span_head_allow.json').read_text()).get('pages_c05',{}).get('c5p84/s250w3'),'repository_modified':False})
+put('span-head-allow-needed.json',{'pages_c05':{'c5p84/s250w3':"la sogs is the source's enumeration closing gesture. Its sogs licenses the alternatives expressed by or such, including initial or; original HGM 25350 attests exactly or such. The whole following pas separately marks the animal-or-such subject and remains intact. No supplied participant or noun is included. Independently reviewed PROVISIONAL C05:250."}})
+put('bank-ready-errata.json',[])
+# Independent semantic decisions for the seven suspicions, each addresses all five grounds.
+reasons=[
+ {'a':'The exact local English has makes his home at offset 88; physical C05 original agrees after whitespace-only normalization.','b':'C15:395/C16:826/C18:1118 have identical full fields. ILL:2331 changes the subject to include fish and says want to reside in it. These observations establish no publication or ingestion independence.','c':'No local duplicate record. No need to invent a corruption class for a defensible idiom.','d':'The construction expresses residence. HGM 23878 gives makes his home and HGM 10288 includes home; the English is idiomatic, not an assertion of building a house.','e':'Both exact full-field queries return four rows; full actual queries and rows saved.'},
+ {'a':'DVANGS is exactly in C05 ACIP and dvangs in its Wylie, also in the complete physical C05 source.','b':'C15:396/C16:827/C18:1119 reproduce the fields; P5:125 instead has DWANGS/dwangs and finishes der \'jug go. ILL:2332 has dvangs. None proves lineage.','c':'No existing exact C05:251 record; this need not be filed because ground d refutes the suspicion.','d':'Original HGM dvangs pa 23556 has clear and clarity. Exact master/entries searches for dwangs pa return zero, not proof that the alternate spelling is impossible. No basis to correct the attested local form.','e':'Exact local English and Wylie each return four rows; original lexical queries repeated and full rows preserved.'},
+ {'a':'C05:251 ends der \'jug and C05:252 begins go,nam exactly; no text is lost across the original pair.','b':'P5:125 and combined ILL:2332 retain \'jug go. Full fields differ; no publication independence inferred.','c':'E-111 already registers syllable spill across row boundaries. This is an application of that class, not a new source defect.','d':'go is grammatical sentence closure of \'jug. Keep the source boundary; do not move it into 251.','e':'Quote ranges, all full-field comparisons and relevant query counts independently replayed.'},
+ {'a':'Initial GO/go occurs at offset zero in C05:252. It is the continuation of the preceding row, not random text.','b':'C15:397/C16:828/C18:1120 reproduce the boundary; P5:125 and ILL:2332 contain the full verb closure. This does not establish lineage.','c':'Already registered E-111 class; no new filing.','d':'Closure function is grammatical; no local lexical English word is needed. The null asserts no separate word, not no grammatical contribution.','e':'Actual source ranges, counts and witness fields checked.'},
+ {'a':'30 Arguments on the Glass of Liquid is absent from all three C05:252 fields and its physical original. It occurs after the shared C05 English in C16:828.','b':'C15:397 matches fully; C16:828 appends that heading; C18:1120 appends asterisks; P5:126 shares English with Tibetan punctuation differences; P7:15 is shorter. All extents verified.','c':'Heading glue is a known governing apparatus class, but this local suspicion already fails quotation ground a.','d':'No such local text exists to correct.','e':'Local English length is 215 characters; exact English equals three rows, exact Wylie equals four. Apparatus extent claims are independently checked.'},
+ {'a':'ability to conceptualize occurs verbatim in the local English and physical original.','b':'C05:51 uses ability to discriminate for nominal \'du shes, ILL:2332 instead uses conception. P7:15 attests the cognitive expression but ends at has. Alternative renderings establish no independent-publication lineage.','c':'No exact local duplicate, and no new class is needed for a defensible nominal rendering.','d':'\'du shes names the conception/discrimination faculty here. Ability to conceptualize is an English nominal recast, supported by that noun function and C05:51. A general ability gloss or an isolated ability member would be unsupported, but neither is proposed.','e':'Full original HGM cognitive entry and all source/query extents rechecked; the current reconciler prose drops the initial apostrophe in two explanations and requires an evidence-only correction.'},
+ {'a':'has dissolved altogether. occurs completely in C05:252 and its physical original.','b':'C15/C16/C18/P5 contain the continuation with the saved differences. P7:15 ends at has, so cannot witness dissolved altogether.','c':'E-107 cap class is already registered; this local row is complete and only 215 characters. No new cap record.','d':'Dissolution is supported by local syntax, HGM 10855/25566 and ILL:2332. No source-text correction follows from a shorter P7 field.','e':'All actual equality/length/count claims replayed. Archival register census figures remain explicitly archival; not asserted as a new census.'}
+]
+assert len(suspicions)==len(reasons)==7
+for r,reason in zip(suspicions,reasons):r['independent_five_ground_refutation']=reason
+put('errata-refutations.json',suspicions)
+print(json.dumps({'witness_extents':len(extents),'tuples':len(tuplechecks),'full_source_blocks':len(fidelity),'suspicions':len(suspicions),'freeze_pins':len(freeze),'nonmatching_freeze_pins':sum(not x['equals_recorded'] for x in freeze),'head_hits':hits},indent=2))

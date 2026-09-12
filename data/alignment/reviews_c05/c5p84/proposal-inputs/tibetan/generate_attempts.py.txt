@@ -1,0 +1,11 @@
+import sys,subprocess,os,json,hashlib,shutil
+from pathlib import Path
+OUT=Path(__file__).resolve().parent;WT=OUT.parents[2]/'campaign-worktree'
+for seq in [250,251,252]:
+ d=OUT/str(seq);a=d/'attempts'/'01';a.mkdir(parents=True,exist_ok=False)
+ b=(d/'spec.json').read_bytes();(a/'spec.json').write_bytes(b)
+ run=subprocess.run([sys.executable,str(OUT/'run_canonical.py')],input=b,cwd=WT,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},capture_output=True)
+ (a/'stdout.html').write_bytes(run.stdout);(a/'stderr.txt').write_bytes(run.stderr);(a/'exit.txt').write_text(str(run.returncode)+'\n')
+ (a/'invocation.json').write_text(json.dumps({'argv':[sys.executable,str(OUT/'run_canonical.py')],'cwd':str(WT),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'read_only':'SQLite connection URI mode=ro; unchanged real generator executed by runpy','exit':run.returncode,'stdout_bytes':len(run.stdout),'stderr_bytes':len(run.stderr)},indent=2)+'\n')
+ if run.returncode==0 and not run.stderr:(d/'body.html').write_bytes(run.stdout)
+ print(seq,'EXIT='+str(run.returncode),'body_bytes='+str(len(run.stdout)),run.stderr.decode())

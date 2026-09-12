@@ -1,0 +1,89 @@
+{
+  "producer": "Codex",
+  "angle": "English-first independent proposal",
+  "governing_base": "9aa617e7cc3a7a30c3b3fec1d318418d0044f993",
+  "canonical_generator_sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e",
+  "source_role": "Asvabhava quotation introduced in C05:248; C05:247-255 original neighboring rows retained in full including raw.",
+  "source_snapshot_checks": [
+    {
+      "snapshot": "source.json",
+      "count": 3,
+      "fields": [
+        "id",
+        "course",
+        "seq",
+        "acip",
+        "wylie",
+        "english"
+      ],
+      "match": true
+    },
+    {
+      "snapshot": "context.json",
+      "count": 9,
+      "fields": [
+        "id",
+        "course",
+        "seq",
+        "acip",
+        "wylie",
+        "english"
+      ],
+      "match": true
+    }
+  ],
+  "evidence": {
+    "original-corpus-evidence.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/original-corpus-evidence.json",
+      "sha256": "72635fc67fdde0f4d61057f0b6c7f0bcbbe45ae74b3770e2003ca6f61fc91780"
+    },
+    "original-master-evidence.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/original-master-evidence.json",
+      "sha256": "2a68a16fdb33640da027fd14fdb9332419a7c471c193278ddecab943aa44fdd5"
+    },
+    "governing-manifest.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/governing-manifest.json",
+      "sha256": "ed3f326db06915db6d0c804899ff6a5cb6020b282cf88ceeaed33b07bc235123"
+    },
+    "errata-registered-class-evidence.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/errata-registered-class-evidence.json",
+      "sha256": "77810fd8524af6acb02f598edda0063cd04bbf2faf8cfb06042016b465fdc331"
+    },
+    "dispatch-brief.md": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/dispatch-brief.md",
+      "sha256": "dcb899f8a5a09d4014777363b88a6e2a2e56bb89d3c9ff77f851e65ebc9461ae"
+    },
+    "proposal-protocol.md": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-250-252/english/proposal-protocol.md",
+      "sha256": "6cf88efbfe2b7a68ea4d3d7fb507043b595760f9d60fd05b44a47e3268c6f752"
+    }
+  },
+  "independence": "Only own English angle and whitelisted batch files read; no other-angle, reconciliation or root-review judgments used.",
+  "scope": "Proposals only; mechanical verification does not imply semantic approval.",
+  "parallel_limit": "Text-field identity does not establish independent publication or ingestion lineage. Course-shape re-ingestion statements remain metadata claims.",
+  "segment": 251,
+  "source": {
+    "id": 1633,
+    "course": "C05",
+    "seq": 251,
+    "acip": "MI RNAMS KYIS NI MNGAR BA DANG , DVANGS PA DANG , BSIL BA'I CHUR RTOGS SHING 'THUNG NGO , , KHRUS BYED DO, , DER 'JUG",
+    "wylie": "mi rnams kyis ni mngar ba dang , dvangs pa dang , bsil ba'i chur rtogs shing 'thung ngo , , khrus byed do, , der 'jug",
+    "english": "Humans look at the same thing and perceive it as water--sweet, clear, and cool. They drink of it, they wash themselves with it, and they swim in it.",
+    "raw": "{\"course\": \"C05\", \"acip\": \"MI RNAMS KYIS NI MNGAR BA DANG , DVANGS PA DANG , BSIL BA'I CHUR RTOGS SHING 'THUNG NGO , , KHRUS BYED DO, , DER 'JUG\", \"wylie\": \"mi rnams kyis ni mngar ba dang , dvangs pa dang , bsil ba'i chur rtogs shing 'thung ngo , , khrus byed do, , der 'jug\", \"english\": \"Humans look at the same thing and perceive it as water--sweet, clear, and cool. They drink of it, they wash themselves with it, and they swim in it.\"}"
+  },
+  "content_rationale": [
+    "mi/Humans uses the human-noun reading, not the negative mi homograph. rnams is a proven grammatical plural fused into Humans and is null only as a separate exponent.",
+    "mngar ba/sweet, dvangs pa/clear, bsil ba/cool, rtogs/perceive, 'thung/drink and 'jug/swim have HGM glossary support.",
+    "chur/as water is one inflected word; d7 chu/water and r/as resolve uniquely and remain strictly inside the parent. der/in it similarly retains the actual demonstrative and locative with d7 de/it and r/in.",
+    "khrus byed/wash is the light-verb washing compound. Its master HGM gloss is null, so it is matched from the original C05 row, C08:61 washing and TCS09:538 washing yourself; the null master gloss is not filled or promoted.",
+    "Second Tibetan dang maps only the English and after clear. First dang is a null lexical exponent expressed by comma, not assigned the earlier and before perceive. Shing marks transition to the next sentence, not the and before perceive.",
+    "P5:125 has dwangs instead of dvangs and completes 'jug go in one row; ILL:2332 alters ordering, uses bath/drink and does not separately say swim. These differences limit claims of full identity, while HTG2016 'jug includes swim and the local exact English makes this mapping defensible."
+  ],
+  "omissions": [
+    "Attributive 'i after bsil ba is omitted as distributed within the postposed adjective list.",
+    "look at the same thing and is explanatory English beyond the rtogs/perceive atom; supplied it after perceive, They/they, of it, themselves with it and final coordinating and remain unwrapped.",
+    "ngo/do have no word exponents; final go is preserved at C05:252, not moved."
+  ],
+  "errata": "Empty list. DVANGS/dvangs is the exact source spelling and has an HGM master entry; P5 dwangs alone cannot prove it wrong. Exact English/Wylie queries each return four course rows, also ACIP-identical. Initial C05:252 GO is the registered E-111 row-boundary-spill class, no new filing.",
+  "challenge": "Null shing versus the English recast and sequence: the visible and before perceive is not the Tibetan conjunction after rtogs."
+}

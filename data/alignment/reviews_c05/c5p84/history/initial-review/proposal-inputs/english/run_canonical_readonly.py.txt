@@ -1,0 +1,11 @@
+"""Execute unchanged canonical generator; constrain every SQLite open to URI mode=ro."""
+import sqlite3,runpy,sys
+from pathlib import Path
+original_connect=sqlite3.connect
+spine=(Path(__file__).resolve().parents[3]/'campaign-worktree/build/hgm_spine_v27_2.db').resolve()
+def readonly(database,*args,**kwargs):
+    if Path(database).resolve()!=spine: raise RuntimeError('Unexpected SQLite database')
+    kwargs['uri']=True
+    return original_connect(spine.as_uri()+'?mode=ro',*args,**kwargs)
+sqlite3.connect=readonly
+runpy.run_path(str(spine.parents[1]/'tools/gen_alignment_page.py'),run_name='__main__')

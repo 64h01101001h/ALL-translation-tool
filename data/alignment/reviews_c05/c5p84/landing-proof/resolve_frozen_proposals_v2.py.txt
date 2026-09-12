@@ -1,0 +1,49 @@
+"""Record canonical ranges for frozen independent proposals; no semantic verdict.
+
+Requires explicit English order, as the campaign proposal protocol expects for
+these crossed translations. The actual generator functions remain the oracle.
+"""
+from pathlib import Path
+import hashlib
+import importlib.util
+import json
+import sqlite3
+import sys
+sys.dont_write_bytecode = True
+
+art = Path(__file__).resolve().parent
+wt = art.parent / 'campaign-worktree'
+seqs = list(map(int, sys.argv[1:]))
+assert len(seqs) == 3 and seqs == list(range(seqs[0], seqs[0] + 3))
+batch = art / f'C05-{seqs[0]}-{seqs[-1]}'
+target = batch / 'proposal-verification/root-resolved-spans.json'
+assert not target.exists(), 'Preserve prior proof before resolving changed inputs'
+sys.path.insert(0, str(wt / 'tools'))
+definition = importlib.util.spec_from_file_location('canonical_generator', wt / 'tools/gen_alignment_page.py')
+generator = importlib.util.module_from_spec(definition)
+definition.loader.exec_module(generator)
+db = sqlite3.connect((wt / 'build/hgm_spine_v27_2.db').as_uri() + '?mode=ro', uri=True)
+db.row_factory = sqlite3.Row
+db.execute('PRAGMA query_only=ON')
+proof = json.loads((target.parent / 'report.json').read_text())
+resolved = []
+for angle in ('tibetan', 'english'):
+    for seq in seqs:
+        raw = (batch / angle / str(seq) / 'spec.json').read_bytes()
+        checked = next(r for r in proof if r['angle'] == angle and r['seq'] == seq)
+        assert checked['spec_sha256'] == hashlib.sha256(raw).hexdigest()
+        segment = json.loads(raw)['segments'][0]
+        assert segment['seq'] == seq and segment.get('eng_order')
+        source = dict(db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?', ('C05', seq)).fetchone())
+        spans = segment['spans']
+        tr = generator.resolve(source['wylie'], spans, 'tib', seq)
+        by_id = {s['id']: s for s in spans}
+        english = generator.with_members(spans, [by_id[x] for x in segment['eng_order']], source['english'])
+        er = generator.resolve(source['english'], english, 'eng', seq)
+        for span in spans:
+            resolved.append(dict(angle=angle, seq=seq, id=span['id'], d=span['d'],
+                tib=span['tib'], eng=span['eng'], tib_range=list(tr[span['id']]),
+                eng_range=list(er[span['id']]) if span['eng'] is not None else None))
+db.close()
+target.write_text(json.dumps(resolved, ensure_ascii=False, indent=2) + '\n')
+print(json.dumps({'resolved': len(resolved), 'path': str(target)}))

@@ -1,0 +1,137 @@
+import os,json,hashlib,subprocess,sys,importlib.util,copy,re
+from pathlib import Path
+ROOT=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');WT=ROOT/'campaign-worktree';B=ROOT/'campaign-artifacts/C05-250-252';R=B/'reconciled';E=R/'250/evidence'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def meta(p):
+ b=p.read_bytes();return {'path':str(p),'sha256':sha(b),'bytes':len(b)}
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+source={x['seq']:x for x in json.loads((E/'source.json').read_text())}
+wrapper=R/'250/run_canonical_readonly.py'
+wrapper.write_text("import sqlite3,runpy\nfrom pathlib import Path\nconnect=sqlite3.connect\ndef ro(database,*args,**kwargs):\n kwargs['uri']=True\n return connect(Path(database).resolve().as_uri()+'?mode=ro',*args,**kwargs)\nsqlite3.connect=ro\nrunpy.run_path("+repr(str(WT/'tools/gen_alignment_page.py'))+",run_name='__main__')\n")
+module_spec=importlib.util.spec_from_file_location('canonical_generator',WT/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(module_spec);module_spec.loader.exec_module(G)
+def resolve(spec):
+ seg=spec['segments'][0];seq=seg['seq'];spans=seg['spans'];src=source[seq];tr=G.resolve(src['wylie'],spans,'tib',seq);byid={s['id']:s for s in spans};er=G.resolve(src['english'],G.with_members(spans,[byid[i] for i in seg['eng_order']],src['english']),'eng',seq)
+ out=[];parent=None
+ for s in spans:
+  if s['d']!=7:parent=s['id']
+  d={'original_span':copy.deepcopy(s),'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s['eng'],'tib_range':list(tr[s['id']]),'eng_range':list(er[s['id']]) if s['id'] in er else None,'parent_id':parent if s['d']==7 else None}
+  for field,side in [('wylie','tib'),('english','eng')]:
+   piece=s[side];hits=[]
+   if piece is not None:
+    pos=0
+    while True:
+     k=G.find_word(src[field],piece,pos,subword=s['d']==7 or s.get('subword',False))
+     if k<0:break
+     hits.append([k,k+len(piece)]);pos=k+1
+   d[side+'_all_candidate_ranges']=hits
+  if s['d']==7:
+   par=byid[parent];a,b=tr[parent];x,y=tr[s['id']];assert a<=x<y<=b and (a,b)!=(x,y);assert src['wylie'][a:b].count(s['tib'])==1
+   if s['eng'] is not None:
+    a,b=er[parent];x,y=er[s['id']];assert a<=x<y<=b and (a,b)!=(x,y)
+  out.append(d)
+ return out
+env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+replays=[];originals={}
+for angle in ['tibetan','english']:
+ for seq in [250,251,252]:
+  p=B/angle/str(seq)/'spec.json';spec=json.loads(p.read_text());originals[angle,seq]=resolve(spec)
+  out=R/str(seq)/'proposal-replays';out.mkdir(exist_ok=True)
+  result=subprocess.run([sys.executable,str(wrapper)],input=p.read_bytes(),capture_output=True,cwd=WT,env=env)
+  (out/(angle+'.stdout.html')).write_bytes(result.stdout);(out/(angle+'.stderr')).write_bytes(result.stderr);(out/(angle+'.exit')).write_text(str(result.returncode)+'\n')
+  assert result.returncode==0 and result.stderr==b'' and result.stdout==(p.parent/'body.html').read_bytes()
+  replays.append({'angle':angle,'seq':seq,'spec':meta(p),'saved_body':meta(p.parent/'body.html'),'replay':meta(out/(angle+'.stdout.html')),'exit':result.returncode,'stderr_bytes':0,'exact_saved_body':True})
+save(E/'six-proposal-replays.json',replays)
+root_ranges=json.loads((B/'proposal-verification/root-resolved-spans.json').read_text());verified=[]
+for (angle,seq),rows in originals.items():
+ for r in rows:
+  root=next(x for x in root_ranges if x['angle']==angle and x['seq']==seq and x['id']==r['id'])
+  assert all(root[k]==r[k] for k in ['id','d','tib','eng','tib_range','eng_range']);verified.append({'angle':angle,'seq':seq,**r})
+assert len(verified)==84;save(E/'original-84-span-ranges.json',verified)
+
+notes={
+250:"PROVISIONAL machine alignment reconciled by Codex (gpt-6-astra). The two gnas occurrences are distinct: the first names the perceived place to stay; the second carries the residence content home in GMR's makes his home idiom. Byed pa supplies its light verb makes, while par links the Tibetan predicate and is omitted. This local compositional match does not claim that every gnas par byed pa means making a home. The complete HGM glossary idiom and the separate gnas/home and byed pa/makes attestations support the split; his is supplied and stays unwrapped. De nyid owns this same; water supplies the antecedent from C05:249. Blos stays intact and owns thinks in the nominal-to-verbal recast, despite its separate glossary's intent reading. La sogs is the attested closing gesture or such and licenses initial or. Pas is retained whole as agentive marking with no separately alignable English word; it is not split into pa and s. The initial la and kyi are omitted as distributed relations. Final dang links onward in the source series; it is not assigned the English interior and. An, on the other hand, of, water, as a, and, his and there remain unwrapped. All original wording is preserved; no new erratum and no hgm_gloss promotion.",
+251:"PROVISIONAL machine alignment reconciled by Codex (gpt-6-astra). Mi is human here; rnams contributes plurality fused into Humans, with no separate English plural word. Kyis and ni have no separately alignable agent/topic words in the English subject construction. The first dang is expressed by the comma after sweet and has no separate word; the second dang owns only the and between clear and cool. Chur is the whole inflected water word: its r licenses predicative as, so as water contains strict chu/water and r/as members. Der similarly owns the final in it after swim, with de/it and r/in members. Rtogs is captured once at perceive; look at the same thing and is a contextual expansion, not another atom. Shing's transition to drinking is expressed by the sentence boundary, with no separate connective word; ngo and do are wordless assertive closures. Khrus byed is the established washing construction and owns wash; no second make word is invented, and themselves with it stays unwrapped. The local water context and HGM 'jug/swim support swim. The genitive after bsil ba is omitted as the attributive relation recast across the postposed adjective list. Repeated participants, object expansions and the final English and remain unwrapped except the explicit der/in it. C05:252's initial go closes this row's 'jug across the preserved E-111 boundary-spill class. DVANGS/dvangs remains verbatim. No new erratum and no hgm_gloss promotion.",
+252:"PROVISIONAL machine alignment reconciled by Codex (gpt-6-astra). Initial go is the wordless closure of C05:251's 'jug, preserved in this row under the registered E-111 boundary-spill class. The technical realm name is a d5 compound with three strict members; its space is the first English occurrence. Snyoms par zhugs pa owns the complete predicative phrase wrapped in deep meditation at d3, excluding who are; the phrasing is not decomposed into invented wrapped or deep atoms. Lha owns pleasure beings; rnams contributes plural morphology fused into beings, and kyis has no separate agent word. The later nam mkhar owns as empty space: the case-conditioned nam mkha stem owns empty space and its bound r owns predicative as. The nominal 'du shes owns ability to conceptualize, the cognitive faculty which the English says has dissolved; C05:51 also renders nominal 'du shes as ability to discriminate. This local nominal scope excludes their and creates no independent ability equivalent. Gzugs owns physical matter; kyi's relation is expressed through conceptualize taking a direct object, with no separate genitive word. Rnam par owns altogether and the tighter bshig stem owns dissolved, leaving has unwrapped. Only the first phyir owns causal for; ro is a wordless assertive closure. La, ste and the relative/nominal endings are omitted as distributed syntax. Final zhes gsungs pa'i phyir is the unexpressed outer citation frame. Those, who are, at the level we call the, the water, their and has remain unwrapped. C16:828 and C18:1120 contain later apparatus outside this row's shared English; P7:15 ends at has and cannot attest dissolved altogether. All original wording is preserved; no new erratum and no hgm_gloss promotion."
+}
+
+# Every proposed ID is classified below, with its complete original optional fields and
+# independently resolved ranges retained in the final decisions, never normalized away.
+rationales={
+250:{
+'w1':"Retain pronominal de nyid/this same, excluding anaphoric water. HGM 8408/8418 distinguishes pronominal use from reality/thusness; C05:249 supplies the water antecedent.",
+'w2':"Retain dud 'gro/animal; HGM 8287 and local animate subject support the noun. Initial An has no source article.",
+'w3':"Use the tighter established la sogs/or such (HGM 25350 explicitly lists or such). The following full pas is separately retained with a null agent relation, never split into pa plus s. HGM 19208 supports the fuller la sogs pa alternative but does not require absorbing agent morphology into the lexical parent. Sogs in this enumeration licenses or, with no added noun.",
+'p1':"Retain whole pas at d6. It is the source's agentive nominal ending after the enumeration; English animal or such is a syntactic subject, and no separate by/with word realizes this agent relation. Null asserts absence of a separate exponent, not absence of agent semantics; no agentive -s split.",
+'w4':"Retain first gnas/place to stay; HGM 10288 explicitly attests this noun phrase. The original first gnas lies before kyi blos; later gnas is not allowed to inherit this range.",
+'w5':"Retain inflected blos/thinks whole. Original HGM blo 12986 includes thinks; blos 24294 instead gives intent, contrary evidence retained. Gnas kyi blos describes the thought of a dwelling; the exact local English verbalizes that thought. It is not a universal definition of blos, and the inseparable s is intact.",
+'w6':"Retain second gnas/home after challenge to both angles' agreement. The gnas-par-byed light-verb construction expresses residence; in the particular English light-verb idiom makes his home, gnas carries residence/home content and byed carries makes. HGM 10288 explicitly includes home, 12837 includes makes, and 23878 gives the complete makes his home. ILL:2331 recasts the second predicate as reside, while C08:179/190/193 show other gnas-par-byed functions: neither makes a universal home equivalent. Full-span makes his home would overcapture supplied his, so the two contextually supported atoms are retained without it.",
+'w7':"Retain byed pa/makes in this residence light-verb idiom (HGM 12837 makes; whole 23878 makes his home). This is actual present English makes aligned to the overt Tibetan light verb, not an invented independent act of manufacturing. Unlike 251 wash, the English explicitly has a light verb here. Par is a constructional link omitted for distributed relation, and supplied his remains unwrapped."},
+251:{
+'w1':"Retain mi/Humans as human noun, not the homographic negation; HGM 13973 includes humans, and rnams/kyis establish the plural animate agent.",
+'p1':"Retain rnams null: plural information is fused into the final s of Humans, not separately alignable as a word. The null is explicit grammatical fusion, not missing meaning.",
+'p2':"Retain kyis null: the human subject construction expresses agency without a separate by/with exponent. No unrelated later with is stolen from washing.",
+'p3':"Retain ni null: the human topic is expressed by subject position and discourse contrast; no separately alignable English topic word occurs here. The added look at the same thing is content expansion, not ni.",
+'w2':"Retain mngar ba/sweet, HGM 3787, first quality in the postposed English adjective list.",
+'p4':"Retain first dang null: the first Tibetan list conjunction after sweet corresponds to list punctuation after sweet; neither the earlier and before perceive nor the later and before cool is its separate word exponent.",
+'w3':"Retain dvangs pa/clear, HGM 23556. Full P5:125 differs as dwangs and an em dash; variant spelling alone proves no source defect.",
+'p5':"Retain second dang/and, specifically the source occurrence after dvangs pa and English occurrence after clear, enforced by both forward cursors and eng_order. English has three and tokens; only this one is selected.",
+'w4':"Retain bsil ba/cool, HGM 21415. The following attributive 'i is omitted as relational recast across the reordered qualities.",
+'w5':"Reconcile to complete inflected chur/as water. Chu supplies water (HGM 4459); terminative r supplies predicative as under rtogs, directly between perceive it and water in English. Chur's master HGM field is null; this is exact corpus attestation plus transparent case morphology, not master promotion. Water-only understates the alignable case relation.",
+'m1':"Retain chu/water as unique strict d7 lexical member inside chur/as water; actual Tibetan and English ranges are nested and tighter.",
+'m2':"Retain bound r/as as unique strict d7 predicative-case member inside chur/as water. It is not a standalone syllable at d6 and no supplied English article is included.",
+'w6':"Retain rtogs/perceive, HGM 6756. The local English also expands perception as look at the same thing; bank the explicit lexical atom once and omit the expansion.",
+'p6':"Retain shing null: source connects perception onward to drinking, whereas English starts They drink as a new sentence. The and before perceive connects GMR's added look with perceive, so its occurrence cannot belong to shing after rtogs. No separate transition word survives at the corresponding sentence boundary.",
+'w7':"Retain 'thung/drink, HGM 8047. Supplied They/of it have no separately selected source exponents.",
+'p7':"Retain ngo null: assertive closure after drinking has no separate English lexical exponent; sentence punctuation is not an English word.",
+'w8':"Retain entire khrus byed/wash at d5 as established noun-plus-light-verb washing construction. HGM khrus 1389 says wash, but full khrus byed 29985 has null HGM gloss, which remains null. Complete C08:61 and TCS09:538 independently located corpus contexts attest washing/washing yourself. Here no separate make/do word exists; a khrus member would duplicate the whole English wash and is rejected as degenerate. Themselves with it is supplied.",
+'p8':"Retain do null: the washing predicate's assertive closure has no separate English word.",
+'w9':"Retain inflected der/in it at the final swimming location, not another it phrase. HGM 8594 explicitly includes in it. Demonstrative de and bound locative r both have separate nested exponents.",
+'m3':"Retain de/it as unique strictly tighter d7 demonstrative member under der/in it, referring to the same water; this is source-licensed it, unlike supplied participants elsewhere.",
+'m4':"Retain bound r/in as unique strict d7 locative member in der/in it, selected at the final English in it after swim.",
+'w10':"Retain 'jug/swim, HGM 5280 explicitly includes swim alongside enter/engage. The water context and final der make this the local sense. ILL:2332 uses relate to it and lacks a separate swim, so it cannot establish identical English extent."},
+252:{
+'p1':"Retain initial go null as prior-row 'jug closure with no English word in 252. Source boundary stays exact; P5:125 and ILL:2332 complete 'jug go, confirming closure function but not publication lineage. Existing E-111 class blocks a new erratum.",
+'w1':"Retain established technical name nam mkha' mtha' yas skye mched/realm of limitless space (HGM 10175). C08:41/44 supports the name while using Door; source nomenclature, not a freely assembled sentence, licenses d5.",
+'m1':"Retain nam mkha'/space as strict unique member of the realm name: first English space inside the parent, not later empty space. HGM 10167 supplies space.",
+'m2':"Retain mtha' yas/limitless as strict unique member of the realm name; HGM 7841 supports limitless.",
+'m3':"Retain skye mched/realm as strict unique member of the realm name; HGM 692 contains realm. Members reorder only within the complete parent.",
+'w2':"Recast the agreed complete snyoms par zhugs pa/wrapped in deep meditation to d3. HGM 23065 attests the exact predicate, but entry inclusion alone is not a dictionary-depth test. The local rendering packages entry/absorption into a complete participial predicate; ILL:2332 deep in meditation and EM:714 gone into a state of meditative focus show predicate recasting. Retain all its defensible meaning as a phrase, exclude who are, and mint no isolated wrapped or deep members. This depth decision is semantic rather than a generator workaround.",
+'w3':"Retain lha/pleasure beings, HGM 21537, excluding supplied Those and who are.",
+'p2':"Retain rnams null: plurality is fused into beings; no separate plural word. Full nominal lha/pleasure beings is still retained.",
+'p3':"Retain kyis null: source marks these pleasure beings as perceiving agents; English subject syntax carries that relation without a separate agent word.",
+'w4':"Use complete nam mkhar/as empty space, not empty space alone. The inflected noun's terminative r supplies predicative as under mthong, not location in a sky. HGM 10189 has empty space and in the sky; the full local syntax selects the first sense with predicative case. Whole bound-case unit permits two strict members.",
+'m4':"Retain nam mkha/empty space as the actual case-conditioned stem of nam mkha' inside nam mkhar; never silently add an apostrophe absent from source. HGM 10167/10189 attest empty space, and member is strict on both sides.",
+'m5':"Retain unique bound r/as as d7 inside nam mkhar/as empty space, selected at the second source space phrase and the English as after water.",
+'w5':"Retain mthong/see, HGM 7961. The water is an anaphoric English object expansion and not part of this atom.",
+'w6':"Retain gzugs/physical matter (HGM 16759) as object/content of the cognitive faculty. It is not captured as a member of 'du shes because it is a separate preceding word.",
+'p4':"Retain kyi null: the Tibetan genitive links form to conception; English conceptualize takes physical matter as its direct object inside ability to conceptualize physical matter. The relation is realized in this syntactic recast, with no separately alignable genitive word. Null is not the claim that the relation vanished.",
+'w7':"Retain the Tibetan-angle full nominal 'du shes/ability to conceptualize and expand the English-angle conceptualize-only proposal. Original HGM 9528 includes conceptualize but also conception/discrimination; local 'du shes is the cognitive faculty which dissolves, not an independently asserted action. Original C05:51 has 'du shes mi gsal pa with ability to discriminate ... too unclear, supporting the nominal faculty construction; ILL:2332 instead says conception ... dissolved completely, useful contrary phrasing. Ability to makes the verb an English nominal faculty expression; their remains supplied. No claim that 'du shes alone denotes general ability, no d7 ability member, and no hgm_gloss alteration.",
+'w8':"Retain rnam par/altogether, HGM 10582 explicitly attests altogether. Other contexts vary (SPF/Sunlight deny), so this is a local intensifier match supported by whole rnam par bshig pa 10855.",
+'w9':"Use tighter bshig/dissolved, excluding bound pa in the nominal causal construction and English auxiliary has. Direct stem HGM 20179 destroy is contrary lexical evidence, but HGM bshig pa 25566 has dissolved and rnam par bshig pa 10855 has dissolved altogether, alongside exact local source and ILL:2332 dissolved completely, establish the contextual dissolution sense. No correction or universal substitution for destroy.",
+'p5':"Retain first phyir/for in the internal reason: source states form-conception has dissolved. The second phyir belongs to final quotation/evidence framing and has no separate English for; never map it twice.",
+'p6':"Retain ro null: the internal reason's assertive closure has no separate English word. This is different from the omitted outer citation frame."}
+}
+
+maps={250:{'tibetan':{'w1':'w1','w2':'w2','w3':'w3','w4':'w4','w5':'w5','w6':'w6','w7':'w7'}},251:{'tibetan':{'w1':'w1','p1':'p1','w2':'w2','w3':'w3','p2':'p5','w4':'w4','w5':'w5','w6':'w6','w7':'w7','w8':'w8','w9':'w9','m1':'m4','w10':'w10'}},252:{'tibetan':{'w1':'w1','m1':'m1','m2':'m2','m3':'m3','f1':'w2','w2':'w3','p1':'p2','w3':'w4','w4':'w5','w5':'w6','w6':'w7','w7':'w8','w8':'w9','p2':'p5'}}}
+for seq in [250,251,252]:
+ spec=json.loads((B/f'english/{seq}/spec.json').read_text());seg=spec['segments'][0]
+ if seq==252:
+  next(s for s in seg['spans'] if s['id']=='w2')['d']=3
+  next(s for s in seg['spans'] if s['id']=='w7')['eng']='ability to conceptualize'
+ seg['note']=notes[seq]
+ directory=R/str(seq);attempt=directory/'attempts'/'01';attempt.mkdir(parents=True,exist_ok=False)
+ save(directory/'spec.json',spec);save(directory/'errata.json',[]);(attempt/'spec.json').write_bytes((directory/'spec.json').read_bytes())
+ proc=subprocess.run([sys.executable,str(wrapper)],input=(directory/'spec.json').read_bytes(),capture_output=True,cwd=WT,env=env)
+ (attempt/'stdout.html').write_bytes(proc.stdout);(attempt/'stderr.txt').write_bytes(proc.stderr);(attempt/'exit.txt').write_text(str(proc.returncode)+'\n')
+ save(attempt/'invocation.json',{'argv':[sys.executable,str(wrapper)],'cwd':str(WT),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite':'original canonical code; only sqlite3.connect redirected to URI mode=ro','generator':meta(WT/'tools/gen_alignment_page.py'),'wrapper':meta(wrapper)})
+ assert proc.returncode==0 and proc.stderr==b''
+ (directory/'body.html').write_bytes(proc.stdout)
+ final=resolve(spec);save(directory/'final-ordered-tuples.json',{'offset_convention':'zero-based half-open Unicode character ranges; all selected Wylie/English text is ASCII','tibetan_order':final,'eng_order':seg['eng_order'],'english_render_order':[s['id'] for s in G.with_members(seg['spans'],[{s['id']:s for s in seg['spans']}[i] for i in seg['eng_order']],source[seq]['english'])]})
+ dispositions=[]
+ for angle in ['tibetan','english']:
+  for original in originals[angle,seq]:
+   fid=original['id'] if angle=='english' else maps[seq][angle][original['id']];f=next(r for r in final if r['id']==fid)
+   unchanged=original['original_span']==f['original_span']
+   dispositions.append({'angle':angle,'original':original,'disposition':'retained_exact' if unchanged else 'recast_to_final','final_id':fid,'final_span':f['original_span'],'final_tib_range':f['tib_range'],'final_eng_range':f['eng_range'],'all_original_optional_fields_disposed':True,'rationale':rationales[seq][fid]})
+ save(directory/'decisions.json',{'producer':'Codex (gpt-6-astra), reconciliation role','status':'PROVISIONAL machine alignment; requires separate independent semantic review before landing; no human acceptance or hgm_gloss promotion','accepted_head_at_dispatch':'87a5296a8f2fed8d14f4c7960ac598e00213e083','data_baseline_through249':'9aa617e7cc3a7a30c3b3fec1d318418d0044f993','independence':'The earlier English agent retired before drafting after prohibited root-preparation exposure. The replacement authored the sole frozen English proposals from whitelisted inputs, without other-angle/root input. Incident record preserved exactly; no contamination is attributed to replacement. Reconciliation intentionally reads both frozen angles and root leads.','original_span_count':len(dispositions),'dispositions':dispositions,'final_span_rationales':[{'final_id':k,'rationale':v} for k,v in rationales[seq].items()],'material_omissions':notes[seq],'evidence_shared_directory':str(E)})
+ print(seq,'spans',len(seg['spans']),'nulls',sum(s['eng'] is None for s in seg['spans']),'EXIT',proc.returncode,'BODY_BYTES',len(proc.stdout))

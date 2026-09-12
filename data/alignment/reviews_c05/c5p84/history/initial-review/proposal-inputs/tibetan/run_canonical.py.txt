@@ -1,0 +1,10 @@
+"""Execute the unchanged real generator with only connection policy forced read-only."""
+import sys,sqlite3,runpy
+from pathlib import Path
+WT=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+real_connect=sqlite3.connect
+def read_only_connect(database,*args,**kwargs):
+ database=Path(database).resolve().as_uri()+'?mode=ro';kwargs['uri']=True
+ return real_connect(database,*args,**kwargs)
+sqlite3.connect=read_only_connect
+runpy.run_path(str(WT/'tools/gen_alignment_page.py'),run_name='__main__')

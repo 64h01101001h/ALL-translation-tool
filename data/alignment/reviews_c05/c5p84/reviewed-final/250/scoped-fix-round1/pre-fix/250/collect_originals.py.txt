@@ -1,0 +1,55 @@
+import os, json, sqlite3, gzip, hashlib, subprocess, sys
+from pathlib import Path
+ROOT=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+WT=ROOT/'campaign-worktree'; B=ROOT/'campaign-artifacts/C05-250-252'; OUT=B/'reconciled/250/evidence'
+def sha(b): return hashlib.sha256(b).hexdigest()
+def save(name,obj): (OUT/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def meta(p):
+ b=p.read_bytes();return {'path':str(p),'sha256':sha(b),'bytes':len(b)}
+paths=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+access=[{'path':str(Path.home()/p),'readable':os.access(Path.home()/p,os.R_OK)} for p in paths];assert all(x['readable'] for x in access);save('reference-access.json',access)
+db=WT/'build/hgm_spine_v27_2.db';c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+queries=[]
+def query(sql,params,origin):
+ rows=[dict(r) for r in c.execute(sql,params)];queries.append({'origin':origin,'sql':sql,'params':params,'count':len(rows),'rows':rows});return rows
+source=query('select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',247,255],'original context')
+checks=[]
+for name in ['source.json','context.json']:
+ for row in json.loads((B/name).read_text()):
+  actual=next(r for r in source if r['seq']==row['seq']);assert all(actual[k]==v for k,v in row.items());checks.append({'snapshot':name,'seq':row['seq'],'all_provided_fields_exact':True})
+save('source.json',source);save('snapshot-checks.json',checks)
+for f in ['english/original-corpus-evidence.json','tibetan/corpus-queries-full-originals.json','root-focused-parallel-check.json']:
+ saved=json.loads((B/f).read_text());saved=saved if isinstance(saved,list) else saved['queries']
+ for q in saved:
+  rows=query(q['sql'],q.get('params',q.get('parameters')),f);assert len(rows)==q['count'];assert rows==q['rows']
+for field,term in [('wylie',"'du shes"),('wylie','gnas par byed pa'),('wylie','nam mkhar mthong'),('english','ability to conceptualize'),('english','place to stay')]:
+ query('select * from corpus_segments where course != ? and instr('+field+',?)>0 order by course,seq',['C13',term],'additional semantic challenge')
+save('corpus-queries.json',{'original':meta(db),'mode':'ro','queries':queries})
+entries=[]
+for q in json.loads((B/'root-lexical-preparation.json').read_text()):
+ rows=[dict(r) for r in c.execute(q['sql'],q['params'])];assert rows==q['entries'];entries.append({'term':q['term'],'sql':q['sql'],'params':q['params'],'count':len(rows),'entries':rows})
+terms=set(q['term'] for q in json.loads((B/'english/original-master-evidence.json').read_text())['queries'])|set(json.loads((B/'tibetan/master-lexical-full-originals.json').read_text())['terms'])|{"mtha' yas",'la sogs pa','bshig pa','snyoms','zhugs pa'}
+for t in sorted(terms-set(q['term'] for q in entries)):
+ sql='select * from entries where wylie=? order by id';rows=[dict(r) for r in c.execute(sql,[t])];entries.append({'term':t,'sql':sql,'params':[t],'count':len(rows),'entries':rows})
+save('spine-lexical-rows.json',{'original':meta(db),'mode':'ro','queries':entries})
+mp=WT/'data/hgm_dictionary_v27_2.json.gz'; master=json.loads(gzip.decompress(mp.read_bytes())); me=master['unified_entries']
+matches=[{'term':t,'count':sum(e.get('wylie')==t or t in e.get('wylie_variants',[]) for e in me),'entries':[e for e in me if e.get('wylie')==t or t in e.get('wylie_variants',[])]} for t in sorted(terms)]
+save('master-full-entries.json',{'original':meta(mp),'entry_count':len(me),'queries':matches})
+physical=Path(json.loads((B/'root-physical-source-check.json').read_text())['original_path']);pb=physical.read_bytes();(OUT/'C05ReadingASCII.original.txt').write_bytes(pb);normalized=b' '.join(pb.split());pc=[]
+for row in source:
+ if row['seq'] in [250,251,252]:
+  for f in ['acip','english']:
+   term=b' '.join(row[f].encode('ascii').split());offset=normalized.find(term);assert offset>=0;pc.append({'seq':row['seq'],'field':f,'normalized_byte_offset':offset,'matched_bytes':len(term)})
+save('physical-source-proof.json',{'original':meta(physical),'copy':meta(OUT/'C05ReadingASCII.original.txt'),'comparison':'whitespace normalization only, no original edits','matches':pc})
+manifest=[]
+for f in ['AGENTS.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/errata_register.json','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ p=WT/f; dest=OUT/('governing-'+f.replace('/','_'));dest.write_bytes(p.read_bytes());manifest.append({'original':meta(p),'copy':meta(dest)})
+for f in ['Handoff/HANDOFF.md','Handoff/README.md']:
+ p=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP'/f;dest=OUT/('history-'+p.name);dest.write_bytes(p.read_bytes());manifest.append({'original':meta(p),'copy':meta(dest)})
+for p in [B/'english-angle-independence-incident01.json',B/'tibetan/freeze.json']+[B/f'english/{s}/final-freeze.json' for s in [250,251,252]]:
+ dest=OUT/('frozen-'+str(p.relative_to(B)).replace('/','_'));dest.write_bytes(p.read_bytes());manifest.append({'original':meta(p),'copy':meta(dest)})
+save('original-path-hash-byte-map.json',manifest)
+save('input-file-manifest.json',[meta(p) for angle in ['tibetan','english'] for p in sorted((B/angle).rglob('*')) if p.is_file()])
+print('Source snapshots exact, all original query reruns exact; master terms',len(matches),'entries',sum(x['count'] for x in matches))
+for q in entries:
+ print(q['term'],json.dumps([{'id':e['id'],'hgm_gloss':e['hgm_gloss'],'hgm_evidence':json.loads(e['raw']).get('hgm_evidence')} for e in q['entries']],ensure_ascii=False))
