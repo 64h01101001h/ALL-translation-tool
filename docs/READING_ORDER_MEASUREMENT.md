@@ -101,6 +101,24 @@ level, and says which one the evidence favours — currently the written order.
 Gates in the pane's `selfTest` fail if a later edit reduces step 4 to the
 engine's ruling alone, or lets the quoted figures drift from the constants.
 
+## The drill that came out of it
+
+A fourteenth Drills mode, **"Reading order — which chunk does his English take
+first?"** The chunks are presented in the order they are WRITTEN and the
+question is what order his English takes them in.
+
+It is deliberately not scored against `planReading`. The key is recovered from
+the alignment bank — where each child span's English sits inside its parent's —
+so the answer is **attested**, and the 51%-against-59% problem never touches
+it. The pool skews towards spans that actually reorder, because a card whose
+answer is "1 2 3" teaches a learner to type 1 2 3, and a gate fails if typing
+the written order is ever accepted when his order differs.
+
+This is the complement to the existing **Chunk order** drill, which scrambles
+the Tibetan and asks for the Tibetan back. That one trains Tibetan word order
+and says nothing about the mapping into English, which is the difficulty Adam
+actually named. Both are worth having; only one of them was there.
+
 **The engine itself was deliberately NOT changed.** Retuning `planReading` to
 fit 57 spans would be overfitting. The correction waits for alignment data that
 can carry it; labelling it honestly does not wait. (Adam's ruling, 2026-09-12:

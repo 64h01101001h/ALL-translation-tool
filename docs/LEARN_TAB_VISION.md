@@ -21,6 +21,24 @@
 **A vision and build plan for the Diamond Cutter Translation Tool**
 Written 2026-09-10. Feeds `docs/PEDAGOGY_ROADMAP.md`.
 
+**Added 2026-09-12 — a thirteenth, and why the twelve were not enough.**
+Adam: *"my main problem in reading/translating Tibetan is understanding in what
+order to read the chunks and which direction to read the chunks."* Nothing in
+the twelve asked that question. **Chunk order** comes closest and is not close:
+it scrambles the TIBETAN and asks for the TIBETAN back, which trains Tibetan
+word order and is silent about the mapping into English.
+
+So: **Reading order — which chunk does his English take first?** (Drills, mode
+14). Chunks in written order, answer keyed to Geshe Michael's own English via
+the alignment bank — attested, not the engine's ruling, which matters because
+the ruling was measured at 51% against 59% for doing nothing at this very level
+(docs/READING_ORDER_MEASUREMENT.md). The same measurement produced the
+**Walkthrough** pane, which takes a whole paragraph apart step by step.
+
+This entry is here as a correction to the one below it. "All twelve tools are
+built" was true and still left the user's stated main difficulty unaddressed,
+because the twelve were the twelve that had been thought of.
+
 **Status 2026-09-11 — complete.** All twelve tools in §3 are built, gated and
 shipped on the desktop trainer. Each carries its build date. Eleven of the
 twelve reach the phone; the twelfth is named in §3.5 along with the reason it
