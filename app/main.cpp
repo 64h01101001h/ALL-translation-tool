@@ -5835,6 +5835,7 @@ static QString paneBlurb(const QString& title) {
         {"Trainer", "Learning to read, layer by layer. Engine guidance is labelled guidance; only corpus lines are answers."},
         {"Drills", "Exercises that write themselves from the corpus, so every answer is Geshe Michael's own text."},
         // written from what the pane does
+        {"Walkthrough", "A paragraph taken apart step by step: where it breaks, the verb, the chunks, what order to read them in, and what each word means."},
         {"Scans", "The woodblock scans beside the text you are reading."},
         {"Export", "Sending a text out in another form."},
         {"Apparatus", "The published footnote and apparatus bank."},
@@ -28683,6 +28684,7 @@ protected:
 #include "replace_files.inc"     // F4 Replace in Files… with mandatory preview (needs normalize::, versions, filewalk)
 #include "apply_patch.inc"       // F5 Apply Patch… (needs replf::readForRewrite / bytesForWrite, textpatch)
 #include "study_pane.inc"        // batch 5 F1: the Study pane shell (textspan at the boundary; pages arrive with their engines)
+#include "walkthrough_pane.inc"  // "Walk me through it": the step-by-step reading breakdown (needs reader.h engines + sess::remember above)
 
 class FilesPane : public QWidget {
 public:
@@ -44131,6 +44133,8 @@ int main(int argc, char** argv) {
             .arg(QStringLiteral(ALL_APP_VERSION))
             .arg(QString::fromStdString(spine.metaValue("release_version"))));
     auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
+    auto* walkPane = new WalkthroughPane(spine);
+    tabs.addTab(walkPane, "Walkthrough");
     tabs.addTab(overlay, "Overlay");
     auto* scansPane = new ScansPane(overlay);
     tabs.addTab(scansPane, "Scans");
@@ -44885,7 +44889,7 @@ int main(int argc, char** argv) {
             tabs.addTab(page, gname);
             groupPages.push_back({gname, page});
         };
-        mkGroup("Read", {"Overlay", "Library", "Files", "Scans",
+        mkGroup("Read", {"Walkthrough", "Overlay", "Library", "Files", "Scans",
                          "Export"});
         mkGroup("Translate",
                 {"Draft", "Manuscript", "Apparatus", "Review",
@@ -47844,6 +47848,7 @@ int main(int argc, char** argv) {
         fails += manuscriptPane->selfTest(log);
         fails += comparePane->selfTest(log);
         fails += studyPane->selfTest(log);   // batch 5 F1 shell
+        fails += walkPane->selfTest(log);
         {   // Features: hiding is a view, and it refuses to empty the window
             auto fcheck = [&](bool ok, const char* what) { log << QString("  [%1] Features: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++fails; };
             QSettings st("ALL", "TranslationTool");
