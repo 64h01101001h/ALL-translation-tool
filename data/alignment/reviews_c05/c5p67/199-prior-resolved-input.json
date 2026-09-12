@@ -1,0 +1,547 @@
+{
+  "canonical_resolver": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+  "eng_order": [
+    "w1",
+    "w2",
+    "w3",
+    "p1",
+    "w4",
+    "w5",
+    "w7",
+    "w6"
+  ],
+  "actual_english_span_order": [
+    "w1",
+    "w2",
+    "m2",
+    "m1",
+    "w3",
+    "p1",
+    "w4",
+    "w5",
+    "w7",
+    "w6"
+  ],
+  "resolved_spans": [
+    {
+      "id": "w1",
+      "d": 5,
+      "tib": "log g-yem",
+      "eng": "wrong sex",
+      "tib_range": [
+        0,
+        9
+      ],
+      "eng_range": [
+        22,
+        31
+      ],
+      "tib_context": "log g-yem gyi ni, bshang gci ",
+      "eng_context": "Because you have done wrong sex, you live in a place whe",
+      "all_tib_matches": [
+        {
+          "range": [
+            0,
+            9
+          ],
+          "context": "log g-yem gyi ni, bshang gci dang 'dam rdzab"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            22,
+            31
+          ],
+          "context": "Because you have done wrong sex, you live in a place where there i"
+        }
+      ],
+      "decision": "Exact glossary wrong sex; no you/have/done/causal framing claimed."
+    },
+    {
+      "id": "w2",
+      "d": 5,
+      "tib": "bshang gci",
+      "eng": "piss and shit",
+      "tib_range": [
+        18,
+        28
+      ],
+      "eng_range": [
+        68,
+        81
+      ],
+      "tib_context": "log g-yem gyi ni, bshang gci dang 'dam rdzab dan",
+      "eng_context": "n a place where there is piss and shit all around, and mud and ",
+      "all_tib_matches": [
+        {
+          "range": [
+            18,
+            28
+          ],
+          "context": "log g-yem gyi ni, bshang gci dang 'dam rdzab dang ljan ljin dan"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            68,
+            81
+          ],
+          "context": "you live in a place where there is piss and shit all around, and mud and dirt and f"
+        }
+      ],
+      "decision": "Attested bshang gci compound, with complete coordinated excreta rendering; no all around."
+    },
+    {
+      "id": "m1",
+      "d": 7,
+      "tib": "bshang",
+      "eng": "shit",
+      "tib_range": [
+        18,
+        24
+      ],
+      "eng_range": [
+        77,
+        81
+      ],
+      "tib_context": "log g-yem gyi ni, bshang gci dang 'dam rdzab",
+      "eng_context": " where there is piss and shit all around, and mud and ",
+      "all_tib_matches": [
+        {
+          "range": [
+            18,
+            24
+          ],
+          "context": "log g-yem gyi ni, bshang gci dang 'dam rdzab dang ljan ljin"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            77,
+            81
+          ],
+          "context": "in a place where there is piss and shit all around, and mud and dirt and f"
+        }
+      ],
+      "decision": "Unique tighter bshang/shit, English second inside the parent."
+    },
+    {
+      "id": "m2",
+      "d": 7,
+      "tib": "gci",
+      "eng": "piss",
+      "tib_range": [
+        25,
+        28
+      ],
+      "eng_range": [
+        68,
+        72
+      ],
+      "tib_context": "-yem gyi ni, bshang gci dang 'dam rdzab dan",
+      "eng_context": "n a place where there is piss and shit all around, and",
+      "all_tib_matches": [
+        {
+          "range": [
+            25,
+            28
+          ],
+          "context": "log g-yem gyi ni, bshang gci dang 'dam rdzab dang ljan ljin dan"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            68,
+            72
+          ],
+          "context": "you live in a place where there is piss and shit all around, and mud and d"
+        }
+      ],
+      "decision": "Unique tighter gci/piss, English first inside the parent; canonical with_members handles reversal."
+    },
+    {
+      "id": "w3",
+      "d": 5,
+      "tib": "'dam rdzab",
+      "eng": "mud and dirt",
+      "tib_range": [
+        34,
+        44
+      ],
+      "eng_range": [
+        98,
+        110
+      ],
+      "tib_context": "ni, bshang gci dang 'dam rdzab dang ljan ljin dang",
+      "eng_context": "and shit all around, and mud and dirt and filth, and everythin",
+      "all_tib_matches": [
+        {
+          "range": [
+            34,
+            44
+          ],
+          "context": "log g-yem gyi ni, bshang gci dang 'dam rdzab dang ljan ljin dang mi gtsang ba d"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            98,
+            110
+          ],
+          "context": "e is piss and shit all around, and mud and dirt and filth, and everything stinks, "
+        }
+      ],
+      "decision": "Attested fixed compound mud and dirt; no speculative syllable members."
+    },
+    {
+      "id": "p1",
+      "d": 3,
+      "tib": "ljan ljin dang mi gtsang ba",
+      "eng": "filth",
+      "tib_range": [
+        50,
+        77
+      ],
+      "eng_range": [
+        115,
+        120
+      ],
+      "tib_context": "ang 'dam rdzab dang ljan ljin dang mi gtsang ba dang dri nga ba man",
+      "eng_context": "nd, and mud and dirt and filth, and everything stinks, ",
+      "all_tib_matches": [
+        {
+          "range": [
+            50,
+            77
+          ],
+          "context": "i, bshang gci dang 'dam rdzab dang ljan ljin dang mi gtsang ba dang dri nga ba mang ba dang nyam "
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            115,
+            120
+          ],
+          "context": "t all around, and mud and dirt and filth, and everything stinks, and everyw"
+        }
+      ],
+      "decision": "Both impurity terms directly attest filth; source coordinates them and English compresses them into one noun. Retain complete two-to-one phrase, not arbitrary ljan-only assignment or a false null for mi gtsang ba."
+    },
+    {
+      "id": "w4",
+      "d": 5,
+      "tib": "dri nga ba",
+      "eng": "stinks",
+      "tib_range": [
+        83,
+        93
+      ],
+      "eng_range": [
+        137,
+        143
+      ],
+      "tib_context": "g mi gtsang ba dang dri nga ba mang ba dang nyam n",
+      "eng_context": "nd filth, and everything stinks, and everywhere seems un",
+      "all_tib_matches": [
+        {
+          "range": [
+            83,
+            93
+          ],
+          "context": "g ljan ljin dang mi gtsang ba dang dri nga ba mang ba dang nyam nga ba dang nyam"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            137,
+            143
+          ],
+          "context": "and dirt and filth, and everything stinks, and everywhere seems unpleasant a"
+        }
+      ],
+      "decision": "Exact HGM stinks. Everything is not assigned to the odor word."
+    },
+    {
+      "id": "w5",
+      "d": 5,
+      "tib": "mang ba",
+      "eng": "everywhere",
+      "tib_range": [
+        94,
+        101
+      ],
+      "eng_range": [
+        149,
+        159
+      ],
+      "tib_context": " ba dang dri nga ba mang ba dang nyam nga ba da",
+      "eng_context": "d everything stinks, and everywhere seems unpleasant and dis",
+      "all_tib_matches": [
+        {
+          "range": [
+            94,
+            101
+          ],
+          "context": " dang mi gtsang ba dang dri nga ba mang ba dang nyam nga ba dang nyams mi dga"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            149,
+            159
+          ],
+          "context": " filth, and everything stinks, and everywhere seems unpleasant and distasteful."
+        }
+      ],
+      "decision": "Retain HGM everywhere as the contextual recast of abundant environmental conditions. Its scope shifts in the English sentence; no necessity that the adverb stay beside stinks. all around/everything are distributed expansions, not extra occurrences of mang ba. This is a deliberate judgment for skeptic review, not glossary membership alone."
+    },
+    {
+      "id": "w6",
+      "d": 5,
+      "tib": "nyam nga ba",
+      "eng": "distasteful",
+      "tib_range": [
+        107,
+        118
+      ],
+      "eng_range": [
+        181,
+        192
+      ],
+      "tib_context": "nga ba mang ba dang nyam nga ba dang nyams mi dga' ",
+      "eng_context": "ere seems unpleasant and distasteful.",
+      "all_tib_matches": [
+        {
+          "range": [
+            107,
+            118
+          ],
+          "context": "ng ba dang dri nga ba mang ba dang nyam nga ba dang nyams mi dga' ba'o"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            181,
+            192
+          ],
+          "context": "nd everywhere seems unpleasant and distasteful."
+        }
+      ],
+      "decision": "HGM glossary explicitly gives distasteful; local adjective list supports it. Comparative fear/danger cannot displace this applicable HGM choice. English reversal does not create ambiguity."
+    },
+    {
+      "id": "w7",
+      "d": 5,
+      "tib": "nyams mi dga' ba",
+      "eng": "unpleasant",
+      "tib_range": [
+        124,
+        140
+      ],
+      "eng_range": [
+        166,
+        176
+      ],
+      "tib_context": "ng nyam nga ba dang nyams mi dga' ba'o",
+      "eng_context": "ks, and everywhere seems unpleasant and distasteful.",
+      "all_tib_matches": [
+        {
+          "range": [
+            124,
+            140
+          ],
+          "context": "a ba mang ba dang nyam nga ba dang nyams mi dga' ba'o"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            166,
+            176
+          ],
+          "context": "thing stinks, and everywhere seems unpleasant and distasteful."
+        }
+      ],
+      "decision": "Transparent negative pleasant-state adjective owns unpleasant. The lack of an HGM entry for the whole is not evidence of absence; source and local contrast with distasteful establish the atom."
+    }
+  ],
+  "extra_complete_match_lists": {
+    "tib": {
+      "dang": [
+        {
+          "range": [
+            29,
+            33
+          ],
+          "context": "log g-yem gyi ni, bshang gci dang 'dam rdzab dang ljan ljin dang mi "
+        },
+        {
+          "range": [
+            45,
+            49
+          ],
+          "context": "gyi ni, bshang gci dang 'dam rdzab dang ljan ljin dang mi gtsang ba dang d"
+        },
+        {
+          "range": [
+            60,
+            64
+          ],
+          "context": "gci dang 'dam rdzab dang ljan ljin dang mi gtsang ba dang dri nga ba mang "
+        },
+        {
+          "range": [
+            78,
+            82
+          ],
+          "context": "b dang ljan ljin dang mi gtsang ba dang dri nga ba mang ba dang nyam nga b"
+        },
+        {
+          "range": [
+            102,
+            106
+          ],
+          "context": " gtsang ba dang dri nga ba mang ba dang nyam nga ba dang nyams mi dga' ba'"
+        },
+        {
+          "range": [
+            119,
+            123
+          ],
+          "context": "ri nga ba mang ba dang nyam nga ba dang nyams mi dga' ba'o"
+        }
+      ],
+      "mi": [
+        {
+          "range": [
+            65,
+            67
+          ],
+          "context": "ang 'dam rdzab dang ljan ljin dang mi gtsang ba dang dri nga ba mang ba "
+        },
+        {
+          "range": [
+            130,
+            132
+          ],
+          "context": "ang ba dang nyam nga ba dang nyams mi dga' ba'o"
+        }
+      ],
+      "las": [],
+      "'jigs pa": [],
+      "mang ba": [
+        {
+          "range": [
+            94,
+            101
+          ],
+          "context": " dang mi gtsang ba dang dri nga ba mang ba dang nyam nga ba dang nyams mi dga"
+        }
+      ]
+    },
+    "eng": {
+      "work": [],
+      "afraid": [],
+      "and": [
+        {
+          "range": [
+            73,
+            76
+          ],
+          "context": "ive in a place where there is piss and shit all around, and mud and dirt "
+        },
+        {
+          "range": [
+            94,
+            97
+          ],
+          "context": "there is piss and shit all around, and mud and dirt and filth, and everyt"
+        },
+        {
+          "range": [
+            102,
+            105
+          ],
+          "context": " piss and shit all around, and mud and dirt and filth, and everything sti"
+        },
+        {
+          "range": [
+            111,
+            114
+          ],
+          "context": " shit all around, and mud and dirt and filth, and everything stinks, and "
+        },
+        {
+          "range": [
+            122,
+            125
+          ],
+          "context": "round, and mud and dirt and filth, and everything stinks, and everywhere "
+        },
+        {
+          "range": [
+            145,
+            148
+          ],
+          "context": " and filth, and everything stinks, and everywhere seems unpleasant and di"
+        },
+        {
+          "range": [
+            177,
+            180
+          ],
+          "context": "s, and everywhere seems unpleasant and distasteful."
+        }
+      ],
+      "filth": [
+        {
+          "range": [
+            115,
+            120
+          ],
+          "context": "t all around, and mud and dirt and filth, and everything stinks, and everyw"
+        }
+      ],
+      "everywhere": [
+        {
+          "range": [
+            149,
+            159
+          ],
+          "context": " filth, and everything stinks, and everywhere seems unpleasant and distasteful."
+        }
+      ],
+      "unpleasant": [
+        {
+          "range": [
+            166,
+            176
+          ],
+          "context": "thing stinks, and everywhere seems unpleasant and distasteful."
+        }
+      ],
+      "distasteful": [
+        {
+          "range": [
+            181,
+            192
+          ],
+          "context": "nd everywhere seems unpleasant and distasteful."
+        }
+      ],
+      "people": [],
+      "your": [],
+      "talk": [],
+      "split": []
+    }
+  }
+}

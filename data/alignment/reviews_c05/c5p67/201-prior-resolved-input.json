@@ -1,0 +1,649 @@
+{
+  "canonical_resolver": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+  "eng_order": [
+    "w1",
+    "w2",
+    "w3",
+    "w4",
+    "w5",
+    "w6",
+    "w7",
+    "w8",
+    "p1"
+  ],
+  "actual_english_span_order": [
+    "w1",
+    "w2",
+    "w3",
+    "w4",
+    "w5",
+    "m1",
+    "m2",
+    "w6",
+    "m3",
+    "m4",
+    "w7",
+    "w8",
+    "p1"
+  ],
+  "resolved_spans": [
+    {
+      "id": "w1",
+      "d": 5,
+      "tib": "sa",
+      "eng": "ground",
+      "tib_range": [
+        14,
+        16
+      ],
+      "eng_range": [
+        58,
+        64
+      ],
+      "tib_context": "phra ma'i ni, sa phyogs 'bar 'bur da",
+      "eng_context": "with your talk, the very ground in the place you live is",
+      "all_tib_matches": [
+        {
+          "range": [
+            14,
+            16
+          ],
+          "context": "phra ma'i ni, sa phyogs 'bar 'bur dang lcang lcong "
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            58,
+            64
+          ],
+          "context": "people up with your talk, the very ground in the place you live is all uneve"
+        }
+      ],
+      "decision": "sa/ground excludes very/the and no supplied residence; more coverage than place-only compound."
+    },
+    {
+      "id": "w2",
+      "d": 5,
+      "tib": "phyogs",
+      "eng": "place",
+      "tib_range": [
+        17,
+        23
+      ],
+      "eng_range": [
+        72,
+        77
+      ],
+      "tib_context": "phra ma'i ni, sa phyogs 'bar 'bur dang lcan",
+      "eng_context": ", the very ground in the place you live is all uneven, ",
+      "all_tib_matches": [
+        {
+          "range": [
+            17,
+            23
+          ],
+          "context": "phra ma'i ni, sa phyogs 'bar 'bur dang lcang lcong dang mt"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            72,
+            77
+          ],
+          "context": " your talk, the very ground in the place you live is all uneven, covered wi"
+        }
+      ],
+      "decision": "phyogs/place separately licensed; avoids capturing internal in the."
+    },
+    {
+      "id": "w3",
+      "d": 5,
+      "tib": "'bar 'bur",
+      "eng": "uneven",
+      "tib_range": [
+        24,
+        33
+      ],
+      "eng_range": [
+        94,
+        100
+      ],
+      "tib_context": " ma'i ni, sa phyogs 'bar 'bur dang lcang lcong da",
+      "eng_context": "he place you live is all uneven, covered with crags and ",
+      "all_tib_matches": [
+        {
+          "range": [
+            24,
+            33
+          ],
+          "context": "phra ma'i ni, sa phyogs 'bar 'bur dang lcang lcong dang mtho dma' da"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            94,
+            100
+          ],
+          "context": "round in the place you live is all uneven, covered with crags and gullies, f"
+        }
+      ],
+      "decision": "Exact HGM uneven, excluding all."
+    },
+    {
+      "id": "w4",
+      "d": 5,
+      "tib": "lcang lcong",
+      "eng": "crags",
+      "tib_range": [
+        39,
+        50
+      ],
+      "eng_range": [
+        115,
+        120
+      ],
+      "tib_context": "yogs 'bar 'bur dang lcang lcong dang mtho dma' dang",
+      "eng_context": "all uneven, covered with crags and gullies, full of hig",
+      "all_tib_matches": [
+        {
+          "range": [
+            39,
+            50
+          ],
+          "context": " ma'i ni, sa phyogs 'bar 'bur dang lcang lcong dang mtho dma' dang bgrod dka' ba "
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            115,
+            120
+          ],
+          "context": "u live is all uneven, covered with crags and gullies, full of highs and low"
+        }
+      ],
+      "decision": "Keep exact HGM crags. Reject expansion to crags and gullies until the whole compound scope is established beyond local adjacency; no lcang/lcong members are evidenced."
+    },
+    {
+      "id": "w5",
+      "d": 5,
+      "tib": "mtho dma'",
+      "eng": "highs and lows",
+      "tib_range": [
+        56,
+        65
+      ],
+      "eng_range": [
+        142,
+        156
+      ],
+      "tib_context": "ng lcang lcong dang mtho dma' dang bgrod dka' ba ",
+      "eng_context": "ags and gullies, full of highs and lows, so that you can travel ",
+      "all_tib_matches": [
+        {
+          "range": [
+            56,
+            65
+          ],
+          "context": "gs 'bar 'bur dang lcang lcong dang mtho dma' dang bgrod dka' ba dang 'jigs pa d"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            142,
+            156
+          ],
+          "context": "ed with crags and gullies, full of highs and lows, so that you can travel only with "
+        }
+      ],
+      "decision": "Established high/low antonym compound and direct constituent HGM evidence; reject mined travel-only-with-difficulty gloss as misplaced in this row."
+    },
+    {
+      "id": "m1",
+      "d": 7,
+      "tib": "mtho",
+      "eng": "highs",
+      "tib_range": [
+        56,
+        60
+      ],
+      "eng_range": [
+        142,
+        147
+      ],
+      "tib_context": "ng lcang lcong dang mtho dma' dang bgrod dka",
+      "eng_context": "ags and gullies, full of highs and lows, so that you ca",
+      "all_tib_matches": [
+        {
+          "range": [
+            56,
+            60
+          ],
+          "context": "gs 'bar 'bur dang lcang lcong dang mtho dma' dang bgrod dka' ba dang 'jigs"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            142,
+            147
+          ],
+          "context": "ed with crags and gullies, full of highs and lows, so that you can travel o"
+        }
+      ],
+      "decision": "Unique tighter high member/highs."
+    },
+    {
+      "id": "m2",
+      "d": 7,
+      "tib": "dma'",
+      "eng": "lows",
+      "tib_range": [
+        61,
+        65
+      ],
+      "eng_range": [
+        152,
+        156
+      ],
+      "tib_context": "ang lcong dang mtho dma' dang bgrod dka' ba ",
+      "eng_context": "llies, full of highs and lows, so that you can travel ",
+      "all_tib_matches": [
+        {
+          "range": [
+            61,
+            65
+          ],
+          "context": "ar 'bur dang lcang lcong dang mtho dma' dang bgrod dka' ba dang 'jigs pa d"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            152,
+            156
+          ],
+          "context": "ags and gullies, full of highs and lows, so that you can travel only with "
+        }
+      ],
+      "decision": "Unique tighter low member/lows; do not change dma' to dman."
+    },
+    {
+      "id": "w6",
+      "d": 5,
+      "tib": "bgrod dka' ba",
+      "eng": "travel only with difficulty",
+      "tib_range": [
+        71,
+        84
+      ],
+      "eng_range": [
+        174,
+        201
+      ],
+      "tib_context": "dang mtho dma' dang bgrod dka' ba dang 'jigs pa dang ",
+      "eng_context": "nd lows, so that you can travel only with difficulty, and where you are alway",
+      "all_tib_matches": [
+        {
+          "range": [
+            71,
+            84
+          ],
+          "context": "ng lcang lcong dang mtho dma' dang bgrod dka' ba dang 'jigs pa dang 'jigs su rung b"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            174,
+            201
+          ],
+          "context": "of highs and lows, so that you can travel only with difficulty, and where you are always afraid, "
+        }
+      ],
+      "decision": "Established hard-to-traverse compound and exact HGM travel only with difficulty: only with expresses the difficulty restriction, without supplied you/can."
+    },
+    {
+      "id": "m3",
+      "d": 7,
+      "tib": "bgrod",
+      "eng": "travel",
+      "tib_range": [
+        71,
+        76
+      ],
+      "eng_range": [
+        174,
+        180
+      ],
+      "tib_context": "dang mtho dma' dang bgrod dka' ba dang 'jigs ",
+      "eng_context": "nd lows, so that you can travel only with difficulty, an",
+      "all_tib_matches": [
+        {
+          "range": [
+            71,
+            76
+          ],
+          "context": "ng lcang lcong dang mtho dma' dang bgrod dka' ba dang 'jigs pa dang 'jigs s"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            174,
+            180
+          ],
+          "context": "of highs and lows, so that you can travel only with difficulty, and where yo"
+        }
+      ],
+      "decision": "Unique tighter bgrod/travel member."
+    },
+    {
+      "id": "m4",
+      "d": 7,
+      "tib": "dka' ba",
+      "eng": "difficulty",
+      "tib_range": [
+        77,
+        84
+      ],
+      "eng_range": [
+        191,
+        201
+      ],
+      "tib_context": "tho dma' dang bgrod dka' ba dang 'jigs pa dang ",
+      "eng_context": "you can travel only with difficulty, and where you are alway",
+      "all_tib_matches": [
+        {
+          "range": [
+            77,
+            84
+          ],
+          "context": "ng lcong dang mtho dma' dang bgrod dka' ba dang 'jigs pa dang 'jigs su rung b"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            191,
+            201
+          ],
+          "context": ", so that you can travel only with difficulty, and where you are always afraid, "
+        }
+      ],
+      "decision": "Unique tighter dka' ba/difficulty member."
+    },
+    {
+      "id": "w7",
+      "d": 5,
+      "tib": "'jigs pa",
+      "eng": "afraid",
+      "tib_range": [
+        90,
+        98
+      ],
+      "eng_range": [
+        228,
+        234
+      ],
+      "tib_context": " bgrod dka' ba dang 'jigs pa dang 'jigs su rung ",
+      "eng_context": "and where you are always afraid, and there are many thin",
+      "all_tib_matches": [
+        {
+          "range": [
+            90,
+            98
+          ],
+          "context": " mtho dma' dang bgrod dka' ba dang 'jigs pa dang 'jigs su rung ba'i rgyu mang "
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            228,
+            234
+          ],
+          "context": "fficulty, and where you are always afraid, and there are many things to be a"
+        },
+        {
+          "range": [
+            268,
+            274
+          ],
+          "context": "d, and there are many things to be afraid of."
+        }
+      ],
+      "decision": "First afraid, after always; always and you are not in the span."
+    },
+    {
+      "id": "p1",
+      "d": 3,
+      "tib": "'jigs su rung ba'i rgyu",
+      "eng": "things to be afraid of",
+      "tib_range": [
+        104,
+        127
+      ],
+      "eng_range": [
+        255,
+        277
+      ],
+      "tib_context": " dang 'jigs pa dang 'jigs su rung ba'i rgyu mang po dang ldan p",
+      "eng_context": "raid, and there are many things to be afraid of.",
+      "all_tib_matches": [
+        {
+          "range": [
+            104,
+            127
+          ],
+          "context": "g bgrod dka' ba dang 'jigs pa dang 'jigs su rung ba'i rgyu mang po dang ldan pa dang"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            255,
+            277
+          ],
+          "context": " always afraid, and there are many things to be afraid of."
+        }
+      ],
+      "decision": "Whole fear-causes phrase/things to be afraid of; avoids supplied agent or ambiguous isolated fear word."
+    },
+    {
+      "id": "w8",
+      "d": 5,
+      "tib": "mang po",
+      "eng": "many",
+      "tib_range": [
+        128,
+        135
+      ],
+      "eng_range": [
+        250,
+        254
+      ],
+      "tib_context": "s su rung ba'i rgyu mang po dang ldan pa dang",
+      "eng_context": "ys afraid, and there are many things to be afraid of.",
+      "all_tib_matches": [
+        {
+          "range": [
+            128,
+            135
+          ],
+          "context": "gs pa dang 'jigs su rung ba'i rgyu mang po dang ldan pa dang"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            250,
+            254
+          ],
+          "context": "u are always afraid, and there are many things to be afraid of."
+        }
+      ],
+      "decision": "Direct many; English order precedes the final phrase."
+    }
+  ],
+  "extra_complete_match_lists": {
+    "tib": {
+      "dang": [
+        {
+          "range": [
+            34,
+            38
+          ],
+          "context": "phra ma'i ni, sa phyogs 'bar 'bur dang lcang lcong dang mtho dma' dang bg"
+        },
+        {
+          "range": [
+            51,
+            55
+          ],
+          "context": " phyogs 'bar 'bur dang lcang lcong dang mtho dma' dang bgrod dka' ba dang "
+        },
+        {
+          "range": [
+            66,
+            70
+          ],
+          "context": "ur dang lcang lcong dang mtho dma' dang bgrod dka' ba dang 'jigs pa dang '"
+        },
+        {
+          "range": [
+            85,
+            89
+          ],
+          "context": " dang mtho dma' dang bgrod dka' ba dang 'jigs pa dang 'jigs su rung ba'i r"
+        },
+        {
+          "range": [
+            99,
+            103
+          ],
+          "context": "' dang bgrod dka' ba dang 'jigs pa dang 'jigs su rung ba'i rgyu mang po da"
+        },
+        {
+          "range": [
+            136,
+            140
+          ],
+          "context": "ng 'jigs su rung ba'i rgyu mang po dang ldan pa dang"
+        },
+        {
+          "range": [
+            149,
+            153
+          ],
+          "context": "ung ba'i rgyu mang po dang ldan pa dang"
+        }
+      ],
+      "mi": [],
+      "las": [],
+      "'jigs pa": [
+        {
+          "range": [
+            90,
+            98
+          ],
+          "context": " mtho dma' dang bgrod dka' ba dang 'jigs pa dang 'jigs su rung ba'i rgyu mang "
+        }
+      ],
+      "mang ba": []
+    },
+    "eng": {
+      "work": [],
+      "afraid": [
+        {
+          "range": [
+            228,
+            234
+          ],
+          "context": "fficulty, and where you are always afraid, and there are many things to be a"
+        },
+        {
+          "range": [
+            268,
+            274
+          ],
+          "context": "d, and there are many things to be afraid of."
+        }
+      ],
+      "and": [
+        {
+          "range": [
+            121,
+            124
+          ],
+          "context": " is all uneven, covered with crags and gullies, full of highs and lows, s"
+        },
+        {
+          "range": [
+            148,
+            151
+          ],
+          "context": "h crags and gullies, full of highs and lows, so that you can travel only "
+        },
+        {
+          "range": [
+            203,
+            206
+          ],
+          "context": "u can travel only with difficulty, and where you are always afraid, and t"
+        },
+        {
+          "range": [
+            236,
+            239
+          ],
+          "context": ", and where you are always afraid, and there are many things to be afraid"
+        }
+      ],
+      "filth": [],
+      "everywhere": [],
+      "unpleasant": [],
+      "distasteful": [],
+      "people": [
+        {
+          "range": [
+            23,
+            29
+          ],
+          "context": "Because you have split people up with your talk, the very ground"
+        }
+      ],
+      "your": [
+        {
+          "range": [
+            38,
+            42
+          ],
+          "context": "ause you have split people up with your talk, the very ground in the place"
+        }
+      ],
+      "talk": [
+        {
+          "range": [
+            43,
+            47
+          ],
+          "context": "you have split people up with your talk, the very ground in the place you "
+        }
+      ],
+      "split": [
+        {
+          "range": [
+            17,
+            22
+          ],
+          "context": "Because you have split people up with your talk, the very"
+        }
+      ]
+    }
+  }
+}

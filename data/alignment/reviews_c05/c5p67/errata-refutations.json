@@ -1,0 +1,66 @@
+[
+  {
+    "seq": 200,
+    "found": "GRU SPYOD",
+    "expected": "GROGS SPYOD",
+    "refuted": true,
+    "reason": "Ground (d): the correction is conjectural, and genuine gru ship plus spyod use/activity gives a defensible source reading. Lack of an established proposed compound and unproved publication independence warrant default-refute. The English cooperation mismatch remains visible as an omitted alignment; refutation does not endorse that translation as ship-use.",
+    "parallel_witness": "C09:157, C16:778 and C17:504 preserve GRU SPYOD and exactly equal the C05:200 wylie, ACIP and English. No P1/TCS row appears in the exact or broadened same-passage searches. The two original S05392L files each have GRU\\s+SPYOD at @119B and identical relevant contexts. Neither identical digital rows nor related nonidentical files establish independent publication.",
+    "counts_rechecked": {
+      "wylie like ? :: %gru spyod%": 4,
+      "acip like ? :: %GRU SPYOD%": 4,
+      "wylie like ? :: %grogs spyod%": 0,
+      "acip like ? :: %GROGS SPYOD%": 0,
+      "english like ? :: %work in cooperation with other people%": 4,
+      "wylie=? :: gru spyod": 0,
+      "wylie=? :: gru spyod pa": 0,
+      "wylie=? :: grogs spyod": 0,
+      "wylie=? :: grogs spyod pa": 0,
+      "wylie like ? :: %zhing las dang gru%": 4,
+      "wylie like ? :: %mthun par mi 'gyur%": 4,
+      "english like ? :: %can't work well together%": 4,
+      "english like ? :: %work in cooperation%": 4
+    },
+    "suggested_severity": null,
+    "suggested_confidence": null,
+    "five_grounds": {
+      "a": {
+        "refutes": false,
+        "finding": "Found GRU SPYOD occurs verbatim once in C05:200 ACIP; lowercase gru spyod occurs once in wylie; uppercase spelling does not occur in wylie or English. The complete ACIP quote in the proposal equals the independently read source."
+      },
+      "b": {
+        "refutes": false,
+        "finding": "Three other matching corpus rows, exact field parity, and two raw-file passages are confirmed. No publication-level independence is proved, so identical witnesses alone cannot refute under ground(b). The available evidence also cannot establish an isolated corruption."
+      },
+      "c": {
+        "refutes": false,
+        "finding": "No register record contains gru spyod/grogs spyod and no C05:200 duplicate. Registered Sanskrit-converter, running-head, cap, footnote, row-spill and heading classes were read; this disputed lexical spelling is none of them."
+      },
+      "d": {
+        "refutes": true,
+        "finding": "HGM2020 gru/ship and 2074 grogs/friend/companion/associate confirmed against both SQLite and master. spyod pa includes activity/work/operate, with use in reference comparanda. C03:351 actually describes a boat crossing with oars; C08:195 describes shipwrecked merchants. These substantiate genuine ship usage, though neither is a witness of the disputed compound. All four exact disputed/proposed compounds are absent from dictionary headwords; GROGS SPYOD is absent from corpus. A plausible semantic substitution of friend for ship is not evidence of a source misspelling."
+      },
+      "e": {
+        "refutes": false,
+        "finding": "All cited corpus/dictionary counts and row identities rerun. GRU SPYOD: 4 rows in each case-appropriate field; GROGS SPYOD: 0; cooperation wording: 4; all four exact dictionary compounds: 0. Each original raw file has 1 GRU\\s+SPYOD hit and 0 GROGS hits; byte ranges, full-file hashes, relevant contexts and folio checked exactly. Reconciled raw-file numerical claims match. No count defect supplies the refutation."
+      }
+    },
+    "raw_file_evidence": "lamrim-evidence.json",
+    "raw_file_comparison": "lamrim-file-comparison.json",
+    "quoted_source_evidence": "source-and-context.json",
+    "query_evidence": "errata-queries.json",
+    "dictionary_evidence": [
+      "lexical-evidence.json",
+      "master-selected-evidence.json"
+    ],
+    "original_claim": {
+      "seq": 200,
+      "kind": "TIBETAN_SPELLING",
+      "found": "GRU SPYOD",
+      "expected": "GROGS SPYOD",
+      "evidence": "Exact C05:200 ACIP row: ,BRDZUN DU SMRA BA'I NI, ZHING LAS DANG GRU SPYOD PA'I LAS KYI MTHA' RGYAS PAR MI 'GYUR BA DANG MTHUN PAR MI 'GYUR ZHING PHAL CHER BSLU BA DANG 'JIGS PA DANG 'JIGS SU RUNG BA'I RGYU MANG PO DANG LDAN PA DANG ,. Its wylie has gru spyod and GMR's English has ‘work in cooperation with other people’. Current HGM evidence gives GRU/gru = ‘ship’ and GROGS/grogs = ‘friend’, ‘companion’, ‘associate’; neither GRU SPYOD nor GROGS SPYOD is an HGM glossary compound. Exact same-passage rows C09:157, C16:778, and C17:504 all preserve GRU SPYOD and identical English, so textual identity does not establish independent publication or a local ingestion defect. A corpus search found no GROGS SPYOD row. The candidate is not one of the registered converter, footnote, folio, heading-glue, running-head, or 1,500-character classes. The semantic fit supports the correction but the available digital witnesses cannot prove it.",
+      "severity": "LOW",
+      "confidence": "PROBABLE"
+    }
+  }
+]

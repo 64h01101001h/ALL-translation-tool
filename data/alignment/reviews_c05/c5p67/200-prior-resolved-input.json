@@ -1,0 +1,533 @@
+{
+  "canonical_resolver": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+  "eng_order": [
+    "w1",
+    "w2",
+    "p1",
+    "p2",
+    "w3",
+    "w4",
+    "w5",
+    "w6",
+    "p3"
+  ],
+  "actual_english_span_order": [
+    "w1",
+    "w2",
+    "p1",
+    "p2",
+    "w3",
+    "w4",
+    "w5",
+    "w6",
+    "p3"
+  ],
+  "resolved_spans": [
+    {
+      "id": "w1",
+      "d": 5,
+      "tib": "brdzun du smra ba",
+      "eng": "lied",
+      "tib_range": [
+        0,
+        17
+      ],
+      "eng_range": [
+        17,
+        21
+      ],
+      "tib_context": "brdzun du smra ba'i ni, zhing las dan",
+      "eng_context": "Because you have lied, you live in a world whe",
+      "all_tib_matches": [
+        {
+          "range": [
+            0,
+            17
+          ],
+          "context": "brdzun du smra ba'i ni, zhing las dang gru spyod pa'"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            17,
+            21
+          ],
+          "context": "Because you have lied, you live in a world where, when y"
+        }
+      ],
+      "decision": "Attested lying idiom/lied, without you have."
+    },
+    {
+      "id": "w2",
+      "d": 5,
+      "tib": "zhing las",
+      "eng": "farming",
+      "tib_range": [
+        24,
+        33
+      ],
+      "eng_range": [
+        69,
+        76
+      ],
+      "tib_context": "un du smra ba'i ni, zhing las dang gru spyod pa'i",
+      "eng_context": "here, when you undertake farming or some work in cooperat",
+      "all_tib_matches": [
+        {
+          "range": [
+            24,
+            33
+          ],
+          "context": "brdzun du smra ba'i ni, zhing las dang gru spyod pa'i las kyi mtha' "
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            69,
+            76
+          ],
+          "context": " a world where, when you undertake farming or some work in cooperation with o"
+        }
+      ],
+      "decision": "Field-work compound/farming; no undertake."
+    },
+    {
+      "id": "p1",
+      "d": 3,
+      "tib": "rgyas par mi 'gyur ba",
+      "eng": "fails to prosper",
+      "tib_range": [
+        68,
+        89
+      ],
+      "eng_range": [
+        144,
+        160
+      ],
+      "tib_context": " pa'i las kyi mtha' rgyas par mi 'gyur ba dang mthun par mi '",
+      "eng_context": "ple, in the end the work fails to prosper, and the people can't wo",
+      "all_tib_matches": [
+        {
+          "range": [
+            68,
+            89
+          ],
+          "context": " dang gru spyod pa'i las kyi mtha' rgyas par mi 'gyur ba dang mthun par mi 'gyur zhing phal"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            144,
+            160
+          ],
+          "context": " other people, in the end the work fails to prosper, and the people can't work well to"
+        }
+      ],
+      "decision": "Complete non-prospering predicate/fails to prosper at d3; no arbitrary split of failure auxiliary."
+    },
+    {
+      "id": "p2",
+      "d": 3,
+      "tib": "mthun par mi 'gyur",
+      "eng": "can't work well together",
+      "tib_range": [
+        95,
+        113
+      ],
+      "eng_range": [
+        177,
+        201
+      ],
+      "tib_context": "ar mi 'gyur ba dang mthun par mi 'gyur zhing phal cher bsl",
+      "eng_context": " prosper, and the people can't work well together, and for the most part e",
+      "all_tib_matches": [
+        {
+          "range": [
+            95,
+            113
+          ],
+          "context": "i mtha' rgyas par mi 'gyur ba dang mthun par mi 'gyur zhing phal cher bslu ba dang 'jigs"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            177,
+            201
+          ],
+          "context": "k fails to prosper, and the people can't work well together, and for the most part everyone is"
+        }
+      ],
+      "decision": "Complete non-harmonizing predicate/can't work well together at d3. Context licenses work together as relational harmony and inability/failure as the English predicate recast; the people is outside. Prefer complete phrase over mthun par/work well together plus mi/n't with stranded gyur."
+    },
+    {
+      "id": "w3",
+      "d": 5,
+      "tib": "phal cher",
+      "eng": "for the most part",
+      "tib_range": [
+        120,
+        129
+      ],
+      "eng_range": [
+        207,
+        224
+      ],
+      "tib_context": " par mi 'gyur zhing phal cher bslu ba dang 'jigs ",
+      "eng_context": " work well together, and for the most part everyone is cheating one",
+      "all_tib_matches": [
+        {
+          "range": [
+            120,
+            129
+          ],
+          "context": "r ba dang mthun par mi 'gyur zhing phal cher bslu ba dang 'jigs pa dang 'jigs s"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            207,
+            224
+          ],
+          "context": "ople can't work well together, and for the most part everyone is cheating one another, "
+        }
+      ],
+      "decision": "Exact HGM for the most part; phal cher provides the whole adverbial unit."
+    },
+    {
+      "id": "w4",
+      "d": 5,
+      "tib": "bslu ba",
+      "eng": "cheating",
+      "tib_range": [
+        130,
+        137
+      ],
+      "eng_range": [
+        237,
+        245
+      ],
+      "tib_context": "yur zhing phal cher bslu ba dang 'jigs pa dang ",
+      "eng_context": "he most part everyone is cheating one another, and is afra",
+      "all_tib_matches": [
+        {
+          "range": [
+            130,
+            137
+          ],
+          "context": "mthun par mi 'gyur zhing phal cher bslu ba dang 'jigs pa dang 'jigs su rung b"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            237,
+            245
+          ],
+          "context": " and for the most part everyone is cheating one another, and is afraid, and wh"
+        }
+      ],
+      "decision": "bslu ba/cheating; everyone/one another supplied participants excluded."
+    },
+    {
+      "id": "w5",
+      "d": 5,
+      "tib": "'jigs pa",
+      "eng": "afraid",
+      "tib_range": [
+        143,
+        151
+      ],
+      "eng_range": [
+        266,
+        272
+      ],
+      "tib_context": "l cher bslu ba dang 'jigs pa dang 'jigs su rung ",
+      "eng_context": "ting one another, and is afraid, and where there are man",
+      "all_tib_matches": [
+        {
+          "range": [
+            143,
+            151
+          ],
+          "context": "'gyur zhing phal cher bslu ba dang 'jigs pa dang 'jigs su rung ba'i rgyu mang "
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            266,
+            272
+          ],
+          "context": "ne is cheating one another, and is afraid, and where there are many things t"
+        },
+        {
+          "range": [
+            312,
+            318
+          ],
+          "context": " where there are many things to be afraid of."
+        }
+      ],
+      "decision": "First afraid, after is and before the final fear-causes phrase; second afraid belongs only inside that phrase."
+    },
+    {
+      "id": "p3",
+      "d": 3,
+      "tib": "'jigs su rung ba'i rgyu",
+      "eng": "things to be afraid of",
+      "tib_range": [
+        157,
+        180
+      ],
+      "eng_range": [
+        299,
+        321
+      ],
+      "tib_context": " dang 'jigs pa dang 'jigs su rung ba'i rgyu mang po dang ldan p",
+      "eng_context": "and where there are many things to be afraid of.",
+      "all_tib_matches": [
+        {
+          "range": [
+            157,
+            180
+          ],
+          "context": "al cher bslu ba dang 'jigs pa dang 'jigs su rung ba'i rgyu mang po dang ldan pa dang"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            299,
+            321
+          ],
+          "context": "s afraid, and where there are many things to be afraid of."
+        }
+      ],
+      "decision": "Whole terrifying-causes phrase/things to be afraid of; rgyu licenses the referents, avoids individually giving rung or rgyu an arbitrary fragment."
+    },
+    {
+      "id": "w6",
+      "d": 5,
+      "tib": "mang po",
+      "eng": "many",
+      "tib_range": [
+        181,
+        188
+      ],
+      "eng_range": [
+        294,
+        298
+      ],
+      "tib_context": "s su rung ba'i rgyu mang po dang ldan pa dang",
+      "eng_context": "aid, and where there are many things to be afraid of.",
+      "all_tib_matches": [
+        {
+          "range": [
+            181,
+            188
+          ],
+          "context": "gs pa dang 'jigs su rung ba'i rgyu mang po dang ldan pa dang"
+        }
+      ],
+      "all_eng_matches": [
+        {
+          "range": [
+            294,
+            298
+          ],
+          "context": "and is afraid, and where there are many things to be afraid of."
+        }
+      ],
+      "decision": "mang po/many, English before the fear-causes phrase."
+    }
+  ],
+  "extra_complete_match_lists": {
+    "tib": {
+      "dang": [
+        {
+          "range": [
+            34,
+            38
+          ],
+          "context": "brdzun du smra ba'i ni, zhing las dang gru spyod pa'i las kyi mtha' rgyas"
+        },
+        {
+          "range": [
+            90,
+            94
+          ],
+          "context": "as kyi mtha' rgyas par mi 'gyur ba dang mthun par mi 'gyur zhing phal cher"
+        },
+        {
+          "range": [
+            138,
+            142
+          ],
+          "context": "r mi 'gyur zhing phal cher bslu ba dang 'jigs pa dang 'jigs su rung ba'i r"
+        },
+        {
+          "range": [
+            152,
+            156
+          ],
+          "context": "ng phal cher bslu ba dang 'jigs pa dang 'jigs su rung ba'i rgyu mang po da"
+        },
+        {
+          "range": [
+            189,
+            193
+          ],
+          "context": "ng 'jigs su rung ba'i rgyu mang po dang ldan pa dang"
+        },
+        {
+          "range": [
+            202,
+            206
+          ],
+          "context": "ung ba'i rgyu mang po dang ldan pa dang"
+        }
+      ],
+      "mi": [
+        {
+          "range": [
+            78,
+            80
+          ],
+          "context": "spyod pa'i las kyi mtha' rgyas par mi 'gyur ba dang mthun par mi 'gyur z"
+        },
+        {
+          "range": [
+            105,
+            107
+          ],
+          "context": "yas par mi 'gyur ba dang mthun par mi 'gyur zhing phal cher bslu ba dang"
+        }
+      ],
+      "las": [
+        {
+          "range": [
+            30,
+            33
+          ],
+          "context": "brdzun du smra ba'i ni, zhing las dang gru spyod pa'i las kyi mtha' "
+        },
+        {
+          "range": [
+            54,
+            57
+          ],
+          "context": " ni, zhing las dang gru spyod pa'i las kyi mtha' rgyas par mi 'gyur ba da"
+        }
+      ],
+      "'jigs pa": [
+        {
+          "range": [
+            143,
+            151
+          ],
+          "context": "'gyur zhing phal cher bslu ba dang 'jigs pa dang 'jigs su rung ba'i rgyu mang "
+        }
+      ],
+      "mang ba": []
+    },
+    "eng": {
+      "work": [
+        {
+          "range": [
+            85,
+            89
+          ],
+          "context": "when you undertake farming or some work in cooperation with other people, "
+        },
+        {
+          "range": [
+            139,
+            143
+          ],
+          "context": " with other people, in the end the work fails to prosper, and the people c"
+        },
+        {
+          "range": [
+            183,
+            187
+          ],
+          "context": "s to prosper, and the people can't work well together, and for the most pa"
+        }
+      ],
+      "afraid": [
+        {
+          "range": [
+            266,
+            272
+          ],
+          "context": "ne is cheating one another, and is afraid, and where there are many things t"
+        },
+        {
+          "range": [
+            312,
+            318
+          ],
+          "context": " where there are many things to be afraid of."
+        }
+      ],
+      "and": [
+        {
+          "range": [
+            162,
+            165
+          ],
+          "context": "the end the work fails to prosper, and the people can't work well togethe"
+        },
+        {
+          "range": [
+            203,
+            206
+          ],
+          "context": "e people can't work well together, and for the most part everyone is chea"
+        },
+        {
+          "range": [
+            259,
+            262
+          ],
+          "context": " everyone is cheating one another, and is afraid, and where there are man"
+        },
+        {
+          "range": [
+            274,
+            277
+          ],
+          "context": "eating one another, and is afraid, and where there are many things to be "
+        }
+      ],
+      "filth": [],
+      "everywhere": [],
+      "unpleasant": [],
+      "distasteful": [],
+      "people": [
+        {
+          "range": [
+            116,
+            122
+          ],
+          "context": "ome work in cooperation with other people, in the end the work fails to pros"
+        },
+        {
+          "range": [
+            170,
+            176
+          ],
+          "context": "the work fails to prosper, and the people can't work well together, and for "
+        }
+      ],
+      "your": [],
+      "talk": [],
+      "split": []
+    }
+  }
+}

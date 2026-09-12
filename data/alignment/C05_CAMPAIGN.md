@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. Coverage 198/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. Coverage 201/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -638,3 +638,40 @@ actual main CSV references, retaining all22,622 old groups. Master/corpus hashes
 are unchanged. All17 targeted fidelity/export/constitution suites passed in
 10.50seconds. Visual rendering remains unverified; no newer native/device or
 main integration action occurred. Next:199–201, independently approved for landing.
+
+
+### c5p67 · C05:199–201 — 2026-09-12 — Codex reconciliation/review
+
+Fresh independent proposal angles, separate reconciliation and skeptical semantic
+review completed. APPROVE covers 32 analyst spans (10/9/13), zero nulls, 21 d5
+pairs and six d7 members. All six proposals and all three final bodies reproduce
+exactly with zero stderr. All canonical tuples/ranges match the accepted spec;
+all eligible review evidence is copied byte-for-byte. See `specs_c05/c5p67.json`
+and `reviews_c05/c5p67/`. These remain PROVISIONAL machine alignments.
+
+199 keeps the crossed piss/shit members and final adjectives, the complete
+filth compression, and HGM-attested everywhere with explicit scope-recast limits.
+200 retains the whole negative prosperity/concord predicates; the latter owns
+can't work well together without claiming separate ability vocabulary. Shipping,
+cooperation and distributed work/end remain omitted with explanations. 201 keeps
+crags, the high/low and difficult-travel compounds with useful members, and the
+whole fear-ground phrase. The full phra ma glossary gloss was examined, but no
+continuous target span preserves its speech/division distinction without supplied
+participants and possessive framing; it remains omitted, not falsely nulled.
+
+The GRU SPYOD→GROGS SPYOD candidate is refuted after all five grounds: ship/use
+is defensible, while the proposed cooperation compound is unattested. Four
+corpus rows and both local S05392L contexts retain GRU SPYOD; none establishes
+independent publication. Exact raw bytes, ranges and full query results are in
+the review. No errata or allowances are added; all 186 register records and
+existing allowances remain byte-identical to the prior checkpoint.
+
+Coverage 201/511. Bank: 42,726 links (+35 with three sentence anchors), 11,868
+null exponents, 1,537 notes, 11 trees. Evidence: 6,857 headwords / 14,784 pairs.
+All 42,691 prior links, earlier notes/trees/evidence/ACIP mappings and 21,335
+prior main CSV lexical rows and citations survive. Main CSV: 21,364 rows;
+reverse: 21,024; changes: 29 versus ef8c0e4. All 22,697 course/depth groups match
+actual main CSV references, retaining all 22,665 old groups. Source master and
+corpus hashes remain unchanged. All 17 targeted fidelity/export/constitution
+suites passed in 10.46 seconds. Rendering remains unverified; no newer native,
+device or main integration action occurred. Next: 202–204, reconciliation active.
