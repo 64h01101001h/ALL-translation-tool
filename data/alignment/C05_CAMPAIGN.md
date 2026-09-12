@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. Coverage 201/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. Coverage 204/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -675,3 +675,56 @@ actual main CSV references, retaining all 22,665 old groups. Source master and
 corpus hashes remain unchanged. All 17 targeted fidelity/export/constitution
 suites passed in 10.46 seconds. Rendering remains unverified; no newer native,
 device or main integration action occurred. Next: 202–204, reconciliation active.
+
+
+### ERRATA to c5p66 null description — 2026-09-12
+
+The c5p66 entry's “two explicit grammatical fusion nulls” overstates the kind
+of the second null. C05:196 p1 rnams marks plurality fused into English lamas;
+p2 do marks assertion closure with no distinct English exponent. Read the
+entry as “two explained grammatical nulls: one fused plurality and one assertion
+closure.” The accepted spec and semantic review already make this distinction
+correctly; neither changes. This correction closes the independent integration
+review's factual ledger finding while preserving the original account above.
+
+
+### c5p68 · C05:202–204 — 2026-09-12 — Codex reconciliation/review
+
+Fresh independent proposal angles, separate reconciliation and skeptical semantic
+review completed. APPROVE covers 59 analyst spans (24/24/11), zero nulls, 47 d5
+pairs, one d7 member, five d6 particles and six d3 phrases. All six proposals and
+three final bodies reproduce exactly with zero stderr; all canonical tuples and
+source ranges agree. All 39 eligible semantic evidence files were copied exactly.
+See `specs_c05/c5p68.json` and `reviews_c05/c5p68/`. These remain PROVISIONAL
+machine attestations; no glossary promotion or human acceptance is claimed.
+
+202 recovers HGM-attested rgo/poisoned and keeps dgon dung/burning hot. The
+tha chad/useless reading is corroborated by C01:179 beyond the repeated target
+paragraph. rtsub po/harsh is the FIRST rtsub occurrence within ngag rtsub po;
+the later rtsub pa owns rough. Root's initial dispatch calling the member second
+was explicitly corrected; actual source ranges and final files were already right.
+203 selects the second Tibetan fruit noun, preserves the two ripe occurrences
+in the correct English order, retains the full dus su/right times phrase, and
+recovers causal rgyu/make without supplied things/around/you. Parks has original
+C06 support; pools of cool water has an explicit whole HGM gloss. The leisure
+negative-many recast remains omitted without a false null. 204 retains four
+seasons, get worse, less and less and the complete day-by-day phrase; annual
+recurrence is distributed and omitted. No source correction is established.
+
+Independent review reproduced 3,287 quoted source/glossary fields and 32 corpus
+query records. All original variant fields are preserved: 202 GYI SA versus
+C09/C17 GYIS, and 204 four seasons versus four season. These do not establish
+C05 errors or publication independence. No errata or allowances were added;
+all 186 existing records and earlier allowance entries remain unchanged.
+
+Coverage 204/511. Bank: 42,788 links (+62 including three sentence anchors),
+11,868 null exponents, 1,540 notes, 11 trees. Evidence: 6,879 headwords / 14,822
+pairs. All 42,726 prior links, prior notes/trees/evidence/ACIP and 21,364 old main
+CSV lexical records and citations survive. One old phonetic row ring du/ringdu
+gains its empty ACIP field as RING DU, proven by new C05:203 d5 source evidence;
+its lexical content and depth are unchanged. Main CSV: 21,413; reverse: 21,073;
+changes: 49 versus 59de591. All 22,751 course/depth groups match actual source
+references, retaining all 22,697 old groups. Source hashes are unchanged.
+All 17 targeted fidelity/export/constitution suites passed in 10.52 seconds.
+Actual rendering and newer native/device execution remain unverified; no main
+integration occurred. Next: c5p69, 205–207, with source/context snapshots only.
