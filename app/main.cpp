@@ -25903,6 +25903,36 @@ public:
                       "instruction");
             }
         }
+        // ---- a tool that examined nothing says so (audit 2026-09-11) ------
+        // All four STRUCTURE tools read source_, and all four used to answer
+        // confidently about an empty box: "no sa bcad markers found in this
+        // text", "0 syllables", "no dominant meter". Each reads as a finding
+        // ABOUT a text, and there was no text.
+        {
+            source_->setPlainText("");
+            struct { const char* name; void (DraftPane::*fn)(); } tools[] = {
+                {"outline", &DraftPane::outline},
+                {"structural units", &DraftPane::structuralUnits},
+                {"verse", &DraftPane::verse},
+                {"verse reading", &DraftPane::verseReading},
+            };
+            for (const auto& t : tools) {
+                (this->*t.fn)();
+                const QString r = report_->toPlainText();
+                check(r.contains("Nothing to examine"),
+                      QString("structure: %1 refuses an empty source instead "
+                              "of reporting a finding about it")
+                          .arg(t.name).toUtf8().constData());
+            }
+            // and with a real source they answer normally again
+            source_->setPlainText("/ /sems can thams cad bde ba dang ldan "
+                                  "par gyur cig /");
+            verse();
+            check(!report_->toPlainText().contains("Nothing to examine"),
+                  "structure: with a source present the tools answer as "
+                  "before");
+        }
+
         // ---- his English is never cut in silence (audit 2026-09-11) -------
         {
             const QString shortLine = "A short line.";
@@ -26633,7 +26663,28 @@ private:
         anchors_->setHtml(h);
     }
 
+    // The four STRUCTURE tools all read source_ and all used to answer
+    // confidently about an empty box: "no sa bcad markers found in this
+    // text", "0 syllables · 0 shlokas", "no dominant meter". Each of those
+    // is a FINDING about a text, and there was no text — the same shape as
+    // the terminology check reporting a clean zero over nothing. A tool that
+    // examined nothing must say so. (Draft workspace audit, 2026-09-11.)
+    bool sourceOrSayWhy(const char* what) {
+        if (!source_->toPlainText().trimmed().isEmpty()) return true;
+        report_->setHtml(
+            QString("<div style='color:%1'><b>Nothing to examine.</b></div>"
+                    "<div style='padding-top:6px'>%2 reads the source box, "
+                    "and it is empty. Paste the Tibetan first \u2014 this is "
+                    "not a finding about your text, it is the absence of "
+                    "one.</div>")
+                .arg(ux::darkChrome() ? ux::chromeMachine()
+                                      : QString(ux::kMachine))
+                .arg(QString(what)));
+        return false;
+    }
+
     void outline() {
+        if (!sourceOrSayWhy("The sa bcad outline")) return;
         std::vector<std::string> toks;
         std::vector<bool> bars;
         allcore::tokenizeDocument(source_->toPlainText().toStdString(), toks,
@@ -26680,6 +26731,7 @@ private:
     // syllables of prose or 4 verse lines; bampo = 300 shlokas) and are
     // labeled as such — never presented as counts.
     void structuralUnits() {
+        if (!sourceOrSayWhy("The structural-unit count")) return;
         std::vector<std::string> toks;
         std::vector<bool> bars;
         allcore::tokenizeDocument(source_->toPlainText().toStdString(), toks,
@@ -26739,6 +26791,7 @@ private:
     }
 
     void verse() {
+        if (!sourceOrSayWhy("The verse-meter check")) return;
         auto v = allcore::analyzeVerse(source_->toPlainText().toStdString());
         QString h = "<div><b>Verse meter</b></div>";
         if (v.is_verse)
@@ -26772,6 +26825,7 @@ private:
     // understood particles. Group into shlokas, then run the verb-first
     // reading plan over each assembled stanza.
     void verseReading() {
+        if (!sourceOrSayWhy("The verse reading order")) return;
         const std::string src = source_->toPlainText().toStdString();
         auto v = allcore::analyzeVerse(src);
         QString h = "<div><b>Verse reading order</b></div>";
