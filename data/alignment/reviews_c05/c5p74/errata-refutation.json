@@ -1,0 +1,89 @@
+[
+  {
+    "seq": 222,
+    "found": "have any affect on anything",
+    "refuted": false,
+    "reason": "The context is unrestricted causal functioning, not emotion. Standard nominal effect is the probable intended form. No positive contextual defense of nominal affect survives; merely imagining deliberate nonstandard use is insufficient. Repeated strings and lack of a corrected witness do not refute this probable source-typo candidate.",
+    "parallel_witness": "C16:799 has the same complete English sentence: A deed which is already gone is no longer a thing that can have any affect on anything. It equals C05:222 in all three text fields, with no established independence. ILL:1878: And a karma which has already stopped could never exist as a functioning thing; how then could the karma give forth its result? ILL's Tibetan ends at brtsad pa'i without lan du; its distinct rendering does not establish publication lineage.",
+    "counts_rechecked": {
+      "select id,course,seq,acip,wylie,english from corpus_segments where english like ? order by course,seq | ['%have any affect on anything%']": 2,
+      "select id,course,seq,acip,wylie,english from corpus_segments where english like ? order by course,seq | ['%have any effect on anything%']": 0,
+      "select id,course,seq,acip,wylie,english from corpus_segments where english like ? order by course,seq | ['%any affect%']": 2,
+      "select id,course,seq,acip,wylie,english from corpus_segments where english like ? order by course,seq | ['%thing that can have any effect%']": 0,
+      "select id,course,seq,acip,wylie,english from corpus_segments where wylie like ? order by course,seq | ['%las zhig pa yang dngos por med pas%']": 3,
+      "select id,course,seq,acip,wylie,english from corpus_segments where wylie like ? order by course,seq | [\"%las de byas pa'i skad cig gnyis par zhig na ni%\"]": 3,
+      "select * from entries where hgm_gloss like ? order by id | ['%have any affect%']": 1,
+      "select * from entries where hgm_gloss like ? order by id | ['%have any effect%']": 0,
+      "select * from entries where hgm_gloss like ? order by id | ['%affect%']": 14,
+      "select * from entries where hgm_gloss like ? order by id | ['%effect%']": 12
+    },
+    "suggested_severity": "LOW",
+    "suggested_confidence": "PROBABLE",
+    "grounds": {
+      "a": {
+        "refutes": false,
+        "presence": {
+          "acip": false,
+          "wylie": false,
+          "english": true,
+          "raw": true
+        },
+        "finding": "Present verbatim in this segment English and raw; not a quotation from a different segment.",
+        "physical_original_presence": "Exact affect phrase occurs once in each complete C05/C16 original; raw byte ranges [134751,134778) and [554400,554427)."
+      },
+      "b": {
+        "refutes": false,
+        "finding": "Global English and Tibetan passage searches include C16/P1/TCS. Same exact phrase only C05:222/C16:799; Tibetan passage finds ILL:1878 as well. C16 text identity does not demonstrate independent publication. ILL differs in English and Tibetan extent. No independent same-reading publication established.",
+        "physical_original_limit": "The two separate digital course files repeat this wording; no independent publication lineage has been established. The different ILL rendering and physical section boundary are directly inspected, without claiming a correction in a printed edition."
+      },
+      "c": {
+        "refutes": false,
+        "finding": "Fresh register snapshot has 189 records, zero C05:222 matches and zero exact found-phrase matches. Reconciler captured an earlier 188-record snapshot. This is a distinct lexical English typo, not an existing apparatus/converter/cap/row-boundary class; no inherited numerical claim is rejected because HEAD moved."
+      },
+      "d": {
+        "refutes": false,
+        "finding": "After have any the disputed form is nominal. Ordinary effect denotes the causal impact meant by functioning thing here; psychological affect would mean an emotional state/feeling, which does not express the general capacity of a vanished deed to function. No quotation marks, discussion of emotion, or contrast motivates an intentionally novel nominal affect. Complete original dictionary fields confirm functional terminology and the string have any affect, but not a separate grammatical rationale. The correction is probable, not asserted as a verified printed-source reading."
+      },
+      "e": {
+        "refutes": false,
+        "finding": "All ten errata SQL queries reproduce exactly: corpus affect phrase 2, effect phrase 0, any affect 2, thing-that-can-have-any-effect 0; both Tibetan patterns 3; dictionary have-any-affect 1, have-any-effect 0, substring affect 14, effect 12. Substring glossary counts include inflected and unrelated senses, not 14 or 12 lexical proofs. Limited lexical result sets elsewhere are explicitly bounded and not global alignment counts.",
+        "physical_original_counts": {
+          "originals/C05ReadingASCII.txt": 1,
+          "originals/C16ReadingASCII.txt": 1,
+          "originals/ILL.txt": 1
+        },
+        "physical_original_count_meaning": "Each count is the actual number of byte-regex matches in the complete named file for the regex recorded in original-file-verification.json; the ILL regex searches the alternative stopped-karma sentence, not affect."
+      }
+    },
+    "source_claim": {
+      "seq": 222,
+      "kind": "ENGLISH_TYPO",
+      "found": "have any affect on anything",
+      "expected": "have any effect on anything",
+      "evidence": "C05:222 English and its original raw field contain have any affect on anything in a general argument about whether a ceased deed can perform a function. The construction requires a noun denoting causal influence/result; effect supplies that reading. Emotional/psychological nominal affect has no support in this local argument, and an invented nominalization for affecting does not establish defensible authorial usage. C16:799 has exactly equal ACIP, Wylie and English, but no independent publication is demonstrated. ILL:1878 instead reads And a karma which has already stopped could never exist as a functioning thing; how then could the karma give forth its result? and is shorter, ending at brtsad pa'i without lan du. The original HGM dngos po field includes have any affect, but repetition does not validate grammar or prove independence. Exact corpus phrase counts: affect=2 (C05:222,C16:799), effect=0; each of the two cited Tibetan passage patterns=3 (C05:222,C16:799,ILL:1878). All five grounds independently checked. Raw spine originals are preserved in source-originals.json and witness-originals.json; complete dictionary fields and SQL results in glossary-originals.json and query-evidence.json. Full physical original bytes were independently reread and copied to originals/C05ReadingASCII.txt, originals/C16ReadingASCII.txt and originals/ILL.txt; exact hashes and raw contexts are in original-file-verification.json. The affect phrase is at physical C05 line 2085 and C16 line 8753. The alternative ILL passage is physical printed section [1873], Tibetan line 18445 and English line 18449 (spine ILL:1878); next physical section [1874] begins LAN DU. Digital-original agreement does not establish independent publication or ingestion history. LOW/PROBABLE, pending human/printed-source review; no original wording is changed.",
+      "severity": "LOW",
+      "confidence": "PROBABLE"
+    },
+    "physical_original_check": {
+      "manifest": "original-file-verification.json",
+      "files": [
+        {
+          "path": "originals/C05ReadingASCII.txt",
+          "bytes": 329826,
+          "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+        },
+        {
+          "path": "originals/C16ReadingASCII.txt",
+          "bytes": 696353,
+          "sha256": "047edf8fe23fc7ff37fbde22cfa4be33e62c1c5b259ea965f0ebcca153da0f21"
+        },
+        {
+          "path": "originals/ILL.txt",
+          "bytes": 2981468,
+          "sha256": "ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e"
+        }
+      ],
+      "finding": "Complete physical source files independently reopened from original paths and copied byte for byte. These are distinct evidence from SQLite raw-field JSON. C05 line 2085 and C16 line 8753 retain affect. ILL physical [1873] has Tibetan at 18445 and English at 18449 (spine ILL:1878); following [1874] starts LAN DU at 18453. Original-file identity does not establish independent publication or printed-edition verification."
+    }
+  }
+]

@@ -1,0 +1,1 @@
+Scoped round1 corrections affect only220w2 and222 erratum/note. This segment spec.json, body.html, report.md, decisions.md, proof.json and resolved-ranges.json are unchanged byte for byte from attempts/historical-pre-semantic-fix-round1. Actual replay exited0,6330 stdout bytes,0 stderr bytes, matching body.html exactly. See round1-proof.json and round1-generator.*.

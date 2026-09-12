@@ -1,0 +1,1 @@
+The first evidence-helper invocation failed before any generator run with KeyError: 'entries'. It assumed the master JSON key entries; the actual key is unified_entries. The failed helper is preserved as recheck-helper-failed.py. After correcting only that reader key, all six real generators ran and passed. This was not a canonical-generator failure.

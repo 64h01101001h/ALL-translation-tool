@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. Coverage 219/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. Coverage 222/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -966,3 +966,57 @@ Master/corpus hashes are unchanged. All 17 fidelity/export/constitution suites
 pass in 10.61 seconds. Rendering and newer native/device execution remain
 unverified; no main integration occurred. Next: c5p74,220–222, undergoing fresh
 independent semantic review before landing.
+
+
+### c5p74 · C05:220–222 — 2026-09-12 — Codex reconciliation/review
+
+Independent semantic approval and scoped round1 re-review cover 68 analyst spans
+(17/35/16), one null, 44 d5 pairs, six d7 members, nine d3 phrases, two d2 clauses
+and seven d6 particles including the null. All six original proposals and all
+three final bodies independently reproduce. Root also replayed all corrected
+bodies and verified that only C05:220 w2's tuple changed; 221 is byte-identical and
+222 changes only its canonical note. The 427 copied semantic files include complete raw
+C05/C16/ILL originals, all six frozen proposals, rejected attempts and earlier
+review states. All 217 additional packaged input files match their originals,
+review copies and landed bytes. Three final reconciliation reports are copied.
+All alignments remain PROVISIONAL machine attestations, not human acceptance.
+
+220 retains the established natural-existence and karma/consequence compounds
+with strictly tighter members, and full HGM evaluative/closing gestures. The
+initial ni null is corrected to d6 Here is at Tibetan [9,11), English [0,7), first
+in English order: the original ni glossary and this topic introduction support
+a separate exponent. The remaining supplied workings frame and participants
+stay unpaired. This does not make every ni equivalent to Here is.
+
+221 keeps the complete Buddhist-schools unit provisionally, distinguishing its
+auto-aligned HGM evidence from curated equivalents and comparative dictionaries.
+Repeated karma/result occurrences retain their actual roles. The temporal phrase
+owns the complete interval; gives has karma as agent and result as object. The
+final d2 includes the entire negative causal relation, preserving cause/result
+under the English converse verb. A bare arising verb is not equated with gave
+rise. 222 likewise uses complete temporal-event and interrogative recasts, with
+third/fourth deed occurrences and both med exponents fixed. Its distinct ni
+has no separately alignable exponent and remains the sole justified null; the
+recast conditional is omitted. The functional explanatory relative is unpaired.
+
+E-190 is the sole new erratum, LOW/PROBABLE English affect→effect at C05:222. Independent
+five-ground review rejected the imagined nominal-affect defense: the causal
+function context supports ordinary nominal effect, and repeated corpus/HGM
+strings do not validate grammar. The source remains verbatim pending human review.
+The exact original phrase is at C05 line 2085 and C16 line 8753. ILL's alternative
+is physical section [1873], Tibetan line 18445 / English line 18449, corresponding to spine sequence 1878;
+next physical [1874] begins LAN DU. All three complete raw files and original-byte
+contexts are preserved. Digital agreement establishes no publication independence
+or ingestion history. Two exact sogs allowances, s220w10 and s221w15, are added.
+
+Coverage 222/511. Bank: 43,345 links (+71 including three sentence anchors),
+11,872 null exponents, 1,558 note blocks and 11 trees. Evidence: 6,945 headwords /
+14,997 pairs. All 43,274 prior links, notes/trees/evidence/ACIP and 21,642 prior
+CSV lexical keys and citations survive. No old ACIP field changes. Main CSV:
+21,685; reverse: 21,345; changes: 43 versus 12b77ec. All 23,090 course/depth groups
+match actual main CSV references, retaining all 23,043 earlier groups. All 189
+prior errata survive; only E-190 and the two reviewed allowances are added.
+Master/corpus hashes are unchanged. All 17 fidelity/export/constitution suites
+pass in 10.56 seconds. Rendering and newer native/device execution remain
+unverified; no main integration occurred. Next: c5p75, C05:223–225, source/context
+snapshots and root lexical preparation only; no proposals or approval yet.
