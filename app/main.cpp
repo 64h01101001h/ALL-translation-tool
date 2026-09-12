@@ -25200,8 +25200,21 @@ public:
             return QString("QLabel { color:%1; font-size:11px; }")
                 .arg(ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted));
         });
+        // sess::remember restores the source text but nothing derived from
+        // it, so on launch a reader met a FULL source box beside a clause
+        // column saying "press Load source" and an Evidence Ribbon saying
+        // "load a source" — the pane looked half-restored and it was not
+        // obvious the text was last session's rather than something the app
+        // had failed to finish opening. Loading it here instead would put a
+        // tokenise on the startup path, which is the wrong trade; saying so
+        // costs nothing. (Draft workspace audit, 2026-09-11.)
         startHint->setText(
-            "Start here. This pane's other tools are on the ribbon above.");
+            source_->toPlainText().trimmed().isEmpty()
+                ? "Start here. This pane's other tools are on the ribbon "
+                  "above."
+                : "The source above is the one you left here last session. "
+                  "Press Load source to work with it \u2014 nothing derived "
+                  "from it is restored.");
         startHint->setToolTip(
             "Outline, verse metre, quotation detection, terminology check, "
             "phrase memory and export all live on the ribbon above, grouped "
