@@ -25868,6 +25868,43 @@ public:
                       "instruction");
             }
         }
+        // ---- one form, one composer (audit 2026-09-11) -------------------
+        // The bibliography dialog is modal, so the SELECTION cannot be driven
+        // here — but the thing that made the defect matter can be. With the
+        // Sanskrit-work box ticked the preview composed one way and "Save as
+        // candidate" composed the other, and the two are NOT cosmetic
+        // variants: the plain composer has nowhere to put the Sanskrit title,
+        // the volume letter or the sectioning, so banking it silently DROPS
+        // fields the translator filled in and read back.
+        {
+            allcore::SanskritBibFields sk;
+            sk.author_skt = "Vasubandhu";
+            sk.english_title = "The Treasure House of Knowledge";
+            sk.sanskrit_title = "Abhidharmakosha";
+            sk.tibetan_title = "CHOS MNGON PA'I MDZOD";
+            sk.vol_num = "140";
+            sk.vol_letter = "KU";
+            sk.collection = "Derge Tengyur";
+            const QString skt = QString::fromStdString(
+                allcore::composeSanskritBibEntry(sk));
+
+            allcore::BibliographyFields plain;
+            plain.author = "Vasubandhu";
+            plain.english_title = "The Treasure House of Knowledge";
+            plain.tibetan_title = "CHOS MNGON PA'I MDZOD";
+            const QString bare = QString::fromStdString(
+                allcore::composeBibliographyEntry(plain));
+
+            check(skt != bare,
+                  "bibliography: the Sanskrit composer and the plain one do "
+                  "NOT agree — so which one runs is a real choice");
+            check(skt.contains("Abhidharmakosha") &&
+                      !bare.contains("Abhidharmakosha"),
+                  "bibliography: the Sanskrit title survives only through the "
+                  "Sanskrit composer — banking the plain form drops what the "
+                  "translator typed");
+        }
+
         // ---- a check that examined nothing is not a clean check ----------
         // ORDER MATTERS: this block WRITES into report_, so it must run after
         // the pristine-state checks above. Placed before them, it clobbered
@@ -27244,10 +27281,17 @@ public:
             "Save as candidate (pending GMR approval)",
             QDialogButtonBox::ActionRole);
         QObject::connect(candB, &QPushButton::clicked,
-                         [this, assemble, bibIsEmpty] {
+                         [this, assemble, composedNow, bibIsEmpty] {
             const auto f = assemble();
-            const QString entry = QString::fromStdString(
-                allcore::composeBibliographyEntry(f));
+            // composedNow(), the SAME call the live preview makes. This path
+            // used to compose its own entry with composeBibliographyEntry and
+            // ignore the Sanskrit-work checkbox entirely — so with that box
+            // ticked the preview showed the full canonical Sanskrit citation
+            // and the queue was handed the plain form instead. A different
+            // entry from the one the translator read, banked under their name
+            // as "pending GMR approval", with no sign anything had changed.
+            // One form must have one composer. (Audit 2026-09-11.)
+            const QString entry = composedNow();
             if (bibIsEmpty(entry)) return;   // was `entry == "."` — dead
             QFile fj(dataFile("candidate_bib.json"));
             QJsonArray arr;
