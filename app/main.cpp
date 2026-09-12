@@ -26026,6 +26026,29 @@ public:
                       "instruction");
             }
         }
+        // ---- the technical-spelling helper is reversible (audit 09-11) ----
+        // It rewrote the Author field in place with no way back and no word
+        // about what it had done, on a button whose own label says "review
+        // result". The pure function underneath is what can be gated here;
+        // the dialog itself is modal.
+        {
+            const std::string before = "Grags pa";
+            const std::string after = allcore::hgmTechnicalSpelling(before);
+            check(after != before,
+                  "hyphenate: the helper actually changes an unhyphenated "
+                  "author, so a way back is something the reader needs");
+            // the undo test the dialog performs: re-running the helper on the
+            // remembered value reproduces exactly what is on screen, which is
+            // how a second press recognises its own work rather than a hand
+            // edit the reader made in between
+            check(allcore::hgmTechnicalSpelling(before) == after,
+                  "hyphenate: the helper is deterministic, so the undo can "
+                  "tell its own rewrite from the reader's own typing");
+            check(allcore::hgmTechnicalSpelling(after) == after,
+                  "hyphenate: and is idempotent, so an already-hyphenated "
+                  "author reports 'nothing changed' instead of churning");
+        }
+
         // ---- the apparatus banks are found by the resolved root ----------
         // dataFile() used to count five "../" out of the bundle and then fall
         // back to the CURRENT WORKING DIRECTORY, so whether the apparatus
@@ -27822,19 +27845,74 @@ public:
                         svl, sse, sss, sstb, sco, sed})
             QObject::connect(w, &QLineEdit::textChanged, refresh);
         QObject::connect(skC, &QCheckBox::toggled, refresh);
-        QObject::connect(hyBtn, &QPushButton::clicked, [au, refresh] {
-            au->setText(QString::fromStdString(allcore::hgmTechnicalSpelling(
-                au->text().trimmed().toStdString())));
+        hyBtn->setToolTip(
+            "Rewrites the Author field into the house technical spelling "
+            "(STD-002). Press again to put back what was there before — the "
+            "previous value is kept, and the result is always yours to "
+            "review.");
+        // Scoped to THIS dialog, not a function-local static: a static would
+        // carry one opening's previous value into the next, so the first
+        // press in a fresh dialog could "undo" to a value from an entry the
+        // reader had finished with.
+        auto hyPrevious = std::make_shared<QString>();
+        QObject::connect(hyBtn, &QPushButton::clicked,
+                         [au, refresh, fillStatus, hyPrevious] {
+            // It rewrote the field in place with no way back and no word
+            // about what it had done. A helper whose result you are told to
+            // review has to be reversible WHILE you review it, so the
+            // previous value is kept and a second press restores it.
+            // (Draft workspace audit, 2026-09-11.)
+            const QString before = au->text().trimmed();
+
+            // Second press, with the rewrite still in place: put it back.
+            if (!hyPrevious->isEmpty() &&
+                before == QString::fromStdString(allcore::hgmTechnicalSpelling(
+                              hyPrevious->toStdString()))) {
+                const QString restored = *hyPrevious;
+                hyPrevious->clear();
+                au->setText(restored);
+                refresh();
+                if (fillStatus)
+                    fillStatus->setText(
+                        QString("Author put back to \u201c%1\u201d.")
+                            .arg(restored));
+                return;
+            }
+
+            const QString after = QString::fromStdString(
+                allcore::hgmTechnicalSpelling(before.toStdString()));
+            if (after == before) {
+                if (fillStatus)
+                    fillStatus->setText(
+                        "The author field is already in the house technical "
+                        "spelling \u2014 nothing changed.");
+                return;
+            }
+            *hyPrevious = before;
+            au->setText(after);
             refresh();
+            if (fillStatus)
+                fillStatus->setText(
+                    QString("Author rewritten: \u201c%1\u201d \u2192 "
+                            "\u201c%2\u201d. Press again to put it back.")
+                        .arg(before, after));
         });
         auto* buttons = new QDialogButtonBox;
         auto* insertB =
             buttons->addButton("Insert into draft", QDialogButtonBox::AcceptRole);
+        // Return in any field used to fire this button, because an AcceptRole
+        // button is the dialog's default. Typing a field and pressing Return
+        // is a reflex, and here it accepted the whole form and inserted
+        // whatever had been filled in so far. Now Return does nothing and the
+        // reader has to mean it. (Draft workspace audit, 2026-09-11.)
+        insertB->setAutoDefault(false);
+        insertB->setDefault(false);
         auto* candB = buttons->addButton(
             "Save as candidate (pending GMR approval)",
             QDialogButtonBox::ActionRole);
         QObject::connect(candB, &QPushButton::clicked,
-                         [this, assemble, composedNow, bibIsEmpty] {
+                         [this, assemble, composedNow, bibIsEmpty,
+                          fillStatus] {
             const auto f = assemble();
             // composedNow(), the SAME call the live preview makes. This path
             // used to compose its own entry with composeBibliographyEntry and
@@ -27862,11 +27940,25 @@ public:
             if (!saveOrWarn(this, fj.fileName(),
                             QJsonDocument(arr).toJson(),
                             "The bibliography candidate")) {
+                // Into the DIALOG. This is an ActionRole button, so the
+                // dialog stays open — and report_ is the pane behind it, where
+                // nothing said here can be seen. A save that reports only to a
+                // hidden surface is a save that looks like nothing happened.
+                // (Draft workspace audit, 2026-09-11.)
+                if (fillStatus)
+                    fillStatus->setText(
+                        "NOT saved \u2014 the candidate file could not be "
+                        "written; the entry is not queued.");
                 report_->setHtml("<b>NOT saved</b> — the candidate "
                                  "file could not be written; the "
                                  "entry is not queued.");
                 return;
             }
+            if (fillStatus)
+                fillStatus->setText(
+                    "Saved as a candidate \u2014 PENDING until published and "
+                    "approved by Geshe Michael Roach. It is not part of the "
+                    "apparatus yet.");
             report_->setHtml(
                 "<b>Bibliography candidate saved</b> — pending until "
                 "published and approved; it appears in the review "
