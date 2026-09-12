@@ -25864,17 +25864,26 @@ public:
         const QString head =
             "<div style='color:#9A7A33;font-size:11px;letter-spacing:2px;"
             "font-weight:600'>EVIDENCE RIBBON</div>";
+        // TWO ways in, and they are named because only one of them is
+        // discoverable. The ribbon also follows the caret — but only the
+        // caret in the SOURCE box, and pressing Load source does not move it,
+        // so the advertised "appears on its own, with no further clicks"
+        // never fired on the path a new reader actually walks: they load, the
+        // pane says nothing, and they conclude it is broken. Saying which
+        // two gestures work is cheaper and truer than promising one that
+        // needs a gesture nobody made. (Draft workspace audit, 2026-09-11.)
         return head +
                (sourceLoaded
                     ? "<div style='color:#6F6F6F;padding-top:6px'>"
-                      "<b>Click any clause in the middle column.</b><br>"
-                      "Its anchors, scaffold, exact parallels and quotation "
-                      "status appear here on their own, with no further "
-                      "clicks.</div>"
+                      "<b>Click any clause in the middle column</b> \u2014 "
+                      "its anchors, scaffold, exact parallels and quotation "
+                      "status appear here.<br><br>Or put the caret in the "
+                      "source box on the left: the ribbon follows it from "
+                      "clause to clause as you move through the text.</div>"
                     : "<div style='color:#6F6F6F;padding-top:6px'>Load a "
-                      "source, then click or arrow into any clause. Its "
-                      "anchors, scaffold, exact parallels and quotation "
-                      "status appear here on their own.</div>");
+                      "source first. Then either click a clause in the middle "
+                      "column, or move the caret through the source box on "
+                      "the left \u2014 the ribbon follows it.</div>");
     }
 
     // One pane, several tools. Naming them is the whole point: this is the
