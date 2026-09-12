@@ -620,6 +620,10 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_alignment_builder.py)
 
+  add_test(NAME dictionary_exports
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_dictionary_exports.py)
+
   add_test(NAME no_broken_words
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_no_broken_words.py)

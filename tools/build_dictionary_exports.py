@@ -180,7 +180,8 @@ def write_exports(depths, phonetics, meta, acip_index=None):
                     "courses", "refs", "tier"],
                    rev_rows)
 
-    # per course, ranked by occurrences in THAT course
+    # Per course and depth, ranked by occurrences in THAT group. Combining
+    # depths would label their total with one arbitrary contributing depth.
     per = collections.defaultdict(lambda: collections.defaultdict(int))
     info = {}
     for r in rows:
@@ -188,13 +189,13 @@ def write_exports(depths, phonetics, meta, acip_index=None):
             continue
         for ref in r["refs"].split():
             co = ref.split(":")[0]
-            per[co][(r["wylie"], r["english"])] += 1
-            info[(r["wylie"], r["english"])] = r
+            per[co][(r["wylie"], r["english"], r["depth"])] += 1
+            info[(co, r["wylie"], r["english"], r["depth"])] = r
     course_rows = []
     for co in sorted(per):
-        for (t, e), n in sorted(per[co].items(), key=lambda kv: (-kv[1],
+        for (t, e, d), n in sorted(per[co].items(), key=lambda kv: (-kv[1],
                                                                 kv[0][0].lower())):
-            r = info[(t, e)]
+            r = info[(co, t, e, d)]
             course_rows.append({"course": co, "wylie": t, "acip": r["acip"],
                                 "tibetan_generated": r["tibetan_generated"],
                                 "pronunciation_generated": r["pronunciation_generated"],

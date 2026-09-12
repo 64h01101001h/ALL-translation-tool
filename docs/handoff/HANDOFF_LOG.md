@@ -8,6 +8,38 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — ERRATA: course CSV depth provenance repaired
+
+The continuation review found a defect beyond the earlier CSV retention checks:
+the course CSV selected depth metadata globally by Tibetan/English pair. Adding
+C05:178's depth-6 yin pa'i/is relabelled the unchanged C04 depth-5 row as depth 6.
+Within a course, occurrences at several depths were also collapsed into a single
+arbitrarily labelled count. The bank and source alignment records were intact.
+
+The exporter now groups by course, Tibetan, English, and depth. Its existing
+scalar depth and occurrence-count columns describe that exact group. The corrected
+course CSV has **22,451 rows** instead of 21,743: 689 course/pair groups contain
+several depths, requiring 708 additional rows. All previous aggregate course/pair
+occurrence counts are retained; every new row's depth and count matches the main
+CSV's source refs. The C04 yin pa'i/is row is depth 5, one occurrence. Column order,
+verbatim text, UTF-8 BOM and CRLF remain unchanged.
+
+The real exporter regression failed four assertions before the fix and passes
+all five tests after it. Private CMake configuration confirms 118 registered and
+written suites; the new test and three fixture-free supporting suites passed.
+This is not a full 118-suite run. The full-data regeneration used the real view
+builder in a temporary directory with `2f16dee`'s main CSV as the previous export.
+Main/reverse/changes CSVs and dictionary HTML reproduce byte-for-byte, preserving
+the accepted 55-row changes report. Both bank files and source/master hashes are
+unchanged. Evidence is in sibling `campaign-artifacts/integration/course-csv-depth-fix/`.
+After installing the corrected CSV, the export regression, view/layer agreement,
+generated-doc synchronization and constitution suites all passed (4/4, 0.62 seconds).
+
+C05 remains through 183; next is 184–186. Native/device/rendering and main-integration
+limits from the preceding checkpoint remain in force. Independent source review
+approved the repair and its tests without further findings; final committed-output
+reproduction and read-only main apply checks are the remaining checkpoint steps.
+
 ## 2026-09-12 — Codex — continuation checkpoint, C05 through 183
 
 ### Done and verified

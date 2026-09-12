@@ -95,3 +95,15 @@ were refuted, and one new LOW/PROBABLE candidate was recorded without changing
 the source. Previous data and citations are retained. Next is 184–186, with
 source snapshots only. Rendered inspection, newer native/device execution and
 main integration remain open; the earlier consumer checkpoint is still 171.
+
+## Export repair found during continuation review
+
+The course CSV used another course's depth metadata and collapsed several depths
+into one count. A focused regression reproduced four failures before repair;
+all five methods now pass. The exporter preserves separate course/Tibetan/English/depth
+groups. Full-data regeneration and a source-ref oracle verify all 22,451 rows and
+retention of prior course/pair aggregate counts. The other three CSVs, dictionary
+HTML, banks, and master/source files are unchanged. The changes report remains
+the 55-row delta against `2f16dee`. Private CMake registration is now 118 suites;
+this is not a full-suite execution claim. See the append-only handoff ERRATA entry
+and sibling integration evidence before continuing at C05:184.
