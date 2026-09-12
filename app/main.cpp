@@ -957,6 +957,29 @@ static const std::set<std::string>* g_spellingValid = nullptr;
 // line that changes.
 inline const char* kDefectIntake = "adam.derick.andrade@gmail.com";
 
+// A selftest block that SAVES a document writes a properties sidecar and a
+// version record through the pane's dataRoot_. Run against the live root — as
+// every such block was until 2026-09-11 — each battery run files real document
+// history for a phantom document into the translator's own library. Six
+// phantom records were found there, one carrying revision 410, and File ▸
+// Properties duly showed a history nobody wrote.
+//
+// A scope guard rather than a hand-rolled pair of lines: the restore has to
+// happen even when a check inside the block throws, and four hand-written
+// swaps are four chances to forget the second half.
+struct TempDataRoot {
+    QString* slot;
+    QString keep;
+    TempDataRoot(QString* s, const QString& tmp) : slot(s), keep(*s) {
+        QDir(tmp).removeRecursively();
+        *slot = tmp;
+    }
+    ~TempDataRoot() {
+        QDir(*slot).removeRecursively();
+        *slot = keep;
+    }
+};
+
 // spine pointer for the About box's data-release line
 static const allcore::Spine* g_spineForAbout = nullptr;
 
@@ -8249,6 +8272,8 @@ public:
         input_->clear();
         loadDoc();
         {   // File → Save / Save As on the Document box (2026-09-08)
+            TempDataRoot tdr(&dataRoot_,
+                             QDir::temp().filePath("all_st_root_docsave"));
             const QString keepText = input_->toPlainText();
             const QString keepFile = docFile_;
             const bool keepWylie = wasWylieFile_;
@@ -8330,7 +8355,17 @@ public:
                       templateText(tname) == "@001A *, ,TEMPLATE BODY,,",
                   "Save as Template writes a template the picker lists and reloads verbatim");
             QFile::remove(templatesDir() + "/" + tname + ".txt");
-            // rename carries the glossary sidecar; move keeps the name
+            // rename carries the glossary sidecar; move keeps the name.
+            //
+            // The whole block runs against a TEMP data root. It used to use
+            // the live one, so every battery run filed glossary, properties
+            // and version records for probe documents into the translator's
+            // own library — six phantom property records and two probe
+            // version folders were found there on 2026-09-11, one of them
+            // carrying revision 410. (Draft workspace audit.)
+            const QString keepRootOps = dataRoot_;
+            dataRoot_ = QDir::temp().filePath("all_selftest_ops_root");
+            QDir(dataRoot_).removeRecursively();
             const QString tmpDir = QDir::temp().filePath("all_selftest_fileops");
             QDir().mkpath(tmpDir);
             QDir().mkpath(tmpDir + "/sub");
@@ -8447,6 +8482,8 @@ public:
                 QDir(vdir2).removeRecursively(); QFile::remove(vf); QFile::remove(docprops::sidecarPath(dataRoot_, vf));
             }
             QDir(tmpDir).removeRecursively();
+            QDir(dataRoot_).removeRecursively();   // the probe root, not his
+            dataRoot_ = keepRootOps;
             input_->setPlainText(keepText);
             docFile_ = keepFile;
             wasWylieFile_ = keepWylie;
@@ -8473,6 +8510,8 @@ public:
             const QString keepText = input_->toPlainText();
             const QString keepFile = docFile_;
             const QString keepEnc = docEncoding_;
+            TempDataRoot tdrEnc(&dataRoot_,
+                                QDir::temp().filePath("all_st_root_enc"));
             const QString f1 = QDir::temp().filePath("all_selftest_enc.txt");
             check(writeFixture(f1, "@001A *, ,\x93SEMS\x94,,"), "fixture: the Windows-1252 probe was written");
             docFile_ = f1;
@@ -8577,6 +8616,8 @@ public:
             put(3);
             check(selops::expandToWhitespace(input_) && input_->textCursor().selectedText() == "@001A", "Expand to Whitespace selects the run between spaces");
             // line endings: a CRLF file opens normalised and saves back as CRLF
+            TempDataRoot tdrCrlf(&dataRoot_,
+                                 QDir::temp().filePath("all_st_root_crlf"));
             const QString f1 = QDir::temp().filePath("all_selftest_crlf.txt");
             check(writeFixture(f1, "@001A *, ,SEMS,,\r\nBDE\r\n"), "fixture: the CRLF probe was written");
             const QString keepFile = docFile_;
@@ -25935,6 +25976,17 @@ public:
         draft_->clear();
         source_->clear();
         {   // File → Save / Save As (2026-09-08)
+            // EVERY save in this block writes a properties sidecar and a
+            // version record through dataRoot_. They used to run against the
+            // LIVE data root, so each battery run filed real document history
+            // for a phantom document into the translator's own library — and
+            // File ▸ Properties then showed a history nobody wrote. The
+            // correct pattern was already sitting fifteen lines below, used
+            // for one save out of three; it now covers the whole block.
+            // (Draft workspace audit, 2026-09-11.)
+            const QString keepRootAll = dataRoot_;
+            dataRoot_ = QDir::temp().filePath("all_selftest_draft_rootall");
+            QDir(dataRoot_).removeRecursively();
             const QString keep = draft_->toPlainText();
             const QString keepPath = draftPath_;
             const QString outP = QDir::temp().filePath(
@@ -25976,6 +26028,45 @@ public:
             draftPath_ = keepPath;
             draft_->setPlainText(keep);
             QFile::remove(outP);
+            QDir(dataRoot_).removeRecursively();
+            dataRoot_ = keepRootAll;
+        }
+        {   // And prove it: the live library gained no phantom document.
+            // This is the check that would have caught the pollution, and it
+            // is deliberately expressed against the REAL root.
+            const QString liveProps =
+                docprops::sidecarPath(dataRoot_,
+                                      QDir::temp().filePath(
+                                          "all_selftest_draft_save.txt"));
+            const QString liveVers = docprops::versionsDir(
+                dataRoot_, QDir::temp().filePath("all_selftest_draft_save.txt"));
+            check(!QFile::exists(liveProps),
+                  "the suite files NO properties record for its own probe "
+                  "document in the translator's library");
+            check(!QDir(liveVers).exists(),
+                  "and no version history either");
+            // Widened after the narrow version passed while FIVE other
+            // phantom records were still being written by other panes. A
+            // gate that only checks its own block is a gate that agrees with
+            // the bug. Every probe document this suite creates is named
+            // "all_…", which is what makes the sweep possible.
+            const QStringList strayP =
+                QDir(dataRoot_ + "/library/properties")
+                    .entryList({"all_*"}, QDir::Files);
+            const QStringList strayV =
+                QDir(dataRoot_ + "/library/versions")
+                    .entryList({"all_*", "renametest*", "renamed_ok*"},
+                               QDir::Dirs | QDir::NoDotAndDotDot);
+            check(strayP.isEmpty(),
+                  strayP.isEmpty()
+                      ? "NO pane leaves a probe document in the library"
+                      : QString("a pane left probe documents in the library: "
+                                "%1").arg(strayP.join(", ")).toUtf8().constData());
+            check(strayV.isEmpty(),
+                  strayV.isEmpty()
+                      ? "and none leaves a probe version history"
+                      : QString("a pane left probe version histories: %1")
+                            .arg(strayV.join(", ")).toUtf8().constData());
         }
         {   // File → New / Close on the draft (2026-09-08)
             const QString keep = draft_->toPlainText();
@@ -38023,6 +38114,8 @@ public:
         find();
         check(results_->toPlainText().contains("bden"),
               "Gofer sidebar reaches the corpus");
+        TempDataRoot tdrMss(&dataRoot_,
+                            QDir::temp().filePath("all_st_root_mss"));
         const QString tmp =
             QDir::temp().filePath("all_manuscript_selftest.html");
         path_ = tmp;
