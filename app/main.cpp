@@ -26562,6 +26562,20 @@ public:
             // correct pattern was already sitting fifteen lines below, used
             // for one save out of three; it now covers the whole block.
             // (Draft workspace audit, 2026-09-11.)
+            // ASSERTED BEFORE THE SWAP, while dataRoot_ still holds what the
+            // CONSTRUCTOR put there. Everything below runs against a temp
+            // root, so every sidecar assertion in this block proves a
+            // property of docprops — "it writes a sidecar when given a data
+            // root" — and not the thing the F0 fix was about: that the
+            // constructor wired dataRoot_ at all. Comment out the assignment
+            // at the constructor and every check below still passed, because
+            // the value they test is the one the test itself assigned. My own
+            // hoist of the temp root earlier tonight made that worse by
+            // covering the whole block. (Draft workspace audit, 2026-09-11.)
+            check(!dataRoot_.isEmpty() && dataRoot_ == root_,
+                  "the constructor wires dataRoot_ (F0) — without it every "
+                  "Draft sidecar write is a silent no-op and no other check "
+                  "here can tell");
             const QString keepRootAll = dataRoot_;
             dataRoot_ = QDir::temp().filePath("all_selftest_draft_rootall");
             QDir(dataRoot_).removeRecursively();
