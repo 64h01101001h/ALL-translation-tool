@@ -9253,8 +9253,15 @@ public:
         docGenName_[++docGen_] =
             fn.isEmpty() ? QString("your untitled text")
                          : QFileInfo(fn).fileName();
-        QSettings("ALL", "TranslationTool")
-            .setValue("overlay/lastFile", fn);
+        // saveSession() guards this same key with g_harnessRun ("never
+        // clobber the real session"); this write did not, so every battery
+        // run repointed the translator's last-opened file at a temp probe.
+        // The next real launch then opened a /tmp file they had never seen —
+        // or, once it was cleaned up, nothing at all.
+        // (Draft workspace audit, 2026-09-11.)
+        if (!g_harnessRun)
+            QSettings("ALL", "TranslationTool")
+                .setValue("overlay/lastFile", fn);
         {   // the upfront citation offer (Adam 2026-08-14): the
             // moment a text opens, the translator learns what
             // texts they will encounter — one click builds the
@@ -47112,6 +47119,18 @@ int main(int argc, char** argv) {
         {   // Features: hiding is a view, and it refuses to empty the window
             auto fcheck = [&](bool ok, const char* what) { log << QString("  [%1] Features: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++fails; };
             QSettings st("ALL", "TranslationTool");
+            // SNAPSHOT the translator's own Feature choices before probing
+            // them. The block used to finish by st.remove()-ing every
+            // features/pane and features/group key, which is not a restore:
+            // a translator who had deliberately switched some panes off found
+            // them all switched back on after a battery run, and a chosen
+            // workflow undone. A key that was ABSENT is restored by removing
+            // it again; a key that had a value gets that value back.
+            // (Draft workspace audit, 2026-09-11.)
+            QMap<QString, QVariant> featureKeep;
+            for (const QString& k : st.allKeys())
+                if (k.startsWith("features/"))
+                    featureKeep.insert(k, st.value(k));
             const QList<QPair<QString, QString>> listed = g_featureList ? g_featureList() : QList<QPair<QString, QString>>();
             fcheck(listed.size() == (int)flatPanes.size() && !listed.isEmpty(), "every pane that exists is offered, so the list cannot drift from the build");
             QString probe, probeGroup; QToolButton* probeBtn = nullptr;
@@ -47145,8 +47164,26 @@ int main(int argc, char** argv) {
                 fcheck(everyWorkflowUsable && shippedWorkflows().size() >= 5,
                        "every shipped workflow names groups this build actually has, so none of them can empty the window");
             }
-            for (const auto& f : flatPanes) { st.remove("features/pane/" + f.title); st.remove("features/group/" + f.group); }
+            // Restore, rather than wipe. Anything this block created that the
+            // translator never had is removed; anything they DID have is put
+            // back exactly as it was.
+            for (const QString& k : st.allKeys())
+                if (k.startsWith("features/") && !featureKeep.contains(k))
+                    st.remove(k);
+            for (auto it = featureKeep.constBegin();
+                 it != featureKeep.constEnd(); ++it)
+                st.setValue(it.key(), it.value());
             g_applyFeatures();
+            {   // and prove the restore, because a silent one is how this
+                // defect survived in the first place
+                bool restored = true;
+                for (auto it = featureKeep.constBegin();
+                     it != featureKeep.constEnd(); ++it)
+                    if (st.value(it.key()) != it.value()) restored = false;
+                fcheck(restored,
+                       "the suite puts the translator's own Feature choices "
+                       "back exactly as it found them");
+            }
         }
         fails += idiombank::selfTest(log, root, root, spine);   // the idiom bank
         fails += tablePage->selfTest(log);   // batch 5 F7
