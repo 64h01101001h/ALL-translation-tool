@@ -1,0 +1,1 @@
+C05:217: final independent SPEC and QUALITY APPROVE. Canonical bytes and all span tuples are unchanged from the initial independent review. See ../review.md for the complete final rationale and ../review.json for measured proof. Producer-report history is preserved separately. This remains PROVISIONAL machine alignment, not human acceptance.

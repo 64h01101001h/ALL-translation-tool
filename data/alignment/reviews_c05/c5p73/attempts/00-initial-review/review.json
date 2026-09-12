@@ -1,0 +1,115 @@
+{
+  "page": "c5p73",
+  "course": "C05",
+  "reviewer": "Codex independent semantic reviewer",
+  "verdict": "NEEDS_CORRECTION",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "NEEDS_CORRECTION",
+  "span_tuple_quality": "APPROVE",
+  "segments": [
+    {
+      "seq": 217,
+      "producer": "Codex",
+      "span_count": 28,
+      "null_count": 0,
+      "word_pair_count": 24,
+      "depth_counts": {
+        "5": 24,
+        "6": 3,
+        "7": 1
+      },
+      "generator_exit": 0,
+      "spec_bytes": 4688,
+      "spec_sha256": "71ff639e17103067aa431d12b43fb1ad1d7c1ec57c5afa1f0e127c8d3273123b",
+      "body_bytes": 5056,
+      "body_sha256": "6c98ba4bff11e61824f40780cf2452b65758c14efa76e510f81c878f66d4e59b",
+      "stderr_bytes": 0,
+      "matches_reconciled_body": true
+    },
+    {
+      "seq": 218,
+      "producer": "Codex",
+      "span_count": 49,
+      "null_count": 0,
+      "word_pair_count": 39,
+      "depth_counts": {
+        "5": 39,
+        "3": 1,
+        "6": 5,
+        "7": 4
+      },
+      "generator_exit": 0,
+      "spec_bytes": 7846,
+      "spec_sha256": "334fd2eb99142aa25b78e1385b4dc30d22b22fd49838a2d616c9fc57c4b8e70e",
+      "body_bytes": 8348,
+      "body_sha256": "8c6fa4208f6e99d773ae674d14ac0813ef1c353bba71c9a65674cd56fefe5ce9",
+      "stderr_bytes": 0,
+      "matches_reconciled_body": true
+    },
+    {
+      "seq": 219,
+      "producer": "Codex",
+      "span_count": 48,
+      "null_count": 0,
+      "word_pair_count": 31,
+      "depth_counts": {
+        "5": 31,
+        "7": 11,
+        "3": 4,
+        "6": 2
+      },
+      "generator_exit": 0,
+      "spec_bytes": 8094,
+      "spec_sha256": "bdfc49c3fe710b5e3eba5dd5e4443b7221602fecad698eedef3f7bb9033e01e3",
+      "body_bytes": 8700,
+      "body_sha256": "0a367ebcfc0dfd2989bd186cecd9f4cce4003b10d77f78a0cb1f4e731ef0b9ba",
+      "stderr_bytes": 0,
+      "matches_reconciled_body": true
+    }
+  ],
+  "total_spans": 125,
+  "total_nulls": 0,
+  "total_word_pairs": 94,
+  "generator_replays": {
+    "final": 3,
+    "original_proposals": 6,
+    "all_exit_zero": true,
+    "all_exact_body_bytes": true,
+    "failed_english219_draft_reproduced": true
+  },
+  "errata": {
+    "reviewed": 2,
+    "refuted": 1,
+    "retained": 1,
+    "bank_ready_file": "bank-ready-errata.json"
+  },
+  "open_findings": [
+    {
+      "seq": 218,
+      "location": "spec.json note",
+      "minimal_change": "Replace positive retained LOW/PROBABLE spelling-candidate statement with independently reviewed but unfiled variant evidence; regenerate body."
+    },
+    {
+      "seq": 218,
+      "location": "errata.json / errata-refutation.json / report.md",
+      "minimal_change": "Drop spelling filing under ground (d), preserve historical variant claim; retain only LOW/PROBABLE English polarity; update final count/hash statements."
+    },
+    {
+      "seq": 218,
+      "location": "report.md / proposal-comparison.json narrative",
+      "minimal_change": "Correct first closing bag chags from [562,571) to [563,572); final w47 remains [586,595)."
+    },
+    {
+      "seq": 218,
+      "location": "final errata evidence",
+      "minimal_change": "Use bank-ready-errata.json reviewed wording and review-local paths, distinguish omitted frame from retained atoms, remove stale pending machine-review claim."
+    }
+  ],
+  "evidence": {
+    "original_bytes_manifest": "original-file-verification.json",
+    "resolved_spans": "resolved-spans.json",
+    "quality_records": "span-quality-evidence.json",
+    "allow_needed": "span-head-allow-needed.json"
+  },
+  "approval_scope": "No full approval until final corrected C218 spec/body/report and erratum disposition are re-reviewed. All current span tuples are sound."
+}

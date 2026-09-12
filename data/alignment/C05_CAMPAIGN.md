@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. Coverage 216/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. Coverage 219/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -915,3 +915,54 @@ are added. Master/corpus hashes are unchanged. All 17 fidelity/export/constituti
 suites pass in 10.62 seconds. Rendering and newer native/device execution remain
 unverified; no main integration occurred. Next: c5p73, 217–219, correction round1
 completed and awaiting scoped independent re-review before landing.
+
+
+### c5p73 · C05:217–219 — 2026-09-12 — Codex reconciliation/review
+
+Independent semantic SPEC/QUALITY APPROVE covers 125 analyst spans (28/49/48),
+zero nulls, 94 d5 pairs, 16 d7 members, ten particles and five d3 phrases.
+All six original proposals and all three final bodies independently reproduce.
+The initial review required four corrections to the 218 note, errata disposition
+and narrative evidence. Reconciliation round1 implemented them and scoped
+independent re-review closed all four findings. All 125 tuples stayed unchanged;
+only the 218 canonical note/body changed. Earlier review and producer attempts
+remain preserved. The 422 copied semantic files include complete C05/C16/ILL
+raw witnesses and their exact hashes; three final reconciliation reports are
+also copied. All new matches remain PROVISIONAL machine attestations.
+
+217 retains the HGM-attested rigs 'dra/continuation of later, similar instances
+compound with a unique similar member. Four mind/stream occurrences and the
+second also retain exact ranges. 218 identifies mur thug pa/continuity from the
+local four-item list while explicitly recording absent HGM equivalence and
+divergent ILL interpretations. It does not promote a comparative definition.
+The closing affirmative application instruction cannot own the English question
+rejecting another basis: that frame is omitted, with six useful lexical atoms
+retained. The later bag chags occurrence is selected after the genuine sogs
+span; no null cursor anchor is used. The reviewed list-closing gesture receives
+one precise c5p73/s218w46 allowance.
+
+219 retains a complete causal-seed phrase and the established spang gnyen opposed
+pair with useful members. Dormant occurrences1,2,4 and all four basis occurrences
+are distinct. The final apply-this-reasoning phrase includes its demonstrative.
+The 1500-character English cap affects appended heading text, after the complete
+main antidotes sentence. No source tail is invented and E-107 is not refiled.
+
+E-189 is the sole added erratum: LOW/PROBABLE English polarity review at218,
+with all five grounds independently checked and complete digital originals
+preserved. It is an editorial review request, not replacement GMR prose. The
+separate 'GAG→'BAG spelling filing is refuted because recorded 'gag/stop remains
+grammatical and matches its English. ILL's explicit competing annotation and
+'BAGS variant remain evidence; no checked Teng page or independent publication
+is claimed. Both source languages and hgm_gloss are unchanged.
+
+Coverage 219/511. Bank: 43,274 links (+128 including three sentence anchors),
+11,871 null exponents, 1,555 note blocks and 11 trees. Evidence: 6,940 headwords /
+14,971 pairs. All 43,146 prior links, notes/trees/evidence/ACIP and 21,585 prior
+CSV lexical keys and citations survive. No old ACIP field changes. Main CSV:
+21,642; reverse: 21,302; changes: 57 versus f242fdc. All 23,043 course/depth
+groups match actual main CSV references, retaining all 22,971 prior groups.
+All 188 prior errata survive; only E-189 and the reviewed sogs allowance are added.
+Master/corpus hashes are unchanged. All 17 fidelity/export/constitution suites
+pass in 10.61 seconds. Rendering and newer native/device execution remain
+unverified; no main integration occurred. Next: c5p74,220–222, undergoing fresh
+independent semantic review before landing.

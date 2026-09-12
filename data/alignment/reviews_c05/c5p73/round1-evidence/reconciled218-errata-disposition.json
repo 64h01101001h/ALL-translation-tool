@@ -1,0 +1,39 @@
+{
+  "producer": "Codex reconciler implementing independent Codex semantic review",
+  "review_source": "../../semantic-review/review.json",
+  "reviewed_distinct_candidates": 2,
+  "refuted": 1,
+  "retained": 1,
+  "historical_proposal_records": 3,
+  "spelling": {
+    "filed": false,
+    "ground": "REFUTE_BRIEF(d): defensible current reading; conservative default",
+    "variant_status": "Reviewed and unfiled. ILL 'bag/'bags evidence remains preserved; refuting the spelling filing does not refute the alternate readings.",
+    "historical_claims": "attempts/historical-pre-semantic-fix-round1/errata.json",
+    "historical_reconciler_verdicts": "attempts/historical-pre-semantic-fix-round1/errata-refutation.json",
+    "current_independent_verdicts": "errata-refutation.json"
+  },
+  "english_polarity": {
+    "filed": true,
+    "severity": "LOW",
+    "confidence": "PROBABLE",
+    "wording_source": "../../semantic-review/bank-ready-errata.json",
+    "wording_change": "Only evidence-path qualification from review-local to ../../semantic-review/ relative to reconciled/218/."
+  },
+  "closing_frame": "Disputed frame omitted; lexical w44–w49 retained unchanged.",
+  "closing_bag_chags_ranges": {
+    "first_unpaired": [
+      563,
+      572
+    ],
+    "w46_la_sogs_pa": [
+      573,
+      583
+    ],
+    "w47_retained": [
+      586,
+      595
+    ]
+  },
+  "no_source_or_hgm_gloss_change": true
+}

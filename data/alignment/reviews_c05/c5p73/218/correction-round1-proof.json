@@ -1,0 +1,107 @@
+{
+  "source_review": "../../semantic-review/review.json",
+  "changed_existing_files": [
+    {
+      "file": "217/write_reconciled.py",
+      "previous_sha256": "62cdb79ecf5a7bcc31f5156cc1cda0ccb15d12af5eebbe0a9661ab03c0943894",
+      "final_sha256": "f36faab1374c26c955aefc3e02b5c34df201a7b2c689dc665758acb7efa1c20f"
+    },
+    {
+      "file": "217/write_reports.py",
+      "previous_sha256": "c5298e4de4ac1e3e2afe1060bebbebe328dcc9178ce8f1e6b5887e67ff92a93e",
+      "final_sha256": "6a4e4ce2bd4fd5ddc8fb28ab270e4d6cd1e9b4aae7b2fb4c32caeb091f678976"
+    },
+    {
+      "file": "218/body.html",
+      "previous_sha256": "8c6fa4208f6e99d773ae674d14ac0813ef1c353bba71c9a65674cd56fefe5ce9",
+      "final_sha256": "44773d50e098a838d10182b56bbbf373fa7d0f9ddce3ffe39d65a0f9a9d79848"
+    },
+    {
+      "file": "218/errata-refutation.json",
+      "previous_sha256": "d9a30ed8f3f301444e6f7b8f34ffab5583d78765c254b156b7f6dfe7aeba44b2",
+      "final_sha256": "fc073b13cc785575d5252a07fa65f1b5464b8dc049d54856266a245d9921688d"
+    },
+    {
+      "file": "218/errata.json",
+      "previous_sha256": "20eb4c1975c40f8b5f977f3a6c7c0170b9eaee998586fc1736e87e5295d5a52a",
+      "final_sha256": "6b2d132521f9e83b4c771f30c4d55c58d895c9a1866399187e01d8d0b3991a51"
+    },
+    {
+      "file": "218/errata_check.py",
+      "previous_sha256": "19afeb629a8b129488319f09bafb03dae76e121c1fb8545635fcd502f8d11c45",
+      "final_sha256": "31bd940d956c995651aa0b4b8db45b44f650e8d0a5e9a279ec66880c8329459b"
+    },
+    {
+      "file": "218/generator.stdout",
+      "previous_sha256": "8c6fa4208f6e99d773ae674d14ac0813ef1c353bba71c9a65674cd56fefe5ce9",
+      "final_sha256": "44773d50e098a838d10182b56bbbf373fa7d0f9ddce3ffe39d65a0f9a9d79848"
+    },
+    {
+      "file": "218/proof.json",
+      "previous_sha256": "2b58557809494f4e7aee7a3e90e179e729e7779f1919ca957adc8abaab3a7f43",
+      "final_sha256": "2d3df7062bc75504cf18ea9d6806487d8480052a0d6b3f1dc10643a516b30c0a"
+    },
+    {
+      "file": "218/proposal-comparison.json",
+      "previous_sha256": "4b4871348a0f73cd0979ae3e847361345b3b51cc5a69b8d117c0aac17dd6a01d",
+      "final_sha256": "9ae44ebb558aa1146700872ae99ecc6e10436d333dd85bb24a3cd7caa8f5a5d8"
+    },
+    {
+      "file": "218/report.md",
+      "previous_sha256": "7745b2cf63fda5cbb8b0ef4deeaedf1d6b3e6aeb556d9ce69b34e48b09be2bad",
+      "final_sha256": "ed2d5e579bc1d39c62e23e18120dc9e45758d7cd5bfe19c6e366b4e95da392d6"
+    },
+    {
+      "file": "218/spec.json",
+      "previous_sha256": "334fd2eb99142aa25b78e1385b4dc30d22b22fd49838a2d616c9fc57c4b8e70e",
+      "final_sha256": "20a4151ceea3d0d76ff5409efa4cb5fa2db61cc493eec6f7c30028ce76a910c8"
+    }
+  ],
+  "new_files": [
+    "218/correct_round1.py",
+    "218/errata-disposition.json",
+    "218/correction-round1-proof.json",
+    "218/attempts/03-semantic-fix-round1/*",
+    "217/attempts/historical-pre-semantic-fix-round1/*",
+    "218/attempts/historical-pre-semantic-fix-round1/*",
+    "219/attempts/historical-pre-semantic-fix-round1/*"
+  ],
+  "retired_historical_helpers": [
+    "217/write_reconciled.py",
+    "217/write_reports.py",
+    "218/errata_check.py"
+  ],
+  "canonical_argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_generator_readonly.py"
+  ],
+  "canonical_environment": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "sqlite_mode": "ro",
+  "stdin": "spec.json",
+  "stdout": "generator.stdout",
+  "stderr": "generator.stderr",
+  "exit": 0,
+  "body_bytes": 8481,
+  "body_sha256": "44773d50e098a838d10182b56bbbf373fa7d0f9ddce3ffe39d65a0f9a9d79848",
+  "spec_sha256": "20a4151ceea3d0d76ff5409efa4cb5fa2db61cc493eec6f7c30028ce76a910c8",
+  "body_equals_stdout": true,
+  "both_source_fields_exact": true,
+  "all_span_tuples_unchanged": true,
+  "resolved_spans_file_unchanged": true,
+  "unchanged_canonical_other_segments": {
+    "217": {
+      "spec.json": "71ff639e17103067aa431d12b43fb1ad1d7c1ec57c5afa1f0e127c8d3273123b",
+      "body.html": "6c98ba4bff11e61824f40780cf2452b65758c14efa76e510f81c878f66d4e59b"
+    },
+    "219": {
+      "spec.json": "bdfc49c3fe710b5e3eba5dd5e4443b7221602fecad698eedef3f7bb9033e01e3",
+      "body.html": "0a367ebcfc0dfd2989bd186cecd9f4cce4003b10d77f78a0cb1f4e731ef0b9ba"
+    }
+  },
+  "reviewed_errata": 2,
+  "refuted_errata": 1,
+  "retained_errata": 1,
+  "all_review_evidence_paths_exist": true
+}
