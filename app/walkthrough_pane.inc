@@ -112,6 +112,32 @@ inline QString slice(const allcore::OverlayDoc& doc, int beg, int end) {
     return out.toHtmlEscaped();
 }
 
+// The longest span starting at `t` that actually carries a binding gloss.
+//
+// This began as "the longest span starting at t", which is wrong in a way the
+// structural gates could not see: the lattice matches SANGS RGYAS KYIS as a
+// span, that span has an entry, and the entry has no hgm_gloss — so the
+// picker took it, reported "no Geshe Michael equivalent banked" for a term
+// that is curated as "Buddha", and step 6 fell through to single syllables
+// and emitted <CHOS> mentioned | <SANGS> grow with. Twenty gates passed on
+// that output, because every one of them checked the SHAPE of the page and
+// none checked whether a word it knows came back known. Length is the
+// tiebreak; carrying a gloss is the requirement.
+//
+// Returns -1 when nothing in [t, limit) is glossed, and the caller flags the
+// syllable rather than approximating it (rule 3).
+inline int bestGlossSpan(const allcore::OverlayDoc& doc, int t, int limit) {
+    int best = -1, bestLen = 0;
+    for (int si : doc.spansAt(t)) {
+        const auto& sp = doc.spans[si];
+        if (sp.beg != t || sp.end > limit || sp.entry_ix < 0) continue;
+        if (doc.entries[sp.entry_ix].hgm_gloss.empty()) continue;
+        const int len = sp.end - sp.beg;
+        if (len > bestLen) { bestLen = len; best = si; }
+    }
+    return best;
+}
+
 }  // namespace walk
 
 class WalkthroughPane : public QWidget {
@@ -254,6 +280,46 @@ public:
             check(!t.contains("[GMR auto-aligned]"),
                   "an auto-aligned gloss is never dressed as a GMR tier \u2014 "
                   "it reads PROVISIONAL");
+        }
+        {   // CONTENT, not shape. The first twenty gates on this pane all
+            // passed while step 5 reported "no Geshe Michael equivalent
+            // banked" for sangs rgyas — curated as "Buddha" — and step 6
+            // emitted <CHOS> mentioned | <SANGS> grow with. The picker was
+            // taking the longest span starting at the token whether or not it
+            // carried a gloss, and SANGS RGYAS KYIS is such a span. Every
+            // gate checked the shape of the page; none asked whether a word
+            // the glossary knows came back known. These do.
+            src_->setPlainText("sangs rgyas kyis chos bstan");
+            walk();
+            const QString t = out_->toPlainText();
+            check(t.contains("Buddha"),
+                  "sangs rgyas comes back as Buddha \u2014 a curated term is "
+                  "not reported as unglossed because a longer gloss-less span "
+                  "starts at the same syllable");
+            check(t.contains("Dharma"), "chos comes back as Dharma");
+            check(t.contains("[GMR curated]"),
+                  "and the curated tier is named, so the reader can see the "
+                  "weight the line carries");
+            // Every syllable of this clause is in the glossary, so step 6 must
+            // not be flagging any of them. An angle bracket here means the
+            // picker has fallen back to syllables again.
+            const int s6 = t.indexOf("Step 6");
+            const int s7 = t.indexOf("Step 7", s6 < 0 ? 0 : s6);
+            const QString six = (s6 >= 0 && s7 > s6) ? t.mid(s6, s7 - s6) : QString();
+            // Scope the bracket check to the ASSEMBLED LINE only. The
+            // disclaimer under it explains what angle brackets mean and so
+            // contains a pair of its own — my first version of this gate read
+            // the whole block and failed on the explanation, which is the
+            // gate being wrong rather than the pane.
+            const QStringList lines = six.split('\n', Qt::SkipEmptyParts);
+            const QString assembledLine = lines.size() > 1 ? lines.at(1) : QString();
+            check(!assembledLine.isEmpty() &&
+                      !assembledLine.contains(QChar(0x27E8)),
+                  "step 6 flags nothing in a clause whose every word is "
+                  "glossed \u2014 no silent fallback to single syllables");
+            check(six.contains("FIRST one"),
+                  "step 6 admits it took the FIRST of several equivalents, not "
+                  "the best one");
         }
         src_->setPlainText(keep);
         return fails;
@@ -498,15 +564,7 @@ private:
         int t = c.beg;
         int rows = 0;
         while (t < c.end) {
-            auto at = doc.spansAt(t);
-            int best = -1, bestEnd = t + 1;
-            for (int si : at) {
-                const auto& s = doc.spans[si];
-                if (s.beg == t && s.end <= c.end && s.end > bestEnd - 1 &&
-                    s.entry_ix >= 0) {
-                    if (s.end > bestEnd || best < 0) { best = si; bestEnd = s.end; }
-                }
-            }
+            const int best = walk::bestGlossSpan(doc, t, c.end);
             if (best < 0) {
                 h += "<tr><td style='font-family:monospace'>" +
                      walk::slice(doc, t, t + 1) +
@@ -519,15 +577,11 @@ private:
             QString g;
             for (size_t i = 0; i < e.hgm_gloss.size() && i < 3; ++i)
                 g += (i ? " · " : "") + walk::esc(e.hgm_gloss[i]);
-            if (g.isEmpty())
-                g = "<span style='color:#B4540A'>no Geshe Michael equivalent "
-                    "banked for this entry</span>";
             // G2: the binding gloss renders TIERED, always. Labelling only
             // the provisional ones leaves curated and glossary material
-            // indistinguishable from each other and from an unlabelled
-            // default, and the reader cannot see how much weight a line
-            // carries. Every row says which tier it is.
-            QString tier = e.provisional()
+            // indistinguishable, and the reader cannot see how much weight
+            // a line carries.
+            const QString tier = e.provisional()
                 ? " <span style='color:#B4540A;font-size:11px'>[PROVISIONAL "
                   "\u2014 auto-aligned]</span>"
                 : e.tier.empty()
@@ -538,7 +592,7 @@ private:
             h += "<tr><td style='font-family:monospace'>" +
                  walk::slice(doc, doc.spans[best].beg, doc.spans[best].end) +
                  "</td><td>" + g + tier + "</td></tr>";
-            t = bestEnd; ++rows;
+            t = doc.spans[best].end; ++rows;
         }
         h += "</table>";
         if (rows == 0) h = body("nothing to gloss");
@@ -559,35 +613,45 @@ private:
             QString piece;
             int t = chunks[ix].beg;
             while (t < chunks[ix].end) {
-                auto at = doc.spansAt(t);
-                int best = -1, bestEnd = t + 1;
-                for (int si : at) {
-                    const auto& s = doc.spans[si];
-                    if (s.beg == t && s.end <= chunks[ix].end && s.entry_ix >= 0 &&
-                        (s.end > bestEnd || best < 0)) { best = si; bestEnd = s.end; }
-                }
-                if (best >= 0 && !doc.entries[doc.spans[best].entry_ix].hgm_gloss.empty()) {
-                    // G2 again, and this is the site that mattered: step 6
-                    // assembled provisional glosses into a running line with
-                    // nothing to distinguish them, so a line built entirely
-                    // out of auto-aligned material read exactly like one
-                    // built from curated material. A provisional word is
-                    // marked where it is used, not only where it is listed.
-                    const auto& ent = doc.entries[doc.spans[best].entry_ix];
-                    const QString g = walk::esc(ent.hgm_gloss[0]);
-                    piece += (piece.isEmpty() ? "" : " ") +
-                             (ent.provisional()
-                                  ? "<span style='color:#B4540A'>" + g +
-                                        "<sup>prov</sup></span>"
-                                  : g);
-                    if (ent.provisional()) ++provisional_;
-                    t = bestEnd;
-                } else {
+                const int best = walk::bestGlossSpan(doc, t, chunks[ix].end);
+                if (best < 0) {
                     piece += (piece.isEmpty() ? "" : " ") +
                              QString("&#10216;") + walk::slice(doc, t, t + 1) +
                              "&#10217;";
                     ++t;
+                    continue;
                 }
+                // G2, and this is the site that mattered: step 6 assembled
+                // provisional glosses into a running line with nothing to
+                // distinguish them, so a line built entirely from
+                // auto-aligned material read exactly like one built from
+                // curated material. A provisional word is marked where it is
+                // USED, not only where it is listed.
+                const auto& ent = doc.entries[doc.spans[best].entry_ix];
+                // bestGlossSpan's contract is that the span it returns carries
+                // a gloss, so this index is safe — but a contract is not a
+                // guard. When I mutation-tested the picker by dropping its
+                // gloss requirement, this line indexed an empty vector and the
+                // binary died before printing anything, and my harness counted
+                // zero [FAIL] lines and called that a pass. A crash is a bad
+                // way to learn a gate works. Falling through to the flag keeps
+                // the failure legible, so the CONTENT gate is what catches a
+                // broken picker rather than a segfault.
+                if (ent.hgm_gloss.empty()) {
+                    piece += (piece.isEmpty() ? "" : " ") +
+                             QString("&#10216;") + walk::slice(doc, t, t + 1) +
+                             "&#10217;";
+                    ++t;
+                    continue;
+                }
+                const QString g = walk::esc(ent.hgm_gloss[0]);
+                piece += (piece.isEmpty() ? "" : " ") +
+                         (ent.provisional()
+                              ? "<span style='color:#B4540A'>" + g +
+                                    "<sup>prov</sup></span>"
+                              : g);
+                if (ent.provisional()) ++provisional_;
+                t = doc.spans[best].end;
             }
             line += (line.isEmpty() ? "" : " <span style='color:#888'>|</span> ") + piece;
         }
@@ -596,7 +660,12 @@ private:
             "Geshe Michael's glossary words in the engine's order — not a "
             "translation, and not English. It is the raw material a "
             "translation gets made out of. Anything in &#10216;angle "
-            "brackets&#10217; is a word the glossary does not have.";
+            "brackets&#10217; is a word the glossary does not have. Where he "
+            "banked several equivalents this takes the FIRST one, which is not "
+            "always the best one — <i>bstan</i> comes out \"mentioned\" here "
+            "when \"teach\" is the sense. Step 5 lists the alternatives; "
+            "choosing between them is your job, because choosing would be "
+            "composing and the machine may only match.";
         if (provisional_ > 0)
             note += " <span style='color:#B4540A'>" +
                     QString::number(provisional_) +
