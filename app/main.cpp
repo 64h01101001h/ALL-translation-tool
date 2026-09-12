@@ -25517,6 +25517,11 @@ public:
         draftPath_.clear();
         savedDigest_ = docprops::digest(QString());
         editTimer_.restart();
+        // The apparatus pane kept the PREVIOUS draft's verdict — a
+        // terminology report, an outline, a concordance — now describing a
+        // document that no longer exists. A stale answer over a new question
+        // is worse than no answer. (Draft workspace audit, 2026-09-11.)
+        if (report_) report_->setHtml(reportIdleHtml());
         if (termLive_) termLive_->setText("New draft.");
         return true;
     }
@@ -25535,6 +25540,7 @@ public:
         if (!f.open(QIODevice::ReadOnly)) return false;
         draft_->setPlainText(QString::fromUtf8(f.readAll()));
         savedDigest_ = docprops::digest(draft_->toPlainText());
+        if (report_) report_->setHtml(reportIdleHtml());   // same reason
         if (termLive_) termLive_->setText("Reverted to the saved " + QFileInfo(draftPath_).fileName());
         return true;
     }
@@ -25903,6 +25909,44 @@ public:
                       "instruction");
             }
         }
+        // ---- a new draft does not keep the old verdict (audit 2026-09-11) --
+        {
+            source_->setPlainText("/ /sems can thams cad bde ba dang ldan "
+                                  "par gyur cig /");
+            load();
+            check(termLive_->text().contains("clause"),
+                  "load: the primary button reports what it did \u2014 it used "
+                  "to produce no confirmation at all");
+            const int loadedClauses = (int)clauses_.size();
+            check(loadedClauses > 0,
+                  "load: and the count it reports is a real one");
+
+            // put a verdict on screen, then start a new draft
+            draft_->setPlainText("some english for the check");
+            check_();
+            const QString verdict = report_->toPlainText();
+            check(!verdict.contains("Nothing has been run yet"),
+                  "a check leaves a verdict on screen");
+            newDraft();
+            check(report_->toPlainText().contains("Nothing has been run yet"),
+                  "new draft: the previous draft's verdict is cleared \u2014 a "
+                  "stale answer over a new question is worse than none");
+
+            source_->setPlainText("");
+            load();
+            check(termLive_->text().contains("empty"),
+                  "load: an empty source box is diagnosed, not silently "
+                  "reported as having no clauses");
+
+            // RESTORE what the later gates rely on. This block clears the
+            // source and the draft, and the anchor-hue and gloss gates below
+            // read the state demo() established at the top of this suite. A
+            // block that mutates shared state has to put it back — the same
+            // ordering lesson the report_ gates taught two hours ago.
+            demo("/ /blo sbyong snyan brgyud chen mo'i 'khrid yig "
+                 "/sems can thams cad bde ba dang ldan par gyur cig /");
+        }
+
         // ---- a tool that examined nothing says so (audit 2026-09-11) ------
         // All four STRUCTURE tools read source_, and all four used to answer
         // confidently about an empty box: "no sa bcad markers found in this
@@ -26276,6 +26320,19 @@ private:
                      .arg(text.toHtmlEscaped());
         }
         clauseView_->setHtml(h.isEmpty() ? "<i>no clauses</i>" : h);
+        // Load source is this pane's primary button and it used to produce no
+        // confirmation of any kind — no count, no next step, and on a source
+        // it could not parse, an undiagnosed "no clauses" with nothing said
+        // about why.
+        if (termLive_)
+            termLive_->setText(
+                clauses_.empty()
+                    ? (source_->toPlainText().trimmed().isEmpty()
+                           ? "Nothing loaded \u2014 the source box is empty."
+                           : "Loaded, but no clauses could be split out of "
+                             "that text. Check it is ACIP or Tibetan script.")
+                    : QString("%1 clause(s) loaded \u2014 click one for its "
+                              "evidence.").arg(clauses_.size()));
         // NOT clear(). Loading a source used to blank this pane completely,
         // destroying the one line that said what it was for — so the moment a
         // reader did the right thing, the pane stopped explaining itself.
