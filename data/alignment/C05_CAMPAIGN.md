@@ -6,8 +6,8 @@ course-parametrised set in `docs/alignment_briefs/`; the task names the course.
 
 Standing rules (Adam): GMR's English stays VERBATIM, typos flagged never
 corrected; nothing binding without human review; every batch records its
-producing model (propose: Claude Opus 5 · reconcile/refute: Claude Fable
-5.1); completeness is proved by the builder's COVERAGE GATE, never asserted
+actual producer (historical campaign: Claude Opus 5 / Fable 5.1; resumed
+2026-09-12 campaign: Codex under Adam’s explicit handover); completeness is proved by the builder's COVERAGE GATE, never asserted
 in prose; a reconciler's deliverable is a spec FILE that exited 0.
 
 ## Course shape (spine scan, 511 segments)
@@ -47,9 +47,9 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. Coverage 165/511 (17 gates green at every landing; pages_c05 0 unlicensed function-word span heads).
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. Coverage 168/511; current verification is recorded in the latest batch entry below.
 
-**PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
+**Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
 168, 169 and proposals for 170–175 exist only in session scratch and are NOT
 banked; when the campaign resumes, re-propose from 166 unless that scratch is
@@ -182,3 +182,36 @@ TODO.md).
 **Models.** Propose Claude Opus 5 (two angles per row); reconcile and
 refute Claude Fable 5.1 throughout, including the relaunches after the
 2026-09-05 rate-limit kills (95, 99, 101) — never moved off Fable.
+
+
+### c5p56 · C05:166–168 — 2026-09-12 — Codex
+
+Resumed under Adam’s explicit instruction to continue through Tuesday, September 15,
+07:00 America/Denver. Two fresh independent proposal angles, a separate reconciler,
+and a separate skeptical semantic reviewer examined all 85 retained spans.
+Accepted reproducible spec: `specs_c05/c5p56.json`; full review evidence and actual
+producer credits: `reviews_c05/c5p56/`. All three individual generators and the
+assembled page generator exited 0 with empty stderr. Page keeps the original
+source and PROVISIONAL label.
+
+C05:167’s initial `bzhi`/“three” disagreement remains visible and unpaired; later
+`gsum` owns the correct later “three.” Recast temporal expressions remain d3 rather
+than false dictionary units. Genuine lexical ellipsis is distinguished from an
+unresolved mapping. `la sogs pa` owns only “and such,” licensed by `sogs` in
+`span_head_allow.json`. Zero new errata.
+
+Registry coverage: 168/511. Full bank: 41,847 links (+88: 85 reviewed spans plus
+three generated sentence links), 11,791 null English exponents. Evidence: 6,761
+headwords, 14,546 pair records. The dictionary HTML and CSV exports were rebuilt.
+New page credits name Codex; the mixed bank credits its builder and refers to
+source-page producers. The new page defines the previously missing depth-7
+slider label. Added the absent C05 index and connected c5p55 → c5p56 navigation.
+
+All 16 targeted CTest fidelity/constitution suites passed (10.93 seconds).
+Structural checks found zero broken local links in the C05 index, previous page
+and new page; all seven depth labels are defined. These checks are recorded beside the durable
+batch in `campaign-artifacts/C05-166-168/landing/`. Browser preview remains
+unverified: the in-app browser’s URL policy blocked local HTML; no workaround
+was used. This limitation does not change the source-verification evidence or
+turn machine semantic review into human acceptance. Desktop/iOS integration is
+being checked separately; no deployment claim is made for this batch yet.
