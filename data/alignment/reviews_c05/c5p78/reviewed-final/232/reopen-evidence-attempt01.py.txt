@@ -1,0 +1,36 @@
+import json,sqlite3,pathlib,hashlib,os,subprocess,sys,gzip,shutil
+P=pathlib.Path(__file__).resolve().parents[2]; R=P.parents[1]/'campaign-worktree'
+def save(d,n,x): (d/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+D=sqlite3.connect((R/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);D.row_factory=sqlite3.Row
+paths=["~/Desktop/HGM DICTIONARY - TRANSLATION APP","~/ACIP Software Developmeent/Gofer Developmetn Files","~/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","~/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","~/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","~/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra","~/ACIP Software Developmeent/tibetan-spellchecker","~/Tibetan Translation Tool"]
+access=[{'path':str(pathlib.Path(p).expanduser()),'readable':os.access(pathlib.Path(p).expanduser(),os.R_OK)} for p in paths];assert all(x['readable'] for x in access)
+context=[dict(x) for x in D.execute("select * from corpus_segments where course='C05' and seq between 230 and 236 order by seq")]
+code="import sqlite3,runpy,pathlib; original=sqlite3.connect; sqlite3.connect=lambda path,*a,**kw: original(pathlib.Path(path).resolve().as_uri()+'?mode=ro',uri=True); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+root_queries=json.loads((P/'root-focused-lexical-corpus-queries.json').read_text());qr=[]
+for q in root_queries:
+ hits=[dict(x) for x in D.execute(q['query'],q['parameters'])];qr.append({**q,'hits':hits,'independent_measured_count':len(hits),'same_as_root':hits==q['hits']});print(q['label'],len(hits))
+masterpath=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz');master=json.loads(gzip.decompress(masterpath.read_bytes()));print('master shape',type(master).__name__,list(master)[:12] if isinstance(master,dict) else len(master))
+entries=master.get('entries',[]) if isinstance(master,dict) else master
+for n in [232,233,234]:
+ d=P/'reconciled'/str(n)
+ save(d,'access.json',access);save(d,'original-source-context.json',context);source=next(x for x in context if x['seq']==n);save(d,'source-original.json',source)
+ snap=next(x for x in json.loads((P/'source.json').read_text()) if x['seq']==n);assert all(source[k]==v for k,v in snap.items())
+ save(d,'root-exact-query-replay.json',qr)
+ hgmq=json.loads((P/'english'/str(n)/'evidence-query.json').read_text());terms=hgmq['hgm_parameters']+list(json.loads((P/'root-Tibetan-proposal-lexical-check.json').read_text()))+["snga phyi'i rgyun","rang gi","ngo bo","'khyil","lugs","gsal bar","'chad",'yin','la','du','ni','ste','gyi']
+ terms=sorted(set(terms));q='select * from entries where wylie in ('+','.join('?' for _ in terms)+') order by wylie,id';hr=[dict(x) for x in D.execute(q,terms)];save(d,'original-hgm-rows.json',{'query':q,'parameters':terms,'rows':hr});me=[x for x in entries if x.get('wylie') in terms];save(d,'original-master-entries.json',{'path':str(masterpath),'sha256':sha(masterpath),'entries':me})
+ refs={('C16',n+577),('ILL',1111),('ILL',1112),('ILL',1113),('ILL',1114),('SPF',40),('C06',76),('EM',265),('SOS',294)}
+ cr=[dict(D.execute('select * from corpus_segments where course=? and seq=?',ref).fetchone()) for ref in sorted(refs)];save(d,'original-witness-rows.json',cr)
+ pqs=json.loads((P/'root-focused-parallel-check.json').read_text());pqr=[]
+ for z in pqs:
+  qq="SELECT * FROM corpus_segments WHERE course != 'C13' AND (instr(wylie,?)>0 OR instr(english,?)>0) ORDER BY course,seq";hits=[dict(x) for x in D.execute(qq,z['params'])];pqr.append({'query':qq,'params':z['params'],'seq':z['seq'],'hits':hits,'count':len(hits)})
+ save(d,'parallel-query-replay.json',pqr)
+ for course in ['C05','C16']:
+  path=pathlib.Path(hgmq['original_hgm_source']).with_name(course+'ReadingASCII.txt');content=path.read_bytes();(d/(course+'ReadingASCII-original.txt')).write_bytes(content)
+  save(d,course+'-original-provenance.json',{'path':str(path),'bytes':len(content),'sha256':sha(path)})
+ lines=pathlib.Path(hgmq['original_hgm_source']).read_text().splitlines();(d/'original-C05-excerpt.txt').write_text('\n'.join(f'{i+1}: {lines[i]}' for i in range(2218,2253))+'\n')
+ replay=[]
+ for angle in ['tibetan','english']:
+  a=d/('replay-'+angle);a.mkdir(exist_ok=True);sp=P/angle/str(n)/'spec.json';rr=subprocess.run([sys.executable,'-c',code],cwd=R,input=sp.read_bytes(),capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});(a/'stdout.html').write_bytes(rr.stdout);(a/'stderr.txt').write_bytes(rr.stderr);save(a,'result.json',{'exit':rr.returncode,'saved_body_equal':rr.stdout==(P/angle/str(n)/'body.html').read_bytes(),'spec_sha256':sha(sp),'body_bytes':len(rr.stdout),'argv':[sys.executable,'-c',code],'cwd':str(R)});assert rr.returncode==0 and rr.stdout==(P/angle/str(n)/'body.html').read_bytes();replay.append({'angle':angle,'exit':0,'exact_saved_body':True,'bytes':len(rr.stdout)})
+ save(d,'proposal-replays.json',replay)
+ print(n,'replayed both, HGM rows',len(hr),'master rows',len(me))

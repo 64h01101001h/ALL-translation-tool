@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-c",
+    "import sqlite3,runpy,pathlib; original=sqlite3.connect; sqlite3.connect=lambda path,*a,**kw: original(pathlib.Path(path).resolve().as_uri()+'?mode=ro',uri=True); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+  "sqlite_policy": "All canonical connections redirected to same resolved spine with URI mode=ro; no generator code or gate changed",
+  "canonical_sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+}

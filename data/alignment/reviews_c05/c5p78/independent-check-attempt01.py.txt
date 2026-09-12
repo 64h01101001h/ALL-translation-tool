@@ -1,0 +1,43 @@
+from pathlib import Path
+import sqlite3,runpy,json,hashlib,sys,os,subprocess,gzip,re,html
+R=Path.cwd()/'campaign-worktree';B=Path.cwd()/'campaign-artifacts/C05-232-234';V=B/'semantic-review'
+def save(n,x):p=V/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+D=sqlite3.connect((R/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);D.row_factory=sqlite3.Row
+paths=json.loads((B/'reconciled/232/access.json').read_text());assert all(os.access(x['path'],os.R_OK) for x in paths);save('independent-access.json',paths)
+sources=[dict(x) for x in D.execute("select * from corpus_segments where course='C05' and seq between 230 and 236 order by seq")];save('original-source-context.json',sources)
+for r in json.loads((B/'source.json').read_text()):assert all(next(x for x in sources if x['seq']==r['seq'])[k]==v for k,v in r.items())
+G=runpy.run_path(str(R/'tools/gen_alignment_page.py'),run_name='independent_resolver');resolved=[];proof=[]
+code="import sqlite3,runpy,pathlib; orig=sqlite3.connect; sqlite3.connect=lambda path,*a,**k: orig(pathlib.Path(path).resolve().as_uri()+'?mode=ro',uri=True); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+for n in [232,233,234]:
+ src=next(x for x in sources if x['seq']==n)
+ for angle in ['reconciled','tibetan','english']:
+  sp=B/angle/str(n)/'spec.json';body=B/angle/str(n)/'body.html';raw=sp.read_bytes();spec=json.loads(raw)['segments'][0];s=spec['spans'];tr=G['resolve'](src['wylie'],s,'tib',n);by={x['id']:x for x in s};es=G['with_members'](s,[by[i] for i in spec['eng_order']],src['english']);er=G['resolve'](src['english'],es,'eng',n)
+  rs=[dict(seq=n,id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng'],tib_range=list(tr[x['id']]),eng_range=list(er[x['id']]) if x['eng'] is not None else None) for x in s];save(f'replays/{angle}/{n}/resolved-spans.json',rs)
+  p=subprocess.run([sys.executable,'-c',code],cwd=R,input=raw,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});out=V/f'replays/{angle}/{n}';(out/'stdout.html').write_bytes(p.stdout);(out/'stderr.txt').write_bytes(p.stderr);(out/'exit.txt').write_text(str(p.returncode)+'\n')
+  assert p.returncode==0 and not p.stderr and p.stdout==body.read_bytes()
+  for side,col in [('tib','wylie'),('eng','english')]:
+   m=re.search(r'<div class="'+side+r'"><div class="lab">.*?</div>\n(.*?)\n</div>',p.stdout.decode(),re.S);plain=html.unescape(re.sub('<[^>]+>','',m.group(1)));assert plain==src[col]
+  rec=dict(seq=n,span_count=len(s),null_count=sum(x['eng'] is None for x in s),word_pair_count=sum(x['d']==5 and x['eng'] is not None for x in s),spec_sha256=sha(raw),spec_bytes=len(raw),body_sha256=sha(p.stdout),body_bytes=len(p.stdout),generator_exit=p.returncode)
+  save(f'replays/{angle}/{n}/proof.json',{**rec,'angle':angle,'source_restoration':True,'exact_saved_body':True,'argv':[sys.executable,'-c',code],'cwd':str(R)})
+  if angle=='reconciled':resolved+=rs;proof.append(rec)
+save('resolved-spans.json',resolved);save('generator-proof.json',proof)
+# Reopen each original numerical query, recording every full returned row.
+qr=[]
+for q in json.loads((B/'root-focused-lexical-corpus-queries.json').read_text()):
+ hits=[dict(r) for r in D.execute(q['query'],q['parameters'])];assert hits==q['hits'];qr.append(dict(label=q['label'],query=q['query'],parameters=q['parameters'],count=len(hits),rows=hits));print(q['label'],len(hits))
+save('independent-query-proofs.json',qr)
+pr=[]
+for q in json.loads((B/'root-focused-parallel-check.json').read_text()):
+ query="SELECT * FROM corpus_segments WHERE course != 'C13' AND (instr(wylie,?)>0 OR instr(english,?)>0) ORDER BY course,seq";hits=[dict(x) for x in D.execute(query,q['params'])];pr.append(dict(seq=q['seq'],query=query,parameters=q['params'],count=len(hits),rows=hits))
+save('independent-parallel-proofs.json',pr)
+terms=set()
+for n in [232,233,234]:terms.update(json.loads((B/f'reconciled/{n}/final-lexical-originals.json').read_text())['parameters']);terms.update(json.loads((B/f'reconciled/{n}/original-hgm-rows.json').read_text())['parameters'])
+terms=sorted(terms|{'chung zad','cung zad'});query='select * from entries where wylie in ('+','.join('?' for _ in terms)+') order by wylie,id';rows=[dict(x) for x in D.execute(query,terms)];save('independent-hgm-originals.json',dict(query=query,parameters=terms,rows=rows))
+masterpath=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz');mb=masterpath.read_bytes();master=json.loads(gzip.decompress(mb))['unified_entries'];save('independent-master-originals.json',dict(original=str(masterpath),sha256=sha(mb),bytes=len(mb),entries=[x for x in master if x.get('wylie') in terms]))
+refs={('C16',809),('C16',810),('C16',811),('ILL',1111),('ILL',1112),('ILL',1113),('ILL',1114),('SPF',40),('C06',76),('EM',265),('SOS',294)};w=[dict(D.execute('select * from corpus_segments where course=? and seq=?',r).fetchone()) for r in sorted(refs)];save('independent-witness-originals.json',w)
+print('PROOFS',json.dumps(proof));print('HGM',len(rows));
+for x in rows:
+ if x.get('hgm_gloss') or x['wylie'] in ['chung zad','cung zad']:print(x['id'],x['wylie'],repr(x.get('hgm_gloss')))
+print('WITNESSES')
+for x in w: print(x['course'],x['seq'],x['acip'],x['wylie'],x['english'],sep='\n')

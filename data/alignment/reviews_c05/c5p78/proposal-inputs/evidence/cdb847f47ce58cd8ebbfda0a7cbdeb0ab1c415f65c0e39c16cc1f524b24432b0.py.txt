@@ -1,0 +1,42 @@
+import json,pathlib,copy,subprocess,sys,os,hashlib,html,re
+P=pathlib.Path(__file__).resolve().parents[2];R=P.parents[1]/'campaign-worktree'
+def save(d,n,x): (d/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sp(i,d,t,e):return {'id':i,'d':d,'tib':t,'eng':e}
+def insert_after(s,i,news):
+ at=next(k for k,x in enumerate(s) if x['id']==i);s[at+1:at+1]=news
+notes={
+232:"PROVISIONAL machine alignment reconciled by Codex on 2026-09-12. This is corpus attestation, with no source correction or promotion into hgm_gloss. HGM supports the whole mtshon pa / giving a single example and the separate pattern, colored, way, coiled, think and start units. 'byung marks the onset of thinking; supplied to yourself stays unwrapped. All six sbrul occurrences own their corresponding snake; the fifth is lexical, with 'jog owning establish. The larger establishment recast is omitted: the selected noun/verb construction does not separately license the supplied ever frame. mtshan gzhir and rgyu remain unwrapped with distributed instance/modality meaning, not false nulls. thag pa occurrences 1, 2 and 4 own English rope occurrences 1, 2 and 4; source occurrence 3 is implicit in the perception example and source occurrence 5 restates the rope of the collection without a second English rope there. English rope occurrences 3 and 5 expand de la and de'i anaphorically and remain unwrapped. de'i tshe is not The fact though. Omitted rnams, case/topic/connective grammar, demonstratives, snang ba and chung zad kyang have no selected separate mapping; no null asserts semantic absence. mi owns n't with the authorized subword flag; can, it and very remain unwrapped. sogs licenses only the closing gesture and such.",
+233:"PROVISIONAL machine alignment reconciled by Codex on 2026-09-12. No source correction or hgm_gloss promotion. The first phung po owns heaps; its explanatory components to yourself stays unwrapped. The second phung po selects components occurrence 2. The first clause keeps the complete nga'o snyam pa 'byung ba / get the idea of me recast with original quotation marks, excluding supplied you; na separately owns when. snga phyi / time and rgyun / continuum are separate HGM lexical units; the larger genitive continuum expression is not assumed to be an established compound. HGM dus gcig pa / single moment is retained whole, with unique members dus / moment and gcig / single. Its repeated English in time is explicitation, left unwrapped rather than banked twice for dus. Two tshogs pa own whole occurrences 1 and 2; whole occurrence 3 is explanatory. Both dang own nor in the negative coordination. 'jog owns establish; the instance/anaphoric de'i mtshan gzhir, modality and minimizer are distributed through the any kind of me / ever / nothing recast and remain unwrapped. No uncertainty is coded as null. The final 'chad / go into, rgyas par / in more detail and 'og nas / further on exclude supplied We'll and this. C16:810 has identical ACIP, Wylie and English with different id/course/seq; this proves neither independent publication nor re-ingestion lineage.",
+234:"PROVISIONAL machine alignment reconciled by Codex on 2026-09-12. No source correction or hgm_gloss promotion. HGM ngo bo tha dad pa / outside supports the inflected lexical span; preceding las separately owns of in outside of. 'dzin owns consider; the surrounding anaphoric basis/instance recast remains unwrapped, including the first quoted me. nga owns quoted me occurrence 2 and de owns this occurrence 2; the later third quoted me is supplied. yin owns the explicit is immediately after this me; a no-exponent null would be false. phung po owns components occurrences 1 and 2. brten nas / based on, bzhag pa / creation, rtog pas / conception and tsam / nothing more than retain their local roles. Creation is a contextual corpus match, not a claim that the auto-aligned bzhag pa glossary entry proves it. rang gi ngo bos is the HGM-supported complete instrumental/reflexive unit through any essence of its own, with rang gi / of its own and ngo bo / essence as tighter members. Agentive -s is not split. med pas / not and final med / no preserve both negations; unselected case/topic/connective grammar remains omitted, not nulled. The complete Selection Five tail after ********* is preserved verbatim and unaligned under the registered following-heading class."
+}
+for n in [232,233,234]:
+ d=P/'reconciled'/str(n);spec=json.loads((P/'tibetan'/str(n)/'spec.json').read_text());s=spec['segments'][0];ss=s['spans'];order=s['eng_order']
+ if n==232:
+  insert_after(ss,'w29',[sp('a1',6,'zhing','and')]);order.insert(order.index('w28')+1,'a1')
+  insert_after(ss,'w32',[sp('a2',6,'na','if')]);order.insert(order.index('w30'),'a2')
+  insert_after(ss,'w35',[sp('a3',5,'thag pa','rope')]);order.insert(order.index('w36'),'a3')
+  x=next(x for x in ss if x['id']=='w38');x.update(d=5,tib='sbrul',eng='snake');insert_after(ss,'w38',[sp('a4',5,"'jog",'establish')]);order.insert(order.index('w38'),'a4')
+ if n==233:
+  for x in ss:
+   if x['id']=='w1':x['d']=5
+   if x['id']=='w6':x.update(d=5,tib='snga phyi',eng='time')
+   if x['id']=='w9':x.update(d=5,tib='dus gcig pa',eng='single moment')
+   if x['id']=='w12':x.update(d=5,tib="'jog",eng='establish')
+   if x['id'] in ['w14','w15']:x['d']=5
+  insert_after(ss,'w8',[sp('a1',6,'dang','nor')]);order.insert(order.index('w10'),'a1')
+  insert_after(ss,'w9',[sp('m1',7,'dus','moment'),sp('m2',7,'gcig','single')])
+  insert_after(ss,'w10',[sp('a2',6,'dang','nor')]);order.insert(order.index('w11'),'a2')
+ if n==234:
+  insert_after(ss,'w6',[sp('a1',6,'las','of')]);order.insert(order.index('w7')+1,'a1')
+  for x in ss:
+   if x['id']=='w7':x['d']=5
+   if x['id']=='w8':x.update(d=5,tib="'dzin",eng='consider')
+   if x['id']=='w19':x['d']=5
+  insert_after(ss,'w18',[sp('a2',6,'yin','is')]);order.insert(order.index('w18'),'a2')
+  insert_after(ss,'w19',[sp('m1',7,'rang gi','of its own'),sp('m2',7,'ngo bo','essence')])
+ s['note']=notes[n];save(d,'spec.json',spec);save(d,'errata.json',[])
+code="import sqlite3,runpy,pathlib; original=sqlite3.connect; sqlite3.connect=lambda path,*a,**kw: original(pathlib.Path(path).resolve().as_uri()+'?mode=ro',uri=True); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+for n in [232,233,234]:
+ d=P/'reconciled'/str(n);ad=d/'attempts';ad.mkdir(exist_ok=True);a=ad/f'{len(list(ad.iterdir()))+1:02d}';a.mkdir();(a/'spec.json').write_bytes((d/'spec.json').read_bytes());r=subprocess.run([sys.executable,'-c',code],cwd=R,input=(d/'spec.json').read_bytes(),capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});(a/'stdout.html').write_bytes(r.stdout);(a/'stderr.txt').write_bytes(r.stderr);save(a,'exit.json',{'exit':r.returncode});print(n,'EXIT',r.returncode,len(r.stdout),r.stderr.decode())
+ if r.returncode==0:
+  (d/'body.html').write_bytes(r.stdout);(d/'generator.stdout.html').write_bytes(r.stdout);(d/'generator.stderr.txt').write_bytes(r.stderr);(d/'generator.exit.txt').write_text(str(r.returncode)+'\n');save(d,'generator-invocation.json',{'argv':[sys.executable,'-c',code],'cwd':str(R),'PYTHONDONTWRITEBYTECODE':'1','sqlite':'mode=ro','canonical_generator_sha256':hashlib.sha256((R/'tools/gen_alignment_page.py').read_bytes()).hexdigest()})

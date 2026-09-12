@@ -1,0 +1,50 @@
+import pathlib,json,hashlib,re,html,sys,importlib.util
+root=pathlib.Path(__file__).resolve().parents[1];work=root.parents[2]/'campaign-worktree'
+sys.path.insert(0,str(work/'tools'));import gen_alignment_page as G
+for seq in (232,233,234):
+ d=root/str(seq);spec=json.loads((d/'spec.json').read_text());s=spec['segments'][0];rows=json.loads((d/'original-source-context.json').read_text());row=next(r for r in rows if r['seq']==seq)
+ tib=G.resolve(row['wylie'],s['spans'],'tib',seq);byid={sp['id']:sp for sp in s['spans']};eng=G.resolve(row['english'],[byid[i] for i in s['eng_order']],'eng',seq)
+ intended=json.loads((d/'intended-english-offsets.json').read_text())
+ for k,at in intended.items():
+  if eng[k][0]!=at:print('OFFSET correction',seq,k,at,'actual',eng[k][0]);intended[k]=eng[k][0]
+ (d/'intended-english-offsets.json').write_text(json.dumps(intended,indent=2)+'\n')
+ body=(d/'body.html').read_text();blocks={}
+ for side in ('tib','eng'):
+  block=body.split('<div class="'+side+'"><div class="lab">',1)[1].split('</div>',1)[1].split('</div>',1)[0].strip()
+  recovered=html.unescape(re.sub('<[^>]+>','',block));assert recovered==row['wylie' if side=='tib' else 'english'],(seq,side)
+  blocks[side]=True
+ assert (d/'body.html').read_bytes()==(d/'canonical-stdout.html').read_bytes();assert (d/'canonical-exit.txt').read_text()=='0\n';assert (d/'canonical-stderr.txt').read_bytes()==b''
+ counts={'spans':len(s['spans']),'nulls':sum(sp['eng'] is None for sp in s['spans']),'d5':sum(sp['d']==5 for sp in s['spans']),'d3':sum(sp['d']==3 for sp in s['spans']),'d6':sum(sp['d']==6 for sp in s['spans']),'d7':sum(sp['d']==7 for sp in s['spans'])}
+ checks={'counts':counts,'canonical_exit':0,'stderr_bytes':0,'body_bytes':len((d/'body.html').read_bytes()),'body_sha256':hashlib.sha256((d/'body.html').read_bytes()).hexdigest(),'spec_sha256':hashlib.sha256((d/'spec.json').read_bytes()).hexdigest(),'body_equals_canonical_stdout':True,'full_source_unwrapped_equality':blocks,'occurrences':[{**sp,'tib_range':tib[sp['id']],'english_range':eng[sp['id']]} for sp in s['spans']]}
+ (d/'verification.json').write_text(json.dumps(checks,ensure_ascii=False,indent=2)+'\n')
+ comments={232:[
+ 'Challenge first: the complete d3 sbrul gyi mtshan gzhir \'jog rgyu → could ever establish as being one kind of a snake; this is contextual recasting, never mtshan gzhi → kind at d5.',
+ 'Original HGM glossary entries support mtshon pa → giving a single example, khra bo → pattern, mdog → colored, \'khyil → coiled, lugs → way, rtog pa → conceptualization/conceptions, and thag pa/sbrul/tshogs pa/cha shas. Inflected bzhag par → established and btags pa → creation are contextual corpus matches, not master changes.',
+ 'All six snake occurrences are resolved; the fifth is contained in the d3 phrase. Only the first two ropes are lexical pairs; later rope references, demonstratives, snang ba and chung zad kyang remain omitted due to distribution/recasting. No unresolved content is nulled. mi → n\'t is the explicit negative-affix exception.',
+ 'Original C05 and C16 ASCII passages were inspected; C16:809 has identical ACIP/Wylie but projection/projections where C05 has conceptualization/conceptions. ILL:1111 supports only the shorter shared snake-appearance extent; EM:265 and SOS:294 are related recast examples, not whole-row witnesses.',
+ 'Errata: [] — CHUNG ZAD/chung zad is preserved; C16:809 has the same reading, adjacent C05:233–234 has CUNG ZAD/cung zad, and the master contains chung zad without an HGM gloss. This is insufficient to assert a correction. No new registered-class defect was found.',
+ 'Attempt 01 failed on the English and occurrence (each and every intervenes); its spec/stdout/stderr/exit are preserved. Attempt 02 corrects dang to the conjunction after the colored rope phrase, before way.'
+ ],233:[
+ 'Challenge first: de\'i mtshan gzhir \'jog rgyu → could ever establish as being any kind of "me." is retained as a complete d3 anaphoric recast, not mtshan gzhi → kind at d5.',
+ 'Original HGM evidence supports phung po → heaps/components, rgyun → continuum, tshogs pa → the whole of, cha shas → parts and \'chad → go into. The full nga\'o idea-arising clause and the temporal phrases are d3; dus gcig pa\'i retains the single-moment numeral.',
+ 'Heaps is the first phung po; the first explanatory components stays unwrapped. The second phung po selects the second components, anchored after nothing. Two tshogs pa select whole 1/2; whole 3 in the parts elaboration is unwrapped. All offsets are saved.',
+ 'la brten nas/steng nas and cung zad kyang have distributed English correspondence and remain omitted, not nulled. Unselected grammar remains unwrapped; no d7 members are proposed.',
+ 'Original C05 and C16 ASCII material was inspected. C16:810 matches ACIP, Wylie and English exactly; id/course/seq differ. Identity proves neither independent publication nor ingestion lineage. Full original rows including raw are retained.',
+ 'Errata: [] — no supported new error; numeral is retained, no cap or heading in this row. Both canonical attempts passed; attempt history remains preserved.'
+ ],234:[
+ 'Challenge first: ngo bo tha dad pa\'i → outside is a d3 contextual recast of being a distinct entity, with las left outside the pairing; never a d5 equation of essence and outside.',
+ 'Original HGM evidence supports phung po → components, cha can → whole, brten nas → based on, nga → me and tsam → nothing more than. bzhag pa → creation is contextual attestation in this sentence, not substitution of its glossary entry (nothing but), nor a change to hgm_gloss.',
+ 'The earlier de\'i gzhir \'dzin rgyu d3 phrase owns the first quoted me. nga selects quoted me 2 and de selects this 2; the supplied third me is unwrapped. The two phung po own components 1/2. rang gi ngo bos stays a complete d3 possessive/instrumental phrase.',
+ 'Unselected grammar is omitted; no uncertainty is coded as null. The apparatus from ********* through the Selection Five heading is retained verbatim and unaligned under the registered following-heading class.',
+ 'C16:811 shares ACIP/Wylie but uses projection and different heading apparatus. Original C05/C16 ASCII material was inspected and copied whole; this establishes these text readings, not independent publication or ingestion lineage.',
+ 'Errata: [] — the selection heading is already a registered class; no new source correction is proposed. Both canonical attempts passed and are preserved.'
+ ]}
+ report=[f'C05:{seq} — independent Tibetan-first proposal; actual producer Codex; PROVISIONAL, not semantic approval.',
+ 'Read governing protocol/AGENTS/alignment spec/propose brief/C05 course shape and complete local argument C05:230–236. All six snapshot fields equal original full read-only spine rows; raw is preserved. Original HGM entries are in the evidence files; comparanda did not supply English.',*comments[seq],
+ f'Counts: {counts["spans"]} spans; {counts["nulls"]} nulls; d5={counts["d5"]}, d3={counts["d3"]}, d6={counts["d6"]}, d7={counts["d7"]}; errata=0.',
+ f'Canonical final: EXIT=0; stderr=0 bytes; stdout=body.html exactly, {checks["body_bytes"]} bytes. Exact stdout/stderr/exit and command are saved; a runner enforces SQLite URI mode=ro while running the unmodified canonical file with bytecode disabled.',
+ f'Body SHA256: {checks["body_sha256"]}; spec SHA256: {checks["spec_sha256"]}.',
+ 'Full source text restored from both HTML blocks equals the original fields byte-for-byte after UTF-8 encoding; all span occurrence ranges are saved in verification.json. Generator success is mechanical evidence only.',
+ 'Frozen handoff boundary: final files and all prior attempts are inventoried in freeze-manifest.json. Reports are authoritative; later changes must explicitly supersede this boundary.']
+ (d/'report.md').write_text('\n'.join(report)+'\n')
+ print(seq,counts,checks['body_bytes'],checks['body_sha256'])

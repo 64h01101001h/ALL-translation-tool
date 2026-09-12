@@ -1,0 +1,12 @@
+{
+  "database_uri": "file:build/hgm_spine_v27_2.db?mode=ro",
+  "source_query": "select id,course,seq,acip,wylie,english,raw from corpus_segments where course='C05' and seq=233;",
+  "source_parameters": {"course": "C05", "seq": 233},
+  "hgm_query": "select wylie,tibetan,acip,hgm_gloss,tier,hgm_source,corpus_courses,corpus_n_segments,raw from entries where wylie in ('de bzhin du','phung po','brten nas','nga','snyam pa','snga phyi','rgyun','tshogs pa','dus gcig pa','dus','gcig','cha shas','mtshan gzhi','cung zad','rgyas par','''og nas','''chad pa') order by wylie,id;",
+  "hgm_parameters": ["de bzhin du", "phung po", "brten nas", "nga", "snyam pa", "snga phyi", "rgyun", "tshogs pa", "dus gcig pa", "dus", "gcig", "cha shas", "mtshan gzhi", "cung zad", "rgyas par", "'og nas", "'chad pa"],
+  "corpus_query": "select course,seq,acip,wylie,english from corpus_segments where course <> 'C13' and ((course='C16' and seq=810) or (course='ILL' and seq=1113) or (course='SPF' and seq=40)) order by course,seq;",
+  "corpus_parameters": [{"course": "C16", "seq": 810}, {"course": "ILL", "seq": 1113}, {"course": "SPF", "seq": 40}],
+  "excluded_course": "C13",
+  "original_hgm_source": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+  "original_hgm_line_range": "2235-2242"
+}

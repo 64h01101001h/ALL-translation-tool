@@ -1,0 +1,38 @@
+from pathlib import Path
+import json,hashlib,runpy,subprocess,os
+R=Path.cwd()/'campaign-worktree';B=Path.cwd()/'campaign-artifacts/C05-232-234';V=B/'semantic-review';M=V/'original-to-copy-manifest.json'
+def digest(b):return hashlib.sha256(b).hexdigest()
+records=[]
+def cp(p,rel,pin=None):
+ raw=p.read_bytes(); dest=V/rel;dest.parent.mkdir(parents=True,exist_ok=True); assert not dest.exists() or dest.read_bytes()==raw;dest.write_bytes(raw)
+ rec=dict(original=str(p.resolve()),copy=rel,sha256=digest(raw),bytes=len(raw))
+ if pin:
+  gitpath=str(p.relative_to(R)); obj=subprocess.check_output(['git','show',pin+':'+gitpath],cwd=R);assert obj==raw;rec.update(original_git_commit=pin,repository_relative_path=gitpath)
+ records.append(rec)
+# Preserve core originals and all historical core attempts in readable paths; use dedup only for evidence.
+evidence=[]
+for p in sorted(B.rglob('*')):
+ if not p.is_file() or p.is_relative_to(V) or '__pycache__' in p.parts:continue
+ rel=p.relative_to(B); core=any(w in p.name for w in ['spec','body','report','decision','disposition','attempt','freeze','frozen','errata']) or 'attempts' in p.parts
+ if core:
+  out=('reviewed-final/'+str(Path(*rel.parts[1:])) if rel.parts[0]=='reconciled' else 'proposal-inputs/'+str(rel))
+  if p.suffix not in ['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit']:out+='.txt' if p.suffix in ['.py','.sha256'] else '.bin'
+  cp(p,out)
+ else:evidence.append(p)
+commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','docs/errata_register.json','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ p=R/rel
+ if p.exists():cp(p,'governing-originals/'+rel+('.txt' if p.suffix=='.py' else ''),commit)
+for p in [B.parent/'semantic-review-protocol.md',B.parent/'proposal-protocol.md',B.parent/'copy_evidence_once.py',*sorted((B.parent/'policy-history').glob('*'))]:
+ if p.is_file():evidence.append(p)
+for c in ['C05','C16']:
+ prov=json.loads((B/'reconciled/232'/f'{c}-original-provenance.json').read_text());p=Path(prov['path']);assert p.stat().st_size==prov['bytes'] and digest(p.read_bytes())==prov['sha256'];evidence.append(p)
+M.write_text(json.dumps(records,ensure_ascii=False,indent=2)+'\n')
+h=runpy.run_path(str(B.parent/'copy_evidence_once.py'));print(h['preserve'](V,M,evidence))
+records=json.loads(M.read_text())
+for rec in records:
+ p=Path(rec['original']);b=(V/rec['copy']).read_bytes();assert len(b)==rec['bytes'] and digest(b)==rec['sha256']
+ if 'original_git_commit' in rec:assert b==subprocess.check_output(['git','show',rec['original_git_commit']+':'+rec['repository_relative_path']],cwd=R)
+ else:assert b==p.read_bytes()
+(V/'preservation-check.json').write_text(json.dumps(dict(all_equal=True,original_records=len(records),distinct_copies=len({r['copy'] for r in records}),governing_git_commit=commit),indent=2)+'\n')
+print('All original/copy bytes independently verified',len(records),commit)

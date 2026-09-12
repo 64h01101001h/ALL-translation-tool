@@ -1,0 +1,48 @@
+import pathlib,json,sys,runpy,hashlib,html,re,sqlite3,gzip
+from collections import Counter
+P=pathlib.Path(__file__).resolve().parents[2];R=P.parents[1]/'campaign-worktree';sys.path.insert(0,str(R/'tools'));G=runpy.run_path(str(R/'tools/gen_alignment_page.py'),run_name='reconciliation_check')
+def save(d,n,x): (d/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def resolve(s,src):
+ spans=s['spans'];trs=G['resolve'](src['wylie'],spans,'tib',src['seq']);by={x['id']:x for x in spans};es=G['with_members'](spans,[by[i] for i in s['eng_order']],src['english']);ers=G['resolve'](src['english'],es,'eng',src['seq']);return [dict(x,tib_range=trs[x['id']],eng_range=ers.get(x['id'])) for x in spans]
+def occurrences(text,piece):
+ out=[];pos=0
+ while True:
+  i=G['find_word'](text,piece,pos)
+  if i<0:return out
+  out.append([i,i+len(piece)]);pos=i+len(piece)
+D=sqlite3.connect((R/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);D.row_factory=sqlite3.Row
+m_path=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz');master=json.loads(gzip.decompress(m_path.read_bytes()))['unified_entries']
+register=json.loads((R/'docs/errata_register.json').read_text());reg_records=[x for x in register if any(k in json.dumps(x) for k in ['following section','E-071','E-076','E-107','CHUNG ZAD','chung zad','C05:232','C05:233','C05:234'])]
+for n in [232,233,234]:
+ d=P/'reconciled'/str(n);spec=json.loads((d/'spec.json').read_text());s=spec['segments'][0];src=json.loads((d/'source-original.json').read_text());rs=resolve(s,src);save(d,'resolved-spans.json',rs)
+ body=(d/'body.html').read_text();restored={}
+ for side,col in [('tib','wylie'),('eng','english')]:
+  match=re.search(r'<div class="'+side+r'"><div class="lab">.*?</div>\n(.*?)\n</div>',body,re.S);plain=html.unescape(re.sub('<[^>]+>','',match.group(1)));assert plain.encode()==src[col].encode();restored[col]={'byte_exact':True,'bytes':len(plain.encode())}
+ reps={}
+ for side,pieces in [('wylie',['thag pa','sbrul','phung po','tshogs pa','nga','de','yin']),('english',['rope','snake','components','whole','me','this','is','time','moment','nor','of'])]:
+  for piece in pieces:
+   ranges=occurrences(src[side],piece)
+   if not ranges:continue
+   key=side+':'+piece;reps[key]=[]
+   for i,ran in enumerate(ranges,1):
+    owners=[x['id'] for x in rs if (z:=x['tib_range' if side=='wylie' else 'eng_range']) and z[0]<=ran[0] and ran[1]<=z[1]];reps[key].append({'occurrence':i,'range':ran,'owners':owners,'context':src[side][max(0,ran[0]-35):ran[1]+45]})
+ save(d,'repeated-occurrences.json',reps)
+ comparisons=[]
+ for a in ['tibetan','english']:
+  ps=json.loads((P/a/str(n)/'spec.json').read_text())['segments'][0];pr=resolve(ps,src);save(d,'proposal-'+a+'-resolved-spans.json',pr)
+  for x in pr:
+   exact=[f['id'] for f in rs if all(x.get(k)==f.get(k) for k in ['d','tib','eng','tib_range','eng_range'])];related=[f['id'] for f in rs if max(f['tib_range'][0],x['tib_range'][0])<min(f['tib_range'][1],x['tib_range'][1])]
+   comparisons.append({'angle':a,'proposal':x,'disposition':'retained exact' if exact else ('replaced or tightened; see semantic-decisions.md' if related else 'omitted; see semantic-decisions.md'),'final_spans':exact or related})
+ save(d,'all-proposal-dispositions.json',comparisons)
+ # Reopen all final lexical strings and their explicit inflectional bases, preserving full original master entries.
+ terms=sorted(set([x['tib'] for x in rs]+["'jog","'dzin","ngo bo tha dad pa",'rtog pa','med','bzhag pa','gsungs pa',"'chad pa",'rang gi','ngo bo','snga phyi','dus gcig pa','las','yin','zhing','na']))
+ query='select * from entries where wylie in ('+','.join('?' for _ in terms)+') order by wylie,id';rows=[dict(x) for x in D.execute(query,terms)];save(d,'final-lexical-originals.json',{'query':query,'parameters':terms,'rows':rows,'master_path':str(m_path),'master_sha256':sha(m_path),'master_entries':[x for x in master if x.get('wylie') in terms]})
+ save(d,'registered-class-originals.json',{'register_path':str(R/'docs/errata_register.json'),'register_sha256':sha(R/'docs/errata_register.json'),'records':reg_records,'alignment_spec_class_policy':(R/'docs/ALIGNMENT_LAYER_SPEC.md').read_text().split('## 4. Markers and apparatus')[1].split('## 5.')[0]})
+ ck={'source_restoration':restored,'counts':dict(Counter(x['d'] for x in rs)),'span_count':len(rs),'null_count':sum(x['eng'] is None for x in rs),'errata_count':0,'generator_exit':int((d/'generator.exit.txt').read_text()),'generator_stderr_bytes':(d/'generator.stderr.txt').stat().st_size,'generator_stdout_equals_body':(d/'generator.stdout.html').read_bytes()==(d/'body.html').read_bytes(),'spec_sha256':sha(d/'spec.json'),'spec_bytes':(d/'spec.json').stat().st_size,'body_sha256':sha(d/'body.html'),'body_bytes':(d/'body.html').stat().st_size}
+ save(d,'verification.json',ck);print(n,json.dumps(ck));print('selected repeated', {k:[(z['occurrence'],z['range'],z['owners']) for z in v] for k,v in reps.items() if k in ['wylie:thag pa','english:rope','english:me','english:is','english:time','english:moment']})
+ allowed=[]
+ for x in rs:
+  if x['d'] in [5,7] and x['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you) ',x['eng'],re.I):
+   assert n==232 and x['id']=='w4';allowed.append({'directory':'pages_c05','key':'c5p78/s232w4','value':"sogs at original Wylie [18,22) licenses the complete closing gesture 'and such', including initial and. HGM glossary entry 20919 (HTG2016) explicitly attests and such; no supplied noun or participant is captured. Codex reconciliation, PROVISIONAL.",'tib_range':x['tib_range'],'eng_range':x['eng_range']})
+ save(d,'proposed-span-head-allowance.json',allowed)

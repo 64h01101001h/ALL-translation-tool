@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. Coverage 231/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. Coverage 234/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -1159,3 +1159,43 @@ native/device execution remain unverified; no main integration occurred.
 Next 232–234 has source/context snapshots, original-parallel checks and independent
 role briefs only; no proposals or semantic approval. Final bounded integration
 review is active on the three fixed data heads and forthcoming documentation.
+
+
+### c5p78 · C05:232–234 — 2026-09-12 — Codex reconciliation/review
+
+Three independent Tibetan/English proposal pairs, fresh reconciliation and separate
+semantic SPEC/QUALITY APPROVE yield 92 analyst spans (47/20/25), zero nulls,
+68 non-null d5 pairs and four d7 members. Source wording and PROVISIONAL labels
+remain unchanged; no human editorial acceptance or hgm_gloss promotion is implied.
+
+All six snakes are retained with their actual owners. Rope source occurrences
+1/2/4 own English ropes1/2/4; the implicit third source rope and repeated fifth
+genitive are omitted, as are English anaphoric expansions. The broad instance
+recasts and supplied personal frames stay unwrapped. Temporal continuum/time
+are separate lexical units; single moment retains moment/single members. The
+explicit yin/is corrects a proposed false null. Outside and its ablative of
+are separate; the full instrumental/reflexive essence unit has two members.
+Creation remains local provisional corpus attestation, not a glossary correction.
+
+No new errata; CHUNG/CUNG remains underdetermined, and the original Selection
+Five tail stays unwrapped under the registered heading class. One exact sogs/
+and such allowance is added at c5p78/s232w4; all prior allowances and190 errata
+remain unchanged. Review/source/copy proofs verify415 original mappings,
+including10 immutable Git snapshots, and394 copied semantic files. All150
+original proposal dispositions and failed attempts survive; exact-body evidence
+is independently reproduced. Identical immutable evidence shares one copy with
+every original path retained. No review or generator check is skipped.
+
+Coverage234/511. Bank43,816 links (+95 with three anchors),11,877 nulls,
+1,570 notes,11 trees; evidence6,997 heads/15,160 pairs. Main/reverse/course/changes
+CSV rows21,922/21,582/23,376/39, seeded against1809556. Every course-depth group
+matches actual source references; prior content, links, notes, trees, citations,
+ACIP values and source/master hashes survive. No old ACIP enrichment.
+
+All17 targeted suites passed (11.37s). Exact copies, body/range/source retention,
+complete exports and navigation targets passed. A first root registration
+assertion expected compact dict syntax and stopped before mutation; the original
+spaced form was read and preserved in the retry. Review extraction's failed
+null-marker check and its corrected full replay remain preserved. Rendering
+remains unverified after browser-policy refusal; native/installed-phone execution
+remains verified only through171, locked launch unverified. Main integration open.

@@ -1,0 +1,14 @@
+import pathlib,subprocess,os,json,hashlib,shutil,sys
+root=pathlib.Path(__file__).resolve().parents[1];work=root.parents[2]/'campaign-worktree'
+code="import sqlite3,runpy,pathlib; original=sqlite3.connect; sqlite3.connect=lambda path,*a,**kw: original(pathlib.Path(path).resolve().as_uri()+'?mode=ro',uri=True); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+for seq in (232,233,234):
+ d=root/str(seq);a=d/'attempts';a.mkdir(exist_ok=True);out=a/f'{len(list(a.iterdir()))+1:02d}';out.mkdir();shutil.copyfile(d/'spec.json',out/'spec.json')
+ command=[sys.executable,'-c',code]
+ r=subprocess.run(command,cwd=work,input=(d/'spec.json').read_bytes(),stdout=subprocess.PIPE,stderr=subprocess.PIPE,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (out/'stdout.html').write_bytes(r.stdout);(out/'stderr.txt').write_bytes(r.stderr);(out/'exit.txt').write_text(str(r.returncode)+'\n')
+ (out/'invocation.json').write_text(json.dumps({'argv':command,'cwd':str(work),'sqlite_policy':'All canonical connections redirected to same resolved spine with URI mode=ro; no generator code or gate changed','canonical_sha256':hashlib.sha256((work/'tools/gen_alignment_page.py').read_bytes()).hexdigest()},indent=2)+'\n')
+ print(seq,'EXIT='+str(r.returncode),'bytes='+str(len(r.stdout)),r.stderr.decode())
+ if r.returncode==0:
+  (d/'body.html').write_bytes(r.stdout)
+  for name in ('stderr.txt','exit.txt','invocation.json'):shutil.copyfile(out/name,d/('canonical-'+name))
+  shutil.copyfile(out/'stdout.html',d/'canonical-stdout.html')

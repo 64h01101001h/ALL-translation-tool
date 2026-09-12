@@ -1,0 +1,41 @@
+import pathlib,json,hashlib,re
+P=pathlib.Path(__file__).resolve().parents[2]
+def save(d,n,x):(d/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+nulls={232:{'p1':'Plural agreement/coordination is distributed; and such is already licensed by sogs. Omit, without claiming a proven fusion or absence.','p2':'Basis relation is syntactic in rope labelled snake; plausible grammatical fusion, omitted as optional unselected grammar.','p3':'Label complement du has no literal as here; syntactic realization with labelled is plausible. Omitted rather than banking a needless null.','p4':'Topic framing may appear across it is; no unique lexical assignment is proven. Omit.','p6':'Visible semicolon and explanatory discourse can realize ste; no blanket absence claim. Omit punctuation/discourse uncertainty.','p18':'Final topic may be reflected in then / is framing; absence not established. Omit.'},234:{'p8':'Topic marker is omitted; yin owns the explicit copula. No absence claim for ni.','p9':'Governed-basis relation is incorporated in based on; omit optional fused grammar without an absence claim.','p11':'Contradicted: yin [174,177) has explicit is [191,193) after second quoted me. Replace with a2 yin/is.','p12':'Contrast is discourse across the English sentence boundary; no proven lack of exponent. Omit.'}}
+for n in [232,233,234]:
+ d=P/'reconciled'/str(n);v=json.loads((d/'verification.json').read_text());nr=[]
+ for sp in json.loads((d/'proposal-english-resolved-spans.json').read_text()):
+  if sp['eng'] is None:nr.append({'original':sp,'decision':nulls[n][sp['id']]})
+ save(d,'all-null-decisions.json',nr)
+ allowance=json.loads((d/'proposed-span-head-allowance.json').read_text())
+ if n==232:
+  hard="The broad perception/instance recasts were tightened to known lexical units; all six snakes remain and rope occurrences 1/2/4 are explicitly resolved. All six proposed nulls were examined and omitted with reasons."
+  coverage="HGM mtshon pa/giving a single example, pattern/colored/coiled/way, think/start are retained. Source rope 4 [339,346) owns English rope 4 [555,559); source rope 3 is implicit, source rope 5 repeats the genitive without a second local English rope."
+  gate="One exact proposed allowance: pages_c05 c5p78/s232w4, sogs [19,23) → and such [41,49); full licensor wording is in proposed-span-head-allowance.json. No allowance file changed."
+ elif n==233:
+  hard="The temporal genitive continuum is split into snga phyi/time and rgyun/continuum; established dus gcig pa/single moment keeps unique dus/moment and gcig/single members. All four original d7 roles are dispositioned."
+  coverage="Supplied personal/appositional/instance frames are excluded; 'jog/establish and final go into/in more detail/further on remain lexical. Components occurrence2 and whole occurrences1/2 are pinned; repeated whole3/time2 are omitted."
+  gate="No gated d5/d7 English heads; proposed allowance list is empty. Corrected English233's provenance assertion: C16:810 has equal ACIP/Wylie/English, but independence and re-ingestion lineage are not proved."
+ else:
+  hard="False yin/null replaced by yin [174,177) → is [191,193) after the second quoted me. All four proposed nulls were individually examined; none retained. 'dzin/consider replaces the overcaptured instance recast."
+  coverage="HGM outside is d5 with las/of separately; full instrumental/reflexive essence is d5 with unique rang gi/of its own and ngo bo/essence d7 members. Creation remains explicit contextual corpus attestation, not proof from the auto-aligned glossary."
+  gate="No gated d5/d7 English heads; proposed allowance list is empty. Selection Five tail is byte-preserved, unaligned registered following-heading apparatus."
+ report=[f'C05:{n} — reconciliation by Codex, 2026-09-12; PROVISIONAL corpus attestation, not separate skeptical approval.',
+ 'Read both complete angles, source/context, governing briefs/spec/AGENTS and course shape; independently reopened read-only spine, original master fields and complete C05/C16 ASCII bytes.',
+ 'Both actual canonical proposal reruns EXIT=0, empty stderr, exact saved bodies; complete replay outputs/commands are preserved.',hard,coverage,gate,
+ 'All150 proposal decisions across this batch are on disk with canonical ranges; this segment\'s full decisions, every omission/null, original witnesses and errata grounds are in semantic-decisions.md and all-proposal-dispositions.json.',
+ 'Exact original corpus queries independently replayed as 13 mtshan-gzhi, 3 continuum and 3 parts/whole rows, excluding C13. Short parallels support only their shared extent; no textual-equality/difference argument proves publication or ingestion lineage.',
+ 'Errata=[]; all five refutation grounds considered. No CHUNG/CUNG correction is supported; registered classes were reopened, source wording never corrected, no hgm_gloss promotion.',
+ f'Counts: spans={v["span_count"]}; depths={v["counts"]}; nulls=0; errata=0.',
+ f'FINAL GENERATOR: EXIT={v["generator_exit"]}; STDERR={v["generator_stderr_bytes"]} bytes; STDOUT=body.html byte-exact; BODY={v["body_bytes"]} bytes.',
+ f'SPEC: {v["spec_bytes"]} bytes; SHA256={v["spec_sha256"]}.',
+ f'BODY: {v["body_bytes"]} bytes; SHA256={v["body_sha256"]}.',
+ 'Both complete HTML source columns restore byte-exact to original Wylie/English; actual final ranges and repeated-occurrence owners are preserved. Mechanical correctness is not semantic proof.',
+ 'Attempts and corrected ancillary-report versions are preserved. Final immutable handoff hashes are in frozen-manifest.json; freeze marks reconciliation completion only. Separate skeptical review remains required before root landing.'
+ ]
+ (d/'report.md').write_text('\n'.join(report)+'\n')
+ save(d,'frozen-state.json',{'state':'FINAL','producer':'Codex reconciliation agent','status':'PROVISIONAL','repository_edits':False,'source_or_master_edits':False,'separate_skeptical_approval_claimed':False,'span_count':v['span_count'],'nulls':0,'errata':0,'generator_exit':0})
+# Freeze all current evidence and outputs; manifest itself is excluded to avoid a hash cycle.
+for n in [232,233,234]:
+ d=P/'reconciled'/str(n);items={str(f.relative_to(d)):{'bytes':f.stat().st_size,'sha256':hashlib.sha256(f.read_bytes()).hexdigest()} for f in sorted(d.rglob('*')) if f.is_file() and f.name!='frozen-manifest.json'};save(d,'frozen-manifest.json',{'state':'FINAL','producer':'Codex reconciliation','files':items})
+ print(n,'FROZEN',len(items),'files')

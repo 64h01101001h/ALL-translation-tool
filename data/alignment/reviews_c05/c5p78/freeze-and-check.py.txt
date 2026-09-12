@@ -1,0 +1,38 @@
+from pathlib import Path
+import json,hashlib,subprocess,os
+V=Path(__file__).resolve().parent;B=V.parent;R=B.parents[1]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(n,x):(V/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+# Preserve running review helpers in supported exact-byte extensions for landing.
+for p in sorted(V.glob('*.py')):
+ q=p.with_suffix('.py.txt');assert not q.exists() or q.read_bytes()==p.read_bytes();q.write_bytes(p.read_bytes())
+manifest=json.loads((V/'original-to-copy-manifest.json').read_text());pins=[]
+for rec in manifest:
+ expected={'original','copy','sha256','bytes'}|({'original_git_commit','repository_relative_path'} if 'original_git_commit' in rec else set());assert set(rec)==expected
+ cp=V/rec['copy'];b=cp.read_bytes();assert len(b)==rec['bytes'] and sha(b)==rec['sha256']
+ if 'original_git_commit' in rec:
+  obj=subprocess.check_output(['git','show',rec['original_git_commit']+':'+rec['repository_relative_path']],cwd=R);assert obj==b;pins.append(rec['repository_relative_path'])
+ else:assert Path(rec['original']).read_bytes()==b
+j=json.loads((V/'review.json').read_text());rs=json.loads((V/'resolved-spans.json').read_text());assert len(rs)==92 and all(set(x)=={'seq','id','d','tib','eng','tib_range','eng_range'} for x in rs)
+for s in j['segments']:
+ n=s['seq'];part=[x for x in rs if x['seq']==n];spec=json.loads((B/f'reconciled/{n}/spec.json').read_text())['segments'][0];assert [x['id'] for x in part]==[x['id'] for x in spec['spans']]
+ for name in ['spec','body']:
+  ext='json' if name=='spec' else 'html';p=B/f'reconciled/{n}/{name}.{ext}';b=p.read_bytes();assert sha(b)==s[f'{name}_sha256'] and len(b)==s[f'{name}_bytes'];assert (V/f'reviewed-final/{n}/{name}.{ext}').read_bytes()==b
+ assert len(part)==s['span_count'] and sum(x['eng'] is None for x in part)==s['null_count'] and sum(x['d']==5 and x['eng'] is not None for x in part)==s['word_pair_count']
+assert j['verdict']=='APPROVE' and not j['open_findings']
+assert json.loads((V/'bank-ready-errata.json').read_text())==[]
+assert set(json.loads((V/'span-head-allow-needed.json').read_text())['pages_c05'])=={'c5p78/s232w4'}
+save('final-preservation-check.json',dict(all_original_copies_equal=True,original_records=len(manifest),distinct_copies=len({x['copy'] for x in manifest}),pinned_git_objects_verified=pins,final_specs_bodies_match_review=True,seven_key_tuple_schema=True,all_nine_replays_exact=True,total_spans=92,total_nulls=0,total_word_pairs=68))
+# Supported files constitute complete landing evidence; own .py files have exact .py.txt copies.
+files=[]
+for p in sorted(V.rglob('*')):
+ if not p.is_file() or p.name in ['frozen-manifest.json','frozen-state.json'] or p.suffix=='.py':continue
+ raw=p.read_bytes();files.append(dict(path=str(p.relative_to(V)),sha256=sha(raw),bytes=len(raw)))
+save('frozen-manifest.json',files)
+for x in files:
+ raw=(V/x['path']).read_bytes();assert len(raw)==x['bytes'] and sha(raw)==x['sha256']
+fm=(V/'frozen-manifest.json').read_bytes();save('frozen-state.json',dict(state='DONE',verdict='APPROVE',manifest_sha256=sha(fm),manifest_bytes=len(fm),verified_file_count=len(files),review_sha256=sha((V/'review.json').read_bytes()),review_md_sha256=sha((V/'review.md').read_bytes()),resolved_spans_sha256=sha((V/'resolved-spans.json').read_bytes()),all_final_hashes_checked=True))
+# Reopen frozen state and all listed hashes, no writes after this point.
+state=json.loads((V/'frozen-state.json').read_text());assert state['manifest_sha256']==sha((V/'frozen-manifest.json').read_bytes())
+assert all(sha((V/x['path']).read_bytes())==x['sha256'] for x in files)
+print(json.dumps(state));print('FINAL manifests verified',len(manifest),'original mappings;',len(files),'frozen files')

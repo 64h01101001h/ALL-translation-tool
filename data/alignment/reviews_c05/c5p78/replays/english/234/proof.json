@@ -1,0 +1,20 @@
+{
+  "seq": 234,
+  "span_count": 22,
+  "null_count": 4,
+  "word_pair_count": 10,
+  "spec_sha256": "b0fcc92b4c7245b973abc8bdb3ac1fc0ef6a846c638e59b8be793a1ec479b2e7",
+  "spec_bytes": 2644,
+  "body_sha256": "46f07ed086114b9fcdfd5c973912458cba18055bb0d6b7c421a2e30fd726f137",
+  "body_bytes": 4058,
+  "generator_exit": 0,
+  "angle": "english",
+  "source_restoration": true,
+  "exact_saved_body": true,
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-c",
+    "import sqlite3,runpy,pathlib; orig=sqlite3.connect; sqlite3.connect=lambda path,*a,**k: orig(pathlib.Path(path).resolve().as_uri()+'?mode=ro',uri=True); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree"
+}

@@ -1,0 +1,51 @@
+import pathlib,json,re
+root=pathlib.Path(__file__).resolve().parents[1]
+rows=json.loads((root/'232/original-source-context.json').read_text()); rows={r['seq']:r for r in rows}
+# English occurrence selection is explicit; sorting only serializes these decisions.
+proposals={
+232:[
+(5,"'grel pa",'commentary'),(5,'der','this'),(5,'chags','desire'),(5,'sogs','and such'),
+(5,'thag pa','rope',1),(5,'sbrul','snake',1),(5,'btags pa','labelled'),(6,'ltar','like',1),(5,'gsungs pa','states'),
+(5,'mtshon pa','giving a single example'),(6,'tsam','only'),
+(5,'chos','existing object'),(5,'gzhan','other'),(5,'thams cad','each and every'),(6,'kyang','as well'),
+(5,'thag pa','rope',2),(5,'sbrul','snake',2),(5,'btags pa','called'),(6,'ltar','like',2),
+(5,'rtog pas','conceptualization'),(5,'bzhag par','established'),(5,"'chad pa'o",'say'),
+(5,'khra bo','pattern'),(5,'mdog','colored'),(6,'dang','and',2),
+(5,"'khyil",'coiled'),(5,'lugs','way'),(5,'sbrul','snake',3),(5,"'dra",'resemble'),
+(5,'yul','place'),(6,'mi',"n't"),(5,'gsal bar','clearly'),
+(5,'sbrul','snake',4),(5,'snyam pa','think'),(5,"'byung",'start'),
+(5,'tshogs pa','whole'),(5,'cha shas','parts'),
+(3,"sbrul gyi mtshan gzhir 'jog rgyu",'could ever establish as being one kind of a snake'),
+(5,'med pas','nothing',1),(5,'sbrul','snake',6),(5,'rtog pas','conceptions'),(5,'btags pa','creation'),(6,'tsam','nothing but')
+],
+233:[
+(3,'de bzhin du','same thing'),(5,'phung po','heaps'),
+(3,"nga'o snyam pa 'byung ba",'get the idea of "me"'),(6,'na','when',1),
+(5,'phung po','components',2),(3,"snga phyi'i",'in time',1),(5,'rgyun','continuum'),(5,'tshogs pa','whole',1),
+(3,"dus gcig pa'i",'in a single moment in time'),(5,'tshogs pa','whole',2),(5,'cha shas','parts'),
+(3,"de'i mtshan gzhir 'jog rgyu",'could ever establish as being any kind of "me."'),
+(5,'med','nothing'),(3,'rgyas par','in more detail'),(3,"'og nas",'further on'),(5,"'chad",'go into')
+],
+234:[
+(3,"de'i phyir",'Because of this fact'),(6,'dang','and',1),(5,'phung po','components',1),
+(5,'cha','parts'),(6,'dang','or'),(5,'cha can','whole'),(3,"ngo bo tha dad pa'i",'outside'),
+(3,"de'i gzhir 'dzin rgyu",'could ever consider any kind of "me,"'),(6,'yang','moreover'),
+(5,'cung zad','slightest thing'),(5,'med pas','not'),(5,'nga','me',2),(5,'de','this',2),
+(5,'rtog pas','conception'),(5,'phung po','components',2),(5,'brten nas','based on'),(5,'bzhag pa','creation'),
+(6,'tsam','nothing more than'),(3,'rang gi ngo bos','through any essence of its own'),(5,'grub pa','exists'),(5,'med','no')
+]}
+notes={232:"Provisional machine alignment produced independently by Codex (Tibetan-first); semantic acceptance requires separate review. HGM glossary supports khra bo / pattern, mdog / colored, mtshon pa / giving a single example, and the rope, snake, conception, whole and part vocabulary. Repeated snakes resolve to all six source and English occurrences, the fifth inside the complete d3 establishment phrase. Only the first two rope mentions are separately aligned: later references are distributed between explicit rope and pronouns and remain omitted. mtshan gzhi is retained inside the complete d3 recast, never promoted to a dictionary equivalence with kind. rtog pas is an inflected nominal word; its agentive -s is not split. The first med pas owns nothing; final tsam owns nothing but. Omitted rnams, local de la / de'i tshe / de'i, thag pa repeats, 'di, snang ba and chung zad kyang have distributed or uncertain correspondence; no null asserts their absence. Connectives and bound grammar without chosen separate alignment remain omitted. mi owns the negative n't in can't, with subword explicitly declared; supplied can, it and very stay unwrapped.",
+233:"Provisional machine alignment produced independently by Codex (Tibetan-first); semantic acceptance requires separate review. The nga'o snyam pa 'byung ba recast is a complete d3 phrase, not a dictionary compound. The first phung po owns heaps, while its supplied explanatory restatement components to yourself is unwrapped; second phung po owns the second English components. The two tshogs pa occurrences own the first two whole occurrences; the third English whole is supplied in elaborating parts and remains unwrapped. snga phyi'i is the temporal phrase in time; dus gcig pa'i is the full single-moment phrase, preserving the numeral. de'i mtshan gzhir 'jog rgyu is retained only as the complete d3 recast including the anaphoric me; mtshan gzhi does not separately own kind. la brten nas / steng nas and cung zad kyang are omitted because their contributions are distributed through the English about / nothing / ever frame, not affirmative no-exponent judgments. Other unselected particles and demonstratives remain omitted. No dictionary gloss is changed.",
+234:"Provisional machine alignment produced independently by Codex (Tibetan-first); semantic acceptance requires separate review. ngo bo tha dad pa'i corresponds to outside only as a d3 recast of distinct essence, not a d5 lexical equivalence; the ablative las is left unwrapped. de'i gzhir 'dzin rgyu is the complete d3 any-kind-of-me recast. nga owns the second quoted me and de owns the second this; the first quoted me is inside the earlier anaphoric d3 phrase, and the third English me is an explanatory subject without a separate nga and remains unwrapped. Whole is the lexical cha can; brten nas owns based on with the dependent nominal form kept whole. rang gi ngo bos owns the complete possessive/instrumental essence phrase, not separate supplied any. med pas and med own not and no respectively; tsam owns nothing more than. Unselected case, topic and copular grammar remains omitted, with no uncertain nulls. The following Selection Five heading after ********* is original apparatus in the registered following-heading class, preserved verbatim and unaligned, not a new erratum."}
+for seq,items in proposals.items():
+ spans=[];slots={};text=rows[seq]['english']
+ for i,item in enumerate(items,1):
+  d,t,e,*occ=item;sp={'id':'w'+str(i),'d':d,'tib':t,'eng':e}
+  if e=="n't":sp['subword']=True
+  spans.append(sp)
+  hits=[m.start() for m in re.finditer(re.escape(e),text) if (e=="n't" or (m.start()==0 or not text[m.start()-1].isalnum()) and (m.end()==len(text) or not text[m.end()].isalnum()))]
+  n=occ[0] if occ else 1
+  assert len(hits)>=n,(seq,e,hits,n)
+  slots[sp['id']]=hits[n-1]
+ spec={'course':'C05','segments':[{'seq':seq,'title':{232:'rope and snake',233:'the heaps and the self',234:'a self established by conception'}[seq],'spans':spans,'eng_order':sorted(slots,key=slots.get),'note':notes[seq]}]}
+ out=root/str(seq);(out/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(out/'errata.json').write_text('[]\n');(out/'intended-english-offsets.json').write_text(json.dumps(slots,indent=2)+'\n')

@@ -1,0 +1,56 @@
+{
+  "register_snapshot": "governing-originals/docs/errata_register.json",
+  "matches": [
+    {
+      "item_id": "E-056",
+      "course": "C03",
+      "segment": "C03:210",
+      "kind": "NOT_AN_ERRATUM",
+      "found": "Tibetan opens 'brgyad pa'i skabs su ni thog mar gnyen po dran 'dzin gyi rtsol ba cung zad bsten na...' — the state is referred to only as 'the eighth', with no name. English opens 'Here is what happens when you reach the eighth state of meditation, called \"making the mind single-pointed.\"'",
+      "expected": "",
+      "evidence": "The observation is factually correct — rtse gcig tu byed pa, the eighth state's name, does not appear anywhere in C03:210 — but it is the author's consistent practice, not an omission. Every one of the six neighbouring state-by-state segments does the same: C03:206 Tibetan says only 'bzhi pa ni' while the English supplies 'called \"placing the mind on the object closely\"'; likewise C03:207 ('lnga pa ni' / 'controlling the mind'), C03:208 ('drug pa ni' / 'pacifying the mind'), C03:209 ('bdun pa'i skabs su' / 'pacifying the mind totally') and C03:211 ('dgu pa ni' / 'achieving equilibrium'). The commentary numbers the states; the translator restores the names from the enumeration given earlier at C03:157 and C03:201, where the eighth is 'rtse gcig tu byed pa'. The supplied English name matches that list.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "Registered as not-an-erratum so the finding is closed rather than left for a future editor to re-derive. The log itself seems to reach the same conclusion — 'Recorded so a reader meets the note rather than the puzzle.' One caveat: the excerpt's first sentence, 'His slip, and it stands', belongs to a preceding item that is not in the excerpt, so I could not identify what slip was meant or confirm that it concerns C03:210. If that sentence names a real defect it is still unregistered, and the source log at line 1242 should be re-read for it."
+    }
+  ],
+  "match_count": 1,
+  "class_examples": [
+    {
+      "item_id": "E-106",
+      "course": "C03",
+      "segment": "C03:429",
+      "kind": "INGEST_ARTEFACT",
+      "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+      "expected": "our Lama to help us find the ability to do so.",
+      "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+      "severity": "HIGH",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-113",
+      "course": "C03",
+      "segment": "C03:445",
+      "kind": "TIBETAN_SPELLING",
+      "found": "THAMS CAD MKHYEN PA'I GO 'PANG BSGRUB PA",
+      "expected": "THAMS CAD MKHYEN PA'I GO 'PHANG BSGRUB PA",
+      "evidence": "Confirmed from this segment's own text. ACIP (source of record) reads GO 'PANG; the wylie field carries the same reading, go 'pang, so this is in the source, not the converter. The word is go 'phang (rank, station, state), which is what GMR translates: 'the state of All-Knowing'. Re-derived corpus counts: acip LIKE '%GO ''PANG%' returns exactly one row, C03:445; acip LIKE '%GO ''PHANG%' returns 219; the wylie field splits identically, 1 vs 219. Stronger still, the syllable 'pang occurs NOWHERE else in the corpus wylie: a-chung ('a) prefixes only voiced or aspirated radicals in Tibetan orthography ('g 'j 'd 'b 'dz 'kh 'ch 'th 'ph 'tsh), so 'p- is not a spellable syllable onset and 'pang cannot be a variant. Parallel-witness check: no other segment carries this passage (english LIKE '%habit of hoping for the%', english LIKE '%up to the final end%', wylie LIKE '%tshe ''di snang gi zhen pa%', wylie LIKE '%rang res ngan ''gro%' each return C03:445 alone). The exact collocation mkhyen pa'i go 'p… appears in seven other rows, every one of them 'phang: C01:84, C16:32, TCS02:315, TCS09:37, Sunlight:595, Sunlight:707, SPF:461. The nearest relative for the surrounding idiom, ILL:126 (thog mtha' bar gsum du gal che), shares only that closing idiom and says nothing about go 'phang. Registered classes checked and not applicable: no {SHl} drop, no fused footnote number, no folio marker, no glued heading; the ACIP trailing shad ',' absent from the wylie is the normal strip, and ACIP TSE for wylie tshe is the ACIP convention (TS = tsh), not an error. A dropped aspiration H in one row against 219 correct ones, yielding an impossible syllable, is a keystroke error.",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-177",
+      "course": "C05",
+      "segment": "C05:142",
+      "kind": "FORMATTING",
+      "found": "MNYAM PAR BZHAG,GLANG CHEN MNAL",
+      "expected": "MNYAM PAR BZHAG, GLANG CHEN MNAL",
+      "evidence": "ACIP (source of record) omits the space after the shad-comma between the second and third verse lines; the wylie inherits it as 'bzhag,glang'. Every other line break in the same verse has ', '. No parallel witness: the verse (wylie like '%glang chen gshegs na%', english like '%Even as he stays, the elephant%') occurs only at C05:142 in all 42,199 rows; C16 does not carry this row. Not in any registered class ({SHl} drop, fused footnote, folio splice, glued heading). SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in ACIP and wylie; only occurrence (no witness); comma-without-space is not the general convention (271 vs 29,996 spaced rows) and the verse's other breaks are spaced; same class as E-037/E-038 (per-segment INGEST_ARTEFACT); cross-reference class fix.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    }
+  ]
+}
