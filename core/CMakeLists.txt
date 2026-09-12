@@ -607,6 +607,9 @@ if(Python3_FOUND)
   add_test(NAME gen_alignment_page
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_gen_alignment_page.py)
+  add_test(NAME alignment_gate_coverage
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_alignment_gate_coverage.py)
 
   add_test(NAME alignment_builder
            COMMAND ${Python3_EXECUTABLE}

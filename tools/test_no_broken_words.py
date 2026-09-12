@@ -63,11 +63,11 @@ def eng_blocks(page):
 def main():
     bad = []
     n_pages = n_spans = 0
-    for d in ("pages_c01", "pages", "pages_c03", "pages_c04"):
-        for f in sorted(glob.glob(os.path.join(ROOT, "data", "alignment",
-                                               d, "*.html"))):
+    for d in sorted(glob.glob(os.path.join(ROOT, "data", "alignment", "pages*"))):
+        for f in sorted(glob.glob(os.path.join(d, "*.html"))):
             n_pages += 1
-            page = io.open(f, encoding="utf-8").read()
+            with io.open(f, encoding="utf-8") as source:
+                page = source.read()
             for chunk in eng_blocks(page):
                 for m in SPAN.finditer(chunk):
                     t = m.group(2)
@@ -88,6 +88,9 @@ def main():
                     elif LET.match(t[0]) and prv and LET.match(prv):
                         bad.append((os.path.basename(f), m.group(1), t,
                                     "prefixed by %r" % prv))
+    if not n_pages:
+        print("REFUSED: no alignment pages were inspected")
+        sys.exit(1)
     if bad:
         print("BROKEN WORDS in English spans: %d" % len(bad))
         for b in bad:

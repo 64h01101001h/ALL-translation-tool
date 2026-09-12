@@ -8,6 +8,42 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — campaign resumed; incoming claims checked
+
+### Done
+
+- Adam authorized continuing this campaign through 2026-09-15 at 07:00 America/Denver, superseding the older alignment pause. Work is isolated on `codex/aci-alignment-20260915` from `455c92d` while the main checkout has concurrent edits.
+- Preserved 101 surviving C05 scratch files for segments 166–175, including reconciled specs 166–169 and both proposal angles through 175. Originals were left unchanged; every copy was checked by SHA-256. Durable archive and verification reports are in the sibling workspace's `campaign-artifacts/handoff-check/`.
+- Fixed four page gates which enumerated only C01–C04: broken English words, split Tibetan syllables, degenerate members, and builder span coverage. They now discover later course directories and refuse an empty scan. Added a regression suite exercising C05, a future course, valid page counts, and absent pages.
+
+### Verified
+
+- Incoming claim 1: **CORRECTED.** Punchlist has 191 rows, not 191 verified currently open tasks. Its headings total 85 unblocked, 91 Adam, 15 outside, differing from the introductory split. Seven of ten sampled statuses/dependencies require correction; details and source citations are in `campaign-artifacts/handoff-check/report.md`.
+- Incoming claim 2: **CONFIRMED for the deterministic sample.** Existing `build_drill_pack` produced 500 cloze items, 0 unplaceable, exit 0. This is a sampled check using the existing binary, not a proof over all draws.
+- Incoming claim 3: **CORRECTED.** The allegedly lost scratch survives under an older project-related Claude scratch workspace. Preserved files and original paths/hashes are listed in `recovered-c05-inventory.json`.
+- Incoming claim 4: **CORRECTED in scope.** The current prose generator rejects the legacy phonetics shape (340 d=7 spans lacking d=5 ancestors across the 14 clone pages). This does not mean the data is irrecoverable or impossible for any generator to reproduce. Existing pages remain untouched.
+- Incoming claim 5: **CONFIRMED with terminology.** 2,891 identified recordings / 3,905 identified syllable readings; physical recording count is 3,002, not 2,891. All 3,002 manifest paths exist; no broken by-sound links.
+- Baseline alignment checks and constitution: 15 command exits were 0. Four nevertheless omitted C05; the new regression exposed this with 16 failures before the fix and passed after it. The corrected gates inspect 511 pages, including 55 C05 pages. Independent review approved the narrow fix.
+- Worktree CMake configuration registers 116 suites (one new regression) and reports all fixtures present. A full build/test run is separately in progress; these configuration counts are not a test-pass claim.
+
+### Claims to verify
+
+- Re-run returned C05 specs independently, then perform semantic reconciliation and adversarial review before banking any new links.
+- Confirm the final full native build and tests from their logs; they had not completed at this entry.
+- Inspect the final page, bank, desktop data loading, and regenerated iOS pack before claiming propagated results.
+
+### In flight
+
+- Two fresh independent analyses of C05:166–168 are complete; reconciliation is running. No new page was banked at this checkpoint.
+- Hourly continuation is scheduled through the deadline; exact recovery state is in the sibling workspace's `CAMPAIGN_CONTINUATION.md`.
+
+### Do not
+
+- Do not repeat the lost-scratch claim or treat the stale punchlist as a current open-task count.
+- Do not label new work as Claude-produced. This handover uses Codex agents in the independent roles; preserve actual provenance and provisional labels.
+- Do not pair C05:167 `bzhi` with the source English “three”; preserve both source texts and the existing pending discrepancy.
+- Do not scan C13, promote hgm_gloss, overwrite concurrent main-checkout work, spend API money, send messages, or publish releases.
+
 ## 2026-09-11 — Claude (Opus 5) — first handoff; this folder
 
 ### Done

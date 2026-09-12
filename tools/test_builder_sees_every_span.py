@@ -59,13 +59,14 @@ LOOSE = {
 }
 
 def main():
-    dirs = ['pages', 'pages_c01', 'pages_c03', 'pages_c04']
+    dirs = sorted(glob.glob(os.path.join(ROOT, 'data/alignment', 'pages*')))
     seen = present = npages = apparatus = 0
     other = {'note': 0, 'tree': 0}
     bad = []
     for d in dirs:
-        for f in sorted(glob.glob(os.path.join(ROOT, 'data/alignment', d, '*.html'))):
-            s = io.open(f, encoding='utf-8').read()
+        for f in sorted(glob.glob(os.path.join(d, '*.html'))):
+            with io.open(f, encoding='utf-8') as source:
+                s = source.read()
             # APPARATUS spans - typo queue, supplied-sentence flags,
             # editorial notes - are excluded ON PURPOSE and counted out loud.
             # They are not alignment pairs and must never reach the dictionary.
@@ -83,6 +84,9 @@ def main():
                 other[name] += x
                 if x != y:
                     bad.append((os.path.basename(f), name, x, y, y - x))
+    if not npages:
+        print('REFUSED: no alignment pages were inspected')
+        return 1
     if bad:
         bad.sort(key=lambda x: -abs(x[4]))
         print('FAIL the builder does not see everything the pages contain: '

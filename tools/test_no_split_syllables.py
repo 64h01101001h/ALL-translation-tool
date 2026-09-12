@@ -59,11 +59,11 @@ STEM_OK = {"sgo", "de", "rim pa", "phyi ma", "thar pa", "gzhi", "don",
 def main():
     bad = []
     n_pages = n_spans = 0
-    for d in ("pages_c01", "pages", "pages_c03", "pages_c04"):
-        for f in sorted(glob.glob(os.path.join(ROOT, "data", "alignment",
-                                               d, "*.html"))):
+    for d in sorted(glob.glob(os.path.join(ROOT, "data", "alignment", "pages*"))):
+        for f in sorted(glob.glob(os.path.join(d, "*.html"))):
             n_pages += 1
-            page = io.open(f, encoding="utf-8").read()
+            with io.open(f, encoding="utf-8") as source:
+                page = source.read()
             for chunk in page.split('<div class="tib">')[1:]:
                 i = chunk.find('<div class="eng">')
                 if i >= 0:
@@ -88,6 +88,9 @@ def main():
                                         "the word %r?" % (t, tail, t, t + tail)))
                         continue
                     bad.append((os.path.basename(f), m.group(2), t[-24:], tail))
+    if not n_pages:
+        print("REFUSED: no alignment pages were inspected")
+        sys.exit(1)
     if bad:
         print("SPLIT SYLLABLES in Tibetan spans: %d" % len(bad))
         for b in bad:

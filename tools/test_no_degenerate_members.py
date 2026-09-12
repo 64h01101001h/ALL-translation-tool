@@ -21,13 +21,17 @@ PAT = re.compile(r'<span class="u[^"]*" data-d="5" data-l="(s\d+\w+)">'
 
 def main():
     bad, n_pages = [], 0
-    for d in ("pages_c01", "pages", "pages_c03", "pages_c04"):
-        for f in sorted(glob.glob(os.path.join(ROOT, "data", "alignment",
-                                               d, "*.html"))):
+    for d in sorted(glob.glob(os.path.join(ROOT, "data", "alignment", "pages*"))):
+        for f in sorted(glob.glob(os.path.join(d, "*.html"))):
             n_pages += 1
-            for m in PAT.finditer(io.open(f, encoding="utf-8").read()):
+            with io.open(f, encoding="utf-8") as source:
+                page = source.read()
+            for m in PAT.finditer(page):
                 bad.append((os.path.basename(f), m.group(1), m.group(2),
                             m.group(3)[:40]))
+    if not n_pages:
+        print("REFUSED: no alignment pages were inspected")
+        sys.exit(1)
     if bad:
         print("DEGENERATE MEMBERS (a depth-7 span repeating its parent): %d"
               % len(bad))
