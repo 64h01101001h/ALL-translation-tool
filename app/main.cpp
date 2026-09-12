@@ -25436,8 +25436,7 @@ public:
                                      QString::fromStdString(
                                          allcore::hgmTechnicalSpelling(wylie)) +
                                      ")";
-                                 draft_->textCursor().insertText(ins);
-                                 draft_->setFocus();
+                                 insertIntoDraft(ins, "Technical spelling");
                              } else if (s.startsWith("t:"))
                                  showConcordance(s.mid(2).toStdString());
                              else if (s == "back" && lastClause_ >= 0)
@@ -25909,6 +25908,35 @@ public:
                       "instruction");
             }
         }
+        // ---- an insertion is visible, and says so (audit 2026-09-11) ------
+        // Every insertion landed at the draft box's last cursor position —
+        // often scrolled out of sight — and then the dialog closed, so the
+        // control read as broken when it had worked.
+        {
+            draft_->setPlainText("");
+            const int before = draft_->toPlainText().size();
+            insertIntoDraft("[NOTE: probe]", "Probe note");
+            check(draft_->toPlainText().size() > before,
+                  "insert: the text actually reaches the draft");
+            check(draft_->toPlainText().contains("[NOTE: probe]"),
+                  "insert: and reaches it verbatim");
+            check(termLive_->text().contains("inserted at the cursor"),
+                  "insert: the pane says something arrived, so a control that "
+                  "worked cannot look broken");
+            check(termLive_->text().contains("Probe note"),
+                  "insert: and names WHAT arrived");
+            // the cursor is left at the insertion, which is what makes
+            // ensureCursorVisible show it
+            check(draft_->textCursor().position() ==
+                      draft_->toPlainText().size(),
+                  "insert: the cursor is left at the insertion point");
+            insertIntoDraft("", "Nothing");
+            check(draft_->toPlainText().contains("[NOTE: probe]"),
+                  "insert: an empty insertion changes nothing and says "
+                  "nothing");
+            draft_->setPlainText("");
+        }
+
         // ---- a new draft does not keep the old verdict (audit 2026-09-11) --
         {
             source_->setPlainText("/ /sems can thams cad bde ba dang ldan "
@@ -27175,13 +27203,32 @@ public:
                 .arg(candBank_.size()));
     }
 
+    // Every insertion into the draft used to land at whatever point the draft
+    // box's cursor last sat — often scrolled off-screen — and then the dialog
+    // closed. The reader pressed "insert", the dialog vanished, and the draft
+    // looked unchanged, so the control read as broken. It was working; they
+    // simply could not see where. (Draft workspace audit, 2026-09-11.)
+    //
+    // Three things, in this order: put it in, SHOW it, and say what arrived.
+    void insertIntoDraft(const QString& text, const QString& what) {
+        if (text.isEmpty()) return;
+        QTextCursor c = draft_->textCursor();
+        c.insertText(text);
+        draft_->setTextCursor(c);
+        draft_->ensureCursorVisible();
+        draft_->setFocus();
+        if (termLive_)
+            termLive_->setText(what + " inserted at the cursor \u2014 "
+                                      "\u2318Z undoes it.");
+    }
+
     void insertNote(int ix) {
         if (ix < 0 || ix >= (int)notesBank_.size()) return;
         const auto& n = notesBank_[ix];
-        draft_->textCursor().insertText(
+        insertIntoDraft(
             "[NOTE: " + n.lemma + ": " + n.text + " — reused from " +
-            n.source + ", n." + QString::number(n.note) + "]");
-        draft_->setFocus();
+                n.source + ", n." + QString::number(n.note) + "]",
+            "Published footnote");
     }
 
     void detectQuotes() {
@@ -27555,10 +27602,9 @@ public:
         if (dlg.exec() != QDialog::Accepted) return;
         const QString entry = composedNow();
         if (bibIsEmpty(entry)) return;   // was `entry == "."`, which never fired
-        draft_->textCursor().insertText(
-            "[BIBLIOGRAPHY — NEW ENTRY, house format (STD-007 / "
-            "DCC guide): " + entry + "]");
-        draft_->setFocus();
+        insertIntoDraft("[BIBLIOGRAPHY — NEW ENTRY, house format (STD-007 / "
+                        "DCC guide): " + entry + "]",
+                        "Bibliography entry");
     }
 
     void loadCatalogWorks() {
@@ -27624,19 +27670,17 @@ public:
     void insertBibEntry(int ix) {
         if (ix < 0 || ix >= (int)bibBank_.size()) return;
         const auto& b = bibBank_[ix];
-        draft_->textCursor().insertText(
-            "[BIBLIOGRAPHY: " + b.text + " — entry " + b.id +
-            " as published in " + b.source + "]");
-        draft_->setFocus();
+        insertIntoDraft("[BIBLIOGRAPHY: " + b.text + " — entry " + b.id +
+                            " as published in " + b.source + "]",
+                        "Published bibliography entry");
     }
 
     void insertCandidate(int ix) {
         if (ix < 0 || ix >= (int)candBank_.size()) return;
         const auto& n = candBank_[ix];
-        draft_->textCursor().insertText(
-            "[NOTE — PENDING, not GMR-approved: " + n.lemma + ": " +
-            n.text + "]");
-        draft_->setFocus();
+        insertIntoDraft("[NOTE — PENDING, not GMR-approved: " + n.lemma +
+                            ": " + n.text + "]",
+                        "PENDING note (not his)");
     }
 
     void aiCheck() {
