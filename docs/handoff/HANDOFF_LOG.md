@@ -8,6 +8,37 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 213
+
+### Done
+
+- Added 205–207 in `cc7d690`, 208–210 in `5aeb6e9`, and 211–213 in `a143082`: nine segments, 210 independently reviewed analyst spans and nine sentence anchors. C05 reaches **213/511**, pages c5p1–c5p71. Sixteen pages since 165 contain 1,200 analyst spans and 48 anchors. Separate proposal angles, reconciliation, skeptical semantic reviews, exact specs and source evidence are preserved. All alignments remain PROVISIONAL; human acceptance is not implied.
+- The new 206 sentence exposed an incomplete heading cut and the old 40-row shortening allowance. A reviewed four-file repair recognizes the documented numbered ACI course-heading boundary and requires exact source/depth justification at every citation for shortened output. Eleven displayed depth-1 rows change: ten earlier sentences and new C05:206. Full banked English, Tibetan, hgm_gloss and original source files remain untouched. Phonetic extraction is unchanged; the visible explanation now discloses both shortening paths.
+- Added only E-187 (210 PAR→BAR) and E-188 (213 SKYE BO→SKYE'O), both LOW/PROBABLE after independent five-ground review. The original spellings remain intact. Complete raw digital witnesses are committed. Two reviewed sogs allowances retain the HGM-attested closing gestures and the rest / and so on. All older errata and allowances survive.
+- Refuted English rewrites stay out of the bank. The whole-verse d1 proposal, the false ces-null cursor workaround, wrong-of attachment and canonical ordering failures remain preserved as rejected attempts. Unresolved/distributed wording is omitted with reasons. An appended ledger ERRATA corrects the historical 210 reconciler's attribution of interval to HGM bar: interval is comparative-only; between/in between/intermediate are HGM attestations. Final semantic review and E-187 already made the correct distinction.
+
+### Verified
+
+- All three pages passed **17 targeted fidelity, export and constitution suites**, in 10.57s, 10.55s and 10.81s. The existing view gate now also executes ten literal trimming regressions. Separate code SPEC/QUALITY review approved all four code hashes, the narrow eleven-row migration, meaningful RED/GREEN evidence and mutation checks. The original failing 16/17 run and broader rejected pattern are preserved.
+- Bank: **43,007 links, 11,871 null exponents, 1,549 note blocks, 11 trees**. Evidence: **6,914 headwords / 14,893 pairs**. CSV rows: main 21,532; reverse 21,192; course/depth 22,896; changes 38 versus 5aeb6e9. All course/depth groups match actual main CSV references and counts. Source/master hashes match the campaign baseline.
+- All prior source-bank links, notes, trees, evidence and ACIP mappings survive. Exactly ten prior displayed sentence keys receive the reviewed heading cuts; other prior lexical content and citations survive. Old d7 rows nub/western and lngar/into five gain formerly empty ACIP fields from new source-attested d5 links. These metadata enrichments do not change their English or depth.
+- Independent reproduction at all three fixed data heads exactly matches both banks, HTML and all four CSVs (229,391 / 229,605 / 229,799 checks), with changes seeded from 4aa4aa6, cc7d690 and 5aeb6e9 respectively. All 210 final tuples, nine individual bodies and three assembled page hashes match. The heading repair is independently checked against original code and actual source strings. Final evidence, documentation and full-campaign read-only applicability belong in sibling `campaign-artifacts/integration/continuation-through213-review.md` and its companion proofs.
+
+### Claims to verify
+
+- Final checkpoint approval requires the independent report to name the final committed HEAD after all three data reproductions and documentation checks. Read-only applicability is not main integration. No rendered-page inspection or newer native/device execution follows from these data checks.
+- Digital equality/difference does not establish publication independence or ingestion history. ILL literally marks PAR {%BAR} and SKYE BO {%SKYE'O}; GK's shorter line ends SKYE'O and does not witness DE DON MED. No printed-reading or blockprint verification is claimed.
+
+### In flight
+
+- Next: **c5p72, C05:214–216**, with source/context snapshots, focused original-parallel checks and a verified baseline at a143082; no proposals yet. Hourly continuation was rechecked ACTIVE through Tuesday, September 15, 2026, 07:00 America/Denver. No additional source files are needed. The campaign remains unfinished; C13 retains its upstream-source constraint.
+- Native and installed-phone verification remains through 171. Locked-device launch and actual alignment-page rendering remain unverified. Main-checkout integration remains open; preserve concurrent work there.
+
+### Do not
+
+- Do not compose GMR English, modify original source wording or promote machine matches into hgm_gloss. Preserve complete proposals, rejected attempts, raw witnesses, reports and explicit corrections. Do not replace uncertain correspondence with a false null or a misleading broader phrase.
+- Do not bypass browser policy, infer phone unlock, invoke paid generation or change main's unrelated work. Build the layer, then the view once; the standalone export entry point reruns the view and resets the previous-export delta. The repaired shortening rule is a narrow source-backed display transformation, never general permission to truncate. Resume from the live committed boundary and sibling continuation record.
+
 ## 2026-09-12 — Codex — continuation checkpoint, C05 through 204
 
 ### Done

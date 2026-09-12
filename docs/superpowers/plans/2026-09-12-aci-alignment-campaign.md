@@ -164,3 +164,37 @@ integration/continuation-through204-review.md. No main integration or newer
 native/device/rendering verification is inferred. Next 205–207 has source/context
 snapshots only. Tasks 3 and 4 retain their stated limits; the hourly campaign remains
 active through the authorized Tuesday morning deadline.
+
+
+## Sixth continuation checkpoint — 2026-09-12
+
+Accepted C05 reaches 213 in cc7d690, 5aeb6e9 and a143082: 210 independently
+reviewed analyst spans plus nine sentence anchors. All three pages passed all
+17 targeted suites. Both JSON banks, HTML and all four CSVs independently
+reproduce at each fixed data head; all 210 tuples and nine individual bodies
+match. All 22,896 course/depth groups match actual source-reference counts.
+Original source/master, full banked text, prior links and citations are retained.
+Two prior empty ACIP export fields acquire NUB and LNGAR from new d5 source links.
+
+The first landing exposed an incomplete numbered course-heading cut and a
+legacy 40-row limit. A separately reviewed repair makes the following-heading
+boundary explicit and validates every shortening against its cited source/depth.
+It changes exactly eleven depth-1 display rows (ten earlier plus new206) while
+retaining full source text and unchanged phonetic extraction. The existing gate
+runs ten new literal regressions; RED/GREEN, mutations, exact migration records
+and original failed attempts remain preserved. No general truncation permission
+is introduced, and all other prior lexical content remains intact.
+
+E-187 and E-188 are the only new errata, both LOW/PROBABLE after five-ground
+review; two sogs closing-gesture allowances are explicitly supported. The false
+ces-null cursor workaround, uncertain English rewrites and wrong-of attachment
+remain rejected. An appended ledger ERRATA corrects a historical bar-gloss
+attribution; final semantic review and E-187 already distinguish HGM between
+from comparative-only interval. No source or accepted alignment was changed.
+
+Final committed documentation, evidence and read-only main applicability are
+recorded in sibling integration/continuation-through213-review.md. No main
+integration or newer native/device/rendering verification is inferred. Next
+214–216 has source/context snapshots, focused original-parallel checks and a
+verified baseline at a143082, with no proposals yet. Tasks3/4 retain their
+stated limits; hourly continuation remains ACTIVE through Tuesday morning.
