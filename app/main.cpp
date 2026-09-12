@@ -43833,6 +43833,7 @@ int main(int argc, char** argv) {
                        early.contains("--sanskritcheck") ||
                        early.contains("--survey") ||
                        early.contains("--teachbench") ||
+                       early.contains("--walk") ||
                        early.contains("--gauntlet") ||
                        early.contains("--openprobe")   /* release audit 2026-09-09: was the one probe outside the guard */;
         g_sweepActive = early.contains("--sweep");
@@ -44717,6 +44718,23 @@ int main(int argc, char** argv) {
                    cliArgs[pngIx + 1].toUtf8().constData());
         }
         return missing == 0 ? 0 : 1;
+    }
+    // --walk "<passage>" — print the Walkthrough pane's own breakdown to
+    // stdout. Same pane, same engines, same labels the reader sees; it is the
+    // pane's text, not a second implementation that could drift from it. Two
+    // uses: showing the breakdown without opening the app, and re-checking
+    // the reading-order measurement against a grown alignment bank
+    // (docs/READING_ORDER_MEASUREMENT.md).
+    if (cliArgs.contains("--walk")) {
+        const int ix = cliArgs.indexOf("--walk");
+        if (ix + 1 >= cliArgs.size()) {
+            std::fprintf(stderr, "usage: --walk \"<Tibetan passage>\"\n");
+            return 2;
+        }
+        walkPane->setSourceForTest(cliArgs.at(ix + 1));
+        walkPane->walkForTest();
+        std::printf("%s\n", walkPane->outText().toUtf8().constData());
+        return 0;
     }
     const bool selfTestMode = cliArgs.contains("--selftest");
     const bool sweepMode = cliArgs.contains("--sweep");
