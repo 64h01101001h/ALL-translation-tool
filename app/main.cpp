@@ -7892,7 +7892,15 @@ public:
             { QFile f(tmp); (void)f.open(QIODevice::WriteOnly);
               f.write("BDEN PA ,"); }
             QSettings st("ALL", "TranslationTool");
-            const auto keep = st.value("overlay/lastFile");
+            // All THREE keys are written below, so all three are snapshotted.
+            // Only lastFile was restored, so every battery run zeroed the
+            // translator's saved scroll position and cursor in the Overlay —
+            // their reading place, silently reset. And an ABSENT key is
+            // restored by removing it again, not by writing back an invalid
+            // QVariant. (Draft workspace audit, 2026-09-11.)
+            const QVariant keep = st.value("overlay/lastFile");
+            const QVariant keepScroll = st.value("overlay/lastScroll");
+            const QVariant keepCursor = st.value("overlay/lastCursor");
             st.setValue("overlay/lastFile", tmp);
             st.setValue("overlay/lastScroll", 0);
             st.setValue("overlay/lastCursor", 0);
@@ -7919,7 +7927,18 @@ public:
             check(spotOk,
                   "session restore reopens the file AND re-lights "
                   "the saved cursor spot + nest rung");
-            st.setValue("overlay/lastFile", keep);
+            auto put = [&st](const char* k, const QVariant& v) {
+                if (v.isValid()) st.setValue(k, v);
+                else st.remove(k);
+            };
+            put("overlay/lastFile", keep);
+            put("overlay/lastScroll", keepScroll);
+            put("overlay/lastCursor", keepCursor);
+            check(st.value("overlay/lastScroll") == keepScroll &&
+                      st.value("overlay/lastCursor") == keepCursor,
+                  "the session probe puts the reader's scroll position and "
+                  "cursor back \u2014 it used to zero both and restore only "
+                  "the filename");
             QFile::remove(tmp);
         }
         {
@@ -35150,6 +35169,12 @@ public:
     int currentPage() const { return pageIx_; }
 
     void recordRecentScan(const QString& p) {
+        // Unguarded, so every battery run that opened a probe scan pushed a
+        // temp path into the translator's own recent-scans list — and the
+        // Input pane then offered a folder that only ever existed as a test
+        // fixture. Same defect and same fix as overlay/lastFile.
+        // (Draft workspace audit, 2026-09-11.)
+        if (g_harnessRun) return;
         QSettings st("ALL", "TranslationTool");
         QStringList rec =
             st.value("input/recentScans").toStringList();
