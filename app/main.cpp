@@ -47873,14 +47873,12 @@ int main(int argc, char** argv) {
             {   // routing: proposing an identity files a PENDING
                 // catalog-identity row carrying the evidence; a
                 // titleless file is refused with a real answer.
-                // The store is the REAL shared file — snapshot and
-                // restore it so probes never pollute the queue.
-                const QString storeP =
-                    g_proposalsDir + "/proposals.tsv";
-                QByteArray storeSnap;
-                { QFile sf(storeP);
-                  if (sf.open(QIODevice::ReadOnly))
-                      storeSnap = sf.readAll(); }
+                // A probe must never write the configured shared
+                // queue: snapshot/restore can lose concurrent work
+                // and fails when the real store is read-only.
+                QTemporaryDir proposalFixture;
+                const QString savedProposalsDir = g_proposalsDir;
+                g_proposalsDir = proposalFixture.path();
                 QDir().mkpath(wd);
                 const QString pf = wd + "/scan_0500_unnamed.txt";
                 { QFile f(pf);
@@ -47918,20 +47916,22 @@ int main(int argc, char** argv) {
                     wd + "/fragment.txt");
                 const bool refused =
                     e2.contains("No title page");
+                const bool routingOk = proposalFixture.isValid() &&
+                    e1.isEmpty() && filed && evOk && refused;
                 log << QString("  [%1] Catalog: routing files a "
                                "catalog-identity proposal with "
                                "evidence; titleless files are "
                                "refused honestly")
-                           .arg(e1.isEmpty() && filed && evOk && refused
-                                    ? "PASS"
-                                    : "FAIL");
-                if (!(e1.isEmpty() && filed && evOk && refused))
+                           .arg(routingOk ? "PASS" : "FAIL");
+                if (!routingOk) {
                     ++fails;
-                {   // restore the shared store exactly as found
-                    QFile sf(storeP);
-                    if (sf.open(QIODevice::WriteOnly))
-                        sf.write(storeSnap);
+                    log << QString("    fixture=%1 proposal=%2 "
+                                   "filed=%3 evidence=%4 refusal=%5")
+                               .arg(proposalFixture.isValid())
+                               .arg(e1)
+                               .arg(filed).arg(evOk).arg(e2);
                 }
+                g_proposalsDir = savedProposalsDir;
                 QDir(wd).removeRecursively();
             }
             {   // the QC lanes: a planted English-from-the-wrong-text
