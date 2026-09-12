@@ -49,9 +49,35 @@ std::vector<std::string> glossAlternatives(const std::string& gloss) {
 
 }  // namespace
 
+// Does `needle` occur in `hay` as a WORD, rather than buried inside a longer
+// one? The check was a bare find(), and measured on real English that is a
+// false-positive machine: "mind" matched "reminded", "art" matched
+// "departure", "one" matched "honest". Each of those reported a term as
+// RENDERED when the equivalent never appears as a word at all — and the
+// pane's headline verdict is a count of exactly that judgement.
+// (Found 2026-09-11 by probing the shipped matcher, not by reading it.)
+//
+// The boundary class is alphanumeric, so an apostrophe or a hyphen still
+// counts as an edge: "buddha" legitimately matches "buddha's", and "being"
+// matches "well-being". Only a letter or digit on either side disqualifies.
+static bool containsAsWords(const std::string& hay, const std::string& needle) {
+    if (needle.empty()) return false;
+    size_t at = hay.find(needle);
+    while (at != std::string::npos) {
+        const bool leftOk =
+            at == 0 || !std::isalnum((unsigned char)hay[at - 1]);
+        const size_t end = at + needle.size();
+        const bool rightOk =
+            end >= hay.size() || !std::isalnum((unsigned char)hay[end]);
+        if (leftOk && rightOk) return true;
+        at = hay.find(needle, at + 1);
+    }
+    return false;
+}
+
 bool glossMatches(const std::string& gloss, const std::string& draft_lower) {
     for (const auto& alt : glossAlternatives(gloss))
-        if (draft_lower.find(alt) != std::string::npos) return true;
+        if (containsAsWords(draft_lower, alt)) return true;
     return false;
 }
 

@@ -96,6 +96,48 @@ int main(int argc, char** argv) {
         CHECK(bp && bp->occurrences == 2, "repeated term counted twice");
     }
 
+    // ---- an equivalent must appear as a WORD, not buried in a longer one ---
+    // The matcher was a bare substring find(), and on real English that is a
+    // false-positive machine. Each of these reported a term as RENDERED when
+    // the equivalent never appears as a word at all — and the pane's headline
+    // verdict is a count of exactly that judgement. Found 2026-09-11 by
+    // probing the shipped matcher rather than by reading it.
+    {
+        CHECK(!allcore::glossMatches("mind", "he reminded them of the vow"),
+              "gloss: \"mind\" does NOT match inside \"reminded\"");
+        CHECK(!allcore::glossMatches("art", "a departure from the path"),
+              "gloss: \"art\" does NOT match inside \"departure\"");
+        CHECK(!allcore::glossMatches("one", "he was honest about it"),
+              "gloss: \"one\" does NOT match inside \"honest\"");
+
+        // and the true matches still hold, because a fix that only tightens
+        // is a fix that breaks the feature
+        CHECK(allcore::glossMatches("mind", "the mind is clear"),
+              "gloss: a real occurrence still matches");
+        CHECK(allcore::glossMatches("merit", "the merit of giving"),
+              "gloss: and so does a term mid-sentence");
+        // The contract is that the DRAFT arrives lowered (checkTerminology
+        // lowers once and calls this per term). Asserting the contract rather
+        // than assuming it, because a caller who forgets gets silent misses.
+        CHECK(!allcore::glossMatches("mind", "MIND is clear"),
+              "gloss: the draft must arrive lowered — an unlowered draft "
+              "misses, and the parameter name and header say so");
+        CHECK(allcore::glossMatches("mind", "mind is clear"),
+              "gloss: lowered, the same draft matches");
+
+        // punctuation is a word edge, so possessives and hyphenates count
+        CHECK(allcore::glossMatches("buddha", "the buddha's own words"),
+              "gloss: a possessive still counts as the word");
+        CHECK(allcore::glossMatches("being", "well-being of all"),
+              "gloss: a hyphenate still counts as the word");
+
+        // a multi-word equivalent is bounded as a whole, not per word
+        CHECK(allcore::glossMatches("good deeds", "his good deeds ripen"),
+              "gloss: a multi-word equivalent matches as a phrase");
+        CHECK(!allcore::glossMatches("good deeds", "good deedsmanship"),
+              "gloss: and is bounded at its end like any other word");
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "TERMINOLOGY SMOKE FAILED" : "TERMINOLOGY SMOKE OK",
                 failures);

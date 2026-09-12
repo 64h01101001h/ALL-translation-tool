@@ -41,6 +41,19 @@ struct TermReport {
 
 // A gloss "matches" when one of its alternatives (split on '/', parentheticals
 // stripped, ≥3 letters) appears in the lowercased draft.
+// Does any of `gloss`'s alternatives occur in the draft as a WORD?
+//
+// CONTRACT: `draft_lower` must ALREADY be lowercased. The alternatives are
+// lowered internally, the draft is not — checkTerminology lowers once and
+// calls this per term, and lowering a long draft on every call would be
+// quadratic in the number of terms. The name says so; this comment says why,
+// because a caller who forgets gets silent misses rather than an error.
+//
+// "as a WORD" is load-bearing. Until 2026-09-11 this was a bare substring
+// find(), so "mind" matched "reminded", "art" matched "departure" and "one"
+// matched "honest" — each reporting a term as rendered when the equivalent
+// never appeared. Alphanumeric characters bound a word; an apostrophe or
+// hyphen does not, so "buddha" still matches "buddha's".
 bool glossMatches(const std::string& gloss, const std::string& draft_lower);
 
 TermReport checkTerminology(const Spine& spine, const HeadwordIndex& index,
