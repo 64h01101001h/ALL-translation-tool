@@ -25356,8 +25356,16 @@ public:
         termTimer_ = new QTimer(this);
         termTimer_->setSingleShot(true);
         termTimer_->setInterval(1500);
-        connect(draft_, &QPlainTextEdit::textChanged,
-                [this] { termTimer_->start(); });
+        connect(draft_, &QPlainTextEdit::textChanged, [this] {
+            // Typing ends the hold on the shared label. The hold exists so a
+            // confirmation survives long enough to read; the moment the
+            // reader goes back to writing they have moved on, and the live
+            // health chip is the more useful thing to show. A hold that
+            // outlived the reader's attention would suppress the chip after
+            // every Load source, which is a signal they want back promptly.
+            sayActive_ = false;
+            termTimer_->start();
+        });
         connect(termTimer_, &QTimer::timeout, this,
                 &DraftPane::updateTermChip);
 
@@ -25581,7 +25589,7 @@ public:
         // document that no longer exists. A stale answer over a new question
         // is worse than no answer. (Draft workspace audit, 2026-09-11.)
         if (report_) report_->setHtml(reportIdleHtml());
-        if (termLive_) termLive_->setText("New draft.");
+        say("New draft.");
         return true;
     }
     bool closeDraft() { return newDraft(); }
@@ -25593,7 +25601,7 @@ public:
     QString draftText() const { return draft_->toPlainText(); }
     bool isProtected() const { return draft_->isReadOnly(); }
     bool revertDraft() {
-        if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Nothing to revert to: the draft has no file."); return false; }
+        if (draftPath_.isEmpty()) { say("Nothing to revert to: the draft has no file."); return false; }
         if (!confirmDiscardDraft()) return false;
         QFile f(draftPath_);
         if (!f.open(QIODevice::ReadOnly)) return false;
@@ -25612,7 +25620,7 @@ public:
         draft_->document()->print(&printer);
     }
     bool moveDraft() {
-        if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Save the draft first; Move works on a file."); return false; }
+        if (draftPath_.isEmpty()) { say("Save the draft first; Move works on a file."); return false; }
         const QString dir = safeGetExistingDirectory(this, "Move draft to folder");
         QString nw;
         if (dir.isEmpty() || !docprops::moveFileTo(this, draftPath_, dir, nw)) return false;
@@ -25623,15 +25631,13 @@ public:
         const bool carried =
             docprops::carryDocHistory(dataRoot_, draftPath_, nw, &why);
         draftPath_ = nw;
-        if (termLive_)
-            termLive_->setText(
-                carried ? "Moved to " + QDir::toNativeSeparators(dir)
-                        : "Moved to " + QDir::toNativeSeparators(dir) +
-                              " \u2014 but " + why);
+        say(carried ? "Moved to " + QDir::toNativeSeparators(dir)
+                    : "Moved to " + QDir::toNativeSeparators(dir) +
+                          " \u2014 but " + why);
         return true;
     }
     bool renameDraft() {
-        if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Save the draft first; Rename works on a file."); return false; }
+        if (draftPath_.isEmpty()) { say("Save the draft first; Rename works on a file."); return false; }
         const QString n = docprops::askName(this, "Rename draft", "New file name:", QFileInfo(draftPath_).fileName());
         QString nw;
         // The sidecar pair list is NOT passed any more: it assumed both
@@ -25643,11 +25649,9 @@ public:
         const bool carried =
             docprops::carryDocHistory(dataRoot_, draftPath_, nw, &why);
         draftPath_ = nw;
-        if (termLive_)
-            termLive_->setText(
-                carried ? "Renamed to " + QFileInfo(nw).fileName()
-                        : "Renamed to " + QFileInfo(nw).fileName() +
-                              " \u2014 but " + why);
+        say(carried ? "Renamed to " + QFileInfo(nw).fileName()
+                    : "Renamed to " + QFileInfo(nw).fileName() +
+                          " \u2014 but " + why);
         return true;
     }
     void showProperties(int tab = 0) {
@@ -25677,7 +25681,33 @@ public:
     // so the selftest can drive it directly — a Qt signal cannot be emitted
     // from outside its own object, and a behaviour no test can reach is a
     // behaviour that drifts.
+    // One label serves two purposes: the live terminology chip, and the
+    // confirmation line for File actions and insertions. The chip runs off a
+    // 1500 ms timer, so it always won — "New draft.", "Moved to …",
+    // "3 clause(s) loaded", "Bibliography entry inserted" all appeared and
+    // were wiped about a second and a half later, before a reader had
+    // finished with them. (Draft workspace audit, 2026-09-11.)
+    //
+    // An action's message now HOLDS the label briefly. Not forever: the chip
+    // is a live health indicator and suppressing it indefinitely would be the
+    // opposite defect. Six seconds is long enough to read a confirmation and
+    // short enough that the health line comes back on its own.
+    static constexpr int kSayHoldMs = 6000;
+    void say(const QString& msg) {
+        if (!termLive_) return;
+        termLive_->setText(msg);
+        sayHeld_.restart();
+        sayActive_ = true;
+    }
+    bool sayHolding() const {
+        return sayActive_ && sayHeld_.isValid() &&
+               sayHeld_.elapsed() < kSayHoldMs;
+    }
+
     void updateTermChip() {
+            // an action's confirmation is still on screen and still readable
+            if (sayHolding()) return;
+            sayActive_ = false;
             const std::string src =
                 source_->toPlainText().toStdString();
             const std::string dr =
@@ -25968,6 +25998,29 @@ public:
                       "instruction");
             }
         }
+        // ---- an action's confirmation survives long enough to read -------
+        // The terminology chip and the File/insert confirmations share one
+        // label, and the chip runs off a 1500 ms timer — so every
+        // confirmation appeared and was wiped before a reader had finished
+        // with it. (Draft workspace audit, 2026-09-11.)
+        {
+            source_->setPlainText("/ /sems can thams cad bde ba /");
+            draft_->setPlainText("a draft long enough for the live chip");
+            say("PROBE MESSAGE");
+            check(termLive_->text() == "PROBE MESSAGE",
+                  "status: an action's message reaches the label");
+            updateTermChip();
+            check(termLive_->text() == "PROBE MESSAGE",
+                  "status: and the live chip does not wipe it out from under "
+                  "the reader");
+            // but the hold is a hold, not a lock — the chip must come back
+            sayActive_ = false;
+            updateTermChip();
+            check(termLive_->text() != "PROBE MESSAGE",
+                  "status: once the hold lapses the health chip returns \u2014 "
+                  "suppressing it for good would be the opposite defect");
+        }
+
         // ---- a partial style check is not a clean one (audit 2026-09-11) --
         // Every rule is gated on a Preferences switch, and the check silently
         // skipped the ones turned off while still reporting "No mechanical
@@ -26465,8 +26518,7 @@ private:
         // confirmation of any kind — no count, no next step, and on a source
         // it could not parse, an undiagnosed "no clauses" with nothing said
         // about why.
-        if (termLive_)
-            termLive_->setText(
+        say(
                 clauses_.empty()
                     ? (source_->toPlainText().trimmed().isEmpty()
                            ? "Nothing loaded \u2014 the source box is empty."
@@ -27346,9 +27398,7 @@ public:
         draft_->setTextCursor(c);
         draft_->ensureCursorVisible();
         draft_->setFocus();
-        if (termLive_)
-            termLive_->setText(what + " inserted at the cursor \u2014 "
-                                      "\u2318Z undoes it.");
+        say(what + " inserted at the cursor \u2014 \u2318Z undoes it.");
     }
 
     // The key was sampled ONCE, at construction. A reader who followed the
@@ -28156,6 +28206,8 @@ public:
     QTimer* evTimer_ = nullptr;   // Evidence Ribbon debounce
     QLabel* termLive_ = nullptr;  // terminology live-guard line
     QTimer* termTimer_ = nullptr;
+    QElapsedTimer sayHeld_;        // how long an action message has been up
+    bool sayActive_ = false;
     QString draftPath_;   // File → Save target for the English draft
     QByteArray savedDigest_;
     QElapsedTimer editTimer_;
