@@ -8,6 +8,37 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 240
+
+### Done
+
+- Added 232–234 in `6232214`, 235–237 in `aa580e8`, 238–240 in `499e907`: nine segments, 236 independently reviewed analyst spans and nine sentence anchors. C05 reaches **240/511**, pages1–80. Twenty-five pages since 165 contain 2,132 analyst spans and 75 anchors. Independent proposal angles, reconciliation and separate semantic review approve the exact frozen files. All matches remain PROVISIONAL machine attestations, with no human editorial acceptance.
+- Preserved source-specific lexical units, complete titles, temporal/essence and world compounds with legitimate members. Corrected a proposed false yin/null to its explicit is. Repeated ropes, snakes, minds and karma have exact occurrence owners. Distributed relations, supplied wording and uncertain phrase recasts remain unwrapped with reasons; no null was added. Original source/master and hgm_gloss remain unchanged.
+- Added only E-191 (235 causal/concessive relation) and E-192 (237 THUN MANG/MONG), both LOW/PROBABLE after independent five-ground scrutiny. Actual HGM 25759 gsal du 'gro/disappear defeats the original categorical clarity-only claim; 236 is refuted under uncertainty and its disputed phrase stays unaligned. Full C05/C16/ILL/SVN physical originals and exact query/count proofs are preserved. Source equality/difference never establishes independent publication or ingestion lineage. All190 older errata remain unchanged.
+- Added five exact allowances:232 sogs, 238 two sogs closures, 239 yin min/or not and 240 de ltar na/And so. Only page registrations changed the canonical builder; generator/resolver/exporter/heading-trimming code are intact. A reviewer-authored omission of four apostrophes in gsal du 'gro narrative was corrected by that original reviewer with scoped SPEC/QUALITY approval, exact old/new diff and unchanged accepted data.
+
+### Verified
+
+- Each page passed **all 17 targeted fidelity/export/constitution suites** (11.37s, 10.99s, 11.03s). All 18 original proposal bodies and nine final individual bodies reproduce exactly; all 236 tuples match their actual source ranges and assembled pages. Original-copy manifest records 415/566/336, historical Git pins 10/15/12 and copied semantic files 394/440/358 were independently checked before registration. Original attempts, failures, complete decisions and old governing versions survive.
+- Bank: **43,966 links, 11,877 nulls, 1,576 notes, 11 trees**. Evidence: **7,015 heads/15,221 pairs**. CSV rows: main 22,007; reverse 21,667; course/depth 23,471; changes 46 against aa580e8. Every course/depth group matches actual references and metadata. Prior links, notes, trees, evidence, lexical keys and citations survive. Two old empty ACIP fields gain source-attested spellings: d6 cis/why gains CIS from 235 d5, and d7 sems tsam/Mind-Only gains SEMS TZAM from 239 d5. Their words, depths and citations are unchanged.
+- The final independent integration record belongs in sibling `campaign-artifacts/integration/continuation-through240-review.md` and companion proofs. It covers all seven outputs at each immutable data head, complete original evidence, committed documentation and full original-base-to-final read-only main applicability. Actual changes seeds are1809556 (same generated outputs as incoming bf81cd0),6232214 andaa580e8. Exact source/evidence whitespace is retained and inventoried by path/line/hash, including original legacy byte files.
+
+### Claims to verify
+
+- Final checkpoint approval requires the independent report to name the committed documentation HEAD and close all three fixed-head reproductions, evidence audits and live-main read-only preflight. Read-only applicability is not integration. Preserve concurrent main work and all fixtures.
+- The 239 verse's modifier/coordination relationships and 240 possession/accompaniment remain outside accepted lexical scope. No uniquely correct poetic interpretation, critical-edition correction or human acceptance is claimed. Canonical source fidelity alone does not establish semantic correctness.
+
+### In flight
+
+- Next: **c5p81,C05:241–243**, clean baseline499e907, source/context and independent role briefs. Tibetan/English proposal readers are running as advance preparation, with no reconciliation or semantic acceptance yet. Read the sibling continuation record for their latest frozen state; do not duplicate completed work. C13 remains blocked; no additional source files are needed.
+- User requested greater speed while maintaining highest data fidelity. New proposal pairs both use Astra/high, with separate contexts and withheld other-angle/root judgments. Preparation overlaps independent review. Compact reports retain complete structured decisions and contrary evidence; identical immutable evidence shares one copy with every original path mapped and byte-verified. All semantic stages, generators and17 suites remain. Stage timings are recorded; no measured overall speedup is claimed.
+- Hourly continuation remains ACTIVE through 2026-09-15T13:00Z (Tuesday 07:00 America/Denver). Native/installed-phone verification remains through 171; locked launch and actual alignment-page rendering remain unverified. Main integration stays open. This closes a bounded continuation only after the final independent verdict.
+
+### Do not
+
+- Do not compose GMR English, alter source wording, promote machine matches to hgm_gloss, turn uncertainty into absence, or hide a false relation in a broad phrase. Preserve all historical attempts and actual producer identities.
+- Do not bypass browser policy, infer a phone unlock, invoke paid generation, send account messages or overwrite unrelated main work. Build layer then view once; a separate export entry point would reset the changes seed. Resume from committed coverage and precise durable state.
+
 ## 2026-09-12 — Codex — continuation checkpoint, C05 through 231
 
 ### Done

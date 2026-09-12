@@ -255,3 +255,38 @@ device or rendered-page verification is inferred. Next 232–234 has source/cont
 focused original-parallel checks, independent-role briefs and a clean baseline
 at 1809556; no proposals. Tasks 3/4 retain their stated limits; hourly continuation
 remains ACTIVE through the authorized Tuesday morning deadline.
+
+
+## Ninth continuation checkpoint — 2026-09-12
+
+Accepted C05 reaches240 in 6232214, aa580e8 and 499e907: 236 independently reviewed
+analyst spans plus nine sentence anchors. Each page passed all 17 targeted suites;
+every one of 23,471 course/depth groups matches actual source-reference metadata.
+Previous links, notes, trees, evidence, lexical keys and citations survive. Two
+previously empty ACIP fields gain CIS and SEMS TZAM from new d5 source witnesses.
+Source/master, hgm_gloss and canonical generation/export code remain unchanged.
+
+Supported whole units and lexical occurrences remain; supplied/distributed or
+disputed phrase relations stay unwrapped. A false yin/null is corrected to is.
+No new nulls are introduced. E-191 and E-192 are LOW/PROBABLE relation/spelling
+candidates after all-five-ground review; actual HGM 25759 disappearance evidence
+limits the 235 claim and refutes 236 under uncertainty. Five precise source-
+licensed allowances are added. A scoped reviewer narrative correction restores
+four source apostrophes without changing any accepted input or decision. All
+originals, failures, superseded decisions and governing Git snapshots survive.
+
+Final fixed-head output reproduction, original-evidence audit, committed
+documentation and live-main read-only applicability are recorded in sibling
+`campaign-artifacts/integration/continuation-through240-review.md`. Final
+approval requires that report to name the committed final HEAD and close every
+required check. No main integration or newer native/device/rendering verification
+is inferred. Next 241–243 has a clean baseline at 499e907 and independent proposals
+in preparation, with no reconciliation/acceptance. Resume their exact durable state.
+
+The user's throughput refinement moves new proposal pairs to Astra/high, keeps
+angles independent, overlaps preparation/review and stores identical immutable
+evidence once with complete byte/hash provenance. Compact reports keep all
+material decisions and contrary evidence. No semantic stage, canonical generator
+or required fidelity test is removed; no measured overall speedup is claimed.
+Tasks 3/4 retain their explicit limits; hourly continuation remains ACTIVE through
+the authorized Tuesday 07:00 America/Denver cutoff.
