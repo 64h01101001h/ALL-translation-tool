@@ -22,6 +22,56 @@ inline QString versionDocKey(const QString& docPath, const QString& dataRoot) {
     return QString::fromStdString(allcore::versions::docKeyFor(QFileInfo(docPath).absoluteFilePath().toStdString(), dataRoot.toStdString()));
 }
 inline QString versionsDir(const QString& dataRoot, const QString& docPath) { return versionsRoot(dataRoot) + "/" + versionDocKey(docPath, dataRoot); }
+// Carry a document's history with the document (Adam, 2026-09-11: the Draft
+// workspace audit). Renaming or moving a draft used to ORPHAN its version
+// history — the Versions window then reports "No versions" over work that is
+// still on disk under the old key, which reads as data loss and effectively
+// is: nobody finds it again.
+//
+// Two keying schemes are in play and they are NOT the same, so each is asked
+// its own question rather than one rule being assumed for both:
+//   * versions are keyed by allcore::versions::docKeyFor — the file's stem
+//     INSIDE the data root, and stem + "~" + a path hash outside it. So a
+//     move can change the key even though the name did not, and a move across
+//     the data-root boundary changes its very shape.
+//   * the properties sidecar is keyed by the bare base name (sidecarPath),
+//     so it only moves when the NAME changes.
+//
+// Returns false when something existed and could not be carried, so the
+// caller can say so instead of reporting a clean move over a broken one.
+inline bool carryDocHistory(const QString& dataRoot, const QString& oldPath,
+                            const QString& newPath, QString* why = nullptr) {
+    auto fail = [&](const QString& m) { if (why) *why = m; return false; };
+    if (dataRoot.isEmpty() || oldPath.isEmpty() || newPath.isEmpty())
+        return true;
+
+    const QString ov = versionsDir(dataRoot, oldPath);
+    const QString nv = versionsDir(dataRoot, newPath);
+    if (ov != nv && QDir(ov).exists()) {
+        if (QDir(nv).exists())
+            return fail("a version history already exists for the new name; "
+                        "the old one is still at " +
+                        QDir::toNativeSeparators(ov));
+        QDir().mkpath(QFileInfo(nv).path());
+        if (!QDir().rename(ov, nv))
+            return fail("the version history could not be moved; it is still "
+                        "at " + QDir::toNativeSeparators(ov));
+    }
+
+    const QString os = sidecarPath(dataRoot, oldPath);
+    const QString ns = sidecarPath(dataRoot, newPath);
+    if (os != ns && QFile::exists(os)) {
+        if (QFile::exists(ns))
+            return fail("document properties already exist for the new name; "
+                        "the old ones are still at " +
+                        QDir::toNativeSeparators(os));
+        if (!QFile::rename(os, ns))
+            return fail("the document properties could not be moved; they are "
+                        "still at " + QDir::toNativeSeparators(os));
+    }
+    return true;
+}
+
 inline allcore::versions::Limits versionLimits() {
     QSettings st("ALL", "TranslationTool");
     allcore::versions::Limits l;
