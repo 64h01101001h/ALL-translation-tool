@@ -229,7 +229,19 @@ public:
         const std::string only = QFileInfo(h_.docPath).absoluteFilePath().toStdString();
         auto all = allcore::versions::list(dir().toStdString(), showElse_->isChecked() ? std::string() : only, &other, &orphans);
         showElse_->setVisible(other > 0 || showElse_->isChecked());
-        if (other > 0) showElse_->setText(QString("Show versions of a file with this name in another folder (%1)").arg(other));
+        // "another folder" was only half the story. After a Rename or a Move,
+        // these records are THIS file's own history: renameKey moves the
+        // directory but deliberately does NOT rewrite each record's `path`
+        // field, because that field is provenance — where the file was when
+        // that version was saved — and rewriting it would falsify the record.
+        // So the honest label covers both cases. (Audit 2026-09-11.)
+        if (other > 0)
+            showElse_->setText(
+                QString("Show %1 version%2 recorded under a different path "
+                        "\u2014 this file's own history from before a rename "
+                        "or move, or a same-named file elsewhere")
+                    .arg(other)
+                    .arg(other == 1 ? "" : "s"));
         // newest first
         std::reverse(all.begin(), all.end());
         const int mode = filter_->currentIndex();
@@ -268,7 +280,24 @@ public:
         if (hidden) notes << "Autosaves keep one rolling entry until you press Save (Show autosaves).";
         if (orphans) notes << QString("%1 record%2 with no readable provenance %3 not offered as a version (orphan).").arg(orphans).arg(orphans == 1 ? "" : "s").arg(orphans == 1 ? "is" : "are");
         if (damaged) notes << QString("%1 damaged — excluded from Compare and Restore.").arg(damaged);
-        if (entries_.empty()) notes << "No versions yet: the first Save of this text will keep one.";
+        // THE FALSE LINE. list() filters by the file's CURRENT path, and
+        // after a rename or move every record still carries the path it was
+        // saved under — so every entry was filtered out and the window
+        // announced "No versions yet" over a history that was sitting right
+        // there on disk. It reads as data loss and it is not. The count was
+        // already in hand as `other`; it simply was not used.
+        if (entries_.empty() && other > 0)
+            notes << QString("This file has %1 saved version%2, but %3 "
+                             "recorded under a different path \u2014 which is "
+                             "what a Rename or a Move leaves behind, because "
+                             "a version records where the file WAS when it "
+                             "was saved. Tick the box above to see them; "
+                             "nothing has been lost.")
+                         .arg(other)
+                         .arg(other == 1 ? "" : "s")
+                         .arg(other == 1 ? "it is" : "they are");
+        else if (entries_.empty())
+            notes << "No versions yet: the first Save of this text will keep one.";
         notice_->setText(notes.join("  "));
         syncButtons();
     }
