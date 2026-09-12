@@ -1,0 +1,52 @@
+import pathlib,json,hashlib,runpy,sys,sqlite3,subprocess,datetime
+from html.parser import HTMLParser
+base=pathlib.Path(__file__).resolve().parents[1];root=base.parents[2]/'campaign-worktree';sha=lambda b:hashlib.sha256(b).hexdigest();evidence=base/'253/evidence.json';e=json.loads(evidence.read_text())
+regpath=root/'docs/errata_register.json';reg=json.loads(regpath.read_text());relevant=[r for r in reg if r.get('item_id') in ['E-044','E-071','E-076','E-107','E-111','E-121'] or any(x in json.dumps(r).lower() for x in ['following section','hyphen','line break','heading glued'])]
+e['errata_register_check']={'path':str(regpath),'sha256':sha(regpath.read_bytes()),'record_count':len(reg),'selected_records':relevant}
+e['spine']={'path':str(root/'build/hgm_spine_v27_2.db'),'mode':'SQLite URI mode=ro','sha256':sha((root/'build/hgm_spine_v27_2.db').read_bytes())}
+e['parallel_field_comparisons']=[]
+source={r['seq']:r for r in json.loads((base.parent/'source.json').read_text())}
+for seq,rr in source.items():
+ witnesses={}
+ for q in e['queries']:
+  if 'corpus_segments' not in q['sql']:continue
+  for row in q['rows']:
+   if row['course']=='C05' and row['seq']==seq:continue
+   if row['english']==rr['english']:
+    witnesses[(row['course'],row['seq'])]={'course':row['course'],'seq':row['seq'],'fields_equal':{k:row[k]==rr[k] for k in ['acip','wylie','english']}}
+ e['parallel_field_comparisons'].append({'seq':seq,'witnesses':list(witnesses.values()),'limit':'Textual identity does not establish independent publication or ingestion lineage.'})
+evidence.write_text(json.dumps(e,ensure_ascii=False,indent=2)+'\n')
+mod=runpy.run_path(str(root/'tools/gen_alignment_page.py'))
+class Parser(HTMLParser):
+ def __init__(self):super().__init__();self.stack=[];self.output={'tib':'','eng':''}
+ def handle_starttag(self,tag,attrs):
+  if tag=='div':self.stack.append(dict(attrs).get('class',''))
+ def handle_endtag(self,tag):
+  if tag=='div':self.stack.pop()
+ def handle_data(self,data):
+  if 'lab' in self.stack:return
+  for side in self.output:
+   if side in self.stack:self.output[side]+=data
+for seq in [253,254,255]:
+ p=base/str(seq);spec=json.loads((p/'spec.json').read_text());seg=spec['segments'][0];sp=seg['spans'];by={s['id']:s for s in sp};actual_t=mod['resolve'](source[seq]['wylie'],sp,'tib',seq);english_spans=mod['with_members'](sp,[by[i] for i in seg['eng_order']],source[seq]['english']);actual_e=mod['resolve'](source[seq]['english'],english_spans,'eng',seq);intent=json.loads((p/'intended-occurrences.json').read_text())
+ for id,r in intent.items():assert actual_e[id][0]==r['english_offset'],(seq,id,r,actual_e[id])
+ parser=Parser();parser.feed((p/'body.html').read_text());assert parser.output['tib'].strip()==source[seq]['wylie'];assert parser.output['eng'].strip()==source[seq]['english']
+ final_attempt=2 if seq==255 else 1
+ for ext in ['stdout','stderr','exit']:(p/f'canonical.{ext}').write_bytes((p/f'attempt-{final_attempt:02}.{ext}').read_bytes())
+ assert (p/'canonical.stdout').read_bytes()==(p/'body.html').read_bytes();assert (p/'canonical.stderr').read_bytes()==b'';assert (p/'canonical.exit').read_text()=='0\n'
+ for path,h in e['files_sha256'].items():assert sha(pathlib.Path(path).read_bytes())==h,('consumed file changed',path)
+ for s in sp:
+  if s['d']==7:
+   idx=sp.index(s);assert sp[idx-1]['d']==5;par=sp[idx-1]
+   for side in ['tib','eng']:assert s[side] in par[side] and s[side]!=par[side] and par[side].count(s[side])==1
+ spans_with_positions=[{**s,'tib_range':actual_t[s['id']],'eng_range':actual_e.get(s['id'])} for s in sp]
+ counts={'spans':len(sp),'nulls':sum(s['eng'] is None for s in sp),'d5':sum(s['d']==5 for s in sp),'d3':sum(s['d']==3 for s in sp),'d6':sum(s['d']==6 for s in sp),'d7':sum(s['d']==7 for s in sp),'errata':0,'body_bytes':len((p/'body.html').read_bytes())}
+ proof={'status':'FROZEN','producer':'Codex English-first','incoming_head':e['head'],'verification_head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'baseline_consumed':False,'canonical_command':['python3',str(base/'253/canonical_readonly.py')],'canonical_cwd':str(root),'canonical_generator':str(root/'tools/gen_alignment_page.py'),'sqlite_mode':'URI mode=ro enforced at connection boundary; canonical generator source unchanged','exit':0,'stderr_bytes':0,'body_equals_stdout':True,'source_text_roundtrip':{'tib':True,'eng':True},'counts':counts,'source_evidence_path':str(evidence),'source_evidence_sha256':sha(evidence.read_bytes()),'resolved_spans':spans_with_positions,'final_files_sha256':{fn:sha((p/fn).read_bytes()) for fn in ['spec.json','body.html','errata.json','canonical.stdout','canonical.stderr','canonical.exit','intended-occurrences.json']}}
+ (p/'proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+ concern={253:'Challenge bzhag → establishing first: the isolated auto-aligned entry is unsuitable; C05:262 and ILL:2137 supply contextual corroboration. rang explicitly licenses our own.',254:'Challenge the contextual d3 reason clause and terminal med → no first. bzang ngan remains omitted because its contrast is distributed; sangs rgyas pa → Buddha is restricted to this institutional paraphrase.',255:'Challenge yod → do first: do is the complete existential predicate under ellipsis here. The exact first-person I is licensed by bdag; its auxiliary is excluded.'}[seq]
+ omissions={253:'Supplied outline framing and steps remain unwrapped; all repeated positions and the last first are resolved explicitly.',254:'bzang ngan, sogs and zhes zer na are omitted with reasons, never falsely nulled. The second implication frame and supplied participants remain unwrapped.',255:'The earlier supplied have claimed is excluded from dod. The verse other is occurrence 2, khyod/khyed take the two You occurrences, and the causal for occurrences exclude the refuge phrase.'}[seq]
+ errata={253:'No new erratum. C15:398 and C16:829 match ACIP, Wylie and English; P7:16 shares English but differs in Tibetan punctuation.',254:'No new erratum. Original non- Buddhists is retained and also occurs in C15:399 and C16:830; all three selected text fields match. Text agreement cannot establish a fresh ingestion defect.',255:'No new erratum. C15:400 and C16:831 match the selected three text fields. C10:192–193 corroborate only the refuge formula, not the complete verse.'}[seq]
+ report=[f'# C05:{seq} — frozen English-first proposal',f'Producer: Codex. Consumed incoming head `{e["head"]}`; no later landing baseline consumed.',concern,omissions,'Full original rows, six-field snapshot verification, glossary records, query SQL/parameters/counts, corpus rows and registered-class checks are in [evidence.json](../253/evidence.json).',f'Evidence SHA-256: `{proof["source_evidence_sha256"]}`.',errata,'Text agreement proves no independent publication or ingestion history. Every alignment remains provisional; mechanical fidelity is not semantic approval.',f'Canonical result: `EXIT=0`; stderr empty; body `{counts["body_bytes"]}` bytes, byte-identical to saved canonical.stdout.',f'Measured counts: spans {counts["spans"]}; d5 {counts["d5"]}; d3 {counts["d3"]}; d6 {counts["d6"]}; d7 {counts["d7"]}; null {counts["nulls"]}; errata 0.',f'Body SHA-256: `{proof["final_files_sha256"]["body.html"]}`. Spec SHA-256: `{proof["final_files_sha256"]["spec.json"]}`.','[proof.json](proof.json) records all resolved offsets, hashes, source roundtrip and exact canonical invocation. Attempts and their actual stdout/stderr/exit are retained; C05:255 attempt 1 was refused for wrong occurrence ordering.' if seq==255 else '[proof.json](proof.json) records resolved offsets, hashes, source roundtrip and exact canonical invocation. Canonical attempt 1 passed; shared authoring failures are preserved in ../253/.']
+ (p/'report.md').write_text('\n'.join(report)+'\n')
+ freeze={'status':'FROZEN','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'sha256':{x.name:sha(x.read_bytes()) for x in sorted(p.iterdir()) if x.is_file() and x.name!='freeze.json'}}
+ (p/'freeze.json').write_text(json.dumps(freeze,indent=2)+'\n');print(seq,counts,proof['final_files_sha256']['body.html'])

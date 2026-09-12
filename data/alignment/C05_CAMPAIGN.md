@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. c5p81 (241–243) landed after independent review. c5p82 (244–246) landed after independent review. c5p83 (247–249) landed after independent review. c5p84 (250–252) landed after independent review. Coverage 252/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. c5p81 (241–243) landed after independent review. c5p82 (244–246) landed after independent review. c5p83 (247–249) landed after independent review. c5p84 (250–252) landed after independent review. c5p85 (253–255) landed after independent review. Coverage 255/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -1459,3 +1459,57 @@ The first whitespace audit failed closed on frozen review whitespace. A scoped
 checker verified eight exact review-freeze pins and every cited empty report
 field, EOF line and unified-diff context line; all 56,274 warnings are accounted
 for alongside original physical sources and CSV CRLF. No bytes were normalized.
+
+
+### c5p85 · C05:253–255 — 2026-09-12 — Codex reconciliation/review
+
+Fresh independent proposals, reconciliation and semantic SPEC APPROVE / QUALITY
+APPROVE yield 65 spans (16/19/30), two nulls (0/0/2), 48 non-null d5 pairs,
+five d3 phrases, eleven non-null d6 particles and one d7 member. All remain
+PROVISIONAL machine attestations. The outline's final first, two positions and
+meaning-of relation retain exact owners. Actual weak mined glosses and wider
+binding variants are confronted explicitly. Complete causal and alternative
+recasts remain d3; the Buddha stem excludes the institutional suffix. Distributed
+bzang ngan comparison stays omitted with reasons, without a false atom or null.
+Single med/thal occurrences select their first exponents, leaving repeated
+English consequence/negative formulations unwrapped. Existential yod/do retains
+its local ellipsis. The refuge compound has a tighter mchi/go member; pronouns,
+causal for occurrences and restrictive alone retain their actual owners. Both ni
+nulls describe topic/cleft grammar without a separately alignable English word.
+
+No errata added; all 192 prior records survive. Non- Buddhists remains verbatim
+under the registered hyphen-plus-space class, after all five refutation grounds.
+Full C15/C16 equality and shorter P7/P9 extents do not establish independent
+publication or support the unquoted continuation. Four exact head allowances
+name bdag cag, bdag, khyod and khyed. Source/master and hgm_gloss stay unchanged.
+
+Root read all 123 original dispositions and 65 final rationales, plus the entire
+semantic report, 65 independent assessments and complete five-ground refutation.
+The reviewer independently replayed nine canonical bodies, 123 original and 65
+final tuples, 66 SQL queries and 42 full master selections, with seven additional
+contested lexical records. Root verified 462 original mappings and 11 immutable
+Git pins, then 323 exact semantic file copies. All original proposals, complete
+source evidence, failed/superseded attempts and historical governing bytes survive.
+The new landing baseline is 0561829; earlier proposal context remains pinned to
+87a5296. No post-freeze correction of accepted proposals was required.
+
+Coverage 255/511. Bank 44,382 links (+68 with three anchors), 11,895 nulls,
+1,591 notes and 11 trees; evidence 7,048 heads / 15,360 pairs. Main/reverse/
+course/changes CSV rows 22,212 / 21,872 / 23,719 / 31, seeded from 0561829.
+Every course/depth group independently matches actual main CSV references.
+Prior links, notes, trees, evidence, lexical keys, citations and ACIP metadata
+survive without enrichment. All 17 targeted suites passed (11.60s); exact body,
+source range, copy, retention and navigation checks pass. Staged whitespace is
+audited byte-safely before commit, preserving physical source and CSV CRLF bytes.
+
+The fresh reviewer is checking both new data heads and final documentation.
+Rendered inspection remains unverified after browser-policy refusal; native and
+installed-phone proof remains through171. Locked launch and main integration
+remain open. The larger campaign continues through the authorized Tuesday cutoff.
+
+The first whitespace audit rejected two exact frozen brief EOFs. The pin adapter
+then assumed relative freeze paths and failed on this reviewer's absolute paths;
+an immediate v2 invocation also failed closed without pins. Scoped v3 resolves
+either schema strictly inside the review directory. Both exact pins and all
+22,564 diagnostics pass before commit. Failed attempts remain preserved; no
+source, review evidence or generated data was normalized or changed.

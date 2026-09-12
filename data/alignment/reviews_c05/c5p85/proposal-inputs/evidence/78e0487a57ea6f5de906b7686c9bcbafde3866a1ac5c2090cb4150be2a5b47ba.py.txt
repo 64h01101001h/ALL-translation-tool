@@ -1,0 +1,11 @@
+"""Run unchanged canonical generator with all SQLite opens forced to URI mode=ro."""
+import sqlite3,runpy,pathlib,sys
+original=sqlite3.connect
+def readonly(database,*args,**kwargs):
+    path=pathlib.Path(database).resolve()
+    kwargs['uri']=True
+    return original(path.as_uri()+'?mode=ro',*args,**kwargs)
+sqlite3.connect=readonly
+root=pathlib.Path(__file__).resolve().parents[4]/'campaign-worktree'
+sys.argv=[str(root/'tools/gen_alignment_page.py')]
+runpy.run_path(sys.argv[0],run_name='__main__')

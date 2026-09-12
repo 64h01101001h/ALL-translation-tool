@@ -1,0 +1,165 @@
+import pathlib,json,hashlib,subprocess,os,runpy,datetime,re,difflib
+from html.parser import HTMLParser
+B=pathlib.Path(__file__).resolve().parents[2];D=B/'reconciled';W=B.parents[1]/'campaign-worktree';E=D/'253/evidence'
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+def meta(p):
+ b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':sha(b)}
+mod=runpy.run_path(str(W/'tools/gen_alignment_page.py'))
+reopened=json.loads((E/'reopened-originals.json').read_text());rows={}
+for q in reopened['queries']:
+ if 'corpus_segments' in q['sql']:
+  for r in q['full_original_rows']:rows[(r['course'],r['seq'])]=r
+originals=json.loads((E/'original-123-spans.json').read_text())
+def ranges(seg,src):
+ sp=seg['spans'];by={s['id']:s for s in sp}
+ return mod['resolve'](src['wylie'],sp,'tib',seg['seq']),mod['resolve'](src['english'],mod['with_members'](sp,[by[i] for i in seg['eng_order']],src['english']),'eng',seg['seq'])
+def explain(n,s):
+ t=s['tib'];e=s['eng']
+ common={
+ 'gnyis pa':'Ordinal outline marker identifies section two; secondly is its adverbial English realization.',
+ 'lung':'The quoted authoritative passage is rendered text; the retrospective we quoted first is extra English framing.',
+ 'gi':'Genitive relates meaning to text and owns of at that relation, not of in position of others.',
+ 'don':'The content of the passage is its meaning.',
+ 'bshad pa':'The explanatory action supplies explain; person and tense auxiliaries are supplied.',
+ 'gzhan':('Other-party reference licenses others in the first position.' if n==253 else 'Other qualifies the verse teachers; select the later other, not the earlier other inside the consideration recast.'),
+ 'lugs':'Position is the local doctrinal stance; first/second occurrences follow gzhan/rang and own the corresponding English position.',
+ 'dgag':'The outline action against the other position is disproving; no supplied article is included.',
+ 'rang':'Select own as the narrower explicit reflexive boundary. HTG2016 has both own and our own, but local person is inferred from the speaking side; our remains unwrapped. This is a boundary choice, not a claim that our own is absent from the glossary.',
+ 'bzhag':'The local establishment step licenses establishing. C05:262 independently gives rang lugs bzhag pa / establish our own position; ILL:2137 gives put forth their own system. The original auto-aligned three diamonds record is retained as weak mined evidence and not used as the semantic basis.',
+ 'rtsod pa':'The objection/rebuttal answered by the third step supplies rebuttal; their is contextual.',
+ 'spong ba':'The response abandons/disposes of the objection, rendered refuting in this outline.',
+ 'dang':'The enumerating conjunction supplies and before then refuting; this is not the dang inside final dang po.',
+ 'gsum':'Numeral three; the outline lets GMR add steps and We proceed in, which are excluded.',
+ 'dang po':'The closing first subsection marker owns the final first, after rebuttal. The earlier first belongs to GMR\u0027s supplied retrospective quoted first.',
+ 'kha cig':'Indefinite person supplies Someone; no participant is invented.',
+ 'na re':'Established multi-syllable reporting unit, HTG2016 claim/claims/say. d5 is justified as a lexical reporting form; neither d3 nor a wider may make the following capture is needed.',
+ 'rgyu mtshan de nyid kyi phyir na':'Full deictic causal frame says for that very reason; GMR\u0027s Given the statements that have come above is its complete contextual recast. de nyid points back and kyi phyir na supplies the causal framing. Kept d3; bare rgyu mtshan is not equated with statements.',
+ 'chos thams cad':'All phenomena is realized as anything under the negative consideration predicate; d3 retains the full noun phrase and does not bank thams cad or chos separately against a fused English quantifier.',
+ "'di yin 'di min gang du yang":'Retain the whole alternative construction at d3: yin/min provides being this versus not this and gang du yang extends it to any manner. being is licensed by yin; one way or the other is the full positive/negative alternative. No article or conjunction is harvested independently, and no source component is falsely nulled.',
+ 'bzung':'Consider is the apprehension/judgment action; surrounding should and again are not separately owned by the lexical verb.',
+ 'sangs rgyas':'Buddha is the lexical stem explicitly present in sangs rgyas pa\u0027i. The affiliation suffix pa and genitive are recast by system of the Buddha and omitted as distributed morphology. Reject the larger sangs rgyas pa/Buddha dictionary equation; no correction to the source or glossary is implied.',
+ "grub mtha'":'System is the local tenet system. The two repeated Tibetan and English occurrences are independently cursor-resolved in institutional order; supplied belief is excluded.',
+ 'phyi rol pa':'The established non-Buddhist designation supplies this distinct English occurrence; preserve the original first non-Buddhist and second non- Buddhists typography. No normalization or conflation.',
+ 'bdag cag':'Explicit first-person plural bdag cag licenses our; following gi gives the possessive construction. The allowance names this actual source licensor.',
+ 'ston pa':('The first occurrence owns capitalized Teacher; the second owns plural teachers. The singular teacher after highest is a repeated English expansion with no third Tibetan occurrence.' if n==254 else 'The verse ston pa owns teachers, qualified by gzhan; supplied All is excluded.'),
+ 'mchog':'Highest is the superior side of the comparison; the following repeated teacher is supplied. HGM4956\u0027s whole-compound highest does not require swallowing dman when lesser explicitly realizes it here.',
+ 'dman':'Lesser is the inferior side of the teacher comparison, separately explicit in English.',
+ 'phyir':'Causal for: the opening phyir owns the first for before you have claimed; final phyir owns the second causal for before as the verse says. The third for sits within the refuge compound and is not selected.',
+ "'dod":"Agree belongs to the explicit concession 'dod na; earlier have claimed is supplied explanatory restatement and cannot consume this occurrence. Source apostrophe is preserved; the English-first report\u0027s narrative dod spelling is preserved only as its original historical wording.",
+ 'na':'Conditional if in Now if you should agree, not another source na inside an earlier formula.',
+ 'yod':'Existential yod owns do in they do, whose predicate antecedent is exist in none of the differences mentioned above exist. Under ellipsis do is the complete affirmative existential exponent; this is a local contextual attestation, not yod = action/do generally. The earlier exist occurs inside GMR\u0027s expanded concession and is not aligned to affirmative yod.',
+ 'bdag':'Explicit first-person pronoun licenses I in I\u0027ve; the source English uses the straight apostrophe in I\'ve. The auxiliary ve is excluded, and the canonical boundary rule permits the pronoun before the apostrophe without subword:true.',
+ 'ni':('Topic marker with no separately alignable English exponent. First ni marks bdag as topic; second ni participates in cleft/topic framing around You alone rather than licensing an isolated it, is or who. These nulls assert grammatical absence of a separate atom, not uncertainty or absence of all contribution.'),
+ 'spangs':'The abandonment verb owns given up; tense/sequence wording now and the auxiliary of I\u0027ve are not captured.',
+ 'khyod':'Direct second-person object of refuge owns first capitalized You after to only; only is an English emphasis not licensed by khyod alone.',
+ 'la':'Dative target relation owns to before only You, not for inside the refuge compound.',
+ 'skyabs su mchi':'HTG2016 HGM21882 attests go for refuge as an established compound. C10:192–193 corroborate only the refuge formula in different passages. The parent is d5 and allows one immediately following unique tighter member mchi/go.',
+ 'mchi':'HTG2016 HGM4900 go is independently lexical; mchi occurs once strictly inside skyabs su mchi and go once inside go for refuge. Immediate d5 parent and both containment boundaries are proved.',
+ 'ci slad':'Established interrogative why unit, HTG2016 why?. Punctuation is left outside. The following ce na is discourse framing and does not justify claiming Because.',
+ 'khyed':'Honorific second-person pronoun owns second You before alone. It is separate from earlier khyod/You, which belongs to the refuge object.',
+ 'nyid':'Restrictive emphasis owns alone immediately after second You; HTG2016 expressly attests alone. A whole d3 khyed nyid parent is unnecessary because both separate exponents are clear.',
+ 'skyon':'Fault is the defect denied; negation belongs to mi.',
+ 'mi':'Negative particle owns No before fault; it is the same negated possession predicate as mnga\u0027/has, not a separately invented negation.',
+ "mnga'":'Honorific possession verb owns has before No fault; English verb order precedes the negated object.',
+ 'zhing':'Conjunction owns the final lower-case and before perfected, not either earlier capitalized And in the expanded English.',
+ 'yon tan':'Good is the virtue/quality noun in the verse; every is excluded from this lexical span.',
+ 'rdzogs':'The completion/perfection predicate owns perfected. HGM16033 includes perfected every and perfected; the tighter perfected is fully explicit, while every is GMR\u0027s exhaustive expansion and stays unwrapped.',
+ 'gsungs':'The quoted speech verb owns says in as the verse says. Verse is supplied citation identification and remains outside.'
+ }
+ if t=='med':return ('The first med owns never in the denial of considering anything determinately; English again is additional temporal emphasis.' if e=='never' else 'The final med is the shared negative predicate of the systems-and-teachers consequence. Own its first explicit atom no in no difference once. Its negative scope also appears as never state; repeated realization is left unwrapped by the one-source-occurrence convention. Do not assign med to correctness or difference.')
+ if t=='thal':return ('Consequence marker owns the first must be suggesting that once, supported by HGM7394\u0027s exact distributed must be suggesting that ... must be saying too that. The later formula is repeated realization, not a second source thal. Supplied you is excluded; causal modality belongs to thal.' if n==254 else 'Consequence marker owns must reply that, explicitly attested in HGM7394 and functioning here as the response to concession. The supplied speaker we is excluded; its modal response frame is not an invented auxiliary.')
+ return common[t]
+omissions={
+253:[{'source':'la (opening and final), las','english':'Here; We proceed in; Here is the','reason':'Outline divisions and transitions are paraphrased by expanded English framing; no isolated atom is forced or falsely nulled.'},{'source':'no separate lexical licensor','english':'we will; we quoted first; steps; our; then; their','reason':'Participants, tense and explanatory expansions remain outside the narrower lexical spans. rang owns own; gsum owns three.'}],
+254:[{'source':'bzang ngan','english':'all the same; difference in their correctness','reason':'The good/bad relative comparison is spread across the dimensional paraphrase. HGM25000 relative quality/better or worse/no difference and C08:41, C03:561, TCS06:572 support the comparative role, but correctness alone loses the contrast and no difference would also consume terminal med. Omit as distributed content, not a null.'},{'source':"pa'i after sangs rgyas",'english':'system of the Buddha','reason':'Institutional affiliation and possession are recast across the noun relation. Buddha remains a sound lexical stem match to sangs rgyas; no isolated English Buddhist is invented.'},{'source':'zhes zer na; sogs; repeated dang and case particles','english':'Well then; And; too; extended two-consequence framing','reason':'Reporting/conditional/list scope is distributed across the expanded reply and repeated implications; no secure independent atom.'},{'source':'one final med; one final thal; two ston pa','english':'never state; must be saying too that; teacher after highest','reason':'Those are additional English realizations of already selected source words; bank each source occurrence once.'},{'source':'no separate selected lexical licensor','english':'the fact is that; we should; again; you; belief; every; supplied articles and auxiliary exposition','reason':'Keep supplied framing and participants unwrapped; the full d3 recasts already license their own internal syntax.'}],
+255:[{'source':'yod par thal / preceding concession','english':'none of the differences mentioned above exist; And you must be suggesting all this; you have claimed','reason':'GMR explicates the debate context; affirmative yod selects the existential do of the reply, while the expanded negative concession is not its exponent.'},{'source':'nas; lags kyi; ce na; zhes and genitive/quotation morphology','english':'now; Because; as the verse','reason':'Sequencing, politeness and citation/discourse functions do not have securely separable local words. Omit distributed contribution rather than uncertainty-null.'},{'source':'no separately selected licensor; narrower khyod and rdzogs','english':'All; only; every; verse; supplied person/auxiliary wording','reason':'gzhan owns other, khyod owns You, rdzogs owns perfected; supplied amplification and citation identification remain unwrapped.'}]
+}
+class Parser(HTMLParser):
+ def __init__(self):super().__init__();self.stack=[];self.output={'tib':'','eng':''}
+ def handle_starttag(self,t,a):
+  if t in ['div','span']:self.stack.append((t,dict(a).get('class','')))
+ def handle_endtag(self,t):
+  if t in ['div','span']:
+   assert self.stack[-1][0]==t;self.stack.pop()
+ def handle_data(self,d):
+  cls=[x[1] for x in self.stack]
+  if any(x in ['lab','nul'] for x in cls):return
+  for side in self.output:
+   if side in cls:self.output[side]+=d
+def gaps(text,rr):
+ intervals=sorted(rr);end=0;result=[]
+ for a,b in intervals:
+  if a>end:result.append({'range':[end,a],'text':text[end:a]})
+  end=max(end,b)
+ if end<len(text):result.append({'range':[end,len(text)],'text':text[end:]})
+ return result
+def occurrences(text,piece):
+ result=[];i=0
+ while True:
+  i=mod['find_word'](text,piece,i)
+  if i<0:break
+  result.append([i,i+len(piece)]);i+=1
+ return result
+all_counts=[]
+for n in [253,254,255]:
+ p=D/str(n);spec=json.loads((p/'spec.json').read_text());seg=spec['segments'][0];src=rows[('C05',n)];tr,er=ranges(seg,src)
+ attempts=p/'attempts';attempts.mkdir(exist_ok=True);num=len(list(attempts.glob('*.spec.json')))+1;prefix=attempts/f'{num:02}'
+ prefix.with_suffix('.spec.json').write_bytes((p/'spec.json').read_bytes())
+ wrapper=B/'tibetan/canonical_ro.py';proc=subprocess.run(['python3',str(wrapper)],input=(p/'spec.json').read_bytes(),capture_output=True,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for ext,data in [('stdout',proc.stdout),('stderr',proc.stderr),('exit',str(proc.returncode).encode()+b'\n')]:
+  prefix.with_suffix('.'+ext).write_bytes(data);(p/f'canonical.{ext}').write_bytes(data)
+ assert proc.returncode==0 and not proc.stderr,(n,proc.stderr)
+ (p/'body.html').write_bytes(proc.stdout)
+ parser=Parser();parser.feed(proc.stdout.decode());assert parser.output['tib'].strip()==src['wylie'];assert parser.output['eng'].strip()==src['english'],(n,parser.output['eng'])
+ tuples=[]
+ for i,s in enumerate(seg['spans']):
+  obj={'order':i+1,'span':s,'field_presence':list(s),'tib_range':list(tr[s['id']]),'eng_range':list(er[s['id']]) if s['id'] in er else None,'rationale':explain(n,s),'all_tib_word_occurrences':occurrences(src['wylie'],s['tib']),'all_eng_word_occurrences':occurrences(src['english'],s['eng']) if s['eng'] else []}
+  if s['d']==7:
+   par=seg['spans'][i-1];assert par['d']==5
+   for side,rr in [('tib',tr),('eng',er)]:
+    assert par[side].count(s[side])==1 and par[side]!=s[side];assert rr[par['id']][0]<=rr[s['id']][0]<rr[s['id']][1]<=rr[par['id']][1]
+   obj['immediate_parent']=par['id']
+  tuples.append(obj)
+ dispositions=[]
+ for original in [o for o in originals if o['seq']==n]:
+  s=original['original_span'];equal=[t for t in tuples if {k:v for k,v in t['span'].items() if k!='id'}=={k:v for k,v in s.items() if k!='id'} and t['tib_range']==original['tib_range'] and t['eng_range']==original['eng_range']]
+  if equal:status='retained';targets=equal;reason=equal[0]['rationale']
+  elif s['tib']=='bzang ngan':status='rejected-omitted';targets=[];reason=omissions[254][0]['reason']
+  else:
+   a,b=original['tib_range'];targets=[t for t in tuples if a<t['tib_range'][1] and b>t['tib_range'][0]]
+   status='recast' if targets else 'rejected-omitted';reason=' '.join(t['rationale'] for t in targets) or 'No separately defensible final exponent; see material omissions.'
+  dispositions.append({**original,'disposition':status,'final_ids':[t['span']['id'] for t in targets],'rationale':reason})
+ assert len(dispositions)==sum(1 for o in originals if o['seq']==n)
+ allowances={}
+ for t in tuples:
+  s=t['span']
+  if s['d'] in [5,7] and s['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',s['eng'],re.I):
+   allowances[f"c5p85/s{n}{s['id']}"]=f"{s['tib']} (Codex reconciliation C05:{n}: {explain(n,s)})"
+ dump(p/'allowances-proposed.json',{'pages_c05':allowances,'status':'Exact proposed entries only; existing allowance file unchanged. Apply only to the same final IDs when root lands the approved page.'})
+ dump(p/'decisions.json',{'producer':'Codex reconciliation','status':'PROVISIONAL','original_dispositions':dispositions,'final_ordered_tuples':tuples,'eng_order':seg['eng_order'],'material_omissions':omissions[n],'unwrapped_tibetan_ranges':gaps(src['wylie'],[tr[s['id']] for s in seg['spans'] if s['d']!=7]),'unwrapped_english_ranges':gaps(src['english'],[er[s['id']] for s in seg['spans'] if s['d']!=7 and s['eng'] is not None]),'shared_original_evidence':str(E),'input_narrative_advisory':"Original English255 report spells 'dod as dod in one narrative sentence. Its exact original bytes are preserved. Final notes and explanations spell the source form 'dod exactly." if n==255 else None})
+ witnesses=[]
+ sels={253:[('C15',398),('C16',829),('P7',16)],254:[('C15',399),('C16',830),('P7',17),('P9',44)],255:[('C15',400),('C16',831),('C10',192),('C10',193),('OSE',41),('OSE',370)]}[n]
+ for key in sels:
+  r=rows[key];fields={}
+  for f in ['acip','wylie','english','raw']:
+   value=r[f];fields[f]={'complete_text':value,'characters':len(value),'utf8_bytes':len(value.encode()),'sha256':sha(value.encode()),'equal_to_target':value==src[f]}
+   if f!='raw':fields[f]['all_equal_blocks_against_target']=[{'target_range':[m.a,m.a+m.size],'witness_range':[m.b,m.b+m.size],'text':src[f][m.a:m.a+m.size]} for m in difflib.SequenceMatcher(None,src[f],value,autojunk=False).get_matching_blocks() if m.size]
+  witnesses.append({'course':key[0],'seq':key[1],'complete_original_row':r,'physical_field_extents':fields,'publication_or_ingestion_independence':'Not established. Equality/difference applies only to these physical field extents; no external publication file or independent lineage is inferred.'})
+ dump(p/'witness-extents.json',{'source_spine':reopened['source_files'][0],'target_full_row':src,'witnesses':witnesses,'limits':('P7:17 and P9:44 each carry the full Tibetan consequence through thal but English stops at never state, before the teacher predicates. P7:17 additionally lacks other after one way or the. Their English cannot attest the missing continuation.' if n==254 else 'C10:192–193 share the refuge formula only; OSE:41/370 share All other teachers words in different passages and are not witnesses to the complete four-line verse.' if n==255 else 'P7:16 shares complete English but differs in Tibetan punctuation; this is no proof of independent publication.')})
+ claims=[]
+ if n==254:
+  q=next(q for q in reopened['queries'] if q['parameters']==['%non- Buddhists%']);assert q['count']==3
+  reg=json.loads((W/'docs/errata_register.json').read_text());registered=[r for r in reg if r['item_id'] in ['E-025','E-028','E-029']]
+  claims=[{'seq':254,'suspicion':'Source typography non- Buddhists might merit a new local erratum','found':'non- Buddhists','expected':'non-Buddhists','refuted':True,'grounds':{'a_quote':'Exact found appears once in target English; not in Tibetan Wylie or ACIP, which carry the corresponding phyi rol pa / PHYI ROL PA. Quote therefore holds on English only.','b_parallel':'C15:399 and C16:830 carry the identical full three text fields including this spelling. Their independent publication/ingestion lineage is unproven; identity alone is not an independent-publication refutation. P7:17 and P9:44 English ends before this token and cannot adjudicate it.','c_registered':'E-025 already covers source hyphen-plus-space typography; this is the same class and should not be filed anew. No separate claim is made about authorial spelling.','d_defensible':'Removing the space is standard compound typography, but the existing reading is understandable line-break-format residue. The local phyi rol pa meaning is clear; source wording must remain verbatim.','e_counts':'Original English LIKE %non- Buddhists% query independently reruns at 3 full rows: C05:254, C15:399, C16:830. Both full parallel three-field identity comparisons rerun true; target found count is 1.'},'counts_rechecked':{'english_like_non_space_Buddhists':q['count'],'target_found_occurrences':src['english'].count('non- Buddhists')},'full_registered_records':registered,'severity':'LOW if ever tracked within existing class','confidence':'No new erratum; publication lineage unresolved'}]
+ dump(p/'errata-analysis.json',{'retained_errata':[],'suspicions_checked_all_five_grounds':claims,'general_scan':{'english_characters':len(src['english']),'at_1500_cap':len(src['english'])==1500,'following_heading':False,'selected_registered_classes':['E-025','E-044','E-071','E-076','E-107','E-111','E-121'],'register_full_immutable_copy':'See source-path-map.json mapping for docs/errata_register.json','no_source_correction_or_master_promotion':True},'scope':'Alignment boundary disagreements and an original proposal narrative spelling slip are not evidence of source errata.'})
+ counts={'spans':len(seg['spans']),'d3':sum(s['d']==3 for s in seg['spans']),'d5':sum(s['d']==5 for s in seg['spans']),'d6':sum(s['d']==6 for s in seg['spans']),'d7':sum(s['d']==7 for s in seg['spans']),'nulls':sum(s['eng'] is None for s in seg['spans']),'errata':0,'original_dispositions':len(dispositions)};all_counts.append({'seq':n,**counts})
+ proof={'status':'FROZEN mechanical proof; semantic review is a separate stage','producer':'Codex reconciliation','canonical_command':['python3',str(wrapper)],'canonical_cwd':str(W),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'canonical_generator':meta(W/'tools/gen_alignment_page.py'),'canonical_wrapper':meta(wrapper),'sqlite_mode':'All SQLite opens forced to URI mode=ro by wrapper; unchanged canonical script executes with runpy','generator_exit':proc.returncode,'stderr_bytes':len(proc.stderr),'body_equals_stdout':(p/'body.html').read_bytes()==proc.stdout,'source_text_roundtrip':{'wylie':True,'english':True},'counts':counts,'files':{f:meta(p/f) for f in ['spec.json','body.html','errata.json','decisions.json','allowances-proposed.json','witness-extents.json','errata-analysis.json','canonical.stdout','canonical.stderr','canonical.exit']},'shared_evidence_map':meta(E/'source-path-map.json'),'reopened_originals':meta(E/'reopened-originals.json'),'six_proposal_replays':meta(E/'proposal-replays.json'),'incoming_proposal_head':'87a5296a8f2fed8d14f4c7960ac598e00213e083','future_landing_baseline_consumed':False,'review_limit':'Generator and substring/shape proofs do not establish semantic correctness. No gate was disabled or allowance file changed.'}
+ dump(p/'proof.json',proof)
+ report=[f'C05:{n} — Codex reconciliation; PROVISIONAL.',f"Counts: {counts['spans']} spans; d3={counts['d3']}, d5={counts['d5']}, d6={counts['d6']}, d7={counts['d7']}; nulls={counts['nulls']}; errata=0.",f"Both original angles replayed exactly; {len(dispositions)} original dispositions preserved with every original optional field and canonical range in decisions.json.",seg['note'],f"Final ordered tuples, per-span rationales, all repeated occurrences, material omissions and exact unwrapped ranges: {p/'decisions.json'}.",f"Exact proposed gated-head allowances (file unchanged): {p/'allowances-proposed.json'}.",f"Complete original witness rows/raw metadata and full physical extents: {p/'witness-extents.json'}.",f"All five grounds for typography suspicion (254 only), register checks and no-new-errata rationale: {p/'errata-analysis.json'}.",f"Original-source replay: 66 SQLite read-only queries, 42 full-record master selections, all snapshots verified; complete immutable original files and source-path/hash/byte mappings: {E/'source-path-map.json'}.",f"Original input originals, attempts and all six actual canonical replays are preserved under {E}.",f"EXIT={proc.returncode}",f"BODY_BYTES={len(proc.stdout)}; STDERR_BYTES={len(proc.stderr)}; saved body equals exact canonical stdout.",f"SPEC_SHA256={sha((p/'spec.json').read_bytes())}; SPEC_BYTES={len((p/'spec.json').read_bytes())}",f"BODY_SHA256={sha(proc.stdout)}",f"Canonical argv/cwd, source roundtrip, depth/parent proof and file hashes: {p/'proof.json'}.","Text agreement or difference proves only compared extents, not independent publication or ingestion lineage.","Mechanical freeze complete; all matching remains provisional and carries no semantic approval. No source, repository, master, allowance or gate changed; no landing baseline consumed."]
+ (p/'report.md').write_text('\n'.join(report)+'\n')
+dump(D/'253/batch-counts.json',all_counts)
+assert sum(x['original_dispositions'] for x in all_counts)==123
+for n in [253,254,255]:
+ p=D/str(n);files=[x for x in p.rglob('*') if x.is_file() and x.name!='freeze.json'];dump(p/'freeze.json',{'status':'FROZEN','producer':'Codex reconciliation','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':[meta(x) for x in sorted(files)]})
+print(json.dumps(all_counts));print('All final generators exit0, all body roundtrips hold, all123 dispositions complete; files frozen.')

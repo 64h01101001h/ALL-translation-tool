@@ -1,0 +1,66 @@
+import pathlib,json,hashlib,sqlite3,gzip,subprocess,os,runpy
+ROOT=pathlib.Path(__file__).resolve().parents[4]
+W=ROOT/'campaign-worktree'; B=ROOT/'campaign-artifacts/C05-253-255'; D=B/'reconciled/253'; E=D/'evidence'; E.mkdir(exist_ok=True)
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+def meta(p):
+ b=p.read_bytes();return {'source_path':str(p),'resolved_source_path':str(p.resolve()),'bytes':len(b),'sha256':sha(b)}
+manifest=[]
+def preserve(p):
+ m=meta(p);dest=E/'immutable'/m['sha256'];dest.parent.mkdir(exist_ok=True)
+ if not dest.exists():dest.write_bytes(p.read_bytes())
+ m['immutable_copy']=str(dest);manifest.append(m)
+for p in sorted(B.rglob('*')):
+ if p.is_file() and 'reconciled' not in p.relative_to(B).parts:preserve(p)
+for rel in ['AGENTS.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','docs/errata_register.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ preserve(W/rel)
+home=pathlib.Path('/Users/adamderickandrade')
+refs=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+access=[{'path':str(home/x),'readable':os.access(home/x,os.R_OK)} for x in refs];assert all(x['readable'] for x in access)
+S=W/'build/hgm_spine_v27_2.db';M=home/'Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz'
+c=sqlite3.connect(S.resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+for rel in ['HANDOFF.md','README.md']:preserve(M.parent.parent/rel)
+queries=[]
+def query(sql,params,origin,expected=None):
+ rows=[dict(r) for r in c.execute(sql,params)];item={'sql':sql,'parameters':params,'origin':origin,'count':len(rows),'full_original_rows':rows}
+ if expected is not None:
+  item['equals_proposal_rows']=rows==expected;assert rows==expected,(origin,sql)
+ queries.append(item);return rows
+en=json.loads((B/'english/253/evidence.json').read_text())
+for i,q in enumerate(en['queries']):query(q['sql'],q['parameters'],f'english/253/evidence.json queries[{i}]',q['rows'])
+ti=json.loads((B/'tibetan/corpus-evidence.json').read_text())
+for i,q in enumerate(ti['queries']):query(q['sql'],q['parameters'],f'tibetan/corpus-evidence.json queries[{i}]',q['full_rows'])
+extras=[('C05',262),('ILL',2137),('C10',192),('C10',193),('P7',16),('P7',17),('P9',44),('C08',41),('C03',561),('TCS06',572)]
+for course,seq in extras:query('select * from corpus_segments where course=? and seq=?',[course,seq],'reconciler targeted full witness')
+terms=['rang','bzhag','gzhan lugs','na re','sangs rgyas','sangs rgyas pa','bzang ngan','mchog dman','thal','yod','yod par thal','skyabs su mchi','mchi','ci slad','khyed','khyod','nyid','rdzogs']
+for t in terms:query('select * from entries where wylie=?',[t],'reconciler disputed lexical original')
+source=query('select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',247,261],'reconciler original context')
+checks=[]
+for name in ['source.json','context.json']:
+ for r in json.loads((B/name).read_text()):
+  a=next(x for x in source if x['seq']==r['seq']);check={k:a[k]==v for k,v in r.items()};assert all(check.values());checks.append({'snapshot':name,'seq':r['seq'],'equal_fields':check})
+master=json.load(gzip.open(M));master_queries=[]
+tm=json.loads((B/'tibetan/master-evidence.json').read_text())
+for q in tm['queries']:
+ t=q['query']['exact_wylie_or_variant'];es=[e for e in master['unified_entries'] if e.get('wylie')==t or t in e.get('wylie_variants',[])];assert es==q['full_records'];master_queries.append({'term':t,'count':len(es),'equals_proposal':True,'full_original_records':es})
+dump(E/'reopened-originals.json',{'producer':'Codex reconciler','sqlite_mode':'URI mode=ro','source_files':[meta(S),meta(M)],'reference_access':access,'snapshot_checks':checks,'queries':queries,'master_queries':master_queries})
+dump(E/'source-path-map.json',manifest)
+mod=runpy.run_path(str(W/'tools/gen_alignment_page.py'));original_spans=[];replays=[]
+for angle in ['tibetan','english']:
+ for n in [253,254,255]:
+  p=B/angle/str(n);spec=json.loads((p/'spec.json').read_text());seg=spec['segments'][0];src=next(x for x in source if x['seq']==n);sp=seg['spans'];by={s['id']:s for s in sp}
+  tr=mod['resolve'](src['wylie'],sp,'tib',n);er=mod['resolve'](src['english'],mod['with_members'](sp,[by[i] for i in seg['eng_order']],src['english']),'eng',n)
+  wrapper=B/('tibetan/canonical_ro.py' if angle=='tibetan' else 'english/253/canonical_readonly.py')
+  proc=subprocess.run(['python3',str(wrapper)],input=(p/'spec.json').read_bytes(),capture_output=True,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+  out=E/'proposal-replays';out.mkdir(exist_ok=True)
+  for ext,data in [('stdout',proc.stdout),('stderr',proc.stderr),('exit',str(proc.returncode).encode()+b'\n')]: (out/f'{angle}-{n}.{ext}').write_bytes(data)
+  assert proc.returncode==0 and proc.stdout==(p/'body.html').read_bytes() and not proc.stderr
+  replays.append({'angle':angle,'seq':n,'argv':['python3',str(wrapper)],'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':proc.returncode,'body_equals_saved':True,'stdout_bytes':len(proc.stdout),'stdout_sha256':sha(proc.stdout),'stderr_bytes':len(proc.stderr),'spec':meta(p/'spec.json')})
+  for s in sp:original_spans.append({'angle':angle,'seq':n,'original_span':s,'original_field_presence':list(s),'tib_range':tr[s['id']],'eng_range':er.get(s['id'])})
+assert len(original_spans)==123
+root=json.loads((B/'proposal-verification/root-resolved-spans.json').read_text())
+for s,r in zip(original_spans,root):
+ assert s['angle']==r['angle'] and s['seq']==r['seq'] and s['original_span']['id']==r['id']
+ assert list(s['tib_range'])==r['tib_range'] and (list(s['eng_range']) if s['eng_range'] else None)==r['eng_range']
+dump(E/'original-123-spans.json',original_spans);dump(E/'proposal-replays.json',{'canonical_generator':meta(W/'tools/gen_alignment_page.py'),'replays':replays,'root_ranges_independently_reproduced':123})
+print('Preserved',len(manifest),'source mappings; original queries',len(queries),'; master queries',len(master_queries),'; six exact replays; all123 ranges reproduced')

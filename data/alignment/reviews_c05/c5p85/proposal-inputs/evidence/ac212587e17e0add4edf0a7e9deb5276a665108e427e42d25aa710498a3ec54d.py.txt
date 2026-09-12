@@ -1,0 +1,36 @@
+import pathlib,json,sqlite3,gzip,hashlib,subprocess
+ROOT=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+W=ROOT/'campaign-worktree'; D=ROOT/'campaign-artifacts/C05-253-255/tibetan'; O=D/'originals'; O.mkdir(exist_ok=True)
+HEAD='87a5296a8f2fed8d14f4c7960ac598e00213e083'
+def dump(p,x): p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def metadata(p):
+ b=p.read_bytes();return dict(path=str(p),resolved_path=str(p.resolve()),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+pins=[]
+for rel in ['AGENTS.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/errata_register.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ b=subprocess.check_output(['git','show',HEAD+':'+rel],cwd=W); p=O/(rel.replace('/','__'));p.write_bytes(b);pins.append(dict(original_path=str(W/rel),git_commit=HEAD,git_blob=subprocess.check_output(['git','rev-parse',HEAD+':'+rel],cwd=W,text=True).strip(),bytes=len(b),sha256=hashlib.sha256(b).hexdigest(),full_git_byte_copy=str(p),current_bytes_equal=(W/rel).read_bytes()==b))
+S=W/'build/hgm_spine_v27_2.db'; M=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz')
+originals=[metadata(S),metadata(M)]
+for rel in ['HANDOFF.md','README.md']:
+ p=M.parent.parent/rel;b=p.read_bytes();o=O/rel;o.write_bytes(b);originals.append(dict(**metadata(p),full_byte_copy=str(o)))
+c=sqlite3.connect(S.as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+checks=[]
+for name in ['source.json','context.json']:
+ snap=json.loads((D.parent/name).read_text());rows=[]
+ for r in snap:
+  a=dict(c.execute('select * from corpus_segments where course=? and seq=?',(r['course'],r['seq'])).fetchone());rows.append(a)
+  checks.append(dict(snapshot=name,seq=r['seq'],six_fields={k:a[k]==r[k] for k in ['id','course','seq','acip','wylie','english']}))
+ dump(D/('full-original-'+name),rows)
+assert all(all(x['six_fields'].values()) for x in checks)
+terms=['gnyis pa','lung','don','bshad pa','gzhan','lugs','dgag','rang','bzhag','rtsod pa','spong ba','gsum','dang po','kha cig','na re','rgyu mtshan','chos','thams cad','bzung','med','sangs rgyas','grub mtha\'','phyi rol pa','bzang ngan','bdag cag','ston pa','mchog','dman','sogs','yod','bdag','gzhan','spangs','khyod','skyabs su mchi','ci slad','khyed nyid','skyon','mnga\'','yon tan','rdzogs','gsungs']
+master=json.load(gzip.open(M));matched=[]
+for t in terms:
+ es=[e for e in master['unified_entries'] if e.get('wylie')==t or t in e.get('wylie_variants',[])]; matched.append(dict(query={'exact_wylie_or_variant':t},count=len(es),full_records=es))
+dump(D/'master-evidence.json',dict(source=metadata(M),selection='Full records matching listed exact headword or variant; NOT a full-file copy.',queries=matched))
+queries=[]
+for field,pattern in [('wylie',"%chos thams cad la 'di yin 'di min%"),('wylie','%bdag ni ston pa gzhan spangs%'),('wylie','%bzang ngan%'),('wylie','%rgyu mtshan de nyid%'),('english','%All other teachers%'),('english','%non- Buddhists%'),('english','%Here secondly we will explain the meaning%')]:
+ sql='select * from corpus_segments where '+field+' like ? order by course,seq';r=[dict(x) for x in c.execute(sql,(pattern,))];queries.append(dict(sql=sql,parameters=[pattern],count=len(r),full_rows=r))
+for n in (253,254,255):
+ src=c.execute('select * from corpus_segments where course=? and seq=?',('C05',n)).fetchone();sql='select * from corpus_segments where acip=? or wylie=? or english=? order by course,seq';pars=[src[k] for k in ['acip','wylie','english']];rr=[dict(x) for x in c.execute(sql,pars)];queries.append(dict(for_seq=n,sql=sql,parameters=pars,count=len(rr),full_rows=rr,identity=[{'course':r['course'],'seq':r['seq'],**{k:r[k]==src[k] for k in ['acip','wylie','english']}} for r in rr]))
+dump(D/'corpus-evidence.json',dict(source=metadata(S),connection='SQLite URI mode=ro',queries=queries))
+dump(D/'provenance.json',dict(producer='Codex, Tibetan-first independent proposal',incoming_git_commit=HEAD,governing_git_pins=pins,original_sources=originals,snapshot_checks=checks,method='Original source and master reopened independently; snapshot fields compared against select * full original rows. Corpus identity establishes only compared field identity, not independent publication or ingestion history.'))
+print([(q.get('for_seq'),q['parameters'][0][:60],q['count']) for q in queries]); print('snapshot_checks',len(checks),'all six true')

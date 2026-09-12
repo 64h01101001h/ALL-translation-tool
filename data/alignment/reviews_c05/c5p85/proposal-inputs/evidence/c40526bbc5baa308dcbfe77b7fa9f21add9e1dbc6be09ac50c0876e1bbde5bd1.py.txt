@@ -1,0 +1,10 @@
+"""Run the unchanged canonical script with SQLite connections forced to URI mode=ro."""
+import sqlite3,pathlib,runpy,sys
+original_connect=sqlite3.connect
+def readonly_connect(database,*args,**kwargs):
+    p=pathlib.Path(database)
+    assert p.is_file(),database
+    kwargs['uri']=True
+    return original_connect(p.resolve().as_uri()+'?mode=ro',*args,**kwargs)
+sqlite3.connect=readonly_connect
+runpy.run_path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py',run_name='__main__')

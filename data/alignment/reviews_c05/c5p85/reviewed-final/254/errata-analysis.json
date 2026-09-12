@@ -1,0 +1,80 @@
+{
+  "retained_errata": [],
+  "suspicions_checked_all_five_grounds": [
+    {
+      "seq": 254,
+      "suspicion": "Source typography non- Buddhists might merit a new local erratum",
+      "found": "non- Buddhists",
+      "expected": "non-Buddhists",
+      "refuted": true,
+      "grounds": {
+        "a_quote": "Exact found appears once in target English; not in Tibetan Wylie or ACIP, which carry the corresponding phyi rol pa / PHYI ROL PA. Quote therefore holds on English only.",
+        "b_parallel": "C15:399 and C16:830 carry the identical full three text fields including this spelling. Their independent publication/ingestion lineage is unproven; identity alone is not an independent-publication refutation. P7:17 and P9:44 English ends before this token and cannot adjudicate it.",
+        "c_registered": "E-025 already covers source hyphen-plus-space typography; this is the same class and should not be filed anew. No separate claim is made about authorial spelling.",
+        "d_defensible": "Removing the space is standard compound typography, but the existing reading is understandable line-break-format residue. The local phyi rol pa meaning is clear; source wording must remain verbatim.",
+        "e_counts": "Original English LIKE %non- Buddhists% query independently reruns at 3 full rows: C05:254, C15:399, C16:830. Both full parallel three-field identity comparisons rerun true; target found count is 1."
+      },
+      "counts_rechecked": {
+        "english_like_non_space_Buddhists": 3,
+        "target_found_occurrences": 1
+      },
+      "full_registered_records": [
+        {
+          "item_id": "E-025",
+          "course": "C01",
+          "segment": "C01:355",
+          "kind": "INGEST_ARTEFACT",
+          "found": "in the cause-and- effect interpretation accepted by all the schools",
+          "expected": "in the cause-and-effect interpretation accepted by all the schools",
+          "evidence": "Hint C01:334 is WRONG - that segment is the 'Suppose you analyze, see the no-self of things' verse and contains no such string. Corrected to C01:355 by searching english LIKE '%cause-and- effect%', which returns exactly two hits corpus-wide: C01:355 and C03:274 ('Practicing with the Seven-Step, Cause-and- Effect Method'). A hyphen followed by a space mid-compound is the signature of a hyphenated line break preserved at digitisation.",
+          "severity": "LOW",
+          "confidence": "CONFIRMED",
+          "note": "Cosmetic and mechanical, not authorial. C03:274 is a second instance of the identical artefact and should be fixed in the same pass. A corpus-wide sweep for the pattern 'hyphen + space' inside compounds would likely surface more."
+        },
+        {
+          "item_id": "E-028",
+          "course": "C01",
+          "segment": "C01:379",
+          "kind": "INGEST_ARTEFACT",
+          "found": "And the oh-so- vivid, self-standing \"me\" that this state of mind clings to",
+          "expected": "And the oh-so-vivid, self-standing \"me\" that this state of mind clings to",
+          "evidence": "Hint C01:334 is WRONG; corrected to C01:379 by searching english LIKE '%oh-so- vivid%' (single hit). Same hyphen-plus-space line-break signature as E-025. Comparison confirms the intended form: 'oh-so-deep' and 'oh-so-high' appear correctly closed up at C03:346, C16:413 and P1:35.",
+          "severity": "LOW",
+          "confidence": "CONFIRMED",
+          "note": "Cosmetic. The note's accompanying Tibetan citation was checked and is accurate - C01:379 wylie reads 'de 'dzin mkhan gyi blo de bden 'dzin lhan skyes sam, 'jig lta lhan skyes yin', matching the glosses 'inborn grasping to a self' and 'inborn destructible view' and the footnote 163 marker. No erratum in that part of the note."
+        },
+        {
+          "item_id": "E-029",
+          "course": "C01",
+          "segment": "C01:380",
+          "kind": "INGEST_ARTEFACT",
+          "found": "The non- existence of this is what we call \"no-self.\"164",
+          "expected": "The non-existence of this is what we call \"no-self.\"",
+          "evidence": "Segment hint 334 was wrong (C01:334 is the 'Suppose you analyze' verse); located by searching english LIKE '%non- existence%', which returns exactly C01:380 and its parallel C16:199. The prose note's own framing ('hyphen-space artifact #3') is corroborated: C01 alone carries at least 16 instances of the same word-internal 'x- y' pattern where a hyphen should join, e.g. seq 56 'single- pointed', 72 'all- knowingness', 265 'self- made victors', 310 'loving- kindness', 355 'cause-and- effect', 379 'oh-so- vivid', 496 'loving- kindness'. A systematic pattern of hyphen-plus-space at what were line breaks is digitisation damage, not authorial.",
+          "severity": "LOW",
+          "confidence": "CONFIRMED",
+          "note": "Cosmetic but systematic. Worth fixing as a class (a single sweep for word-internal '- ') rather than one entry at a time; the identical defect is in C16:199, which is the same passage reused in another course. Filed by the log under 'ENGLISH TYPO QUEUE #22', but it is not a typing slip."
+        }
+      ],
+      "severity": "LOW if ever tracked within existing class",
+      "confidence": "No new erratum; publication lineage unresolved"
+    }
+  ],
+  "general_scan": {
+    "english_characters": 500,
+    "at_1500_cap": false,
+    "following_heading": false,
+    "selected_registered_classes": [
+      "E-025",
+      "E-044",
+      "E-071",
+      "E-076",
+      "E-107",
+      "E-111",
+      "E-121"
+    ],
+    "register_full_immutable_copy": "See source-path-map.json mapping for docs/errata_register.json",
+    "no_source_correction_or_master_promotion": true
+  },
+  "scope": "Alignment boundary disagreements and an original proposal narrative spelling slip are not evidence of source errata."
+}

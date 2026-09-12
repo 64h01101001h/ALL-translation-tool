@@ -1,0 +1,13 @@
+import subprocess,pathlib,json,os,hashlib,sys
+D=pathlib.Path(__file__).parent; W=D.parents[2]/'campaign-worktree'
+for seq in (253,254,255):
+ P=D/str(seq); A=P/'attempts'; A.mkdir(exist_ok=True); n=len(list(A.glob('*.spec.json')))+1; prefix=A/f'{n:02d}'
+ spec=(P/'spec.json').read_bytes();prefix.with_suffix('.spec.json').write_bytes(spec)
+ cmd=[sys.executable,'-B',str(D/'canonical_ro.py')]
+ r=subprocess.run(cmd,input=spec,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+ prefix.with_suffix('.stdout.html').write_bytes(r.stdout);prefix.with_suffix('.stderr.txt').write_bytes(r.stderr);prefix.with_suffix('.exit.txt').write_text(str(r.returncode)+'\n')
+ proof=dict(command=cmd,cwd=str(W),environment={'PYTHONDONTWRITEBYTECODE':'1'},exit=r.returncode,stderr_bytes=len(r.stderr),stdout_bytes=len(r.stdout),stdout_sha256=hashlib.sha256(r.stdout).hexdigest(),canonical_source=str(W/'tools/gen_alignment_page.py'),canonical_sha256=hashlib.sha256((W/'tools/gen_alignment_page.py').read_bytes()).hexdigest(),source_modifications=False,sqlite_mode='URI mode=ro via retained canonical_ro.py wrapper',attempt=n)
+ prefix.with_suffix('.proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+ if r.returncode==0 and not r.stderr:
+  (P/'body.html').write_bytes(r.stdout);(P/'generator.stdout.html').write_bytes(r.stdout);(P/'generator.stderr.txt').write_bytes(r.stderr);(P/'generator.exit.txt').write_text(str(r.returncode)+'\n');(P/'generator-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+ print(seq,proof);print(r.stderr.decode())

@@ -1,0 +1,45 @@
+"""Independently rerun both completed proposal angles; does not approve semantics.
+Usage: python3 campaign-artifacts/verify_proposals_batch.py 193 194 195
+"""
+from pathlib import Path
+import hashlib
+import json
+import os
+import subprocess
+import sys
+
+art = Path(__file__).resolve().parent
+worktree = art.parent / 'campaign-worktree'
+seqs = list(map(int, sys.argv[1:]))
+assert len(seqs) == 3 and seqs == list(range(seqs[0], seqs[0] + 3))
+batch = art / f'C05-{seqs[0]}-{seqs[-1]}'
+out = batch / 'proposal-verification'
+out.mkdir(exist_ok=True)
+results = []
+for role in ('tibetan', 'english'):
+    candidates = [p for p in (batch / role, batch / (role + '-first')) if p.is_dir()]
+    assert len(candidates) == 1, (role, candidates)
+    angle_dir = candidates[0]
+    angle = angle_dir.name
+    for seq in seqs:
+        directory = angle_dir / str(seq)
+        raw = (directory / 'spec.json').read_bytes()
+        spec = json.loads(raw)
+        assert spec['course'] == 'C05'
+        assert [s['seq'] for s in spec['segments']] == [seq]
+        run = subprocess.run([sys.executable, str(art / 'run_generator_readonly.py')],
+            cwd=worktree, input=raw, capture_output=True,
+            env=dict(os.environ, PYTHONDONTWRITEBYTECODE='1'))
+        prefix = f'{angle}-{seq}'
+        (out / f'{prefix}.stdout').write_bytes(run.stdout)
+        (out / f'{prefix}.stderr').write_bytes(run.stderr)
+        (out / f'{prefix}.exit').write_text(str(run.returncode) + '\n')
+        assert run.returncode == 0 and not run.stderr, (angle, seq, run.stderr)
+        assert run.stdout == (directory / 'body.html').read_bytes(), (angle, seq)
+        spans = spec['segments'][0]['spans']
+        results.append(dict(angle=angle, seq=seq, exit=run.returncode,
+            spans=len(spans), nulls=sum(s['eng'] is None for s in spans),
+            body_bytes=len(run.stdout), body_sha256=hashlib.sha256(run.stdout).hexdigest(),
+            spec_sha256=hashlib.sha256(raw).hexdigest(), saved_body_identical=True))
+(out / 'report.json').write_text(json.dumps(results, indent=2) + '\n')
+print(json.dumps(results, indent=2))
