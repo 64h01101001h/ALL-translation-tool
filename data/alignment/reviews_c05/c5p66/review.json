@@ -1,0 +1,112 @@
+{
+  "verdict": "APPROVE",
+  "producer": "Codex independent semantic reviewer",
+  "status": "PROVISIONAL machine alignment; not human acceptance",
+  "page": "c5p66",
+  "course": "C05",
+  "segments": [
+    {
+      "seq": 196,
+      "spans": 18,
+      "nulls": 2,
+      "word_pairs": 10,
+      "depth_counts": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 10,
+        "6": 2,
+        "7": 6
+      },
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "spec_sha256": "d46b28a8b36f4228b253c86bc3233679998e33f6cd71a59260393c310e3e5d5d",
+      "spec_bytes": 3934,
+      "body_sha256": "2e9385a834f43096a7337427bc24ae7633250ab32cee65ceae891732713d448d",
+      "body_bytes": 4066,
+      "generated_body_sha256": "2e9385a834f43096a7337427bc24ae7633250ab32cee65ceae891732713d448d",
+      "exact_saved_body": true
+    },
+    {
+      "seq": 197,
+      "spans": 21,
+      "nulls": 0,
+      "word_pairs": 18,
+      "depth_counts": {
+        "1": 0,
+        "2": 0,
+        "3": 3,
+        "4": 0,
+        "5": 18,
+        "6": 0,
+        "7": 0
+      },
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "spec_sha256": "48d68dbec4c80253b8f52c774d250bd22eb5234f049e59563fd1a1384212e801",
+      "spec_bytes": 4243,
+      "body_sha256": "21de111b9aca57be99581db02930eeed9e78d6057f0b9a6f2ab9bc758943156a",
+      "body_bytes": 4507,
+      "generated_body_sha256": "21de111b9aca57be99581db02930eeed9e78d6057f0b9a6f2ab9bc758943156a",
+      "exact_saved_body": true
+    },
+    {
+      "seq": 198,
+      "spans": 14,
+      "nulls": 0,
+      "word_pairs": 13,
+      "depth_counts": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 13,
+        "6": 0,
+        "7": 0
+      },
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "spec_sha256": "a4d2cbbf9a19a1a45cafd46e7dd786c73c7a9ed20c8af5973ee6bbf4b7b2e02f",
+      "spec_bytes": 3149,
+      "body_sha256": "d0bf01168192ba790a002eab32566ca58ed0b17c520e85da8771c4db4228d730",
+      "body_bytes": 3356,
+      "generated_body_sha256": "d0bf01168192ba790a002eab32566ca58ed0b17c520e85da8771c4db4228d730",
+      "exact_saved_body": true
+    }
+  ],
+  "totals": {
+    "spans": 53,
+    "nulls": 2,
+    "word_pairs": 41,
+    "d7_members": 6,
+    "d3_phrases": 4
+  },
+  "open_findings": [],
+  "closed_findings": [
+    {
+      "id": "provenance-C16",
+      "disposition": "The 198 report statement known re-ingest is expressly qualified in review.md: identical ACIP/Wylie/English fields are proved; specific ingestion history and independent publication are unproved. No spec correction required."
+    },
+    {
+      "id": "provenance-local-headers",
+      "disposition": "Earlier parent different-headers assertion rejected. First differing byte 167559 is within body; files are nonidentical even after whitespace removal, have matching relevant contexts and 1239948-byte exact suffix. No independent publication proved."
+    }
+  ],
+  "errata_count": 0,
+  "bank_ready_errata": "bank-ready-errata.json",
+  "generator_proof": "Three final and six proposal canonical generator calls: all exit0, empty stderr, exact saved bytes. Python bytecode disabled throughout. Source SQLite mode=ro.",
+  "resolved_spans": "resolved-spans.json",
+  "evidence_files": [
+    "source-full.json",
+    "glossary-full-originals.json",
+    "additional-glossary-full-originals.json",
+    "corpus-full-queries.json",
+    "complete-occurrences.json",
+    "claimed-count-audit.json",
+    "raw-local-witnesses.json",
+    "source-and-provenance-checks.json",
+    "proposal-generator-audit.json",
+    "errata-refutations.json"
+  ]
+}

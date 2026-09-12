@@ -1,0 +1,20 @@
+Codex reconciler; PROVISIONAL machine alignment. Both independent proposals reran with EXIT=0, empty stderr and exact saved body bytes (4386 Tibetan-first; 3373 English-first).
+Original source/context independently matched the SQLite mode=ro six-field snapshots; evidence.json preserves the glossary originals and raw local witnesses.
+Agreement on synonym phrase is retained after checking independently: bdag po'i 'bras bu'am dbang gi 'bras bu maps to the whole environmental/or/dominant/consequence coordination at d3. English shares one consequence; HGM 9149/24296 give opposite label order, while actual P6:88 uses environmental for bdag po'i 'bras bus. Do not force isolated label atoms.
+Outer-world depth disagreement: retain the entire phyi snod kyi 'jig rten at d3. The lexical evidence for the truncated phyi snod kyi 'jig (24074) does not make the actual productive modifier/genitive expression an established technical compound.
+Food/drink disagreement: split bza'/Food and btung/drink into secure lexical atoms (original HGM 16908/6535), rather than retaining the combined dietary phrase.
+Crops disagreement: retain 'bras bu/crops. The glossary includes crops in the fields, but fields is explanatory specificity without a separate zhing-type source exponent; the tighter lexical mapping is secure. The actual crop occurrence is the third Tibetan 'bras bu, after the coordinated categories.
+List closure disagreement: sogs pa owns other only. Reject la sogs pa/and other such things despite mechanical success; it would include the supplied noun things. and has no independent connector within this selected Tibetan span.
+Quantity disagreement: split mthu/power and chung ba/little, excluding very. Also split stobs/nutrition and second chung ba/little; the nus pa/potency and nutrition ordering is independently confirmed by HGM 10227/7031.
+Two chung ba occurrences [140,148), [188,196) resolve to little [240,246), [290,296). stobs/nutrition [297,306) precedes nus pa/potency [310,317) in the English order.
+Digest/disease disagreement: retain 'ju/digest, dka'/hard, nad/disease, bskyed pas/cause as lexical atoms. Original glossary rows support all stems. English to, and, they and in you stay outside these spans; zhing is not absorbed into digest.
+bskyed pas is a retained inflected causative verb; its causal suffix contributes to the distributed Because of this frame and is not separately paired or nulled. las, ni and list linkers likewise have no forced nulls.
+Lifespan disagreement: select the English-first complete tshe ma zad par yang 'chi bar 'gyur ba/die before reaching the end of a full life at d3. The whole unexhausted-lifespan plus dying construction licenses the temporal English recast; no independent full or reaching gloss is invented.
+Errata: []. bsnyems pa/inferior is original HGM glossary 6341 and exact source ACIP, though reference haughty suggests a different ordinary sense. Neither conjectural correction nor dictionary-reference substitution is authorized.
+Re-ran 5 bsnyems pa rows, 5 bdag po'i 'bras bu rows and 4 nus pa dang stobs chung ba rows. Same-Wylie C05:197/C09:154/C16:775/C17:501 have identical relevant source and English; no independent publication inferred. Local S05392L witnesses retain BSNYEMS PA.
+No new registered artefact class or duplicate filing; all original lengths are below the 1500 cap. No retained gated d5/d7 supplied heads; allowlist additions: none. Attempt-01 passed; attempt-02 only clarified the causal-suffix note and also passed. Both are preserved.
+Actual counts: 21 spans; depths {'3': 3, '5': 18, '6': 0, '7': 0}; 0 nulls; 0 errata.
+FINAL GENERATOR: EXIT=0; BODY_BYTES=4507; STDERR_BYTES=0. Complete stdout is body.html and attempt output; stderr file is empty.
+SPEC_SHA256=48d68dbec4c80253b8f52c774d250bd22eb5234f049e59563fd1a1384212e801
+BODY_SHA256=21de111b9aca57be99581db02930eeed9e78d6057f0b9a6f2ab9bc758943156a
+Evidence: evidence.json, occurrence-ranges.json and proof.json; proposal-*.stdout/stderr preserve all six independent reruns across these directories. Generator success proves literal fidelity/shape, not semantic correspondence.

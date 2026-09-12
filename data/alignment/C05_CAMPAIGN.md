@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. Coverage 195/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. Coverage 198/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -601,3 +601,40 @@ are preserved under reviews_c05/c5p65. No accepted span, source range, null,
 bank, dictionary output or errata-register record changes. The final omission of
 the disputed help pairing remains approved. This correction concerns the machine
 review account, not an error in GMR's source.
+
+
+### c5p66 · C05:196–198 — 2026-09-12 — Codex reconciliation/review
+
+Both independent proposal angles, separate reconciliation and fresh skeptical
+semantic review completed. APPROVE covers 53 analyst spans (18/21/14), two
+explicit grammatical fusion nulls, 41 d5 pairs and six d7 members. All six
+proposal bodies and three final bodies reproduce exactly with zero stderr;
+all final tuples and actual source ranges match the accepted spec. Evidence:
+`specs_c05/c5p66.json` and `reviews_c05/c5p66/`. Machine approval remains
+PROVISIONAL and does not constitute human acceptance.
+
+196 keeps the second English killing, separate pleasure/become predicates,
+both established result compounds and their tighter members. 197 retains the
+complete synonymous result-category phrase, digest/disease, and the complete
+premature-death recast; nutrition/potency correctly cross in English. 198
+anchors the first, second and fifth Tibetan crop nouns to the three English
+crops. Unproved long ba/non-emergence remains omitted, without a false null.
+All proposed source corrections are refuted; no errata or allowances are added.
+
+The semantic review explicitly supersedes the 198 report's unsupported
+“known re-ingest” wording: identical source fields do not prove ingestion
+history or publication independence. Two differently named local S05392L files
+have identical relevant contexts and a 1,239,948-byte common suffix. Their first
+difference at byte167559 lies in body formatting, not a header; they remain
+unequal after whitespace removal. Root's earlier different-headers description
+is explicitly corrected. No claim of independent publication is made.
+
+Coverage 198/511. Bank:42,691 links (+56 including three sentence anchors),
+11,868 null exponents,1,534 notes,11 trees. Evidence:6,845 headwords/14,768 pairs.
+All42,635 prior links, earlier notes/trees/evidence/ACIP mappings and21,297 prior
+CSV lexical rows and citations survive unchanged. Main CSV:21,335 rows;
+reverse20,995; changes38 versus5c4d784. All22,665 course/depth groups match the
+actual main CSV references, retaining all22,622 old groups. Master/corpus hashes
+are unchanged. All17 targeted fidelity/export/constitution suites passed in
+10.50seconds. Visual rendering remains unverified; no newer native/device or
+main integration action occurred. Next:199–201, independently approved for landing.
