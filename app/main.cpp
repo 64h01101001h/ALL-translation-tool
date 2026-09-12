@@ -25348,7 +25348,25 @@ public:
         notesSearch_->setPlaceholderText(
             "search the shared apparatus: footnotes + bibliography "
             "(GMR: reuse released work)…");
-        draftCol->addWidget(notesSearch_);
+        notesSearch_->setToolTip(
+            "Search the published footnotes and bibliography, plus anything "
+            "still pending approval. Press Return or the search button; a "
+            "result can be inserted into the draft with its citation.");
+        // A visible action, not just a hidden Return. The field had no
+        // button, no tooltip, and an empty Return did nothing at all — so a
+        // reader who noticed it and pressed Return got complete silence and
+        // no reason to try again. (Draft workspace audit, 2026-09-11.)
+        {
+            auto* searchRow = new QHBoxLayout;
+            searchRow->setContentsMargins(0, 0, 0, 0);
+            searchRow->addWidget(notesSearch_, 1);
+            auto* goBtn = new QPushButton("Search");
+            goBtn->setToolTip(notesSearch_->toolTip());
+            searchRow->addWidget(goBtn);
+            draftCol->addLayout(searchRow);
+            QObject::connect(goBtn, &QPushButton::clicked,
+                             [this] { searchNotesBank(); });
+        }
         QObject::connect(notesSearch_, &QLineEdit::returnPressed,
                          [this] { searchNotesBank(); });
                 auto* rtfBtn = new QPushButton("Export draft (RTF, *italics*)…");
@@ -25379,12 +25397,7 @@ public:
         QObject::connect(proposeBtn, &QPushButton::clicked,
                          [this] { proposeNote(); });
         aiBtn_ = new QPushButton("AI back-check (API, labeled AI)");
-        if (anthropicKey().isEmpty()) {
-            aiBtn_->setEnabled(false);
-            aiBtn_->setToolTip(
-                "No Anthropic API key (env or the Application "
-                "Support key file)");
-        }
+        refreshAiButton();
         draftCol->addWidget(aiBtn_);
         bl->addLayout(draftCol, 1);
         report_ = new QTextBrowser;
@@ -25919,6 +25932,34 @@ public:
                       "instruction");
             }
         }
+        // ---- controls that fail quietly (audit 2026-09-11) ----------------
+        {
+            // an empty apparatus search used to `return` in silence
+            notesSearch_->setText("");
+            searchNotesBank();
+            check(report_->toPlainText().contains("Type something to search"),
+                  "apparatus: an empty search says what it wants instead of "
+                  "doing nothing at all");
+            check(report_->toPlainText().contains("footnote"),
+                  "apparatus: and says what it holds, so the field is worth "
+                  "a second try");
+
+            // the AI button samples the key when the pane is shown, not once
+            // at construction
+            const bool haveKey = !anthropicKey().isEmpty();
+            refreshAiButton();
+            check(aiBtn_->isEnabled() == haveKey,
+                  "ai: the button's state follows whether a key is actually "
+                  "present");
+            check(!aiBtn_->toolTip().isEmpty(),
+                  "ai: and it always carries a reason, enabled or not");
+            if (!haveKey)
+                check(aiBtn_->toolTip().contains("re-checks"),
+                      "ai: a disabled button tells the reader their fix will "
+                      "be noticed, which the once-at-construction version "
+                      "could not honour");
+        }
+
         // ---- an insertion is visible, and says so (audit 2026-09-11) ------
         // Every insertion landed at the draft box's last cursor position —
         // often scrolled out of sight — and then the dialog closed, so the
@@ -27069,7 +27110,23 @@ private:
     void searchNotesBank() {
         loadNotesBank();
         const QString q = notesSearch_->text().trimmed();
-        if (q.isEmpty()) return;
+        if (q.isEmpty()) {
+            // Was a bare `return`. A reader who noticed the field and pressed
+            // Return to see what it offered got complete silence — no
+            // results, no prompt, no sign the control was even connected.
+            report_->setHtml(
+                QString("<div style='color:%1'><b>Type something to search "
+                        "for.</b></div><div style='padding-top:6px'>The "
+                        "shared apparatus holds %2 published footnote(s) and "
+                        "%3 bibliography entr(y/ies), plus anything still "
+                        "pending approval. Search by a word in the note, the "
+                        "lemma, or an ACIP number.</div>")
+                    .arg(ux::darkChrome() ? ux::chromeMuted()
+                                          : QString(ux::kMuted))
+                    .arg(notesBank_.size())
+                    .arg(bibBank_.size()));
+            return;
+        }
         if (notesBank_.empty() && bibBank_.empty()) {
             report_->setHtml("<i>apparatus banks not found — run "
                              "tools/extract_mixed_nuts_notes.py and "
@@ -27233,6 +27290,33 @@ public:
                                       "\u2318Z undoes it.");
     }
 
+    // The key was sampled ONCE, at construction. A reader who followed the
+    // tooltip's own advice and added a key found the button still greyed out,
+    // with the same tooltip telling them to do the thing they had just done —
+    // for the rest of the session. Re-checked whenever the pane is shown,
+    // which is the first moment after they went away to set it.
+    // (Draft workspace audit, 2026-09-11.)
+    void refreshAiButton() {
+        if (!aiBtn_) return;
+        const bool have = !anthropicKey().isEmpty();
+        aiBtn_->setEnabled(have);
+        aiBtn_->setToolTip(
+            have ? "Sends the source and your draft to the API for a coverage "
+                   "diff. The reply is labelled AI and is never treated as "
+                   "Geshe Michael Roach's English."
+                 : "No Anthropic API key found, so this is unavailable. Set "
+                   "ANTHROPIC_API_KEY in the environment, or put the key in "
+                   "the Application Support key file \u2014 this button "
+                   "re-checks each time you come back to this pane.");
+    }
+
+protected:
+    void showEvent(QShowEvent* e) override {
+        QWidget::showEvent(e);
+        refreshAiButton();
+    }
+
+public:
     void insertNote(int ix) {
         if (ix < 0 || ix >= (int)notesBank_.size()) return;
         const auto& n = notesBank_[ix];
