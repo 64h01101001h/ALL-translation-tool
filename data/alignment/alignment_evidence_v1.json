@@ -4,7 +4,7 @@
   "tier": "TENTATIVE (machine-matched, unreviewed)",
   "generator": "build_alignment_layer.py; source analyses credited on pages and in campaign ledgers",
   "date": "2026-09-11",
-  "source_pages": "banked pages, 5 course(s) (sha256 45b32a6a44ed1715)",
+  "source_pages": "banked pages, 5 course(s) (sha256 582ecedb085e0888)",
   "source_corpus": "hgm_spine_v27_2 corpus_segments C01+C02+C03+C04+C05",
   "rule": "English is HGM's corpus text verbatim, machine-MATCHED never composed; never enters hgm_gloss",
   "transliteration": "ACIP is the source of record and the join key (acip / acip_index); wylie is the derived display form, proven equal to acip_to_ewts(acip) on 8961/8961 segments of C01-C18 (Adam 2026-08-28)",
@@ -577,9 +577,10 @@
      "C04:95",
      "C04:121",
      "C05:40",
-     "C05:156"
+     "C05:156",
+     "C05:175"
     ],
-    "n": 8,
+    "n": 9,
     "acip": "'BRAS BU"
    },
    {
@@ -1962,19 +1963,20 @@
     "acip": "'CHI BA"
    },
    {
+    "eng": "die",
+    "refs": [
+     "C01:156",
+     "C01:176",
+     "C05:175"
+    ],
+    "n": 3,
+    "acip": "'CHI BA"
+   },
+   {
     "eng": "Death",
     "refs": [
      "C03:227",
      "C03:228"
-    ],
-    "n": 2,
-    "acip": "'CHI BA"
-   },
-   {
-    "eng": "die",
-    "refs": [
-     "C01:156",
-     "C01:176"
     ],
     "n": 2,
     "acip": "'CHI BA"
@@ -3695,9 +3697,10 @@
      "C04:178",
      "C05:171",
      "C05:173",
-     "C05:174"
+     "C05:174",
+     "C05:175"
     ],
-    "n": 6,
+    "n": 7,
     "acip": "'DOD CHAGS"
    },
    {
@@ -3758,9 +3761,11 @@
     "eng": "realm of desire",
     "refs": [
      "C05:151",
-     "C05:152"
+     "C05:152",
+     "C05:176",
+     "C05:177"
     ],
-    "n": 2,
+    "n": 4,
     "acip": "'DOD KHAMS"
    },
    {
@@ -3908,6 +3913,14 @@
     "eng": "consider",
     "refs": [
      "C05:63"
+    ],
+    "n": 1,
+    "acip": "'DOD PA"
+   },
+   {
+    "eng": "desire realm",
+    "refs": [
+     "C05:175"
     ],
     "n": 1,
     "acip": "'DOD PA"
@@ -10188,9 +10201,10 @@
     "eng": "realized being",
     "refs": [
      "C02:34",
-     "C02:59"
+     "C02:59",
+     "C05:175"
     ],
-    "n": 2,
+    "n": 3,
     "acip": "'PHAGS PA"
    },
    {
@@ -10454,6 +10468,14 @@
      "C05:172"
     ],
     "n": 2,
+    "acip": "'PHEN PA"
+   },
+   {
+    "eng": "project",
+    "refs": [
+     "C05:177"
+    ],
+    "n": 1,
     "acip": "'PHEN PA"
    },
    {
@@ -11715,6 +11737,14 @@
     "acip": "BAR DO"
    },
    {
+    "eng": "state between death and rebirth",
+    "refs": [
+     "C05:177"
+    ],
+    "n": 1,
+    "acip": "BAR DO"
+   },
+   {
     "eng": "state between them",
     "refs": [
      "C03:547"
@@ -12370,6 +12400,16 @@
     ],
     "n": 4,
     "acip": "BCU DRUG"
+   }
+  ],
+  "bcu gcig": [
+   {
+    "eng": "eleven",
+    "refs": [
+     "C05:177"
+    ],
+    "n": 1,
+    "acip": "BCU GCIG"
    }
   ],
   "bcu gnyis": [
@@ -17113,19 +17153,20 @@
     "acip": "BRAL BA"
    },
    {
+    "eng": "overcome",
+    "refs": [
+     "C05:173",
+     "C05:174",
+     "C05:175"
+    ],
+    "n": 3,
+    "acip": "BRAL BA"
+   },
+   {
     "eng": "free of",
     "refs": [
      "C02:58",
      "C03:306"
-    ],
-    "n": 2,
-    "acip": "BRAL BA"
-   },
-   {
-    "eng": "overcome",
-    "refs": [
-     "C05:173",
-     "C05:174"
     ],
     "n": 2,
     "acip": "BRAL BA"
@@ -28213,6 +28254,14 @@
     "acip": "BYED PA"
    },
    {
+    "eng": "perform",
+    "refs": [
+     "C05:175"
+    ],
+    "n": 1,
+    "acip": "BYED PA"
+   },
+   {
     "eng": "performed",
     "refs": [
      "C05:170"
@@ -36831,9 +36880,10 @@
     "refs": [
      "C03:465",
      "C04:67",
-     "C05:83"
+     "C05:83",
+     "C05:176"
     ],
-    "n": 3,
+    "n": 4,
     "acip": "DE"
    },
    {
@@ -36854,6 +36904,15 @@
      "C05:62"
     ],
     "n": 3,
+    "acip": "DE"
+   },
+   {
+    "eng": "he",
+    "refs": [
+     "C05:174",
+     "C05:175"
+    ],
+    "n": 2,
     "acip": "DE"
    },
    {
@@ -36921,14 +36980,6 @@
     "eng": "extraordinary",
     "refs": [
      "C02:40"
-    ],
-    "n": 1,
-    "acip": "DE"
-   },
-   {
-    "eng": "he",
-    "refs": [
-     "C05:174"
     ],
     "n": 1,
     "acip": "DE"
@@ -48763,9 +48814,10 @@
      "C01:106",
      "C01:131",
      "C03:349",
-     "C04:129"
+     "C04:129",
+     "C05:176"
     ],
-    "n": 4,
+    "n": 5,
     "acip": "GCIG"
    },
    {
@@ -50975,9 +51027,10 @@
     "refs": [
      "C05:111",
      "C05:115",
-     "C05:116"
+     "C05:116",
+     "C05:177"
     ],
-    "n": 3,
+    "n": 4,
     "acip": "GNAS SKABS"
    },
    {
@@ -65113,9 +65166,10 @@
      "C05:168",
      "C05:170",
      "C05:172",
-     "C05:173"
+     "C05:173",
+     "C05:177"
     ],
-    "n": 35,
+    "n": 36,
     "acip": "LAS"
    },
    {
@@ -65134,6 +65188,20 @@
     "acip": "LAS"
    },
    {
+    "eng": "deed",
+    "refs": [
+     "C05:102",
+     "C05:104",
+     "C05:105",
+     "C05:170",
+     "C05:172",
+     "C05:174",
+     "C05:175"
+    ],
+    "n": 7,
+    "acip": "LAS"
+   },
+   {
     "eng": "Deeds",
     "refs": [
      "C05:97",
@@ -65145,19 +65213,6 @@
      "C05:159"
     ],
     "n": 7,
-    "acip": "LAS"
-   },
-   {
-    "eng": "deed",
-    "refs": [
-     "C05:102",
-     "C05:104",
-     "C05:105",
-     "C05:170",
-     "C05:172",
-     "C05:174"
-    ],
-    "n": 6,
     "acip": "LAS"
    },
    {
@@ -67925,9 +67980,10 @@
      "C05:138",
      "C05:163",
      "C05:166",
-     "C05:168"
+     "C05:168",
+     "C05:177"
     ],
-    "n": 18,
+    "n": 19,
     "acip": "LNGA"
    },
    {
@@ -75837,17 +75893,18 @@
   ],
   "mi brtan pa": [
    {
-    "eng": "no stability",
+    "eng": "unstable",
     "refs": [
-     "C04:69"
+     "C05:171",
+     "C05:175"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "MI BRTAN PA"
    },
    {
-    "eng": "unstable",
+    "eng": "no stability",
     "refs": [
-     "C05:171"
+     "C04:69"
     ],
     "n": 1,
     "acip": "MI BRTAN PA"
@@ -77334,6 +77391,14 @@
    }
   ],
   "mi srid pa": [
+   {
+    "eng": "impossible",
+    "refs": [
+     "C05:175"
+    ],
+    "n": 1,
+    "acip": "MI SRID PA"
+   },
    {
     "eng": "it would be impossible",
     "refs": [
@@ -78848,9 +78913,10 @@
    {
     "eng": "womb",
     "refs": [
-     "C01:365"
+     "C01:365",
+     "C05:177"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "MNGAL"
    }
   ],
@@ -85750,6 +85816,15 @@
     "acip": "NYAMS PA"
    },
    {
+    "eng": "lost",
+    "refs": [
+     "C03:210",
+     "C05:175"
+    ],
+    "n": 2,
+    "acip": "NYAMS PA"
+   },
+   {
     "eng": "brought down",
     "refs": [
      "C04:196"
@@ -85766,6 +85841,14 @@
     "acip": "NYAMS PA"
    },
    {
+    "eng": "degenerated",
+    "refs": [
+     "C05:175"
+    ],
+    "n": 1,
+    "acip": "NYAMS PA"
+   },
+   {
     "eng": "lose",
     "refs": [
      "C03:210"
@@ -85777,14 +85860,6 @@
     "eng": "loses",
     "refs": [
      "C03:184"
-    ],
-    "n": 1,
-    "acip": "NYAMS PA"
-   },
-   {
-    "eng": "lost",
-    "refs": [
-     "C03:210"
     ],
     "n": 1,
     "acip": "NYAMS PA"
@@ -86753,6 +86828,26 @@
     ],
     "n": 1,
     "acip": "NYI MA"
+   }
+  ],
+  "nyi shu gnyis": [
+   {
+    "eng": "Twenty-two",
+    "refs": [
+     "C05:176"
+    ],
+    "n": 1,
+    "acip": "NYI SHU GNYIS"
+   }
+  ],
+  "nyi shu rtsa gnyis": [
+   {
+    "eng": "twenty-two",
+    "refs": [
+     "C05:177"
+    ],
+    "n": 1,
+    "acip": "NYI SHU RTZA GNYIS"
    }
   ],
   "nyi tshe ba": [
@@ -97621,6 +97716,14 @@
     "eng": "discrete being",
     "refs": [
      "C05:166"
+    ],
+    "n": 1,
+    "acip": "RIGS"
+   },
+   {
+    "eng": "discrete type",
+    "refs": [
+     "C05:176"
     ],
     "n": 1,
     "acip": "RIGS"
@@ -120229,6 +120332,24 @@
     "acip": "SRID PA"
    }
   ],
+  "srid pa bar ma": [
+   {
+    "eng": "Inbetween beings",
+    "refs": [
+     "C05:176"
+    ],
+    "n": 1,
+    "acip": "SRID PA BAR MA"
+   },
+   {
+    "eng": "inbetween beings",
+    "refs": [
+     "C05:177"
+    ],
+    "n": 1,
+    "acip": "SRID PA BAR MA"
+   }
+  ],
   "srid pa'i": [
    {
     "eng": "suffering existence",
@@ -120285,6 +120406,14 @@
      "C05:158"
     ],
     "n": 2,
+    "acip": "SRID RTZE"
+   },
+   {
+    "eng": "\"peak\" level",
+    "refs": [
+     "C05:175"
+    ],
+    "n": 1,
     "acip": "SRID RTZE"
    },
    {
@@ -131517,6 +131646,15 @@
     "acip": "YOD"
    },
    {
+    "eng": "are",
+    "refs": [
+     "C02:40",
+     "C05:177"
+    ],
+    "n": 2,
+    "acip": "YOD"
+   },
+   {
     "eng": "be",
     "refs": [
      "C04:182",
@@ -131565,14 +131703,6 @@
     "eng": "appears",
     "refs": [
      "C05:62"
-    ],
-    "n": 1,
-    "acip": "YOD"
-   },
-   {
-    "eng": "are",
-    "refs": [
-     "C02:40"
     ],
     "n": 1,
     "acip": "YOD"
@@ -136505,6 +136635,7 @@
   "BCU": "bcu",
   "BCU BZHI": "bcu bzhi",
   "BCU DRUG": "bcu drug",
+  "BCU GCIG": "bcu gcig",
   "BCU GNYIS": "bcu gnyis",
   "BCU GSUM": "bcu gsum",
   "BCU GSUM LA SOGS PA": "bcu gsum la sogs pa",
@@ -140239,6 +140370,8 @@
   "NYI 'OG PA": "nyi 'og pa",
   "NYI LTAR": "nyi ltar",
   "NYI MA": "nyi ma",
+  "NYI SHU GNYIS": "nyi shu gnyis",
+  "NYI SHU RTZA GNYIS": "nyi shu rtsa gnyis",
   "NYI TSE BA": "nyi tshe ba",
   "NYID": "nyid",
   "NYID DGOS": "nyid dgos",
@@ -141889,6 +142022,7 @@
   "SRID MTHA' TZAM": "srid mtha' tsam",
   "SRID MTSO": "srid mtsho",
   "SRID PA": "srid pa",
+  "SRID PA BAR MA": "srid pa bar ma",
   "SRID PA'I": "srid pa'i",
   "SRID PA'I BDE LA": "srid pa'i bde la",
   "SRID PA'I RTZA BA": "srid pa'i rtsa ba",

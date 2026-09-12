@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. Coverage 174/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. Coverage 177/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -277,11 +277,45 @@ Coverage 174/511. Bank: 42,029 links (+92, including three sentence links),
 11,815 null English exponents; evidence 6,770 headwords / 14,580 pair records.
 Generated dictionary and errata documents rebuilt. Structural checks found no
 broken new-page/index navigation and confirmed bank counts 35/28/29 for the
-three new segments. All16 targeted CTest fidelity/constitution suites passed
+three new segments. All 16 targeted CTest fidelity/constitution suites passed
 (10.93 seconds). Browser inspection remains unverified.
 
-Consumer checkpoint: native app selftest passed with the bank through171,
+Consumer checkpoint: native app selftest passed with the bank through 171,
 after private-library setup and the Catalog routing test’s temporary-store
-fix (929f012). Signed iPhone pack through171 was built, verified, and installed;
+fix (929f012). Signed iPhone pack through 171 was built, verified, and installed;
 launch is pending because the phone was locked. Newer alignment bank rows
 are not claimed present in that installed pack.
+
+
+### c5p59 · C05:175–177 — 2026-09-12 — Codex reconciliation/review
+
+Both historical proposal angles for 175 and both fresh Codex angles for 176–177
+were preserved and rerun successfully. Separate reconciliation and skeptical
+review approved all 97 final spans (83 linked, 14 grammatical nulls), including
+53 d5/d7 dictionary pairs. Accepted spec and exhaustive review:
+`specs_c05/c5p59.json`, `reviews_c05/c5p59/`. Parent generator reruns and the
+assembled page exited 0 with empty stderr and exact bodies. No new errata or
+function-head allowlist entries.
+
+175’s complete loss-to-restoration interval stays d3, avoiding a false
+positive atom for the negative restoration syntax. 176’s first demonstrative
+is retained in its complete subject/predicate clause at d2; exclusive
+`kho na` → “but” remains a particle, not an adversative. 177’s state-to-person
+recast stays phrase-level, while the earlier attested `bar do` state term
+remains at dictionary depth.
+
+The whole 177 definite/indefinite opposition is retained at d3 after explicit
+challenge: the elided English predicate can include “definitely,” and 178
+resumes the eleven definite cases. The ambiguity note MUST remain. This is
+not a dictionary equation of `ma nges` with “not experienced”; higher depth
+was not accepted as a reason to ignore a contradiction.
+
+Coverage 177/511; full bank 42,129 links (+100, including three sentence links),
+11,829 null English exponents; evidence 6,774 headwords / 14,593 pair records.
+All 42,029 prior links and every prior note/tree page value are unchanged.
+Structural checks verify navigation, all seven depth labels, and expected
+new segment counts 45/19/36. All 16 targeted CTest fidelity/constitution suites
+passed in 11.08 seconds. Master dictionary and original corpus SHA-256
+values still match the starting snapshot. Browser rendering and native
+consumption of this newest bank remain separately unverified; the tested
+desktop/installed-phone checkpoint is through 171.
