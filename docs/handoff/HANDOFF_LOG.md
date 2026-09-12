@@ -1,3 +1,61 @@
+## 2026-09-12 — Codex private continuation through C05:264
+
+Adam's authorization and five-minute heartbeat continue through Tuesday,
+September15,2026 at07:00 America/Denver. No additional source files are needed.
+Work remains private on codex/aci-alignment-20260915.
+
+Data2c1e0768629aff301b9f80a510d7ccbcf53d6ba7 adds108 independently reconciled
+and skeptically reviewed spans plus3 sentence anchors for262–264. C05 reaches
+264/511 source segments and88 pages. Since165,33 new pages contain2828 analyst
+spans and99 anchors. All remain PROVISIONAL machine attestations; original
+source/master bytes and hgm_gloss remain unchanged. No new errata or head
+allowance was added; all192 prior errata survive.
+
+A root correction restored khrag/blood as a second contiguous d7 member under
+rnag khrag/blood and pus. The old one-member interpretation contradicted the
+canonical generator's explicit multi-child handling. The independent reviewer
+upheld the correction and all final semantics; the earlier107-span candidate,
+all191 original dispositions and every failed/superseded attempt are preserved.
+Distinct unrelated-batch readers were reused under explicit capacity rulings
+after a fresh-instance dispatch failed. No fresh-context claim is made.
+Positive glossary ma/until and not-yet evidence is explicitly acknowledged in
+the temporal fusion-null judgment, separate from the matrix negation.
+
+Root read the complete final review and108 adjudications, verified764 frozen
+files plus the freeze itself,689 original-copy mappings and38 historical Git
+pins. All765 semantic files landed exactly. The independent review reopened
+143 full SQL sets plus3 direct queries,51 master records and24 physical extents,
+reproduced all9 current/original bodies and2 superseded bodies, and checked all
+57 package sections/diffs. SPEC and QUALITY both APPROVE; zero open findings.
+
+Both real builders ran once, exited0, and used the actual235bd2e main CSV as
+the changes-report seed. All17 fidelity/export/constitution suites passed in
+13.57seconds. Prior links, notes, trees, references, lexical rows and ACIP
+metadata survived without enrichment. All23840 course-depth groups match
+actual main CSV references and metadata. Bank44686 links/11906 nulls/1600 notes/
+11 trees; evidence7065 heads/15415 pairs; main/reverse/course/changes CSV rows
+22311/21971/23840/23.
+
+The staged audit accounted for all119316 warnings against exact source bytes,
+canonical CSV CRLF,9 empty diff-context lines and4 empty EOF warnings. Raw
+40716639byte log SHA f69d0588fa6b2c4606a47baff3f0de2a9978a08ff4f1dba76780d4c4931d7812
+remains external; its complete hash was unchanged after final proof staging.
+The v5 helper accepts this review's actual freeze.json filename explicitly;
+all strict source/index/classification checks are unchanged. A first classifier
+rejected a redundant new helper-diff copy outside the semantic freeze. The
+complete diff remains externally hash-pinned, both full helpers are committed,
+and all earlier metadata/failure records are preserved. No source normalized.
+
+Claims to verify next: independently reproduce all seven outputs from this
+fixed data head and the real previous CSV; inspect documentation/provenance,
+all fixtures and the complete original-base patch using read-only MAIN preflight.
+That final checkpoint review is pending, not implied by the data commit.
+Native/installed-phone verification remains through171; locked launch, rendered
+inspection after browser-policy refusal, and MAIN integration remain open.
+Future265–267 has exact baseline2c1e076, source/context and role briefs but no
+original proposals. Withheld source/lexical preparation extends through285;
+later batches have no baselines. Preserve independence when resuming.
+
 ## 2026-09-12 — Codex private continuation through C05:261
 
 Adam's continuation authorization remains active through Tuesday, September15,

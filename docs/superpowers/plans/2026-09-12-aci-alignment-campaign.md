@@ -432,3 +432,32 @@ started. Root leads remain withheld until both angles freeze. Use the corrected
 semantic-review-brief-v2.md interfaces. Continue the preserved campaign under
 the existing ACTIVE heartbeat, now every five minutes through Tuesday,
 September15,2026 at07:00 America/Denver. No speed multiplier is asserted.
+
+
+## 2026-09-12 continuation through264 — data accepted, checkpoint review pending
+
+Private data2c1e0768629aff301b9f80a510d7ccbcf53d6ba7 lands c5p88 after independent
+SPEC/QUALITY approval. Two original angles191 spans; corrected final108 spans,
+11 nulls,75 non-null d5 pairs and3 automatic anchors. The second blood/pus
+member was restored under the recorded contiguous-member ruling, with all
+original/correction history retained. Separate non-authors were reused under
+explicit platform-capacity rulings; no fresh-context claim or removed gate.
+
+All17 suites passed13.57seconds; both actual canonical builders ran once with
+the235bd2e CSV seed and exited0. Root verified765 exact semantic copies,
+689 source mappings/38 Git pins, all23840 course-depth groups, retained prior
+links/evidence/metadata, unchanged source archives and119316 narrowly classified
+staged warnings. The whitespace helper gained only a constrained actual-freeze
+filename input. Its complete sources and failed metadata history are preserved;
+the full helper diff is external with exact SHA. Data remain provisional.
+
+Coverage264/511 over88 pages. Bank44686/null11906/notes1600/trees11; evidence
+7065heads/15415pairs; CSV22311main/21971reverse/23840course/23changes. No added
+errata or allowances. Root's final-stage check found830 scoped files, no tracked
+unstaged changes, and identical full warning output before commit.
+
+A fixed data/documentation checkpoint review is still required, including seven
+output reproductions, all1912 fixtures per checkout and a new read-only full
+original-base MAIN patch check. Native/device/rendering/MAIN limits persist.
+265–267 baseline is2c1e076, no original proposals yet; preparation extends through
+285. Continue the five-minute campaign until2026-09-15 at07:00 America/Denver.
