@@ -127,6 +127,40 @@ int main(int argc, char** argv) {
               "genitive chunk gets no number (attaches forward)");
     }
 
+    // Preston p.xviii, verbatim: "gangs ri mig shes la sngon por snang" —
+    // snow mountains appear blue to the eye consciousness. The splitter used
+    // to cut this at SHES, reading the quotative particle, and hand back
+    // "gangs ri mig" as a clause whose verb was mig. mig shes is a dictionary
+    // entry, "visual consciousness", and no clause ends in the middle of a
+    // word. Found by running the book's own example through the reader.
+    {
+        auto [doc, cls] = analyze("GANGS RI MIG SHES LA SNGON POR SNANG");
+        // splitClauses sees only tokens and barriers, so it DOES cut here —
+        // that is the two-stage design, not a bug, and asserting otherwise
+        // was my mistake when I first wrote this gate. The lattice lives one
+        // stage later.
+        CHECK(cls.size() == 2,
+              "splitClauses, which has no lattice, still cuts at shes");
+        auto ref = allcore::refineClauses(doc, cls);
+        CHECK(ref.size() == 1,
+              "and refineClauses puts it back, because mig shes is a word "
+              "and no clause ends inside one (Preston p.xviii)");
+        auto chunks = allcore::chunkClause(doc, ref[0]);
+        auto verb = allcore::spotVerb(doc, chunks);
+        CHECK(verb.confident && verb.wylie == "snang",
+              "the clause verb is snang, not the mig left behind by a split "
+              "through the middle of a word");
+    }
+    // and the quotative must still split where it really is one: a shes that
+    // is NOT inside a glossed word keeps its boundary.
+    {
+        auto [doc, cls] = analyze("SANGS RGYAS KYIS CHOS BSTAN CES GSUNGS");
+        auto ref = allcore::refineClauses(doc, cls);
+        CHECK(ref.size() >= 2,
+              "a real quotative ces still ends its clause \u2014 the anchor "
+              "only refuses boundaries that fall inside a word");
+    }
+
     // agent + verb: sangs rgyas kyis chos bstan
     {
         auto [doc, cls] = analyze("SANGS RGYAS KYIS CHOS BSTAN");
