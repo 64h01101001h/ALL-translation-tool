@@ -167,6 +167,26 @@ int main() {
               "every function can say its own name");
     }
 
+    // ---- syntactic particles that mark a qualifier ----
+    // Preston's chart lists "s.p." among the qualifier markers. Three of
+    // Wilson's four nom-s.p. classes are reachable through the case tables;
+    // dang is not a case particle at all, so caseOf answers nothing for it
+    // and the pane printed an em dash where our own verbclass table already
+    // said "the dang chunk completes the verb".
+    CHECK(syntacticParticleMarksQualifier("dang", VerbClass::Conjunctive) &&
+              syntacticParticleMarksQualifier("dang", VerbClass::Disjunctive),
+          "dang marks the qualifier of a conjunctive or disjunctive verb \u2014 "
+          "read off verbclass.cpp, not decided here");
+    CHECK(!syntacticParticleMarksQualifier("dang", VerbClass::AgentiveNom) &&
+              !syntacticParticleMarksQualifier("dang", VerbClass::Linking),
+          "and marks nothing under a verb whose class does not use it");
+    CHECK(syntacticParticleMarksQualifier("gis", VerbClass::Absence),
+          "the gis-family marks an absence verb's qualifier \u2014 what the "
+          "subject is empty OF, which verbclass.cpp says is not an agent");
+    CHECK(!syntacticParticleMarksQualifier("ni", VerbClass::Conjunctive),
+          "ni is not claimed for anything \u2014 no Wilson class names it, so "
+          "neither does this table");
+
     std::printf("cases_smoke: %s (%d failure(s))\n",
                 failures ? "FAILURES" : "ALL PASS", failures);
     return failures ? 1 : 0;

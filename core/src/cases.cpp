@@ -177,4 +177,24 @@ std::vector<Function> functionsFor(int n, Transitivity t) {
     return out;
 }
 
+bool syntacticParticleMarksQualifier(const std::string& marker, VerbClass c) {
+    switch (c) {
+        case VerbClass::Conjunctive:
+        case VerbClass::Disjunctive:
+            // verbclass.cpp: "the dang chunk completes the verb".
+            return marker == "dang";
+        case VerbClass::Separative:
+            // Reachable as the 5th case too; named here so the s.p. reading
+            // is not lost if the case route ever changes.
+            return marker == "las" || marker == "nas";
+        case VerbClass::Absence:
+            // The gis-family here is NOT an agent — verbclass.cpp says so in
+            // as many words — it is what the subject is empty of.
+            return marker == "gis" || marker == "kyis" || marker == "gyis" ||
+                   marker == "yis" || marker == "s";
+        default:
+            return false;
+    }
+}
+
 }  // namespace allcore

@@ -285,6 +285,10 @@ public:
             // The la-family gate. Preston reads this one as 2nd from the
             // relationship; the particle alone cannot, and the pane must not
             // pretend it can.
+            check(t.contains("subject readings are out because the verb is "
+                             "transitive"),
+                  "cases: the pane says WHY a reading was excluded, not just "
+                  "a shorter list");
             check(t.contains("2/4/7") && t.contains("cannot tell you which"),
                   "cases: a la don particle reports 2nd/4th/7th and says the "
                   "particle cannot choose between them");
@@ -326,6 +330,23 @@ public:
             // and the caution, on a transitive clause with the agent removed
             src_->setPlainText("chos bstan");
             walk();
+            {   // dang under a conjunctive verb: not a case, but our own
+                // verbclass table says it completes the verb. The column used
+                // to print an em dash, throwing away a fact we held.
+                src_->setPlainText("chos dang 'brel");
+                walk();
+                const QString d = out_->toPlainText();
+                check(d.contains("qualifier of the verb") &&
+                          d.contains("syntactic particle, not by a case"),
+                      "cases: dang under a conjunctive verb is named as the "
+                      "qualifier, marked by a syntactic particle");
+                src_->setPlainText("chos ni bstan");
+                walk();
+                check(out_->toPlainText().contains("not a case particle"),
+                      "cases: and a particle no Wilson class claims says "
+                      "\"not a case particle\", not a bare dash that reads as "
+                      "nothing known");
+            }
             check(out_->toPlainText().contains("agent is UNSTATED"),
                   "cases: a transitive verb with no third-case chunk warns "
                   "that the agent is unstated — absence of an agent is not "
@@ -684,7 +705,8 @@ private:
                                                       "(fused)</span>"
                                                     : QString())) +
                  "</td><td>" + caseCell + "</td><td>" + row1Role +
-                 "</td><td>" + functionCell(cr, verb) + "</td></tr>";
+                 "</td><td>" + functionCell(cr, verb, chunks[i].marker) +
+                 "</td></tr>";
             if (splittable)
                 h += "<tr><td style='color:#888'>[" + QString::number(i + 1) +
                      "b]</td><td style='font-family:monospace'>" +
@@ -787,8 +809,24 @@ private:
     // narrowed by the verb. A set, never a single answer, unless the grammar
     // really does give one — which happens only for the fifth case.
     static QString functionCell(const allcore::CaseReading& cr,
-                                const allcore::VerbGuess& verb) {
-        if (!cr.known()) return "<span style='color:#888'>—</span>";
+                                const allcore::VerbGuess& verb,
+                                const std::string& marker) {
+        if (!cr.known()) {
+            // Not a case particle. That is NOT the same as "nothing is known"
+            // — Preston's chart lists s.p. among the qualifier markers, and
+            // Wilson's nom-s.p. classes say which particle each one uses. An
+            // em dash here threw away a fact our own verbclass table already
+            // held: for a conjunctive or disjunctive verb, the dang chunk
+            // completes the verb.
+            if (verb.cls &&
+                allcore::syntacticParticleMarksQualifier(marker, verb.cls->cls))
+                return "<b style='color:#3B7A3B'>qualifier of the verb</b> "
+                       "<span style='color:#666;font-size:11px'>(marked by a "
+                       "syntactic particle, not by a case \u2014 this verb's "
+                       "class is what says so)</span>";
+            return "<span style='color:#888'>not a case particle \u2014 see "
+                   "the note</span>";
+        }
         // Collect over every case the particle admits: a la don chunk is
         // 2nd/4th/7th, so its function set is the union of all three.
         std::vector<allcore::Function> fs;
@@ -812,12 +850,24 @@ private:
             return "<b style='color:#3B7A3B'>" + out + "</b>";
         // More than one, and the grammar cannot choose between them. Say so:
         // naming the first would be the overreach this column exists to end.
-        QString note = fs.size() == 4 && !haveVerb
-                           ? " <span style='color:#B4540A;font-size:11px'>(no "
-                             "verb identified, so nothing narrows this)</span>"
-                           : " <span style='color:#B4540A;font-size:11px'>(the "
-                             "case cannot choose between these)</span>";
-        return out + note;
+        // Say WHY the list is as short as it is. A reader shown four
+        // readings on one row and two on the next, with no reason given, has
+        // to guess whether the engine knew something or simply had less to
+        // say.
+        QString why;
+        if (!haveVerb)
+            why = "no verb identified, so nothing narrows this";
+        else if (t == allcore::Transitivity::Transitive)
+            why = "the case cannot choose between these; subject readings are "
+                  "out because the verb is transitive";
+        else if (t == allcore::Transitivity::Intransitive)
+            why = "the case cannot choose between these; agent and object "
+                  "readings are out because the verb is intransitive";
+        else
+            why = "the case cannot choose between these, and a specialized "
+                  "verb rules nothing out \u2014 it has a subject AND an object";
+        return out + " <span style='color:#B4540A;font-size:11px'>(" + why +
+               ")</span>";
     }
 
     static QString step(int n, const char* title) {

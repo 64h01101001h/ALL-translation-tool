@@ -133,4 +133,22 @@ std::vector<Function> functionsForCase(int case_number);
 // AND an object, so neither exclusion holds for them.
 std::vector<Function> functionsFor(int case_number, Transitivity t);
 
+// Wilson's nom-s.p. classes take a qualifier marked by a SYNTACTIC particle
+// rather than by a case, which is the "s.p." entry in Preston's p.xv chart
+// alongside the 2nd/3rd/4th/5th/7th.
+//
+// Three of the four are already reachable through the case tables — the
+// separative's las/nas is the 5th, and the absence verbs' gis-family is the
+// 3rd, and functionsForCase keeps the qualifier reading open for both. The
+// fourth is not: `dang` is not a case particle at all, so caseOf returns
+// nothing for it and the Walkthrough printed an em dash in the column that is
+// supposed to say what a chunk could be doing.
+//
+// Our own tables already knew better. verbclass.cpp records, for every
+// conjunctive and disjunctive verb, that "the dang chunk completes the verb".
+// This reads that off rather than deciding it: nothing here is new grammar,
+// it is one table finally being asked what another already recorded.
+// (Adversarial pass over Preston, 2026-09-13.)
+bool syntacticParticleMarksQualifier(const std::string& marker, VerbClass c);
+
 }  // namespace allcore
