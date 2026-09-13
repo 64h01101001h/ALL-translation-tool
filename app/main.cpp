@@ -6208,6 +6208,12 @@ public:
     // alive (hidden) so its connects, gates, and pins hold
     void addBig(QAbstractButton* src, const QString& iconKind) {
         auto* p = new RibbonProxy(src, miniIcon(iconKind));
+        // Record the kind so a gate can count duplicates. miniIcon paints
+        // purely from this string, so two buttons with the same kind are the
+        // same pixmap — and with ribbon labels off the pixmap is all the
+        // reader has. Without this the check has nothing to read and would
+        // pass by finding nothing, which is worse than no check.
+        p->setObjectName("ribbonKind:" + iconKind);
         src->setParent(this);
         row_->addWidget(p);
     }
@@ -25712,7 +25718,9 @@ public:
             "shlokas (four verse lines, or the poet's own double-shad "
             "closes) and applies the verb-first reading order to each "
             "stanza as a whole.");
-        gStruct->addBig(verseReadBtn, "book");
+        // Shared the "book" glyph with Compose bibliography. Neither is
+        // destructive, but four actions on two icons is two too few.
+        gStruct->addBig(verseReadBtn, "strip");
         QObject::connect(verseReadBtn, &QPushButton::clicked,
                          [this] { verseReading(); });
                 auto* quoteBtn = new QPushButton("Detect quotations");
@@ -25844,7 +25852,13 @@ public:
             "The ladder: when the bench work is done, carry this "
             "draft into the Manuscript to write and publish — the "
             "apparatus is waiting there.");
-        gWork->addBig(toMssBtn, "out");
+        // Shared the "out" arrow with Export RTF, so with ribbon labels off
+        // the destructive Manuscript overwrite and a harmless file export
+        // were the same green glyph. miniIcon paints purely from the kind
+        // string, so identical kinds give identical pixmaps and there was
+        // nothing else on screen to tell them apart.
+        // (Draft workspace audit 2026-09-11.)
+        gWork->addBig(toMssBtn, "manuscript");
         connect(toMssBtn, &QPushButton::clicked, [this] {
             if (g_sendToManuscript)
                 g_sendToManuscript(draft_->toPlainText());
@@ -26842,6 +26856,69 @@ public:
                   "structure: with a source present the tools answer as "
                   "before");
         }
+
+        // ---- no two ribbon buttons wear the same icon -------------------
+        //
+        // With ribbon labels off (Preferences, ui/ribbonLabels) an icon is
+        // ALL the reader has. Two pairs shared one — the destructive "Send to
+        // Manuscript" wore the same green arrow as "Export draft (RTF)", and
+        // "Verse reading order" the same blue book as "Compose bibliography".
+        //
+        // The gate counts rather than naming the four, so adding a button
+        // with a duplicate kind fails immediately instead of waiting for
+        // someone to turn labels off and notice.
+        {
+            // Search the RIBBON, not the pane. attachTo() registers the bar
+            // in a global map and never reparents it, so findChildren from
+            // `this` walks a tree the buttons are not in — my first version
+            // of this gate did exactly that, found nothing, and passed with
+            // the duplicate icon still in place. Mutation testing is the only
+            // reason I know that.
+            QWidget* bar = paneRibbons().value(this, nullptr);
+            check(bar != nullptr,
+                  "ribbon: the pane's ribbon is findable, so the icon check "
+                  "below is looking at something");
+            QSet<QString> seen;
+            QStringList dupes;
+            for (QWidget* w : bar ? bar->findChildren<QWidget*>()
+                                  : QList<QWidget*>()) {
+                const QString n = w->objectName();
+                if (!n.startsWith("ribbonKind:")) continue;
+                const QString kind = n.mid(11);
+                if (seen.contains(kind)) dupes << kind;
+                seen.insert(kind);
+            }
+            check(dupes.isEmpty(),
+                  dupes.isEmpty()
+                      ? "ribbon: every button wears a distinct icon, so the "
+                        "row still reads with labels turned off"
+                      : QString("ribbon: %1 shared icon(s): %2")
+                            .arg(dupes.size()).arg(dupes.join(", "))
+                            .toUtf8().constData());
+        }
+
+        // ---- the two data-root members may never diverge ---------------
+        //
+        // DraftPane carries root_ (scan URLs, data-file loads) and dataRoot_
+        // (docprops sidecars and versions). They are always equal because
+        // both come from the same constructor argument, and NOTHING enforces
+        // that. A future setDataRoot, or an initialiser-list tidy applied to
+        // one of them, would leave the file-loading paths and the
+        // sidecar/version paths pointing at different folders with no report.
+        //
+        // The audit offered two fixes and I took the smaller one deliberately.
+        // Deleting dataRoot_ and using root_ at the six docprops sites is the
+        // real repair, but dataRoot_ exists BECAUSE of finding F0 — it was
+        // never assigned at all, and every Draft sidecar write was a silent
+        // no-op until 2026-09-09. Rewriting those six sites to close a risk
+        // that has never fired, in the same lines that carried a live bug
+        // three days ago, trades a theoretical divergence for a real chance
+        // of reintroducing it. The pin makes divergence a FAIL, which is what
+        // the finding actually asks for.
+        check(dataRoot_ == root_,
+              "data root: the pane's two root members hold the same folder \u2014 "
+              "if they ever diverge, file loads and sidecar writes go to "
+              "different places and nothing else would say so");
 
         // ---- nothing in this pane is blank when it has nothing to say ----
         {
