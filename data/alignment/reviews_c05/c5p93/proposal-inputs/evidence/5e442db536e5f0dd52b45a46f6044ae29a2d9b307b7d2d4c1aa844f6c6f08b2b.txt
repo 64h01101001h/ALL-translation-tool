@@ -1,0 +1,82 @@
+from pathlib import Path
+import json,gzip,sqlite3,hashlib,re,subprocess,os,datetime
+R=Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment");W=R/'campaign-worktree';B=R/'campaign-artifacts/C05-277-279';D=B/'tibetan/277'
+def save(name,x):
+ with (D/name).open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+def pin(p):
+ b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+assert __debug__
+base=json.loads((B/'baseline.json').read_bytes())
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=W,text=True).strip()==base['commit']
+assert not subprocess.check_output(['git','diff','--name-only'],cwd=W)
+assert not subprocess.check_output(['git','diff','--cached','--name-only'],cwd=W)
+for name,sha in base['sha256'].items():assert pin(W/name)['sha256']==sha,name
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+rows=[dict(x) for x in db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',271,285))]
+src=json.loads((B/'source.json').read_bytes());ctx=json.loads((B/'context.json').read_bytes())
+assert len(rows)==len(ctx)==15
+assert all({k:y[k] for k in x}==x for x,y in zip(ctx,rows))
+assert all({k:y[k] for k in x}==x for x,y in zip(src,rows[6:9]))
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+corpusmap={(x['course'],x['segment'] if 'segment' in x else -1):x for x in []}
+c05=[x for x in corpus if x['course']=='C05']
+for row in rows:assert json.loads(row['raw'])==c05[row['seq']-1]
+save('source-context-full.json',rows)
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries']
+terms=['der thal','chos kyi grags pa','lung','don','grangs can','rgyang ring','thung','rgyang ring thung','ring thung','gzugs','bltas pa',"de'i tshe na",'mig shes','gnyis','bar du','las','las gzugs','gsal','gsal bar','mi','skye ba','dbang gis','snang',"'jog pa",'rnam pa','shar ba','rnam pa shar ba','sgo nas','ma yin','khas blangs pa','de lta bu','bsgribs','sgrib pa','mthong ba','ma mthong','ma','na','thal','phyir','cig car du','bkag pa','gnyis pa','phyogs snga','phyogs snga ma','brlan','zhing','gsher ba','phor pa','gang','gang po',"'gro ba",'gsum','dngos po','gzhi mthun','khas ma blangs','skyes bu','gcig','mdzes','mi mdzes','gnyis ka','yi dvags','chu klung','rnag khrag','mig','las kyi dbang gis','ni','gyis','kyis','kyi','dang','yin','yang']
+queries=[];masters={}
+sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'
+for t in terms:
+ rr=[dict(x) for x in db.execute(sql,(t,t))]
+ for x in rr:
+  m=master[x['id']-1];assert m==json.loads(x['raw']);masters[str(x['id'])]=m
+ queries.append({'term':t,'sql':sql,'parameters':[t,t],'count':len(rr),'rows':rr})
+save('lexical-queries-full.json',queries);save('master-records-full.json',masters)
+preps=['root-lexical-preparation.json','root-additional-lexical-preparation.json','root-parallel-preparation.json']
+reopened=[]
+for n in preps:
+ obj=json.loads((B/n).read_bytes())
+ print('PREP_SCHEMA',n,type(obj).__name__, list(obj)[:8] if isinstance(obj,dict) else len(obj))
+ # Full actual original prepared record bytes retained once; all recorded query rows replayed below.
+ (D/n).write_bytes((B/n).read_bytes())
+ records=obj if isinstance(obj,list) else obj.get('queries',[])
+ for z in records:
+  if 'sql' not in z:continue
+  result=[dict(x) for x in db.execute(z['sql'],z['parameters'])]
+  assert result==z['rows'],(n,z.get('parameters'))
+  reopened.append({'file':n,'query_index':records.index(z),'count':len(result),'full_rows_equal':True})
+save('preparation-query-replays.json',reopened)
+parallels=[]
+for x in src:
+ for fld in ['acip','wylie','english']:
+  sq='SELECT * FROM corpus_segments WHERE '+fld+'=? ORDER BY course,seq'
+  rr=[dict(y) for y in db.execute(sq,(x[fld],))]
+  parallels.append({'seq':x['seq'],'field':fld,'sql':sq,'parameters':[x[fld]],'count':len(rr),'rows':rr})
+save('parallel-queries-full.json',parallels)
+physical=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt')
+raw=physical.read_bytes();(D/'C05ReadingASCII.txt').write_bytes(raw);extents=[]
+for x in src:
+ for fld in ['acip','english']:
+  val=x[fld].encode();pattern=rb'[ \t\r\n\v\f]+'.join(re.escape(a) for a in re.split(rb'[ \t\r\n\v\f]+',val))
+  hits=list(re.finditer(pattern,raw));assert len(hits)==1,(x['seq'],fld,len(hits))
+  m=hits[0];assert re.sub(rb'[ \t\r\n\v\f]+',b' ',m.group())==val
+  extents.append({'seq':x['seq'],'field':fld,'start':m.start(),'end':m.end(),'text':m.group().decode(),'sha256':hashlib.sha256(m.group()).hexdigest()})
+save('physical-extents.json',extents)
+files=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']
+(D/'governing').mkdir();manifest=[];runs=[]
+for n in files:
+ p=W/n;dest=D/'governing'/n;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes())
+ argv=['git','show',base['commit']+':'+n];proc=subprocess.run(argv,cwd=W,capture_output=True)
+ stem='git-'+str(len(runs)+1);(D/(stem+'.stdout')).write_bytes(proc.stdout);(D/(stem+'.stderr')).write_bytes(proc.stderr)
+ assert proc.returncode==0 and not proc.stderr and proc.stdout==p.read_bytes()
+ runs.append({'argv':argv,'cwd':str(W),'exit_code':proc.returncode,'stdout':stem+'.stdout','stderr':stem+'.stderr','pin':pin(p)})
+ manifest.append({'original':str(p),'copy':str(dest.relative_to(D)),**{k:v for k,v in pin(p).items() if k!='path'},'git_commit':base['commit']})
+for p in [W/'data/hgm_dictionary_v27_2.json.gz',W/'data/full_parallel_corpus_v32.json.gz',W/'build/hgm_spine_v27_2.db']:
+ manifest.append({'original':str(p),'symlink':os.readlink(p) if p.is_symlink() else None,'resolved':str(p.resolve()),'source_asset_not_git':True,**pin(p)})
+save('original-manifest.json',manifest);save('governing-git-runs.json',runs)
+register=json.loads((W/'docs/errata_register.json').read_bytes());save('errata-current-and-classes.json',{'registered_total':len(register),'current':[x for x in register if x['segment'] in ['C05:277','C05:278','C05:279']],'classes':[x for x in register if x['item_id'] in ['E-025','E-028','E-029','E-044','E-071','E-107','E-111']]})
+save('evidence-proof.json',{'status':'PASS_FULL_LOCAL_SOURCE_BASELINE_AND_GOVERNING_EVIDENCE','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'baseline':pin(B/'baseline.json'),'source':pin(B/'source.json'),'context':pin(B/'context.json'),'spine_mode':'URI mode=ro; PRAGMA query_only=ON','context_full_raw_equality':len(rows),'physical':pin(physical),'physical_extents':len(extents),'lexical_queries':len(queries),'distinct_master_records':len(masters),'exact_parallel_queries':len(parallels),'replayed_preparation_queries':len(reopened),'producer':'Primary Codex Tibetan-first, informed by own earlier preparation; no current English original or reconciled judgments read.','limits':'Aliases and matching C15/P7 text are overlapping digital evidence, not proof of independent publication/ingestion. No semantic approval or hgm_gloss modification.'})
+for x in queries:print('LEX',x['term'],[(y['id'],y['wylie'],json.loads(y['hgm_gloss']) if y['hgm_gloss'] else None,y['tier'],y['hgm_source']) for y in x['rows']])
+for x in parallels:print('PARALLEL',x['seq'],x['field'],[(y['course'],y['seq']) for y in x['rows']])
+print('PASS',len(queries),len(masters),len(reopened))
+

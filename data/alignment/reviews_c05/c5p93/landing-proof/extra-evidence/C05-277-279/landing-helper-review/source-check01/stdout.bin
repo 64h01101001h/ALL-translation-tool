@@ -1,0 +1,37 @@
+{
+  "status": "PASS_SCOPED_SOURCE_CHECKS",
+  "candidate": {
+    "bytes": 6145,
+    "sha256": "1cfe6a27799b478231564c83596039bba00216bccdcf9f84cb5f0d40f3d5f34f"
+  },
+  "old": {
+    "bytes": 4455,
+    "sha256": "d3c78d495849126439c7dc2c42664e1954345497743bd5154d7d956a32170e4c"
+  },
+  "all_original_prepared_actual_copies_equal": true,
+  "complete_diff_equal": true,
+  "old_top_level_statements_retained_in_order_except_visual_string": true,
+  "inserted_statements": 12,
+  "actual_subprocess_calls_unchanged": 2,
+  "command_argv_AST_equal": true,
+  "command_cwd_AST_equal": true,
+  "generator_stdin_identical_serialization_AST": true,
+  "wrapper_stdin_actual_generator_stdout": true,
+  "syntax_only_sources": 4,
+  "helper_generator_wrapper_executions": 0,
+  "new_wrapper_stderr_blocking": true,
+  "supported_review_evidence_copy_extensions": [
+    ".json",
+    ".md",
+    ".html",
+    ".stderr",
+    ".stdout",
+    ".log",
+    ".txt",
+    ".bin",
+    ".exit"
+  ],
+  "copy_scope": "semantic-review descendants only; newly captured landing artifacts require separate root banking/retention",
+  "timestamps": "started_at before subprocess; finished_at sampled after subprocess return and stream writes, not exact process-end timing",
+  "environment": "records only the actual explicit PYTHONDONTWRITEBYTECODE=1 override; inherited environment is not claimed as complete capture"
+}

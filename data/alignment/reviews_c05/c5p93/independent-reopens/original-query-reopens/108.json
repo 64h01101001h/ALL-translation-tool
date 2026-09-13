@@ -1,0 +1,37 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/108.json",
+  "query_pin": {
+    "bytes": 2826,
+    "sha256": "532fc663c329a9eb6b79d46ce2e0b01b681518cb6db160cffe2a954c6f07cea8"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "de lta bu",
+    "de lta bu"
+  ],
+  "rows": [
+    {
+      "id": 8429,
+      "wylie": "de lta bu",
+      "tibetan": "དེ་ལྟ་བུ",
+      "tibetan_source": null,
+      "acip": "DE LTA BU",
+      "pronunciation": "deta bu",
+      "pronunciation_source": null,
+      "sanskrit": "{L}evam; {MSA}ākṛti; {LC}idam; {LC}īdṛśa; {LC}evaṃvidha; {LC}evaṃ manasīkāreṇa; {LC}evaṃbhāvin; {LC}evaṃrūpam; {LC}eṣa; {LC}tad; {LC}tādṛśa; {LC}ityevam; {LC}etat; {LC}evaṃrūpa; {LC}tathā; {LC}tathārūpa; {LC}sadṛk, sadṛkṣa; {LC}sadṛśa",
+      "hopkins_english": "such; thus; as; so; just; exactly",
+      "hgm_gloss": "[\"this kind\", \"particular\", \"like this\", \"of this kind\", \"this type\", \"like\", \"cases\", \"in this sort of case\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C05\", \"C06\", \"C10\", \"C11\", \"C13\", \"C15\", \"C16\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P6\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS03\", \"TCS04PrayerBook\", \"TCS06\", \"TCS09\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+      "corpus_n_segments": 142,
+      "raw": "{\"tibetan\": \"དེ་ལྟ་བུ\", \"wylie\": \"de lta bu\", \"wylie_variants\": [\"de lta bu\"], \"tenses\": null, \"sanskrit\": \"{L}evam; {MSA}ākṛti; {LC}idam; {LC}īdṛśa; {LC}evaṃvidha; {LC}evaṃ manasīkāreṇa; {LC}evaṃbhāvin; {LC}evaṃrūpam; {LC}eṣa; {LC}tad; {LC}tādṛśa; {LC}ityevam; {LC}etat; {LC}evaṃrūpa; {LC}tathā; {LC}tathārūpa; {LC}sadṛk, sadṛkṣa; {LC}sadṛśa\", \"hopkins_english\": \"such; thus; as; so; just; exactly\", \"hgm_gloss\": [\"this kind\", \"particular\", \"like this\", \"of this kind\", \"this type\", \"like\", \"cases\", \"in this sort of case\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"deta bu\", \"acip\": \"DE LTA BU\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C05\", \"C06\", \"C10\", \"C11\", \"C13\", \"C15\", \"C16\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P6\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS03\", \"TCS04PrayerBook\", \"TCS06\", \"TCS09\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 142}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

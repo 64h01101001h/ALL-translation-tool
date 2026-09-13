@@ -1,0 +1,64 @@
+"""Run the two canonical builders once after root accepts and lands a page.
+
+Usage: python3 -B run_reviewed_builders_once.py PAGE FIRST
+No semantic judgment is supplied. Existing execution logs prevent a rerun.
+The dictionary view's normal diagnostic stderr is preserved for inspection.
+"""
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,sys,traceback
+
+art=Path(__file__).resolve().parent
+wt=art.parent/'campaign-worktree'
+page,first=map(int,sys.argv[1:])
+batch=art/f'C05-{first}-{first+2}'
+landing=batch/'landing'
+baseline=json.loads((batch/'baseline.json').read_text())
+accepted=json.loads((landing/'root-semantic-acceptance-proof.json').read_text())
+copied=json.loads((landing/'root-frozen-input-copy-check.json').read_text())
+assert accepted['page']==copied['page']==page
+assert accepted['segments']==copied['segments']==list(range(first,first+3))
+assert baseline['course_boundary']==first-1
+assert accepted['exact_final_hashes_counts_and_ranges'] and copied['landed_bytes_checked']
+assert accepted['review_sha256']==copied['review_sha256']
+assert (wt/f'data/alignment/pages_c05/c5p{page}.html').is_file()
+assert (landing/'review-copy-and-register-proof.json').is_file()
+target=landing/'canonical-builds-once.json'
+assert not target.exists()
+for label in ('build-layer','build-view'):
+    assert not any((landing/f'{label}.{ext}').exists()for ext in ('command.json','stdout','stderr','exit')),label
+
+sha=lambda raw:hashlib.sha256(raw).hexdigest()
+env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
+csv_rel='docs/geshe_michael_roach_dictionary.csv'
+previous=subprocess.check_output(['git','show',baseline['commit']+':'+csv_rel],cwd=wt)
+assert sha(previous)==baseline['sha256'][csv_rel] and previous==(wt/csv_rel).read_bytes()
+seed=landing/'previous-main-csv-seed.bin'
+assert not seed.exists()
+seed.write_bytes(previous)
+record={'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'baseline_commit':baseline['commit'],'page':page,'first_segment':first,
+        'previous_main_csv_seed':{'path':str(seed),'bytes':len(previous),'sha256':sha(previous)},
+        'status':'RUNNING','runs':[]}
+try:
+    for label,tool in (('build-layer','tools/build_alignment_layer.py'),('build-view','tools/build_dictionary_view.py')):
+        argv=[sys.executable,'-B',str(art/'run_tool_readonly_sqlite.py'),tool]
+        command={'argv':argv,'cwd':str(wt),'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+        (landing/f'{label}.command.json').write_text(json.dumps(command,indent=2)+'\n')
+        run=subprocess.run(argv,cwd=wt,env=env,capture_output=True)
+        (landing/f'{label}.stdout').write_bytes(run.stdout)
+        (landing/f'{label}.stderr').write_bytes(run.stderr)
+        (landing/f'{label}.exit').write_text(str(run.returncode)+'\n')
+        record['runs'].append({**command,'exit':run.returncode,'stdout_bytes':len(run.stdout),'stdout_sha256':sha(run.stdout),'stderr_bytes':len(run.stderr),'stderr_sha256':sha(run.stderr),'finished_at':datetime.datetime.now(datetime.timezone.utc).isoformat()})
+        print(label,'EXIT',run.returncode,'stdout',len(run.stdout),'stderr',len(run.stderr),flush=True)
+        assert run.returncode==0,(label,run.stderr.decode(errors='replace'))
+    record['output_sha256']={name:sha((wt/name).read_bytes())for name in baseline['sha256']}
+    for name in ('data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz'):
+        assert record['output_sha256'][name]==baseline['sha256'][name],name
+    record['status']='PASS'
+except Exception:
+    record.update(status='FAILED',failure=traceback.format_exc())
+    raise
+finally:
+    record['finished_at']=datetime.datetime.now(datetime.timezone.utc).isoformat()
+    target.write_text(json.dumps(record,indent=2)+'\n')
+    print(json.dumps({'status':record['status'],'proof':str(target)}),flush=True)

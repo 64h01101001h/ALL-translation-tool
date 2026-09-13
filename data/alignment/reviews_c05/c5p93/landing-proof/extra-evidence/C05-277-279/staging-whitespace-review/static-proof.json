@@ -1,0 +1,266 @@
+{
+  "status": "PASS_INVERSE_AND_FULL_INPUT_IDENTITY_STATIC_ONLY",
+  "utc": "2026-09-13T18:30:40.089721+00:00",
+  "preparation_freeze": {
+    "bytes": 4519,
+    "sha256": "1292eaea3bbbc96f3f098a0404ee22d2e36f83a74a5db037b773388c8021d6b5"
+  },
+  "preparation_files": 29,
+  "all13_preparation_original_copy_pairs_equal": true,
+  "inverse_checks": [
+    {
+      "label": "whitespace",
+      "old": {
+        "bytes": 18898,
+        "sha256": "5117455cf67dc362f15ae67f3700c36406a0593210655e147f8a341d1244431e"
+      },
+      "new": {
+        "bytes": 18898,
+        "sha256": "b38c18aa63a82a3e9fbf83a118160c1ab91509b8e8a6e038bfae69d7bd129144"
+      },
+      "full_inverse_bytes_equal": true,
+      "entire_diff_exact": true,
+      "changed_functions": [
+        "__init__",
+        "run"
+      ],
+      "unchanged_functions": {
+        "digest": {
+          "bytes": 55,
+          "sha256": "c36fee10252da2653bd4463a40c0b17609ec00a6c1c18c61ea743db668e851b1"
+        },
+        "pin": {
+          "bytes": 61,
+          "sha256": "c18eff79ca57e0da890aff604c7f65f6c8ba25c5dcae06e806355d399861718e"
+        },
+        "check_pin": {
+          "bytes": 217,
+          "sha256": "08a131f73ae9f176b1394d50357dea66aaaa1507c50627802af0360958eb5507"
+        },
+        "relative": {
+          "bytes": 189,
+          "sha256": "da2a74e0539a72e489cd827958a44da828359b1628514edb966e3cf450ba98bc"
+        },
+        "parse_log": {
+          "bytes": 761,
+          "sha256": "4d67989e5527b0181bd02567b3d8383ef6146e558c53b63c372349cafff73d87"
+        },
+        "literal_warnings": {
+          "bytes": 758,
+          "sha256": "d9de95642ab938b4b6c7d20cb04a1e568b5fe0cc50d2e7f3455c4cc1d3c46b18"
+        },
+        "diff_context_lines": {
+          "bytes": 1615,
+          "sha256": "0e1acdcdb4b7f40906c72cac7658e848cc80fc42f17a150991033e48b31aad35"
+        },
+        "ordinary_predicate": {
+          "bytes": 889,
+          "sha256": "66ba349b63679f1950f0f405fbd3e97b0bd051860ae00a08879bf783e82a3652"
+        },
+        "classify_physical": {
+          "bytes": 1900,
+          "sha256": "84c0e0de4ef8b03ce2820812a607540e0d39f2be908405c1a3ecf21b3ff69bcc"
+        },
+        "main": {
+          "bytes": 939,
+          "sha256": "e5fe4d5e908950c65b4fd2dbea93d51678581dcab3aa37d0263d5fa38c52b15a"
+        },
+        "capture_root": {
+          "bytes": 366,
+          "sha256": "8229cdb28d8b80dbb6c4836d23c9f606e88436227a27b22ee2b8879e170dddc8"
+        },
+        "recheck_roots": {
+          "bytes": 388,
+          "sha256": "5518c2e8fe772ce760842d28039c6771e9a91b7ffcbef10113abbe5174274e2b"
+        },
+        "save": {
+          "bytes": 170,
+          "sha256": "1ec8a91f60a3a21d7ab669d956031f3a5ae149211f4b07a28b0ef83c73d6bcf0"
+        },
+        "read": {
+          "bytes": 580,
+          "sha256": "6bef2ca426d6e872cafd8a668709c7b778af4b0bd472a162322532c133752c46"
+        },
+        "obj": {
+          "bytes": 55,
+          "sha256": "7109ab672cfd20b213054d25074822bafe2ba8344a66c0d4d76b26e704b34936"
+        },
+        "git": {
+          "bytes": 821,
+          "sha256": "80e246c2f90defb96f4aa6ff8f7db94fc913310888bc09ec5c162f0547aca8a3"
+        },
+        "staged": {
+          "bytes": 226,
+          "sha256": "bf8234c0eca0d10104ee3b3d281757ae7405390155510a7f8df32ee2956e71fc"
+        },
+        "frozen_read": {
+          "bytes": 209,
+          "sha256": "d9be1ae93f194478c5ba01f511aa57d2973a8d0514a8185ab890b9c547fa29a3"
+        }
+      },
+      "candidate_import_or_execution": false
+    },
+    {
+      "label": "staging",
+      "old": {
+        "bytes": 40211,
+        "sha256": "b4229900ca09a00f5b4ecdce9564e86c3465a6076fc6c40cd880b7360f77c84d"
+      },
+      "new": {
+        "bytes": 40212,
+        "sha256": "39a2908b2db4effb9468e9587d0e28b4dcd828ae4ac8fce99368a723973a211f"
+      },
+      "full_inverse_bytes_equal": true,
+      "entire_diff_exact": true,
+      "changed_functions": [
+        "__init__",
+        "run"
+      ],
+      "unchanged_functions": {
+        "sha": {
+          "bytes": 56,
+          "sha256": "166ad903d6d1b4f98706f40c535e6a84f4a6268f81640d32bb1d0f02c6857de1"
+        },
+        "signature": {
+          "bytes": 82,
+          "sha256": "b40fa3571c59505c07ced33d89ac065a169f4fdcc0f61dec56608b68eee3b5a1"
+        },
+        "relative": {
+          "bytes": 125,
+          "sha256": "ac13f41704515405655648eb60ec3a0d9f3a25899ab1c7d158f468202a6c4f63"
+        },
+        "freeze_entries": {
+          "bytes": 583,
+          "sha256": "d65d5e4b5fb9562509db152631be6ac723935fdb6d2b2e705a080c9b17b923c3"
+        },
+        "allowance_result": {
+          "bytes": 980,
+          "sha256": "3b9e6ca805be47a78c4aed8407db64c9942ce66e272a6e500aa700c0d5d8e6c3"
+        },
+        "nul_paths": {
+          "bytes": 289,
+          "sha256": "e37b807d63d8d0f45fd4a9d23e694682619b7b8fce63714012a273e4893309d6"
+        },
+        "untracked_transition": {
+          "bytes": 1380,
+          "sha256": "276b60fb1ab5677554e6d1946ffa00564b350c23873c9bccebac9660426b90f0"
+        },
+        "check_final_head": {
+          "bytes": 102,
+          "sha256": "5b4712c8905a7dd942aaa8f6515b05c206ab669a0f15aa89a56cf7b67e2b9b25"
+        },
+        "main": {
+          "bytes": 1131,
+          "sha256": "c72b54613344db020424b9299acb57b5f1310b1d184348e12254328a028437be"
+        },
+        "raw": {
+          "bytes": 307,
+          "sha256": "22ad239d4cae09773bd1880a5dea9a96c4549f7bf0e038ead0f5c2ceb1a82662"
+        },
+        "obj": {
+          "bytes": 56,
+          "sha256": "89450a2d7b336e1561358b68cb700edb74dbc53f0f0627ce9c297345bd598fbd"
+        },
+        "git": {
+          "bytes": 923,
+          "sha256": "2927bdf99847c5ccee24f5f6e5a9b79c98558287935bec6fea47d7c238bfe2b2"
+        },
+        "old": {
+          "bytes": 94,
+          "sha256": "b1536ae13e9fadfa0af050f6dbb86d727b8206f48754f4e5e9268d1e5ff44ba6"
+        },
+        "require": {
+          "bytes": 227,
+          "sha256": "2f999d6138227da9a57ddc43b2bdc59cf15d88bc8dbb842886aadec883fb9100"
+        },
+        "pincheck": {
+          "bytes": 116,
+          "sha256": "ad182a11487083e32e00eb7eada7fca354af428a59acf48de9d00153e19477af"
+        },
+        "verify_source_archive": {
+          "bytes": 1889,
+          "sha256": "cef3648c1c5e9a8f1cf1d6f44095bd99c3d741a081d2c0114ba34673aa66f9e9"
+        },
+        "verify_payload_source": {
+          "bytes": 1528,
+          "sha256": "8c755dc918904c78b6b00355fd51c6d50c68046466c31bd4c55f95c0613c6656"
+        },
+        "verify_untracked_capture": {
+          "bytes": 621,
+          "sha256": "6c5341fc4054c9815775964779dfe4e2e35c40ae46f5b0417bbbd8e90580e14e"
+        },
+        "verify_banking_writes": {
+          "bytes": 3781,
+          "sha256": "351bcb0fadb5aae07d5afb2f2c1f69124089026104279e3249f01ef96cbb7051"
+        }
+      },
+      "candidate_import_or_execution": false
+    }
+  ],
+  "copy_result": {
+    "original_records": 172,
+    "distinct_copies": 80,
+    "new_copies": 80
+  },
+  "earlier_whitespace_failure": {
+    "argv": [
+      "python3",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py",
+      "prepare",
+      "--worktree",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "--review",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/semantic-review",
+      "--root-manifest",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/landing/root-proof-copy-manifest-before-whitespace.json",
+      "--root-manifest-bank-path",
+      "data/alignment/reviews_c05/c5p92/landing-proof/root-proof-copy-manifest-before-whitespace.json",
+      "--physical-descriptors",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/physical-source-descriptors.json",
+      "--raw-log",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-stage-runs/initial-diff-check/stdout.bin",
+      "--raw-stderr",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-stage-runs/initial-diff-check/stderr.bin",
+      "--raw-exit",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-stage-runs/initial-diff-check/exit.txt",
+      "--raw-command",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-stage-runs/initial-diff-check/command.json",
+      "--build-proof",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/landing/canonical-builds-once.json",
+      "--output",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runs/prepare"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+    "started_at": "2026-09-13T16:09:31.259303+00:00",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "GIT_OPTIONAL_LOCKS": "0"
+    },
+    "inherited_environment": true,
+    "stdin_bytes": 0,
+    "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+    "finished_at": "2026-09-13T16:09:35.470905+00:00",
+    "wall_seconds": 4.210940540768206,
+    "exit": 1,
+    "stdout_bytes": 0,
+    "stderr_bytes": 2299,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "aabb4dfd1b67d4ac2dc5b4af1c76b75398a052fe9173f1e503e107799861a1ea"
+  },
+  "earlier_closure_failure_pins": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-root-closure/final/fresh-main-comparison.json",
+      "bytes": 858970,
+      "sha256": "0d59557852f42ef0a1595e3e692e9dd2b614b8269184edde04a143bf5ee7f8f6"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-root-closure/final-v2/fresh-main-comparison.json",
+      "bytes": 859501,
+      "sha256": "9cf89b4813e0235598fbb569d9413e8ed2f2673d08d597d7adc346f47c9aa32e"
+    }
+  ],
+  "no_candidate_imports_runs_Git_SQL_tests_builds": true,
+  "runtime_semantic_review_freeze_exists_at_observation": false,
+  "code_scope": "Numerical/BASE adaptation and actual fixed-data closure path/schema only; this static checker never imports or executes candidates."
+}

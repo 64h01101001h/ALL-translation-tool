@@ -1,0 +1,23 @@
+from pathlib import Path
+import json,hashlib,datetime
+D=Path(__file__).resolve().parent
+get=lambda p:json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not (D/'freeze.json').exists();r=get(D/'review.json');assert r['status']==r['verdict']==r['spec_verdict']==r['quality_verdict']=='APPROVE' and r['open_findings']==[]
+assert get(D/'final-preflight-caller01/execution.json')['exit']==0 and (D/'final-preflight-caller01/stderr.bin').read_bytes()==b'' and get(D/'manifest-transition-proof.json')['status']=='PASS'
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+for p in D.rglob('*'):
+ assert not p.is_symlink()
+ if p.is_file():assert p.suffix.lower() in allowed
+r['checklist'][-1]['evidence'].append('manifest-transition-proof.json');r['freeze_contract']=dict(path='freeze.json',files_schema='DICT mapping every relative regular-file path to bytes and sha256',excluded_path='Only the actual top-level freeze.json itself',no_nested_freeze_exclusions=True)
+r['report']=pin(D/'review.md')
+# No circular pin: this evidence manifest excludes only its own path, review.json which pins it, and the eventual top-level freeze; all are included by final freeze.
+ep={str(p.relative_to(D)):pin(p) for p in sorted(D.rglob('*')) if p.is_file() and p not in [D/'evidence-pins.json',D/'review.json',D/'freeze.json']}
+put(D/'evidence-pins.json',dict(status='PASS',files=ep,file_count=len(ep),total_bytes=sum(x['bytes'] for x in ep.values()),exclusions=['evidence-pins.json','review.json','freeze.json'],closure='Final freeze includes all three interfaces except its own actual top-level file.'))
+r['evidence_manifest']=dict(path='evidence-pins.json',**pin(D/'evidence-pins.json'));put(D/'review.json',r)
+files={str(p.relative_to(D)):pin(p) for p in sorted(D.rglob('*')) if p.is_file() and p!=D/'freeze.json'}
+f=dict(status='FROZEN_APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),files=files,file_count=len(files),total_bytes=sum(x['bytes'] for x in files.values()),scope='Independent machine semantic review C05:277–279 only; no landing or integration approval.',exclusion='Only this actual top-level freeze.json')
+put(D/'freeze.json',f);assert {str(p.relative_to(D)) for p in D.rglob('*') if p.is_file() and p!=D/'freeze.json'}==set(files)
+for n,p in files.items():assert pin(D/n)==p
+print(json.dumps(dict(status='DONE',spec_verdict='APPROVE',quality_verdict='APPROVE',freeze=pin(D/'freeze.json'),file_count=f['file_count'],total_bytes=f['total_bytes'],report=pin(D/'review.md'),review=pin(D/'review.json'),manifest=pin(D/'original-to-copy-manifest.json'),spans=146,nulls=8,word_pairs=94,open_findings=[])))

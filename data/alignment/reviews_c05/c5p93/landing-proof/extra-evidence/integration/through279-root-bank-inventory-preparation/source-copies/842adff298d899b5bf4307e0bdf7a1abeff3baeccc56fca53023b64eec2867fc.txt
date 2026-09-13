@@ -1,0 +1,37 @@
+from pathlib import Path
+import datetime,hashlib,json
+B=Path(__file__).resolve().parent;A=B.parent;R=B/'semantic-review';D=A/'integration/through279-finalization-runtime'
+D.mkdir()
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def read(p):return json.loads(p.read_bytes())
+records=[]
+def copy(source,relative,sha=None):
+ raw=source.read_bytes()
+ if sha:assert hashlib.sha256(raw).hexdigest()==sha
+ dest=D/relative;dest.parent.mkdir(parents=True,exist_ok=True);assert not dest.exists();dest.write_bytes(raw);assert dest.read_bytes()==raw
+ records.append(dict(original=str(source),copy=str(dest),**pin(dest)))
+assert read(B/'root-final-semantic-review-verification/proof.json')['status']=='PASS'
+assert read(B/'staging-whitespace-root-review-captured/proof.json')['status']=='APPROVE_EXACT_TOOLING_CONDITIONAL_ON_ACTUAL_RUNTIME'
+for name,source,sha in [
+ ('whitespace279.py',B/'staging-whitespace-preparation/whitespace279.py','b38c18aa63a82a3e9fbf83a118160c1ab91509b8e8a6e038bfae69d7bd129144'),
+ ('verify_staged_through279.py',B/'staging-whitespace-preparation/verify_staged_through279.py','39a2908b2db4effb9468e9587d0e28b4dcd828ae4ac8fce99368a723973a211f'),
+ ('bank_root_proofs_through279.py',B/'page-banking-preparation/bank_root_proofs_through279.py','4fda2995ef53e3b9fe64c4d6ca30b8eb7f73f661d0dbcfc4c4cfe42d844428ba')]:copy(source,name,sha)
+copy(R/'freeze.json','current-inputs/semantic-review/freeze.json','d744bffe9a7635a7340aee88431bd192b2afe2e063f126f36896b105bc66578f')
+copy(R/'original-to-copy-manifest.json','current-inputs/semantic-review/original-to-copy-manifest.json','3650eaa9efba8b8c7c5281814d9f2b396b3eabc2e20239968564cce5fb0269f4')
+manifest=read(R/'original-to-copy-manifest.json');frozen=read(R/'freeze.json')['files']
+names={'C05ReadingASCII.txt','C15ReadingASCII.txt','C16ReadingASCII.txt','C18ReadingASCII.txt','ILL.txt'}
+sources={Path(r['original']) for r in manifest if '/Desktop/HGM DICTIONARY - TRANSLATION APP/' in r['original'] and Path(r['original']).name in names}
+assert len(sources)==5 and {p.name for p in sources}==names
+descriptors=[]
+for source in sorted(sources):
+ rows=[r for r in manifest if Path(r['original']).resolve()==source.resolve()]
+ assert rows
+ for r in rows:
+  assert source.read_bytes()==(R/r['copy']).read_bytes()
+  assert pin(source)=={k:r[k] for k in ['bytes','sha256']}==frozen[r['copy']]
+ descriptors.append(dict(kind='complete_original_physical_text',original=str(source),**pin(source),manifest_records=rows))
+(D/'physical-source-descriptors.json').write_text(json.dumps(descriptors,indent=2)+'\n')
+(D/'original-to-runtime-map.json').write_text(json.dumps(records,indent=2)+'\n')
+proof=dict(status='PASS_ROOT_RUNTIME_IDENTITY_RELEASE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),copied_inputs=records,physical_source_descriptors=pin(D/'physical-source-descriptors.json'),physical_sources=5,scope='Exact already reviewed three helper bytes and actual frozen semantic/physical inputs only. No banking, staging, diagnostic classification, audit or acceptance run by this release.')
+(D/'release-proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps({'status':'PASS','runtime':str(D),'copied_files':len(records),'physical_sources':5,'no_runtime_execution':True}))

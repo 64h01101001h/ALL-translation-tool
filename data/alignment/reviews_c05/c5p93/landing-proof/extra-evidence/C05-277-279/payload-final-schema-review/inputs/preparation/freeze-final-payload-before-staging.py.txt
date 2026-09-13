@@ -1,0 +1,125 @@
+"""Freeze actual final non-review payload bytes before any staging.
+
+Requires the actual successful build, test and retention records. No builder,
+test, source, index or repository file is changed here.
+"""
+from pathlib import Path
+import datetime, hashlib, json, os, re, subprocess
+
+B = Path(__file__).resolve().parent
+W = B.parents[1]/'campaign-worktree'
+L = B/'landing'
+OUT = L/'payload-freeze'
+MANIFEST = L/'staged-payload-manifest.json'
+PROOF = L/'staged-payload-source-proof.json'
+assert not any(p.exists() for p in (OUT,MANIFEST,PROOF))
+def raw(p): return Path(p).read_bytes()
+def j(p): return json.loads(raw(p))
+def pin(x): return dict(bytes=len(x),sha256=hashlib.sha256(x).hexdigest())
+def git(*args):
+    return subprocess.check_output(['git',*args],cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+base = j(B/'baseline.json')
+assert git('rev-parse','HEAD').decode().strip() == base['commit'] == 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+assert git('diff','--cached','--name-only','-z') == b''
+build = j(L/'canonical-builds-once.json')
+assert build['status']=='PASS' and build['baseline_commit']==base['commit']
+assert len(build['runs'])==2
+for record,label,tool in zip(build['runs'],('build-layer','build-view'),('tools/build_alignment_layer.py','tools/build_dictionary_view.py')):
+    assert record['argv'][-1] == tool and record['exit']==0
+    command=j(L/(label+'.command.json'))
+    assert all(record[k]==v for k,v in command.items())
+    assert raw(L/(label+'.exit'))==b'0\n'
+    for stream in ('stdout','stderr'):
+        p=pin(raw(L/(label+'.'+stream)))
+        assert p==dict(bytes=record[stream+'_bytes'],sha256=record[stream+'_sha256'])
+assert b'COVERAGE C05: 279/511' in raw(L/'build-layer.stdout')
+seed=build['previous_main_csv_seed']
+assert pin(raw(seed['path']))=={k:seed[k] for k in ('bytes','sha256')}
+assert raw(seed['path'])==git('show',base['commit']+':docs/geshe_michael_roach_dictionary.csv')
+tests={'constitution','gen_alignment_page','alignment_gate_coverage','alignment_builder','dictionary_exports','no_broken_words','no_split_syllables','no_phonetics_in_layer','no_degenerate_members','no_supplied_span_head','layer_matches_spine','evidence_matches_spine','errata_quotes_hold','view_matches_layer','generated_docs_in_sync','builder_sees_every_span','errata_name_their_witnesses'}
+log=raw(L/'ctest-17.stdout').decode()
+passed=re.findall(r'^\s*(\d+)/17 Test\s+#(\d+): ([a-z_]+) .* Passed\s+([0-9.]+) sec$',log,re.M)
+assert len(passed)==17 and [int(x[0]) for x in passed]==list(range(1,18))
+assert {x[2] for x in passed}==tests
+assert raw(L/'ctest-17.exit')==b'0\n' and raw(L/'ctest-17.stderr')==b''
+assert '100% tests passed out of 17' in log
+duration=re.findall(r'Total Test time \(real\) =\s+([0-9.]+) sec',log)
+assert len(duration)==1
+retention=j(L/'retention-source-check.json')
+assert retention['baseline_commit']==base['commit'] and retention['segments']==[277,278,279]
+assert base['full_links']==45126 and retention['prior_links_retained']==base['full_links']
+# Counts come from the actual approved interface, bound to its complete specs.
+approved_review=j(B/'semantic-review/review.json')
+assert approved_review['spec_verdict']==approved_review['quality_verdict']=='APPROVE'
+assert approved_review['open_findings']==[] and approved_review['baseline_commit']==base['commit']
+assert [row['seq'] for row in approved_review['segments']]==[277,278,279]
+approved_spans=0
+for row in approved_review['segments']:
+    assert type(row['span_count']) is int and row['span_count']>0
+    part_raw=raw(B/'semantic-review/reviewed-final'/str(row['seq'])/'spec.json')
+    assert pin(part_raw)==dict(bytes=row['spec_bytes'],sha256=row['spec_sha256'])
+    part=json.loads(part_raw)
+    assert part['course']=='C05' and [s['seq'] for s in part['segments']]==[row['seq']]
+    assert len(part['segments'][0]['spans'])==row['span_count']
+    approved_spans+=row['span_count']
+assert approved_review['total_spans']==approved_spans
+assert retention['added_links']==approved_spans+3  # one canonical sentence anchor per segment
+assert retention['source_hashes_unchanged'] and retention['review_tuples_and_source_ranges_match']
+course=j(L/'course-csv-retention.json')
+assert course['baseline_commit']==base['commit'] and course['all_depths_counts_and_metadata_match_main_csv_refs']
+meta=j(B/'semantic-review/review.json')
+assert meta==approved_review
+assert meta['spec_verdict']==meta['quality_verdict']=='APPROVE' and meta['open_findings']==[]
+assert j(B/'semantic-review/bank-ready-errata.json')==[]
+assert j(B/'semantic-review/span-head-allow-needed.json')=={}
+for rel in ('docs/errata_register.json','docs/ERRATA_REGISTER.md','data/alignment/span_head_allow.json'):
+    p=W/rel
+    if p.exists(): assert raw(p)==git('show',base['commit']+':'+rel)
+sources={'data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz'}
+assert set(build['output_sha256'])==set(base['sha256']) and len(build['output_sha256'])==9
+paths=[]
+for rel,digest in build['output_sha256'].items():
+    value=raw(W/rel)
+    assert pin(value)['sha256']==digest
+    if rel in sources:
+        assert digest==base['sha256'][rel]
+    elif value!=git('show',base['commit']+':'+rel): paths.append(rel)
+paths.extend(['data/alignment/pages_c05/c5p92.html','data/alignment/pages_c05/c5p93.html',
+              'data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p93.json','tools/build_alignment_layer.py'])
+assert len(paths)==len(set(paths))==12
+registration=j(L/'course-registration-verification.json')
+for rel,field in [('data/alignment/pages_c05/index.html','index_after'),('tools/build_alignment_layer.py','builder_after')]:
+    assert pin(raw(W/rel))==registration[field]
+prior=git('show',base['commit']+':data/alignment/pages_c05/c5p92.html')
+nav=b'&larr; Previous</a></div>'
+assert prior.count(nav)==2
+assert raw(W/'data/alignment/pages_c05/c5p92.html')==prior.replace(nav,b"&larr; Previous</a><a href='c5p93.html'>Next &rarr;</a></div>")
+land=j(W/'data/alignment/reviews_c05/c5p93/landing.json')
+assert pin(raw(W/'data/alignment/specs_c05/c5p93.json'))['sha256']==land['spec_sha256']
+body=raw(L/'generator.stdout')
+assert pin(body)['sha256']==land['body_sha256']
+html=raw(W/'data/alignment/pages_c05/c5p93.html')
+assert body in html and b'AI (Codex)' in html and b'Codex (AI)' in html
+OUT.mkdir()
+files=[]; copies=[]
+for rel in sorted(paths):
+    value=raw(W/rel); target=OUT/rel
+    target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(value)
+    assert raw(target)==value==raw(W/rel)
+    files.append(dict(path=rel,**pin(value)))
+    copies.append(dict(original=str(W/rel),copy=str(target),**pin(value)))
+MANIFEST.write_text(json.dumps(dict(head=base['commit'],files=files),indent=2)+'\n')
+proof=dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=base['commit'],
+    boundary='Actual final payload frozen before staging; no stage, bank, test, build or source mutation',
+    manifest=dict(path=str(MANIFEST),**pin(raw(MANIFEST))),files=copies,
+    sources_unchanged=True,all_actual_canonical_output_pins_match=True,
+    all_prior_links_retained=retention['prior_links_retained'],added_links=retention['added_links'],
+    actual_ctest_records=[dict(ordinal=int(i),ctest_id=int(k),name=n,seconds=float(t)) for i,k,n,t in passed],
+    actual_ctest_total_seconds=float(duration[0]),actual_ctest_run_count=1,
+    actual_build_invocations=len(build['runs']),actual_layer_invocations=1,actual_view_invocations=1,
+    actual_build_seed=seed,review_freeze=pin(raw(B/'semantic-review/freeze.json')),
+    approved_errata_empty=True,approved_allowances_empty=True,
+    proof_inputs=[dict(path=str(L/n),**pin(raw(L/n))) for n in ['canonical-builds-once.json','course-registration-verification.json','retention-source-check.json','course-csv-retention.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit']])
+PROOF.write_text(json.dumps(proof,indent=2)+'\n')
+assert git('diff','--cached','--name-only','-z')==b''
+print(json.dumps(dict(status='PASS',payload_files=len(files),payload_bytes=sum(x['bytes'] for x in files),manifest=str(MANIFEST),source_proof=str(PROOF),tests=len(passed),test_seconds=float(duration[0]),build_invocations=len(build['runs'])),indent=2))

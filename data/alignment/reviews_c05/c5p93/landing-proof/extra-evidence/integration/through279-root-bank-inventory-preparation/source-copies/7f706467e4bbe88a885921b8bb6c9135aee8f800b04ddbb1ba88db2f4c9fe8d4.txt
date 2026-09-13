@@ -1,0 +1,42 @@
+from pathlib import Path
+import os,sys,json,hashlib,collections,csv,io,re,subprocess,datetime,sqlite3
+sys.dont_write_bytecode=True;os.environ.update(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+R=Path(__file__).resolve().parent;S=R/'workspace';ROOT=R.parents[2];W=ROOT/'campaign-worktree';B=ROOT/'campaign-artifacts/C05-271-273';L=B/'landing';P=R/'previous-generated'
+J=lambda p:json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def rows(base,suffix):return list(csv.DictReader(io.StringIO((base/('docs/geshe_michael_roach_dictionary'+suffix)).read_bytes().decode('utf-8-sig'),newline='')))
+checks=J(R/'history/retention-attempt01/retention-checks.json');failed=checks.pop();assert failed['check']=='Actual five unproven ACIP spans' and failed['pass_'] is False;assert all(x['pass_'] for x in checks)
+def check(name,result,detail=None):
+ checks.append(dict(check=name,pass_=bool(result),detail=detail));assert result,(name,detail)
+proof=dict(status='RUNNING',retained_prior_passes=len(checks),attempt01_failure='Full-bank population includes one no-segment d5 row excluded by the actual evidence collection loop; no output defect',recovery='Only diagnostic population corrected; no builder or earlier successful retention gate rerun')
+try:
+ full=J(S/'data/alignment/alignment_full_v1.json');old=J(P/'data/alignment/alignment_full_v1.json');ev=J(S/'data/alignment/alignment_evidence_v1.json');oe=J(P/'data/alignment/alignment_evidence_v1.json')
+ sig=lambda x:json.dumps(x,sort_keys=True,ensure_ascii=False);added=[json.loads(k) for k,n in (collections.Counter(map(sig,full['links']))-collections.Counter(map(sig,old['links']))).items() for _ in range(n)]
+ nr=rows(S,'.csv');pr=rows(P,'.csv');reverse=rows(S,'_reverse.csv');oldreverse=rows(P,'_reverse.csv');course=rows(S,'_by_course.csv');oldcourse=rows(P,'_by_course.csv');delta=rows(S,'_changes.csv');key=lambda x:(x['kind'],x['depth'],x['wylie'],x['english']);nm={key(x):x for x in nr};fields_changed=collections.Counter(k for x in pr for k in x if x[k]!=nm[key(x)][k])
+ missing=[dict(tib=t,pairs=p) for t,p in ev['pairs'].items() if all(x['acip'] is None for x in p)];allmiss=[x for x in full['links'] if x['d']==5 and x['eng'] and not x['tib_acip']];missspans=[x for x in allmiss if x['seg'] is not None];excluded=[x for x in allmiss if x['seg'] is None]
+ check('ACIP evidence population five source-linked spans',len(missspans)==5 and len(excluded)==1 and excluded[0]['id']=='xseg2829ldog');check('ACIP head population7075/7078',len(ev['pairs'])==7078 and len(ev['acip_index'])==7075 and len(missing)==3)
+ check('All six missing-ACIP full-bank rows are unchanged historical links',all(x in old['links'] for x in allmiss))
+ save(R/'acip-incomplete-evidence.json',dict(headwords=7078,proven=7075,missing=3,percentage=100*7075/7078,printed_rounded_percent='100.0%',builder_rejection_threshold_percent=95,unproven_source_linked_span_count=5,full_bank_d5_english_unproven_count=6,missing_heads=missing,unproven_source_linked_spans=missspans,excluded_no_segment_bank_row=excluded,limit='The actual builder excludes non-segment labels before evidence collection. Existing95%floor permits three missing heads; rounded100.0%is not full coverage. No new ACIP enrichment or link change.'))
+ check('C05 exact273coverage',sorted({x['seg'] for x in full['links'] if x['course']=='C05'})==list(range(1,274)));check('Evidence honesty labels',ev['meta']['tier']=='TENTATIVE (machine-matched, unreviewed)' and 'never enters hgm_gloss' in ev['meta']['rule'] and 'never that the correspondence is CORRECT' in ev['meta']['limit'])
+ registered=J(R/'registered-pages.json');pagehash=hashlib.sha256()
+ for x in registered:pagehash.update((S/x['relative_path']).read_text().encode())
+ check('Source-page digest derived from complete registered pages',pagehash.hexdigest()[:16] in ev['meta']['source_pages'])
+ conn=sqlite3.connect((S/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);conn.execute('PRAGMA query_only=ON');check('Current review source ranges independently reopened',conn.execute('PRAGMA query_only').fetchone()[0]==1)
+ reviewdir=S/'data/alignment/reviews_c05/c5p91';review=J(reviewdir/'review.json');spec=J(S/'data/alignment/specs_c05/c5p91.json');tuples=J(reviewdir/'resolved-spans.json');check('Accepted current101tuple interface',review['verdict']=='APPROVE' and review['open_findings']==[] and len(tuples)==101 and [dict(seq=s['seq'],id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng']) for s in spec['segments'] for x in s['spans']]==[{k:x[k] for k in ('seq','id','d','tib','eng')} for x in tuples])
+ for x in tuples:
+  w,e=conn.execute('SELECT wylie,english FROM corpus_segments WHERE course=? AND seq=?',('C05',x['seq'])).fetchone();check('Current accepted range source exact',w[slice(*x['tib_range'])]==x['tib'] and (x['eng_range'] is None if x['eng'] is None else e[slice(*x['eng_range'])]==x['eng']))
+ conn.close()
+ for x in J(R/'input-manifest.json'):
+  cp=R/x['copy']
+  if x['role']=='first isolated view seed; intentionally previous main CSV':continue
+  check('Isolated immutable input remains exact',pin(cp)=={k:x[k] for k in ('bytes','sha256')},x['copy'])
+ for x in J(L/'staged-payload-manifest.json')['files']:check('Actual live frozen12 payload remains equal',pin(W/x['path'])=={k:x[k] for k in ('bytes','sha256')} and (W/x['path']).read_bytes()==(R/'expected-payload'/x['path']).read_bytes(),x['path'])
+ counts=dict(links=len(full['links']),nulls=sum(x['eng'] is None for x in full['links']),notes=sum(len(x) for x in full['notes'].values()),trees=sum(len(x) for x in full['trees'].values()),heads=len(ev['pairs']),pairs=sum(map(len,ev['pairs'].values())),csv_main=len(nr),csv_reverse=len(reverse),csv_course=len(course),csv_changes=len(delta));check('Exact expected output counts',list(counts.values())==[45011,11923,1609,11,7078,15469,22413,22073,23974,28])
+ proof.update(status='PASS',counts=counts,prior_links_retained=len(old['links']),added_links=len(added),added_by_segment=dict(collections.Counter(x['seg'] for x in added)),prior_main_rows=len(pr),prior_reverse_rows=len(oldreverse),prior_course_groups=len(oldcourse),main_existing_fields_changed=dict(fields_changed),acip_metadata_enrichments=[],all_seven_frozen_and_live_complete_bytes_equal=True,checks_total=len(checks),failures=[],scope='Generated-output reproduction and retention only; no finalcommit/staging/MAIN/render approval')
+except BaseException:
+ import traceback
+ proof.update(status='FAILED',failure=traceback.format_exc());raise
+finally:save(R/'retention-checks.json',checks);save(R/'retention-proof.json',proof)
+save(R/'live-after.json',dict(head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=W).decode().strip(),status=subprocess.check_output(['git','status','--porcelain=v1','--untracked-files=no'],cwd=W).decode(),utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))
+print(json.dumps(proof,indent=2))

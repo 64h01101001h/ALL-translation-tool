@@ -1,0 +1,178 @@
+{
+  "status": "PASS_ACTUAL_MEASUREMENT_PREPARATION_ONLY",
+  "baseline": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "counts": {
+    "links": 45275,
+    "nulls": 11934,
+    "notes": 1615,
+    "trees": 11,
+    "heads": 7084,
+    "pairs": 15517,
+    "csv_main": 22491,
+    "csv_reverse": 22151,
+    "csv_course": 24061,
+    "csv_changes": 34
+  },
+  "approved_tuple_count": 146,
+  "approved_nulls": 8,
+  "approved_nonnull_d5": 94,
+  "anchors": 3,
+  "prior_links": 45126,
+  "added_links": 149,
+  "added_by_segment": {
+    "277": 62,
+    "278": 22,
+    "279": 65
+  },
+  "source_date": "2026-09-13",
+  "source_pages": "banked pages, 5 course(s) (sha256 02516e62ba89f2e2)",
+  "registered_pages": 547,
+  "seed": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/landing/previous-main-csv-seed.bin",
+    "bytes": 16175749,
+    "sha256": "5cf481f710b98894d5def968211f33669d7ff1863825be9203470809201b83e1"
+  },
+  "review_freeze": {
+    "bytes": 373480,
+    "sha256": "d744bffe9a7635a7340aee88431bd192b2afe2e063f126f36896b105bc66578f"
+  },
+  "review_frozen_files": 2070,
+  "review_landed_full_pairs": 2071,
+  "payload_manifest": {
+    "bytes": 2187,
+    "sha256": "1337b1cb34a1f481fd4a7cb8e16c56aee050c454e8a0021f5b48567f9c6e0f35"
+  },
+  "payload_source_proof": {
+    "bytes": 11005,
+    "sha256": "93a3ae5d8545a3c8df7058d259b227cd26da715cd151dbf6214b346a1f369ecb"
+  },
+  "actual_root_build_runs": 2,
+  "actual_root_ctest_suites": 17,
+  "actual_root_ctest_seconds": 11.27,
+  "actual_ctest_outer_seconds": 11.308549750130624,
+  "acip": {
+    "heads": 7084,
+    "proven": 7081,
+    "missing_heads": [
+      {
+        "tib": "kA ri kA",
+        "pairs": [
+          {
+            "eng": "Karika",
+            "refs": [
+              "C05:30",
+              "C05:31"
+            ],
+            "n": 2,
+            "acip": null
+          },
+          {
+            "eng": "karika",
+            "refs": [
+              "C05:31"
+            ],
+            "n": 1,
+            "acip": null
+          }
+        ]
+      },
+      {
+        "tib": "ko ShA",
+        "pairs": [
+          {
+            "eng": "kosha",
+            "refs": [
+              "C05:31"
+            ],
+            "n": 1,
+            "acip": null
+          }
+        ]
+      },
+      {
+        "tib": "manydzu goh ShA",
+        "pairs": [
+          {
+            "eng": "Manjugoshaya",
+            "refs": [
+              "C01:41"
+            ],
+            "n": 1,
+            "acip": null
+          }
+        ]
+      }
+    ],
+    "source_linked_missing": [
+      {
+        "course": "C01",
+        "page": "c1p01",
+        "seg": 41,
+        "id": "s41w3",
+        "d": 5,
+        "tib": "manydzu goh ShA",
+        "tib_acip": null,
+        "eng": "Manjugoshaya",
+        "case": false
+      },
+      {
+        "course": "C05",
+        "page": "c5p10",
+        "seg": 30,
+        "id": "s30w3",
+        "d": 5,
+        "tib": "kA ri kA",
+        "tib_acip": null,
+        "eng": "Karika",
+        "case": false
+      },
+      {
+        "course": "C05",
+        "page": "c5p11",
+        "seg": 31,
+        "id": "s31w18",
+        "d": 5,
+        "tib": "ko ShA",
+        "tib_acip": null,
+        "eng": "kosha",
+        "case": false
+      },
+      {
+        "course": "C05",
+        "page": "c5p11",
+        "seg": 31,
+        "id": "s31w20",
+        "d": 5,
+        "tib": "kA ri kA",
+        "tib_acip": null,
+        "eng": "karika",
+        "case": false
+      },
+      {
+        "course": "C05",
+        "page": "c5p11",
+        "seg": 31,
+        "id": "s31w6",
+        "d": 5,
+        "tib": "kA ri kA",
+        "tib_acip": null,
+        "eng": "Karika",
+        "case": false
+      }
+    ],
+    "excluded_no_segment": [
+      {
+        "course": "C01",
+        "page": "r2",
+        "seg": null,
+        "id": "xseg2829ldog",
+        "d": 5,
+        "tib": "ldog",
+        "tib_acip": null,
+        "eng": "stop",
+        "case": false
+      }
+    ]
+  },
+  "candidate_executions": 0
+}

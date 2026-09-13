@@ -1,0 +1,96 @@
+{
+  "status": "FROZEN_SCOPED_TOOLING_REVIEW",
+  "utc": "2026-09-13T18:11:55.967186+00:00",
+  "files": {
+    "added-statements.json": {
+      "bytes": 2236,
+      "sha256": "64d8c02ceb176710df3985e19257f0db352be19649a47af368bc197644521d25"
+    },
+    "independently-derived.diff.txt": {
+      "bytes": 4058,
+      "sha256": "01187c277a47c979b6d2470505a183bd7e39ad7c5da5ad0885bd0229c11ca72b"
+    },
+    "input-manifest.json": {
+      "bytes": 3824,
+      "sha256": "71f4ab49b4a17419d55a812d71501b630cccc2791accab5a0e46879776d1bf61"
+    },
+    "inputs/actual-candidate.py.txt": {
+      "bytes": 6145,
+      "sha256": "1cfe6a27799b478231564c83596039bba00216bccdcf9f84cb5f0d40f3d5f34f"
+    },
+    "inputs/actual-old.py.txt": {
+      "bytes": 4455,
+      "sha256": "d3c78d495849126439c7dc2c42664e1954345497743bd5154d7d956a32170e4c"
+    },
+    "inputs/prepared-candidate.py.txt": {
+      "bytes": 6145,
+      "sha256": "1cfe6a27799b478231564c83596039bba00216bccdcf9f84cb5f0d40f3d5f34f"
+    },
+    "inputs/prepared-complete.diff.txt": {
+      "bytes": 4058,
+      "sha256": "01187c277a47c979b6d2470505a183bd7e39ad7c5da5ad0885bd0229c11ca72b"
+    },
+    "inputs/prepared-old.py.txt": {
+      "bytes": 4455,
+      "sha256": "d3c78d495849126439c7dc2c42664e1954345497743bd5154d7d956a32170e4c"
+    },
+    "inputs/recorder-original.py.txt": {
+      "bytes": 845,
+      "sha256": "b42e8b74d929704657e11e0349a3f619f2d43c2e37544a8083ee082ccfd44b74"
+    },
+    "inputs/run_generator_readonly.py.txt": {
+      "bytes": 666,
+      "sha256": "584e87317a295d3bfb0e2bbd96d7c69a2497286c728f75d64f01dc0aa4ba2747"
+    },
+    "inputs/wrap_alignment_page.py.txt": {
+      "bytes": 6718,
+      "sha256": "d7a796ea298f635ffa2bc3270cd6b144773ae7d22f75566a46cd79c5bb694d30"
+    },
+    "proof.json": {
+      "bytes": 1376,
+      "sha256": "c5076a805ce5343109ca9c389a7f2af01d181cf966a1438900e1f12a4e465394"
+    },
+    "record_command.py": {
+      "bytes": 845,
+      "sha256": "b42e8b74d929704657e11e0349a3f619f2d43c2e37544a8083ee082ccfd44b74"
+    },
+    "report.md": {
+      "bytes": 5222,
+      "sha256": "8f76b8533a3bbe592e65b29ddf59720a3edffd37f149e702e6632d1cab8ed348"
+    },
+    "review.json": {
+      "bytes": 708,
+      "sha256": "e8033cd9bf7e7951bcd06730bb25c067786fd3e2b67d87eced07b2326779132c"
+    },
+    "review_sources.py": {
+      "bytes": 5456,
+      "sha256": "aecfb34166a5aef8aa6c1c9c0d0136bf5b7c6ff31e51ac9a05df52f6ed9c4faa"
+    },
+    "source-check01/execution.json": {
+      "bytes": 423,
+      "sha256": "45e80d0e59f1d6a50ae982014f50f8c66109a39e7ff05589d87b91c884fb0670"
+    },
+    "source-check01/exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "source-check01/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source-check01/stdin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source-check01/stdout": {
+      "bytes": 1376,
+      "sha256": "c5076a805ce5343109ca9c389a7f2af01d181cf966a1438900e1f12a4e465394"
+    }
+  },
+  "file_count": 21,
+  "total_bytes": 59013,
+  "excluded": [
+    "freeze.json"
+  ],
+  "boundary": "Later caller stdout/exit is external and not self-covered."
+}

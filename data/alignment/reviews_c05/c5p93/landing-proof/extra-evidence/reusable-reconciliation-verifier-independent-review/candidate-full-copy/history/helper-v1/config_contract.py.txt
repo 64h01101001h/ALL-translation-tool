@@ -1,0 +1,56 @@
+"""Small read-only config/schema checks. No SQL, Git, output writes or imports of producers."""
+from pathlib import Path
+import hashlib,json,re
+
+def pinned(ref):
+ assert set(ref)=={'path','bytes','sha256'}
+ p=Path(ref['path']);assert p.is_absolute() and p.is_file()
+ assert type(ref['bytes'])is int and ref['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',ref['sha256'])
+ raw=p.read_bytes();assert len(raw)==ref['bytes'] and hashlib.sha256(raw).hexdigest()==ref['sha256']
+ assert p.read_bytes()==raw
+ return raw
+
+def batch_counts(sequences,records):
+ assert len(sequences)==3 and all(type(s)is int and s>0 for s in sequences)
+ assert sequences==list(range(sequences[0],sequences[0]+3))
+ assert [r['seq']for r in records]==sequences
+ totals=dict(spans=0,nulls=0,d5_nonnull=0)
+ for r in records:
+  c=r['counts'];assert set(c)==set(totals) and all(type(x)is int for x in c.values())
+  assert c['spans']>0 and 0<=c['nulls']<=c['spans'] and 0<=c['d5_nonnull']<=c['spans']-c['nulls']
+  for k in totals:totals[k]+=c[k]
+ return totals
+
+def original_inventory(spec_records,identity_records):
+ expected={}
+ for r in spec_records:
+  for sp in r['spans']:
+   key=(r['angle'],r['seq'],sp['id']);assert key not in expected;expected[key]=sp
+ keys=[(r['angle'],r['seq'],r['id'])for r in identity_records]
+ assert len(keys)==len(set(keys))==len(expected) and set(keys)==set(expected)
+ for r,key in zip(identity_records,keys):
+  sp=expected[key];assert r['original_span']==sp and r['original_field_presence']==list(sp)
+  assert all(r[k]==sp[k]for k in ['id','d','tib','eng'])
+ return len(expected)
+
+def bind_query(query,descriptor,binding):
+ kind=binding['kind']
+ if kind=='standalone':assert set(binding)=={'kind'};source=descriptor
+ elif kind=='query_list':
+  assert set(binding)=={'kind','index'} and isinstance(descriptor,list)
+  i=binding['index'];assert type(i)is int and 0<=i<len(descriptor);source=descriptor[i]
+ elif kind=='hgm_results':
+  assert set(binding)=={'kind','term'} and isinstance(descriptor,dict)
+  assert descriptor['parameters_per_term']=='[term,term]'
+  term=binding['term'];assert isinstance(term,str)and term in descriptor['results']
+  source={'sql':descriptor['sql'],'parameters':[term,term],'rows':descriptor['results'][term]}
+ else:raise AssertionError('Unsupported genuine query descriptor schema')
+ assert isinstance(source,dict)
+ for key in ['sql','parameters','rows']:assert query[key]==source[key],key
+ assert isinstance(query['sql'],str) and query['sql'].lstrip().upper().startswith('SELECT ')
+ assert isinstance(query['parameters'],list)and isinstance(query['rows'],list)
+ assert ('count'in query)==('count'in source),'Count presence differs from the actual original descriptor'
+ if 'count'in source:
+  assert type(source['count'])is int and type(query['count'])is int
+  assert query['count']==source['count']==len(query['rows'])
+ return len(query['rows'])

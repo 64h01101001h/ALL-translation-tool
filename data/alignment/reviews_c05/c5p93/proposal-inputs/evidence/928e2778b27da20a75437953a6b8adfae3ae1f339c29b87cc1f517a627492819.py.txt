@@ -1,0 +1,23 @@
+from pathlib import Path
+import json,runpy,hashlib
+O=Path(__file__).resolve().parent;E=O.parent;B=O.parents[1];Parse=runpy.run_path(str(O/'parse_canonical.py'))['Parse'];sources={r['seq']:r for r in json.loads((B/'source.json').read_bytes())};allfail=[]
+for seq in [277,278,279]:
+ d=E/str(seq);ss=json.loads((d/'spec.json').read_bytes())['segments'][0];dec=json.loads((d/'occurrence-declarations.json').read_bytes());body=(d/'body.html').read_bytes();p=Parse();p.feed(body.decode());assert len(p.out)==2
+ checks=[];gaps={};failure=[]
+ for side,text,res in [('tib',sources[seq]['wylie'],p.out[0]),('eng',sources[seq]['english'],p.out[1])]:
+  assert res['text']==text
+  for q in dec['declarations']:
+   r=res['ranges'].get('s'+str(seq)+q['id']);expect=q[side];ok=(r is None and expect is None)or(r is not None and expect is not None and (r['start'],r['end'])==(expect['start'],expect['end']))
+   checks.append(dict(id=q['id'],side=side,actual=r,expected=expect,match=ok))
+   if not ok:failure.append(checks[-1])
+  flat=sorted([r for r in res['ranges'].values()if r['depth']!=7],key=lambda r:r['start']);cursor=0;gs=[]
+  for r in flat:
+   assert r['start']>=cursor
+   if cursor<r['start']:gs.append(dict(start=cursor,end=r['start'],text=text[cursor:r['start']]))
+   cursor=r['end']
+  if cursor<len(text):gs.append(dict(start=cursor,end=len(text),text=text[cursor:]))
+  gaps[side]=gs
+ attempt=len(list(d.glob('range-proof-attempt*.json')))+1
+ (d/f'range-proof-attempt{attempt:02d}.json').write_text(json.dumps(dict(status='FAIL'if failure else'PASS',full_source_both_sides=True,records=checks,failures=failure),ensure_ascii=False,indent=2)+'\n')
+ (d/f'unwrapped-attempt{attempt:02d}.json').write_text(json.dumps(gaps,ensure_ascii=False,indent=2)+'\n');allfail+= [dict(seq=seq,**r)for r in failure]
+print(json.dumps(dict(failures=allfail),indent=2));assert not allfail

@@ -1,0 +1,28 @@
+{
+  "status": "PASS_PREPARATION_STATIC_ONLY",
+  "candidates": {
+    "freeze-final-payload-before-staging.py": {
+      "bytes": 8218,
+      "sha256": "02f4bff23dfe604f62f4a21bdd37ff1daacd7bba4ca057176717a31c7a79cdfc"
+    },
+    "bank_root_proofs_through279.py": {
+      "bytes": 17890,
+      "sha256": "4fda2995ef53e3b9fe64c4d6ca30b8eb7f73f661d0dbcfc4c4cfe42d844428ba"
+    }
+  },
+  "BASE": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "actual_incoming_links": 45126,
+  "actual_current_boundary": 276,
+  "prospective_page": 93,
+  "prospective_coverage": 279,
+  "prospective_remaining": 232,
+  "next_uncovered": "280-511",
+  "actual_helper_Git_generator_build_query_test_calls": 0,
+  "syntax_checks": 2,
+  "material_changes_requiring_independent_review": [
+    "Replace fixed115 with approved spec-bound span counts plus3 anchors; preserve baseline45126",
+    "Require complete exact9-key baseline/build output inventory (7 generated outputs plus2 source archives)",
+    "Replace batch-specific correction-history requirements with root-supplied universal interfaces and explicit full extra-input history contract"
+  ],
+  "all_consumed_original_copy_bytes_rechecked": true
+}

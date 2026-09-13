@@ -1,0 +1,8 @@
+{
+  "event": "Read-only lookup failure, no candidate execution",
+  "command": "rg -n 'suffix|\\.txt|\\.json|\\.bin' campaign-worktree/tools/land_reviewed_page.py",
+  "exit": 2,
+  "stderr": "rg: campaign-worktree/tools/land_reviewed_page.py: IO error for operation on campaign-worktree/tools/land_reviewed_page.py: No such file or directory (os error 2)\n",
+  "context": "The lookup followed full cat reads of source.json, schema-contract.json and both diffs in the same read-only tool command. Those inputs are preserved in full. This records the tool-observed failure; it is not a newly rerun command or a fabricated raw outer-caller capture.",
+  "disposition": "No requirement or approval depends on this absent-path lookup. No source or candidate change. A subsequent filename-only search exposed names, not current original/reconciled content."
+}

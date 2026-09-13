@@ -1,0 +1,41 @@
+from pathlib import Path
+import ast,datetime,difflib,hashlib,json,os,subprocess
+B=Path(__file__).parent;W=B.parents[1]/'campaign-worktree';O=B/'page-banking-root-review';O.mkdir()
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+base=read(B/'baseline.json')['commit'];results=[];bindings=[]
+for folder,sha,manifest in [('page-banking-preparation','572124f1cf6815176a7eb6dd9718a932144e11e2be380b3eb8f3948a0c4fd9dc','input-manifest.json'),('page-banking-review','a873810864540e3c24baed72065a5be1e2e6d66e3d09fd6f7e072be7ed848d3a','original-to-copy-manifest.json')]:
+ d=B/folder;assert pin(d/'freeze.json')['sha256']==sha
+ fs=read(d/'freeze.json')['files'];fs=fs if isinstance(fs,dict) else {x['path']:x for x in fs}
+ assert set(fs)=={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}
+ for n,r in fs.items():assert pin(d/n)=={k:r[k] for k in ['bytes','sha256']}
+ maps=read(d/manifest)
+ for r in maps:
+  p=Path(r['original']);c=d/r['copy'];assert c.resolve().is_relative_to(d.resolve())
+  assert pin(c)=={k:r[k] for k in ['bytes','sha256']} and c.read_bytes()==p.read_bytes()
+  for k in ['resolved','resolved_original']:
+   if k in r:assert str(p.resolve())==r[k]
+  if 'symlink' in r:assert (os.readlink(p) if p.is_symlink() else None)==r['symlink']
+  row=dict(r,copy=str(c))
+  if p.is_relative_to(W):
+   rel=str(p.relative_to(W));commit=r.get('original_git_commit',base);argv=['git','show',commit+':'+rel]
+   x=subprocess.run(argv,cwd=W,capture_output=True,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+   stem='git-'+str(len(bindings))
+   for n,v in [('stdout',x.stdout),('stderr',x.stderr),('exit',(str(x.returncode)+'\n').encode())]:(O/(stem+'.'+n)).write_bytes(v)
+   (O/(stem+'.command.json')).write_text(json.dumps(dict(argv=argv,cwd=str(W),exit=x.returncode),indent=2)+'\n')
+   assert x.returncode==0 and not x.stderr and x.stdout==c.read_bytes()
+   row.update(original_git_commit=commit,repository_relative_path=rel)
+  bindings.append(row)
+ results.append(dict(folder=folder,freeze=pin(d/'freeze.json'),files=len(fs),mappings=len(maps)))
+p=B/'page-banking-preparation'
+for kind,name in [('payload','freeze-final-payload-before-staging.py'),('banking','bank_root_proofs_through279.py')]:
+ old=(p/('inputs/prior-'+kind+'.py.txt')).read_text();new=(p/name).read_text();ast.parse(new)
+ assert ''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior-'+kind,tofile='candidate-'+kind))==(p/(kind+'.diff.txt')).read_text()
+review=read(B/'page-banking-review/review.json')
+assert review['spec_verdict']==review['quality_verdict']=='APPROVE' and review['open_findings']==[]
+for n,v in review['candidate_pins'].items():assert pin(p/n)==v
+(O/'original-bindings.json').write_text(json.dumps(bindings,indent=2)+'\n')
+out=dict(status='APPROVE_CODE_ONLY_CONDITIONAL_RUNTIME',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=base,reviewed=results,source_maps=len(bindings),candidate_pins=review['candidate_pins'],root_full_code_diffs_and_report_read=True,execution_performed=False,conditions=['Actual final semantic approval and full identity required.','Nonempty actual errata or allowances blocks this unchanged candidate; separate narrow review required.','Root must inventory every actual caller and correction/version history; universal HISTORY is not exhaustive.','Exact full actual builds,17 tests,retention,reproduction,payload and later whitespace/stage gates remain.'])
+(O/'proof.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))
+

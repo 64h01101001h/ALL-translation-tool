@@ -1,0 +1,62 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "code": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-reproduction-closure-preparation/close-evidence.py.txt",
+      "bytes": 4879,
+      "sha256": "7b3db3b8d72a5adf97054c8dd17f4011843ebfff28b0c72a767ba1442150807f",
+      "full_inverse_exact": true,
+      "full_diff_exact": true,
+      "compiled_only": true
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-reproduction-closure-preparation/accept-independent-reproduction-root.py",
+      "bytes": 10075,
+      "sha256": "10e6ec30c73654989f6c18beae2ea92fefe9a9bf42e5f794824a009d4bca1f72",
+      "full_inverse_exact": true,
+      "full_diff_exact": true,
+      "compiled_only": true
+    }
+  ],
+  "materialization": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-reproduction-closure-preparation/close-evidence.py.txt",
+      "copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction/close-evidence.py.txt"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-reproduction-closure-preparation/accept-independent-reproduction-root.py",
+      "copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/accept-independent-reproduction-root.py"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction/close-evidence.py.txt"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction",
+      "capture": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction/caller-runs/close-evidence"
+    },
+    {
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/accept-independent-reproduction-root.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279",
+      "capture": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reproduction-root-acceptance-caller"
+    }
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "between_commands": "Successful actual close-evidence full capture then complete runtime freeze; separate root release required.",
+  "contract": {
+    "bytes": 5230,
+    "sha256": "7cd5977b28382300bb71e773c5a113d73be80317614f20bebcaf6d492850fca2"
+  },
+  "candidate_executions": 0
+}

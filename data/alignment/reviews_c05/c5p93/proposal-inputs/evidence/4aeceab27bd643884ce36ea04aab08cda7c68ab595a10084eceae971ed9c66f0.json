@@ -1,0 +1,13 @@
+{
+  "angle": "tibetan",
+  "source": "lexical-queries-full.json",
+  "term": "rgyang ring thung",
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "rgyang ring thung",
+    "rgyang ring thung"
+  ],
+  "count": 0,
+  "rows": [],
+  "independently_reopened": true
+}

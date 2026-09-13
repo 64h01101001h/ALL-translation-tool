@@ -1,0 +1,216 @@
+{
+  "status": "APPROVE",
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "course": "C05",
+  "page": "c5p93",
+  "baseline_commit": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "reviewer_role": "Reused-context independent Codex model; non-author of current originals and reconciliation; not human certification.",
+  "segments": [
+    {
+      "seq": 277,
+      "span_count": 61,
+      "null_count": 6,
+      "word_pair_count": 39,
+      "spec_sha256": "88c1c69c1f210490636fc1ad5dd22cd0d0fbcbb6455c9ac7a11396f0710f61df",
+      "spec_bytes": 9757,
+      "body_sha256": "10e2ffd370ea12198c7fc82b51eb9eee5059a06df6763faf52770e20303681ba",
+      "body_bytes": 9842,
+      "generator_exit": 0
+    },
+    {
+      "seq": 278,
+      "span_count": 21,
+      "null_count": 0,
+      "word_pair_count": 14,
+      "spec_sha256": "09cd78ef62f1c88b51dbabed4513e707c9b8775fad4d875b66e09906e1f4b9d6",
+      "spec_bytes": 3440,
+      "body_sha256": "ff35009ad220f3fe4c3b98fbb1e6a8b8019a5dc70da219b6087623f07bd14eea",
+      "body_bytes": 3681,
+      "generator_exit": 0
+    },
+    {
+      "seq": 279,
+      "span_count": 64,
+      "null_count": 2,
+      "word_pair_count": 41,
+      "spec_sha256": "f1dd7dca733ac62302197c18faa0895b114201570f2fa234260e38d71774200b",
+      "spec_bytes": 9494,
+      "body_sha256": "7a7b33869df6873f06dcfd521c579d7f319df50f9160f207816f6566d78e50fb",
+      "body_bytes": 9456,
+      "generator_exit": 0
+    }
+  ],
+  "total_spans": 146,
+  "total_nulls": 8,
+  "total_word_pairs": 94,
+  "d7_members": 4,
+  "original_dispositions": {
+    "retained": 243,
+    "recast": 26,
+    "omitted": 2
+  },
+  "actual_current_canonical_runs": 3,
+  "actual_query_replays": 217,
+  "original_raw_objects": 805,
+  "errata": [],
+  "allowances": {},
+  "report": {
+    "bytes": 33600,
+    "sha256": "e160357bcffc3113290aa7e37dc891784d64681d52c9708dac8f240de751fb4e"
+  },
+  "checklist": [
+    {
+      "id": "ROLE_AND_GOVERNING",
+      "status": "APPROVE",
+      "disposition": "Non-author reused model role; full current protocols and fixed Git inputs.",
+      "evidence": [
+        "governing-git-proof.json",
+        "source-version-transport.json"
+      ]
+    },
+    {
+      "id": "COMPLETE_INPUT_READING",
+      "status": "APPROVE",
+      "disposition": "Whole799932-byte package and material originals/history fully read.",
+      "evidence": [
+        "input-boundary.json",
+        "material-parallels-full.json.txt",
+        "additional-master-reading.json"
+      ]
+    },
+    {
+      "id": "SOURCE_AND_RAW_OBJECTS",
+      "status": "APPROVE",
+      "disposition": "217 actual RO/query_only replays,805 raw originals, unchanged sources.",
+      "evidence": [
+        "query-reopen-proof.json",
+        "full-original-object-proof.json",
+        "evidence-packaging-proof.json"
+      ]
+    },
+    {
+      "id": "PHYSICAL_PROVENANCE",
+      "status": "APPROVE",
+      "disposition": "Whole originals and23 current exact extents; historical PDF visual reading preserved with limits.",
+      "evidence": [
+        "physical-reopen-proof.json",
+        "source-alias-transport.json"
+      ]
+    },
+    {
+      "id": "CANONICAL",
+      "status": "APPROVE",
+      "disposition": "Three actual current final runs, exact bodies, no rerun.",
+      "evidence": [
+        "canonical-proof.json"
+      ]
+    },
+    {
+      "id": "EVERY_FINAL_SPAN",
+      "status": "APPROVE",
+      "disposition": "146 individual substantive judgments.",
+      "evidence": [
+        "independent-span-judgments.json",
+        "resolved-full-objects.json"
+      ]
+    },
+    {
+      "id": "EVERY_ORIGINAL",
+      "status": "APPROVE",
+      "disposition": "271 full identities and separate disposition judgments.",
+      "evidence": [
+        "independent-original-disposition-judgments.json"
+      ]
+    },
+    {
+      "id": "OMISSIONS_AND_NULLS",
+      "status": "APPROVE",
+      "disposition": "25 material explanations, complete complements,8 positively supported nulls.",
+      "evidence": [
+        "independent-omission-judgments.json",
+        "structural-proof.json"
+      ]
+    },
+    {
+      "id": "MEMBERS_AND_OCCURRENCES",
+      "status": "APPROVE",
+      "disposition": "Four strict d7 members and every repeated range verified.",
+      "evidence": [
+        "resolved-spans.json",
+        "structural-proof.json"
+      ]
+    },
+    {
+      "id": "ERRATA",
+      "status": "APPROVE",
+      "disposition": "All six suspicions refuted under five grounds; no retained errata.",
+      "evidence": [
+        "independent-errata-rulings.json",
+        "bank-ready-errata.json"
+      ]
+    },
+    {
+      "id": "HEAD_ALLOWANCES",
+      "status": "APPROVE",
+      "disposition": "Actual predicate zero hits; canonical{}.",
+      "evidence": [
+        "head-predicate-proof.json",
+        "span-head-allow-needed.json"
+      ]
+    },
+    {
+      "id": "FAILURE_HISTORY",
+      "status": "APPROVE",
+      "disposition": "Full original/reconciler/root/reviewer failures and version transports retained.",
+      "evidence": [
+        "historical-helper-identity.json",
+        "source-version-transport.json",
+        "history/collection-boundary/original-to-copy-manifest.json"
+      ]
+    },
+    {
+      "id": "PRESERVATION",
+      "status": "APPROVE",
+      "disposition": "Complete original/copy bytes, historical aliases, nine baseline pins, current canonical files, whole-tree supported suffixes and unchanged spine verified.",
+      "evidence": [
+        "original-to-copy-manifest.json",
+        "evidence-packaging-proof.json",
+        "packaging-final-proof.json",
+        "manifest-transition-proof.json"
+      ]
+    }
+  ],
+  "limits": [
+    "Machine semantic review only; PROVISIONAL labels remain.",
+    "Digital/physical repetition is not proof of independent publication or ingestion.",
+    "No source promotion, landing, build/global check, MAIN, native, phone or render acceptance.",
+    "Historical source-only queries/renders and failed attempts are not newly executed current canonical proof."
+  ],
+  "preservation": {
+    "manifest_records": 1633,
+    "distinct_manifest_targets": 805,
+    "full_aliases": 1634,
+    "manifest_sha256": "3650eaa9efba8b8c7c5281814d9f2b396b3eabc2e20239968564cce5fb0269f4",
+    "governing_objects": 13
+  },
+  "final_preflight": {
+    "path": "packaging-final-proof.json",
+    "bytes": 923,
+    "sha256": "888702672ba9b975beb561b476aa8ba69b2c80c6874b803a08a4fc2a00a03b87"
+  },
+  "completed_at": "2026-09-13T19:03:38.417275+00:00",
+  "freeze_contract": {
+    "path": "freeze.json",
+    "files_schema": "DICT mapping every relative regular-file path to bytes and sha256",
+    "excluded_path": "Only the actual top-level freeze.json itself",
+    "no_nested_freeze_exclusions": true
+  },
+  "evidence_manifest": {
+    "path": "evidence-pins.json",
+    "bytes": 373111,
+    "sha256": "03796d97f769bd7f612014ef240cf7c0db233027f0c1950f868b7f25e798642b"
+  }
+}

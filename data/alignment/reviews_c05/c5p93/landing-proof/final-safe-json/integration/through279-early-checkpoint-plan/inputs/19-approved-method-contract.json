@@ -1,0 +1,80 @@
+{
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "NEEDS_CORRECTION",
+  "scope": "Private diagnostic method only; no execution release or consumer acceptance",
+  "fixed_data_closure": "inputs/authoritative-closure.json",
+  "target": {
+    "course": "C05",
+    "seq": [
+      274,
+      275,
+      276
+    ]
+  },
+  "exact_proposed_pack_invocation": {
+    "argv": [
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-private-drill-pack-runtime/bin/build_drill_pack",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-private-drill-pack-runtime/drills.json",
+      "4000",
+      "C05 through 276; fixed f114fcb7a5a899b939ffc948ae9fdbbb746541fa"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-private-drill-pack-runtime/inputs",
+    "environment": {
+      "GIT_OPTIONAL_LOCKS": "0",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "binary_materialization": "Exact independently accepted existing binary copied into runtime/bin; otherwise exact newly built external binary with complete provenance. Neither has been released here."
+  },
+  "exact_conditional_build_commands": [
+    {
+      "argv": [
+        "cmake",
+        "-S",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-private-drill-pack-runtime/build",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DALL_AUDIO=ON"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-private-drill-pack-runtime"
+    },
+    {
+      "argv": [
+        "cmake",
+        "--build",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-private-drill-pack-runtime/build",
+        "-j8",
+        "--target",
+        "build_drill_pack"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-private-drill-pack-runtime"
+    }
+  ],
+  "execution_count_now": 0,
+  "pack_run_limit": 1,
+  "source_provenance_prerequisite": {
+    "existing_binary": "BLOCKED unless root accepts complete current transitive-source-to-binary provenance; no producing commit inferred",
+    "new_build": "Fresh external build from fixed accepted current-source bytes; complete configured toolchain/library/SDK/cache/compile/link/dependency records and all compiled project source/header pins; no gate overrides or source changes"
+  },
+  "materialization": [
+    "Require runtime/output/build absence and reject symlink redirection into WT/MAIN",
+    "Copy exactly accepted full and evidence JSON into inputs/data/alignment; compare full bytes and pins to accepted originals before and after",
+    "Verify resolved absolute spine path, full bytes/hash and alias before and after",
+    "Preserve exact released executable in runtime/bin with mode/hash; before and after identity",
+    "Record full actual argv/cwd/environment/streams/exit outside frozen original preparation; preserve interrupted/failed partial output"
+  ],
+  "required_two_validation_layers": [
+    "Exact current scanner/selection/declared output transformation behavior",
+    "Decoded accepted source text/count/ref identity: any affected emitted corruption fails consumer fidelity even if first layer passes"
+  ],
+  "failure_boundaries": [
+    "CP276-01 emitted truncated English or incorrect n/ranking fails faithful propagation; do not install or describe output as validated",
+    "JSON missing array/schema/stamp/output truncation, input drift or suppressed query error is failure",
+    "Unexpected omission/unknown attribution is not acceptance; retain corpus-versus-alignment and non-exported provenance distinctions",
+    "No automatic second generator run; no code/cap/data normalization in this task"
+  ],
+  "per_array_method": "report.md Selection and validation contract: every element, full diffs/order/count, exact274–276 and C13 direct/nested inspection",
+  "native_phone_MAIN": "No native/QSettings/phone/deploy or current MAIN clearance in this approval",
+  "determinism": "Conditional code/input/platform/library/query-order property; one run cannot certify repeat equality"
+}

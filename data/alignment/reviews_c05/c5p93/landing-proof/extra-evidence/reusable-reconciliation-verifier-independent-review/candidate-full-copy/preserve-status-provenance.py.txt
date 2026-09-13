@@ -1,0 +1,9 @@
+from pathlib import Path
+import hashlib,json
+P=Path(__file__).resolve().parent;B=P.parent/'C05-277-279';rows=[]
+d=P/'status-provenance';d.mkdir()
+for stem in ['status','head']:
+ for suffix in ['command.json','stdin','stdout','stderr','exit']:
+  src=B/'root-reconciliation-verification'/f'{stem}.{suffix}';raw=src.read_bytes();dst=d/src.name;dst.write_bytes(raw);assert dst.read_bytes()==src.read_bytes()==raw
+  rows.append({'original':str(src),'copy':str(dst.relative_to(P)),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()})
+(P/'status-provenance-map.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps({'pairs':len(rows),'bytes_equal':True}))

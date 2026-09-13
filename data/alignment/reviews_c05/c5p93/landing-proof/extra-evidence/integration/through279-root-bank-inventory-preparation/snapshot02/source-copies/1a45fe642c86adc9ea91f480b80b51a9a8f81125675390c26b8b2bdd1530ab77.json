@@ -1,0 +1,86 @@
+{
+  "status": "FROZEN_PREPARATION_PENDING_ROOT_REVIEW",
+  "candidate_pins": {
+    "whitespace279.py": {
+      "bytes": 18898,
+      "sha256": "b38c18aa63a82a3e9fbf83a118160c1ab91509b8e8a6e038bfae69d7bd129144"
+    },
+    "verify_staged_through279.py": {
+      "bytes": 40212,
+      "sha256": "39a2908b2db4effb9468e9587d0e28b4dcd828ae4ac8fce99368a723973a211f"
+    }
+  },
+  "BASE": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "runtime_release": "Separate fresh runtime directory and exact complete original-to-copy map; no append to preparation. Whitespace HERE snapshots/descriptors require root acceptance of actual finalized bytes.",
+  "whitespace_argv_template": [
+    "python3",
+    "-B",
+    "<released whitespace279.py>",
+    "<prepare OR audit>",
+    "--worktree",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "--review",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/semantic-review",
+    "--root-manifest",
+    "<actual ordinary root manifest>",
+    "--root-manifest-bank-path",
+    "data/alignment/reviews_c05/c5p93/landing-proof/root-proof-copy-manifest-before-whitespace.json",
+    "--physical-descriptors",
+    "<runtime physical-source-descriptors.json>",
+    "--raw-log",
+    "<actual staged diagnostic stdout>",
+    "--raw-stderr",
+    "<actual staged diagnostic stderr>",
+    "--raw-exit",
+    "<actual staged diagnostic exit>",
+    "--raw-command",
+    "<actual staged diagnostic command.json>",
+    "--build-proof",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/landing/canonical-builds-once.json",
+    "--output",
+    "<fresh external output>"
+  ],
+  "audit_additional_arguments": [
+    "--prepared",
+    "<actual independently reviewed whitespace prepare output>"
+  ],
+  "staging_argv_template": [
+    "python3",
+    "-B",
+    "<released verify_staged_through279.py>",
+    "--worktree",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "--batch",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279",
+    "--output",
+    "<fresh external staging output>",
+    "--untracked-before",
+    "<actual PRE-ORDINARY capture.stdout>",
+    "--whitespace-proof",
+    "<actual reviewed audit source-whitespace-proof.json>",
+    "--whitespace-log",
+    "<actual exact diagnostic stdout>",
+    "--payload-manifest",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/landing/staged-payload-manifest.json",
+    "--payload-source-proof",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/landing/staged-payload-source-proof.json",
+    "--banking-ordinary-run",
+    "<actual external ordinary run>",
+    "--banking-final-run",
+    "<actual external final-whitespace run>"
+  ],
+  "placeholders": "Unknown actual inputs, never paths/files to fabricate. No current candidate invocation.",
+  "required_runtime_detail": "runtime-prerequisites.md",
+  "material_review_item": "Staging closure path/status/head-field adaptation to actual through276 fixed-data closure; current MAIN applicability remains unclaimed.",
+  "no_new_predicate_or_retention_algorithm": true,
+  "current_banking_preparation_freeze": {
+    "bytes": 4016,
+    "sha256": "572124f1cf6815176a7eb6dd9718a932144e11e2be380b3eb8f3948a0c4fd9dc"
+  },
+  "current_banking_release_not_assumed": true
+}

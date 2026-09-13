@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,gzip,hashlib,re,os
+O=Path(__file__).resolve().parent;B=O.parents[1];ROOT=B.parents[1];E=O/'evidence'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+source=json.loads((O/'inputs/source.json').read_bytes());queries=json.loads((E/'corpus-full-queries.json').read_bytes());corpus=json.loads(gzip.decompress((O/'inputs/full_parallel_corpus_v32.json.gz').read_bytes()));by={}
+for r in corpus:by.setdefault(r['course'],[]).append(r)
+checks=[]
+for i,q in enumerate(queries):
+ for r in q['rows']:
+  assert json.loads(r['raw'])==by[r['course']][r['seq']-1];checks.append(dict(query=i,course=r['course'],seq=r['seq'],raw_full_original_equal=True))
+(E/'all-corpus-query-original-proof.json').write_text(json.dumps(dict(corpus=pin((O/'inputs/full_parallel_corpus_v32.json.gz').read_bytes()),checks=checks),indent=2)+'\n')
+par=[]
+for src,q in zip(source,queries[:3]):
+ par.append(dict(seq=src['seq'],query=q['sql'],parameters=q['parameters'],rows=[dict(course=r['course'],seq=r['seq'],fields_equal_to_selected={k:r[k]==src[k]for k in ['acip','wylie','english']})for r in q['rows']]))
+(E/'parallel-field-identity.json').write_text(json.dumps(par,indent=2)+'\n')
+pb=(O/'inputs/C05ReadingASCII.txt').read_bytes();starts=[182145,182702,183819,184000,184440,185012];ends=[182702,183819,184000,184440,185012,pb.index(b'GZHAN YANG , DPAL CHOS',185012)];physical=[]
+for i,(a,z) in enumerate(zip(starts,ends)):
+ src=source[i//2];f=['acip','english'][i%2];raw=pb[a:z];name=f'physical-{src["seq"]}-{f}.raw';(E/name).write_bytes(raw);projection=re.sub(rb'\s+',b' ',raw).strip();assert projection==src[f].encode()
+ physical.append(dict(seq=src['seq'],field=f,start=a,end=z,raw_copy=name,raw_pin=pin(raw),field_pin=pin(src[f].encode()),projection='ASCII whitespace collapsed to one space for comparison ONLY; original raw bytes and complete full source remain unchanged. This is not a claim of exact contiguous raw equality or ingestion history.',comparison_equal=True))
+(E/'physical-six-field-proof.json').write_text(json.dumps(dict(full_original=pin(pb),records=physical),indent=2)+'\n')
+paths=['/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP','/Users/adamderickandrade/ACIP Software Developmeent/Gofer Developmetn Files',"/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'/Users/adamderickandrade/ACIP Software Developmeent/tibetan-spellchecker','/Users/adamderickandrade/Tibetan Translation Tool']
+assert all(os.access(p,os.R_OK)for p in paths);(E/'required-access.json').write_text(json.dumps([dict(path=p,readable=True)for p in paths],indent=2)+'\n')
+print(json.dumps(dict(status='PASS',full_corpus_raw_objects=len(checks),physical_fields=6,required_paths=8,parallel_fields=par),indent=2))
+# Print exact representative counterevidence for the challenged shared-basis term, not an inference from glossary alone.
+for r in queries[5]['rows'][:3]:print(r['course'],r['seq'],r['wylie'],r['english'])

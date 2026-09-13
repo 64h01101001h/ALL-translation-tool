@@ -1,0 +1,16 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/097.json",
+  "query_pin": {
+    "bytes": 322,
+    "sha256": "351d88458941d947721d59554c754d94d9c4d1e67cc662b32b255500dace0432"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "las gzugs",
+    "las gzugs"
+  ],
+  "rows": [],
+  "count": 0,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

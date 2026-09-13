@@ -1,0 +1,86 @@
+{
+  "status": "PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276",
+  "closed_utc": "2026-09-13T17:45:17.658355+00:00",
+  "final_head": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "data_head": "2602b7d7966f3ee332393e860770f25a6b3a3f79",
+  "incoming_global_closed": "81942cfc6022a785894d3cc2a20de81dc4c6f599",
+  "global_identity": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-root-closure/identity-v2/proof.json",
+    "bytes": 1433,
+    "sha256": "961432505b7b6a465d1e39eed22ff9cf6bea7a0177696ecc285410d41aaf7910"
+  },
+  "drift_identity": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-root-closure/drift-identity/proof.json",
+    "bytes": 1280,
+    "sha256": "703dd66010d6a78e9c70b49e3184d9f4afd6eadbc5e06226c40e998b2f7a49b3"
+  },
+  "later_independent_review": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-later-drift-assessment",
+    "freeze": {
+      "bytes": 50632,
+      "sha256": "b1353434fb8254d79d843e8b6e0665c08b2bbb05eb32eff4413469a96c5faf6c"
+    },
+    "report": {
+      "path": "review.md",
+      "bytes": 7483,
+      "sha256": "7bc2885b4b5ebfd6e35be8c5198f7451cc50393d9153f33e2e3f444e3c9477ee"
+    },
+    "spec_verdict": "APPROVE",
+    "quality_verdict": "APPROVE",
+    "files": 262,
+    "original_copy_records": 575,
+    "complete_Git_objects": 26
+  },
+  "later_root_proof": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-later-drift-root/verification/proof.json",
+    "bytes": 2562,
+    "sha256": "7e6dd59218a28eba7df5e5389352bda4a532e125cf5062e837f0dae2a91abad0"
+  },
+  "source_archives": {
+    "data/hgm_dictionary_v27_2.json.gz": {
+      "bytes": 13393560,
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253"
+    },
+    "data/full_parallel_corpus_v32.json.gz": {
+      "bytes": 8965675,
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+    }
+  },
+  "coverage": {
+    "course": "C05",
+    "verified_segments": 276,
+    "total_segments": 511,
+    "remaining_segments": 235,
+    "accepted_pages": 92,
+    "next_batch": [
+      277,
+      278,
+      279
+    ],
+    "next_regular_global": 291
+  },
+  "actual_applicability": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-main-preflight-v2/chunked-main-preflight.json",
+    "bytes": 1719638,
+    "sha256": "2bb87f9e4c2fd5a7aa2af4cf3d9828d6dbbde110a483924450348fd09e8e561f",
+    "completed_at": "2026-09-13T17:25:51.770763+00:00",
+    "successful_checks": 11,
+    "status": "PASS_OBSERVED_DATED_ONLY"
+  },
+  "current_MAIN_applicability_claimed": false,
+  "MAIN_integration": "OPEN_REQUIRES_THEN_CURRENT_STATE_CONFIGURATION_AND_FRESH_APPLICABILITY_CHECK",
+  "failed_fresh_closures_preserved": [
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-root-closure/final/fresh-main-comparison.json",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-root-closure/final-v2/fresh-main-comparison.json"
+  ],
+  "process_ruling": "Adopt independently reviewed separation of fixed-data acceptance from future integration clearance after exact later unrelated-drift assessment. Prior actual failures stay failures; dated stable applicability is not described as current. No semantic, fidelity, source, fixture, retention, partition or provenance gate waived.",
+  "new_apply_build_test_runs": 0,
+  "applied": false,
+  "limits": [
+    "All alignment evidence remains provisional machine matches; hgm_gloss unchanged",
+    "Native/installed-phone verification through171; current pack rebuild/validation, rendered native acceptance and locked launch remain open",
+    "C13 remains blocked upstream",
+    "Historical raw Git configuration/infoattributes equality unavailable and not claimed"
+  ],
+  "campaign_order": "Finish and verify all511 C05 before C06, then courses in order."
+}

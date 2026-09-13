@@ -1,0 +1,34 @@
+{
+  "angle": "tibetan",
+  "source": "lexical-queries-full.json",
+  "term": "mi",
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "mi",
+    "mi"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 13973,
+      "wylie": "mi",
+      "tibetan": "མི",
+      "tibetan_source": null,
+      "acip": "MI",
+      "pronunciation": "mi",
+      "pronunciation_source": "GMR card (C08 Language Study Guide)",
+      "sanskrit": "na; {C}manuṣya; {C}narā; {C}puruṣa; {C,MSA}mānuṣa; {MSA}jana; {MSA}nṛ; {MSA} manu-ja; {LC}a!!; {LC}aviratam; {LC}avicchinna; {LC}aviśrāmam; {LC}adurlabha; {LC}anadbhuta; {LC}avaśyam; {LC}aviśvāsya; {LC}acintya; {LC}apuṇyavat; {LC}janapada; {LC}parajanapada; {LC}parajanapadāḥ; {LC}dus!!; {LC}dar!!; {LC}darmanasya; {LC}na vimocyam; {LC}na viśvaseya; {LC}nara; {LC}sanarāmaraloka!!; {LC}nāsti; {LC}saṃbhavo nāsti; {LC}nis!!, nir!!; {LC}nṛdevāḥ; {LC}no; {LC}kaścideva puruṣaḥ; {LC}vadhakapuruṣa; {LC}manuja; {LC}martya; {LC}mābhūdandhamidaṃ jagat; {LC}mānava; {LC}mānuṣya; {LC}vi!!",
+      "hopkins_english": "(1) negative particle: not; non-; is not; (2) human; person; {C}person(ality); (some)one",
+      "hgm_gloss": "[\"never\", \"not\", \"fail\", \"failing\", \"no\", \"hardly\", \"will not\", \"do not\", \"avoiding\", \"human\", \"don't\", \"does not\", \"won't\", \"preventing\", \"why\", \"it is not the case\", \"refuse\", \"avoid\", \"failing to\", \"instead of\", \"nothing\", \"cannot\", \"prevent\", \"rather than\", \"failing ... failing\", \"humans\", \"human being\", \"person\", \"men\", \"couldn't\", \"human beings\", \"unable\", \"could never be\", \"never ... never\", \"doesn't\", \"didn't\", \"man\", \"none\", \"without\", \"n't\", \"neither ... nor\", \"can't\", \"could never\", \"ever\", \"impossible\", \"wouldn't\", \"neither\", \"neglect\", \"no one\", \"would never\", \"has yet to\", \"are not\", \"is not\", \"were not\", \"is no\", \"can't be\", \"not though the case\", \"'t\", \"fails\", \"no way\", \"failed\", \"cannot be\", \"n ... is\", \"why should it be true\", \"can not\", \"non-\", \"is not at all\", \"never be\", \"wouldn't ... any\", \"prevent ... from\", \"without having\", \"never even\", \"no ... could ever\", \"no ... are\", \"lack\", \"they do not\", \"nor\", \"one\", \"human?\", \"lacks\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 8825,
+      "raw": "{\"tibetan\": \"མི\", \"wylie\": \"mi\", \"wylie_variants\": [\"mi\"], \"tenses\": null, \"sanskrit\": \"na; {C}manuṣya; {C}narā; {C}puruṣa; {C,MSA}mānuṣa; {MSA}jana; {MSA}nṛ; {MSA} manu-ja; {LC}a!!; {LC}aviratam; {LC}avicchinna; {LC}aviśrāmam; {LC}adurlabha; {LC}anadbhuta; {LC}avaśyam; {LC}aviśvāsya; {LC}acintya; {LC}apuṇyavat; {LC}janapada; {LC}parajanapada; {LC}parajanapadāḥ; {LC}dus!!; {LC}dar!!; {LC}darmanasya; {LC}na vimocyam; {LC}na viśvaseya; {LC}nara; {LC}sanarāmaraloka!!; {LC}nāsti; {LC}saṃbhavo nāsti; {LC}nis!!, nir!!; {LC}nṛdevāḥ; {LC}no; {LC}kaścideva puruṣaḥ; {LC}vadhakapuruṣa; {LC}manuja; {LC}martya; {LC}mābhūdandhamidaṃ jagat; {LC}mānava; {LC}mānuṣya; {LC}vi!!\", \"hopkins_english\": \"(1) negative particle: not; non-; is not; (2) human; person; {C}person(ality); (some)one\", \"hgm_gloss\": [\"never\", \"not\", \"fail\", \"failing\", \"no\", \"hardly\", \"will not\", \"do not\", \"avoiding\", \"human\", \"don't\", \"does not\", \"won't\", \"preventing\", \"why\", \"it is not the case\", \"refuse\", \"avoid\", \"failing to\", \"instead of\", \"nothing\", \"cannot\", \"prevent\", \"rather than\", \"failing ... failing\", \"humans\", \"human being\", \"person\", \"men\", \"couldn't\", \"human beings\", \"unable\", \"could never be\", \"never ... never\", \"doesn't\", \"didn't\", \"man\", \"none\", \"without\", \"n't\", \"neither ... nor\", \"can't\", \"could never\", \"ever\", \"impossible\", \"wouldn't\", \"neither\", \"neglect\", \"no one\", \"would never\", \"has yet to\", \"are not\", \"is not\", \"were not\", \"is no\", \"can't be\", \"not though the case\", \"'t\", \"fails\", \"no way\", \"failed\", \"cannot be\", \"n ... is\", \"why should it be true\", \"can not\", \"non-\", \"is not at all\", \"never be\", \"wouldn't ... any\", \"prevent ... from\", \"without having\", \"never even\", \"no ... could ever\", \"no ... are\", \"lack\", \"they do not\", \"nor\", \"one\", \"human?\", \"lacks\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"mi\", \"acip\": \"MI\", \"pronunciation_source\": \"GMR card (C08 Language Study Guide)\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 8825}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "independently_reopened": true
+}

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/semantic-review/verify-structures.py.txt", line 44, in <module>
+    put(D/'resolved-spans.json',final);put(D/'resolved-full-objects.json',[dict(seq=q,span=s,**r) for q in [277,278,279] for s,r in zip(get(B/'reconciled'/str(q)/'spec.json')['segments'][0]['spans'],resolve(get(B/'reconciled'/str(q)/'spec.json')['segments'][0]))]);put(D/'original-identities.json',original);put(D/'original-dispositions-inspected.json',disps)
+                                                                           ~~~~^^^^^^^^^^^^^^^^^^
+TypeError: dict() got multiple values for keyword argument 'seq'

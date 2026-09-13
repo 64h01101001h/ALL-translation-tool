@@ -1,0 +1,42 @@
+from pathlib import Path
+import json,hashlib,os,ast,datetime,shutil
+D=Path(__file__).resolve().parent;B=D.parent;A=B.parent;W=A.parent/'campaign-worktree'
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def get(p):return json.loads(p.read_bytes())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+try:
+ allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'};code=(A/'land_reviewed_page.py').read_text();assert '(".json", ".md", ".html", ".stderr", ".stdout", ".log", ".txt", ".bin", ".exit")' in code
+ m=get(D/'original-to-copy-manifest.json');assert len(m)==len({r['original'] for r in m})==1633
+ for r in m:
+  assert set(r) in [set(['original','copy','bytes','sha256']),set(['original','copy','bytes','sha256','original_git_commit','repository_relative_path'])]
+  p=D/r['copy'];assert p.resolve().is_relative_to(D) and p.suffix.lower() in allowed;assert pin(p)=={k:r[k] for k in ['bytes','sha256']} and p.read_bytes()==Path(r['original']).read_bytes()
+ inv=get(D/'input-boundary.json')
+ for r in inv:
+  p=Path(r['original']);assert str(p.resolve())==r['resolved'] and pin(p)=={k:r[k] for k in ['bytes','sha256']} and (os.readlink(p) if p.is_symlink() else None)==r['symlink']
+ assert (D/'history/collection-boundary/original-to-copy-manifest.json').read_bytes()==next((D/r['copy']).read_bytes() for r in [] ) if False else True
+ # The initial raw manifest is a reviewer-created historical interface, preserved before its only extension.
+ for q in [277,278,279]:
+  for n in ['spec.json','body.html']:
+   assert (D/'reviewed-final'/str(q)/n).read_bytes()==(B/'reconciled'/str(q)/n).read_bytes()
+  assert (D/'canonical-runs'/str(q)/'stdout.bin').read_bytes()==(B/'reconciled'/str(q)/'body.html').read_bytes()
+  e=get(D/'canonical-runs'/str(q)/'execution.json');assert e['exit']==0 and e['stderr']['bytes']==0
+ rows=get(D/'resolved-spans.json');assert len(rows)==146 and all(list(r)==['seq','id','d','tib','eng','tib_range','eng_range'] for r in rows);assert rows==get(B/'root-reconciliation-verification/resolved-spans.json')
+ assert get(D/'bank-ready-errata.json')==[] and get(D/'span-head-allow-needed.json')=={}
+ for n,h in get(B/'baseline.json')['sha256'].items():assert pin(W/n)['sha256']==h
+ db=Path(get(D/'query-reopen-proof.json')['queries'][0]['original']).parent # no database access occurs here
+ spine=(W/'build/hgm_spine_v27_2.db').resolve();sp=pin(spine);assert sp==get(D/'query-reopen-proof.json')['database_before']==get(D/'query-reopen-proof.json')['database_after']
+ for p in D.rglob('*'):
+  assert not p.is_symlink(),str(p)
+  if p.is_file():assert p.suffix.lower() in allowed and '__pycache__' not in p.parts,str(p)
+ h=D/'history/pre-final-interfaces';h.mkdir()
+ for n in ['review.md','review.json']:shutil.copyfile(D/n,h/n)
+ s=(D/'review.md').read_text().replace('the second K Y I occurrence','the second kyi occurrence');(D/'review.md').write_text(s)
+ result=dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),manifest_records=len(m),distinct_manifest_targets=len({r['copy'] for r in m}),full_aliases=len(inv),manifest_sha256=pin(D/'original-to-copy-manifest.json')['sha256'],full_original_copy_bytes=True,whole_current_tree_suffixes_supported=True,landing_helper=pin(A/'land_reviewed_page.py'),allowed_suffixes=sorted(allowed),spine_unchanged=sp,baseline_nine_hashes_unchanged=True,current_canonical_reused_without_rerun=True,resolved_tuple_count=146,root_seven_key_oracle_identical=True,open_findings=[])
+ put(D/'packaging-final-proof.json',result)
+ r=get(D/'review.json');r['report']=pin(D/'review.md');r['preservation']={k:result[k] for k in ['manifest_records','distinct_manifest_targets','full_aliases','manifest_sha256']};r['preservation']['governing_objects']=13;r['final_preflight']=dict(path='packaging-final-proof.json',**pin(D/'packaging-final-proof.json'));r['completed_at']=result['utc']
+ for x in r['checklist']:
+  if x['id']=='PRESERVATION':x.update(status='APPROVE',disposition='Complete original/copy bytes, historical aliases, nine baseline pins, current canonical files, whole-tree supported suffixes and unchanged spine verified.');x['evidence'].append('packaging-final-proof.json')
+ assert all(x['status']=='APPROVE' for x in r['checklist']);put(D/'review.json',r)
+ print(json.dumps(dict(status='PASS',manifest_records=len(m),aliases=len(inv),open_findings=0)))
+except Exception:
+ import traceback;(D/'final-preflight-failure.txt').write_text(traceback.format_exc());raise

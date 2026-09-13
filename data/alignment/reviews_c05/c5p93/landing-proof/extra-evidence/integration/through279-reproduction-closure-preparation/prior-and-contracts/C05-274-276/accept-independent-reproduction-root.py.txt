@@ -1,0 +1,72 @@
+from pathlib import Path
+import json,hashlib,datetime,os,subprocess
+B=Path(__file__).resolve().parent;I=B.parent/'integration';R=I/'through276-generated-reproduction';W=B.parents[1]/'campaign-worktree';O=I/'through276-generated-reproduction-root-acceptance';HEAD='81942cfc6022a785894d3cc2a20de81dc4c6f599'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def js(p):return json.loads(p.read_bytes())
+f=js(R/'freeze.json');assert isinstance(f['files'],dict)
+O.mkdir(parents=True,exist_ok=False);commands=[]
+def git(args):
+ d=O/'commands'/str(len(commands)+1);d.mkdir(parents=True)
+ argv=['git',*args];env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1')
+ (d/'command.json').write_text(json.dumps(dict(argv=argv,cwd=str(W),environment_overrides=dict(GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1')),indent=2)+'\n');(d/'stdin.bin').write_bytes(b'')
+ r=subprocess.run(argv,cwd=W,env=env,input=b'',capture_output=True)
+ for n,raw in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(d/n).write_bytes(raw)
+ assert r.returncode==0 and not r.stderr
+ commands.append(dict(directory=str(d),argv=argv,stdout=pin(r.stdout)));return r.stdout
+assert git(['rev-parse','HEAD']).decode().strip()==HEAD
+assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+assert len(f['files'])==f['file_count'] and sum(r['bytes'] for r in f['files'].values())==f['total_bytes']
+for n,r in f['files'].items():assert pin((R/n).read_bytes())==r
+release=js(R/'root-runtime-release.json')
+for r in release['code_mapping']:assert Path(r['original']).read_bytes()==Path(r['copy']).read_bytes() and pin(Path(r['copy']).read_bytes())=={k:r[k] for k in ('bytes','sha256')}
+execution=js(R/'execution-proof.json');retention=js(R/'retention-proof.json');checks=js(R/'retention-checks.json')
+assert execution['status']==retention['status']=='PASS' and len(execution['runs'])==2 and len(execution['outputs'])==7
+assert execution['layer_invocations']==execution['view_invocations']==1 and execution['first_view_seed_exact']
+assert retention['prior_links_retained']==45011 and retention['added_links']==115 and retention['failures']==[]
+assert list(retention['counts'].values())==[45126,11926,1612,11,7083,15500,22457,22117,24024,44]
+assert len(checks)==retention['checks_total'] and all(x['pass_'] is True for x in checks)
+for label,run in zip(('layer','view'),execution['runs']):
+ d=R/'executions'/label;c=js(d/'command.json');e=js(d/'execution.json')
+ assert c['argv']==e['argv']==run['argv'] and c['cwd']==e['cwd']==run['cwd']==str(R/'workspace')
+ assert e==run and (d/'stdin.bin').read_bytes()==b'' and (d/'exit').read_bytes()==b'0\n'
+ for n in ('stdout','stderr'):assert pin((d/n).read_bytes())==run[n]
+ g=js(d/'runtime-guards.json');assert g['date_override']=='2026-09-13' and g['bytecode_disabled'] and g['write_scope']==str(R)
+ assert all(x['query_only']==1 and '?mode=ro' in x['uri'] for x in g['sqlite_connections'])
+manifest=js(R/'input-manifest.json');originals=[];git_blobs={}
+for r in manifest:
+ cp=R/r['copy'];assert cp.resolve().is_relative_to(R.resolve());raw=cp.read_bytes();assert pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+ if 'original_git_commit' in r:
+  assert r['original_git_commit']==HEAD
+  rel=r['repository_relative_path'];key=HEAD+':'+rel
+  if key not in git_blobs:git_blobs[key]=git(['show',key])
+  assert git_blobs[key]==raw
+ else:
+  origin=Path(r['original']);assert origin.read_bytes()==raw
+ originals.append(r)
+base=js(B/'baseline.json');assert len(base['sha256'])==9 and len(git_blobs)==7
+for rel,h in base['sha256'].items():
+ cp=R/('workspace' if rel.startswith('data/') and rel.endswith('.gz') else 'previous-generated')/rel
+ assert pin(cp.read_bytes())['sha256']==h
+ if rel.endswith('.gz'):assert cp.read_bytes()==(W/rel).read_bytes()
+entry=js(B/'reproduction-root-entry/proof.json')
+for r in entry['files']:
+ p=Path(r['path']);s=p.stat();assert str(p.resolve())==r['resolved'] and (os.readlink(p) if p.is_symlink() else None)==r['symlink']
+ assert (s.st_dev,s.st_ino)==(r['device'],r['inode']) and pin(p.read_bytes())=={k:r[k] for k in ('bytes','sha256')}
+for r in js(B/'landing/staged-payload-manifest.json')['files']:
+ raw=(W/r['path']).read_bytes();assert pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+ assert raw==(R/'expected-payload'/r['path']).read_bytes()==(B/'landing/payload-freeze'/r['path']).read_bytes()
+for r in execution['outputs']:
+ raw=(W/r['path']).read_bytes();assert raw==(R/'workspace'/r['path']).read_bytes()==(R/'reproduced-outputs'/r['path']).read_bytes() and pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+seed=R/'seed/previous-main-csv-seed.bin';assert seed.read_bytes()==(B/'landing/previous-main-csv-seed.bin').read_bytes()==git_blobs[HEAD+':docs/geshe_michael_roach_dictionary.csv']
+seedrows=[r for r in manifest if 'materialized_initial_path' in r];assert len(seedrows)==1 and seedrows[0]['copy']=='seed/previous-main-csv-seed.bin'
+assert (R/seedrows[0]['materialized_initial_path']).read_bytes()==(W/'docs/geshe_michael_roach_dictionary.csv').read_bytes()
+acip=js(R/'acip-incomplete-evidence.json');assert (acip['headwords'],acip['proven'],acip['missing'],acip['unproven_source_linked_span_count'],acip['full_bank_d5_english_unproven_count'])==(7083,7080,3,5,6)
+assert len(js(R/'registered-pages.json'))==546
+before=js(R/'live-before.json');after=js(R/'live-after.json');assert before['head']==after['head']==HEAD and before['status']==after['status']
+assert git(['status','--porcelain=v1','--untracked-files=no']).decode()==after['status']
+assert git(['ls-files','--others','--exclude-standard','-z'])==(B/'landing/pre-bank-untracked.stdout').read_bytes()
+assert git(['diff','--cached','--name-only','-z'])==b''
+assert git(['rev-parse','HEAD']).decode().strip()==HEAD
+for n,r in f['files'].items():assert pin((R/n).read_bytes())==r
+result=dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=HEAD,complete_runtime_freeze=pin((R/'freeze.json').read_bytes()),frozen_files=len(f['files']),frozen_bytes=f['total_bytes'],full_original_copy_records=len(originals),actual_historical_git_objects=len(git_blobs),all_nine_baseline_hashes_verified=True,all_ten_current_source_output_aliases_unchanged=True,all_seven_reproduced_outputs_byte_exact=True,all_twelve_payload_files_byte_exact=True,immutable_seed_transition_verified=True,independent_layer_invocations=1,independent_view_invocations=1,root_tests_not_repeated=True,retention_checks=len(checks),counts=retention['counts'],acip_proven=7080,acip_heads=7083,original_history_and_failures_retained=True,live_head_index_untracked_state_unchanged=True,scope='Independent generated reproduction/source/retention acceptance only. Actual bank/stage/whitespace/private commits and native/MAIN integration remain separate.')
+(O/'original-copy-checks.json').write_text(json.dumps(originals,indent=2)+'\n');(O/'actual-git-records.json').write_text(json.dumps(commands,indent=2)+'\n');(O/'proof.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

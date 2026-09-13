@@ -1,0 +1,117 @@
+{
+  "status": "APPROVE_CODE_AND_CURRENT_SCOPE_ONLY",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "role": "reused-context independent non-author model reviewer",
+  "baseline": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "open_findings": [],
+  "candidate_freeze": {
+    "bytes": 14615,
+    "sha256": "a8f573eb254818b4c219bd4db7c25b9727d7cb53b91e3bef94be2e00259b0a51"
+  },
+  "candidates": {
+    "compose-final-inputs.py": {
+      "bytes": 17923,
+      "sha256": "cb3411275f6380f1d0f314d709b7ff096f2e4a79f8ac8c7b19e121c441a6ab6b"
+    },
+    "assemble-final-supplement.py": {
+      "bytes": 10838,
+      "sha256": "04787289c8d4b5650df58590287d798aa00a52c032492878ddcbbddd8eed7fa8"
+    },
+    "final-source-scope.json": {
+      "bytes": 2805714,
+      "sha256": "eaedca88c01ee094b32a019f65c52d4ef4fc854801e2ce0a452d4f1903df6de5"
+    }
+  },
+  "checklist": [
+    {
+      "id": "FULL_CANDIDATE_IDENTITY",
+      "status": "PASS",
+      "evidence": "proof.json; original-to-copy-manifest.json; inputs/freeze.json"
+    },
+    {
+      "id": "COMPLETE_CODE_AND_CONTRACTS",
+      "status": "PASS",
+      "evidence": "report.md; inputs/compose-final-inputs.py.txt; inputs/assemble-final-supplement.py.txt; inputs/command-contract.md"
+    },
+    {
+      "id": "CURRENT_SCOPE_AND_ALIASES",
+      "status": "PASS",
+      "evidence": "proof.json; external-descriptor-verification.json"
+    },
+    {
+      "id": "ORDINARY_RETENTION_AND_AUTOMATIC_ROUTES",
+      "status": "PASS",
+      "evidence": "proof.json; inputs/final-source-scope.json"
+    },
+    {
+      "id": "SAFE_JSON_EXTERNAL_RAW_BOUNDARY",
+      "status": "PASS",
+      "evidence": "report.md; both exact candidate sources"
+    },
+    {
+      "id": "ACTUAL_WHITESPACE_PROVENANCE",
+      "status": "PASS",
+      "evidence": "proof.json; external-descriptor-verification.json"
+    },
+    {
+      "id": "FAILURES_AND_ORDERING_CORRECTION",
+      "status": "PASS",
+      "evidence": "inputs/version-history; inputs/lexical-order-correction.diff.txt; proof.json"
+    },
+    {
+      "id": "SUPPLEMENT_ALGORITHM_AND_TIME_BOUNDARY",
+      "status": "PASS_CODE_ONLY",
+      "evidence": "report.md; inputs/command-contract.md; exact supplement source"
+    },
+    {
+      "id": "ACTUAL_INITIAL_COMPOSITION",
+      "status": "PENDING_NOT_EXECUTED",
+      "evidence": "Root release and complete actual caller required"
+    },
+    {
+      "id": "ACTUAL_LITERAL_SUPPLEMENT_SCOPE",
+      "status": "PENDING_NOT_AUTHORED_OR_RELEASED",
+      "evidence": "Must preserve and review actual completed roots and capture"
+    },
+    {
+      "id": "ACTUAL_BANK_AND_STAGED_DIAGNOSTIC",
+      "status": "PENDING",
+      "evidence": "No banker or diagnostic executed by this review"
+    },
+    {
+      "id": "EARLY_GLOBAL279_AND_MAIN",
+      "status": "OPEN",
+      "evidence": "Early outer checkpoint279 required; MAIN integration open"
+    }
+  ],
+  "execution": {
+    "reviewer_readonly_identity_verifier": 1,
+    "composer": 0,
+    "supplement": 0,
+    "bank": 0,
+    "git": 0,
+    "stage": 0,
+    "build": 0,
+    "tests": 0,
+    "sql": 0
+  },
+  "actual_composition_approved": false,
+  "future_literal_supplement_scope_approved": false,
+  "global_checkpoint_approved": false,
+  "early_outer_checkpoint279_required": true,
+  "main_integration": "OPEN",
+  "report": {
+    "path": "report.md",
+    "bytes": 10091,
+    "sha256": "524ecabe4ed098bd240fc50561c6b5efc787fc1262ec423225f1b41a7f844ea2"
+  },
+  "proof": "proof.json",
+  "source_copy_manifest": "original-to-copy-manifest.json",
+  "full_external_identities": "external-descriptor-verification.json",
+  "freeze_contract": {
+    "path": "freeze.json",
+    "files": "relative-path DICT",
+    "exclusion": "only this actual top-level freeze.json"
+  }
+}

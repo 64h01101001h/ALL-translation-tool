@@ -1,0 +1,11 @@
+--- v1
++++ v2
+@@ -12,7 +12,7 @@
+  dest=D/relative;dest.parent.mkdir(parents=True,exist_ok=True);assert not dest.exists();dest.write_bytes(raw);assert dest.read_bytes()==raw
+  records.append(dict(original=str(source),copy=str(dest),**pin(dest)))
+ assert read(B/'root-final-semantic-review-verification/proof.json')['status']=='PASS'
+-assert read(B/'staging-whitespace-root-review-captured/proof.json')['status'].startswith('PASS')
++assert read(B/'staging-whitespace-root-review-captured/proof.json')['status']=='APPROVE_EXACT_TOOLING_CONDITIONAL_ON_ACTUAL_RUNTIME'
+ for name,source,sha in [
+  ('whitespace279.py',B/'staging-whitespace-preparation/whitespace279.py','b38c18aa63a82a3e9fbf83a118160c1ab91509b8e8a6e038bfae69d7bd129144'),
+  ('verify_staged_through279.py',B/'staging-whitespace-preparation/verify_staged_through279.py','39a2908b2db4effb9468e9587d0e28b4dcd828ae4ac8fce99368a723973a211f'),

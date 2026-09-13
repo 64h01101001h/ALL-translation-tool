@@ -1,0 +1,59 @@
+from pathlib import Path
+import ast, datetime, difflib, hashlib, json, os
+D=Path(__file__).resolve().parent; B=D.parent; C=B/'page-banking-preparation'
+def pin(x): return dict(bytes=len(x),sha256=hashlib.sha256(x).hexdigest())
+def save(p,x): p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+maps=[]
+def copy(p,rel,extra=None):
+    raw=p.read_bytes(); dest=D/rel; dest.parent.mkdir(parents=True,exist_ok=True)
+    if dest.exists(): assert dest.read_bytes()==raw
+    else:
+        with dest.open('xb') as f: f.write(raw)
+    assert p.read_bytes()==dest.read_bytes()==raw
+    row=dict(original=str(p),resolved_original=str(p.resolve(strict=True)),copy=rel,symlink=os.readlink(p) if p.is_symlink() else None,**pin(raw))
+    row.update(extra or {}); maps.append(row)
+    return raw
+frozen=json.loads((C/'freeze.json').read_bytes()); inventory={str(p.relative_to(C)):pin(p.read_bytes()) for p in C.rglob('*') if p.is_file() and p!=C/'freeze.json'}
+assert inventory==frozen['files'] and len(inventory)==frozen['file_count']==26
+assert sum(r['bytes'] for r in inventory.values())==frozen['total_bytes']==116789
+for p in sorted(C.rglob('*')):
+    if p.is_file():
+        rel=str(p.relative_to(C))
+        if p.suffix=='.py' or not p.suffix: rel+='.txt'
+        copy(p,'candidate/'+rel)
+for r in json.loads((C/'input-manifest.json').read_bytes()):
+    p=Path(r['original']); raw=p.read_bytes()
+    assert pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+    assert str(p.resolve(strict=True))==r['resolved']
+    assert raw==(C/r['copy']).read_bytes()
+    copy(p,'candidate/'+r['copy'],{'candidate_original_mapping':r})
+diffs={}
+for label,name in [('payload','freeze-final-payload-before-staging.py'),('banking','bank_root_proofs_through279.py')]:
+    old=(C/('inputs/prior-'+label+'.py.txt')).read_text(); new=(C/name).read_text()
+    actual=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior-'+label,tofile='candidate-'+label)).encode()
+    assert actual==(C/(label+'.diff.txt')).read_bytes()
+    diffs[label]=pin(actual)
+    ast.parse(old); ast.parse(new) # Static syntax tree inspection, no import/compile/run.
+e=json.loads((C/'prepare-run01/execution.json').read_bytes())
+assert e['exit']==0 and (C/'prepare-run01/exit').read_bytes()==b'0\n'
+for n in ['stdout','stderr']:
+    assert len((C/('prepare-run01/'+n)).read_bytes())==e[n+'_bytes']
+assert not (C/'prepare-run01/stderr').read_bytes() and not (C/'prepare-run01/stdin').read_bytes()
+assert (C/'prepare-run01/stdout').read_bytes()==(C/'proof.json').read_bytes()
+assert (C/'record_command.py').read_bytes()==(C/'inputs/record-command-original.py.txt').read_bytes()
+S=B/'semantic-source-preparation'
+copy(S/'original-to-copy-manifest.json','governing/source-preparation-manifest.json')
+copy(S/'freeze.json','governing/source-preparation-freeze.json')
+governing=[]
+for r in json.loads((S/'original-to-copy-manifest.json').read_bytes()):
+    if r.get('repository_relative_path') in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/NEVER_BANK_A_FALSEHOOD.md']:
+        p=Path(r['original']); assert p.read_bytes()==(S/r['copy']).read_bytes()
+        assert pin(p.read_bytes())=={k:r[k] for k in ('bytes','sha256')}
+        copy(p,'governing/'+r['repository_relative_path'],{'original_git_commit':r['original_git_commit'],'repository_relative_path':r['repository_relative_path'],'git_binding_provenance':'Prior frozen independent source preparation; no new Git command in this tooling review.'})
+        governing.append(r['repository_relative_path'])
+save(D/'original-to-copy-manifest.json',maps)
+proof=dict(status='PASS_STATIC_IDENTITY',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),candidate_freeze=pin((C/'freeze.json').read_bytes()),candidate_files=len(inventory),candidate_bytes=sum(r['bytes'] for r in inventory.values()),original_candidate_mappings=9,review_mappings=len(maps),diffs_reproduced=diffs,governing_paths=governing,actual_candidate_executions=0,actual_tests_queries_generators_builders_Git_calls=0,author_preparation_exit=0,author_syntax_only_compilations_reported=2,read_only_input_invariance=True)
+save(D/'proof.json',proof)
+for r in maps: assert Path(r['original']).read_bytes()==(D/r['copy']).read_bytes() and str(Path(r['original']).resolve(strict=True))==r['resolved_original']
+assert {str(p.relative_to(C)):pin(p.read_bytes()) for p in C.rglob('*') if p.is_file() and p!=C/'freeze.json'}==inventory
+print(json.dumps(proof,indent=2))

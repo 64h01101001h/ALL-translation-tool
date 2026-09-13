@@ -1,0 +1,72 @@
+from pathlib import Path
+import json,sqlite3,gzip,hashlib,os,subprocess,datetime,re
+O=Path(__file__).resolve().parent;B=O.parent;A=B.parent;R=A.parent;W=R/'campaign-worktree';HEAD='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,d):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True);assert not p.exists();p.write_text(json.dumps(d,indent=2,ensure_ascii=False)+'\n')
+maps=[]
+def copy(p,**more):
+ p=Path(p);b=p.read_bytes();h=pin(b);q=O/'inputs'/(h['sha256']+'.bin');q.parent.mkdir(exist_ok=True)
+ if not q.exists():q.write_bytes(b)
+ assert q.read_bytes()==b
+ maps.append(dict(original=str(p),copy=str(q.relative_to(O)),**h,resolved_original=str(p.resolve(strict=True)),symlink=os.readlink(p) if p.is_symlink() else None,**more));return b
+git=[]
+def governing(rel):
+ p=W/rel;argv=['git','show',HEAD+':'+rel];c=subprocess.run(argv,cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1'),input=b'',capture_output=True);n=len(git)+1;d=O/f'commands/{n}';d.mkdir(parents=True)
+ for k,v in [('stdout',c.stdout),('stderr',c.stderr),('stdin',b'')]: (d/(k+'.bin')).write_bytes(v)
+ rec=dict(argv=argv,cwd=str(W),exit=c.returncode,stdout=pin(c.stdout),stderr=pin(c.stderr));save(f'commands/{n}/command.json',rec);git.append(rec)
+ assert c.returncode==0 and not c.stderr and c.stdout==p.read_bytes();copy(p,original_git_commit=HEAD,repository_relative_path=rel)
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','data/alignment/C05_CAMPAIGN.md','docs/errata_register.json'] :governing(rel)
+for p in [A/'proposal-protocol.md',A/'semantic-review-protocol.md']+[B/n for n in ['semantic-review-brief-v2.md','source.json','context.json','baseline.json']]:copy(p)
+refs=[Path('/Users/adamderickandrade')/p for p in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']]
+access=[dict(path=str(p),readable=os.access(p,os.R_OK)) for p in refs];save('reference-access.json',access);assert all(r['readable'] for r in access)
+db=W/'build/hgm_spine_v27_2.db';before=pin(db.read_bytes());c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON');assert c.execute('PRAGMA query_only').fetchone()[0]==1
+queries=[]
+def query(sql,params=(),purpose=''):
+ rows=[dict(r) for r in c.execute(sql,params)];n=len(queries)+1;rec=dict(id=n,sql=sql,parameters=list(params),purpose=purpose,count=len(rows),rows=rows);save(f'queries/{n:03}.json',rec);queries.append(rec);return rows
+query("select name,sql from sqlite_master where type='table' order by name",purpose='Actual schema')
+source=query('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',277,279),'Current exact originals')
+context=query('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',271,285),'Whole local argument')
+for rows,n in [(source,'source.json'),(context,'context.json')]:assert [{k:r[k] for k in ('id','course','seq','acip','wylie','english')} for r in rows]==json.loads((B/n).read_bytes())
+all_corpus={r['id']:r for r in context}
+for column,term in [('wylie','rgyang ring thung'),('wylie','las gzugs gsal mi gsal'),('wylie','des de ma bsgribs'),('wylie','dngos po gsum gyi gzhi mthun'),('english','the actual meaning of Master Dharmakirti'),('english','Wouldn\'t your visual consciousness'),('english','Our second point'),('english','clear impression of this form'),('wylie','yi dvags kyi chu klung'),('wylie','yi dvags kyis chu klung')]:
+ for r in query(f'select * from corpus_segments where {column} like ? order by course,seq',('%'+term+'%',),'Exact independently chosen parallel/counterreading probe'):all_corpus[r['id']]=r
+terms=['der thal','chos kyi grags pa','lung','lung don','grangs can','rgyang','ring','thung','rgyang ring','rgyang ring thung','gzugs','mig shes','bar du','las gzugs','gsal','gsal bar','mi gsal','skye ba',"dbang gis","rnam pa","shar ba","sgo nas","'jog pa","khas blangs","bsgribs","sgrib","ma","cig car du","cig car","bkag","phyir","phyogs snga","brlan zhing gsher ba","phor pa","gang","dngos po","gzhi mthun","skyes bu","mdzes","mi mdzes","gnyis ka","yi dvags","mig","chu klung","rnag khrag","rnag","khrag"]
+entries={}
+for term in terms:
+ for r in query('select * from entries where wylie=? order by id',(term,),'Exact lexical unit; full raw/master corroboration'):entries[r['id']]=r
+for term in ['rgyang ring','las gzugs','gzhi mthun','bsgrib','cig car','khas blang']:
+ for r in query('select * from entries where wylie like ? order by id',('%'+term+'%',),'Positive wider-headword counterevidence'):entries[r['id']]=r
+master_path=W/'data/hgm_dictionary_v27_2.json.gz';corpus_path=W/'data/full_parallel_corpus_v32.json.gz'
+master=json.loads(gzip.decompress(copy(master_path)));corpus=json.loads(gzip.decompress(copy(corpus_path)))
+master_index={json.dumps(e,sort_keys=True,ensure_ascii=False) for e in master['unified_entries']};corpus_index={json.dumps(e,sort_keys=True,ensure_ascii=False) for e in corpus}
+for r in entries.values():assert json.dumps(json.loads(r['raw']),sort_keys=True,ensure_ascii=False) in master_index
+for r in all_corpus.values():assert json.dumps(json.loads(r['raw']),sort_keys=True,ensure_ascii=False) in corpus_index
+save('complete-master-objects.json',[dict(spine_id=r['id'],object=json.loads(r['raw'])) for r in entries.values()]);save('complete-corpus-objects.json',[dict(spine_id=r['id'],object=json.loads(r['raw'])) for r in all_corpus.values()])
+display=[dict(id=r['id'],wylie=r['wylie'],hgm_gloss=r['hgm_gloss'],tier=r['tier'],hgm_source=r['hgm_source'],hopkins_english=r['hopkins_english']) for r in entries.values()];save('lexical-reading.json',display)
+save('parallel-reading.json',[{k:r[k] for k in ('id','course','seq','acip','wylie','english')} for r in all_corpus.values() if r['course']!='C05'])
+physical_root=refs[0];physical=[]
+for name in ['C05','C15','C16','C18']:
+ p=physical_root/'To DO/Formal Courses/ACI Readings In Roman ASCII'/(name+'ReadingASCII.txt');raw=copy(p);physical.append((p,raw))
+p=physical_root/'Handoff/book_texts/ILL.txt';physical.append((p,copy(p)))
+extents=[]
+anchors=[b'RGYANG RING THUNG',b'LAS GZUGS GSAL MI GSAL',b'MA BSGRIBS NA',b'GNYIS PA DER THAL',b'actual meaning of Master Dharmakirti',b'Wouldn',b'Our second point']
+for p,raw in physical:
+ for anchor in anchors:
+  pos=0
+  while (hit:=raw.find(anchor,pos))>=0:
+   pos=hit+len(anchor)
+   if anchor==b'Wouldn' and b'visual consciousness' not in raw[hit:hit+120]:continue
+   if anchor==b'GNYIS PA DER THAL' and b'PHYOGS SNGA MAS BRLAN' not in raw[hit:hit+100]:continue
+   start=raw.rfind(b'\n',0,max(0,hit-100));start=0 if start<0 else start+1
+   end=raw.find(b'\n',min(len(raw),hit+6000));end=len(raw) if end<0 else end+1
+   block=raw[start:end];n=len(extents)+1;(O/f'physical-{n:03}.bin').write_bytes(block)
+   extents.append(dict(original=str(p),source_pin=pin(raw),anchor=anchor.decode(),anchor_offset=hit,start=start,end=end,copy=f'physical-{n:03}.bin',**pin(block)))
+save('physical-extents.json',extents)
+save('query-index.json',[{k:r[k] for k in ('id','sql','parameters','purpose','count')} for r in queries])
+save('repetition-index.json',[dict(seq=r['seq'],fields={field:{term:[[m.start(),m.end()] for m in re.finditer(re.escape(term),r[field])] for term in (['gzugs','gsal','mi','ma','bsgribs','phyir','rnag khrag','gnyis','chu klung','khas'] if field=='wylie' else ['form','clear','not','obscure','two','both','position','blood and pus','stream of water','because','since'])} for field in ('wylie','english')}) for r in source])
+c.close();after=pin(db.read_bytes());assert before==after
+save('source-unchanged.json',dict(database=dict(path=str(db),resolved=str(db.resolve()),before=before,after=after,connection='URI mode=ro; PRAGMA query_only=ON'),sources=[dict(original=r['original'],bytes=r['bytes'],sha256=r['sha256']) for r in maps],no_generators=True,no_proposals_read=True))
+save('original-to-copy-manifest.json',maps)
+save('collection-proof.json',dict(status='PASS_SOURCE_ONLY_COLLECTION',query_count=len(queries),master_objects=len(entries),corpus_objects=len(all_corpus),physical_sources=len(physical),physical_extents=len(extents),governing_Git_objects=len(git),generator_runs=0,semantic_acceptance=False,source_pins_unchanged=True,source_snapshot_exact=True,context_snapshot_exact=True))
+print(json.dumps(read if False else dict(status='PASS_SOURCE_ONLY_COLLECTION',queries=len(queries),master_objects=len(entries),corpus_objects=len(all_corpus),physical_extents=len(extents))))

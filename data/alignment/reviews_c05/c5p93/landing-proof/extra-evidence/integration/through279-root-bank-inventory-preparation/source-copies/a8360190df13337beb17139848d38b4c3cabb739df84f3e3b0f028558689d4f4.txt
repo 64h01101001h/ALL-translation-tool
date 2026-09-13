@@ -1,0 +1,37 @@
+--- prior-whitespace
++++ prepared-whitespace
+@@ -1,4 +1,4 @@
+-"""PREPARED bounded C05:274–276 whitespace tooling. No CLI execution approved.
++"""PREPARED bounded C05:277–279 whitespace tooling. No CLI execution approved.
+ 
+ prepare retains classification pins from a later actual staged diagnostic;
+ audit reproduces that diagnostic and independently repeats every predicate.
+@@ -9,8 +9,8 @@
+ import argparse, datetime, hashlib, json, os, re, subprocess, sys, traceback
+ sys.dont_write_bytecode = True
+ HERE = Path(__file__).resolve().parent
+-HEAD = '81942cfc6022a785894d3cc2a20de81dc4c6f599'
+-PREFIX = 'data/alignment/reviews_c05/c5p92/'
++HEAD = 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
++PREFIX = 'data/alignment/reviews_c05/c5p93/'
+ CSV = {'docs/geshe_michael_roach_dictionary' + x for x in ('.csv', '_reverse.csv', '_by_course.csv', '_changes.csv')}
+ WARNINGS = {'trailing whitespace.', 'space before tab in indent.', 'new blank line at EOF.'}
+ 
+@@ -145,7 +145,7 @@
+         self.a = args; self.root_aliases = []
+         self.w = self.capture_root(args.worktree, 'worktree')
+         self.review = self.capture_root(args.review, 'review')
+-        assert self.review.name == 'semantic-review' and self.review.parent.name == 'C05-274-276'
++        assert self.review.name == 'semantic-review' and self.review.parent.name == 'C05-277-279'
+         resolved_manifest = self.capture_root(args.root_manifest, 'root_manifest')
+         self.root_manifest = Path(args.root_manifest).absolute()
+         self.out = Path(args.output).absolute()
+@@ -229,7 +229,7 @@
+             prepared = self.obj(Path(self.a.prepared)/'prepared-pins.json')
+             assert prepared['head'] == HEAD and prepared['raw_log'] == pin(log) and prepared['review_freeze'] == pin(freeze_raw) and prepared['root_manifest'] == pin(root_raw)
+         else: assert not self.a.prepared
+-        build = self.obj(self.a.build_proof); assert build['status'] == 'PASS' and build['baseline_commit'] == HEAD and build['page'] == 92 and build['first_segment'] == 274
++        build = self.obj(self.a.build_proof); assert build['status'] == 'PASS' and build['baseline_commit'] == HEAD and build['page'] == 93 and build['first_segment'] == 277
+         for path, grouped in issues.items():
+             raw = self.staged(path); lines = literal_warnings(raw,grouped); witness = {}
+             if path in CSV:

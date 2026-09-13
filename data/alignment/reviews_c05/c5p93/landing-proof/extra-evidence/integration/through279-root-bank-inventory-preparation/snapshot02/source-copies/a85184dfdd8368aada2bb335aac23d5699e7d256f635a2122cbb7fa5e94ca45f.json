@@ -1,0 +1,18 @@
+{
+  "spec": "APPROVE",
+  "quality": "APPROVE",
+  "scope": "Exact frozen candidate and completed277 config under the documented current schema; separate root identity/adoption/runtime release required",
+  "blocking_findings": [],
+  "clarifications": [
+    {
+      "id": "RV-REVIEW-NOTE-01",
+      "severity": "nonblocking prose precision",
+      "detail": "Author report mentions reordered identities and query inputs among tests. Actual reorder negative concerns batch sequences; identity inventory is set-based and query inventory is set-complete. Current pinned query order independently equals the prior two sorted directory enumerations. Future query order is supplied by the separately reviewed exact config; no generic reordering rejection was demonstrated."
+    },
+    {
+      "id": "RV-REVIEW-NOTE-02",
+      "severity": "scope limit",
+      "detail": "Config/ref pins establish exact approved input identity, not independent semantic correctness or producer safety. Three descriptor adapters are approved for the actual pinned current schemas. New descriptor schema or unrecognized metadata requires explicit review, even where permissive extra dictionary keys happen to parse."
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/initialize.py", line 30, in <module>
+    raw=Path(r['original']).read_bytes();assert pin(raw)==r['source_pin'];piece=raw[r['start']:r['end']];assert piece==(S/r['copy']).read_bytes();extents.append({'manifest':nm,**r,'independent_exact_extent':True})
+                                                          ~^^^^^^^^^^^^^^
+KeyError: 'source_pin'

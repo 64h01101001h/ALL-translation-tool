@@ -1,0 +1,61 @@
+from pathlib import Path
+import ast,json,hashlib,re,difflib
+D=Path(__file__).resolve().parent;B=D.parent;A=B.parent;P=A/'C05-274-276/page-tooling-preparation';C=B/'page-banking-preparation'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+items=[(P/'banking-and-whitespace/whitespace276.py','whitespace276.py.txt'),(P/'staging/verify_staged_through276.py','verify_staged_through276.py.txt'),(P/'banking-and-whitespace/runtime-prerequisites.md','prior-whitespace-runtime-prerequisites.md'),(P/'banking-and-whitespace/report.md','prior-whitespace-report.md'),(P/'staging/command-contract.json','prior-staging-command-contract.json'),(B/'baseline.json','baseline.json'),(A/'integration/through276-root-closure/final-observed-main/proof.json','actual-closed276.json'),(C/'freeze-final-payload-before-staging.py','prepared-payload.py.txt'),(C/'bank_root_proofs_through279.py','prepared-banking.py.txt'),(C/'command-contract.json','prepared-banking-command-contract.json'),(C/'schema-contract.json','prepared-banking-schema-contract.json'),(C/'freeze.json','prepared-banking-freeze.json'),(B/'english/277/record_command.py','record-command-original.py.txt')]
+(D/'inputs').mkdir();maps=[]
+for p,n in items:
+ b=p.read_bytes();c=D/'inputs'/n;c.write_bytes(b);assert c.read_bytes()==p.read_bytes();maps.append(dict(original=str(p),resolved=str(p.resolve()),copy=str(c.relative_to(D)),**pin(b)))
+save(D/'input-manifest.json',maps)
+base=json.loads((D/'inputs/baseline.json').read_bytes());closed=json.loads((D/'inputs/actual-closed276.json').read_bytes())
+assert base['commit']==closed['final_head']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+assert base['course_boundary']==276 and base['full_links']==45126
+frozen=json.loads((D/'inputs/prepared-banking-freeze.json').read_bytes())
+for old,copy in [('freeze-final-payload-before-staging.py','prepared-payload.py.txt'),('bank_root_proofs_through279.py','prepared-banking.py.txt'),('command-contract.json','prepared-banking-command-contract.json'),('schema-contract.json','prepared-banking-schema-contract.json')]:assert pin((D/'inputs'/copy).read_bytes())==frozen['files'][old]
+oldbase='81942cfc6022a785894d3cc2a20de81dc4c6f599';mapping={str(n):str(n+3)for n in range(271,277)};mapping.update({'91':'92','92':'93'})
+pat=r'(?<!\d)(?:'+ '|'.join(mapping)+r')(?!\d)'
+proofs=[]
+for label,original,name in [('whitespace','whitespace276.py.txt','whitespace279.py'),('staging','verify_staged_through276.py.txt','verify_staged_through279.py')]:
+ old=(D/'inputs'/original).read_text();assert old.count(oldbase)==1
+ masked=old.replace(oldbase,'__BASE__');changes=[dict(start=m.start(),old=m.group(),new=mapping[m.group()])for m in re.finditer(pat,masked)]
+ new=re.sub(pat,lambda m:mapping[m.group()],masked).replace('__BASE__',base['commit'])
+ schema=[]
+ if label=='staging':
+  schema=[('integration/through276-root-closure/final/proof.json','integration/through276-root-closure/final-observed-main/proof.json'),("closed['status'] == 'PASS_ROOT_CLOSED_THROUGH_C05_276' and closed['fixed_heads']['final_documentation'] == BASE","closed['status'] == 'PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276' and closed['final_head'] == BASE")]
+  for before,after in schema:
+   assert new.count(before)==1;new=new.replace(before,after)
+ back=new
+ for before,after in reversed(schema):assert back.count(after)==1;back=back.replace(after,before)
+ back=back.replace(base['commit'],'__BASE__')
+ for r in reversed(changes):
+  assert back[r['start']:r['start']+len(r['new'])]==r['new']
+  back=back[:r['start']]+r['old']+back[r['start']+len(r['new']):]
+ assert back.replace('__BASE__',oldbase)==old
+ (D/name).write_text(new);compile(new,str(D/name),'exec')
+ (D/(label+'.diff.txt')).write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior-'+label,tofile='prepared-'+label)))
+ oldtree,newtree=ast.parse(old),ast.parse(new)
+ # Every unchanged top-level function and method gets a source/AST comparison.
+ nodes=lambda t:{n.name:n for n in ast.walk(t)if isinstance(n,ast.FunctionDef)}
+ on,nn=nodes(oldtree),nodes(newtree);assert set(on)==set(nn)
+ preserved={}
+ changed=[]
+ for key in on:
+  osrc=ast.get_source_segment(old,on[key]);nsrc=ast.get_source_segment(new,nn[key])
+  if osrc==nsrc:
+   assert ast.dump(on[key])==ast.dump(nn[key]);preserved[key]=pin(osrc.encode())
+  else:changed.append(key)
+ proofs.append(dict(label=label,prior=pin(old.encode()),candidate=pin(new.encode()),numeric_changes=changes,closure_schema_changes=schema,full_exact_reverse_identity=True,unchanged_functions=preserved,functions_with_boundary_changes=changed))
+ws=(D/'whitespace279.py').read_text();stage=(D/'verify_staged_through279.py').read_text()
+assert "build['page'] == 93 and build['first_segment'] == 277"in ws
+assert "PREFIX = 'data/alignment/reviews_c05/c5p93/'"in ws
+assert "self.review.parent.name == 'C05-277-279'"in ws
+assert "self.b.name == 'C05-277-279'"in stage
+assert "PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276"in stage
+assert "integration/through276-root-closure/final-observed-main/proof.json"in stage
+assert "assert len(added) == totals['spans'] + len(SEQS)"in stage
+assert "self.verify_banking_writes(previous, previous_raw, root_manifest, root_manifest_raw)"in stage
+assert "verify_source_archive"in stage and "check_final_head(self.git('rev-parse', 'HEAD')[0])"in stage
+for r in maps:assert Path(r['original']).read_bytes()==(D/r['copy']).read_bytes()
+proof={'status':'PASS_STATIC_PREPARATION_ONLY','BASE':base['commit'],'known_incoming_links':base['full_links'],'current_accepted_boundary':276,'prospective_page':93,'prospective_sequences':[277,278,279],'prospective_coverage':279,'prospective_open':232,'candidates':proofs,'syntax_checks':2,'actual_candidate_Git_SQL_build_test_runs':0,'current_final_review_diagnostics_payload_bank_not_read_or_created':True,'material_change':'Staging closure status/path/head-field must use actual fixed-data through276 closure; no new whitespace classification or retention algorithm.','all_original_copy_bytes_rechecked':True}
+save(D/'proof.json',proof);print(json.dumps({k:v for k,v in proof.items()if k!='candidates'},indent=2));print(json.dumps([{k:v for k,v in p.items()if k in ['label','prior','candidate','full_exact_reverse_identity','functions_with_boundary_changes']}for p in proofs],indent=2))

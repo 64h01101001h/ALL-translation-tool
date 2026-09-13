@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/extract_candidate.py", line 21, in <module>
+    rep("for s in [277,278,279]]", "for s in SEQS]")
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/extract_candidate.py", line 9, in rep
+    assert body.count(a)==1,(a,body.count(a));body=body.replace(a,b);changes.append({'old':a,'new':b})
+           ^^^^^^^^^^^^^^^^
+AssertionError: ('for s in [277,278,279]]', 2)

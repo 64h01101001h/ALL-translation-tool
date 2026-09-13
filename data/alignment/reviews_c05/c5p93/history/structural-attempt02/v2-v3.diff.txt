@@ -1,0 +1,11 @@
+--- v2
++++ v3
+@@ -48,7 +48,7 @@
+   for r in x['rows']:
+    if 'raw' not in r:continue
+    raw=json.loads(r['raw']);kind='corpus' if 'course' in r else 'master';arr=corpus if kind=='corpus' else master;assert arr[r['id']-1]==raw
+-   if 'hgm_gloss' in r:assert (json.loads(r['hgm_gloss']) if r['hgm_gloss'] is not None else None)==raw.get('hgm_gloss')
++   if 'hgm_gloss' in r:assert r['hgm_gloss']==(json.dumps(raw.get('hgm_gloss'),ensure_ascii=False) if raw.get('hgm_gloss') else None)
+    key=(kind,r['id']);assert key not in raws or raws[key]==r;raws[key]=r;n+=1
+   qp.append(dict(query=str(p.relative_to(D)),full_raw_rows=n))
+  packet=[]

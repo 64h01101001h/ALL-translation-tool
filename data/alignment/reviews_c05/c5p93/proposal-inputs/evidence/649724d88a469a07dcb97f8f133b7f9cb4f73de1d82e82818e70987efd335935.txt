@@ -1,0 +1,69 @@
+from pathlib import Path
+import json,hashlib,datetime,gzip,sqlite3,os
+D=Path(__file__).parent;B=D.parents[1];W=B.parent.parent/'campaign-worktree'
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+ b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,obj):
+ with p.open('x') as f:json.dump(obj,f,ensure_ascii=False,indent=2);f.write('\n')
+assert __debug__
+base=read(B/'baseline.json')
+for n,sha in base['sha256'].items():assert pin(W/n)['sha256']==sha
+for x in read(D/'original-manifest.json'):
+ p=Path(x['original']);assert pin(p)=={k:x[k] for k in ['bytes','sha256']}
+ if 'copy' in x:assert p.read_bytes()==(D/x['copy']).read_bytes()
+ if 'resolved' in x:assert str(p.resolve())==x['resolved'] and (os.readlink(p) if p.is_symlink() else None)==x['symlink']
+corp=read(W/'data/full_parallel_corpus_v32.json.gz') if False else json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+courses={}
+for x in corp:courses.setdefault(x['course'],[]).append(x)
+par=read(D/'parallel-queries-full.json');seen={}
+for q in par:
+ for row in q['rows']:
+  assert json.loads(row['raw'])==courses[row['course']][row['seq']-1]
+  seen[(row['course'],row['seq'])]=row
+save(D/'parallel-complete-corpus-verification.json',{'full_field_queries':len(par),'distinct_witness_rows':len(seen),'all_full_raw_objects_equal_original_corpus':True,'records':[{'course':k[0],'seq':k[1],'raw':json.loads(v['raw'])} for k,v in seen.items()],'lineage_limit':'Digitally identical text and repeated raw source metadata do not establish independent publication or ingestion.'})
+src={x['seq']:x for x in read(B/'source.json')}
+paths=[B/'baseline.json',B/'baseline-boundary.json',B/'source.json',B/'context.json',B/'tibetan-brief.md',B.parent/'proposal-protocol.md']
+additional=[]
+for p in paths:
+ dest=D/('shared-'+p.name);assert not dest.exists();dest.write_bytes(p.read_bytes());additional.append({'original':str(p),'copy':dest.name,**pin(p)})
+save(D/'shared-input-copy-manifest.json',additional)
+challenges={
+277:'Challenge the second far/near phrase as distance, final rgyang ring/at a distance, impression phrase without clear, and one assertion/name ownership. Four content ellipses and two active-agentive nulls have explicit no-separate-exponent reasons. Every repeated original/intermediate form and negative has an exact intended range.',
+278:'Challenge the modal thal/would have to and full simultaneity phrase. The rhetorical Wouldn’t is excluded from both explicit premise ma operators; outer phyir/quote framing and supplied source names remain distributed omissions.',
+279:'Challenge phyogs snga mas/original position against actual context and the contrary opponent glossary variants; four complete negative assertions versus final positive position; two strict reversed fluids-member pairs; omission of common-locus distributed wording; and final karma/control split. No grammatical correction of final yi dvags kyi is silently made.'}
+counts=[]
+for seq in [277,278,279]:
+ d=B/'tibetan'/str(seq);g=read(d/'generator-proof.json');sp=read(d/'spec.json')['segments'][0];items=read(d/'intended-spans.json')
+ assert g['exit_code']==0 and g['stderr_bytes']==0 and g['all_occurrences_match']
+ assert pin(d/'spec.json')['sha256']==g['spec_sha256']
+ assert (d/'body.html').read_bytes()==(d/'generator.stdout').read_bytes()
+ assert pin(d/'body.html')['sha256']==g['stdout_sha256']
+ assert len(sp['spans'])==len(items)==g['span_count']
+ assert read(d/'errata.json')==[]
+ assert len(src[seq]['english'])<1500
+ decision=('Final YI DVAGS KYI is preserved exactly in ACIP/derived Wylie and in C15:424. Its English subject role is recorded, but grammar alone without a verified correction does not authorize an erratum or source substitution; the genitive/agentive question remains a skeptical-review challenge.' if seq==279 else 'No spelling, factual, count or boundary defect is established by these sources; rhetorical and repeated negation structures are preserved rather than corrected.')
+ save(d/'errata-analysis.json',{'seq':seq,'errata':[],'five_grounds':{'actual_source':src[seq],'full_local_witnesses':'../277/parallel-queries-full.json and parallel-complete-corpus-verification.json; C15:'+str(seq+145)+' exact all three fields; P7:28 English-only exact for279. Overlap is not independent publication/ingestion.','registered_classes':'Full192-entry original register and7 selected full class records retained; no current exact citation; no selected field is at1500 characters or a course-shape heading marker.','linguistic_disposition':decision,'counts_and_provenance':'72 exact lexical queries,71 distinct complete master entries verified to source archive;15 full context/raw rows;56 preparation queries replayed exactly;9 full-field parallel queries;6 unique physical ACIP/English extents verified without whitespace repair to source.'}})
+ report=f'''C05:{seq} Tibetan-first original, primary Codex; PROVISIONAL mechanical proposal only.
+Author read its own earlier source preparation and root leads; no current English-original, reconciliation or skeptical findings were read before all three originals froze.
+{challenges[seq]}
+Shared evidence in ../277 includes72 complete lexical query sets/71 original master records,15 complete context/raw rows,56 exact preparation replays,9 exact full-field parallel queries and6 original physical extents; complete source/copy/Git records are preserved.
+Every intended Tib/English occurrence was compared to the actual unchanged canonical resolver, including all English-order crossings and strict members. Nulls mean documented ellipsis/grammar fusion; uncertain or distributed items are omitted with reasons in the immutable note/items.
+One actual canonical invocation for this segment: EXIT=0; stderr=0 bytes; stdout/body={g['stdout_bytes']} bytes; SHA-256={g['stdout_sha256']}. No failed or superseded current attempt; no post-generation spec/note edit.
+Spans={g['span_count']}; nulls={g['null_count']}; nonnull D5={g['d5_nonnull']}. Exact optional fields/occurrences remain in spec.json and intended-spans.json.
+Errata=0. {decision} Full five-ground decision is in errata-analysis.json.
+Source/master pins and baseline are unchanged. HGM glosses retain their original tier and fields; reference/auto-aligned anomalies are not used to compose English or promote machine evidence.
+Independent reconciliation and skeptical semantic acceptance are still required. No native, phone, MAIN, paid API, database write or source modification was performed.
+'''
+ (d/'report.md').write_text(report)
+ save(d/'completion-input-proof.json',{'status':'PASS_ORIGINAL_MECHANICAL_CHECKS_ONLY','canonical':g,'shared_evidence':str(D),'input_proof':pin(D/'evidence-proof.json'),'peer_originals_unread':True})
+ counts.append({'seq':seq,'spans':g['span_count'],'nulls':g['null_count'],'nonnull_d5':g['d5_nonnull'],'spec':pin(d/'spec.json'),'body':pin(d/'body.html')})
+now=datetime.datetime.now(datetime.timezone.utc).isoformat();freezes=[]
+for seq in [277,278,279]:
+ d=B/'tibetan'/str(seq)
+ files=[{'path':str(p.relative_to(d)),**pin(p)} for p in sorted(d.rglob('*')) if p.is_file()]
+ save(d/'freeze.json',{'status':'FROZEN_ORIGINAL_NO_SEMANTIC_APPROVAL','utc':now,'producer':'Primary Codex, own-preparation-informed Tibetan-first','files':files})
+ freezes.append({'path':str(d/'freeze.json'),**pin(d/'freeze.json')})
+save(B/'primary-tibetan-original-complete.json',{'utc':now,'status':'ALL_THREE_ORIGINALS_FROZEN_BEFORE_CURRENT_ENGLISH_READ','counts':counts,'freezes':freezes,'total_spans':sum(x['spans'] for x in counts),'total_nulls':sum(x['nulls'] for x in counts)})
+print(json.dumps(counts,indent=2))
+

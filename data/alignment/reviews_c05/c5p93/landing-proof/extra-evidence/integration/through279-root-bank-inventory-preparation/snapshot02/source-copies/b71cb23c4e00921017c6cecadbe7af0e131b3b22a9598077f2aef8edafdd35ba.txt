@@ -1,0 +1,62 @@
+from pathlib import Path
+import json,hashlib,os,ast,difflib,csv,io,collections,datetime
+D=Path(__file__).resolve().parent;I=D.parents[1];P=I/'through279-generated-reproduction-concrete-preparation';A=I.parent;W=A.parent/'campaign-worktree';B=A/'C05-277-279'
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def j(p):return json.loads(p.read_bytes())
+def save(n,v):(D/n).write_text(json.dumps(v,indent=2)+'\n')
+f=j(P/'freeze.json');assert pin((P/'freeze.json').read_bytes())['sha256']=='007e81a0435d0d41e12be4e841ebc795647b028d21f9df7da00bf8d8c9c61706'
+actual={str(x.relative_to(P)):pin(x.read_bytes()) for x in P.rglob('*') if x.is_file() and x!=P/'freeze.json'}
+assert actual==f['files'] and len(actual)==f['file_count']==473 and sum(x['bytes'] for x in actual.values())==f['total_bytes']==13155582
+maps=[];verified=[]
+for name in ['phase01-original-to-copy-manifest.json','current-original-to-copy-manifest.json','history-supplement-map.json']:
+ for r in j(P/name):
+  o=Path(r['original']);b=o.read_bytes();c=P/r['copy'];assert b==c.read_bytes() and pin(b)=={k:r[k] for k in ['bytes','sha256']}
+  resolved=r.get('resolved_original',r.get('resolved'));assert str(o.resolve())==resolved
+  assert (os.readlink(o) if o.is_symlink() else None)==r['symlink']
+  verified.append({'manifest':name,'original':str(o),'resolved_original':resolved,'copy':str(c),**pin(b)})
+assert len(verified)==426
+external=j(P/'external-full-byte-bindings.json');e=[]
+for r in external['payload']+external['semantic_review']+[external['seed']]:
+ o=Path(r['original']);c=Path(r['copy']);b=o.read_bytes();assert b==c.read_bytes() and pin(b)=={k:r[k] for k in ['bytes','sha256']}
+ e.append({**r,'resolved_original':str(o.resolve()),'resolved_copy':str(c.resolve()),'original_symlink':os.readlink(o) if o.is_symlink() else None,'copy_symlink':os.readlink(c) if c.is_symlink() else None})
+assert len(e)==2084
+for r in external['baseline_sources']:assert pin(Path(r['path']).read_bytes())=={k:r[k] for k in ['bytes','sha256']}
+assert len(external['baseline_sources'])==9
+fp=j(P/'final-preparation-proof.json');s=fp['spine'];assert pin(Path(s['path']).read_bytes())=={k:s[k] for k in ['bytes','sha256']};assert str(Path(s['path']).resolve())==s['resolved']
+code=[]
+for r in j(P/'adaptation-proof.json')['files']:
+ n=r['file'];old=(P/'prior-preparation'/n).read_bytes();new=(P/n).read_bytes();assert pin(old)==r['original'] and pin(new)==r['candidate']
+ forward=old.decode()
+ for z in r['changes']:assert forward.count(z['old'])==z['count'];forward=forward.replace(z['old'],z['new'])
+ assert forward.encode()==new
+ back=new.decode()
+ for z in reversed(r['changes']):assert back.count(z['new'])==z['count'];back=back.replace(z['new'],z['old'])
+ assert back.encode()==old
+ expected=''.join(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile='prior-preparation/'+n,tofile=n))
+ assert (P/(n+'.diff')).read_bytes()==expected.encode()
+ tree=ast.parse(new);ot=ast.parse(old)
+ structure=lambda t: [type(x).__name__ for x in ast.walk(t)]
+ assert structure(tree)==structure(ot)
+ code.append({'file':n,**pin(new),'forward_inverse_diff_exact':True,'ast_node_structure_unchanged':True})
+# Independent input measurement only: no candidate import or execution.
+base=B/'landing/payload-freeze';full=j(base/'data/alignment/alignment_full_v1.json');ev=j(base/'data/alignment/alignment_evidence_v1.json')
+rows=lambda suffix:list(csv.DictReader(io.StringIO((base/('docs/geshe_michael_roach_dictionary'+suffix)).read_bytes().decode('utf-8-sig'),newline='')))
+counts=[len(full['links']),sum(x['eng'] is None for x in full['links']),sum(map(len,full['notes'].values())),sum(map(len,full['trees'].values())),len(ev['pairs']),sum(map(len,ev['pairs'].values()))]+[len(rows(s)) for s in ['.csv','_reverse.csv','_by_course.csv','_changes.csv']]
+m=j(P/'actual-measurements.json');assert counts==list(m['counts'].values())==[45275,11934,1615,11,7084,15517,22491,22151,24061,34]
+t=ast.parse((W/'tools/build_alignment_layer.py').read_bytes());a=next(n for n in t.body if isinstance(n,ast.Assign) and any(isinstance(q,ast.Name) and q.id=='COURSES' for q in n.targets));reg={ast.literal_eval(k):{ast.literal_eval(kk):ast.literal_eval(vv) for kk,vv in zip(v.keys,v.values) if ast.literal_eval(kk)=='pages'} for k,v in zip(a.value.keys,a.value.values)}
+assert sum(len(v['pages']) for v in reg.values())==m['registered_pages']==547 and reg['C05']['pages']['c5p93']==[277,278,279]
+assert ev['meta']['date']==m['source_date']=='2026-09-13' and ev['meta']['source_pages']==m['source_pages']
+assert len(ev['acip_index'])==m['acip']['proven']==7081
+assert m['review_freeze']==pin((B/'semantic-review/freeze.json').read_bytes())
+# Copy the complete immutable candidate, including every nested failure and freeze.
+for p in sorted(P.rglob('*')):
+ if not p.is_file():continue
+ target=D/'inputs'/p.relative_to(P)
+ if target.suffix in ['.py','.diff'] or not target.suffix:target=target.with_name(target.name+'.txt')
+ target.parent.mkdir(parents=True,exist_ok=True);b=p.read_bytes()
+ with target.open('xb') as out:out.write(b)
+ assert b==target.read_bytes()
+ maps.append({'original':str(p),'resolved_original':str(p.resolve()),'symlink':os.readlink(p) if p.is_symlink() else None,'copy':str(target.relative_to(D)),**pin(b)})
+save('original-to-copy-manifest.json',maps);save('candidate-source-map-verification.json',verified);save('external-full-byte-verification.json',e)
+save('proof.json',{'status':'PASS_STATIC_METHOD_AND_FULL_IDENTITY_CHECKS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'candidate_freeze':pin((P/'freeze.json').read_bytes()),'candidate_frozen_files':473,'full_preserved_candidate_files':len(maps),'candidate_original_copy_pairs':len(verified),'full_external_pairs':len(e),'baseline_pins':9,'code':code,'counts':counts,'registered_pages':547,'production_sql_git_test_executions':0,'candidate_imports_or_executions':0})
+print(json.dumps({'status':'PASS','candidate_files':len(maps),'source_pairs':len(verified),'external_pairs':len(e),'code':4}))

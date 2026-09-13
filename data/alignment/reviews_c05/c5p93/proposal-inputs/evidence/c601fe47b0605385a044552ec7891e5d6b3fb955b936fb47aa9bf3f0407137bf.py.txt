@@ -1,0 +1,41 @@
+from pathlib import Path
+import json,hashlib,datetime,subprocess,os,ast,re
+B=Path(__file__).parent;W=B.parents[1]/'campaign-worktree';O=B/'root-tooling-acceptance';O.mkdir()
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+ b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+base=read(B/'baseline.json')['commit'];results=[];bindings=[]
+for folder,expected in [('registration-preparation','708cc19aa06d07e472eb6b45c9d346c4d51d9efb9e0538d585c9bc2cc035bdfa'),('landing-helper-review','9ca3a2ea457bbd959c7432f95f01316f03ed2c2334878dc2bafe43624988df79')]:
+ d=B/folder;f=read(d/'freeze.json');assert pin(d/'freeze.json')['sha256']==expected
+ fs=f['files'];fs=fs if isinstance(fs,dict) else {x['path']:x for x in fs}
+ actual={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}
+ assert actual==set(fs)
+ for name,p in fs.items():assert pin(d/name)=={k:p[k] for k in ['bytes','sha256']}
+ maps=read(d/'input-manifest.json')
+ for x in maps:
+  p=Path(x['original']);c=d/x['copy']
+  assert pin(c)=={k:x[k] for k in ['bytes','sha256']} and c.read_bytes()==p.read_bytes()
+  row=dict(x,copy=str(c))
+  if p.is_relative_to(W):
+   rel=str(p.relative_to(W));argv=['git','show',base+':'+rel]
+   run=subprocess.run(argv,cwd=W,capture_output=True,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+   assert run.returncode==0 and not run.stderr and run.stdout==c.read_bytes()
+   stem='git-'+str(len(bindings));(O/(stem+'.stdout')).write_bytes(run.stdout);(O/(stem+'.stderr')).write_bytes(run.stderr)
+   (O/(stem+'.command.json')).write_text(json.dumps({'argv':argv,'cwd':str(W),'exit':run.returncode,'stdout':stem+'.stdout','stderr':stem+'.stderr'},indent=2)+'\n')
+   row.update(original_git_commit=base,repository_relative_path=rel)
+  bindings.append(row)
+ results.append({'folder':folder,'files':len(actual),'input_maps':len(maps),'freeze':pin(d/'freeze.json')})
+d=B/'registration-preparation'
+old=(W/'data/alignment/pages_c05/index.html').read_text()
+last='<li><a href="c5p92.html">Page 92 · segments 274–276</a></li>'
+added='<li><a href="c5p93.html">Page 93 · segments 277–279</a></li>'
+new=old.replace('Reviewed campaign coverage: 276 of 511 source segments.','Reviewed campaign coverage: 279 of 511 source segments.').replace(last,last+'\n'+added)
+assert new.encode()==(d/'prospective/index.html').read_bytes()
+builder=(W/'tools/build_alignment_layer.py').read_bytes();anchor=b'    "c5p92": [274, 275, 276],\n';line=b'    "c5p93": [277, 278, 279],\n'
+assert builder.count(anchor)==1 and line not in builder
+assert builder.replace(anchor,anchor+line)==(d/'prospective/build_alignment_layer.py.txt').read_bytes()
+for p in [d/'register-reviewed-page-and-index.py',B.parent/'land_reviewed_page_v2.py']:ast.parse(p.read_bytes())
+(O/'historical-input-bindings.json').write_text(json.dumps(bindings,indent=2)+'\n')
+out={'status':'APPROVE_SCOPED_TOOLING_WITH_RUNTIME_PREREQUISITES','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'head':base,'reviews':results,'historical_governing_records':sum('original_git_commit' in x for x in bindings),'registration':pin(d/'register-reviewed-page-and-index.py'),'landing_helper':pin(B.parent/'land_reviewed_page_v2.py'),'root_review':'Full source/diff/report/contract read. Exact intended three registration transformations and logging-only helper AST review accepted. All actual copies and immutable Git objects match.','execution_performed':False,'runtime_prerequisites':['Final independent semantic APPROVE and root exact identity/source acceptance','Complete current landed individual/body/spec/review interfaces for registration','One recorded caller for each tool, assertions enabled, preserve failure/partial output without automatic retry'],'limits':'No semantic, native, device or current MAIN approval. Future historical input verification must use recorded Git objects for mutable worktree source snapshots; current live path equality is a capture-time observation.'}
+(O/'proof.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))
+

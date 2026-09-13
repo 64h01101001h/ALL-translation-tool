@@ -1,0 +1,22 @@
+{
+  "status": "PASS_COMPLETE_ACTUAL_PRE_ORDINARY_INVENTORY",
+  "utc": "2026-09-13T19:47:38.385253+00:00",
+  "sources": 11818,
+  "counts": {
+    "explicit-bank": 4009,
+    "already-banked-exact-copy": 7676,
+    "automatic-landing-input": 58,
+    "explicit-external": 75
+  },
+  "records": 4084,
+  "new_since_preparation": 2353,
+  "manifest": {
+    "bytes": 2160674,
+    "sha256": "130b99160d0011bd3fefdb811ca723530c50c4f9060ed0a654e8fbb42341eccd"
+  },
+  "required_reproduction_acceptance": {
+    "bytes": 1328,
+    "sha256": "ad32574faf6f4d1f19880215543e79422cc894986fdaff6b560e4d2218546041"
+  },
+  "boundary": "All listed current roots plus current late closure/freeze/rootacceptance and inventory/review sources; ordinary-bank manifest consumes exact LIST. This composition output and its later caller are external and must be explicitly retained by final phase; the LIST itself is banked automatically. No bank/stage/test execution."
+}

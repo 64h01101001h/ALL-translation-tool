@@ -1,0 +1,122 @@
+{
+  "status": "APPROVE_CODE_ONLY_CONDITIONAL_ROOT_RELEASE",
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "candidate_freeze": {
+    "bytes": 89713,
+    "sha256": "007e81a0435d0d41e12be4e841ebc795647b028d21f9df7da00bf8d8c9c61706"
+  },
+  "baseline_commit": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "code": [
+    {
+      "file": "prepare.py.txt",
+      "bytes": 5097,
+      "sha256": "795dbf83954f82d6461bfcafd691588974ce5b146d4f3ed4a459c2f595a04df2",
+      "forward_inverse_diff_exact": true,
+      "ast_node_structure_unchanged": true
+    },
+    {
+      "file": "run-once.py.txt",
+      "bytes": 2559,
+      "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0",
+      "forward_inverse_diff_exact": true,
+      "ast_node_structure_unchanged": true
+    },
+    {
+      "file": "run-isolated-readonly.py.txt",
+      "bytes": 1639,
+      "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca",
+      "forward_inverse_diff_exact": true,
+      "ast_node_structure_unchanged": true
+    },
+    {
+      "file": "verify-retention.py.txt",
+      "bytes": 11698,
+      "sha256": "a390e0f89a64b873798dde798ad4aa5f60c1e2d9a01027ad1d4a882ce3515a35",
+      "forward_inverse_diff_exact": true,
+      "ast_node_structure_unchanged": true
+    }
+  ],
+  "checklist": [
+    {
+      "id": "CODE_SCOPE",
+      "status": "APPROVE",
+      "disposition": "All four forward/inverse/full diffs and AST structure exact",
+      "evidence": "final/proof.json"
+    },
+    {
+      "id": "MEASURED_PARAMS",
+      "status": "APPROVE",
+      "disposition": "Current full payload measurements match concrete counts and registry",
+      "evidence": "final/proof.json"
+    },
+    {
+      "id": "SEED_TRANSITION",
+      "status": "APPROVE",
+      "disposition": "Incoming immutable seed and immediate-before-view/replacement contract retained",
+      "evidence": "final/inputs/command-plan.md"
+    },
+    {
+      "id": "SEVEN_OUTPUTS",
+      "status": "APPROVE",
+      "disposition": "All seven fixed prior and current full-byte comparisons retained",
+      "evidence": "final/inputs/verify-retention.py.txt"
+    },
+    {
+      "id": "RETENTION_RANGES",
+      "status": "APPROVE",
+      "disposition": "Complete prior metadata, CSV oracle and source-range gates unchanged",
+      "evidence": "final/inputs/verify-retention.py.txt"
+    },
+    {
+      "id": "READ_ONLY",
+      "status": "APPROVE",
+      "disposition": "Unchanged wrapper plus explicit release/source/state closure obligations",
+      "evidence": "final/inputs/command-plan.md"
+    },
+    {
+      "id": "ACTUAL_PREREQUISITES",
+      "status": "APPROVE",
+      "disposition": "Eleven callers, twelve payload pairs, one layer/view and actual17 results",
+      "evidence": "prerequisites/proof.json"
+    },
+    {
+      "id": "HISTORY",
+      "status": "APPROVE",
+      "disposition": "Failed source/callers and superseded original proof versions retained",
+      "evidence": "final/original-to-copy-manifest.json"
+    },
+    {
+      "id": "PROVENANCE",
+      "status": "APPROVE",
+      "disposition": "426 full current/historical source pairs and2084 external pairs verified",
+      "evidence": "final/candidate-source-map-verification.json"
+    },
+    {
+      "id": "RUNTIME_LIMIT",
+      "status": "APPROVE",
+      "disposition": "No production execution; separate release and reviewed post-run closure required",
+      "evidence": "final/inputs/command-plan.md"
+    }
+  ],
+  "runtime_executions": 0,
+  "post_run_closure_pending": true,
+  "report": {
+    "path": "report.md",
+    "bytes": 8313,
+    "sha256": "bfe08e8638166f0547666e7ee5c26ed399ffa81c0fa37fad4c2b9e4c3caa30ce"
+  },
+  "source_manifest": {
+    "path": "original-to-copy-manifest.json",
+    "records": 697,
+    "bytes": 530359,
+    "sha256": "95cfe95ad3ec43355c0ebcb8fa480408e43ce9a4d7455a97d4277f7bb210b9b5"
+  },
+  "freeze_contract": {
+    "path": "freeze.json",
+    "files": "DICT relative path to bytes/sha256",
+    "excludes": "Only this top-level freeze.json"
+  }
+}

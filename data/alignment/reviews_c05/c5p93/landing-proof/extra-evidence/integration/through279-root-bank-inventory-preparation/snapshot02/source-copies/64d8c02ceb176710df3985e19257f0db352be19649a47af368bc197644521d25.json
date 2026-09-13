@@ -1,0 +1,50 @@
+[
+  {
+    "line": 9,
+    "source": "import datetime"
+  },
+  {
+    "line": 34,
+    "source": "generator_started = datetime.datetime.now(datetime.timezone.utc).isoformat()"
+  },
+  {
+    "line": 43,
+    "source": "(landing / \"generator.stdin.bin\").write_bytes(json.dumps(spec, ensure_ascii=False).encode())"
+  },
+  {
+    "line": 44,
+    "source": "(landing / \"generator.command.json\").write_text(json.dumps({\n    \"argv\": [sys.executable, str(art / \"run_generator_readonly.py\")],\n    \"cwd\": str(root), \"started_at\": generator_started,\n    \"finished_at\": datetime.datetime.now(datetime.timezone.utc).isoformat(),\n    \"environment_overrides\": {\"PYTHONDONTWRITEBYTECODE\": \"1\"},\n    \"stdin\": \"generator.stdin.bin\", \"stdout\": \"generator.stdout\",\n    \"stderr\": \"generator.stderr\", \"exit\": run.returncode}, indent=2) + \"\\n\")"
+  },
+  {
+    "line": 56,
+    "source": "wrapper_started = datetime.datetime.now(datetime.timezone.utc).isoformat()"
+  },
+  {
+    "line": 60,
+    "source": "(landing / \"wrapper.stdout\").write_bytes(wrap.stdout)"
+  },
+  {
+    "line": 61,
+    "source": "(landing / \"wrapper.stderr\").write_bytes(wrap.stderr)"
+  },
+  {
+    "line": 62,
+    "source": "(landing / \"wrapper.exit\").write_text(str(wrap.returncode) + \"\\n\")"
+  },
+  {
+    "line": 63,
+    "source": "(landing / \"wrapper.command.json\").write_text(json.dumps({\n    \"argv\": [sys.executable, \"tools/wrap_alignment_page.py\", str(out), title,\n             subtitle, f\"c5p{page-1}.html\", \"-\", \"5\"],\n    \"cwd\": str(root), \"started_at\": wrapper_started,\n    \"finished_at\": datetime.datetime.now(datetime.timezone.utc).isoformat(),\n    \"environment_overrides\": {\"PYTHONDONTWRITEBYTECODE\": \"1\"},\n    \"stdin\": \"generator.stdout\", \"stdout\": \"wrapper.stdout\",\n    \"stderr\": \"wrapper.stderr\", \"exit\": wrap.returncode}, indent=2) + \"\\n\")"
+  },
+  {
+    "line": 72,
+    "source": "assert not wrap.stderr, \"Wrapper reported warnings\""
+  },
+  {
+    "line": 73,
+    "source": "(landing / \"wrapped-page-before-credits.html\").write_bytes(out.read_bytes())"
+  },
+  {
+    "line": 86,
+    "source": "(landing / \"prior-page-before-navigation.html\").write_bytes(prior.read_bytes())"
+  }
+]

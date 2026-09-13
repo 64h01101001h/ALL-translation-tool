@@ -1,0 +1,16 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/026.json",
+  "query_pin": {
+    "bytes": 361,
+    "sha256": "c26977ca14459cfd136c8328916c353895781684477ae243f6ddd02869fc30e8"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "rnam pa shar ba",
+    "rnam pa shar ba"
+  ],
+  "rows": [],
+  "count": 0,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

@@ -1,0 +1,63 @@
+from pathlib import Path
+import hashlib,json,ast,difflib,os,datetime
+D=Path(__file__).resolve().parent;I=D.parent;P=I/'through279-reproduction-closure-preparation';R=I/'through279-generated-reproduction';B=I.parent/'C05-277-279';W=I.parent.parent/'campaign-worktree'
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def j(p):return json.loads(p.read_bytes())
+def save(n,v):(D/n).write_text(json.dumps(v,indent=2)+'\n')
+f=j(P/'freeze.json');assert pin((P/'freeze.json').read_bytes())['sha256']=='c72e438be5580182990e59ab92fde3c74b68ebf89089a79cea458228ac1ab452'
+actual={str(x.relative_to(P)):pin(x.read_bytes()) for x in P.rglob('*') if x.is_file() and x!=P/'freeze.json'}
+assert actual==f['files'] and len(actual)==f['file_count']==186 and sum(x['bytes'] for x in actual.values())==f['total_bytes']==75087411
+sources=[]
+for n in ['phase01-source-map.json','actual-input-source-map.json']:
+ for r in j(P/n):
+  o=Path(r['original']);b=o.read_bytes();assert b==(P/r['copy']).read_bytes() and pin(b)=={k:r[k] for k in ['bytes','sha256']}
+  sources.append({**r,'source_manifest':n,'resolved_original':str(o.resolve()),'symlink':os.readlink(o) if o.is_symlink() else None})
+assert len(sources)==157
+code=[]
+for r in j(P/'adaptation-proof.json')['files']:
+ old=Path(r['original_path']).read_bytes();new=(P/r['file']).read_bytes();assert pin(old)==r['original'] and pin(new)==r['candidate']
+ current=old.decode()
+ for c in r['changes']:assert current.count(c['old'])==c['count'];current=current.replace(c['old'],c['new'])
+ assert current.encode()==new
+ for c in reversed(r['changes']):assert current.count(c['new'])==c['count'];current=current.replace(c['new'],c['old'])
+ assert current.encode()==old
+ diff=''.join(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile=r['original_path'],tofile=r['file']))
+ assert diff.encode()==(P/(r['file']+'.diff')).read_bytes();ast.parse(new)
+ code.append({'file':r['file'],**pin(new),'full_forward_inverse_diff_exact':True,'parsed_only':True})
+# Observe existing runtime records; no checks are rerun.
+checks=j(R/'retention-checks.json');ret=j(R/'retention-proof.json');exe=j(R/'execution-proof.json');assert len(checks)==ret['checks_total']==224711 and all(x['pass_'] is True for x in checks)
+assert ret['status']==exe['status']=='PASS' and exe['layer_invocations']==exe['view_invocations']==1 and len(exe['runs'])==2 and len(exe['outputs'])==7
+manifest=j(R/'input-manifest.json');assert len(manifest)==2711 and len(j(R/'registered-pages.json'))==547
+streams=[]
+for label in ['prepare','run-once','retention']:
+ d=R/'caller-runs'/label;c=j(d/'command.json');e=j(d/'execution.json');assert c['argv']==e['argv'] and c['cwd']==e['cwd']==str(R) and e['exit']==0
+ assert (d/'exit.txt').read_bytes()==b'0\n' and (d/'stdin.bin').read_bytes()==b'' and (d/'stderr.bin').read_bytes()==b''
+ for n in ['stdout','stderr']:assert pin((d/(n+'.bin')).read_bytes())=={'bytes':e[n+'_bytes'],'sha256':e[n+'_sha256']}
+ streams.append({'label':label,'execution':pin((d/'execution.json').read_bytes()),'exit':0})
+for label,run in zip(['layer','view'],exe['runs']):
+ d=R/'executions'/label;assert j(d/'execution.json')==run and (d/'exit').read_bytes()==b'0\n'
+ for n in ['stdout','stderr']:assert pin((d/n).read_bytes())==run[n]
+ g=j(d/'runtime-guards.json');assert g['date_override']=='2026-09-13' and g['bytecode_disabled'] and g['write_scope']==str(R) and all(x['query_only']==1 and x['uri'].endswith('?mode=ro') for x in g['sqlite_connections'])
+assert (R/'executions/view/stderr').stat().st_size==1079
+outputs=[]
+for r in exe['outputs']:
+ b=(R/'workspace'/r['path']).read_bytes();assert pin(b)=={k:r[k] for k in ['bytes','sha256']}
+ for p in [R/'expected-payload'/r['path'],R/'reproduced-outputs'/r['path'],W/r['path'],B/'landing/payload-freeze'/r['path']]:assert p.read_bytes()==b
+ outputs.append({'path':r['path'],**pin(b),'locations_full_bytes_equal':5})
+entry=j(B/'reproduction-root-entry/proof.json');state=[]
+for label,r in entry['state'].items():
+ p=B/'reproduction-root-entry'/(label+'.bin');assert pin(p.read_bytes())==r;state.append({'field':label,'path':str(p),**r})
+assert len(state)==6
+# Actual entry historical streams, not fresh live state observations.
+records=[]
+for p in sorted(P.rglob('*')):
+ if not p.is_file():continue
+ target=D/'inputs'/p.relative_to(P)
+ if target.suffix in ['.py','.diff'] or not target.suffix:target=target.with_name(target.name+'.txt')
+ target.parent.mkdir(parents=True,exist_ok=True);b=p.read_bytes()
+ with target.open('xb') as o:o.write(b)
+ assert target.read_bytes()==b
+ records.append({'original':str(p),'resolved_original':str(p.resolve()),'symlink':os.readlink(p) if p.is_symlink() else None,'copy':str(target.relative_to(D)),**pin(b)})
+save('original-to-copy-manifest.json',records);save('upstream-source-map-verification.json',sources)
+save('proof.json',{'status':'PASS_STATIC_AND_EXISTING_RUNTIME_EVIDENCE','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'candidate_freeze':pin((P/'freeze.json').read_bytes()),'candidate_files':186,'preserved_files':len(records),'source_copy_pairs':157,'code':code,'retention_check_records':len(checks),'input_aliases':len(manifest),'registered_pages':547,'actual_callers':streams,'actual_seven_outputs':outputs,'historical_entry_fields':state,'fresh_git_state_observed':False,'candidate_closure_acceptance_executions':0,'sql_git_producer_test_invocations':0})
+print(json.dumps({'status':'PASS','frozen_files':186,'input_copies':len(records),'upstream_pairs':157,'observed_check_records':len(checks),'outputs':7}))

@@ -1,0 +1,17 @@
+....E.
+======================================================================
+ERROR: test_optimized_candidate_rejected_before_any_config_read (__main__.ReleaseTests.test_optimized_candidate_rejected_before_any_config_read)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/test_release_boundary.py", line 16, in test_optimized_candidate_rejected_before_any_config_read
+    with self.assertRaises(RuntimeError):ns['release_inputs'](None)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/verify_reconciliation.py", line 14, in release_inputs
+    config_path=Path(args.config);assert config_path.is_absolute() and config_path.is_file()
+                     ^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'config'
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.011s
+
+FAILED (errors=1)

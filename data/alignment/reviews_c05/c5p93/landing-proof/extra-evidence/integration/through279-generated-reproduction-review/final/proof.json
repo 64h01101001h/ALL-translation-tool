@@ -1,0 +1,58 @@
+{
+  "status": "PASS_STATIC_METHOD_AND_FULL_IDENTITY_CHECKS",
+  "utc": "2026-09-13T19:30:55.258063+00:00",
+  "candidate_freeze": {
+    "bytes": 89713,
+    "sha256": "007e81a0435d0d41e12be4e841ebc795647b028d21f9df7da00bf8d8c9c61706"
+  },
+  "candidate_frozen_files": 473,
+  "full_preserved_candidate_files": 474,
+  "candidate_original_copy_pairs": 426,
+  "full_external_pairs": 2084,
+  "baseline_pins": 9,
+  "code": [
+    {
+      "file": "prepare.py.txt",
+      "bytes": 5097,
+      "sha256": "795dbf83954f82d6461bfcafd691588974ce5b146d4f3ed4a459c2f595a04df2",
+      "forward_inverse_diff_exact": true,
+      "ast_node_structure_unchanged": true
+    },
+    {
+      "file": "run-once.py.txt",
+      "bytes": 2559,
+      "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0",
+      "forward_inverse_diff_exact": true,
+      "ast_node_structure_unchanged": true
+    },
+    {
+      "file": "run-isolated-readonly.py.txt",
+      "bytes": 1639,
+      "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca",
+      "forward_inverse_diff_exact": true,
+      "ast_node_structure_unchanged": true
+    },
+    {
+      "file": "verify-retention.py.txt",
+      "bytes": 11698,
+      "sha256": "a390e0f89a64b873798dde798ad4aa5f60c1e2d9a01027ad1d4a882ce3515a35",
+      "forward_inverse_diff_exact": true,
+      "ast_node_structure_unchanged": true
+    }
+  ],
+  "counts": [
+    45275,
+    11934,
+    1615,
+    11,
+    7084,
+    15517,
+    22491,
+    22151,
+    24061,
+    34
+  ],
+  "registered_pages": 547,
+  "production_sql_git_test_executions": 0,
+  "candidate_imports_or_executions": 0
+}

@@ -1,0 +1,22 @@
+{
+  "utc": "2026-09-13T16:09:35.452835+00:00",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py\", line 248, in run\n    try: kind = ordinary_predicate(raw,grouped)\n                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py\", line 97, in ordinary_predicate\n    contexts = diff_context_lines(raw)\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py\", line 84, in diff_context_lines\n    assert pair and match, ('Unrecognized or ambiguous diff framing', i+1, line)\n           ^^^^^^^^^^^^^^\nAssertionError: ('Unrecognized or ambiguous diff framing', 1, b'  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/reconciled/274/finish.py\", line 30')\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py\", line 278, in main\n    try: result = run.run()\n                  ~~~~~~~^^\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py\", line 250, in run\n    witness = classify_physical(raw,grouped,physical)\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py\", line 139, in classify_physical\n    assert matches, ('No complete original physical line', number)\n           ^^^^^^^\nAssertionError: ('No complete original physical line', 2)\n",
+  "partial_files": [
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C05-274-english-0.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C05-275-english-0.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C05-276-english-0.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C05-context-reading.txt",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C05-context.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C15-419-acip-0.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C15-419-english-0.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C15-420-english-0.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C15-421-english-0.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C15-context-reading.txt",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/physical-C15-context.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/proposal-inputs/evidence/5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb.txt",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/proposal-inputs/evidence/cafbaf4007dfde49aba0c96a991c5710b77945d8751954357fd08d91131586c6.bin",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/history/source-preparation/proposal-inputs/evidence/ede520e320a21fc3f7aef4366920c1debbddbc26894513506648e9dd0ffeed10.txt",
+    "data/alignment/reviews_c05/c5p92/history/initial-review/proposal-inputs/evidence/29b027d1339bf3b4b987a7607e4a255c7293b88d694e09dbc6ce59cebc7ee941.bin"
+  ],
+  "disposition": "Keep this entire fresh attempt unchanged, including all copied full inputs, commands, raw diagnostics and partial classification; use a distinct output for any retry."
+}

@@ -1,0 +1,598 @@
+[
+  {
+    "id": 1,
+    "sql": "select name,sql from sqlite_master where type='table' order by name",
+    "parameters": [],
+    "purpose": "Actual schema",
+    "count": 21
+  },
+  {
+    "id": 2,
+    "sql": "select * from corpus_segments where course=? and seq between ? and ? order by seq",
+    "parameters": [
+      "C05",
+      277,
+      279
+    ],
+    "purpose": "Current exact originals",
+    "count": 3
+  },
+  {
+    "id": 3,
+    "sql": "select * from corpus_segments where course=? and seq between ? and ? order by seq",
+    "parameters": [
+      "C05",
+      271,
+      285
+    ],
+    "purpose": "Whole local argument",
+    "count": 15
+  },
+  {
+    "id": 4,
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%rgyang ring thung%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 5
+  },
+  {
+    "id": 5,
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%las gzugs gsal mi gsal%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 3
+  },
+  {
+    "id": 6,
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%des de ma bsgribs%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 2
+  },
+  {
+    "id": 7,
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%dngos po gsum gyi gzhi mthun%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 9
+  },
+  {
+    "id": 8,
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%the actual meaning of Master Dharmakirti%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 3
+  },
+  {
+    "id": 9,
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%Wouldn't your visual consciousness%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 2
+  },
+  {
+    "id": 10,
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%Our second point%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 97
+  },
+  {
+    "id": 11,
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%clear impression of this form%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 2
+  },
+  {
+    "id": 12,
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%yi dvags kyi chu klung%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 2
+  },
+  {
+    "id": 13,
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%yi dvags kyis chu klung%"
+    ],
+    "purpose": "Exact independently chosen parallel/counterreading probe",
+    "count": 7
+  },
+  {
+    "id": 14,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "der thal"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 15,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "chos kyi grags pa"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 16,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "lung"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 17,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "lung don"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 0
+  },
+  {
+    "id": 18,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "grangs can"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 19,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "rgyang"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 20,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "ring"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 21,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "thung"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 22,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "rgyang ring"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 23,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "rgyang ring thung"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 0
+  },
+  {
+    "id": 24,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "gzugs"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 25,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "mig shes"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 26,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "bar du"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 27,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "las gzugs"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 0
+  },
+  {
+    "id": 28,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "gsal"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 29,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "gsal bar"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 30,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "mi gsal"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 31,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "skye ba"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 32,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "dbang gis"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 33,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "rnam pa"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 34,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "shar ba"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 35,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "sgo nas"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 36,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "'jog pa"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 37,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "khas blangs"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 38,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "bsgribs"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 39,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "sgrib"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 40,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "ma"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 41,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "cig car du"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 42,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "cig car"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 43,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "bkag"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 44,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "phyir"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 45,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "phyogs snga"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 46,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "brlan zhing gsher ba"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 47,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "phor pa"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 48,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "gang"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 49,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "dngos po"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 50,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "gzhi mthun"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 51,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "skyes bu"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 52,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "mdzes"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 53,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "mi mdzes"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 54,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "gnyis ka"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 55,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "yi dvags"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 56,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "mig"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 57,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "chu klung"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 58,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "rnag khrag"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 59,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "rnag"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 60,
+    "sql": "select * from entries where wylie=? order by id",
+    "parameters": [
+      "khrag"
+    ],
+    "purpose": "Exact lexical unit; full raw/master corroboration",
+    "count": 1
+  },
+  {
+    "id": 61,
+    "sql": "select * from entries where wylie like ? order by id",
+    "parameters": [
+      "%rgyang ring%"
+    ],
+    "purpose": "Positive wider-headword counterevidence",
+    "count": 15
+  },
+  {
+    "id": 62,
+    "sql": "select * from entries where wylie like ? order by id",
+    "parameters": [
+      "%las gzugs%"
+    ],
+    "purpose": "Positive wider-headword counterevidence",
+    "count": 0
+  },
+  {
+    "id": 63,
+    "sql": "select * from entries where wylie like ? order by id",
+    "parameters": [
+      "%gzhi mthun%"
+    ],
+    "purpose": "Positive wider-headword counterevidence",
+    "count": 13
+  },
+  {
+    "id": 64,
+    "sql": "select * from entries where wylie like ? order by id",
+    "parameters": [
+      "%bsgrib%"
+    ],
+    "purpose": "Positive wider-headword counterevidence",
+    "count": 47
+  },
+  {
+    "id": 65,
+    "sql": "select * from entries where wylie like ? order by id",
+    "parameters": [
+      "%cig car%"
+    ],
+    "purpose": "Positive wider-headword counterevidence",
+    "count": 13
+  },
+  {
+    "id": 66,
+    "sql": "select * from entries where wylie like ? order by id",
+    "parameters": [
+      "%khas blang%"
+    ],
+    "purpose": "Positive wider-headword counterevidence",
+    "count": 20
+  }
+]

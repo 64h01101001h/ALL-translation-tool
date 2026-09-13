@@ -1,0 +1,37 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/090.json",
+  "query_pin": {
+    "bytes": 3729,
+    "sha256": "a5ae96c3cbc2bdb3b2fc8da5314b80d930a805ddb5c63bc20d54e71b2052a927"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "gzugs",
+    "gzugs"
+  ],
+  "rows": [
+    {
+      "id": 16759,
+      "wylie": "gzugs",
+      "tibetan": "གཟུགས",
+      "tibetan_source": null,
+      "acip": "GZUGS",
+      "pronunciation": "suk",
+      "pronunciation_source": null,
+      "sanskrit": "{LCh,C,MSA,MV}rūpa; {C}vigraha; {MSA}ākṛti; {MSA}bimba; {LC}aṅga; {LC}enas; {LC}chāyā; {LC}tanū; {LC}tviṣ; {LC}pustastrī; {LC}pratikṛti; {LC}pratimā; {LC}maṇḍala; {LC}mūrtti; {LC}rūpaṇa; {LC}rūpin; {LC}rūpya; {LC}vapus",
+      "hopkins_english": "form; body; matter; the atomic; visible form; {C}color; figure; frame; shape",
+      "hgm_gloss": "[\"physical form\", \"body\", \"form\", \"forms\", \"bodies\", \"physical objects\", \"visible forms\", \"visible objects\", \"physical body\", \"visual matter\", \"visual\", \"physical matter\", \"physical appearance\", \"physical\", \"matter\", \"form realm\", \"realm of form\", \"formless realm\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 1325,
+      "raw": "{\"tibetan\": \"གཟུགས\", \"wylie\": \"gzugs\", \"wylie_variants\": [\"gzugs\"], \"tenses\": null, \"sanskrit\": \"{LCh,C,MSA,MV}rūpa; {C}vigraha; {MSA}ākṛti; {MSA}bimba; {LC}aṅga; {LC}enas; {LC}chāyā; {LC}tanū; {LC}tviṣ; {LC}pustastrī; {LC}pratikṛti; {LC}pratimā; {LC}maṇḍala; {LC}mūrtti; {LC}rūpaṇa; {LC}rūpin; {LC}rūpya; {LC}vapus\", \"hopkins_english\": \"form; body; matter; the atomic; visible form; {C}color; figure; frame; shape\", \"hgm_gloss\": [\"physical form\", \"body\", \"form\", \"forms\", \"bodies\", \"physical objects\", \"visible forms\", \"visible objects\", \"physical body\", \"visual matter\", \"visual\", \"physical matter\", \"physical appearance\", \"physical\", \"matter\", \"form realm\", \"realm of form\", \"formless realm\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"suk\", \"acip\": \"GZUGS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 1325}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

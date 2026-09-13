@@ -1,0 +1,20 @@
+from html.parser import HTMLParser
+class Parse(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.active=None;self.stack=[];self.out=[]
+ def handle_starttag(self,t,a):
+  a=dict(a)
+  if t=='span':
+   label=a.get('data-l')
+   if label and label.endswith('S'):
+    assert self.active is None;self.active=dict(text='',ranges={},stack=[])
+   if self.active is not None:self.active['stack'].append((label,len(self.active['text']),a))
+ def handle_data(self,d):
+  if self.active is not None:self.active['text']+=d
+ def handle_endtag(self,t):
+  if t=='span' and self.active is not None:
+   label,start,a=self.active['stack'].pop()
+   if label and label.endswith('S'):
+    assert not self.active['stack'];self.out.append(self.active);self.active=None
+   elif label:
+    assert label not in self.active['ranges'];self.active['ranges'][label]=dict(start=start,end=len(self.active['text']),depth=int(a['data-d']))
+

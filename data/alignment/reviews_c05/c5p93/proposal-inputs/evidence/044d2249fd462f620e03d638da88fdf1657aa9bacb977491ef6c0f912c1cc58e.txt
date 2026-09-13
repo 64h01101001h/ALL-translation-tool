@@ -1,0 +1,21 @@
+--- v2
++++ v3
+@@ -4,7 +4,7 @@
+ from pathlib import Path
+ from collections import Counter
+ from html.parser import HTMLParser
+-import datetime,gzip,hashlib,importlib.util,json,os,sqlite3,subprocess,sys,traceback
++import datetime,gzip,hashlib,importlib.util,json,os,re,sqlite3,subprocess,sys,traceback
+ sys.dont_write_bytecode=True
+ B=Path(__file__).resolve().parent;W=B.parents[1]/'campaign-worktree';D=B/'reconciled/277'
+ O=B/'root-reconciliation-verification';O.mkdir()
+@@ -103,7 +103,8 @@
+   d=B/f'reconciled/{seq}';spec=read(d/'spec.json');seg=spec['segments'][0];spans=seg['spans'];byid={s['id']:s for s in spans}
+   assert spec['course']=='C05' and len(spec['segments'])==1 and seg['seq']==seq and len(spans)==len(byid)==count
+   raw=run([sys.executable,'-B',str(wrapper)],str(seq),(d/'spec.json').read_bytes());assert raw==(d/'body.html').read_bytes()
+-  a=SourceAnchors();a.feed(raw.decode());assert a.values==[sources[seq]['wylie'],sources[seq]['english']]
++  cleaned,markers=re.subn(r'<span class="nul">.*?</span>','',raw.decode());assert markers==nulls
++  a=SourceAnchors();a.feed(cleaned);assert a.values==[sources[seq]['wylie'],sources[seq]['english']]
+   tr=g.resolve(sources[seq]['wylie'],spans,'tib',seq);ordered=g.with_members(spans,[byid[i] for i in seg['eng_order']],sources[seq]['english']);er=g.resolve(sources[seq]['english'],ordered,'eng',seq)
+   local=[];parent=None;tuples=[]
+   for s in spans:

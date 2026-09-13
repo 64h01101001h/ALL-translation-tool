@@ -1,0 +1,11 @@
+from pathlib import Path
+import json,hashlib,os
+P=Path(__file__).resolve().parent;A=P.parents[1];B=A/'C05-277-279';W=A.parent/'campaign-worktree';rows=[]
+paths=[]
+for name in ['semantic-root-caller','semantic-root-caller-v2','semantic-root-interface-caller','payload-schema-release-caller','registration-preparation']:
+ paths.extend(p for p in(B/name).rglob('*')if p.is_file())
+paths.append(B/'release-final-payload-helper.py');paths.extend((W/'engines').glob('*.py'))
+for p in sorted(set(paths)):
+ raw=p.read_bytes();d=P/'history-supplement'/p.relative_to(A)if p.is_relative_to(A)else P/'history-supplement/worktree'/p.relative_to(W);d.parent.mkdir(parents=True,exist_ok=True);assert not d.exists();d.write_bytes(raw);assert p.read_bytes()==d.read_bytes()==raw
+ rows.append(dict(original=str(p),copy=str(d.relative_to(P)),resolved=str(p.resolve()),symlink=os.readlink(p)if p.is_symlink()else None,bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+(P/'history-supplement-map.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps({'pairs':len(rows),'full_bytes_equal':True}))

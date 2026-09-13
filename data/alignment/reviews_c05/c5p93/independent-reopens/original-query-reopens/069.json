@@ -1,0 +1,37 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/069.json",
+  "query_pin": {
+    "bytes": 5229,
+    "sha256": "44466e8e1e4d862a79b3a8f20423100a754e69e51eda3b5c5f913058fed6481a"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "dang",
+    "dang"
+  ],
+  "rows": [
+    {
+      "id": 8107,
+      "wylie": "dang",
+      "tibetan": "དང",
+      "tibetan_source": null,
+      "acip": "DANG",
+      "pronunciation": "dang",
+      "pronunciation_source": null,
+      "sanskrit": "{C}ca; {MSA}prasanna; {MSA}prasāda; {C}atha; {C}sārdham; {LC}api; {LC}api ca; {LC}ca... ca; {LC}tathā; {LC}tu; {LC}suprasanna; {LC}prasannacitta; {LC}vā; {LC}vāpi; {LC}saha; {LC}sahā; {LC}hi; {LC}accha; {LC}viśada",
+      "hopkins_english": "and; or; with; {C}but; moreover; however; together with",
+      "hgm_gloss": "[\"and\", \"or\", \".\", \",\", \"or else\", \"or perhaps\", \"and also\", \"as well as\", \"another is\", \"another\", \"later\", \"and also with\", \"with\", \"moreover\", \"the second\", \"both\", \"or ... or ... or\", \"secondly\", \"neither\", \"and\", \"which\", \"secondly,\", \", nor\", \"next is\", \", and\", \"of\", \"and then\", \"?\", \"and after it\", \"nor\", \"but\", \"as well\", \"next\", \"with the\", \"lastly,\", \"to\", \"while\", \"after it\", \"also\", \"but ... also\", \"whereas\", \"they are\", \"that is\", \"at\", \"are nothing but\", \"including\", \"when we speak of\", \"in\", \"from\", \"and yet\", \"then\", \"has\", \"according to\", \"is all the same as\", \"furthermore\", \"and add as well\", \"along with\", \":\", \"and then too\", \"goes\", \"first of all ... secondly\", \"realize secondly that\", \"levels. where it\", \"too\", \"as well a\", \"together with\", \"include\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 17009,
+      "raw": "{\"tibetan\": \"དང\", \"wylie\": \"dang\", \"wylie_variants\": [\"dang\"], \"tenses\": null, \"sanskrit\": \"{C}ca; {MSA}prasanna; {MSA}prasāda; {C}atha; {C}sārdham; {LC}api; {LC}api ca; {LC}ca... ca; {LC}tathā; {LC}tu; {LC}suprasanna; {LC}prasannacitta; {LC}vā; {LC}vāpi; {LC}saha; {LC}sahā; {LC}hi; {LC}accha; {LC}viśada\", \"hopkins_english\": \"and; or; with; {C}but; moreover; however; together with\", \"hgm_gloss\": [\"and\", \"or\", \".\", \",\", \"or else\", \"or perhaps\", \"and also\", \"as well as\", \"another is\", \"another\", \"later\", \"and also with\", \"with\", \"moreover\", \"the second\", \"both\", \"or ... or ... or\", \"secondly\", \"neither\", \"and\", \"which\", \"secondly,\", \", nor\", \"next is\", \", and\", \"of\", \"and then\", \"?\", \"and after it\", \"nor\", \"but\", \"as well\", \"next\", \"with the\", \"lastly,\", \"to\", \"while\", \"after it\", \"also\", \"but ... also\", \"whereas\", \"they are\", \"that is\", \"at\", \"are nothing but\", \"including\", \"when we speak of\", \"in\", \"from\", \"and yet\", \"then\", \"has\", \"according to\", \"is all the same as\", \"furthermore\", \"and add as well\", \"along with\", \":\", \"and then too\", \"goes\", \"first of all ... secondly\", \"realize secondly that\", \"levels. where it\", \"too\", \"as well a\", \"together with\", \"include\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"dang\", \"acip\": \"DANG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 17009}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

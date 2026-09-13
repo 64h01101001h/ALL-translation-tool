@@ -1,0 +1,80 @@
+{
+  "status": "SOURCE_CONTRACT_PREPARATION_ONLY_PENDING_ACTUAL279_INPUTS",
+  "created_at": "2026-09-13T19:01:35.724962+00:00",
+  "prior_freeze": {
+    "bytes": 15287,
+    "sha256": "8f30e5789bc8da851f837163bd7034a35f3b0c899ddda53619da026f56d207ec"
+  },
+  "prior_frozen_files": 88,
+  "full_original_copy_pairs": 105,
+  "four_prior_scripts": [
+    {
+      "file": "prepare.py.txt",
+      "bytes": 5097,
+      "sha256": "29afb47c427d4848cead3c4432ed1049332c1a83a40bc51a53fce1bb5156e374",
+      "read_complete": true,
+      "parsed_only": true,
+      "executed": false
+    },
+    {
+      "file": "run-once.py.txt",
+      "bytes": 2559,
+      "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0",
+      "read_complete": true,
+      "parsed_only": true,
+      "executed": false
+    },
+    {
+      "file": "run-isolated-readonly.py.txt",
+      "bytes": 1639,
+      "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca",
+      "read_complete": true,
+      "parsed_only": true,
+      "executed": false
+    },
+    {
+      "file": "verify-retention.py.txt",
+      "bytes": 11698,
+      "sha256": "d75195561cd87782920c8c7cb85c73dd86678c4ebfb9c9d41389cc047e378ec2",
+      "read_complete": true,
+      "parsed_only": true,
+      "executed": false
+    }
+  ],
+  "actual_incoming_baseline": {
+    "commit": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+    "course_boundary": 276,
+    "full_links": 45126,
+    "null_exponents": 11926,
+    "evidence_headwords": 7083,
+    "evidence_pairs": 15500,
+    "sha256": {
+      "data/hgm_dictionary_v27_2.json.gz": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+      "data/full_parallel_corpus_v32.json.gz": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8",
+      "data/alignment/alignment_full_v1.json": "4714c13c683d8de02d73a0cdc386d0a0a175f4823081f5502160062182d9947d",
+      "data/alignment/alignment_evidence_v1.json": "b89a517485a7391b167724bedb3711ffcfe918ecda45e95a26eed8555308eff4",
+      "docs/geshe_michael_roach_dictionary.html": "09fc5c56dcb3ee1deaa38f7b82b1990886dced30b18addf5935e1c0d08d9ee0e",
+      "docs/geshe_michael_roach_dictionary.csv": "5cf481f710b98894d5def968211f33669d7ff1863825be9203470809201b83e1",
+      "docs/geshe_michael_roach_dictionary_reverse.csv": "80754b418b25ad680135c9f3c652e6100fbedec82a0cfc6affcfb8b68f365909",
+      "docs/geshe_michael_roach_dictionary_by_course.csv": "ef10df35afee1e038757cb7eafa6fed95757ab9cd32ee5e3f5338a98451f49ed",
+      "docs/geshe_michael_roach_dictionary_changes.csv": "5b20d06c1e3d007e2b5ebe0a146931b13c51824fde412598c2ef22ee6bb2eb27"
+    },
+    "required_reference_paths_readable": 8,
+    "source_snapshot_matches_spine": true,
+    "source_snapshot_fields": [
+      "id",
+      "course",
+      "seq",
+      "acip",
+      "wylie",
+      "english"
+    ]
+  },
+  "actual279_totals": null,
+  "actual279_final_review_freeze": null,
+  "actual279_payload_freeze": null,
+  "code_adaptation_emitted": false,
+  "runtime_executions": 0,
+  "semantic_approval": false,
+  "role": "Reused Codex context/current277 reconciler, not author of prior276 method; no independent semantic verdict."
+}

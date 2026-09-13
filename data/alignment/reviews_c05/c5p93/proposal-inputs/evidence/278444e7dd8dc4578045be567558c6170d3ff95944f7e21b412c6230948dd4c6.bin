@@ -1,0 +1,18 @@
+--- prepare-originals.py
++++ prepare-originals-v2.py
+@@ -28,11 +28,14 @@
+ en=json.loads((B/'english/277/evidence/hgm-full-rows.json').read_bytes())
+ # The original helper records results by exact term; retain its actual structure.
+ if isinstance(en['results'],dict):
+- for term,r in en['results'].items():qs.append({'angle':'english','source':'hgm-full-rows.json','term':term,'sql':en['sql'],'parameters':en['parameters_per_term'][term]if isinstance(en['parameters_per_term'],dict)else [term],'rows':r})
++ for term,r in en['results'].items():qs.append({'angle':'english','source':'hgm-full-rows.json','term':term,'sql':en['sql'],'parameters':en['parameters_per_term'][term]if isinstance(en['parameters_per_term'],dict)else [term,term],'rows':r})
+ else:
+  for r in en['results']:qs.append({'angle':'english','source':'hgm-full-rows.json','sql':en['sql'],**r})
+ qs.extend({'angle':'english','source':'corpus-full-queries.json',**r}for r in json.loads((B/'english/277/evidence/corpus-full-queries.json').read_bytes()))
+ for i,x in enumerate(qs):
++ prior=E/('original-query-reopens/%03d.json'%i)
++ if prior.exists():
++  saved=json.loads(prior.read_bytes());assert saved['sql']==x['sql'] and saved['parameters']==x['parameters'] and saved['rows']==x['rows'];continue
+  rows=[dict(r)for r in con.execute(x['sql'],x['parameters'])];assert rows==x['rows'],(i,x.keys());save('original-query-reopens/%03d.json'%i,{**x,'rows':rows,'independently_reopened':True})
+ con.close();assert pin(db.read_bytes())==before
+ # Actual unchanged canonical through exact existing reviewed RO/query_only wrapper.

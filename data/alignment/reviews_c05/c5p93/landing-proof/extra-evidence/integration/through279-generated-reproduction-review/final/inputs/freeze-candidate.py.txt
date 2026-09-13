@@ -1,0 +1,10 @@
+from pathlib import Path
+import hashlib,json,datetime
+P=Path(__file__).resolve().parent
+assert (P/'final-preparation-caller/exit').read_bytes()==b'0\n'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+files={str(p.relative_to(P)):pin(p.read_bytes())for p in sorted(P.rglob('*'))if p.is_file()and p!=P/'freeze.json'}
+assert not any('__pycache__'in Path(n).parts for n in files)
+f=P/'freeze.json';assert not f.exists();f.write_text(json.dumps(dict(status='FROZEN_CONCRETE_CANDIDATE_PENDING_INDEPENDENT_REVIEW',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),files=files,file_count=len(files),total_bytes=sum(x['bytes']for x in files.values()),excludes_only='freeze.json',runtime_executions=0),indent=2)+'\n')
+for n,r in files.items():assert pin((P/n).read_bytes())==r
+print(json.dumps(dict(path=str(f),**pin(f.read_bytes()),files=len(files),total_bytes=sum(x['bytes']for x in files.values()),code={n:pin((P/n).read_bytes())for n in ['prepare.py.txt','run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt']})))

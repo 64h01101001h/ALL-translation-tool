@@ -1,0 +1,124 @@
+{
+  "status": "APPROVE_CODE_ONLY_CONDITIONAL_RUNTIME",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "role": "Reused independent non-author model reviewer; not fresh context or human certification.",
+  "baseline": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "page": 93,
+  "segments": [
+    277,
+    278,
+    279
+  ],
+  "open_findings": [],
+  "requested_changes": [],
+  "semantic_approval": false,
+  "actual_execution_approval": false,
+  "candidate_pins": {
+    "freeze-final-payload-before-staging.py": {
+      "bytes": 8218,
+      "sha256": "02f4bff23dfe604f62f4a21bdd37ff1daacd7bba4ca057176717a31c7a79cdfc"
+    },
+    "bank_root_proofs_through279.py": {
+      "bytes": 17890,
+      "sha256": "4fda2995ef53e3b9fe64c4d6ca30b8eb7f73f661d0dbcfc4c4cfe42d844428ba"
+    }
+  },
+  "candidate_freeze": {
+    "bytes": 4016,
+    "sha256": "572124f1cf6815176a7eb6dd9718a932144e11e2be380b3eb8f3948a0c4fd9dc"
+  },
+  "report": {
+    "path": "review.md",
+    "bytes": 9438,
+    "sha256": "4733f169f3eff3e45330d92a7099c4c1a49f12b0aab5ddf3c3222e05e894091c"
+  },
+  "proof": {
+    "path": "proof.json",
+    "bytes": 944,
+    "sha256": "9260a406ee4b04f23645266b716af87241d8df69c14fc37f70700e71976da1d5"
+  },
+  "original_to_copy_manifest": {
+    "path": "original-to-copy-manifest.json",
+    "bytes": 27917,
+    "sha256": "8bca01814f9859d958bd489eb61257c2cba4a8df848cdb054e2a7e0f9f7f6419",
+    "records": 41
+  },
+  "checklist": [
+    {
+      "id": "IDENTITY",
+      "status": "PASS_CODE_SCOPE",
+      "disposition": "26 candidate files plus freeze, nine original mappings and both full diffs independently exact.",
+      "evidence": [
+        "review.md",
+        "proof.json",
+        "candidate/command-contract.json"
+      ]
+    },
+    {
+      "id": "MEASURED_COUNTS",
+      "status": "PASS_CODE_SCOPE",
+      "disposition": "Approved ordered counts individually bound to full specs, total and retention plus three anchors.",
+      "evidence": [
+        "review.md",
+        "proof.json",
+        "candidate/command-contract.json"
+      ]
+    },
+    {
+      "id": "SOURCE_OUTPUTS",
+      "status": "PASS_CODE_SCOPE",
+      "disposition": "Actual nine baseline keys, unchanged two source archives, seven outputs and seeded build/retention gates retained.",
+      "evidence": [
+        "review.md",
+        "proof.json",
+        "candidate/command-contract.json"
+      ]
+    },
+    {
+      "id": "HISTORY",
+      "status": "PASS_CODE_SCOPE",
+      "disposition": "Nine universal interfaces plus mandatory complete actual extra history and alias/version review before runtime.",
+      "evidence": [
+        "review.md",
+        "proof.json",
+        "candidate/command-contract.json"
+      ]
+    },
+    {
+      "id": "BANKING",
+      "status": "PASS_CODE_SCOPE",
+      "disposition": "Full semantic tree, existing landing inventory, ordinary/final history and exact copy gates retained.",
+      "evidence": [
+        "review.md",
+        "proof.json",
+        "candidate/command-contract.json"
+      ]
+    },
+    {
+      "id": "RUNTIME_BOUNDARY",
+      "status": "PASS_CODE_SCOPE",
+      "disposition": "No current run or semantic approval. Actual inputs and root release remain prerequisites.",
+      "evidence": [
+        "review.md",
+        "proof.json",
+        "candidate/command-contract.json"
+      ]
+    },
+    {
+      "id": "PRESERVATION",
+      "status": "PASS_CODE_SCOPE",
+      "disposition": "Complete candidate and original copies, source/version pins and actual static execution evidence preserved.",
+      "evidence": [
+        "review.md",
+        "proof.json",
+        "candidate/command-contract.json"
+      ]
+    }
+  ],
+  "execution_limits": "Zero candidate/Git/SQL/generator/builder/test executions; static code, AST, complete diff and byte identity review only.",
+  "freeze": {
+    "path": "freeze.json",
+    "schema": "files DICT, measured file_count/total_bytes; only actual top-level freeze excluded"
+  }
+}

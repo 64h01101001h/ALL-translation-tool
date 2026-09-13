@@ -1,0 +1,33 @@
+from pathlib import Path
+import os,sys,hashlib,json,sqlite3,runpy,datetime
+E=Path(__file__).resolve().parent;B=E.parent.parent;A=B.parent;W=A.parent/'campaign-worktree';S=B/'semantic-source-preparation'
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+refs=["Desktop/HGM DICTIONARY - TRANSLATION APP","ACIP Software Developmeent/Gofer Developmetn Files","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra","ACIP Software Developmeent/tibetan-spellchecker","Tibetan Translation Tool"]
+access=[{'path':str(Path('/Users/adamderickandrade')/r),'readable':os.access(Path('/Users/adamderickandrade')/r,os.R_OK)}for r in refs];save('reference-access.json',access);assert all(r['readable']for r in access)
+paths=[B/n for n in ['reconciliation-brief.md','source.json','context.json','baseline.json','baseline-boundary.json','primary-tibetan-original-complete.json','preparation-freeze.json','preparation-supplement-freeze.json']]
+governing=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','tools/test_no_supplied_span_head.py','data/alignment/span_head_allow.json','docs/errata_register.json']
+paths.extend(W/n for n in governing);paths.append(A/'copy_evidence_once_v2.py');paths.extend(p for p in S.rglob('*')if p.is_file())
+for nm in ['original-to-copy-manifest.json','additional-original-to-copy-manifest.json']:
+ for r in json.loads((S/nm).read_bytes()):paths.append(Path(r['original']))
+paths=list(dict.fromkeys(paths));fn=runpy.run_path(str(A/'copy_evidence_once_v2.py'))['preserve'];copyproof=fn(E,E/'original-to-copy-manifest.json',paths)
+# Explicit logical aliases supplement the reviewed copier's resolved original identity.
+save('logical-aliases.json',[{'logical':str(p),'resolved':str(p.resolve()),'symlink':os.readlink(p)if p.is_symlink()else None,**pin(p.read_bytes())}for p in paths])
+# Reopen actual source and context using full raw SQLite objects, no mutable connection.
+db=W/'build/hgm_spine_v27_2.db';before=pin(db.read_bytes());con=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row;con.execute('PRAGMA query_only=ON');assert con.execute('PRAGMA query_only').fetchone()[0]==1
+rows=[dict(r)for r in con.execute("SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",('C05',270,285))];save('independent-source-context-full-rows.json',rows)
+for nm in ['source.json','context.json']:
+ for r in json.loads((B/nm).read_bytes()):
+  found=next(x for x in rows if x['seq']==r['seq']);assert all(found[k]==v for k,v in r.items())
+queries=[]
+for q in sorted((S/'queries').glob('*.json')):
+ x=json.loads(q.read_bytes());assert x['sql'].lstrip().lower().startswith('select');result=[dict(r)for r in con.execute(x['sql'],x['parameters'])];assert result==x['rows'];rec={**x,'rows':result,'independent_reopen':True,'original_saved_query':str(q)};save('independent-queries/'+q.name,rec);queries.append({'path':str(q),'count':len(result),'full_rows_equal':True})
+con.close();after=pin(db.read_bytes());assert before==after
+# Independently verify every full physical range against the named physical source.
+extents=[]
+for nm in ['physical-extents.json','common-locus-physical-extents.json']:
+ for r in json.loads((S/nm).read_bytes()):
+  raw=Path(r['original']).read_bytes();assert pin(raw)==r['source_pin'];piece=raw[r['start']:r['end']];assert piece==(S/r['copy']).read_bytes();extents.append({'manifest':nm,**r,'independent_exact_extent':True})
+save('independent-physical-extents.json',extents)
+save('initial-proof.json',{'status':'SOURCE_GOVERNANCE_REOPEN_PASS_ORIGINAL_ANGLES_NOT_YET_CONSUMED','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'copy':copyproof,'source_rows':len(rows),'queries':queries,'physical_extent_count':len(extents),'spine_before':before,'spine_after':after,'SQL_mode':'URI mode=ro; PRAGMA query_only=ON','prior_context':'Reused Codex reconciliation/tooling context; neither current original author. Root Tibetan original producer has own preparation; independent semantic reviewer follows.','English_partials_read':False,'root_review_targets_read':False})
+print(json.dumps({'status':'PASS_SOURCE_REOPEN','copy':copyproof,'queries':len(queries),'physical_extents':len(extents),'English_partial_reads':0},indent=2))

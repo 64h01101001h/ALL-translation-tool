@@ -1,0 +1,13 @@
+from pathlib import Path
+import json,hashlib
+D=Path(__file__).resolve().parent
+get=lambda p:json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+old=get(D/'history/collection-boundary/original-to-copy-manifest.json');new=get(D/'original-to-copy-manifest.json');nm={r['original']:r for r in new};core={r['original']:r for r in get(D/'readable-original-core-map.json')};assert len(old)==1632 and len(new)==1633
+for r in old:
+ n=nm[r['original']];assert all(n[k]==r[k] for k in ['original','bytes','sha256']);assert (D/r['copy']).read_bytes()==(D/n['copy']).read_bytes()==Path(r['original']).read_bytes()
+ if n['copy']!=r['copy']:assert n['copy']==core[r['original']]['copy']
+ for k in ['original_git_commit','repository_relative_path']:
+  if k in r:assert n[k]==r[k]
+assert set(nm)-{r['original'] for r in old}=={get(D/'importer-git-binding/proof.json')['original']}
+(D/'manifest-transition-proof.json').write_text(json.dumps(dict(status='PASS',old_records=len(old),current_records=len(new),readable_core_transitions=len(core),old_manifest_pin=pin(D/'history/collection-boundary/original-to-copy-manifest.json'),current_manifest_pin=pin(D/'original-to-copy-manifest.json'),all_old_copies_byte_exact=True,only_new_source='Previously inspected importer source; immutable Git binding retained.',scope='Explicit historical manifest transition check. Earlier preflight contains an inert conditional assertion line, which supplies no evidence; this full executed comparison establishes the claim.'),indent=2)+'\n');print('PASS full historical manifest transition')

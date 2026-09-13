@@ -1,0 +1,263 @@
+{
+  "status": "APPROVE",
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "baseline": "81942cfc6022a785894d3cc2a20de81dc4c6f599",
+  "role": "Reused non-author/non-reconciler independent model reviewer; no fresh-context or human-certification claim.",
+  "segments": [
+    {
+      "seq": 274,
+      "span_count": 42,
+      "null_count": 1,
+      "word_pair_count": 31,
+      "spec_bytes": 6658,
+      "spec_sha256": "f37f15bb428af109f7dd9ac653e864a1e6fcb4ec7a08050b57f92b9dba1b2499",
+      "body_bytes": 6743,
+      "body_sha256": "b7fa81dc5865419c5637226fc5c5460b5789c507aa9815dafa1012fbc66018a9",
+      "generator_exit": 0
+    },
+    {
+      "seq": 275,
+      "span_count": 59,
+      "null_count": 1,
+      "word_pair_count": 43,
+      "spec_bytes": 9337,
+      "spec_sha256": "21edf1383600a9280319051a7e030d482ae7694178a7c4d20d84dc7254921220",
+      "body_bytes": 9488,
+      "body_sha256": "dcc3c9d123a3c2a2fc74603ede86e0e2bc0b47eb96b751a14ef0e6601a328ff3",
+      "generator_exit": 0
+    },
+    {
+      "seq": 276,
+      "span_count": 11,
+      "null_count": 1,
+      "word_pair_count": 7,
+      "spec_bytes": 2630,
+      "spec_sha256": "a4f530ac8f0fbb612a0d16c9cc5f8b075ec61876b324838c7e0540af05be55e2",
+      "body_bytes": 2831,
+      "body_sha256": "ef105fb11eddc667118c42e633a4314e53b8b005d71032826592705d420364fa",
+      "generator_exit": 0
+    }
+  ],
+  "total_spans": 112,
+  "total_nulls": 3,
+  "total_word_pairs": 81,
+  "open_findings": [],
+  "nonblocking_clarifications": "nonblocking-clarifications.json",
+  "span_correspondence_assessment": "All 112 selected spans, 3 fusion nulls and 81 non-null d5 pairs approved; current omission metadata corrected.",
+  "original_dispositions": {
+    "RETAINED": 198,
+    "RECAST_OR_TIGHTENED": 12,
+    "OMITTED_DISTRIBUTED": 1
+  },
+  "report": {
+    "path": "review.md",
+    "bytes": 22709,
+    "sha256": "ba2c96b8a0ee4e623348e358522d042e74bf559a8be17f27d6d7558d4ab4c236"
+  },
+  "checklist": [
+    {
+      "id": "ROLE",
+      "status": "PASS",
+      "disposition": "Reused non-author/non-reconciler model review; original human-inspection wording externally corrected, never silently edited.",
+      "evidence": [
+        "review.md",
+        "history/source-preparation/report.md"
+      ]
+    },
+    {
+      "id": "GOVERNING",
+      "status": "PASS",
+      "disposition": "Actual fixed baseline and complete governing Git object pins.",
+      "evidence": [
+        "governing-git-proof.json"
+      ]
+    },
+    {
+      "id": "PACKAGES",
+      "status": "PASS",
+      "disposition": "Complete primary/supplement section bytes and 1059 fixed/additive input records retained.",
+      "evidence": [
+        "complete-package-section-proof.json",
+        "preservation-proof.json"
+      ]
+    },
+    {
+      "id": "SOURCE",
+      "status": "PASS",
+      "disposition": "Independent RO/query_only full sources, 222 actual query sets and 116 master/302 corpus objects.",
+      "evidence": [
+        "history/source-preparation/independent-source-proof.json",
+        "all-final-query-alias-proof.json"
+      ]
+    },
+    {
+      "id": "PHYSICAL",
+      "status": "PASS",
+      "disposition": "Both full original physical files, twelve extents and full contexts; no publication/ingestion independence inferred.",
+      "evidence": [
+        "history/source-preparation/physical-extents.json"
+      ]
+    },
+    {
+      "id": "ORIGINALS",
+      "status": "PASS",
+      "disposition": "211 full identities and all 198 retained/12 recast/1 omitted dispositions inspected.",
+      "evidence": [
+        "all-original-disposition-proof.json",
+        "independent-original-disposition-review.json"
+      ]
+    },
+    {
+      "id": "SEMANTICS",
+      "status": "PASS",
+      "disposition": "Complete initial semantic judgments retained; actual three-field metadata correction resolves the sole finding and both clarifications.",
+      "evidence": [
+        "resolved-findings.json",
+        "correction01/scope-proof.json",
+        "independent-span-review.json"
+      ]
+    },
+    {
+      "id": "CANONICAL",
+      "status": "PASS",
+      "disposition": "Three actual final generator calls, zero exits, empty stderr and exact complete bodies.",
+      "evidence": [
+        "canonical-proof.json",
+        "canonical-runs"
+      ]
+    },
+    {
+      "id": "STRUCTURE",
+      "status": "PASS",
+      "disposition": "Exact seven-key tuples, original field ordering/parents/occurrences, full-source fields and omission complements.",
+      "evidence": [
+        "interface-proof.json",
+        "resolved-spans.json"
+      ]
+    },
+    {
+      "id": "OMISSION_METADATA",
+      "status": "PASS",
+      "disposition": "Complete initial semantic judgments retained; actual three-field metadata correction resolves the sole finding and both clarifications.",
+      "evidence": [
+        "resolved-findings.json",
+        "correction01/scope-proof.json",
+        "independent-span-review.json"
+      ]
+    },
+    {
+      "id": "ERRATA",
+      "status": "PASS",
+      "disposition": "All five grounds examined for three suspicions; no surviving new erratum.",
+      "evidence": [
+        "review.md",
+        "bank-ready-errata.json"
+      ]
+    },
+    {
+      "id": "ALLOWANCE",
+      "status": "PASS",
+      "disposition": "Bare you does not match actual trailing-space predicate; source licensor remains khyod; no allowance.",
+      "evidence": [
+        "review.md",
+        "span-head-allow-needed.json"
+      ]
+    },
+    {
+      "id": "HISTORY",
+      "status": "PASS",
+      "disposition": "All original/current histories, nested freezes and 483 old freeze rows retained with explicit versions.",
+      "evidence": [
+        "gate-correction-history-proof.json",
+        "readable-history-and-final-mappings.json"
+      ]
+    },
+    {
+      "id": "PRESERVATION",
+      "status": "PASS",
+      "disposition": "Complete supported-copy, raw-alias and source-unchanged closure.",
+      "evidence": [
+        "correction01/scope-proof.json",
+        "original-to-copy-manifest.json",
+        "source-alias-transports.json"
+      ]
+    },
+    {
+      "id": "LIMITS",
+      "status": "PASS",
+      "disposition": "Scoped semantic approval only; no new canonical/SQL/build/CTest/MAIN/native/human acceptance claimed.",
+      "evidence": [
+        "review.md"
+      ]
+    },
+    {
+      "id": "SCOPED_CORRECTION",
+      "status": "PASS",
+      "disposition": "Exactly three metadata strings corrected with complete retained preimages; current canonical inputs unchanged.",
+      "evidence": [
+        "correction01/scope-proof.json",
+        "correction01/canonical-reuse-bindings.json",
+        "correction01-caller/execution.json"
+      ]
+    }
+  ],
+  "evidence_manifest": {
+    "path": "evidence-pins.json",
+    "bytes": 492174,
+    "sha256": "e94fd7a00482f09cab524f49f032b2b6c8da813ac1dcd5a3fc911f43855699a2"
+  },
+  "original_to_copy_manifest": {
+    "path": "original-to-copy-manifest.json",
+    "bytes": 1462255,
+    "sha256": "fff43dcc860e8d82a7c4a383ee4b5229622225089339500537f327a0b86a3be5"
+  },
+  "freeze": {
+    "path": "freeze.json",
+    "schema": "files DICT, actual file_count and total_bytes, truthful matching spec_verdict and quality_verdict; only top-level freeze excluded"
+  },
+  "execution_limits": "No canonical/SQL/build/suite rerun in scoped review. Earlier three actual canonical records bound only to byte-identical current spec/body/note inputs. No source/repository/MAIN/native/network mutation.",
+  "inspection_history": {
+    "failed_attempt": "interface-inspection-attempt01",
+    "successful_attempt": "interface-inspection-attempt02",
+    "prior_interfaces": "history/pre-inspection-completion",
+    "finding_count_unchanged": 1
+  },
+  "resolved_findings": [
+    "C05-275-OMISSION-01"
+  ],
+  "current_reconciled_freezes": [
+    {
+      "seq": 274,
+      "freeze": {
+        "bytes": 90940,
+        "sha256": "2ba447528e416bebb51695cbdfbf133461be20ba5a7389edfae9d996bc16ebef"
+      },
+      "file_count": 489
+    },
+    {
+      "seq": 275,
+      "freeze": {
+        "bytes": 4467,
+        "sha256": "36e76c5bbef4676cd7397587bf96fd909795172a5c15f48f0dd7d2a976778626"
+      },
+      "file_count": 23
+    },
+    {
+      "seq": 276,
+      "freeze": {
+        "bytes": 3592,
+        "sha256": "6fb42016746b95a47b2e72b0ad13cab9dac567f67955c78dd6812132c4339490"
+      },
+      "file_count": 23
+    }
+  ],
+  "scoped_review": {
+    "new_canonical_calls": 0,
+    "new_sql_calls": 0,
+    "earlier_canonical_runs_reused": 3,
+    "proof": "correction01/scope-proof.json",
+    "historical_review": "history/initial-review/review.json"
+  }
+}

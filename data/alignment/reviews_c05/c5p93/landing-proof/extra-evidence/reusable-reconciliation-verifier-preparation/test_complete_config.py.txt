@@ -1,0 +1,39 @@
+"""Only config/file/helper validation on frozen completed inputs, never the checker."""
+from pathlib import Path
+import copy,json,unittest
+import config_contract as c
+P=Path(__file__).resolve().parent
+class CompleteConfigTests(unittest.TestCase):
+ def setUp(self):
+  self.assertTrue(callable(getattr(c,'validate_config',None)),'Complete pinned configuration validation missing')
+  self.cfg=json.loads((P/'completed-277-config.json').read_bytes())
+ def test_completed_config_measures_counts_without_any_query_execution(self):
+  x=c.validate_config(self.cfg);self.assertEqual(x['original_count'],271);self.assertEqual(x['totals'],{'spans':146,'nulls':8,'d5_nonnull':94});self.assertEqual(x['query_count'],217)
+ def test_changed_reported_count_rejects(self):
+  self.cfg['reconciled'][0]['counts']['spans']+=1
+  with self.assertRaises(AssertionError):c.validate_config(self.cfg)
+ def test_wrong_reconciled_freeze_pin_rejects(self):
+  self.cfg['reconciled'][0]['freeze']['sha256']='0'*64
+  with self.assertRaises(AssertionError):c.validate_config(self.cfg)
+ def test_missing_or_duplicate_query_cannot_reduce_coverage(self):
+  for mode in ['missing','duplicate']:
+   data=copy.deepcopy(self.cfg)
+   if mode=='missing':data['queries'].pop()
+   else:data['queries'].append(data['queries'][0])
+   with self.subTest(mode=mode),self.assertRaises(AssertionError):c.validate_config(data)
+ def test_missing_role_descriptor_rejects(self):
+  self.cfg['evidence'].pop('physical')
+  with self.assertRaises(AssertionError):c.validate_config(self.cfg)
+ def test_wrong_baseline_or_source_context_course_rejects(self):
+  for field in ['course','context']:
+   data=copy.deepcopy(self.cfg)
+   if field=='course':data['course']='C06'
+   else:data['context']['parameters'][0]='C06'
+   with self.subTest(field=field),self.assertRaises(AssertionError):c.validate_config(data)
+ def test_original_angle_or_sequence_omission_rejects(self):
+  self.cfg['originals'].pop()
+  with self.assertRaises(AssertionError):c.validate_config(self.cfg)
+ def test_query_descriptor_wrong_source_binding_rejects(self):
+  self.cfg['queries'][81]['binding']['term']='missing-headword'
+  with self.assertRaises(AssertionError):c.validate_config(self.cfg)
+if __name__=='__main__':unittest.main(verbosity=2)

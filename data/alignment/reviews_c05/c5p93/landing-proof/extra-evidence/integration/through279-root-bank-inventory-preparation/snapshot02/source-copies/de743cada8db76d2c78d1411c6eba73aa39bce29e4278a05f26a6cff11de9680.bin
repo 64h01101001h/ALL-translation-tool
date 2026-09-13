@@ -1,0 +1,53 @@
+{
+  "status": "PASS_STATIC_PREPARATION_ONLY",
+  "BASE": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "known_incoming_links": 45126,
+  "current_accepted_boundary": 276,
+  "prospective_page": 93,
+  "prospective_sequences": [
+    277,
+    278,
+    279
+  ],
+  "prospective_coverage": 279,
+  "prospective_open": 232,
+  "syntax_checks": 2,
+  "actual_candidate_Git_SQL_build_test_runs": 0,
+  "current_final_review_diagnostics_payload_bank_not_read_or_created": true,
+  "material_change": "Staging closure status/path/head-field must use actual fixed-data through276 closure; no new whitespace classification or retention algorithm.",
+  "all_original_copy_bytes_rechecked": true
+}
+[
+  {
+    "label": "whitespace",
+    "prior": {
+      "bytes": 18898,
+      "sha256": "5117455cf67dc362f15ae67f3700c36406a0593210655e147f8a341d1244431e"
+    },
+    "candidate": {
+      "bytes": 18898,
+      "sha256": "b38c18aa63a82a3e9fbf83a118160c1ab91509b8e8a6e038bfae69d7bd129144"
+    },
+    "full_exact_reverse_identity": true,
+    "functions_with_boundary_changes": [
+      "__init__",
+      "run"
+    ]
+  },
+  {
+    "label": "staging",
+    "prior": {
+      "bytes": 40211,
+      "sha256": "b4229900ca09a00f5b4ecdce9564e86c3465a6076fc6c40cd880b7360f77c84d"
+    },
+    "candidate": {
+      "bytes": 40212,
+      "sha256": "39a2908b2db4effb9468e9587d0e28b4dcd828ae4ac8fce99368a723973a211f"
+    },
+    "full_exact_reverse_identity": true,
+    "functions_with_boundary_changes": [
+      "__init__",
+      "run"
+    ]
+  }
+]

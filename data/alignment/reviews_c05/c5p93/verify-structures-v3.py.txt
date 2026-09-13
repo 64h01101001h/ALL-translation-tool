@@ -1,0 +1,69 @@
+from pathlib import Path
+import sys,os,json,hashlib,gzip,runpy,datetime,traceback
+sys.dont_write_bytecode=True
+D=Path(__file__).resolve().parent;B=D.parent;A=B.parent;W=A.parent/'campaign-worktree';C=B/'reconciled/277'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def get(p):return json.loads(p.read_bytes())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+try:
+ source={r['seq']:r for r in get(D/'independent-source-context.json')['rows']}
+ g=runpy.run_path(str(W/'tools/gen_alignment_page.py'),run_name='review_resolver_only')
+ def resolve(seg):
+  spans=seg['spans'];by={s['id']:s for s in spans};q=seg['seq'];t=g['resolve'](source[q]['wylie'],spans,'tib',q);e=g['resolve'](source[q]['english'],g['with_members'](spans,[by[i] for i in seg['eng_order']],source[q]['english']),'eng',q);out=[];parent=None
+  for s in spans:
+   if s['d']!=7:parent=s['id'] if s['d']==5 else None
+   out.append(dict(seq=q,**{k:s[k] for k in ['id','d','tib','eng']},tib_range=list(t[s['id']]),eng_range=list(e[s['id']]) if s['id'] in e else None,parent=parent if s['d']==7 else None))
+  return out
+ final=[];original=[];disps=[];checks=[]
+ for q in [277,278,279]:
+  root=B/'reconciled'/str(q);seg=get(root/'spec.json')['segments'][0];rows=resolve(seg);published=get(root/'final-tuples.json');ds=get(root/'original-dispositions.json')
+  assert [{k:v for k,v in r.items() if k!='seq'} for r in rows]==published
+  for r in rows:
+   if r['d']==7:
+    p=next(x for x in rows if x['id']==r['parent']);assert p['d']==5
+    for side in ['tib_range','eng_range']:assert p[side][0]<=r[side][0]<r[side][1]<=p[side][1] and r[side]!=p[side]
+   final.append({k:r[k] for k in ['seq','id','d','tib','eng','tib_range','eng_range']})
+  for angle in ['tibetan','english']:
+   p=B/angle/str(q);sg=get(p/'spec.json')['segments'][0];rr=resolve(sg);dd=[r for r in ds if r['original_identity']['angle']==angle];decl=get(p/('intended-spans.json' if angle=='tibetan' else 'occurrence-declarations.json'));decl=decl if angle=='tibetan' else decl['declarations'];assert len(rr)==len(dd)==len(decl)
+   for r,sp,d,de in zip(rr,sg['spans'],dd,decl):
+    ident=dict(angle=angle,**{k:r[k] for k in ['seq','id','d','tib','eng','tib_range','eng_range']});assert d['original_identity']==ident and list(d['original_identity'])==list(ident);assert d['original_span']==sp and d['original_key_order']==list(sp) and d['original_parent']==r['parent'] and d['original_declaration']==de
+    for k in ['cls','nul','subword']:assert d['optional_presence'][k]==dict(present=k in sp,**({'value':sp[k]} if k in sp else {}))
+    if angle=='tibetan':assert de['tib_range']==r['tib_range'] and de['eng_range']==r['eng_range']
+    else:
+     assert [de['tib']['start'],de['tib']['end']]==r['tib_range'];assert ([de['eng']['start'],de['eng']['end']] if de['eng'] else None)==r['eng_range']
+    assert all(i in {x['id'] for x in rows} for i in d['final_ids']);original.append(dict(identity=ident,span=sp,parent=r['parent'],declaration=de));disps.append(d)
+  om=get(root/'omissions.json')
+  for side,field in [('tib','wylie'),('eng','english')]:
+   text=source[q][field];ranges=sorted(r[side+'_range'] for r in rows if r['d']!=7 and r[side+'_range'] is not None);cur=0;gaps=[]
+   for lo,hi in ranges:
+    assert cur<=lo<hi<=len(text)
+    if lo>cur:gaps.append(dict(start=cur,end=lo,text=text[cur:lo]))
+    cur=hi
+   if cur<len(text):gaps.append(dict(start=cur,end=len(text),text=text[cur:]))
+   assert gaps==om['full_unwrapped_complements'][side];checks.append(dict(seq=q,side=side,complete_complement=True,gaps=len(gaps)))
+ put(D/'resolved-spans.json',final);put(D/'resolved-full-objects.json',[dict(span=s,**r) for q in [277,278,279] for s,r in zip(get(B/'reconciled'/str(q)/'spec.json')['segments'][0]['spans'],resolve(get(B/'reconciled'/str(q)/'spec.json')['segments'][0]))]);put(D/'original-identities.json',original);put(D/'original-dispositions-inspected.json',disps)
+ masterpath=W/'data/hgm_dictionary_v27_2.json.gz';corpuspath=W/'data/full_parallel_corpus_v32.json.gz';mr=masterpath.read_bytes();cr=corpuspath.read_bytes();master=json.loads(gzip.decompress(mr))['unified_entries'];corpus=json.loads(gzip.decompress(cr));raws={};qp=[]
+ for p in sorted((D/'independent-reopens').rglob('*.json')):
+  x=get(p);n=0
+  for r in x['rows']:
+   if 'raw' not in r:continue
+   raw=json.loads(r['raw']);kind='corpus' if 'course' in r else 'master';arr=corpus if kind=='corpus' else master;assert arr[r['id']-1]==raw
+   if 'hgm_gloss' in r:assert r['hgm_gloss']==(json.dumps(raw.get('hgm_gloss'),ensure_ascii=False) if raw.get('hgm_gloss') else None)
+   key=(kind,r['id']);assert key not in raws or raws[key]==r;raws[key]=r;n+=1
+  qp.append(dict(query=str(p.relative_to(D)),full_raw_rows=n))
+ packet=[]
+ for (kind,id),r in sorted(raws.items()):
+  p=D/'full-original-objects'/kind/(str(id)+'.json');put(p,r);packet.append(dict(kind=kind,id=id,path=str(p.relative_to(D)),pin=pin(p.read_bytes())))
+ ext=[]
+ for r in get(C/'independent-physical-extents.json'):
+  p=Path(r['original']);raw=p.read_bytes();assert pin(raw)==r['verified_full_source_pin'];piece=raw[r['start']:r['end']];assert pin(piece)=={k:r[k] for k in ['bytes','sha256']} and piece==(B/'semantic-source-preparation'/r['copy']).read_bytes();ext.append(r)
+ put(D/'physical-reopen-proof.json',dict(status='PASS',extents=ext,model_reading='Full material extents and PDF images were inspected in immutable source preparation; current entire originals and exact ranges independently reopened here.'))
+ pat=runpy.run_path(str(W/'tools/test_no_supplied_span_head.py'),run_name='review_predicate_only')['PAT'];hits=[]
+ for q in [277,278,279]:hits.extend(pat.findall((D/'canonical-runs'/str(q)/'stdout.bin').read_text()))
+ assert not hits
+ put(D/'head-predicate-proof.json',dict(status='PASS',hits=hits,predicate=pin((W/'tools/test_no_supplied_span_head.py').read_bytes()),allowance={}))
+ put(D/'full-original-object-proof.json',dict(status='PASS',queries=qp,objects=packet,master_pin=pin(mr),corpus_pin=pin(cr),nulls_preserved=True,source_archive_not_Git=True));assert masterpath.read_bytes()==mr and corpuspath.read_bytes()==cr
+ put(D/'structural-proof.json',dict(status='PASS',final_spans=len(final),original_identities=len(original),nulls=sum(r['eng'] is None for r in final),d7=sum(r['d']==7 for r in final),nonnull_d5=sum(r['d']==5 and r['eng'] is not None for r in final),complements=checks,actual_new_canonical_runs=0,actual_new_SQL_queries=0,semantic_approval=False))
+ print(json.dumps(dict(status='PASS',spans=len(final),originals=len(original),raw_objects=len(raws),physical=len(ext),heads=len(hits))))
+except Exception:
+ (D/'structural-failure.txt').write_text(traceback.format_exc());raise

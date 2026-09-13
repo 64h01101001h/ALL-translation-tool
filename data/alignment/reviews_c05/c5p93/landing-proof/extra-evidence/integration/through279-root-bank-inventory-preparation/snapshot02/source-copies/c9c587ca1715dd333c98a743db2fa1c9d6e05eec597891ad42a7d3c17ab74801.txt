@@ -1,0 +1,16 @@
+"""Run an existing repository tool with all SQLite connections read-only."""
+from pathlib import Path
+import runpy,sqlite3,sys
+wt=Path(__file__).resolve().parent.parent/'campaign-worktree'
+original=sqlite3.connect
+def readonly(database,*args,**kwargs):
+    assert not args,'Unexpected positional SQLite options'
+    path=str(database)
+    if path.startswith('file:'):
+        assert 'mode=ro' in path
+    else:path=Path(path).resolve().as_uri()+'?mode=ro'
+    kwargs['uri']=True
+    db=original(path,**kwargs);db.execute('PRAGMA query_only=ON');return db
+sqlite3.connect=readonly
+script=wt/sys.argv[1];sys.argv=[str(script),*sys.argv[2:]]
+runpy.run_path(str(script),run_name='__main__')

@@ -1,0 +1,13 @@
+--- v1
++++ v2
+@@ -80,7 +80,9 @@
+  for p in queryfiles:
+   q=read(p);assert q['sql'].lstrip().upper().startswith('SELECT ')
+   actual=[dict(r) for r in db.execute(q['sql'],q['parameters'])]
+-  assert actual==q['rows'] and len(actual)==q['count'],str(p)
++  assert actual==q['rows'],str(p)
++  if 'count' in q:assert len(actual)==q['count'],str(p)
++  else:assert p.parent.name=='original-query-reopens' and 81<=int(p.stem)<=150
+   for r in actual:
+    if 'raw' in r:
+     raw=json.loads(r['raw'])

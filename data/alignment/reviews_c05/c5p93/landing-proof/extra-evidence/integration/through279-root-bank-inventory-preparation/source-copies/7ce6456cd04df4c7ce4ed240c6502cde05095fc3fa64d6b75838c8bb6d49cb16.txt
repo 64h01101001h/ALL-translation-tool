@@ -1,0 +1,37 @@
+from pathlib import Path
+import ast,difflib,hashlib,json
+D=Path(__file__).resolve().parent;OLD=D.parent/'through273-generated-reproduction'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def replace(s,a,b):assert s.count(a)==1,a;return s.replace(a,b)
+measured=json.loads((D/'actual-measurements.json').read_bytes());interface=json.loads((D/'interface-proof.json').read_bytes())
+assert list(measured['counts'].values())==[45126,11926,1612,11,7083,15500,22457,22117,24024,44]
+assert interface['counts']['tuples']+interface['counts']['anchors']==115 and interface['counts']['prior_links']+115==measured['counts']['links']
+changes=[]
+for name in ('prepare.py.txt','run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt'):
+    original=(OLD/name).read_text();current=original
+    if name in ('prepare.py.txt','verify-retention.py.txt'):
+        current=current.replace('C05-271-273','C05-274-276').replace('c5p91','c5p92').replace('7166534a9f47a201e5ab580a843c14ba2a910891','81942cfc6022a785894d3cc2a20de81dc4c6f599')
+    if name=='prepare.py.txt':
+        needle="cp(seed,S/'docs/geshe_michael_roach_dictionary.csv','first isolated view seed; intentionally previous main CSV')"
+        current=replace(current,needle,needle+";records[-1].update(copy='seed/previous-main-csv-seed.bin',materialized_initial_path='workspace/docs/geshe_michael_roach_dictionary.csv',version_note='Immutable seed copy. materialized_initial_path is the initial workspace seed expected to be replaced by the sole view. Actual before-view bytes and resulting output are recorded separately by run-once.py.txt.')")
+    if name=='verify-retention.py.txt':
+        # Replace only the incorrect ACIP block with the accepted recovery block.
+        recovery=(OLD/'verify-retention-recovery.py.txt').read_text()
+        a=current.index(' missing=[dict(tib=t,pairs=p)');b=current.index(" check('C05 exact273coverage'",a)
+        ra=recovery.index(' missing=[dict(tib=t,pairs=p)');rb=recovery.index(" check('C05 exact273coverage'",ra)
+        accepted_block=recovery[ra:rb]
+        (D/'accepted-acip-block.py.txt').write_text(accepted_block)
+        current=current[:a]+accepted_block+current[b:]
+        current=current.replace('(271,272,273)','(274,275,276)').replace('271–273','274–276').replace('range(1,274)','range(1,277)').replace('C05 exact273coverage','C05 exact276coverage')
+        current=replace(current,"check('104 new links confined to274–276',len(added)==104", "check('115 new links confined to274–276',len(added)==115")
+        current=replace(current,"check('All prior complete links exact',not(before-after),len(old['links']))", "check('All prior complete links exact',not(before-after) and len(old['links'])==45011,len(old['links']))")
+        current=current.replace('Entire28-row','Entire44-row').replace('len(delta)==28','len(delta)==44').replace('7075','7080').replace('7078','7083').replace('current101tuple','current112tuple').replace('len(tuples)==101','len(tuples)==112')
+        current=replace(current,'[45011,11923,1609,11,7078,15469,22413,22073,23974,28]'.replace('7078','7083'),'[45126,11926,1612,11,7083,15500,22457,22117,24024,44]')
+        # After seed aliases are corrected to the immutable copy, check every alias.
+        current=replace(current,"  if x['role']=='first isolated view seed; intentionally previous main CSV':continue\n",'')
+    ast.parse(current)
+    (D/name).write_text(current)
+    (D/(name+'.diff')).write_text(''.join(difflib.unified_diff(original.splitlines(True),current.splitlines(True),fromfile=str(OLD/name),tofile=str(D/name))))
+    changes.append(dict(file=name,original=pin(original.encode()),candidate=pin(current.encode()),unchanged=current==original,syntax='AST only'))
+result=dict(status='CONCRETE_PREPARATION_NOT_EXECUTED',candidate_sources=changes,known_added_links=115,independent_basis=dict(approved_tuples=112,anchors=3,incoming=45011,actual_total=45126),no_dynamic_count_gates=True,accepted_acip_block_source=str(OLD/'verify-retention-recovery.py.txt'),seed_transition_schema_source=str(OLD/'input-manifest.json'),runtime_operations=0)
+(D/'adaptation-proof.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

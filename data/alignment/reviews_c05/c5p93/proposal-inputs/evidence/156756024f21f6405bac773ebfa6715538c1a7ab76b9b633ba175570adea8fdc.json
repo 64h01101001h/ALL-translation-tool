@@ -1,0 +1,34 @@
+{
+  "angle": "tibetan",
+  "source": "lexical-queries-full.json",
+  "term": "chos kyi grags pa",
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "chos kyi grags pa",
+    "chos kyi grags pa"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 4621,
+      "wylie": "chos kyi grags pa",
+      "tibetan": "ཆོས་ཀྱི་གྲགས་པ",
+      "tibetan_source": null,
+      "acip": "CHOS KYI GRAGS PA",
+      "pronunciation": "chu kyi drakpa",
+      "pronunciation_source": null,
+      "sanskrit": "dharmakīrti",
+      "hopkins_english": "Dharmakīrti [name of the Indian philosopher, author of the Seven Treatises on Valid Cognition]",
+      "hgm_gloss": "[\"dharmakirti\", \"master dharmakirti\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"TCS18LamaChupa\"]",
+      "corpus_n_segments": 1,
+      "raw": "{\"tibetan\": \"ཆོས་ཀྱི་གྲགས་པ\", \"wylie\": \"chos kyi grags pa\", \"wylie_variants\": [\"chos kyi grags pa\"], \"tenses\": null, \"sanskrit\": \"dharmakīrti\", \"hopkins_english\": \"Dharmakīrti [name of the Indian philosopher, author of the Seven Treatises on Valid Cognition]\", \"hgm_gloss\": [\"dharmakirti\", \"master dharmakirti\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"chu kyi drakpa\", \"acip\": \"CHOS KYI GRAGS PA\", \"corpus_occurrences\": {\"courses\": [\"TCS18LamaChupa\"], \"n_segments\": 1}, \"hopkins_realigned\": \"uma-v26\"}"
+    }
+  ],
+  "independently_reopened": true
+}

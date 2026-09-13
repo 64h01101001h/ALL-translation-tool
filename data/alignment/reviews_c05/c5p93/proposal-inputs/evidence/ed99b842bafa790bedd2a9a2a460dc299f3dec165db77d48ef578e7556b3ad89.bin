@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/english/277/capture_lexical.py", line 23, in <module>
+    raw=json.loads(r['raw']);assert raw==master['unified_entries'][r['id']-1] and json.loads(r['hgm_gloss'])==(raw.get('hgm_gloss')or[]);checks.append(dict(term=t,id=r['id'],raw_full_original_equal=True,hgm_gloss_equal=True))
+                                                                                  ~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 345, in loads
+    raise TypeError(f'the JSON object must be str, bytes or bytearray, '
+                    f'not {s.__class__.__name__}')
+TypeError: the JSON object must be str, bytes or bytearray, not NoneType

@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path; import ast,json; p=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-final-bank-inventory-preparation'); names=['compose-final-inputs.py','assemble-final-supplement.py','capture-finished-scope.py']; rows=[]\nfor n in names:\n b=(p/n).read_bytes(); t=ast.parse(b,filename=str(p/n)); compile(t,str(p/n),'exec'); rows.append({'path':str(p/n),'bytes':len(b),'compile':'PASS','executed':False})\nprint(json.dumps(rows))"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0"
+  }
+}

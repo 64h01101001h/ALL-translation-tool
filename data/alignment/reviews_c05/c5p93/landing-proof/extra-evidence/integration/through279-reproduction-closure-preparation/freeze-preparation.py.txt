@@ -1,0 +1,9 @@
+from pathlib import Path
+import datetime,hashlib,json
+P=Path(__file__).resolve().parent
+assert (P/'final-preparation-caller/exit').read_bytes()==b'0\n'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+f=P/'freeze.json';assert not f.exists();files={str(p.relative_to(P)):pin(p.read_bytes())for p in sorted(P.rglob('*'))if p.is_file()};assert not any('__pycache__'in Path(n).parts for n in files)
+f.write_text(json.dumps(dict(status='FROZEN_CONCRETE_CLOSURE_CANDIDATE_PENDING_REVIEW',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),files=files,file_count=len(files),total_bytes=sum(x['bytes']for x in files.values()),excluded_only='freeze.json',candidate_executions=0),indent=2)+'\n')
+for n,r in files.items():assert pin((P/n).read_bytes())==r
+print(json.dumps(dict(freeze=str(f),**pin(f.read_bytes()),files=len(files),total_bytes=sum(x['bytes']for x in files.values()),code={n:pin((P/n).read_bytes())for n in ['close-evidence.py.txt','accept-independent-reproduction-root.py']})))

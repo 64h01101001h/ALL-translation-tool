@@ -1,0 +1,87 @@
+--- prior-banking
++++ candidate-banking
+@@ -15,8 +15,8 @@
+ import subprocess
+ import traceback
+ 
+-BASE = '81942cfc6022a785894d3cc2a20de81dc4c6f599'
+-PAGE, SEQS = 92, [274, 275, 276]
++BASE = 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
++PAGE, SEQS = 93, [277, 278, 279]
+ LARGE_BYTES = 2_000_000
+ TESTS = {'constitution', 'gen_alignment_page', 'alignment_gate_coverage', 'alignment_builder',
+          'dictionary_exports', 'no_broken_words', 'no_split_syllables', 'no_phonetics_in_layer',
+@@ -24,21 +24,15 @@
+          'errata_quotes_hold', 'view_matches_layer', 'generated_docs_in_sync', 'builder_sees_every_span',
+          'errata_name_their_witnesses'}
+ HISTORY = (
+-    'verify-initial-semantic-review-root.py',
+-    'root-initial-semantic-review-verification/proof.json',
+-    'metadata-correction01-proposal.json',
+-    'apply-metadata-correction01-root.py',
+-    'metadata-correction01/proof.json',
+-    'metadata-correction01/report.md',
+-    'metadata-correction01/omissions.json.diff',
+-    'metadata-correction01/material-decisions.json.diff',
+-    'pre-metadata-correction01/preservation.json',
+-    'pre-metadata-correction01/original-logical-to-retained-paths.json',
++    'verify-complete-originals.py',
++    'proposal-verification/root-original-freeze-check.json',
++    'proposal-verification/execution-proof.json',
++    'verify-reconciliation-root.py',
++    'root-reconciliation-verification/execution-proof.json',
++    'root-reconciliation-verification/report.json',
++    'root-reconciliation-verification/resolved-spans.json',
+     'verify-final-semantic-review-root.py',
+-    'verify-final-semantic-review-root-v2.py',
+-    'final-semantic-root-preservation-recovery/v1-v2.diff',
+-    'final-semantic-root-preservation-recovery/explanation.json',
+-    'root-final-semantic-review-verification-v2/proof.json',
++    'root-final-semantic-review-verification/proof.json',
+ )
+ 
+ 
+@@ -62,9 +56,9 @@
+     if not __debug__:
+         raise RuntimeError('Assertions must remain enabled')
+     b, wt = Path(args.batch).resolve(strict=True), Path(args.worktree).resolve(strict=True)
+-    assert b.name == 'C05-274-276'
++    assert b.name == 'C05-277-279'
+     landing = b / 'landing'; review = b / 'semantic-review'
+-    dest = wt / 'data/alignment/reviews_c05/c5p92/landing-proof'
++    dest = wt / 'data/alignment/reviews_c05/c5p93/landing-proof'
+     output = Path(args.run_output).absolute()
+     assert not output.resolve().is_relative_to(wt) and not output.resolve().is_relative_to(b)
+     output.mkdir(parents=True, exist_ok=False)
+@@ -165,7 +159,7 @@
+                 match(read(record['path']), record); externals.append(record)
+ 
+         initial_review = semantic_tree()
+-        preservation = js(b / 'root-final-semantic-review-verification-v2/proof.json')
++        preservation = js(b / 'root-final-semantic-review-verification/proof.json')
+         assert preservation['status'] == 'PASS' and preservation['head'] == BASE
+         assert preservation['review_freeze'] == initial_review
+         accepted = js(landing / 'root-semantic-acceptance-proof.json')
+@@ -195,7 +189,7 @@
+                 measured_builds.append(dict(record=str(record_path), label=label, exit=run['exit']))
+         assert len(build['runs']) == 2 and all(run['exit'] == 0 for run in build['runs'])
+         coverage = re.findall(rb'^COVERAGE C05: (\d+)/511 segments scanned, (\d+) open \(([^)]+)\)$', read(landing / 'build-layer.stdout'), re.M)
+-        assert coverage == [(b'276', b'235', b'277-511')]
++        assert coverage == [(b'279', b'232', b'280-511')]
+         for path, expected in build['output_sha256'].items():
+             assert pin(read(wt / relpath(path)))['sha256'] == expected
+         stdout = read(landing / 'ctest-17.stdout')
+@@ -250,10 +244,12 @@
+         for name in HISTORY:
+             source = b / name
+             add(source, copy='root-review-history/' + name + ('.txt' if source.suffix == '.py' else ''))
+-        for name in ('freeze-final-payload-before-staging.py', 'freeze-final-payload-before-staging-v2.py'):
++        for name in ('freeze-final-payload-before-staging.py',):
+             add(b / name, copy='root-helpers/' + name + '.txt')
+         # Code and explicit configuration are evidence; no execution of sources.
+         add(Path(__file__), copy='root-helpers/' + Path(__file__).name + '.txt')
++        # Root must supply full actual caller/source/resolver streams and every
++        # actual finding/correction history; HISTORY above is only universal interfaces.
+         explicit_inputs(Path(args.extra_inputs))
+         if args.phase == 'final-whitespace':
+             assert js(Path(args.whitespace_inputs)), 'Final phase requires explicit actual whitespace evidence inputs'

@@ -1,0 +1,37 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/053.json",
+  "query_pin": {
+    "bytes": 1839,
+    "sha256": "4954a179bc2d05008b6be745c086538bb0084823d216b97d149314cf61617b68"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "gzhi mthun",
+    "gzhi mthun"
+  ],
+  "rows": [
+    {
+      "id": 16437,
+      "wylie": "gzhi mthun",
+      "tibetan": "གཞི་མཐུན",
+      "tibetan_source": null,
+      "acip": "GZHI MTHUN",
+      "pronunciation": "shitun",
+      "pronunciation_source": null,
+      "sanskrit": "samānādhikaraṇa ; samānādhibaraṇa",
+      "hopkins_english": "common locus",
+      "hgm_gloss": "[\"wet and flowing\"]",
+      "tier": "auto-aligned",
+      "hgm_source": null,
+      "status": "hgm-auto (mined)",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C04\", \"C05\", \"C12\", \"C13\", \"C15\", \"C16\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"ILL\", \"P6\", \"P7\", \"TCS15\", \"TCS16Reading\"]",
+      "corpus_n_segments": 238,
+      "raw": "{\"tibetan\": \"གཞི་མཐུན\", \"wylie\": \"gzhi mthun\", \"wylie_variants\": [\"gzhi mthun\"], \"tenses\": null, \"sanskrit\": \"samānādhikaraṇa ; samānādhibaraṇa\", \"hopkins_english\": \"common locus\", \"hgm_gloss\": [\"wet and flowing\"], \"hgm_evidence\": {\"tier\": \"auto-aligned\", \"method\": \"intersection\", \"confidence\": \"medium\", \"support\": 3, \"of_segments\": 6}, \"status\": \"hgm-auto (mined)\", \"pronunciation\": \"shitun\", \"acip\": \"GZHI MTHUN\", \"corpus_occurrences\": {\"courses\": [\"C04\", \"C05\", \"C12\", \"C13\", \"C15\", \"C16\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"ILL\", \"P6\", \"P7\", \"TCS15\", \"TCS16Reading\"], \"n_segments\": 238}, \"hopkins_realigned\": \"uma-v26\"}"
+    }
+  ],
+  "count": 1,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

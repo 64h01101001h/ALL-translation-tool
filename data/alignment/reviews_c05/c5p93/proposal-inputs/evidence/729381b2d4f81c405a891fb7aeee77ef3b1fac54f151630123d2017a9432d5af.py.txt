@@ -1,0 +1,9 @@
+from pathlib import Path
+import json
+O=Path(__file__).resolve().parent;H=O/'history-candidate02';H.mkdir()
+for n in ['spec.json','body.html','occurrence-declarations.json']:(H/n).write_bytes((O/n).read_bytes())
+s=json.loads((O/'spec.json').read_bytes());seg=s['segments'][0];sp=next(x for x in seg['spans']if x['tib']=='rnam pa shar ba');assert sp['eng']=='clear impression';sp['eng']='impression'
+d=json.loads((O/'occurrence-declarations.json').read_bytes());r=next(x for x in d['declarations']if x['id']==sp['id']);r['eng']['start']+=6;r['eng']['all_whole_word_offsets']=[r['eng']['start']];r['rationale']='Appearing-aspect construction rendered as impression; leave the English adjective clear unwrapped because no separate clarity expression occurs inside this Tibetan construction.'
+d['concerns'][2]='rnam pa shar ba owns impression only as a d3 appearing-aspect construction. The adjective clear before impression is left supplied; it is not the later gsal bar/clearly. The expanded second whether or not is not another Tibetan mi.'
+seg['note']+=' The appearing-aspect construction owns impression only; the English adjective clear is left unwrapped.'
+(O/'candidate03.spec.json').write_text(json.dumps(s,ensure_ascii=False,indent=2)+'\n');(O/'occurrence-declarations.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n');(O/'run_canonical03.py').write_text((O/'run_canonical02.py').read_text().replace('canonical-attempt02','canonical-attempt03').replace('candidate02.spec.json','candidate03.spec.json'));print('Retained full candidate02; tightened impression without changing source.')

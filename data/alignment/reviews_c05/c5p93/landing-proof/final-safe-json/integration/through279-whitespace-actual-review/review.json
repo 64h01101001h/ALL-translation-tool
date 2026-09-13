@@ -1,0 +1,76 @@
+{
+  "status": "APPROVE_CODE_AND_PROVENANCE_ONLY_PENDING_PREPARE_AUDIT",
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "candidate_freeze": {
+    "bytes": 77075,
+    "sha256": "2c86e7c418204955b071ed972de598df60fa72cdfd0f3b473e1507d34557c1f9"
+  },
+  "candidate": {
+    "bytes": 28625,
+    "sha256": "4aedff9abaea7db677e217f753dbcbcae5ec49d777305c1e60e3297293034943"
+  },
+  "descriptor": {
+    "bytes": 421809,
+    "sha256": "c61eadecf83d368572abbc425a7ddc72b340a07d34efde845d734fa8830ffaf5"
+  },
+  "additional_exact_aliases": 37,
+  "runtime_prepare_audit_calls": 0,
+  "checklist": [
+    {
+      "id": "OLD_PREDICATES_AND_DIFF",
+      "status": "APPROVE",
+      "evidence": "proof.json"
+    },
+    {
+      "id": "PHYSICAL_CSV_SYNTAX_OWNERSHIP",
+      "status": "APPROVE",
+      "evidence": "descriptor-ownership-review.json"
+    },
+    {
+      "id": "FULL_SOURCE_PROVENANCE",
+      "status": "APPROVE",
+      "evidence": "upstream-verification.json"
+    },
+    {
+      "id": "ACTUAL_CAPTURED_DIAGNOSTIC",
+      "status": "APPROVE",
+      "evidence": "proof.json"
+    },
+    {
+      "id": "NEGATIVE_TEST_EVIDENCE",
+      "status": "APPROVE",
+      "evidence": "inputs/test_additional.py.txt"
+    },
+    {
+      "id": "FAILURE_HISTORY",
+      "status": "APPROVE",
+      "evidence": "attempt01-disposition.json"
+    },
+    {
+      "id": "RUNTIME_AND_EXTERNAL_RETENTION_LIMITS",
+      "status": "APPROVE",
+      "evidence": "report.md"
+    }
+  ],
+  "report": {
+    "path": "report.md",
+    "bytes": 9894,
+    "sha256": "f0a78812aeb3c93759226b7e223dddcb27cffd09f71cb6d1e766fdfc69a91ca6"
+  },
+  "source_manifest": {
+    "path": "original-to-copy-manifest.json",
+    "records": 401,
+    "bytes": 282578,
+    "sha256": "3d0ea998294a40897291ca826672ebb70e2ac894d00a7232bd3f6c288c7d006f"
+  },
+  "requires_actual_prepare_audit_and_global_checkpoint": true,
+  "freeze_contract": {
+    "files": "DICT",
+    "file_count": "measured",
+    "total_bytes": "measured",
+    "excludes_only": "freeze.json"
+  }
+}

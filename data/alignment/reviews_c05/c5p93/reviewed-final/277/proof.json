@@ -1,0 +1,75 @@
+{
+  "status": "PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION",
+  "seq": 277,
+  "execution": {
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/run-canonical-readonly.py"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "GIT_OPTIONAL_LOCKS": "0"
+    },
+    "start_utc": "2026-09-13T18:22:56.558525+00:00",
+    "end_utc": "2026-09-13T18:22:56.651877+00:00",
+    "exit": 0,
+    "stdin": {
+      "bytes": 9757,
+      "sha256": "88c1c69c1f210490636fc1ad5dd22cd0d0fbcbb6455c9ac7a11396f0710f61df"
+    },
+    "stdout": {
+      "bytes": 9842,
+      "sha256": "10e2ffd370ea12198c7fc82b51eb9eee5059a06df6763faf52770e20303681ba"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "wrapper": {
+      "bytes": 545,
+      "sha256": "f7a40d68d275a6a7e3d401a30de58ae84e83061998deeaa121ab840a99b056c0"
+    },
+    "canonical_source": {
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    },
+    "SQL": "actual unchanged wrapper uses URI mode=ro and query_only=ON"
+  },
+  "spec": {
+    "bytes": 9757,
+    "sha256": "88c1c69c1f210490636fc1ad5dd22cd0d0fbcbb6455c9ac7a11396f0710f61df"
+  },
+  "body": {
+    "bytes": 9842,
+    "sha256": "10e2ffd370ea12198c7fc82b51eb9eee5059a06df6763faf52770e20303681ba"
+  },
+  "counts": {
+    "spans": 61,
+    "nulls": 6,
+    "d5_nonnull": 39,
+    "depths": {
+      "3": 5,
+      "5": 43,
+      "6": 13,
+      "7": 0
+    },
+    "original_dispositions": 111,
+    "errata": 0
+  },
+  "full_source_reproduction": {
+    "wylie": true,
+    "english": true
+  },
+  "final_tuple_keys": [
+    "id",
+    "d",
+    "tib",
+    "eng",
+    "tib_range",
+    "eng_range",
+    "parent"
+  ],
+  "semantic_status": "PROVISIONAL reconciliation; separate non-author review required before landing"
+}

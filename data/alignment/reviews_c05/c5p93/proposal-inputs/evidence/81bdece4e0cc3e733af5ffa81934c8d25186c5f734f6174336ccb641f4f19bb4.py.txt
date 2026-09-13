@@ -1,0 +1,15 @@
+from pathlib import Path
+import json,hashlib,sys,datetime
+E=Path(__file__).resolve().parent
+def pin(raw):return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def put(p,x):p.write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+put(E/'freeze-command.json',{'argv':[sys.executable,'-B',str(Path(__file__).resolve())],'cwd':str(Path.cwd()),'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'purpose':'Enumerate completed current per-segment artifacts; no generator or repository action. Freeze excludes only its own file.'})
+out=[]
+for seq in [277,278,279]:
+ d=E.parent/str(seq);assert not (d/'freeze.json').exists();files={str(p.relative_to(d)):pin(p.read_bytes())for p in sorted(d.rglob('*'))if p.is_file() and p!=d/'freeze.json'}
+ assert not any(p.is_symlink()for p in d.rglob('*'))
+ f={'status':'FROZEN_PROVISIONAL_RECONCILIATION','seq':seq,'files':files,'file_count':len(files),'total_bytes':sum(p['bytes']for p in files.values()),'semantic_approval':False};put(d/'freeze.json',f)
+ assert set(files)=={str(p.relative_to(d))for p in d.rglob('*')if p.is_file()and p!=d/'freeze.json'}
+ for name,p in files.items():assert pin((d/name).read_bytes())==p
+ out.append({'seq':seq,'freeze':str(d/'freeze.json'),**pin((d/'freeze.json').read_bytes()),'files':len(files),'total_bytes':f['total_bytes']})
+print(json.dumps({'status':'DONE_FROZEN','freezes':out},indent=2))

@@ -1,0 +1,28 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-generated-reproduction/prepare.py.txt
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-generated-reproduction-concrete-preparation/prepare.py.txt
+@@ -1,7 +1,7 @@
+ from pathlib import Path
+ import os,sys,json,hashlib,importlib.util,subprocess,datetime
+ sys.dont_write_bytecode=True;os.environ.update(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+-R=Path(__file__).resolve().parent;ROOT=R.parents[2];W=ROOT/'campaign-worktree';B=ROOT/'campaign-artifacts/C05-271-273';L=B/'landing';S=R/'workspace';HEAD='7166534a9f47a201e5ab580a843c14ba2a910891';S.mkdir(exist_ok=False)
++R=Path(__file__).resolve().parent;ROOT=R.parents[2];W=ROOT/'campaign-worktree';B=ROOT/'campaign-artifacts/C05-274-276';L=B/'landing';S=R/'workspace';HEAD='81942cfc6022a785894d3cc2a20de81dc4c6f599';S.mkdir(exist_ok=False)
+ def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+ def save(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+ records=[]
+@@ -18,13 +18,13 @@
+ for course,cfg in sorted(m.COURSES.items()):
+  for page,seqs in sorted(cfg['pages'].items()):
+   dst=Path(cfg['dir'])/(page+'.html');rel=dst.relative_to(S);cp(W/rel,dst,'registered physical page consumed by layer');registered.append(dict(course=course,page=page,sequences=seqs,relative_path=str(rel)))
+-for rel in ['data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p91.json','build/hgm_spine_v27_2.db','data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']:cp(W/rel,S/rel,'current registered spec/source/provenance')
+-for p in sorted((W/'data/alignment/reviews_c05/c5p91').rglob('*')):
++for rel in ['data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p92.json','build/hgm_spine_v27_2.db','data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']:cp(W/rel,S/rel,'current registered spec/source/provenance')
++for p in sorted((W/'data/alignment/reviews_c05/c5p92').rglob('*')):
+  if p.is_file():cp(p,S/p.relative_to(W),'complete accepted semantic review plus histories; only top current review is approval')
+ outputrels=['data/alignment/alignment_full_v1.json','data/alignment/alignment_evidence_v1.json']+['docs/geshe_michael_roach_dictionary'+s for s in ('.html','.csv','_reverse.csv','_by_course.csv','_changes.csv')]
+ for rel in outputrels:
+  raw=subprocess.check_output(['git','show',HEAD+':'+rel],cwd=W);out=R/'previous-generated'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(raw);records.append(dict(original_git_commit=HEAD,repository_relative_path=rel,copy=str(out.relative_to(R)),role='immutable incoming generated baseline',**pin(out)))
+-seed=L/'previous-main-csv-seed.bin';assert seed.read_bytes()==(R/'previous-generated/docs/geshe_michael_roach_dictionary.csv').read_bytes();cp(seed,R/'seed/previous-main-csv-seed.bin','actual root first-view seed');cp(seed,S/'docs/geshe_michael_roach_dictionary.csv','first isolated view seed; intentionally previous main CSV')
++seed=L/'previous-main-csv-seed.bin';assert seed.read_bytes()==(R/'previous-generated/docs/geshe_michael_roach_dictionary.csv').read_bytes();cp(seed,R/'seed/previous-main-csv-seed.bin','actual root first-view seed');cp(seed,S/'docs/geshe_michael_roach_dictionary.csv','first isolated view seed; intentionally previous main CSV');records[-1].update(copy='seed/previous-main-csv-seed.bin',materialized_initial_path='workspace/docs/geshe_michael_roach_dictionary.csv',version_note='Immutable seed copy. materialized_initial_path held these exact bytes immediately before the first view invocation and was then legitimately replaced by the generated current main CSV. Original pre-execution materialization remains explicitly recorded.')
+ for p in sorted(L.iterdir()):
+  if p.is_file() and p!=seed:cp(p,R/'root-landing-evidence'/p.name,'root build/test/retention/failure history; no independent approval inferred')
+ for name in ['run_reviewed_builders_once.py','run_tool_readonly_sqlite.py','verify_landed_batch.py','verify_course_csv.py']:cp(ROOT/'campaign-artifacts'/name,R/'root-helpers'/(name+'.txt'),'actual root command helper inspected')

@@ -1,0 +1,73 @@
+from pathlib import Path
+import os, sys, json, hashlib, importlib.util, sqlite3, subprocess, datetime, traceback
+sys.dont_write_bytecode=True
+D=Path(__file__).resolve().parent; B=D.parent; A=B.parent; W=A.parent/'campaign-worktree'; C=B/'reconciled/277'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def call(argv,stdin,out,cwd=W):
+ out.mkdir(parents=True,exist_ok=False); (out/'stdin.bin').write_bytes(stdin)
+ meta=dict(argv=argv,cwd=str(cwd),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0','PYTHONOPTIMIZE':'0'},started_at=datetime.datetime.now(datetime.timezone.utc).isoformat())
+ save(out/'command.json',meta)
+ r=subprocess.run(argv,cwd=cwd,input=stdin,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0',PYTHONOPTIMIZE='0'))
+ for n,v in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(out/n).write_bytes(v)
+ meta.update(exit=r.returncode,stdout=pin(r.stdout),stderr=pin(r.stderr),stdin=pin(stdin),completed_at=datetime.datetime.now(datetime.timezone.utc).isoformat());save(out/'execution.json',meta)
+ return r,meta
+try:
+ roots=[B/n for n in ['tibetan','english','reconciled','semantic-source-preparation','proposal-verification','original-verification-caller','root-reconciliation-verification','root-reconciliation-correction01','root-reconciliation-correction02','reconciliation-root-caller','reconciliation-root-caller-v2','reconciliation-root-caller-v3']]
+ originals=set(p for root in roots if root.exists() for p in root.rglob('*') if p.is_file() and '__pycache__' not in p.parts)
+ originals.update(p for p in B.iterdir() if p.is_file())
+ originals.update([A/'semantic-review-protocol.md',A/'proposal-protocol.md',A/'copy_evidence_once_v2.py',A/'land_reviewed_page.py'])
+ for n in ['original-to-copy-manifest.json']:
+  for r in json.loads((C/n).read_bytes()):
+   p=Path(r['original']); assert pin(p.read_bytes())=={k:r[k] for k in ('bytes','sha256')} and p.read_bytes()==(C/r['copy']).read_bytes(); originals.add(p)
+ for r in json.loads((B/'semantic-source-preparation/original-to-copy-manifest.json').read_bytes()):originals.add(Path(r['original']))
+ inventory=[dict(original=str(p),resolved=str(p.resolve(strict=True)),symlink=os.readlink(p) if p.is_symlink() else None,**pin(p.read_bytes())) for p in sorted(originals)]
+ save(D/'input-boundary.json',inventory)
+ spec=importlib.util.spec_from_file_location('approved_evidence_copier',A/'copy_evidence_once_v2.py');mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
+ copied=mod.preserve(D,D/'original-to-copy-manifest.json',sorted(originals));save(D/'preservation-proof.json',copied)
+ snapshots=[]
+ for seq in [277,278,279]:
+  root=B/'reconciled'/str(seq); f=json.loads((root/'freeze.json').read_bytes()); tree={str(p.relative_to(root)):pin(p.read_bytes()) for p in root.rglob('*') if p.is_file() and p!=root/'freeze.json'}
+  assert tree==f['files'];snapshots.append(dict(seq=seq,freeze=pin((root/'freeze.json').read_bytes()),files=len(tree)))
+  out=D/'reviewed-final'/str(seq);out.mkdir(parents=True,exist_ok=False)
+  for p in root.iterdir():
+   if p.is_file() and p.suffix in {'.json','.md','.html'}:(out/p.name).write_bytes(p.read_bytes())
+ save(D/'current-freeze-proof.json',snapshots)
+ gp=json.loads((C/'governing-fixed-git-provenance.json').read_bytes());gitproof=[]
+ records=json.loads((D/'original-to-copy-manifest.json').read_bytes())
+ for i,r in enumerate(gp['actual_runs']):
+  run,meta=call(r['argv'],b'',D/'governing-git'/str(i+1));assert run.returncode==0 and not run.stderr and pin(run.stdout)==r['stdout']
+  assert run.stdout==(C/r['copy']).read_bytes()
+  rel=r['argv'][-1].split(':',1)[1]
+  for row in records:
+   if row['original']==str(Path(r['logical_source']).resolve()):row.update(original_git_commit=gp['commit'],repository_relative_path=rel)
+  gitproof.append(dict(repository_relative_path=rel,original_git_commit=gp['commit'],execution=meta))
+ save(D/'original-to-copy-manifest.json',records);save(D/'governing-git-proof.json',gitproof)
+ dbpath=(W/'build/hgm_spine_v27_2.db').resolve();before=pin(dbpath.read_bytes());db=sqlite3.connect(dbpath.as_uri()+'?mode=ro',uri=True);db.execute('PRAGMA query_only=ON');db.row_factory=sqlite3.Row
+ assert db.execute('PRAGMA query_only').fetchone()[0]==1
+ sql='select * from corpus_segments where course=? and seq between ? and ? order by seq';params=['C05',270,285];rows=[dict(r) for r in db.execute(sql,params)];save(D/'independent-source-context.json',dict(sql=sql,parameters=params,rows=rows,count=len(rows),database=str(dbpath),mode='ro',query_only=1))
+ src={r['seq']:r for r in rows}
+ for r in json.loads((B/'source.json').read_bytes()):assert all(src[r['seq']][k]==v for k,v in r.items())
+ qproof=[]
+ for folder in ['independent-queries','original-query-reopens']:
+  for p in sorted((C/folder).glob('*.json')):
+   q=json.loads(p.read_bytes());assert q['sql'].lstrip().lower().startswith('select')
+   rows=[dict(r) for r in db.execute(q['sql'],q['parameters'])];assert rows==q['rows']
+   if 'count' in q:assert len(rows)==q['count']
+   save(D/'independent-reopens'/folder/p.name,dict(original_query=str(p),query_pin=pin(p.read_bytes()),sql=q['sql'],parameters=q['parameters'],rows=rows,count=len(rows),database=str(dbpath),query_only=1))
+   qproof.append(dict(original=str(p),count=len(rows),row_identity=True))
+ db.close();save(D/'query-reopen-proof.json',dict(queries=qproof,count=len(qproof),database_before=before,database_after=pin(dbpath.read_bytes())))
+ assert pin(dbpath.read_bytes())==before
+ wrapper=C/'run-canonical-readonly.py';(D/'run-canonical-readonly.py.txt').write_bytes(wrapper.read_bytes());runs=[]
+ for seq in [277,278,279]:
+  root=B/'reconciled'/str(seq);specraw=(root/'spec.json').read_bytes();run,meta=call([sys.executable,'-B',str(D/'run-canonical-readonly.py.txt')],specraw,D/'canonical-runs'/str(seq))
+  assert run.returncode==0 and not run.stderr and run.stdout==(root/'body.html').read_bytes()
+  spans=json.loads(specraw)['segments'][0]['spans'];runs.append(dict(seq=seq,span_count=len(spans),null_count=sum(s['eng'] is None for s in spans),word_pair_count=sum(s['d']==5 and s['eng'] is not None for s in spans),spec_bytes=len(specraw),spec_sha256=pin(specraw)['sha256'],body_bytes=len(run.stdout),body_sha256=pin(run.stdout)['sha256'],generator_exit=run.returncode,execution=meta))
+ save(D/'canonical-proof.json',runs)
+ assert pin(dbpath.read_bytes())==before
+ for r in inventory:
+  p=Path(r['original']);assert pin(p.read_bytes())=={k:r[k] for k in ('bytes','sha256')} and str(p.resolve(strict=True))==r['resolved']
+ save(D/'collection-proof.json',dict(status='PASS',input_aliases=len(inventory),preservation=copied,Git_objects=len(gitproof),queries=len(qproof),canonical_runs=3,source_unchanged=True,semantic_approval=False))
+ print(json.dumps(json.loads((D/'collection-proof.json').read_bytes()),indent=2))
+except Exception:
+ (D/'collection-failure.txt').write_text(traceback.format_exc());raise

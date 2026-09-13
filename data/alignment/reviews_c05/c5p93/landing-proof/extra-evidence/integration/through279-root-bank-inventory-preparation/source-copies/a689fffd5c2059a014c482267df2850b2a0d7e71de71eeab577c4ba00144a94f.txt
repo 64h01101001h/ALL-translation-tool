@@ -1,0 +1,286 @@
+{
+  "status": "PASS_PREPARATION_ONLY",
+  "actual_helper_executions": 0,
+  "Git_calls": 0,
+  "builders_generators_tests_executed": 0,
+  "syntax_checks": [
+    "candidate",
+    "prospective builder"
+  ],
+  "old_helper": {
+    "bytes": 8036,
+    "sha256": "5ba4b2395030c6a56b5f361aca40821d792d6fcfa2f2c32946672d777e5e1f75"
+  },
+  "candidate": {
+    "bytes": 8037,
+    "sha256": "aed207dbf618c745f1d2ba30752b78d4642a1a79f523dcf70fcd0681443f9e1c"
+  },
+  "exact_inverse_full_helper_bytes": true,
+  "number_substitutions": [
+    {
+      "start": 25,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 537,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 542,
+      "old": "274",
+      "new": "277"
+    },
+    {
+      "start": 547,
+      "old": "275",
+      "new": "278"
+    },
+    {
+      "start": 552,
+      "old": "276",
+      "new": "279"
+    },
+    {
+      "start": 619,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 1830,
+      "old": "273",
+      "new": "276"
+    },
+    {
+      "start": 1936,
+      "old": "273",
+      "new": "276"
+    },
+    {
+      "start": 4082,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 4498,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 4741,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 5139,
+      "old": "273",
+      "new": "276"
+    },
+    {
+      "start": 5212,
+      "old": "276",
+      "new": "279"
+    },
+    {
+      "start": 5269,
+      "old": "91",
+      "new": "92"
+    },
+    {
+      "start": 5283,
+      "old": "91",
+      "new": "92"
+    },
+    {
+      "start": 5297,
+      "old": "271",
+      "new": "274"
+    },
+    {
+      "start": 5301,
+      "old": "273",
+      "new": "276"
+    },
+    {
+      "start": 5343,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 5357,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 5371,
+      "old": "274",
+      "new": "277"
+    },
+    {
+      "start": 5375,
+      "old": "276",
+      "new": "279"
+    },
+    {
+      "start": 5558,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 5748,
+      "old": "93",
+      "new": "94"
+    },
+    {
+      "start": 5848,
+      "old": "93",
+      "new": "94"
+    },
+    {
+      "start": 5966,
+      "old": "91",
+      "new": "92"
+    },
+    {
+      "start": 5972,
+      "old": "271",
+      "new": "274"
+    },
+    {
+      "start": 5977,
+      "old": "272",
+      "new": "275"
+    },
+    {
+      "start": 5982,
+      "old": "273",
+      "new": "276"
+    },
+    {
+      "start": 6014,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 6020,
+      "old": "274",
+      "new": "277"
+    },
+    {
+      "start": 6025,
+      "old": "275",
+      "new": "278"
+    },
+    {
+      "start": 6030,
+      "old": "276",
+      "new": "279"
+    },
+    {
+      "start": 6394,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 6410,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 6461,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 6594,
+      "old": "277",
+      "new": "280"
+    },
+    {
+      "start": 7245,
+      "old": "273",
+      "new": "276"
+    },
+    {
+      "start": 7251,
+      "old": "276",
+      "new": "279"
+    },
+    {
+      "start": 7290,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 7349,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 7553,
+      "old": "92",
+      "new": "93"
+    },
+    {
+      "start": 7581,
+      "old": "276",
+      "new": "279"
+    }
+  ],
+  "closure_schema_changes": {
+    "path": [
+      "integration/through276-root-closure/final/proof.json",
+      "integration/through276-root-closure/final-observed-main/proof.json"
+    ],
+    "guard": [
+      "assert closed['status'] == 'PASS_ROOT_CLOSED_THROUGH_C05_276' and closed['fixed_heads']['final_documentation'] == BASE",
+      "assert closed['status'] == 'PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276' and closed['final_head'] == BASE"
+    ]
+  },
+  "actual_closure_selected_fields": {
+    "status": "PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276",
+    "final_head": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+    "data_head": "2602b7d7966f3ee332393e860770f25a6b3a3f79",
+    "incoming_global_closed": "81942cfc6022a785894d3cc2a20de81dc4c6f599",
+    "coverage": {
+      "course": "C05",
+      "verified_segments": 276,
+      "total_segments": 511,
+      "remaining_segments": 235,
+      "accepted_pages": 92,
+      "next_batch": [
+        277,
+        278,
+        279
+      ],
+      "next_regular_global": 291
+    },
+    "current_MAIN_applicability_claimed": false,
+    "MAIN_integration": "OPEN_REQUIRES_THEN_CURRENT_STATE_CONFIGURATION_AND_FRESH_APPLICABILITY_CHECK",
+    "applied": false
+  },
+  "actual_index_before": {
+    "bytes": 6875,
+    "sha256": "b7e86b2ff94301f91aed4d804b94dd7acdd4773853375cd1f03bdcebe3168713"
+  },
+  "prospective_index": {
+    "bytes": 6939,
+    "sha256": "ad46b2e65c2c0c7c25bed2f21a8a0096f51b193c94c1c673d50db92f9208316c"
+  },
+  "actual_builder_before": {
+    "bytes": 39580,
+    "sha256": "ba49ef338ae59e1ca5948c4879f0cb8ff6c0a7880eaf9e84f0bbe121d5e47a0b"
+  },
+  "prospective_builder": {
+    "bytes": 39610,
+    "sha256": "60f7d2d63c766b026e98eb020215988a31a6aa975e61ce8be8a882874694a659"
+  },
+  "previous_registry_exact": true,
+  "all_other_index_and_builder_bytes_exact": true,
+  "previous_page_links": 92,
+  "prospective_page_links": 93,
+  "prospective_coverage": 279,
+  "all_consumed_original_copy_bytes_rechecked": true,
+  "future_page_existence_and_approval_checks": "not executed; mandatory live prerequisites"
+}

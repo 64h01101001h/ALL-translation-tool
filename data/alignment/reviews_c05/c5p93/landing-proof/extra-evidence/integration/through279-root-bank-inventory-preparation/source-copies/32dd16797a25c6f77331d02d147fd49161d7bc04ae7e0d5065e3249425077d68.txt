@@ -1,0 +1,92 @@
+"""Concrete preparation only: read full actual inputs, preserve exact bytes, derive measurements, edit external candidate text. Never execute candidates."""
+from pathlib import Path
+import ast,collections,csv,datetime,difflib,hashlib,io,json,os,re
+P=Path(__file__).resolve().parent;I=P.parent;A=I.parent;W=A.parent/'campaign-worktree';B=A/'C05-277-279';L=B/'landing';V=B/'semantic-review';records=[]
+def bp(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def pin(p):return bp(p.read_bytes())
+def j(p):return json.loads(p.read_bytes())
+def save(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def cp(p):
+ raw=p.read_bytes();d=P/'current-inputs'/p.relative_to(A) if p.is_relative_to(A) else P/'current-inputs/worktree'/p.relative_to(W)
+ if not d.exists():d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(raw)
+ assert d.read_bytes()==p.read_bytes()==raw;records.append(dict(original=str(p),copy=str(d.relative_to(P)),resolved=str(p.resolve()),symlink=os.readlink(p)if p.is_symlink()else None,**bp(raw)))
+# Immutable phase01 must remain exact, not compared to a widened present-day enumeration.
+phase=j(P/'phase01-freeze.json')
+for n,r in phase['files'].items():assert pin(P/n)==r
+paths=[]
+for name in ['semantic-root-correction01','semantic-root-proof-interface','payload-final-schema-preparation','payload-final-schema-review','root-payload-schema-release','root-final-semantic-review-verification']:
+ paths.extend(x for x in(B/name).rglob('*')if x.is_file())
+for n in ['verify-final-semantic-review-root.py','normalize-semantic-root-proof-interface.py','freeze-final-payload-before-staging.py']:
+ p=B/n;assert p.exists(),str(p);paths.append(p)
+for d in sorted((B/'landing-runs').iterdir()):
+ if d.is_dir() and 1<=int(d.name.split('-')[0])<=10:paths.extend(x for x in d.rglob('*')if x.is_file())
+paths.extend(x for x in L.iterdir()if x.is_file()and x.name!='previous-main-csv-seed.bin')
+for n in ['freeze.json','review.json','resolved-spans.json','review.md','evidence-pins.json','original-to-copy-manifest.json','source-version-transport.json','manifest-transition-proof.json','packaging-final-proof.json']:paths.append(V/n)
+for n in ['run_reviewed_builders_once.py','run_tool_readonly_sqlite.py','verify_landed_batch.py','verify_course_csv.py','land_reviewed_page_v2.py','run_generator_readonly.py','verify_semantic_acceptance.py','verify_review_copy_and_register.py']:paths.append(A/n)
+paths.extend(W/n for n in ['tools/build_alignment_layer.py','tools/build_dictionary_view.py','tools/build_dictionary_exports.py','tools/gen_alignment_page.py','tools/dictionary_view_shell.html'])
+for p in sorted(set(paths)):cp(p)
+# Complete final review and landed review bytes, no semantic re-adjudication.
+f=j(V/'freeze.json');assert pin(V/'freeze.json')['sha256']=='d744bffe9a7635a7340aee88431bd192b2afe2e063f126f36896b105bc66578f';assert isinstance(f['files'],dict)
+assert set(f['files'])=={str(p.relative_to(V))for p in V.rglob('*')if p.is_file()and p!=V/'freeze.json'}
+review_pairs=[];landed=W/'data/alignment/reviews_c05/c5p93'
+for n,r in list(f['files'].items())+[('freeze.json',pin(V/'freeze.json'))]:
+ raw=(V/n).read_bytes();assert bp(raw)==r and raw==(landed/n).read_bytes();review_pairs.append(dict(original=str(V/n),copy=str(landed/n),**r))
+review=j(V/'review.json');tuples=j(V/'resolved-spans.json');assert all(review[k]=='APPROVE'for k in ['verdict','spec_verdict','quality_verdict'])and review['open_findings']==[]and review['baseline_commit']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+assert len(tuples)==review['total_spans']==146 and sum(x['eng']is None for x in tuples)==review['total_nulls']==8 and review['total_word_pairs']==94
+rp=j(B/'root-final-semantic-review-verification/proof.json');assert rp['status']=='PASS'and rp['review_freeze']==pin(V/'freeze.json')
+# Every frozen current payload/source pair is reopened in full, retained externally to avoid a redundant whole payload copy.
+pm=j(L/'staged-payload-manifest.json');ps=j(L/'staged-payload-source-proof.json');assert pin(L/'staged-payload-manifest.json')['sha256']=='1337b1cb34a1f481fd4a7cb8e16c56aee050c454e8a0021f5b48567f9c6e0f35'
+assert ps['status']=='PASS'and ps['manifest']['sha256']==pin(L/'staged-payload-manifest.json')['sha256']and len(pm['files'])==12
+payload=[]
+for r in pm['files']:
+ src=W/r['path'];frozen=L/'payload-freeze'/r['path'];raw=src.read_bytes();assert raw==frozen.read_bytes()and bp(raw)=={k:r[k]for k in ['bytes','sha256']};payload.append(dict(original=str(src),copy=str(frozen),**bp(raw)))
+assert payload==ps['files']
+full=j(L/'payload-freeze/data/alignment/alignment_full_v1.json');ev=j(L/'payload-freeze/data/alignment/alignment_evidence_v1.json')
+def rows(s):return list(csv.DictReader(io.StringIO((L/'payload-freeze/docs'/('geshe_michael_roach_dictionary'+s)).read_bytes().decode('utf-8-sig'),newline='')))
+counts=dict(links=len(full['links']),nulls=sum(x['eng']is None for x in full['links']),notes=sum(map(len,full['notes'].values())),trees=sum(map(len,full['trees'].values())),heads=len(ev['pairs']),pairs=sum(map(len,ev['pairs'].values())),csv_main=len(rows('.csv')),csv_reverse=len(rows('_reverse.csv')),csv_course=len(rows('_by_course.csv')),csv_changes=len(rows('_changes.csv')))
+assert list(counts.values())==[45275,11934,1615,11,7084,15517,22491,22151,24061,34]
+base=j(B/'baseline.json');assert base['full_links']==45126
+old=I/'through276-generated-reproduction/reproduced-outputs';oldfull=j(old/'data/alignment/alignment_full_v1.json');assert pin(old/'data/alignment/alignment_full_v1.json')['sha256']==base['sha256']['data/alignment/alignment_full_v1.json']
+sig=lambda x:json.dumps(x,sort_keys=True,ensure_ascii=False);before=collections.Counter(map(sig,oldfull['links']));after=collections.Counter(map(sig,full['links']));assert not(before-after);added=[json.loads(k)for k,n in(after-before).items()for _ in range(n)];assert len(added)==len(tuples)+3==149 and collections.Counter(x['seg']for x in added)=={277:62,278:22,279:65}and all(x['course']=='C05'for x in added)
+missing=[dict(tib=t,pairs=p)for t,p in ev['pairs'].items()if all(x['acip']is None for x in p)];allmiss=[x for x in full['links']if x['d']==5 and x['eng']and not x['tib_acip']];miss=[x for x in allmiss if x['seg']is not None];excluded=[x for x in allmiss if x['seg']is None]
+assert len(ev['acip_index'])==7081 and len(missing)==3 and len(miss)==5 and len(excluded)==1 and excluded[0]['id']=='xseg2829ldog'and all(x in oldfull['links']for x in allmiss)
+seed=L/'previous-main-csv-seed.bin';seedraw=seed.read_bytes();assert bp(seedraw)['sha256']==base['sha256']['docs/geshe_michael_roach_dictionary.csv']and seedraw==(old/'docs/geshe_michael_roach_dictionary.csv').read_bytes()
+# Actual prior generated archives and unchanged source aliases bind all nine baseline pins without running Git or SQL here.
+baseline_pairs=[]
+for rel,h in base['sha256'].items():
+ p=W/rel if rel.endswith('.gz')else old/rel;raw=p.read_bytes();assert bp(raw)['sha256']==h;baseline_pairs.append(dict(path=str(p),role='full local source alias'if rel.endswith('.gz')else'accepted prior reproduction matching fixed incoming pin',**bp(raw)))
+build=j(L/'canonical-builds-once.json');assert build['status']=='PASS'and len(build['runs'])==2
+for label,r in zip(['layer','view'],build['runs']):
+ assert r['exit']==0
+ for stream in ['stdout','stderr']:assert pin(L/f'build-{label}.{stream}')==dict(bytes=r[stream+'_bytes'],sha256=r[stream+'_sha256'])
+for r in pm['files']:
+ if r['path']in build['output_sha256']:assert r['sha256']==build['output_sha256'][r['path']]
+ctest=j(L/'ctest-17.execution.json');assert ctest['exit']==0 and (L/'ctest-17.exit').read_bytes()==b'0\n'and (L/'ctest-17.stderr').read_bytes()==b''
+for stream in ['stdout','stderr']:assert pin(L/f'ctest-17.{stream}')==dict(bytes=ctest[stream+'_bytes'],sha256=ctest[stream+'_sha256'])
+assert ps['actual_ctest_run_count']==1 and len(ps['actual_ctest_records'])==17
+ret=j(L/'retention-source-check.json');assert ret['prior_links_retained']==45126 and ret['added_links']==149 and ret['full_links']==counts['links']and ret['source_hashes_unchanged']
+# Registry is inspected as literal AST only, no producer import.
+astcode=ast.parse((W/'tools/build_alignment_layer.py').read_bytes());assignment=next(n for n in astcode.body if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='COURSES'for t in n.targets));registry=ast.literal_eval(assignment.value)
+registered=sum(len(r['pages'])for r in registry.values());assert registry['C05']['pages']['c5p93']==[277,278,279]
+measure=dict(status='PASS_ACTUAL_MEASUREMENT_PREPARATION_ONLY',baseline=base['commit'],counts=counts,approved_tuple_count=len(tuples),approved_nulls=8,approved_nonnull_d5=94,anchors=3,prior_links=45126,added_links=len(added),added_by_segment=dict(collections.Counter(x['seg']for x in added)),source_date=ev['meta']['date'],source_pages=ev['meta']['source_pages'],registered_pages=registered,seed=dict(path=str(seed),**bp(seedraw)),review_freeze=pin(V/'freeze.json'),review_frozen_files=len(f['files']),review_landed_full_pairs=len(review_pairs),payload_manifest=pin(L/'staged-payload-manifest.json'),payload_source_proof=pin(L/'staged-payload-source-proof.json'),actual_root_build_runs=2,actual_root_ctest_suites=17,actual_root_ctest_seconds=ps['actual_ctest_total_seconds'],actual_ctest_outer_seconds=ctest['wall_seconds'],acip=dict(heads=len(ev['pairs']),proven=len(ev['acip_index']),missing_heads=missing,source_linked_missing=miss,excluded_no_segment=excluded),candidate_executions=0)
+save('current-original-to-copy-manifest.json',records);save('external-full-byte-bindings.json',dict(payload=payload,semantic_review=review_pairs,seed=dict(original=str(seed),copy=str(old/'docs/geshe_michael_roach_dictionary.csv'),**bp(seedraw)),baseline_sources=baseline_pairs));save('actual-measurements.json',measure)
+# Exact literal substitutions; full inverse and full diff retained per file.
+proof=[]
+for name in ['prepare.py.txt','run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt']:
+ original=(P/'prior-preparation'/name).read_text();current=original;changes=[]
+ def replace(a,b):
+  global current
+  n=current.count(a);assert n>0,(name,a);current=current.replace(a,b);changes.append(dict(old=a,new=b,count=n))
+ if name in ['prepare.py.txt','verify-retention.py.txt']:
+  replace('C05-274-276','C05-277-279');replace('c5p92','c5p93')
+ if name=='prepare.py.txt':replace('81942cfc6022a785894d3cc2a20de81dc4c6f599',base['commit'])
+ if name=='verify-retention.py.txt':
+  for a,b in [('len(old[\'links\'])==45011','len(old[\'links\'])==45126'),('115 new links confined to274–276','149 new links confined to277–279'),('len(added)==115','len(added)==149'),('(274,275,276)','(277,278,279)'),('Entire44-row','Entire34-row'),('len(delta)==44','len(delta)==34'),('7080','7081'),('7083','7084'),('exact276coverage','exact279coverage'),('range(1,277)','range(1,280)'),('Accepted current112tuple','Accepted current146tuple'),('len(tuples)==112','len(tuples)==146'),('[45126,11926,1612,11,7084,15500,22457,22117,24024,44]','[45275,11934,1615,11,7084,15517,22491,22151,24061,34]')]:replace(a,b)
+ inverse=current
+ for r in reversed(changes):assert inverse.count(r['new'])==r['count'];inverse=inverse.replace(r['new'],r['old'])
+ assert inverse==original;ast.parse(current)
+ out=P/name;assert not out.exists();out.write_text(current)
+ (P/(name+'.diff')).write_text(''.join(difflib.unified_diff(original.splitlines(True),current.splitlines(True),fromfile='prior-preparation/'+name,tofile=name)))
+ proof.append(dict(file=name,original=bp(original.encode()),candidate=bp(current.encode()),changes=changes,full_inverse_exact=True,syntax='AST only',executed=False))
+save('adaptation-proof.json',dict(status='CONCRETE_PREPARATION_NOT_EXECUTED',files=proof,actual_measurements=pin(P/'actual-measurements.json'),all_prior_gates_retained_by_exact_inverse=True,no_dynamic_count_gates=True))
+print(json.dumps({'status':'CONCRETE_PREPARED','counts':counts,'input_copies':len(records),'external_review_pairs':len(review_pairs),'payload_pairs':len(payload),'registered_pages':registered,'runtime_executions':0}))

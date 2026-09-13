@@ -1,0 +1,34 @@
+{
+  "angle": "tibetan",
+  "source": "lexical-queries-full.json",
+  "term": "de'i tshe na",
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "de'i tshe na",
+    "de'i tshe na"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 23511,
+      "wylie": "de'i tshe na",
+      "tibetan": "དེའི་ཚེ་ན",
+      "tibetan_source": null,
+      "acip": "DE'I TSE NA",
+      "pronunciation": "dey tse na",
+      "pronunciation_source": null,
+      "sanskrit": "{LC}tadā",
+      "hopkins_english": null,
+      "hgm_gloss": "[\"in this situation\", \"in the same situation\", \"suppose\", \"when\", \"in this same situation\", \"according to your view\", \"again consider this same situation\", \"since at this point\", \"in the situation you've just described\", \"at the same time\", \"at this point\", \"when all this is happening\", \"situation where\", \"then\", \"same situation\", \"this same situation\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested (not in Great Dictionary)",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C03\", \"C05\", \"C15\", \"C16\", \"C18\", \"GK\", \"P1\", \"P7\", \"P9\", \"TCS06\"]",
+      "corpus_n_segments": 77,
+      "raw": "{\"tibetan\": \"དེའི་ཚེ་ན\", \"wylie\": \"de'i tshe na\", \"wylie_variants\": [\"de'i tshe na\"], \"tenses\": null, \"sanskrit\": \"{LC}tadā\", \"hopkins_english\": null, \"hgm_gloss\": [\"in this situation\", \"in the same situation\", \"suppose\", \"when\", \"in this same situation\", \"according to your view\", \"again consider this same situation\", \"since at this point\", \"in the situation you've just described\", \"at the same time\", \"at this point\", \"when all this is happening\", \"situation where\", \"then\", \"same situation\", \"this same situation\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"dey tse na\", \"acip\": \"DE'I TSE NA\", \"corpus_occurrences\": {\"courses\": [\"C03\", \"C05\", \"C15\", \"C16\", \"C18\", \"GK\", \"P1\", \"P7\", \"P9\", \"TCS06\"], \"n_segments\": 77}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "independently_reopened": true
+}

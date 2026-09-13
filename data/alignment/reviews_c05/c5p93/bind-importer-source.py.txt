@@ -1,0 +1,13 @@
+from pathlib import Path
+import json,hashlib,subprocess,os,datetime
+D=Path(__file__).resolve().parent;M=Path('/Users/adamderickandrade/ALL-translation-tool');O=D/'importer-git-binding';O.mkdir()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+calls=[]
+def call(a,label):
+ r=subprocess.run(a,cwd=M,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'));c=dict(argv=a,cwd=str(M),exit=r.returncode,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),stdout=pin(r.stdout),stderr=pin(r.stderr));calls.append(c)
+ for n,b in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('stdin.bin',b''),('exit.txt',f'{r.returncode}\n'.encode())]:(O/(label+'.'+n)).write_bytes(b)
+ (O/(label+'.command.json')).write_text(json.dumps(c,indent=2)+'\n');assert r.returncode==0 and not r.stderr;return r.stdout
+try:
+ h=call(['git','rev-parse','HEAD'],'head').decode().strip();b=call(['git','show',h+':tools/build_spine.py'],'source');assert b==(D/'history/structural-attempt02/build_spine.py.txt').read_bytes()==(M/'tools/build_spine.py').read_bytes();(O/'proof.json').write_text(json.dumps(dict(status='PASS',original=str(M/'tools/build_spine.py'),original_git_commit=h,repository_relative_path='tools/build_spine.py',pin=pin(b),calls=calls,scope='Read-only binding of importer source inspected after reviewer assertion failure; no importer execution.'),indent=2)+'\n');print('PASS importer source binding')
+except Exception:
+ import traceback;(O/'failure.txt').write_text(traceback.format_exc());raise

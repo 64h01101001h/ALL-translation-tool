@@ -1,0 +1,124 @@
+{
+  "status": "PASS",
+  "runs": [
+    {
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-generated-reproduction/run-isolated-readonly.py.txt",
+        "tools/build_alignment_layer.py",
+        "2026-09-13",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-generated-reproduction/executions/layer/runtime-guards.json"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-generated-reproduction/workspace",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "GIT_OPTIONAL_LOCKS": "0"
+      },
+      "stdin_bytes": 0,
+      "start": "2026-09-13T16:02:42.906792+00:00",
+      "tool": {
+        "bytes": 39580,
+        "sha256": "ba49ef338ae59e1ca5948c4879f0cb8ff6c0a7880eaf9e84f0bbe121d5e47a0b"
+      },
+      "seed_before_first_view": null,
+      "exit": 0,
+      "end": "2026-09-13T16:02:51.652818+00:00",
+      "stdout": {
+        "bytes": 344,
+        "sha256": "4f75812074f6595ed59ef2bd4d04233d51847c68d72a9bd529c416116ac10f02"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-generated-reproduction/run-isolated-readonly.py.txt",
+        "tools/build_dictionary_view.py",
+        "2026-09-13",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-generated-reproduction/executions/view/runtime-guards.json"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-generated-reproduction/workspace",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "GIT_OPTIONAL_LOCKS": "0"
+      },
+      "stdin_bytes": 0,
+      "start": "2026-09-13T16:02:51.663675+00:00",
+      "tool": {
+        "bytes": 11170,
+        "sha256": "dee3188a3b490cf4aa1845a04b7dee0ccdd517470aff313f9a0d507454a1ebca"
+      },
+      "seed_before_first_view": {
+        "bytes": 16142334,
+        "sha256": "9340b8186c8690782dd368850fa58fb0473a408f300a88d9f4a6d8bd95fc89e8"
+      },
+      "exit": 0,
+      "end": "2026-09-13T16:02:56.672650+00:00",
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1079,
+        "sha256": "0a4046412186af3b710193e8971928ebb048faceb4c8ce1205a40f05bb6cb0b7"
+      }
+    }
+  ],
+  "date": "2026-09-13",
+  "seed": {
+    "bytes": 16142334,
+    "sha256": "9340b8186c8690782dd368850fa58fb0473a408f300a88d9f4a6d8bd95fc89e8"
+  },
+  "outputs": [
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "bytes": 9932865,
+      "sha256": "4714c13c683d8de02d73a0cdc386d0a0a175f4823081f5502160062182d9947d",
+      "complete_frozen_payload_equal": true
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "bytes": 2197581,
+      "sha256": "b89a517485a7391b167724bedb3711ffcfe918ecda45e95a26eed8555308eff4",
+      "complete_frozen_payload_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "bytes": 2187492,
+      "sha256": "09fc5c56dcb3ee1deaa38f7b82b1990886dced30b18addf5935e1c0d08d9ee0e",
+      "complete_frozen_payload_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "bytes": 16175749,
+      "sha256": "5cf481f710b98894d5def968211f33669d7ff1863825be9203470809201b83e1",
+      "complete_frozen_payload_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "bytes": 5214717,
+      "sha256": "80754b418b25ad680135c9f3c652e6100fbedec82a0cfc6affcfb8b68f365909",
+      "complete_frozen_payload_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "bytes": 5145145,
+      "sha256": "ef10df35afee1e038757cb7eafa6fed95757ab9cd32ee5e3f5338a98451f49ed",
+      "complete_frozen_payload_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "bytes": 9831,
+      "sha256": "5b20d06c1e3d007e2b5ebe0a146931b13c51824fde412598c2ef22ee6bb2eb27",
+      "complete_frozen_payload_equal": true
+    }
+  ],
+  "layer_invocations": 1,
+  "view_invocations": 1,
+  "first_view_seed_exact": true
+}

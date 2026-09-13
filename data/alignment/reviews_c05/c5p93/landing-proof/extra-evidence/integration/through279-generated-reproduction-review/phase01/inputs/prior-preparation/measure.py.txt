@@ -1,0 +1,34 @@
+from pathlib import Path
+import ast,collections,csv,hashlib,io,json,runpy
+D=Path(__file__).resolve().parent;A=D.parents[1];ROOT=A.parent;W=ROOT/'campaign-worktree';B=A/'C05-274-276';L=B/'landing'
+def j(p):return json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+base=j(B/'baseline.json');build=j(L/'canonical-builds-once.json');assert build['status']=='PASS' and build['baseline_commit']==base['commit']
+inputpaths=[L/'canonical-builds-once.json',W/'tools/build_alignment_layer.py']
+for label,r in zip(('build-layer','build-view'),build['runs']):
+    assert r['exit']==0
+    for suffix in ('stdout','stderr'):
+        p=L/(label+'.'+suffix);assert pin(p)==dict(bytes=r[suffix+'_bytes'],sha256=r[suffix+'_sha256']);inputpaths.append(p)
+files=[]
+for rel,h in build['output_sha256'].items():
+    p=W/rel;record=pin(p);assert record['sha256']==h;files.append(dict(path=str(p),**record,disposition='Full actual bytes read; no runtime copy. Bind to exact future frozen payload/source originals before execution.'))
+full=j(W/'data/alignment/alignment_full_v1.json');ev=j(W/'data/alignment/alignment_evidence_v1.json')
+counts=dict(links=len(full['links']),nulls=sum(x['eng'] is None for x in full['links']),notes=sum(map(len,full['notes'].values())),trees=sum(map(len,full['trees'].values())),heads=len(ev['pairs']),pairs=sum(map(len,ev['pairs'].values())))
+for k,suffix in [('main','.csv'),('reverse','_reverse.csv'),('course','_by_course.csv'),('changes','_changes.csv')]:
+    counts['csv_'+k]=len(list(csv.DictReader(io.StringIO((W/('docs/geshe_michael_roach_dictionary'+suffix)).read_bytes().decode('utf-8-sig'),newline=''))))
+assert list(counts.values())==[45126,11926,1612,11,7083,15500,22457,22117,24024,44]
+missing=[dict(tib=t,pairs=p) for t,p in ev['pairs'].items() if all(x['acip'] is None for x in p)]
+allmiss=[x for x in full['links'] if x['d']==5 and x['eng'] and not x['tib_acip']];linked=[x for x in allmiss if x['seg'] is not None];excluded=[x for x in allmiss if x['seg'] is None]
+assert len(ev['acip_index'])==7080 and len(missing)==3 and len(allmiss)==6 and len(linked)==5 and len(excluded)==1 and excluded[0]['id']=='xseg2829ldog'
+code=(W/'tools/build_alignment_layer.py').read_text();tree=ast.parse(code)
+courses=next(n.value for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COURSES' for t in n.targets))
+registry=[]
+for ck,cv in zip(courses.keys,courses.values):
+    course=ast.literal_eval(ck);pages=next(v for k,v in zip(cv.keys,cv.values) if ast.literal_eval(k)=='pages')
+    for pk,pv in zip(pages.keys,pages.values):registry.append(dict(course=course,page=ast.literal_eval(pk),sequences=ast.literal_eval(pv)))
+assert len(registry)==546
+seed=Path(build['previous_main_csv_seed']['path']);assert pin(seed)=={k:build['previous_main_csv_seed'][k] for k in ('bytes','sha256')};assert pin(seed)['sha256']==base['sha256']['docs/geshe_michael_roach_dictionary.csv']
+out=dict(status='ACTUAL_OUTPUT_MEASUREMENTS_NOT_REPRODUCTION',counts=counts,metadata=ev['meta'],registered_pages=len(registry),registry=registry,seed=dict(path=str(seed),**pin(seed)),acip=dict(headwords=7083,proven=7080,missing=missing,source_linked_unproven_spans=linked,excluded_no_segment_rows=excluded,full_bank_unproven_spans=allmiss,percentage=100*7080/7083),actual_outputs=files,limitations='No generation, SQL, Git, source copying or tests. Actual page-byte digest reproduction deferred to released runtime; source_pages metadata observed, not independently recomputed here.')
+(D/'actual-measurements.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+copy=runpy.run_path(str(A/'copy_evidence_once_v2.py'),run_name='nonmain')['preserve'](D,D/'original-to-copy-manifest.json',inputpaths)
+print(json.dumps(dict(status=out['status'],counts=counts,registered_pages=len(registry),source_date=ev['meta']['date'],source_pages=ev['meta']['source_pages'],seed=out['seed'],acip_population=[7080,7083,3,5,6,1],retention=copy),indent=2))

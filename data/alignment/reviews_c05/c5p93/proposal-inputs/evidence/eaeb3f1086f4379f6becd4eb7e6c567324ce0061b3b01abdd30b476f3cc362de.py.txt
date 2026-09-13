@@ -1,0 +1,31 @@
+from pathlib import Path
+import sqlite3,json,gzip,hashlib,os
+O=Path(__file__).resolve().parent;B=O.parents[1];ROOT=B.parents[1];W=ROOT/'campaign-worktree';E=O/'evidence';E.mkdir()
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(n,x):(E/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+(O/'source-verification.json').write_bytes((O/'verification.json').read_bytes())
+db=W/'build/hgm_spine_v27_2.db';before=sha(db.read_bytes());uri=db.resolve().as_uri()+'?mode=ro';c=sqlite3.connect(uri,uri=True);c.execute('PRAGMA query_only=ON');c.row_factory=sqlite3.Row
+save('schema.json',dict(uri=uri,query_only=c.execute('PRAGMA query_only').fetchone()[0],entries=[list(r)for r in c.execute('PRAGMA table_info(entries)')],variants=[list(r)for r in c.execute('PRAGMA table_info(entry_variants)')]))
+terms=['der thal','chos kyi grags pa','lung','don','grangs can','rgyang','ring','thung','rgyang ring','gzugs','bltas pa','tshe','bar du','mig shes','gnyis','las','las gzugs','gsal','mi gsal','skye ba','dbang','snang',"'jog pa",'rnam pa','shar ba',"sgo nas",'khas blangs pa','de lta bu','bsgribs','sgrib pa','ma bsgribs','mthong','ma mthong','phyir','cig car','bkag pa','gnyis pa','phyogs snga','brlan','gsher ba','phor pa','gang',"'gro ba",'gsum','dngos po','gzhi mthun','khas ma blangs','skyes bu','gcig','mdzes','mi mdzes','gnyis ka','yi dvags','chu klung','rnag','khrag','rnag khrag','mig','las kyi dbang','ma','na']
+sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'
+hits={t:[dict(r)for r in c.execute(sql,(t,t))]for t in terms}
+save('hgm-full-rows.json',dict(sql=sql,parameters_per_term='[term,term]',results=hits))
+save('hgm-reading.json',{t:[{k:r[k]for k in ['id','wylie','hgm_gloss','tier','hgm_source']}for r in rows]for t,rows in hits.items()})
+queries=[];source=json.loads((B/'source.json').read_bytes())
+for r in source:
+ s='SELECT * FROM corpus_segments WHERE wylie=? OR english=? ORDER BY course,seq';params=[r['wylie'],r['english']];queries.append(dict(sql=s,parameters=params,role='Full-field parallel C05:'+str(r['seq']),rows=[dict(x)for x in c.execute(s,params)]))
+for term in ['las gzugs','rgyang ring thung','gzhi mthun','brlan zhing gsher','sgrib pa','bsgribs']:
+ s='SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq';queries.append(dict(sql=s,parameters=[term],role='Complete uncapped original corpus counterevidence',rows=[dict(x)for x in c.execute(s,(term,))]))
+save('corpus-full-queries.json',queries);c.close();assert sha(db.read_bytes())==before
+master=json.loads(gzip.decompress((O/'inputs/hgm_dictionary_v27_2.json.gz').read_bytes()));checks=[]
+for t,rows in hits.items():
+ for r in rows:
+  raw=json.loads(r['raw']);assert raw==master['unified_entries'][r['id']-1] and json.loads(r['hgm_gloss'])==(raw.get('hgm_gloss')or[]);checks.append(dict(term=t,id=r['id'],raw_full_original_equal=True,hgm_gloss_equal=True))
+save('master-source-proof.json',dict(checks=checks,complete_source=str(O/'inputs/hgm_dictionary_v27_2.json.gz'),sha256=sha((O/'inputs/hgm_dictionary_v27_2.json.gz').read_bytes())))
+maps=[]
+for p in [W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py',W/'docs/errata_register.json',ROOT/'campaign-artifacts/run_generator_readonly.py']:
+ b=p.read_bytes();q=E/p.name;q.write_bytes(b);assert q.read_bytes()==p.read_bytes();maps.append(dict(original=str(p),copy=str(q.relative_to(O)),bytes=len(b),sha256=sha(b)))
+save('input-manifest.json',maps)
+physical=(O/'inputs/C05ReadingASCII.txt').read_bytes();anchors=json.loads((O/'physical-availability.json').read_bytes());save('physical-relevant-anchors.json',anchors)
+summary=dict(status='PASS',hgm_terms=len(terms),hgm_rows=sum(len(x)for x in hits.values()),corpus_queries=len(queries),corpus_rows=sum(len(q['rows'])for q in queries),db_before=before,db_after=sha(db.read_bytes()),all_master_raw_equal=True)
+save('lexical-proof.json',summary);print(json.dumps(summary,indent=2))

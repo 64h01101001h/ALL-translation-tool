@@ -1,0 +1,20 @@
+from pathlib import Path
+import json, hashlib, datetime
+D=Path(__file__).resolve().parent
+def pin(b): return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(n,x):
+    with (D/n).open('x') as f:f.write(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+proof=json.loads((D/'proof.json').read_bytes())
+for r in json.loads((D/'original-to-copy-manifest.json').read_bytes()):
+    p=Path(r['original']); b=p.read_bytes()
+    assert pin(b)=={k:r[k] for k in ('bytes','sha256')} and b==(D/r['copy']).read_bytes()
+    assert str(p.resolve(strict=True))==r['resolved_original']
+checks=[('IDENTITY','26 candidate files plus freeze, nine original mappings and both full diffs independently exact.'),('MEASURED_COUNTS','Approved ordered counts individually bound to full specs, total and retention plus three anchors.'),('SOURCE_OUTPUTS','Actual nine baseline keys, unchanged two source archives, seven outputs and seeded build/retention gates retained.'),('HISTORY','Nine universal interfaces plus mandatory complete actual extra history and alias/version review before runtime.'),('BANKING','Full semantic tree, existing landing inventory, ordinary/final history and exact copy gates retained.'),('RUNTIME_BOUNDARY','No current run or semantic approval. Actual inputs and root release remain prerequisites.'),('PRESERVATION','Complete candidate and original copies, source/version pins and actual static execution evidence preserved.')]
+review=dict(status='APPROVE_CODE_ONLY_CONDITIONAL_RUNTIME',spec_verdict='APPROVE',quality_verdict='APPROVE',role='Reused independent non-author model reviewer; not fresh context or human certification.',baseline='f114fcb7a5a899b939ffc948ae9fdbbb746541fa',page=93,segments=[277,278,279],open_findings=[],requested_changes=[],semantic_approval=False,actual_execution_approval=False,candidate_pins=json.loads((D/'candidate/proof.json').read_bytes())['candidates'],candidate_freeze=proof['candidate_freeze'],report={'path':'review.md',**pin((D/'review.md').read_bytes())},proof={'path':'proof.json',**pin((D/'proof.json').read_bytes())},original_to_copy_manifest={'path':'original-to-copy-manifest.json',**pin((D/'original-to-copy-manifest.json').read_bytes()),'records':proof['review_mappings']},checklist=[dict(id=k,status='PASS_CODE_SCOPE',disposition=v,evidence=['review.md','proof.json','candidate/command-contract.json']) for k,v in checks],execution_limits='Zero candidate/Git/SQL/generator/builder/test executions; static code, AST, complete diff and byte identity review only.',freeze={'path':'freeze.json','schema':'files DICT, measured file_count/total_bytes; only actual top-level freeze excluded'})
+write('review.json',review)
+files={str(p.relative_to(D)):pin(p.read_bytes()) for p in sorted(D.rglob('*')) if p.is_file() and p!=D/'freeze.json'}
+assert all(Path(n).suffix in {'.txt','.md','.json','.bin'} for n in files)
+frozen=dict(status=review['status'],spec_verdict='APPROVE',quality_verdict='APPROVE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),files=files,file_count=len(files),total_bytes=sum(p['bytes'] for p in files.values()),excluded=['freeze.json'])
+write('freeze.json',frozen)
+assert {str(p.relative_to(D)):pin(p.read_bytes()) for p in D.rglob('*') if p.is_file() and p!=D/'freeze.json'}==files
+print(json.dumps(dict(status=review['status'],files=len(files),bytes=frozen['total_bytes'],mappings=proof['review_mappings'],freeze=pin((D/'freeze.json').read_bytes()),report=review['report']),indent=2))

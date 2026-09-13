@@ -1,0 +1,24 @@
+from pathlib import Path
+import hashlib,json
+D=Path(__file__).resolve().parent
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+manifest=json.loads((D/'original-to-copy-manifest.json').read_bytes())
+for r in manifest:
+    original=Path(r['original']).read_bytes(); copy=(D/r['copy']).read_bytes()
+    assert original==copy and pin(copy)=={k:r[k] for k in ('bytes','sha256')}
+assert (D/'bindings-run01/exit').read_bytes()==b'0\n'
+assert (D/'bindings-run01/stderr').read_bytes()==b''
+external=json.loads((D/'external-retained-evidence.json').read_bytes())
+for r in external['payload_and_seed']:
+    a=Path(r['original']).read_bytes(); b=Path(r['copy']).read_bytes()
+    assert a==b and pin(b)=={k:r[k] for k in ('bytes','sha256')}
+for r in external['prior_history']:
+    assert pin(Path(r['path']).read_bytes())=={k:r[k] for k in ('bytes','sha256')}
+for r in json.loads((D/'adaptation-proof.json').read_bytes())['candidate_sources']:
+    assert pin((D/r['file']).read_bytes())==r['candidate']
+assert not (D/'freeze.json').exists()
+files={str(p.relative_to(D)):pin(p.read_bytes()) for p in sorted(D.rglob('*')) if p.is_file()}
+f=dict(status='FROZEN_CONCRETE_PREPARATION_PENDING_ROOT_REVIEW_NO_RUNTIME',files=files,file_count=len(files),total_bytes=sum(v['bytes'] for v in files.values()))
+(D/'freeze.json').write_text(json.dumps(f,indent=2)+'\n')
+for n,r in files.items():assert pin((D/n).read_bytes())==r
+print(json.dumps(dict(status='DONE',freeze=pin((D/'freeze.json').read_bytes()),file_count=len(files),total_bytes=f['total_bytes'],original_copy_pairs=len(manifest))))

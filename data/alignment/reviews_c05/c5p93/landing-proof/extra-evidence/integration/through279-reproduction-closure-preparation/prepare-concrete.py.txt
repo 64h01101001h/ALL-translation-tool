@@ -1,0 +1,80 @@
+"""Read actual completed runtime metadata and prepare closure sources; no closure, Git, SQL, tests or builders execute."""
+from pathlib import Path
+import ast,collections,difflib,hashlib,json,os
+P=Path(__file__).resolve().parent;A=P.parents[1];I=P.parent;B=A/'C05-277-279';R=I/'through279-generated-reproduction';rows=[]
+def bp(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def save(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def cp(p):
+ raw=p.read_bytes();d=P/'actual-inputs'/p.relative_to(A);d.parent.mkdir(parents=True,exist_ok=True);assert not d.exists();d.write_bytes(raw);assert p.read_bytes()==d.read_bytes()==raw;rows.append(dict(original=str(p),copy=str(d.relative_to(P)),**bp(raw)))
+paths=[R/n for n in ['preparation-proof.json','execution-proof.json','retention-proof.json','retention-checks.json','input-manifest.json','registered-pages.json','acip-incomplete-evidence.json','live-before.json','live-after.json','root-runtime-release.json','prepare.py.txt','run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt']]
+for d in [R/'caller-runs',R/'executions',B/'reproduction-root-entry',B/'reproduction-method-root-caller']:paths.extend(p for p in d.rglob('*')if p.is_file())
+paths += [B/'reproduction-method-root-approval.json',B/'baseline.json',B/'landing/staged-payload-manifest.json',B/'landing/untracked-before-banking.stdout']
+for p in sorted(set(paths)):cp(p)
+checks=j(R/'retention-checks.json');ret=j(R/'retention-proof.json');ex=j(R/'execution-proof.json');prep=j(R/'preparation-proof.json');entry=j(B/'reproduction-root-entry/proof.json')
+assert ret['status']==ex['status']==prep['status']=='PASS'and len(checks)==ret['checks_total']==224711 and all(x['pass_']is True for x in checks)
+assert len(ex['runs'])==2 and ex['layer_invocations']==ex['view_invocations']==1 and len(ex['outputs'])==7 and len(j(R/'input-manifest.json'))==prep['files']==2711
+assert len(j(R/'registered-pages.json'))==547 and list(ret['counts'].values())==[45275,11934,1615,11,7084,15517,22491,22151,24061,34]
+assert {p.name for p in(R/'caller-runs').iterdir()if p.is_dir()}=={'prepare','run-once','retention'}
+callers=[]
+for label in ['prepare','run-once','retention']:
+ d=R/'caller-runs'/label;rec=j(d/'execution.json');assert rec['exit']==0 and (d/'exit.txt').read_bytes()==b'0\n'and (d/'stdin.bin').read_bytes()==b''
+ for n in ['stdout','stderr']:assert bp((d/(n+'.bin')).read_bytes())==dict(bytes=rec[n+'_bytes'],sha256=rec[n+'_sha256'])
+ assert (d/'stderr.bin').read_bytes()==b'';callers.append(rec)
+for label,rec in zip(['layer','view'],ex['runs']):
+ d=R/'executions'/label;assert j(d/'execution.json')==rec and rec['exit']==0 and (d/'exit').read_bytes()==b'0\n'
+ for n in ['stdout','stderr']:assert bp((d/n).read_bytes())==rec[n]
+assert ex['runs'][1]['stderr']['bytes']==1079
+assert entry['status']=='PASS_BEFORE_INDEPENDENT_RUNTIME'and entry['head']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+for n,r in entry['state'].items():assert bp((B/'reproduction-root-entry'/(n+'.bin')).read_bytes())==r
+save('actual-interfaces.json',dict(status='PASS_PRODUCED_INTERFACE_INSPECTION_ONLY',retention_checks=len(checks),counts=ret['counts'],input_aliases=2711,registered_pages=547,caller_records=callers,view_stderr=ex['runs'][1]['stderr'],entry=entry,executed_candidates=0,producer_failures_in_actual_three_run_history=0))
+save('actual-input-source-map.json',rows)
+# Source parameter extraction with complete reversible history.
+records=[]
+for name,src in [('close-evidence.py.txt',I/'through276-generated-reproduction/close-evidence.py.txt'),('accept-independent-reproduction-root.py',A/'C05-274-276/accept-independent-reproduction-root.py')]:
+ old=src.read_text();new=old;changes=[]
+ def rep(a,b):
+  global new
+  count=new.count(a);assert count>0,(name,a);new=new.replace(a,b);changes.append(dict(old=a,new=b,count=count))
+ if name=='close-evidence.py.txt':rep('C05-274-276','C05-277-279');rep('224556','224711')
+ else:
+  for a,b in [('through276','through279'),('81942cfc6022a785894d3cc2a20de81dc4c6f599','f114fcb7a5a899b939ffc948ae9fdbbb746541fa'),("retention['prior_links_retained']==45011", "retention['prior_links_retained']==45126"),("retention['added_links']==115","retention['added_links']==149"),('[45126,11926,1612,11,7083,15500,22457,22117,24024,44]','[45275,11934,1615,11,7084,15517,22491,22151,24061,34]'),('(7083,7080,3,5,6)','(7084,7081,3,5,6)'),("registered-pages.json'))==546","registered-pages.json'))==547"),('acip_proven=7080,acip_heads=7083','acip_proven=7081,acip_heads=7084'),('landing/pre-bank-untracked.stdout','landing/untracked-before-banking.stdout')]:rep(a,b)
+  rep("assert len(checks)==retention['checks_total'] and all(x['pass_'] is True for x in checks)","assert len(checks)==retention['checks_total']==224711 and all(x['pass_'] is True for x in checks)")
+  rep("env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1')","env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0')")
+  rep("environment_overrides=dict(GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1')","environment_overrides=dict(GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0')")
+  rep("  origin=Path(r['original']);assert origin.read_bytes()==raw","  origin=Path(r['original']);s=origin.stat();actual=origin.read_bytes();t=origin.stat();assert actual==raw and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns);assert cp.read_bytes()==raw")
+  rep("entry=js(B/'reproduction-root-entry/proof.json')", """entry=js(B/'reproduction-root-entry/proof.json')
+assert entry['status']=='PASS_BEFORE_INDEPENDENT_RUNTIME' and entry['head']==HEAD and entry['baseline_hashes']==base['sha256']
+state_commands=[('head',['rev-parse','HEAD']),('tracked_status',['status','--porcelain=v1','--untracked-files=no']),('untracked',['ls-files','--others','--exclude-standard','-z']),('stages',['ls-files','--stage','-z']),('cached_names',['diff','--cached','--name-only','-z'])]
+assert set(entry['state'])=={x[0] for x in state_commands}|{'index'}
+def verify_entry_state(boundary):
+ results={}
+ for label,args in state_commands:
+  expected=(B/'reproduction-root-entry'/(label+'.bin')).read_bytes();assert pin(expected)==entry['state'][label]
+  actual=git(args);assert actual==expected;results[label]=pin(actual)
+ indexpath=Path(git(['rev-parse','--git-path','index']).decode().strip());indexpath=indexpath if indexpath.is_absolute() else W/indexpath
+ assert str(indexpath.resolve())==entry['index_path']
+ expected=(B/'reproduction-root-entry/index.bin').read_bytes();assert pin(expected)==entry['state']['index']
+ s=indexpath.stat();actual=indexpath.read_bytes();t=indexpath.stat()
+ assert actual==expected and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)
+ results['index']=pin(actual);(O/(boundary+'-state.json')).write_text(json.dumps(results,indent=2)+'\\n')
+verify_entry_state('before-final-source-checks')""")
+  rep(" assert (s.st_dev,s.st_ino)==(r['device'],r['inode']) and pin(p.read_bytes())=={k:r[k] for k in ('bytes','sha256')}"," actual=p.read_bytes();t=p.stat();assert (s.st_dev,s.st_ino)==(r['device'],r['inode']) and pin(actual)=={k:r[k] for k in ('bytes','sha256')} and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)")
+  # Closure output and its actual fresh caller must exist before root acceptance, never fabricate them now.
+  rep("for n,r in f['files'].items():assert pin((R/n).read_bytes())==r\nresult=", """for n,r in f['files'].items():assert pin((R/n).read_bytes())==r
+closure=js(R/'final-proof.json');assert closure['status']=='PASS_REPRODUCTION_AND_LOCAL_RETENTION' and closure['counts']==retention['counts'] and closure['checks_total']==224711
+assert closure['input_aliases']==len(manifest) and closure['actual_layer_invocations']==closure['actual_view_invocations']==1 and closure['actual_new_ctest_invocations']==0
+closure_source=I/'through279-reproduction-closure-preparation/close-evidence.py.txt';assert (R/'close-evidence.py.txt').read_bytes()==closure_source.read_bytes()
+for label,script in [('prepare','prepare.py.txt'),('run-once','run-once.py.txt'),('retention','verify-retention.py.txt'),('close-evidence','close-evidence.py.txt')]:
+ d=R/'caller-runs'/label;c=js(d/'command.json');e=js(d/'execution.json')
+ assert c['argv']==e['argv'] and c['cwd']==e['cwd']==str(R) and Path(e['argv'][-1])==R/script and e['exit']==0
+ assert (d/'exit.txt').read_bytes()==b'0\\n' and (d/'stdin.bin').read_bytes()==b'' and (d/'stderr.bin').read_bytes()==b''
+ for n in ['stdout','stderr']:assert pin((d/(n+'.bin')).read_bytes())==dict(bytes=e[n+'_bytes'],sha256=e[n+'_sha256'])
+verify_entry_state('after-all-acceptance-checks')
+result=""")
+ inverse=new
+ for r in reversed(changes):assert inverse.count(r['new'])==r['count'];inverse=inverse.replace(r['new'],r['old'])
+ assert inverse==old;ast.parse(new);(P/name).write_text(new);(P/(name+'.diff')).write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile=str(src),tofile=name)))
+ records.append(dict(file=name,original_path=str(src),original=bp(old.encode()),candidate=bp(new.encode()),changes=changes,full_inverse_exact=True,syntax_only=True))
+save('adaptation-proof.json',dict(status='PREPARED_NOT_EXECUTED',files=records,retention_literal_source=dict(path=str(R/'retention-checks.json'),**bp((R/'retention-checks.json').read_bytes())),retention_checks=224711,source_map_records=len(rows),added_current_entry_raw_state_and_index_checks=True,root_acceptance_requires_actual_closure_and_caller=True))
+print(json.dumps({'status':'CONCRETE_CLOSURE_PREPARED','retention_checks':224711,'full_source_pairs':len(rows),'candidate_executions':0}))

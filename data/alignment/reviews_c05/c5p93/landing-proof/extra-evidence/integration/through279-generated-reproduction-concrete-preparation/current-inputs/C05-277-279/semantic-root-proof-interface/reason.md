@@ -1,0 +1,1 @@
+The actual completed root checker recorded review_freeze as path/bytes/sha256. The independently reviewed root bank requires exactly bytes/sha256. Preserve the entire actual passed proof, move only the path into review_freeze_path and link this adapter. No source, spec, body, review or actual test result changes; no failed bank execution occurred.

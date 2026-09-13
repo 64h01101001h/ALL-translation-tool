@@ -1,0 +1,43 @@
+from pathlib import Path
+import json,hashlib,datetime,os
+B=Path(__file__).resolve().parent;A=B.parent;I=A/'integration';W=B.parents[1]/'campaign-worktree';P=I/'through279-root-bank-inventory-preparation';S=P/'snapshot02';O=I/'through279-ordinary-bank-inventory'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def save(n,x):(O/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert j(I/'through279-generated-reproduction-root-acceptance/proof.json')['status']=='PASS'
+assert j(I/'through279-root-bank-inventory-root-review/proof.json')['status']=='APPROVE_CURRENT_INVENTORY_AND_COMPLETE_EXCLUSIONS'
+scope=j(S/'scope-inventory.json')
+roots=[Path(x['root']) for x in scope['roots']]+[P,I/'through279-root-bank-inventory-root-review',I/'through279-root-bank-inventory-root-review-caller',I/'through279-reproduction-closure-preparation',I/'through279-reproduction-closure-review',I/'through279-reproduction-closure-root-release',I/'through279-generated-reproduction-root-acceptance']
+assert all(x.exists() for x in roots) and all(not O.is_relative_to(x) for x in roots)
+O.mkdir(exist_ok=False)
+paths={p for root in roots for p in root.rglob('*') if p.is_file()}|set(map(Path,scope['explicit_helper_files']))|{A/'record_external_step.py'}
+assert all(p.is_relative_to(A) for p in paths)
+old={x['original']:x for x in j(S/'coverage-and-exclusion-map.json')};assert set(old)<=set(map(str,paths))
+bankindex={}
+for x in j(S/'accepted-semantic-bank-full-copy-map.json'):
+ p=Path(x['banked_copy']);raw=p.read_bytes();assert pin(raw)=={k:x[k] for k in ('bytes','sha256')} and raw==Path(x['original']).read_bytes();bankindex.setdefault((len(raw),hashlib.sha256(raw).hexdigest()),p)
+records=[];coverage=[];destinations=set()
+supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+for p in sorted(paths):
+ raw=p.read_bytes();v=pin(raw);row=dict(original=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,**v)
+ if str(p) in old:assert v=={k:old[str(p)][k] for k in ('bytes','sha256')} and str(p.resolve())==old[str(p)]['resolved_original']
+ if p.is_relative_to(B/'landing'):row.update(coverage='automatic-landing-input')
+ elif (v['bytes'],v['sha256']) in bankindex:
+  dest=bankindex[(v['bytes'],v['sha256'])];assert dest.read_bytes()==raw;row.update(coverage='already-banked-exact-copy',banked_copy=str(dest))
+ elif v['bytes']>=2000000:
+  records.append(dict(original=str(p),retention='external',**v,disposition='Complete original at this exact pinned local path, including complete large raw evidence; no shortening or normalization.'));row.update(coverage='explicit-external')
+ else:
+  target='extra-evidence/'+str(p.relative_to(A))
+  if p.suffix.lower() not in supported:target+=('.txt' if p.suffix.lower() in {'.py','.sh','.diff','.patch','.jsonl'} else '.bin')
+  assert target not in destinations;destinations.add(target)
+  records.append(dict(original=str(p),retention='bank',copy=target,**v));row.update(coverage='explicit-bank',copy=target)
+ coverage.append(row)
+assert paths==({p for root in roots for p in root.rglob('*') if p.is_file()}|set(map(Path,scope['explicit_helper_files']))|{A/'record_external_step.py'})
+for x in coverage:
+ p=Path(x['original']);assert pin(p.read_bytes())=={k:x[k] for k in ('bytes','sha256')} and str(p.resolve())==x['resolved']
+save('extra-inputs.json',records);save('coverage-and-exclusion-map.json',coverage)
+save('scope.json',dict(roots=list(map(str,roots)),explicit_helper_files=scope['explicit_helper_files']+[str(A/'record_external_step.py')]))
+counts={}
+for x in coverage:counts[x['coverage']]=counts.get(x['coverage'],0)+1
+save('proof.json',dict(status='PASS_COMPLETE_ACTUAL_PRE_ORDINARY_INVENTORY',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),sources=len(coverage),counts=counts,records=len(records),new_since_preparation=len(paths)-len(old),manifest=pin((O/'extra-inputs.json').read_bytes()),required_reproduction_acceptance=pin((I/'through279-generated-reproduction-root-acceptance/proof.json').read_bytes()),boundary='All listed current roots plus current late closure/freeze/rootacceptance and inventory/review sources; ordinary-bank manifest consumes exact LIST. This composition output and its later caller are external and must be explicitly retained by final phase; the LIST itself is banked automatically. No bank/stage/test execution.'))
+print(json.dumps(j(O/'proof.json')))

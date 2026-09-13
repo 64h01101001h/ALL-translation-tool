@@ -1,0 +1,37 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/012.json",
+  "query_pin": {
+    "bytes": 1887,
+    "sha256": "4107eae674f0434a92a9f19ee79f12533bcdf4dde7e132707d5438a8d10c55fc"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "mig shes",
+    "mig shes"
+  ],
+  "rows": [
+    {
+      "id": 14365,
+      "wylie": "mig shes",
+      "tibetan": "མིག་ཤེས",
+      "tibetan_source": null,
+      "acip": "MIG SHES",
+      "pronunciation": "mikshe",
+      "pronunciation_source": null,
+      "sanskrit": "cakṣur-jñāna",
+      "hopkins_english": "eye consciousness; eye cognition",
+      "hgm_gloss": "[\"visual consciousness\", \"visual consciousnesses\", \"consciousness of the eye\", \"eye consciousness\", \"sees\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C04\", \"C05\", \"C13\", \"C15\", \"C16\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"ILL\", \"P5\", \"P7\", \"P9\", \"SPF\", \"Sunlight\"]",
+      "corpus_n_segments": 110,
+      "raw": "{\"tibetan\": \"མིག་ཤེས\", \"wylie\": \"mig shes\", \"wylie_variants\": [\"mig shes\"], \"tenses\": null, \"sanskrit\": \"cakṣur-jñāna\", \"hopkins_english\": \"eye consciousness; eye cognition\", \"hgm_gloss\": [\"visual consciousness\", \"visual consciousnesses\", \"consciousness of the eye\", \"eye consciousness\", \"sees\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"mikshe\", \"acip\": \"MIG SHES\", \"corpus_occurrences\": {\"courses\": [\"C04\", \"C05\", \"C13\", \"C15\", \"C16\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"ILL\", \"P5\", \"P7\", \"P9\", \"SPF\", \"Sunlight\"], \"n_segments\": 110}, \"hopkins_realigned\": \"uma-v26\"}"
+    }
+  ],
+  "count": 1,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

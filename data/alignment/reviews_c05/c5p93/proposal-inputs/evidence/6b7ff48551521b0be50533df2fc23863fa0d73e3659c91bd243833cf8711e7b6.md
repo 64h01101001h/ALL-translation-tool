@@ -1,0 +1,10 @@
+C05:277 Tibetan-first original, primary Codex; PROVISIONAL mechanical proposal only.
+Author read its own earlier source preparation and root leads; no current English-original, reconciliation or skeptical findings were read before all three originals froze.
+Challenge the second far/near phrase as distance, final rgyang ring/at a distance, impression phrase without clear, and one assertion/name ownership. Four content ellipses and two active-agentive nulls have explicit no-separate-exponent reasons. Every repeated original/intermediate form and negative has an exact intended range.
+Shared evidence in ../277 includes72 complete lexical query sets/71 original master records,15 complete context/raw rows,56 exact preparation replays,9 exact full-field parallel queries and6 original physical extents; complete source/copy/Git records are preserved.
+Every intended Tib/English occurrence was compared to the actual unchanged canonical resolver, including all English-order crossings and strict members. Nulls mean documented ellipsis/grammar fusion; uncertain or distributed items are omitted with reasons in the immutable note/items.
+One actual canonical invocation for this segment: EXIT=0; stderr=0 bytes; stdout/body=10305 bytes; SHA-256=d9866975aad6f2c051e2d7ad8649622ed259d70a0e580a62defed95c1aedad50. No failed or superseded current attempt; no post-generation spec/note edit.
+Spans=61; nulls=6; nonnull D5=39. Exact optional fields/occurrences remain in spec.json and intended-spans.json.
+Errata=0. No spelling, factual, count or boundary defect is established by these sources; rhetorical and repeated negation structures are preserved rather than corrected. Full five-ground decision is in errata-analysis.json.
+Source/master pins and baseline are unchanged. HGM glosses retain their original tier and fields; reference/auto-aligned anomalies are not used to compose English or promote machine evidence.
+Independent reconciliation and skeptical semantic acceptance are still required. No native, phone, MAIN, paid API, database write or source modification was performed.

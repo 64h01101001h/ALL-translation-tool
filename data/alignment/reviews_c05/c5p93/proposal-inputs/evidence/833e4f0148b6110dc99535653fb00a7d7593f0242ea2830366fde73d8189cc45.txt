@@ -1,0 +1,34 @@
+from pathlib import Path
+import json,hashlib,gzip,re,os,datetime
+O=Path(__file__).resolve().parent;B=O.parent;W=B.parents[1]/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def read(p):return json.loads(p.read_bytes())
+def save(n,d):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True);assert not p.exists();p.write_text(json.dumps(d,indent=2,ensure_ascii=False)+'\n')
+orig=O/'original-to-copy-manifest.json';raw=orig.read_bytes();(O/'history').mkdir(exist_ok=True);(O/'history/collection-original-to-copy-manifest.json').write_bytes(raw)
+maps=read(orig)+read(O/'additional-original-to-copy-manifest.json');orig.write_text(json.dumps(maps,indent=2,ensure_ascii=False)+'\n')
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));mi={json.dumps(e,sort_keys=True,ensure_ascii=False) for e in master['unified_entries']}
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));ci={json.dumps(e,sort_keys=True,ensure_ascii=False) for e in corpus}
+add=read(O/'additional-queries.json')
+for r in add[0]['rows']:assert json.dumps(json.loads(r['raw']),sort_keys=True,ensure_ascii=False) in ci
+for r in add[1]['rows']:assert json.dumps(json.loads(r['raw']),sort_keys=True,ensure_ascii=False) in mi
+allq=[read(p) for p in sorted((O/'queries').glob('*.json'))]+add
+entries={r['id'] for q in allq for r in q['rows'] if 'hgm_gloss'in r};corpusids={r['id'] for q in allq for r in q['rows'] if 'course'in r and 'seq'in r}
+registry=read(W/'docs/errata_register.json');assert isinstance(registry,list)
+duplicates=[r for r in registry if any(re.search(r'\bC05:'+str(n)+r'\b',str(r.get('segment',''))) for n in (277,278,279))]
+save('exact-register-target-check.json',dict(register_count=len(registry),actual_locator_key='segment',target_segments=['C05:277','C05:278','C05:279'],exact_matches=duplicates,broad_39_record_screen='Historical search results are a screening set, not39 target errata or39 relevant classes'))
+extra=[]
+for row in maps:
+ p=Path(row['original'])
+ if p.name not in ('C16ReadingASCII.txt','C18ReadingASCII.txt'):continue
+ data=p.read_bytes();anchor=b'DNGOS PO GSUM GYI GZHI MTHUN';at=0
+ while (at:=data.find(anchor,at))>=0:
+  start=data.rfind(b'\n',0,max(0,at-1500));start=0 if start<0 else start+1;end=data.find(b'\n',min(len(data),at+2500));end=len(data) if end<0 else end+1
+  payload=data[start:end];name=f'common-locus-physical-{len(extra)+1}.bin';(O/name).write_bytes(payload);extra.append(dict(original=str(p),start=start,end=end,anchor_offset=at,copy=name,**pin(payload)));at+=len(anchor)
+save('common-locus-physical-extents.json',extra)
+for r in maps:
+ p=Path(r['original']);d=O/r['copy'];assert p.read_bytes()==d.read_bytes();assert pin(d.read_bytes())=={k:r[k]for k in ('bytes','sha256')};assert str(p.resolve())==r['resolved_original'];assert (os.readlink(p)if p.is_symlink()else None)==r['symlink'];assert d.suffix in {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+for r in read(O/'physical-extents.json')+extra:assert Path(r['original']).read_bytes()[r['start']:r['end']]==(O/r['copy']).read_bytes()
+db=W/'build/hgm_spine_v27_2.db';assert pin(db.read_bytes())==read(O/'source-unchanged.json')['database']['before']
+save('preparation-verification.json',dict(status='PASS_SOURCE_ONLY_PREPARATION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),query_records=len(allq),master_objects=len(entries),corpus_objects=len(corpusids),source_copy_records=len(maps),physical_full_sources=6,initial_physical_extents=21,added_common_locus_extents=len(extra),pdf_visual_pages=[41,42,43],pdf_printed_pages=[36,37,38],governing_Git_objects=8,all_copy_bytes_aliases_exact=True,all_physical_ranges_exact=True,database_and_source_bytes_unchanged=True,source_context_snapshot_exact=True,canonical_runs=0,final_proposal_spans_reviewed=0,semantic_acceptance=False,withheld_inputs_read=False,execution_notes=['Three pdftoppm commands exited0 with372-byte font/ligature warnings each; warnings retained, pages visually inspected.','Initial long combined governing read was truncated; required governing briefs/spec and course-shape section reread in bounded output.','Initial exploratory schema queries preceded recorded collection and are not included in the68 durable query-record count.']))
+print(json.dumps(read(O/'preparation-verification.json')))

@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py", line 248, in run
+    try: kind = ordinary_predicate(raw,grouped)
+                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py", line 97, in ordinary_predicate
+    contexts = diff_context_lines(raw)
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py", line 84, in diff_context_lines
+    assert pair and match, ('Unrecognized or ambiguous diff framing', i+1, line)
+           ^^^^^^^^^^^^^^
+AssertionError: ('Unrecognized or ambiguous diff framing', 1, b'  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/reconciled/274/finish.py", line 30')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py", line 283, in <module>
+    if __name__ == '__main__': main()
+                               ~~~~^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py", line 278, in main
+    try: result = run.run()
+                  ~~~~~~~^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py", line 250, in run
+    witness = classify_physical(raw,grouped,physical)
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-whitespace-runtime/whitespace276.py", line 139, in classify_physical
+    assert matches, ('No complete original physical line', number)
+           ^^^^^^^
+AssertionError: ('No complete original physical line', 2)

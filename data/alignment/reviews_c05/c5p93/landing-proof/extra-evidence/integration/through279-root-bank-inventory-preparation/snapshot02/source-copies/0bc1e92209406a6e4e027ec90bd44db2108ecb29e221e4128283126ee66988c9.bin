@@ -1,0 +1,42 @@
+{
+  "status": "APPROVE_SCOPED_TOOLING_WITH_RUNTIME_PREREQUISITES",
+  "utc": "2026-09-13T18:16:01.700508+00:00",
+  "head": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "reviews": [
+    {
+      "folder": "registration-preparation",
+      "files": 23,
+      "input_maps": 5,
+      "freeze": {
+        "bytes": 3552,
+        "sha256": "708cc19aa06d07e472eb6b45c9d346c4d51d9efb9e0538d585c9bc2cc035bdfa"
+      }
+    },
+    {
+      "folder": "landing-helper-review",
+      "files": 21,
+      "input_maps": 8,
+      "freeze": {
+        "bytes": 3284,
+        "sha256": "9ca3a2ea457bbd959c7432f95f01316f03ed2c2334878dc2bafe43624988df79"
+      }
+    }
+  ],
+  "historical_governing_records": 3,
+  "registration": {
+    "bytes": 8037,
+    "sha256": "aed207dbf618c745f1d2ba30752b78d4642a1a79f523dcf70fcd0681443f9e1c"
+  },
+  "landing_helper": {
+    "bytes": 6145,
+    "sha256": "1cfe6a27799b478231564c83596039bba00216bccdcf9f84cb5f0d40f3d5f34f"
+  },
+  "root_review": "Full source/diff/report/contract read. Exact intended three registration transformations and logging-only helper AST review accepted. All actual copies and immutable Git objects match.",
+  "execution_performed": false,
+  "runtime_prerequisites": [
+    "Final independent semantic APPROVE and root exact identity/source acceptance",
+    "Complete current landed individual/body/spec/review interfaces for registration",
+    "One recorded caller for each tool, assertions enabled, preserve failure/partial output without automatic retry"
+  ],
+  "limits": "No semantic, native, device or current MAIN approval. Future historical input verification must use recorded Git objects for mutable worktree source snapshots; current live path equality is a capture-time observation."
+}

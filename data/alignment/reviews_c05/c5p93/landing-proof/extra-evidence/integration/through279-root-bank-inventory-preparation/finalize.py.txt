@@ -1,0 +1,57 @@
+from pathlib import Path
+import json,hashlib,datetime,shutil
+R=Path(__file__).resolve().parent;A=R.parent.parent;I=A/'integration';B=A/'C05-277-279';Q=R/'snapshot02'
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(n,x):(R/n).write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+def load(p):return json.loads(p.read_bytes())
+old={r['original']:r for r in load(R/'source-snapshot-pins.json')};new={r['original']:r for r in load(Q/'source-snapshot-pins.json')}
+changed=[p for p in old.keys()&new.keys()if any(old[p][k]!=new[p][k]for k in ('bytes','sha256','resolved_original','symlink'))]
+assert not changed,changed
+put('snapshot-transition.json',{'first_snapshot_preserved':True,'old_files':len(old),'current_files':len(new),'added':sorted(new.keys()-old.keys()),'removed':sorted(old.keys()-new.keys()),'changed':changed})
+checks=0
+for r in new.values():
+ p=Path(r['original']);assert str(p.resolve())==r['resolved_original'];assert pin(p.read_bytes())=={k:r[k]for k in ('bytes','sha256')};checks+=1
+for base in (R,Q):
+ for r in load(base/'original-to-copy-manifest.json'):
+  raw=Path(r['original']).read_bytes();assert (base/r['copy']).read_bytes()==raw;checks+=1
+ for r in load(base/'coverage-and-exclusion-map.json'):
+  if r['coverage']=='already-banked-exact-copy':assert Path(r['original']).read_bytes()==Path(r['banked_copy']).read_bytes();checks+=1
+for r in load(Q/'extra-inputs.json'):
+ assert set(r)==({'original','retention','copy','bytes','sha256'}if r['retention']=='bank'else{'original','retention','disposition','bytes','sha256'})
+ if r['retention']=='bank':assert Path(r['copy']).suffix in {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+# Separate late-path audit is truthful: these are additions beyond snapshot02, never covered by inference.
+scope=load(Q/'scope-inventory.json');late=[]
+for row in scope['roots']:
+ root=Path(row['root']);current={str(p.relative_to(root))for p in root.rglob('*')if p.is_file()};was=set(row['files'])
+ late.append({'root':str(root),'added_after_snapshot02':sorted(current-was),'removed_after_snapshot02':sorted(was-current)})
+put('late-boundary-path-audit.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'roots':late})
+rec=B/'english/277/record_command.py';raw=rec.read_bytes();d=R/'record-command.py.txt';d.write_bytes(raw);assert d.read_bytes()==rec.read_bytes()
+put('preparation-tool-source-map.json',[{'original':str(rec),'copy':str(d.relative_to(R)),**pin(raw)}])
+pending=[
+ {'scope':'Runtime reproduction final freeze/report and full original/current/seed/source/Git/state closure plus independent root acceptance','runtime':str(I/'through279-generated-reproduction'),'status':'Current runtime snapshot included; closure/release/acceptance/final freeze must be appended from actual finished evidence. No completion inferred from three successful callers.'},
+ {'scope':'Later root release, closure preparation, closure execution and root acceptance trees outside current explicit roots','status':'Actual complete file inventories and exact original/copy or external pins required from root; no guessed completed paths or schemas.'},
+ {'scope':'Every added_after_snapshot02 path in late-boundary-path-audit.json and any later file','status':'Not in current machine LIST; root must append actual pins and supported targets before ordinary banking.'},
+ {'scope':'Raw untracked capture before ordinary bank','status':'Banker requires actual complete command/stdout/stderr/exit/execution at supplied stem before ordinary invocation. Never synthesize from later staged state.'},
+ {'scope':'Ordinary bank invocation/run-output and caller','status':'Future execution outside B/landing; cannot cover its own later streams. Final phase must explicitly retain these actual outputs.'},
+ {'scope':'This inventory freeze and root independent inventory review/late combined LIST','path':str(R),'status':'Add exact completed artifacts as explicit future inventory entries after this freeze. This preparation is not self-banked.'},
+ {'scope':'Final whitespace, staging, final bank and final verification outputs','status':'Later final-phase or explicit supplemental boundaries; not current ordinary execution facts.'}
+]
+put('pending-additions.json',pending)
+p=load(Q/'proof.json');p.update(final_rechecks=checks,source_changes_since_snapshot01=changed,late_added_paths=sum(len(x['added_after_snapshot02'])for x in late),banker_executed=False,scope='SOURCE_INVENTORY_ONLY_CURRENT_SNAPSHOT_WITH_EXPLICIT_PENDING_BOUNDARIES')
+put('final-proof.json',p)
+report=f'''Current source-only ordinary-bank inventory is complete for the explicitly enumerated snapshot02 scope; it is not a final completeness claim or authorization to execute banking. The exact machine LIST is snapshot02/extra-inputs.json: {p['explicit_LIST_records']} records, including {p['counts']['explicit-bank']} small bank records and {p['counts']['explicit-external']} complete externally retained originals. The {p['scope_files']} source paths include {p['counts']['already-banked-exact-copy']} full-byte verified exclusions and {p['counts']['automatic-landing-input']} automatic landing inputs. All current paths, resolved aliases, byte counts and SHA256 pins are in snapshot02/source-snapshot-pins.json and coverage-and-exclusion-map.json. No file was omitted by an arbitrary suffix or size rule.
+
+The inspected banker is integration/through279-finalization-runtime/bank_root_proofs_through279.py, 17890 bytes / 4fda2995ef53e3b9fe64c4d6ca30b8eb7f73f661d0dbcfc4c4cfe42d844428ba. The LIST matches its actual explicit_inputs schema exactly: bank rows have original, retention, copy, bytes, sha256; external rows replace copy with disposition. Destination paths are relative below landing-proof/extra-evidence/. Supported file suffixes remain exact; .py/.sh/.diff/.patch/.jsonl add .txt, other unsupported suffixes add .bin, without changing any source byte. Sources of at least 2,000,000 bytes remain complete at the exact absolute originals with explicit disposition. Small full sources are retained under snapshot02/source-copies, with every alias preserved in the original-to-copy manifest; shared bytes never erase path identity.
+
+The snapshot includes the whole current277–279 batch, finalization runtime, concrete reproduction preparation and finalized independent review, current reproduction runtime, reusable checker preparation/independent review/root review/caller/adopted code, and explicit common ART helpers. Root helper/caller/correction/tooling histories are covered by complete path inventories, not merely reports. The current runtime tree was captured only after root reported three successful callers; those actual streams are retained without rerunning a producer. The final reproduction review was read completely and remains a code-only conditional approval. Its later runtime closure and acceptance are separate pending evidence. No future280 other-angle or lexical preparation was inspected.
+
+All exclusions against the semantic bank are supported by actual full original-to-actual-bank-copy byte equality, resolved paths and pins; a digest was used only to locate a candidate copy. The initial accepted bank verification checks all2071 semantic-tree files and three reconciler reports. Every alias excluded is reopened and compared separately. The automatic58 landing files are planned automatic banker inputs, never falsely labelled already banked. The banker's own universal nine-file history and helper inclusion may duplicate explicit small records at different supported paths; this is deliberate complete evidence retention, not a claim of extra original activity. HISTORY includes current root-original, reconciliation and final semantic interfaces. Extra-inputs must retain all actual caller/source/correction streams as well.
+
+Capture01 remains unchanged. Snapshot02 adds {len(new.keys()-old.keys())} paths, removes {len(old.keys()-new.keys())}, and changes {len(changed)} existing source identities. Final rereads performed {checks} source/copy/exclusion comparisons. The late boundary audit records {p['late_added_paths']} paths added after snapshot02, explicitly pending; no moving tree is silently called frozen. Root must append these and all later actual closure/release/acceptance/freeze outputs before execution, then recheck originals and the exact scope. pending-additions.json is mandatory to that handoff. Raw untracked capture must occur before ordinary banking. Ordinary/final bank callers run outside landing, with later streams covered by the subsequent explicit boundary, never their own manifest. This preparation and its future root review are themselves pending inventory additions after freeze.
+
+The scope-inventory initial field named invoked_helper_provenance records JSON argv references, including historical and illustrative contracts. It does not prove every such helper was invoked for current279. Snapshot02 names these observed_argv_helper_references_actual_or_historical. Known current common helpers are retained explicitly, and complete execution records distinguish actual invocations. Earlier interactive read attempts for a not-yet-created reproduction-review root report and a mistaken runtime-source-map filename failed as reads only; the actual report and original-to-runtime-map were subsequently read and retained. These were not failed production, banking or test calls. No generated evidence was fabricated to represent those failed lookups.
+
+Role: reused Codex model and prior English-original/tooling author; this is full-byte source inventory and direct model reading, not human inspection, alignment semantic approval or independent adoption of the runtime. Zero banker, staging, Git, SQL, canonical, build or test executions occurred. Actual capture01/capture02/final-check command argv/cwd/stdin/full streams/exit and source versions remain in this tree. Python bytecode disabled and optimization0 were requested; recorder records its own dontwrite override separately from inherited environment. Root independently reviews this frozen preparation and composes any later concrete LIST. No frozen preparation is to be edited in place.
+'''
+(R/'report.md').write_text(report)
+print(json.dumps(p))

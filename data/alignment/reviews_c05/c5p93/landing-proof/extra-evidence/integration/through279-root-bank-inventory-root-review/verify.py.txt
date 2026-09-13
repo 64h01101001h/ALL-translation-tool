@@ -1,0 +1,43 @@
+from pathlib import Path
+import json,hashlib,os,datetime
+O=Path(__file__).resolve().parent;P=O.parent/'through279-root-bank-inventory-preparation';B=O.parents[1]/'C05-277-279';W=O.parents[2]/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def save(n,x):(O/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+f=j(P/'freeze.json');assert pin((P/'freeze.json').read_bytes())['sha256']=='d60fbc62e61d8cb3657fb475a6443c87e983c1d2be9cc87d6b53fc8af53475e0'
+assert len(f['files'])==1796 and {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+for n,x in f['files'].items():assert pin((P/n).read_bytes())==x
+comparisons=0
+for base in (P,P/'snapshot02'):
+ for x in j(base/'original-to-copy-manifest.json'):
+  p=Path(x['original']);raw=p.read_bytes();assert pin(raw)=={k:x[k] for k in ('bytes','sha256')} and raw==(base/x['copy']).read_bytes()
+  assert str(p.resolve())==x['resolved_original'];comparisons+=1
+current=P/'snapshot02';coverage=j(current/'coverage-and-exclusion-map.json');scope=j(current/'scope-inventory.json');extra=j(current/'extra-inputs.json')
+expected={str(Path(x['root'])/n) for x in scope['roots'] for n in x['files']}|set(scope['explicit_helper_files'])
+assert len(expected)==len(coverage)==9465 and {x['original'] for x in coverage}==expected
+extras={x['original']:x for x in extra};assert len(extras)==len(extra)==1982
+destinations=[x['copy'] for x in extra if x['retention']=='bank'];assert len(destinations)==len(set(destinations))==1942
+counts={}
+for x in coverage:
+ p=Path(x['original']);raw=p.read_bytes();v=pin(raw);assert v=={k:x[k] for k in ('bytes','sha256')}
+ assert str(p.resolve())==x['resolved_original'] and (os.readlink(p) if p.is_symlink() else None)==x['symlink']
+ kind=x['coverage'];counts[kind]=counts.get(kind,0)+1
+ if kind=='already-banked-exact-copy':
+  target=Path(x['banked_copy']);assert target.resolve().is_relative_to((W/'data/alignment/reviews_c05/c5p93').resolve()) and str(target.resolve())==x['resolved_banked_copy'] and raw==target.read_bytes();assert str(p) not in extras
+ elif kind=='automatic-landing-input':assert p.is_relative_to(B/'landing') and str(p) not in extras
+ elif kind=='explicit-bank':
+  rec=extras[str(p)];assert rec['retention']=='bank' and rec['copy']==x['planned_banked_copy'] and raw==(current/x['preparation_copy']).read_bytes() and v['bytes']<2000000
+  assert Path(rec['copy']).parts[0]=='extra-evidence' and not Path(rec['copy']).is_absolute() and '..' not in Path(rec['copy']).parts
+ elif kind=='explicit-external':assert extras[str(p)]['retention']=='external' and v['bytes']>=2000000
+ else:raise AssertionError(kind)
+ comparisons+=1
+for x in extra:assert pin(Path(x['original']).read_bytes())=={k:x[k] for k in ('bytes','sha256')}
+late=[]
+for x in scope['roots']:
+ root=Path(x['root']);actual={str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()};old=set(x['files']);assert old<=actual
+ late.extend(str(root/n) for n in sorted(actual-old))
+save('late-existing-paths.json',late)
+save('proof.json',dict(status='APPROVE_CURRENT_INVENTORY_AND_COMPLETE_EXCLUSIONS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),preparation_freeze=pin((P/'freeze.json').read_bytes()),whole_frozen_files=1796,scope_files=9465,counts=counts,explicit_records=len(extra),unique_bank_destinations=len(destinations),complete_comparisons=comparisons,late_paths=len(late),final_composition_pending=True,scope='Actual complete bytes for every prepared source/copy/exclusion, supported unique destinations and explicit large originals. Later closure/freeze/rootacceptance/current inventory own frozen review and callers must be added; no ordinary banking or completion claimed.'))
+save('report.json',dict(root_read_complete_report_current_inventory_source_contract_pending_additions=True,no_new_semantic_approval=True,no_build_test_sql_git_execution=True,no_predicate_waiver=True))
+files={str(p.relative_to(O)):pin(p.read_bytes()) for p in sorted(O.rglob('*')) if p.is_file() and p.name!='freeze.json'};save('freeze.json',dict(files=files,file_count=len(files),total_bytes=sum(x['bytes'] for x in files.values())))
+print(json.dumps(j(O/'proof.json')))

@@ -1,0 +1,63 @@
+{
+  "status": "APPROVE_EXACT_REUSABLE_MECHANICAL_CODE",
+  "utc": "2026-09-13T19:20:58.830909+00:00",
+  "checked": [
+    {
+      "folder": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation",
+      "freeze": {
+        "bytes": 102865,
+        "sha256": "f63f76654b3326239a647f7fa3863ea37cb0b8b8edcd7938df86cbc7c888638a"
+      },
+      "files": 510,
+      "maps": 502
+    },
+    {
+      "folder": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-independent-review",
+      "freeze": {
+        "bytes": 116234,
+        "sha256": "aff8141f4cb097947fea61654f694594e2bbd10328bc83efc405a55815d6cff8"
+      },
+      "files": 532,
+      "maps": 513
+    }
+  ],
+  "full36change_inverse": true,
+  "unchanged_ASTs": 8,
+  "actual_descriptor_bindings": 217,
+  "descriptors_without_count": 70,
+  "independent_tests": 29,
+  "root_new_test_or_SQL_or_Git_or_canonical_runs": 0,
+  "code": {
+    "verify_reconciliation.py": {
+      "bytes": 14332,
+      "sha256": "7c1f6ceb0b506a6df941add09f12078e76d8000815832cb4ee85a9cc5ba29d58"
+    },
+    "config_contract.py": {
+      "bytes": 9125,
+      "sha256": "9fb7d4080b6ec5f4e15f79ff4a4da96485f3fa92e39f76c9e84c657ca366a4a5"
+    }
+  },
+  "historical_fixture": {
+    "bytes": 178275,
+    "sha256": "14b2c4296308a89c47bda357452b0d9f9060c904eb91f307f170e347406f24dd"
+  },
+  "clarifications": [
+    {
+      "id": "RV-REVIEW-NOTE-01",
+      "severity": "nonblocking prose precision",
+      "detail": "Author report mentions reordered identities and query inputs among tests. Actual reorder negative concerns batch sequences; identity inventory is set-based and query inventory is set-complete. Current pinned query order independently equals the prior two sorted directory enumerations. Future query order is supplied by the separately reviewed exact config; no generic reordering rejection was demonstrated."
+    },
+    {
+      "id": "RV-REVIEW-NOTE-02",
+      "severity": "scope limit",
+      "detail": "Config/ref pins establish exact approved input identity, not independent semantic correctness or producer safety. Three descriptor adapters are approved for the actual pinned current schemas. New descriptor schema or unrecognized metadata requires explicit review, even where permissive extra dictionary keys happen to parse."
+    }
+  ],
+  "runtime_approval": false,
+  "conditions": [
+    "The completed277 fixture is historical and must not replay against now changed279 outputs.",
+    "Every new batch needs its actual full pinned configuration and independent review before CLI release.",
+    "Preserve all actual original/semantic/source/retention gates; no schema exception or guessed metadata.",
+    "Whole code and exact generator/wrapper dependencies must remain pinned; all current runtime paths/readonly safety and actual source freshness checked before execution."
+  ]
+}

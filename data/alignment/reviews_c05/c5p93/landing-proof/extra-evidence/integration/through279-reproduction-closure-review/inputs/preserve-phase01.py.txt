@@ -1,0 +1,9 @@
+from pathlib import Path
+import json,hashlib,ast
+P=Path(__file__).resolve().parent;A=P.parents[1];I=P.parent;rows=[]
+sources=[I/'through276-generated-reproduction/close-evidence.py.txt',A/'C05-274-276/accept-independent-reproduction-root.py',A/'C05-277-279/approve-reproduction-method-root.py',I/'through276-generated-reproduction-root-acceptance/proof.json',I/'through276-generated-reproduction/final-proof.json',I/'through279-generated-reproduction-concrete-preparation/command-plan.md',I/'through279-generated-reproduction-concrete-preparation/actual-measurements.json',I/'through279-generated-reproduction-concrete-preparation/freeze.json',I/'through279-generated-reproduction-review/review.json',I/'through279-generated-reproduction-review/freeze.json']
+for p in sources:
+ raw=p.read_bytes();d=P/'prior-and-contracts'/p.relative_to(A);d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(raw);assert p.read_bytes()==d.read_bytes()==raw
+ if p.name.endswith(('.py','.py.txt')):ast.parse(raw)
+ rows.append(dict(original=str(p),copy=str(d.relative_to(P)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+(P/'phase01-source-map.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps({'source_copies':len(rows),'candidate_execution':0,'retention_count':None}))

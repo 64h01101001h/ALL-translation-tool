@@ -1,0 +1,34 @@
+from pathlib import Path
+import hashlib,json,re,runpy
+D=Path(__file__).resolve().parent;A=D.parents[1];W=A.parent/'campaign-worktree';B=A/'C05-274-276';L=B/'landing'
+def j(p):return json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+proof=j(L/'staged-payload-source-proof.json');manifest=j(L/'staged-payload-manifest.json');base=j(B/'baseline.json');assert proof['status']=='PASS' and proof['head']==manifest['head']==base['commit']
+assert proof['manifest']==dict(path=str(L/'staged-payload-manifest.json'),**pin(L/'staged-payload-manifest.json'))
+assert proof['all_prior_links_retained']==45011 and proof['added_links']==115 and proof['review_freeze']==pin(B/'semantic-review/freeze.json')
+assert len(proof['files'])==len(manifest['files'])==12
+byrel={x['path']:x for x in manifest['files']};external=[]
+for r in proof['files']:
+    p=Path(r['original']);c=Path(r['copy']);rel=str(p.relative_to(W));assert c==L/'payload-freeze'/rel
+    assert p.read_bytes()==c.read_bytes();assert pin(c)=={k:r[k] for k in ('bytes','sha256')}=={k:byrel[rel][k] for k in ('bytes','sha256')}
+    external.append(dict(original=str(p),copy=str(c),**pin(c),disposition='Full actual original/copy bytes independently read and equal; payload remains externally retained, no duplicate runtime preparation copy'))
+assert len(byrel)==12
+log=(L/'ctest-17.stdout').read_text();tests=re.findall(r'^\s*(\d+)/17 Test\s+#(\d+): ([a-z_]+) .* Passed\s+([0-9.]+) sec$',log,re.M)
+assert len(tests)==17 and [int(x[0]) for x in tests]==list(range(1,18))
+assert [x[2] for x in tests]==[r['name'] for r in proof['actual_ctest_records']]
+assert (L/'ctest-17.exit').read_bytes()==b'0\n' and (L/'ctest-17.stderr').read_bytes()==b'' and re.findall(r'Total Test time \(real\) =\s+([0-9.]+) sec',log)==['11.32'] and proof['actual_ctest_total_seconds']==11.32
+for r in proof['proof_inputs']:assert pin(Path(r['path']))=={k:r[k] for k in ('bytes','sha256')}
+inputs=[L/'staged-payload-source-proof.json',L/'staged-payload-manifest.json',*[Path(x['path']) for x in proof['proof_inputs']]]
+for label in ('ctest-17','retention-source','course-csv-retention','payload-freeze'):
+    inputs.extend(L/(label+'.'+suffix) for suffix in ('command.json','execution.json','stdin.bin','stdout','stderr','exit'))
+copy=runpy.run_path(str(A/'copy_evidence_once_v2.py'),run_name='nonmain')['preserve'](D,D/'original-to-copy-manifest.json',inputs)
+# Historical actual failure bytes retained externally, without duplicating the 22MB check list.
+old=D.parent/'through273-generated-reproduction'
+history=[]
+for p in sorted((old/'history').rglob('*')):
+    if p.is_file():history.append(dict(path=str(p),**pin(p),disposition='Complete immutable historical original retained externally; never executed for through276'))
+seed=Path(j(L/'canonical-builds-once.json')['previous_main_csv_seed']['path'])
+external.append(dict(original=str(seed),copy=str(seed),**pin(seed),disposition='Complete immutable root incoming CSV seed retained externally; no runtime workspace materialization yet'))
+(D/'external-retained-evidence.json').write_text(json.dumps(dict(payload_and_seed=external,prior_history=history),indent=2)+'\n')
+result=dict(status='PASS_ACTUAL_PREREQUISITE_BINDINGS_NOT_RUNTIME_APPROVAL',payload=pin(L/'staged-payload-manifest.json'),payload_source=pin(L/'staged-payload-source-proof.json'),payload_files=12,payload_bytes=sum(x['bytes'] for x in manifest['files']),actual_root_ctest_suites=17,actual_root_ctest_seconds=11.32,actual_root_layer_invocations=1,actual_root_view_invocations=1,new_independent_layer_invocations=0,new_independent_view_invocations=0,queries=0,tests=0,baseline_sha256=base['sha256'],source_date=j(D/'actual-measurements.json')['metadata']['date'],retention=copy)
+(D/'prerequisite-bindings.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

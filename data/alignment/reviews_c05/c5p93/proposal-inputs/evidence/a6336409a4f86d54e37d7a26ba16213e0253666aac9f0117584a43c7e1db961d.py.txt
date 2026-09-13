@@ -1,0 +1,49 @@
+from pathlib import Path
+import os,sys,json,hashlib,sqlite3,runpy,subprocess,datetime,importlib.util,copy
+E=Path(__file__).resolve().parent;B=E.parent.parent;A=B.parent;W=A.parent/'campaign-worktree';S=B/'semantic-source-preparation'
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+# Preserve initial failed completion without editing or rerunning its completed queries.
+for nm in ['initialize.py','initialize.stdout','initialize.stderr','initialize.exit']:
+ p=E/'history'/'initial-source-completion'/nm;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes((E/nm).read_bytes())
+manifest=json.loads((E/'original-to-copy-manifest.json').read_bytes());origpins={r['original']:{k:r[k]for k in ['bytes','sha256']}for r in manifest}
+ext=[]
+for nm in ['physical-extents.json','common-locus-physical-extents.json']:
+ for r in json.loads((S/nm).read_bytes()):
+  raw=Path(r['original']).read_bytes();sp=r.get('source_pin',origpins.get(str(Path(r['original']).resolve())));assert sp is not None and pin(raw)==sp;piece=raw[r['start']:r['end']];assert piece==(S/r['copy']).read_bytes();ext.append({'manifest':nm,**r,'verified_full_source_pin':sp,'independent_exact_extent':True})
+save('independent-physical-extents.json',ext)
+paths=[B/'root-review-targets.md'];freezes=[]
+for angle in ['tibetan','english']:
+ for seq in [277,278,279]:
+  d=B/angle/str(seq);f=json.loads((d/'freeze.json').read_bytes());rows=f['files']
+  if isinstance(rows,list):rows={r['path']:{'bytes':r['bytes'],'sha256':r['sha256']}for r in rows}
+  for n,p in rows.items():assert pin((d/n).read_bytes())==p
+  freezes.append({'angle':angle,'seq':seq,**pin((d/'freeze.json').read_bytes()),'files':len(rows)})
+  paths.extend(p for p in d.rglob('*')if p.is_file())
+fn=runpy.run_path(str(A/'copy_evidence_once_v2.py'))['preserve'];proof=fn(E,E/'original-to-copy-manifest.json',paths);save('original-angle-freeze-verification.json',freezes)
+# Full original queries reopened once; no result truncation.
+db=W/'build/hgm_spine_v27_2.db';before=pin(db.read_bytes());con=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row;con.execute('PRAGMA query_only=ON');qs=[]
+for nm in ['lexical-queries-full.json','parallel-queries-full.json']:
+ for r in json.loads((B/'tibetan/277'/nm).read_bytes()):qs.append({'angle':'tibetan','source':nm,**r})
+en=json.loads((B/'english/277/evidence/hgm-full-rows.json').read_bytes())
+# The original helper records results by exact term; retain its actual structure.
+if isinstance(en['results'],dict):
+ for term,r in en['results'].items():qs.append({'angle':'english','source':'hgm-full-rows.json','term':term,'sql':en['sql'],'parameters':en['parameters_per_term'][term]if isinstance(en['parameters_per_term'],dict)else [term,term],'rows':r})
+else:
+ for r in en['results']:qs.append({'angle':'english','source':'hgm-full-rows.json','sql':en['sql'],**r})
+qs.extend({'angle':'english','source':'corpus-full-queries.json',**r}for r in json.loads((B/'english/277/evidence/corpus-full-queries.json').read_bytes()))
+for i,x in enumerate(qs):
+ prior=E/('original-query-reopens/%03d.json'%i)
+ if prior.exists():
+  saved=json.loads(prior.read_bytes());assert saved['sql']==x['sql'] and saved['parameters']==x['parameters'] and saved['rows']==x['rows'];continue
+ rows=[dict(r)for r in con.execute(x['sql'],x['parameters'])];assert rows==x['rows'],(i,x.keys());save('original-query-reopens/%03d.json'%i,{**x,'rows':rows,'independently_reopened':True})
+con.close();assert pin(db.read_bytes())==before
+# Actual unchanged canonical through exact existing reviewed RO/query_only wrapper.
+wrapper=(B/'tibetan/277/run-canonical-readonly.py').read_bytes();(E/'run-canonical-readonly.py').write_bytes(wrapper)
+gov={n:pin((W/n).read_bytes())for n in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']};execs=[]
+for a in ['tibetan','english']:
+ for seq in [277,278,279]:
+  d=E/'original-replays'/a/str(seq);d.mkdir(parents=True,exist_ok=True);raw=(B/a/str(seq)/'spec.json').read_bytes();(d/'stdin.bin').write_bytes(raw);argv=[sys.executable,'-B',str(E/'run-canonical-readonly.py')];start=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(argv,input=raw,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'},capture_output=True);(d/'stdout.bin').write_bytes(r.stdout);(d/'stderr.bin').write_bytes(r.stderr);(d/'exit.txt').write_text(str(r.returncode)+'\n');rec={'argv':argv,'cwd':str(W),'environment_overrides':{'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'},'start_utc':start,'end_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':r.returncode,'stdin':pin(raw),'stdout':pin(r.stdout),'stderr':pin(r.stderr),'wrapper':pin(wrapper),'canonical_inputs':gov,'matches_saved_original_body':r.stdout==(B/a/str(seq)/'body.html').read_bytes()};(d/'execution.json').write_text(json.dumps(rec,indent=2)+'\n');assert r.returncode==0 and not r.stderr and rec['matches_saved_original_body'];execs.append({'angle':a,'seq':seq,**rec})
+assert pin(db.read_bytes())==before;assert gov=={n:pin((W/n).read_bytes())for n in gov}
+save('original-replay-proof.json',{'status':'PASS_SIX_ACTUAL_CANONICAL_REPLAYS','executions':execs,'source_before_after':before,'copy_proof':proof,'query_reopens':len(qs),'physical_extents':len(ext),'failed_initial_completion':'history/initial-source-completion','initial_query_reopens':len(list((E/'independent-queries').glob('*.json')))})
+print(json.dumps({'status':'PASS','queries':len(qs),'canonical':len(execs),'copy':proof,'physical_extents':len(ext)},indent=2))

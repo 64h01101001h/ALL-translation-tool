@@ -1,0 +1,33 @@
+--- campaign-artifacts/C05-274-276/verify-complete-originals-v2.py
++++ current277–279
+@@ -27,17 +27,17 @@
+ try:
+     baseline=json.loads((batch/'baseline.json').read_text())
+     for name,digest in baseline['sha256'].items():assert pin(wt/name)['sha256']==digest,name
+-    freezes=[freeze(a,s) for a in ['tibetan','english'] for s in [274,275,276]]
++    freezes=[freeze(a,s) for a in ['tibetan','english'] for s in [277,278,279]]
+     own=json.loads((batch/'primary-tibetan-original-complete.json').read_text())
+-    assert own['status'].startswith('All three Tibetan originals frozen') and sum(r['spans'] for r in own['counts'])==106
++    assert own['status']=='ALL_THREE_ORIGINALS_FROZEN_BEFORE_CURRENT_ENGLISH_READ' and sum(r['spans'] for r in own['counts'])==146
+     sys.path.insert(0,str(wt/'tools'))
+     definition=importlib.util.spec_from_file_location('canonical_generator',wt/'tools/gen_alignment_page.py')
+     g=importlib.util.module_from_spec(definition);definition.loader.exec_module(g)
+     sources={r['seq']:r for r in json.loads((batch/'source.json').read_text())}
+     results=[];records=[]
+-    wrapper=batch/'tibetan/274/run-canonical-readonly.py'
++    wrapper=batch/'tibetan/277/run-canonical-readonly.py'
+     for angle in ['tibetan','english']:
+-        for seq in [274,275,276]:
++        for seq in [277,278,279]:
+             directory=batch/angle/str(seq);raw=(directory/'spec.json').read_bytes();spec=json.loads(raw)
+             assert spec['course']=='C05' and [s['seq'] for s in spec['segments']]==[seq]
+             argv=[sys.executable,'-B',str(wrapper)]
+@@ -78,7 +78,7 @@
+                 body_sha256=hashlib.sha256(run.stdout).hexdigest(),spec_sha256=hashlib.sha256(raw).hexdigest(),
+                 saved_body_identical=True))
+     assert len(results)==6 and len(records)==sum(r['spans'] for r in results)
+-    assert freezes==[freeze(a,s) for a in ['tibetan','english'] for s in [274,275,276]]
++    assert freezes==[freeze(a,s) for a in ['tibetan','english'] for s in [277,278,279]]
+     for name,digest in baseline['sha256'].items():assert pin(wt/name)['sha256']==digest,name
+     save(out/'report.json',results);save(out/'root-resolved-spans.json',records)
+     proof.update(status='PASS',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),

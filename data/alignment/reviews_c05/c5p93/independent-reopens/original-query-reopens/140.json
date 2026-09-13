@@ -1,0 +1,37 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/140.json",
+  "query_pin": {
+    "bytes": 5459,
+    "sha256": "67d5810a857965c2f502ded916296ca749ff22af4ef64e6b962ed374b866718b"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "ma",
+    "ma"
+  ],
+  "rows": [
+    {
+      "id": 13694,
+      "wylie": "ma",
+      "tibetan": "མ",
+      "tibetan_source": null,
+      "acip": "MA",
+      "pronunciation": "ma",
+      "pronunciation_source": null,
+      "sanskrit": "{LCh,C,MSA}mātṛ; {MSA}a- (e.g.: akṛta, etc.); {MSA}na; {LC}a!!, an!!; {LC}aparicchinna; {LC}aparipācita; {LC}jananī; {LC}janayitrī; {LC}nir!!; {LC}nirga rava; {LC}mā evaṃ cintaya; {LC}mā kuru saṃśayam; {LC}mā vidhāvadhvam; {LC}mātā janetrī; {LC}mātṛtva; {LC}vi!!; {LC}viṣama; {LC}agamyamāna, anyatra, bahiḥ, muktvā; {LC}bhaviṣyat; {LC}nīca; {LC}khala; {LC}sakala, sarva,...; {LC}abhuktvā; {LC}amba; {LC}ambā; {LC}āmalakī; {LC}prasū; {LC}mātṛkā",
+      "hopkins_english": "(1) mother ; (2) particle indicating negative: not; non-; un-",
+      "hgm_gloss": "[\"mother\", \"no\", \"wouldn't have\", \"she\", \"not\", \"prevent\", \"never\", \"lack\", \"n't\", \"not yet\", \"her\", \"failure\", \"has not\", \"fail\", \"my mother\", \"don't\", \"nothing\", \"our mothers\", \"have yet to\", \"did not\", \"do not\", \"mothers\", \"failing\", \"without\", \"have never\", \"difficult\", \"fails to\", \"failed\", \"not ... not\", \"n\", \"unable\", \"nor\", \"un\", \"wasn't\", \"could never\", \"cannot\", \"none\", \"neither\", \"unless\", \"in\", \"im\", \"have not been\", \"until\", \"have not yet\", \"stop\", \"no longer had any\", \"is not\", \"no ... that exists\", \"is ... not\", \"had never been\", \"mistaken\", \"fails\", \"it's not\", \"was not\", \"nothing more\", \"doesn't\", \"wrong\", \"hasn't\", \"lack of any\", \"does not\", \"has failed\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 13487,
+      "raw": "{\"tibetan\": \"མ\", \"wylie\": \"ma\", \"wylie_variants\": [\"ma\"], \"tenses\": null, \"sanskrit\": \"{LCh,C,MSA}mātṛ; {MSA}a- (e.g.: akṛta, etc.); {MSA}na; {LC}a!!, an!!; {LC}aparicchinna; {LC}aparipācita; {LC}jananī; {LC}janayitrī; {LC}nir!!; {LC}nirga rava; {LC}mā evaṃ cintaya; {LC}mā kuru saṃśayam; {LC}mā vidhāvadhvam; {LC}mātā janetrī; {LC}mātṛtva; {LC}vi!!; {LC}viṣama; {LC}agamyamāna, anyatra, bahiḥ, muktvā; {LC}bhaviṣyat; {LC}nīca; {LC}khala; {LC}sakala, sarva,...; {LC}abhuktvā; {LC}amba; {LC}ambā; {LC}āmalakī; {LC}prasū; {LC}mātṛkā\", \"hopkins_english\": \"(1) mother ; (2) particle indicating negative: not; non-; un-\", \"hgm_gloss\": [\"mother\", \"no\", \"wouldn't have\", \"she\", \"not\", \"prevent\", \"never\", \"lack\", \"n't\", \"not yet\", \"her\", \"failure\", \"has not\", \"fail\", \"my mother\", \"don't\", \"nothing\", \"our mothers\", \"have yet to\", \"did not\", \"do not\", \"mothers\", \"failing\", \"without\", \"have never\", \"difficult\", \"fails to\", \"failed\", \"not ... not\", \"n\", \"unable\", \"nor\", \"un\", \"wasn't\", \"could never\", \"cannot\", \"none\", \"neither\", \"unless\", \"in\", \"im\", \"have not been\", \"until\", \"have not yet\", \"stop\", \"no longer had any\", \"is not\", \"no ... that exists\", \"is ... not\", \"had never been\", \"mistaken\", \"fails\", \"it's not\", \"was not\", \"nothing more\", \"doesn't\", \"wrong\", \"hasn't\", \"lack of any\", \"does not\", \"has failed\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"ma\", \"acip\": \"MA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 13487}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

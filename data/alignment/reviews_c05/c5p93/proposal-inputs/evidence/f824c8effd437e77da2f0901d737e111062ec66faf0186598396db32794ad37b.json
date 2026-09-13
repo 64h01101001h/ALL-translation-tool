@@ -1,0 +1,33 @@
+{
+  "angle": "english",
+  "source": "hgm-full-rows.json",
+  "term": "gcig",
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "gcig",
+    "gcig"
+  ],
+  "rows": [
+    {
+      "id": 4216,
+      "wylie": "gcig",
+      "tibetan": "གཅིག",
+      "tibetan_source": null,
+      "acip": "GCIG",
+      "pronunciation": "chik",
+      "pronunciation_source": "GMR card (C14 Language Study Guide)",
+      "sanskrit": "{MV}eka; {MV}ekatva; {MSA}aikyatas; {C}mitha; abhinna {GD:284}; {LC}ekakṣaṇa; {LC}ekasveraṇa; {LC}ekānte; {LC}ekasmin samaye; {LC}ekārthatā; {LC}ekarasaṃ yathāsyāt; {LC}ekaka; {LC}ekākin; {LC}kṣaṇa; {LC}anyatama; {LC}nikaṣā; {LC}sakṛt; {LC}samīpa; {LC}putra!",
+      "hopkins_english": "one; same; oneness; unitary; single; singular phenomenon; {PH}identity; same; {C}autonomous; first; together; one single; alone; the same as; only one; common; identical; mutual",
+      "hgm_gloss": "[\"one and only\", \"one\", \"single\", \"someone\", \"period of 24 hours\", \"a single\", \"a certain\", \"a single being\", \"a specific\", \"one ... alone\", \"a measure\", \"also\", \"same\", \"another\", \"the same as\", \"be present with\", \"a\", \"exactly the same\", \"possess\", \"singular\", \"one thing\", \"are one\", \"an\", \"there exists no difference\", \"single thing\", \"particular\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 2711,
+      "raw": "{\"tibetan\": \"གཅིག\", \"wylie\": \"gcig\", \"wylie_variants\": [\"gcig\"], \"tenses\": null, \"sanskrit\": \"{MV}eka; {MV}ekatva; {MSA}aikyatas; {C}mitha; abhinna {GD:284}; {LC}ekakṣaṇa; {LC}ekasveraṇa; {LC}ekānte; {LC}ekasmin samaye; {LC}ekārthatā; {LC}ekarasaṃ yathāsyāt; {LC}ekaka; {LC}ekākin; {LC}kṣaṇa; {LC}anyatama; {LC}nikaṣā; {LC}sakṛt; {LC}samīpa; {LC}putra!\", \"hopkins_english\": \"one; same; oneness; unitary; single; singular phenomenon; {PH}identity; same; {C}autonomous; first; together; one single; alone; the same as; only one; common; identical; mutual\", \"hgm_gloss\": [\"one and only\", \"one\", \"single\", \"someone\", \"period of 24 hours\", \"a single\", \"a certain\", \"a single being\", \"a specific\", \"one ... alone\", \"a measure\", \"also\", \"same\", \"another\", \"the same as\", \"be present with\", \"a\", \"exactly the same\", \"possess\", \"singular\", \"one thing\", \"are one\", \"an\", \"there exists no difference\", \"single thing\", \"particular\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"chik\", \"acip\": \"GCIG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 2711}, \"pronunciation_source\": \"GMR card (C14 Language Study Guide)\", \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "independently_reopened": true
+}

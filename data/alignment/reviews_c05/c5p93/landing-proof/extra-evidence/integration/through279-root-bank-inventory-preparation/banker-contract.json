@@ -1,0 +1,12 @@
+{
+  "banker": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-finalization-runtime/bank_root_proofs_through279.py",
+    "bytes": 17890,
+    "sha256": "4fda2995ef53e3b9fe64c4d6ca30b8eb7f73f661d0dbcfc4c4cfe42d844428ba"
+  },
+  "explicit_inputs_source": "def explicit_inputs(path):\n        config = js(path)\n        assert isinstance(config, list)\n        for record in config:\n            assert isinstance(record['original'], str)\n            source = Path(record['original'])\n            if record['retention'] == 'bank':\n                add(source, copy=record['copy'], expected=record)\n            else:\n                assert record['retention'] == 'external'\n                add(source, disposition=record['disposition'], expected=record)\n        add(Path(path), copy='banking-config/' + Path(path).name)",
+  "schema": "LIST of {original,retention:bank,copy,bytes,sha256} or {original,retention:external,disposition,bytes,sha256}",
+  "status": "SOURCE_INVENTORY_ONLY_NOT_EXECUTED",
+  "threshold_bytes": 2000000,
+  "ordinary_output_and_caller": "Must be outside B/landing and WT; after inventory/preflight. Actual ordinary invocation/caller outputs are not covered by this snapshot."
+}

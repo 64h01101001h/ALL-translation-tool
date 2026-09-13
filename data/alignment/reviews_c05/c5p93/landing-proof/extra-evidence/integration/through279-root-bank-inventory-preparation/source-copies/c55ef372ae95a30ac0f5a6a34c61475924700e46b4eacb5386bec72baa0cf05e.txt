@@ -1,0 +1,47 @@
+from pathlib import Path
+import ast,datetime,difflib,hashlib,json,textwrap
+D=Path(__file__).resolve().parent;A=D.parent
+P=A/'reusable-reconciliation-verifier-preparation';R=A/'reusable-reconciliation-verifier-independent-review'
+def pin(p):
+ raw=p.read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def read(p):return json.loads(p.read_bytes())
+checked=[]
+for p,sha in [(P,'f63f76654b3326239a647f7fa3863ea37cb0b8b8edcd7938df86cbc7c888638a'),(R,'aff8141f4cb097947fea61654f694594e2bbd10328bc83efc405a55815d6cff8')]:
+ assert pin(p/'freeze.json')['sha256']==sha
+ f=read(p/'freeze.json');actual={str(x.relative_to(p)):pin(x)for x in p.rglob('*')if x.is_file()and x!=p/'freeze.json'}
+ assert actual==f['files'] and len(actual)==f['file_count']and sum(v['bytes']for v in actual.values())==f['total_bytes']
+ records=read(p/'original-to-copy-manifest.json')
+ for r in records:assert (p/r['copy']).read_bytes()==Path(r['original']).read_bytes()and pin(p/r['copy'])=={k:r[k]for k in ['bytes','sha256']}
+ checked.append(dict(folder=str(p),freeze=pin(p/'freeze.json'),files=len(actual),maps=len(records)))
+old=(P/'prior-verifier.py.txt').read_text();new=(P/'verify_reconciliation.py').read_text();ledger=read(P/'parameter-extraction.json')
+assert pin(P/'prior-verifier.py.txt')['sha256']==ledger['source_sha256']
+body=textwrap.dedent(new.split('def verify(C,summary,output,config_raw):\n',1)[1].split('\ndef main():',1)[0])
+for r in reversed(ledger['changes']):
+ assert body.count(r['new'])==r.get('all',1);body=body.replace(r['new'],r['old'])
+prefix,tail=old.split('B=Path(__file__).resolve().parent;',1)
+assert body=='B=Path(__file__).resolve().parent;'+tail and prefix+body==old
+assert ''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior-verifier.py.txt',tofile='verify_reconciliation.py'))==(P/'prior-to-candidate.diff').read_text()
+pa=ast.parse(old);ca=ast.parse(new);v=next(n for n in ca.body if isinstance(n,ast.FunctionDef)and n.name=='verify')
+for name in ['read','bp','pin','check','save','run','frozen','SourceAnchors']:
+ x=next(n for n in pa.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))and n.name==name);y=next(n for n in v.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))and n.name==name)
+ assert ast.dump(x,include_attributes=False)==ast.dump(y,include_attributes=False)
+config=read(P/'completed-277-config.json');assert pin(P/'completed-277-config.json')['sha256']=='14b2c4296308a89c47bda357452b0d9f9060c904eb91f307f170e347406f24dd'
+query_inventory=[]
+for item in config['queries']:
+ for ref in [item['file'],item['descriptor']]:assert pin(Path(ref['path']))=={k:ref[k]for k in ['bytes','sha256']}
+ q=read(Path(item['file']['path']));source=read(Path(item['descriptor']['path']));binding=item['binding']
+ if binding['kind']=='query_list':source=source[binding['index']]
+ elif binding['kind']=='hgm_results':
+  assert source['parameters_per_term']=='[term,term]';term=binding['term'];source=dict(sql=source['sql'],parameters=[term,term],rows=source['results'][term])
+ else:assert binding=={'kind':'standalone'}
+ assert all(q[k]==source[k]for k in ['sql','parameters','rows']) and ('count'in q)==('count'in source)
+ if 'count'in source:assert q['count']==source['count']==len(q['rows'])
+ query_inventory.append(dict(file=item['file'],descriptor=item['descriptor'],binding=binding,rows=len(q['rows']),has_count='count'in q))
+assert len(query_inventory)==217 and sum(not x['has_count']for x in query_inventory)==70
+for ref in read(P/'fixture-provenance.json')['large_external_pins'].values():assert pin(Path(ref['path']))=={k:ref[k]for k in ['bytes','sha256']}
+findings=read(R/'findings.json');assert findings['spec']==findings['quality']=='APPROVE'and findings['blocking_findings']==[]
+assert (P/'tests-final/exit').read_bytes()==b'0\n'
+review=read(R/'final-verification.json');assert review['status']=='PASS'and review['current_query_order_matches_prior']and review['check01_stderr_empty']
+(D/'query-descriptor-identities.json').write_text(json.dumps(query_inventory,indent=2)+'\n')
+proof=dict(status='APPROVE_EXACT_REUSABLE_MECHANICAL_CODE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),checked=checked,full36change_inverse=True,unchanged_ASTs=8,actual_descriptor_bindings=217,descriptors_without_count=70,independent_tests=29,root_new_test_or_SQL_or_Git_or_canonical_runs=0,code={n:pin(P/n)for n in ['verify_reconciliation.py','config_contract.py']},historical_fixture=pin(P/'completed-277-config.json'),clarifications=findings['clarifications'],runtime_approval=False,conditions=['The completed277 fixture is historical and must not replay against now changed279 outputs.','Every new batch needs its actual full pinned configuration and independent review before CLI release.','Preserve all actual original/semantic/source/retention gates; no schema exception or guessed metadata.','Whole code and exact generator/wrapper dependencies must remain pinned; all current runtime paths/readonly safety and actual source freshness checked before execution.'])
+(D/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps({'status':proof['status'],'files':sum(x['files']for x in checked),'maps':sum(x['maps']for x in checked),'descriptors':217,'no_runtime_execution':True}))

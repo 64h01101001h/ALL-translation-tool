@@ -1,0 +1,74 @@
+--- old-land_reviewed_page.py
++++ land_reviewed_page_v2.py
+@@ -6,6 +6,7 @@
+ and the missing depth-7 label inherited from the historical wrapper.
+ """
+ import hashlib
++import datetime
+ import json
+ import os
+ from pathlib import Path
+@@ -30,6 +31,7 @@
+     assert [s["seq"] for s in part["segments"]] == [seq]
+     spec["segments"].extend(part["segments"])
+ env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
++generator_started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+ run = subprocess.run([sys.executable, str(art / "run_generator_readonly.py")],
+     cwd=root, env=env, input=json.dumps(spec, ensure_ascii=False).encode(),
+     capture_output=True)
+@@ -38,14 +40,38 @@
+ (landing / "generator.stdout").write_bytes(run.stdout)
+ (landing / "generator.stderr").write_bytes(run.stderr)
+ (landing / "generator.exit").write_text(f"{run.returncode}\n")
++(landing / "generator.stdin.bin").write_bytes(json.dumps(spec, ensure_ascii=False).encode())
++(landing / "generator.command.json").write_text(json.dumps({
++    "argv": [sys.executable, str(art / "run_generator_readonly.py")],
++    "cwd": str(root), "started_at": generator_started,
++    "finished_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
++    "environment_overrides": {"PYTHONDONTWRITEBYTECODE": "1"},
++    "stdin": "generator.stdin.bin", "stdout": "generator.stdout",
++    "stderr": "generator.stderr", "exit": run.returncode}, indent=2) + "\n")
++
+ assert run.returncode == 0, run.stderr.decode()
+ assert not run.stderr, "Generator reported warnings"
+ title = f"ACI Course 5 · Page {page}"
+ subtitle = f"How Karma Works · C05:{seqs[0]}–{seqs[-1]} · provisional span alignment"
++wrapper_started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+ wrap = subprocess.run([sys.executable, "tools/wrap_alignment_page.py",
+     str(out), title, subtitle, f"c5p{page-1}.html", "-", "5"],
+     cwd=root, env=env, input=run.stdout, capture_output=True)
++(landing / "wrapper.stdout").write_bytes(wrap.stdout)
++(landing / "wrapper.stderr").write_bytes(wrap.stderr)
++(landing / "wrapper.exit").write_text(str(wrap.returncode) + "\n")
++(landing / "wrapper.command.json").write_text(json.dumps({
++    "argv": [sys.executable, "tools/wrap_alignment_page.py", str(out), title,
++             subtitle, f"c5p{page-1}.html", "-", "5"],
++    "cwd": str(root), "started_at": wrapper_started,
++    "finished_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
++    "environment_overrides": {"PYTHONDONTWRITEBYTECODE": "1"},
++    "stdin": "generator.stdout", "stdout": "wrapper.stdout",
++    "stderr": "wrapper.stderr", "exit": wrap.returncode}, indent=2) + "\n")
+ assert wrap.returncode == 0, wrap.stderr.decode()
++assert not wrap.stderr, "Wrapper reported warnings"
++(landing / "wrapped-page-before-credits.html").write_bytes(out.read_bytes())
++
+ html = out.read_text()
+ assert html.count("AI (Claude)") == 1 and html.count("Claude (AI)") == 1
+ html = html.replace("AI (Claude)", "AI (Codex)").replace("Claude (AI)", "Codex (AI)")
+@@ -57,6 +83,7 @@
+ out.write_text(html)
+ prior = out.with_name(f"c5p{page-1}.html")
+ prior_html = prior.read_text()
++(landing / "prior-page-before-navigation.html").write_bytes(prior.read_bytes())
+ nav_end = "&larr; Previous</a></div>"
+ assert prior_html.count(nav_end) == 2, "Check prior-page navigation manually"
+ prior.write_text(prior_html.replace(nav_end,
+@@ -82,7 +109,7 @@
+     "body_sha256": hashlib.sha256(run.stdout).hexdigest(),
+     "generator_exit": run.returncode,
+     "presentation_changes": ["New page credits name Codex", "Define the inherited missing depth-7 label", "Connect previous-page navigation"],
+-    "visual_verification": "Unverified: in-app browser policy rejected local HTML preview; no workaround attempted",
++    "visual_verification": "Unverified for this batch: native rendering, saved data-root selection and installed phone resource identity require separate verification",
+ }
+ (review_dir / "landing.json").write_text(json.dumps(manifest, indent=2) + "\n")
+ print(json.dumps(manifest, indent=2))

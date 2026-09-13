@@ -1,0 +1,48 @@
+"""Read-only completed277 descriptor fixture and complete historical code preservation."""
+from pathlib import Path
+import hashlib,json,runpy
+P=Path(__file__).resolve().parent;A=P.parent;B=A/'C05-277-279';W=A.parent/'campaign-worktree';D=B/'reconciled/277'
+def read(p):return json.loads(p.read_bytes())
+def ref(p):raw=p.read_bytes();return {'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def put(p,x):p.write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+paths=[B/'verify-reconciliation-root.py',B/'root-reconciliation-verification/execution-proof.json',B/'root-reconciliation-verification/status.stdout',A/'copy_evidence_once_v2.py']
+for n in ['root-reconciliation-correction01','root-reconciliation-correction02']:
+ paths.extend(p for p in(B/n).rglob('*')if p.is_file())
+for n in ['reconciliation-root-caller','reconciliation-root-caller-v2','reconciliation-root-caller-v3']:
+ if (B/n).exists():paths.extend(p for p in(B/n).rglob('*')if p.is_file())
+originals=[];final=[]
+for a in ['tibetan','english']:
+ for s in [277,278,279]:
+  d=B/a/str(s);originals.append({'angle':a,'seq':s,'directory':str(d),'freeze':ref(d/'freeze.json'),'spec':ref(d/'spec.json'),'declarations':ref(d/('intended-spans.json'if a=='tibetan'else'occurrence-declarations.json'))})
+roles={'spec':'spec.json','body':'body.html','tuples':'final-tuples.json','decisions':'final-decisions.json','omissions':'omissions.json','dispositions':'original-dispositions.json','errata_analysis':'errata-analysis.json','allowances':'proposed-head-allowances.json','errata':'errata.json','proof':'proof.json'}
+for s in [277,278,279]:
+ d=B/'reconciled'/str(s);c=read(d/'proof.json')['counts'];final.append({'seq':s,'directory':str(d),'freeze':ref(d/'freeze.json'),'counts':{k:c[k]for k in ['spans','nulls','d5_nonnull']},'files':{k:ref(d/v)for k,v in roles.items()}})
+evidence={k:ref(p)for k,p in {'reference_access':D/'reference-access.json','copy_manifest':D/'original-to-copy-manifest.json','aliases':D/'logical-aliases.json','governing':D/'governing-fixed-git-provenance.json','source_context':D/'independent-source-context-full-rows.json','physical':D/'independent-physical-extents.json','original_identities':B/'proposal-verification/root-resolved-spans.json','original_proof':B/'proposal-verification/execution-proof.json','source_snapshot':B/'source.json','master':W/'data/hgm_dictionary_v27_2.json.gz','corpus':W/'data/full_parallel_corpus_v32.json.gz','database':W/'build/hgm_spine_v27_2.db','generator':W/'tools/gen_alignment_page.py','wrapper':D/'run-canonical-readonly.py'}.items()}
+qs=[]
+for p in sorted((D/'original-query-reopens').glob('*.json')):
+ q=read(p)
+ if q['angle']=='tibetan':
+  src=B/'tibetan/277'/q['source'];items=read(src);matches=[i for i,r in enumerate(items)if all(r[k]==q[k]for k in ['sql','parameters','rows'])];assert len(matches)==1;binding={'kind':'query_list','index':matches[0]}
+ elif q['source']=='hgm-full-rows.json':src=B/'english/277/evidence'/q['source'];binding={'kind':'hgm_results','term':q['term']}
+ else:
+  src=B/'english/277/evidence'/q['source'];items=read(src);matches=[i for i,r in enumerate(items)if all(r[k]==q[k]for k in ['sql','parameters','rows'])];assert len(matches)==1;binding={'kind':'query_list','index':matches[0]}
+ qs.append({'file':ref(p),'descriptor':ref(src),'binding':binding});paths.append(src)
+for p in sorted((D/'independent-queries').glob('*.json')):
+ q=read(p);src=Path(q['original_saved_query']);qs.append({'file':ref(p),'descriptor':ref(src),'binding':{'kind':'standalone'}});paths.append(src)
+cfg={'schema':'reconciliation-277-v1','course':'C05','batch':str(B),'worktree':str(W),'shared_directory':str(D),'sequences':[277,278,279],'baseline':ref(B/'baseline.json'),'status_capture':ref(B/'root-reconciliation-verification/status.stdout'),'originals':originals,'reconciled':final,'evidence':evidence,'context':{'sql':'SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq','parameters':['C05',270,285]},'query_directories':[str(D/'original-query-reopens'),str(D/'independent-queries')],'queries':qs,'operator_role':'Completed277 fixture only; reusable mechanical/source candidate, not semantic acceptance or runtime authorization.'}
+put(P/'completed-277-config.json',cfg)
+# Pin all fixture metadata/descriptors in full; large immutable archive/DB inputs remain explicit external originals.
+def collect(v):
+ if isinstance(v,dict):
+  if set(v)=={'path','bytes','sha256'}:
+   if v['path']not in [evidence[k]['path']for k in ['master','corpus','database']]:paths.append(Path(v['path']))
+  else:
+   for x in v.values():collect(x)
+ elif isinstance(v,list):
+  for x in v:collect(x)
+collect(cfg)
+for n in ['test-driven-development/SKILL.md','test-driven-development/writing-good-tests.md','verification-before-completion/SKILL.md']:paths.append(Path('/Users/adamderickandrade/ALL-translation-tool/.agents/skills')/n)
+copy_result=runpy.run_path(str(A/'copy_evidence_once_v2.py'))['preserve'](P,P/'original-to-copy-manifest.json',list(dict.fromkeys(paths)))
+(P/'prior-verifier.py.txt').write_bytes((B/'verify-reconciliation-root.py').read_bytes())
+put(P/'fixture-provenance.json',{'scope':'Exact current completed277 fixture; no future fixture author/count invented. No queries/canonical/Git replay.','config':ref(P/'completed-277-config.json'),'large_external_pins':{k:evidence[k]for k in ['master','corpus','database']},'copy':copy_result,'queries':len(qs),'original_counts':[len(read(Path(r['spec']['path']))['segments'][0]['spans'])for r in originals],'reported_counts':[r['counts']for r in final]})
+print(json.dumps({'status':'PREPARED_FIXTURE','query_descriptors':len(qs),'copy':copy_result},indent=2))

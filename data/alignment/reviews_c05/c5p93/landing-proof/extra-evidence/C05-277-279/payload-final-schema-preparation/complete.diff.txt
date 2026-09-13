@@ -1,0 +1,11 @@
+--- prior
++++ current
+@@ -51,7 +51,7 @@
+ # Counts come from the actual approved interface, bound to its complete specs.
+ approved_review=j(B/'semantic-review/review.json')
+ assert approved_review['spec_verdict']==approved_review['quality_verdict']=='APPROVE'
+-assert approved_review['open_findings']==[] and approved_review['baseline']==base['commit']
++assert approved_review['open_findings']==[] and approved_review['baseline_commit']==base['commit']
+ assert [row['seq'] for row in approved_review['segments']]==[277,278,279]
+ approved_spans=0
+ for row in approved_review['segments']:

@@ -1,0 +1,89 @@
+from pathlib import Path
+import ast,json,hashlib,re,difflib
+D=Path(__file__).resolve().parent;B=D.parent;A=B.parent;P=A/'C05-274-276';W=A.parent/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+items=[(P/'freeze-final-payload-before-staging-v2.py','prior-payload.py.txt'),(P/'page-tooling-preparation/banking-v2/bank_root_proofs_through276_v2.py','prior-banking.py.txt'),(B/'baseline.json','baseline.json'),(B/'source.json','source.json'),(B/'proposal-verification/root-original-freeze-check.json','root-original-freeze-check.json'),(B/'proposal-verification/execution-proof.json','original-execution-proof.json'),(A/'integration/through276-root-closure/final-observed-main/proof.json','closed276.json'),(P/'semantic-review/review.json','prior-approved-review-schema.json'),(B/'english/277/record_command.py','record-command-original.py.txt')]
+(D/'inputs').mkdir();maps=[]
+for p,n in items:
+ b=p.read_bytes();c=D/'inputs'/n;c.write_bytes(b);assert c.read_bytes()==p.read_bytes();maps.append(dict(original=str(p),resolved=str(p.resolve()),copy=str(c.relative_to(D)),**pin(b)))
+save(D/'input-manifest.json',maps)
+base=json.loads((D/'inputs/baseline.json').read_bytes());closed=json.loads((D/'inputs/closed276.json').read_bytes());assert base['commit']==closed['final_head']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa';assert base['full_links']==45126 and base['course_boundary']==276
+oldbase='81942cfc6022a785894d3cc2a20de81dc4c6f599'
+oldp=(D/'inputs/prior-payload.py.txt').read_text();oldb=(D/'inputs/prior-banking.py.txt').read_text()
+def adapt(s):
+ assert s.count(oldbase)==1;s=s.replace(oldbase,'__BASE__')
+ mapping={'274':'277','275':'278','276':'279','91':'92','92':'93'}
+ s=re.sub(r'(?<!\d)(?:'+ '|'.join(mapping)+r')(?!\d)',lambda m:mapping[m.group()],s)
+ return s.replace('__BASE__',base['commit'])
+p=adapt(oldp);b=adapt(oldb)
+oldret="assert retention['prior_links_retained']==45011 and retention['added_links']==115"
+newret="""assert base['full_links']==45126 and retention['prior_links_retained']==base['full_links']
+# Counts come from the actual approved interface, bound to its complete specs.
+approved_review=j(B/'semantic-review/review.json')
+assert approved_review['spec_verdict']==approved_review['quality_verdict']=='APPROVE'
+assert approved_review['open_findings']==[] and approved_review['baseline']==base['commit']
+assert [row['seq'] for row in approved_review['segments']]==[277,278,279]
+approved_spans=0
+for row in approved_review['segments']:
+    assert type(row['span_count']) is int and row['span_count']>0
+    part_raw=raw(B/'semantic-review/reviewed-final'/str(row['seq'])/'spec.json')
+    assert pin(part_raw)==dict(bytes=row['spec_bytes'],sha256=row['spec_sha256'])
+    part=json.loads(part_raw)
+    assert part['course']=='C05' and [s['seq'] for s in part['segments']]==[row['seq']]
+    assert len(part['segments'][0]['spans'])==row['span_count']
+    approved_spans+=row['span_count']
+assert approved_review['total_spans']==approved_spans
+assert retention['added_links']==approved_spans+3  # one canonical sentence anchor per segment"""
+assert p.count(oldret)==1;p=p.replace(oldret,newret)
+p=p.replace("meta=j(B/'semantic-review/review.json')\n","meta=j(B/'semantic-review/review.json')\nassert meta==approved_review\n")
+needle="sources={'data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz'}\n"
+assert p.count(needle)==1
+p=p.replace(needle,needle+"assert set(build['output_sha256'])==set(base['sha256']) and len(build['output_sha256'])==9\n")
+history="""HISTORY = (
+    'verify-complete-originals.py',
+    'proposal-verification/root-original-freeze-check.json',
+    'proposal-verification/execution-proof.json',
+    'verify-reconciliation-root.py',
+    'root-reconciliation-verification/execution-proof.json',
+    'root-reconciliation-verification/report.json',
+    'root-reconciliation-verification/resolved-spans.json',
+    'verify-final-semantic-review-root.py',
+    'root-final-semantic-review-verification/proof.json',
+)"""
+start=b.index('HISTORY = (');end=b.index('\n)',start)+2;b=b[:start]+history+b[end:]
+assert b.count("root-final-semantic-review-verification-v2/proof.json")==1
+b=b.replace('root-final-semantic-review-verification-v2/proof.json','root-final-semantic-review-verification/proof.json')
+# Unlike the previous batch, no current v1/v2 payload history is invented.
+needle="for name in ('freeze-final-payload-before-staging.py', 'freeze-final-payload-before-staging-v2.py'):"
+assert b.count(needle)==1;b=b.replace(needle,"for name in ('freeze-final-payload-before-staging.py',):")
+# The previous 'remaining' and next-source range are independent boundary literals.
+assert b.count("[(b'279', b'235', b'277-511')]")==1
+b=b.replace("[(b'279', b'235', b'277-511')]","[(b'279', b'232', b'280-511')]")
+# The mandatory explicit list is a full-history inventory; the unchanged copier
+# verifies every supplied original/copy pin and rereads all final bytes.
+b=b.replace("        explicit_inputs(Path(args.extra_inputs))\n","        # Root must supply full actual caller/source/resolver streams and every\n        # actual finding/correction history; HISTORY above is only universal interfaces.\n        explicit_inputs(Path(args.extra_inputs))\n")
+for label,old,new,name in [('payload',oldp,p,'freeze-final-payload-before-staging.py'),('banking',oldb,b,'bank_root_proofs_through279.py')]:
+ (D/name).write_text(new);compile(new,str(D/name),'exec')
+ (D/(label+'.diff.txt')).write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior-'+label,tofile='candidate-'+label)))
+# Static scope checks; do not import or execute either prepared candidate.
+assert "assert j(B/'semantic-review/span-head-allow-needed.json')=={}"in p
+assert "assert j(B/'semantic-review/bank-ready-errata.json')==[]"in p
+assert "'docs/ERRATA_REGISTER.md'"in p
+assert 'len(paths)==len(set(paths))==12'in p
+assert "approved_spans+3"in p
+assert "preservation['review_freeze'] == initial_review"in b
+assert "coverage == [(b'279', b'232', b'280-511')]"in b
+assert "root-final-semantic-review-verification-v2"not in b
+assert 'metadata-correction01'not in b
+assert "choices=['ordinary', 'final-whitespace']"in b
+assert "assert semantic_tree() == initial_review"in b
+assert "for name in ('batch', 'worktree', 'run-output', 'payload-manifest', 'payload-source-proof', 'untracked-capture-stem', 'extra-inputs')"in b
+# Parsing the actual historical approved schema supports the explicit future
+# contract; it supplies no current count, semantic decision or approval.
+prior=json.loads((D/'inputs/prior-approved-review-schema.json').read_bytes())
+assert all('span_count'in r and 'spec_bytes'in r and 'spec_sha256'in r for r in prior['segments'])
+save(D/'schema-contract.json',{'actual_historical_schema_only':{'baseline_type':type(prior['baseline']).__name__,'segment_keys':list(prior['segments'][0]),'total_spans_type':type(prior['total_spans']).__name__},'current_final_review_not_read':True,'current_final_counts_unbound':True,'required_current_segments':[277,278,279],'required_incoming_full_links':45126,'added_links_rule':'sum of approved per-segment span_count, individually byte-bound to approved reviewed-final specs, plus exactly3 canonical sentence anchors','allowance_contract':'Exactly{} remains required. Any actual nonempty allowance blocks; obtain separately reviewed correction preserving baseline/source/class gates, never fabricate an empty file.','history':list(ast.literal_eval(next(n.value for n in ast.parse(b).body if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='HISTORY'for t in n.targets))))})
+proof={'status':'PASS_PREPARATION_STATIC_ONLY','candidates':{n:pin((D/n).read_bytes())for n in ['freeze-final-payload-before-staging.py','bank_root_proofs_through279.py']},'BASE':base['commit'],'actual_incoming_links':base['full_links'],'actual_current_boundary':base['course_boundary'],'prospective_page':93,'prospective_coverage':279,'prospective_remaining':232,'next_uncovered':'280-511','actual_helper_Git_generator_build_query_test_calls':0,'syntax_checks':2,'material_changes_requiring_independent_review':['Replace fixed115 with approved spec-bound span counts plus3 anchors; preserve baseline45126','Require complete exact9-key baseline/build output inventory (7 generated outputs plus2 source archives)','Replace batch-specific correction-history requirements with root-supplied universal interfaces and explicit full extra-input history contract'],'all_consumed_original_copy_bytes_rechecked':True}
+for r in maps:assert Path(r['original']).read_bytes()==(D/r['copy']).read_bytes()
+save(D/'proof.json',proof);print(json.dumps(proof,indent=2))

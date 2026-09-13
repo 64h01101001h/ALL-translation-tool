@@ -1,0 +1,37 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/043.json",
+  "query_pin": {
+    "bytes": 1616,
+    "sha256": "0aa9d44ada82fe3ab6b99714be0d7fe423ec6595e74e3228d961deeae9ede90f"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "phyogs snga ma",
+    "phyogs snga ma"
+  ],
+  "rows": [
+    {
+      "id": 12043,
+      "wylie": "phyogs snga ma",
+      "tibetan": "ཕྱོགས་སྔ་མ",
+      "tibetan_source": null,
+      "acip": "PHYOGS SNGA MA",
+      "pronunciation": "chonga ma",
+      "pronunciation_source": null,
+      "sanskrit": "pūrva-pakṣa; {LC}pūrvapakṣa",
+      "hopkins_english": "opponent{BJ 11.1}",
+      "hgm_gloss": "[\"opponent\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C13\", \"C15\", \"C18\", \"GIE\", \"GK\", \"ILL\"]",
+      "corpus_n_segments": 27,
+      "raw": "{\"tibetan\": \"ཕྱོགས་སྔ་མ\", \"wylie\": \"phyogs snga ma\", \"wylie_variants\": [\"phyogs snga ma\"], \"tenses\": null, \"sanskrit\": \"pūrva-pakṣa; {LC}pūrvapakṣa\", \"hopkins_english\": \"opponent{BJ 11.1}\", \"hgm_gloss\": [\"opponent\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"chonga ma\", \"acip\": \"PHYOGS SNGA MA\", \"corpus_occurrences\": {\"courses\": [\"C13\", \"C15\", \"C18\", \"GIE\", \"GK\", \"ILL\"], \"n_segments\": 27}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

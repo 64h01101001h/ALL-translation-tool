@@ -1,0 +1,107 @@
+--- prior-staging
++++ prepared-staging
+@@ -1,4 +1,4 @@
+-"""PREPARED candidate: read-only through276 staging verification, no banking.
++"""PREPARED candidate: read-only through279 staging verification, no banking.
+ 
+ Requires actual final approvals/landing/builds/tests/banked proofs and an already
+ reviewed whitespace proof. Writes evidence only to a fresh external --output.
+@@ -16,8 +16,8 @@
+ import sys
+ import traceback
+ 
+-BASE = '81942cfc6022a785894d3cc2a20de81dc4c6f599'
+-PAGE, SEQS = 92, [274, 275, 276]
++BASE = 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
++PAGE, SEQS = 93, [277, 278, 279]
+ TESTS = {'constitution', 'gen_alignment_page', 'alignment_gate_coverage',
+          'alignment_builder', 'dictionary_exports', 'no_broken_words',
+          'no_split_syllables', 'no_phonetics_in_layer', 'no_degenerate_members',
+@@ -114,10 +114,10 @@
+     def __init__(self, args):
+         self.w = Path(args.worktree).resolve(strict=True)
+         self.b = Path(args.batch).resolve(strict=True)
+-        assert self.b.name == 'C05-274-276'
++        assert self.b.name == 'C05-277-279'
+         self.l = self.b / 'landing'
+         self.review = self.b / 'semantic-review'
+-        self.bank_rel = Path('data/alignment/reviews_c05/c5p92')
++        self.bank_rel = Path('data/alignment/reviews_c05/c5p93')
+         self.bank = self.w / self.bank_rel
+         self.out = Path(args.output).absolute()
+         assert not self.out.resolve().is_relative_to(self.w)
+@@ -308,8 +308,8 @@
+         current_untracked = self.git('ls-files', '--others', '--exclude-standard', '-z')[0]
+         baseline = self.obj(self.b / 'baseline.json')
+         assert baseline['commit'] == BASE and baseline['course_boundary'] == SEQS[0] - 1
+-        closed = self.obj(self.b.parent / 'integration/through273-root-closure/final/proof.json')
+-        assert closed['status'] == 'PASS_ROOT_CLOSED_THROUGH_C05_273' and closed['fixed_heads']['final_documentation'] == BASE
++        closed = self.obj(self.b.parent / 'integration/through276-root-closure/final-observed-main/proof.json')
++        assert closed['status'] == 'PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276' and closed['final_head'] == BASE
+ 
+         # Exact semantic freeze and actual approval identities; no semantic judgment.
+         freeze_raw = self.raw(self.review / 'freeze.json')
+@@ -371,13 +371,13 @@
+         assert self.raw(self.l / 'generator.stdout') == body and body
+         assert self.raw(self.l / 'generator.exit').strip() == b'0' and not self.raw(self.l / 'generator.stderr')
+         landed = self.obj(self.bank / 'landing.json')
+-        assert landed['course'] == 'C05' and landed['page'] == 'c5p92' and landed['segments'] == SEQS
++        assert landed['course'] == 'C05' and landed['page'] == 'c5p93' and landed['segments'] == SEQS
+         assert landed['generator_exit'] == 0 and landed['spec_sha256'] == sha(spec) and landed['body_sha256'] == sha(body)
+         self.require(self.bank_rel / 'landing.json', self.raw(self.bank / 'landing.json'))
+-        self.require('data/alignment/specs_c05/c5p92.json', spec)
+-        page = self.raw(self.w / 'data/alignment/pages_c05/c5p92.html')
++        self.require('data/alignment/specs_c05/c5p93.json', spec)
++        page = self.raw(self.w / 'data/alignment/pages_c05/c5p93.html')
+         assert body in page
+-        self.require('data/alignment/pages_c05/c5p92.html', page)
++        self.require('data/alignment/pages_c05/c5p93.html', page)
+ 
+         # Every source alias is reopened; historical originals use their exact commit.
+         manifest = self.obj(self.review / 'original-to-copy-manifest.json')
+@@ -407,20 +407,20 @@
+             new = self.raw(self.w / rel)
+             self.pincheck(old, registration[before_key]); self.pincheck(new, registration[after_key])
+             if rel.startswith('tools/'):
+-                needle = b'    "c5p91": [271, 272, 273],\n'
++                needle = b'    "c5p92": [274, 275, 276],\n'
+                 assert old.count(needle) == 1
+-                assert new == old.replace(needle, needle + b'    "c5p92": [274, 275, 276],\n')
++                assert new == old.replace(needle, needle + b'    "c5p93": [277, 278, 279],\n')
+             else:
+-                coverage = b'Reviewed campaign coverage: 273 of 511 source segments.'
+-                link = '<li><a href="c5p91.html">Page 91 · segments 271–273</a></li>'.encode()
++                coverage = b'Reviewed campaign coverage: 276 of 511 source segments.'
++                link = '<li><a href="c5p92.html">Page 92 · segments 274–276</a></li>'.encode()
+                 assert old.count(coverage) == old.count(link) == 1
+-                assert new == old.replace(coverage, b'Reviewed campaign coverage: 276 of 511 source segments.').replace(link, link + '\n<li><a href="c5p92.html">Page 92 · segments 274–276</a></li>'.encode())
++                assert new == old.replace(coverage, b'Reviewed campaign coverage: 279 of 511 source segments.').replace(link, link + '\n<li><a href="c5p93.html">Page 93 · segments 277–279</a></li>'.encode())
+             self.require(rel, new)
+-        previous = 'data/alignment/pages_c05/c5p91.html'
++        previous = 'data/alignment/pages_c05/c5p92.html'
+         old = self.old(previous)
+         nav = b'&larr; Previous</a></div>'
+         assert old.count(nav) == 2
+-        self.require(previous, old.replace(nav, b"&larr; Previous</a><a href='c5p92.html'>Next &rarr;</a></div>"))
++        self.require(previous, old.replace(nav, b"&larr; Previous</a><a href='c5p93.html'>Next &rarr;</a></div>"))
+ 
+         # Actual approved errata/allowance changes, never assumed present.
+         register = self.obj(self.l / 'review-copy-and-register-proof.json')
+@@ -472,7 +472,7 @@
+         assert not old_links - new_links
+         added = [json.loads(k) for k, n in (new_links - old_links).items() for _ in range(n)]
+         assert len(added) == totals['spans'] + len(SEQS)
+-        assert all(x['course'] == 'C05' and x['seg'] in SEQS and x['page'] == 'c5p92' for x in added)
++        assert all(x['course'] == 'C05' and x['seg'] in SEQS and x['page'] == 'c5p93' for x in added)
+         assert sum(x['eng'] is None for x in added) == totals['nulls']
+         norm = lambda value: ' '.join(value.split()) if value is not None else None
+         sentence_ids = {f's{seq}S' for seq in SEQS}
+@@ -495,7 +495,7 @@
+         for field in ('notes', 'trees'):
+             assert all(now[field].get(k) == v for k, v in before[field].items())
+         retention = self.obj(self.l / 'retention-source-check.json')
+-        assert retention['baseline_commit'] == BASE and retention['segments'] == SEQS and retention['page'] == 'c5p92'
++        assert retention['baseline_commit'] == BASE and retention['segments'] == SEQS and retention['page'] == 'c5p93'
+         assert retention['added_links'] == len(added) and retention['reviewed_analyst_spans'] == totals['spans']
+         assert retention['full_links'] == len(now['links']) and retention['null_exponents'] == sum(x['eng'] is None for x in now['links'])
+         for flag in ('prior_notes_trees_evidence_and_acip_retained', 'prior_csv_content_and_references_retained', 'source_hashes_unchanged', 'review_tuples_and_source_ranges_match', 'navigation_targets_exist'):

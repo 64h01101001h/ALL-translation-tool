@@ -1,0 +1,31 @@
+{
+  "status": "CANDIDATE_ONLY_REQUIRES_SEPARATE_NON_AUTHOR_REVIEW",
+  "scope": "CP276-01 evidence JSON parsing in second and vocab; original second/silent task label corrected by parent",
+  "production_candidates": {
+    "candidate/build_drill_pack.cpp": "tools/build_drill_pack.cpp",
+    "candidate/drill_evidence_json.h": "tools/drill_evidence_json.h"
+  },
+  "no_current_repository_installation": true,
+  "tests": {
+    "harness": "tests/harness.cpp",
+    "cases": "tests/cases.json",
+    "runner": "tests_run.py",
+    "old_scanner": "red/parser_under_test.h",
+    "candidate_consumer_prefixes": "candidate/parser_under_test.h",
+    "extraction_provenance": ["tests/source-extraction.json", "tests/candidate-extraction.json"],
+    "red": "red-results/result.json",
+    "green": "green-results/result.json",
+    "scope_limits": "No converter, FTS, factories, allcore linking or whole-pack output. Candidate parser is called directly and each actual consumer prefix is exercised. std::sort ties remain platform behavior."
+  },
+  "dependencies": "Existing allcore PUBLIC SQLite linkage. Actual linked SQLite must support JSON functions and preserve the characterized traversal order; no downloaded libraries or new CMake link target proposed.",
+  "failure_behavior": "Malformed/missing/schema-invalid evidence and unsupported counts fail explicitly with return3 at either evidence consumer before writing the pack; never default n1 or silently emit partial arrays.",
+  "preserved_behavior": "First300 eligible second heads; existing descending-count comparator/top12 cap; vocab multiword40-byte filter, first maximum count including original empty-English behavior, converter/FTS8 and first2 distinct usable hits,400 successes. All other arrays, full-bank silent/peel, labels, RNG, source paths, output escaper and write behavior unchanged.",
+  "future_release_gates": [
+    "Separate non-author full candidate/header/diff/test/provenance review",
+    "Root accepted exact current inputs and full source-to-new-binary build provenance; this preparation produces no production executable",
+    "Actual bounded tests on the released target SQLite/compiler, including full input ordering and decoded source fidelity",
+    "Separately authorized one private full-pack generation only after exact source/input/runtime release",
+    "All11 arrays and every emitted field/order/selection/source attribution checked under the approved consumer contract; any corruption or unexplained loss fails fidelity",
+    "No installation/native/phone/MAIN integration claim from private parser or pack evidence"
+  ]
+}

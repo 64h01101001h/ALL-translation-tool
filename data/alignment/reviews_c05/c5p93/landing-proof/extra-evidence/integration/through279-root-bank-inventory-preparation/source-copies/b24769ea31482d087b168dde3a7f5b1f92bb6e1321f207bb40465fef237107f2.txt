@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/verify-final-semantic-review-root.py", line 62, in <module>
+    assert {str(p.relative_to(folder)):pin(p) for p in folder.rglob('*') if p.is_file() and p!=folder/'freeze.json'}==f['files']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

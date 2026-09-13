@@ -1,0 +1,12 @@
+{
+  "angle": "english",
+  "source": "hgm-full-rows.json",
+  "term": "las gzugs",
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "las gzugs",
+    "las gzugs"
+  ],
+  "rows": [],
+  "independently_reopened": true
+}

@@ -1,0 +1,8 @@
+from pathlib import Path
+import json,hashlib
+b=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279');r=b/'landing-runs/07-ctest17';l=b/'landing';execution=json.loads((r/'execution.json').read_bytes());assert execution['exit']==0 and not(r/'stderr.bin').read_bytes()
+records=[]
+for old,new in [('stdout.bin','ctest-17.stdout'),('stderr.bin','ctest-17.stderr'),('exit.txt','ctest-17.exit'),('stdin.bin','ctest-17.stdin.bin'),('command.json','ctest-17.command.json'),('execution.json','ctest-17.execution.json')]:
+ d=l/new;assert not d.exists();raw=(r/old).read_bytes();d.write_bytes(raw);assert d.read_bytes()==raw;records.append(dict(original=str(r/old),copy=str(d),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+(l/'ctest-17-raw-transport.json').write_text(json.dumps(dict(status='PASS',records=records,scope='Actual captured CTest streams/argv/wall_seconds copied unchanged; no re-execution'),indent=2)+'\n')
+print((r/'stdout.bin').read_text());print('actual outer wall seconds',execution['wall_seconds'])

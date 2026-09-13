@@ -1,0 +1,15 @@
+from pathlib import Path
+import datetime,json,os,subprocess
+B=Path(__file__).resolve().parent;W=B.parents[1]/'campaign-worktree';L=B/'landing';stem=L/'untracked-before-banking'
+assert (L/'staged-payload-manifest.json').is_file()
+assert not (L/'root-proof-copy-manifest-before-whitespace.json').exists()
+assert not any(Path(str(stem)+x).exists() for x in ['.stdout','.stderr','.exit','.command.json','.execution.json'])
+argv=['git','ls-files','--others','--exclude-standard','-z']
+meta=dict(argv=argv,cwd=str(W),started_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),environment_overrides={'GIT_OPTIONAL_LOCKS':'0'})
+Path(str(stem)+'.command.json').write_text(json.dumps(meta,indent=2)+'\n')
+r=subprocess.run(argv,cwd=W,input=b'',capture_output=True,env={**os.environ,'GIT_OPTIONAL_LOCKS':'0'})
+for suffix,raw in [('.stdout',r.stdout),('.stderr',r.stderr),('.exit',f'{r.returncode}\n'.encode()),('.stdin.bin',b'')]:Path(str(stem)+suffix).write_bytes(raw)
+meta.update(finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=r.returncode,stdout_bytes=len(r.stdout),stderr_bytes=len(r.stderr))
+Path(str(stem)+'.execution.json').write_text(json.dumps(meta,indent=2)+'\n')
+assert r.returncode==0 and not r.stderr and r.stdout.endswith(b'\0')
+print(json.dumps(dict(status='PASS',paths=len(r.stdout.split(b'\0'))-1,stem=str(stem),scope='Actual pre-ordinary and pre-stage raw untracked capture; no Git mutation.')))

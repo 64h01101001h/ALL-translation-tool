@@ -1,0 +1,37 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/064.json",
+  "query_pin": {
+    "bytes": 2314,
+    "sha256": "823214d41a4b76175a27ca87bd588977fd4f9787da3af7a67eed77c48b934e0f"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "las kyi dbang gis",
+    "las kyi dbang gis"
+  ],
+  "rows": [
+    {
+      "id": 19353,
+      "wylie": "las kyi dbang gis",
+      "tibetan": "ལས་ཀྱི་དབང་གིས",
+      "tibetan_source": null,
+      "acip": "LAS KYI DBANG GIS",
+      "pronunciation": "le kyi wang gi",
+      "pronunciation_source": null,
+      "sanskrit": "{MSA} karmādhipatyena; {LC}karmāyattā",
+      "hopkins_english": "by the power of actions/karma",
+      "hgm_gloss": "[\"because of the force of past deeds done\", \"the power of the past deeds\", \"through the power of karma\", \"by the force of karma\", \"by force of his karma\", \"due to the force of karma\", \"karma forces\", \"forced to do so by their karma\", \"through the karma\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C03\", \"C05\", \"C08\", \"C09\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P1\", \"P7\"]",
+      "corpus_n_segments": 38,
+      "raw": "{\"tibetan\": \"ལས་ཀྱི་དབང་གིས\", \"wylie\": \"las kyi dbang gis\", \"wylie_variants\": [\"las kyi dbang gis\"], \"tenses\": null, \"sanskrit\": \"{MSA} karmādhipatyena; {LC}karmāyattā\", \"hopkins_english\": \"by the power of actions/karma\", \"hgm_gloss\": [\"because of the force of past deeds done\", \"the power of the past deeds\", \"through the power of karma\", \"by the force of karma\", \"by force of his karma\", \"due to the force of karma\", \"karma forces\", \"forced to do so by their karma\", \"through the karma\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"le kyi wang gi\", \"acip\": \"LAS KYI DBANG GIS\", \"corpus_occurrences\": {\"courses\": [\"C03\", \"C05\", \"C08\", \"C09\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P1\", \"P7\"], \"n_segments\": 38}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

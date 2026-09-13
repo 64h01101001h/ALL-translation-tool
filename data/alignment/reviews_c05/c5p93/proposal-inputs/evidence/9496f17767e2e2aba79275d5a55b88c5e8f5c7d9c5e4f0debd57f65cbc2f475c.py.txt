@@ -1,0 +1,18 @@
+from pathlib import Path
+import json,gzip,hashlib
+O=Path(__file__).resolve().parent;B=O.parents[1];ROOT=B.parents[1];W=ROOT/'campaign-worktree';E=O/'evidence'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(n,x):(E/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+(O/'lexical-capture01/failed-code.py').write_bytes((O/'capture_lexical.py').read_bytes())
+hits=json.loads((E/'hgm-full-rows.json').read_bytes())['results'];master=json.loads(gzip.decompress((O/'inputs/hgm_dictionary_v27_2.json.gz').read_bytes()));checks=[]
+for t,rows in hits.items():
+ for r in rows:
+  raw=json.loads(r['raw']);assert raw==master['unified_entries'][r['id']-1]
+  gloss=json.loads(r['hgm_gloss'])if r['hgm_gloss']is not None else None
+  assert gloss==raw.get('hgm_gloss');checks.append(dict(term=t,id=r['id'],full_raw_equal=True,gloss_field_exact=True,gloss_was_SQL_NULL=r['hgm_gloss']is None))
+save('master-source-proof.json',dict(checks=checks,master_bytes=len((O/'inputs/hgm_dictionary_v27_2.json.gz').read_bytes()),master_sha256=sha((O/'inputs/hgm_dictionary_v27_2.json.gz').read_bytes()),correction='Actual SQL NULL retained as null; not coerced to a list. All previous full query results reused byte-exact, zero new SQL.'))
+maps=[]
+for p in [W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py',W/'docs/errata_register.json',ROOT/'campaign-artifacts/run_generator_readonly.py']:
+ b=p.read_bytes();q=E/p.name;q.write_bytes(b);assert q.read_bytes()==p.read_bytes();maps.append(dict(original=str(p),copy=str(q.relative_to(O)),bytes=len(b),sha256=sha(b)))
+save('input-manifest.json',maps)
+q=json.loads((E/'corpus-full-queries.json').read_bytes());print(json.dumps(dict(status='PASS',hgm_terms=len(hits),hgm_rows=sum(map(len,hits.values())),corpus_queries=len(q),corpus_rows=sum(len(r['rows'])for r in q),new_SQL=0),indent=2))

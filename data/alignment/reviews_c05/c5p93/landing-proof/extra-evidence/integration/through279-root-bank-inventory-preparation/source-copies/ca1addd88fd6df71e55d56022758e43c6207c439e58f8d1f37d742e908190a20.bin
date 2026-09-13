@@ -1,0 +1,50 @@
+FFFFF
+======================================================================
+FAIL: test_actual_config_release_validates_without_execution (__main__.ReleaseTests.test_actual_config_release_validates_without_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/test_release_boundary.py", line 25, in test_actual_config_release_validates_without_execution
+    self.assertIsNotNone(M);a=self.args();c,summary,out,raw=M.release_inputs(a)
+    ~~~~~~~~~~~~~~~~~~~~^^^
+AssertionError: unexpectedly None
+
+======================================================================
+FAIL: test_existing_or_inside_protected_output_rejected (__main__.ReleaseTests.test_existing_or_inside_protected_output_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/test_release_boundary.py", line 20, in test_existing_or_inside_protected_output_rejected
+    self.assertIsNotNone(M)
+    ~~~~~~~~~~~~~~~~~~~~^^^
+AssertionError: unexpectedly None
+
+======================================================================
+FAIL: test_import_has_no_runtime_outputs_or_calls (__main__.ReleaseTests.test_import_has_no_runtime_outputs_or_calls)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/test_release_boundary.py", line 12, in test_import_has_no_runtime_outputs_or_calls
+    self.assertIsNotNone(M);self.assertFalse(hasattr(M,'calls'));self.assertTrue(callable(M.verify));self.assertTrue(callable(M.main))
+    ~~~~~~~~~~~~~~~~~~~~^^^
+AssertionError: unexpectedly None
+
+======================================================================
+FAIL: test_missing_release_rejected (__main__.ReleaseTests.test_missing_release_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/test_release_boundary.py", line 14, in test_missing_release_rejected
+    self.assertIsNotNone(M);a=self.args();a.execute_reviewed_verification=False
+    ~~~~~~~~~~~~~~~~~~~~^^^
+AssertionError: unexpectedly None
+
+======================================================================
+FAIL: test_wrong_config_pin_rejected (__main__.ReleaseTests.test_wrong_config_pin_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/test_release_boundary.py", line 17, in test_wrong_config_pin_rejected
+    self.assertIsNotNone(M);a=self.args();a.config_sha256='0'*64
+    ~~~~~~~~~~~~~~~~~~~~^^^
+AssertionError: unexpectedly None
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+FAILED (failures=5)

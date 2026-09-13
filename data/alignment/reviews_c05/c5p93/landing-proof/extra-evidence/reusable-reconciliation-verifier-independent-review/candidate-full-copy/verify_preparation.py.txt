@@ -1,0 +1,42 @@
+"""Preparation-only byte conservation and pure syntax/config evidence. No checker, SQL or Git execution."""
+from pathlib import Path
+import ast,hashlib,json,textwrap,difflib
+P=Path(__file__).resolve().parent
+
+def pin(raw):return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+
+def emit(n,obj):(P/n).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+old=(P/'prior-verifier.py.txt').read_bytes();new=(P/'verify_reconciliation.py').read_bytes();ledger=json.loads((P/'parameter-extraction.json').read_bytes())
+# Exactly undo wrapping and all substitutions; the old import/header is independently retained in full.
+body=new.decode().split('def verify(C,summary,output,config_raw):\n',1)[1].split('\ndef main():',1)[0]
+body=textwrap.dedent(body);assert body.endswith('\n\n')
+for r in reversed(ledger['changes']):
+ assert body.count(r['new'])==r.get('all',1);body=body.replace(r['new'],r['old'])
+prefix,originalbody=old.decode().split("B=Path(__file__).resolve().parent;",1);originalbody="B=Path(__file__).resolve().parent;"+originalbody
+assert body==originalbody
+restored=(prefix+body).encode();assert restored==old
+full_diff=''.join(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile='prior-verifier.py.txt',tofile='verify_reconciliation.py'))
+assert full_diff==(P/'prior-to-candidate.diff').read_text()
+# Complete selected algorithm subtrees are unchanged after parameter extraction.
+a=ast.parse(old);b=ast.parse(new);v=next(x for x in b.body if isinstance(x,ast.FunctionDef) and x.name=='verify')
+unchanged=[]
+for name in ['read','bp','pin','check','save','run','frozen','SourceAnchors']:
+ x=next(n for n in a.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))and n.name==name)
+ y=next(n for n in v.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))and n.name==name)
+ assert ast.dump(x,include_attributes=False)==ast.dump(y,include_attributes=False);unchanged.append(name)
+syntax=[]
+for n in ['verify_reconciliation.py','config_contract.py','test_config_contract.py','test_complete_config.py','test_release_boundary.py']:
+ raw=(P/n).read_bytes();compile(raw,str(P/n),'exec');syntax.append({'path':n,**pin(raw)})
+maps=json.loads((P/'original-to-copy-manifest.json').read_bytes());checked=[]
+for r in maps:
+ src=Path(r['original']);dst=P/r['copy'];a=src.read_bytes();b=dst.read_bytes();assert a==b and pin(a)=={k:r[k]for k in ['bytes','sha256']};assert src.read_bytes()==a and dst.read_bytes()==b
+ checked.append({'original':str(src),'copy':str(dst),**pin(a)})
+external=json.loads((P/'fixture-provenance.json').read_bytes())['large_external_pins']
+for r in external.values():assert pin(Path(r['path']).read_bytes())=={k:r[k]for k in ['bytes','sha256']}
+import config_contract
+c=json.loads((P/'completed-277-config.json').read_bytes());summary=config_contract.validate_config(c)
+assert (P/'tests-final/exit').read_bytes()==b'0\n'
+helper_before=(P/'history/helper-v1/config_contract.py').read_text();helper_after=(P/'config_contract.py').read_text()
+(P/'helper-v1-to-final.diff').write_text(''.join(difflib.unified_diff(helper_before.splitlines(True),helper_after.splitlines(True),fromfile='history/helper-v1/config_contract.py',tofile='config_contract.py')))
+emit('preparation-proof.json',{'status':'PASS_PREPARATION_ONLY','candidate':pin(new),'original_verifier':pin(old),'full_inverse_bytes_exact':True,'full_diff_exact':True,'unchanged_ast_subtrees':unchanged,'syntax_compile_only':syntax,'all_source_copy_pairs':checked,'original_copy_records':len(maps),'unique_copies':len({r['copy']for r in maps}),'large_external_pins_full_read':external,'config_summary':summary,'tests':29,'full_checker_executions':0,'sql_replays':0,'canonical_replays':0,'git_commands':0,'semantic_approval':False,'adoption':False})
+print(json.dumps({'status':'PASS_PREPARATION_ONLY','full_inverse_bytes_exact':True,'original_copy_records':len(maps),'unique_copies':len({r['copy']for r in maps}),'tests':29,'runtime_executions':0}))

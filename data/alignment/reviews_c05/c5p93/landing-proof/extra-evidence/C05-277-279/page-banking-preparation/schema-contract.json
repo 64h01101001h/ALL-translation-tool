@@ -1,0 +1,38 @@
+{
+  "actual_historical_schema_only": {
+    "baseline_type": "str",
+    "segment_keys": [
+      "seq",
+      "span_count",
+      "null_count",
+      "word_pair_count",
+      "spec_bytes",
+      "spec_sha256",
+      "body_bytes",
+      "body_sha256",
+      "generator_exit"
+    ],
+    "total_spans_type": "int"
+  },
+  "current_final_review_not_read": true,
+  "current_final_counts_unbound": true,
+  "required_current_segments": [
+    277,
+    278,
+    279
+  ],
+  "required_incoming_full_links": 45126,
+  "added_links_rule": "sum of approved per-segment span_count, individually byte-bound to approved reviewed-final specs, plus exactly3 canonical sentence anchors",
+  "allowance_contract": "Exactly{} remains required. Any actual nonempty allowance blocks; obtain separately reviewed correction preserving baseline/source/class gates, never fabricate an empty file.",
+  "history": [
+    "verify-complete-originals.py",
+    "proposal-verification/root-original-freeze-check.json",
+    "proposal-verification/execution-proof.json",
+    "verify-reconciliation-root.py",
+    "root-reconciliation-verification/execution-proof.json",
+    "root-reconciliation-verification/report.json",
+    "root-reconciliation-verification/resolved-spans.json",
+    "verify-final-semantic-review-root.py",
+    "root-final-semantic-review-verification/proof.json"
+  ]
+}

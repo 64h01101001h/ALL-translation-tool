@@ -1,0 +1,19 @@
+--- v1.py
++++ v2.py
+@@ -59,7 +59,15 @@
+         for seq in SEQS:
+             folder=B/category/str(seq)
+             f=read(folder/'freeze.json')
+-            assert {str(p.relative_to(folder)):pin(p) for p in folder.rglob('*') if p.is_file() and p!=folder/'freeze.json'}==f['files']
++            values=f['files']
++            if category=='tibetan':
++                assert isinstance(values,list) and all(set(r)=={'path','bytes','sha256'} for r in values)
++                assert len({r['path'] for r in values})==len(values)
++                expected={r['path']:{k:r[k] for k in ['bytes','sha256']} for r in values}
++            else:
++                assert isinstance(values,dict)
++                expected=values
++            assert {str(p.relative_to(folder)):pin(p) for p in folder.rglob('*') if p.is_file() and p!=folder/'freeze.json'}==expected
+     structural=read(R/'structural-proof.json')
+     assert structural['status']=='PASS' and structural['final_spans']==146 and structural['original_identities']==271
+     assert structural['nulls']==8 and structural['d7']==4 and structural['nonnull_d5']==94

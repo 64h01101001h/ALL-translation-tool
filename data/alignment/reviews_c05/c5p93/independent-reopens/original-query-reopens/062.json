@@ -1,0 +1,37 @@
+{
+  "original_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/reconciled/277/original-query-reopens/062.json",
+  "query_pin": {
+    "bytes": 1672,
+    "sha256": "fc72bb326c97893ff0dc1b8141d8fb6f2867f39b3965449e5d80b98a2093d7f7"
+  },
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "rnag khrag",
+    "rnag khrag"
+  ],
+  "rows": [
+    {
+      "id": 23908,
+      "wylie": "rnag khrag",
+      "tibetan": "རྣག་ཁྲག",
+      "tibetan_source": null,
+      "acip": "RNAG KHRAG",
+      "pronunciation": "naktrak",
+      "pronunciation_source": null,
+      "sanskrit": "{LC}pūyaśoṇita",
+      "hopkins_english": null,
+      "hgm_gloss": "[\"pus and blood\", \"blood and pus\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested (not in Great Dictionary)",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C05\", \"C15\", \"C16\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"]",
+      "corpus_n_segments": 91,
+      "raw": "{\"tibetan\": \"རྣག་ཁྲག\", \"wylie\": \"rnag khrag\", \"wylie_variants\": [\"rnag khrag\"], \"tenses\": null, \"sanskrit\": \"{LC}pūyaśoṇita\", \"hopkins_english\": null, \"hgm_gloss\": [\"pus and blood\", \"blood and pus\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"naktrak\", \"acip\": \"RNAG KHRAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C05\", \"C15\", \"C16\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"], \"n_segments\": 91}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1,
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "query_only": 1
+}

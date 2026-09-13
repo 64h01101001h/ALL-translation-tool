@@ -1,0 +1,43 @@
+from pathlib import Path
+import subprocess, os, json, hashlib, sys, importlib.util
+sys.dont_write_bytecode=True
+batch=Path(__file__).resolve().parents[2]
+wt=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+sys.path.insert(0,str(wt/'tools'))
+definition=importlib.util.spec_from_file_location('canonical_generator',wt/'tools/gen_alignment_page.py')
+g=importlib.util.module_from_spec(definition);definition.loader.exec_module(g)
+sources={x['seq']:x for x in json.loads((batch/'source.json').read_text())}
+def pin(p):return {'path':str(p),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+for seq in map(int,sys.argv[1:]):
+    directory=batch/'tibetan'/str(seq);source=sources[seq]
+    attempts=directory/'attempts';attempts.mkdir(exist_ok=True)
+    number=1
+    while (attempts/f'attempt{number:02}').exists():number+=1
+    attempt=attempts/f'attempt{number:02}';attempt.mkdir()
+    raw=(directory/'spec.json').read_bytes()
+    (attempt/'spec.json').write_bytes(raw)
+    (attempt/'intended-spans.json').write_bytes((directory/'intended-spans.json').read_bytes())
+    argv=[sys.executable,'-B',str(batch/'tibetan/277/run-canonical-readonly.py')]
+    proc=subprocess.run(argv,input=raw,cwd=wt,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},capture_output=True)
+    (attempt/'generator.stdout').write_bytes(proc.stdout);(attempt/'generator.stderr').write_bytes(proc.stderr)
+    proof={'command':argv,'cwd':str(wt),'exit_code':proc.returncode,'stdout_bytes':len(proc.stdout),'stdout_sha256':hashlib.sha256(proc.stdout).hexdigest(),'stderr_bytes':len(proc.stderr),'stderr_sha256':hashlib.sha256(proc.stderr).hexdigest(),'spec_sha256':hashlib.sha256(raw).hexdigest(),'canonical_generator':pin(wt/'tools/gen_alignment_page.py'),'wrapper':pin(batch/'tibetan/277/run-canonical-readonly.py')}
+    (attempt/'generator-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+    print(seq,'EXIT',proc.returncode,'STDERR',proc.stderr.decode(),'BODY_BYTES',len(proc.stdout))
+    assert proc.returncode==0 and not proc.stderr
+    segment=json.loads(raw)['segments'][0];spans=segment['spans'];byid={x['id']:x for x in spans}
+    tr=g.resolve(source['wylie'],spans,'tib',seq)
+    es=g.with_members(spans,[byid[x] for x in segment['eng_order']],source['english'])
+    er=g.resolve(source['english'],es,'eng',seq)
+    intended=json.loads((directory/'intended-spans.json').read_text());checks=[]
+    for item in intended:
+        ident=item['id'];actual={'tib_range':list(tr[ident]),'eng_range':list(er[ident]) if item['eng'] is not None else None}
+        check={'id':ident,**actual,'intended_tib':item['tib_range'],'intended_eng':item['eng_range'],'match':actual['tib_range']==item['tib_range'] and actual['eng_range']==item['eng_range']}
+        checks.append(check)
+        print(seq,ident,item['tib'],'=>',repr(item['eng']),actual,'PASS' if check['match'] else 'FAIL')
+    proof.update(intended_occurrences=checks,span_count=len(spans),null_count=sum(x['eng'] is None for x in spans),d5_nonnull=sum(x['d']==5 and x['eng'] is not None for x in spans),all_occurrences_match=all(x['match'] for x in checks))
+    (attempt/'occurrence-proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+    assert proof['all_occurrences_match']
+    (directory/'body.html').write_bytes(proc.stdout)
+    assert (directory/'body.html').read_bytes()==(attempt/'generator.stdout').read_bytes()
+    (directory/'generator.stdout').write_bytes(proc.stdout);(directory/'generator.stderr').write_bytes(proc.stderr)
+    (directory/'generator-proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')

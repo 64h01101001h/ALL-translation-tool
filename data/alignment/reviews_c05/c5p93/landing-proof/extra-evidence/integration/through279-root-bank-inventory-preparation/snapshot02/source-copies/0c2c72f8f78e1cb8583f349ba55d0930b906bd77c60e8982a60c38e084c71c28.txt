@@ -1,0 +1,86 @@
+"""Exact parameter extraction, with invertible complete before/after replacement ledger."""
+from pathlib import Path
+import json,hashlib,difflib
+P=Path(__file__).resolve().parent
+old=(P/'prior-verifier.py.txt').read_text();prefix,body=old.split("B=Path(__file__).resolve().parent;",1);body="B=Path(__file__).resolve().parent;"+body
+originalbody=body;changes=[]
+def rep(a,b):
+ global body
+ assert body.count(a)==1,(a,body.count(a));body=body.replace(a,b);changes.append({'old':a,'new':b})
+rep("B=Path(__file__).resolve().parent;W=B.parents[1]/'campaign-worktree';D=B/'reconciled/277'\nO=B/'root-reconciliation-verification';O.mkdir()", "B=Path(C['batch']);W=Path(C['worktree']);D=Path(C['shared_directory']);SEQS=C['sequences'];COURSE=C['course']\nE=C['evidence'];O=output;O.mkdir()\ndef ep(role):return Path(E[role]['path'])\nfreeze_rows=C['originals']+C['reconciled']")
+rep("proof=dict(status='RUNNING',role='Root authored preparation-informed Tibetan originals; mechanical/source verification only.',started_at=datetime.datetime.now(datetime.timezone.utc).isoformat());db=None", "proof=dict(status='RUNNING',role=C['operator_role'],semantic_approval=False,started_at=datetime.datetime.now(datetime.timezone.utc).isoformat());db=None")
+rep("base=read(B/'baseline.json');assert run(['git','rev-parse','HEAD'],'head').decode().strip()==base['commit']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'", "base=summary['baseline']\n (O/'config.json').write_bytes(config_raw)\n for name in ['verify_reconciliation.py','config_contract.py']:(O/name).write_bytes((Path(__file__).resolve().parent/name).read_bytes())\n save('config-validation.json',summary)\n for ref in E.values():pinned(ref)\n assert run(['git','rev-parse','HEAD'],'head').decode().strip()==base['commit']\n assert run(['git','status','--short'],'status-before')==pinned(C['status_capture'])")
+rep("freezes=[frozen(B/a/str(s)) for a in ['tibetan','english','reconciled'] for s in [277,278,279]]\n for seq,h in [(277,'5fc4043d41e982c5500df069c2948ac5d91f837deba6b8fe5987b36f9d0ed05e'),(278,'624f177987122e3a6c85c01e858a7b545e620176e53eaa90f9e6d3a3a31c0959'),(279,'64d832addc6a1015856c451484901db2fc7d383c327cf73770b13feaf00e7611')]:\n  assert pin(B/f'reconciled/{seq}/freeze.json')['sha256']==h", "freezes=[frozen(Path(row['directory'])) for row in freeze_rows]\n for row in freeze_rows:pinned(row['freeze'])")
+for a,b in [("D/'reference-access.json'","ep('reference_access')"),("D/'original-to-copy-manifest.json'","ep('copy_manifest')"),("D/'logical-aliases.json'","ep('aliases')"),("D/'governing-fixed-git-provenance.json'","ep('governing')"),("B/'proposal-verification/root-resolved-spans.json'","ep('original_identities')"),("D/'independent-source-context-full-rows.json'","ep('source_context')"),("B/'source.json'","ep('source_snapshot')"),("D/'independent-physical-extents.json'","ep('physical')")]:rep(a,b)
+rep(";assert len(mappings)==618", ";assert mappings==json.loads(pinned(E['copy_manifest']))")
+rep("assert len(originals)==len(original_records)==271", "assert len(originals)==len(original_records)==summary['original_count']")
+# Multiple occurrence paths: retain every exact instance and reverse each as one recorded replacement.
+for a,b in [("W/'build/hgm_spine_v27_2.db'","ep('database')"),("W/'tools/gen_alignment_page.py'","ep('generator')")]:
+ n=body.count(a);assert n>0;body=body.replace(a,b);changes.append({'old':a,'new':b,'all':n})
+rep("db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',270,285))", "db.execute(C['context']['sql'],C['context']['parameters'])")
+rep("for s in [277,278,279]]==read", "for s in SEQS]==read")
+rep("W/'data/hgm_dictionary_v27_2.json.gz'", "ep('master')")
+rep("W/'data/full_parallel_corpus_v32.json.gz'", "ep('corpus')")
+rep("queryfiles=sorted((D/'original-query-reopens').glob('*.json'))+sorted((D/'independent-queries').glob('*.json'));assert len(queryfiles)==217", "queryfiles=[Path(r['file']['path']) for r in C['queries']];assert len(queryfiles)==summary['query_count']")
+rep("for p in queryfiles:\n  q=read(p);assert q['sql'].lstrip().upper().startswith('SELECT ')", "for binding,p in zip(C['queries'],queryfiles):\n  q=json.loads(pinned(binding['file']));bind_query(q,json.loads(pinned(binding['descriptor'])),binding['binding'])\n  assert q['sql'].lstrip().upper().startswith('SELECT ')")
+rep("if 'count' in q:assert len(actual)==q['count'],str(p)\n  else:assert p.parent.name=='original-query-reopens' and 81<=int(p.stem)<=150", "assert len(actual)==bind_query(q,json.loads(pinned(binding['descriptor'])),binding['binding'])")
+rep("bycourse['C05'][r['seq']-1]", "bycourse[COURSE][r['seq']-1]")
+rep(";assert len(physical)==23", ";assert physical==json.loads(pinned(E['physical']))")
+rep("wrapper=D/'run-canonical-readonly.py'", "wrapper=ep('wrapper')")
+rep("for seq,count,nulls,d5 in [(277,61,6,39),(278,21,0,14),(279,64,2,41)]:\n  d=B/f'reconciled/{seq}'", "for record in C['reconciled']:\n  seq=record['seq'];count=record['counts']['spans'];nulls=record['counts']['nulls'];d5=record['counts']['d5_nonnull']\n  d=Path(record['directory'])")
+rep("spec['course']=='C05'", "spec['course']==COURSE")
+rep("allow['pages_c05']", "allow['pages_'+COURSE.lower()]")
+rep("assert len(finals)==146 and len(seen)==len(set(seen))==271 and set(seen)==set(originals)", "assert len(finals)==summary['totals']['spans'] and len(seen)==len(set(seen))==summary['original_count'] and set(seen)==set(originals)")
+rep("assert freezes==[frozen(B/a/str(s)) for a in ['tibetan','english','reconciled'] for s in [277,278,279]]", "assert freezes==[frozen(Path(row['directory'])) for row in freeze_rows]\n assert validate_config(C)==summary\n for ref in E.values():pinned(ref)")
+rep("assert run(['git','status','--short'],'status').decode()=='?? data/teaching/dcc_captions\\n'", "assert run(['git','status','--short'],'status')==pinned(C['status_capture'])\n assert run(['git','rev-parse','HEAD'],'head-after').decode().strip()==base['commit']")
+rep("original_identities=271,final_spans=146,nulls=8,nonnull_d5=94", "original_identities=summary['original_count'],final_spans=summary['totals']['spans'],nulls=summary['totals']['nulls'],nonnull_d5=summary['totals']['d5_nonnull']")
+rep("governing_git_objects=10", "governing_git_objects=len(governing['actual_runs'])")
+rep("canonical_replays=3", "canonical_replays=len(C['reconciled'])")
+rep("history='Complete737/16/16 frozen trees and618 source mappings include actual failed helpers and disposition/report corrections; not stale274 history.'", "history='Complete configured freezes and pinned source mappings retained, including their actual nested failed and superseded histories; config supplies exact batch inputs without semantic acceptance.'")
+# Prove extraction exactly reversible to complete old source (not merely selected lines).
+inverse=body
+for r in reversed(changes):
+ assert inverse.count(r['new'])==r.get('all',1),(r['new'],inverse.count(r['new']))
+ inverse=inverse.replace(r['new'],r['old'])
+assert inverse==originalbody
+front='''"""Proposed read-only mechanical verifier; config and separate review required.
+Import is inert. This module neither grants semantic approval nor adopts the candidate.
+"""
+from pathlib import Path
+from collections import Counter
+from html.parser import HTMLParser
+import argparse,datetime,gzip,hashlib,importlib.util,json,os,re,sqlite3,subprocess,sys,traceback
+from config_contract import pinned,validate_config,bind_query
+sys.dont_write_bytecode=True
+
+def release_inputs(args):
+ if not __debug__:raise RuntimeError('Assertions must remain enabled; no -O/PYTHONOPTIMIZE')
+ assert args.execute_reviewed_verification, 'Separate review/release required before full execution'
+ config_path=Path(args.config);assert config_path.is_absolute() and config_path.is_file()
+ raw=config_path.read_bytes();assert hashlib.sha256(raw).hexdigest()==args.config_sha256
+ C=json.loads(raw);summary=validate_config(C)
+ output=Path(args.output);assert output.is_absolute() and not output.exists() and output.parent.is_dir()
+ protected=[Path(C[k]).resolve() for k in ['batch','worktree','shared_directory']]+[Path(__file__).resolve().parent,config_path.parent.resolve()]
+ assert not output.is_symlink() and all(not output.resolve().is_relative_to(p) and not p.is_relative_to(output.resolve()) for p in protected)
+ assert config_path.read_bytes()==raw
+ return C,summary,output,raw
+
+def verify(C,summary,output,config_raw):
+'''
+tail='''
+def main():
+ parser=argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--config',required=True)
+ parser.add_argument('--config-sha256',required=True)
+ parser.add_argument('--output',required=True)
+ parser.add_argument('--execute-reviewed-verification',action='store_true')
+ args=parser.parse_args()
+ verify(*release_inputs(args))
+
+if __name__=='__main__':main()
+'''
+new=front+''.join(' '+line if line.strip() else line for line in body.splitlines(keepends=True))+tail
+(P/'verify_reconciliation.py').write_text(new)
+(P/'parameter-extraction.json').write_text(json.dumps({'source_sha256':hashlib.sha256(old.encode()).hexdigest(),'body_exact_inverse':True,'changes':changes},indent=2)+'\n')
+(P/'prior-to-candidate.diff').write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior-verifier.py.txt',tofile='verify_reconciliation.py')))
+print(json.dumps({'exact_inverse':True,'replacements':len(changes),'candidate_bytes':len(new.encode()),'candidate_sha256':hashlib.sha256(new.encode()).hexdigest()}))

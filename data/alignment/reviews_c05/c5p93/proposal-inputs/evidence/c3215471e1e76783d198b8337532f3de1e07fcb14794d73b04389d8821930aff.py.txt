@@ -1,0 +1,127 @@
+from pathlib import Path
+import os, sys, json, copy, hashlib, runpy, subprocess, datetime, gzip, re, html
+E=Path(__file__).resolve().parent; B=E.parent.parent; A=B.parent; W=A.parent/'campaign-worktree'
+def pin(b): return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+def load(p):return json.loads(p.read_bytes())
+G=runpy.run_path(str(W/'tools/gen_alignment_page.py'))
+source={x['seq']:x for x in load(E/'independent-source-context-full-rows.json')}
+def resolved(seg):
+ spans=seg['spans']; by={s['id']:s for s in spans};t=G['resolve'](source[seg['seq']]['wylie'],spans,'tib',seg['seq']); flat=[by[i]for i in seg['eng_order']]; en=G['resolve'](source[seg['seq']]['english'],G['with_members'](spans,flat,source[seg['seq']]['english']),'eng',seg['seq']);out=[];parent=None
+ for s in spans:
+  if s['d']!=7:parent=s['id'] if s['d']==5 else None
+  out.append({'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s['eng'],'tib_range':list(t[s['id']]),'eng_range':list(en[s['id']])if s['id']in en else None,'parent':parent if s['d']==7 else None})
+ return out
+originals={};decl={};tuples={}
+for angle in ['tibetan','english']:
+ for seq in [277,278,279]:
+  seg=load(B/angle/str(seq)/'spec.json')['segments'][0];originals[angle,seq]=seg;tuples[angle,seq]=resolved(seg)
+  x=load(B/angle/str(seq)/('intended-spans.json'if angle=='tibetan'else'occurrence-declarations.json'));ds=x if angle=='tibetan'else x['declarations'];decl[angle,seq]={r['id']:r for r in ds}
+  for r in tuples[angle,seq]:
+   d=decl[angle,seq][r['id']]
+   if angle=='tibetan':assert d['tib_range']==r['tib_range'] and d['eng_range']==r['eng_range']
+   else:
+    assert [d['tib']['start'],d['tib']['end']]==r['tib_range']
+    assert ([d['eng']['start'],d['eng']['end']]if d['eng']else None)==r['eng_range']
+# Decisions apply to exact resolved originals, never inferred ordinal substring matches.
+changes={277:{
+ 'w9':({'eng':'form'},'Second gzugs is the object endpoint of the between relation with mig shes. The original-form occurrence after visual consciousness, not the earlier object reprise, preserves that relational role.'),
+ 'q4':({'d':5},'bar du is the established relational lexical unit between (HTG12357), here separating the object and visual consciousness; no supplied participant is captured.'),
+ 'q5':(None,'Reject dbang gis→depending on despite HTG13091 positive wording: this Tibetan controls the arising/clarity cause, whereas the English depending on directly governs distance. The causal dependency is distributed into the ensuing determines sentence; do not null a correspondence left uncertain by restructuring.'),
+ 'w26':({'d':3,'eng':'not the case'},'The matrix ma yin denies the whole impression-based explanation. Retain the tighter negative-predication phrase at d3, not a dictionary word or the inner appearance negative; the copular is remains outside this tighter proposed boundary.'),
+ 'w31':({'tib':'gnyis'},'Tighten to the explicit numeral gnyis; po is not needed to own two.'),
+ 'w32':({'eng':'distance'},'The final rgyang ring contrasts with thung/close by. Retain the tighter English distance in the one at a distance reprise; at a is English locative/indefinite framing, not another lexical exponent to bank.'),
+ 'w35':({'tib':'gnyis'},'Tighten the second original-forms numeral to gnyis/two; preserve its later occurrence.'),
+ 'w41':({'tib':'gnyis'},'Tighten the consequence numeral to gnyis/two, separate from both preceding pairs.'),
+ 'w42':({'tib':'mthong'},'The lexical seeing predicate owns see; bar belongs to the following consequence construction and is omitted from the lexical boundary.')},
+278:{
+ 'w6':({'tib':'ring'},'Use the tighter independently attested ring/far (HTG18969), in the original-forms pair; rgyang remains outside this lexical selection. The English near/far order reverses Tibetan order.'),
+ 'w9':({'tib':'gnyis'},'Tighten to the second explicit numeral gnyis/two, the original forms rather than karma forms.'),
+ 'q1':({'eng':'at the same time'},'The complete simultaneous-perception expression licenses at the same time at phrase depth. Exclude the English totalizing all rather than expand the source ownership.'),
+ 'w10':({'tib':'mthong'},'Retain the lexical seeing stem; consequence bar is omitted from this word boundary.')},
+279:{
+ 'q2':({'tib':'phyogs snga'},'Tighten to the prior-position expression at phrase depth. The earlier declared thesis in270–278 licenses original position in this context despite contrary opponent glossary readings; mas is left outside the phrase, not split into an invented agentive member.'),
+ 'q3':({'d':5},'cig car du is an attested adverbial lexical unit together (HTG4169). It owns together, not were sitting or all participants.'),
+ 'w12':({'eng':'full'},'gang po owns full; exclude the following English complement preposition of.'),
+ 'p4':(None,'First yang is additive discourse structure distributed across the list of denials. There is no independently located English token with secure ownership; omit it, and reject the original case-class null rather than treating a connective as an agentive.'),
+ 'w15':({'d':6,'tib':'ma','eng':'not'},'First assertion ma negates the shared-instance claim. HTG22009 really contains not our position, but a positive glossary phrase cannot supply our. Keep the explicit negative and omit discontinuous khas…blangs/position wording; do not promote the whole compositional denial to d5.'),
+ 'w21':({'d':6,'tib':'ma','eng':'not'},'Second assertion ma negates the attractive-and-ugly claim. Tighten to its own not; the supplied our and discontinuous assertion are not a single licensed dictionary correspondence.'),
+ 'q5':({'d':5},'Established bar du/between (HTG12357) has the visual-consciousness and stream endpoints here, distinct from277; the conjunction remains separate.'),
+ 'w29':({'d':6,'tib':'ma','eng':'not'},'Third assertion ma denies the intermediate karma form arising between eye and stream. Keep its own not, distinct from all other denials; supplied our remains unwrapped.'),
+ 'w37':({'tib':'mthong'},'Tighten the fourth-claim seeing predicate to mthong/see; keep the karma-form and river objects in their own ranges.'),
+ 'w38':({'d':6,'tib':'ma','eng':'not'},'Fourth assertion ma denies seeing both objects. Preserve its own not, not the final non-seeing negative within a positively asserted position.'),
+ 'w42':({'tib':'mthong'},'The final seeing stem owns see under ma/not; the modal able to is distributed English explication, not a separate source atom.')}
+}
+special={277:{
+ 'q1':'Whole local conclusion formula der thal (HTG23514), phrase depth, excludes following for.',
+ 'p1':'ni marks the statement-topic presentation and has the actual HTG10208 is as follows variant. The full introductory discourse exponent belongs to this particle, not to don or lung.',
+ 'q2':'The complete de\'i tshe na locates the looking situation. English rephrases that circumstance as situation where, without including a situation\'s English article or supplied observer; retain the contextual phrase, not a temporal dictionary equation.',
+ 'q3':'The second near/far contrast rgyang ring thung is compressed into distance. Phrase depth acknowledges this scalar recast; no claim that it is an attested dictionary compound or that the earlier/final pairs share this token.',
+ 'q6':'rnam pa shar ba denotes the appearing aspect as an impression; preserve the whole source phrase at d3. The nearest gsal bar belongs to appears clearly, so clear before impression remains unwrapped even though a rnam pa glossary variant says clear.',
+ 'w27':'The sole closing khas blangs pa reports the Numerist assertion. Choose the first is describing matrix, attested in HTG1139 and governing the stated situation, rather than one of the repeated They say resumptions; all other say tokens remain unwrapped.',
+ 'w36':'The first positive bsgribs owns the one shared obscure in Do they, or do they not, function to obscure. The negative alternative shares this same lexical predicate; it does not manufacture a second English token.',
+ 'w37':'Proven question ellipsis: the second bsgribs is the negative alternative of the same obscure predicate. Keep the original explicit ellipsis null; this marks no separately printed exponent, not absence of obscuring meaning.',
+ 'p11':'thal marks the conditional consequence then in If they were to obscure them, then...; this is distinct from the earlier This then determines reprise.'},
+278:{
+ 'p4':'The consequence particle thal owns would have to in the explicit modal restatement (positive HTG7394 evidence). They is supplied and excluded. The rhetorical Wouldn\'t earlier is a second consequence presentation, not the premise ma.',
+ 'p1':'First ma owns not in the opening supposition do not obscure; do not steal the rhetorical n\'t from Wouldn\'t.',
+ 'p5':'Second ma owns not in the stated because reason do not obscure; it is distinct from the supposition and rhetorical question.',
+ 'w14':'Final yin is the explicit copula of This is the real point; this separately printed is is retained while the outer reason/quotation construction is omitted as distributed.'},
+279:{
+ 'q1':'der thal is the complete concluding assertion is also quite true, at phrase depth, excluding the bracketed English recall and opening Our.',
+ 'q4':'The full de\'i tshe na frames the three beings\' looking situation. English situation where is the contextual circumstantial recast, with article/participants outside the phrase.',
+ 'q6':'kyi dbang gis licenses by force of as a complete causal-control phrase: dbang/force, gis/instrumental by, kyi/of linking karma. The English his is supplied and unwrapped despite HTG19353\'s longer wording.',
+ 'w43':'The final positive khas blangs pa owns position (HTG1139) after four denied positions. Only the embedded seeing is negative; do not convert this assertion into a fifth denied position.',
+ 'p5':'This yang resumes the next denied claim with the second-sentence And. Do not transfer it to the furthermore attached to the third claim, where no yang occurs.',
+ 'p10':'This later yang resumes the fourth denial with its And, distinct from the earlier second-claim connective.',
+ 'p7':'The actual kyi after the second yi dvags is the genitive linking the spirit to its eyes, and owns exactly the printed possessive suffix \'s. This is not the disputed final kyi.'}}
+notes={277:"PROVISIONAL machine alignment by Codex, reused non-author reconciler context. The three near/far occurrences and all repeated forms keep their own source roles. The second gzugs owns form in the between relation; the earlier object is a reprise. The dbang gis causal relation is distributed and omitted rather than assigned to depending on distance. The full appearing-aspect phrase owns impression; clear is unwrapped. Matrix negation is a phrase, not the inner appearance negatives. Three negative-side predicate repetitions and the shared question predicate are explicit ellipsis nulls; two active agentives are grammatical-fusion nulls. The sole name and assertion own one English occurrence each. No source wording or hgm_gloss is changed.",278:"PROVISIONAL machine alignment by Codex, reused non-author reconciler context. The supposition and reason negatives own separate not tokens; rhetorical Wouldn't is not assigned to either ma. The consequence thal owns would have to once, excluding They. Original and karma forms, two counts and reversed near/far keep their exact occurrences. The simultaneity phrase excludes all. Final yin owns the explanatory copula; outer reason and quotation scaffolding remain distributed. No uncertain omission is relabeled null. Source wording and hgm_gloss are unchanged.",279:"PROVISIONAL machine alignment by Codex, reused non-author reconciler context. Four explicit ma negatives own four denied claims, and the final positive position contains a separate negative seeing predicate. Supplied our is excluded despite the positive not our position glossary idiom. The common-instance phrase owns one thing contextually, without using auto-aligned wet and flowing as lexical evidence. Two blood-and-pus compounds retain both tighter members in reversed English order. Causal-control wording excludes his. Two active agentives have fused roles and no separate exponent; uncertain additive structure is omitted. The exact final yi dvags kyi is preserved without substitution or an erratum. Bracketed recall stays unwrapped; no source or hgm_gloss change."}
+final={};finaltuples={};decisions={};omissions={}
+for seq in [277,278,279]:
+ s=copy.deepcopy(originals['tibetan',seq]); base={r['id']:r for r in tuples['tibetan',seq]};desired={i:copy.deepcopy(r)for i,r in base.items()};ss=[];reasons={};removed=[]
+ for sp in s['spans']:
+  id=sp['id'];change,reason=changes[seq].get(id,({},None))
+  if change is None:removed.append({'original_id':id,'source_range':base[id]['tib_range'],'tib':sp['tib'],'reason':reason});continue
+  old=copy.deepcopy(sp);sp.update(change)
+  if change.get('eng') is not None and old['eng'] is not None:
+   if id=='w9'and seq==277:desired[id]['eng_range']=next(x['eng_range']for x in tuples['english',277]if x['id']=='w10')
+   elif sp['eng']!=old['eng']:
+    a=base[id]['eng_range'][0]+old['eng'].index(sp['eng']);desired[id]['eng_range']=[a,a+len(sp['eng'])]
+  if sp['tib']!=old['tib']:
+   a=base[id]['tib_range'][0]+old['tib'].index(sp['tib']);desired[id]['tib_range']=[a,a+len(sp['tib'])]
+  basis=decl['tibetan',seq][id]['basis'];reason=reason or special.get(seq,{}).get(id) or (sp.get('nul') if sp['eng'] is None else 'Local source-role reading: '+basis+' The exact ordered occurrence below is retained; dictionary evidence is contextual support, not approval by agreement.')
+  reasons[id]=reason;ss.append(sp)
+  if seq==277 and id=='w36':
+   x=next(copy.deepcopy(x)for x in originals['english',277]['spans']if x['id']=='p40');x['id']='p13';ss.append(x);desired['p13']=next(copy.deepcopy(x)for x in tuples['english',277]if x['id']=='p40');reasons['p13']='sam explicitly presents the alternative and owns or in the shared obscure question; this useful particle omitted by Tibetan original is retained.'
+  if seq==279 and id=='w14':
+   x=next(copy.deepcopy(x)for x in originals['english',279]['spans']if x['id']=='r20');x['id']='q7';ss.append(x);desired['q7']=next(copy.deepcopy(x)for x in tuples['english',279]if x['id']=='r20');reasons['q7']='gzhi mthun is the common instance for three things, expressed locally as one thing in one thing that is three different things. This is a contextual d3 relation, supported by full C16/C18 common-locus parallels and the contrast in C05:262/C04:172; the auto-aligned wet and flowing entry is contrary unreliable evidence, never the license. No supplied article or three-things predicate is captured.'
+ s['spans']=ss;s['note']=notes[seq];s['eng_order']=[x['id']for x in sorted([x for x in ss if x['eng'] is not None and x['d']!=7],key=lambda x:desired[x['id']]['eng_range'][0])]
+ rr=resolved(s)
+ for r in rr:assert r['tib_range']==desired[r['id']]['tib_range'] and r['eng_range']==desired[r['id']]['eng_range'],(seq,r,desired[r['id']])
+ final[seq]={'course':'C05','segments':[s]};finaltuples[seq]=rr;decisions[seq]=[{'final_tuple':r,'final_span':ss[i],'rationale':reasons[r['id']]}for i,r in enumerate(rr)];omissions[seq]=removed
+ d=E.parent/str(seq);put(d/'spec.json',final[seq]);put(d/'final-tuples.json',rr);put(d/'final-decisions.json',decisions[seq]);put(d/'errata.json',[])
+# Every original remains a separate full record, including IDs, all optional fields and actual parent/ranges.
+total=0
+for seq in [277,278,279]:
+ disp=[]
+ for angle in ['tibetan','english']:
+  for i,r in enumerate(tuples[angle,seq]):
+   original=originals[angle,seq]['spans'][i];candidates=[d for d in decisions[seq]if max(r['tib_range'][0],d['final_tuple']['tib_range'][0])<min(r['tib_range'][1],d['final_tuple']['tib_range'][1])]
+   exact=[d for d in candidates if all(r[k]==d['final_tuple'][k]for k in ['d','tib','eng','tib_range','eng_range'])]
+   status='retained'if exact else'recast'if candidates else'omitted'
+   if candidates:reason=' '.join(d['rationale']for d in candidates)
+   else:reason=next((x['reason']for x in omissions[seq]if x['source_range']==r['tib_range']),'Distributed or uncertain correspondence has no secure final exponent; omitted, not nulled.')
+   identity={'angle':angle,'seq':seq,**{k:r[k]for k in ['id','d','tib','eng','tib_range','eng_range']}}
+   disp.append({'original_identity':identity,'original_span':original,'original_key_order':list(original),'optional_presence':{k:{'present':k in original,**({'value':original[k]}if k in original else{})}for k in ['cls','nul','subword']},'original_parent':r['parent'],'original_declaration':decl[angle,seq][r['id']],'disposition':status,'final_ids':[d['final_tuple']['id']for d in candidates],'reason':reason})
+ total+=len(disp);put(E.parent/str(seq)/'original-dispositions.json',disp)
+assert total==271
+# Independent full raw object comparison against actual untouched complete archives.
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries'];corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));checks=[]
+for q in sorted((E/'original-query-reopens').glob('*.json')):
+ x=load(q)
+ for r in x['rows']:
+  raw=json.loads(r['raw']);arr=corpus if 'course'in r else master;assert arr[r['id']-1]==raw
+  if 'hgm_gloss'in r:assert (json.loads(r['hgm_gloss'])if r['hgm_gloss'] is not None else None)==raw.get('hgm_gloss')
+ checks.append({'query':q.name,'full_raw_rows':len(x['rows']),'all_source_objects_equal':True})
+put(E/'complete-master-corpus-raw-verification.json',{'source_pins':{n:pin((W/'data'/n).read_bytes())for n in ['hgm_dictionary_v27_2.json.gz','full_parallel_corpus_v32.json.gz']},'queries':checks,'normalization':'JSON objects compared for provenance only; full original compressed bytes preserved unchanged. Stored NULL remains NULL.'})
+print(json.dumps({'status':'AUTHORED_AND_RESOLVED','final_spans':{q:len(finaltuples[q])for q in finaltuples},'original_dispositions':total,'master_corpus_queries':len(checks)},indent=2))

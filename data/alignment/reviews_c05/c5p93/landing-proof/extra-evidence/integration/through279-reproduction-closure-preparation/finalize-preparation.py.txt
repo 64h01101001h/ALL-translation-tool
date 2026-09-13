@@ -1,0 +1,19 @@
+from pathlib import Path
+import ast,difflib,hashlib,json,sys
+P=Path(__file__).resolve().parent;A=P.parents[1];R=P.parent/'through279-generated-reproduction';B=A/'C05-277-279'
+def bp(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def put(n,x):(P/n).write_text(json.dumps(x,indent=2)+'\n')
+rows=j(P/'phase01-source-map.json')+j(P/'actual-input-source-map.json')
+for r in rows:
+ raw=Path(r['original']).read_bytes();assert raw==(P/r['copy']).read_bytes()and bp(raw)=={k:r[k]for k in ['bytes','sha256']}
+codes=[]
+for r in j(P/'adaptation-proof.json')['files']:
+ raw=(P/r['file']).read_bytes();old=Path(r['original_path']).read_bytes();assert bp(raw)==r['candidate']and bp(old)==r['original'];value=raw.decode()
+ for c in reversed(r['changes']):assert value.count(c['new'])==c['count'];value=value.replace(c['new'],c['old'])
+ assert value.encode()==old;compile(raw,str(P/r['file']),'exec');diff=''.join(difflib.unified_diff(old.decode().splitlines(True),raw.decode().splitlines(True),fromfile=r['original_path'],tofile=r['file']));assert diff==(P/(r['file']+'.diff')).read_text()
+ codes.append(dict(path=str(P/r['file']),**bp(raw),full_inverse_exact=True,full_diff_exact=True,compiled_only=True))
+assert (P/'concrete-preparation-caller/exit').read_bytes()==b'0\n'
+put('final-preparation-proof.json',dict(status='PASS_PREPARATION_ONLY',source_copy_records=len(rows),code=codes,retention_checks=224711,actual_state_fields=['head','tracked_status','untracked','stages','cached_names','index'],actual_view_stderr_bytes=1079,candidate_executions=0,tests=0,git_commands=0,production_runs=0,independent_review_required=True,root_release_required=True))
+put('command-contract.json',dict(status='PREPARED_NOT_EXECUTED',code=codes,materialization=[dict(original=str(P/'close-evidence.py.txt'),copy=str(R/'close-evidence.py.txt')),dict(original=str(P/'accept-independent-reproduction-root.py'),copy=str(B/'accept-independent-reproduction-root.py'))],commands=[dict(argv=[sys.executable,'-B',str(R/'close-evidence.py.txt')],cwd=str(R),capture=str(R/'caller-runs/close-evidence')),dict(argv=[sys.executable,'-B',str(B/'accept-independent-reproduction-root.py')],cwd=str(B),capture=str(B/'reproduction-root-acceptance-caller'))],environment={'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0','GIT_OPTIONAL_LOCKS':'0'},between_commands='Successful actual close-evidence full capture then complete runtime freeze; separate root release required.',contract=bp((P/'command-contract.md').read_bytes()),candidate_executions=0))
+print(json.dumps({'status':'PASS_PREPARATION_ONLY','full_source_pairs':len(rows),'full_inverse_checks':2,'candidate_executions':0}))

@@ -1,0 +1,43 @@
+from pathlib import Path
+import ast,json,hashlib,difflib,runpy,sys,datetime
+D=Path(__file__).resolve().parent;B=D.parent;A=B.parent;P=B/'staging-whitespace-preparation'
+def pin(raw):return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def load(p):return json.loads(p.read_bytes())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+freeze_raw=(P/'freeze.json').read_bytes();assert pin(freeze_raw)['sha256']=='1292eaea3bbbc96f3f098a0404ee22d2e36f83a74a5db037b773388c8021d6b5';freeze=json.loads(freeze_raw)
+assert {str(p.relative_to(P))for p in P.rglob('*')if p.is_file()}==set(freeze['files'])|{'freeze.json'}
+for n,h in freeze['files'].items():assert pin((P/n).read_bytes())==h
+proof=load(P/'proof.json');results=[]
+for rec in proof['candidates']:
+ label=rec['label'];old_path=P/'inputs'/('whitespace276.py.txt'if label=='whitespace'else'verify_staged_through276.py.txt');new_path=P/('whitespace279.py'if label=='whitespace'else'verify_staged_through279.py');old_raw=old_path.read_bytes();new_raw=new_path.read_bytes();assert pin(old_raw)==rec['prior'] and pin(new_raw)==rec['candidate'];old=old_raw.decode();new=new_raw.decode();back=new
+ for before,after in reversed(rec['closure_schema_changes']):assert back.count(after)==1;back=back.replace(after,before)
+ assert back.count(proof['BASE'])==1;back=back.replace(proof['BASE'],'__BASE__')
+ for change in reversed(rec['numeric_changes']):
+  k=change['start'];assert back[k:k+len(change['new'])]==change['new'];back=back[:k]+change['old']+back[k+len(change['new']):]
+ back=back.replace('__BASE__','81942cfc6022a785894d3cc2a20de81dc4c6f599');assert back.encode()==old_raw
+ diff=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior-'+label,tofile='prepared-'+label));assert diff.encode()==(P/(label+'.diff.txt')).read_bytes()
+ before_nodes={x.name:x for x in ast.walk(ast.parse(old))if isinstance(x,ast.FunctionDef)};after_nodes={x.name:x for x in ast.walk(ast.parse(new))if isinstance(x,ast.FunctionDef)};assert before_nodes.keys()==after_nodes.keys();unchanged={};changed=[]
+ for name,node in before_nodes.items():
+  a=ast.get_source_segment(old,node);b=ast.get_source_segment(new,after_nodes[name])
+  if a==b:assert ast.dump(node)==ast.dump(after_nodes[name]);unchanged[name]=pin(a.encode())
+  else:changed.append(name)
+ assert unchanged==rec['unchanged_functions'] and changed==rec['functions_with_boundary_changes']==['__init__','run']
+ results.append({'label':label,'old':pin(old_raw),'new':pin(new_raw),'full_inverse_bytes_equal':True,'entire_diff_exact':True,'changed_functions':changed,'unchanged_functions':unchanged,'candidate_import_or_execution':False})
+# Entire supplied preparation, all named actual originals/aliases and the cited earlier failures.
+paths=[p for p in P.rglob('*')if p.is_file()];mapping=load(P/'input-manifest.json')
+for r in mapping:
+ original=Path(r['original']);copy=P/r['copy'];raw=original.read_bytes();assert raw==copy.read_bytes() and pin(raw)=={k:r[k]for k in ['bytes','sha256']};paths.append(original)
+closed=load(P/'inputs/actual-closed276.json');assert closed['status']=='PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276'and closed['final_head']==proof['BASE'];assert closed['current_MAIN_applicability_claimed']is False
+paths.extend(Path(p)for p in closed['failed_fresh_closures_preserved'])
+for name in ['prepare','prepare-caller']:
+ paths.extend(p for p in (A/'integration/through276-whitespace-runs'/name).rglob('*')if p.is_file())
+paths.append(A/'copy_evidence_once_v2.py')
+copy_result=runpy.run_path(str(A/'copy_evidence_once_v2.py'))['preserve'](D,D/'original-to-copy-manifest.json',paths)
+allmaps=load(D/'original-to-copy-manifest.json')
+for r in allmaps:assert Path(r['original']).read_bytes()==(D/r['copy']).read_bytes()
+prior=load(A/'integration/through276-whitespace-runs/prepare-caller/execution.json');assert prior['exit']==1
+closure_failures=[{'original':p,**pin(Path(p).read_bytes())}for p in closed['failed_fresh_closures_preserved']]
+put(D/'static-proof.json',{'status':'PASS_INVERSE_AND_FULL_INPUT_IDENTITY_STATIC_ONLY','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'preparation_freeze':pin(freeze_raw),'preparation_files':len(freeze['files']),'all13_preparation_original_copy_pairs_equal':len(mapping)==13,'inverse_checks':results,'copy_result':copy_result,'earlier_whitespace_failure':prior,'earlier_closure_failure_pins':closure_failures,'no_candidate_imports_runs_Git_SQL_tests_builds':True,'runtime_semantic_review_freeze_exists_at_observation':(B/'semantic-review/freeze.json').exists(),'code_scope':'Numerical/BASE adaptation and actual fixed-data closure path/schema only; this static checker never imports or executes candidates.'})
+assert (P/'freeze.json').read_bytes()==freeze_raw
+for n,h in freeze['files'].items():assert pin((P/n).read_bytes())==h
+print(json.dumps({'status':'PASS_STATIC_REVIEW','full_inverse_checks':2,'candidate_calls':0,'new_tests':0,'copy':copy_result},indent=2))

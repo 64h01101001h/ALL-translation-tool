@@ -1,0 +1,83 @@
+{
+  "status": "APPROVE_CODE_ONLY_PENDING_ACTUAL_CLOSURE_AND_ACCEPTANCE",
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "candidate_freeze": {
+    "bytes": 35265,
+    "sha256": "c72e438be5580182990e59ab92fde3c74b68ebf89089a79cea458228ac1ab452"
+  },
+  "code": [
+    {
+      "file": "close-evidence.py.txt",
+      "bytes": 4879,
+      "sha256": "7b3db3b8d72a5adf97054c8dd17f4011843ebfff28b0c72a767ba1442150807f",
+      "full_forward_inverse_diff_exact": true,
+      "parsed_only": true
+    },
+    {
+      "file": "accept-independent-reproduction-root.py",
+      "bytes": 10075,
+      "sha256": "10e6ec30c73654989f6c18beae2ea92fefe9a9bf42e5f794824a009d4bca1f72",
+      "full_forward_inverse_diff_exact": true,
+      "parsed_only": true
+    }
+  ],
+  "actual_runtime_observations": {
+    "retention_checks": 224711,
+    "inputs": 2711,
+    "pages": 547,
+    "seven_full_output_locations": 5
+  },
+  "candidate_executions": 0,
+  "fresh_live_git_state_observed": false,
+  "report": {
+    "path": "report.md",
+    "bytes": 7021,
+    "sha256": "11210ac9dedb8c8e894bce1995e8045dcbb3c6806103d4fdee63f845fdf24a4b"
+  },
+  "source_manifest": {
+    "path": "original-to-copy-manifest.json",
+    "records": 187,
+    "bytes": 134984,
+    "sha256": "309a622352bef7a91703b12851ab6bb66d3bf5abcdd564820aff91d0d14c85ac"
+  },
+  "checklist": [
+    {
+      "id": "CODE_AND_DIFF",
+      "status": "APPROVE",
+      "evidence": "proof.json"
+    },
+    {
+      "id": "CURRENT_LITERAL_AND_STREAMS",
+      "status": "APPROVE",
+      "evidence": "proof.json"
+    },
+    {
+      "id": "FULL_SOURCE_PRESERVATION",
+      "status": "APPROVE",
+      "evidence": "upstream-source-map-verification.json"
+    },
+    {
+      "id": "RAW_ENTRY_AND_INDEX_PREDICATES",
+      "status": "APPROVE",
+      "evidence": "inputs/accept-independent-reproduction-root.py.txt"
+    },
+    {
+      "id": "ORIGINAL_SEED_GIT_CLOSURE",
+      "status": "APPROVE",
+      "evidence": "inputs/command-contract.md"
+    },
+    {
+      "id": "ACTUAL_COMMANDS_STILL_REQUIRED",
+      "status": "APPROVE",
+      "evidence": "report.md"
+    }
+  ],
+  "freeze_contract": {
+    "path": "freeze.json",
+    "files": "DICT",
+    "excludes": "Only actual top freeze.json"
+  }
+}

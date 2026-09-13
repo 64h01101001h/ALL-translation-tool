@@ -1,0 +1,41 @@
+from pathlib import Path
+import json, hashlib, os, sys, datetime
+O=Path(__file__).resolve().parent; E=O.parent
+
+def pin(p):
+ b=p.read_bytes(); return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,x):
+ assert not p.exists(), str(p)
+ p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def freeze(d):
+ rows={}
+ for p in sorted(d.rglob('*')):
+  assert not p.is_symlink(),str(p)
+  if p.is_file() and p!=d/'freeze.json': rows[str(p.relative_to(d))]=pin(p)
+ f={'status':'FROZEN_PROVISIONAL_ORIGINAL','producer':'Codex English-first original; reused context; direct model inspection only, no human review or semantic approval','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':rows,'file_count':len(rows),'total_bytes':sum(x['bytes']for x in rows.values()),'excluded':['freeze.json']}
+ save(d/'freeze.json',f)
+ return {'path':str(d/'freeze.json'),**pin(d/'freeze.json'),'file_count':len(rows),'total_bytes':f['total_bytes']}
+for seq in [277,278,279]: assert not(E/str(seq)/'freeze.json').exists()
+checks=[]
+for m in [O/'input-manifest.json',O/'evidence/input-manifest.json']:
+ for r in json.loads(m.read_bytes()):
+  a=Path(r['original']);c=O/r['copy'];assert a.read_bytes()==c.read_bytes();assert pin(c)=={k:r[k]for k in ['bytes','sha256']}
+  checks.append({'original':str(a),'resolved':str(a.resolve()),'copy':str(c),**pin(c)})
+db=json.loads((O/'sqlite-query.json').read_bytes())['db_after'];dbp=Path(db['path']);assert str(dbp.resolve())==db['resolved'];assert pin(dbp)=={k:db[k]for k in ['bytes','sha256']}
+checks.append({'original':str(dbp),'resolved':str(dbp.resolve()),**pin(dbp),'disposition':'complete original retained externally; full queried rows and raw fields retained in English277; no immutable full-DB copy claimed'})
+for seq in [277,278,279]:
+ d=E/str(seq);v=json.loads((d/'verification.json').read_bytes());a=d/('canonical-attempt03' if seq==277 else 'canonical-attempt01')
+ assert pin(d/'spec.json')==v['spec'] and pin(d/'body.html')==v['body']
+ assert (d/'spec.json').read_bytes()==(a/'stdin.json').read_bytes()
+ assert (d/'body.html').read_bytes()==(a/'stdout.html').read_bytes()
+ assert (a/'exit.txt').read_bytes()==b'0\n' and (a/'stderr.txt').read_bytes()==b''
+ q=json.loads((d/'canonical-occurrence-proof.json').read_bytes());assert q['status']=='PASS' and not q['failures']
+save(O/'pre-freeze-source-recheck.json',{'status':'PASS','source_and_copy_checks':checks,'no_SQL_or_generator_calls':True})
+save(O/'freeze-invocation.json',{'argv':sys.argv,'cwd':os.getcwd(),'stdin':'empty','environment':{k:os.environ.get(k)for k in ['PYTHONDONTWRITEBYTECODE','PYTHONOPTIMIZE','GIT_OPTIONAL_LOCKS']},'boundary':'This invocation freezes each directory after all its writes. Actual terminal stdout/exit follow the freeze and are external caller evidence, not claimed as self-covered.'})
+f277=freeze(O)
+for seq in [278,279]:
+ save(E/str(seq)/'shared-evidence-reference.json',{'shared_angle':'English-first C05:277–279','shared_root':str(O),'complete_shared_tree_freeze':f277,'full_original_copy_maps':[{'path':str(p),**pin(p)}for p in [O/'input-manifest.json',O/'evidence/input-manifest.json',O/'pre-freeze-source-recheck.json']],'source_and_copy_checks':checks,'obligation':'Consume full relevant source/lexical/physical/query evidence and all original and failed attempts from the exact frozen English277 tree; storage shared once, no evidence omitted or second independent producer claimed.'})
+results=[f277,freeze(E/'278'),freeze(E/'279')]
+for seq in [277,278,279]:
+ d=E/str(seq);f=json.loads((d/'freeze.json').read_bytes());actual={str(p.relative_to(d)):pin(p)for p in sorted(d.rglob('*'))if p.is_file() and p!=d/'freeze.json'};assert actual==f['files']
+print(json.dumps({'status':'DONE','originals':3,'spans':125,'d5':93,'nulls':0,'errata':0,'actual_canonical_calls':5,'final_exit_zero_empty_stderr':3,'freezes':results},indent=2))

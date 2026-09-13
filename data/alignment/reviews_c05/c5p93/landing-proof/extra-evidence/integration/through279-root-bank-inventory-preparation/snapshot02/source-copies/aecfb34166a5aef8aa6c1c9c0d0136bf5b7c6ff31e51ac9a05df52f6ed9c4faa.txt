@@ -1,0 +1,51 @@
+from pathlib import Path
+import ast,hashlib,json,difflib
+D=Path(__file__).resolve().parent; B=D.parent; A=B.parent; W=A.parent/'campaign-worktree'
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+items=[(A/'land_reviewed_page_v2.py','actual-candidate.py.txt'),(B/'landing-helper-preparation/old-land_reviewed_page.py.txt','prepared-old.py.txt'),(B/'landing-helper-preparation/candidate.py.txt','prepared-candidate.py.txt'),(B/'landing-helper-preparation/complete.diff','prepared-complete.diff.txt'),(A/'land_reviewed_page.py','actual-old.py.txt'),(A/'run_generator_readonly.py','run_generator_readonly.py.txt'),(W/'tools/wrap_alignment_page.py','wrap_alignment_page.py.txt'),(B/'english/277/record_command.py','recorder-original.py.txt')]
+(D/'inputs').mkdir();rows=[]
+for p,n in items:
+ raw=p.read_bytes();c=D/'inputs'/n;c.write_bytes(raw);assert c.read_bytes()==p.read_bytes();rows.append({'original':str(p),'resolved':str(p.resolve()),'copy':str(c.relative_to(D)),**pin(raw)})
+save(D/'input-manifest.json',rows)
+old=(D/'inputs/actual-old.py.txt').read_text();new=(D/'inputs/actual-candidate.py.txt').read_text()
+assert old==(D/'inputs/prepared-old.py.txt').read_text();assert new==(D/'inputs/prepared-candidate.py.txt').read_text()
+diff=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='old-land_reviewed_page.py',tofile='land_reviewed_page_v2.py'))
+assert diff==(D/'inputs/prepared-complete.diff.txt').read_text();(D/'independently-derived.diff.txt').write_text(diff)
+ot,nt=ast.parse(old),ast.parse(new)
+for p in ['actual-old.py.txt','actual-candidate.py.txt','run_generator_readonly.py.txt','wrap_alignment_page.py.txt']:compile((D/'inputs'/p).read_bytes(),p,'exec')
+def dump(n):return ast.dump(n,include_attributes=False)
+def run_calls(t):return [n for n in ast.walk(t)if isinstance(n,ast.Call)and isinstance(n.func,ast.Attribute)and isinstance(n.func.value,ast.Name)and n.func.value.id=='subprocess'and n.func.attr=='run']
+a,b=run_calls(ot),run_calls(nt);assert len(a)==len(b)==2 and list(map(dump,a))==list(map(dump,b))
+# Map literal command metadata dictionaries to their actual subprocess arguments.
+commands=[]
+for n in ast.walk(nt):
+ if isinstance(n,ast.Dict):
+  v={k.value:x for k,x in zip(n.keys,n.values)if isinstance(k,ast.Constant)and isinstance(k.value,str)}
+  if 'argv'in v:commands.append(v)
+assert len(commands)==2
+for call,meta in zip(b,commands):
+ assert dump(call.args[0])==dump(meta['argv'])
+ kw={k.arg:k.value for k in call.keywords};assert isinstance(meta['cwd'],ast.Call)and dump(meta['cwd'].args[0])==dump(kw['cwd'])
+assert ast.literal_eval(commands[0]['stdin'])=='generator.stdin.bin'
+assert ast.literal_eval(commands[1]['stdin'])=='generator.stdout'
+# Generator stdin is serialized again with the identical expression and an unchanged spec.
+gen_stdin=[n for n in ast.walk(nt)if isinstance(n,ast.Call)and isinstance(n.func,ast.Attribute)and n.func.attr=='write_bytes'and "generator.stdin.bin" in ast.unparse(n.func.value)]
+assert len(gen_stdin)==1 and dump(gen_stdin[0].args[0])==dump(next(k.value for k in b[0].keywords if k.arg=='input'))
+assert dump(next(k.value for k in b[1].keywords if k.arg=='input'))=="Attribute(value=Name(id='run', ctx=Load()), attr='stdout', ctx=Load())"
+# Every old top-level AST node remains ordered, except the specified visual metadata string.
+prior_visual='Unverified: in-app browser policy rejected local HTML preview; no workaround attempted'
+current_visual='Unverified for this batch: native rendering, saved data-root selection and installed phone resource identity require separate verification'
+assert new.count(current_visual)==old.count(prior_visual)==1
+normalized=ast.parse(new.replace(current_visual,prior_visual));sigold=list(map(dump,ot.body));signew=list(map(dump,normalized.body));added=[];cursor=0
+for i,s in enumerate(signew):
+ if cursor<len(sigold)and s==sigold[cursor]:cursor+=1
+ else:added.append({'line':normalized.body[i].lineno,'source':ast.get_source_segment(new,nt.body[i])})
+assert cursor==len(sigold)
+save(D/'added-statements.json',added)
+extensions=['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit']
+assert 'file.suffix.lower() in (' in new
+report={'status':'PASS_SCOPED_SOURCE_CHECKS','candidate':pin(new.encode()),'old':pin(old.encode()),'all_original_prepared_actual_copies_equal':True,'complete_diff_equal':True,'old_top_level_statements_retained_in_order_except_visual_string':True,'inserted_statements':len(added),'actual_subprocess_calls_unchanged':2,'command_argv_AST_equal':True,'command_cwd_AST_equal':True,'generator_stdin_identical_serialization_AST':True,'wrapper_stdin_actual_generator_stdout':True,'syntax_only_sources':4,'helper_generator_wrapper_executions':0,'new_wrapper_stderr_blocking':True,'supported_review_evidence_copy_extensions':extensions,'copy_scope':'semantic-review descendants only; newly captured landing artifacts require separate root banking/retention','timestamps':'started_at before subprocess; finished_at sampled after subprocess return and stream writes, not exact process-end timing','environment':'records only the actual explicit PYTHONDONTWRITEBYTECODE=1 override; inherited environment is not claimed as complete capture'}
+save(D/'proof.json',report)
+for r in rows:assert Path(r['original']).read_bytes()==(D/r['copy']).read_bytes()
+print(json.dumps(report,indent=2))

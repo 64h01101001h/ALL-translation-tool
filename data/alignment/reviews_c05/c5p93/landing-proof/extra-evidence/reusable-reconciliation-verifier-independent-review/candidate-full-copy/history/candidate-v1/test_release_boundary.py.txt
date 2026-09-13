@@ -1,0 +1,31 @@
+import importlib.util,json,hashlib,types,unittest
+from pathlib import Path
+P=Path(__file__).resolve().parent
+S=importlib.util.spec_from_file_location('candidate',P/'verify_reconciliation.py') if (P/'verify_reconciliation.py').exists() else None
+M=importlib.util.module_from_spec(S) if S else None
+if M:S.loader.exec_module(M)
+class ReleaseTests(unittest.TestCase):
+ def args(self):
+  p=P/'completed-277-config.json'
+  return types.SimpleNamespace(config=str(p),config_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),output=str(P.parent/'future-reconciliation-check-UNEXECUTED'),execute_reviewed_verification=True)
+ def test_import_has_no_runtime_outputs_or_calls(self):
+  self.assertIsNotNone(M);self.assertFalse(hasattr(M,'calls'));self.assertTrue(callable(M.verify));self.assertTrue(callable(M.main))
+ def test_optimized_candidate_rejected_before_any_config_read(self):
+  self.assertIsNotNone(M);ns={'__name__':'tooling_optimized_import','__file__':str(P/'verify_reconciliation.py')}
+  exec(compile((P/'verify_reconciliation.py').read_bytes(),str(P/'verify_reconciliation.py'),'exec',optimize=1),ns)
+  with self.assertRaises(RuntimeError):ns['release_inputs'](None)
+ def test_missing_release_rejected(self):
+  self.assertIsNotNone(M);a=self.args();a.execute_reviewed_verification=False
+  with self.assertRaises(AssertionError):M.release_inputs(a)
+ def test_wrong_config_pin_rejected(self):
+  self.assertIsNotNone(M);a=self.args();a.config_sha256='0'*64
+  with self.assertRaises(AssertionError):M.release_inputs(a)
+ def test_existing_or_inside_protected_output_rejected(self):
+  self.assertIsNotNone(M)
+  for path in [str(P),str(P/'uncreated-output'),json.loads((P/'completed-277-config.json').read_bytes())['worktree']+'/uncreated-output']:
+   a=self.args();a.output=path
+   with self.assertRaises(AssertionError):M.release_inputs(a)
+ def test_actual_config_release_validates_without_execution(self):
+  self.assertIsNotNone(M);a=self.args();c,summary,out,raw=M.release_inputs(a)
+  self.assertEqual(summary['original_count'],271);self.assertEqual(out,Path(a.output));self.assertFalse(out.exists());self.assertEqual(raw,Path(a.config).read_bytes())
+if __name__=='__main__':unittest.main()

@@ -1,0 +1,30 @@
+from pathlib import Path
+import ast,difflib,hashlib,json
+R=Path(__file__).resolve().parent;B=R.parent;P=B/'payload-final-schema-preparation'
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+f=json.loads((P/'freeze.json').read_bytes());assert bp((P/'freeze.json').read_bytes())['sha256']=='9339e09f4d1ecc9fa8ffe8dfab6558c12cf4406dcdbefc8c2d5acfa7e9e5dccd'
+assert set(f['files'])=={str(p.relative_to(P))for p in P.rglob('*')if p.is_file()and p!=P/'freeze.json'}
+rows=[]
+def keep(src,name):
+ raw=src.read_bytes();dst=R/'inputs'/name;dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(raw);assert dst.read_bytes()==src.read_bytes()==raw;rows.append({'original':str(src),'copy':str(dst.relative_to(R)),**bp(raw)});return raw
+for name in list(f['files'])+['freeze.json']:
+ raw=keep(P/name,'preparation/'+name)
+ if name!='freeze.json':assert bp(raw)==f['files'][name]
+old=keep(B/'page-banking-preparation/freeze-final-payload-before-staging.py','approved-prior-helper.py.txt')
+assert old==(P/'previous-reviewed-helper.py.txt').read_bytes()
+new=(P/'freeze-final-payload-before-staging.py').read_bytes();before=b"approved_review['baseline']";after=b"approved_review['baseline_commit']"
+assert old.count(before)==1 and new.count(after)==1 and old.replace(before,after)==new and new.replace(after,before)==old
+assert ''.join(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile='prior',tofile='current')).encode()==(P/'complete.diff.txt').read_bytes()
+oldtree=ast.parse(old);newtree=ast.parse(new)
+# The inverse is byte exact; syntax only, never execution or imports.
+ast.parse(new.replace(after,before));assert ast.dump(ast.parse(new.replace(after,before)))==ast.dump(oldtree)
+reviewraw=keep(B/'semantic-review/review.json','actual-final-review.json');assert reviewraw==(P/'actual-review.json').read_bytes();review=json.loads(reviewraw)
+base=json.loads(keep(B/'baseline.json','baseline.json'));fr=json.loads(keep(B/'semantic-review/freeze.json','actual-semantic-freeze.json'))
+assert bp(reviewraw)==fr['files']['review.json']
+assert 'baseline'not in review and review['baseline_commit']==base['commit']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+assert review['spec_verdict']==review['quality_verdict']=='APPROVE'and review['open_findings']==[]
+assert [x['seq']for x in review['segments']]==[277,278,279]and sum(x['span_count']for x in review['segments'])==review['total_spans']==146
+put('original-to-copy-manifest.json',rows)
+put('proof.json',{'status':'PASS_SINGLE_KEY_STATIC_REVIEW','spec':'APPROVE','quality':'APPROVE','candidate':bp(new),'prior':bp(old),'actual_final_review':bp(reviewraw),'actual_final_review_matches_semantic_freeze':True,'baseline_commit':base['commit'],'one_key_access_only':True,'full_diff_exact':True,'full_inverse_byte_exact':True,'syntax_only':True,'freezer_executions':0,'tests':0,'SQL':0,'Git':0,'semantic_approval':False})
+print(json.dumps({'status':'PASS','candidate':bp(new),'full_inverse_exact':True,'review_pin':bp(reviewraw),'source_copy_records':len(rows)}))

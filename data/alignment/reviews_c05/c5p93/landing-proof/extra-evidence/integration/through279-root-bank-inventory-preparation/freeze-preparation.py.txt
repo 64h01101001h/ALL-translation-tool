@@ -1,0 +1,15 @@
+from pathlib import Path
+import hashlib,json,datetime
+R=Path(__file__).resolve().parent
+assert not (R/'freeze.json').exists()
+files={}
+for p in sorted(R.rglob('*')):
+ if p.is_file():
+  assert not p.is_symlink()
+  b=p.read_bytes();files[str(p.relative_to(R))]={'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+raw=(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'Complete source-only inventory preparation, no future completeness or banking claim','excludes':['freeze.json'],'files':files},indent=2)+'\n').encode()
+(R/'freeze.json').write_bytes(raw)
+for rel,pin in files.items():
+ b=(R/rel).read_bytes();assert {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}==pin
+assert set(files)|{'freeze.json'}=={str(p.relative_to(R))for p in R.rglob('*')if p.is_file()}
+print(json.dumps({'status':'DONE_FROZEN','files':len(files),'bytes':sum(v['bytes']for v in files.values()),'freeze_bytes':len(raw),'freeze_sha256':hashlib.sha256(raw).hexdigest()}))

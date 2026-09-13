@@ -1,0 +1,23 @@
+from pathlib import Path
+import hashlib,json,difflib,datetime
+B=Path(__file__).resolve().parent
+D=B/'root-payload-schema-release';D.mkdir()
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def read(p):return json.loads(p.read_bytes())
+counts=[]
+for name,sha in [('payload-final-schema-preparation','9339e09f4d1ecc9fa8ffe8dfab6558c12cf4406dcdbefc8c2d5acfa7e9e5dccd'),('payload-final-schema-review','59a52282ef9810944765a05178a53d6112a9013c7475ce39e67df461691f7c29')]:
+ p=B/name;assert pin(p/'freeze.json')['sha256']==sha;f=read(p/'freeze.json')
+ actual={str(x.relative_to(p)):pin(x)for x in p.rglob('*')if x.is_file()and x!=p/'freeze.json'}
+ assert actual==f['files']and len(actual)==f['file_count']and sum(v['bytes']for v in actual.values())==f['total_bytes'];counts.append(len(actual))
+r=B/'payload-final-schema-review'
+for m in read(r/'original-to-copy-manifest.json'):
+ c=r/m['copy'];assert c.read_bytes()==Path(m['original']).read_bytes()and pin(c)=={k:m[k]for k in ['bytes','sha256']}
+p=B/'payload-final-schema-preparation';old=(p/'previous-reviewed-helper.py.txt').read_bytes();new=(p/'freeze-final-payload-before-staging.py').read_bytes()
+assert new.replace(b"approved_review['baseline_commit']==base['commit']",b"approved_review['baseline']==base['commit']")==old==(B/'page-banking-preparation/freeze-final-payload-before-staging.py').read_bytes()
+assert ''.join(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile='prior',tofile='current'))==(p/'complete.diff.txt').read_text()
+meta=read(B/'semantic-review/review.json');assert meta['baseline_commit']==read(B/'baseline.json')['commit']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+assert read(r/'proof.json')['spec']==read(r/'proof.json')['quality']=='APPROVE'
+dest=B/'freeze-final-payload-before-staging.py';assert not dest.exists();dest.write_bytes(new);assert pin(dest)==read(r/'proof.json')['candidate']
+proof=dict(status='PASS_RELEASE_EXACT_SINGLE_KEY_ADAPTATION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),frozen_files=sum(counts),source_copy_pairs=10,candidate=dict(path=str(dest),**pin(dest)),one_key_change_only=True,no_payload_execution_by_release=True)
+(D/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))

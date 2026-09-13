@@ -1,0 +1,17 @@
+from pathlib import Path
+import json,hashlib,runpy,sys,datetime
+D=Path(__file__).resolve().parent;A=D.parents[1];P=D.parent/'staging-whitespace-preparation'
+def pin(raw):return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def put(p,x):p.write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+ct=A/'C05-274-276/landing';paths=[ct/('ctest-17.'+ext)for ext in ['stdout','stderr','exit','command.json','execution.json']]
+result=runpy.run_path(str(A/'copy_evidence_once_v2.py'))['preserve'](D,D/'original-to-copy-manifest.json',paths)
+maps=json.loads((D/'original-to-copy-manifest.json').read_bytes())
+for r in maps:assert Path(r['original']).read_bytes()==(D/r['copy']).read_bytes() and pin((D/r['copy']).read_bytes())=={k:r[k]for k in ['bytes','sha256']}
+f=json.loads((P/'freeze.json').read_bytes());assert pin((P/'freeze.json').read_bytes())['sha256']=='1292eaea3bbbc96f3f098a0404ee22d2e36f83a74a5db037b773388c8021d6b5'
+for n,p in f['files'].items():assert pin((P/n).read_bytes())==p
+put(D/'final-byte-preflight.json',{'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'all_full_original_copy_pairs':len(maps),'distinct_copies':len({x['copy']for x in maps}),'candidate_freeze_unchanged':True,'historical_ctest_source_copied_only_not_run':result,'no_candidate_Git_build_test_SQL_or_semantic_execution':True})
+put(D/'freeze-command.json',{'argv':[sys.executable,'-B',str(Path(__file__).resolve())],'cwd':str(Path.cwd()),'purpose':'Complete byte-copy verification and static-review integrity freeze only'})
+assert not (D/'freeze.json').exists();files={str(p.relative_to(D)):pin(p.read_bytes())for p in sorted(D.rglob('*'))if p.is_file()}
+put(D/'freeze.json',{'spec_verdict':'APPROVE','quality_verdict':'APPROVE','scope':'Static parameter/schema adaptation only; actual runtime release remains blocked','files':files,'file_count':len(files),'total_bytes':sum(p['bytes']for p in files.values())})
+assert set(files)=={str(p.relative_to(D))for p in D.rglob('*')if p.is_file()and p!=D/'freeze.json'}
+print(json.dumps({'status':'DONE_STATIC_REVIEW_FROZEN','freeze':pin((D/'freeze.json').read_bytes()),'files':len(files),'bytes':sum(x['bytes']for x in files.values()),'maps':len(maps)},indent=2))

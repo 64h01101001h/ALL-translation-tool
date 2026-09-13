@@ -1,0 +1,34 @@
+from pathlib import Path
+import ast,datetime,difflib,hashlib,json,os,sys
+P=Path(__file__).resolve().parent;A=P.parents[1];W=A.parent/'campaign-worktree'
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def j(p):return json.loads(p.read_bytes())
+def put(n,v):(P/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+phase=j(P/'phase01-freeze.json')
+for n,r in phase['files'].items():assert bp((P/n).read_bytes())==r
+maps=[]
+for name in ['phase01-original-to-copy-manifest.json','current-original-to-copy-manifest.json','history-supplement-map.json']:maps+=j(P/name)
+for r in maps:
+ a=Path(r['original']).read_bytes();b=(P/r['copy']).read_bytes();assert a==b and bp(a)=={k:r[k]for k in ['bytes','sha256']}
+external=j(P/'external-full-byte-bindings.json');verified=0
+for r in external['payload']+external['semantic_review']+[external['seed']]:
+ a=Path(r['original']).read_bytes();b=Path(r['copy']).read_bytes();assert a==b and bp(a)=={k:r[k]for k in ['bytes','sha256']};verified+=1
+for r in external['baseline_sources']:assert bp(Path(r['path']).read_bytes())=={k:r[k]for k in ['bytes','sha256']}
+spine=W/'build/hgm_spine_v27_2.db';raw=spine.read_bytes();assert bp(raw)['sha256']=='5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc'
+spine_record=dict(path=str(spine),resolved=str(spine.resolve()),symlink=os.readlink(spine)if spine.is_symlink()else None,**bp(raw));assert spine.read_bytes()==raw
+proof=j(P/'adaptation-proof.json');code=[]
+for r in proof['files']:
+ name=r['file'];old=(P/'prior-preparation'/name).read_bytes();raw=(P/name).read_bytes();assert bp(old)==r['original']and bp(raw)==r['candidate'];inverse=raw.decode()
+ for change in reversed(r['changes']):assert inverse.count(change['new'])==change['count'];inverse=inverse.replace(change['new'],change['old'])
+ assert inverse.encode()==old
+ diff=''.join(difflib.unified_diff(old.decode().splitlines(True),raw.decode().splitlines(True),fromfile='prior-preparation/'+name,tofile=name));assert diff==(P/(name+'.diff')).read_text()
+ a=ast.parse(old);b=ast.parse(raw);assert sum(isinstance(x,ast.Assert)for x in ast.walk(a))==sum(isinstance(x,ast.Assert)for x in ast.walk(b))
+ checks=lambda tree:sum(isinstance(x,ast.Call)and isinstance(x.func,ast.Name)and x.func.id=='check'for x in ast.walk(tree))
+ assert checks(a)==checks(b);compile(raw,str(P/name),'exec')
+ code.append(dict(path=str(P/name),**bp(raw),full_inverse_exact=True,full_diff_exact=True,assertion_count=sum(isinstance(x,ast.Assert)for x in ast.walk(b)),check_call_count=checks(b),syntax_only=True))
+assert all((P/n).read_bytes()==(P/'prior-preparation'/n).read_bytes()for n in ['run-once.py.txt','run-isolated-readonly.py.txt'])
+assert (P/'measurement-adaptation02/exit').read_bytes()==b'0\n'
+put('final-preparation-proof.json',dict(status='PASS_CONCRETE_PREPARATION_ONLY',code=code,source_copy_records=len(maps),external_complete_pair_checks=verified,all_nine_baseline_sources_pinned=True,spine=spine_record,phase01_unchanged=True,actual_measurement_pin=bp((P/'actual-measurements.json').read_bytes()),candidate_executions=0,sql_queries=0,git_commands=0,production_tests=0,semantic_approval=False,independent_review_required=True,root_release_required=True))
+R=P.parent/'through279-generated-reproduction'
+put('command-plan.json',dict(status='PREPARED_PENDING_INDEPENDENT_REVIEW_AND_ROOT_RELEASE',runtime=str(R),cwd=str(R),environment={'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0','GIT_OPTIONAL_LOCKS':'0'},materialize_exact_code=code,sequential_commands=[[sys.executable,'-B',str(R/name)]for name in ['prepare.py.txt','run-once.py.txt','verify-retention.py.txt']],contract_path=str(P/'command-plan.md'),contract=bp((P/'command-plan.md').read_bytes()),actual_measurements=bp((P/'actual-measurements.json').read_bytes()),capture='Fresh complete actual command/stdin/stdout/stderr/exit/start/end and all failures; no rerun of completed successful builders.',additional_entry_and_post_acceptance='All original/source/seed/Git/state gates described in command-plan.md remain mandatory; exact current post-run closure adaptation requires review.',execution_count=0))
+print(json.dumps({'status':'PASS_CONCRETE_PREPARATION_ONLY','source_copy_records':len(maps),'external_pairs':verified,'four_full_inverse_checks':True,'runtime_executions':0}))

@@ -1,0 +1,31 @@
+from pathlib import Path
+import hashlib,json,os,datetime
+D=Path(__file__).resolve().parent
+P=D.parents[1]/'through279-generated-reproduction-concrete-preparation'
+def pin(b): return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def dump(p,x): p.write_text(json.dumps(x,indent=2)+'\n')
+freeze=json.loads((P/'phase01-freeze.json').read_bytes())
+actual={str(f.relative_to(P)):pin(f.read_bytes()) for f in P.rglob('*') if f.is_file() and f!=P/'phase01-freeze.json'}
+assert actual==freeze['files'], 'phase01 full frozen tree mismatch'
+prior=json.loads((P/'prior-preparation/freeze.json').read_bytes())
+assert len(prior['files'])==88
+for rel,q in prior['files'].items(): assert pin((P/'prior-preparation'/rel).read_bytes())==q
+maps=json.loads((P/'phase01-original-to-copy-manifest.json').read_bytes())
+for r in maps:
+ o=Path(r['original']); b=o.read_bytes()
+ assert str(o.resolve())==r['resolved_original']
+ assert pin(b)=={k:r[k] for k in ['bytes','sha256']}
+ assert b==(P/r['copy']).read_bytes()
+ if r['symlink'] is not None: assert o.is_symlink() and os.readlink(o)==r['symlink']
+records=[]
+for f in sorted(P.rglob('*')):
+ if not f.is_file(): continue
+ rel=f.relative_to(P); target=D/'inputs'/rel
+ if target.suffix in ['.py','.diff'] or not target.suffix: target=target.with_name(target.name+'.txt')
+ target.parent.mkdir(parents=True,exist_ok=True); b=f.read_bytes()
+ with target.open('xb') as g:g.write(b)
+ assert target.read_bytes()==b
+ records.append({'original':str(f),'resolved_original':str(f.resolve()),'symlink':os.readlink(f) if f.is_symlink() else None,'copy':str(target.relative_to(D)),**pin(b)})
+dump(D/'original-to-copy-manifest.json',records)
+dump(D/'proof.json',{'status':'PREPARATION_REVIEW_ONLY_PENDING_FROZEN_CONCRETE_ADAPTATION','created_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'phase01_freeze':pin((P/'phase01-freeze.json').read_bytes()),'phase01_frozen_files':len(actual),'prior_frozen_files':88,'prior_full_original_copy_pairs_verified':len(maps),'retained_input_copies':len(records),'runtime_executions':0,'git_sql_builder_test_invocations':0,'spec_verdict':'PENDING','quality_verdict':'PENDING'})
+print(json.dumps({'status':'PRESERVED_PHASE01','files':len(records),'pairs':len(maps)}))

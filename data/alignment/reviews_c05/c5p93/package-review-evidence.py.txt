@@ -1,0 +1,59 @@
+from pathlib import Path
+import json,hashlib,shutil,importlib.util,os,difflib,datetime
+D=Path(__file__).resolve().parent;B=D.parent;A=B.parent;W=A.parent/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def get(p):return json.loads(p.read_bytes())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+H=D/'history/collection-boundary';H.mkdir();shutil.copyfile(D/'original-to-copy-manifest.json',H/'original-to-copy-manifest.json');shutil.copyfile(D/'preservation-proof.json',H/'preservation-proof.json')
+m=get(D/'original-to-copy-manifest.json');by={r['original']:r for r in m};core=[]
+for a in ['tibetan','english']:
+ for q in [277,278,279]:
+  root=B/a/str(q)
+  for p in sorted(root.rglob('*')):
+   if not p.is_file():continue
+   rel=p.relative_to(root)
+   if (len(rel.parts)==1 and (p.name in ['spec.json','body.html','report.md','errata.json','errata-audit.json','occurrence-declarations.json','intended-spans.json','freeze.json'] or 'candidate' in p.name)) or ('history' in str(rel) and p.name in ['spec.json','body.html','report.md','errata.json','occurrence-declarations.json','draft.py']):
+    dest=D/'proposal-inputs'/a/str(q)/rel
+    if dest.suffix not in {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}:dest=dest.with_name(dest.name+'.txt')
+    dest.parent.mkdir(parents=True,exist_ok=True);assert not dest.exists();dest.write_bytes(p.read_bytes());r=by[str(p.resolve())];assert pin(dest.read_bytes())=={k:r[k] for k in ['bytes','sha256']};r['copy']=str(dest.relative_to(D));core.append(dict(original=str(p),copy=r['copy'],**pin(dest.read_bytes())))
+# Preserve additional actually inspected importer source, with immutable Git identity.
+p=Path('/Users/adamderickandrade/ALL-translation-tool/tools/build_spine.py');r=dict(original=str(p),copy='history/structural-attempt02/build_spine.py.txt',**pin(p.read_bytes()));assert p.read_bytes()==(D/r['copy']).read_bytes();ib=get(D/'importer-git-binding/proof.json');r.update({k:ib[k] for k in ['original_git_commit','repository_relative_path']});assert r['original'] not in by;m.append(r)
+# Every historical governing snapshot is bound by complete byte identity to a recorded immutable object.
+bind={}
+for g in get(D/'governing-git-proof.json'):bind[g['execution']['stdout']['sha256']]={k:g[k] for k in ['original_git_commit','repository_relative_path']}
+for g in get(B/'semantic-source-preparation/original-to-copy-manifest.json'):
+ if 'original_git_commit' in g:bind[g['sha256']]={k:g[k] for k in ['original_git_commit','repository_relative_path']}
+bind[r['sha256']]={k:r[k] for k in ['original_git_commit','repository_relative_path']}
+for r in m:
+ if r['sha256'] in bind:r.update(bind[r['sha256']])
+put(D/'original-to-copy-manifest.json',m);put(D/'readable-original-core-map.json',core)
+# Retain original logical aliases separately; a full archive has exactly one canonical resolved-source manifest row.
+inv=get(D/'input-boundary.json');alias=[]
+for x in inv:
+ r=next(r for r in m if r['original']==x['resolved']);alias.append(dict(logical_original=x['original'],resolved_original=x['resolved'],symlink=x['symlink'],copy=r['copy'],bytes=x['bytes'],sha256=x['sha256']))
+put(D/'source-alias-transport.json',alias)
+put(D/'source-version-transport.json',dict(rules=['Current manifest originals are actual retained physical paths, with immutable Git metadata for every identified governing snapshot.','Historical manifests are preserved raw and are not rewritten to pretend that their earlier logical source versions are current.','The two root verifier versions use their explicit retained-path-map.json transports; current helper is v3.','The source-only preparation predates both original angles; its queries and PDF render history remain historical evidence, not new executions.'],root_transports=[dict(original=str(B/f'root-reconciliation-correction{i}/retained-path-map.json'),retained_copy=next(r['copy'] for r in m if r['original']==str(B/f'root-reconciliation-correction{i}/retained-path-map.json')),**pin((B/f'root-reconciliation-correction{i}/retained-path-map.json').read_bytes())) for i in ['01','02']]))
+for q in [277,278,279]:
+ prefix=str(B/'reconciled'/str(q))+'/'
+ put(D/'reviewed-final'/str(q)/'current-evidence-copy-map.json',[r for r in m if r['original'].startswith(prefix)])
+# Independently bind root failed sources to the fully read current code via exact complete diffs.
+v1=(B/'root-reconciliation-correction01/v1.py.txt').read_text();v2=(B/'root-reconciliation-correction02/v2.py.txt').read_text();v3=(B/'verify-reconciliation-root.py').read_text()
+for old,new,sub,a,b in [(v1,v2,'01','v1','v2'),(v2,v3,'02','v2','v3')]:assert ''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile=a,tofile=b))==(B/f'root-reconciliation-correction{sub}/complete.diff.txt').read_text()
+put(D/'historical-helper-identity.json',dict(status='PASS',root_versions=[pin(s.encode()) for s in [v1,v2,v3]],exact_complete_diffs=True,root_failed_canonical_calls=[0,1],root_successful_canonical_calls=3,reviewer_canonical_calls=3,reviewer_checker_failed_attempts=[1,2],reviewer_checker_successful_attempt=3))
+# Close complete nine frozen trees and initial consumed aliases, without invoking any generator or query.
+freezes=[]
+for a in ['tibetan','english','reconciled']:
+ for q in [277,278,279]:
+  root=B/a/str(q);f=get(root/'freeze.json')['files'];f=f if isinstance(f,dict) else {r['path']:r for r in f};expected={}
+  for n,r in f.items():
+   n=str(Path(n).relative_to(root)) if Path(n).is_absolute() else n;expected[n]={k:r[k] for k in ['bytes','sha256']}
+  actual={str(p.relative_to(root)):pin(p.read_bytes()) for p in root.rglob('*') if p.is_file() and p!=root/'freeze.json'};assert actual==expected,(a,q);freezes.append(dict(angle=a,seq=q,files=len(actual),freeze=pin((root/'freeze.json').read_bytes())))
+for x in inv:
+ p=Path(x['original']);assert pin(p.read_bytes())=={k:x[k] for k in ['bytes','sha256']} and str(p.resolve())==x['resolved'] and (os.readlink(p) if p.is_symlink() else None)==x['symlink']
+for n,h in get(B/'baseline.json')['sha256'].items():assert pin((W/n).read_bytes())['sha256']==h,n
+for r in m:
+ assert Path(r['original']).read_bytes()==(D/r['copy']).read_bytes();assert pin((D/r['copy']).read_bytes())=={k:r[k] for k in ['bytes','sha256']}
+for name in ['hgm_dictionary_v27_2.json.gz','full_parallel_corpus_v32.json.gz']:
+ p=(W/'data'/name).resolve();assert sum(Path(r['original']).resolve()==p and 'original_git_commit' not in r for r in m)==1,name
+put(D/'evidence-packaging-proof.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),records=len(m),distinct_copies=len({r['copy'] for r in m}),aliases=len(alias),readable_core_copies=len(core),governing_aliases=sum('original_git_commit' in r for r in m),governing_objects=len(bind),freezes=freezes,baseline_nine_pins_unchanged=True,complete_original_copy_bytes_equal=True,one_resolved_source_record_per_master_corpus=True))
+print('PASS',len(m),len(alias),len(core),len(bind))

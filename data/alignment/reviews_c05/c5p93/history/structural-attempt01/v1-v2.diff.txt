@@ -1,0 +1,11 @@
+--- v1
++++ v2
+@@ -41,7 +41,7 @@
+     cur=hi
+    if cur<len(text):gaps.append(dict(start=cur,end=len(text),text=text[cur:]))
+    assert gaps==om['full_unwrapped_complements'][side];checks.append(dict(seq=q,side=side,complete_complement=True,gaps=len(gaps)))
+- put(D/'resolved-spans.json',final);put(D/'resolved-full-objects.json',[dict(seq=q,span=s,**r) for q in [277,278,279] for s,r in zip(get(B/'reconciled'/str(q)/'spec.json')['segments'][0]['spans'],resolve(get(B/'reconciled'/str(q)/'spec.json')['segments'][0]))]);put(D/'original-identities.json',original);put(D/'original-dispositions-inspected.json',disps)
++ put(D/'resolved-spans.json',final);put(D/'resolved-full-objects.json',[dict(span=s,**r) for q in [277,278,279] for s,r in zip(get(B/'reconciled'/str(q)/'spec.json')['segments'][0]['spans'],resolve(get(B/'reconciled'/str(q)/'spec.json')['segments'][0]))]);put(D/'original-identities.json',original);put(D/'original-dispositions-inspected.json',disps)
+  masterpath=W/'data/hgm_dictionary_v27_2.json.gz';corpuspath=W/'data/full_parallel_corpus_v32.json.gz';mr=masterpath.read_bytes();cr=corpuspath.read_bytes();master=json.loads(gzip.decompress(mr))['unified_entries'];corpus=json.loads(gzip.decompress(cr));raws={};qp=[]
+  for p in sorted((D/'independent-reopens').rglob('*.json')):
+   x=get(p);n=0

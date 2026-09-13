@@ -1,0 +1,21 @@
+from pathlib import Path
+import hashlib,json,runpy
+D=Path(__file__).resolve().parent; A=D.parents[1]; B=A/'C05-274-276'; S=B/'semantic-review'; OLD=D.parent/'through273-generated-reproduction'
+def pin(p): b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+r=j(S/'review.json');f=j(S/'freeze.json');t=j(S/'resolved-spans.json');root=j(B/'root-final-semantic-review-verification-v2/proof.json')
+assert r['verdict']==r['spec_verdict']==r['quality_verdict']=='APPROVE' and r['open_findings']==[]
+assert r['baseline']=='81942cfc6022a785894d3cc2a20de81dc4c6f599'
+assert r['total_spans']==len(t)==112 and r['total_nulls']==sum(x['eng'] is None for x in t)==3 and r['total_word_pairs']==sum(x['d']==5 and x['eng'] is not None for x in t)==81
+assert {x['seq'] for x in t}=={274,275,276}
+assert all(set(x)=={'seq','id','d','tib','eng','tib_range','eng_range'} for x in t)
+assert isinstance(f['files'],dict)
+for n in ('review.json','resolved-spans.json'):assert pin(S/n)=={k:f['files'][n][k] for k in ('bytes','sha256')}
+assert root['status']=='PASS' and root['head']==r['baseline'] and root['review_freeze']==pin(S/'freeze.json')
+prior_seed=[x for x in j(OLD/'input-manifest.json') if 'seed' in x.get('role','')]
+assert len(prior_seed)==2 and all(x['copy']=='seed/previous-main-csv-seed.bin' for x in prior_seed)
+assert prior_seed[1]['materialized_initial_path']=='workspace/docs/geshe_michael_roach_dictionary.csv'
+inputs=[S/'review.json',S/'resolved-spans.json',S/'freeze.json',B/'root-final-semantic-review-verification-v2/proof.json',B/'landing/root-semantic-acceptance-proof.json',B/'baseline.json',OLD/'verify-retention.py.txt',OLD/'verify-retention-recovery.py.txt',OLD/'prepare.py.txt',OLD/'run-once.py.txt',OLD/'run-isolated-readonly.py.txt',OLD/'input-manifest.json',OLD/'acip-incomplete-evidence.json',A/'copy_evidence_once_v2.py']
+retention=runpy.run_path(str(A/'copy_evidence_once_v2.py'),run_name='nonmain')['preserve'](D,D/'original-to-copy-manifest.json',inputs)
+out=dict(status='INTERFACE_INSPECTED_PREPARATION_PENDING_ACTUAL_OUTPUTS',review=pin(S/'review.json'),freeze=pin(S/'freeze.json'),tuples=pin(S/'resolved-spans.json'),counts=dict(tuples=112,nulls=3,nonnull_d5=81,anchors=3,added_links=115,prior_links=45011),schema=dict(approval='verdict/spec_verdict/quality_verdict APPROVE',freeze='files DICT',tuples='seven keys, tib_range/eng_range',selected_segments=[274,275,276]),prior_seed_aliases=prior_seed,retention=retention,limitations='Only interface identity/counts; no new semantic approval; no source queries or runtime preparation')
+(D/'interface-proof.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))

@@ -1,0 +1,136 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "files": [
+    {
+      "file": "close-evidence.py.txt",
+      "original_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through276-generated-reproduction/close-evidence.py.txt",
+      "original": {
+        "bytes": 4879,
+        "sha256": "cb7db6c6afac76fbee45f9dde69649a2a3356cdf3a6cbea83741a3520bfa0109"
+      },
+      "candidate": {
+        "bytes": 4879,
+        "sha256": "7b3db3b8d72a5adf97054c8dd17f4011843ebfff28b0c72a767ba1442150807f"
+      },
+      "changes": [
+        {
+          "old": "C05-274-276",
+          "new": "C05-277-279",
+          "count": 1
+        },
+        {
+          "old": "224556",
+          "new": "224711",
+          "count": 1
+        }
+      ],
+      "full_inverse_exact": true,
+      "syntax_only": true
+    },
+    {
+      "file": "accept-independent-reproduction-root.py",
+      "original_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/accept-independent-reproduction-root.py",
+      "original": {
+        "bytes": 7123,
+        "sha256": "08b754c529ef0138adeba5e36d0b4dba905234980ca78c2170328eded068a58e"
+      },
+      "candidate": {
+        "bytes": 10075,
+        "sha256": "10e6ec30c73654989f6c18beae2ea92fefe9a9bf42e5f794824a009d4bca1f72"
+      },
+      "changes": [
+        {
+          "old": "through276",
+          "new": "through279",
+          "count": 2
+        },
+        {
+          "old": "81942cfc6022a785894d3cc2a20de81dc4c6f599",
+          "new": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+          "count": 1
+        },
+        {
+          "old": "retention['prior_links_retained']==45011",
+          "new": "retention['prior_links_retained']==45126",
+          "count": 1
+        },
+        {
+          "old": "retention['added_links']==115",
+          "new": "retention['added_links']==149",
+          "count": 1
+        },
+        {
+          "old": "[45126,11926,1612,11,7083,15500,22457,22117,24024,44]",
+          "new": "[45275,11934,1615,11,7084,15517,22491,22151,24061,34]",
+          "count": 1
+        },
+        {
+          "old": "(7083,7080,3,5,6)",
+          "new": "(7084,7081,3,5,6)",
+          "count": 1
+        },
+        {
+          "old": "registered-pages.json'))==546",
+          "new": "registered-pages.json'))==547",
+          "count": 1
+        },
+        {
+          "old": "acip_proven=7080,acip_heads=7083",
+          "new": "acip_proven=7081,acip_heads=7084",
+          "count": 1
+        },
+        {
+          "old": "landing/pre-bank-untracked.stdout",
+          "new": "landing/untracked-before-banking.stdout",
+          "count": 1
+        },
+        {
+          "old": "assert len(checks)==retention['checks_total'] and all(x['pass_'] is True for x in checks)",
+          "new": "assert len(checks)==retention['checks_total']==224711 and all(x['pass_'] is True for x in checks)",
+          "count": 1
+        },
+        {
+          "old": "env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1')",
+          "new": "env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0')",
+          "count": 1
+        },
+        {
+          "old": "environment_overrides=dict(GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1')",
+          "new": "environment_overrides=dict(GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0')",
+          "count": 1
+        },
+        {
+          "old": "  origin=Path(r['original']);assert origin.read_bytes()==raw",
+          "new": "  origin=Path(r['original']);s=origin.stat();actual=origin.read_bytes();t=origin.stat();assert actual==raw and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns);assert cp.read_bytes()==raw",
+          "count": 1
+        },
+        {
+          "old": "entry=js(B/'reproduction-root-entry/proof.json')",
+          "new": "entry=js(B/'reproduction-root-entry/proof.json')\nassert entry['status']=='PASS_BEFORE_INDEPENDENT_RUNTIME' and entry['head']==HEAD and entry['baseline_hashes']==base['sha256']\nstate_commands=[('head',['rev-parse','HEAD']),('tracked_status',['status','--porcelain=v1','--untracked-files=no']),('untracked',['ls-files','--others','--exclude-standard','-z']),('stages',['ls-files','--stage','-z']),('cached_names',['diff','--cached','--name-only','-z'])]\nassert set(entry['state'])=={x[0] for x in state_commands}|{'index'}\ndef verify_entry_state(boundary):\n results={}\n for label,args in state_commands:\n  expected=(B/'reproduction-root-entry'/(label+'.bin')).read_bytes();assert pin(expected)==entry['state'][label]\n  actual=git(args);assert actual==expected;results[label]=pin(actual)\n indexpath=Path(git(['rev-parse','--git-path','index']).decode().strip());indexpath=indexpath if indexpath.is_absolute() else W/indexpath\n assert str(indexpath.resolve())==entry['index_path']\n expected=(B/'reproduction-root-entry/index.bin').read_bytes();assert pin(expected)==entry['state']['index']\n s=indexpath.stat();actual=indexpath.read_bytes();t=indexpath.stat()\n assert actual==expected and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)\n results['index']=pin(actual);(O/(boundary+'-state.json')).write_text(json.dumps(results,indent=2)+'\\n')\nverify_entry_state('before-final-source-checks')",
+          "count": 1
+        },
+        {
+          "old": " assert (s.st_dev,s.st_ino)==(r['device'],r['inode']) and pin(p.read_bytes())=={k:r[k] for k in ('bytes','sha256')}",
+          "new": " actual=p.read_bytes();t=p.stat();assert (s.st_dev,s.st_ino)==(r['device'],r['inode']) and pin(actual)=={k:r[k] for k in ('bytes','sha256')} and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)",
+          "count": 1
+        },
+        {
+          "old": "for n,r in f['files'].items():assert pin((R/n).read_bytes())==r\nresult=",
+          "new": "for n,r in f['files'].items():assert pin((R/n).read_bytes())==r\nclosure=js(R/'final-proof.json');assert closure['status']=='PASS_REPRODUCTION_AND_LOCAL_RETENTION' and closure['counts']==retention['counts'] and closure['checks_total']==224711\nassert closure['input_aliases']==len(manifest) and closure['actual_layer_invocations']==closure['actual_view_invocations']==1 and closure['actual_new_ctest_invocations']==0\nclosure_source=I/'through279-reproduction-closure-preparation/close-evidence.py.txt';assert (R/'close-evidence.py.txt').read_bytes()==closure_source.read_bytes()\nfor label,script in [('prepare','prepare.py.txt'),('run-once','run-once.py.txt'),('retention','verify-retention.py.txt'),('close-evidence','close-evidence.py.txt')]:\n d=R/'caller-runs'/label;c=js(d/'command.json');e=js(d/'execution.json')\n assert c['argv']==e['argv'] and c['cwd']==e['cwd']==str(R) and Path(e['argv'][-1])==R/script and e['exit']==0\n assert (d/'exit.txt').read_bytes()==b'0\\n' and (d/'stdin.bin').read_bytes()==b'' and (d/'stderr.bin').read_bytes()==b''\n for n in ['stdout','stderr']:assert pin((d/(n+'.bin')).read_bytes())==dict(bytes=e[n+'_bytes'],sha256=e[n+'_sha256'])\nverify_entry_state('after-all-acceptance-checks')\nresult=",
+          "count": 1
+        }
+      ],
+      "full_inverse_exact": true,
+      "syntax_only": true
+    }
+  ],
+  "retention_literal_source": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction/retention-checks.json",
+    "bytes": 22607927,
+    "sha256": "0e7e2647674dc40ce00dcd3b3daab8128a81fc960678c9bdd97858fb158d08fa"
+  },
+  "retention_checks": 224711,
+  "source_map_records": 147,
+  "added_current_entry_raw_state_and_index_checks": true,
+  "root_acceptance_requires_actual_closure_and_caller": true
+}

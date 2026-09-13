@@ -1,0 +1,44 @@
+{
+  "status": "APPROVE_CODE_ONLY_CONDITIONAL_RUNTIME",
+  "utc": "2026-09-13T18:26:19.733372+00:00",
+  "head": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "reviewed": [
+    {
+      "folder": "page-banking-preparation",
+      "freeze": {
+        "bytes": 4016,
+        "sha256": "572124f1cf6815176a7eb6dd9718a932144e11e2be380b3eb8f3948a0c4fd9dc"
+      },
+      "files": 26,
+      "mappings": 9
+    },
+    {
+      "folder": "page-banking-review",
+      "freeze": {
+        "bytes": 6912,
+        "sha256": "a873810864540e3c24baed72065a5be1e2e6d66e3d09fd6f7e072be7ed848d3a"
+      },
+      "files": 44,
+      "mappings": 41
+    }
+  ],
+  "source_maps": 50,
+  "candidate_pins": {
+    "freeze-final-payload-before-staging.py": {
+      "bytes": 8218,
+      "sha256": "02f4bff23dfe604f62f4a21bdd37ff1daacd7bba4ca057176717a31c7a79cdfc"
+    },
+    "bank_root_proofs_through279.py": {
+      "bytes": 17890,
+      "sha256": "4fda2995ef53e3b9fe64c4d6ca30b8eb7f73f661d0dbcfc4c4cfe42d844428ba"
+    }
+  },
+  "root_full_code_diffs_and_report_read": true,
+  "execution_performed": false,
+  "conditions": [
+    "Actual final semantic approval and full identity required.",
+    "Nonempty actual errata or allowances blocks this unchanged candidate; separate narrow review required.",
+    "Root must inventory every actual caller and correction/version history; universal HISTORY is not exhaustive.",
+    "Exact full actual builds,17 tests,retention,reproduction,payload and later whitespace/stage gates remain."
+  ]
+}

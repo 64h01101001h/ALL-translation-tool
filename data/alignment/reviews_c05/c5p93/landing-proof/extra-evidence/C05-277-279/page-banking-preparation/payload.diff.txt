@@ -1,0 +1,89 @@
+--- prior-payload
++++ candidate-payload
+@@ -19,7 +19,7 @@
+ def git(*args):
+     return subprocess.check_output(['git',*args],cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+ base = j(B/'baseline.json')
+-assert git('rev-parse','HEAD').decode().strip() == base['commit'] == '81942cfc6022a785894d3cc2a20de81dc4c6f599'
++assert git('rev-parse','HEAD').decode().strip() == base['commit'] == 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+ assert git('diff','--cached','--name-only','-z') == b''
+ build = j(L/'canonical-builds-once.json')
+ assert build['status']=='PASS' and build['baseline_commit']==base['commit']
+@@ -32,7 +32,7 @@
+     for stream in ('stdout','stderr'):
+         p=pin(raw(L/(label+'.'+stream)))
+         assert p==dict(bytes=record[stream+'_bytes'],sha256=record[stream+'_sha256'])
+-assert b'COVERAGE C05: 276/511' in raw(L/'build-layer.stdout')
++assert b'COVERAGE C05: 279/511' in raw(L/'build-layer.stdout')
+ seed=build['previous_main_csv_seed']
+ assert pin(raw(seed['path']))=={k:seed[k] for k in ('bytes','sha256')}
+ assert raw(seed['path'])==git('show',base['commit']+':docs/geshe_michael_roach_dictionary.csv')
+@@ -46,12 +46,29 @@
+ duration=re.findall(r'Total Test time \(real\) =\s+([0-9.]+) sec',log)
+ assert len(duration)==1
+ retention=j(L/'retention-source-check.json')
+-assert retention['baseline_commit']==base['commit'] and retention['segments']==[274,275,276]
+-assert retention['prior_links_retained']==45011 and retention['added_links']==115
++assert retention['baseline_commit']==base['commit'] and retention['segments']==[277,278,279]
++assert base['full_links']==45126 and retention['prior_links_retained']==base['full_links']
++# Counts come from the actual approved interface, bound to its complete specs.
++approved_review=j(B/'semantic-review/review.json')
++assert approved_review['spec_verdict']==approved_review['quality_verdict']=='APPROVE'
++assert approved_review['open_findings']==[] and approved_review['baseline']==base['commit']
++assert [row['seq'] for row in approved_review['segments']]==[277,278,279]
++approved_spans=0
++for row in approved_review['segments']:
++    assert type(row['span_count']) is int and row['span_count']>0
++    part_raw=raw(B/'semantic-review/reviewed-final'/str(row['seq'])/'spec.json')
++    assert pin(part_raw)==dict(bytes=row['spec_bytes'],sha256=row['spec_sha256'])
++    part=json.loads(part_raw)
++    assert part['course']=='C05' and [s['seq'] for s in part['segments']]==[row['seq']]
++    assert len(part['segments'][0]['spans'])==row['span_count']
++    approved_spans+=row['span_count']
++assert approved_review['total_spans']==approved_spans
++assert retention['added_links']==approved_spans+3  # one canonical sentence anchor per segment
+ assert retention['source_hashes_unchanged'] and retention['review_tuples_and_source_ranges_match']
+ course=j(L/'course-csv-retention.json')
+ assert course['baseline_commit']==base['commit'] and course['all_depths_counts_and_metadata_match_main_csv_refs']
+ meta=j(B/'semantic-review/review.json')
++assert meta==approved_review
+ assert meta['spec_verdict']==meta['quality_verdict']=='APPROVE' and meta['open_findings']==[]
+ assert j(B/'semantic-review/bank-ready-errata.json')==[]
+ assert j(B/'semantic-review/span-head-allow-needed.json')=={}
+@@ -59,6 +76,7 @@
+     p=W/rel
+     if p.exists(): assert raw(p)==git('show',base['commit']+':'+rel)
+ sources={'data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz'}
++assert set(build['output_sha256'])==set(base['sha256']) and len(build['output_sha256'])==9
+ paths=[]
+ for rel,digest in build['output_sha256'].items():
+     value=raw(W/rel)
+@@ -66,21 +84,21 @@
+     if rel in sources:
+         assert digest==base['sha256'][rel]
+     elif value!=git('show',base['commit']+':'+rel): paths.append(rel)
+-paths.extend(['data/alignment/pages_c05/c5p91.html','data/alignment/pages_c05/c5p92.html',
+-              'data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p92.json','tools/build_alignment_layer.py'])
++paths.extend(['data/alignment/pages_c05/c5p92.html','data/alignment/pages_c05/c5p93.html',
++              'data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p93.json','tools/build_alignment_layer.py'])
+ assert len(paths)==len(set(paths))==12
+ registration=j(L/'course-registration-verification.json')
+ for rel,field in [('data/alignment/pages_c05/index.html','index_after'),('tools/build_alignment_layer.py','builder_after')]:
+     assert pin(raw(W/rel))==registration[field]
+-prior=git('show',base['commit']+':data/alignment/pages_c05/c5p91.html')
++prior=git('show',base['commit']+':data/alignment/pages_c05/c5p92.html')
+ nav=b'&larr; Previous</a></div>'
+ assert prior.count(nav)==2
+-assert raw(W/'data/alignment/pages_c05/c5p91.html')==prior.replace(nav,b"&larr; Previous</a><a href='c5p92.html'>Next &rarr;</a></div>")
+-land=j(W/'data/alignment/reviews_c05/c5p92/landing.json')
+-assert pin(raw(W/'data/alignment/specs_c05/c5p92.json'))['sha256']==land['spec_sha256']
++assert raw(W/'data/alignment/pages_c05/c5p92.html')==prior.replace(nav,b"&larr; Previous</a><a href='c5p93.html'>Next &rarr;</a></div>")
++land=j(W/'data/alignment/reviews_c05/c5p93/landing.json')
++assert pin(raw(W/'data/alignment/specs_c05/c5p93.json'))['sha256']==land['spec_sha256']
+ body=raw(L/'generator.stdout')
+ assert pin(body)['sha256']==land['body_sha256']
+-html=raw(W/'data/alignment/pages_c05/c5p92.html')
++html=raw(W/'data/alignment/pages_c05/c5p93.html')
+ assert body in html and b'AI (Codex)' in html and b'Codex (AI)' in html
+ OUT.mkdir()
+ files=[]; copies=[]

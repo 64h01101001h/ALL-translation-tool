@@ -1,0 +1,57 @@
+{
+  "status": "PREPARED_NOT_AUTHORIZED_NOT_EXECUTED",
+  "purpose": "Illustrative exact completed277 fixture command; not a replay request. Future batch requires its own full pinned reviewed config.",
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/verify_reconciliation.py",
+    "--config",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/completed-277-config.json",
+    "--config-sha256",
+    "14b2c4296308a89c47bda357452b0d9f9060c904eb91f307f170e347406f24dd",
+    "--output",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-runs/attempt01",
+    "--execute-reviewed-verification"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation",
+  "environment_delta": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "code": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/verify_reconciliation.py",
+      "bytes": 14332,
+      "sha256": "7c1f6ceb0b506a6df941add09f12078e76d8000815832cb4ee85a9cc5ba29d58"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/config_contract.py",
+      "bytes": 9125,
+      "sha256": "9fb7d4080b6ec5f4e15f79ff4a4da96485f3fa92e39f76c9e84c657ca366a4a5"
+    }
+  ],
+  "config": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/reusable-reconciliation-verifier-preparation/completed-277-config.json",
+    "bytes": 178275,
+    "sha256": "14b2c4296308a89c47bda357452b0d9f9060c904eb91f307f170e347406f24dd"
+  },
+  "output_parent_must_exist_before_authorized_run": true,
+  "output_must_be_fresh_external": true,
+  "required_separate_review": [
+    "entire candidate and helper",
+    "exact actual config and every provenance/count/evidence input",
+    "actual pinned generator and wrapper safety",
+    "baseline and source stability",
+    "independent semantic gates unaffected"
+  ],
+  "caller_capture": [
+    "exact argv and cwd",
+    "actual environment delta",
+    "start/end",
+    "full stdout/stderr/exit",
+    "all partial outputs and failures, including pre-directory config failures"
+  ],
+  "execution_count": 0,
+  "semantic_approval": false
+}

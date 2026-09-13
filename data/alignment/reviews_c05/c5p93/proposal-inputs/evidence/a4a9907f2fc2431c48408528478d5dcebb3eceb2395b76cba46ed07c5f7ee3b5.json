@@ -1,0 +1,33 @@
+{
+  "angle": "english",
+  "source": "hgm-full-rows.json",
+  "term": "phor pa",
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "phor pa",
+    "phor pa"
+  ],
+  "rows": [
+    {
+      "id": 24066,
+      "wylie": "phor pa",
+      "tibetan": "ཕོར་པ",
+      "tibetan_source": null,
+      "acip": "PHOR PA",
+      "pronunciation": "porpa",
+      "pronunciation_source": null,
+      "sanskrit": "{LC}saraka; {LC}ulūkhala; {LC}khāri, pātra, śarāvaka; {LC}taṭvaka",
+      "hopkins_english": null,
+      "hgm_gloss": "[\"glass\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested (not in Great Dictionary)",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"EM\", \"P7\", \"P9\", \"TCS09\"]",
+      "corpus_n_segments": 70,
+      "raw": "{\"tibetan\": \"ཕོར་པ\", \"wylie\": \"phor pa\", \"wylie_variants\": [\"phor pa\"], \"tenses\": null, \"sanskrit\": \"{LC}saraka; {LC}ulūkhala; {LC}khāri, pātra, śarāvaka; {LC}taṭvaka\", \"hopkins_english\": null, \"hgm_gloss\": [\"glass\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"porpa\", \"acip\": \"PHOR PA\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"EM\", \"P7\", \"P9\", \"TCS09\"], \"n_segments\": 70}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "independently_reopened": true
+}

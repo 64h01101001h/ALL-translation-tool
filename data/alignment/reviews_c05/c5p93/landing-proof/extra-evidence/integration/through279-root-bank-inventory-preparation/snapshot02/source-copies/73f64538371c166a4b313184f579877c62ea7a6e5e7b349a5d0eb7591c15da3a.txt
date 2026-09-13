@@ -1,0 +1,24 @@
+"""Preparation-only full prior method/provenance preservation; never imports or runs producers."""
+from pathlib import Path
+import json,hashlib,ast,os,datetime
+P=Path(__file__).resolve().parent;I=P.parent;A=I.parent;B=A/'C05-277-279';old=I/'through276-generated-reproduction-concrete-preparation';records=[]
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def cp(src,dst,role):
+ before=src.stat();raw=src.read_bytes();after=src.stat();assert (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns)
+ dst.parent.mkdir(parents=True,exist_ok=True);assert not dst.exists();dst.write_bytes(raw);assert dst.read_bytes()==src.read_bytes()==raw
+ records.append({'original':str(src),'resolved_original':str(src.resolve()),'symlink':os.readlink(src)if src.is_symlink()else None,'copy':str(dst.relative_to(P)),'role':role,**pin(raw)})
+f=json.loads((old/'freeze.json').read_bytes());assert set(f['files'])=={str(p.relative_to(old))for p in old.rglob('*')if p.is_file()and p!=old/'freeze.json'}
+for rel,v in f['files'].items():assert pin((old/rel).read_bytes())=={k:v[k]for k in ['bytes','sha256']}
+for src in sorted(old.rglob('*')):
+ if src.is_file():cp(src,P/'prior-preparation'/src.relative_to(old),'Complete prior approved276 preparation and its own histories, retained as276')
+extra=[I/'through276-generated-reproduction'/n for n in ['root-runtime-release.json','final-proof.json','close-evidence.py.txt','report.md','input-manifest.json','preparation-proof.json','execution-proof.json','retention-proof.json','acip-incomplete-evidence.json','live-before.json','live-after.json']]
+extra += [I/'through276-generated-reproduction-root-acceptance/proof.json',A/'C05-274-276/reproduction-root-entry/proof.json',B/'baseline.json',A/'land_reviewed_page_v2.py',I/'through276-root-closure/final-observed-main/proof.json']
+for src in extra:cp(src,P/'supporting-inputs'/src.relative_to(A),'Exact actual prior approval/closure or current baseline/landing source; no new approval')
+code=[]
+for name in ['prepare.py.txt','run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt']:
+ raw=(old/name).read_bytes();ast.parse(raw);code.append({'file':name,**pin(raw),'read_complete':True,'parsed_only':True,'executed':False})
+base=json.loads((B/'baseline.json').read_bytes());assert base['commit']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'and base['course_boundary']==276
+save('phase01-original-to-copy-manifest.json',records)
+save('phase01-proof.json',{'status':'SOURCE_CONTRACT_PREPARATION_ONLY_PENDING_ACTUAL279_INPUTS','created_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'prior_freeze':pin((old/'freeze.json').read_bytes()),'prior_frozen_files':len(f['files']),'full_original_copy_pairs':len(records),'four_prior_scripts':code,'actual_incoming_baseline':base,'actual279_totals':None,'actual279_final_review_freeze':None,'actual279_payload_freeze':None,'code_adaptation_emitted':False,'runtime_executions':0,'semantic_approval':False,'role':'Reused Codex context/current277 reconciler, not author of prior276 method; no independent semantic verdict.'})
+print(json.dumps({'status':'PHASE01_PRESERVED','prior_files':len(f['files']),'full_pairs':len(records),'runtime_executions':0}))

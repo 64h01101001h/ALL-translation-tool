@@ -1,0 +1,25 @@
+"""Project the completed root proof's freeze locator to the bank's two-key pin.
+This changes only serialization; the entire actual proof is retained first.
+No verification or semantic judgment is rerun or invented.
+"""
+from pathlib import Path
+import hashlib, json
+B=Path(__file__).resolve().parent
+P=B/'root-final-semantic-review-verification/proof.json'
+H=B/'semantic-root-proof-interface'
+H.mkdir()
+raw=P.read_bytes();old=json.loads(raw)
+assert old['status']=='PASS' and old['head']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+locator=old['review_freeze']
+assert set(locator)=={'path','bytes','sha256'}
+source=Path(locator['path']).read_bytes()
+assert len(source)==locator['bytes'] and hashlib.sha256(source).hexdigest()==locator['sha256']=='d744bffe9a7635a7340aee88431bd192b2afe2e063f126f36896b105bc66578f'
+(H/'actual-passed-proof-before-interface.json').write_bytes(raw)
+new=dict(old)
+new['review_freeze']={k:locator[k] for k in ['bytes','sha256']}
+new['review_freeze_path']=locator['path']
+new['interface_normalization']={'original_proof':str(H/'actual-passed-proof-before-interface.json'),'original_proof_bytes':len(raw),'original_proof_sha256':hashlib.sha256(raw).hexdigest(),'adapter':str(Path(__file__).resolve()),'scope':'Move the unchanged freeze path to a separate locator field; all actual verification fields retained. No new verification run.'}
+assert {k:v for k,v in new.items() if k not in ['review_freeze','review_freeze_path','interface_normalization']}=={k:v for k,v in old.items() if k!='review_freeze'}
+P.write_text(json.dumps(new,ensure_ascii=False,indent=2)+'\n')
+(H/'reason.md').write_text('The actual completed root checker recorded review_freeze as path/bytes/sha256. The independently reviewed root bank requires exactly bytes/sha256. Preserve the entire actual passed proof, move only the path into review_freeze_path and link this adapter. No source, spec, body, review or actual test result changes; no failed bank execution occurred.\n')
+print('PASS lossless completed-proof interface projection; no verification rerun')

@@ -1,0 +1,21 @@
+from pathlib import Path
+import hashlib,json,datetime
+P=Path(__file__).resolve().parent;B=P.parent/'C05-277-279'
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+rows=[]
+for name in ['original-to-copy-manifest.json','status-provenance-map.json']:rows+=json.loads((P/name).read_bytes())
+for r in rows:
+ a=Path(r['original']).read_bytes();b=(P/r['copy']).read_bytes();assert a==b and bp(a)=={k:r[k]for k in ['bytes','sha256']}
+originals={r['original']for r in rows};histories=[]
+for name in ['root-reconciliation-correction01','root-reconciliation-correction02']:
+ paths={str(p)for p in(B/name).rglob('*')if p.is_file()};assert paths<=originals;histories.append({'path':str(B/name),'complete_files':len(paths),'all_original_full_bytes_copied':True})
+assert (P/'tests-final/exit').read_bytes()==b'0\n'and(P/'preparation-verification02/exit').read_bytes()==b'0\n'
+assert (P/'prior-verifier.py.txt').read_bytes()==(B/'verify-reconciliation-root.py').read_bytes()
+put('finalization-proof.json',{'status':'PASS_FROZEN_PREPARATION_ONLY','original_copy_records':len(rows),'distinct_copy_paths':len({r['copy']for r in rows}),'complete_history_trees':histories,'current_original_verifier_unchanged':True,'tests':29,'full_runtime_executions':0,'config_and_source_checks_only':True,'independent_review_required':True,'semantic_approval':False,'adoption':False})
+files={str(p.relative_to(P)):bp(p.read_bytes())for p in sorted(P.rglob('*'))if p.is_file()and p!=P/'freeze.json'}
+assert not any('__pycache__'in Path(n).parts for n in files)
+put('freeze.json',{'status':'FROZEN_CANDIDATE_PENDING_INDEPENDENT_REVIEW','created_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':files,'file_count':len(files),'total_bytes':sum(r['bytes']for r in files.values()),'excludes_only':'freeze.json'})
+for n,r in files.items():assert bp((P/n).read_bytes())==r
+assert set(files)=={str(p.relative_to(P))for p in P.rglob('*')if p.is_file()and p!=P/'freeze.json'}
+print(json.dumps({'freeze':str(P/'freeze.json'),**bp((P/'freeze.json').read_bytes()),'files':len(files),'total_bytes':sum(r['bytes']for r in files.values()),'original_copy_records':len(rows),'distinct_copies':len({r['copy']for r in rows}),'tests':29}))

@@ -1,0 +1,63 @@
+"""Tooling-only fault tests; no SQL, Git, canonical generator or live checker run."""
+from pathlib import Path
+import copy,hashlib,importlib.util,json,unittest
+HERE=Path(__file__).resolve().parent
+class ContractTests(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  p=HERE/'config_contract.py'
+  if p.exists():
+   s=importlib.util.spec_from_file_location('config_contract',p);cls.m=importlib.util.module_from_spec(s);s.loader.exec_module(cls.m)
+  else:cls.m=None
+ def setUp(self):self.assertIsNotNone(self.m,'Missing required config/descriptor validation implementation')
+ def q(self):return {'sql':'SELECT * FROM entries WHERE wylie=?','parameters':['x'],'rows':[{'id':1,'raw':'{"x": 1}'}],'count':1}
+ def test_counted_descriptor_accepts_full_exact_rows(self):
+  q=self.q();self.assertEqual(self.m.bind_query(q,q,{'kind':'standalone'}),1)
+ def test_missing_count_needs_actual_descriptor_absence(self):
+  q=self.q();q.pop('count')
+  with self.assertRaises(AssertionError):self.m.bind_query(q,self.q(),{'kind':'standalone'})
+ def test_list_missing_count_is_derived_from_actual_descriptor(self):
+  q=self.q();q.pop('count');self.assertEqual(self.m.bind_query(q,[q],{'kind':'query_list','index':0}),1)
+ def test_added_count_cannot_change_original_presence(self):
+  src=self.q();src.pop('count')
+  with self.assertRaises(AssertionError):self.m.bind_query(self.q(),src,{'kind':'standalone'})
+ def test_hgm_actual_string_parameter_descriptor_supported(self):
+  q={'sql':'SELECT x WHERE a=? OR b=?','parameters':['x','x'],'rows':[{'raw':'a'}]};src={'sql':q['sql'],'parameters_per_term':'[term,term]','results':{'x':q['rows']}}
+  self.assertEqual(self.m.bind_query(q,src,{'kind':'hgm_results','term':'x'}),1)
+ def test_hgm_unknown_parameter_shape_rejected(self):
+  q={'sql':'SELECT x','parameters':['x'],'rows':[]};src={'sql':q['sql'],'parameters_per_term':'[term]','results':{'x':[]}}
+  with self.assertRaises(AssertionError):self.m.bind_query(q,src,{'kind':'hgm_results','term':'x'})
+ def test_changed_raw_or_sql_or_parameters_fail(self):
+  for k,v in [('sql','SELECT  * FROM entries WHERE wylie=?'),('parameters',['y']),('rows',[{'id':1,'raw':'{"x":1}'}])]:
+   q=self.q();q[k]=v
+   with self.subTest(k=k),self.assertRaises(AssertionError):self.m.bind_query(q,self.q(),{'kind':'standalone'})
+ def test_wrong_count_and_bool_count_rejected(self):
+  for value in [0,True,None]:
+   q=self.q();q['count']=value
+   with self.subTest(value=value),self.assertRaises(AssertionError):self.m.bind_query(q,q,{'kind':'standalone'})
+ def test_unknown_binding_keys_rejected(self):
+  with self.assertRaises(AssertionError):self.m.bind_query(self.q(),self.q(),{'kind':'standalone','allow_missing_count':True})
+ def test_wrong_list_selector_rejected(self):
+  with self.assertRaises(AssertionError):self.m.bind_query(self.q(),[self.q()],{'kind':'query_list','index':1})
+ def test_three_consecutive_sequences_and_counts(self):
+  rows=[{'seq':s,'counts':{'spans':3,'nulls':1,'d5_nonnull':2}}for s in [13,14,15]]
+  self.assertEqual(self.m.batch_counts([13,14,15],rows),{'spans':9,'nulls':3,'d5_nonnull':6})
+ def test_gap_reorder_duplicate_or_bad_counts_rejected(self):
+  for seqs in [[13,15,16],[14,13,15],[13,13,14],[13,14]]:
+   with self.subTest(seqs=seqs),self.assertRaises(AssertionError):self.m.batch_counts(seqs,[{'seq':s,'counts':{'spans':3,'nulls':1,'d5_nonnull':2}}for s in seqs])
+  for counts in [{'spans':0,'nulls':0,'d5_nonnull':0},{'spans':2,'nulls':3,'d5_nonnull':0},{'spans':3,'nulls':1,'d5_nonnull':3}]:
+   with self.subTest(counts=counts),self.assertRaises(AssertionError):self.m.batch_counts([13,14,15],[{'seq':s,'counts':counts}for s in [13,14,15]])
+ def test_pin_requires_absolute_full_bytes(self):
+  p=HERE/'test-fixture.bin';raw=p.read_bytes();ref={'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()};self.assertEqual(self.m.pinned(ref),raw)
+  for r in [{**ref,'path':'test-fixture.bin'},{**ref,'sha256':'0'*64},{**ref,'bytes':len(raw)+1}]:
+   with self.subTest(r=r),self.assertRaises(AssertionError):self.m.pinned(r)
+ def test_original_count_derived_and_optional_fields_checked(self):
+  sp={'id':'p1','d':6,'tib':'kyis','eng':None,'cls':'case','nul':'active role'};pair={'angle':'tibetan','seq':13,'spans':[sp]};record={'angle':'tibetan','seq':13,'id':'p1','d':6,'tib':'kyis','eng':None,'original_span':sp,'original_field_presence':list(sp)}
+  self.assertEqual(self.m.original_inventory([pair],[record]),1)
+  wrong=copy.deepcopy(record);wrong['original_span'].pop('nul')
+  with self.assertRaises(AssertionError):self.m.original_inventory([pair],[wrong])
+ def test_original_omission_duplicate_and_recast_rejected(self):
+  sp={'id':'w1','d':5,'tib':'a','eng':'b'};pair={'angle':'english','seq':13,'spans':[sp]};r={'angle':'english','seq':13,**sp,'original_span':sp,'original_field_presence':list(sp)}
+  for rs in [[],[r,r],[{**r,'eng':'c'}]]:
+   with self.subTest(rs=rs),self.assertRaises(AssertionError):self.m.original_inventory([pair],rs)
+if __name__=='__main__':unittest.main(verbosity=2)

@@ -1,0 +1,34 @@
+{
+  "angle": "tibetan",
+  "source": "lexical-queries-full.json",
+  "term": "bkag pa",
+  "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+  "parameters": [
+    "bkag pa",
+    "bkag pa"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 394,
+      "wylie": "bkag pa",
+      "tibetan": "བཀག་པ",
+      "tibetan_source": null,
+      "acip": "BKAG PA",
+      "pronunciation": "kakpa",
+      "pronunciation_source": null,
+      "sanskrit": "{C}nisiddha; {C}niṣedha; {LC}nivartana; {LC}nivāryate; {LC}niṣiddha; {LC}pratiṣedha; {LC}ābaddha; {LC}dhāraṇa; {LC}niruddha; {LC}pīḍita; {LC}ruddha; {LC}rodha; {LC}vārita; {LC}vidhārita; {LC}saṃruddha; {LC}saṃrodha",
+      "hopkins_english": "negation; stop; negate; refute; negative; limit; {PH}negation; that which is forbidden; {C}has (learned to) refrain; has refrained; inadmissible; refrain; repudiation",
+      "hgm_gloss": "[\"denying\", \"disproved\", \"refutation\", \"deny\", \"refuses\", \"disproving\", \"denied\", \"stopped\", \"refutations\", \"refute\", \"refutes\", \"denial\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": "dgag 'gog bkag khogs",
+      "flags": null,
+      "corpus_courses": "[\"C04\", \"C05\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P7\", \"P9\", \"SPF\", \"Sunlight\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\"]",
+      "corpus_n_segments": 117,
+      "raw": "{\"tibetan\": \"བཀག་པ\", \"wylie\": \"bkag pa\", \"wylie_variants\": [\"bkag pa\"], \"tenses\": \"dgag 'gog bkag khogs\", \"sanskrit\": \"{C}nisiddha; {C}niṣedha; {LC}nivartana; {LC}nivāryate; {LC}niṣiddha; {LC}pratiṣedha; {LC}ābaddha; {LC}dhāraṇa; {LC}niruddha; {LC}pīḍita; {LC}ruddha; {LC}rodha; {LC}vārita; {LC}vidhārita; {LC}saṃruddha; {LC}saṃrodha\", \"hopkins_english\": \"negation; stop; negate; refute; negative; limit; {PH}negation; that which is forbidden; {C}has (learned to) refrain; has refrained; inadmissible; refrain; repudiation\", \"hgm_gloss\": [\"denying\", \"disproved\", \"refutation\", \"deny\", \"refuses\", \"disproving\", \"denied\", \"stopped\", \"refutations\", \"refute\", \"refutes\", \"denial\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"kakpa\", \"acip\": \"BKAG PA\", \"corpus_occurrences\": {\"courses\": [\"C04\", \"C05\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P7\", \"P9\", \"SPF\", \"Sunlight\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\"], \"n_segments\": 117}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "independently_reopened": true
+}

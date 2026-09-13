@@ -1,0 +1,152 @@
+{
+  "source_sha256": "c9bed3d3d4a751ab94689b89843dbcbf08b1e46169ae69e7a1c0148ae11adf44",
+  "body_exact_inverse": true,
+  "changes": [
+    {
+      "old": "B=Path(__file__).resolve().parent;W=B.parents[1]/'campaign-worktree';D=B/'reconciled/277'\nO=B/'root-reconciliation-verification';O.mkdir()",
+      "new": "B=Path(C['batch']);W=Path(C['worktree']);D=Path(C['shared_directory']);SEQS=C['sequences'];COURSE=C['course']\nE=C['evidence'];O=output;O.mkdir()\ndef ep(role):return Path(E[role]['path'])\nfreeze_rows=C['originals']+C['reconciled']"
+    },
+    {
+      "old": "proof=dict(status='RUNNING',role='Root authored preparation-informed Tibetan originals; mechanical/source verification only.',started_at=datetime.datetime.now(datetime.timezone.utc).isoformat());db=None",
+      "new": "proof=dict(status='RUNNING',role=C['operator_role'],semantic_approval=False,started_at=datetime.datetime.now(datetime.timezone.utc).isoformat());db=None"
+    },
+    {
+      "old": "base=read(B/'baseline.json');assert run(['git','rev-parse','HEAD'],'head').decode().strip()==base['commit']=='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'",
+      "new": "base=summary['baseline']\n (O/'config.json').write_bytes(config_raw)\n for name in ['verify_reconciliation.py','config_contract.py']:(O/name).write_bytes((Path(__file__).resolve().parent/name).read_bytes())\n save('config-validation.json',summary)\n for ref in E.values():pinned(ref)\n assert run(['git','rev-parse','HEAD'],'head').decode().strip()==base['commit']\n assert run(['git','status','--short'],'status-before')==pinned(C['status_capture'])"
+    },
+    {
+      "old": "freezes=[frozen(B/a/str(s)) for a in ['tibetan','english','reconciled'] for s in [277,278,279]]\n for seq,h in [(277,'5fc4043d41e982c5500df069c2948ac5d91f837deba6b8fe5987b36f9d0ed05e'),(278,'624f177987122e3a6c85c01e858a7b545e620176e53eaa90f9e6d3a3a31c0959'),(279,'64d832addc6a1015856c451484901db2fc7d383c327cf73770b13feaf00e7611')]:\n  assert pin(B/f'reconciled/{seq}/freeze.json')['sha256']==h",
+      "new": "freezes=[frozen(Path(row['directory'])) for row in freeze_rows]\n for row in freeze_rows:pinned(row['freeze'])"
+    },
+    {
+      "old": "D/'reference-access.json'",
+      "new": "ep('reference_access')"
+    },
+    {
+      "old": "D/'original-to-copy-manifest.json'",
+      "new": "ep('copy_manifest')"
+    },
+    {
+      "old": "D/'logical-aliases.json'",
+      "new": "ep('aliases')"
+    },
+    {
+      "old": "D/'governing-fixed-git-provenance.json'",
+      "new": "ep('governing')"
+    },
+    {
+      "old": "B/'proposal-verification/root-resolved-spans.json'",
+      "new": "ep('original_identities')"
+    },
+    {
+      "old": "D/'independent-source-context-full-rows.json'",
+      "new": "ep('source_context')"
+    },
+    {
+      "old": "B/'source.json'",
+      "new": "ep('source_snapshot')"
+    },
+    {
+      "old": "D/'independent-physical-extents.json'",
+      "new": "ep('physical')"
+    },
+    {
+      "old": ";assert len(mappings)==618",
+      "new": ";assert mappings==json.loads(pinned(E['copy_manifest']))"
+    },
+    {
+      "old": "assert len(originals)==len(original_records)==271",
+      "new": "assert len(originals)==len(original_records)==summary['original_count']"
+    },
+    {
+      "old": "W/'build/hgm_spine_v27_2.db'",
+      "new": "ep('database')",
+      "all": 3
+    },
+    {
+      "old": "W/'tools/gen_alignment_page.py'",
+      "new": "ep('generator')",
+      "all": 2
+    },
+    {
+      "old": "db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',270,285))",
+      "new": "db.execute(C['context']['sql'],C['context']['parameters'])"
+    },
+    {
+      "old": "for s in [277,278,279]]==read",
+      "new": "for s in SEQS]==read"
+    },
+    {
+      "old": "W/'data/hgm_dictionary_v27_2.json.gz'",
+      "new": "ep('master')"
+    },
+    {
+      "old": "W/'data/full_parallel_corpus_v32.json.gz'",
+      "new": "ep('corpus')"
+    },
+    {
+      "old": "queryfiles=sorted((D/'original-query-reopens').glob('*.json'))+sorted((D/'independent-queries').glob('*.json'));assert len(queryfiles)==217",
+      "new": "queryfiles=[Path(r['file']['path']) for r in C['queries']];assert len(queryfiles)==summary['query_count']"
+    },
+    {
+      "old": "for p in queryfiles:\n  q=read(p);assert q['sql'].lstrip().upper().startswith('SELECT ')",
+      "new": "for binding,p in zip(C['queries'],queryfiles):\n  q=json.loads(pinned(binding['file']));bind_query(q,json.loads(pinned(binding['descriptor'])),binding['binding'])\n  assert q['sql'].lstrip().upper().startswith('SELECT ')"
+    },
+    {
+      "old": "if 'count' in q:assert len(actual)==q['count'],str(p)\n  else:assert p.parent.name=='original-query-reopens' and 81<=int(p.stem)<=150",
+      "new": "assert len(actual)==bind_query(q,json.loads(pinned(binding['descriptor'])),binding['binding'])"
+    },
+    {
+      "old": "bycourse['C05'][r['seq']-1]",
+      "new": "bycourse[COURSE][r['seq']-1]"
+    },
+    {
+      "old": ";assert len(physical)==23",
+      "new": ";assert physical==json.loads(pinned(E['physical']))"
+    },
+    {
+      "old": "wrapper=D/'run-canonical-readonly.py'",
+      "new": "wrapper=ep('wrapper')"
+    },
+    {
+      "old": "for seq,count,nulls,d5 in [(277,61,6,39),(278,21,0,14),(279,64,2,41)]:\n  d=B/f'reconciled/{seq}'",
+      "new": "for record in C['reconciled']:\n  seq=record['seq'];count=record['counts']['spans'];nulls=record['counts']['nulls'];d5=record['counts']['d5_nonnull']\n  d=Path(record['directory'])"
+    },
+    {
+      "old": "spec['course']=='C05'",
+      "new": "spec['course']==COURSE"
+    },
+    {
+      "old": "allow['pages_c05']",
+      "new": "allow['pages_'+COURSE.lower()]"
+    },
+    {
+      "old": "assert len(finals)==146 and len(seen)==len(set(seen))==271 and set(seen)==set(originals)",
+      "new": "assert len(finals)==summary['totals']['spans'] and len(seen)==len(set(seen))==summary['original_count'] and set(seen)==set(originals)"
+    },
+    {
+      "old": "assert freezes==[frozen(B/a/str(s)) for a in ['tibetan','english','reconciled'] for s in [277,278,279]]",
+      "new": "assert freezes==[frozen(Path(row['directory'])) for row in freeze_rows]\n assert validate_config(C)==summary\n for ref in E.values():pinned(ref)"
+    },
+    {
+      "old": "assert run(['git','status','--short'],'status').decode()=='?? data/teaching/dcc_captions\\n'",
+      "new": "assert run(['git','status','--short'],'status')==pinned(C['status_capture'])\n assert run(['git','rev-parse','HEAD'],'head-after').decode().strip()==base['commit']"
+    },
+    {
+      "old": "original_identities=271,final_spans=146,nulls=8,nonnull_d5=94",
+      "new": "original_identities=summary['original_count'],final_spans=summary['totals']['spans'],nulls=summary['totals']['nulls'],nonnull_d5=summary['totals']['d5_nonnull']"
+    },
+    {
+      "old": "governing_git_objects=10",
+      "new": "governing_git_objects=len(governing['actual_runs'])"
+    },
+    {
+      "old": "canonical_replays=3",
+      "new": "canonical_replays=len(C['reconciled'])"
+    },
+    {
+      "old": "history='Complete737/16/16 frozen trees and618 source mappings include actual failed helpers and disposition/report corrections; not stale274 history.'",
+      "new": "history='Complete configured freezes and pinned source mappings retained, including their actual nested failed and superseded histories; config supplies exact batch inputs without semantic acceptance.'"
+    }
+  ]
+}

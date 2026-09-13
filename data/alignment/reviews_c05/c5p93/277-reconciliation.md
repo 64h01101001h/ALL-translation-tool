@@ -1,0 +1,14 @@
+C05:277 — PROVISIONAL reconciliation by Codex, reused non-author context; neither current original angle authored here.
+Final: 61 spans; 6 nulls; 39 nonnull d5; depths {'3': 5, '5': 43, '6': 13, '7': 0}; errata 0.
+All 111 original identities receive separate full dispositions: {'retained': 100, 'recast': 10, 'omitted': 1}. Original optional keys, raw declarations, parents and ranges are preserved.
+dbang gis/depending on is omitted for causal-scope restructuring. Second gzugs takes the object endpoint form. Matrix ma yin is tightened at d3; shared question bsgribs keeps one predicate and one explicit ellipsis null. sam/or is recovered.
+Actual source/context, 151 full original query sets and 66 source-preparation query files were independently reopened; full raw original-query objects match complete master/corpus archives. No glossary promotion.
+Full physical sources and 23 specified witness extents are retained. Relevant P7 printed36–38 images were directly inspected; common-locus excerpts were read. Physical/digital equality does not establish independent publication or ingestion.
+Errata suspicions receive all five grounds in errata-analysis.json; actual register and exact-field counts are retained in ../277/errata-register-and-parallel-recheck.json. Empty errata means no claim survives, not silent source correction.
+Every final ordered seven-key tuple and rationale is in final-tuples.json/final-decisions.json; omissions.json contains material decisions and complete unwrapped complements.
+Canonical note is final for this execution; no stale pending-review wording, source retyping or body reconstruction.
+Actual final generator: EXIT=0; stderr=0 bytes; body=9842 bytes SHA256 10e2ffd370ea12198c7fc82b51eb9eee5059a06df6763faf52770e20303681ba; spec=9757 bytes SHA256 88c1c69c1f210490636fc1ad5dd22cd0d0fbcbb6455c9ac7a11396f0710f61df.
+canonical-final-attempt01 retains exact argv, stdin, stdout, stderr, exit and code/wrapper hashes. Both complete source fields reproduce exactly. No supplied-head allowance is needed under the actual predicate.
+Six final-original canonical inputs were independently replayed exactly once each; all five English original canonical attempts and superseded versions remain preserved through ../277/original-to-copy-manifest.json.
+Own failed evidence-helper attempts and initial disposition-reference history are retained; role-and-history.json states the actual history limitation. All original/copy bytes undergo reviewed evidence-copy-v2 preflight.
+No source/master/repository/index edits, builders, semantic acceptance, landing or paid/native/network actions. Separate non-author semantic review is required before any acceptance.

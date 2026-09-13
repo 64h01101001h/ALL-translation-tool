@@ -1,0 +1,30 @@
+{
+  "status": "APPROVE_EXACT_CLOSURE_AND_ROOT_ACCEPTANCE_RUNTIME",
+  "utc": "2026-09-13T19:45:38.236730+00:00",
+  "preparation_freeze": {
+    "bytes": 35265,
+    "sha256": "c72e438be5580182990e59ab92fde3c74b68ebf89089a79cea458228ac1ab452"
+  },
+  "independent_review_freeze": {
+    "bytes": 38153,
+    "sha256": "7051f019b32328af20607b49cb8cf19c7c91d492493ba11d04e73e343f99ff44"
+  },
+  "whole_frozen_files": 383,
+  "full_source_copy_pairs": 344,
+  "code_mapping": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-reproduction-closure-preparation/close-evidence.py.txt",
+      "copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction/close-evidence.py.txt",
+      "bytes": 4879,
+      "sha256": "7b3db3b8d72a5adf97054c8dd17f4011843ebfff28b0c72a767ba1442150807f"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-reproduction-closure-preparation/accept-independent-reproduction-root.py",
+      "copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/accept-independent-reproduction-root.py",
+      "bytes": 10075,
+      "sha256": "10e6ec30c73654989f6c18beae2ea92fefe9a9bf42e5f794824a009d4bca1f72"
+    }
+  ],
+  "root_read_both_full_codes_diffs_contract_and_review": true,
+  "scope": "Once close with actual full caller, then complete actual runtime freeze, then separate root acceptance once. Existing successful producers/tests are not rerun. No bank/stage/commit/native/MAIN approval supplied."
+}

@@ -1,0 +1,57 @@
+{
+  "status": "INTERFACE_INSPECTED_PREPARATION_PENDING_ACTUAL_OUTPUTS",
+  "review": {
+    "bytes": 8621,
+    "sha256": "29b297996a7588fb8ad5557af27665001d3c2368b70baef16be8136cc7579623"
+  },
+  "freeze": {
+    "bytes": 493230,
+    "sha256": "694dceeb5248484e702d1973c84be78b7f6b34750fa75708113338e0887fee8a"
+  },
+  "tuples": {
+    "bytes": 21167,
+    "sha256": "0bfc3e847d0cbacb8e9737996a38da50f990cfc502da7f604190df3c1bf613a5"
+  },
+  "counts": {
+    "tuples": 112,
+    "nulls": 3,
+    "nonnull_d5": 81,
+    "anchors": 3,
+    "added_links": 115,
+    "prior_links": 45011
+  },
+  "schema": {
+    "approval": "verdict/spec_verdict/quality_verdict APPROVE",
+    "freeze": "files DICT",
+    "tuples": "seven keys, tib_range/eng_range",
+    "selected_segments": [
+      274,
+      275,
+      276
+    ]
+  },
+  "prior_seed_aliases": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/previous-main-csv-seed.bin",
+      "copy": "seed/previous-main-csv-seed.bin",
+      "role": "actual root first-view seed",
+      "bytes": 16122105,
+      "sha256": "105f869bbc7f04032e083e637c32d10837029c6428b512b89a0458d6ef54bf5b"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/previous-main-csv-seed.bin",
+      "copy": "seed/previous-main-csv-seed.bin",
+      "role": "first isolated view seed; intentionally previous main CSV",
+      "bytes": 16122105,
+      "sha256": "105f869bbc7f04032e083e637c32d10837029c6428b512b89a0458d6ef54bf5b",
+      "materialized_initial_path": "workspace/docs/geshe_michael_roach_dictionary.csv",
+      "version_note": "Immutable seed copy. materialized_initial_path held these exact bytes immediately before the first view invocation and was then legitimately replaced by the generated current main CSV. Original pre-execution manifest retained verbatim."
+    }
+  ],
+  "retention": {
+    "original_records": 14,
+    "distinct_copies": 14,
+    "new_copies": 14
+  },
+  "limitations": "Only interface identity/counts; no new semantic approval; no source queries or runtime preparation"
+}

@@ -1,0 +1,162 @@
+"""Root identity gate AFTER reading the independent final semantic review.
+
+Current277–279 schema only. This checker does not supply a semantic judgment,
+rerun SQLite queries, or regenerate canonical bodies. All actual evidence is
+read in full and retained by the review freeze; new Git reads are recorded.
+Usage: python3 -B verify-final-semantic-review-root.py REVIEW_FREEZE_SHA256
+"""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess, sys
+
+B=Path(__file__).resolve().parent
+R=B/'semantic-review'
+A=B.parent
+W=A.parent/'campaign-worktree'
+O=B/'root-final-semantic-review-verification'
+assert not O.exists(), 'Preserve every previous root attempt before rerunning'
+O.mkdir()
+HEAD='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+SEQS=[277,278,279]
+def pin(p):
+    raw=p.read_bytes()
+    return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def read(p):return json.loads(p.read_bytes())
+def save(p,v):p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def call(argv,label):
+    folder=O/label;folder.mkdir()
+    start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+    run=subprocess.run(argv,cwd=W,input=b'',capture_output=True,env={**os.environ,'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'})
+    for name,raw in [('stdout.bin',run.stdout),('stderr.bin',run.stderr),('stdin.bin',b''),('exit.txt',f'{run.returncode}\n'.encode())]:
+        (folder/name).write_bytes(raw)
+    save(folder/'execution.json',dict(argv=argv,cwd=str(W),started_at=start,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=run.returncode,stdout=pin(folder/'stdout.bin'),stderr=pin(folder/'stderr.bin'),environment_overrides={'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'}))
+    assert run.returncode==0 and not run.stderr,(label,run.returncode)
+    return run.stdout
+try:
+    assert len(sys.argv)==2 and pin(R/'freeze.json')['sha256']==sys.argv[1]
+    assert call(['git','rev-parse','HEAD'],'head-before').decode().strip()==HEAD
+    expected_status=b'?? data/teaching/dcc_captions\n'
+    assert call(['git','status','--porcelain=v1','-uall'],'status-before')==expected_status
+    baseline=read(B/'baseline.json');assert baseline['commit']==HEAD and baseline['course_boundary']==276
+    assert len(baseline['sha256'])==9
+    for path,sha in baseline['sha256'].items():assert pin(W/path)['sha256']==sha,path
+    freeze=read(R/'freeze.json')
+    actual={str(p.relative_to(R)):pin(p) for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json'}
+    assert actual==freeze['files']
+    assert len(actual)==freeze['file_count'] and sum(x['bytes'] for x in actual.values())==freeze['total_bytes']
+    supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+    assert all(Path(path).suffix.lower() in supported for path in actual), 'Every frozen byte must survive canonical review copy'
+    meta=read(R/'review.json')
+    assert meta['verdict']==meta['spec_verdict']==meta['quality_verdict']=='APPROVE'
+    assert meta['open_findings']==[]
+    assert meta['status']=='APPROVE' and meta['baseline_commit']==HEAD
+    assert meta['report']==pin(R/'review.md')
+    assert meta['checklist'] and all(r['status']=='APPROVE' for r in meta['checklist'])
+    assert [r['seq'] for r in meta['segments']]==SEQS
+    assert freeze['spec_verdict']==freeze['quality_verdict']=='APPROVE'
+    assert read(R/'bank-ready-errata.json')==[]
+    assert read(R/'span-head-allow-needed.json')=={}
+    for category in ['tibetan','english','reconciled']:
+        for seq in SEQS:
+            folder=B/category/str(seq)
+            f=read(folder/'freeze.json')
+            values=f['files']
+            if category=='tibetan':
+                assert isinstance(values,list) and all(set(r)=={'path','bytes','sha256'} for r in values)
+                assert len({r['path'] for r in values})==len(values)
+                expected={r['path']:{k:r[k] for k in ['bytes','sha256']} for r in values}
+            else:
+                assert isinstance(values,dict)
+                expected=values
+            assert {str(p.relative_to(folder)):pin(p) for p in folder.rglob('*') if p.is_file() and p!=folder/'freeze.json'}==expected
+    structural=read(R/'structural-proof.json')
+    assert structural['status']=='PASS' and structural['final_spans']==146 and structural['original_identities']==271
+    assert structural['nulls']==8 and structural['d7']==4 and structural['nonnull_d5']==94
+    assert len(structural['complements'])==6 and all(x['complete_complement'] for x in structural['complements'])
+    resolved=read(R/'resolved-spans.json')
+    assert resolved==read(B/'root-reconciliation-verification/resolved-spans.json')
+    assert len(resolved)==146
+    assert all(list(r)==['seq','id','d','tib','eng','tib_range','eng_range'] for r in resolved)
+    judgments=read(R/'independent-span-judgments.json')
+    assert pin(R/'independent-span-judgments.json')['sha256']=='d3819681e7bc5bb6c54241348ff34d6396dbbc03486e2b8fb491fa4ac21aa564'
+    assert len(judgments)==146 and [{k:r[k] for k in resolved[0]} for r in judgments]==resolved
+    assert all(r['independent_assessment']=='SUPPORTED' and r['reason'].strip() for r in judgments)
+    canonical=read(R/'canonical-proof.json')
+    assert [r['seq'] for r in canonical]==SEQS
+    totals=dict(spans=0,nulls=0,word_pairs=0)
+    for row,c in zip(meta['segments'],canonical):
+        seq=row['seq'];folder=B/'reconciled'/str(seq);spec=read(folder/'spec.json')
+        assert spec['course']=='C05' and [s['seq'] for s in spec['segments']]==[seq]
+        spans=spec['segments'][0]['spans']
+        counts=dict(spans=len(spans),nulls=sum(s['eng'] is None for s in spans),word_pairs=sum(s['d']==5 and s['eng'] is not None for s in spans))
+        assert counts==dict(spans=row['span_count'],nulls=row['null_count'],word_pairs=row['word_pair_count'])
+        for key,val in counts.items():totals[key]+=val
+        for name,file in [('spec','spec.json'),('body','body.html')]:
+            expected=dict(bytes=row[name+'_bytes'],sha256=row[name+'_sha256'])
+            assert expected==pin(folder/file)==pin(R/'reviewed-final'/str(seq)/file)
+            assert c[name+'_bytes']==expected['bytes'] and c[name+'_sha256']==expected['sha256']
+        run=R/'canonical-runs'/str(seq);e=read(run/'execution.json')
+        assert e==c['execution'] and e['exit']==c['generator_exit']==row['generator_exit']==int((run/'exit.txt').read_text())==0
+        assert (run/'stdin.bin').read_bytes()==(folder/'spec.json').read_bytes()
+        assert (run/'stdout.bin').read_bytes()==(folder/'body.html').read_bytes() and not (run/'stderr.bin').read_bytes()
+        for field in ['stdin','stdout','stderr']:assert e[field]==pin(run/(field+'.bin'))
+    assert totals==dict(spans=146,nulls=8,word_pairs=94)
+    assert all(meta['total_'+key]==value for key,value in totals.items())
+    records=read(R/'original-to-copy-manifest.json')
+    assert isinstance(records,list) and records
+    git_cache={};logical=[];normalized={}
+    for row in records:
+        copy=R/row['copy'];assert copy.resolve().is_relative_to(R.resolve())
+        assert pin(copy)=={k:row[k] for k in ['bytes','sha256']}
+        commit=row.get('original_git_commit')
+        if commit:
+            key=(commit,row['repository_relative_path'])
+            if key not in git_cache:git_cache[key]=call(['git','show',commit+':'+row['repository_relative_path']],f'git-object-{len(git_cache)+1:03}')
+            original=git_cache[key]
+        else:
+            source=Path(row['original']);original=source.read_bytes()
+            normalized.setdefault(str(source.resolve()),[]).append(row)
+            logical.append(dict(original=str(source),resolved=str(source.resolve()),symlink=os.readlink(source) if source.is_symlink() else None,copy=row['copy'],**pin(copy)))
+        assert original==copy.read_bytes(),row
+    save(O/'current-original-aliases.json',logical)
+    # Original input-boundary keeps logical aliases; preservation normalizes them.
+    for row in read(R/'input-boundary.json'):
+        path=Path(row['original'])
+        assert str(path.resolve(strict=True))==row['resolved']
+        assert (os.readlink(path) if path.is_symlink() else None)==row['symlink']
+        assert pin(path)=={k:row[k] for k in ['bytes','sha256']}
+        assert any(pin(R/r['copy'])==pin(path) for r in records if str(Path(r['original']).resolve())==row['resolved']),row
+    for name in ['data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']:
+        rows=normalized.get(str((W/name).resolve()),[])
+        assert len(rows)==1,(name,len(rows))
+        assert rows[0]['sha256']==baseline['sha256'][name]
+    # Every retained root checker failure/correction has complete original bytes in final evidence.
+    failure_files=[]
+    for folder in ['root-reconciliation-correction01','root-reconciliation-correction02','reconciliation-root-caller','reconciliation-root-caller-v2','reconciliation-root-caller-v3']:
+        for path in (B/folder).rglob('*'):
+            if path.is_file():
+                matches=[r for r in records if str(Path(r['original']).resolve())==str(path.resolve())]
+                assert matches and any((R/r['copy']).read_bytes()==path.read_bytes() for r in matches),str(path)
+                failure_files.append(str(path.relative_to(B)))
+    save(O/'retained-root-history-files.json',failure_files)
+    query=read(R/'query-reopen-proof.json')
+    assert query['count']==len(query['queries'])==217 and query['database_before']==query['database_after']
+    assert all(r['row_identity'] for r in query['queries'])
+    for folder in ['independent-queries','original-query-reopens']:
+        for path in (R/'independent-reopens'/folder).glob('*.json'):
+            r=read(path);old=read(Path(r['original_query']))
+            assert r['query_pin']==pin(Path(r['original_query']))
+            assert r['sql']==old['sql'] and r['parameters']==old['parameters'] and r['rows']==old['rows']
+            assert r['count']==len(r['rows']) and r['query_only']==1
+    assert pin((W/'build/hgm_spine_v27_2.db').resolve())==query['database_after']
+    assert read(R/'full-original-object-proof.json')['status']=='PASS'
+    assert read(R/'head-predicate-proof.json')['hits']==[]
+    assert read(R/'physical-reopen-proof.json')['status']=='PASS'
+    assert call(['git','rev-parse','HEAD'],'head-after').decode().strip()==HEAD
+    assert call(['git','status','--porcelain=v1','-uall'],'status-after')==expected_status
+    for path,sha in baseline['sha256'].items():assert pin(W/path)['sha256']==sha,path
+    proof=dict(status='PASS',head=HEAD,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),review_freeze={'path':str(R/'freeze.json'),**pin(R/'freeze.json')},review_metadata=pin(R/'review.json'),review_report=pin(R/'review.md'),file_count=len(actual),total_bytes=freeze['total_bytes'],source_copy_records=len(records),fixed_Git_objects=len(git_cache),all_original_aliases_current=True,original_and_reconciliation_freezes=9,totals=totals,all146_independent_judgments_read=True,retained_root_history_files=len(failure_files),new_canonical_runs=0,new_SQL_queries=0,unchanged_baseline_files=9,root_semantic_decision='Accept the separately reviewed reconciled page as provisional machine alignment; no hgm_gloss promotion.',integration_limit='No page landing, full builds, fidelity suites, native rendering, installed-phone resource or MAIN application implied by this proof.')
+    save(O/'proof.json',proof);print(json.dumps(proof,indent=2))
+except Exception:
+    import traceback
+    (O/'failure.txt').write_text(traceback.format_exc())
+    raise

@@ -1,0 +1,12 @@
+from pathlib import Path
+import json
+O=Path(__file__).resolve().parent;H=O/'history-candidate01';H.mkdir()
+for n in ['spec.json','body.html','occurrence-declarations.json','draft.py']:(H/n).write_bytes((O/n).read_bytes())
+spec=json.loads((O/'spec.json').read_bytes());ss=spec['segments'][0];sp=ss['spans'];q=next(x for x in sp if x['id']=='w39');sp.remove(q);i=next(i for i,x in enumerate(sp)if x['id']=='p41');sp.insert(i+1,q)
+D=json.loads((O/'occurrence-declarations.json').read_bytes());r=next(x for x in D['declarations']if x['id']=='w39');r['tib'].update(start=458,end=465,selected_occurrence=2);r['rationale']='One English obscure is shared by both polarity alternatives. Select the second, negative Tibetan predicate after ma; leave the first repeated positive predicate unbanked, not null. This also distinguishes the following conditional bsgribs.'
+D['declarations'].remove(r);j=next(i for i,x in enumerate(D['declarations'])if x['id']=='p41');D['declarations'].insert(j+1,r)
+D['concerns'][3]='The first bsgribs in the polarity question is unbanked; its single shared English obscure is mapped once to the second Tibetan bsgribs after ma. The third bsgribs is the separate conditional obscure. Both appearances of snang after negative mi remain elliptic and omitted.'
+ss['note']+=' The single obscure in the polarity question is assigned once to its second, negative bsgribs; the first repeated predicate is unbanked, while the third conditional bsgribs has its own obscure. No null is used for this shared predicate.'
+(O/'candidate02.spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(O/'occurrence-declarations.json').write_text(json.dumps(D,ensure_ascii=False,indent=2)+'\n')
+code=(O/'run_canonical.py').read_text().replace('(277,278,279)','(277,)').replace('canonical-attempt01','canonical-attempt02').replace('candidate01.spec.json','candidate02.spec.json');(O/'run_canonical02.py').write_text(code)
+print('Preserved complete candidate01; moved w39 to its negative question occurrence, no null added.')

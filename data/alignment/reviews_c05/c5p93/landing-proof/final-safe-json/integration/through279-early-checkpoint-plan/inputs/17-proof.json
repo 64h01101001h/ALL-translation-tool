@@ -1,0 +1,156 @@
+{
+  "status": "PASS_INDEPENDENT_BOUNDED_PARSER_CANDIDATE_REVIEW",
+  "utc": "2026-09-13T18:56:55.880380+00:00",
+  "head": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "freeze": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/drill-pack-parser-correction-preparation/freeze.json",
+    "bytes": 354916,
+    "sha256": "b06012b9dfaebbc507179db728c44464909880a9d35d5558ddbc161b316c0738"
+  },
+  "files_checked": 1930,
+  "bytes_checked": 15134294,
+  "full_original_maps": [
+    {
+      "name": "input-manifest.json",
+      "records": 15,
+      "pin": {
+        "bytes": 6661,
+        "sha256": "107c46058fa700a5d79f3b570b42f62f1fe3d660b3b6cd7bd8c8e0f2aa7a9f04"
+      }
+    },
+    {
+      "name": "dependency-manifest.json",
+      "records": 1068,
+      "pin": {
+        "bytes": 557033,
+        "sha256": "95ce222b15ea1743b0b2f0f1d6689c0c1eeb69596c4f4350ac1e8a2057bbae84"
+      }
+    }
+  ],
+  "candidate_pins": {
+    "candidate/build_drill_pack.cpp": {
+      "bytes": 35721,
+      "sha256": "3e4f9b50079b2c2dba505245d2b67c3ef4ab1ad627bdd568b24739f311ed1d3a"
+    },
+    "candidate/drill_evidence_json.h": {
+      "bytes": 5221,
+      "sha256": "043f72ccee274aba42e9af41d04354f83b70d697fb2819c4f4a80b361c78c9a6"
+    }
+  },
+  "root_rechecked_actual_results": [
+    "simple-order-raw",
+    "simple-order-second",
+    "simple-order-vocab",
+    "escaped-quotes-raw",
+    "escaped-quotes-second",
+    "escaped-quotes-vocab",
+    "distant-count-raw",
+    "distant-count-second",
+    "distant-count-vocab",
+    "bracket-in-string-raw",
+    "bracket-in-string-second",
+    "bracket-in-string-vocab",
+    "escapes-unicode-raw",
+    "escapes-unicode-second",
+    "escapes-unicode-vocab",
+    "empty-English-best-raw",
+    "empty-English-best-second",
+    "empty-English-best-vocab",
+    "escaped-key-raw",
+    "escaped-key-second",
+    "escaped-key-vocab",
+    "empty-pairs-raw",
+    "empty-pairs-second",
+    "empty-pairs-vocab",
+    "unicode-escapes-raw",
+    "unicode-escapes-second",
+    "unicode-escapes-vocab",
+    "compact-json-raw",
+    "compact-json-second",
+    "compact-json-vocab",
+    "top12-rank-raw",
+    "top12-rank-second",
+    "top12-rank-vocab",
+    "first300-order-raw",
+    "first300-order-second",
+    "first300-order-vocab",
+    "truncated-raw",
+    "truncated-second",
+    "truncated-vocab",
+    "trailing-garbage-raw",
+    "trailing-garbage-second",
+    "trailing-garbage-vocab",
+    "missing-pairs-raw",
+    "missing-pairs-second",
+    "missing-pairs-vocab",
+    "pairs-not-object-raw",
+    "pairs-not-object-second",
+    "pairs-not-object-vocab",
+    "rendering-not-array-raw",
+    "rendering-not-array-second",
+    "rendering-not-array-vocab",
+    "missing-n-raw",
+    "missing-n-second",
+    "missing-n-vocab",
+    "noninteger-n-raw",
+    "noninteger-n-second",
+    "noninteger-n-vocab",
+    "overflow-n-raw",
+    "overflow-n-second",
+    "overflow-n-vocab",
+    "negative-n-raw",
+    "negative-n-second",
+    "negative-n-vocab",
+    "wrong-eng-type-raw",
+    "wrong-eng-type-second",
+    "wrong-eng-type-vocab",
+    "duplicate-n-raw",
+    "duplicate-n-second",
+    "duplicate-n-vocab",
+    "actual-complete-evidence-raw",
+    "actual-complete-evidence-second",
+    "actual-complete-evidence-vocab"
+  ],
+  "red_failures": 58,
+  "green_passes": 72,
+  "full_source_heads": 7083,
+  "full_source_renderings": 15500,
+  "source_differing_old_head_arrays": 200,
+  "unchanged_regions": [
+    {
+      "region": "before-second",
+      "bytes": 16043,
+      "sha256": "830b51bb9cea22e94b54163f34f7b1e20da0a6af51790cfbd60c6ef09dfef3fc"
+    },
+    {
+      "region": "between-second-vocab",
+      "bytes": 7855,
+      "sha256": "0afc5ce328d43c9fb89a40d1ed9b12645256f66e948616996f8e75286f7ec5fc"
+    },
+    {
+      "region": "vocab-after-parser",
+      "bytes": 6614,
+      "sha256": "033b8f7af25dbdd298e8d92a6584a6eca161f0b45a809991fb289ac4a026b176"
+    },
+    {
+      "region": "output-escaper-converter-helper",
+      "bytes": 1319,
+      "sha256": "7979f810865fed9069f98dd3b3b11cb300eb94d2cd7f20fc1f5be4d9bab06bdb"
+    }
+  ],
+  "no_additional_compile_or_generation": true,
+  "production_adopted": false,
+  "approved_scope": "Exact parser candidate and measured current SQLite3.51.0 consumer prefixes only. Fresh binary/full-pack provenance and fidelity still required.",
+  "limits": [
+    "No allcore link, full pack, FTS or converter execution, native view, installed phone or MAIN integration.",
+    "SQLite JSON id is an internal housekeeping identifier; current traversal order is verified on this source/library, with no cross-version guarantee.",
+    "Existing output escaper normalizes controls; full pack requires complete emitted-wording check. Silent/peel full-bank scanners remain unchanged.",
+    "Vocab prefix tests6137 possible heads; downstream actual400 success selection is not claimed. C++ second ties retain current comparator; no portable stable tie order claim.",
+    "System dyld library bytes are not copied; actual compiler and observed dependencies are pinned."
+  ],
+  "public_reference": {
+    "url": "https://www.sqlite.org/json1.html",
+    "use": "Official documentation describes JSON support and states id is an internal identifier, not a stable traversal ordering contract."
+  },
+  "open_code_findings": []
+}

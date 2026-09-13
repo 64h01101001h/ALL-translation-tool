@@ -1,0 +1,38 @@
+from pathlib import Path
+import json,hashlib,os,datetime
+D=Path(__file__).resolve().parent
+I=D.parents[1]; ROOT=I.parents[1]; B=ROOT/'campaign-artifacts/C05-277-279'; W=ROOT/'campaign-worktree';L=B/'landing'
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def dump(p,x):p.write_text(json.dumps(x,indent=2)+'\n')
+records=[]
+files=[p for p in L.iterdir() if p.is_file() and p.name!='previous-main-csv-seed.bin']
+files += [p for p in (B/'landing-runs').rglob('*') if p.is_file()]
+for p in sorted(files):
+ b=p.read_bytes(); t=D/'inputs'/p.relative_to(B)
+ if t.suffix in ['.py','.diff'] or not t.suffix:t=t.with_name(t.name+'.txt')
+ t.parent.mkdir(parents=True,exist_ok=True)
+ with t.open('xb') as f:f.write(b)
+ assert t.read_bytes()==b
+ records.append({'original':str(p),'resolved_original':str(p.resolve()),'symlink':os.readlink(p) if p.is_symlink() else None,'copy':str(t.relative_to(D)),**pin(b)})
+callers=[]
+for d in sorted((B/'landing-runs').iterdir()):
+ if not d.is_dir():continue
+ q=json.loads((d/'execution.json').read_bytes());assert q['exit']==0
+ for stream in ['stdout','stderr']:
+  z=(d/(stream+'.bin')).read_bytes();assert len(z)==q[stream+'_bytes'] and pin(z)['sha256']==q[stream+'_sha256']
+ assert int((d/'exit.txt').read_text())==0 and (d/'stdin.bin').stat().st_size==q['stdin_bytes']==0
+ callers.append({'directory':str(d),'execution':pin((d/'execution.json').read_bytes()),'exit':0})
+assert len(callers)==11
+m=json.loads((L/'staged-payload-manifest.json').read_bytes());payload=[]
+for r in m['files']:
+ b=(L/'payload-freeze'/r['path']).read_bytes();assert pin(b)=={k:r[k] for k in ['bytes','sha256']};assert b==(W/r['path']).read_bytes();payload.append(r)
+assert len(payload)==12
+build=json.loads((L/'canonical-builds-once.json').read_bytes())
+for prefix,rec in zip(['build-layer','build-view'],build['runs']):
+ assert rec['exit']==0
+ for stream in ['stdout','stderr']:
+  b=(L/(prefix+'.'+stream)).read_bytes();assert pin(b)=={'bytes':rec[stream+'_bytes'],'sha256':rec[stream+'_sha256']}
+seed=build['previous_main_csv_seed'];assert pin(Path(seed['path']).read_bytes())=={k:seed[k] for k in ['bytes','sha256']}
+dump(D/'original-to-copy-manifest.json',records)
+dump(D/'proof.json',{'status':'ACTUAL_PREREQUISITE_BYTES_VERIFIED_NOT_REPRODUCTION_APPROVAL','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'copied_files':len(records),'actual_callers':callers,'payloads_full_frozen_vs_live':payload,'incoming_seed':seed,'layer_calls':1,'view_calls':1,'view_stderr_is_actual_informational_output':pin((L/'build-view.stderr').read_bytes()),'executed_production_or_git_sql_tests':False})
+print(json.dumps({'copies':len(records),'callers':len(callers),'payloads':len(payload),'status':'PASS'}))

@@ -1,0 +1,14 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/prepare_semantic_package.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/prepare_semantic_package_v2.py
+@@ -31,7 +31,10 @@
+                      "span-decisions.json", "omissions.json", "errata-scrutiny.json",
+                      "errata-five-ground-checks.json", "proposal-decisions.json",
+                      "final-span-decisions.json", "errata-five-ground-verdicts.json",
+-                     "decision-occurrence-correction.md", "errata.json"):
++                     "decision-occurrence-correction.md", "errata.json",
++                     "original-dispositions.json", "final-decisions.json", "final-tuples.json",
++                     "errata-analysis.json", "proposed-head-allowances.json",
++                     "material-decisions.json", "occurrence-declarations.json"):
+             include(batch / angle / str(seq) / name)
+     for angle in ("tibetan", "english"):
+         old = batch / angle / str(seq) / "spec.json"
