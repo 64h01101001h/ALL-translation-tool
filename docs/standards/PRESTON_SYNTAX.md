@@ -83,6 +83,45 @@ Checked against Preston's own example (p. xvii), element for element:
     [3] CHOS              —     1   object of the transitive verb
     [3b] BSTAN            —     —   the transitive verb, ending the clause
 
+## Corrections from pp. 217–220 (Adam's scan, 2026-09-12)
+
+Two things implemented earlier the same day were wrong, and his own
+abbreviation tables say so.
+
+**There are EIGHT cases, not seven.** p.218 lists nineteen case-marking
+particles across eight cases, and the eighth — the **vocative** — takes no
+particle, the same surface as the first. `caseOf("")` said "first case" flatly.
+It now carries the caveat that a bare noun is not by itself *proof* of the
+nominative. The caveat is carried rather than folded into the case list,
+because marking every unmarked chunk `1/8` would drown the la don ambiguity
+that actually bites.
+
+The eight: 1 nominative (no particle) · 2 objective (la don) · 3 agentive ·
+4 beneficial/purposive (la don) · 5 originative · 6 connective · 7 locative
+(la don) · 8 vocative (no particle).
+
+**Wilson's eight verb classes fall in THREE groups, not two** (p.218):
+
+| group | classes | shape |
+|---|---|---|
+| 4 intransitive | nom-nom, nom-loc, nom-obj, nom-s.p. | subject in the 1st |
+| 2 transitive | ag-nom, ag-obj | agent in the 3rd, object in the 1st or 2nd |
+| **2 specialized** | b/p-nom, loc-nom | **subject** in the 4th or 7th, **object** in the 1st |
+
+The specialized pair breaks the clean mapping. They carry an object like a
+transitive verb and call their actor a *subject* like an intransitive one, and
+p.219's entry for loc-nom says outright "class of **transitive** verbs whose
+subject is in the locative (7th) case". `isTransitive` answered false for both;
+`transitivityOf` is now three-valued and a gate fails if either is ever
+collapsed into a bucket to tidy the enum.
+
+**Still to act on, from the same pages.** p.219–220 record four *irregular*
+syntaxes — `attrib. loc-nom`, `attrib. nom-loc`, `irreg. nom-s.p`,
+`irreg. s.p.-nom` — each described as "syntactically irregular but frequently
+seen alternative syntax with **normally agentive** verbs". That is a
+cannot-infer of the first importance: a verb's class does **not** determine its
+syntax in a given instance. Nothing in the engine knows this yet.
+
 ## The hypothesis this produced
 
 The predicate chunk conflating object and verb is a better candidate for
