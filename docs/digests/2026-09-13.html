@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Diamond Cutter Translation Tool Daily Digest #6 — Sunday, September 13 2026</title>
+  <style>
+
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">body{max-width:62em;margin:2.5em auto;padding:0 1.5em;font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:1.05em;line-height:1.55;color:#222}
+
+h1,h2,h3,h4{text-align:center}
+h1{font-size:1.7em;line-height:1.25;margin:0 0 1.2em}
+h2{font-size:1.3em;margin:2.4em 0 0.9em;padding-top:0.6em;border-top:1px solid #e3ddd0}
+p{margin:0 0 1em}
+ul,ol{margin:0.6em 0 1.2em;padding-left:1.6em}
+li{margin:0.45em 0}
+li>p{margin:0.3em 0}
+figure{margin:2em 0 2.2em;text-align:center}
+img{max-width:100%;height:auto;border:1px solid #ddd;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+figcaption{color:#555;font-size:0.92em;line-height:1.45;margin:0.7em auto 0;max-width:52em;text-align:center}
+table{border-collapse:collapse;margin:1.4em 0 2em}
+th,td{padding:0.45em 0.9em;border-bottom:1px solid #e3ddd0;text-align:left;vertical-align:top}
+th{background:#f4efe4}
+strong{color:#111}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Diamond Cutter Translation Tool Daily Digest #6 —
+Sunday, September 13 2026</h1>
+</header>
+<h1 id="diamond-cutter-translation-tool-daily-digest-6-sunday-september-13-2026">Diamond
+Cutter Translation Tool Daily Digest #6 — Sunday, September 13 2026</h1>
+<p><strong>Headline.</strong> I photographed pages from a Tibetan
+grammar textbook I own and fed them into the work, and running the
+book’s own example sentences through our reader found five real faults
+in it — including one where the tool was confidently naming the
+commonest particle in the Tibetan language as the verb of the
+sentence.</p>
+<h2 id="what-got-done">What got done</h2>
+<h3 id="the-reader-learned-three-sentence-shapes-it-had-no-name-for">The
+reader learned three sentence shapes it had no name for</h3>
+<p>Classical Tibetan leaves things out far more often than English does,
+and our tool had no way to say so.</p>
+<p><strong>A verb can be used in a way that changes what everything
+around it means.</strong> A verb that normally takes a <em>doer</em> can
+be used in a construction where it takes a <em>subject</em> instead —
+the book calls it attributive syntax, “A is called B”. Our tool assumed
+a verb’s type settled the shape of its sentence. It does not. The tool
+now offers both readings and says outright that it cannot tell which is
+meant.</p>
+<p><strong>A Tibetan sentence can have no verb at all.</strong> Two
+kinds. In the first, “A is B”, the word <em>is</em> is simply never
+written — the book calls this by far the most common sentence shape in
+this literature. In the second, a sentence of existence or possession
+leaves out the word <em>has</em>. The tool now recognises the shape of
+each and names it, while leaving the reader the judgement English forces
+and Tibetan does not: whether something <em>has</em> something, or
+<em>exists</em> somewhere.</p>
+<h3 id="five-faults-found-by-running-the-books-own-sentences">Five
+faults, found by running the book’s own sentences</h3>
+<ol type="1">
+<li><p><strong>The tool was calling <code>la</code> the verb of the
+sentence.</strong> <code>la</code> is the commonest particle in Tibetan
+— closer to “to” or “at” than to any verb. Its dictionary entry carries
+108 meanings, one of which is a pattern rather than a definition, and
+our tool accepted anything beginning with the word “to” as evidence of a
+verb. Across three thousand sample passages, <code>la</code> and one
+other particle were the two most frequently named “verbs” in the whole
+corpus.</p></li>
+<li><p><strong>It called verbs intransitive on no evidence.</strong>
+Whenever a verb was absent from its reference tables, the tool announced
+the verb took no object — and in the sentence I tested it, that was the
+opposite of the truth, printed directly underneath a line saying the
+sentence had a doer.</p></li>
+<li><p><strong>It cut Tibetan words in half.</strong> Two words — one
+meaning “visual consciousness”, one meaning “the first” — were being
+split down the middle, because part of each looks like a grammatical
+particle when read letter by letter. A sentence cannot end in the middle
+of a word, and now it doesn’t.</p></li>
+<li><p><strong>It hunted for a verb where there was nowhere for one to
+be.</strong> In 27% of clauses the sentence structure leaves no slot for
+a verb at all. The tool searched anyway, and called what it found
+trustworthy in nearly half of those cases.</p></li>
+<li><p><strong>It named a verbal noun as the sentence’s verb,
+confidently.</strong> This is the construction the textbook singles out
+as the hard one, and the tool was getting it wrong with confidence
+rather than saying it was unsure.</p></li>
+</ol>
+<h3 id="an-idea-of-mine-that-measuring-killed">An idea of mine that
+measuring killed</h3>
+<p>I was about to teach the reader a rule: that a word ending in a
+particular syllable is a noun, not a verb. Before changing anything I
+measured how many real verbs take that ending. <strong>The dictionary
+records 43% of its verbs in exactly that form.</strong> The rule would
+have thrown away nearly half the evidence the tool relies on. It is
+written down as a dead end so nobody tries it again.</p>
+<h3 id="a-second-opinion-from-outside-our-tradition">A second opinion,
+from outside our tradition</h3>
+<p>Everything our tool knows about Tibetan grammar descends from one
+line of teachers. That means its internal rules can agree with each
+other perfectly and still be wrong together. Two grammars from a
+completely different tradition — 1883 and 1912, both long out of
+copyright — are now on the machine as an outside check. The older one
+immediately confirmed a correction we had made the day before on the
+textbook’s authority alone.</p>
+<h3 id="the-reading-page-rebuilt">The reading page, rebuilt</h3>
+<p>The page had grown two blocks of statistics before any Tibetan
+appeared, and a table that stated the same fact in three separate
+columns. It now opens with two short lines, and the table says each
+thing once.</p>
+<h3 id="a-correction">A correction</h3>
+<p>I published a figure this morning saying the tool could not identify
+a verb in 52% of the corpus. That was wrong. My sample had been filtered
+by length rather than by whether the text was Tibetan, so it included
+English headings and a fragment of a mantra. Measured properly, it is
+<strong>20%</strong>. The wrong figure and how it happened are recorded
+beside the right one.</p>
+<h2 id="adams-decisions-and-actions">Adam’s decisions and actions</h2>
+<ul>
+<li>Photographed and sent nine pages of the grammar’s second volume,
+plus its index. Every one of them was used.</li>
+<li>Ruled that the reading work should be built now and refined after
+the eighteen courses are aligned, rather than waiting for the data.</li>
+<li>Put three Tibetan cursive scripts on the backlog, with a trainer for
+reading them.</li>
+<li>Asked for the reading page to be cleaned up, which it was.</li>
+</ul>
+<h2 id="numbers">Numbers</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr>
+<td>Verbs the dictionary records in the noun-looking form</td>
+<td>2,105 of 4,874 (43%)</td>
+</tr>
+<tr>
+<td>Clauses with no slot for a verb</td>
+<td>27%</td>
+</tr>
+<tr>
+<td>…where the tool named one anyway, confidently</td>
+<td>46%</td>
+</tr>
+<tr>
+<td>Passages with no confidently identified verb</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Clause pairs that read backwards into English</td>
+<td>5% of 972</td>
+</tr>
+<tr>
+<td>Automated tests, all green</td>
+<td>117</td>
+</tr>
+</tbody>
+</table>
+<h2 id="open-questions-for-leadership">Open questions for
+leadership</h2>
+<ul>
+<li><strong>The second volume of the grammar.</strong> I own the first.
+The second is where the worked examples live, and every page of it has
+paid for itself today. It is a normal book purchase; I mention it only
+because the work now depends on it.</li>
+<li><strong>Yesterday’s digest</strong> shows in my records as drafted
+but not sent. If it did not reach you, say so and I will send it.</li>
+</ul>
+<h2 id="tomorrow">Tomorrow</h2>
+<ul>
+<li>Close the remaining gaps in the verb tables — one common verb form
+is missing outright, which the measurements turned up.</li>
+<li>Keep going through the grammar’s chapters as they are scanned.</li>
+</ul>
+</body>
+</html>
