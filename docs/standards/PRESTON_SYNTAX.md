@@ -170,6 +170,72 @@ seen alternative syntax with **normally agentive** verbs". That is a
 cannot-infer of the first importance: a verb's class does **not** determine its
 syntax in a given instance. Nothing in the engine knows this yet.
 
+## Volume two: attributive syntax, and the assumption it breaks
+
+**Adam scanned pp. 60, 70, 162–163 and 200 on 2026-09-13**, the four pages the
+Index of Diagrammed Syntactic Elements lists under *attributive syntax*.
+
+Everything above this section treats a verb's Wilson class as settling the
+shape of its clause. Volume two says otherwise, on four pages, in four
+wordings: a **normally transitive verb can be used with a nom-loc syntax**. In
+that reading its actor is a **subject**, not an agent, and what is attributed
+sits in the **7th case**. Page 219's abbreviation list already carried the
+names — `attrib. loc-nom` (attributive subject in the 7th, object in the 1st)
+and `attrib. nom-loc` — and I had read that page without seeing what it implied.
+
+The pane had been announcing "this is a transitive verb, so the clause has an
+agent, not a subject" as though the class decided it.
+
+**Implemented** as `attributiveSyntaxOpen` — which **reports** the reading and
+does not detect it. Nothing in the engine can detect it, and a detector would
+be the guess rule 3 forbids. It fires only on the shape that admits the reading
+(a normally transitive verb, no third-case chunk, and a la don chunk for a
+seventh case to sit in) and says outright that both readings are live. A gate
+asserts that last sentence stays, so the day someone makes it choose, the suite
+objects.
+
+Our own tables had part of this already: `verbclass.cpp`'s entry for *zer*
+notes that as "is called" it shifts to Class VIII. The prose knew; the code
+ignored it.
+
+### Implied verbs
+
+Page 60's upper diagram shows an implied verb of existence carrying a class
+(nom-loc) it is not present to declare, and the volume two index lists sixteen
+page references for implied verbs — twelve for the implied linking verb, four
+for existence and possession.
+
+`spotVerb` always returns something: the last dictionary word in the final
+chunk. So a verbless clause got a named candidate reading exactly like a real
+verb the glossary happens not to mark. Step 2 now says the clause may have no
+verb at all, and calls the candidate the engine's last resort.
+
+**Still wanted:** pp. 44, 53, 64, 65, 71 — the implied-verb examples
+themselves. One diagram is enough to justify a caution; it is not enough to
+build recognition on.
+
+### A fix reverted, with the evidence
+
+On p.60's passage the chunker returns `dang po gnyis la` as `DANG` +
+`PO GNYIS LA` — a chunk boundary inside a word, since *dang po* is a dictionary
+entry. The dictionary anchor that fixed the quotative *shes* one layer up does
+not work here:
+
+    DANG PO GNYIS LA           span 0..2  dang po
+    CHOS DANG BRAL             span 1..3  dang bral
+    ... RANG BZHIN GYIS STONG  span 3..7  rang bzhin gyis stong
+
+All three straddle the boundary with the particle as the span's first syllable,
+so no test on span shape separates them — yet *dang po* is a word in which
+*dang* is not a particle, while the other two are verb idioms in which it is
+doing its job, and Wilson is right that those need their boundaries. The anchor
+broke both of those gates.
+
+The distinction that would work is whether the straddling span contains the
+clause verb, and `chunkClause` cannot ask: `spotVerb` runs after it, over the
+chunks it produces. Fixing it means reordering that, which is not a change to
+make on two examples.
+
 ## The hypothesis this produced
 
 The predicate chunk conflating object and verb is a better candidate for
