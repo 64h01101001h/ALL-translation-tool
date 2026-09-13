@@ -547,14 +547,23 @@ private:
                 // the label itself. Wilson's class names already carry the
                 // split (agentive- against nominative-), so this reads it off
                 // the class rather than deciding anything.
-                const bool tr = allcore::isTransitive(verb.cls->cls);
-                e += QString("<br>This is a <b>%1</b> verb, so the clause has "
-                             "an <b>%2</b>, not a %3. (Preston keeps the two "
-                             "words apart on purpose: %2 belongs to %1 "
-                             "constructions only.)")
-                         .arg(tr ? "transitive" : "intransitive")
-                         .arg(allcore::actorWord(verb.cls->cls))
-                         .arg(tr ? "subject" : "agent");
+                using T = allcore::Transitivity;
+                const T tr = allcore::transitivityOf(verb.cls->cls);
+                if (tr == T::Specialized) {
+                    e += QString("<br>This is <b>%1</b>.")
+                             .arg(QString(allcore::specializedNote(
+                                              verb.cls->cls))
+                                      .toHtmlEscaped());
+                } else {
+                    e += QString("<br>This is a <b>%1</b> verb, so the clause "
+                                 "has an <b>%2</b>, not a %3. (Preston keeps "
+                                 "the two words apart on purpose: %2 belongs "
+                                 "to %1 constructions only.)")
+                             .arg(tr == T::Transitive ? "transitive"
+                                                      : "intransitive")
+                             .arg(allcore::actorWord(verb.cls->cls))
+                             .arg(tr == T::Transitive ? "subject" : "agent");
+                }
             }
             h += body(e);
         }
@@ -592,6 +601,9 @@ private:
                 caseCell = "<b>" + QString::number(cr.cases.front()) +
                            "</b> <span style='color:#666'>" +
                            QString(cr.gloss).toHtmlEscaped() + "</span>";
+                if (cr.caveat[0])
+                    caseCell += " <span style='color:#B4540A;font-size:11px'>" +
+                                QString(cr.caveat).toHtmlEscaped() + "</span>";
             }
             // Preston separates the object of a transitive verb from the
             // verb itself; our chunker does not, because it closes a chunk at

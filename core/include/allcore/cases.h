@@ -28,11 +28,16 @@
 
 namespace allcore {
 
-// The Tibetan grammarians' seven cases (rnam dbye), plus the unmarked first.
+// EIGHT cases, not seven. Preston p.218 lists nineteen case-marking particles
+// across eight cases, and the eighth — the vocative — takes NO PARTICLE, the
+// same surface as the first. Corrected 2026-09-12 from Adam's scan of p.218;
+// the first version of this file said seven and treated a bare noun as proof
+// of the nominative, which it is not.
 struct CaseReading {
     std::vector<int> cases;      // possible case numbers, ascending; empty = not a case particle
     const char* family = "";     // the Tibetan family name, or ""
     const char* gloss = "";      // what the case does, when unambiguous
+    const char* caveat = "";     // what this marking still cannot settle
     bool ambiguous() const { return cases.size() > 1; }
     bool known() const { return !cases.empty(); }
 };
@@ -42,14 +47,38 @@ struct CaseReading {
 // noun, not an absence of information.
 CaseReading caseOf(const std::string& marker);
 
-// Preston: "subject" belongs to intransitive constructions and "agent" to
-// transitive ones, exclusively. Wilson's class names already carry the split —
-// the agentive- classes take an agent, the nominative- classes a subject — so
-// this reads it off rather than inventing it.
+// Preston p.218 groups Wilson's eight classes in THREE, not two:
+//
+//   4 intransitive   nom-nom, nom-loc, nom-obj, nom-s.p.
+//   2 transitive     ag-nom, ag-obj
+//   2 SPECIALIZED    b/p-nom  (subject in the 4th, object in the 1st)
+//                    loc-nom  (subject in the 7th, object in the 1st)
+//
+// The specialized pair breaks the clean mapping this file shipped with. They
+// take a SUBJECT — Preston's word for the intransitive actor — and they also
+// take an OBJECT, which he says only transitive verbs have; and his p.219
+// entry calls loc-nom outright "class of transitive verbs whose subject is in
+// the locative (7th) case". My first version answered isTransitive(LocativeNom)
+// = false, which p.219 contradicts.
+//
+// So the answer is three-valued. Collapsing the specialized classes into
+// either bucket would be tidier and would misreport two of the eight.
+enum class Transitivity { Intransitive, Transitive, Specialized };
+
+Transitivity transitivityOf(VerbClass c);
+
+// Kept for callers that only need "does this take an agent". A specialized
+// verb does NOT — it takes a subject — so this answers false for those, and a
+// caller that needs to tell a specialized verb from an intransitive one must
+// ask transitivityOf.
 bool isTransitive(VerbClass c);
 
-// "agent" for a transitive verb, "subject" for an intransitive one.
+// What Preston calls the actor of this class: "agent" for the two transitive
+// classes, "subject" for the four intransitive AND the two specialized.
 const char* actorWord(VerbClass c);
+
+// The specialized classes in one sentence, or "" for the other six.
+const char* specializedNote(VerbClass c);
 
 // Preston's warning, which a machine most needs: a Tibetan sentence is NOT
 // conclusively intransitive because no agent appears in it. Tibetan leaves
