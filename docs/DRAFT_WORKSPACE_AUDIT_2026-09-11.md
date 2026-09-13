@@ -750,3 +750,66 @@ and it was flattering their draft.
 3. **A flaky gate is worse than a missing one**, because it teaches you to
    discount a red result. Five Overlay gates went red from debris left by an
    interrupted run; the same binary passed them on a re-run.
+
+---
+
+## Dispositions, 2026-09-12
+
+Every finding in this audit is now either fixed with a mutation-proved gate, or
+recorded below with the reason it was not. Nothing is marked closed because
+code near it was edited — that error is what produced the verification pass in
+the first place.
+
+### HIGH and MEDIUM — all closed
+
+| finding | how |
+|---|---|
+| the `draft uses:` claim | now "found in your draft"; the register spread and the header corrected too; the old gate REQUIRED the defect and was replaced |
+| `recordRecentScan` guard did not hold | the guard was there; the caller had lowered the global two frames up |
+| three `g_harnessRun = false` windows leaking | `ProbeSessionKeys` opens the session keys alone; the global never drops. Proved from Adam's live plist, which held three temp paths |
+| Return fires a button in the bibliography form | `ReturnMovesFocus` on every field. The recorded fix was inert — `QDialogButtonBox` re-asserts the default on show, proved by `tools/probes/return_default_probe.cpp` |
+| the middle column replaced its own instruction | restored, plus a placeholder backstop |
+
+### LOW — closed
+
+| finding | how |
+|---|---|
+| self-test wrote a phantom sidecar into the real data root | `TempDataRoot` scope guard, seven sites |
+| ANALYSIS_SUITE_PLAN asserts `dataRoot_` is never assigned | correction note in place, naming the two items that ARE still true |
+| two members hold the identical data root | **pinned, not merged** — see below |
+| placeholder advertises ACIP only | now names Wylie and says detection is automatic |
+| terminology chip blank on first run | half of this was already fixed and read as whole; the label was still constructed empty |
+| evidence lands off-screen with no confirmation | `insertIntoDraft` does `ensureCursorVisible` and announces |
+| AI back-check's reason hidden in a tooltip | now in the label, because a disabled QPushButton on macOS does not reliably show a tooltip at all |
+| two pairs of ribbon buttons share an icon | distinct kinds; the gate counts duplicates. Two earlier versions of that gate were GREEN while the defect sat in front of them |
+
+### LOW — deliberately not done, with the reason
+
+**Two members holding the identical data root — pinned rather than merged.**
+The audit offered deleting `dataRoot_` and using `root_` at the six docprops
+sites. `dataRoot_` exists *because* of finding F0: it was never assigned at
+all, and every Draft sidecar write was a silent no-op until 2026-09-09.
+Rewriting those six sites to close a risk that has never fired, in the lines
+that carried a live bug three days earlier, trades a theoretical divergence for
+a real chance of reintroducing it. A gate now makes divergence a FAIL, which is
+what the finding asks for. Revisit when something else needs those lines open.
+
+**Return in an empty apparatus search box does nothing.** Not done. It is the
+correct behaviour for an empty box; the finding is that it gives no feedback.
+That is a real gap and the fix is a message, but the same pane's search already
+answers "Type something to search" in the report panel, so the reader is not
+without information. Left for a pass that looks at the whole pane's feedback
+rather than one control of it.
+
+**"Pair-hyphenate author" overwrites the field with no way back.** Partly done:
+it has a tooltip now. The "no way back" half is real and NOT fixed — the honest
+fix is an undo, and a one-field undo bolted onto one button is the kind of
+half-mechanism that later gets mistaken for a general one. It belongs with the
+form's validation work.
+
+**The AI paragraph carries no provenance stamp.** Open, and the most
+substantial of the remainder. It is not a labelling tweak: it needs the
+inserted text to carry a stamp that survives save, reload and export, which
+means deciding where a per-paragraph provenance mark lives in a plain-text
+draft. That is a design question, not a fix.
+

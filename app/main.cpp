@@ -26857,6 +26857,23 @@ public:
                   "before");
         }
 
+        // ---- a disabled control says why on its face --------------------
+        {
+            refreshAiButton();
+            const bool haveKey = !anthropicKey().isEmpty();
+            check(aiBtn_->isEnabled() == haveKey,
+                  "AI button: enabled exactly when a key is present");
+            // The reason must be readable WITHOUT hovering. A disabled
+            // QPushButton on macOS does not reliably show a tooltip, so the
+            // tooltip alone left the blocker invisible.
+            check(haveKey || aiBtn_->text().contains("needs an Anthropic API key"),
+                  "AI button: with no key, the label itself says a key is "
+                  "what is missing \u2014 not only the tooltip");
+            check(!haveKey || !aiBtn_->text().contains("needs an"),
+                  "AI button: and the label goes back to normal once a key is "
+                  "there");
+        }
+
         // ---- no two ribbon buttons wear the same icon -------------------
         //
         // With ribbon labels off (Preferences, ui/ribbonLabels) an icon is
@@ -28346,6 +28363,14 @@ public:
         if (!aiBtn_) return;
         const bool have = !anthropicKey().isEmpty();
         aiBtn_->setEnabled(have);
+        // The reason lived only in the tooltip, and a disabled QPushButton on
+        // macOS does not reliably show one at all — so the most prominent
+        // control in this column was permanently grey with nothing on screen
+        // saying why, and a reader who never hovered never learned that a key
+        // was the missing thing. It goes in the label.
+        // (Draft workspace audit 2026-09-11.)
+        aiBtn_->setText(have ? "AI back-check (API, labeled AI)"
+                             : "AI back-check \u2014 needs an Anthropic API key");
         aiBtn_->setToolTip(
             have ? "Sends the source and your draft to the API for a coverage "
                    "diff. The reply is labelled AI and is never treated as "
