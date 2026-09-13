@@ -174,12 +174,57 @@ bool verbEvidenceAt(const allcore::OverlayDoc& doc, int tok) {
 
 }  // namespace
 
+namespace {
+
+// Is token `t` the last syllable of a MULTI-syllable span the dictionary
+// knows? If so the token is part of a word, and a boundary drawn on it cuts a
+// word in half.
+bool insideGlossedWord(const OverlayDoc& doc, int t) {
+    for (int si : doc.spansAt(t)) {
+        const auto& sp = doc.spans[si];
+        if (sp.end - sp.beg < 2) continue;      // a single syllable is no help
+        if (sp.entry_ix < 0) continue;
+        if (doc.entries[sp.entry_ix].hgm_gloss.empty()) continue;
+        if (t > sp.beg && t < sp.end) return true;   // not the span's first
+    }
+    return false;
+}
+
+}  // namespace
+
 std::vector<Clause> refineClauses(const OverlayDoc& doc,
                                   std::vector<Clause> clauses,
                                   std::vector<int>* merged_na) {
     std::vector<Clause> out;
     for (size_t i = 0; i < clauses.size(); ++i) {
         Clause c = clauses[i];
+        // The ces/zhes/shes family, dictionary-anchored.
+        //
+        // Found by running Preston's own example sentence through the reader
+        // (How to Read Classical Tibetan I, p.xviii): "gangs ri mig shes la
+        // sngon por snang", snow mountains appear blue to the eye
+        // consciousness. The splitter cut it at SHES — reading the quotative
+        // particle — and left "GANGS RI MIG" as a clause with mig as an
+        // UNVERIFIED verb. But mig shes is a dictionary entry, "visual
+        // consciousness", and the span was right there in the lattice.
+        //
+        // chunkClause already works this way for the fused endings, and the
+        // comment there says why: dictionary-anchored, so lexical las/nas are
+        // never misread as inflected. The clause splitter had no such anchor,
+        // because splitClauses sees only tokens and barriers. refineClauses
+        // has the lattice, which is exactly where the na rule already lives.
+        //
+        // Merging is safe in the one direction that matters: a boundary drawn
+        // INSIDE a glossed word is wrong whatever else is true, because no
+        // clause ends in the middle of a word.
+        while ((c.boundary == "ces" || c.boundary == "zhes" ||
+                c.boundary == "shes") &&
+               i + 1 < clauses.size() && insideGlossedWord(doc, c.end - 1)) {
+            const Clause& nxt = clauses[++i];
+            c.end = nxt.end;
+            c.boundary = nxt.boundary;
+            c.boundary_function = nxt.boundary_function;
+        }
         while (c.boundary == "na" && i + 1 < clauses.size()) {
             const int pre = c.end - 2;   // the word na attaches to
             // conditional after a verb; ALSO after the nominalizer pa/ba —
