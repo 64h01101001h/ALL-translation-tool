@@ -1,0 +1,22 @@
+PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+from pathlib import Path
+import json,sqlite3,gzip,hashlib,datetime,difflib
+r=Path.cwd();w=r/'campaign-worktree';b=r/'campaign-artifacts/C05-268-270';out=b/'tibetan/268';c=sqlite3.connect((w/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('pragma query_only=on')
+master=json.loads(gzip.decompress((w/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries'];more=[]
+for term in ['dwangs','dwangs ba','dvangs ba','dvangs shing bsil ba','zas','skom']:
+ sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'; rows=[dict(x) for x in c.execute(sql,(term,term))];entry=[]
+ for x in rows: assert json.loads(x['raw'])==master[x['id']-1];entry.append(master[x['id']-1])
+ more.append(dict(term=term,sql=sql,parameters=[term,term],rows=rows,master_entries=entry));print('EXTRA',term,[(x['id'],x['wylie'],x['hgm_gloss']) for x in rows])
+(out/'additional-lexical-queries-full.json').write_text(json.dumps(more,ensure_ascii=False,indent=2)+'\n')
+corp=json.loads(gzip.decompress((w/'data/full_parallel_corpus_v32.json.gz').read_bytes()));idx={(x['course'],x['seq']):x for x in corp};direct=[]
+for course,lo,hi in [('P7',23,25),('C16',844,846)]:
+ sql='select * from corpus_segments where course=? and seq between ? and ? order by seq';rows=[dict(x) for x in c.execute(sql,(course,lo,hi))]
+ for x in rows:assert json.loads(x['raw'])==idx[(x['course'],x['seq'])]; print('DIRECT',course,x['seq'],'\n',x['wylie'],'\n',x['english'])
+ direct.append(dict(sql=sql,parameters=[course,lo,hi],rows=rows))
+(out/'direct-parallel-context-full.json').write_text(json.dumps(direct,ensure_ascii=False,indent=2)+'\n')
+count=0
+for name in ['lexical-queries-full.json','parallel-queries-full.json','additional-lexical-queries-full.json','direct-parallel-context-full.json']:
+ for q in json.loads((out/name).read_text()):assert [dict(x) for x in c.execute(q['sql'],q['parameters'])]==q['rows'];count+=1
+p=json.loads((b/'baseline.json').read_text());assert all(hashlib.sha256((w/path).read_bytes()).hexdigest()==sha for path,sha in p['sha256'].items())
+(out/'query-replay-and-baseline-proof.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='PASS',complete_query_replays=count,all_nine_baseline_hashes_unchanged=True,source_master_original_equality=True),indent=2)+'\n');print('Full query replays',count)
+PY

@@ -1,0 +1,19 @@
+{
+  "utc": "2026-09-12T23:05:09.543381+00:00",
+  "attempt01": {
+    "exit": 1,
+    "helper": "boundary-attempt01.py.txt",
+    "stdout": "boundary-attempt01.stdout",
+    "stderr": "boundary-attempt01.stderr",
+    "cause": "Root wrongly attempted git show of the external master fixture. Git exited128; Python raised CalledProcessError. This was not a source-data failure."
+  },
+  "scope_probe": "boundary-attempt01-fixture-scope-probe.json",
+  "attempt02": {
+    "exit": 0,
+    "helper": "boundary-attempt02.py.txt",
+    "stdout": "boundary-attempt02.stdout",
+    "stderr": "boundary-attempt02.stderr",
+    "correction": "All nine live baseline hashes retained; seven tracked outputs additionally matched immutable Git, while both external fixture identities and original source pins were independently checked. No gate removed or original failure rewritten."
+  },
+  "whole_boundary_limits": "Root authored Tibetan; these are mechanical checks, not independent semantic approval."
+}

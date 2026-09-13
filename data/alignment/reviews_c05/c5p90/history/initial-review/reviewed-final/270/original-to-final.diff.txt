@@ -1,0 +1,659 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/tibetan/270/spec.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/270/spec.json
+@@ -43,7 +43,7 @@
+         },
+         {
+           "id": "w6",
+-          "d": 5,
++          "d": 6,
+           "tib": "can",
+           "eng": "with"
+         },
+@@ -198,12 +198,18 @@
+         {
+           "id": "w23",
+           "d": 5,
++          "tib": "lcags sngags",
++          "eng": "mantra of steel"
++        },
++        {
++          "id": "m3",
++          "d": 7,
+           "tib": "lcags",
+           "eng": "steel"
+         },
+         {
+-          "id": "w24",
+-          "d": 5,
++          "id": "m4",
++          "d": 7,
+           "tib": "sngags",
+           "eng": "mantra"
+         },
+@@ -236,12 +242,18 @@
+         {
+           "id": "w27",
+           "d": 5,
++          "tib": "lcags sngags",
++          "eng": "mantra of steel"
++        },
++        {
++          "id": "m5",
++          "d": 7,
+           "tib": "lcags",
+           "eng": "steel"
+         },
+         {
+-          "id": "w28",
+-          "d": 5,
++          "id": "m6",
++          "d": 7,
+           "tib": "sngags",
+           "eng": "mantra"
+         },
+@@ -297,8 +309,14 @@
+         {
+           "id": "w36",
+           "d": 5,
+-          "tib": "gzhan zhig",
+-          "eng": "some other"
++          "tib": "gzhan",
++          "eng": "other"
++        },
++        {
++          "id": "p10",
++          "d": 6,
++          "tib": "zhig",
++          "eng": "some"
+         },
+         {
+           "id": "w37",
+@@ -409,13 +427,11 @@
+         "w20",
+         "w22",
+         "p5",
+-        "w24",
+         "w23",
+         "w26",
+         "w25",
+         "q3",
+         "w29",
+-        "w28",
+         "w27",
+         "w30",
+         "w31",
+@@ -424,6 +440,7 @@
+         "w33",
+         "w32",
+         "w37",
++        "p10",
+         "w36",
+         "w35",
+         "p8",
+@@ -438,7 +455,7 @@
+         "w46",
+         "w45"
+       ],
+-      "note": "PROVISIONAL machine alignment by Codex, Tibetan-first original with disclosed prior preparation and no English-first judgments read. Two source gsum numerals own three beings and three objects; the English three karmas is a contextual reprise, not a third source numeral. Complete positive tshad mas grub pa evidence supports confirmed/by/valid perception, retained as separate lexical atoms with the inseparable case relation unwrapped. Only byas pa owns the second provides, for mantra as contributing factor; the first provides is an English parallel predicate. Steel, ball and mantra occurrences are resolved separately; lcags in the final abbreviated mantra reference is omitted, not falsely assigned to an earlier steel. Four reg bya occurrences own the four sensations in order. First myong is undergo, second feels, third feel; final myong is an explicit elliptical null under the English coordinated negative object. Three independent negations distinguish not feeling heat, not using mantra and feeling no other sensation. The two later de'i tshe na constructions are distributed in the expanded relative/conditional cases, not assigned to the first when. Red-hot has two strictly tighter members. The next moon/sun example belongs to271; P7:25's cold wording is not a defect in this steel segment. No source or glossary is changed."
++      "note": "PROVISIONAL machine reconciliation by reused Codex non-author c05_253_255_reconcile. Original producers were primary Codex, Tibetan-first with prior preparation, and reused peer c05_262_264_english, English-first. This is not human editorial acceptance. The two source gsum numerals own the first and third English three, for beings and objects; three karmas is an English contextual reprise. Can/with is attributive d6 and cig car du/all together is a complete simultaneous-viewing phrase. Skye ba/start to be and the red-hot compound retain their tighter attested lexical boundaries. Yod owns the initial There is; Suppose there is is supplied framing. Each of the two complete lcags sngags/mantra of steel names has unique lcags/steel and sngags/mantra members; the third abbreviated title keeps sngags/mantra only. The single byas pa owns the second provides, for the contributing factor. Three active-agentive relations have no separate English words. Gzhan/other and zhig/some remain separate lexical/particle atoms. Four reg bya occurrences own the four sensations in order; myong owns undergo, myong ba feels, and later myong feel. The final myong has no separately repeated verb under the coordinated no-other-sensation object and is an explicit elliptical null, not loss of its experiential meaning. The three negations retain distinct scopes. Later time clauses and supplied participants/auxiliaries remain unwrapped. No source or glossary is changed."
+     }
+   ]
+ }
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/english/270/spec.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/270/spec.json
+@@ -3,7 +3,7 @@
+   "segments": [
+     {
+       "seq": 270,
+-      "title": "an example with steel",
++      "title": "the steel mantra and opposite sensations",
+       "spans": [
+         {
+           "id": "w1",
+@@ -12,380 +12,450 @@
+           "eng": "wet"
+         },
+         {
+-          "id": "w2",
++          "id": "p1",
+           "d": 6,
+           "tib": "zhing",
+           "eng": "and"
+         },
+         {
+-          "id": "w3",
++          "id": "w2",
+           "d": 5,
+           "tib": "gsher ba",
+           "eng": "flowing"
+         },
+         {
+-          "id": "w4",
++          "id": "w3",
+           "d": 5,
+           "tib": "phor pa",
+           "eng": "glass"
+         },
+         {
+-          "id": "w5",
++          "id": "w4",
+           "d": 5,
+           "tib": "gang",
+           "eng": "full"
+         },
+         {
+-          "id": "w6",
++          "id": "w5",
+           "d": 5,
+           "tib": "las",
+           "eng": "karmas"
+         },
+         {
+-          "id": "w7",
++          "id": "w6",
+           "d": 6,
+           "tib": "can",
+           "eng": "with"
+         },
+         {
+-          "id": "w8",
++          "id": "w7",
+           "d": 5,
+           "tib": "'gro ba",
+           "eng": "beings"
+         },
+         {
+-          "id": "w9",
++          "id": "w8",
+           "d": 5,
+           "tib": "gsum",
+           "eng": "three"
+         },
+         {
+-          "id": "w10",
+-          "d": 5,
++          "id": "p2",
++          "d": 6,
++          "tib": "gyis",
++          "eng": null,
++          "cls": "case",
++          "nul": "Active perceivers are the English subject; no separate agentive word."
++        },
++        {
++          "id": "q1",
++          "d": 3,
+           "tib": "cig car du",
+           "eng": "all together"
+         },
+         {
+-          "id": "w11",
++          "id": "w9",
+           "d": 5,
+           "tib": "bltas pa",
+           "eng": "look"
+         },
+         {
+-          "id": "w12",
++          "id": "q2",
+           "d": 3,
+           "tib": "de'i tshe na",
+           "eng": "when"
+         },
+         {
+-          "id": "w13",
++          "id": "w10",
+           "d": 5,
+           "tib": "dngos po",
+           "eng": "objects"
+         },
+         {
+-          "id": "w14",
++          "id": "w11",
+           "d": 5,
+           "tib": "tshad mas",
+           "eng": "valid perception"
+         },
+         {
+-          "id": "w15",
++          "id": "w12",
+           "d": 5,
+           "tib": "grub pa",
+           "eng": "confirmed"
+         },
+         {
+-          "id": "w16",
++          "id": "w13",
+           "d": 5,
+           "tib": "gsum",
+           "eng": "three"
+         },
+         {
+-          "id": "w17",
+-          "d": 3,
+-          "tib": "skye ba'i",
++          "id": "w14",
++          "d": 5,
++          "tib": "skye ba",
+           "eng": "start to be"
+         },
+         {
+-          "id": "w18",
++          "id": "w15",
+           "d": 5,
+           "tib": "dpe",
+           "eng": "example"
+         },
+         {
+-          "id": "w19",
++          "id": "p3",
+           "d": 6,
+           "tib": "yang",
+           "eng": "moreover"
+         },
+         {
+-          "id": "w20",
++          "id": "w16",
++          "d": 5,
++          "tib": "yod",
++          "eng": "There is"
++        },
++        {
++          "id": "w17",
+           "d": 5,
+           "tib": "lcags",
+           "eng": "steel"
+         },
+         {
+-          "id": "w21",
++          "id": "w18",
+           "d": 5,
+           "tib": "gong",
+           "eng": "ball"
+         },
+         {
+-          "id": "w22",
+-          "d": 5,
+-          "tib": "dmar 'bar ba'i",
++          "id": "w19",
++          "d": 5,
++          "tib": "dmar 'bar ba",
+           "eng": "red-hot"
+         },
+         {
+-          "id": "w23",
++          "id": "m1",
+           "d": 7,
+           "tib": "dmar",
+           "eng": "red"
+         },
+         {
+-          "id": "w24",
++          "id": "m2",
+           "d": 7,
+           "tib": "'bar ba",
+           "eng": "hot"
+         },
+         {
+-          "id": "w25",
++          "id": "w20",
+           "d": 5,
+           "tib": "cha shas",
+           "eng": "piece"
+         },
+         {
+-          "id": "w26",
++          "id": "w21",
+           "d": 5,
+           "tib": "gcig",
+           "eng": "one"
+         },
+         {
+-          "id": "w27",
++          "id": "p4",
++          "d": 6,
++          "tib": "gis",
++          "eng": null,
++          "cls": "case",
++          "nul": "Agentive piece is active subject of provides, with no separate English exponent."
++        },
++        {
++          "id": "w22",
+           "d": 5,
+           "tib": "nyer len",
+           "eng": "material cause"
+         },
+         {
+-          "id": "w28",
++          "id": "p5",
++          "d": 6,
++          "tib": "dang",
++          "eng": "and"
++        },
++        {
++          "id": "w23",
+           "d": 5,
+           "tib": "lcags sngags",
+           "eng": "mantra of steel"
+         },
+         {
+-          "id": "w29",
++          "id": "m3",
++          "d": 7,
++          "tib": "lcags",
++          "eng": "steel"
++        },
++        {
++          "id": "m4",
++          "d": 7,
++          "tib": "sngags",
++          "eng": "mantra"
++        },
++        {
++          "id": "p6",
++          "d": 6,
++          "tib": "kyis",
++          "eng": null,
++          "cls": "case",
++          "nul": "Mantra as active contributing subject, no separate agentive exponent."
++        },
++        {
++          "id": "w25",
+           "d": 5,
+           "tib": "lhan cig byed rkyen",
+           "eng": "contributing factor"
+         },
+         {
+-          "id": "w30",
++          "id": "w26",
+           "d": 5,
+           "tib": "byas pa",
+           "eng": "provides"
+         },
+         {
+-          "id": "w31",
++          "id": "q3",
+           "d": 3,
+           "tib": "brten nas",
+           "eng": "Due to"
+         },
+         {
+-          "id": "w32",
++          "id": "w27",
+           "d": 5,
+           "tib": "lcags sngags",
+           "eng": "mantra of steel"
+         },
+         {
+-          "id": "w33",
+-          "d": 5,
+-          "tib": "btab pa'i",
++          "id": "m5",
++          "d": 7,
++          "tib": "lcags",
++          "eng": "steel"
++        },
++        {
++          "id": "m6",
++          "d": 7,
++          "tib": "sngags",
++          "eng": "mantra"
++        },
++        {
++          "id": "w29",
++          "d": 5,
++          "tib": "btab pa",
+           "eng": "used"
+         },
+         {
+-          "id": "w34",
++          "id": "w30",
+           "d": 5,
+           "tib": "lag pas",
+           "eng": "hand"
+         },
+         {
+-          "id": "w35",
++          "id": "w31",
+           "d": 5,
+           "tib": "reg pa",
+           "eng": "touch"
+         },
+         {
+-          "id": "w36",
++          "id": "w32",
+           "d": 5,
+           "tib": "tsha ba'i",
+           "eng": "heat"
+         },
+         {
+-          "id": "w37",
++          "id": "w33",
+           "d": 5,
+           "tib": "reg bya",
+           "eng": "sensation"
+         },
+         {
+-          "id": "w38",
++          "id": "p7",
+           "d": 6,
+           "tib": "mi",
+           "eng": "n't",
+           "subword": true
+         },
+         {
+-          "id": "w39",
++          "id": "w34",
+           "d": 5,
+           "tib": "myong",
+           "eng": "undergo"
+         },
+         {
+-          "id": "w40",
++          "id": "w35",
+           "d": 5,
+           "tib": "reg bya",
+           "eng": "sensation"
+         },
+         {
+-          "id": "w41",
++          "id": "w36",
+           "d": 5,
+           "tib": "gzhan",
+           "eng": "other"
+         },
+         {
+-          "id": "w42",
++          "id": "p10",
+           "d": 6,
+           "tib": "zhig",
+           "eng": "some"
+         },
+         {
+-          "id": "w43",
++          "id": "w37",
+           "d": 5,
+           "tib": "myong ba",
+           "eng": "feels"
+         },
+         {
+-          "id": "w44",
++          "id": "w38",
+           "d": 5,
+           "tib": "sngags",
+           "eng": "mantra"
+         },
+         {
+-          "id": "w45",
++          "id": "p8",
+           "d": 6,
+           "tib": "ma",
+           "eng": "not"
+         },
+         {
+-          "id": "w46",
+-          "d": 5,
+-          "tib": "btab pa'i",
++          "id": "w39",
++          "d": 5,
++          "tib": "btab pa",
+           "eng": "used"
+         },
+         {
+-          "id": "w47",
++          "id": "w40",
+           "d": 5,
+           "tib": "lag pas",
+           "eng": "hand"
+         },
+         {
+-          "id": "w48",
++          "id": "w41",
+           "d": 5,
+           "tib": "reg pa",
+           "eng": "touches"
+         },
+         {
+-          "id": "w49",
++          "id": "w42",
+           "d": 5,
+           "tib": "tsha ba'i",
+           "eng": "heat"
+         },
+         {
+-          "id": "w50",
++          "id": "w43",
+           "d": 5,
+           "tib": "reg bya",
+           "eng": "sensation"
+         },
+         {
+-          "id": "w51",
++          "id": "w44",
+           "d": 5,
+           "tib": "myong",
+           "eng": "feel"
+         },
+         {
+-          "id": "w52",
++          "id": "w45",
+           "d": 5,
+           "tib": "reg bya",
+           "eng": "sensation"
+         },
+         {
+-          "id": "w53",
++          "id": "w46",
+           "d": 5,
+           "tib": "gzhan",
+           "eng": "other"
+         },
+         {
+-          "id": "w54",
++          "id": "p9",
+           "d": 6,
+           "tib": "mi",
+           "eng": "no"
++        },
++        {
++          "id": "w47",
++          "d": 5,
++          "tib": "myong",
++          "eng": null,
++          "cls": "unrendered",
++          "nul": "No separately expressed final experience predicate in and no other kind of sensation. English coordinates this object under preceding feel; that preceding predicate is not counted twice. This is explicit elliptical grammar, not unresolved source correspondence."
+         }
+       ],
+       "eng_order": [
+-        "w19",
+-        "w18",
+-        "w12",
+-        "w9",
++        "w16",
++        "p3",
++        "w15",
++        "q2",
+         "w8",
+         "w7",
+         "w6",
++        "w5",
++        "w9",
++        "q1",
++        "w3",
++        "w4",
++        "w1",
++        "p1",
++        "w2",
++        "w14",
++        "w13",
++        "w10",
++        "w12",
+         "w11",
+-        "w10",
+-        "w4",
+-        "w5",
+-        "w1",
+-        "w2",
+-        "w3",
++        "w18",
++        "w19",
+         "w17",
+-        "w16",
+-        "w13",
+-        "w15",
+-        "w14",
+         "w21",
++        "w20",
+         "w22",
+-        "w20",
++        "p5",
++        "w23",
+         "w26",
+         "w25",
++        "q3",
++        "w29",
+         "w27",
+-        "w28",
+         "w30",
+-        "w29",
+         "w31",
++        "p7",
++        "w34",
+         "w33",
+         "w32",
+-        "w34",
++        "w37",
++        "p10",
++        "w36",
+         "w35",
++        "p8",
++        "w39",
+         "w38",
+-        "w39",
+-        "w37",
+-        "w36",
++        "w40",
++        "w41",
++        "w44",
+         "w43",
+         "w42",
+-        "w41",
+-        "w40",
+-        "w45",
++        "p9",
+         "w46",
+-        "w44",
+-        "w47",
+-        "w48",
+-        "w51",
+-        "w50",
+-        "w49",
+-        "w54",
+-        "w53",
+-        "w52"
++        "w45"
+       ],
+-      "note": "Provisional machine alignment by Codex, reused English-first original reader; no fresh-context, human-review or semantic-approval claim. The two source gsum instances select English three #1 (beings) and #3 (objects); three #2 modifying karmas is supplied. las and attributive can separately own karmas and with. The first lcags gong yields steel and ball; later ball mentions are supplied reprises. dmar 'bar ba'i is the inflected red-hot compound with two strictly tighter members. The first two lcags sngags own mantra of steel; the third omits lcags as the title is shortened to mantra and maps only sngags. byas pa selects provides #2; the earlier predicate is supplied by shared construction. Four reg bya instances select the four sensation occurrences in order. The final myong ba is omitted because its experiential predication is distributed in does feel ... and no other kind of sensation. Two later de'i tshe na clauses have no retained separate time atom. Approved negative n't is subword; all other auxiliary, causal, pronominal and case contributions are left unclaimed where distributed."
++      "note": "PROVISIONAL machine reconciliation by reused Codex non-author c05_253_255_reconcile. Original producers were primary Codex, Tibetan-first with prior preparation, and reused peer c05_262_264_english, English-first. This is not human editorial acceptance. The two source gsum numerals own the first and third English three, for beings and objects; three karmas is an English contextual reprise. Can/with is attributive d6 and cig car du/all together is a complete simultaneous-viewing phrase. Skye ba/start to be and the red-hot compound retain their tighter attested lexical boundaries. Yod owns the initial There is; Suppose there is is supplied framing. Each of the two complete lcags sngags/mantra of steel names has unique lcags/steel and sngags/mantra members; the third abbreviated title keeps sngags/mantra only. The single byas pa owns the second provides, for the contributing factor. Three active-agentive relations have no separate English words. Gzhan/other and zhig/some remain separate lexical/particle atoms. Four reg bya occurrences own the four sensations in order; myong owns undergo, myong ba feels, and later myong feel. The final myong has no separately repeated verb under the coordinated no-other-sensation object and is an explicit elliptical null, not loss of its experiential meaning. The three negations retain distinct scopes. Later time clauses and supplied participants/auxiliaries remain unwrapped. No source or glossary is changed."
+     }
+   ]
+ }

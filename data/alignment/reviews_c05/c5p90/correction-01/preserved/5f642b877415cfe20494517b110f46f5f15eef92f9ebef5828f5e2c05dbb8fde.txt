@@ -1,0 +1,16 @@
+import pathlib,json,hashlib,datetime,os,sys
+C=pathlib.Path(__file__).resolve().parent;B=C.parent
+def pin(p):
+ b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+assert sys.dont_write_bytecode and os.environ['PYTHONDONTWRITEBYTECODE']=='1'
+assert not (C/'freeze.json').exists()
+for seq in (268,269,270):
+ d=B/f'reconciled/{seq}';f=json.loads((d/'freeze.json').read_text());expected={x['relative_path']:x for x in f['files']}
+ actual={str(p.relative_to(d)):pin(p) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}
+ assert set(actual)==set(expected)
+ for rel,item in actual.items():assert all(item[k]==expected[rel][k] for k in ('bytes','sha256'))
+files=[{**pin(p),'relative_path':str(p.relative_to(C))} for p in sorted(C.rglob('*'),key=lambda p:str(p.relative_to(C))) if p.is_file() and p!=C/'freeze.json']
+freeze={'status':'PROVISIONAL frozen correction01; scoped semantic re-review required','finding':'C05-268-ERRATA-01','producer':'reused non-author c05_253_255_reconcile','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'root':str(C),'actual_freeze_argv':['python3','-B',*sys.argv],'actual_cwd':os.getcwd(),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'self_exclusion':'Only this top-level freeze.json is excluded. All nested historical freezes and failed-attempt versions remain enumerated.','file_count':len(files),'total_bytes':sum(x['bytes'] for x in files),'current_268_freeze':pin(B/'reconciled/268/freeze.json'),'files':files}
+(C/'freeze.json').write_text(json.dumps(freeze,ensure_ascii=False,indent=2)+'\n')
+for item in files:assert all(pin(pathlib.Path(item['path']))[k]==item[k] for k in ('bytes','sha256'))
+print(json.dumps({'status':'DONE','correction_freeze':pin(C/'freeze.json'),'file_count':len(files),'current_268_freeze':freeze['current_268_freeze']}))

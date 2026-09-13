@@ -1,0 +1,87 @@
+import pathlib,json,hashlib,subprocess,os,sys,sqlite3,importlib.util,difflib,copy
+assert sys.dont_write_bytecode
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+ROOT=pathlib.Path.cwd();B=ROOT/'campaign-artifacts/C05-268-270';R=B/'semantic-review';O=R/'correction-01';H=B/'pre-correction-01';C=B/'reconciliation-correction-01';W=ROOT/'campaign-worktree'
+def j(p):return json.loads(p.read_text())
+def pin(p):d=p.read_bytes();return dict(bytes=len(d),sha256=hashlib.sha256(d).hexdigest())
+def put(n,v):(O/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def equalpin(p,x):assert pin(p)=={k:x[k] for k in ['bytes','sha256']},str(p)
+roots=j(B/'root-initial-semantic-verification.json')['history_files'];assert len(roots)==923
+for x in roots:equalpin(pathlib.Path(x['copy']),x)
+freezes=[]
+for d in [C]+[B/f'reconciled/{s}' for s in (268,269,270)]:
+ f=j(d/'freeze.json');actual={p.relative_to(d).as_posix():p for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'};expected={x['relative_path']:x for x in f['files']};assert actual.keys()==expected.keys()
+ for k,p in actual.items():equalpin(p,expected[k])
+ freezes.append(dict(path=str(d/'freeze.json'),files=len(actual),**pin(d/'freeze.json')))
+before=j(C/'before-files.json');after=j(C/'after-files.json');delta=[];diff=[]
+actual={p.relative_to(B).as_posix():p for s in (268,269,270) for p in (B/f'reconciled/{s}').rglob('*') if p.is_file()};assert actual.keys()==after.keys()
+for rel,v in before.items():equalpin(H/rel,v)
+for rel,v in after.items():equalpin(B/rel,v)
+for rel in sorted(set(before)|set(after)):
+ a=before.get(rel);b=after.get(rel)
+ if a==b:continue
+ delta.append(dict(path=rel,status='added' if not a else 'removed' if not b else 'changed'))
+ old=(H/rel).read_bytes() if a else b'';new=(B/rel).read_bytes() if b else b''
+ try:diff.extend(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile=str(H/rel) if a else '/dev/null',tofile=str(B/rel) if b else '/dev/null',n=5))
+ except UnicodeDecodeError:diff.append('Binary exact-byte change; see full before/after pins and retained files: '+rel+'\n')
+raw=''.join(diff).encode();assert raw==(C/'exact-correction.diff.txt').read_bytes();assert len(raw)==1242701
+put('complete-diff-verification.json',dict(status='PASS',bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),changed=sum(x['status']=='changed' for x in delta),added=sum(x['status']=='added' for x in delta),removed=sum(x['status']=='removed' for x in delta),all_changes=delta,complete_before_after_originals_reopened=True))
+assert sum(x['status']=='changed' for x in delta)==13 and sum(x['status']=='added' for x in delta)==39 and not any(x['status']=='removed' for x in delta)
+changed={x['path'].split('/')[-1] for x in delta if x['status']=='changed'}
+assert changed=={'spec.json','body.html','errata.json','errata-analysis.json','report.md','generator-proof.json','batch-counts.json','original-dispositions.json','omissions.json','original-to-final.diff.txt','final-audit.json','supported-copy-preflight.json','freeze.json'}
+# Exact semantic scope, including field order and reasons.
+alltuples=[];orig_count=0;reason_changes=[]
+for s in (268,269,270):
+ d=B/f'reconciled/{s}';h=H/f'reconciled/{s}';old=j(h/'spec.json');new=j(d/'spec.json');t=copy.deepcopy(old)
+ if s==268:t['segments'][0]['note']=new['segments'][0]['note']
+ assert t==new
+ for a,z in zip(old['segments'][0]['spans'],new['segments'][0]['spans']):assert a==z and list(a)==list(z)
+ assert (d/'resolved-spans.json').read_bytes()==(h/'resolved-spans.json').read_bytes();alltuples+=j(d/'resolved-spans.json')
+ ds=j(d/'original-dispositions.json');hs=j(h/'original-dispositions.json');assert len(ds)==len(hs)
+ for a,z in zip(hs,ds):
+  orig_count+=1;assert {k:v for k,v in a.items() if k!='reason'}=={k:v for k,v in z.items() if k!='reason'}
+  if a['reason']!=z['reason']:reason_changes.append(dict(original=z['original_identity'],old=a['reason'],new=z['reason']))
+ if s!=268:
+  for p in h.rglob('*'):
+   if p.is_file():assert p.read_bytes()==(d/p.relative_to(h)).read_bytes()
+ assert j(d/'errata.json')==[]
+assert len(alltuples)==123 and alltuples==j(R/'history/initial-review/resolved-spans.json') and orig_count==227
+assert len(reason_changes)==1 and reason_changes[0]['original']['id']=='w17' and reason_changes[0]['original']['angle']=='tibetan'
+old=j(H/'reconciled/268/errata-analysis.json');new=j(B/'reconciled/268/errata-analysis.json');a=old['candidate_dispositions'][0];z=new['candidate_dispositions'][0]
+assert z['refuted'] is True and z['five_grounds']['d_wrong_correction_or_defensible_reading']['refutes'] is True
+for k in ['a_verbatim_presence','c_registered_or_duplicate','e_counts_and_scope_rechecked']:assert z['five_grounds'][k]==a['five_grounds'][k]
+for k,v in a['five_grounds']['d_wrong_correction_or_defensible_reading'].items():
+ if k not in ['refutes','ruling']:assert z['five_grounds']['d_wrong_correction_or_defensible_reading'][k]==v
+assert z['five_grounds']['d_wrong_correction_or_defensible_reading']['ruling']==j(R/'history/initial-review/errata-five-ground-proof.json')['grounds']['d']['finding']
+# Cross-version correction-review references now resolve through immutable history, not mutable review paths.
+transport=[]
+for m in j(B/'reconciled/268/correction-review-input-mappings.json'):
+ p=pathlib.Path(m['immutable_historical_source']);cp=B/'reconciled/268'/m['copy'];equalpin(p,m);assert p.read_bytes()==cp.read_bytes()
+ transport.append(dict(original_consumed=m['original'],immutable_source=str(p),consumed_pin=pin(p),reconciler_copy=str(cp)))
+put('semantic-scope-proof.json',dict(status='PASS',all_123_tuples_exact=True,all_227_original_identities_dispositions_and_fields_exact=True,only_original_reason_change=reason_changes,all_269_270_files_unchanged=True,only_spec_change='268 note',all_current_errata_empty=True,positive_contrary_evidence_unchanged=True,history_reference_transport=transport))
+# Independent full source reopening and one actual current canonical run.
+prior=j(R/'history/initial-review/source-state-proof.json')['before'];start=[]
+for x in prior:equalpin(pathlib.Path(x['path']),x);start.append(dict(path=x['path'],**pin(pathlib.Path(x['path']))))
+cp=j(B/'reconciled/268/collection-proof.json');db=pathlib.Path(cp['database']['path']).resolve();conn=sqlite3.connect(db.as_uri()+'?mode=ro',uri=True);conn.row_factory=sqlite3.Row;conn.execute('pragma query_only=on');assert conn.execute('pragma query_only').fetchone()[0]==1
+sql="select * from corpus_segments where course=? and seq between ? and ? order by seq";rows=[dict(x) for x in conn.execute(sql,('C05',268,270))];assert rows==j(R/'history/initial-review/evidence/source-full-rows.json')
+lex=[dict(x) for x in conn.execute('select * from entries where id in (23555,23556,3787,8162) order by id')];mr=j(R/'history/initial-review/evidence/full-master-reopened.json')['entries']
+for x in lex:assert json.loads(x['raw'])==mr[str(x['id'])]
+put('current-source-reopened.json',dict(sql=sql,params=['C05',268,270],rows=rows,lexical_rows=lex,sqlite_uri=db.as_uri()+'?mode=ro',query_only=1));conn.close()
+run=O/'canonical268';run.mkdir();spec=B/'reconciled/268/spec.json';wrapper=B/'reconciled/268/run-canonical-readonly.py';assert wrapper.read_bytes()==(H/'reconciled/268/run-canonical-readonly.py').read_bytes()
+(run/'stdin.json').write_bytes(spec.read_bytes());argv=['python3','-B',str(wrapper)]
+p=subprocess.run(argv,input=spec.read_bytes(),cwd=W,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+(run/'stdout.html').write_bytes(p.stdout);(run/'stderr.txt').write_bytes(p.stderr);(run/'exit.txt').write_text(str(p.returncode)+'\n')
+gp=dict(argv=argv,cwd=str(W),environment={'PYTHONDONTWRITEBYTECODE':'1'},exit=p.returncode,stdin=pin(run/'stdin.json'),stdout=pin(run/'stdout.html'),stderr=pin(run/'stderr.txt'),spec=pin(spec),body=pin(B/'reconciled/268/body.html'),canonical_generator=pin(W/'tools/gen_alignment_page.py'),builder=pin(W/'tools/build_alignment_layer.py'),read_only_wrapper=pin(wrapper),actual_stdout_equals_current_body=p.stdout==(B/'reconciled/268/body.html').read_bytes())
+put('canonical268/invocation.json',gp);assert p.returncode==0 and not p.stderr and gp['actual_stdout_equals_current_body'] and len(p.stdout)==5252
+sp=importlib.util.spec_from_file_location('scoped_generator',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(sp);sp.loader.exec_module(g);resolved=[]
+for s,row in zip((268,269,270),rows):
+ seg=j(B/f'reconciled/{s}/spec.json')['segments'][0];ss=seg['spans'];by={x['id']:x for x in ss};tr=g.resolve(row['wylie'],ss,'tib',s);er=g.resolve(row['english'],g.with_members(ss,[by[i] for i in seg['eng_order']],row['english']),'eng',s)
+ resolved.extend(dict(seq=s,id=x['id'],d=x['d'],tib=x['tib'],eng=x.get('eng'),tib_range=list(tr[x['id']]),eng_range=list(er[x['id']]) if x.get('eng') is not None else None) for x in ss)
+assert resolved==alltuples
+end=[dict(path=x['path'],**pin(pathlib.Path(x['path']))) for x in prior];assert start==end
+put('source-state-proof.json',dict(before=start,after=end,identical=True,readonly=True));put('resolved-spans.json',resolved)
+# Exact initial packaging failure and recovery: preserve all outputs, no failed helper execution.
+failed=C/'failed-package-attempt01/0-package.py.txt';patch=''.join(difflib.unified_diff(failed.read_text().splitlines(True),(C/'package.py.txt').read_text().splitlines(True),fromfile=str(failed),tofile=str(C/'package.py.txt'),n=5));(O/'package-helper-recovery.diff.txt').write_text(patch)
+assert j(C/'package-process-result.json')['exit_code']==1 and j(C/'package-attempt02-process-result.json')['exit_code']==0
+put('scoped-check-summary.json',dict(status='PASS',initial_root_history_files=923,initial_review_files=573,freezes=freezes,complete_diff=pin(C/'exact-correction.diff.txt'),changed_existing=13,added=39,removed=0,spans=123,nulls=5,word_pairs=75,originals=227,current_errata=0,new_generator_runs=1,new_generator_exit=p.returncode,body=gp['body'],spec=gp['spec'],initial_nine_runs_preserved=True,unchanged_269_270_verified_without_rerun=True,sole_finding_resolved=True))
+print(json.dumps(j(O/'scoped-check-summary.json')))

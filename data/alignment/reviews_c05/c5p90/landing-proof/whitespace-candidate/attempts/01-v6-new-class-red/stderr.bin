@@ -1,0 +1,23 @@
+test_exact_six_print_records_accept_without_normalization (__main__.WitnessTests.test_exact_six_print_records_accept_without_normalization) ... FAIL
+
+======================================================================
+FAIL: test_exact_six_print_records_accept_without_normalization (__main__.WitnessTests.test_exact_six_print_records_accept_without_normalization)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-270/test_witnesses.py", line 74, in test_exact_six_print_records_accept_without_normalization
+    result=self.check()
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-270/test_witnesses.py", line 71, in check
+    return w.verify_formatter(self.raw,self.grouped,self.pin,self.review,self.freeze)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-270/baseline_v6_adapter.py", line 18, in verify_formatter
+    exec(code,context)
+    ~~~~^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-270/baseline/audit_staged_source_whitespace_v6.py", line 123, in <module>
+    assert pin['kind'] in ('diff_context', 'empty_report_field')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+----------------------------------------------------------------------
+Ran 1 test in 0.010s
+
+FAILED (failures=1)

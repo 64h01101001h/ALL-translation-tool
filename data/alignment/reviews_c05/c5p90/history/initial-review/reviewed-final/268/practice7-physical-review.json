@@ -1,0 +1,45 @@
+{
+  "original_pdf": {
+    "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Daily Practices/Practice7Reading.pdf",
+    "sha256": "886e93e7da4c03296396f0fa4114f65c44bfacc76b5f0935f2503111e9de4c48",
+    "bytes": 198365
+  },
+  "extract_argv": [
+    "pdftotext",
+    "-layout",
+    "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Daily Practices/Practice7Reading.pdf",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/268/Practice7Reading.extracted-replay.txt"
+  ],
+  "extract_exit": 0,
+  "extract_stdout": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/268/practice7-extract.stdout.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "extract_stderr": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/268/practice7-extract.stderr.txt",
+    "sha256": "fdb1243a517526638327ee1570b10484c45350faf746959bf104beb58239a85d",
+    "bytes": 25296
+  },
+  "initial_extraction": "Same pdftotext -layout invocation first wrote Practice7Reading.extracted.txt, EXIT0 with warnings; actual exact replay and warning bytes preserved. Identical extracted bytes proved.",
+  "render_proof": "practice7-render-proof.json",
+  "visually_inspected_pdf_pages_one_based": [
+    30,
+    36,
+    37,
+    38
+  ],
+  "printed_pages": [
+    25,
+    31,
+    32,
+    33
+  ],
+  "findings": [
+    "Page30 separately prints the Tibetan sweetness/clarity/coolness list and English sweet, clear, and cool.",
+    "Page36 bottom carries the complete Tibetan current268 discussion including clear/cool; page37 top has the complete English sweet, cool water paragraph with em dashes. No independent lineage inferred.",
+    "Page37 middle has the complete269 Tibetan/English obstacle passage.",
+    "The steel example corresponding to C05:270 is physically present across pages37–38. Digital P7:25 is the subsequent moon/sun paragraph and is not the steel source; its omitted of in sensation cold does not affect270."
+  ],
+  "limits": "Extracted Tibetan is corrupt custom-font glyph text with Poppler warnings, so it is NOT substituted for ACIP/Wylie or used as a byte-equality proof. Rendered full pages supply visual evidence. PDF English retains typographic differences; no whole-field identity to C05 is claimed."
+}

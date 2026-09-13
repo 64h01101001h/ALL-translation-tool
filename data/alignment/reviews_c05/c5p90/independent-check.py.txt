@@ -1,0 +1,78 @@
+from pathlib import Path
+import json,hashlib,sqlite3,sys,os,io,contextlib,importlib.util,subprocess,gzip,re,html,collections
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';C=B/'reconciled/268';HEAD='2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812'
+H=lambda b:hashlib.sha256(b).hexdigest()
+def save(n,x):p=R/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def get(p):return json.loads(p.read_text())
+def pin(p):b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=H(b))
+cp=get(C/'collection-proof.json');sourcefiles=[Path(cp[k]['path']) for k in ['database','source_master','original_master','corpus']]+[Path(x['path']) for x in cp['physical_files']]+[W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py'];before=[pin(p) for p in sourcefiles]
+for x in cp['references']:p=Path(x['path']);assert p.is_dir() and os.access(p,os.R_OK|os.X_OK);next(p.iterdir(),None)
+for p in sourcefiles[-2:]:assert p.read_bytes()==subprocess.check_output(['git','show',HEAD+':'+str(p.relative_to(W))],cwd=W)
+con=sqlite3.connect
+connections=[]
+def ro(p,*a,**kw):
+ if not str(p).startswith('file:'):p=Path(p).resolve().as_uri()+'?mode=ro'
+ assert 'mode=ro' in str(p);kw['uri']=True;c=con(p,*a,**kw);c.execute('PRAGMA query_only=ON');assert c.execute('PRAGMA query_only').fetchone()[0]==1;connections.append(str(p));return c
+sqlite3.connect=ro;db=ro(sourcefiles[0]);db.row_factory=sqlite3.Row
+queries=get(C/'query-reruns-full.json')+get(C/'erratum-source-queries-full.json');results=[]
+for q in queries:
+ assert q['sql'].strip().lower().startswith('select');rows=[dict(x) for x in db.execute(q['sql'],q['params'])];assert rows==q['rows'] and len(rows)==q['count'];results.append(dict(**q,independently_reopened=True))
+save('evidence/full-query-replays.json',results)
+master=json.loads(gzip.decompress(sourcefiles[1].read_bytes()));assert sourcefiles[1].read_bytes()==sourcefiles[2].read_bytes();mr=get(C/'master-entries-full.json');assert mr['metadata']==master['meta']
+for k,x in mr['entries'].items():assert x==master['unified_entries'][int(k)-1]==json.loads(db.execute('select raw from entries where id=?',(int(k),)).fetchone()[0])
+save('evidence/full-master-reopened.json',mr)
+cr=get(C/'corpus-objects-full.json');full=json.loads(gzip.decompress(sourcefiles[3].read_bytes()));need={json.dumps(x['raw'],sort_keys=True) for x in cr};found=set()
+def walk(x):
+ if isinstance(x,dict):
+  if 'acip' in x or 'english' in x:
+   s=json.dumps(x,sort_keys=True)
+   if s in need:found.add(s)
+  for v in x.values():walk(v)
+ elif isinstance(x,list):
+  for v in x:walk(v)
+walk(full);assert need==found
+for x in cr:assert x['raw']==json.loads(db.execute('select raw from corpus_segments where id=?',(x['row_id'],)).fetchone()[0])
+save('evidence/full-corpus-reopened.json',cr)
+rows={x['seq']:dict(x) for x in db.execute("select * from corpus_segments where course='C05' and seq between268 and270 order by seq".replace('between268','between 268').replace('and270','and 270'))}
+assert list(rows.values())==get(C/'source-full-rows.json');save('evidence/source-full-rows.json',list(rows.values()))
+physical=get(C/'physical-extents.json')
+for x in physical:
+ b=Path(x['source_path']).read_bytes();part=b[x['start']:x['end']];assert H(b)==x['file_sha256'] and H(part)==x['sha256'] and len(part)==x['bytes'] and part.decode('latin1')==x['exact_bytes_latin1'];assert b' '.join(part.split())==rows[x['seq']][x['field']].encode('ascii')
+save('evidence/physical-reopened.json',physical)
+sp=importlib.util.spec_from_file_location('canonical_independent',W/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(sp);sp.loader.exec_module(G)
+allres={};generations=[];occ=[]
+def hits(s,t,sub=False):
+ if t is None:return []
+ out=[];at=0
+ while True:
+  at=G.find_word(s,t,at,subword=sub)
+  if at<0:return out
+  out.append([at,at+len(t)]);at+=1
+for angle in ['tibetan','english','reconciled']:
+ for seq in [268,269,270]:
+  p=B/angle/str(seq)/'spec.json';spec=get(p);s=spec['segments'][0];source=rows[seq];out=io.StringIO();err=io.StringIO();old=sys.stdin;sys.stdin=io.StringIO(p.read_text())
+  try:
+   with contextlib.redirect_stdout(out),contextlib.redirect_stderr(err):G.main()
+   code=0
+  except SystemExit as e:code=e.code
+  finally:sys.stdin=old
+  raw=out.getvalue().encode();d=R/'reproduction'/f'{angle}-{seq}';d.mkdir(parents=True,exist_ok=True);(d/'stdout.html').write_bytes(raw);(d/'stderr.txt').write_text(err.getvalue());(d/'exit.txt').write_text(str(code)+'\n');assert code==0 and not err.getvalue() and raw==(p.parent/'body.html').read_bytes()
+  spans=s['spans'];tr=G.resolve(source['wylie'],spans,'tib',seq);by={x['id']:x for x in spans};er=G.resolve(source['english'],G.with_members(spans,[by[i] for i in s['eng_order']],source['english']),'eng',seq);rr=[];parent=None;cur=0
+  for x in spans:
+   sid=x['id'];t=list(tr[sid]);e=list(er[sid]) if x['eng'] is not None else None;assert source['wylie'][slice(*t)]==x['tib'];assert (source['english'][slice(*e)] if e else None)==x['eng']
+   if x['d']==7:
+    assert parent and parent['d']==5;pt=tr[parent['id']];pe=er[parent['id']];assert pt[0]<=t[0]<t[1]<=pt[1] and list(pt)!=t and pe[0]<=e[0]<e[1]<=pe[1] and list(pe)!=e;assert source['wylie'][slice(*pt)].count(x['tib'])==1 and source['english'][slice(*pe)].count(x['eng'])==1
+   else:assert t[0]>=cur;cur=t[1];parent=x
+   r=dict(seq=seq,id=sid,d=x['d'],tib=x['tib'],eng=x['eng'],tib_range=t,eng_range=e);rr.append(r);occ.append(dict(angle=angle,**r,all_tib_occurrences=hits(source['wylie'],x['tib'],x.get('subword',False) or x['d']==7),all_eng_occurrences=hits(source['english'],x['eng'],x.get('subword',False) or x['d']==7)))
+  for side,field in [('tib','wylie'),('eng','english')]:
+   block=out.getvalue().split('<div class="'+side+'"><div class="lab">',1)[1].split('</div>',1)[1].split('\n</div>',1)[0];block=re.sub(r'<span class="nul">.*?</span>','',block,flags=re.S);plain=html.unescape(re.sub(r'<[^>]*>','',block)).removeprefix('\n');assert plain==source[field]
+  allres[angle,seq]=rr;generations.append(dict(angle=angle,seq=seq,span_count=len(spans),null_count=sum(x['eng'] is None for x in spans),word_pair_count=sum(x['d']==5 and x['eng'] is not None for x in spans),spec_sha256=H(p.read_bytes()),spec_bytes=p.stat().st_size,body_sha256=H(raw),body_bytes=len(raw),generator_exit=code))
+for seq in [268,269,270]:
+ rr=allres['reconciled',seq];assert rr==get(B/f'reconciled/{seq}/resolved-spans.json');s=get(B/f'reconciled/{seq}/spec.json')['segments'][0]
+ for sp,r,d in zip(s['spans'],rr,get(B/f'reconciled/{seq}/final-decisions.json')):assert sp==d['final_span'] and r==d['final_tuple']
+ for angle in ['tibetan','english']:
+  old=get(B/f'{angle}/{seq}/spec.json')['segments'][0]['spans'];ds=[x for x in get(B/f'reconciled/{seq}/original-dispositions.json') if x['original_identity']['angle']==angle];assert len(old)==len(ds)
+  for sp,r,d in zip(old,allres[angle,seq],ds):assert sp==d['original_span'] and list(sp)==d['original_span_keys'] and dict(angle=angle,**r)==d['original_identity']
+save('resolved-spans.json',[r for seq in [268,269,270] for r in allres['reconciled',seq]]);save('evidence/all-original-identities.json',[dict(angle=a,**r) for a in ['tibetan','english'] for seq in [268,269,270] for r in allres[a,seq]]);save('evidence/all-occurrences.json',occ);save('generator-proof.json',generations)
+after=[pin(p) for p in sourcefiles];assert before==after;save('source-state-proof.json',dict(before=before,after=after,identical=True,connections=connections,readonly=True));save('independent-check-summary.json',dict(status='PASS',primary_queries=len(queries)-3,supplemental_queries=3,master_entries=len(mr['entries']),corpus_objects=len(cr),physical_extents=len(physical),generations=len(generations),original_spans=sum(len(allres[a,s]) for a in ['tibetan','english'] for s in [268,269,270]),final_spans=sum(len(allres['reconciled',s]) for s in [268,269,270]),original_dispositions_exact=True));print((R/'independent-check-summary.json').read_text())

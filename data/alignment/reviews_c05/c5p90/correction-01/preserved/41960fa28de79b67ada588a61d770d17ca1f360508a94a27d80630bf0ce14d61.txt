@@ -1,0 +1,126 @@
+"""Mechanically verify the actual correction before distinct scoped review."""
+from pathlib import Path
+from collections import Counter
+import datetime, difflib, hashlib, json, os, sqlite3, subprocess, sys
+
+B = Path(__file__).resolve().parent
+C = B / 'reconciliation-correction-01'
+H = B / 'pre-correction-01'
+R = B / 'reconciled/268'
+W = B.parent.parent / 'campaign-worktree'
+O = B / 'root-correction-01-verification'
+assert not O.exists(), 'Preserve prior attempts'
+O.mkdir()
+
+def read(p): return json.loads(p.read_text())
+def pin(p):
+    raw = p.read_bytes()
+    return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+def check(p, expected):
+    assert pin(p) == {k: expected[k] for k in ('bytes', 'sha256')}, p
+def write(p, value): p.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+freezes = []
+for directory in [C, R, B/'reconciled/269', B/'reconciled/270']:
+    f = read(directory/'freeze.json')
+    expected = {r['relative_path']: r for r in f['files']}
+    actual = {str(p.relative_to(directory)) for p in directory.rglob('*') if p.is_file() and p != directory/'freeze.json'}
+    assert actual == set(expected) and len(actual) == f['file_count']
+    for rel, row in expected.items(): check(directory/rel, row)
+    freezes.append({'path': str(directory/'freeze.json'), **pin(directory/'freeze.json'), 'files': len(actual)})
+for row in read(B/'root-initial-semantic-verification.json')['history_files']:
+    check(Path(row['copy']), row)
+for p in (H/'semantic-review').rglob('*'):
+    if p.is_file(): assert p.read_bytes() == (B/'semantic-review'/p.relative_to(H/'semantic-review')).read_bytes()
+
+before = read(C/'before-files.json')
+after = read(C/'after-files.json')
+actual = {str(p.relative_to(B)): {'path': str(p), **pin(p)} for seq in [268,269,270] for p in (B/f'reconciled/{seq}').rglob('*') if p.is_file()}
+assert actual == after
+assert set(before) == {str(p.relative_to(H)) for p in (H/'reconciled').rglob('*') if p.is_file()}
+for rel, row in before.items(): check(H/rel, row)
+changes = []
+diff = []
+for rel in sorted(set(before)|set(after)):
+    a, b = before.get(rel), after.get(rel)
+    if a == b: continue
+    assert rel.startswith('reconciled/268/') and b is not None
+    changes.append({'path':str(B/rel), 'before':a, 'after':b, 'immutable_before_path':str(H/rel) if a else None, 'status':'added' if not a else 'changed'})
+    old = (H/rel).read_bytes() if a else b''
+    new = (B/rel).read_bytes()
+    try:
+        diff.extend(difflib.unified_diff(old.decode('utf-8').splitlines(True),new.decode('utf-8').splitlines(True),fromfile=str(H/rel) if a else '/dev/null',tofile=str(B/rel),n=5))
+    except UnicodeDecodeError:
+        diff.append('Binary exact-byte change; see full before/after pins and retained files: '+rel+'\n')
+assert changes == read(C/'before-after-manifest.json')['changes']
+assert Counter(x['status'] for x in changes) == {'changed':13,'added':39}
+assert ''.join(diff).encode() == (C/'exact-correction.diff.txt').read_bytes()
+expected_changed = {'spec.json','body.html','errata.json','errata-analysis.json','report.md','generator-proof.json','batch-counts.json','original-dispositions.json','omissions.json','original-to-final.diff.txt','final-audit.json','supported-copy-preflight.json','freeze.json'}
+assert {Path(x['path']).name for x in changes if x['status']=='changed'} == expected_changed
+
+tuples = []
+originals = 0
+for seq in [268,269,270]:
+    d = B/f'reconciled/{seq}'
+    h = H/f'reconciled/{seq}'
+    old, new = read(h/'spec.json'), read(d/'spec.json')
+    if seq == 268:
+        assert old['segments'][0]['note'] != new['segments'][0]['note']
+        old['segments'][0]['note'] = new['segments'][0]['note']
+    assert old == new
+    assert [list(s) for s in old['segments'][0]['spans']] == [list(s) for s in new['segments'][0]['spans']]
+    assert read(d/'errata.json') == []
+    current_tuples = read(d/'resolved-spans.json')
+    assert current_tuples == read(h/'resolved-spans.json')
+    tuples.extend(current_tuples)
+    a, b = read(h/'original-dispositions.json'), read(d/'original-dispositions.json')
+    assert len(a) == len(b)
+    for previous, current in zip(a,b):
+        if previous != current:
+            assert seq == 268 and previous['original_identity']['angle']=='tibetan' and previous['original_identity']['id']=='w17'
+            assert {k:v for k,v in previous.items() if k!='reason'} == {k:v for k,v in current.items() if k!='reason'}
+    originals += len(b)
+    for name in ['final-decisions.json','unwrapped-extents.json','proposed-span-head-allowances.json']:
+        assert (d/name).read_bytes() == (h/name).read_bytes()
+assert tuples == read(B/'root-reconciliation-verification/resolved-spans.json')
+assert len(tuples)==123 and originals==227
+candidate = read(R/'errata-analysis.json')['candidate_dispositions'][0]
+assert candidate['refuted'] is True
+assert candidate['five_grounds']['d_wrong_correction_or_defensible_reading']['refutes'] is True
+assert len(candidate['five_grounds']) == 5
+
+maps = 0
+for name in ['original-to-copy-manifest.json','supplemental-to-copy-manifest.json','helper-and-skill-copy-manifest.json','correction-review-input-mappings.json','correction-01-copy-manifest.json']:
+    for row in read(R/name):
+        cp = R/row['copy']; check(cp,row)
+        assert cp.suffix in ('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit')
+        if row.get('original_git_commit'):
+            original = subprocess.check_output(['git','show',row['original_git_commit']+':'+row['repository_relative_path']],cwd=W)
+        else:
+            original = Path(row.get('immutable_historical_source',row['original'])).read_bytes()
+        assert cp.read_bytes() == original
+        maps += 1
+for row in read(R/'freeze-packaging-addendum.json')['additional_source_to_copy_mappings']:
+    check(Path(row['original']),row); check(R/row['copy'],row); maps+=1
+for name in ['correction-history-mappings.json','package-recovery-history-mappings.json']:
+    for row in read(R/name):
+        source, cp = Path(row['immutable_historical_source']), Path(row['current_retained_copy'])
+        check(source,row);check(cp,row);assert source.read_bytes()==cp.read_bytes(); maps+=1
+assert maps == 249
+source = read(C/'unchanged-source-proof.json')
+for row in source['before_pins']+source['after_pins']: check(Path(row['path']),row)
+db = sqlite3.connect(source['sqlite_uri'],uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+for name in ['source_query','positive_and_contrary_lexical_query']:
+    q=source[name]; rows=[dict(r) for r in db.execute(q['sql'],q['params'])];assert rows==q['rows']
+db.close()
+argv=[sys.executable,'-B',str(B.parent/'run_generator_readonly.py')]
+write(O/'canonical.command.json',{'argv':argv,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':str(R/'spec.json')})
+run=subprocess.run(argv,input=(R/'spec.json').read_bytes(),cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},capture_output=True)
+(O/'canonical.stdout.html').write_bytes(run.stdout);(O/'canonical.stderr.txt').write_bytes(run.stderr);(O/'canonical.exit.txt').write_text(str(run.returncode)+'\n')
+assert run.returncode==0 and not run.stderr and run.stdout==(R/'body.html').read_bytes()
+for row in source['after_pins']:check(Path(row['path']),row)
+assert subprocess.check_output(['git','status','--short'],cwd=W)==b'?? data/teaching/dcc_captions\n'
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=W).decode().strip()=='2487bfcd73a1463d135a4544a01535ba5c99cab0'
+result={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS mechanical correction boundary; separate semantic re-review still required','freezes':freezes,'initial_history_files_verified':923,'exact_complete_diff':pin(C/'exact-correction.diff.txt'),'changed_existing_files':13,'added_files':39,'removed_files':0,'material_mappings':249,'span_tuples':123,'original_dispositions':227,'nulls':5,'word_pairs':75,'current_spec':pin(R/'spec.json'),'current_body':pin(R/'body.html'),'root_actual_canonical_exit':run.returncode,'root_actual_canonical_stderr_bytes':len(run.stderr),'source_reopens_and_hashes_unchanged':True,'only_spec_change':'268 note reflects refuted erratum','accepted':False}
+write(O/'proof.json',result)
+print(json.dumps(result,ensure_ascii=False,indent=2))

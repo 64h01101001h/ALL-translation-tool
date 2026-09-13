@@ -1,0 +1,80 @@
+from pathlib import Path
+import json,hashlib,subprocess,re,difflib,os
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';H=lambda b:hashlib.sha256(b).hexdigest();HEAD='2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812'
+def get(p):return json.loads(p.read_text())
+def save(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+assert all(('"'+s+'"') in (B.parent/'land_reviewed_page.py').read_text() for s in allowed)
+manifest=[];seen={};origins={}
+def preserve(p,relative=None,raw=None,**meta):
+ p=Path(p).resolve();raw=p.read_bytes() if raw is None else raw;digest=H(raw);key=(digest,len(raw));suffix=p.suffix.lower();suffix=suffix if suffix in allowed else suffix+'.txt'
+ if relative is None:relative=seen.get(key,'proposal-inputs/evidence/'+digest+suffix)
+ else:
+  relative=str(relative)
+  if Path(relative).suffix.lower() not in allowed:relative+='.txt'
+ dest=R/relative;dest.parent.mkdir(parents=True,exist_ok=True)
+ if dest.exists():assert dest.read_bytes()==raw
+ else:dest.write_bytes(raw)
+ seen.setdefault(key,relative);record=dict(original=str(p),copy=relative,sha256=digest,bytes=len(raw),**meta)
+ if str(p) in origins:
+  old=origins[str(p)];assert old['sha256']==digest and old['bytes']==len(raw);old.update(meta)
+ else:manifest.append(record);origins[str(p)]=record
+ return record
+inputs=get(B/'semantic-all-inputs.json');assert len(inputs)==536
+for x in inputs:
+ p=Path(x['path']);raw=p.read_bytes();assert H(raw)==x['sha256'] and len(raw)==x['bytes'];rel=x['relative_path']
+ if rel.startswith('reconciled/'):
+  target='reviewed-final/'+rel[len('reconciled/'):]
+  if '/evidence/' in target:target=None
+ else:target='proposal-inputs/'+rel
+ preserve(p,target,raw)
+for name in ['semantic-all-inputs.json','semantic-dispatch-inputs.json','semantic-supplement-generation.json','prepare-semantic-supplement.py']:
+ preserve(B/name,'proposal-inputs/'+name)
+for name in ['semantic-review-protocol.md','proposal-protocol.md','copy_evidence_once.py','land_reviewed_page.py','run_generator_readonly.py']:
+ preserve(B.parent/name,'governing-campaign/'+name)
+# Every historical source mapping is resolved against its named Git object, never an assumed later file.
+C=B/'reconciled/268'
+allmaps=get(C/'original-to-copy-manifest.json')+get(C/'supplemental-to-copy-manifest.json')+get(C/'helper-and-skill-copy-manifest.json')+get(C/'freeze-packaging-addendum.json')['additional_source_to_copy_mappings']
+assert len(allmaps)==221
+for x in allmaps:
+ copied=(B/'reconciled/268'/x['copy']).read_bytes();assert H(copied)==x['sha256'] and len(copied)==x['bytes'];meta={k:x[k] for k in ['original_git_commit','repository_relative_path'] if k in x}
+ raw=subprocess.check_output(['git','show',x['original_git_commit']+':'+x['repository_relative_path']],cwd=W) if meta else Path(x['original']).read_bytes();assert raw==copied;preserve(Path(x['original']),raw=raw,**meta)
+# Add explicit historical provenance to author snapshot paths by exact governing file identity.
+gov=['AGENTS.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/alignment_briefs/PROPOSE_BRIEF.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','docs/errata_register.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']
+lookup={}
+for n in gov:
+ raw=subprocess.check_output(['git','show',HEAD+':'+n],cwd=W);lookup[(H(raw),len(raw))]=n;preserve(W/n,'governing-repository/'+n,raw,original_git_commit=HEAD,repository_relative_path=n)
+for x in manifest:
+ key=(x['sha256'],x['bytes'])
+ if key in lookup and '/input-snapshots/' in x['original']:x.update(original_git_commit=HEAD,repository_relative_path=lookup[key])
+# Original source/master archives and complete physical files, independent of author subset captures.
+cp=get(B/'reconciled/268/collection-proof.json')
+for p in [Path(cp[k]['path']) for k in ['source_master','original_master','corpus']]+[Path(x['path']) for x in cp['physical_files']]:preserve(p)
+for p in [Path('/Users/adamderickandrade/.codex/plugins/cache/openai-primary-runtime/pdf/26.909.12148/skills/pdf/SKILL.md'),Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/HANDOFF.md'),Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/README.md')]:preserve(p)
+# Verify every package section from full raw input, full hashes and regenerated U10 diffs.
+packages=[]
+for filename,last in [('semantic-input-review-package.txt','PACKAGE INPUT HASHES'),('semantic-input-supplement.txt','COMPLETE SUPPLEMENT MANIFEST')]:
+ raw=(B/filename).read_bytes();parts=re.split(rb'\n===== (.*?) =====\n',raw);sectionproof=[]
+ for i in range(1,len(parts),2):
+  label=parts[i].decode();body=parts[i+1]
+  if label==last:
+   for x in json.loads(body):b=(B/x['path']).read_bytes();assert len(b)==x['bytes'] and H(b)==x['sha256']
+   kind='complete manifest'
+  elif label.startswith('COMPLETE '):
+   m=re.fullmatch(r'COMPLETE (tibetan|english) TO RECONCILED DIFF (\d+)',label);assert m;angle,seq=m.groups();left=f'{angle}/{seq}/spec.json';right=f'reconciled/{seq}/spec.json';expected=''.join(difflib.unified_diff((B/left).read_text().splitlines(True),(B/right).read_text().splitlines(True),fromfile=left,tofile=right,n=10)).encode();assert body==expected;kind='complete U10 diff'
+  else:assert body==(B/label).read_bytes();kind='full original bytes'
+  sectionproof.append(dict(label=label,bytes=len(body),sha256=H(body),kind=kind))
+ packages.append(dict(file=filename,bytes=len(raw),sha256=H(raw),complete_sections=sectionproof))
+save('package-content-proof.json',packages)
+# Every current reconciler freeze includes all nested history files, excludes only itself.
+counts=[]
+for seq in [268,269,270]:
+ d=B/'reconciled'/str(seq);freeze=get(d/'freeze.json');entries=freeze['files'];assert isinstance(entries,list);actual={str(p.resolve()) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json' and '__pycache__' not in p.parts};assert actual=={x['path'] for x in entries}
+ for x in entries:b=Path(x['path']).read_bytes();assert H(b)==x['sha256'] and len(b)==x['bytes']
+ counts.append(len(entries))
+for x in manifest:
+ b=(R/x['copy']).read_bytes();assert H(b)==x['sha256'] and len(b)==x['bytes'];assert Path(x['copy']).suffix.lower() in allowed
+ if 'original_git_commit' in x:assert b==subprocess.check_output(['git','show',x['original_git_commit']+':'+x['repository_relative_path']],cwd=W)
+ else:assert b==Path(x['original']).read_bytes()
+save('original-to-copy-manifest.json',manifest);save('preservation-proof.json',dict(status='PASS',all_inputs=536,current_reconciler_frozen_files=sum(counts),per_segment_freeze_files=counts,manifest_mappings=len(manifest),Git_pins=sum('original_git_commit' in x for x in manifest),distinct_copies=len(set(x['copy'] for x in manifest)),all_extensions_allowed=True,nested_freezes_preserved=True,all_package_sections=sum(len(x['complete_sections']) for x in packages)));print((R/'preservation-proof.json').read_text())

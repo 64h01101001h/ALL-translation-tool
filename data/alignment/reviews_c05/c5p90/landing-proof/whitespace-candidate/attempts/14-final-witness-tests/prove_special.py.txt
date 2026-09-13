@@ -1,0 +1,41 @@
+"""Prove only the ten authorized aliases; no claim about other diagnostics."""
+from collections import defaultdict
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+from prepare_witnesses import prepare_witnesses
+from witnesses import verify_frozen, verify_formatter, verify_physical
+
+candidate=Path(__file__).resolve().parent
+batch=candidate.parent/'C05-268-270';review=batch/'semantic-review';wt=candidate.parent.parent/'campaign-worktree'
+freeze={r['path']:r for r in json.loads((review/'freeze.json').read_bytes())['files']}
+assert (review/'freeze.json').read_bytes()==(candidate/'inputs/freeze.json').read_bytes()
+diagnostic=json.loads((candidate/'inputs/whitespace-unclassified-diagnostic.json').read_bytes())
+issues=defaultdict(lambda:defaultdict(list))
+for d in diagnostic:issues[d['path']][d['warning']].append(d['line'])
+pins,proof=prepare_witnesses(candidate,batch,wt,freeze,issues)
+results={}
+for rel,pin in pins.items():
+    path='data/alignment/reviews_c05/c5p90/'+rel
+    raw=(wt/path).read_bytes()
+    command=['git','show',':'+path]
+    run=subprocess.run(command,cwd=wt,capture_output=True)
+    assert run.returncode==0 and not run.stderr
+    p=candidate/'staged-blobs'/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(run.stdout)
+    pin.update(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+    verify_frozen(raw,run.stdout,rel,pin,review,freeze)
+    if pin['kind']=='retained_print_separator':
+        results[rel]=verify_formatter(raw,dict(issues[path]),pin,review,freeze)
+    else:
+        verify_physical(raw,dict(issues[path]),pin)
+        results[rel]=dict(kind=pin['kind'],warnings=sum(map(len,issues[path].values())),verified_complete_original=True)
+    results[rel]['git_show']=dict(argv=command,cwd=str(wt),exit=run.returncode,stderr_hex=run.stderr.hex(),
+        stdout_path=str(p),stdout_bytes=len(run.stdout),stdout_sha256=hashlib.sha256(run.stdout).hexdigest())
+out=candidate/'special-proof';out.mkdir(exist_ok=False)
+(out/'pins.json').write_text(json.dumps(pins,indent=2)+'\n')
+(out/'proof.json').write_text(json.dumps(dict(status='PASS ten-alias witness proof only; full staged audit pending',
+    provenance=proof,results=results,warning_count=len(diagnostic),alias_count=len(pins)),ensure_ascii=False,indent=2)+'\n')
+print(json.dumps(dict(status='PASS ten-alias witness proof only',aliases=len(pins),warnings=len(diagnostic),
+    exact_staged_frozen_original_comparisons=len(pins),formatter_aliases=5,formatter_warnings=30,
+    whole_ILL_aliases=3,whole_ILL_warnings=3636,zip_member_aliases=2,zip_member_warnings=2),indent=2))

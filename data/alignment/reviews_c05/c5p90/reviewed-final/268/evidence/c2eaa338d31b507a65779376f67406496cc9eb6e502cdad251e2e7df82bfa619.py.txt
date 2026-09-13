@@ -1,0 +1,83 @@
+from pathlib import Path
+import json, hashlib, datetime, subprocess
+
+out=Path(__file__).parent
+batch=out.parents[1]
+wt=batch.parents[1]/'campaign-worktree'
+now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+def pin(p):
+    raw=p.read_bytes();return dict(path=str(p.resolve()),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(p,obj):
+    with p.open('x') as f:json.dump(obj,f,ensure_ascii=False,indent=2);f.write('\n')
+inputs=json.loads((out/'input-proof.json').read_text())
+for x in inputs['inputs']:
+    p=Path(x['path']);assert pin(p)['sha256']==x['sha256'] and p.stat().st_size==x['bytes'],p
+originals=out/'governing-originals';originals.mkdir()
+copies=[]
+for name in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md',
+             'data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']:
+    raw=subprocess.check_output(['git','show','2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812:'+name],cwd=wt)
+    p=wt/name;assert raw==p.read_bytes()
+    copy=originals/name;copy.parent.mkdir(parents=True,exist_ok=True);copy.write_bytes(raw)
+    copies.append(dict(original=str(p),original_git_commit='2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812',copy=str(copy),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+save(out/'governing-original-copy-manifest.json',copies)
+prep=[p for p in batch.iterdir() if p.is_file() and (p.name.startswith('root-') or p.name.startswith('preparation-'))]
+save(out/'evidence-references.json',dict(shared_evidence_directory=str(out),own_prior_preparation=[pin(p) for p in sorted(prep)],
+    role='Primary Codex Tibetan-first original, prior own preparation disclosed; not a non-author semantic verdict',
+    peer_isolation='No English268–270 spec/body/report/errata or semantic judgment has been opened. Only assignment/completion counts, hashes and paths received. Allthree own originals freeze before any such access.',
+    governing_copy_manifest=pin(out/'governing-original-copy-manifest.json')))
+extra=dict(utc=now,actual_exit=0,actual_command=['PYTHONDONTWRITEBYTECODE=1','python3','-B',str(out/'complete-extra-evidence.py')],
+           stdout=pin(out/'complete-extra-evidence.stdout.txt'),stderr=pin(out/'complete-extra-evidence.stderr.txt'))
+assert extra['stderr']['bytes']==0
+save(out/'extra-evidence-success-execution.json',extra)
+source={x['seq']:x for x in json.loads((batch/'source.json').read_text())}
+errata={
+268:dict(candidate='dvangs is rendered sweet in the source English',local_quote='sweet, cool water',tibetan_quote='chu dvangs shing bsil ba',
+    lexical='Complete HTG23555 lists liquid. Additional dwangs8162 has no HGM gloss; dwangs ba/dvangs ba/whole quality exact queries are empty. None establishes absence of a contextual exponent. Bs il/cool is positive21415.',
+    parallels='C15:413 andC18:1127 match allthree source fields. C16:844 shares the entire selected English then appends a following heading; P7:23 preserves sweet/cool with punctuation/orthographic differences. Full original rows and physicalC05 preserve exactly that reading.',
+    decision='No erratum proposed: this original records a contextually matched quality under explicit glossary disagreement, not a claim that sweet is an established dictionary gloss or a proven textual error. Digital identity does not prove independent publication; the non-author reviewers must challenge correspondence and any possible editorial concern.'),
+269:dict(candidate='Expanded outer/inner/food obstacles and repeated spirit mentions',local_quote='obstacles that are parts of their bodies',tibetan_quote='nang gi sgrib pa can',
+    lexical='Full positive24093/23814 records establish the named outer/inner classes;11856 includes world around them;2545 includes some kinds of. Expanded bodily-parts/prevention prose is not automatically a separate lexical exponent.',
+    parallels='C15:414 andC18:1128 match allthree fields; P7:24 English matches, Tibetan punctuation and DVAGS/DWAGS differ. Allfullrows preserved.',
+    decision='No erratum. Explanatory English is preserved; inner relation is omitted from fine alignment with a reason. The unaligned third spirit reference is resumed as them, not an invented absence.'),
+270:dict(candidate='Mantra/steel recurrence, omitted repeat verb and next moon/sun example',local_quote='and no other kind of sensation',tibetan_quote='reg bya gzhan mi myong ba dang',
+    lexical='Full15331 supports confirmed by a valid perception;24696 red-hot with positive14697/13333 members;14665 supports undergo/feels/feel. Empty exact steel-ball/mantra/heat-sensation queries do not establish missing meaning.',
+    parallels='C15:415 andC18:1129 match allthree fields. P7:25 is the next moon/sun example, not this steel segment. Allfullrows and current physical extents preserved.',
+    decision='No erratum. Final experience predicate has no separate word in the English elliptical coordination; explicit provisional null note retains its grammatical contribution. Expanded participants and repeated steel name are not reassigned to earlier words.')}
+reports={
+268:'Challenge dvangs/sweet first: its local quality syntax and complete source reading support the match, while the current HGM glossary lists liquid. This difference is stated, not concealed. The original does not propose a source correction. Only third grub owns created; earlier predicates and collected are distributed. Both human-owner/occupant occurrences and two taking predicates have exact independently checked ranges. Sogs owns and so on, requiring an exact source licensor if retained at landing. No uncertain nulls.',
+269:'Challenge phyi\'i/world around them at phrase depth and yang/by the way against the full discourse. Full positive11856/2545 support outer-domain and some-kinds wording. Nang gi is expanded into bodily-parts description and omitted; allthree actual obstacles/with atoms remain. The third spirit mention is resumed as them, fourth owns the final explicit plural. Allfour d7 members stay inside the two paired compounds. Sole null is the active-subject agentive.',
+270:'Challenge the final myong elliptical null and the precise three-number/four-sensation ownership. The first two English provides clauses share one source byas pa; only second provides is banked. Complete positive perception phrase is split into lexical confirmed/valid perception with bound case relation left outside. Red-hot has two strictly tighter members. Three source agentives have no separate English word. Final abbreviated mantra leaves lcags omitted; no earlier steel is reused.'}
+counts=[]
+for seq in [268,269,270]:
+    d=batch/'tibetan'/str(seq);g=json.loads((d/'generator-proof.json').read_text());s=json.loads((d/'spec.json').read_text())['segments'][0]
+    assert g['exit_code']==0 and g['stderr_bytes']==0 and g['all_occurrences_match']
+    assert (d/'body.html').read_bytes()==(d/'generator.stdout').read_bytes()
+    e=errata[seq]
+    for field,quote in [('english',e['local_quote']),('wylie',e['tibetan_quote'])]:assert quote in source[seq][field]
+    e.update(registered_class_check='Full192-entry register copied; exact current-citation search0. No selected source field ends at1500. Following-heading glue is already registered and only occurs in the supplemental C16 comparison.',
+             fidelity='Allsix selected source fields and all15 contextual full raw rows verified against original read-only spine/corpus; six complete unique physical-source extents preserved with ASCII-whitespace comparison only.',
+             five_grounds=['verbatim current source quotation','full lexical evidence including positive alternatives and limitations','full available parallel/physical witnesses','registered classes and exact source scope','independent-review boundary and no unsupported correction'])
+    save(d/'errata-analysis.json',e)
+    report=f'''C05:{seq} Tibetan-first original — Codex; PROVISIONAL, not semantically approved.
+The primary reader used its own earlier source/glossary preparation and read no English proposal or semantic findings before this freeze.
+{reports[seq]}
+Source evidence is shared at ../268/:15 complete context rows, six physical extents,83 primary lexical selections plus six supplemental selections and full master records, nine parallel sets and two direct three-row context queries; all100 query sets replay exactly.
+The original corpus has no seq field: the failed assumption and exact actual command/exception/EXIT1 are preserved in ../268/extra-evidence-attempt01; successful capture uses each course original list indexed by seq-1. No source changed.
+All79 primary master IDs and supplemental full records remain preserved, with every HGM gloss/variant/status/provenance read; generic comparative material was not promoted to HGM equivalents.
+Allnine data/source baseline hashes remain exact at f3c1ca8. Governing files are exact2a1b9a8 Git snapshots; later index-only fix2487bfc did not change consumed inputs. Eight required references were verified at baseline.
+Errata:0; allfive grounds and limitations are in errata-analysis.json. Digital matches do not establish independent publication or ingestion lineage.
+Actual canonical generator EXIT=0; stderr=0 bytes; body={g['stdout_bytes']} bytes; SHA-256={g['stdout_sha256']}.
+Measured spans={g['span_count']}; nulls={g['null_count']}; non-null d5={g['d5_nonnull']}; all intended ordered source/English occurrences match the canonical resolver.
+Exact spec, intended spans, body/stdout, command/exit/proof, immutable attempt01 and full source evidence are files on disk. Canonical fidelity is not semantic correctness.
+Both original authors are excluded from reconciliation and semantic approval; separate non-author reviews are still required.
+'''
+    (d/'report.md').write_text(report)
+    save(d/'completion-input-proof.json',dict(utc=now,status='PASS own original mechanical verification only',source=source[seq],shared_evidence_directory=str(out),canonical=g,peer_isolation=True))
+    counts.append(dict(seq=seq,span_count=g['span_count'],null_count=g['null_count'],nonnull_d5=g['d5_nonnull'],body_bytes=g['stdout_bytes'],body_sha256=g['stdout_sha256']))
+for seq in [268,269,270]:
+    d=batch/'tibetan'/str(seq);files=[pin(p) for p in sorted(d.rglob('*')) if p.is_file()]
+    for x in files:x['path']=str(Path(x['path']).relative_to(d.resolve()))
+    save(d/'freeze.json',dict(utc=now,status='FROZEN original Tibetan-first; no semantic approval',files=files))
+save(batch/'primary-tibetan-original-complete.json',dict(utc=now,status='Allthree Tibetan originals frozen before reading English proposals or judgments',producer='Primary Codex, prior own preparation disclosed',counts=counts,freezes=[pin(batch/'tibetan'/str(n)/'freeze.json') for n in [268,269,270]]))
+print(json.dumps(counts,indent=2))

@@ -1,0 +1,66 @@
+import pathlib,json,hashlib,subprocess,os
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+ROOT=pathlib.Path.cwd();B=ROOT/'campaign-artifacts/C05-268-270';R=B/'semantic-review';H=B/'pre-correction-01';O=R/'correction-01';W=ROOT/'campaign-worktree'
+def j(p):return json.loads(p.read_text())
+def pin(p):d=p.read_bytes();return dict(bytes=len(d),sha256=hashlib.sha256(d).hexdigest())
+def put(n,x):(O/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+allow={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+old=j(R/'history/initial-review/original-to-copy-manifest.json');roots=j(B/'root-initial-semantic-verification.json')['history_files'];hr={x['original']:pathlib.Path(x['copy']) for x in roots};maps=[];transport=[]
+for x in old:
+ v=dict(x);v['copy']='history/initial-review/'+x['copy'];cp=R/v['copy'];assert pin(cp)=={k:x[k] for k in ['bytes','sha256']}
+ if 'original_git_commit' not in x:
+  orig=pathlib.Path(x['original'])
+  if orig.read_bytes()!=cp.read_bytes():
+   immutable=hr.get(x['original']);assert immutable and immutable.read_bytes()==cp.read_bytes(),x['original']
+   v['original']=str(immutable);transport.append(dict(original_consumed_path=x['original'],consumed_pin={k:x[k] for k in ['bytes','sha256']},immutable_historical_source=str(immutable),historical_pin=pin(immutable),current_review_copy=v['copy'],comparison='Full immutable source bytes equal current preserved historical copy; changed live original is provenance only.'))
+ maps.append(v)
+# Stable deduplication corpus includes the entire immutable initial review. Current final interfaces get explicit paths.
+byhash={}
+for p in sorted((R/'history/initial-review').rglob('*')):
+ if p.is_file():byhash.setdefault(pin(p)['sha256'],p)
+def add(src,dest=None):
+ raw=src.read_bytes();h=hashlib.sha256(raw).hexdigest()
+ if dest is None:
+  dest=byhash.get(h)
+  if dest is None:
+   ext=src.suffix if src.suffix.lower() in allow else '.txt';dest=O/'preserved'/f'{h}{ext}'
+ if dest.exists():
+  if dest.read_bytes()!=raw:
+   assert str(dest.relative_to(R)).startswith('reviewed-final/'),dest
+   # Old version is already byte-preserved under history/initial-review.
+   prior=R/'history/initial-review'/dest.relative_to(R);assert prior.read_bytes()==dest.read_bytes()
+   dest.write_bytes(raw)
+ else:dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
+ assert dest.suffix.lower() in allow and dest.read_bytes()==raw
+ byhash.setdefault(h,dest);maps.append(dict(original=str(src),copy=dest.relative_to(R).as_posix(),sha256=h,bytes=len(raw)))
+# All923 immutable historical versions, even if no longer represented by current living path.
+for x in roots:
+ p=pathlib.Path(x['copy']);assert pin(p)=={k:x[k] for k in ['bytes','sha256']};add(p)
+ transport.append(dict(original_consumed_path=x['original'],consumed_pin={k:x[k] for k in ['bytes','sha256']},immutable_historical_source=str(p),historical_pin=pin(p),current_review_copy=maps[-1]['copy'],comparison='Root-preserved original version reopened byte for byte; initial version not current live assertion.'))
+# Every current final source/helper/freeze gets a current-role mapping and readable per-segment path.
+for seq in (268,269,270):
+ d=B/f'reconciled/{seq}'
+ for p in sorted(d.rglob('*')):
+  if p.is_file():
+   rel=p.relative_to(d);name=rel.name if p.suffix.lower() in allow else rel.name+'.txt';add(p,R/'reviewed-final'/str(seq)/rel.parent/name)
+# All correction and root proof files, including initial failure histories and scoped dispatch.
+for d in [C for C in [B/'reconciliation-correction-01',B/'root-correction-01-verification',B/'root-reconciliation-verification'] if C.exists()]:
+ for p in sorted(d.rglob('*')):
+  if p.is_file():add(p)
+for p in sorted(B.iterdir()):
+ if p.is_file():add(p)
+for p in [ROOT/'campaign-artifacts/semantic-review-protocol.md',ROOT/'campaign-artifacts/land_reviewed_page.py']:add(p)
+# Explicit transport of material source-version references embedded in current reconciliation.
+for m in j(B/'reconciled/268/correction-review-input-mappings.json'):
+ p=pathlib.Path(m['immutable_historical_source']);assert pin(p)=={k:m[k] for k in ['bytes','sha256']}
+ assert p.read_bytes()==(B/'reconciled/268'/m['copy']).read_bytes();add(p)
+# Dedup exact duplicate mapping records only; different role/version original mappings remain.
+unique=[];seen=set()
+for m in maps:
+ key=json.dumps(m,sort_keys=True)
+ if key not in seen:seen.add(key);unique.append(m)
+(R/'original-to-copy-manifest.json').write_text(json.dumps(unique,ensure_ascii=False,indent=2)+'\n')
+put('history-transport.json',transport)
+put('preservation-summary.json',dict(status='PASS',initial_review_files=573,root_immutable_history_files=923,initial_original_mappings=570,current_mappings=len(unique),distinct_copies=len({x['copy'] for x in unique}),Git_pins=sum('original_git_commit' in x for x in unique),history_transport_records=len(transport),all_current_reconciled_files=sum(1 for s in (268,269,270) for p in (B/f'reconciled/{s}').rglob('*') if p.is_file()),correction_package_files=sum(p.is_file() for p in (B/'reconciliation-correction-01').rglob('*')),old_dispatch_packages='INITIAL version, not corrected note'))
+put('reviewer-read-attempts.json',[dict(action='Read failed-package-attempt01/package-process-result.json',exit=1,stderr='No such file or directory',resolution='Actual preserved name is failed-package-attempt01/1-package-process-result.json; current package-process-result.json was read in full and pins the same failure. No input changed.')])
+print(json.dumps(j(O/'preservation-summary.json')))

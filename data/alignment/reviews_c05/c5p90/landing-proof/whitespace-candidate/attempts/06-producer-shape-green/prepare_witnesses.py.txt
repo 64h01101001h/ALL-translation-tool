@@ -1,0 +1,93 @@
+"""Build exact witnesses for only the ten already diagnosed frozen aliases."""
+import hashlib
+import io
+import json
+from pathlib import Path
+import zipfile
+from witnesses import EXPECTED, pinned_bytes, verify_frozen, verify_physical
+
+def meta(path):
+    raw=path.read_bytes()
+    return dict(path=str(path.resolve()),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+
+def prepare_witnesses(candidate,batch,wt,freeze,issues):
+    review=batch/'semantic-review'
+    manifest=json.loads((review/'original-to-copy-manifest.json').read_bytes())
+    assert (review/'original-to-copy-manifest.json').read_bytes()==(candidate/'inputs/original-to-copy-manifest.json').read_bytes()
+    diagnostic=json.loads((candidate/'inputs/whitespace-unclassified-diagnostic.json').read_bytes())
+    prefix='data/alignment/reviews_c05/c5p90/'
+    paths=sorted({x['path'] for x in diagnostic})
+    assert len(paths)==10 and len(diagnostic)==3668
+    evidence=candidate/'evidence';evidence.mkdir(exist_ok=False)
+    pins={};proof={};source_records=[]
+
+    def frozen_read(rel):
+        raw=(review/rel).read_bytes()
+        verify_frozen(raw,raw,rel,freeze[rel],review,freeze)
+        return raw
+
+    def original(pin):
+        raw=pinned_bytes(pin)
+        matches=[x for x in manifest if x['original']==pin['path'] and x['bytes']==pin['bytes'] and x['sha256']==pin['sha256']]
+        assert matches,('No original manifest provenance',pin['path'])
+        assert any(frozen_read(x['copy'])==raw for x in matches)
+        source_records.append(pin)
+        return raw
+
+    # Exact frozen capture provenance identifies original document and member.
+    extents=json.loads(frozen_read('reviewed-final/268/ILL-original-extents.json'))
+    assert (batch/'reconciled/268/ILL-original-extents.json').read_bytes()==frozen_read('reviewed-final/268/ILL-original-extents.json')
+    ill_pin=extents['physical_text_file'];ill=original(ill_pin)
+    (evidence/'ILL.txt').write_bytes(ill)
+    doc_pin=extents['original_docx'];doc=original(doc_pin)
+    (evidence/'ILL-original.docx').write_bytes(doc)
+    assert extents['zip_member']=='word/document.xml'
+    with zipfile.ZipFile(io.BytesIO(doc)) as archive:
+        assert archive.namelist().count('word/document.xml')==1
+        xml=archive.read('word/document.xml')
+    assert xml==pinned_bytes(extents['uncompressed_member'])
+    xml_path=evidence/'ILL.word-document.xml.txt';xml_path.write_bytes(xml)
+    xml_pin=meta(xml_path)
+
+    collection=json.loads(frozen_read('reviewed-final/268/collection-proof.json'))
+    db_pin=collection['database'];corpus_pin=collection['corpus']
+    assert Path(db_pin['path']).resolve()==(wt/'build/hgm_spine_v27_2.db').resolve()
+    assert Path(corpus_pin['path']).resolve()==(wt/'data/full_parallel_corpus_v32.json.gz').resolve()
+    (evidence/'hgm_spine_v27_2.db').write_bytes(pinned_bytes(db_pin))
+    (evidence/'full_parallel_corpus_v32.json.gz').write_bytes(pinned_bytes(corpus_pin))
+    source_records.extend([db_pin,corpus_pin])
+    producer=batch/'tibetan/268/complete-extra-evidence.py'
+    stdout=batch/'tibetan/268/complete-extra-evidence.stdout.txt'
+    producer_pin=meta(producer);stdout_pin=meta(stdout)
+    assert pinned_bytes(producer_pin)==(candidate/'inputs/producer.py').read_bytes()
+    assert pinned_bytes(stdout_pin)==(candidate/'inputs/producer.stdout.txt').read_bytes()
+    producer_rel='proposal-inputs/tibetan/268/complete-extra-evidence.py.txt'
+    assert frozen_read(producer_rel)==producer.read_bytes()
+    formatter=dict(kind='retained_print_separator',warning_lines=[n for n,_,_ in EXPECTED],
+        producer=producer_pin,producer_review_rel=producer_rel,stdout_original=stdout_pin,database=db_pin,corpus=corpus_pin,
+        line_witnesses={str(n):dict(course=co,seq=seq,field='wylie',prefix=f'{co} {seq} WYLIE: ',suffix_hex='20') for n,co,seq in EXPECTED})
+    counts={'retained_print_separator':0,'ILL_original_whole':0,'ILL_original_zip_member':0}
+    for name in paths:
+        assert name.startswith(prefix)
+        rel=name[len(prefix):];raw=frozen_read(rel)
+        expected=[x for x in diagnostic if x['path']==name]
+        assert sum(map(len,issues[name].values()))==len(expected)
+        assert all(raw.split(b'\n')[x['line']-1]==x['value'].encode('utf-8') for x in expected)
+        if raw==stdout.read_bytes():
+            pins[rel]=formatter.copy();counts['retained_print_separator']+=1
+            assert len(expected)==6
+        elif raw==ill:
+            pins[rel]=dict(kind='physical_bytes',witness=ill_pin,byte_range=[0,len(ill)])
+            verify_physical(raw,dict(issues[name]),pins[rel]);counts['ILL_original_whole']+=1
+            assert len(expected)==1212
+        elif raw==xml:
+            pins[rel]=dict(kind='physical_bytes',witness=xml_pin,byte_range=[0,len(xml)],zip_source=doc_pin,zip_member='word/document.xml')
+            verify_physical(raw,dict(issues[name]),pins[rel]);counts['ILL_original_zip_member']+=1
+            assert len(expected)==1
+        else:
+            raise AssertionError(('Unrecognized exact diagnosed alias',name))
+    assert counts=={'retained_print_separator':5,'ILL_original_whole':3,'ILL_original_zip_member':2}
+    proof['physical_provenance']=dict(original_extents_pin=meta(review/'reviewed-final/268/ILL-original-extents.json'),
+        collection_pin=meta(review/'reviewed-final/268/collection-proof.json'),source_pins=source_records,
+        member_pin=xml_pin,zip_source=doc_pin,zip_member='word/document.xml',exact_member_reopened=True,counts=counts)
+    return pins,proof

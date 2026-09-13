@@ -1,0 +1,32 @@
+import pathlib,json,sqlite3,hashlib,subprocess,gzip
+r=pathlib.Path.cwd();b=r.parent/'campaign-artifacts/C05-268-270';o=b/'english/268';db=r/'build/hgm_spine_v27_2.db';c=sqlite3.connect(db.as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('pragma query_only=on');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();rows=[dict(x) for x in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',242,280))]
+for n in ['source.json','context.json']:
+ for s in json.loads((b/n).read_text()):assert all(next(x for x in rows if x['seq']==s['seq'])[k]==s[k] for k in ['id','course','seq','acip','wylie','english'])
+phy=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt');raw=phy.read_bytes();(o/'C05ReadingASCII.original.txt').write_bytes(raw);txt=raw.decode('latin-1');norm=' '.join(txt.split());checks=[]
+for seq in [268,269,270]:
+ row=next(x for x in rows if x['seq']==seq)
+ for f in ['acip','english']:
+  needle=' '.join(row[f].split());assert needle in norm;checks.append({'seq':seq,'field':f,'full_field':row[f],'normalized_offset':norm.index(needle),'whole_field_whitespace_normalized_equal':True})
+e={'producer':'Codex reused English-first reader /root/c05_262_264_english; not fresh context; no current other-angle judgments read','governing_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'immutable_generated_baseline':json.loads((b/'baseline.json').read_text())['commit'],'db':str(db),'db_sha256':sha(db),'sqlite_uri':db.as_uri()+'?mode=ro','query_only':1,'schema':{n:[dict(x) for x in c.execute('pragma table_info('+n+')')] for n in ['entries','corpus_segments']},'source_query':{'sql':'select * from corpus_segments where course=? and seq between ? and ? order by seq','params':['C05',242,280],'count':len(rows)},'rows':rows,'snapshot_verification':{'all_equal':True,'fields':['id','course','seq','acip','wylie','english'],'source_count':3,'context_count':15},'physical_original':{'path':str(phy),'sha256':sha(phy),'preserved':'C05ReadingASCII.original.txt','bytes':len(raw),'presentation':'Latin-1 reversible byte display; not an original encoding assertion','whole_field_checks':checks},'lexical_queries':[],'corpus_queries':[]}
+terms=['dang por','gnas pa',"'gro ba",'gsum po','rang rang',"thun mong ma yin pa'i",'las','brten nas',"grub pa'i",'snod',"'jig rten",'blangs pa','grub pa',"mi'i",'grub pas','chu','dvangs','dwangs','dvangs pa','mngar','mngar ba','bsil ba','blangs','sogs','yi dvags','chu klung','bltas pa','rnag khrag',"'ga' zhig",'thams cad',"phyi'i",'sgrib pa','can','nang','zas','skom','nyid','du ma',"yod pa'i",'brlan','gsher ba','phor pa','gang','las can','cig car du','dngos po','tshad mas','grub pa',"skye ba'i",'dpe','yang','lcags','lcags gong',"dmar 'bar ba'i",'dmar',"'bar ba",'cha shas','gcig','nyer len','lcags sngags','lhan cig byed rkyen','byas pa',"btab pa'i",'lag pas','reg pa',"tsha ba'i",'reg bya','myong','gzhan','zhig','myong ba']
+for t in terms:
+ q='select * from entries where wylie=? or id in (select entry_id from entry_variants where wylie=?)';rr=[dict(x) for x in c.execute(q,(t,t))];e['lexical_queries'].append({'sql':q,'params':[t,t],'count':len(rr),'rows':rr});print(t,[(x['wylie'],x['hgm_gloss']) for x in rr])
+for seq in [268,269,270]:
+ row=next(x for x in rows if x['seq']==seq)
+ for f in ['acip','wylie','english']:
+  q=f'select * from corpus_segments where {f}=? order by course,seq';rr=[dict(x) for x in c.execute(q,(row[f],))];e['corpus_queries'].append({'sql':q,'params':[row[f]],'count':len(rr),'rows':rr});print(seq,f,[(x['course'],x['seq']) for x in rr])
+for field,pat in [('wylie','%dvangs%'),('wylie','%mngar ba%'),('wylie','%lcags sngags%'),('wylie',"%phyi'i sgrib pa%"),('english','%sweet, cool water%')]:
+ q=f'select * from corpus_segments where {field} like ? order by course,seq';rr=[dict(x) for x in c.execute(q,(pat,))];e['corpus_queries'].append({'sql':q,'params':[pat],'count':len(rr),'rows':rr});print(field,pat,len(rr))
+regp=r/'docs/errata_register.json';e['registered_classes']={'path':str(regp),'sha256':sha(regp),'register':json.loads(regp.read_text())}
+paths=[r/'AGENTS.md',r/'docs/ALIGNMENT_LAYER_SPEC.md',r/'docs/alignment_briefs/PROPOSE_BRIEF.md',r/'data/alignment/C05_CAMPAIGN.md',b/'english-brief.md',b/'source.json',b/'context.json',b/'baseline.json',b/'proposal-role-capacity-ruling.md',b.parent/'proposal-protocol.md'];e['instruction_source_hashes']={str(p):sha(p) for p in paths}
+dp=r/'data/hgm_dictionary_v27_2.json.gz';cp=r/'data/full_parallel_corpus_v32.json.gz';d=json.loads(gzip.decompress(dp.read_bytes()));u=d['unified_entries'];lookup={}
+for x in u:lookup.setdefault(x['wylie'],[]).append(x)
+material=[]
+for q in e['lexical_queries']:
+ for x in q['rows']:
+  v=json.loads(x['raw']);assert v in lookup[x['wylie']];material.append({'id':x['id'],'raw':v,'physical_equals_spine_raw':True})
+co=json.loads(gzip.decompress(cp.read_bytes()));cr=[]
+for x in rows:
+ v=json.loads(x['raw']);assert v in co;cr.append({'id':x['id'],'seq':x['seq'],'raw':v,'physical_equals_spine_raw':True})
+e['physical_release']={'master_path':str(dp),'master_sha256':sha(dp),'master_meta':d['meta'],'master_count':len(u),'material_master_entries':material,'corpus_path':str(cp),'corpus_sha256':sha(cp),'corpus_count':len(co),'material_corpus_rows':cr}
+(o/'original-evidence.json').write_text(json.dumps(e,ensure_ascii=False,indent=2)+'\n')

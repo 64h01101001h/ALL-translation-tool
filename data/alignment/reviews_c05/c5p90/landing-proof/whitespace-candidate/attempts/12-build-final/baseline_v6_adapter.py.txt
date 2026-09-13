@@ -1,0 +1,18 @@
+"""Run the actual v6 pin-kind branch AST on an independently built fixture.
+
+This test-only adapter isolates the existing branch without running git or
+writing a live proof. The branch nodes themselves are compiled unchanged.
+"""
+import ast
+from pathlib import Path
+source=Path(__file__).parent/'baseline/audit_staged_source_whitespace_v6.py'
+tree=ast.parse(source.read_text())
+branches=[x for x in ast.walk(tree) if isinstance(x,ast.If) and ast.unparse(x.test)=="pin['kind'] == 'physical_bytes'"]
+assert len(branches)==2
+branch=next(x for x in branches if any(isinstance(y,ast.Assert) for y in x.body))
+code=compile(ast.fix_missing_locations(ast.Module(body=[branch],type_ignores=[])),str(source),'exec')
+def verify_frozen(raw,staged,rel,pin,review,freeze):
+    assert raw==staged==(review/rel).read_bytes()
+def verify_formatter(raw,grouped,pin,review,freeze):
+    context=dict(pin=pin,raw=raw,grouped=grouped,lines=raw.split(b'\n'))
+    exec(code,context)

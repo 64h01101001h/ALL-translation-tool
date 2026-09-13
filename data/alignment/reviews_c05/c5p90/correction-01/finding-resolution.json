@@ -1,0 +1,31 @@
+{
+  "id": "C05-268-ERRATA-01",
+  "initial_finding": {
+    "id": "C05-268-ERRATA-01",
+    "severity": "BLOCKING",
+    "seq": 268,
+    "affected": [
+      "reconciled/268/errata.json",
+      "reconciled/268/errata-analysis.json",
+      "reconciled/268/spec.json:segments[0].note",
+      "reconciled/268/report.md",
+      "dependent current summaries/proofs"
+    ],
+    "found": "sweet, cool water",
+    "expected_candidate": "clear, cool water",
+    "problem": "HGM23556 dvangs pa positively attests clear/clarity; HGM3787 mngar ba sweet; C05:251 and physical Practice7 page30 distinguish sweet, clear, and cool. HGM23555 dvangs/liquid is contrary positive evidence and is preserved. HGM8162 dwangs has no HGM gloss; its Hopkins clear is comparative only. C09:35 and ILL:174 are full lexical clarity comparanda, not whole268 witnesses. This makes the proposed word pair unresolved, but does not establish that the published English is indefensible. The reconciler explicitly leaves deliberate contextual paraphrase or another Tibetan source possible. Under the binding default-to-refuted rule when uncertain, this unresolved defensibility and intended-source question requires refuted=true. A LOW/PROBABLE label cannot waive that rule. Neither sweet nor clear is inserted into the source or glossary.",
+    "minimal_change": "Remove the retained candidate from current errata.json; mark its analysis refuted=true under ground(d)/uncertainty default. Update the current note/report and mechanically dependent counts/proofs to describe a refuted proposal. Preserve all original/superseded candidate evidence and prior freezes. Keep dvangs and sweet unwrapped, and keep every current alignment tuple and original source byte unchanged.",
+    "alignment_span_changes_requested": []
+  },
+  "status": "RESOLVED",
+  "decision": "APPROVE actual correction01",
+  "basis": "Current errata is empty; five-ground(d) ruling explicitly follows uncertainty default; contrary evidence retained; no span/source changes; dependent note/report/generated body correct.",
+  "current_spec": {
+    "bytes": 5029,
+    "sha256": "2f435ff3920e748c34ac750280dc27fa602f130854054ffccfce06a84cdd45a1"
+  },
+  "current_body": {
+    "bytes": 5252,
+    "sha256": "e49408a7d5cc2a2074a29584ac61ac8465a61ef2a10f1179bda7148cfdc13d6c"
+  }
+}

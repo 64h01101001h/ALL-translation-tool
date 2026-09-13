@@ -1,0 +1,28 @@
+"""Write once, then verify the complete candidate freeze; no self hash."""
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+target = HERE / 'candidate-freeze.json'
+assert not target.exists()
+records = []
+for path in sorted(HERE.rglob('*')):
+    assert not path.is_symlink(), path
+    if path.is_file():
+        raw = path.read_bytes()
+        records.append(dict(path=str(path.relative_to(HERE)), bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest()))
+freeze = dict(version='whitespace-candidate-270; not adopted',
+    producer='/root/c05_262_264_english, reused English author; bounded whitespace implementer',
+    created_utc=datetime.now(timezone.utc).isoformat(),
+    scope='All candidate files including all attempts and copied fixtures; only this manifest is excluded from itself.',
+    independent_review='pending', file_count=len(records), total_bytes=sum(r['bytes'] for r in records), files=records)
+target.write_text(json.dumps(freeze, indent=2) + '\n')
+for record in records:
+    raw = (HERE / record['path']).read_bytes()
+    assert len(raw) == record['bytes'] and hashlib.sha256(raw).hexdigest() == record['sha256']
+assert len([p for p in HERE.rglob('*') if p.is_file()]) == len(records) + 1
+print(json.dumps(dict(status='DONE, candidate frozen; independent review pending',
+    file_count=len(records), total_bytes=freeze['total_bytes'], freeze_path=str(target),
+    freeze_sha256=hashlib.sha256(target.read_bytes()).hexdigest()), indent=2))

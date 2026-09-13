@@ -1,0 +1,21 @@
+PROVISIONAL C05:268 reconciliation — reused Codex non-author c05_253_255_reconcile.
+Original producers: primary/root Codex (Tibetan-first with prior preparation) and reused peer c05_262_264_english (English-first). No fresh-context or human editorial acceptance claim.
+
+25 spans, 0 nulls, 18 non-null d5 pairs; all 52 original identities have individual dispositions (44 retained, 7 recast, 1 rejected).
+Reject the mechanically valid dvangs/sweet pair. Positive dvangs pa/clear, mngar ba/sweet, and C05:251's three distinct qualities support leaving both current words unwrapped; there is no false null or source correction.
+Retain one LOW/PROBABLE ENGLISH_FACTUAL_ERROR candidate, sweet, cool water → clear, cool water. All five grounds, original claims, complete source quotes, measured counts, and 192 registered records are addressed in errata-analysis.json and registered-class-check.json.
+Shared C15/C18 fields and C16's complete 436-character shared English do not establish independent publication. Actual Practice7 PDF pages 36–37 preserve the disputed reading; page 30, C09:35 and original ILL text/DOCX support the lexical distinction. Deliberate paraphrase or another source reading remains possible.
+Merge brten nas grub pas/created by at d3; retain complete de nyid du gnas pa/original condition at d3. Keep tighter gsum and thun mong ma yin pa boundaries, with explicit distributed-inflection omissions.
+The first outer world is selected once. First mi'i owns the later singular human karma owner; second mi'i owns humans in the earlier world clause. Earlier grub predicates and repeated liquid/world descriptions remain unwrapped for stated reasons.
+Retain d5 sogs/and so on as a lexical closing expression; propose only pages_c05:c5p90/s268w21, licensed by sogs and full HTG2016 HGM20919. No gate or allowance file is changed.
+
+Actual final generator: EXIT=0; body=4993 bytes; stderr=0 bytes. Exact argv, stdin, stdout, stderr, exit and engine/wrapper hashes: generator-proof.json and attempts/01/.
+spec.json: 4770 bytes; SHA256 9f69f4dcb8871b49f68999659b18bf79b8e2ba8675598a104e6e7681e565c203.
+body.html: 4993 bytes; SHA256 59d77c705bcfbde16f795dfe9fee250d9da00a5a58ae0b582ecb63ac1a6e98d9.
+Every final ordered seven-key tuple and rationale: resolved-spans.json and final-decisions.json. Every original eight-key identity, object, optional-field presence, range and disposition: original-dispositions.json. Full original differences: original-to-final.diff.txt.
+Meaningful omissions and exact full complements: omissions.json and unwrapped-extents.json. Erratum decisions and full witness comparisons: errata.json, errata-analysis.json, parallel-comparisons-full.json.
+Shared immutable original/evidence copies live once in ../268/evidence/; original-to-copy-manifest.json, supplemental-to-copy-manifest.json and helper-and-skill-copy-manifest.json preserve absolute source paths, hashes, bytes and immutable Git object mappings.
+Shared evidence includes 234 original/current query sets plus 3 comparative queries, 94 full master entries, 137 corpus objects, 24 full ASCII witness extents, full ILL logical paragraphs/XML and four visually reviewed physical PDF pages. final-source-pin-check.json adds the final unchanged-source query.
+All six original canonical replays are exact; all three final runs use the unchanged canonical generator through a saved SQLite read-only wrapper. Complete attempts and historical failures are retained; supported-copy-preflight.json and final-audit.json record the final checks.
+Consumed data baseline f3c1ca804a933d53f84214d6968a84e7e0193c6e; governing snapshots 2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812. Current repository 2487bfcd73a1463d135a4544a01535ba5c99cab0 changes none of those inputs. No repository/source/master/allowance edits or commits.
+Complete private enumeration and hashes: freeze.json. Shared packaging and execution details are in ../268/.

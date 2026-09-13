@@ -1,0 +1,24 @@
+from pathlib import Path
+import os,json,hashlib,sqlite3,zipfile,xml.etree.ElementTree as ET,subprocess,re
+os.environ['PYTHONDONTWRITEBYTECODE']='1'
+R=Path(__file__).resolve().parent;B=R.parent;C=B/'reconciled/268';W=B.parent.parent/'campaign-worktree';H=lambda b:hashlib.sha256(b).hexdigest()
+def get(p):return json.loads(p.read_text())
+def save(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.execute('PRAGMA query_only=ON');c.row_factory=sqlite3.Row
+xs=get(C/'erratum-ascii-physical-extents.json')
+for x in xs:
+ p=Path(x['source_file']['path']);b=p.read_bytes();assert len(b)==x['source_file']['bytes'] and H(b)==x['source_file']['sha256'];part=b[x['start']:x['end']];assert H(part)==x['sha256'] and len(part)==x['bytes'] and part.decode('latin1')==x['raw_latin1'];row=c.execute('select * from corpus_segments where course=? and seq=?',(x['course'],x['seq'])).fetchone();assert b' '.join(part.split())==row[x['field']].encode()
+ill=get(C/'ILL-original-extents.json');b=Path(ill['physical_text_file']['path']).read_bytes();assert H(b)==ill['physical_text_file']['sha256'] and len(b)==ill['physical_text_file']['bytes']
+for x in ill['complete_text_paragraph_extents']:
+ part=b[x['start']:x['end']];assert H(part)==x['sha256'] and len(part)==x['bytes'] and part.decode()==x['exact_utf8']
+p=Path(ill['original_docx']['path']);b=p.read_bytes();assert H(b)==ill['original_docx']['sha256'] and len(b)==ill['original_docx']['bytes'];xml=zipfile.ZipFile(p).read(ill['zip_member']);assert xml==Path(ill['uncompressed_member']['path']).read_bytes() and H(xml)==ill['uncompressed_member']['sha256'];root=ET.fromstring(xml);paragraphs=root.findall('.//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}p')
+for x in ill['full_paragraphs']:
+ el=paragraphs[x['index']];actual=''.join(y.text or '' for y in el.iter('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t'));assert actual==x['text'];assert ET.tostring(el,encoding='unicode')==x['xml']
+source=dict(c.execute("select * from corpus_segments where course='C05' and seq=268").fetchone());query_records=[]
+for label,sql,args,expected in [('dvangs','select * from corpus_segments where wylie like ? order by id',['%dvangs%'],76),('mngar_ba','select * from corpus_segments where wylie like ? order by id',['%mngar ba%'],12),('sweet_cool','select * from corpus_segments where english like ? order by id',['%sweet, cool%'],5),('all_three_fields','select * from corpus_segments where acip=? and wylie=? and english=? and not(course=? and seq=?) order by id',[source['acip'],source['wylie'],source['english'],'C05',268],2),('steel_mantra','select * from corpus_segments where wylie like ? order by id',['%lcags sngags%'],7)]:
+ rows=[dict(x) for x in c.execute(sql,args)];assert len(rows)==expected;(query_records).append(dict(label=label,sql=sql,params=args,count=len(rows),rows=rows))
+register=get(W/'docs/errata_register.json');print('register schema',type(register).__name__)
+records=register if isinstance(register,list) else register['entries'];assert len(records)==192
+currenthits=[x for x in records if any(re.search(r'C05[:/]\s*'+str(n)+r'\b',json.dumps(x)) for n in [268,269,270])];assert not currenthits
+save('additional-source-proof.json',dict(status='PASS',additional_ascii_extents=xs,ILL=ill,independent_count_queries=query_records,registered_records=192,current_citation_hits=currenthits,query_only=1))
+print('PASS extra original witnesses/counts')

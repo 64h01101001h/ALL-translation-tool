@@ -1,0 +1,30 @@
+from pathlib import Path
+import json, hashlib, datetime, sys, importlib.util
+sys.dont_write_bytecode=True
+batch=Path(__file__).parent
+wt=batch.parents[1]/'campaign-worktree'
+sys.path.insert(0,str(wt/'tools'))
+definition=importlib.util.spec_from_file_location('canonical_generator',wt/'tools/gen_alignment_page.py')
+g=importlib.util.module_from_spec(definition);definition.loader.exec_module(g)
+src={x['seq']:x for x in json.loads((batch/'source.json').read_text())}
+records=[];freezes=[]
+for angle in ['tibetan','english']:
+    for seq in [268,269,270]:
+        d=batch/angle/str(seq);f=json.loads((d/'freeze.json').read_text());fs=f['files']
+        expected=fs if isinstance(fs,dict) else {x['path']:x for x in fs}
+        actual={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}
+        assert actual==set(expected),(angle,seq,actual^set(expected))
+        for name,x in expected.items():
+            raw=(d/name).read_bytes();assert len(raw)==x['bytes'] and hashlib.sha256(raw).hexdigest()==x['sha256'],(angle,seq,name)
+        s=json.loads((d/'spec.json').read_text())['segments'][0];spans=s['spans'];byid={x['id']:x for x in spans}
+        tr=g.resolve(src[seq]['wylie'],spans,'tib',seq)
+        ordered=g.with_members(spans,[byid[x] for x in s['eng_order']],src[seq]['english'])
+        er=g.resolve(src[seq]['english'],ordered,'eng',seq)
+        for x in spans:
+            ident=x['id'];records.append(dict(angle=angle,seq=seq,id=ident,d=x['d'],tib=x['tib'],eng=x['eng'],tib_range=list(tr[ident]),eng_range=None if x['eng'] is None else list(er[ident]),original_span=x,original_field_presence=sorted(x)))
+        freezes.append(dict(angle=angle,seq=seq,files=len(expected),freeze_sha256=hashlib.sha256((d/'freeze.json').read_bytes()).hexdigest()))
+assert len(records)==227
+out=batch/'proposal-verification'
+for name,obj in [('root-resolved-spans.json',records),('root-original-freeze-check.json',dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='PASS six exact original freezes and227 actual identities',freezes=freezes,root_role='Primary authored Tibetan; this is mechanical evidence only. Separate non-author reconciliation and semantic approval required.'))]:
+    with (out/name).open('x') as f:json.dump(obj,f,ensure_ascii=False,indent=2);f.write('\n')
+print(json.dumps(freezes,indent=2))

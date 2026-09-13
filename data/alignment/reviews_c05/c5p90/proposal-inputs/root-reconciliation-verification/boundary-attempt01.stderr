@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/verify-reconciliation-boundary.py", line 27, in <module>
+    assert hashlib.sha256(git_bytes(baseline['commit'],name)).hexdigest()==sha
+                          ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/verify-reconciliation-boundary.py", line 20, in git_bytes
+    return subprocess.run(['git','show',f'{commit}:{path}'],cwd=wt,capture_output=True,check=True).stdout
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['git', 'show', 'f3c1ca804a933d53f84214d6968a84e7e0193c6e:data/hgm_dictionary_v27_2.json.gz']' returned non-zero exit status 128.

@@ -1,0 +1,33 @@
+"""Read-only final verification; the actual staged audit remains root's next gate."""
+import hashlib,json
+from pathlib import Path
+
+p=Path(__file__).resolve().parent;a=p.parent;b=a/'C05-268-270'
+assert (p/'baseline/audit_staged_source_whitespace_v6.py').read_bytes()==(a/'audit_staged_source_whitespace_v6.py').read_bytes()
+assert (p/'baseline/prepare-whitespace-pins.py').read_bytes()==(b/'prepare-whitespace-pins.py').read_bytes()
+for name,original in [('freeze.json',b/'semantic-review/freeze.json'),('original-to-copy-manifest.json',b/'semantic-review/original-to-copy-manifest.json'),('whitespace-preflight.stdout',b/'landing/whitespace-preflight.stdout'),('producer.py',b/'tibetan/268/complete-extra-evidence.py'),('producer.stdout.txt',b/'tibetan/268/complete-extra-evidence.stdout.txt'),('root-before-whitespace-manifest.json',b/'landing/root-proof-copy-manifest-before-whitespace.json'),('root-course-index.stdout',b/'landing/course-index.stdout'),('root-course-index.execution.json',b/'landing/course-index.execution.json')]:
+    assert (p/'inputs'/name).read_bytes()==original.read_bytes(),name
+classification=json.loads((p/'prepared/whitespace-classification-preflight.json').read_bytes())
+assert sum(classification['classes'].values())==141409
+assert classification['classes']=={'diff_context':2,'blank_eof':4,'whole_original_physical':114913,'retained_print_separator':30,'physical_bytes':3638,'root_course_index_blank_eof':1,'canonical_csv':22821}
+pins=json.loads((p/'prepared/review-whitespace-exact-pins.json').read_bytes());assert len(pins)==16
+proof=json.loads((p/'prepared/special-witness-proof.json').read_bytes())
+formatter=[x for x in proof.values() if isinstance(x,dict) and x.get('kind')=='retained_print_separator']
+assert len(formatter)==5
+for item in formatter:
+    assert item['verified_lines']==[1,3,5,7,9,11] and item['query_only']==1
+    assert len(item['rows'])==6 and item['producer_call']['line']==22
+    assert item['producer_call']['keyword_arguments']==[]
+    assert item['producer_call']['sep']==' ' and item['producer_call']['end']=='\n'
+for name,attempt in [('witnesses.py','14-final-witness-tests'),('test_witnesses.py','14-final-witness-tests'),('audit_staged_source_whitespace_candidate.py','15-final-audit-dispatch'),('test_audit_dispatch.py','15-final-audit-dispatch'),('prepare-whitespace-pins.py','13-prepare-final')]:
+    assert (p/name).read_bytes()==(p/'attempts'/attempt/name).read_bytes(),name
+for attempt in ['13-prepare-final','14-final-witness-tests','15-final-audit-dispatch']:
+    assert (p/'attempts'/attempt/'exit.txt').read_text()=='0\n'
+assert not (p/'audit-output').exists(), 'Actual current staged audit must remain pending'
+assert not list(p.rglob('*.pyc'))
+print(json.dumps(dict(status='PASS candidate verification; root review and actual staged audit pending',
+    unchanged_shared_v6=True,unchanged_root_preparation=True,unchanged_original_inputs=True,
+    classified_warnings=141409,exact_pins=16,formatter_aliases=5,formatter_warnings=30,
+    preserved_whole_ILL_warnings=3636,preserved_original_ZIP_member_warnings=2,root_EOF_warnings=1,
+    witness_tests=16,audit_dispatch_tests=1,actual_current_staged_audit_executed=False,
+    hashes={name:hashlib.sha256((p/name).read_bytes()).hexdigest() for name in ['witnesses.py','prepare-whitespace-pins.py','audit_staged_source_whitespace_candidate.py','prepared/review-whitespace-exact-pins.json']}),indent=2))

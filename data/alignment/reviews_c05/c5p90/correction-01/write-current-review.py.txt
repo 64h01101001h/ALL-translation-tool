@@ -1,0 +1,92 @@
+import pathlib,json,hashlib
+B=pathlib.Path('campaign-artifacts/C05-268-270').resolve();R=B/'semantic-review';O=R/'correction-01';H=R/'history/initial-review'
+def j(p):return json.loads(p.read_text())
+def put(p,v):p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def pin(p):d=p.read_bytes();return dict(bytes=len(d),sha256=hashlib.sha256(d).hexdigest())
+# Immutable Git provenance accompanies every exact copy of a known historical repository object.
+old=j(H/'original-to-copy-manifest.json');gits={x['sha256']:x for x in old if 'original_git_commit' in x};maps=j(R/'original-to-copy-manifest.json');inherited=[]
+for m in maps:
+ if m['sha256'] in gits and 'original_git_commit' not in m:
+  s=gits[m['sha256']];assert (R/m['copy']).read_bytes()==(H/s['copy']).read_bytes()
+  for k in ['original_git_commit','repository_relative_path']:m[k]=s[k]
+  inherited.append(dict(original=m['original'],copy=m['copy'],original_git_commit=m['original_git_commit'],repository_relative_path=m['repository_relative_path'],initial_manifest_record=s,derivation='Known original repository snapshot and full exact bytes, not a new live-file comparison.'))
+put(R/'original-to-copy-manifest.json',maps);put(O/'git-provenance-inheritance.json',inherited)
+pres=j(O/'preservation-summary.json');pres['Git_pins']=sum('original_git_commit' in x for x in maps);put(O/'preservation-summary.json',pres)
+v=j(H/'review.json');v.update(verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=[],initial_verdict='NEEDS_CORRECTION',resolved_findings=['C05-268-ERRATA-01'],correction='01',initial_full_review='history/initial-review/review.md',scoped_proof='correction-01/scoped-check-summary.json',history_transport='correction-01/history-transport.json',limits='Provisional machine review only; no human editorial acceptance, source correction, landing, native/device/browser test or MAIN integration. Context is reused, not fresh. Initial full semantic review plus this bounded correction review; unchanged 269/270 runs are preserved prior executions, not new runs.')
+for x in v['segments']:
+ for n,sz,sha in [('spec.json','spec_bytes','spec_sha256'),('body.html','body_bytes','body_sha256')]:
+  z=pin(B/f"reconciled/{x['seq']}/{n}");x[sz]=z['bytes'];x[sha]=z['sha256']
+put(R/'review.json',v);put(R/'open-findings.json',[])
+put(R/'resolved-spans.json',j(O/'resolved-spans.json'));assert (R/'resolved-spans.json').read_bytes()==(H/'resolved-spans.json').read_bytes()
+gens=[]
+for oldgen in j(H/'generator-proof.json'):
+ if oldgen['angle']=='reconciled':
+  a=dict(oldgen);a['execution_scope']='Preserved initial actual run, unchanged current spec/body verified; not rerun in correction01.';a['proof_source']='history/initial-review/generator-proof.json'
+  if a['seq']==268:
+   s=v['segments'][0]
+   for k in ['spec_sha256','spec_bytes','body_sha256','body_bytes']:a[k]=s[k]
+   a['execution_scope']='New actual corrected268 canonical run in correction01.';a['proof_source']='correction-01/canonical268/invocation.json'
+  gens.append(a)
+put(R/'generator-proof.json',gens);put(R/'source-state-proof.json',j(O/'source-state-proof.json'))
+put(R/'completion-audit.json',dict(status='PASS',scope='Current correction01; all initial full review evidence retained in history/initial-review',original_occurrence_declarations=227,independent_span_judgments=123,original_dispositions=227,disposition_counts={'retained':200,'recast':26,'rejected':1},errata_refuted=1,errata_accepted=0,open_findings=0,initial_actual_runs=9,new_actual_runs=1,all_current_pins_verified=True))
+put(R/'preservation-proof.json',pres)
+put(O/'finding-resolution.json',dict(id='C05-268-ERRATA-01',initial_finding=j(H/'open-findings.json')[0],status='RESOLVED',decision='APPROVE actual correction01',basis='Current errata is empty; five-ground(d) ruling explicitly follows uncertainty default; contrary evidence retained; no span/source changes; dependent note/report/generated body correct.',current_spec=pin(B/'reconciled/268/spec.json'),current_body=pin(B/'reconciled/268/body.html')))
+# Initial unchanged statements which are historical rather than current interfaces are explicitly indexed.
+put(R/'current-status-index.json',dict(current_verdict='APPROVE',current_interfaces=['review.md','review.json','open-findings.json','resolved-spans.json','generator-proof.json','bank-ready-errata.json','span-head-allow-needed.json','original-to-copy-manifest.json','final-packaging-proof.json','freeze.json'],unchanged_semantic_reasoning=['per-span-adjudications.json','original-adjudications.json','errata-refutations.json','errata-five-ground-proof.json'],historical_execution_artifacts='Top-level original helpers, initial reproduction/ streams, independent-check-summary.json, package-content-proof.json and original stdout/stderr logs remain initial actual execution evidence. They are not a reconstruction recipe for current correction01. The complete immutable initial tree including every former current interface is history/initial-review/. Current generator-proof.json explicitly distinguishes new268 from preserved269/270.',initial_packages='Both semantic-input packages and original semantic-all-inputs/dispatch are INITIAL version. Actual correction inputs are preserved separately through the manifest. No old package is relabeled corrected.'))
+summary=j(O/'scoped-check-summary.json')
+report='''# C05:268–270 / c5p90 — current independent semantic review after correction01
+
+**SPEC: APPROVE. QUALITY: APPROVE. Open findings: 0.** This approval concerns the actual corrected files below. The complete initial full review was NEEDS_CORRECTION with one finding, C05-268-ERRATA-01; it is preserved byte for byte under history/initial-review/. Approval combines that complete unchanged alignment review with this independent scoped review, not a claim of a fresh semantic pass.
+
+The non-author reconciler removed the retained sweet-to-clear editorial candidate, set ground(d)/the uncertainty-default refutation to true, and updated the dependent note/report/proofs. Current errata lists for all three segments are empty. The positive dvangs pa/clear and mngar ba/sweet records, contrary dvangs/liquid record, full physical witnesses and publication/translator-intent uncertainty all remain visible. Refutation does not establish the rejected dvangs/sweet word pair: both source words remain unwrapped. No source or glossary correction was made. The corrected note remains PROVISIONAL and does not claim human editorial acceptance.
+
+## Exact current boundary and new execution
+
+The original consumed governing Git head remains 2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812; preceding accepted checkpoint2487bfcd73a1463d135a4544a01535ba5c99cab0; actual generated baselinef3c1ca804a933d53f84214d6968a84e7e0193c6e. No repository changes were made in this review. Reviewer /root/c05_through249_final_review is a reused non-author of current originals and reconciliation. Root authored Tibetan; English author and non-author reconciler are distinct. Reuse was disclosed and does not establish new-context independence.
+
+| Seq | Spans | Nulls | Non-null d5 | Spec bytes / SHA-256 | Body bytes / SHA-256 |
+|---|---:|---:|---:|---|---|
+'''
+for x in v['segments']:report+=f"| {x['seq']} | {x['span_count']} | {x['null_count']} | {x['word_pair_count']} | {x['spec_bytes']} / {x['spec_sha256']} | {x['body_bytes']} / {x['body_sha256']} |\n"
+report+='''
+Totals remain **123 spans, 5 nulls, 75 non-null d5 pairs**. All123 exact seven-key tuples were independently resolved again and remain byte-identical to the initial review in spec order. All span objects, optional fields/key order and all227 original identity/disposition fields remain unchanged. The only original rationale edit updates the separate editorial status of rejected original Tibetan268w17. All200 retained/26 recast/1 rejected dispositions remain the same.
+
+The reviewer independently reopened all three current C05 rows and the four material positive/contrary master records using SQLite URI mode=ro plus query_only. Full rows equal the initial consumed source and master records. Source/master/corpus/physical/engine hashes match the initial pins before and after the actual run. PYTHONDONTWRITEBYTECODE=1 propagated into the child.
+
+Exactly one new actual canonical execution ran for corrected268: EXIT0, empty stderr, exact5252-byte body, SHAe49408a7d5cc2a2074a29584ac61ac8465a61ef2a10f1179bda7148cfdc13d6c. The changed note accounts for4993→5252 bytes; the body was generated, not patched or reconstructed. Full argv/environment/stdin/stdout/stderr/exit and engine/wrapper pins: correction-01/canonical268/invocation.json and sibling files. The initial nine actual runs remain under history/initial-review/. Current269/270 complete trees and freezes equal their initial bytes; their exact successful generator executions are preserved prior runs, not falsely labeled new. No unchanged test suite was rerun.
+
+## Actual change scope and five-ground resolution
+
+The complete1,242,701-byte correction diff was independently reproduced from every actual before/after file with the exact U5 generation protocol, SHA7abaf7db6dd536902f4349801999515af8163f501b19ddccc3db8abc77d88fa9. Complete directory enumeration verifies13 changed existing268 files,39 additions,0 removals. All other existing files are exact. The actual current268 freeze enumerates309 files, SHA4ced3ed2be5a68aca5eacd10cd182dcbe1736f212a79117228c1314cfe6777f1. The correction package freezes31 files plus its own manifest, SHAdb209a76d2161bf9092fd6ddec590d58215b3d9b13b453da718411eb60e62e9d. complete-diff-verification.json records every changed/additional path; all full before/after originals and helper sources are preserved through the manifest.
+
+The actual spec change is only268's explanatory note. Its new wording correctly separates an unresolved lexical correspondence from an editorial allegation. The current analysis retains the exact original candidate as history while its disposition is refuted=true, suggested severity/confidence null, and ground(d) follows the independent initial ruling. Ground(a) valid quoted presence, ground(c) complete registered-class check, ground(e) complete numerical evidence, and all positive/contrary lexical records are unchanged. Ground(b) now explicitly says that unknown independence cannot become positive evidence of error. No claim of independent publication, certain translator intent or impossible paraphrase was inserted. Current report, omission and single rejected-original rationale consistently describe the refuted status. All three current errata lists are []. The sole finding is resolved in correction-01/finding-resolution.json.
+
+The original five-ground reasoning remains in errata-refutations.json and errata-five-ground-proof.json, with its complete original candidate and exact physical evidence. Those records refute the historical proposal and remain valid for the corrected empty bank-ready-errata.json. Actual source phrases, all prior numerical claims and contrary evidence were not erased. This review did not adopt any new speed/cache/reading helper or waive a gate.
+
+## Complete history and source-version transport
+
+Before replacing any current interface, the reviewer compared all573 initial review files to pre-correction-01/semantic-review/ and copied them byte for byte to history/initial-review/. This includes the complete initial report, open finding, nine execution proofs, all source/evidence copies, original manifests, failed reads and initial freeze. The entire923-file root-preserved history was independently checked and accounted for in the current manifest, together with the initial536-input universe, original570 mappings, current350 reconciled files, full32-file correction package including its top freeze, all root correction/boundary proofs and scoped brief.
+
+Old original-to-copy manifests remain byte-exact historical documents. The current LIST maps changed historical originals to their immutable pre-correction sources. correction-01/history-transport.json joins each old consumed path/pin, immutable source/pin and actual review copy. Full bytes were compared, not hashes alone. Current final files are mapped separately under reviewed-final/<seq>/. Embedded correction-review-input-mappings and errata-analysis references to initial semantic-review paths resolve via immutable_historical_source after the live review changes; those old path strings are provenance, not assertions that the current APPROVE report equals the initial NEEDS_CORRECTION report. Every copied known repository snapshot carries actual original_git_commit/repository_relative_path, inherited only after full equality with the initial pinned object.
+
+Both original semantic input packages and their dispatch inventory remain explicitly INITIAL, with the old note and candidate. The actual correction report/diff/helpers/execution proofs are separate current inputs. No transport silently relabels an initial package as corrected, rewrites old manifests or omits nested freezes. Current-status-index.json distinguishes retained initial helpers/execution logs from current interfaces.
+
+The packaging failure is preserved: attempt01 exited1 because Path-component ordering differed from relative-string ordering at a freeze assertion. The complete failed helper/freeze/streams remain in the correction evidence. Attempt02 uses the same relative-string ordering consistently and adds explicit preservation of the failed packaging history; it exited0. The exact helper diff was independently produced and read. It does not alter a source, span, note or body. Root's earlier initial-review checker also failed on an angle-major versus segment-major zip assumption; its corrected checker compares the complete227 unique eight-field identity sets before each original object/field check. Both original attempts/commands/full output remain. This is an identity-order correction, not a relaxation of identity fields. The reviewer's single initially misnamed failure-file read is preserved in correction-01/reviewer-read-attempts.json; the actual named file was then read in full.
+
+Final-packaging-proof.json verifies the actual landing helper whitelist, every current/historical original-to-copy byte relationship and Git object, every manifest target's extension, all nested freezes and complete current directory enumeration. Only the actual top-level freeze.json is excluded from itself. Unsupported helpers/physical formats have exact supported copies. The final freeze is current; the entire initial freeze remains in history.
+
+## Unchanged full semantic findings
+
+The following material alignment reasoning and all123 per-span judgments are carried forward from the independently completed initial full review because the actual spans, source, glossary and evidence are unchanged. They are not replaced by fidelity tests. Full initial source/query/physical analyses remain in history/initial-review/review.md and its evidence files, with unchanged current per-span-adjudications.json and original-adjudications.json.
+
+'''
+initial=(H/'review.md').read_text();material=initial.split('## All material alignment decisions\n',1)[1].split('## Physical evidence, complete provenance and failures\n',1)[0];report+=material
+report+='''
+## Execution and acceptance limits
+
+This is provisional machine SPEC/QUALITY approval of c5p90's actual corrected semantic files. It is not human editorial acceptance, proof of publication independence, a source/master change, a repository landing, a MAIN integration, a native/device/browser check or a future-page approval. No agents, paid APIs, network/account/UI actions, source/repository/index/fixture writes or commits were performed. Source wording and all labels remain exact. The one source-specific sogs/and so on head allowance remains justified and unchanged; no repository allowance was edited. There are zero open findings.
+
+'''
+report+='## Individual current span judgments\n'+initial.split('## Individual span judgments\n',1)[1]
+(R/'review.md').write_text(report)
+print(json.dumps(dict(status='PASS',review=pin(R/'review.md'),review_json=pin(R/'review.json'),mappings=len(maps),Git_pins=pres['Git_pins'],inherited_Git_pins=len(inherited))))

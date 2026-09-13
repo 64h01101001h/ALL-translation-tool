@@ -1,0 +1,1327 @@
+{
+  "physical_provenance": {
+    "original_extents_pin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/semantic-review/reviewed-final/268/ILL-original-extents.json",
+      "bytes": 14776,
+      "sha256": "b7fb3da51bab046570e618c92c108b237c045182e4867e65c279c4e34149353f"
+    },
+    "collection_pin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/semantic-review/reviewed-final/268/collection-proof.json",
+      "bytes": 4315,
+      "sha256": "6ddf6fc3ce76482830e611b30201c8de21baa7315efd1d96075da6e95103521f"
+    },
+    "source_pins": [
+      {
+        "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/book_texts/ILL.txt",
+        "sha256": "ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e",
+        "bytes": 2981468
+      },
+      {
+        "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/ILLUMINATION 5 28 26.docx",
+        "sha256": "7059db0069a54fb6b4a5191657224ecec946631f4b31d029de89961f5d185dba",
+        "bytes": 18638588
+      },
+      {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+        "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc",
+        "bytes": 249167872
+      },
+      {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/full_parallel_corpus_v32.json.gz",
+        "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8",
+        "bytes": 8965675
+      }
+    ],
+    "member_pin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-270/evidence/ILL.word-document.xml.txt",
+      "bytes": 50562402,
+      "sha256": "191ecfc324c7e07343f8aa5be08016a17ad8eb5a81c7fa76742476b21c2d8954"
+    },
+    "zip_source": {
+      "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/ILLUMINATION 5 28 26.docx",
+      "sha256": "7059db0069a54fb6b4a5191657224ecec946631f4b31d029de89961f5d185dba",
+      "bytes": 18638588
+    },
+    "zip_member": "word/document.xml",
+    "exact_member_reopened": true,
+    "counts": {
+      "retained_print_separator": 5,
+      "ILL_original_whole": 3,
+      "ILL_original_zip_member": 2
+    }
+  },
+  "history/initial-review/proposal-inputs/evidence/0d78c2df6c3a2a2822a79dc5105dc322d9aa90e473c7fcd134b5ff431a5832b2.txt": {
+    "kind": "retained_print_separator",
+    "verified_lines": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "query_only": 1,
+    "sqlite_uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+    "schema": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "course",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "seq",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "acip",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "wylie",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "english",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "raw",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "producer_call": {
+      "line": 23,
+      "end_line": 23,
+      "exact_source": "print(course,x['seq'],'WYLIE:',x['wylie'],'\\nENGLISH:',x['english'])",
+      "ast": "Call(func=Name(id='print', ctx=Load()), args=[Name(id='course', ctx=Load()), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='seq'), ctx=Load()), Constant(value='WYLIE:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='wylie'), ctx=Load()), Constant(value='\\nENGLISH:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='english'), ctx=Load())])",
+      "sep": " ",
+      "end": "\n",
+      "keyword_arguments": [],
+      "print_name_not_rebound": true
+    },
+    "rows": [
+      {
+        "line": 1,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          23
+        ],
+        "row": {
+          "id": 34912,
+          "course": "P7",
+          "seq": 23,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 23 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2c2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e207465206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206477616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 3,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          24
+        ],
+        "row": {
+          "id": 34913,
+          "course": "P7",
+          "seq": 24,
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR\", \"wylie\": \"yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir\", \"english\": \"When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 24 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "7969206477616773206b79697320636875206b6c756e67206c6120626c746173207061206e6120726e6167206b68726167206d74686f6e672062612064652079616e6720796920647761677320276761272c207a686967206c612079696e20677969207969206477616773207468616d7320636164206c61206d612079696e207465207969206477616773206c61207068796927692073677269622070612063616e206e616e672067692073677269622070612063616e207a617320736b6f6d206e796964206c6120796f6420706127692073677269622070612063616e206475206d6120796f642070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 5,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          25
+        ],
+        "row": {
+          "id": 34914,
+          "course": "P7",
+          "seq": 25,
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR\", \"wylie\": \"sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir\", \"english\": \"Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 25 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736f73206b61276920647573207375207a6c61206261276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b79692c206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e6720627961722067797572207061276920747368612062612769207265672062796120736b79652062612064616e67206467756e20647573207375206e7969206d61276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b7969206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e67206279617220677975722070612769206772616e672062612769207265672062796120736b796520626120796f64207061206c74612062752079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 7,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          844
+        ],
+        "row": {
+          "id": 6862,
+          "course": "C16",
+          "seq": 844,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?",
+          "raw": "{\"course\": \"C16\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?"
+        },
+        "prefix": "C16 844 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e2074652c206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206476616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 9,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          845
+        ],
+        "row": {
+          "id": 6863,
+          "course": "C16",
+          "seq": 845,
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,\", \"wylie\": \"yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na\", \"english\": \"Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue."
+        },
+        "prefix": "C16 845 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "79616e67206b6861206369672c202767726f206261206773756d20677969732062726c616e207a68696e672067736865722062612070686f722070612067616e67206c61206369672063617220647520626c74617320706127692074736865206e612c20726e6167206b6872616720646e676f7320676e6173207061206d656420706172207468616c2c20646d79616c2062612769206c636167732073726567206c6120736f67732070612064657220736b79657320706127692073656d732063616e2067796920736e616e67206261207473616d2079696e206779692c20646e676f7320676e61732073752067727562207061206d656420706127692070687969722c20646572207468616c2c20646520276472612769206279656420706120706f2073752079616e67206d656420706127692070687969722c20646572207468616c2c207370796f6420276a7567206c61732c206c63616773207372656720736120677a68692073752079697320627961732c202c206d65207473686f677320646520646167206369206c6173206279756e67202c202c206465202764726120646520646167207468616d7320636164206b79616e67202c20736469672073656d732079696e20706172207468756220706173206773756e67732c202c207a686573206773756e677320706127692070687969722c207a6572206e61",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 11,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          846
+        ],
+        "row": {
+          "id": 6864,
+          "course": "C16",
+          "seq": 846,
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,\", \"wylie\": \"skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir\", \"english\": \"Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+        },
+        "prefix": "C16 846 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736b796f6e206d65642064652c206465276920646f6e206c636167732073726567206c6120736f677320706120646520646167206462616e67207068797567207274616720706120736f6773206b79697320626c6f276920672d796f20626120736e676f6e206475206274616e67206e61732062796173207061206d612079696e207061722064657220736b7965732070612769202767726f206261276920736469672073656d73206279656420706120706f7220627374616e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      }
+    ],
+    "reproduced_prefix_bytes": 5404,
+    "reproduced_prefix_sha256": "40b649fa2386445e08ff2f5b0f23781805ed51d9c13e96bc58a84778125ba285"
+  },
+  "history/initial-review/proposal-inputs/tibetan/268/complete-extra-evidence.stdout.txt": {
+    "kind": "retained_print_separator",
+    "verified_lines": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "query_only": 1,
+    "sqlite_uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+    "schema": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "course",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "seq",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "acip",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "wylie",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "english",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "raw",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "producer_call": {
+      "line": 23,
+      "end_line": 23,
+      "exact_source": "print(course,x['seq'],'WYLIE:',x['wylie'],'\\nENGLISH:',x['english'])",
+      "ast": "Call(func=Name(id='print', ctx=Load()), args=[Name(id='course', ctx=Load()), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='seq'), ctx=Load()), Constant(value='WYLIE:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='wylie'), ctx=Load()), Constant(value='\\nENGLISH:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='english'), ctx=Load())])",
+      "sep": " ",
+      "end": "\n",
+      "keyword_arguments": [],
+      "print_name_not_rebound": true
+    },
+    "rows": [
+      {
+        "line": 1,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          23
+        ],
+        "row": {
+          "id": 34912,
+          "course": "P7",
+          "seq": 23,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 23 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2c2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e207465206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206477616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 3,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          24
+        ],
+        "row": {
+          "id": 34913,
+          "course": "P7",
+          "seq": 24,
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR\", \"wylie\": \"yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir\", \"english\": \"When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 24 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "7969206477616773206b79697320636875206b6c756e67206c6120626c746173207061206e6120726e6167206b68726167206d74686f6e672062612064652079616e6720796920647761677320276761272c207a686967206c612079696e20677969207969206477616773207468616d7320636164206c61206d612079696e207465207969206477616773206c61207068796927692073677269622070612063616e206e616e672067692073677269622070612063616e207a617320736b6f6d206e796964206c6120796f6420706127692073677269622070612063616e206475206d6120796f642070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 5,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          25
+        ],
+        "row": {
+          "id": 34914,
+          "course": "P7",
+          "seq": 25,
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR\", \"wylie\": \"sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir\", \"english\": \"Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 25 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736f73206b61276920647573207375207a6c61206261276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b79692c206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e6720627961722067797572207061276920747368612062612769207265672062796120736b79652062612064616e67206467756e20647573207375206e7969206d61276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b7969206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e67206279617220677975722070612769206772616e672062612769207265672062796120736b796520626120796f64207061206c74612062752079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 7,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          844
+        ],
+        "row": {
+          "id": 6862,
+          "course": "C16",
+          "seq": 844,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?",
+          "raw": "{\"course\": \"C16\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?"
+        },
+        "prefix": "C16 844 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e2074652c206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206476616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 9,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          845
+        ],
+        "row": {
+          "id": 6863,
+          "course": "C16",
+          "seq": 845,
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,\", \"wylie\": \"yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na\", \"english\": \"Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue."
+        },
+        "prefix": "C16 845 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "79616e67206b6861206369672c202767726f206261206773756d20677969732062726c616e207a68696e672067736865722062612070686f722070612067616e67206c61206369672063617220647520626c74617320706127692074736865206e612c20726e6167206b6872616720646e676f7320676e6173207061206d656420706172207468616c2c20646d79616c2062612769206c636167732073726567206c6120736f67732070612064657220736b79657320706127692073656d732063616e2067796920736e616e67206261207473616d2079696e206779692c20646e676f7320676e61732073752067727562207061206d656420706127692070687969722c20646572207468616c2c20646520276472612769206279656420706120706f2073752079616e67206d656420706127692070687969722c20646572207468616c2c207370796f6420276a7567206c61732c206c63616773207372656720736120677a68692073752079697320627961732c202c206d65207473686f677320646520646167206369206c6173206279756e67202c202c206465202764726120646520646167207468616d7320636164206b79616e67202c20736469672073656d732079696e20706172207468756220706173206773756e67732c202c207a686573206773756e677320706127692070687969722c207a6572206e61",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 11,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          846
+        ],
+        "row": {
+          "id": 6864,
+          "course": "C16",
+          "seq": 846,
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,\", \"wylie\": \"skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir\", \"english\": \"Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+        },
+        "prefix": "C16 846 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736b796f6e206d65642064652c206465276920646f6e206c636167732073726567206c6120736f677320706120646520646167206462616e67207068797567207274616720706120736f6773206b79697320626c6f276920672d796f20626120736e676f6e206475206274616e67206e61732062796173207061206d612079696e207061722064657220736b7965732070612769202767726f206261276920736469672073656d73206279656420706120706f7220627374616e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      }
+    ],
+    "reproduced_prefix_bytes": 5404,
+    "reproduced_prefix_sha256": "40b649fa2386445e08ff2f5b0f23781805ed51d9c13e96bc58a84778125ba285"
+  },
+  "landing-proof/course-index.stdout": {
+    "kind": "root_course_index_blank_eof",
+    "verified_line": 24,
+    "manifest_records": 128,
+    "exact_original_staged_banked_manifest_and_execution": true,
+    "execution_exit": 0,
+    "stdout_bytes": 699,
+    "stdout_sha256": "1b2ab2f275fcf995f8c57f4a6eaae43477ac10272e0156df2ed4bbd56fc217be"
+  },
+  "proposal-inputs/evidence/0d78c2df6c3a2a2822a79dc5105dc322d9aa90e473c7fcd134b5ff431a5832b2.txt": {
+    "kind": "retained_print_separator",
+    "verified_lines": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "query_only": 1,
+    "sqlite_uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+    "schema": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "course",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "seq",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "acip",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "wylie",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "english",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "raw",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "producer_call": {
+      "line": 23,
+      "end_line": 23,
+      "exact_source": "print(course,x['seq'],'WYLIE:',x['wylie'],'\\nENGLISH:',x['english'])",
+      "ast": "Call(func=Name(id='print', ctx=Load()), args=[Name(id='course', ctx=Load()), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='seq'), ctx=Load()), Constant(value='WYLIE:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='wylie'), ctx=Load()), Constant(value='\\nENGLISH:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='english'), ctx=Load())])",
+      "sep": " ",
+      "end": "\n",
+      "keyword_arguments": [],
+      "print_name_not_rebound": true
+    },
+    "rows": [
+      {
+        "line": 1,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          23
+        ],
+        "row": {
+          "id": 34912,
+          "course": "P7",
+          "seq": 23,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 23 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2c2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e207465206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206477616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 3,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          24
+        ],
+        "row": {
+          "id": 34913,
+          "course": "P7",
+          "seq": 24,
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR\", \"wylie\": \"yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir\", \"english\": \"When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 24 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "7969206477616773206b79697320636875206b6c756e67206c6120626c746173207061206e6120726e6167206b68726167206d74686f6e672062612064652079616e6720796920647761677320276761272c207a686967206c612079696e20677969207969206477616773207468616d7320636164206c61206d612079696e207465207969206477616773206c61207068796927692073677269622070612063616e206e616e672067692073677269622070612063616e207a617320736b6f6d206e796964206c6120796f6420706127692073677269622070612063616e206475206d6120796f642070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 5,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          25
+        ],
+        "row": {
+          "id": 34914,
+          "course": "P7",
+          "seq": 25,
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR\", \"wylie\": \"sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir\", \"english\": \"Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 25 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736f73206b61276920647573207375207a6c61206261276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b79692c206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e6720627961722067797572207061276920747368612062612769207265672062796120736b79652062612064616e67206467756e20647573207375206e7969206d61276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b7969206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e67206279617220677975722070612769206772616e672062612769207265672062796120736b796520626120796f64207061206c74612062752079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 7,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          844
+        ],
+        "row": {
+          "id": 6862,
+          "course": "C16",
+          "seq": 844,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?",
+          "raw": "{\"course\": \"C16\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?"
+        },
+        "prefix": "C16 844 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e2074652c206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206476616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 9,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          845
+        ],
+        "row": {
+          "id": 6863,
+          "course": "C16",
+          "seq": 845,
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,\", \"wylie\": \"yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na\", \"english\": \"Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue."
+        },
+        "prefix": "C16 845 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "79616e67206b6861206369672c202767726f206261206773756d20677969732062726c616e207a68696e672067736865722062612070686f722070612067616e67206c61206369672063617220647520626c74617320706127692074736865206e612c20726e6167206b6872616720646e676f7320676e6173207061206d656420706172207468616c2c20646d79616c2062612769206c636167732073726567206c6120736f67732070612064657220736b79657320706127692073656d732063616e2067796920736e616e67206261207473616d2079696e206779692c20646e676f7320676e61732073752067727562207061206d656420706127692070687969722c20646572207468616c2c20646520276472612769206279656420706120706f2073752079616e67206d656420706127692070687969722c20646572207468616c2c207370796f6420276a7567206c61732c206c63616773207372656720736120677a68692073752079697320627961732c202c206d65207473686f677320646520646167206369206c6173206279756e67202c202c206465202764726120646520646167207468616d7320636164206b79616e67202c20736469672073656d732079696e20706172207468756220706173206773756e67732c202c207a686573206773756e677320706127692070687969722c207a6572206e61",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 11,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          846
+        ],
+        "row": {
+          "id": 6864,
+          "course": "C16",
+          "seq": 846,
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,\", \"wylie\": \"skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir\", \"english\": \"Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+        },
+        "prefix": "C16 846 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736b796f6e206d65642064652c206465276920646f6e206c636167732073726567206c6120736f677320706120646520646167206462616e67207068797567207274616720706120736f6773206b79697320626c6f276920672d796f20626120736e676f6e206475206274616e67206e61732062796173207061206d612079696e207061722064657220736b7965732070612769202767726f206261276920736469672073656d73206279656420706120706f7220627374616e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      }
+    ],
+    "reproduced_prefix_bytes": 5404,
+    "reproduced_prefix_sha256": "40b649fa2386445e08ff2f5b0f23781805ed51d9c13e96bc58a84778125ba285"
+  },
+  "proposal-inputs/tibetan/268/complete-extra-evidence.stdout.txt": {
+    "kind": "retained_print_separator",
+    "verified_lines": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "query_only": 1,
+    "sqlite_uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+    "schema": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "course",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "seq",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "acip",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "wylie",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "english",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "raw",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "producer_call": {
+      "line": 23,
+      "end_line": 23,
+      "exact_source": "print(course,x['seq'],'WYLIE:',x['wylie'],'\\nENGLISH:',x['english'])",
+      "ast": "Call(func=Name(id='print', ctx=Load()), args=[Name(id='course', ctx=Load()), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='seq'), ctx=Load()), Constant(value='WYLIE:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='wylie'), ctx=Load()), Constant(value='\\nENGLISH:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='english'), ctx=Load())])",
+      "sep": " ",
+      "end": "\n",
+      "keyword_arguments": [],
+      "print_name_not_rebound": true
+    },
+    "rows": [
+      {
+        "line": 1,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          23
+        ],
+        "row": {
+          "id": 34912,
+          "course": "P7",
+          "seq": 23,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 23 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2c2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e207465206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206477616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 3,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          24
+        ],
+        "row": {
+          "id": 34913,
+          "course": "P7",
+          "seq": 24,
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR\", \"wylie\": \"yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir\", \"english\": \"When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 24 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "7969206477616773206b79697320636875206b6c756e67206c6120626c746173207061206e6120726e6167206b68726167206d74686f6e672062612064652079616e6720796920647761677320276761272c207a686967206c612079696e20677969207969206477616773207468616d7320636164206c61206d612079696e207465207969206477616773206c61207068796927692073677269622070612063616e206e616e672067692073677269622070612063616e207a617320736b6f6d206e796964206c6120796f6420706127692073677269622070612063616e206475206d6120796f642070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 5,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          25
+        ],
+        "row": {
+          "id": 34914,
+          "course": "P7",
+          "seq": 25,
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR\", \"wylie\": \"sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir\", \"english\": \"Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 25 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736f73206b61276920647573207375207a6c61206261276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b79692c206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e6720627961722067797572207061276920747368612062612769207265672062796120736b79652062612064616e67206467756e20647573207375206e7969206d61276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b7969206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e67206279617220677975722070612769206772616e672062612769207265672062796120736b796520626120796f64207061206c74612062752079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 7,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          844
+        ],
+        "row": {
+          "id": 6862,
+          "course": "C16",
+          "seq": 844,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?",
+          "raw": "{\"course\": \"C16\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?"
+        },
+        "prefix": "C16 844 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e2074652c206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206476616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 9,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          845
+        ],
+        "row": {
+          "id": 6863,
+          "course": "C16",
+          "seq": 845,
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,\", \"wylie\": \"yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na\", \"english\": \"Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue."
+        },
+        "prefix": "C16 845 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "79616e67206b6861206369672c202767726f206261206773756d20677969732062726c616e207a68696e672067736865722062612070686f722070612067616e67206c61206369672063617220647520626c74617320706127692074736865206e612c20726e6167206b6872616720646e676f7320676e6173207061206d656420706172207468616c2c20646d79616c2062612769206c636167732073726567206c6120736f67732070612064657220736b79657320706127692073656d732063616e2067796920736e616e67206261207473616d2079696e206779692c20646e676f7320676e61732073752067727562207061206d656420706127692070687969722c20646572207468616c2c20646520276472612769206279656420706120706f2073752079616e67206d656420706127692070687969722c20646572207468616c2c207370796f6420276a7567206c61732c206c63616773207372656720736120677a68692073752079697320627961732c202c206d65207473686f677320646520646167206369206c6173206279756e67202c202c206465202764726120646520646167207468616d7320636164206b79616e67202c20736469672073656d732079696e20706172207468756220706173206773756e67732c202c207a686573206773756e677320706127692070687969722c207a6572206e61",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 11,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          846
+        ],
+        "row": {
+          "id": 6864,
+          "course": "C16",
+          "seq": 846,
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,\", \"wylie\": \"skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir\", \"english\": \"Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+        },
+        "prefix": "C16 846 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736b796f6e206d65642064652c206465276920646f6e206c636167732073726567206c6120736f677320706120646520646167206462616e67207068797567207274616720706120736f6773206b79697320626c6f276920672d796f20626120736e676f6e206475206274616e67206e61732062796173207061206d612079696e207061722064657220736b7965732070612769202767726f206261276920736469672073656d73206279656420706120706f7220627374616e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      }
+    ],
+    "reproduced_prefix_bytes": 5404,
+    "reproduced_prefix_sha256": "40b649fa2386445e08ff2f5b0f23781805ed51d9c13e96bc58a84778125ba285"
+  },
+  "reviewed-final/268/evidence/0d78c2df6c3a2a2822a79dc5105dc322d9aa90e473c7fcd134b5ff431a5832b2.txt": {
+    "kind": "retained_print_separator",
+    "verified_lines": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "query_only": 1,
+    "sqlite_uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+    "schema": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "course",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "seq",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "acip",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "wylie",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "english",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "raw",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "producer_call": {
+      "line": 23,
+      "end_line": 23,
+      "exact_source": "print(course,x['seq'],'WYLIE:',x['wylie'],'\\nENGLISH:',x['english'])",
+      "ast": "Call(func=Name(id='print', ctx=Load()), args=[Name(id='course', ctx=Load()), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='seq'), ctx=Load()), Constant(value='WYLIE:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='wylie'), ctx=Load()), Constant(value='\\nENGLISH:'), Subscript(value=Name(id='x', ctx=Load()), slice=Constant(value='english'), ctx=Load())])",
+      "sep": " ",
+      "end": "\n",
+      "keyword_arguments": [],
+      "print_name_not_rebound": true
+    },
+    "rows": [
+      {
+        "line": 1,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          23
+        ],
+        "row": {
+          "id": 34912,
+          "course": "P7",
+          "seq": 23,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN, PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DWANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin, pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dwangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans—a world created by the specific karma of the human in the group—then that would be its original condition, and so on.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 23 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2c2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e207465206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206477616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 3,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          24
+        ],
+        "row": {
+          "id": 34913,
+          "course": "P7",
+          "seq": 24,
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR\", \"wylie\": \"yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir\", \"english\": \"When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "YI DWAGS KYIS CHU KLUNG LA BLTAS PA NA RNAG KHRAG MTHONG BA DE YANG YI DWAGS 'GA', ZHIG LA YIN GYI YI DWAGS THAMS CAD LA MA YIN TE YI DWAGS LA PHYI'I SGRIB PA CAN NANG GI SGRIB PA CAN ZAS SKOM NYID LA YOD PA'I SGRIB PA CAN DU MA YOD PA'I PHYIR",
+          "wylie": "yi dwags kyis chu klung la bltas pa na rnag khrag mthong ba de yang yi dwags 'ga', zhig la yin gyi yi dwags thams cad la ma yin te yi dwags la phyi'i sgrib pa can nang gi sgrib pa can zas skom nyid la yod pa'i sgrib pa can du ma yod pa'i phyir",
+          "english": "When we say that a craving spirit looks at a stream of water and sees pus and blood, by the way, we are only talking about some kinds of craving spirits, and not all of them. This is because there are many kinds of craving spirits: some with obstacles in the world around them that prevent them from relieving their craving; some with obstacles that are parts of their bodies; and some with obstacles that relate to the food or drink itself.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 24 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "7969206477616773206b79697320636875206b6c756e67206c6120626c746173207061206e6120726e6167206b68726167206d74686f6e672062612064652079616e6720796920647761677320276761272c207a686967206c612079696e20677969207969206477616773207468616d7320636164206c61206d612079696e207465207969206477616773206c61207068796927692073677269622070612063616e206e616e672067692073677269622070612063616e207a617320736b6f6d206e796964206c6120796f6420706127692073677269622070612063616e206475206d6120796f642070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 5,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "P7",
+          25
+        ],
+        "row": {
+          "id": 34914,
+          "course": "P7",
+          "seq": 25,
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "raw": "{\"course\": \"P7\", \"acip\": \"SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR\", \"wylie\": \"sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir\", \"english\": \"Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+        },
+        "raw_corpus_object": {
+          "course": "P7",
+          "acip": "SOS KA'I DUS SU ZLA BA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI, LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I TSA BA'I REG BYA SKYE BA DANG DGUN DUS SU NYI MA'I REG BYA'I CHA SHAS GCIG GIS NYER LEN DANG YI DWAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I LUS SHES KYI MYONG BYAR GYUR PA'I GRANG BA'I REG BYA SKYE BA YOD PA LTA BU YIN PA'I PHYIR",
+          "wylie": "sos ka'i dus su zla ba'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi, las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i tsha ba'i reg bya skye ba dang dgun dus su nyi ma'i reg bya'i cha shas gcig gis nyer len dang yi dwags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i lus shes kyi myong byar gyur pa'i grang ba'i reg bya skye ba yod pa lta bu yin pa'i phyir",
+          "english": "Another example would be the moon in springtime; one part of the feel of its rays on the body provides the material cause, and then the karma of a craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation of heat, which is experienced by the consciousness of the body. So too with the wintertime sun; one part of the feel of its rays on the body provides the material cause, and then the karma of the craving spirit provides a contributing factor. Based on these two, the spirit gets a sensation cold, which is experienced by the consciousness of the body.",
+          "wylie_method": "glyph-decode",
+          "decode_score": 1.0
+        },
+        "prefix": "P7 25 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736f73206b61276920647573207375207a6c61206261276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b79692c206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e6720627961722067797572207061276920747368612062612769207265672062796120736b79652062612064616e67206467756e20647573207375206e7969206d61276920726567206279612769206368612073686173206763696720676973206e796572206c656e2064616e67207969206477616773206b7969206c6173206b796973206c68616e20636967206279656420726b79656e2062796173207061206c6120627274656e206e61732064652769206c75732073686573206b7969206d796f6e67206279617220677975722070612769206772616e672062612769207265672062796120736b796520626120796f64207061206c74612062752079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 7,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          844
+        ],
+        "row": {
+          "id": 6862,
+          "course": "C16",
+          "seq": 844,
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?",
+          "raw": "{\"course\": \"C16\", \"acip\": \"DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,\", \"wylie\": \"dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir\", \"english\": \"How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "DANG POR GANG DU GNAS PA DE YANG 'GRO BA GSUM PO DE'I RANG RANG GI THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PA'I SNOD KYI 'JIG RTEN GANG NAS BLANGS PA DE NYID DU GRUB PA YIN TE, MI'I THUN MONG MA YIN PA'I LAS LA BRTEN NAS GRUB PAS MI'I 'JIG RTEN GYI CHU DVANGS SHING BSIL BA NAS BLANGS NA DE NYID DU GNAS PA SOGS YIN PA'I PHYIR,",
+          "wylie": "dang por gang du gnas pa de yang 'gro ba gsum po de'i rang rang gi thun mong ma yin pa'i las la brten nas grub pa'i snod kyi 'jig rten gang nas blangs pa de nyid du grub pa yin te, mi'i thun mong ma yin pa'i las la brten nas grub pas mi'i 'jig rten gyi chu dvangs shing bsil ba nas blangs na de nyid du gnas pa sogs yin pa'i phyir",
+          "english": "How the glass of liquid exists originally all depends on the particular outer world from where it has been taken, for each of the three different beings has a different outer world, depending on the specific karma he himself has collected. If the glass of liquid were sweet, cool water taken from the world of humans--a world created by the specific karma of the human in the group--then that would be its original condition, and so on. 33 Who Made Hell?"
+        },
+        "prefix": "C16 844 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "64616e6720706f722067616e6720647520676e61732070612064652079616e67202767726f206261206773756d20706f20646527692072616e672072616e67206769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e61732067727562207061276920736e6f64206b796920276a6967207274656e2067616e67206e617320626c616e6773207061206465206e79696420647520677275622070612079696e2074652c206d692769207468756e206d6f6e67206d612079696e2070612769206c6173206c6120627274656e206e6173206772756220706173206d69276920276a6967207274656e2067796920636875206476616e6773207368696e67206273696c206261206e617320626c616e6773206e61206465206e79696420647520676e617320706120736f67732079696e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 9,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          845
+        ],
+        "row": {
+          "id": 6863,
+          "course": "C16",
+          "seq": 845,
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,\", \"wylie\": \"yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na\", \"english\": \"Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "YANG KHA CIG, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA'I TSE NA, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, DMYAL BA'I LCAGS SREG LA SOGS PA DER SKYES PA'I SEMS CAN GYI SNANG BA TZAM YIN GYI, DNGOS GNAS SU GRUB PA MED PA'I PHYIR, DER THAL, DE 'DRA'I BYED PA PO SU YANG MED PA'I PHYIR, DER THAL, SPYOD 'JUG LAS, LCAGS SREG SA GZHI SU YIS BYAS, , ME TSOGS DE DAG CI LAS BYUNG , , DE 'DRA DE DAG THAMS CAD KYANG , SDIG SEMS YIN PAR THUB PAS GSUNGS, , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+          "wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na",
+          "english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue."
+        },
+        "prefix": "C16 845 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "79616e67206b6861206369672c202767726f206261206773756d20677969732062726c616e207a68696e672067736865722062612070686f722070612067616e67206c61206369672063617220647520626c74617320706127692074736865206e612c20726e6167206b6872616720646e676f7320676e6173207061206d656420706172207468616c2c20646d79616c2062612769206c636167732073726567206c6120736f67732070612064657220736b79657320706127692073656d732063616e2067796920736e616e67206261207473616d2079696e206779692c20646e676f7320676e61732073752067727562207061206d656420706127692070687969722c20646572207468616c2c20646520276472612769206279656420706120706f2073752079616e67206d656420706127692070687969722c20646572207468616c2c207370796f6420276a7567206c61732c206c63616773207372656720736120677a68692073752079697320627961732c202c206d65207473686f677320646520646167206369206c6173206279756e67202c202c206465202764726120646520646167207468616d7320636164206b79616e67202c20736469672073656d732079696e20706172207468756220706173206773756e67732c202c207a686573206773756e677320706127692070687969722c207a6572206e61",
+        "formatter_suffix_hex": "20"
+      },
+      {
+        "line": 11,
+        "sql": "select * from corpus_segments where course=? and seq=?",
+        "parameters": [
+          "C16",
+          846
+        ],
+        "row": {
+          "id": 6864,
+          "course": "C16",
+          "seq": 846,
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.",
+          "raw": "{\"course\": \"C16\", \"acip\": \"SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,\", \"wylie\": \"skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir\", \"english\": \"Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.\"}"
+        },
+        "raw_corpus_object": {
+          "course": "C16",
+          "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+          "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+          "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+        },
+        "prefix": "C16 846 WYLIE: ",
+        "field": "wylie",
+        "source_field_utf8_hex": "736b796f6e206d65642064652c206465276920646f6e206c636167732073726567206c6120736f677320706120646520646167206462616e67207068797567207274616720706120736f6773206b79697320626c6f276920672d796f20626120736e676f6e206475206274616e67206e61732062796173207061206d612079696e207061722064657220736b7965732070612769202767726f206261276920736469672073656d73206279656420706120706f7220627374616e2070612769207068796972",
+        "formatter_suffix_hex": "20"
+      }
+    ],
+    "reproduced_prefix_bytes": 5404,
+    "reproduced_prefix_sha256": "40b649fa2386445e08ff2f5b0f23781805ed51d9c13e96bc58a84778125ba285"
+  }
+}

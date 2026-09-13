@@ -1,0 +1,56 @@
+from pathlib import Path
+import json, sqlite3, gzip, hashlib, datetime, re, difflib
+
+out=Path(__file__).parent
+batch=out.parents[1]
+root=batch.parents[1]
+wt=root/'campaign-worktree'
+c=sqlite3.connect((wt/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True)
+c.row_factory=sqlite3.Row
+c.execute('PRAGMA query_only=ON')
+corpus=json.loads(gzip.decompress((wt/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+source={x['seq']:x for x in json.loads((batch/'source.json').read_text())}
+def save(name,obj):
+    with (out/name).open('x') as f:
+        json.dump(obj,f,ensure_ascii=False,indent=2);f.write('\n')
+direct=[]
+for course,lo,hi in [('P7',23,25),('C16',844,846)]:
+    sql='select * from corpus_segments where course=? and seq between ? and ? order by seq'
+    rows=[dict(x) for x in c.execute(sql,(course,lo,hi))]
+    originals=[x for x in corpus if x['course']==course]
+    for x in rows:
+        assert json.loads(x['raw'])==originals[x['seq']-1]
+        print(course,x['seq'],'WYLIE:',x['wylie'],'\nENGLISH:',x['english'])
+    direct.append(dict(sql=sql,parameters=[course,lo,hi],rows=rows))
+save('direct-parallel-context-full.json',direct)
+parallels=[]
+for seq in [268,269,270]:
+    known={}
+    for q in json.loads((out/'parallel-queries-full.json').read_text()):
+        if q['seq']==seq:
+            for x in q['rows']:known[(x['course'],x['seq'])]=x
+    for (course,n),row in sorted(known.items()):
+        originals=[x for x in corpus if x['course']==course]
+        assert json.loads(row['raw'])==originals[n-1]
+        same={field:row[field]==source[seq][field] for field in ['acip','wylie','english']}
+        changes={field:[dict(tag=tag,source_range=[a,b],other_range=[u,v],source=source[seq][field][a:b],other=row[field][u:v])
+                        for tag,a,b,u,v in difflib.SequenceMatcher(None,source[seq][field],row[field],autojunk=False).get_opcodes() if tag!='equal']
+                 for field in same if not same[field]}
+        parallels.append(dict(seq=seq,course=course,parallel_seq=n,same=same,differences=changes))
+save('parallel-comparison-proof.json',parallels)
+count=0
+for name in ['lexical-queries-full.json','parallel-queries-full.json','additional-lexical-queries-full.json','direct-parallel-context-full.json']:
+    for q in json.loads((out/name).read_text()):
+        assert [dict(x) for x in c.execute(q['sql'],q['parameters'])]==q['rows']
+        count+=1
+baseline=json.loads((batch/'baseline.json').read_text())
+assert all(hashlib.sha256((wt/path).read_bytes()).hexdigest()==digest for path,digest in baseline['sha256'].items())
+register=json.loads((wt/'docs/errata_register.json').read_text())
+save('registered-class-original.json',register)
+entries=register if isinstance(register,list) else register.get('entries',register.get('errata'))
+assert isinstance(entries,list)
+hits=[e for e in entries if any(s in json.dumps(e,ensure_ascii=False) for s in ['C05:268','C05:269','C05:270'])]
+save('registered-class-checks.json',dict(exact_current_citation_hits=hits,registered_entry_count=len(entries),
+    note='Exact citation search is recorded literally; it does not pretend to exhaust alternative register course/seq encodings. Full register copied for independent review. Following-heading glue is an existing registered class; no current selected source field ends at1500 characters.'))
+save('query-replay-and-baseline-proof.json',dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='PASS',complete_query_replays=count,all_nine_baseline_hashes_unchanged=True,source_master_original_equality=True,sqlite_query_only=c.execute('pragma query_only').fetchone()[0]))
+print('Complete query replays',count,'register entries',len(entries),'exact citation hits',len(hits))

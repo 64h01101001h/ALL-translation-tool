@@ -1,0 +1,191 @@
+import pathlib, json, hashlib, subprocess, os, sqlite3, importlib.util, re, sys
+
+R = pathlib.Path(__file__).resolve().parent
+B = R.parents[1]
+W = B.parent.parent / 'campaign-worktree'
+SUPPORTED = {'.json', '.md', '.html', '.stderr', '.stdout', '.log', '.txt', '.bin', '.exit'}
+def read(p): return json.loads(p.read_text())
+def put(p, obj): p.write_text(json.dumps(obj, ensure_ascii=False, indent=2) + '\n')
+def pin(p):
+    b = p.read_bytes()
+    return {'path': str(p), 'bytes': len(b), 'sha256': hashlib.sha256(b).hexdigest()}
+def verify(p, record):
+    got = pin(p)
+    assert all(got[k] == record[k] for k in ('bytes', 'sha256')), (str(p), got, record)
+    return got
+
+assert sys.dont_write_bytecode and os.environ.get('PYTHONDONTWRITEBYTECODE') == '1'
+checks = []
+def passed(name, detail): checks.append({'check': name, 'pass': True, 'detail': detail})
+counts = read(R/'batch-counts.json')
+collection = read(R/'collection-proof.json')
+for field in ('database', 'source_master', 'original_master', 'corpus'):
+    verify(pathlib.Path(collection[field]['path']), collection[field])
+passed('Original database/master/corpus pins remain exact', [collection[x] for x in ('database', 'source_master', 'original_master', 'corpus')])
+db = pathlib.Path(collection['database']['path'])
+con = sqlite3.connect(db.as_uri()+'?mode=ro', uri=True)
+con.row_factory = sqlite3.Row
+con.execute('PRAGMA query_only=ON')
+sql = 'select * from corpus_segments where course=? and seq between ? and ? order by seq'
+source = [dict(x) for x in con.execute(sql, ['C05', 268, 270])]
+assert source == read(R/'source-full-rows.json')
+put(R/'final-source-pin-check.json', {'sql': sql, 'params': ['C05',268,270], 'sqlite_uri': db.as_uri()+'?mode=ro', 'query_only': con.execute('PRAGMA query_only').fetchone()[0], 'rows': source, 'equals_originally_consumed_source': True})
+passed('Final complete source rows are unchanged', {'rows': 3, 'query_only': 1})
+con.close()
+sp = importlib.util.spec_from_file_location('canonical_readonly_validation', W/'tools/gen_alignment_page.py')
+gen = importlib.util.module_from_spec(sp)
+sp.loader.exec_module(gen)
+originals = read(R/'original-span-objects.json')
+root = read(B/'proposal-verification/root-resolved-spans.json')
+root_by = {(x['angle'], x['seq'], x['id']): x for x in root}
+identities = read(R/'original-identities.json')
+assert len(originals) == len(root) == len(identities) == 227
+assert [o['identity'] for o in originals] == identities
+dispositions = []
+summary = []
+for count in counts:
+    seq = count['seq']; D = R.parent/str(seq)
+    spec = read(D/'spec.json'); seg = spec['segments'][0]
+    assert len(spec['segments']) == 1 and seg['seq'] == seq
+    assert 'PROVISIONAL' in seg['note'] and not re.search(r'pending.review|awaiting.review', seg['note'], re.I)
+    row = next(x for x in source if x['seq'] == seq)
+    spans = seg['spans']; by = {x['id']:x for x in spans}
+    tr = gen.resolve(row['wylie'], spans, 'tib', seq)
+    er = gen.resolve(row['english'], gen.with_members(spans, [by[i] for i in seg['eng_order']], row['english']), 'eng', seq)
+    expected = [{'seq':seq,'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s.get('eng'),'tib_range':list(tr[s['id']]),'eng_range':list(er[s['id']]) if s.get('eng') is not None else None} for s in spans]
+    assert expected == read(D/'resolved-spans.json')
+    decisions = read(D/'final-decisions.json')
+    assert [x['final_tuple'] for x in decisions] == expected and [x['final_span'] for x in decisions] == spans
+    assert all(x['rationale'] and x['evidence'] and all((D/p).exists() for p in x['evidence']) for x in decisions)
+    assert len(expected) == count['spans']
+    assert sum(x['eng'] is None for x in expected) == count['nulls']
+    assert sum(x['d']==5 and x['eng'] is not None for x in expected) == count['word_pairs']
+    ds = read(D/'original-dispositions.json'); dispositions.extend(ds)
+    assert len(ds) == count['original_identities']
+    assert {k:sum(d['disposition']==k for d in ds) for k in ('retained','recast','rejected')} == count['dispositions']
+    for d in ds:
+        i = d['original_identity']; o = root_by[(i['angle'],i['seq'],i['id'])]
+        assert set(i) == {'angle','seq','id','d','tib','eng','tib_range','eng_range'}
+        assert i == {k:v for k,v in o.items() if k not in ('original_span','original_field_presence')}
+        assert d['original_span'] == o['original_span']
+        assert d['original_field_presence'] == o['original_field_presence']
+        assert d['original_span_keys'] == list(o['original_span'])
+        assert d['reason'] and all(t in expected for t in d['final_identities'])
+        original_spec = read(pathlib.Path(d['original_spec_path']))
+        assert next(x for x in original_spec['segments'][0]['spans'] if x['id']==i['id']) == d['original_span']
+        assert (d['disposition']=='rejected') == (not d['final_identities'])
+    proof = read(D/'generator-proof.json')
+    assert proof['exit'] == 0 and proof['stderr']['bytes'] == 0
+    for key in ('wrapper','canonical_generator','builder','stdin','stdout','stderr','spec','body'):
+        verify(pathlib.Path(proof[key]['path']), proof[key])
+    assert (D/'spec.json').read_bytes() == (D/'attempts/01/stdin.json').read_bytes()
+    assert (D/'body.html').read_bytes() == (D/'attempts/01/stdout.html').read_bytes()
+    assert (D/'attempts/01/exit.txt').read_text() == '0\n'
+    gated = [x for x in expected if x['d'] in (5,7) and x['eng'] is not None and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',x['eng'],re.I)]
+    assert [x['id'] for x in gated] == (['w21'] if seq==268 else [])
+    allowance = read(D/'proposed-span-head-allowances.json')
+    assert bool(allowance) == (seq==268)
+    if allowance: assert list(allowance['pages_c05']) == ['c5p90/s268w21']
+    # The complement includes punctuation and all meaningful unwrapped text exactly.
+    unwrapped = read(D/'unwrapped-extents.json')
+    for field, key in [('wylie','tib_range'), ('english','eng_range')]:
+        intervals = [(x[key], 'span') for x in expected if x['d']!=7 and x[key] is not None]
+        intervals += [(x['range'], 'unwrapped') for x in unwrapped[field]]
+        intervals.sort()
+        cursor = 0
+        for (a,b), kind in intervals:
+            assert a == cursor and b >= a
+            cursor = b
+        assert cursor == len(row[field])
+        assert all(row[field][x['range'][0]:x['range'][1]] == x['text'] for x in unwrapped[field])
+    summary.append({**count, 'spec':proof['spec'], 'body':proof['body'], 'errata':len(read(D/'errata.json'))})
+passed('All final ordered tuples/ranges, complements, decisions, original optional fields and counts', {'final_spans':123,'nulls':5,'original_identities':227,'dispositions':{'retained':200,'recast':26,'rejected':1}})
+assert len(dispositions)==227 and len({(x['original_identity']['angle'],x['original_identity']['seq'],x['original_identity']['id']) for x in dispositions}) == 227
+for p in read(R/'original-replay-proof.json'):
+    assert p['exit']==0 and p['equals_original_body'] and p['stderr']['bytes']==0
+    for key in ('wrapper','generator','stdin','stdout','stderr'): verify(pathlib.Path(p[key]['path']), p[key])
+    assert pathlib.Path(p['stdout']['path']).read_bytes() == (B/p['angle']/str(p['seq'])/'body.html').read_bytes()
+passed('Actual canonical proof artifacts and unchanged engines', {'original_replays':6,'final_runs':3,'all_exit':0,'all_stderr_bytes':0,'body_bytes':[4993,5926,10222]})
+
+extra_manifest = []
+for p in sorted(R.glob('*.py')):
+    dst = R/(p.name+'.txt'); dst.write_bytes(p.read_bytes())
+    extra_manifest.append({'original':str(p),'copy':str(dst.relative_to(R)),**{k:v for k,v in pin(p).items() if k!='path'},'purpose':'Exact executable-helper bytes under supported evidence suffix; no semantic rewrite.'})
+skill = pathlib.Path('/Users/adamderickandrade/.codex/plugins/cache/openai-primary-runtime/pdf/26.909.12148/skills/pdf/SKILL.md')
+dst = R/'evidence'/('pdf-skill-'+pin(skill)['sha256']+'.md'); dst.write_bytes(skill.read_bytes())
+extra_manifest.append({'original':str(skill),'copy':str(dst.relative_to(R)),**{k:v for k,v in pin(skill).items() if k!='path'},'purpose':'Read-only PDF skill used for actual physical page review.'})
+put(R/'helper-and-skill-copy-manifest.json', extra_manifest)
+allmaps=[]
+for name in ('original-to-copy-manifest.json','supplemental-to-copy-manifest.json','helper-and-skill-copy-manifest.json'):
+    for m in read(R/name):
+        dest=R/m['copy']; verify(dest,m); assert dest.suffix in SUPPORTED
+        if m.get('original_git_commit'):
+            b=subprocess.check_output(['git','show',m['original_git_commit']+':'+m['repository_relative_path']],cwd=W)
+            assert b==dest.read_bytes()
+            origin='immutable Git object '+m['original_git_commit']+':'+m['repository_relative_path']
+        else:
+            verify(pathlib.Path(m['original']),m); origin=m['original']
+        allmaps.append({'manifest':name,'original':origin,'copy':m['copy'],'bytes':m['bytes'],'sha256':m['sha256']})
+passed('Complete source-to-copy mappings and supported suffixes', {'mappings':len(allmaps),'original_manifest':204,'supplemental_manifest':9,'helper_and_skill_manifest':len(extra_manifest),'immutable_git_pins':sum('immutable Git object' in x['original'] for x in allmaps)})
+put(R/'supported-copy-preflight.json', {'status':'PASS','whitelist':sorted(SUPPORTED),'mappings':allmaps,'raw_formats':'Executable .py helpers are also copied as .py.txt. Original PNG/PDF/DOCX bytes are copied as .png.bin/.pdf.bin/.docx.bin. Raw helpers/renderings remain in the private complete freeze.'})
+
+attempts=[]
+for stem in ('collection','supplement','author','errata-review'):
+    script = {'collection':'collect.py','supplement':'supplement.py','author':'author.py','errata-review':'errata-review.py'}[stem]
+    stdout=R/(stem+'-attempt01.stdout.txt'); stderr=R/(stem+'-attempt01.stderr.txt')
+    assert stderr.read_bytes()==b''
+    attempts.append({'stage':stem,'attempt':1,'executed_python_script':pin(R/script),'python_mode':'-B; PYTHONDONTWRITEBYTECODE=1 inherited by children','observed_tool_exit':0,'stdout':pin(stdout),'stderr':pin(stderr),'record_scope':'Post-run capture of executed script and complete saved streams. Original shell command text was not separately saved; exact canonical subprocess argv/cwd/env/streams/exits are in each invocation.json.'})
+put(R/'attempt-execution-records.json', {'helpers':attempts,'canonical_originals':'original-replay-proof.json','canonical_finals':['../268/generator-proof.json','../269/generator-proof.json','../270/generator-proof.json'],'pdf_extract_and_render':'practice7-physical-review.json and practice7-render-proof.json','historical_failures':'Original root missing-protocol probe and extra-evidence KeyError/EXIT1 plus recovery remain in exact original-to-copy-manifest mappings. Initial PDF text extraction warnings were not redirected in that first shell call; a saved exact replay records the warnings and proves identical extraction bytes. No canonical attempt failed in this reconciliation.'})
+
+content={
+268:[
+"25 spans, 0 nulls, 18 non-null d5 pairs; all 52 original identities have individual dispositions (44 retained, 7 recast, 1 rejected).",
+"Reject the mechanically valid dvangs/sweet pair. Positive dvangs pa/clear, mngar ba/sweet, and C05:251's three distinct qualities support leaving both current words unwrapped; there is no false null or source correction.",
+"Retain one LOW/PROBABLE ENGLISH_FACTUAL_ERROR candidate, sweet, cool water → clear, cool water. All five grounds, original claims, complete source quotes, measured counts, and 192 registered records are addressed in errata-analysis.json and registered-class-check.json.",
+"Shared C15/C18 fields and C16's complete 436-character shared English do not establish independent publication. Actual Practice7 PDF pages 36–37 preserve the disputed reading; page 30, C09:35 and original ILL text/DOCX support the lexical distinction. Deliberate paraphrase or another source reading remains possible.",
+"Merge brten nas grub pas/created by at d3; retain complete de nyid du gnas pa/original condition at d3. Keep tighter gsum and thun mong ma yin pa boundaries, with explicit distributed-inflection omissions.",
+"The first outer world is selected once. First mi'i owns the later singular human karma owner; second mi'i owns humans in the earlier world clause. Earlier grub predicates and repeated liquid/world descriptions remain unwrapped for stated reasons.",
+"Retain d5 sogs/and so on as a lexical closing expression; propose only pages_c05:c5p90/s268w21, licensed by sogs and full HTG2016 HGM20919. No gate or allowance file is changed."],
+269:[
+"34 spans, 1 null, 14 non-null d5 pairs; all 60 original identities have individual dispositions (52 retained, 8 recast). Errata list is empty.",
+"Retain stream of water, pus and blood, and food or drink with both unique d7 siblings each. Source/English member-order crossing remains inside each parent and passes the unchanged generator.",
+"Select some rather than the positively attested wider some kinds of; the taxonomic expansion stays unwrapped. Recast the third yi dvags mention with thams cad as all of them at d3; the fourth owns the final plural craving spirits.",
+"Retain phyi'i/world around them at d3 as the contextual outer-domain relation, supported by the full positive phyi and exact phyi'i records. Nang gi's expanded bodily-parts description remains omitted: body/parts particulars exceed that source relation.",
+"All three can/with links are attributive particles at d6. Keep explicit la/at, gyi/and, yod/there are, full la yod pa'i/relate to at d3, and narrower causal phyir/because at d6.",
+"The active-subject agentive kyis has no separate English word and is explicitly null. Supplied metadiscourse, preventing-relief prose, participants and remaining nominal framing have complete omission records.",
+"All five grounds refute the bodily-parts mismatch suspicion. Full C15/C18/P7 comparisons and actual Practice7 page 37 support an expanded translation; digital matches are not claims of independently published lineage."],
+270:[
+"64 spans, 4 nulls, 43 non-null d5 pairs; all 115 original identities have individual dispositions (104 retained, 11 recast). Errata list is empty.",
+"Retain two complete locally established mantra of steel names, each with steel/mantra d7 siblings; the later abbreviated title retains mantra only. Exact compound-headword lookup is empty; seven local corpus records establish the repeated name, and positive component entries support the members.",
+"Keep tighter skye ba/start to be and dmar 'bar ba/red-hot lexical boundaries with the two red/hot members. Can/with is attributive d6; cig car du/all together is a complete simultaneous-viewing phrase at d3.",
+"Split gzhan zhig/some other into gzhan/other d5 and zhig/some d6. Initial yod owns There is; source byas pa owns only the second provides. The two source numerals own the first and third three, leaving three karmas as a contextual reprise.",
+"All four reg bya occurrences own their four sensations in order. Experience predicates own undergo, feels, feel, then an explicit elliptical null under the coordinated no-other-sensation object. Three active agentives supply the other nulls; three negations retain distinct scopes.",
+"Later time clauses, supplied auxiliaries/participants, the first provides, and the third title's unexpressed steel are omitted with reasons. Complete exact complements include all remaining unwrapped text.",
+"All five grounds refute an experiential-ellipsis defect and a misplaced P7 cold claim. Digital P7:25 is the following moon/sun passage; actual physical PDF pages 37–38 do contain the full steel example. The cold wording belongs to the following example, not C05:270."]}
+for item in summary:
+    seq=item['seq']; D=R.parent/str(seq); p=read(D/'generator-proof.json')
+    lines=[f"PROVISIONAL C05:{seq} reconciliation — reused Codex non-author c05_253_255_reconcile.",
+           "Original producers: primary/root Codex (Tibetan-first with prior preparation) and reused peer c05_262_264_english (English-first). No fresh-context or human editorial acceptance claim.",
+           ""] + content[seq] + [
+           "",
+           f"Actual final generator: EXIT=0; body={p['body']['bytes']} bytes; stderr=0 bytes. Exact argv, stdin, stdout, stderr, exit and engine/wrapper hashes: generator-proof.json and attempts/01/.",
+           f"spec.json: {p['spec']['bytes']} bytes; SHA256 {p['spec']['sha256']}.",
+           f"body.html: {p['body']['bytes']} bytes; SHA256 {p['body']['sha256']}.",
+           "Every final ordered seven-key tuple and rationale: resolved-spans.json and final-decisions.json. Every original eight-key identity, object, optional-field presence, range and disposition: original-dispositions.json. Full original differences: original-to-final.diff.txt.",
+           "Meaningful omissions and exact full complements: omissions.json and unwrapped-extents.json. Erratum decisions and full witness comparisons: errata.json, errata-analysis.json, parallel-comparisons-full.json.",
+           "Shared immutable original/evidence copies live once in ../268/evidence/; original-to-copy-manifest.json, supplemental-to-copy-manifest.json and helper-and-skill-copy-manifest.json preserve absolute source paths, hashes, bytes and immutable Git object mappings.",
+           "Shared evidence includes 234 original/current query sets plus 3 comparative queries, 94 full master entries, 137 corpus objects, 24 full ASCII witness extents, full ILL logical paragraphs/XML and four visually reviewed physical PDF pages. final-source-pin-check.json adds the final unchanged-source query.",
+           "All six original canonical replays are exact; all three final runs use the unchanged canonical generator through a saved SQLite read-only wrapper. Complete attempts and historical failures are retained; supported-copy-preflight.json and final-audit.json record the final checks.",
+           "Consumed data baseline f3c1ca804a933d53f84214d6968a84e7e0193c6e; governing snapshots 2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812. Current repository 2487bfcd73a1463d135a4544a01535ba5c99cab0 changes none of those inputs. No repository/source/master/allowance edits or commits.",
+           "Complete private enumeration and hashes: freeze.json. Shared packaging and execution details are in ../268/."
+    ]
+    assert 10 <= len(lines) <= 25
+    (D/'report.md').write_text('\n'.join(lines)+'\n')
+status=subprocess.run(['git','status','--short'],cwd=W,capture_output=True)
+head=subprocess.run(['git','rev-parse','HEAD'],cwd=W,capture_output=True)
+assert status.returncode==head.returncode==0 and head.stdout.decode().strip()=='2487bfcd73a1463d135a4544a01535ba5c99cab0'
+assert status.stdout.decode()=='?? data/teaching/dcc_captions\n'
+put(R/'repository-readonly-check.json', {'commands':[{'argv':['git','status','--short'],'cwd':str(W),'exit':status.returncode,'stdout':status.stdout.decode(),'stderr':status.stderr.decode()},{'argv':['git','rev-parse','HEAD'],'cwd':str(W),'exit':head.returncode,'stdout':head.stdout.decode(),'stderr':head.stderr.decode()}],'conclusion':'No tracked repository changes. The existing untracked captions entry matches the pre-finalization observation and was not touched.'})
+passed('Repository/source scope and unchanged tracked files', {'HEAD':head.stdout.decode().strip(),'status':status.stdout.decode()})
+put(R/'final-audit.json', {'status':'PASS','producer':collection['producer'],'checks':checks,'summary':summary,'source_query_total_note':'234 stored initial sets + 3 comparative sets + 1 final exact-source pin query = 238 saved query sets; internal PRAGMA calls and initial separate source read are not advertised as lexical evidence sets.','semantic_limit':'Mechanical checks establish faithful source slices, provenance and canonical output; independent semantic review remains a separate gate. PROVISIONAL is not editorial acceptance.'})
+print(json.dumps({'status':'PASS','checks':len(checks),'spans':123,'nulls':5,'originals':227,'mapping_count':len(allmaps),'reports':[str(R.parent/str(x)/'report.md') for x in (268,269,270)]}))

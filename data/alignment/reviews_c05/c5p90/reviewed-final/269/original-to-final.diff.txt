@@ -1,0 +1,385 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/tibetan/269/spec.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/269/spec.json
+@@ -26,6 +26,18 @@
+           "eng": "stream of water"
+         },
+         {
++          "id": "m5",
++          "d": 7,
++          "tib": "chu",
++          "eng": "water"
++        },
++        {
++          "id": "m6",
++          "d": 7,
++          "tib": "klung",
++          "eng": "stream"
++        },
++        {
+           "id": "p2",
+           "d": 6,
+           "tib": "la",
+@@ -83,7 +95,7 @@
+           "id": "w7",
+           "d": 5,
+           "tib": "'ga' zhig",
+-          "eng": "some kinds of"
++          "eng": "some"
+         },
+         {
+           "id": "p5",
+@@ -93,9 +105,9 @@
+         },
+         {
+           "id": "w8",
+-          "d": 5,
+-          "tib": "thams cad",
+-          "eng": "all"
++          "d": 3,
++          "tib": "yi dvags thams cad",
++          "eng": "all of them"
+         },
+         {
+           "id": "p6",
+@@ -123,7 +135,7 @@
+         },
+         {
+           "id": "w11",
+-          "d": 5,
++          "d": 6,
+           "tib": "can",
+           "eng": "with"
+         },
+@@ -135,7 +147,7 @@
+         },
+         {
+           "id": "w13",
+-          "d": 5,
++          "d": 6,
+           "tib": "can",
+           "eng": "with"
+         },
+@@ -177,7 +189,7 @@
+         },
+         {
+           "id": "w16",
+-          "d": 5,
++          "d": 6,
+           "tib": "can",
+           "eng": "with"
+         },
+@@ -195,8 +207,8 @@
+         },
+         {
+           "id": "q3",
+-          "d": 3,
+-          "tib": "pa'i phyir",
++          "d": 6,
++          "tib": "phyir",
+           "eng": "because"
+         }
+       ],
+@@ -229,7 +241,7 @@
+         "w14",
+         "p7"
+       ],
+-      "note": "PROVISIONAL machine alignment by Codex, Tibetan-first original with own prior source preparation, isolated from the English draft. The third Tibetan yi dvags is resumed as them in not all of them and is omitted; the fourth source mention owns the second plural craving spirits. The explicit some-kinds quantifier is supported by full HTG2545, while only/talking-about and copular frames remain unwrapped. First outer relation phyi'i is preserved at phrase depth against the positive world around them equivalent. The expanded inner-obstacle description parts of their bodies has no safely separate inner word and remains unwrapped; the actual second obstacles/with atoms are preserved. The third category retains food/drink, reflexive itself and the complete relate-to relation. Source grammar does not license harvesting the full explanatory prevention-of-relief sentence. Two paired compounds each have two unique tighter members. No new errata; identical C15/C18 fields and P7 English establish digital identity only, not independent publication history."
++      "note": "PROVISIONAL machine reconciliation by reused Codex non-author c05_253_255_reconcile. Original producers were primary Codex, Tibetan-first with prior preparation, and reused peer c05_262_264_english, English-first. This is not human editorial acceptance. The four yi dvags mentions have distinct roles: the singular perceiver, first plural group, the complete yi dvags thams cad/all of them phrase, and final plural taxonomy. The stream-of-water compound retains both unique chu/water and klung/stream members despite their crossing English order; pus/blood and food/drink likewise retain their two siblings. The indefinite quantifier owns some; the wider positive some kinds of variant is acknowledged but kinds of is left as taxonomic expansion. Phyi'i/world around them retains the complete contextual outer-domain relation at d3, while nang gi's bodily-parts expansion remains omitted. All three can/with instances are attributive particles at d6; la/at, gyi/and, existential yod/there are and causal phyir/because have explicit exponents. The agentive kyis has no separate word in the active English subject and is null. La yod pa'i/relate to is a complete grammatical relation. Expanded participants, prevention-of-relief prose and copular framing remain unwrapped. No source or dictionary edit is made."
+     }
+   ]
+ }
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/english/269/spec.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/269/spec.json
+@@ -3,7 +3,7 @@
+   "segments": [
+     {
+       "seq": 269,
+-      "title": "types of craving spirits",
++      "title": "three kinds of craving spirit obstacles",
+       "spans": [
+         {
+           "id": "w1",
+@@ -12,195 +12,236 @@
+           "eng": "craving spirit"
+         },
+         {
++          "id": "p1",
++          "d": 6,
++          "tib": "kyis",
++          "eng": null,
++          "cls": "case",
++          "nul": "Active-subject agentive case has no separately expressed English word."
++        },
++        {
+           "id": "w2",
+           "d": 5,
+           "tib": "chu klung",
+           "eng": "stream of water"
+         },
+         {
+-          "id": "w3",
++          "id": "m5",
+           "d": 7,
+           "tib": "chu",
+           "eng": "water"
+         },
+         {
+-          "id": "w4",
++          "id": "m6",
+           "d": 7,
+           "tib": "klung",
+           "eng": "stream"
+         },
+         {
+-          "id": "w5",
++          "id": "p2",
++          "d": 6,
++          "tib": "la",
++          "eng": "at"
++        },
++        {
++          "id": "w3",
+           "d": 5,
+           "tib": "bltas pa",
+           "eng": "looks"
+         },
+         {
+-          "id": "w6",
++          "id": "p3",
+           "d": 6,
+           "tib": "na",
+           "eng": "When"
+         },
+         {
+-          "id": "w7",
++          "id": "w4",
+           "d": 5,
+           "tib": "rnag khrag",
+           "eng": "pus and blood"
+         },
+         {
+-          "id": "w8",
++          "id": "m1",
+           "d": 7,
+           "tib": "rnag",
+           "eng": "pus"
+         },
+         {
+-          "id": "w9",
++          "id": "m2",
+           "d": 7,
+           "tib": "khrag",
+           "eng": "blood"
+         },
+         {
+-          "id": "w10",
++          "id": "w5",
+           "d": 5,
+           "tib": "mthong ba",
+           "eng": "sees"
+         },
+         {
+-          "id": "w11",
++          "id": "p4",
+           "d": 6,
+           "tib": "yang",
+           "eng": "by the way"
+         },
+         {
+-          "id": "w12",
++          "id": "w6",
+           "d": 5,
+           "tib": "yi dvags",
+           "eng": "craving spirits"
+         },
+         {
+-          "id": "w13",
++          "id": "w7",
+           "d": 5,
+           "tib": "'ga' zhig",
+           "eng": "some"
+         },
+         {
+-          "id": "w14",
++          "id": "p5",
++          "d": 6,
++          "tib": "gyi",
++          "eng": "and"
++        },
++        {
++          "id": "w8",
+           "d": 3,
+           "tib": "yi dvags thams cad",
+           "eng": "all of them"
+         },
+         {
+-          "id": "w15",
++          "id": "p6",
+           "d": 6,
+           "tib": "ma",
+           "eng": "not"
+         },
+         {
+-          "id": "w16",
++          "id": "w9",
+           "d": 5,
+           "tib": "yi dvags",
+           "eng": "craving spirits"
+         },
+         {
+-          "id": "w17",
++          "id": "q1",
++          "d": 3,
++          "tib": "phyi'i",
++          "eng": "world around them"
++        },
++        {
++          "id": "w10",
+           "d": 5,
+           "tib": "sgrib pa",
+           "eng": "obstacles"
+         },
+         {
+-          "id": "w18",
++          "id": "w11",
+           "d": 6,
+           "tib": "can",
+           "eng": "with"
+         },
+         {
+-          "id": "w19",
++          "id": "w12",
+           "d": 5,
+           "tib": "sgrib pa",
+           "eng": "obstacles"
+         },
+         {
+-          "id": "w20",
++          "id": "w13",
+           "d": 6,
+           "tib": "can",
+           "eng": "with"
+         },
+         {
+-          "id": "w21",
+-          "d": 5,
++          "id": "w14",
++          "d": 5,
++          "tib": "zas skom",
++          "eng": "food or drink"
++        },
++        {
++          "id": "m3",
++          "d": 7,
+           "tib": "zas",
+           "eng": "food"
+         },
+         {
+-          "id": "w22",
+-          "d": 5,
++          "id": "m4",
++          "d": 7,
+           "tib": "skom",
+           "eng": "drink"
+         },
+         {
+-          "id": "w23",
++          "id": "p7",
+           "d": 6,
+           "tib": "nyid",
+           "eng": "itself"
+         },
+         {
+-          "id": "w24",
++          "id": "q2",
+           "d": 3,
+           "tib": "la yod pa'i",
+           "eng": "relate to"
+         },
+         {
+-          "id": "w25",
++          "id": "w15",
+           "d": 5,
+           "tib": "sgrib pa",
+           "eng": "obstacles"
+         },
+         {
+-          "id": "w26",
++          "id": "w16",
+           "d": 6,
+           "tib": "can",
+           "eng": "with"
+         },
+         {
+-          "id": "w27",
++          "id": "w17",
+           "d": 5,
+           "tib": "du ma",
+           "eng": "many"
+         },
+         {
+-          "id": "w28",
++          "id": "w18",
++          "d": 5,
++          "tib": "yod",
++          "eng": "there are"
++        },
++        {
++          "id": "q3",
+           "d": 6,
+           "tib": "phyir",
+           "eng": "because"
+         }
+       ],
+       "eng_order": [
++        "p3",
++        "w1",
++        "w3",
++        "p2",
++        "w2",
++        "w5",
++        "w4",
++        "p4",
++        "w7",
+         "w6",
+-        "w1",
+-        "w5",
+-        "w2",
++        "p5",
++        "p6",
++        "w8",
++        "q3",
++        "w18",
++        "w17",
++        "w9",
++        "w11",
+         "w10",
+-        "w7",
+-        "w11",
++        "q1",
+         "w13",
+         "w12",
++        "w16",
+         "w15",
++        "q2",
+         "w14",
+-        "w28",
+-        "w27",
+-        "w16",
+-        "w18",
+-        "w17",
+-        "w20",
+-        "w19",
+-        "w26",
+-        "w25",
+-        "w24",
+-        "w21",
+-        "w22",
+-        "w23"
++        "p7"
+       ],
+-      "note": "Provisional machine alignment by Codex, reused English-first original reader; no fresh-context, human-review or semantic-approval claim. The four source yi dvags instances have distinct roles: singular craving spirit, plural craving spirits, the anaphoric phrase yi dvags thams cad / all of them, and the second plural craving spirits. The three sgrib pa/can instances select obstacles/with in order. phyi'i and nang are omitted because the English expands them into descriptions of environment and bodily obstacles; no unrelated word is forced into their place and no null asserts absence. la yod pa'i / relate to is a grammatical phrase recast. Supplementary some, kinds, participants, prevent-relieving wording and auxiliary frames remain unwrapped. chu/klung and rnag/khrag are strictly tighter compound members, with English member order resolved inside the parent."
++      "note": "PROVISIONAL machine reconciliation by reused Codex non-author c05_253_255_reconcile. Original producers were primary Codex, Tibetan-first with prior preparation, and reused peer c05_262_264_english, English-first. This is not human editorial acceptance. The four yi dvags mentions have distinct roles: the singular perceiver, first plural group, the complete yi dvags thams cad/all of them phrase, and final plural taxonomy. The stream-of-water compound retains both unique chu/water and klung/stream members despite their crossing English order; pus/blood and food/drink likewise retain their two siblings. The indefinite quantifier owns some; the wider positive some kinds of variant is acknowledged but kinds of is left as taxonomic expansion. Phyi'i/world around them retains the complete contextual outer-domain relation at d3, while nang gi's bodily-parts expansion remains omitted. All three can/with instances are attributive particles at d6; la/at, gyi/and, existential yod/there are and causal phyir/because have explicit exponents. The agentive kyis has no separate word in the active English subject and is null. La yod pa'i/relate to is a complete grammatical relation. Expanded participants, prevention-of-relief prose and copular framing remain unwrapped. No source or dictionary edit is made."
+     }
+   ]
+ }

@@ -1,0 +1,38 @@
+"""Create the isolated candidates from preserved baseline bytes, preserving a diff."""
+from pathlib import Path
+import difflib
+
+HERE=Path(__file__).resolve().parent
+
+def save(name,old,new):
+    assert new!=old
+    (HERE/name).write_text(new)
+    (HERE/(name+'.diff')).write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='baseline/'+name,tofile=name)))
+
+old=(HERE/'baseline/prepare-whitespace-pins.py').read_text()
+new=old.replace('import datetime\n','import datetime\nimport subprocess\nfrom witnesses import verify_frozen, verify_formatter, verify_physical, verify_root_log\nfrom prepare_witnesses import prepare_witnesses, meta\n',1)
+new=new.replace('b = Path(__file__).resolve().parent\n',"candidate = Path(__file__).resolve().parent\nb = candidate.parent / 'C05-268-270'\n",1)
+new=new.replace("out = b / 'landing'\nraw_log = (out / 'whitespace-preflight.stdout').read_bytes()", "out = candidate / 'prepared'\nout.mkdir(exist_ok=False)\nraw_log = (b / 'landing/whitespace-preflight.stdout').read_bytes()\nassert raw_log == (candidate / 'inputs/whitespace-preflight.stdout').read_bytes()",1)
+new=new.replace("pins, details = {}, {}", "assert (rev / 'freeze.json').read_bytes() == (candidate / 'inputs/freeze.json').read_bytes()\nspecial, witness_proof = prepare_witnesses(candidate, b, wt, freeze, issues)\npins, details = {}, {}",1)
+new=new.replace("    digest = hashlib.sha256(raw).hexdigest()", "    staged = subprocess.check_output(['git', 'show', ':' + name], cwd=wt)\n    assert staged == raw, name\n    digest = hashlib.sha256(raw).hexdigest()",1)
+new=new.replace("    else:\n        prefix = 'data/alignment/reviews_c05/c5p90/'", "    elif name == 'data/alignment/reviews_c05/c5p90/landing-proof/course-index.stdout':\n        rel = 'landing-proof/course-index.stdout'\n        pin = dict(kind='root_course_index_blank_eof', bytes=len(raw), sha256=digest,\n            original=meta(b/'landing/course-index.stdout'),\n            manifest=meta(b/'landing/root-proof-copy-manifest-before-whitespace.json'),\n            execution=meta(b/'landing/course-index.execution.json'))\n        assert Path(pin['manifest']['path']).read_bytes() == (candidate/'inputs/root-before-whitespace-manifest.json').read_bytes()\n        assert Path(pin['execution']['path']).read_bytes() == (candidate/'inputs/root-course-index.execution.json').read_bytes()\n        witness_proof[rel] = verify_root_log(raw, staged, rel, dict(kinds), pin, b, wt/'data/alignment/reviews_c05/c5p90/landing-proof')\n        pins[rel] = pin\n        category = pin['kind']\n    else:\n        prefix = 'data/alignment/reviews_c05/c5p90/'",1)
+new=new.replace("        if set(kinds) == {'trailing whitespace.'}", "        if rel in special:\n            pin.update(special[rel])\n            verify_frozen(raw, staged, rel, pin, rev, freeze)\n            if pin['kind'] == 'retained_print_separator':\n                witness_proof[rel] = verify_formatter(raw, dict(kinds), pin, rev, freeze)\n            else:\n                verify_physical(raw, dict(kinds), pin)\n            category = pin['kind']\n        elif set(kinds) == {'trailing whitespace.'}",1)
+new=new.replace("'status': 'PASS classification; strict v6 staged audit required'", "'status': 'PASS candidate classification; independent review and candidate staged audit still required'")
+new=new.replace("        pins[rel] = pin\n        category = pin['kind']", "        for banked_name in ('root-proof-copy-manifest-before-whitespace.json', 'course-index.execution.json'):\n            banked_path = 'data/alignment/reviews_c05/c5p90/landing-proof/' + banked_name\n            assert subprocess.check_output(['git', 'show', ':' + banked_path], cwd=wt) == (wt/banked_path).read_bytes()\n        pins[rel] = pin\n        category = pin['kind']",1)
+new=new.replace("str(out/'whitespace-preflight.stdout')", "str(b/'landing/whitespace-preflight.stdout')")
+new += "\n(out / 'special-witness-proof.json').write_text(json.dumps(witness_proof, ensure_ascii=False, indent=2) + '\\n')\n"
+save('prepare-whitespace-pins.py',old,new)
+
+old=(HERE/'baseline/audit_staged_source_whitespace_v6.py').read_text()
+new=old.replace('import sys\n','import sys\nimport os\nfrom witnesses import verify_formatter, verify_physical, verify_root_log\n',1)
+new=new.replace("art = Path(__file__).resolve().parent", "candidate = Path(__file__).resolve().parent\nart = candidate.parent",1)
+new=new.replace("out = batch / 'landing'", "out = Path(os.environ.get('WHITESPACE_AUDIT_OUTPUT', str(candidate / 'audit-output'))).resolve()\nout.mkdir(parents=True, exist_ok=False)",1)
+new=new.replace("exact_path = out / 'review-whitespace-exact-pins.json'", "exact_path = candidate / 'prepared/review-whitespace-exact-pins.json'",1)
+new=new.replace("(out / 'root-semantic-acceptance-proof.json')", "(batch / 'landing/root-semantic-acceptance-proof.json')",1)
+new=new.replace("    elif path == f'data/alignment/reviews_c05/c5p{page}/review.md':", "    elif path == 'data/alignment/reviews_c05/c5p90/landing-proof/course-index.stdout':\n        assert page == 90 and first == 268\n        pin = exact['landing-proof/course-index.stdout']\n        verify_root_log(raw, staged, 'landing-proof/course-index.stdout', dict(grouped), pin, batch, wt/'data/alignment/reviews_c05/c5p90/landing-proof')\n        reason = 'Exact original root course-index execution output and 128-file manifest; only empty bytes from line24 through EOF'\n        originals = [pin[k]['path'] for k in ('original', 'manifest', 'execution')]\n    elif path == f'data/alignment/reviews_c05/c5p{page}/review.md':",1)
+new=new.replace("        reason = 'Exact original root course-index execution output", "        for banked_name in ('root-proof-copy-manifest-before-whitespace.json', 'course-index.execution.json'):\n            banked_path = 'data/alignment/reviews_c05/c5p90/landing-proof/' + banked_name\n            assert subprocess.check_output(['git', 'show', ':' + banked_path], cwd=wt) == (wt/banked_path).read_bytes()\n        reason = 'Exact original root course-index execution output",1)
+new=new.replace("        if pin['kind'] == 'physical_bytes':\n            witness", "        if pin['kind'] == 'retained_print_separator':\n            verify_formatter(raw, dict(grouped), pin, review_root, review_freeze)\n        elif pin['kind'] == 'physical_bytes':\n            if 'zip_source' in pin:\n                verify_physical(raw, dict(grouped), pin)\n            witness",1)
+new=new.replace("exact original physical byte ranges/complete physical lines'", "exact original physical byte ranges/complete physical lines, or the explicitly pinned retained print separator'",1)
+new=new.replace("        if pin['kind'] == 'physical_bytes':\n            originals", "        if pin['kind'] == 'retained_print_separator':\n            originals = [str(original)] + [pin[k]['path'] for k in ('producer', 'stdout_original', 'database', 'corpus')]\n        elif pin['kind'] == 'physical_bytes':\n            originals",1)
+new=new.replace("            originals = [str(original), pin['witness']['path']]", "            originals = [str(original), pin['witness']['path']]\n            if 'zip_source' in pin:\n                originals.append(pin['zip_source']['path'])",1)
+save('audit_staged_source_whitespace_candidate.py',old,new)

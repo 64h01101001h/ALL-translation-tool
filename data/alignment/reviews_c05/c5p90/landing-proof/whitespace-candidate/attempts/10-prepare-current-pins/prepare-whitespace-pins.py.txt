@@ -1,0 +1,108 @@
+from pathlib import Path
+from collections import defaultdict, Counter
+import hashlib
+import json
+import re
+import datetime
+import subprocess
+from witnesses import verify_frozen, verify_formatter, verify_physical, verify_root_log
+from prepare_witnesses import prepare_witnesses, meta
+
+candidate = Path(__file__).resolve().parent
+b = candidate.parent / 'C05-268-270'
+wt = b.parent.parent / 'campaign-worktree'
+rev = b / 'semantic-review'
+out = candidate / 'prepared'
+out.mkdir(exist_ok=False)
+raw_log = (b / 'landing/whitespace-preflight.stdout').read_bytes()
+assert raw_log == (candidate / 'inputs/whitespace-preflight.stdout').read_bytes()
+issues = defaultdict(lambda: defaultdict(list))
+rx = re.compile(rb'^([^+\n]+):([0-9]+): (.+)$')
+for line in raw_log.split(b'\n'):
+    m = rx.match(line)
+    if m:
+        p, n, kind = m.groups()
+        issues[p.decode()][kind.decode()].append(int(n))
+    else:
+        assert not line.strip() or line.startswith(b'+')
+physical = {}
+for x in json.loads((rev / 'original-to-copy-manifest.json').read_text()):
+    if x['original'].endswith('ReadingASCII.txt'):
+        p = Path(x['original'])
+        raw = p.read_bytes()
+        assert len(raw) == x['bytes'] and hashlib.sha256(raw).hexdigest() == x['sha256']
+        physical[str(p)] = {'pin': {'path': str(p), 'bytes': len(raw), 'sha256': x['sha256']}, 'raw': raw}
+physical_keys = {(x['pin']['bytes'], x['pin']['sha256']) for x in physical.values()}
+freeze = {x['path']: x for x in json.loads((rev / 'freeze.json').read_text())['files']}
+assert (rev / 'freeze.json').read_bytes() == (candidate / 'inputs/freeze.json').read_bytes()
+special, witness_proof = prepare_witnesses(candidate, b, wt, freeze, issues)
+pins, details = {}, {}
+classes = Counter()
+csvs = {'docs/geshe_michael_roach_dictionary' + suffix for suffix in ('.csv', '_reverse.csv', '_by_course.csv', '_changes.csv')}
+for name, kinds in issues.items():
+    raw = (wt / name).read_bytes()
+    staged = subprocess.check_output(['git', 'show', ':' + name], cwd=wt)
+    assert staged == raw, name
+    digest = hashlib.sha256(raw).hexdigest()
+    lines = raw.split(b'\n')
+    if name in csvs:
+        category = 'canonical_csv'
+    elif (len(raw), digest) in physical_keys:
+        category = 'whole_original_physical'
+    elif name == 'data/alignment/reviews_c05/c5p90/landing-proof/course-index.stdout':
+        rel = 'landing-proof/course-index.stdout'
+        pin = dict(kind='root_course_index_blank_eof', bytes=len(raw), sha256=digest,
+            original=meta(b/'landing/course-index.stdout'),
+            manifest=meta(b/'landing/root-proof-copy-manifest-before-whitespace.json'),
+            execution=meta(b/'landing/course-index.execution.json'))
+        assert Path(pin['manifest']['path']).read_bytes() == (candidate/'inputs/root-before-whitespace-manifest.json').read_bytes()
+        assert Path(pin['execution']['path']).read_bytes() == (candidate/'inputs/root-course-index.execution.json').read_bytes()
+        witness_proof[rel] = verify_root_log(raw, staged, rel, dict(kinds), pin, b, wt/'data/alignment/reviews_c05/c5p90/landing-proof')
+        pins[rel] = pin
+        category = pin['kind']
+    else:
+        prefix = 'data/alignment/reviews_c05/c5p90/'
+        assert name.startswith(prefix)
+        rel = name[len(prefix):]
+        assert rel in freeze and raw == (rev / rel).read_bytes() and digest == freeze[rel]['sha256']
+        pin = {'bytes': len(raw), 'sha256': digest}
+        if rel in special:
+            pin.update(special[rel])
+            verify_frozen(raw, staged, rel, pin, rev, freeze)
+            if pin['kind'] == 'retained_print_separator':
+                witness_proof[rel] = verify_formatter(raw, dict(kinds), pin, rev, freeze)
+            else:
+                verify_physical(raw, dict(kinds), pin)
+            category = pin['kind']
+        elif set(kinds) == {'trailing whitespace.'} and all(lines[n-1] == b' ' for n in kinds['trailing whitespace.']) and all(marker in raw for marker in (b'@@ ', b'--- ', b'+++ ')):
+            category = 'diff_context'
+        elif set(kinds) == {'new blank line at EOF.'} and all(not b''.join(lines[n-1:]).strip() for n in kinds['new blank line at EOF.']):
+            category = 'blank_eof'
+        else:
+            assert set(kinds) == {'trailing whitespace.'}, (name, kinds)
+            witnesses = {}
+            for n in kinds['trailing whitespace.']:
+                value = lines[n-1]
+                matches = []
+                for physical_path, item in physical.items():
+                    source = item['raw']
+                    for m in re.finditer(re.escape(value), source):
+                        lo, hi = m.span()
+                        if (lo == 0 or source[lo-1:lo] == b'\n') and source[hi:hi+1] in (b'\r', b'\n'):
+                            matches.append({'witness': item['pin'], 'byte_range': [lo, hi]})
+                assert matches, ('No exact complete physical line witness', name, n, value)
+                witnesses[str(n)] = matches[0]
+            category = 'physical_source_lines'
+            pin['line_witnesses'] = witnesses
+        pin['kind'] = category
+        pins[rel] = pin
+    count = sum(map(len, kinds.values()))
+    classes[category] += count
+    details[name] = {'category': category, 'warnings': count}
+for name, obj in [('review-whitespace-exact-pins.json', pins), ('whitespace-classification-preflight.json', {'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'status': 'PASS candidate classification; independent review and candidate staged audit still required', 'classes': dict(classes), 'details': details, 'raw_log_bytes': len(raw_log), 'raw_log_sha256': hashlib.sha256(raw_log).hexdigest(), 'raw_log_path': str(b/'landing/whitespace-preflight.stdout')})]:
+    p = out / name
+    assert not p.exists()
+    p.write_text(json.dumps(obj, indent=2) + '\n')
+print(json.dumps({'classes': dict(classes), 'exact_review_pins': len(pins)}))
+
+(out / 'special-witness-proof.json').write_text(json.dumps(witness_proof, ensure_ascii=False, indent=2) + '\n')

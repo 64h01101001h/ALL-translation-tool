@@ -1,0 +1,54 @@
+{
+  "utc": "2026-09-13T00:28:29.584274+00:00",
+  "status": "PASS independent code/provenance verification",
+  "spec_verdict": "APPROVE for bounded270 tooling only",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "candidate_freeze_sha256": "af8db137b011bf7accfdfda477ae506609a5acb80f73f1c6c2975049b00a9538",
+  "candidate_files": 434,
+  "candidate_bytes": 818971825,
+  "exact_diffs_verified": 2,
+  "all16_pins_reopened_against_actual_staged_and_original_bytes": true,
+  "full_six_source_rows_reopened_for_each_formatter_alias": true,
+  "fresh_witness_tests": 16,
+  "fresh_dispatch_tests": 1,
+  "dispatch_test_uses_test_git_transport": true,
+  "real_current_staged_witnesses_verified_separately": true,
+  "candidate_unchanged": true,
+  "actual_full_staged_audit": "PENDING; next action uses fresh output directory",
+  "source_normalization": false,
+  "runs": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-root-review-270/test_witnesses.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-root-review-270",
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "WHITESPACE_AUDIT_OUTPUT": "unset"
+      },
+      "started_at": "2026-09-13T00:28:28.509072+00:00",
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 2716
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-root-review-270/test_audit_dispatch.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-root-review-270",
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "WHITESPACE_AUDIT_OUTPUT": "unset"
+      },
+      "started_at": "2026-09-13T00:28:28.866096+00:00",
+      "exit": 0,
+      "stdout_bytes": 1033,
+      "stderr_bytes": 266
+    }
+  ]
+}

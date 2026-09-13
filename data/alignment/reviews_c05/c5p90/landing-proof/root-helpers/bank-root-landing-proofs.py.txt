@@ -1,0 +1,40 @@
+"""Preserve actual root landing proofs without modifying semantic-review inputs."""
+from pathlib import Path
+import datetime, hashlib, json, re
+b=Path(__file__).resolve().parent; art=b.parent; wt=art.parent/'campaign-worktree'; out=b/'landing'
+dest=wt/'data/alignment/reviews_c05/c5p90/landing-proof'
+assert not dest.exists()
+raw=(out/'ctest-17.stdout').read_text()
+passed=re.findall(r'^\s*(\d+)/17 Test\s+#(\d+): ([a-z_]+) .* Passed\s+([0-9.]+) sec$',raw,re.M)
+assert len(passed)==17 and [int(x[0]) for x in passed]==list(range(1,18))
+assert (out/'ctest-17.exit').read_text()=='0\n' and (out/'ctest-17.stderr').read_bytes()==b''
+assert '100% tests passed out of 17' in raw and 'Total Test time (real) =  12.29 sec' in raw
+assert 'COVERAGE C05: 270/511' in (out/'build-layer.stdout').read_text()
+assert (out/'history/build-attempt01-unregistered/build-layer.stdout').read_text().startswith('COVERAGE C05: 267/511')
+proof={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'actual_test_records':[{'ordinal':int(i),'ctest_id':int(k),'name':n,'seconds':float(t)} for i,k,n,t in passed],'ctest_exit':0,'test_runs_for_batch':1,'builders_runs_each_for_batch':2,'first_build_unregistered_preserved':True,'corrected_coverage':270}
+(out/'ctest-17-root-verification.json').write_text(json.dumps(proof,indent=2)+'\n')
+records=[]; external=[]
+def copy(source, relative):
+ raw=source.read_bytes(); target=dest/relative
+ assert not target.exists();target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+ assert target.read_bytes()==raw
+ records.append({'original':str(source),'copy':str(relative),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()})
+for p in sorted(out.rglob('*')):
+ if not p.is_file():continue
+ rel=p.relative_to(out)
+ if p.name=='previous-main-csv-seed.bin' or 'generated-outputs' in rel.parts:
+  raw=p.read_bytes();external.append({'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'disposition':'Complete actual bytes retained at external historical/seed path; not a banked semantic-review copy'})
+ else:copy(p,rel)
+for name in ['verify_semantic_acceptance.py','land_reviewed_page.py','verify_review_copy_and_register.py','run_reviewed_builders_once.py','verify_landed_batch.py','verify_course_csv.py','audit_staged_source_whitespace_v6.py','run_tool_readonly_sqlite.py','run_generator_readonly.py']:
+ copy(art/name,Path(name+'.txt'))
+for p in sorted(b.glob('*.py')):copy(p,Path('root-helpers')/(p.name+'.txt'))
+for p in sorted(b.glob('*.json')):
+ if p.name.startswith(('root-','primary-','proposal-role','semantic-dispatch')):copy(p,Path('root-dispatch')/p.name)
+for pattern in ['root-initial-semantic-*','root-correction-01-attempt01.*','initial-semantic-boundary-attempt*']:
+ for p in sorted(b.glob(pattern)):
+  if p.is_file() and not any(x['original']==str(p) for x in records):copy(p,Path('root-attempt-history')/(p.name if p.suffix!='.py' else p.name+'.txt'))
+manifest={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'semantic_review_unchanged':True,'files':records,'external_actual_bytes_retained':external}
+raw=json.dumps(manifest,indent=2)+'\n'
+(out/'root-proof-copy-manifest-before-whitespace.json').write_text(raw)
+(dest/'root-proof-copy-manifest-before-whitespace.json').write_text(raw)
+print(json.dumps({'copied':len(records),'external_retained':len(external),'ctest17':'PASS','builders_each':2,'destination':str(dest)}))

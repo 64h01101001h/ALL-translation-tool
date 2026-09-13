@@ -1,0 +1,42 @@
+"""Verify current independent approval and its preserved initial history."""
+from pathlib import Path
+import datetime, hashlib, json
+
+B=Path(__file__).resolve().parent
+R=B/'semantic-review'
+H=B/'pre-correction-01'
+O=B/'landing/root-semantic-freeze-verification.json'
+assert not O.exists()
+def read(p):return json.loads(p.read_text())
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def check(p,r):assert pin(p)=={k:r[k] for k in ['bytes','sha256']},p
+meta=read(R/'review.json');assert meta['verdict']==meta['spec_verdict']==meta['quality_verdict']=='APPROVE' and meta['open_findings']==[]
+assert meta['initial_verdict']=='NEEDS_CORRECTION' and meta['resolved_findings']==['C05-268-ERRATA-01']
+freeze=read(R/'freeze.json')
+actual={str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()}
+assert actual=={r['path'] for r in freeze['files']}|{'freeze.json'}
+assert len(freeze['files'])==1394
+for row in freeze['files']:check(R/row['path'],row)
+for p in (H/'semantic-review').rglob('*'):
+    if p.is_file():assert p.read_bytes()==(R/'history/initial-review'/p.relative_to(H/'semantic-review')).read_bytes()
+for row in read(B/'root-initial-semantic-verification.json')['history_files']:check(Path(row['copy']),row)
+transport=read(R/'correction-01/history-transport.json');assert len(transport)==936
+for row in transport:
+    assert row['consumed_pin']==row['historical_pin']
+    source=Path(row['immutable_historical_source']);copy=R/row['current_review_copy']
+    check(source,row['historical_pin']);check(copy,row['consumed_pin']);assert source.read_bytes()==copy.read_bytes()
+for name in ['per-span-adjudications.json','original-adjudications.json','resolved-spans.json','errata-refutations.json','errata-five-ground-proof.json']:
+    assert (R/name).read_bytes()==(H/'semantic-review'/name).read_bytes()
+report=(R/'review.md').read_text();initial=(H/'semantic-review/review.md').read_text()
+rows=lambda text:[line for line in text.splitlines() if line.startswith(('| 268/','| 269/','| 270/'))]
+assert rows(report)==rows(initial) and len(rows(report))==123
+assert read(R/'bank-ready-errata.json')==[]
+assert read(R/'correction-01/finding-resolution.json')['status']=='RESOLVED'
+gp=read(R/'correction-01/canonical268/invocation.json');assert gp['exit']==0 and gp['stderr']['bytes']==0
+check(B/'reconciled/268/spec.json',gp['spec']);check(B/'reconciled/268/body.html',gp['body'])
+assert gp['stdout']==gp['body'] and gp['stdin']==gp['spec']
+pack=read(R/'final-packaging-proof.json');assert pack['current_mappings']==1926 and pack['Git_pins']==78 and pack['nested_freeze_count']==20
+assert sum(p.name=='freeze.json' for p in R.rglob('*') if p.is_file())==21
+result={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS final semantic freeze/history boundary; independent APPROVE recorded','review':pin(R/'review.md'),'review_json':pin(R/'review.json'),'freeze':pin(R/'freeze.json'),'frozen_files':1394,'initial_review_files_preserved':573,'root_history_files_verified':923,'history_transport_records':936,'span_judgments_unchanged':123,'original_adjudications_unchanged':227,'initial_erratum_refutation_unchanged':True,'current_errata':0,'new_semantic_generator_exit':0,'current_mapping_count':1926,'historical_Git_records':78,'nested_freezes':20,'source_and_mapping_checks':'Independent root correction verification remains valid; only current semantic review interfaces changed.'}
+O.parent.mkdir(exist_ok=True);O.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');print(json.dumps(result,ensure_ascii=False,indent=2))

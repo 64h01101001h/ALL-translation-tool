@@ -1,0 +1,41 @@
+"""Verify actual staged data/proofs and unchanged raw whitespace diagnostics."""
+from pathlib import Path
+import collections, datetime, hashlib, json, re, subprocess
+b=Path(__file__).resolve().parent; art=b.parent; wt=art.parent/'campaign-worktree'; out=b/'landing'
+assert not (out/'root-final-stage-verification.json').exists()
+def git(*args):return subprocess.check_output(['git',*args],cwd=wt)
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+head=git('rev-parse','HEAD').decode().strip()
+assert head=='2487bfcd73a1463d135a4544a01535ba5c99cab0'
+staged=git('diff','--cached','--name-only','-z').decode().split('\0')[:-1]
+assert staged and len(staged)==len(set(staged))
+required={'data/alignment/pages_c05/c5p89.html','data/alignment/pages_c05/c5p90.html','data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p90.json','data/alignment/span_head_allow.json','tools/build_alignment_layer.py','data/alignment/alignment_full_v1.json','data/alignment/alignment_evidence_v1.json'}
+required.update('docs/geshe_michael_roach_dictionary'+s for s in ('.html','.csv','_reverse.csv','_by_course.csv','_changes.csv'))
+assert required <= set(staged)
+assert all(p in required or p.startswith('data/alignment/reviews_c05/c5p90/') for p in staged)
+assert git('diff','--name-only')==b''
+assert git('ls-files','--others','--exclude-standard','-z')==b'data/teaching/dcc_captions\0'
+files=[]
+for p in staged:
+ raw=(wt/p).read_bytes();assert raw==git('show',':'+p),p
+ files.append({'path':p,'bytes':len(raw),'sha256':sha(raw)})
+build=json.loads((out/'canonical-builds-once.json').read_text())
+for p,h in build['output_sha256'].items():assert sha((wt/p).read_bytes())==h,p
+for p,h in json.loads((b/'baseline.json').read_text())['sha256'].items():
+ if p.startswith('data/') and '/alignment/' not in p:assert sha((wt/p).read_bytes())==h,p
+old=git('show','HEAD:tools/build_alignment_layer.py');new=(wt/'tools/build_alignment_layer.py').read_bytes()
+needle=b'    "c5p89": [265, 266, 267],\n'; assert old.count(needle)==1
+assert new==old.replace(needle,needle+b'    "c5p90": [268, 269, 270],\n')
+assert (wt/'docs/errata_register.json').read_bytes()==git('show','HEAD:docs/errata_register.json')
+for x in json.loads((b/'semantic-review/freeze.json').read_text())['files']:
+ raw=(b/'semantic-review'/x['path']).read_bytes();assert len(raw)==x['bytes'] and sha(raw)==x['sha256']
+ assert raw==(wt/'data/alignment/reviews_c05/c5p90'/x['path']).read_bytes()
+check=subprocess.run(['git','diff','--cached','--check'],cwd=wt,capture_output=True)
+assert check.returncode==2 and not check.stderr
+assert check.stdout==(out/'staged-diff-check.stdout').read_bytes()
+for suffix,raw in [('stdout',check.stdout),('stderr',check.stderr),('exit',(str(check.returncode)+'\n').encode())]:(out/('final-staged-diff-check.'+suffix)).write_bytes(raw)
+whitespace=json.loads((out/'source-whitespace-proof.json').read_text());assert whitespace['all_warnings_accounted_for'] and whitespace['raw_log_sha256']==sha(check.stdout)
+proof={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS','head':head,'staged_count':len(staged),'files':files,'tracked_unstaged_empty':True,'only_untracked':'data/teaching/dcc_captions','builder_registry_only_change':True,'errata_unchanged':True,'semantic_frozen_files':len(json.loads((b/'semantic-review/freeze.json').read_text())['files']),'whitespace_raw_identical_after_proof_staging':True,'whitespace_bytes':len(check.stdout),'whitespace_sha256':sha(check.stdout),'ctest17_actual_exit':int((out/'ctest-17.exit').read_text()),'builders_actual_invocations_each':2}
+assert proof['ctest17_actual_exit']==0
+(out/'root-final-stage-verification.json').write_text(json.dumps(proof,indent=2)+'\n')
+print(json.dumps({k:v for k,v in proof.items() if k!='files'}))

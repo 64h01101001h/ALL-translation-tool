@@ -1,0 +1,28 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciliation-correction-01/failed-package-attempt01/0-package.py.txt
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciliation-correction-01/package.py.txt
+@@ -35,11 +35,11 @@
+   if m.get('immutable_historical_source'):verify(pathlib.Path(m['immutable_historical_source']),m)
+   mappings.append({'manifest':name,'original_evidence_version':origin,'copy':m['copy'],'bytes':m['bytes'],'sha256':m['sha256']})
+ for m in read(R/'freeze-packaging-addendum.json')['additional_source_to_copy_mappings']:
+  verify(pathlib.Path(m['original']),m);verify(R/m['copy'],m);assert (R/m['copy']).suffix in whitelist;mappings.append(m)
+ historical=[]
+-for m in read(R/'correction-history-mappings.json'):
++for m in read(R/'correction-history-mappings.json')+read(R/'package-recovery-history-mappings.json'):
+  verify(pathlib.Path(m['immutable_historical_source']),m);verify(pathlib.Path(m['current_retained_copy']),m)
+  assert pathlib.Path(m['current_retained_copy']).suffix in whitelist
+  historical.append({**m,'comparison_rule':'Compare immutable historical source to retained historical copy only. changed_original_path identifies provenance and is not an assertion of current byte equality.'})
+ raw=[]
+ for D in (R,C):
+@@ -60,11 +60,11 @@
+ assert read(R/'errata-analysis.json')['candidate_dispositions'][0]['refuted'] is True
+ assert 'LOW/PROBABLE erratum proposes' not in read(R/'spec.json')['segments'][0]['note']
+ gp=read(R/'generator-proof.json')
+ for k in ('spec','body','stdin','stdout','stderr','wrapper','canonical_generator','builder'):verify(pathlib.Path(gp[k]['path']),gp[k])
+ assert gp['spec']['sha256']==gp['stdin']['sha256'] and gp['body']['sha256']==gp['stdout']['sha256'] and gp['exit']==0 and gp['stderr']['bytes']==0
+-files=[{**pin(p),'relative_path':str(p.relative_to(R))} for p in sorted(R.rglob('*')) if p.is_file() and p!=R/'freeze.json']
++files=[{**pin(p),'relative_path':str(p.relative_to(R))} for p in sorted(R.rglob('*'),key=lambda p:str(p.relative_to(R))) if p.is_file() and p!=R/'freeze.json']
+ put(R/'freeze.json',{'seq':268,'status':'PROVISIONAL frozen correction01; scoped semantic re-review required','producer':'reused non-author c05_253_255_reconcile','finding':'C05-268-ERRATA-01','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'root':str(R),'self_exclusion':'Only current top-level freeze.json is excluded. Nested historical freeze.json files are retained.','previous_freeze':pin(H/'reconciled/268/freeze.json'),'file_count':len(files),'total_bytes':sum(x['bytes'] for x in files),'files':files})
+ assert sorted(str(p.relative_to(R)) for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json')==[x['relative_path'] for x in files]
+ for m in files:verify(pathlib.Path(m['path']),m)
+ after={str(p.relative_to(B)):pin(p) for seq in (268,269,270) for p in sorted((B/f'reconciled/{seq}').rglob('*')) if p.is_file()}
+ put(C/'after-files.json',after)

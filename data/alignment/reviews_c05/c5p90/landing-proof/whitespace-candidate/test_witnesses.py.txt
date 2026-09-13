@@ -1,0 +1,223 @@
+"""Independent real-file faults for a formatter-specific retained-evidence exception.
+
+Fixtures use real SQLite, gzip JSON, raw stdout, freeze pins and ZIP members.
+No production hash/parser creates the expected literal print framing.
+"""
+import copy
+import gzip
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import shutil
+import sqlite3
+import tempfile
+import unittest
+import zipfile
+
+HERE = Path(__file__).resolve().parent
+MODULE = Path(os.environ.get('WITNESS_MODULE', str(HERE / 'witnesses.py')))
+spec = importlib.util.spec_from_file_location('witnesses', MODULE)
+w = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(w)
+
+def pin(path):
+    raw = path.read_bytes()
+    return dict(path=str(path), bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+class WitnessTests(unittest.TestCase):
+    def tearDown(self):
+        target=HERE/'test-fixtures'/str(os.getpid())/self._testMethodName
+        target.parent.mkdir(parents=True,exist_ok=True)
+        shutil.copytree(self.root,target,symlinks=True)
+
+    def setUp(self):
+        (HERE / 'test-work').mkdir(exist_ok=True)
+        self.tmp = tempfile.TemporaryDirectory(dir=HERE / 'test-work')
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        self.review = self.root / 'review'
+        self.review.mkdir()
+        self.producer = self.root / 'producer.py'
+        self.producer.write_text("print(course, x['seq'], 'WYLIE:', x['wylie'], '\\nENGLISH:', x['english'])\n")
+        self.log = self.root / 'producer.stdout'
+        self.db = self.root / 'source.db'
+        c = sqlite3.connect(self.db)
+        c.execute('create table corpus_segments(id integer primary key, course text, seq integer, acip text, wylie text, english text, raw text)')
+        self.corpus = []
+        self.rows = []
+        parts = []
+        self.expected = [(1,'P7',23),(3,'P7',24),(5,'P7',25),(7,'C16',844),(9,'C16',845),(11,'C16',846)]
+        for course, maximum in [('P7',25),('C16',846)]:
+            for seq in range(1, maximum + 1):
+                obj = dict(course=course, acip='ACIP', wylie='field-' + str(seq), english='English-' + str(seq))
+                self.corpus.append(obj)
+                if (course,seq) in [(co,n) for _,co,n in self.expected]:
+                    row=dict(id=len(self.rows)+1,course=course,seq=seq,acip=obj['acip'],wylie=obj['wylie'],english=obj['english'],raw=json.dumps(obj))
+                    self.rows.append(row)
+                    c.execute('insert into corpus_segments values(:id,:course,:seq,:acip,:wylie,:english,:raw)',row)
+                    parts.append((course+' '+str(seq)+' WYLIE: field-'+str(seq)+' \nENGLISH: English-'+str(seq)+'\n').encode())
+        c.commit();c.close()
+        self.gz = self.root / 'corpus.json.gz'
+        self.gz.write_bytes(gzip.compress(json.dumps(self.corpus).encode(),mtime=0))
+        self.log.write_bytes(b''.join(parts)+b'Final producer summary\n')
+        self.raw = self.log.read_bytes()
+        (self.review/'log.txt').write_bytes(self.raw)
+        (self.review/'producer.py').write_bytes(self.producer.read_bytes())
+        self.freeze={'log.txt':pin(self.review/'log.txt'),'producer.py':pin(self.review/'producer.py')}
+        self.grouped={'trailing whitespace.':[1,3,5,7,9,11]}
+        self.pin=dict(bytes=len(self.raw),sha256=hashlib.sha256(self.raw).hexdigest(),kind='retained_print_separator',
+            warning_lines=[1,3,5,7,9,11],producer=pin(self.producer),producer_review_rel='producer.py',
+            stdout_original=pin(self.log),database=pin(self.db),corpus=pin(self.gz),
+            line_witnesses={str(n):dict(course=co,seq=seq,field='wylie',prefix=co+' '+str(seq)+' WYLIE: ',suffix_hex='20') for n,co,seq in self.expected})
+
+    def check(self):
+        w.verify_frozen(self.raw,self.raw,'log.txt',self.pin,self.review,self.freeze)
+        return w.verify_formatter(self.raw,self.grouped,self.pin,self.review,self.freeze)
+
+    def test_exact_six_print_records_accept_without_normalization(self):
+        result=self.check()
+        self.assertEqual(result['verified_lines'],[1,3,5,7,9,11])
+        self.assertEqual(result['query_only'],1)
+
+    def test_wrong_prefix_field_or_separator_rejects_even_with_updated_log_pins(self):
+        initial=self.raw
+        for wrong in [b'P7 23 WYLIE: changed \n',b'P7 023 WYLIE: field-23 \n',b'P7 23 ENGLISH: field-23 \n',b'P7 23 WYLIE: field-23\n',b'P7 23 WYLIE: field-23  \n']:
+            with self.subTest(wrong=wrong):
+                self.raw=wrong+initial.split(b'\n',1)[1]
+                self.log.write_bytes(self.raw);(self.review/'log.txt').write_bytes(self.raw)
+                self.pin.update(bytes=len(self.raw),sha256=hashlib.sha256(self.raw).hexdigest(),stdout_original=pin(self.log))
+                self.freeze['log.txt']=pin(self.review/'log.txt')
+                with self.assertRaises(AssertionError):self.check()
+
+    def test_warning_line_set_missing_extra_duplicate_or_moved_rejects(self):
+        for wrong in [[1,3,5,7,9],[1,3,5,7,9,11,13],[1,3,5,7,9,11,11],[2,3,5,7,9,11]]:
+            with self.subTest(lines=wrong):
+                self.grouped={'trailing whitespace.':wrong}
+                with self.assertRaises(AssertionError):self.check()
+
+    def test_unknown_warning_kind_rejects(self):
+        self.grouped['space before tab in indent.']=[1]
+        with self.assertRaises(AssertionError):self.check()
+
+    def test_changed_witness_field_prefix_suffix_or_course_rejects(self):
+        initial=copy.deepcopy(self.pin)
+        for key,value in [('field','english'),('prefix','P7 23 WYLIE:  '),('suffix_hex','2020'),('course','P8'),('seq',24)]:
+            with self.subTest(key=key):
+                self.pin=copy.deepcopy(initial);self.pin['line_witnesses']['1'][key]=value
+                with self.assertRaises(AssertionError):self.check()
+
+    def test_changed_producer_original_or_frozen_bytes_rejects(self):
+        self.producer.write_text('print("other")\n')
+        with self.assertRaises(AssertionError):self.check()
+        self.pin['producer']=pin(self.producer)
+        with self.assertRaises(AssertionError):self.check()
+
+    def test_changed_original_stdout_rejects(self):
+        self.log.write_bytes(self.raw+b'changed')
+        with self.assertRaises(AssertionError):self.check()
+
+    def test_changed_formatter_rejects_even_when_producer_pin_and_freeze_are_updated(self):
+        self.producer.write_text("print(course, x['seq'], 'WYLIE:', x['wylie'], '\\nENGLISH:', x['english'], sep='')\n")
+        (self.review/'producer.py').write_bytes(self.producer.read_bytes())
+        self.pin['producer']=pin(self.producer)
+        self.freeze['producer.py']=pin(self.review/'producer.py')
+        with self.assertRaises(AssertionError):self.check()
+
+    def test_missing_source_rejects(self):
+        self.gz.unlink()
+        with self.assertRaises(FileNotFoundError):self.check()
+
+    def test_changed_corpus_bytes_and_field_disagreement_rejects(self):
+        self.corpus[22]['wylie']='different'
+        self.gz.write_bytes(gzip.compress(json.dumps(self.corpus).encode(),mtime=0))
+        with self.assertRaises(AssertionError):self.check()
+        self.pin['corpus']=pin(self.gz)
+        with self.assertRaises(AssertionError):self.check()
+
+    def test_changed_sqlite_bytes_and_raw_field_disagreement_rejects(self):
+        c=sqlite3.connect(self.db);c.execute("update corpus_segments set wylie='different' where course='P7' and seq=23");c.commit();c.close()
+        with self.assertRaises(AssertionError):self.check()
+        self.pin['database']=pin(self.db)
+        with self.assertRaises(AssertionError):self.check()
+
+    def test_source_field_space_is_not_misclassified_as_print_separator(self):
+        c=sqlite3.connect(self.db)
+        c.execute("update corpus_segments set wylie=wylie||' ' where course='P7' and seq=23");c.commit();c.close()
+        self.pin['database']=pin(self.db)
+        with self.assertRaises(AssertionError):self.check()
+
+    def test_staged_frozen_pin_and_path_corruption_each_reject(self):
+        for altered in ['staged','frozen','pin','escape']:
+            with self.subTest(altered=altered):
+                staged=self.raw; rel='log.txt';p=copy.deepcopy(self.pin);f=copy.deepcopy(self.freeze)
+                if altered=='staged':staged+=b'x'
+                if altered=='frozen':f['log.txt']['sha256']='0'*64
+                if altered=='pin':p['bytes']+=1
+                if altered=='escape':rel='../producer.stdout'
+                with self.assertRaises(AssertionError):w.verify_frozen(self.raw,staged,rel,p,self.review,f)
+
+    def test_raw_zip_member_requires_original_zip_and_unique_member(self):
+        doc=self.root/'original.docx';xml=b'<?xml version="1.0"?><document>source </document> '
+        with zipfile.ZipFile(doc,'w') as z:z.writestr('word/document.xml',xml)
+        member=self.root/'member.xml';member.write_bytes(xml)
+        p=dict(witness=pin(member),byte_range=[0,len(xml)],zip_source=pin(doc),zip_member='word/document.xml')
+        self.assertEqual(w.verify_physical(xml,{'trailing whitespace.':[1]},p),xml)
+        member.write_bytes(xml+b'changed')
+        with self.assertRaises(AssertionError):w.verify_physical(xml,self.grouped,p)
+        member.write_bytes(xml)
+        with zipfile.ZipFile(doc,'w') as z:z.writestr('word/document.xml',b'other')
+        with self.assertRaises(AssertionError):w.verify_physical(xml,self.grouped,p)
+        p['zip_source']=pin(doc)
+        with self.assertRaises(AssertionError):w.verify_physical(xml,self.grouped,p)
+        with zipfile.ZipFile(doc,'w') as z:
+            z.writestr('word/document.xml',xml);z.writestr('word/document.xml',xml)
+        p['zip_source']=pin(doc)
+        with self.assertRaises(AssertionError):w.verify_physical(xml,self.grouped,p)
+
+    def test_whole_physical_bytes_and_ranges_reject_corruption(self):
+        source=self.root/'ILL.txt';source.write_bytes(b'original \ntext\n')
+        raw=source.read_bytes();p=dict(witness=pin(source),byte_range=[0,len(raw)])
+        self.assertEqual(w.verify_physical(raw,{'trailing whitespace.':[1]},p),raw)
+        for wrong in [raw+b'x',raw[:-1],b'changed']:
+            with self.subTest(wrong=wrong):
+                with self.assertRaises(AssertionError):w.verify_physical(wrong,self.grouped,p)
+
+    def test_root_log_complete_provenance_accepts_and_each_broken_link_rejects(self):
+        """Actual 699-byte fixture; independently constructed root manifest transport."""
+        batch=self.root/'C05-268-270';landing=batch/'landing';landing.mkdir(parents=True)
+        bank=self.root/'bank';bank.mkdir()
+        actual=(HERE/'inputs/root-course-index.stdout').read_bytes()
+        stdout=landing/'course-index.stdout';stdout.write_bytes(actual)
+        execution=landing/'course-index.execution.json'
+        execution.write_text(json.dumps(dict(exit=0,stdout_bytes=699,stderr_bytes=0,argv=['python3','-B','campaign-artifacts/C05-268-270/update-and-verify-course-index.py'])))
+        (bank/'course-index.execution.json').write_bytes(execution.read_bytes())
+        entries=[dict(original=str(stdout),copy='course-index.stdout',bytes=699,sha256=hashlib.sha256(actual).hexdigest()),
+                 dict(original=str(execution),copy='course-index.execution.json',bytes=execution.stat().st_size,sha256=pin(execution)['sha256'])]
+        entries += [dict(original='unused-'+str(n),copy='unused-'+str(n),bytes=0,sha256=hashlib.sha256(b'').hexdigest()) for n in range(126)]
+        manifest=landing/'root-proof-copy-manifest-before-whitespace.json'
+        manifest.write_text(json.dumps(dict(files=entries)))
+        (bank/manifest.name).write_bytes(manifest.read_bytes())
+        p=dict(kind='root_course_index_blank_eof',original=pin(stdout),manifest=pin(manifest),execution=pin(execution))
+        def check(raw=actual,staged=actual,rel='landing-proof/course-index.stdout',grouped=None):
+            return w.verify_root_log(raw,staged,rel,grouped or {'new blank line at EOF.':[24]},p,batch,bank)
+        self.assertEqual(check()['verified_line'],24)
+        for field in ['output','manifest','banked_manifest','execution','banked_execution','path','warning','nonempty_tail']:
+            with self.subTest(field=field):
+                backup={q:q.read_bytes() for q in [stdout,manifest,execution,bank/manifest.name,bank/execution.name]}
+                try:
+                    if field=='output':stdout.write_bytes(actual[:-1]+b'x')
+                    if field=='manifest':manifest.write_bytes(backup[manifest]+b' ')
+                    if field=='banked_manifest':(bank/manifest.name).write_bytes(b'wrong')
+                    if field=='execution':execution.write_bytes(b'{"exit":1}')
+                    if field=='banked_execution':(bank/execution.name).write_bytes(b'wrong')
+                    with self.assertRaises(AssertionError):
+                        if field=='path':check(rel='landing-proof/other.stdout')
+                        elif field=='warning':check(grouped={'new blank line at EOF.':[23]})
+                        elif field=='nonempty_tail':check(raw=actual+b'x',staged=actual+b'x')
+                        else:check()
+                finally:
+                    for q,raw in backup.items():q.write_bytes(raw)
+
+if __name__=='__main__':unittest.main(verbosity=2)

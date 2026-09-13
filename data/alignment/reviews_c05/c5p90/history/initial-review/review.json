@@ -1,0 +1,80 @@
+{
+  "verdict": "NEEDS_CORRECTION",
+  "spec_verdict": "NEEDS_CORRECTION",
+  "quality_verdict": "NEEDS_CORRECTION",
+  "open_findings": [
+    {
+      "id": "C05-268-ERRATA-01",
+      "severity": "BLOCKING",
+      "seq": 268,
+      "affected": [
+        "reconciled/268/errata.json",
+        "reconciled/268/errata-analysis.json",
+        "reconciled/268/spec.json:segments[0].note",
+        "reconciled/268/report.md",
+        "dependent current summaries/proofs"
+      ],
+      "found": "sweet, cool water",
+      "expected_candidate": "clear, cool water",
+      "problem": "HGM23556 dvangs pa positively attests clear/clarity; HGM3787 mngar ba sweet; C05:251 and physical Practice7 page30 distinguish sweet, clear, and cool. HGM23555 dvangs/liquid is contrary positive evidence and is preserved. HGM8162 dwangs has no HGM gloss; its Hopkins clear is comparative only. C09:35 and ILL:174 are full lexical clarity comparanda, not whole268 witnesses. This makes the proposed word pair unresolved, but does not establish that the published English is indefensible. The reconciler explicitly leaves deliberate contextual paraphrase or another Tibetan source possible. Under the binding default-to-refuted rule when uncertain, this unresolved defensibility and intended-source question requires refuted=true. A LOW/PROBABLE label cannot waive that rule. Neither sweet nor clear is inserted into the source or glossary.",
+      "minimal_change": "Remove the retained candidate from current errata.json; mark its analysis refuted=true under ground(d)/uncertainty default. Update the current note/report and mechanically dependent counts/proofs to describe a refuted proposal. Preserve all original/superseded candidate evidence and prior freezes. Keep dvangs and sweet unwrapped, and keep every current alignment tuple and original source byte unchanged.",
+      "alignment_span_changes_requested": []
+    }
+  ],
+  "segments": [
+    {
+      "seq": 268,
+      "span_count": 25,
+      "null_count": 0,
+      "word_pair_count": 18,
+      "spec_sha256": "9f69f4dcb8871b49f68999659b18bf79b8e2ba8675598a104e6e7681e565c203",
+      "spec_bytes": 4770,
+      "body_sha256": "59d77c705bcfbde16f795dfe9fee250d9da00a5a58ae0b582ecb63ac1a6e98d9",
+      "body_bytes": 4993,
+      "generator_exit": 0
+    },
+    {
+      "seq": 269,
+      "span_count": 34,
+      "null_count": 1,
+      "word_pair_count": 14,
+      "spec_sha256": "4172b2df91e6493798ad15ffeadf39732f49ee977870006a234c66f6ed42df6f",
+      "spec_bytes": 5945,
+      "body_sha256": "3096513e164b0e6bc23a89592d9d1664815e8d3a49d162ae5b0514c2e9fd593c",
+      "body_bytes": 5926,
+      "generator_exit": 0
+    },
+    {
+      "seq": 270,
+      "span_count": 64,
+      "null_count": 4,
+      "word_pair_count": 43,
+      "spec_sha256": "d79cec17ec05599af8dccf55fd33eb470c06fe60aa7e15481440e86717c3f991",
+      "spec_bytes": 10512,
+      "body_sha256": "2d8206ec98e7fefd406a3b6aa07ef7e714364aacb22efd3ddc51b531b3e8c619",
+      "body_bytes": 10222,
+      "generator_exit": 0
+    }
+  ],
+  "total_spans": 123,
+  "total_nulls": 5,
+  "total_word_pairs": 75,
+  "errata_accepted": 0,
+  "head_allowances": 1,
+  "reviewer": "/root/c05_through249_final_review",
+  "context": "Reused non-author context; no fresh-context claim. Authored neither current original nor reconciliation.",
+  "governing_original_git_commit": "2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812",
+  "accepted_previous_checkpoint": "2487bfcd73a1463d135a4544a01535ba5c99cab0",
+  "generated_baseline": "f3c1ca804a933d53f84214d6968a84e7e0193c6e",
+  "originals": {
+    "total": 227,
+    "retained": 200,
+    "recast": 26,
+    "rejected": 1
+  },
+  "generator_proof": "generator-proof.json",
+  "resolved_spans": "resolved-spans.json",
+  "per_span_reasoning": "per-span-adjudications.json",
+  "original_reasoning": "original-adjudications.json",
+  "limits": "Machine semantic/spec review only; no human editorial acceptance, source correction, landing, native/device/browser test or MAIN integration. No approval while retained erratum and dependent note remain uncorrected."
+}

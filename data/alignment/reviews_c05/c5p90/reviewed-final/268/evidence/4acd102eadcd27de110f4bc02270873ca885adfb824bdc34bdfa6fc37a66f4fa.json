@@ -1,0 +1,11 @@
+{
+  "utc": "2026-09-12T22:28:38.237527+00:00",
+  "source_log": "/Users/adamderickandrade/.codex/sessions/2026/09/11/rollout-2026-09-11T21-10-39-01a09398-7d89-7231-b278-93e5ae8ae6f8.jsonl",
+  "line": 20132,
+  "byte_range": [
+    116789287,
+    116796289
+  ],
+  "sha256": "28da68c5b852b9faed9c1c013d52e275960443f87f897a3f82fd91912f4890d7",
+  "reason": "Root incorrectly assumed original corpus objects have seq fields. Six additional lexical sets were fully written before KeyError; no direct-context file or replay PASS was written. Correction indexes each course original list by seq-1, matching actual prior canonical source capture."
+}

@@ -1,0 +1,138 @@
+"""Narrow byte witnesses; no text normalization or general hash exemption."""
+import ast
+import gzip
+import hashlib
+import io
+import json
+from pathlib import Path
+import sqlite3
+import zipfile
+
+EXPECTED = [(1,'P7',23),(3,'P7',24),(5,'P7',25),(7,'C16',844),(9,'C16',845),(11,'C16',846)]
+
+def pinned_bytes(pin):
+    raw=Path(pin['path']).read_bytes()
+    assert len(raw)==pin['bytes'] and hashlib.sha256(raw).hexdigest()==pin['sha256'], ('Changed witness',pin['path'])
+    return raw
+
+def verify_frozen(raw,staged,rel,pin,review,freeze):
+    original=(review/rel).resolve()
+    assert original.is_relative_to(review.resolve()), rel
+    assert rel in freeze, rel
+    assert raw==staged==original.read_bytes(), ('Frozen/staged mismatch',rel)
+    assert len(raw)==pin['bytes']==freeze[rel]['bytes'], rel
+    assert hashlib.sha256(raw).hexdigest()==pin['sha256']==freeze[rel]['sha256'], rel
+
+def verify_formatter(raw,grouped,pin,review,freeze):
+    assert pin['kind']=='retained_print_separator'
+    expected_lines=[n for n,_,_ in EXPECTED]
+    assert grouped=={'trailing whitespace.':expected_lines}, grouped
+    assert pin['warning_lines']==expected_lines
+    assert set(pin['line_witnesses'])==set(map(str,expected_lines))
+    assert raw==pinned_bytes(pin['stdout_original'])
+    producer=pinned_bytes(pin['producer'])
+    rel=pin['producer_review_rel']
+    verify_frozen(producer,producer,rel,pin['producer'],review,freeze)
+    tree=ast.parse(producer)
+    calls=[node for node in ast.walk(tree) if isinstance(node,ast.Call)
+        and isinstance(node.func,ast.Name) and node.func.id=='print'
+        and any(isinstance(arg,ast.Constant) and arg.value=='WYLIE:' for arg in node.args)]
+    assert len(calls)==1, 'Expected exactly one known WYLIE print call'
+    expected_call=ast.parse("print(course, x['seq'], 'WYLIE:', x['wylie'], '\\nENGLISH:', x['english'])").body[0].value
+    assert ast.dump(calls[0])==ast.dump(expected_call), 'Changed source formatter call/default sep/end'
+    assert not any(isinstance(node,ast.Name) and node.id=='print' and isinstance(node.ctx,ast.Store) for node in ast.walk(tree))
+    assert not any(isinstance(node,(ast.FunctionDef,ast.AsyncFunctionDef,ast.ClassDef)) and node.name=='print' for node in ast.walk(tree))
+    assert not any(isinstance(node,ast.arg) and node.arg=='print' for node in ast.walk(tree))
+    assert not any(isinstance(node,ast.alias) and (node.asname or node.name.split('.')[0])=='print' for node in ast.walk(tree))
+    producer_call=dict(line=calls[0].lineno,end_line=calls[0].end_lineno,
+        exact_source=ast.get_source_segment(producer.decode('utf-8'),calls[0]),
+        ast=ast.dump(calls[0]),sep=' ',end='\n',keyword_arguments=[],print_name_not_rebound=True)
+    # Reopen both full source files. Metadata alone never establishes source equality.
+    pinned_bytes(pin['database'])
+    corpus=json.loads(gzip.decompress(pinned_bytes(pin['corpus'])))
+    assert isinstance(corpus,list)
+    uri=Path(pin['database']['path']).resolve().as_uri()+'?mode=ro'
+    c=sqlite3.connect(uri,uri=True)
+    c.row_factory=sqlite3.Row
+    c.execute('PRAGMA query_only=ON')
+    proofs=[];printed=io.StringIO();lines=raw.split(b'\n')
+    try:
+        query_only=c.execute('PRAGMA query_only').fetchone()[0]
+        assert query_only==1
+        schema=[dict(row) for row in c.execute('PRAGMA table_info(corpus_segments)')]
+        for number,course,seq in EXPECTED:
+            item=pin['line_witnesses'][str(number)]
+            prefix=f'{course} {seq} WYLIE: '
+            assert item==dict(course=course,seq=seq,field='wylie',prefix=prefix,suffix_hex='20')
+            sql='select * from corpus_segments where course=? and seq=?'
+            rows=[dict(row) for row in c.execute(sql,(course,seq))]
+            assert len(rows)==1
+            row=rows[0]
+            original_course=[obj for obj in corpus if obj['course']==course]
+            assert len(original_course)>=seq
+            original=original_course[seq-1]
+            assert json.loads(row['raw'])==original
+            assert all(row[field]==original[field] for field in ('course','acip','wylie','english'))
+            value=row['wylie']
+            assert isinstance(value,str) and value and not value[-1].isspace()
+            assert '\n' not in value and '\r' not in value
+            assert '\n' not in row['english'] and '\r' not in row['english']
+            # Explicit formatter separator, never called source whitespace.
+            expected=prefix.encode()+value.encode('utf-8')+b' '
+            assert lines[number-1]==expected
+            print(course,row['seq'],'WYLIE:',row['wylie'],'\nENGLISH:',row['english'],file=printed)
+            proofs.append(dict(line=number,sql=sql,parameters=[course,seq],row=row,raw_corpus_object=original,
+                prefix=prefix,field='wylie',source_field_utf8_hex=value.encode().hex(),formatter_suffix_hex='20'))
+        reproduced=printed.getvalue().encode('utf-8')
+        assert raw.startswith(reproduced)
+    finally:
+        c.close()
+    pinned_bytes(pin['database']);pinned_bytes(pin['corpus'])
+    return dict(kind='retained_print_separator',verified_lines=expected_lines,query_only=query_only,
+        sqlite_uri=uri,schema=schema,producer_call=producer_call,rows=proofs,reproduced_prefix_bytes=len(reproduced),
+        reproduced_prefix_sha256=hashlib.sha256(reproduced).hexdigest())
+
+def verify_physical(raw,grouped,pin):
+    witness=pinned_bytes(pin['witness'])
+    lo,hi=pin['byte_range']
+    assert 0<=lo<hi<=len(witness) and witness[lo:hi]==raw
+    assert set(grouped)<={'trailing whitespace.','space before tab in indent.','new blank line at EOF.'}
+    if 'zip_source' in pin:
+        assert pin['zip_member']=='word/document.xml'
+        assert lo==0 and hi==len(witness)
+        zip_raw=pinned_bytes(pin['zip_source'])
+        with zipfile.ZipFile(io.BytesIO(zip_raw)) as archive:
+            assert archive.namelist().count(pin['zip_member'])==1
+            assert archive.read(pin['zip_member'])==witness
+    return witness
+
+def verify_root_log(raw,staged,rel,grouped,pin,batch,bank):
+    assert rel=='landing-proof/course-index.stdout'
+    assert pin['kind']=='root_course_index_blank_eof'
+    assert grouped=={'new blank line at EOF.':[24]}
+    assert len(raw)==699 and hashlib.sha256(raw).hexdigest()=='1b2ab2f275fcf995f8c57f4a6eaae43477ac10272e0156df2ed4bbd56fc217be'
+    assert raw==staged==pinned_bytes(pin['original'])
+    landing=batch/'landing'
+    assert Path(pin['original']['path'])==landing/'course-index.stdout'
+    assert Path(pin['manifest']['path'])==landing/'root-proof-copy-manifest-before-whitespace.json'
+    assert Path(pin['execution']['path'])==landing/'course-index.execution.json'
+    manifest_raw=pinned_bytes(pin['manifest'])
+    assert manifest_raw==(bank/'root-proof-copy-manifest-before-whitespace.json').read_bytes()
+    records=json.loads(manifest_raw)['files']
+    assert len(records)==128 and len({r['copy'] for r in records})==128
+    for name,key in [('course-index.stdout','original'),('course-index.execution.json','execution')]:
+        matches=[r for r in records if r['copy']==name]
+        assert len(matches)==1
+        record=matches[0]
+        assert record['original']==str(landing/name)
+        assert record['bytes']==pin[key]['bytes'] and record['sha256']==pin[key]['sha256']
+    execution_raw=pinned_bytes(pin['execution'])
+    assert execution_raw==(bank/'course-index.execution.json').read_bytes()
+    execution=json.loads(execution_raw)
+    assert execution['exit']==0 and execution['stdout_bytes']==699 and execution['stderr_bytes']==0
+    assert execution['argv']==['python3','-B','campaign-artifacts/C05-268-270/update-and-verify-course-index.py']
+    lines=raw.split(b'\n')
+    assert len(lines)>=24 and all(line==b'' for line in lines[23:])
+    return dict(kind='root_course_index_blank_eof',verified_line=24,manifest_records=128,
+        exact_original_staged_banked_manifest_and_execution=True,execution_exit=0,
+        stdout_bytes=699,stdout_sha256=pin['original']['sha256'])

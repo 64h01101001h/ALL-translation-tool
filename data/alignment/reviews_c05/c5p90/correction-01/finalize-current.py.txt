@@ -1,0 +1,65 @@
+import pathlib,json,hashlib,subprocess,os,ast,datetime
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+ROOT=pathlib.Path.cwd();B=ROOT/'campaign-artifacts/C05-268-270';R=B/'semantic-review';O=R/'correction-01';H=B/'pre-correction-01';W=ROOT/'campaign-worktree'
+def j(p):return json.loads(p.read_text())
+def pin(p):d=p.read_bytes();return dict(bytes=len(d),sha256=hashlib.sha256(d).hexdigest())
+def put(p,v):p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+helper=ROOT/'campaign-artifacts/land_reviewed_page.py';t=ast.parse(helper.read_text());allow=None
+for n in ast.walk(t):
+ if isinstance(n,ast.Compare) and isinstance(n.ops[0],ast.In) and isinstance(n.comparators[0],ast.Tuple):
+  vals=[x.value for x in n.comparators[0].elts if isinstance(x,ast.Constant)]
+  if '.json' in vals and '.bin' in vals:allow=set(vals)
+assert allow=={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+initial=j(O/'initial-review-preservation.json');assert initial['count']==573
+for x in initial['files']:
+ p=R/x['copy'];src=pathlib.Path(x['immutable_source']);assert pin(p)=={k:x[k] for k in ['bytes','sha256']} and p.read_bytes()==src.read_bytes()
+roots=j(B/'root-initial-semantic-verification.json')['history_files'];assert len(roots)==923
+for x in roots:assert pin(pathlib.Path(x['copy']))=={k:x[k] for k in ['bytes','sha256']}
+maps=j(R/'original-to-copy-manifest.json');assert isinstance(maps,list);gits={};raworiginals={m['original'] for m in maps}
+for m in maps:
+ assert set(m) in [set(['original','copy','sha256','bytes']),set(['original','copy','sha256','bytes','original_git_commit','repository_relative_path'])]
+ cp=R/m['copy'];assert cp.is_file() and cp.suffix.lower() in allow;d=cp.read_bytes();assert pin(cp)=={k:m[k] for k in ['bytes','sha256']}
+ # Both physical copied historical version AND Git object, when present, must match.
+ src=pathlib.Path(m['original']);assert src.read_bytes()==d,m['original']
+ if 'original_git_commit' in m:
+  key=m['original_git_commit']+':'+m['repository_relative_path']
+  if key not in gits:gits[key]=subprocess.check_output(['git','show',key],cwd=W)
+  assert gits[key]==d,m
+for x in roots:assert x['copy'] in raworiginals
+# Every initial mapping transported or unchanged is accounted for, without assuming a changed live file equals history.
+trans=j(O/'history-transport.json'); old=j(R/'history/initial-review/original-to-copy-manifest.json')
+for x in old:
+ cp=R/'history/initial-review'/x['copy'];assert pin(cp)=={k:x[k] for k in ['bytes','sha256']}
+ assert any(m['copy']==str(cp.relative_to(R)) and m['sha256']==x['sha256'] for m in maps)
+for m in trans:
+ p=pathlib.Path(m['immutable_historical_source']);cp=R/m['current_review_copy'];assert pin(p)==m['historical_pin']==m['consumed_pin'];assert p.read_bytes()==cp.read_bytes()
+for seq in (268,269,270):
+ d=B/f'reconciled/{seq}'
+ for p in d.rglob('*'):
+  if p.is_file():assert str(p) in raworiginals
+ f=j(d/'freeze.json');actual={p.relative_to(d).as_posix():p for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'};expected={x['relative_path']:x for x in f['files']};assert actual.keys()==expected.keys()
+ for k,p in actual.items():assert pin(p)=={z:expected[k][z] for z in ['bytes','sha256']}
+ # Embedded old initial semantic references resolve only via their immutable source when live review changes.
+ if seq==268:
+  for m in j(d/'correction-review-input-mappings.json'):
+   p=pathlib.Path(m['immutable_historical_source']);assert pin(p)=={k:m[k] for k in ['bytes','sha256']};assert p.read_bytes()==(d/m['copy']).read_bytes()
+review=j(R/'review.json');assert review['verdict']==review['spec_verdict']==review['quality_verdict']=='APPROVE' and review['open_findings']==[]
+keys={'seq','span_count','null_count','word_pair_count','spec_sha256','spec_bytes','body_sha256','body_bytes','generator_exit'}
+for x in review['segments']:
+ assert set(x)==keys
+ for n,sz,sha in [('spec.json','spec_bytes','spec_sha256'),('body.html','body_bytes','body_sha256')]:
+  p=B/f"reconciled/{x['seq']}/{n}";assert pin(p)=={'bytes':x[sz],'sha256':x[sha]};assert p.read_bytes()==(R/f"reviewed-final/{x['seq']}/{n}").read_bytes()
+assert len(j(R/'resolved-spans.json'))==123 and (R/'resolved-spans.json').read_bytes()==(R/'history/initial-review/resolved-spans.json').read_bytes()
+assert j(R/'bank-ready-errata.json')==[] and j(R/'open-findings.json')==[]
+for x in j(O/'source-state-proof.json')['before']:assert pin(pathlib.Path(x['path']))=={k:x[k] for k in ['bytes','sha256']}
+for p in R.rglob('*'):
+ if p.is_file():assert p.suffix.lower() in allow,(p,'unsupported')
+nested=[p.relative_to(R).as_posix() for p in R.rglob('freeze.json') if p!=R/'freeze.json']
+proof=dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),verdict='APPROVE',initial_verdict='NEEDS_CORRECTION',finding_resolved='C05-268-ERRATA-01',open_findings=0,initial_review_files=573,root_history_files=923,all_current_reconciled_files=350,current_mappings=len(maps),distinct_manifest_targets=len({m['copy'] for m in maps}),Git_pins=sum('original_git_commit' in m for m in maps),unique_Git_objects=len(gits),history_transport_records=len(trans),all_history_bytes_exact=True,all_current_and_historical_copies_full_bytes_verified=True,all_originals_and_Git_objects_verified=True,actual_whitelist=sorted(allow),actual_landing_helper=dict(path=str(helper),**pin(helper)),all_extensions_supported=True,nested_freeze_count=len(nested),nested_freezes=nested,current_spec_body_pins_exact=True,source_state_unchanged=True,total_spans=123,total_nulls=5,total_word_pairs=75,original_identities=227,initial_actual_generations=9,new_actual_generations=1,new268_generator_exit=0,new268_stderr_bytes=0,errata_count=0,allowance_count=1,freeze_excludes_only='actual current top-level semantic-review/freeze.json')
+put(R/'final-packaging-proof.json',proof)
+assert (R/'freeze.json').read_bytes()==(R/'history/initial-review/freeze.json').read_bytes()
+files=[dict(path=p.relative_to(R).as_posix(),**pin(p)) for p in sorted(R.rglob('*')) if p.is_file() and p!=R/'freeze.json']
+put(R/'freeze.json',dict(status='FROZEN_APPROVE_CORRECTION01',verdict='APPROVE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),initial_freeze=dict(path='history/initial-review/freeze.json',**pin(R/'history/initial-review/freeze.json')),exclusion='Only this actual current top-level freeze.json; every nested freeze included.',files=files))
+for m in files:assert pin(R/m['path'])=={k:m[k] for k in ['bytes','sha256']}
+assert {m['path'] for m in files}=={p.relative_to(R).as_posix() for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json'}
+print(json.dumps(dict(status='PASS',verdict='APPROVE',frozen_files=len(files),mappings=len(maps),distinct_manifest_targets=len({m['copy'] for m in maps}),Git_pins=proof['Git_pins'],nested_freezes=len(nested),review=pin(R/'review.md'),review_json=pin(R/'review.json'),manifest=pin(R/'original-to-copy-manifest.json'),freeze=pin(R/'freeze.json'))))

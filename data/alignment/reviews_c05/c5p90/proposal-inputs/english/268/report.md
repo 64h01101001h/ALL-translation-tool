@@ -1,0 +1,13 @@
+C05:268 — Codex reused English-first original reader; PROVISIONAL, not a fresh context and not semantically approved.
+Challenge the distributed two-world explanation and the causal phrase brten nas grub pas→created by. First outer world is selected, second is an English reprise; mi'i #1→human and #2→humans are explicit. dvangs is omitted rather than matched to sweet or falsely nulled. One LOW/PROBABLE English mismatch candidate quotes sweet, cool water and proposes clear, cool water for separate skeptical review only.
+Counts: 25 spec spans; d5=17, d6=3, d7=0, d3=5; nulls=0; errata=1. Automatic d1 containers counted separately.
+Full original evidence: ../268/original-evidence.json, including full spine/raw C05:242–280 context, current HGM entries/provenance, physical-master/corpus equality, complete parameterized corpus queries, registered-class records and full physical C05 ASCII bytes (../268/C05ReadingASCII.original.txt).
+Original evidence SHA256: 4c14c4db1eedadfcb58fed68a8da243ff1490aff4362fae00efccc9e93129608.
+Six selected snapshot fields independently match spine. Selected full ACIP/English match physical ASCII after declared whitespace comparison; physical original bytes remain intact. Source master and corpus objects equal spine raw records.
+Source/witness limits: C15/C18 field equalities are explicit; C16:844 adds a heading after shared C05:268 English, and P7:23 has Tibetan/punctuation variants. Equal wording is not proof of independent publication or ingestion lineage.
+Errata: registered classes checked; 268 has one probable translation-mismatch proposal with exact source/HGM/corpus evidence and alternative explanations; 269/270 have none. No selected cap or following selection heading; no source correction inserted.
+Exact intended and canonical occurrences: occurrences.json and attempts/01/occurrence-check.json; recovered source text, counts and hashes: proof.json.
+Actual final canonical stdout: attempts/01/stdout.html; stderr: attempts/01/stderr.txt (0 bytes); exit: attempts/01/exit.txt. EXIT=0; BODY_BYTES=4666.
+Actual argv/stdin and canonical/wrapper hashes: attempts/01/invocation.json. Supplied wrapper forces URI mode=ro; local runner additionally sets query_only. Canonical code unchanged; all first canonical attempts pass.
+spec.json SHA256 401edf8f503bd6b15e32dba9c6b755d750c71a2e2412f5f7d00477faf495db78; body.html SHA256 b75f2572576cc64942fb1d9bd05bc1fbdf188c281a9a474b54493511a4f9977e
+Final freeze.json lists all deliverables and attempts; no failed or superseded authoring/generator attempts in this batch. Any later correction must preserve and explicitly supersede this proof boundary.

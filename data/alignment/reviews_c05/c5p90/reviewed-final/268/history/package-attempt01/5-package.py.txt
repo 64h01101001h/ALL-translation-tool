@@ -1,0 +1,101 @@
+import pathlib,json,hashlib,subprocess,sys,os,datetime,difflib,ast
+C=pathlib.Path(__file__).resolve().parent;B=C.parent;R=B/'reconciled/268';H=B/'pre-correction-01';W=B.parent.parent/'campaign-worktree'
+def read(p):return json.loads(p.read_text())
+def pin(p):
+ b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def verify(p,m):assert all(pin(p)[k]==m[k] for k in ('bytes','sha256')),(str(p),m)
+assert sys.dont_write_bytecode and os.environ['PYTHONDONTWRITEBYTECODE']=='1'
+assert (C/'attempt01.stderr.txt').read_bytes()==b''
+result=read(C/'attempt01.stdout.txt');assert result['current_errata']==0 and result['generator_exit']==0
+(C/'attempt01.exit.txt').write_text('0\n')
+command={'argv':['python3','-B','campaign-artifacts/C05-268-270/reconciliation-correction-01/correct.py'],'cwd':str(B.parents[1]),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'stdout_redirection':str(C/'attempt01.stdout.txt'),'stderr_redirection':str(C/'attempt01.stderr.txt'),'observed_tool_exit':0,'stdout':pin(C/'attempt01.stdout.txt'),'stderr':pin(C/'attempt01.stderr.txt'),'script':pin(C/'correct.py'),'actual_canonical_subprocess':read(R/'generator-proof.json'),'scope':'Exact executed correction command; process exit0 observed from tool before this packaging command.'}
+put(C/'execution-proof.json',command)
+for p in (C/'correct.py',C/'package.py'):(C/(p.name+'.txt')).write_bytes(p.read_bytes())
+newmaps=[]
+for p in (C/'correct.py',C/'package.py',C/'execution-proof.json',C/'unchanged-source-proof.json',C/'unchanged-mappings-proof.json'):
+ dst=R/'correction-01'/((p.name+'.txt') if p.suffix=='.py' else p.name);dst.parent.mkdir(exist_ok=True);dst.write_bytes(p.read_bytes())
+ newmaps.append({'original':str(p),'copy':str(dst.relative_to(R)),**{k:v for k,v in pin(p).items() if k!='path'}})
+put(R/'correction-01-copy-manifest.json',newmaps)
+helper=B.parent/'land_reviewed_page.py';parsed=ast.parse(helper.read_text());whitelist=None
+for node in ast.walk(parsed):
+ if isinstance(node,ast.Compare) and isinstance(node.left,ast.Call) and isinstance(node.left.func,ast.Attribute) and node.left.func.attr=='lower':
+  vals=node.comparators
+  if len(vals)==1 and isinstance(vals[0],ast.Tuple):
+   strings=[x.value for x in vals[0].elts if isinstance(x,ast.Constant)]
+   if '.json' in strings and '.bin' in strings:whitelist=strings
+assert whitelist==['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit']
+mappings=[]
+for name in ('original-to-copy-manifest.json','supplemental-to-copy-manifest.json','helper-and-skill-copy-manifest.json','correction-review-input-mappings.json','correction-01-copy-manifest.json'):
+ for m in read(R/name):
+  dest=R/m['copy'];verify(dest,m);assert dest.suffix.lower() in whitelist
+  if m.get('original_git_commit'):
+   data=subprocess.check_output(['git','show',m['original_git_commit']+':'+m['repository_relative_path']],cwd=W);assert data==dest.read_bytes();origin=m['original_git_commit']+':'+m['repository_relative_path']
+  else:verify(pathlib.Path(m['original']),m);origin=m['original']
+  if m.get('immutable_historical_source'):verify(pathlib.Path(m['immutable_historical_source']),m)
+  mappings.append({'manifest':name,'original_evidence_version':origin,'copy':m['copy'],'bytes':m['bytes'],'sha256':m['sha256']})
+for m in read(R/'freeze-packaging-addendum.json')['additional_source_to_copy_mappings']:
+ verify(pathlib.Path(m['original']),m);verify(R/m['copy'],m);assert (R/m['copy']).suffix in whitelist;mappings.append(m)
+historical=[]
+for m in read(R/'correction-history-mappings.json'):
+ verify(pathlib.Path(m['immutable_historical_source']),m);verify(pathlib.Path(m['current_retained_copy']),m)
+ assert pathlib.Path(m['current_retained_copy']).suffix in whitelist
+ historical.append({**m,'comparison_rule':'Compare immutable historical source to retained historical copy only. changed_original_path identifies provenance and is not an assertion of current byte equality.'})
+raw=[]
+for D in (R,C):
+ supported={pin(p)['sha256']:str(p) for p in D.rglob('*') if p.is_file() and p.suffix.lower() in whitelist}
+ for p in D.rglob('*'):
+  if p.is_file() and p.suffix.lower() not in whitelist:
+   h=pin(p);assert h['sha256'] in supported,(str(p),'unsupported without exact supported copy')
+   raw.append({'original':h,'supported_copy':supported[h['sha256']]})
+put(R/'supported-copy-preflight.json',{'status':'PASS','actual_landing_helper':pin(helper),'exact_landing_whitelist':whitelist,'mappings':mappings,'historical_changed_path_mappings':historical,'unsupported_raw_formats_preserved_exactly':raw,'previous_preflight':pin(H/'reconciled/268/supported-copy-preflight.json'),'historic_semantics':'Old manifests and freezes retain their consumed versions and are not silently retargeted to changed live files. Current freeze enumerates all current files including nested historical freezes.','material_mapping_count':len(mappings)+len(historical)})
+before=read(C/'before-files.json')
+for rel,m in before.items():
+ if rel.startswith(('reconciled/269/','reconciled/270/')):verify(B/rel,m)
+for m in read(B/'root-initial-semantic-verification.json')['history_files']:verify(pathlib.Path(m['copy']),m)
+status=subprocess.run(['git','status','--short'],cwd=W,capture_output=True);head=subprocess.run(['git','rev-parse','HEAD'],cwd=W,capture_output=True)
+assert status.returncode==head.returncode==0 and status.stdout==b'?? data/teaching/dcc_captions\n' and head.stdout.strip()==b'2487bfcd73a1463d135a4544a01535ba5c99cab0'
+put(C/'scope-check.json',{'history_files_923_unchanged':True,'all_269_270_files_unchanged':True,'commands':[{'argv':['git','status','--short'],'cwd':str(W),'exit':status.returncode,'stdout':status.stdout.decode(),'stderr':status.stderr.decode()},{'argv':['git','rev-parse','HEAD'],'cwd':str(W),'exit':head.returncode,'stdout':head.stdout.decode(),'stderr':head.stderr.decode()}]})
+for seq in (268,269,270):assert read(B/f'reconciled/{seq}/errata.json')==[]
+assert read(R/'errata-analysis.json')['candidate_dispositions'][0]['refuted'] is True
+assert 'LOW/PROBABLE erratum proposes' not in read(R/'spec.json')['segments'][0]['note']
+gp=read(R/'generator-proof.json')
+for k in ('spec','body','stdin','stdout','stderr','wrapper','canonical_generator','builder'):verify(pathlib.Path(gp[k]['path']),gp[k])
+assert gp['spec']['sha256']==gp['stdin']['sha256'] and gp['body']['sha256']==gp['stdout']['sha256'] and gp['exit']==0 and gp['stderr']['bytes']==0
+files=[{**pin(p),'relative_path':str(p.relative_to(R))} for p in sorted(R.rglob('*')) if p.is_file() and p!=R/'freeze.json']
+put(R/'freeze.json',{'seq':268,'status':'PROVISIONAL frozen correction01; scoped semantic re-review required','producer':'reused non-author c05_253_255_reconcile','finding':'C05-268-ERRATA-01','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'root':str(R),'self_exclusion':'Only current top-level freeze.json is excluded. Nested historical freeze.json files are retained.','previous_freeze':pin(H/'reconciled/268/freeze.json'),'file_count':len(files),'total_bytes':sum(x['bytes'] for x in files),'files':files})
+assert sorted(str(p.relative_to(R)) for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json')==[x['relative_path'] for x in files]
+for m in files:verify(pathlib.Path(m['path']),m)
+after={str(p.relative_to(B)):pin(p) for seq in (268,269,270) for p in sorted((B/f'reconciled/{seq}').rglob('*')) if p.is_file()}
+put(C/'after-files.json',after)
+delta=[];diff=[]
+for rel in sorted(set(before)|set(after)):
+ a=before.get(rel);b=after.get(rel)
+ if a==b:continue
+ delta.append({'path':str(B/rel),'before':a,'after':b,'immutable_before_path':str(H/rel) if a else None,'status':'added' if not a else 'removed' if not b else 'changed'})
+ old=(H/rel).read_bytes() if a else b'';new=(B/rel).read_bytes() if b else b''
+ try:
+  oldtext=old.decode('utf-8');newtext=new.decode('utf-8')
+  diff.extend(difflib.unified_diff(oldtext.splitlines(True),newtext.splitlines(True),fromfile=str(H/rel) if a else '/dev/null',tofile=str(B/rel) if b else '/dev/null',n=5))
+ except UnicodeDecodeError:diff.append('Binary exact-byte change; see full before/after pins and retained files: '+rel+'\n')
+put(C/'before-after-manifest.json',{'scope':'Complete before/after enumeration of all three reconciled trees, including all current and nested historical freezes.','before_manifest':pin(C/'before-files.json'),'after_manifest':pin(C/'after-files.json'),'changes':delta,'unchanged_existing_files':sum(before.get(k)==v for k,v in after.items()),'changed_existing_files':sum(x['status']=='changed' for x in delta),'added_files':sum(x['status']=='added' for x in delta),'removed_files':sum(x['status']=='removed' for x in delta),'history_mappings':read(C/'changed-original-history-mappings.json')})
+(C/'exact-correction.diff.txt').write_text(''.join(diff))
+freeze=pin(R/'freeze.json');res=read(C/'correction-result.json')
+(C/'report.md').write_text('\n'.join([
+ '# C05-268-ERRATA-01 correction01',
+ '',
+ 'DONE — correction artifacts are PROVISIONAL. Reused non-author reconciler c05_253_255_reconcile; this is not semantic approval.',
+ 'Removed the current sweet-to-clear candidate. Ground (d) and REFUTE\'s uncertainty default now refute it: possible contextual paraphrase or another intended Tibetan source remains unresolved. All five grounds, positive/contrary records, original candidates and physical witnesses remain intact.',
+ 'The current note and report reflect that ruling. Dvangs and sweet stay unwrapped; every one of the 123 seven-key tuples, all span objects/optional fields and 227 original identities/dispositions remain exact. Only the rejected original w17 reason updates the separate erratum status. Segments 269 and 270 are entirely byte-identical.',
+ 'Actual unchanged canonical268 generator EXIT=0; stderr=0 bytes. Revised note changes body 4993 → 5252 bytes; output was generated, not reconstructed. Counts remain 25/34/64 spans, 0/1/4 nulls, 18/14/43 non-null d5 pairs; all three errata lists are empty.',
+ f"Current268 spec: {res['spec']['bytes']} bytes; SHA256 {res['spec']['sha256']}.",
+ f"Current268 body: {res['body']['bytes']} bytes; SHA256 {res['body']['sha256']}.",
+ f"Current268 freeze: {freeze['bytes']} bytes; SHA256 {freeze['sha256']}; {len(files)} enumerated files, excluding only its own top-level manifest.",
+ 'All 923 root pre-correction history copies verified unchanged. Changed live paths map explicitly to immutable pre-correction sources and locally retained history; old manifests/freezes are not tested against changed live bytes. Current supported-copy preflight verifies actual landing whitelist and complete original/copy byte hashes, including helpers and nested historical freezes.',
+ 'Full exact before/after inventory and diff: before-files.json, after-files.json, before-after-manifest.json, exact-correction.diff.txt. Actual helper argv/streams/exit: execution-proof.json and attempt01.*. Actual generator streams/exit: ../reconciled/268/attempts/correction-01/.',
+ 'Unchanged mappings/source/glossary/engine proof: unchanged-mappings-proof.json and unchanged-source-proof.json. No repository/source/master/index edit, gate relaxation, commit or external action; no unchanged test-suite rerun.',
+ 'A distinct reviewer must conduct the scoped semantic re-review of this actual corrected candidate before acceptance. Initial full review remains immutable NEEDS_CORRECTION history.',
+ ''
+ ]))
+put(C/'packaging-result.json',{'status':'PASS','current_268_freeze':freeze,'current_268_enumerated_files':len(files),'material_mappings':len(mappings)+len(historical),'changed_existing_files':sum(x['status']=='changed' for x in delta),'added_files':sum(x['status']=='added' for x in delta),'removed_files':sum(x['status']=='removed' for x in delta),'exact_diff':pin(C/'exact-correction.diff.txt'),'report':pin(C/'report.md'),'supported_preflight':pin(R/'supported-copy-preflight.json')})
+print(json.dumps(read(C/'packaging-result.json')))

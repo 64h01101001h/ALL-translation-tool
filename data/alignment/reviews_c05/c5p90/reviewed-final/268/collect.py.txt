@@ -1,0 +1,119 @@
+import pathlib, json, hashlib, subprocess, os, sqlite3, gzip, re, importlib.util
+R=pathlib.Path(__file__).resolve().parent
+B=R.parents[1]; W=B.parent.parent/'campaign-worktree'
+G='2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812'
+def sha(b): return hashlib.sha256(b).hexdigest()
+def put(p,x): p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def meta(p): b=p.read_bytes();return {'path':str(p),'sha256':sha(b),'bytes':len(b)}
+manifest=[]
+def preserve(p, data=None, **extra):
+ b=p.read_bytes() if data is None else data; h=sha(b); ext=p.suffix.lower()
+ if ext not in ['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit']: ext=ext+'.txt'
+ dest=R/'evidence'/(''+h+ext);dest.parent.mkdir(exist_ok=True);dest.write_bytes(b)
+ manifest.append({'original':str(p),'copy':str(dest.relative_to(R)),'sha256':h,'bytes':len(b),**extra})
+for p in sorted(B.rglob('*')):
+ if p.is_file() and 'reconciled' not in p.relative_to(B).parts: preserve(p)
+for name in ['proposal-protocol.md','run_generator_readonly.py','land_reviewed_page.py']:
+ preserve(B.parent/name)
+gov=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','docs/errata_register.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']
+for name in gov:
+ data=subprocess.check_output(['git','show',G+':'+name],cwd=W)
+ preserve(W/name,data,original_git_commit=G,repository_relative_path=name)
+ assert data==(W/name).read_bytes(), name
+refs=[pathlib.Path('/Users/adamderickandrade')/s for s in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']]
+access=[]
+for p in refs:
+ assert p.is_dir() and os.access(p,os.R_OK|os.X_OK),p
+ next(p.iterdir(),None);access.append({'path':str(p),'readable':True})
+db=W/'build/hgm_spine_v27_2.db'; c=sqlite3.connect(db.as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON')
+E=json.loads((B/'english/268/original-evidence.json').read_text())
+queries=[('english-source',E['source_query'],E['rows'])]
+for section in ['lexical_queries','corpus_queries']:
+ for q in E[section]: queries.append(('english-'+section,q,q['rows']))
+for file in ['tibetan/268/lexical-queries-full.json','tibetan/268/parallel-queries-full.json','tibetan/268/additional-lexical-queries-full.json','tibetan/268/direct-parallel-context-full.json','root-lexical-preparation.json','root-parallel-preparation.json']:
+ for q in json.loads((B/file).read_text()): queries.append((file,q,q['rows']))
+allq=[];entries={};corpus={}
+for origin,q,expected in queries:
+ sql=q['sql'];params=q.get('params',q.get('parameters',[])); rows=[dict(x) for x in c.execute(sql,params)]
+ assert rows==expected,(origin,params)
+ allq.append({'origin':origin,'sql':sql,'params':params,'count':len(rows),'rows':rows,'equals_original':True})
+ for row in rows:
+  if 'hgm_gloss' in row: entries[row['id']]=row
+  elif 'course' in row: corpus[row['id']]=row
+for term in ['dvangs','dvangs pa','dvangs ba','mngar ba',"phyi'i",'phyi',"'ga' zhig",'lcags sngags','sngags','lcags',"gzhan zhig","cig car du"]:
+ sql='select * from entries where wylie=? or id in (select entry_id from entry_variants where wylie=?) order by id'
+ rows=[dict(x) for x in c.execute(sql,[term,term])];allq.append({'origin':'reconciler-current-source','term':term,'sql':sql,'params':[term,term],'count':len(rows),'rows':rows})
+ entries.update({row['id']:row for row in rows})
+put(R/'query-reruns-full.json',allq)
+source=[dict(x) for x in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',268,270])]
+put(R/'source-full-rows.json',source)
+for row in source:
+ original=next(x for x in json.loads((B/'source.json').read_text()) if x['seq']==row['seq'])
+ assert all(row[k]==v for k,v in original.items())
+master_path=W/'data/hgm_dictionary_v27_2.json.gz'; corpus_path=W/'data/full_parallel_corpus_v32.json.gz'
+master=json.loads(gzip.decompress(master_path.read_bytes())); originalmaster=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz')
+assert originalmaster.read_bytes()==master_path.read_bytes()
+masterlist=master['unified_entries']
+masterrows={}
+for k,row in entries.items():
+ raw=json.loads(row['raw']);assert raw==masterlist[k-1],k;masterrows[str(k)]=raw
+put(R/'master-entries-full.json',{'metadata':master['meta'],'entries':masterrows})
+fullcorpus=json.loads(gzip.decompress(corpus_path.read_bytes()))
+def all_dicts(x):
+ if isinstance(x,dict):
+  yield x
+  for v in x.values(): yield from all_dicts(v)
+ elif isinstance(x,list):
+  for v in x: yield from all_dicts(v)
+# Canonical corpus raw objects can have nested sentence records; exact serialization-independent equality.
+need={json.dumps(json.loads(r['raw']),sort_keys=True,ensure_ascii=False) for r in corpus.values()}
+found=set()
+for x in all_dicts(fullcorpus):
+ if ('acip' in x or 'english' in x):
+  s=json.dumps(x,sort_keys=True,ensure_ascii=False)
+  if s in need: found.add(s)
+assert need==found,(len(need),len(found))
+put(R/'corpus-objects-full.json',[{'row_id':k,'raw':json.loads(r['raw'])} for k,r in sorted(corpus.items())])
+physical=[]; extents=[]
+base=refs[0]/'To DO/Formal Courses/ACI Readings In Roman ASCII'
+for course in ['C05','C15','C16','C18']:
+ p=base/(course+'ReadingASCII.txt');data=p.read_bytes();preserve(p);physical.append(meta(p))
+ tokens=list(re.finditer(rb'\S+',data)); normalized=b' '.join(m.group() for m in tokens); starts=[];cur=0
+ for m in tokens: starts.append(cur);cur+=len(m.group())+1
+ import bisect
+ for row in source:
+  if course=='C16' and row['seq']!=268: continue
+  for field in ['acip','english']:
+   needle=row[field].encode('ascii'); at=normalized.find(needle);assert at>=0,(course,row['seq'],field)
+   i=bisect.bisect_right(starts,at)-1; j=bisect.bisect_right(starts,at+len(needle)-1)-1
+   lo=tokens[i].start()+at-starts[i];hi=tokens[j].start()+at+len(needle)-starts[j];piece=data[lo:hi]
+   assert b' '.join(piece.split())==needle
+   extents.append({'source_path':str(p),'file_sha256':sha(data),'seq':row['seq'],'field':field,'start':lo,'end':hi,'bytes':hi-lo,'sha256':sha(piece),'exact_bytes_latin1':piece.decode('latin1'),'display_encoding_note':'Latin-1 is a reversible byte display, not a claim about file encoding.','ascii_whitespace_collapse_equals_spine':True})
+put(R/'physical-extents.json',extents)
+env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1');replays=[]
+for angle in ['tibetan','english']:
+ wrapper=B/(angle+'/268/'+('run-canonical-readonly.py' if angle=='tibetan' else 'canonical_readonly.py'))
+ for seq in [268,269,270]:
+  d=B/angle/str(seq);out=R/'original-replays'/angle/str(seq);out.mkdir(parents=True,exist_ok=True)
+  argv=['python3','-B',str(wrapper)];inp=(d/'spec.json').read_bytes();p=subprocess.run(argv,input=inp,cwd=W,env=env,capture_output=True)
+  (out/'stdin.json').write_bytes(inp);(out/'stdout.html').write_bytes(p.stdout);(out/'stderr.txt').write_bytes(p.stderr);(out/'exit.txt').write_text(str(p.returncode)+'\n')
+  proof={'angle':angle,'seq':seq,'argv':argv,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'wrapper':meta(wrapper),'generator':meta(W/'tools/gen_alignment_page.py'),'stdin':meta(out/'stdin.json'),'stdout':meta(out/'stdout.html'),'stderr':meta(out/'stderr.txt'),'exit':p.returncode,'equals_original_body':p.stdout==(d/'body.html').read_bytes()}
+  put(out/'invocation.json',proof);assert p.returncode==0 and proof['equals_original_body'];replays.append(proof)
+sp=importlib.util.spec_from_file_location('canonical',W/'tools/gen_alignment_page.py');gen=importlib.util.module_from_spec(sp);sp.loader.exec_module(gen)
+def resolve(spec,row):
+ spans=spec['segments'][0]['spans'];by={x['id']:x for x in spans};seg=spec['segments'][0]
+ english=gen.with_members(spans,[by[i] for i in seg['eng_order']],row['english'])
+ tr=gen.resolve(row['wylie'],spans,'tib',row['seq']);er=gen.resolve(row['english'],english,'eng',row['seq'])
+ return [{'seq':row['seq'],'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x.get('eng'),'tib_range':list(tr[x['id']]),'eng_range':list(er[x['id']]) if x.get('eng') is not None else None} for x in spans]
+ident=[];full=[]
+for angle in ['tibetan','english']:
+ for row in source:
+  spec=json.loads((B/angle/str(row['seq'])/'spec.json').read_text())
+  for t,s in zip(resolve(spec,row),spec['segments'][0]['spans']):
+   identity={'angle':angle,**t};ident.append(identity);full.append({'identity':identity,'original_span':s,'original_span_keys':list(s),'spec_path':str(B/angle/str(row['seq'])/'spec.json')})
+root=[{k:v for k,v in x.items() if k not in ['original_span','original_field_presence']} for x in json.loads((B/'proposal-verification/root-resolved-spans.json').read_text())];assert sorted(ident,key=lambda x:(x['angle'],x['seq'],x['id']))==sorted(root,key=lambda x:(x['angle'],x['seq'],x['id']))
+assert len(ident)==227
+put(R/'original-identities.json',ident);put(R/'original-span-objects.json',full);put(R/'original-replay-proof.json',replays)
+put(R/'original-to-copy-manifest.json',manifest)
+put(R/'collection-proof.json',{'producer':'Codex c05_253_255_reconcile, reused non-author of current batch; no fresh-context claim','original_producers':{'tibetan':'primary/root Codex with prior preparation, isolated from English before freezing','english':'reused peer c05_262_264_english'},'governing_head':G,'data_head':'f3c1ca804a933d53f84214d6968a84e7e0193c6e','references':access,'database':meta(db),'sqlite_uri':db.as_uri()+'?mode=ro','query_only':c.execute('PRAGMA query_only').fetchone()[0],'source_master':meta(master_path),'original_master':meta(originalmaster),'corpus':meta(corpus_path),'master_entry_count':len(masterrows),'corpus_raw_objects_exact':len(found),'query_count':len(allq),'physical_files':physical,'complete_physical_extents':len(extents),'original_identities':len(ident),'original_replays_pass':len(replays),'shared_manifest_count':len(manifest),'historical_failures':'All original and root attempt files preserved by exact-byte mappings. No independently published lineage inferred.'})
+print(json.dumps({'queries':len(allq),'entries':len(masterrows),'corpus':len(found),'identities':len(ident),'replays':len(replays),'extents':len(extents),'copies':len(manifest)}))

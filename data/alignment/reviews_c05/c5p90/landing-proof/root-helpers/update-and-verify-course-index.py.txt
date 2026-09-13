@@ -1,0 +1,61 @@
+"""Update page90's link and coverage only after independent page acceptance.
+
+This complements the unchanged landing helper, which updates adjacent page
+navigation but not the course index. It does not supply semantic approval.
+"""
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import re
+
+B = Path(__file__).resolve().parent
+W = B.parent.parent / 'campaign-worktree'
+R = W / 'data/alignment/reviews_c05/c5p90'
+D = W / 'data/alignment/pages_c05'
+P = B / 'landing/course-index-verification.json'
+
+def pin(raw):
+    return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+assert not P.exists(), 'Preserve prior index verification before another run'
+meta = json.loads((B / 'semantic-review/review.json').read_text())
+assert meta['verdict'] == 'APPROVE' and meta['open_findings'] == []
+assert (R / 'review.json').read_bytes() == (B / 'semantic-review/review.json').read_bytes()
+acceptance = json.loads((B / 'landing/root-semantic-acceptance-proof.json').read_text())
+assert acceptance['page'] == 90 and acceptance['segments'] == [268, 269, 270]
+assert acceptance['exact_final_hashes_counts_and_ranges']
+spec = json.loads((W / 'data/alignment/specs_c05/c5p90.json').read_text())
+assert spec['course'] == 'C05'
+assert [s['seq'] for s in spec['segments']] == [268, 269, 270]
+body = (B / 'landing/generator.stdout').read_bytes()
+assert body in (D / 'c5p90.html').read_bytes()
+
+index = D / 'index.html'
+before = index.read_bytes()
+text = before.decode('utf-8')
+old_coverage = 'Reviewed campaign coverage: 267 of 511 source segments.'
+new_coverage = 'Reviewed campaign coverage: 270 of 511 source segments.'
+old_link = '<li><a href="c5p89.html">Page 89 · segments 265–267</a></li>'
+new_link = '<li><a href="c5p90.html">Page 90 · segments 268–270</a></li>'
+assert text.count(old_coverage) == text.count(old_link) == 1
+assert new_link not in text
+assert list(map(int, re.findall(r'href="c5p(\d+)\.html"', text))) == list(range(1, 90))
+updated = text.replace(old_coverage, new_coverage).replace(old_link, old_link + '\n' + new_link)
+assert list(map(int, re.findall(r'href="c5p(\d+)\.html"', updated))) == list(range(1, 91))
+assert updated.count(new_coverage) == 1 and old_coverage not in updated
+for page in range(1, 91):
+    assert (D / f'c5p{page}.html').is_file()
+after = updated.encode('utf-8')
+index.write_bytes(after)
+assert index.read_bytes() == after
+P.write_text(json.dumps({
+    'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'status': 'PASS course index contains every page1–90 link and exact270/511 coverage',
+    'before': pin(before), 'after': pin(after),
+    'only_transformations': ['267 to270 coverage', 'append exact page90 link after page89'],
+    'page_count': 90, 'covered_source_segments': 270,
+    'accepted_page_body': pin(body),
+    'all_page_targets_exist': True,
+}, ensure_ascii=False, indent=2) + '\n')
+print(P.read_text())

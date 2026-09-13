@@ -1,0 +1,186 @@
+import os,json,hashlib,pathlib,subprocess,collections
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+ROOT=pathlib.Path.cwd();B=ROOT/'campaign-artifacts/C05-268-270';R=B/'semantic-review';W=ROOT/'campaign-worktree'
+def read(p):return json.loads(p.read_text())
+def put(n,v): (R/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def pin(p):q=p.read_bytes();return dict(bytes=len(q),sha256=hashlib.sha256(q).hexdigest())
+# Compare both original authors' intended occurrence declarations with independent actual resolver results.
+occ=read(R/'evidence/all-occurrences.json'); oi={(x['angle'],x['seq'],x['id']):x for x in occ}; proof=[]
+for seq in (268,269,270):
+ for x in read(B/f'tibetan/{seq}/intended-spans.json'):
+  y=oi['tibetan',seq,x['id']]
+  assert all(x[k]==y[k] for k in ['d','tib','eng','tib_range','eng_range'])
+  if x['eng'] is not None:assert y['all_eng_occurrences'][x['english_occurrence_zero_based']]==x['eng_range']
+  proof.append(dict(angle='tibetan',seq=seq,id=x['id'],exact=True))
+ for x in read(B/f'english/{seq}/occurrences.json')['spans']:
+  y=oi['english',seq,x['id']];assert x['tib']==y['tib_range'] and x['eng']==y['eng_range']
+  assert x['all_english_occurrences']==[z[0] for z in y['all_eng_occurrences']]
+  if x['eng'] is not None:assert y['all_eng_occurrences'][x['intended_english_occurrence']-1]==x['eng']
+  proof.append(dict(angle='english',seq=seq,id=x['id'],exact=True))
+assert len(proof)==227
+put('original-occurrence-declarations-proof.json',dict(status='PASS',count=227,records=proof))
+# Independent original captured failure record, not a reconstruction of a failed command.
+f=B/'tibetan/268/extra-evidence-attempt01'; fp=read(f/'failure-proof.json'); raw=pathlib.Path(fp['source_log']).read_bytes()[slice(*fp['byte_range'])]
+assert hashlib.sha256(raw).hexdigest()==fp['sha256'] and raw==(f/'original-tool-record.jsonl').read_bytes()
+put('original-failure-record-reopened.json',dict(status='PASS',original=fp,raw_record=pin(f/'original-tool-record.jsonl'),interpretation="Exact original root KeyError: 'seq' failure. Six extra lexical sets were already written, but direct-context/replay PASS were not produced. Corrected capture indexes original course lists. No source defect inferred."))
+# Record-specific judgments: independently written after complete current source/evidence review.
+reasons={268:[
+'Temporal adverb at the opening owns originally; the resumed original condition has another licensor.',
+'Interrogative manner relation asks how the liquid exists; complete gang du at phrase depth.',
+'First state predicate owns exists, not the final resumed condition.',
+'Names the beings whose different karma determines the relevant world; excludes types/different.',
+'Cardinal three without nominal po; positive wider gsum po does not compel inflectional capture.',
+'Distributive rang rang owns each; does not absorb the later he himself reprise.',
+'Established nonshared compound owns specific for the first karma; bound genitive is outside.',
+'First explicit karma belongs to each being; second karma has a separate source occurrence.',
+'Dependence construction owns depending on; the earlier English depends paraphrases broader predication.',
+'Established outer-world compound owns first outer world; later reprise is not a second source occurrence.',
+'Source-location relative phrase owns from where as a complete relation.',
+'First taking predicate owns taken within the source-location question.',
+'First inflected human noun specifies the karma owner, realized later as human in the group.',
+'Second nonshared compound owns second specific, inside the human-karma causal explanation.',
+'Second karma is the human owner karma, not the earlier collective explanation.',
+'Dependence plus establishing predicate jointly license created by at d3; no surplus participant captured.',
+'Second inflected human noun names the world occupants, realized as plural humans before its karma explanation.',
+'Second Tibetan world owns the first bare world after from; subsequent a world is an English reprise.',
+'Water noun owns water within the contested quality phrase; sweet remains unwrapped.',
+'Cool adjective is supported independently of the disputed clarity adjective; no sweet capture.',
+'Source ablative after the qualities owns from, introducing the human world.',
+'Second taking predicate owns second taken, within the conditional example.',
+'Conditional na owns If; it is not an asserted absence or added lexical verb.',
+'Entire resumed-state phrase owns original condition; de nyid recalls that very state, and gnas pa supplies its persistence.',
+'Lexical enumeration closure sogs owns all of and so on; and is internal to the attested closing expression.'
+],269:[
+'First spirit mention is singular active perceiver, matching craving spirit.',
+'Active-subject agentive kyis has no separately expressed English word; definite grammatical null.',
+'Establised river compound owns stream of water, with both constituents recoverable.',
+'Water is a unique strictly tighter member of the stream-of-water parent.',
+'Stream is the unique klung member; reversed internal English order stays inside the same parent.',
+'Locative perception complement la owns at.',
+'Looking predicate owns looks, distinct from later seeing.',
+'Temporal na owns opening When.',
+'Paired substance compound owns pus and blood; current local order resolves reciprocal dictionary variants.',
+'First compound constituent rnag owns pus here; not every glossary variant is the local translation.',
+'Second khrag constituent owns blood here; contiguous sibling remains within the same parent.',
+'Seeing predicate owns sees; does not reuse looks.',
+'Additive topic-resumption particle yang owns by the way in this aside, not the expanded we say frame.',
+'Second source spirit mention is the first explicit plural group in some kinds of craving spirits.',
+'Indefinite quantifier safely owns some; positive some kinds of variant acknowledged but classification prose is left outside.',
+'Contrastive connective gyi owns third English and before not all of them.',
+'Explicit spirit referent plus universal quantifier owns all of them as a complete noun phrase, avoiding false omission of the third spirit.',
+'Matrix negation ma owns not before all of them; does not negate the earlier perception.',
+'Fourth spirit mention owns final explicit craving spirits introducing the taxonomy.',
+'Genitive outer-domain relation owns world around them at phrase depth; the already named spirits license them.',
+'First obstacle noun names the environmental obstacle class.',
+'First can is attributive possession expressed by first with, at particle depth.',
+'Second obstacle noun names the bodily obstacle class; no invented lexical body or parts assignment.',
+'Second can owns second with independently of omitted inner expansion.',
+'Established food-drink pair owns food or drink; disjunction is internal to the English compound.',
+'Food is the unique narrower first constituent inside food or drink.',
+'Drink is the unique narrower second constituent inside the same parent.',
+'Emphatic identity particle nyid owns itself following food or drink.',
+'Locative/existential attributive relation owns relate to as a whole phrase; no new literal participant.',
+'Third obstacle noun names food/drink obstacles.',
+'Third can owns third with and is a possessive particle.',
+'Plural quantifier du ma owns many; kinds of remains explanatory classification.',
+'Final existential yod owns there are; it does not supply an earlier copula.',
+'Independent causal postposition phyir owns because; nominal pa\'i framing remains outside.'
+],270:[
+'Wet predicate owns wet in the liquid description.',
+'Quality connective zhing owns first and between wet and flowing.',
+'Flowing predicate owns flowing, keeping full gsher ba lexical form.',
+'Container noun owns glass; no additional object reprise is taken.',
+'Full adjective owns full without importing something or liquid.',
+'Karma noun owns karmas; their and extra three are supplied in the English frame.',
+'Attributive can owns with at particle depth; wider las can evidence does not force a compound.',
+'Beings noun owns beings without different types of.',
+'First source numeral owns first English three for beings, not the second before karmas.',
+'Perceiving beings are an active subject; gyis has no separate English agentive word.',
+'Complete simultaneity adverbial owns all together at phrase depth, without absorbing look.',
+'Looking predicate owns look once, directed at the glass.',
+'First complete time relation owns when; later conditional time reprises do not reuse it.',
+'Object noun owns objects in the emergence clause.',
+'Inflected valid-perception lexical unit retains bound case; by and article lie outside the English lexical parent.',
+'Confirmation predicate owns confirmed; full positive perception phrase supports the local construction.',
+'Second source numeral owns third English three for objects, bypassing the supplied karma numeral.',
+'Tight skye ba lexical predicate owns start to be; genitive relation to example remains distributed.',
+'Example noun owns example, without we can use for how.',
+'Additive particle owns moreover.',
+'Existential yod owns initial There is; later Suppose there is is supplied framing.',
+'Material steel noun owns first steel, outside later mantra names.',
+'Ball noun owns first ball, not later pronoun/object repetitions.',
+'Attested red-hot compound has tight ba boundary and two strict members.',
+'Color member red lies strictly within red-hot.',
+'Hot member lies strictly within the same red-hot parent and follows its sibling.',
+'Part noun owns piece; repeated of this ball stays outside.',
+'Cardinal gcig owns one for the causal piece.',
+'Piece is the active subject of the supplied first provides; gis has no distinct English case word.',
+'Material-cause technical compound owns material cause.',
+'Cause/cofactor conjunction owns and before the mantra, not earlier quality and.',
+'Locally named mantra of steel is an established title in the passage and repeated corpus, despite no exact glossary headword.',
+'First named-title steel is a strict unique member, not the earlier material steel.',
+'First named-title mantra is its strict unique head member; English order crosses inside parent.',
+'Mantra is active contributing subject; kyis has no separately expressed English agentive.',
+'Technical contributing-condition compound owns contributing factor without article.',
+'Only explicit byas pa owns second provides, for the contributing factor.',
+'Dependence relation owns Due to; these two is English anaphoric expansion outside this phrase.',
+'Second full mantra title owns second mantra of steel, now in application context.',
+'Second title steel is confined to the second parent.',
+'Second title mantra is confined to the second parent; no reuse of the first title.',
+'Application predicate owns first used; has and person who are outside.',
+'Inflected hand noun owns first hand; English his/on relation stays outside.',
+'First contact predicate owns touch; can and ball are supplied outside.',
+'First inflected heat noun owns first heat, within the negative sensation.',
+'First sensation noun owns first sensation after undergo.',
+'First mi negates undergo through the exact contracted n\'t substring; explicit subword flag is required.',
+'First experience predicate owns undergo, not feels or feel later.',
+'Second sensation noun owns second sensation after some other.',
+'First alternative adjective owns first other.',
+'Indefinite zhig independently owns some, with crossing English order before other.',
+'Second experience predicate owns feels within the contrasting alternative.',
+'Third title is abbreviated in English to mantra; source lcags is omitted with a title-ellipsis reason.',
+'Ma negates use and owns not; it does not negate the later heat sensation.',
+'Second application predicate owns second used under not.',
+'Second inflected hand noun owns second hand.',
+'Second contact predicate owns touches; later ball is supplied repetition.',
+'Second inflected heat noun owns second heat in positive sensation.',
+'Third sensation noun owns third sensation, after does feel.',
+'Third experience predicate owns feel; auxiliary does stays outside.',
+'Fourth sensation noun owns final sensation in the coordinated negative object.',
+'Second alternative adjective owns final other, without kind of.',
+'Final mi owns no, restricting the coordinated other sensation.',
+'Final experience predicate is grammatically elided under prior feel; null states only no separately repeated verb, not absent meaning.'
+]}
+resolved=read(R/'resolved-spans.json'); judgments=[]
+for seq in (268,269,270):
+ spans=[x for x in resolved if x['seq']==seq];assert len(spans)==len(reasons[seq]),(seq,len(spans),len(reasons[seq]))
+ for s,why in zip(spans,reasons[seq]):judgments.append(dict(span=s,alignment_decision='SOUND',independent_reason=why,evidence=['evidence/source-full-rows.json','evidence/full-master-reopened.json','evidence/full-query-replays.json','evidence/all-occurrences.json']))
+put('per-span-adjudications.json',judgments)
+jidx={(x['span']['seq'],x['span']['id']):x for x in judgments};originals=[]
+for seq in (268,269,270):
+ for x in read(B/f'reconciled/{seq}/original-dispositions.json'):
+  rs=[jidx[(z['seq'],z['id'])]['independent_reason'] for z in x['final_identities']]
+  if not rs:rs=['Dvangs/sweet is not independently secure as a lexical match. Reject this pair, preserve both source words unwrapped. Refutation of the separate editorial erratum does not establish this mapping.']
+  originals.append(dict(original_identity=x['original_identity'],original_span=x['original_span'],original_span_keys=x['original_span_keys'],original_field_presence=x['original_field_presence'],disposition=x['disposition'],final_identities=x['final_identities'],independent_reasons=rs))
+assert len(originals)==227
+put('original-adjudications.json',originals)
+put('span-head-allow-needed.json',{'pages_c05':{'c5p90/s268w21':'Exact sogs at Wylie[311,315) owns English[426,435) and so on. HGM20919 full HTG2016 variants attest the lexical enumeration closure; this local clause ends with that gesture. The initial and is internal to this source-licensed expression, not a supplied article/conjunction captured by an unrelated head.'}})
+put('bank-ready-errata.json',[])
+counts={'current_dvangs_LIKE_rows':76,'current_mngar_ba_LIKE_rows':12,'sweet_cool_LIKE_rows':5,'other_exact_three_field_C05_268_matches':2,'lcags_sngags_LIKE_rows':7,'full_register_records':192,'current_citation_hits':0,'C16_844_shared_English_characters':436,'current_found_occurrences':1}
+five={
+'a':{'refutation_triggered':False,'finding':'The found text sweet, cool water is exact at C05:268 English[268,285). ACIP CHU DVANGS SHING BSIL BA and corresponding Wylie preserve the actual clarity/coolness phrase. No mngar occurs in current268. The quotation is valid, so this ground alone does not refute.'},
+'b':{'refutation_triggered':'UNRESOLVED_INDEPENDENCE','finding':'C15:413 and C18:1127 are exact ACIP/Wylie/English matches. C16:844 shares the full 436-character English and adds 33 Who Made Hell?; P7:23 has DWANGS/spelling/punctuation differences while preserving sweet/cool. Full physical C05/C15/C18/C16 originals, Practice7 PDF pages36–37 and row comparisons confirm the readings. Identical words or distinct course labels do not prove independent publication or ingestion. No claim of established independent publication is made. Uncertainty cannot be converted to evidence of error.'},
+'c':{'refutation_triggered':False,'finding':'All 192 register entries inspected, no current citation duplicate. Already registered following-heading glue is visible in C16 but outside the selected found phrase. No converter, cap, footnote or caption class supplies this candidate.'},
+'d':{'refutation_triggered':True,'finding':'HGM23556 dvangs pa positively attests clear/clarity; HGM3787 mngar ba sweet; C05:251 and physical Practice7 page30 distinguish sweet, clear, and cool. HGM23555 dvangs/liquid is contrary positive evidence and is preserved. HGM8162 dwangs has no HGM gloss; its Hopkins clear is comparative only. C09:35 and ILL:174 are full lexical clarity comparanda, not whole268 witnesses. This makes the proposed word pair unresolved, but does not establish that the published English is indefensible. The reconciler explicitly leaves deliberate contextual paraphrase or another Tibetan source possible. Under the binding default-to-refuted rule when uncertain, this unresolved defensibility and intended-source question requires refuted=true. A LOW/PROBABLE label cannot waive that rule. Neither sweet nor clear is inserted into the source or glossary.'},
+'e':{'refutation_triggered':False,'finding':'All234 primary and3 supplemental query sets replayed with full rows; five independently added full-row queries measured76/12/5/2/7. All claimed count scopes are explicit. Stored master dvangs corpus frequency73 is metadata, not the current LIKE count76. lcags sngags seven rows include repetitions and different passages; they are not seven independent publications. Counts support the evidence identity but not erratum acceptance.','measured':counts}}
+put('errata-five-ground-proof.json',dict(seq=268,candidate=read(B/'reconciled/268/errata.json')[0],refuted=True,decisive_ground='d and explicit uncertainty default',grounds=five,evidence=['additional-source-proof.json','evidence/full-query-replays.json','evidence/full-master-reopened.json','evidence/full-corpus-reopened.json','evidence/physical-reopened.json','pdf-review/render-proof.json','original-to-copy-manifest.json']))
+put('errata-refutations.json',[dict(seq=268,found='sweet, cool water',refuted=True,reason=five['d']['finding'],parallel_witness='C16:844: "sweet, cool water"; shared full current English then "33 Who Made Hell?". P7:23 and physical pages36–37 retain "sweet, cool water" with spelling/punctuation variants. Independent publication is unestablished.',counts_rechecked=counts,suggested_severity=None,suggested_confidence=None)])
+finding=dict(id='C05-268-ERRATA-01',severity='BLOCKING',seq=268,affected=['reconciled/268/errata.json','reconciled/268/errata-analysis.json','reconciled/268/spec.json:segments[0].note','reconciled/268/report.md','dependent current summaries/proofs'],found='sweet, cool water',expected_candidate='clear, cool water',problem=five['d']['finding'],minimal_change='Remove the retained candidate from current errata.json; mark its analysis refuted=true under ground(d)/uncertainty default. Update the current note/report and mechanically dependent counts/proofs to describe a refuted proposal. Preserve all original/superseded candidate evidence and prior freezes. Keep dvangs and sweet unwrapped, and keep every current alignment tuple and original source byte unchanged.',alignment_span_changes_requested=[])
+put('open-findings.json',[finding])
+segments=[]
+for seq in (268,269,270):
+ xs=[x for x in resolved if x['seq']==seq];sp=pin(B/f'reconciled/{seq}/spec.json');bp=pin(B/f'reconciled/{seq}/body.html')
+ segments.append(dict(seq=seq,span_count=len(xs),null_count=sum(x['eng'] is None for x in xs),word_pair_count=sum(x['d']==5 and x['eng'] is not None for x in xs),spec_sha256=sp['sha256'],spec_bytes=sp['bytes'],body_sha256=bp['sha256'],body_bytes=bp['bytes'],generator_exit=0))
+put('review.json',dict(verdict='NEEDS_CORRECTION',spec_verdict='NEEDS_CORRECTION',quality_verdict='NEEDS_CORRECTION',open_findings=[finding],segments=segments,total_spans=123,total_nulls=5,total_word_pairs=75,errata_accepted=0,head_allowances=1,reviewer='/root/c05_through249_final_review',context='Reused non-author context; no fresh-context claim. Authored neither current original nor reconciliation.',governing_original_git_commit='2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812',accepted_previous_checkpoint='2487bfcd73a1463d135a4544a01535ba5c99cab0',generated_baseline='f3c1ca804a933d53f84214d6968a84e7e0193c6e',originals=dict(total=227,retained=200,recast=26,rejected=1),generator_proof='generator-proof.json',resolved_spans='resolved-spans.json',per_span_reasoning='per-span-adjudications.json',original_reasoning='original-adjudications.json',limits='Machine semantic/spec review only; no human editorial acceptance, source correction, landing, native/device/browser test or MAIN integration. No approval while retained erratum and dependent note remain uncorrected.'))
+put('completion-audit.json',dict(status='PASS',original_occurrence_declarations=227,independent_span_judgments=123,original_dispositions=227,disposition_counts=dict(collections.Counter(x['disposition'] for x in originals)),errata_refuted=1,errata_accepted=0,open_findings=1))
+print(json.dumps(read(R/'completion-audit.json')))

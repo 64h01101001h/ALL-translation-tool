@@ -1,0 +1,54 @@
+"""Root independent review verification; never write in the frozen candidate."""
+from pathlib import Path
+from collections import defaultdict,Counter
+import datetime,hashlib,importlib.util,json,os,re,subprocess,sys,difflib
+art=Path(__file__).resolve().parent;c=art/'whitespace-candidate-270';b=art/'C05-268-270';wt=art.parent/'campaign-worktree';out=art/'whitespace-root-review-270'
+assert not out.exists();out.mkdir()
+def sha(x):return hashlib.sha256(x).hexdigest()
+def obj(p):return json.loads(p.read_bytes())
+def verify(p,r):raw=p.read_bytes();assert len(raw)==r['bytes'] and sha(raw)==r['sha256'],str(p);return raw
+fr=(c/'candidate-freeze.json').read_bytes();assert sha(fr)=='af8db137b011bf7accfdfda477ae506609a5acb80f73f1c6c2975049b00a9538';f=json.loads(fr)
+for r in f['files']:verify(c/r['path'],r)
+assert sorted(r['path'] for r in f['files'])==sorted(str(p.relative_to(c)) for p in c.rglob('*') if p.is_file() and p!=c/'candidate-freeze.json')
+assert (c/'baseline/audit_staged_source_whitespace_v6.py').read_bytes()==(art/'audit_staged_source_whitespace_v6.py').read_bytes()
+assert (c/'baseline/prepare-whitespace-pins.py').read_bytes()==(b/'prepare-whitespace-pins.py').read_bytes()
+for name,base in [('audit_staged_source_whitespace_candidate.py','audit_staged_source_whitespace_v6.py'),('prepare-whitespace-pins.py','prepare-whitespace-pins.py')]:
+ old=(c/'baseline'/base).read_text();new=(c/name).read_text();expected=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='baseline/'+name,tofile=name))
+ assert (c/(name+'.diff')).read_text()==expected
+raw=(b/'landing/whitespace-preflight.stdout').read_bytes();assert raw==(c/'inputs/whitespace-preflight.stdout').read_bytes()
+issues=defaultdict(lambda:defaultdict(list))
+for line in raw.split(b'\n'):
+ m=re.match(rb'^([^+\n]+):([0-9]+): (.+)$',line)
+ if m:issues[m[1].decode()][m[3].decode()].append(int(m[2]))
+ else:assert not line.strip() or line.startswith(b'+')
+assert sum(len(ns) for kinds in issues.values() for ns in kinds.values())==141409
+pins=obj(c/'prepared/review-whitespace-exact-pins.json');assert len(pins)==16
+assert (b/'semantic-review/freeze.json').read_bytes()==(c/'inputs/freeze.json').read_bytes()
+freeze={x['path']:x for x in obj(b/'semantic-review/freeze.json')['files']}
+spec=importlib.util.spec_from_file_location('verified_witnesses',c/'witnesses.py');w=importlib.util.module_from_spec(spec);spec.loader.exec_module(w)
+real=[]
+for rel,p in pins.items():
+ name='data/alignment/reviews_c05/c5p90/'+rel;data=(wt/name).read_bytes();staged=subprocess.check_output(['git','show',':'+name],cwd=wt);grouped=dict(issues[name]);assert data==staged
+ if p['kind']=='root_course_index_blank_eof':proof=w.verify_root_log(data,staged,rel,grouped,p,b,wt/'data/alignment/reviews_c05/c5p90/landing-proof')
+ else:
+  w.verify_frozen(data,staged,rel,p,b/'semantic-review',freeze)
+  if p['kind']=='retained_print_separator':proof=w.verify_formatter(data,grouped,p,b/'semantic-review',freeze)
+  elif p['kind']=='physical_bytes':w.verify_physical(data,grouped,p);proof={'kind':p['kind'],'original_full_bytes_or_zip_member_exact':True}
+  elif p['kind']=='blank_eof':assert set(grouped)=={'new blank line at EOF.'} and all(not b''.join(data.split(b'\n')[n-1:]).strip() for n in grouped['new blank line at EOF.']);proof={'kind':p['kind']}
+  elif p['kind']=='diff_context':assert set(grouped)=={'trailing whitespace.'} and all(data.split(b'\n')[n-1]==b' ' for n in grouped['trailing whitespace.']);proof={'kind':p['kind']}
+  else:raise AssertionError(p['kind'])
+ real.append({'relative_path':rel,'warning_count':sum(map(len,grouped.values())),'proof':proof})
+(out/'actual-witness-proofs.json').write_text(json.dumps(real,ensure_ascii=False,indent=2)+'\n')
+for name in ['witnesses.py','test_witnesses.py','test_audit_dispatch.py','audit_staged_source_whitespace_candidate.py']:(out/name).write_bytes((c/name).read_bytes())
+(out/'inputs').mkdir();(out/'inputs/root-course-index.stdout').write_bytes((c/'inputs/root-course-index.stdout').read_bytes())
+runs=[]
+for label,file,count in [('witness','test_witnesses.py',16),('dispatch','test_audit_dispatch.py',1)]:
+ argv=['python3','-B',str(out/file)];env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1');env.pop('WHITESPACE_AUDIT_OUTPUT',None);started=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(argv,cwd=out,env=env,capture_output=True)
+ for suffix,data in [('stdout',r.stdout),('stderr',r.stderr),('exit',(str(r.returncode)+'\n').encode())]:(out/(label+'.'+suffix)).write_bytes(data)
+ record={'argv':argv,'cwd':str(out),'environment':{'PYTHONDONTWRITEBYTECODE':'1','WHITESPACE_AUDIT_OUTPUT':'unset'},'started_at':started,'exit':r.returncode,'stdout_bytes':len(r.stdout),'stderr_bytes':len(r.stderr)}
+ (out/(label+'.command.json')).write_text(json.dumps(record,indent=2)+'\n');runs.append(record)
+ assert r.returncode==0 and f'Ran {count} test'.encode() in r.stderr and r.stderr.rstrip().endswith(b'OK')
+for r in f['files']:verify(c/r['path'],r)
+assert (c/'candidate-freeze.json').read_bytes()==fr
+proof={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS independent code/provenance verification','spec_verdict':'APPROVE for bounded270 tooling only','quality_verdict':'APPROVE','open_findings':[],'candidate_freeze_sha256':sha(fr),'candidate_files':len(f['files']),'candidate_bytes':sum(r['bytes'] for r in f['files']),'exact_diffs_verified':2,'all16_pins_reopened_against_actual_staged_and_original_bytes':True,'full_six_source_rows_reopened_for_each_formatter_alias':True,'fresh_witness_tests':16,'fresh_dispatch_tests':1,'dispatch_test_uses_test_git_transport':True,'real_current_staged_witnesses_verified_separately':True,'candidate_unchanged':True,'actual_full_staged_audit':'PENDING; next action uses fresh output directory','source_normalization':False,'runs':runs}
+(out/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');(out/'verify.py.txt').write_bytes(Path(__file__).read_bytes());print(json.dumps(proof,indent=2))

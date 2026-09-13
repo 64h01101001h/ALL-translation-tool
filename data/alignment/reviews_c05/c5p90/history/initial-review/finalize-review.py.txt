@@ -1,0 +1,64 @@
+import json,pathlib,hashlib,subprocess,os,ast,datetime,collections
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+ROOT=pathlib.Path.cwd();B=ROOT/'campaign-artifacts/C05-268-270';R=B/'semantic-review';W=ROOT/'campaign-worktree'
+def j(p):return json.loads(p.read_text())
+def pin(p):v=p.read_bytes();return {'bytes':len(v),'sha256':hashlib.sha256(v).hexdigest()}
+def put(n,v):(R/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+# Original executing commands remain unmodified; format records name the final exact-byte preservation.
+formats=[]
+for p in sorted(R.rglob('*')):
+ if p.is_file() and p.suffix in ('.py','.png'):
+  dest=p.with_name(p.name+('.txt' if p.suffix=='.py' else '.bin'));assert not dest.exists()
+  z=pin(p);p.rename(dest);assert pin(dest)==z
+  formats.append(dict(original_execution_path=str(p),preserved_copy=dest.relative_to(R).as_posix(),**z,method='Exact-byte rename of reviewer-owned helper/render after execution/inspection; no source or author file changed.'))
+put('reviewer-helper-format-mappings.json',formats)
+helper=ROOT/'campaign-artifacts/land_reviewed_page.py'; tree=ast.parse(helper.read_text());allow=None
+for n in ast.walk(tree):
+ if isinstance(n,ast.Compare) and isinstance(n.ops[0],ast.In) and isinstance(n.comparators[0],ast.Tuple):
+  vals=[x.value for x in n.comparators[0].elts if isinstance(x,ast.Constant)]
+  if '.json' in vals and '.bin' in vals:allow=set(vals)
+assert allow=={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+manifest=j(R/'original-to-copy-manifest.json');assert isinstance(manifest,list) and len(manifest)==570
+for x in manifest:
+ assert set(x) in [set(['original','copy','sha256','bytes']),set(['original','copy','sha256','bytes','original_git_commit','repository_relative_path'])],set(x)
+ cp=R/x['copy'];assert cp.is_file() and cp.suffix.lower() in allow
+ assert pin(cp)=={k:x[k] for k in ['bytes','sha256']}
+ if 'original_git_commit' in x:
+  got=subprocess.run(['git','show',x['original_git_commit']+':'+x['repository_relative_path']],cwd=W,capture_output=True,check=True).stdout
+ else:got=pathlib.Path(x['original']).read_bytes()
+ assert got==cp.read_bytes(),x
+for x in j(R/'source-state-proof.json')['before']:
+ assert pin(pathlib.Path(x['path']))=={k:x[k] for k in ['bytes','sha256']}
+review=j(R/'review.json');assert isinstance(review['segments'],list) and len(review['segments'])==3
+keys={'seq','span_count','null_count','word_pair_count','spec_sha256','spec_bytes','body_sha256','body_bytes','generator_exit'}
+for x in review['segments']:
+ assert set(x)==keys
+ for nm,sha,sz in [('spec.json','spec_sha256','spec_bytes'),('body.html','body_sha256','body_bytes')]:
+  assert pin(B/f"reconciled/{x['seq']}/{nm}")=={'sha256':x[sha],'bytes':x[sz]}
+resolved=j(R/'resolved-spans.json');assert len(resolved)==123
+for x in resolved:assert list(x)==['seq','id','d','tib','eng','tib_range','eng_range']
+assert sum(x['eng'] is None for x in resolved)==5
+assert sum(x['d']==5 and x['eng'] is not None for x in resolved)==75
+assert len(j(R/'original-adjudications.json'))==227 and len(j(R/'per-span-adjudications.json'))==123
+assert j(R/'bank-ready-errata.json')==[]
+assert len(j(R/'open-findings.json'))==1 and review['verdict']=='NEEDS_CORRECTION'
+assert j(R/'errata-refutations.json')[0]['refuted'] is True
+# Preserve computed negative/positive semantic decisions without editing current candidate files.
+assert len(j(B/'reconciled/268/errata.json'))==1
+# Coverage of every full original input and every nested freeze is explicit.
+input_rows=j(B/'semantic-all-inputs.json');actual_originals={x['original'] for x in manifest}
+for x in input_rows:
+ original=x.get('path',x.get('original'));assert original in actual_originals,original
+nested=[p.relative_to(R).as_posix() for p in R.rglob('freeze.json') if p!=R/'freeze.json']
+for p in R.rglob('*'):
+ if p.is_file():assert p.suffix.lower() in allow,(p,'unsupported suffix')
+put('final-packaging-proof.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),whitelist=sorted(allow),actual_landing_helper=dict(path=str(helper),**pin(helper)),manifest_mappings=len(manifest),distinct_manifest_targets=len({x['copy'] for x in manifest}),historical_git_pins=sum('original_git_commit' in x for x in manifest),all_536_original_inputs_preserved=True,all_manifest_targets_full_bytes_rechecked=True,current_spec_body_pins_unchanged=True,source_state_rechecked_unchanged=True,all_extensions_supported=True,nested_freeze_count=len(nested),nested_freezes=nested,reviewer_format_records=len(formats),required_interfaces_valid=True,total_spans=123,total_nulls=5,total_word_pairs=75,original_dispositions=227,errata_refuted=1,errata_accepted=0,open_findings=1,freeze_excludes_only='actual top-level semantic-review/freeze.json',source_mutations=False))
+# Complete actual current tree, not basename-based exclusions. Every nested freeze and failed attempt stays in.
+assert not (R/'freeze.json').exists()
+files=[]
+for p in sorted(R.rglob('*')):
+ if p.is_file() and p!=R/'freeze.json':files.append(dict(path=p.relative_to(R).as_posix(),**pin(p)))
+put('freeze.json',dict(status='FROZEN_INITIAL_NEEDS_CORRECTION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),verdict='NEEDS_CORRECTION',files=files,exclusion='Only this actual top-level freeze.json; every nested freeze included.'))
+for x in j(R/'freeze.json')['files']:assert pin(R/x['path'])=={k:x[k] for k in ['bytes','sha256']}
+assert {x['path'] for x in files}=={p.relative_to(R).as_posix() for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json'}
+print(json.dumps(dict(status='PASS',frozen_files=len(files),freeze=pin(R/'freeze.json'),review=pin(R/'review.md'),review_json=pin(R/'review.json'),manifest=pin(R/'original-to-copy-manifest.json'),open_findings=1)))

@@ -1,0 +1,56 @@
+{
+  "seq": 268,
+  "candidate": {
+    "seq": 268,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "sweet, cool water",
+    "expected": "clear, cool water",
+    "evidence": "PROBABLE local translation mismatch only. C05:268 ACIP CHU DVANGS SHING BSIL BA and original GMR sweet, cool water are preserved verbatim. HGM23556 dvangs pa positively gives clear/clarity; HGM3787 mngar ba gives sweet. C05:251 separately pairs MNGAR BA/DVANGS PA/BSIL BA with sweet, clear, and cool; its complete ASCII and Practice7 PDF page30 corroborate the distinction. Full C09:35 and ILL:174 are lexical clarity comparanda, not whole-passage witnesses. Original ILL DOCX/text paragraphs and full source rows are preserved. C15:413/C18:1127 match all three fields; C16:844 shares the complete436-character English then adds a heading; P7:23 and actual PDF pages36–37 preserve sweet/cool with spelling/punctuation differences. None proves independent publication lineage or translator intent. All five refutation grounds and complete quote/count/registered-class checks are in errata-analysis.json. No positive sweet sense for this clarity adjective was established; a deliberate contextual paraphrase or different Tibetan source remains possible, so confidence remains PROBABLE and severity LOW. This is a review-only correction proposal: no source text, dictionary entry or register is changed.",
+    "severity": "LOW",
+    "confidence": "PROBABLE"
+  },
+  "refuted": true,
+  "decisive_ground": "d and explicit uncertainty default",
+  "grounds": {
+    "a": {
+      "refutation_triggered": false,
+      "finding": "The found text sweet, cool water is exact at C05:268 English[268,285). ACIP CHU DVANGS SHING BSIL BA and corresponding Wylie preserve the actual clarity/coolness phrase. No mngar occurs in current268. The quotation is valid, so this ground alone does not refute."
+    },
+    "b": {
+      "refutation_triggered": "UNRESOLVED_INDEPENDENCE",
+      "finding": "C15:413 and C18:1127 are exact ACIP/Wylie/English matches. C16:844 shares the full 436-character English and adds 33 Who Made Hell?; P7:23 has DWANGS/spelling/punctuation differences while preserving sweet/cool. Full physical C05/C15/C18/C16 originals, Practice7 PDF pages36–37 and row comparisons confirm the readings. Identical words or distinct course labels do not prove independent publication or ingestion. No claim of established independent publication is made. Uncertainty cannot be converted to evidence of error."
+    },
+    "c": {
+      "refutation_triggered": false,
+      "finding": "All 192 register entries inspected, no current citation duplicate. Already registered following-heading glue is visible in C16 but outside the selected found phrase. No converter, cap, footnote or caption class supplies this candidate."
+    },
+    "d": {
+      "refutation_triggered": true,
+      "finding": "HGM23556 dvangs pa positively attests clear/clarity; HGM3787 mngar ba sweet; C05:251 and physical Practice7 page30 distinguish sweet, clear, and cool. HGM23555 dvangs/liquid is contrary positive evidence and is preserved. HGM8162 dwangs has no HGM gloss; its Hopkins clear is comparative only. C09:35 and ILL:174 are full lexical clarity comparanda, not whole268 witnesses. This makes the proposed word pair unresolved, but does not establish that the published English is indefensible. The reconciler explicitly leaves deliberate contextual paraphrase or another Tibetan source possible. Under the binding default-to-refuted rule when uncertain, this unresolved defensibility and intended-source question requires refuted=true. A LOW/PROBABLE label cannot waive that rule. Neither sweet nor clear is inserted into the source or glossary."
+    },
+    "e": {
+      "refutation_triggered": false,
+      "finding": "All234 primary and3 supplemental query sets replayed with full rows; five independently added full-row queries measured76/12/5/2/7. All claimed count scopes are explicit. Stored master dvangs corpus frequency73 is metadata, not the current LIKE count76. lcags sngags seven rows include repetitions and different passages; they are not seven independent publications. Counts support the evidence identity but not erratum acceptance.",
+      "measured": {
+        "current_dvangs_LIKE_rows": 76,
+        "current_mngar_ba_LIKE_rows": 12,
+        "sweet_cool_LIKE_rows": 5,
+        "other_exact_three_field_C05_268_matches": 2,
+        "lcags_sngags_LIKE_rows": 7,
+        "full_register_records": 192,
+        "current_citation_hits": 0,
+        "C16_844_shared_English_characters": 436,
+        "current_found_occurrences": 1
+      }
+    }
+  },
+  "evidence": [
+    "additional-source-proof.json",
+    "evidence/full-query-replays.json",
+    "evidence/full-master-reopened.json",
+    "evidence/full-corpus-reopened.json",
+    "evidence/physical-reopened.json",
+    "pdf-review/render-proof.json",
+    "original-to-copy-manifest.json"
+  ]
+}

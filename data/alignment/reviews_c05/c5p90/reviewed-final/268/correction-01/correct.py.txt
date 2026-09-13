@@ -1,0 +1,120 @@
+import pathlib,json,hashlib,subprocess,os,sys,sqlite3,importlib.util,difflib,copy
+C=pathlib.Path(__file__).resolve().parent; B=C.parent; R=B/'reconciled/268'; H=B/'pre-correction-01'; W=B.parent.parent/'campaign-worktree'
+def read(p):return json.loads(p.read_text())
+def pin(p):
+ b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def verify(p,x):assert all(pin(p)[k]==x[k] for k in ('bytes','sha256')),(str(p),x)
+assert sys.dont_write_bytecode and os.environ['PYTHONDONTWRITEBYTECODE']=='1'
+root=read(B/'root-initial-semantic-verification.json')
+assert root['only_open_finding']=='C05-268-ERRATA-01' and len(root['history_files'])==923
+for m in root['history_files']:verify(pathlib.Path(m['copy']),m)
+before={str(p.relative_to(B)):pin(p) for seq in (268,269,270) for p in sorted((B/f'reconciled/{seq}').rglob('*')) if p.is_file()}
+for rel,m in before.items():verify(H/rel,m)
+put(C/'before-files.json',before)
+review=read(B/'semantic-review/review.json');assert len(review['open_findings'])==1
+assert review['open_findings'][0]['alignment_span_changes_requested']==[]
+proof5=read(B/'semantic-review/errata-five-ground-proof.json');verdict=read(B/'semantic-review/errata-refutations.json')
+assert proof5['refuted'] and proof5['grounds']['d']['refutation_triggered'] is True
+reason=proof5['grounds']['d']['finding']
+changes=['spec.json','body.html','errata.json','errata-analysis.json','report.md','generator-proof.json','batch-counts.json','original-dispositions.json','omissions.json','original-to-final.diff.txt','final-audit.json','supported-copy-preflight.json','freeze.json']
+history=[]
+for name in changes:
+ old=H/'reconciled/268'/name;dst=R/'history/pre-correction-01'/name
+ dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(old.read_bytes())
+ history.append({'changed_original_path':str(R/name),'immutable_historical_source':str(old),'current_retained_copy':str(dst),'bytes':pin(old)['bytes'],'sha256':pin(old)['sha256']})
+put(C/'changed-original-history-mappings.json',history)
+put(R/'correction-history-mappings.json',history)
+material=[]
+for name in ('review.md','review.json','errata-refutations.json','errata-five-ground-proof.json'):
+ p=B/'semantic-review'/name;dst=R/'evidence'/('initial-semantic-'+name);dst.write_bytes(p.read_bytes())
+ material.append({'original':str(p),'immutable_historical_source':str(H/'semantic-review'/name),'copy':str(dst.relative_to(R)),**{k:v for k,v in pin(p).items() if k!='path'}})
+put(R/'correction-review-input-mappings.json',material)
+collection=read(R/'collection-proof.json');sourcepins=[]
+for key in ('database','source_master','original_master','corpus'):
+ p=pathlib.Path(collection[key]['path']);verify(p,collection[key]);sourcepins.append(pin(p))
+for p in (W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py',R/'run-canonical-readonly.py'):sourcepins.append(pin(p))
+db=pathlib.Path(collection['database']['path']);conn=sqlite3.connect(db.as_uri()+'?mode=ro',uri=True);conn.row_factory=sqlite3.Row;conn.execute('PRAGMA query_only=ON')
+sql='select * from corpus_segments where course=? and seq between ? and ? order by seq';params=['C05',268,270]
+rows=[dict(x) for x in conn.execute(sql,params)];assert rows==read(R/'source-full-rows.json')
+lexsql='select * from entries where id in (23555,23556,3787,8162) order by id';lex=[dict(x) for x in conn.execute(lexsql)]
+master=read(R/'master-entries-full.json')['entries']
+assert all(json.loads(x['raw'])==master[str(x['id'])] for x in lex)
+put(C/'unchanged-source-proof.json',{'before_pins':sourcepins,'sqlite_uri':db.as_uri()+'?mode=ro','query_only':conn.execute('PRAGMA query_only').fetchone()[0],'source_query':{'sql':sql,'params':params,'rows':rows},'positive_and_contrary_lexical_query':{'sql':lexsql,'params':[],'rows':lex},'equals_consumed_source_and_full_master_entries':True})
+conn.close()
+oldspec=read(H/'reconciled/268/spec.json');spec=copy.deepcopy(oldspec)
+oldsentence="The separately preserved LOW/PROBABLE erratum proposes clear for editorial consideration only; GMR's sweet, cool water remains verbatim."
+sentence="The separately preserved sweet-to-clear editorial candidate is refuted under ground (d) and REFUTE's uncertainty default: deliberate contextual paraphrase or another Tibetan source remains possible. The positive clarity/taste evidence leaves the word pair unresolved and does not establish indefensible published English. No current erratum is retained; GMR's sweet, cool water remains verbatim."
+assert spec['segments'][0]['note'].count(oldsentence)==1
+spec['segments'][0]['note']=spec['segments'][0]['note'].replace(oldsentence,sentence)
+assert spec['segments'][0]['spans']==oldspec['segments'][0]['spans'] and spec['segments'][0]['eng_order']==oldspec['segments'][0]['eng_order']
+put(R/'spec.json',spec);put(R/'errata.json',[])
+analysis=read(H/'reconciled/268/errata-analysis.json');candidate=analysis['candidate_dispositions'][0]
+analysis['correction']={'finding':'C05-268-ERRATA-01','original_complete_analysis':str(H/'reconciled/268/errata-analysis.json'),'initial_semantic_review':material,'ruling':'Refuted under ground (d) and explicit uncertainty default; all positive/contrary evidence and all five grounds retained. No alignment change.'}
+candidate['decision']='refute under ground (d) and explicit uncertainty default';candidate['refuted']=True
+candidate['five_grounds']['d_wrong_correction_or_defensible_reading']['refutes']=True
+candidate['five_grounds']['d_wrong_correction_or_defensible_reading']['ruling']=reason
+candidate['five_grounds']['b_independent_parallel_refutation']['explanation']='Independence and ingestion lineage remain unestablished. Identical words or different course labels do not establish independent publication, and this uncertainty cannot become positive evidence of error. The complete shared readings and their limits remain as recorded.'
+candidate['suggested_severity']=None;candidate['suggested_confidence']=None
+put(R/'errata-analysis.json',analysis)
+put(R/'errata-refutations.json',verdict)
+ds=read(H/'reconciled/268/original-dispositions.json')
+selected=[d for d in ds if d['original_identity']['angle']=='tibetan' and d['original_identity']['id']=='w17'];assert len(selected)==1
+selected[0]['reason']='Reject dvangs/sweet word pair despite canonical PASS: positive clarity/taste distinction and current source do not resolve this as a sound lexical correspondence. Leave both unwrapped; no false null or source correction. The separate editorial candidate is refuted under ground (d) and REFUTE\'s uncertainty default; that refutation does not establish the rejected mapping.'
+put(R/'original-dispositions.json',ds)
+om=read(H/'reconciled/268/omissions.json');assert om[0]['extent']=='dvangs / sweet'
+om[0]['decision']='Reject the proposed word pair: positive dvangs pa/clear, mngar ba/sweet and C05:251 distinguish clarity from taste, leaving this local correspondence unresolved. Both exact source words remain unwrapped, not nulled or corrected. The separate sweet-to-clear candidate is refuted under ground (d) and the explicit uncertainty default; all five grounds and contrary evidence remain preserved.'
+put(R/'omissions.json',om)
+attempt=R/'attempts/correction-01';attempt.mkdir(parents=True,exist_ok=False)
+argv=['python3','-B',str(R/'run-canonical-readonly.py')];inp=(R/'spec.json').read_bytes();(attempt/'stdin.json').write_bytes(inp)
+p=subprocess.run(argv,input=inp,cwd=W,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+(attempt/'stdout.html').write_bytes(p.stdout);(attempt/'stderr.txt').write_bytes(p.stderr);(attempt/'exit.txt').write_text(str(p.returncode)+'\n')
+gp={'argv':argv,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite':'URI mode=ro; PRAGMA query_only=ON','wrapper':pin(R/'run-canonical-readonly.py'),'canonical_generator':pin(W/'tools/gen_alignment_page.py'),'builder':pin(W/'tools/build_alignment_layer.py'),'stdin':pin(attempt/'stdin.json'),'stdout':pin(attempt/'stdout.html'),'stderr':pin(attempt/'stderr.txt'),'exit':p.returncode}
+put(attempt/'invocation.json',gp);assert p.returncode==0 and not p.stderr
+(R/'body.html').write_bytes(p.stdout);gp['spec']=pin(R/'spec.json');gp['body']=pin(R/'body.html');gp['supersedes']=pin(H/'reconciled/268/generator-proof.json');put(R/'generator-proof.json',gp)
+assert p.stdout!=(H/'reconciled/268/body.html').read_bytes()
+sp=importlib.util.spec_from_file_location('canonical',W/'tools/gen_alignment_page.py');gen=importlib.util.module_from_spec(sp);sp.loader.exec_module(gen)
+alltuples=[];alloriginals=[]
+for seq in (268,269,270):
+ D=B/f'reconciled/{seq}';s=read(D/'spec.json')['segments'][0];old=read(H/f'reconciled/{seq}/spec.json')['segments'][0]
+ assert s['spans']==old['spans'] and s['eng_order']==old['eng_order']
+ assert [list(x) for x in s['spans']]==[list(x) for x in old['spans']]
+ row=next(x for x in rows if x['seq']==seq);by={x['id']:x for x in s['spans']}
+ tr=gen.resolve(row['wylie'],s['spans'],'tib',seq);er=gen.resolve(row['english'],gen.with_members(s['spans'],[by[x] for x in s['eng_order']],row['english']),'eng',seq)
+ tuples=[{'seq':seq,'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x.get('eng'),'tib_range':list(tr[x['id']]),'eng_range':list(er[x['id']]) if x.get('eng') is not None else None} for x in s['spans']]
+ assert tuples==read(D/'resolved-spans.json')==read(H/f'reconciled/{seq}/resolved-spans.json');alltuples+=tuples
+ current=read(D/'original-dispositions.json');previous=read(H/f'reconciled/{seq}/original-dispositions.json')
+ assert [{k:v for k,v in d.items() if k!='reason'} for d in current]==[{k:v for k,v in d.items() if k!='reason'} for d in previous]
+ alloriginals+=current
+ for name in ('final-decisions.json','unwrapped-extents.json','proposed-span-head-allowances.json'):assert (D/name).read_bytes()==(H/f'reconciled/{seq}'/name).read_bytes()
+assert len(alltuples)==123 and len(alloriginals)==227
+counts=read(H/'reconciled/268/batch-counts.json');counts[0]['body_bytes']=len(p.stdout)
+for c in counts:c['errata']=0
+put(R/'batch-counts.json',counts)
+diff=[]
+for angle in ('tibetan','english'):diff+=list(difflib.unified_diff((B/f'{angle}/268/spec.json').read_text().splitlines(True),(R/'spec.json').read_text().splitlines(True),fromfile=str(B/f'{angle}/268/spec.json'),tofile=str(R/'spec.json')))
+(R/'original-to-final.diff.txt').write_text(''.join(diff))
+report=(H/'reconciled/268/report.md').read_text()
+report=report.replace('25 spans, 0 nulls, 18 non-null d5 pairs;', '25 spans, 0 nulls, 18 non-null d5 pairs, 0 current errata;')
+report=report.replace('Retain one LOW/PROBABLE ENGLISH_FACTUAL_ERROR candidate, sweet, cool water → clear, cool water. All five grounds, original claims, complete source quotes, measured counts, and 192 registered records are addressed in errata-analysis.json and registered-class-check.json.', 'C05-268-ERRATA-01 corrected: sweet, cool water → clear, cool water is refuted under ground (d) and REFUTE\'s uncertainty default. Positive clarity/taste evidence does not establish indefensible published English. All five grounds, contrary evidence, original claims and measured counts remain in errata-analysis.json; current errata.json is empty.')
+oldgp=read(H/'reconciled/268/generator-proof.json')
+for name in ('spec','body'):
+ report=report.replace(f"{name}.json: {oldgp[name]['bytes']} bytes; SHA256 {oldgp[name]['sha256']}",f"{name}.json: {gp[name]['bytes']} bytes; SHA256 {gp[name]['sha256']}") if name=='spec' else report.replace(f"body.html: {oldgp[name]['bytes']} bytes; SHA256 {oldgp[name]['sha256']}",f"body.html: {gp[name]['bytes']} bytes; SHA256 {gp[name]['sha256']}")
+report=report.replace('body=4993 bytes','body='+str(len(p.stdout))+' bytes').replace('generator-proof.json and attempts/01/.','generator-proof.json and attempts/correction-01/.')
+report=report.replace('Complete private enumeration and hashes: freeze.json. Shared packaging and execution details are in ../268/.','Complete current enumeration: freeze.json. Initial versions and freezes are immutable in history/pre-correction-01/ and ../../pre-correction-01/. Full correction manifest/diff/execution proof: ../../reconciliation-correction-01/. Independent scoped semantic re-review is still required; this correction is not semantic approval.')
+(R/'report.md').write_text(report)
+afterpins=[]
+for oldpin in sourcepins:
+ q=pathlib.Path(oldpin['path']);verify(q,oldpin);afterpins.append(pin(q))
+sourceproof=read(C/'unchanged-source-proof.json');sourceproof['after_pins']=afterpins;put(C/'unchanged-source-proof.json',sourceproof)
+untouched=[]
+for rel,m in before.items():
+ if rel.startswith(('reconciled/269/','reconciled/270/')):verify(B/rel,m);untouched.append(m)
+put(C/'unchanged-mappings-proof.json',{'status':'PASS','all_123_ordered_tuples':alltuples,'all_227_original_dispositions_except_one_erratum_reason_unchanged':True,'all_span_objects_and_optional_field_presence_and_key_order_unchanged':True,'dvangs_and_sweet_unwrapped':True,'unwrapped_extents_and_final_decisions_and_allowances_unchanged':True,'unchanged_269_270_files':untouched,'current_counts':counts})
+summaries=[]
+for c in counts:
+ D=B/f'reconciled/{c["seq"]}';summaries.append({**c,'spec':pin(D/'spec.json'),'body':pin(D/'body.html')})
+put(R/'final-audit.json',{'status':'PASS mechanical correction checks; not semantic approval','finding_corrected':'C05-268-ERRATA-01','producer':'reused Codex non-author c05_253_255_reconcile','superseded_initial_audit':pin(H/'reconciled/268/final-audit.json'),'current_summary':summaries,'checks':{'all_123_tuples_exact':True,'all_227_original_identity_and_disposition_fields_exact':True,'original_w17_reason_only_updates_erratum_status':True,'269_and_270_all_files_unchanged':True,'source_master_corpus_and_engine_hashes_unchanged':True,'current_268_actual_canonical_exit':0,'current_268_stderr_bytes':0,'all_current_errata_lists_empty':True},'correction_proofs':['../../reconciliation-correction-01/unchanged-source-proof.json','../../reconciliation-correction-01/unchanged-mappings-proof.json'],'review_requirement':'Distinct reviewer must conduct scoped semantic re-review before approval.'})
+put(R/'correction-status.json',{'finding':'C05-268-ERRATA-01','current_errata_count':0,'candidate_refuted':True,'ground':'d plus REFUTE uncertainty default','spec':gp['spec'],'body':gp['body'],'generator':gp,'superseded_initial_documents':'Initial author/errata-review/finalize/freeze helpers, execution streams, attempt01 bodies, original-manifests and history/pre-correction-01/ documents are historical records and must not be run to reconstruct current state. Their retained-candidate wording is preserved as history. Current interfaces are spec/body/errata/analysis/report/generator-proof/batch-counts/final-audit and this status.','role':'Non-author correction, not semantic approval.'})
+put(C/'correction-result.json',{'finding':'C05-268-ERRATA-01','corrected':True,'current_errata':0,'spans':123,'nulls':5,'word_pairs':75,'originals':227,'spec':gp['spec'],'body':gp['body'],'generator_exit':0,'stderr_bytes':0,'source_proof':pin(C/'unchanged-source-proof.json'),'mapping_proof':pin(C/'unchanged-mappings-proof.json'),'prior_history_files_verified':923,'review_required':True})
+print(json.dumps(read(C/'correction-result.json')))

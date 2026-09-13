@@ -1,0 +1,132 @@
+"""Verify the initial review and preserve exact pre-correction history once.
+
+This is a mechanical boundary check, not semantic approval. It must run before
+any current reconciliation correction. No source or repository file is written.
+"""
+from pathlib import Path
+from collections import Counter
+import datetime
+import hashlib
+import json
+import shutil
+import subprocess
+
+B = Path(__file__).resolve().parent
+R = B / 'semantic-review'
+W = B.parent.parent / 'campaign-worktree'
+H = B / 'pre-correction-01'
+P = B / 'root-initial-semantic-verification.json'
+
+def read(p):
+    return json.loads(p.read_text())
+
+def pin(p):
+    raw = p.read_bytes()
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+def check(p, record):
+    assert pin(p) == {k: record[k] for k in ('bytes', 'sha256')}, p
+
+assert not H.exists() and not P.exists(), 'Preserve prior executions'
+meta = read(R / 'review.json')
+assert meta['verdict'] == meta['spec_verdict'] == meta['quality_verdict'] == 'NEEDS_CORRECTION'
+assert [f['id'] for f in meta['open_findings']] == ['C05-268-ERRATA-01']
+assert meta['open_findings'][0]['alignment_span_changes_requested'] == []
+assert read(R / 'bank-ready-errata.json') == []
+freeze = read(R / 'freeze.json')
+actual = {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()}
+assert actual == {r['path'] for r in freeze['files']} | {'freeze.json'}
+assert len(freeze['files']) == 572
+for row in freeze['files']:
+    check(R / row['path'], row)
+maps = read(R / 'original-to-copy-manifest.json')
+assert len(maps) == 570
+historical = 0
+for row in maps:
+    cp = (R / row['copy']).resolve()
+    assert cp.is_relative_to(R.resolve())
+    assert cp.suffix.lower() in ('.json', '.md', '.html', '.stderr', '.stdout', '.log', '.txt', '.bin', '.exit')
+    check(cp, row)
+    if row.get('original_git_commit'):
+        original = subprocess.check_output(['git', 'show', row['original_git_commit'] + ':' + row['repository_relative_path']], cwd=W)
+        historical += 1
+    else:
+        original = Path(row['original']).read_bytes()
+    assert cp.read_bytes() == original, row
+assert historical == 12
+inputs = read(B / 'semantic-all-inputs.json')
+assert len(inputs) == 536
+for row in inputs:
+    check(Path(row['path']), row)
+    assert any(m['original'] == row['path'] and m['sha256'] == row['sha256'] and m['bytes'] == row['bytes'] for m in maps), row
+resolved = read(R / 'resolved-spans.json')
+assert resolved == read(B / 'root-reconciliation-verification/resolved-spans.json')
+assert len(resolved) == 123
+judgments = read(R / 'per-span-adjudications.json')
+assert [j['span'] for j in judgments] == resolved
+assert all(j['alignment_decision'] == 'SOUND' and j['independent_reason'] for j in judgments)
+report = (R / 'review.md').read_text()
+assert all(j['independent_reason'] in report for j in judgments)
+for j in judgments:
+    assert all((R / p).is_file() for p in j['evidence'])
+originals = read(B / 'proposal-verification/root-resolved-spans.json')
+adjudications = read(R / 'original-adjudications.json')
+assert len(originals) == len(adjudications) == 227
+identity_keys = ['angle', 'seq', 'id', 'd', 'tib', 'eng', 'tib_range', 'eng_range']
+known_reasons = {j['independent_reason'] for j in judgments}
+additional_reasons = []
+for original, adjudication in zip(originals, adjudications):
+    assert adjudication['original_identity'] == {k: original[k] for k in identity_keys}
+    assert adjudication['original_span'] == original['original_span']
+    assert adjudication['original_span_keys'] == list(original['original_span'])
+    assert adjudication['original_field_presence'] == original['original_field_presence']
+    assert all(i in resolved for i in adjudication['final_identities'])
+    assert adjudication['independent_reasons']
+    for reason in adjudication['independent_reasons']:
+        if reason not in known_reasons and reason not in additional_reasons:
+            additional_reasons.append(reason)
+assert Counter(a['disposition'] for a in adjudications) == {'retained': 200, 'recast': 26, 'rejected': 1}
+for row in meta['segments']:
+    seq = row['seq']
+    directory = B / 'reconciled' / str(seq)
+    for stem, filename in [('spec', 'spec.json'), ('body', 'body.html')]:
+        expected = {'bytes': row[stem + '_bytes'], 'sha256': row[stem + '_sha256']}
+        check(directory / filename, expected)
+        assert (R / 'reviewed-final' / str(seq) / filename).read_bytes() == (directory / filename).read_bytes()
+    spans = read(directory / 'spec.json')['segments'][0]['spans']
+    assert len(spans) == row['span_count']
+    assert sum(s['eng'] is None for s in spans) == row['null_count']
+    assert sum(s['eng'] is not None and s['d'] == 5 for s in spans) == row['word_pair_count']
+    assert row['generator_exit'] == 0
+assert [meta['total_spans'], meta['total_nulls'], meta['total_word_pairs']] == [123, 5, 75]
+assert len(read(R / 'generator-proof.json')) == 9
+assert all(r['generator_exit'] == 0 for r in read(R / 'generator-proof.json'))
+
+# Preserve entire initial trees outside the mutable current interfaces.
+for folder in ['semantic-review', 'reconciled', 'root-reconciliation-verification']:
+    shutil.copytree(B / folder, H / folder)
+dispatch = H / 'dispatch'
+dispatch.mkdir()
+for name in ['semantic-all-inputs.json', 'semantic-input-review-package.txt', 'semantic-input-supplement.txt', 'semantic-dispatch-inputs.json', 'semantic-dispatch-addendum.md', 'semantic-supplement-generation.json']:
+    shutil.copy2(B / name, dispatch / name)
+history = []
+for cp in sorted(p for p in H.rglob('*') if p.is_file()):
+    relative = cp.relative_to(H)
+    original = B / (relative.relative_to('dispatch') if relative.parts[0] == 'dispatch' else relative)
+    assert cp.read_bytes() == original.read_bytes(), cp
+    history.append({'original': str(original), 'copy': str(cp), **pin(cp)})
+result = {
+    'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'status': 'PASS mechanical initial NEEDS_CORRECTION boundary and exact history preservation; not acceptance',
+    'review_freeze': pin(R / 'freeze.json'),
+    'review': pin(R / 'review.md'),
+    'frozen_files': 572, 'manifest_records': 570, 'historical_git_pins': historical,
+    'initial_raw_inputs': 536, 'current_tuples': 123, 'original_dispositions': 227,
+    'additional_original_reasons_for_root_read': additional_reasons,
+    'history_files': history,
+    'only_open_finding': 'C05-268-ERRATA-01',
+    'accepted': False,
+}
+P.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
+print(json.dumps({k: v for k, v in result.items() if k != 'history_files'}, ensure_ascii=False, indent=2))
+print('Preserved history files:', len(history))

@@ -1,0 +1,167 @@
+{
+  "status": "PASS",
+  "producer": "Codex c05_253_255_reconcile, reused non-author of current batch; no fresh-context claim",
+  "checks": [
+    {
+      "check": "Original database/master/corpus pins remain exact",
+      "pass": true,
+      "detail": [
+        {
+          "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+          "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc",
+          "bytes": 249167872
+        },
+        {
+          "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/hgm_dictionary_v27_2.json.gz",
+          "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+          "bytes": 13393560
+        },
+        {
+          "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz",
+          "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+          "bytes": 13393560
+        },
+        {
+          "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/full_parallel_corpus_v32.json.gz",
+          "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8",
+          "bytes": 8965675
+        }
+      ]
+    },
+    {
+      "check": "Final complete source rows are unchanged",
+      "pass": true,
+      "detail": {
+        "rows": 3,
+        "query_only": 1
+      }
+    },
+    {
+      "check": "All final ordered tuples/ranges, complements, decisions, original optional fields and counts",
+      "pass": true,
+      "detail": {
+        "final_spans": 123,
+        "nulls": 5,
+        "original_identities": 227,
+        "dispositions": {
+          "retained": 200,
+          "recast": 26,
+          "rejected": 1
+        }
+      }
+    },
+    {
+      "check": "Actual canonical proof artifacts and unchanged engines",
+      "pass": true,
+      "detail": {
+        "original_replays": 6,
+        "final_runs": 3,
+        "all_exit": 0,
+        "all_stderr_bytes": 0,
+        "body_bytes": [
+          4993,
+          5926,
+          10222
+        ]
+      }
+    },
+    {
+      "check": "Complete source-to-copy mappings and supported suffixes",
+      "pass": true,
+      "detail": {
+        "mappings": 220,
+        "original_manifest": 204,
+        "supplemental_manifest": 9,
+        "helper_and_skill_manifest": 7,
+        "immutable_git_pins": 10
+      }
+    },
+    {
+      "check": "Repository/source scope and unchanged tracked files",
+      "pass": true,
+      "detail": {
+        "HEAD": "2487bfcd73a1463d135a4544a01535ba5c99cab0",
+        "status": "?? data/teaching/dcc_captions\n"
+      }
+    }
+  ],
+  "summary": [
+    {
+      "seq": 268,
+      "spans": 25,
+      "nulls": 0,
+      "word_pairs": 18,
+      "original_identities": 52,
+      "dispositions": {
+        "retained": 44,
+        "recast": 7,
+        "rejected": 1
+      },
+      "generator_exit": 0,
+      "body_bytes": 4993,
+      "spec": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/268/spec.json",
+        "bytes": 4770,
+        "sha256": "9f69f4dcb8871b49f68999659b18bf79b8e2ba8675598a104e6e7681e565c203"
+      },
+      "body": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/268/body.html",
+        "bytes": 4993,
+        "sha256": "59d77c705bcfbde16f795dfe9fee250d9da00a5a58ae0b582ecb63ac1a6e98d9"
+      },
+      "errata": 1
+    },
+    {
+      "seq": 269,
+      "spans": 34,
+      "nulls": 1,
+      "word_pairs": 14,
+      "original_identities": 60,
+      "dispositions": {
+        "retained": 52,
+        "recast": 8,
+        "rejected": 0
+      },
+      "generator_exit": 0,
+      "body_bytes": 5926,
+      "spec": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/269/spec.json",
+        "bytes": 5945,
+        "sha256": "4172b2df91e6493798ad15ffeadf39732f49ee977870006a234c66f6ed42df6f"
+      },
+      "body": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/269/body.html",
+        "bytes": 5926,
+        "sha256": "3096513e164b0e6bc23a89592d9d1664815e8d3a49d162ae5b0514c2e9fd593c"
+      },
+      "errata": 0
+    },
+    {
+      "seq": 270,
+      "spans": 64,
+      "nulls": 4,
+      "word_pairs": 43,
+      "original_identities": 115,
+      "dispositions": {
+        "retained": 104,
+        "recast": 11,
+        "rejected": 0
+      },
+      "generator_exit": 0,
+      "body_bytes": 10222,
+      "spec": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/270/spec.json",
+        "bytes": 10512,
+        "sha256": "d79cec17ec05599af8dccf55fd33eb470c06fe60aa7e15481440e86717c3f991"
+      },
+      "body": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-268-270/reconciled/270/body.html",
+        "bytes": 10222,
+        "sha256": "2d8206ec98e7fefd406a3b6aa07ef7e714364aacb22efd3ddc51b531b3e8c619"
+      },
+      "errata": 0
+    }
+  ],
+  "source_query_total_note": "234 stored initial sets + 3 comparative sets + 1 final exact-source pin query = 238 saved query sets; internal PRAGMA calls and initial separate source read are not advertised as lexical evidence sets.",
+  "semantic_limit": "Mechanical checks establish faithful source slices, provenance and canonical output; independent semantic review remains a separate gate. PROVISIONAL is not editorial acceptance."
+}

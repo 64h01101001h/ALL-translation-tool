@@ -1,0 +1,48 @@
+"""Bank exact verification records; retain all large/raw witness artifacts externally."""
+from pathlib import Path
+import datetime,hashlib,json
+b=Path(__file__).resolve().parent;art=b.parent;wt=art.parent/'campaign-worktree';landing=b/'landing';dest=wt/'data/alignment/reviews_c05/c5p90/landing-proof';candidate=art/'whitespace-candidate-270';rootreview=art/'whitespace-root-review-270'
+def sha(x):return hashlib.sha256(x).hexdigest()
+# Preserve actual audit outputs alongside other landing records. No source overwritten.
+for p in (b/'whitespace-audit-root').iterdir():
+ if p.is_file():
+  target=landing/p.name;assert not target.exists();target.write_bytes(p.read_bytes());assert target.read_bytes()==p.read_bytes()
+for name in ['review-whitespace-exact-pins.json','whitespace-classification-preflight.json','special-witness-proof.json']:
+ target=landing/name;assert not target.exists();target.write_bytes((candidate/'prepared'/name).read_bytes())
+rootreview.joinpath('review.md').write_text('''# Independent review of the bounded270 whitespace tooling\n\nSPEC: APPROVE for this bounded tooling invocation. QUALITY: APPROVE. No open\nfinding. Root read all final verifier, preparer, audit and test sources and\nexact baseline diffs, original producer code and original document extents.\nAll434 candidate-frozen files remain exact. Root independently reopened every\n16 specific pin against staged and source bytes, including full formatter\nsource rows and original DOCX member, and ran16 witness tests plus1 dispatch\ntest fresh outside the candidate. The dispatch test uses a test Git transport;\nreal current staged equality was checked separately. Exact proof/streams are\nadjacent. No source whitespace or semantic data was changed.\n\nOnly the actual six print records/default separators, exact whole ILL/ZIP bytes\nand exact699-byte root-log EOF are accepted by the additions. Originalv6 and\nfailed preparer remain unchanged. This is not an independent semantic verdict\non root-authored Tibetan originals. The separate non-author semantic approval\nremains binding. The actual staged audit subsequently passed at00:29:04UTC;\nits complete141409 warnings and44112924 raw bytes are preserved in the batch.\nNo audit write occurred inside the frozen candidate.\n''')
+manifest=json.loads((landing/'root-proof-copy-manifest-before-whitespace.json').read_text());records=list(manifest['files']);externals=list(manifest['external_actual_bytes_retained'])
+seen={r['copy'] for r in records}
+def copy(source,relative):
+ relative=Path(relative);raw=source.read_bytes();target=dest/relative
+ if target.exists():assert target.read_bytes()==raw;return
+ target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw);assert target.read_bytes()==raw
+ records.append({'original':str(source),'copy':str(relative),'bytes':len(raw),'sha256':sha(raw)})
+def retain(source,reason):
+ raw=source.read_bytes();externals.append({'path':str(source),'bytes':len(raw),'sha256':sha(raw),'disposition':reason})
+large_logs={'whitespace-preflight.stdout','staged-diff-check.stdout','whitespace-unclassified-diagnostic.json'}
+for p in sorted(landing.glob('*')):
+ if not p.is_file() or p.name=='root-proof-copy-manifest-before-whitespace.json':continue
+ if p.name in large_logs or p.name=='previous-main-csv-seed.bin':retain(p,'Complete external raw evidence retained; referenced by banked proofs')
+ else:copy(p,p.name)
+for p in sorted(b.glob('*.py')):
+ relative=Path('root-helpers')/(p.name+'.txt');copy(p,relative)
+for p in [art/'review-whitespace-candidate-270.py']:
+ copy(p,Path('root-helpers')/(p.name+'.txt'))
+# Every candidate file is retained and pinned by candidate-freeze.json. Bank all
+# helper sources, attempt metadata, small actual streams, proofs and the freeze;
+# large source/diagnostic and test-fixture snapshots remain at immutable external paths.
+freeze=json.loads((candidate/'candidate-freeze.json').read_text())
+for r in freeze['files']:
+ p=candidate/r['path'];raw=p.read_bytes();assert len(raw)==r['bytes'] and sha(raw)==r['sha256'];rel=Path(r['path'])
+ selected=(len(rel.parts)==1 or rel.parts[0] in {'baseline','prepared','special-proof','attempts'}) and p.suffix in {'.py','.md','.json','.txt','.bin'} and len(raw)<200000
+ # Exact diff lines and raw warning payloads remain external, never normalized.
+ if selected and not (p.suffix=='.bin' and (raw.endswith(b'\n\n') or len(raw)>10000)):
+  name=str(rel)+('.txt' if p.suffix=='.py' else '')
+  copy(p,Path('whitespace-candidate')/name)
+ else:retain(p,'Complete immutable candidate file retained externally; candidate freeze and root verification bind exact bytes')
+copy(candidate/'candidate-freeze.json','whitespace-candidate/candidate-freeze.json')
+for p in rootreview.iterdir():
+ if p.is_file():copy(p,Path('whitespace-root-review')/(p.name+('.txt' if p.suffix=='.py' else '')))
+raw=json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':records,'external_actual_bytes_retained':externals,'before_whitespace_manifest_unchanged':True,'semantic_review_unchanged':True,'scope':'Exact root proof copies and explicit full external witness/attempt retention; no source format change or lost evidence'},indent=2)+'\n'
+(landing/'root-proof-copy-manifest.json').write_text(raw);(dest/'root-proof-copy-manifest.json').write_text(raw)
+print(json.dumps({'banked_root_records':len(records),'external_retained_records':len(externals),'whitespace':json.loads((landing/'source-whitespace-proof.json').read_text())['warning_count']}))

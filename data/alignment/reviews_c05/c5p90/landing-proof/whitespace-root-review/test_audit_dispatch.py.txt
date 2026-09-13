@@ -1,0 +1,58 @@
+"""Execute the complete audit script on real files with a test Git transport.
+
+No repository or index is created/modified. The transport only returns bytes
+from a separate staged fixture file, and exact hand-built diagnostic headers.
+The real current ten-alias proof separately uses actual read-only git show.
+"""
+import json
+from pathlib import Path
+import runpy
+import shutil
+import subprocess
+import sys
+import unittest
+from unittest.mock import patch
+from test_witnesses import WitnessTests,HERE
+
+class AuditDispatchTests(WitnessTests):
+    def test_complete_candidate_dispatch_preserves_all_six_warning_checks(self):
+        art=self.root/'art';batch=art/'C05-268-270';batch.mkdir(parents=True)
+        review=batch/'semantic-review';self.review.rename(review);self.review=review
+        review.joinpath('original-to-copy-manifest.json').write_text('[]\n')
+        review.joinpath('freeze.json').write_text(json.dumps(dict(files=[dict(path=rel,bytes=pin['bytes'],sha256=pin['sha256']) for rel,pin in self.freeze.items()])))
+        candidate=art/'whitespace-candidate-270';candidate.mkdir()
+        script=candidate/'audit_staged_source_whitespace_candidate.py'
+        shutil.copyfile(HERE/script.name,script)
+        candidate.joinpath('prepared').mkdir()
+        candidate.joinpath('prepared/review-whitespace-exact-pins.json').write_text(json.dumps({'log.txt':self.pin}))
+        wt=self.root/'campaign-worktree';path='data/alignment/reviews_c05/c5p90/log.txt'
+        working=wt/path;working.parent.mkdir(parents=True);working.write_bytes(self.raw)
+        staged=self.root/'staged.bin';staged.write_bytes(self.raw)
+        lines=self.raw.split(b'\n')
+        diagnostic=b''.join(path.encode()+b':'+str(n).encode()+b': trailing whitespace.\n+'+lines[n-1]+b'\n' for n in [1,3,5,7,9,11])
+        def run(argv,**kwargs):
+            self.assertEqual(argv,['git','diff','--cached','--check'])
+            self.assertEqual(kwargs['cwd'],wt)
+            return subprocess.CompletedProcess(argv,2,diagnostic,b'')
+        def output(argv,**kwargs):
+            self.assertEqual(kwargs['cwd'],wt)
+            if argv==['git','show',':'+path]:return staged.read_bytes()
+            self.assertEqual(argv,['git','rev-parse','HEAD'])
+            return b'fixture-head\n'
+        with patch.object(sys,'argv',[str(script),'90','268','freeze.json']),patch.object(subprocess,'run',run),patch.object(subprocess,'check_output',output):
+            runpy.run_path(str(script),run_name='__main__')
+        proof=json.loads(candidate.joinpath('audit-output/source-whitespace-proof.json').read_bytes())
+        self.assertEqual(proof['warning_count'],6)
+        self.assertTrue(proof['all_warnings_accounted_for'])
+        self.assertEqual(list(proof['files']),[path])
+        # Re-run a copied audit with a corrupt staged payload; must fail before proof.
+        candidate.joinpath('audit-output').rename(candidate/'prior-output')
+        staged.write_bytes(self.raw+b'changed')
+        with patch.object(sys,'argv',[str(script),'90','268','freeze.json']),patch.object(subprocess,'run',run),patch.object(subprocess,'check_output',output):
+            with self.assertRaises(AssertionError):runpy.run_path(str(script),run_name='__main__')
+        self.assertFalse(candidate.joinpath('audit-output/source-whitespace-proof.json').exists())
+
+if __name__=='__main__':
+    suite=unittest.TestSuite([AuditDispatchTests('test_complete_candidate_dispatch_preserves_all_six_warning_checks')])
+    result=unittest.TextTestRunner(verbosity=2).run(suite)
+    raise SystemExit(not result.wasSuccessful())

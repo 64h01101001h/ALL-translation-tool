@@ -1,0 +1,70 @@
+{
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "segments": [
+    {
+      "seq": 268,
+      "span_count": 25,
+      "null_count": 0,
+      "word_pair_count": 18,
+      "spec_sha256": "2f435ff3920e748c34ac750280dc27fa602f130854054ffccfce06a84cdd45a1",
+      "spec_bytes": 5029,
+      "body_sha256": "e49408a7d5cc2a2074a29584ac61ac8465a61ef2a10f1179bda7148cfdc13d6c",
+      "body_bytes": 5252,
+      "generator_exit": 0
+    },
+    {
+      "seq": 269,
+      "span_count": 34,
+      "null_count": 1,
+      "word_pair_count": 14,
+      "spec_sha256": "4172b2df91e6493798ad15ffeadf39732f49ee977870006a234c66f6ed42df6f",
+      "spec_bytes": 5945,
+      "body_sha256": "3096513e164b0e6bc23a89592d9d1664815e8d3a49d162ae5b0514c2e9fd593c",
+      "body_bytes": 5926,
+      "generator_exit": 0
+    },
+    {
+      "seq": 270,
+      "span_count": 64,
+      "null_count": 4,
+      "word_pair_count": 43,
+      "spec_sha256": "d79cec17ec05599af8dccf55fd33eb470c06fe60aa7e15481440e86717c3f991",
+      "spec_bytes": 10512,
+      "body_sha256": "2d8206ec98e7fefd406a3b6aa07ef7e714364aacb22efd3ddc51b531b3e8c619",
+      "body_bytes": 10222,
+      "generator_exit": 0
+    }
+  ],
+  "total_spans": 123,
+  "total_nulls": 5,
+  "total_word_pairs": 75,
+  "errata_accepted": 0,
+  "head_allowances": 1,
+  "reviewer": "/root/c05_through249_final_review",
+  "context": "Reused non-author context; no fresh-context claim. Authored neither current original nor reconciliation.",
+  "governing_original_git_commit": "2a1b9a8f5203ff38cf7b9ae83186e0bf433c3812",
+  "accepted_previous_checkpoint": "2487bfcd73a1463d135a4544a01535ba5c99cab0",
+  "generated_baseline": "f3c1ca804a933d53f84214d6968a84e7e0193c6e",
+  "originals": {
+    "total": 227,
+    "retained": 200,
+    "recast": 26,
+    "rejected": 1
+  },
+  "generator_proof": "generator-proof.json",
+  "resolved_spans": "resolved-spans.json",
+  "per_span_reasoning": "per-span-adjudications.json",
+  "original_reasoning": "original-adjudications.json",
+  "limits": "Provisional machine review only; no human editorial acceptance, source correction, landing, native/device/browser test or MAIN integration. Context is reused, not fresh. Initial full semantic review plus this bounded correction review; unchanged 269/270 runs are preserved prior executions, not new runs.",
+  "initial_verdict": "NEEDS_CORRECTION",
+  "resolved_findings": [
+    "C05-268-ERRATA-01"
+  ],
+  "correction": "01",
+  "initial_full_review": "history/initial-review/review.md",
+  "scoped_proof": "correction-01/scoped-check-summary.json",
+  "history_transport": "correction-01/history-transport.json"
+}
