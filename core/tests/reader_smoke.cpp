@@ -203,6 +203,51 @@ int main(int argc, char** argv) {
               "and so does the gyis of an absence verb");
     }
 
+    // NO PREDICATE SLOT, NO CONFIDENT VERB.
+    //
+    // chunkClause gives the final chunk the role "predicate slot" only when
+    // it carries no marker. A clause ending at a case particle has no
+    // predicate position at all, so anything verb-shaped in that last chunk
+    // is inside a marked phrase. spotVerb searched it anyway: measured over
+    // 115 clauses of corpus prose, 32 (27%) have no predicate slot and
+    // spotVerb returned CONFIDENT on 15 of them (46%).
+    {
+        // "bstan pa la" and not "bshad pa'i phyir": phyir is NOT a role
+        // marker, so that clause DOES have a predicate slot and its verb was
+        // being suppressed by the gloss-shape guard instead. The fixture
+        // assertion below caught that — it exists for exactly this.
+        //
+        // Here rule 1 fires on bstan's tense forms and the predicate-slot
+        // check is what removes the confidence, which is the rule under test.
+        auto [doc, cls] = analyze("BSTAN PA LA");
+        auto chunks = allcore::chunkClause(doc, cls[0]);
+        auto v = allcore::spotVerb(doc, chunks);
+        CHECK(!chunks.empty() && !chunks.back().marker.empty(),
+              "no predicate slot: the fixture really does end at a marker \u2014 "
+              "without this the check below could pass by never meeting the "
+              "case it was written for");
+        CHECK(v.evidence.find("tenses:") == 0,
+              "no predicate slot: and rule 1 really did fire, so it is the "
+              "slot check being tested and not some other guard");
+        CHECK(!v.confident,
+              "no predicate slot: no verb is reported CONFIDENT, because a "
+              "word inside a marked phrase is not in predicate position");
+        CHECK(v.chunk >= 0,
+              "no predicate slot: the candidate is still named \u2014 the "
+              "position is wrong, not the word unknown");
+        CHECK(v.evidence.find("no predicate slot") != std::string::npos,
+              "no predicate slot: and the evidence line says why");
+    }
+    {   // The guard must not cost a clause that HAS a predicate slot.
+        auto [doc, cls] = analyze("SANGS RGYAS KYIS CHOS BSTAN");
+        auto chunks = allcore::chunkClause(doc, cls[0]);
+        CHECK(chunks.back().marker.empty(),
+              "predicate slot: this clause has one");
+        auto v = allcore::spotVerb(doc, chunks);
+        CHECK(v.confident && v.wylie == "bstan",
+              "predicate slot: and its verb is still found confidently");
+    }
+
     // A CASE PARTICLE IS NOT A VERB.
     //
     // spotVerb's weakest rule accepted any entry with a gloss beginning
