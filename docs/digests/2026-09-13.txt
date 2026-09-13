@@ -1,0 +1,140 @@
+# Diamond Cutter Translation Tool Daily Digest #6 --- Sunday, September 13 2026
+
+**Headline.** I photographed pages from a Tibetan grammar textbook I own
+and fed them into the work, and running the book's own example sentences
+through our reader found five real faults in it --- including one where
+the tool was confidently naming the commonest particle in the Tibetan
+language as the verb of the sentence.
+
+## What got done
+
+### The reader learned three sentence shapes it had no name for
+
+Classical Tibetan leaves things out far more often than English does,
+and our tool had no way to say so.
+
+**A verb can be used in a way that changes what everything around it
+means.** A verb that normally takes a *doer* can be used in a
+construction where it takes a *subject* instead --- the book calls it
+attributive syntax, "A is called B". Our tool assumed a verb's type
+settled the shape of its sentence. It does not. The tool now offers both
+readings and says outright that it cannot tell which is meant.
+
+**A Tibetan sentence can have no verb at all.** Two kinds. In the first,
+"A is B", the word *is* is simply never written --- the book calls this
+by far the most common sentence shape in this literature. In the second,
+a sentence of existence or possession leaves out the word *has*. The
+tool now recognises the shape of each and names it, while leaving the
+reader the judgement English forces and Tibetan does not: whether
+something *has* something, or *exists* somewhere.
+
+### Five faults, found by running the book's own sentences
+
+1.  **The tool was calling `la` the verb of the sentence.** `la` is the
+    commonest particle in Tibetan --- closer to "to" or "at" than to any
+    verb. Its dictionary entry carries 108 meanings, one of which is a
+    pattern rather than a definition, and our tool accepted anything
+    beginning with the word "to" as evidence of a verb. Across three
+    thousand sample passages, `la` and one other particle were the two
+    most frequently named "verbs" in the whole corpus.
+
+2.  **It called verbs intransitive on no evidence.** Whenever a verb was
+    absent from its reference tables, the tool announced the verb took
+    no object --- and in the sentence I tested it, that was the opposite
+    of the truth, printed directly underneath a line saying the sentence
+    had a doer.
+
+3.  **It cut Tibetan words in half.** Two words --- one meaning "visual
+    consciousness", one meaning "the first" --- were being split down
+    the middle, because part of each looks like a grammatical particle
+    when read letter by letter. A sentence cannot end in the middle of a
+    word, and now it doesn't.
+
+4.  **It hunted for a verb where there was nowhere for one to be.** In
+    27% of clauses the sentence structure leaves no slot for a verb at
+    all. The tool searched anyway, and called what it found trustworthy
+    in nearly half of those cases.
+
+5.  **It named a verbal noun as the sentence's verb, confidently.** This
+    is the construction the textbook singles out as the hard one, and
+    the tool was getting it wrong with confidence rather than saying it
+    was unsure.
+
+### An idea of mine that measuring killed
+
+I was about to teach the reader a rule: that a word ending in a
+particular syllable is a noun, not a verb. Before changing anything I
+measured how many real verbs take that ending. **The dictionary records
+43% of its verbs in exactly that form.** The rule would have thrown away
+nearly half the evidence the tool relies on. It is written down as a
+dead end so nobody tries it again.
+
+### A second opinion, from outside our tradition
+
+Everything our tool knows about Tibetan grammar descends from one line
+of teachers. That means its internal rules can agree with each other
+perfectly and still be wrong together. Two grammars from a completely
+different tradition --- 1883 and 1912, both long out of copyright ---
+are now on the machine as an outside check. The older one immediately
+confirmed a correction we had made the day before on the textbook's
+authority alone.
+
+### The reading page, rebuilt
+
+The page had grown two blocks of statistics before any Tibetan appeared,
+and a table that stated the same fact in three separate columns. It now
+opens with two short lines, and the table says each thing once.
+
+### A correction
+
+I published a figure this morning saying the tool could not identify a
+verb in 52% of the corpus. That was wrong. My sample had been filtered
+by length rather than by whether the text was Tibetan, so it included
+English headings and a fragment of a mantra. Measured properly, it is
+**20%**. The wrong figure and how it happened are recorded beside the
+right one.
+
+## Adam's decisions and actions
+
+- Photographed and sent nine pages of the grammar's second volume, plus
+  its index. Every one of them was used.
+- Ruled that the reading work should be built now and refined after the
+  eighteen courses are aligned, rather than waiting for the data.
+- Put three Tibetan cursive scripts on the backlog, with a trainer for
+  reading them.
+- Asked for the reading page to be cleaned up, which it was.
+
+## Numbers
+
+  ----------------------------------- -----------------------------------
+  Verbs the dictionary records in the 2,105 of 4,874 (43%)
+  noun-looking form                   
+
+  Clauses with no slot for a verb     27%
+
+  ...where the tool named one anyway, 46%
+  confidently                         
+
+  Passages with no confidently        20%
+  identified verb                     
+
+  Clause pairs that read backwards    5% of 972
+  into English                        
+
+  Automated tests, all green          117
+  ----------------------------------- -----------------------------------
+
+## Open questions for leadership
+
+- **The second volume of the grammar.** I own the first. The second is
+  where the worked examples live, and every page of it has paid for
+  itself today. It is a normal book purchase; I mention it only because
+  the work now depends on it.
+- **Yesterday's digest** shows in my records as drafted but not sent. If
+  it did not reach you, say so and I will send it.
+
+## Tomorrow
+
+- Close the remaining gaps in the verb tables --- one common verb form
+  is missing outright, which the measurements turned up.
+- Keep going through the grammar's chapters as they are scanned.
