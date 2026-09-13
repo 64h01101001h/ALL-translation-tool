@@ -190,6 +190,32 @@ bool insideGlossedWord(const OverlayDoc& doc, int t) {
     return false;
 }
 
+// Does a glossed WORD straddle the gap after token `t`, ending before the
+// clause does?
+//
+// The clause-end test is what separates the two cases that defeated the first
+// attempt at this. A glossed span running all the way to the end of the
+// clause contains the predicate — it is a verb idiom, and its particle is
+// doing particle work that needs its own chunk. A span ending mid-clause is a
+// lexical word, and a chunk boundary inside it is simply wrong:
+//
+//     dang po        0..2 of a 0..4 clause   ends early  -> a WORD
+//     dang bral      1..3 of a 0..3 clause   runs to end -> verb idiom
+//     rang bzhin gyis stong
+//                    3..7 of a 0..7 clause   runs to end -> verb idiom
+//
+// (Preston vol. 2 p.60, whose "dang po gnyis la" the chunker was cutting in
+// half. 2026-09-13.)
+bool wordStraddlesAfter(const OverlayDoc& doc, int t, int clauseEnd) {
+    for (int si : doc.spansAt(t)) {
+        const auto& sp = doc.spans[si];
+        if (sp.end - sp.beg < 2 || sp.entry_ix < 0) continue;
+        if (doc.entries[sp.entry_ix].hgm_gloss.empty()) continue;
+        if (sp.beg <= t && sp.end > t + 1 && sp.end < clauseEnd) return true;
+    }
+    return false;
+}
+
 }  // namespace
 
 std::vector<Clause> refineClauses(const OverlayDoc& doc,
@@ -322,35 +348,22 @@ std::vector<Chunk> chunkClause(const OverlayDoc& doc, const Clause& clause) {
                 if (r[0] != '\0') { marker = sp->clitic; fused = true; role = r; }
             }
         }
-        // KNOWN LIMITATION, and a fix reverted rather than shipped.
+        // A chunk boundary may not fall inside a word — the same rule the
+        // quotative anchor applies one layer up in refineClauses, and found
+        // the same way: on Preston's p.60 passage "dang po gnyis la" the
+        // chunker returned DANG + "PO GNYIS LA", because dang is a role
+        // marker and dang po is a dictionary entry, "the first".
         //
-        // On Preston's p.60 passage "dang po gnyis la" this returns a DANG
-        // chunk followed by "PO GNYIS LA", because dang is in kRoleMarkers —
-        // but dang po is a dictionary entry, "the first". A chunk boundary
-        // has fallen inside a word, which is the same defect the quotative
-        // anchor fixed one layer up in refineClauses.
+        // The first attempt at this suppressed every straddled boundary and
+        // broke two correct gates, because dang bral and rang bzhin gyis
+        // stong straddle theirs too and there the particle IS working. The
+        // clause-end test in wordStraddlesAfter is what separates them.
         //
-        // The same anchor does NOT work here, and the lattice says why:
-        //
-        //   DANG PO GNYIS LA        span 0..2  dang po
-        //   CHOS DANG BRAL          span 1..3  dang bral
-        //   ... RANG BZHIN GYIS STONG  span 3..7  rang bzhin gyis stong
-        //
-        // All three straddle the boundary with the particle as the span's
-        // first syllable, so no test on span shape separates them. But dang
-        // po is a WORD in which dang is not a particle at all, while dang
-        // bral and rang bzhin gyis stong are verb idioms in which the
-        // particle is doing its job — and Wilson says so: the dang chunk
-        // under a disjunctive verb gets its own number, and gyis under an
-        // absence verb is the qualifier. Suppressing those boundaries broke
-        // both gates, correctly.
-        //
-        // The distinction that would work is "does the straddling span
-        // contain the clause verb", and chunkClause cannot ask: spotVerb runs
-        // after it, over the chunks this produces. Fixing it properly means
-        // reordering that, which is not a change to make on two examples.
-        // (Preston vol. 2 p.60, 2026-09-13.)
-        if (!marker.empty() && i + 1 <= last) {
+        // Only freestanding markers are tested. A fused ending is part of its
+        // word by construction, so testing those would veto every one and the
+        // chunker would stop closing chunks at all.
+        if (!marker.empty() && i + 1 <= last &&
+            !(!fused && wordStraddlesAfter(doc, i, last))) {
             out.push_back({beg, i + 1, marker, fused, role});
             beg = i + 1;
         }

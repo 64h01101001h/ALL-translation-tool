@@ -161,6 +161,48 @@ int main(int argc, char** argv) {
               "only refuses boundaries that fall inside a word");
     }
 
+    // A chunk boundary may not fall inside a word either — Preston vol.2
+    // p.60, whose "dang po gnyis la" the chunker returned as DANG + "PO
+    // GNYIS LA". dang po is a dictionary entry, "the first".
+    //
+    // The three checks below are one fix and its two guard rails. Suppressing
+    // every straddled boundary is the obvious move and it is wrong: dang bral
+    // and rang bzhin gyis stong straddle theirs too, and there the particle
+    // is doing real work. What separates them is whether the glossed span
+    // runs to the END of the clause — a span that does contains the
+    // predicate and is a verb idiom; one that stops short is a word.
+    {
+        auto [doc, cls] = analyze("DANG PO GNYIS LA DON SMRA BA ZER");
+        auto ref = allcore::refineClauses(doc, cls);
+        auto chunks = allcore::chunkClause(doc, ref[0]);
+        bool splitDangPo = false;
+        for (const auto& ch : chunks)
+            if (ch.end - ch.beg == 1 && ch.marker == "dang") splitDangPo = true;
+        CHECK(!splitDangPo,
+              "dang po is not cut in half by a chunk boundary (Preston "
+              "vol.2 p.60)");
+    }
+    {   // guard rail one: the disjunctive dang still gets its own chunk,
+        // because dang bral runs to the end of the clause.
+        auto [doc, cls] = analyze("CHOS DANG BRAL");
+        auto ref = allcore::refineClauses(doc, cls);
+        auto chunks = allcore::chunkClause(doc, ref[0]);
+        bool dangChunk = false;
+        for (const auto& ch : chunks) if (ch.marker == "dang") dangChunk = true;
+        CHECK(dangChunk,
+              "and the dang of a disjunctive verb still closes its own chunk "
+              "\u2014 the anchor does not swallow a working particle");
+    }
+    {   // guard rail two: same for the absence verb's gis-family chunk.
+        auto [doc, cls] = analyze("CHOS THAMS CAD RANG BZHIN GYIS STONG");
+        auto ref = allcore::refineClauses(doc, cls);
+        auto chunks = allcore::chunkClause(doc, ref[0]);
+        bool gyisChunk = false;
+        for (const auto& ch : chunks) if (ch.marker == "gyis") gyisChunk = true;
+        CHECK(gyisChunk,
+              "and so does the gyis of an absence verb");
+    }
+
     // agent + verb: sangs rgyas kyis chos bstan
     {
         auto [doc, cls] = analyze("SANGS RGYAS KYIS CHOS BSTAN");
