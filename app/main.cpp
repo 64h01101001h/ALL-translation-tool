@@ -26639,6 +26639,39 @@ public:
                   "before");
         }
 
+        // ---- the terminology row may not exceed what the check knows ----
+        //
+        // "draft uses: X" asserted that the draft renders THIS term with X.
+        // The check knows only that X occurs somewhere in the draft as a whole
+        // word — the pane's own banner says so ("it cannot tell which term you
+        // used one for") and the row was contradicting it on every line.
+        //
+        // Two false starts on this gate, both worth recording because both
+        // passed while proving nothing. First I hung it on the register-spread
+        // fixture in ReviewPane, mutation-tested it by putting "draft uses:"
+        // back, and got zero failures — that fixture produces no MATCHED term,
+        // so the row never rendered and the gate was pointed at a report that
+        // could not contain the string. Then I banned the substring outright
+        // and it failed on "the draft uses NONE of the attested renderings",
+        // which is an ABSENCE claim and the one thing this check does
+        // establish. A gate aimed at the wrong pane, then a gate aimed at the
+        // wrong sentence.
+        {
+            source_->setPlainText("SANGS RGYAS");
+            draft_->setPlainText("the Buddha taught this");
+            check_();
+            const QString r = report_->toPlainText();
+            check(r.contains("found in your draft"),
+                  "terminology: a matched term reports what was FOUND in the "
+                  "draft");
+            check(!r.contains("draft uses:") && !r.contains("draft uses \u201c"),
+                  "terminology: and never that the draft USES that gloss FOR "
+                  "that term \u2014 the banner promises the check cannot tell, "
+                  "and no row may exceed it");
+            source_->clear();
+            draft_->clear();
+        }
+
         // ---- his English is never cut in silence (audit 2026-09-11) -------
         {
             const QString shortLine = "A short line.";
@@ -33922,11 +33955,9 @@ public:
             // word. So the gate was asserting the defect as a requirement,
             // and would have failed the fix. It is the second time an audit
             // has turned up a gate written to hold a bug in place.
-            check(!rr.contains("draft uses \u201c") &&
-                      !rr.contains("draft uses:"),
-                  "and nowhere claims the draft USES a gloss for a term \u2014 "
-                  "the banner says it cannot tell, and no row may say "
-                  "otherwise");
+            check(!rr.contains("draft uses \u201c"),
+                  "the register spread nowhere claims the draft USES a "
+                  "rendering \u2014 the banner says it cannot tell");
             check(!rr.contains("auto-resolve") ||
                       rr.contains("never auto-resolve"),
                   "spreads are flags, never verdicts (item 2)");
