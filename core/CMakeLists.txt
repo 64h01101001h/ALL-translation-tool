@@ -152,6 +152,11 @@ target_link_libraries(lattice_smoke PRIVATE allcore)
 add_test(NAME lattice_smoke
          COMMAND lattice_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
 
+add_executable(table_conformance tests/table_conformance.cpp)
+target_link_libraries(table_conformance PRIVATE allcore)
+add_test(NAME table_conformance
+         COMMAND table_conformance ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
 add_executable(cases_smoke tests/cases_smoke.cpp)
 target_link_libraries(cases_smoke PRIVATE allcore)
 add_test(NAME cases_smoke COMMAND cases_smoke)
