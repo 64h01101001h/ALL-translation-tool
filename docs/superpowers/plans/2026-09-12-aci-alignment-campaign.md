@@ -918,3 +918,40 @@ accepted source, specs, canonical bodies, ranges and generated data are unchange
 The original entry, private commit bbf32652 and its full review packages/patch
 remain preserved. The early global276 checkpoint must use the subsequent
 documentation commit and newly bound packages/applicability evidence.
+
+
+### 2026-09-13 — C05 segments 277–279 (page 93)
+
+Independent proposal, reconciliation and skeptical semantic review approved
+146 correspondences (61/21/64), including eight explicit null correspondences.
+Uncertain correspondences remain unbanked with recorded reasons. GMR's source
+wording and the master sources are unchanged; all new alignments remain
+provisional and none were promoted to hgm_gloss. The complete source specs,
+original proposals, review decisions, omissions and actual execution history
+are retained in reviews_c05/c5p93 and the external campaign evidence manifests.
+
+One root layer/view build and all 17 relevant fidelity suites passed. The
+independent isolated rebuild reproduced all seven generated outputs byte for
+byte. Full retention checks preserved all 45,126 prior links and added 149
+links, including three sentence anchors. Coverage is now 279 of 511 C05
+segments, with 232 remaining. The full bank has 45,275 links, 11,934 nulls,
+7,084 heads and 15,517 evidence pairs. ACIP is present for 7,081 of 7,084
+heads; the three missing heads remain an explicit limit. Main/reverse/course
+CSV row counts are 22,491/22,151/24,061; the changes CSV has 34 data rows.
+
+Actual prepare/audit accounted for every preserved source, CSV and historical
+formatting warning without changing the evidence bytes. Final bank and staged
+source checks precede this append. Complete actual later bank, stage, commit
+and closure outputs are retained externally; they cannot be inside their own
+earlier input manifests. The fixed DATA and documentation commit identities
+are recorded in the subsequent root closure proof.
+
+Private JSON, HTML and CSV artifacts are current through 279. Native and
+installed-phone consumption remain verified only through 171. The separately
+reviewed phone parser correction is still external and unadopted; a fresh
+production build and complete pack fidelity check remain pending. MAIN
+integration is open; its last successful read-only applicability check was
+2026-09-13 at 17:25:51 UTC, before later unrelated native edits. No MAIN patch
+or release was applied. Finish all 511 C05 segments before C06, then courses
+in order; C13 remains blocked upstream. The next regular outer checkpoint is
+291. The five-minute continuation ends 2026-09-15 at 07:00 America/Denver.
