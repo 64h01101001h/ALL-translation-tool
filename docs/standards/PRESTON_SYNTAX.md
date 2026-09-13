@@ -257,33 +257,55 @@ make on two examples.
 
 ## How often do the new cautions fire? Measured, 2026-09-13
 
-A caution that fires on everything is wallpaper. Measured over 40 real corpus
-segments drawn from `corpus_segments`, 25–80 characters, deduplicated:
+**CORRECTED the same day. The first version of this section was wrong**, and
+the commit carrying it overstated by two and a half times. It is left below
+the corrected figures because how it went wrong is the point.
+
+Over **60 corpus segments filtered to Tibetan prose** — English rejected,
+shouting headers rejected, fewer than six syllables rejected:
 
 | caution | fires on |
 |---|---:|
-| implied LINKING verb | 32% |
-| implied EXISTENCE verb | 7% |
-| ATTRIBUTIVE syntax open | 2% |
-| agent UNSTATED | 5% |
-| **verb UNVERIFIED** | **52%** |
+| implied LINKING verb | 23% |
+| implied EXISTENCE verb | 10% |
+| ATTRIBUTIVE syntax open | 3% |
+| any clause with an UNVERIFIED verb | 45% |
+| **no confident verb anywhere in the segment** | **20%** |
 
-The four cautions are proportionate. The attributive one at 2% is properly
-rare, which is what you want from a reading that needs a specific shape.
+The cautions are proportionate. The attributive one at 3% is properly rare,
+which is what a reading needing a specific shape should be.
 
-**The 52% is the finding.** `spotVerb` cannot confidently identify a verb in
-more than half of Geshe Michael's own corpus. That is not a display problem and
-no amount of careful wording fixes it — it is the size of the gap that the
-implied-verb work sits inside. Two things could be true in any mixture and this
-measurement does not separate them: the verb tables and the spine's `tenses`
-coverage are thin, or a large share of these segments genuinely have no finite
-verb, which is what Preston's five pages would predict.
+### What the 20% actually are, and it is not implied verbs
 
-**Caveat on the 32%.** Corpus segments are lines, not always complete
-sentences. A fragment with no verb and only first-case nouns looks exactly like
-an implied-linking-verb clause, so this figure is an upper bound. Separating
-them needs sentence-complete input, which the alignment bank has and this
-sample did not use.
+Of the twelve segments with no confident verb, **none end in a nominalised
+form**. They end in:
+
+    ni x6 · shog x2 · mi · kyis · ya · che
+
+That answers the question the first version left open, and answers it against
+the hypothesis I preferred. These are not implied-verb constructions. Six end
+in the topic particle *ni*, which means they are openings or fragments rather
+than whole sentences. Two end in *shog*, the optative — **a real verb form the
+Wilson tables do not have**, and a concrete gap worth closing.
+
+Preston's frequency claim is about a tenets text. This corpus is Geshe
+Michael's courses, a different genre, and the implied-verb shapes he documents
+do not dominate it. The cautions remain correct where they fire; they are just
+not describing the bulk of what is missing here.
+
+**The 23% for implied linking verbs should be read as an upper bound.** A
+fragment ending in *ni*, with only first-case nouns and no verb, is
+indistinguishable from an implied-linking clause by the signal we use.
+
+### How the first measurement went wrong
+
+The first sample took 40 segments filtered only by LENGTH, and reported 52%.
+It contained English — "THE ASIAN CLASSICS INSTITUTE", "RENUNCIATION", "VIEW"
+— a mantra fragment, and lines ending in *shog*. Filtering by character count
+is not filtering to Tibetan prose. The number was published in a commit
+message before anyone looked at what the sample contained, which is the same
+mistake as trusting a gate without mutation-testing it: the measurement ran,
+so it looked like evidence.
 
 ## Deferred, with the reason: unifying the la don resolver
 
