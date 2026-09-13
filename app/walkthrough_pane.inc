@@ -341,6 +341,34 @@ public:
             check(!t.contains("complement / subject material"),
                   "unknown class: and the row above does not quietly drop the "
                   "object reading either");
+        }
+        {   // An UNVERIFIED candidate must not read as "a verb is here".
+            // spotVerb always returns the last dictionary word, so a verbless
+            // clause gets a named candidate exactly like a real verb the
+            // glossary happens not to mark. Preston's vol.2 index carries
+            // sixteen page references for implied verbs; they are not an edge
+            // case.
+            //
+            // UNCONDITIONAL, deliberately. My first version wrapped these in
+            // `if (t.contains("UNVERIFIED"))` and hung them on the bskyed
+            // fixture — which is ATTESTED, so the condition never held and
+            // both gates silently skipped while reporting nothing. That is
+            // the same shape as the clauses gate earlier in this file: a
+            // check that can decline to run is a check that agrees with the
+            // bug. This asserts the fixture produces the state first.
+            src_->setPlainText("chos thams cad mi rtag");
+            walk();
+            const QString u = out_->toPlainText();
+            check(u.contains("UNVERIFIED"),
+                  "implied verb: the fixture really does produce an "
+                  "unverified candidate \u2014 without this the two gates "
+                  "below could pass by never running");
+            check(u.contains("may have NO verb at all"),
+                  "implied verb: an unverified candidate says the clause may "
+                  "have no verb at all, rather than naming a word and leaving "
+                  "the reader to assume one is present");
+            check(u.contains("last resort"),
+                  "implied verb: and calls the candidate what it is");
             // and the caution, on a transitive clause with the agent removed
             src_->setPlainText("chos bstan");
             walk();
@@ -624,9 +652,32 @@ private:
                 e += " <span style='color:#3B7A3B'>ATTESTED</span> — " +
                      walk::esc(verb.evidence);
             else
+                // "A candidate, not a finding" was honest about the WORD
+                // and silent about the clause. spotVerb always returns
+                // something — the last dictionary word in the final chunk —
+                // so a clause with no verb in it at all still gets a named
+                // candidate, and the reader has no way to tell that case
+                // apart from a real verb the glossary happens not to mark.
+                //
+                // Tibetan omits verbs. Preston's vol. 2 index carries sixteen
+                // page references for implied verbs — twelve for the implied
+                // linking verb, four for the implied verb of existence and
+                // possession — and his p.60 diagram shows an implied yod
+                // carrying a class (nom-loc) it is not present to declare.
+                // So "no verb here, one is implied" is a live reading of an
+                // unverified candidate, and a frequent one.
+                // (Preston vol. 2 p.60 and the Index of Diagrammed Syntactic
+                // Elements, 2026-09-13.)
                 e += " <span style='color:#B4540A'>UNVERIFIED</span> — the last "
                      "dictionary word in the final chunk. Nothing in the "
-                     "glossary says it is a verb; it is a candidate, not a finding.";
+                     "glossary says it is a verb; it is a candidate, not a "
+                     "finding.<br><span style='color:#B4540A'>And the clause "
+                     "may have NO verb at all.</span> Tibetan omits them "
+                     "freely, most often a verb of existence or a linking "
+                     "verb, and an implied verb leaves nothing on the page for "
+                     "this step to find. A named candidate here is the "
+                     "engine's last resort, not evidence that a verb is "
+                     "present.";
             if (verb.cls) {
                 e += "<br>Wilson class: <b>" +
                      QString::fromUtf8(verb.cls->label).toHtmlEscaped() +
