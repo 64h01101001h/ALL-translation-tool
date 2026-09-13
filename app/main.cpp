@@ -2900,6 +2900,32 @@ static bool g_sweepActive = false;
 // (found 2026-08-15: the stray "QTextCursor::setPosition: Position
 // '4' out of range" was restoreSession racing the selftest doc)
 static bool g_harnessRun = false;
+// Three selftest blocks used to lower g_harnessRun outright so that sess::put
+// would write and a restore path could be exercised end to end. Lowering the
+// GLOBAL also unguarded everything else that consults it on the way through —
+// and those blocks restored only the handful of keys they had named. The
+// result was live, in Adam's own settings: input/recentScans held
+// /var/folders/.../T/all_input_probe and file/recents held
+// all_session_test.txt and S0134I_inc_t.txt. The Input pane was offering him
+// a folder that had only ever existed as a test fixture.
+//
+// What those probes actually need is for sess::put and sess::get to work.
+// They do NOT need the recent-files list, the recent-scans list or
+// overlay/lastFile to be writable. So the two things are now separate
+// permissions: this flag opens the session keys and nothing else, and
+// g_harnessRun stays UP for the whole run. A probe cannot leak what it was
+// never given permission to touch.
+// (Draft workspace audit 2026-09-11, closed 2026-09-12 — proved from the
+// live plist, not from reading the code.)
+static bool g_probeSessionKeys = false;
+
+// Opens sess:: for one scope and shuts it again, however the scope exits.
+struct ProbeSessionKeys {
+    ProbeSessionKeys() { g_probeSessionKeys = true; }
+    ~ProbeSessionKeys() { g_probeSessionKeys = false; }
+    ProbeSessionKeys(const ProbeSessionKeys&) = delete;
+    ProbeSessionKeys& operator=(const ProbeSessionKeys&) = delete;
+};
 // Selftest fixtures (2026-09-08): a fixture written without checking the
 // write makes every assertion below it vacuous — the standing rule this
 // project already applies to its proposal stores. These are the checked
@@ -3001,13 +3027,13 @@ static QByteArray anthropicKey() {
 namespace sess {
 
 inline void put(const QString& key, const QVariant& v) {
-    if (g_harnessRun) return;
+    if (g_harnessRun && !g_probeSessionKeys) return;
     QSettings("ALL", "TranslationTool").setValue("sess/" + key, v);
 }
 
 inline QVariant get(const QString& key,
                     const QVariant& def = QVariant()) {
-    if (g_harnessRun) return def;
+    if (g_harnessRun && !g_probeSessionKeys) return def;
     return QSettings("ALL", "TranslationTool")
         .value("sess/" + key, def);
 }
@@ -7900,16 +7926,21 @@ public:
             // their reading place, silently reset. And an ABSENT key is
             // restored by removing it again, not by writing back an invalid
             // QVariant. (Draft workspace audit, 2026-09-11.)
+            const QStringList recentsBefore =
+                st.value("file/recents").toStringList();
             const QVariant keep = st.value("overlay/lastFile");
             const QVariant keepScroll = st.value("overlay/lastScroll");
             const QVariant keepCursor = st.value("overlay/lastCursor");
             st.setValue("overlay/lastFile", tmp);
             st.setValue("overlay/lastScroll", 0);
             st.setValue("overlay/lastCursor", 0);
-            // the guard rightly blocks harness runs; lift it just
-            // for this pin so the mechanism itself stays proven
-            const bool guardKeep = g_harnessRun;
-            g_harnessRun = false;
+            // The guard rightly blocks harness runs. This used to lower it
+            // process-wide, which also unguarded the Recent-Files write
+            // inside openFile() — and left all_session_test.txt sitting in
+            // the translator's File > Open Recent. Now only the session keys
+            // are opened; g_harnessRun stays up and the recents write stays
+            // blocked. (Audit 2026-09-11, closed 2026-09-12.)
+            ProbeSessionKeys probeKeys;
             restoreSession();
             bool spotOk = docFile_ == tmp;
             if (spotOk) {
@@ -7925,7 +7956,6 @@ public:
                     spotOk = (cycle_ == 1) && lastTok_ == tokA;
                 }
             }
-            g_harnessRun = guardKeep;
             check(spotOk,
                   "session restore reopens the file AND re-lights "
                   "the saved cursor spot + nest rung");
@@ -7941,6 +7971,26 @@ public:
                   "the session probe puts the reader's scroll position and "
                   "cursor back \u2014 it used to zero both and restore only "
                   "the filename");
+            // THE LEAK GATE. This probe opens a /tmp file through the real
+            // openFile() path. If the global guard is ever lowered again —
+            // by this block or by anything it calls — that filename lands in
+            // the translator's File > Open Recent, which is exactly what was
+            // found in Adam's live plist: all_session_test.txt sitting at the
+            // top of his recents. The gate reads the SETTINGS, not the code,
+            // because reading the code is how this was missed for weeks: the
+            // write at 9240 does carry a g_harnessRun check, and the check
+            // was simply not in force when it ran.
+            // Compared against a snapshot taken BEFORE the probe, not
+            // against an empty list: the list legitimately holds the
+            // translator's own files, and it also still holds the debris of
+            // the leak this fixes. What must be true is that the probe adds
+            // nothing — testing "is the list clean" would fail forever on
+            // history and testing "does it contain tmp" would pass the day
+            // someone cleared the plist by hand.
+            check(st.value("file/recents").toStringList() == recentsBefore,
+                  "harness: a probe leaves File > Open Recent exactly as it "
+                  "found it \u2014 the guard holds through the whole probe, "
+                  "not just where the write is");
             QFile::remove(tmp);
         }
         {
@@ -7950,12 +8000,11 @@ public:
             // memories, and a path that has gone away since restores
             // as nothing rather than an error on launch.
             //
-            // The guard is lifted for the pin (it blocks harness
-            // runs by design), so every key written here is removed
-            // again before the guard goes back on — a probe must not
-            // leave the translator's dialogs pointing at /tmp.
-            const bool guardKeep = g_harnessRun;
-            g_harnessRun = false;
+            // Only the session keys are opened, not the global guard: this
+            // probe writes sess/ keys and removes them again below, and it
+            // has no business unguarding anything else on the way past.
+            // (Audit 2026-09-11, closed 2026-09-12.)
+            ProbeSessionKeys probeKeys;
             const QVariant priorLast =
                 QSettings("ALL", "TranslationTool")
                     .value("sess/dlg/last");
@@ -7985,7 +8034,6 @@ public:
                 else
                     c.remove("sess/dlg/last");
             }
-            g_harnessRun = guardKeep;
             QFile::remove(tmpf);
             check(folderRemembered && callerWins && perPicker &&
                       vanishSafe,
@@ -11088,7 +11136,12 @@ public:
     }
 
     void restoreSession() {
-        if (g_harnessRun) return;   // harness docs are not sessions
+        // A session READ, which is precisely what ProbeSessionKeys opens.
+        // The session probe used to get past this by lowering g_harnessRun
+        // globally, which also unguarded the Recent-Files write inside
+        // openFile() below. Now the probe opens the session permission only
+        // and the recents write stays blocked.
+        if (g_harnessRun && !g_probeSessionKeys) return;
         QSettings st("ALL", "TranslationTool");
         const QString f = st.value("overlay/lastFile").toString();
         if (f.isEmpty() || !QFileInfo(f).isReadable()) return;
@@ -48657,9 +48710,17 @@ int main(int argc, char** argv) {
                 im.fill(Qt::white);
                 im.save(QString("%1/page_%2.png").arg(wd).arg(i));
             }
-            const bool guardKeep = g_harnessRun;
-            g_harnessRun = false;
+            // This is the block that put /var/folders/.../T/all_input_probe
+            // into the translator's recent-scans list. It lowered the global
+            // guard so sess::put would write, which also unguarded
+            // recordRecentScan, and then restored only the three sess/input
+            // keys it had named. Opening the session keys alone fixes it at
+            // the root: recordRecentScan's guard now holds through the whole
+            // probe. (Audit 2026-09-11, closed 2026-09-12.)
+            ProbeSessionKeys probeKeys;
             QSettings c("ALL", "TranslationTool");
+            const QStringList scansBefore =
+                c.value("input/recentScans").toStringList();
             const QVariant km = c.value("sess/input/mode"),
                            kf = c.value("sess/input/folder"),
                            kp = c.value("sess/input/page");
@@ -48682,7 +48743,13 @@ int main(int argc, char** argv) {
             back2("input/mode", km);
             back2("input/folder", kf);
             back2("input/page", kp);
-            g_harnessRun = guardKeep;
+            // The matching gate for the leak this block actually caused.
+            const bool scanLeak =
+                c.value("input/recentScans").toStringList() != scansBefore;
+            log << QString("  [%1] Session: the Input probe's folder never "
+                           "reaches the translator's recent-scans list")
+                       .arg(scanLeak ? "FAIL" : "PASS");
+            if (scanLeak) ++fails;
             QDir(wd).removeRecursively();
             log << QString("  [%1] Session: the Input pane resumes "
                            "its working folder AND page, and ignores "
