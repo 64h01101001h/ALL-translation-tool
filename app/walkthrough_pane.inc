@@ -577,6 +577,12 @@ private:
         // FUNCTIONS the chunk fills and which CASE it is declined into, and
         // that is a strictly more useful thing to be told.
         h += "<table cellspacing='0' cellpadding='4' style='margin:2px 0'>";
+        h += "<tr><td></td><td style='color:#888;font-size:11px'>chunk</td>"
+             "<td style='color:#888;font-size:11px'>particle</td>"
+             "<td style='color:#888;font-size:11px'>case</td>"
+             "<td style='color:#888;font-size:11px'>particle note</td>"
+             "<td style='color:#888;font-size:11px'>what it could be doing"
+             "</td></tr>";
         bool sawThird = false;
         for (size_t i = 0; i < chunks.size(); ++i) {
             const auto cr = allcore::caseOf(chunks[i].marker);
@@ -640,12 +646,14 @@ private:
                             (chunks[i].marker_fused ? " <span style='color:#888'>"
                                                       "(fused)</span>"
                                                     : QString())) +
-                 "</td><td>" + caseCell + "</td><td>" + row1Role + "</td></tr>";
+                 "</td><td>" + caseCell + "</td><td>" + row1Role +
+                 "</td><td>" + functionCell(cr, verb) + "</td></tr>";
             if (splittable)
                 h += "<tr><td style='color:#888'>[" + QString::number(i + 1) +
                      "b]</td><td style='font-family:monospace'>" +
                      walk::slice(doc, verb.tok, chunks[i].end) +
                      "</td><td><span style='color:#888'>—</span></td>"
+                     "<td><span style='color:#888'>—</span></td>"
                      "<td><span style='color:#888'>—</span></td><td>" +
                      QString(verb.cls && allcore::isTransitive(verb.cls->cls)
                                  ? "the transitive verb, ending the clause"
@@ -717,6 +725,43 @@ private:
         h += step(7, "Geshe Michael's own translation");
         h += corpusHit(doc, c);
         return h;
+    }
+
+    // What this chunk could be DOING, from Preston's p.xv chart inverted and
+    // narrowed by the verb. A set, never a single answer, unless the grammar
+    // really does give one — which happens only for the fifth case.
+    static QString functionCell(const allcore::CaseReading& cr,
+                                const allcore::VerbGuess& verb) {
+        if (!cr.known()) return "<span style='color:#888'>—</span>";
+        // Collect over every case the particle admits: a la don chunk is
+        // 2nd/4th/7th, so its function set is the union of all three.
+        std::vector<allcore::Function> fs;
+        const bool haveVerb = verb.cls != nullptr;
+        const auto t = haveVerb ? allcore::transitivityOf(verb.cls->cls)
+                                : allcore::Transitivity::Specialized;
+        for (int c : cr.cases)
+            for (auto f : allcore::functionsFor(c, t)) {
+                bool seen = false;
+                for (auto g : fs) if (g == f) seen = true;
+                if (!seen) fs.push_back(f);
+            }
+        if (fs.empty())
+            return "<span style='color:#888'>fills no slot of its own — it "
+                   "joins this noun to the next</span>";
+        QString out;
+        for (size_t i = 0; i < fs.size(); ++i)
+            out += (i ? " · " : "") +
+                   QString(allcore::functionName(fs[i])).toHtmlEscaped();
+        if (fs.size() == 1)
+            return "<b style='color:#3B7A3B'>" + out + "</b>";
+        // More than one, and the grammar cannot choose between them. Say so:
+        // naming the first would be the overreach this column exists to end.
+        QString note = fs.size() == 4 && !haveVerb
+                           ? " <span style='color:#B4540A;font-size:11px'>(no "
+                             "verb identified, so nothing narrows this)</span>"
+                           : " <span style='color:#B4540A;font-size:11px'>(the "
+                             "case cannot choose between these)</span>";
+        return out + note;
     }
 
     static QString step(int n, const char* title) {
