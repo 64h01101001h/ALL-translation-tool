@@ -369,6 +369,30 @@ public:
                   "the reader to assume one is present");
             check(u.contains("last resort"),
                   "implied verb: and calls the candidate what it is");
+        }
+        {   // Preston p.53's sentence. spotVerb reports "bshad pa" as the
+            // clause verb, CONFIDENT — and p.53 says this sentence ends not
+            // in a verb but in a verbal noun. The caution has to fire despite
+            // that confidence, which is why it keys on the nominalisation.
+            src_->setPlainText("grub mtha'i rnam gzhag bshad pa'o");
+            walk();
+            const QString v = out_->toPlainText();
+            check(v.contains("ATTESTED"),
+                  "implied existence: spotVerb really is confident here \u2014 "
+                  "without this the gate below could pass by never meeting "
+                  "the case it was written for");
+            check(v.contains("VERBAL NOUN"),
+                  "implied existence: and the caution fires anyway, because a "
+                  "nominalised ending is a verbal noun and not the finite verb");
+            check(v.contains("your judgement"),
+                  "implied existence: HAVE or EXIST is left to the reader, "
+                  "since the Tibetan does not distinguish what English must");
+            // A clause with a real finite verb must NOT get it.
+            src_->setPlainText("sangs rgyas kyis chos bstan");
+            walk();
+            check(!out_->toPlainText().contains("VERBAL NOUN"),
+                  "implied existence: not offered for a clause that ends in a "
+                  "finite verb");
             // and the caution, on a transitive clause with the agent removed
             src_->setPlainText("chos bstan");
             walk();
@@ -868,6 +892,67 @@ private:
                      QString(attr).toHtmlEscaped() +
                      ". <span style='font-size:11px'>(Preston vol. 2 pp.60, "
                      "70, 163, 200)</span></div>";
+        }
+        // ---- the two implied-verb shapes, named -------------------------
+        {
+            // A clause-level case beyond the first. The SIXTH does not count:
+            // the genitive joins nouns inside a phrase and fills no
+            // clause-level slot, which functionsForCase records by answering
+            // the empty set for it.
+            bool beyondFirst = false;
+            for (const auto& ch : chunks) {
+                const auto cc = allcore::caseOf(ch.marker);
+                if (!cc.known()) continue;
+                if (allcore::functionsForCase(cc.cases.front()).empty()) continue;
+                if (!(cc.cases.size() == 1 && cc.cases.front() == 1))
+                    beyondFirst = true;
+            }
+            const char* link = allcore::impliedLinkingVerbLikely(
+                verb.confident, beyondFirst);
+            if (link[0])
+                h += "<div style='color:#B4540A;padding:4px 0 0 12px'>" +
+                     QString(link).toHtmlEscaped() +
+                     ". <span style='font-size:11px'>(Preston vol. 2 p.44)"
+                     "</span></div>";
+
+            // Preston p.53's signal: the clause ends in a verbal noun (pa/ba)
+            // followed by a terminating particle rather than in a verb. The
+            // boundary particle is the clause's last token and sits outside
+            // every chunk, so the nominaliser is the token before it.
+            // The clause's last element nominalised: pa, ba, or a fused
+            // pa'o/ba'o. p.71's vocabulary treats the fused terminator as
+            // ordinary, and "bshad pa'o" arrives as ONE token, so both forms
+            // are tested.
+            bool endsVerbalNoun = false;
+            if (c.end >= 1) {
+                const QString lastTok =
+                    QString::fromStdString(doc.tokens[c.end - 1]).toUpper();
+                endsVerbalNoun = lastTok == "PA" || lastTok == "BA" ||
+                                 lastTok.endsWith("PA'O") ||
+                                 lastTok.endsWith("BA'O");
+            }
+            // p.64's second signal: a seventh-case subject with a list and no
+            // finite verb — "A has [n parts]: …". Distinct from the
+            // attributive reading above, which needs a verb that is present
+            // and normally transitive.
+            bool seventhNoVerb = false;
+            for (const auto& ch : chunks) {
+                const auto cc = allcore::caseOf(ch.marker);
+                if (cc.cases.size() == 3 && cc.cases[0] == 2 && endsVerbalNoun)
+                    seventhNoVerb = true;
+            }
+            const char* exist = allcore::impliedExistenceVerbLikely(
+                endsVerbalNoun, seventhNoVerb);
+            if (exist[0])
+                h += "<div style='color:#B4540A;padding:4px 0 0 12px'>" +
+                     QString(exist).toHtmlEscaped() +
+                     ". <span style='font-size:11px'>(Preston vol. 2 p.53)"
+                     "</span></div>";
+            if (link[0] || exist[0])
+                h += "<div style='color:#666;padding:2px 0 0 12px;"
+                     "font-size:11px'>" +
+                     QString(allcore::impliedElementNeedsContext())
+                         .toHtmlEscaped() + ".</div>";
         }
 
         // ---- step 4 ----

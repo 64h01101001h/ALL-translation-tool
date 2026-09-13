@@ -217,6 +217,37 @@ int main() {
               "choosing \u2014 nothing here can tell them apart");
     }
 
+    // ---- the two implied-verb shapes ----
+    {
+        // The linking verb: A is B, both in the first case, yin understood.
+        CHECK(impliedLinkingVerbLikely(false, false)[0] != '\0',
+              "implied linking verb: no attested verb and nothing beyond the "
+              "first case is the A-is-B shape");
+        CHECK(impliedLinkingVerbLikely(true, false)[0] == '\0',
+              "implied linking verb: not offered when a verb is attested");
+        CHECK(impliedLinkingVerbLikely(false, true)[0] == '\0',
+              "implied linking verb: not offered when some other case is "
+              "doing clause-level work");
+        // The existence verb keys on the NOMINALISATION, not on the absence
+        // of an attested verb — because spotVerb is confident on exactly the
+        // sentences Preston uses to teach this, and confidently wrong.
+        CHECK(impliedExistenceVerbLikely(true, false)[0] != '\0',
+              "implied existence verb: a clause ending in a verbal noun is "
+              "the shape, whatever spotVerb thinks it found");
+        CHECK(impliedExistenceVerbLikely(false, false)[0] == '\0',
+              "implied existence verb: not offered otherwise");
+        const std::string m = impliedExistenceVerbLikely(true, false);
+        CHECK(m.find("your judgement") != std::string::npos,
+              "implied existence verb: says whether it is HAVE or EXIST is "
+              "the reader's judgement, since Tibetan does not distinguish "
+              "them and English must");
+        // And the context caution names what the engine cannot reach.
+        const std::string ctx = impliedElementNeedsContext();
+        CHECK(ctx.find("one clause at a time") != std::string::npos,
+              "implied element: the caution says why this reader cannot "
+              "recover an implied agent \u2014 it never sees the chapter");
+    }
+
     std::printf("cases_smoke: %s (%d failure(s))\n",
                 failures ? "FAILURES" : "ALL PASS", failures);
     return failures ? 1 : 0;
