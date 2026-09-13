@@ -307,6 +307,35 @@ message before anyone looked at what the sample contained, which is the same
 mistake as trusting a gate without mutation-testing it: the measurement ran,
 so it looked like evidence.
 
+## What the day's engine fixes did to the numbers, 2026-09-13
+
+Three changes landed that move the "no confident verb" figure, and they move
+it in **opposite directions**. Reporting only the headline would be
+misleading, so both directions are here.
+
+**Downward — the benedictive `shog`.** Hannah (1912) gives it as the imperative
+of *'ong ba*, "to come"; our spine holds *'ong* with tense forms and omits the
+imperative. On 25 corpus segments ending in the benedictive:
+
+| | before | after |
+|---|---:|---:|
+| finds a confident verb | 0 | **25** |
+
+**Upward — two guards that remove false confidence.** The `la`/`phyir` particle
+guard and the no-predicate-slot rule both stop the engine claiming a verb it
+had no business claiming. On the 60-segment Tibetan-prose sample, segments
+with no confident verb anywhere went **20% → 33%**.
+
+That rise is the fixes working, not a regression. The endings of the newly
+verbless segments say so directly: two of them end in **`la`**, which the
+engine used to call the clause's verb.
+
+The honest summary is that the engine now finds a verb in fewer places and is
+right more often in the places it does — and that no single percentage
+captures that, which is why both are recorded.
+
+**`mchis` was checked and is not a gap** — it carries tense forms already.
+
 ## Deferred, with the reason: unifying the la don resolver
 
 `narrowLaDon` in cases.cpp and `caseLabel` in wilsonparse.cpp both resolve a la
