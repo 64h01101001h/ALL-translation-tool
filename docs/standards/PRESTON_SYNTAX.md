@@ -16,7 +16,7 @@ On the most basic level of syntactic function, Classical Tibetan has eight:
 |---|---|
 | agent of a transitive verb | 3rd |
 | object of a transitive verb | 1st or 2nd |
-| complement to the object | 2nd |
+| complement to the object | 1st or 2nd |
 | subject of an intransitive verb | 1st, 4th, 7th |
 | complement to the subject | 1st or 2nd |
 | qualifier of the verb | 2nd, 3rd, 4th, 5th, 7th, s.p. |
@@ -82,6 +82,54 @@ Checked against Preston's own example (p. xvii), element for element:
     [2] RGYA GAR LA       la    2/4/7  qualifier — place of activity
     [3] CHOS              —     1   object of the transitive verb
     [3b] BSTAN            —     —   the transitive verb, ending the clause
+
+## Errata in this file
+
+**Corrected 2026-09-13.** The table above recorded "complement to the object |
+2nd". Preston's p.xv chart puts complements to objects *and* subjects in the
+**1st or 2nd**. `cases.cpp` had it right — case 1 includes `ComplementToObject`
+— so this file contradicted both the source and our own implementation, and
+would have sent the next implementer to "fix" correct code.
+
+A misquotation of a source document banked in the repository is exactly what
+the errata register exists for, and this one was mine. Found by the adversarial
+pass over the chart inversion, not by re-reading.
+
+## A second tradition, and what it corroborates
+
+Everything above descends from one lineage: Hopkins → Napper → Wilson →
+Preston. Five hand-kept particle/case tables in `allcore` all trace to it and
+nothing checks them against anything outside, so they can be perfectly
+self-consistent and wrong together.
+
+Two grammars outside that line are now local (gitignored,
+`data/reference/grammars/`), both public domain by age:
+
+- **Jäschke, *Tibetan Grammar* (1883)** — the 19th-century European
+  philological tradition.
+- **Hannah, *A Grammar of the Tibetan Language* (1912)**, Baptist Mission
+  Press, Calcutta.
+
+**First use, and it corroborates the correction made yesterday.** Jäschke
+reckons *seven* cases, but the inventory he lists includes the vocative, and he
+states that the unaltered form of the noun carries the functions of the
+nominative, the accusative **and** the vocative. He counts seven only because
+nominative and accusative share one form.
+
+So two traditions, 120 years apart, agree on the fact that matters to us: **a
+bare noun is not proof of the nominative.** That is the caveat `caseOf("")`
+began carrying on 2026-09-12 on Preston's authority alone. It now has
+independent support, which is a different and stronger thing than one more
+voice from the same school.
+
+His naming differs — instrumental/agent, terminative — and that difference is
+itself useful: it is a reminder that "3rd case" is a label from one system, not
+a fact about Tibetan.
+
+**Not yet checked against the external grammars**, and each is a place our
+tables may be self-consistently wrong: whether the gis-family has non-agentive
+uses (p.xxv says three, and our own `verbclass.h` already knows one of them);
+whether fused `r` is a case particle at all; and the four irregular syntaxes.
 
 ## Corrections from pp. 217–220 (Adam's scan, 2026-09-12)
 

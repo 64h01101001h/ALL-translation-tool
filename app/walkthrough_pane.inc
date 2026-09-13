@@ -291,9 +291,38 @@ public:
             check(t.contains("transitive verb, ending the clause"),
                   "cases: the verb is split out of the predicate chunk, as "
                   "Preston separates it from its object");
+            // Belongs to THIS fixture — bstan is in Wilson's tables as class
+            // V. I split this block to add the unknown-class case below and
+            // left this assertion behind in the new one, where the verb has
+            // no class and the line it looks for correctly never appears.
             check(t.contains("an agent, not a subject"),
                   "cases: a transitive verb is said to take an agent, in "
                   "Preston's exclusive sense of the word");
+        }
+        {   // A verb spotted from its banked tenses but ABSENT from Wilson's
+            // class tables. The pane used to print "the intransitive verb,
+            // ending the clause" here — a positive false claim on no
+            // evidence, and false in fact: Preston's p.217 table lists bskyed
+            // as trans. v. (ag-nom), produce/generate/create. It printed that
+            // directly beneath a row reading "third case — marks the AGENT of
+            // a transitive verb", so the pane contradicted itself inside one
+            // table.
+            //
+            // "Attested" and "classified" are separate facts about a verb and
+            // the display may not fuse them. A two-branch ternary standing in
+            // for a three-state fact is what did.
+            src_->setPlainText("bdag gis sems bskyed");
+            walk();
+            const QString t = out_->toPlainText();
+            check(!t.contains("the intransitive verb, ending the clause"),
+                  "unknown class: the pane never calls a verb intransitive "
+                  "merely because Wilson's tables do not have it");
+            check(t.contains("transitivity is unknown"),
+                  "unknown class: it says the transitivity is unknown, which "
+                  "is the fact");
+            check(!t.contains("complement / subject material"),
+                  "unknown class: and the row above does not quietly drop the "
+                  "object reading either");
             // and the caution, on a transitive clause with the agent removed
             src_->setPlainText("chos bstan");
             walk();
@@ -631,11 +660,19 @@ private:
             const QString row1Text =
                 splittable ? walk::slice(doc, chunks[i].beg, verb.tok)
                            : walk::slice(doc, chunks[i].beg, chunks[i].end);
+            // Three states, not two. A two-branch ternary here stood in for
+            // a THREE-state fact — transitive, intransitive, and unknown —
+            // and collapsed the third into the second.
+            const bool clsKnown = verb.cls != nullptr;
+            const bool clsTrans = clsKnown && allcore::isTransitive(verb.cls->cls);
             const QString row1Role =
                 splittable
-                    ? QString(verb.cls && allcore::isTransitive(verb.cls->cls)
-                                  ? "object of the transitive verb"
-                                  : "complement / subject material")
+                    ? (!clsKnown
+                           ? QString("the material before the verb \u2014 what "
+                                     "it is depends on the verb's transitivity, "
+                                     "which is not known")
+                           : clsTrans ? QString("object of the transitive verb")
+                                      : QString("complement / subject material"))
                     : QString(chunks[i].role).toHtmlEscaped();
             h += "<tr><td style='color:#888'>[" + QString::number(i + 1) +
                  "]</td><td style='font-family:monospace'>" + row1Text +
@@ -655,7 +692,26 @@ private:
                      "</td><td><span style='color:#888'>—</span></td>"
                      "<td><span style='color:#888'>—</span></td>"
                      "<td><span style='color:#888'>—</span></td><td>" +
-                     QString(verb.cls && allcore::isTransitive(verb.cls->cls)
+                     // This asserted INTRANSITIVITY whenever Wilson's tables
+                     // did not have the verb — a positive false claim, not an
+                     // omission. On "bdag gis sems bskyed" the pane printed
+                     // "the intransitive verb" directly beneath a row reading
+                     // "third case — marks the AGENT of a transitive verb",
+                     // and bskyed is listed in Preston's own p.217 table as
+                     // trans. v. (ag-nom), produce/generate/create. The pane
+                     // contradicted itself in one table and was wrong in the
+                     // bargain.
+                     //
+                     // spotVerb can be CONFIDENT about a verb from its banked
+                     // tenses while classifyVerb has no class for it, so
+                     // "attested" and "classified" are separate facts and the
+                     // display must not fuse them.
+                     // (Adversarial pass over Preston, 2026-09-13.)
+                     QString(!clsKnown
+                                 ? "the verb, ending the clause \u2014 Wilson's "
+                                   "tables do not have this one, so its "
+                                   "transitivity is unknown"
+                             : clsTrans
                                  ? "the transitive verb, ending the clause"
                                  : "the intransitive verb, ending the clause") +
                      "</td></tr>";
