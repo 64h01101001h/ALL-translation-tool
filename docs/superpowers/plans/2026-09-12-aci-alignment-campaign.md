@@ -903,3 +903,18 @@ open and must not be described as deployed. C13 remains blocked upstream.
 Finish all 511 C05 segments before C06 (177 contiguous local sources). The
 five-minute continuation remains active through 2026-09-15 at 07:00
 America/Denver. No additional files, paid API generation or release is needed.
+
+### 2026-09-13 — Correction to the through276 checkpoint entry
+
+Independent global review found two inaccuracies in the preceding entry's
+description of the metadata correction. There was one blocking correction and
+two nonblocking explanatory clarifications. The phrase "quoted D3 parent" is
+incorrect: C05:275 w4, mi 'thad par / mistaken (D5), and r14, mthong med /
+don't see (D3), are separate alignments. Their Tibetan ranges [28,40) and
+[146,156), and English ranges [78,86) and [283,292), do not contain one another.
+The intended description is "the negative evaluation's D5 correspondence from
+the separate quoted D3 predicate." This corrects the ledger prose only; the
+accepted source, specs, canonical bodies, ranges and generated data are unchanged.
+The original entry, private commit bbf32652 and its full review packages/patch
+remain preserved. The early global276 checkpoint must use the subsequent
+documentation commit and newly bound packages/applicability evidence.
