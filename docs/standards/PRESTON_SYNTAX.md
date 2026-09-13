@@ -214,7 +214,26 @@ verb at all, and calls the candidate the engine's last resort.
 themselves. One diagram is enough to justify a caution; it is not enough to
 build recognition on.
 
-### A fix reverted, with the evidence
+### A fix reverted, then found — the clause-end test
+
+**Superseded 2026-09-13, later the same day.** The reverted attempt below was
+right about the defect and wrong about the test. What separates the three
+straddling spans is whether the glossed span runs to the **end of the clause**:
+
+    dang po                 0..2 of a 0..4 clause   stops short -> a WORD
+    dang bral               1..3 of a 0..3 clause   runs to end -> verb idiom
+    rang bzhin gyis stong   3..7 of a 0..7 clause   runs to end -> verb idiom
+
+A span reaching the clause end contains the predicate, so its particle is
+doing particle work and needs its own chunk. A span stopping short is a
+lexical word and a boundary inside it is simply wrong. `chunkClause` already
+has the clause, so no reordering of `spotVerb` was needed after all.
+
+Mutation-proved in both directions: dropping the clause-end test fires the two
+guard rails and the two original Wilson gates; disabling the anchor fires the
+`dang po` gate.
+
+### The attempt that was reverted, kept for the reasoning
 
 On p.60's passage the chunker returns `dang po gnyis la` as `DANG` +
 `PO GNYIS LA` — a chunk boundary inside a word, since *dang po* is a dictionary
