@@ -1,0 +1,39 @@
+from pathlib import Path
+import hashlib,json,gzip,os,re,datetime
+P=Path(__file__).resolve().parent;B=P.parent;W=B.parent.parent/'campaign-worktree'
+def put(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ b=p.read_bytes();return dict(path=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+sets=json.loads((P/'actual-query-replays.json').read_text());assert len(sets)==222 and all(x['full_rows_exact'] for x in sets)
+entries={};corpus={}
+for q in sets:
+ for r in q['rows']:
+  if 'hgm_gloss' in r:entries[r['id']]=r
+  elif 'course' in r:corpus[r['id']]=r
+mp=W/'data/hgm_dictionary_v27_2.json.gz';cp=W/'data/full_parallel_corpus_v32.json.gz';db=W/'build/hgm_spine_v27_2.db'
+master=json.loads(gzip.decompress(mp.read_bytes()));rc=json.loads(gzip.decompress(cp.read_bytes()))
+for id,r in entries.items():assert master['unified_entries'][id-1]==json.loads(r['raw']);assert json.loads(r['hgm_gloss'])==json.loads(r['raw'])['hgm_gloss']
+for id,r in corpus.items():assert rc[id-1]==json.loads(r['raw'])
+put('independent-master-full-objects.json',{str(i):master['unified_entries'][i-1] for i in sorted(entries)})
+put('independent-corpus-full-objects.json',{str(i):rc[i-1] for i in sorted(corpus)})
+put('gloss-reading-view.json',[dict(id=i,wylie=r['wylie'],hgm_gloss=json.loads(r['hgm_gloss']),tier=r['tier'],source=r['hgm_source'],status=r['status']) for i,r in sorted(entries.items())])
+put('corpus-reading-view.json',[{k:r[k] for k in ['id','course','seq','acip','wylie','english']} for i,r in sorted(corpus.items())])
+physical=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII');extents=[]
+for course,seqs in [('C05',[274,275,276]),('C15',[419,420,421])]:
+ f=physical/(course+'ReadingASCII.txt');raw=f.read_bytes();fp=pin(f)
+ for seq in seqs:
+  row=next(r for r in corpus.values() if r['course']==course and r['seq']==seq)
+  for field in ['acip','english']:
+   value=row[field].encode();pattern=rb'[ \t\r\n\v\f]+'.join(re.escape(x) for x in re.split(rb'[ \t\r\n\v\f]+',value));hits=list(re.finditer(pattern,raw))
+   rec=dict(course=course,seq=seq,field=field,source=fp,literal_full_offsets=[m.start() for m in re.finditer(re.escape(value),raw)],whitespace_separated_full_matches=[])
+   for j,m in enumerate(hits):
+    n=f'physical-{course}-{seq}-{field}-{j}.bin';(P/n).write_bytes(m.group());rec['whitespace_separated_full_matches'].append(dict(start=m.start(),end=m.end(),copy=n,bytes=len(m.group()),sha256=hashlib.sha256(m.group()).hexdigest()))
+   extents.append(rec)
+ # Complete contiguous context retained and rendered separately with Latin-1 reversible transport.
+ lo,hi=(175000,185200) if course=='C05' else (279000,285500)
+ (P/f'physical-{course}-context.bin').write_bytes(raw[lo:hi]);(P/f'physical-{course}-context-reading.txt').write_text(raw[lo:hi].decode('latin1'))
+ assert pin(f)==fp
+put('physical-extents.json',extents)
+after=[pin(p) for p in [db,mp,cp]];put('sources-after.json',after);assert after==json.loads((P/'sources-before.json').read_text())
+proof=dict(status='PASS',query_sets=len(sets),query_result_rows=sum(r['count'] for r in sets),unique_query_sets=len({(r['sql'],tuple(r['parameters'])) for r in sets}),unique_master_objects=len(entries),unique_corpus_objects=len(corpus),full_physical_files=2,physical_field_searches=len(extents),physical_full_extents=sum(len(r['whitespace_separated_full_matches']) for r in extents),source_unchanged=True,query_only=1,uri=db.resolve().as_uri()+'?mode=ro',canonical_calls=0,attempt01='222 exact SQL replays succeeded; subsequent wrong zero-based master ordinal failed. Actual one-based IDs verified against full raw objects and author capture source. No successful SQL repeated.',finished=datetime.datetime.now(datetime.timezone.utc).isoformat())
+put('independent-source-proof.json',proof);print(json.dumps(proof))

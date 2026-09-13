@@ -1,0 +1,21 @@
+import gzip,hashlib,json,pathlib,sqlite3
+O=pathlib.Path(__file__).resolve().parent;B=O.parents[1];WT=B.parents[1]/'campaign-worktree';E=O/'evidence'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(n,x):(E/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+c=sqlite3.connect((WT/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.execute('PRAGMA query_only=ON');c.row_factory=sqlite3.Row
+terms=['can','zhing','kyang','gi','kyis','du','ma','phyir','zer na','der thal','de ltar','mthong ba',"mi 'thad",'gsum ga','re res','pas','zhes']
+sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'
+rows={t:[dict(r) for r in c.execute(sql,(t,t))] for t in terms};c.close()
+master=json.loads(gzip.decompress((E/'hgm_dictionary_v27_2.json.gz').read_bytes()))
+for rs in rows.values():
+ for r in rs:assert json.loads(r['raw'])==master['unified_entries'][r['id']-1]
+save('hgm-grammar-full-rows.json',dict(sql=sql,parameters_per_term='[term,term]',terms=terms,results=rows,complete_raw_objects_equal_original_master=True,query_only=1,uri_mode='ro'))
+physical=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C15ReadingASCII.txt')
+pb=physical.read_bytes();(E/'C15ReadingASCII.txt').write_bytes(pb);assert (E/'C15ReadingASCII.txt').read_bytes()==physical.read_bytes()==pb
+qs=json.loads((E/'corpus-full-query-results.json').read_text());checks=[]
+for i,q in enumerate(qs[:3]):
+ source=next(r for r in q['rows'] if r['course']=='C05');parallel=next(r for r in q['rows'] if r['course']=='C15')
+ checks.append(dict(source_seq=source['seq'],parallel_seq=parallel['seq'],equal_fields=[f for f in ('acip','wylie','english') if source[f]==parallel[f]],different_fields=[f for f in ('acip','wylie','english') if source[f]!=parallel[f]],raw_keys=list(json.loads(source['raw'])),parallel_raw_keys=list(json.loads(parallel['raw'])),physical_C15_acip_full_offsets=[m for m in range(len(pb)) if pb.startswith(parallel['acip'].encode(),m)]))
+save('parallel-source-proof.json',dict(physical_original=str(physical),physical_copy=str(E/'C15ReadingASCII.txt'),bytes=len(pb),sha256=sha(pb),rows=checks,limits='Only specified text-field equality and physical literal-byte occurrence. Different course/id/seq retained. No independent-publication or ingestion-lineage inference.'))
+for t,rs in rows.items(): print(t,[(r['id'],r['tier'],r['hgm_gloss']) for r in rs])
+print('PARALLEL_PROOF',json.dumps(checks))

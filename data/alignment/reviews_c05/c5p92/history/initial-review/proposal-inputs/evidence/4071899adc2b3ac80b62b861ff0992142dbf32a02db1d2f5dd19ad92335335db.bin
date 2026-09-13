@@ -1,0 +1,90 @@
+--- initial/274/supported-copy-byte-preflight.json
++++ current/274/supported-copy-byte-preflight.json
+@@ -1,8 +1,8 @@
+ {
+   "status": "PASS",
+   "helper": "Reviewed copy_evidence_once_v2.py selected explicitly; reading-index/clone experiments not adopted",
+-  "original_copy_records": 479,
+-  "distinct_payloads": 258,
++  "original_copy_records": 489,
++  "distinct_payloads": 263,
+   "records": [
+     {
+       "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/english-brief.md",
+@@ -3356,6 +3356,76 @@
+       "full_bytes_equal": true,
+       "bytes": 216,
+       "sha256": "09eb2406574c06cf0a788b2aec63f791614cf3de2f7f38c597f59adfeaed3cb6"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_supplied_span_head.py",
++      "copy": "proposal-inputs/evidence/5783bbd12eff2b371a10852c32744a30ca9f8d226b66dd7907bd4af3aa721655.py.txt",
++      "full_bytes_equal": true,
++      "bytes": 3788,
++      "sha256": "5783bbd12eff2b371a10852c32744a30ca9f8d226b66dd7907bd4af3aa721655"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/check-bare-you-gate-root.py",
++      "copy": "proposal-inputs/evidence/e200ccdf613f5df4a04492ff422597225094653dde0aa9f274f19728fca0c12f.py.txt",
++      "full_bytes_equal": true,
++      "bytes": 1731,
++      "sha256": "e200ccdf613f5df4a04492ff422597225094653dde0aa9f274f19728fca0c12f"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/root-bare-you-gate-correction/test_no_supplied_span_head.py.txt",
++      "copy": "proposal-inputs/evidence/5783bbd12eff2b371a10852c32744a30ca9f8d226b66dd7907bd4af3aa721655.py.txt",
++      "full_bytes_equal": true,
++      "bytes": 3788,
++      "sha256": "5783bbd12eff2b371a10852c32744a30ca9f8d226b66dd7907bd4af3aa721655"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/root-bare-you-gate-correction/proof.json",
++      "copy": "proposal-inputs/evidence/088222f6eb653033f2b6cc34c5427db91e85e8c6895271edde4ca3d5d8cbdd8a.json",
++      "full_bytes_equal": true,
++      "bytes": 1876,
++      "sha256": "088222f6eb653033f2b6cc34c5427db91e85e8c6895271edde4ca3d5d8cbdd8a"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/root-bare-you-gate-correction-caller/stdout.bin",
++      "copy": "proposal-inputs/evidence/088222f6eb653033f2b6cc34c5427db91e85e8c6895271edde4ca3d5d8cbdd8a.json",
++      "full_bytes_equal": true,
++      "bytes": 1876,
++      "sha256": "088222f6eb653033f2b6cc34c5427db91e85e8c6895271edde4ca3d5d8cbdd8a"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/root-bare-you-gate-correction-caller/command.json",
++      "copy": "proposal-inputs/evidence/783b586208f72101a22d4c0ad4c5446486fa293f89c38d80fee742902669a873.json",
++      "full_bytes_equal": true,
++      "bytes": 499,
++      "sha256": "783b586208f72101a22d4c0ad4c5446486fa293f89c38d80fee742902669a873"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/root-bare-you-gate-correction-caller/stderr.bin",
++      "copy": "proposal-inputs/evidence/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
++      "full_bytes_equal": true,
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/root-bare-you-gate-correction-caller/execution.json",
++      "copy": "proposal-inputs/evidence/ddc2a209933fab8dd056938e79d1f4ef2d43abd9c310d281dc5276ac76cdc9f3.json",
++      "full_bytes_equal": true,
++      "bytes": 823,
++      "sha256": "ddc2a209933fab8dd056938e79d1f4ef2d43abd9c310d281dc5276ac76cdc9f3"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/root-bare-you-gate-correction-caller/exit.txt",
++      "copy": "proposal-inputs/evidence/9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa.txt",
++      "full_bytes_equal": true,
++      "bytes": 2,
++      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
++    },
++    {
++      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/root-bare-you-gate-correction-caller/stdin.bin",
++      "copy": "proposal-inputs/evidence/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
++      "full_bytes_equal": true,
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+     }
+   ],
+   "allowed_output_roots": [

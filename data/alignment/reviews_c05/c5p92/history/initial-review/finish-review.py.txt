@@ -1,0 +1,163 @@
+from pathlib import Path
+import hashlib,json,os,sys,datetime,collections
+sys.dont_write_bytecode=True
+P=Path(__file__).resolve().parent;B=P.parent;PRE=B/'semantic-review-preparation';W=B.parents[1]/'campaign-worktree'
+ALLOWED={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+    v=p.read_bytes();return {'bytes':len(v),'sha256':hashlib.sha256(v).hexdigest()}
+def save(n,v):
+    p=P/n;p.parent.mkdir(parents=True,exist_ok=True)
+    assert not p.exists(),str(p)
+    p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def exactcopy(src,dst):
+    dst.parent.mkdir(parents=True,exist_ok=True)
+    if dst.exists():assert src.read_bytes()==dst.read_bytes()
+    else:dst.write_bytes(src.read_bytes())
+    assert src.read_bytes()==dst.read_bytes()
+    return {'original':str(src),'copy':str(dst.relative_to(P)),**pin(dst)}
+assert sys.argv[1:] in [['prepare'],['freeze']]
+if sys.argv[1]=='freeze':
+    assert not (P/'freeze.json').exists()
+    files={str(f.relative_to(P)):pin(f) for f in sorted(P.rglob('*')) if f.is_file() and f!=P/'freeze.json'}
+    save('freeze.json',{'status':'NEEDS_CORRECTION','files':files,'exclusion':'Only this actual top-level freeze.json; all nested freezes retained.'})
+    assert files=={str(f.relative_to(P)):pin(f) for f in sorted(P.rglob('*')) if f.is_file() and f!=P/'freeze.json'}
+    print(json.dumps({'freeze':pin(P/'freeze.json'),'files':len(files),'bytes':sum(v['bytes'] for v in files.values())}))
+    sys.exit(0)
+
+# Preserve this pre-finalization boundary before extending current interfaces.
+for n in ['original-to-copy-manifest.json','preservation-proof.json','input-aliases.json','copy-proof.json']:
+    exactcopy(P/n,P/'history/preservation-boundary'/n)
+manifest=read(P/'original-to-copy-manifest.json');byorig={r['original']:r for r in manifest};assert len(byorig)==len(manifest)
+readable=[]
+for src in sorted(PRE.rglob('*')):
+    if not src.is_file():continue
+    rel=src.relative_to(PRE)
+    dst=P/'history/source-preparation'/rel
+    if dst.suffix.lower() not in ALLOWED:dst=Path(str(dst)+'.bin')
+    readable.append(exactcopy(src,dst))
+for seq in (274,275,276):
+    for src in sorted((B/'reconciled'/str(seq)).iterdir()):
+        if not src.is_file():continue
+        name='input-freeze.json' if src.name=='freeze.json' else src.name
+        dst=P/'reviewed-final'/str(seq)/name
+        if dst.suffix.lower() not in ALLOWED:dst=Path(str(dst)+'.bin')
+        readable.append(exactcopy(src,dst))
+save('readable-history-and-final-mappings.json',readable)
+
+# Carry raw aliases into the current LIST without falsely assigning ignored gzip data a Git blob.
+transports=[]
+for a in read(PRE/'consumed-input-aliases.json'):
+    if a['path']==a['resolved']:continue
+    src=Path(a['path']);assert str(src.resolve())==a['resolved']
+    assert (os.readlink(src) if src.is_symlink() else None)==a['symlink']
+    assert pin(src)=={k:a[k] for k in ('bytes','sha256')}
+    target=byorig[a['resolved']]
+    assert src.read_bytes()==(P/target['copy']).read_bytes()
+    if a['path'] not in byorig:
+        record={'original':a['path'],'copy':target['copy'],**pin(src)};manifest.append(record);byorig[a['path']]=record
+    transports.append({**a,'copy':target['copy'],'kind':'Current ignored source alias; original source bytes, not a historical tracked Git snapshot'})
+save('source-alias-transports.json',transports)
+
+# Own raw command records keep their original paths; each unsupported format has a bankable exact copy.
+own=[]
+for src in sorted(P.rglob('*')):
+    if not src.is_file() or src.suffix.lower() in ALLOWED:continue
+    dst=P/'execution-evidence'/Path(str(src.relative_to(P))+'.bin')
+    r=exactcopy(src,dst);own.append(r)
+    if r['original'] not in byorig:manifest.append(r);byorig[r['original']]=r
+save('own-execution-format-transports.json',own)
+(P/'original-to-copy-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+
+judgments={};seq=None
+for line in (P/'independent-judgments.txt').read_text().splitlines():
+    if not line:continue
+    if line.isdigit():seq=int(line);continue
+    i,judgment=line.split('|',1);assert (seq,i) not in judgments;judgments[seq,i]=judgment
+tuples=read(P/'resolved-spans.json');assert len(tuples)==len(judgments)==112
+assert tuples==read(B/'root-reconciliation-verification/resolved-spans.json')
+spanreviews=[{'tuple':t,'correspondence_verdict':'SOUND','judgment':judgments[t['seq'],t['id']],
+              'current_metadata_finding':'C05-275-OMISSION-01' if (t['seq'],t['id'])==(275,'r54') else None} for t in tuples]
+save('independent-span-review.json',spanreviews)
+dispositions=[]
+for r in read(P/'all-original-disposition-proof.json'):
+    identity=r['original_identity'];s=identity['seq']
+    judgments_for_ids=[{'id':i,'judgment':judgments[s,i]} for i in r['final_ids']]
+    if not judgments_for_ids:
+        assert (identity['angle'],s,identity['id'])==('tibetan',275,'q5')
+        judgments_for_ids=[{'id':None,'judgment':'Positive HGM7086 circumstances is real; the current dependency/arising relation is distributed into circumstances cause another form. An isolated nominal circumstances is insufficiently secure as the separate exponent of brten nas. Omit, do not null; preserve the original proposal and punctuation.'}]
+    dispositions.append({'identity':identity,'disposition':r['disposition'],'final_ids':r['final_ids'],'independent_assessment':'SUPPORTED','reason':judgments_for_ids})
+assert len(dispositions)==211
+save('independent-original-disposition-review.json',dispositions)
+
+omissions=read(B/'reconciled/275/omissions.json')
+gap=next(x for x in omissions if (x['side'],x['start'],x['end'])==('eng',3,34))
+assert gap['text']==' comes and makes the following '
+assert gap['reason']=='Comes and is rhetorical introduction; kept zer na claims only makes the following claim.'
+finding={'id':'C05-275-OMISSION-01','status':'OPEN','severity':'REQUIRED_METADATA_CORRECTION','seq':275,'span_id':'r54',
+ 'file':str(B/'reconciled/275/omissions.json'),'source_pin':pin(B/'reconciled/275/omissions.json'),
+ 'affected_gap':gap,'final_tuple':next(t for t in tuples if (t['seq'],t['id'])==(275,'r54')),
+ 'problem':'Current omission reason describes the superseded wider zer na/makes the following claim pairing, contradicting the actual final zer/claim span and its complement.',
+ 'minimal_remedy':'Change only the current gap reason to describe zer/claim and the unwrapped English reporting presentation. Preserve exact gap fields, original_omission_contexts, original dispositions, all specs/bodies/notes/tuples and complete previous versions.',
+ 'required_follow_up':'Scoped independent review of actual corrected frozen metadata; no successful canonical rerun for byte-identical specs/bodies/notes.'}
+save('findings.json',[finding])
+save('nonblocking-clarifications.json',[
+ {'id':'C05-275-CLARIFY-01','blocking':False,'location':"omissions.json tib[560,563) residual 'i ",'assessment':'No extra standalone for can mean no third exponent for the residual genitive; n5 correctly retains second phyir/for. Clarify the genitive relation without suggesting phyir is omitted.'},
+ {'id':'C05-275-CLARIFY-02','blocking':False,'location':'material-decisions.json topic Initial final negative scopes','assessment':"Trailing at d3 has ambiguous modifier scope; explicit actual w4 is d5 mi 'thad par/mistaken and r14 d3 mthong med/don't see. The selected depths are sound; separate wording would clarify."}])
+save('bank-ready-errata.json',[]);save('span-head-allow-needed.json',{})
+
+# Full identity/format closure; no builder, generator, suite or SQLite rerun.
+for r in manifest:
+    src=Path(r['original']);dst=P/r['copy']
+    assert dst.resolve().is_relative_to(P) and dst.suffix.lower() in ALLOWED
+    assert pin(dst)=={k:r[k] for k in ('bytes','sha256')}
+    assert src.read_bytes()==dst.read_bytes(),str(src)
+for r in readable:assert Path(r['original']).read_bytes()==(P/r['copy']).read_bytes()
+for a in read(P/'input-aliases.json'):
+    src=Path(a['path']);assert str(src.resolve())==a['resolved'];assert (os.readlink(src) if src.is_symlink() else None)==a['symlink'];assert pin(src)=={k:a[k] for k in ('bytes','sha256')}
+assert read(P/'canonical-sources-before.json')==read(P/'canonical-sources-after.json')
+for a in read(P/'canonical-sources-after.json'):
+    src=Path(a['path']);assert pin(src)=={k:a[k] for k in ('bytes','sha256')}
+current=[]
+for s in (274,275,276):
+    d=B/'reconciled'/str(s);f=read(d/'freeze.json');expected=f['files']
+    assert set(expected)=={str(q.relative_to(d)) for q in d.rglob('*') if q.is_file() and q!=d/'freeze.json'}
+    for n,r in expected.items():assert pin(d/n)==r
+    current.append({'seq':s,'files':len(expected),'freeze':pin(d/'freeze.json')})
+save('finalize-proof.json',{'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'input_manifest_records':len(manifest),'unique_manifest_targets':len({r['copy'] for r in manifest}),
+ 'readable_history_final_mappings':len(readable),'raw_source_alias_transports':len(transports),'own_execution_format_transports':len(own),
+ 'historical_governing_git_pins':len(read(P/'governing-git-proof.json')),'current_reconciled_freezes':current,
+ 'specs_bodies_source_code_unchanged':True,'all_manifest_targets_supported_and_exact':True,
+ 'source_preparation_freeze':pin(PRE/'freeze.json'),'complete_original_dispositions':len(dispositions),'complete_final_judgments':len(spanreviews),
+ 'no_generator_or_suite_rerun':True})
+checklist=[
+ ('ROLE','PASS','Reused non-author/non-reconciler model review; original human-inspection wording externally corrected, never silently edited.',['review.md','history/source-preparation/report.md']),
+ ('GOVERNING','PASS','Actual fixed baseline and complete governing Git object pins.',['governing-git-proof.json']),
+ ('PACKAGES','PASS','Complete primary/supplement section bytes and 1059 fixed/additive input records retained.',['complete-package-section-proof.json','preservation-proof.json']),
+ ('SOURCE','PASS','Independent RO/query_only full sources, 222 actual query sets and 116 master/302 corpus objects.',['history/source-preparation/independent-source-proof.json','all-final-query-alias-proof.json']),
+ ('PHYSICAL','PASS','Both full original physical files, twelve extents and full contexts; no publication/ingestion independence inferred.',['history/source-preparation/physical-extents.json']),
+ ('ORIGINALS','PASS','211 full identities and all 198 retained/12 recast/1 omitted dispositions inspected.',['all-original-disposition-proof.json','independent-original-disposition-review.json']),
+ ('SEMANTICS','PASS_WITH_METADATA_FINDING','112 actual correspondence/range/depth/null judgments; r54 current omission metadata remains open.',['independent-span-review.json','findings.json']),
+ ('CANONICAL','PASS','Three actual final generator calls, zero exits, empty stderr and exact complete bodies.',['canonical-proof.json','canonical-runs']),
+ ('STRUCTURE','PASS','Exact seven-key tuples, original field ordering/parents/occurrences, full-source fields and omission complements.',['interface-proof.json','resolved-spans.json']),
+ ('OMISSION_METADATA','NEEDS_CORRECTION','One current reason describes the superseded wider r54 span.',['findings.json']),
+ ('ERRATA','PASS','All five grounds examined for three suspicions; no surviving new erratum.',['review.md','bank-ready-errata.json']),
+ ('ALLOWANCE','PASS','Bare you does not match actual trailing-space predicate; source licensor remains khyod; no allowance.',['review.md','span-head-allow-needed.json']),
+ ('HISTORY','PASS','All original/current histories, nested freezes and 483 old freeze rows retained with explicit versions.',['gate-correction-history-proof.json','readable-history-and-final-mappings.json']),
+ ('PRESERVATION','PASS','Complete supported-copy, raw-alias and source-unchanged closure.',['finalize-proof.json','original-to-copy-manifest.json','source-alias-transports.json']),
+ ('LIMITS','PASS','No landing/build/CTest/MAIN/native/human acceptance implied; one scoped metadata correction required.',['review.md'])]
+save('checklist.json',[dict(id=i,status=s,disposition=d,evidence=e) for i,s,d,e in checklist])
+evidence={str(f.relative_to(P)):pin(f) for f in sorted(P.rglob('*')) if f.is_file()}
+save('evidence-pins.json',{'boundary':'All files present before review.json and final outer-caller completion; final freeze covers those later files too.','files':evidence})
+save('review.json',{'status':'NEEDS_CORRECTION','verdict':'NEEDS_CORRECTION','spec_verdict':'NEEDS_CORRECTION','quality_verdict':'NEEDS_CORRECTION',
+ 'baseline':'81942cfc6022a785894d3cc2a20de81dc4c6f599','role':'Reused non-author/non-reconciler independent model reviewer; no fresh-context or human-certification claim.',
+ 'segments':read(P/'measured-segments.json'),'total_spans':112,'total_nulls':3,'total_word_pairs':81,'open_findings':[finding],
+ 'nonblocking_clarifications':'nonblocking-clarifications.json','span_correspondence_assessment':'No unresolved selected-span correspondence/range/depth/null finding; current omission metadata blocks candidate approval.',
+ 'original_dispositions':dict(collections.Counter(x['disposition'] for x in dispositions)),
+ 'report':{'path':'review.md',**pin(P/'review.md')},'checklist':read(P/'checklist.json'),
+ 'evidence_manifest':{'path':'evidence-pins.json',**pin(P/'evidence-pins.json')},
+ 'original_to_copy_manifest':{'path':'original-to-copy-manifest.json',**pin(P/'original-to-copy-manifest.json')},
+ 'freeze':{'path':'freeze.json','schema':'files is a relative-path dictionary of bytes/sha256; excludes only its actual top-level path'},
+ 'execution_limits':'Three actual final canonical replays only. No original generator or passing suite reruns. No source/master/repository/index/MAIN/reconciler/native/network writes.'})
+print(json.dumps({'status':'NEEDS_CORRECTION','open_findings':1,'spans':112,'nulls':3,'word_pairs':81,'manifest_records':len(manifest),'readable_mappings':len(readable)}))

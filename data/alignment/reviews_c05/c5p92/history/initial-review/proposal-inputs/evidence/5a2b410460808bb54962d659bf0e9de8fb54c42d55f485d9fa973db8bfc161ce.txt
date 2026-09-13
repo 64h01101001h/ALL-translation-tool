@@ -1,0 +1,35 @@
+from pathlib import Path
+import hashlib,json,sqlite3,gzip,os,datetime
+P=Path(__file__).resolve().parent;B=P.parent;W=B.parent.parent/'campaign-worktree'
+def put(n,x): (P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ b=p.read_bytes();return dict(path=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+db=W/'build/hgm_spine_v27_2.db';mp=W/'data/hgm_dictionary_v27_2.json.gz';cp=W/'data/full_parallel_corpus_v32.json.gz'
+before=[pin(p) for p in [db,mp,cp]];put('sources-before.json',before)
+c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON');assert c.execute('PRAGMA query_only').fetchone()[0]==1;c.execute('BEGIN')
+sets=[]
+for f in ['root-lexical-preparation.json','root-additional-lexical-preparation.json','root-parallel-preparation.json','tibetan/274/lexical-queries-full.json','tibetan/274/parallel-queries-full.json','tibetan/274/supplemental-corpus-full.json','english/274/evidence/corpus-full-query-results.json']:
+ for i,r in enumerate(json.loads((B/f).read_text())):sets.append((f,i,r['sql'],r['parameters'],r['rows']))
+for f in ['english/274/evidence/hgm-exact-full-rows.json','english/274/evidence/hgm-grammar-full-rows.json']:
+ x=json.loads((B/f).read_text())
+ for term,rows in x['results'].items():sets.append((f,term,x['sql'],[term,term],rows))
+sets.append(('english-source-preparation/sqlite-full-rows.json',0,'SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',268,282],json.loads((B/'english-source-preparation/sqlite-full-rows.json').read_text())))
+replays=[];entries={};corpus={}
+for f,i,sql,params,expected in sets:
+ assert sql.lstrip().upper().startswith('SELECT ')
+ rows=[dict(r) for r in c.execute(sql,params)];item=dict(original_file=f,original_index=i,sql=sql,parameters=params,count=len(rows),rows=rows,full_rows_exact=rows==expected);replays.append(item);put('actual-query-replays.json',replays);assert rows==expected,(f,i)
+ for row in rows:
+  if 'hgm_gloss' in row:entries[row['id']]=row
+  elif 'course' in row:corpus[row['id']]=row
+# Full current raw master and corpus objects, not only displayed gloss subsets.
+master=json.loads(gzip.decompress(mp.read_bytes()));rawcorpus=json.loads(gzip.decompress(cp.read_bytes()));objects={}
+for id,row in entries.items():
+ raw=json.loads(row['raw']);assert master['unified_entries'][id]==raw,id;assert json.loads(row['hgm_gloss'])==raw['hgm_gloss'];objects[str(id)]=raw
+put('independent-master-full-objects.json',objects)
+for id,row in corpus.items():assert rawcorpus[id]==json.loads(row['raw']),id
+put('independent-corpus-full-objects.json',{str(id):rawcorpus[id] for id in sorted(corpus)})
+put('gloss-reading-view.json',[dict(id=id,wylie=r['wylie'],hgm_gloss=json.loads(r['hgm_gloss']),tier=r['tier'],source=r['hgm_source'],status=r['status']) for id,r in sorted(entries.items())])
+put('corpus-reading-view.json',[{k:r[k] for k in ['id','course','seq','acip','wylie','english']} for id,r in sorted(corpus.items())])
+c.execute('ROLLBACK');c.close();after=[pin(p) for p in [db,mp,cp]];put('sources-after.json',after);assert after==before
+proof=dict(status='PASS',query_sets=len(replays),query_result_rows=sum(r['count'] for r in replays),unique_query_sets=len({(r['sql'],tuple(r['parameters'])) for r in replays}),unique_master_objects=len(entries),unique_corpus_objects=len(corpus),source_unchanged=True,query_only=1,uri=db.resolve().as_uri()+'?mode=ro',canonical_calls=0,finished=datetime.datetime.now(datetime.timezone.utc).isoformat())
+put('independent-source-proof.json',proof);print(json.dumps(proof))

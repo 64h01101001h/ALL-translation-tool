@@ -1,0 +1,174 @@
+import hashlib,json,pathlib,re
+B=pathlib.Path(__file__).resolve().parents[2];E=B/'english'
+source={r['seq']:r for r in json.loads((B/'english-source-preparation/inputs/source.json').read_text())}
+allrows={}
+def begin(seq):
+ global S,decls,spans,n,parent
+ S=source[seq];decls=[];spans=[];n=0;parent=None
+def hits(text,piece,member=False):
+ out=[];at=0
+ while (at:=text.find(piece,at))>=0:
+  end=at+len(piece)
+  if member or ((not piece[0].isalnum() or at==0 or not text[at-1].isalnum()) and (not piece[-1].isalnum() or end==len(text) or not text[end].isalnum())):out.append(at)
+  at+=1
+ return out
+def locate(text,piece,window=None,member=False):
+ hs=hits(text,piece,member)
+ if window:
+  assert text.count(window)==1,(S['seq'],piece,window,'window not unique')
+  start=text.index(window);eligible=[a for a in hs if start<=a and a+len(piece)<=start+len(window)]
+ else: eligible=hs
+ assert len(eligible)==1,(S['seq'],piece,eligible,'explicit window needed')
+ return eligible[0],hs
+def A(t,e,d=5,tw=None,ew=None,why='Direct contextual lexical correspondence.'):
+ global n,parent
+ n+=1; id={5:'w',6:'p',7:'m',3:'r'}[d]+str(n)
+ ta,ths=locate(S['wylie'],t,tw,d==7);ea,ehs=locate(S['english'],e,ew,d==7)
+ if d!=7: parent=id if d==5 else None
+ else:assert parent is not None
+ sp=dict(id=id,d=d,tib=t,eng=e);spans.append(sp)
+ decls.append(dict(id=id,parent=parent if d==7 else None,tib=dict(start=ta,end=ta+len(t),all_whole_word_offsets=ths,selected_occurrence=ths.index(ta)+1,window=tw),eng=dict(start=ea,end=ea+len(e),all_whole_word_offsets=ehs,selected_occurrence=ehs.index(ea)+1,window=ew),rationale=why))
+def finish(title,note,concerns):
+ seq=S['seq'];o=E/str(seq)
+ order=[x['id'] for x in sorted(decls,key=lambda x:x['eng']['start']) if next(s for s in spans if s['id']==x['id'])['d']!=7]
+ spec=dict(course='C05',segments=[dict(seq=seq,title=title,spans=spans,eng_order=order,note='PROVISIONAL machine matching by Codex, independent English-first original; reused earlier English-author and tooling context. '+note)])
+ (o/'candidate01.spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+ (o/'occurrence-declarations.json').write_text(json.dumps(dict(producer='Codex English-first, reused context',coordinate_system='0-based Python Unicode code points; end exclusive. All source text ASCII here, so also UTF-8 byte offsets.',spec_top_keys=list(spec),segment_keys=list(spec['segments'][0]),span_keys=['id','d','tib','eng'],optional_keys=dict(cls='absent',nul='absent',subword='absent',clauses='absent',eng_order='explicit',note='present'),declarations=decls,concerns=concerns),ensure_ascii=False,indent=2)+'\n')
+ (o/'errata.json').write_text('[]\n')
+ allrows[seq]=dict(spans=len(spans),d5=sum(s['d']==5 for s in spans),d6=sum(s['d']==6 for s in spans),d7=sum(s['d']==7 for s in spans),d3=sum(s['d']==3 for s in spans),nulls=0)
+
+begin(274)
+A('gsum pa','third part')
+A('rtsod pa','rebuttal')
+A('spong ba','refute')
+A('brlan','wet',tw='brlan zhing gsher ba phor pa gang po la',ew='something that is wet and flowing')
+A('zhing','and',6,tw='brlan zhing gsher ba phor pa gang po la',ew='something that is wet and flowing')
+A('gsher ba','flowing',tw='brlan zhing gsher ba phor pa gang po la',ew='something that is wet and flowing')
+A('phor pa','glass',tw='phor pa gang po la',ew='looking at a glass')
+A('gang po','filled with',tw='phor pa gang po la',ew='a glass filled with something that')
+A('las can','with their own karma',why='Attested possessive compound (HGM 19364); excludes the preceding distributive each.')
+A('las','karma',7,tw='las can',ew='with their own karma',why='Karma content inside the possessed-karma compound; actual source English, not a change to curated deeds gloss.')
+A('can','with',7,tw='las can',ew='with their own karma',why='Possession member; own/their remain inside the attested parent without separate member claims.')
+A("'gro ba",'beings',tw="las can gyi 'gro ba gsum gyis",ew='beings of three different types')
+A('gsum','three',tw="'gro ba gsum gyis",ew='three different types')
+A('cig car','together',why='Simultaneity is carried by together in the sitting/looking description; sitting is left supplied.')
+A('bltas pa','looking',ew='together and looking at')
+A("de'i tshe",'at this point',3,why='Temporal reference rendered after the repeated glass clause, not the earlier descriptive situation.')
+A('brlan','wet',tw='brlan zhing gsher ba phor pa gang po de',ew='something wet and flowing exists')
+A('zhing','and',6,tw='brlan zhing gsher ba phor pa gang po de',ew='something wet and flowing exists')
+A('gsher ba','flowing',tw='brlan zhing gsher ba phor pa gang po de',ew='something wet and flowing exists')
+A('phor pa','glass',tw='phor pa gang po de',ew='The glass filled')
+A('gang po','filled with',tw='phor pa gang po de',ew='The glass filled with something wet')
+A('cha shas','parts')
+A('gsum','three',tw='cha shas gsum ldan',ew='three distinct parts')
+A('ldan','with',tw='gsum ldan gyi',ew='as something with three distinct parts')
+A('cha can','something',ew='as something with three distinct parts',why='Part-bearing whole, the third something. Earlier somethings introduce the liquid descriptions and are not this cha can.')
+A('du','as',6,tw='cha can du skyes',ew='at this point, as something')
+A('skyes','exists',why='Resultant arising rendered as exists in this local sentence (HGM 792 includes exists); does not claim general synonymy.')
+A('kyang','Nonetheless',6)
+A('rang rang','each',ew='they are each at the mercy',why='Possessor distribution, not the earlier each with their own karma.')
+A('thun mong ma yin pa','particular',why='Nonshared/individual qualifier, whole lexical expression; no false separate null for internal negation.')
+A('las','karma',tw="thun mong ma yin pa'i las",ew='particular karma')
+A('dbang gis','at the mercy of',why='Attested idiomatic force/dependence expression (HGM 13091), kept whole.')
+A("'gro ba",'beings',tw="'gro ba re res",ew='one of the beings',why='Distributive perceiver occurrence. Earlier post-kyang three-beings subject is compressed into pronouns and omitted, not assigned this slot.')
+A('re res','one',why='Distributive singular in no one; the negative is independently ma, not part of this distributive.')
+A('dngos po','things')
+A('gsum ga','all three')
+A('gsum','three',7,tw='gsum ga',ew='all three')
+A('ga','all',7,tw='gsum ga',ew='all three')
+A('ma','no',6,tw='gsum ga ma mthong',why='Predicate negation recast on the distributive subject as no one; does not negate the three-object quantifier.')
+A('mthong','see')
+A('khas blangs pa','position',ew='our own position is describing',why='The accepted account is introduced earlier in English. Final this position is a repeated explanatory reference and is not claimed again.')
+finish('refuting a rebuttal to the account of perception',
+ 'Repeated glass descriptions, karma references and quantifiers have explicit occurrence declarations. The middle three-beings reference is compressed into pronouns; the later distributive beings owns the second English beings. The third something names the part-bearing whole. The opening position corresponds to the closing Tibetan assertion formula. Supplied explanatory participants, collected and the final restatement remain unwrapped; no new erratum is proposed.',
+ ['Review contextual skyes/exists, cha can/third something, and displaced khas blangs pa/first position; they are not general dictionary definitions.',
+  'Omit de la and connective la/gyi/gyis/gi/kyi where the English distributes their grammatical relations; do not assert nulls for uncertainty.',
+  "Omit the middle 'gro ba gsum po des as a separate atom: the account is restructured into no one of the beings and they; assigning its beings to the distributive later occurrence would mislabel roles.",
+  'Omit supplied representatives of other views/viewpoints, presentation, recall, sitting, distinct, collected, final attack-this-position restatement; no separate source atoms securely license those isolated words.',
+  'No new erratum: C15:419 shares the selected text fields; this does not establish independent publication or ingestion lineage.'])
+
+begin(275)
+A('kha cig','One')
+A('de ltar','as just explained',3,why='Anaphoric manner phrase referring to the account just given; not a claim that explained translates a separate Tibetan verb.')
+A("'dod pa",'position',ew='Your position, as just explained')
+A("mi 'thad",'mistaken',why='Whole negative predicate; positive appropriate and negation have no independent English words here.')
+A('dpal ldan','glorious')
+A('chos kyi grags pa','Dharmakirti',ew='glorious Dharmakirti',why='First named authority. Later Master Dharmakirti is a supplied repeated attribution, not another Tibetan occurrence.')
+A('lung','statement')
+A("'gal ba",'goes against')
+A('phyir','for',6,tw="'gal ba'i phyir",ew='mistaken, for it goes')
+A('der thal','This is quite surely the case',3,why='Complete consequence formula translated as an asserted fact; surely is kept inside the whole phrase, not attributed to an isolated particle.')
+A('gzhung','work',why='The source text/work, without supplied major or bracketed title. The unrelated auto-aligned master gloss is not used.')
+A('las','in',6,tw="de'i gzhung las",ew='for in his major work',why='Citation-source postposition, not the later karma noun.')
+A('gal te','Suppose',6,why='Conditional introduction, independent of the unrelated provisional automatic master gloss.')
+A('mthong med',"don't see",3,why='Complete negated seeing predicate; do is English grammatical support, not a separate Tibetan content word.')
+A('gzugs','form',tw="brten nas gzugs gzhan",ew='another form. What')
+A('gzhan','another',tw="brten nas gzugs gzhan",ew='another form. What')
+A('zhes','says',6,why='Quotation closure licenses the earlier English reporting tag he says; he remains unwrapped.')
+A('dgra','enemy',tw='zhes dgra gnyen',ew='his enemy, and also')
+A('gnyen','friend',tw='zhes dgra gnyen',ew='by his friend.')
+A('kyis','by',6,tw='dgra gnyen gnyis kyis',ew='time by his enemy',why='One agent marker shared by both observers; first by retained, repeated by his friend is not assigned a second source occurrence.')
+A('skyes bu','person',tw='skyes bu gcig gi',ew='single person whose')
+A('gcig','single',tw='skyes bu gcig gi')
+A('gi','whose',6,tw='skyes bu gcig gi',why='Possessive relation rendered by the English relative possessive.')
+A('gzugs','physical form',tw='gcig gi gzugs la',ew='whose physical form is looked')
+A('bltas pa','looked upon')
+A("de'i tshe na",'at the same time',3,ew='looked upon at the same time by',why='Only the first at-the-same-time occurrence; the later same-time wording restates coexistence.')
+A('skyes bu','person',tw="skyes bu de'i gzugs",ew="In reality, the person's")
+A('gzugs','physical form',tw="skyes bu de'i gzugs",ew="person's physical form is both")
+A('mdzes','attractive',tw='gzugs mdzes mi mdzes gnyis su')
+A('mi mdzes','ugly',tw='gzugs mdzes mi mdzes gnyis su',why='Whole negative adjective. Ugly lexicalizes the negative meaning; no separate negation atom is claimed.')
+A('gnyis','both',tw='mi mdzes gnyis su',ew='is both attractive')
+A('gzugs','physical form',tw='gzugs de dang dgra',ew="person's true physical form",why='Original body in the between-relation, later English position than the intervening karmic form.')
+A('dang','and',6,tw='gzugs de dang dgra',ew='physical form and the enemy')
+A('dgra','enemy',tw='gzugs de dang dgra',ew='the enemy and friend looking')
+A('gnyen','friend',tw='dang dgra gnyen gnyis kyi',ew='the enemy and friend looking')
+A('bar du','between')
+A('las','karma',tw='bar du las gzugs',why='Karma modifier of intervening form. English distributes the compound as physical form, one from karma; no contiguous full compound pairing is invented.')
+A('gzugs','physical form',tw='bar du las gzugs',ew='yet another physical form',why='Intervening form, third physical-form occurrence in English, distinguished from the original form.')
+A('skyes','grows up')
+A('pas','Because of this',6,tw='gzugs skyes pas',why='Causal connective following the intervening-form event; this resumes that event, not a new participant.')
+A('dgra','enemy',tw='skyes pas, dgra gnyen',ew='neither the enemy nor')
+A('gnyen','friend',tw='pas, dgra gnyen gnyis po',ew='nor the friend sees')
+A('mdzes','attractiveness',tw='gzugs mdzes mi mdzes gnyis ka')
+A('mi mdzes','ugliness',tw='gzugs mdzes mi mdzes gnyis ka')
+A('gnyis ka','both',ew='sees both the attractiveness')
+A('ma','neither',6,tw='gnyis ka ma mthong',why='Negation redistributed to observers in neither; both still quantifies the two appearances.')
+A('mthong ba','sees')
+A('grangs can','Numerist School',why='Proper school name only; bracketed non-Buddhist is supplied classification.')
+A('khas blangs pa','belief',why='The Numerists accepted this account. English introduces the belief earlier, before its illustration.')
+A("'gog byed",'refute',why='Refutation function of the argument; excludes supplied to.')
+A('rigs pa','logic',ew='uses logic to refute',why='One source occurrence, first English logic; this same logic is a repeated explanatory reference.')
+A('khyod','you',ew='position you have taken',why='Owner/addressee of the challenged position, not the quotation addressee or final you are wrong.')
+A('gnod pa','against',ew='can be used against the position',why='The argument bears against the position. Final prove that you are wrong is a fuller explanatory repetition, not another source atom.')
+A('zer na','makes the following claim',3,why='Whole claim-introduction formula rendered earlier; comes and is unwrapped, and conditional na has no separate claim here.')
+finish('a claim invoking dharmakirti',
+ 'The Numerist claim is the opponent speech, not the author\'s endorsed account; the next segment rejects it. Quotation, original body, intervening karmic form and final appearances have distinct occurrence declarations. Single Tibetan authority/logic references are not duplicated for repeated English attributions. The verse causal recast and transferred-argument wording are left unatomized. The original non- Buddhist spacing is retained without a new erratum.',
+ ['The complete negated quotation predicate is d3, not a standalone false null or an invented positive stem.',
+  'brten nas and \'byung \'gyur na together recast dependency/arising as circumstances cause; omit individual atoms instead of treating an intransitive arising verb as a causative verb. gzugs/form and gzhan/another remain separately sound.',
+  'kha spos pas means transferring/application of the same argument. Its auto-aligned HGM entry ugliness together master dharmakirti is positional contamination, not a license; omit the distributed can be used atom. C03:487/P1:107 transfer wording is corroborative only for the shared transfer expression.',
+  'gnas kyang, numerical gnyis where a pair is coordinated, pronoun/genitive scaffolding, final gzugs before attractiveness/ugliness and the final phyir are distributed or compressed. Omit rather than declare no contribution.',
+  'Review der thal/complete asserted-fact phrase, causal pas/Because of this and zer na/claim-introduction; these are grammatical recasts, not dictionary definitions.',
+  'C15:420 matches ACIP and Wylie; English differs at non-Buddhist versus non- Buddhist. Original C05 physical source has a line break after non-. Keep the published/corpus bytes and do not label the entire pair byte-identical.',
+  'No new erratum; following bracketed work title and religious classification are original English apparatus and not mapped to source content words.'])
+
+begin(276)
+A("mi 'thad",'incorrect',why='Negative predicate as a complete lexical unit; no separate English negation atom.')
+A("'dod pa",'belief',tw="de ltar 'dod pa de ni")
+A('chos kyi grags pa','Master Dharmakirti',why='Attested complete proper name and honorific in this occurrence; the source-name genitive and English possessive remain unwrapped.')
+A('lung','statement')
+A('don','meaning',tw='lung don dang')
+A('dang','and',6)
+A("'dod pa",'position',tw="smra ba po'i 'dod pa gnyis ka")
+A('gnyis ka','both',why='Two objects of failed understanding: meaning of the statement and the prior position, not two speakers.')
+A('khong du ma chud pa','failed to understand',why='Whole idiomatic negative understanding expression, attested HGM 1209. No separate atom for ma or a guessed positive stem.')
+A('phyir','for',6)
+finish('rejecting the misunderstanding of both accounts',
+ 'This response rejects the preceding opponent claim. Both quantifies the statement\'s meaning and the previously expressed position. The complete failed-to-understand idiom is kept whole. The source phrase naming the prior-position speaker and the error/manifestation construction are distributed in the English and omitted as separate atoms, not nulled. No new erratum is proposed.',
+ ["phyogs snga smra ba po'i names the proponent of the prior position; English recasts this as the whole position expressed above. Do not isolate smra ba po as position or phyogs snga as above. The second 'dod pa owns position.",
+  'de/de ltar reference the prior argument/belief. The supplied Your reasoning here and you have expressed are not standalone dictionary mappings; the current negative predicate and first belief remain mapped.',
+  'skyon yin pa\'i presents the error of not understanding, recast as shows that you have failed to understand. Omit skyon/shows as an atom; the glossary reveals entry does not settle this local correspondence.',
+  'Whole, expressed above, supplied pronouns and genitive/nominal/topical frames remain unwrapped; no unresolved contribution is relabeled null.',
+  'C15:421 shares ACIP, Wylie and English, and original C05 physical prose preserves the unusual is though incorrect wording. No correction or independent-publication inference is proposed.'])
+
+print(json.dumps(allrows,indent=2))

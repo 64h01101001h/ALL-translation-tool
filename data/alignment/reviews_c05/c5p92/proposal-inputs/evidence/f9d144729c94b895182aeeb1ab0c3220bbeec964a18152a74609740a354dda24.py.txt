@@ -1,0 +1,68 @@
+import gzip,hashlib,json,pathlib
+from html.parser import HTMLParser
+O=pathlib.Path(__file__).resolve().parent;B=O.parents[1];E=O.parent;WT=B.parents[1]/'campaign-worktree';prep=B/'english-source-preparation'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+class Parse(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.active=None;self.stack=[];self.out=[]
+ def handle_starttag(self,t,a):
+  a=dict(a)
+  if t=='span':
+   label=a.get('data-l')
+   if label and label.endswith('S'):
+    assert self.active is None;self.active=dict(text='',ranges={},stack=[])
+   if self.active is not None:self.active['stack'].append((label,len(self.active['text']),a))
+ def handle_data(self,d):
+  if self.active is not None:self.active['text']+=d
+ def handle_endtag(self,t):
+  if t=='span' and self.active is not None:
+   label,start,a=self.active['stack'].pop()
+   if label and label.endswith('S'):
+    assert not self.active['stack'];self.out.append(self.active);self.active=None
+   elif label:
+    assert label not in self.active['ranges'];self.active['ranges'][label]=dict(start=start,end=len(self.active['text']),depth=int(a['data-d']))
+
+sources={r['seq']:r for r in json.loads((prep/'inputs/source.json').read_text())}
+for filename,current in [('AGENTS.md','AGENTS.md'),('ALIGNMENT_LAYER_SPEC.md','docs/ALIGNMENT_LAYER_SPEC.md'),('PROPOSE_BRIEF.md','docs/alignment_briefs/PROPOSE_BRIEF.md')]:
+ assert (prep/'inputs'/filename).read_bytes()==(WT/current).read_bytes()
+assert (O/'head-read01/stdout').read_text().strip()==json.loads((O/'evidence/baseline.json').read_text())['commit']
+full=json.loads(gzip.decompress((O/'evidence/hgm_dictionary_v27_2.json.gz').read_bytes()))
+lex=json.loads((O/'evidence/hgm-exact-full-rows.json').read_text())['results'];masterchecks=[]
+for term,rows in lex.items():
+ for r in rows:
+  raw=json.loads(r['raw']);assert raw==full['unified_entries'][r['id']-1]
+  assert json.loads(r['hgm_gloss'])==(raw.get('hgm_gloss') or [])
+  masterchecks.append(dict(term=term,id=r['id'],complete_raw_object_equal=True,hgm_gloss_equal=True,original_ordinal=r['id']))
+save(O/'evidence/master-source-proof.json',dict(master_bytes=13393560,master_sha256=sha((O/'evidence/hgm_dictionary_v27_2.json.gz').read_bytes()),checks=masterchecks))
+summary=[]
+for seq in (274,275,276):
+ d=E/str(seq);s=sources[seq];spec=json.loads((d/'spec.json').read_text());ss=spec['segments'][0]
+ body=(d/'body.html').read_bytes();assert body==(d/'canonical-attempt01/stdout.html').read_bytes()
+ assert (d/'spec.json').read_bytes()==(d/'candidate01.spec.json').read_bytes()==(d/'canonical-attempt01/stdin.json').read_bytes()
+ assert (d/'canonical-attempt01/exit.txt').read_text()=='0\n' and (d/'canonical-attempt01/stderr.txt').read_bytes()==b''
+ p=Parse();p.feed(body.decode());assert len(p.out)==2
+ dec=json.loads((d/'occurrence-declarations.json').read_text());spans={sp['id']:sp for sp in ss['spans']}
+ gaps={};exact=[]
+ for side,text,result in [('tib',s['wylie'],p.out[0]),('eng',s['english'],p.out[1])]:
+  assert result['text']==text and set(result['ranges'])=={'s'+str(seq)+id for id in spans}
+  for decl in dec['declarations']:
+   id=decl['id'];r=result['ranges']['s'+str(seq)+id];expected=decl[side]
+   assert (r['start'],r['end'])==(expected['start'],expected['end']),(seq,side,id,r,expected)
+   assert text[r['start']:r['end']]==spans[id][side]
+   assert r['depth']==spans[id]['d']
+   if decl['parent']:
+    par=result['ranges']['s'+str(seq)+decl['parent']]
+    assert par['start']<=r['start']<r['end']<=par['end'] and (r['start'],r['end'])!=(par['start'],par['end'])
+   exact.append(dict(id=id,side=side,range=r,declared_occurrence=expected['selected_occurrence'],all_offsets=expected['all_whole_word_offsets']))
+  flat=sorted([r for label,r in result['ranges'].items() if r['depth']!=7],key=lambda r:r['start']);cur=0;gs=[]
+  for r in flat:
+   assert r['start']>=cur
+   if r['start']>cur:gs.append(dict(start=cur,end=r['start'],text=text[cur:r['start']]))
+   cur=r['end']
+  if cur<len(text):gs.append(dict(start=cur,end=len(text),text=text[cur:]))
+  gaps[side]=gs
+ save(d/'unwrapped-source-inventory.json',dict(scope='Complete complements of flat proposal spans; retained verbatim, not null assertions.',gaps=gaps))
+ save(d/'canonical-occurrence-proof.json',dict(status='PASS',full_tibetan_reproduction=True,full_english_reproduction=True,all_declared_ranges_equal_actual_canonical=True,all_labels_present_both_sides=True,all_parent_ranges_strictly_contain_children=True,records=exact))
+ row=dict(seq=seq,spans=len(spans),nulls=0,d5=sum(sp['d']==5 for sp in spans.values()),d6=sum(sp['d']==6 for sp in spans.values()),d7=sum(sp['d']==7 for sp in spans.values()),d3=sum(sp['d']==3 for sp in spans.values()),spec_bytes=(d/'spec.json').stat().st_size,spec_sha256=sha((d/'spec.json').read_bytes()),body_bytes=len(body),body_sha256=sha(body),canonical_exit=0,canonical_attempts=1,errata=0)
+ save(d/'verification.json',row);summary.append(row)
+print(json.dumps(summary,indent=2))

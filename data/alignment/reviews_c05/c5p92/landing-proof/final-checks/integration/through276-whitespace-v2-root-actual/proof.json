@@ -1,0 +1,39 @@
+{
+  "status": "PASS_ROOT_ACCEPTS_ACTUAL_WHITESPACE_AUDIT",
+  "utc": "2026-09-13T16:34:02.441788+00:00",
+  "runs": [
+    {
+      "mode": "prepare",
+      "consumed_inputs": 177,
+      "commands": 61,
+      "proof": {
+        "bytes": 1018933,
+        "sha256": "2d13ed227a25fbaea01df4a53344789a12d39a7a38577d4c3493f9b89581808c"
+      }
+    },
+    {
+      "mode": "audit",
+      "consumed_inputs": 178,
+      "commands": 62,
+      "proof": {
+        "bytes": 1018939,
+        "sha256": "77d7f64b5032ab622da351ddf1656a978a2bef02dac68304355ffa5e307f72c8"
+      }
+    }
+  ],
+  "warning_count": 62470,
+  "warned_paths": 56,
+  "classes": {
+    "physical_bytes": 39554,
+    "recorded_python_syntax_error_source_echo": 4,
+    "canonical_csv_crlf": 22912
+  },
+  "index_unchanged": {
+    "bytes": 2888969,
+    "sha256": "04363aab8d7d90afe09c4ae293a97336c00885be6e101524f5950f98f5018b09"
+  },
+  "all_consumed_aliases_full_bytes_unchanged": true,
+  "old_failed_prepare_preserved": true,
+  "early_global276_required": true,
+  "scope": "Actual staged whitespace provenance only; full staging, private commits and global closure still pending"
+}

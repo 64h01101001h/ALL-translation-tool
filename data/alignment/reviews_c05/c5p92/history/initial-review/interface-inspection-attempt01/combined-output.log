@@ -1,0 +1,50 @@
+verdict NEEDS_CORRECTION checklist 15 findings 1
+finalize {
+  "status": "PASS",
+  "utc": "2026-09-13T15:13:58.869193+00:00",
+  "input_manifest_records": 1508,
+  "unique_manifest_targets": 521,
+  "readable_history_final_mappings": 475,
+  "raw_source_alias_transports": 2,
+  "own_execution_format_transports": 12,
+  "historical_governing_git_pins": 14,
+  "current_reconciled_freezes": [
+    {
+      "seq": 274,
+      "files": 489,
+      "freeze": {
+        "bytes": 90940,
+        "sha256": "2ba447528e416bebb51695cbdfbf133461be20ba5a7389edfae9d996bc16ebef"
+      }
+    },
+    {
+      "seq": 275,
+      "files": 23,
+      "freeze": {
+        "bytes": 3604,
+        "sha256": "482334a87ab99ff30fd201ec897d51a8f0bd6327d67f4c17edc7ea4ec2f6778c"
+      }
+    },
+    {
+      "seq": 276,
+      "files": 23,
+      "freeze": {
+        "bytes": 3592,
+        "sha256": "6fb42016746b95a47b2e72b0ad13cab9dac567f67955c78dd6812132c4339490"
+      }
+    }
+  ],
+  "specs_bodies_source_code_unchanged": true,
+  "all_manifest_targets_supported_and_exact": true,
+  "source_preparation_freeze": {
+    "bytes": 68505,
+    "sha256": "bc922cb4c1586baf7e1880bdb692dcdd35a5d7eabf2d2f3a06817b6d343b691e"
+  },
+  "complete_original_dispositions": 211,
+  "complete_final_judgments": 112,
+  "no_generator_or_suite_rerun": true
+}
+
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+KeyError: 'files'

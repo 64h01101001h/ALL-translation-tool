@@ -1,0 +1,12 @@
+C05:276 Tibetan-first original — primary Codex; PROVISIONAL, not semantic approval.
+Own root preparation and review leads were read and disclosed; no current English proposal or judgment was read before freezing all three originals.
+Challenge the whole prior-speaker phrase/position expressed above and the skyon/yin omission. Full HGM1209 licenses failed to understand as one negative idiom; the topic ni is a grammar-fusion null, not the nearby printed is.
+Complete shared source/evidence is in ../274/:75 lexical query sets/76 full master entries,15 raw context rows,9 exact parallel queries,46 full preparation replays,6 supplemental corpus query sets/24 rows, and six byte-exact extents of the complete original physical C05 file.
+Current81942cfc governing originals are bound by9 actual Git show executions; complete original/copy records and supplied aliases are preserved by reviewed evidence-copy v2. Source/master baseline hashes remain unchanged.
+All106 intended occurrences across the three originals match the canonical resolver, including repeated forms and subject/object reversals; membership/optional fields remain explicit in specs and intended-spans.json.
+Author attempt01 wrote274 and then failed on noncontiguous la brten nas, separated by original verse punctuation; its full source and streams remain. A premature combined canonical caller passed274 once, then stopped because275 was absent. V2 authored275/276 only, retaining brten nas and explicitly omitting la; neither source nor checker changed, and274 was not rerun.
+Actual canonical generator EXIT=0; stderr=0 bytes; body=3031 bytes; SHA-256=e1ca8fc8f45013b3456305e614922a1669fe714c99f419ec0162de4a77678624.
+Measured spans=11; nulls=1; non-null d5=7. One actual successful canonical invocation per current segment; no post-generation spec/note edits.
+Errata:0. The unusual is though incorrect preserves a concessive English word order in this actual published-text witness. C15 shares it exactly. Stylistic preference does not establish a factual/typographic defect; no corrected word order is composed. All five grounds and source quotes are recorded in errata-analysis.json; independent skeptical review remains required.
+Prior full helper versions, partial/failed calls, complete raw witnesses, current source/copy manifests and actual command records are retained. Native/rendered/device/MAIN integration has not been performed for these originals.
+Both original authors are excluded from reconciliation and semantic approval. Fidelity alone does not certify correspondence.

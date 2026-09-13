@@ -1,0 +1,324 @@
+{
+  "uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "query_only": 1,
+  "transaction": "BEGIN; read SELECTs; ROLLBACK",
+  "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+  "parameters": [
+    "C05",
+    268,
+    282
+  ],
+  "schema": [
+    [
+      "index",
+      "idx_corpus_course",
+      "corpus_segments",
+      "CREATE INDEX idx_corpus_course ON corpus_segments(course, seq)"
+    ],
+    [
+      "index",
+      "idx_entries_acip",
+      "entries",
+      "CREATE INDEX idx_entries_acip ON entries(acip)"
+    ],
+    [
+      "index",
+      "idx_entries_tibetan",
+      "entries",
+      "CREATE INDEX idx_entries_tibetan ON entries(tibetan)"
+    ],
+    [
+      "index",
+      "idx_entries_tier",
+      "entries",
+      "CREATE INDEX idx_entries_tier ON entries(tier)"
+    ],
+    [
+      "index",
+      "idx_entries_wylie",
+      "entries",
+      "CREATE INDEX idx_entries_wylie ON entries(wylie)"
+    ],
+    [
+      "index",
+      "idx_pron_fold",
+      "pron_index",
+      "CREATE INDEX idx_pron_fold ON pron_index(fold)"
+    ],
+    [
+      "index",
+      "idx_reverse_english",
+      "reverse_index",
+      "CREATE INDEX idx_reverse_english ON reverse_index(english)"
+    ],
+    [
+      "index",
+      "idx_variants_entry",
+      "entry_variants",
+      "CREATE INDEX idx_variants_entry ON entry_variants(entry_id)"
+    ],
+    [
+      "index",
+      "idx_variants_wylie",
+      "entry_variants",
+      "CREATE INDEX idx_variants_wylie ON entry_variants(wylie)"
+    ],
+    [
+      "index",
+      "sqlite_autoindex_meta_1",
+      "meta",
+      null
+    ],
+    [
+      "table",
+      "corpus_fts",
+      "corpus_fts",
+      "CREATE VIRTUAL TABLE corpus_fts USING fts5(\n  wylie, english, acip, wylie_norm,\n  content='', tokenize=\"unicode61 tokenchars ''''\"\n)"
+    ],
+    [
+      "table",
+      "corpus_fts_config",
+      "corpus_fts_config",
+      "CREATE TABLE 'corpus_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID"
+    ],
+    [
+      "table",
+      "corpus_fts_data",
+      "corpus_fts_data",
+      "CREATE TABLE 'corpus_fts_data'(id INTEGER PRIMARY KEY, block BLOB)"
+    ],
+    [
+      "table",
+      "corpus_fts_docsize",
+      "corpus_fts_docsize",
+      "CREATE TABLE 'corpus_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB)"
+    ],
+    [
+      "table",
+      "corpus_fts_idx",
+      "corpus_fts_idx",
+      "CREATE TABLE 'corpus_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID"
+    ],
+    [
+      "table",
+      "corpus_segments",
+      "corpus_segments",
+      "CREATE TABLE corpus_segments (\n  id INTEGER PRIMARY KEY,\n  course TEXT NOT NULL,\n  seq INTEGER NOT NULL,              -- position within course (line number for NEAR)\n  acip TEXT,\n  wylie TEXT,\n  english TEXT,\n  raw TEXT NOT NULL\n)"
+    ],
+    [
+      "table",
+      "english_fts",
+      "english_fts",
+      "CREATE VIRTUAL TABLE english_fts USING fts5(\n  hgm_gloss, hopkins_english, sanskrit,\n  content='', tokenize='unicode61'\n)"
+    ],
+    [
+      "table",
+      "english_fts_config",
+      "english_fts_config",
+      "CREATE TABLE 'english_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID"
+    ],
+    [
+      "table",
+      "english_fts_data",
+      "english_fts_data",
+      "CREATE TABLE 'english_fts_data'(id INTEGER PRIMARY KEY, block BLOB)"
+    ],
+    [
+      "table",
+      "english_fts_docsize",
+      "english_fts_docsize",
+      "CREATE TABLE 'english_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB)"
+    ],
+    [
+      "table",
+      "english_fts_idx",
+      "english_fts_idx",
+      "CREATE TABLE 'english_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID"
+    ],
+    [
+      "table",
+      "entries",
+      "entries",
+      "CREATE TABLE entries (\n  id INTEGER PRIMARY KEY,            -- stable ordinal in release order\n  wylie TEXT NOT NULL,\n  tibetan TEXT,\n  tibetan_source TEXT,               -- NULL = source-attested; else generated-*\n  acip TEXT,\n  pronunciation TEXT,\n  pronunciation_source TEXT,\n  sanskrit TEXT,\n  hopkins_english TEXT,\n  hgm_gloss TEXT,                    -- JSON array; BINDING equivalents (rule 1)\n  tier TEXT,                         -- curated | glossary | auto-aligned | NULL\n  hgm_source TEXT,\n  status TEXT,\n  tenses TEXT,\n  flags TEXT,                        -- JSON array\n  corpus_courses TEXT,               -- JSON array\n  corpus_n_segments INTEGER,\n  raw TEXT NOT NULL                  -- complete source entry JSON, verbatim\n)"
+    ],
+    [
+      "table",
+      "entries_fts",
+      "entries_fts",
+      "CREATE VIRTUAL TABLE entries_fts USING fts5(\n  wylie, variants, tibetan, acip, pronunciation,\n  content='', tokenize=\"unicode61 tokenchars ''''\"\n)"
+    ],
+    [
+      "table",
+      "entries_fts_config",
+      "entries_fts_config",
+      "CREATE TABLE 'entries_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID"
+    ],
+    [
+      "table",
+      "entries_fts_data",
+      "entries_fts_data",
+      "CREATE TABLE 'entries_fts_data'(id INTEGER PRIMARY KEY, block BLOB)"
+    ],
+    [
+      "table",
+      "entries_fts_docsize",
+      "entries_fts_docsize",
+      "CREATE TABLE 'entries_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB)"
+    ],
+    [
+      "table",
+      "entries_fts_idx",
+      "entries_fts_idx",
+      "CREATE TABLE 'entries_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID"
+    ],
+    [
+      "table",
+      "entry_variants",
+      "entry_variants",
+      "CREATE TABLE entry_variants (\n  entry_id INTEGER NOT NULL REFERENCES entries(id),\n  wylie TEXT NOT NULL\n)"
+    ],
+    [
+      "table",
+      "meta",
+      "meta",
+      "CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT)"
+    ],
+    [
+      "table",
+      "pron_index",
+      "pron_index",
+      "CREATE TABLE pron_index (\n  fold TEXT NOT NULL,                -- pronunciation, lowercased, letters only\n  entry_id INTEGER NOT NULL\n)"
+    ],
+    [
+      "table",
+      "reverse_index",
+      "reverse_index",
+      "CREATE TABLE reverse_index (\n  english TEXT NOT NULL,\n  wylie TEXT NOT NULL,\n  pronunciation TEXT,\n  tier TEXT\n)"
+    ]
+  ],
+  "columns": [
+    [
+      0,
+      "id",
+      "INTEGER",
+      0,
+      null,
+      1
+    ],
+    [
+      1,
+      "course",
+      "TEXT",
+      1,
+      null,
+      0
+    ],
+    [
+      2,
+      "seq",
+      "INTEGER",
+      1,
+      null,
+      0
+    ],
+    [
+      3,
+      "acip",
+      "TEXT",
+      0,
+      null,
+      0
+    ],
+    [
+      4,
+      "wylie",
+      "TEXT",
+      0,
+      null,
+      0
+    ],
+    [
+      5,
+      "english",
+      "TEXT",
+      0,
+      null,
+      0
+    ],
+    [
+      6,
+      "raw",
+      "TEXT",
+      1,
+      null,
+      0
+    ]
+  ],
+  "metadata": [
+    [
+      "built_utc",
+      "2026-08-15T02:38:46Z"
+    ],
+    [
+      "n_corpus_segments",
+      "42199"
+    ],
+    [
+      "n_entries",
+      "105634"
+    ],
+    [
+      "n_reverse_keys",
+      "16465"
+    ],
+    [
+      "release_date",
+      "2026-08-04"
+    ],
+    [
+      "release_title",
+      "Holy Geshe Michael Roach Dictionary (HGM Lexicon)"
+    ],
+    [
+      "release_version",
+      "0.27.2"
+    ],
+    [
+      "source_corpus",
+      "full_parallel_corpus_v32.json.gz"
+    ],
+    [
+      "source_master",
+      "hgm_dictionary_v27_2.json.gz"
+    ],
+    [
+      "source_reverse_index",
+      "hgm_reverse_index_v27_2.json"
+    ],
+    [
+      "spine_schema_version",
+      "1"
+    ]
+  ],
+  "db_before": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+    "resolved": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+    "bytes": 249167872,
+    "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc",
+    "device": 16777230,
+    "inode": 249375018,
+    "mtime_ns": 1786761528230883313,
+    "symlink": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db"
+  },
+  "db_after": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+    "resolved": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+    "bytes": 249167872,
+    "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc",
+    "device": 16777230,
+    "inode": 249375018,
+    "mtime_ns": 1786761528230883313,
+    "symlink": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db"
+  },
+  "complete_database_retention": "Original database retained externally at resolved path; complete queried rows retained here. No claim of immutable historical baseline."
+}

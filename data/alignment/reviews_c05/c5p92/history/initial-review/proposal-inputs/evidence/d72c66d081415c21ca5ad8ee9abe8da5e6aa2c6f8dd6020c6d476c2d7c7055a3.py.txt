@@ -1,0 +1,15 @@
+import json,pathlib,runpy,sqlite3,sys
+root=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+original=sqlite3.connect;connections=[];records=[]
+def guarded(database,*args,**kwargs):
+ assert kwargs.get('uri') is True and str(database).endswith('?mode=ro')
+ c=original(database,*args,**kwargs);c.execute('PRAGMA query_only=ON')
+ assert c.execute('PRAGMA query_only').fetchone()==(1,)
+ records.append(dict(database=str(database),uri=True,query_only=1,database_list=c.execute('PRAGMA database_list').fetchall()))
+ connections.append(c);return c
+sqlite3.connect=guarded
+try:
+ runpy.run_path(str(root/'campaign-artifacts/run_generator_readonly.py'),run_name='__main__')
+finally:
+ for c in connections:c.close()
+ pathlib.Path(sys.argv[1]).write_text(json.dumps(records,indent=2)+'\n')

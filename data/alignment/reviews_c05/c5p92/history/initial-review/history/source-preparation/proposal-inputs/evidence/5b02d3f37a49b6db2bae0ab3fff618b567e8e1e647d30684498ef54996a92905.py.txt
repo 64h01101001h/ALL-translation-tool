@@ -1,0 +1,124 @@
+"""Root supplementary source corroboration; no canonical or semantic approval."""
+import datetime, gzip, hashlib, json, os, sqlite3, traceback
+from pathlib import Path
+B=Path(__file__).resolve().parent
+WT=B.parents[1]/'campaign-worktree'
+P=B/'english-source-preparation'
+D=B/'english/274'
+E=D/'evidence'
+O=B/'root-english-source-verification'
+O.mkdir()
+def read(p): return json.loads(p.read_bytes())
+def save(name,obj):
+    with (O/name).open('x') as f: json.dump(obj,f,ensure_ascii=False,indent=2); f.write('\n')
+def pin(p):
+    p=Path(p); b=p.read_bytes()
+    return dict(path=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def same(p,r):
+    q=pin(p); assert (q['bytes'],q['sha256'])==(r['bytes'],r['sha256']),(str(p),q,r)
+    return q
+proof=dict(status='RUNNING',started_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),role='Root authored Tibetan originals and has read both drafts. This is supplementary source corroboration only.')
+connection=None
+try:
+    baseline=read(B/'baseline.json')
+    for n,h in baseline['sha256'].items(): assert pin(WT/n)['sha256']==h,n
+    prep=read(P/'freeze.json'); expected={r['path']:r for r in prep['files']}
+    assert len(expected)==len(prep['files'])==31
+    assert set(expected)=={str(p.relative_to(P)) for p in P.rglob('*') if p.is_file() and p.name!='freeze.json'}
+    prepared=[same(P/n,r) for n,r in expected.items()]
+    assert sum(r['bytes'] for r in prepared)==prep['total_bytes']
+    refs=read(E/'source-preparation-references.json')
+    same(refs['freeze']['path'],refs['freeze'])
+    assert len(refs['files'])==31
+    for r in refs['files']: same(r['original'],r)
+    copies=[]
+    for base,manifest in [(P,P/'input-manifest.json'),(E,E/'input-copy-manifest.json')]:
+        for r in read(manifest):
+            original=Path(r['original']); copy=Path(r['copy'])
+            if not copy.is_absolute(): copy=base/copy
+            assert str(original.resolve())==r['resolved']
+            a=same(original,r); z=same(copy,r)
+            assert original.read_bytes()==copy.read_bytes()
+            copies.append(dict(manifest=str(manifest),original=a,copy=z))
+    pp=read(E/'parallel-source-proof.json')
+    a=same(pp['physical_original'],pp); z=same(pp['physical_copy'],pp)
+    assert Path(pp['physical_original']).read_bytes()==Path(pp['physical_copy']).read_bytes()
+    copies.append(dict(manifest=str(E/'parallel-source-proof.json'),original=a,copy=z))
+    assert len(copies)==19
+    shared=[]
+    for seq in [274,275,276]:
+        r=read(B/f'english/{seq}/shared-evidence-references.json')
+        assert pin(r['source_preparation_freeze']['path'])['sha256']==r['source_preparation_freeze']['sha256']
+        for row in r['shared_files']: shared.append(same(row['path'],row))
+        assert Path(r['original_and_copy_mapping'])==E/'input-copy-manifest.json'
+        assert Path(r['source_preparation_full_files_mapping'])==E/'source-preparation-references.json'
+    local=read(E/'physical-local-context-provenance.json')
+    physical=Path(local['original']).read_bytes()
+    assert hashlib.sha256(physical).hexdigest()==local['sha256']
+    extent=physical[local['start']:local['end_exclusive']]
+    assert len(extent)==local['bytes'] and extent==(E/'physical-local-context.raw').read_bytes()
+    query=read(P/'sqlite-query.json')
+    db=WT/'build/hgm_spine_v27_2.db'; before=same(db,query['db_before'])
+    assert before['resolved']==query['db_before']['resolved'] and before['symlink']==query['db_before']['symlink']
+    uri=db.resolve().as_uri()+'?mode=ro'
+    assert uri==query['uri']
+    connection=sqlite3.connect(uri,uri=True); connection.row_factory=sqlite3.Row
+    connection.execute('PRAGMA query_only=ON'); assert connection.execute('PRAGMA query_only').fetchone()[0]==1
+    connection.execute('BEGIN')
+    corpus=json.loads(gzip.decompress((WT/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+    assert isinstance(corpus,list)
+    bycourse={}
+    for raw in corpus: bycourse.setdefault(raw['course'],[]).append(raw)
+    master=json.loads(gzip.decompress((WT/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries']
+    captured=[]
+    def replay(sql,parameters,expected,role):
+        assert sql.lstrip().upper().startswith('SELECT ')
+        rows=[dict(r) for r in connection.execute(sql,parameters)]
+        captured.append(dict(role=role,sql=sql,parameters=parameters,rows=rows))
+        assert rows==expected,role
+        return rows
+    def checkcorpus(rows):
+        for row in rows:
+            raw=json.loads(row['raw']); assert raw==bycourse[row['course']][row['seq']-1]
+            assert all(row[k]==raw[k] for k in ['course','acip','wylie','english'])
+    context=replay(query['sql'],query['parameters'],read(P/'sqlite-full-rows.json'),'Full C05 context 268–282')
+    checkcorpus(context)
+    assert [r['seq'] for r in context]==list(range(268,283))
+    corpus_queries=read(E/'corpus-full-query-results.json')
+    for r in corpus_queries: checkcorpus(replay(r['sql'],r['parameters'],r['rows'],r['role']))
+    master_ids=set(); hgm_count=0
+    for name in ['hgm-exact-full-rows.json','hgm-grammar-full-rows.json']:
+        q=read(E/name); assert set(q['terms'])==set(q['results'])
+        for term in q['terms']:
+            rows=replay(q['sql'],[term,term],q['results'][term],name+': '+term); hgm_count+=1
+            for row in rows:
+                raw=json.loads(row['raw']); assert raw==master[row['id']-1]
+                assert json.loads(row['hgm_gloss'])==raw['hgm_gloss']
+                master_ids.add(row['id'])
+    parallel_checks=[]; physical15=Path(pp['physical_copy']).read_bytes()
+    for q,expected_parallel in zip(corpus_queries[:3],pp['rows']):
+        source=next(r for r in q['rows'] if r['course']=='C05')
+        parallel=next(r for r in q['rows'] if r['course']=='C15')
+        needle=parallel['acip'].encode(); offsets=[]; start=0
+        while True:
+            found=physical15.find(needle,start)
+            if found<0: break
+            offsets.append(found); start=found+1
+        actual=dict(source_seq=source['seq'],parallel_seq=parallel['seq'],equal_fields=[f for f in ['acip','wylie','english'] if source[f]==parallel[f]],different_fields=[f for f in ['acip','wylie','english'] if source[f]!=parallel[f]],raw_keys=list(json.loads(source['raw'])),parallel_raw_keys=list(json.loads(parallel['raw'])),physical_C15_acip_full_offsets=offsets)
+        assert actual==expected_parallel
+        parallel_checks.append(actual)
+    connection.rollback(); connection.close(); connection=None
+    assert pin(db)==before
+    for n,h in baseline['sha256'].items(): assert pin(WT/n)['sha256']==h,n
+    for n,r in expected.items(): same(P/n,r)
+    save('complete-query-replays.json',captured)
+    save('original-copy-verification.json',copies)
+    save('source-preparation-and-shared-pins.json',dict(preparation=prepared,shared=shared,freeze=pin(P/'freeze.json')))
+    save('parallel-comparison.json',parallel_checks)
+    proof.update(status='PASS',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_preparation_files=31,full_original_copy_pairs=len(copies),shared_reference_rows=len(shared),context_rows=len(context),corpus_query_sets=len(corpus_queries),corpus_rows=sum(len(r['rows']) for r in corpus_queries),hgm_query_sets=hgm_count,distinct_master_entries=len(master_ids),total_query_sets=len(captured),query_only=1,uri=uri,database_before_after=before,source_hashes_unchanged=True,canonical_calls=0,limits='Exact bytes, complete query rows and full raw object provenance; no publication independence, semantic approval or human certification claimed.')
+except Exception:
+    proof.update(status='FAILED',failure=traceback.format_exc()); raise
+finally:
+    if connection is not None: connection.rollback(); connection.close()
+    save('proof.json',proof)
+    print(json.dumps(proof,indent=2))

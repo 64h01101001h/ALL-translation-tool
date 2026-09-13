@@ -1,0 +1,39 @@
+from pathlib import Path
+import json,gzip,sqlite3,subprocess,os,sys,re,hashlib,datetime
+D=Path(__file__).resolve().parent;B=D.parents[1];W=B.parents[1]/'campaign-worktree';sys.dont_write_bytecode=True
+def save(n,x):
+ p=D/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+def pin(p):
+ b=Path(p).read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON')
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries']
+qs=[]
+for n in ['hgm-exact-full-rows.json','hgm-grammar-full-rows.json']:
+ p=B/'english/274/evidence'/n;j=json.loads(p.read_bytes())
+ assert j['parameters_per_term']=='[term,term]'
+ for t in j['terms']:
+  rs=[dict(r) for r in c.execute(j['sql'],(t,t))];assert rs==j['results'][t]
+  for r in rs:assert json.loads(r['raw'])==master[r['id']-1]
+  qs.append(dict(original=str(p),sql=j['sql'],parameters=[t,t],count=len(rs),rows=rs))
+save('english-combined-query-replays.json',qs)
+physical=json.loads((D/'physical-extents.json').read_bytes());proof=[]
+for r in physical:
+ source=dict(c.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(r['course'],r['seq'])).fetchone());assert r['matches']==1
+ extent=r['extents'][0];raw=(D/extent['copy']).read_bytes();whole=Path(r['original']).read_bytes()
+ assert whole[extent['start']:extent['end']]==raw
+ assert re.sub(rb'[ \t\r\n\v\f]+',b' ',raw)==source[r['field']].encode()
+ proof.append(dict(**r,ascii_whitespace_collapse_equals_spine=True,full_source_contiguous_match=whole.find(source[r['field']].encode())>=0))
+save('physical-equality-proof.json',proof)
+register=json.loads((W/'docs/errata_register.json').read_bytes());save('register-full-reopened.json',register)
+c.close()
+base=json.loads((B/'baseline.json').read_bytes());pins=[]
+for i,rel in enumerate(['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']):
+ p=D/'governing-git'/str(i);p.mkdir(parents=True);argv=['git','show',base['commit']+':'+rel];rr=subprocess.run(argv,cwd=W,input=b'',capture_output=True,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1'))
+ for n,b in [('stdin.bin',b''),('stdout.bin',rr.stdout),('stderr.bin',rr.stderr),('exit.txt',(str(rr.returncode)+'\n').encode())]:(p/n).write_bytes(b)
+ save('governing-git/'+str(i)+'/command.json',dict(argv=argv,cwd=str(W),environment={'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1'},exit=rr.returncode))
+ assert rr.returncode==0 and not rr.stderr and rr.stdout==(W/rel).read_bytes()
+ pins.append(dict(original=str(W/rel),git_commit=base['commit'],repository_relative_path=rel,copy=str((p/'stdout.bin').relative_to(D)),**pin(p/'stdout.bin')))
+save('governing-pins.json',pins)
+save('supplement-proof.json',dict(status='PASS',english_combined_queries=len(qs),rows=sum(q['count'] for q in qs),physical_extents_verified=len(proof),governing_git_objects=len(pins),new_discovery='C15:419 full ACIP is not contiguous exact, but one full whitespace-located extent exists; source contains LAS space CRLF CAN. This supplements, not rewrites, the English original limitation.'))
+print('PASS',len(qs),'English combined queries;',len(proof),'full physical extents;',len(pins),'Git objects')

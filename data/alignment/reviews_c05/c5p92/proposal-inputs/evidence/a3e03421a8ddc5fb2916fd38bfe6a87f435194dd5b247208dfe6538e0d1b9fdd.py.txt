@@ -1,0 +1,31 @@
+import hashlib,json,pathlib,subprocess
+O=pathlib.Path(__file__).resolve().parent;B=O.parents[1];E=O.parent;ROOT=B.parents[1];WT=ROOT/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def check(p,n,h):
+ b=pathlib.Path(p).read_bytes();assert len(b)==n and sha(b)==h,(p,n,h);return b
+references=json.loads((O/'evidence/source-preparation-references.json').read_text());f=references['freeze'];check(f['path'],f['bytes'],f['sha256'])
+for r in references['files']:check(r['original'],r['bytes'],r['sha256'])
+maps=json.loads((O/'evidence/input-copy-manifest.json').read_text())
+for r in maps:assert check(r['original'],r['bytes'],r['sha256'])==check(r['copy'],r['bytes'],r['sha256'])
+prepmaps=json.loads((B/'english-source-preparation/input-manifest.json').read_text())
+for r in prepmaps:
+ assert check(r['original'],r['bytes'],r['sha256'])==check(B/'english-source-preparation'/r['copy'],r['bytes'],r['sha256'])
+physical=json.loads((O/'evidence/parallel-source-proof.json').read_text())
+assert check(physical['physical_original'],physical['bytes'],physical['sha256'])==check(physical['physical_copy'],physical['bytes'],physical['sha256'])
+db=json.loads((B/'english-source-preparation/sqlite-query.json').read_text())['db_after'];check(db['path'],db['bytes'],db['sha256'])
+argv=['git','-C',str(WT),'rev-parse','HEAD'];r=subprocess.run(argv,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+assert r.returncode==0 and not r.stderr and r.stdout.decode().strip()==json.loads((O/'evidence/baseline.json').read_text())['commit']
+out=[]
+for seq in (274,275,276):
+ d=E/str(seq);v=json.loads((d/'verification.json').read_text());check(d/'spec.json',v['spec_bytes'],v['spec_sha256']);check(d/'body.html',v['body_bytes'],v['body_sha256'])
+ assert (d/'spec.json').read_bytes()==(d/'canonical-attempt01/stdin.json').read_bytes()
+ assert (d/'body.html').read_bytes()==(d/'canonical-attempt01/stdout.html').read_bytes()
+ ex=json.loads((d/'canonical-attempt01/execution.json').read_text());assert ex['exit']==0
+ for row in ex['code_after']:check(row['path'],row['bytes'],row['sha256'])
+ for row in json.loads((d/'shared-evidence-references.json').read_text())['shared_files']:check(row['path'],row['bytes'],row['sha256'])
+ assert json.loads((d/'canonical-occurrence-proof.json').read_text())['status']=='PASS'
+ assert len(json.loads((d/'omission-review.json').read_text())['fragments'])==sum(map(len,json.loads((d/'unwrapped-source-inventory.json').read_text())['gaps'].values()))
+ out.append(v)
+proof=dict(status='PASS',segments=out,original_source_preparation_files=len(references['files']),original_copy_pairs=len(maps)+len(prepmaps)+1,full_database_still_equal=True,full_shared_files_reopened=True,no_canonical_rerun=True,head_command=dict(argv=argv,stdout=r.stdout.decode(),stderr=r.stderr.decode(),exit=r.returncode))
+(O/'pre-freeze-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+print(json.dumps(dict(status='PASS',spans=sum(x['spans'] for x in out),nulls=0,canonical_runs=3,unchanged_head=r.stdout.decode().strip())))

@@ -1,0 +1,57 @@
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess
+I=Path(__file__).resolve().parent; ROOT=I.parents[1]; W=ROOT/'campaign-worktree'
+RUNS=I/'through276-whitespace-runs'; O=I/'through276-whitespace-v2-root-actual'
+assert not O.exists(); O.mkdir()
+def pin(b): return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def js(p): return json.loads(p.read_bytes())
+def command(argv):
+ d=O/('fresh-'+str(len(list(O.glob('fresh-*')))+1)); d.mkdir()
+ (d/'command.json').write_text(json.dumps(dict(argv=argv,cwd=str(W)),indent=2)+'\n');(d/'stdin.bin').write_bytes(b'')
+ r=subprocess.run(argv,cwd=W,input=b'',capture_output=True,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+ for name,b in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',f'{r.returncode}\n'.encode())]:(d/name).write_bytes(b)
+ assert r.returncode==0 and not r.stderr
+ return r.stdout
+approval=js(I/'through276-whitespace-v2-root-code/proof.json');assert approval['status']=='APPROVE_EXACT_V2_FOR_FRESH_PREPARE_AND_AUDIT'
+runtime=I/'through276-whitespace-v2-candidate/runtime'
+assert pin((runtime/'whitespace276.py').read_bytes())==approval['code']
+assert pin((runtime/'syntax-diagnostic-descriptors.json').read_bytes())==approval['descriptor']
+runproofs=[]; prior=None; expected_index=None
+for mode,label in [('prepare','prepare-v2'),('audit','audit-v2')]:
+ d=RUNS/label; caller=RUNS/(label+'-caller'); e=js(caller/'execution.json')
+ assert e['exit']==int((caller/'exit.txt').read_bytes())==0 and not (caller/'stderr.bin').read_bytes()
+ assert e['stdout_bytes']==len((caller/'stdout.bin').read_bytes()) and e['stderr_bytes']==0
+ invocation=js(d/'invocation.json');assert invocation['mode']==mode and invocation['argv'][0]==str(runtime/'whitespace276.py') and invocation['environment']['PYTHONDONTWRITEBYTECODE']=='1'
+ inputs=js(d/'consumed-inputs.json')
+ for r in inputs:
+  source=Path(r['input_path']);assert source.resolve(strict=True)==Path(r['path'])
+  raw=source.read_bytes();assert pin(raw)=={k:r[k] for k in ('bytes','sha256')} and raw==(d/r['copy']).read_bytes()
+ for r in js(d/'root-aliases.json'):
+  p=Path(r['input_path']).resolve(strict=True);s=p.stat();assert str(p)==r['path'] and (s.st_dev,s.st_ino)==(r['device'],r['inode'])
+ commands=sorted((d/'commands').iterdir(),key=lambda x:int(x.name));assert [int(x.name) for x in commands]==list(range(1,len(commands)+1))
+ indexes=[];heads=[];diagnostics=0
+ for c in commands:
+  argv=js(c/'command.json')['argv'];out=(c/'stdout.bin').read_bytes();code=int((c/'exit.txt').read_bytes())
+  assert (c/'stdin.bin').read_bytes()==(c/'stderr.bin').read_bytes()==b''
+  assert js(c/'command.json')['cwd']==str(W)
+  if argv==['git','diff','--cached','--check']:
+   assert mode=='audit' and code==2 and out==(I/'through276-stage-runs/initial-diff-check/stdout.bin').read_bytes();diagnostics+=1
+  else:assert code==0
+  if argv==['git','ls-files','--stage','-z']:indexes.append(out)
+  if argv==['git','rev-parse','HEAD']:heads.append(out)
+  if argv[:2]==['git','show']:assert len(argv)==3 and argv[2].startswith(':') and out==(W/argv[2][1:]).read_bytes()
+ assert diagnostics==int(mode=='audit') and len(indexes)==len(heads)==2 and indexes[0]==indexes[1] and heads[0]==heads[1]==b'81942cfc6022a785894d3cc2a20de81dc4c6f599\n'
+ if expected_index is None:expected_index=indexes[0]
+ assert expected_index==indexes[0]
+ prepared=js(d/'prepared-pins.json')
+ if prior is not None:assert prior==prepared
+ prior=prepared
+ proof=js(d/('source-whitespace-proof.json' if mode=='audit' else 'whitespace-classification-preflight.json'))
+ assert proof['all_warnings_accounted_for'] and proof['warning_count']==62470 and len(proof['files'])==56
+ assert proof['classes']==dict(physical_bytes=39554,recorded_python_syntax_error_source_echo=4,canonical_csv_crlf=22912)
+ assert js(caller/'stdout.bin')=={k:v for k,v in proof.items() if k!='files'}
+ runproofs.append(dict(mode=mode,consumed_inputs=len(inputs),commands=len(commands),proof=pin((d/('source-whitespace-proof.json' if mode=='audit' else 'whitespace-classification-preflight.json')).read_bytes())))
+assert command(['git','ls-files','--stage','-z'])==expected_index
+assert command(['git','rev-parse','HEAD'])==b'81942cfc6022a785894d3cc2a20de81dc4c6f599\n'
+result=dict(status='PASS_ROOT_ACCEPTS_ACTUAL_WHITESPACE_AUDIT',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),runs=runproofs,warning_count=62470,warned_paths=56,classes=proof['classes'],index_unchanged=pin(expected_index),all_consumed_aliases_full_bytes_unchanged=True,old_failed_prepare_preserved=True,early_global276_required=True,scope='Actual staged whitespace provenance only; full staging, private commits and global closure still pending')
+(O/'proof.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

@@ -1,0 +1,151 @@
+from pathlib import Path
+import json,hashlib,os,subprocess,sys,difflib,datetime,collections
+sys.dont_write_bytecode=True
+P=Path(__file__).resolve().parent;B=P.parent;A=B.parent;W=A.parent/'campaign-worktree';H=B/'pre-metadata-correction01';I=H/'semantic-review'
+O=P/'correction01';O.mkdir(exist_ok=False)
+ALLOWED={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+    x=p.read_bytes();return dict(bytes=len(x),sha256=hashlib.sha256(x).hexdigest())
+def save(n,x):
+    p=O/n;p.parent.mkdir(parents=True,exist_ok=True);assert not p.exists();p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def exactcopy(src,dst):
+    dst.parent.mkdir(parents=True,exist_ok=True)
+    if dst.exists():assert src.read_bytes()==dst.read_bytes()
+    else:dst.write_bytes(src.read_bytes())
+    assert src.read_bytes()==dst.read_bytes()
+    return dict(original=str(src),copy=str(dst.relative_to(P)),**pin(dst))
+initial=read(I/'freeze.json');assert pin(I/'freeze.json')['sha256']=='da1d5430f251078b4bec3ff5b2a308ba55c4c8182eb6f0477827e44919e93897'
+actual={str(p.relative_to(I)):pin(p) for p in I.rglob('*') if p.is_file() and p!=I/'freeze.json'}
+assert actual==initial['files'] and len(actual)==1112
+for n,r in actual.items():assert pin(P/n)==r
+assert pin(P/'freeze.json')==pin(I/'freeze.json')
+transport=read(H/'original-logical-to-retained-paths.json');assert len(transport)==1651
+transport_by_logical={r['original_logical_path']:r for r in transport};assert len(transport_by_logical)==len(transport)
+pres=read(H/'preservation.json');assert pres['files']==len(transport)
+for name,files in pres['source_trees'].items():
+    actual={str(p.relative_to(H/name)):pin(p) for p in (H/name).rglob('*') if p.is_file()};assert actual==files
+for r in transport:
+    assert pin(Path(r['retained_path']))=={k:r[k] for k in ('bytes','sha256')}
+    assert Path(r['retained_path'])==H/Path(r['original_logical_path']).relative_to(B)
+
+# Exact scope: complete current reconciliation versus the full preserved preimage.
+old={str(p.relative_to(H/'reconciled')):pin(p) for p in (H/'reconciled').rglob('*') if p.is_file()}
+now={str(p.relative_to(B/'reconciled')):pin(p) for p in (B/'reconciled').rglob('*') if p.is_file()}
+assert set(old)==set(now)
+changed={n for n in old if old[n]!=now[n]}
+assert changed=={'275/omissions.json','275/material-decisions.json','275/freeze.json'}
+proposal=read(B/'metadata-correction01-proposal.json');assert len(proposal['changes'])==3
+diffs=[]
+for filename in sorted({r['file'] for r in proposal['changes']}):
+    src=Path(filename);before=H/src.relative_to(B);a=before.read_bytes();z=src.read_bytes()
+    data=json.loads(a)
+    for c in proposal['changes']:
+        if c['file']!=filename:continue
+        assert data[c['record_index']][c['field']]==c['old'];data[c['record_index']][c['field']]=c['new']
+    assert (json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode()==z
+    restored=json.loads(z)
+    for c in proposal['changes']:
+        if c['file']==filename:restored[c['record_index']][c['field']]=c['old']
+    assert (json.dumps(restored,ensure_ascii=False,indent=2)+'\n').encode()==a
+    expected=''.join(difflib.unified_diff(a.decode().splitlines(True),z.decode().splitlines(True),fromfile=str(before),tofile=str(src))).encode()
+    supplied=B/'metadata-correction01'/(src.name+'.diff');assert supplied.read_bytes()==expected
+    diffs.append(dict(path=filename,before=pin(before),after=pin(src),complete_diff=pin(supplied)))
+omold=read(H/'reconciled/275/omissions.json');omnew=read(B/'reconciled/275/omissions.json')
+assert [x.get('original_omission_contexts') for x in omold]==[x.get('original_omission_contexts') for x in omnew]
+frozen=[];canonical=[]
+for s in (274,275,276):
+    d=B/'reconciled'/str(s);f=read(d/'freeze.json')
+    entries={str(p.relative_to(d)):pin(p) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}
+    assert f['files']==entries
+    if s==275:assert f['file_count']==len(entries) and f['bytes']==sum(x['bytes'] for x in entries.values())
+    frozen.append(dict(seq=s,freeze=pin(d/'freeze.json'),file_count=len(entries)))
+    for name in ['spec.json','body.html','final-tuples.json','original-dispositions.json','final-decisions.json']:
+        assert (d/name).read_bytes()==(H/'reconciled'/str(s)/name).read_bytes()
+    rec=read(I/'canonical-runs'/str(s)/'execution.json')
+    assert rec['exit']==0 and rec['stderr']['bytes']==0
+    bound={}
+    for key,name in [('stdin','spec.json'),('stdout','body.html'),('stderr',None)]:
+        logical=rec[key]['path'];h=transport_by_logical[logical];retained=Path(h['retained_path'])
+        assert pin(retained)=={k:rec[key][k] for k in ('bytes','sha256')}
+        if name:assert retained.read_bytes()==(d/name).read_bytes()
+        bound[key]=dict(original_logical_path=logical,retained_path=str(retained),**pin(retained))
+    canonical.append(dict(seq=s,actual_run='Initial independent canonical run retained unchanged; no new execution',execution_record=str(I/'canonical-runs'/str(s)/'execution.json'),bound_streams=bound))
+assert read(I/'resolved-spans.json')==read(P/'resolved-spans.json')==read(B/'root-reconciliation-verification/resolved-spans.json')
+root=read(B/'metadata-correction01/proof.json');assert root['historical_file_count']==1651 and root['canonical_calls']==0
+caller=read(B/'metadata-correction01-caller/execution.json');assert caller['exit']==0
+for stream in ['stdout','stderr']:
+    q=B/'metadata-correction01-caller'/(stream+'.bin');assert pin(q)==dict(bytes=caller[stream+'_bytes'],sha256=caller[stream+'_sha256'])
+assert caller['stderr_bytes']==0
+assert pin(A/'record_external_step.py')['sha256']==caller['recorder_sha256']
+
+# One current-head observation and full unchanged source pins; no SQL or generator calls.
+argv=['git','-C',str(W),'rev-parse','HEAD'];q=subprocess.run(argv,input=b'',capture_output=True,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1'))
+for name,v in [('stdin.bin',b''),('stdout.bin',q.stdout),('stderr.bin',q.stderr),('exit.txt',(str(q.returncode)+'\n').encode())]:(O/name).write_bytes(v)
+save('head-command.json',dict(argv=argv,exit=q.returncode,environment={'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1'}))
+assert q.returncode==0 and not q.stderr and q.stdout.decode().strip()=='81942cfc6022a785894d3cc2a20de81dc4c6f599'
+sources=[]
+for r in read(I/'canonical-sources-after.json'):
+    src=Path(r['path']);assert pin(src)=={k:r[k] for k in ('bytes','sha256')};assert str(src.resolve())==r['resolved'];sources.append({**r,'actual_symlink_target':os.readlink(src) if src.is_symlink() else None})
+save('source-and-code-current.json',sources);save('canonical-reuse-bindings.json',canonical)
+
+# Retain the entire initial review in place before replacing any current interfaces.
+history=[]
+for src in sorted(I.rglob('*')):
+    if src.is_file():history.append(exactcopy(src,P/'history/initial-review'/src.relative_to(I)))
+save('full-initial-review-history-map.json',history)
+
+# Transport old logical sources explicitly; do not compare old metadata with new live bytes.
+oldmanifest=read(I/'original-to-copy-manifest.json');manifest=[];transformed=[];removed_aliases=[]
+source_paths=[(W/'data/hgm_dictionary_v27_2.json.gz').resolve(),(W/'data/full_parallel_corpus_v32.json.gz').resolve()]
+for r in oldmanifest:
+    r=dict(r);logical=r['original'];src=Path(logical)
+    if src.is_symlink() and src.resolve() in source_paths:
+        removed_aliases.append(dict(original_record=r,alias=logical,resolved=str(src.resolve()),symlink=os.readlink(src),reason='Retained alias transport; one canonical source row per live source in current manifest'))
+        continue
+    if logical in transport_by_logical:
+        h=transport_by_logical[logical];assert pin(Path(h['retained_path']))=={k:r[k] for k in ('bytes','sha256')}
+        r['original']=h['retained_path'];transformed.append(dict(original_logical_path=logical,current_manifest_original=r['original'],copy=r['copy'],bytes=r['bytes'],sha256=r['sha256']))
+    manifest.append(r)
+byoriginal={r['original']:r for r in manifest};assert len(byoriginal)==len(manifest)
+byhash={r['sha256']:r['copy'] for r in manifest if (P/r['copy']).suffix.lower() in ALLOWED}
+def add(src,preferred=None):
+    src=Path(src);key=str(src);h=pin(src)
+    if key in byoriginal:
+        assert {k:byoriginal[key][k] for k in ('bytes','sha256')}==h;return
+    if preferred and preferred.suffix.lower() in ALLOWED:
+        record=exactcopy(src,preferred)
+    elif h['sha256'] in byhash:
+        dst=P/byhash[h['sha256']];assert src.read_bytes()==dst.read_bytes();record=dict(original=key,copy=str(dst.relative_to(P)),**h)
+    else:
+        suffix=src.suffix.lower();suffix=suffix if suffix in ALLOWED else '.py.txt' if suffix=='.py' else '.diff.txt' if suffix=='.diff' else '.bin'
+        record=exactcopy(src,P/'proposal-inputs/evidence'/(h['sha256']+suffix))
+    manifest.append(record);byoriginal[key]=record;byhash[h['sha256']]=record['copy']
+for src in sorted(H.rglob('*')):
+    if src.is_file():
+        preferred=P/'history/initial-review'/src.relative_to(I) if src.is_relative_to(I) else None
+        add(src,preferred)
+inputs=[B/'metadata-correction01-proposal.json',B/'apply-metadata-correction01-root.py',B/'verify-initial-semantic-review-root.py',A/'record_external_step.py']
+for directory in ['metadata-correction01','metadata-correction01-caller','root-initial-semantic-review-verification']:
+    inputs.extend(p for p in (B/directory).rglob('*') if p.is_file())
+inputs.extend(p for p in (B/'reconciled').rglob('*') if p.is_file())
+for src in sorted(set(inputs)):add(src)
+save('old-logical-source-transports.json',transformed);save('source-alias-transports.json',removed_aliases)
+save('retained-original-manifest-pin.json',dict(path=str(I/'original-to-copy-manifest.json'),**pin(I/'original-to-copy-manifest.json')))
+for r in manifest:
+    dst=P/r['copy'];assert dst.suffix.lower() in ALLOWED and dst.resolve().is_relative_to(P)
+    assert pin(dst)=={k:r[k] for k in ('bytes','sha256')}
+    assert Path(r['original']).read_bytes()==dst.read_bytes()
+for src in source_paths:
+    matches=[r for r in manifest if not r.get('original_git_commit') and Path(r['original']).resolve()==src]
+    assert len(matches)==1,(src,len(matches))
+save('combined-original-to-copy-manifest.json',manifest)
+save('scope-proof.json',dict(status='PASS_SCOPED_METADATA_REVIEW_MECHANICS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ initial_freeze=pin(I/'freeze.json'),initial_frozen_files=1112,initial_history_files=len(history),full_retained_tree_records=len(transport),
+ exact_changed_paths=sorted(changed),exact_changed_string_fields=3,complete_diffs=diffs,current_freezes=frozen,
+ original_omission_contexts_unchanged=True,all112_tuples_and211_originals_unchanged=True,all_specs_bodies_notes_unchanged=True,
+ canonical_runs_reused=3,new_canonical_calls=0,new_sql_calls=0,baseline=q.stdout.decode().strip(),
+ manifest_records=len(manifest),unique_targets=len({r['copy'] for r in manifest}),old_logical_transports=len(transformed),source_alias_transports=len(removed_aliases),
+ source_records_per_live_master_and_corpus=1,full_original_copy_equality_and_extensions=True,
+ finding='C05-275-OMISSION-01 resolved by actual metadata correction; independent semantic disposition in final report'))
+print(json.dumps(read(O/'scope-proof.json'),indent=2))

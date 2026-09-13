@@ -1,0 +1,72 @@
+from pathlib import Path
+import json,hashlib,importlib.util,difflib,sys,datetime
+sys.dont_write_bytecode=True
+D=Path(__file__).resolve().parent;B=D.parents[1];W=B.parents[1]/'campaign-worktree';H=D/'gate-correction01';H.mkdir()
+def pin(p):
+ b=Path(p).read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+# Preserve every changed pre-correction interface plus each whole prior freeze. Unchanged files remain exact in-place with explicit historical mapping.
+changed={274:['freeze.json','report.md','shared-evidence-reference.json','original-copy-manifest.json','supported-copy-byte-preflight.json','payload-whitelist.json','final-preflight.json'],275:['freeze.json','report.md','shared-evidence-reference.json','proposed-head-allowances.json','head-licensor-audit.json','final-decisions.json','original-dispositions.json','material-decisions.json'],276:['freeze.json','report.md','shared-evidence-reference.json']}
+versionmap=[];priorfreezes={}
+for seq in (274,275,276):
+ out=B/'reconciled'/str(seq);priorfreezes[seq]=json.loads((out/'freeze.json').read_bytes())
+ for n in changed[seq]:
+  p=out/n;dst=H/'initial'/str(seq)/n;dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(p.read_bytes());versionmap.append(dict(original=str(p),historical_copy=str(dst.relative_to(D)),**pin(p)))
+ before={n:pin(out/n) for n in ['spec.json','body.html','final-tuples.json']};save(H/(str(seq)+'-core-before.json'),before)
+sp=importlib.util.spec_from_file_location('gate_actual',W/'tools/test_no_supplied_span_head.py');gate=importlib.util.module_from_spec(sp);sp.loader.exec_module(gate)
+probes=[]
+for content in ['you','you hold','You','You hold']:
+ text='<span class="u" data-d="5" data-l="s275w52">'+content+'</span>';hit=bool(gate.PAT.search(text));assert hit==(' ' in content);probes.append(dict(html=text,matches=hit))
+bodyhits={}
+for seq in (274,275,276):
+ matches=list(gate.PAT.finditer((B/'reconciled'/str(seq)/'body.html').read_text()));assert not matches;bodyhits[str(seq)]=len(matches)
+save(H/'actual-predicate-proof.json',dict(FN=gate.FN,PAT=gate.PAT.pattern,probes=probes,actual_body_hits=bodyhits,full_test_suite_invoked=False,gate_code=pin(W/'tools/test_no_supplied_span_head.py')))
+out=B/'reconciled/275'
+save(out/'proposed-head-allowances.json',{})
+audit=json.loads((out/'head-licensor-audit.json').read_bytes())
+for r in audit:r.pop('proposed_key',None);r.pop('proposed_page',None);r.update(actual_gate_matches=False,allowance_required=False,semantic_licensor_required=True,reason='Actual FN/PAT require literal trailing ASCII space; bare you closes its span immediately. Khyod ownership remains a semantic requirement.')
+save(out/'head-licensor-audit.json',audit)
+oldphrase='Exact head allowance is proposed separately with khyod as licensor.';newphrase='Khyod is the semantic licensor. Actual FN/PAT do not match bare you before a closing span, so no gate allowance is proposed.'
+for n in ['final-decisions.json','original-dispositions.json','material-decisions.json']:
+ raw=(out/n).read_text();assert oldphrase in raw,n;(out/n).write_text(raw.replace(oldphrase,newphrase))
+for seq in (274,275,276):
+ out=B/'reconciled'/str(seq);raw=(out/'report.md').read_text();old='Exact proposed head allowances are in proposed-head-allowances.json (only C05:275 khyod/you); no gate file was edited.';assert old in raw
+ raw=raw.replace(old,'Proposed head allowances are empty. Actual FN/PAT require trailing ASCII space and do not match bare you; khyod remains its semantic licensor. No gate file was edited.')
+ (out/'report.md').write_text(raw)
+# Copy external exact correction, actual code/helper/caller through selected reviewed helper v2.
+inputs=[W/'tools/test_no_supplied_span_head.py',B/'check-bare-you-gate-root.py']+[p for prefix in ['root-bare-you-gate-correction','root-bare-you-gate-correction-caller'] for p in (B/prefix).rglob('*') if p.is_file()]
+sp=importlib.util.spec_from_file_location('cpv2',B.parent/'copy_evidence_once_v2.py');cp=importlib.util.module_from_spec(sp);sp.loader.exec_module(cp);save(H/'copy-result.json',cp.preserve(D,D/'original-copy-manifest.json',inputs))
+# Strict current full-byte preflight and current references.
+manifest=json.loads((D/'original-copy-manifest.json').read_bytes());checks=[]
+for r in manifest:
+ p=Path(r['original']);d=D/r['copy'];assert p.read_bytes()==d.read_bytes() and pin(d)=={k:r[k] for k in ('bytes','sha256')};checks.append(dict(original=str(p),copy=r['copy'],full_bytes_equal=True,**pin(d)))
+proof=json.loads((D/'supported-copy-byte-preflight.json').read_bytes());proof.update(original_copy_records=len(checks),distinct_payloads=len({r['copy'] for r in checks}),records=checks);save(D/'supported-copy-byte-preflight.json',proof)
+for seq in (274,275,276):
+ out=B/'reconciled'/str(seq);ref=json.loads((out/'shared-evidence-reference.json').read_bytes());ref['manifest_pin']=pin(D/'original-copy-manifest.json');ref['metadata_correction']='../274/gate-correction01/actual-predicate-proof.json; unchanged spec/body/tuples';save(out/'shared-evidence-reference.json',ref)
+ before=json.loads((H/(str(seq)+'-core-before.json')).read_bytes());assert before=={n:pin(out/n) for n in before}
+ dec=json.loads((out/'final-decisions.json').read_bytes());assert [r['tuple'] for r in dec]==json.loads((out/'final-tuples.json').read_bytes())
+ base=priorfreezes[seq]['files'];changednames=set(changed[seq]);historic=[]
+ for n,row in base.items():
+  p=H/'initial'/str(seq)/n if n in changednames else out/n
+  assert pin(p)==row,(seq,n)
+  historic.append(dict(original_relative=n,retained_path=str(p),historical_pin=row,retention='copied historical changed bytes' if n in changednames else 'unchanged original path'))
+ save(H/(str(seq)+'-complete-initial-freeze-retention.json'),historic)
+ for n in changed[seq]:
+  if n=='freeze.json':continue
+  prior=(H/'initial'/str(seq)/n).read_text();now=(out/n).read_text();diff=H/'diffs'/str(seq)/(n+'.diff');diff.parent.mkdir(parents=True,exist_ok=True);diff.write_text(''.join(difflib.unified_diff(prior.splitlines(True),now.splitlines(True),fromfile='initial/'+str(seq)+'/'+n,tofile='current/'+str(seq)+'/'+n)))
+whitelist=json.loads((D/'payload-whitelist.json').read_bytes())
+for r in whitelist:r.update(pin(r['source']))
+save(D/'payload-whitelist.json',whitelist)
+finalproof=json.loads((D/'final-preflight.json').read_bytes());finalproof.update(source_copy_records=len(manifest),metadata_correction='Bare-you gate requirement corrected after initial freeze; entire prior freeze coverage retained with changed-byte mappings; all three specs/bodies/notes and112 tuples remain exact; no canonical rerun.',gate_hits=bodyhits,proposed_allowances=0);save(D/'final-preflight.json',finalproof)
+# Regenerate diffs for dependent proof/whitelist after final refresh.
+for n in ['payload-whitelist.json','final-preflight.json']:
+ p=H/'diffs/274'/(n+'.diff');p.write_text(''.join(difflib.unified_diff((H/'initial/274'/n).read_text().splitlines(True),(D/n).read_text().splitlines(True),fromfile='initial/274/'+n,tofile='current/274/'+n)))
+save(H/'history-map.json',versionmap)
+save(H/'proof.json',dict(status='PASS_METADATA_ONLY_CORRECTION',all112_final_tuples_unchanged=True,all3_specs_bodies_notes_unchanged=True,prior_freezes_complete_coverage_preserved=True,full_byte_copy_records=len(manifest),actual_pattern_hits=bodyhits,canonical_reruns=0,allowances_proposed=0,semantic_ownership='khyod/you retained; independent semantic approval still required'))
+(H/'report.md').write_text('Metadata-only gate correction after initial freeze. Actual FN and PAT require a trailing ASCII space, so bare you does not match. Removed the unnecessary allowance; retained semantic khyod ownership. Reports, dependent current references/proofs and rationale references corrected. All112 tuples and all three exact canonical spec/body/note bytes remain unchanged; no canonical rerun. Every old freeze claim is supported by a complete explicit retention map, using historical copies for changed paths and original paths only for unchanged bytes. Root exact proof/code/helper/caller are retained via evidence-copy v2.\n')
+# New exact freezes retain old freezes as historical files.
+for seq in (275,276,274):
+ out=B/'reconciled'/str(seq);entries={str(p.relative_to(out)):pin(p) for p in sorted(out.rglob('*')) if p.is_file() and p!=out/'freeze.json'};assert not any(p.is_symlink() for p in out.rglob('*'))
+ save(out/'freeze.json',dict(status='DONE_RECONCILED_PROVISIONAL_REQUIRES_DISTINCT_SEMANTIC_REVIEW',producer='Codex /root/c05_253_255_reconcile reused non-author',files=entries,file_count=len(entries),bytes=sum(r['bytes'] for r in entries.values()),excluded=['freeze.json']))
+ for n,row in entries.items():assert pin(out/n)==row
+ print(json.dumps(dict(seq=seq,freeze=pin(out/'freeze.json'),files=len(entries),bytes=sum(r['bytes'] for r in entries.values()))))

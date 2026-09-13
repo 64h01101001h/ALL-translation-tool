@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/semantic-review-preparation/complete-material-v3.py.txt", line 15, in <module>
+    for id,r in entries.items():assert master['unified_entries'][id-1]==json.loads(r['raw']);assert (json.loads(r['hgm_gloss']) if r['hgm_gloss'] is not None else None)==json.loads(r['raw']).get('hgm_gloss')
+                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,40 @@
+import gzip,hashlib,json,pathlib,sqlite3
+ROOT=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+WT=ROOT/'campaign-worktree'; B=ROOT/'campaign-artifacts/C05-274-276'; O=pathlib.Path(__file__).resolve().parent
+E=O/'evidence';E.mkdir()
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(name,x):
+ p=E/name;p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+maps=[]
+def copy(p,name):
+ p=pathlib.Path(p);b=p.read_bytes();q=E/name;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(b);assert q.read_bytes()==p.read_bytes()==b
+ maps.append(dict(original=str(p),resolved=str(p.resolve()),copy=str(q),bytes=len(b),sha256=sha(b)));return b
+prep=B/'english-source-preparation';f=prep/'freeze.json';fb=f.read_bytes();assert sha(fb)=='540c3c39263e409cb3f4d98ed1a6673b60e635155b9eb1933940cee40577fe16'
+manifest=json.loads(fb);refs=[]
+for r in manifest['files']:
+ p=prep/r['path'];b=p.read_bytes();assert len(b)==r['bytes'] and sha(b)==r['sha256'];refs.append(dict(original=str(p),bytes=len(b),sha256=sha(b),disposition='Full immutable original retained in this English angle source-preparation freeze; no semantic judgments there.'))
+save('source-preparation-references.json',dict(freeze=dict(path=str(f),bytes=len(fb),sha256=sha(fb)),files=refs))
+for p,n in [(B/'baseline.json','baseline.json'),(B/'baseline-boundary.json','baseline-boundary.json'),(WT/'tools/gen_alignment_page.py','gen_alignment_page.py'),(WT/'tools/build_alignment_layer.py','build_alignment_layer.py'),(ROOT/'campaign-artifacts/run_generator_readonly.py','run_generator_readonly.py')]:copy(p,n)
+master=copy(WT/'data/hgm_dictionary_v27_2.json.gz','hgm_dictionary_v27_2.json.gz');assert sha(master)==json.loads((B/'baseline.json').read_text())['sha256']['data/hgm_dictionary_v27_2.json.gz']
+db=WT/'build/hgm_spine_v27_2.db';dbsha=sha(db.read_bytes());assert dbsha==json.loads((prep/'sqlite-query.json').read_text())['db_after']['sha256']
+c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);c.execute('PRAGMA query_only=ON');c.row_factory=sqlite3.Row
+save('lexical-schema.json',dict(entries=[list(r) for r in c.execute('PRAGMA table_info(entries)')],entry_variants=[list(r) for r in c.execute('PRAGMA table_info(entry_variants)')],query_only=c.execute('PRAGMA query_only').fetchone()[0],uri=db.resolve().as_uri()+'?mode=ro'))
+terms=['gsum pa','rtsod pa','spong ba','brlan','gsher ba','phor pa','gang po','las','las can',"'gro ba",'gsum','cig car','bltas pa',"de'i tshe",'cha shas','ldan','cha can','skyes','rang rang','thun mong ma yin pa','dbang','dbang gis','re re','dngos po','mthong','khas blangs pa','kha cig',"'dod pa","mi 'thad pa",'dpal ldan','chos kyi grags pa','lung',"'gal ba",'gzhung','gal te','brten nas','gzugs','gzhan',"'byung",'dgra','gnyen','skyes bu','gcig','mdzes','mi mdzes','gnas','bar du','las gzugs','grangs can',"'gog byed",'rigs pa','kha spos','gnod pa','lung don','don','phyogs snga','smra ba po','gnyis ka','khong du chud pa','khong du ma chud pa','skyon']
+sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'
+hits={}
+for t in terms:hits[t]=[dict(r) for r in c.execute(sql,(t,t))]
+save('hgm-exact-full-rows.json',dict(sql=sql,terms=terms,parameters_per_term='[term,term]',results=hits))
+compact={t:[{k:r[k] for k in ['id','wylie','hgm_gloss','tier','hgm_source','corpus_courses']} for r in rs] for t,rs in hits.items()};save('hgm-reading.json',compact)
+source=json.loads((prep/'inputs/source.json').read_text())
+queries=[]
+for r in source:
+ sql2='SELECT * FROM corpus_segments WHERE english=? OR wylie=? ORDER BY course,seq'
+ queries.append(dict(sql=sql2,parameters=[r['english'],r['wylie']],role='Full-field parallel/counterevidence for C05:'+str(r['seq']),rows=[dict(x) for x in c.execute(sql2,(r['english'],r['wylie']))]))
+for needle in ['kha spos','thun mong ma yin',"khong du ma chud",'las gzugs']:
+ sql2='SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq'
+ queries.append(dict(sql=sql2,parameters=[needle],role='Full uncapped corpus counterevidence for exact phrase',rows=[dict(x) for x in c.execute(sql2,(needle,))]))
+save('corpus-full-query-results.json',queries)
+c.close();assert sha(db.read_bytes())==dbsha
+pb=(prep/'inputs/C05ReadingASCII.txt').read_bytes();(E/'physical-local-context.raw').write_bytes(pb[175000:185200]);save('physical-local-context-provenance.json',dict(original=str(prep/'inputs/C05ReadingASCII.txt'),sha256=sha(pb),start=175000,end_exclusive=185200,bytes=10200,scope='Exact contiguous physical bytes read; full original retained in preparation.'))
+save('input-copy-manifest.json',maps)
+print(json.dumps(dict(status='PASS',hgm_terms=len(terms),hgm_full_rows=sum(map(len,hits.values())),corpus_queries=len(queries),corpus_rows=sum(len(q['rows']) for q in queries),db_sha256=dbsha,source_preparation_files_verified=len(refs)),indent=2))

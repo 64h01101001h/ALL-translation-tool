@@ -1,0 +1,41 @@
+{
+  "status": "APPROVE_EXACT_V2_FOR_FRESH_PREPARE_AND_AUDIT",
+  "utc": "2026-09-13T16:32:04.307118+00:00",
+  "candidate": {
+    "freeze": {
+      "bytes": 14864,
+      "sha256": "d451e0dead25a06134dac4486a4448afb74756ab5f4e845e049f45e2be7914f7"
+    },
+    "files": 95,
+    "bytes": 4966052,
+    "original_copy_pairs": 49
+  },
+  "independent_review": {
+    "freeze": {
+      "bytes": 29181,
+      "sha256": "ffd87144f9d204cb6fdc32b26c92f198c2431fd5182352b8d309b48c0a89e8a4"
+    },
+    "files": 151,
+    "bytes": 73001089,
+    "original_copy_pairs": 381
+  },
+  "external_full_files": 113,
+  "code": {
+    "bytes": 23739,
+    "sha256": "82220b4f64d744b5018a7c30fcf2c01f7dd5c621fc27424e3b0d4e7ad06acf4a"
+  },
+  "descriptor": {
+    "bytes": 3866,
+    "sha256": "98cb5864d5fe24a546b95c7f80974f32cc8041d82a7a6da77f46cd55d7a01479"
+  },
+  "full_inverse_and_diff_exact": true,
+  "report_full_read": true,
+  "actual_cli_executions_so_far": 0,
+  "early_global276_required": true,
+  "obligations": [
+    "Retain original failed prepare and diagnostic unchanged",
+    "Run fresh prepare-v2 and audit-v2 outside frozen inputs with assertions and no bytecode",
+    "Accept full consumed input, warning, index and HEAD proofs before banking",
+    "No source whitespace edits; no canonical builders or tests rerun"
+  ]
+}

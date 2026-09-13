@@ -1,0 +1,14 @@
+import sys,sqlite3,runpy,json
+from pathlib import Path
+sys.dont_write_bytecode=True
+W=Path(__file__).resolve().parents[3]/'campaign-worktree'
+connect=sqlite3.connect;connections=[];records=[]
+def readonly(database,*args,**kwargs):
+ target=Path(database).resolve();assert target.is_file();kwargs['uri']=True
+ c=connect(target.as_uri()+'?mode=ro',*args,**kwargs);c.execute('PRAGMA query_only=ON');assert c.execute('PRAGMA query_only').fetchone()==(1,)
+ records.append(dict(database=str(target),uri=target.as_uri()+'?mode=ro',query_only=1));connections.append(c);return c
+sqlite3.connect=readonly
+try:runpy.run_path(str(W/'tools/gen_alignment_page.py'),run_name='__main__')
+finally:
+ for c in connections:c.close()
+ Path(sys.argv[1]).write_text(json.dumps(records,indent=2)+'\n')

@@ -1,0 +1,24 @@
+"""Inspect the actual supplied-head predicate without invoking its suite."""
+import datetime, hashlib, importlib.util, json, sys
+from pathlib import Path
+sys.dont_write_bytecode=True
+B=Path(__file__).resolve().parent
+W=B.parents[1]/'campaign-worktree'
+O=B/'root-bare-you-gate-correction'
+O.mkdir()
+tool=W/'tools/test_no_supplied_span_head.py'
+raw=tool.read_bytes()
+(O/'test_no_supplied_span_head.py.txt').write_bytes(raw)
+definition=importlib.util.spec_from_file_location('actual_supplied_head_predicate',tool)
+m=importlib.util.module_from_spec(definition);definition.loader.exec_module(m)
+assert m.FN.endswith(' ')
+checks=[]
+for english,expected in [('you',0),('you agree',1),('You',0),('You agree',1)]:
+    html='<span class="u" data-d="5" data-l="s275p1">'+english+'</span>'
+    hits=[list(x.groups()) for x in m.PAT.finditer(html)]
+    assert len(hits)==expected
+    checks.append(dict(english=english,html=html,actual_matches=hits,expected_count=expected))
+assert tool.read_bytes()==raw
+proof=dict(status='PASS scoped actual-predicate inspection',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),original=str(tool),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),actual_function_word_regex=m.FN,actual_pattern=m.PAT.pattern,checks=checks,suite_invoked=False,source_modified=False,correction="Root's reconciliation-dispatch statement that standalone khyod/you necessarily requires a gate allowance was too broad. The actual regex requires an ASCII space after you. A standalone you span does not hit it. Independent semantic licensing and occurrence review remain required.")
+(O/'proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps(proof,ensure_ascii=False,indent=2))

@@ -1,0 +1,20 @@
+from pathlib import Path
+import json,hashlib,datetime
+P=Path(__file__).resolve().parent
+def pin(f):
+    b=f.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+append='''
+
+Late inspection history, before this initial review freeze: the successful final preservation helper was followed by a separate read-only interface inspection that assumed the preparation freeze had a `files` wrapper. The actual preparation freeze is a direct 366-entry relative-path dictionary, so the inspection exited 1 at that access before its remaining assertions. The full attempted source and observed tool error/combined-output transport are preserved in interface-inspection-attempt01, explicitly distinguishing the tool's combined stream from unavailable separate child streams. No preparation, candidate or source data changed. A narrowly corrected inspection using the observed direct dictionary then exited 0 with complete actual streams in interface-inspection-attempt02; all current segment counts/hashes, report pin and seven-key tuple interfaces passed. This current report and dependent pins were refreshed only after preserving the prior report/review/evidence interfaces under history/pre-inspection-completion. No canonical, query or suite was rerun.
+'''
+report=P/'review.md';assert 'Late inspection history, before' not in report.read_text();report.write_text(report.read_text()+append)
+r=json.loads((P/'review.json').read_text());r['report']={'path':'review.md',**pin(report)}
+r['inspection_history']={'failed_attempt':'interface-inspection-attempt01','successful_attempt':'interface-inspection-attempt02','prior_interfaces':'history/pre-inspection-completion','finding_count_unchanged':1}
+files={str(f.relative_to(P)):pin(f) for f in sorted(P.rglob('*')) if f.is_file() and f not in [P/'evidence-pins.json',P/'review.json',P/'freeze.json']}
+save('evidence-pins.json',{'boundary':'All current files except this manifest, current review.json and final freeze.json; current review pins this manifest and the final freeze includes all current files including both interfaces. Prior interfaces remain separately pinned history.','files':files})
+r['evidence_manifest']={'path':'evidence-pins.json',**pin(P/'evidence-pins.json')};save('review.json',r)
+assert r['report']['sha256']==pin(report)['sha256']
+assert r['evidence_manifest']['sha256']==pin(P/'evidence-pins.json')['sha256']
+save('final-interface-refresh-proof.json',{'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'review':pin(P/'review.json'),'report':pin(report),'evidence_manifest':pin(P/'evidence-pins.json'),'open_findings':1,'passing_inspection_exit':json.loads((P/'interface-inspection-attempt02/execution.json').read_text())['exit'],'preserved_prior_interfaces':{n:pin(P/'history/pre-inspection-completion'/n) for n in ['review.md','review.json','evidence-pins.json']}})
+print('PASS final interface pins refreshed; original failing inspection and prior interfaces retained')

@@ -1,0 +1,63 @@
+from pathlib import Path
+import json,copy,hashlib,importlib.util,sys
+sys.dont_write_bytecode=True
+D=Path(__file__).resolve().parent;B=D.parents[1];W=B.parents[1]/'campaign-worktree'
+records=json.loads((D/'original-replays/root-resolved-spans.json').read_bytes())
+sources={r['seq']:r for r in json.loads((D/'source-full-rows.json').read_bytes())}
+def save(p,x):
+ with p.open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+def orig(a,s,i):return next(copy.deepcopy(r) for r in records if (r['angle'],r['seq'],r['id'])==(a,s,i))
+choices={}
+for s,a in [(274,'tibetan'),(275,'english'),(276,'tibetan')]:
+ choices[s]=[copy.deepcopy(r) for r in records if r['angle']==a and r['seq']==s]
+for seq in choices:
+ for r in choices[seq]:
+  r['span']=copy.deepcopy(r['original_span']);decl=r['original_occurrence_declaration']
+  r['rationale']=decl.get('basis',decl.get('rationale'))
+def change(seq,i,why,**fields):
+ r=next(r for r in choices[seq] if r['id']==i)
+ for k,v in fields.items():
+  if k in ('d','tib','eng'):r['span'][k]=v;r[k]=v
+  else:r[k]=v
+ r['rationale']=why
+change(274,'q1','The complete lexicalized simultaneity adverb cig car du is one established unit (full HGM4169), so retain d5 with du. Together is the locally secure exponent. Positive sit-down variants were read, but they do not require absorbing the independent English posture elaboration sitting in this simultaneous-looking sentence.',d=5)
+change(274,'q3','dbang gis is a lexicalized control/causal adposition (full HGM13091, HTG2016), locally at the mercy of the particular karma. Retain whole d5 with its case ending, without supplying another force noun or collecting verb.',d=5)
+change(274,'w16','Retain the tighter parts boundary. Full positive HGM4384 distinct parts is acknowledged; here distinction elaborates the partition into three and need not be banked as an additional modifier licensed by cha shas. No claim that the wider glossary variant is absent or inherently wrong.',eng='parts',eng_range=[433,438])
+for i,newid in [('m37','n1'),('m38','n2')]:
+ r=orig('english',274,i);r['id']=newid;r['span']=dict(r['original_span'],id=newid);r['rationale']='Unique tighter member of gsum ga/all three: numeral gsum owns three; inclusive ga owns all. Both are inside the same parent, and crossing English order is explicit, not an intervening flat span.';choices[274].append(r)
+change(274,'p2','The agentive gyis marks the three beings as the actors of looking. English realizes that role in the active subject-predicate structure, without a separate by; null records grammatical fusion, not absence of agency.')
+change(274,'w24','The final distributive source occurrence at301:308 owns beings at467:473. The middle collective reprise at227 is compressed into pronominal discourse and is omitted. These are different original source roles, not interchangeable equal strings.')
+change(275,'w4','Whole negative evaluative expression mi thad with its actual par inflection, as in the retained Tibetan original and HGM24556 mi thad pa. The r ending belongs to the predicate frame; do not create a free negative or claim the following consequence particle thal.',tib="mi 'thad par",tib_range=[28,40])
+change(275,'p40','The first pas after the intermediate form grows establishes causation of the ensuing failure to see. It licenses Because alone. Of this is English anaphoric resumption of the prior event; retaining the causal particle does not require overcapturing that resumption.',eng='Because',eng_range=[785,792])
+change(275,'r54','The final speech verb zer becomes the opening claim noun. Keep that narrow contextual lexical correspondence at d5; makes the following is reporting presentation and na is a conditional frame, neither separately asserted absent.',d=5,tib='zer',tib_range=[569,572],eng='claim',eng_range=[34,39])
+for old,newid in [('w9','n1'),('p3','n2'),('p6','n3'),('w37','n4'),('p7','n5')]:
+ r=orig('tibetan',275,old);r['id']=newid;r['span']=dict(r['original_span'],id=newid);r['rationale']=r['original_occurrence_declaration']['basis'];choices[275].append(r)
+change(275,'n1','Quoted de resumes the object that is not seen: English it at293:295, inside the direct quote, not the earlier it goes against nor the later looking at it. Supplied you/they are separate quotation scaffolding.')
+change(275,'n2','Quoted additive/concessive yang has no independently printed even/also. And starts the following coordinated conditional line, licensed by the continuation frame la rather than by moving this yang out of its own clause. Retain explicit unrendered-emphasis null, not a null for unresolved reference.')
+change(275,'n3','Numerist gyis names the asserter of khas blangs pa. English nominalizes the same ownership relation as belief of the Numerist School. The second lower-case of at376:378 expresses that relation, without assigning the source agent to the earlier statement of Dharmakirti.')
+change(275,'n4','The demonstrative following the Numerist assertion is the object of refutation. English this at930:934 resumes that very assertion; concept is explanatory nominal wording and stays outside.')
+change(275,'n5','Second phyir closes the entire quoted-and-applied refutation as the premise of der thal: the source claims the position conflicts with Dharmakirti because his cited argument can be turned against it. English second for at180:183 introduces that full explanation. This is distinct from first phyir at97:102/for88:91, which directly grounds mistaken in conflict with the statement. The final prove-that clause elaborates the application and does not consume the outer premise relation.')
+change(275,'p17','The closing quotative zhes marks the quotation attributed through de\'i gzhung las. It has an overt reporting exponent says at251:255, earlier in English; he is supplied, not inside this particle mapping.')
+change(275,'p23','The genitive gi attaches the single person to the observed physical form. English whose carries that exact possessive relation in a relative construction, without importing an extra person.')
+change(275,'p33','The second dang at346:350 coordinates the original form with the observers as the two sides of the between relation. English and at745:748 performs that relation; the later enemy-and-friend conjunction has no second dang here.')
+change(275,'p13','gal te is the standalone conditional particle introducing the quoted hypothesis. Suppose expresses that conditional frame; d6 is appropriate for the complete particle, without an invented subject.')
+change(275,'w36','bar du functions here as the established relational unit between (HGM12357), linking the original form to the observers. Keep d5 for this lexicalized postposition, without absorbing either endpoint.')
+change(275,'w52','The actual khyod denotes the opponent who holds the challenged position; English you at997:1000 refers to that holder. It is not the supplied quote addressee or final repeated you are wrong. Exact head allowance is proposed separately with khyod as licensor.')
+change(275,'w53','gnod pa describes the argument bearing against the opponent position; the second against at976:983 is its narrow HTG2016-attested exponent. Position/you-have-taken expands the target construction, so a complete target phrase is not necessary to preserve this lexical value.')
+change(276,'q1','The whole prior-proponent assertion phrase names the position of the earlier speaker; English recasts the possessor/speech relation as position expressed above. Retain the complete d3 recast, excluding whole. Neither smra ba po/position nor phyogs snga/above is asserted as a separate word correspondence.')
+change(276,'p1','ni marks the present belief as the topic; English realizes this as the subject of shows. No distinct topic word is printed, and the earlier is belongs to incorrect. Null explicitly records grammatical fusion, not doubt about the reference.')
+notes={274:"Repeated wet/flowing, glass/fullness and number owners remain separate. The third something is the part-bearing whole; the middle three-beings reprise is pronominal and omitted, while the final distributive beings is retained. Complete lexicalized cig car du/together and dbang gis/at the mercy of are d5; broader sitting and distinct wording stays unwrapped despite positive glossary variants. The agentive null records active-grammar fusion. Gsum ga has two strict members, with reversed English member order. The single final assertion owns the earlier position, not an invented set of representatives. Collection, explanatory participants and final attack restatement remain unwrapped.",275:"The sole Tibetan name owns first Dharmakirti only. Four physical-form roles and three enemy/friend pairs preserve their distinct ranges across reordering. Whole negatives remain intact; quoted de owns it and yang has no separate additive exponent. Brten nas and the arising construction jointly yield the circumstances-cause paraphrase, so neither is independently atomized despite positive HGM7086. The quotative says, possessive whose and original-form/observer and retain their local licensors. First pas owns Because alone; of this remains explanatory resumption. Numerist gyis/of and the refuted demonstrative this retain their relations. The two phyir/for pairs have different premise scopes. Kha spos is a distributed transfer of argument, not the auto-aligned neighboring ugliness/Dharmakirti wording. Khyod owns the second you and gnod pa the second against; zer owns claim. Inserted title, second authority/logic reprises, final prove-that expansion and original non- Buddhist spacing stay verbatim.",276:"The complete negative understanding idiom owns failed to understand; there is no free negative member. Meaning and statement remain separate across English order. The full prior-proponent assertion is a d3 recast to position expressed above, excluding whole; both scopes over the two objects of failed understanding. Topic ni records grammar fusion. Skyon/yin is distributed in the shows-that construction and remains omitted, despite wider skyon/reveals glossary evidence. The unusual is though incorrect remains verbatim."}
+allfinal=[]
+for seq,rs in choices.items():
+ # Sorting by original Tibetan offsets preserves flat sequence; parent precedes same-start member.
+ rs.sort(key=lambda r:(r['tib_range'][0],r['d']==7))
+ seg={'seq':seq,'title':{274:'three beings and a three-part whole',275:'an opponent invokes dharmakirti',276:'a mistaken reading of both positions'}[seq],'spans':[r['span'] for r in rs],'eng_order':[r['id'] for r in sorted((r for r in rs if r['eng'] is not None and r['d']!=7),key=lambda r:r['eng_range'][0])],'note':'PROVISIONAL machine alignment by Codex, reused non-author reconciler /root/c05_253_255_reconcile. Both independent originals and current source evidence were examined by the model; this is not human certification or binding glossary promotion. '+notes[seq]}
+ out=B/'reconciled'/str(seq);save(out/'spec.json',dict(course='C05',segments=[seg]));save(out/'errata.json',[])
+ parent=None;final=[]
+ for r in rs:
+  if r['d']!=7:parent=r['id'] if r['d']==5 else None
+  tuple7={k:r[k] for k in ['id','d','tib','eng','tib_range','eng_range']};tuple7['parent_id']=parent if r['d']==7 else None
+  final.append(dict(tuple=tuple7,span=r['span'],rationale=r['rationale'],selected_from={'angle':r['angle'],'original_id':r['original_span']['id']},source_context={'wylie':sources[seq]['wylie'],'english':sources[seq]['english']}))
+ save(out/'final-decisions.json',final);save(out/'final-tuples.json',[r['tuple'] for r in final]);allfinal+=final
+save(D/'decision-construction-proof.json',dict(status='CANDIDATE_NOT_YET_CANONICAL',original_identities=len(records),final_counts={str(s):len(r) for s,r in choices.items()},producer='Reused Codex reconciler, neither original author',notes=notes))
+print({s:len(r) for s,r in choices.items()})

@@ -1,0 +1,72 @@
+from pathlib import Path
+import json,hashlib,importlib.util,sys,re,difflib
+from html.parser import HTMLParser
+sys.dont_write_bytecode=True
+P=Path(__file__).resolve().parent;B=P.parent;W=B.parent.parent/'campaign-worktree';PRE=B/'semantic-review-preparation'
+def save(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(x):return hashlib.sha256(x).hexdigest()
+src={r['seq']:r for r in json.loads((B/'source.json').read_bytes())}
+sp=importlib.util.spec_from_file_location('canonical_review',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(sp);sp.loader.exec_module(g)
+class Parser(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.blocks=[];self.b=None;self.stack=[];self.skip=0
+ def handle_starttag(self,t,a):
+  if t!='span':return
+  a=dict(a);lab=a.get('data-l')
+  if lab and lab.endswith('S'):assert self.b is None;self.b=dict(text='',ranges={})
+  if self.b is None:return
+  nul='nul' in a.get('class','').split();self.stack.append((a,len(self.b['text']),nul));self.skip+=int(nul)
+ def handle_data(self,s):
+  if self.b is not None and self.skip==0:self.b['text']+=s
+ def handle_endtag(self,t):
+  if t!='span' or self.b is None:return
+  a,start,nul=self.stack.pop();self.skip-=int(nul);lab=a.get('data-l')
+  if lab and lab.endswith('S'):assert not self.stack;self.blocks.append(self.b);self.b=None
+  elif lab:assert lab not in self.b['ranges'];self.b['ranges'][lab]=dict(range=[start,len(self.b['text'])],d=int(a['data-d']))
+allresolved=[];alloriginal=[];counts=[]
+for seq in [274,275,276]:
+ d=B/'reconciled'/str(seq);spec=json.loads((d/'spec.json').read_bytes());seg=spec['segments'][0];spans=seg['spans'];ids={s['id']:s for s in spans}
+ tr=g.resolve(src[seq]['wylie'],spans,'tib',seq);er=g.resolve(src[seq]['english'],g.with_members(spans,[ids[i] for i in seg['eng_order']],src[seq]['english']),'eng',seq)
+ actual=[dict(seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(tr[s['id']]),eng_range=list(er[s['id']]) if s['eng'] is not None else None) for s in spans]
+ claimed=json.loads((d/'final-tuples.json').read_bytes());assert len(actual)==len(claimed)
+ for r,q in zip(actual,claimed):assert all(r[k]==q[k] for k in r if k!='seq')
+ h=Parser();h.feed((P/'canonical-runs'/str(seq)/'stdout.html').read_text());assert len(h.blocks)==2
+ for side,i,key in [('tib',0,'wylie'),('eng',1,'english')]:
+  block=h.blocks[i];assert block['text']==src[seq][key];assert set(block['ranges'])=={f's{seq}'+s['id'] for s in spans}
+  for r in actual:
+   got=block['ranges'][f's{seq}'+r['id']];assert got['d']==r['d'];expect=r[side+'_range'] if r[side] is not None else [len(src[seq][key])]*2;assert got['range']==expect
+  # Exact complement of the union, including punctuation and whitespace.
+  covered=set(j for r in actual if r[side+'_range'] is not None for j in range(*r[side+'_range']));uncovered=set(range(len(src[seq][key])))-covered;gaps=[r for r in json.loads((d/'omissions.json').read_bytes()) if r['side']==side];got=[]
+  for r in gaps:assert src[seq][key][r['start']:r['end']]==r['text'];got.extend(range(r['start'],r['end']))
+  assert len(got)==len(set(got)) and set(got)==uncovered
+ dispositions=json.loads((d/'original-dispositions.json').read_bytes());expected=[]
+ for angle in ['tibetan','english']:
+  od=B/angle/str(seq);ss=json.loads((od/'spec.json').read_bytes())['segments'][0]['spans'];decl=json.loads((od/('intended-spans.json' if angle=='tibetan' else 'occurrence-declarations.json')).read_bytes());decl=decl if angle=='tibetan' else decl['declarations'];by={r['id']:r for r in decl};parent=None
+  for s in ss:
+   r=next(x for x in dispositions if x['original_identity']['angle']==angle and x['original_identity']['id']==s['id']);i=r['original_identity'];assert i['seq']==seq and i['original_span']==s and i['original_field_presence']==list(s) and i['original_occurrence_declaration']==by[s['id']]
+   assert i['parent_id']==(parent if s['d']==7 else None)
+   if s['d']!=7:parent=s['id']
+   for side,key in [('tib','wylie'),('eng','english')]:
+    rng=i[side+'_range'];assert (rng is None and s[side] is None) or src[seq][key][rng[0]:rng[1]]==s[side]
+   assert set(r['final_ids'])<=set(ids);expected.append((angle,s['id']));alloriginal.append(r)
+ assert len(dispositions)==len(expected)==len(set(expected));allresolved.extend(actual)
+ counts.append(dict(seq=seq,span_count=len(spans),null_count=sum(s['eng'] is None for s in spans),word_pair_count=sum(s['d']==5 and s['eng'] is not None for s in spans),spec_bytes=(d/'spec.json').stat().st_size,spec_sha256=sha((d/'spec.json').read_bytes()),body_bytes=(d/'body.html').stat().st_size,body_sha256=sha((d/'body.html').read_bytes()),generator_exit=0))
+save('resolved-spans.json',allresolved);save('all-original-disposition-proof.json',alloriginal);save('measured-segments.json',counts)
+# Every complete package section is checked byte for byte against its actual input or actual full U10 diff.
+sections=[]
+for name,digest in [('semantic-input-review-package.txt','db681fea81f564805da0457ef49a821a97d2b84f87a8386e55310a6ea6d4cd3f'),('semantic-decision-review-supplement.txt','e577049626f9a2404cd269c93330b363d24c36d1ccfa4c36fdf0d0633cb6b685')]:
+ raw=(B/name).read_bytes();assert sha(raw)==digest;matches=list(re.finditer(rb'\n===== (.*?) =====\n',raw));assert matches[0].start()==0
+ for j,m in enumerate(matches):
+  title=m.group(1).decode();body=raw[m.end():matches[j+1].start() if j+1<len(matches) else len(raw)]
+  if title.startswith('COMPLETE '):
+   _,angle,_,_,_,seq=title.split();a=f'{angle}/{seq}/spec.json';b=f'reconciled/{seq}/spec.json';expected=''.join(difflib.unified_diff((B/a).read_text().splitlines(True),(B/b).read_text().splitlines(True),fromfile=a,tofile=b,n=10)).encode();assert body==expected
+  elif title=='PACKAGE INPUT HASHES':
+   for r in json.loads(body):x=(B/r['path']).read_bytes();assert len(x)==r['bytes'] and sha(x)==r['sha256']
+  else:assert body==(B/title).read_bytes(),(name,title)
+  sections.append(dict(package=name,section=title,start=m.end(),end=m.end()+len(body),bytes=len(body),sha256=sha(body)))
+save('complete-package-section-proof.json',sections)
+previous=json.loads((PRE/'actual-query-replays.json').read_bytes());lookup={(r['sql'],tuple(r['parameters'])):r for r in previous};qproof=[]
+for name in ['full-query-replays.json','english-combined-query-replays.json']:
+ for n,r in enumerate(json.loads((B/'reconciled/274'/name).read_bytes())):
+  key=(r['sql'],tuple(r['parameters']));assert key in lookup,(name,n,key);assert r['rows']==lookup[key]['rows'];qproof.append(dict(file=name,index=n,query=key,rows=len(r['rows']),independent_preparation_replay_exact=True))
+save('all-final-query-alias-proof.json',qproof)
+save('interface-proof.json',dict(status='PASS',segments=counts,final_spans=len(allresolved),original_dispositions=len(alloriginal),complete_package_sections=len(sections),final_query_records=len(qproof),generators_rerun_by_this_helper=0));print('PASS',len(allresolved),len(alloriginal),len(sections),len(qproof))

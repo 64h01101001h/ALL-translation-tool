@@ -1,0 +1,48 @@
+from pathlib import Path
+import datetime, hashlib, json
+I=Path(__file__).resolve().parent; A=I.parent; B=A/'C05-274-276'; L=B/'landing'
+O=I/'through276-final-banking-inputs'; assert not O.exists();O.mkdir()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def js(p):return json.loads(p.read_bytes())
+def save(p,o):
+ with p.open('x') as f:f.write(json.dumps(o,indent=2)+'\n')
+ordinary=js(L/'root-proof-copy-manifest-before-whitespace.json');old={}
+for r in ordinary['files']+ordinary['external_actual_bytes_retained']:
+ name=r.get('original',r.get('path'));p=Path(name).resolve(strict=True);q={k:r[k] for k in ('bytes','sha256')}
+ assert p not in old or old[p]==q;old[p]=q;assert pin(p.read_bytes())==q
+assert js(I/'through276-whitespace-v2-root-actual/proof.json')['status']=='PASS_ROOT_ACCEPTS_ACTUAL_WHITESPACE_AUDIT'
+assert js(I/'through276-packages-only-review/review.json')['spec_verdict']=='APPROVE_CODE_ONLY'
+roots=[B]+sorted(p for p in I.glob('through276*') if p.is_dir() and p!=O)
+helpers=[I/'approve-through276-whitespace-v2-root.py',I/'accept-through276-whitespace-v2-root.py',Path(__file__).resolve()]
+sources=set(helpers)
+for root in roots:
+ for p in root.rglob('*'):
+  if p.is_file() and not p.is_relative_to(L):sources.add(p.resolve(strict=True))
+audit=(I/'through276-whitespace-runs/audit-v2/source-whitespace-proof.json').resolve()
+rawlog=(I/'through276-stage-runs/initial-diff-check/stdout.bin').resolve()
+assert audit in sources and rawlog in sources
+selected={
+ I/'through276-whitespace-v2-root-actual/proof.json',I/'through276-whitespace-v2-root-code/proof.json',
+ I/'through276-whitespace-v2-review/report.md',I/'through276-whitespace-v2-review/review.json',
+ I/'through276-whitespace-v2-candidate/runtime/whitespace276.py',I/'through276-whitespace-v2-candidate/runtime/syntax-diagnostic-descriptors.json',
+ I/'through276-whitespace-diagnostic-proposal/report.md',I/'through276-historical-execution-log-review/report.md',
+ I/'through276-packages-only-preparation/report.md',I/'through276-packages-only-review/report.md',
+ I/'through276-global-plan-root-review/proof.json',*helpers}
+extra=[];ws=[];skipped=0
+def record(p,bank=False):
+ raw=p.read_bytes();r=dict(original=str(p),**pin(raw))
+ if bank:
+  assert len(raw)<2_000_000 and not any(line.endswith((b' ',b'\t',b'\r')) for line in raw.split(b'\n')) and not raw.endswith(b'\n\n'),str(p)
+  r.update(retention='bank',copy='final-checks/'+str(p.relative_to(A))+('.txt' if p.suffix=='.py' else ''))
+ else:r.update(retention='external',disposition='Complete immutable original at the final pre-bank boundary; full bytes retained without shortening or normalization')
+ return r
+for p in sorted(sources):
+ if p in old:
+  assert pin(p.read_bytes())==old[p];skipped+=1;continue
+ if p in (audit,rawlog):ws.append(record(p,p==audit))
+ else:extra.append(record(p,p in selected))
+assert len(ws)==2 and len({r['original'] for r in extra+ws})==len(extra)+len(ws)
+proof=dict(status='PASS_EXPLICIT_FINAL_INPUT_INVENTORY',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),roots=[str(p) for p in roots],additional_helpers=[str(p) for p in helpers],whole_unique_files=len(sources),unchanged_already_retained_files=skipped,new_extra_files=len(extra),actual_whitespace_files=len(ws),new_extra_bytes=sum(r['bytes'] for r in extra),new_whitespace_bytes=sum(r['bytes'] for r in ws),boundary='All current immutable inputs in listed trees, excluding landing handled by approved bank helper; no later final-bank/caller/stage/commit/global evidence claimed. Configs are banked explicitly by helper; this proof is an additional bank input.')
+save(O/'proof.json',proof);extra.append(record(O/'proof.json',True))
+save(O/'extra-inputs.json',extra);save(O/'whitespace-inputs.json',ws)
+print(json.dumps({k:v for k,v in proof.items() if k not in ('roots','additional_helpers')},indent=2))

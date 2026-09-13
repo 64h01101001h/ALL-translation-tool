@@ -1,0 +1,46 @@
+from pathlib import Path
+import json,hashlib,runpy,os,subprocess
+P=Path(__file__).resolve().parent;B=P.parent;A=B.parent;W=A.parent/'campaign-worktree';PRE=B/'semantic-review-preparation'
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+files=[];inventory=[]
+for name in ['semantic-dispatch-inputs.json','semantic-dispatch-root-addendum.json']:
+ files.append(B/name)
+ for r in json.loads((B/name).read_text())['files']:
+  p=Path(r['path']);assert pin(p)=={k:r[k] for k in ('bytes','sha256')};files.append(p);inventory.append(r)
+files += [p for p in PRE.rglob('*') if p.is_file()]
+for name in [PRE/'original-to-copy-manifest.json',B/'reconciled/274/original-copy-manifest.json']:
+ for r in json.loads(name.read_text()):files.append(Path(r['original']))
+files += [A/'copy_evidence_once_v2.py',A/'land_reviewed_page.py',A/'prepare_semantic_package.py',A/'semantic-review-protocol.md',W/'docs/alignment_briefs/RECONCILE_BRIEF.md',W/'tools/build_spine.py',W/'tools/test_no_supplied_span_head.py']
+files=sorted(set(files));assert not any(p.is_relative_to(P) for p in files)
+save('input-aliases.json',[dict(path=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,**pin(p)) for p in files])
+copy=runpy.run_path(str(A/'copy_evidence_once_v2.py'))['preserve'];result=copy(P,P/'original-to-copy-manifest.json',files);save('copy-proof.json',result)
+freezes=[]
+for seq in [274,275,276]:
+ d=B/'reconciled'/str(seq);f=json.loads((d/'freeze.json').read_text());actual={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'};assert actual==set(f['files'])
+ for n,r in f['files'].items():assert pin(d/n)==r
+ freezes.append(dict(seq=seq,files=len(actual),freeze=pin(d/'freeze.json')))
+save('current-frozen-input-proof.json',freezes)
+history=[];h=B/'reconciled/274/gate-correction01'
+for seq in [274,275,276]:
+ core=json.loads((h/f'{seq}-core-before.json').read_text())
+ for n,r in core.items():assert pin(B/'reconciled'/str(seq)/n)==r
+ rows=json.loads((h/f'{seq}-complete-initial-freeze-retention.json').read_text());old=json.loads((h/'initial'/str(seq)/'freeze.json').read_text())['files'];assert {r['original_relative'] for r in rows}==set(old)
+ for r in rows:assert pin(Path(r['retained_path']))==r['historical_pin']==old[r['original_relative']]
+ history.extend(rows)
+save('gate-correction-history-proof.json',dict(status='PASS',retained_old_freeze_rows=len(history),all112_tuples_and_three_specs_bodies_notes_unchanged=True,transport=history))
+# Required core history remains directly readable, while bulk identical evidence is deduplicated.
+for seq in [274,275,276]:
+ for angle in ['tibetan','english']:
+  for n in ['spec.json','body.html','report.md','errata.json']:
+   d=P/'proposal-inputs'/angle/str(seq)/n;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes((B/angle/str(seq)/n).read_bytes())
+for f in PRE.rglob('*'):
+ if f.is_file() and f.parent==PRE and f.name in ['report.md','preparation.json','freeze.json']:
+  d=P/'history/source-preparation'/f.name;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(f.read_bytes())
+manifest=json.loads((P/'original-to-copy-manifest.json').read_text());git=[];whitelist={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+for r in manifest:
+ p=Path(r['original']);dst=P/r['copy'];assert p.read_bytes()==dst.read_bytes();assert pin(dst)=={k:r[k] for k in ('bytes','sha256')};assert dst.suffix.lower() in whitelist
+ if p.is_relative_to(W):
+  rel=str(p.relative_to(W));argv=['git','-C',str(W),'show','81942cfc6022a785894d3cc2a20de81dc4c6f599:'+rel];q=subprocess.run(argv,capture_output=True);assert q.returncode==0 and not q.stderr and q.stdout==dst.read_bytes();r.update(original_git_commit='81942cfc6022a785894d3cc2a20de81dc4c6f599',repository_relative_path=rel);git.append(dict(argv=argv,exit=q.returncode,stdout_copy=r['copy'],stderr='',**pin(dst)))
+save('original-to-copy-manifest.json',manifest);save('governing-git-proof.json',git);save('preservation-proof.json',dict(status='PASS',dispatch_records=len(inventory),original_records=len(manifest),distinct_copies=len({r['copy'] for r in manifest}),alias_paths=len(files),git_objects=len(git),final_frozen_files=sum(r['files'] for r in freezes),old_freeze_retention_rows=len(history),actual_landing_whitelist=sorted(whitelist)));print(json.dumps(json.loads((P/'preservation-proof.json').read_text())))

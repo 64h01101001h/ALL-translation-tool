@@ -1,0 +1,258 @@
+{
+  "status": "NEEDS_CORRECTION",
+  "verdict": "NEEDS_CORRECTION",
+  "spec_verdict": "NEEDS_CORRECTION",
+  "quality_verdict": "NEEDS_CORRECTION",
+  "baseline": "81942cfc6022a785894d3cc2a20de81dc4c6f599",
+  "role": "Reused non-author/non-reconciler independent model reviewer; no fresh-context or human-certification claim.",
+  "segments": [
+    {
+      "seq": 274,
+      "span_count": 42,
+      "null_count": 1,
+      "word_pair_count": 31,
+      "spec_bytes": 6658,
+      "spec_sha256": "f37f15bb428af109f7dd9ac653e864a1e6fcb4ec7a08050b57f92b9dba1b2499",
+      "body_bytes": 6743,
+      "body_sha256": "b7fa81dc5865419c5637226fc5c5460b5789c507aa9815dafa1012fbc66018a9",
+      "generator_exit": 0
+    },
+    {
+      "seq": 275,
+      "span_count": 59,
+      "null_count": 1,
+      "word_pair_count": 43,
+      "spec_bytes": 9337,
+      "spec_sha256": "21edf1383600a9280319051a7e030d482ae7694178a7c4d20d84dc7254921220",
+      "body_bytes": 9488,
+      "body_sha256": "dcc3c9d123a3c2a2fc74603ede86e0e2bc0b47eb96b751a14ef0e6601a328ff3",
+      "generator_exit": 0
+    },
+    {
+      "seq": 276,
+      "span_count": 11,
+      "null_count": 1,
+      "word_pair_count": 7,
+      "spec_bytes": 2630,
+      "spec_sha256": "a4f530ac8f0fbb612a0d16c9cc5f8b075ec61876b324838c7e0540af05be55e2",
+      "body_bytes": 2831,
+      "body_sha256": "ef105fb11eddc667118c42e633a4314e53b8b005d71032826592705d420364fa",
+      "generator_exit": 0
+    }
+  ],
+  "total_spans": 112,
+  "total_nulls": 3,
+  "total_word_pairs": 81,
+  "open_findings": [
+    {
+      "id": "C05-275-OMISSION-01",
+      "status": "OPEN",
+      "severity": "REQUIRED_METADATA_CORRECTION",
+      "seq": 275,
+      "span_id": "r54",
+      "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/reconciled/275/omissions.json",
+      "source_pin": {
+        "bytes": 65226,
+        "sha256": "044d2e17f3c23b56200243614d57f48c6660c209ed91b1900ca90c60382b17d2"
+      },
+      "affected_gap": {
+        "side": "eng",
+        "start": 3,
+        "end": 34,
+        "text": " comes and makes the following ",
+        "disposition": "OMITTED_NOT_NULL",
+        "reason": "Comes and is rhetorical introduction; kept zer na claims only makes the following claim.",
+        "original_omission_contexts": [
+          {
+            "side": "eng",
+            "gap_index": 0,
+            "start": 3,
+            "end": 14,
+            "text": " comes and ",
+            "disposition": "OMIT, not null",
+            "reason": "Comes and is rhetorical introduction; kept zer na claims only makes the following claim."
+          }
+        ]
+      },
+      "final_tuple": {
+        "seq": 275,
+        "id": "r54",
+        "d": 5,
+        "tib": "zer",
+        "eng": "claim",
+        "tib_range": [
+          569,
+          572
+        ],
+        "eng_range": [
+          34,
+          39
+        ]
+      },
+      "problem": "Current omission reason describes the superseded wider zer na/makes the following claim pairing, contradicting the actual final zer/claim span and its complement.",
+      "minimal_remedy": "Change only the current gap reason to describe zer/claim and the unwrapped English reporting presentation. Preserve exact gap fields, original_omission_contexts, original dispositions, all specs/bodies/notes/tuples and complete previous versions.",
+      "required_follow_up": "Scoped independent review of actual corrected frozen metadata; no successful canonical rerun for byte-identical specs/bodies/notes."
+    }
+  ],
+  "nonblocking_clarifications": "nonblocking-clarifications.json",
+  "span_correspondence_assessment": "No unresolved selected-span correspondence/range/depth/null finding; current omission metadata blocks candidate approval.",
+  "original_dispositions": {
+    "RETAINED": 198,
+    "RECAST_OR_TIGHTENED": 12,
+    "OMITTED_DISTRIBUTED": 1
+  },
+  "report": {
+    "path": "review.md",
+    "bytes": 22809,
+    "sha256": "c1e9b8957669464616e13b958062c47fb624a47ba02fa3a0f46e76b9426cfb93"
+  },
+  "checklist": [
+    {
+      "id": "ROLE",
+      "status": "PASS",
+      "disposition": "Reused non-author/non-reconciler model review; original human-inspection wording externally corrected, never silently edited.",
+      "evidence": [
+        "review.md",
+        "history/source-preparation/report.md"
+      ]
+    },
+    {
+      "id": "GOVERNING",
+      "status": "PASS",
+      "disposition": "Actual fixed baseline and complete governing Git object pins.",
+      "evidence": [
+        "governing-git-proof.json"
+      ]
+    },
+    {
+      "id": "PACKAGES",
+      "status": "PASS",
+      "disposition": "Complete primary/supplement section bytes and 1059 fixed/additive input records retained.",
+      "evidence": [
+        "complete-package-section-proof.json",
+        "preservation-proof.json"
+      ]
+    },
+    {
+      "id": "SOURCE",
+      "status": "PASS",
+      "disposition": "Independent RO/query_only full sources, 222 actual query sets and 116 master/302 corpus objects.",
+      "evidence": [
+        "history/source-preparation/independent-source-proof.json",
+        "all-final-query-alias-proof.json"
+      ]
+    },
+    {
+      "id": "PHYSICAL",
+      "status": "PASS",
+      "disposition": "Both full original physical files, twelve extents and full contexts; no publication/ingestion independence inferred.",
+      "evidence": [
+        "history/source-preparation/physical-extents.json"
+      ]
+    },
+    {
+      "id": "ORIGINALS",
+      "status": "PASS",
+      "disposition": "211 full identities and all 198 retained/12 recast/1 omitted dispositions inspected.",
+      "evidence": [
+        "all-original-disposition-proof.json",
+        "independent-original-disposition-review.json"
+      ]
+    },
+    {
+      "id": "SEMANTICS",
+      "status": "PASS_WITH_METADATA_FINDING",
+      "disposition": "112 actual correspondence/range/depth/null judgments; r54 current omission metadata remains open.",
+      "evidence": [
+        "independent-span-review.json",
+        "findings.json"
+      ]
+    },
+    {
+      "id": "CANONICAL",
+      "status": "PASS",
+      "disposition": "Three actual final generator calls, zero exits, empty stderr and exact complete bodies.",
+      "evidence": [
+        "canonical-proof.json",
+        "canonical-runs"
+      ]
+    },
+    {
+      "id": "STRUCTURE",
+      "status": "PASS",
+      "disposition": "Exact seven-key tuples, original field ordering/parents/occurrences, full-source fields and omission complements.",
+      "evidence": [
+        "interface-proof.json",
+        "resolved-spans.json"
+      ]
+    },
+    {
+      "id": "OMISSION_METADATA",
+      "status": "NEEDS_CORRECTION",
+      "disposition": "One current reason describes the superseded wider r54 span.",
+      "evidence": [
+        "findings.json"
+      ]
+    },
+    {
+      "id": "ERRATA",
+      "status": "PASS",
+      "disposition": "All five grounds examined for three suspicions; no surviving new erratum.",
+      "evidence": [
+        "review.md",
+        "bank-ready-errata.json"
+      ]
+    },
+    {
+      "id": "ALLOWANCE",
+      "status": "PASS",
+      "disposition": "Bare you does not match actual trailing-space predicate; source licensor remains khyod; no allowance.",
+      "evidence": [
+        "review.md",
+        "span-head-allow-needed.json"
+      ]
+    },
+    {
+      "id": "HISTORY",
+      "status": "PASS",
+      "disposition": "All original/current histories, nested freezes and 483 old freeze rows retained with explicit versions.",
+      "evidence": [
+        "gate-correction-history-proof.json",
+        "readable-history-and-final-mappings.json"
+      ]
+    },
+    {
+      "id": "PRESERVATION",
+      "status": "PASS",
+      "disposition": "Complete supported-copy, raw-alias and source-unchanged closure.",
+      "evidence": [
+        "finalize-proof.json",
+        "original-to-copy-manifest.json",
+        "source-alias-transports.json"
+      ]
+    },
+    {
+      "id": "LIMITS",
+      "status": "PASS",
+      "disposition": "No landing/build/CTest/MAIN/native/human acceptance implied; one scoped metadata correction required.",
+      "evidence": [
+        "review.md"
+      ]
+    }
+  ],
+  "evidence_manifest": {
+    "path": "evidence-pins.json",
+    "bytes": 224439,
+    "sha256": "7ee6711b7d39ad65ac271ed0c0c8f671ebc2b71f072490788257bd80d6b8e1f6"
+  },
+  "original_to_copy_manifest": {
+    "path": "original-to-copy-manifest.json",
+    "bytes": 636015,
+    "sha256": "13e5287f614a26d7a1d2ed1fcfd137d2ff7e351b4c6877be0a3e6bc17c0db237"
+  },
+  "freeze": {
+    "path": "freeze.json",
+    "schema": "files is a relative-path dictionary of bytes/sha256; excludes only its actual top-level path"
+  },
+  "execution_limits": "Three actual final canonical replays only. No original generator or passing suite reruns. No source/master/repository/index/MAIN/reconciler/native/network writes."
+}

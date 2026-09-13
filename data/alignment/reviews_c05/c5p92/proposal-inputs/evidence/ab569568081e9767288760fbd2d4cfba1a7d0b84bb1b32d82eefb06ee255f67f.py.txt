@@ -1,0 +1,147 @@
+"""Verify actual frozen reconciliation schemas and sources; not semantic approval."""
+from pathlib import Path
+from collections import Counter
+import datetime,gzip,hashlib,importlib.util,json,os,re,sqlite3,subprocess,sys,traceback
+sys.dont_write_bytecode=True
+B=Path(__file__).resolve().parent; W=B.parents[1]/'campaign-worktree'; D=B/'reconciled/274'
+O=B/'root-reconciliation-verification';O.mkdir()
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+    raw=Path(p).read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def check(p,r):assert pin(p)=={k:r[k] for k in ('bytes','sha256')},str(p)
+def save(n,o):
+    with (O/n).open('x') as f:json.dump(o,f,ensure_ascii=False,indent=2);f.write('\n')
+calls=[]
+def run(argv,label,stdin=b''):
+    start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+    r=subprocess.run(argv,cwd=W,input=stdin,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'))
+    for name,data in [('stdin',stdin),('stdout',r.stdout),('stderr',r.stderr),('exit',(str(r.returncode)+'\n').encode())]:
+        with (O/(label+'.'+name)).open('xb') as f:f.write(data)
+    call=dict(argv=argv,cwd=str(W),started_at=start,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),environment=dict(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'),exit=r.returncode,streams={k:pin(O/(label+'.'+k)) for k in ['stdin','stdout','stderr']})
+    calls.append(call);save(label+'.command.json',call)
+    assert r.returncode==0 and not r.stderr,(label,r.returncode,r.stderr)
+    return r.stdout
+def frozen(d):
+    f=read(d/'freeze.json');items=f['files'].items() if isinstance(f['files'],dict) else [(r['path'],r) for r in f['files']]
+    expected={}
+    for n,r in items:
+        p=Path(n);n=str(p.relative_to(d)) if p.is_absolute() else n
+        assert not Path(n).is_absolute() and '..' not in Path(n).parts and n not in expected
+        expected[n]=r
+    assert set(expected)=={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}
+    for n,r in expected.items():check(d/n,r)
+    return dict(path=str(d),freeze=pin(d/'freeze.json'),files=len(expected))
+proof=dict(status='RUNNING',role='Root authored Tibetan originals; mechanical/source verification only, no independent semantic approval.',started_at=datetime.datetime.now(datetime.timezone.utc).isoformat())
+db=None
+try:
+    base=read(B/'baseline.json');assert run(['git','rev-parse','HEAD'],'head').decode().strip()==base['commit']=='81942cfc6022a785894d3cc2a20de81dc4c6f599'
+    for n,h in base['sha256'].items():assert pin(W/n)['sha256']==h,n
+    freezes=[frozen(B/a/str(s)) for a in ['tibetan','english','reconciled'] for s in [274,275,276]]
+    for p in read(D/'required-access.json'):assert Path(p).is_dir() and os.access(p,os.R_OK),p
+    mappings=read(D/'original-copy-manifest.json')
+    for r in mappings:
+        a=Path(r['original']);c=D/r['copy'];assert c.resolve().is_relative_to(D.resolve())
+        check(a,r);check(c,r);assert a.read_bytes()==c.read_bytes()
+    aliases=read(D/'aliases.json')+read(D/'late-aliases.json')
+    for r in aliases:
+        p=Path(r['alias']);check(p,r);assert str(p.resolve())==r['resolved']
+        assert (os.readlink(p) if p.is_symlink() else None)==r['symlink']
+    governing=read(D/'governing-pins.json')
+    for i,r in enumerate(governing):
+        p=D/r['copy'];check(p,r)
+        assert run(['git','show',r['git_commit']+':'+r['repository_relative_path']],f'governing-{i}')==p.read_bytes()
+    original_records=read(B/'proposal-verification/root-resolved-spans.json')
+    originals={(r['angle'],r['seq'],r['id']):r for r in original_records};assert len(originals)==len(original_records)==211
+    before_db=pin(W/'build/hgm_spine_v27_2.db');assert before_db==read(D/'capture-proof.json')['database']
+    db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+    db.execute('PRAGMA query_only=ON');assert db.execute('PRAGMA query_only').fetchone()[0]==1;db.execute('BEGIN')
+    rows=[dict(r) for r in db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',268,282))]
+    assert rows==read(D/'source-full-rows.json');sources={r['seq']:r for r in rows}
+    assert [{k:sources[s][k] for k in ['id','course','seq','acip','wylie','english']} for s in [274,275,276]]==read(B/'source.json')
+    master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries']
+    corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));bycourse={}
+    for raw in corpus:bycourse.setdefault(raw['course'],[]).append(raw)
+    queries=read(D/'full-query-replays.json')+read(D/'english-combined-query-replays.json');actual_queries=[]
+    for q in queries:
+        assert q['sql'].lstrip().upper().startswith('SELECT ')
+        actual=[dict(r) for r in db.execute(q['sql'],q['parameters'])]
+        assert actual==q['rows'] and len(actual)==q['count']
+        for r in actual:
+            raw=json.loads(r['raw'])
+            if 'seq' in r:assert raw==bycourse[r['course']][r['seq']-1]
+            else:assert raw==master[r['id']-1]
+        actual_queries.append(dict(sql=q['sql'],parameters=q['parameters'],rows=actual))
+    for r in rows:assert json.loads(r['raw'])==bycourse['C05'][r['seq']-1]
+    save('full-query-replays.json',actual_queries);save('source-full-rows.json',rows)
+    physical=read(D/'physical-equality-proof.json')
+    for r in physical:
+        original=Path(r['original']);check(original,r['original_pin']);raw=original.read_bytes()
+        source=bycourse[r['course']][r['seq']-1][r['field']].encode()
+        assert r['matches']==len(r['extents'])==1
+        for extent in r['extents']:
+            p=D/extent['copy'];check(p,extent);s=raw[extent['start']:extent['end']];assert s==p.read_bytes()
+            assert (re.sub(rb'\s+',b' ',s).strip()==source)==r['ascii_whitespace_collapse_equals_spine']
+        assert (source in raw)==r['full_source_contiguous_match']
+    db.rollback();db.close();db=None
+    history=D/'gate-correction01';retained=0
+    for r in read(history/'history-map.json'):check(D/r['historical_copy'],r)
+    for seq in [274,275,276]:
+        d=B/f'reconciled/{seq}'
+        for n,r in read(history/f'{seq}-core-before.json').items():check(d/n,r)
+        old=read(history/f'initial/{seq}/freeze.json');f=old['files'];oldmap=f if isinstance(f,dict) else {r['path']:r for r in f}
+        retention=read(history/f'{seq}-complete-initial-freeze-retention.json')
+        assert set(oldmap)=={r['original_relative'] for r in retention}
+        for r in retention:
+            expected=oldmap[r['original_relative']];assert {k:expected[k] for k in ['bytes','sha256']}==r['historical_pin']
+            check(Path(r['retained_path']),r['historical_pin']);retained+=1
+    sys.path.insert(0,str(W/'tools'));definition=importlib.util.spec_from_file_location('actual_generator',W/'tools/gen_alignment_page.py')
+    g=importlib.util.module_from_spec(definition);definition.loader.exec_module(g)
+    wrapper=B/'tibetan/274/run-canonical-readonly.py';results=[];finals=[];seen=[];dispositions=Counter()
+    for seq,count,d5 in [(274,42,31),(275,59,43),(276,11,7)]:
+        d=B/f'reconciled/{seq}';spec=read(d/'spec.json');seg=spec['segments'][0];spans=seg['spans'];byid={s['id']:s for s in spans}
+        assert spec['course']=='C05' and len(spec['segments'])==1 and seg['seq']==seq and len(spans)==len(byid)==count
+        raw=run([sys.executable,'-B',str(wrapper)],str(seq),(d/'spec.json').read_bytes());assert raw==(d/'body.html').read_bytes()
+        tr=g.resolve(sources[seq]['wylie'],spans,'tib',seq);ordered=g.with_members(spans,[byid[i] for i in seg['eng_order']],sources[seq]['english']);er=g.resolve(sources[seq]['english'],ordered,'eng',seq)
+        local=[];parent=None;tuples=[]
+        for s in spans:
+            i=s['id'];r=dict(seq=seq,id=i,d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(tr[i]),eng_range=None if s['eng'] is None else list(er[i]));local.append(r)
+            if s['d']!=7:parent=i if s['d']==5 else None
+            tuples.append({**{k:v for k,v in r.items() if k!='seq'},'parent_id':parent if s['d']==7 else None})
+        assert tuples==read(d/'final-tuples.json')
+        decisions=read(d/'final-decisions.json');assert [x['tuple'] for x in decisions]==tuples and [x['span'] for x in decisions]==spans and all(x['rationale'] for x in decisions)
+        omitted=read(d/'omissions.json')
+        for side,field,rng in [('tib','wylie','tib_range'),('eng','english','eng_range')]:
+            text=sources[seq][field];covered=[False]*len(text)
+            for t in local:
+                if t[rng] is not None:
+                    a,z=t[rng];assert text[a:z]==t[side];covered[a:z]=[True]*(z-a)
+            gaps=[];i=0
+            while i<len(text):
+                if covered[i]:i+=1;continue
+                z=i+1
+                while z<len(text) and not covered[z]:z+=1
+                gaps.append(dict(side=side,start=i,end=z,text=text[i:z]));i=z
+            actual=[r for r in omitted if r['side']==side];assert gaps==[{k:r[k] for k in ['side','start','end','text']} for r in actual] and all(r['reason'] for r in actual)
+        for r in read(d/'original-dispositions.json'):
+            identity=r['original_identity'];key=(identity['angle'],identity['seq'],identity['id']);seen.append(key);assert identity==originals[key]
+            matches=[next(t for t in local if t['id']==i) for i in r['final_ids']];status=r['disposition'];dispositions[status]+=1;assert r['rationale']
+            if status=='RETAINED':assert len(matches)==1 and {k:identity[k] for k in ['seq','d','tib','eng','tib_range','eng_range']}=={k:matches[0][k] for k in ['seq','d','tib','eng','tib_range','eng_range']}
+            elif status=='RECAST_OR_TIGHTENED':assert matches
+            else:assert status=='OMITTED_DISTRIBUTED' and not matches
+        for e in read(d/'errata-analysis.json'):
+            assert e['refuted'] and set(e['five_grounds'])==set('abcde') and e['five_grounds']['a']['complete_source']==sources[seq]
+        assert read(d/'errata.json')==[] and read(d/'proposed-head-allowances.json')=={}
+        assert sum(s['eng'] is None for s in spans)==1 and sum(s['d']==5 and s['eng'] is not None for s in spans)==d5
+        finals+=local;results.append(dict(seq=seq,exit=0,spans=count,nulls=1,word_pairs=d5,spec_bytes=pin(d/'spec.json')['bytes'],spec_sha256=pin(d/'spec.json')['sha256'],body_bytes=len(raw),body_sha256=hashlib.sha256(raw).hexdigest(),saved_body_identical=True))
+    assert len(finals)==112 and len(seen)==len(set(seen))==211 and set(seen)==set(originals)
+    assert freezes==[frozen(B/a/str(s)) for a in ['tibetan','english','reconciled'] for s in [274,275,276]]
+    for n,h in base['sha256'].items():assert pin(W/n)['sha256']==h,n
+    assert pin(W/'build/hgm_spine_v27_2.db')==before_db
+    assert run(['git','status','--short'],'status').decode()=='?? data/teaching/dcc_captions\n'
+    save('resolved-spans.json',finals);save('report.json',results)
+    proof.update(status='PASS mechanical source and identity verification',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),baseline=base['commit'],freezes=freezes,original_identities=211,final_spans=112,nulls=3,nonnull_d5=81,dispositions=dict(dispositions),queries=len(queries),source_copy_records=len(mappings),aliases=len(aliases),governing_git_objects=len(governing),physical_extents=len(physical),complete_prior_freeze_retention_rows=retained,source_database_unchanged=True,canonical_replays=3,canonical_wrapper=pin(wrapper),canonical_generator=pin(W/'tools/gen_alignment_page.py'),semantic_approval=False)
+except Exception:
+    proof.update(status='FAILED',failure=traceback.format_exc());raise
+finally:
+    if db is not None:db.rollback();db.close()
+    save('execution-proof.json',proof);print(json.dumps(proof,indent=2))

@@ -1,0 +1,17 @@
+import pathlib,json,hashlib
+p=pathlib.Path('campaign-artifacts/C05-274-276/semantic-review')
+r=json.loads((p/'review.json').read_text());print('verdict',r['verdict'],'checklist',len(r['checklist']),'findings',len(r['open_findings']))
+print('finalize', (p/'finalize-proof.json').read_text())
+f=json.loads((p.parent/'semantic-review-preparation/freeze.json').read_text());print('PREfiles',len(f['files']))
+print('own transports',len(json.loads((p/'own-execution-format-transports.json').read_text())))
+for x in r['segments']:
+ s=str(x['seq'])
+ for n in ['spec','body']:
+  data=(p/'reviewed-final'/s/(n+('.json' if n=='spec' else '.html'))).read_bytes()
+  assert len(data)==x[n+'_bytes'] and hashlib.sha256(data).hexdigest()==x[n+'_sha256']
+assert r['report']['sha256']==hashlib.sha256((p/'review.md').read_bytes()).hexdigest()
+assert sum(s['span_count'] for s in r['segments'])==112
+assert sum(s['null_count'] for s in r['segments'])==3
+assert sum(s['word_pair_count'] for s in r['segments'])==81
+assert all(list(x)==['seq','id','d','tib','eng','tib_range','eng_range'] for x in json.loads((p/'resolved-spans.json').read_text()))
+print('interface consistency PASS')

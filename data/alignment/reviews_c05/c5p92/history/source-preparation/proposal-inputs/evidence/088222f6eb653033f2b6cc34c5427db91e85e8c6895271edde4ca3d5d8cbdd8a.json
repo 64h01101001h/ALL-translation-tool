@@ -1,0 +1,48 @@
+{
+  "status": "PASS scoped actual-predicate inspection",
+  "utc": "2026-09-13T06:38:46.128126+00:00",
+  "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_supplied_span_head.py",
+  "bytes": 3788,
+  "sha256": "5783bbd12eff2b371a10852c32744a30ca9f8d226b66dd7907bd4af3aa721655",
+  "actual_function_word_regex": "(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) ",
+  "actual_pattern": "<span class=\"u[^\"]*\" data-d=\"([57])\" data-l=\"(s\\d+\\w+)\">(?:<span class=\"u[^\"]*\" data-d=\"7\" data-l=\"s\\d+\\w+\">)?(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) ",
+  "checks": [
+    {
+      "english": "you",
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s275p1\">you</span>",
+      "actual_matches": [],
+      "expected_count": 0
+    },
+    {
+      "english": "you agree",
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s275p1\">you agree</span>",
+      "actual_matches": [
+        [
+          "5",
+          "s275p1"
+        ]
+      ],
+      "expected_count": 1
+    },
+    {
+      "english": "You",
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s275p1\">You</span>",
+      "actual_matches": [],
+      "expected_count": 0
+    },
+    {
+      "english": "You agree",
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s275p1\">You agree</span>",
+      "actual_matches": [
+        [
+          "5",
+          "s275p1"
+        ]
+      ],
+      "expected_count": 1
+    }
+  ],
+  "suite_invoked": false,
+  "source_modified": false,
+  "correction": "Root's reconciliation-dispatch statement that standalone khyod/you necessarily requires a gate allowance was too broad. The actual regex requires an ASCII space after you. A standalone you span does not hit it. Independent semantic licensing and occurrence review remain required."
+}

@@ -1,0 +1,15 @@
+import hashlib,json,pathlib
+E=pathlib.Path(__file__).resolve().parent.parent
+results=[]
+for seq in (274,275,276):
+ d=E/str(seq);assert not (d/'freeze.json').exists();files=[]
+ for p in sorted(d.rglob('*')):
+  if p.is_file():
+   b=p.read_bytes();files.append(dict(path=str(p.relative_to(d)),bytes=len(b),sha256=hashlib.sha256(b).hexdigest()))
+ obj=dict(role='Codex independent English-first ORIGINAL, reused context; no semantic approval',seq=seq,baseline='81942cfc6022a785894d3cc2a20de81dc4c6f599',files=files,file_count=len(files),total_bytes=sum(x['bytes'] for x in files),external_full_evidence_manifest='shared-evidence-references.json',freeze_boundary='All files below this directory at finalization except this self manifest; complete shared originals retained at explicit pinned paths.')
+ b=(json.dumps(obj,ensure_ascii=False,indent=2)+'\n').encode();(d/'freeze.json').write_bytes(b)
+ for f in files:
+  b2=(d/f['path']).read_bytes();assert len(b2)==f['bytes'] and hashlib.sha256(b2).hexdigest()==f['sha256']
+ assert {str(p.relative_to(d)) for p in d.rglob('*') if p.is_file()}=={f['path'] for f in files}|{'freeze.json'}
+ results.append(dict(seq=seq,files=len(files),bytes=obj['total_bytes'],freeze_sha256=hashlib.sha256(b).hexdigest(),path=str(d/'freeze.json')))
+print(json.dumps(results,indent=2))

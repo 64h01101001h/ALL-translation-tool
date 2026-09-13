@@ -1,0 +1,62 @@
+from pathlib import Path
+import json,hashlib,datetime,collections,os
+D=Path(__file__).resolve().parent;B=D.parents[1];W=B.parents[1]/'campaign-worktree'
+def pin(p):
+ b=Path(p).read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):
+ with p.open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+# Previous command metadata used abbreviated/absolute helper display paths; preserve it and record actual relative shell argv.
+hist=D/'history/command-metadata';hist.mkdir(parents=True)
+commands=[]
+for label,helper,code in [('capture','capture.py',0),('replay','replay-originals.py',0),('decide','decide.py',0),('supplement','supplement.py',0),('canonical-final','canonical-final.py',0),('document','document.py',0),('finish','finish.py',1),('finish-v2','finish-v2.py',0)]:
+ p=D/(label+'.execution.json')
+ if p.exists():(hist/p.name).write_bytes(p.read_bytes())
+ rel='campaign-artifacts/C05-274-276/reconciled/274/'+helper
+ record=dict(argv=['python3','-B',rel],cwd=str(B.parents[1]),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'},exit=code,stdout=pin(D/(label+'.stdout')),stderr=pin(D/(label+'.stderr')),helper=pin(D/helper),shell_command='PYTHONDONTWRITEBYTECODE=1 python3 -B '+rel+' > campaign-artifacts/C05-274-276/reconciled/274/'+label+'.stdout 2> campaign-artifacts/C05-274-276/reconciled/274/'+label+'.stderr')
+ p.write_text(json.dumps(record,indent=2)+'\n');commands.append(record)
+save(D/'attempt-history.json',dict(actual_commands=commands,original_attempts='Complete original frozen trees/source prep and current root verification failure histories copied by exact source paths. Tibetan first construction failed at separated la/brten nas after writing274; premature canonical caller passed274 then stopped before absent275; fresh275/276 succeeded. English two drafting ambiguities mdzes/skyes were refused before275 creation; canonical six current inputs passed and each reconciler replay passed once.',current_failure='finish.py failed at Python parse before any writes, exit1; exact source/stdout/stderr retained. finish-v2.py fixes the malformed dict keyword and adds the subsequently supplied exact author clarification. No canonical retry and no semantic gate change.',current_final_attempts=3,original_replays=6,metadata_correction='Display-path argv records are retained in history/command-metadata; current actual argv records use the relative path passed by the saved shell invocation. Subprocess canonical argv in per-attempt records was already captured from actual subprocess calls.'))
+manifest=json.loads((D/'original-copy-manifest.json').read_bytes());checks=[]
+for r in manifest:
+ original=Path(r['original']);copy=D/r['copy'];assert copy.resolve().is_relative_to(D)
+ b=original.read_bytes();cb=copy.read_bytes();assert b==cb and original.read_bytes()==b
+ assert dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())=={k:r[k] for k in ('bytes','sha256')}
+ checks.append(dict(original=str(original),copy=r['copy'],full_bytes_equal=True,**pin(copy)))
+save(D/'supported-copy-byte-preflight.json',dict(status='PASS',helper='Reviewed copy_evidence_once_v2.py selected explicitly; reading-index/clone experiments not adopted',original_copy_records=len(checks),distinct_payloads=len({r['copy'] for r in checks}),records=checks,allowed_output_roots=[str(B/'reconciled'/str(s)) for s in (274,275,276)],landing_whitelist='No landing executed. The exact per-segment interface list is payload-whitelist.json; all remaining frozen files are evidence/history.'))
+base=json.loads((B/'baseline.json').read_bytes());before=json.loads((D/'capture-proof.json').read_bytes())['database'];assert pin(W/'build/hgm_spine_v27_2.db')==before
+for rel,h in base['sha256'].items():assert pin(W/rel)['sha256']==h
+original=json.loads((D/'original-replays/root-resolved-spans.json').read_bytes());seen=[];finalcount=0;payload=[];semchecks=[]
+for seq in (274,275,276):
+ out=B/'reconciled'/str(seq);ver=json.loads((out/'verification.json').read_bytes());spec=json.loads((out/'spec.json').read_bytes())['segments'][0];final=json.loads((out/'final-tuples.json').read_bytes());decisions=json.loads((out/'final-decisions.json').read_bytes());dispositions=json.loads((out/'original-dispositions.json').read_bytes());originalseq=[r for r in original if r['seq']==seq]
+ assert [d['original_identity'] for d in dispositions]==originalseq
+ assert [d['tuple'] for d in decisions]==final
+ assert [d['span'] for d in decisions]==spec['spans']
+ assert (out/'spec.json').read_bytes()==(out/'canonical-attempt01/stdin.json').read_bytes()
+ assert (out/'body.html').read_bytes()==(out/'canonical-attempt01/stdout.html').read_bytes()
+ for n in ('spec','body'):assert pin(out/(n+'.json' if n=='spec' else n+'.html'))=={k:ver[n][k] for k in ('bytes','sha256')}
+ assert (out/'canonical-attempt01/exit.txt').read_bytes()==b'0\n' and (out/'canonical-attempt01/stderr.bin').read_bytes()==b''
+ assert all(len(t)==7 and list(t)==['id','d','tib','eng','tib_range','eng_range','parent_id'] for t in final)
+ # Every flat source byte belongs exactly once to a final span or a recorded omission.
+ source=json.loads((out/'canonical-occurrence-proof.json').read_bytes())['source'];omissions=json.loads((out/'omissions.json').read_bytes())
+ for side,key in [('tib','wylie'),('eng','english')]:
+  chunks=[(t[side+'_range'][0],t[side+'_range'][1],t[side]) for t in final if t['d']!=7 and t[side] is not None]+[(r['start'],r['end'],r['text']) for r in omissions if r['side']==side];chunks.sort();cur=0
+  for lo,hi,text in chunks:assert lo==cur and source[key][lo:hi]==text;cur=hi
+  assert cur==len(source[key])
+ seen+=dispositions;finalcount+=len(final)
+ for name in ['spec.json','body.html','errata.json','report.md']:
+  payload.append(dict(source=str(out/name),seq=seq,kind='future interface only; no write to repository',**pin(out/name)))
+ semchecks.append(dict(seq=seq,original_dispositions=len(dispositions),final_spans=len(final),nulls=ver['nulls'],canonical_exit=0,whole_source_partition_exact=True))
+assert len(seen)==211 and finalcount==112
+save(D/'payload-whitelist.json',payload)
+save(D/'final-preflight.json',dict(status='PASS_FIDELITY_AND_COMPLETE_DISPOSITION_TRANSPORT_NOT_SEMANTIC_APPROVAL',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),baseline_commit=base['commit'],baseline_pins=base['sha256'],database_unchanged=before,summary=semchecks,original_identities=211,final_spans=112,errata=0,source_copy_records=len(manifest),output_boundary='Only current reconciled/{274,275,276}; sources, repository, index, master, original angles and protocol unchanged.'))
+# Current exact tree freezes include every nested historical file, but each excludes only its own top freeze.
+for seq in (275,276,274):
+ out=B/'reconciled'/str(seq);entries={}
+ for p in sorted(out.rglob('*')):
+  assert not p.is_symlink(),p
+  if p.is_file():
+   assert p.name!='freeze.json' or p!=out/'freeze.json'
+   entries[str(p.relative_to(out))]=pin(p)
+ save(out/'freeze.json',dict(status='DONE_RECONCILED_PROVISIONAL_REQUIRES_DISTINCT_SEMANTIC_REVIEW',producer='Codex /root/c05_253_255_reconcile reused non-author',files=entries,file_count=len(entries),bytes=sum(r['bytes'] for r in entries.values()),excluded=['freeze.json']))
+ assert set(entries)=={str(p.relative_to(out)) for p in out.rglob('*') if p.is_file() and p!=out/'freeze.json'}
+ for n,r in entries.items():assert pin(out/n)==r
+ print(json.dumps(dict(seq=seq,freeze=pin(out/'freeze.json'),files=len(entries),bytes=sum(r['bytes'] for r in entries.values()))))

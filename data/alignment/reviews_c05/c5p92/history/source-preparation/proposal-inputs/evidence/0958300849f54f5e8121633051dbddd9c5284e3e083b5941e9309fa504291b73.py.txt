@@ -1,0 +1,68 @@
+from pathlib import Path
+import datetime,gzip,hashlib,importlib.util,json,os,sqlite3,subprocess,sys
+sys.dont_write_bytecode=True
+D=Path(__file__).resolve().parent;B=D.parents[1];A=B.parent;W=A.parent/'campaign-worktree'
+def pin(p):
+ raw=Path(p).read_bytes();return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def save(name,x):
+ p=D/name;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+base=json.loads((B/'baseline.json').read_bytes());assert base['commit']=='81942cfc6022a785894d3cc2a20de81dc4c6f599'
+for rel,sha in base['sha256'].items():assert pin(W/rel)['sha256']==sha
+db=W/'build/hgm_spine_v27_2.db';before=pin(db)
+assert before=={'bytes':249167872,'sha256':'5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc'}
+c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON')
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));courses={}
+for row in corpus:courses.setdefault(row['course'],[]).append(row)
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries']
+prep=['root-lexical-preparation.json','root-additional-lexical-preparation.json','root-parallel-preparation.json']
+replayed=[]
+for name in prep:
+ for q in json.loads((B/name).read_bytes()):
+  actual=[dict(r) for r in c.execute(q['sql'],q['parameters'])];assert actual==q['rows'] and len(actual)==q['count']
+  for r in actual:
+   expected=courses[r['course']][r['seq']-1] if 'course' in r else master[r['id']-1]
+   assert json.loads(r['raw'])==expected
+  replayed.append({'original_file':name,'sql':q['sql'],'parameters':q['parameters'],'count':len(actual),'full_rows_exact':True})
+queries=[]
+for field,term in [('wylie','kha spos'),('english','no one of the beings'),('english','neither the enemy nor the friend'),('english','Your reasoning here is though incorrect'),('wylie','khong du ma chud pa'),('english','Numerist School')]:
+ sql='SELECT * FROM corpus_segments WHERE '+field+' LIKE ? ORDER BY course,seq';params=['%'+term+'%'];rows=[dict(r) for r in c.execute(sql,params)]
+ for r in rows:assert json.loads(r['raw'])==courses[r['course']][r['seq']-1]
+ queries.append({'sql':sql,'parameters':params,'count':len(rows),'rows':rows});print(field,term,len(rows))
+save('supplemental-corpus-full.json',queries);save('earlier-preparation-replay.json',replayed)
+c.close();assert pin(db)==before
+source={r['seq']:r for r in json.loads((B/'source.json').read_bytes())}
+parallels=[]
+for seq,other in [(274,419),(275,420),(276,421)]:
+ a=source[seq]
+ # Corpus raw objects carry no ordinal seq key. Use the proven course order.
+ b=courses['C15'][other-1]
+ fields={k:a[k]==b[k] for k in ('acip','wylie','english')}
+ if seq==275:
+  assert fields=={'acip':True,'wylie':True,'english':False}
+  assert a['english'].replace('[non- Buddhist]','[non-Buddhist]')==b['english']
+ else:assert all(fields.values())
+ parallels.append({'C05':seq,'C15':other,'fields':fields,'source':a,'comparison_full_raw':b,'independent_publication_established':False})
+save('source-parallel-comparison.json',parallels)
+register=json.loads((W/'docs/errata_register.json').read_bytes())
+save('register-shape-observation.json',{'type':type(register).__name__,'top_level_count':len(register),'note':'Complete register is copied below; actual record schema is inspected before final errata count claims.'})
+spec=importlib.util.spec_from_file_location('copy_evidence_v2',A/'copy_evidence_once_v2.py');copytool=importlib.util.module_from_spec(spec);spec.loader.exec_module(copytool)
+inputproof=json.loads((D/'input-proof.json').read_bytes()); originals=[Path(x['path']) for x in inputproof['inputs'] if Path(x['path']).resolve()!=db.resolve()]
+originals += [B/n for n in ['root-preparation-original-rows.json','root-review-targets.md','root-preparation-proof.json','root-additional-preparation-proof.json','root-preparation-wording-correction.json',*prep]]
+originals += [A/'copy_evidence_once_v2.py',A/'copy_evidence_once_v2-verification.json',W/'docs/alignment_briefs/REFUTE_BRIEF.md',W/'docs/NEVER_BANK_A_FALSEHOOD.md',Path(inputproof['physical']['path']),B/'baseline-boundary.json']
+save('copy-v2-result.json',copytool.preserve(D,D/'original-to-copy-manifest.json',originals))
+aliases=[]
+for p in originals:
+ aliases.append({'alias':str(p),'symlink':os.readlink(p) if p.is_symlink() else None,'resolved':str(p.resolve(strict=True)),**pin(p)})
+save('supplied-aliases.json',aliases)
+governing=[]
+for i,rel in enumerate(['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']):
+ argv=['git','show',base['commit']+':'+rel];out=D/'governing-git'/str(i);out.mkdir(parents=True,exist_ok=False)
+ start=datetime.datetime.now(datetime.timezone.utc).isoformat();p=subprocess.run(argv,cwd=W,env={**os.environ,'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1'},input=b'',capture_output=True)
+ for n,raw in [('stdin.bin',b''),('stdout.bin',p.stdout),('stderr.bin',p.stderr)]: (out/n).write_bytes(raw)
+ (out/'exit.txt').write_text(str(p.returncode)+'\n');save('governing-git/'+str(i)+'/command.json',{'argv':argv,'cwd':str(W),'started_at':start,'finished_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'environment_overrides':{'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1'},'exit':p.returncode})
+ assert p.returncode==0 and not p.stderr and p.stdout==(W/rel).read_bytes()
+ governing.append({'original':str(W/rel),'original_git_commit':base['commit'],'repository_relative_path':rel,'copy':str((out/'stdout.bin').relative_to(D)),**pin(out/'stdout.bin')})
+save('governing-original-copy-manifest.json',governing)
+save('source-evidence-verification.json',{'status':'PASS_FULL_LOCAL_SOURCE_AND_GOVERNING_EVIDENCE','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'database_before':before,'database_after':pin(db),'sqlite':'mode=ro;query_only=ON','prior_preparation_query_replays':len(replayed),'new_material_query_sets':len(queries),'new_material_full_rows':sum(q['count'] for q in queries),'governing_Git_objects':len(governing),'current_input_pins':{r:pin(W/r) for r in base['sha256']},'originals_preserved_by_copy_v2':len(originals),'role':'Primary Codex Tibetan-first; own preparation disclosed, no current English-first proposal or semantic judgment read','publication_independence':'Not established by digital equality or course-shape metadata'})
+print('PASS_FULL_LOCAL_SOURCE_AND_GOVERNING_EVIDENCE')

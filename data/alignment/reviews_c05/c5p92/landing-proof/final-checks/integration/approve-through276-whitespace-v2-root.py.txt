@@ -1,0 +1,55 @@
+from pathlib import Path
+import datetime, difflib, hashlib, json
+
+I = Path(__file__).resolve().parent
+C = I / 'through276-whitespace-v2-candidate'
+R = I / 'through276-whitespace-v2-review'
+O = I / 'through276-whitespace-v2-root-code'
+assert not O.exists()
+O.mkdir()
+def pin(b):
+    return dict(bytes=len(b), sha256=hashlib.sha256(b).hexdigest())
+def read(p):
+    return Path(p).read_bytes()
+def obj(p):
+    return json.loads(read(p))
+def frozen(d, expected):
+    raw = read(d/'freeze.json'); assert pin(raw)['sha256'] == expected
+    f = json.loads(raw)
+    assert set(f['files']) | {'freeze.json'} == {str(p.relative_to(d)) for p in d.rglob('*') if p.is_file()}
+    for rel, q in f['files'].items():
+        assert pin(read(d/rel)) == q, rel
+    assert len(f['files']) == f['file_count']
+    assert sum(q['bytes'] for q in f['files'].values()) == f['total_bytes']
+    rows = obj(d/'original-to-copy-manifest.json')
+    for r in rows:
+        b = read(r['original'])
+        assert b == read(d/r['copy']) and pin(b) == {k:r[k] for k in ('bytes','sha256')}, r
+    return dict(freeze=pin(raw), files=f['file_count'], bytes=f['total_bytes'], original_copy_pairs=len(rows))
+
+candidate = frozen(C, 'd451e0dead25a06134dac4486a4448afb74756ab5f4e845e049f45e2be7914f7')
+review = frozen(R, 'ffd87144f9d204cb6fdc32b26c92f198c2431fd5182352b8d309b48c0a89e8a4')
+external = obj(C/'external-retention.json')
+for q in external:
+    assert pin(read(q['path'])) == {k:q[k] for k in ('bytes','sha256')}
+old = read(C/'old-runtime/whitespace276.py'); new = read(C/'runtime/whitespace276.py')
+a = obj(C/'adaptation.json')
+pred = read(C/'new-predicate.py.txt'); binding = read(C/'new-binding.py.txt')
+assert new.count(pred) == new.count(binding) == new.count(a['new_fallback'].encode()) == 1
+assert new.replace(pred,b'',1).replace(binding,b'',1).replace(a['new_fallback'].encode(),a['old_fallback'].encode(),1) == old
+assert read(C/'v1-v2.diff') == ''.join(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile='approved/whitespace276.py',tofile='runtime/whitespace276.py')).encode()
+v = obj(R/'review.json'); p = obj(R/'independent-proof.json')
+assert v['spec_verdict'] == v['quality_verdict'] == 'APPROVE_CODE_ONLY' and v['open_findings'] == []
+assert v['candidate_freeze'] == candidate['freeze'] and v['code'] == pin(new)
+assert v['descriptor'] == pin(read(C/'runtime/syntax-diagnostic-descriptors.json'))
+assert v['report'] == pin(read(R/'report.md')) and v['proof'] == pin(read(R/'independent-proof.json'))
+assert len(p['independent_negative_checks']) == 14 and p['compiler_calls'] == 0
+assert all(q['result'] == 'REJECTED_BEFORE_CLASSIFIER' for q in p['independent_negative_checks'])
+for label, code in [('red',1),('adapt',0),('green',0),('dispatch-red',1),('dispatch-green',0),('final-verification',0)]:
+    d = C/'attempts'/label; e = obj(d/'execution.json')
+    assert e['exit'] == int(read(d/'exit.txt')) == code
+    assert e['stdout_bytes'] == len(read(d/'stdout.bin')) and e['stderr_bytes'] == len(read(d/'stderr.bin'))
+assert int(read(R/'caller.exit.txt')) == 0 and read(R/'caller.stderr.bin') == b''
+result = dict(status='APPROVE_EXACT_V2_FOR_FRESH_PREPARE_AND_AUDIT', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), candidate=candidate, independent_review=review, external_full_files=len(external), code=pin(new), descriptor=v['descriptor'], full_inverse_and_diff_exact=True, report_full_read=True, actual_cli_executions_so_far=0, early_global276_required=True, obligations=['Retain original failed prepare and diagnostic unchanged','Run fresh prepare-v2 and audit-v2 outside frozen inputs with assertions and no bytecode','Accept full consumed input, warning, index and HEAD proofs before banking','No source whitespace edits; no canonical builders or tests rerun'])
+(O/'proof.json').write_text(json.dumps(result,indent=2)+'\n')
+print('PASS root code approval: 95 candidate + 151 review files, 430 original-copy pairs, 113 external files; early global276 required')

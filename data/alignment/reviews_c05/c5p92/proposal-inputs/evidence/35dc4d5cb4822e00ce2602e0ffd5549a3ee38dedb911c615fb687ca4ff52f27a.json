@@ -1,0 +1,18 @@
+{
+  "provenance": "Faithful preservation of tool-returned execution metadata after resume; not a new subprocess execution or canonical rerun.",
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B campaign-artifacts/C05-274-276/reconciled/274/gate-correction.py",
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "exit_code": 0,
+  "stderr": "",
+  "captured_stdout": "{\"seq\": 275, \"freeze\": {\"bytes\": 3604, \"sha256\": \"482334a87ab99ff30fd201ec897d51a8f0bd6327d67f4c17edc7ea4ec2f6778c\"}, \"files\": 23, \"bytes\": 604917}\n{\"seq\": 276, \"freeze\": {\"bytes\": 3592, \"sha256\": \"6fb42016746b95a47b2e72b0ad13cab9dac567f67955c78dd6812132c4339490\"}, \"files\": 23, \"bytes\": 103073}\n{\"seq\": 274, \"freeze\": {\"bytes\": 90608, \"sha256\": \"ed33a857cba7b079b87a71d91f09228d2eed922fe6763c28a2b0f580c3e2d890\"}, \"files\": 487, \"bytes\": 32862367}\n",
+  "resumed_full_freeze_recheck": {
+    "exit_code": 0,
+    "all_three_trees_exact": true,
+    "files": [
+      487,
+      23,
+      23
+    ]
+  },
+  "scope": "Only metadata/history added. All initial freezes remain historically exact; current top freeze is refreshed to enumerate these added records."
+}

@@ -1,0 +1,74 @@
+from pathlib import Path
+import json,hashlib,sqlite3,gzip,importlib.util,os,subprocess,sys,re,datetime
+sys.dont_write_bytecode=True
+D=Path(__file__).resolve().parent;B=D.parents[1];R=B.parents[1];W=R/'campaign-worktree';A=B.parent
+
+def pin(p):
+ b=Path(p).read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,x):
+ p=D/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+refs=[Path('/Users/adamderickandrade')/s for s in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']]
+for p in refs:assert p.is_dir() and os.access(p,os.R_OK)
+save('required-access.json',[str(p) for p in refs])
+originals=[p for p in B.rglob('*') if p.is_file() and not p.is_relative_to(B/'reconciled') and not any(x.startswith('semantic-review') for x in p.relative_to(B).parts)]
+# Retain complete actual inputs and every alias recorded in existing original source-copy manifests.
+extra=[]
+for p in originals:
+ if p.suffix=='.json':
+  def walk(x):
+   if isinstance(x,dict):
+    for k,v in x.items():
+     if k in ('original','source') and isinstance(v,str) and v.startswith('/') and Path(v).is_file() and not v.endswith('.db'):extra.append(Path(v))
+     walk(v)
+   elif isinstance(x,list):
+    for v in x:walk(v)
+  walk(json.loads(p.read_bytes()))
+originals+=extra
+originals+=[W/s for s in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json','data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']]
+originals+=[A/'copy_evidence_once_v2.py',A/'copy_evidence_once_v2-verification.json']
+originals=list(dict.fromkeys(originals));aliases=[dict(alias=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,**pin(p)) for p in originals]
+spec=importlib.util.spec_from_file_location('copyv2',A/'copy_evidence_once_v2.py');cp=importlib.util.module_from_spec(spec);spec.loader.exec_module(cp)
+save('copy-result.json',cp.preserve(D,D/'original-copy-manifest.json',originals));save('aliases.json',aliases)
+base=json.loads((B/'baseline.json').read_bytes())
+for rel,h in base['sha256'].items():assert pin(W/rel)['sha256']==h
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON')
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));courses={}
+for r in corpus:courses.setdefault(r['course'],[]).append(r)
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries']
+source=[dict(r) for r in c.execute("SELECT * FROM corpus_segments WHERE course='C05' AND seq BETWEEN 268 AND 282 ORDER BY seq")];save('source-full-rows.json',source)
+for r,x in zip(source,json.loads((B/'context.json').read_bytes())):
+ assert all(r[k]==v for k,v in x.items());assert json.loads(r['raw'])==courses['C05'][r['seq']-1]
+qs=[]
+# Reopen every saved executable source/glossary/corpus query, including both producer angles.
+for p in originals:
+ if p.suffix!='.json':continue
+ def queries(x):
+  if isinstance(x,dict):
+   if 'sql' in x and isinstance(x['sql'],str) and 'rows' in x and ('parameters' in x or 'params' in x):yield x
+   for v in x.values():yield from queries(v)
+  elif isinstance(x,list):
+   for v in x:yield from queries(v)
+ for q in queries(json.loads(p.read_bytes())):
+  sql=q['sql'];params=q.get('parameters',q.get('params'));assert sql.lstrip().upper().startswith('SELECT')
+  actual=[dict(r) for r in c.execute(sql,params)];assert actual==q['rows'],str(p)
+  for r in actual:
+   if 'raw' in r:
+    assert json.loads(r['raw'])==(courses[r['course']][r['seq']-1] if 'course' in r else master[r['id']-1])
+  qs.append(dict(original=str(p),sql=sql,parameters=params,count=len(actual),rows=actual))
+save('full-query-replays.json',qs)
+physical=[]
+for course,seqs in [('C05',[274,275,276]),('C15',[419,420,421])]:
+ p=refs[0]/'To DO/Formal Courses/ACI Readings In Roman ASCII'/f'{course}ReadingASCII.txt';raw=p.read_bytes()
+ for seq in seqs:
+  r=dict(c.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(course,seq)).fetchone())
+  for field in ('acip','english'):
+   val=r[field].encode();pattern=rb'[ \t\r\n\v\f]+'.join(re.escape(x) for x in re.split(rb'[ \t\r\n\v\f]+',val));hits=list(re.finditer(pattern,raw))
+   rr=dict(original=str(p),course=course,seq=seq,field=field,original_pin=pin(p),matches=len(hits),extents=[])
+   for i,h in enumerate(hits):
+    n=f'physical/{course}-{seq}-{field}-{i}.bin';(D/n).parent.mkdir(exist_ok=True);(D/n).write_bytes(h.group());rr['extents'].append(dict(start=h.start(),end=h.end(),copy=n,**pin(D/n)))
+   physical.append(rr)
+save('physical-extents.json',physical)
+c.close()
+save('capture-proof.json',dict(status='PASS',queries=len(qs),full_rows=sum(len(q['rows']) for q in qs),source_rows=len(source),originals=len(originals),database=pin(W/'build/hgm_spine_v27_2.db'),sqlite='URI mode=ro; query_only=ON',baseline=base,physical=physical))
+print('PASS',len(originals),'original paths;',len(qs),'full query replays')

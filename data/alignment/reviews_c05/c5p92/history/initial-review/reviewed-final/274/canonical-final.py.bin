@@ -1,0 +1,52 @@
+from pathlib import Path
+import json,hashlib,os,subprocess,sys,datetime,importlib.util
+from html.parser import HTMLParser
+sys.dont_write_bytecode=True
+D=Path(__file__).resolve().parent;B=D.parents[1];W=B.parents[1]/'campaign-worktree'
+def pin(p):
+ b=Path(p).read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):
+ with p.open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+class Parse(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.active=None;self.out=[];self.skip=0
+ def handle_starttag(self,t,a):
+  a=dict(a)
+  if t=='span':
+   label=a.get('data-l')
+   if label and label.endswith('S'):assert self.active is None;self.active=dict(text='',ranges={},stack=[],nulls={})
+   if self.active is not None:
+    null='nul' in a.get('class','').split();self.active['stack'].append((label,len(self.active['text']),a,null))
+    if null:self.skip+=1
+ def handle_data(self,d):
+  if self.active is not None and not self.skip:self.active['text']+=d
+ def handle_endtag(self,t):
+  if t=='span' and self.active is not None:
+   label,start,a,null=self.active['stack'].pop()
+   if null:self.skip-=1
+   if label and label.endswith('S'):assert not self.active['stack'];self.out.append(self.active);self.active=None
+   elif label:assert label not in self.active['ranges'];self.active['ranges'][label]=dict(start=start,end=len(self.active['text']),depth=int(a['data-d']))
+sources={r['seq']:r for r in json.loads((D/'source-full-rows.json').read_bytes())}
+sys.path.insert(0,str(W/'tools'));sp=importlib.util.spec_from_file_location('g',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(sp);sp.loader.exec_module(g)
+summary=[]
+for seq in (274,275,276):
+ d=B/'reconciled'/str(seq);a=d/'canonical-attempt01';a.mkdir()
+ raw=(d/'spec.json').read_bytes();(a/'stdin.json').write_bytes(raw);spec=json.loads(raw);s=spec['segments'][0];source=sources[seq]
+ wrapper=B/'english/274/canonical_driver.py';code=[wrapper,B.parent/'run_generator_readonly.py',W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py'];before=[pin(p) for p in code]
+ argv=[sys.executable,'-B',str(wrapper),str(a/'sqlite-connections.json')];started=datetime.datetime.now(datetime.timezone.utc).isoformat();p=subprocess.run(argv,cwd=W,input=raw,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+ for n,b in [('stdout.html',p.stdout),('stderr.bin',p.stderr),('exit.txt',(str(p.returncode)+'\n').encode())]:(a/n).write_bytes(b)
+ after=[pin(x) for x in code];save(a/'execution.json',dict(argv=argv,cwd=str(W),environment={'PYTHONDONTWRITEBYTECODE':'1'},started_utc=started,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),stdin=pin(a/'stdin.json'),stdout=pin(a/'stdout.html'),stderr=pin(a/'stderr.bin'),exit=p.returncode,code_before=before,code_after=after));assert before==after;assert p.returncode==0 and not p.stderr,p.stderr
+ (d/'body.html').write_bytes(p.stdout)
+ spans=s['spans'];byid={r['id']:r for r in spans};tr=g.resolve(source['wylie'],spans,'tib',seq);er=g.resolve(source['english'],g.with_members(spans,[byid[i] for i in s['eng_order']],source['english']),'eng',seq)
+ final=json.loads((d/'final-tuples.json').read_bytes());html=Parse();html.feed(p.stdout.decode());assert len(html.out)==2
+ for side,index,key in [('tib',0,'wylie'),('eng',1,'english')]:
+  h=html.out[index];assert h['text']==source[key];assert set(h['ranges'])=={f's{seq}'+x['id'] for x in spans}
+  for r in final:
+   label=f's{seq}'+r['id'];observed=h['ranges'][label];assert observed['depth']==r['d']
+   if r[side] is None:assert observed['start']==observed['end']==len(source[key]);continue
+   expected=r[side+'_range'];resolved=(tr if side=='tib' else er)[r['id']];assert list(resolved)==expected and [observed['start'],observed['end']]==expected,(seq,side,r)
+   assert source[key][expected[0]:expected[1]]==r[side]
+   if r['parent_id']:
+    parent=next(x for x in final if x['id']==r['parent_id']);lo,hi=parent[side+'_range'];assert lo<=expected[0]<expected[1]<=hi and expected!=[lo,hi]
+ save(d/'canonical-occurrence-proof.json',dict(status='PASS',source=source,final_tuples=final,html_full_text_and_all_labels_exact=True,canonical_resolver_all_ranges_exact=True,source_optional_fields_retained=True))
+ row=dict(seq=seq,spans=len(spans),nulls=sum(x['eng'] is None for x in spans),depths={str(i):sum(x['d']==i for x in spans) for i in range(1,8)},spec=pin(d/'spec.json'),body=pin(d/'body.html'),canonical_exit=p.returncode,stderr_bytes=len(p.stderr),canonical_invocations=1,errata=0);save(d/'verification.json',row);summary.append(row)
+save(D/'final-canonical-summary.json',summary);print(json.dumps(summary,indent=2))

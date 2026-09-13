@@ -1,0 +1,56 @@
+from pathlib import Path
+import json, sqlite3, gzip, hashlib, datetime, re
+
+root=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+wt=root/'campaign-worktree'; batch=root/'campaign-artifacts/C05-271-273'
+out=Path(__file__).parent
+def dump(name,obj):
+    p=out/name
+    assert not p.exists(),p
+    p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+    return {'path':str(p),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+c=sqlite3.connect((wt/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True)
+c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON')
+source=json.loads((batch/'source.json').read_text());context=json.loads((batch/'context.json').read_text())
+rows=[dict(r) for r in c.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',265,279))]
+assert len(context)==len(rows)==15
+assert all({k:r[k] for k in x}==x for x,r in zip(context,rows))
+assert all({k:r[k] for k in x}==x for x,r in zip(source,rows[6:9]))
+corpus=json.loads(gzip.decompress((wt/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+c05=[x for x in corpus if x['course']=='C05'];assert len(c05)==511
+for r in rows:assert json.loads(r['raw'])==c05[r['seq']-1]
+physical=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt')
+raw=physical.read_bytes();physicalproof=[]
+for r in rows[6:9]:
+    for field in ['acip','english']:
+        val=r[field].encode()
+        pattern=rb'[ \t\r\n\v\f]+'.join(re.escape(x) for x in re.split(rb'[ \t\r\n\v\f]+',val))
+        hits=list(re.finditer(pattern,raw));assert len(hits)==1,(r['seq'],field,len(hits))
+        m=hits[0];extent=m.group()
+        assert re.sub(rb'[ \t\r\n\v\f]+',b' ',extent)==val
+        physicalproof.append({'seq':r['seq'],'field':field,'start':m.start(),'bytes':len(extent),'source_utf8':extent.decode('utf-8'),'ascii_whitespace_collapse_equals_spine':True,'sha256':hashlib.sha256(extent).hexdigest()})
+(out/'physical-C05ReadingASCII.txt').write_bytes(raw)
+dump('source-context-full-rows.json',rows)
+terms=['sos ka', "sos ka'i dus", 'dus', 'zla ba', 'reg bya', 'cha shas', 'gcig', 'nyer len', 'yi dvags', 'yi', 'dvags', 'las', 'lhan cig byed rkyen', 'lhan cig byed', 'rkyen', 'byas pa', 'brten nas', 'lus shes', 'lus', 'shes', 'myong', 'myong bya', 'gyur pa', 'tsha ba', 'skye ba', 'dgun dus', 'dgun', 'nyi ma', 'grang ba', 'lta bu', 'de ltar', 'bshes spring', 'bshes', 'spring', 'rnams', 'la', 'ni', 'ang', 'tsha', 'grang', 'zhes', 'gsungs pa', 'phyir', 'yang', 'yul', 'khyad par can', 'khyad par', 'de dag', 'dbang gis', 'spyir', 'ma', 'steng', 'med', 'mun pa', "mun pa'i rdzas", 'rdzas', 'der thal']
+master=json.loads(gzip.decompress((wt/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries']
+queries=[];masterrecords={}
+for term in terms:
+    sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'
+    rs=[dict(r) for r in c.execute(sql,(term,term))]
+    for r in rs:
+        ident=r['id'];m=master[ident-1];assert json.loads(r['raw'])==m,(term,ident)
+        masterrecords[str(ident)]=m
+    queries.append({'term':term,'sql':sql,'parameters':[term,term],'count':len(rs),'rows':rs})
+    print(term,json.dumps([{'id':r['id'],'wylie':r['wylie'],'hgm_gloss':r['hgm_gloss'],'tier':r['tier'],'source':r['hgm_source']} for r in rs],ensure_ascii=False))
+dump('lexical-queries-full.json',queries);dump('master-entries-full.json',masterrecords)
+parallel=[]
+for r in rows[6:9]:
+    for field in ['acip','wylie','english']:
+        sql='SELECT * FROM corpus_segments WHERE '+field+'=? ORDER BY course,seq'
+        rs=[dict(x) for x in c.execute(sql,(r[field],))]
+        parallel.append({'seq':r['seq'],'field':field,'sql':sql,'parameters':[r[field]],'count':len(rs),'rows':rs})
+        print('PARALLEL',r['seq'],field,[(x['course'],x['seq']) for x in rs])
+dump('parallel-queries-full.json',parallel)
+inputs=[wt/'AGENTS.md',wt/'docs/ALIGNMENT_LAYER_SPEC.md',wt/'docs/alignment_briefs/PROPOSE_BRIEF.md',wt/'data/alignment/C05_CAMPAIGN.md',wt/'tools/gen_alignment_page.py',wt/'tools/build_alignment_layer.py',wt/'docs/errata_register.json',wt/'data/hgm_dictionary_v27_2.json.gz',wt/'data/full_parallel_corpus_v32.json.gz',wt/'build/hgm_spine_v27_2.db',batch/'source.json',batch/'context.json',batch/'baseline.json',batch/'proposal-role-and-version-addendum.md',batch/'tibetan-brief.md',batch.parent/'proposal-protocol.md']
+dump('input-proof.json',{'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'primary Codex, Tibetan-first original; prior own source/glossary preparation acknowledged','peer_isolation':'No English271–273 proposal or semantic findings read. Only assignment/status metadata received.','source_context_verified_fields':['id','course','seq','acip','wylie','english'],'corpus_raw_complete_equality':15,'physical':pin(physical),'physical_extents':physicalproof,'inputs':[pin(p) for p in inputs],'sqlite':'URI mode=ro; PRAGMA query_only=ON; full rows stored','capture_history':'This helper adapts the primary author own268 capture mechanics to actual271–273 sources and queries. No earlier failure is claimed as a current run. The earlier helper is preserved as prior-capture-helper.py.txt.'})

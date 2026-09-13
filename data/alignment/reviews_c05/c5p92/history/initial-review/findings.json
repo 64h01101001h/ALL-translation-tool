@@ -1,0 +1,51 @@
+[
+  {
+    "id": "C05-275-OMISSION-01",
+    "status": "OPEN",
+    "severity": "REQUIRED_METADATA_CORRECTION",
+    "seq": 275,
+    "span_id": "r54",
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/reconciled/275/omissions.json",
+    "source_pin": {
+      "bytes": 65226,
+      "sha256": "044d2e17f3c23b56200243614d57f48c6660c209ed91b1900ca90c60382b17d2"
+    },
+    "affected_gap": {
+      "side": "eng",
+      "start": 3,
+      "end": 34,
+      "text": " comes and makes the following ",
+      "disposition": "OMITTED_NOT_NULL",
+      "reason": "Comes and is rhetorical introduction; kept zer na claims only makes the following claim.",
+      "original_omission_contexts": [
+        {
+          "side": "eng",
+          "gap_index": 0,
+          "start": 3,
+          "end": 14,
+          "text": " comes and ",
+          "disposition": "OMIT, not null",
+          "reason": "Comes and is rhetorical introduction; kept zer na claims only makes the following claim."
+        }
+      ]
+    },
+    "final_tuple": {
+      "seq": 275,
+      "id": "r54",
+      "d": 5,
+      "tib": "zer",
+      "eng": "claim",
+      "tib_range": [
+        569,
+        572
+      ],
+      "eng_range": [
+        34,
+        39
+      ]
+    },
+    "problem": "Current omission reason describes the superseded wider zer na/makes the following claim pairing, contradicting the actual final zer/claim span and its complement.",
+    "minimal_remedy": "Change only the current gap reason to describe zer/claim and the unwrapped English reporting presentation. Preserve exact gap fields, original_omission_contexts, original dispositions, all specs/bodies/notes/tuples and complete previous versions.",
+    "required_follow_up": "Scoped independent review of actual corrected frozen metadata; no successful canonical rerun for byte-identical specs/bodies/notes."
+  }
+]

@@ -1,0 +1,80 @@
+"""Preserve full preimages, then apply three independently identified prose fixes.
+
+No source/spec/body/tuple/note/occurrence/disposition changes or canonical runs.
+The separate reviewer must review these actual resulting files before acceptance.
+"""
+from pathlib import Path
+import datetime, difflib, hashlib, json, shutil
+B = Path(__file__).resolve().parent
+H = B/'pre-metadata-correction01'
+O = B/'metadata-correction01'
+H.mkdir(exist_ok=False); O.mkdir(exist_ok=False)
+def pin(raw): return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def js(p): return json.loads(p.read_bytes())
+def save(p,x): p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+root = js(B/'root-initial-semantic-review-verification/proof.json')
+assert root['status']=='PASS_INITIAL_REVIEW_PRESERVATION' and root['review_verdict']=='NEEDS_CORRECTION'
+assert root['open_findings']==['C05-275-OMISSION-01']
+assert pin((B/'semantic-review/freeze.json').read_bytes())==root['review_freeze']
+proposal = js(B/'metadata-correction01-proposal.json')
+assert proposal['status']=='PROPOSED_NOT_APPLIED' and len(proposal['changes'])==3
+before={}; mappings=[]
+for name in ('reconciled','semantic-review'):
+    source=B/name
+    assert not any(p.is_symlink() for p in source.rglob('*'))
+    before[name]={str(p.relative_to(source)):pin(p.read_bytes()) for p in source.rglob('*') if p.is_file()}
+    shutil.copytree(source,H/name)
+    for rel, expected in before[name].items():
+        a=source/rel; c=H/name/rel
+        assert pin(c.read_bytes())==expected and a.read_bytes()==c.read_bytes()
+        mappings.append(dict(original_logical_path=str(a),retained_path=str(c),**expected))
+save(H/'original-logical-to-retained-paths.json',mappings)
+save(H/'preservation.json',dict(status='PASS_BEFORE_ANY_METADATA_CHANGE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    source_trees=before,files=len(mappings),bytes=sum(x['bytes'] for x in mappings),
+    boundary='Entire current reconciled and initial semantic-review trees copied byte-for-byte; logical paths may later name newer metadata, so use this exact retained version map'))
+changed=[]
+for filename in sorted({x['file'] for x in proposal['changes']}):
+    path=Path(filename); assert path.parent==B/'reconciled/275'
+    old=path.read_bytes(); data=json.loads(old)
+    assert old==(json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode()
+    for c in (x for x in proposal['changes'] if x['file']==filename):
+        assert pin(old)==dict(bytes=c['file_bytes'],sha256=c['file_sha256'])
+        assert data[c['record_index']][c['field']]==c['old']
+        data[c['record_index']][c['field']]=c['new']
+    new=(json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode()
+    # Reversing just the declared three fields must recover every original byte.
+    restored=json.loads(new)
+    for c in (x for x in proposal['changes'] if x['file']==filename):
+        restored[c['record_index']][c['field']]=c['old']
+    assert (json.dumps(restored,ensure_ascii=False,indent=2)+'\n').encode()==old
+    path.write_bytes(new)
+    (O/(path.name+'.diff')).write_text(''.join(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile=str(H/'reconciled/275'/path.name),tofile=str(path))))
+    changed.append(dict(path=str(path),old=pin(old),new=pin(new)))
+D=B/'reconciled/275'; old_freeze=(H/'reconciled/275/freeze.json').read_bytes(); f=json.loads(old_freeze)
+actual={str(p.relative_to(D)):pin(p.read_bytes()) for p in D.rglob('*') if p.is_file() and p!=D/'freeze.json'}
+assert set(actual)==set(f['files'])
+assert {n for n in actual if actual[n]!=f['files'][n]}=={'omissions.json','material-decisions.json'}
+f['files']=actual; f['file_count']=len(actual); f['bytes']=sum(x['bytes'] for x in actual.values())
+f['metadata_correction']=dict(author='Root Codex; original Tibetan proposer, not the independent semantic reviewer',
+    scope='Exactly three current prose string replacements; all original omission contexts and every other data field unchanged',
+    proposal=dict(path=str(B/'metadata-correction01-proposal.json'),**pin((B/'metadata-correction01-proposal.json').read_bytes())),
+    original_freeze=pin(old_freeze),history=str(H/'reconciled/275'))
+save(D/'freeze.json',f)
+allowed={'reconciled/275/omissions.json','reconciled/275/material-decisions.json','reconciled/275/freeze.json'}
+for name in before:
+    after={str(p.relative_to(B/name)):pin(p.read_bytes()) for p in (B/name).rglob('*') if p.is_file()}
+    assert set(after)==set(before[name])
+    for rel,expected in before[name].items():
+        if name+'/'+rel not in allowed: assert after[rel]==expected,(name,rel)
+        assert pin((H/name/rel).read_bytes())==expected
+for seq in (274,275,276):
+    for filename in ('spec.json','body.html','final-tuples.json','original-dispositions.json'):
+        assert (B/f'reconciled/{seq}/{filename}').read_bytes()==(H/f'reconciled/{seq}/{filename}').read_bytes()
+save(O/'proof.json',dict(status='PASS_METADATA_ONLY_CORRECTION_REQUIRES_INDEPENDENT_REVIEW',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    finding='C05-275-OMISSION-01',nonblocking_clarifications=2,changed_metadata_files=changed,new_reconciled275_freeze=pin((D/'freeze.json').read_bytes()),
+    complete_historical_trees=pin((H/'preservation.json').read_bytes()),historical_file_count=len(mappings),
+    historical_mapping=dict(path=str(H/'original-logical-to-retained-paths.json'),**pin((H/'original-logical-to-retained-paths.json').read_bytes())),
+    all_other_tree_files_unchanged=True,all_original_omission_contexts_unchanged=True,all_specs_bodies_notes_tuples_dispositions_unchanged=True,
+    semantic_review_itself_unchanged=True,source_writes=0,canonical_calls=0,acceptance=False))
+(O/'report.md').write_text('Root applied exactly the blocking current omission reason and two nonblocking prose clarifications from the frozen independent review. Full earlier reconciled and semantic-review trees remain byte-exact under pre-metadata-correction01, with an explicit old logical-path to retained-path map. Only omissions.json, material-decisions.json and the measured275 freeze changed. Original omission contexts and all source/spec/body/note/tuple/occurrence/disposition data remain unchanged. The current initial semantic-review remains NEEDS_CORRECTION and has not been rewritten; separate scoped review of these actual resulting files is required. No canonical, builder, test, source or WT action occurred.\n')
+print(json.dumps(dict(status='PASS_METADATA_ONLY_CORRECTION_REQUIRES_INDEPENDENT_REVIEW',preserved_files=len(mappings),changed_prose_files=2,canonical_calls=0)))

@@ -1,0 +1,64 @@
+from pathlib import Path
+import json,copy,hashlib,re,importlib.util,os,datetime,difflib
+D=Path(__file__).resolve().parent;B=D.parents[1];W=B.parents[1]/'campaign-worktree';A=B.parent
+
+def pin(p):
+ b=Path(p).read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):
+ with p.open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+records=json.loads((D/'original-replays/root-resolved-spans.json').read_bytes());sources={r['seq']:r for r in json.loads((D/'source-full-rows.json').read_bytes())}
+role={'reconciler':'Codex /root/c05_253_255_reconcile','context':'Reused prior reconciliation and tooling context explicitly retained; authored neither current angle; current source reopens determine decisions.','tibetan_original':'primary Codex /root; own preparation and leads disclosed before English reading','english_original':'Codex /root/c05_262_264_english; reused English/tooling context, independent of current Tibetan proposals and root leads','human_certification':False,'wording_correction':json.loads((B/'english-inspection-wording-correction.json').read_bytes()),'root_verification':'Mechanical only; full source corroboration later than original capture, not a substitute for direct model reading.','approval_boundary':'Reconciliation only. Distinct semantic review required; no landing or binding glossary promotion.'}
+save(D/'role-provenance.json',role)
+# Retain exact historical draft decisions before rationale enrichment/source-exact apostrophe correction.
+for seq in (274,275,276):
+ out=B/'reconciled'/str(seq);hist=out/'history/pre-documentation';hist.mkdir(parents=True)
+ for name in ['final-decisions.json']:(hist/name).write_bytes((out/name).read_bytes())
+ final=json.loads((out/'final-decisions.json').read_bytes())
+ for f in final:
+  t=f['tuple'];r=f['rationale']
+  if r=='Direct contextual lexical correspondence.':
+   matches=[r for r in records if r['seq']==seq and r['angle']=='tibetan' and all(r[k]==t[k] for k in ['tib','eng','tib_range','eng_range'])]
+   assert matches,(seq,t)
+   f['rationale']='Independently retained after source-role comparison: '+matches[0]['original_occurrence_declaration']['basis']
+  f['rationale']=f['rationale'].replace('mi thad',"mi 'thad")
+ (out/'final-decisions.json').write_text(json.dumps(final,ensure_ascii=False,indent=2)+'\n')
+ (hist/'exact-documentation.diff').write_text(''.join(difflib.unified_diff((hist/'final-decisions.json').read_text().splitlines(True),(out/'final-decisions.json').read_text().splitlines(True),fromfile='pre-documentation/final-decisions.json',tofile='final-decisions.json')))
+ dispositions=[]
+ for original in [r for r in records if r['seq']==seq]:
+  def overlap(a,b):return a is not None and b is not None and max(a[0],b[0])<min(a[1],b[1])
+  exact=[f for f in final if all(f['tuple'][k]==original[k] for k in ['d','tib','eng','tib_range','eng_range'])]
+  related=exact or [f for f in final if overlap(original['tib_range'],f['tuple']['tib_range']) and (overlap(original['eng_range'],f['tuple']['eng_range']) or original['eng'] is f['tuple']['eng'] is None)]
+  if exact:status='RETAINED';reason=exact[0]['rationale']
+  elif related:status='RECAST_OR_TIGHTENED';reason=' | '.join(f['rationale'] for f in related)
+  else:
+   assert seq==275 and original['angle']=='tibetan' and original['id']=='q5',original
+   status='OMITTED_DISTRIBUTED';reason="Full positive HTG2016 HGM7086 circumstances was read and retained. In this quote brten nas expresses dependence on the unseen referent, while 'byung 'gyur na supplies arising. English converts the dependency/arising relation to circumstances cause another form. The isolated noun circumstances does not securely preserve the relation of brten nas alone. Leave both relational/arising constructions unatomized, not null; keep the separately licensed gzugs/form and gzhan/another. Original punctuation separates la from brten nas and is not repaired."
+  dispositions.append(dict(original_identity=original,disposition=status,final_ids=[f['tuple']['id'] for f in related],rationale=reason))
+ save(out/'original-dispositions.json',dispositions)
+ # Full original objects and key order, parents and occurrence declarations remain intact inside every identity.
+ assert len(dispositions)==sum(r['seq']==seq for r in records)
+ for x in dispositions:assert x['original_identity']['original_field_presence']==list(x['original_identity']['original_span'])
+ omissions=[];previous=json.loads((B/'english'/str(seq)/'omission-review.json').read_bytes())['fragments']
+ for side,key in [('tib','wylie'),('eng','english')]:
+  text=sources[seq][key];flat=sorted([f['tuple'][side+'_range'] for f in final if f['tuple']['d']!=7 and f['tuple'][side] is not None]);cursor=0
+  for lo,hi in flat+[[len(text),len(text)]]:
+   assert lo>=cursor
+   if lo>cursor:
+    raw=text[cursor:lo];matched=[r for r in previous if r['side']==side and max(r['start'],cursor)<min(r['end'],lo)]
+    reasons=list(dict.fromkeys(r['reason'] for r in matched))
+    if not raw.strip() or not re.search(r'[A-Za-z]',raw):reason='Exact source punctuation/spacing; no lexical atom.'
+    elif side=='eng' and seq==275 and cursor==792:reason='Of this resumes the preceding event; the first pas licenses the separately retained Because, without a separate demonstrative in this source phrase.'
+    elif reasons:reason=' '.join(reasons)
+    else:reason='Remaining grammatical inflection or supplied English reporting structure; no separately licensed atom is asserted. See material-decisions.json for local source scope.'
+    omissions.append(dict(side=side,start=cursor,end=lo,text=raw,disposition='OMITTED_NOT_NULL',reason=reason,original_omission_contexts=matched))
+   cursor=hi
+ save(out/'omissions.json',omissions)
+ # Exact proposed additive head allowance; does not mutate any gate.
+ allowed={} if seq!=275 else {'pages_c05':{'c5p92/s275w52':'khyod at C05:275 Wylie [537,542) licenses the opponent-holder you at English [997,1000) in position you have taken; excludes quote addressee and final repeated you are wrong. PROVISIONAL Codex non-author reconciliation.'}}
+ save(out/'proposed-head-allowances.json',allowed)
+ save(out/'head-licensor-audit.json',[dict(id=f['tuple']['id'],tib=f['tuple']['tib'],eng=f['tuple']['eng'],licensor=f['tuple']['tib'],proposed_page='c5p92',proposed_key='c5p92/s'+str(seq)+f['tuple']['id']) for f in final if f['tuple']['d'] in (5,7) and f['tuple']['eng'] is not None and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',f['tuple']['eng'],re.I)])
+ print(seq,len(final),len(dispositions),len(omissions))
+# Append later root corroboration and author wording correction with actual source-copy helper v2.
+sp=importlib.util.spec_from_file_location('copyv2',A/'copy_evidence_once_v2.py');cp=importlib.util.module_from_spec(sp);sp.loader.exec_module(cp)
+late=[B/'english-inspection-wording-correction.json']+[p for p in B.glob('root-english-source-verif*') if p.is_file()]+[p for p in B.rglob('*') if p.is_file() and any(x.startswith('root-english-source-verif') for x in p.relative_to(B).parts)]
+late=list(dict.fromkeys(late));save(D/'late-copy-result.json',cp.preserve(D,D/'original-copy-manifest.json',late));save(D/'late-aliases.json',[dict(alias=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,**pin(p)) for p in late])

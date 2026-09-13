@@ -1,0 +1,39 @@
+from pathlib import Path
+import hashlib,json,os,runpy,subprocess,sqlite3,gzip,datetime
+P=Path(__file__).resolve().parent; B=P.parent; A=B.parent; W=A.parent/'campaign-worktree'
+os.environ['PYTHONDONTWRITEBYTECODE']='1'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def put(n,x):
+ p=P/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ p=Path(p);b=p.read_bytes();return dict(path=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,bytes=len(b),sha256=sha(b))
+roots=['tibetan','english','english-source-preparation','proposal-verification','proposal-verification-caller','proposal-verification-caller-v2','root-english-source-verification','root-english-source-verification-caller','root-verifier-history','baseline-caller','primary-finalize-caller']
+files=[p for p in B.iterdir() if p.is_file()]
+for n in roots: files.extend(p for p in (B/n).rglob('*') if p.is_file())
+files += [A/'copy_evidence_once_v2.py',A/'semantic-review-protocol.md',A/'proposal-protocol.md',A/'integration/through273-root-closure/final/proof.json']
+files += [W/'docs/alignment_briefs/RECONCILE_BRIEF.md',W/'data/alignment/span_head_allow.json']
+gitrows=json.loads((B/'tibetan/274/governing-original-copy-manifest.json').read_text())
+for i,r in enumerate(gitrows):
+ argv=['git','-C',str(W),'show',r['original_git_commit']+':'+r['repository_relative_path']]
+ q=subprocess.run(argv,capture_output=True);d=P/'git'/str(i);d.mkdir(parents=True);(d/'stdout.bin').write_bytes(q.stdout);(d/'stderr').write_bytes(q.stderr)
+ put('git/'+str(i)+'/execution.json',dict(argv=argv,exit=q.returncode,stdout_bytes=len(q.stdout),stdout_sha256=sha(q.stdout),stderr_bytes=len(q.stderr),original_git_commit=r['original_git_commit'],repository_relative_path=r['repository_relative_path']))
+ assert q.returncode==0 and not q.stderr and sha(q.stdout)==r['sha256'] and len(q.stdout)==r['bytes']
+ files.append(Path(r['original']))
+# Preserve exact supplied originals and each raw alias independently. No traversal of reconciliation.
+for rel in ['english-source-preparation/input-manifest.json','english/274/evidence/input-copy-manifest.json','tibetan/274/original-to-copy-manifest.json']:
+ for r in json.loads((B/rel).read_text()):
+  p=Path(r['original'])
+  if p.is_file() and p.suffix!='db':files.append(p)
+physical=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII')
+files += [physical/(c+'ReadingASCII.txt') for c in ['C05','C15']]
+files=sorted(set(files));assert not any('reconciled' in p.relative_to(B).parts for p in files if p.is_relative_to(B))
+put('consumed-input-aliases.json',[pin(p) for p in files])
+copy=runpy.run_path(str(A/'copy_evidence_once_v2.py'))['preserve']
+result=copy(P,P/'original-to-copy-manifest.json',files)
+put('preservation.json',result)
+put('historical-git-snapshot-mappings.json',gitrows)
+for angle in ['tibetan','english']:
+ for seq in [274,275,276]:
+  for n in ['spec.json','body.html','report.md']:
+   p=P/'originals'/angle/str(seq)/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes((B/angle/str(seq)/n).read_bytes())
+print(json.dumps(result))

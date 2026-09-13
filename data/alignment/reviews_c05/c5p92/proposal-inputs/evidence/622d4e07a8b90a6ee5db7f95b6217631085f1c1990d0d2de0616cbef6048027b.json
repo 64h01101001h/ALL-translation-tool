@@ -1,0 +1,78 @@
+{
+  "utc": "2026-09-12T18:54:44.939074+00:00",
+  "status": "PREPARATION ONLY; no baseline, reader or accepted proposal",
+  "source_sha256": "0138586a27eec0c9fed5cec3ffbdf2575aba2410280e466a91da03705b8ec416",
+  "primary_lexical_queries": 34,
+  "primary_entry_rows": 32,
+  "additional_queries": 3,
+  "additional_counts": [
+    28,
+    1,
+    4
+  ],
+  "parallel_queries": 9,
+  "parallel_result_rows": 17,
+  "all_queries_reopened_exactly": true,
+  "digital_comparisons": [
+    {
+      "source_seq": 274,
+      "course": "C15",
+      "seq": 419,
+      "fields_equal": {
+        "acip": true,
+        "wylie": true,
+        "english": true
+      },
+      "english_lengths": [
+        674,
+        674
+      ],
+      "english_differences": []
+    },
+    {
+      "source_seq": 275,
+      "course": "C15",
+      "seq": 420,
+      "fields_equal": {
+        "acip": true,
+        "wylie": true,
+        "english": false
+      },
+      "english_lengths": [
+        1041,
+        1040
+      ],
+      "english_differences": [
+        {
+          "tag": "delete",
+          "local_range": [
+            388,
+            389
+          ],
+          "parallel_range": [
+            388,
+            388
+          ],
+          "local": " ",
+          "parallel": ""
+        }
+      ]
+    },
+    {
+      "source_seq": 276,
+      "course": "C15",
+      "seq": 421,
+      "fields_equal": {
+        "acip": true,
+        "wylie": true,
+        "english": true
+      },
+      "english_lengths": [
+        207,
+        207
+      ],
+      "english_differences": []
+    }
+  ],
+  "source_unchanged": true
+}

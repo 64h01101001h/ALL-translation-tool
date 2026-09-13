@@ -1,0 +1,122 @@
+from pathlib import Path
+import json,hashlib,os,sys,datetime
+P=Path(__file__).resolve().parent;B=P.parent;H=B/'pre-metadata-correction01';I=H/'semantic-review';O=P/'correction01'
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+    v=p.read_bytes();return {'bytes':len(v),'sha256':hashlib.sha256(v).hexdigest()}
+def save(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert sys.argv[1:] in [['publish'],['seal']]
+if sys.argv[1]=='seal':
+    r=read(P/'review.json');assert r['spec_verdict']==r['quality_verdict']==r['verdict']=='APPROVE' and not r['open_findings']
+    files={str(f.relative_to(P)):pin(f) for f in sorted(P.rglob('*')) if f.is_file() and f!=P/'freeze.json'}
+    f={'status':'APPROVE','spec_verdict':'APPROVE','quality_verdict':'APPROVE','files':files,'file_count':len(files),'total_bytes':sum(x['bytes'] for x in files.values()),'exclusion':'Only this actual top-level freeze.json. Every nested historical freeze is included.'}
+    save('freeze.json',f)
+    assert files=={str(q.relative_to(P)):pin(q) for q in sorted(P.rglob('*')) if q.is_file() and q!=P/'freeze.json'}
+    print(json.dumps({'status':'APPROVE','spec_verdict':'APPROVE','quality_verdict':'APPROVE','file_count':f['file_count'],'total_bytes':f['total_bytes'],'freeze':pin(P/'freeze.json')}));sys.exit(0)
+scope=read(O/'scope-proof.json');assert scope['status']=='PASS_SCOPED_METADATA_REVIEW_MECHANICS'
+assert read(P/'review.json')['verdict']=='NEEDS_CORRECTION'
+for n in ['review.md','review.json','freeze.json','original-to-copy-manifest.json','independent-span-review.json','independent-original-disposition-review.json','independent-judgments.txt','findings.json','checklist.json']:
+    assert (P/n).read_bytes()==(I/n).read_bytes()==(P/'history/initial-review'/n).read_bytes()
+manifest=read(O/'combined-original-to-copy-manifest.json');save('original-to-copy-manifest.json',manifest)
+save('input-aliases.json',[dict(path=r['original'],resolved=str(Path(r['original']).resolve()),symlink=os.readlink(r['original']) if Path(r['original']).is_symlink() else None,bytes=r['bytes'],sha256=r['sha256']) for r in manifest])
+save('source-alias-transports.json',read(O/'source-alias-transports.json'))
+logical={r['original_logical_path']:r['retained_path'] for r in read(H/'original-logical-to-retained-paths.json')}
+readable=[]
+for r in read(I/'readable-history-and-final-mappings.json'):
+    r=dict(r);r['original']=logical.get(r['original'],r['original']);r['copy']='history/initial-review/'+r['copy'];assert (P/r['copy']).read_bytes()==Path(r['original']).read_bytes();readable.append(r)
+for s in (274,275,276):
+    d=B/'reconciled'/str(s)
+    for src in sorted(d.iterdir()):
+        if not src.is_file():continue
+        name='input-freeze.json' if src.name=='freeze.json' else src.name
+        target=P/'reviewed-final'/str(s)/name
+        if target.suffix.lower() not in {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}:target=Path(str(target)+'.bin')
+        target.write_bytes(src.read_bytes());readable.append(dict(original=str(src),copy=str(target.relative_to(P)),**pin(target)))
+save('readable-history-and-final-mappings.json',readable)
+save('current-frozen-input-proof.json',scope['current_freezes'])
+save('findings.json',[])
+closed=read(I/'findings.json')[0];closed['status']='RESOLVED';closed['resolution']='Actual current omission reason now names only final zer[569,572) / claim[34,39) d5 and correctly leaves the reporting frame unwrapped.';closed['resolution_proof']='correction01/scope-proof.json';save('resolved-findings.json',[closed])
+clar=read(I/'nonblocking-clarifications.json')
+for r in clar:r['status']='RESOLVED';r['resolution']='Actual metadata wording now explicitly distinguishes this scope/depth without changing any span.'
+save('nonblocking-clarifications.json',clar)
+oldjudgment=next(x['judgment'] for x in read(I/'independent-span-review.json') if (x['tuple']['seq'],x['tuple']['id'])==(275,'r54'))
+newjudgment="zer becomes the opening claim noun at d5. The conditional na and makes the following are unwrapped reporting syntax. The current omission reason now describes those exact final ranges; C05-275-OMISSION-01 is resolved."
+text=(I/'independent-judgments.txt').read_text();assert text.count(oldjudgment)==1;(P/'independent-judgments.txt').write_text(text.replace(oldjudgment,newjudgment))
+spans=read(I/'independent-span-review.json')
+for r in spans:
+    if (r['tuple']['seq'],r['tuple']['id'])==(275,'r54'):r['judgment']=newjudgment;r['current_metadata_finding']=None;r['resolved_historical_finding']='C05-275-OMISSION-01'
+save('independent-span-review.json',spans)
+originals=read(I/'independent-original-disposition-review.json')
+for r in originals:
+    for reason in r['reason']:
+        if reason['judgment']==oldjudgment:reason['judgment']=newjudgment
+save('independent-original-disposition-review.json',originals)
+assert [r['tuple'] for r in spans]==read(P/'resolved-spans.json')==read(I/'resolved-spans.json')
+assert [r['identity'] for r in originals]==[r['identity'] for r in read(I/'independent-original-disposition-review.json')]
+
+header='''C05:274–276 / c5p92 — final scoped independent semantic review
+
+Overall verdict: APPROVE. SPEC: APPROVE. QUALITY: APPROVE. Zero open findings. The sole initial finding, C05-275-OMISSION-01, is resolved in the actual current metadata. All 112 spans, 3 nulls and 81 non-null d5 correspondences retain their completed independent semantic assessment. This is provisional machine review, not human editorial certification or permission to bypass landing/integration gates.
+
+I remain the reused Codex reviewer /root/c05_through249_final_review, author of neither current original angle nor reconciliation. Root authored the Tibetan originals and now authored the disclosed metadata-only correction; root does not supply its independent semantic approval. The actual final correction was reviewed separately here. No fresh-context claim is made. The observed governing Git HEAD remains 81942cfc6022a785894d3cc2a20de81dc4c6f599.
+
+Actual scoped correction
+
+The current English omission gap [3,34), ` comes and makes the following `, now says that the rhetorical and claim-introduction wording remains outside spans and final r54 retains only zer [569,572) / claim [34,39) at d5. This accurately describes the final lexical correspondence. The superseded wider English original remains genuine preserved history; its original_omission_contexts have not been rewritten. C05-275-OMISSION-01 is resolved.
+
+The residual Tibetan [560,563) `'i ` explanation now identifies the genitive connection and explicitly distinguishes adjacent n5/for [180,183), avoiding any suggestion that the second phyir is omitted. The negative-scope topic now explicitly says mi 'thad par/mistaken is d5 and the quoted mthong med/don't see is d3. These two nonblocking clarifications are also resolved. No new correspondence is inferred from the clearer prose.
+
+The entire current reconciliation tree was independently compared to its preserved preimage. Exactly omissions.json and material-decisions.json under 275 contain three changed string fields; 275/freeze.json records the measured new inventory and discloses root's metadata authorship. Reversing only those three strings reconstructs every old byte of both metadata files. Both complete supplied diffs reproduce exactly. Every other current file, all original omission contexts, all three specs/bodies/notes, all 112 tuples and all 211 original identities/dispositions are unchanged. The current 275 freeze is SHA-256 36e76c5bbef4676cd7397587bf96fd909795172a5c15f48f0dd7d2a976778626; 274 and 276 freezes remain unchanged.
+
+Current proof and execution boundary
+
+correction01/scope-proof.json records the independent full-scope check, complete diff pins, source/code unchanged pins and one read-only HEAD observation. The scoped verification caller exited 0 with empty stderr. Root's separate metadata caller exited 0 with empty stderr; its complete command, recorder source, actual streams and proof are copied. The proposed-not-applied JSON is retained as the earlier proposal version, not mislabeled as an execution result.
+
+There were ZERO new canonical or SQL calls, builders or suites in this scoped review. correction01/canonical-reuse-bindings.json ties each actual earlier canonical input/output/stderr to its retained historical version and the byte-identical current specification/body. The three earlier actual final generator runs remain exactly those earlier runs; they are not retimed or relabeled as new executions. Full before/after source hashes remain valid and were rechecked without changing the sources.
+
+'''
+initial_report=(I/'review.md').read_text()
+middle=initial_report[initial_report.index('Current measured boundary\n'):initial_report.index('History and preservation boundary\n')]
+middle=middle.replace('It does not label them accepted while the current candidate is NEEDS_CORRECTION.','The complete unchanged tuple set is approved by this final scoped verdict.')
+middle=middle.replace('Zer/claim is the correct narrow reporting correspondence; the contradictory inherited current omission reason is the sole blocking defect detailed above.','Zer/claim is the correct narrow reporting correspondence; the initial contradictory omission reason is now corrected as described above.')
+footer='''History, provenance and final contract
+
+The entire initial NEEDS_CORRECTION review is preserved byte-exact in history/initial-review and in the external pre-metadata-correction01/semantic-review tree. That initial freeze remains SHA-256 da1d5430f251078b4bec3ff5b2a308ba55c4c8182eb6f0477827e44919e93897, with its original status/files-only schema; it is historical, not replaced by a retroactive approval. All 1113 initial files including the initial top freeze were copied. The complete old reconciliation and review version map contains 1651 retained records. Each retained tree and mapping was independently enumerated and byte checked. Earlier source-preparation failures, the original zero-based/null-field assumptions and final narrow fixes, author/reconciler failed attempts, gate-correction history, original allowance overgeneralization and late initial-review freeze-schema inspection failure are all preserved, including complete original helpers and supported format copies. No earlier failure was rerun to create its evidence.
+
+The full initial source/semantic/errata judgments remain in the preserved report and current unchanged material sections. The 483 earlier gate-correction freeze rows and nested freezes are retained. The original English Human inspection wording and its exact author clarification remain distinct; no human certification is inferred. Complete physical C05/C15 files, all material raw master/corpus objects and the exact primary/supplement packages remain preserved. The initial package and supplement are explicitly INITIAL versions; their old metadata text is historical and does not purport to contain this later correction.
+
+The current original-to-copy-manifest.json is a LIST with 3234 exact mappings at the scoped preservation boundary, 1654 unique targets and 14 retained governing Git pins. The complete original 1508-row manifest remains byte-exact inside the initial review history. There are 550 explicit old-logical-path transports to actual retained versions, so old metadata is not compared to changed live files. Full new correction/root proof inputs and all current reconciliation files are separately mapped. Every target has a supported landing suffix; .py and .diff material is preserved as exact .py.txt/.diff.txt or already existing exact supported content copies.
+
+The two live compressed sources each have exactly one non-Git original row resolving to that live source in the current manifest. The two worktree symlink aliases are retained separately in source-alias-transports.json, including their original manifest records, targets and resolution. This removes ambiguous duplicate archive-source rows without discarding alias provenance or altering source bytes. Current input-aliases.json describes the current manifest's actual original paths; the full initial alias records remain immutable history with explicit version transports. Historical governing snapshots retain original_git_commit and repository_relative_path; ignored compressed sources are not falsely described as Git blobs.
+
+Final review.json has distinct truthful spec_verdict/quality_verdict, the ordered measured segment LIST, total counts, no open findings, full checklist and report/provenance pins. resolved-spans.json remains the exact seven-key 112-record list. bank-ready-errata.json is [], and span-head-allow-needed.json is the actual empty mapping {}. Final freeze.json uses a files dictionary, computed file_count and total_bytes, and matching APPROVE SPEC/QUALITY verdicts. It excludes only its actual top-level path; all nested historical freezes and all earlier review interfaces remain included.
+
+This closes the independent semantic/spec/quality review of the actual corrected candidate. It does not perform or imply page landing, canonical rebuilding, CTest, render/native/device validation, MAIN integration, human acceptance or dictionary promotion. No source, master, repository, index, MAIN or author/reconciler file was edited by this reviewer. PROVISIONAL labels and every original source defect remain byte-exact.
+'''
+(P/'review.md').write_text(header+middle+footer)
+check=read(I/'checklist.json')
+for c in check:
+    if c['id'] in ['SEMANTICS','OMISSION_METADATA']:
+        c['status']='PASS';c['disposition']='Complete initial semantic judgments retained; actual three-field metadata correction resolves the sole finding and both clarifications.';c['evidence']=['resolved-findings.json','correction01/scope-proof.json','independent-span-review.json']
+    if c['id']=='LIMITS':c['disposition']='Scoped semantic approval only; no new canonical/SQL/build/CTest/MAIN/native/human acceptance claimed.'
+    if c['id']=='PRESERVATION':c['evidence']=['correction01/scope-proof.json','original-to-copy-manifest.json','source-alias-transports.json']
+check.append(dict(id='SCOPED_CORRECTION',status='PASS',disposition='Exactly three metadata strings corrected with complete retained preimages; current canonical inputs unchanged.',evidence=['correction01/scope-proof.json','correction01/canonical-reuse-bindings.json','correction01-caller/execution.json']))
+save('checklist.json',check)
+meta=read(I/'review.json')
+meta.update(status='APPROVE',verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=[],resolved_findings=['C05-275-OMISSION-01'],checklist=check,
+ span_correspondence_assessment='All 112 selected spans, 3 fusion nulls and 81 non-null d5 pairs approved; current omission metadata corrected.',
+ current_reconciled_freezes=scope['current_freezes'],scoped_review=dict(new_canonical_calls=0,new_sql_calls=0,earlier_canonical_runs_reused=3,proof='correction01/scope-proof.json',historical_review='history/initial-review/review.json'),
+ execution_limits='No canonical/SQL/build/suite rerun in scoped review. Earlier three actual canonical records bound only to byte-identical current spec/body/note inputs. No source/repository/MAIN/native/network mutation.',
+ freeze={'path':'freeze.json','schema':'files DICT, actual file_count and total_bytes, truthful matching spec_verdict and quality_verdict; only top-level freeze excluded'})
+meta['report']={'path':'review.md',**pin(P/'review.md')};meta['original_to_copy_manifest']={'path':'original-to-copy-manifest.json',**pin(P/'original-to-copy-manifest.json')}
+for s in meta['segments']:
+    for key,name in [('spec','spec.json'),('body','body.html')]:
+        assert pin(P/'reviewed-final'/str(s['seq'])/name)=={'bytes':s[key+'_bytes'],'sha256':s[key+'_sha256']}
+for r in manifest:
+    assert (P/r['copy']).read_bytes()==Path(r['original']).read_bytes()
+assert read(P/'bank-ready-errata.json')==[] and read(P/'span-head-allow-needed.json')=={}
+evidence={str(f.relative_to(P)):pin(f) for f in sorted(P.rglob('*')) if f.is_file() and f not in [P/'evidence-pins.json',P/'review.json',P/'freeze.json']}
+save('evidence-pins.json',{'boundary':'Complete files present at final interface capture, excluding current review.json, this manifest and top freeze. Later final caller/proof files are included by final freeze. Prior interfaces remain exact history.','files':evidence})
+meta['evidence_manifest']={'path':'evidence-pins.json',**pin(P/'evidence-pins.json')};save('review.json',meta)
+save('scoped-final-interface-proof.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),review=pin(P/'review.json'),report=pin(P/'review.md'),manifest=pin(P/'original-to-copy-manifest.json'),segments=meta['segments'],total_spans=112,total_nulls=3,total_word_pairs=81,open_findings=[],checklist_rows=len(check),readable_current_and_historical_mappings=len(readable)))
+print(json.dumps(dict(status='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=0,total_spans=112,total_nulls=3,total_word_pairs=81,manifest_records=len(manifest),checklist_rows=len(check))))

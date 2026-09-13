@@ -1,0 +1,16 @@
+from pathlib import Path
+import hashlib,json,subprocess,os,datetime
+P=Path(__file__).resolve().parent;B=P.parent;W=B.parent.parent/'campaign-worktree'
+def pin(p):
+ b=p.read_bytes();return dict(path=str(p),resolved=str(p.resolve()),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+sources=[W/'build/hgm_spine_v27_2.db',W/'data/hgm_dictionary_v27_2.json.gz',W/'data/full_parallel_corpus_v32.json.gz',W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py',P/'canonical-driver.py.txt'];before=[pin(x) for x in sources];save(P/'canonical-sources-before.json',before)
+summary=[]
+for seq in [274,275,276]:
+ original=B/'reconciled'/str(seq);d=P/'reviewed-final'/str(seq);d.mkdir(parents=True);a=P/'canonical-runs'/str(seq);a.mkdir(parents=True)
+ for n in ['spec.json','body.html','report.md','errata.json']:(d/n).write_bytes((original/n).read_bytes())
+ raw=(d/'spec.json').read_bytes();(a/'stdin.json').write_bytes(raw);argv=['python3','-B',str(P/'canonical-driver.py.txt'),str(a/'sqlite-connections.json')];start=datetime.datetime.now(datetime.timezone.utc).isoformat();q=subprocess.run(argv,input=raw,capture_output=True,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (a/'stdout.html').write_bytes(q.stdout);(a/'stderr').write_bytes(q.stderr);(a/'exit').write_text(str(q.returncode)+'\n');save(a/'execution.json',dict(argv=argv,cwd=str(W),environment={'PYTHONDONTWRITEBYTECODE':'1'},started=start,finished=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=q.returncode,stdin=pin(a/'stdin.json'),stdout=pin(a/'stdout.html'),stderr=pin(a/'stderr')))
+ assert q.returncode==0 and not q.stderr and q.stdout==(d/'body.html').read_bytes(),seq
+ summary.append(dict(seq=seq,spec=pin(d/'spec.json'),body=pin(d/'body.html'),generator_exit=q.returncode,stderr_bytes=len(q.stderr),canonical_calls=1));save(P/'canonical-proof.json',summary)
+after=[pin(x) for x in sources];save(P/'canonical-sources-after.json',after);assert after==before;print(json.dumps(dict(status='PASS',canonical_calls=3,source_unchanged=True,segments=summary)))

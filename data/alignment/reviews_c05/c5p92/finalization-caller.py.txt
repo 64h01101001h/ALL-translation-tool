@@ -1,0 +1,12 @@
+from pathlib import Path
+import subprocess,sys,os,json,hashlib,datetime
+P=Path(__file__).resolve().parent;O=P/'finalization-attempt01';O.mkdir()
+argv=[sys.executable,'-B',str(P/'finish-review.py.txt'),'prepare']
+env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+started=datetime.datetime.now(datetime.timezone.utc).isoformat()
+r=subprocess.run(argv,cwd=P,input=b'',capture_output=True,env=env)
+streams={}
+for n,v in [('stdin.bin',b''),('stdout.stdout',r.stdout),('stderr.stderr',r.stderr),('exit.exit',(str(r.returncode)+'\n').encode())]:
+    p=O/n;p.write_bytes(v);streams[n]=dict(bytes=len(v),sha256=hashlib.sha256(v).hexdigest())
+(O/'execution.json').write_text(json.dumps(dict(argv=argv,cwd=str(P),environment={'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'},started=started,finished=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=r.returncode,streams=streams),indent=2)+'\n')
+print(r.stdout.decode());print(r.stderr.decode());sys.exit(r.returncode)

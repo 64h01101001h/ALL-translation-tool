@@ -1,0 +1,147 @@
+[
+  {
+    "id": "ROLE",
+    "status": "PASS",
+    "disposition": "Reused non-author/non-reconciler model review; original human-inspection wording externally corrected, never silently edited.",
+    "evidence": [
+      "review.md",
+      "history/source-preparation/report.md"
+    ]
+  },
+  {
+    "id": "GOVERNING",
+    "status": "PASS",
+    "disposition": "Actual fixed baseline and complete governing Git object pins.",
+    "evidence": [
+      "governing-git-proof.json"
+    ]
+  },
+  {
+    "id": "PACKAGES",
+    "status": "PASS",
+    "disposition": "Complete primary/supplement section bytes and 1059 fixed/additive input records retained.",
+    "evidence": [
+      "complete-package-section-proof.json",
+      "preservation-proof.json"
+    ]
+  },
+  {
+    "id": "SOURCE",
+    "status": "PASS",
+    "disposition": "Independent RO/query_only full sources, 222 actual query sets and 116 master/302 corpus objects.",
+    "evidence": [
+      "history/source-preparation/independent-source-proof.json",
+      "all-final-query-alias-proof.json"
+    ]
+  },
+  {
+    "id": "PHYSICAL",
+    "status": "PASS",
+    "disposition": "Both full original physical files, twelve extents and full contexts; no publication/ingestion independence inferred.",
+    "evidence": [
+      "history/source-preparation/physical-extents.json"
+    ]
+  },
+  {
+    "id": "ORIGINALS",
+    "status": "PASS",
+    "disposition": "211 full identities and all 198 retained/12 recast/1 omitted dispositions inspected.",
+    "evidence": [
+      "all-original-disposition-proof.json",
+      "independent-original-disposition-review.json"
+    ]
+  },
+  {
+    "id": "SEMANTICS",
+    "status": "PASS",
+    "disposition": "Complete initial semantic judgments retained; actual three-field metadata correction resolves the sole finding and both clarifications.",
+    "evidence": [
+      "resolved-findings.json",
+      "correction01/scope-proof.json",
+      "independent-span-review.json"
+    ]
+  },
+  {
+    "id": "CANONICAL",
+    "status": "PASS",
+    "disposition": "Three actual final generator calls, zero exits, empty stderr and exact complete bodies.",
+    "evidence": [
+      "canonical-proof.json",
+      "canonical-runs"
+    ]
+  },
+  {
+    "id": "STRUCTURE",
+    "status": "PASS",
+    "disposition": "Exact seven-key tuples, original field ordering/parents/occurrences, full-source fields and omission complements.",
+    "evidence": [
+      "interface-proof.json",
+      "resolved-spans.json"
+    ]
+  },
+  {
+    "id": "OMISSION_METADATA",
+    "status": "PASS",
+    "disposition": "Complete initial semantic judgments retained; actual three-field metadata correction resolves the sole finding and both clarifications.",
+    "evidence": [
+      "resolved-findings.json",
+      "correction01/scope-proof.json",
+      "independent-span-review.json"
+    ]
+  },
+  {
+    "id": "ERRATA",
+    "status": "PASS",
+    "disposition": "All five grounds examined for three suspicions; no surviving new erratum.",
+    "evidence": [
+      "review.md",
+      "bank-ready-errata.json"
+    ]
+  },
+  {
+    "id": "ALLOWANCE",
+    "status": "PASS",
+    "disposition": "Bare you does not match actual trailing-space predicate; source licensor remains khyod; no allowance.",
+    "evidence": [
+      "review.md",
+      "span-head-allow-needed.json"
+    ]
+  },
+  {
+    "id": "HISTORY",
+    "status": "PASS",
+    "disposition": "All original/current histories, nested freezes and 483 old freeze rows retained with explicit versions.",
+    "evidence": [
+      "gate-correction-history-proof.json",
+      "readable-history-and-final-mappings.json"
+    ]
+  },
+  {
+    "id": "PRESERVATION",
+    "status": "PASS",
+    "disposition": "Complete supported-copy, raw-alias and source-unchanged closure.",
+    "evidence": [
+      "correction01/scope-proof.json",
+      "original-to-copy-manifest.json",
+      "source-alias-transports.json"
+    ]
+  },
+  {
+    "id": "LIMITS",
+    "status": "PASS",
+    "disposition": "Scoped semantic approval only; no new canonical/SQL/build/CTest/MAIN/native/human acceptance claimed.",
+    "evidence": [
+      "review.md"
+    ]
+  },
+  {
+    "id": "SCOPED_CORRECTION",
+    "status": "PASS",
+    "disposition": "Exactly three metadata strings corrected with complete retained preimages; current canonical inputs unchanged.",
+    "evidence": [
+      "correction01/scope-proof.json",
+      "correction01/canonical-reuse-bindings.json",
+      "correction01-caller/execution.json"
+    ]
+  }
+]

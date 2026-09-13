@@ -1,0 +1,95 @@
+"""Verify complete frozen initial review identity; keep NEEDS_CORRECTION true.
+
+Root read the full report/checklist and all 112 independent judgments before
+this run. This does not supply the separate reviewer judgment or rerun it.
+"""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess
+B = Path(__file__).resolve().parent
+D = B / 'semantic-review'
+W = B.parents[1] / 'campaign-worktree'
+O = B / 'root-initial-semantic-review-verification'
+O.mkdir(exist_ok=False)
+def pin(raw): return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+def js(p): return json.loads(p.read_bytes())
+def save(p,x): p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+git_cache = {}
+def git_object(commit, rel):
+    key = commit + ':' + rel
+    if key not in git_cache:
+        p = O / 'git' / str(len(git_cache)); p.mkdir(parents=True)
+        argv = ['git','show',key]
+        save(p/'command.json',dict(argv=argv,cwd=str(W),environment_overrides={'GIT_OPTIONAL_LOCKS':'0'}))
+        (p/'stdin.bin').write_bytes(b'')
+        r = subprocess.run(argv,cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'),input=b'',capture_output=True)
+        (p/'stdout.bin').write_bytes(r.stdout); (p/'stderr.bin').write_bytes(r.stderr); (p/'exit.txt').write_text(str(r.returncode)+'\n')
+        assert r.returncode == 0 and not r.stderr
+        git_cache[key] = r.stdout
+    return git_cache[key]
+f = js(D/'freeze.json')
+assert pin((D/'freeze.json').read_bytes())['sha256'] == 'da1d5430f251078b4bec3ff5b2a308ba55c4c8182eb6f0477827e44919e93897'
+files = {str(p.relative_to(D)):pin(p.read_bytes()) for p in D.rglob('*') if p.is_file() and p != D/'freeze.json'}
+assert files == f['files'] and len(files) == 1112
+assert sum(x['bytes'] for x in files.values()) == 80884239
+manifest = js(D/'original-to-copy-manifest.json')
+assert len(manifest) == 1508
+for row in manifest:
+    copy = D/row['copy']; assert copy.resolve().is_relative_to(D.resolve())
+    raw = copy.read_bytes(); assert pin(raw) == {k:row[k] for k in ('bytes','sha256')}
+    old = git_object(row['original_git_commit'],row['repository_relative_path']) if row.get('original_git_commit') else Path(row['original']).read_bytes()
+    assert raw == old, row
+aliases = js(D/'input-aliases.json')
+assert len(aliases) == 1494
+for row in aliases:
+    p = Path(row['path'])
+    assert str(p.resolve(strict=True)) == row['resolved']
+    assert (os.readlink(p) if p.is_symlink() else None) == row['symlink']
+    assert pin(p.read_bytes()) == {k:row[k] for k in ('bytes','sha256')}
+meta = js(D/'review.json')
+assert meta['status'] == meta['verdict'] == meta['spec_verdict'] == meta['quality_verdict'] == 'NEEDS_CORRECTION'
+assert [x['id'] for x in meta['open_findings']] == ['C05-275-OMISSION-01']
+assert meta['total_spans'] == 112 and meta['total_nulls'] == 3 and meta['total_word_pairs'] == 81
+assert pin((D/'review.md').read_bytes()) == {k:meta['report'][k] for k in ('bytes','sha256')}
+assert pin((D/'original-to-copy-manifest.json').read_bytes()) == {k:meta['original_to_copy_manifest'][k] for k in ('bytes','sha256')}
+resolved = js(D/'resolved-spans.json')
+assert resolved == js(B/'root-reconciliation-verification/resolved-spans.json')
+judgments = js(D/'independent-span-review.json')
+assert [x['tuple'] for x in judgments] == resolved
+assert all(x['correspondence_verdict'] == 'SOUND' and x['judgment'] for x in judgments)
+originals = js(B/'proposal-verification/root-resolved-spans.json')
+key = lambda x:(x['angle'],x['seq'],x['id'])
+expected = {key(x):x for x in originals}; assert len(expected)==211
+dispositions = js(D/'independent-original-disposition-review.json')
+assert len(dispositions)==211 and {key(x['identity']) for x in dispositions} == set(expected)
+for row in dispositions:
+    assert row['identity'] == expected[key(row['identity'])]
+    assert row['independent_assessment'] == 'SUPPORTED'
+    assert row['identity']['original_field_presence'] == list(row['identity']['original_span'])
+canonical=[]
+for row in meta['segments']:
+    seq=row['seq']; q=D/'canonical-runs'/str(seq); rec=js(q/'execution.json')
+    assert rec['exit']==0 and rec['stderr']['bytes']==0
+    for stream in ('stdin','stdout','stderr'):
+        p=Path(rec[stream]['path']); assert p.resolve().is_relative_to(q.resolve())
+        assert pin(p.read_bytes()) == {k:rec[stream][k] for k in ('bytes','sha256')}
+    for label, filename, stream in [('spec','spec.json','stdin'),('body','body.html','stdout')]:
+        raw=(B/'reconciled'/str(seq)/filename).read_bytes()
+        assert raw==(D/'reviewed-final'/str(seq)/filename).read_bytes()==Path(rec[stream]['path']).read_bytes()
+        assert pin(raw)==dict(bytes=row[label+'_bytes'],sha256=row[label+'_sha256'])
+    connections=js(q/'sqlite-connections.json'); assert connections
+    assert all(c['query_only']==1 and c['uri'].endswith('?mode=ro') for c in connections)
+    canonical.append(rec)
+assert [x['seq'] for x in meta['segments']] == [274,275,276]
+assert js(D/'bank-ready-errata.json') == [] and js(D/'span-head-allow-needed.json') == {}
+assert js(D/'canonical-sources-before.json') == js(D/'canonical-sources-after.json')
+assert files == {str(p.relative_to(D)):pin(p.read_bytes()) for p in D.rglob('*') if p.is_file() and p != D/'freeze.json'}
+save(O/'original-copy-checks.json',manifest)
+save(O/'actual-canonical-record-checks.json',canonical)
+save(O/'proof.json',dict(status='PASS_INITIAL_REVIEW_PRESERVATION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    review_verdict='NEEDS_CORRECTION',open_findings=['C05-275-OMISSION-01'],review_freeze=pin((D/'freeze.json').read_bytes()),
+    review_report=pin((D/'review.md').read_bytes()),frozen_files=len(files),frozen_bytes=sum(x['bytes'] for x in files.values()),
+    full_original_copy_records=len(manifest),raw_aliases=len(aliases),unique_git_objects=len(git_cache),
+    original_identities=211,final_judgments=112,nulls=3,word_pairs=81,actual_independent_canonical_runs_checked=3,
+    new_canonical_runs=0,queries=0,source_mutations=0,alignment_acceptance=False,
+    next_action='Preserve complete initial review and reconciled trees before applying the three proposed metadata string replacements, then independent scoped re-review'))
+print(json.dumps(dict(status='PASS_INITIAL_REVIEW_PRESERVATION',files=len(files),originals=len(manifest),git_objects=len(git_cache))))

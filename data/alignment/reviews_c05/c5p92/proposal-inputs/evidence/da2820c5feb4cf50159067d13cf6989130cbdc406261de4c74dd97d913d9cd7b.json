@@ -1,0 +1,32 @@
+{
+  "FN": "(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) ",
+  "PAT": "<span class=\"u[^\"]*\" data-d=\"([57])\" data-l=\"(s\\d+\\w+)\">(?:<span class=\"u[^\"]*\" data-d=\"7\" data-l=\"s\\d+\\w+\">)?(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) ",
+  "probes": [
+    {
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s275w52\">you</span>",
+      "matches": false
+    },
+    {
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s275w52\">you hold</span>",
+      "matches": true
+    },
+    {
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s275w52\">You</span>",
+      "matches": false
+    },
+    {
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s275w52\">You hold</span>",
+      "matches": true
+    }
+  ],
+  "actual_body_hits": {
+    "274": 0,
+    "275": 0,
+    "276": 0
+  },
+  "full_test_suite_invoked": false,
+  "gate_code": {
+    "bytes": 3788,
+    "sha256": "5783bbd12eff2b371a10852c32744a30ca9f8d226b66dd7907bd4af3aa721655"
+  }
+}

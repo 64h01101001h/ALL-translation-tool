@@ -1,0 +1,38 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/verify-final-semantic-review-root.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-274-276/verify-final-semantic-review-root-v2.py
+@@ -6,7 +6,7 @@
+ import datetime, hashlib, json, os, subprocess
+ B=Path(__file__).resolve().parent
+ D=B/'semantic-review'; H=B/'pre-metadata-correction01'
+-W=B.parents[1]/'campaign-worktree'; O=B/'root-final-semantic-review-verification'
++W=B.parents[1]/'campaign-worktree'; O=B/'root-final-semantic-review-verification-v2'
+ BASE='81942cfc6022a785894d3cc2a20de81dc4c6f599'
+ O.mkdir(exist_ok=False)
+ def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+@@ -30,7 +30,16 @@
+ assert files==f['files'] and len(files)==f['file_count']==2286
+ assert sum(x['bytes'] for x in files.values())==f['total_bytes']==168139617
+ supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+-assert all(Path(n).suffix.lower() in supported for n in files)
++supplement=js(B/'raw-execution-evidence-supplement-plan.json')
++assert supplement['review_freeze']==freeze_pin
++missing={n:v for n,v in files.items() if Path(n).suffix.lower() not in supported}
++assert len(missing)==24 and sum(v['bytes'] for v in missing.values())==6646
++assert set(missing)=={r['relative_path'] for r in supplement['files']}
++for r in supplement['files']:
++    assert missing[r['relative_path']]=={k:r[k] for k in ('bytes','sha256')}
++    assert Path(r['original'])==D/r['relative_path']
++    assert Path(r['destination'])==W/'data/alignment/reviews_c05/c5p92'/r['relative_path']
++    assert Path(r['relative_path']).suffix==''
+ manifest=js(D/'original-to-copy-manifest.json');assert len(manifest)==3234
+ for row in manifest:
+     p=D/row['copy'];assert p.resolve().is_relative_to(D.resolve())
+@@ -112,7 +121,7 @@
+     semantic_spec_verdict='APPROVE',semantic_quality_verdict='APPROVE',open_findings=[],frozen_files=len(files),frozen_bytes=f['total_bytes'],
+     full_original_copy_records=len(manifest),current_aliases=len(aliases),historical_git_objects=len(objects),
+     retained_tree_records=len(mapping),old_logical_transports=len(transports),initial_review_full_files=1113,
+-    source_archive_aliases=len(source_aliases),unique_non_git_row_per_live_archive=True,all_supported_landing_extensions=True,
++    source_archive_aliases=len(source_aliases),unique_non_git_row_per_live_archive=True,all_supported_landing_extensions=False,required_exact_raw_file_supplement=supplement,raw_supplement_not_yet_executed=True,
+     unchanged_final_tuples=112,nulls=3,word_pairs=81,earlier_actual_canonical_runs_reused=3,
+     canonical_reruns=0,queries=0,builds=0,tests=0,WT_mutations=0,prior273_outputs_and_sources_unchanged=True))
+ print(json.dumps(dict(status='PASS',frozen_files=len(files),original_copy_records=len(manifest),historical_git_objects=len(objects))))

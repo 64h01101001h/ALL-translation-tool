@@ -1,0 +1,38 @@
+from pathlib import Path
+import json, hashlib
+
+batch=Path(__file__).resolve().parents[2]
+source={x['seq']:x for x in json.loads((batch/'source.json').read_text())}
+def make(seq,title,items,note):
+    src=source[seq];spans=[];intended=[];cursor=0;counts={}
+    for tib,eng,d,occ,why in items:
+        prefix='m' if d==7 else 'p' if d==6 else 'q' if d<5 else 'w'
+        counts[prefix]=counts.get(prefix,0)+1;ident=prefix+str(counts[prefix])
+        sp={'id':ident,'d':d,'tib':tib,'eng':eng}
+        if eng is None:sp.update(cls=('number' if tib=='rnams' else 'case') if d==6 else 'unrendered',nul=why)
+        if eng=="n't":sp['subword']=True
+        if d==7:
+            assert parent is not None
+            ts=src['wylie'].find(tib,*parent)
+            assert ts>=0 and src['wylie'].count(tib,*parent)==1
+        else:
+            ts=src['wylie'].find(tib,cursor);assert ts>=0,(seq,tib);cursor=ts+len(tib)
+            parent=(ts,cursor) if d==5 else None
+        es=None
+        if eng is not None:
+            found=[];i=0
+            while True:
+                i=src['english'].find(eng,i)
+                if i<0:break
+                j=i+len(eng)
+                if eng=="n't" or ((not eng[0].isalnum() or i==0 or not src['english'][i-1].isalnum()) and (not eng[-1].isalnum() or j==len(src['english']) or not src['english'][j].isalnum())):found.append(i)
+                i+=1
+            assert occ<len(found),(seq,tib,eng,occ,found)
+            es=found[occ]
+        spans.append(sp);intended.append({'id':ident,'d':d,'tib':tib,'eng':eng,'tib_range':[ts,ts+len(tib)],'eng_range':None if es is None else [es,es+len(eng)],'english_occurrence_zero_based':occ if es is not None else None,'basis':why})
+    order=[x['id'] for x in sorted((x for x in intended if x['eng'] is not None and x['d']!=7),key=lambda x:x['eng_range'][0])]
+    spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':note}]}
+    out=batch/'tibetan'/str(seq)
+    for name,obj in [('spec.json',spec),('intended-spans.json',intended),('errata.json',[])]:
+        p=out/name;assert not p.exists(),p;p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+    print(seq,len(spans),sum(x['eng'] is None for x in spans))

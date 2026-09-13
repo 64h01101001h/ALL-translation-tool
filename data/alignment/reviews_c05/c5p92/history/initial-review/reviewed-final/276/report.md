@@ -1,0 +1,15 @@
+C05:276 — DONE reconciled candidate; PROVISIONAL Codex /root/c05_253_255_reconcile, reused context, neither current original author.
+Final spans=11; nulls=1; d5=7; d7=0; errata=0. All 21 original identities have individual dispositions, full optional fields/key order, parents and declared occurrences.
+Both full frozen angles and current sources were reopened; all six original canonical bodies independently reproduced exactly. Root mechanical/source checks are corroboration only.
+All final ordered seven-key tuples and individual rationales are in final-tuples.json and final-decisions.json; every original identity/disposition is in original-dispositions.json; exact complete omission complements are in omissions.json.
+Material disagreements, positive counterevidence and rejected broader/atomized proposals are recorded in material-decisions.json. No agreement or generator pass is treated as semantic proof.
+Retain whole prior-speaker d3 recast, full negative-understanding idiom, topic-fusion null, meaning/statement reordering and both. Skyon/yin and supplied whole remain omitted.
+All five grounds for each actual suspicion are in errata-analysis.json; no new erratum survives. Original C05/C15 bytes are preserved with complete physical extents and exact source-range mappings.
+Shared 274 evidence uses reviewed copy_evidence_once_v2.py with original-copy-manifest.json plus original alias records; current full rows, raw master/corpus objects, source histories and original failed attempts remain intact.
+New physical result: full C15:419 ACIP matches one whitespace-located extent (LAS space CRLF CAN); the English original correctly reported no contiguous exact match. This is not evidence of independent publication.
+The original English Human inspection wording is preserved verbatim and externally corrected as direct Codex model reading; no human certification occurred. See shared role-provenance.json and the retained author correction.
+Actual final canonical generator: EXIT=0; stderr=0 bytes; body=2831 bytes. Full argv/stdin/stdout/stderr/code pins and RO/query_only connections: canonical-attempt01/.
+Final spec: 2630 bytes; SHA256=a4f530ac8f0fbb612a0d16c9cc5f8b075ec61876b324838c7e0540af05be55e2.
+Final body: 2831 bytes; SHA256=ef105fb11eddc667118c42e633a4314e53b8b005d71032826592705d420364fa.
+Final body was generated from the final note/spec, never reconstructed; all labels/ranges and both entire text fields pass the independent HTML parser and canonical resolver. No subsequent spec/note edit.
+Proposed head allowances are empty. Actual FN/PAT require trailing ASCII space and do not match bare you; khyod remains its semantic licensor. No gate file was edited. Separate semantic approval remains required before root landing; this reconciler grants none.

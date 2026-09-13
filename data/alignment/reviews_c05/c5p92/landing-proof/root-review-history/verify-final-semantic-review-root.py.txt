@@ -1,0 +1,118 @@
+"""Root full final preservation/identity gate after complete final report reading.
+
+No semantic re-authoring, canonical/query/test rerun, or WT mutation.
+"""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess
+B=Path(__file__).resolve().parent
+D=B/'semantic-review'; H=B/'pre-metadata-correction01'
+W=B.parents[1]/'campaign-worktree'; O=B/'root-final-semantic-review-verification'
+BASE='81942cfc6022a785894d3cc2a20de81dc4c6f599'
+O.mkdir(exist_ok=False)
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def js(p):return json.loads(p.read_bytes())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+commands=[]; objects={}
+def git(*args):
+    q=O/'git'/str(len(commands));q.mkdir(parents=True)
+    record=dict(argv=['git',*args],cwd=str(W),environment_overrides={'GIT_OPTIONAL_LOCKS':'0'})
+    save(q/'command.json',record);(q/'stdin.bin').write_bytes(b'')
+    r=subprocess.run(record['argv'],cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'),input=b'',capture_output=True)
+    (q/'stdout.bin').write_bytes(r.stdout);(q/'stderr.bin').write_bytes(r.stderr);(q/'exit.txt').write_text(str(r.returncode)+'\n')
+    commands.append(record);assert r.returncode==0 and not r.stderr
+    return r.stdout
+assert git('rev-parse','HEAD').decode().strip()==BASE
+assert git('status','--porcelain=v1','--untracked-files=no')==b''
+f=js(D/'freeze.json');freeze_pin=pin((D/'freeze.json').read_bytes())
+assert freeze_pin['sha256']=='694dceeb5248484e702d1973c84be78b7f6b34750fa75708113338e0887fee8a'
+assert f['spec_verdict']==f['quality_verdict']=='APPROVE'
+files={str(p.relative_to(D)):pin(p.read_bytes()) for p in D.rglob('*') if p.is_file() and p!=D/'freeze.json'}
+assert files==f['files'] and len(files)==f['file_count']==2286
+assert sum(x['bytes'] for x in files.values())==f['total_bytes']==168139617
+supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+assert all(Path(n).suffix.lower() in supported for n in files)
+manifest=js(D/'original-to-copy-manifest.json');assert len(manifest)==3234
+for row in manifest:
+    p=D/row['copy'];assert p.resolve().is_relative_to(D.resolve())
+    raw=p.read_bytes();assert pin(raw)=={k:row[k] for k in ('bytes','sha256')}
+    if row.get('original_git_commit'):
+        key=row['original_git_commit']+':'+row['repository_relative_path']
+        if key not in objects:objects[key]=git('show',key)
+        original=objects[key]
+    else:original=Path(row['original']).read_bytes()
+    assert raw==original,row
+assert len(objects)==14
+aliases=js(D/'input-aliases.json');assert len(aliases)==3234
+for row in aliases:
+    p=Path(row['path'])
+    assert str(p.resolve(strict=True))==row['resolved']
+    assert (os.readlink(p) if p.is_symlink() else None)==row['symlink']
+    assert pin(p.read_bytes())=={k:row[k] for k in ('bytes','sha256')}
+baseline=js(B/'baseline.json');assert baseline['commit']==BASE and baseline['course_boundary']==273
+for rel,digest in baseline['sha256'].items():assert pin((W/rel).read_bytes())['sha256']==digest
+source_aliases=js(D/'source-alias-transports.json');assert len(source_aliases)==2
+for row in source_aliases:
+    p=Path(row['alias']);record=row['original_record']
+    assert p.is_symlink() and os.readlink(p)==row['symlink'] and str(p.resolve())==row['resolved']
+    raw=p.read_bytes();assert pin(raw)=={k:record[k] for k in ('bytes','sha256')}
+    assert raw==(D/record['copy']).read_bytes()
+for rel in ('data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz'):
+    p=W/rel;rows=[r for r in manifest if Path(r['original']).resolve()==p.resolve()]
+    assert len(rows)==1 and not rows[0].get('original_git_commit')
+    assert rows[0]['copy'] in files
+meta=js(D/'review.json')
+assert meta['status']==meta['verdict']==meta['spec_verdict']==meta['quality_verdict']=='APPROVE'
+assert meta['open_findings']==[] and meta['resolved_findings']==['C05-275-OMISSION-01']
+assert meta['total_spans']==112 and meta['total_nulls']==3 and meta['total_word_pairs']==81
+for name,key in [('review.md','report'),('original-to-copy-manifest.json','original_to_copy_manifest'),('evidence-pins.json','evidence_manifest')]:
+    assert pin((D/name).read_bytes())=={k:meta[key][k] for k in ('bytes','sha256')}
+checks=js(D/'checklist.json');assert len(checks)==16 and all(c['status']=='PASS' for c in checks)
+assert js(D/'resolved-spans.json')==js(B/'root-reconciliation-verification/resolved-spans.json')
+assert js(D/'bank-ready-errata.json')==[] and js(D/'span-head-allow-needed.json')=={}
+scope=js(D/'correction01/scope-proof.json')
+assert scope['status']=='PASS_SCOPED_METADATA_REVIEW_MECHANICS'
+assert scope['exact_changed_paths']==['275/freeze.json','275/material-decisions.json','275/omissions.json']
+assert scope['exact_changed_string_fields']==3 and scope['new_canonical_calls']==scope['new_sql_calls']==0
+mapping=js(H/'original-logical-to-retained-paths.json');by_logical={r['original_logical_path']:r for r in mapping}
+assert len(mapping)==len(by_logical)==1651
+for row in mapping:assert pin(Path(row['retained_path']).read_bytes())=={k:row[k] for k in ('bytes','sha256')}
+transports=js(D/'correction01/old-logical-source-transports.json');assert len(transports)==550
+for row in transports:
+    old=by_logical[row['original_logical_path']]
+    assert old['retained_path']==row['current_manifest_original']
+    assert pin(Path(old['retained_path']).read_bytes())=={k:row[k] for k in ('bytes','sha256')}
+    assert Path(old['retained_path']).read_bytes()==(D/row['copy']).read_bytes()
+old_freeze=js(H/'semantic-review/freeze.json')
+for rel,expected in {**old_freeze['files'],'freeze.json':pin((H/'semantic-review/freeze.json').read_bytes())}.items():
+    assert pin((D/'history/initial-review'/rel).read_bytes())==expected
+    assert (D/'history/initial-review'/rel).read_bytes()==(H/'semantic-review'/rel).read_bytes()
+reuse=js(D/'correction01/canonical-reuse-bindings.json');assert [r['seq'] for r in reuse]==[274,275,276]
+for row in reuse:
+    seq=row['seq'];rec=js(Path(row['execution_record']));assert rec['exit']==0
+    for stream,r in row['bound_streams'].items():
+        raw=Path(r['retained_path']).read_bytes()
+        assert pin(raw)=={k:r[k] for k in ('bytes','sha256')}=={k:rec[stream][k] for k in ('bytes','sha256')}
+        if stream=='stderr':assert raw==b''
+        else:
+            name='spec.json' if stream=='stdin' else 'body.html'
+            assert raw==(B/f'reconciled/{seq}'/name).read_bytes()==(D/f'reviewed-final/{seq}'/name).read_bytes()
+for row in js(D/'correction01/source-and-code-current.json'):
+    p=Path(row['path']);assert str(p.resolve())==row['resolved']
+    assert (os.readlink(p) if p.is_symlink() else None)==row['actual_symlink_target']
+    assert pin(p.read_bytes())=={k:row[k] for k in ('bytes','sha256')}
+for row in meta['current_reconciled_freezes']:
+    p=B/f"reconciled/{row['seq']}";rf=js(p/'freeze.json')
+    assert pin((p/'freeze.json').read_bytes())==row['freeze']
+    assert {str(x.relative_to(p)):pin(x.read_bytes()) for x in p.rglob('*') if x.is_file() and x!=p/'freeze.json'}==rf['files']
+assert git('rev-parse','HEAD').decode().strip()==BASE
+assert files=={str(p.relative_to(D)):pin(p.read_bytes()) for p in D.rglob('*') if p.is_file() and p!=D/'freeze.json'}
+save(O/'original-copy-checks.json',manifest)
+save(O/'proof.json',dict(status='PASS',scope='Root final semantic-review preservation and identity closure; no independent semantic claim supplied by root',
+    utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=BASE,review_freeze=freeze_pin,review_report=pin((D/'review.md').read_bytes()),
+    semantic_spec_verdict='APPROVE',semantic_quality_verdict='APPROVE',open_findings=[],frozen_files=len(files),frozen_bytes=f['total_bytes'],
+    full_original_copy_records=len(manifest),current_aliases=len(aliases),historical_git_objects=len(objects),
+    retained_tree_records=len(mapping),old_logical_transports=len(transports),initial_review_full_files=1113,
+    source_archive_aliases=len(source_aliases),unique_non_git_row_per_live_archive=True,all_supported_landing_extensions=True,
+    unchanged_final_tuples=112,nulls=3,word_pairs=81,earlier_actual_canonical_runs_reused=3,
+    canonical_reruns=0,queries=0,builds=0,tests=0,WT_mutations=0,prior273_outputs_and_sources_unchanged=True))
+print(json.dumps(dict(status='PASS',frozen_files=len(files),original_copy_records=len(manifest),historical_git_objects=len(objects))))

@@ -1,0 +1,72 @@
+from pathlib import Path
+import datetime,hashlib,json,os
+D=Path(__file__).resolve().parent;B=D.parents[1];W=B.parent.parent/'campaign-worktree'
+def read(p):return json.loads(Path(p).read_bytes())
+def pin(p):
+ b=Path(p).read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,x):
+ with Path(p).open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+base=read(B/'baseline.json');src={x['seq']:x for x in read(B/'source.json')}
+ev=read(D/'source-evidence-verification.json');assert ev['status']=='PASS_FULL_LOCAL_SOURCE_AND_GOVERNING_EVIDENCE'
+for n,sha in base['sha256'].items():assert pin(W/n)['sha256']==sha
+for r in read(D/'original-to-copy-manifest.json'):
+ original=Path(r['original']);cp=D/r['copy'];assert original.read_bytes()==cp.read_bytes();assert pin(cp)=={k:r[k] for k in ('bytes','sha256')}
+for r in read(D/'supplied-aliases.json'):
+ p=Path(r['alias']);assert str(p.resolve(strict=True))==r['resolved'];assert (os.readlink(p) if p.is_symlink() else None)==r['symlink'];assert pin(p)=={k:r[k] for k in ('bytes','sha256')}
+register=read(W/'docs/errata_register.json');assert isinstance(register,list) and len(register)==192
+existing=[r for r in register if r['segment'] in ('C05:274','C05:275','C05:276')];assert not existing
+classes=[r for r in register if r['item_id'] in ('E-025','E-028','E-029','E-045','E-089')];assert len(classes)==5
+save(D/'registered-hyphen-class-full.json',classes)
+physical=read(D/'input-proof.json');raw=(D/'physical-C05ReadingASCII.txt').read_bytes()
+for r in physical['physical_extents']:assert raw[r['start']:r['start']+r['bytes']]==r['source_utf8'].encode()
+quotes={274:('no one of the beings is able to see all three things',"'gro ba re res dngos po gsum ga ma mthong bar"),275:('[non- Buddhist]','grangs can'),276:('is though incorrect',"mi 'thad par thal")}
+decisions={
+274:'No count/negation correction is established: each perceiver failing to see all three preserves the source distributive/negative scope. The particular/unshared karma expression is a different negative-containing lexical item.',
+275:'The complete physical source has [non- followed by CRLF and Buddhist]. The source/spine spacing and C15 unspaced form differ exactly at that single space. This is the already registered hyphen/line-break family E-025/E-028/E-029/E-045; no new row-level erratum is filed, and no whitespace is repaired.',
+276:'The unusual is though incorrect preserves a concessive English word order in this actual published-text witness. C15 shares it exactly. Stylistic preference does not establish a factual/typographic defect; no corrected word order is composed.'}
+challenges={
+274:'Challenge las can/with their own karma and its strict karma/with members; time-phrase relocation; the single early English position for final khas blangs pa; and source ma/no with distributive re res/one. The middle being reprise is omitted, with the final being range explicitly verified.',
+275:'Challenge the quotation brten nas/circumstances and the two phyir/for premise scopes; passive kyis/by versus nominal gyis/of; the middle original-form/intermediate-form reversal; and the final complete target-conflict phrase. Kha spos and cause remain distributed omissions with positive contrary glossary/corpus evidence retained.',
+276:'Challenge the whole prior-speaker phrase/position expressed above and the skyon/yin omission. Full HGM1209 licenses failed to understand as one negative idiom; the topic ni is a grammar-fusion null, not the nearby printed is.'}
+counts=[]
+for seq in [274,275,276]:
+ d=B/'tibetan'/str(seq);g=read(d/'generator-proof.json');spec=read(d/'spec.json');items=read(d/'intended-spans.json')
+ assert g['exit_code']==0 and g['stderr_bytes']==0 and g['all_occurrences_match']
+ assert (d/'body.html').read_bytes()==(d/'generator.stdout').read_bytes()
+ assert pin(d/'spec.json')['sha256']==g['spec_sha256'] and pin(d/'body.html')['sha256']==g['stdout_sha256']
+ assert len(items)==len(spec['segments'][0]['spans'])==g['span_count']
+ assert read(d/'errata.json')==[]
+ found,tib=quotes[seq];assert found in src[seq]['english'] and tib in src[seq]['wylie']
+ analysis={'seq':seq,'found':found,'tibetan_quote':tib,'errata_proposed':0,'disposition':decisions[seq],
+ 'five_grounds':{'a_actual_quote':'Both exact quotes verified in this row; full ACIP/Wylie/English, raw corpus object, and physical extents retained.',
+ 'b_witnesses':'C15:'+str({274:419,275:420,276:421}[seq])+' matches all actual text fields except the recorded275 one-space difference. Six uncapped material corpus queries and nine exact full-field parallel queries are preserved. Digital overlap and metadata do not establish independent publication or ingestion lineage.',
+ 'c_register':'Full192-entry register read; no current exact citation. Full five relevant hyphen-class records retained;275 spacing falls under the registered family. No selected English field reaches1500; no current following-heading marker is present.',
+ 'd_defensible_or_uncertain':decisions[seq]+' HGM evidence is binding as supplied; reference glosses and questionable auto-aligned rows cannot supply new English or repair this source.',
+ 'e_counts':'Actual capture75 lexical query sets/76 distinct complete master records;9 exact parallel sets;46 earlier preparation query replays exact;6 new material queries24 full rows.15 complete context rows and six physical extents verified. Every raw query/result/count is preserved; independence is not counted from aliases.'}}
+ assert len(src[seq]['english'])!=1500
+ save(d/'errata-analysis.json',analysis)
+ report=f'''C05:{seq} Tibetan-first original — primary Codex; PROVISIONAL, not semantic approval.
+Own root preparation and review leads were read and disclosed; no current English proposal or judgment was read before freezing all three originals.
+{challenges[seq]}
+Complete shared source/evidence is in ../274/:75 lexical query sets/76 full master entries,15 raw context rows,9 exact parallel queries,46 full preparation replays,6 supplemental corpus query sets/24 rows, and six byte-exact extents of the complete original physical C05 file.
+Current81942cfc governing originals are bound by9 actual Git show executions; complete original/copy records and supplied aliases are preserved by reviewed evidence-copy v2. Source/master baseline hashes remain unchanged.
+All106 intended occurrences across the three originals match the canonical resolver, including repeated forms and subject/object reversals; membership/optional fields remain explicit in specs and intended-spans.json.
+Author attempt01 wrote274 and then failed on noncontiguous la brten nas, separated by original verse punctuation; its full source and streams remain. A premature combined canonical caller passed274 once, then stopped because275 was absent. V2 authored275/276 only, retaining brten nas and explicitly omitting la; neither source nor checker changed, and274 was not rerun.
+Actual canonical generator EXIT=0; stderr=0 bytes; body={g['stdout_bytes']} bytes; SHA-256={g['stdout_sha256']}.
+Measured spans={g['span_count']}; nulls={g['null_count']}; non-null d5={g['d5_nonnull']}. One actual successful canonical invocation per current segment; no post-generation spec/note edits.
+Errata:0. {decisions[seq]} All five grounds and source quotes are recorded in errata-analysis.json; independent skeptical review remains required.
+Prior full helper versions, partial/failed calls, complete raw witnesses, current source/copy manifests and actual command records are retained. Native/rendered/device/MAIN integration has not been performed for these originals.
+Both original authors are excluded from reconciliation and semantic approval. Fidelity alone does not certify correspondence.
+'''
+ (d/'report.md').write_text(report)
+ save(d/'completion-input-proof.json',{'status':'PASS_ORIGINAL_MECHANICAL_CHECKS_ONLY','source':src[seq],'canonical':g,'shared_evidence_directory':str(D),'source_evidence_proof':pin(D/'source-evidence-verification.json'),'other_angle_not_read':True,'producer':'Primary Codex with own preparation disclosed'})
+ counts.append({'seq':seq,'spans':g['span_count'],'nulls':g['null_count'],'nonnull_d5':g['d5_nonnull'],'spec':pin(d/'spec.json'),'body':pin(d/'body.html')})
+assert sum(x['spans'] for x in counts)==106
+now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+freezes=[]
+for seq in [274,275,276]:
+ d=B/'tibetan'/str(seq);files=[{'path':str(p.relative_to(d)),**pin(p)} for p in sorted(d.rglob('*')) if p.is_file()]
+ save(d/'freeze.json',{'utc':now,'status':'FROZEN original Tibetan-first; no semantic approval','files':files})
+ freezes.append({'path':str(d/'freeze.json'),**pin(d/'freeze.json')})
+save(B/'primary-tibetan-original-complete.json',{'utc':now,'status':'All three Tibetan originals frozen before any current English proposal or judgment read','producer':'Primary Codex; own preparation disclosed','counts':counts,'freezes':freezes})
+print(json.dumps(counts,indent=2))
