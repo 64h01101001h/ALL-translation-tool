@@ -387,6 +387,28 @@ VerbGuess spotVerb(const OverlayDoc& doc, const std::vector<Chunk>& chunks) {
                     classifyVerbWithTenses(e.wylie, e.tenses)};
         return v;
     };
+    // Is there a PREDICATE SLOT at all?
+    //
+    // chunkClause closes a chunk at every case particle and gives the final
+    // chunk the role "predicate slot — expect the verb here" only when that
+    // chunk carries NO marker. A clause ending at a marker therefore has no
+    // predicate position, and anything verb-shaped inside that last chunk is
+    // sitting in a marked phrase — "bshad pa'i phyir", because of explaining
+    // — not in the position a finite verb occupies.
+    //
+    // spotVerb searched it anyway. Measured over 115 clauses of real corpus
+    // prose: 32 (27%) have no predicate slot, and spotVerb returned CONFIDENT
+    // on 15 of those 32 (46%). The chunker had already worked out there was
+    // nowhere for a verb to be, and this function never asked it.
+    //
+    // The candidate is still reported, because naming the word is useful. Its
+    // CONFIDENCE is not, because the position is wrong, and confidence here
+    // means "HGM's data supports this being the clause's verb". A clause with
+    // no predicate slot is also the shape of an implied verb, which the
+    // Walkthrough now says in as many words.
+    // (2026-09-13, from the same measurement pass that found la.)
+    const bool hasPredicateSlot = chunks.back().marker.empty();
+
     // only the final chunk is searched for a confident verb, right-to-left
     {
         const int c = (int)chunks.size() - 1;
@@ -395,13 +417,30 @@ VerbGuess spotVerb(const OverlayDoc& doc, const std::vector<Chunk>& chunks) {
                 const auto& span = doc.spans[ix];
                 const auto& e = doc.entries[span.entry_ix];
                 if (!e.tenses.empty())
-                    return found(c, span.beg, e, "tenses: " + e.tenses, true);
+                    return found(c, span.beg, e,
+                                 hasPredicateSlot
+                                     ? "tenses: " + e.tenses
+                                     : "tenses: " + e.tenses +
+                                           " \u2014 but this clause has no "
+                                           "predicate slot, so the word sits "
+                                           "inside a marked phrase",
+                                 hasPredicateSlot);
                 if (isCopula(e.wylie))
                     return found(c, span.beg, e,
-                                 "closed-class verb (rule table)", true);
+                                 hasPredicateSlot
+                                     ? "closed-class verb (rule table)"
+                                     : "closed-class verb, but inside a marked "
+                                       "phrase \u2014 this clause has no "
+                                       "predicate slot",
+                                 hasPredicateSlot);
                 if (classifyVerbWithTenses(e.wylie, e.tenses))
-                    return found(c, span.beg, e, "Wilson verb-class table",
-                                 true);
+                    return found(c, span.beg, e,
+                                 hasPredicateSlot
+                                     ? "Wilson verb-class table"
+                                     : "Wilson verb-class table, but inside a "
+                                       "marked phrase \u2014 this clause has "
+                                       "no predicate slot",
+                                 hasPredicateSlot);
                 // Rule 4, the weakest of the four, and the one that was
                 // making CASE PARTICLES into confident verbs.
                 //
@@ -438,7 +477,8 @@ VerbGuess spotVerb(const OverlayDoc& doc, const std::vector<Chunk>& chunks) {
                     for (const auto& gl : e.hgm_gloss)
                         if (gl.rfind("to ", 0) == 0 && gl.size() > 3 &&
                             std::isalpha((unsigned char)gl[3]))
-                            return found(c, span.beg, e, "gloss: " + gl, true);
+                            return found(c, span.beg, e, "gloss: " + gl,
+                                         hasPredicateSlot);
             }
         }
     }
