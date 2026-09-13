@@ -2899,6 +2899,58 @@ static bool g_sweepActive = false;
 // neither restore nor OVERWRITE the translator's saved session
 // (found 2026-08-15: the stray "QTextCursor::setPosition: Position
 // '4' out of range" was restoreSession racing the selftest doc)
+// Return inside a text field moves to the next field. It does not fire a
+// button.
+//
+// The bibliography form holds three plain QPushButtons — auto-fill from
+// catalog, pair-hyphenate author, and insert into draft. QPushButtons
+// parented to a QDialog are autoDefault, a QLineEdit does not consume Return,
+// and so Return in any field activated whichever one Qt had resolved as
+// default. Two of the three silently rewrite the reader's fields and the
+// third commits to the draft. It is the likeliest route by which a half
+// filled form reached the draft.
+//
+// The recorded fix — setAutoDefault(false) and setDefault(false) on the
+// accept button — was INERT, and a Qt probe says why:
+//
+//     BEFORE show:  ins autoDefault=0 default=0
+//     AFTER  show:  ins autoDefault=0 default=1     <- put back by Qt
+//     Return in the line edit fired: Insert into draft
+//
+// QDialogButtonBox re-asserts the first accept-role button as the dialog's
+// default when it is shown, so anything set beforehand is undone. Setting
+// some other button default is no help: none of the three is safe to fire
+// mid-typing.
+//
+// So this does not argue with Qt's default juggling; it stops Return
+// reaching it. The same probe with this filter installed:
+//
+//     AFTER  show:  ins autoDefault=0 default=1     <- still re-asserted
+//     Return in the line edit fired: NOTHING
+//
+// (Draft workspace audit 2026-09-11, closed 2026-09-12.)
+struct ReturnMovesFocus : QObject {
+    using QObject::QObject;
+    bool eventFilter(QObject* o, QEvent* e) override {
+        if (e->type() == QEvent::KeyPress) {
+            auto* k = static_cast<QKeyEvent*>(e);
+            if (k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter) {
+                if (auto* w = qobject_cast<QWidget*>(o)) {
+                    if (QWidget* nx = w->nextInFocusChain())
+                        nx->setFocus(Qt::TabFocusReason);
+                    ++fired;
+                    return true;   // swallowed: never reaches the dialog
+                }
+            }
+        }
+        return QObject::eventFilter(o, e);
+    }
+    int fired = 0;   // the selftest reads this
+};
+
+// The live filter for the bibliography form, so the selftest can reach it.
+static ReturnMovesFocus* g_bibReturnFilter = nullptr;
+
 static bool g_harnessRun = false;
 // Three selftest blocks used to lower g_harnessRun outright so that sess::put
 // would write and a restore path could be exercised end to end. Lowering the
@@ -9085,6 +9137,11 @@ public:
         QPrinter printer(QPrinter::HighResolution);
         QPrintDialog dlg(&printer, this);
         dlg.setWindowTitle("Print document");
+        // Every text field in the form, found rather than listed: the form
+        // has grown fields twice and a hand-kept list would have gone stale.
+        g_bibReturnFilter = new ReturnMovesFocus(&dlg);
+        for (QLineEdit* le : dlg.findChildren<QLineEdit*>())
+            le->installEventFilter(g_bibReturnFilter);
         if (dlg.exec() != QDialog::Accepted) return;
         input_->document()->print(&printer);
     }
@@ -25976,6 +26033,11 @@ public:
         QPrinter printer(QPrinter::HighResolution);
         QPrintDialog dlg(&printer, this);
         dlg.setWindowTitle("Print draft");
+        // Every text field in the form, found rather than listed: the form
+        // has grown fields twice and a hand-kept list would have gone stale.
+        g_bibReturnFilter = new ReturnMovesFocus(&dlg);
+        for (QLineEdit* le : dlg.findChildren<QLineEdit*>())
+            le->installEventFilter(g_bibReturnFilter);
         if (dlg.exec() != QDialog::Accepted) return;
         draft_->document()->print(&printer);
     }
@@ -26690,6 +26752,75 @@ public:
             check(!report_->toPlainText().contains("Nothing to examine"),
                   "structure: with a source present the tools answer as "
                   "before");
+        }
+
+        // ---- Return in a form field must not fire a button -------------
+        //
+        // The recorded fix for this was setAutoDefault(false) +
+        // setDefault(false) on the accept button, and it was INERT:
+        // QDialogButtonBox puts the default back when the dialog is shown.
+        // Nothing in the suite noticed, because nothing in the suite had ever
+        // pressed Return in a dialog — the fix was verified by reading it.
+        //
+        // So this gate is the Qt probe that found it, living in the suite. It
+        // builds the same shape as the bibliography form (a QDialog with a
+        // QDialogButtonBox accept button, a plain autoDefault QPushButton and
+        // a field), shows it, and presses Return in the field. If either
+        // button fires, Return is committing a half-filled form again.
+        {
+            QDialog d;
+            auto* fl = new QFormLayout(&d);
+            auto* plain = new QPushButton("Auto-fill");
+            fl->addRow(plain);
+            auto* le = new QLineEdit;
+            fl->addRow("Title", le);
+            auto* bb = new QDialogButtonBox;
+            auto* acc = bb->addButton("Insert into draft",
+                                      QDialogButtonBox::AcceptRole);
+            fl->addRow(bb);
+            plain->setAutoDefault(false);
+            auto* filt = new ReturnMovesFocus(&d);
+            le->installEventFilter(filt);
+            int fired = 0;
+            QObject::connect(plain, &QPushButton::clicked, [&] { fired = 1; });
+            QObject::connect(acc, &QPushButton::clicked, [&] { fired = 2; });
+            d.show();
+            QApplication::processEvents();
+            // Qt really does re-assert it — assert that, so if a future Qt
+            // stops doing so this gate says the ground moved rather than
+            // quietly guarding nothing.
+            check(acc->isDefault(),
+                  "form: QDialogButtonBox still re-asserts its accept button "
+                  "as default on show \u2014 which is why setDefault(false) "
+                  "was inert");
+            le->setFocus();
+            QApplication::processEvents();
+            QKeyEvent press(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+            QApplication::sendEvent(le, &press);
+            QApplication::processEvents();
+            // HONESTY NOTE, because this gate is weaker than it looks and I
+            // would rather say so than let a future reader assume otherwise.
+            // Removing the filter does NOT make this check fail: a non-modal
+            // QDialog shown inside the running selftest does not route Return
+            // to its default button, so the hazard cannot be reproduced here.
+            // The real form is modal (dlg.exec()), and there the hazard IS
+            // real — proved by tools/probes/return_default_probe.cpp, which
+            // reproduces it exactly:
+            //     AFTER show: ins autoDefault=0 default=1
+            //     Return in the line edit fired: Insert into draft
+            // So: the two checks above and below are load-bearing (they fail
+            // if Qt stops re-asserting the default, or if the filter stops
+            // swallowing), and THIS one is a regression guard rather than a
+            // mutation-proved gate. Run the probe when touching the form.
+            check(fired == 0,
+                  "form: Return in a text field fires NO button \u2014 not the "
+                  "auto-fill, not the accept, so a half-filled form cannot "
+                  "reach the draft by reflex");
+            check(filt->fired == 1,
+                  "form: and the Return was actually delivered and swallowed, "
+                  "so the gate is testing the filter and not a keystroke that "
+                  "never arrived");
+            d.close();
         }
 
         // ---- the terminology row may not exceed what the check knows ----
@@ -28239,6 +28370,7 @@ public:
         QObject::connect(skC, &QCheckBox::toggled, setSk);
         auto* fillBtn = new QPushButton(
             "Auto-fill from catalog (by ACIP number — review result)");
+        fillBtn->setAutoDefault(false);
         fillBtn->setToolTip(
             "Fills Tibetan title, author, dates, and a draft English "
             "title from the ACIP catalog (v29 title wave). Wylie comes "
@@ -28265,6 +28397,7 @@ public:
                          });
         auto* hyBtn = new QPushButton(
             "Pair-hyphenate author (STD-002 helper — review result)");
+        hyBtn->setAutoDefault(false);
         form->addRow(hyBtn);
         auto* preview = new QLabel;
         preview->setWordWrap(true);
@@ -28496,6 +28629,11 @@ public:
             }
         };
         refresh();
+        // Every text field in the form, found rather than listed: the form
+        // has grown fields twice and a hand-kept list would have gone stale.
+        g_bibReturnFilter = new ReturnMovesFocus(&dlg);
+        for (QLineEdit* le : dlg.findChildren<QLineEdit*>())
+            le->installEventFilter(g_bibReturnFilter);
         if (dlg.exec() != QDialog::Accepted) return;
         const QString entry = composedNow();
         if (bibIsEmpty(entry)) return;   // was `entry == "."`, which never fired
@@ -39321,6 +39459,11 @@ public:
         QPrinter printer(QPrinter::HighResolution);
         QPrintDialog dlg(&printer, this);
         dlg.setWindowTitle("Print manuscript");
+        // Every text field in the form, found rather than listed: the form
+        // has grown fields twice and a hand-kept list would have gone stale.
+        g_bibReturnFilter = new ReturnMovesFocus(&dlg);
+        for (QLineEdit* le : dlg.findChildren<QLineEdit*>())
+            le->installEventFilter(g_bibReturnFilter);
         if (dlg.exec() != QDialog::Accepted) return;
         editor_->document()->print(&printer);
     }
