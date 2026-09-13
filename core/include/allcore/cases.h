@@ -86,4 +86,51 @@ const char* specializedNote(VerbClass c);
 // the clause has a transitive verb and no 3rd-case chunk, empty otherwise.
 const char* unstatedAgentCaution(VerbClass c, bool sawThirdCase);
 
+// ---- Preston's p.xv chart, inverted ---------------------------------------
+//
+// The chart reads forwards: each of the eight syntactic functions lists the
+// cases it may be declined into.
+//
+//     agent of a transitive verb        3rd
+//     object of a transitive verb       1st, 2nd
+//     complement to the object          1st, 2nd
+//     subject of an intransitive verb   1st, 4th, 7th
+//     complement to the subject         1st, 2nd
+//     qualifier of the verb             2nd, 3rd, 4th, 5th, 7th, s.p.
+//
+// A reader with a chunk in front of them needs it BACKWARDS: given this case,
+// what can this chunk be doing? Inverting it is arithmetic, not judgement,
+// and the answer is a SET. Only the fifth case names one function.
+//
+// Then one deterministic filter, from Preston's two structural exclusions,
+// both stated verbatim on p.xvi-xviii: a transitive clause has no subject and
+// no complement to a subject; an intransitive clause has no agent and no
+// object. The verb's class shrinks the set without inferring anything.
+//
+// This exists because the engine's role labels commit to ONE function each —
+// "la don, to/at/in/for" for la, which is the qualifier reading — and Preston
+// diagrams the same fused particle as the complement in both of his worked
+// examples. A label that names one of four possibilities as though it were
+// the answer is the same overreach as resolving a la don particle to a single
+// case, and this file already refuses that.
+enum class Function {
+    AgentOfTransitive,
+    ObjectOfTransitive,
+    ComplementToObject,
+    SubjectOfIntransitive,
+    ComplementToSubject,
+    QualifierOfVerb,
+    Vocative,
+};
+
+const char* functionName(Function f);
+
+// Every function the given case admits, before the verb is considered.
+std::vector<Function> functionsForCase(int case_number);
+
+// ... and after. `t` narrows by Preston's two exclusions. Pass
+// Transitivity::Specialized to apply neither: those classes carry a subject
+// AND an object, so neither exclusion holds for them.
+std::vector<Function> functionsFor(int case_number, Transitivity t);
+
 }  // namespace allcore

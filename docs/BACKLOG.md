@@ -27,6 +27,67 @@ Every batch of alignment data should flow outward, not only into the export:
 The constraint that makes this safe: the tier travels with the data at every
 hop. A layer entry may never arrive anywhere wearing the binding colour.
 
+## The cursive scripts: kyuk-yik, bam-yik, dru-tsa (Adam, 2026-09-12)
+
+> "we're going to integrate using the kyuk-yik script/font and the bam-yik
+> script font and the dru-tsa script/font. in addition i'd also like to create
+> a trainer for reading these scripts and find other creative ways to use them
+> in our application."
+
+Three Tibetan hands beyond the dbu-can (headed) printing script the app
+renders everywhere today. Adam gave the names phonetically; the wylie is
+recorded here as **unconfirmed** rather than guessed, because a wrong
+transliteration banked in a spec is exactly the failure rule 3 exists to stop.
+Confirm each spelling with Adam or against the spine before any of it reaches
+code or a UI label.
+
+| as Adam said it | almost certainly | what it is |
+|---|---|---|
+| kyuk-yik | ⟨'khyug yig⟩ *unconfirmed* | the running/fast cursive hand — what a scribe writes at speed |
+| bam-yik | ⟨bam yig⟩ *unconfirmed* | a heavy formal headless book hand |
+| dru-tsa | ⟨'bru tsha⟩ *unconfirmed* | an ornamental display hand |
+
+### Why this is not just a font picker
+
+The three tasks are different sizes and only the first is small.
+
+**1. Render in these hands.** A font swap on the display side. The engines are
+untouched: they work in ACIP and wylie, and unicode Tibetan is unicode Tibetan
+whatever face draws it. The real work is sourcing fonts that are licensed to
+ship — the same question the Kawachen audio raised, and it must be answered
+BEFORE anything is added to the repo, not after.
+
+**2. A trainer for READING them.** This is the substantial one, and it is a
+genuinely different skill from everything the Learn tab does today. Every
+existing drill assumes the reader can already decode the glyph and asks about
+meaning, order or grammar. Reading a cursive hand is decoding, and it is the
+skill that stands between a student and every manuscript that was never
+block-printed.
+
+The honest design problem: our drills are generated from the corpus and scored
+against Geshe Michael's own text, which is what makes their answers his rather
+than ours. A script-reading drill would be scored against *the same syllable
+rendered in another face* — so the answer key is the identity of the syllable,
+which is attested, and the difficulty is entirely in the rendering. That works,
+and it is worth noting that it is a different kind of drill from the other
+fourteen: no corpus evidence is involved and none should be claimed.
+
+**3. "Other creative ways."** Deliberately not designed here. Worth thinking
+about with the pecha scans in the Input pane, where a real manuscript hand is
+already on screen beside the typed text.
+
+### What has to be settled first
+
+- **Licensing, before a single font file lands in the repo.** This repository
+  is public. Several good Tibetan cursive faces are free for use and not for
+  redistribution, which is the Kawachen situation exactly.
+- **Does the shaping hold?** Qt was chosen for this project because bundled
+  HarfBuzz shapes Tibetan stacks correctly. A cursive face exercises shaping
+  far harder than dbu-can does, and a face that renders a subjoined stack
+  wrongly is worse than no face at all. Measure before promising.
+- **Which hand first.** Kyuk-yik is the one a reader meets most in
+  manuscripts, so it is the obvious first, but Adam's call.
+
 ## THL Kangyur and Tengyur catalog (Adam, 2026-09-09)
 
 Harvest what we can from `old.thlib.org/encyclopedias/literary/canons/kt/`

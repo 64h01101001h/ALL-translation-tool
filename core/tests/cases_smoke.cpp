@@ -2,6 +2,7 @@
 // Preston, How to Read Classical Tibetan I, front matter + grammar review.
 #include <cstdio>
 #include <string>
+#include <vector>
 
 #include "allcore/cases.h"
 
@@ -102,6 +103,69 @@ int main() {
           "and does not raise it when the agent is right there");
     CHECK(unstatedAgentCaution(VerbClass::Linking, false)[0] == '\0',
           "an intransitive verb never raises it — it has no agent to miss");
+
+    // ---- Preston's p.xv chart, inverted ----
+    {
+        using F = Function;
+        auto has = [](const std::vector<F>& v, F f) {
+            for (F x : v) if (x == f) return true;
+            return false;
+        };
+        // The fifth case is the ONLY one in the chart that names one function.
+        CHECK(functionsForCase(5).size() == 1 &&
+                  functionsForCase(5)[0] == F::QualifierOfVerb,
+              "the fifth case names exactly one function \u2014 qualifier \u2014 "
+              "and is the only case in the chart that does");
+        // The sixth fills no slot: it joins noun to noun.
+        CHECK(functionsForCase(6).empty(),
+              "the sixth case fills no syntactic slot of its own");
+        // The first is four ways ambiguous before the verb is known.
+        CHECK(functionsForCase(1).size() == 4,
+              "a bare first-case noun could be four different things until "
+              "the verb is known");
+        // Preston's two exclusions, which is what the verb buys you.
+        const auto t1 = functionsFor(1, Transitivity::Transitive);
+        CHECK(!has(t1, F::SubjectOfIntransitive) &&
+                  !has(t1, F::ComplementToSubject),
+              "under a TRANSITIVE verb the first case cannot be a subject or "
+              "a complement to one \u2014 a transitive clause has no subject");
+        CHECK(has(t1, F::ObjectOfTransitive),
+              "and can still be the object");
+        const auto i1 = functionsFor(1, Transitivity::Intransitive);
+        CHECK(!has(i1, F::AgentOfTransitive) &&
+                  !has(i1, F::ObjectOfTransitive) &&
+                  !has(i1, F::ComplementToObject),
+              "under an INTRANSITIVE verb the first case cannot be an agent, "
+              "an object, or a complement to an object");
+        CHECK(has(i1, F::SubjectOfIntransitive) &&
+                  has(i1, F::ComplementToSubject),
+              "and can be the subject or its complement");
+        // Knowing the verb genuinely narrows: two of four, not four of four.
+        CHECK(t1.size() == 2 && i1.size() == 2,
+              "knowing the verb's transitivity halves the first case's "
+              "possibilities \u2014 the filter earns its place");
+        // A specialized verb gets NEITHER exclusion, because it carries a
+        // subject and an object at once. Collapsing it into either bucket
+        // would silently delete real readings.
+        CHECK(functionsFor(1, Transitivity::Specialized).size() == 4,
+              "a SPECIALIZED verb narrows nothing \u2014 it has a subject and "
+              "an object, so neither exclusion applies");
+        // THE overreach gate. The second case is what fused r marks, and the
+        // engine used to label it "la don, to/at/in" — the qualifier reading,
+        // named as though it were the answer. Preston diagrams that same
+        // fused particle as the COMPLEMENT in both of his worked examples.
+        const auto second = functionsForCase(2);
+        CHECK(second.size() == 4 && has(second, F::QualifierOfVerb) &&
+                  has(second, F::ComplementToObject) &&
+                  has(second, F::ComplementToSubject) &&
+                  has(second, F::ObjectOfTransitive),
+              "the second case admits the object, either complement, AND the "
+              "qualifier \u2014 naming only the qualifier was the overreach "
+              "this table exists to end");
+        CHECK(std::string(functionName(F::ComplementToSubject)) ==
+                  "complement to the subject",
+              "every function can say its own name");
+    }
 
     std::printf("cases_smoke: %s (%d failure(s))\n",
                 failures ? "FAILURES" : "ALL PASS", failures);

@@ -117,4 +117,64 @@ const char* unstatedAgentCaution(VerbClass c, bool sawThirdCase) {
            "intransitive, and the tool will not treat it as such";
 }
 
+const char* functionName(Function f) {
+    switch (f) {
+        case Function::AgentOfTransitive:     return "agent of the transitive verb";
+        case Function::ObjectOfTransitive:    return "object of the transitive verb";
+        case Function::ComplementToObject:    return "complement to the object";
+        case Function::SubjectOfIntransitive: return "subject of the intransitive verb";
+        case Function::ComplementToSubject:   return "complement to the subject";
+        case Function::QualifierOfVerb:       return "qualifier of the verb";
+        case Function::Vocative:              return "vocative — being addressed";
+    }
+    return "";
+}
+
+std::vector<Function> functionsForCase(int n) {
+    switch (n) {
+        case 1:   // nominative
+            return {Function::ObjectOfTransitive,
+                    Function::SubjectOfIntransitive,
+                    Function::ComplementToObject,
+                    Function::ComplementToSubject};
+        case 2:   // objective
+            return {Function::ObjectOfTransitive,
+                    Function::ComplementToObject,
+                    Function::ComplementToSubject,
+                    Function::QualifierOfVerb};
+        case 3:   // agentive
+            return {Function::AgentOfTransitive, Function::QualifierOfVerb};
+        case 4:   // beneficial / purposive
+            return {Function::SubjectOfIntransitive, Function::QualifierOfVerb};
+        case 5:   // originative — the only case in the chart that names ONE
+            return {Function::QualifierOfVerb};
+        case 6:   // connective: joins noun to noun, and fills no slot itself
+            return {};
+        case 7:   // locative
+            return {Function::SubjectOfIntransitive, Function::QualifierOfVerb};
+        case 8:   // vocative
+            return {Function::Vocative};
+        default:
+            return {};
+    }
+}
+
+std::vector<Function> functionsFor(int n, Transitivity t) {
+    std::vector<Function> out;
+    for (Function f : functionsForCase(n)) {
+        if (t == Transitivity::Transitive &&
+            (f == Function::SubjectOfIntransitive ||
+             f == Function::ComplementToSubject))
+            continue;   // a transitive clause has no subject
+        if (t == Transitivity::Intransitive &&
+            (f == Function::AgentOfTransitive ||
+             f == Function::ObjectOfTransitive ||
+             f == Function::ComplementToObject))
+            continue;   // an intransitive clause has no agent and no object
+        // Specialized: neither exclusion. They carry a subject AND an object.
+        out.push_back(f);
+    }
+    return out;
+}
+
 }  // namespace allcore
