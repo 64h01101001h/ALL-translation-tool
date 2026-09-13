@@ -1,3 +1,5 @@
+#include <cctype>
+
 #include "allcore/reader.h"
 
 #include "allcore/particles.h"
@@ -400,9 +402,43 @@ VerbGuess spotVerb(const OverlayDoc& doc, const std::vector<Chunk>& chunks) {
                 if (classifyVerbWithTenses(e.wylie, e.tenses))
                     return found(c, span.beg, e, "Wilson verb-class table",
                                  true);
-                for (const auto& gl : e.hgm_gloss)
-                    if (gl.rfind("to ", 0) == 0)
-                        return found(c, span.beg, e, "gloss: " + gl, true);
+                // Rule 4, the weakest of the four, and the one that was
+                // making CASE PARTICLES into confident verbs.
+                //
+                // Measured over 3,000 corpus segments: this rule fired on
+                // 5.8% of all returns, and la and phyir were the two
+                // most-returned "verbs" in the whole sample. la is the
+                // commonest particle in Tibetan.
+                //
+                // Two causes, and both need a guard.
+                //
+                // First, la's entry carries 108 glosses, among them
+                // "to ... to" and "to ... to ... to ... to ... to" — pattern
+                // entries showing how the particle works in a construction,
+                // not definitions of a verb. A bare rfind("to ",0)==0 matches
+                // them. So the gloss must have a real word after the "to ",
+                // not an ellipsis.
+                //
+                // Second, phyir is not in the particle table and its
+                // "to ... to" is caught by the first guard, but la's
+                // "to fit only" is not — that one has a real word after it.
+                // What settles la is that it IS a particle, and a particle is
+                // not a verb. Our own table already says which tokens are
+                // particles; this rule simply never asked.
+                //
+                // Rules 1-3 are unaffected: a token with tense forms, or in
+                // the copula list, or in the Wilson tables, still returns
+                // before reaching here. This narrows only the gloss-shaped
+                // guess. (2026-09-13, from a measurement pass over spotVerb.)
+                std::string upper = e.wylie;
+                for (auto& ch : upper)
+                    if (ch >= 'a' && ch <= 'z') ch = (char)(ch - 'a' + 'A');
+                const bool isParticle = classifyParticle(upper) != nullptr;
+                if (!isParticle)
+                    for (const auto& gl : e.hgm_gloss)
+                        if (gl.rfind("to ", 0) == 0 && gl.size() > 3 &&
+                            std::isalpha((unsigned char)gl[3]))
+                            return found(c, span.beg, e, "gloss: " + gl, true);
             }
         }
     }
