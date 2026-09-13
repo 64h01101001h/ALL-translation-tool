@@ -21694,8 +21694,23 @@ static QString equivalentsOwner(const allcore::TermUse& t) {
 // they are on their own. The Trainer's sixth layer already degrades correctly
 // when there is no key; what was missing is that the reader could not see the
 // degradation coming until they had already done the work.
+// `what` names the thing that is actually being scored.
+//
+// The badge used to say "Geshe Michael Roach's own ENGLISH for this passage is
+// the answer key" on every drill that draws from the corpus, and on five of
+// the eight it was false. Chunk order is scored on his TIBETAN sequence. Cloze
+// scores a Tibetan chunk and shows his English only as the hint. Boundary hunt
+// scores positions in the Tibetan. Peel scores a count taken from the
+// alignment layer, where his English is not consulted at all. Particle choice
+// scores a Tibetan particle.
+//
+// The badge exists to tell a learner whose authority stands behind the mark
+// against their answer. Naming the wrong artefact of his is a provenance
+// claim that is simply untrue (rule 4), and "his English is the key" is the
+// most load-bearing sentence in the Learn tab.
+// (Adam's reading-order review, 2026-09-12.)
 static QString keyBadge(bool inCorpus, const QString& course = QString(),
-                        int seq = 0) {
+                        int seq = 0, const char* what = "English") {
     const QString gold = ux::darkChrome() ? ux::chromeGold() : QString(ux::kGold);
     const QString mach =
         ux::darkChrome() ? ux::chromeMachine() : QString(ux::kMachine);
@@ -21704,8 +21719,8 @@ static QString keyBadge(bool inCorpus, const QString& course = QString(),
                    "<div style='border-left:3px solid %1;padding:4px 8px;"
                    "margin-bottom:6px'><b style='color:%1'>KEY</b> "
                    "<span style='font-size:12px'>Geshe Michael Roach's own "
-                   "English for this passage is the answer key%2.</span></div>")
-            .arg(gold,
+                   "%2 for this passage is the answer key%3.</span></div>")
+            .arg(gold, QString(what),
                  course.isEmpty() ? QString()
                                   : QString(" \u2014 %1:%2").arg(course).arg(seq));
     }
@@ -22344,7 +22359,8 @@ public:
         layout->addWidget(stats_);
         auto* row = new QHBoxLayout;
         mode_ = new QComboBox;
-        mode_->addItems({"Chunk order", "Cloze (fill the blank)",
+        mode_->addItems({"Chunk order \u2014 restore the TIBETAN order",
+                         "Cloze (fill the blank)",
                          "Particle choice", "Parallel reading",
                          "Vocabulary review (SRS)",
                          "Translate & compare",
@@ -22843,6 +22859,47 @@ public:
                     newDrill();
                     check(!lookupBtn_->isVisibleTo(this),
                           "look up: out of reach again on the next drill");
+                }
+            }
+
+            // ---- the KEY badge may only name what is actually scored ----
+            //
+            // The badge said "Geshe Michael Roach's own ENGLISH for this
+            // passage is the answer key" on every corpus-drawn drill, and on
+            // five of eight it was false: chunk order scores his Tibetan
+            // sequence, cloze scores a Tibetan chunk with his English merely
+            // shown as the hint, boundary hunt scores positions in the
+            // Tibetan, Peel scores a count off the alignment layer where his
+            // English is never consulted, and particle choice scores a
+            // Tibetan particle. Only "his second thought" and "silent
+            // particle" are scored on his English.
+            //
+            // The badge is the sentence that tells a learner whose authority
+            // stands behind the mark. Naming the wrong artefact of his is a
+            // provenance claim that is untrue.
+            {
+                struct { int mode; const char* mustSay; const char* mustNotSay; }
+                    kKeyClaims[] = {
+                        {0,  "Tibetan, in the order he wrote it", "English for this passage"},
+                        {1,  "Tibetan for this segment",          "English for this passage"},
+                        {11, "alignment of this passage",         "English for this passage"},
+                        {12, "Tibetan, and where it is punctuated", "English for this passage"},
+                    };
+                for (const auto& kc : kKeyClaims) {
+                    mode_->setCurrentIndex(kc.mode);
+                    for (int i = 0; i < 20; ++i) {
+                        newDrill();
+                        if (question_->toPlainText().contains("KEY")) break;
+                    }
+                    const QString q = question_->toPlainText();
+                    if (!q.contains("KEY")) continue;   // no corpus item drawn
+                    check(q.contains(kc.mustSay),
+                          QString("key badge: mode %1 names what it actually "
+                                  "scores").arg(kc.mode).toUtf8().constData());
+                    check(!q.contains(kc.mustNotSay),
+                          QString("key badge: mode %1 no longer claims his "
+                                  "English is the key when it is not")
+                              .arg(kc.mode).toUtf8().constData());
                 }
             }
 
@@ -24185,12 +24242,17 @@ private:
         QString h;
         if (m == 0 && order_) {
             h += kindBadge(order_->segment);
-            // drawn from the corpus, so his English IS the key
+            // The key is his TIBETAN sequence. This drill does not touch the
+            // Tibetan-to-English mapping at all — that is the Reading order
+            // drill, mode 14 — and the badge said "English" here for months.
             h += keyBadge(true,
                           QString::fromStdString(order_->segment.course),
-                          order_->segment.seq);
-            h += "<div style='color:#555'>Restore the original order of these "
-                 "chunks (enter letters, e.g. <b>C A B</b>). From [" +
+                          order_->segment.seq, "Tibetan, in the order he wrote it");
+            h += "<div style='color:#555'>Put these chunks back into the order "
+                 "they appear in <b>in the Tibetan</b> (enter letters, e.g. "
+                 "<b>C A B</b>). This is Tibetan word order, not the order you "
+                 "would read them into English \u2014 for that, see "
+                 "<i>Reading order</i>. From [" +
                  QString::fromStdString(order_->segment.course) + ":" +
                  QString::number(order_->segment.seq) + "]</div><hr>";
             for (size_t i = 0; i < order_->presented.size(); ++i)
@@ -24216,9 +24278,11 @@ private:
         } else if (m == 1 && cloze_) {
             h += kindBadge(cloze_->segment);
             // drawn from the corpus, so his English IS the key
+            // The blank is filled by a TIBETAN chunk; his English is shown
+            // below as the hint, not as the thing being scored.
             h += keyBadge(true,
                           QString::fromStdString(cloze_->segment.course),
-                          cloze_->segment.seq);
+                          cloze_->segment.seq, "Tibetan for this segment");
             h += "<div style='color:#555'>Which chunk fills the blank? Geshe Michael Roach's "
                  "English for the whole segment:</div>"
                  "<div style='background:#EEF6EE;color:#2B2118;padding:6px'><i>" +
@@ -24235,9 +24299,13 @@ private:
                 const QString muted =
                     ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
                 h += kindBadge(bound_->segment);
+                // Boundary positions in the TIBETAN, half of them the
+                // scribe's own shad and half the engine's ruling — which the
+                // drill already separates into two scores.
                 h += keyBadge(true,
                               QString::fromStdString(bound_->segment.course),
-                              bound_->segment.seq);
+                              bound_->segment.seq,
+                              "Tibetan, and where it is punctuated");
                 h += "<div style='color:#555'>The punctuation has been "
                      "stripped. <b>Where do the clauses end?</b> Enter the "
                      "numbers of the words each clause ends ON \u2014 e.g. "
@@ -24272,8 +24340,12 @@ private:
                      "nesting \u2014 a span, and the pieces it contains \u2014 "
                      "and builds nothing that is not measured there.</div>";
             } else {
+                // Peel scores a COUNT taken from the alignment layer's own
+                // nesting. His English is not consulted at any point, so
+                // naming it as the key was the plainest of the five errors.
                 h += keyBadge(true, peelRef_.section(':', 0, 0),
-                              peelRef_.section(':', 1, 1).toInt());
+                              peelRef_.section(':', 1, 1).toInt(),
+                              "alignment of this passage");
                 h += "<div style='color:#555'>Read this span. How many pieces "
                      "does it split into at the next level down? Decide before "
                      "you check \u2014 the SPLIT is what is scored, not the "
@@ -24382,9 +24454,10 @@ private:
         } else if (m == 2 && part_) {
             h += kindBadge(part_->segment);
             // drawn from the corpus, so his English IS the key
+            // A TIBETAN particle is what fills the blank.
             h += keyBadge(true,
                           QString::fromStdString(part_->segment.course),
-                          part_->segment.seq);
+                          part_->segment.seq, "Tibetan for this segment");
             h += "<div style='color:#555'>Which particle belongs in the blank?"
                  "</div><hr><div style='font-size:" + QString::number(px(22)) + "px'>";
             for (size_t i = 0; i < part_->tokens.size(); ++i) {
