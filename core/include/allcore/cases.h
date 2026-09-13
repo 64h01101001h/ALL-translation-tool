@@ -180,4 +180,34 @@ struct LaDonNarrowing {
 };
 LaDonNarrowing narrowLaDon(const std::string& marker, const VerbClassInfo* cls);
 
+// ATTRIBUTIVE SYNTAX — the counterexample to the engine's central assumption.
+//
+// Everything in this file so far treats a verb's Wilson class as settling the
+// shape of its clause. Preston's volume two says otherwise on four separate
+// pages, in four separate wordings:
+//
+//   p.60   attributive syntax, "wherein something is called something else…
+//          something in the 7th case is being called something in the 1st"
+//   p.70   over the verb: "normally transitive, but here used with an
+//          attributive syntax"
+//   p.163  "Attributive Syntax: A refers to B" — the verb byed, normally
+//          ag-nom, diagrammed (nom-loc)
+//   p.200  "the normally transitive verb is used with a nom-loc syntax"
+//
+// And p.219's abbreviation list already had the names for it: attrib. loc-nom
+// (attributive subject in the 7th, object in the 1st) and attrib. nom-loc
+// (subject in the 1st, object in the 7th).
+//
+// So a normally-agentive verb can take a SUBJECT rather than an agent, with
+// what is attributed sitting in the 7th case. The pane has been announcing
+// "this is a transitive verb, so the clause has an agent, not a subject" as
+// though the class settled it. For an ag-nom verb with no third-case chunk
+// and a la-group chunk that could be a 7th, it does not.
+//
+// This does not DETECT attributive syntax — nothing here can, and a detector
+// would be the guess rule 3 forbids. It reports that the reading is open.
+// Returns "" when the shape does not fit.
+const char* attributiveSyntaxOpen(const VerbClassInfo* cls, bool sawThirdCase,
+                                  bool sawLaGroup);
+
 }  // namespace allcore

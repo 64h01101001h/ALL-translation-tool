@@ -361,6 +361,32 @@ public:
                       "\"not a case particle\", not a bare dash that reads as "
                       "nothing known");
             }
+            {   // Preston vol.2 states on four pages that a normally
+                // transitive verb can be used with a nom-loc syntax. The pane
+                // announced "agent, not subject" as settled by the class.
+                src_->setPlainText("dang po gnyis la don smra ba zer");
+                walk();
+                const QString a = out_->toPlainText();
+                check(a.contains("ATTRIBUTIVE SYNTAX is open"),
+                      "attributive: a transitive verb with no agent and a la "
+                      "don chunk offers the attributive reading");
+                check(a.contains("both are live"),
+                      "attributive: and says both readings are live rather "
+                      "than picking one");
+                // With an agent present it must NOT be offered.
+                src_->setPlainText("sangs rgyas kyis rgya gar la chos bstan");
+                walk();
+                check(!out_->toPlainText().contains("ATTRIBUTIVE SYNTAX is open"),
+                      "attributive: not offered when the agent is right there "
+                      "in the third case");
+                // Put back the fixture the NEXT check needs. Twice today an
+                // inserted block has left a different passage loaded and
+                // stranded the assertion after it — the first time the gate
+                // failed honestly, which is the only reason I found it. A
+                // block that changes the fixture restores it.
+                src_->setPlainText("chos bstan");
+                walk();
+            }
             check(out_->toPlainText().contains("agent is UNSTATED"),
                   "cases: a transitive verb with no third-case chunk warns "
                   "that the agent is unstated — absence of an agent is not "
@@ -647,10 +673,11 @@ private:
              "<td style='color:#888;font-size:11px'>particle note</td>"
              "<td style='color:#888;font-size:11px'>what it could be doing"
              "</td></tr>";
-        bool sawThird = false;
+        bool sawThird = false, sawLaGroup = false;
         for (size_t i = 0; i < chunks.size(); ++i) {
             const auto cr = allcore::caseOf(chunks[i].marker);
             for (int c : cr.cases) if (c == 3) sawThird = true;
+            if (cr.cases.size() == 3 && cr.cases[0] == 2) sawLaGroup = true;
             QString caseCell;
             if (!cr.known()) {
                 caseCell = "<span style='color:#888'>—</span>";
@@ -781,6 +808,15 @@ private:
             if (caution[0])
                 h += "<div style='color:#B4540A;padding:4px 0 0 12px'>" +
                      QString(caution).toHtmlEscaped() + ".</div>";
+            // The counterexample to this pane's central assumption, and the
+            // reason step 2 must not announce "agent, not subject" as settled.
+            const char* attr = allcore::attributiveSyntaxOpen(
+                verb.cls, sawThird, sawLaGroup);
+            if (attr[0])
+                h += "<div style='color:#B4540A;padding:4px 0 0 12px'>" +
+                     QString(attr).toHtmlEscaped() +
+                     ". <span style='font-size:11px'>(Preston vol. 2 pp.60, "
+                     "70, 163, 200)</span></div>";
         }
 
         // ---- step 4 ----

@@ -187,6 +187,36 @@ int main() {
           "ni is not claimed for anything \u2014 no Wilson class names it, so "
           "neither does this table");
 
+    // ---- attributive syntax: the counterexample to class-decides-shape ----
+    {
+        const auto* agn = classifyVerb("bstan");   // Class V, ag-nom
+        const auto* lnk = classifyVerb("yin");     // Class I, intransitive
+        CHECK(agn && lnk, "the tables still know bstan and yin");
+        // The shape that opens it: transitive verb, no third case, a la don
+        // chunk for the seventh to sit in.
+        CHECK(attributiveSyntaxOpen(agn, false, true)[0] != '\0',
+              "attributive: a normally transitive verb with no agent and a la "
+              "don chunk leaves the attributive reading OPEN");
+        // An agent settles it — the ordinary agentive reading holds.
+        CHECK(attributiveSyntaxOpen(agn, true, true)[0] == '\0',
+              "attributive: an agent in the third case settles it, so the "
+              "reading is not offered");
+        // Nowhere for a seventh case to sit.
+        CHECK(attributiveSyntaxOpen(agn, false, false)[0] == '\0',
+              "attributive: and it needs a la don chunk to be possible at all");
+        // Intransitive verbs are not "normally transitive used otherwise".
+        CHECK(attributiveSyntaxOpen(lnk, false, true)[0] == '\0',
+              "attributive: never offered for a verb that is not normally "
+              "transitive");
+        CHECK(attributiveSyntaxOpen(nullptr, false, true)[0] == '\0',
+              "attributive: and never on a verb with no class at all");
+        // It must REPORT, not decide. Rule 3: a detector here would be a guess.
+        const std::string msg = attributiveSyntaxOpen(agn, false, true);
+        CHECK(msg.find("both are live") != std::string::npos,
+              "attributive: it says both readings are live rather than "
+              "choosing \u2014 nothing here can tell them apart");
+    }
+
     std::printf("cases_smoke: %s (%d failure(s))\n",
                 failures ? "FAILURES" : "ALL PASS", failures);
     return failures ? 1 : 0;

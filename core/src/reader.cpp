@@ -322,6 +322,34 @@ std::vector<Chunk> chunkClause(const OverlayDoc& doc, const Clause& clause) {
                 if (r[0] != '\0') { marker = sp->clitic; fused = true; role = r; }
             }
         }
+        // KNOWN LIMITATION, and a fix reverted rather than shipped.
+        //
+        // On Preston's p.60 passage "dang po gnyis la" this returns a DANG
+        // chunk followed by "PO GNYIS LA", because dang is in kRoleMarkers —
+        // but dang po is a dictionary entry, "the first". A chunk boundary
+        // has fallen inside a word, which is the same defect the quotative
+        // anchor fixed one layer up in refineClauses.
+        //
+        // The same anchor does NOT work here, and the lattice says why:
+        //
+        //   DANG PO GNYIS LA        span 0..2  dang po
+        //   CHOS DANG BRAL          span 1..3  dang bral
+        //   ... RANG BZHIN GYIS STONG  span 3..7  rang bzhin gyis stong
+        //
+        // All three straddle the boundary with the particle as the span's
+        // first syllable, so no test on span shape separates them. But dang
+        // po is a WORD in which dang is not a particle at all, while dang
+        // bral and rang bzhin gyis stong are verb idioms in which the
+        // particle is doing its job — and Wilson says so: the dang chunk
+        // under a disjunctive verb gets its own number, and gyis under an
+        // absence verb is the qualifier. Suppressing those boundaries broke
+        // both gates, correctly.
+        //
+        // The distinction that would work is "does the straddling span
+        // contain the clause verb", and chunkClause cannot ask: spotVerb runs
+        // after it, over the chunks this produces. Fixing it properly means
+        // reordering that, which is not a change to make on two examples.
+        // (Preston vol. 2 p.60, 2026-09-13.)
         if (!marker.empty() && i + 1 <= last) {
             out.push_back({beg, i + 1, marker, fused, role});
             beg = i + 1;
