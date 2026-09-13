@@ -65,3 +65,21 @@ ios/build/
 # it is stamped into every provisioning profile — but this repo is public, so
 # it stays local. Never put a password or an App Store Connect .p8 key here.
 ios/DeveloperTeam.txt
+
+# Craig Preston, How to Read Classical Tibetan (Snow Lion 2003) — OCR of Adam's
+# own copy, for in-house engine development. Same standing as the Kawachen
+# audio: owning the book is permission to USE it here, not to redistribute it,
+# and this repository is public. What belongs in the repo is the GRAMMAR
+# extracted from it (docs/standards/PRESTON_SYNTAX.md), never the text.
+data/reference/preston/*
+
+# Reference grammars, local only. Jaschke (1883) and Hannah (1912) are public
+# domain by age and COULD be committed; they are not, because 6MB of page scan
+# does not belong in a repo that has already had to have a blob stripped from
+# its history. What belongs here is the grammar extracted from them.
+#
+# These two matter for a specific reason (docs/standards/PRESTON_SYNTAX.md):
+# every table in allcore descends from one lineage — Hopkins, Napper, Wilson,
+# Preston — and nothing checks them against anything outside it. These are
+# outside it. They can say whether our tables are RIGHT or only self-consistent.
+data/reference/grammars/*
