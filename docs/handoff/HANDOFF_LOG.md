@@ -680,3 +680,129 @@ reasonably act on without re-checking.
   on billing.
 - **Do not resolve the twelve release blockers that are Adam's.** They are
   licence, privacy and ship/hide decisions.
+
+## 2026-09-12 — Codex private continuation through C05:270
+
+Private data commit 32472a829c3336f13667d19c3df92538cca3340f lands C05:268–270 as page90: 123 analyst spans (25/34/64), five explicit nulls
+(0/1/4), 75 non-null d5 pairs and three sentence anchors. The corrected builder
+proves270/511 across90 pages. Since segment165,35 pages contain3043 reviewed
+analyst spans and105 anchors. These remain PROVISIONAL machine attestations;
+source/master bytes and hgm_gloss remain unchanged.
+
+Root authored the Tibetan originals, disclosed its earlier source preparation,
+and froze all three before reading the separate English proposals. Distinct
+non-authors reconciled and semantically reviewed the batch. Contexts were reused
+with disclosed roles; root performed mechanical acceptance, not semantic approval.
+Every227 original identity retains its disposition:200 retained,26 recast and
+one rejected. All123 exact final tuples, optional fields and occurrences survive.
+
+The initial full semantic review returned one blocking finding: the retained
+sweet-to-clear erratum candidate did not defeat uncertainty. The non-author
+reconciler removed that candidate from current errata and corrected its note.
+Both dvangs and sweet remain unwrapped; refuting an editorial allegation does
+not establish a lexical correspondence. Positive and contrary dictionary
+records, original sources, all five refutation grounds and historical proposals
+remain intact. No source text was corrected and no new erratum was accepted.
+All192 previous errata remain unchanged.
+
+The independent scoped re-review resolved C05-268-ERRATA-01 and approved SPEC
+and QUALITY with zero open findings. It combines the completed initial full
+alignment review with exact verification of the note-only correction; it does
+not claim a fresh full semantic pass. Final report31823bytes SHA-256
+cff14cd1bf28cc2d25b6c55444df31ea7e44149e2d1f251b578ba6f909bf4fba.
+Current freeze285239bytes SHA-256
+dd97122be4eaf14d7c848ebddf1f87cf97f9eadead09ee21196ed2eac06faa25
+lists1394 files;1395 including itself are copied exactly. Current manifest has
+1926 mappings and78 historical Git pins. Initial governing repository objects
+remain pinned to2a1b9a8; changed live paths use explicit immutable-history
+transport. All573 initial review files,923 root-preserved historical files,
+936 transports and20 nested freezes remain verifiable. Initial packages retain
+their initial status; no old NEEDS_CORRECTION result was relabeled APPROVE.
+
+Material alignments preserve268's repeated human/world/karma/taken references,
+created by as a complete phrase, and lexical sogs/and so on. Its single specific
+head allowance is pages_c05/c5p90/s268w21, licensed by HGM20919 and source ranges
+Wylie[311,315), English[426,435). Segment269 distinguishes all four spirit
+references, outer-domain phrase expansion and omitted inner-domain explanatory
+prose; three obstacle/with pairs and six compound members have distinct ranges.
+Segment270 distinguishes repeated threes, two complete mantra-of-steel names
+and a later abbreviated name, the second provides, two sets of application/hand/
+contact predicates, contracted n't and the final coordination-licensed myong
+null. Supplied words and unresolved correspondence stay unwrapped.
+
+Nine initial original/final canonical executions pass. The reviewer ran exactly
+one new canonical268 execution for the changed note;269/270 remain exact prior
+successful runs. Root independently regenerated268 and then the assembled page.
+The assembled body is21400bytes SHA-256
+9df2ab728dac4c87cfdc0ea3877b95cac1cd4d624f757e053a485be5b93f88b9;
+combined spec SHA-256
+f8035b43d6147b779c6d89fa040f52077cd7277e63cb4076129cdb2c8e987a72.
+
+Root initially omitted page90 from the builder registry after updating the page,
+index and allowance. Both builders exited0 but still reported267 coverage;
+root stopped acceptance before testing or committing. All15 execution artifacts
+and seven actual generated outputs were preserved, then all seven outputs were
+restored byte-for-byte from baselinef3c1ca8. The sole builder-code change registers
+c5p90:[268,269,270]. Corrected builders ran again and exited0 with270 coverage.
+They each ran twice for this batch; canonical-builds-once.json describes only
+its particular attempt. The historical first attempt remains explicitly separate.
+Both attempts use the exact previous main CSV fromf3c1ca8. No algorithm changed.
+
+All17 targeted CTest suites ran once and passed in12.29seconds with explicit
+PYTHONDONTWRITEBYTECODE=1 inherited by children. All44781 prior links, earlier
+notes/trees/evidence/ACIP,22341 prior main CSV rows and23875 course-depth groups
+are retained without enrichment. Current bank44907 links/11915 nulls/1606 notes/
+11 trees; evidence7073 heads/15452 pairs. CSV rows:22385 main,22045 reverse,
+23932 course-depth and44 changes. All23932 course groups match exact main-CSV
+references and metadata. ACIP is proven for7070/7073 heads; rounded100.0% does
+not mean complete headword coverage. Source/master hashes remain exact.
+
+The full staged whitespace audit accounts for141409 warnings:114913 complete
+original physical-source warnings,22821 canonical CSV CRLF,3638 exact whole
+ILL/original ZIP-member warnings,30 print-separator warnings,4 existing empty
+EOF warnings,2 exact diff-context lines and1 exact root-log EOF. The complete
+44112924-byte diagnostic SHA-256 is
+ba7343bb6a19e47b73e66c2922e208db4fa079a0a8a7030236a6c20e282cd186.
+It remained byte-identical after all final proof staging. No source or evidence
+whitespace was normalized. The private data commit contains1862 scoped files.
+
+The earlier pin preparer refused these new evidence forms. A bounded candidate
+adds exact verification of the actual producer print call/default separator,
+full SQLite/corpus field equality, complete original ILL bytes, original DOCX
+member equality, and the specific root output's manifest/execution/empty EOF.
+Root's initial inference that six trailing log spaces came from source fields
+was wrong: they are print-separator bytes. An AST regression test exposed the
+need to verify the actual producer call even if pins were updated. Full actual
+failed attempts remain, including the candidate's initial refusal of the root
+log and its final verifier's wrong source-line22 assumption corrected to23.
+Sharedv6 and original root preparer remain unchanged. No general whitespace
+exception or semantic-freeze relabeling was introduced.
+
+Root independently verified all434 candidate files, both complete baseline
+diffs and all16 exact pins against real staged/original bytes; fresh16 witness
+tests and1 dispatch test pass. The dispatch test uses a test Git transport;
+actual current staged verification is separate. The real full staged audit
+passed at00:29:04UTC Sep13, writing only to a fresh external output directory.
+Candidate freeze SHA-256
+af8db137b011bf7accfdfda477ae506609a5acb80f73f1c6c2975049b00a9538
+remains immutable. All434 full candidate files/818971825 bytes and actual test
+fixtures/failure history remain available; banked code/proofs/metadata and
+explicitly pinned external large/raw witnesses preserve every version.
+
+The final root copy manifest has448 exact records and175 explicitly retained
+external records. Earlier128-record before-whitespace and441-record before-
+final-stage manifests remain exact historical snapshots. Initial staging proof
+covers1855 files; a separate final supplement verifies the7 additional proof
+records, the sole updated current manifest and unchanged1854 prior file pins,
+then binds all1862 actual staged files. Its own last proof stays external to
+avoid a self-referential hash. The immutable data commit binds the final tree.
+
+The preceding fully closed checkpoint is2487bfc through267. A separate fixed
+through270 checkpoint review, full seven-output reproduction and fresh read-only
+original-base MAIN patch check are still required. No changes applied to MAIN.
+Native/installed-phone verification remains through171; rendered inspection,
+locked launch and MAIN integration remain open. C13 remains blocked upstream.
+Source preparation through303 is not accepted alignment. Evidence-copy v2 is
+available only for explicitly pinned future batches and was not used here; a
+reading-index candidate remains unadopted. The active continuation is every five
+minutes through2026-09-15 at07:00 America/Denver. No additional files are needed.
