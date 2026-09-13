@@ -45441,7 +45441,13 @@ int main(int argc, char** argv) {
         }
         walkPane->setSourceForTest(cliArgs.at(ix + 1));
         walkPane->walkForTest();
-        std::printf("%s\n", walkPane->outText().toUtf8().constData());
+        // --walk-html prints the rendered HTML instead of the plain text, so
+        // the layout can actually be LOOKED at while it is being designed.
+        // Judging a table's readability from toPlainText is judging it with
+        // the formatting removed.
+        std::printf("%s\n", cliArgs.contains("--walk-html")
+                                 ? walkPane->outHtml().toUtf8().constData()
+                                 : walkPane->outText().toUtf8().constData());
         return 0;
     }
     const bool selfTestMode = cliArgs.contains("--selftest");
