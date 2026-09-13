@@ -255,6 +255,36 @@ clause verb, and `chunkClause` cannot ask: `spotVerb` runs after it, over the
 chunks it produces. Fixing it means reordering that, which is not a change to
 make on two examples.
 
+## How often do the new cautions fire? Measured, 2026-09-13
+
+A caution that fires on everything is wallpaper. Measured over 40 real corpus
+segments drawn from `corpus_segments`, 25–80 characters, deduplicated:
+
+| caution | fires on |
+|---|---:|
+| implied LINKING verb | 32% |
+| implied EXISTENCE verb | 7% |
+| ATTRIBUTIVE syntax open | 2% |
+| agent UNSTATED | 5% |
+| **verb UNVERIFIED** | **52%** |
+
+The four cautions are proportionate. The attributive one at 2% is properly
+rare, which is what you want from a reading that needs a specific shape.
+
+**The 52% is the finding.** `spotVerb` cannot confidently identify a verb in
+more than half of Geshe Michael's own corpus. That is not a display problem and
+no amount of careful wording fixes it — it is the size of the gap that the
+implied-verb work sits inside. Two things could be true in any mixture and this
+measurement does not separate them: the verb tables and the spine's `tenses`
+coverage are thin, or a large share of these segments genuinely have no finite
+verb, which is what Preston's five pages would predict.
+
+**Caveat on the 32%.** Corpus segments are lines, not always complete
+sentences. A fragment with no verb and only first-case nouns looks exactly like
+an implied-linking-verb clause, so this figure is an upper bound. Separating
+them needs sentence-complete input, which the alignment bank has and this
+sample did not use.
+
 ## Deferred, with the reason: unifying the la don resolver
 
 `narrowLaDon` in cases.cpp and `caseLabel` in wilsonparse.cpp both resolve a la
