@@ -939,3 +939,107 @@ C13 remains blocked upstream. Source preparation through 303 is not accepted
 alignment. Finish all 511 C05 source segments before starting C06; 177 contiguous
 C06 rows are available locally. The five-minute continuation remains active
 through 2026-09-15 at 07:00 America/Denver. No additional files are currently needed.
+
+## 2026-09-13 — C05 through 276; private data commit 2602b7d7
+
+Private data commit `2602b7d7966f3ee332393e860770f25a6b3a3f79` adds
+C05:274–276 as page 92, with 2,446 exact scoped files. The previous independently
+closed global checkpoint is `81942cfc6022a785894d3cc2a20de81dc4c6f599`
+through 273; its final root closure is retained under
+campaign-artifacts/integration/through273-root-closure/final/proof.json.
+Current generated and page-verified coverage is 276/511, with 235 segments open
+(277–511). The early through276 global checkpoint is still pending here.
+
+Independent proposal, reconciliation and semantic review accepted 112 analyst
+spans (42/59/11), three explicit nulls (one per segment), 81 non-null D5 pairs
+(31/43/7), and three sentence anchors. All 211 original proposal identities
+retain dispositions: 198 retained, 12 recast and one distributed omission.
+Uncertain correspondence remains unbanked with its reason. The initial review
+required three explanatory metadata corrections in 275; no approved lexical
+span, source range, optional field, occurrence, note or canonical body changed.
+The corrected explanations distinguish zer/claim, the residual genitive and
+the negative clause's D5 correspondence from its quoted D3 parent. Complete
+initial review and pre-correction originals survive. Scoped independent final
+SPEC and QUALITY both APPROVE, with 16 checks passing and zero open findings.
+The verdict is model review, with role/context disclosures preserved.
+
+The final semantic freeze contains 2,286 files, SHA-256
+`694dceeb5248484e702d1973c84be78b7f6b34750fa75708113338e0887fee8a`.
+All 3,234 original/copy mappings, 14 governing Git objects, source archive
+aliases and nine baseline pins were reopened. The canonical landing helper
+omits 24 extensionless raw execution files; a separately reviewed supplement
+copied exactly those 6,646 bytes with a persistent attempt/completion journal.
+The complete 2,287-file semantic tree, including freeze, is byte-identical.
+Rejected copy helper and failed root suffix preflight remain preserved. No new
+errata or head allowances were added. GMR wording, master/source bytes and
+binding hgm_gloss remain unchanged; machine attestations stay PROVISIONAL.
+
+Both canonical builders ran once, with the exact incoming main CSV seed; all
+17 targeted CTest suites passed once in 11.32 seconds. Complete actual commands,
+stdout, stderr and exits are retained, including the view's normal trim output.
+The bank contains 45,126 links, 11,926 nulls, 1,612 notes, 11 trees, 7,083 evidence
+heads and 15,500 pairs. All 45,011 prior links and prior notes, trees, evidence,
+ACIP spellings and lexical export fields remain exact. The 115 new links are
+the 112 spans plus three anchors. CSV rows are 22,457 main, 22,117 reverse,
+24,024 course-depth and 44 changes. All course-depth groups match main references
+and metadata. Original CSV BOM/CRLF and source-page digest semantics survive.
+ACIP head coverage is 7,080/7,083 (99.957645%); rounded 100.0% remains incomplete.
+Three missing heads and six unchanged historical empty-ACIP rows are explicit;
+five of those rows have source segments, and one historical row has seg=null.
+
+Independent isolated reproduction used one layer build and one correctly
+seeded view build. All seven complete outputs are byte-identical; 224,556
+retention checks passed. Its freeze covers 3,051 files, SHA-256
+`672ca1b2f1eae5c72d6259d552ecc810e177595fb73975e10661aaa4f5272280`.
+Root verified all 2,979 input mappings, seven prior Git outputs, all current
+source/output aliases and all twelve frozen staged payloads. No passed builders
+or CTest suites were repeated for banking or staging.
+
+The first actual whitespace prepare failed on four aliases of one preserved
+historical Python SyntaxError log. Its clipped source echo ends in an original
+ASCII space; the complete physical source line does not. The failed helper,
+full diagnostic and all partial evidence remain unchanged. A narrowly reviewed
+new predicate binds the original failed source, invocation, full streams,
+manifest aliases and exact source ranges. Compile-only exception rendering
+reproduces all 2,220 stderr bytes; the failed source body is never executed.
+Eleven focused author tests, actual fallback dispatch and fourteen independent
+negative provenance checks passed. The code and descriptor were independently
+approved and fully root-verified before fresh actual prepare/audit each passed.
+
+All 62,470 warnings in 56 staged files are accounted for: 39,554 original
+physical-byte warnings, 22,912 canonical CSV CRLF warnings and four recorded
+SyntaxError source-echo warnings. The full raw diagnostic is 27,652,514 bytes,
+SHA-256 `cb2a68b32f29fc54d10dae2f745aff0599110ff01dab868789fe2aaed353c1dd`.
+It remained byte-identical during final staging verification. No source or
+evidence whitespace was normalized. This substantive predicate change requires
+an early global checkpoint through276 before starting 277–279; the regular
+six-page global checkpoint remains scheduled through291 afterward.
+
+Ordinary banking preserved 123 copy records and 11,063 external records. Final
+banking preserves 142 copy records and 12,611 complete external records; its
+6,634,433-byte manifest has SHA-256
+`0c7a9f21ac4f3e61431a9854644f3da2cfbb625d10fdcef2827c3b35673149bf`.
+The original pre-bank untracked stream is retained unchanged. Exactly 2,427
+initial files plus 19 later bank files were staged. The complete final verifier
+passed; root reopened 15,211 consumed inputs totaling 2,227,467,786 bytes,
+all 2,487 complete command records and every staged blob, then checked a fresh
+identical index and unchanged HEAD. Final-stage proof SHA-256 is
+`3e1d221662d00067fcb1c0534f1237c0ce98755ec8b90ee93f4548f80eb5d507`.
+Only the intentional dcc_captions alias remains untracked. The final bank and
+landing directory are immutable. Later final-bank/staging/root/commit/global
+execution evidence is retained externally under campaign-artifacts/integration;
+it is not falsely claimed inside its earlier input bank.
+
+The pending global276 checkpoint will bind the existing reproduction to actual
+data/documentation commits, produce full canonical review packages, review all
+current source/history/data/documentation obligations, and measure a fresh
+read-only original-base-to-final MAIN applicability conjunction. The exact
+accepted whole-file partition method will be used from the outset; the prior
+oversized unsplit failure stays history. No patch has been applied to MAIN.
+Private JSON, HTML and CSV consumption artifacts are current through276;
+native/installed-phone verification remains through171. Rendered inspection,
+locked launch, current native/device consumption and MAIN integration remain
+open and must not be described as deployed. C13 remains blocked upstream.
+Finish all 511 C05 segments before C06 (177 contiguous local sources). The
+five-minute continuation remains active through 2026-09-15 at 07:00
+America/Denver. No additional files, paid API generation or release is needed.
