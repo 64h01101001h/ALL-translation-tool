@@ -113,6 +113,14 @@ inline Detected detect(const QString& raw) {
     return d;
 }
 
+// 1 -> "1st". Ordinals read faster than "1 first case" and the table has
+// four columns to fit.
+inline QString ord(int n) {
+    static const char* k[] = {"", "1st", "2nd", "3rd", "4th",
+                              "5th", "6th", "7th", "8th"};
+    return (n >= 1 && n <= 8) ? k[n] : QString::number(n);
+}
+
 inline QString esc(const std::string& s) {
     return QString::fromStdString(s).toHtmlEscaped();
 }
@@ -260,13 +268,18 @@ public:
             check(t.contains("does not hold up"),
                   "step 4 admits the middle-level gap is not statistically "
                   "established rather than spending a trend as a finding");
-            check(t.contains("p&lt;0.0001") || t.contains("p<0.0001"),
-                  "and it cites what IS established \u2014 the clause-level "
-                  "result, which is decisive");
+            // The clause-level evidence moved out of a p-value and into the
+            // green strip, which now carries the figures a reader can act on.
+            // The FACT asserted is unchanged: the pane must still show what
+            // the clause-level measurement was, not merely assert it.
+            check(t.contains(QString::number(walk::kClauseBackPct) + "%") &&
+                      t.contains(QString::number(walk::kClausePairs)),
+                  "the clause-level evidence is still on the page \u2014 the "
+                  "backwards rate and the number of pairs it rests on");
             check(t.contains(QString::number(kEngineHere) + "%") &&
                       t.contains(QString::number(kPlainHere) + "%"),
                   "step 4 quotes the measured figures for its own level");
-            check(t.contains("do not shuffle them"),
+            check(t.contains("Read the clauses as written"),
                   "the reader is told to leave the clause order alone");
         }
         {   // Preston's eight elements. Checked against HIS OWN example
@@ -296,7 +309,7 @@ public:
                 src_->setPlainText("rgya gar du 'gro");
                 walk();
                 const QString n = out_->toPlainText();
-                check(n.contains("narrowed by the VERB, not by the particle"),
+                check(n.contains("narrowed by the VERB, not the particle"),
                       "la don: a verb that CAN narrow the case does, and the "
                       "cell says the verb is what did it");
                 check(!n.contains("2/4/7"),
@@ -367,7 +380,7 @@ public:
                   "implied verb: an unverified candidate says the clause may "
                   "have no verb at all, rather than naming a word and leaving "
                   "the reader to assume one is present");
-            check(u.contains("last resort"),
+            check(u.contains("a candidate, not a finding"),
                   "implied verb: and calls the candidate what it is");
         }
         {   // Preston p.53's sentence. spotVerb reports "bshad pa" as the
@@ -449,7 +462,10 @@ public:
             src_->setPlainText("sangs rgyas kyis chos bstan");
             walk();
             const QString t = out_->toPlainText();
-            check(t.contains("not a translation"),
+            // Case-insensitive: the sentence now opens the line, so the N is
+            // capitalised. The claim being pinned is that step 6 refuses to
+            // call its own output a translation, not how the line is cased.
+            check(t.contains("not a translation", Qt::CaseInsensitive),
                   "step 6 refuses the word \"translation\" for its own output "
                   "(match, never compose)");
             // Rule 3 proper: a syllable the glossary has never seen must
@@ -591,47 +607,56 @@ private:
     QString header(const walk::Detected& det, int tokens,
                    const std::vector<allcore::Clause>& cls,
                    const std::vector<int>& merged_na) {
+        // ---- ONE compact orientation strip, not two walls of statistics ----
+        //
+        // This used to open with two amber blocks carrying span counts,
+        // percentages and McNemar p-values, and step 4 then repeated the
+        // whole argument. A translator reading a paragraph met the same
+        // methodology twice before reaching any Tibetan, and because every
+        // caution in the pane was amber, none of them stood out.
+        //
+        // The honesty is not reduced, it is placed. The FINDING belongs in
+        // the reading path; the EVIDENCE belongs in
+        // docs/READING_ORDER_MEASUREMENT.md, which the strip names. Colour is
+        // now load-bearing: green for what is attested, amber only for a
+        // caution about THIS clause, grey for a standing note.
+        // (design-critique pass, 2026-09-13.)
         QString h;
-        h += "<div style='padding:4px 0'><b>" + QString::number(tokens) +
-             "</b> syllables · <b>" + QString::number(cls.size()) +
-             "</b> clause(s) · read as " + det.how.toHtmlEscaped() + "</div>";
-        // Two things the reader has to know before step 4 means anything:
-        // the clause order above it is trustworthy, and step 4 itself is not
-        // yet as good as leaving the phrases alone.
+        h += "<div style='padding:2px 0 8px 0;color:#666;font-size:12px'>" +
+             QString::number(tokens) + " syllables · " +
+             QString::number(cls.size()) + " clause" +
+             (cls.size() == 1 ? "" : "s") + " · read as " +
+             det.how.toHtmlEscaped() + "</div>";
+        // Two <div> strips, not table cells, and SOLID colours.
+        //
+        // The first version used <td> with background:rgba(...) and both
+        // bands rendered as black boxes with dark text on them — unreadable.
+        // Qt's rich-text engine honours rgba() on a div, which is what the
+        // old bands used, and not on a table cell. The constitution's R9
+        // exists for exactly this hazard (a hand-written ground without fixed
+        // ink) and did not catch it, because it does not look at cells.
+        //
+        // Solid hex, and an explicit text colour on every span, so neither
+        // depends on what it inherits.
+        const bool dark = ux::darkChrome();
+        const QString ink = dark ? QString("#E8E2D8") : QString("#2B2118");
+        const QString greenBg = dark ? QString("#1E2A1E") : QString("#EDF4ED");
+        const QString amberBg = dark ? QString("#2E2118") : QString("#FBF1E8");
         h += "<div style='border-left:3px solid #3B7A3B;padding:6px 10px;"
-             "margin:8px 0;background:rgba(59,122,59,0.06)'>"
-             "<b>The clauses above are already in reading order.</b> Tibetan "
-             "clause order survives into English almost intact — across " +
-             QString::number(walk::kClausePairs) +
-             " measured clause pairs in Geshe Michael's own translations, only " +
-             QString::number(walk::kClauseBackPct) +
-             "% come out backwards. So take the clauses in the order they are "
-             "written and do not shuffle them. The work is inside each one.</div>";
+             "background:" + greenBg + ";color:" + ink + "'>"
+             "<b style='color:#3B7A3B'>Clause order is reliable.</b> "
+             "<span style='color:" + ink + ";font-size:12px'>Read the clauses "
+             "as written \u2014 only " +
+             QString::number(walk::kClauseBackPct) + "% of " +
+             QString::number(walk::kClausePairs) + " measured pairs come out "
+             "backwards. The work is inside each one.</span></div>";
         h += "<div style='border-left:3px solid #B4540A;padding:6px 10px;"
-             "margin:8px 0;background:rgba(180,84,10,0.06)'>"
-             "<b>How much to trust step 4 — less than you would like.</b> The "
-             "reading order inside a clause is the engine's ruling from the "
-             "particle tables, not a fact from the dictionary. Measured against "
-             "Geshe Michael's own translations at exactly this level (" +
-             QString::number(walk::kClauseSpans) + " spans), the engine matched "
-             "his order <b>" + QString::number(walk::kClauseEngine) +
-             "%</b> of the time and simply reading the phrases left to right "
-             "matched it <b>" + QString::number(walk::kClausePlain) +
-             "%</b> — but only " + QString::number(walk::kClauseDiscordant) +
-             " spans separate them, and at that count the difference does not "
-             "hold up (McNemar p=0.08). So step 4 shows you both and neither "
-             "is established here; the honest posture is to try the written "
-             "order first because it is simpler, not because it is proven. "
-             "What IS established sits either side of this level: at the "
-             "clause level the written order wins decisively (p&lt;0.0001, and "
-             "reordering clauses is the one thing you should not do), and "
-             "deeper down — inside "
-             "a phrase, among the words — the ruling wins decisively, " +
-             QString::number(walk::kWordEngine) + "% against " +
-             QString::number(walk::kWordPlain) +
-             "% (p=0.003). Fixing the middle level is on the punchlist, and "
-             "so is measuring it properly; reporting either as better than it "
-             "is, is not an option.</div>";
+             "margin:4px 0 12px 0;background:" + amberBg + ";color:" + ink + "'>"
+             "<b style='color:#B4540A'>Order INSIDE a clause is not settled.</b> "
+             "<span style='color:" + ink + ";font-size:12px'>Step 4 shows the "
+             "engine's order and the written order side by side, because at "
+             "this level neither is established. Try the written one first."
+             "</span></div>";
         if (!merged_na.empty())
             h += "<div style='color:#B4540A;padding:4px 0'>" +
                  QString::number(merged_na.size()) +
@@ -692,16 +717,15 @@ private:
                 // unverified candidate, and a frequent one.
                 // (Preston vol. 2 p.60 and the Index of Diagrammed Syntactic
                 // Elements, 2026-09-13.)
-                e += " <span style='color:#B4540A'>UNVERIFIED</span> — the last "
-                     "dictionary word in the final chunk. Nothing in the "
-                     "glossary says it is a verb; it is a candidate, not a "
-                     "finding.<br><span style='color:#B4540A'>And the clause "
-                     "may have NO verb at all.</span> Tibetan omits them "
-                     "freely, most often a verb of existence or a linking "
-                     "verb, and an implied verb leaves nothing on the page for "
-                     "this step to find. A named candidate here is the "
-                     "engine's last resort, not evidence that a verb is "
-                     "present.";
+                e += " <span style='color:#B4540A'>UNVERIFIED</span>"
+                     "<div style='font-size:12px;padding-top:2px'>"
+                     "The last dictionary word in the final chunk. Nothing in "
+                     "the glossary says it is a verb \u2014 a candidate, not a "
+                     "finding.</div>"
+                     "<div style='color:#B4540A;font-size:12px'>The clause may "
+                     "have NO verb at all. Tibetan omits them freely, most "
+                     "often a verb of existence or a linking verb, and an "
+                     "implied one leaves nothing here to find.</div>";
             if (verb.cls) {
                 e += "<br>Wilson class: <b>" +
                      QString::fromUtf8(verb.cls->label).toHtmlEscaped() +
@@ -742,12 +766,28 @@ private:
         // FUNCTIONS the chunk fills and which CASE it is declined into, and
         // that is a strictly more useful thing to be told.
         h += "<table cellspacing='0' cellpadding='4' style='margin:2px 0'>";
-        h += "<tr><td></td><td style='color:#888;font-size:11px'>chunk</td>"
-             "<td style='color:#888;font-size:11px'>particle</td>"
-             "<td style='color:#888;font-size:11px'>case</td>"
-             "<td style='color:#888;font-size:11px'>particle note</td>"
-             "<td style='color:#888;font-size:11px'>what it could be doing"
-             "</td></tr>";
+        // FOUR columns, not six. The old table said one fact three times —
+        // "3 third case — marks the AGENT of a transitive verb", then
+        // "agent/instrument — by/with", then "agent of the transitive verb" —
+        // and repeated the whole case gloss verbatim on every row that shared
+        // a case. The gloss is now a legend printed ONCE beneath the table,
+        // covering only the cases this clause actually contains.
+        // FIVE cells, matching the data rows. The first version had four and
+        // the labels sat over the wrong columns, which only showed up on
+        // looking at the rendered page.
+        {
+            const QString th = "color:#999;font-size:10px;letter-spacing:.06em";
+            h += "<tr><td style='" + th + "'></td>"
+                 "<td style='" + th + "'>CHUNK</td>"
+                 "<td style='" + th + "'>PARTICLE</td>"
+                 "<td style='" + th + "'>CASE</td>"
+                 "<td style='" + th + "'>WHAT IT IS DOING</td></tr>";
+        }
+        QStringList legend;
+        QString excludedBy;
+        auto note = [&legend](const QString& t) {
+            if (!t.isEmpty() && !legend.contains(t)) legend << t;
+        };
         bool sawThird = false, sawLaGroup = false;
         for (size_t i = 0; i < chunks.size(); ++i) {
             const auto cr = allcore::caseOf(chunks[i].marker);
@@ -755,7 +795,7 @@ private:
             if (cr.cases.size() == 3 && cr.cases[0] == 2) sawLaGroup = true;
             QString caseCell;
             if (!cr.known()) {
-                caseCell = "<span style='color:#888'>—</span>";
+                caseCell = "<span style='color:#aaa'>not a case</span>";
             } else if (cr.ambiguous()) {
                 // The particle cannot choose, but the VERB often can, and
                 // wilsonParse has been resolving exactly this for far longer
@@ -770,11 +810,12 @@ private:
                 // the two panes cannot drift apart again.
                 const auto nar = allcore::narrowLaDon(chunks[i].marker, verb.cls);
                 if (nar.narrowed()) {
-                    caseCell = "<b>" + QString::number(nar.cases[0]) +
-                               "</b> <span style='color:#666'>" +
-                               QString(cr.family).toHtmlEscaped() +
-                               " — narrowed by the VERB, not by the particle: " +
-                               QString(nar.because).toHtmlEscaped() + "</span>";
+                    caseCell = "<b>" + walk::ord(nar.cases[0]) +
+                               "</b> <span style='color:#888;font-size:11px'>" +
+                               QString(cr.family).toHtmlEscaped() + "</span>";
+                    note("<b>" + walk::ord(nar.cases[0]) +
+                         "</b> narrowed by the VERB, not the particle: " +
+                         QString(nar.because).toHtmlEscaped() + ".");
                     for (int c : nar.cases) if (c == 3) sawThird = true;
                 } else {
                     QString nums;
@@ -783,19 +824,26 @@ private:
                     // Nothing narrowed it. Printing one of the three would be
                     // a guess (rule 3); printing all three with the reason is
                     // what the grammar supports.
-                    caseCell = "<b>" + nums + "</b> <span style='color:#B4540A'>"
-                               "(the <i>" + QString(cr.family) + "</i> particles "
-                               "decline into any of these three — the particle "
-                               "cannot tell you which, the relationship does)"
-                               "</span>";
+                    caseCell = "<b style='color:#B4540A'>" + nums +
+                               "</b> <span style='color:#888;font-size:11px'>" +
+                               QString(cr.family).toHtmlEscaped() + "</span>";
+                    note("<b style='color:#B4540A'>" + nums + "</b> the <i>" +
+                         QString(cr.family) + "</i> particles decline into any "
+                         "of these three; the particle cannot tell you which, "
+                         "the relationship does.");
                 }
             } else {
-                caseCell = "<b>" + QString::number(cr.cases.front()) +
-                           "</b> <span style='color:#666'>" +
-                           QString(cr.gloss).toHtmlEscaped() + "</span>";
-                if (cr.caveat[0])
-                    caseCell += " <span style='color:#B4540A;font-size:11px'>" +
-                                QString(cr.caveat).toHtmlEscaped() + "</span>";
+                caseCell = "<b>" + walk::ord(cr.cases.front()) +
+                           "</b> <span style='color:#888;font-size:11px'>" +
+                           QString(cr.family).toHtmlEscaped() + "</span>";
+                note("<b>" + walk::ord(cr.cases.front()) + "</b> " +
+                     QString(cr.gloss).toHtmlEscaped() +
+                     // The gloss ends without punctuation, so the caveat ran
+                     // straight on from it into one unreadable sentence.
+                     (cr.caveat[0] ? QString(". <span style='color:#B4540A'>") +
+                                         QString(cr.caveat).toHtmlEscaped() +
+                                         ".</span>"
+                                   : QString(".")));
             }
             // Preston separates the object of a transitive verb from the
             // verb itself; our chunker does not, because it closes a chunk at
@@ -840,16 +888,21 @@ private:
                             (chunks[i].marker_fused ? " <span style='color:#888'>"
                                                       "(fused)</span>"
                                                     : QString())) +
-                 "</td><td>" + caseCell + "</td><td>" + row1Role +
-                 "</td><td>" + functionCell(cr, verb, chunks[i].marker) +
+                 "</td><td>" + caseCell + "</td><td>" +
+                 functionCell(cr, verb, chunks[i].marker, &excludedBy) +
+                 // reader.cpp's role text duplicates the function column on
+                 // every row except the predicate slot, which the case tables
+                 // cannot name. Keep that one, drop the rest.
+                 (row1Role.contains("predicate")
+                      ? "<div style='color:#888;font-size:11px'>" + row1Role +
+                            "</div>"
+                      : QString()) +
                  "</td></tr>";
             if (splittable)
                 h += "<tr><td style='color:#888'>[" + QString::number(i + 1) +
                      "b]</td><td style='font-family:monospace'>" +
                      walk::slice(doc, verb.tok, chunks[i].end) +
-                     "</td><td><span style='color:#888'>—</span></td>"
-                     "<td><span style='color:#888'>—</span></td>"
-                     "<td><span style='color:#888'>—</span></td><td>" +
+                     "</td><td><span style='color:#aaa'>—</span></td><td>" +
                      // This asserted INTRANSITIVITY whenever Wilson's tables
                      // did not have the verb — a positive false claim, not an
                      // omission. On "bdag gis sems bskyed" the pane printed
@@ -875,6 +928,19 @@ private:
                      "</td></tr>";
         }
         h += "</table>";
+        // The case glosses and the exclusion reason, ONCE, for the cases this
+        // clause actually uses. Both were being repeated verbatim on every
+        // row: the gloss because rows share a case, and the exclusion because
+        // it depends on the VERB, which is the same for the whole clause.
+        if (!excludedBy.isEmpty()) note(excludedBy);
+        if (!legend.isEmpty()) {
+            h += "<div style='margin:3px 0 0 0;padding:6px 10px;"
+                 "background:rgba(0,0,0,0.035);font-size:11px;color:#555;"
+                 "line-height:1.55'>";
+            for (int z = 0; z < legend.size(); ++z)
+                h += (z ? "<br>" : "") + legend[z];
+            h += "</div>";
+        }
         // Preston's warning, and the one a machine most needs to hear: an
         // absent agent is not evidence of an intransitive construction.
         if (verb.cls) {
@@ -958,13 +1024,11 @@ private:
         // ---- step 4 ----
         h += step(4, "What order to read them in");
         h += "<div style='color:#B4540A;font-size:11px;padding:0 0 4px 0'>"
-             "the engine's ruling. At this level it matched Geshe Michael " +
-             QString::number(walk::kClauseEngine) + "% of the time and the "
-             "written order matched him " + QString::number(walk::kClausePlain) +
-             "% — a gap of " + QString::number(walk::kClauseDiscordant) +
-             " spans that does not hold up statistically (p=0.08). Neither "
-             "column is established at this level; try the simpler one "
-             "first.</div>";
+             "neither column is established at this level \u2014 the engine "
+             "matched him " + QString::number(walk::kClauseEngine) +
+             "% and the written order " + QString::number(walk::kClausePlain) +
+             "%, and the gap does not hold up. Try the right-hand column "
+             "first because it is simpler.</div>";
         // Both orders, side by side. Showing only the engine's would be
         // presenting the weaker of two measured options as the answer.
         h += "<table cellspacing='0' cellpadding='4' style='margin:2px 0'>"
@@ -1016,7 +1080,8 @@ private:
     // really does give one — which happens only for the fifth case.
     static QString functionCell(const allcore::CaseReading& cr,
                                 const allcore::VerbGuess& verb,
-                                const std::string& marker) {
+                                const std::string& marker,
+                                QString* excludedBy = nullptr) {
         if (!cr.known()) {
             // Not a case particle. That is NOT the same as "nothing is known"
             // — Preston's chart lists s.p. among the qualifier markers, and
@@ -1062,7 +1127,14 @@ private:
         // say.
         QString why;
         if (!haveVerb)
-            why = "no verb identified, so nothing narrows this";
+            // "no verb identified" was FALSE whenever spotVerb had found one
+            // that Wilson's tables do not classify — step 2 said ATTESTED and
+            // this line said no verb was identified, in the same view. What
+            // is missing is the CLASS, not the verb.
+            why = verb.chunk >= 0
+                      ? "the verb's class is not in Wilson's tables, so its "
+                        "transitivity cannot narrow this"
+                      : "no verb identified, so nothing narrows this";
         else if (t == allcore::Transitivity::Transitive)
             why = "the case cannot choose between these; subject readings are "
                   "out because the verb is transitive";
@@ -1072,8 +1144,10 @@ private:
         else
             why = "the case cannot choose between these, and a specialized "
                   "verb rules nothing out \u2014 it has a subject AND an object";
-        return out + " <span style='color:#B4540A;font-size:11px'>(" + why +
-               ")</span>";
+        // The reason is the same for every row in the clause — it turns on
+        // the VERB — so it is hoisted to the legend rather than repeated.
+        if (excludedBy) *excludedBy = why;
+        return out;
     }
 
     static QString step(int n, const char* title) {
@@ -1182,23 +1256,19 @@ private:
             }
             line += (line.isEmpty() ? "" : " <span style='color:#888'>|</span> ") + piece;
         }
+        // One line, then the two caveats that actually change what a reader
+        // should do. The old version was a five-sentence paragraph in which
+        // the important sentence — that the FIRST equivalent is not always
+        // the right one — was buried in the middle.
         QString note =
-            "<div style='color:#666;font-size:11px;padding-top:4px'>"
-            "Geshe Michael's glossary words in the engine's order — not a "
-            "translation, and not English. It is the raw material a "
-            "translation gets made out of. Anything in &#10216;angle "
-            "brackets&#10217; is a word the glossary does not have. Where he "
-            "banked several equivalents this takes the FIRST one, which is not "
-            "always the best one — <i>bstan</i> comes out \"mentioned\" here "
-            "when \"teach\" is the sense. Step 5 lists the alternatives; "
-            "choosing between them is your job, because choosing would be "
-            "composing and the machine may only match.";
-        if (provisional_ > 0)
-            note += " <span style='color:#B4540A'>" +
-                    QString::number(provisional_) +
-                    " word(s) marked <sup>prov</sup> are PROVISIONAL "
-                    "auto-aligned glosses, not Geshe Michael's own ruling — "
-                    "the line is only as good as they are.</span>";
+            "<div style='color:#666;font-size:11px;padding-top:5px'>"
+            "His glossary words in the engine's order. Not a translation and "
+            "not English \u2014 the raw material one is made from."
+            "<br>&#10216;angle brackets&#10217; = a word the glossary does not "
+            "have. Where he banked several equivalents this takes the FIRST "
+            "one, which is not always the best: step 5 lists the "
+            "alternatives, and choosing between them is your job because "
+            "choosing would be composing.";
         note += "</div>";
         return body(line + note);
     }
