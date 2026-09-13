@@ -17,6 +17,8 @@
 #include "allcore/tibdisplay.h"
 #include "allcore/tibdisplay.h"
 
+#include "drill_evidence_json.h"
+
 #include <algorithm>
 #include <cstdio>
 #include <fstream>
@@ -400,67 +402,21 @@ int main(int argc, char** argv) {
         int nse = 0;
         {
             // alignment_evidence_v1.json: {"pairs": {wylie: [{eng, refs, n}]}}
-            // Scanned rather than fully parsed — the packer has no JSON
-            // library, and every field taken is a plain string or integer.
             std::ifstream ef("data/alignment/alignment_evidence_v1.json");
             std::string j((std::istreambuf_iterator<char>(ef)),
                           std::istreambuf_iterator<char>());
-            const size_t pairsAt = j.find("\"pairs\"");
-            size_t at = pairsAt == std::string::npos ? j.size() : pairsAt;
-            while (nse < 300) {
-                // a headword key: "\n  "wylie": ["
-                const size_t k = j.find("\": [", at);
-                if (k == std::string::npos) break;
-                {   // headword keys are indented two spaces;
-                    // "refs" sits deeper and must be skipped
-                    const size_t ls = j.rfind('\n', k);
-                    if (ls == std::string::npos ||
-                        j.compare(ls, 4, "\n  \"") != 0) {
-                        at = k + 4;
-                        continue;
-                    }
-                }
-                const size_t qs = j.rfind('"', k);
-                if (qs == std::string::npos) break;
-                const size_t qb = j.rfind('"', qs - 1);
-                if (qb == std::string::npos) break;
-                const std::string w = j.substr(qb + 1, qs - qb - 1);
-                // Find the MATCHING bracket. The first ']' after the key
-                // closes the nested "refs" array, not the headword's, and
-                // stopping there made every word look like it had a single
-                // rendering — so none ever qualified.
-                size_t arrEnd = std::string::npos;
-                {
-                    int depth = 0;
-                    // start AFTER the opening bracket: starting on it
-                    // counted it as a nesting level, so the matching
-                    // close never registered and nothing ever parsed
-                    for (size_t z = k + 4; z < j.size(); ++z) {
-                        if (j[z] == '[') ++depth;
-                        else if (j[z] == ']') {
-                            if (depth == 0) { arrEnd = z; break; }
-                            --depth;
-                        }
-                    }
-                }
-                if (arrEnd == std::string::npos) break;
-                const std::string arr = j.substr(k, arrEnd - k);
-                // collect this headword's renderings
+            std::vector<drillpack::EvidenceHead> heads;
+            try { heads = drillpack::parseEvidence(j); }
+            catch (const std::exception& e) {
+                std::fprintf(stderr, "%s\n", e.what());
+                return 3;
+            }
+            for (const auto& head : heads) {
+                if (nse >= 300) break;
+                const std::string& w = head.wylie;
                 std::vector<std::pair<std::string, int>> rs;
-                size_t e = 0;
-                while ((e = arr.find("\"eng\": \"", e)) != std::string::npos) {
-                    const size_t b = e + 8;
-                    const size_t q = arr.find('"', b);
-                    if (q == std::string::npos) break;
-                    std::string eng = arr.substr(b, q - b);
-                    int n = 1;
-                    const size_t np2 = arr.find("\"n\": ", q);
-                    if (np2 != std::string::npos && np2 < q + 300)
-                        n = std::atoi(arr.c_str() + np2 + 5);
-                    if (!eng.empty()) rs.emplace_back(std::move(eng), n);
-                    e = q;
-                }
-                at = arrEnd + 1;
+                for (const auto& rendering : head.renderings)
+                    if (!rendering.first.empty()) rs.push_back(rendering);
                 if (rs.size() < 2 || w.empty() || w.size() > 40) continue;
                 std::sort(rs.begin(), rs.end(),
                           [](const auto& a, const auto& b) {
@@ -629,35 +585,15 @@ int main(int argc, char** argv) {
             std::ifstream ef("data/alignment/alignment_evidence_v1.json");
             std::string j((std::istreambuf_iterator<char>(ef)),
                           std::istreambuf_iterator<char>());
-            const size_t pairsAt = j.find("\"pairs\"");
-            size_t at = pairsAt == std::string::npos ? j.size() : pairsAt;
-            while (nvc < 400) {
-                const size_t k = j.find("\": [", at);
-                if (k == std::string::npos) break;
-                {
-                    const size_t ls = j.rfind('\n', k);
-                    if (ls == std::string::npos ||
-                        j.compare(ls, 4, "\n  \"") != 0) { at = k + 4; continue; }
-                }
-                const size_t qs = j.rfind('"', k);
-                if (qs == std::string::npos) break;
-                const size_t qb = j.rfind('"', qs - 1);
-                if (qb == std::string::npos) break;
-                const std::string w = j.substr(qb + 1, qs - qb - 1);
-                size_t arrEnd = std::string::npos;
-                {
-                    int depth = 0;
-                    for (size_t z = k + 4; z < j.size(); ++z) {
-                        if (j[z] == '[') ++depth;
-                        else if (j[z] == ']') {
-                            if (depth == 0) { arrEnd = z; break; }
-                            --depth;
-                        }
-                    }
-                }
-                if (arrEnd == std::string::npos) break;
-                const std::string arr = j.substr(k, arrEnd - k);
-                at = arrEnd + 1;
+            std::vector<drillpack::EvidenceHead> heads;
+            try { heads = drillpack::parseEvidence(j); }
+            catch (const std::exception& e) {
+                std::fprintf(stderr, "%s\n", e.what());
+                return 3;
+            }
+            for (const auto& head : heads) {
+                if (nvc >= 400) break;
+                const std::string& w = head.wylie;
                 if (w.empty() || w.size() > 40) continue;
                 // Multi-syllable only. The single-syllable entries here are
                 // overwhelmingly grammatical particles ('am, ni, kyi), which
@@ -669,17 +605,8 @@ int main(int argc, char** argv) {
                 if (w.find(' ') == std::string::npos) continue;
                 // his most-attested English for it
                 std::string gloss; int best = -1;
-                size_t e = 0;
-                while ((e = arr.find("\"eng\": \"", e)) != std::string::npos) {
-                    const size_t b = e + 8;
-                    const size_t q = arr.find('"', b);
-                    if (q == std::string::npos) break;
-                    int n = 1;
-                    const size_t np2 = arr.find("\"n\": ", q);
-                    if (np2 != std::string::npos && np2 < q + 300)
-                        n = std::atoi(arr.c_str() + np2 + 5);
-                    if (n > best) { best = n; gloss = arr.substr(b, q - b); }
-                    e = q;
+                for (const auto& [eng, n] : head.renderings) {
+                    if (n > best) { best = n; gloss = eng; }
                 }
                 if (gloss.empty()) continue;
                 const std::string wd = tib(w);
