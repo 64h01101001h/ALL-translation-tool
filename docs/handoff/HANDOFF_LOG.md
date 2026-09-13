@@ -806,3 +806,136 @@ Source preparation through303 is not accepted alignment. Evidence-copy v2 is
 available only for explicitly pinned future batches and was not used here; a
 reading-index candidate remains unadopted. The active continuation is every five
 minutes through2026-09-15 at07:00 America/Denver. No additional files are needed.
+
+## 2026-09-13 — C05 through 273; private data commit 2e5d5159
+
+Private data commit `2e5d515987c1b30d7812ab9d1ac7f42397b6ad37` adds
+C05:271–273 as page 91. It contains 2,625 scoped files. Generated coverage is
+273/511; this does not claim that C05 is finished. The preceding independently
+closed global checkpoint is `7166534a9f47a201e5ab580a843c14ba2a910891`
+through 270. This entry records page acceptance; the separate fixed-head global
+through-273 review and fresh read-only MAIN preflight remain pending.
+
+The page has 101 independently reviewed analyst spans (52/21/28), eight explicit
+nulls (4/4/0), 63 non-null d5 pairs and three sentence anchors. Root authored
+the Tibetan originals and froze them before reading separate English proposals.
+Distinct non-authors reconciled and reviewed them with disclosed reused context.
+All 198 original identities retain full dispositions: 180 retained, 16 recast
+and two distributed omissions. Root's acceptance checks are mechanical;
+semantic approval comes from the independent SPEC and QUALITY review.
+
+The initial reviewer upheld one causal-scope finding in 273. The correction
+removed only p22 and its English-order entry and appended an explanatory note.
+The first phyir [196,201) and first for [91,94) remain verbatim and unwrapped:
+they connect different premises in the two versions. Positive HGM11962 evidence
+for for/because/since remains preserved. This is distributed restructuring,
+not absent meaning or an explicit null. The distinct final phyir/for mapping at
+[255,260)/[265,268) remains. Scoped independent re-review approved both gates
+with zero open findings. All 101 surviving full spans, optional fields, parentage,
+source ranges and rationales match the initial review after removing only p22;
+the other 197 original dispositions remain unchanged. Six five-ground errata
+refutations survive; no erratum or head allowance was added. All 192 prior
+errata remain exact, and the initial NEEDS_CORRECTION package stays unchanged.
+
+The final semantic freeze contains 2,032 files plus its top manifest, SHA-256
+`b4f9b53d8cbc18385b006f7d8dff7a04cee73fa5bf61a98e9b031bcb32c1cf4c`.
+Its 12,568 full source mappings retain 1,975 distinct copies, 9,145 historical
+source-version transports and 283 Git aliases against 11 original objects.
+Root reopened complete originals/copies before landing. The assembled spec is
+17,245 bytes, SHA-256
+`f77fb9eebff766ffc97db8c3290ba17c09cbc2b009920ef21e4c85ac3f56adbc`;
+the canonical body is 17,220 bytes, SHA-256
+`0d3ccc58baef88af484d202aaf5d6020101e733308c47e2c1db0acc47e922c33`.
+The sole builder change registers c5p91:[271,272,273]; navigation and index
+advance exactly. Source/master bytes and binding hgm_gloss are unchanged;
+machine attestations remain PROVISIONAL.
+
+Both live builders ran once, exited 0 and reported coverage 273. The view used
+the exact prior main CSV seed from 7166534. All 17 targeted CTest suites passed
+once in 12.16 seconds. All 44,907 prior links, earlier notes/trees/evidence/ACIP,
+22,385 main CSV rows and 23,932 course-depth groups remain without enrichment.
+Current totals: 45,011 links, 11,923 nulls, 1,609 notes, 11 trees, 7,078 evidence
+heads and 15,469 pairs. CSV rows: 22,413 main, 22,073 reverse, 23,974 course-depth
+and 28 changes. Every course group matches exact main CSV references/metadata.
+Actual ACIP head coverage is 7,075/7,078; rounded 100.0% is not complete coverage.
+The missing spellings and six unchanged prior empty-ACIP rows remain explicit.
+
+An independent isolated run reproduced both JSON banks, dictionary HTML and all
+four CSVs byte for byte with the preserved previous CSV seed and frozen date.
+The retention oracle passed 223,906 checks. Its first ACIP diagnostic and scoped
+recovery are preserved. Root reopened all 2,785 frozen reproduction files, 2,715
+full input aliases, seven immutable prior Git outputs and seven current outputs.
+Reproduction freeze SHA-256:
+`6e4c34741e2712221a22806cf602440e99ab8d2ec1ce1ae3bcd8e89240d7a34f`.
+No builder or CTest rerun was used to close staging.
+
+Independent review of the first whitespace candidate found discarded supplied
+root aliases, rejection of 33 exact physical CRLF EOF fragments, and rejection
+of a complete 2,176-byte diff with blank context at EOF. The corrected helper
+preserves and rechecks aliases, proves complete physical-source ownership, and
+parses balanced full diffs; ordinary LF EOF checks remain strict. Author 60
+tests and independent 63 boundary/changed-fragment checks pass. Both actual
+prepare and audit ran once and exited 0. The raw Git diagnostic itself exits 2;
+all 95,906 warnings in 58 files have exact source evidence: 73,208 physical-byte,
+22,691 canonical CSV CRLF, five diff-context and two blank-EOF warnings. Its full
+36,268,143 bytes, SHA-256
+`ce93fc36cce920a0d24660ef2ac1b7f735059a96beb3b9e4e4ee82921e02a766`,
+remain identical after final staging. No source/evidence whitespace was changed.
+All failed, rejected and superseded tooling versions and full witnesses survive.
+
+Ordinary banking preserved 261 source/copy and 2,981 external records. Final
+banking preserves 575 source/copy and 6,959 external records; its manifest is
+4,159,097 bytes, SHA-256
+`89a9f4b919aa32c27af1fd4ffa550771ce7dba1e1c6ac1da65d21f278b28d9e4`.
+The 576 bank files include that final manifest. The original pre-banking raw
+untracked capture is preserved: 2,039 of its paths became staged, 576 later
+root-bank paths were added, and ten already tracked changes give 2,625 staged
+files. Only the intentional dcc_captions directory remains untracked.
+
+The full staging v2 execution stopped on an incorrect Git-tracked-source
+assumption: the dictionary gzip exists as a local source alias, not an object
+in the incoming Git commit. The actual failed git-show command, exit 128 and
+complete 1,478-file run are retained. The minimal v3 correction checks canonical
+alias/target identity, baseline hashes, unique non-Git provenance, the frozen
+semantic copy and complete original/copy bytes. The rest of v2 is byte-exact.
+Fifteen focused author tests and fifteen fresh independent tests pass; the
+initial dispatch-test failure is preserved. Actual full v3 execution passed.
+Root reopened all 24,467 consumed file pins (2,814,784,746 bytes), all 2,625
+current staged files, all 2,935 complete command records and the current index.
+The final stage proof is 1,015,312 bytes, SHA-256
+`53bb499f5c36f626bf184220c8987a05361676efc23eb1bb6d7ddfd7bb5079e4`.
+The final bank is immutable. Its later execution, staging v2 failure/v3 fix,
+reviews, actual v3 run, root acceptance and commit records remain complete
+external evidence under campaign-artifacts/integration; they are not claimed
+inside the earlier bank. This avoids changing an input to include its own proof.
+
+The current through-273 global checkpoint retains its full original-base patch,
+lossless archive, fixture census and fresh read-only MAIN preflight commitment.
+Root verified the 49-file frozen preparation, 39 original/copy mappings and 43
+exact workspace copies. The unchanged helper is approved to execute only in
+the separate unfrozen workspace after the actual data/documentation heads are
+supplied; the old preparation must remain immutable. No global verdict is
+claimed by this ledger entry.
+
+After that checkpoint closes, the future global cadence is six accepted pages
+(18 segments), next scheduled through 291, following ALIGNMENT_LAYER_SPEC §7.
+Every three-segment page still requires independent original angles,
+reconciliation, semantic review, original evidence preservation, canonical
+generation, all 17 fidelity suites, source/prior-data retention, independent
+seven-output reproduction, exact staging/whitespace checks and a page ledger
+and commit. Only the repeated whole-history archive census, complete fixture
+census and full campaign-to-MAIN applicability check move to the outer cadence.
+Run the global checkpoint earlier for a course boundary, deadline, material
+handoff, integrity discrepancy or a substantive source/schema/algorithm/proof
+helper change. A routine reviewed page-registry addition retains its page gates.
+Any actual integration still requires fresh applicability against current MAIN.
+The evidence-backed cadence recommendation is retained at
+campaign-artifacts/integration/checkpoint-cadence-review/report.md. No measured
+speedup or APFS copy optimization is claimed. Earlier commitments stay intact.
+
+Native and installed-phone verification remain through 171; rendered inspection,
+locked launch and MAIN integration remain open. No changes were applied to MAIN.
+C13 remains blocked upstream. Source preparation through 303 is not accepted
+alignment. Finish all 511 C05 source segments before starting C06; 177 contiguous
+C06 rows are available locally. The five-minute continuation remains active
+through 2026-09-15 at 07:00 America/Denver. No additional files are currently needed.
