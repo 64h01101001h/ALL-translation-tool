@@ -255,6 +255,29 @@ clause verb, and `chunkClause` cannot ask: `spotVerb` runs after it, over the
 chunks it produces. Fixing it means reordering that, which is not a change to
 make on two examples.
 
+## Deferred, with the reason: unifying the la don resolver
+
+`narrowLaDon` in cases.cpp and `caseLabel` in wilsonparse.cpp both resolve a la
+don particle from the verb class. That is a duplicate table of exactly the kind
+`table_conformance` exists to police, and it was written knowingly, held to the
+older one by a gate.
+
+**Not unified, deliberately.** Checked what it would cost:
+
+- The gates on `caseLabel` match substrings (`.find("2nd")`, `.find("NOT 3rd")`),
+  so they would survive the change. That is not the obstacle.
+- The obstacle is the class-specific PHRASING. `caseLabel` says "2nd (objective:
+  destination/place of activity)" under a motion verb and "7th (referential
+  locative, about/toward)" under one of attitude. Rebuilding those from
+  `narrowLaDon` means either changing a shipped pane's output, or moving
+  display text into `allcore`, which is worse.
+- The actual risk — the two drifting apart and the panes contradicting each
+  other in front of a reader — is already caught by the conformance gate.
+
+So the remaining benefit is tidiness, and the cost is touching a shipped pane's
+strings. Revisit if `caseLabel` needs changing for another reason, and do it
+then rather than for its own sake.
+
 ## The hypothesis this produced
 
 The predicate chunk conflating object and verb is a better candidate for
