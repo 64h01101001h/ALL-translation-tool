@@ -1,0 +1,48 @@
+from pathlib import Path
+import json,hashlib,importlib.util,types,datetime
+R=Path.cwd();O=R/'campaign-artifacts/integration/through273-preparation/staging-review-v2';H=O.parent/'staging-helper-v2';B=R/'campaign-artifacts/C05-271-273';W=R/'campaign-worktree';L=B/'landing'
+manifest=json.loads((O/'input-manifest.json').read_text()); records=manifest['records']
+def pin(raw):return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def keep(p,d):
+ raw=p.read_bytes();d.parent.mkdir(parents=True,exist_ok=True);assert not d.exists() or d.read_bytes()==raw;d.write_bytes(raw);assert raw==p.read_bytes()==d.read_bytes();records.append({'original':str(p),'copy':str(d.relative_to(O)),**pin(raw)})
+for name in ['initial-stage-input-proof.json','initial-stage-pathspec.bin']:
+ keep(L/name,O/'actual-landing'/name)
+for p in sorted((R/'campaign-artifacts/integration/through273-stage-runs/initial').rglob('*')):
+ if p.is_file():keep(p,O/'actual-stage-initial'/p.name)
+spec=importlib.util.spec_from_file_location('reviewed',O/'candidate/verify_staged_through273.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+c=object.__new__(m.Check);c.w=W;c.b=B;c.l=L;c.inputs={};c.args=types.SimpleNamespace(untracked_before=str(L/'staging-untracked-before.stdout'))
+prevraw=(L/'root-proof-copy-manifest-before-whitespace.json').read_bytes();prev=json.loads(prevraw)
+c.retained_originals={r['original'] for r in prev['files']}|{r['path'] for r in prev['external_actual_bytes_retained']}
+payloadraw=(L/'staged-payload-manifest.json').read_bytes();payload=json.loads(payloadraw);proof=json.loads((L/'staged-payload-source-proof.json').read_text());freeze_raw=(B/'semantic-review/freeze.json').read_bytes()
+c.verify_payload_source(L/'staged-payload-manifest.json',payloadraw,payload,proof,freeze_raw)
+capture=(L/'staging-untracked-before.stdout').read_bytes();c.verify_untracked_capture(capture)
+assert pin(capture)=={'bytes':255551,'sha256':'e53d6531280332605a6264bbd02c033f42f382d2aa644992b2179e18664f148d'}
+bankroot=Path('data/alignment/reviews_c05/c5p91/landing-proof');bankpaths={str(bankroot/m.relative(row['copy'])) for row in prev['files']}|{str(bankroot/'root-proof-copy-manifest-before-whitespace.json')}
+run=R/'campaign-artifacts/integration/through273-banking-runs/ordinary';result=json.loads((run/'result.json').read_text());events=json.loads((run/'write-events.json').read_text());inv=json.loads((run/'invocation.json').read_text());inputs=json.loads((run/'input-pins.json').read_text())
+assert result['status']=='PASS' and result['phase']=='ordinary' and result['manifest_pin']==pin(prevraw)
+assert Path(result['manifest_path'])==L/'root-proof-copy-manifest-before-whitespace.json'
+assert result['writes']==events and len(events)==len(set(events))
+assert set(events)=={str(W/p) for p in bankpaths}|{str(L/'root-proof-copy-manifest-before-whitespace.json')}
+assert inputs[str(L/'staging-untracked-before.stdout')]==pin(capture)
+producer=Path(inv['argv'][0]);assert inputs[str(producer)]==pin(producer.read_bytes())
+for flag,expected in [('--phase','ordinary'),('--batch',str(B)),('--worktree',str(W)),('--run-output',str(run)),('--untracked-capture-stem',str(L/'staging-untracked-before'))]:
+ assert inv['argv'].count(flag)==1 and inv['argv'][inv['argv'].index(flag)+1]==expected
+head=json.loads((run/'head-command.json').read_text());assert head['argv']==['git','rev-parse','HEAD'] and Path(head['cwd'])==W
+assert not (run/'head-stdin.bin').read_bytes() and not (run/'head-stderr.txt').read_bytes() and int((run/'head-exit.txt').read_text())==0
+m.check_final_head((run/'head-stdout.txt').read_bytes())
+# Prove the ordinary bank's complete original/copy bytes. No final bank is invented.
+for row in prev['files']:
+ raw=Path(row['original']).read_bytes();assert pin(raw)=={k:row[k] for k in ('bytes','sha256')};assert raw==(W/bankroot/row['copy']).read_bytes()
+assert prevraw==(W/bankroot/'root-proof-copy-manifest-before-whitespace.json').read_bytes()
+stage=json.loads((L/'initial-stage-input-proof.json').read_text());paths={r['path'] for r in stage['files']};rawpaths=(L/'initial-stage-pathspec.bin').read_bytes();assert set(m.nul_paths(rawpaths))==paths and pin(rawpaths)=={k:stage['pathspec'][k] for k in ('bytes','sha256')}
+initial=set(m.nul_paths(capture));new=(initial&paths)|bankpaths
+assert len(paths)==2311 and len(new)==2301 and len(paths-new)==10 and bankpaths<=paths
+expected_residual=b''.join(p.encode()+b'\0' for p in stage['untracked_residual'])
+transition=m.untracked_transition(capture,expected_residual,new,bankpaths,bankpaths)
+# This uses the root's initial-stage recorded residual, not a new live-index observation.
+for k,v in c.inputs.items():assert pin(Path(k).read_bytes())==v
+for row in records:
+ raw=Path(row['original']).read_bytes();assert raw==(O/row['copy']).read_bytes() and pin(raw)=={k:row[k] for k in ('bytes','sha256')}
+manifest['records']=records;(O/'input-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+out={'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'boundary':'Read-only actual payload and initial/ordinary-bank interfaces; no full candidate invocation, live Git command, final-bank fabrication or stage approval','actual_payload_files':len(payload['files']),'actual_payload_bytes':sum(r['bytes'] for r in payload['files']),'sourceproof_inputs':len(proof['proof_inputs']),'capture':pin(capture),'captured_paths':len(initial),'ordinary_records':len(prev['files']),'ordinary_external_records':len(prev['external_actual_bytes_retained']),'ordinary_bank_paths':len(bankpaths),'ordinary_actual_write_events':len(events),'ordinary_original_copy_equal':len(prev['files']),'ordinary_manifest_pin':pin(prevraw),'initial_required_paths':len(paths),'initial_new_paths':len(new),'initial_tracked_changes':len(paths-new),'initial_recorded_residual':stage['untracked_residual'],'transition':transition,'retained_input_records':len(records),'retained_input_bytes':sum(r['bytes'] for r in records),'full_verifier_cli_executions':0,'live_git_commands':0,'consumed_candidate_interface_pins':c.inputs}
+(O/'actual-interface-proof.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({k:v for k,v in out.items() if k!='consumed_candidate_interface_pins'}))

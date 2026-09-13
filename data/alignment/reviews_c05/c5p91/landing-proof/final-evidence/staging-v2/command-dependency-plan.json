@@ -1,0 +1,56 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "verifier_argv": [
+    "python3",
+    "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-preparation/staging-helper-v2/verify_staged_through273.py",
+    "--worktree",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "--batch",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273",
+    "--output",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-final-staging-runs/verification-v2",
+    "--untracked-before",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staging-untracked-before.stdout",
+    "--whitespace-proof",
+    "ACTUAL_APPROVED_WHITESPACE_PROOF_PATH",
+    "--whitespace-log",
+    "ACTUAL_COMPLETE_WHITESPACE_LOG_PATH",
+    "--payload-manifest",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-payload-manifest.json",
+    "--payload-source-proof",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-payload-source-proof.json",
+    "--banking-ordinary-run",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-banking-runs/ordinary",
+    "--banking-final-run",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-banking-runs/final-whitespace"
+  ],
+  "caller_capture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-final-staging-runs/caller-verification-v2",
+  "ordered_steps": [
+    "Independent tooling review of frozen banking v1 and staging v2; root acceptance before any invocation.",
+    "After actual landing and payload freeze, BEFORE ordinary banking and BEFORE any staging, capture git ls-files --others --exclude-standard -z in WT, preserving argv/cwd, raw stdout, empty stderr and exit0 at landing/staging-untracked-before.*. Preserve the original binary NUL stream unchanged. No root landing-proof destination exists yet.",
+    "Invoke reviewed banking v1 ordinary with that capture stem. Caller stdout/stderr/exit/execution go to a fresh external run directory, not landing. Preserve complete internal run-output including write-events, result, invocation, input pins and raw HEAD command records.",
+    "Stage only actual independently authorized payload, semantic bank and ordinary bank paths. All newly staged paths outside root landing-proof must be present in the true initial raw stream.",
+    "Capture actual staged whitespace diagnostics; independently review precise classifications and retain full proofs. No guessed exemption or unknown schema is introduced by this preparation.",
+    "Create explicit final extra inventory including every ordinary run-output and caller-record file, later approved tooling/reproduction/whitespace evidence, complete original failure records. Invoke reviewed banking final-whitespace into its fresh external run-output. It adds only exact manifest targets; preserve all final bank write-events/result/command streams externally.",
+    "Stage exact remaining final root-bank targets and manifest. Do not create late files inside landing after the final manifest snapshot. Any later boundary must use an explicit separately reviewed supplement; no broad exclusions.",
+    "After final banking caller streams have completed, invoke staging v2 with both actual bank run-output directories. The final bank run is consumed and pinned as later external evidence, not falsely covered by its own earlier manifest. Capture this verifier caller argv/stdout/stderr/exit/execution outside landing and outside its own fresh internal --output.",
+    "Review actual verifier output and preserve its external tree. This pre-commit check does not cover later files or mutations. Do not bank its own output into its own successful stage without a new separately reviewed boundary."
+  ],
+  "untracked_contract": {
+    "initial_boundary": "before ordinary banking and before initial staging",
+    "derive_new_paths": "required staged set minus actual baseline git ls-tree; exact match to actual cached diff-filter=A paths",
+    "later_bank_paths": "exact final root-manifest copy targets plus both manifests; exact ordinary/final actual write events, excluding only their external landing manifest writes",
+    "residual": "original raw order with only initially listed independently authorized newly staged paths removed; byte-exact comparison to current raw untracked stream",
+    "reject": "unrelated additions/drops, new non-bank paths absent initially, initial root-bank paths, missing/extra bank events, missing/changed capture pins"
+  },
+  "future_prerequisites": [
+    "Actual root-bank manifests and complete run evidence",
+    "Actual independently approved whitespace proof/log in the expected interface",
+    "Actual complete staged set; none executed by this preparation"
+  ]
+}

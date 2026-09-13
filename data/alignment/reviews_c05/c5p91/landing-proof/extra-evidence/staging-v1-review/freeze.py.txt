@@ -1,0 +1,12 @@
+from pathlib import Path
+import json,hashlib,datetime,difflib
+O=Path(__file__).resolve().parent
+old=(O/'report.md').read_text();n=len((O/'candidate/verify_staged_through273.py.txt').read_text().splitlines());assert n==465
+(O/'report-before-linecount-fix.md').write_text(old);new=old.replace('lines1–475','lines1–465');assert new!=old;(O/'report.md').write_text(new);(O/'report-linecount-fix.diff.txt').write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='report-before-linecount-fix.md',tofile='report.md')))
+def pin(p):
+ raw=p.read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file() and p!=O/'freeze.json'}
+freeze=dict(verdict='NEEDS_CORRECTION tooling only',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),scope='Every current file except this exact top freeze; includes complete private Git fixture and original nested freezes',files=files)
+(O/'freeze.json').write_text(json.dumps(freeze,indent=2)+'\n')
+assert {str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file() and p!=O/'freeze.json'}==files
+print(json.dumps(dict(status='DONE tooling review frozen',files=len(files),freeze=pin(O/'freeze.json'),report=pin(O/'report.md'),findings=3,tests=7,candidate_executions=0),indent=2))

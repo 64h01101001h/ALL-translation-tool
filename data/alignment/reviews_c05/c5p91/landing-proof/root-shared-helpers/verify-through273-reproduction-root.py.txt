@@ -1,0 +1,79 @@
+"""Identity closure of the independently completed reproduction; no reruns."""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess
+
+A=Path(__file__).resolve().parent
+R=A/'through273-generated-reproduction'
+W=A.parents[1]/'campaign-worktree'
+B=A.parent/'C05-271-273'
+OUT=A/'through273-generated-reproduction-root'
+assert not OUT.exists()
+def raw(p): return Path(p).read_bytes()
+def j(p): return json.loads(raw(p))
+def pin(x): return dict(bytes=len(x),sha256=hashlib.sha256(x).hexdigest())
+def match(p,record):
+    x=raw(p);assert pin(x)=={k:record[k] for k in ('bytes','sha256')},str(p)
+    return x
+f=j(R/'freeze.json')
+assert pin(raw(R/'freeze.json'))['sha256']=='6e4c34741e2712221a22806cf602440e99ab8d2ec1ce1ae3bcd8e89240d7a34f'
+actual={str(p.relative_to(R)):pin(raw(p)) for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json'}
+assert actual==f['files'] and len(actual)==f['file_count']==2785
+assert sum(x['bytes'] for x in actual.values())==f['total_bytes']==722254397
+m=j(R/'input-manifest.json');old=j(R/'history/pre-execution-input-manifest.json')
+assert len(m)==len(old)==2715
+git_cache={};version_changes=[]
+for i,(row,before) in enumerate(zip(m,old)):
+    x=match(R/row['copy'],row)
+    if row.get('original_git_commit'):
+        key=row['original_git_commit']+':'+row['repository_relative_path']
+        if key not in git_cache:git_cache[key]=subprocess.check_output(['git','show',key],cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+        assert x==git_cache[key]
+    else:assert x==raw(row['original'])
+    if row!=before:
+        version_changes.append(i)
+        assert row['role']=='first isolated view seed; intentionally previous main CSV'
+        assert row['materialized_initial_path']==before['copy']=='workspace/docs/geshe_michael_roach_dictionary.csv'
+        assert row['copy']=='seed/previous-main-csv-seed.bin'
+        assert all(row[k]==v for k,v in before.items() if k!='copy')
+assert len(git_cache)==7 and len(version_changes)==1
+proof=j(R/'final-proof.json');execution=j(R/'execution-proof.json')
+assert proof['status']==execution['status']=='PASS' and proof['open_findings']==[]
+assert len(execution['runs'])==2 and execution['layer_invocations']==execution['view_invocations']==1
+for label,run in zip(('layer','view'),execution['runs']):
+    d=R/'executions'/label;assert j(d/'execution.json')==run
+    command=j(d/'command.json');assert all(run[k]==v for k,v in command.items())
+    assert run['exit']==0 and raw(d/'exit')==b'0\n' and raw(d/'stdin.bin')==b''
+    for stream in ('stdout','stderr'):match(d/stream,run[stream])
+    guard=j(d/'runtime-guards.json')
+    assert guard['date_override']==execution['date']=='2026-09-12' and guard['bytecode_disabled']
+    assert all(x['query_only']==1 and x['uri'].endswith('?mode=ro') for x in guard['sqlite_connections'])
+assert execution['runs'][1]['seed_before_first_view']==execution['seed']
+assert match(R/'seed/previous-main-csv-seed.bin',execution['seed'])==raw(B/'landing/previous-main-csv-seed.bin')
+assert len(execution['outputs'])==7 and execution['outputs']==proof['output_pins']
+for x in execution['outputs']:
+    values=[match(p/x['path'],x) for p in (R/'workspace',R/'expected-payload',R/'reproduced-outputs',B/'landing/payload-freeze',W)]
+    assert all(v==values[0] for v in values)
+checks=j(R/'retention-checks.json');historical=j(R/'history/retention-attempt01/retention-checks.json')
+assert len(checks)==223906 and all(x['pass_'] is True for x in checks)
+assert len(historical)==221071 and checks[:221070]==historical[:-1]
+assert historical[-1]['check']=='Actual five unproven ACIP spans' and historical[-1]['pass_'] is False
+retention=j(R/'retention-proof.json')
+assert retention['status']=='PASS' and retention['failures']==[] and retention['retained_prior_passes']==221070
+assert j(R/'history/retention-attempt01/retention-proof.json')['status']=='FAILED'
+assert len(j(R/'registered-pages.json'))==545
+for x in j(B/'landing/staged-payload-manifest.json')['files']:
+    assert match(W/x['path'],x)==raw(R/'expected-payload'/x['path'])
+head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=W).decode().strip()
+assert head==proof['reviewed_incoming_head']==proof['actual_live_final_head']=='7166534a9f47a201e5ab580a843c14ba2a910891'
+OUT.mkdir()
+result=dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=head,
+    scope='Root full identity closure after reading complete independent report, generation/retention/recovery helper sources and actual proofs; no new builder, test, semantic or live source execution',
+    freeze=pin(raw(R/'freeze.json')),report=pin(raw(R/'report.md')),frozen_files=2785,frozen_bytes=722254397,
+    input_aliases=2715,immutable_git_outputs=7,explicit_seed_version_transitions=1,
+    actual_independent_layer_runs=1,actual_independent_view_runs=1,all_seven_full_bytes_equal_across_five_locations=True,
+    passing_retention_checks=223906,exact_retained_prior_passes=221070,failed_diagnostic_history_retained=True,
+    registered_pages=545,ctest_reruns=0,all_twelve_frozen_payload_files_equal_live=True,
+    acip_proven_heads=7075,acip_heads=7078,source_linked_missing_acip_spans=5,full_bank_missing_acip_d5_rows=6,
+    no_final_commit_staging_MAIN_or_render_approval=True)
+(OUT/'proof.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result,indent=2))

@@ -1,0 +1,14 @@
+from pathlib import Path
+import json,hashlib
+R=Path.cwd();O=R/'campaign-artifacts/integration/through273-preparation/staging-review-v2';B=R/'campaign-artifacts/C05-271-273';W=R/'campaign-worktree';M=O/'input-manifest.json';m=json.loads(M.read_text());rows=m['records'];bank=W/'data/alignment/reviews_c05/c5p91/landing-proof';prev=json.loads((O/'actual-landing/root-proof-copy-manifest-before-whitespace.json').read_text())
+def keep(p,d):
+ raw=p.read_bytes();d.parent.mkdir(parents=True,exist_ok=True);assert not d.exists();d.write_bytes(raw);assert p.read_bytes()==d.read_bytes()==raw;rows.append({'original':str(p),'copy':str(d.relative_to(O)),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()})
+for row in prev['files']:
+ for kind,p in [('original',Path(row['original'])),('bank-copy',bank/row['copy'])]:keep(p,O/'ordinary-identity'/kind/row['copy'])
+keep(bank/'root-proof-copy-manifest-before-whitespace.json',O/'ordinary-identity/bank-copy/root-proof-copy-manifest-before-whitespace.json')
+# Preserve each actual source-proof worktree original too; its frozen counterpart was already retained.
+proof=json.loads((O/'actual-landing/staged-payload-source-proof.json').read_text())
+for row in proof['files']:keep(Path(row['original']),O/'actual-payload-original'/Path(row['original']).relative_to(W))
+for row in rows:
+ raw=Path(row['original']).read_bytes();assert raw==(O/row['copy']).read_bytes();assert len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256']
+M.write_text(json.dumps(m,indent=2)+'\n');print(json.dumps({'status':'PASS','preserved_original_copy_records':len(rows),'bytes':sum(r['bytes'] for r in rows)}))

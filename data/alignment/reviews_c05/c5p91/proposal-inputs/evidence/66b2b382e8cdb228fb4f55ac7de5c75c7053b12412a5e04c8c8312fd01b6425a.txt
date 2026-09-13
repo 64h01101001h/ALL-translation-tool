@@ -1,0 +1,51 @@
+from pathlib import Path
+import json,hashlib,subprocess,sys,os,datetime,difflib,collections
+sys.dont_write_bytecode=True
+R=Path.cwd();B=R/'campaign-artifacts/C05-271-273';C=B/'correction-01/reconciler';D=B/'reconciled/273';I=B/'correction-01/initial';W=R/'campaign-worktree'
+def j(p):return json.loads(p.read_text())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def inv(p):return {str(x.relative_to(p)):pin(x) for x in sorted(p.rglob('*')) if x.is_file()}
+# Approved v2 remains additive, with source-exact full copies and actual execution provenance.
+helper=R/'campaign-artifacts/copy_evidence_once_v2.py';assert pin(helper)['sha256']=='b8eabf4b53c29174d7f67c2f723007d429edc1e153ee3e5b32ff0a6e6fa147d1'
+inputs=[helper,B/'correction-01/reconcile-dispatch.md',B/'correction-01/proof.json']+[B/'semantic-review'/n for n in ['review.md','review.json','causal-scope-finding-evidence.json']]
+argv=[sys.executable,'-B',str(helper),str(C),str(C/'original-copy-manifest.json')]+[str(x) for x in inputs]
+save(C/'copy-v2.command.json',dict(argv=argv,cwd=str(R),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'},stdin='',helper_pin=pin(helper)))
+p=subprocess.run(argv,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),capture_output=True);(C/'copy-v2.stdout').write_bytes(p.stdout);(C/'copy-v2.stderr').write_bytes(p.stderr);(C/'copy-v2.exit').write_text(str(p.returncode)+'\n');assert p.returncode==0 and not p.stderr
+allowed=['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'];landing=R/'campaign-artifacts/verify_review_copy_and_register.py';assert "('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit')" in landing.read_text()
+checks=[]
+for base,manifest in [(B/'reconciled/271',B/'reconciled/271/original-copy-manifest.json'),(C,C/'original-copy-manifest.json')]:
+ for rec in j(manifest):
+  original=Path(rec['original']);copy=base/rec['copy'];a=original.read_bytes();b=copy.read_bytes();assert a==b;assert pin(copy)=={k:rec[k] for k in ['bytes','sha256']};assert copy.suffix.lower() in allowed;checks.append(dict(manifest=str(manifest),original=str(original),copy=str(copy),**pin(copy),full_bytes_equal=True))
+for name in ['review.md','review.json','causal-scope-finding-evidence.json']:assert (C/name).read_bytes()==(B/'semantic-review'/name).read_bytes()
+save(C/'all-source-copy-byte-checks.json',checks)
+root=j(B/'correction-01/proof.json');snapshots=root['snapshots']
+for name,snapshot in snapshots.items():assert inv(I/name)==snapshot['files']
+for name in ['semantic-review','root-reconciliation-verification']:assert inv(B/name)==snapshots[name]['files']
+for seq in ['271','272']:assert inv(B/'reconciled'/seq)==inv(I/'reconciled'/seq)
+for path in ['errata-five-ground-decisions.json','errata.json','proposed-head-allowances.json','original-freeze-recheck.json']:
+ assert (D/path).read_bytes()==(I/'reconciled/273'/path).read_bytes()
+for r in j(B/'reconciled/271/source-input-pins.json'):assert pin(Path(r['path']))=={k:r[k] for k in ['bytes','sha256']}
+oldall=[];newall=[];oldids=[];newids=[];counts=[]
+for seq in [271,272,273]:
+ old=j(I/f'reconciled/{seq}/final-tuples.json');new=j(B/f'reconciled/{seq}/final-tuples.json');assert new==[x for x in old if not(seq==273 and x['id']=='p22')];oldall+=old;newall+=new
+ od=j(I/f'reconciled/{seq}/original-dispositions.json');nd=j(B/f'reconciled/{seq}/original-dispositions.json');oldids+=od;newids+=nd
+ for a,b in zip(od,nd):
+  if not(seq==273 and a['original_identity']['angle']=='english' and a['original_identity']['id']=='p22'):assert a==b
+  else:
+   assert b['status']=='omitted_distributed' and b['final_ids']==[]
+   for key in a:
+    if key not in ['status','final_ids','rationale']:assert a[key]==b[key]
+ counts.append(dict(seq=seq,spans=len(new),nulls=sum(x['eng'] is None for x in new),d5=sum(x['d']==5 and x['eng'] is not None for x in new),original_dispositions=len(nd)))
+assert len(newall)==101 and len(newids)==198 and len({(x['original_identity']['angle'],x['original_identity']['seq'],x['original_identity']['id']) for x in newids})==198
+old=j(I/'reconciled/273/final-decisions.json');new=j(D/'final-decisions.json');assert new==[x for x in old if x['tuple']['id']!='p22']
+old=j(I/'reconciled/273/spec.json')['segments'][0];new=j(D/'spec.json')['segments'][0];assert new['spans']==[x for x in old['spans'] if x['id']!='p22'];assert new['eng_order']==[x for x in old['eng_order'] if x!='p22']
+for key in old:
+ if key not in ['spans','eng_order','note']:assert new[key]==old[key]
+for p in [D,C]:
+ for f in p.rglob('*'):
+  if f.is_file():assert f.suffix.lower() in allowed,f
+result=dict(status='PASS mechanical correction preflight; distinct semantic re-review required',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),counts=counts,total_spans=len(newall),total_nulls=sum(x['eng'] is None for x in newall),total_d5=sum(x['d']==5 and x['eng'] is not None for x in newall),original_dispositions=len(newids),original_disposition_status_counts=dict(collections.Counter(x['status'] for x in newids)),unchanged_original_dispositions=197,source_copy_records=len(checks),source_copy_all_full_bytes_equal=True,landing_whitelist=allowed,landing_helper_pin=pin(landing),all_initial_trees_and_271_272_live_exact=True,six_errata_refutations_unchanged=True,source_pins_unchanged=True,new_canonical_runs=1,canonical_exit=0,canonical_stderr_bytes=0,unchanged_271_272_execution_provenance='Initial actual runs remain in canonical-attempt01 and the preserved root proof; no new execution claimed.',semantic_approval=False,failures='correct.py.txt HTML checker cleared side on nested lab closing; successful canonical streams and complete partial active tree retained. recover-checker-v2 checks sentence spans without that reset and updates only remaining interfaces. No repeat canonical run.')
+save(C/'proof.json',result)
+print(json.dumps(result,indent=2))

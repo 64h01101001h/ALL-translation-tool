@@ -1,0 +1,21 @@
+from pathlib import Path
+import hashlib,json,os,datetime
+R=Path(__file__).resolve().parent
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+# All literal source aliases and their exact bytes still equal the preserved versions.
+m=json.loads((R/'original-to-copy-manifest.json').read_bytes())
+for rec in m:
+ assert Path(rec['original']).read_bytes()==(R/rec['copy']).read_bytes()
+ assert pin((R/rec['copy']).read_bytes())=={k:rec[k] for k in ('bytes','sha256')}
+files={}
+for p in sorted(R.rglob('*')):
+ if p.is_file() and p!=R/'freeze.json':
+  r=pin(p.read_bytes())
+  if p.is_symlink():r.update(is_symlink=True,symlink_target=os.readlink(p),resolved_target=str(p.resolve(strict=True)))
+  files[str(p.relative_to(R))]=r
+assert not (R/'freeze.json').exists()
+f=dict(status='FROZEN INITIAL NEEDS_CORRECTION TOOLING REVIEW',spec_verdict='NEEDS_CORRECTION',quality_verdict='NEEDS_CORRECTION',open_findings=3,created_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),original_to_copy_mappings=len(m),files=files,total_files=len(files),total_bytes=sum(v['bytes'] for v in files.values()),exclude_only='freeze.json',limits='Code/predicates only; candidate CLI and live Git/index operations zero; raw root diagnostic preserved, not independently rerun.')
+(R/'freeze.json').write_text(json.dumps(f,indent=2,ensure_ascii=False)+'\n')
+assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()}==set(files)|{'freeze.json'}
+for rel,rec in files.items():assert pin((R/rel).read_bytes())=={k:rec[k] for k in ('bytes','sha256')}
+print(json.dumps(dict(status='DONE NEEDS_CORRECTION',files=len(files),bytes=f['total_bytes'],original_mappings=len(m),freeze=pin((R/'freeze.json').read_bytes()),report=pin((R/'report.md').read_bytes()),review=pin((R/'review.json').read_bytes()))))

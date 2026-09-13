@@ -1,0 +1,22 @@
+"""Run one explicit campaign command, preserving exact streams and exit once."""
+from pathlib import Path
+import datetime, json, os, re, subprocess, sys, time
+
+B=Path(__file__).resolve().parent
+label,*argv=sys.argv[1:]
+assert re.fullmatch(r'[a-z0-9-]+',label) and argv
+folder=B/'landing';folder.mkdir(exist_ok=True)
+paths={suffix:folder/(label+'.'+suffix) for suffix in ['command.json','stdout','stderr','exit','execution.json']}
+assert not any(p.exists() for p in paths.values()),'Preserve existing execution records'
+env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
+record={'argv':argv,'cwd':os.getcwd(),'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'env_overrides':{'PYTHONDONTWRITEBYTECODE':'1'}}
+paths['command.json'].write_text(json.dumps(record,indent=2)+'\n')
+started=time.perf_counter()
+run=subprocess.run(argv,env=env,capture_output=True)
+elapsed=time.perf_counter()-started
+paths['stdout'].write_bytes(run.stdout);paths['stderr'].write_bytes(run.stderr)
+paths['exit'].write_text(str(run.returncode)+'\n')
+paths['execution.json'].write_text(json.dumps({**record,'finished_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'wall_seconds':elapsed,'exit':run.returncode,'stdout_bytes':len(run.stdout),'stderr_bytes':len(run.stderr)},indent=2)+'\n')
+sys.stdout.buffer.write(run.stdout);sys.stderr.buffer.write(run.stderr)
+print('\nRecorded',label,'EXIT',run.returncode,flush=True)
+sys.exit(run.returncode)

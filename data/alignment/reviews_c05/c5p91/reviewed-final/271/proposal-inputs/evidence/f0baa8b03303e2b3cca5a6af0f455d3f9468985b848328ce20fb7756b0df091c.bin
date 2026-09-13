@@ -1,0 +1,26 @@
+--- verify-complete-originals.py
++++ verify-complete-originals-v2.py
+@@ -3,7 +3,7 @@
+ import datetime, hashlib, importlib.util, json, os, subprocess, sys, traceback
+ sys.dont_write_bytecode=True
+ batch=Path(__file__).parent;wt=batch.parents[1]/'campaign-worktree'
+-out=batch/'proposal-verification';out.mkdir()
++out=batch/'proposal-verification-attempt02';out.mkdir()
+ proof={'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'RUNNING',
+        'role':'Root authored Tibetan; this is mechanical verification only, not independent semantic approval.'}
+ def pin(p):
+@@ -12,7 +12,13 @@
+     with p.open('x') as f:json.dump(obj,f,ensure_ascii=False,indent=2);f.write('\n')
+ def freeze(angle,seq):
+     directory=batch/angle/str(seq);fp=directory/'freeze.json';f=json.loads(fp.read_text())
+-    expected=f['files'] if isinstance(f['files'],dict) else {r['path']:r for r in f['files']}
++    entries=f['files'] if isinstance(f['files'],dict) else {r.get('relative_path',r['path']):r for r in f['files']}
++    expected={}
++    for name,r in entries.items():
++        key=str(Path(name).relative_to(directory)) if Path(name).is_absolute() else name
++        assert key not in expected and not Path(key).is_absolute() and '..' not in Path(key).parts
++        if Path(r.get('path','')).is_absolute():assert Path(r['path'])==directory/key
++        expected[key]=r
+     actual={str(p.relative_to(directory)) for p in directory.rglob('*') if p.is_file() and p!=fp}
+     assert actual==set(expected),(angle,seq,actual^set(expected))
+     for name,r in expected.items():

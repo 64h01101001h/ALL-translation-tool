@@ -1,0 +1,72 @@
+"""Bounded real-function regressions. No live Check.run or live Git access."""
+from pathlib import Path
+import copy,hashlib,importlib.util,json,unittest
+D=Path(__file__).resolve().parent
+s=importlib.util.spec_from_file_location('candidate',D/'verify_staged_through273.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+class Tests(unittest.TestCase):
+ def test_actual_dict_freeze_full_mapping(self):
+  f=json.loads((D/'inputs/schema/freeze.json').read_bytes());self.assertEqual(len(m.freeze_entries(f)),2032)
+ def test_freeze_rejects_either_nonapprove_verdict(self):
+  f=json.loads((D/'inputs/schema/freeze.json').read_bytes())
+  for key in ('spec_verdict','quality_verdict'):
+   with self.subTest(key=key):
+    bad=copy.deepcopy(f);bad[key]='NEEDS_CORRECTION'
+    with self.assertRaises(AssertionError):m.freeze_entries(bad)
+ def test_freeze_rejects_bad_count_and_list_schema(self):
+  f=json.loads((D/'inputs/schema/freeze.json').read_bytes())
+  for bad in [dict(f,file_count=0),dict(f,files=[]),dict(f,total_bytes=0)]:
+   with self.assertRaises(AssertionError):m.freeze_entries(bad)
+ def test_allowance_actual_empty_category_baseline_bytes(self):
+  wanted=json.loads((D/'inputs/schema/span-head-allow-needed.json').read_bytes())
+  self.assertEqual(m.allowance_result(b'{"pages_c05": {}}\n',b'{"pages_c05": {}}\n',wanted,wanted),(wanted,False))
+ def test_allowance_zero_rejects_format_only_change(self):
+  with self.assertRaises(AssertionError):m.allowance_result(b'{"pages_c05":{}}',b'{"pages_c05": {}}',{'pages_c05':{}},{'pages_c05':{}})
+ def test_allowance_exact_one_addition(self):
+  w={'pages_c05':{'a':'licensor'}}
+  self.assertEqual(m.allowance_result(b'{"pages_c05":{}}',b'{"pages_c05":{"a":"licensor"}}',w,w),(w,True))
+ def test_allowance_rejects_unapproved_extra(self):
+  with self.assertRaises(AssertionError):m.allowance_result(b'{"pages_c05":{}}',b'{"pages_c05":{"extra":"x"}}',{'pages_c05':{}},{'pages_c05':{}})
+ def test_allowance_rejects_overwrite(self):
+  w={'pages_c05':{'a':'new'}}
+  with self.assertRaises(AssertionError):m.allowance_result(b'{"pages_c05":{"a":"old"}}',b'{"pages_c05":{"a":"new"}}',w,w)
+ def transition(self,before=b'page\0spec\0unrelated\0',after=b'unrelated\0',new=None,bank=None,writes=None):
+  return m.untracked_transition(before,after,new or {'page','spec','bank/a','bank/final'},bank or {'bank/a','bank/final'},writes if writes is not None else {'bank/a','bank/final'})
+ def test_transition_initial_new_and_later_bank(self):
+  r=self.transition();self.assertEqual(r['initial_paths_newly_staged'],['page','spec']);self.assertEqual(r['later_created_root_bank_paths'],['bank/a','bank/final']);self.assertEqual(r['residual_paths'],['unrelated'])
+ def test_transition_rejects_unrelated_drop_or_addition(self):
+  for after in [b'',b'unrelated\0intruder\0']:
+   with self.subTest(after=after),self.assertRaises(AssertionError):self.transition(after=after)
+ def test_transition_rejects_missing_initial_payload(self):
+  with self.assertRaises(AssertionError):self.transition(before=b'page\0unrelated\0')
+ def test_transition_rejects_unproven_late_bank(self):
+  with self.assertRaises(AssertionError):self.transition(writes={'bank/a'})
+ def test_transition_rejects_root_bank_already_in_initial(self):
+  with self.assertRaises(AssertionError):self.transition(before=b'bank/a\0page\0spec\0unrelated\0')
+ def test_transition_rejects_malformed_or_duplicate_raw(self):
+  for before in [b'page\0spec\0unrelated',b'page\0page\0spec\0unrelated\0']:
+   with self.subTest(before=before),self.assertRaises(AssertionError):self.transition(before=before)
+ def test_final_head_guard_rejects_changed_head(self):
+  with self.assertRaises(AssertionError):m.check_final_head(b'0'*40+b'\n')
+  m.check_final_head((m.BASE+'\n').encode())
+ def test_payload_requires_full_frozen_copy_and_source_pin(self):
+  p=D/'fixtures'/'payload-final';p.mkdir(parents=True,exist_ok=True)
+  w=p/'worktree';l=p/'landing';(w/'docs').mkdir(parents=True,exist_ok=True);(l/'payload-freeze/docs').mkdir(parents=True,exist_ok=True)
+  raw=b'actual payload\n';original=w/'docs/file.txt';frozen=l/'payload-freeze/docs/file.txt';original.write_bytes(raw);frozen.write_bytes(raw)
+  manifest=dict(head=m.BASE,files=[dict(path='docs/file.txt',**pin(raw))]);manifest_raw=(json.dumps(manifest)+'\n').encode();manifest_path=l/'staged-payload-manifest.json';manifest_path.write_bytes(manifest_raw)
+  proof_input=l/'proof.json';proof_input.write_bytes(b'{}\n')
+  freeze=b'freeze';proof=dict(status='PASS',head=m.BASE,manifest=dict(path=str(manifest_path),**pin(manifest_raw)),files=[dict(original=str(original),copy=str(frozen),**pin(raw))],sources_unchanged=True,all_actual_canonical_output_pins_match=True,review_freeze=pin(freeze),proof_inputs=[dict(path=str(proof_input),**pin(proof_input.read_bytes()))])
+  def run(pr):
+   c=object.__new__(m.Check);c.inputs={};c.w=w.resolve();c.l=l.resolve();c.retained_originals={str(frozen.resolve()),str(proof_input.resolve())};return c.verify_payload_source(manifest_path,manifest_raw,manifest,pr,freeze)
+  run(proof)
+  frozen.write_bytes(b'CORRUPTED\n')
+  with self.assertRaises(AssertionError):run(proof)
+  frozen.write_bytes(raw)
+  bad=copy.deepcopy(proof);bad['manifest']['sha256']='0'*64
+  with self.assertRaises(AssertionError):run(bad)
+  bad=copy.deepcopy(proof);bad['files']=[]
+  with self.assertRaises(AssertionError):run(bad)
+  bad=copy.deepcopy(proof);bad['files'][0]['copy']=str(original)
+  with self.assertRaises(AssertionError):run(bad)
+  (p/'input-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+if __name__=='__main__':unittest.main(verbosity=2)

@@ -1,0 +1,16 @@
+{
+  "status": "PREPARED only; syntax compiled; never executed",
+  "candidate": {
+    "path": "campaign-artifacts/C05-271-273/verify-reconciliation-boundary-v3.py",
+    "bytes": 17766,
+    "sha256": "efc25a7d4db27836681129b216be4fbfb8a7d26fe63cb270c058260706dcb7d7"
+  },
+  "source": {
+    "path": "campaign-artifacts/C05-271-273/verify-reconciliation-boundary-v2.py",
+    "bytes": 13754,
+    "sha256": "d97f98b990d9e22f373650e8c3d0c2bec7b1bb89b13d1b55b839a0a8bcc743c7"
+  },
+  "scope": "Require exact101 remaining tuples and all198 original identities, complete unchanged271/272 trees and all preserved histories; actual canonical only273; old271/272 execution provenance retained explicitly.",
+  "before_execution": "Receive corrected frozen DONE; read full current changes, omissions and extra reasons. Preserve current root-reconciliation-verification by rename to root-reconciliation-verification-initial, confirming exact correction-01/initial snapshot, then run v3 with complete new streams. No current proof or baseline is changed by this preparation.",
+  "preparation_failure_history": "root-boundary-preparation-attempt01.json records failed inline substring guard; no helper was written or executed in that attempt."
+}

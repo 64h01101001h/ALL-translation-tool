@@ -1,0 +1,215 @@
+{
+  "synthetic_only": true,
+  "unchanged_candidate_sha256": "4db82414ccf8467a333280696786fd0089cc1080bb689f04f980e4bc8978535e",
+  "cases": [
+    {
+      "case": "control",
+      "exit": 0,
+      "existing_files_changed": [
+        "campaign-worktree/data/alignment/pages_c05/index.html",
+        "campaign-worktree/tools/build_alignment_layer.py"
+      ],
+      "helper_created_files": [
+        "campaign-artifacts/C05-271-273/landing/course-registration-verification.json",
+        "campaign-artifacts/C05-271-273/landing/registration-preimages/build_alignment_layer.py.txt",
+        "campaign-artifacts/C05-271-273/landing/registration-preimages/index.html"
+      ],
+      "expected_rejection": false,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "wrong-head",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "unclosed-checkpoint",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "review-rejected",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "acceptance-pin-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "changed-index",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "missing-prior-page",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "wrong-sequences",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "changed-landed-spec",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": true
+    },
+    {
+      "case": "replacement-body-and-page",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": true
+    },
+    {
+      "case": "individual-spec-hash-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "individual-body-size-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "reviewed-spec-copy-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "reviewed-body-copy-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "banked-spec-copy-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "banked-body-copy-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "review-order-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "combined-spec-serialization-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "combined-body-order-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "generator-exit-nonzero",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "generator-stderr-nonempty",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "landing-spec-pin-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "landing-body-pin-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "landing-page-identity-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    },
+    {
+      "case": "page-does-not-contain-body",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "previous_guard_gap_rejected": false
+    }
+  ],
+  "previous_guard_gaps_closed": 2,
+  "all_live_inputs_untouched": true
+}

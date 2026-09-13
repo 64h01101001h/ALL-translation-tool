@@ -1,0 +1,58 @@
+"""Reopen complete actual prepare/audit inputs and command outputs after EXIT0."""
+from pathlib import Path
+import datetime,hashlib,json,os
+A=Path(__file__).resolve().parent.parent;C=A/'whitespace-candidate-273-v2';R=A/'whitespace-runs-273-v2'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def checked(raw,row):assert pin(raw)=={k:row[k] for k in ('bytes','sha256')}
+def main():
+ out=A/'whitespace-root-273-v2/actual';out.mkdir(parents=True,exist_ok=False)
+ contract=json.loads((C/'command-contract.json').read_bytes());runs=[]
+ prepared=json.loads((R/'prepare-01/prepared-pins.json').read_bytes())
+ audited=json.loads((R/'audit-01/prepared-pins.json').read_bytes());assert prepared==audited
+ original_log=(A/'C05-271-273/landing/staged-diff-check.stdout').read_bytes()
+ for mode,count in [('prepare',63),('audit',64)]:
+  folder=R/(mode+'-01');caller=R/(mode+'-caller-01')
+  outer=json.loads((caller/'execution.json').read_bytes())
+  assert outer['exit']==0 and outer['argv']==contract[mode]['argv'] and outer['cwd']==contract[mode]['cwd']
+  for name in ('stdout','stderr'):
+   raw=(caller/(name+'.bin')).read_bytes()
+   assert len(raw)==outer[name+'_bytes'] and pin(raw)['sha256']==outer[name+'_sha256']
+  assert not (caller/'stderr.bin').read_bytes() and (caller/'exit.txt').read_bytes()==b'0\n'
+  assert not (folder/'failure.json').exists()
+  inputs=json.loads((folder/'consumed-inputs.json').read_bytes())
+  for row in inputs:
+   alias=Path(row['input_path']);assert str(alias.resolve(strict=True))==row['path']
+   raw=alias.read_bytes();checked(raw,row);assert (folder/row['copy']).read_bytes()==raw
+  for row in json.loads((folder/'root-aliases.json').read_bytes()):
+   p=Path(row['input_path']).resolve(strict=True);assert str(p)==row['path']
+   s=p.stat();assert (s.st_dev,s.st_ino)==(row['device'],row['inode'])
+  commands=sorted((folder/'commands').iterdir(),key=lambda p:int(p.name));assert len(commands)==count
+  heads=[];indexes=[];diagnostics=[];shows=0
+  for d in commands:
+   command=json.loads((d/'command.json').read_bytes());argv=command['argv']
+   assert command['cwd']==contract[mode]['cwd']+'/campaign-worktree'
+   assert not (d/'stdin.bin').read_bytes() and not (d/'stderr.bin').read_bytes()
+   raw=(d/'stdout.bin').read_bytes();exit_code=int((d/'exit.txt').read_bytes())
+   if argv==['git','rev-parse','HEAD']:heads.append(raw);assert exit_code==0
+   elif argv==['git','ls-files','--stage','-z']:indexes.append(raw);assert exit_code==0
+   elif argv==['git','diff','--cached','--check']:diagnostics.append(raw);assert exit_code==2 and raw==original_log
+   else:
+    assert len(argv)==3 and argv[:2]==['git','show'] and argv[2].startswith(':') and exit_code==0
+    assert raw==(Path(command['cwd'])/argv[2][1:]).read_bytes();shows+=1
+  assert len(heads)==len(indexes)==2 and heads[0]==heads[1]==(prepared['head']+'\n').encode()
+  assert indexes[0]==indexes[1] and shows==59 and len(diagnostics)==(mode=='audit')
+  filename='whitespace-classification-preflight.json' if mode=='prepare' else 'source-whitespace-proof.json'
+  proof=json.loads((folder/filename).read_bytes())
+  assert proof['mode']==mode and proof['all_warnings_accounted_for'] and proof['warning_count']==95906
+  assert len(proof['files'])==58 and proof['raw_log_sha256']==pin(original_log)['sha256']
+  assert proof['classes']=={'physical_bytes':73208,'blank_eof':2,'diff_context':5,'canonical_csv_crlf':22691}
+  assert json.loads((caller/'stdout.bin').read_bytes())=={k:v for k,v in proof.items() if k!='files'}
+  runs.append(dict(mode=mode,actual_execution=outer,inputs=len(inputs),commands=len(commands),
+    index=pin(indexes[0]),proof=dict(path=str(folder/filename),**pin((folder/filename).read_bytes()))))
+ assert runs[0]['index']==runs[1]['index']
+ result=dict(status='PASS ROOT ACCEPTS ACTUAL WHITESPACE AUDIT',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+  runs=runs,all_full_original_copy_and_actual_staged_command_bytes_reopened=True,warning_count=95906,
+  warned_files=58,raw_log=pin(original_log),code_review=A.as_posix()+'/whitespace-root-273-v2/review/proof.json',
+  root_git_commands=0,root_test_reruns=0,limitations='Initial stage only. Final bank additions require exact final stage verification and identical diagnostic bytes; no semantic or MAIN acceptance.')
+ (out/'proof.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:v for k,v in result.items() if k!='runs'},indent=2))
+if __name__=='__main__':main()

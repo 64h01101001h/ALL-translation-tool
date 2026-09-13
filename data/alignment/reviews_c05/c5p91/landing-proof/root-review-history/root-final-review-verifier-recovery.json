@@ -1,0 +1,8 @@
+{
+  "utc": "2026-09-13T03:26:43.115431+00:00",
+  "initial_result": "FAILED root verifier before final proof or landing; complete first execution streams and original helper retained",
+  "cause": "Incorrect assumption that each historical alias keeps its former destination path; approved copier can reuse a byte-identical target while retaining every logical original, source version and original-copy alias. First mismatch was a preserved empty stderr.",
+  "correction": "Require the unique actual manifest source/destination row and its exact historical original/copy/version metadata; still compare all old and retained current full bytes and immutable Git objects. No source, review, canonical or historical file changes.",
+  "old_helper_sha256": "882761533cf823d6f2beed98a1b155e882cede83915cd1137dc67ca8c385642c",
+  "new_helper_sha256": "4b4e5f1b7eedd26d10db2d8cd7998ee94e00869679287842afdcb916e6b13626"
+}

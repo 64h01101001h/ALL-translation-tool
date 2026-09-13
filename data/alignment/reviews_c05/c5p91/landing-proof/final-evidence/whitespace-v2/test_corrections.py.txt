@@ -1,0 +1,65 @@
+"""Tooling only: pure predicates and constructor/read/final-input checks, no Git/Run.run."""
+from pathlib import Path
+import hashlib,json,importlib.util,os,shutil,types,unittest
+D=Path(__file__).resolve().parent;R=D/'history/whitespace-review-273';C=D/'history/whitespace-candidate-273'
+SOURCE=Path(os.environ.get('CANDIDATE',str(D/'whitespace273.py')))
+RUN=os.environ.get('FIXTURE_RUN','default')
+def module(path):
+ s=importlib.util.spec_from_file_location('whitespace_'+str(hash(str(path))),path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+m=module(SOURCE)
+probe=json.loads((R/'actual-predicate-probe.json').read_bytes())
+descriptors=json.loads((C/'physical-source-descriptors.json').read_bytes())
+physical=[(item,(D/'originals'/f'physical-{i}.bin').read_bytes()) for i,item in enumerate(descriptors)]
+fragments=[r for r in probe['results'] if r['whole_original_ranges'] and 'new blank line at EOF.' in r['issues'] and any(x==['0d',''] for x in r.get('EOF_tails_hex',{}).values())]
+assert len(fragments)==33
+rootdiff=next(r for r in probe['results'] if r['path'].endswith('report-linecount-fix.diff.txt'))
+def finish(run):
+ if hasattr(run,'recheck_roots'):run.recheck_roots()
+ for record in run.inputs:
+  alias=Path(record['input_path']);assert alias.resolve(strict=True)==Path(record['path']);raw=alias.read_bytes();m.check_pin(raw,record);assert raw==(run.out/record['copy']).read_bytes()
+class Tests(unittest.TestCase):
+ def alias(self,role,retarget):
+  d=D/'fixtures'/RUN/(role+('-retarget' if retarget else '-stable'));d.mkdir(parents=True,exist_ok=False)
+  install=d/'install';install.mkdir();code=install/'whitespace273.py';code.write_bytes(SOURCE.read_bytes());local=module(code)
+  w1=d/'worktree-one';w2=d/'worktree-two';w1.mkdir();w2.mkdir();w=d/'worktree-alias';w.symlink_to(w1,target_is_directory=True)
+  r1=d/'one/C05-271-273/semantic-review';r2=d/'two/C05-271-273/semantic-review';r1.mkdir(parents=True);r2.mkdir(parents=True);review=d/'review-alias';review.symlink_to(r1,target_is_directory=True)
+  manifest_dir=d/'manifests';manifest_dir.mkdir();one=manifest_dir/'one.json';two=manifest_dir/'two.json';one.write_bytes(b'{"same":"bytes"}\n');two.write_bytes(one.read_bytes());root=manifest_dir/'root-alias.json';root.symlink_to(one)
+  args=types.SimpleNamespace(worktree=str(w),review=str(review),root_manifest=str(root),output=str(d/'run-output'),mode='prepare')
+  run=local.Run(args);run.read(run.root_manifest)
+  if retarget:
+   alias,target={'root':(root,two),'worktree':(w,w2),'review':(review,r2)}[role];alias.unlink();alias.symlink_to(target,target_is_directory=role!='root')
+   with self.assertRaises(AssertionError):finish(run)
+  else:finish(run)
+ def test_constructor_root_same_byte_retarget(self):self.alias('root',True)
+ def test_constructor_worktree_retarget(self):self.alias('worktree',True)
+ def test_constructor_review_retarget(self):self.alias('review',True)
+ def test_constructor_stable_aliases(self):self.alias('root',False)
+ def test_actual_root_diff_mixed_eof(self):
+  raw=(R/rootdiff['copy']).read_bytes();self.assertEqual(len(raw),2176);self.assertEqual(hashlib.sha256(raw).hexdigest(),'4dbcb14873bfa4ce514c1ac9856fe9c509ba6f9f80747087c598ebeff0021a5c')
+  root=json.loads((R/'current-root-manifest.json').read_bytes());key=rootdiff['path'].split('/landing-proof/',1)[1];rows=[r for r in root['files'] if r['copy']==key];self.assertEqual(len(rows),1);m.check_pin(raw,rows[0]);self.assertEqual(raw,(R/'actual-originals/report-linecount-fix.diff.txt').read_bytes())
+  self.assertEqual(m.ordinary_predicate(raw,rootdiff['issues']),'diff_context')
+ def test_diff_negative_forms(self):
+  good=b'--- old\n+++ new\n@@ -1,2 +1,2 @@\n-old\n+new\n \n'
+  self.assertEqual(m.ordinary_predicate(good,{'trailing whitespace.':[6],'new blank line at EOF.':[6]}),'diff_context')
+  for raw,groups in [(good.replace(b'-1,2',b'-1,3'),{'trailing whitespace.':[6],'new blank line at EOF.':[6]}),(good[:-2],{'new blank line at EOF.':[5]}),(b'prose\n'+good,{'trailing whitespace.':[7],'new blank line at EOF.':[7]}),(good+b' \n',{'trailing whitespace.':[7],'new blank line at EOF.':[7]}),(good.replace(b' \n',b'  \n'),{'trailing whitespace.':[6],'new blank line at EOF.':[6]}),(good,{'space before tab in indent.':[6]}),(b'paragraph\n \n',{'new blank line at EOF.':[2]})]:
+   with self.subTest(raw=raw),self.assertRaises(AssertionError):m.ordinary_predicate(raw,groups)
+ def test_physical_eof_requires_complete_range_and_empty_crlf(self):
+  for raw,source,groups in [(b'A\r\n \r\n',b'A\r\n \r\n',{'new blank line at EOF.':[2]}),(b'\r\n',b'A\r\n\r\n',{'new blank line at EOF.':[1]}),(b'header\nA\r\n\r\n',b'A\r\n\r\n',{'new blank line at EOF.':[3]}),(b'A\r\n\r\nZ',b'A\r\n\r\nZ',{'new blank line at EOF.':[2]})]:
+   with self.subTest(raw=raw),self.assertRaises(AssertionError):m.classify_physical(raw,groups,[({'path':'TOOLING_ONLY'},source)])
+ def test_strict_ordinary_eof_remains_separate(self):
+  self.assertEqual(m.ordinary_predicate(b'text\n\n',{'new blank line at EOF.':[2]}),'blank_eof')
+  for raw in [b'text\n \n',b'text\r\n\r\n',b' \n']:
+   with self.subTest(raw=raw),self.assertRaises(AssertionError):m.ordinary_predicate(raw,{'new blank line at EOF.':[len(raw.split(b'\n'))-1]})
+
+def case(row):
+ def test(self):
+  raw=(R/row['copy']).read_bytes();m.check_pin(raw,row)
+  frozen=json.loads((C/'current-inputs/semantic-review/freeze.json').read_bytes())['files'];m.check_pin(raw,frozen[row['path'][len(m.PREFIX):]])
+  out=m.classify_physical(raw,row['issues'],physical);self.assertEqual(out['kind'],'physical_bytes')
+  found=[dict(original=x['witness']['path'],source_pin={k:x['witness'][k] for k in ['bytes','sha256']},byte_range=x['byte_range']) for x in out['full_range_witnesses']]
+  self.assertEqual(found,row['whole_original_ranges'])
+  changed=bytes([raw[0]^1])+raw[1:]
+  with self.assertRaises(AssertionError):m.classify_physical(changed,row['issues'],physical)
+ return test
+for i,row in enumerate(fragments):setattr(Tests,f'test_actual_physical_{i:02d}',case(row))
+if __name__=='__main__':unittest.main(verbosity=2)

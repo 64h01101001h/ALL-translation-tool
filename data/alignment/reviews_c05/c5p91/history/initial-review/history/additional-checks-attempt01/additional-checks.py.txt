@@ -1,0 +1,28 @@
+from pathlib import Path
+import json,hashlib,os
+from html.parser import HTMLParser
+R=Path(__file__).resolve().parent;B=R.parent;H=lambda b:hashlib.sha256(b).hexdigest()
+def j(p):return json.loads(p.read_bytes())
+def save(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+class Body(HTMLParser):
+ def __init__(self):super().__init__();self.stack=[];self.groups=[];self.active=None
+ def handle_starttag(self,t,attrs):
+  a=dict(attrs);self.stack.append((t,a))
+  if t=='span' and a.get('data-d')=='1':self.active=[]
+ def handle_data(self,s):
+  if self.active is not None and not any('nul' in a.get('class','').split() for _,a in self.stack):self.active.append(s)
+ def handle_endtag(self,t):
+  tag,a=self.stack.pop();assert tag==t
+  if t=='span' and a.get('data-d')=='1':self.groups.append(''.join(self.active));self.active=None
+rows=j(R/'independent-context-full.json');proof=[]
+for seq in [271,272,273]:
+ row=next(x for x in rows if x['course']=='C05' and x['seq']==seq);p=Body();p.feed((B/f'reconciled/{seq}/body.html').read_text());assert p.groups==[row['wylie'],row['english']]
+ proof.append(dict(seq=seq,wylie_characters=len(row['wylie']),english_characters=len(row['english']),whole_source_text_equal=True,annotation_labels_excluded=True))
+# Every decoded raw corpus field is printed once in the reading record; raw-only metadata is retained.
+corpus=j(B/'reconciled/271/corpus-full-rows.json');corpus_read=[]
+for row in corpus:
+ raw=json.loads(row['raw']);assert all(row[k]==v for k,v in raw.items() if k in row)
+ corpus_read.append({**{k:v for k,v in row.items() if k!='raw'},'raw_extra':{k:v for k,v in raw.items() if k not in row}})
+save('corpus-full-reading-view.json',corpus_read)
+register=j(B/'reconciled/271/governing/errata_register.json');save('additional-checks.json',dict(status='PASS',HTML_source=proof,corpus_full_fields=87,corpus_raw_extra_preserved=True,register_root_type=type(register).__name__,register_keys=list(register) if isinstance(register,dict) else None))
+print(json.dumps(j(R/'additional-checks.json'),indent=2))

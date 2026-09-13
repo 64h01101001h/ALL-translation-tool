@@ -1,0 +1,85 @@
+"""Root byte-preservation closure of finished tooling reviews; no live verifier."""
+from pathlib import Path
+import datetime, hashlib, json, os
+
+ART = Path(__file__).resolve().parent.parent
+OUT = ART / 'integration/through273-preparation/tooling-reviews-root'
+
+def pin(raw):
+    return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+def check(raw, expected):
+    assert pin(raw) == {k: expected[k] for k in ('bytes', 'sha256')}
+
+def inventory(rel, digest, manifest):
+    root = ART / rel
+    raw = (root / 'freeze.json').read_bytes()
+    assert pin(raw)['sha256'] == digest
+    frozen = json.loads(raw)
+    assert isinstance(frozen['files'], dict)
+    actual = {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()}
+    assert actual == set(frozen['files']) | {'freeze.json'}
+    total = 0
+    for name, expected in frozen['files'].items():
+        assert not Path(name).is_absolute() and '..' not in Path(name).parts
+        p = root / name
+        data = p.read_bytes(); check(data, expected); total += len(data)
+        assert p.is_symlink() == expected.get('is_symlink', False), p
+        if p.is_symlink():
+            assert os.readlink(p) == expected['symlink_target']
+            assert str(p.resolve(strict=True)) == expected['resolved_target']
+    assert total == frozen['total_bytes']
+    assert len(actual) - 1 == frozen.get('file_count', frozen.get('total_files'))
+    mappings = json.loads((root / manifest).read_bytes())
+    if isinstance(mappings, dict): mappings = mappings['records']
+    for row in mappings:
+        source = Path(row['original']); target = Path(row['copy'])
+        if not target.is_absolute(): target = root / target
+        before = source.resolve(strict=True)
+        data = source.read_bytes(); check(data, row)
+        assert data == target.read_bytes()
+        assert source.resolve(strict=True) == before
+    return dict(tree=str(root), freeze=pin(raw), files=len(actual)-1,
+                total_bytes=total, original_copy_mappings=len(mappings),
+                all_full_bytes_reopened=True)
+
+def main():
+    OUT.mkdir(parents=True, exist_ok=False)
+    rows = [inventory(*args) for args in [
+        ('integration/through273-preparation/staging-helper-v2',
+         '8f470ad05e5192c7c95796920cdabb23acae12a68eade7f05bb8b2a760081752', 'input-manifest.json'),
+        ('integration/through273-preparation/staging-review-v2',
+         'c41ab6df67745b75708e4124f80e8666650da59aa4df8fcbd31827480eeb9e55', 'input-manifest.json'),
+        ('whitespace-review-273',
+         '0ab4b6f2ef6b6f06235bbbbfb0cdf21f3dbd9d0a1b7400e0c69939b1b829dc8d', 'original-to-copy-manifest.json')]]
+    stage = ART / 'integration/through273-preparation/staging-review-v2'
+    review = json.loads((stage / 'review.json').read_bytes())
+    assert review['status'] == 'DONE' and review['verdict'] == 'CONDITIONAL_APPROVE_CODE_AND_DEPENDENCIES'
+    assert review['open_code_findings'] == [] and review['full_live_verifier_executions'] == 0
+    tests = stage / 'fresh-test-execution'
+    assert (tests / 'exit.txt').read_bytes() == b'0\n'
+    assert not (tests / 'stdout.txt').read_bytes() and not (tests / 'stdin.bin').read_bytes()
+    stderr = (tests / 'stderr.txt').read_bytes()
+    assert stderr.count(b' ... ok\n') == 22 and b'Ran 22 tests' in stderr and stderr.endswith(b'\nOK\n')
+    actual = json.loads((stage / 'actual-interface-proof.json').read_bytes())
+    assert actual['status'] == 'PASS' and actual['actual_payload_files'] == 12
+    assert actual['captured_paths'] == 2040 and actual['ordinary_original_copy_equal'] == 261
+    assert actual['ordinary_actual_write_events'] == 263
+    assert actual['transition']['residual_paths'] == ['data/teaching/dcc_captions']
+    for name, expected in actual['consumed_candidate_interface_pins'].items():
+        check(Path(name).read_bytes(), expected)
+    ws = json.loads((ART / 'whitespace-review-273/review.json').read_bytes())
+    assert ws['spec_verdict'] == ws['quality_verdict'] == 'NEEDS_CORRECTION'
+    assert len(ws['open_findings']) == 3
+    proof = dict(status='PASS', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        trees=rows, staging_code_dependency_review_root_accepted=True,
+        staging_actual_execution_approved=False,
+        required_before_actual_stage_verifier=['Completed actual final bank',
+            'Independently approved actual whitespace proof matching final staged log'],
+        whitespace_initial_rejection_root_accepted=True, whitespace_open_findings=ws['open_findings'],
+        semantic_approval_supplied=False, root_test_reruns=0, root_live_git_commands=0,
+        source=dict(path=str(Path(__file__).resolve()), **pin(Path(__file__).read_bytes())))
+    (OUT / 'proof.json').write_text(json.dumps(proof, indent=2) + '\n')
+    print(json.dumps({k:v for k,v in proof.items() if k not in ('whitespace_open_findings',)}, indent=2))
+
+if __name__ == '__main__': main()

@@ -1,0 +1,30 @@
+from pathlib import Path
+import json,collections
+import whitespace273 as m
+D=Path(__file__).resolve().parent;A=D.parent;R=D/'history/whitespace-review-273';B=A/'C05-271-273';W=A.parent/'campaign-worktree'
+probe=json.loads((R/'actual-predicate-probe.json').read_bytes());raw_log=(R/'actual-log/staged-diff-check.stdout').read_bytes();m.check_pin(raw_log,probe['raw_log']);issues=m.parse_log(raw_log)
+freeze=json.loads((D/'current-inputs/semantic-review/freeze.json').read_bytes())['files'];root=json.loads((R/'current-root-manifest.json').read_bytes());build=json.loads((R/'current-build-proof.json').read_bytes())
+descriptors=json.loads((D/'physical-source-descriptors.json').read_bytes());physical=[];aliases=[]
+def alias(source,copy):
+ raw=Path(source).read_bytes();assert raw==Path(copy).read_bytes();aliases.append(dict(original=str(source),copy=str(Path(copy).relative_to(D)),**m.pin(raw)));return raw
+for i,item in enumerate(descriptors):
+ raw=alias(item['path'],D/'originals'/f'physical-{i}.bin');m.check_pin(raw,item);physical.append((item,raw))
+results=[]
+for row in probe['results']:
+ path=row['path'];raw=alias(W/path,R/row['copy']);m.check_pin(raw,row);groups=issues[path];assert groups==row['issues'];lines=m.literal_warnings(raw,groups)
+ if path in m.CSV:
+  assert m.digest(raw)==build['output_sha256'][path];assert set(groups)=={'trailing whitespace.'} and all(lines[n-1].endswith(b'\r') for n in groups['trailing whitespace.']);witness=dict(kind='canonical_csv_crlf')
+ else:
+  rel=path[len(m.PREFIX):];assert path.startswith(m.PREFIX)
+  if rel.startswith('landing-proof/'):
+   records=[r for r in root['files'] if r['copy']==rel[len('landing-proof/'):]];assert len(records)==1;m.check_pin(raw,records[0]);assert alias(records[0]['original'],R/row['copy'])==raw;witness=dict(kind=m.ordinary_predicate(raw,groups))
+  else:
+   m.check_pin(raw,freeze[rel]);assert alias(B/'semantic-review'/rel,R/row['copy'])==raw
+   try:witness=dict(kind=m.ordinary_predicate(raw,groups))
+   except AssertionError:witness=m.classify_physical(raw,groups,physical)
+ results.append(dict(path=path,**m.pin(raw),issues=groups,witness=witness))
+assert set(issues)=={r['path'] for r in results}
+counts=collections.Counter(r['witness']['kind'] for r in results)
+proof=dict(status='PASS PURE PREDICATES ONLY; NOT CLI OR STAGED AUDIT',file_count=len(results),warning_count=sum(sum(map(len,r['issues'].values())) for r in results),kind_file_counts=dict(counts),candidate_pin=m.pin((D/'whitespace273.py').read_bytes()),Run_run_calls=0,git_calls=0,results=results)
+(D/'actual-predicate-results.json').write_text(json.dumps(proof,indent=2)+'\n');(D/'actual-reopened-aliases.json').write_text(json.dumps(aliases,indent=2)+'\n')
+print(json.dumps({k:v for k,v in proof.items() if k!='results'}))

@@ -1,0 +1,91 @@
+{
+  "verdict": "PASS generated-output integration reproduction",
+  "scope": "C05-through273 current pre-stage payload, HEAD7166534a9f47a201e5ab580a843c14ba2a910891",
+  "generated_output_reproduction": "PASS",
+  "retention": "PASS",
+  "semantic_review": "Prior frozen review; no new semantic verdict",
+  "counts": {
+    "links": 45011,
+    "nulls": 11923,
+    "notes": 1609,
+    "trees": 11,
+    "heads": 7078,
+    "pairs": 15469,
+    "csv_main": 22413,
+    "csv_reverse": 22073,
+    "csv_course": 23974,
+    "csv_changes": 28
+  },
+  "check_count": 223906,
+  "open_findings": [],
+  "known_limitations": [
+    "The actual builder excludes non-segment labels before evidence collection. Existing95%floor permits three missing heads; rounded100.0%is not full coverage. No new ACIP enrichment or link change.",
+    "No final commit/index/staging/whitespace/full MAIN applicability/render/native/phone acceptance in this subtask."
+  ],
+  "actual_new_builder_runs": 2,
+  "layer_runs": 1,
+  "view_runs": 1,
+  "test_reruns": 0,
+  "checklist": [
+    {
+      "gate": "Exact current code/source/page/review snapshot",
+      "status": "PASS",
+      "proof": "input-manifest.json"
+    },
+    {
+      "gate": "Immutable incoming7166534seed used on first view invocation",
+      "status": "PASS",
+      "proof": "executions/view/command.json"
+    },
+    {
+      "gate": "Actual canonical layer and view each once",
+      "status": "PASS",
+      "proof": "execution-proof.json"
+    },
+    {
+      "gate": "All seven complete bytes equal root frozen payload and live",
+      "status": "PASS",
+      "proof": "retention-proof.json"
+    },
+    {
+      "gate": "Prior full bank links/notes/trees retained",
+      "status": "PASS",
+      "proof": "retention-checks.json"
+    },
+    {
+      "gate": "Evidence pairs/ref/ACIP index retained",
+      "status": "PASS",
+      "proof": "retention-checks.json"
+    },
+    {
+      "gate": "Main/reverse/course/change exports and full provenance oracle",
+      "status": "PASS",
+      "proof": "retention-checks.json"
+    },
+    {
+      "gate": "Prior HTML tuples and references retained",
+      "status": "PASS",
+      "proof": "retention-checks.json"
+    },
+    {
+      "gate": "Actual current101review/spec/source identities",
+      "status": "PASS",
+      "proof": "retention-checks.json"
+    },
+    {
+      "gate": "Known ACIP incompleteness disclosed with exact population",
+      "status": "PASS",
+      "proof": "acip-incomplete-evidence.json"
+    },
+    {
+      "gate": "Root17passingCTestrecords read without rerun",
+      "status": "PASS",
+      "proof": "root-landing-evidence/ctest-17.stdout"
+    },
+    {
+      "gate": "Attempt01failure and scoped recovery preserved",
+      "status": "PASS",
+      "proof": "history/retention-attempt01/retention-proof.json"
+    }
+  ]
+}

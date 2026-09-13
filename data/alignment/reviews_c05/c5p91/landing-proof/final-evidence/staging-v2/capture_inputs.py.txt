@@ -1,0 +1,31 @@
+from pathlib import Path
+import json,hashlib,datetime
+D=Path(__file__).resolve().parent
+P=D.parent
+A=P.parent.parent
+B=A/'C05-271-273'
+records=[]
+def save(src,rel):
+ raw=src.read_bytes(); dest=D/'inputs'/rel; dest.parent.mkdir(parents=True,exist_ok=True); dest.write_bytes(raw)
+ assert dest.read_bytes()==raw
+ records.append(dict(original=str(src),copy=str(dest.relative_to(D)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+for name in ['staging-helper','staging-review','staging-review-root']:
+ source=P/name
+ for src in sorted(source.rglob('*')):
+  if src.is_file(): save(src,Path(name)/src.relative_to(source))
+for name in ['staged-payload-manifest.json','staged-payload-source-proof.json']:
+ save(B/'landing'/name,Path('current-landing')/name)
+proof=json.loads((B/'landing/staged-payload-source-proof.json').read_bytes())
+for r in proof['files']:
+ src=Path(r['copy']);save(src,Path('payload-freeze')/src.relative_to(B/'landing/payload-freeze'))
+for r in proof['proof_inputs']:
+ src=Path(r['path']);save(src,Path('payload-proof-inputs')/src.name)
+for name in ['freeze.json','review.json','span-head-allow-needed.json']:
+ save(B/'semantic-review'/name,Path('schema')/name)
+for name in ['bank_root_proofs_through273.py','freeze.json','command-plan.json']:
+ save(P/'banking-helper'/name,Path('banking-v1')/name)
+main=Path('/Users/adamderickandrade/ALL-translation-tool')
+for name in ['AGENTS.md','.agents/skills/test-driven-development/SKILL.md','.agents/skills/test-driven-development/writing-good-tests.md','.agents/skills/verification-before-completion/SKILL.md','.agents/skills/receiving-code-review/SKILL.md']:
+ save(main/name,Path('instructions')/name)
+(D/'input-manifest.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),records=records),indent=2)+'\n')
+print(json.dumps(dict(records=len(records),bytes=sum(r['bytes'] for r in records))))

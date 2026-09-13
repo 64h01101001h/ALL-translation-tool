@@ -1,0 +1,10 @@
+from pathlib import Path
+import os,sys,json,subprocess,datetime,hashlib
+D=Path(__file__).resolve().parent
+label=sys.argv[1];argv=sys.argv[2:];out=D/'attempts'/label;out.mkdir(parents=True,exist_ok=False)
+env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1');(out/'command.json').write_text(json.dumps(dict(argv=argv,cwd=str(D),environment_overrides={k:env[k] for k in ['PYTHONDONTWRITEBYTECODE','CANDIDATE','FIXTURE_RUN'] if k in env}),indent=2)+'\n');(out/'stdin.bin').write_bytes(b'')
+r=subprocess.run(argv,cwd=D,env=env,input=b'',capture_output=True)
+for n,raw in [('stdout',r.stdout),('stderr',r.stderr)]: (out/n).write_bytes(raw)
+(out/'exit.txt').write_text(str(r.returncode)+'\n')
+print(json.dumps(dict(label=label,exit=r.returncode,stdout_bytes=len(r.stdout),stderr_bytes=len(r.stderr))));print(r.stderr.decode()[-180:])
+sys.exit(r.returncode)

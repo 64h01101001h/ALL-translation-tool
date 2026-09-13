@@ -1,0 +1,37 @@
+"""Root acceptance of completed independent tooling review; no audit claim."""
+from pathlib import Path
+import datetime,hashlib,json,os
+A=Path(__file__).resolve().parent.parent;R=A/'whitespace-review-273-v2';C=A/'whitespace-candidate-273-v2'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def main():
+ out=A/'whitespace-root-273-v2/review';out.mkdir(parents=True,exist_ok=False)
+ raw=(R/'freeze.json').read_bytes();f=json.loads(raw)
+ assert pin(raw)['sha256']=='f5731e66b6d39f9fa0b1ec0c432b9d3140eb065729b08d9bb0416e4aa0e1b6cf'
+ assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+ for rel,row in f['files'].items():assert pin((R/rel).read_bytes())==row
+ assert len(f['files'])==f['file_count']==627 and sum(x['bytes'] for x in f['files'].values())==f['total_bytes']==142091137
+ assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_symlink()}==set(f['symlinks'])
+ for rel,row in f['symlinks'].items():
+  assert os.readlink(R/rel)==row['target'] and str((R/rel).resolve(strict=True))==row['resolved']
+ rows=json.loads((R/'original-to-copy-manifest.json').read_bytes());assert len(rows)==1014
+ for row in rows:
+  original=Path(row['original']);target=original.resolve(strict=True);data=original.read_bytes()
+  assert pin(data)=={k:row[k] for k in ('bytes','sha256')} and data==(R/row['copy']).read_bytes()
+  assert original.resolve(strict=True)==target
+ review=json.loads((R/'review.json').read_bytes())
+ assert review['spec_verdict']==review['quality_verdict']=='APPROVE' and review['open_findings']==[]
+ assert pin((C/'whitespace273.py').read_bytes())==review['candidate']
+ assert pin((C/'freeze.json').read_bytes())==review['candidate_freeze']
+ p=json.loads((R/'independent-proof.json').read_bytes());assert p['checks_total']==len(p['checks'])==63
+ assert all(x['status'].startswith('PASS') for x in p['checks'])
+ assert p['actual_results']==json.loads((C/'actual-predicate-results.json').read_bytes())['results']
+ assert p['actual_file_count']==58 and p['actual_warning_count']==95906
+ assert (R/'independent-review.exit.txt').read_bytes()==b'0\n' and not (R/'independent-review.stderr.txt').read_bytes()
+ proof=dict(status='PASS ROOT ACCEPTS INDEPENDENT CODE/PREDICATE APPROVAL',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+  reviewed_freeze=pin(raw),candidate=review['candidate'],candidate_freeze=review['candidate_freeze'],
+  reopened_frozen_files=627,reopened_original_copy_mappings=1014,independent_checks=63,
+  root_read_full_report_review_probe_code_execution=True,root_test_reruns=0,
+  authorized_next='Run exact prepare then audit contract once each in fresh external directories, preserving actual complete caller records. Inspect prepare before audit.',
+  actual_audit_completed=False,semantic_or_commit_approval_supplied=False)
+ (out/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof,indent=2))
+if __name__=='__main__':main()

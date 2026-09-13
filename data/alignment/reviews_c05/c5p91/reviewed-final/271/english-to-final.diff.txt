@@ -1,0 +1,184 @@
+--- english/271/spec.json
++++ reconciled/271/spec.json
+@@ -7,7 +7,7 @@
+       "spans": [
+         {
+           "id": "r1",
+-          "d": 3,
++          "d": 5,
+           "tib": "sos ka'i dus",
+           "eng": "springtime"
+         },
+@@ -46,7 +46,7 @@
+           "d": 6,
+           "tib": "gis",
+           "eng": null,
+-          "cls": "grammar",
++          "cls": "case",
+           "nul": "Instrumental gis: no separate by/with exponent; the English presents the part as an active subject."
+         },
+         {
+@@ -84,7 +84,7 @@
+           "d": 6,
+           "tib": "kyis",
+           "eng": null,
+-          "cls": "grammar",
++          "cls": "case",
+           "nul": "Instrumental kyis: karma is rendered as an active subject; no separate by/with word in this causal clause."
+         },
+         {
+@@ -94,6 +94,12 @@
+           "eng": "contributing factor"
+         },
+         {
++          "id": "mc1",
++          "d": 7,
++          "tib": "lhan cig byed",
++          "eng": "contributing"
++        },
++        {
+           "id": "m15",
+           "d": 7,
+           "tib": "rkyen",
+@@ -106,24 +112,10 @@
+           "eng": "provides"
+         },
+         {
+-          "id": "p17",
+-          "d": 6,
+-          "tib": "la",
+-          "eng": "on"
+-        },
+-        {
+-          "id": "w18",
+-          "d": 5,
+-          "tib": "brten",
+-          "eng": "Based"
+-        },
+-        {
+-          "id": "p19",
+-          "d": 6,
+-          "tib": "nas",
+-          "eng": null,
+-          "cls": "grammar",
+-          "nul": "Conjunctive nas: the English Based-on clause supplies no separate after/from/then connective here."
++          "id": "qdep1",
++          "d": 3,
++          "tib": "la brten nas",
++          "eng": "Based on"
+         },
+         {
+           "id": "w20",
+@@ -175,7 +167,7 @@
+         },
+         {
+           "id": "r28",
+-          "d": 3,
++          "d": 5,
+           "tib": "dgun dus",
+           "eng": "wintertime"
+         },
+@@ -208,7 +200,7 @@
+           "d": 6,
+           "tib": "gis",
+           "eng": null,
+-          "cls": "grammar",
++          "cls": "case",
+           "nul": "Instrumental gis: the English presents this part as an active subject, without a separate by/with exponent."
+         },
+         {
+@@ -246,7 +238,7 @@
+           "d": 6,
+           "tib": "kyis",
+           "eng": null,
+-          "cls": "grammar",
++          "cls": "case",
+           "nul": "Instrumental kyis: active karma-subject syntax has no separate by/with word here."
+         },
+         {
+@@ -256,6 +248,12 @@
+           "eng": "contributing factor"
+         },
+         {
++          "id": "mc2",
++          "d": 7,
++          "tib": "lhan cig byed",
++          "eng": "contributing"
++        },
++        {
+           "id": "m41",
+           "d": 7,
+           "tib": "rkyen",
+@@ -268,24 +266,10 @@
+           "eng": "provides"
+         },
+         {
+-          "id": "p43",
+-          "d": 6,
+-          "tib": "la",
+-          "eng": "on"
+-        },
+-        {
+-          "id": "w44",
+-          "d": 5,
+-          "tib": "brten",
+-          "eng": "Based"
+-        },
+-        {
+-          "id": "p45",
+-          "d": 6,
+-          "tib": "nas",
+-          "eng": null,
+-          "cls": "grammar",
+-          "nul": "Conjunctive nas: no separate after/from/then connective follows the second Based-on clause."
++          "id": "qdep2",
++          "d": 3,
++          "tib": "la brten nas",
++          "eng": "Based on"
+         },
+         {
+           "id": "w46",
+@@ -340,14 +324,6 @@
+           "d": 5,
+           "tib": "lta bu",
+           "eng": "example"
+-        },
+-        {
+-          "id": "p55",
+-          "d": 6,
+-          "tib": "phyir",
+-          "eng": null,
+-          "cls": "grammar",
+-          "nul": "Causal phyir: no separate because/for word occurs in this segment; the example explanation carries the connective relation."
+         }
+       ],
+       "eng_order": [
+@@ -365,8 +341,7 @@
+         "w10",
+         "w16",
+         "w14",
+-        "w18",
+-        "p17",
++        "qdep1",
+         "w27",
+         "w26",
+         "w25",
+@@ -385,8 +360,7 @@
+         "w36",
+         "w42",
+         "w40",
+-        "w44",
+-        "p43",
++        "qdep2",
+         "w53",
+         "w52",
+         "w51",
+@@ -394,7 +368,7 @@
+         "p49",
+         "w46"
+       ],
+-      "note": "PROVISIONAL machine alignment by Codex, independent English-first original. The two seasonal expressions are phrases, not invented subword links. Each shared causal byas pa owns the provides after its karma owner; the other provides is left as a reprise. The two tactile-consciousness compounds retain body/consciousness members within their own occurrences. Six case/conjunction nulls and the closing causal null assert no separate lexical exponent; uncertain or distributed wording is omitted. GMR source text is unchanged."
++      "note": "PROVISIONAL machine reconciliation by Codex, reused non-author of both current originals. Springtime and wintertime are established whole seasonal terms, without subword members. Each co-acting modifier owns contributing inside its own contributing-factor compound. The two complete la brten nas dependence phrases own Based on; covered nas is not separately nulled. Four active agentives have no separate English exponent. Each byas pa owns the second or fourth provides; first and third provides are reprises of the shared predicates. Four reg bya occurrences and the two body/consciousness member groups retain their distinct owners. Nominal experience syntax, anaphoric spirit subjects, rays/body expansions and the closing causal framing remain distributed and unwrapped. C15/C18 omit of before cold; C05 preserves it. No source wording or hgm_gloss is changed."
+     }
+   ]
+ }

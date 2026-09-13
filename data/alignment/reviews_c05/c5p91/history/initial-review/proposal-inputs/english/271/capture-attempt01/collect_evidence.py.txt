@@ -1,0 +1,131 @@
+"""English-first independent original evidence capture; read-only originals."""
+from pathlib import Path
+import datetime,gzip,hashlib,json,os,re,sqlite3,subprocess,sys
+
+HERE=Path(__file__).resolve().parent;B=HERE.parents[1];ART=B.parent;WT=ART.parent/'campaign-worktree'
+H=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP')
+BASE='7166534a9f47a201e5ab580a843c14ba2a910891'
+OUT=HERE/'evidence';OUT.mkdir(exist_ok=False)
+
+def meta(path):
+    raw=path.read_bytes();return dict(path=str(path),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def put(name,obj):
+    p=OUT/name;p.parent.mkdir(parents=True,exist_ok=True)
+    with p.open('x') as f:json.dump(obj,f,ensure_ascii=False,indent=2);f.write('\n')
+def run(label,argv,stdin=b'',cwd=WT):
+    dest=OUT/'commands'/label;dest.mkdir(parents=True)
+    (dest/'stdin.bin').write_bytes(stdin)
+    put('commands/'+label+'/command.json',dict(argv=argv,cwd=str(cwd),stdin_bytes=len(stdin),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'}))
+    r=subprocess.run(argv,cwd=cwd,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),input=stdin,capture_output=True)
+    (dest/'stdout.bin').write_bytes(r.stdout);(dest/'stderr.bin').write_bytes(r.stderr);(dest/'exit.txt').write_text(str(r.returncode)+'\n')
+    assert r.returncode==0 and not r.stderr,(label,r.returncode)
+    return r.stdout
+
+governing=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','docs/NEVER_BANK_A_FALSEHOOD.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']
+gp=[]
+for i,relative in enumerate(governing):
+    raw=run('git-source-'+str(i),['git','show',BASE+':'+relative])
+    target=OUT/'governing'/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+    gp.append(dict(commit=BASE,repository_relative=relative,copy=str(target),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+    if relative.startswith('tools/'):
+        assert raw==(WT/relative).read_bytes(),relative
+put('governing-pins.json',gp)
+for name in ['english-brief.md','proposal-role-and-version-addendum.md','source.json','context.json','baseline.json']:
+    (OUT/name).write_bytes((B/name).read_bytes())
+(OUT/'proposal-protocol.md').write_bytes((ART/'proposal-protocol.md').read_bytes())
+baseline=json.loads((B/'baseline.json').read_bytes())
+assert baseline['commit']==BASE
+for relative,digest in baseline['sha256'].items():assert meta(WT/relative)['sha256']==digest,relative
+
+db=WT/'build/hgm_spine_v27_2.db';before=meta(db)
+c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON')
+put('schema.json',[dict(x) for x in c.execute("select name,sql from sqlite_master where type='table' and name in ('entries','corpus_segments')")])
+source=[dict(x) for x in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',271,273))]
+context=[dict(x) for x in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',265,279))]
+for snapshot,rows in [('source.json',source),('context.json',context)]:
+    snap=json.loads((B/snapshot).read_bytes());assert len(snap)==len(rows)
+    assert all(all(s[k]==r[k] for k in ['id','course','seq','acip','wylie','english']) for s,r in zip(snap,rows))
+put('source-full-rows.json',source);put('context-full-rows.json',context)
+terms=['sos ka','dus','zla ba','reg bya','cha shas','gcig','nyer len','yi dvags','las','lhan cig byed rkyen','byas pa','brten','lus shes','lus','shes','myong','tsha ba','skye ba','dgun','nyi ma','grang ba','lta bu','de ltar','bshes spring','bshes sprin','bshes','spring','rnams','tsha','grang','gsungs','phyir','yul','khyad par can','de dag','dbang','spyir','ma','med','steng','mun pa','rdzas','thal','rkyen','la','su','gis','kyis','kyi','nas','ni','yang','de','dus su','la brten nas','brten nas','steng du','dbang gis','dbang gis skye ba']
+queries=[];entries={}
+def query(sql,parameters,role):
+    rows=[dict(x) for x in c.execute(sql,parameters)]
+    queries.append(dict(role=role,sql=sql,parameters=parameters,count=len(rows),rows=rows))
+    return rows
+for term in terms:
+    for row in query('select * from entries where wylie=? order by id',[term],'exact HGM lexical headword, including empty results'):entries[row['id']]=row
+for row in query("select * from entries where wylie like ? and hgm_gloss like ? order by id",['%las%','%karma%'],'English-first karma support, full results'):entries[row['id']]=row
+parallel_queries=['%springtime%','%Letter to a Friend%','%covered space%','%caused by the extraordinary%','%moon in springtime%','%It is a fact that they get this kind of sensation%']
+corpus_rows={r['id']:r for r in context}
+for pattern in parallel_queries:
+    for row in query('select * from corpus_segments where english like ? order by course,seq',[pattern],'English-first parallel search'):corpus_rows[row['id']]=row
+for seq in [271,272,273]:
+    row=next(x for x in source if x['seq']==seq)
+    for parallel in query('select * from corpus_segments where wylie=? or acip=? order by course,seq',[row['wylie'],row['acip']],'exact selected-field parallel search'):
+        corpus_rows[parallel['id']]=parallel
+for pattern in ['%lus shes%','%dbang gis skye ba%','%steng du%']:
+    rows=query('select * from corpus_segments where wylie like ? and english like ? order by course,seq',[pattern,{'%lus shes%':'%consciousness of the body%','%dbang gis skye ba%':'%caused%','%steng du%':'%about%'}[pattern]],'contentious local construction')
+    for row in rows:corpus_rows[row['id']]=row
+put('queries-full.json',queries)
+
+master_path=WT/'data/hgm_dictionary_v27_2.json.gz';original_master=H/'Handoff/release/hgm_dictionary_v27_2.json.gz'
+corpus_path=WT/'data/full_parallel_corpus_v32.json.gz';original_corpus=H/'Handoff/data/full_parallel_corpus_v32.json.gz'
+master=json.loads(gzip.decompress(master_path.read_bytes()));oldmaster=json.loads(gzip.decompress(original_master.read_bytes()))
+assert master==oldmaster
+master_entries=master['unified_entries']
+entry_objects=[]
+for identity,row in sorted(entries.items()):
+    obj=json.loads(row['raw']);assert obj==master_entries[identity-1]
+    entry_objects.append(dict(spine_id=identity,full_spine_row=row,original_master_object=obj))
+put('lexical-original-objects.json',entry_objects)
+corpus=json.loads(gzip.decompress(corpus_path.read_bytes()));oldcorpus=json.loads(gzip.decompress(original_corpus.read_bytes()));assert corpus==oldcorpus
+by_course={}
+for obj in corpus:by_course.setdefault(obj['course'],[]).append(obj)
+raw_objects=[]
+for identity,row in sorted(corpus_rows.items()):
+    obj=json.loads(row['raw']);assert obj==by_course[row['course']][row['seq']-1]
+    raw_objects.append(dict(spine_id=identity,course=row['course'],seq=row['seq'],original_corpus_object=obj))
+put('corpus-original-objects.json',raw_objects)
+comparisons=[]
+for selected in source:
+    for other in corpus_rows.values():
+        if other['id']!=selected['id'] and (other['wylie']==selected['wylie'] or other['english'].startswith(selected['english'][:60])):
+            comparisons.append(dict(selected_seq=selected['seq'],parallel_course=other['course'],parallel_seq=other['seq'],
+                exact_fields={field:selected[field]==other[field] for field in ['acip','wylie','english']},full_parallel_row=other))
+put('parallel-field-comparisons.json',comparisons)
+
+physical=[];extents=[]
+for course in ['C05','C15','C18']:
+    path=H/'To DO/Formal Courses/ACI Readings In Roman ASCII'/f'{course}ReadingASCII.txt'
+    raw=path.read_bytes();physical.append(path)
+    for seq,needle in [(271,b'SOS KA\'I DUS SU ZLA BA\'I REG BYA'),(272,b'DE LTAR SKYE BA YIN TE, BSHES SPRING'),(273,b'DE YANG YUL DUS KHYAD PAR CAN')]:
+        starts=[m.start() for m in re.finditer(re.escape(needle),raw)]
+        for at in starts:
+            lo=raw.rfind(b'\n',0,at)+1
+            # End at next complete Tibetan source line; retain any interior blank page break.
+            candidates=[m.start()+at+len(needle) for m in re.finditer(rb'(?m)^[A-Z][A-Z \x27,;?!0-9-]{50,}\r?$',raw[at+len(needle):])]
+            hi=candidates[0] if candidates else len(raw)
+            name=f'physical/{course}-{seq}-{lo}-{hi}.bin';target=OUT/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw[lo:hi])
+            extents.append(dict(course=course,selected_context_seq=seq,original=meta(path),byte_range=[lo,hi],copy=name,
+                bytes=hi-lo,sha256=hashlib.sha256(raw[lo:hi]).hexdigest(),display_decode='latin1 only; raw bytes authoritative',full_extent_latin1=raw[lo:hi].decode('latin1')))
+put('physical-extents.json',extents)
+
+approved=B/'evidence-copy-v2-inputs';allowed=['manifest.json','proof.json','review.json','review.md','copy_evidence_once_v2.py.txt','copy_evidence_once_v2-verification.json']
+approval_manifest=json.loads((approved/'manifest.json').read_bytes())
+for record in approval_manifest:
+    path=Path(record['copy']['path']);assert path.parent==approved
+    assert meta(path)['sha256']==record['copy']['sha256'] and meta(path)['bytes']==record['copy']['bytes']
+helper=ART/'copy_evidence_once_v2.py';assert meta(helper)['sha256']=='b8eabf4b53c29174d7f67c2f723007d429edc1e153ee3e5b32ff0a6e6fa147d1'
+originals=[master_path,original_master,corpus_path,original_corpus,*physical,helper,ART/'run_generator_readonly.py',*[approved/name for name in allowed]]
+run('approved-evidence-copy-v2',[sys.executable,'-B',str(helper),str(HERE),str(HERE/'original-to-copy-manifest.json'),*[str(p) for p in originals]],cwd=ART.parent)
+for record in json.loads((HERE/'original-to-copy-manifest.json').read_bytes()):
+    raw=Path(record['original']).read_bytes();assert raw==(HERE/record['copy']).read_bytes()
+    assert len(raw)==record['bytes'] and hashlib.sha256(raw).hexdigest()==record['sha256']
+assert meta(db)==before
+for query_record in queries:assert [dict(x) for x in c.execute(query_record['sql'],query_record['parameters'])]==query_record['rows']
+put('capture-proof.json',dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),actual_producer='Codex /root/c05_262_264_english, reused English-first original author; no other-angle reads',baseline=BASE,
+    sqlite_uri=db.resolve().as_uri()+'?mode=ro',query_only=c.execute('PRAGMA query_only').fetchone()[0],database=before,
+    full_source_rows=len(source),full_context_rows=len(context),complete_query_count=len(queries),full_master_entries=len(entry_objects),full_corpus_objects=len(raw_objects),physical_extents=len(extents),
+    original_master_equals_worktree_master=True,original_corpus_equals_worktree_corpus=True,all_queries_replayed=True,all_nine_baseline_hashes_verified=True,
+    selected_snapshot_six_fields_exact=True,copy_helper_consumed=meta(helper),reading_index_consumed=False,original_file_pins=[meta(p) for p in originals]))
+print(json.dumps(dict(status='PASS source/evidence capture',source_rows=3,context_rows=15,queries=len(queries),master_entries=len(entries),corpus_objects=len(raw_objects),physical_extents=len(extents))))

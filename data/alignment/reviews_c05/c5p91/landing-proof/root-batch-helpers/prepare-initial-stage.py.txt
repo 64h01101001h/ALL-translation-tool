@@ -1,0 +1,72 @@
+"""Derive the exact initial stage from approved payload/review/root-bank proofs.
+
+This does not stage. Full bytes and the before-banking untracked transition are
+verified before writing the explicit pathspec and proof outside the worktree.
+"""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess
+B=Path(__file__).resolve().parent;W=B.parents[1]/'campaign-worktree';L=B/'landing';R=B/'semantic-review'
+bankrel=Path('data/alignment/reviews_c05/c5p91');bank=W/bankrel
+out=L/'initial-stage-pathspec.bin';proofpath=L/'initial-stage-input-proof.json'
+assert not out.exists() and not proofpath.exists()
+def raw(p):return p.read_bytes()
+def j(p):return json.loads(raw(p))
+def pin(x):return dict(bytes=len(x),sha256=hashlib.sha256(x).hexdigest())
+def git(*args):return subprocess.check_output(['git',*args],cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+base=git('rev-parse','HEAD').decode().strip();assert base=='7166534a9f47a201e5ab580a843c14ba2a910891'
+assert git('diff','--cached','--name-only','-z')==b''
+required={}
+def require(rel,expected):
+    rel=str(rel);value=raw(W/rel)
+    assert pin(value)=={k:expected[k] for k in ('bytes','sha256')},rel
+    if rel in required:assert required[rel]==pin(value)
+    required[rel]=pin(value)
+payload=j(L/'staged-payload-manifest.json');assert payload['head']==base
+for row in payload['files']:
+    require(row['path'],row)
+    assert raw(W/row['path'])==raw(L/'payload-freeze'/row['path'])
+freeze=j(R/'freeze.json')
+assert freeze['spec_verdict']==freeze['quality_verdict']=='APPROVE'
+frozen={**freeze['files'],'freeze.json':pin(raw(R/'freeze.json'))}
+assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()}==set(frozen)
+for rel,expected in frozen.items():
+    assert pin(raw(R/rel))==expected
+    require(bankrel/rel,expected)
+    assert raw(bank/rel)==raw(R/rel)
+for seq in (271,272,273):
+    name=f'{seq}-reconciliation.md';value=raw(B/'reconciled'/str(seq)/'report.md')
+    require(bankrel/name,pin(value));assert raw(bank/name)==value
+require(bankrel/'landing.json',pin(raw(bank/'landing.json')))
+name='root-proof-copy-manifest-before-whitespace.json';manifest=j(L/name)
+assert manifest['phase']=='ordinary' and manifest['semantic_review_unchanged']
+bank_required=set()
+for row in manifest['files']:
+    value=raw(Path(row['original']));assert pin(value)=={k:row[k] for k in ('bytes','sha256')}
+    rel=bankrel/'landing-proof'/row['copy'];require(rel,row)
+    assert raw(W/rel)==value;bank_required.add(str(rel))
+for row in manifest['external_actual_bytes_retained']:
+    assert pin(raw(Path(row['path'])))=={k:row[k] for k in ('bytes','sha256')}
+require(bankrel/'landing-proof'/name,pin(raw(L/name)));bank_required.add(str(bankrel/'landing-proof'/name))
+assert raw(bank/'landing-proof'/name)==raw(L/name)
+assert {str(p.relative_to(W)) for p in bank.rglob('*') if p.is_file()}=={k for k in required if k.startswith(str(bankrel)+'/')}
+before_raw=raw(L/'staging-untracked-before.stdout');before=set(before_raw.decode().split('\0')[:-1])
+current_raw=git('ls-files','--others','--exclude-standard','-z');current=set(current_raw.decode().split('\0')[:-1])
+assert len(before)==2040 and len(before)==len(before_raw.split(b'\0'))-1
+assert current==before|bank_required
+tracked=set(git('ls-files','-z').decode().split('\0')[:-1])
+changed=set(git('diff','--name-only','-z').decode().split('\0')[:-1])
+assert changed==set(required)&tracked
+new=set(required)-tracked
+assert new<=current and new-before==bank_required
+residual=current-new
+assert residual=={'data/teaching/dcc_captions'} and residual==before-new
+assert len(payload['files'])==12
+out.write_bytes(b''.join(p.encode()+b'\0' for p in sorted(required)))
+result=dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=base,
+    scope='Exact initial stage before whitespace/final banking; no stage mutation yet',files=[dict(path=p,**required[p]) for p in sorted(required)],
+    source_records=len(manifest['files']),external_records=len(manifest['external_actual_bytes_retained']),
+    semantic_files=len(frozen),payload_files=len(payload['files']),untracked_before=len(before),
+    authorized_bank_files_created_after_capture=len(bank_required),new_files_to_stage=len(new),tracked_changed=len(changed),
+    untracked_residual=sorted(residual),pathspec=dict(path=str(out),**pin(raw(out))))
+proofpath.write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({k:v for k,v in result.items() if k!='files'},indent=2))

@@ -1,0 +1,28 @@
+{
+  "tooling_only": true,
+  "candidate_executions": 0,
+  "tests": 7,
+  "failures": 0,
+  "errors": 0,
+  "observations": [
+    {
+      "test": "freeze_files",
+      "observed": "TypeError indexing actual dict key as row"
+    },
+    {
+      "test": "freeze_verdict",
+      "observed": "KeyError verdict on actual APPROVE freeze",
+      "file_count": 2032
+    },
+    {
+      "test": "empty_allowance",
+      "observed": "require called with no requested allowance additions"
+    },
+    {
+      "test": "untracked_contract",
+      "before_hex": "6e65772d706167652e74787400756e72656c617465642e74787400",
+      "after_hex": "756e72656c617465642e74787400",
+      "observed": "candidate exact-equality condition fails after authorized new-file staging"
+    }
+  ]
+}

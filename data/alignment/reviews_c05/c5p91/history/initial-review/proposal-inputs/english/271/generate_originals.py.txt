@@ -1,0 +1,25 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,sys
+
+HERE=Path(__file__).resolve().parent;ANGLE=HERE.parent;B=HERE.parents[1];ART=B.parent;WT=ART.parent/'campaign-worktree'
+wrapper=ART/'run_generator_readonly.py';runner=HERE/'run_canonical.py'
+for relative in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+    assert (WT/relative).read_bytes()==(HERE/'evidence/governing'/relative).read_bytes()
+for seq in [271,272,273]:
+    directory=ANGLE/str(seq);attempt=directory/('canonical-attempt-'+sys.argv[1]);attempt.mkdir(exist_ok=False)
+    spec=(directory/'spec.json').read_bytes();(attempt/'stdin.json').write_bytes(spec)
+    argv=[sys.executable,'-B',str(runner),str(wrapper),str(attempt/'connections.json')]
+    versions=[]
+    for source in [runner,wrapper,WT/'tools/gen_alignment_page.py',WT/'tools/build_alignment_layer.py']:
+        raw=source.read_bytes();versions.append(dict(path=str(source),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+        (attempt/(source.name+'.txt')).write_bytes(raw)
+    (attempt/'command.json').write_text(json.dumps(dict(argv=argv,cwd=str(WT),stdin_bytes=len(spec),stdin_sha256=hashlib.sha256(spec).hexdigest(),
+        environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'},versions=versions),indent=2)+'\n')
+    run=subprocess.run(argv,cwd=WT,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),input=spec,capture_output=True)
+    (attempt/'stdout.html').write_bytes(run.stdout);(attempt/'stderr.txt').write_bytes(run.stderr);(attempt/'exit.txt').write_text(str(run.returncode)+'\n')
+    print(seq,'EXIT='+str(run.returncode),'body_bytes='+str(len(run.stdout)),'stderr_bytes='+str(len(run.stderr)))
+    if run.returncode!=0 or run.stderr:
+        print(run.stderr.decode());raise SystemExit(1)
+    (directory/'body.html').write_bytes(run.stdout)
+    (directory/'canonical-result.json').write_text(json.dumps(dict(attempt=str(attempt),exit=run.returncode,stderr_bytes=len(run.stderr),body_bytes=len(run.stdout),
+        body_sha256=hashlib.sha256(run.stdout).hexdigest(),spec_bytes=len(spec),spec_sha256=hashlib.sha256(spec).hexdigest()),indent=2)+'\n')

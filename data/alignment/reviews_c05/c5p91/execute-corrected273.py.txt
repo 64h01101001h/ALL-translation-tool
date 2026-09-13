@@ -1,0 +1,23 @@
+from pathlib import Path
+import os,sys,json,hashlib,subprocess,datetime
+from html.parser import HTMLParser
+sys.dont_write_bytecode=True;os.environ.update(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';I=B/'semantic-review-initial'
+def pin(p):b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+wrapper=R/'run-canonical-readonly.py.txt';wrapper.write_bytes((I/'run-canonical-readonly.py.txt').read_bytes());a=R/'executions/corrected273';a.mkdir(parents=True,exist_ok=False);spine=W/'build/hgm_spine_v27_2.db';before=pin(spine);spec=B/'reconciled/273/spec.json';stdin=spec.read_bytes();(a/'stdin.json').write_bytes(stdin);argv=[sys.executable,'-B',str(wrapper)];record=dict(seq=273,version='correction01 current',argv=argv,cwd=str(W),environment_overrides=dict(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'),inherited_environment=True,stdin=pin(a/'stdin.json'),wrapper=pin(wrapper),generator=pin(W/'tools/gen_alignment_page.py'),builder=pin(W/'tools/build_alignment_layer.py'),started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),sqlite='URI mode=ro; PRAGMA query_only=ON');save(a/'command.json',record)
+p=subprocess.run(argv,cwd=W,input=stdin,capture_output=True,env=os.environ.copy());(a/'stdout.html').write_bytes(p.stdout);(a/'stderr.txt').write_bytes(p.stderr);(a/'exit.txt').write_text(str(p.returncode)+'\n');record.update(finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=p.returncode,stdout=pin(a/'stdout.html'),stderr=pin(a/'stderr.txt'));save(a/'execution-proof.json',record)
+assert p.returncode==0 and p.stderr==b'';assert p.stdout==(B/'reconciled/273/body.html').read_bytes()
+class Sentences(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.depth=0;self.parts=[]
+ def handle_starttag(self,tag,attrs):
+  if tag=='span':
+   if self.depth:self.depth+=1
+   elif dict(attrs).get('data-l')=='s273S':self.parts.append([]);self.depth=1
+ def handle_endtag(self,tag):
+  if tag=='span' and self.depth:self.depth-=1
+ def handle_data(self,s):
+  if self.depth:self.parts[-1].append(s)
+h=Sentences();h.feed(p.stdout.decode());source=next(x for x in json.loads((R/'independent-scoped-source-reopen.json').read_bytes())['source_rows'] if x['course']=='C05' and x['seq']==273);assert [''.join(x) for x in h.parts]==[source['wylie'],source['english']];assert b's273p22' not in p.stdout;assert p.stdout.count(b's273p28')==2;assert pin(spine)==before
+save(R/'new-canonical-proof.json',dict(status='PASS',new_runs=1,seq=273,exit=0,stderr_bytes=0,full_current_body_exact=True,full_wylie_and_english_exact=True,source_spine_before_after=before,execution=record,historical_runs='Nine actual initial runs remain initial version provenance; unchanged271/272 were verified by exact current byte equality, not rerun.'))
+print(json.dumps(dict(status='PASS one actual corrected273 run',stdout=pin(a/'stdout.html'),stderr_bytes=0),indent=2))

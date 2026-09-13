@@ -1,0 +1,17 @@
+"""Run the unchanged canonical page generator with read-only SQLite connections."""
+from pathlib import Path
+import runpy
+import sqlite3
+
+worktree = Path(__file__).resolve().parent.parent / 'campaign-worktree'
+original_connect = sqlite3.connect
+
+def read_only_connect(database, *args, **kwargs):
+    # The canonical generator reads only the existing on-disk source spine.
+    target = Path(database).resolve()
+    assert target.is_file(), target
+    kwargs['uri'] = True
+    return original_connect(target.as_uri() + '?mode=ro', *args, **kwargs)
+
+sqlite3.connect = read_only_connect
+runpy.run_path(str(worktree / 'tools/gen_alignment_page.py'), run_name='__main__')

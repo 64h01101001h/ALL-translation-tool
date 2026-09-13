@@ -1,0 +1,176 @@
+"""English-first proposals; every selected string comes from the verified source."""
+from pathlib import Path
+import json,re
+
+HERE=Path(__file__).resolve().parent;ANGLE=HERE.parent
+ROWS={r['seq']:r for r in json.loads((HERE/'evidence/source-full-rows.json').read_bytes())}
+
+def hits(text,piece):
+    return [[m.start(),m.end()] for m in re.finditer(r'(?<![A-Za-z0-9])'+re.escape(piece)+r'(?![A-Za-z0-9])',text)]
+
+class Draft:
+    def __init__(self,seq,title):
+        self.seq=seq;self.row=ROWS[seq];self.title=title;self.spans=[];self.decisions=[];self.cursor=0;self.parent=None
+    def add(self,tib,eng,d=5,n=1,context=None,reason='',nul=None):
+        identity={3:'r',5:'w',6:'p',7:'m'}[d]+str(len(self.spans)+1)
+        if d==7:
+            parent,pr=self.parent
+            assert parent['tib'].count(tib)==1 and parent['eng'].count(eng)==1
+            tr=[pr['tib_range'][0]+parent['tib'].index(tib),pr['tib_range'][0]+parent['tib'].index(tib)+len(tib)]
+            er=[pr['eng_range'][0]+parent['eng'].index(eng),pr['eng_range'][0]+parent['eng'].index(eng)+len(eng)]
+            assert tib!=parent['tib'] and eng!=parent['eng']
+        else:
+            possible=[r for r in hits(self.row['wylie'],tib) if r[0]>=self.cursor]
+            assert possible,(self.seq,tib,self.cursor)
+            tr=possible[0];self.cursor=tr[1]
+            er=None
+            if eng is not None:
+                choices=hits(self.row['english'],eng)
+                if context:
+                    start=self.row['english'].index(context);end=start+len(context)
+                    choices=[r for r in choices if start<=r[0] and r[1]<=end]
+                assert len(choices)>=n,(self.seq,eng,n,choices)
+                er=choices[n-1]
+        sp=dict(id=identity,d=d,tib=tib,eng=eng)
+        if eng is None:
+            assert nul
+            sp.update(cls='grammar',nul=nul)
+        decision=dict(id=identity,tib_range=tr,eng_range=er,tib_occurrences=hits(self.row['wylie'],tib),
+            eng_occurrences=hits(self.row['english'],eng) if eng is not None else [],reason=reason,
+            source_role=reason.split(';')[0],null_rationale=nul,parent=self.parent[0]['id'] if d==7 else None)
+        self.spans.append(sp);self.decisions.append(decision)
+        if d==5:self.parent=(sp,decision)
+        elif d!=7:self.parent=None
+        return identity
+    def save(self,note,omissions):
+        flat=[(d['eng_range'][0],s['id']) for s,d in zip(self.spans,self.decisions) if s['eng'] is not None and s['d']!=7]
+        seg=dict(seq=self.seq,title=self.title,spans=self.spans,eng_order=[identity for _,identity in sorted(flat)],note=note)
+        p=ANGLE/str(self.seq)
+        (p/'spec.json').write_text(json.dumps(dict(course='C05',segments=[seg]),ensure_ascii=False,indent=2)+'\n')
+        (p/'decisions.json').write_text(json.dumps(dict(producer='Codex; reused English-first original author; no other-angle reads',seq=self.seq,
+            occurrence_coordinate_system='zero-based Python Unicode character ranges in the complete original source fields',
+            spans=self.decisions,omission_decisions=omissions,not_a_semantic_approval=True),ensure_ascii=False,indent=2)+'\n')
+        (p/'errata.json').write_text('[]\n')
+
+d=Draft(271,'seasonal sensations and their causes')
+a=d.add
+a("sos ka'i dus",'springtime',3,reason='spring temporal expression; full genitive noun phrase at d3 avoids pretending time is absent or claiming an English subword')
+a('su','in',6,reason='spring locative; in before springtime')
+a('zla ba','moon',reason='first celestial object; HGM16708')
+a('reg bya','feel',n=1,reason='first material sensory component; HGM19110 distinguishes feel from later experienced sensation')
+a('cha shas','part',n=1,reason='first material portion; HGM4384')
+a('gcig','one',n=1,reason='first single part; HGM4216')
+a('gis',None,6,reason='first material portion as agent/cause',nul='Instrumental gis: no separate by/with exponent; the English presents the part as an active subject.')
+a('nyer len','material cause',n=1,reason='first material cause; established term HGM5840; supplied the excluded')
+a('dang','and',6,n=1,reason='joins first material cause and karma factor')
+a('yi dvags','craving spirit',n=1,reason='first karma owner; HGM25069; excludes supplied a')
+a('kyi','of',6,context='karma of a craving spirit',reason='first karma-owner genitive; exact of after karma')
+a('las','karma',n=1,reason='first causal karma; current exact GMR context, not a replacement of curated deeds gloss')
+a('kyis',None,6,reason='first karma as contributing cause',nul='Instrumental kyis: karma is rendered as an active subject; no separate by/with word in this causal clause.')
+a('lhan cig byed rkyen','contributing factor',n=1,reason='first contributing condition; established HGM21656 term')
+a('rkyen','factor',7,reason='condition member inside first contributing-factor parent; HGM487')
+a('byas pa','provides',n=2,reason='first shared causal predicate; selects second English provides after craving spirit; first material-cause provides is an unwrapped reprise; HGM12732')
+a('la','on',6,n=2,reason='first dependency relation; on in Based on, excluding earlier rays on the body')
+a('brten','Based',n=1,reason='first causal dependence; HGM7084 based, exact capitalization retained')
+a('nas',None,6,reason='first dependency clause ending',nul='Conjunctive nas: the English Based-on clause supplies no separate after/from/then connective here.')
+a('lus shes','consciousness of the body',n=1,reason='first tactile consciousness; established HGM19534, internal of the is licensed by the compound relation')
+a('lus','body',7,reason='body member within first tactile-consciousness compound; HGM19473, not the earlier rays/body explanation')
+a('shes','consciousness',7,reason='consciousness member within first compound; HGM19969')
+a('kyi','by',6,n=1,reason='first nominal experiencer relation rendered by in the English passive experienced by')
+a('myong','experienced',n=1,reason='first experience predicate; HGM14665; become-an-object-for construction remains distributed')
+a('tsha ba','heat',reason='first resultant quality; HGM15245')
+a('reg bya','sensation',n=1,reason='first resultant sensory object; HGM19110')
+a('skye ba','gets',n=1,reason='first arising recast as experiencer gets; HGM703 and full local clause support this subject shift')
+a('dgun dus','wintertime',3,reason='winter temporal expression; full noun phrase at d3 preserves lexical time contribution')
+a('nyi ma','sun',reason='second celestial object; HGM5684')
+a('reg bya','feel',n=2,reason='second material sensory component; HGM19110')
+a('cha shas','part',n=2,reason='second material portion; HGM4384')
+a('gcig','one',n=2,reason='second single part; HGM4216')
+a('gis',None,6,reason='second material portion as agent/cause',nul='Instrumental gis: the English presents this part as an active subject, without a separate by/with exponent.')
+a('nyer len','material cause',n=2,reason='second material cause; HGM5840')
+a('dang','and',6,n=2,reason='joins second material cause and karma factor')
+a('yi dvags','craving spirit',n=2,reason='second karma owner; HGM25069; excludes supplied the')
+a('kyi','of',6,context='karma of the craving spirit',reason='second karma-owner genitive')
+a('las','karma',n=2,reason='second causal karma; exact GMR context')
+a('kyis',None,6,reason='second karma as contributing cause',nul='Instrumental kyis: active karma-subject syntax has no separate by/with word here.')
+a('lhan cig byed rkyen','contributing factor',n=2,reason='second contributing condition; HGM21656')
+a('rkyen','factor',7,reason='condition member within second parent; HGM487')
+a('byas pa','provides',n=4,reason='second shared causal predicate; selects fourth English provides after craving spirit; third provides remains a material-cause reprise')
+a('la','on',6,n=4,reason='second dependency relation; on in second Based on')
+a('brten','Based',n=2,reason='second causal dependence; HGM7084')
+a('nas',None,6,reason='second dependency clause ending',nul='Conjunctive nas: no separate after/from/then connective follows the second Based-on clause.')
+a('lus shes','consciousness of the body',n=2,reason='second tactile consciousness; HGM19534')
+a('lus','body',7,reason='body member within second tactile consciousness; HGM19473')
+a('shes','consciousness',7,reason='consciousness member within second parent; HGM19969')
+a('kyi','by',6,n=2,reason='second nominal experiencer relation rendered by in experienced by')
+a('myong','experienced',n=2,reason='second experience predicate; HGM14665')
+a('grang ba','cold',reason='second resultant quality; HGM1979')
+a('reg bya','sensation',n=2,reason='second resultant sensory object; HGM19110')
+a('skye ba','gets',n=2,reason='second arising recast as experiencer gets; HGM703')
+a('lta bu','example',reason='postposed example expression moved to initial English; HGM6857 example, excludes Another/would be')
+a('phyir',None,6,reason='closing causal particle',nul='Causal phyir: no separate because/for word occurs in this segment; the example explanation carries the connective relation.')
+d.save('PROVISIONAL machine alignment by Codex, independent English-first original. The two seasonal expressions are phrases, not invented subword links. Each shared causal byas pa owns the provides after its karma owner; the other provides is left as a reprise. The two tactile-consciousness compounds retain body/consciousness members within their own occurrences. Six case/conjunction nulls and the closing causal null assert no separate lexical exponent; uncertain or distributed wording is omitted. GMR source text is unchanged.',[
+    dict(source='dang between the heat and winter examples; second su',reason='So too with recasts the transition and winter-time relation; no isolated exact atom is forced and neither is falsely nulled.'),
+    dict(source="bound genitives, de'i, byar gyur pa'i, yod pa/yin pa and remaining connective material",reason='Possessive/pronominal and become-an-object-for constructions are distributed across English determiner, passive and experiencer syntax; omitted, not declared absent.'),
+    dict(english='Another; would be; its rays on the body; these two; the spirit; which is; supplied articles; first/third provides',reason='Expansions, anaphoric restatements and shared-predicate reprises remain unwrapped. No source word is assigned twice to capture the additional English.')])
+
+d=Draft(272,'a cited verse on seasonal sensations');a=d.add
+a('de ltar','this kind of',3,reason='manner recast as an anaphoric kind phrase; HGM8435; sensation is not overcaptured')
+a('skye ba','get',reason='arising recast as experience; HGM703; excludes they')
+a('bshes spring','Letter to a Friend',reason='established cited title HGM25568; bracketed author attribution excluded despite expansive glossary variant')
+a('bshes','Friend',7,reason='friend member in the title; HGM20189')
+a('spring','Letter',7,reason='letter member in the title; HGM24021')
+a('las',None,6,reason='cited-text source ablative',nul='Source ablative las: attribution uses the title as subject of states, with no separate from/in word.')
+a('yi dvags','craving spirits',reason='verse beneficiaries; HGM25069, plural English retained whole')
+a('rnams',None,6,reason='plural marker fused into spirits',nul='Plural rnams is grammatically fused into the plural noun spirits; no separate English word is available, and its meaning is not claimed absent.')
+a('la','For',6,reason='verse beneficiary marker; capital For, not the earlier causal for')
+a('sos ka','spring',reason='season in the verse; HGM25698')
+a('su','In',6,reason='season locative; verse-initial capital In retained')
+a('ni',None,6,reason='first topic marker',nul='Topic ni has no separate English topic-marker word in this verse line.')
+a('zla ba','moon',reason='first celestial body in verse; HGM16708; light of the left unwrapped')
+a('tsha','hot',reason='first temperature predicate; HGM15244')
+a('la','and',6,reason='connects the two temperature predicates')
+a('dgun','winter',reason='second season in verse; HGM22228')
+a('ni',None,6,reason='second topic marker',nul='Second topic ni has no separate topic-marker word in the English winter clause.')
+a('nyi ma','sun',reason='second celestial body; HGM5684')
+a('grang','cold',reason='second temperature predicate; HGM1977')
+a('gsungs','states',reason='quoted speech verb; HGM21219; resolves before the quoted verse')
+a('phyir','for',6,reason='causal citation connective; first lowercase for before the bracketed author attribution')
+d.save('PROVISIONAL machine alignment by Codex, independent English-first original. The cited title excludes the supplied bracketed author; Friend/Letter are tighter members of that title. Capital For and In retain the verse wording. Plural rnams is a proven grammatical fusion into spirits; the source ablative and two topic markers lack separate lexical exponents. The two bound ang particles do have even counterparts, but are omitted rather than mis-depthed or falsely nulled. No source text is corrected.',[
+    dict(source='yin te; dus; bound ang twice; zhes and nominal/case remnants',reason='The introductory assertion, temporal noun and quote framing are recast. Both ang correspond to even, but a flat bound-particle link is invalid and enclosing supplied light/articles would overcapture; both are omitted, never null.'),
+    dict(english="It is a fact that; they; sensation; [Arya Nagarjuna's]; even twice; light of the; supplied articles and is",reason='Preserved verbatim and left unwrapped where an exact licensed atom or valid parent/member representation is not defensible.')])
+
+d=Draft(273,'particular conditions and covered space');a=d.add
+a('de','this',reason='opening anaphoric demonstrative; only this, not All of')
+a('yul','place',reason='place condition; HGM17646/18170')
+a('dus','time',reason='time condition; HGM8311; reversed English time/place order explicitly recorded')
+a('khyad par can','extraordinary',reason='distinctive qualifier; HGM1245; no supplied circumstances captured')
+a('dbang gis skye ba','caused by',3,reason='complete causal-arising phrase; dbang gis HGM13091 and skye ba predicate jointly support passive caused by; not banked as a dictionary word')
+a('spyir','generally speaking',reason='established adverbial rendering; HGM11429')
+a('de ltar','this way',3,reason='manner phrase; HGM8435')
+a('skye ba','happens',reason='second arising predicate; HGM703')
+a('ma','never',reason='negative under generally speaking; HGM13694; does not claim a separately translated temporal noun')
+a('nyi ma','sun',n=1,reason='first solar object; HGM5684')
+a('steng du','about',n=1,reason='first locative relation; attested HGM6941 about')
+a('grang ba','cold',reason='excluded solar temperature; HGM1979')
+a('reg bya','feel',n=1,reason='sensory object recast as feel in can feel cold; HGM19110; can stays unwrapped')
+a('yang','at all',6,reason='emphasis within first negative existential; HGM17092')
+a('med','nothing',n=1,reason='first negative existential rendered as negative quantifier; HGM14511')
+a('zla ba','moon',reason='lunar object; HGM16708')
+a('steng du','about',n=2,reason='second locative relation; HGM6941')
+a('tsha ba','hot',reason='excluded lunar temperature; HGM15245')
+a('reg bya','feel',n=2,reason='second sensory object recast as feel; HGM19110')
+a('yang','and',6,n=2,reason='additive negative clause joining the moon to the sun claim; HGM17092; excludes and between time/place')
+a('med','nothing',n=2,reason='second negative existential; HGM14511')
+a('phyir','for',6,n=1,reason='first causal explanation; English introduces the generally-speaking argument earlier than the Tibetan closing connective')
+a('nyi ma','sun',n=2,reason='final solar location; HGM5684; distinct from the temperature clause')
+a('steng du','on',reason='final locative relation; HGM6941')
+a('mun pa','covered space',reason='attested technical rendering HGM14472, confirmed in complete current/parallel fields and original physical excerpt; not rejected merely because darkness is another gloss')
+a('rdzas','substance',reason='material substance; HGM15967; English reverses substance and its named kind')
+a('med','not exist',reason='final negative existential; HGM14511; does auxiliary excluded')
+a('phyir','for',6,n=2,reason='second causal explanation; exact second English for after the factual-assertion formula')
+d.save('PROVISIONAL machine alignment by Codex, independent English-first original. Covered space is a positively attested HGM rendering of mun pa and is retained without correction. Causal arising is a phrase-level caused by link, while supplied circumstances/particular framing stays unwrapped. Separate sun, feel, nothing, locative and causal occurrences are explicitly resolved. The assertion formula and distributed grammatical material are omitted rather than turned into unsupported nulls. Source text is unchanged.',[
+    dict(source='initial yang; de dag gi; yin gyi/yin te; bound genitives; der thal and other grammatical remnants',reason='All-of/particular-circumstances and assertion framing distribute these contributions. No isolated source atom is forced onto fact, and none is called absent.'),
+    dict(english='All of; is; circumstances of the particular; articles; it; there is; that can; This too is a fact; there does; any case of that; we call',reason='Contextual expansions, clause scaffolding and naming apparatus remain visible but unwrapped. No comparative gloss composes or changes GMR English.')])
+
+print(json.dumps({seq:dict(spans=len(json.loads((ANGLE/str(seq)/'spec.json').read_text())['segments'][0]['spans'])) for seq in [271,272,273]}))

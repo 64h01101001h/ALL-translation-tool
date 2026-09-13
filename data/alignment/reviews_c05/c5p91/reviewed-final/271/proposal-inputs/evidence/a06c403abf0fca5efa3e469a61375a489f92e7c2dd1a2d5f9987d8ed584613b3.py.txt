@@ -1,0 +1,39 @@
+"""Check exact review evidence copies and only approved register/allowance deltas."""
+from pathlib import Path
+import hashlib,json,subprocess,sys
+art=Path(__file__).resolve().parent;wt=art.parent/'campaign-worktree'
+page,first=map(int,sys.argv[1:]);batch=art/f'C05-{first}-{first+2}';dest=wt/f'data/alignment/reviews_c05/c5p{page}'
+base=json.loads((batch/'baseline.json').read_text())['commit']
+copied=[]
+for p in (batch/'semantic-review').rglob('*'):
+    if p.is_file() and p.suffix.lower() in ('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'):
+        rel=p.relative_to(batch/'semantic-review');assert (dest/rel).read_bytes()==p.read_bytes(),str(rel)
+        copied.append({'path':str(rel),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})
+for seq in range(first,first+3):assert (dest/f'{seq}-reconciliation.md').read_bytes()==(batch/f'reconciled/{seq}/report.md').read_bytes()
+def old(name):return json.loads(subprocess.check_output(['git','show',base+':'+name],cwd=wt))
+rp='docs/errata_register.json';before=old(rp);now=json.loads((wt/rp).read_text());assert now[:len(before)]==before
+expected=json.loads((dest/'bank-ready-errata.json').read_text());added=now[len(before):];assert len(added)==len(expected)
+for a,e in zip(added,expected):
+    assert a['segment']==f"C05:{e['seq']}" and a['course']=='C05'
+    for key in ('kind','found','expected','evidence','severity','confidence'):assert a[key]==e[key],key
+ap='data/alignment/span_head_allow.json';ba=old(ap);na=json.loads((wt/ap).read_text())
+wanted=json.loads((dest/'span-head-allow-needed.json').read_text()) if (dest/'span-head-allow-needed.json').exists() else {}
+if isinstance(wanted,list):
+    normalized={}
+    for item in wanted:
+        if 'key' in item:
+            category,key=item['key'].split('/',1)
+        else:
+            category,key=item['pages_directory'],item['allowlist_key']
+        assert category in ba and isinstance(key,str) and '/' in key
+        assert key not in normalized.setdefault(category,{})
+        normalized[category][key]=item['licensor']
+    wanted=normalized
+allowed=json.loads(json.dumps(ba))
+for category,values in wanted.items():
+    for key,value in values.items():
+        assert key not in allowed[category];allowed[category][key]=value
+assert na==allowed
+out={'baseline_commit':base,'semantic_files_copied_exactly':len(copied),'files':copied,'reconciliation_reports_copied_exactly':3,'prior_errata_retained':len(before),'added_errata':[x['item_id'] for x in added],'only_approved_bank_ready_records_added':True,'only_reviewed_allowances_added':wanted}
+(batch/'landing/review-copy-and-register-proof.json').write_text(json.dumps(out,indent=2)+'\n')
+print(json.dumps({k:v for k,v in out.items() if k!='files'},indent=2))

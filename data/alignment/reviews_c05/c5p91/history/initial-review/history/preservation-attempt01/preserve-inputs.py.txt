@@ -1,0 +1,45 @@
+from pathlib import Path
+import os,json,hashlib,importlib.util,subprocess
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';H=lambda b:hashlib.sha256(b).hexdigest()
+def j(p):return json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=H(b))
+def save(n,x):p=R/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+inv=j(B/'semantic-all-inputs-complete.json');assert len(inv)==9131 and sum(x['bytes'] for x in inv)==80469570
+for x in inv:
+ p=Path(x['path']);assert p==B/x['relative_path'];b=p.read_bytes();assert len(b)==x['bytes'] and H(b)==x['sha256']
+for n,sha,size in [('semantic-input-review-package.txt','e77c65b662ca019175a03d21f26ce6da9ab773cf13d26021914925077fd7a2bc',211657),('semantic-input-supplement.txt','f28b8dc715d74a14f2e827f0bfbe26abca44ea10e029b7343c5a97583c049697',1436321),('final-dispatch-proof.json','0b0a12703ee64590d7e1e2514e26ede26a1271280487c17c2127c9a0b5aad11a',76298)]:
+ b=(B/n).read_bytes();assert H(b)==sha and len(b)==size
+records=[];supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+# Actual proposal/final trees retain readable role/segment locations. Synthetic fixtures elsewhere never enter these roles.
+for angle,dest in [('tibetan','proposal-inputs/tibetan'),('english','proposal-inputs/english'),('reconciled','reviewed-final')]:
+ for seq in [271,272,273]:
+  directory=B/angle/str(seq)
+  for p in sorted(directory.rglob('*')):
+   if not p.is_file() or '__pycache__' in p.parts:continue
+   rel=Path(dest)/str(seq)/p.relative_to(directory)
+   if rel.suffix.lower() not in supported:rel=Path(str(rel)+('.txt' if rel.suffix.lower() in {'.py','.diff','.sql','.sh'} else '.bin'))
+   b=p.read_bytes();cp=R/rel;cp.parent.mkdir(parents=True,exist_ok=True)
+   if cp.exists():assert cp.read_bytes()==b
+   else:cp.write_bytes(b)
+   records.append(dict(original=str(p),copy=str(rel),sha256=H(b),bytes=len(b)))
+assert len({x['original'] for x in records})==len(records)
+manifest=R/'original-to-copy-manifest.json';save(manifest.name,records)
+helper=B.parent/'copy_evidence_once_v2.py';assert H(helper.read_bytes())=='b8eabf4b53c29174d7f67c2f723007d429edc1e153ee3e5b32ff0a6e6fa147d1'
+spec=importlib.util.spec_from_file_location('approved_evidence_v2',helper);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+selected={str(Path(x['path']).resolve()) for x in inv}|{str((B/n).resolve()) for n in ['semantic-all-inputs-complete.json','final-dispatch-proof.json']}|{str(helper.resolve()),str((B.parent/'semantic-review-protocol.md').resolve())}
+result=module.preserve(R,manifest,sorted(selected));records=j(manifest)
+# Attach explicit immutable Git provenance to every known actual byte-identical governing snapshot alias.
+known={}
+for m in j(B/'reconciled/271/governing-manifest.json'):
+ b=subprocess.check_output(['git','show',m['git_commit']+':'+m['git_path']],cwd=W);assert b==Path(m['copy']['path']).read_bytes();known[H(b),len(b)]=(m['git_commit'],m['git_path'])
+for x in records:
+ p=Path(x['original']);b=(R/x['copy']).read_bytes();assert b==p.read_bytes() and H(b)==x['sha256'] and len(b)==x['bytes'];assert (R/x['copy']).suffix.lower() in supported
+ k=(H(b),len(b))
+ if k in known:
+  commit,path=known[k];x.update(original_git_commit=commit,repository_relative_path=path)
+save(manifest.name,records)
+synthetic=[x for x in inv if 'registration' in x['relative_path'] or '/test-fixtures/' in x['relative_path'] or '/fixtures/' in x['relative_path']]
+save('synthetic-tooling-inputs.json',dict(scope='Preservation/provenance only: synthetic approval-shaped fixture contents never establish alignment approval, original authorship, source bytes or semantic correspondence.',records=synthetic))
+save('input-preservation-proof.json',dict(status='PASS',complete_inventory=pin(B/'semantic-all-inputs-complete.json'),inventory_files=len(inv),inventory_bytes=sum(x['bytes'] for x in inv),copier=pin(helper),copier_result=result,manifest_records=len(records),Git_pins=sum('original_git_commit' in x for x in records),distinct_copies=len({x['copy'] for x in records}),synthetic_preservation_records=len(synthetic),no_semantic_verdict=True))
+print(json.dumps(j(R/'input-preservation-proof.json'),indent=2))

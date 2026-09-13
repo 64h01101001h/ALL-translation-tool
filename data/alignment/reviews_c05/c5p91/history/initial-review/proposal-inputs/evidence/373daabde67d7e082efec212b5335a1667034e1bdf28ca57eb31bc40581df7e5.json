@@ -1,0 +1,54 @@
+{
+  "status": "NEEDS_CORRECTION",
+  "spec_verdict": "NEEDS_CORRECTION",
+  "quality_verdict": "NEEDS_CORRECTION",
+  "reviewer": "Codex /root/c05_262_264_english; retained context and independent English-original author, not author of this root registration helper; this is tooling review only",
+  "reviewed_helper_sha256": "574fe05ca252c52a3ab90b52503a2265b25c006d5600c12f4b86be8871f6faae",
+  "immutable_baseline": "7166534a9f47a201e5ab580a843c14ba2a910891",
+  "findings": [
+    {
+      "id": "REG-001",
+      "priority": "P1",
+      "status": "NEEDS_CORRECTION",
+      "file": "register-reviewed-page-and-index.py",
+      "lines": [
+        54,
+        61
+      ],
+      "title": "Bind registration to the exact approved landed spec and body",
+      "trigger": "After acceptance, change content within a landed spec segment without changing course/seqs, or replace landing/generator.stdout together with its containing page HTML.",
+      "actual": "Both isolated faults reach EXIT0, mutate the registry/index, and claim accepted_page_body despite unchanged review metadata and acceptance proof.",
+      "expected": "Reject before creating registration-preimages or writing either destination when any landed spec/body diverges from the accepted reviewed-final versions.",
+      "evidence": [
+        "fixtures/changed-landed-spec/result.json",
+        "fixtures/changed-landed-spec/stdout.txt",
+        "fixtures/replacement-body-and-page/result.json",
+        "fixtures/replacement-body-and-page/stdout.txt"
+      ],
+      "requested_change": "Before the first write, verify each actual approved review segment identity and hash/size against its retained reviewed-final spec/body; bind the combined landed spec to those complete approved spec objects and bind the actual canonical combined body to that same spec/version. A landed manifest pin alone is insufficient if it only describes whatever land_reviewed_page.py generated after earlier acceptance. Keep exact actual canonical reproduction and page inclusion checks. Re-run the same two negative cases, which must reject without destination mutation."
+    }
+  ],
+  "observed_transform": {
+    "index": "Exactly coverage270\u2192273 and one page91 link insertion; every remaining index byte retained.",
+    "builder": "Exactly one 30-byte c5p91 registry line insertion; every remaining builder byte retained, existing C05 complete=False unchanged.",
+    "preimages": "Both complete originals retained before index or builder writes.",
+    "existing_files_mutated": 2,
+    "helper_files_created": 3,
+    "all_prior_html_page_bytes_preserved": true,
+    "all_prior_registry_entries_preserved": true
+  },
+  "tests": {
+    "total_cases": 10,
+    "control_passes": 1,
+    "expected_prewrite_rejections": 7,
+    "incorrect_acceptances_reproduced": 2,
+    "harness_exit": 0
+  },
+  "limits": [
+    "Synthetic approval/source metadata and placeholder pages, no current semantic-review or reconciliation content inspected.",
+    "Git is stubbed only to the captured immutable baseline and synthetic HEAD; actual candidate code is unchanged.",
+    "No registration or builder executed against live WT; no project tests rerun; no semantic verdict on originals.",
+    "The two-file write sequence is not transactional; complete preimages permit recovery after interruption, and successful readback proves only the completed execution."
+  ],
+  "live_input_bytes_reopened_unchanged": true
+}

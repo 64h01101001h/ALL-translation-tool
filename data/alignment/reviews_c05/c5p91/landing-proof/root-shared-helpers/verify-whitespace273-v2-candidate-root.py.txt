@@ -1,0 +1,54 @@
+"""Full root preservation check of the finished v2; no CLI or fresh tests."""
+from pathlib import Path
+import datetime, hashlib, json, os
+ART = Path(__file__).resolve().parent.parent
+P = ART / 'whitespace-candidate-273-v2'
+OUT = ART / 'whitespace-root-273-v2/candidate'
+def pin(raw): return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+def check(raw, row): assert pin(raw) == {k:row[k] for k in ('bytes','sha256')}
+def main():
+    OUT.mkdir(parents=True, exist_ok=False)
+    frozen_raw = (P/'freeze.json').read_bytes(); frozen = json.loads(frozen_raw)
+    assert pin(frozen_raw)['sha256'] == 'ff3c006dbb5c86c4111ee62674b46861cdecb909646657a1484ca4e5b3bd2b46'
+    assert {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()} == set(frozen['files']) | {'freeze.json'}
+    total = 0
+    for rel,row in frozen['files'].items():
+        raw=(P/rel).read_bytes(); check(raw,row); total+=len(raw)
+    assert len(frozen['files']) == frozen['file_count'] == 587
+    assert total == frozen['total_bytes'] == 139664037
+    links = {str(p.relative_to(P)) for p in P.rglob('*') if p.is_symlink()}
+    assert links == set(frozen['symlinks'])
+    for rel,row in frozen['symlinks'].items():
+        assert os.readlink(P/rel) == row['target']
+        assert str((P/rel).resolve(strict=True)) == row['resolved']
+    counts = {}
+    for name in ('input-manifest.json','actual-reopened-aliases.json'):
+        obj=json.loads((P/name).read_bytes()); rows=obj['records'] if isinstance(obj,dict) else obj
+        for row in rows:
+            source=Path(row['original']); resolved=source.resolve(strict=True)
+            raw=source.read_bytes();check(raw,row);assert (P/row['copy']).read_bytes()==raw
+            if row.get('resolved_original'): assert str(resolved)==row['resolved_original']
+            assert source.resolve(strict=True)==resolved
+            if row.get('source_symlink') is not None: assert os.readlink(source)==row['source_symlink']
+        counts[name]=len(rows)
+    assert counts=={'input-manifest.json':310,'actual-reopened-aliases.json':116}
+    results=json.loads((P/'actual-predicate-results.json').read_bytes())
+    assert results['file_count']==58 and results['warning_count']==95906
+    assert results['Run_run_calls']==results['git_calls']==0
+    check((P/'whitespace273.py').read_bytes(),results['candidate_pin'])
+    tests=P/'attempts/final-corrected-60-tests'
+    assert (tests/'exit.txt').read_bytes()==b'0\n' and not (tests/'stdout').read_bytes()
+    stderr=(tests/'stderr').read_bytes()
+    assert stderr.count(b' ... ok\n')==60 and b'Ran 60 tests' in stderr and stderr.endswith(b'\nOK\n')
+    for mode in ('prepare','audit'):
+        plan=json.loads((P/'command-contract.json').read_bytes())[mode]
+        argv=plan['argv']; assert argv[3]==mode
+        assert not Path(argv[argv.index('--output')+1]).exists()
+    proof=dict(status='PASS ROOT FULL BYTE PRESERVATION; INDEPENDENT REREVIEW PENDING',
+        utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),candidate=pin((P/'whitespace273.py').read_bytes()),
+        freeze=pin(frozen_raw),files=587,total_bytes=total,symlink_identities=len(links),mappings=counts,
+        retained_focused_tests=60,root_test_reruns=0,candidate_CLI_executions=0,
+        root_read_complete_current_code_diff_contract_and_test_sources=True,
+        actual_warning_count=95906,actual_warned_files=58,actual_staged_audit_approved=False)
+    (OUT/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof,indent=2))
+if __name__=='__main__': main()

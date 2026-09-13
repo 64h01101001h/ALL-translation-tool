@@ -1,0 +1,27 @@
+--- verify-and-preserve-initial-review.py
++++ verify-and-preserve-initial-review-v2.py
+@@ -88,7 +88,15 @@
+     dispositions=readj(R/'original-disposition-review.json')
+     assert [x['original_record'] for x in dispositions]==originals and len(originals)==198
+     identity_keys=['original_identity','original_span','original_key_order','original_field_presence','original_parent_id','original_occurrence_declaration']
+-    assert readj(R/'independent-original-identities.json')==[{k:o[k] for k in identity_keys} for o in originals]
++    independent_identities=readj(R/'independent-original-identities.json')
++    def identity_key(x):
++        i=x['original_identity']; return i['angle'],i['seq'],i['id']
++    expected_identities=[{k:o[k] for k in identity_keys} for o in originals]
++    assert len(independent_identities)==len(expected_identities)==198
++    assert len({identity_key(x) for x in independent_identities})==198
++    assert {identity_key(x):x for x in independent_identities}=={identity_key(x):x for x in expected_identities}
++    declared_order=[(a,s,p['id']) for a in ('tibetan','english') for s in (271,272,273) for p in readj(B/a/str(s)/'spec.json')['segments'][0]['spans']]
++    assert [identity_key(x) for x in independent_identities]==declared_order
+     executions=readj(R/'independent-executions.json')
+     assert len(executions)==9
+     assert {(x['angle'],x['seq']) for x in executions}=={(a,s) for a in ('tibetan','english','reconciled') for s in (271,272,273)}
+@@ -146,6 +154,6 @@
+     print(json.dumps({k:proof[k] for k in ('status','utc','review_freeze','counts','manifest_records','canonical_records_checked')},indent=2))
+ except Exception:
+     error={'utc':datetime.now(timezone.utc).isoformat(),'status':'FAILED; preserve this helper and execution; do not reuse partial snapshot as proof','traceback':traceback.format_exc()}
+-    p=OUT/'failure-attempt01.json'
++    p=OUT/'failure-attempt02.json'
+     if not p.exists(): p.write_text(json.dumps(error,indent=2)+'\n')
+     raise

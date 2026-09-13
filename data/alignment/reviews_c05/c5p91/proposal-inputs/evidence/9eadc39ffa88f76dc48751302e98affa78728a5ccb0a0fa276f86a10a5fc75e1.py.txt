@@ -1,0 +1,34 @@
+from pathlib import Path
+from datetime import datetime,timezone
+import hashlib,json
+C=Path(__file__).resolve().parent
+B=C.parent
+def pin(p):
+    raw=p.read_bytes();return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+paths=[B/'source.json']
+for seq in (271,272,273):
+    paths.extend(B/'reconciled'/str(seq)/name for name in ('spec.json','body.html','report.md'))
+paths.extend(B/'reconciled/273'/name for name in ('material-rulings.json','omissions-full.json'))
+paths.extend(C/'reconciler'/name for name in ('report.md','finding-resolution.json','source-and-positive-evidence-reopen.json','complete-active273.diff.txt','proof.json','source-version-transitions.json'))
+paths.extend([B/'root-reconciliation-verification/root-frozen-evidence-check.json',C/'root-correction-input-proof.json'])
+records=[{'path':str(p),'relative_path':str(p.relative_to(B)),**pin(p)} for p in paths]
+package=C/'correction-semantic-package.txt'
+assert not package.exists()
+parts=['This is the COMPLETE selected semantic material for the scoped correction. Initial packages, original identities, full queries and initial reviews remain separately preserved, with all actual paths/bytes in correction-current-inputs.json. Current273 differs only by p22 omission and its necessary notes/metadata. Read this complete package; inspect all material source and exact before/after changes. Inventory pins are mechanical, not semantic approval.\n']
+for p,r in zip(paths,records):
+    parts.append('\n\n===== '+r['relative_path']+' | '+str(r['bytes'])+' bytes | SHA256 '+r['sha256']+' =====\n')
+    parts.append(p.read_text())
+package.write_text(''.join(parts))
+(C/'correction-semantic-package-inputs.json').write_text(json.dumps(records,ensure_ascii=False,indent=2)+'\n')
+inventory=[]
+excluded={'correction-01/correction-current-inputs.json','correction-01/scoped-rereview-dispatch-proof.json'}
+for p in sorted(B.rglob('*')):
+    if not p.is_file():continue
+    rel=p.relative_to(B)
+    if rel.parts[0]=='semantic-review' or '__pycache__' in rel.parts or str(rel) in excluded:continue
+    inventory.append({'path':str(p),'relative_path':str(rel),**pin(p)})
+inv=C/'correction-current-inputs.json';assert not inv.exists()
+inv.write_text(json.dumps(inventory,ensure_ascii=False,indent=2)+'\n')
+proof={'utc':datetime.now(timezone.utc).isoformat(),'status':'Prepared actual corrected semantic inputs; independent re-review pending','selected_material_files':len(records),'package':{'path':str(package),**pin(package)},'selected_material_inventory':{'path':str(C/'correction-semantic-package-inputs.json'),**pin(C/'correction-semantic-package-inputs.json')},'complete_inventory':{'path':str(inv),**pin(inv),'files':len(inventory),'source_bytes':sum(x['bytes'] for x in inventory)},'exclusions':'Only actual new top-level semantic-review output, __pycache__, this new dispatch proof and the inventory itself; nested synthetic tooling and initial reviews remain included. No tool fixture approval is semantic approval.','dispatch':{'path':str(C/'semantic-rereview-dispatch.md'),**pin(C/'semantic-rereview-dispatch.md')},'current_root_proof':{'path':str(B/'root-reconciliation-verification/root-frozen-evidence-check.json'),**pin(B/'root-reconciliation-verification/root-frozen-evidence-check.json')},'current_freezes':[{'path':str(B/'reconciled'/str(s)/'freeze.json'),**pin(B/'reconciled'/str(s)/'freeze.json')} for s in (271,272,273)],'initial_review_freeze':{'path':str(B/'semantic-review-initial/freeze.json'),**pin(B/'semantic-review-initial/freeze.json')},'semantic_approval':False}
+(C/'scoped-rereview-dispatch-proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps(proof,ensure_ascii=False,indent=2))

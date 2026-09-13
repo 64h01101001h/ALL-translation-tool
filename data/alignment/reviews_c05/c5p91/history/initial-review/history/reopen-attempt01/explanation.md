@@ -1,0 +1,1 @@
+Attempt 01 independently reproduced all 153 query sets and context rows, then failed on reviewer adapter expecting a segments object while the actual complete corpus is a list. No canonical run occurred. The exact helper, streams and produced files are preserved. Attempt 02 corrects this explicit container assumption, leaving corpus bytes untouched.

@@ -1,0 +1,38 @@
+"""Pure tooling-only unit fixtures; never call Run or a campaign CLI."""
+import unittest
+from whitespace273 import parse_log,literal_warnings,ordinary_predicate,diff_context_lines,classify_physical
+class Predicates(unittest.TestCase):
+ def test_parse_real_form(self):
+  self.assertEqual(parse_log(b'x.txt:1: trailing whitespace.\n+text \n'),{'x.txt':{'trailing whitespace.':[1]}})
+ def test_unknown_warning(self):
+  with self.assertRaises(AssertionError):parse_log(b'x.txt:1: invented warning.\n')
+ def test_duplicate_warning(self):
+  with self.assertRaises(AssertionError):parse_log(b'x.txt:1: trailing whitespace.\nx.txt:1: trailing whitespace.\n')
+ def test_path_escape(self):
+  with self.assertRaises(AssertionError):parse_log(b'../x.txt:1: trailing whitespace.\n')
+ def test_line_out_of_range(self):
+  with self.assertRaises(AssertionError):literal_warnings(b'x\n',{'new blank line at EOF.':[99]})
+ def test_literal_empty_eof(self):
+  self.assertEqual(ordinary_predicate(b'x\n\n',{'new blank line at EOF.':[2]}),'blank_eof')
+ def test_nonempty_eof(self):
+  with self.assertRaises(AssertionError):ordinary_predicate(b'x\n \n',{'new blank line at EOF.':[2]})
+ def test_valid_blank_diff_context(self):
+  raw=b'--- old\n+++ new\n@@ -1,2 +1,2 @@\n-old\n+new\n \n';self.assertEqual(diff_context_lines(raw),{6});self.assertEqual(ordinary_predicate(raw,{'trailing whitespace.':[6]}),'diff_context')
+ def test_marker_shaped_payload_is_not_diff(self):
+  raw=b'ordinary prose\n--- old\n+++ new\n@@ -1 +1 @@\n \n'
+  with self.assertRaises(AssertionError):ordinary_predicate(raw,{'trailing whitespace.':[5]})
+ def test_missing_diff_content(self):
+  with self.assertRaises(AssertionError):diff_context_lines(b'--- old\n+++ new\n@@ -1,2 +1,2 @@\n \n')
+ def test_source_complete_range(self):
+  result=classify_physical(b'A \r\n',{'trailing whitespace.':[1]},[({'path':'TOOLING_ONLY'},b'prefix\nA \r\nsuffix')]);self.assertEqual(result['full_range_witnesses'][0]['byte_range'],[7,12])
+ def test_changed_physical_payload(self):
+  with self.assertRaises(AssertionError):classify_physical(b'B \r\n',{'trailing whitespace.':[1]},[({'path':'TOOLING_ONLY'},b'prefix\nA \r\nsuffix')])
+ def test_complete_physical_line_not_substring(self):
+  with self.assertRaises(AssertionError):classify_physical(b'header\nA \r\n',{'trailing whitespace.':[2]},[({'path':'TOOLING_ONLY'},b'prefixA \r\n')])
+ def test_source_line_records_full_range(self):
+  result=classify_physical(b'header\nA \r\n',{'trailing whitespace.':[2]},[({'path':'TOOLING_ONLY'},b'prefix\nA \r\nsuffix')]);self.assertEqual(result['line_witnesses']['2'][0]['byte_range'],[7,11])
+ def test_root_print_formatter_is_not_ordinary_exception(self):
+  with self.assertRaises(AssertionError):ordinary_predicate(b'WYLIE: text \n',{'trailing whitespace.':[1]})
+ def test_literal_crlf_and_indent(self):
+  literal_warnings(b'x\r\n \tx\n',{'trailing whitespace.':[1],'space before tab in indent.':[2]})
+if __name__=='__main__':unittest.main(verbosity=2)

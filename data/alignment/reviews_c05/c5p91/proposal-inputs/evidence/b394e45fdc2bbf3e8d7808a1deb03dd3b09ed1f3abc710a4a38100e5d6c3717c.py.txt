@@ -1,0 +1,68 @@
+from pathlib import Path
+from datetime import datetime, timezone
+import ast, difflib, hashlib, json
+C=Path(__file__).resolve().parent
+B=C.parent
+R=C/'reconciler'
+def j(p): return json.loads(p.read_text())
+def pin(p):
+    raw=p.read_bytes();return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def check(p,x): assert pin(p)=={k:x[k] for k in ('bytes','sha256')}, str(p)
+def inventory(p): return {str(x.relative_to(p)):pin(x) for x in sorted(p.rglob('*')) if x.is_file()}
+assert not (C/'root-correction-input-proof.json').exists()
+check(R/'freeze.json',{'bytes':11762,'sha256':'90f0a29fa21108b4568a8b4b524e8778c5901bdfa244984865119fb364071803'})
+check(B/'reconciled/273/freeze.json',{'bytes':4175,'sha256':'70a62cd0624b1e1b09f95a2d76b26301a8a7b018d67296ff6f0947059cb7430c'})
+freezes=[]
+for p in (R,B/'reconciled/273'):
+    actual=inventory(p);f=j(p/'freeze.json')
+    assert {k:v for k,v in actual.items() if k!='freeze.json'}==f['files']
+    freezes.append({'path':str(p/'freeze.json'),**pin(p/'freeze.json'),'files':len(f['files']),'total_bytes':sum(x['bytes'] for x in f['files'].values())})
+pres=j(C/'proof.json');before=j(R/'before-manifest.json');after=j(R/'after-manifest.json')
+for name,tree in before['trees'].items():
+    assert tree==pres['snapshots'][name]['files']==inventory(C/'initial'/name)
+for name,tree in after['trees'].items(): assert tree==inventory(B/name)
+for p in before['source_pins']: check(Path(p['path']),p)
+for name in ('semantic-review','root-reconciliation-verification'): assert before['trees'][name]==after['trees'][name]
+for seq in ('271/','272/'):
+    assert {k:v for k,v in before['trees']['reconciled'].items() if k.startswith(seq)}=={k:v for k,v in after['trees']['reconciled'].items() if k.startswith(seq)}
+rows=j(R/'all-source-copy-byte-checks.json');assert len(rows)==412
+for x in rows:
+    check(Path(x['original']),x);check(Path(x['copy']),x)
+    assert Path(x['original']).read_bytes()==Path(x['copy']).read_bytes() and x['full_bytes_equal']
+for x in j(R/'original-copy-manifest.json'):
+    check(Path(x['original']),x);check(R/x['copy'],x)
+t=j(R/'source-version-transitions.json')
+old=before['trees']['reconciled'];new=after['trees']['reconciled']
+changed=[k for k in sorted(set(old)|set(new)) if old.get(k)!=new.get(k)]
+assert len(changed)==18 and all(x.startswith('273/') for x in changed)
+assert {str(B/'reconciled'/x) for x in changed}=={x['original_active_path'] for x in t['changes']}
+for x in t['changes']:
+    current=Path(x['original_active_path']);assert current.is_relative_to(B/'reconciled/273')
+    check(current,x['after'])
+    if x['kind']=='changed':
+        assert x['before'] is not None;check(Path(x['initial_retained_copy']),x['before'])
+    else: assert x['kind']=='added' and x['before'] is None and x['initial_retained_copy'] is None
+diff=[]
+for k in changed:
+    a=C/'initial/reconciled'/k;z=B/'reconciled'/k
+    diff.extend(difflib.unified_diff(a.read_text().splitlines(True) if a.exists() else [],z.read_text().splitlines(True),fromfile=str(a) if a.exists() else '/dev/null',tofile=str(z)))
+assert ''.join(diff)==(R/'complete-active273.diff.txt').read_text()
+for x in j(R/'complete-json-before-after.json'):
+    p=Path(x['path']);assert p.is_relative_to(B/'reconciled/273')
+    oldp=C/'initial/reconciled/273'/p.relative_to(B/'reconciled/273')
+    assert x['after']==j(p) and x['before']==(j(oldp) if oldp.exists() else None)
+helper=B.parents[0]/'land_reviewed_page.py'
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+sets=[{x.value for x in n.elts} for n in ast.walk(ast.parse(helper.read_text())) if isinstance(n,(ast.Set,ast.Tuple,ast.List)) and all(isinstance(x,ast.Constant) and isinstance(x.value,str) for x in n.elts)]
+assert allowed in sets
+assert all(Path(x['copy']).suffix in allowed for x in rows)
+check(R/'proof.json',{'bytes':1809,'sha256':'550e606b07df120cd3f0c701e99f324c821c9906fb814bca191fbb61d72fa799'})
+canonical=B/'reconciled/273/canonical-correction01';command=j(canonical/'command.json')
+assert (canonical/'exit.txt').read_text().strip()=='0' and (canonical/'stderr.txt').read_bytes()==b''
+assert (canonical/'stdin.json').read_bytes()==(B/'reconciled/273/spec.json').read_bytes()
+assert (canonical/'stdout.html').read_bytes()==(B/'reconciled/273/body.html').read_bytes()
+for name in ('stdin','wrapper','generator','builder'): check(Path(command[name]['path']),command[name])
+assert (R/'correct.exit').read_text().strip()=='1' and (R/'recover-checker-v2.exit').read_text().strip()=='0'
+out={'status':'PASS frozen correction package, complete actual diffs and initial versions; not semantic approval','utc':datetime.now(timezone.utc).isoformat(),'freezes':freezes,'source_copy_records':len(rows),'source_version_changes':t['changes'],'complete_diff_reproduced':pin(R/'complete-active273.diff.txt'),'complete_json_before_after_checked':pin(R/'complete-json-before-after.json'),'actual_landing_helper':{'path':str(helper),**pin(helper)},'reconciler_proof_helper_label_note':'Reconciler proof landing_helper_pin binds verify_review_copy_and_register.py (2778bytes). Root additionally inspected actual land_reviewed_page.py AST and confirmed identical whitelist. No missing suffix evidence.','canonical_run_record_checked':command,'new_root_canonical_runs':0,'initial_semantic_review_unchanged':True,'initial_root_proof_unchanged':True,'read_probe_history':[{'tool_chunk':'d4feb6','limitation':'Metadata schema preview inadvertently printed full before/after tree values and truncated. Not treated as full human manifest read; entire trees verified programmatically above. Recovery checker material displayed in tail.'},{'tool_chunk':'4e2242','limitation':'Read-only source_pins lookup failed on after-manifest, whose actual keys are trees,current273,scope. Before has source_pins; corrected schema inspected before this verifier.'}],'full_correction_reports_and_material_diffs_read':True}
+(C/'root-correction-input-proof.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({k:out[k] for k in ('status','utc','freezes','source_copy_records')},indent=2))

@@ -1,0 +1,8 @@
+from pathlib import Path
+import difflib,hashlib,json
+O=Path(__file__).resolve().parent;p=O/'verify_staged_through273.py';raw=p.read_bytes()
+compile(raw,str(p),'exec')  # Syntax only: does not import or execute candidate.
+old=(O/'inputs/prior-helpers/verify-final-staged-landing.py.txt').read_bytes()
+(O/'candidate-vs-270.diff.txt').write_text(''.join(difflib.unified_diff(old.decode().splitlines(True),raw.decode().splitlines(True),fromfile='immutable270/verify-final-staged-landing.py',tofile='prepared273/verify_staged_through273.py')))
+proof=dict(status='SYNTAX_PASS_ONLY',candidate_path=str(p),candidate_bytes=len(raw),candidate_sha256=hashlib.sha256(raw).hexdigest(),prior_helper_sha256=hashlib.sha256(old).hexdigest(),candidate_execution_count=0,tests_executed=0,live_git_commands_executed=0,scope='Compile source to code object only; no candidate entrypoint/import or stage/bank/build/generator/test action')
+(O/'syntax-proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))

@@ -1,0 +1,42 @@
+"""Complete current-schema material supplement plus immutable raw input inventory."""
+from pathlib import Path
+import hashlib, json
+b = Path(__file__).resolve().parent
+target = b/'semantic-input-supplement.txt'
+assert not target.exists() and not (b/'semantic-all-inputs.json').exists()
+selected = {p for p in b.iterdir() if p.is_file() and p.suffix in {'.md','.json','.diff','.py'}}
+for folder in ('proposal-verification','proposal-verification-attempt02',
+               'complete-originals-execution','complete-originals-execution-attempt02',
+               'root-reconciliation-verification','root-reconciliation-verification-attempt01',
+               'root-boundary-execution-attempt01','root-boundary-execution-attempt02'):
+    selected.update(p for p in (b/folder).rglob('*') if p.is_file())
+names = {'original-dispositions.json','final-decisions.json','final-tuples.json',
+         'omissions-full.json','errata-five-ground-decisions.json','material-rulings.json',
+         'source-preservation-proof.json','final-proof.json','intended-spans.json',
+         'errata-analysis.json','errata-review.json','gap-review.json','occurrence-proof.json',
+         'input-proof.json','completion-input-proof.json','evidence-references.json',
+         'generator-proof.json','canonical-result.json','final-verification.json',
+         'C15-271-physical-supplement.json','las-original-tier-records.json',
+         'refutation-targeted-queries-full.json','capture-proof.json','register-check.json',
+         'final-freeze-preflight.json','supported-copy-preflight.json',
+         'source-input-pins.json','governing-manifest.json'}
+for angle in ('tibetan','english','reconciled'):
+    for seq in (271,272,273):
+        selected.update(p for p in (b/angle/str(seq)).iterdir() if p.is_file() and p.name in names)
+chunks = ['Complete material supplement. Read with the complete primary package and original raw inputs. Root checks are mechanical; root authored Tibetan. Tooling-only synthetic fixtures are not alignment approvals or source evidence. All actual alignment proposals, failures and source/copy mappings remain preserved.\n']
+manifest=[]
+for p in sorted(selected):
+    raw=p.read_bytes();chunks.extend(['\n===== '+str(p.relative_to(b))+' =====\n',raw.decode('utf8')])
+    manifest.append(dict(path=str(p.relative_to(b)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+chunks.extend(['\n===== COMPLETE SUPPLEMENT MANIFEST =====\n',json.dumps(manifest,indent=2),'\n'])
+with target.open('x') as f:f.write(''.join(chunks))
+all_inputs=[]
+for p in sorted(b.rglob('*')):
+    relative=p.relative_to(b)
+    if p.is_file() and '__pycache__' not in relative.parts and 'semantic-review' not in relative.parts:
+        raw=p.read_bytes()
+        all_inputs.append(dict(path=str(p),relative_path=str(relative),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+with (b/'semantic-all-inputs.json').open('x') as f:json.dump(all_inputs,f,indent=2);f.write('\n')
+result=dict(supplement_bytes=target.stat().st_size,supplement_sha256=hashlib.sha256(target.read_bytes()).hexdigest(),complete_material_files=len(manifest),all_raw_input_files=len(all_inputs),all_raw_input_bytes=sum(r['bytes'] for r in all_inputs))
+with (b/'semantic-supplement-generation.json').open('x') as f:json.dump(result,f,indent=2);f.write('\n')
+print(json.dumps(result))

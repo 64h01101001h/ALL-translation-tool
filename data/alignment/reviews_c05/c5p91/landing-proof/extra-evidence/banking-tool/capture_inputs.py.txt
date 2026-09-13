@@ -1,0 +1,26 @@
+from pathlib import Path
+import hashlib,json,re
+O=Path(__file__).resolve().parent;ART=O.parents[2];B=ART/'C05-271-273';W=ART.parent/'campaign-worktree';E=O/'inputs';E.mkdir(exist_ok=False);records=[]
+def save(p,rel):
+ raw=p.read_bytes();dest=E/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw);records.append(dict(original=str(p),copy=str(dest.relative_to(O)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()));return raw
+for p in sorted((B/'landing').rglob('*')):
+ if p.is_file():save(p,Path('current-landing')/p.relative_to(B/'landing'))
+for name in ['verify-final-review-root.py','verify-final-review-root-v2.py','root-final-review-verifier-v1-v2.diff','root-final-review-verifier-recovery.json','root-final-review-preservation.json']:
+ save(B/'correction-01'/name,Path('root-review-history')/name)
+for name in ['bank-root-landing-proofs.py','bank-final-verification-proofs.py']:
+ save(ART/'C05-268-270'/name,Path('old270')/name)
+stdout=(E/'current-landing/ctest-17.stdout').read_bytes();assert (E/'current-landing/ctest-17.exit').read_bytes()==b'0\n' and not (E/'current-landing/ctest-17.stderr').read_bytes()
+passed=re.findall(r'^\s*(\d+)/(\d+) Test\s+#(\d+): ([a-z_]+) .* Passed\s+([0-9.]+) sec$',stdout.decode(),re.M);duration=re.findall(r'^Total Test time \(real\) =\s*([0-9.]+) sec$',stdout.decode(),re.M)
+build=json.loads((E/'current-landing/canonical-builds-once.json').read_bytes())
+for i,run in enumerate(build['runs']):
+ label=['build-layer','build-view'][i]
+ for ext in ['stdout','stderr']:
+  raw=(E/'current-landing'/f'{label}.{ext}').read_bytes();assert len(raw)==run[ext+'_bytes'] and hashlib.sha256(raw).hexdigest()==run[ext+'_sha256']
+ assert int((E/'current-landing'/f'{label}.exit').read_bytes())==run['exit']==0
+outputs=[]
+for path,digest in build['output_sha256'].items():
+ raw=(W/path).read_bytes();assert hashlib.sha256(raw).hexdigest()==digest;outputs.append(dict(path=path,bytes=len(raw),sha256=digest))
+for r in records:assert Path(r['original']).read_bytes()==(O/r['copy']).read_bytes()
+(O/'input-manifest.json').write_text(json.dumps(records,indent=2)+'\n')
+proof=dict(status='OBSERVED_COMPLETED_LANDING_RECORDS_ONLY',tests=[dict(ordinal=int(i),total=int(n),ctest_id=int(k),name=name,seconds=float(s))for i,n,k,name,s in passed],actual_total_seconds=[float(x)for x in duration],actual_build_invocations=len(build['runs']),actual_builds=[dict(tool=r['argv'][-1],exit=r['exit'])for r in build['runs']],actual_coverage_stdout=(E/'current-landing/build-layer.stdout').read_text().splitlines()[0],actual_output_pins=outputs,failed_root_verifier_exit=int((E/'current-landing/root-final-review-preservation.exit').read_bytes()),successful_root_verifier_exit=int((E/'current-landing/root-final-review-preservation-v2.exit').read_bytes()),all_captured_originals_reread_equal=True,candidate_runs=0)
+(O/'observed-proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps({k:v for k,v in proof.items() if k not in ['tests','actual_output_pins']},indent=2))

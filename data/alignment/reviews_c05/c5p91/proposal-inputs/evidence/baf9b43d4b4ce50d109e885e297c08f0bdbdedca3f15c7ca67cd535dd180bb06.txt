@@ -1,0 +1,55 @@
+from pathlib import Path
+import json,sys,os,hashlib,subprocess,datetime,copy,sqlite3,importlib.util,difflib
+from html.parser import HTMLParser
+sys.dont_write_bytecode=True
+R=Path.cwd();B=R/'campaign-artifacts/C05-271-273';C=B/'correction-01/reconciler';D=B/'reconciled/273';I=B/'correction-01/initial';W=R/'campaign-worktree'
+def j(p):return json.loads(p.read_text())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def pp(p):return dict(path=str(p),**pin(p))
+def inventory(p):return {str(f.relative_to(p)):pin(f) for f in sorted(p.rglob('*')) if f.is_file()}
+def stamp():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+old=j(I/'reconciled/273/spec.json');new=j(D/'spec.json');seg=new['segments'][0]
+oldtuples=j(I/'reconciled/273/final-tuples.json');tuples=j(D/'final-tuples.json');olddec=j(I/'reconciled/273/final-decisions.json');dec=j(D/'final-decisions.json');olddisp=j(I/'reconciled/273/original-dispositions.json');disp=j(D/'original-dispositions.json');om=j(D/'omissions-full.json');row=j(C/'source-and-positive-evidence-reopen.json')['queries'][0]['rows'][0];reason=j(C/'finding-resolution.json')['reason'];a=D/'canonical-correction01'
+from types import SimpleNamespace
+p=SimpleNamespace(stdout=(a/'stdout.html').read_bytes(),stderr=(a/'stderr.txt').read_bytes(),returncode=int((a/'exit.txt').read_text()));assert p.returncode==0 and p.stderr==b'' and (D/'body.html').read_bytes()==p.stdout
+sys.path.insert(0,str(W/'tools'));specmod=importlib.util.spec_from_file_location('current_canonical',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(specmod);specmod.loader.exec_module(g)
+tr=g.resolve(row['wylie'],seg['spans'],'tib',273);byid={s['id']:s for s in seg['spans']};ordered=g.with_members(seg['spans'],[byid[x] for x in seg['eng_order']],row['english']);er=g.resolve(row['english'],ordered,'eng',273)
+resolved=[dict(id=s['id'],d=s['d'],tib=s['tib'],eng=s.get('eng'),tib_range=list(tr[s['id']]),eng_range=list(er[s['id']]),parent_id=None) for s in seg['spans']];assert resolved==tuples
+assert next(x for x in resolved if x['id']=='p28')['eng_range']==[265,268]
+# Independent raw substring/order and exact complement verification.
+for side,key,text in [('tib','tib_range',row['wylie']),('eng','eng_range',row['english'])]:
+ ranges=sorted(x[key] for x in tuples);cursor=0;gaps=[]
+ for x in tuples:assert text[slice(*x[key])]==x[side]
+ for lo,hi in ranges:
+  assert lo>=cursor
+  if cursor<lo:gaps.append([cursor,lo])
+  cursor=hi
+ if cursor<len(text):gaps.append([cursor,len(text)])
+ assert gaps==[x['range'] for x in om['gaps'][side]]
+ for x in om['gaps'][side]:assert text[slice(*x['range'])]==x['text']
+class Paragraphs(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.depth=0;self.parts={'tib':[],'eng':[]}
+ def handle_starttag(self,tag,attrs):
+  at=dict(attrs)
+  if tag=='div' and at.get('class') in self.parts:self.side=at['class']
+  if tag=='span' and self.side:
+   if self.depth:self.depth+=1
+   elif at.get('data-d')=='1':self.depth=1
+ def handle_endtag(self,tag):
+  if tag=='span' and self.depth:self.depth-=1
+ def handle_data(self,data):
+  if self.side and self.depth:self.parts[self.side].append(data)
+parser=Paragraphs();parser.feed(p.stdout.decode());assert ''.join(parser.parts['tib'])==row['wylie'];assert ''.join(parser.parts['eng'])==row['english']
+assert not any(s.get('eng') is None for s in seg['spans'])
+proof=j(D/'final-proof.json');proof.update(spans=len(tuples),nulls=0,d5=sum(x['d']==5 for x in tuples),spec=pp(D/'spec.json'),body=pp(D/'body.html'),canonical_current=str(a));save(D/'final-proof.json',proof)
+src=j(D/'source-preservation-proof.json');src.update(spec=proof['spec'],body=proof['body'],final_tuples=len(tuples),canonical_current=str(a));save(D/'source-preservation-proof.json',src)
+report=(D/'report.md').read_text().replace('Final spans=29;','Final spans=28;').replace('and both causal for occurrences.','and only the final causal for occurrence.').replace('body=4786 bytes. Complete argv/stdin/stdout/stderr/exit and canonical pins: canonical-attempt01/.',f"body={proof['body']['bytes']} bytes. Complete current argv/stdin/stdout/stderr/exit and canonical pins: canonical-correction01/. Earlier canonical-attempt01 is preserved initial-version history.").replace('4766 bytes; SHA256=08841eca475e519a057c3a61aa354a25b724d0a2fb6c6b27a7af3e3265e589e6',f"{proof['spec']['bytes']} bytes; SHA256={proof['spec']['sha256']}").replace('21d65e1111828ba74318b09fcaabe9f7042cea26bfd2e03e87bcc752e4620545',proof['body']['sha256'])
+report+='\nCorrection C05-273-CAUSAL-01: '+reason+'\nInitial complete outputs, original argument and initial NEEDS_CORRECTION review remain byte-identical under ../../correction-01/initial/. Shared ../271 proofs that pin the initial 273 remain historical claims; ../../correction-01/reconciler/ records the explicit version transition and current checks. This correction requires distinct semantic re-review; no semantic approval is issued here.\n'
+(D/'report.md').write_text(report)
+for angle in ['tibetan','english']:
+ original=B/f'reconciled/271/executions/original-{angle}-273/stdin.bin'
+ (D/f'{angle}-to-final.diff.txt').write_text(''.join(difflib.unified_diff(original.read_text().splitlines(True),(D/'spec.json').read_text().splitlines(True),fromfile=str(original),tofile=str(D/'spec.json'))))
+save(C/'unchanged-mappings-proof.json',dict(initial_count=len(oldtuples),corrected_count=len(tuples),removed_id='p22',exact_ordered_tuples_equal_initial_minus_p22=resolved==[x for x in oldtuples if x['id']!='p22'],resolved_current=resolved,all_surviving_span_objects_and_optional_fields_unchanged=seg['spans']==[s for s in old['segments'][0]['spans'] if s['id']!='p22'],all_surviving_decisions_unchanged=dec==[x for x in olddec if x['tuple']['id']!='p22'],original_identities_count=len(disp),changed_original_dispositions=1,unchanged_original_field_objects=True,full_source_paragraphs_exact=True,exact_complement_gaps=True,p28=next(x for x in resolved if x['id']=='p28'),canonical_exit=p.returncode,canonical_stderr_bytes=len(p.stderr),body_exact_stdout=(D/'body.html').read_bytes()==p.stdout))
+print(json.dumps(dict(status='PASS correction and actual canonical execution',spans=len(tuples),nulls=0,d5=22,dispositions=len(disp),spec=proof['spec'],body=proof['body']),indent=2))

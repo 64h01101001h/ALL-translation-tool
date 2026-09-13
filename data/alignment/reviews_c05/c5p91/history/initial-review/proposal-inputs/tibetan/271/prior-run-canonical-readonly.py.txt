@@ -1,0 +1,13 @@
+from pathlib import Path
+import runpy, sqlite3, sys
+sys.dont_write_bytecode=True
+wt=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+original=sqlite3.connect
+def readonly(database,*args,**kwargs):
+    path=Path(database).resolve();assert path.is_file()
+    kwargs['uri']=True
+    db=original(path.as_uri()+'?mode=ro',*args,**kwargs)
+    db.execute('PRAGMA query_only=ON')
+    return db
+sqlite3.connect=readonly
+runpy.run_path(str(wt/'tools/gen_alignment_page.py'),run_name='__main__')

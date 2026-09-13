@@ -1,0 +1,13 @@
+from pathlib import Path
+import json,hashlib,datetime
+D=Path(__file__).resolve().parent
+assert not (D/'freeze.json').exists()
+files={}
+for p in sorted(D.rglob('*')):
+ if p.is_file():
+  raw=p.read_bytes();files[str(p.relative_to(D))]=dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+f=dict(status='FROZEN_PREPARED_CANDIDATE_NOT_APPROVED_OR_EXECUTED_LIVE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),file_count=len(files),total_bytes=sum(r['bytes'] for r in files.values()),excluded=['freeze.json'],files=files)
+raw=(json.dumps(f,indent=2)+'\n').encode();(D/'freeze.json').write_bytes(raw)
+for rel,row in files.items():
+ b=(D/rel).read_bytes();assert len(b)==row['bytes'] and hashlib.sha256(b).hexdigest()==row['sha256']
+print(json.dumps(dict(files=len(files),bytes=f['total_bytes'],freeze_sha256=hashlib.sha256(raw).hexdigest())))

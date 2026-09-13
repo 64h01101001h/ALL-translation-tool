@@ -1,0 +1,199 @@
+--- tibetan/272/spec.json
++++ reconciled/272/spec.json
+@@ -3,137 +3,161 @@
+   "segments": [
+     {
+       "seq": 272,
+-      "title": "the letter to a friend citation",
++      "title": "a cited verse on seasonal sensations",
+       "spans": [
+         {
+-          "id": "q1",
++          "id": "r1",
+           "d": 3,
+           "tib": "de ltar",
+           "eng": "this kind of"
+         },
+         {
+-          "id": "w1",
++          "id": "w2",
+           "d": 5,
+           "tib": "skye ba",
+           "eng": "get"
+         },
+         {
+-          "id": "w2",
++          "id": "w3",
+           "d": 5,
+           "tib": "bshes spring",
+           "eng": "Letter to a Friend"
+         },
+         {
+-          "id": "m1",
++          "id": "m4",
+           "d": 7,
+           "tib": "bshes",
+           "eng": "Friend"
+         },
+         {
+-          "id": "m2",
++          "id": "m5",
+           "d": 7,
+           "tib": "spring",
+           "eng": "Letter"
+         },
+         {
+-          "id": "w3",
++          "id": "p6",
++          "d": 6,
++          "tib": "las",
++          "eng": null,
++          "cls": "case",
++          "nul": "Source ablative las: attribution uses the title as subject of states, with no separate from/in word."
++        },
++        {
++          "id": "w7",
+           "d": 5,
+           "tib": "yi dvags",
+           "eng": "craving spirits"
+         },
+         {
+-          "id": "p1",
++          "id": "p8",
+           "d": 6,
+           "tib": "rnams",
+           "eng": null,
+           "cls": "number",
+-          "nul": "Plural marker contributes to the inflected spirits; no separate English word. Its contribution is fused, not absent."
++          "nul": "Plural rnams is grammatically fused into the plural noun spirits; no separate English word is available, and its meaning is not claimed absent."
+         },
+         {
+-          "id": "p2",
++          "id": "p9",
+           "d": 6,
+           "tib": "la",
+           "eng": "For"
+         },
+         {
+-          "id": "w4",
++          "id": "w10",
+           "d": 5,
+           "tib": "sos ka",
+           "eng": "spring"
+         },
+         {
+-          "id": "p3",
++          "id": "p11",
+           "d": 6,
+           "tib": "su",
+           "eng": "In"
+         },
+         {
+-          "id": "w5",
++          "id": "p12",
++          "d": 6,
++          "tib": "ni",
++          "eng": null,
++          "cls": "topic",
++          "nul": "Topic ni has no separate English topic-marker word in this verse line."
++        },
++        {
++          "id": "w13",
+           "d": 5,
+           "tib": "zla ba",
+           "eng": "moon"
+         },
+         {
+-          "id": "w6",
++          "id": "w14",
+           "d": 5,
+           "tib": "tsha",
+           "eng": "hot"
+         },
+         {
+-          "id": "p4",
++          "id": "p15",
+           "d": 6,
+           "tib": "la",
+           "eng": "and"
+         },
+         {
+-          "id": "w7",
++          "id": "w16",
+           "d": 5,
+           "tib": "dgun",
+           "eng": "winter"
+         },
+         {
+-          "id": "w8",
++          "id": "p17",
++          "d": 6,
++          "tib": "ni",
++          "eng": null,
++          "cls": "topic",
++          "nul": "Second topic ni has no separate topic-marker word in the English winter clause."
++        },
++        {
++          "id": "w18",
+           "d": 5,
+           "tib": "nyi ma",
+           "eng": "sun"
+         },
+         {
+-          "id": "w9",
++          "id": "w19",
+           "d": 5,
+           "tib": "grang",
+           "eng": "cold"
+         },
+         {
+-          "id": "w10",
++          "id": "w20",
+           "d": 5,
+-          "tib": "gsungs pa",
++          "tib": "gsungs",
+           "eng": "states"
+         },
+         {
+-          "id": "p5",
++          "id": "p21",
+           "d": 6,
+           "tib": "phyir",
+           "eng": "for"
+         }
+       ],
+       "eng_order": [
+-        "w1",
+-        "q1",
+-        "p5",
+         "w2",
++        "r1",
++        "p21",
++        "w3",
++        "w20",
++        "p9",
++        "w7",
++        "w13",
++        "p11",
+         "w10",
+-        "p2",
+-        "w3",
+-        "w5",
+-        "p3",
+-        "w4",
+-        "w6",
+-        "p4",
+-        "w7",
+-        "w8",
+-        "w9"
++        "w14",
++        "p15",
++        "w16",
++        "w18",
++        "w19"
+       ],
+-      "note": "PROVISIONAL machine alignment by Codex, Tibetan-first original. No other-angle proposal or semantic judgment was read. Letter to a Friend is banked as the established title with unique Friend/Letter members; the bracketed author remains explanatory even though the glossary contains the expanded quotation. The plural rnams is fused into spirits, not semantically absent. Each bound ang contributes even, but it cannot be detached as a standalone syllable or placed under a moon/sun parent whose English excludes even; both contributions are omitted with this reason, not falsely nulled. Light, they, the reprise sensation, and the expanded It is a fact frame stay unwrapped. Capital In is verse lineation. C15:417 and C18:1131 match all three text fields; P7:26 matches English with Tibetan orthographic/punctuation differences, without establishing publication independence. No source or hgm_gloss is changed."
++      "note": "PROVISIONAL machine reconciliation by Codex, reused non-author of both current originals. Letter to a Friend is the established title; its bracketed author is explanatory, with Friend and Letter as its only members. Plural rnams is fused into spirits; source las and two topic ni have no separate English word. Bound 'ang twice has overt even counterparts but no defensible compound parent containing them without supplied wording, so both are omitted, never nulled. The assertion and sensation reprises stay unwrapped. Capital For/In and lowercase causal for retain distinct owners. ILL:2342, physical label [2337], says summer; C05 says spring, positively attested in HTG2016. This difference does not establish a correction. No source wording or hgm_gloss is changed."
+     }
+   ]
+ }

@@ -1,0 +1,29 @@
+[
+  {
+    "seq": 271,
+    "sql": "select * from corpus_segments where (course='C16' or course='P1' or course like 'TCS%') and english like ? order by course,seq",
+    "parameters": [
+      "%moon in springtime%"
+    ],
+    "count": 0,
+    "rows": []
+  },
+  {
+    "seq": 272,
+    "sql": "select * from corpus_segments where (course='C16' or course='P1' or course like 'TCS%') and english like ? order by course,seq",
+    "parameters": [
+      "%craving spirits, even the light of the moon%"
+    ],
+    "count": 0,
+    "rows": []
+  },
+  {
+    "seq": 273,
+    "sql": "select * from corpus_segments where (course='C16' or course='P1' or course like 'TCS%') and english like ? order by course,seq",
+    "parameters": [
+      "%that substance we call%"
+    ],
+    "count": 0,
+    "rows": []
+  }
+]

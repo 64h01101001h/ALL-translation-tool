@@ -1,0 +1,50 @@
+from pathlib import Path
+import json,hashlib,difflib,datetime
+R=Path.cwd();B=R/'campaign-artifacts/C05-271-273';C=B/'correction-01/reconciler';D=B/'reconciled/273';I=B/'correction-01/initial'
+def j(p):return json.loads(p.read_text())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def inv(p,exclude=None):return {str(x.relative_to(p)):pin(x) for x in sorted(p.rglob('*')) if x.is_file() and x!=exclude}
+def now():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+proof=j(C/'proof.json');assert proof['total_spans']==101 and proof['original_dispositions']==198
+save(D/'freeze.json',dict(seq=273,scope='Every current file except this top freeze itself; canonical-attempt01 is initial-version history, canonical-correction01 binds the current spec/body. Initial top freeze remains under correction-01/initial/reconciled/273/freeze.json.',timestamp=now(),producer='Codex reused non-author /root/c05_253_255_reconcile',files=inv(D,D/'freeze.json')))
+before=inv(I/'reconciled/273');after=inv(D);trans=[];diffs=[];structured=[]
+for rel in sorted(set(before)|set(after)):
+ if before.get(rel)==after.get(rel):continue
+ old=I/'reconciled/273'/rel;new=D/rel
+ trans.append(dict(original_active_path=str(new),initial_retained_copy=str(old) if old.exists() else None,before=before.get(rel),after=after.get(rel),kind='changed' if old.exists() else 'added'))
+ a=old.read_text() if old.exists() else '';b=new.read_text() if new.exists() else '';diffs.extend(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile=str(old) if old.exists() else '/dev/null',tofile=str(new)))
+ if new.suffix=='.json':structured.append(dict(path=str(new),before=json.loads(a) if a else None,after=json.loads(b)))
+(C/'complete-active273.diff.txt').write_text(''.join(diffs));save(C/'complete-json-before-after.json',structured)
+save(C/'source-version-transitions.json',dict(changes=trans,original_transport_manifest=str(B/'correction-01/proof.json'),rule='All original-version aliases, historical freezes and initial shared 271 proofs bind their exact initial retained copies. They are not compared to changed current 273 files or relabelled current. Root source_version_transports is the complete original-to-initial mapping.',initial_trees={name:str(I/name) for name in ['reconciled','semantic-review','root-reconciliation-verification']},unchanged_271_272=True,initial_top_freeze=dict(path=str(I/'reconciled/273/freeze.json'),**pin(I/'reconciled/273/freeze.json')),current_top_freeze=dict(path=str(D/'freeze.json'),**pin(D/'freeze.json'))))
+save(C/'after-manifest.json',dict(trees={name:inv(B/name) for name in ['reconciled','semantic-review','root-reconciliation-verification']},current273=after,scope='Complete active trees corresponding to before-manifest; correction outputs are separately enumerated in correction top freeze.'))
+report=f'''C05:273 correction C05-273-CAUSAL-01 is implemented and mechanically verified. PROVISIONAL; distinct semantic re-review remains required. Reused non-author reconciler /root/c05_253_255_reconcile authored neither current original angle and does not issue semantic approval.
+
+Only p22 was removed from spans and eng_order without renumbering. The first phyir [196,201) closes concrete solar/lunar grounds, while the first English for [91,94) introduces the broader general non-occurrence reason. Their causal relation is distributed through the colon and restructured argument; it is not semantically absent. Positive full HTG2016 entry11962, all parallels, both originals, the original retention argument and the initial NEEDS_CORRECTION review remain preserved. No null or replacement mapping was created.
+
+p28 remains exactly d6 phyir [255,260) → for [265,268). All other 101 surviving batch tuples match the initial sequence minus only p22, including all optional fields, depths, parentage and ordered decisions. There are 28 current273 spans, 0 nulls, 22 d5 pairs and 56 original dispositions. Batch totals are 101 spans, 8 nulls, 63 d5 pairs and 198 original dispositions: 180 retained,16 recast,2 distributed omissions. Only the English273 p22 disposition changed; all original identity/object/presence/key-order/occurrence fields remain exact.
+
+The actual unchanged canonical generator ran once for changed273 through the saved SQLite URI mode=ro/query_only wrapper with Python -B and PYTHONDONTWRITEBYTECODE=1. EXIT0, empty stderr, exact current body equals full stdout. Full sentence extraction and every independent resolved range/complement pass. Current spec {pin(D/'spec.json')['bytes']} bytes SHA256 {pin(D/'spec.json')['sha256']}; body {pin(D/'body.html')['bytes']} bytes SHA256 {pin(D/'body.html')['sha256']}. Actual streams and argv are in ../../reconciled/273/canonical-correction01/. Initial canonical-attempt01 remains explicitly historical; 271/272 were not rerun.
+
+Before editing, all1896 initial retained files were compared against their live originals and root pins. The complete initial trees, live271/272 and initial semantic-review/root-proof trees remain unchanged; all six errata refutations and source/master pins remain intact. Approved copy-evidence v2 ran with exact provenance; all412 old/new source-copy records passed full-byte equality and the actual landing whitelist. Byte/hash checks are mechanical evidence, not semantic approval or reading.
+
+One correction helper failed after the successful canonical execution because its HTML checker cleared paragraph context on the nested lab closing tag. Its exact helper/streams/exit and full partial active273 tree are retained under failed-attempt01/; recover-checker-v2 corrects that checker and completes interfaces without rerunning the canonical generator. Initial earlier failures are also retained. Bounded inspection output truncations were recovered with targeted reads; no truncated middle was treated as read.
+
+complete-active273.diff.txt contains every exact changed/new active file diff; complete-json-before-after.json contains complete changed JSON values. source-version-transitions.json maps every changed initial path to its immutable preserved copy and distinguishes old shared proof claims from current outputs. before-manifest.json and after-manifest.json enumerate the complete corresponding trees. Current273 freeze SHA256 {pin(D/'freeze.json')['sha256']}; correction proof SHA256 {pin(C/'proof.json')['sha256']}. The correction freeze enumerates every current correction file except itself, including the failed-attempt nested freeze.
+
+No repository/source/master/index/original/semantic-review changes, landing, build, commit or independent approval occurred. Root must dispatch the distinct reviewer for the scoped re-review.
+'''
+(C/'report.md').write_text(report)
+allowed=['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit']
+for base in [C,D]:
+ for f in base.rglob('*'):
+  if f.is_file():assert f.suffix.lower() in allowed
+root=j(B/'correction-01/proof.json')
+for name,snap in root['snapshots'].items():assert inv(I/name)==snap['files']
+for seq in ['271','272']:assert inv(B/'reconciled'/seq)==inv(I/'reconciled'/seq)
+for name in ['semantic-review','root-reconciliation-verification']:assert inv(B/name)==root['snapshots'][name]['files']
+assert j(D/'freeze.json')['files']==inv(D,D/'freeze.json')
+save(C/'freeze.json',dict(scope='All current correction files except this top freeze itself. All nested historical freezes are retained.',timestamp=now(),producer='Codex reused non-author /root/c05_253_255_reconcile',provisional=True,semantic_approval=False,files=inv(C,C/'freeze.json')))
+assert j(C/'freeze.json')['files']==inv(C,C/'freeze.json')
+print(json.dumps(dict(status='DONE frozen correction; distinct semantic re-review required',current273_freeze=pin(D/'freeze.json'),correction_freeze=pin(C/'freeze.json'),proof=pin(C/'proof.json'),current273_files=len(j(D/'freeze.json')['files']),correction_files=len(j(C/'freeze.json')['files']),changed_active_files=[x['original_active_path'] for x in trans]),indent=2))

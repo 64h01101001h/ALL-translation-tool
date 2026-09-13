@@ -1,0 +1,93 @@
+from pathlib import Path
+import json,sys,os,hashlib,gzip,subprocess,datetime,difflib,re,sqlite3
+from html.parser import HTMLParser
+sys.dont_write_bytecode=True
+R=Path(__file__).resolve().parents[4];B=R/'campaign-artifacts/C05-271-273';W=R/'campaign-worktree';O=B/'reconciled/271'
+def save(p,d):p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def sha(b):return hashlib.sha256(b).hexdigest()
+helper=R/'campaign-artifacts/copy_evidence_once_v2.py';extra=[W/'data/hgm_dictionary_v27_2.json.gz',W/'data/full_parallel_corpus_v32.json.gz',R/'campaign-artifacts/verify_review_copy_and_register.py']
+argv=[sys.executable,'-B',str(helper),str(O),str(O/'original-copy-manifest.json')]+[str(p) for p in extra];run=subprocess.run(argv,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+(O/'supplement-copy.stdout.txt').write_bytes(run.stdout);(O/'supplement-copy.stderr.txt').write_bytes(run.stderr);(O/'supplement-copy.exit.txt').write_text(str(run.returncode)+'\n');save(O/'supplement-copy.command.json',dict(argv=argv,cwd=str(R),exit=run.returncode,environment={'PYTHONDONTWRITEBYTECODE':'1'},helper=pin(helper)));assert run.returncode==0
+master=json.loads(gzip.decompress(extra[0].read_bytes()));save(O/'las-original-tier-records.json',{k:[x for x in master[k] if x.get('wylie')=='las'] for k in ['unified_entries','curated_entries','glossary_entries']})
+physical=json.loads((O/'physical-reopened-full.json').read_text());x=next(x for x in physical if x.get('course')=='C15' and x.get('selected_context_seq')==271);p=Path(x['original']['path']);raw=p.read_bytes();extent=raw[279252:280288];(O/'C15-271-complete-physical.bin').write_bytes(extent)
+save(O/'C15-271-physical-supplement.json',dict(original=pin(p),range=[279252,280288],copy=pin(O/'C15-271-complete-physical.bin'),complete_extent_latin1=extent.decode('latin1'),prior_extent=x,decision='The English original extent279252–279507 ends mid-ACIP. Preserve it as historical partial evidence and reopen the entire selected ACIP plus English through the next selected paragraph. The original full source file is copied unchanged.'))
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+probes=[]
+for seq,term in [(271,'moon in springtime'),(272,'craving spirits, even the light of the moon'),(273,'that substance we call')]:
+ sql="select * from corpus_segments where (course='C16' or course='P1' or course like 'TCS%') and english like ? order by course,seq";params=['%'+term+'%'];rows=[dict(r) for r in db.execute(sql,params)];probes.append(dict(seq=seq,sql=sql,parameters=params,count=len(rows),rows=rows))
+save(O/'refutation-targeted-queries-full.json',probes)
+sources={r['seq']:r for r in json.loads((O/'context-full-rows.json').read_text())};rows=json.loads((O/'corpus-full-rows.json').read_text());register=json.loads((O/'governing/docs/errata_register.json').read_text());assert len(register)==192
+register_hits={seq:[r for r in register if re.search(r'C05[: ]+'+str(seq)+r'\b',json.dumps(r))] for seq in [271,272,273]};assert all(not r for r in register_hits.values())
+save(O/'register-check.json',dict(register_pin=pin(O/'governing/docs/errata_register.json'),entries=len(register),current_citation_hits=register_hits,classes_checked=['SHl converter drop','footnote fusion','folio/caption splice','following-section heading','running head E-071','1500-character cap E-107'],current_english_lengths={seq:len(sources[seq]['english']) for seq in [271,272,273]},result='No current selected-row instance; verse lineation and physical whitespace remain verbatim.'))
+candidates={271:[('a sensation of cold','a sensation cold','C15:416/C18:1130/P7:25 omit of, but C05 source and its complete physical extent contain the grammatical of. Removing of damages ordinary English and lacks a current-source basis.'),('springtime','summertime','HTG2016 entry25699 directly attests springtime, with25698 spring. ILL:2342 has summer in the related verse; that is real contrary evidence but cannot displace defensible current wording.')],272:[('spring','summer','HTG2016 entry25698 explicitly attests spring;25699 springtime and actual C05 physical wording corroborate. ILL:2342, physical label[2337], says Is hot, in the summer; LC Sanskrit grīṣma/nidāgha are contrary reference comparanda, not HGM equivalents. The difference remains unresolved editorially; default refuted=true under(d).'),('In the spring','in the spring','Capital In begins a verse line in the complete original physical excerpt. Source lineation is defensible; no typography correction.')],273:[('covered space','darkness','Full HTG2016 entry14472 contains covered space alongside pitch-black/darkness. Local substance and sun premise confirm technical usage. Reference darkness is not grounds for overriding a positively attested GMR equivalent.'),('************','','The stars are not in C05:273. C18:1132 alone appends a space plus12 stars; this is another-source tail and cannot be filed as a defect in the current selected segment.') ]}
+for seq in [271,272,273]:
+ D=B/'reconciled'/str(seq);verdicts=[]
+ selected_parallels=[r for r in rows if (r['course'],r['seq']) in {271:[('C15',416),('C18',1130),('P7',25),('ILL',2342)],272:[('C15',417),('C18',1131),('P7',26),('ILL',2342)],273:[('C15',418),('C18',1132),('P9',47),('P7',27)]}[seq]]
+ for found,expected,reason in candidates[seq]:
+  present={k:found in sources[seq][k] for k in ['acip','wylie','english']}
+  verdicts.append(dict(seq=seq,found=found,expected=expected,refuted=True,decisive_ground='d' if any(present.values()) else 'a',reason=reason,grounds={
+  'a':dict(verbatim_in_current_fields=present,complete_row=sources[seq]),
+  'b':dict(parallels=selected_parallels,targeted_C16_P1_TCS_probe=next(q for q in probes if q['seq']==seq),ruling='No independently established publication/ingestion lineage. All actual same/different text remains evidence, not a count of independent publications. ILL summer is contrary to C05 spring; P7:27 is later context, not a273 parallel.'),
+  'c':dict(register_entries=192,current_hits=register_hits[seq],ruling='No duplicate current citation found. Registered converter/footnote/folio/heading/cap classes checked; other-source tails and authentic verse lineation do not create a current erratum.'),
+  'd':dict(ruling=reason,uncertainty_default='Refuted=true unless all five grounds survive. No source correction or glossary promotion.'),
+  'e':dict(initial_query_sets=150,all_initial_query_counts_and_complete_results_replayed=True,targeted_count=next(q['count'] for q in probes if q['seq']==seq),english_characters=len(sources[seq]['english']),original_spans=sum(len(json.loads((B/f'{angle}/{seq}/spec.json').read_text())['segments'][0]['spans']) for angle in ['tibetan','english']),ruling='Counts measured from reopened rows/specs; embedded master corpus_n_segments is preserved historical metadata, not asserted as a new exact current query count.')},surviving_erratum=False))
+ save(D/'errata-five-ground-decisions.json',verdicts)
+ # Details supplement the unchanged canonical notes.
+ save(D/'material-rulings.json',dict(seq=seq,provisional=True,role='Codex reused non-author reconciler, not semantic approver',source_evidence='../271/capture-proof.json',original_producers={'tibetan':'primary root, prior own preparation disclosed','english':'reused /root/c05_262_264_english'},key_rulings={271:['The current season terms are established whole d5 units; full HTG2016 support means d3 is unnecessarily broad in depth, not in byte range.','Both lhan cig byed modifiers are co-acting/contributing inside their own complete factors, based on morphology and local relation, not subtraction or unglossed standalone promotion.','la brten nas includes both dependence and its subordinating relation at d3; nas is not nulled inside its positive parent. Closing phyir remains distributed in example-as-reason framing, omitted rather than uncertain null.','kyi after yi dvags has its own karma-of relation; kyi after lus shes marks the experiencer relation recast as experienced by. Inflected myong byar gyur pa\'i is an object-of-experience nominal relative, not another gets; myong alone owns experienced and the residual grammar stays unwrapped.','Whole lus shes licenses internal of the body; leading the before consciousness and material cause lack an independent licensor and stay outside.','Original raw glossary las includes karma; curated0011/unified19341 deeds/deed stays unchanged.'],272:['The expanded full25568 title includes bracketed author, but this author is explanatory, not an independent source member; retain title and reverse-order Friend/Letter siblings.','Original glossary las includes states and which states: these are positive attribution renderings. Here gsungs owns states while las contributes source attribution with no independent token. Its null asserts only absence of a separate exponent, not absent meaning.','rnams plurality is fused; ni topics have no separate marker; is in the hot predicate is supplied English predication, not proof ni means is here.','Both bound \'ang are positive even counterparts. They are inside zla ba\'ang/nyi ma\'ang but may not be detached as flat d6; enclosing even the light of the moon or even the winter sun as invented d5 parents would absorb unrelated material. Omit with positive evidence, not null.','The initial yin te/assertion, they and sensation reprises, dus in the seasonal construction, zhes quotation grammar and nominal pa\'i remain unwrapped with exact complement ranges.'],273:['Whole dbang gis skye ba preserves both causal relation and arising at phrase depth;13091 already includes caused by but that does not prove first skye ba has no contribution. Avoid isolated caused=skye ba.','Both actual originals already put spyir at d5; dispatch wording about their depths differing is overly broad. All three steng du are lexicalized relational expressions with full6941 support, not separate speculative steng or du glosses.','Whole der thal is explicitly supported23514 and local conclusion syntax. Retain at d3; isolated thal/fact is not the proposed claim.','yang at3–7 is topic/discourse and omitted;136–140 owns at all;182–186 adds the parallel negative clause and owns and199–202, not time/place and80–83.','First phyir links the general counterstatement and its evidence as reason; its English for precedes generally speaking, with colon before concrete grounds. Final phyir owns final for. All three med have separate exact ranges.']}[seq]))
+ # Exact originals remain intact, including nested failed/superseded versions.
+ freezechecks=[]
+ for angle in ['tibetan','english']:
+  P=B/angle/str(seq);f=json.loads((P/'freeze.json').read_text());items=f['files'];items=items.items() if isinstance(items,dict) else [(r.get('relative_path',r['path']),r) for r in items];expected={}
+  for name,r in items:
+   name=str(Path(name).relative_to(P)) if Path(name).is_absolute() else name;assert name not in expected;expected[name]=r
+  actual={str(p.relative_to(P)) for p in P.rglob('*') if p.is_file() and p.name!='freeze.json'}
+  # Original trees have no nested freeze names excluded by these original schemas.
+  actual={str(p.relative_to(P)) for p in P.rglob('*') if p.is_file() and p!=P/'freeze.json'};assert actual==set(expected)
+  for name,r in expected.items():
+   pinx=pin(P/name);assert pinx['sha256']==r['sha256'] and pinx['bytes']==r['bytes']
+  freezechecks.append(dict(angle=angle,files=len(actual),freeze=pin(P/'freeze.json')))
+ save(D/'original-freeze-recheck.json',freezechecks)
+ final=json.loads((D/'final-tuples.json').read_text());dispositions=json.loads((D/'original-dispositions.json').read_text());assert len(dispositions)==sum(len(json.loads((B/f'{a}/{seq}/spec.json').read_text())['segments'][0]['spans']) for a in ['tibetan','english'])
+ for f in final:assert len(f)==7
+ for d in dispositions:assert len(d['original_identity'])==8 and list(d['original_span'])==d['original_key_order'] and sorted(d['original_span'])==d['original_field_presence']
+ proof=json.loads((D/'final-proof.json').read_text());assert pin(D/'spec.json')==proof['spec'] and pin(D/'body.html')==proof['body'];assert (D/'body.html').read_bytes()==(D/'canonical-attempt01/stdout.html').read_bytes();assert (D/'spec.json').read_bytes()==(D/'canonical-attempt01/stdin.json').read_bytes()
+ # Read actual body and recover complete displayed source paragraphs independently.
+ class Parser(HTMLParser):
+  def __init__(self):super().__init__(convert_charrefs=True);self.depth=0;self.current=None;self.side=None;self.parts={}
+  def handle_starttag(self,t,a):
+   attrs=dict(a)
+   if t=='div' and attrs.get('class') in ['tib','eng']:self.side=attrs['class']
+   if t=='span':
+    if self.depth:self.depth+=1
+    elif attrs.get('data-d')=='1':self.current=self.side;self.parts[self.current]=[];self.depth=1
+  def handle_endtag(self,t):
+   if t=='span' and self.depth:
+    self.depth-=1
+    if not self.depth:self.current=None
+  def handle_data(self,d):
+   if self.current:self.parts[self.current].append(d)
+ parser=Parser();parser.feed((D/'body.html').read_text());assert set(parser.parts)=={'tib','eng'}
+ for field,sf in [('tib','wylie'),('eng','english')]:assert ''.join(parser.parts[field])==sources[seq][sf]
+ save(D/'source-preservation-proof.json',dict(source_row=sources[seq],spec=proof['spec'],body=proof['body'],all_final_tuple_substrings_exact=all(sources[seq]['wylie'][f['tib_range'][0]:f['tib_range'][1]]==f['tib'] and (f['eng'] is None or sources[seq]['english'][f['eng_range'][0]:f['eng_range'][1]]==f['eng']) for f in final),html_paragraph_classes_found=list(parser.parts),body_exact_canonical_stdout=True,original_dispositions=len(dispositions),final_tuples=len(final)))
+ report=[f'C05:{seq} — PROVISIONAL reconciliation by Codex, reused non-author /root/c05_253_255_reconcile.',
+ 'Neither current original was authored here. Root authored Tibetan with disclosed preparation; the reused English peer authored English. This is not semantic approval.',
+ f'Final spans={proof["spans"]}; nulls={proof["nulls"]}; non-null d5={proof["d5"]}; errata=0; all {len(dispositions)} current-segment original identities have individual dispositions.',
+ {271:'Retain whole seasonal d5 terms and both co-acting/contributing members; combine la brten nas as two d3 Based on phrases, replacing split particles and covered nas nulls.',272:'Retain established title with reverse-order Friend/Letter members, excluding bracketed author. Keep source/topic nulls and proven plural fusion; tighten gsungs pa to gsungs.',273:'Retain joint dbang gis skye ba/caused by, lexical spyir/steng du, whole der thal assertion at d3, second negative yang/and and both causal for occurrences.'}[seq],
+ {271:'Second/fourth provides, four reg bya, second/fourth body and two experienced/gets groups retain their own exact ranges. Closing phyir is distributed, not nulled.',272:"Both bound 'ang have even counterparts but lack a defensible compound parent; omit, never null. Initial assertion/sensation reprise and remaining grammar stay unwrapped.",273:'The initial yang and time/place and remain unwrapped; three med predicates resolve nothing/nothing/not exist. No isolated thal/fact or skye ba/caused claim.'}[seq],
+ 'Full final seven-key tuples/rationales: final-tuples.json and final-decisions.json; all exact original eight-key identities, fields, parentage and declarations: original-dispositions.json.',
+ 'Every unwrapped source/English complement is retained in omissions-full.json; disagreements and positive contrary evidence are detailed in material-rulings.json.',
+ 'All six original actual canonical outputs replayed byte-exact; all198 original spans resolved independently. Original failed/superseded versions and freezes remain in ../271/original-copy-manifest.json mappings.',
+ 'Complete source rows,150 initial full query replays,92 full entry rows,87 raw corpus rows, master tier records and physical witnesses were reopened; ../271/capture-proof.json and evidence files preserve provenance.',
+ 'C05 says spring; ILL:2342 physical[2337] says summer. HTG2016 supports spring/springtime, so correction is refuted under(d) and uncertainty default; no publication independence is invented.',
+ 'C15/C18/P7 omit of before cold; C18:1132 appends13 characters and P9:47 a later selection. Full witnesses and differences are preserved; P7:27 is later context.',
+ 'English original C15:271 physical extent stopped mid-ACIP; the exact old extent remains and a full279252–280288 supplement was independently reopened.',
+ 'Every suspicion has all five grounds in errata-five-ground-decisions.json; errata.json=[]; no source/master/hgm_gloss mutation or proposed head allowance is needed.',
+ f'Actual canonical generator EXIT=0; stderr=0 bytes; body={proof["body"]["bytes"]} bytes. Complete argv/stdin/stdout/stderr/exit and canonical pins: canonical-attempt01/.',
+ f'Spec: {proof["spec"]["bytes"]} bytes; SHA256={proof["spec"]["sha256"]}.',f'Body SHA256={proof["body"]["sha256"]}.',
+ 'Approved evidence-copy v2 was explicitly invoked; every source alias/copy is byte-compared. The reading-index candidate was not used.',
+ 'First capture failed on master container key entries; exact helper/streams survive. Recovery reads actual unified_entries and preserves earlier successful evidence. All canonical attempts passed.',
+ 'Read-only sources and immutable7166534 governing objects retained; SQLite URI mode=ro plus query_only; Python bytecode disabled. Separate semantic review is required before landing.'
+ ];(D/'report.md').write_text('\n'.join(report)+'\n')
+print(json.dumps({'status':'PASS','final_spans':102,'original_dispositions':198,'errata':0,'targeted_probe_counts':[p['count'] for p in probes]}))

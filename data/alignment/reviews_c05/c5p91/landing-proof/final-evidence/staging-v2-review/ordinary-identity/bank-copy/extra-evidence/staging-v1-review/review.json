@@ -1,0 +1,68 @@
+{
+  "verdict": "NEEDS_CORRECTION",
+  "role": "Independent tooling reviewer; reused semantic reconciler, no new semantic approval",
+  "findings": [
+    {
+      "id": "STAGE273-01",
+      "priority": "P1",
+      "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-preparation/staging-helper/verify_staged_through273.py",
+      "lines": [
+        123,
+        129
+      ],
+      "title": "Consume the actual two-verdict dictionary freeze schema",
+      "problem": "The actual current semantic freeze has spec_verdict/quality_verdict=APPROVE and a dict of2032 relative-path\u2192pin records. There is no verdict key. Line123 raises KeyError; after fixing that, lines125\u2013126 iterate strings and raise TypeError treating a dict key as a row. This is a guaranteed rejection before any later proof checks.",
+      "required_change": "Explicitly require both current verdict fields, iterate files.items(), validate each relative key and bytes/sha256 pin, and retain the exact inventory comparison. Do not silently reinterpret the old270 schema as current approval.",
+      "evidence": [
+        "actual-current/semantic-review/freeze.json",
+        "regression-results.json"
+      ]
+    },
+    {
+      "id": "STAGE273-02",
+      "priority": "P1",
+      "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-preparation/staging-helper/verify_staged_through273.py",
+      "lines": [
+        261,
+        271
+      ],
+      "title": "Require allowance staging only for actual additions",
+      "problem": "Current span-head-allow-needed.json and actual review-copy-and-register-proof.json both contain pages_c05:{}; this is truthy although the nested additions count is zero. Lines268\u2013269 require unchanged span_head_allow.json, and the exact staged-set check at422 then fails because ordinary git add cannot make a byte-identical tracked file a staged change. It also pollutes the exact payload-manifest required set.",
+      "required_change": "Determine actual nonempty category additions while preserving the original wanted object for provenance. With zero additions require full byte identity to baseline and omit the allowance file from changed requirements. Do not force whitespace/reserialization to manufacture a change.",
+      "evidence": [
+        "actual-current/semantic-review/span-head-allow-needed.json",
+        "actual-current/landing/review-copy-and-register-proof.json",
+        "actual-helpers/verify_review_copy_and_register.py.txt",
+        "regression-results.json"
+      ]
+    },
+    {
+      "id": "STAGE273-03",
+      "priority": "P1",
+      "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-preparation/staging-helper/verify_staged_through273.py",
+      "lines": [
+        113,
+        114
+      ],
+      "related_lines": [
+        431
+      ],
+      "title": "Use an honest untracked-list transition boundary",
+      "problem": "The command-dependency plan explicitly requires a full raw untracked list captured before staging. The new page/spec/review paths are then untracked; staging removes them. Requiring the original list unchanged at114 and431 rejects authorized staging. The private Git fixture captures new-page.txt plus unrelated.txt, stages only the new file, and proves that the remaining list contains only unrelated.txt.",
+      "required_change": "Preserve the true pre-stage raw stream and command, then derive the exact residual by removing only independently authorized newly tracked paths, verifying the full authorized new-path set against baseline/index and rejecting all other drift. Alternatively define and name a genuinely stable pre-landing or post-stage residual boundary explicitly; do not relabel a post-stage capture pre-stage.",
+      "evidence": [
+        "candidate/command-dependency-plan.json",
+        "fixture-commands/2/stdout.bin",
+        "fixture-commands/4/stdout.bin",
+        "regression-results.json"
+      ]
+    }
+  ],
+  "tests": 7,
+  "test_failures": 0,
+  "candidate_executions": 0,
+  "live_index_reads": 0,
+  "live_index_writes": 0,
+  "semantic_approval": false,
+  "source_versions_preserved": 65
+}

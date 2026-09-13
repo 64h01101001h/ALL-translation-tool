@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-09-13T00:56:32.619626+00:00",
+  "original_helper_sha256": "18b8fc757bf21f2f82451b7b2046e5002e264083eba402cf0b29b0a14658fc4a",
+  "v2_helper_sha256": "f5185166f705afd1fe865c664663359c5fcef2892cdb0a1a57266cd667cc86c9",
+  "failure": "Full pin object equality compared literal recorded fixture symlink paths with resolved paths. Actual full bytes/size/hash were identical for all three fixtures; no source change.",
+  "changes": [
+    "Keep the exact original interface path spelling when comparing pins.",
+    "Allow the two already-written immutable supplemental result files only after exact complete-byte equality. No overwrite."
+  ],
+  "original_attempt_retained": true,
+  "semantic_outputs_changed": false
+}

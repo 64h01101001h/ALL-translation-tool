@@ -1,0 +1,21 @@
+from pathlib import Path
+import json,hashlib,os,datetime
+R=Path(__file__).resolve().parent;C=R.parent/'whitespace-candidate-273-v2'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+assert not (R/'freeze.json').exists()
+assert pin((C/'freeze.json').read_bytes())['sha256']=='ff3c006dbb5c86c4111ee62674b46861cdecb909646657a1484ca4e5b3bd2b46'
+for r in json.loads((R/'original-to-copy-manifest.json').read_bytes()):
+ b=(R/r['copy']).read_bytes();assert b==Path(r['original']).read_bytes();assert pin(b)=={k:r[k] for k in ['bytes','sha256']}
+files={};symlinks={}
+for p in sorted(R.rglob('*')):
+ rel=str(p.relative_to(R))
+ if p.is_symlink():symlinks[rel]=dict(target=os.readlink(p),resolved=str(p.resolve(strict=True)),is_file=p.is_file())
+ if p.is_file():
+  assert p.suffix in {'.json','.md','.txt','.bin','.csv','.html','.gz','.png','.pdf'},rel
+  files[rel]=pin(p.read_bytes())
+f=dict(spec_verdict='APPROVE',quality_verdict='APPROVE',approval_scope='Exact v2 code and predicates only; actual prepare/audit pending',open_findings=0,resolved_findings=3,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),candidate_pin=pin((C/'whitespace273.py').read_bytes()),candidate_freeze=pin((C/'freeze.json').read_bytes()),files=files,file_count=len(files),total_bytes=sum(x['bytes'] for x in files.values()),symlinks=symlinks,excluded_only='freeze.json',original_mapping_count=1014)
+(R/'freeze.json').write_text(json.dumps(f,indent=2,ensure_ascii=False)+'\n')
+assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()}==set(files)|{'freeze.json'}
+for rel,rec in files.items():assert pin((R/rel).read_bytes())==rec
+for rel,rec in symlinks.items():assert os.readlink(R/rel)==rec['target'] and str((R/rel).resolve(strict=True))==rec['resolved']
+print(json.dumps(dict(status='DONE SPEC/QUALITY APPROVE code/predicates only',files=len(files),bytes=f['total_bytes'],symlink_records=len(symlinks),original_mappings=1014,freeze=pin((R/'freeze.json').read_bytes()),report=pin((R/'report.md').read_bytes()),review=pin((R/'review.json').read_bytes()),open_findings=0)))

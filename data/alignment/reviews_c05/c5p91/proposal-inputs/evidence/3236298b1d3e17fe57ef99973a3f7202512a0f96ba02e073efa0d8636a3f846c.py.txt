@@ -1,0 +1,159 @@
+from pathlib import Path
+from datetime import datetime, timezone
+import hashlib, json, os, shutil, sqlite3, subprocess, traceback
+
+B = Path(__file__).resolve().parents[1]
+ROOT = B.parents[1]
+WT = ROOT / 'campaign-worktree'
+R = B / 'semantic-review'
+OUT = Path(__file__).resolve().parent
+HEAD = '7166534a9f47a201e5ab580a843c14ba2a910891'
+ALLOWED = {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+cache = {}
+def readj(p): return json.loads(p.read_text())
+def info(p):
+    p = Path(p)
+    stat = p.stat()
+    key = (str(p), stat.st_size, stat.st_mtime_ns)
+    if key not in cache:
+        h = hashlib.sha256()
+        with p.open('rb') as f:
+            for chunk in iter(lambda: f.read(4 * 1024 * 1024), b''): h.update(chunk)
+        cache[key] = {'bytes': stat.st_size, 'sha256': h.hexdigest()}
+    return cache[key]
+def pin(p, expected):
+    actual = info(p)
+    assert actual == {k: expected[k] for k in ('bytes','sha256')}, (str(p), actual, expected)
+    return actual
+def inventory(d): return {str(p.relative_to(d)):info(p) for p in sorted(d.rglob('*')) if p.is_file()}
+def git(*args): return subprocess.check_output(['git','-C',str(WT),*args], env={**os.environ,'GIT_OPTIONAL_LOCKS':'0'})
+
+assert not (OUT/'proof.json').exists()
+assert not (OUT/'initial').exists()
+try:
+    before = {'head':git('rev-parse','HEAD').decode().strip(),'status':git('status','--porcelain=v1','-uall').decode()}
+    assert before['head'] == HEAD
+    assert before['status'] == '?? data/teaching/dcc_captions\n', before
+    pin(R/'freeze.json',{'bytes':275730,'sha256':'48c45652d1bc47bbb7446a20153a70c039dd4f2d8431cf4eced8c53689f8b69c'})
+    freeze = readj(R/'freeze.json')
+    files = inventory(R)
+    assert {k:v for k,v in files.items() if k!='freeze.json'} == freeze['files']
+    assert len(freeze['files']) == freeze['file_count'] == 1402
+    assert sum(x['bytes'] for x in freeze['files'].values()) == freeze['total_bytes']
+    manifest = readj(R/'original-to-copy-manifest.json')
+    assert len(manifest) == 9145
+    git_objects = {}
+    git_aliases = 0
+    for m in manifest:
+        cp = R / m['copy']
+        assert cp.resolve().is_relative_to(R.resolve()) and cp.suffix in ALLOWED
+        pin(cp,m)
+        pin(Path(m['original']),m)
+        if 'original_git_commit' in m:
+            git_aliases += 1
+            key=(m['original_git_commit'],m['repository_relative_path'])
+            if key not in git_objects:
+                raw=git('show',key[0]+':'+key[1])
+                git_objects[key]={'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+            assert git_objects[key] == info(cp)
+    assert git_aliases == 128 and len(git_objects)==11
+    assert len({m['copy'] for m in manifest})==1264
+    meta=readj(R/'review.json')
+    assert meta['verdict']==meta['spec_verdict']==meta['quality_verdict']=='NEEDS_CORRECTION'
+    assert len(meta['open_findings'])==1 and meta['open_findings'][0]['id']=='C05-273-CAUSAL-01'
+    assert readj(R/'open-findings.json')==meta['open_findings']
+    assert [x['seq'] for x in meta['segments']]==[271,272,273]
+    totals=[0,0,0]
+    for m in meta['segments']:
+        d=B/'reconciled'/str(m['seq'])
+        for kind in ('spec','body'):
+            f='spec.json' if kind=='spec' else 'body.html'
+            expected={'bytes':m[kind+'_bytes'],'sha256':m[kind+'_sha256']}
+            pin(d/f,expected);pin(R/'reviewed-final'/str(m['seq'])/f,expected)
+        spans=readj(d/'spec.json')['segments'][0]['spans']
+        counts=[len(spans),sum(s['eng'] is None for s in spans),sum(s['d']==5 and s['eng'] is not None for s in spans)]
+        assert counts==[m['span_count'],m['null_count'],m['word_pair_count']]
+        totals=[a+b for a,b in zip(totals,counts)]
+    assert totals==[meta['total_spans'],meta['total_nulls'],meta['total_word_pairs']]==[102,8,63]
+    resolved=readj(R/'resolved-spans.json')
+    assert resolved==readj(B/'root-reconciliation-verification/resolved-spans.json')
+    assert all(list(x)==['seq','id','d','tib','eng','tib_range','eng_range'] for x in resolved)
+    assessments=readj(R/'span-semantic-review.json')
+    assert [x['tuple'] for x in assessments]==resolved
+    assert sum(x['verdict']=='NEEDS_CORRECTION' for x in assessments)==1
+    report=(R/'review.md').read_text()
+    assert all(x['reason'] in report for x in assessments)
+    originals=[]
+    for seq in (271,272,273): originals.extend(readj(B/'reconciled'/str(seq)/'original-dispositions.json'))
+    dispositions=readj(R/'original-disposition-review.json')
+    assert [x['original_record'] for x in dispositions]==originals and len(originals)==198
+    identity_keys=['original_identity','original_span','original_key_order','original_field_presence','original_parent_id','original_occurrence_declaration']
+    independent_identities=readj(R/'independent-original-identities.json')
+    def identity_key(x):
+        i=x['original_identity']; return i['angle'],i['seq'],i['id']
+    expected_identities=[{k:o[k] for k in identity_keys} for o in originals]
+    assert len(independent_identities)==len(expected_identities)==198
+    assert len({identity_key(x) for x in independent_identities})==198
+    assert {identity_key(x):x for x in independent_identities}=={identity_key(x):x for x in expected_identities}
+    declared_order=[(a,s,p['id']) for a in ('tibetan','english') for s in (271,272,273) for p in readj(B/a/str(s)/'spec.json')['segments'][0]['spans']]
+    assert [identity_key(x) for x in independent_identities]==declared_order
+    executions=readj(R/'independent-executions.json')
+    assert len(executions)==9
+    assert {(x['angle'],x['seq']) for x in executions}=={(a,s) for a in ('tibetan','english','reconciled') for s in (271,272,273)}
+    for x in executions:
+        assert x['exit']==0
+        for field in ('stdin','stdout','stderr','wrapper'): pin(Path(x[field]['path']),x[field])
+        ep=Path(x['stdout']['path']).parent
+        assert (ep/'exit.txt').read_text().strip()=='0'
+        assert readj(ep/'command.json')==x
+        assert x['stderr']['bytes']==0 and x['environment']['PYTHONDONTWRITEBYTECODE']=='1'
+        d=B/x['angle']/str(x['seq'])
+        assert Path(x['stdin']['path']).read_bytes()==(d/'spec.json').read_bytes()
+        assert Path(x['stdout']['path']).read_bytes()==(d/'body.html').read_bytes()
+    reopen=readj(R/'independent-reopen-proof.json')
+    for x in [reopen['spine_before_after'],*reopen['source_before_after']]: pin(Path(x['path']),x)
+    db=sqlite3.connect(Path(reopen['spine_before_after']['path']).resolve().as_uri()+'?mode=ro',uri=True)
+    db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+    finding=readj(R/'causal-scope-finding-evidence.json')
+    assert finding['finding']==meta['open_findings'][0]
+    assert finding['full_source']==dict(db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',('C05',273)).fetchone())
+    assert finding['full_positive_master_entry']==dict(db.execute('SELECT * FROM entries WHERE id=?',(11962,)).fetchone())
+    for row in finding['parallel_full_rows']:
+        assert row==dict(db.execute('SELECT * FROM corpus_segments WHERE id=?',(row['id'],)).fetchone())
+    errata=readj(R/'independent-errata-refutations.json')
+    assert len(errata)==6 and readj(R/'bank-ready-errata.json')==[]
+    for row in errata:
+        assert row['refuted'] and set(row['five_grounds'])==set('abcde')
+        assert row['original_complete_decision'] in readj(B/'reconciled'/str(row['seq'])/'errata-five-ground-decisions.json')
+        g=row['five_grounds'];src=dict(db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',('C05',row['seq'])).fetchone())
+        assert g['a']['current_full_source']==src
+        assert g['a']['found_verbatim']=={k:row['found'] in src[k] for k in ('wylie','english','acip')}
+        p=g['b']['probe'];actual=[dict(x) for x in db.execute(p['sql'],p['parameters'])]
+        assert actual==p['rows']==p['independent_rows']==[] and p['count']==0
+        assert not g['b']['independent_publication_established'] and g['c']['current_hits']==[]
+        assert g['e']['counts_rechecked']['english_characters']==len(src['english'])
+    db.close()
+    final=readj(R/'final-preservation-proof.json')
+    for field,name in [('review','review.md'),('review_json','review.json'),('resolved_spans','resolved-spans.json')]: pin(R/name,final[field])
+    assert final['manifest_records']==len(manifest) and final['canonical_runs']==len(executions)
+    snapshots={}
+    source_transports=[]
+    for rel in ('reconciled','semantic-review','root-reconciliation-verification'):
+        source=B/rel;dest=OUT/'initial'/rel
+        tree=inventory(source)
+        for name,expected in tree.items():
+            a=source/name;c=dest/name;c.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(a,c);pin(c,expected);pin(a,expected)
+            source_transports.append({'original':str(a),'retained_copy':str(c),'bytes':expected['bytes'],'sha256':expected['sha256']})
+        assert inventory(dest)==tree
+        snapshots[rel]={'files':tree,'file_count':len(tree),'bytes':sum(x['bytes'] for x in tree.values())}
+    after={'head':git('rev-parse','HEAD').decode().strip(),'status':git('status','--porcelain=v1','-uall').decode()}
+    assert before==after
+    proof={'status':'PASS initial NEEDS_CORRECTION review verified and fully preserved; no semantic approval or correction applied','utc':datetime.now(timezone.utc).isoformat(),'review_freeze':info(R/'freeze.json'),'review_report':info(R/'review.md'),'open_findings':meta['open_findings'],'counts':totals,'manifest_records':len(manifest),'Git_aliases':git_aliases,'unique_Git_objects':len(git_objects),'canonical_records_checked':len(executions),'root_role':'Tibetan-original author; mechanical verification and full report read, not independent semantic approval','full_report_and_extra_original_reasons_read':True,'report_truncation_recovered':True,'causal_full_entry_truncation_recovered':True,'snapshots':snapshots,'source_version_transports':source_transports,'worktree_before_after':before,'no_new_canonical_run':True}
+    (OUT/'proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+    print(json.dumps({k:proof[k] for k in ('status','utc','review_freeze','counts','manifest_records','canonical_records_checked')},indent=2))
+except Exception:
+    error={'utc':datetime.now(timezone.utc).isoformat(),'status':'FAILED; preserve this helper and execution; do not reuse partial snapshot as proof','traceback':traceback.format_exc()}
+    p=OUT/'failure-attempt02.json'
+    if not p.exists(): p.write_text(json.dumps(error,indent=2)+'\n')
+    raise

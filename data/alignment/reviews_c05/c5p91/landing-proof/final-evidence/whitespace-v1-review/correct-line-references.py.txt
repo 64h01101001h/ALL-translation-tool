@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,hashlib,os,datetime
+R=Path(__file__).resolve().parent; H=R/'history/before-line-reference-correction';H.mkdir(parents=True,exist_ok=False)
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,o):p.write_text(json.dumps(o,indent=2,ensure_ascii=False)+'\n')
+names=['report.md','review.json','findings.json','evidence-pins.json','original-to-copy-manifest.json','freeze.json']
+history=[]
+for name in names:
+ b=(R/name).read_bytes();(H/name).write_bytes(b);history.append(dict(original_logical_path=str(R/name),immutable_historical_source=str(H/name),**pin(b)))
+f=json.loads((R/'findings.json').read_bytes());prior=[x['lines'] for x in f];correct=[[127,129,140,223,224,225],[57,100,199],[57,91,92,93,97,199]]
+for rec,lines in zip(f,correct):rec['lines']=lines
+save(R/'findings.json',f)
+e=json.loads((R/'evidence-pins.json').read_bytes());e['findings.json']=pin((R/'findings.json').read_bytes());save(R/'evidence-pins.json',e)
+r=json.loads((R/'review.json').read_bytes());r['open_findings']=f;r['evidence_pins']=e;r['line_reference_correction_history']='history/before-line-reference-correction';save(R/'review.json',r)
+save(R/'line-reference-correction.json',dict(reason='Final numbered source inspection found approximate machine-readable line references. Corrected only exact line references and their dependent pins; all three findings, verdicts, actual proofs, copy manifest and report bytes unchanged. No checks rerun.',before=prior,after=correct,history=history,source=pin((R/'candidate/whitespace273.py.txt').read_bytes())))
+files={}
+for p in sorted(R.rglob('*')):
+ if p.is_file() and p!=R/'freeze.json':
+  rec=pin(p.read_bytes())
+  if p.is_symlink():rec.update(is_symlink=True,symlink_target=os.readlink(p),resolved_target=str(p.resolve(strict=True)))
+  files[str(p.relative_to(R))]=rec
+old=json.loads((H/'freeze.json').read_bytes());new={**old,'created_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':files,'total_files':len(files),'total_bytes':sum(x['bytes'] for x in files.values()),'line_reference_correction_history':'line-reference-correction.json'};save(R/'freeze.json',new)
+for rel,rec in files.items():assert pin((R/rel).read_bytes())=={k:rec[k] for k in ('bytes','sha256')}
+assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()}==set(files)|{'freeze.json'}
+print(json.dumps(dict(status='DONE NEEDS_CORRECTION',files=len(files),bytes=new['total_bytes'],original_mappings=new['original_to_copy_mappings'],freeze=pin((R/'freeze.json').read_bytes()),report=pin((R/'report.md').read_bytes()),review=pin((R/'review.json').read_bytes()),findings=3)))

@@ -1,0 +1,47 @@
+"""Complete candidate banking write method on isolated, retained real files."""
+from pathlib import Path
+import json,hashlib,importlib.util,unittest,types,copy
+D=Path(__file__).resolve().parent
+s=importlib.util.spec_from_file_location('c',D/'verify_staged_through273.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+def write(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,indent=2)+'\n')
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+class Tests(unittest.TestCase):
+ def setup_case(self,label):
+  root=D/'fixtures'/'bank-final'/label;root.mkdir(parents=True,exist_ok=False)
+  w=root/'worktree';w.mkdir();b=root/'C05-271-273';l=b/'landing';l.mkdir(parents=True)
+  stem=l/'untracked-before';Path(str(stem)+'.stdout').write_bytes(b'page\0unrelated\0')
+  c=object.__new__(m.Check);c.w=w.resolve();c.b=b.resolve();c.l=l.resolve();c.bank_rel=Path('data/alignment/reviews_c05/c5p91');c.inputs={};c.required={};c.retained_originals=set()
+  bank=c.bank_rel/'landing-proof';before={'files':[{'original':str(l/'proof-a'),'copy':'proof-a',**pin(b'a')}],'external_actual_bytes_retained':[]};final={'files':before['files']+[{'original':str(l/'proof-b'),'copy':'proof-b',**pin(b'b')},{'original':str(l/'root-proof-copy-manifest-before-whitespace.json'),'copy':'root-proof-copy-manifest-before-whitespace.json',**pin(b'previous')}],'external_actual_bytes_retained':[]}
+  raws=[json.dumps(x).encode() for x in [before,final]]
+  paths=[{'proof-a','root-proof-copy-manifest-before-whitespace.json'},{'proof-b','root-proof-copy-manifest.json'}]
+  run_dirs=[root/'ordinary-run',root/'final-run'];helper=root/'bank.py';helper.write_bytes(b'# candidate code pin\n')
+  for i,(phase,run,name,new) in enumerate(zip(['ordinary','final-whitespace'],run_dirs,['root-proof-copy-manifest-before-whitespace.json','root-proof-copy-manifest.json'],paths)):
+   run.mkdir();events=[str(w/bank/x) for x in sorted(new)]+[str(l/name)]
+   invocation=dict(argv=[str(helper),'--phase',phase,'--batch',str(b),'--worktree',str(w),'--run-output',str(run),'--untracked-capture-stem',str(stem)],cwd=str(root))
+   result=dict(status='PASS',phase=phase,manifest_path=str(l/name),manifest_pin=pin(raws[i]),source_records=len([before,final][i]['files']),external_records=0,writes=events)
+   write(run/'invocation.json',invocation);write(run/'result.json',result);write(run/'write-events.json',events)
+   inputs={str(Path(str(stem)+'.stdout')):pin(b'page\0unrelated\0'),str(helper):pin(helper.read_bytes())};write(run/'input-pins.json',inputs)
+   write(run/'head-command.json',dict(argv=['git','rev-parse','HEAD'],cwd=str(w),environment_overrides={'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1'}))
+   (run/'head-stdin.bin').write_bytes(b'');(run/'head-stdout.txt').write_bytes((m.BASE+'\n').encode());(run/'head-stderr.txt').write_bytes(b'');(run/'head-exit.txt').write_bytes(b'0\n')
+   for x in new:c.required[str(bank/x)]=b'irrelevant-to-boundary-unit'
+   if i==0:c.retained_originals.update(str(x.resolve()) for x in run.iterdir())
+  c.args=types.SimpleNamespace(banking_ordinary_run=str(run_dirs[0]),banking_final_run=str(run_dirs[1]),untracked_before=str(stem)+'.stdout')
+  return c,before,raws[0],final,raws[1],run_dirs
+ def test_exact_two_phase_write_boundary(self):
+  c,*args,runs=self.setup_case('control');paths,written=c.verify_banking_writes(*args);self.assertEqual(paths,written);self.assertEqual(len(paths),4)
+ def test_rejects_missing_write_event(self):
+  c,*args,runs=self.setup_case('missing-event');events=json.loads((runs[1]/'write-events.json').read_text());write(runs[1]/'write-events.json',events[:-1])
+  with self.assertRaises(AssertionError):c.verify_banking_writes(*args)
+ def test_rejects_consistently_pinned_unrelated_write(self):
+  c,*args,runs=self.setup_case('extra-event');p=runs[1];result=json.loads((p/'result.json').read_text());result['writes'].append(str(c.w/'unrelated'));write(p/'result.json',result);write(p/'write-events.json',result['writes'])
+  with self.assertRaises(AssertionError):c.verify_banking_writes(*args)
+ def test_rejects_changed_manifest_pin(self):
+  c,*args,runs=self.setup_case('manifest-pin');p=runs[1]/'result.json';r=json.loads(p.read_text());r['manifest_pin']['sha256']='0'*64;write(p,r)
+  with self.assertRaises(AssertionError):c.verify_banking_writes(*args)
+ def test_rejects_changed_capture_after_bank_invocation(self):
+  c,*args,runs=self.setup_case('capture-pin');Path(c.args.untracked_before).write_bytes(b'wrong\0')
+  with self.assertRaises(AssertionError):c.verify_banking_writes(*args)
+ def test_rejects_unretained_ordinary_run(self):
+  c,*args,runs=self.setup_case('unretained');c.retained_originals.remove(str(runs[0]/'result.json'))
+  with self.assertRaises(AssertionError):c.verify_banking_writes(*args)
+if __name__=='__main__':unittest.main(verbosity=2)

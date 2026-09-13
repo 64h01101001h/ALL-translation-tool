@@ -1,0 +1,116 @@
+{
+  "status": "PREPARED_NOT_EXECUTED_PENDING_ROOT_REVIEW",
+  "commands": [
+    {
+      "phase": "ordinary",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-preparation/banking-helper/bank_root_proofs_through273.py",
+        "--batch",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273",
+        "--worktree",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+        "--payload-manifest",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-payload-manifest.json",
+        "--payload-source-proof",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-payload-source-proof.json",
+        "--untracked-capture-stem",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staging-untracked-before",
+        "--phase",
+        "ordinary",
+        "--run-output",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-banking-runs/ordinary",
+        "--extra-inputs",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/banking-ordinary-extra-inputs.json"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "executed": false,
+      "external_caller_streams": "Capture command/stdin/stdout/stderr/exit outside the live batch landing directory; later final phase must inventory ordinary run evidence explicitly. Final caller outputs belong to a later explicit proof boundary."
+    },
+    {
+      "phase": "final-whitespace",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-preparation/banking-helper/bank_root_proofs_through273.py",
+        "--batch",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273",
+        "--worktree",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+        "--payload-manifest",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-payload-manifest.json",
+        "--payload-source-proof",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-payload-source-proof.json",
+        "--untracked-capture-stem",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staging-untracked-before",
+        "--phase",
+        "final-whitespace",
+        "--run-output",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-banking-runs/final-whitespace",
+        "--extra-inputs",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/banking-final-whitespace-extra-inputs.json",
+        "--whitespace-inputs",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/banking-whitespace-inputs.json"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "executed": false,
+      "external_caller_streams": "Capture command/stdin/stdout/stderr/exit outside the live batch landing directory; later final phase must inventory ordinary run evidence explicitly. Final caller outputs belong to a later explicit proof boundary."
+    }
+  ],
+  "manifest_contract": {
+    "files": "[{original,copy,bytes,sha256}]",
+    "external_actual_bytes_retained": "[{path,bytes,sha256,disposition}]",
+    "semantic_review_unchanged": true,
+    "ordinary": "landing/root-proof-copy-manifest-before-whitespace.json and exact review/landing-proof copy, both fresh",
+    "final": "landing/root-proof-copy-manifest.json and exact review/landing-proof copy, both fresh; all earlier original/copy/manifest bytes rechecked, none replaced"
+  },
+  "explicit_inventory_contract": {
+    "schema": [
+      {
+        "original": "absolute existing original file path",
+        "retention": "bank OR external",
+        "bytes": "actual byte count",
+        "sha256": "actual full SHA256",
+        "copy": "relative landing-proof target, required for bank",
+        "disposition": "full external retention reason, required for external"
+      }
+    ],
+    "requirements": [
+      "Root supplies actual complete inventories, not this placeholder schema. Every supplied pin is checked against actual bytes before bank writes.",
+      "No filename/suffix filter discards material; ordinary phase snapshots all current landing files. Full seeds and every payload-freeze file are external regardless of suffix/size; other landing files >=2000000bytes are external. Original sources remain complete and rechecked.",
+      "Additional finished reproduction, staging-tool/review and whitespace-tool/review trees require explicit records for every file in their real frozen inventory. Bank readable small reports/proofs/freezes; retain complete large sources/fixtures/executions externally with pins. Root must independently verify inventory completeness against each tree freeze; this candidate does not silently infer or glob unknown extra trees.",
+      "Include the ordinary banking run\u2019s external command/stdin/stdout/stderr/exit, result/input-pins/write-events/head-command files in the final extra inventory. Include all failures and superseded attempts, not only successful summaries.",
+      "Final whitespace list must be nonempty and contain actual complete tool/proof/review/command/stream evidence selected after real warnings exist. The candidate validates supplied byte pins only and invents no whitespace-classification schema or approval. Root adaptation/review may be needed once real artifacts exist."
+    ]
+  },
+  "boundaries": [
+    "Phaseordinary requires no existing landing-proof directory or before/final manifest; both manifests are created only after preflight and exact copy rereads.",
+    "Phasefinal verifies the ordinary manifest and every retained original/copy first, adds newly completed landing files and explicit later evidence, and creates a fresh final manifest. It does not edit the ordinary manifest.",
+    "Each phase covers its enumerated pre-existing inputs. Its own new manifest and later caller outputs cannot be source records of that same manifest. Later evidence must be captured in a later explicit boundary.",
+    "No automatic retry after a partial write: fresh guards fail closed. Preserve run-output failure/write-events and all partially written bytes; root must inspect and explicitly arrange a new reviewed boundary."
+  ],
+  "known_current_measured": {
+    "ctest_passed": 17,
+    "total_seconds": 12.16,
+    "live_layer_invocations": 1,
+    "live_view_invocations": 1,
+    "live_total_build_invocations": 2,
+    "coverage": 273,
+    "payload_files": 12,
+    "payload_bytes": 40883683
+  },
+  "prerequisites": [
+    "Independent root tooling review and explicit invocation; this preparation is not permission to bank.",
+    "Actual root pre-staging untracked command capture and exact explicit extra input inventories.",
+    "Completed separate isolated reproduction tree may be added once frozen, with its invocation roles clearly separate from the live batch counts.",
+    "Final-whitespace phase must await actual staged warnings, separately reviewed whitespace tooling/proofs and complete explicit inventories.",
+    "Staging v1 remains exact and unadopted; another reviewer returned NEEDS_CORRECTION and root will separately dispatch v2. No staging file was edited during this task."
+  ]
+}

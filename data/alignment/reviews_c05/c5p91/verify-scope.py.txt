@@ -1,0 +1,93 @@
+from pathlib import Path
+import json,hashlib,os,sys,sqlite3,subprocess,importlib.util,difflib,collections,gzip,datetime
+sys.dont_write_bytecode=True;os.environ.update(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+R=Path(__file__).resolve().parent;B=R.parent;C=B/'correction-01';I=B/'semantic-review-initial';CI=C/'initial';W=B.parent.parent/'campaign-worktree'
+def j(p):return json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def inv(p):return {str(x.relative_to(p)):pin(x) for x in sorted(p.rglob('*')) if x.is_file()}
+def checkfreeze(p):
+ obj=j(p/'freeze.json'); files=obj['files'];assert isinstance(files,dict);actual=inv(p);del actual['freeze.json'];assert actual==files;return dict(path=str(p),files=len(files),freeze=pin(p/'freeze.json'))
+selected=j(C/'correction-semantic-package-inputs.json');raw=(C/'correction-semantic-package.txt').read_bytes();assert len(raw)==172356 and hashlib.sha256(raw).hexdigest()=='d1be65c750a88bf8beb5010f417fb29f890ef6b695501e84f0fedf68169ac55d'
+for x in selected:assert pin(Path(x['path']))=={k:x[k] for k in ('bytes','sha256')} and Path(x['path']).read_bytes() in raw
+inventory=j(C/'correction-current-inputs.json')
+for x in inventory:assert pin(Path(x['path']))=={k:x[k] for k in ('bytes','sha256')},x['path']
+assert len(inventory)==12554
+proof=j(C/'proof.json')
+for name,snap in proof['snapshots'].items():assert inv(CI/name)==snap['files']
+assert inv(I)==inv(CI/'semantic-review')
+for seq in (271,272):assert inv(B/f'reconciled/{seq}')==inv(CI/f'reconciled/{seq}')
+freezes=[checkfreeze(p) for p in [I,C/'reconciler']+[B/f'reconciled/{s}' for s in (271,272,273)]]
+a=inv(CI/'reconciled/273');b=inv(B/'reconciled/273');changes=[];diff=[];structured=[]
+for rel in sorted(a.keys()|b.keys()):
+ if a.get(rel)==b.get(rel):continue
+ old=CI/'reconciled/273'/rel;new=B/'reconciled/273'/rel;assert new.exists();aa=old.read_text() if old.exists() else '';bb=new.read_text();changes.append(dict(path=rel,before=a.get(rel),after=b.get(rel)))
+ diff.extend(difflib.unified_diff(aa.splitlines(True),bb.splitlines(True),fromfile=str(old) if old.exists() else '/dev/null',tofile=str(new)))
+ if new.suffix=='.json':structured.append(dict(path=str(new),before=json.loads(aa) if aa else None,after=json.loads(bb)))
+assert ''.join(diff).encode()==(C/'reconciler/complete-active273.diff.txt').read_bytes();assert structured==j(C/'reconciler/complete-json-before-after.json');assert len(changes)==18 and sum(x['before'] is not None for x in changes)==13
+save('independent-complete-scope.json',dict(changes=changes,complete_diff=pin(C/'reconciler/complete-active273.diff.txt'),complete_json_objects=len(structured),freezes=freezes,initial_files=sum(len(s['files']) for s in proof['snapshots'].values()),inventory_files=len(inventory),inventory_bytes=sum(x['bytes'] for x in inventory),selected_files=len(selected),package=pin(C/'correction-semantic-package.txt')))
+sourcepins=j(B/'reconciled/271/source-input-pins.json')
+for x in sourcepins:assert pin(Path(x['path']))=={k:x[k] for k in ('bytes','sha256')}
+spine=W/'build/hgm_spine_v27_2.db';before=pin(spine);con=sqlite3.connect(spine.as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row;con.execute('PRAGMA query_only=ON');assert con.execute('PRAGMA query_only').fetchone()[0]==1
+rows=[]
+for course,seq in [('C05',271),('C05',272),('C05',273),('C15',418),('C18',1132),('P9',47)]:
+ row=dict(con.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(course,seq)).fetchone());rows.append(row)
+master=dict(con.execute('SELECT * FROM entries WHERE id=?',(11962,)).fetchone());assert master==j(I/'causal-scope-finding-evidence.json')['full_positive_master_entry']
+fullmaster=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));assert json.loads(master['raw']) in fullmaster['unified_entries']
+fullcorpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+for x in rows:assert json.loads(x['raw']) in fullcorpus
+save('independent-scoped-source-reopen.json',dict(database=dict(path=str(spine),**before),query_only=1,source_sql='SELECT * FROM corpus_segments WHERE course=? AND seq=?',source_rows=rows,entry_sql='SELECT * FROM entries WHERE id=?',entry_params=[11962],full_positive_entry=master,master_raw_and_corpus_raw_exact=True))
+physical=[]
+for x in j(I/'independent-physical-reopen.json'):
+ if x['original_record'].get('selected_context_seq')!=273:continue
+ src=Path(x['source']['path']);assert pin(src)=={k:x['source'][k] for k in ('bytes','sha256')};part=src.read_bytes()[slice(*x['range'])];old=I/Path(x['copy']['path']).relative_to(R);assert part==old.read_bytes();physical.append(dict(source=x['source'],range=x['range'],full_extent_latin1=part.decode('latin1'),retained_initial_copy=str(old)))
+assert len(physical)==3;save('independent-scoped-physical.json',physical)
+sys.path.insert(0,str(W/'tools'));spec=importlib.util.spec_from_file_location('canon',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+for x in j(B/'reconciled/271/governing-manifest.json'):assert subprocess.check_output(['git','show',x['git_commit']+':'+x['git_path']],cwd=W)==Path(x['copy']['path']).read_bytes()
+resolved=[];all_disps=[];counts=[]
+for seq in (271,272,273):
+ d=B/f'reconciled/{seq}';old=CI/f'reconciled/{seq}';s=j(d/'spec.json')['segments'][0];ss=s['spans'];byid={x['id']:x for x in ss};row=next(x for x in rows if x['course']=='C05' and x['seq']==seq);tr=g.resolve(row['wylie'],ss,'tib',seq);er=g.resolve(row['english'],g.with_members(ss,[byid[k] for k in s['eng_order']],row['english']),'eng',seq);local=[];parent=None
+ for x in ss:
+  if x['d']!=7:parent=x['id'] if x['d']==5 else None
+  t=dict(seq=seq,id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng'],tib_range=list(tr[x['id']]),eng_range=None if x['eng'] is None else list(er[x['id']]))
+  assert row['wylie'][slice(*t['tib_range'])]==x['tib']
+  if x['eng'] is not None:assert row['english'][slice(*t['eng_range'])]==x['eng']
+  if x['d']==7:
+   assert parent is not None
+   for ranges,side in [(tr,'tib'),(er,'eng')]:
+    if x[side] is not None:assert ranges[parent][0]<=ranges[x['id']][0]<ranges[x['id']][1]<=ranges[parent][1] and ranges[parent]!=ranges[x['id']]
+  resolved.append(t);local.append({k:t[k] for k in ('id','d','tib','eng','tib_range','eng_range')}|dict(parent_id=parent if x['d']==7 else None))
+ assert local==j(d/'final-tuples.json');assert local==[x for x in j(old/'final-tuples.json') if not(seq==273 and x['id']=='p22')]
+ assert j(d/'final-decisions.json')==[x for x in j(old/'final-decisions.json') if not(seq==273 and x['tuple']['id']=='p22')]
+ oldspec=j(old/'spec.json')['segments'][0];assert ss==[x for x in oldspec['spans'] if not(seq==273 and x['id']=='p22')];assert s['eng_order']==[x for x in oldspec['eng_order'] if not(seq==273 and x=='p22')]
+ nd=j(d/'original-dispositions.json');od=j(old/'original-dispositions.json');assert len(nd)==len(od)
+ for a,b in zip(od,nd):
+  if a!=b:
+   assert seq==273 and a['original_identity']['angle']=='english' and a['original_identity']['id']=='p22';assert b['status']=='omitted_distributed' and b['final_ids']==[]
+   assert {k:v for k,v in a.items() if k not in ('status','final_ids','rationale')}=={k:v for k,v in b.items() if k not in ('status','final_ids','rationale')}
+ all_disps+=nd
+ for f in ('errata.json','errata-five-ground-decisions.json','proposed-head-allowances.json'):assert (d/f).read_bytes()==(old/f).read_bytes()
+ counts.append(dict(seq=seq,span_count=len(ss),null_count=sum(x['eng'] is None for x in ss),word_pair_count=sum(x['d']==5 and x['eng'] is not None for x in ss),spec_bytes=pin(d/'spec.json')['bytes'],spec_sha256=pin(d/'spec.json')['sha256'],body_bytes=pin(d/'body.html')['bytes'],body_sha256=pin(d/'body.html')['sha256'],generator_exit=0))
+assert resolved==[x for x in j(I/'resolved-spans.json') if not(x['seq']==273 and x['id']=='p22')];assert len(resolved)==101
+for x in j(I/'independent-original-identities.json'):
+ actual=next(d for d in all_disps if d['original_identity']==x['original_identity']);assert all(actual[k]==v for k,v in x.items())
+p28=next(x for x in resolved if x['seq']==273 and x['id']=='p28');assert p28['tib_range']==[255,260] and p28['eng_range']==[265,268]
+row=next(x for x in rows if x['course']=='C05' and x['seq']==273);gaps=j(B/'reconciled/273/omissions-full.json')['gaps']
+for side,source,key in [('tib',row['wylie'],'tib_range'),('eng',row['english'],'eng_range')]:
+ cursor=0;expected=[]
+ for lo,hi in sorted(x[key] for x in resolved if x['seq']==273):
+  assert lo>=cursor
+  if lo>cursor:expected.append([cursor,lo])
+  cursor=hi
+ if cursor<len(source):expected.append([cursor,len(source)])
+ assert expected==[x['range'] for x in gaps[side]]
+ for x in gaps[side]:assert source[slice(*x['range'])]==x['text']
+for x in j(I/'independent-executions.json'):
+ olddir=I/'executions'/f"{x['angle']}-{x['seq']}";assert int((olddir/'exit.txt').read_text())==0 and (olddir/'stderr.txt').read_bytes()==b''
+ for key,filename in [('stdin','stdin.json'),('stdout','stdout.html'),('stderr','stderr.txt')]:assert pin(olddir/filename)=={k:x[key][k] for k in ('bytes','sha256')}
+ if x['angle']=='reconciled' and x['seq'] in (271,272):assert (olddir/'stdout.html').read_bytes()==(B/f"reconciled/{x['seq']}/body.html").read_bytes()
+con.close();assert pin(spine)==before
+for x in sourcepins:assert pin(Path(x['path']))=={k:x[k] for k in ('bytes','sha256')}
+save('resolved-spans.json',resolved);save('current-original-dispositions.json',all_disps);save('current-segment-metadata.json',counts)
+save('independent-scoped-verification.json',dict(status='PASS mechanical scoped checks; separate semantic adjudication required',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),segments=counts,total_spans=101,total_nulls=8,total_word_pairs=63,original_identities=len(all_disps),disposition_counts=dict(collections.Counter(x['status'] for x in all_disps)),all_101_survivor_objects_optional_fields_key_order_parents_and_decisions_exact=True,p28=p28,complete_current273_gaps_exact=True,initial_nine_actual_runs_verified_as_history=True,new_canonical_runs=0,source_before_after=sourcepins,spine_before_after=dict(path=str(spine),**before),git_objects=11))
+print('PASS scope101/original198; full12554inventory; changed13 added5; source reopens; no canonical execution in this helper')

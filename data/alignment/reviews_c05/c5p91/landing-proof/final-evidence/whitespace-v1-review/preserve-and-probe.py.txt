@@ -1,0 +1,37 @@
+from pathlib import Path
+import json,hashlib,sys,os,importlib.util,importlib.machinery,types,traceback
+sys.dont_write_bytecode=True;os.environ['PYTHONDONTWRITEBYTECODE']='1'
+R=Path(__file__).resolve().parent;ROOT=R.parent.parent;C=ROOT/'campaign-artifacts/whitespace-candidate-273';B=ROOT/'campaign-artifacts/C05-271-273'
+J=lambda p:json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert pin(C/'freeze.json')['sha256']=='cdbb9f2cc81c0c14c45364d757ca9fed75b65aaf5a3800637b82c099e04ce9b3'
+cf=J(C/'freeze.json')['files'];assert cf=={str(p.relative_to(C)):pin(p) for p in C.rglob('*') if p.is_file() and p!=C/'freeze.json'}
+records=[]
+def cp(p,d,role):
+ raw=p.read_bytes();d.parent.mkdir(parents=True,exist_ok=True);assert not d.exists();d.write_bytes(raw);assert d.read_bytes()==p.read_bytes();records.append(dict(original=str(p),copy=str(d.relative_to(R)),role=role,**pin(d)))
+for p in sorted(C.rglob('*')):
+ if p.is_file():cp(p,R/'candidate'/(str(p.relative_to(C))+('.txt' if p.suffix in ('.py','.diff') else '')),'complete frozen candidate including attempts/baselines')
+for x in J(C/'input-manifest.json')['records']:assert Path(x['original']).read_bytes()==(C/x['copy']).read_bytes() and pin(C/x['copy'])=={k:x[k] for k in ('bytes','sha256')}
+rootmanifest=B/'landing/root-proof-copy-manifest-before-whitespace.json';assert pin(rootmanifest)['sha256']=='f665b5f6191c891b41d65d73f7f6f3a9a9f639a59b74553f2840f00851b1ac09';cp(rootmanifest,R/'current-root-manifest.json','actual261record root manifest, no stage claim');root=J(rootmanifest);assert root['semantic_review_unchanged'] is True and len(root['files'])==261
+cp(B/'landing/canonical-builds-once.json',R/'current-build-proof.json','actual canonical CSV output hash schema')
+actualmanifest=J(B/'semantic-review/original-to-copy-manifest.json');freeze=J(B/'semantic-review/freeze.json');assert len(freeze['files'])==2032
+for item in J(C/'physical-source-descriptors.json'):
+ raw=Path(item['path']).read_bytes();assert pin(Path(item['path']))=={k:item[k] for k in ('bytes','sha256')};matches=[x for x in actualmanifest if x['original']==item['path'] and all(x[k]==item[k] for k in ('bytes','sha256'))];assert matches==item['manifest_records']
+ for x in matches:assert (B/'semantic-review'/x['copy']).read_bytes()==raw and pin(B/'semantic-review'/x['copy'])==freeze['files'][x['copy']]
+save(R/'input-manifest.json',records)
+loader=importlib.machinery.SourceFileLoader('candidate_probe',str(R/'candidate/whitespace273.py.txt'));sp=importlib.util.spec_from_loader(loader.name,loader);m=importlib.util.module_from_spec(sp);loader.exec_module(m)
+# Narrow synthetic probe: only constructor and read() in a private fixture tree. No Run.run, CLI, Git, index, or actual campaign path is invoked.
+f=R/'fixtures';w=f/'worktree';rv=f/'C05-271-273/semantic-review';data=f/'sources';w.mkdir(parents=True);rv.mkdir(parents=True);data.mkdir();one=data/'one.json';two=data/'two.json';one.write_bytes(b'{"same": true}\n');two.write_bytes(one.read_bytes());alias=data/'manifest-alias.json';alias.symlink_to(one.name)
+args=types.SimpleNamespace(worktree=str(w),review=str(rv),root_manifest=str(alias),output=str(f/'probe-output'),mode='prepare')
+run=m.Run(args);raw=run.read(run.root_manifest);captured=list(run.inputs);alias.unlink();alias.symlink_to(two.name)
+recheck_passed=True
+try:
+ for record in run.inputs:
+  p=Path(record['input_path']);assert p.resolve(strict=True)==Path(record['path']);m.check_pin(p.read_bytes(),record);assert p.read_bytes()==(run.out/record['copy']).read_bytes()
+except AssertionError:recheck_passed=False
+assert recheck_passed and captured[0]['input_path']==str(one) and alias.resolve()==two
+# Positive control: direct read(alias) does record and detect retargeting.
+alias2=data/'direct-alias.json';alias2.symlink_to(one.name);run.read(alias2);control=run.inputs[-1];alias2.unlink();alias2.symlink_to(two.name);direct_retarget_rejected=alias2.resolve()!=Path(control['path']);assert direct_retarget_rejected
+save(R/'alias-probe.json',dict(candidate=pin(C/'whitespace273.py'),candidate_cli_calls=0,Run_run_calls=0,git_calls=0,constructor_read_calls_in_private_fixture_only=True,supplied_root_manifest_alias=str(alias),initial_resolved_target=str(one),later_resolved_target=str(two),captured_input_record=captured[0],actual_final_input_recheck_passes_despite_alias_retarget=recheck_passed,direct_read_alias_control_rejects_retarget=direct_retarget_rejected,conclusion='Run.__init__ resolves root_manifest before Run.read, so the supplied alias is lost. Final checks validate only the old resolved target. Worktree/review roots are likewise canonicalized without retaining their supplied path aliases.'))
+print(json.dumps(dict(status='PROBE CONFIRMED',candidate_files=len(cf),input_records=len(records),root_records=len(root['files']),alias_gap=True,cli_calls=0),indent=2))

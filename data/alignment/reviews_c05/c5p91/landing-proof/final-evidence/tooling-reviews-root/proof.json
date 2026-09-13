@@ -1,0 +1,171 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-13T04:11:05.309555+00:00",
+  "trees": [
+    {
+      "tree": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-preparation/staging-helper-v2",
+      "freeze": {
+        "bytes": 108397,
+        "sha256": "8f470ad05e5192c7c95796920cdabb23acae12a68eade7f05bb8b2a760081752"
+      },
+      "files": 623,
+      "total_bytes": 89487005,
+      "original_copy_mappings": 192,
+      "all_full_bytes_reopened": true
+    },
+    {
+      "tree": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-preparation/staging-review-v2",
+      "freeze": {
+        "bytes": 256158,
+        "sha256": "c41ab6df67745b75708e4124f80e8666650da59aa4df8fcbd31827480eeb9e55"
+      },
+      "files": 1378,
+      "total_bytes": 195297889,
+      "original_copy_mappings": 1209,
+      "all_full_bytes_reopened": true
+    },
+    {
+      "tree": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-review-273",
+      "freeze": {
+        "bytes": 33343,
+        "sha256": "0ab4b6f2ef6b6f06235bbbbfb0cdf21f3dbd9d0a1b7400e0c69939b1b829dc8d"
+      },
+      "files": 209,
+      "total_bytes": 101580603,
+      "original_copy_mappings": 164,
+      "all_full_bytes_reopened": true
+    }
+  ],
+  "staging_code_dependency_review_root_accepted": true,
+  "staging_actual_execution_approved": false,
+  "required_before_actual_stage_verifier": [
+    "Completed actual final bank",
+    "Independently approved actual whitespace proof matching final staged log"
+  ],
+  "whitespace_initial_rejection_root_accepted": true,
+  "whitespace_open_findings": [
+    {
+      "id": "WHITESPACE-273-ALIAS-01",
+      "priority": "P1",
+      "status": "OPEN",
+      "file": "whitespace273.py",
+      "lines": [
+        127,
+        129,
+        140,
+        223,
+        224,
+        225
+      ],
+      "title": "Supplied root aliases are discarded before the final identity check",
+      "evidence": "alias-probe.json",
+      "detail": "Constructor resolves worktree, review, and root_manifest immediately. The root-manifest private fixture retargets the supplied symlink from one.json to two.json with identical bytes. The exact final input loop passes because the recorded input_path is already one.json. Direct read(alias) control rejects the same retarget. Worktree/review roots have the same static loss; only root-manifest retarget was dynamically probed.",
+      "minimal_remedy": "Retain and recheck supplied root aliases and resolved identities, and read root_manifest via its supplied alias; track worktree/review roots equivalently. Alternatively explicitly reject noncanonical/symlink root aliases at entry and document that bounded restriction. Keep full byte rechecks. Add constructor-level same-byte retarget and stable-alias controls."
+    },
+    {
+      "id": "WHITESPACE-273-PHYSICAL-02",
+      "priority": "P1",
+      "status": "OPEN",
+      "file": "whitespace273.py",
+      "lines": [
+        57,
+        100,
+        199
+      ],
+      "title": "Global empty-LF EOF gate rejects exact original CRLF physical fragments",
+      "evidence": "actual-predicate-probe.json",
+      "affected_files": 33,
+      "affected_warning_headers": 308,
+      "example": {
+        "path": "data/alignment/reviews_c05/c5p91/history/initial-review/independent-physical/00.bin",
+        "bytes": 1037,
+        "sha256": "c77f8a60c77fc9c632e58e4ea3c513b697e31c454ffcf794764f1249f5723a8e",
+        "issues": {
+          "trailing whitespace.": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "new blank line at EOF.": [
+            10
+          ]
+        },
+        "whole_original_ranges": [
+          {
+            "original": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+            "source_pin": {
+              "bytes": 329826,
+              "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+            },
+            "byte_range": [
+              177050,
+              178087
+            ]
+          }
+        ],
+        "EOF_tails_hex": {
+          "10": [
+            "0d",
+            ""
+          ]
+        }
+      },
+      "detail": "33 current warned frozen files equal complete byte ranges in reopened physical originals. Their final blank line is CRLF, so split-LF yields b\"\\r\", b\"\"; the unconditional literal_warnings EOF assertion rejects before source-range classification, including within classify_physical itself. The first exact C05 fragment is [177050,178087),1037 bytes; EOF line10. This is an actual frozen-source case, not an inferred new exemption.",
+      "minimal_remedy": "Separate common warning-name/number/trailing/indent validation from category-specific EOF ownership. Permit original CRLF EOF only under independently verified whole physical byte-range provenance and exact literal empty CRLF tail, preserving all complete-source aliases/ranges. Keep ordinary blank-EOF strict and physical-line fallback narrow; reject changed fragments, whitespace-only fabricated reports, nonempty tails, and unsupported categories. Update report/contract/tests without normalizing source."
+    },
+    {
+      "id": "WHITESPACE-273-DIFF-03",
+      "priority": "P1",
+      "status": "OPEN",
+      "file": "whitespace273.py",
+      "lines": [
+        57,
+        91,
+        92,
+        93,
+        97,
+        199
+      ],
+      "title": "Valid blank diff context at EOF cannot pass mixed trailing/EOF diagnostics",
+      "evidence": "boundary-proof.json and actual-predicate-probe.json",
+      "example": {
+        "path": "data/alignment/reviews_c05/c5p91/landing-proof/extra-evidence/staging-v1-review/report-linecount-fix.diff.txt",
+        "bytes": 2176,
+        "sha256": "4dbcb14873bfa4ce514c1ac9856fe9c509ba6f9f80747087c598ebeff0021a5c",
+        "issues": {
+          "trailing whitespace.": [
+            5,
+            8,
+            10
+          ],
+          "new blank line at EOF.": [
+            10
+          ]
+        },
+        "EOF_tails_hex": {
+          "10": [
+            "20",
+            ""
+          ]
+        }
+      },
+      "detail": "The actual root bank file is a complete balanced unified diff: ---/+++/@@ -1,6 +1,6 @@ and exactly balanced content. Existing diff_context_lines independently returns {5,8,10}. Git reports trailing whitespace at5/8/10 and new blank line at EOF at10. Line10 is exactly the required single ASCII context marker, not an empty LF line. Global EOF validation rejects it; even bypassing that gate leaves the single-kind ordinary branch rejecting this combination. Actual261-record root manifest has one exact source/copy record, whose full original equals the 2176-byte bank file.",
+      "minimal_remedy": "Add a bounded complete-diff-context path that validates all reported trailing lines and any EOF line as exact one-space parsed context positions, with exact allowed final tail, and permits this observed mixed warning set. Preserve ordinary empty-LF EOF behavior separately; do not accept arbitrary whitespace EOF, marker-shaped prose, unbalanced hunks, source prints, or unsupported kinds. Preserve this original diff unchanged and test its complete actual bytes plus negatives."
+    }
+  ],
+  "semantic_approval_supplied": false,
+  "root_test_reruns": 0,
+  "root_live_git_commands": 0,
+  "source": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/verify-through273-tooling-reviews-root.py",
+    "bytes": 4922,
+    "sha256": "24472a5aba09af00ed2e5f9f85f2dbabeee4bb04801b6f24af0fff09f2eed298"
+  }
+}

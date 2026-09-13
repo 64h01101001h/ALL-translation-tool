@@ -1,0 +1,63 @@
+{
+  "status": "PASS mechanical correction preflight; distinct semantic re-review required",
+  "utc": "2026-09-13T02:53:41.716686+00:00",
+  "counts": [
+    {
+      "seq": 271,
+      "spans": 52,
+      "nulls": 4,
+      "d5": 31,
+      "original_dispositions": 103
+    },
+    {
+      "seq": 272,
+      "spans": 21,
+      "nulls": 4,
+      "d5": 10,
+      "original_dispositions": 39
+    },
+    {
+      "seq": 273,
+      "spans": 28,
+      "nulls": 0,
+      "d5": 22,
+      "original_dispositions": 56
+    }
+  ],
+  "total_spans": 101,
+  "total_nulls": 8,
+  "total_d5": 63,
+  "original_dispositions": 198,
+  "original_disposition_status_counts": {
+    "retained": 180,
+    "recast_or_boundary_or_depth_changed": 16,
+    "omitted_distributed": 2
+  },
+  "unchanged_original_dispositions": 197,
+  "source_copy_records": 412,
+  "source_copy_all_full_bytes_equal": true,
+  "landing_whitelist": [
+    ".json",
+    ".md",
+    ".html",
+    ".stderr",
+    ".stdout",
+    ".log",
+    ".txt",
+    ".bin",
+    ".exit"
+  ],
+  "landing_helper_pin": {
+    "bytes": 2778,
+    "sha256": "a06c403abf0fca5efa3e469a61375a489f92e7c2dd1a2d5f9987d8ed584613b3"
+  },
+  "all_initial_trees_and_271_272_live_exact": true,
+  "six_errata_refutations_unchanged": true,
+  "source_pins_unchanged": true,
+  "new_canonical_runs": 1,
+  "canonical_exit": 0,
+  "canonical_stderr_bytes": 0,
+  "unchanged_271_272_execution_provenance": "Initial actual runs remain in canonical-attempt01 and the preserved root proof; no new execution claimed.",
+  "semantic_approval": false,
+  "failures": "correct.py.txt HTML checker cleared side on nested lab closing; successful canonical streams and complete partial active tree retained. recover-checker-v2 checks sentence spans without that reset and updates only remaining interfaces. No repeat canonical run."
+}

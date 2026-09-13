@@ -1,0 +1,38 @@
+"""Tooling-only observations of the unchanged candidate; no campaign execution."""
+from pathlib import Path
+import ast,json,os,subprocess,sys,unittest,re,hashlib
+O=Path(__file__).resolve().parent;candidate=O/'candidate/verify_staged_through273.py.txt';source=candidate.read_text();tree=ast.parse(source);cls=next(n for n in tree.body if isinstance(n,ast.ClassDef) and n.name=='Check');run=next(n for n in cls.body if isinstance(n,ast.FunctionDef) and n.name=='run');results=[]
+def execute_slice(first,last,values):
+ nodes=[n for n in run.body if first<=n.lineno<=last];assert nodes;exec(compile(ast.Module(body=nodes,type_ignores=[]),str(candidate),'exec'),values)
+class Tests(unittest.TestCase):
+ def test_current_freeze_verdict_assumption_rejects_actual_approve(self):
+  f=json.loads((O/'actual-current/semantic-review/freeze.json').read_text());self.assertEqual((f['spec_verdict'],f['quality_verdict']),('APPROVE','APPROVE'))
+  with self.assertRaises(KeyError):execute_slice(123,123,{'freeze':f})
+  results.append({'test':'freeze_verdict','observed':'KeyError verdict on actual APPROVE freeze','file_count':len(f['files'])})
+ def test_current_freeze_dict_fails_list_row_assumption(self):
+  f=json.loads((O/'actual-current/semantic-review/freeze.json').read_text());self.assertIsInstance(f['files'],dict)
+  with self.assertRaises(TypeError):execute_slice(124,125,{'freeze':f,'relative':lambda x:Path(x)})
+  results.append({'test':'freeze_files','observed':'TypeError indexing actual dict key as row'})
+ def test_empty_category_requires_unchanged_allowance_file(self):
+  w=json.loads((O/'actual-current/semantic-review/span-head-allow-needed.json').read_text());self.assertEqual(w,{'pages_c05':{}});calls=[]
+  class Fake:
+   def require(self,*args):calls.append(args)
+  execute_slice(268,268,{'wanted':w,'self':Fake(),'rel':'data/alignment/span_head_allow.json','new_raw':b'unchanged','old_raw':b'unchanged'})
+  self.assertEqual(calls,[('data/alignment/span_head_allow.json',b'unchanged')]);self.assertFalse(any(w.values()));results.append({'test':'empty_allowance','observed':'require called with no requested allowance additions'})
+ def test_no_categories_unchanged_branch_is_not_false_positive(self):
+  class Fake:
+   def require(self,*args):raise AssertionError('unexpected requirement')
+  execute_slice(268,268,{'wanted':{},'self':Fake(),'rel':'allow','new_raw':b'x','old_raw':b'x'})
+ def test_real_private_git_staging_removes_new_untracked_paths(self):
+  p=O/'tooling-fixture';p.mkdir();commands=O/'fixture-commands';commands.mkdir();n=0
+  def git(*args):
+   nonlocal n;n+=1;d=commands/str(n);d.mkdir();argv=['git',*args];env=dict(os.environ,GIT_CONFIG_NOSYSTEM='1',GIT_CONFIG_GLOBAL='/dev/null',GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1');(d/'command.json').write_text(json.dumps({'argv':argv,'cwd':str(p),'environment_overrides':{k:env[k] for k in ['GIT_CONFIG_NOSYSTEM','GIT_CONFIG_GLOBAL','GIT_OPTIONAL_LOCKS','PYTHONDONTWRITEBYTECODE']}},indent=2)+'\n');(d/'stdin.bin').write_bytes(b'');r=subprocess.run(argv,cwd=p,env=env,input=b'',capture_output=True);(d/'stdout.bin').write_bytes(r.stdout);(d/'stderr.bin').write_bytes(r.stderr);(d/'exit.txt').write_text(str(r.returncode)+'\n');self.assertEqual(r.returncode,0);return r.stdout
+  git('init','--quiet');(p/'new-page.txt').write_bytes(b'TOOLING ONLY new file\n');(p/'unrelated.txt').write_bytes(b'TOOLING ONLY pre-existing untracked\n');before=git('ls-files','--others','--exclude-standard','-z');git('add','--','new-page.txt');after=git('ls-files','--others','--exclude-standard','-z');self.assertNotEqual(before,after);self.assertEqual(before,b'new-page.txt\0unrelated.txt\0');self.assertEqual(after,b'unrelated.txt\0');results.append({'test':'untracked_contract','before_hex':before.hex(),'after_hex':after.hex(),'observed':'candidate exact-equality condition fails after authorized new-file staging'})
+ def test_actual_retained_ctest_stdout_matches_candidate_patterns(self):
+  stdout=(O/'candidate/inputs/prior-examples/landing/ctest-17.stdout').read_text();passed=re.findall(r'^\s*(\d+)/(\d+) Test\s+#(\d+): ([a-z_]+) .* Passed\s+([0-9.]+) sec$',stdout,re.M);self.assertEqual(len(passed),17);self.assertIn('100% tests passed out of 17',stdout);self.assertEqual(len(re.findall(r'^Total Test time \(real\) =\s*([0-9.]+) sec$',stdout,re.M)),1)
+ def test_actual_current_build_record_shapes_match_candidate(self):
+  b=json.loads((O/'actual-current/landing/canonical-builds-once.json').read_text());self.assertEqual(b['status'],'PASS');self.assertEqual(len(b['runs']),2)
+  for i,r in enumerate(b['runs']):
+   label=['build-layer','build-view'][i];cmd=json.loads((O/f'actual-current/landing/{label}.command.json').read_text());self.assertEqual(r['argv'],cmd['argv']);self.assertEqual(r['cwd'],cmd['cwd']);self.assertEqual(Path(r['argv'][-2]).name,'run_tool_readonly_sqlite.py');self.assertEqual(r['argv'][-1],['tools/build_alignment_layer.py','tools/build_dictionary_view.py'][i])
+if __name__=='__main__':
+ suite=unittest.defaultTestLoader.loadTestsFromTestCase(Tests);r=unittest.TextTestRunner(verbosity=2).run(suite);(O/'regression-results.json').write_text(json.dumps({'tooling_only':True,'candidate_executions':0,'tests':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'observations':results},indent=2)+'\n');sys.exit(not r.wasSuccessful())

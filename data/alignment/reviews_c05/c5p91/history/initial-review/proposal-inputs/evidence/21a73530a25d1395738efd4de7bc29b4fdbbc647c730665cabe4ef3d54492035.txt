@@ -1,0 +1,28 @@
+--- verify-reconciliation-boundary.py
++++ verify-reconciliation-boundary-v2.py
+@@ -34,7 +34,7 @@
+         entries[name] = record
+     actual = {str(p.relative_to(directory)) for p in directory.rglob('*') if p.is_file() and p != fp}
+     assert actual == set(entries), (directory, actual ^ set(entries))
+-    assert len(entries) == f['file_count']
++    if 'file_count' in f: assert len(entries) == f['file_count']
+     for name, record in entries.items(): checkpin(directory/name, record)
+     if 'total_bytes' in f: assert sum(r['bytes'] for r in entries.values()) == f['total_bytes']
+     return dict(directory=str(directory), files=len(entries), freeze=pin(fp))
+@@ -153,8 +153,14 @@
+     checkpin(original,physical['original']);checkpin(copy,physical['copy']);a,z=physical['range']
+     assert original.read_bytes()[a:z]==copy.read_bytes()==physical['complete_extent_latin1'].encode('latin1')
+     for r in read(shared/'physical-reopened-full.json'):
+-        original=Path(r['original']['path']);checkpin(original,r['original']);a,z=r['byte_range'];raw=original.read_bytes()[a:z]
+-        assert len(raw)==r['bytes'] and hashlib.sha256(raw).hexdigest()==r['sha256'] and raw==r['full_extent_latin1'].encode('latin1')
++        if isinstance(r['original'],dict):
++            original=Path(r['original']['path']);checkpin(original,r['original']);a,z=r['byte_range'];raw=original.read_bytes()[a:z]
++            assert len(raw)==r['bytes'] and hashlib.sha256(raw).hexdigest()==r['sha256'] and raw==r['full_extent_latin1'].encode('latin1')
++        else:
++            original=Path(r['original']);checkpin(original,dict(bytes=r['original_bytes'],sha256=r['original_sha256']))
++            raw=original.read_bytes()[r['extent_start_byte']:r['extent_end_byte']]
++            assert hashlib.sha256(raw).hexdigest()==r['extent_sha256'] and raw==r['extent_utf8'].encode('utf8')
++            assert (shared/r['copy']).read_bytes()==original.read_bytes()
+     for name,sha in baseline['sha256'].items(): assert pin(wt/name)['sha256']==sha
+     assert final_freezes == [freeze(b/'reconciled'/str(seq)) for seq in (271,272,273)]
+     assert original_freezes == [freeze(b/angle/str(seq)) for angle in ('tibetan','english') for seq in (271,272,273)]

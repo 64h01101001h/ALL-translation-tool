@@ -1,0 +1,77 @@
+"""Inventory finished final-stage evidence without changing source or index."""
+from pathlib import Path
+import datetime,hashlib,json,os
+B=Path(__file__).resolve().parent;A=B.parent;I=A/'integration';L=B/'landing'
+TARGETS={k:L/n for k,n in [('extra','banking-final-whitespace-extra-inputs.json'),('whitespace','banking-whitespace-inputs.json')]}
+PROOF=L/'banking-final-inputs-proof.json'
+READABLE={'report.md','review.md','review.json','report.json','freeze.json','command-contract.json',
+ 'command-dependency-plan.json','retention-proof.json','retention-verification.json','input-manifest.json',
+ 'original-to-copy-manifest.json','evidence-pins.json','findings.json','actual-predicate-results.json',
+ 'independent-proof.json','final-preservation-proof.json','actual-interface-proof.json','boundary-proof.json',
+ 'source-symlink-provenance.json','history-provenance-proof.json','proof.json','source-whitespace-proof.json',
+ 'whitespace-classification-preflight.json','prepared-pins.json'}
+records={'extra':[],'whitespace':[]};trees=[]
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def clean_text(raw):
+ try:raw.decode('utf-8')
+ except UnicodeDecodeError:return False
+ return not raw.endswith(b'\n\n') and all(not line.endswith((b' ',b'\t',b'\r')) for line in raw.split(b'\n'))
+def add(p,group,copy=None):
+ raw=p.read_bytes();rec=dict(original=str(p.absolute()),resolved_original=str(p.resolve(strict=True)),**pin(raw))
+ if copy is not None and len(raw)<2_000_000 and clean_text(raw):
+  rec.update(retention='bank',copy=copy+('.txt' if p.suffix=='.py' else ''))
+ else:rec.update(retention='external',disposition='Complete immutable original retained at the explicit path with its full tree inventory, source/alias metadata and all failed histories. Raw streams, diffs and fixtures remain complete; no bytes normalized.')
+ records[group].append(rec)
+def tree(rel,label,group,digest=None):
+ folder=A/rel;paths=sorted(p for p in folder.rglob('*') if p.is_file())
+ assert paths
+ if digest:
+  fraw=(folder/'freeze.json').read_bytes();assert pin(fraw)['sha256']==digest
+  freeze=json.loads(fraw);items=freeze['files'];assert isinstance(items,dict)
+  assert {str(p.relative_to(folder)) for p in paths}==set(items)|{'freeze.json'}
+  for name,row in items.items():
+   p=folder/name;assert pin(p.read_bytes())=={k:row[k] for k in ('bytes','sha256')}
+   if row.get('is_symlink'):
+    assert p.is_symlink() and os.readlink(p)==row['symlink_target'] and str(p.resolve(strict=True))==row['resolved_target']
+  for name,row in freeze.get('symlinks',{}).items():
+   assert os.readlink(folder/name)==row['target'] and str((folder/name).resolve(strict=True))==row['resolved']
+ before=len(records[group])
+ for p in paths:
+  name=p.name;relative=p.relative_to(folder)
+  selected=name in READABLE or (len(relative.parts)==1 and (name.endswith('.py') or name.endswith('.py.txt')))
+  add(p,group,'final-evidence/'+label+'/'+str(relative) if selected else None)
+ trees.append(dict(root=str(folder),label=label,group=group,freeze_sha256=digest,
+  actual_files=len(paths),record_start=before,record_end=len(records[group]),all_full_bytes_reopened=True))
+def main():
+ assert not PROOF.exists() and all(not p.exists() for p in TARGETS.values())
+ assert json.loads((A/'whitespace-root-273-v2/actual/proof.json').read_bytes())['status']=='PASS ROOT ACCEPTS ACTUAL WHITESPACE AUDIT'
+ for rel,label,sha in [
+  ('integration/through273-preparation/staging-helper-v2','staging-v2','8f470ad05e5192c7c95796920cdabb23acae12a68eade7f05bb8b2a760081752'),
+  ('integration/through273-preparation/staging-review-v2','staging-v2-review','c41ab6df67745b75708e4124f80e8666650da59aa4df8fcbd31827480eeb9e55')]:tree(rel,label,'extra',sha)
+ for rel,label,sha in [
+  ('whitespace-candidate-273','whitespace-v1','cdbb9f2cc81c0c14c45364d757ca9fed75b65aaf5a3800637b82c099e04ce9b3'),
+  ('whitespace-review-273','whitespace-v1-review','0ab4b6f2ef6b6f06235bbbbfb0cdf21f3dbd9d0a1b7400e0c69939b1b829dc8d'),
+  ('whitespace-candidate-273-v2','whitespace-v2','ff3c006dbb5c86c4111ee62674b46861cdecb909646657a1484ca4e5b3bd2b46'),
+  ('whitespace-review-273-v2','whitespace-v2-review','f5731e66b6d39f9fa0b1ec0c432b9d3140eb065729b08d9bb0416e4aa0e1b6cf')]:tree(rel,label,'whitespace',sha)
+ for rel,label in [
+  ('integration/through273-preparation/tooling-reviews-root','tooling-reviews-root'),
+  ('integration/through273-preparation/tooling-reviews-root-caller','tooling-reviews-root-caller'),
+  ('integration/through273-banking-runs/ordinary','banking-ordinary-run'),
+  ('integration/through273-banking-runs/ordinary-caller','banking-ordinary-caller'),
+  ('integration/through273-stage-runs/initial','initial-stage-run')]:tree(rel,label,'extra')
+ for rel,label in [('whitespace-runs-273-v2','whitespace-actual-runs'),('whitespace-root-273-v2','whitespace-root-proofs')]:tree(rel,label,'whitespace')
+ for name in ['verify-through273-tooling-reviews-root.py','verify-whitespace273-v2-candidate-root.py',
+              'accept-whitespace273-v2-review-root.py','verify-whitespace273-actual-root.py']:
+  add(I/name,'extra','root-shared-helpers/'+name)
+ for name in ['prepare-initial-stage.py','prepare-final-bank-inputs.py']:
+  add(B/name,'extra','root-batch-helpers/'+name)
+ for group,rows in records.items():
+  assert rows and len({(r['original'],r.get('copy')) for r in rows})==len(rows)
+  for row in rows:assert pin(Path(row['original']).read_bytes())=={k:row[k] for k in ('bytes','sha256')}
+  TARGETS[group].write_text(json.dumps(rows,indent=2)+'\n')
+ result=dict(status='PASS complete actual final evidence inventory',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+  trees=trees,inventories={k:dict(path=str(TARGETS[k]),**pin(TARGETS[k].read_bytes()),records=len(v),
+   banked=sum(r['retention']=='bank' for r in v),external=sum(r['retention']=='external' for r in v)) for k,v in records.items()},
+  scope='All finished explicitly named trees and helpers; every regular file retained in full, private link metadata retained in exact freezes. Final bank will separately snapshot every current landing file and preserve its prior ordinary records. No later caller outputs claimed.')
+ PROOF.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result['inventories'],indent=2))
+if __name__=='__main__':main()

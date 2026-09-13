@@ -1,0 +1,109 @@
+{
+  "synthetic_only": true,
+  "unchanged_candidate_sha256": "574fe05ca252c52a3ab90b52503a2265b25c006d5600c12f4b86be8871f6faae",
+  "cases": [
+    {
+      "case": "control",
+      "exit": 0,
+      "existing_files_changed": [
+        "campaign-worktree/data/alignment/pages_c05/index.html",
+        "campaign-worktree/tools/build_alignment_layer.py"
+      ],
+      "helper_created_files": [
+        "campaign-artifacts/C05-271-273/landing/course-registration-verification.json",
+        "campaign-artifacts/C05-271-273/landing/registration-preimages/build_alignment_layer.py.txt",
+        "campaign-artifacts/C05-271-273/landing/registration-preimages/index.html"
+      ],
+      "expected_rejection": false,
+      "guard_gap_reproduced": false
+    },
+    {
+      "case": "wrong-head",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "guard_gap_reproduced": false
+    },
+    {
+      "case": "unclosed-checkpoint",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "guard_gap_reproduced": false
+    },
+    {
+      "case": "review-rejected",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "guard_gap_reproduced": false
+    },
+    {
+      "case": "acceptance-pin-mismatch",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "guard_gap_reproduced": false
+    },
+    {
+      "case": "changed-index",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "guard_gap_reproduced": false
+    },
+    {
+      "case": "missing-prior-page",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "guard_gap_reproduced": false
+    },
+    {
+      "case": "wrong-sequences",
+      "exit": 1,
+      "existing_files_changed": [],
+      "helper_created_files": [],
+      "expected_rejection": true,
+      "guard_gap_reproduced": false
+    },
+    {
+      "case": "changed-landed-spec",
+      "exit": 0,
+      "existing_files_changed": [
+        "campaign-worktree/data/alignment/pages_c05/index.html",
+        "campaign-worktree/tools/build_alignment_layer.py"
+      ],
+      "helper_created_files": [
+        "campaign-artifacts/C05-271-273/landing/course-registration-verification.json",
+        "campaign-artifacts/C05-271-273/landing/registration-preimages/build_alignment_layer.py.txt",
+        "campaign-artifacts/C05-271-273/landing/registration-preimages/index.html"
+      ],
+      "expected_rejection": true,
+      "guard_gap_reproduced": true
+    },
+    {
+      "case": "replacement-body-and-page",
+      "exit": 0,
+      "existing_files_changed": [
+        "campaign-worktree/data/alignment/pages_c05/index.html",
+        "campaign-worktree/tools/build_alignment_layer.py"
+      ],
+      "helper_created_files": [
+        "campaign-artifacts/C05-271-273/landing/course-registration-verification.json",
+        "campaign-artifacts/C05-271-273/landing/registration-preimages/build_alignment_layer.py.txt",
+        "campaign-artifacts/C05-271-273/landing/registration-preimages/index.html"
+      ],
+      "expected_rejection": true,
+      "guard_gap_reproduced": true
+    }
+  ],
+  "known_guard_gap_cases": 2,
+  "all_live_inputs_untouched": true
+}

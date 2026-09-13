@@ -1,0 +1,79 @@
+from pathlib import Path
+import os,sys,json,hashlib,collections,csv,io,re,subprocess,datetime,sqlite3
+sys.dont_write_bytecode=True;os.environ.update(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+R=Path(__file__).resolve().parent;S=R/'workspace';ROOT=R.parents[2];W=ROOT/'campaign-worktree';B=ROOT/'campaign-artifacts/C05-271-273';L=B/'landing';P=R/'previous-generated'
+J=lambda p:json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def rows(base,suffix):return list(csv.DictReader(io.StringIO((base/('docs/geshe_michael_roach_dictionary'+suffix)).read_bytes().decode('utf-8-sig'),newline='')))
+checks=[]
+def check(name,result,detail=None):
+ checks.append(dict(check=name,pass_=bool(result),detail=detail));assert result,(name,detail)
+proof=dict(status='RUNNING')
+try:
+ execution=J(R/'execution-proof.json');check('Exactly one seeded layer/view execution',execution['status']=='PASS' and len(execution['runs'])==2 and execution['first_view_seed_exact'])
+ for x in execution['outputs']:check('Complete output equals frozen and live: '+x['path'],(S/x['path']).read_bytes()==(W/x['path']).read_bytes()==(R/'expected-payload'/x['path']).read_bytes(),x)
+ full=J(S/'data/alignment/alignment_full_v1.json');old=J(P/'data/alignment/alignment_full_v1.json');ev=J(S/'data/alignment/alignment_evidence_v1.json');oe=J(P/'data/alignment/alignment_evidence_v1.json');sig=lambda x:json.dumps(x,sort_keys=True,ensure_ascii=False);before=collections.Counter(map(sig,old['links']));after=collections.Counter(map(sig,full['links']));check('All prior complete links exact',not(before-after),len(old['links']));added=[json.loads(k) for k,n in (after-before).items() for _ in range(n)];check('104 new links confined to271–273',len(added)==104 and all(x['course']=='C05' and x['seg'] in (271,272,273) for x in added))
+ for name in ('notes','trees'):check('Prior '+name+' values exact',all(full[name].get(k)==v for k,v in old[name].items()))
+ addedrefs=[]
+ for tib,pairs in oe['pairs'].items():
+  current={x['eng']:x for x in ev['pairs'][tib]}
+  for pair in pairs:
+   n=current[pair['eng']];check('Prior evidence pair/ref/ACIP exact retained',pair['acip']==n['acip'] and set(pair['refs'])<=set(n['refs']) and n['n']==len(n['refs']))
+ for tib,pairs in ev['pairs'].items():
+  oldpair={x['eng']:x for x in oe['pairs'].get(tib,[])}
+  for pair in pairs:addedrefs.extend(set(pair['refs'])-set(oldpair.get(pair['eng'],{}).get('refs',[])))
+ check('Added evidence refs confined',all(x.split(':')[0]=='C05' and int(x.split(':')[1]) in (271,272,273) for x in addedrefs));check('Prior ACIP index unchanged',all(ev['acip_index'].get(k)==v for k,v in oe['acip_index'].items()))
+ nr=rows(S,'.csv');pr=rows(P,'.csv');key=lambda x:(x['kind'],x['depth'],x['wylie'],x['english']);nm={key(x):x for x in nr};check('Main CSV unique complete keys',len(nm)==len(nr));variable={'occurrences','courses','n_courses','refs','first_ref','source_pages','layer_date'};fields_changed=collections.Counter()
+ for p in pr:
+  n=nm[key(p)];check('Prior main semantic fields exact',all(n[k]==v for k,v in p.items() if k not in variable));a=set(p['refs'].split());b=set(n['refs'].split());check('Prior main refs retained and additions confined',a<=b and all(x.split(':')[0]=='C05' and int(x.split(':')[1]) in (271,272,273) for x in b-a));fields_changed.update(k for k in p if p[k]!=n[k])
+ for n in nr:
+  refs=n['refs'].split();courses=sorted({x.split(':')[0] for x in refs});check('Main count/course metadata independently derived',int(n['occurrences'])==len(refs) and len(refs)==len(set(refs)) and n['first_ref']==refs[0] and n['courses'].split()==courses and int(n['n_courses'])==len(courses));check('Main layer metadata exact',n['layer_date']==ev['meta']['date'] and n['source_pages']==ev['meta']['source_pages'])
+ reverse=rows(S,'_reverse.csv');oldreverse=rows(P,'_reverse.csv');rk=lambda x:(x['wylie'],x['english'],x['depth']);rv={rk(x):x for x in reverse};translations={rk(x):x for x in nr if x['kind']=='translation'};check('Reverse exactly all translation rows',len(rv)==len(reverse)==len(translations) and set(rv)==set(translations))
+ for k,x in rv.items():check('Every reverse field equals main',all(x[f]==translations[k][f] for f in x))
+ for x in oldreverse:
+  n=rv[rk(x)];check('Prior reverse lexical fields and refs retained',all(x[f]==n[f] for f in x if f not in ('occurrences','courses','refs')) and set(x['refs'].split())<=set(n['refs'].split()))
+ course=rows(S,'_by_course.csv');oldcourse=rows(P,'_by_course.csv');oracle=collections.Counter();metadata={};ck=lambda x:(x['course'],x['wylie'],x['english'],x['depth'])
+ for x in nr:
+  if x['kind']!='translation':continue
+  for ref in x['refs'].split():k=(ref.split(':')[0],x['wylie'],x['english'],x['depth']);oracle[k]+=1;metadata[k]=x
+ actual={}
+ for x in course:
+  k=ck(x);check('Course unique key',k not in actual);actual[k]=int(x['occurrences_in_course']);check('Course full lexical/provenance fields exact',all(x[f]==metadata[k][f] for f in ('wylie','english','depth','acip','tibetan_generated','pronunciation_generated','tier')))
+ check('Complete course CSV equals independent main-ref oracle',actual==oracle)
+ for x in oldcourse:check('Prior course group retained',actual.get(ck(x),0)>=int(x['occurrences_in_course']))
+ delta=rows(S,'_changes.csv');oldkey={(x['wylie'],x['english'],x['depth']):x for x in pr};newkey={(x['wylie'],x['english'],x['depth']):x for x in nr};oldwords={x['wylie'] for x in pr};expected=[]
+ for x in nr:
+  if (x['wylie'],x['english'],x['depth']) not in oldkey:expected.append(dict(change='new headword' if x['wylie'] not in oldwords else 'new rendering',**{f:x[f] for f in ('wylie','acip','tibetan_generated','english','kind','depth','occurrences','courses','refs')}))
+ for k,x in oldkey.items():
+  if k not in newkey:expected.append(dict(change='withdrawn',**{f:x.get(f,'') for f in ('wylie','acip','tibetan_generated','english','kind','depth','occurrences','courses','refs')}))
+ check('Entire28-row change export independently derived from actual incoming seed',delta==expected and len(delta)==28)
+ for suffix in ('.csv','_reverse.csv','_by_course.csv','_changes.csv'):
+  raw=(S/('docs/geshe_michael_roach_dictionary'+suffix)).read_bytes();check('CSV complete BOM/CRLF preserved '+suffix,raw.startswith(b'\xef\xbb\xbf') and b'\n' not in raw.replace(b'\r\n',b''))
+ def payload(base):return json.loads(re.search(r'const PAYLOAD = (.*?);\n',(base/'docs/geshe_michael_roach_dictionary.html').read_text(),re.S).group(1))
+ def values(p):return {(d,t,a,e):set(refs) for d,ents in list(p['depths'].items())+[('phonetic',p['phonetics'])] for t,a,rs in ents for e,refs in rs}
+ ov=values(payload(P));nv=values(payload(S));check('All prior HTML tuples and references retained',all(k in nv and refs<=nv[k] for k,refs in ov.items()),len(ov))
+ missing=[dict(tib=t,pairs=p) for t,p in ev['pairs'].items() if all(x['acip'] is None for x in p)];missspans=[x for x in full['links'] if x['d']==5 and x['eng'] and not x['tib_acip']];check('Actual ACIP incomplete coverage7075/7078',len(ev['pairs'])==7078 and len(ev['acip_index'])==7075 and len(missing)==3);check('Actual five unproven ACIP spans',len(missspans)==5)
+ save(R/'acip-incomplete-evidence.json',dict(headwords=7078,proven=7075,missing=3,percentage=100*7075/7078,printed_rounded_percent='100.0%',builder_rejection_threshold_percent=95,unproven_span_count=5,missing_heads=missing,unproven_spans=missspans,limit='Existing 95% floor permits this incomplete state; rounded 100.0% is not full ACIP coverage. No new ACIP metadata enrichment.'))
+ check('C05 exact273coverage',sorted({x['seg'] for x in full['links'] if x['course']=='C05'})==list(range(1,274)));check('Evidence honesty labels',ev['meta']['tier']=='TENTATIVE (machine-matched, unreviewed)' and 'never enters hgm_gloss' in ev['meta']['rule'] and 'never that the correspondence is CORRECT' in ev['meta']['limit'])
+ registered=J(R/'registered-pages.json');pagehash=hashlib.sha256()
+ for x in registered:pagehash.update((S/x['relative_path']).read_text().encode())
+ check('Source-page digest derived from complete registered pages',pagehash.hexdigest()[:16] in ev['meta']['source_pages'])
+ conn=sqlite3.connect((S/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);conn.execute('PRAGMA query_only=ON');check('Current review source ranges independently reopened',conn.execute('PRAGMA query_only').fetchone()[0]==1)
+ reviewdir=S/'data/alignment/reviews_c05/c5p91';review=J(reviewdir/'review.json');spec=J(S/'data/alignment/specs_c05/c5p91.json');tuples=J(reviewdir/'resolved-spans.json');check('Accepted current101tuple interface',review['verdict']=='APPROVE' and review['open_findings']==[] and len(tuples)==101 and [dict(seq=s['seq'],id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng']) for s in spec['segments'] for x in s['spans']]==[{k:x[k] for k in ('seq','id','d','tib','eng')} for x in tuples])
+ for x in tuples:
+  w,e=conn.execute('SELECT wylie,english FROM corpus_segments WHERE course=? AND seq=?',('C05',x['seq'])).fetchone();check('Current accepted range source exact',w[slice(*x['tib_range'])]==x['tib'] and (x['eng_range'] is None if x['eng'] is None else e[slice(*x['eng_range'])]==x['eng']))
+ conn.close()
+ for x in J(R/'input-manifest.json'):
+  cp=R/x['copy']
+  if x['role']=='first isolated view seed; intentionally previous main CSV':continue
+  check('Isolated immutable input remains exact',pin(cp)=={k:x[k] for k in ('bytes','sha256')},x['copy'])
+ for x in J(L/'staged-payload-manifest.json')['files']:check('Actual live frozen12 payload remains equal',pin(W/x['path'])=={k:x[k] for k in ('bytes','sha256')} and (W/x['path']).read_bytes()==(R/'expected-payload'/x['path']).read_bytes(),x['path'])
+ counts=dict(links=len(full['links']),nulls=sum(x['eng'] is None for x in full['links']),notes=sum(len(x) for x in full['notes'].values()),trees=sum(len(x) for x in full['trees'].values()),heads=len(ev['pairs']),pairs=sum(map(len,ev['pairs'].values())),csv_main=len(nr),csv_reverse=len(reverse),csv_course=len(course),csv_changes=len(delta));check('Exact expected output counts',list(counts.values())==[45011,11923,1609,11,7078,15469,22413,22073,23974,28])
+ proof.update(status='PASS',counts=counts,prior_links_retained=len(old['links']),added_links=len(added),added_by_segment=dict(collections.Counter(x['seg'] for x in added)),prior_main_rows=len(pr),prior_reverse_rows=len(oldreverse),prior_course_groups=len(oldcourse),main_existing_fields_changed=dict(fields_changed),acip_metadata_enrichments=[],all_seven_frozen_and_live_complete_bytes_equal=True,checks_total=len(checks),failures=[],scope='Generated-output reproduction and retention only; no finalcommit/staging/MAIN/render approval')
+except BaseException:
+ import traceback
+ proof.update(status='FAILED',failure=traceback.format_exc());raise
+finally:save(R/'retention-checks.json',checks);save(R/'retention-proof.json',proof)
+save(R/'live-after.json',dict(head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=W).decode().strip(),status=subprocess.check_output(['git','status','--porcelain=v1','--untracked-files=no'],cwd=W).decode(),utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))
+print(json.dumps(proof,indent=2))

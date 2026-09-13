@@ -1,0 +1,219 @@
+"""Root mechanical check of the actual 271–273 schemas; not semantic approval."""
+from pathlib import Path
+from collections import Counter
+import datetime, hashlib, importlib.util, json, os, sqlite3, subprocess, sys, traceback
+sys.dont_write_bytecode = True
+b = Path(__file__).resolve().parent
+wt = b.parents[1] / 'campaign-worktree'
+shared = b / 'reconciled/271'
+out = b / 'root-reconciliation-verification'
+out.mkdir()
+key7 = ('seq', 'id', 'd', 'tib', 'eng', 'tib_range', 'eng_range')
+key8 = ('angle',) + key7
+proof = dict(started_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             status='RUNNING', role='Root authored Tibetan originals; mechanical verification only.')
+def read(p): return json.loads(p.read_bytes())
+def pin(p):
+    raw = p.read_bytes()
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+def checkpin(p, expected):
+    assert pin(p) == {k: expected[k] for k in ('bytes', 'sha256')}, str(p)
+def save(p, obj):
+    with p.open('x') as f: json.dump(obj, f, ensure_ascii=False, indent=2); f.write('\n')
+def git(*args):
+    return subprocess.run(['git', *args], cwd=wt, capture_output=True, check=True).stdout
+def freeze(directory):
+    fp = directory / 'freeze.json'; f = read(fp)
+    items = f['files'].items() if isinstance(f['files'], dict) else [(r.get('relative_path', r.get('path')), r) for r in f['files']]
+    entries = {}
+    for name, record in items:
+        path = Path(name)
+        name = str(path.relative_to(directory)) if path.is_absolute() else name
+        assert not Path(name).is_absolute() and '..' not in Path(name).parts and name not in entries
+        if Path(record.get('path', '')).is_absolute(): assert Path(record['path']) == directory/name
+        entries[name] = record
+    actual = {str(p.relative_to(directory)) for p in directory.rglob('*') if p.is_file() and p != fp}
+    assert actual == set(entries), (directory, actual ^ set(entries))
+    if 'file_count' in f: assert len(entries) == f['file_count']
+    for name, record in entries.items(): checkpin(directory/name, record)
+    if 'total_bytes' in f: assert sum(r['bytes'] for r in entries.values()) == f['total_bytes']
+    return dict(directory=str(directory), files=len(entries), freeze=pin(fp))
+try:
+    initial=b/'correction-01/initial'
+    preservation=read(b/'correction-01/proof.json')
+    assert preservation['status'].startswith('PASS initial NEEDS_CORRECTION')
+    for item in preservation['source_version_transports']:
+        checkpin(Path(item['retained_copy']),item)
+    for seq in (271,272):
+        before=preservation['snapshots']['reconciled']['files']
+        expected={k.split('/',1)[1]:v for k,v in before.items() if k.startswith(str(seq)+'/')}
+        actual={str(p.relative_to(b/'reconciled'/str(seq))):pin(p) for p in (b/'reconciled'/str(seq)).rglob('*') if p.is_file()}
+        assert actual==expected, ('unchanged complete segment',seq)
+    initial_273=read(initial/'reconciled/273/spec.json')
+    current_273=read(b/'reconciled/273/spec.json')
+    expected_273=json.loads(json.dumps(initial_273))
+    expected_273['segments'][0]['spans']=[x for x in expected_273['segments'][0]['spans'] if x['id']!='p22']
+    expected_273['segments'][0]['eng_order']=[x for x in expected_273['segments'][0]['eng_order'] if x!='p22']
+    assert current_273['segments'][0]['note']
+    expected_273['segments'][0]['note']=current_273['segments'][0]['note']
+    assert current_273==expected_273, 'Only p22 omission and the explanatory note may change the spec'
+    initial_tuples=read(initial/'root-reconciliation-verification/resolved-spans.json')
+    expected_final=[x for x in initial_tuples if not (x['seq']==273 and x['id']=='p22')]
+    assert len(expected_final)==101
+    initial_dispositions=read(initial/'reconciled/273/original-dispositions.json')
+    current_dispositions=read(b/'reconciled/273/original-dispositions.json')
+    assert len(initial_dispositions)==len(current_dispositions)==56
+    for a,z in zip(initial_dispositions,current_dispositions):
+        identity=a['original_identity']
+        if identity['angle']=='english' and identity['id']=='p22':
+            allowed={'status','final_ids','rationale'}
+            assert {k:v for k,v in a.items() if k not in allowed}=={k:v for k,v in z.items() if k not in allowed}
+            assert z['status']=='omitted_distributed' and z['final_ids']==[] and z['rationale']
+        else: assert a==z
+    initial_decisions=read(initial/'reconciled/273/final-decisions.json')
+    assert read(b/'reconciled/273/final-decisions.json')==[x for x in initial_decisions if x['tuple']['id']!='p22']
+    for name in ('errata-five-ground-decisions.json','errata.json','proposed-head-allowances.json'):
+        assert (b/'reconciled/273'/name).read_bytes()==(initial/'reconciled/273'/name).read_bytes()
+    baseline = read(b/'baseline.json')
+    assert git('rev-parse', 'HEAD').decode().strip() == baseline['commit'] == '7166534a9f47a201e5ab580a843c14ba2a910891'
+    for name, sha in baseline['sha256'].items(): assert pin(wt/name)['sha256'] == sha, name
+    original_freezes = [freeze(b/angle/str(seq)) for angle in ('tibetan', 'english') for seq in (271, 272, 273)]
+    final_freezes = [freeze(b/'reconciled'/str(seq)) for seq in (271, 272, 273)]
+    for r in read(shared/'source-input-pins.json'): checkpin(Path(r['path']), r)
+    for r in read(shared/'supported-copy-preflight.json')['required_reference_access']: assert os.access(r['path'], os.R_OK), r['path']
+    db = sqlite3.connect((wt/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro', uri=True)
+    db.row_factory = sqlite3.Row; db.execute('PRAGMA query_only=ON')
+    source_rows = [dict(r) for r in db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq', ('C05', 271, 273))]
+    assert [{k:r[k] for k in ('id','course','seq','acip','wylie','english')} for r in source_rows] == read(b/'source.json')
+    sources = {r['seq']: r for r in source_rows}
+    query_count = 0
+    for r in read(shared/'queries-reopened-full.json') + read(shared/'refutation-targeted-queries-full.json'):
+        actual = [dict(x) for x in db.execute(r['sql'], r['parameters'])]
+        assert actual == r['rows'] and len(actual) == r['count'], (r.get('term'), r['sql'])
+        query_count += 1
+    for name, table in [('master-full-rows.json','entries'), ('corpus-full-rows.json','corpus_segments')]:
+        for r in read(shared/name): assert dict(db.execute(f'SELECT * FROM {table} WHERE id=?', (r['id'],)).fetchone()) == r
+    db.close()
+    originals = read(b/'proposal-verification-attempt02/root-resolved-spans.json')
+    original_by_key = {(r['angle'],r['seq'],r['id']): r for r in originals}
+    assert len(original_by_key) == len(originals) == 198
+    sys.path.insert(0, str(wt/'tools'))
+    definition = importlib.util.spec_from_file_location('canonical_generator', wt/'tools/gen_alignment_page.py')
+    g = importlib.util.module_from_spec(definition); definition.loader.exec_module(g)
+    finals = []; results = []; seen = []; dispositions = Counter(); extra_reasons = set()
+    wrapper = shared/'run-canonical-readonly.py.txt'
+    for seq in (271, 272, 273):
+        directory = b/'reconciled'/str(seq); raw = (directory/'spec.json').read_bytes(); spec = json.loads(raw)
+        assert spec['course'] == 'C05' and [s['seq'] for s in spec['segments']] == [seq]
+        segment = spec['segments'][0]; spans = segment['spans']; byid = {s['id']: s for s in spans}
+        assert len(byid) == len(spans)
+        if seq==273:
+            argv = [sys.executable, '-B', str(wrapper)]
+            started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+            run = subprocess.run(argv, input=raw, cwd=wt, capture_output=True, env=dict(os.environ, PYTHONDONTWRITEBYTECODE='1'))
+            stdout=run.stdout;stderr=run.stderr;generator_exit=run.returncode
+            for suffix, content in [('stdout',stdout),('stderr',stderr),('exit',(str(generator_exit)+'\n').encode())]:
+                with (out/f'{seq}.{suffix}').open('xb') as f: f.write(content)
+            execution=dict(kind='actual changed-segment canonical execution',argv=argv,cwd=str(wt),started_at=started,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),environment={'PYTHONDONTWRITEBYTECODE':'1'},stdin=dict(path=str(directory/'spec.json'),**pin(directory/'spec.json')),exit=generator_exit,stdout=pin(out/f'{seq}.stdout'),stderr=pin(out/f'{seq}.stderr'),wrapper=pin(wrapper),generator=pin(wt/'tools/gen_alignment_page.py'))
+            save(out/f'{seq}.command.json',execution)
+        else:
+            historical=initial/'root-reconciliation-verification'
+            command=read(historical/f'{seq}.command.json')
+            stdout=(historical/f'{seq}.stdout').read_bytes();stderr=(historical/f'{seq}.stderr').read_bytes();generator_exit=command['exit']
+            assert (historical/f'{seq}.exit').read_text().strip()=='0'
+            checkpin(directory/'spec.json',command['stdin']);checkpin(wrapper,command['wrapper']);checkpin(wt/'tools/gen_alignment_page.py',command['generator'])
+            checkpin(historical/f'{seq}.stdout',command['stdout']);checkpin(historical/f'{seq}.stderr',command['stderr'])
+            execution=dict(kind='retained unchanged actual historical execution; not rerun',command=dict(path=str(historical/f'{seq}.command.json'),**pin(historical/f'{seq}.command.json')),stdout=dict(path=str(historical/f'{seq}.stdout'),**pin(historical/f'{seq}.stdout')),stderr=dict(path=str(historical/f'{seq}.stderr'),**pin(historical/f'{seq}.stderr')))
+            save(out/f'{seq}.retained-execution.json',execution)
+        assert generator_exit == 0 and not stderr and stdout == (directory/'body.html').read_bytes(), seq
+        tr = g.resolve(sources[seq]['wylie'], spans, 'tib', seq)
+        ordered = g.with_members(spans, [byid[i] for i in segment['eng_order']], sources[seq]['english'])
+        er = g.resolve(sources[seq]['english'], ordered, 'eng', seq)
+        local = [dict(seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(tr[s['id']]),eng_range=None if s['eng'] is None else list(er[s['id']])) for s in spans]
+        decisions = read(directory/'final-decisions.json'); tuples = read(directory/'final-tuples.json')
+        assert [x['tuple'] for x in decisions] == tuples
+        assert [x['span_object'] for x in decisions] == spans
+        assert [{k:x[k] for k in key7 if k != 'seq'} for x in local] == [{k:x[k] for k in key7 if k != 'seq'} for x in tuples]
+        for t in tuples:
+            parent = t['parent_id']
+            if t['d'] == 7:
+                assert parent and byid[parent]['d'] == 5
+                for field in ('tib_range','eng_range'):
+                    a,z = t[field]; p = next(v for v in tuples if v['id'] == parent)[field]
+                    assert p[0] <= a < z <= p[1] and p != t[field]
+            else: assert parent is None
+        reasons = {x['rationale'] for x in decisions}; assert all(reasons)
+        assert read(directory/'source-preservation-proof.json')['source_row'] == sources[seq]
+        omissions = read(directory/'omissions-full.json')
+        for field, sourcekey, rangekey in [('tib','wylie','tib_range'),('eng','english','eng_range')]:
+            source = sources[seq][sourcekey]; covered = [False]*len(source)
+            for t in local:
+                r = t[rangekey]
+                if r is not None:
+                    a,z = r; assert source[a:z] == t[field]; covered[a:z] = [True]*(z-a)
+            gaps=[]; i=0
+            while i < len(source):
+                if covered[i]: i+=1; continue
+                j=i+1
+                while j < len(source) and not covered[j]: j+=1
+                gaps.append(dict(range=[i,j],text=source[i:j]));i=j
+            assert gaps == [{k:r[k] for k in ('range','text')} for r in omissions['gaps'][field]]
+            assert all(r['rationale'] for r in omissions['gaps'][field])
+        for x in read(directory/'original-dispositions.json'):
+            ident=x['original_identity']; assert set(ident) == set(key8)
+            k=(ident['angle'],ident['seq'],ident['id']);seen.append(k);r=original_by_key[k]
+            assert ident == {a:r[a] for a in key8}
+            original_dir=b/ident['angle']/str(seq)
+            original_spec=read(original_dir/'spec.json')['segments'][0]
+            original_span=next(s for s in original_spec['spans'] if s['id']==ident['id'])
+            assert original_span == r['original_span'] == x['original_span']
+            assert list(original_span)==x['original_key_order'] and sorted(original_span)==x['original_field_presence']==r['original_field_presence']
+            declarations = read(original_dir/'intended-spans.json') if ident['angle']=='tibetan' else read(original_dir/'decisions.json')['spans']
+            assert next(d for d in declarations if d['id']==ident['id']) == x['original_occurrence_declaration']
+            status=x['status'];dispositions[status]+=1;assert x['rationale']
+            if x['rationale'] not in reasons:extra_reasons.add(x['rationale'])
+            matches=[next(t for t in local if t['id']==i) for i in x['final_ids']]
+            if status=='retained':
+                assert len(matches)==1 and {a:ident[a] for a in key7 if a!='id'}=={a:matches[0][a] for a in key7 if a!='id'}
+            elif status=='recast_or_boundary_or_depth_changed': assert matches
+            else: assert status=='omitted_distributed' and not matches
+        for x in read(directory/'errata-five-ground-decisions.json'):
+            assert set(x['grounds']) == set('abcde') and x['refuted'] and not x['surviving_erratum']
+            assert x['grounds']['a']['complete_row'] == sources[seq]
+            assert x['grounds']['a']['verbatim_in_current_fields'] == {k:x['found'] in sources[seq][k] for k in ('acip','wylie','english')}
+        assert read(directory/'errata.json') == [] and read(directory/'proposed-head-allowances.json') == []
+        finals.extend(local)
+        results.append(dict(seq=seq,exit=generator_exit,generator_execution=execution,spans=len(spans),nulls=sum(s['eng'] is None for s in spans),word_pairs=sum(s['d']==5 and s['eng'] is not None for s in spans),body_bytes=len(stdout),body_sha256=pin(directory/'body.html')['sha256'],spec_bytes=len(raw),spec_sha256=pin(directory/'spec.json')['sha256'],saved_body_identical=True))
+    assert finals==expected_final and len(finals)==101 and len(seen)==len(set(seen))==198 and set(seen)==set(original_by_key)
+    assert dispositions==Counter(retained=180,recast_or_boundary_or_depth_changed=16,omitted_distributed=2)
+    whitelist={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+    mappings=read(shared/'original-copy-manifest.json')
+    for r in mappings:
+        original=Path(r['original']); copy=shared/r['copy']
+        checkpin(original,r);checkpin(copy,r);assert original.read_bytes()==copy.read_bytes() and copy.suffix in whitelist
+    for r in read(shared/'governing-manifest.json'):
+        copy=Path(r['copy']['path']);checkpin(copy,r['copy']);assert copy.read_bytes()==git('show',r['git_commit']+':'+r['git_path'])
+    physical=read(shared/'C15-271-physical-supplement.json')
+    original=Path(physical['original']['path']);copy=Path(physical['copy']['path'])
+    checkpin(original,physical['original']);checkpin(copy,physical['copy']);a,z=physical['range']
+    assert original.read_bytes()[a:z]==copy.read_bytes()==physical['complete_extent_latin1'].encode('latin1')
+    for r in read(shared/'physical-reopened-full.json'):
+        if isinstance(r['original'],dict):
+            original=Path(r['original']['path']);checkpin(original,r['original']);a,z=r['byte_range'];raw=original.read_bytes()[a:z]
+            assert len(raw)==r['bytes'] and hashlib.sha256(raw).hexdigest()==r['sha256'] and raw==r['full_extent_latin1'].encode('latin1')
+        else:
+            original=Path(r['original']);checkpin(original,dict(bytes=r['original_bytes'],sha256=r['original_sha256']))
+            raw=original.read_bytes()[r['extent_start_byte']:r['extent_end_byte']]
+            assert hashlib.sha256(raw).hexdigest()==r['extent_sha256'] and raw==r['extent_utf8'].encode('utf8')
+            assert (shared/r['copy']).read_bytes()==original.read_bytes()
+    for name,sha in baseline['sha256'].items(): assert pin(wt/name)['sha256']==sha
+    assert final_freezes == [freeze(b/'reconciled'/str(seq)) for seq in (271,272,273)]
+    assert original_freezes == [freeze(b/angle/str(seq)) for angle in ('tibetan','english') for seq in (271,272,273)]
+    assert git('status','--short').decode() == '?? data/teaching/dcc_captions\n'
+    save(out/'resolved-spans.json',finals);save(out/'report.json',results)
+    proof.update(status='PASS mechanical handoff only',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),baseline=baseline['commit'],original_freezes=original_freezes,reconciled_freezes=final_freezes,original_identities=198,final_tuples=len(finals),nulls=8,nonnull_d5=63,dispositions=dict(dispositions),original_full_objects_and_occurrence_declarations_exact=True,complete_omission_complements_exact=True,query_replays=query_count,material_copy_records=len(mappings),governing_git_pins=11,physical_extents_reopened=11,all_rationales_read=True,additional_unique_original_rationales=len(extra_reasons),canonical_replays=1,canonical_replay_segments=[273],retained_unchanged_canonical_results=[271,272],initial_preservation_proof=pin(b/'correction-01/proof.json'),initial_tuple_sequence_minus_p22_exact=True,source_pins_unchanged=True,semantic_approval=False)
+except Exception:
+    proof.update(status='FAILED',failure=traceback.format_exc());raise
+finally:
+    save(out/'root-frozen-evidence-check.json',proof)
+    print(json.dumps(proof,ensure_ascii=False))

@@ -1,0 +1,66 @@
+from pathlib import Path
+from html.parser import HTMLParser
+import hashlib,json,re
+
+HERE=Path(__file__).resolve().parent;ANGLE=HERE.parent
+ROWS={r['seq']:r for r in json.loads((HERE/'evidence/source-full-rows.json').read_bytes())}
+
+class Page(HTMLParser):
+    def __init__(self,seq):
+        super().__init__(convert_charrefs=True)
+        self.seq=seq;self.side=None;self.active=False;self.skip=0;self.stack=[];self.text={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}}
+    def handle_starttag(self,tag,attrs):
+        a=dict(attrs)
+        if tag=='div' and a.get('class') in ('tib','eng'):self.side=a['class']
+        if tag=='span':
+            root=a.get('data-l')==f's{self.seq}S'
+            if root:self.active=True
+            null='nul' in a.get('class','').split()
+            if null:self.skip+=1
+            self.stack.append(dict(root=root,null=null,side=self.side,active=self.active,label=a.get('data-l'),start=len(self.text[self.side]) if self.side else 0))
+    def handle_data(self,data):
+        if self.active and not self.skip:self.text[self.side]+=data
+    def handle_endtag(self,tag):
+        if tag=='span':
+            entry=self.stack.pop()
+            if entry['active'] and entry['label']:
+                self.ranges[entry['side']][entry['label']]=[entry['start'],len(self.text[entry['side']])]
+            if entry['null']:self.skip-=1
+            if entry['root']:self.active=False
+
+def gaps(text,ranges):
+    out=[];cursor=0
+    for lo,hi in sorted(ranges):
+        if lo>cursor:out.append(dict(range=[cursor,lo],text=text[cursor:lo]))
+        cursor=max(cursor,hi)
+    if cursor<len(text):out.append(dict(range=[cursor,len(text)],text=text[cursor:]))
+    return out
+
+for seq,row in ROWS.items():
+    p=ANGLE/str(seq);spec=json.loads((p/'spec.json').read_bytes())['segments'][0];decision=json.loads((p/'decisions.json').read_bytes())
+    page=Page(seq);page.feed((p/'body.html').read_text())
+    assert page.text['tib']==row['wylie'] and page.text['eng']==row['english'],seq
+    resolved=[]
+    for sp,expected in zip(spec['spans'],decision['spans']):
+        assert sp['id']==expected['id']
+        label=f's{seq}'+sp['id'];tr=page.ranges['tib'][label];er=page.ranges['eng'][label]
+        assert tr==expected['tib_range'],(seq,sp['id'],'tib',tr,expected['tib_range'])
+        assert row['wylie'][tr[0]:tr[1]]==sp['tib']
+        if sp['eng'] is not None:
+            assert er==expected['eng_range'],(seq,sp['id'],'eng',er,expected['eng_range'])
+            assert row['english'][er[0]:er[1]]==sp['eng']
+        else:assert er==[len(row['english']),len(row['english'])]
+        resolved.append(dict(id=sp['id'],d=sp['d'],tib=sp['tib'],eng=sp['eng'],tib_char_range=tr,eng_char_range=er if sp['eng'] is not None else None,
+            tib_utf8_byte_range=[len(row['wylie'][:v].encode()) for v in tr],eng_utf8_byte_range=[len(row['english'][:v].encode()) for v in er] if sp['eng'] is not None else None))
+    counts=dict(spans=len(spec['spans']),d5=sum(s['d']==5 for s in spec['spans']),nulls=sum(s['eng'] is None for s in spec['spans']),
+        by_depth={str(d):sum(s['d']==d for s in spec['spans']) for d in sorted({s['d'] for s in spec['spans']})})
+    unwrapped={side:gaps(row['wylie' if side=='tib' else 'english'],[v[side+'_char_range'] for v in resolved if v['d']!=7 and v[side+'_char_range'] is not None]) for side in ['tib','eng']}
+    result=json.loads((p/'canonical-result.json').read_bytes())
+    assert result['exit']==0 and result['stderr_bytes']==0
+    assert hashlib.sha256((p/'body.html').read_bytes()).hexdigest()==result['body_sha256']
+    proof=dict(seq=seq,source_fields_reproduced_exactly=['wylie','english'],actual_HTML_occurrences_match_all_planned_ranges=True,
+        count_scope='spec spans, excluding the automatic sentence wrapper',counts=counts,canonical=result,spans=resolved,unwrapped=unwrapped)
+    (p/'occurrence-proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+    print(seq,counts)
+    print('TIB_GAPS',[(i,g['text']) for i,g in enumerate(unwrapped['tib']) if g['text'].strip(' ,')])
+    print('ENG_GAPS',[(i,g['text']) for i,g in enumerate(unwrapped['eng']) if g['text'].strip(' ,.;:"')])

@@ -1,0 +1,8 @@
+from pathlib import Path
+import json,subprocess,sys,os,hashlib,datetime
+O=Path(__file__).resolve().parent
+commands=[('syntax',[sys.executable,'-B','-c',"from pathlib import Path; [compile(p.read_bytes(),str(p),'exec') for p in [Path('whitespace273.py'),Path('test_predicates.py')]]; print('Syntax compile PASS; no bytecode written')"]),('unit',[sys.executable,'-B','test_predicates.py'])]
+for label,argv in commands:
+ out=O/'checks'/label;out.mkdir(parents=True,exist_ok=False);(out/'command.json').write_text(json.dumps(dict(argv=argv,cwd=str(O),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'},started_at=datetime.datetime.now(datetime.timezone.utc).isoformat()),indent=2)+'\n');(out/'stdin.bin').write_bytes(b'');p=subprocess.run(argv,cwd=O,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),input=b'',capture_output=True)
+ for name,raw in [('stdout.txt',p.stdout),('stderr.txt',p.stderr),('exit.txt',(str(p.returncode)+'\n').encode())]:(out/name).write_bytes(raw)
+ print(label,p.returncode,p.stdout.decode(),p.stderr.decode());assert p.returncode==0

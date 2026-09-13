@@ -1,0 +1,213 @@
+{
+  "review_type": "Independent bounded tooling code/predicate review",
+  "context_reused": true,
+  "authored_candidate": false,
+  "spec_verdict": "NEEDS_CORRECTION",
+  "quality_verdict": "NEEDS_CORRECTION",
+  "open_findings": [
+    {
+      "id": "WHITESPACE-273-ALIAS-01",
+      "priority": "P1",
+      "status": "OPEN",
+      "file": "whitespace273.py",
+      "lines": [
+        127,
+        129,
+        140,
+        223,
+        224,
+        225
+      ],
+      "title": "Supplied root aliases are discarded before the final identity check",
+      "evidence": "alias-probe.json",
+      "detail": "Constructor resolves worktree, review, and root_manifest immediately. The root-manifest private fixture retargets the supplied symlink from one.json to two.json with identical bytes. The exact final input loop passes because the recorded input_path is already one.json. Direct read(alias) control rejects the same retarget. Worktree/review roots have the same static loss; only root-manifest retarget was dynamically probed.",
+      "minimal_remedy": "Retain and recheck supplied root aliases and resolved identities, and read root_manifest via its supplied alias; track worktree/review roots equivalently. Alternatively explicitly reject noncanonical/symlink root aliases at entry and document that bounded restriction. Keep full byte rechecks. Add constructor-level same-byte retarget and stable-alias controls."
+    },
+    {
+      "id": "WHITESPACE-273-PHYSICAL-02",
+      "priority": "P1",
+      "status": "OPEN",
+      "file": "whitespace273.py",
+      "lines": [
+        57,
+        100,
+        199
+      ],
+      "title": "Global empty-LF EOF gate rejects exact original CRLF physical fragments",
+      "evidence": "actual-predicate-probe.json",
+      "affected_files": 33,
+      "affected_warning_headers": 308,
+      "example": {
+        "path": "data/alignment/reviews_c05/c5p91/history/initial-review/independent-physical/00.bin",
+        "bytes": 1037,
+        "sha256": "c77f8a60c77fc9c632e58e4ea3c513b697e31c454ffcf794764f1249f5723a8e",
+        "issues": {
+          "trailing whitespace.": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "new blank line at EOF.": [
+            10
+          ]
+        },
+        "whole_original_ranges": [
+          {
+            "original": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+            "source_pin": {
+              "bytes": 329826,
+              "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+            },
+            "byte_range": [
+              177050,
+              178087
+            ]
+          }
+        ],
+        "EOF_tails_hex": {
+          "10": [
+            "0d",
+            ""
+          ]
+        }
+      },
+      "detail": "33 current warned frozen files equal complete byte ranges in reopened physical originals. Their final blank line is CRLF, so split-LF yields b\"\\r\", b\"\"; the unconditional literal_warnings EOF assertion rejects before source-range classification, including within classify_physical itself. The first exact C05 fragment is [177050,178087),1037 bytes; EOF line10. This is an actual frozen-source case, not an inferred new exemption.",
+      "minimal_remedy": "Separate common warning-name/number/trailing/indent validation from category-specific EOF ownership. Permit original CRLF EOF only under independently verified whole physical byte-range provenance and exact literal empty CRLF tail, preserving all complete-source aliases/ranges. Keep ordinary blank-EOF strict and physical-line fallback narrow; reject changed fragments, whitespace-only fabricated reports, nonempty tails, and unsupported categories. Update report/contract/tests without normalizing source."
+    },
+    {
+      "id": "WHITESPACE-273-DIFF-03",
+      "priority": "P1",
+      "status": "OPEN",
+      "file": "whitespace273.py",
+      "lines": [
+        57,
+        91,
+        92,
+        93,
+        97,
+        199
+      ],
+      "title": "Valid blank diff context at EOF cannot pass mixed trailing/EOF diagnostics",
+      "evidence": "boundary-proof.json and actual-predicate-probe.json",
+      "example": {
+        "path": "data/alignment/reviews_c05/c5p91/landing-proof/extra-evidence/staging-v1-review/report-linecount-fix.diff.txt",
+        "bytes": 2176,
+        "sha256": "4dbcb14873bfa4ce514c1ac9856fe9c509ba6f9f80747087c598ebeff0021a5c",
+        "issues": {
+          "trailing whitespace.": [
+            5,
+            8,
+            10
+          ],
+          "new blank line at EOF.": [
+            10
+          ]
+        },
+        "EOF_tails_hex": {
+          "10": [
+            "20",
+            ""
+          ]
+        }
+      },
+      "detail": "The actual root bank file is a complete balanced unified diff: ---/+++/@@ -1,6 +1,6 @@ and exactly balanced content. Existing diff_context_lines independently returns {5,8,10}. Git reports trailing whitespace at5/8/10 and new blank line at EOF at10. Line10 is exactly the required single ASCII context marker, not an empty LF line. Global EOF validation rejects it; even bypassing that gate leaves the single-kind ordinary branch rejecting this combination. Actual261-record root manifest has one exact source/copy record, whose full original equals the 2176-byte bank file.",
+      "minimal_remedy": "Add a bounded complete-diff-context path that validates all reported trailing lines and any EOF line as exact one-space parsed context positions, with exact allowed final tail, and permits this observed mixed warning set. Preserve ordinary empty-LF EOF behavior separately; do not accept arbitrary whitespace EOF, marker-shaped prose, unbalanced hunks, source prints, or unsupported kinds. Preserve this original diff unchanged and test its complete actual bytes plus negatives."
+    }
+  ],
+  "baseline_head": "7166534a9f47a201e5ab580a843c14ba2a910891",
+  "candidate": {
+    "bytes": 16617,
+    "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+  },
+  "candidate_freeze": {
+    "bytes": 14601,
+    "sha256": "cdbb9f2cc81c0c14c45364d757ca9fed75b65aaf5a3800637b82c099e04ce9b3"
+  },
+  "preserved_original_mapping_count": 164,
+  "actual_diagnostic": {
+    "pin": {
+      "bytes": 36268143,
+      "sha256": "ce93fc36cce920a0d24660ef2ac1b7f735059a96beb3b9e4e4ee82921e02a766"
+    },
+    "file_count": 58,
+    "warning_count": 95906,
+    "warning_kinds": {
+      "trailing whitespace.": 95852,
+      "new blank line at EOF.": 36,
+      "space before tab in indent.": 18
+    },
+    "root_command_exit": 2
+  },
+  "current_schema_counts": {
+    "semantic_freeze": 2032,
+    "root_manifest_files": 261,
+    "root_manifest_external": 2981
+  },
+  "retained_author_predicate_tests": 16,
+  "retained_author_final_exit": 0,
+  "retained_author_initial_failures": 2,
+  "independent_execution": {
+    "candidate_cli_calls": 0,
+    "Run_run_calls": 0,
+    "git_calls": 0,
+    "live_index_reads": 0,
+    "private_constructor_alias_probe": true,
+    "pure_predicates_on_preserved_actual_warned_files": 58,
+    "full_source_reopens": 4
+  },
+  "evidence_pins": {
+    "candidate/whitespace273.py.txt": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "candidate/freeze.json": {
+      "bytes": 14601,
+      "sha256": "cdbb9f2cc81c0c14c45364d757ca9fed75b65aaf5a3800637b82c099e04ce9b3"
+    },
+    "candidate/command-contract.json": {
+      "bytes": 8300,
+      "sha256": "1f5540fc6dbc565dc28d9fd42067ed2643eb447428e035969615006b212b41c4"
+    },
+    "current-root-manifest.json": {
+      "bytes": 1800687,
+      "sha256": "f665b5f6191c891b41d65d73f7f6f3a9a9f639a59b74553f2840f00851b1ac09"
+    },
+    "current-build-proof.json": {
+      "bytes": 3170,
+      "sha256": "e766d2f53c1afa97e9814ba6e76c0681018c6504e17d242a1d90e50c2fa21891"
+    },
+    "alias-probe.json": {
+      "bytes": 1744,
+      "sha256": "1e7cfcd3808baa46698eada6d04722cce16e83e71615860962872c74788d8cc1"
+    },
+    "actual-predicate-probe.json": {
+      "bytes": 1830356,
+      "sha256": "80f5167d833ad855bfbc26de33e2bc83587b3b2e478edc62658461c732bff401"
+    },
+    "boundary-proof.json": {
+      "bytes": 22686,
+      "sha256": "4f27c55619981143a7c1fed00f539bdd42e40ad2ed2b51fe6085ee2b58459058"
+    },
+    "original-to-copy-manifest.json": {
+      "bytes": 66154,
+      "sha256": "7106ede083c8320551f63a4918192d75bbbacbd4329e4b83de686d77c59c661c"
+    },
+    "findings.json": {
+      "bytes": 5529,
+      "sha256": "157ec13c9e6147ab474f5aa4fd4eb145a54a22d9bf5b4ea74aeb0f19653eccef"
+    }
+  },
+  "limits": [
+    "Not an actual prepare/audit run or staging/index acceptance.",
+    "No new semantic approval, generated-output rerun, CTest, repository writes or source normalization.",
+    "Any corrected code requires scoped independent re-review and later actual command/diagnostic/byte/index gates."
+  ],
+  "line_reference_correction_history": "history/before-line-reference-correction"
+}

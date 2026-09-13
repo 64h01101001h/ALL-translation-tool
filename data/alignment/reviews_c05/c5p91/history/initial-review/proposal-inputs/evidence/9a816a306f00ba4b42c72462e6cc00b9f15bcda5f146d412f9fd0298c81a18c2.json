@@ -1,0 +1,46 @@
+{
+  "status": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "scope": "Only exact registration-helper v2 identity guards and permitted registry/index transformations; no live execution or alignment semantic approval.",
+  "actual_reviewer": "Codex /root/c05_262_264_english, reused context, English-original author; not root helper author",
+  "candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/register-reviewed-page-and-index-v2.py",
+    "bytes": 7971,
+    "sha256": "4db82414ccf8467a333280696786fd0089cc1080bb689f04f980e4bc8978535e"
+  },
+  "resolved_findings": [
+    {
+      "id": "REG-001",
+      "status": "RESOLVED",
+      "evidence": "Both original faults now reject before any helper writes; each approved individual spec/body is hash/size bound and equal to both retained copies, and full landed spec serialization/body composition are checked before registration."
+    }
+  ],
+  "open_findings": [],
+  "validation": {
+    "final_fixture_cases": 25,
+    "control_passes": 1,
+    "prewrite_fault_rejections": 24,
+    "all_prior_fixture_pages_unchanged": true,
+    "exact_preimages_verified": true,
+    "permitted_existing_mutations": 2,
+    "permitted_created_evidence_files": 3,
+    "control_metadata_check_exit": 0,
+    "first_attempt_retained": true,
+    "first_attempt_fixture_limitation": "An irrelevant placeholder manifest count mismatch was corrected in separate complete fixtures; original 25-case run remains unchanged. See attempt-note.md.",
+    "initial_freeze_files_reverified": 1176
+  },
+  "preserved_interfaces": [
+    "land_reviewed_page.py",
+    "verify_semantic_acceptance.py",
+    "baseline-generator.py",
+    "baseline-builder.py",
+    "baseline-index.html"
+  ],
+  "limits": [
+    "Synthetic control checks interface byte identity, not real alignment correctness or completed semantic acceptance.",
+    "Git calls are constrained fixture stubs; no live registration, builders, canonical generator, or unchanged project tests executed.",
+    "Parent still must independently accept actual semantic review and run actual landing/canonical/registry/build/tests/retained-output checks; this approval substitutes for none of those.",
+    "Whole wrapper presentation and concurrent interruption/transaction recovery remain outside this narrowly scoped helper review; full original preimages are retained before writes."
+  ]
+}

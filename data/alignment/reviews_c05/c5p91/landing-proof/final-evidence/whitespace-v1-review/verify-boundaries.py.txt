@@ -1,0 +1,31 @@
+import json, hashlib, importlib.machinery, importlib.util, sys
+from pathlib import Path
+sys.dont_write_bytecode=True
+ROOT=Path.cwd();R=ROOT/'campaign-artifacts/whitespace-review-273';C=ROOT/'campaign-artifacts/whitespace-candidate-273';B=ROOT/'campaign-artifacts/C05-271-273';W=ROOT/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,o):p.write_text(json.dumps(o,indent=2,ensure_ascii=False)+'\n')
+loader=importlib.machinery.SourceFileLoader('boundary_candidate',str(R/'candidate/whitespace273.py.txt'));s=importlib.util.spec_from_loader(loader.name,loader);m=importlib.util.module_from_spec(s);loader.exec_module(m)
+root=json.loads((R/'current-root-manifest.json').read_bytes()); sem=json.loads((R/'candidate/current-inputs/semantic-review/freeze.json').read_bytes());build=json.loads((R/'current-build-proof.json').read_bytes());obs=json.loads((R/'actual-predicate-probe.json').read_bytes());records=[];extra=[]
+for x in obs['results']:
+ b=(R/x['copy']).read_bytes();assert pin(b)=={k:x[k] for k in ('bytes','sha256')};assert (W/x['path']).read_bytes()==b
+ if x['path'] in m.CSV:
+  assert pin(b)['sha256']==build['output_sha256'][x['path']];assert set(x['issues'])=={'trailing whitespace.'};lines=b.split(b'\n');assert all(lines[n-1].endswith(b'\r') for n in x['issues']['trailing whitespace.']);provenance='actual builder hash and all CR-before-LF warning lines'
+ elif '/landing-proof/' in x['path']:
+  rel=x['path'].split('/landing-proof/')[1];rows=[r for r in root['files'] if r['copy']==rel];assert len(rows)==1;rec=rows[0];assert pin(b)=={k:rec[k] for k in ('bytes','sha256')};assert Path(rec['original']).read_bytes()==b
+  cp='actual-originals/report-linecount-fix.diff.txt';(R/cp).parent.mkdir(exist_ok=True);assert not (R/cp).exists();(R/cp).write_bytes(b);extra.append(dict(original=rec['original'],copy=cp,**pin(b)))
+  contexts=m.diff_context_lines(b);assert contexts=={5,8,10};assert b.split(b'\n')[9:]==[b' ',b''];provenance=dict(root_manifest_record=rec,complete_balanced_diff_contexts=sorted(contexts),EOF_at_complete_blank_context=True)
+ else:
+  rel=x['path'][len(m.PREFIX):];assert pin(b)=={k:sem['files'][rel][k] for k in ('bytes','sha256')};assert (B/'semantic-review'/rel).read_bytes()==b;provenance='exact actual DICT freeze and whole semantic source equality'
+ records.append(dict(path=x['path'],pin=pin(b),provenance=provenance))
+assert len(root['files'])==261 and len(root['external_actual_bytes_retained'])==2981
+assert len(sem['files'])==2032
+# Historical difference already inspected. Exact actual candidate preservation includes all nested attempt files.
+cf=json.loads((C/'freeze.json').read_bytes());assert set(cf['files'])=={str(p.relative_to(C)) for p in C.rglob('*') if p.is_file() and p!=C/'freeze.json'}
+for rel,rec in cf['files'].items():assert pin((C/rel).read_bytes())=={k:rec[k] for k in ('bytes','sha256')}
+# Source copies and recorded original aliases retained without extension-dependent interpretation.
+for name in ['input-manifest.json','actual-input-manifest.json']:
+ for rec in json.loads((R/name).read_bytes()):
+  assert Path(rec['original']).read_bytes()==(R/rec['copy']).read_bytes();assert pin((R/rec['copy']).read_bytes())=={k:rec[k] for k in ('bytes','sha256')}
+save(R/'boundary-proof.json',dict(status='PASS independent read-only provenance and pure classification boundary checks',candidate=pin((C/'whitespace273.py').read_bytes()),candidate_freeze=pin((C/'freeze.json').read_bytes()),candidate_frozen_files=len(cf['files']),semantic_frozen_files=len(sem['files']),root_file_records=len(root['files']),root_external_records=len(root['external_actual_bytes_retained']),actual_warned_files=len(records),records=records,candidate_cli_calls=0,Run_run_calls=0,git_calls=0,scope='Actual log/file source observations only; no independent index blob read or staged audit'))
+save(R/'boundary-input-manifest.json',extra)
+print(json.dumps(dict(status='PASS',files=len(records),root_records=len(root['files']),external_records=len(root['external_actual_bytes_retained']),candidate_files=len(cf['files']))))

@@ -1,0 +1,9 @@
+{
+  "utc": "2026-09-13T03:32:43.123181+00:00",
+  "first_attempt": "EXIT1 before output directory, inventory, source proof or payload copies",
+  "cause": "Canonical Markdown has Git path docs/ERRATA_REGISTER.md. Case-insensitive local filesystem made lowercase exists() true but Git object lookup correctly rejected the invented casing.",
+  "correction": "Use exact tracked case verified from tools/build_errata_register.py and Git listing. All full source checks unchanged. No source, review, index, builder, test or prior artifact mutation.",
+  "read_limitation": "Broad Git errata path listing output truncated; exact canonical path and its producer lines verified, no whole-list reading claimed.",
+  "old_sha256": "b4a5a7d39f98d3fab8cc45e310019d7b2c2a54a65dc3368ba835f2fb0c20d8bd",
+  "new_sha256": "31ce0e6a21747f5316c83f9f4d2271399ccbc0104b0a03cbea10da9587957fd8"
+}

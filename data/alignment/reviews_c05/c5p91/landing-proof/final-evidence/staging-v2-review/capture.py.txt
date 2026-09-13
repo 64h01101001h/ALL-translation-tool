@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,hashlib,datetime
+R=Path.cwd();O=R/'campaign-artifacts/integration/through273-preparation/staging-review-v2';H=O.parent/'staging-helper-v2';B=R/'campaign-artifacts/C05-271-273';records=[]
+def pin(p):
+ raw=p.read_bytes();return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def keep(p,d):
+ raw=p.read_bytes();d.parent.mkdir(parents=True,exist_ok=True);assert not d.exists();d.write_bytes(raw);assert raw==p.read_bytes()==d.read_bytes();records.append({'original':str(p),'copy':str(d.relative_to(O)),**pin(p)})
+assert pin(H/'freeze.json')['sha256']=='8f470ad05e5192c7c95796920cdabb23acae12a68eade7f05bb8b2a760081752'
+f=json.loads((H/'freeze.json').read_text());files={str(p.relative_to(H)):pin(p) for p in H.rglob('*') if p.is_file() and p!=H/'freeze.json'};assert files==f['files'] and len(files)==623
+for p in sorted(H.rglob('*')):
+ if p.is_file():keep(p,O/'candidate'/p.relative_to(H))
+for dirname in ['ordinary','ordinary-caller']:
+ base=R/'campaign-artifacts/integration/through273-banking-runs'/dirname
+ for p in sorted(base.rglob('*')):
+  if p.is_file():keep(p,O/'actual-banking'/dirname/p.relative_to(base))
+for name in ['root-proof-copy-manifest-before-whitespace.json','staging-untracked-before.stdout','staging-untracked-before.stderr','staging-untracked-before.exit','staging-untracked-before.command.json','staged-payload-manifest.json','staged-payload-source-proof.json']:
+ keep(B/'landing'/name,O/'actual-landing'/name)
+keep(R/'campaign-artifacts/integration/through273-preparation/banking-helper/bank_root_proofs_through273.py',O/'actual-banking/bank_root_proofs_through273.py.txt')
+proof=json.loads((B/'landing/staged-payload-source-proof.json').read_text())
+for row in proof['files']:
+ p=Path(row['copy']);relative=p.relative_to(B/'landing/payload-freeze');keep(p,O/'actual-payload'/relative)
+for row in proof['proof_inputs']:
+ p=Path(row['path']);keep(p,O/'actual-proof-inputs'/p.name)
+(O/'input-manifest.json').write_text(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'role':'Reused independent non-author tooling reviewer; no new semantic approval','records':records},indent=2)+'\n')
+print(json.dumps({'candidate_frozen_files':len(files),'preserved_records':len(records),'bytes':sum(r['bytes'] for r in records)}))

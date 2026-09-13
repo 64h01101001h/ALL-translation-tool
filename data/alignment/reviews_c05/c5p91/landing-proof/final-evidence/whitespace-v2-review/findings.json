@@ -1,0 +1,20 @@
+{
+  "open_findings": [],
+  "resolved_findings": [
+    {
+      "id": "WHITESPACE-273-ALIAS-01",
+      "status": "RESOLVED",
+      "decision": "Supplied/absolute root aliases, resolved target and device/inode retained. Final input checks precede root identity checks. Independent stable, retargeted, restored-target and same-path replacement probes confirm behavior."
+    },
+    {
+      "id": "WHITESPACE-273-PHYSICAL-02",
+      "status": "RESOLVED",
+      "decision": "Common warning validation no longer wrongly owns EOF content. Whole physical range proof then permits exact nonblank CRLF empty tail, retaining old LF behavior. All33 actual rejected fragments now yield exactly the original full range lists; all33 single-byte changed variants reject. All-blank, space/tab and nonempty CRLF tails, and report-line EOF fallback reject."
+    },
+    {
+      "id": "WHITESPACE-273-DIFF-03",
+      "status": "RESOLVED",
+      "decision": "Complete parsed context owns mixed trailing/EOF diagnostics. The exact2176-byte actual root diff yields contexts5/8/10 and diff_context. Per-file hunk completion rejects orphan or abandoned headers as well as truncated/unbalanced and marker-shaped prose. Ordinary LF EOF remains separate."
+    }
+  ]
+}

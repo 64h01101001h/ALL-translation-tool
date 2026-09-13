@@ -1,0 +1,134 @@
+"""Root identity/preservation check after the complete independent review was read.
+
+This supplies no semantic judgment and runs no generator or builder.
+"""
+from pathlib import Path
+import datetime, hashlib, json, subprocess
+
+B = Path(__file__).resolve().parents[1]
+WT = B.parents[1] / 'campaign-worktree'
+R = B / 'semantic-review'
+OLD = B / 'semantic-review-initial'
+OUT = B / 'correction-01/root-final-review-preservation.json'
+assert not OUT.exists()
+def read(p): return Path(p).read_bytes()
+def js(p): return json.loads(read(p))
+def pin(raw): return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+def match(p, expected):
+    raw = read(p)
+    assert pin(raw) == {k: expected[k] for k in ('bytes', 'sha256')}, str(p)
+    return raw
+def tree(p):
+    return {str(f.relative_to(p)): pin(read(f)) for f in sorted(p.rglob('*')) if f.is_file()}
+head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=WT).decode().strip()
+assert head == '7166534a9f47a201e5ab580a843c14ba2a910891'
+assert pin(read(R/'freeze.json'))['sha256'] == 'b4f9b53d8cbc18385b006f7d8dff7a04cee73fa5bf61a98e9b031bcb32c1cf4c'
+freeze = js(R/'freeze.json')
+actual = tree(R); actual.pop('freeze.json')
+assert actual == freeze['files']
+assert len(actual) == freeze['file_count'] == 2032
+assert sum(r['bytes'] for r in actual.values()) == freeze['total_bytes']
+oldtree = tree(OLD)
+assert len(oldtree) == 1403
+assert tree(R/'history/initial-review') == oldtree
+oldfreeze = js(OLD/'freeze.json')
+assert {k:v for k,v in oldtree.items() if k != 'freeze.json'} == oldfreeze['files']
+assert oldtree['freeze.json']['sha256'] == '48c45652d1bc47bbb7446a20153a70c039dd4f2d8431cf4eced8c53689f8b69c'
+assert oldtree['review.md']['sha256'] == 'e83f2f66aa1db97293aa1b492305084ee75734b33b5bd83316e4d82ccb576e91'
+manifest = js(R/'original-to-copy-manifest.json')
+git_cache = {}; copy_cache = {}; original_cache = {}
+git_aliases = 0
+for row in manifest:
+    cp = R/row['copy']
+    assert cp.resolve().is_relative_to(R.resolve())
+    if row['copy'] not in copy_cache: copy_cache[row['copy']] = read(cp)
+    raw = copy_cache[row['copy']]
+    assert pin(raw) == {k:row[k] for k in ('bytes','sha256')}
+    if row.get('original_git_commit'):
+        key = (row['original_git_commit'], row['repository_relative_path'])
+        if key not in git_cache:
+            git_cache[key] = subprocess.check_output(['git','show',key[0]+':'+key[1]], cwd=WT)
+        original = git_cache[key]; git_aliases += 1
+        # The logical original is also an existing retained physical version.
+        assert read(row['original']) == raw
+    else:
+        if row['original'] not in original_cache: original_cache[row['original']] = read(row['original'])
+        original = original_cache[row['original']]
+    assert original == raw, row
+assert (len(manifest),len(copy_cache),git_aliases,len(git_cache)) == (12568,1975,283,11)
+transports = js(R/'source-version-transports.json')
+initial_manifest = js(OLD/'original-to-copy-manifest.json')
+assert len(transports) == len(initial_manifest) == 9145
+for t, old in zip(transports, initial_manifest):
+    assert t['logical_original'] == old['original']
+    assert t['current_copy'] == 'history/initial-review/'+old['copy']
+    assert {k:t[k] for k in ('bytes','sha256')} == {k:old[k] for k in ('bytes','sha256')}
+    raw = match(R/t['current_copy'], t)
+    assert raw == read(OLD/old['copy']) == read(t['actual_retained_original'])
+    for k in ('original_git_commit','repository_relative_path'):
+        assert t.get(k) == old.get(k)
+    if t.get('original_git_commit'):
+        assert raw == git_cache[(t['original_git_commit'],t['repository_relative_path'])]
+meta = js(R/'review.json')
+assert meta['verdict'] == meta['spec_verdict'] == meta['quality_verdict'] == 'APPROVE'
+assert meta['open_findings'] == [] and [r['id'] for r in meta['resolved_findings']] == ['C05-273-CAUSAL-01']
+assert meta['governing_git_commit'] == head
+resolved = js(R/'resolved-spans.json')
+assert resolved == js(B/'root-reconciliation-verification/resolved-spans.json')
+assert all(list(r) == ['seq','id','d','tib','eng','tib_range','eng_range'] for r in resolved)
+assert [len(resolved),sum(r['eng'] is None for r in resolved),sum(r['d']==5 and r['eng'] is not None for r in resolved)] == [101,8,63]
+initial_resolved = js(OLD/'resolved-spans.json')
+assert resolved == [r for r in initial_resolved if (r['seq'],r['id']) != (273,'p22')]
+assessments = js(R/'span-semantic-review.json')
+initial_assessments = js(OLD/'span-semantic-review.json')
+survivors = [r for r in initial_assessments if (r['tuple']['seq'],r['tuple']['id']) != (273,'p22')]
+assert [r['tuple'] for r in assessments] == resolved
+assert [{k:r[k] for k in ('tuple','verdict','reason')} for r in assessments] == survivors
+current_dispositions = js(R/'current-original-dispositions.json')
+rec_dispositions = sum([js(B/'reconciled'/str(n)/'original-dispositions.json') for n in (271,272,273)], [])
+identity = lambda row: json.dumps(row['original_identity'], ensure_ascii=False, sort_keys=True)
+keyed = lambda rows: {identity(r):r for r in rows}
+assert len(keyed(current_dispositions)) == len(current_dispositions) == 198
+assert keyed(current_dispositions) == keyed(rec_dispositions)
+old_dispositions = sum([js(B/'correction-01/initial/reconciled'/str(n)/'original-dispositions.json') for n in (271,272,273)], [])
+old_by_key = keyed(old_dispositions)
+changed = [r for r in current_dispositions if r != old_by_key[identity(r)]]
+assert len(changed) == 1
+assert changed[0]['original_identity']['seq'] == 273 and changed[0]['status'] == 'omitted_distributed'
+independent_dispositions = js(R/'original-disposition-review.json')
+assert [{k:v for k,v in r.items() if not k.startswith('independent_')} for r in independent_dispositions] == current_dispositions
+assert all(r['independent_verdict'] == 'SOUND' for r in independent_dispositions)
+for segment in meta['segments']:
+    n = str(segment['seq']); folder = B/'reconciled'/n
+    assert tree(folder) == tree(R/'reviewed-final'/n)
+    for field, name in [('spec','spec.json'),('body','body.html')]:
+        match(folder/name, {'bytes':segment[field+'_bytes'], 'sha256':segment[field+'_sha256']})
+assert js(R/'bank-ready-errata.json') == []
+assert read(R/'independent-errata-refutations.json') == read(OLD/'independent-errata-refutations.json')
+assert js(R/'span-head-allow-needed.json') == {'pages_c05': {}}
+execution = js(R/'executions/corrected273/execution-proof.json')
+assert execution['exit'] == 0
+for field in ('stdin','wrapper','generator','builder','stdout','stderr'):
+    match(execution[field]['path'], execution[field])
+assert read(execution['stdin']['path']) == read(B/'reconciled/273/spec.json')
+assert read(execution['stdout']['path']) == read(B/'reconciled/273/body.html')
+assert read(execution['stderr']['path']) == b''
+assert (R/'executions/corrected273/exit.txt').read_text().strip() == '0'
+canonical = js(R/'new-canonical-proof.json')
+assert canonical['execution'] == execution and canonical['new_runs'] == 1
+for p in sorted(R.glob('*.exit')):
+    assert p.read_text().strip() == '0', p
+    assert (p.with_suffix('.stderr')).read_bytes() == b'', p
+assert tree(R) == dict(actual, **{'freeze.json':pin(read(R/'freeze.json'))})
+proof = dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=head,
+    limit='Root mechanical identity and preservation closure after full independent report reading; no new semantic review or canonical run.',
+    review_freeze=pin(read(R/'freeze.json')),review_report=pin(read(R/'review.md')),review_meta=pin(read(R/'review.json')),
+    frozen_files=len(actual),frozen_bytes=sum(r['bytes'] for r in actual.values()),
+    source_copy_records=len(manifest),distinct_copy_targets=len(copy_cache),git_aliases=git_aliases,unique_git_objects=len(git_cache),
+    all_full_source_copy_bytes_equal=True,source_version_transports=len(transports),all_initial_logical_versions_resolved=True,
+    unchanged_initial_tree_files=len(oldtree),all_101_full_tuple_and_reason_objects_exact=True,current_counts=[101,8,63],
+    original_dispositions=198,unchanged_dispositions=197,changed_disposition=changed[0],
+    current_actual_canonical273=execution,retained_initial_canonical_runs=9,
+    retained_errata_refutations_exact=True,approved_errata_empty=True,approved_head_allowances_empty=True)
+OUT.write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({k:v for k,v in proof.items() if k not in ('changed_disposition','current_actual_canonical273')},indent=2))

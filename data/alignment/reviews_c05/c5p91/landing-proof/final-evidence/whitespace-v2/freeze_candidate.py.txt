@@ -1,0 +1,15 @@
+from pathlib import Path
+import json,hashlib,datetime,os
+D=Path(__file__).resolve().parent;assert not (D/'freeze.json').exists()
+files={};symlinks={}
+for p in sorted(D.rglob('*')):
+ rel=str(p.relative_to(D))
+ if p.is_symlink():symlinks[rel]=dict(target=os.readlink(p),resolved=str(p.resolve(strict=True)))
+ if p.is_file():
+  raw=p.read_bytes();files[rel]=dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+f=dict(status='FROZEN_V2_TOOLING_CANDIDATE_REQUIRES_INDEPENDENT_REREVIEW',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),file_count=len(files),total_bytes=sum(r['bytes'] for r in files.values()),excluded=['freeze.json'],symlinks=symlinks,files=files)
+raw=(json.dumps(f,indent=2)+'\n').encode();(D/'freeze.json').write_bytes(raw)
+for rel,row in files.items():
+ b=(D/rel).read_bytes();assert len(b)==row['bytes'] and hashlib.sha256(b).hexdigest()==row['sha256']
+for rel,row in symlinks.items():assert os.readlink(D/rel)==row['target'] and str((D/rel).resolve(strict=True))==row['resolved']
+print(json.dumps(dict(files=len(files),bytes=f['total_bytes'],symlinks=len(symlinks),freeze_sha256=hashlib.sha256(raw).hexdigest(),candidate_sha256=hashlib.sha256((D/'whitespace273.py').read_bytes()).hexdigest())))

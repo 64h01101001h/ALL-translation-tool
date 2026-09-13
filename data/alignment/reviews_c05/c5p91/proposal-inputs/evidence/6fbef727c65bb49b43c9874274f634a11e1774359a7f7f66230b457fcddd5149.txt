@@ -1,0 +1,69 @@
+--- correct.py.txt
++++ recover-checker-v2.py.txt
+@@ -10,53 +10,11 @@
+ def pp(p):return dict(path=str(p),**pin(p))
+ def inventory(p):return {str(f.relative_to(p)):pin(f) for f in sorted(p.rglob('*')) if f.is_file()}
+ def stamp():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+-rootproof=j(B/'correction-01/proof.json'); verified=[]
+-for name,snap in rootproof['snapshots'].items():
+- assert inventory(I/name)==snap['files'],name
+- assert inventory(B/name)==snap['files'],name
+- for rel in snap['files']:
+-  assert (I/name/rel).read_bytes()==(B/name/rel).read_bytes(),rel
+- verified.append(dict(tree=name,files=len(snap['files']),full_bytes_equal=True))
+-for t in rootproof['source_version_transports']:
+- assert pin(Path(t['retained_copy']))=={k:t[k] for k in ['bytes','sha256']}
+- assert Path(t['original']).read_bytes()==Path(t['retained_copy']).read_bytes()
+-save(C/'initial-preservation-verified.json',dict(utc=stamp(),root_proof=pp(B/'correction-01/proof.json'),trees=verified,source_version_transports=len(rootproof['source_version_transports']),full_bytes_equal=True))
+-save(C/'before-manifest.json',dict(trees={k:inventory(B/k) for k in rootproof['snapshots']},source_pins=j(B/'reconciled/271/source-input-pins.json')))
+-# Current sources are reopened through the actual unchanged generator's spine location.
+-sys.path.insert(0,str(W/'tools'))
+-specmod=importlib.util.spec_from_file_location('current_canonical',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(specmod);specmod.loader.exec_module(g)
+-assert pin(W/'tools/gen_alignment_page.py')['sha256']=='7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e'
+-dbpath=Path(g.B.SPINE).resolve();db=sqlite3.connect(dbpath.as_uri()+'?mode=ro',uri=True);db.execute('PRAGMA query_only=ON');db.row_factory=sqlite3.Row
+-sql='SELECT * FROM corpus_segments WHERE course=? AND seq=?';row=dict(db.execute(sql,('C05',273)).fetchone());assert row==j(D/'source-preservation-proof.json')['source_row']
+-master_sql='SELECT * FROM entries WHERE id=?';master=dict(db.execute(master_sql,(11962,)).fetchone());assert master==j(B/'semantic-review/causal-scope-finding-evidence.json')['full_positive_master_entry']
+-save(C/'source-and-positive-evidence-reopen.json',dict(database=pp(dbpath),uri=dbpath.as_uri()+'?mode=ro',query_only=db.execute('PRAGMA query_only').fetchone()[0],queries=[dict(sql=sql,params=['C05',273],rows=[row]),dict(sql=master_sql,params=[11962],rows=[master])]))
+-db.close()
+-old=j(D/'spec.json');new=copy.deepcopy(old);seg=new['segments'][0];seg['spans']=[s for s in seg['spans'] if s['id']!='p22'];seg['eng_order']=[i for i in seg['eng_order'] if i!='p22']
+-reason="Omit first phyir [196,201) / first for [91,94) as distributed causal restructuring (C05-273-CAUSAL-01). Tibetan phyir closes the concrete sun/cold and moon/hot grounds for general non-occurrence. English first for introduces that general non-occurrence as a reason for exceptional circumstances; the colon introduces the concrete grounds. Positive HTG2016 entry11962 phyir/for and shared discourse intent do not establish this local d6 ownership. The contribution is distributed, not absent: no null, reassignment or source change. Final p28 remains the separate final premise link."
+-seg['note']+=' The first phyir and first for stay unwrapped because the concrete grounds are reorganized through the English colon; final phyir owns the second for. This distributed causal restructuring does not assert absence of meaning.'
+-assert len(seg['spans'])==len(old['segments'][0]['spans'])-1
+-save(D/'spec.json',new)
+-oldtuples=j(D/'final-tuples.json');tuples=[x for x in oldtuples if x['id']!='p22'];olddec=j(D/'final-decisions.json');dec=[x for x in olddec if x['tuple']['id']!='p22'];save(D/'final-tuples.json',tuples);save(D/'final-decisions.json',dec)
+-disp=j(D/'original-dispositions.json');olddisp=copy.deepcopy(disp);target=next(x for x in disp if x['original_identity']['angle']=='english' and x['original_identity']['id']=='p22');target.update(status='omitted_distributed',final_ids=[],rationale=reason);save(D/'original-dispositions.json',disp)
+-assert sum(a!=b for a,b in zip(disp,olddisp))==1
+-for a,b in zip(disp,olddisp):
+- for k in b:
+-  if k not in ['status','final_ids','rationale']:assert a[k]==b[k]
+-om=j(D/'omissions-full.json');oldom=copy.deepcopy(om)
+-for side,start,end,why in [('tib',190,203,"Nominal/genitive pa'i links the concrete solar/lunar grounds to phyir. That causal relation is distributed through the English colon and reorganized argument, not owned by the first English for; omission does not assert absence of meaning."),('eng',89,95,"The first for introduces general non-occurrence as a reason for the exceptional circumstances. It is not an exclusive exponent of the first Tibetan phyir, which closes the concrete grounds recast after the colon. Left unwrapped as distributed causal restructuring.")]:
+- text=row['wylie' if side=='tib' else 'english'];gaps=om['gaps'][side];replaced=[x for x in gaps if start<=x['range'][0] and x['range'][1]<=end];assert len(replaced)==2
+- om['gaps'][side]=sorted([x for x in gaps if x not in replaced]+[dict(range=[start,end],text=text[start:end],rationale=why)],key=lambda x:x['range'])
+-save(D/'omissions-full.json',om)
+-mat=j(D/'material-rulings.json');assert mat['key_rulings'][-1].startswith('First phyir');mat['key_rulings'][-1]=reason+' All three med retain separate exact ranges.';save(D/'material-rulings.json',mat)
+-# Save the original argument and full semantic evidence as immutable-path references plus their full bytes.
+-for name in ['review.md','review.json','causal-scope-finding-evidence.json']:
+- p=B/'semantic-review'/name;out=C/name;out.write_bytes(p.read_bytes());assert out.read_bytes()==p.read_bytes()
+-save(C/'finding-resolution.json',dict(finding='C05-273-CAUSAL-01',status='Correction implemented; distinct semantic re-review required',provisional=True,reconciler='Codex reused non-author /root/c05_253_255_reconcile',original_final_decision=next(x for x in olddec if x['tuple']['id']=='p22'),original_disposition=next(x for x in olddisp if x['original_identity']['angle']=='english' and x['original_identity']['id']=='p22'),corrected_disposition=target,reason=reason,removed_tuple=next(x for x in oldtuples if x['id']=='p22'),preserved_p28=next(x for x in tuples if x['id']=='p28')))
+-# Real subprocess. Exact streams are saved before assertions or body installation.
+-a=D/'canonical-correction01';a.mkdir();wrapper=B/'reconciled/271/run-canonical-readonly.py.txt';argv=[sys.executable,'-B',str(wrapper)];env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1');stdin=(D/'spec.json').read_bytes();(a/'stdin.json').write_bytes(stdin)
+-save(a/'command.json',dict(argv=argv,cwd=str(W),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'},inherited_environment=True,stdin=pp(a/'stdin.json'),wrapper=pp(wrapper),generator=pp(W/'tools/gen_alignment_page.py'),builder=pp(W/'tools/build_alignment_layer.py'),sqlite='URI mode=ro; PRAGMA query_only=ON',started_utc=stamp()))
+-p=subprocess.run(argv,cwd=W,env=env,input=stdin,capture_output=True);(a/'stdout.html').write_bytes(p.stdout);(a/'stderr.txt').write_bytes(p.stderr);(a/'exit.txt').write_text(str(p.returncode)+'\n');assert p.returncode==0 and p.stderr==b''
+-(D/'body.html').write_bytes(p.stdout)
++old=j(I/'reconciled/273/spec.json');new=j(D/'spec.json');seg=new['segments'][0]
++oldtuples=j(I/'reconciled/273/final-tuples.json');tuples=j(D/'final-tuples.json');olddec=j(I/'reconciled/273/final-decisions.json');dec=j(D/'final-decisions.json');olddisp=j(I/'reconciled/273/original-dispositions.json');disp=j(D/'original-dispositions.json');om=j(D/'omissions-full.json');row=j(C/'source-and-positive-evidence-reopen.json')['queries'][0]['rows'][0];reason=j(C/'finding-resolution.json')['reason'];a=D/'canonical-correction01'
++from types import SimpleNamespace
++p=SimpleNamespace(stdout=(a/'stdout.html').read_bytes(),stderr=(a/'stderr.txt').read_bytes(),returncode=int((a/'exit.txt').read_text()));assert p.returncode==0 and p.stderr==b'' and (D/'body.html').read_bytes()==p.stdout
++sys.path.insert(0,str(W/'tools'));specmod=importlib.util.spec_from_file_location('current_canonical',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(specmod);specmod.loader.exec_module(g)
+ tr=g.resolve(row['wylie'],seg['spans'],'tib',273);byid={s['id']:s for s in seg['spans']};ordered=g.with_members(seg['spans'],[byid[x] for x in seg['eng_order']],row['english']);er=g.resolve(row['english'],ordered,'eng',273)
+ resolved=[dict(id=s['id'],d=s['d'],tib=s['tib'],eng=s.get('eng'),tib_range=list(tr[s['id']]),eng_range=list(er[s['id']]),parent_id=None) for s in seg['spans']];assert resolved==tuples
+ assert next(x for x in resolved if x['id']=='p28')['eng_range']==[265,268]
+@@ -81,7 +39,6 @@
+    elif at.get('data-d')=='1':self.depth=1
+  def handle_endtag(self,tag):
+   if tag=='span' and self.depth:self.depth-=1
+-  if tag=='div':self.side=None
+  def handle_data(self,data):
+   if self.side and self.depth:self.parts[self.side].append(data)
+ parser=Paragraphs();parser.feed(p.stdout.decode());assert ''.join(parser.parts['tib'])==row['wylie'];assert ''.join(parser.parts['eng'])==row['english']

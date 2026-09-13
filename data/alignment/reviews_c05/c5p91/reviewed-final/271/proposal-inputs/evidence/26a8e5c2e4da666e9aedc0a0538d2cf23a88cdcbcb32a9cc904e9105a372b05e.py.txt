@@ -1,0 +1,11 @@
+from pathlib import Path
+import json,os,subprocess,sys,hashlib
+H=Path(__file__).resolve().parent
+D=H/'verification-attempt01';D.mkdir(exist_ok=False)
+for name in ('verify_occurrences.py','review_gaps.py','final_verify.py'):
+ d=D/name.removesuffix('.py');d.mkdir();code=(H/name).read_bytes();(d/(name+'.txt')).write_bytes(code)
+ argv=[sys.executable,'-B',str(H/name)];(d/'command.json').write_text(json.dumps(dict(argv=argv,cwd=str(H),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'},code_sha256=hashlib.sha256(code).hexdigest()),indent=2)+'\n');(d/'stdin.bin').write_bytes(b'')
+ r=subprocess.run(argv,cwd=H,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),input=b'',capture_output=True)
+ (d/'stdout.txt').write_bytes(r.stdout);(d/'stderr.txt').write_bytes(r.stderr);(d/'exit.txt').write_text(str(r.returncode)+'\n')
+ print(name,'exit',r.returncode,'stdout_bytes',len(r.stdout),'stderr_bytes',len(r.stderr))
+ assert r.returncode==0 and not r.stderr

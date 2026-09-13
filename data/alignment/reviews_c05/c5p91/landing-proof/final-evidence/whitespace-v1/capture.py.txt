@@ -1,0 +1,21 @@
+from pathlib import Path
+import hashlib,json,datetime
+R=Path.cwd();O=R/'campaign-artifacts/whitespace-candidate-273';B=R/'campaign-artifacts/C05-271-273';records=[]
+def keep(p,d):
+ raw=p.read_bytes();d.parent.mkdir(parents=True,exist_ok=True);assert not d.exists();d.write_bytes(raw);assert p.read_bytes()==raw==d.read_bytes();records.append(dict(original=str(p),copy=str(d.relative_to(O)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+keep(R/'campaign-artifacts/audit_staged_source_whitespace_v6.py',O/'baseline/audit_staged_source_whitespace_v6.py.txt')
+old=R/'campaign-artifacts/whitespace-candidate-270'
+for p in sorted(old.iterdir()):
+ if p.is_file():keep(p,O/'baseline270'/(p.name+('.txt' if p.suffix in ['.py','.diff'] else '')))
+for p in sorted((old/'baseline').rglob('*')):
+ if p.is_file():keep(p,O/'baseline270/baseline'/(str(p.relative_to(old/'baseline'))+('.txt' if p.suffix=='.py' else '')))
+for rel in ['semantic-review/freeze.json','semantic-review/original-to-copy-manifest.json','whitespace-preparation/frozen-static-whitespace-inventory.json']:
+ keep(B/rel,O/'current-inputs'/rel)
+m=json.loads((B/'semantic-review/original-to-copy-manifest.json').read_text());paths=sorted({x['original'] for x in m if x['original'].endswith('ReadingASCII.txt') and '/Desktop/' in x['original']})
+paths.append('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/book_texts/ILL.txt')
+physical=[]
+for path in paths:
+ p=Path(path);raw=p.read_bytes();h=hashlib.sha256(raw).hexdigest();matches=[x for x in m if x['original']==path and x['bytes']==len(raw) and x['sha256']==h];assert matches
+ if p.name=='ILL.txt':assert len(raw)==2981468 and h=='ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e'
+ keep(p,O/'physical'/p.name);physical.append(dict(path=path,bytes=len(raw),sha256=h,kind='complete_original_physical_text',provenance='Explicit physical source for this bounded C05-271-273 preparation, with matching current manifest records',manifest_records=matches))
+(O/'physical-source-descriptors.json').write_text(json.dumps(physical,ensure_ascii=False,indent=2)+'\n');(O/'input-manifest.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),records=records),ensure_ascii=False,indent=2)+'\n');print(json.dumps({'preserved_files':len(records),'physical_sources':len(physical),'candidate_executions':0}))

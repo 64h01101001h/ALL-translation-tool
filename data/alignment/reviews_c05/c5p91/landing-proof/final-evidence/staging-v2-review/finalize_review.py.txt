@@ -1,0 +1,18 @@
+from pathlib import Path
+import json,hashlib,datetime
+R=Path.cwd();O=R/'campaign-artifacts/integration/through273-preparation/staging-review-v2';H=O.parent/'staging-helper-v2'
+def pin(p):
+ b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+f=json.loads((H/'freeze.json').read_text());actual={str(p.relative_to(H)):pin(p) for p in H.rglob('*') if p.is_file() and p!=H/'freeze.json'};assert actual==f['files'] and len(actual)==623
+assert pin(H/'freeze.json')['sha256']=='8f470ad05e5192c7c95796920cdabb23acae12a68eade7f05bb8b2a760081752'
+rows=json.loads((O/'input-manifest.json').read_text())['records']
+for row in rows:
+ original=Path(row['original']);copy=O/row['copy'];assert original.read_bytes()==copy.read_bytes();assert pin(copy)=={k:row[k] for k in ('bytes','sha256')}
+for name in ['verify_staged_through273.py','test_v2.py','test_bank_boundary.py']:
+ assert (O/'fresh-tests'/name).read_bytes()==(H/name).read_bytes()
+assert int((O/'fresh-test-execution/exit.txt').read_text())==0 and b'Ran 22 tests' in (O/'fresh-test-execution/stderr.txt').read_bytes()
+assert int((O/'actual-interface-execution-02/exit.txt').read_text())==0
+proof={'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'candidate_inventory_exact':len(actual),'candidate_freeze':pin(H/'freeze.json'),'preserved_records':len(rows),'preserved_bytes':sum(r['bytes'] for r in rows),'all_original_copy_bytes_equal':True,'fresh_tests':22,'fresh_test_exit':0,'actual_interface_exit':0,'full_live_verifier_executions':0,'live_git_commands':0,'actual_candidate_code':pin(H/'verify_staged_through273.py')}
+(O/'final-preservation-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+report={'status':'DONE','verdict':'CONDITIONAL_APPROVE_CODE_AND_DEPENDENCIES','reviewer':'/root/c05_253_255_reconcile','retained_context':True,'candidate_author': '/root/c05_262_264_english','semantic_approval_supplied':False,'candidate':proof['actual_candidate_code'],'candidate_freeze':proof['candidate_freeze'],'resolved_findings':['STAGE273-01','STAGE273-02','STAGE273-03'],'open_code_findings':[],'fresh_focused_tests':22,'test_exit':0,'full_live_verifier_executions':0,'live_git_commands':0,'actual_final_stage_approved':False,'prerequisites':['Actual complete final bank and both banking run records','Independently approved final-stage whitespace proof and exact raw log','Actual full verifier EXIT0 on final stage','External caller/output retention with truthful later-evidence boundary'],'report':'review.md','proof':'final-preservation-proof.json','actual_interfaces':'actual-interface-proof.json','retention_records':len(rows)}
+(O/'review.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(proof))

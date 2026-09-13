@@ -1,0 +1,63 @@
+from pathlib import Path
+import os,json,hashlib,gzip,importlib.util,subprocess,ast
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';H=lambda b:hashlib.sha256(b).hexdigest()
+def j(p):return json.loads(p.read_bytes())
+def save(n,x): (R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p): b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=H(b))
+# Preserve the earlier interface as historical, not replace its facts.
+h=R/'history/before-manifest-completion';h.mkdir(parents=True,exist_ok=True)
+for n in ['original-to-copy-manifest.json','input-preservation-proof.json']:
+ p=h/n
+ if not p.exists():p.write_bytes((R/n).read_bytes())
+module_spec=importlib.util.spec_from_file_location('copier',B.parent/'copy_evidence_once_v2.py');m=importlib.util.module_from_spec(module_spec);module_spec.loader.exec_module(m)
+known={}
+for x in j(B/'reconciled/271/governing-manifest.json'):
+ data=subprocess.check_output(['git','show',x['git_commit']+':'+x['git_path']],cwd=W);assert data==Path(x['copy']['path']).read_bytes();known[(H(data),len(data))]=(x['git_commit'],x['git_path'])
+external=j(B/'reconciled/271/original-copy-manifest.json');assert len(external)==406
+new=[];checks=[];old=j(R/'original-to-copy-manifest.json');origset={x['original'] for x in old}
+for x in external:
+ p=Path(x['original']);cp=B/'reconciled/271'/x['copy'];data=cp.read_bytes()
+ assert len(data)==x['bytes'] and H(data)==x['sha256'];assert p.read_bytes()==data
+ checks.append(dict(original=x['original'],copy=str(cp),bytes=len(data),sha256=H(data)))
+ if str(p.resolve()) not in origset:new.append(str(p.resolve()));origset.add(str(p.resolve()))
+new += [str(B.parent/'land_reviewed_page.py')]
+result=m.preserve(R,R/'original-to-copy-manifest.json',new)
+records=j(R/'original-to-copy-manifest.json');byoriginal={x['original']:x for x in records}
+# Retain literal symlink aliases explicitly rather than silently resolving them away.
+for x in external:
+ if x['original'] not in byoriginal:
+  y=dict(byoriginal[str(Path(x['original']).resolve())]);y['original']=x['original'];records.append(y);byoriginal[y['original']]=y
+for x in records:
+ data=(R/x['copy']).read_bytes();assert data==Path(x['original']).read_bytes()
+ k=(H(data),len(data))
+ if k in known:x.update(original_git_commit=known[k][0],repository_relative_path=known[k][1])
+save('original-to-copy-manifest.json',records);save('independent-transitive-copy-checks.json',checks)
+freeze_checks=[]
+for angle in ['tibetan','english','reconciled']:
+ for seq in [271,272,273]:
+  d=B/angle/str(seq);p=d/'freeze.json';v=j(p);f=v['files'];entries=f if isinstance(f,dict) else {(x.get('relative_path') or x['path']):x for x in f}
+  actual={str(q.relative_to(d)):pin(q) for q in d.rglob('*') if q.is_file() and q!=p and '__pycache__' not in q.parts}
+  assert set(entries)==set(actual),(angle,seq,set(entries)^set(actual))
+  for n,x in entries.items():assert x['sha256']==actual[n]['sha256'] and x['bytes']==actual[n]['bytes']
+  if 'file_count' in v:assert v['file_count']==len(actual)
+  freeze_checks.append(dict(angle=angle,seq=seq,freeze=pin(p),files=len(actual),nested_freezes=sum(n.endswith('/freeze.json') for n in actual)))
+save('independent-input-freeze-checks.json',freeze_checks)
+master_path=W/'data/hgm_dictionary_v27_2.json.gz';before=pin(master_path);master=json.loads(gzip.decompress(master_path.read_bytes()));original_tiers=j(B/'reconciled/271/las-original-tier-records.json')
+for tier,expected in original_tiers.items():
+ actual=[x for x in master[tier] if x.get('wylie')=='las'];assert actual==expected,(tier,len(actual))
+assert pin(master_path)==before
+save('independent-las-original-tiers.json',dict(source=before,records=original_tiers,exact_match=True))
+# Inspect the actual landing whitelist AST; no execution of a mutating helper.
+landing=B.parent/'land_reviewed_page.py';tree=ast.parse(landing.read_text());whitelists=[]
+for node in ast.walk(tree):
+ if isinstance(node,ast.Compare) and isinstance(node.left,ast.Call) and ast.unparse(node.left).endswith('suffix.lower()'):
+  whitelists.append(ast.literal_eval(node.comparators[0]))
+assert len(whitelists)==1;supported=set(whitelists[0])
+for x in records:assert (R/x['copy']).suffix.lower() in supported
+base=Path('/Users/adamderickandrade');access=[]
+for s in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']:
+ p=base/s;assert p.is_dir() and os.access(p,os.R_OK);next(iter(p.iterdir()),None);access.append(dict(path=str(p),readable=True))
+save('required-reference-access.json',access)
+save('preservation-completion-proof.json',dict(status='PASS',external_mappings=len(checks),copier_result=result,manifest_records=len(records),distinct_copies=len({x['copy'] for x in records}),Git_records=sum('original_git_commit' in x for x in records),unique_Git_objects=len(known),original_frozen_files=sum(x['files'] for x in freeze_checks if x['angle']!='reconciled'),reconciled_frozen_files=sum(x['files'] for x in freeze_checks if x['angle']=='reconciled'),landing_helper=pin(landing),supported_extensions=sorted(supported),las_original_tiers_exact=True,reference_directories=len(access)))
+print(json.dumps(j(R/'preservation-completion-proof.json'),indent=2))

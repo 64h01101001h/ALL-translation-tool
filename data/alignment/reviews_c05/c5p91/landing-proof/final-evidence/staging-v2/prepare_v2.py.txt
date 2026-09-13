@@ -1,0 +1,181 @@
+from pathlib import Path
+D=Path(__file__).resolve().parent
+s=(D/'inputs/staging-helper/verify_staged_through273.py').read_text()
+functions='''def freeze_entries(freeze):
+    # Actual current immutable freeze: distinct SPEC and QUALITY verdicts, DICT pins.
+    assert freeze['spec_verdict'] == freeze['quality_verdict'] == 'APPROVE'
+    rows = freeze['files']
+    assert isinstance(rows, dict) and rows
+    assert freeze['file_count'] == len(rows)
+    assert freeze['total_bytes'] == sum(row['bytes'] for row in rows.values())
+    for name, row in rows.items():
+        relative(name)
+        assert isinstance(row['bytes'], int) and row['bytes'] >= 0
+        assert re.fullmatch('[0-9a-f]{64}', row['sha256'])
+    return rows
+
+
+def allowance_result(old_raw, new_raw, wanted, registered):
+    allowed = json.loads(old_raw)
+    if isinstance(wanted, list):
+        normalized = {}
+        for row in wanted:
+            category, key = row['key'].split('/', 1) if 'key' in row else (row['pages_directory'], row['allowlist_key'])
+            assert key not in normalized.setdefault(category, {})
+            normalized[category][key] = row['licensor']
+        wanted = normalized
+    assert isinstance(wanted, dict) and wanted == registered
+    additions = 0
+    for category, rows in wanted.items():
+        assert isinstance(rows, dict) and category in allowed
+        for key, value in rows.items():
+            assert key not in allowed[category]
+            allowed[category][key] = value
+            additions += 1
+    assert json.loads(new_raw) == allowed
+    if not additions:
+        assert new_raw == old_raw, 'Zero additions require complete baseline byte identity'
+    return wanted, bool(additions)
+
+
+def nul_paths(raw):
+    assert not raw or raw.endswith(b'\\0'), 'Incomplete raw Git path stream'
+    values = [os.fsdecode(value) for value in raw.split(b'\\0')[:-1]] if raw else []
+    assert len(values) == len(set(values))
+    for value in values:
+        relative(value)
+    return values
+
+
+def untracked_transition(before, after, newly_staged, root_bank_paths, later_written):
+    initial = nul_paths(before)
+    current = nul_paths(after)
+    newly_staged, root_bank_paths, later_written = map(set, (newly_staged, root_bank_paths, later_written))
+    assert root_bank_paths <= newly_staged
+    assert not set(initial) & root_bank_paths, 'Capture must precede ordinary bank creation'
+    assert newly_staged - root_bank_paths <= set(initial), 'New non-bank payload absent from true pre-stage capture'
+    assert later_written == root_bank_paths, 'Every later root-bank path needs exact actual write evidence'
+    removed = set(initial) & newly_staged
+    residual = [value for value in initial if value not in removed]
+    expected_raw = b''.join(os.fsencode(value) + b'\\0' for value in residual)
+    assert after == expected_raw, ('Unrelated untracked drift', set(current) - set(residual), set(residual) - set(current))
+    return dict(initial_paths_newly_staged=sorted(removed),
+                later_created_root_bank_paths=sorted(root_bank_paths), residual_paths=residual,
+                raw_before_bytes=len(before), raw_before_sha256=sha(before),
+                raw_after_bytes=len(after), raw_after_sha256=sha(after),
+                boundary='Raw capture before ordinary banking and before any staging; bank paths created later are not claimed in that stream')
+
+
+def check_final_head(raw):
+    assert raw.decode().strip() == BASE, 'HEAD changed during verification'
+
+
+'''
+s=s.replace('class Check:',functions+'class Check:',1)
+s=s.replace("        assert self.git('ls-files', '--others', '--exclude-standard', '-z')[0] == initial_untracked\n", "        current_untracked = self.git('ls-files', '--others', '--exclude-standard', '-z')[0]\n",1)
+s=s.replace("        assert freeze['verdict'] == 'APPROVE'\n        frozen = {}\n        for row in freeze['files']:\n            rel = str(relative(row['path']))", "        frozen = {}\n        for name, row in freeze_entries(freeze).items():\n            rel = str(relative(name))")
+s=s.replace("        assert meta['verdict'] == 'APPROVE' and meta['open_findings'] == []", "        assert meta['verdict'] == meta['spec_verdict'] == meta['quality_verdict'] == 'APPROVE'\n        assert meta['open_findings'] == []")
+start=s.index("        old_raw = self.old(rel); allowed = json.loads(old_raw)")
+end=s.index("\n        build = self.obj",start)
+s=s[:start]+'''        old_raw = self.old(rel)
+        needed_path = self.review / 'span-head-allow-needed.json'
+        wanted = self.obj(needed_path) if needed_path.exists() else {}
+        new_raw = self.raw(self.w / rel)
+        wanted, has_allowance_additions = allowance_result(old_raw, new_raw, wanted, register['only_reviewed_allowances_added'])
+        if has_allowance_additions:
+            self.require(rel, new_raw)
+''' + s[end:]
+# Require exact ordinary phase identity and its inclusion in final manifest.
+s=s.replace("        assert root_manifest['semantic_review_unchanged'] is True", "        assert root_manifest['semantic_review_unchanged'] is True and root_manifest['phase'] == 'final-whitespace'\n        self.pincheck(freeze_raw, root_manifest['semantic_review_freeze'])")
+s=s.replace("        self.require(self.bank_rel / 'landing-proof' / previous_manifest.name, self.raw(previous_manifest))", "        previous_raw = self.raw(previous_manifest)\n        previous = json.loads(previous_raw)\n        assert previous['phase'] == 'ordinary' and previous['semantic_review_unchanged'] is True\n        self.pincheck(freeze_raw, previous['semantic_review_freeze'])\n        assert all(row in root_manifest['files'] for row in previous['files'])\n        assert all(row in root_manifest['external_actual_bytes_retained'] for row in previous['external_actual_bytes_retained'])\n        self.require(self.bank_rel / 'landing-proof' / previous_manifest.name, previous_raw)")
+s=s.replace("        assert str(Path(self.args.untracked_before).resolve()) in self.retained_originals", "        assert str(Path(self.args.untracked_before).resolve()) in self.retained_originals\n        self.verify_untracked_capture(initial_untracked)")
+s=s.replace("        assert payload['head'] == BASE\n        payload_records = {}", "        assert payload['head'] == BASE\n        payload_source_path = Path(self.args.payload_source_proof)\n        assert str(payload_source_path.resolve()) in self.retained_originals\n        self.verify_payload_source(payload_path, self.raw(payload_path), payload, self.obj(payload_source_path), freeze_raw)\n        payload_records = {}")
+s=s.replace("        staged_files = []", "        baseline_paths = set(nul_paths(self.git('ls-tree', '-r', '--name-only', '-z', BASE)[0]))\n        newly_staged = set(self.required) - baseline_paths\n        assert set(nul_paths(self.git('diff', '--cached', '--diff-filter=A', '--name-only', '-z')[0])) == newly_staged\n        bank_paths, later_written = self.verify_banking_writes(previous, previous_raw, root_manifest, root_manifest_raw)\n        assert not bank_paths & baseline_paths\n        transition = untracked_transition(initial_untracked, current_untracked, newly_staged, bank_paths, later_written)\n        staged_files = []",1)
+s=s.replace("        assert self.git('ls-files', '--others', '--exclude-standard', '-z')[0] == initial_untracked", "        assert self.git('ls-files', '--others', '--exclude-standard', '-z')[0] == current_untracked")
+s=s.replace("        return dict(status='PASS'", "        check_final_head(self.git('rev-parse', 'HEAD')[0])\n        return dict(status='PASS'",1)
+s=s.replace("                    semantic_frozen_files=len(frozen), no_semantic_approval_supplied=True,", "                    semantic_frozen_files=len(frozen), no_semantic_approval_supplied=True,\n                    untracked_transition=transition, final_head_rechecked=True,\n                    final_banking_run_is_later_external_input_not_self_banked=True,")
+s=s.replace("'whitespace-log', 'payload-manifest')", "'whitespace-log', 'payload-manifest', 'payload-source-proof', 'banking-ordinary-run', 'banking-final-run')")
+methods='''    def verify_payload_source(self, manifest_path, manifest_raw, payload, proof, freeze_raw):
+        assert proof['status'] == 'PASS' and proof['head'] == BASE
+        assert Path(proof['manifest']['path']).resolve() == Path(manifest_path).resolve()
+        self.pincheck(manifest_raw, proof['manifest'])
+        self.pincheck(freeze_raw, proof['review_freeze'])
+        assert proof['sources_unchanged'] is proof['all_actual_canonical_output_pins_match'] is True
+        expected = {str(relative(row['path'])): row for row in payload['files']}
+        assert len(expected) == len(payload['files']) == len(proof['files']) and expected
+        seen = set()
+        for row in proof['files']:
+            original = Path(row['original']).resolve(strict=True)
+            rel = str(original.relative_to(self.w))
+            assert rel in expected and rel not in seen
+            seen.add(rel)
+            raw = self.raw(original)
+            self.pincheck(raw, row); self.pincheck(raw, expected[rel])
+            preserved = Path(row['copy']).resolve(strict=True)
+            assert preserved == (self.l / 'payload-freeze' / rel).resolve(strict=True)
+            assert str(preserved) in self.retained_originals
+            assert self.raw(preserved) == raw
+        assert seen == set(expected)
+        assert proof['proof_inputs']
+        for row in proof['proof_inputs']:
+            path = Path(row['path']).resolve(strict=True)
+            assert str(path) in self.retained_originals
+            self.pincheck(self.raw(path), row)
+
+    def verify_untracked_capture(self, raw):
+        path = Path(self.args.untracked_before)
+        assert path.name.endswith('.stdout')
+        stem = str(path)[:-len('.stdout')]
+        for ext in ('.command.json', '.stderr', '.exit'):
+            assert str(Path(stem + ext).resolve()) in self.retained_originals
+        command = self.obj(stem + '.command.json')
+        assert command['argv'] == ['git', 'ls-files', '--others', '--exclude-standard', '-z']
+        assert Path(command['cwd']).resolve() == self.w
+        assert int(self.raw(stem + '.exit')) == 0 and not self.raw(stem + '.stderr')
+        nul_paths(raw)
+
+    def verify_banking_writes(self, previous, previous_raw, final, final_raw):
+        bank_root = self.bank_rel / 'landing-proof'
+        before_paths = {str(bank_root / relative(row['copy'])) for row in previous['files']}
+        before_paths.add(str(bank_root / 'root-proof-copy-manifest-before-whitespace.json'))
+        final_paths = {str(bank_root / relative(row['copy'])) for row in final['files']}
+        final_paths.update(str(bank_root / name) for name in ('root-proof-copy-manifest-before-whitespace.json', 'root-proof-copy-manifest.json'))
+        assert before_paths <= final_paths
+        assert final_paths == {rel for rel in self.required if Path(rel).is_relative_to(bank_root)}
+        written = set()
+        for phase, run_dir, manifest_raw, name, new_paths in [
+                ('ordinary', self.args.banking_ordinary_run, previous_raw, 'root-proof-copy-manifest-before-whitespace.json', before_paths),
+                ('final-whitespace', self.args.banking_final_run, final_raw, 'root-proof-copy-manifest.json', final_paths - before_paths)]:
+            run_dir = Path(run_dir).resolve(strict=True)
+            assert not run_dir.is_relative_to(self.b) and not run_dir.is_relative_to(self.w)
+            result = self.obj(run_dir / 'result.json')
+            events = self.obj(run_dir / 'write-events.json')
+            invocation = self.obj(run_dir / 'invocation.json')
+            assert result['status'] == 'PASS' and result['phase'] == phase
+            assert Path(result['manifest_path']).resolve() == (self.l / name).resolve()
+            self.pincheck(manifest_raw, result['manifest_pin'])
+            assert result['writes'] == events and len(events) == len(set(events))
+            argv = invocation['argv']
+            assert argv.count('--phase') == 1 and argv[argv.index('--phase') + 1] == phase
+            for flag, expected in [('--batch', self.b), ('--worktree', self.w), ('--run-output', run_dir)]:
+                assert argv.count(flag) == 1 and Path(argv[argv.index(flag) + 1]).resolve() == expected
+            assert argv.count('--untracked-capture-stem') == 1
+            assert Path(argv[argv.index('--untracked-capture-stem') + 1] + '.stdout').resolve() == Path(self.args.untracked_before).resolve()
+            expected_events = {str((self.w / rel).resolve()) for rel in new_paths} | {str((self.l / name).resolve())}
+            assert set(events) == expected_events, ('Unexpected/missing actual bank write', phase)
+            for rel in new_paths:
+                assert rel not in written
+                written.add(rel)
+            # The ordinary run pre-exists final banking. The final run completes
+            # after its manifest and is explicitly later external evidence.
+            for p in sorted(run_dir.rglob('*')):
+                if p.is_file():
+                    self.raw(p)
+                    if phase == 'ordinary':
+                        assert str(p.resolve()) in self.retained_originals
+        return final_paths, written
+
+'''
+s=s.replace('    def run(self):',methods+'    def run(self):',1)
+(D/'verify_staged_through273.py').write_text(s)
+print('candidate bytes',len(s.encode()))

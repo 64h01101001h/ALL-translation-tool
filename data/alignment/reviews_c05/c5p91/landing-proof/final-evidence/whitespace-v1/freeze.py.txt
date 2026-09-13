@@ -1,0 +1,19 @@
+from pathlib import Path
+import hashlib,json,datetime
+O=Path(__file__).resolve().parent
+manifest=json.loads((O/'input-manifest.json').read_text());verified=[]
+for record in manifest['records']:
+ a=Path(record['original']).read_bytes();b=(O/record['copy']).read_bytes();assert a==b and len(a)==record['bytes'] and hashlib.sha256(a).hexdigest()==record['sha256'];verified.append(record)
+assert not list(O.rglob('__pycache__'))
+code=O/'whitespace273.py';candidate_pin=dict(bytes=code.stat().st_size,sha256=hashlib.sha256(code.read_bytes()).hexdigest())
+for name in ['syntax-final','unit-final']:
+ assert (O/'checks'/name/'exit.txt').read_text()=='0\n'
+assert (O/'checks/syntax-final/stderr.txt').read_bytes()==b''
+report=(O/'report.md').read_text();report+='\nFinal provenance refinement retains every supplied input alias alongside its resolved target and rechecks both before completion; its exact previous source/diff is in attempts/02-explicit-read-alias/. Current syntax and16 predicate tests pass in checks/syntax-final and checks/unit-final on this final source. Candidate SHA256 '+candidate_pin['sha256']+'. All27 consumed preparation source versions pass fresh full-byte equality; complete preserved source bytes total '+str(sum(x['bytes'] for x in verified))+'.\n';(O/'report.md').write_text(report)
+(O/'final-preflight.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='PASS mechanical preparation verification only',candidate=candidate_pin,candidate_cli_executions=0,semantic_approval=False,source_versions=len(verified),source_bytes=sum(x['bytes'] for x in verified),source_mappings=verified,syntax_exit=0,current_unit_tests=16,current_unit_exit=0,no_bytecode=True),indent=2)+'\n')
+def pin(p):
+ raw=p.read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file() and p!=O/'freeze.json'}
+(O/'freeze.json').write_text(json.dumps(dict(status='PREPARED_REQUIRES_INDEPENDENT_TOOLING_REVIEW',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),scope='All current files except only this top freeze; nested historical freezes retained unchanged',candidate_cli_executions=0,files=files),indent=2)+'\n')
+assert files=={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file() and p!=O/'freeze.json'}
+print(json.dumps(dict(status='DONE prepared candidate frozen; no execution approval',files=len(files),candidate=candidate_pin,freeze=pin(O/'freeze.json'),report=pin(O/'report.md'),candidate_cli_executions=0,unit_tests=16),indent=2))

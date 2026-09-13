@@ -1,0 +1,66 @@
+from pathlib import Path
+import json,hashlib,os,sys,importlib.util,subprocess,ast
+sys.dont_write_bytecode=True;os.environ.update(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+R=Path(__file__).resolve().parent;B=R.parent;C=B/'correction-01';I=B/'semantic-review-initial';W=B.parent.parent/'campaign-worktree';ROOT=W.parent
+H=lambda b:hashlib.sha256(b).hexdigest()
+def j(p):return json.loads(p.read_bytes())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=H(b))
+manifest=R/'original-to-copy-manifest.json';assert not manifest.exists();records=[]
+def exactcopy(source,dest):
+ raw=source.read_bytes();dest.parent.mkdir(parents=True,exist_ok=True);assert not dest.exists();dest.write_bytes(raw);assert dest.read_bytes()==source.read_bytes();records.append(dict(original=str(source.resolve()),copy=str(dest.relative_to(R)),bytes=len(raw),sha256=H(raw)))
+for p in sorted(I.rglob('*')):
+ if p.is_file():exactcopy(p,R/'history/initial-review'/p.relative_to(I))
+for seq in (271,272,273):
+ for name in ('spec.json','body.html','report.md','final-decisions.json','final-tuples.json','omissions-full.json','original-dispositions.json','errata-five-ground-decisions.json','freeze.json'):
+  p=B/f'reconciled/{seq}'/name;exactcopy(p,R/f'reviewed-final/{seq}'/name)
+save(manifest,records);seeded={x['original'] for x in records}
+helper=ROOT/'campaign-artifacts/copy_evidence_once_v2.py';assert pin(helper)['sha256']=='b8eabf4b53c29174d7f67c2f723007d429edc1e153ee3e5b32ff0a6e6fa147d1'
+sp=importlib.util.spec_from_file_location('approved_copy_v2',helper);m=importlib.util.module_from_spec(sp);sp.loader.exec_module(m)
+inputs=[Path(x['path']) for x in j(C/'correction-current-inputs.json')]+[C/'correction-current-inputs.json',C/'scoped-rereview-dispatch-proof.json',helper,ROOT/'campaign-artifacts/land_reviewed_page.py',ROOT/'campaign-artifacts/verify_review_copy_and_register.py',B.parent/'semantic-review-protocol.md']
+inputs=list(dict.fromkeys(p.resolve() for p in inputs if str(p.resolve()) not in seeded));result=m.preserve(R,manifest,inputs);records=j(manifest);byoriginal={x['original']:x for x in records};versionlinks=[];newhistorical=[]
+for old in j(I/'original-to-copy-manifest.json'):
+ logical=Path(old['original']);actual=logical
+ if logical.is_relative_to(R):actual=I/logical.relative_to(R)
+ elif logical.is_relative_to(B/'root-reconciliation-verification'):actual=C/'initial/root-reconciliation-verification'/logical.relative_to(B/'root-reconciliation-verification')
+ elif logical.is_relative_to(B/'reconciled/273'):actual=C/'initial/reconciled/273'/logical.relative_to(B/'reconciled/273')
+ if not actual.is_file() or pin(actual)!={k:old[k] for k in ('bytes','sha256')}:actual=I/old['copy']
+ assert actual.is_file() and actual.read_bytes()==(I/old['copy']).read_bytes()
+ key=str(actual.resolve());meta=dict(historical_original=old['original'],historical_producer='As recorded in immutable initial manifest; no inferred author',historical_version='initial semantic NEEDS_CORRECTION boundary',initial_manifest_copy=old['copy'])
+ if key not in byoriginal:
+  dest=R/'history/initial-review'/old['copy'];assert dest.read_bytes()==actual.read_bytes();rec=dict(original=key,copy=str(dest.relative_to(R)),bytes=old['bytes'],sha256=old['sha256']);records.append(rec);byoriginal[key]=rec
+ rec=byoriginal[key];assert rec['bytes']==old['bytes'] and rec['sha256']==old['sha256'];rec.setdefault('historical_aliases',[]).append(meta)
+ for field in ('original_git_commit','repository_relative_path'):
+  if field in old:
+   if field in rec:assert rec[field]==old[field]
+   rec[field]=old[field]
+ versionlinks.append(dict(logical_original=old['original'],actual_retained_original=key,current_copy=rec['copy'],bytes=old['bytes'],sha256=old['sha256'],**{k:old[k] for k in ('original_git_commit','repository_relative_path') if k in old}))
+# Bind all exact repository-snapshot aliases to explicit original Git object metadata, including duplicate historical trees.
+gitbycontent={}
+for rec in records:
+ if 'original_git_commit' in rec:gitbycontent[(rec['sha256'],rec['bytes'])]=(rec['original_git_commit'],rec['repository_relative_path'])
+for rec in records:
+ obj=gitbycontent.get((rec['sha256'],rec['bytes']))
+ if obj:rec.update(original_git_commit=obj[0],repository_relative_path=obj[1])
+# Every physical/helper alias still has its actual original name, including unsupported suffixes; only copied suffixes are adapted.
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+lander=ROOT/'campaign-artifacts/land_reviewed_page.py';tree=ast.parse(lander.read_text());suffixsets=[]
+for node in ast.walk(tree):
+ if isinstance(node,(ast.Tuple,ast.List,ast.Set)):
+  try:v=ast.literal_eval(node)
+  except (ValueError,TypeError):continue
+  if isinstance(v,(tuple,list,set)) and set(v)==allowed:suffixsets.append(v)
+assert suffixsets
+verifiedgit={}
+for rec in records:
+ copy=R/rec['copy'];raw=copy.read_bytes();assert Path(rec['original']).read_bytes()==raw;assert len(raw)==rec['bytes'] and H(raw)==rec['sha256'];assert copy.suffix in allowed
+ if 'original_git_commit' in rec:
+  key=(rec['original_git_commit'],rec['repository_relative_path'])
+  if key not in verifiedgit:verifiedgit[key]=subprocess.check_output(['git','show',key[0]+':'+key[1]],cwd=W)
+  assert verifiedgit[key]==raw
+assert len(records)==len({x['original'] for x in records}) and len(versionlinks)==9145 and len(verifiedgit)==11
+save(manifest,records);save(R/'source-version-transports.json',versionlinks)
+for p in R.rglob('*'):
+ if p.is_file():assert p.suffix in allowed,p
+summary=dict(status='PASS complete copies and exact initial-version transports',approved_copier=dict(path=str(helper),**pin(helper)),approved_copier_call='Imported approved preserve(review_dir, manifest_path, originals); exact selected input list preserved',copier_result_before_historical_aliases=result,initial_review_files=sum(p.is_file() for p in I.rglob('*')),complete_inventory_files=12554,source_copy_records=len(records),distinct_copy_targets=len({x['copy'] for x in records}),initial_aliases_transport_count=len(versionlinks),git_aliases=sum('original_git_commit' in x for x in records),unique_git_objects=len(verifiedgit),actual_landing_helper=dict(path=str(lander),**pin(lander)),other_verifier_helper=dict(path=str(ROOT/'campaign-artifacts/verify_review_copy_and_register.py'),**pin(ROOT/'campaign-artifacts/verify_review_copy_and_register.py')),all_original_and_copy_full_bytes_equal=True,all_copied_extensions_supported=True,synthetic_fixture_limit='Synthetic fixture review metadata and passes are tooling provenance only, never semantic approval or translation evidence.')
+save(R/'approved-copier-inputs.json',[str(p) for p in inputs]);save(R/'preservation-proof.json',summary);print(json.dumps(summary,indent=2))

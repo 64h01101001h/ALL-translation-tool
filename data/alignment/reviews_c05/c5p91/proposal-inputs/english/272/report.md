@@ -1,0 +1,12 @@
+C05:272 — Codex independent English-first ORIGINAL; reused context, no other-angle reads; neither reconciliation nor semantic approval.
+Immutable governing/data baseline: 7166534a9f47a201e5ab580a843c14ba2a910891. Full selected/context rows and 72 complete HGM/corpus queries reopened; exact evidence paths/hashes: evidence-reference.json.
+Challenge first: Letter to a Friend is the actual bshes spring title with two d7 members; the bracket-supplied author stays outside despite the expanded HGM25568 gloss. Exact HGM bshes sprin query was empty.
+The two even words have real bound ang exponents; both are omitted, never nulled, because the allowed flat particle shape cannot claim them and a larger parent would capture supplied words. Lexical dus is distributed in spring wording and is likewise omitted.
+Four nulls: quoted-source las lacks a separate ablative exponent in title-subject states, rnams is grammatical plurality fused into spirits, and both ni are unexpressed topics. Lowercase for is the causal phyir; uppercase For is the verse recipient la.
+C15:417/C18:1131 match all three text fields; P7:26 shares English but differs in ACIP/Wylie. Physical C05 ACIP has a double space after LAS, retained in raw evidence; no normalized-field byte identity with that physical extent is claimed.
+Counts excluding automatic sentence wrapper: 21 spans; 10 d5; 4 nulls. decisions.json records every chosen occurrence/source role; occurrence-proof.json proves actual HTML ranges and unchanged complete text; gap-review.json reviews every unwrapped gap.
+Actual canonical attempt 01: EXIT=0; body bytes=3909; stderr bytes=0. Full argv/stdin/stdout/stderr/exit, wrapper and canonical source pins: canonical-attempt-01/. No failed or superseded canonical attempts.
+Body SHA256 502b74db7fbe890a7d8f353c7802ef38f7e556e884735fd28660b8c3e337f669; spec SHA256 3b1d0367ccb9b976c87d277892c49d370f4355215fec3c9bdc7f6272f1ae0b58.
+errata.json is [] (0 new findings); errata-review.json retains exact row, registered-class assessment and full compared rows. Original physical bytes remain preserved; no silent normalization.
+Approved copy-v2 was actually invoked with exact retained source reads/copy checks; reading index was not consumed. Wrapper itself enforces URI mode=ro; run_canonical.py adds query_only=ON.
+Final source/copy/baseline/query checks: shared 271/final-verification.json; exact verification streams in 271/verification-attempt01/. Full immutable inventory: freeze.json (and shared freeze reference where applicable).

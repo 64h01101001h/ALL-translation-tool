@@ -1,0 +1,13 @@
+--- verify-final-review-root.py
++++ verify-final-review-root-v2.py
+@@ -61,7 +61,9 @@
+ assert len(transports) == len(initial_manifest) == 9145
+ for t, old in zip(transports, initial_manifest):
+     assert t['logical_original'] == old['original']
+-    assert t['current_copy'] == 'history/initial-review/'+old['copy']
++    candidates = [r for r in manifest if r['original'] == t['actual_retained_original'] and r['copy'] == t['current_copy']]
++    assert len(candidates) == 1
++    assert any(a['historical_original'] == old['original'] and a['initial_manifest_copy'] == old['copy'] and a['historical_version'] == 'initial semantic NEEDS_CORRECTION boundary' for a in candidates[0]['historical_aliases'])
+     assert {k:t[k] for k in ('bytes','sha256')} == {k:old[k] for k in ('bytes','sha256')}
+     raw = match(R/t['current_copy'], t)
+     assert raw == read(OLD/old['copy']) == read(t['actual_retained_original'])

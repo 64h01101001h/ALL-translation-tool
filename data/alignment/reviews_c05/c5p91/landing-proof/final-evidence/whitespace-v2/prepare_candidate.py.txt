@@ -1,0 +1,54 @@
+from pathlib import Path
+D=Path(__file__).resolve().parent
+s=(D/'history/whitespace-candidate-273/whitespace273.py').read_text()
+s=s.replace("def literal_warnings(raw, grouped):\n", "def literal_warnings(raw, grouped):\n    \"\"\"Common literal checks; EOF ownership is category-specific below.\"\"\"\n")
+s=s.replace("            else:\n                assert all(x == b'' for x in lines[number-1:]), 'Not literal empty LF lines at EOF'\n", "            # EOF names/numbers are checked here; content belongs to its predicate.\n")
+start=s.index('def ordinary_predicate(');end=s.index('\ndef classify_physical(',start)
+s=s[:start]+'''def ordinary_predicate(raw, grouped):
+    lines = literal_warnings(raw, grouped)
+    if set(grouped) == {'new blank line at EOF.'} and all(
+            all(x == b'' for x in lines[n-1:]) for n in grouped['new blank line at EOF.']):
+        return 'blank_eof'
+    assert set(grouped) <= {'trailing whitespace.', 'new blank line at EOF.'}
+    contexts = diff_context_lines(raw)
+    for number in grouped.get('trailing whitespace.', []):
+        assert number in contexts and lines[number-1] == b' '
+    for number in grouped.get('new blank line at EOF.', []):
+        # A terminal unified-diff context marker owns one ASCII space. Every
+        # remaining content line must also be a parsed blank context marker.
+        assert lines[-1] == b'' and number < len(lines)
+        assert all(lines[i] == b' ' and i+1 in contexts for i in range(number-1, len(lines)-1))
+    return 'diff_context'
+''' + s[end:]
+s=s.replace("    if matches:\n        return dict(kind='physical_bytes', full_range_witnesses=matches)", """    if matches:
+        if 'new blank line at EOF.' in grouped:
+            # This exception exists only after whole-range ownership, never in
+            # the report-line fallback. Reject a fabricated all-blank fragment.
+            assert raw.strip()
+            lines = raw.split(b'\\n')
+            for number in grouped['new blank line at EOF.']:
+                tail = lines[number-1:]
+                assert len(tail) >= 2 and tail[-1] == b''
+                assert all(value == b'\\r' for value in tail[:-1]), 'Not exact empty CRLF source tail'
+        return dict(kind='physical_bytes', full_range_witnesses=matches)""")
+s=s.replace("        self.a = args; self.w = Path(args.worktree).resolve(strict=True); self.review = Path(args.review).resolve(strict=True)", "        self.a = args; self.root_aliases = []\n        self.w = self.capture_root(args.worktree, 'worktree')\n        self.review = self.capture_root(args.review, 'review')")
+s=s.replace("        self.root_manifest = Path(args.root_manifest).resolve(strict=True)", "        resolved_manifest = self.capture_root(args.root_manifest, 'root_manifest')\n        self.root_manifest = Path(args.root_manifest).absolute()")
+s=s.replace("for forbidden in (self.w, self.review.parent, HERE, self.root_manifest.parent):", "for forbidden in (self.w, self.review.parent, HERE, self.root_manifest.parent, resolved_manifest.parent):")
+s=s.replace("        self.save('invocation.json',", "        self.recheck_roots()\n        self.save('root-aliases.json', self.root_aliases)\n        self.save('invocation.json',",1)
+methods='''    def capture_root(self, supplied, role):
+        alias = Path(supplied).absolute(); target = alias.resolve(strict=True)
+        stat = target.stat()
+        self.root_aliases.append(dict(role=role, supplied_path=str(supplied), input_path=str(alias),
+                                      path=str(target), device=stat.st_dev, inode=stat.st_ino))
+        return target
+    def recheck_roots(self):
+        for record in self.root_aliases:
+            target = Path(record['input_path']).resolve(strict=True)
+            assert target == Path(record['path']), ('Root alias retargeted', record['role'])
+            stat = target.stat()
+            assert (stat.st_dev, stat.st_ino) == (record['device'], record['inode']), ('Root identity changed', record['role'])
+'''
+s=s.replace('    def save(self, name, obj):',methods+'    def save(self, name, obj):',1)
+s=s.replace("        metadata = dict(head=HEAD", "        self.recheck_roots()\n        metadata = dict(head=HEAD",1)
+(D/'whitespace273.py').write_text(s)
+print('prepared bytes',len(s.encode()))

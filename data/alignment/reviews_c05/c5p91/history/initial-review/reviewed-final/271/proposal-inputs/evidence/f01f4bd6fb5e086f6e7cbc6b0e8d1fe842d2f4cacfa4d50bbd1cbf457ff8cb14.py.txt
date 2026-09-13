@@ -1,0 +1,94 @@
+from pathlib import Path
+import datetime, hashlib, json, subprocess
+
+out=Path(__file__).parent;batch=out.parents[1];art=batch.parent;wt=art.parent/'campaign-worktree'
+now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+def pin(p):
+    raw=p.read_bytes()
+    return dict(path=str(p.resolve()),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(p,obj):
+    with p.open('x') as f:json.dump(obj,f,ensure_ascii=False,indent=2);f.write('\n')
+base=json.loads((batch/'baseline.json').read_text())
+for name,digest in base['sha256'].items():assert pin(wt/name)['sha256']==digest,name
+assert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=wt).strip()
+assert json.loads((out/'source-evidence-verification.json').read_text())['status'].startswith('PASS')
+extra_copies=[]
+for name in ['docs/alignment_briefs/REFUTE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md']:
+    raw=subprocess.check_output(['git','show',base['commit']+':'+name],cwd=wt)
+    assert raw==(wt/name).read_bytes()
+    dest=out/'governing-originals'/name;dest.parent.mkdir(parents=True,exist_ok=True)
+    with dest.open('xb') as f:f.write(raw)
+    extra_copies.append(dict(original=str(wt/name),original_git_commit=base['commit'],copy=str(dest),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+save(out/'supplemental-governing-originals.json',extra_copies)
+prep=[p for p in batch.iterdir() if p.is_file() and (p.name.startswith('root-') or p.name.startswith('preparation-'))]
+save(out/'evidence-references.json',dict(shared_evidence_directory=str(out),
+     own_prior_preparation=[pin(p) for p in sorted(prep)],
+     role='Primary Codex Tibetan-first original; own prior preparation disclosed; not a non-author semantic verdict',
+     peer_isolation='No English271–273 proposal, report, spec, body, erratum, reconciliation or semantic judgment read. All three originals freeze before that access.',
+     active_role_addendum=pin(batch/'proposal-role-and-version-addendum.md'),
+     selected_version_inputs=pin(batch/'evidence-copy-v2-inputs/manifest.json'),
+     actual_copy_v2_consumption=pin(out/'copy-v2-ILL.execution.json'),
+     supplemental_originals=pin(out/'supplemental-governing-originals.json')))
+
+reason={
+271:'Challenge the two explicit byas pa/provides owners and skye ba/gets versus the relative-clause gyur pa. All four reg bya and four English body positions are distinguished. Both whole consciousness and contributing-factor compounds have unique tighter members; yi dvags is kept whole. Four active agentives have no separate English atom.',
+272:'Challenge the spring/summer variation and omission of the two bound ang/even contributions. Current C05 and HGM25698/25699 explicitly preserve spring/springtime; ILL:2342 and physical [2337] say summer. That difference does not establish a correction. Letter to a Friend excludes the bracketed author and has two licensed members. Rnams contributes through the plural spirits, with an explicit fusion null.',
+273:'Challenge skye ba/caused and the source roles of about/about/on. Positive supplemental HGM6941 includes about and on, but the spatial constructions remain phrases. Extraordinary is banked once; particular/circumstances stay distributed. Three med predicates own nothing/nothing/not exist. Positive HGM14472 supports covered space; generic darkness comparanda do not establish an error.'
+}
+errata={
+271:dict(found='a sensation of cold',source_quote='grang ba',comparison='C15:416, C18:1130 and P7:25 omit of before cold. C05 and its original physical reading include it. This is a difference in other witnesses, not a current-row defect.',
+         lexical='HGM25699/22229 attest springtime/wintertime; 19110 feel/sensation; 19534 consciousness of the body; 12732 provides; 703 gets. No new correction is supported.'),
+272:dict(found='In the spring is hot',source_quote="sos ka'i dus su ni",comparison='C15:417/C18:1131 match the actual three text fields. P7:26 matches English with orthographic/punctuation differences. ILL:2342 and original physical label [2337] say Is hot, in the summer; the whole original text and exact byte extent are preserved.',
+         lexical='Positive HGM25698 spring and25699 springtime coexist with the explicit ILL summer wording. Sanskrit/Hopkins comparanda are reference only. A season correction is uncertain and refuted at proposal level; no source is changed.'),
+273:dict(found='covered space',source_quote='mun pa',comparison='C15:418 matches all three fields. C18:1132 appends an asterisk separator; P9:47 appends the following selection explanation. Both preserve this covered-space wording in the shared extent; neither proves an independent publication.',
+         lexical='Full HGM14472 explicitly includes covered space alongside pitch-black/darkness; HGM15967 supports substance. Generic comparanda cannot override that evidence.')
+}
+source={r['seq']:r for r in json.loads((batch/'source.json').read_text())}
+counts=[]
+for seq in [271,272,273]:
+    d=batch/'tibetan'/str(seq)
+    g=json.loads((d/'generator-proof.json').read_text())
+    assert g['exit_code']==0 and not g['stderr_bytes'] and g['all_occurrences_match']
+    assert (d/'body.html').read_bytes()==(d/'generator.stdout').read_bytes()
+    assert hashlib.sha256((d/'body.html').read_bytes()).hexdigest()==g['stdout_sha256']
+    assert hashlib.sha256((d/'spec.json').read_bytes()).hexdigest()==g['spec_sha256']
+    e=errata[seq]
+    assert e['found'] in source[seq]['english'] and e['source_quote'] in source[seq]['wylie']
+    e.update(seq=seq,errata_proposed=0,decision='No proposed correction survives the current evidence; independent reconciliation and skeptical review remain required.',
+      five_grounds={
+        'a_verbatim':'Actual found and source quotation verified in this exact source row; complete ACIP/Wylie/English and physical extents preserved.',
+        'b_independent_witness':e['comparison']+' Text identity does not establish ingestion lineage or publication independence.',
+        'c_registered_class':'All192 register entries retained, exact current-citation entries0. No current field reaches1500. Verse lineation is original; other-source appended apparatus is not a new current-row defect.',
+        'd_defensible_or_uncertain':e['lexical']+' Default to no erratum when a correction is uncertain.',
+        'e_counts_rechecked':'All66 initial query sets replayed exactly; six supplemental full query sets and six broad substring query sets executed, with full original corpus/master equality. Every query/parameter/count/result is retained.'
+      })
+    save(d/'errata-analysis.json',e)
+    report=f'''C05:{seq} Tibetan-first original — primary Codex; PROVISIONAL, no semantic approval.
+Own earlier source preparation is disclosed; no current English-first proposal or judgment was read before all three originals froze.
+{reason[seq]}
+Complete shared evidence is at ../271/:15 full context rows,57 initial and2 supplemental full master records,66 replayed initial query sets,6 supplemental sets,6 broad parallel sets, six exact C05 physical extents and the complete original ILL witness with its exact season-verse extent.
+All nine baseline data/source hashes remain exact at7166534; consumed governing files are preserved as immutable7166534 Git objects. Actual required reference paths readable:8.
+First inline helper preparation failed at parsing an apostrophe and its dependent recorder found no directory; actual tool history and the explicit failure record remain. No capture ran then.
+The later evidence verifier first compared resolved symlink paths with literal recorded paths and refused despite identical bytes. Its exact helper/results/streams remain; v2 preserves interface spelling and accepts earlier supplemental files only after full byte equality.
+Current source verification passes. Evidence-copy v2 was used once for exact original ILL preservation; no reading index or semantic shortcut was used.
+Errata:0; exact source quotes, alternative readings, all five refutation grounds and limitations are in errata-analysis.json. Complete witnesses remain unmodified.
+Actual canonical generator EXIT=0; stderr=0 bytes; body={g['stdout_bytes']} bytes; SHA-256={g['stdout_sha256']}.
+Measured spans={g['span_count']}; nulls={g['null_count']}; non-null d5={g['d5_nonnull']}; every intended source and English range matches the canonical resolver.
+Canonical execution occurred once for this segment, with full original command/exit/stdout/stderr retained; no spec or note changed afterward.
+Both original authors are excluded from reconciliation and semantic approval. Truth of correspondence still requires those non-author reviews.
+'''
+    with (d/'report.md').open('x') as f:f.write(report)
+    save(d/'completion-input-proof.json',dict(utc=now,status='PASS own original mechanical verification only',
+       source=source[seq],shared_evidence_directory=str(out),canonical=g,other_angle_not_read=True))
+    counts.append(dict(seq=seq,spans=g['span_count'],nulls=g['null_count'],nonnull_d5=g['d5_nonnull'],
+                       body_bytes=g['stdout_bytes'],body_sha256=g['stdout_sha256'],spec_sha256=g['spec_sha256']))
+for seq in [271,272,273]:
+    d=batch/'tibetan'/str(seq)
+    files=[pin(p) for p in sorted(d.rglob('*')) if p.is_file()]
+    for r in files:r['path']=str(Path(r['path']).relative_to(d.resolve()))
+    save(d/'freeze.json',dict(utc=now,status='FROZEN original Tibetan-first; no semantic approval',files=files))
+save(batch/'primary-tibetan-original-complete.json',dict(utc=now,
+     status='All three Tibetan originals frozen before any current English proposal or judgment read',
+     producer='Primary Codex; own prior source preparation disclosed',counts=counts,
+     freezes=[pin(batch/'tibetan'/str(s)/'freeze.json') for s in [271,272,273]]))
+print(json.dumps(counts,indent=2))

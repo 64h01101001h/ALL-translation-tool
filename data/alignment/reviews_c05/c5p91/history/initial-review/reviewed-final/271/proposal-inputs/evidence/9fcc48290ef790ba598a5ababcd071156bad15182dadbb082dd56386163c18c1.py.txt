@@ -1,0 +1,122 @@
+"""Primary Codex Tibetan-first proposals; no other-angle judgments consumed."""
+from pathlib import Path
+import hashlib, json
+
+out = Path(__file__).parent
+prior = out.parents[2] / 'C05-268-270/tibetan/268/author-proposals.py'
+original = prior.read_bytes()
+prefix = original.decode().split("\nmake(268,", 1)[0]
+assert 'def make(' in prefix and 'make(268' not in prefix
+# The prior occurrence mechanism is retained; number is the actual null class.
+prefix = prefix.replace("cls='case' if d==6 else 'unrendered'",
+                        "cls=('number' if tib=='rnams' else 'case') if d==6 else 'unrendered'")
+(out/'prior-author-helper.py.txt').write_bytes(original)
+namespace = {'__file__': str(out/'author-core.py')}
+(out/'author-core.py').write_text(prefix)
+exec(compile(prefix, str(out/'author-core.py'), 'exec'), namespace)
+make = namespace['make']
+
+items271 = [
+("sos ka'i dus", 'springtime', 5, 0, 'HTG25699 licenses the complete seasonal term; no broken spring member inside springtime.'),
+('su', 'in', 6, 0, 'Temporal locative; the first in belongs to springtime.'),
+('zla ba', 'moon', 5, 0, 'HTG16708, the springtime moon.'),
+('reg bya', 'feel', 5, 0, 'HTG19110, the initial feel of the rays, not the subsequent heat sensation.'),
+('cha shas', 'part', 5, 0, 'HTG4384, first material portion.'),
+('gcig', 'one', 5, 0, 'HTG4216, the first numerical one.'),
+('gis', None, 6, 0, 'Agentive of the part acting as material cause; active English has no separate agentive word.'),
+('nyer len', 'material cause', 5, 0, 'HTG5840, complete technical compound; supplied the excluded.'),
+('dang', 'and', 6, 0, 'Coordinates the two causes; then is an English discourse addition.'),
+('yi dvags', 'craving spirit', 5, 0, 'HTG25069, first karma owner; later spirit is an anaphoric reprise. No yi/dvags members inferred from unrelated genitive yi or unglossed dvags.'),
+('las', 'karma', 5, 0, 'Current source attestation. Curated19341 deeds/deed is preserved unchanged.'),
+('kyis', None, 6, 0, 'Karma is an active cause; no separate English agentive word.'),
+('lhan cig byed rkyen', 'contributing factor', 5, 0, 'HTG21656, first complete causal compound.'),
+('lhan cig byed', 'contributing', 7, 0, 'Co-acting modifier within the actual whole contributing-factor compound; not a standalone HGM gloss.'),
+('rkyen', 'factor', 7, 0, 'HTG487, unique strictly tighter head inside its first parent.'),
+('byas pa', 'provides', 5, 1, 'HTG12732; only the second English provides corresponds at this predicate position, first is expanded across the coordinated causes.'),
+('brten nas', 'Based on', 3, 0, 'Complete dependence phrase, HTG7086; these two is a supplied dual recap and stays unwrapped.'),
+('lus shes', 'consciousness of the body', 5, 0, 'HTG19534, first complete tactile-consciousness compound.'),
+('lus', 'body', 7, 1, 'HTG19473, body inside consciousness compound, not earlier rays on the body. Variant-linked11111 skin is not the licensor.'),
+('shes', 'consciousness', 7, 0, 'HTG19969, unique strictly tighter member of first parent.'),
+('myong', 'experienced', 5, 0, 'HTG14665, experience root in the relative object-of-experience construction; its nominal and copular suffixes are left unwrapped.'),
+('tsha ba', 'heat', 5, 0, 'HTG15245, the heat felt in the moon example.'),
+('reg bya', 'sensation', 5, 0, 'HTG19110, first produced sensation, separate from the prior ray feel.'),
+('skye ba', 'gets', 5, 0, 'HTG703, the arising of a sensation is rendered as the spirit gets it; gyur pa is not separately assigned this same predicate.'),
+('dgun dus', 'wintertime', 5, 0, 'HTG22229, complete seasonal term, without broken-word members.'),
+('nyi ma', 'sun', 5, 0, 'HTG5684, the wintertime sun.'),
+('reg bya', 'feel', 5, 1, 'Second ray feel, independent occurrence.'),
+('cha shas', 'part', 5, 1, 'Second material portion.'),
+('gcig', 'one', 5, 1, 'Second numerical one.'),
+('gis', None, 6, 0, 'Agentive of the second active material cause, without a separately alignable English agentive.'),
+('nyer len', 'material cause', 5, 1, 'Second complete technical compound.'),
+('dang', 'and', 6, 1, 'Second coordination of the material cause and karmic factor.'),
+('yi dvags', 'craving spirit', 5, 1, 'Second karma owner; the fourth standalone spirit is an English reprise.'),
+('las', 'karma', 5, 1, 'Second actual karma occurrence.'),
+('kyis', None, 6, 0, 'Second active karmic cause has no separate agentive word.'),
+('lhan cig byed rkyen', 'contributing factor', 5, 1, 'Second complete causal compound.'),
+('lhan cig byed', 'contributing', 7, 1, 'Same local modifier within the second independently resolved parent.'),
+('rkyen', 'factor', 7, 1, 'Unique strictly tighter head inside the second parent.'),
+('byas pa', 'provides', 5, 3, 'Fourth English provides belongs to this second explicit source predicate. The third is its coordinated English expansion.'),
+('brten nas', 'Based on', 3, 1, 'Second complete dependence phrase; repeated these two stays unwrapped.'),
+('lus shes', 'consciousness of the body', 5, 1, 'Second complete tactile-consciousness compound.'),
+('lus', 'body', 7, 3, 'Fourth body occurrence is inside the second consciousness parent, not the third rays/body expansion.'),
+('shes', 'consciousness', 7, 1, 'Unique strictly tighter member of second parent.'),
+('myong', 'experienced', 5, 1, 'Second experience root, not the first passive.'),
+('grang ba', 'cold', 5, 0, 'HTG1979, the cold felt in the sun example.'),
+('reg bya', 'sensation', 5, 1, 'Second produced sensation; actual C05 includes of before cold.'),
+('skye ba', 'gets', 5, 1, 'Second arising predicate rendered gets.'),
+('lta bu', 'example', 5, 0, 'HTG6857, closing exemplar expression realized at the beginning of the English; another and would be are left unwrapped.')
+]
+make(271, 'moon and sun as causal examples', items271,
+     'PROVISIONAL machine alignment by Codex, Tibetan-first original. Own earlier source preparation is disclosed; no English-first proposal or semantic judgment was read. The two causal sequences resolve separately: byas pa owns the second and fourth provides, and skye ba owns the two gets, not the relative-clause gyur pa. The four source reg bya occurrences own feel, sensation, feel, sensation in that order. Both consciousness compounds have unique body/consciousness members; earlier rays on the body are explanatory expansions. Four active agentives have no separate English word. The pronoun/dependence/relative constructions, these two, then, the repeated spirit subjects and So too with are not forced into separate atoms. Springtime and wintertime are preserved whole. The C15:416 and C18:1130 English omit of before cold; the actual C05 wording is preserved, not corrected from them. No source or hgm_gloss is changed.')
+
+make(272, 'the letter to a friend citation', [
+('de ltar', 'this kind of', 3, 0, 'HTG8435, complete anaphoric manner phrase; sensation is an English reprise from271.'),
+('skye ba', 'get', 5, 0, 'HTG703, the actual occurrence predicate, not supplied sensation or they.'),
+('bshes spring', 'Letter to a Friend', 5, 0, 'Established title HTG25568, tightened to the title itself; bracketed author is explanatory, even though the dictionary preserves that fuller quotation.'),
+('bshes', 'Friend', 7, 0, 'HTG20189, unique tighter title member.'),
+('spring', 'Letter', 7, 0, 'HTG24021, unique tighter title member in English reverse order.'),
+('yi dvags', 'craving spirits', 5, 0, 'HTG25069, whole term; no speculative yi/dvags morpheme pair.'),
+('rnams', None, 6, 0, 'Plural marker contributes to the inflected spirits; no separate English word. Its contribution is fused, not absent.'),
+('la', 'For', 6, 0, 'Recipient/perspective particle begins the actual quoted verse, distinct from lowercase causal for.'),
+('sos ka', 'spring', 5, 0, 'HTG25698, the season; dus elaborates the temporal construction without a separate word.'),
+('su', 'In', 6, 0, 'Verse-initial capital is source lineation; temporal locative.'),
+('zla ba', 'moon', 5, 0, 'HTG16708; bound ang and supplied light are left unwrapped.'),
+('tsha', 'hot', 5, 0, 'HTG15244, first seasonal quality.'),
+('la', 'and', 6, 0, 'Clausal coordination between the two verse statements.'),
+('dgun', 'winter', 5, 0, 'HTG22228, second season.'),
+('nyi ma', 'sun', 5, 0, 'HTG5684, second celestial object.'),
+('grang', 'cold', 5, 0, 'HTG1977, second quality; English omits its copula.'),
+('gsungs pa', 'states', 5, 0, 'HTG21221, the quoted text states; zhes/las citation grammar stays unwrapped.'),
+('phyir', 'for', 6, 0, 'Lowercase causal for before the title; not the capital For inside the quotation.')
+], 'PROVISIONAL machine alignment by Codex, Tibetan-first original. No other-angle proposal or semantic judgment was read. Letter to a Friend is banked as the established title with unique Friend/Letter members; the bracketed author remains explanatory even though the glossary contains the expanded quotation. The plural rnams is fused into spirits, not semantically absent. Each bound ang contributes even, but it cannot be detached as a standalone syllable or placed under a moon/sun parent whose English excludes even; both contributions are omitted with this reason, not falsely nulled. Light, they, the reprise sensation, and the expanded It is a fact frame stay unwrapped. Capital In is verse lineation. C15:417 and C18:1131 match all three text fields; P7:26 matches English with Tibetan orthographic/punctuation differences, without establishing publication independence. No source or hgm_gloss is changed.')
+
+make(273, 'particular circumstances and covered space', [
+('de', 'this', 5, 0, 'Initial anaphoric reference; All of and topic yang are not separately harvested.'),
+('yul', 'place', 5, 0, 'HTG17646/18170, actual place, reordered after time in English.'),
+('dus', 'time', 5, 0, 'HTG8311, actual time.'),
+('khyad par can', 'extraordinary', 5, 0, 'HTG1245, complete qualifier; particular is an English recurrence of the same qualification.'),
+('dbang gis', 'by', 3, 0, 'Full causal relation HTG13091, phrase depth rather than an isolated agentive suffix.'),
+('skye ba', 'caused', 5, 0, 'First occurrence, the arising caused by special conditions; keeps the causal frame separate from its by relation.'),
+('spyir', 'generally speaking', 5, 0, 'HTG11429, established generalizing adverb.'),
+('de ltar', 'this way', 3, 0, 'HTG8435, complete manner anaphor.'),
+('skye ba', 'happens', 5, 0, 'Second occurrence, general occurrence predicate; distinct from initial caused.'),
+('ma', 'never', 5, 0, 'HTG13694, whole negative word, no broken subword.'),
+('nyi ma', 'sun', 5, 0, 'First sun, the general absence of cold.'),
+('steng du', 'about', 3, 0, 'Complete spatial/domain expression, locally rendered about; lexical steng alone is not asserted to mean about.'),
+('grang ba', 'cold', 5, 0, 'HTG1979, the first quality.'),
+('reg bya', 'feel', 5, 0, 'HTG19110, tangible quality rendered as feel in the English relative clause.'),
+('yang', 'at all', 6, 0, 'First negative-scope intensifier, HTG17092; not the initial topic yang.'),
+('med', 'nothing', 5, 0, 'First negative existence predicate, HTG14511; there is remains grammatical framing.'),
+('zla ba', 'moon', 5, 0, 'The moon in the corresponding general absence of heat.'),
+('steng du', 'about', 3, 1, 'Second complete domain expression.'),
+('tsha ba', 'hot', 5, 0, 'HTG15245, quality of heat.'),
+('reg bya', 'feel', 5, 1, 'Second tangible/feel occurrence.'),
+('med', 'nothing', 5, 1, 'Second negative existence predicate; the second yang has no safe independent atom and is omitted.'),
+('der thal', 'This too is a fact', 3, 0, 'HTG23514, complete debate assertion as a phrase, not a dictionary word or compound.'),
+('nyi ma', 'sun', 5, 1, 'Second sun, in the covered-space premise.'),
+('steng du', 'on', 3, 0, 'Third complete spatial expression rendered on; earlier two own about.'),
+('mun pa', 'covered space', 5, 0, 'Positive HGM14472 licenses this reading; generic darkness comparanda do not require rewriting it.'),
+('rdzas', 'substance', 5, 0, 'HTG15967, the substance noun, not the supplied any case of that.'),
+('med', 'not exist', 5, 0, 'Third negative existence predicate; auxiliary does stays unwrapped.'),
+('phyir', 'for', 6, 1, 'Final premise owns the second lowercase for, after This too is a fact; the earlier causal connective is left unwrapped.')
+], 'PROVISIONAL machine alignment by Codex, Tibetan-first original. No other-angle proposal or semantic judgment was read. Extraordinary is banked once; particular and the expanded circumstances frame remain distributed. First skye ba belongs to caused, second to happens. The three spatial expressions resolve as about, about, on; first and second med own their separate nothing, final med owns not exist. The first negative-scope yang owns at all; the second is omitted without claiming its force absent. Covered space is positively attested in HGM14472; the other dictionaries darkness is not grounds to correct GMR. Supplied All of, participants, modal can, any case of that, and we call remain unwrapped. C18:1132 appends an asterisk separator; C05/C15 do not. No new erratum is proposed and no source or hgm_gloss is changed.')

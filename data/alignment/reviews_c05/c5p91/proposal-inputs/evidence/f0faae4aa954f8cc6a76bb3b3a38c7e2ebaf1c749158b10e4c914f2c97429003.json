@@ -1,0 +1,8 @@
+{
+  "status": "FAILED preparation before writing candidate or executing any checker",
+  "tool_chunk": "5d006f",
+  "exception": "AssertionError at inline preparation line69",
+  "cause": "A preparation guard searched the substring exit=run.returncode, which also occurs legitimately inside generator_exit=run.returncode. This was an overbroad string guard, not a source/canonical failure.",
+  "complete_inline_command_location": "The exact functions.exec / exec_command tool input for chunk5d006f in the current task history. No failed helper file existed on disk; no reconstructed invocation is claimed.",
+  "recovery": "Prepare v3 in distinct explicit file steps; inspect final diff and compile without executing. Original v2 and both current/preserved proof directories remain unchanged."
+}

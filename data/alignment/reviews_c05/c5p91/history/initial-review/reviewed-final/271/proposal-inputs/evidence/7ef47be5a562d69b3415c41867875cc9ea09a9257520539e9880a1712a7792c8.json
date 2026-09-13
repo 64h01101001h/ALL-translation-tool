@@ -1,0 +1,53 @@
+{
+  "utc": "2026-09-12T23:46:51.574581+00:00",
+  "status": "PASS independent code, artifact and fresh fault-suite verification",
+  "candidate": {
+    "bytes": 3683,
+    "sha256": "b8eabf4b53c29174d7f67c2f723007d429edc1e153ee3e5b32ff0a6e6fa147d1"
+  },
+  "candidate_freeze": {
+    "bytes": 1905089,
+    "sha256": "6f82ad23a00dca2e9dab0ac6d5944177d3c1693f4d1bfb68cb22d0cac5439368"
+  },
+  "frozen_files_checked": 8611,
+  "source_paths_reopened": 447,
+  "all_aliases_reopened_per_mode_per_helper": 527,
+  "output_tree_checks": [
+    {
+      "mode": "startup",
+      "files_per_tree": 448,
+      "exact_equal": true,
+      "alias_rechecks": 1054
+    },
+    {
+      "mode": "compatible-originals",
+      "files_per_tree": 448,
+      "exact_equal": true,
+      "alias_rechecks": 1054
+    },
+    {
+      "mode": "rebuild",
+      "files_per_tree": 218,
+      "exact_equal": true,
+      "alias_rechecks": 1054
+    },
+    {
+      "mode": "historical-conflict",
+      "files_per_tree": 448,
+      "exact_equal": true,
+      "alias_rechecks": 1054
+    }
+  ],
+  "measured_invocations_checked": 16,
+  "fresh_fault_tests": 22,
+  "fresh_fault_suite_exit": 0,
+  "startup_reads_saved": 80,
+  "startup_logical_bytes_saved": 17547354,
+  "observed_instrumented_startup_median_seconds": {
+    "old": 0.08416529186069965,
+    "candidate": 0.07610141672194004
+  },
+  "limitation": "Local copied-file microbenchmark only; about8.1ms median startup reduction, not a measured campaign speedup. Filesystem mutation is not an atomic snapshot guarantee. Full final retained-output checks remain mandatory.",
+  "live_helper_unchanged": true,
+  "alignment_semantic_approval": false
+}

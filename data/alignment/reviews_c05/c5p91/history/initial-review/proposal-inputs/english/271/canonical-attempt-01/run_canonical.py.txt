@@ -1,0 +1,22 @@
+"""Invoke the untouched supplied URI-ro wrapper, adding query_only to connections."""
+from pathlib import Path
+import json,runpy,sqlite3,sys
+
+wrapper=Path(sys.argv[1]).resolve();proof=Path(sys.argv[2]).resolve()
+assert proof.is_relative_to(Path(__file__).resolve().parent.parent)
+original=sqlite3.connect;connections=[]
+def query_only_connect(database,*args,**kwargs):
+    assert kwargs.get('uri') is True and '?mode=ro' in str(database)
+    connection=original(database,*args,**kwargs)
+    connection.execute('PRAGMA query_only=ON')
+    value=connection.execute('PRAGMA query_only').fetchone()[0]
+    assert value==1
+    connections.append(dict(database=str(database),uri=kwargs['uri'],query_only=value))
+    return connection
+sqlite3.connect=query_only_connect
+sys.argv=[str(wrapper)]
+try:
+    runpy.run_path(str(wrapper),run_name='__main__')
+finally:
+    proof.write_text(json.dumps(dict(wrapper=str(wrapper),connections=connections,
+        supplied_wrapper_enforces='URI mode=ro',local_runner_adds='PRAGMA query_only=ON'),indent=2)+'\n')

@@ -1,0 +1,85 @@
+from pathlib import Path
+import datetime, gzip, hashlib, json, sqlite3, subprocess
+
+out=Path(__file__).parent
+batch=out.parents[1]
+wt=batch.parents[1]/'campaign-worktree'
+def pin(p):
+    raw=p.read_bytes()
+    return dict(path=str(p.resolve()),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(p,obj):
+    with p.open('x') as f:json.dump(obj,f,ensure_ascii=False,indent=2);f.write('\n')
+base=json.loads((batch/'baseline.json').read_text())
+assert base['commit']=='7166534a9f47a201e5ab580a843c14ba2a910891'
+for name,digest in base['sha256'].items():assert pin(wt/name)['sha256']==digest,name
+assert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=wt).strip()
+c=sqlite3.connect((wt/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True)
+c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON')
+master=json.loads(gzip.decompress((wt/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries']
+corpus=json.loads(gzip.decompress((wt/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+courses={}
+for row in corpus:courses.setdefault(row['course'],[]).append(row)
+sets=0;selected={}
+for name in ['lexical-queries-full.json','parallel-queries-full.json']:
+    for q in json.loads((out/name).read_text()):
+        actual=[dict(r) for r in c.execute(q['sql'],q['parameters'])]
+        assert actual==q['rows'] and len(actual)==q['count'];sets+=1
+        for r in actual:
+            if 'seq' in r:
+                assert json.loads(r['raw'])==courses[r['course']][r['seq']-1]
+            else:
+                assert json.loads(r['raw'])==master[r['id']-1]
+                selected[str(r['id'])]=master[r['id']-1]
+assert selected==json.loads((out/'master-entries-full.json').read_text())
+for r in json.loads((out/'source-context-full-rows.json').read_text()):
+    actual=dict(c.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(r['course'],r['seq'])).fetchone())
+    assert actual==r and json.loads(r['raw'])==courses[r['course']][r['seq']-1]
+supp=[]
+sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'
+supp_master={}
+for term in ['de','steng du','myong byar','myong byar gyur pa','dbang gis skye ba']:
+    rows=[dict(r) for r in c.execute(sql,(term,term))]
+    for r in rows:
+        original=master[r['id']-1];assert json.loads(r['raw'])==original;supp_master[str(r['id'])]=original
+    supp.append(dict(term=term,sql=sql,parameters=[term,term],count=len(rows),rows=rows))
+    print('LEXICAL',term,json.dumps([dict(id=r['id'],wylie=r['wylie'],hgm_gloss=r['hgm_gloss'],tier=r['tier']) for r in rows],ensure_ascii=False))
+sql='SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq'
+rows=[dict(r) for r in c.execute(sql,('P7',25,27))]
+assert len(rows)==3
+for r in rows:
+    assert json.loads(r['raw'])==courses[r['course']][r['seq']-1]
+    print('PARALLEL',json.dumps({k:v for k,v in r.items() if k!='raw'},ensure_ascii=False))
+supp.append(dict(sql=sql,parameters=['P7',25,27],count=3,rows=rows))
+save(out/'supplemental-queries-full.json',supp)
+save(out/'supplemental-master-full.json',supp_master)
+for k,v in supp_master.items():print('MASTER',k,json.dumps(v,ensure_ascii=False))
+inputs=json.loads((out/'input-proof.json').read_text())
+for x in inputs['inputs']:assert pin(Path(x['path']))==x
+physical=Path(inputs['physical']['path']);assert pin(physical)==inputs['physical']
+raw=physical.read_bytes();assert raw==(out/'physical-C05ReadingASCII.txt').read_bytes()
+for x in inputs['physical_extents']:
+    extent=raw[x['start']:x['start']+x['bytes']]
+    assert extent.decode()==x['source_utf8'] and hashlib.sha256(extent).hexdigest()==x['sha256']
+    print('PHYSICAL',x['seq'],x['field'],json.dumps(extent.decode(),ensure_ascii=False))
+originals=out/'governing-originals';originals.mkdir()
+copies=[]
+for name in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md',
+             'data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']:
+    original=subprocess.check_output(['git','show',base['commit']+':'+name],cwd=wt)
+    assert original==(wt/name).read_bytes()
+    dest=originals/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(original)
+    copies.append(dict(original=str(wt/name),original_git_commit=base['commit'],copy=str(dest),bytes=len(original),sha256=hashlib.sha256(original).hexdigest()))
+save(out/'governing-original-copy-manifest.json',copies)
+register=json.loads((originals/'docs/errata_register.json').read_text())
+assert len(register)==192
+current=[r for r in register if r['segment'] in ['C05:271','C05:272','C05:273']]
+assert not current
+for name,digest in base['sha256'].items():assert pin(wt/name)['sha256']==digest,name
+proof=dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='PASS original source/evidence verification, not semantic approval',
+           replayed_initial_query_sets=sets,supplemental_query_sets=len(supp),full_master_records=len(selected),supplemental_master_records=len(supp_master),
+           full_context_rows=15,full_source_field_extents=6,baseline_commit=base['commit'],baseline_hashes_unchanged=True,
+           registered_errata=192,current_citation_entries=0,governing_originals=copies,
+           own_prior_preparation_disclosed=True,other_angle_not_read=True,
+           reading_limit='Initial large terminal master/lexical output truncated. Complete material master fields subsequently read in bounded subsets; complete original/source files and all query results retained. Hash equality proves transport, not semantic correspondence.')
+save(out/'source-evidence-verification.json',proof)
+print('RESULT',json.dumps({k:v for k,v in proof.items() if k!='governing_originals'},ensure_ascii=False))

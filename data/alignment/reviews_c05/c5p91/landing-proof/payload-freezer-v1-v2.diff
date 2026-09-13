@@ -1,0 +1,11 @@
+--- freeze-final-payload-before-staging.py
++++ freeze-final-payload-before-staging-v2.py
+@@ -55,7 +55,7 @@
+ assert meta['spec_verdict']==meta['quality_verdict']=='APPROVE' and meta['open_findings']==[]
+ assert j(B/'semantic-review/bank-ready-errata.json')==[]
+ assert j(B/'semantic-review/span-head-allow-needed.json')=={'pages_c05':{}}
+-for rel in ('docs/errata_register.json','docs/errata_register.md','data/alignment/span_head_allow.json'):
++for rel in ('docs/errata_register.json','docs/ERRATA_REGISTER.md','data/alignment/span_head_allow.json'):
+     p=W/rel
+     if p.exists(): assert raw(p)==git('show',base['commit']+':'+rel)
+ sources={'data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz'}

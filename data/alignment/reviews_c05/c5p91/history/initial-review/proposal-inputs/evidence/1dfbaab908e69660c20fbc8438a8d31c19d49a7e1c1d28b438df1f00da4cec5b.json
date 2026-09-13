@@ -1,0 +1,25 @@
+{
+  "utc": "2026-09-13T01:37:59.384809+00:00",
+  "status": "PREPARED_NOT_EXECUTED_PENDING_INDEPENDENT_REVIEW",
+  "original_unchanged": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/register-reviewed-page-and-index.py",
+    "bytes": 5837,
+    "sha256": "574fe05ca252c52a3ab90b52503a2265b25c006d5600c12f4b86be8871f6faae"
+  },
+  "candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/register-reviewed-page-and-index-v2.py",
+    "bytes": 7971,
+    "sha256": "4db82414ccf8467a333280696786fd0089cc1080bb689f04f980e4bc8978535e"
+  },
+  "diff": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/registration-helper-v2.diff.txt",
+    "bytes": 3467,
+    "sha256": "f4cb7ea9645e45ded3cc2f7885310ad97f8bd0438eb611b14f1ff7d793f119a3"
+  },
+  "reason": "Independent reviewer reported v1 approval record insufficiently tied to landed spec/body. Root independently read actual landing/generator interfaces. V2 requires all individual final spec/body approval pins and both review copies, exact full spec serialization and concatenated canonical body, actual recorded generator exit/stderr and landing manifest hashes before writes.",
+  "actual_canonical_composition_evidence": "Root inspected gen_alignment_page.py main tail and land_reviewed_page.py; through270 actual21400-byte body equals exact concatenation of approved three individual bodies. No canonical engine rewritten.",
+  "first_review_preservation": "Original helper remains unchanged while reviewer completes initial NEEDS_CORRECTION report/freeze. Candidate not used or dispatched yet.",
+  "repository_mutations": false,
+  "candidate_execution_count": 0,
+  "syntax_compile_only": "PASS"
+}

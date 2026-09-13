@@ -1,0 +1,8 @@
+from pathlib import Path
+import json,hashlib,difflib
+O=Path(__file__).resolve().parent;p=O/'bank_root_proofs_through273.py';raw=p.read_bytes();compile(raw,str(p),'exec')
+for old in ['bank-root-landing-proofs.py','bank-final-verification-proofs.py']:
+ prior=(O/'inputs/old270'/old).read_bytes()
+ (O/(old+'.diff.txt')).write_text(''.join(difflib.unified_diff(prior.decode().splitlines(True),raw.decode().splitlines(True),fromfile='immutable270/'+old,tofile='prepared273/'+p.name)))
+proof=dict(status='SYNTAX_PASS_ONLY',bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),candidate_executions=0,banking_mutations=0,live_git_commands=0,tests_executed=0)
+(O/'syntax-proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))

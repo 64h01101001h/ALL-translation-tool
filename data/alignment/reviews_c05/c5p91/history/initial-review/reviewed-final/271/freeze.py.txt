@@ -1,0 +1,33 @@
+from pathlib import Path
+import sys,json,os,hashlib,subprocess,datetime
+sys.dont_write_bytecode=True
+R=Path(__file__).resolve().parents[4];B=R/'campaign-artifacts/C05-271-273';O=B/'reconciled/271'
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+helper=R/'campaign-artifacts/copy_evidence_once_v2.py';skill=Path('/Users/adamderickandrade/ALL-translation-tool/.agents/skills/verification-before-completion/SKILL.md')
+# Preserve the previously verified manifest as a historical version before additive preservation.
+(O/'manifest-before-skill-preservation.json').write_bytes((O/'original-copy-manifest.json').read_bytes())
+argv=[sys.executable,'-B',str(helper),str(O),str(O/'original-copy-manifest.json'),str(skill)]
+p=subprocess.run(argv,cwd=R,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+for name,data in [('stdout.txt',p.stdout),('stderr.txt',p.stderr),('exit.txt',(str(p.returncode)+'\n').encode())]:(O/('skill-copy.'+name)).write_bytes(data)
+save(O/'skill-copy.command.json',dict(argv=argv,cwd=str(R),environment={'PYTHONDONTWRITEBYTECODE':'1'},exit=p.returncode,helper=pin(helper),source=pin(skill)));assert p.returncode==0
+manifest=json.loads((O/'original-copy-manifest.json').read_text())
+for r in manifest:
+ a=Path(r['original']).read_bytes();copy=(O/r['copy']).read_bytes();assert a==copy and len(a)==r['bytes'] and hashlib.sha256(a).hexdigest()==r['sha256']
+aliases=json.loads((O/'all-input-alias-byte-checks.json').read_text())
+for r in aliases:assert Path(r['input_path']).read_bytes()==(O/r['copy']).read_bytes()
+for r in json.loads((O/'source-input-pins.json').read_text()):assert pin(Path(r['path']))=={k:r[k] for k in ['bytes','sha256']}
+allowed=['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit']
+proof=dict(status='PASS',checked_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),all_original_copy_records=len(manifest),distinct_copies=len({r['copy'] for r in manifest}),prior_invocation_aliases_reopened=len(aliases),additional_skill_alias_reopened=str(skill),every_original_copy_full_bytes_equal=True,source_pins_unchanged=True,landing_whitelist=allowed,baseline_governing_commit='7166534a9f47a201e5ab580a843c14ba2a910891',final_spans=102,original_dispositions=198,canonical_runs=9,all_exit_zero_empty_stderr=True,approval='PROVISIONAL reconciliation only; separate semantic review required')
+save(O/'final-freeze-preflight.json',proof)
+results=[]
+for seq in [271,272,273]:
+ d=B/'reconciled'/str(seq);assert not (d/'freeze.json').exists();files={}
+ for p in sorted(d.rglob('*')):
+  if p.is_file():assert p.suffix.lower() in allowed;files[str(p.relative_to(d))]=pin(p)
+ save(d/'freeze.json',dict(seq=seq,scope='All current files except this top freeze itself; nested historical freezes are retained unchanged.',timestamp=datetime.datetime.now(datetime.timezone.utc).isoformat(),producer='Codex reused non-author /root/c05_253_255_reconcile',files=files,file_count=len(files)))
+ actual={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'};assert actual==set(files)
+ for name,value in files.items():assert pin(d/name)==value
+ results.append(dict(seq=seq,freeze_path=str(d/'freeze.json'),files=len(files),**pin(d/'freeze.json')))
+print(json.dumps({'status':'DONE PROVISIONAL; all current freezes independently reread exactly','freezes':results,'preflight':proof},indent=2))

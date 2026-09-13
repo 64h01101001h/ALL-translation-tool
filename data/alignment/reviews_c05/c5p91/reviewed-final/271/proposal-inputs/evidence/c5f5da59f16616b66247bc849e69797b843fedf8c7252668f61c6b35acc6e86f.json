@@ -1,0 +1,12 @@
+{
+  "utc": "2026-09-13T01:18:04.203607+00:00",
+  "original_exit": 1,
+  "canonical_executions_in_failed_attempt": 0,
+  "cause": "English freeze records carry absolute path plus relative_path; root first checker incorrectly treated path as relative. Original frozen bytes untouched.",
+  "correction": "New version validates both absolute and relative identity and full inventory. Fresh output directory preserves failed full execution.",
+  "earlier_read_probe": {
+    "tool_chunk": "9fe534",
+    "error": "FileNotFoundError errata-analysis.json; actual English interface errata-review.json",
+    "writes": false
+  }
+}

@@ -1,0 +1,132 @@
+"""Read-only retention/source checks after a manually approved batch is landed.
+
+Usage: python3 campaign-artifacts/verify_landed_batch.py 60 178 179 180
+Mechanical evidence only; this does not supply semantic approval.
+"""
+from collections import Counter
+import csv
+import hashlib
+import io
+import json
+from pathlib import Path
+import re
+import sqlite3
+import subprocess
+import sys
+
+art = Path(__file__).resolve().parent
+root = art.parent / "campaign-worktree"
+page, *seqs = map(int, sys.argv[1:])
+assert len(seqs) == 3 and seqs == list(range(seqs[0], seqs[0] + 3))
+batch = art / f"C05-{seqs[0]}-{seqs[-1]}"
+baseline = json.loads((batch / "baseline.json").read_text())
+base = baseline["commit"]
+
+
+def read_current(path):
+    return json.loads((root / path).read_text())
+
+
+def read_old(path):
+    return json.loads(subprocess.check_output(["git", "show", f"{base}:{path}"], cwd=root))
+
+
+def signature(value):
+    return json.dumps(value, ensure_ascii=False, sort_keys=True)
+
+
+full_path = "data/alignment/alignment_full_v1.json"
+evidence_path = "data/alignment/alignment_evidence_v1.json"
+old, now = read_old(full_path), read_current(full_path)
+before, after = Counter(map(signature, old["links"])), Counter(map(signature, now["links"]))
+assert not (before - after), "Prior links were removed or changed"
+added = [json.loads(k) for k, n in (after - before).items() for _ in range(n)]
+assert added and all(x["course"] == "C05" and x["seg"] in seqs for x in added)
+for field in ("notes", "trees"):
+    assert all(now[field].get(k) == v for k, v in old[field].items()), field
+assert sorted({x["seg"] for x in now["links"] if x["course"] == "C05"}) == list(range(1, seqs[-1] + 1))
+oe, ne = read_old(evidence_path), read_current(evidence_path)
+for tib, pairs in oe["pairs"].items():
+    current = {x["eng"]: x for x in ne["pairs"].get(tib, [])}
+    for pair in pairs:
+        nxt = current[pair["eng"]]
+        assert set(pair["refs"]) <= set(nxt["refs"]), (tib, pair)
+        assert nxt.get("acip") == pair.get("acip"), (tib, pair)
+assert all(ne["acip_index"].get(k) == v for k, v in oe["acip_index"].items())
+
+csv_path = "docs/geshe_michael_roach_dictionary.csv"
+old_csv = list(csv.DictReader(io.StringIO(subprocess.check_output(
+    ["git", "show", f"{base}:{csv_path}"], cwd=root).decode("utf-8-sig"))))
+new_csv = list(csv.DictReader(io.StringIO((root / csv_path).read_text(encoding="utf-8-sig"))))
+csv_key = lambda x: (x["kind"], x["depth"], x["wylie"], x["english"])
+current_csv = {csv_key(x): x for x in new_csv}
+stable_columns = ("acip", "tibetan_generated", "pronunciation_generated", "in_acip_index",
+                  "tier", "rule", "generated_columns", "source_corpus", "generator")
+csv_acip_enrichments = []
+for entry in old_csv:
+    nxt = current_csv[csv_key(entry)]
+    assert set(entry["refs"].split()) <= set(nxt["refs"].split()), csv_key(entry)
+    changed = {k for k in stable_columns if entry[k] != nxt[k]}
+    if changed:
+        assert changed == {"acip", "in_acip_index"}, (csv_key(entry), changed)
+        assert entry["acip"] == "" and entry["in_acip_index"] == "no"
+        assert nxt["acip"] and nxt["in_acip_index"] == "yes"
+        assert nxt["acip"] not in oe["acip_index"]
+        assert ne["acip_index"][nxt["acip"]] == entry["wylie"]
+        witnesses = [x for x in added if x["d"] == 5 and x["tib"] == entry["wylie"]
+                     and x.get("tib_acip") == nxt["acip"]]
+        assert witnesses, "A new ACIP export value requires a newly banked source witness"
+        csv_acip_enrichments.append({"key": csv_key(entry), "acip": nxt["acip"],
+                                     "new_source_refs": [f"{x['course']}:{x['seg']}" for x in witnesses]})
+
+for path in ("data/hgm_dictionary_v27_2.json.gz", "data/full_parallel_corpus_v32.json.gz"):
+    assert hashlib.sha256((root / path).read_bytes()).hexdigest() == baseline["sha256"][path], path
+
+name = f"c5p{page}"
+spec_path = root / "data/alignment/specs_c05" / f"{name}.json"
+review_dir = root / "data/alignment/reviews_c05" / name
+spec = json.loads(spec_path.read_text())
+manifest = json.loads((review_dir / "landing.json").read_text())
+assert hashlib.sha256(spec_path.read_bytes()).hexdigest() == manifest["spec_sha256"]
+body = (batch / "landing/generator.stdout").read_bytes()
+assert hashlib.sha256(body).hexdigest() == manifest["body_sha256"]
+assert body.decode() in (root / "data/alignment/pages_c05" / f"{name}.html").read_text()
+expected = [(s["seq"], x["id"], x["d"], x["tib"], x["eng"]) for s in spec["segments"] for x in s["spans"]]
+resolved = json.loads((review_dir / "resolved-spans.json").read_text())
+actual = [(x["seq"], x["id"], x["d"], x["tib"], x["eng"]) for x in resolved]
+assert actual == expected, "Accepted spec differs from the semantic review"
+db = sqlite3.connect(f"file:{root / 'build/hgm_spine_v27_2.db'}?mode=ro", uri=True)
+rows = {seq: db.execute("SELECT wylie,english FROM corpus_segments WHERE course='C05' AND seq=?", (seq,)).fetchone() for seq in seqs}
+for x in resolved:
+    wylie, english = rows[x["seq"]]
+    assert wylie[slice(*x["tib_range"])] == x["tib"]
+    if x["eng"] is not None:
+        assert english[slice(*x["eng_range"])] == x["eng"]
+db.close()
+assert len(added) == len(expected) + 3
+
+directory = root / "data/alignment/pages_c05"
+for path in (directory / "index.html", directory / f"c5p{page-1}.html", directory / f"{name}.html"):
+    html = path.read_text()
+    for href in re.findall(r'''href=["']([^"']+)["']''', html):
+        if href.startswith(("http:", "https:", "#", "mailto:")):
+            continue
+        assert (path.parent / href.split("#", 1)[0]).exists(), (path, href)
+
+report = {
+    "baseline_commit": base, "page": name, "segments": seqs,
+    "prior_links_retained": len(old["links"]), "added_links": len(added),
+    "added_by_segment": dict(Counter(x["seg"] for x in added)),
+    "reviewed_analyst_spans": len(expected), "full_links": len(now["links"]),
+    "null_exponents": sum(x["eng"] is None for x in now["links"]),
+    "evidence_headwords": len(ne["pairs"]),
+    "evidence_pairs": sum(map(len, ne["pairs"].values())),
+    "prior_notes_trees_evidence_and_acip_retained": True,
+    "prior_csv_rows_retained": len(old_csv), "current_csv_rows": len(new_csv),
+    "prior_csv_content_and_references_retained": True,
+    "csv_acip_enrichments_from_newly_banked_source": csv_acip_enrichments,
+    "source_hashes_unchanged": True, "review_tuples_and_source_ranges_match": True,
+    "navigation_targets_exist": True, "rendering_verified": False,
+}
+(batch / "landing/retention-source-check.json").write_text(json.dumps(report, indent=2) + "\n")
+print(json.dumps(report, indent=2))

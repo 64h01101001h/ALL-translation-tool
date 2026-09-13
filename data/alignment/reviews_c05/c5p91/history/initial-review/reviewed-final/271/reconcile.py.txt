@@ -1,0 +1,115 @@
+from pathlib import Path
+import json,sys,os,subprocess,hashlib,datetime,importlib.util,copy,difflib,re
+sys.dont_write_bytecode=True
+R=Path(__file__).resolve().parents[4];B=R/'campaign-artifacts/C05-271-273';W=R/'campaign-worktree';O=B/'reconciled/271'
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+sys.path.insert(0,str(W/'tools'));definition=importlib.util.spec_from_file_location('canonical',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(definition);definition.loader.exec_module(g)
+sources={r['seq']:r for r in json.loads((O/'context-full-rows.json').read_text())};originals=json.loads((O/'original-identities.json').read_text())
+notes={
+271:"PROVISIONAL machine reconciliation by Codex, reused non-author of both current originals. Springtime and wintertime are established whole seasonal terms, without subword members. Each co-acting modifier owns contributing inside its own contributing-factor compound. The two complete la brten nas dependence phrases own Based on; covered nas is not separately nulled. Four active agentives have no separate English exponent. Each byas pa owns the second or fourth provides; first and third provides are reprises of the shared predicates. Four reg bya occurrences and the two body/consciousness member groups retain their distinct owners. Nominal experience syntax, anaphoric spirit subjects, rays/body expansions and the closing causal framing remain distributed and unwrapped. C15/C18 omit of before cold; C05 preserves it. No source wording or hgm_gloss is changed.",
+272:"PROVISIONAL machine reconciliation by Codex, reused non-author of both current originals. Letter to a Friend is the established title; its bracketed author is explanatory, with Friend and Letter as its only members. Plural rnams is fused into spirits; source las and two topic ni have no separate English word. Bound 'ang twice has overt even counterparts but no defensible compound parent containing them without supplied wording, so both are omitted, never nulled. The assertion and sensation reprises stay unwrapped. Capital For/In and lowercase causal for retain distinct owners. ILL:2342, physical label [2337], says summer; C05 says spring, positively attested in HTG2016. This difference does not establish a correction. No source wording or hgm_gloss is changed.",
+273:"PROVISIONAL machine reconciliation by Codex, reused non-author of both current originals. The complete causal-arising phrase dbang gis skye ba owns caused by; no isolated skye ba/caused dictionary claim is made. Generally speaking and about/about/on are established lexical renderings. The complete der thal formula owns This too is a fact at phrase depth. The two negative-scope yang occurrences own at all and the clause-joining and; the initial topic yang and time/place conjunction stay unwrapped. Three med predicates own their separate nothing/nothing/not exist. Covered space is positively attested in HTG2016; comparative darkness does not justify changing it. Supplied participants, modal can, articles and naming language remain unwrapped. No source wording or hgm_gloss is changed."}
+special={
+271:{'r1':"Retain at d5: complete sos ka'i dus is an established seasonal term, exactly springtime in HTG2016 entry25699. The English compound includes time; no member cuts springtime.", 'r28':"Retain at d5: complete dgun dus is the established wintertime term (HTG2016 entry22229), including time without broken members.",
+'qdep1':"First full la brten nas is the dependency construction Based on. la marks the basis, brten dependence, nas the subordinating linkage. Preserve that relation as a d3 phrase; these two is a supplied recap of both causes. Positive brten/based and brten nas/based on entries7084/7086 support, but do not require splitting the construction or nulling its covered nas.",
+'qdep2':"Second full la brten nas is the second dependency construction Based on, with the same complete phrase scope and no null for covered nas; first ray/body on and first Based on are different occurrences.",
+'mc1':"lhan cig byed is the co-acting modifier of rkyen, locally contributing within contributing factor; lhan cig together plus byed acting supplies the co-operative contribution, rather than an invented subtraction. Whole HTG2016 entry21656 supports the compound; unglossed105024 is not a competing negative gloss. Strictly tighter d7, not a promoted standalone equivalent.",
+'mc2':"Second co-acting lhan cig byed modifier owns contributing within the second contributing-factor parent. Morphology and local causal ownership support this member independently of the unglossed standalone record105024; no standalone hgm_gloss is minted."},
+272:{'p6':"Retain grammatical null: source ablative las marks the cited text as source; English makes the title the subject of states. There is no separately alignable from/in here; relation persists in attribution syntax, not semantic absence.",
+'p8':"Retain number-class null: rnams has proven plural contribution in craving spirits, fused into its inflection. No separate all is claimed and no English plural subword is cut.",
+'p12':"Retain topic-class null: first ni sets off the spring temporal topic. In already belongs to su; English has no separate topic-marker word. Predicate is belongs to the hot predication, not a lexical ni/is claim.",
+'p17':"Retain topic-class null: second ni marks the winter topic, represented in verse ordering without a separate topic marker; winter is dgun, even is bound 'ang.",
+'w20':"Tighten Tibetan gsungs pa to gsungs, matching the actual speech predicate states (HTG2016 entry21219). Nominal pa'i links to phyir and remains unwrapped; wider entry21221 is positive but does not require absorbing that grammar."},
+273:{'r5':"Retain d3 causal-arising construction dbang gis skye ba/caused by. Full entry13091 positively includes both by and caused by; this is not an empty-query rejection. The English passive compresses arising under the power of these circumstances. The larger source phrase preserves both contributions without asserting skye ba alone means caused or nulling its contribution. Following skye ba independently owns happens.",
+'w6':"Retain d5 established adverb spyir/generally speaking, explicitly attested HTG2016 entry11429. Both actual originals already use d5 here; dispatch shorthand suggesting a depth difference is not adopted.",
+'w11':"Retain d5 steng du/about: established relational expression HTG2016 entry6941, locally the domain of the sun. No standalone steng/about or du/null is inferred.",
+'w17':"Retain second d5 steng du/about, the corresponding lunar domain. Full entry6941 attests this complete lexicalized relational expression; source/English occurrences differ from the solar pair.",
+'w24':"Retain third d5 steng du/on, established locative expression entry6941, belonging to the final sun/substance premise rather than either preceding about.",
+'qfact':"Retain whole der thal/This too is a fact at d3. The demonstrative consequence formula asserts the just stated premise; exact whole HTG2016 entry23514 includes this too is a fact. This does not assert isolated thal/fact or promote the formula into a dictionary word.",
+'p20':"Retain second negative-scope yang/and at English199–202: additive extension of the sun's excluded quality to the moon's excluded quality, compatible with yang/and in full entry17092. First negative yang instead emphasizes at all; initial topic yang is distinct. The earlier time and place conjunction has no right to this token.",
+'p22':"Retain first phyir/first for: the general counterstatement and ensuing sun/moon absence supply the reason exceptional conditions are required. English places for before the generalization and uses a colon before its evidence; this is the same causal argument, not the second final covered-space premise."}}
+def key(r):return (r['d'],r['tib'],r['eng'],tuple(r['tib_range']),None if r['eng_range'] is None else tuple(r['eng_range']))
+results=[]
+for seq in [271,272,273]:
+ D=B/'reconciled'/str(seq);spec=copy.deepcopy(json.loads((B/f'english/{seq}/spec.json').read_text()));seg=spec['segments'][0];ss=seg['spans'];expected={r['id']:r for r in originals if r['angle']=='english' and r['seq']==seq}
+ if seq==271:
+  replacement=[]
+  for s in ss:
+   i=s['id']
+   if i in ['r1','r28']:s['d']=5
+   if i in ['p7','p13','p33','p39']:s['cls']='case'
+   if i in ['p17','p43']:
+    j=1 if i=='p17' else 2;s=dict(id=f'qdep{j}',d=3,tib='la brten nas',eng='Based on');old=expected[i];a=old['tib_range'][0];e=194 if j==1 else 485;expected[s['id']]=dict(tib_range=[a,a+12],eng_range=[e,e+8])
+   if i in ['w18','p19','w44','p45','p55']:continue
+   replacement.append(s)
+   if i in ['w14','w40']:
+    j=1 if i=='w14' else 2;m=dict(id=f'mc{j}',d=7,tib='lhan cig byed',eng='contributing');replacement.append(m);parent=expected[i];a=parent['tib_range'][0];e=parent['eng_range'][0];expected[m['id']]=dict(tib_range=[a,a+13],eng_range=[e,e+12])
+  ss=replacement
+ if seq==272:
+  for s in ss:
+   if s['id']=='p6':s['cls']='case'
+   if s['id']=='p8':s['cls']='number'
+   if s['id'] in ['p12','p17']:s['cls']='topic'
+ if seq==273:
+  i=next(i for i,s in enumerate(ss) if s['id']=='w23');ss.insert(i,dict(id='qfact',d=3,tib='der thal',eng='This too is a fact'));expected['qfact']=dict(tib_range=[203,211],eng_range=[245,263])
+ seg['spans']=ss;seg['note']=notes[seq];seg['eng_order']=[s['id'] for s in sorted([s for s in ss if s['d']!=7 and s['eng'] is not None],key=lambda s:expected[s['id']]['eng_range'][0])]
+ save(D/'spec.json',spec);save(D/'errata.json',[]);save(D/'proposed-head-allowances.json',[])
+ # Actual canonical execution; body is never constructed by this helper.
+ attempt=D/'canonical-attempt01';attempt.mkdir();raw=(D/'spec.json').read_bytes();(attempt/'stdin.json').write_bytes(raw)
+ argv=[sys.executable,'-B',str(O/'run-canonical-readonly.py.txt')];start=datetime.datetime.now(datetime.timezone.utc).isoformat();p=subprocess.run(argv,input=raw,cwd=W,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+ (attempt/'stdout.html').write_bytes(p.stdout);(attempt/'stderr.txt').write_bytes(p.stderr);(attempt/'exit.txt').write_text(str(p.returncode)+'\n')
+ proof=dict(argv=argv,cwd=str(W),environment={'PYTHONDONTWRITEBYTECODE':'1'},started_at=start,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=p.returncode,spec=pin(D/'spec.json'),stdout=pin(attempt/'stdout.html'),stderr=pin(attempt/'stderr.txt'),wrapper=pin(O/'run-canonical-readonly.py.txt'),generator=pin(W/'tools/gen_alignment_page.py'),builder=pin(W/'tools/build_alignment_layer.py'),sqlite='URI mode=ro; PRAGMA query_only=ON')
+ save(attempt/'command.json',proof);assert p.returncode==0 and p.stderr==b'',p.stderr;(D/'body.html').write_bytes(p.stdout)
+ source=sources[seq];tr=g.resolve(source['wylie'],ss,'tib',seq);byid={s['id']:s for s in ss};er=g.resolve(source['english'],g.with_members(ss,[byid[i] for i in seg['eng_order']],source['english']),'eng',seq)
+ final=[];decisions=[];parent=None;original_decisions={r['id']:r for r in json.loads((B/f'english/{seq}/decisions.json').read_text())['spans']}
+ for s in ss:
+  i=s['id']
+  if s['d']!=7:parent=i if s['d']==5 else None
+  row=dict(id=i,d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(tr[i]),eng_range=None if s['eng'] is None else list(er[i]),parent_id=parent if s['d']==7 else None)
+  assert row['tib_range']==expected[i]['tib_range'] and row['eng_range']==expected[i]['eng_range'],(seq,i,row,expected[i])
+  if s['d'] in [5,7] and s['eng']:assert not re.match(r'(?i)^(the|a|an|and|or|his|our|your|I|you)(?:\s|$)',s['eng'])
+  rationale=special.get(seq,{}).get(i)
+  if rationale is None:
+   old=original_decisions[i];rationale=f"Retain after current source and full lexical evidence review: {old['reason']}. "
+   if s['eng'] is None:rationale+=s['nul']
+   else:rationale+=f"Exact local {s['tib']} at {row['tib_range']} owns {s['eng']} at {row['eng_range']}; adjacent supplied English is excluded."
+  final.append(row);decisions.append(dict(tuple=row,rationale=rationale,span_object=s,source_context=source['wylie'][max(0,row['tib_range'][0]-30):row['tib_range'][1]+35]))
+ save(D/'final-tuples.json',final);save(D/'final-decisions.json',decisions)
+ dispositions=[]
+ for r in [x for x in originals if x['seq']==seq]:
+  same=[f for f in final if key(f)==key(r)];overlap=[f for f in final if max(f['tib_range'][0],r['tib_range'][0])<min(f['tib_range'][1],r['tib_range'][1]) and f['d']!=7]
+  if same:status='retained';why=next(x['rationale'] for x in decisions if x['tuple']['id']==same[0]['id']);targets=[x['id'] for x in same]
+  elif overlap:status='recast_or_boundary_or_depth_changed';targets=[x['id'] for x in overlap];why=' '.join(next(x['rationale'] for x in decisions if x['tuple']['id']==f['id']) for f in overlap)
+  else:
+   assert seq==271 and r['tib']=='phyir',r;status='omitted_distributed';targets=[];why="Closing phyir belongs to the whole example-as-reason framing. There is no isolated for/because, but the initial example and preceding argument distribute this connective contribution. Omit rather than assert a null on mere failure to identify an atom."
+  if r['eng'] is None and overlap and not same:why+=' The original null is not retained: its source is positively included in the full dependence phrase.'
+  original_decl=(next(x for x in json.loads((B/f'tibetan/{seq}/intended-spans.json').read_text()) if x['id']==r['id']) if r['angle']=='tibetan' else original_decisions[r['id']])
+  dispositions.append(dict(original_identity={k:r[k] for k in ['angle','seq','id','d','tib','eng','tib_range','eng_range']},original_span=r['original_span'],original_key_order=r['original_key_order'],original_field_presence=r['original_field_presence'],original_parent_id=r['parent_id'],original_occurrence_declaration=original_decl,status=status,final_ids=targets,rationale=why))
+ save(D/'original-dispositions.json',dispositions)
+ # Exact complement coverage; original gap decisions apply only to identical ranges.
+ origgaps=json.loads((B/f'english/{seq}/gap-review.json').read_text())['gaps'];gaps={}
+ for field,sourcefield in [('tib','wylie'),('eng','english')]:
+  text=source[sourcefield];covered=set()
+  for f in final:
+   rng=f[field+'_range']
+   if rng:covered.update(range(*rng))
+  pairs=[];start=None
+  for i in range(len(text)+1):
+   if i<len(text) and i not in covered:
+    if start is None:start=i
+   elif start is not None:
+    t=text[start:i];old=next((q for q in origgaps[field] if q['range']==[start,i]),None)
+    if not re.search(r'[A-Za-z]',t):why='Verbatim whitespace/punctuation; no lexical mapping asserted.'
+    elif old:why=old['disposition']
+    elif seq==271 and 'phyir' in t:why='Copular/exemplar and causal linkage distributed over the initial example framing; no unsupported null for closing phyir.'
+    else:raise AssertionError((seq,field,start,i,t))
+    pairs.append(dict(range=[start,i],text=t,rationale=why));start=None
+  gaps[field]=pairs
+ save(D/'omissions-full.json',dict(seq=seq,coverage='Every exact unwrapped complement; grammatical or distributed contributions are not equated with absence.',gaps=gaps))
+ for angle in ['tibetan','english']:
+  old=(B/f'{angle}/{seq}/spec.json').read_text().splitlines(True);new=(D/'spec.json').read_text().splitlines(True);(D/f'{angle}-to-final.diff.txt').write_text(''.join(difflib.unified_diff(old,new,fromfile=f'{angle}/{seq}/spec.json',tofile=f'reconciled/{seq}/spec.json')))
+ result=dict(seq=seq,spans=len(ss),nulls=sum(s['eng'] is None for s in ss),d5=sum(s['d']==5 and s['eng'] is not None for s in ss),original_dispositions=len(dispositions),exit=0,spec=pin(D/'spec.json'),body=pin(D/'body.html'),errata=0)
+ save(D/'final-proof.json',result);results.append(result)
+print(json.dumps(results,ensure_ascii=False,indent=2))

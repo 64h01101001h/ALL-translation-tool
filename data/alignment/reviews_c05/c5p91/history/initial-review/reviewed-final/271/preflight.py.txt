@@ -1,0 +1,38 @@
+from pathlib import Path
+import json,sys,hashlib,os,subprocess,datetime
+sys.dont_write_bytecode=True
+R=Path(__file__).resolve().parents[4];B=R/'campaign-artifacts/C05-271-273';O=B/'reconciled/271';W=R/'campaign-worktree'
+def pin(p):
+ raw=p.read_bytes();return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+allowed=['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit']
+source=(R/'campaign-artifacts/verify_review_copy_and_register.py').read_text();assert "('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit')" in source
+manifest=json.loads((O/'original-copy-manifest.json').read_text());mapping={r['original']:r for r in manifest}
+for r in manifest:
+ a=Path(r['original']).read_bytes();b=(O/r['copy']).read_bytes();assert a==b and len(a)==r['bytes'] and hashlib.sha256(a).hexdigest()==r['sha256']
+aliases=[]
+for command in [O/'executions/copy-v2/command.json',O/'supplement-failed-attempt01/supplement-copy.command.json',O/'supplement-copy.command.json']:
+ c=json.loads(command.read_text())
+ for original in c['argv'][5:]:
+  p=Path(original);r=mapping[str(p.resolve())];a=p.read_bytes();assert a==(O/r['copy']).read_bytes();aliases.append(dict(input_path=original,resolved_original=r['original'],copy=r['copy'],bytes=len(a),sha256=hashlib.sha256(a).hexdigest(),actual_command=str(command)))
+save(O/'all-input-alias-byte-checks.json',aliases)
+for r in json.loads((O/'source-input-pins.json').read_text()):assert pin(Path(r['path']))==r
+gitchecks=[]
+for r in json.loads((O/'governing-manifest.json').read_text()):
+ p=subprocess.run(['git','show',r['git_commit']+':'+r['git_path']],cwd=W,capture_output=True);assert p.returncode==0 and not p.stderr;assert p.stdout==Path(r['copy']['path']).read_bytes();gitchecks.append(dict(commit=r['git_commit'],path=r['git_path'],bytes=len(p.stdout),sha256=hashlib.sha256(p.stdout).hexdigest(),exit=p.returncode))
+save(O/'governing-final-recheck.json',gitchecks)
+all_originals=json.loads((O/'original-identities.json').read_text());seen=[];files=[];summaries=[]
+for seq in [271,272,273]:
+ D=B/'reconciled'/str(seq);rows=json.loads((D/'original-dispositions.json').read_text());tuples=json.loads((D/'final-tuples.json').read_text());decisions=json.loads((D/'final-decisions.json').read_text());assert [r['tuple'] for r in decisions]==tuples
+ for row in rows:
+  identity=row['original_identity'];a=next(x for x in all_originals if all(x[k]==v for k,v in identity.items()));assert a['original_span']==row['original_span'] and a['original_key_order']==row['original_key_order'] and a['original_field_presence']==row['original_field_presence'];assert row['rationale'];seen.append((identity['angle'],seq,identity['id']))
+ for path in D.rglob('*'):
+  if path.is_file():assert path.suffix.lower() in allowed,path;files.append(pin(path))
+ proof=json.loads((D/'final-proof.json').read_text());assert pin(D/'spec.json')==proof['spec'] and pin(D/'body.html')==proof['body'];assert json.loads((D/'errata.json').read_text())==[];assert json.loads((D/'proposed-head-allowances.json').read_text())==[];summaries.append(proof)
+ assert len((D/'report.md').read_text().splitlines()) in range(10,26)
+ assert json.loads((D/'source-preservation-proof.json').read_text())['all_final_tuple_substrings_exact']
+assert len(seen)==198 and len(set(seen))==198
+refs=[Path.home()/x for x in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']]
+assert all(os.access(p,os.R_OK) for p in refs)
+result=dict(status='PASS: current source, every original/copy alias, immutable governing objects,198 dispositions,102 final tuples and landing suffix whitelist',timestamp=datetime.datetime.now(datetime.timezone.utc).isoformat(),original_copy_records=len(manifest),distinct_copies=len({r['copy'] for r in manifest}),actual_invocation_alias_reads=len(aliases),governing_git_objects=len(gitchecks),required_reference_access=[dict(path=str(p),readable=True) for p in refs],landing_whitelist=allowed,files_checked=len(files),summaries=summaries,semantic_approval=False,limitations='Mechanical proof is not reading or semantic approval. A separate non-author semantic reviewer must adjudicate this PROVISIONAL reconciliation.')
+save(O/'supported-copy-preflight.json',result);print(json.dumps(result,indent=2))

@@ -1,0 +1,22 @@
+from pathlib import Path
+import json,hashlib
+R=Path(__file__).resolve().parent;B=R.parent
+J=lambda p:json.loads(p.read_bytes())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+m=J(R/'original-to-copy-manifest.json');by={x['original']:x for x in m};history=R/'history/preservation-stage01';history.mkdir()
+for n in ('original-to-copy-manifest.json','preservation-proof.json','source-version-transports.json'):(history/n).write_bytes((R/n).read_bytes())
+added=[]
+for angle in ('reconciled','tibetan','english'):
+ for seq in (271,272,273):
+  base=B/angle/str(seq);out=R/(f'reviewed-final/{seq}' if angle=='reconciled' else f'proposal-inputs/{angle}/{seq}')
+  files=[p for p in base.rglob('*') if p.is_file()] if angle=='reconciled' else [base/n for n in ('spec.json','body.html','report.md','errata.json') if (base/n).exists()]
+  for source in files:
+   target=out/source.relative_to(base);raw=source.read_bytes();target.parent.mkdir(parents=True,exist_ok=True)
+   if target.exists():assert target.read_bytes()==raw
+   else:target.write_bytes(raw);added.append(str(target.relative_to(R)))
+   rec=by[str(source.resolve())];assert rec['sha256']==hashlib.sha256(raw).hexdigest() and rec['bytes']==len(raw);rec['copy']=str(target.relative_to(R))
+links=J(R/'source-version-transports.json')
+for x in links:x['current_copy']=by[x['actual_retained_original']]['copy']
+save(R/'source-version-transports.json',links);save(R/'original-to-copy-manifest.json',m)
+proof=J(R/'preservation-proof.json');proof['distinct_copy_targets']=len({x['copy'] for x in m});proof['readable_interface_completion']=dict(added_files=len(added),added=added,reason='Complete current reconciled trees and original core interfaces at expected readable paths; prior manifest/proof/transport retained under history/preservation-stage01. Every byte already preserved; no new source or semantic execution.');save(R/'preservation-proof.json',proof)
+print(json.dumps(dict(added_files=len(added),source_copy_records=len(m),distinct_copy_targets=proof['distinct_copy_targets'])))

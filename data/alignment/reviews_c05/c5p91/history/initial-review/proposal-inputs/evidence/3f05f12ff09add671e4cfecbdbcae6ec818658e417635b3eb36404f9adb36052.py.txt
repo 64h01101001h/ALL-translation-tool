@@ -1,0 +1,15 @@
+"""Run unchanged registration helper only in explicit isolated synthetic tree.
+Only its three git reads are stubbed to immutable baseline input bytes.
+"""
+from pathlib import Path
+import json,runpy,sys,subprocess
+from unittest.mock import patch
+O=Path(__file__).resolve().parent;F=Path(sys.argv[1]).resolve();assert F.is_relative_to(O/'fixtures-complete')
+B=F/'campaign-artifacts/C05-271-273';W=F/'campaign-worktree'
+def git(argv,**kw):
+ assert Path(kw['cwd'])==W and argv[0]=='git'
+ if argv[1:]==['rev-parse','HEAD']:return ((F/'synthetic-head.txt').read_text().strip()+'\n').encode()
+ assert argv[1]=='show' and argv[2].startswith('7166534a9f47a201e5ab580a843c14ba2a910891:')
+ relative=argv[2].split(':',1)[1]
+ return (O/({'tools/build_alignment_layer.py':'baseline-builder.py','data/alignment/pages_c05/index.html':'baseline-index.html'}[relative])).read_bytes()
+with patch.object(subprocess,'check_output',git):runpy.run_path(str(B/'register-reviewed-page-and-index-v2.py'),run_name='__main__')

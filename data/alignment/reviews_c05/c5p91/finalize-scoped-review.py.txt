@@ -1,0 +1,48 @@
+from pathlib import Path
+import json,hashlib,sys,os,subprocess,datetime
+sys.dont_write_bytecode=True;os.environ.update(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';I=B/'semantic-review-initial';C=B/'correction-01';allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+J=lambda p:json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def inv(p,exclude=None):return {str(x.relative_to(p)):pin(x) for x in sorted(p.rglob('*')) if x.is_file() and x!=exclude}
+assert not (R/'freeze.json').exists()
+review=J(R/'review.json');tuples=J(R/'resolved-spans.json');assert review['verdict']==review['spec_verdict']==review['quality_verdict']=='APPROVE' and review['open_findings']==[]
+assert tuples==J(B/'root-reconciliation-verification/resolved-spans.json')
+assert len(tuples)==101 and all(list(x)==['seq','id','d','tib','eng','tib_range','eng_range'] for x in tuples)
+for s in review['segments']:
+ seq=s['seq'];current=B/f'reconciled/{seq}';copied=R/f'reviewed-final/{seq}';assert inv(current)==inv(copied)
+ for name in ('spec','body'):
+  p=current/('spec.json' if name=='spec' else 'body.html');pp=pin(p);assert pp['bytes']==s[name+'_bytes'] and pp['sha256']==s[name+'_sha256']
+ old=J(C/f'initial/reconciled/{seq}/spec.json')['segments'][0];new=J(current/'spec.json')['segments'][0]
+ originals=[x for x in old['spans'] if not(seq==273 and x['id']=='p22')]
+ for a,b in zip(originals,new['spans']):assert list(a)==list(b) and a==b
+ assert s['span_count']==sum(x['seq']==seq for x in tuples);assert s['null_count']==sum(x['seq']==seq and x['eng'] is None for x in tuples);assert s['word_pair_count']==sum(x['seq']==seq and x['d']==5 and x['eng'] is not None for x in tuples)
+assert J(R/'bank-ready-errata.json')==[] and J(R/'span-head-allow-needed.json')=={'pages_c05':{}}
+assert inv(I)==inv(R/'history/initial-review')==inv(C/'initial/semantic-review')
+manifest=J(R/'original-to-copy-manifest.json');assert len(manifest)==len({x['original'] for x in manifest})==12568;git={}
+for x in manifest:
+ copy=R/x['copy'];assert copy.is_file() and copy.suffix in allowed;assert pin(copy)=={k:x[k] for k in ('bytes','sha256')};assert Path(x['original']).read_bytes()==copy.read_bytes()
+ if 'original_git_commit' in x:
+  key=x['original_git_commit'],x['repository_relative_path']
+  if key not in git:git[key]=subprocess.check_output(['git','show',key[0]+':'+key[1]],cwd=W)
+  assert git[key]==copy.read_bytes()
+links=J(R/'source-version-transports.json');assert len(links)==9145
+for x in links:assert Path(x['actual_retained_original']).read_bytes()==(R/x['current_copy']).read_bytes() and pin(R/x['current_copy'])=={k:x[k] for k in ('bytes','sha256')}
+# Every dispatch-frozen original still matches after all reads and our isolated output generation.
+for x in J(C/'correction-current-inputs.json'):assert pin(Path(x['path']))=={k:x[k] for k in ('bytes','sha256')}
+for x in J(B/'reconciled/271/source-input-pins.json'):assert pin(Path(x['path']))=={k:x[k] for k in ('bytes','sha256')}
+for p in R.rglob('*'):
+ if p.is_file():assert p.suffix in allowed,p
+assert J(R/'new-canonical-proof.json')['new_runs']==1
+actual_runs=list((R/'executions').glob('*/execution-proof.json'));assert len(actual_runs)==1 and J(actual_runs[0])['exit']==0
+for f in ['verify-scope','execute-corrected273','preserve-current-and-history','complete-readable-interfaces','write-scoped-review']:
+ assert (R/(f+'.exit')).read_text().strip()=='0' and (R/(f+'.stderr')).read_bytes()==b''
+count_before=len(inv(R));final_count=count_before+2
+proof=dict(status='PASS complete current scoped review closure',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=0,resolved_findings=['C05-273-CAUSAL-01'],current_counts=[101,8,63],segments=review['segments'],exact_root_101_tuple_equality=True,exact_seven_key_order=True,all_surviving_optional_key_order_and_objects_exact=True,original_identities=198,initial_review_preserved_files=1403,initial_review_freeze=pin(I/'freeze.json'),initial_review_report=pin(I/'review.md'),source_copy_records=len(manifest),distinct_copy_targets=len({x['copy'] for x in manifest}),historical_alias_transports=len(links),git_aliases=sum('original_git_commit' in x for x in manifest),unique_git_objects=len(git),complete_current_reconciled_tree_files=[len(inv(B/f'reconciled/{s}')) for s in (271,272,273)],all_original_copy_complete_bytes_equal=True,all_current_and_nested_files_supported=True,dispatch_inventory12554_unchanged=True,source_master_physical_pins_unchanged=True,new_actual_canonical_runs=1,retained_initial_actual_runs=9,freeze_file_count=final_count,freeze_rule='Excludes only this actual top-level freeze.json; includes all nested historical freezes, failed versions and complete source bytes',machine_review_limits='Provisional correspondence review; no human/native/phone/render/landing/MAIN integration approval. Synthetic fixture metadata is tooling provenance only.')
+save(R/'final-preservation-proof.json',proof)
+save(R/'evidence-pins.json',dict(scope='Every current file before evidence-pins and top freeze creation; full final freeze additionally includes this manifest',files=inv(R)))
+files=inv(R);assert len(files)==final_count
+save(R/'freeze.json',dict(producer='Codex /root/c05_through249_final_review; reused independent non-author reviewer',scope='All current files except only this actual top-level freeze; nested historical freeze.json files included unchanged',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),spec_verdict='APPROVE',quality_verdict='APPROVE',provisional=True,file_count=len(files),total_bytes=sum(x['bytes'] for x in files.values()),files=files))
+assert J(R/'freeze.json')['files']==inv(R,R/'freeze.json')
+print(json.dumps(dict(status='DONE',spec='APPROVE',quality='APPROVE',counts=[101,8,63],open_findings=0,source_copies=len(manifest),distinct_copy_targets=proof['distinct_copy_targets'],history_files=1403,freeze_files=len(files),freeze_bytes=sum(x['bytes'] for x in files.values()),freeze=pin(R/'freeze.json'),report=pin(R/'review.md'),canonical=pin(R/'new-canonical-proof.json')),indent=2))

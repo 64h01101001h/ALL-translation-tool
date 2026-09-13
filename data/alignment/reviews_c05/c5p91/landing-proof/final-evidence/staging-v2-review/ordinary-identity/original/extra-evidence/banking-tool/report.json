@@ -1,0 +1,31 @@
+{
+  "status": "PREPARED_SYNTAX_ONLY_NOT_EXECUTED",
+  "candidate": {
+    "status": "SYNTAX_PASS_ONLY",
+    "bytes": 17531,
+    "sha256": "6e329fd6d2940514e1d135adcf32751566aa9afd75a3be298886ffdbf156e09d",
+    "candidate_executions": 0,
+    "banking_mutations": 0,
+    "live_git_commands": 0,
+    "tests_executed": 0
+  },
+  "producer": "Codex /root/c05_262_264_english, retained context and English-original author; tooling preparation only",
+  "known_actual_results": {
+    "ctest_passed": 17,
+    "total_seconds": 12.16,
+    "live_layer_invocations": 1,
+    "live_view_invocations": 1,
+    "live_total_build_invocations": 2,
+    "coverage": 273,
+    "payload_files": 12,
+    "payload_bytes": 40883683
+  },
+  "preserved_failures": [
+    "Root review verifier v1 EXIT1, v2 EXIT0, both full code versions, diff, recovery and preservation proof, all execution streams.",
+    "Payload freezer v1 EXIT1 for incorrect Git-path casing, v2 EXIT0, both root helpers, case-only diff/recovery and all execution streams."
+  ],
+  "isolation": "Later isolated reproduction invocations are separate evidence supplied by explicit inventory; never included in live landing build counts.",
+  "current_limit": "No candidate execution or banking mutations, no tests rerun, no staging changes or semantic approval. Future final whitespace evidence/schema and external finished-tree inventory remain caller-supplied dependencies.",
+  "payload_capture_note": "All12payload files were already present in the initial capture snapshot and are preserved in this preparation. The later additional-input capture found0 new payload files; all-payload-external-plan.json records the complete12file future external-retention plan. No payload has been banked.",
+  "compatibility": "Manifest required keys match the staging interface. Current semantic freeze dictionary is handled mechanically; known staging-v1 defects are left for separate reviewed v2."
+}

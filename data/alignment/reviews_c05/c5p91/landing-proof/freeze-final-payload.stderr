@@ -1,0 +1,17 @@
+fatal: path 'docs/errata_register.md' exists on disk, but not in '7166534a9f47a201e5ab580a843c14ba2a910891'
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/freeze-final-payload-before-staging.py", line 60, in <module>
+    if p.exists(): assert raw(p)==git('show',base['commit']+':'+rel)
+                                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/freeze-final-payload-before-staging.py", line 20, in git
+    return subprocess.check_output(['git',*args],cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 473, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['git', 'show', '7166534a9f47a201e5ab580a843c14ba2a910891:docs/errata_register.md']' returned non-zero exit status 128.

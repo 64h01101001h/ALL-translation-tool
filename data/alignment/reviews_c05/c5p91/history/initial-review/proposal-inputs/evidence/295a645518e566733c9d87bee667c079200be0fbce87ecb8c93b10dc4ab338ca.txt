@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/verify-reconciliation-boundary.py", line 45, in <module>
+    original_freezes = [freeze(b/angle/str(seq)) for angle in ('tibetan', 'english') for seq in (271, 272, 273)]
+                        ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/verify-reconciliation-boundary.py", line 37, in freeze
+    assert len(entries) == f['file_count']
+                           ~^^^^^^^^^^^^^^
+KeyError: 'file_count'

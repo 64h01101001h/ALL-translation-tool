@@ -1,0 +1,93 @@
+{
+  "status": "PREPARATION ONLY: root code/provenance review required before either CLI",
+  "prepare": {
+    "argv": [
+      "python3",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273/whitespace273.py",
+      "prepare",
+      "--worktree",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "--review",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review",
+      "--root-manifest",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/root-proof-copy-manifest-before-whitespace.json",
+      "--root-manifest-bank-path",
+      "data/alignment/reviews_c05/c5p91/landing-proof/root-proof-copy-manifest-before-whitespace.json",
+      "--physical-descriptors",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273/physical-source-descriptors.json",
+      "--raw-log",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.stdout",
+      "--raw-stderr",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.stderr",
+      "--raw-exit",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.exit",
+      "--raw-command",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.command.json",
+      "--build-proof",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/canonical-builds-once.json",
+      "--output",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-runs-273/prepare-01"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "executed": false
+  },
+  "audit": {
+    "argv": [
+      "python3",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273/whitespace273.py",
+      "audit",
+      "--worktree",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "--review",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review",
+      "--root-manifest",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/root-proof-copy-manifest-before-whitespace.json",
+      "--root-manifest-bank-path",
+      "data/alignment/reviews_c05/c5p91/landing-proof/root-proof-copy-manifest-before-whitespace.json",
+      "--physical-descriptors",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273/physical-source-descriptors.json",
+      "--raw-log",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.stdout",
+      "--raw-stderr",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.stderr",
+      "--raw-exit",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.exit",
+      "--raw-command",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.command.json",
+      "--build-proof",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/canonical-builds-once.json",
+      "--output",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-runs-273/audit-01",
+      "--prepared",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-runs-273/prepare-01"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "executed": false
+  },
+  "prerequisites": [
+    "Root independently reviews exact candidate and all baselines/diffs; candidate frozen code and inputs remain exact.",
+    "The real staged Git diagnostic command must be exactly git diff --cached --check with actual worktree cwd, separately retained full command/stdin/stdout/stderr/exit, exit0 or2 and empty stderr. Static LF predicates are never substituted.",
+    "Root creates, retains and stages the actual before-whitespace root manifest and its listed original/copy bank records. The candidate does not invent that future manifest or approve any root output category. All root warnings must belong to its files records.",
+    "The actual current canonical-build proof supplies CSV output hashes; review source/semantic/full-freeze and retention gates remain independent prerequisites.",
+    "Every output directory must be absent and outside candidate, worktree, entire active batch and manifest directory. Caller captures the candidate command and complete stdout/stderr/exit in a separate fresh sibling execution directory, never overwriting a prior attempt.",
+    "prepare creates exact full-input copies plus progressive partial-classification checkpoints. On failure keep the entire output and failure.json; use another explicitly named directory on retry. Never delete or repurpose partial outputs.",
+    "audit requires unchanged prepared pins, review freeze, root manifest, raw diagnostic and staged file bytes; it reruns actual git diff --cached --check and independently repeats all predicates. It does not use prepare as an approval.",
+    "The displayed future paths are an explicit proposed command contract, not claims that missing raw logs/manifests exist. If root chooses a different actual manifest/raw-log location, preserve the final exact invocation and corresponding source provenance.",
+    "After audit root may bank exact outputs under separately reviewed banking tooling. Any subsequent staging change requires a fresh verification boundary; this candidate does not cover its own later banking."
+  ],
+  "source_policy": [
+    "Four explicitly described full physical text sources must exactly match original current manifest records and frozen copies. All complete original bytes and all discovered whole-fragment or complete-line ranges are retained, with all matching witnesses rather than invented unique attribution.",
+    "Review paths require exact current freeze pin+full working/staged/frozen byte equality AND a strict literal predicate. Root bank paths require actual original/copy manifest equality AND strict diff-context or literal empty-LF EOF only.",
+    "CSV requires current actual build output hash plus every warning line ending CR-before-LF. Diff context requires exact b-space content at a real blank context position in a fully parsed complete unified diff with balanced hunk counts. EOF requires only empty LF lines from the cited line to the end.",
+    "Physical warnings require exact entire source-range equality or complete original source-line boundaries, plus strict warning-name/line-number/literal checks. No print separator, ZIP member, empty report field, old root-log, filename-only or general frozen-byte exception exists.",
+    "Unknown categories, unsupported diff framing, ambiguous framing, changed sources, out-of-range lines, duplicate warning identities, missing root provenance or changed index/head fail closed."
+  ]
+}

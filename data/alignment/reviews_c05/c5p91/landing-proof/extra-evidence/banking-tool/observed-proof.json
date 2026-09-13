@@ -1,0 +1,190 @@
+{
+  "status": "OBSERVED_COMPLETED_LANDING_RECORDS_ONLY",
+  "tests": [
+    {
+      "ordinal": 1,
+      "total": 17,
+      "ctest_id": 82,
+      "name": "constitution",
+      "seconds": 0.3
+    },
+    {
+      "ordinal": 2,
+      "total": 17,
+      "ctest_id": 90,
+      "name": "gen_alignment_page",
+      "seconds": 1.42
+    },
+    {
+      "ordinal": 3,
+      "total": 17,
+      "ctest_id": 91,
+      "name": "alignment_gate_coverage",
+      "seconds": 0.11
+    },
+    {
+      "ordinal": 4,
+      "total": 17,
+      "ctest_id": 92,
+      "name": "alignment_builder",
+      "seconds": 0.04
+    },
+    {
+      "ordinal": 5,
+      "total": 17,
+      "ctest_id": 93,
+      "name": "dictionary_exports",
+      "seconds": 0.15
+    },
+    {
+      "ordinal": 6,
+      "total": 17,
+      "ctest_id": 94,
+      "name": "no_broken_words",
+      "seconds": 0.18
+    },
+    {
+      "ordinal": 7,
+      "total": 17,
+      "ctest_id": 95,
+      "name": "no_split_syllables",
+      "seconds": 0.1
+    },
+    {
+      "ordinal": 8,
+      "total": 17,
+      "ctest_id": 96,
+      "name": "no_phonetics_in_layer",
+      "seconds": 0.26
+    },
+    {
+      "ordinal": 9,
+      "total": 17,
+      "ctest_id": 97,
+      "name": "no_degenerate_members",
+      "seconds": 0.07
+    },
+    {
+      "ordinal": 10,
+      "total": 17,
+      "ctest_id": 98,
+      "name": "no_supplied_span_head",
+      "seconds": 0.1
+    },
+    {
+      "ordinal": 11,
+      "total": 17,
+      "ctest_id": 99,
+      "name": "layer_matches_spine",
+      "seconds": 3.76
+    },
+    {
+      "ordinal": 12,
+      "total": 17,
+      "ctest_id": 100,
+      "name": "evidence_matches_spine",
+      "seconds": 0.2
+    },
+    {
+      "ordinal": 13,
+      "total": 17,
+      "ctest_id": 101,
+      "name": "errata_quotes_hold",
+      "seconds": 0.15
+    },
+    {
+      "ordinal": 14,
+      "total": 17,
+      "ctest_id": 102,
+      "name": "view_matches_layer",
+      "seconds": 0.28
+    },
+    {
+      "ordinal": 15,
+      "total": 17,
+      "ctest_id": 103,
+      "name": "generated_docs_in_sync",
+      "seconds": 0.04
+    },
+    {
+      "ordinal": 16,
+      "total": 17,
+      "ctest_id": 104,
+      "name": "builder_sees_every_span",
+      "seconds": 0.18
+    },
+    {
+      "ordinal": 17,
+      "total": 17,
+      "ctest_id": 105,
+      "name": "errata_name_their_witnesses",
+      "seconds": 4.8
+    }
+  ],
+  "actual_total_seconds": [
+    12.16
+  ],
+  "actual_build_invocations": 2,
+  "actual_builds": [
+    {
+      "tool": "tools/build_alignment_layer.py",
+      "exit": 0
+    },
+    {
+      "tool": "tools/build_dictionary_view.py",
+      "exit": 0
+    }
+  ],
+  "actual_coverage_stdout": "COVERAGE C05: 273/511 segments scanned, 238 open (274-511)",
+  "actual_output_pins": [
+    {
+      "path": "data/hgm_dictionary_v27_2.json.gz",
+      "bytes": 13393560,
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253"
+    },
+    {
+      "path": "data/full_parallel_corpus_v32.json.gz",
+      "bytes": 8965675,
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+    },
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "bytes": 9911069,
+      "sha256": "19f929d44b5324a7e80809e61c9c1671782d06c1ae80c422fb9dc9252b916bf8"
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "bytes": 2193371,
+      "sha256": "1ab25cba1dbe7d96c13ce19c6aa1e034ff412f7ae0564c1b0de40397e75715c3"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "bytes": 2182568,
+      "sha256": "6a0b65dee3a44e239869f4489532bf57e73ca761ffc8f4fa63d1a3b7ffb78297"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "bytes": 16142334,
+      "sha256": "9340b8186c8690782dd368850fa58fb0473a408f300a88d9f4a6d8bd95fc89e8"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "bytes": 5202679,
+      "sha256": "9f014e88234fc4ea265a181d1a565a7ee5ac320ff8f6965ddbe006fd732f4455"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "bytes": 5133393,
+      "sha256": "64fc0ece4fa5b3dd35bd0bde8a0241a4b0ae772d7bbfd2f8c58513c14c30955d"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "bytes": 5075,
+      "sha256": "d6bdb4a40189d2f4c04be7f30529b8e04c0c99313c6123afa62a16821fa789fb"
+    }
+  ],
+  "failed_root_verifier_exit": 1,
+  "successful_root_verifier_exit": 0,
+  "all_captured_originals_reread_equal": true,
+  "candidate_runs": 0
+}

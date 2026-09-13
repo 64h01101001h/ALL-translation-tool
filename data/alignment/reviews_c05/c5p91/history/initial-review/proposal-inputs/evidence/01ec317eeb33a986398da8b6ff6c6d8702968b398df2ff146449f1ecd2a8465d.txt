@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/registration-helper-independent-review/fixture_driver.py", line 15, in <module>
+    with patch.object(subprocess,'check_output',git):runpy.run_path(str(B/'register-reviewed-page-and-index.py'),run_name='__main__')
+                                                     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 294, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/registration-helper-independent-review/fixtures/changed-index/campaign-artifacts/C05-271-273/register-reviewed-page-and-index.py", line 66, in <module>
+    assert old_index == git('show', BASE + ':data/alignment/pages_c05/index.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

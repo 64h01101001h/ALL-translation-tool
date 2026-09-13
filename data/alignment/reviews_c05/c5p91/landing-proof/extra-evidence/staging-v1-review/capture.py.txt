@@ -1,0 +1,19 @@
+from pathlib import Path
+import hashlib,json,datetime
+R=Path.cwd();O=R/'campaign-artifacts/integration/through273-preparation/staging-review';H=O.parent/'staging-helper';B=R/'campaign-artifacts/C05-271-273';records=[]
+def preserve(p,d):
+ raw=p.read_bytes();d.parent.mkdir(parents=True,exist_ok=True);assert not d.exists();d.write_bytes(raw);assert p.read_bytes()==raw==d.read_bytes();records.append(dict(original=str(p),copy=str(d.relative_to(O)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+for p in sorted(H.rglob('*')):
+ if p.is_file():
+  rel=p.relative_to(H);dest=O/'candidate'/rel
+  if dest.suffix=='.py':dest=dest.with_name(dest.name+'.txt')
+  preserve(p,dest)
+paths=['baseline.json','source.json','semantic-review/freeze.json','semantic-review/review.json','semantic-review/resolved-spans.json','semantic-review/span-head-allow-needed.json','semantic-review/bank-ready-errata.json','semantic-review/original-to-copy-manifest.json','landing/root-semantic-acceptance-proof.json','landing/root-frozen-input-copy-check.json','landing/course-registration-verification.json','landing/review-copy-and-register-proof.json','landing/canonical-builds-once.json','landing/build-layer.command.json','landing/build-view.command.json','landing/build-layer.stdout','landing/build-layer.stderr','landing/build-layer.exit','landing/build-view.stdout','landing/build-view.stderr','landing/build-view.exit']
+for rel in paths:
+ p=B/rel
+ if p.exists():preserve(p,O/'actual-current'/rel)
+for name in ['verify_semantic_acceptance.py','land_reviewed_page.py','verify_review_copy_and_register.py','run_reviewed_builders_once.py','verify_landed_batch.py','verify_course_csv.py','run_tool_readonly_sqlite.py','run_generator_readonly.py']:
+ preserve(R/'campaign-artifacts'/name,O/'actual-helpers'/(name+'.txt'))
+preserve(R/'campaign-artifacts/integration/root-through270-closure/proof.json',O/'actual-current/through270-closure-proof.json')
+(O/'input-manifest.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),role='Independent tooling reviewer; reused semantic reconciler, no new semantic approval',records=records),indent=2)+'\n')
+print(json.dumps({'preserved':len(records),'bytes':sum(r['bytes'] for r in records),'candidate_sha256':next(r['sha256'] for r in records if r['original']==str(H/'verify_staged_through273.py'))}))

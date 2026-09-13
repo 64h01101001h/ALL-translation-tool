@@ -1,0 +1,10 @@
+import unittest
+from whitespace273 import ordinary_predicate
+class Completion(unittest.TestCase):
+ def test_terminal_header_pair_without_hunk_is_truncated(self):
+  raw=b'--- old\n+++ new\n@@ -1 +1 @@\n \n--- orphan-old\n+++ orphan-new\n'
+  with self.assertRaises(AssertionError):ordinary_predicate(raw,{'trailing whitespace.':[4]})
+ def test_header_pair_replaced_before_any_hunk_is_ambiguous(self):
+  raw=b'--- abandoned-old\n+++ abandoned-new\n--- old\n+++ new\n@@ -1 +1 @@\n \n'
+  with self.assertRaises(AssertionError):ordinary_predicate(raw,{'trailing whitespace.':[6],'new blank line at EOF.':[6]})
+if __name__=='__main__':unittest.main(verbosity=2)

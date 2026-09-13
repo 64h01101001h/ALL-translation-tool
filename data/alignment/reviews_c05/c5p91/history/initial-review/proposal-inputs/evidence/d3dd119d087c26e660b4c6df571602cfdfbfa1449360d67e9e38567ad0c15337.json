@@ -1,0 +1,17 @@
+{
+  "complete_control_metadata": "PASS",
+  "control_manifest_records": 1,
+  "control_segment_records": 3,
+  "synthetic_counts": {
+    "spans": 0,
+    "nulls": 0,
+    "word_pairs": 0
+  },
+  "canonical_source_sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e",
+  "canonical_output_composition": "All body.append calls occur inside ordered per-segment loop; final newline join plus one terminal newline gives exact concatenation of separately generated complete bodies.",
+  "canonical_actual_runs_in_this_review": 0,
+  "root_through270_composition_claim": "Retained as root claim only; this review independently inspects pinned canonical source instead of reading through270 outputs.",
+  "landed_spec_serialization": "Matches actual land_reviewed_page.py: json.dumps(spec, ensure_ascii=False, indent=2) plus newline; ordered segments extend individual part segments.",
+  "all_consumed_original_bytes_unchanged": true,
+  "initial_frozen_files_rechecked": 1176
+}

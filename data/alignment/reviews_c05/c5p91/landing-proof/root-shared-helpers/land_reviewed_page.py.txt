@@ -1,0 +1,88 @@
+"""Materialize a manually approved C05 batch; does not register or rebuild it.
+
+Run only after reading and accepting its separate semantic review.
+Usage: python3 campaign-artifacts/land_reviewed_page.py 56 166 167 168
+Keeps the canonical body intact; changes only new-page presentation credits
+and the missing depth-7 label inherited from the historical wrapper.
+"""
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+art = Path(__file__).resolve().parent
+root = art.parent / "campaign-worktree"
+page, *seqs = map(int, sys.argv[1:])
+assert len(seqs) == 3 and seqs == list(range(seqs[0], seqs[0] + 3))
+batch = art / f"C05-{seqs[0]}-{seqs[-1]}"
+review = batch / "semantic-review"
+assert (review / "review.md").is_file() and (review / "review.json").is_file()
+name = f"c5p{page}"
+out = root / "data/alignment/pages_c05" / f"{name}.html"
+assert not out.exists(), "Refusing to overwrite a landed page"
+spec = {"course": "C05", "segments": []}
+for seq in seqs:
+    part = json.loads((batch / f"reconciled/{seq}/spec.json").read_text())
+    assert part["course"] == "C05"
+    assert [s["seq"] for s in part["segments"]] == [seq]
+    spec["segments"].extend(part["segments"])
+env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+run = subprocess.run([sys.executable, str(art / "run_generator_readonly.py")],
+    cwd=root, env=env, input=json.dumps(spec, ensure_ascii=False).encode(),
+    capture_output=True)
+landing = batch / "landing"
+landing.mkdir(exist_ok=True)
+(landing / "generator.stdout").write_bytes(run.stdout)
+(landing / "generator.stderr").write_bytes(run.stderr)
+(landing / "generator.exit").write_text(f"{run.returncode}\n")
+assert run.returncode == 0, run.stderr.decode()
+assert not run.stderr, "Generator reported warnings"
+title = f"ACI Course 5 · Page {page}"
+subtitle = f"How Karma Works · C05:{seqs[0]}–{seqs[-1]} · provisional span alignment"
+wrap = subprocess.run([sys.executable, "tools/wrap_alignment_page.py",
+    str(out), title, subtitle, f"c5p{page-1}.html", "-", "5"],
+    cwd=root, env=env, input=run.stdout, capture_output=True)
+assert wrap.returncode == 0, wrap.stderr.decode()
+html = out.read_text()
+assert html.count("AI (Claude)") == 1 and html.count("Claude (AI)") == 1
+html = html.replace("AI (Claude)", "AI (Codex)").replace("Claude (AI)", "Codex (AI)")
+old = "6:'6 \\u00b7 Morpheme / particle'};"
+new = "6:'6 \\u00b7 Morpheme / particle',7:'7 \\u00b7 Syllable / compound member'};"
+assert html.count(old) == 1
+html = html.replace(old, new)
+assert run.stdout.decode() in html, "The canonical alignment body must remain intact"
+out.write_text(html)
+prior = out.with_name(f"c5p{page-1}.html")
+prior_html = prior.read_text()
+nav_end = "&larr; Previous</a></div>"
+assert prior_html.count(nav_end) == 2, "Check prior-page navigation manually"
+prior.write_text(prior_html.replace(nav_end,
+    f"&larr; Previous</a><a href='{name}.html'>Next &rarr;</a></div>"))
+spec_dir = root / "data/alignment/specs_c05"
+spec_dir.mkdir(exist_ok=True)
+spec_path = spec_dir / f"{name}.json"
+spec_path.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + "\n")
+review_dir = root / "data/alignment/reviews_c05" / name
+review_dir.mkdir(parents=True, exist_ok=False)
+for file in review.rglob("*"):
+    if file.is_file() and file.suffix.lower() in (".json", ".md", ".html", ".stderr", ".stdout", ".log", ".txt", ".bin", ".exit"):
+        target = review_dir / file.relative_to(review)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(file, target)
+for seq in seqs:
+    shutil.copy2(batch / f"reconciled/{seq}/report.md", review_dir / f"{seq}-reconciliation.md")
+manifest = {
+    "course": "C05", "page": name, "segments": seqs,
+    "producer": "Codex; historical inputs, where used, credited in reconciliation records",
+    "status": "PROVISIONAL; independent machine semantic review is not human acceptance",
+    "spec_sha256": hashlib.sha256(spec_path.read_bytes()).hexdigest(),
+    "body_sha256": hashlib.sha256(run.stdout).hexdigest(),
+    "generator_exit": run.returncode,
+    "presentation_changes": ["New page credits name Codex", "Define the inherited missing depth-7 label", "Connect previous-page navigation"],
+    "visual_verification": "Unverified: in-app browser policy rejected local HTML preview; no workaround attempted",
+}
+(review_dir / "landing.json").write_text(json.dumps(manifest, indent=2) + "\n")
+print(json.dumps(manifest, indent=2))

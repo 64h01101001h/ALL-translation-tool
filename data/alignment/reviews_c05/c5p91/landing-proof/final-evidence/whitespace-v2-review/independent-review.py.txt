@@ -1,0 +1,91 @@
+from pathlib import Path
+import json,hashlib,os,sys,types,importlib.util,importlib.machinery,difflib,traceback,collections
+sys.dont_write_bytecode=True
+ROOT=Path.cwd(); C=ROOT/'campaign-artifacts/whitespace-candidate-273-v2'; R=ROOT/'campaign-artifacts/whitespace-review-273-v2'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(name,o):
+ p=R/name;p.parent.mkdir(parents=True,exist_ok=True);assert not p.exists();p.write_text(json.dumps(o,indent=2,ensure_ascii=False)+'\n')
+def supported(rel):return rel if Path(rel).suffix in {'.json','.md','.txt','.bin','.csv','.html','.gz','.png','.pdf'} else rel+'.txt'
+manifest=[];copies={};symlinks={}
+f=json.loads((C/'freeze.json').read_bytes());assert pin((C/'freeze.json').read_bytes())['sha256']=='ff3c006dbb5c86c4111ee62674b46861cdecb909646657a1484ca4e5b3bd2b46'
+actual={str(p.relative_to(C)) for p in C.rglob('*') if p.is_file()};assert actual==set(f['files'])|{'freeze.json'}
+for rel,rec in f['files'].items():assert pin((C/rel).read_bytes())==rec
+for rel,rec in f['symlinks'].items():assert os.readlink(C/rel)==rec['target'] and str((C/rel).resolve(strict=True))==rec['resolved']
+for p in sorted(C.rglob('*')):
+ rel=str(p.relative_to(C))
+ if p.is_symlink():symlinks[rel]=dict(target=os.readlink(p),resolved=str(p.resolve(strict=True)),is_file=p.is_file())
+ if p.is_file():
+  b=p.read_bytes();cp='candidate/'+supported(rel);out=R/cp;out.parent.mkdir(parents=True,exist_ok=True)
+  if out.exists():assert out.read_bytes()==b
+  else:out.write_bytes(b)
+  assert p.read_bytes()==out.read_bytes();copies[rel]=cp;manifest.append(dict(original=str(p),copy=cp,**pin(b),source_symlink=symlinks.get(rel)))
+for r in json.loads((C/'input-manifest.json').read_bytes())['records']:
+ b=Path(r['original']).read_bytes();assert b==(C/r['copy']).read_bytes();assert pin(b)=={k:r[k] for k in ['bytes','sha256']};manifest.append(dict(original=r['original'],copy=copies[r['copy']],**pin(b),transport='v2 input manifest original alias; complete preserved version',source_symlink=r.get('source_symlink')))
+for r in json.loads((C/'actual-reopened-aliases.json').read_bytes()):
+ b=Path(r['original']).read_bytes();assert b==(C/r['copy']).read_bytes();assert pin(b)=={k:r[k] for k in ['bytes','sha256']};manifest.append(dict(original=r['original'],copy=copies[r['copy']],**pin(b),transport='v2 actual reopened source alias; independently reopened now'))
+# Exact complete diff reproduction with the author-recorded labels.
+for name,old,new,a,b in [('candidate-v1-v2.diff.txt','history/whitespace-candidate-273/whitespace273.py','whitespace273.py','frozen-v1/whitespace273.py','candidate-v2/whitespace273.py'),('contract-v1-v2.diff.txt','history/whitespace-candidate-273/command-contract.json','command-contract.json','frozen-v1/command-contract.json','candidate-v2/command-contract.json')]:
+ d=''.join(difflib.unified_diff((C/old).read_text().splitlines(True),(C/new).read_text().splitlines(True),fromfile=a,tofile=b)).encode();assert d==(C/name).read_bytes()
+loader=importlib.machinery.SourceFileLoader('independent_v2',str(R/copies['whitespace273.py']));spec=importlib.util.spec_from_loader(loader.name,loader);m=importlib.util.module_from_spec(spec);loader.exec_module(m)
+# No Run.run or git methods can execute even inadvertently in this independent probe.
+def forbidden(*args,**kwargs):raise RuntimeError('CLI/Run.run/Git forbidden in this independent tooling review')
+m.Run.run=forbidden;m.Run.git=forbidden
+checks=[]
+def case(name,fn,reject=False):
+ try:v=fn()
+ except AssertionError as e:
+  if not reject:raise
+  checks.append(dict(name=name,status='PASS expected rejection',message=str(e)));return
+ assert not reject, name+' unexpectedly accepted';checks.append(dict(name=name,status='PASS',result=v))
+# Constructor aliases: test exact final ordering (full input loop, then roots).
+def finish(run):
+ for rec in run.inputs:
+  alias=Path(rec['input_path']);assert alias.resolve(strict=True)==Path(rec['path']);raw=alias.read_bytes();m.check_pin(raw,rec);assert raw==(run.out/rec['copy']).read_bytes()
+ run.recheck_roots()
+for role in ['root_manifest','worktree','review']:
+ d=R/'private-fixtures'/role;d.mkdir(parents=True)
+ w1=d/'w1';w2=d/'w2';w1.mkdir();w2.mkdir();wa=d/'w-alias';wa.symlink_to(w1,target_is_directory=True)
+ r1=d/'one/C05-271-273/semantic-review';r2=d/'two/C05-271-273/semantic-review';r1.mkdir(parents=True);r2.mkdir(parents=True);ra=d/'review-alias';ra.symlink_to(r1,target_is_directory=True)
+ md=d/'manifests';md.mkdir();one=md/'one.json';two=md/'two.json';one.write_bytes(b'{"same":true}\n');two.write_bytes(one.read_bytes());ma=md/'alias.json';ma.symlink_to(one)
+ run=m.Run(types.SimpleNamespace(worktree=str(wa),review=str(ra),root_manifest=str(ma),output=str(d/'output'),mode='prepare'));run.read(run.root_manifest)
+ case(role+'_stable_supplied_alias',lambda:finish(run))
+ a,t={'root_manifest':(ma,two),'worktree':(wa,w2),'review':(ra,r2)}[role];a.unlink();a.symlink_to(t,target_is_directory=role!='root_manifest')
+ case(role+'_same_byte_or_empty_directory_retarget',lambda:finish(run),True)
+ # Restore exact original target as a positive control; bytes and inode identities unchanged.
+ a.unlink();a.symlink_to({'root_manifest':one,'worktree':w1,'review':r1}[role],target_is_directory=role!='root_manifest');case(role+'_restored_original_target_control',lambda:finish(run))
+ if role=='root_manifest':
+  replacement=md/'replacement.json';replacement.write_bytes(one.read_bytes());replacement.replace(one);case('same_path_same_bytes_inode_replacement',lambda:finish(run),True)
+# Complete diff boundaries, including terminal/abandoned header pairs and malformed counts.
+good=b'--- old\n+++ new\n@@ -1,2 +1,2 @@\n-old\n+new\n \n'
+case('balanced_mixed_diff',lambda:m.ordinary_predicate(good,{'trailing whitespace.':[6],'new blank line at EOF.':[6]}))
+for name,raw,num in [('headers_without_hunk',b'--- old\n+++ new\n',2),('terminal_orphan',good+b'--- x\n+++ y\n',6),('abandoned_header',b'--- a\n+++ b\n'+good,8),('unbalanced',good.replace(b'-1,2',b'-1,3'),6),('truncated',good[:-2],5),('prose',b'prose\n'+good,7),('extra_blank_marker',good+b' \n',7),('two_space_context',good.replace(b' \n',b'  \n'),6)]:
+ case(name,lambda raw=raw,num=num:m.ordinary_predicate(raw,{'trailing whitespace.':[num]}),True)
+case('multi_file_complete_diff',lambda:sorted(m.diff_context_lines(good+good)))
+case('ordinary_LF',lambda:m.ordinary_predicate(b'text\n\n',{'new blank line at EOF.':[2]}))
+for name,raw in [('ordinary_CRLF',b'text\r\n\r\n'),('ordinary_space_tail',b'text\n \n'),('ordinary_tab_tail',b'text\n\t\n')]:case(name,lambda raw=raw:m.ordinary_predicate(raw,{'new blank line at EOF.':[2]}),True)
+case('retained_physical_LF',lambda:m.classify_physical(b'A \n\n',{'trailing whitespace.':[1],'new blank line at EOF.':[2]},[({'path':'SYNTHETIC'},b'prefix\nA \n\n')])['kind'])
+for name,raw,src,n in [('all_blank_CRLF',b'\r\n',b'A\r\n\r\n',1),('space_CRLF',b'A\r\n \r\n',b'A\r\n \r\n',2),('tab_CRLF',b'A\r\n\t\r\n',b'A\r\n\t\r\n',2),('nonempty_tail',b'A\r\n\r\nZ',b'A\r\n\r\nZ',2),('report_line_EOF',b'header\nA\r\n\r\n',b'A\r\n\r\n',3)]:case(name,lambda raw=raw,src=src,n=n:m.classify_physical(raw,{'new blank line at EOF.':[n]},[({'path':'SYNTHETIC'},src)]),True)
+# Re-adjudicate all actual 58 preserved files. Complete source aliases were reopened above.
+h='history/whitespace-review-273/';oldprobe=json.loads((C/(h+'actual-predicate-probe.json')).read_bytes());rawlog=(R/copies[h+'actual-log/staged-diff-check.stdout']).read_bytes();assert pin(rawlog)==oldprobe['raw_log'];issues=m.parse_log(rawlog)
+physical=[(item,(R/copies[f'originals/physical-{i}.bin']).read_bytes()) for i,item in enumerate(json.loads((C/'physical-source-descriptors.json').read_bytes()))]
+freeze=json.loads((C/'current-inputs/semantic-review/freeze.json').read_bytes())['files'];root=json.loads((C/(h+'current-root-manifest.json')).read_bytes());build=json.loads((C/(h+'current-build-proof.json')).read_bytes());results=[];negative_count=0
+for row in oldprobe['results']:
+ raw=(R/copies[h+row['copy']]).read_bytes();m.check_pin(raw,row);groups=issues[row['path']];assert groups==row['issues'];lines=m.literal_warnings(raw,groups)
+ if row['path'] in m.CSV:
+  assert m.digest(raw)==build['output_sha256'][row['path']];assert set(groups)=={'trailing whitespace.'};assert all(lines[n-1].endswith(b'\r') for n in groups['trailing whitespace.']);witness=dict(kind='canonical_csv_crlf')
+ elif '/landing-proof/' in row['path']:
+  rr=[x for x in root['files'] if x['copy']==row['path'].split('/landing-proof/')[1]];assert len(rr)==1;m.check_pin(raw,rr[0]);assert Path(rr[0]['original']).read_bytes()==raw;witness=dict(kind=m.ordinary_predicate(raw,groups));assert m.diff_context_lines(raw)=={5,8,10}
+ else:
+  m.check_pin(raw,freeze[row['path'][len(m.PREFIX):]])
+  try:witness=dict(kind=m.ordinary_predicate(raw,groups))
+  except AssertionError:witness=m.classify_physical(raw,groups,physical)
+  if witness['kind']=='physical_bytes':
+   found=[dict(original=x['witness']['path'],source_pin={k:x['witness'][k] for k in ['bytes','sha256']},byte_range=x['byte_range']) for x in witness['full_range_witnesses']];assert found==row['whole_original_ranges']
+   if row['literal']['status']=='REJECT':
+    case('changed_actual_fragment_'+str(negative_count),lambda raw=raw,groups=groups:m.classify_physical(bytes([raw[0]^1])+raw[1:],groups,physical),True);negative_count+=1
+ results.append(dict(path=row['path'],**pin(raw),issues=groups,witness=witness))
+assert len(results)==58 and negative_count==33;author=json.loads((C/'actual-predicate-results.json').read_bytes());assert results==author['results']
+counts=dict(collections.Counter(x['witness']['kind'] for x in results));assert sum(sum(map(len,x['issues'].values())) for x in results)==95906
+save('original-to-copy-manifest.json',manifest);save('source-symlink-provenance.json',symlinks)
+save('independent-proof.json',dict(status='PASS scoped independent code/predicate probes',candidate=pin((C/'whitespace273.py').read_bytes()),candidate_freeze=pin((C/'freeze.json').read_bytes()),candidate_frozen_files=len(f['files']),preserved_original_mappings=len(manifest),v2_initial_source_aliases=310,v2_additional_source_aliases=116,exact_diff_reproductions=2,checks=checks,checks_total=len(checks),actual_file_count=58,actual_warning_count=95906,actual_kind_file_counts=counts,all_actual_results_equal_author=True,actual_results=results,candidate_cli_calls=0,Run_run_calls=0,git_calls=0,limits='Pure functions and private constructor/read fixtures only. Actual index, prepare/audit and final staging remain untested in this scoped review.'))
+print(json.dumps(dict(status='PASS',candidate=pin((C/'whitespace273.py').read_bytes()),candidate_files=len(f['files']),original_mappings=len(manifest),independent_checks=len(checks),actual_files=58,warnings=95906,kind_file_counts=counts)))

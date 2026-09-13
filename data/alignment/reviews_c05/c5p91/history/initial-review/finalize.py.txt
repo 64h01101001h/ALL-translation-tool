@@ -1,0 +1,39 @@
+from pathlib import Path
+import json,hashlib,subprocess,os,datetime
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0';H=lambda b:hashlib.sha256(b).hexdigest()
+def j(p):return json.loads(p.read_bytes())
+def save(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=H(b))
+manifest=j(R/'original-to-copy-manifest.json');supported=set(j(R/'preservation-completion-proof.json')['supported_extensions']);gitcache={}
+for x in manifest:
+ cp=R/x['copy'];assert cp.is_relative_to(R) and cp.is_file() and cp.suffix.lower() in supported;assert pin(cp)=={k:x[k] for k in ['bytes','sha256']}
+ if 'original_git_commit' in x:
+  key=(x['original_git_commit'],x['repository_relative_path'])
+  if key not in gitcache:gitcache[key]=subprocess.check_output(['git','show',key[0]+':'+key[1]],cwd=W)
+  assert cp.read_bytes()==gitcache[key]
+ else:assert cp.read_bytes()==Path(x['original']).read_bytes()
+assert len({x['original'] for x in manifest})==len(manifest)
+review=j(R/'review.json');tuples=j(R/'resolved-spans.json');assert len(tuples)==102;assert all(list(x)==['seq','id','d','tib','eng','tib_range','eng_range'] for x in tuples)
+assert review['verdict']==review['spec_verdict']==review['quality_verdict']=='NEEDS_CORRECTION';assert len(review['open_findings'])==1
+f=review['open_findings'][0];t=next(x for x in tuples if x['seq']==273 and x['id']=='p22');assert t==dict(seq=273,id='p22',d=6,tib='phyir',eng='for',tib_range=[196,201],eng_range=[91,94])
+for x in review['segments']:
+ seq=x['seq'];sp=B/f'reconciled/{seq}/spec.json';bp=B/f'reconciled/{seq}/body.html';assert pin(sp)==dict(bytes=x['spec_bytes'],sha256=x['spec_sha256']);assert pin(bp)==dict(bytes=x['body_bytes'],sha256=x['body_sha256']);assert (R/f'executions/reconciled-{seq}/stdout.html').read_bytes()==bp.read_bytes();assert (R/f'executions/reconciled-{seq}/stderr.txt').read_bytes()==b'';assert (R/f'executions/reconciled-{seq}/exit.txt').read_text().strip()=='0'
+ ts=[t for t in tuples if t['seq']==seq];assert len(ts)==x['span_count'];assert sum(t['eng'] is None for t in ts)==x['null_count'];assert sum(t['eng'] is not None and t['d']==5 for t in ts)==x['word_pair_count']
+assert [sum(x[k] for x in review['segments']) for k in ['span_count','null_count','word_pair_count']]==[102,8,63]
+assert len(j(R/'span-semantic-review.json'))==102 and len(j(R/'original-disposition-review.json'))==198
+assert len(j(R/'independent-errata-refutations.json'))==6 and all(x['refuted'] for x in j(R/'independent-errata-refutations.json'));assert j(R/'bank-ready-errata.json')==[] and j(R/'span-head-allow-needed.json')=={'pages_c05':{}}
+for x in j(R/'independent-reopen-proof.json')['source_before_after']:
+ p=Path(x['path']);assert pin(p)=={k:x[k] for k in ['bytes','sha256']}
+for x in j(R/'independent-physical-reopen.json'):
+ p=Path(x['source']['path']);assert pin(p)=={k:x['source'][k] for k in ['bytes','sha256']}
+assert not any('__pycache__' in p.parts for p in R.rglob('*'))
+for p in R.rglob('*'):
+ if p.is_file():assert p.suffix.lower() in supported
+save('final-preservation-proof.json',dict(status='PASS packaging and identities; semantic verdict remains NEEDS_CORRECTION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),manifest_records=len(manifest),distinct_manifest_copies=len({x['copy'] for x in manifest}),historical_Git_records=sum('original_git_commit' in x for x in manifest),unique_Git_objects=len(gitcache),whole_sources_unchanged=True,all_targets_supported=True,spans=102,nulls=8,word_pairs=63,original_dispositions=198,canonical_runs=9,SQL_replays=153,full_entry_rows=92,corpus_rows=87,physical_extents=11,errata_refuted=6,open_findings=1,review=pin(R/'review.md'),review_json=pin(R/'review.json'),resolved_spans=pin(R/'resolved-spans.json'),history_preserved=True))
+# Evidence-pin inventory includes every current file except its own self-reference and the subsequently written top freeze.
+paths=sorted(p for p in R.rglob('*') if p.is_file() and p not in [R/'freeze.json',R/'evidence-pins.json'])
+save('evidence-pins.json',[dict(path=str(p.relative_to(R)),**pin(p)) for p in paths])
+files={str(p.relative_to(R)):pin(p) for p in sorted(R.rglob('*')) if p.is_file() and p!=R/'freeze.json'}
+save('freeze.json',dict(status='FROZEN initial independent semantic NEEDS_CORRECTION review; not approval',scope='All current files excluding only this actual top-level freeze.json; nested historical freezes included.',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),files=files,file_count=len(files),total_bytes=sum(x['bytes'] for x in files.values())))
+actual={str(p.relative_to(R)):pin(p) for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json'};assert actual==files
+print(json.dumps(dict(status='NEEDS_CORRECTION',spec='NEEDS_CORRECTION',quality='NEEDS_CORRECTION',spans=102,nulls=8,word_pairs=63,open_findings=1,manifest_records=len(manifest),distinct_manifest_copies=len({x['copy'] for x in manifest}),freeze_files=len(files),freeze_bytes=sum(x['bytes'] for x in files.values()),freeze_sha256=pin(R/'freeze.json')['sha256'],report=str(R/'review.md'),proof=str(R/'final-preservation-proof.json')),indent=2))

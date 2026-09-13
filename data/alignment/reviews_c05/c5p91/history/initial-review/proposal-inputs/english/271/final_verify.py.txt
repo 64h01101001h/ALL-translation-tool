@@ -1,0 +1,40 @@
+from pathlib import Path
+import hashlib,json,sqlite3
+H=Path(__file__).resolve().parent;WT=H.parents[3]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def read(p):return json.loads(p.read_bytes())
+proof=read(H/'evidence/capture-proof.json');baseline=read(H/'evidence/baseline.json')
+original_checks=[]
+for r in proof['original_file_pins']+[proof['database']]:
+ b=Path(r['path']).read_bytes();assert len(b)==r['bytes'] and sha(b)==r['sha256'],r['path'];original_checks.append(r)
+copy_checks=[]
+for r in read(H/'original-to-copy-manifest.json'):
+ a=Path(r['original']).read_bytes();b=(H/r['copy']).read_bytes()
+ assert a==b and len(b)==r['bytes'] and sha(b)==r['sha256'],r
+ copy_checks.append(r)
+for rel,digest in baseline['sha256'].items():assert sha((WT/rel).read_bytes())==digest,rel
+for r in read(H/'evidence/governing-pins.json'):
+ assert sha(Path(r['copy']).read_bytes())==r['sha256']
+ if r['repository_relative'].startswith('tools/'):assert Path(r['copy']).read_bytes()==(WT/r['repository_relative']).read_bytes()
+db=WT/'build/hgm_spine_v27_2.db';con=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row;con.execute('PRAGMA query_only=ON')
+assert con.execute('PRAGMA query_only').fetchone()[0]==1
+queries=read(H/'evidence/queries-full.json')
+for q in queries:assert [dict(r) for r in con.execute(q['sql'],q['parameters'])]==q['rows']
+rows=[dict(r) for r in con.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',271,273))]
+assert rows==read(H/'evidence/source-full-rows.json')
+assert [dict(r) for r in con.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',265,279))]==read(H/'evidence/context-full-rows.json')
+con.close();assert sha(db.read_bytes())==proof['database']['sha256']
+segments=[]
+for seq in (271,272,273):
+ p=H.parent/str(seq);result=read(p/'canonical-result.json');attempt=Path(result['attempt'])
+ assert (p/'body.html').read_bytes()==(attempt/'stdout.html').read_bytes()
+ assert (p/'spec.json').read_bytes()==(attempt/'stdin.json').read_bytes()
+ assert sha((p/'body.html').read_bytes())==result['body_sha256'] and sha((p/'spec.json').read_bytes())==result['spec_sha256']
+ assert (attempt/'exit.txt').read_text().strip()=='0' and not (attempt/'stderr.txt').read_bytes()
+ assert read(p/'gap-review.json')['every_actual_gap_reviewed']
+ assert read(p/'errata.json')==[]
+ assert read(p/'occurrence-proof.json')['actual_HTML_occurrences_match_all_planned_ranges']
+ segments.append(dict(seq=seq,canonical=result,counts=read(p/'occurrence-proof.json')['counts']))
+output=dict(actual_original_reopens=original_checks,exact_original_copy_rereads=copy_checks,all_nine_baseline_files_unchanged=True,canonical_tools_unchanged=True,queries_replayed_exactly=len(queries),selected_rows_reopened=3,context_rows_reopened=15,sqlite_query_only=1,sqlite_uri=db.resolve().as_uri()+'?mode=ro',segments=segments,no_independent_semantic_approval=True)
+(H/'final-verification.json').write_text(json.dumps(output,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps(dict(status='PASS',original_file_reopens=len(original_checks),manifest_aliases_checked=len(copy_checks),queries_replayed=len(queries),canonical_attempts=3,spans=sum(r['counts']['spans'] for r in segments),d5=sum(r['counts']['d5'] for r in segments),nulls=sum(r['counts']['nulls'] for r in segments))))

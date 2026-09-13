@@ -1,0 +1,37 @@
+import sys, json, hashlib, importlib.machinery, importlib.util, traceback, collections
+from pathlib import Path
+sys.dont_write_bytecode=True
+ROOT=Path.cwd(); R=ROOT/'campaign-artifacts/whitespace-review-273'; C=ROOT/'campaign-artifacts/whitespace-candidate-273'; B=ROOT/'campaign-artifacts/C05-271-273'; W=ROOT/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,o):p.write_text(json.dumps(o,indent=2,ensure_ascii=False)+'\n')
+manifest=[]
+def copy(p,rel):
+ b=p.read_bytes(); target=R/rel;target.parent.mkdir(parents=True,exist_ok=True);assert not target.exists();target.write_bytes(b);assert p.read_bytes()==target.read_bytes();manifest.append(dict(original=str(p),copy=rel,**pin(b)));return b
+loader=importlib.machinery.SourceFileLoader('pure_candidate',str(R/'candidate/whitespace273.py.txt'));spec=importlib.util.spec_from_loader(loader.name,loader);m=importlib.util.module_from_spec(spec);loader.exec_module(m)
+for p in sorted((B/'landing').glob('staged-diff-check.*')):copy(p,'actual-log/'+p.name)
+raw=(R/'actual-log/staged-diff-check.stdout').read_bytes();execution=json.loads((R/'actual-log/staged-diff-check.execution.json').read_bytes());assert pin(raw)==dict(bytes=execution['stdout_bytes'],sha256=execution['stdout_sha256']);assert execution['exit']==2
+issues=m.parse_log(raw); physical=[]
+for i,item in enumerate(json.loads((C/'physical-source-descriptors.json').read_bytes())):
+ b=copy(Path(item['path']),f'physical/{i}.bin');assert pin(b)=={k:item[k] for k in ('bytes','sha256')};physical.append((item,b))
+results=[]
+for i,(p,groups) in enumerate(issues.items()):
+ b=copy(W/p,f'warned-files/{i:02d}.bin'); rec=dict(path=p,copy=f'warned-files/{i:02d}.bin',**pin(b),issues=groups)
+ for name,fn in [('literal',lambda:m.literal_warnings(b,groups)),('ordinary',lambda:m.ordinary_predicate(b,groups)),('physical',lambda:m.classify_physical(b,groups,physical))]:
+  try:
+   v=fn();rec[name]=dict(status='PASS',result=v if name!='literal' else None)
+  except Exception as e:rec[name]=dict(status='REJECT',exception_type=type(e).__name__,message=str(e),traceback=traceback.format_exc())
+ rec['whole_original_ranges']=[]
+ for item,witness in physical:
+  start=0
+  while b and (lo:=witness.find(b,start))>=0:
+   rec['whole_original_ranges'].append(dict(original=item['path'],source_pin=pin(witness),byte_range=[lo,lo+len(b)]));start=lo+1
+ if 'new blank line at EOF.' in groups:
+  ls=b.split(b'\n');rec['EOF_tails_hex']={str(n):[x.hex() for x in ls[n-1:]] for n in groups['new blank line at EOF.']}
+  if p.endswith('report-linecount-fix.diff.txt'):rec['complete_diff_utf8']=b.decode()
+ results.append(rec)
+counts=collections.Counter()
+for groups in issues.values():
+ for kind,nums in groups.items():counts[kind]+=len(nums)
+save(R/'actual-predicate-probe.json',dict(status='PURE PREDICATE OBSERVATION; NOT CLI/STAGED AUDIT',candidate_cli_calls=0,Run_run_calls=0,git_calls=0,raw_log=pin(raw),file_count=len(issues),warning_count=sum(counts.values()),warning_kinds=dict(counts),results=results))
+save(R/'actual-input-manifest.json',manifest)
+print(json.dumps(dict(files=len(issues),warnings=sum(counts.values()),literal_rejects=[dict(path=r['path'],eof=r.get('EOF_tails_hex'),whole_matches=len(r['whole_original_ranges'])) for r in results if r['literal']['status']=='REJECT'],ordinary_rejects_with_no_physical=[r['path'] for r in results if r['ordinary']['status']=='REJECT' and r['physical']['status']=='REJECT' and r['literal']['status']=='PASS']),indent=2))

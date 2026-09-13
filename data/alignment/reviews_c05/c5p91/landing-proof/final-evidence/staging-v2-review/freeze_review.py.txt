@@ -1,0 +1,11 @@
+from pathlib import Path
+import hashlib,json,datetime
+O=Path(__file__).resolve().parent
+assert not (O/'freeze.json').exists()
+def pin(p):
+ b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file()}
+f={'status':'DONE','verdict':'CONDITIONAL_APPROVE_CODE_AND_DEPENDENCIES','semantic_approval_supplied':False,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'boundary':'Every current regular file except this top freeze; all nested historical freezes included unchanged','file_count':len(files),'total_bytes':sum(p['bytes'] for p in files.values()),'files':files}
+(O/'freeze.json').write_text(json.dumps(f,indent=2)+'\n')
+assert {str(p.relative_to(O)):pin(p) for p in O.rglob('*') if p.is_file() and p!=O/'freeze.json'}==files
+print(json.dumps({'files':len(files),'total_bytes':f['total_bytes'],'freeze':pin(O/'freeze.json'),'report':pin(O/'review.md'),'review_json':pin(O/'review.json')}))

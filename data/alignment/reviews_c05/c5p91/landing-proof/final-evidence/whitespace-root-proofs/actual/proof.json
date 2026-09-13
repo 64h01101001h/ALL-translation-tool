@@ -1,0 +1,139 @@
+{
+  "status": "PASS ROOT ACCEPTS ACTUAL WHITESPACE AUDIT",
+  "utc": "2026-09-13T04:28:33.529962+00:00",
+  "runs": [
+    {
+      "mode": "prepare",
+      "actual_execution": {
+        "argv": [
+          "python3",
+          "-B",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/whitespace273.py",
+          "prepare",
+          "--worktree",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+          "--review",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review",
+          "--root-manifest",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/root-proof-copy-manifest-before-whitespace.json",
+          "--root-manifest-bank-path",
+          "data/alignment/reviews_c05/c5p91/landing-proof/root-proof-copy-manifest-before-whitespace.json",
+          "--physical-descriptors",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/physical-source-descriptors.json",
+          "--raw-log",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.stdout",
+          "--raw-stderr",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.stderr",
+          "--raw-exit",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.exit",
+          "--raw-command",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.command.json",
+          "--build-proof",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/canonical-builds-once.json",
+          "--output",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-runs-273-v2/prepare-01"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+        "started_at": "2026-09-13T04:26:34.059955+00:00",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "GIT_OPTIONAL_LOCKS": "0"
+        },
+        "inherited_environment": true,
+        "stdin_bytes": 0,
+        "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+        "finished_at": "2026-09-13T04:26:42.175049+00:00",
+        "wall_seconds": 8.114641916006804,
+        "exit": 0,
+        "stdout_bytes": 1092,
+        "stderr_bytes": 0,
+        "stdout_sha256": "36006f8b7e1029db082b0efa32f7d694ab01ecc14786e4f41a50cd75d1b46388",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": 133,
+      "commands": 63,
+      "index": {
+        "bytes": 2408827,
+        "sha256": "57d41d1ae0f2e595be2d77acd55a1182aa5675319146245d989a8a0fa97a0ff3"
+      },
+      "proof": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-runs-273-v2/prepare-01/whitespace-classification-preflight.json",
+        "bytes": 1563735,
+        "sha256": "6bb03a2a4e1493625c0f3ba5ce3209466ef0e6f1a808228e013aa0aebaa6463a"
+      }
+    },
+    {
+      "mode": "audit",
+      "actual_execution": {
+        "argv": [
+          "python3",
+          "-B",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/whitespace273.py",
+          "audit",
+          "--worktree",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+          "--review",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review",
+          "--root-manifest",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/root-proof-copy-manifest-before-whitespace.json",
+          "--root-manifest-bank-path",
+          "data/alignment/reviews_c05/c5p91/landing-proof/root-proof-copy-manifest-before-whitespace.json",
+          "--physical-descriptors",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/physical-source-descriptors.json",
+          "--raw-log",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.stdout",
+          "--raw-stderr",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.stderr",
+          "--raw-exit",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.exit",
+          "--raw-command",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/staged-diff-check.command.json",
+          "--build-proof",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/landing/canonical-builds-once.json",
+          "--output",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-runs-273-v2/audit-01",
+          "--prepared",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-runs-273-v2/prepare-01"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+        "started_at": "2026-09-13T04:27:03.202562+00:00",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "GIT_OPTIONAL_LOCKS": "0"
+        },
+        "inherited_environment": true,
+        "stdin_bytes": 0,
+        "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+        "finished_at": "2026-09-13T04:27:12.578435+00:00",
+        "wall_seconds": 9.375184166710824,
+        "exit": 0,
+        "stdout_bytes": 1098,
+        "stderr_bytes": 0,
+        "stdout_sha256": "99d67e3e6381023c46f4c92f472ab013a622248429b12c03af7da93680c2552d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": 134,
+      "commands": 64,
+      "index": {
+        "bytes": 2408827,
+        "sha256": "57d41d1ae0f2e595be2d77acd55a1182aa5675319146245d989a8a0fa97a0ff3"
+      },
+      "proof": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-runs-273-v2/audit-01/source-whitespace-proof.json",
+        "bytes": 1563741,
+        "sha256": "f441614b63bc888aeb9ab86942c81a74fac413b23e8fb393b795e5e2c3d2252f"
+      }
+    }
+  ],
+  "all_full_original_copy_and_actual_staged_command_bytes_reopened": true,
+  "warning_count": 95906,
+  "warned_files": 58,
+  "raw_log": {
+    "bytes": 36268143,
+    "sha256": "ce93fc36cce920a0d24660ef2ac1b7f735059a96beb3b9e4e4ee82921e02a766"
+  },
+  "code_review": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-root-273-v2/review/proof.json",
+  "root_git_commands": 0,
+  "root_test_reruns": 0,
+  "limitations": "Initial stage only. Final bank additions require exact final stage verification and identical diagnostic bytes; no semantic or MAIN acceptance."
+}

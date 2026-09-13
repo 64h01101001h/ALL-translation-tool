@@ -1,0 +1,74 @@
+from pathlib import Path
+import json,sys,os,hashlib,subprocess,sqlite3,importlib.util,gzip,datetime
+sys.dont_write_bytecode=True
+R=Path(__file__).resolve().parents[4]; B=R/'campaign-artifacts/C05-271-273'; W=R/'campaign-worktree'; O=B/'reconciled/271'
+HEAD='7166534a9f47a201e5ab580a843c14ba2a910891'
+def save(p,d):
+ p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ raw=p.read_bytes();return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def run(label,argv,stdin=b'',cwd=R):
+ d=O/'executions'/label;d.mkdir(parents=True);(d/'stdin.bin').write_bytes(stdin)
+ start=datetime.datetime.now(datetime.timezone.utc).isoformat();p=subprocess.run(argv,input=stdin,cwd=cwd,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+ for n,v in [('stdout.bin',p.stdout),('stderr.bin',p.stderr),('exit.txt',(str(p.returncode)+'\n').encode())]:(d/n).write_bytes(v)
+ save(d/'command.json',dict(argv=argv,cwd=str(cwd),environment={'PYTHONDONTWRITEBYTECODE':'1'},start=start,end=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=p.returncode,stdin=pin(d/'stdin.bin'),stdout=pin(d/'stdout.bin'),stderr=pin(d/'stderr.bin')))
+ assert p.returncode==0,(label,p.stderr);return p
+if __name__=='__main__':
+ originals=sorted(p for p in B.rglob('*') if p.is_file() and 'reconciled' not in p.relative_to(B).parts)
+ helper=R/'campaign-artifacts/copy_evidence_once_v2.py';assert pin(helper)['sha256']=='b8eabf4b53c29174d7f67c2f723007d429edc1e153ee3e5b32ff0a6e6fa147d1'
+ physical=json.loads((B/'english/271/evidence/physical-extents.json').read_text())
+ originals+=list({Path(x['original']['path']) for x in physical})+[Path(json.loads((B/'tibetan/271/ILL-season-physical-proof.json').read_text())['original']),helper,R/'campaign-artifacts/proposal-protocol.md']
+ run('copy-v2',[sys.executable,'-B',str(helper),str(O),str(O/'original-copy-manifest.json')]+[str(p) for p in originals])
+ gov=[]
+ for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/alignment_briefs/PROPOSE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/errata_register.json','data/alignment/C05_CAMPAIGN.md','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+  result=run('git-'+str(len(gov)),['git','show',HEAD+':'+rel],cwd=W);dest=O/'governing'/rel
+  if dest.suffix=='.py':dest=dest.with_suffix('.py.txt')
+  dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(result.stdout);gov.append(dict(git_commit=HEAD,git_path=rel,copy=pin(dest)))
+ save(O/'governing-manifest.json',gov)
+ baseline=json.loads((B/'baseline.json').read_text());pins=[]
+ for rel,digest in baseline['sha256'].items():
+  p=pin(W/rel);assert p['sha256']==digest; pins.append(p)
+ save(O/'source-input-pins.json',pins)
+ db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+ save(O/'schema.json',[dict(r) for r in db.execute("select * from sqlite_master where type='table'")])
+ context=[dict(r) for r in db.execute("select * from corpus_segments where course='C05' and seq between 265 and 279 order by seq")];save(O/'context-full-rows.json',context)
+ for wanted in json.loads((B/'context.json').read_text()):assert all(next(r for r in context if r['seq']==wanted['seq'])[k]==v for k,v in wanted.items())
+ querypaths=['tibetan/271/lexical-queries-full.json','tibetan/271/parallel-queries-full.json','tibetan/271/supplemental-queries-full.json','tibetan/271/broad-parallel-queries-full.json','english/271/evidence/queries-full.json']
+ queries=[];entryrows={};corpusrows={r['id']:r for r in context}
+ for name in querypaths:
+  for i,q in enumerate(json.loads((B/name).read_text())):
+   rows=[dict(r) for r in db.execute(q['sql'],q['parameters'])];assert rows==q['rows'] and len(rows)==q['count'],(name,i)
+   queries.append(dict(original_file=name,index=i,**q))
+   for r in rows:
+    if 'hgm_gloss' in r:entryrows[r['id']]=r
+    if 'course' in r and 'raw' in r:corpusrows[r['id']]=r
+ save(O/'queries-reopened-full.json',queries)
+ master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))
+ entries=master['entries'] if isinstance(master,dict) else master
+ encoded={json.dumps(x,sort_keys=True,ensure_ascii=False) for x in entries}
+ for r in entryrows.values():assert json.dumps(json.loads(r['raw']),sort_keys=True,ensure_ascii=False) in encoded
+ corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+ segs=corpus['segments'] if isinstance(corpus,dict) else corpus
+ enc={json.dumps(x,sort_keys=True,ensure_ascii=False) for x in segs}
+ for r in corpusrows.values():assert json.dumps(json.loads(r['raw']),sort_keys=True,ensure_ascii=False) in enc
+ save(O/'master-full-rows.json',list(entryrows.values()));save(O/'corpus-full-rows.json',list(corpusrows.values()))
+ extents=[]
+ for x in physical:
+  raw=Path(x['original']['path']).read_bytes();a,z=x['byte_range'];assert raw[a:z]==(B/'english/271/evidence'/x['copy']).read_bytes();extents.append(x)
+ x=json.loads((B/'tibetan/271/ILL-season-physical-proof.json').read_text());raw=Path(x['original']).read_bytes();assert raw[x['extent_start_byte']:x['extent_end_byte']].decode()==x['extent_utf8'];extents.append(x);save(O/'physical-reopened-full.json',extents)
+ wrapper=(B/'tibetan/271/run-canonical-readonly.py').read_bytes();(O/'run-canonical-readonly.py.txt').write_bytes(wrapper)
+ sys.path.insert(0,str(W/'tools'));definition=importlib.util.spec_from_file_location('canonical',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(definition);definition.loader.exec_module(g)
+ records=[]
+ for angle in ['tibetan','english']:
+  for seq in [271,272,273]:
+   d=B/angle/str(seq);raw=(d/'spec.json').read_bytes();p=run(f'original-{angle}-{seq}',[sys.executable,'-B',str(O/'run-canonical-readonly.py.txt')],raw,W);assert p.stdout==(d/'body.html').read_bytes() and p.stderr==b''
+   seg=json.loads(raw)['segments'][0];ss=seg['spans'];source=next(r for r in context if r['seq']==seq);byid={s['id']:s for s in ss};tr=g.resolve(source['wylie'],ss,'tib',seq);er=g.resolve(source['english'],g.with_members(ss,[byid[i] for i in seg['eng_order']],source['english']),'eng',seq);parent=None
+   for s in ss:
+    if s['d']!=7:parent=s['id'] if s['d']==5 else None
+    records.append(dict(angle=angle,seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(tr[s['id']]),eng_range=None if s['eng'] is None else list(er[s['id']]),original_span=s,original_key_order=list(s),original_field_presence=sorted(s),parent_id=parent if s['d']==7 else None))
+ assert len(records)==198
+ root=json.loads((B/'proposal-verification-attempt02/root-resolved-spans.json').read_text())
+ for a,b in zip(records,root):assert all(a[k]==v for k,v in b.items())
+ save(O/'original-identities.json',records)
+ save(O/'capture-proof.json',dict(status='PASS mechanical evidence and canonical replay; not semantic approval',queries=len(queries),entry_rows=len(entryrows),corpus_rows=len(corpusrows),original_identities=len(records),canonical_runs=6,source_pins=pins,sqlite='URI mode=ro; PRAGMA query_only=ON',producer='Codex reused non-author /root/c05_253_255_reconcile',original_producers={'tibetan':'primary root with own prior preparation','english':'reused /root/c05_262_264_english'}))
+ print(json.dumps({'status':'PASS','queries':len(queries),'entries':len(entryrows),'corpus':len(corpusrows),'originals':len(records)}))

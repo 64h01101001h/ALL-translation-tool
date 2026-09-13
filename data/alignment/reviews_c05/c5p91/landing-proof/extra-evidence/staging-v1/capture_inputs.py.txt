@@ -1,0 +1,13 @@
+from pathlib import Path
+import hashlib,json
+O=Path(__file__).resolve().parent;P=O.parent/'root';ART=O.parents[2];B=ART/'C05-268-270';records=[]
+def save(p,relative):
+ raw=p.read_bytes();d=O/'inputs'/relative;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(raw);records.append(dict(original=str(p),copy=str(d.relative_to(O)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+save(P/'preparation.md',Path('preparation.md'));save(P/'input-manifest.json',Path('preparation-input-manifest.json'))
+manifest=json.loads((P/'input-manifest.json').read_bytes())
+for r in manifest:
+ if Path(r['original']).name in ['verify-final-staged-landing.py','bank-root-landing-proofs.py','bank-final-verification-proofs.py','run-recorded-step.py']:
+  p=P/r['copy'];raw=p.read_bytes();assert len(raw)==r['bytes'] and hashlib.sha256(raw).hexdigest()==r['sha256'];assert raw==Path(r['original']).read_bytes();save(p,Path('prior-helpers')/p.name)
+for name in ['landing/root-final-stage-verification.json','landing/root-proof-copy-manifest.json','landing/root-proof-copy-manifest-before-whitespace.json','landing/source-whitespace-proof.json','semantic-review/freeze.json','landing/ctest-17-root-verification.json','landing/root-semantic-acceptance-proof.json','landing/canonical-builds-once.json','landing/retention-source-check.json','landing/review-copy-and-register-proof.json','landing/ctest-17.stdout','landing/ctest-17.execution.json']:
+ save(B/name,Path('prior-examples')/name)
+(O/'input-manifest.json').write_text(json.dumps(records,indent=2)+'\n');print('Retained',len(records),'exact inputs; no current semantic content read.')

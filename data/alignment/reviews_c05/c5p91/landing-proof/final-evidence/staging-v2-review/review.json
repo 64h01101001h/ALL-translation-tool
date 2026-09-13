@@ -1,0 +1,37 @@
+{
+  "status": "DONE",
+  "verdict": "CONDITIONAL_APPROVE_CODE_AND_DEPENDENCIES",
+  "reviewer": "/root/c05_253_255_reconcile",
+  "retained_context": true,
+  "candidate_author": "/root/c05_262_264_english",
+  "semantic_approval_supplied": false,
+  "candidate": {
+    "bytes": 38250,
+    "sha256": "5cc01b4bc95a00f511a11e86dc4735f78ba8ee034d0643caf72d77e771ca12f2"
+  },
+  "candidate_freeze": {
+    "bytes": 108397,
+    "sha256": "8f470ad05e5192c7c95796920cdabb23acae12a68eade7f05bb8b2a760081752"
+  },
+  "resolved_findings": [
+    "STAGE273-01",
+    "STAGE273-02",
+    "STAGE273-03"
+  ],
+  "open_code_findings": [],
+  "fresh_focused_tests": 22,
+  "test_exit": 0,
+  "full_live_verifier_executions": 0,
+  "live_git_commands": 0,
+  "actual_final_stage_approved": false,
+  "prerequisites": [
+    "Actual complete final bank and both banking run records",
+    "Independently approved final-stage whitespace proof and exact raw log",
+    "Actual full verifier EXIT0 on final stage",
+    "External caller/output retention with truthful later-evidence boundary"
+  ],
+  "report": "review.md",
+  "proof": "final-preservation-proof.json",
+  "actual_interfaces": "actual-interface-proof.json",
+  "retention_records": 1209
+}

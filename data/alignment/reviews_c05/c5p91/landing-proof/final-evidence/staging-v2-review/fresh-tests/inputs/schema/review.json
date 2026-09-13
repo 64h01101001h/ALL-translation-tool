@@ -1,0 +1,89 @@
+{
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "resolved_findings": [
+    {
+      "id": "C05-273-CAUSAL-01",
+      "seq": 273,
+      "span_id": "p22",
+      "label": "s273p22",
+      "tib": "phyir",
+      "eng": "for",
+      "tib_range": [
+        196,
+        201
+      ],
+      "eng_range": [
+        91,
+        94
+      ],
+      "severity": "blocking",
+      "reason": "NEEDS_CORRECTION C05-273-CAUSAL-01: the first phyir closes the concrete solar/lunar grounds for general non-occurrence. The first English for introduces general non-occurrence as a reason for the exceptional-circumstances assertion; the colon introduces the concrete grounds. Broad causal compatibility and positive phyir/for glosses do not establish the same separately owned relation. Omit this disputed particle mapping with a distributed-restructuring reason, rather than null it or automatically reassign it to another English word.",
+      "minimal_remedy": "Remove only p22 from the current 273 spec; regenerate its canonical body and revise its decision/original-disposition/omission/report interfaces to record distributed causal restructuring. Preserve both originals, positive glossary evidence, current failed review and original candidate history. Keep p28 and all unaffected tuples unchanged. No source edit, null replacement, or automatic for reassignment.",
+      "status": "RESOLVED",
+      "resolution": "RESOLVED: the actual correction removes only s273p22 and its English-order entry, with no renumbering or replacement. The first phyir [196,201) and first for [91,94) remain verbatim unwrapped as distributed causal restructuring. Tibetan closes concrete sun/cold and moon/hot grounds for general non-occurrence; English first for introduces that generalization as grounds for exceptional circumstances, and the colon introduces the concrete grounds. Positive HTG2016 entry11962 includes for/because/since and the broader causal intent is real, but these do not establish exclusive local d6 ownership. The current note and both exact complement rationales explicitly avoid an absence-of-meaning or null claim. p28 retains the distinct final-premise relation at Tibetan[255,260)/English[265,268).",
+      "corrected_spec_sha256": "76e55871a61fd92fcab94686d893b53d1e6045a3c13f1604aadb95c79c8b953e",
+      "corrected_body_sha256": "53413f0137f6eb58980f47dddde61a4b80980a846a835d132abff34a032d9a9c"
+    }
+  ],
+  "segments": [
+    {
+      "seq": 271,
+      "span_count": 52,
+      "null_count": 4,
+      "word_pair_count": 31,
+      "spec_bytes": 8326,
+      "spec_sha256": "b35b00e4da27f6d33edfc7c37ff9ab4d736a3f1bf32e8e925ec48e81b41b709c",
+      "body_bytes": 8142,
+      "body_sha256": "6c6bec05c061ddf8c9728c62fa6beccd9fe0e5214fa32fa118090c915fc2e8eb",
+      "generator_exit": 0
+    },
+    {
+      "seq": 272,
+      "span_count": 21,
+      "null_count": 4,
+      "word_pair_count": 10,
+      "spec_bytes": 4139,
+      "spec_sha256": "eda8cd733b0cf2aa02dea3d6404e178733799a16fca0f85d4dca3b16dc3b6867",
+      "body_bytes": 4170,
+      "body_sha256": "457582ce8a25019c481f2dc2c959fac997984e758a6b3cf885bfc3e5f55048f5",
+      "generator_exit": 0
+    },
+    {
+      "seq": 273,
+      "span_count": 28,
+      "null_count": 0,
+      "word_pair_count": 22,
+      "spec_bytes": 4864,
+      "spec_sha256": "76e55871a61fd92fcab94686d893b53d1e6045a3c13f1604aadb95c79c8b953e",
+      "body_bytes": 4908,
+      "body_sha256": "53413f0137f6eb58980f47dddde61a4b80980a846a835d132abff34a032d9a9c",
+      "generator_exit": 0
+    }
+  ],
+  "total_spans": 101,
+  "total_nulls": 8,
+  "total_word_pairs": 63,
+  "provisional": true,
+  "reviewer": "Codex /root/c05_through249_final_review; reused context; non-author of both current originals, reconciliation and correction",
+  "governing_git_commit": "7166534a9f47a201e5ab580a843c14ba2a910891",
+  "generated_baseline_git_commit": "32472a829c3336f13667d19c3df92538cca3340f",
+  "machine_review_not_human_acceptance": true,
+  "review_basis": "Complete initial review plus actual scoped correction01; initial NEEDS_CORRECTION retained unchanged under history/initial-review. No fresh-context claim.",
+  "execution_provenance": {
+    "new_current_runs": [
+      273
+    ],
+    "retained_unchanged_current_runs": [
+      271,
+      272
+    ],
+    "initial_original_runs": 6,
+    "initial_reconciled_runs": 3,
+    "initial273_run_is_historical_only": true,
+    "current273_execution": "executions/corrected273/execution-proof.json"
+  },
+  "reviewed_utc": "2026-09-13T03:15:40.194486+00:00"
+}

@@ -1,0 +1,67 @@
+from pathlib import Path
+import os,sys,json,hashlib,sqlite3,subprocess,importlib.util,gzip,datetime
+sys.dont_write_bytecode=True
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['GIT_OPTIONAL_LOCKS']='0'
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';D=B/'reconciled/271';HEAD='7166534a9f47a201e5ab580a843c14ba2a910891'
+H=lambda b:hashlib.sha256(b).hexdigest()
+def j(p):return json.loads(p.read_bytes())
+def save(n,x):p=R/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=H(b))
+for p in j(D/'source-input-pins.json'):assert pin(Path(p['path']))==p
+spine=W/'build/hgm_spine_v27_2.db';dbpin=pin(spine);con=sqlite3.connect(spine.as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row;con.execute('PRAGMA query_only=ON');assert con.execute('PRAGMA query_only').fetchone()[0]==1
+queries=j(D/'queries-reopened-full.json')+j(D/'refutation-targeted-queries-full.json');replays=[]
+for q in queries:
+ rows=[dict(x) for x in con.execute(q['sql'],q['parameters'])];assert rows==q['rows'] and len(rows)==q['count'];replays.append(dict(q,independent_rows=rows))
+save('independent-query-replays.json',replays)
+context=[]
+for expected in j(D/'context-full-rows.json'):
+ actual=dict(con.execute('select * from corpus_segments where course=? and seq=?',(expected['course'],expected['seq'])).fetchone());assert actual==expected;context.append(actual)
+save('independent-context-full.json',context)
+for f,table in [('master-full-rows.json','entries'),('corpus-full-rows.json','corpus_segments')]:
+ for x in j(D/f):assert dict(con.execute('select * from '+table+' where id=?',(x['id'],)).fetchone())==x
+master=jgz=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));enc=lambda x:json.dumps(x,sort_keys=True,ensure_ascii=False)
+masterset={enc(x) for x in master['unified_entries']}
+for x in j(D/'master-full-rows.json'):assert enc(json.loads(x['raw'])) in masterset
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));corpusset={enc(x) for x in corpus['segments']}
+for x in j(D/'corpus-full-rows.json'):assert enc(json.loads(x['raw'])) in corpusset
+physical=[]
+for x in j(D/'physical-reopened-full.json'):
+ if isinstance(x['original'],dict):
+  p=Path(x['original']['path']);assert pin(p)==x['original'];raw=p.read_bytes();a,z=x['byte_range'];part=raw[a:z];assert len(part)==x['bytes'] and H(part)==x['sha256'] and part.decode('latin1')==x['full_extent_latin1']
+ else:
+  p=Path(x['original']);raw=p.read_bytes();a,z=x['extent_start_byte'],x['extent_end_byte'];part=raw[a:z];assert part.decode()==x['extent_utf8']
+ dest=R/'independent-physical'/f'{len(physical):02}.bin';dest.parent.mkdir(exist_ok=True);dest.write_bytes(part);physical.append(dict(source=pin(p),range=[a,z],copy=pin(dest),original_record=x))
+x=j(D/'C15-271-physical-supplement.json');p=Path(x['original']['path']);assert pin(p)==x['original'];a,z=x['range'];part=p.read_bytes()[a:z];assert part==Path(x['copy']['path']).read_bytes() and part.decode('latin1')==x['complete_extent_latin1'];dest=R/'independent-physical/10.bin';dest.write_bytes(part);physical.append(dict(source=pin(p),range=[a,z],copy=pin(dest),original_record=x));save('independent-physical-reopen.json',physical)
+for m in j(D/'governing-manifest.json'):
+ raw=subprocess.check_output(['git','show',m['git_commit']+':'+m['git_path']],cwd=W);assert raw==Path(m['copy']['path']).read_bytes()
+for p in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:assert (W/p).read_bytes()==subprocess.check_output(['git','show',HEAD+':'+p],cwd=W)
+wrapper=R/'run-canonical-readonly.py.txt';wrapper.write_bytes((D/'run-canonical-readonly.py.txt').read_bytes())
+sys.path.insert(0,str(W/'tools'));spec=importlib.util.spec_from_file_location('canonical_review',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+resolved=[];originals=[];runs=[];dispositions=[]
+for angle in ['tibetan','english','reconciled']:
+ for seq in [271,272,273]:
+  d=B/angle/str(seq);specbytes=(d/'spec.json').read_bytes();segment=json.loads(specbytes)['segments'][0];ss=segment['spans'];source=next(x for x in context if x['course']=='C05' and x['seq']==seq);byid={x['id']:x for x in ss};assert len(byid)==len(ss)
+  directory=R/'executions'/f'{angle}-{seq}';directory.mkdir(parents=True,exist_ok=False);(directory/'stdin.json').write_bytes(specbytes);argv=[sys.executable,'-B',str(wrapper)];start=datetime.datetime.now(datetime.timezone.utc).isoformat();proc=subprocess.run(argv,input=specbytes,cwd=W,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'))
+  (directory/'stdout.html').write_bytes(proc.stdout);(directory/'stderr.txt').write_bytes(proc.stderr);(directory/'exit.txt').write_text(str(proc.returncode)+'\n');record=dict(angle=angle,seq=seq,argv=argv,cwd=str(W),environment={'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'},start=start,end=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=proc.returncode,stdin=pin(directory/'stdin.json'),stdout=pin(directory/'stdout.html'),stderr=pin(directory/'stderr.txt'),wrapper=pin(wrapper));save(str((directory/'command.json').relative_to(R)),record);runs.append(record);assert proc.returncode==0 and proc.stderr==b'' and proc.stdout==(d/'body.html').read_bytes()
+  tr=g.resolve(source['wylie'],ss,'tib',seq);er=g.resolve(source['english'],g.with_members(ss,[byid[k] for k in segment['eng_order']],source['english']),'eng',seq);parent=None;local=[]
+  for s in ss:
+   if s['d']!=7:parent=s['id'] if s['d']==5 else None
+   t=dict(seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(tr[s['id']]),eng_range=None if s['eng'] is None else list(er[s['id']]));assert source['wylie'][slice(*t['tib_range'])]==s['tib']
+   if s['eng'] is not None:assert source['english'][slice(*t['eng_range'])]==s['eng']
+   if s['d']==7:
+    assert parent is not None
+    for ranges,side in [(tr,'tib'),(er,'eng')]:
+     if s[side] is not None:assert ranges[parent][0]<=ranges[s['id']][0]<ranges[s['id']][1]<=ranges[parent][1] and ranges[s['id']]!=ranges[parent]
+   if angle=='reconciled':
+    resolved.append(t);local.append({k:t[k] for k in ['id','d','tib','eng','tib_range','eng_range']}|{'parent_id':parent if s['d']==7 else None})
+   else:
+    identity=dict(angle=angle,**t);declaration=next(x for x in (j(d/'intended-spans.json') if angle=='tibetan' else j(d/'decisions.json')['spans']) if x['id']==s['id']);originals.append(dict(original_identity=identity,original_span=s,original_key_order=list(s),original_field_presence=sorted(s),original_parent_id=parent if s['d']==7 else None,original_occurrence_declaration=declaration))
+  if angle=='reconciled':assert local==j(d/'final-tuples.json');assert [x['tuple'] for x in j(d/'final-decisions.json')]==local;assert [x['span_object'] for x in j(d/'final-decisions.json')]==ss;dispositions.extend(j(d/'original-dispositions.json'))
+for o in originals:
+ matches=[x for x in dispositions if x['original_identity']==o['original_identity']];assert len(matches)==1;match=matches[0]
+ for k,v in o.items():assert match[k]==v,(o['original_identity'],k)
+assert len(originals)==len(dispositions)==198 and len(resolved)==102
+save('resolved-spans.json',resolved);save('independent-original-identities.json',originals);save('independent-executions.json',runs)
+assert pin(spine)==dbpin
+for p in j(D/'source-input-pins.json'):assert pin(Path(p['path']))==p
+save('independent-reopen-proof.json',dict(status='PASS mechanical only; semantic verdict requires review',query_replays=len(replays),full_entry_rows=len(j(D/'master-full-rows.json')),corpus_raw_rows=len(j(D/'corpus-full-rows.json')),context_rows=len(context),physical_extents=len(physical),original_identities=len(originals),final_tuples=len(resolved),canonical_runs=len(runs),spine_before_after=dbpin,source_before_after=j(D/'source-input-pins.json'),governing_commit=HEAD,counts={str(seq):dict(spans=sum(x['seq']==seq for x in resolved),nulls=sum(x['seq']==seq and x['eng'] is None for x in resolved),word_pairs=sum(x['seq']==seq and x['d']==5 and x['eng'] is not None for x in resolved)) for seq in [271,272,273]}));print(json.dumps(j(R/'independent-reopen-proof.json'),indent=2))

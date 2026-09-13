@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review/independent-reopen.py", line 25, in <module>
+    corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));corpusset={enc(x) for x in corpus['segments']}
+                                                                                                                            ~~~~~~^^^^^^^^^^^^
+TypeError: list indices must be integers or slices, not str

@@ -1,0 +1,164 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-13T03:26:54.152405+00:00",
+  "head": "7166534a9f47a201e5ab580a843c14ba2a910891",
+  "limit": "Root mechanical identity and preservation closure after full independent report reading; no new semantic review or canonical run.",
+  "review_freeze": {
+    "bytes": 431343,
+    "sha256": "b4f9b53d8cbc18385b006f7d8dff7a04cee73fa5bf61a98e9b031bcb32c1cf4c"
+  },
+  "review_report": {
+    "bytes": 14090,
+    "sha256": "3bee0e5a92093b45e4ba09a115c69bf44cd9fb2ca7f94e8d629116259ff7b26f"
+  },
+  "review_meta": {
+    "bytes": 4568,
+    "sha256": "03271ab93f925459c561e7e09e246a80ae2dc90762757672d726ea60ba9176a1"
+  },
+  "frozen_files": 2032,
+  "frozen_bytes": 186175787,
+  "source_copy_records": 12568,
+  "distinct_copy_targets": 1975,
+  "git_aliases": 283,
+  "unique_git_objects": 11,
+  "all_full_source_copy_bytes_equal": true,
+  "source_version_transports": 9145,
+  "all_initial_logical_versions_resolved": true,
+  "unchanged_initial_tree_files": 1403,
+  "all_101_full_tuple_and_reason_objects_exact": true,
+  "current_counts": [
+    101,
+    8,
+    63
+  ],
+  "original_dispositions": 198,
+  "unchanged_dispositions": 197,
+  "changed_disposition": {
+    "original_identity": {
+      "angle": "english",
+      "seq": 273,
+      "id": "p22",
+      "d": 6,
+      "tib": "phyir",
+      "eng": "for",
+      "tib_range": [
+        196,
+        201
+      ],
+      "eng_range": [
+        91,
+        94
+      ]
+    },
+    "original_span": {
+      "id": "p22",
+      "d": 6,
+      "tib": "phyir",
+      "eng": "for"
+    },
+    "original_key_order": [
+      "id",
+      "d",
+      "tib",
+      "eng"
+    ],
+    "original_field_presence": [
+      "d",
+      "eng",
+      "id",
+      "tib"
+    ],
+    "original_parent_id": null,
+    "original_occurrence_declaration": {
+      "id": "p22",
+      "tib_range": [
+        196,
+        201
+      ],
+      "eng_range": [
+        91,
+        94
+      ],
+      "tib_occurrences": [
+        [
+          196,
+          201
+        ],
+        [
+          255,
+          260
+        ]
+      ],
+      "eng_occurrences": [
+        [
+          91,
+          94
+        ],
+        [
+          265,
+          268
+        ]
+      ],
+      "reason": "first causal explanation; English introduces the generally-speaking argument earlier than the Tibetan closing connective",
+      "source_role": "first causal explanation",
+      "null_rationale": null,
+      "parent": null
+    },
+    "status": "omitted_distributed",
+    "final_ids": [],
+    "rationale": "Omit first phyir [196,201) / first for [91,94) as distributed causal restructuring (C05-273-CAUSAL-01). Tibetan phyir closes the concrete sun/cold and moon/hot grounds for general non-occurrence. English first for introduces that general non-occurrence as a reason for exceptional circumstances; the colon introduces the concrete grounds. Positive HTG2016 entry11962 phyir/for and shared discourse intent do not establish this local d6 ownership. The contribution is distributed, not absent: no null, reassignment or source change. Final p28 remains the separate final premise link."
+  },
+  "current_actual_canonical273": {
+    "seq": 273,
+    "version": "correction01 current",
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review/run-canonical-readonly.py.txt"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "GIT_OPTIONAL_LOCKS": "0"
+    },
+    "inherited_environment": true,
+    "stdin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review/executions/corrected273/stdin.json",
+      "bytes": 4864,
+      "sha256": "76e55871a61fd92fcab94686d893b53d1e6045a3c13f1604aadb95c79c8b953e"
+    },
+    "wrapper": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review/run-canonical-readonly.py.txt",
+      "bytes": 545,
+      "sha256": "f7a40d68d275a6a7e3d401a30de58ae84e83061998deeaa121ab840a99b056c0"
+    },
+    "generator": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    },
+    "builder": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/build_alignment_layer.py",
+      "bytes": 39520,
+      "sha256": "181583dbf0f03d2339d1cedfaa2a8708344c28894433b5454a399487dbba405f"
+    },
+    "started_utc": "2026-09-13T03:10:58.994708+00:00",
+    "sqlite": "URI mode=ro; PRAGMA query_only=ON",
+    "finished_utc": "2026-09-13T03:10:59.078159+00:00",
+    "exit": 0,
+    "stdout": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review/executions/corrected273/stdout.html",
+      "bytes": 4908,
+      "sha256": "53413f0137f6eb58980f47dddde61a4b80980a846a835d132abff34a032d9a9c"
+    },
+    "stderr": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-271-273/semantic-review/executions/corrected273/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "retained_initial_canonical_runs": 9,
+  "retained_errata_refutations_exact": true,
+  "approved_errata_empty": true,
+  "approved_head_allowances_empty": true
+}

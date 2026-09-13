@@ -1,0 +1,23 @@
+from pathlib import Path
+import json,hashlib,os
+D=Path(__file__).resolve().parent;A=D.parent
+records=[]
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(src,dest):
+ raw=src.read_bytes();dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw);assert src.read_bytes()==dest.read_bytes()
+ records.append(dict(original=str(src),resolved_original=str(src.resolve()),source_symlink=os.readlink(src) if src.is_symlink() else None,copy=str(dest.relative_to(D)),**pin(raw)))
+for name in ['whitespace-candidate-273','whitespace-review-273']:
+ source=A/name
+ for src in sorted(source.rglob('*')):
+  if src.is_file():save(src,D/'history'/name/src.relative_to(source))
+# Candidate runtime-pinned inputs remain byte exact at their required relative names.
+old=A/'whitespace-candidate-273'
+for name in ['physical-source-descriptors.json','current-inputs/semantic-review/freeze.json','current-inputs/semantic-review/original-to-copy-manifest.json']:
+ save(old/name,D/name)
+# Independently reopen the four full actual sources; existing review copies must agree.
+for i,item in enumerate(json.loads((old/'physical-source-descriptors.json').read_bytes())):
+ src=Path(item['path']);raw=src.read_bytes();assert pin(raw)=={k:item[k] for k in ['bytes','sha256']}
+ assert raw==(D/'history/whitespace-review-273/physical'/f'{i}.bin').read_bytes()
+ save(src,D/'originals'/f'physical-{i}.bin')
+(D/'input-manifest.json').write_text(json.dumps(dict(records=records),indent=2)+'\n')
+print(json.dumps(dict(records=len(records),bytes=sum(r['bytes'] for r in records))))

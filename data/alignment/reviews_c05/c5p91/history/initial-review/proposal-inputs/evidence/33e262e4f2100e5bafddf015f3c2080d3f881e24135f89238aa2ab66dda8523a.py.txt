@@ -1,0 +1,69 @@
+from pathlib import Path
+import copy,difflib,hashlib,json,os,subprocess,sys
+O=Path(__file__).resolve().parent;BASE='7166534a9f47a201e5ab580a843c14ba2a910891'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def put(p,b):p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b)
+def js(p,obj):put(p,(json.dumps(obj,indent=2)+'\n').encode())
+def inventory(root):return {str(p.relative_to(root)):dict(bytes=p.stat().st_size,sha256=sha(p.read_bytes())) for p in sorted(root.rglob('*')) if p.is_file()}
+results=[]
+for name,expect in [('control',0),('wrong-head',1),('unclosed-checkpoint',1),('review-rejected',1),('acceptance-pin-mismatch',1),('changed-index',1),('missing-prior-page',1),('wrong-sequences',1),('changed-landed-spec',1),('replacement-body-and-page',1),('individual-spec-hash-mismatch',1),('individual-body-size-mismatch',1),('reviewed-spec-copy-mismatch',1),('reviewed-body-copy-mismatch',1),('banked-spec-copy-mismatch',1),('banked-body-copy-mismatch',1),('review-order-mismatch',1),('combined-spec-serialization-mismatch',1),('combined-body-order-mismatch',1),('generator-exit-nonzero',1),('generator-stderr-nonempty',1),('landing-spec-pin-mismatch',1),('landing-body-pin-mismatch',1),('landing-page-identity-mismatch',1),('page-does-not-contain-body',1)]:
+ F=O/'fixtures'/name;F.mkdir(parents=True);B=F/'campaign-artifacts/C05-271-273';W=F/'campaign-worktree';P=W/'data/alignment/pages_c05';L=B/'landing'
+ put(B/'register-reviewed-page-and-index-v2.py',(O/'register-reviewed-page-and-index-v2.py').read_bytes())
+ put(W/'tools/build_alignment_layer.py',(O/'baseline-builder.py').read_bytes());put(P/'index.html',(O/'baseline-index.html').read_bytes());put(F/'synthetic-head.txt',BASE.encode())
+ for n in range(1,91):put(P/f'c5p{n}.html',f'SYNTHETIC page {n}\n'.encode())
+ parts=[dict(seq=n,title='synthetic',spans=[]) for n in (271,272,273)];spec=dict(course='C05',segments=parts)
+ metarows=[]
+ for part in parts:
+  sb=(json.dumps(dict(course='C05',segments=[part]),indent=2)+'\n').encode();body=f'<p>SYNTHETIC accepted {part["seq"]}</p>\n'.encode()
+  put(B/f'synthetic-reviewed-final/{part["seq"]}/spec.json',sb);put(B/f'synthetic-reviewed-final/{part["seq"]}/body.html',body)
+  for dest in [B/f'reconciled/{part["seq"]}',B/f'semantic-review/reviewed-final/{part["seq"]}',W/f'data/alignment/reviews_c05/c5p91/reviewed-final/{part["seq"]}']:
+   put(dest/'spec.json',sb);put(dest/'body.html',body)
+  metarows.append(dict(seq=part['seq'],spec_bytes=len(sb),spec_sha256=sha(sb),body_bytes=len(body),body_sha256=sha(body),span_count=0,null_count=0,word_pair_count=0,generator_exit=0))
+ meta=dict(verdict='APPROVE',open_findings=[],segments=metarows,total_spans=0,total_nulls=0,total_word_pairs=0)
+ if name=='review-rejected':meta['verdict']='REJECT'
+ if name=='individual-spec-hash-mismatch':meta['segments'][0]['spec_sha256']='0'*64
+ if name=='individual-body-size-mismatch':meta['segments'][0]['body_bytes']+=1
+ if name=='review-order-mismatch':meta['segments'].reverse()
+ mr=(json.dumps(meta,indent=2)+'\n').encode();put(B/'semantic-review/review.json',mr);put(W/'data/alignment/reviews_c05/c5p91/review.json',mr)
+ acceptance=dict(head=BASE,page=91,segments=[271,272,273],totals=dict(spans=0,nulls=0,word_pairs=0),exact_final_hashes_counts_and_ranges=True,manifest_records=1,historical_git_records=0,original_review_bytes_identical=True,landed_bytes_checked=False,review_json_sha256=sha(mr),manifest=[])
+ if name=='acceptance-pin-mismatch':acceptance['review_json_sha256']='0'*64
+ js(L/'root-semantic-acceptance-proof.json',acceptance);js(B.parent/'integration/root-through270-closure/proof.json',dict(status='PASS',final_head=BASE))
+ accepted_body=b''.join((B/f'synthetic-reviewed-final/{n}/body.html').read_bytes() for n in (271,272,273))
+ put(L/'generator.stdout',accepted_body);put(P/'c5p91.html',b'<html>\n'+accepted_body+b'</html>\n');js(W/'data/alignment/specs_c05/c5p91.json',spec)
+ put(L/'generator.exit',b'0\n');put(L/'generator.stderr',b'')
+ landing_meta=dict(course='C05',page='c5p91',segments=[271,272,273],producer='SYNTHETIC fixture, no semantic approval',status='SYNTHETIC',spec_sha256=sha((W/'data/alignment/specs_c05/c5p91.json').read_bytes()),body_sha256=sha(accepted_body),generator_exit=0,presentation_changes=[],visual_verification='Not applicable to synthetic fixture')
+ if name=='landing-spec-pin-mismatch':landing_meta['spec_sha256']='0'*64
+ if name=='landing-body-pin-mismatch':landing_meta['body_sha256']='0'*64
+ if name=='landing-page-identity-mismatch':landing_meta['page']='c5p90'
+ js(W/'data/alignment/reviews_c05/c5p91/landing.json',landing_meta)
+ for case,destination,filename in [('reviewed-spec-copy-mismatch',B/'semantic-review/reviewed-final/271','spec.json'),('reviewed-body-copy-mismatch',B/'semantic-review/reviewed-final/271','body.html'),('banked-spec-copy-mismatch',W/'data/alignment/reviews_c05/c5p91/reviewed-final/271','spec.json'),('banked-body-copy-mismatch',W/'data/alignment/reviews_c05/c5p91/reviewed-final/271','body.html')]:
+  if name==case:put(destination/filename,(destination/filename).read_bytes()+b'CHANGED\n')
+ if name=='combined-spec-serialization-mismatch':put(W/'data/alignment/specs_c05/c5p91.json',json.dumps(spec).encode())
+ if name=='combined-body-order-mismatch':put(L/'generator.stdout',b''.join((B/f'synthetic-reviewed-final/{n}/body.html').read_bytes() for n in (273,272,271)))
+ if name=='generator-exit-nonzero':put(L/'generator.exit',b'1\n')
+ if name=='generator-stderr-nonempty':put(L/'generator.stderr',b'warning\n')
+ if name=='page-does-not-contain-body':put(P/'c5p91.html',b'NO BODY\n')
+ if name=='wrong-head':put(F/'synthetic-head.txt',b'0'*40)
+ if name=='unclosed-checkpoint':js(B.parent/'integration/root-through270-closure/proof.json',dict(status='FAIL',final_head=BASE))
+ if name=='changed-index':put(P/'index.html',(P/'index.html').read_bytes()+b'UNREVIEWED\n')
+ if name=='missing-prior-page':(P/'c5p90.html').unlink()
+ if name=='wrong-sequences':spec['segments'][0]['seq']=270;js(W/'data/alignment/specs_c05/c5p91.json',spec)
+ if name=='changed-landed-spec':spec['segments'][0]['title']='CHANGED AFTER APPROVAL';js(W/'data/alignment/specs_c05/c5p91.json',spec)
+ if name=='replacement-body-and-page':put(L/'generator.stdout',b'<p>UNREVIEWED REPLACEMENT</p>\n');put(P/'c5p91.html',b'<html><p>UNREVIEWED REPLACEMENT</p>\n</html>\n')
+ before=inventory(F);js(F/'before.json',before)
+ argv=[sys.executable,'-B',str(O/'fixture_driver.py'),str(F)];r=subprocess.run(argv,cwd=O,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),input=b'',capture_output=True)
+ js(F/'command.json',dict(argv=argv,cwd=str(O),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'},git_stub='fixture_driver.py: exactly three baseline reads, no Git writes or live helper execution',helper_sha256=sha((B/'register-reviewed-page-and-index-v2.py').read_bytes())))
+ put(F/'stdin.bin',b'');put(F/'stdout.txt',r.stdout);put(F/'stderr.txt',r.stderr);put(F/'exit.txt',f'{r.returncode}\n'.encode())
+ after=inventory(F);changes=[k for k in before if after.get(k)!=before[k]];created=[k for k in after if k not in before and (k.startswith('campaign-artifacts/') or k.startswith('campaign-worktree/'))]
+ assert r.returncode==expect,(name,r.returncode,r.stderr)
+ if expect:assert not changes and not created,(name,changes,created)
+ else:
+  assert changes==['campaign-worktree/data/alignment/pages_c05/index.html','campaign-worktree/tools/build_alignment_layer.py'],changes
+  assert set(created)=={'campaign-artifacts/C05-271-273/landing/course-registration-verification.json','campaign-artifacts/C05-271-273/landing/registration-preimages/build_alignment_layer.py.txt','campaign-artifacts/C05-271-273/landing/registration-preimages/index.html'}
+  for local,old in [('index.html','baseline-index.html'),('build_alignment_layer.py.txt','baseline-builder.py')]:assert (L/'registration-preimages'/local).read_bytes()==(O/old).read_bytes()
+  if name=='control':
+   for old,newpath in [('baseline-index.html',P/'index.html'),('baseline-builder.py',W/'tools/build_alignment_layer.py')]:
+    diff=''.join(difflib.unified_diff((O/old).read_text().splitlines(True),newpath.read_text().splitlines(True),fromfile=old,tofile='registered-'+old));put(O/(old+'.diff'),diff.encode())
+ result=dict(case=name,exit=r.returncode,existing_files_changed=changes,helper_created_files=created,expected_rejection=name not in ['control'],previous_guard_gap_rejected=name in ['changed-landed-spec','replacement-body-and-page'] and r.returncode!=0)
+ js(F/'result.json',result);results.append(result);print(name,'EXIT',r.returncode,'changed',len(changes),'created',len(created))
+js(O/'isolated-results.json',dict(synthetic_only=True,unchanged_candidate_sha256=sha((O/'register-reviewed-page-and-index-v2.py').read_bytes()),cases=results,previous_guard_gaps_closed=2,all_live_inputs_untouched=True))

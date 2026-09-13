@@ -1,0 +1,170 @@
+from pathlib import Path
+import json, hashlib
+
+batch=Path(__file__).resolve().parents[2]
+source={x['seq']:x for x in json.loads((batch/'source.json').read_text())}
+def make(seq,title,items,note):
+    src=source[seq];spans=[];intended=[];cursor=0;counts={}
+    for tib,eng,d,occ,why in items:
+        prefix='m' if d==7 else 'p' if d==6 else 'q' if d<5 else 'w'
+        counts[prefix]=counts.get(prefix,0)+1;ident=prefix+str(counts[prefix])
+        sp={'id':ident,'d':d,'tib':tib,'eng':eng}
+        if eng is None:sp.update(cls='case' if d==6 else 'unrendered',nul=why)
+        if eng=="n't":sp['subword']=True
+        if d==7:
+            assert parent is not None
+            ts=src['wylie'].find(tib,*parent)
+            assert ts>=0 and src['wylie'].count(tib,*parent)==1
+        else:
+            ts=src['wylie'].find(tib,cursor);assert ts>=0,(seq,tib);cursor=ts+len(tib)
+            parent=(ts,cursor) if d==5 else None
+        es=None
+        if eng is not None:
+            found=[];i=0
+            while True:
+                i=src['english'].find(eng,i)
+                if i<0:break
+                j=i+len(eng)
+                if eng=="n't" or ((not eng[0].isalnum() or i==0 or not src['english'][i-1].isalnum()) and (not eng[-1].isalnum() or j==len(src['english']) or not src['english'][j].isalnum())):found.append(i)
+                i+=1
+            assert occ<len(found),(seq,tib,eng,occ,found)
+            es=found[occ]
+        spans.append(sp);intended.append({'id':ident,'d':d,'tib':tib,'eng':eng,'tib_range':[ts,ts+len(tib)],'eng_range':None if es is None else [es,es+len(eng)],'english_occurrence_zero_based':occ if es is not None else None,'basis':why})
+    order=[x['id'] for x in sorted((x for x in intended if x['eng'] is not None and x['d']!=7),key=lambda x:x['eng_range'][0])]
+    spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':note}]}
+    out=batch/'tibetan'/str(seq)
+    for name,obj in [('spec.json',spec),('intended-spans.json',intended),('errata.json',[])]:
+        p=out/name;assert not p.exists(),p;p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+    print(seq,len(spans),sum(x['eng'] is None for x in spans))
+
+make(268,'the original condition and its world',[
+('dang por','originally',5,0,'Temporal original condition, HTG8139; later original is an English reprise.'),
+('gang du','How',3,0,'Complete interrogative/relative expression; HTG1671 includes how; the English asks how the liquid exists.'),
+('gnas pa','exists',5,0,'Initial state predicate, HTG10314.'),
+("'gro ba",'beings',5,0,'Three beings as owners of distinct karmic conditions; curated2677.'),
+('gsum','three',5,0,'The only source numeral here; different is not included in this numerical atom.'),
+('rang rang','each',5,0,'Distributive each, HTG18555; he himself is an English resumption.'),
+('thun mong ma yin pa','specific',5,0,'First established particular/nonshared compound, HTG7486.'),
+('las','karma',5,0,'First karma, local source; curated deeds/deed remains unchanged.'),
+('brten nas','depending on',3,0,'Full dependence relation, not a dictionary compound assembled from the sentence.'),
+("snod kyi 'jig rten",'outer world',5,0,'Established outer-world compound HTG11071; first English occurrence selected, second is a reprise.'),
+('gang nas','from where',3,0,'Complete source-location phrase HTG1678.'),
+('blangs pa','taken',5,0,'First taking predicate, excludes supplied passive auxiliaries; HTG24272.'),
+("mi'i",'human',5,0,'First inflected human refers to the owner of the specific karma in the second sentence; HTG24635.'),
+('thun mong ma yin pa','specific',5,1,'Second established compound: human karma specifically.'),
+('las','karma',5,1,'Second karma, not the earlier three beings collective reference.'),
+('brten nas','by',3,0,'Dependence relation in the passive created by; its causal force is grammatical, not an isolated agentive suffix.'),
+('grub','created',5,0,'Third source grub predicate, after the human-karma clause; HTG2046 supports created. Earlier two predicates are distributed and left unwrapped.'),
+("mi'i",'humans',5,0,'Second inflected human noun belongs to world of humans, not the later singular owner.'),
+("'jig rten",'world',5,2,'Third whole-word world occurrence, world of humans; other world reprises unwrapped.'),
+('chu','water',5,0,'The actual water noun, HTG4459; contextual glass-of-liquid expansions are not harvested.'),
+('dvangs','sweet',5,0,'Local paired quality dvangs shing bsil ba is rendered sweet, cool. HTG23555 lists liquid, which is disclosed; the earlier liquid is a supplied object reprise and not this quality. Full physical/source witnesses preserve this reading, no general dictionary meaning is composed.'),
+('bsil ba','cool',5,0,'Second quality, HTG21415; the intervening Tibetan connective is realized through the English comma and is left unwrapped.'),
+('nas','from',6,1,'Source-location particle of the human-world water; second standalone from, after from where.'),
+('blangs','taken',5,1,'Second taking predicate, in the conditional water example.'),
+('na','If',6,0,'Conditional marker of the complete second example.'),
+('gnas pa','condition',5,0,'Final state/condition predicate, HTG10314; original/its are distributed across the de nyid du resumption and initial temporal frame.'),
+('sogs','and so on',5,0,'Lexical enumeration closure HTG20919. Its initial and is licensed by sogs and requires an exact allowance if finally accepted.')
+],
+'PROVISIONAL machine alignment by Codex, Tibetan-first original; own earlier source/glossary preparation is disclosed and no English-first proposal or semantic finding was read. The first outer world is banked once; the second outer world and the fourth world are English reprises. The three Tibetan grub predicates are not indiscriminately mapped to created: only the third, in the human-karma clause, owns created. Earlier predicate relations, collected and the expanded liquid referents remain unwrapped rather than falsely nulled. First mi\'i owns singular human as karma owner; second owns plural humans as world occupants. Dvangs/sweet is a contextual source attestation, explicitly differing from the glossary\'s liquid equivalent; the full physical C05 reading and matching source pairs preserve it, and no new glossary definition or source correction is asserted. Shing is represented through punctuation; the remaining causal and anaphoric frames are distributed. Sogs owns the full closing gesture. No new erratum is established from these digital matches; C16:844\'s appended following heading is a registered apparatus class, not part of this C05 source.')
+
+make(269,'three kinds of craving spirit obstacles',[
+('yi dvags','craving spirit',5,0,'First perceiver, HTG25069.'),
+('kyis',None,6,0,'Active-subject agentive case has no separately expressed English word.'),
+('chu klung','stream of water',5,0,'Established river/stream compound HTG4460.'),
+('la','at',6,0,'Object relation of looks at.'),
+('bltas pa','looks',5,0,'Actual looking predicate, HTG7117.'),
+('na','When',6,0,'Temporal construction; the English expands it into When we say that.'),
+('rnag khrag','pus and blood',5,0,'Established paired compound HTG23908.'),
+('rnag','pus',7,0,'Unique tighter member, positive HTG10448; reciprocal glossary alternatives disclosed.'),
+('khrag','blood',7,0,'Unique tighter contiguous sibling, positive HTG1368 with reciprocal alternative acknowledged.'),
+('mthong ba','sees',5,0,'Seeing the perceived compound, HTG7978.'),
+('yang','by the way',6,0,'Additive topical aside introducing the restricted statement; full local discourse relation.'),
+('yi dvags','craving spirits',5,0,'The some-kinds group, first plural English occurrence.'),
+("'ga' zhig",'some kinds of',5,0,'Established indefinite quantifier, full positive HTG2545; excludes supplied talking-about frame.'),
+('gyi','and',6,2,'Contrastive positive-some versus not-all linkage; third and, after the internal compound and.'),
+('thams cad','all',5,0,'The universal quantifier under negation, HTG7339; of them is a pronominal resumption.'),
+('ma','not',6,0,'Negation of universal application, not an invented negation inside an English word.'),
+('yi dvags','craving spirits',5,1,'Fourth Tibetan spirit mention, the many-kinds taxonomy; third source mention was resumed as them and is left unwrapped.'),
+("phyi'i",'world around them',3,0,'Complete external-domain relation; positive HTG11856 includes world around them. Phrase depth records the contextual expansion rather than a new lexical definition.'),
+('sgrib pa','obstacles',5,0,'First external obstacles, HTG3196; explanatory prevention-of-relief clause stays unwrapped.'),
+('can','with',5,0,'Possession of first class obstacles, HTG4128.'),
+('sgrib pa','obstacles',5,1,'Second class obstacles. Nang gi is expanded as bodily-parts description and omitted with a reason, not falsely nulled.'),
+('can','with',5,1,'Possession of the second class, second with.'),
+('zas skom','food or drink',5,0,'Established paired consumption compound HTG24957.'),
+('zas','food',7,0,'Unique tighter food member, HTG16642.'),
+('skom','drink',7,0,'Unique tighter contiguous drink member, HTG642.'),
+('nyid','itself',6,0,'Reflexive emphasis on food/drink itself, HTG5714.'),
+("la yod pa'i",'relate to',3,0,'Complete locative/existential relation realized as relate to; full HTG18072 includes relate, not mere possession.'),
+('sgrib pa','obstacles',5,2,'Third class obstacles, third exact English occurrence.'),
+('can','with',5,2,'Possession of the third class, third with.'),
+('du ma','many',5,0,'Plurality of the classes, HTG8270; kinds of is left as taxonomic expansion.'),
+('yod','there are',5,0,'Existential predicate for the taxonomy, HTG18055.'),
+("pa'i phyir",'because',3,0,'Full causal closure governs the explanatory second sentence; this does not break off bound phyir or invent a subject.')
+],
+'PROVISIONAL machine alignment by Codex, Tibetan-first original with own prior source preparation, isolated from the English draft. The third Tibetan yi dvags is resumed as them in not all of them and is omitted; the fourth source mention owns the second plural craving spirits. The explicit some-kinds quantifier is supported by full HTG2545, while only/talking-about and copular frames remain unwrapped. First outer relation phyi\'i is preserved at phrase depth against the positive world around them equivalent. The expanded inner-obstacle description parts of their bodies has no safely separate inner word and remains unwrapped; the actual second obstacles/with atoms are preserved. The third category retains food/drink, reflexive itself and the complete relate-to relation. Source grammar does not license harvesting the full explanatory prevention-of-relief sentence. Two paired compounds each have two unique tighter members. No new errata; identical C15/C18 fields and P7 English establish digital identity only, not independent publication history.')
+
+make(270,'the steel mantra and opposite sensations',[
+('brlan','wet',5,0,'HTG19192.'),
+('zhing','and',6,0,'Wet and flowing coordination; unrelated curated paradise reading is not transferred.'),
+('gsher ba','flowing',5,0,'HTG20149.'),
+('phor pa','glass',5,0,'HTG24066; supplied something remains unwrapped.'),
+('gang','full',5,0,'Fullness has an explicit exponent here, HTG1648.'),
+('las','karmas',5,0,'Plural karmas of three beings; no third source numeral is invented for the English reprise.'),
+('can','with',5,0,'Possession relation, HTG4128; their and three stay outside this atom.'),
+("'gro ba",'beings',5,0,'The three perceivers, curated2677.'),
+('gsum','three',5,0,'First source numeral owns three beings, not the contextual three karmas reprise.'),
+('gyis',None,6,0,'Active perceivers are the English subject; no separate agentive word.'),
+('cig car du','all together',3,0,'Complete simultaneous-viewing adverbial, positive HTG4169.'),
+('bltas pa','look',5,0,'Looking predicate, HTG7117.'),
+("de'i tshe na",'when',3,0,'First complete time expression governs simultaneous viewing.'),
+('dngos po','objects',5,0,'The three resulting objects, HTG3672.'),
+('tshad mas','valid perception',5,0,'Whole inflected technical perception term, HTG15288; the inseparable agentive ending licenses external by, left unwrapped.'),
+('grub pa','confirmed',5,0,'Confirmation predicate, HTG2046; full HTG15331 confirmed by a valid perception supports the whole relation without forcing compound depth.'),
+('gsum','three',5,2,'Second source numeral owns the third English three, the objects.'),
+('skye ba','start to be',5,0,'Onset/existence predicate, HTG703; excludes expletive there.'),
+('dpe','example',5,0,'HTG11195.'),
+('yang','moreover',6,0,'Additive example, HTG17092.'),
+('yod','There is',5,0,'Existential there is for the example; excludes subsequent supplied Suppose there is.'),
+('lcags','steel',5,0,'First steel: material ball, HTG4340.'),
+('gong','ball',5,0,'First ball noun, HTG1869; later ball repetitions are contextual resumptions.'),
+("dmar 'bar ba",'red-hot',5,0,'Established quality compound HTG24696.'),
+('dmar','red',7,0,'Unique tighter color member, positive HTG14697; inside the red-hot parent.'),
+("'bar ba",'hot',7,0,'Unique tighter heat member, positive HTG13333; contiguous member block.'),
+('cha shas','piece',5,0,'The piece providing material cause, HTG4384.'),
+('gcig','one',5,0,'One piece, HTG4216.'),
+('gis',None,6,0,'Agentive piece is active subject of provides, with no separate English exponent.'),
+('nyer len','material cause',5,0,'Technical compound HTG5840.'),
+('dang','and',6,1,'Coordinates material cause and mantra contributing factor, second English and.'),
+('lcags','steel',5,1,'Second steel: the first named mantra.'),
+('sngags','mantra',5,0,'First mantra mention, HTG4027; quotation marks and of remain unwrapped.'),
+('kyis',None,6,0,'Mantra as active contributing subject, no separate agentive exponent.'),
+('lhan cig byed rkyen','contributing factor',5,0,'Technical compound HTG21656.'),
+('byas pa','provides',5,1,'Only source byas pa owns SECOND provides for the contributing factor; first provides is an English parallel predicate.'),
+('brten nas','Due to',3,0,'Complete dependence/causal relation; supplied these two excluded.'),
+('lcags','steel',5,2,'Third steel: the mantra applied in the first hand case.'),
+('sngags','mantra',5,1,'Second English mantra mention, first hand case.'),
+('btab pa','used',5,0,'Application predicate, HTG6532; has is an auxiliary outside the atom.'),
+('lag pas','hand',5,0,'Whole inflected hand word, HTG19218; no attempt to split bound agentive s or capture supplied person.'),
+('reg pa','touch',5,0,'First contact predicate, HTG19107; can and the ball stay outside.'),
+("tsha ba'i",'heat',5,0,'First heat quality, full inflected noun; HTG15245.'),
+('reg bya','sensation',5,0,'First tangible sensation, HTG19110.'),
+('mi',"n't",6,0,'First experiential negation in does not/doesn\'t, confirmed negative-affix convention.'),
+('myong','undergo',5,0,'First experience predicate, HTG14665.'),
+('reg bya','sensation',5,1,'Second sensation, the alternative felt under the mantra.'),
+('gzhan zhig','some other',5,0,'Indefinite other object, explicit local syntax; positive auto-aligned16392 is a reference, not a promotion.'),
+('myong ba','feels',5,0,'Second experience predicate, positive root HTG14665; exact whole source nominal verb retained.'),
+('sngags','mantra',5,2,'Third mantra mention, the untreated hand case; source lcags is omitted in the English abbreviated name.'),
+('ma','not',6,0,'Negation of using the mantra in the second hand case, distinct from two experience negations.'),
+('btab pa','used',5,1,'Second use predicate, under not.'),
+('lag pas','hand',5,1,'Second hand, whole inflected noun; supplied person/on/his not harvested.'),
+('reg pa','touches',5,0,'Second contact predicate, HTG19107.'),
+("tsha ba'i",'heat',5,1,'Second heat quality, for untreated hand.'),
+('reg bya','sensation',5,2,'Third sensation, positively experienced heat.'),
+('myong','feel',5,0,'Third experience predicate; does is supplied auxiliary, despite wider positive glossary does feel.'),
+('reg bya','sensation',5,3,'Fourth sensation, the negated other kind.'),
+('gzhan','other',5,1,'Second other, source contrasts other sensation with heat. Unrelated mined16308 a bodhisattva is not applicable.'),
+('mi','no',6,0,'Final experience negation, separate from no-mantra and earlier does-not-feel-heat.'),
+('myong',None,5,0,'No separately expressed final experience predicate in and no other kind of sensation. English coordinates this object under preceding feel; that preceding predicate is not counted twice. This is explicit elliptical grammar, not unresolved source correspondence.')
+],
+'PROVISIONAL machine alignment by Codex, Tibetan-first original with disclosed prior preparation and no English-first judgments read. Two source gsum numerals own three beings and three objects; the English three karmas is a contextual reprise, not a third source numeral. Complete positive tshad mas grub pa evidence supports confirmed/by/valid perception, retained as separate lexical atoms with the inseparable case relation unwrapped. Only byas pa owns the second provides, for mantra as contributing factor; the first provides is an English parallel predicate. Steel, ball and mantra occurrences are resolved separately; lcags in the final abbreviated mantra reference is omitted, not falsely assigned to an earlier steel. Four reg bya occurrences own the four sensations in order. First myong is undergo, second feels, third feel; final myong is an explicit elliptical null under the English coordinated negative object. Three independent negations distinguish not feeling heat, not using mantra and feeling no other sensation. The two later de\'i tshe na constructions are distributed in the expanded relative/conditional cases, not assigned to the first when. Red-hot has two strictly tighter members. The next moon/sun example belongs to271; P7:25\'s cold wording is not a defect in this steel segment. No source or glossary is changed.')

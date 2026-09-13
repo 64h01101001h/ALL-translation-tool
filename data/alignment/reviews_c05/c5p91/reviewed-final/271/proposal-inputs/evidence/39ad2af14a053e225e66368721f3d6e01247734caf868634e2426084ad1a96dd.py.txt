@@ -1,0 +1,31 @@
+"""Freeze own original directories; any later correction requires a new boundary."""
+from pathlib import Path
+import datetime,hashlib,json
+H=Path(__file__).resolve().parent
+
+def meta(p):
+ b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def freeze(p):
+ target=p/'freeze.json';assert not target.exists()
+ files=[]
+ for f in sorted(p.rglob('*')):
+  if f.is_file():
+   assert not f.is_symlink();r=meta(f);r['relative_path']=str(f.relative_to(p));files.append(r)
+ assert not any('__pycache__' in r['relative_path'] for r in files)
+ payload=dict(schema='independent-original-freeze-v1',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),actual_producer='Codex /root/c05_262_264_english, reused English-first original author',course='C05',seq=int(p.name),baseline='7166534a9f47a201e5ab580a843c14ba2a910891',root=str(p),excluded=['freeze.json'],file_count=len(files),total_bytes=sum(r['bytes'] for r in files),files=files,no_reconciliation_or_semantic_approval=True)
+ target.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n')
+ for r in files:
+  fresh=meta(Path(r['path']));assert fresh['bytes']==r['bytes'] and fresh['sha256']==r['sha256']
+ return dict(**meta(target),file_count=len(files),total_bytes=payload['total_bytes'])
+# Report/spec/body checks before immutable boundary.
+for seq in (271,272,273):
+ p=H.parent/str(seq);result=json.loads((p/'canonical-result.json').read_bytes())
+ for key,filename in [('spec','spec.json'),('body','body.html')]:assert meta(p/filename)['sha256']==result[key+'_sha256']
+ assert 'PROVISIONAL' in (p/'spec.json').read_text()
+ assert len((p/'report.md').read_text().splitlines())==12
+ assert (p/'errata.json').read_text().strip()=='[]'
+shared=freeze(H);print(json.dumps(dict(seq=271,**shared)))
+for seq in (272,273):
+ p=H.parent/str(seq)
+ (p/'shared-freeze-reference.json').write_text(json.dumps(dict(scope='Complete shared English-first material originals, complete queries and verification in 271; read obligations remain original-specific',shared_freeze=shared),indent=2)+'\n')
+ print(json.dumps(dict(seq=seq,**freeze(p))))

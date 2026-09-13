@@ -1,0 +1,15 @@
+from pathlib import Path
+import json,hashlib
+O=Path(__file__).resolve().parent;ART=O.parents[2];B=ART/'C05-271-273';records=json.loads((O/'input-manifest.json').read_bytes());known={r['original'] for r in records};external=[]
+paths=list((B/'landing').rglob('*'))+[B/'freeze-final-payload-before-staging.py',B/'freeze-final-payload-before-staging-v2.py']
+for p in sorted(paths):
+ if not p.is_file() or str(p) in known:continue
+ raw=p.read_bytes();record=dict(original=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+ if 'payload-freeze' in p.parts:
+  record['retention']='Complete original frozen payload bytes retained externally, not duplicated into review bank or this preparation';external.append(record)
+ else:
+  relative=Path('inputs/payload-completion')/p.relative_to(B);target=O/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw);record['copy']=str(relative);records.append(record)
+for r in external:
+ raw=Path(r['original']).read_bytes();assert len(raw)==r['bytes'] and hashlib.sha256(raw).hexdigest()==r['sha256']
+(O/'input-manifest.json').write_text(json.dumps(records,indent=2)+'\n');(O/'external-payload-inputs.json').write_text(json.dumps(external,indent=2)+'\n')
+print('Additional ordinary proof inputs retained; external frozen payload files',len(external),'bytes',sum(r['bytes']for r in external))

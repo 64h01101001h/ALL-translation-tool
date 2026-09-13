@@ -1,0 +1,664 @@
+{
+  "status": "PASS retained real attempts and exact source transitions",
+  "attempts": [
+    {
+      "label": "actual-predicates",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "probe_actual.py"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 360,
+          "sha256": "47094d31cdede1ce5e1ea23c77b50a78b624cc60000b562df585b18ed7c31eaf"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      },
+      "test_count": null,
+      "all_failure_identities": []
+    },
+    {
+      "label": "actual-predicates-final",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "probe_actual.py"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 360,
+          "sha256": "1694dd3c18ffd27c33618e9185a5deb8271ce7ffeed74e6f5eeedf69c2d8562b"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      },
+      "test_count": null,
+      "all_failure_identities": []
+    },
+    {
+      "label": "diff-completion-red",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "test_diff_completion.py"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "exit": 1,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 1865,
+          "sha256": "1dbde7bfaaf301f0db58a27dcba517bb855e8a8a9d8fa83b838edeb6814c735d"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        }
+      },
+      "test_count": 2,
+      "all_failure_identities": [
+        "test_header_pair_replaced_before_any_hunk_is_ambiguous (__main__.Completion.test_header_pair_replaced_before_any_hunk_is_ambiguous)",
+        "test_terminal_header_pair_without_hunk_is_truncated (__main__.Completion.test_terminal_header_pair_without_hunk_is_truncated)"
+      ]
+    },
+    {
+      "label": "final-60-tests",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "-v",
+          "test_corrections",
+          "test_original_predicates",
+          "test_diff_completion",
+          "test_physical_lf_retention"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "FIXTURE_RUN": "final-60"
+        }
+      },
+      "exit": 1,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 6651,
+          "sha256": "50eae03b98a7db94bb55047daf2f8859de90eadb3d5cd1cd8657e8779a886b7b"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        }
+      },
+      "test_count": 60,
+      "all_failure_identities": [
+        "test_preexisting_source_owned_lf_mixed_warnings_remain_valid (test_physical_lf_retention.Retention.test_preexisting_source_owned_lf_mixed_warnings_remain_valid)"
+      ]
+    },
+    {
+      "label": "final-corrected-60-tests",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "-v",
+          "test_corrections",
+          "test_original_predicates",
+          "test_diff_completion",
+          "test_physical_lf_retention"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "FIXTURE_RUN": "final-corrected"
+        }
+      },
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 5687,
+          "sha256": "b27c5331f99f80a5372d52de0aecc682192575749c2b0e2ab3650e6041f1cd09"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      },
+      "test_count": 60,
+      "all_failure_identities": []
+    },
+    {
+      "label": "final-tests",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "-v",
+          "test_corrections",
+          "test_original_predicates",
+          "test_diff_completion"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "FIXTURE_RUN": "final"
+        }
+      },
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 5519,
+          "sha256": "af1143c2d59e4b7ce1838e598d5b7676869b2d24c25152085021c69b3ac088ed"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      },
+      "test_count": 59,
+      "all_failure_identities": []
+    },
+    {
+      "label": "finalize",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "finalize.py"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 183,
+          "sha256": "dccff1e59fed49eb4ccbd9cc162e9470340abb74d1b0babd3a28f2637aec16e3"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      },
+      "test_count": null,
+      "all_failure_identities": []
+    },
+    {
+      "label": "green-corrections",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "test_corrections.py"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "FIXTURE_RUN": "green"
+        }
+      },
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 3261,
+          "sha256": "6adcda386865ab8e8e764fa450070c510bbafa2578354c1fe2032a64cfb688de"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      },
+      "test_count": 41,
+      "all_failure_identities": []
+    },
+    {
+      "label": "lf-retention-red",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "test_physical_lf_retention.py"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "exit": 1,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 1506,
+          "sha256": "942933c0e96cd0fd5f4eb86737740b7b297d8498336b3eecc890759376b51309"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        }
+      },
+      "test_count": 1,
+      "all_failure_identities": [
+        "test_preexisting_source_owned_lf_mixed_warnings_remain_valid (__main__.Retention.test_preexisting_source_owned_lf_mixed_warnings_remain_valid)"
+      ]
+    },
+    {
+      "label": "prepare-candidate",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "prepare_candidate.py"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 21,
+          "sha256": "8d5e176c7f23b863a3d8b526c7913ac434ed1c31279932b5ff39dd21721cc9d1"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      },
+      "test_count": null,
+      "all_failure_identities": []
+    },
+    {
+      "label": "red-corrected",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "test_corrections.py"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CANDIDATE": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273/whitespace273.py",
+          "FIXTURE_RUN": "red-corrected"
+        }
+      },
+      "exit": 1,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 46854,
+          "sha256": "3406969436c5f59c6dcd2de915fa6f423fb23d5edb550ff641476100166388c6"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        }
+      },
+      "test_count": 41,
+      "all_failure_identities": [
+        "test_actual_physical_00 (__main__.Tests.test_actual_physical_00)",
+        "test_actual_physical_01 (__main__.Tests.test_actual_physical_01)",
+        "test_actual_physical_02 (__main__.Tests.test_actual_physical_02)",
+        "test_actual_physical_03 (__main__.Tests.test_actual_physical_03)",
+        "test_actual_physical_04 (__main__.Tests.test_actual_physical_04)",
+        "test_actual_physical_05 (__main__.Tests.test_actual_physical_05)",
+        "test_actual_physical_06 (__main__.Tests.test_actual_physical_06)",
+        "test_actual_physical_07 (__main__.Tests.test_actual_physical_07)",
+        "test_actual_physical_08 (__main__.Tests.test_actual_physical_08)",
+        "test_actual_physical_09 (__main__.Tests.test_actual_physical_09)",
+        "test_actual_physical_10 (__main__.Tests.test_actual_physical_10)",
+        "test_actual_physical_11 (__main__.Tests.test_actual_physical_11)",
+        "test_actual_physical_12 (__main__.Tests.test_actual_physical_12)",
+        "test_actual_physical_13 (__main__.Tests.test_actual_physical_13)",
+        "test_actual_physical_14 (__main__.Tests.test_actual_physical_14)",
+        "test_actual_physical_15 (__main__.Tests.test_actual_physical_15)",
+        "test_actual_physical_16 (__main__.Tests.test_actual_physical_16)",
+        "test_actual_physical_17 (__main__.Tests.test_actual_physical_17)",
+        "test_actual_physical_18 (__main__.Tests.test_actual_physical_18)",
+        "test_actual_physical_19 (__main__.Tests.test_actual_physical_19)",
+        "test_actual_physical_20 (__main__.Tests.test_actual_physical_20)",
+        "test_actual_physical_21 (__main__.Tests.test_actual_physical_21)",
+        "test_actual_physical_22 (__main__.Tests.test_actual_physical_22)",
+        "test_actual_physical_23 (__main__.Tests.test_actual_physical_23)",
+        "test_actual_physical_24 (__main__.Tests.test_actual_physical_24)",
+        "test_actual_physical_25 (__main__.Tests.test_actual_physical_25)",
+        "test_actual_physical_26 (__main__.Tests.test_actual_physical_26)",
+        "test_actual_physical_27 (__main__.Tests.test_actual_physical_27)",
+        "test_actual_physical_28 (__main__.Tests.test_actual_physical_28)",
+        "test_actual_physical_29 (__main__.Tests.test_actual_physical_29)",
+        "test_actual_physical_30 (__main__.Tests.test_actual_physical_30)",
+        "test_actual_physical_31 (__main__.Tests.test_actual_physical_31)",
+        "test_actual_physical_32 (__main__.Tests.test_actual_physical_32)",
+        "test_actual_root_diff_mixed_eof (__main__.Tests.test_actual_root_diff_mixed_eof)",
+        "test_constructor_review_retarget (__main__.Tests.test_constructor_review_retarget)",
+        "test_constructor_root_same_byte_retarget (__main__.Tests.test_constructor_root_same_byte_retarget)",
+        "test_constructor_worktree_retarget (__main__.Tests.test_constructor_worktree_retarget)",
+        "test_diff_negative_forms (__main__.Tests.test_diff_negative_forms)"
+      ]
+    },
+    {
+      "label": "red-original",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "test_corrections.py"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "exit": 1,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 49345,
+          "sha256": "482dd0d7e7cda6fdaab7099eafc48572d055181d02b7ae2f342f32fee5040f7c"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        }
+      },
+      "test_count": 41,
+      "all_failure_identities": [
+        "test_actual_physical_00 (__main__.Tests.test_actual_physical_00)",
+        "test_actual_physical_01 (__main__.Tests.test_actual_physical_01)",
+        "test_actual_physical_02 (__main__.Tests.test_actual_physical_02)",
+        "test_actual_physical_03 (__main__.Tests.test_actual_physical_03)",
+        "test_actual_physical_04 (__main__.Tests.test_actual_physical_04)",
+        "test_actual_physical_05 (__main__.Tests.test_actual_physical_05)",
+        "test_actual_physical_06 (__main__.Tests.test_actual_physical_06)",
+        "test_actual_physical_07 (__main__.Tests.test_actual_physical_07)",
+        "test_actual_physical_08 (__main__.Tests.test_actual_physical_08)",
+        "test_actual_physical_09 (__main__.Tests.test_actual_physical_09)",
+        "test_actual_physical_10 (__main__.Tests.test_actual_physical_10)",
+        "test_actual_physical_11 (__main__.Tests.test_actual_physical_11)",
+        "test_actual_physical_12 (__main__.Tests.test_actual_physical_12)",
+        "test_actual_physical_13 (__main__.Tests.test_actual_physical_13)",
+        "test_actual_physical_14 (__main__.Tests.test_actual_physical_14)",
+        "test_actual_physical_15 (__main__.Tests.test_actual_physical_15)",
+        "test_actual_physical_16 (__main__.Tests.test_actual_physical_16)",
+        "test_actual_physical_17 (__main__.Tests.test_actual_physical_17)",
+        "test_actual_physical_18 (__main__.Tests.test_actual_physical_18)",
+        "test_actual_physical_19 (__main__.Tests.test_actual_physical_19)",
+        "test_actual_physical_20 (__main__.Tests.test_actual_physical_20)",
+        "test_actual_physical_21 (__main__.Tests.test_actual_physical_21)",
+        "test_actual_physical_22 (__main__.Tests.test_actual_physical_22)",
+        "test_actual_physical_23 (__main__.Tests.test_actual_physical_23)",
+        "test_actual_physical_24 (__main__.Tests.test_actual_physical_24)",
+        "test_actual_physical_25 (__main__.Tests.test_actual_physical_25)",
+        "test_actual_physical_26 (__main__.Tests.test_actual_physical_26)",
+        "test_actual_physical_27 (__main__.Tests.test_actual_physical_27)",
+        "test_actual_physical_28 (__main__.Tests.test_actual_physical_28)",
+        "test_actual_physical_29 (__main__.Tests.test_actual_physical_29)",
+        "test_actual_physical_30 (__main__.Tests.test_actual_physical_30)",
+        "test_actual_physical_31 (__main__.Tests.test_actual_physical_31)",
+        "test_actual_physical_32 (__main__.Tests.test_actual_physical_32)",
+        "test_actual_root_diff_mixed_eof (__main__.Tests.test_actual_root_diff_mixed_eof)",
+        "test_constructor_review_retarget (__main__.Tests.test_constructor_review_retarget)",
+        "test_constructor_root_same_byte_retarget (__main__.Tests.test_constructor_root_same_byte_retarget)",
+        "test_constructor_stable_aliases (__main__.Tests.test_constructor_stable_aliases)",
+        "test_constructor_worktree_retarget (__main__.Tests.test_constructor_worktree_retarget)",
+        "test_diff_negative_forms (__main__.Tests.test_diff_negative_forms)"
+      ]
+    },
+    {
+      "label": "syntax",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "-c",
+          "from pathlib import Path; p=Path('whitespace273.py');compile(p.read_bytes(),str(p),'exec');print('PASS syntax',len(p.read_bytes()))"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 18,
+          "sha256": "93e95f86b0e203b690520a46959c51e3972b8336fd41a424075dceaa127f2b3a"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      },
+      "test_count": null,
+      "all_failure_identities": []
+    },
+    {
+      "label": "syntax-final",
+      "command": {
+        "argv": [
+          "python3",
+          "-B",
+          "-c",
+          "from pathlib import Path; p=Path('whitespace273.py');compile(p.read_bytes(),str(p),'exec');print('PASS syntax',len(p.read_bytes()))"
+        ],
+        "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 18,
+          "sha256": "5130815f5dea4746cb38bceb4007c096b2153acf05532aacc188108e6497ecff"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdin.bin": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "exit.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      },
+      "test_count": null,
+      "all_failure_identities": []
+    }
+  ],
+  "source_changes": [
+    {
+      "before": "attempts/diff-completion-red/whitespace273.py",
+      "before_pin": {
+        "bytes": 18629,
+        "sha256": "19680cc747418bd6554cd13fe605ab35f8353ae5b78dfc7c351dfd96b85e45f9"
+      },
+      "after": "attempts/lf-retention-red/whitespace273.py",
+      "after_pin": {
+        "bytes": 18781,
+        "sha256": "480b75e8d71b6122b6f1b56344b20745dca5b02a97d6cd60fdf451dcd5dedbcf"
+      },
+      "complete_diff": "--- attempts/diff-completion-red/whitespace273.py\n+++ attempts/lf-retention-red/whitespace273.py\n@@ -64,7 +64,7 @@\n     \"\"\"\n     lines = raw.split(b'\\n'); lines = lines[:-1] if lines and lines[-1] == b'' else lines\n     hunk = re.compile(rb'^@@ -(\\d+)(?:,(\\d+))? \\+(\\d+)(?:,(\\d+))? @@(?:.*)$')\n-    context = set(); old_left = new_left = 0; pair = False; saw_hunk = False; i = 0\n+    context = set(); old_left = new_left = 0; pair = False; pair_hunk = False; saw_hunk = False; i = 0\n     while i < len(lines):\n         line = lines[i]\n         if old_left or new_left:\n@@ -77,14 +77,15 @@\n             if i < len(lines) and lines[i] == b'\\\\ No newline at end of file': i += 1\n             continue\n         if line.startswith(b'--- '):\n+            assert not pair or pair_hunk, 'File header pair has no complete hunk'\n             assert len(line) > 4 and i+1 < len(lines) and lines[i+1].startswith(b'+++ ') and len(lines[i+1]) > 4\n-            pair = True; i += 2; continue\n+            pair = True; pair_hunk = False; i += 2; continue\n         match = hunk.fullmatch(line)\n         assert pair and match, ('Unrecognized or ambiguous diff framing', i+1, line)\n         old_left = int(match.group(2) or b'1'); new_left = int(match.group(4) or b'1')\n         assert old_left or new_left\n-        saw_hunk = True; i += 1\n-    assert saw_hunk and not old_left and not new_left\n+        saw_hunk = True; pair_hunk = True; i += 1\n+    assert saw_hunk and pair_hunk and not old_left and not new_left\n     return context\n \n def ordinary_predicate(raw, grouped):\n"
+    },
+    {
+      "before": "attempts/lf-retention-red/whitespace273.py",
+      "before_pin": {
+        "bytes": 18781,
+        "sha256": "480b75e8d71b6122b6f1b56344b20745dca5b02a97d6cd60fdf451dcd5dedbcf"
+      },
+      "after": "whitespace273.py",
+      "after_pin": {
+        "bytes": 18898,
+        "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+      },
+      "complete_diff": "--- attempts/lf-retention-red/whitespace273.py\n+++ whitespace273.py\n@@ -116,13 +116,14 @@\n                 matches.append(dict(witness=item, byte_range=[lo, lo+len(raw)])); start = lo+1\n     if matches:\n         if 'new blank line at EOF.' in grouped:\n-            # This exception exists only after whole-range ownership, never in\n-            # the report-line fallback. Reject a fabricated all-blank fragment.\n-            assert raw.strip()\n+            # Preserve the original strict empty-LF rule. The added CRLF\n+            # exception exists only after whole-range ownership, never in\n+            # the report-line fallback; no fabricated all-blank CRLF fragment.\n             lines = raw.split(b'\\n')\n             for number in grouped['new blank line at EOF.']:\n                 tail = lines[number-1:]\n-                assert len(tail) >= 2 and tail[-1] == b''\n+                if all(value == b'' for value in tail): continue\n+                assert raw.strip() and len(tail) >= 2 and tail[-1] == b''\n                 assert all(value == b'\\r' for value in tail[:-1]), 'Not exact empty CRLF source tail'\n         return dict(kind='physical_bytes', full_range_witnesses=matches)\n     assert set(grouped) == {'trailing whitespace.'}\n"
+    },
+    {
+      "before": "attempts/red-original/test_corrections.py",
+      "before_pin": {
+        "bytes": 5993,
+        "sha256": "b11ab4f569f04f40a3d369dfdfef37d63ed98630f8512385382cf8885fed22e5"
+      },
+      "after": "test_corrections.py",
+      "after_pin": {
+        "bytes": 6074,
+        "sha256": "1f48cc5035272d9ef86e214c98ba20b11ea6629e6f1afc2de89a24cd027f8b9f"
+      },
+      "complete_diff": "--- attempts/red-original/test_corrections.py\n+++ test_corrections.py\n@@ -23,7 +23,7 @@\n   install=d/'install';install.mkdir();code=install/'whitespace273.py';code.write_bytes(SOURCE.read_bytes());local=module(code)\n   w1=d/'worktree-one';w2=d/'worktree-two';w1.mkdir();w2.mkdir();w=d/'worktree-alias';w.symlink_to(w1,target_is_directory=True)\n   r1=d/'one/C05-271-273/semantic-review';r2=d/'two/C05-271-273/semantic-review';r1.mkdir(parents=True);r2.mkdir(parents=True);review=d/'review-alias';review.symlink_to(r1,target_is_directory=True)\n-  one=d/'one.json';two=d/'two.json';one.write_bytes(b'{\"same\":\"bytes\"}\\n');two.write_bytes(one.read_bytes());root=d/'root-alias.json';root.symlink_to(one)\n+  manifest_dir=d/'manifests';manifest_dir.mkdir();one=manifest_dir/'one.json';two=manifest_dir/'two.json';one.write_bytes(b'{\"same\":\"bytes\"}\\n');two.write_bytes(one.read_bytes());root=manifest_dir/'root-alias.json';root.symlink_to(one)\n   args=types.SimpleNamespace(worktree=str(w),review=str(review),root_manifest=str(root),output=str(d/'run-output'),mode='prepare')\n   run=local.Run(args);run.read(run.root_manifest)\n   if retarget:\n"
+    },
+    {
+      "before": "attempts/final-60-tests/test_physical_lf_retention.py",
+      "before_pin": {
+        "bytes": 478,
+        "sha256": "c7695ccde682c3d84aa7ef54222d312db575273db739231f601afde11991ba61"
+      },
+      "after": "test_physical_lf_retention.py",
+      "after_pin": {
+        "bytes": 478,
+        "sha256": "3e92285a47836a46296dadb5173c36dfec21cf3fcd7ac3baab30ef03915be0db"
+      },
+      "complete_diff": "--- attempts/final-60-tests/test_physical_lf_retention.py\n+++ test_physical_lf_retention.py\n@@ -3,5 +3,5 @@\n class Retention(unittest.TestCase):\n  def test_preexisting_source_owned_lf_mixed_warnings_remain_valid(self):\n   raw=b'A \\n\\n';r=classify_physical(raw,{'trailing whitespace.':[1],'new blank line at EOF.':[2]},[({'path':'TOOLING_ONLY'},b'prefix\\n'+raw)])\n-  self.assertEqual(r['kind'],'physical_bytes');self.assertEqual(r['full_range_witnesses'][0]['byte_range'],[7,12])\n+  self.assertEqual(r['kind'],'physical_bytes');self.assertEqual(r['full_range_witnesses'][0]['byte_range'],[7,11])\n if __name__=='__main__':unittest.main(verbosity=2)\n"
+    }
+  ],
+  "red_original_environment_limit": "The first run_capture command.json records only PYTHONDONTWRITEBYTECODE. Later fixture-correction.md explicitly records CANDIDATE and FIXTURE_RUN for that original run; traceback and preserved installed fixture source corroborate old code. This supplemental statement is not retroactively presented as contemporaneous command metadata.",
+  "initial_review_retained": "candidate/history/whitespace-review-273/",
+  "initial_candidate_retained": "candidate/history/whitespace-candidate-273/",
+  "retained_test_suite_reruns_by_reviewer": 0
+}

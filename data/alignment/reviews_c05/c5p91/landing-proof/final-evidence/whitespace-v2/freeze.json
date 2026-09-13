@@ -1,0 +1,2649 @@
+{
+  "status": "FROZEN_V2_TOOLING_CANDIDATE_REQUIRES_INDEPENDENT_REREVIEW",
+  "utc": "2026-09-13T04:17:40.902437+00:00",
+  "file_count": 587,
+  "total_bytes": 139664037,
+  "excluded": [
+    "freeze.json"
+  ],
+  "symlinks": {
+    "fixtures/final/review-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/review-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/review-retarget/manifests/one.json"
+    },
+    "fixtures/final/review-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/review-retarget/two/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/review-retarget/two/C05-271-273/semantic-review"
+    },
+    "fixtures/final/review-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/review-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/review-retarget/worktree-one"
+    },
+    "fixtures/final/root-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-retarget/manifests/two.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-retarget/manifests/two.json"
+    },
+    "fixtures/final/root-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/final/root-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-retarget/worktree-one"
+    },
+    "fixtures/final/root-stable/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-stable/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-stable/manifests/one.json"
+    },
+    "fixtures/final/root-stable/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-stable/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-stable/one/C05-271-273/semantic-review"
+    },
+    "fixtures/final/root-stable/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-stable/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/root-stable/worktree-one"
+    },
+    "fixtures/final/worktree-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/worktree-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/worktree-retarget/manifests/one.json"
+    },
+    "fixtures/final/worktree-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/worktree-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/worktree-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/final/worktree-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/worktree-retarget/worktree-two",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final/worktree-retarget/worktree-two"
+    },
+    "fixtures/final-60/review-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/review-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/review-retarget/manifests/one.json"
+    },
+    "fixtures/final-60/review-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/review-retarget/two/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/review-retarget/two/C05-271-273/semantic-review"
+    },
+    "fixtures/final-60/review-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/review-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/review-retarget/worktree-one"
+    },
+    "fixtures/final-60/root-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-retarget/manifests/two.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-retarget/manifests/two.json"
+    },
+    "fixtures/final-60/root-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/final-60/root-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-retarget/worktree-one"
+    },
+    "fixtures/final-60/root-stable/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-stable/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-stable/manifests/one.json"
+    },
+    "fixtures/final-60/root-stable/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-stable/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-stable/one/C05-271-273/semantic-review"
+    },
+    "fixtures/final-60/root-stable/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-stable/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/root-stable/worktree-one"
+    },
+    "fixtures/final-60/worktree-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/worktree-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/worktree-retarget/manifests/one.json"
+    },
+    "fixtures/final-60/worktree-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/worktree-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/worktree-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/final-60/worktree-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/worktree-retarget/worktree-two",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-60/worktree-retarget/worktree-two"
+    },
+    "fixtures/final-corrected/review-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/review-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/review-retarget/manifests/one.json"
+    },
+    "fixtures/final-corrected/review-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/review-retarget/two/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/review-retarget/two/C05-271-273/semantic-review"
+    },
+    "fixtures/final-corrected/review-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/review-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/review-retarget/worktree-one"
+    },
+    "fixtures/final-corrected/root-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-retarget/manifests/two.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-retarget/manifests/two.json"
+    },
+    "fixtures/final-corrected/root-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/final-corrected/root-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-retarget/worktree-one"
+    },
+    "fixtures/final-corrected/root-stable/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-stable/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-stable/manifests/one.json"
+    },
+    "fixtures/final-corrected/root-stable/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-stable/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-stable/one/C05-271-273/semantic-review"
+    },
+    "fixtures/final-corrected/root-stable/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-stable/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/root-stable/worktree-one"
+    },
+    "fixtures/final-corrected/worktree-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/worktree-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/worktree-retarget/manifests/one.json"
+    },
+    "fixtures/final-corrected/worktree-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/worktree-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/worktree-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/final-corrected/worktree-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/worktree-retarget/worktree-two",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/final-corrected/worktree-retarget/worktree-two"
+    },
+    "fixtures/green/review-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/review-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/review-retarget/manifests/one.json"
+    },
+    "fixtures/green/review-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/review-retarget/two/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/review-retarget/two/C05-271-273/semantic-review"
+    },
+    "fixtures/green/review-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/review-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/review-retarget/worktree-one"
+    },
+    "fixtures/green/root-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-retarget/manifests/two.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-retarget/manifests/two.json"
+    },
+    "fixtures/green/root-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/green/root-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-retarget/worktree-one"
+    },
+    "fixtures/green/root-stable/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-stable/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-stable/manifests/one.json"
+    },
+    "fixtures/green/root-stable/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-stable/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-stable/one/C05-271-273/semantic-review"
+    },
+    "fixtures/green/root-stable/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-stable/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/root-stable/worktree-one"
+    },
+    "fixtures/green/worktree-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/worktree-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/worktree-retarget/manifests/one.json"
+    },
+    "fixtures/green/worktree-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/worktree-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/worktree-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/green/worktree-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/worktree-retarget/worktree-two",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/green/worktree-retarget/worktree-two"
+    },
+    "fixtures/red/review-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/review-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/review-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/red/review-retarget/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/review-retarget/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/review-retarget/one.json"
+    },
+    "fixtures/red/review-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/review-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/review-retarget/worktree-one"
+    },
+    "fixtures/red/root-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/red/root-retarget/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-retarget/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-retarget/one.json"
+    },
+    "fixtures/red/root-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-retarget/worktree-one"
+    },
+    "fixtures/red/root-stable/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-stable/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-stable/one/C05-271-273/semantic-review"
+    },
+    "fixtures/red/root-stable/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-stable/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-stable/one.json"
+    },
+    "fixtures/red/root-stable/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-stable/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/root-stable/worktree-one"
+    },
+    "fixtures/red/worktree-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/worktree-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/worktree-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/red/worktree-retarget/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/worktree-retarget/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/worktree-retarget/one.json"
+    },
+    "fixtures/red/worktree-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/worktree-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red/worktree-retarget/worktree-one"
+    },
+    "fixtures/red-corrected/review-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/review-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/review-retarget/manifests/one.json"
+    },
+    "fixtures/red-corrected/review-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/review-retarget/two/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/review-retarget/two/C05-271-273/semantic-review"
+    },
+    "fixtures/red-corrected/review-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/review-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/review-retarget/worktree-one"
+    },
+    "fixtures/red-corrected/root-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-retarget/manifests/two.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-retarget/manifests/two.json"
+    },
+    "fixtures/red-corrected/root-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/red-corrected/root-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-retarget/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-retarget/worktree-one"
+    },
+    "fixtures/red-corrected/root-stable/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-stable/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-stable/manifests/one.json"
+    },
+    "fixtures/red-corrected/root-stable/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-stable/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-stable/one/C05-271-273/semantic-review"
+    },
+    "fixtures/red-corrected/root-stable/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-stable/worktree-one",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/root-stable/worktree-one"
+    },
+    "fixtures/red-corrected/worktree-retarget/manifests/root-alias.json": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/worktree-retarget/manifests/one.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/worktree-retarget/manifests/one.json"
+    },
+    "fixtures/red-corrected/worktree-retarget/review-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/worktree-retarget/one/C05-271-273/semantic-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/worktree-retarget/one/C05-271-273/semantic-review"
+    },
+    "fixtures/red-corrected/worktree-retarget/worktree-alias": {
+      "target": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/worktree-retarget/worktree-two",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/whitespace-candidate-273-v2/fixtures/red-corrected/worktree-retarget/worktree-two"
+    }
+  },
+  "files": {
+    "actual-predicate-results.json": {
+      "bytes": 1686565,
+      "sha256": "b85b48466f2f4ab1e1c7097000f606ff14359005b64e34e12df295eab67aa852"
+    },
+    "actual-reopened-aliases.json": {
+      "bytes": 48319,
+      "sha256": "9d1b87b268340baa41d077a928f0441900556efc296aa24cd5d9aead576b2447"
+    },
+    "attempts/actual-predicates/actual-predicate-results.json": {
+      "bytes": 1686565,
+      "sha256": "77296cb2441990162342452b40e5be3b8f3bb20d7352f36859e21ccb5583b0c3"
+    },
+    "attempts/actual-predicates/actual-reopened-aliases.json": {
+      "bytes": 48319,
+      "sha256": "9d1b87b268340baa41d077a928f0441900556efc296aa24cd5d9aead576b2447"
+    },
+    "attempts/actual-predicates/command.json": {
+      "bytes": 278,
+      "sha256": "bf736ba39f96495a2a5c8852458b8925d92e6320f446bc01dea7676af01ea79a"
+    },
+    "attempts/actual-predicates/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "attempts/actual-predicates/probe_actual.py": {
+      "bytes": 2775,
+      "sha256": "5a6bc984728d66e686c1a39ec91be2f12b42c7b124ccfc66075ad77f801f7c0a"
+    },
+    "attempts/actual-predicates/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/actual-predicates/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/actual-predicates/stdout": {
+      "bytes": 360,
+      "sha256": "47094d31cdede1ce5e1ea23c77b50a78b624cc60000b562df585b18ed7c31eaf"
+    },
+    "attempts/actual-predicates/whitespace273.py": {
+      "bytes": 18781,
+      "sha256": "480b75e8d71b6122b6f1b56344b20745dca5b02a97d6cd60fdf451dcd5dedbcf"
+    },
+    "attempts/actual-predicates-final/command.json": {
+      "bytes": 278,
+      "sha256": "bf736ba39f96495a2a5c8852458b8925d92e6320f446bc01dea7676af01ea79a"
+    },
+    "attempts/actual-predicates-final/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "attempts/actual-predicates-final/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/actual-predicates-final/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/actual-predicates-final/stdout": {
+      "bytes": 360,
+      "sha256": "1694dd3c18ffd27c33618e9185a5deb8271ce7ffeed74e6f5eeedf69c2d8562b"
+    },
+    "attempts/diff-completion-red/command.json": {
+      "bytes": 286,
+      "sha256": "2eb53895064a8ff802519982917d2a0c6c54dff0059e1a09b7895e88ca544642"
+    },
+    "attempts/diff-completion-red/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "attempts/diff-completion-red/stderr": {
+      "bytes": 1865,
+      "sha256": "1dbde7bfaaf301f0db58a27dcba517bb855e8a8a9d8fa83b838edeb6814c735d"
+    },
+    "attempts/diff-completion-red/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/diff-completion-red/stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/diff-completion-red/test_diff_completion.py": {
+      "bytes": 655,
+      "sha256": "8f0616996d76b5ed04be43d4df5f9c9be43b4798ce7567fc16e7b8678c9a0085"
+    },
+    "attempts/diff-completion-red/whitespace273.py": {
+      "bytes": 18629,
+      "sha256": "19680cc747418bd6554cd13fe605ab35f8353ae5b78dfc7c351dfd96b85e45f9"
+    },
+    "attempts/final-60-tests/command.json": {
+      "bytes": 440,
+      "sha256": "9b173e84a0ba46e578b2db72cb0b238766cb917cc9d67f262aaa71fd045ecc41"
+    },
+    "attempts/final-60-tests/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "attempts/final-60-tests/fixture-correction.md": {
+      "bytes": 230,
+      "sha256": "f93a552239dfc842b33a7de6e12be2f6554a8ff307694ec8356b0ad3c1cead04"
+    },
+    "attempts/final-60-tests/stderr": {
+      "bytes": 6651,
+      "sha256": "50eae03b98a7db94bb55047daf2f8859de90eadb3d5cd1cd8657e8779a886b7b"
+    },
+    "attempts/final-60-tests/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/final-60-tests/stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/final-60-tests/test_physical_lf_retention.py": {
+      "bytes": 478,
+      "sha256": "c7695ccde682c3d84aa7ef54222d312db575273db739231f601afde11991ba61"
+    },
+    "attempts/final-60-tests/whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    },
+    "attempts/final-corrected-60-tests/command.json": {
+      "bytes": 447,
+      "sha256": "b33c3cae7f2b617f997c46bbdf5f459b8516ec9dc8d6d6015cf036b346172b6a"
+    },
+    "attempts/final-corrected-60-tests/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "attempts/final-corrected-60-tests/stderr": {
+      "bytes": 5687,
+      "sha256": "b27c5331f99f80a5372d52de0aecc682192575749c2b0e2ab3650e6041f1cd09"
+    },
+    "attempts/final-corrected-60-tests/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/final-corrected-60-tests/stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/final-tests/command.json": {
+      "bytes": 403,
+      "sha256": "7a70f8f4911874d61d73b8592bd1a24759872bde3c5e78820e098ebd5e24267b"
+    },
+    "attempts/final-tests/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "attempts/final-tests/stderr": {
+      "bytes": 5519,
+      "sha256": "af1143c2d59e4b7ce1838e598d5b7676869b2d24c25152085021c69b3ac088ed"
+    },
+    "attempts/final-tests/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/final-tests/stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/finalize/command.json": {
+      "bytes": 274,
+      "sha256": "97d6bbd35d2c80e866e774a3fda3e988d1005915c6b79f3a4a787d79ed7a2ccf"
+    },
+    "attempts/finalize/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "attempts/finalize/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/finalize/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/finalize/stdout": {
+      "bytes": 183,
+      "sha256": "dccff1e59fed49eb4ccbd9cc162e9470340abb74d1b0babd3a28f2637aec16e3"
+    },
+    "attempts/green-corrections/command.json": {
+      "bytes": 310,
+      "sha256": "785ff01478fa74493f168f11ca671f2fbae65c11f75b23c51b3e64f701742473"
+    },
+    "attempts/green-corrections/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "attempts/green-corrections/stderr": {
+      "bytes": 3261,
+      "sha256": "6adcda386865ab8e8e764fa450070c510bbafa2578354c1fe2032a64cfb688de"
+    },
+    "attempts/green-corrections/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/green-corrections/stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/lf-retention-red/command.json": {
+      "bytes": 292,
+      "sha256": "a885ac34f187bf32123f58c2483fd899b2dc3633d45f9ca1148189092ab41b2e"
+    },
+    "attempts/lf-retention-red/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "attempts/lf-retention-red/stderr": {
+      "bytes": 1506,
+      "sha256": "942933c0e96cd0fd5f4eb86737740b7b297d8498336b3eecc890759376b51309"
+    },
+    "attempts/lf-retention-red/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/lf-retention-red/stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/lf-retention-red/test_physical_lf_retention.py": {
+      "bytes": 478,
+      "sha256": "c7695ccde682c3d84aa7ef54222d312db575273db739231f601afde11991ba61"
+    },
+    "attempts/lf-retention-red/whitespace273.py": {
+      "bytes": 18781,
+      "sha256": "480b75e8d71b6122b6f1b56344b20745dca5b02a97d6cd60fdf451dcd5dedbcf"
+    },
+    "attempts/prepare-candidate/command.json": {
+      "bytes": 283,
+      "sha256": "920b186b44d516eb49411537d786e0b648799da22ad80add02191882c505c98f"
+    },
+    "attempts/prepare-candidate/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "attempts/prepare-candidate/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/prepare-candidate/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/prepare-candidate/stdout": {
+      "bytes": 21,
+      "sha256": "8d5e176c7f23b863a3d8b526c7913ac434ed1c31279932b5ff39dd21721cc9d1"
+    },
+    "attempts/red-corrected/command.json": {
+      "bytes": 482,
+      "sha256": "6bdbe71e0e5c8f0a5bc48977a58a27ea3ed1e3dd8baa61bb5cf8d751252bb1b5"
+    },
+    "attempts/red-corrected/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "attempts/red-corrected/stderr": {
+      "bytes": 46854,
+      "sha256": "3406969436c5f59c6dcd2de915fa6f423fb23d5edb550ff641476100166388c6"
+    },
+    "attempts/red-corrected/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/red-corrected/stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/red-original/command.json": {
+      "bytes": 282,
+      "sha256": "34149110d1fdf1cc88889c4bba32dbdcbebe56e7871d12f4b5a916e4ef6d4329"
+    },
+    "attempts/red-original/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "attempts/red-original/fixture-correction.md": {
+      "bytes": 490,
+      "sha256": "4a9c11fa9bfcbe289f161199604fac1b72ecd68e3194341e252d41864f040647"
+    },
+    "attempts/red-original/run_capture.py": {
+      "bytes": 810,
+      "sha256": "ceac7433ef1a2ade0b388f9ad014b79054a672a42b0dbf5b73e924300140bd33"
+    },
+    "attempts/red-original/stderr": {
+      "bytes": 49345,
+      "sha256": "482dd0d7e7cda6fdaab7099eafc48572d055181d02b7ae2f342f32fee5040f7c"
+    },
+    "attempts/red-original/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/red-original/stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/red-original/test_corrections.py": {
+      "bytes": 5993,
+      "sha256": "b11ab4f569f04f40a3d369dfdfef37d63ed98630f8512385382cf8885fed22e5"
+    },
+    "attempts/syntax/command.json": {
+      "bytes": 404,
+      "sha256": "973fa63092ee931f78c940d12138337147882bc2dc12281dc0d68c1c9e9994e9"
+    },
+    "attempts/syntax/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "attempts/syntax/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/syntax/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/syntax/stdout": {
+      "bytes": 18,
+      "sha256": "93e95f86b0e203b690520a46959c51e3972b8336fd41a424075dceaa127f2b3a"
+    },
+    "attempts/syntax-final/command.json": {
+      "bytes": 404,
+      "sha256": "973fa63092ee931f78c940d12138337147882bc2dc12281dc0d68c1c9e9994e9"
+    },
+    "attempts/syntax-final/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "attempts/syntax-final/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/syntax-final/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "attempts/syntax-final/stdout": {
+      "bytes": 18,
+      "sha256": "5130815f5dea4746cb38bceb4007c096b2153acf05532aacc188108e6497ecff"
+    },
+    "candidate-v1-v2.diff.txt": {
+      "bytes": 7665,
+      "sha256": "310f18113d8c4f649c7f75ff7d92d4b3747366538d02eb622610425e8cc9077e"
+    },
+    "capture.py": {
+      "bytes": 1589,
+      "sha256": "78c48029b948c9294e5a3e6d32d55d58ed46902e9c3dd8e56f663e20cfe85d1a"
+    },
+    "command-contract.json": {
+      "bytes": 8960,
+      "sha256": "cddadf0be96ddd59bc5eb4be278adfba384df6730e093a493158bbb0191d5bd9"
+    },
+    "contract-v1-v2.diff.txt": {
+      "bytes": 8525,
+      "sha256": "5a1127023079b2efee1ed0fb1b398d3ca601c4d2b1fd273fe7e7a56750477b3e"
+    },
+    "current-inputs/semantic-review/freeze.json": {
+      "bytes": 431343,
+      "sha256": "b4f9b53d8cbc18385b006f7d8dff7a04cee73fa5bf61a98e9b031bcb32c1cf4c"
+    },
+    "current-inputs/semantic-review/original-to-copy-manifest.json": {
+      "bytes": 11772458,
+      "sha256": "ec77ad877d4ed27d09275d2232fa79b2cd130228e08aa063a9243a5549af1540"
+    },
+    "finalize.py": {
+      "bytes": 11357,
+      "sha256": "11922a368e512fc15bdf0828b65b9ecca8effbfd8b37175b1a35d61d18b43064"
+    },
+    "fixtures/final/review-retarget/install/whitespace273.py": {
+      "bytes": 18781,
+      "sha256": "480b75e8d71b6122b6f1b56344b20745dca5b02a97d6cd60fdf451dcd5dedbcf"
+    },
+    "fixtures/final/review-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/review-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/review-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/review-retarget/run-output/consumed-inputs.json": {
+      "bytes": 604,
+      "sha256": "3fdeec8e74088c59ae9e8a69c4c6ff0764023fc2b423722d661b8e3a3f8f75a4"
+    },
+    "fixtures/final/review-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/review-retarget/run-output/invocation.json": {
+      "bytes": 365,
+      "sha256": "97276217acbb1474ea28d0942f8c385e599f739737557b7546ad029f1e8b96b5"
+    },
+    "fixtures/final/review-retarget/run-output/root-aliases.json": {
+      "bytes": 2047,
+      "sha256": "0b1d7cf3d6cba46267a20ec2f4a0348386d77f147c4ffecbcc4a8322587cc81a"
+    },
+    "fixtures/final/root-retarget/install/whitespace273.py": {
+      "bytes": 18781,
+      "sha256": "480b75e8d71b6122b6f1b56344b20745dca5b02a97d6cd60fdf451dcd5dedbcf"
+    },
+    "fixtures/final/root-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/root-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/root-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/root-retarget/run-output/consumed-inputs.json": {
+      "bytes": 600,
+      "sha256": "558b964bb9991b907d074c6e329ec971f6c371df538437df91394f650dd8842e"
+    },
+    "fixtures/final/root-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/root-retarget/run-output/invocation.json": {
+      "bytes": 365,
+      "sha256": "97276217acbb1474ea28d0942f8c385e599f739737557b7546ad029f1e8b96b5"
+    },
+    "fixtures/final/root-retarget/run-output/root-aliases.json": {
+      "bytes": 2029,
+      "sha256": "0dca443930f50bf3a98fbd3ccd9d553b3ad0fb6b688ee258042b0a9661b0a3d2"
+    },
+    "fixtures/final/root-stable/install/whitespace273.py": {
+      "bytes": 18781,
+      "sha256": "480b75e8d71b6122b6f1b56344b20745dca5b02a97d6cd60fdf451dcd5dedbcf"
+    },
+    "fixtures/final/root-stable/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/root-stable/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/root-stable/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/root-stable/run-output/consumed-inputs.json": {
+      "bytes": 596,
+      "sha256": "7f2019c8796e04773f6c81ff8e82ca7da68333002240c9bdf8948dcc9bc7f8b7"
+    },
+    "fixtures/final/root-stable/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/root-stable/run-output/invocation.json": {
+      "bytes": 365,
+      "sha256": "97276217acbb1474ea28d0942f8c385e599f739737557b7546ad029f1e8b96b5"
+    },
+    "fixtures/final/root-stable/run-output/root-aliases.json": {
+      "bytes": 2011,
+      "sha256": "e8d4c507deb1d8807462fb60cd82160b0c65456d1c1472ba6c2c346055133f5b"
+    },
+    "fixtures/final/worktree-retarget/install/whitespace273.py": {
+      "bytes": 18781,
+      "sha256": "480b75e8d71b6122b6f1b56344b20745dca5b02a97d6cd60fdf451dcd5dedbcf"
+    },
+    "fixtures/final/worktree-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/worktree-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/worktree-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/worktree-retarget/run-output/consumed-inputs.json": {
+      "bytes": 608,
+      "sha256": "6614518cee0aee1a4be7301ccfbf6ddc67d66d9b0350b87806ab0d9f23d89b4e"
+    },
+    "fixtures/final/worktree-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final/worktree-retarget/run-output/invocation.json": {
+      "bytes": 365,
+      "sha256": "97276217acbb1474ea28d0942f8c385e599f739737557b7546ad029f1e8b96b5"
+    },
+    "fixtures/final/worktree-retarget/run-output/root-aliases.json": {
+      "bytes": 2065,
+      "sha256": "e791c4cb8e4e58b295812b7dfcdb19d1a571b47a1d852b092433265444857ae8"
+    },
+    "fixtures/final-60/review-retarget/install/whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    },
+    "fixtures/final-60/review-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/review-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/review-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/review-retarget/run-output/consumed-inputs.json": {
+      "bytes": 610,
+      "sha256": "c812f67c098b45e28acb9f7179e111f105fa5a2a5b2601d84bc7b4de691c7b54"
+    },
+    "fixtures/final-60/review-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/review-retarget/run-output/invocation.json": {
+      "bytes": 399,
+      "sha256": "ea589887a9be021549f93ddd438e402fbda9811e4e8ad6bc470be0ed2e857931"
+    },
+    "fixtures/final-60/review-retarget/run-output/root-aliases.json": {
+      "bytes": 2074,
+      "sha256": "472a644cb5944e68cf7da1e0251e941b500788f7d126016774d3d67705509f52"
+    },
+    "fixtures/final-60/root-retarget/install/whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    },
+    "fixtures/final-60/root-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/root-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/root-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/root-retarget/run-output/consumed-inputs.json": {
+      "bytes": 606,
+      "sha256": "4701687488e11beb8a7a203d110cff49f77325d5896888117844e93ad1b37cc5"
+    },
+    "fixtures/final-60/root-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/root-retarget/run-output/invocation.json": {
+      "bytes": 399,
+      "sha256": "ea589887a9be021549f93ddd438e402fbda9811e4e8ad6bc470be0ed2e857931"
+    },
+    "fixtures/final-60/root-retarget/run-output/root-aliases.json": {
+      "bytes": 2056,
+      "sha256": "1553c6d60c815f5a74f1035913daedc3efc5645aa78ae3e924c2bcee13959cd5"
+    },
+    "fixtures/final-60/root-stable/install/whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    },
+    "fixtures/final-60/root-stable/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/root-stable/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/root-stable/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/root-stable/run-output/consumed-inputs.json": {
+      "bytes": 602,
+      "sha256": "1522d8b95eec5ba436358ff33c47df26dabe11fb977d30c595a0810e69c85cd9"
+    },
+    "fixtures/final-60/root-stable/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/root-stable/run-output/invocation.json": {
+      "bytes": 399,
+      "sha256": "ea589887a9be021549f93ddd438e402fbda9811e4e8ad6bc470be0ed2e857931"
+    },
+    "fixtures/final-60/root-stable/run-output/root-aliases.json": {
+      "bytes": 2038,
+      "sha256": "69cee83353889e6f0d96b6efd6b8d3979c98d851d2033552a3960213e24de5b3"
+    },
+    "fixtures/final-60/worktree-retarget/install/whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    },
+    "fixtures/final-60/worktree-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/worktree-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/worktree-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/worktree-retarget/run-output/consumed-inputs.json": {
+      "bytes": 614,
+      "sha256": "24fa1d4a4166bde2afdd3c95a61a1c6a17447d828ef32b943c4dfb306af22e0e"
+    },
+    "fixtures/final-60/worktree-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-60/worktree-retarget/run-output/invocation.json": {
+      "bytes": 399,
+      "sha256": "ea589887a9be021549f93ddd438e402fbda9811e4e8ad6bc470be0ed2e857931"
+    },
+    "fixtures/final-60/worktree-retarget/run-output/root-aliases.json": {
+      "bytes": 2092,
+      "sha256": "888a3784db202b3e19d0cc40b49e971136b297305f77827cf084822ad106a00a"
+    },
+    "fixtures/final-corrected/review-retarget/install/whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    },
+    "fixtures/final-corrected/review-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/review-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/review-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/review-retarget/run-output/consumed-inputs.json": {
+      "bytes": 624,
+      "sha256": "ed5b01be6bdae10fe0e7e1049cb0ccbdfb703e5c9f4d12399730e6d43f66bc0e"
+    },
+    "fixtures/final-corrected/review-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/review-retarget/run-output/invocation.json": {
+      "bytes": 399,
+      "sha256": "ea589887a9be021549f93ddd438e402fbda9811e4e8ad6bc470be0ed2e857931"
+    },
+    "fixtures/final-corrected/review-retarget/run-output/root-aliases.json": {
+      "bytes": 2137,
+      "sha256": "18162355a832143fef1efe10bee87c23a705804378abb1845617dfee52a96cce"
+    },
+    "fixtures/final-corrected/root-retarget/install/whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    },
+    "fixtures/final-corrected/root-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/root-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/root-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/root-retarget/run-output/consumed-inputs.json": {
+      "bytes": 620,
+      "sha256": "5aaf458b2c75e31c3719c370de6ac64ec2a0352680242bd805f4380820c7784a"
+    },
+    "fixtures/final-corrected/root-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/root-retarget/run-output/invocation.json": {
+      "bytes": 399,
+      "sha256": "ea589887a9be021549f93ddd438e402fbda9811e4e8ad6bc470be0ed2e857931"
+    },
+    "fixtures/final-corrected/root-retarget/run-output/root-aliases.json": {
+      "bytes": 2119,
+      "sha256": "3e0d7da62ece43d49cf7f7179ac17163dbab95c9b8e6a0f9ad2667bb0b86c7cb"
+    },
+    "fixtures/final-corrected/root-stable/install/whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    },
+    "fixtures/final-corrected/root-stable/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/root-stable/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/root-stable/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/root-stable/run-output/consumed-inputs.json": {
+      "bytes": 616,
+      "sha256": "97319bc902df53aa33673eaa7cc948c879e1442fab57ff68399eafcf8a778aab"
+    },
+    "fixtures/final-corrected/root-stable/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/root-stable/run-output/invocation.json": {
+      "bytes": 399,
+      "sha256": "ea589887a9be021549f93ddd438e402fbda9811e4e8ad6bc470be0ed2e857931"
+    },
+    "fixtures/final-corrected/root-stable/run-output/root-aliases.json": {
+      "bytes": 2101,
+      "sha256": "8fd10d58a2255eb8c9ce37a6d99ecd774f2274f5d9ca6abcf9318906f26456f8"
+    },
+    "fixtures/final-corrected/worktree-retarget/install/whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    },
+    "fixtures/final-corrected/worktree-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/worktree-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/worktree-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/worktree-retarget/run-output/consumed-inputs.json": {
+      "bytes": 628,
+      "sha256": "4b4bfb9f61ba51752b2a10997661ba5d4b82aebeb9c92a047b5e558d903852e2"
+    },
+    "fixtures/final-corrected/worktree-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/final-corrected/worktree-retarget/run-output/invocation.json": {
+      "bytes": 399,
+      "sha256": "ea589887a9be021549f93ddd438e402fbda9811e4e8ad6bc470be0ed2e857931"
+    },
+    "fixtures/final-corrected/worktree-retarget/run-output/root-aliases.json": {
+      "bytes": 2155,
+      "sha256": "147855cfbe00eeed6f410a12b7c720816976c98447efa15d55a66bc4978aacf1"
+    },
+    "fixtures/green/review-retarget/install/whitespace273.py": {
+      "bytes": 18629,
+      "sha256": "19680cc747418bd6554cd13fe605ab35f8353ae5b78dfc7c351dfd96b85e45f9"
+    },
+    "fixtures/green/review-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/review-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/review-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/review-retarget/run-output/consumed-inputs.json": {
+      "bytes": 604,
+      "sha256": "7b9d5bf4b970300503b8042645a30347f34fbf193ba79b5f09a4099937e6b86e"
+    },
+    "fixtures/green/review-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/review-retarget/run-output/invocation.json": {
+      "bytes": 268,
+      "sha256": "c1542c30b3810cd6d731ffd63a5a7161d86c092bfe25cc260d488ad8ab8ed68a"
+    },
+    "fixtures/green/review-retarget/run-output/root-aliases.json": {
+      "bytes": 2047,
+      "sha256": "a02272c17c7d0355536193cd857ba54d36e7cb88bef25b387d23b810c0bbc03e"
+    },
+    "fixtures/green/root-retarget/install/whitespace273.py": {
+      "bytes": 18629,
+      "sha256": "19680cc747418bd6554cd13fe605ab35f8353ae5b78dfc7c351dfd96b85e45f9"
+    },
+    "fixtures/green/root-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/root-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/root-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/root-retarget/run-output/consumed-inputs.json": {
+      "bytes": 600,
+      "sha256": "ed6dba70acf427cd4465d3a9a3b5479c4fe8179e97c3caf53987c22623e98155"
+    },
+    "fixtures/green/root-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/root-retarget/run-output/invocation.json": {
+      "bytes": 268,
+      "sha256": "c1542c30b3810cd6d731ffd63a5a7161d86c092bfe25cc260d488ad8ab8ed68a"
+    },
+    "fixtures/green/root-retarget/run-output/root-aliases.json": {
+      "bytes": 2029,
+      "sha256": "304716593052cfe91bc1a4a3361041bf7f7230716454436771a46b538d06c381"
+    },
+    "fixtures/green/root-stable/install/whitespace273.py": {
+      "bytes": 18629,
+      "sha256": "19680cc747418bd6554cd13fe605ab35f8353ae5b78dfc7c351dfd96b85e45f9"
+    },
+    "fixtures/green/root-stable/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/root-stable/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/root-stable/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/root-stable/run-output/consumed-inputs.json": {
+      "bytes": 596,
+      "sha256": "6cfa710a01d9756c5006eec7dccade6409e08a048fd34b81c6cbc6a84db4ad67"
+    },
+    "fixtures/green/root-stable/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/root-stable/run-output/invocation.json": {
+      "bytes": 268,
+      "sha256": "c1542c30b3810cd6d731ffd63a5a7161d86c092bfe25cc260d488ad8ab8ed68a"
+    },
+    "fixtures/green/root-stable/run-output/root-aliases.json": {
+      "bytes": 2011,
+      "sha256": "acc7c1cb6279a0d428a59bc5dd7d6c84bcdc40d8f0d8caaef0303ea61cb5816d"
+    },
+    "fixtures/green/worktree-retarget/install/whitespace273.py": {
+      "bytes": 18629,
+      "sha256": "19680cc747418bd6554cd13fe605ab35f8353ae5b78dfc7c351dfd96b85e45f9"
+    },
+    "fixtures/green/worktree-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/worktree-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/worktree-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/worktree-retarget/run-output/consumed-inputs.json": {
+      "bytes": 608,
+      "sha256": "2be0e1dddb34e9f689149b7184576dc0d110425d507a2d6f6923a30ff16ff869"
+    },
+    "fixtures/green/worktree-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/green/worktree-retarget/run-output/invocation.json": {
+      "bytes": 268,
+      "sha256": "c1542c30b3810cd6d731ffd63a5a7161d86c092bfe25cc260d488ad8ab8ed68a"
+    },
+    "fixtures/green/worktree-retarget/run-output/root-aliases.json": {
+      "bytes": 2065,
+      "sha256": "007639f454321217d82d5862692ffbdda2128aa40c7b515c934f4728156f580e"
+    },
+    "fixtures/red/review-retarget/install/whitespace273.py": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "fixtures/red/review-retarget/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/review-retarget/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/review-retarget/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/root-retarget/install/whitespace273.py": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "fixtures/red/root-retarget/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/root-retarget/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/root-retarget/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/root-stable/install/whitespace273.py": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "fixtures/red/root-stable/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/root-stable/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/root-stable/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/worktree-retarget/install/whitespace273.py": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "fixtures/red/worktree-retarget/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/worktree-retarget/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red/worktree-retarget/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/review-retarget/install/whitespace273.py": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "fixtures/red-corrected/review-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/review-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/review-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/review-retarget/run-output/consumed-inputs.json": {
+      "bytes": 613,
+      "sha256": "0ba489fa0a95ff798be4aed2fc4af1e2e431924b7c3975e826d9366dfaadd1db"
+    },
+    "fixtures/red-corrected/review-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/review-retarget/run-output/invocation.json": {
+      "bytes": 268,
+      "sha256": "c1542c30b3810cd6d731ffd63a5a7161d86c092bfe25cc260d488ad8ab8ed68a"
+    },
+    "fixtures/red-corrected/root-retarget/install/whitespace273.py": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "fixtures/red-corrected/root-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/root-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/root-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/root-retarget/run-output/consumed-inputs.json": {
+      "bytes": 609,
+      "sha256": "7caa244fd91808d425d97cabdc920692202b21da588ffe1310b1b9cfe6180a78"
+    },
+    "fixtures/red-corrected/root-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/root-retarget/run-output/invocation.json": {
+      "bytes": 268,
+      "sha256": "c1542c30b3810cd6d731ffd63a5a7161d86c092bfe25cc260d488ad8ab8ed68a"
+    },
+    "fixtures/red-corrected/root-stable/install/whitespace273.py": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "fixtures/red-corrected/root-stable/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/root-stable/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/root-stable/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/root-stable/run-output/consumed-inputs.json": {
+      "bytes": 605,
+      "sha256": "60da375fadfc29f455b899607945185e1935b641807b98f331d0e3f997779bec"
+    },
+    "fixtures/red-corrected/root-stable/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/root-stable/run-output/invocation.json": {
+      "bytes": 268,
+      "sha256": "c1542c30b3810cd6d731ffd63a5a7161d86c092bfe25cc260d488ad8ab8ed68a"
+    },
+    "fixtures/red-corrected/worktree-retarget/install/whitespace273.py": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "fixtures/red-corrected/worktree-retarget/manifests/one.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/worktree-retarget/manifests/root-alias.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/worktree-retarget/manifests/two.json": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/worktree-retarget/run-output/consumed-inputs.json": {
+      "bytes": 617,
+      "sha256": "04562e221b695a00f5c2f9ebd29c94317ba114789dadcd1b1543c59e4254747b"
+    },
+    "fixtures/red-corrected/worktree-retarget/run-output/inputs/e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104.bin": {
+      "bytes": 17,
+      "sha256": "e93af2a52ce33411156e76a80dc69c6a984cc69f2baae32cda78df2b4f944104"
+    },
+    "fixtures/red-corrected/worktree-retarget/run-output/invocation.json": {
+      "bytes": 268,
+      "sha256": "c1542c30b3810cd6d731ffd63a5a7161d86c092bfe25cc260d488ad8ab8ed68a"
+    },
+    "freeze_candidate.py": {
+      "bytes": 1232,
+      "sha256": "dbf349cbc99c61b0d40c5f957a7b053acde5eaebaded6785036caf5e8c9f9567"
+    },
+    "history/whitespace-candidate-273/approved-v6-to-candidate.diff.txt": {
+      "bytes": 26071,
+      "sha256": "bc9e566b3ef2be8e08e5ccbd992f98ddb3c81913c042a6c70d6055320cc8c566"
+    },
+    "history/whitespace-candidate-273/attempt-source-transitions.json": {
+      "bytes": 970,
+      "sha256": "893122bcbd1eae73ef6972402040ff0ecb781c08adda8f509857ad1c21811660"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/syntax/command.json": {
+      "bytes": 538,
+      "sha256": "b2e742b93206590391cce9f2633bb4505cc07f90d014ef70a335d605efb4d669"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/syntax/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/syntax/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/syntax/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/syntax/stdout.txt": {
+      "bytes": 41,
+      "sha256": "6314baaabcbdcd7afe444428effb76e728a4d3b5098a0d6ec213d82772268bfe"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/unit/command.json": {
+      "bytes": 367,
+      "sha256": "84416b0c9d93c835b5b53ed1f6d6c931640155ad11eee7fd74ef8bbc8d522720"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/unit/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/unit/stderr.txt": {
+      "bytes": 3473,
+      "sha256": "b15c5d9949c369445165427a3c3eec897ebcab799cb46279914fa0210b835c18"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/unit/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/checks/unit/stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/freeze.json": {
+      "bytes": 1962,
+      "sha256": "b51172b3dbad7a24cc7cd802cbcc3e68e779f85e5a4c5a861c9a950a75cc46a1"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/record_checks.py.txt": {
+      "bytes": 1057,
+      "sha256": "cc2be7cb015e953e4d971babb45133fe80d5ab577186914a12c7a20bc99ff32d"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/test_predicates.py": {
+      "bytes": 2980,
+      "sha256": "f28c80f4669cbcda160a5871b0e2086a0c6a7d6be96144e6fb2c9710fbdda56c"
+    },
+    "history/whitespace-candidate-273/attempts/01-fixture-range-expectations/whitespace273.py": {
+      "bytes": 16479,
+      "sha256": "6691f5da6225ff44d6dc217dcd52f51ac6c48a702f22aed801f77b0419e1ac2e"
+    },
+    "history/whitespace-candidate-273/attempts/02-explicit-read-alias/before.py.txt": {
+      "bytes": 16479,
+      "sha256": "6691f5da6225ff44d6dc217dcd52f51ac6c48a702f22aed801f77b0419e1ac2e"
+    },
+    "history/whitespace-candidate-273/attempts/02-explicit-read-alias/change.diff.txt": {
+      "bytes": 1505,
+      "sha256": "92ad5dbfd43975023280305bce877c0dc1d3dd5f4caede5529b0fe0d2190c6b7"
+    },
+    "history/whitespace-candidate-273/attempts/02-explicit-read-alias/reason.md": {
+      "bytes": 189,
+      "sha256": "8948e3074031e986eba952bbb99c14c53537ec3b4dc93aa8a346024a6e5722d3"
+    },
+    "history/whitespace-candidate-273/baseline/audit_staged_source_whitespace_v6.py.txt": {
+      "bytes": 9005,
+      "sha256": "71cdab993b7929ad1b8b564938bb4f10fbca2c94820f00e069b0e4d18452d108"
+    },
+    "history/whitespace-candidate-273/baseline270/audit_staged_source_whitespace_candidate.py.diff.txt": {
+      "bytes": 5150,
+      "sha256": "35ff49661b4bf75245864dd06bd1f2c7e1e845243fc53f451299c0238d165ea0"
+    },
+    "history/whitespace-candidate-273/baseline270/audit_staged_source_whitespace_candidate.py.txt": {
+      "bytes": 10690,
+      "sha256": "11cf8a4120fae57d289e9c2ab97520fe6cc972b3bc64efabc7b353e4a01f8d3c"
+    },
+    "history/whitespace-candidate-273/baseline270/baseline/audit_staged_source_whitespace_v6.py.txt": {
+      "bytes": 9005,
+      "sha256": "71cdab993b7929ad1b8b564938bb4f10fbca2c94820f00e069b0e4d18452d108"
+    },
+    "history/whitespace-candidate-273/baseline270/baseline/prepare-whitespace-pins.py.txt": {
+      "bytes": 4012,
+      "sha256": "ad0e6afc1c6eef9d12d9e30d20de02c605dd7be9312a9e8d550b81c85f664bba"
+    },
+    "history/whitespace-candidate-273/baseline270/baseline_v6_adapter.py.txt": {
+      "bytes": 958,
+      "sha256": "7d0c995b2390525b8788b9429b5da50cddb846851c9493d2c175a9019627130a"
+    },
+    "history/whitespace-candidate-273/baseline270/build_candidates.py.txt": {
+      "bytes": 7333,
+      "sha256": "4a65cd7995ba935b52b0f351f72b9fe7227d66121f2a648160719fbadc556b6f"
+    },
+    "history/whitespace-candidate-273/baseline270/candidate-freeze.json": {
+      "bytes": 85176,
+      "sha256": "af8db137b011bf7accfdfda477ae506609a5acb80f73f1c6c2975049b00a9538"
+    },
+    "history/whitespace-candidate-273/baseline270/capture.py.txt": {
+      "bytes": 1108,
+      "sha256": "2ec601aabd734e15ee0efb9c8f1e62947b734548090bdba711c028c554097513"
+    },
+    "history/whitespace-candidate-273/baseline270/freeze.py.txt": {
+      "bytes": 1541,
+      "sha256": "084542f4802acb218f2724473e8ca92183e0368d95dce6d3b1ee69be743c7f5c"
+    },
+    "history/whitespace-candidate-273/baseline270/prepare-whitespace-pins.py.diff.txt": {
+      "bytes": 5823,
+      "sha256": "52667f760ccb2a3883e24e05c2526381a0e4e8c9ec06a2ae3f1107518e38e9e9"
+    },
+    "history/whitespace-candidate-273/baseline270/prepare-whitespace-pins.py.txt": {
+      "bytes": 6371,
+      "sha256": "1b10cde739ef529bd990c150405d0dbd9440ba6a00763904d7c618c1819d36c7"
+    },
+    "history/whitespace-candidate-273/baseline270/prepare_witnesses.py.txt": {
+      "bytes": 5605,
+      "sha256": "d88763f2e2015fa2e72702b7bd29fe7af843d634c9ffe74c995c7dcf26d4d4bd"
+    },
+    "history/whitespace-candidate-273/baseline270/prove_special.py.txt": {
+      "bytes": 2605,
+      "sha256": "40b386ddf90f2d673b6fa21ef1eb9aa4d293af75f95f0575c769e15af322b54a"
+    },
+    "history/whitespace-candidate-273/baseline270/report.md": {
+      "bytes": 8154,
+      "sha256": "2ccde169876d6e4253bfc652cfa3a28aba1666ccfd744e8b0dbc33034190b6e3"
+    },
+    "history/whitespace-candidate-273/baseline270/test_audit_dispatch.py.txt": {
+      "bytes": 3581,
+      "sha256": "125784fec274b8aa3fcfdece279a1a02132dbcf233d8179e2bb90eea1c85d89e"
+    },
+    "history/whitespace-candidate-273/baseline270/test_witnesses.py.txt": {
+      "bytes": 13305,
+      "sha256": "c80686bf59985048cd5cb30108257a0f9844f5395bde13a3dbcabd9ccf4b98ae"
+    },
+    "history/whitespace-candidate-273/baseline270/verify_final.py.txt": {
+      "bytes": 3426,
+      "sha256": "199cc82a534cb4aa06e5c9aa466775aa42c5c0c23405e0c40e269986523ab94c"
+    },
+    "history/whitespace-candidate-273/baseline270/witnesses.py.txt": {
+      "bytes": 8021,
+      "sha256": "d0b4091cd61ea0a1ab1665d535985d0f5edc451f9a1e56b449acc57cfdebb1d3"
+    },
+    "history/whitespace-candidate-273/capture.py.txt": {
+      "bytes": 2391,
+      "sha256": "da005b3907a8951ca5d33750d4efdb097883b9bb55009c6b18967f0111278e39"
+    },
+    "history/whitespace-candidate-273/checks/static-diff-format/command.json": {
+      "bytes": 598,
+      "sha256": "bd126e3092aa21a56f66ac188ed4db5af9f4732ac26556a1d6e3185e14f045c2"
+    },
+    "history/whitespace-candidate-273/checks/static-diff-format/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-candidate-273/checks/static-diff-format/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/static-diff-format/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/static-diff-format/stdout.txt": {
+      "bytes": 128,
+      "sha256": "a4082fcbe6f66d0f7ce061d540a7fe8ab3fc1c294f3d3bee79ebdd40edb822cc"
+    },
+    "history/whitespace-candidate-273/checks/syntax/command.json": {
+      "bytes": 538,
+      "sha256": "b2e742b93206590391cce9f2633bb4505cc07f90d014ef70a335d605efb4d669"
+    },
+    "history/whitespace-candidate-273/checks/syntax/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-candidate-273/checks/syntax/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/syntax/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/syntax/stdout.txt": {
+      "bytes": 41,
+      "sha256": "6314baaabcbdcd7afe444428effb76e728a4d3b5098a0d6ec213d82772268bfe"
+    },
+    "history/whitespace-candidate-273/checks/syntax-final/command.json": {
+      "bytes": 427,
+      "sha256": "158b4cfb01c6c433ae008e283b71b867d0844736ceebc44039c95b2b21c4f4d0"
+    },
+    "history/whitespace-candidate-273/checks/syntax-final/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-candidate-273/checks/syntax-final/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/syntax-final/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/syntax-final/stdout.txt": {
+      "bytes": 12,
+      "sha256": "a45e0e7e4f73f3d38ca61429e07a02a5f5aa5599b02d592e19dd0eae59440e10"
+    },
+    "history/whitespace-candidate-273/checks/unit/command.json": {
+      "bytes": 367,
+      "sha256": "84416b0c9d93c835b5b53ed1f6d6c931640155ad11eee7fd74ef8bbc8d522720"
+    },
+    "history/whitespace-candidate-273/checks/unit/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "history/whitespace-candidate-273/checks/unit/stderr.txt": {
+      "bytes": 3473,
+      "sha256": "b15c5d9949c369445165427a3c3eec897ebcab799cb46279914fa0210b835c18"
+    },
+    "history/whitespace-candidate-273/checks/unit/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/unit/stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/unit-final/command.json": {
+      "bytes": 318,
+      "sha256": "d99cc7edd957431a94da066f22f38675d868ee39047747bb71a513d6982b98ad"
+    },
+    "history/whitespace-candidate-273/checks/unit-final/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-candidate-273/checks/unit-final/stderr.txt": {
+      "bytes": 1477,
+      "sha256": "62e9eddb179727ca7228394d4c11b88d5d955548b280f857cef8906798831955"
+    },
+    "history/whitespace-candidate-273/checks/unit-final/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/unit-final/stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/unit-v2/command.json": {
+      "bytes": 318,
+      "sha256": "d99cc7edd957431a94da066f22f38675d868ee39047747bb71a513d6982b98ad"
+    },
+    "history/whitespace-candidate-273/checks/unit-v2/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-candidate-273/checks/unit-v2/stderr.txt": {
+      "bytes": 1477,
+      "sha256": "62e9eddb179727ca7228394d4c11b88d5d955548b280f857cef8906798831955"
+    },
+    "history/whitespace-candidate-273/checks/unit-v2/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/checks/unit-v2/stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-candidate-273/command-contract.json": {
+      "bytes": 8300,
+      "sha256": "1f5540fc6dbc565dc28d9fd42067ed2643eb447428e035969615006b212b41c4"
+    },
+    "history/whitespace-candidate-273/current-inputs/registration-v1-v2.diff.txt": {
+      "bytes": 3467,
+      "sha256": "f4cb7ea9645e45ded3cc2f7885310ad97f8bd0438eb611b14f1ff7d793f119a3"
+    },
+    "history/whitespace-candidate-273/current-inputs/semantic-review/freeze.json": {
+      "bytes": 431343,
+      "sha256": "b4f9b53d8cbc18385b006f7d8dff7a04cee73fa5bf61a98e9b031bcb32c1cf4c"
+    },
+    "history/whitespace-candidate-273/current-inputs/semantic-review/original-to-copy-manifest.json": {
+      "bytes": 11772458,
+      "sha256": "ec77ad877d4ed27d09275d2232fa79b2cd130228e08aa063a9243a5549af1540"
+    },
+    "history/whitespace-candidate-273/current-inputs/whitespace-preparation/frozen-static-whitespace-inventory.json": {
+      "bytes": 89207,
+      "sha256": "845e6adbe2196cbec7ea540ee4870f81048fe4e5f5643fffcd8b891110a3ad2a"
+    },
+    "history/whitespace-candidate-273/final-preflight.json": {
+      "bytes": 9861,
+      "sha256": "d5979baaa43ee22bd0f3579c075dc585346e10b4e4413f1a25201e226eaef36d"
+    },
+    "history/whitespace-candidate-273/fixture-range-fix.diff.txt": {
+      "bytes": 1705,
+      "sha256": "5d687231dc88e368ff330082d7a1c50fb354ad243981cb9f79e98e35c3cccc66"
+    },
+    "history/whitespace-candidate-273/freeze.json": {
+      "bytes": 14601,
+      "sha256": "cdbb9f2cc81c0c14c45364d757ca9fed75b65aaf5a3800637b82c099e04ce9b3"
+    },
+    "history/whitespace-candidate-273/freeze.py.txt": {
+      "bytes": 2610,
+      "sha256": "ad461529f102570bed208f3c3c486f3f61b208bde75343693e543889c4d4bd2c"
+    },
+    "history/whitespace-candidate-273/input-manifest.json": {
+      "bytes": 9456,
+      "sha256": "3381476d14701a9d183b96319dbfb806b389ac45641c15d100442270aef71acf"
+    },
+    "history/whitespace-candidate-273/old270-audit-to-candidate.diff.txt": {
+      "bytes": 27787,
+      "sha256": "c0bb8154b6848f813ad264224d272e84feefaf35845cd15241c9b2d7f8c35905"
+    },
+    "history/whitespace-candidate-273/old270-preparer-to-candidate.diff.txt": {
+      "bytes": 23313,
+      "sha256": "81d1d310733ca9ac3bc41033d22dfcb32787e4a5788be8ee020702e8f46dbb57"
+    },
+    "history/whitespace-candidate-273/physical/C05ReadingASCII.txt": {
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "history/whitespace-candidate-273/physical/C15ReadingASCII.txt": {
+      "bytes": 329388,
+      "sha256": "ede520e320a21fc3f7aef4366920c1debbddbc26894513506648e9dd0ffeed10"
+    },
+    "history/whitespace-candidate-273/physical/C18ReadingASCII.txt": {
+      "bytes": 699885,
+      "sha256": "dffbffe9ad441d63783d7583c7c8e5da4c72613f7ce5ff1aecda931a5832c35f"
+    },
+    "history/whitespace-candidate-273/physical/ILL.txt": {
+      "bytes": 2981468,
+      "sha256": "ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e"
+    },
+    "history/whitespace-candidate-273/physical-source-descriptors.json": {
+      "bytes": 5737,
+      "sha256": "b0743b71de515b08cb7e9fbe8dfebfb1b1badb7e2c04770c7a8b09dd9ff2af2b"
+    },
+    "history/whitespace-candidate-273/record_checks.py.txt": {
+      "bytes": 1057,
+      "sha256": "cc2be7cb015e953e4d971babb45133fe80d5ab577186914a12c7a20bc99ff32d"
+    },
+    "history/whitespace-candidate-273/report.json": {
+      "bytes": 485,
+      "sha256": "8c1c8662b02c5ecc4e4ff09d087619968ac9312a41195df45f7d25234f66ee74"
+    },
+    "history/whitespace-candidate-273/report.md": {
+      "bytes": 7289,
+      "sha256": "3658b198361ffe8566dbf7adaa000e30e85941b3796b2e040d97dc7992cad9a7"
+    },
+    "history/whitespace-candidate-273/test_predicates-attempt01.py.txt": {
+      "bytes": 2980,
+      "sha256": "f28c80f4669cbcda160a5871b0e2086a0c6a7d6be96144e6fb2c9710fbdda56c"
+    },
+    "history/whitespace-candidate-273/test_predicates_v2.py": {
+      "bytes": 2980,
+      "sha256": "4014be5c87f1c6e3726166f8dce4777934cdd39e461457e11e3ded4a0bf32fa7"
+    },
+    "history/whitespace-candidate-273/whitespace273.py": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "history/whitespace-candidate-273/write_report.py.txt": {
+      "bytes": 12922,
+      "sha256": "36ec6595200a57da32b3977336961b10828dad33934d4db79724115e94b82df8"
+    },
+    "history/whitespace-review-273/actual-input-manifest.json": {
+      "bytes": 25756,
+      "sha256": "7d00c623843b673f98f421dac8ad8dcf9b1a2442004e770137b4c6f1da55b8d0"
+    },
+    "history/whitespace-review-273/actual-log/staged-diff-check.command.json": {
+      "bytes": 358,
+      "sha256": "53acff7f6bc03c522b85100a2d7a97b151240aeb1cce5e64f327a97befaa43d5"
+    },
+    "history/whitespace-review-273/actual-log/staged-diff-check.execution.json": {
+      "bytes": 597,
+      "sha256": "2768c863982a8a19d9c32e9c5a6378fd63a2506603933efa6ada229c4730d5a2"
+    },
+    "history/whitespace-review-273/actual-log/staged-diff-check.exit": {
+      "bytes": 2,
+      "sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    "history/whitespace-review-273/actual-log/staged-diff-check.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/actual-log/staged-diff-check.stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/actual-log/staged-diff-check.stdout": {
+      "bytes": 36268143,
+      "sha256": "ce93fc36cce920a0d24660ef2ac1b7f735059a96beb3b9e4e4ee82921e02a766"
+    },
+    "history/whitespace-review-273/actual-originals/report-linecount-fix.diff.txt": {
+      "bytes": 2176,
+      "sha256": "4dbcb14873bfa4ce514c1ac9856fe9c509ba6f9f80747087c598ebeff0021a5c"
+    },
+    "history/whitespace-review-273/actual-predicate-probe.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/actual-predicate-probe.json": {
+      "bytes": 1830356,
+      "sha256": "80f5167d833ad855bfbc26de33e2bc83587b3b2e478edc62658461c732bff401"
+    },
+    "history/whitespace-review-273/actual-predicate-probe.py.txt": {
+      "bytes": 3513,
+      "sha256": "c885fa632b268d9ba37f12cb8ea5eb5ca9871b2fe7b9c32a2e810546de6cb6db"
+    },
+    "history/whitespace-review-273/actual-predicate-probe.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/actual-predicate-probe.stdout": {
+      "bytes": 9071,
+      "sha256": "177b59300e69f8597a669f2fa6db40e9bd31cd34ec81eec06881befb46fb88e3"
+    },
+    "history/whitespace-review-273/alias-probe.json": {
+      "bytes": 1744,
+      "sha256": "1e7cfcd3808baa46698eada6d04722cce16e83e71615860962872c74788d8cc1"
+    },
+    "history/whitespace-review-273/boundary-input-manifest.json": {
+      "bytes": 375,
+      "sha256": "f183533e74d1db88e139b88893ad8ecf6ad9c4cdf7267dd178a8c4e072ca5b66"
+    },
+    "history/whitespace-review-273/boundary-proof.json": {
+      "bytes": 22686,
+      "sha256": "4f27c55619981143a7c1fed00f539bdd42e40ad2ed2b51fe6085ee2b58459058"
+    },
+    "history/whitespace-review-273/candidate/approved-v6-to-candidate.diff.txt": {
+      "bytes": 26071,
+      "sha256": "bc9e566b3ef2be8e08e5ccbd992f98ddb3c81913c042a6c70d6055320cc8c566"
+    },
+    "history/whitespace-review-273/candidate/attempt-source-transitions.json": {
+      "bytes": 970,
+      "sha256": "893122bcbd1eae73ef6972402040ff0ecb781c08adda8f509857ad1c21811660"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/syntax/command.json": {
+      "bytes": 538,
+      "sha256": "b2e742b93206590391cce9f2633bb4505cc07f90d014ef70a335d605efb4d669"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/syntax/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/syntax/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/syntax/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/syntax/stdout.txt": {
+      "bytes": 41,
+      "sha256": "6314baaabcbdcd7afe444428effb76e728a4d3b5098a0d6ec213d82772268bfe"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/unit/command.json": {
+      "bytes": 367,
+      "sha256": "84416b0c9d93c835b5b53ed1f6d6c931640155ad11eee7fd74ef8bbc8d522720"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/unit/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/unit/stderr.txt": {
+      "bytes": 3473,
+      "sha256": "b15c5d9949c369445165427a3c3eec897ebcab799cb46279914fa0210b835c18"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/unit/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/checks/unit/stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/freeze.json": {
+      "bytes": 1962,
+      "sha256": "b51172b3dbad7a24cc7cd802cbcc3e68e779f85e5a4c5a861c9a950a75cc46a1"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/record_checks.py.txt": {
+      "bytes": 1057,
+      "sha256": "cc2be7cb015e953e4d971babb45133fe80d5ab577186914a12c7a20bc99ff32d"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/test_predicates.py.txt": {
+      "bytes": 2980,
+      "sha256": "f28c80f4669cbcda160a5871b0e2086a0c6a7d6be96144e6fb2c9710fbdda56c"
+    },
+    "history/whitespace-review-273/candidate/attempts/01-fixture-range-expectations/whitespace273.py.txt": {
+      "bytes": 16479,
+      "sha256": "6691f5da6225ff44d6dc217dcd52f51ac6c48a702f22aed801f77b0419e1ac2e"
+    },
+    "history/whitespace-review-273/candidate/attempts/02-explicit-read-alias/before.py.txt": {
+      "bytes": 16479,
+      "sha256": "6691f5da6225ff44d6dc217dcd52f51ac6c48a702f22aed801f77b0419e1ac2e"
+    },
+    "history/whitespace-review-273/candidate/attempts/02-explicit-read-alias/change.diff.txt": {
+      "bytes": 1505,
+      "sha256": "92ad5dbfd43975023280305bce877c0dc1d3dd5f4caede5529b0fe0d2190c6b7"
+    },
+    "history/whitespace-review-273/candidate/attempts/02-explicit-read-alias/reason.md": {
+      "bytes": 189,
+      "sha256": "8948e3074031e986eba952bbb99c14c53537ec3b4dc93aa8a346024a6e5722d3"
+    },
+    "history/whitespace-review-273/candidate/baseline/audit_staged_source_whitespace_v6.py.txt": {
+      "bytes": 9005,
+      "sha256": "71cdab993b7929ad1b8b564938bb4f10fbca2c94820f00e069b0e4d18452d108"
+    },
+    "history/whitespace-review-273/candidate/baseline270/audit_staged_source_whitespace_candidate.py.diff.txt": {
+      "bytes": 5150,
+      "sha256": "35ff49661b4bf75245864dd06bd1f2c7e1e845243fc53f451299c0238d165ea0"
+    },
+    "history/whitespace-review-273/candidate/baseline270/audit_staged_source_whitespace_candidate.py.txt": {
+      "bytes": 10690,
+      "sha256": "11cf8a4120fae57d289e9c2ab97520fe6cc972b3bc64efabc7b353e4a01f8d3c"
+    },
+    "history/whitespace-review-273/candidate/baseline270/baseline/audit_staged_source_whitespace_v6.py.txt": {
+      "bytes": 9005,
+      "sha256": "71cdab993b7929ad1b8b564938bb4f10fbca2c94820f00e069b0e4d18452d108"
+    },
+    "history/whitespace-review-273/candidate/baseline270/baseline/prepare-whitespace-pins.py.txt": {
+      "bytes": 4012,
+      "sha256": "ad0e6afc1c6eef9d12d9e30d20de02c605dd7be9312a9e8d550b81c85f664bba"
+    },
+    "history/whitespace-review-273/candidate/baseline270/baseline_v6_adapter.py.txt": {
+      "bytes": 958,
+      "sha256": "7d0c995b2390525b8788b9429b5da50cddb846851c9493d2c175a9019627130a"
+    },
+    "history/whitespace-review-273/candidate/baseline270/build_candidates.py.txt": {
+      "bytes": 7333,
+      "sha256": "4a65cd7995ba935b52b0f351f72b9fe7227d66121f2a648160719fbadc556b6f"
+    },
+    "history/whitespace-review-273/candidate/baseline270/candidate-freeze.json": {
+      "bytes": 85176,
+      "sha256": "af8db137b011bf7accfdfda477ae506609a5acb80f73f1c6c2975049b00a9538"
+    },
+    "history/whitespace-review-273/candidate/baseline270/capture.py.txt": {
+      "bytes": 1108,
+      "sha256": "2ec601aabd734e15ee0efb9c8f1e62947b734548090bdba711c028c554097513"
+    },
+    "history/whitespace-review-273/candidate/baseline270/freeze.py.txt": {
+      "bytes": 1541,
+      "sha256": "084542f4802acb218f2724473e8ca92183e0368d95dce6d3b1ee69be743c7f5c"
+    },
+    "history/whitespace-review-273/candidate/baseline270/prepare-whitespace-pins.py.diff.txt": {
+      "bytes": 5823,
+      "sha256": "52667f760ccb2a3883e24e05c2526381a0e4e8c9ec06a2ae3f1107518e38e9e9"
+    },
+    "history/whitespace-review-273/candidate/baseline270/prepare-whitespace-pins.py.txt": {
+      "bytes": 6371,
+      "sha256": "1b10cde739ef529bd990c150405d0dbd9440ba6a00763904d7c618c1819d36c7"
+    },
+    "history/whitespace-review-273/candidate/baseline270/prepare_witnesses.py.txt": {
+      "bytes": 5605,
+      "sha256": "d88763f2e2015fa2e72702b7bd29fe7af843d634c9ffe74c995c7dcf26d4d4bd"
+    },
+    "history/whitespace-review-273/candidate/baseline270/prove_special.py.txt": {
+      "bytes": 2605,
+      "sha256": "40b386ddf90f2d673b6fa21ef1eb9aa4d293af75f95f0575c769e15af322b54a"
+    },
+    "history/whitespace-review-273/candidate/baseline270/report.md": {
+      "bytes": 8154,
+      "sha256": "2ccde169876d6e4253bfc652cfa3a28aba1666ccfd744e8b0dbc33034190b6e3"
+    },
+    "history/whitespace-review-273/candidate/baseline270/test_audit_dispatch.py.txt": {
+      "bytes": 3581,
+      "sha256": "125784fec274b8aa3fcfdece279a1a02132dbcf233d8179e2bb90eea1c85d89e"
+    },
+    "history/whitespace-review-273/candidate/baseline270/test_witnesses.py.txt": {
+      "bytes": 13305,
+      "sha256": "c80686bf59985048cd5cb30108257a0f9844f5395bde13a3dbcabd9ccf4b98ae"
+    },
+    "history/whitespace-review-273/candidate/baseline270/verify_final.py.txt": {
+      "bytes": 3426,
+      "sha256": "199cc82a534cb4aa06e5c9aa466775aa42c5c0c23405e0c40e269986523ab94c"
+    },
+    "history/whitespace-review-273/candidate/baseline270/witnesses.py.txt": {
+      "bytes": 8021,
+      "sha256": "d0b4091cd61ea0a1ab1665d535985d0f5edc451f9a1e56b449acc57cfdebb1d3"
+    },
+    "history/whitespace-review-273/candidate/capture.py.txt": {
+      "bytes": 2391,
+      "sha256": "da005b3907a8951ca5d33750d4efdb097883b9bb55009c6b18967f0111278e39"
+    },
+    "history/whitespace-review-273/candidate/checks/static-diff-format/command.json": {
+      "bytes": 598,
+      "sha256": "bd126e3092aa21a56f66ac188ed4db5af9f4732ac26556a1d6e3185e14f045c2"
+    },
+    "history/whitespace-review-273/candidate/checks/static-diff-format/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/candidate/checks/static-diff-format/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/static-diff-format/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/static-diff-format/stdout.txt": {
+      "bytes": 128,
+      "sha256": "a4082fcbe6f66d0f7ce061d540a7fe8ab3fc1c294f3d3bee79ebdd40edb822cc"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax/command.json": {
+      "bytes": 538,
+      "sha256": "b2e742b93206590391cce9f2633bb4505cc07f90d014ef70a335d605efb4d669"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax/stdout.txt": {
+      "bytes": 41,
+      "sha256": "6314baaabcbdcd7afe444428effb76e728a4d3b5098a0d6ec213d82772268bfe"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax-final/command.json": {
+      "bytes": 427,
+      "sha256": "158b4cfb01c6c433ae008e283b71b867d0844736ceebc44039c95b2b21c4f4d0"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax-final/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax-final/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax-final/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/syntax-final/stdout.txt": {
+      "bytes": 12,
+      "sha256": "a45e0e7e4f73f3d38ca61429e07a02a5f5aa5599b02d592e19dd0eae59440e10"
+    },
+    "history/whitespace-review-273/candidate/checks/unit/command.json": {
+      "bytes": 367,
+      "sha256": "84416b0c9d93c835b5b53ed1f6d6c931640155ad11eee7fd74ef8bbc8d522720"
+    },
+    "history/whitespace-review-273/candidate/checks/unit/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "history/whitespace-review-273/candidate/checks/unit/stderr.txt": {
+      "bytes": 3473,
+      "sha256": "b15c5d9949c369445165427a3c3eec897ebcab799cb46279914fa0210b835c18"
+    },
+    "history/whitespace-review-273/candidate/checks/unit/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/unit/stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-final/command.json": {
+      "bytes": 318,
+      "sha256": "d99cc7edd957431a94da066f22f38675d868ee39047747bb71a513d6982b98ad"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-final/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-final/stderr.txt": {
+      "bytes": 1477,
+      "sha256": "62e9eddb179727ca7228394d4c11b88d5d955548b280f857cef8906798831955"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-final/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-final/stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-v2/command.json": {
+      "bytes": 318,
+      "sha256": "d99cc7edd957431a94da066f22f38675d868ee39047747bb71a513d6982b98ad"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-v2/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-v2/stderr.txt": {
+      "bytes": 1477,
+      "sha256": "62e9eddb179727ca7228394d4c11b88d5d955548b280f857cef8906798831955"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-v2/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/checks/unit-v2/stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/candidate/command-contract.json": {
+      "bytes": 8300,
+      "sha256": "1f5540fc6dbc565dc28d9fd42067ed2643eb447428e035969615006b212b41c4"
+    },
+    "history/whitespace-review-273/candidate/current-inputs/registration-v1-v2.diff.txt": {
+      "bytes": 3467,
+      "sha256": "f4cb7ea9645e45ded3cc2f7885310ad97f8bd0438eb611b14f1ff7d793f119a3"
+    },
+    "history/whitespace-review-273/candidate/current-inputs/semantic-review/freeze.json": {
+      "bytes": 431343,
+      "sha256": "b4f9b53d8cbc18385b006f7d8dff7a04cee73fa5bf61a98e9b031bcb32c1cf4c"
+    },
+    "history/whitespace-review-273/candidate/current-inputs/semantic-review/original-to-copy-manifest.json": {
+      "bytes": 11772458,
+      "sha256": "ec77ad877d4ed27d09275d2232fa79b2cd130228e08aa063a9243a5549af1540"
+    },
+    "history/whitespace-review-273/candidate/current-inputs/whitespace-preparation/frozen-static-whitespace-inventory.json": {
+      "bytes": 89207,
+      "sha256": "845e6adbe2196cbec7ea540ee4870f81048fe4e5f5643fffcd8b891110a3ad2a"
+    },
+    "history/whitespace-review-273/candidate/final-preflight.json": {
+      "bytes": 9861,
+      "sha256": "d5979baaa43ee22bd0f3579c075dc585346e10b4e4413f1a25201e226eaef36d"
+    },
+    "history/whitespace-review-273/candidate/fixture-range-fix.diff.txt": {
+      "bytes": 1705,
+      "sha256": "5d687231dc88e368ff330082d7a1c50fb354ad243981cb9f79e98e35c3cccc66"
+    },
+    "history/whitespace-review-273/candidate/freeze.json": {
+      "bytes": 14601,
+      "sha256": "cdbb9f2cc81c0c14c45364d757ca9fed75b65aaf5a3800637b82c099e04ce9b3"
+    },
+    "history/whitespace-review-273/candidate/freeze.py.txt": {
+      "bytes": 2610,
+      "sha256": "ad461529f102570bed208f3c3c486f3f61b208bde75343693e543889c4d4bd2c"
+    },
+    "history/whitespace-review-273/candidate/input-manifest.json": {
+      "bytes": 9456,
+      "sha256": "3381476d14701a9d183b96319dbfb806b389ac45641c15d100442270aef71acf"
+    },
+    "history/whitespace-review-273/candidate/old270-audit-to-candidate.diff.txt": {
+      "bytes": 27787,
+      "sha256": "c0bb8154b6848f813ad264224d272e84feefaf35845cd15241c9b2d7f8c35905"
+    },
+    "history/whitespace-review-273/candidate/old270-preparer-to-candidate.diff.txt": {
+      "bytes": 23313,
+      "sha256": "81d1d310733ca9ac3bc41033d22dfcb32787e4a5788be8ee020702e8f46dbb57"
+    },
+    "history/whitespace-review-273/candidate/physical/C05ReadingASCII.txt": {
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "history/whitespace-review-273/candidate/physical/C15ReadingASCII.txt": {
+      "bytes": 329388,
+      "sha256": "ede520e320a21fc3f7aef4366920c1debbddbc26894513506648e9dd0ffeed10"
+    },
+    "history/whitespace-review-273/candidate/physical/C18ReadingASCII.txt": {
+      "bytes": 699885,
+      "sha256": "dffbffe9ad441d63783d7583c7c8e5da4c72613f7ce5ff1aecda931a5832c35f"
+    },
+    "history/whitespace-review-273/candidate/physical/ILL.txt": {
+      "bytes": 2981468,
+      "sha256": "ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e"
+    },
+    "history/whitespace-review-273/candidate/physical-source-descriptors.json": {
+      "bytes": 5737,
+      "sha256": "b0743b71de515b08cb7e9fbe8dfebfb1b1badb7e2c04770c7a8b09dd9ff2af2b"
+    },
+    "history/whitespace-review-273/candidate/record_checks.py.txt": {
+      "bytes": 1057,
+      "sha256": "cc2be7cb015e953e4d971babb45133fe80d5ab577186914a12c7a20bc99ff32d"
+    },
+    "history/whitespace-review-273/candidate/report.json": {
+      "bytes": 485,
+      "sha256": "8c1c8662b02c5ecc4e4ff09d087619968ac9312a41195df45f7d25234f66ee74"
+    },
+    "history/whitespace-review-273/candidate/report.md": {
+      "bytes": 7289,
+      "sha256": "3658b198361ffe8566dbf7adaa000e30e85941b3796b2e040d97dc7992cad9a7"
+    },
+    "history/whitespace-review-273/candidate/test_predicates-attempt01.py.txt": {
+      "bytes": 2980,
+      "sha256": "f28c80f4669cbcda160a5871b0e2086a0c6a7d6be96144e6fb2c9710fbdda56c"
+    },
+    "history/whitespace-review-273/candidate/test_predicates_v2.py.txt": {
+      "bytes": 2980,
+      "sha256": "4014be5c87f1c6e3726166f8dce4777934cdd39e461457e11e3ded4a0bf32fa7"
+    },
+    "history/whitespace-review-273/candidate/whitespace273.py.txt": {
+      "bytes": 16617,
+      "sha256": "1ee488c6afd44a574b23a43486be8a1b11bfd373c69fab6b60e54d59e69d3eb8"
+    },
+    "history/whitespace-review-273/candidate/write_report.py.txt": {
+      "bytes": 12922,
+      "sha256": "36ec6595200a57da32b3977336961b10828dad33934d4db79724115e94b82df8"
+    },
+    "history/whitespace-review-273/correct-line-references.py.txt": {
+      "bytes": 2662,
+      "sha256": "ba5308104a7b774009092f00d1417c4886f6b50e59d5b094eeb2d666741b18cb"
+    },
+    "history/whitespace-review-273/current-build-proof.json": {
+      "bytes": 3170,
+      "sha256": "e766d2f53c1afa97e9814ba6e76c0681018c6504e17d242a1d90e50c2fa21891"
+    },
+    "history/whitespace-review-273/current-root-manifest.json": {
+      "bytes": 1800687,
+      "sha256": "f665b5f6191c891b41d65d73f7f6f3a9a9f639a59b74553f2840f00851b1ac09"
+    },
+    "history/whitespace-review-273/evidence-pins.json": {
+      "bytes": 1380,
+      "sha256": "dc2ac71ab8f277b40996f65493dfafa4020aa4e098b297c775e85cde133f12da"
+    },
+    "history/whitespace-review-273/execution-records.json": {
+      "bytes": 1635,
+      "sha256": "568dbc6a8c6b5e04022b06de711376fc2b3742f00b42caf85765a9bc3180d5bd"
+    },
+    "history/whitespace-review-273/finalize-review.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/finalize-review.py.txt": {
+      "bytes": 18921,
+      "sha256": "f7bd2e06649c1f2962efb97d70f2e1e7cd4c610b6df6ea665e12b98038cd51ef"
+    },
+    "history/whitespace-review-273/finalize-review.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/finalize-review.stdout": {
+      "bytes": 178,
+      "sha256": "15a95d314f6e6300c6a8c3afcd9391c3ef5e77e8bb10a396bb3bbc8b2d9112ca"
+    },
+    "history/whitespace-review-273/findings.json": {
+      "bytes": 5529,
+      "sha256": "157ec13c9e6147ab474f5aa4fd4eb145a54a22d9bf5b4ea74aeb0f19653eccef"
+    },
+    "history/whitespace-review-273/fixtures/probe-output/consumed-inputs.json": {
+      "bytes": 1080,
+      "sha256": "2186734de85bcf5f26164ef241048674b36239d869c579d47eaad4226df6a71f"
+    },
+    "history/whitespace-review-273/fixtures/probe-output/inputs/46f4c2af5407a2c7a53fda0c02f6ac59abeb82c471b95fcd3f26815b7652c352.bin": {
+      "bytes": 15,
+      "sha256": "46f4c2af5407a2c7a53fda0c02f6ac59abeb82c471b95fcd3f26815b7652c352"
+    },
+    "history/whitespace-review-273/fixtures/probe-output/invocation.json": {
+      "bytes": 268,
+      "sha256": "ee47b5702848a371348977b336893ddfdce36b98ac704e048b5d7a89e07c4f13"
+    },
+    "history/whitespace-review-273/fixtures/sources/direct-alias.json": {
+      "bytes": 15,
+      "sha256": "46f4c2af5407a2c7a53fda0c02f6ac59abeb82c471b95fcd3f26815b7652c352"
+    },
+    "history/whitespace-review-273/fixtures/sources/manifest-alias.json": {
+      "bytes": 15,
+      "sha256": "46f4c2af5407a2c7a53fda0c02f6ac59abeb82c471b95fcd3f26815b7652c352"
+    },
+    "history/whitespace-review-273/fixtures/sources/one.json": {
+      "bytes": 15,
+      "sha256": "46f4c2af5407a2c7a53fda0c02f6ac59abeb82c471b95fcd3f26815b7652c352"
+    },
+    "history/whitespace-review-273/fixtures/sources/two.json": {
+      "bytes": 15,
+      "sha256": "46f4c2af5407a2c7a53fda0c02f6ac59abeb82c471b95fcd3f26815b7652c352"
+    },
+    "history/whitespace-review-273/freeze-review.py.txt": {
+      "bytes": 1802,
+      "sha256": "74805164d13038ca24c85aed0d885125aa5281c69b57f7ecf659b5d910a36b38"
+    },
+    "history/whitespace-review-273/freeze.json": {
+      "bytes": 33343,
+      "sha256": "0ab4b6f2ef6b6f06235bbbbfb0cdf21f3dbd9d0a1b7400e0c69939b1b829dc8d"
+    },
+    "history/whitespace-review-273/history/before-line-reference-correction/evidence-pins.json": {
+      "bytes": 1380,
+      "sha256": "9453bd220ec5a1e952c9d24a7d62954a0f63ee8f4cdb05e4883bdd2e7724c48f"
+    },
+    "history/whitespace-review-273/history/before-line-reference-correction/findings.json": {
+      "bytes": 5507,
+      "sha256": "40677b09bfad0e040b2086a77a78510a7d234e8cbdd9874a0c512f2119b16510"
+    },
+    "history/whitespace-review-273/history/before-line-reference-correction/freeze.json": {
+      "bytes": 31901,
+      "sha256": "0505660accf278d77db6bb54f505e1f5b8b70c84ce433928432df6e8fd0da7db"
+    },
+    "history/whitespace-review-273/history/before-line-reference-correction/original-to-copy-manifest.json": {
+      "bytes": 66154,
+      "sha256": "7106ede083c8320551f63a4918192d75bbbacbd4329e4b83de686d77c59c661c"
+    },
+    "history/whitespace-review-273/history/before-line-reference-correction/report.md": {
+      "bytes": 10051,
+      "sha256": "03536d4365efd3daa42b31faf83219cbbf0af1753121b486e3e22b5690a7f882"
+    },
+    "history/whitespace-review-273/history/before-line-reference-correction/review.json": {
+      "bytes": 9010,
+      "sha256": "8ef9b683cbf06baf574d032dcf98c057597917fc36d7717cd85387073ac8dcff"
+    },
+    "history/whitespace-review-273/input-manifest.json": {
+      "bytes": 40029,
+      "sha256": "3965ea49bc81712ed477a28348ec4136805f5ef5beb4fa938d71ae56712cfdc5"
+    },
+    "history/whitespace-review-273/inspection-attempt01.json": {
+      "bytes": 1542,
+      "sha256": "de9b0c45c3927296a0d0d31c83dba9239135c176ce7dc01af2fbf6cb453a605d"
+    },
+    "history/whitespace-review-273/line-reference-correction.json": {
+      "bytes": 3891,
+      "sha256": "3f1611132ab3fdfb69b30bc59d6a4ce060ac2659aeac4aa287747f0e5e19ae86"
+    },
+    "history/whitespace-review-273/original-to-copy-manifest.json": {
+      "bytes": 66154,
+      "sha256": "7106ede083c8320551f63a4918192d75bbbacbd4329e4b83de686d77c59c661c"
+    },
+    "history/whitespace-review-273/physical/0.bin": {
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "history/whitespace-review-273/physical/1.bin": {
+      "bytes": 329388,
+      "sha256": "ede520e320a21fc3f7aef4366920c1debbddbc26894513506648e9dd0ffeed10"
+    },
+    "history/whitespace-review-273/physical/2.bin": {
+      "bytes": 699885,
+      "sha256": "dffbffe9ad441d63783d7583c7c8e5da4c72613f7ce5ff1aecda931a5832c35f"
+    },
+    "history/whitespace-review-273/physical/3.bin": {
+      "bytes": 2981468,
+      "sha256": "ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e"
+    },
+    "history/whitespace-review-273/preserve-and-probe.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/preserve-and-probe.py.txt": {
+      "bytes": 5022,
+      "sha256": "7f36cb35716cce06584561a1b0c6ece3c1bdc63fed2f80b804b93ba08b94885f"
+    },
+    "history/whitespace-review-273/preserve-and-probe.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/preserve-and-probe.stdout": {
+      "bytes": 144,
+      "sha256": "8beca862455f4c7356521db418b561bc7299eb0679af61b05c3457394a3673fa"
+    },
+    "history/whitespace-review-273/report.md": {
+      "bytes": 10051,
+      "sha256": "03536d4365efd3daa42b31faf83219cbbf0af1753121b486e3e22b5690a7f882"
+    },
+    "history/whitespace-review-273/review.json": {
+      "bytes": 9119,
+      "sha256": "c6f9157ddadd3163941cd3ba99d78ebfb88a0966fc170c2f0248184e52e625e6"
+    },
+    "history/whitespace-review-273/verify-boundaries.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "history/whitespace-review-273/verify-boundaries.py.txt": {
+      "bytes": 4103,
+      "sha256": "397e2644e097555f571e0c02a9fa03e5db70a64428b5829b0d359ca40a744f5e"
+    },
+    "history/whitespace-review-273/verify-boundaries.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "history/whitespace-review-273/verify-boundaries.stdout": {
+      "bytes": 102,
+      "sha256": "434ae3235cfd7f8c6d544bf18b53212a2f49c67e6cd6d19e84c970b56bbeb15c"
+    },
+    "history/whitespace-review-273/warned-files/00.bin": {
+      "bytes": 1037,
+      "sha256": "c77f8a60c77fc9c632e58e4ea3c513b697e31c454ffcf794764f1249f5723a8e"
+    },
+    "history/whitespace-review-273/warned-files/01.bin": {
+      "bytes": 360,
+      "sha256": "71fa885a1fd36597b0c1ad2d3a930ef802163fcbc8778556b2695fc071459697"
+    },
+    "history/whitespace-review-273/warned-files/02.bin": {
+      "bytes": 624,
+      "sha256": "6993b18896a518c81cf77cd3ac5071b43e6097c00ae33c1410afeccf6ec9369f"
+    },
+    "history/whitespace-review-273/warned-files/03.bin": {
+      "bytes": 255,
+      "sha256": "e0758ad2380dd8d6a91c677f3def393973989dc74b5660ff752e730c362eed74"
+    },
+    "history/whitespace-review-273/warned-files/04.bin": {
+      "bytes": 360,
+      "sha256": "71fa885a1fd36597b0c1ad2d3a930ef802163fcbc8778556b2695fc071459697"
+    },
+    "history/whitespace-review-273/warned-files/05.bin": {
+      "bytes": 622,
+      "sha256": "f9e197659e6f16e6c7b76360a1b4c7d0e92fec2607b15d105acbae2ffecb5147"
+    },
+    "history/whitespace-review-273/warned-files/06.bin": {
+      "bytes": 1034,
+      "sha256": "a9fd8ab29af359897fa3de31633d7a38a1854f81681ce2fe16c3edff54dc20a0"
+    },
+    "history/whitespace-review-273/warned-files/07.bin": {
+      "bytes": 360,
+      "sha256": "71fa885a1fd36597b0c1ad2d3a930ef802163fcbc8778556b2695fc071459697"
+    },
+    "history/whitespace-review-273/warned-files/08.bin": {
+      "bytes": 636,
+      "sha256": "3cbedeb04fd42be0be41181d4d02ae4d96fffd251609df404207fa7ba234beed"
+    },
+    "history/whitespace-review-273/warned-files/09.bin": {
+      "bytes": 296,
+      "sha256": "96bd398c3f6beab543fd5fad7928b708d37ea16570b811eede4f71f0553ebb24"
+    },
+    "history/whitespace-review-273/warned-files/10.bin": {
+      "bytes": 1036,
+      "sha256": "f79e965970889a7c6a3c44169cb7b875b702a06fe854de8eec7a53e3f6d84cd5"
+    },
+    "history/whitespace-review-273/warned-files/11.bin": {
+      "bytes": 1037,
+      "sha256": "c77f8a60c77fc9c632e58e4ea3c513b697e31c454ffcf794764f1249f5723a8e"
+    },
+    "history/whitespace-review-273/warned-files/12.bin": {
+      "bytes": 360,
+      "sha256": "71fa885a1fd36597b0c1ad2d3a930ef802163fcbc8778556b2695fc071459697"
+    },
+    "history/whitespace-review-273/warned-files/13.bin": {
+      "bytes": 624,
+      "sha256": "6993b18896a518c81cf77cd3ac5071b43e6097c00ae33c1410afeccf6ec9369f"
+    },
+    "history/whitespace-review-273/warned-files/14.bin": {
+      "bytes": 255,
+      "sha256": "e0758ad2380dd8d6a91c677f3def393973989dc74b5660ff752e730c362eed74"
+    },
+    "history/whitespace-review-273/warned-files/15.bin": {
+      "bytes": 360,
+      "sha256": "71fa885a1fd36597b0c1ad2d3a930ef802163fcbc8778556b2695fc071459697"
+    },
+    "history/whitespace-review-273/warned-files/16.bin": {
+      "bytes": 622,
+      "sha256": "f9e197659e6f16e6c7b76360a1b4c7d0e92fec2607b15d105acbae2ffecb5147"
+    },
+    "history/whitespace-review-273/warned-files/17.bin": {
+      "bytes": 1034,
+      "sha256": "a9fd8ab29af359897fa3de31633d7a38a1854f81681ce2fe16c3edff54dc20a0"
+    },
+    "history/whitespace-review-273/warned-files/18.bin": {
+      "bytes": 360,
+      "sha256": "71fa885a1fd36597b0c1ad2d3a930ef802163fcbc8778556b2695fc071459697"
+    },
+    "history/whitespace-review-273/warned-files/19.bin": {
+      "bytes": 636,
+      "sha256": "3cbedeb04fd42be0be41181d4d02ae4d96fffd251609df404207fa7ba234beed"
+    },
+    "history/whitespace-review-273/warned-files/20.bin": {
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "history/whitespace-review-273/warned-files/21.bin": {
+      "bytes": 699885,
+      "sha256": "dffbffe9ad441d63783d7583c7c8e5da4c72613f7ce5ff1aecda931a5832c35f"
+    },
+    "history/whitespace-review-273/warned-files/22.bin": {
+      "bytes": 329388,
+      "sha256": "ede520e320a21fc3f7aef4366920c1debbddbc26894513506648e9dd0ffeed10"
+    },
+    "history/whitespace-review-273/warned-files/23.bin": {
+      "bytes": 3467,
+      "sha256": "f4cb7ea9645e45ded3cc2f7885310ad97f8bd0438eb611b14f1ff7d793f119a3"
+    },
+    "history/whitespace-review-273/warned-files/24.bin": {
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "history/whitespace-review-273/warned-files/25.bin": {
+      "bytes": 2981468,
+      "sha256": "ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e"
+    },
+    "history/whitespace-review-273/warned-files/26.bin": {
+      "bytes": 48562,
+      "sha256": "e83f2f66aa1db97293aa1b492305084ee75734b33b5bd83316e4d82ccb576e91"
+    },
+    "history/whitespace-review-273/warned-files/27.bin": {
+      "bytes": 1036,
+      "sha256": "f79e965970889a7c6a3c44169cb7b875b702a06fe854de8eec7a53e3f6d84cd5"
+    },
+    "history/whitespace-review-273/warned-files/28.bin": {
+      "bytes": 636,
+      "sha256": "3cbedeb04fd42be0be41181d4d02ae4d96fffd251609df404207fa7ba234beed"
+    },
+    "history/whitespace-review-273/warned-files/29.bin": {
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "history/whitespace-review-273/warned-files/30.bin": {
+      "bytes": 624,
+      "sha256": "6993b18896a518c81cf77cd3ac5071b43e6097c00ae33c1410afeccf6ec9369f"
+    },
+    "history/whitespace-review-273/warned-files/31.bin": {
+      "bytes": 360,
+      "sha256": "71fa885a1fd36597b0c1ad2d3a930ef802163fcbc8778556b2695fc071459697"
+    },
+    "history/whitespace-review-273/warned-files/32.bin": {
+      "bytes": 1034,
+      "sha256": "a9fd8ab29af359897fa3de31633d7a38a1854f81681ce2fe16c3edff54dc20a0"
+    },
+    "history/whitespace-review-273/warned-files/33.bin": {
+      "bytes": 1037,
+      "sha256": "c77f8a60c77fc9c632e58e4ea3c513b697e31c454ffcf794764f1249f5723a8e"
+    },
+    "history/whitespace-review-273/warned-files/34.bin": {
+      "bytes": 699885,
+      "sha256": "dffbffe9ad441d63783d7583c7c8e5da4c72613f7ce5ff1aecda931a5832c35f"
+    },
+    "history/whitespace-review-273/warned-files/35.bin": {
+      "bytes": 255,
+      "sha256": "e0758ad2380dd8d6a91c677f3def393973989dc74b5660ff752e730c362eed74"
+    },
+    "history/whitespace-review-273/warned-files/36.bin": {
+      "bytes": 329388,
+      "sha256": "ede520e320a21fc3f7aef4366920c1debbddbc26894513506648e9dd0ffeed10"
+    },
+    "history/whitespace-review-273/warned-files/37.bin": {
+      "bytes": 2981468,
+      "sha256": "ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e"
+    },
+    "history/whitespace-review-273/warned-files/38.bin": {
+      "bytes": 622,
+      "sha256": "f9e197659e6f16e6c7b76360a1b4c7d0e92fec2607b15d105acbae2ffecb5147"
+    },
+    "history/whitespace-review-273/warned-files/39.bin": {
+      "bytes": 1036,
+      "sha256": "f79e965970889a7c6a3c44169cb7b875b702a06fe854de8eec7a53e3f6d84cd5"
+    },
+    "history/whitespace-review-273/warned-files/40.bin": {
+      "bytes": 2176,
+      "sha256": "4dbcb14873bfa4ce514c1ac9856fe9c509ba6f9f80747087c598ebeff0021a5c"
+    },
+    "history/whitespace-review-273/warned-files/41.bin": {
+      "bytes": 1036,
+      "sha256": "f79e965970889a7c6a3c44169cb7b875b702a06fe854de8eec7a53e3f6d84cd5"
+    },
+    "history/whitespace-review-273/warned-files/42.bin": {
+      "bytes": 636,
+      "sha256": "3cbedeb04fd42be0be41181d4d02ae4d96fffd251609df404207fa7ba234beed"
+    },
+    "history/whitespace-review-273/warned-files/43.bin": {
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "history/whitespace-review-273/warned-files/44.bin": {
+      "bytes": 624,
+      "sha256": "6993b18896a518c81cf77cd3ac5071b43e6097c00ae33c1410afeccf6ec9369f"
+    },
+    "history/whitespace-review-273/warned-files/45.bin": {
+      "bytes": 360,
+      "sha256": "71fa885a1fd36597b0c1ad2d3a930ef802163fcbc8778556b2695fc071459697"
+    },
+    "history/whitespace-review-273/warned-files/46.bin": {
+      "bytes": 1034,
+      "sha256": "a9fd8ab29af359897fa3de31633d7a38a1854f81681ce2fe16c3edff54dc20a0"
+    },
+    "history/whitespace-review-273/warned-files/47.bin": {
+      "bytes": 1037,
+      "sha256": "c77f8a60c77fc9c632e58e4ea3c513b697e31c454ffcf794764f1249f5723a8e"
+    },
+    "history/whitespace-review-273/warned-files/48.bin": {
+      "bytes": 699885,
+      "sha256": "dffbffe9ad441d63783d7583c7c8e5da4c72613f7ce5ff1aecda931a5832c35f"
+    },
+    "history/whitespace-review-273/warned-files/49.bin": {
+      "bytes": 255,
+      "sha256": "e0758ad2380dd8d6a91c677f3def393973989dc74b5660ff752e730c362eed74"
+    },
+    "history/whitespace-review-273/warned-files/50.bin": {
+      "bytes": 329388,
+      "sha256": "ede520e320a21fc3f7aef4366920c1debbddbc26894513506648e9dd0ffeed10"
+    },
+    "history/whitespace-review-273/warned-files/51.bin": {
+      "bytes": 2981468,
+      "sha256": "ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e"
+    },
+    "history/whitespace-review-273/warned-files/52.bin": {
+      "bytes": 622,
+      "sha256": "f9e197659e6f16e6c7b76360a1b4c7d0e92fec2607b15d105acbae2ffecb5147"
+    },
+    "history/whitespace-review-273/warned-files/53.bin": {
+      "bytes": 1036,
+      "sha256": "f79e965970889a7c6a3c44169cb7b875b702a06fe854de8eec7a53e3f6d84cd5"
+    },
+    "history/whitespace-review-273/warned-files/54.bin": {
+      "bytes": 16142334,
+      "sha256": "9340b8186c8690782dd368850fa58fb0473a408f300a88d9f4a6d8bd95fc89e8"
+    },
+    "history/whitespace-review-273/warned-files/55.bin": {
+      "bytes": 5133393,
+      "sha256": "64fc0ece4fa5b3dd35bd0bde8a0241a4b0ae772d7bbfd2f8c58513c14c30955d"
+    },
+    "history/whitespace-review-273/warned-files/56.bin": {
+      "bytes": 5075,
+      "sha256": "d6bdb4a40189d2f4c04be7f30529b8e04c0c99313c6123afa62a16821fa789fb"
+    },
+    "history/whitespace-review-273/warned-files/57.bin": {
+      "bytes": 5202679,
+      "sha256": "9f014e88234fc4ea265a181d1a565a7ee5ac320ff8f6965ddbe006fd732f4455"
+    },
+    "input-manifest.json": {
+      "bytes": 185898,
+      "sha256": "919a11892f1abbb7bac5b5010d742877d82a437519e1474de8f68a4fa946fa1d"
+    },
+    "originals/physical-0.bin": {
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "originals/physical-1.bin": {
+      "bytes": 329388,
+      "sha256": "ede520e320a21fc3f7aef4366920c1debbddbc26894513506648e9dd0ffeed10"
+    },
+    "originals/physical-2.bin": {
+      "bytes": 699885,
+      "sha256": "dffbffe9ad441d63783d7583c7c8e5da4c72613f7ce5ff1aecda931a5832c35f"
+    },
+    "originals/physical-3.bin": {
+      "bytes": 2981468,
+      "sha256": "ee9b317a833393caf1ef398ae0145e94f8de2bda8647d9629489bba30560dd3e"
+    },
+    "physical-source-descriptors.json": {
+      "bytes": 5737,
+      "sha256": "b0743b71de515b08cb7e9fbe8dfebfb1b1badb7e2c04770c7a8b09dd9ff2af2b"
+    },
+    "preliminary-inspections.json": {
+      "bytes": 881,
+      "sha256": "df18b68764d1d15ad71f72a83e921389944d6cbf96bc704fd7c112e9b9cc4e8a"
+    },
+    "prepare_candidate.py": {
+      "bytes": 4285,
+      "sha256": "8131e3176e521c5dc924d72c48d20d5588e51ba9cb7c8eb3379a07f492cbcc7a"
+    },
+    "probe_actual.py": {
+      "bytes": 2775,
+      "sha256": "5a6bc984728d66e686c1a39ec91be2f12b42c7b124ccfc66075ad77f801f7c0a"
+    },
+    "report.json": {
+      "bytes": 993,
+      "sha256": "4a6cdb2c12027565d91e3fe007798ebc3b9118e58426e86ed58ae88566c7b4c4"
+    },
+    "report.md": {
+      "bytes": 5625,
+      "sha256": "871ece9723c2d61abf7cc7ed3ea81a8b469ba7cf6a4351301d1ccdf8e6ed814b"
+    },
+    "retention-proof.json": {
+      "bytes": 286,
+      "sha256": "6add780692dd08a569849b79ccf1426b6392f2316de23420efb1ae528eb0bb73"
+    },
+    "run_capture.py": {
+      "bytes": 846,
+      "sha256": "97ef5229299fb2c8d9a8df071348633f00aae809662f52e034647598c366be19"
+    },
+    "test_corrections.py": {
+      "bytes": 6074,
+      "sha256": "1f48cc5035272d9ef86e214c98ba20b11ea6629e6f1afc2de89a24cd027f8b9f"
+    },
+    "test_diff_completion.py": {
+      "bytes": 655,
+      "sha256": "8f0616996d76b5ed04be43d4df5f9c9be43b4798ce7567fc16e7b8678c9a0085"
+    },
+    "test_original_predicates.py": {
+      "bytes": 2980,
+      "sha256": "4014be5c87f1c6e3726166f8dce4777934cdd39e461457e11e3ded4a0bf32fa7"
+    },
+    "test_physical_lf_retention.py": {
+      "bytes": 478,
+      "sha256": "3e92285a47836a46296dadb5173c36dfec21cf3fcd7ac3baab30ef03915be0db"
+    },
+    "whitespace273.py": {
+      "bytes": 18898,
+      "sha256": "6815f67ee9d8c042476da55e8c23f63314d68fdcb4eb4ece2f2d3c9fdc3414ba"
+    }
+  }
+}

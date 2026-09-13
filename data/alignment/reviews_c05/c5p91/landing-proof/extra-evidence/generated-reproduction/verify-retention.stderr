@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-generated-reproduction/verify-retention.py.txt", line 56, in <module>
+    missing=[dict(tib=t,pairs=p) for t,p in ev['pairs'].items() if all(x['acip'] is None for x in p)];missspans=[x for x in full['links'] if x['d']==5 and x['eng'] and not x['tib_acip']];check('Actual ACIP incomplete coverage7075/7078',len(ev['pairs'])==7078 and len(ev['acip_index'])==7075 and len(missing)==3);check('Actual five unproven ACIP spans',len(missspans)==5)
+                                                                                                                                                                                                                                                                                                                        ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through273-generated-reproduction/verify-retention.py.txt", line 11, in check
+    checks.append(dict(check=name,pass_=bool(result),detail=detail));assert result,(name,detail)
+                                                                            ^^^^^^
+AssertionError: ('Actual five unproven ACIP spans', None)

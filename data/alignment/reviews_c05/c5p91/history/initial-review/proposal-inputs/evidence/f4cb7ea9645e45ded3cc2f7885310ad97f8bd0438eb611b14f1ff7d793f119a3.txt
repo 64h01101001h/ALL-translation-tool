@@ -1,0 +1,56 @@
+--- register-reviewed-page-and-index.py
++++ register-reviewed-page-and-index-v2.py
+@@ -55,9 +55,41 @@
+ assert acceptance['page'] == PAGE and acceptance['segments'] == SEQS
+ assert acceptance['exact_final_hashes_counts_and_ranges']
+ assert acceptance['review_json_sha256'] == pin(meta_raw)['sha256']
+-spec = json.loads((W / 'data/alignment/specs_c05/c5p91.json').read_text())
+-assert spec['course'] == 'C05' and [s['seq'] for s in spec['segments']] == SEQS
++# Tie every landed byte stream to the separately approved individual inputs.
++# The actual landing helper serializes this ordered spec and the canonical
++# generator concatenates its per-segment bodies with their terminating newline.
++assert isinstance(meta['segments'], list)
++assert [row['seq'] for row in meta['segments']] == SEQS
++expected_spec = {'course': 'C05', 'segments': []}
++expected_bodies = []
++for row in meta['segments']:
++    seq = row['seq']
++    current = B / 'reconciled' / str(seq)
++    accepted = B / 'semantic-review/reviewed-final' / str(seq)
++    landed_accepted = REVIEW / 'reviewed-final' / str(seq)
++    individual_spec = (current / 'spec.json').read_bytes()
++    individual_body = (current / 'body.html').read_bytes()
++    assert pin(individual_spec) == {'bytes': row['spec_bytes'], 'sha256': row['spec_sha256']}
++    assert pin(individual_body) == {'bytes': row['body_bytes'], 'sha256': row['body_sha256']}
++    assert individual_spec == (accepted / 'spec.json').read_bytes() == (landed_accepted / 'spec.json').read_bytes()
++    assert individual_body == (accepted / 'body.html').read_bytes() == (landed_accepted / 'body.html').read_bytes()
++    part = json.loads(individual_spec)
++    assert part['course'] == 'C05' and [seg['seq'] for seg in part['segments']] == [seq]
++    assert row['generator_exit'] == 0 and individual_body
++    expected_spec['segments'].extend(part['segments'])
++    expected_bodies.append(individual_body)
++expected_spec_bytes = (json.dumps(expected_spec, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
++spec_bytes = (W / 'data/alignment/specs_c05/c5p91.json').read_bytes()
++assert spec_bytes == expected_spec_bytes
+ body = (B / 'landing/generator.stdout').read_bytes()
++assert body == b''.join(expected_bodies)
++assert (B / 'landing/generator.exit').read_text().strip() == '0'
++assert not (B / 'landing/generator.stderr').read_bytes()
++landing_meta = json.loads((REVIEW / 'landing.json').read_text())
++assert landing_meta['course'] == 'C05' and landing_meta['page'] == 'c5p91' and landing_meta['segments'] == SEQS
++assert landing_meta['generator_exit'] == 0
++assert landing_meta['spec_sha256'] == pin(spec_bytes)['sha256']
++assert landing_meta['body_sha256'] == pin(body)['sha256']
+ assert body and body in (PAGES / 'c5p91.html').read_bytes()
+ 
+ index = PAGES / 'index.html'
+@@ -110,6 +142,8 @@
+     builder_before=pin(old_builder), builder_after=pin(new_builder),
+     registry_added_bytes=len(added_line), page_count=91, covered_source_segments=273,
+     all_page_targets_exist=True, all_previous_registry_entries_exact=True,
+-    accepted_page_body=pin(body), actual_builders_executed_by_this_helper=0)
++    accepted_page_body=pin(body), accepted_page_spec=pin(spec_bytes),
++    all_individual_approval_pins_match=True, exact_approved_spec_and_body_composition=True,
++    actual_builders_executed_by_this_helper=0)
+ OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
+ print(json.dumps(result, ensure_ascii=False, indent=2))
