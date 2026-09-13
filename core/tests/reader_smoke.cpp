@@ -203,6 +203,40 @@ int main(int argc, char** argv) {
               "and so does the gyis of an absence verb");
     }
 
+    // A CASE PARTICLE IS NOT A VERB.
+    //
+    // spotVerb's weakest rule accepted any entry with a gloss beginning
+    // "to ". la's entry carries 108 glosses, among them "to ... to" — a
+    // pattern entry showing the particle in a construction, not a definition.
+    // Measured over 3,000 corpus segments, that rule fired on 5.8% of all
+    // returns and la and phyir were the two most-returned "verbs" in the
+    // sample. la is the commonest particle in Tibetan.
+    {
+        auto [doc, cls] = analyze("CHOS RNAMS LA");
+        auto chunks = allcore::chunkClause(doc, cls[0]);
+        auto v = allcore::spotVerb(doc, chunks);
+        CHECK(!(v.confident && v.wylie == "la"),
+              "la is never a CONFIDENT verb \u2014 a case particle is not a "
+              "verb, whatever its gloss list happens to contain");
+    }
+    {
+        auto [doc, cls] = analyze("SANGS RGYAS KYI PHYIR");
+        auto chunks = allcore::chunkClause(doc, cls[0]);
+        auto v = allcore::spotVerb(doc, chunks);
+        CHECK(!(v.confident && v.wylie == "phyir"),
+              "and neither is phyir \u2014 its \"to ... to\" is a usage "
+              "pattern with no verb after the to");
+    }
+    {   // The guard must not cost a real verb. bstan has tense forms, so
+        // rule 1 fires long before the gloss rule is reached.
+        auto [doc, cls] = analyze("SANGS RGYAS KYIS CHOS BSTAN");
+        auto chunks = allcore::chunkClause(doc, cls[0]);
+        auto v = allcore::spotVerb(doc, chunks);
+        CHECK(v.confident && v.wylie == "bstan",
+              "and a real verb is still found confidently \u2014 the guard "
+              "narrows only the gloss-shaped guess, not the tense evidence");
+    }
+
     // agent + verb: sangs rgyas kyis chos bstan
     {
         auto [doc, cls] = analyze("SANGS RGYAS KYIS CHOS BSTAN");
