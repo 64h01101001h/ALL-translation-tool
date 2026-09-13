@@ -25594,7 +25594,13 @@ public:
         auto* tl = new QHBoxLayout(top);
         auto* srcCol = new QVBoxLayout;
         source_ = new NumberedEdit;
-        source_->setPlaceholderText("Source ACIP…");
+        // The pane detects Wylie and converts it — load() opens by calling
+        // looksLikeWylie and tokEwts routes on the answer — but the
+        // placeholder named only ACIP, so a translator working in Wylie had
+        // nothing on screen telling them the box would take it, and would go
+        // looking for a converter first. (Draft workspace audit 2026-09-11.)
+        source_->setPlaceholderText(
+            "Paste the source here — ACIP or Wylie, detected automatically…");
         sess::remember(source_, "draft/source");
         srcCol->addWidget(source_);
         auto* startRow = new QHBoxLayout;
@@ -25798,6 +25804,14 @@ public:
         // a spellcheck for terminology — as you type, the same
         // checker the button runs updates a quiet status line
         termLive_ = new QLabel;
+        // The short-draft path was given a resting sentence when this finding
+        // was first worked, and the FIRST-RUN case was left behind: the label
+        // was constructed empty, so before the debounce ever fires there is a
+        // one-line gap under the draft box showing nothing, and a reader
+        // cannot tell "not checked yet" from "checked, nothing to report".
+        // Half a fix reads exactly like the whole one until you launch the
+        // app and look. (Draft workspace audit 2026-09-11.)
+        termLive_->setText("terminology check: waiting for a source");
         termLive_->setStyleSheet("font-size:11px;color:#777");
         termLive_->setWordWrap(true);
         draftCol->addWidget(termLive_);
@@ -26198,6 +26212,8 @@ public:
         return sayActive_ && sayHeld_.isValid() &&
                sayHeld_.elapsed() < kSayHoldMs;
     }
+
+    QString termChipTextForTest() const { return termLive_->text(); }
 
     void updateTermChip() {
             // an action's confirmation is still on screen and still readable
@@ -26825,6 +26841,35 @@ public:
             check(!report_->toPlainText().contains("Nothing to examine"),
                   "structure: with a source present the tools answer as "
                   "before");
+        }
+
+        // ---- nothing in this pane is blank when it has nothing to say ----
+        {
+            check(!source_->placeholderText().contains("ACIP…") ||
+                      source_->placeholderText().contains("Wylie"),
+                  "source box: the placeholder names Wylie too, since the "
+                  "pane detects and converts it");
+            // First run, before any timer has fired: the chip must already
+            // be saying something. Constructed-empty was the half of this
+            // finding that survived the first fix.
+            DraftPane fresh(spine_, nullptr, QDir::temp().filePath(
+                                                  "all_draft_chip_probe"));
+            check(!fresh.termChipTextForTest().isEmpty(),
+                  "terminology chip: says what it is waiting for from the "
+                  "moment the pane exists, not only after the first debounce");
+            // and the two waiting states are distinguishable
+            source_->setPlainText("SANGS RGYAS");
+            draft_->setPlainText("short");
+            updateTermChip();
+            const QString shortMsg = termLive_->text();
+            source_->clear();
+            updateTermChip();
+            check(!shortMsg.isEmpty() && !termLive_->text().isEmpty() &&
+                      shortMsg != termLive_->text(),
+                  "terminology chip: waiting-for-a-source and "
+                  "waiting-for-more-draft do not read the same");
+            source_->clear();
+            draft_->clear();
         }
 
         // ---- Return in a form field must not fire a button -------------
