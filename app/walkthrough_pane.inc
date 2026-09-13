@@ -289,6 +289,20 @@ public:
                              "transitive"),
                   "cases: the pane says WHY a reading was excluded, not just "
                   "a shorter list");
+            {   // The two panes must not contradict each other. Wilson
+                // Parse resolves a la don from the verb class; this pane used
+                // to print "2/4/7 — the particle cannot tell you which" about
+                // the very chunk that pane called "2nd (destination)".
+                src_->setPlainText("rgya gar du 'gro");
+                walk();
+                const QString n = out_->toPlainText();
+                check(n.contains("narrowed by the VERB, not by the particle"),
+                      "la don: a verb that CAN narrow the case does, and the "
+                      "cell says the verb is what did it");
+                check(!n.contains("2/4/7"),
+                      "la don: and it no longer offers all three where the "
+                      "verb has already ruled");
+            }
             check(t.contains("2/4/7") && t.contains("cannot tell you which"),
                   "cases: a la don particle reports 2nd/4th/7th and says the "
                   "particle cannot choose between them");
@@ -641,18 +655,38 @@ private:
             if (!cr.known()) {
                 caseCell = "<span style='color:#888'>—</span>";
             } else if (cr.ambiguous()) {
-                QString nums;
-                for (size_t z = 0; z < cr.cases.size(); ++z)
-                    nums += (z ? "/" : "") + QString::number(cr.cases[z]);
-                // The la-family declines into the 2nd, 4th or 7th and nothing
-                // in the particle chooses between them. Printing one would be
-                // a guess (rule 3); printing all three with the reason is
-                // what the grammar actually supports.
-                caseCell = "<b>" + nums + "</b> <span style='color:#B4540A'>"
-                           "(the <i>" + QString(cr.family) + "</i> particles "
-                           "decline into any of these three — the particle "
-                           "cannot tell you which, the relationship does)"
-                           "</span>";
+                // The particle cannot choose, but the VERB often can, and
+                // wilsonParse has been resolving exactly this for far longer
+                // than this pane has existed. Without asking, the Wilson Parse
+                // pane says "7th (locative)" about the same chunk this one
+                // calls "2/4/7 — the particle cannot tell you which": the tool
+                // contradicting itself in front of one reader.
+                //
+                // The honesty is unchanged. The particle still cannot choose,
+                // and the cell says so — it names the VERB as what narrowed
+                // it. table_conformance holds this to wilsonParse's answer so
+                // the two panes cannot drift apart again.
+                const auto nar = allcore::narrowLaDon(chunks[i].marker, verb.cls);
+                if (nar.narrowed()) {
+                    caseCell = "<b>" + QString::number(nar.cases[0]) +
+                               "</b> <span style='color:#666'>" +
+                               QString(cr.family).toHtmlEscaped() +
+                               " — narrowed by the VERB, not by the particle: " +
+                               QString(nar.because).toHtmlEscaped() + "</span>";
+                    for (int c : nar.cases) if (c == 3) sawThird = true;
+                } else {
+                    QString nums;
+                    for (size_t z = 0; z < cr.cases.size(); ++z)
+                        nums += (z ? "/" : "") + QString::number(cr.cases[z]);
+                    // Nothing narrowed it. Printing one of the three would be
+                    // a guess (rule 3); printing all three with the reason is
+                    // what the grammar supports.
+                    caseCell = "<b>" + nums + "</b> <span style='color:#B4540A'>"
+                               "(the <i>" + QString(cr.family) + "</i> particles "
+                               "decline into any of these three — the particle "
+                               "cannot tell you which, the relationship does)"
+                               "</span>";
+                }
             } else {
                 caseCell = "<b>" + QString::number(cr.cases.front()) +
                            "</b> <span style='color:#666'>" +

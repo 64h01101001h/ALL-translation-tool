@@ -24,6 +24,8 @@
 #include "allcore/lattice.h"
 #include "allcore/reader.h"
 #include "allcore/spine.h"
+#include "allcore/verbclass.h"
+#include "allcore/wilsonparse.h"
 
 static int failures = 0;
 #define CHECK(cond, msg)                                        \
@@ -150,6 +152,72 @@ int main(int argc, char** argv) {
               "conformance: the third case is never proof of agency — it "
               "keeps the qualifier reading, which is how the gis-family marks "
               "an absence verb's qualifier");
+    }
+
+    // ---- narrowLaDon must agree with wilsonParse ----------------------
+    //
+    // cases.cpp's narrowLaDon resolves a la don particle from the verb class.
+    // wilsonParse has been doing the same thing since long before cases.cpp
+    // existed, through caseLabel, and its answers are already gated in
+    // reader_smoke. That makes narrowLaDon a SIXTH table of exactly the kind
+    // this battery exists to police, and it was written knowing that.
+    //
+    // So it is held to the older one. wilsonParse is public and already
+    // resolves; nothing new is exposed to make this checkable. If the two ever
+    // part company, the Walkthrough and the Wilson Parse pane will say
+    // different things about the same word in front of the same reader, which
+    // is the defect this was written to end rather than to cause.
+    {
+        struct Case {
+            const char* acip;      // passage
+            const char* tok;       // the la don token in it
+            const char* verb;      // its verb, for classifyVerb
+            const char* expectIn;  // what wilsonParse's category must contain
+            int narrowTo;          // what narrowLaDon must answer
+        };
+        const std::vector<Case> kCases = {
+            {"RGYA GAR DU 'GRO", "DU", "'gro", "2nd", 2},
+            {"BDAG LA NOR YOD",  "LA", "yod",  "7th", 7},
+        };
+        for (const auto& c : kCases) {
+            auto doc = allcore::buildOverlay(spine, c.acip);
+            auto cls = allcore::splitClauses(doc.tokens, doc.barrier_after);
+            cls = allcore::refineClauses(doc, cls);
+            if (cls.empty()) {
+                CHECK(false, "conformance: la don passage produced no clause");
+                continue;
+            }
+            auto parsed = allcore::wilsonParse(spine, doc, cls);
+            bool wilsonSaid = false;
+            if (!parsed.empty())
+                for (const auto& u : parsed[0].units)
+                    if (u.text == c.tok &&
+                        u.category.find(c.expectIn) != std::string::npos)
+                        wilsonSaid = true;
+            const std::string what =
+                std::string("conformance: ") + c.tok + " under " + c.verb;
+            CHECK(wilsonSaid,
+                  (what + " — wilsonParse still resolves it to the " +
+                   c.expectIn).c_str());
+            std::string low;
+            for (const char* q = c.tok; *q; ++q)
+                low += (*q >= 'A' && *q <= 'Z') ? (char)(*q - 'A' + 'a') : *q;
+            const auto* vc = allcore::classifyVerb(c.verb);
+            CHECK(vc != nullptr,
+                  (what + " — the Wilson tables still know the verb").c_str());
+            const auto n = allcore::narrowLaDon(low, vc);
+            CHECK(n.narrowed() && n.cases[0] == c.narrowTo,
+                  (what + " — and cases.cpp narrows it the SAME way, so the "
+                          "two panes cannot contradict each other").c_str());
+            CHECK(n.because[0] != '\0',
+                  (what + " — saying what about the verb decided it").c_str());
+        }
+        // With no verb, nothing narrows. The particle still cannot choose.
+        const auto open = allcore::narrowLaDon("la", nullptr);
+        CHECK(open.cases.size() == 3 && !open.narrowed() &&
+                  open.because[0] == '\0',
+              "conformance: with no verb identified the la don stays 2nd/4th/"
+              "7th and claims no reason");
     }
 
     std::printf("table_conformance: %s (%d failure(s))\n",
