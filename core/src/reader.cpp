@@ -142,6 +142,35 @@ namespace {
 // auxiliaries that carry neither tense forms nor "to …" glosses in the
 // dictionary (med, min, dgos), plus the debate-formula verbs whose na clause
 // is conditional (zhe na / zer na / 'dod na — "if one asks/says/asserts").
+// Closed-class verbs the dictionary does not carry tense rows for. Despite
+// the name this is not only copulas — dgos, nus, zer and 'dod are here too.
+//
+// shog is deliberately NOT in this list — see isBenedictiveShog below. It
+// needs a position test this table cannot express.
+// shog: the benedictive "...par shog", may it be.
+//
+// On outside evidence rather than a guess. Hannah's Grammar of the Tibetan
+// Language (1912, public domain, in data/reference/grammars/) gives shog as
+// the imperative of 'ong ba, "to come". Our spine holds 'ong with tense forms
+// and omits the imperative, so this construction had no verb at all as far as
+// the engine was concerned — and it was one of the two commonest endings
+// among corpus clauses where no verb could be found.
+//
+// It needs a POSITION test, which is why it is not in the closed-class table.
+// shog is also a noun, a sheet or a page. Of 410 corpus segments carrying
+// shog as a word (a substring search says 2,552 and is wrong: it catches
+// tshogs), 259 are the benedictive and 9 are the noun in shog bu, paper.
+//
+// I first put it in the table and reasoned that position would separate the
+// two, because spotVerb searches only the final chunk. That was wrong and the
+// test said so: spotVerb walks the WHOLE final chunk right to left, so in
+// "shog bu gcig" it reaches shog and called it a confident verb. The
+// benedictive is the LAST TOKEN of its clause; the noun is followed by what
+// it modifies. That is the test.
+bool isBenedictiveShog(const std::string& wylie, int tok, int clauseLast) {
+    return wylie == "shog" && tok == clauseLast - 1;
+}
+
 bool isCopula(const std::string& wylie) {
     static const char* K[] = {"yin", "min", "yod",  "med",  "lags", "'dug",
                               "dgos", "nus", "zhe", "zer", "'dod"};
@@ -425,7 +454,8 @@ VerbGuess spotVerb(const OverlayDoc& doc, const std::vector<Chunk>& chunks) {
                                            "predicate slot, so the word sits "
                                            "inside a marked phrase",
                                  hasPredicateSlot);
-                if (isCopula(e.wylie))
+                if (isCopula(e.wylie) ||
+                    isBenedictiveShog(e.wylie, t, chunks[c].end))
                     return found(c, span.beg, e,
                                  hasPredicateSlot
                                      ? "closed-class verb (rule table)"
