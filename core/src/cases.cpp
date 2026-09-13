@@ -253,4 +253,42 @@ const char* attributiveSyntaxOpen(const VerbClassInfo* cls, bool sawThirdCase,
            "apart; both are live";
 }
 
+const char* impliedLinkingVerbLikely(bool verbAttested,
+                                     bool anyClauseLevelCaseBeyondFirst) {
+    if (verbAttested) return "";                    // a verb is right there
+    if (anyClauseLevelCaseBeyondFirst) return "";   // some other structure
+    return "no verb is attested and every chunk sits in the first case, which "
+           "is the shape of an IMPLIED LINKING VERB: A is B, with yin "
+           "understood and never written. Preston calls this by far the most "
+           "frequent sentence structure in the tenets literature. Both the "
+           "subject and its complement take the first case, so the two "
+           "unmarked phrases here are most likely those \u2014 but nothing on "
+           "the page says so, and this remains a reading rather than a finding";
+}
+
+const char* impliedExistenceVerbLikely(bool endsInVerbalNoun,
+                                       bool seventhCaseSubjectNoVerb) {
+    if (!endsInVerbalNoun && !seventhCaseSubjectNoVerb) return "";
+    return "this clause ends not in a verb but in a VERBAL NOUN, which is the "
+           "shape of an implied verb of "
+           "existence or possession \u2014 yod, understood at the end and "
+           "never written. It takes its subject in the seventh case and its "
+           "object in the first, and serves both senses: something EXISTS "
+           "somewhere, or something HAS something else. English needs "
+           "different constructions for those two and the Tibetan does not "
+           "distinguish them, so which one fits is your judgement about the "
+           "relationship, not a fact the grammar supplies";
+}
+
+const char* impliedElementNeedsContext() {
+    return "an implied agent, object or subject is recovered from the "
+           "SURROUNDING DISCUSSION, not from the sentence \u2014 Preston's "
+           "example is the verb \"assert\" with no agent in a chapter about "
+           "the Proponents of the Great Exposition, where the agent is a "
+           "Proponent of the Great Exposition because that is what the chapter "
+           "is about. This reader sees one clause at a time and has no access "
+           "to the chapter, so it can tell you an element is missing and "
+           "cannot tell you what it was";
+}
+
 }  // namespace allcore

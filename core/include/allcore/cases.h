@@ -210,4 +210,90 @@ LaDonNarrowing narrowLaDon(const std::string& marker, const VerbClassInfo* cls);
 const char* attributiveSyntaxOpen(const VerbClassInfo* cls, bool sawThirdCase,
                                   bool sawLaGroup);
 
+// THE IMPLIED LINKING VERB — named, because Preston vol. 2 p.44 says it is
+// "by far the most frequently seen sentence structure" in the tenets
+// literature, and our engine had no name for it at all.
+//
+// The linking-verb sentence puts BOTH the subject and its complement in the
+// first case and ends with yin (nom-nom): A is B. The implied variant drops
+// the verb, which leaves two unmarked noun phrases and nothing else — exactly
+// the shape spotVerb cannot handle, since it will name the last dictionary
+// word as an unverified candidate and the reader cannot tell that from a real
+// verb the glossary happens not to mark.
+//
+// The signal is precise: no chunk carries a case that fills a CLAUSE-level
+// slot other than the first, and no verb is attested. A sixth-case chunk does
+// not disqualify it — the genitive joins nouns inside a phrase and fills no
+// clause-level slot, which functionsForCase already records by answering the
+// empty set for it.
+//
+// Still a report, not a ruling. It names the reading and its evidence; it
+// does not assert that the verb is yin. Returns "" when the shape does not fit.
+// (Preston vol. 2 p.44, 2026-09-13.)
+const char* impliedLinkingVerbLikely(bool verbAttested,
+                                     bool anyClauseLevelCaseBeyondFirst);
+
+// THE IMPLIED VERB OF EXISTENCE OR POSSESSION — a second implied-verb shape,
+// and unlike the linking one it has a signal on the page.
+//
+// Preston vol. 2 p.53: the challenge of the sentence is that "it ends not with
+// a verb, but with a verbal noun followed by a terminating syntactic
+// particle", and the way to read it is to imagine an implicit yod at the end.
+//
+// That is mechanically checkable, and both halves are things the reader
+// already knows: a verbal noun is formed with pa/ba (p.xxv), and
+// isFinalParticle in reader.h already identifies a terminating particle by
+// the suffix-echo rule.
+//
+// yod takes a subject in the SEVENTH case and an object in the FIRST, and
+// serves both existence ("something exists somewhere") and possession
+// ("something has something else") — one verb with two syntaxes, nom-loc and
+// loc-nom. Which of the two English constructions fits is a judgement about
+// the relationship, not something the grammar settles, so this names both.
+// (Preston vol. 2 p.53, 2026-09-13.)
+// `endsVerbalNounThenTerminator` — p.53's signal, the clause ending in a
+// verbal noun plus a terminating particle rather than in a verb. The
+// terminator is often FUSED to the noun (pa'o), which p.71's vocabulary calls
+// out as ordinary: "syntactic particle fused to suffixless final syllable".
+// A first version of this looked only for two separate tokens and never
+// fired.
+//
+// `seventhCaseSubjectNoVerb` — p.64's signal, and the cleaner of the two: the
+// topical-outline sentence has a subject in the SEVENTH case, a list, and an
+// implied yod ending it. "A has [seven parts]: 1..7."
+// `endsInVerbalNoun` — the clause's last element is nominalised (pa/ba, or a
+// fused pa'o/ba'o), so it is a verbal NOUN and not the finite verb.
+//
+// This is the condition, and finding it corrected a wrong assumption of mine.
+// I first gated this on "no verb attested", and it never fired on Preston's
+// own examples — because spotVerb is CONFIDENT on both of them:
+//
+//     grub mtha'i rnam gzhag bshad pa'o   verb=bshad pa  confident=1
+//     dang po la mtshan nyid dang dbye ba verb=dbye      confident=1
+//
+// The dictionary has tense forms for bshad and dbye, so spotVerb marks the
+// nominalised form as the clause verb with confidence. Preston p.53 says of
+// this very sentence that it "ends not with a verb, but with a verbal noun
+// followed by a terminating syntactic particle". The engine is not merely
+// silent about the implied verb — it confidently names a verbal noun as the
+// finite one, which is worse.
+//
+// So the signal is the nominalisation itself, and the caution has to fire
+// DESPITE spotVerb's confidence rather than because of its absence.
+const char* impliedExistenceVerbLikely(bool endsInVerbalNoun,
+                                       bool seventhCaseSubjectNoVerb);
+
+// What the engine CANNOT recover, from the same page.
+//
+// Preston p.53 on implied agents, objects and subjects: they "share a common
+// reliance on context" — when "assert" appears with no agent in a chapter on
+// the Proponents of the Great Exposition, the agent is a Proponent of the
+// Great Exposition, "because that is what the whole chapter is about".
+//
+// That inference lives in the surrounding discussion, not in the sentence.
+// This reader analyses one clause at a time and has no access to the chapter,
+// so it can report that an element is missing and must not pretend to supply
+// it. Returns the standing caution; the caller decides where to show it.
+const char* impliedElementNeedsContext();
+
 }  // namespace allcore
