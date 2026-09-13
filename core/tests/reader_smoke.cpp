@@ -203,6 +203,39 @@ int main(int argc, char** argv) {
               "and so does the gyis of an absence verb");
     }
 
+    // THE BENEDICTIVE shog, AND ITS HOMOGRAPH.
+    //
+    // Hannah (1912) gives shog as the imperative of 'ong ba, "to come". Our
+    // spine holds 'ong with tense forms and omits the imperative, so
+    // "...par shog" had no verb at all — one of the two commonest endings
+    // among corpus clauses where none could be found. shog is also a noun,
+    // a sheet of paper, and the two are told apart by POSITION: the
+    // benedictive is the clause's last token, the noun is followed by what
+    // it modifies.
+    {
+        auto [doc, cls] = analyze("SANGS RGYAS 'GRUB PAR SHOG");
+        auto chunks = allcore::chunkClause(doc, cls[0]);
+        auto v = allcore::spotVerb(doc, chunks);
+        CHECK(v.confident && v.wylie == "shog",
+              "benedictive shog is a verb \u2014 ...par shog, may it be "
+              "(Hannah 1912: the imperative of 'ong ba)");
+    }
+    {
+        auto [doc, cls] = analyze("BSTAN PA GSAL BYED SHOG");
+        auto chunks = allcore::chunkClause(doc, cls[0]);
+        auto v = allcore::spotVerb(doc, chunks);
+        CHECK(v.confident && v.wylie == "shog",
+              "and with no par before it, since the position is what counts");
+    }
+    {   // THE guard rail. shog bu is paper, and it is not clause-final.
+        auto [doc, cls] = analyze("SHOG BU GCIG");
+        auto chunks = allcore::chunkClause(doc, cls[0]);
+        auto v = allcore::spotVerb(doc, chunks);
+        CHECK(!(v.confident && v.wylie == "shog"),
+              "but shog bu \u2014 paper \u2014 is NOT a verb: the noun is "
+              "followed by what it modifies, so it is never the last token");
+    }
+
     // NO PREDICATE SLOT, NO CONFIDENT VERB.
     //
     // chunkClause gives the final chunk the role "predicate slot" only when
