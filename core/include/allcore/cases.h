@@ -151,4 +151,33 @@ std::vector<Function> functionsFor(int case_number, Transitivity t);
 // (Adversarial pass over Preston, 2026-09-13.)
 bool syntacticParticleMarksQualifier(const std::string& marker, VerbClass c);
 
+// The la don particles decline into the 2nd, 4th or 7th and the PARTICLE
+// cannot choose between them — but the verb often can, and wilsonparse.cpp's
+// caseLabel has been doing exactly that since long before this file existed:
+// 2nd under a verb of motion, 7th under a verb of existence, 4th under a verb
+// of necessity, and so on.
+//
+// Which left the tool disagreeing with itself in front of the reader. The
+// Wilson Parse pane says "7th (locative)" about the same chunk the Walkthrough
+// calls "2/4/7 — the particle cannot tell you which". Both are defensible
+// alone; together they are two panes contradicting each other on one word.
+//
+// This resolves it towards the table that knows more. The honesty is
+// unchanged — the particle still cannot choose, and the caller must say that
+// the VERB is what narrowed it — but information we already hold is no longer
+// thrown away.
+//
+// DUPLICATION, ACKNOWLEDGED: this mirrors logic inside caseLabel rather than
+// replacing it, which makes a sixth table of the kind table_conformance
+// exists to police. It is therefore gated there against caseLabel for every
+// verb class. The real repair is for wilsonparse.cpp to call this, and it is
+// not attempted here because caseLabel also builds display strings for a
+// shipped pane. (Adversarial pass over Preston, 2026-09-13.)
+struct LaDonNarrowing {
+    std::vector<int> cases;   // {2,4,7} when the verb does not narrow it
+    const char* because = ""; // what about the verb decided, or ""
+    bool narrowed() const { return cases.size() == 1; }
+};
+LaDonNarrowing narrowLaDon(const std::string& marker, const VerbClassInfo* cls);
+
 }  // namespace allcore

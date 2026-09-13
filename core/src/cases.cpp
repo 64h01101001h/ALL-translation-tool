@@ -197,4 +197,44 @@ bool syntacticParticleMarksQualifier(const std::string& marker, VerbClass c) {
     }
 }
 
+LaDonNarrowing narrowLaDon(const std::string& marker, const VerbClassInfo* cls) {
+    LaDonNarrowing out;
+    const auto cr = caseOf(marker);
+    out.cases = cr.cases;
+    // Only the la don family is ever narrowed this way.
+    if (!(cr.cases.size() == 3 && cr.cases[0] == 2)) return out;
+    if (!cls) {
+        out.because = "";
+        return out;
+    }
+    switch (cls->cls) {
+        case VerbClass::Motion:
+        case VerbClass::NomAction:
+            out.cases = {2};
+            out.because = "the verb is one of motion or nominative action, so "
+                          "this is the destination or the place of activity";
+            break;
+        case VerbClass::Necessity:
+            out.cases = {4};
+            out.because = "the verb is one of necessity, so this is the one "
+                          "who needs";
+            break;
+        case VerbClass::Existence:
+        case VerbClass::Living:
+            out.cases = {7};
+            out.because = "the verb is one of existence or living, so this is "
+                          "the place or the possessor";
+            break;
+        case VerbClass::Dependence:
+        case VerbClass::Attitude:
+            out.cases = {7};
+            out.because = "the verb is one of dependence or attitude, so this "
+                          "is what it is about or toward";
+            break;
+        default:
+            break;   // the verb's class says nothing; all three stand
+    }
+    return out;
+}
+
 }  // namespace allcore
