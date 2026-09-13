@@ -237,4 +237,20 @@ LaDonNarrowing narrowLaDon(const std::string& marker, const VerbClassInfo* cls) 
     return out;
 }
 
+const char* attributiveSyntaxOpen(const VerbClassInfo* cls, bool sawThirdCase,
+                                  bool sawLaGroup) {
+    if (!cls || !isTransitive(cls->cls)) return "";
+    // An agent in the third case settles it: this is the ordinary agentive
+    // reading and the attributive one is not in play.
+    if (sawThirdCase) return "";
+    // The attributive reading needs somewhere for the seventh case to sit.
+    if (!sawLaGroup) return "";
+    return "this verb is normally transitive, but no agent appears and a "
+           "la don chunk is present \u2014 so ATTRIBUTIVE SYNTAX is open: the "
+           "verb would be read nom-loc, its actor a SUBJECT rather than an "
+           "agent, and the la don chunk a seventh case naming what is being "
+           "called or referred to. Nothing here can tell the two readings "
+           "apart; both are live";
+}
+
 }  // namespace allcore
