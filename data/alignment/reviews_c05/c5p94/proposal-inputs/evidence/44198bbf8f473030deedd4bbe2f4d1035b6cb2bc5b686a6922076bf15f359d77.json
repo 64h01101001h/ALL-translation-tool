@@ -1,0 +1,9 @@
+{
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "dngos gcig",
+    "dngos gcig"
+  ],
+  "rows": [],
+  "count": 0
+}

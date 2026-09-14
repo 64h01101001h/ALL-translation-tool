@@ -1,0 +1,75 @@
+"""Independent static retention source review; no candidate import, SQL, Git or test."""
+from pathlib import Path
+import ast, collections, csv, datetime, difflib, hashlib, io, json, re
+O=Path(__file__).resolve().parent;B=O.parents[1];P=B/'reproduction-retention-preparation';W=B.parents[1]/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def save(n,x):
+ with (O/n).open('x') as f:json.dump(x,f,indent=2,ensure_ascii=False);f.write('\n')
+raw=(P/'freeze.json').read_bytes();assert pin(raw)['sha256']=='9d745f8d8b103725188004c90566c02d6a123b87be13ca1da6c271d3ac261487'
+freeze=json.loads(raw);assert len(freeze['files'])==freeze['file_count']==29
+assert {str(x.relative_to(P)) for x in P.rglob('*') if x.is_file()}==set(freeze['files'])|{'freeze.json'}
+for n,v in freeze['files'].items():assert not (P/n).is_symlink() and pin((P/n).read_bytes())==v
+save('complete-freeze-checks.json',[dict(path=str(P/n),**v,verified=True) for n,v in freeze['files'].items()]);(O/'reviewed-source-freeze.json').write_bytes(raw)
+inputs=j(P/'input-pins.json');assert len(inputs)==19
+for x in inputs:
+ p=Path(x['original']);a=p.stat();b=p.read_bytes();c=p.stat();assert pin(b)=={k:x[k] for k in ('bytes','sha256')};assert (a.st_size,a.st_mtime_ns,a.st_ctime_ns)==(c.st_size,c.st_mtime_ns,c.st_ctime_ns)
+save('actual-input-pin-checks.json',[dict(**x,full_bytes_read_and_pin_verified=True) for x in inputs])
+copies=j(P/'original-to-copy-manifest.json');assert len(copies)==8
+for x in copies:
+ b=Path(x['original']).read_bytes();assert b==(P/x['copy']).read_bytes() and pin(b)=={k:x[k] for k in ('bytes','sha256')}
+save('complete-source-copy-checks.json',[dict(**x,full_bytes_equal=True) for x in copies])
+a=(P/'prior-verify-retention.py.txt').read_text();b=(P/'verify-retention.py.txt').read_text();changes=j(P/'replacement-map.json');assert len(changes)==15
+assert pin(a.encode())==dict(bytes=11698,sha256='a390e0f89a64b873798dde798ad4aa5f60c1e2d9a01027ad1d4a882ce3515a35')
+assert pin(b.encode())==dict(bytes=11887,sha256='ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77')
+value=a
+for c in changes:
+ assert value.count(c['before'])==c['occurrences'];offsets=[m.start() for m in re.finditer(re.escape(c['before']),value)];assert offsets==c['before_offsets']
+ assert [x+i*(len(c['after'])-len(c['before'])) for i,x in enumerate(offsets)]==c['after_offsets'];value=value.replace(c['before'],c['after'])
+assert value==b
+for c in reversed(changes):
+ for off in reversed(c['after_offsets']):
+  assert value[off:off+len(c['after'])]==c['after'];value=value[:off]+c['before']+value[off+len(c['after']):]
+assert value==a
+diff=''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='through279/verify-retention.py.txt',tofile='through282/verify-retention.py.txt'))
+inverse=''.join(difflib.unified_diff(b.splitlines(True),a.splitlines(True),fromfile='through282/verify-retention.py.txt',tofile='through279/verify-retention.py.txt'))
+assert (P/'forward.diff.txt').read_text()==diff and (P/'inverse.diff.txt').read_text()==inverse
+ta,tb=ast.parse(a),ast.parse(b)
+assert (P/'prior.ast.txt').read_text()==ast.dump(ta,include_attributes=False,indent=2)+'\n'
+assert (P/'current.ast.txt').read_text()==ast.dump(tb,include_attributes=False,indent=2)+'\n'
+def calls(t):return collections.Counter(ast.unparse(n.func) for n in ast.walk(t) if isinstance(n,ast.Call))
+old_calls,new_calls=calls(ta),calls(tb)
+assert old_calls['check']==new_calls['check']==35 and new_calls-old_calls==collections.Counter({'sum':2,'dict':1,'collections.Counter':1})
+assert not old_calls-new_calls
+for n in ('sqlite3.connect','conn.execute','conn.close','subprocess.check_output'):assert old_calls[n]==new_calls[n]
+literal_guards=["?mode=ro","PRAGMA query_only=ON","TENTATIVE (machine-matched, unreviewed)","never enters hgm_gloss","never that the correspondence is CORRECT","builder_rejection_threshold_percent=95","'xseg2829ldog'","n['layer_date']==ev['meta']['date'] and n['source_pages']==ev['meta']['source_pages']"]
+for v in literal_guards:assert a.count(v)==b.count(v)==1
+save('source-diff-ast-checks.json',dict(prior=pin(a.encode()),candidate=pin(b.encode()),replacement_operations=15,full_inverse_exact=True,forward_diff=pin(diff.encode()),inverse_diff=pin(inverse.encode()),full_saved_asts_exact=True,prior_check_sites=35,current_check_sites=35,added_calls=dict(new_calls-old_calls),all_prior_call_sites_preserved=True,unchanged_literal_guards=literal_guards,candidate_executed=False))
+basis=j(P/'actual-assertion-basis.json');root=j(B/'actual-current-output-contract.json');assert root['status']=='PASS_ACTUAL_MEASUREMENTS'
+full=j(W/'data/alignment/alignment_full_v1.json');ev=j(W/'data/alignment/alignment_evidence_v1.json')
+csvs={suffix:list(csv.DictReader(io.StringIO((W/('docs/geshe_michael_roach_dictionary'+suffix)).read_text(encoding='utf-8-sig'),newline=''))) for suffix in ['.csv','_reverse.csv','_by_course.csv','_changes.csv']}
+counts=dict(links=len(full['links']),nulls=sum(x['eng'] is None for x in full['links']),notes=sum(map(len,full['notes'].values())),trees=sum(map(len,full['trees'].values())),heads=len(ev['pairs']),pairs=sum(map(len,ev['pairs'].values())),csv_main=len(csvs['.csv']),csv_reverse=len(csvs['_reverse.csv']),csv_course=len(csvs['_by_course.csv']),csv_changes=len(csvs['_changes.csv']))
+assert counts==basis['actual_counts']==root['counts'] and list(counts.values())==[45402,11938,1618,11,7092,15546,22528,22188,24105,37]
+assert ev['meta']['date']==basis['actual_layer_date']==root['source_date']=='2026-09-13' and {x['layer_date'] for x in csvs['.csv']}=={'2026-09-13'}
+assert len(ev['acip_index'])==root['proven_acip_heads']==basis['acip']['proven']==7089
+assert [dict(tib=t,pairs=p) for t,p in ev['pairs'].items() if all(x['acip'] is None for x in p)]==basis['acip']['missing_heads']
+allmiss=[x for x in full['links'] if x['d']==5 and x['eng'] and not x['tib_acip']]
+assert [x for x in allmiss if x['seg'] is not None]==basis['acip']['source_linked_spans']
+assert [x for x in allmiss if x['seg'] is None]==basis['acip']['historical_nonsegment']
+tuples=j(W/'data/alignment/reviews_c05/c5p94/resolved-spans.json');assert len(tuples)==124 and sum(x['eng'] is None for x in tuples)==4 and sum(x['d']==5 and x['eng'] is not None for x in tuples)==102
+ret=j(B/'landing/retention-source-check.json');assert ret['prior_links_retained']==basis['prior_links']==45275 and ret['added_links']==basis['added_links']==127 and ret['added_by_segment']==basis['added_by_segment']=={'280':55,'281':47,'282':25}
+assert root['registered_pages']==sum(root['registered_page_counts'].values())==548
+before=(P/'prepare_source.py.txt').read_text();after=(P/'prepare_source_v2.py.txt').read_text();oldphrase='100% tests passed, 0 tests failed out of 17';newphrase='100% tests passed out of 17';assert before.count(oldphrase)==1 and before.replace(oldphrase,newphrase)==after
+assert (P/'history/attempt01/correction.diff.txt').read_text()==''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='prepare_source.py.txt',tofile='prepare_source_v2.py.txt'))
+failure=j(P/'history/attempt01/failure.json');assert failure['exit']==1 and not failure['target_runtime_executed'] and not failure['actual_test_failure']
+for n,v in failure['partial_files'].items():assert pin((P/n).read_bytes())==v
+history=P/'history/recorded-caller-correction';oldfreeze=j(history/'freeze.json');assert pin((history/'freeze.json').read_bytes())['sha256']=='1f6092198c428bcc4ec372c0ba96d5bc2b654441934a95f73b08202f3f7104f2'
+for n,v in oldfreeze['files'].items():assert pin(((history/n) if n in ['preparation-proof.json','report.md'] else (P/n)).read_bytes())==v
+priorproof=j(history/'preparation-proof.json');currentproof=j(P/'preparation-proof.json');oldcommand=priorproof.pop('command');currentcommand=currentproof.pop('command');assert priorproof==currentproof
+amend=j(P/'recorded-caller-correction.json');assert oldcommand==amend['prior_recorded_command'] and currentcommand==amend['actual_successful_command'] and currentcommand[-1]==str(P/'prepare_source_v2.py.txt')
+extra_path=B/'actual-current-output-contract.json';(O/'actual-current-output-contract.json').write_bytes(extra_path.read_bytes())
+save('actual-measurement-bindings.json',dict(counts=counts,root_contract=dict(path=str(extra_path),**pin(extra_path.read_bytes())),source_date=root['source_date'],registered_pages_reported_by_root=548,acip_proven_heads=7089,acip_total_heads=7092,missing_heads=3,missing_source_spans=5,historical_nonsegment_rows=1,tuples=124,nulls=4,nonnull_d5=102,root_addition_groups=ret['added_by_segment'],root_addition_total=127,prior_links=45275,review_scope='Static expectations and actual artifact measurements only; candidate retention/runtime not run'))
+for n,v in freeze['files'].items():assert pin((P/n).read_bytes())==v
+assert (P/'freeze.json').read_bytes()==raw
+save('review.json',dict(verdict='APPROVE_SOURCE_PREPARATION_ONLY',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),reviewer='Codex /root/c05_280_282_english',author='Codex review_sources',role_disclosure='Non-author of this retention source. Earlier English-original/landing-helper/allowance-adapter/postlanding review roles disclosed. No semantic judgment.',source_directory=str(P),source_freeze=pin(raw),source_files=29,source_bytes=sum(x['bytes'] for x in freeze['files'].values()),candidate=dict(path=str(P/'verify-retention.py.txt'),**pin(b.encode())),prior=dict(path=copies[0]['original'],**pin(a.encode())),all19_actual_input_pins_checked=True,complete_original_copy_pairs=8,all35_prior_check_sites_preserved=True,full15replacement_inverse_and_diffs_exact=True,actual_counts=counts,source_date='2026-09-13',open_findings=[],history_limit='The frozen preparation records failure.json, complete v1/v2 sources and summary-string diff, prior freeze/proof/report and caller metadata amendment. It does not contain full raw preparation caller stdout/stderr transport. These are source/history records, not independently replayed full caller streams. No target runtime failure inferred; no missing streams fabricated.',runtime_release=False,candidate_executed=False,SQL=False,Git=False,builders=False,tests=False,limits='Retention source readiness only. Exact materialization, completed payload13, prepare13/wrappers, source/original/seed/Git/index/untracked entry, actual registered pages548 and later closure/acceptance must be concretely bound and separately released. No old dynamic checks_total/date/count/failure assertions are adopted as current runtime success.'))
+print(json.dumps(dict(verdict='APPROVE_SOURCE_PREPARATION_ONLY',files=29,input_pins=19,source_copy_pairs=8,check_sites=35,replacements=15,runtime_executions=0)))

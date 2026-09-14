@@ -1,0 +1,30 @@
+{
+  "status": "SOURCE_REVIEW_PASS_RUNTIME_BINDINGS_PENDING",
+  "time": "2026-09-14T00:17:40.661002+00:00",
+  "full_source_and_diff_read": true,
+  "freeze_files_verified": 28,
+  "freeze_sha256": "441996c3650168531feba04246537b1b60255f0d7fb077e667db563bd17b4530",
+  "source_sha256": "9f6e71fd9f10bd129bacf5c8b6e332077b1de30dda829c2928f3c28c3a6d4b2f",
+  "named_pending_bindings": {
+    "EXPECTED_COMPLETION_FILE": null,
+    "EXPECTED_COMPLETION_STATUS": null,
+    "EXPECTED_TIBETAN_SPANS": null,
+    "EXPECTED_WRAPPER_RELATIVE_PATH": null
+  },
+  "unresolved": [
+    "actual completion filename/status/count",
+    "reader-owned read-only wrapper",
+    "actual final freeze schemas"
+  ],
+  "source_scope": "Segment literals, honest producer identity, explicit pending guard and common intended-spans LIST interface. Canonical generator/resolver and source hash checks retained.",
+  "actual_verifier_runs": 0,
+  "semantic_acceptance": false,
+  "root_prior_failure": {
+    "status": "FAILED_ROOT_LEXICAL_PLACEHOLDER_COUNT",
+    "actual_count": 6,
+    "expected": 4,
+    "cause": "Unscoped text count also included two normal parent=None assignments. The four named release bindings are correctly None. Full freeze/source hash checks before this assertion passed. No candidate run or modification occurred.",
+    "traceback": "File <stdin>, line 9: AssertionError",
+    "correction": "Inspect only the four named top-level assignments using Python AST."
+  }
+}

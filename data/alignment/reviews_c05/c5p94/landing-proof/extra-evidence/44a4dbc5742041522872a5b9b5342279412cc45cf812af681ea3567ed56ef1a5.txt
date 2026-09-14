@@ -1,0 +1,115 @@
+"""Read actual artifacts and prepare the complete next retention source; never execute it."""
+import ast,collections,csv,difflib,hashlib,io,json,os
+from datetime import datetime,timezone
+from pathlib import Path
+O=Path(__file__).resolve().parent;B=O.parent;ROOT=B.parents[1];W=ROOT/'campaign-worktree';I=ROOT/'campaign-artifacts/integration'
+OLD=I/'through279-generated-reproduction/verify-retention.py.txt';P=I/'through279-generated-reproduction/workspace';L=B/'landing'
+def load(p):return json.loads(Path(p).read_bytes())
+def pin(p):
+ raw=Path(p).read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(n,v):(O/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def rows(p):return list(csv.DictReader(io.StringIO(p.read_bytes().decode('utf-8-sig'),newline='')))
+assert not (O/'freeze.json').exists()
+source=OLD.read_bytes();before=source.decode();(O/'prior-verify-retention.py.txt').write_bytes(source)
+inputs=[]
+def source_pin(p,role):
+ r=dict(original=str(p.resolve()),role=role,**pin(p));inputs.append(r);return r
+source_pin(OLD,'Complete canonical prior retention implementation')
+generated=['data/alignment/alignment_full_v1.json','data/alignment/alignment_evidence_v1.json','docs/geshe_michael_roach_dictionary.html','docs/geshe_michael_roach_dictionary.csv','docs/geshe_michael_roach_dictionary_reverse.csv','docs/geshe_michael_roach_dictionary_by_course.csv','docs/geshe_michael_roach_dictionary_changes.csv']
+build=load(L/'canonical-builds-once.json')
+for name in generated:
+ r=source_pin(W/name,'Actual current generated output, read only');assert r['sha256']==build['output_sha256'][name]
+source_pin(P/'data/alignment/alignment_full_v1.json','Actual prior reproduced complete links')
+full=load(W/generated[0]);ev=load(W/generated[1]);old=load(P/generated[0]);sig=lambda x:json.dumps(x,sort_keys=True,ensure_ascii=False)
+oldlinks=collections.Counter(map(sig,old['links']));newlinks=collections.Counter(map(sig,full['links']))
+assert not oldlinks-newlinks
+added=[json.loads(k) for k,n in (newlinks-oldlinks).items() for _ in range(n)]
+groups=dict(collections.Counter(x['seg'] for x in added));assert groups=={280:55,281:47,282:25} and all(x['course']=='C05' for x in added)
+csvrows={suffix:rows(W/('docs/geshe_michael_roach_dictionary'+suffix)) for suffix in ['.csv','_reverse.csv','_by_course.csv','_changes.csv']}
+counts=dict(links=len(full['links']),nulls=sum(x['eng'] is None for x in full['links']),notes=sum(map(len,full['notes'].values())),trees=sum(map(len,full['trees'].values())),heads=len(ev['pairs']),pairs=sum(map(len,ev['pairs'].values())),csv_main=len(csvrows['.csv']),csv_reverse=len(csvrows['_reverse.csv']),csv_course=len(csvrows['_by_course.csv']),csv_changes=len(csvrows['_changes.csv']))
+assert list(counts.values())==[45402,11938,1618,11,7092,15546,22528,22188,24105,37]
+assert len(old['links'])==45275 and len(added)==127
+missing=[dict(tib=t,pairs=p) for t,p in ev['pairs'].items() if all(x['acip'] is None for x in p)]
+allmiss=[x for x in full['links'] if x['d']==5 and x['eng'] and not x['tib_acip']];missspans=[x for x in allmiss if x['seg'] is not None];excluded=[x for x in allmiss if x['seg'] is None]
+assert len(missing)==3 and len(missspans)==5 and len(excluded)==1 and excluded[0]['id']=='xseg2829ldog' and all(x in old['links'] for x in allmiss)
+assert len(ev['acip_index'])==7089
+coverage=sorted({x['seg'] for x in full['links'] if x['course']=='C05'});assert coverage==list(range(1,283))
+reviewdir=W/'data/alignment/reviews_c05/c5p94';review=load(reviewdir/'review.json');tuples=load(reviewdir/'resolved-spans.json')
+source_pin(reviewdir/'review.json','Actual registered independent review counts and verdict');source_pin(reviewdir/'resolved-spans.json','Actual registered seven-key review tuples')
+assert review['verdict']=='APPROVE' and review['open_findings']==[] and len(tuples)==124 and sum(x['eng'] is None for x in tuples)==4 and sum(x['d']==5 and x['eng'] is not None for x in tuples)==102
+dates=sorted({x['layer_date'] for x in csvrows['.csv']});assert dates==[ev['meta']['date']]==['2026-09-13']
+copymap=[]
+for name in ['retention-source-check.json','course-csv-retention.json','canonical-builds-once.json','ctest-17.execution.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit']:
+ p=L/name;r=source_pin(p,'Actual prior root proof, never rerun');dest=O/'root-proof-inputs'/name;dest.parent.mkdir(exist_ok=True);dest.write_bytes(p.read_bytes());copymap.append(dict(original=str(p),copy=str(dest.relative_to(O)),**pin(p)))
+ctest=load(L/'ctest-17.execution.json');assert ctest['exit']==0 and ctest['stderr_bytes']==0 and '100% tests passed, 0 tests failed out of 17' in (L/'ctest-17.stdout').read_text() and '12.62 sec' in (L/'ctest-17.stdout').read_text()
+source_pin(W/'AGENTS.md','Actual governing instructions read, not changed')
+save('actual-assertion-basis.json',dict(actual_counts=counts,prior_links=45275,added_links=127,added_by_segment=groups,coverage=[1,282],page='c5p94',review_spans=124,review_nulls=4,review_nonnull_d5=102,acip=dict(headwords=7092,proven=7089,missing_heads=missing,source_linked_spans=missspans,historical_nonsegment=excluded,unchanged_historical_rows=True),actual_layer_date=ev['meta']['date'],all_main_layer_dates=dates,source_date_discrepancy='The supplied 2026-09-14 is the current UTC/preparation date, not the actual producer local layer date. Root confirmed the correction. No producer or test failed; the existing equality gate remains unchanged.',ctest_prior_actual=dict(exit=ctest['exit'],tests=17,reported_seconds=12.62,reexecuted=False),payload_population=13,payload_population_authority='Root instruction: complete payload preparation is being performed by another agent. Only the misleading frozen12 check label is changed to frozen13; the complete manifest iteration/equality gate is unchanged.',target_executed=False,SQL_executed=False,Git_executed=False,builds_or_tests_executed=False))
+replacements=[
+ ("C05-277-279","C05-280-282",1,'Current batch path'),
+ ("len(old['links'])==45126","len(old['links'])==45275",1,'Actual prior complete link count'),
+ ("149 new links confined to277–279","127 new links confined to280–282",1,'Actual new link label'),
+ ("len(added)==149 and all(x['course']=='C05' and x['seg'] in (277,278,279) for x in added)","len(added)==127 and all(x['course']=='C05' and x['seg'] in (280,281,282) for x in added) and dict(collections.Counter(x['seg'] for x in added))=={280:55,281:47,282:25}",1,'Actual 127 additions plus explicit hard-coded per-segment assertion'),
+ ("(277,278,279)","(280,281,282)",2,'Evidence and prior-main reference confinement'),
+ ("Entire34-row change export","Entire37-row change export",1,'Actual change-row label'),
+ ("len(delta)==34","len(delta)==37",1,'Actual change-row assertion'),
+ ("check('ACIP head population7081/7084',len(ev['pairs'])==7084 and len(ev['acip_index'])==7081 and len(missing)==3)","check('ACIP head population7089/7092',len(ev['pairs'])==7092 and len(ev['acip_index'])==7089 and len(missing)==3)",1,'Actual proven and total ACIP population; same three missing heads'),
+ ("headwords=7084,proven=7081,missing=3,percentage=100*7081/7084","headwords=7092,proven=7089,missing=3,percentage=100*7089/7092",1,'Honest ACIP proof totals; every prior limitation unchanged'),
+ ("check('C05 exact279coverage',sorted({x['seg'] for x in full['links'] if x['course']=='C05'})==list(range(1,280)))","check('C05 exact282coverage',sorted({x['seg'] for x in full['links'] if x['course']=='C05'})==list(range(1,283)))",1,'Complete coverage through actual final segment'),
+ ("c5p93","c5p94",2,'Actual review and spec page paths'),
+ ("Accepted current146tuple interface","Accepted current124tuple interface",1,'Actual review tuple label'),
+ ("len(tuples)==146","len(tuples)==124 and sum(x['eng'] is None for x in tuples)==4 and sum(x['d']==5 and x['eng'] is not None for x in tuples)==102",1,'Actual tuple count with explicit current null and non-null d5 counts'),
+ ("Actual live frozen12 payload remains equal","Actual live frozen13 payload remains equal",1,'Correct misleading label; existing complete per-file assertion preserved'),
+ ("[45275,11934,1615,11,7084,15517,22491,22151,24061,34]","[45402,11938,1618,11,7092,15546,22528,22188,24105,37]",1,'All ten actual fixed output expectations')]
+after=before;record=[]
+for i,(oldtext,newtext,count,reason) in enumerate(replacements):
+ assert after.count(oldtext)==count,(i,oldtext,after.count(oldtext))
+ offsets=[];at=0
+ while True:
+  at=after.find(oldtext,at)
+  if at<0:break
+  offsets.append(at);at+=len(oldtext)
+ after_offsets=[x+j*(len(newtext)-len(oldtext)) for j,x in enumerate(offsets)]
+ after=after.replace(oldtext,newtext);record.append(dict(order=i+1,before=oldtext,after=newtext,occurrences=count,before_offsets=offsets,after_offsets=after_offsets,reason=reason))
+reverse=after
+for r in reversed(record):
+ for at in reversed(r['after_offsets']):
+  assert reverse[at:at+len(r['after'])]==r['after'],r['order']
+  reverse=reverse[:at]+r['before']+reverse[at+len(r['after']):]
+assert reverse.encode()==source
+(O/'verify-retention.py.txt').write_text(after)
+save('replacement-map.json',record)
+(O/'forward.diff.txt').write_text(''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='through279/verify-retention.py.txt',tofile='through282/verify-retention.py.txt')))
+(O/'inverse.diff.txt').write_text(''.join(difflib.unified_diff(after.splitlines(True),before.splitlines(True),fromfile='through282/verify-retention.py.txt',tofile='through279/verify-retention.py.txt')))
+oldast=ast.parse(before);newast=ast.parse(after)
+(O/'prior.ast.txt').write_text(ast.dump(oldast,include_attributes=False,indent=2)+'\n');(O/'current.ast.txt').write_text(ast.dump(newast,include_attributes=False,indent=2)+'\n')
+def calls(tree):return collections.Counter(ast.unparse(n.func) for n in ast.walk(tree) if isinstance(n,ast.Call))
+oc,nc=calls(oldast),calls(newast);assert oc['check']==nc['check'] and oc['sqlite3.connect']==nc['sqlite3.connect']==1 and oc['subprocess.check_output']==nc['subprocess.check_output']==2
+assert nc-oc==collections.Counter({'sum':2,'dict':1,'collections.Counter':1})
+assert sum(isinstance(x,ast.Assert) for x in ast.walk(oldast))==sum(isinstance(x,ast.Assert) for x in ast.walk(newast))==1
+for literal in ["?mode=ro","PRAGMA query_only=ON","TENTATIVE (machine-matched, unreviewed)","never enters hgm_gloss","never that the correspondence is CORRECT","builder_rejection_threshold_percent=95","'xseg2829ldog'","n['layer_date']==ev['meta']['date'] and n['source_pages']==ev['meta']['source_pages']"]:assert before.count(literal)==after.count(literal)==1
+save('ast-proof.json',dict(status='PASS_STATIC_SOURCE_ONLY',prior_syntax_valid=True,current_syntax_valid=True,full_inverse_reconstruction_exact=True,replacement_operations=len(record),prior_check_call_sites=oc['check'],current_check_call_sites=nc['check'],prior_call_counts=dict(oc),current_call_counts=dict(nc),added_call_counts=dict(nc-oc),new_calls_purpose='One explicit per-segment Counter comparison and two explicit accepted-tuple count sums. All older call sites and retention gates remain.',target_imported=False,target_executed=False,no_dynamic_expected_counts=True))
+save('input-pins.json',inputs);save('original-to-copy-manifest.json',[dict(original=str(OLD),copy='prior-verify-retention.py.txt',**pin(OLD))]+copymap)
+report='''Prepared the complete through282 retention implementation from the actual through279 source. This is source preparation, not runtime approval or a successful reproduction run.
+
+All prior retention gates remain, including seeded output identity, old full links/notes/trees, evidence pairs/references/ACIP, main/reverse/course CSV content and metadata, independently derived change rows, BOM/CRLF, HTML tuples, incomplete-ACIP disclosure, exact coverage, honesty labels, registered-page digest, read-only source ranges, immutable inputs, every frozen payload file, ten fixed output counts and final live-state capture. The replacement map covers every source byte change and reverses exactly to the original. Full forward/inverse diffs and both ASTs are retained. Neither source was imported or executed.
+
+The new literals bind the actual 45402/11938/1618/11/7092/15546/22528/22188/24105/37 totals. The actual prior total is 45275; 127 additions are explicitly confined to 280–282 and now also checked against hard-coded groups 55/47/25. Current review tuples are explicitly 124, with four nulls and 102 non-null d5. ACIP remains incomplete: 7089 proven of 7092 heads, the same three missing heads and five source-linked spans plus one historical nonsegment row. The existing 95% threshold and rounded-100.0% limitation remain unchanged. All these populations were read directly from current generated outputs and the prior reproduced full bank; their complete hashes match the actual root build proof.
+
+The actual evidence/main layer date is 2026-09-13. Root confirmed that supplied 2026-09-14 referred to current UTC/preparation date. The existing layer-date/source-pages equality gate is preserved exactly; there is no producer failure or rerun. The frozen12 text is corrected to frozen13 without altering the full manifest iteration or per-file byte check. Actual 13-file payload preparation is another agent's task and remains a runtime input dependency.
+
+All paths resolve under the eventual through282 reproduction directory exactly as before: workspace and previous-generated are siblings below that run directory; ROOT remains three directory levels above the source, and the batch path is C05-280-282. The source must be placed in that reproduction directory for its eventual authorized execution. The preparation directory is not a runtime workspace. The new source retains actual SQL/Git operations for a later approved runtime; none was invoked here. No WT file, source/master, build, test, SQLite database or Git state was changed.
+
+Another independent agent must review this full source, map, diffs, AST and evidence before runtime release. This preparation makes no semantic re-review, acceptance, rendering, staging or commit claim.
+'''
+(O/'report.md').write_text(report)
+save('preparation-proof.json',dict(status='SOURCE_READY_FOR_INDEPENDENT_REVIEW',utc=datetime.now(timezone.utc).isoformat(),actual_layer_date='2026-09-13',source=pin(OLD),prepared=pin(O/'verify-retention.py.txt'),replacement_map=pin(O/'replacement-map.json'),no_runtime_or_SQL_or_Git_or_build_or_test=True,command=['python3','-B',str(O/'prepare_source.py.txt')],cwd=str(ROOT),actual_read_only_counts=counts))
+for r in inputs:assert pin(r['original'])=={k:r[k] for k in ['bytes','sha256']}
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file()}
+save('freeze.json',dict(status='FROZEN_SOURCE_PREPARATION',files=files,file_count=len(files)))
+for n,p in files.items():assert pin(O/n)==p
+result=dict(status='SOURCE_READY_FOR_INDEPENDENT_REVIEW',files=len(files),source=pin(O/'verify-retention.py.txt'),freeze=pin(O/'freeze.json'))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555)
+print(json.dumps(result,indent=2))

@@ -1,0 +1,201 @@
+[
+  {
+    "order": 1,
+    "before": "C05-277-279",
+    "after": "C05-280-282",
+    "occurrences": 1,
+    "before_offsets": [
+      323
+    ],
+    "after_offsets": [
+      323
+    ],
+    "reason": "Current batch path"
+  },
+  {
+    "order": 2,
+    "before": "len(old['links'])==45126",
+    "after": "len(old['links'])==45275",
+    "occurrences": 1,
+    "before_offsets": [
+      1721
+    ],
+    "after_offsets": [
+      1721
+    ],
+    "reason": "Actual prior complete link count"
+  },
+  {
+    "order": 3,
+    "before": "149 new links confined to277–279",
+    "after": "127 new links confined to280–282",
+    "occurrences": 1,
+    "before_offsets": [
+      1846
+    ],
+    "after_offsets": [
+      1846
+    ],
+    "reason": "Actual new link label"
+  },
+  {
+    "order": 4,
+    "before": "len(added)==149 and all(x['course']=='C05' and x['seg'] in (277,278,279) for x in added)",
+    "after": "len(added)==127 and all(x['course']=='C05' and x['seg'] in (280,281,282) for x in added) and dict(collections.Counter(x['seg'] for x in added))=={280:55,281:47,282:25}",
+    "occurrences": 1,
+    "before_offsets": [
+      1880
+    ],
+    "after_offsets": [
+      1880
+    ],
+    "reason": "Actual 127 additions plus explicit hard-coded per-segment assertion"
+  },
+  {
+    "order": 5,
+    "before": "(277,278,279)",
+    "after": "(280,281,282)",
+    "occurrences": 2,
+    "before_offsets": [
+      2755,
+      3500
+    ],
+    "after_offsets": [
+      2755,
+      3500
+    ],
+    "reason": "Evidence and prior-main reference confinement"
+  },
+  {
+    "order": 6,
+    "before": "Entire34-row change export",
+    "after": "Entire37-row change export",
+    "occurrences": 1,
+    "before_offsets": [
+      6176
+    ],
+    "after_offsets": [
+      6176
+    ],
+    "reason": "Actual change-row label"
+  },
+  {
+    "order": 7,
+    "before": "len(delta)==34",
+    "after": "len(delta)==37",
+    "occurrences": 1,
+    "before_offsets": [
+      6272
+    ],
+    "after_offsets": [
+      6272
+    ],
+    "reason": "Actual change-row assertion"
+  },
+  {
+    "order": 8,
+    "before": "check('ACIP head population7081/7084',len(ev['pairs'])==7084 and len(ev['acip_index'])==7081 and len(missing)==3)",
+    "after": "check('ACIP head population7089/7092',len(ev['pairs'])==7092 and len(ev['acip_index'])==7089 and len(missing)==3)",
+    "occurrences": 1,
+    "before_offsets": [
+      7442
+    ],
+    "after_offsets": [
+      7442
+    ],
+    "reason": "Actual proven and total ACIP population; same three missing heads"
+  },
+  {
+    "order": 9,
+    "before": "headwords=7084,proven=7081,missing=3,percentage=100*7081/7084",
+    "after": "headwords=7092,proven=7089,missing=3,percentage=100*7089/7092",
+    "occurrences": 1,
+    "before_offsets": [
+      7718
+    ],
+    "after_offsets": [
+      7718
+    ],
+    "reason": "Honest ACIP proof totals; every prior limitation unchanged"
+  },
+  {
+    "order": 10,
+    "before": "check('C05 exact279coverage',sorted({x['seg'] for x in full['links'] if x['course']=='C05'})==list(range(1,280)))",
+    "after": "check('C05 exact282coverage',sorted({x['seg'] for x in full['links'] if x['course']=='C05'})==list(range(1,283)))",
+    "occurrences": 1,
+    "before_offsets": [
+      8231
+    ],
+    "after_offsets": [
+      8231
+    ],
+    "reason": "Complete coverage through actual final segment"
+  },
+  {
+    "order": 11,
+    "before": "c5p93",
+    "after": "c5p94",
+    "occurrences": 2,
+    "before_offsets": [
+      9107,
+      9183
+    ],
+    "after_offsets": [
+      9107,
+      9183
+    ],
+    "reason": "Actual review and spec page paths"
+  },
+  {
+    "order": 12,
+    "before": "Accepted current146tuple interface",
+    "after": "Accepted current124tuple interface",
+    "occurrences": 1,
+    "before_offsets": [
+      9245
+    ],
+    "after_offsets": [
+      9245
+    ],
+    "reason": "Actual review tuple label"
+  },
+  {
+    "order": 13,
+    "before": "len(tuples)==146",
+    "after": "len(tuples)==124 and sum(x['eng'] is None for x in tuples)==4 and sum(x['d']==5 and x['eng'] is not None for x in tuples)==102",
+    "occurrences": 1,
+    "before_offsets": [
+      9346
+    ],
+    "after_offsets": [
+      9346
+    ],
+    "reason": "Actual tuple count with explicit current null and non-null d5 counts"
+  },
+  {
+    "order": 14,
+    "before": "Actual live frozen12 payload remains equal",
+    "after": "Actual live frozen13 payload remains equal",
+    "occurrences": 1,
+    "before_offsets": [
+      10200
+    ],
+    "after_offsets": [
+      10200
+    ],
+    "reason": "Correct misleading label; existing complete per-file assertion preserved"
+  },
+  {
+    "order": 15,
+    "before": "[45275,11934,1615,11,7084,15517,22491,22151,24061,34]",
+    "after": "[45402,11938,1618,11,7092,15546,22528,22188,24105,37]",
+    "occurrences": 1,
+    "before_offsets": [
+      10790
+    ],
+    "after_offsets": [
+      10790
+    ],
+    "reason": "All ten actual fixed output expectations"
+  }
+]

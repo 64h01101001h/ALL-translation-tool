@@ -1,0 +1,61 @@
+import json,re
+from pathlib import Path
+BASE=Path(__file__).resolve().parent.parent
+rows={r['seq']:r for r in json.loads((BASE/'280/original-context-rows.json').read_text())['rows']}
+def hits(text,piece,sub=False):
+ out=[]
+ for m in re.finditer(re.escape(piece),text):
+  i,j=m.span()
+  if sub or ((not piece[0].isalnum() or i==0 or not text[i-1].isalnum()) and (not piece[-1].isalnum() or j==len(text) or not text[j].isalnum())): out.append([i,j])
+ return out
+def make(seq,title,items,note,decisions):
+ spans=[]; intended=[]
+ for item in items:
+  tib,eng,*args=item; d=args[0] if args else 5; tn=args[1] if len(args)>1 else 1; en=args[2] if len(args)>2 else 1
+  sub=args[3] if len(args)>3 else False
+  sp={'id':'w'+str(len(spans)+1),'d':d,'tib':tib,'eng':eng}
+  if sub: sp['subword']=True
+  if eng is None: sp.update(cls='case',nul='Agentive case marks the English subject; no separate English case exponent.')
+  tr=hits(rows[seq]['wylie'],tib,sub)[tn-1]; er=hits(rows[seq]['english'],eng,sub)[en-1] if eng is not None else None
+  spans.append(sp); intended.append({'id':sp['id'],'tib_range':tr,'eng_range':er,'tib_occurrence_1based':tn,'eng_occurrence_1based':en if eng else None,'tib':tib,'eng':eng})
+ for a,b in zip(intended,intended[1:]): assert a['tib_range'][1]<=b['tib_range'][0],(seq,a,b)
+ order=[r['id'] for r in sorted((r for r in intended if r['eng_range'] is not None),key=lambda r:r['eng_range'][0])]
+ ers=sorted([r['eng_range'] for r in intended if r['eng_range'] is not None]); assert all(a[1]<=b[0] for a,b in zip(ers,ers[1:])),(seq,ers)
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':'PROVISIONAL machine alignment by Codex (GPT-6 Astra), independent English-first original proposal; unreviewed. '+note}]}
+ out=BASE/str(seq)
+ for name,obj in [('spec.json',spec),('intended-spans.json',intended),('decisions.json',decisions),('errata.json',[])]: (out/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+ print(seq,len(spans),'spans',sum(s['d']==5 for s in spans),'d5',sum(s['eng'] is None for s in spans),'nulls')
+
+make(280,'quotations and the five poisons',[
+ ('gzhan yang','And anyway',3),('dpal','glorious'),('chos kyi grags pa','Dharmakirti'),('lung','statement'),('khyod','you'),("'gal ba",'contradicted'),('khyod','You',5,2),
+ ('nad','sicknesses'),('lnga','five'),('dang','and',6,2,1),("'byung ba",'elements'),('lnga','five',5,2,2),('dang','and',6,3,2),('gdon','demons'),('lnga','five',5,3,3),
+ ('nyon mongs pa','bad thoughts'),('dug','poisons'),('lnga','five',5,4,4),("dngos 'bras",'direct result'),('khas blangs','taken the position'),('mu stegs byed','non-Buddhists'),('bad kan','phlegm'),('dang','and',6,5,3),("'dod chags",'desire'),("rgyu 'bras",'cause-and-effect relationship'),('mkhris pa','bile'),('dang','and',6,6,5),('zhe sdang','anger'),('sogs','and so on'),('khas blangs','take the position',5,2),
+ ('bad kan','phlegm',5,2,2),("'dod chags",'desire',5,2,2),("rjes su 'gro ldog",'come and go'),('mkhris pa','bile',5,2,2),('zhe sdang','anger',5,2,2),("rjes su 'gro ldog",'come and go',5,2,2),('de','them'),("'gog byed",'refutes'),
+ ('phyir','for',6),('rlung','wind'),('sogs','and the rest',5,2),('ma','not',6),('gzhung','statement',5,1,3),('sgyur ba','twist around'),('khyod','your',5,3,1),('gnod pa','disproved'),
+ ("'dus ma byas",'uncreated'),("nam mkha'",'space'),('phrag dog','jealousy'),("dngos 'bras",'direct result',5,2,2),("'dod pa",'assert'),('mi rigs pa','wrong')
+],
+ 'The bracketed final explanation is translator commentary and remains unpaired. The fourth Tibetan lnga owns the five of poisons; the repeated five before bad thoughts is unwrapped. The two rjes su \'gro ldog compounds own come and go, while the distributed failure-of-concomitance wording is omitted. The anaphoric second rgyu \'bras is omitted. Gzhung owns statement in We could twist around this statement, and sgyur ba owns twist around. No new erratum is proposed.',
+ {'least_secure':['mu stegs byed → non-Buddhists: no exact spine headword found; established doctrinal designation confirmed by this complete original argument.','rgyu \'bras → cause-and-effect relationship: entire causal-relation compound, supported by ILL:1313 and the current curated cause and effect gloss.'],
+ 'omissions':[{'tib':"'khrul (three occurrences)",'reason':'The first two are rendered through negative/frequency wording and relational qualification; the quoted third is rendered through relationship does not always hold. No separately bounded lexical exponent is asserted; not nulled.'},{'tib':"rgyu 'bras (second)",'reason':'English same kind of relationship is an anaphoric recast; no isolated causal lexical pair is claimed.'},{'tib':"'don pa",'reason':'Recitation/reading contribution is distributed through statement/twisting; unresolved as its own atom, omitted.'},{'tib':'chos ma yin','reason':'Only ma → not claimed. Fact and such distribute the predicative interpretation; chos is not mapped to fact merely because nearby.'},{'english':'five before bad thoughts; Master Dharmakirti at refutation; bracketed final explanation','reason':'Repeated explanatory English has no second corresponding Tibetan item; stays unwrapped.'}],
+ 'errata':{'outcome':'No new candidate','physical_source':'280/physical-original-context.txt','parallel':'C15:425 has identical ACIP/Wylie and matching translation extent with an added Translator\'s note label. P7:29 has punctuation/English omissions, so supports only its quoted extent. Identity does not establish independent publication or ingestion history.'}})
+
+make(281,'one object and three appearances',[
+ ('dngos','thing'),('gcig','single'),('yid','perceptions'),('tha dad','differing'),('phyir','Insofar as',6),('don ma grub par','has no reality',3),("'dod pa",'say'),
+ ('dngos po','object'),('gcig','single',5,2,2),("snang tshul mi 'dra ba gsum 'byung bar",'appearing in three different ways',3),('gsungs pa','expressed'),("mi 'thad par",'incorrect'),('khyod ltar na','according to you',3),('dngos po','objects',5,2,1),('gsum','three',5,2,2),("snang tshul mi 'dra ba gsum 'byung ba",'appearing in three different ways',3,1,2),('phyir','because',6,2),
+ ("'gro ba",'beings'),('gsum','three',5,4,4),('gyis',None,6),('brlan','wet'),('zhing','and',6,1,7),('gsher ba','flowing'),('phor pa','glass'),('gang','full'),('la','at',6,3),('cig car du','together'),('bltas pa','look'),
+ ('dngos po','objects',5,3,2),('tshad grub pa','confirmed by a valid perception',3),('gsum','three',5,5,5),("snang tshul mi 'dra ba gsum 'byung ba",'appearing in three different ways',3,2,3)
+],
+ 'The quotation is checked against the complete cited verse at C05:248. Three appearance phrases retain their complete appearing in three different ways recast at depth 3; snang tshul and \'byung are not forced into competing owners of appearing. Tshad grub pa is retained as the complete depth-3 qualification confirmed by a valid perception. The bracketed beings in the verse and the added different beside objects and kinds remain unwrapped. No new erratum is proposed.',
+ {'least_secure':['don ma grub par → has no reality: complete negative existence predicate, not a new lexical definition of don.','tshad grub pa → confirmed by a valid perception: phrase depth because abbreviated tshad ma plus grub forms a qualification; each remains supplied.'],
+ 'omissions':[{'tib':'yang kha cig na re; zhes; zer na','reason':'English reporting setup is expanded/reordered; no single atom claims the whole introduction or supplied modal participants.'},{'tib':'der thal; de\'i tshe na; final phyir','reason':'Inferential and contextual relations are distributed across explanatory English, so omitted rather than nulled.'},{'tib':'ni; yin; nominal/genitive residues','reason':'Routine grammar omitted without asserting a null for uncertain packaging.'},{'english':'different before objects; different kinds of before beings; sit down; each; bracketed these different beings','reason':'Supplied expansions; numerals own only three, beings only beings, simultaneity only together.'}],
+ 'errata':{'outcome':'No new candidate','physical_source':'280/physical-original-context.txt','parallel':'C15:426 has identical ACIP/Wylie/English. C05:248 and C16:824 give the complete earlier quotation. P7:30 lacks differing perceptions in its English and is not evidence for that missing extent; no lineage inferred.'}})
+
+make(282,'one person performing five actions',[
+ ("'o na",'Well now',3),('skyes bu','person'),('gis',None,6),('yan lag','limbs'),('bya ba','actions'),("mi 'dra ba",'different',5,2,1),('lnga','five'),('byas pa','perform'),
+ ('skyes bu','person',5,2,2),('gcig','one',5,2),('gis',None,6,2),('bya ba','actions',5,2,2),("mi 'dra ba",'different',5,3,2),('lnga','five',5,2,2),('byas pa','performing',5,2,1),('ma',"n't",6,1,1,True),
+ ('yan lag','protuberances',5,2),("mi 'dra ba",'different',5,4,3),('lngas','five',5,2,3),('bya ba','actions',5,3,3),("mi 'dra ba",'different',5,5,4),('lnga','five',5,3,4),('byas pa','performing',5,3,2),('phyir','because',6)
+],
+ 'Yan lag owns limbs in the opening and protuberances in the reason; the supplied of his body is unwrapped. The first mi \'dra ba lngas is distributed across all four of his limbs, and his head and is omitted, not nulled. The second lngas owns five whole; its integrated agentive -s is never split. Ma owns the negative n\'t in wouldn\'t under the confirmed subword convention. No new erratum is proposed.',
+ {'least_secure':['yan lag → limbs (opening): this is the lexical noun inside a four-limbs-plus-head expansion; no claim that the noun alone owns head or the enumeration.','lngas → five (reason): the entire inflected numeral is selected, and agentive -s remains inseparable.'],
+ 'omissions':[{'tib':'first gcig','reason':'The English indefinite a supplies singular reference but is not claimed as an independent numeral exponent; omitted rather than falsely declaring zero meaning.'},{'tib':"first mi 'dra ba lngas",'reason':'The five differing parts are unpacked into all four limbs and his head; no contiguous independent five exists here.'},{'tib':"de'i tshe na; yin par thal",'reason':'Temporal supposition and consequence syntax are recast as suppose / According to you / would ... be; no atom is asserted.'},{'english':'is using all four of his ... and his head; of his body; According to you','reason':'No extra noun, participant or direct lexical numeral mapping invented.'}],
+ 'errata':{'outcome':'No new candidate','physical_source':'280/physical-original-context.txt','parallel':'C15:427 has identical ACIP/Wylie/English. C05:283 explicitly calls the five protuberances parts of the person and supports the argument. Other corpus protuberances passages use \'bur po and do not license yan lag universally.'}})

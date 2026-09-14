@@ -1,0 +1,1692 @@
+[
+  {
+    "line": 14,
+    "call": "Path",
+    "source": "Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')"
+  },
+  {
+    "line": 26,
+    "call": "ValueError",
+    "source": "ValueError(detail)"
+  },
+  {
+    "line": 30,
+    "call": "len",
+    "source": "len(raw)"
+  },
+  {
+    "line": 30,
+    "call": "hashlib.sha256(raw).hexdigest",
+    "source": "hashlib.sha256(raw).hexdigest()"
+  },
+  {
+    "line": 30,
+    "call": "hashlib.sha256",
+    "source": "hashlib.sha256(raw)"
+  },
+  {
+    "line": 38,
+    "call": "Path",
+    "source": "Path(path)"
+  },
+  {
+    "line": 39,
+    "call": "p.resolve",
+    "source": "p.resolve(strict=True)"
+  },
+  {
+    "line": 40,
+    "call": "require",
+    "source": "require(resolved.is_file(), ('not regular file', str(p)))"
+  },
+  {
+    "line": 40,
+    "call": "resolved.is_file",
+    "source": "resolved.is_file()"
+  },
+  {
+    "line": 40,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 41,
+    "call": "resolved.stat",
+    "source": "resolved.stat()"
+  },
+  {
+    "line": 42,
+    "call": "resolved.read_bytes",
+    "source": "resolved.read_bytes()"
+  },
+  {
+    "line": 43,
+    "call": "resolved.stat",
+    "source": "resolved.stat()"
+  },
+  {
+    "line": 45,
+    "call": "require",
+    "source": "require(all(getattr(before, k) == getattr(after, k) for k in attrs), ('unstable read', str(p)))"
+  },
+  {
+    "line": 45,
+    "call": "all",
+    "source": "all(getattr(before, k) == getattr(after, k) for k in attrs)"
+  },
+  {
+    "line": 45,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 45,
+    "call": "getattr",
+    "source": "getattr(before, k)"
+  },
+  {
+    "line": 45,
+    "call": "getattr",
+    "source": "getattr(after, k)"
+  },
+  {
+    "line": 46,
+    "call": "require",
+    "source": "require(len(raw) == after.st_size, ('short read', str(p)))"
+  },
+  {
+    "line": 46,
+    "call": "len",
+    "source": "len(raw)"
+  },
+  {
+    "line": 46,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 51,
+    "call": "Path",
+    "source": "Path(path)"
+  },
+  {
+    "line": 52,
+    "call": "require",
+    "source": "require(p.is_absolute(), ('relative original', str(p)))"
+  },
+  {
+    "line": 52,
+    "call": "p.is_absolute",
+    "source": "p.is_absolute()"
+  },
+  {
+    "line": 52,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 53,
+    "call": "p.resolve",
+    "source": "p.resolve(strict=True)"
+  },
+  {
+    "line": 56,
+    "call": "reversed",
+    "source": "reversed(p.parents)"
+  },
+  {
+    "line": 57,
+    "call": "q.is_symlink",
+    "source": "q.is_symlink()"
+  },
+  {
+    "line": 58,
+    "call": "aliases.append",
+    "source": "aliases.append({'path': str(q), 'target': os.readlink(q)})"
+  },
+  {
+    "line": 58,
+    "call": "str",
+    "source": "str(q)"
+  },
+  {
+    "line": 58,
+    "call": "os.readlink",
+    "source": "os.readlink(q)"
+  },
+  {
+    "line": 59,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 59,
+    "call": "str",
+    "source": "str(resolved)"
+  },
+  {
+    "line": 59,
+    "call": "pin",
+    "source": "pin(read(p))"
+  },
+  {
+    "line": 59,
+    "call": "read",
+    "source": "read(p)"
+  },
+  {
+    "line": 63,
+    "call": "require",
+    "source": "require(descriptor(row['original']) == row, ('changed input identity', row['original']))"
+  },
+  {
+    "line": 63,
+    "call": "descriptor",
+    "source": "descriptor(row['original'])"
+  },
+  {
+    "line": 64,
+    "call": "read",
+    "source": "read(row['original'])"
+  },
+  {
+    "line": 65,
+    "call": "require",
+    "source": "require(pin(raw) == expected(row), ('changed input bytes', row['original']))"
+  },
+  {
+    "line": 65,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 65,
+    "call": "expected",
+    "source": "expected(row)"
+  },
+  {
+    "line": 70,
+    "call": "Path",
+    "source": "Path(root)"
+  },
+  {
+    "line": 71,
+    "call": "require",
+    "source": "require(root.is_dir() and not root.is_symlink(), ('invalid root', str(root)))"
+  },
+  {
+    "line": 71,
+    "call": "root.is_dir",
+    "source": "root.is_dir()"
+  },
+  {
+    "line": 71,
+    "call": "str",
+    "source": "str(root)"
+  },
+  {
+    "line": 71,
+    "call": "root.is_symlink",
+    "source": "root.is_symlink()"
+  },
+  {
+    "line": 73,
+    "call": "root.rglob",
+    "source": "root.rglob('*')"
+  },
+  {
+    "line": 74,
+    "call": "require",
+    "source": "require(not (p.is_symlink() and p.is_dir()), ('directory symlink enumeration unsupported', str(p)))"
+  },
+  {
+    "line": 74,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 74,
+    "call": "p.is_symlink",
+    "source": "p.is_symlink()"
+  },
+  {
+    "line": 74,
+    "call": "p.is_dir",
+    "source": "p.is_dir()"
+  },
+  {
+    "line": 75,
+    "call": "require",
+    "source": "require(not (p.is_symlink() and not p.exists()), ('broken symlink', str(p)))"
+  },
+  {
+    "line": 75,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 75,
+    "call": "p.is_symlink",
+    "source": "p.is_symlink()"
+  },
+  {
+    "line": 75,
+    "call": "p.exists",
+    "source": "p.exists()"
+  },
+  {
+    "line": 76,
+    "call": "p.is_file",
+    "source": "p.is_file()"
+  },
+  {
+    "line": 77,
+    "call": "found.append",
+    "source": "found.append(str(p))"
+  },
+  {
+    "line": 77,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 79,
+    "call": "require",
+    "source": "require(p.is_dir(), ('unsupported filesystem entry', str(p)))"
+  },
+  {
+    "line": 79,
+    "call": "p.is_dir",
+    "source": "p.is_dir()"
+  },
+  {
+    "line": 79,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 80,
+    "call": "sorted",
+    "source": "sorted(found)"
+  },
+  {
+    "line": 85,
+    "call": "ValueError",
+    "source": "ValueError('nonstandard JSON constant: ' + value)"
+  },
+  {
+    "line": 86,
+    "call": "json.loads",
+    "source": "json.loads(raw.decode('utf-8'), parse_constant=no_constant)"
+  },
+  {
+    "line": 86,
+    "call": "raw.decode",
+    "source": "raw.decode('utf-8')"
+  },
+  {
+    "line": 90,
+    "call": "len",
+    "source": "len(raw)"
+  },
+  {
+    "line": 90,
+    "call": "Path",
+    "source": "Path(path)"
+  },
+  {
+    "line": 93,
+    "call": "strict_json",
+    "source": "strict_json(raw)"
+  },
+  {
+    "line": 98,
+    "call": "any",
+    "source": "any(line.endswith(b' ') for line in raw.split(b'\\n'))"
+  },
+  {
+    "line": 98,
+    "call": "line.endswith",
+    "source": "line.endswith(b' ')"
+  },
+  {
+    "line": 98,
+    "call": "raw.split",
+    "source": "raw.split(b'\\n')"
+  },
+  {
+    "line": 99,
+    "call": "raw.endswith",
+    "source": "raw.endswith(b'\\n\\n')"
+  },
+  {
+    "line": 103,
+    "call": "Path",
+    "source": "Path(value)"
+  },
+  {
+    "line": 104,
+    "call": "require",
+    "source": "require(value and not p.is_absolute() and '..' not in p.parts, ('unsafe relative path', value))"
+  },
+  {
+    "line": 104,
+    "call": "p.is_absolute",
+    "source": "p.is_absolute()"
+  },
+  {
+    "line": 109,
+    "call": "(json.dumps(obj, indent=2, ensure_ascii=True, allow_nan=False) + '\\n').encode",
+    "source": "(json.dumps(obj, indent=2, ensure_ascii=True, allow_nan=False) + '\\n').encode()"
+  },
+  {
+    "line": 109,
+    "call": "json.dumps",
+    "source": "json.dumps(obj, indent=2, ensure_ascii=True, allow_nan=False)"
+  },
+  {
+    "line": 110,
+    "call": "Path(path).open",
+    "source": "Path(path).open('xb')"
+  },
+  {
+    "line": 110,
+    "call": "Path",
+    "source": "Path(path)"
+  },
+  {
+    "line": 111,
+    "call": "f.write",
+    "source": "f.write(raw)"
+  },
+  {
+    "line": 112,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 116,
+    "call": "argparse.ArgumentParser",
+    "source": "argparse.ArgumentParser(description=__doc__)"
+  },
+  {
+    "line": 117,
+    "call": "parser.add_argument",
+    "source": "parser.add_argument('--scope', required=True)"
+  },
+  {
+    "line": 118,
+    "call": "parser.add_argument",
+    "source": "parser.add_argument('--scope-sha256', required=True)"
+  },
+  {
+    "line": 119,
+    "call": "parser.add_argument",
+    "source": "parser.add_argument('--output', required=True)"
+  },
+  {
+    "line": 120,
+    "call": "parser.add_argument",
+    "source": "parser.add_argument('--execute-reviewed-composition', action='store_true', required=True)"
+  },
+  {
+    "line": 121,
+    "call": "parser.parse_args",
+    "source": "parser.parse_args()"
+  },
+  {
+    "line": 122,
+    "call": "require",
+    "source": "require(os.environ.get('PYTHONDONTWRITEBYTECODE') == '1' and not sys.flags.optimize,\n            'Require bytecode disabled and optimization off')"
+  },
+  {
+    "line": 122,
+    "call": "os.environ.get",
+    "source": "os.environ.get('PYTHONDONTWRITEBYTECODE')"
+  },
+  {
+    "line": 124,
+    "call": "Path",
+    "source": "Path(args.output)"
+  },
+  {
+    "line": 125,
+    "call": "require",
+    "source": "require(output.is_absolute() and output.parent.resolve(strict=True) == I.resolve() and\n            output.name == 'through282-final-bank-inventory' and not output.exists(), 'fresh exact output required')"
+  },
+  {
+    "line": 125,
+    "call": "output.is_absolute",
+    "source": "output.is_absolute()"
+  },
+  {
+    "line": 125,
+    "call": "output.parent.resolve",
+    "source": "output.parent.resolve(strict=True)"
+  },
+  {
+    "line": 125,
+    "call": "I.resolve",
+    "source": "I.resolve()"
+  },
+  {
+    "line": 126,
+    "call": "output.exists",
+    "source": "output.exists()"
+  },
+  {
+    "line": 127,
+    "call": "read",
+    "source": "read(args.scope)"
+  },
+  {
+    "line": 128,
+    "call": "require",
+    "source": "require(pin(scope_raw)['sha256'] == args.scope_sha256, 'scope pin mismatch')"
+  },
+  {
+    "line": 128,
+    "call": "pin",
+    "source": "pin(scope_raw)"
+  },
+  {
+    "line": 129,
+    "call": "strict_json",
+    "source": "strict_json(scope_raw)"
+  },
+  {
+    "line": 130,
+    "call": "require",
+    "source": "require(scope['schema'] == 'through282-final-intake-v1' and scope['baseline'] == BASE, 'scope schema/baseline')"
+  },
+  {
+    "line": 131,
+    "call": "require",
+    "source": "require(scope['deferred_before_final_bank'] and scope['later_external_after_final_bank'], 'missing truthful boundaries')"
+  },
+  {
+    "line": 132,
+    "call": "output.mkdir",
+    "source": "output.mkdir(exist_ok=False)"
+  },
+  {
+    "line": 133,
+    "call": "save",
+    "source": "save(output / 'invocation.json', {'argv': sys.argv, 'cwd': os.getcwd(),\n        'environment_overrides': {'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONOPTIMIZE': '0'},\n        'scope': str(Path(args.scope).resolve()), 'scope_pin': pin(scope_raw)})"
+  },
+  {
+    "line": 133,
+    "call": "os.getcwd",
+    "source": "os.getcwd()"
+  },
+  {
+    "line": 135,
+    "call": "str",
+    "source": "str(Path(args.scope).resolve())"
+  },
+  {
+    "line": 135,
+    "call": "pin",
+    "source": "pin(scope_raw)"
+  },
+  {
+    "line": 135,
+    "call": "Path(args.scope).resolve",
+    "source": "Path(args.scope).resolve()"
+  },
+  {
+    "line": 135,
+    "call": "Path",
+    "source": "Path(args.scope)"
+  },
+  {
+    "line": 138,
+    "call": "verified",
+    "source": "verified(v)"
+  },
+  {
+    "line": 138,
+    "call": "scope['controls'].items",
+    "source": "scope['controls'].items()"
+  },
+  {
+    "line": 139,
+    "call": "strict_json",
+    "source": "strict_json(controls['ordinary_manifest'])"
+  },
+  {
+    "line": 140,
+    "call": "require",
+    "source": "require(old['phase'] == 'ordinary' and old['semantic_review_unchanged'] is True, 'ordinary manifest boundary')"
+  },
+  {
+    "line": 141,
+    "call": "require",
+    "source": "require(read(DEST / 'root-proof-copy-manifest-before-whitespace.json') == controls['ordinary_manifest'], 'ordinary manifest copy')"
+  },
+  {
+    "line": 141,
+    "call": "read",
+    "source": "read(DEST / 'root-proof-copy-manifest-before-whitespace.json')"
+  },
+  {
+    "line": 144,
+    "call": "read",
+    "source": "read(row['original'])"
+  },
+  {
+    "line": 145,
+    "call": "require",
+    "source": "require(pin(raw) == expected(row), ('ordinary original', row['original']))"
+  },
+  {
+    "line": 145,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 145,
+    "call": "expected",
+    "source": "expected(row)"
+  },
+  {
+    "line": 146,
+    "call": "relative",
+    "source": "relative(row['copy'])"
+  },
+  {
+    "line": 147,
+    "call": "require",
+    "source": "require(target.resolve().is_relative_to(DEST.resolve()) and read(target) == raw, ('ordinary full copy', str(target)))"
+  },
+  {
+    "line": 147,
+    "call": "target.resolve().is_relative_to",
+    "source": "target.resolve().is_relative_to(DEST.resolve())"
+  },
+  {
+    "line": 147,
+    "call": "str",
+    "source": "str(target)"
+  },
+  {
+    "line": 147,
+    "call": "DEST.resolve",
+    "source": "DEST.resolve()"
+  },
+  {
+    "line": 147,
+    "call": "read",
+    "source": "read(target)"
+  },
+  {
+    "line": 147,
+    "call": "target.resolve",
+    "source": "target.resolve()"
+  },
+  {
+    "line": 148,
+    "call": "retained.setdefault(str(Path(row['original']).resolve()), []).append",
+    "source": "retained.setdefault(str(Path(row['original']).resolve()), []).append({'kind': 'bank', 'record': row})"
+  },
+  {
+    "line": 148,
+    "call": "retained.setdefault",
+    "source": "retained.setdefault(str(Path(row['original']).resolve()), [])"
+  },
+  {
+    "line": 148,
+    "call": "str",
+    "source": "str(Path(row['original']).resolve())"
+  },
+  {
+    "line": 148,
+    "call": "Path(row['original']).resolve",
+    "source": "Path(row['original']).resolve()"
+  },
+  {
+    "line": 148,
+    "call": "Path",
+    "source": "Path(row['original'])"
+  },
+  {
+    "line": 150,
+    "call": "require",
+    "source": "require(pin(read(row['path'])) == expected(row), ('ordinary external', row['path']))"
+  },
+  {
+    "line": 150,
+    "call": "pin",
+    "source": "pin(read(row['path']))"
+  },
+  {
+    "line": 150,
+    "call": "expected",
+    "source": "expected(row)"
+  },
+  {
+    "line": 150,
+    "call": "read",
+    "source": "read(row['path'])"
+  },
+  {
+    "line": 151,
+    "call": "retained.setdefault(str(Path(row['path']).resolve()), []).append",
+    "source": "retained.setdefault(str(Path(row['path']).resolve()), []).append({'kind': 'external', 'record': row})"
+  },
+  {
+    "line": 151,
+    "call": "retained.setdefault",
+    "source": "retained.setdefault(str(Path(row['path']).resolve()), [])"
+  },
+  {
+    "line": 151,
+    "call": "str",
+    "source": "str(Path(row['path']).resolve())"
+  },
+  {
+    "line": 151,
+    "call": "Path(row['path']).resolve",
+    "source": "Path(row['path']).resolve()"
+  },
+  {
+    "line": 151,
+    "call": "Path",
+    "source": "Path(row['path'])"
+  },
+  {
+    "line": 152,
+    "call": "strict_json",
+    "source": "strict_json(controls['ordinary_coverage'])"
+  },
+  {
+    "line": 153,
+    "call": "require",
+    "source": "require(isinstance(prior_coverage, list), 'coverage schema')"
+  },
+  {
+    "line": 153,
+    "call": "isinstance",
+    "source": "isinstance(prior_coverage, list)"
+  },
+  {
+    "line": 154,
+    "call": "set",
+    "source": "set()"
+  },
+  {
+    "line": 156,
+    "call": "Path",
+    "source": "Path(row['original'])"
+  },
+  {
+    "line": 157,
+    "call": "require",
+    "source": "require(str(p) not in old_paths, ('duplicate prior logical path', str(p)))"
+  },
+  {
+    "line": 157,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 157,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 158,
+    "call": "old_paths.add",
+    "source": "old_paths.add(str(p))"
+  },
+  {
+    "line": 158,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 159,
+    "call": "read",
+    "source": "read(p)"
+  },
+  {
+    "line": 160,
+    "call": "require",
+    "source": "require(pin(raw) == expected(row) and str(p.resolve()) == row['resolved'], ('prior coverage changed', str(p)))"
+  },
+  {
+    "line": 160,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 160,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 160,
+    "call": "expected",
+    "source": "expected(row)"
+  },
+  {
+    "line": 160,
+    "call": "str",
+    "source": "str(p.resolve())"
+  },
+  {
+    "line": 160,
+    "call": "p.resolve",
+    "source": "p.resolve()"
+  },
+  {
+    "line": 161,
+    "call": "require",
+    "source": "require((os.readlink(p) if p.is_symlink() else None) == row['symlink'], ('prior alias changed', str(p)))"
+  },
+  {
+    "line": 161,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 161,
+    "call": "p.is_symlink",
+    "source": "p.is_symlink()"
+  },
+  {
+    "line": 161,
+    "call": "os.readlink",
+    "source": "os.readlink(p)"
+  },
+  {
+    "line": 163,
+    "call": "require",
+    "source": "require(read(row['banked_copy']) == raw, ('prior exclusion copy', str(p)))"
+  },
+  {
+    "line": 163,
+    "call": "read",
+    "source": "read(row['banked_copy'])"
+  },
+  {
+    "line": 163,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 165,
+    "call": "require",
+    "source": "require(read(DEST / relative(row['copy'])) == raw, ('prior explicit copy', str(p)))"
+  },
+  {
+    "line": 165,
+    "call": "read",
+    "source": "read(DEST / relative(row['copy']))"
+  },
+  {
+    "line": 165,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 165,
+    "call": "relative",
+    "source": "relative(row['copy'])"
+  },
+  {
+    "line": 166,
+    "call": "require",
+    "source": "require(isinstance(strict_json(controls['ordinary_extra_inputs']), list), 'ordinary LIST schema')"
+  },
+  {
+    "line": 166,
+    "call": "isinstance",
+    "source": "isinstance(strict_json(controls['ordinary_extra_inputs']), list)"
+  },
+  {
+    "line": 166,
+    "call": "strict_json",
+    "source": "strict_json(controls['ordinary_extra_inputs'])"
+  },
+  {
+    "line": 167,
+    "call": "require",
+    "source": "require(scope['controls']['ordinary_extra_inputs']['original'] ==\n                str(I / 'through282-ordinary-bank-inventory/extra-inputs.json'), 'old extra LIST path')"
+  },
+  {
+    "line": 168,
+    "call": "str",
+    "source": "str(I / 'through282-ordinary-bank-inventory/extra-inputs.json')"
+  },
+  {
+    "line": 169,
+    "call": "strict_json",
+    "source": "strict_json(controls['audit_proof'])"
+  },
+  {
+    "line": 170,
+    "call": "strict_json",
+    "source": "strict_json(controls['root_acceptance'])"
+  },
+  {
+    "line": 171,
+    "call": "require",
+    "source": "require(audit['status'] == 'PASS actual staged diagnostic reproduced and predicates verified' and\n                audit['mode'] == 'audit' and audit['baseline_head'] == BASE and\n                audit['all_warnings_accounted_for'] is True and audit['git_diff_check_exit'] == 2 and\n                audit['semantic_approval'] is False, 'actual audit prerequisite')"
+  },
+  {
+    "line": 175,
+    "call": "require",
+    "source": "require(acceptance['status'] == 'PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and\n                acceptance['literal_warnings'] == audit['warning_count'] and\n                acceptance['normalization'] is False, 'actual root acceptance prerequisite')"
+  },
+  {
+    "line": 178,
+    "call": "require",
+    "source": "require(pin(controls['raw_diagnostic']) == {'bytes': audit['raw_log_bytes'], 'sha256': audit['raw_log_sha256']} and\n                audit['raw_log_kept_external'] == scope['controls']['raw_diagnostic']['original'] and\n                int(controls['raw_diagnostic_exit']) == audit['git_diff_check_exit'], 'full actual raw diagnostic binding')"
+  },
+  {
+    "line": 178,
+    "call": "pin",
+    "source": "pin(controls['raw_diagnostic'])"
+  },
+  {
+    "line": 180,
+    "call": "int",
+    "source": "int(controls['raw_diagnostic_exit'])"
+  },
+  {
+    "line": 183,
+    "call": "require",
+    "source": "require(paths(group['root']) == [r['original'] for r in group['files']], ('root enumeration changed', group['root']))"
+  },
+  {
+    "line": 183,
+    "call": "paths",
+    "source": "paths(group['root'])"
+  },
+  {
+    "line": 185,
+    "call": "records.setdefault",
+    "source": "records.setdefault(row['original'], row)"
+  },
+  {
+    "line": 186,
+    "call": "require",
+    "source": "require(old_row == row, ('conflicting alias descriptor', row['original']))"
+  },
+  {
+    "line": 188,
+    "call": "records.setdefault",
+    "source": "records.setdefault(row['original'], row)"
+  },
+  {
+    "line": 189,
+    "call": "require",
+    "source": "require(old_row == row, ('conflicting single descriptor', row['original']))"
+  },
+  {
+    "line": 190,
+    "call": "paths",
+    "source": "paths(B)"
+  },
+  {
+    "line": 190,
+    "call": "Path(p).is_relative_to",
+    "source": "Path(p).is_relative_to(L)"
+  },
+  {
+    "line": 190,
+    "call": "Path",
+    "source": "Path(p)"
+  },
+  {
+    "line": 191,
+    "call": "require",
+    "source": "require(sorted(set(current_batch) - old_paths) == [r['original'] for r in scope['late_batch_files']],\n                'late batch enumeration changed; preserve and review scope refresh')"
+  },
+  {
+    "line": 191,
+    "call": "sorted",
+    "source": "sorted(set(current_batch) - old_paths)"
+  },
+  {
+    "line": 191,
+    "call": "set",
+    "source": "set(current_batch)"
+  },
+  {
+    "line": 193,
+    "call": "require",
+    "source": "require(set(p for p in old_paths if Path(p).is_relative_to(B) and not Path(p).is_relative_to(L)) <= set(current_batch),\n                'prior batch file disappeared')"
+  },
+  {
+    "line": 193,
+    "call": "set",
+    "source": "set(p for p in old_paths if Path(p).is_relative_to(B) and not Path(p).is_relative_to(L))"
+  },
+  {
+    "line": 193,
+    "call": "set",
+    "source": "set(current_batch)"
+  },
+  {
+    "line": 193,
+    "call": "Path(p).is_relative_to",
+    "source": "Path(p).is_relative_to(B)"
+  },
+  {
+    "line": 193,
+    "call": "Path(p).is_relative_to",
+    "source": "Path(p).is_relative_to(L)"
+  },
+  {
+    "line": 193,
+    "call": "Path",
+    "source": "Path(p)"
+  },
+  {
+    "line": 193,
+    "call": "Path",
+    "source": "Path(p)"
+  },
+  {
+    "line": 196,
+    "call": "ast.parse",
+    "source": "ast.parse(controls['banker'].decode('utf-8'))"
+  },
+  {
+    "line": 196,
+    "call": "controls['banker'].decode",
+    "source": "controls['banker'].decode('utf-8')"
+  },
+  {
+    "line": 197,
+    "call": "ast.literal_eval",
+    "source": "ast.literal_eval(n.value)"
+  },
+  {
+    "line": 197,
+    "call": "isinstance",
+    "source": "isinstance(n, ast.Assign)"
+  },
+  {
+    "line": 198,
+    "call": "any",
+    "source": "any(isinstance(t, ast.Name) and t.id == 'HISTORY' for t in n.targets)"
+  },
+  {
+    "line": 198,
+    "call": "isinstance",
+    "source": "isinstance(t, ast.Name)"
+  },
+  {
+    "line": 199,
+    "call": "require",
+    "source": "require(len(history) == 1, 'banker HISTORY schema')"
+  },
+  {
+    "line": 199,
+    "call": "len",
+    "source": "len(history)"
+  },
+  {
+    "line": 201,
+    "call": "paths",
+    "source": "paths(L)"
+  },
+  {
+    "line": 202,
+    "call": "Path",
+    "source": "Path(name)"
+  },
+  {
+    "line": 205,
+    "call": "p.relative_to",
+    "source": "p.relative_to(L)"
+  },
+  {
+    "line": 206,
+    "call": "automatic.append",
+    "source": "automatic.append((p, None if p.name == 'previous-main-csv-seed.bin' or 'payload-freeze' in rel.parts or\n                              p.stat().st_size >= LIMIT else str(rel)))"
+  },
+  {
+    "line": 207,
+    "call": "str",
+    "source": "str(rel)"
+  },
+  {
+    "line": 207,
+    "call": "p.stat",
+    "source": "p.stat()"
+  },
+  {
+    "line": 208,
+    "call": "automatic.extend",
+    "source": "automatic.extend((B / name, 'root-review-history/' + name + ('.txt' if Path(name).suffix == '.py' else ''))\n                         for name in history[0])"
+  },
+  {
+    "line": 208,
+    "call": "Path",
+    "source": "Path(name)"
+  },
+  {
+    "line": 210,
+    "call": "automatic.extend",
+    "source": "automatic.extend([(B / 'freeze-final-payload-before-staging.py', 'root-helpers/freeze-final-payload-before-staging.py.txt'),\n                          (Path(scope['controls']['banker']['original']), 'root-helpers/bank_root_proofs_through282.py.txt')])"
+  },
+  {
+    "line": 211,
+    "call": "Path",
+    "source": "Path(scope['controls']['banker']['original'])"
+  },
+  {
+    "line": 212,
+    "call": "require",
+    "source": "require([(str(p), c) for p, c in automatic] == [(r['source']['original'], r['copy']) for r in scope['automatic_inputs']],\n                'automatic source routing changed')"
+  },
+  {
+    "line": 212,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 215,
+    "call": "zip",
+    "source": "zip(automatic, scope['automatic_inputs'])"
+  },
+  {
+    "line": 216,
+    "call": "verified",
+    "source": "verified(item['source'])"
+  },
+  {
+    "line": 217,
+    "call": "(DEST / relative(copy)).exists",
+    "source": "(DEST / relative(copy)).exists()"
+  },
+  {
+    "line": 217,
+    "call": "relative",
+    "source": "relative(copy)"
+  },
+  {
+    "line": 219,
+    "call": "require",
+    "source": "require(read(DEST / relative(copy)) == raw, ('automatic target changed', copy))"
+  },
+  {
+    "line": 219,
+    "call": "read",
+    "source": "read(DEST / relative(copy))"
+  },
+  {
+    "line": 219,
+    "call": "relative",
+    "source": "relative(copy)"
+  },
+  {
+    "line": 221,
+    "call": "require",
+    "source": "require(clean_json(p, raw), ('new automatic source needs separate review', str(p), copy))"
+  },
+  {
+    "line": 221,
+    "call": "clean_json",
+    "source": "clean_json(p, raw)"
+  },
+  {
+    "line": 221,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 222,
+    "call": "automatic_proof.append",
+    "source": "automatic_proof.append({'original': str(p), 'copy': copy, 'existing_exact_target': existing, **pin(raw)})"
+  },
+  {
+    "line": 222,
+    "call": "str",
+    "source": "str(p)"
+  },
+  {
+    "line": 222,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 225,
+    "call": "set",
+    "source": "set()"
+  },
+  {
+    "line": 226,
+    "call": "sorted",
+    "source": "sorted(records.items())"
+  },
+  {
+    "line": 226,
+    "call": "records.items",
+    "source": "records.items()"
+  },
+  {
+    "line": 227,
+    "call": "verified",
+    "source": "verified(item)"
+  },
+  {
+    "line": 229,
+    "call": "require",
+    "source": "require(Path(source).is_relative_to(ART) and not Path(source).is_relative_to(output) and\n                    not Path(source).is_relative_to(DEST), ('source escape/self reference', logical))"
+  },
+  {
+    "line": 229,
+    "call": "Path(source).is_relative_to",
+    "source": "Path(source).is_relative_to(ART)"
+  },
+  {
+    "line": 229,
+    "call": "Path(source).is_relative_to",
+    "source": "Path(source).is_relative_to(output)"
+  },
+  {
+    "line": 229,
+    "call": "Path",
+    "source": "Path(source)"
+  },
+  {
+    "line": 229,
+    "call": "Path",
+    "source": "Path(source)"
+  },
+  {
+    "line": 230,
+    "call": "Path(source).is_relative_to",
+    "source": "Path(source).is_relative_to(DEST)"
+  },
+  {
+    "line": 230,
+    "call": "Path",
+    "source": "Path(source)"
+  },
+  {
+    "line": 232,
+    "call": "require",
+    "source": "require(all(expected(x['record']) == pin(raw) for x in retained[source]), ('retained alias changed', logical))"
+  },
+  {
+    "line": 232,
+    "call": "all",
+    "source": "all(expected(x['record']) == pin(raw) for x in retained[source])"
+  },
+  {
+    "line": 232,
+    "call": "expected",
+    "source": "expected(x['record'])"
+  },
+  {
+    "line": 232,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 233,
+    "call": "coverage.append",
+    "source": "coverage.append({**item, 'disposition': 'same-resolved-original-already-retained', 'ordinary_records': retained[source]})"
+  },
+  {
+    "line": 236,
+    "call": "require",
+    "source": "require(expected(new_by_source[source]) == pin(raw), 'conflicting resolved alias bytes')"
+  },
+  {
+    "line": 236,
+    "call": "expected",
+    "source": "expected(new_by_source[source])"
+  },
+  {
+    "line": 236,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 237,
+    "call": "coverage.append",
+    "source": "coverage.append({**item, 'disposition': 'new-resolved-alias-shares-explicit-record',\n                                 'retention_record': new_by_source[source]})"
+  },
+  {
+    "line": 240,
+    "call": "clean_json",
+    "source": "clean_json(logical, raw)"
+  },
+  {
+    "line": 241,
+    "call": "str",
+    "source": "str(Path(logical).relative_to(ART))"
+  },
+  {
+    "line": 241,
+    "call": "Path(logical).relative_to",
+    "source": "Path(logical).relative_to(ART)"
+  },
+  {
+    "line": 241,
+    "call": "Path",
+    "source": "Path(logical)"
+  },
+  {
+    "line": 242,
+    "call": "require",
+    "source": "require(target not in new_targets, ('copy collision', target))"
+  },
+  {
+    "line": 243,
+    "call": "new_targets.add",
+    "source": "new_targets.add(target)"
+  },
+  {
+    "line": 244,
+    "call": "require",
+    "source": "require(not (DEST / relative(target)).exists(), ('new destination already exists', target))"
+  },
+  {
+    "line": 244,
+    "call": "(DEST / relative(target)).exists",
+    "source": "(DEST / relative(target)).exists()"
+  },
+  {
+    "line": 244,
+    "call": "relative",
+    "source": "relative(target)"
+  },
+  {
+    "line": 245,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 247,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 250,
+    "call": "rows.append",
+    "source": "rows.append(row)"
+  },
+  {
+    "line": 252,
+    "call": "coverage.append",
+    "source": "coverage.append({**item, 'disposition': row['retention'], 'retention_record': row})"
+  },
+  {
+    "line": 253,
+    "call": "require",
+    "source": "require(rows, 'empty final intake')"
+  },
+  {
+    "line": 254,
+    "call": "set",
+    "source": "set(retained)"
+  },
+  {
+    "line": 256,
+    "call": "str",
+    "source": "str(I / 'through282-banking-runs/ordinary')"
+  },
+  {
+    "line": 257,
+    "call": "require",
+    "source": "require({r['resolved'] for r in group['files']} <= retained_after, 'ordinary internal file omitted')"
+  },
+  {
+    "line": 258,
+    "call": "require",
+    "source": "require({scope['controls'][n]['resolved'] for n in ('audit_proof', 'raw_diagnostic')} <= retained_after,\n                'stage-required whitespace original omitted')"
+  },
+  {
+    "line": 261,
+    "call": "records.values",
+    "source": "records.values()"
+  },
+  {
+    "line": 262,
+    "call": "verified",
+    "source": "verified(item)"
+  },
+  {
+    "line": 263,
+    "call": "scope['controls'].values",
+    "source": "scope['controls'].values()"
+  },
+  {
+    "line": 264,
+    "call": "verified",
+    "source": "verified(item)"
+  },
+  {
+    "line": 266,
+    "call": "require",
+    "source": "require(paths(group['root']) == [r['original'] for r in group['files']], 'root changed during composition')"
+  },
+  {
+    "line": 266,
+    "call": "paths",
+    "source": "paths(group['root'])"
+  },
+  {
+    "line": 267,
+    "call": "require",
+    "source": "require([p for p in paths(B) if not Path(p).is_relative_to(L)] == current_batch, 'batch changed during composition')"
+  },
+  {
+    "line": 267,
+    "call": "paths",
+    "source": "paths(B)"
+  },
+  {
+    "line": 267,
+    "call": "Path(p).is_relative_to",
+    "source": "Path(p).is_relative_to(L)"
+  },
+  {
+    "line": 267,
+    "call": "Path",
+    "source": "Path(p)"
+  },
+  {
+    "line": 269,
+    "call": "read",
+    "source": "read(row['original'])"
+  },
+  {
+    "line": 270,
+    "call": "require",
+    "source": "require(pin(raw) == expected(row) and read(DEST / relative(row['copy'])) == raw, 'ordinary pair changed during reads')"
+  },
+  {
+    "line": 270,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 270,
+    "call": "expected",
+    "source": "expected(row)"
+  },
+  {
+    "line": 270,
+    "call": "read",
+    "source": "read(DEST / relative(row['copy']))"
+  },
+  {
+    "line": 270,
+    "call": "relative",
+    "source": "relative(row['copy'])"
+  },
+  {
+    "line": 272,
+    "call": "require",
+    "source": "require(pin(read(row['path'])) == expected(row), 'ordinary external changed during reads')"
+  },
+  {
+    "line": 272,
+    "call": "pin",
+    "source": "pin(read(row['path']))"
+  },
+  {
+    "line": 272,
+    "call": "expected",
+    "source": "expected(row)"
+  },
+  {
+    "line": 272,
+    "call": "read",
+    "source": "read(row['path'])"
+  },
+  {
+    "line": 274,
+    "call": "read",
+    "source": "read(row['original'])"
+  },
+  {
+    "line": 275,
+    "call": "require",
+    "source": "require(str(Path(row['original']).resolve()) == row['resolved'] and\n                    (os.readlink(row['original']) if Path(row['original']).is_symlink() else None) == row['symlink'],\n                    'prior alias changed during reads')"
+  },
+  {
+    "line": 275,
+    "call": "str",
+    "source": "str(Path(row['original']).resolve())"
+  },
+  {
+    "line": 275,
+    "call": "Path(row['original']).resolve",
+    "source": "Path(row['original']).resolve()"
+  },
+  {
+    "line": 275,
+    "call": "Path",
+    "source": "Path(row['original'])"
+  },
+  {
+    "line": 276,
+    "call": "Path(row['original']).is_symlink",
+    "source": "Path(row['original']).is_symlink()"
+  },
+  {
+    "line": 276,
+    "call": "os.readlink",
+    "source": "os.readlink(row['original'])"
+  },
+  {
+    "line": 276,
+    "call": "Path",
+    "source": "Path(row['original'])"
+  },
+  {
+    "line": 278,
+    "call": "require",
+    "source": "require(pin(raw) == expected(row), 'prior coverage changed during reads')"
+  },
+  {
+    "line": 278,
+    "call": "pin",
+    "source": "pin(raw)"
+  },
+  {
+    "line": 278,
+    "call": "expected",
+    "source": "expected(row)"
+  },
+  {
+    "line": 280,
+    "call": "require",
+    "source": "require(read(row['banked_copy']) == raw, 'prior exclusion copy changed')"
+  },
+  {
+    "line": 280,
+    "call": "read",
+    "source": "read(row['banked_copy'])"
+  },
+  {
+    "line": 282,
+    "call": "require",
+    "source": "require(read(DEST / relative(row['copy'])) == raw, 'prior copy changed')"
+  },
+  {
+    "line": 282,
+    "call": "read",
+    "source": "read(DEST / relative(row['copy']))"
+  },
+  {
+    "line": 282,
+    "call": "relative",
+    "source": "relative(row['copy'])"
+  },
+  {
+    "line": 283,
+    "call": "require",
+    "source": "require(paths(L) == scope['landing_file_paths'], 'landing enumeration changed during composition')"
+  },
+  {
+    "line": 283,
+    "call": "paths",
+    "source": "paths(L)"
+  },
+  {
+    "line": 285,
+    "call": "verified",
+    "source": "verified(item['source'])"
+  },
+  {
+    "line": 286,
+    "call": "(DEST / relative(item['copy'])).exists",
+    "source": "(DEST / relative(item['copy'])).exists()"
+  },
+  {
+    "line": 286,
+    "call": "relative",
+    "source": "relative(item['copy'])"
+  },
+  {
+    "line": 287,
+    "call": "require",
+    "source": "require(read(DEST / relative(item['copy'])) == raw, 'automatic target changed during reads')"
+  },
+  {
+    "line": 287,
+    "call": "read",
+    "source": "read(DEST / relative(item['copy']))"
+  },
+  {
+    "line": 287,
+    "call": "relative",
+    "source": "relative(item['copy'])"
+  },
+  {
+    "line": 288,
+    "call": "require",
+    "source": "require(pin(read(args.scope)) == pin(scope_raw), 'scope changed')"
+  },
+  {
+    "line": 288,
+    "call": "pin",
+    "source": "pin(read(args.scope))"
+  },
+  {
+    "line": 288,
+    "call": "pin",
+    "source": "pin(scope_raw)"
+  },
+  {
+    "line": 288,
+    "call": "read",
+    "source": "read(args.scope)"
+  },
+  {
+    "line": 289,
+    "call": "save",
+    "source": "save(output / 'final-whitespace-inputs-initial.json', rows)"
+  },
+  {
+    "line": 290,
+    "call": "save",
+    "source": "save(output / 'coverage-and-exclusion-map.json', coverage)"
+  },
+  {
+    "line": 291,
+    "call": "save",
+    "source": "save(output / 'automatic-route-check.json', automatic_proof)"
+  },
+  {
+    "line": 293,
+    "call": "datetime.datetime.now(datetime.timezone.utc).isoformat",
+    "source": "datetime.datetime.now(datetime.timezone.utc).isoformat()"
+  },
+  {
+    "line": 293,
+    "call": "pin",
+    "source": "pin(scope_raw)"
+  },
+  {
+    "line": 293,
+    "call": "datetime.datetime.now",
+    "source": "datetime.datetime.now(datetime.timezone.utc)"
+  },
+  {
+    "line": 295,
+    "call": "len",
+    "source": "len(records)"
+  },
+  {
+    "line": 295,
+    "call": "len",
+    "source": "len(old['files'])"
+  },
+  {
+    "line": 296,
+    "call": "len",
+    "source": "len(old['external_actual_bytes_retained'])"
+  },
+  {
+    "line": 297,
+    "call": "len",
+    "source": "len(prior_coverage)"
+  },
+  {
+    "line": 297,
+    "call": "len",
+    "source": "len(rows)"
+  },
+  {
+    "line": 298,
+    "call": "sum",
+    "source": "sum(r['retention'] == 'bank' for r in rows)"
+  },
+  {
+    "line": 299,
+    "call": "sum",
+    "source": "sum(r['retention'] == 'external' for r in rows)"
+  },
+  {
+    "line": 300,
+    "call": "sum",
+    "source": "sum(r['disposition'] == 'same-resolved-original-already-retained' for r in coverage)"
+  },
+  {
+    "line": 306,
+    "call": "save",
+    "source": "save(output / 'proof.json', proof)"
+  },
+  {
+    "line": 307,
+    "call": "print",
+    "source": "print(json.dumps(proof))"
+  },
+  {
+    "line": 307,
+    "call": "json.dumps",
+    "source": "json.dumps(proof)"
+  },
+  {
+    "line": 309,
+    "call": "(output / 'failure.txt').write_text",
+    "source": "(output / 'failure.txt').write_text(traceback.format_exc())"
+  },
+  {
+    "line": 309,
+    "call": "traceback.format_exc",
+    "source": "traceback.format_exc()"
+  },
+  {
+    "line": 310,
+    "call": "save",
+    "source": "save(output / 'partial-coverage.json', coverage)"
+  },
+  {
+    "line": 315,
+    "call": "main",
+    "source": "main()"
+  }
+]

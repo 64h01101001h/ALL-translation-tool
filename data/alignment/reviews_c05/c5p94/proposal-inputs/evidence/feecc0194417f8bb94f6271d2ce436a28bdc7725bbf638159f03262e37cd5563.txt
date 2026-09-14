@@ -1,0 +1,29 @@
+import os,sys,pathlib,json,hashlib,subprocess,datetime,importlib.util,html,re,difflib
+os.environ['PYTHONDONTWRITEBYTECODE']='1'
+R=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');B=R/'campaign-artifacts/C05-280-282';D=B/'reconciled/280';W=R/'campaign-worktree'
+def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+original=B/'english/280/run_generator_readonly.py';text=original.read_text();old="work=Path(__file__).resolve().parents[4]/'campaign-worktree'";print(text)
+# Copy original wrapper with only its path resolution made explicit for this differently nested retained copy.
+assert old in text
+new=text.replace(old,'work = Path('+repr(str(W))+')');wrapper=D/'run-generator-ro.py.txt';wrapper.write_text(new);(D/'wrapper.diff').write_text(''.join(difflib.unified_diff(text.splitlines(True),new.splitlines(True),fromfile=str(original),tofile=str(wrapper))))
+s=importlib.util.spec_from_file_location('g',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)
+s=importlib.util.spec_from_file_location('gate',W/'tools/test_no_supplied_span_head.py');gate=importlib.util.module_from_spec(s);s.loader.exec_module(gate)
+source={r['seq']:r for r in json.loads((D/'source-rows-full.json').read_bytes())};summary=[]
+for seq in [280,281,282]:
+ p=B/'reconciled'/str(seq);out=p/'canonical';out.mkdir();spec=p/'spec.json';raw=spec.read_bytes();(out/'stdin.json').write_bytes(raw);argv=[sys.executable,'-B',str(wrapper)];start=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(argv,input=raw,capture_output=True,cwd=W,env=os.environ.copy());end=datetime.datetime.now(datetime.timezone.utc).isoformat();(out/'stdout.bin').write_bytes(r.stdout);(out/'stderr.bin').write_bytes(r.stderr);(out/'exit.txt').write_text(str(r.returncode)+'\n');exe={'argv':argv,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'start':start,'end':end,'exit':r.returncode,'stdin':pin(spec),'stdout':pin(out/'stdout.bin'),'stderr':pin(out/'stderr.bin'),'wrapper':{'path':str(wrapper),**pin(wrapper)},'canonical':{'path':str(W/'tools/gen_alignment_page.py'),**pin(W/'tools/gen_alignment_page.py')}};save(out/'execution.json',exe)
+ assert r.returncode==0 and not r.stderr;(p/'body.html').write_bytes(r.stdout)
+ seg=json.loads(raw)['segments'][0];spans=seg['spans'];by={s['id']:s for s in spans};tr=g.resolve(source[seq]['wylie'],spans,'tib',seq);er=g.resolve(source[seq]['english'],g.with_members(spans,[by[i]for i in seg['eng_order']],source[seq]['english']),'eng',seq);tuples=json.loads((p/'final-tuples.json').read_bytes())
+ for t in tuples:assert list(tr[t['id']])==t['tib_range'] and(list(er[t['id']])if t['eng']is not None else None)==t['eng_range']
+ body=r.stdout.decode();parts=re.findall(r'<span class="u" data-d="1" data-l="s\d+S">(.*?)</div>',body,re.S);assert len(parts)==2
+ clean=[]
+ for part in parts:
+  part=re.sub(r'<span class="nul">.*?</span>','',part,flags=re.S);clean.append(html.unescape(re.sub('<[^>]+>','',part)).strip())
+ assert clean==[source[seq]['wylie'],source[seq]['english']]
+ hits=[];allow={}
+ for m in gate.PAT.finditer(body):
+  lab=m.group(2);t=next(t for t in tuples if lab=='s'+str(seq)+t['id']);assert t['tib']=='sogs';key='c5p94/'+lab;value="sogs: enumerative closing gesture licenses the complete idiom "+repr(t['eng'])+"; literal and is source-licensed.";allow[key]=value;hits.append({'label':lab,'depth':int(m.group(1)),'match':m.group(0),'body_range':[m.start(),m.end()],'final_tuple':t,'licensor':'sogs','allowance_key':key})
+ save(p/'proposed-head-allowances.json',{'pages_c05':allow,'actual_gated_hits':hits,'predicate_source':{'path':str(W/'tools/test_no_supplied_span_head.py'),**pin(W/'tools/test_no_supplied_span_head.py')},'bare_pronouns':'The literal trailing ASCII space in FN means standalone you/You/your do not trigger. Their Tibetan ownership is explained in final decisions.'})
+ counts={'spans':len(spans),'nulls':sum(x['eng']is None for x in spans),'d5_nonnull':sum(x['d']==5 and x['eng']is not None for x in spans)}
+ proof={'status':'PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION','seq':seq,'execution':exe,'spec':pin(spec),'body':pin(p/'body.html'),'counts':counts,'intended_ranges_exact':True,'source_verbatim':True,'source_fields':{f:{'bytes':len(source[seq][f].encode()),'sha256':hashlib.sha256(source[seq][f].encode()).hexdigest()}for f in ['wylie','english']},'shared_evidence':str(D),'original_replays':{'path':str(D/'original-replays.json'),**pin(D/'original-replays.json')},'semantic_status':'PROVISIONAL reconciliation, not approval'};save(p/'proof.json',proof);summary.append({'seq':seq,**counts,'hits':len(hits),'spec':pin(spec),'body':pin(p/'body.html')})
+save(D/'final-canonical-summary.json',summary);print(json.dumps(summary))

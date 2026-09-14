@@ -1,0 +1,123 @@
+{
+  "status": "PASS_SOURCE_PREPARATION_ONLY",
+  "files": [
+    {
+      "candidate": "freeze-final-payload-before-staging.py",
+      "old": {
+        "bytes": 8225,
+        "sha256": "93b77c750bc4160e6cc79bd3071055a660f0bedb90e1eb9183209421121e63b6"
+      },
+      "new": {
+        "bytes": 9656,
+        "sha256": "ccd80ace5e58e8dd6556f7e5da9eadc53adcc1dd8641f0859d5694efa160f384"
+      },
+      "changes": [
+        {
+          "old": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+          "new": "10968d16e701b698a0e1fbd845b353089d15ac39",
+          "count": 1
+        },
+        {
+          "old": "c5p93",
+          "new": "__CURRENT_PAGE__",
+          "count": 6
+        },
+        {
+          "old": "c5p92",
+          "new": "c5p93",
+          "count": 3
+        },
+        {
+          "old": "__CURRENT_PAGE__",
+          "new": "c5p94",
+          "count": 6
+        },
+        {
+          "old": "COVERAGE C05: 279/511",
+          "new": "COVERAGE C05: 282/511",
+          "count": 1
+        },
+        {
+          "old": "[277,278,279]",
+          "new": "[280,281,282]",
+          "count": 2
+        },
+        {
+          "old": "base['full_links']==45126",
+          "new": "base['full_links']==45275",
+          "count": 1
+        },
+        {
+          "old": "assert approved_review['spec_verdict']==approved_review['quality_verdict']=='APPROVE'\nassert approved_review['open_findings']==[] and approved_review['baseline_commit']==base['commit']",
+          "new": "assert approved_review['verdict']=='APPROVE'\nassert approved_review['spec_verdict']==approved_review['quality_verdict']=='PASS'\nassert approved_review['open_findings']==[]\nroot_semantic=j(B/'root-final-semantic-review-verification-v3/proof.json')\nassert root_semantic['status']=='PASS' and root_semantic['head']==base['commit']\nassert root_semantic['review_freeze']==pin(raw(B/'semantic-review/freeze.json'))\nassert root_semantic['review_metadata']==pin(raw(B/'semantic-review/review.json'))",
+          "count": 1
+        },
+        {
+          "old": "assert meta['spec_verdict']==meta['quality_verdict']=='APPROVE' and meta['open_findings']==[]",
+          "new": "assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS' and meta['open_findings']==[]",
+          "count": 1
+        },
+        {
+          "old": "assert j(B/'semantic-review/span-head-allow-needed.json')=={}\nfor rel in ('docs/errata_register.json','docs/ERRATA_REGISTER.md','data/alignment/span_head_allow.json'):",
+          "new": "needed=j(B/'semantic-review/span-head-allow-needed.json')\nassert set(needed)=={'pages_c05'} and set(needed['pages_c05'])=={'c5p94/s280w29','c5p94/s280w43'}\nallow_rel='data/alignment/span_head_allow.json'\nallow_before=git('show',base['commit']+':'+allow_rel)\nassert allow_before==raw(L/'span-head-allow-before.json')\nexpected_allow=json.loads(allow_before)\nassert not (set(expected_allow.get('pages_c05',{})) & set(needed['pages_c05']))\nexpected_allow.setdefault('pages_c05',{}).update(needed['pages_c05'])\nassert j(W/allow_rel)==expected_allow\nallow_mutation=j(L/'span-head-allow-mutation.json')\nassert allow_mutation['status']=='PASS' and allow_mutation['prior_values_unchanged']\nassert allow_mutation['before']==pin(allow_before) and allow_mutation['after']==pin(raw(W/allow_rel))\nassert allow_mutation['added']==needed\nfor rel in ('docs/errata_register.json','docs/ERRATA_REGISTER.md'):",
+          "count": 1
+        },
+        {
+          "old": "'data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p94.json','tools/build_alignment_layer.py'])\nassert len(paths)==len(set(paths))==12",
+          "new": "'data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p94.json','tools/build_alignment_layer.py',allow_rel])\nassert len(paths)==len(set(paths))==13",
+          "count": 1
+        },
+        {
+          "old": "approved_errata_empty=True,approved_allowances_empty=True,",
+          "new": "approved_errata_empty=True,approved_allowances_empty=False,approved_allowances=needed,prior_allowance_values_unchanged=True,payload_count=len(files),",
+          "count": 1
+        },
+        {
+          "old": "['canonical-builds-once.json','course-registration-verification.json','retention-source-check.json','course-csv-retention.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit']])",
+          "new": "['canonical-builds-once.json','course-registration-verification.json','retention-source-check.json','course-csv-retention.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit','span-head-allow-before.json','span-head-allow-mutation.json']]+[dict(path=str(B/n),**pin(raw(B/n))) for n in ['root-final-semantic-review-verification-v3/proof.json','semantic-review/review.json','semantic-review/freeze.json','semantic-review/span-head-allow-needed.json']])",
+          "count": 1
+        }
+      ],
+      "full_inverse_exact": true,
+      "syntax_only": true,
+      "candidate_executed": false
+    },
+    {
+      "candidate": "prepare.py.txt",
+      "old": {
+        "bytes": 5097,
+        "sha256": "0e3deaeb77a7d68de4b79b91c9674a0e1437f1433394b56b1b7cdea0e338e916"
+      },
+      "new": {
+        "bytes": 5606,
+        "sha256": "43e817bca44c3cda9a6c30010324efed61abbf25ce414cf3c1dde41f07a6d405"
+      },
+      "changes": [
+        {
+          "old": "manifest=json.loads((L/'staged-payload-manifest.json').read_bytes())",
+          "new": "manifest=json.loads((L/'staged-payload-manifest.json').read_bytes())\nsource_proof=json.loads((L/'staged-payload-source-proof.json').read_bytes())\nassert source_proof['status']=='PASS' and source_proof['head']==manifest['head']==HEAD\nassert source_proof['manifest']==dict(path=str(L/'staged-payload-manifest.json'),**pin(L/'staged-payload-manifest.json'))\nassert len(manifest['files'])==source_proof['payload_count']==len(source_proof['files'])==13\nassert len({x['path'] for x in manifest['files']})==len(manifest['files'])",
+          "count": 1
+        },
+        {
+          "old": "root_frozen12_and_live_equal=True",
+          "new": "root_frozen_payload_count=len(manifest['files']),root_frozen_payload_and_live_equal=True",
+          "count": 1
+        }
+      ],
+      "full_inverse_exact": true,
+      "syntax_only": true,
+      "candidate_executed": false
+    }
+  ],
+  "actual_payload_sources": 13,
+  "existing_allowance_values_exact": true,
+  "new_allowance_keys": [
+    "c5p94/s280w29",
+    "c5p94/s280w43"
+  ],
+  "root_semantic_proof": {
+    "bytes": 1335,
+    "sha256": "059a32c1b3aac345236a86a59c09ef560401d975a177016657ab3af388ca3916"
+  },
+  "candidate_executions": 0
+}

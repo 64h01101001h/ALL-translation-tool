@@ -1,0 +1,169 @@
+"""Actual final review identity and preservation after root's complete reading.
+
+No semantic opinion is manufactured here; no canonical producer or SQL runs.
+"""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess, traceback
+
+B = Path(__file__).resolve().parent
+R = B / 'semantic-review'
+W = B.parents[1] / 'campaign-worktree'
+O = B / 'root-final-semantic-review-verification'
+HEAD = '10968d16e701b698a0e1fbd845b353089d15ac39'
+SEQS = [280, 281, 282]
+assert not O.exists()
+O.mkdir()
+
+def pin(p):
+    raw = Path(p).read_bytes()
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+def read(p):
+    return json.loads(Path(p).read_bytes())
+
+def save(name, value):
+    (O / name).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+def call(argv, label):
+    folder = O / label
+    folder.mkdir()
+    start = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    env = dict(os.environ, GIT_OPTIONAL_LOCKS='0', PYTHONDONTWRITEBYTECODE='1', PYTHONOPTIMIZE='0')
+    result = subprocess.run(argv, cwd=W, env=env, input=b'', capture_output=True)
+    for name, raw in [('stdin.bin', b''), ('stdout.bin', result.stdout), ('stderr.bin', result.stderr), ('exit.txt', (str(result.returncode) + '\n').encode())]:
+        (folder / name).write_bytes(raw)
+    (folder / 'execution.json').write_text(json.dumps(dict(argv=argv, cwd=str(W), start=start, end=datetime.datetime.now(datetime.timezone.utc).isoformat(), exit=result.returncode, streams={n: pin(folder / n) for n in ['stdin.bin', 'stdout.bin', 'stderr.bin']}), indent=2) + '\n')
+    assert result.returncode == 0 and not result.stderr
+    return result.stdout
+
+try:
+    assert pin(R / 'freeze.json')['sha256'] == '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
+    assert pin(R / 'review.md')['sha256'] == '35657d28643336faf74fe30c302bd613fce2c0d1ed00cd5747a42442450327b3'
+    assert pin(R / 'review.json')['sha256'] == '264227814d36404865bac2bc1f6eb1ec7ffa7898462d42cb7beb6363b8b92ed3'
+    assert call(['git', 'rev-parse', 'HEAD'], 'head-before').decode().strip() == HEAD
+    expected_status = b'?? data/teaching/dcc_captions\n'
+    assert call(['git', 'status', '--porcelain=v1', '-uall'], 'status-before') == expected_status
+    baseline = read(B / 'baseline.json')
+    assert baseline['commit'] == HEAD and baseline['course_boundary'] == 279
+    for path, digest in baseline['sha256'].items():
+        assert pin(W / path)['sha256'] == digest
+
+    frozen = read(R / 'freeze.json')
+    files = {str(p.relative_to(R)): pin(p) for p in R.rglob('*') if p.is_file() and p != R / 'freeze.json'}
+    assert files == frozen['files'] and len(files) == frozen['file_count'] == 871
+    assert sum(r['bytes'] for r in files.values()) == 48827659
+    supported = {'.json', '.md', '.html', '.stderr', '.stdout', '.log', '.txt', '.bin', '.exit'}
+    assert all(Path(name).suffix.lower() in supported for name in files)
+    history = R / 'history/03-report-wording-correction'
+    old_freeze = read(history / 'freeze.json')['files']
+    assert len(old_freeze) == 864
+    for name, expected in old_freeze.items():
+        path = history / 'review.md' if name == 'review.md' else R / name
+        assert pin(path) == expected
+    old_report = (history / 'review.md').read_text()
+    old_clause = 'including its repeated name, thoughts and twisting vocabulary'
+    assert old_report.count(old_clause) == 1
+    assert old_report.replace(old_clause, 'including its repeated thoughts and twisting vocabulary') == (R / 'review.md').read_text()
+
+    meta = read(R / 'review.json')
+    assert meta['verdict'] == 'APPROVE' and meta['spec_verdict'] == meta['quality_verdict'] == 'PASS'
+    assert meta['open_findings'] == [] and meta['human_editorial_acceptance'] is False
+    assert [r['seq'] for r in meta['segments']] == SEQS
+    assert meta['total_spans'] == 124 and meta['total_nulls'] == 4 and meta['total_word_pairs'] == 102
+    resolved = read(R / 'resolved-spans.json')
+    assert resolved == read(B / 'root-reconciliation-verification/resolved-spans.json') and len(resolved) == 124
+    keys = ['seq', 'id', 'd', 'tib', 'eng', 'tib_range', 'eng_range']
+    assert all(list(r) == keys for r in resolved)
+    judgments = read(R / 'span-review.json')
+    assert [r['source_tuple'] for r in judgments] == resolved
+    assert all(r['judgment'] == 'SOUND' and r['independent_reason'].strip() for r in judgments)
+    expected_dispositions = []
+    for seq in SEQS:
+        for r in read(B / f'reconciled/{seq}/original-dispositions.json'):
+            old = r['original_identity']
+            expected_dispositions.append(dict(angle=old['angle'], seq=old['seq'], id=old['id'], disposition=r['disposition'], final_ids=r['final_ids']))
+    assert read(R / 'original-disposition-inspection.json') == expected_dispositions and len(expected_dispositions) == 225
+
+    for row in meta['segments']:
+        seq = row['seq']
+        folder = B / f'reconciled/{seq}'
+        spans = read(folder / 'spec.json')['segments'][0]['spans']
+        assert len(spans) == row['span_count']
+        assert sum(r['eng'] is None for r in spans) == row['null_count']
+        assert sum(r['d'] == 5 and r['eng'] is not None for r in spans) == row['word_pair_count']
+        for role, name in [('spec', 'spec.json'), ('body', 'body.html')]:
+            assert pin(folder / name) == dict(bytes=row[role + '_bytes'], sha256=row[role + '_sha256'])
+            assert (R / f'reviewed-final/{seq}' / name).read_bytes() == (folder / name).read_bytes()
+        run = R / f'runs/canonical-{seq}'
+        execution = read(run / 'execution.json')
+        assert execution['exit'] == row['generator_exit'] == int((run / 'exit.txt').read_text()) == 0
+        assert (run / 'stdin.bin').read_bytes() == (folder / 'spec.json').read_bytes()
+        assert (run / 'stdout.bin').read_bytes() == (folder / 'body.html').read_bytes()
+        assert not (run / 'stderr.bin').read_bytes()
+        for name, expected in execution['streams'].items():
+            assert pin(run / name) == expected
+
+    assert read(R / 'bank-ready-errata.json') == []
+    wanted = read(R / 'span-head-allow-needed.json')
+    assert set(wanted) == {'pages_c05'} and set(wanted['pages_c05']) == {'c5p94/s280w29', 'c5p94/s280w43'}
+    for key, value in wanted['pages_c05'].items():
+        span_id = key.split('/s280', 1)[1]
+        t = next(t for t in resolved if t['seq'] == 280 and t['id'] == span_id)
+        assert t['tib'] == 'sogs' and t['eng'] in value and t['tib'] in value
+    sources = {r['seq']: r for r in read(B / 'source.json')}
+    refutations = read(R / 'errata-refutations.json')
+    assert len(refutations) == 11
+    for r in refutations:
+        assert r['refuted'] and not r['retained_erratum'] and set(r['five_grounds']) == set('abcde')
+        source = sources[r['seq']]['english']
+        assert len(source) == r['five_grounds']['e']['actual_english_length']
+        assert all(source[a:z] == r['found'] for a, z in r['five_grounds']['a']['full_literal_found_ranges'])
+
+    records = read(R / 'original-to-copy-manifest.json')
+    assert len(records) == 1450
+    git_objects = {}
+    originals = {}
+    for r in records:
+        copied = (R / r['copy']).resolve()
+        assert copied.is_relative_to(R.resolve())
+        assert pin(copied) == {k: r[k] for k in ['bytes', 'sha256']}
+        if r.get('original_git_commit'):
+            key = (r['original_git_commit'], r['repository_relative_path'])
+            if key not in git_objects:
+                git_objects[key] = call(['git', 'show', key[0] + ':' + key[1]], f'git-object-{len(git_objects):03d}')
+            raw = git_objects[key]
+        else:
+            original = Path(r['original'])
+            raw = original.read_bytes()
+            originals.setdefault(str(original.resolve()), []).append(r)
+        assert copied.read_bytes() == raw
+    assert len(git_objects) == 11
+    required_roots = [B / 'semantic-source-preparation', B / 'root-reconciliation-verification', B / 'root-reconciliation-runtime-release', B / 'root-reconciliation-runtime-release-caller', B / 'root-reconciliation-runtime-release-v2', B / 'root-reconciliation-runtime-release-v2-caller', B / 'root-reconciliation-runtime-caller']
+    for root in required_roots:
+        for path in root.rglob('*'):
+            if path.is_file():
+                assert str(path.resolve()) in originals, str(path)
+    for seq in SEQS:
+        for angle in ['tibetan', 'english', 'reconciled']:
+            root = B / angle / str(seq)
+            for path in root.rglob('*'):
+                if path.is_file():
+                    assert str(path.resolve()) in originals, str(path)
+    physical = read(R / 'physical-reopen-proof.json')
+    assert len(physical) == 16
+    for r in physical:
+        assert r['exact'] and pin(r['original']) == r['source_pin']
+        raw = Path(r['original']).read_bytes()[slice(*r['byte_range'])]
+        assert dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest()) == r['excerpt_pin']
+    assert meta['root_mechanical_proof']['execution_sha256'] == pin(B / 'root-reconciliation-verification/execution-proof.json')['sha256']
+    assert call(['git', 'rev-parse', 'HEAD'], 'head-after').decode().strip() == HEAD
+    assert call(['git', 'status', '--porcelain=v1', '-uall'], 'status-after') == expected_status
+    for path, digest in baseline['sha256'].items():
+        assert pin(W / path)['sha256'] == digest
+    assert {str(p.relative_to(R)): pin(p) for p in R.rglob('*') if p.is_file() and p != R / 'freeze.json'} == files
+    proof = dict(status='PASS', head=HEAD, utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), review_freeze=pin(R / 'freeze.json'), review_freeze_path=str(R / 'freeze.json'), review_metadata=pin(R / 'review.json'), review_report=pin(R / 'review.md'), file_count=len(files), total_bytes=sum(r['bytes'] for r in files.values()), source_copy_records=len(records), fixed_Git_objects=len(git_objects), totals=dict(spans=124, nulls=4, word_pairs=102), all124_independent_judgments_read=True, original_dispositions=225, physical_extents=16, prior_report_freeze_reproduced=True, root_semantic_decision='Accept separately reviewed page as provisional machine alignment; no hgm_gloss promotion.', new_canonical_runs=0, new_SQL_queries=0, unchanged_baseline_files=9, integration_limit='Page landing, exports, suites, source retention, private commit and consumer integration still pending.')
+    save('proof.json', proof)
+    print(json.dumps(proof, indent=2))
+except Exception:
+    (O / 'failure.txt').write_text(traceback.format_exc())
+    raise

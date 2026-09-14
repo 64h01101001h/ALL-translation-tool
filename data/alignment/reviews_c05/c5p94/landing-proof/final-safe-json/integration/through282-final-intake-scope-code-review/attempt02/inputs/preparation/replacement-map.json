@@ -1,0 +1,286 @@
+{
+  "capture-finished-scope.py": [
+    {
+      "before": "through279",
+      "after": "through282",
+      "occurrences": 34,
+      "input_sha256": "f46aa035c35b421928443a4ce823a24e758794bbff1156cf2fef8a09bad56aae",
+      "output_sha256": "e67de47d59d472e309258c4cb6e5612648f18a2eee5687cafac6b8e0eee23f90"
+    },
+    {
+      "before": "C05-277-279",
+      "after": "C05-280-282",
+      "occurrences": 1,
+      "input_sha256": "e67de47d59d472e309258c4cb6e5612648f18a2eee5687cafac6b8e0eee23f90",
+      "output_sha256": "2786803976dd28acdc9ebb69dec2636f882c5d4838106e0b71ac2c83b66ccfa3"
+    },
+    {
+      "before": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+      "after": "10968d16e701b698a0e1fbd845b353089d15ac39",
+      "occurrences": 1,
+      "input_sha256": "2786803976dd28acdc9ebb69dec2636f882c5d4838106e0b71ac2c83b66ccfa3",
+      "output_sha256": "b93d975fafb4e439a956620a284e9f9b8128d715082cddc481728db7a59db8e5"
+    },
+    {
+      "before": "P=I/'through282-final-bank-inventory-preparation'",
+      "after": "P=I/'through282-final-intake-scope'",
+      "occurrences": 1,
+      "input_sha256": "b93d975fafb4e439a956620a284e9f9b8128d715082cddc481728db7a59db8e5",
+      "output_sha256": "5cd1c8cc9314a0427944e927cc9d0256a543fe72d02a70cbccbc68baafd56176"
+    },
+    {
+      "before": "import ast, hashlib, json, os",
+      "after": "import ast, hashlib, json, os, argparse, sys",
+      "occurrences": 1,
+      "input_sha256": "5cd1c8cc9314a0427944e927cc9d0256a543fe72d02a70cbccbc68baafd56176",
+      "output_sha256": "1e75a58d964868eb2f582090f6799b716e6edb7a815e11526942d8f10f9c33c3"
+    },
+    {
+      "before": "old=json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes())",
+      "after": "parser=argparse.ArgumentParser(description=__doc__)\nparser.add_argument('--execute-reviewed-capture',action='store_true',required=True)\nparser.add_argument('--writers-quiescent',action='store_true',required=True)\nparser.add_argument('--extra-file',action='append',default=[])\nargs=parser.parse_args()\nassert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and not sys.flags.optimize\nassert not P.exists()\ncaller=I/'through282-final-intake-scope-caller'\nassert caller.is_dir() and not caller.is_symlink()\ndeferred=[P,caller,I/'through282-final-bank-inventory',I/'through282-final-bank-inventory-caller',I/'through282-final-bank-inventory-root-release',I/'through282-final-bank-inventory-root-release-caller']\nassert all(not p.exists() for p in deferred if p not in (P,caller))\ndef current_i():return sorted(I.glob('through282*'),key=str)\ninitial_i_names=[str(p) for p in current_i()]\nfor p in current_i():assert (p.is_file() or p.is_dir()) and not(p.is_symlink() and p.is_dir())\nold=json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes())",
+      "occurrences": 1,
+      "input_sha256": "1e75a58d964868eb2f582090f6799b716e6edb7a815e11526942d8f10f9c33c3",
+      "output_sha256": "1063a54272c8b61b7ae49aba94676e8a9259a3d68eacad2ddd7502b9139df830"
+    },
+    {
+      "before": "roots=['through282-banking-ordinary','through282-banking-ordinary-caller','through282-ordinary-bank-inventory','through282-ordinary-bank-inventory-caller','through282-root-bank-inventory-preparation','through282-root-bank-inventory-root-review','through282-root-bank-inventory-root-review-caller','through282-stage-runs','through282-checkpoint-staged-caller','through282-checkpoint-whitespace-clarification-caller','through282-commit-closure-preparation','through282-commit-closure-review','through282-commit-closure-root-release','through282-commit-closure-root-release-caller']\nroots += sorted(p.name for p in I.glob('through282-whitespace-actual-*') if p.is_dir())\nroots += ['through282-whitespace-runs/raw-diagnostic']\n",
+      "after": "assert len(old)==5633 and len(oldpaths)==5633\nassert len(json.loads((I/'through282-ordinary-bank-inventory/extra-inputs.json').read_bytes()))==5575\nfor row in old:\n p=Path(row['original']);d=desc(p)\n assert {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')} and d['resolved']==row['resolved']\n assert (os.readlink(p) if p.is_symlink() else None)==row['symlink']\nroots=[str(p.relative_to(I)) for p in current_i() if p.is_dir() and p not in deferred]\nassert 'through282-banking-runs' in roots\nroots.append('through282-banking-runs/ordinary')\nroots=sorted(set(roots))\n",
+      "occurrences": 1,
+      "input_sha256": "1063a54272c8b61b7ae49aba94676e8a9259a3d68eacad2ddd7502b9139df830",
+      "output_sha256": "b59228ed191b899f2cbbf8fa129658e13261c0fbe9a88d710feaa9cfff7836a1"
+    },
+    {
+      "before": "banker=I/'through282-finalization-runtime/bank_root_proofs_through282.py'",
+      "after": "banker=B/'bank_root_proofs_through282.py'",
+      "occurrences": 1,
+      "input_sha256": "b59228ed191b899f2cbbf8fa129658e13261c0fbe9a88d710feaa9cfff7836a1",
+      "output_sha256": "24c0ab7725a8e9a7082b2d0aaaef2c826a7bf2ec4a14a1402b25aef3f0cddac1"
+    },
+    {
+      "before": "stage_verifier=I/'through282-finalization-runtime/verify_staged_through282.py'",
+      "after": "stage_verifier=I/'through282-final-stage-preparation/verify_staged_through282.py'",
+      "occurrences": 1,
+      "input_sha256": "24c0ab7725a8e9a7082b2d0aaaef2c826a7bf2ec4a14a1402b25aef3f0cddac1",
+      "output_sha256": "e5f04951bb277f7ba99ad88c3a5d6ec2e602aadc024ed009c20d3510fac787b8"
+    },
+    {
+      "before": "late=[desc(p) for p in sorted(B.rglob('*'),key=str) if p.is_file() and not p.is_relative_to(L) and str(p) not in oldpaths]\nindividual=[desc(p) for p in [A/'checkpoint-current-batch-279-staged.py',A/'clarify-staged279-whitespace-ownership.py',B/'compose-ordinary-bank-inventory-root.py',B/'prepare-explicit-stage-inputs.py',B/'release-whitespace-actual-root.py',B/'accept-whitespace-actual-root.py',B/'accept-whitespace-actual-root-v2.py',B/'release-commit-closure-root.py']]\n",
+      "after": "audit=json.loads(Path(controls['audit_proof']['original']).read_bytes())\nacceptance=json.loads(Path(controls['root_acceptance']['original']).read_bytes())\nassert audit['status']=='PASS actual staged diagnostic reproduced and predicates verified' and audit['mode']=='audit'\nassert audit['baseline_head']=='10968d16e701b698a0e1fbd845b353089d15ac39' and audit['all_warnings_accounted_for'] is True\nassert audit['git_diff_check_exit']==2 and audit['semantic_approval'] is False\nassert acceptance['status']=='PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and acceptance['normalization'] is False\nassert acceptance['literal_warnings']==audit['warning_count']\nassert {k:controls['raw_diagnostic'][k] for k in ('bytes','sha256')}==dict(bytes=audit['raw_log_bytes'],sha256=audit['raw_log_sha256'])\nassert controls['raw_diagnostic']['original']==audit['raw_log_kept_external']\nassert int(Path(controls['raw_diagnostic_exit']['original']).read_bytes())==audit['git_diff_check_exit']\nbatch=tree(B)\nbatch_nonlanding=[x for x in batch if not Path(x['original']).is_relative_to(L)]\nassert {p for p in oldpaths if Path(p).is_relative_to(B) and not Path(p).is_relative_to(L)}<={x['original'] for x in batch_nonlanding}\nlate=[x for x in batch_nonlanding if x['original'] not in oldpaths]\nextra=[I/'release-whitespace282-actual-root.py',I/'accept-whitespace282-actual-root.py']+[Path(p) for p in args.extra_file]\nassert all(p.is_absolute() and p.is_file() and p.resolve(strict=True).is_relative_to(I) for p in extra)\nindividual_paths=sorted(set([p for p in current_i() if p.is_file()]+extra),key=str)\nindividual=[desc(p) for p in individual_paths]\n",
+      "occurrences": 1,
+      "input_sha256": "e5f04951bb277f7ba99ad88c3a5d6ec2e602aadc024ed009c20d3510fac787b8",
+      "output_sha256": "5dfec4c197c32899ce2131e72ce4de258d3296b7c9036e8d2d7127512e3a6ee7"
+    },
+    {
+      "before": "deferred_before_final_bank=[str(P),str(I/'through282-final-bank-inventory-review'),str(I/'through282-final-bank-inventory'),str(I/'through282-final-bank-inventory-caller')]",
+      "after": "deferred_before_final_bank=[str(p) for p in deferred]",
+      "occurrences": 1,
+      "input_sha256": "5dfec4c197c32899ce2131e72ce4de258d3296b7c9036e8d2d7127512e3a6ee7",
+      "output_sha256": "2c5bf8bd9440b981669261e11bfc361e29ca3e70bf441868335e1b975e426541"
+    },
+    {
+      "before": "raw=(json.dumps(scope,indent=2,ensure_ascii=True)+'\\n').encode()",
+      "after": "assert [str(p) for p in current_i()]==initial_i_names\nassert [x['original'] for x in tree(B) if not Path(x['original']).is_relative_to(L)]==[x['original'] for x in batch_nonlanding]\nassert [str(p) for p in sorted(L.rglob('*'),key=str) if p.is_file()]==scope['landing_file_paths']\nassert len(json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes()))==5633\nfor row in old:\n p=Path(row['original']);d=desc(p)\n assert {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')} and d['resolved']==row['resolved']\n assert (os.readlink(p) if p.is_symlink() else None)==row['symlink']\nP.mkdir(exist_ok=False)\nraw=(json.dumps(scope,indent=2,ensure_ascii=True)+'\\n').encode()",
+      "occurrences": 1,
+      "input_sha256": "2c5bf8bd9440b981669261e11bfc361e29ca3e70bf441868335e1b975e426541",
+      "output_sha256": "761aca917868cf89a481c2d6d8ea0b87041fdee0fa48e23f41f86f43dc33fac1"
+    },
+    {
+      "before": "composer_invocations=0)",
+      "after": "composer_invocations=0,stage_verifier_role='Frozen source control; later final runtime bindings are outside this snapshot',capture_argv=sys.argv,full_through282_i_census=True)",
+      "occurrences": 1,
+      "input_sha256": "761aca917868cf89a481c2d6d8ea0b87041fdee0fa48e23f41f86f43dc33fac1",
+      "output_sha256": "d8493062801bcd76620971bd5351e8e4925c9d60ae1efa92be624f0bc324a9e7"
+    }
+  ],
+  "assemble-final-supplement.py": [
+    {
+      "before": "through279",
+      "after": "through282",
+      "occurrences": 7,
+      "input_sha256": "04787289c8d4b5650df58590287d798aa00a52c032492878ddcbbddd8eed7fa8",
+      "output_sha256": "58213a07e399e866af02abe6fa81886717b334c349fe28e0d95ad6f5dffc2d62"
+    },
+    {
+      "before": "c.I / 'through282-final-bank-inventory-preparation/final-source-scope.json'",
+      "after": "c.I / 'through282-final-intake-scope/final-source-scope.json'",
+      "occurrences": 1,
+      "input_sha256": "58213a07e399e866af02abe6fa81886717b334c349fe28e0d95ad6f5dffc2d62",
+      "output_sha256": "d7fdc1259c7ee59d067c984995f7c0ec34bec2ce52efeb446bd978c760c75ddb"
+    }
+  ],
+  "capture-final282-supplement-scope-root.py": [
+    {
+      "before": "through279",
+      "after": "through282",
+      "occurrences": 11,
+      "input_sha256": "5fff2b9d337790ec6e8a126974e702d99f0bd2bd6cce3806028561837e38c1c6",
+      "output_sha256": "0a2676b8d1a2d105e2010d1e838384f66b99df1e3a79b2f55f9fb8bbe82f8566"
+    },
+    {
+      "before": "C05-277-279",
+      "after": "C05-280-282",
+      "occurrences": 1,
+      "input_sha256": "0a2676b8d1a2d105e2010d1e838384f66b99df1e3a79b2f55f9fb8bbe82f8566",
+      "output_sha256": "e0a5470ed637651ec10113a72dc9380d7234dfd4a9da11b5e44bd549ebf18e5a"
+    },
+    {
+      "before": "final279",
+      "after": "final282",
+      "occurrences": 1,
+      "input_sha256": "e0a5470ed637651ec10113a72dc9380d7234dfd4a9da11b5e44bd549ebf18e5a",
+      "output_sha256": "d8bf76b7019821d549b8cd7652320aae9a69eb424fcf94ac6afd6e6e930903a5"
+    },
+    {
+      "before": "P=I/'through282-final-bank-inventory-preparation'",
+      "after": "P=I/'through282-final-intake-scope'",
+      "occurrences": 1,
+      "input_sha256": "d8bf76b7019821d549b8cd7652320aae9a69eb424fcf94ac6afd6e6e930903a5",
+      "output_sha256": "2dacbc6d85ab3d75586f96cb9cddadf8ba41e2ed342ee497e6be663b3d4b3c09"
+    },
+    {
+      "before": "import json,hashlib,os,datetime",
+      "after": "import json,hashlib,os,datetime,argparse,sys",
+      "occurrences": 1,
+      "input_sha256": "2dacbc6d85ab3d75586f96cb9cddadf8ba41e2ed342ee497e6be663b3d4b3c09",
+      "output_sha256": "1016fabd3ee6263decb20a62d99a74ae8cfba5af14ca81c1fa203946c113534c"
+    },
+    {
+      "before": "assert not O.exists()",
+      "after": "parser=argparse.ArgumentParser(description='Capture complete actual later scope only; no composer or supplement execution')\nparser.add_argument('--execute-reviewed-capture',action='store_true',required=True)\nparser.add_argument('--writers-quiescent',action='store_true',required=True)\nparser.add_argument('--extra-file',action='append',default=[])\nargs=parser.parse_args()\nassert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and not sys.flags.optimize\nassert not O.exists()\nactive_caller=I/'through282-final-supplement-scope-caller'\nassert active_caller.is_dir() and not active_caller.is_symlink()\ninitial_i_names=sorted(str(p) for p in I.glob('through282*'))",
+      "occurrences": 1,
+      "input_sha256": "1016fabd3ee6263decb20a62d99a74ae8cfba5af14ca81c1fa203946c113534c",
+      "output_sha256": "777367b52169e61981379d2a81fc21c13122a822ba523af4d6044fd6bfbea8d5"
+    },
+    {
+      "before": "initial_i_names=sorted(str(p) for p in I.glob('through282*'))",
+      "after": "initial_i_names=sorted(str(p) for p in I.glob('through282*'))\nfor p in I.glob('through282*'):assert (p.is_file() or p.is_dir()) and not(p.is_symlink() and p.is_dir())",
+      "occurrences": 1,
+      "input_sha256": "777367b52169e61981379d2a81fc21c13122a822ba523af4d6044fd6bfbea8d5",
+      "output_sha256": "1513c46f0def4c07faed77d4b3f1cf45cd09eb26552bdd72e03b69c69dba9520"
+    },
+    {
+      "before": "roots=[Path(x) for x in s['deferred_before_final_bank']]+[I/n for n in ['through282-final-bank-inventory-root-release','through282-final-bank-inventory-root-release-caller','through282-early-checkpoint-plan','through282-early-checkpoint-plan-root-identity','through282-early-checkpoint-plan-root-identity-caller']]\n",
+      "after": "roots=sorted(set([Path(x) for x in s['deferred_before_final_bank']]+[p for p in I.glob('through282*') if p.is_dir() and p not in (O,active_caller)]),key=str)\nassert all(p.is_dir() for p in roots)\n",
+      "occurrences": 1,
+      "input_sha256": "1513c46f0def4c07faed77d4b3f1cf45cd09eb26552bdd72e03b69c69dba9520",
+      "output_sha256": "df8abfd2ad838efa378506bd8c15d665c3d0606f599135ef214b62d79bff0efa"
+    },
+    {
+      "before": " paths=sorted(str(x) for x in root.rglob('*') if x.is_file()); assert paths",
+      "after": " for f in root.rglob('*'):\n  assert not(f.is_symlink() and f.is_dir()) and (f.is_file() or f.is_dir())\n paths=sorted(str(x) for x in root.rglob('*') if x.is_file()); assert paths",
+      "occurrences": 1,
+      "input_sha256": "df8abfd2ad838efa378506bd8c15d665c3d0606f599135ef214b62d79bff0efa",
+      "output_sha256": "547c503a2f66d658e3a1874cd84a6497c94fc90324a60b1018fc9a2c5b2862ec"
+    },
+    {
+      "before": "individual=[I/'release-final282-inventory-root.py',I/'verify-early279-plan-root.py',Path(__file__).resolve()]\n",
+      "after": "extra=[I/'release-whitespace282-actual-root.py',I/'accept-whitespace282-actual-root.py']+[Path(x) for x in args.extra_file]\nassert all(x.is_absolute() and x.is_file() and x.resolve(strict=True).is_relative_to(I) for x in extra)\nindividual=sorted(set([p for p in I.glob('through282*') if p.is_file()]+extra+[Path(__file__).resolve()]),key=str)\nB=I.parent/'C05-280-282';L=B/'landing'\nordinary=json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes())\nassert len(ordinary)==5633 and len(json.loads((I/'through282-ordinary-bank-inventory/extra-inputs.json').read_bytes()))==5575\nprior_batch={row['original']:row for row in ordinary if Path(row['original']).is_relative_to(B) and not Path(row['original']).is_relative_to(L)}\nprior_batch.update({row['original']:row for row in s['late_batch_files']})\ncurrent_batch=sorted(str(x) for x in B.rglob('*') if x.is_file() and not x.is_relative_to(L))\nfor f in B.rglob('*'):assert (f.is_file() or f.is_dir()) and not(f.is_symlink() and f.is_dir())\nassert set(prior_batch)<=set(current_batch)\nfor logical,row in prior_batch.items():\n d=desc(logical);assert d['resolved']==row['resolved'] and {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')}\nindividual=sorted(set(individual+[Path(x) for x in current_batch if x not in prior_batch]),key=str)\n",
+      "occurrences": 1,
+      "input_sha256": "547c503a2f66d658e3a1874cd84a6497c94fc90324a60b1018fc9a2c5b2862ec",
+      "output_sha256": "6392bbcab769d3bf97c09bf3fa6ed61452c035757cc5d5f47e047c7eea3b9f15"
+    },
+    {
+      "before": "O.mkdir();raw=(json.dumps(scope,indent=2)+'\\n').encode();",
+      "after": "assert sorted(str(p) for p in I.glob('through282*'))==initial_i_names\nassert sorted(str(x) for x in B.rglob('*') if x.is_file() and not x.is_relative_to(L))==current_batch\nfor row in list(scope['controls'].values())+scope['individual_files']:assert desc(row['original'])==row\nO.mkdir();raw=(json.dumps(scope,indent=2)+'\\n').encode();",
+      "occurrences": 1,
+      "input_sha256": "6392bbcab769d3bf97c09bf3fa6ed61452c035757cc5d5f47e047c7eea3b9f15",
+      "output_sha256": "b6db9b677715dde17e722493bd6efd26869f14d7651600bb1301b67d584e1032"
+    }
+  ],
+  "conditional/release-final282-inventory-root.py": [
+    {
+      "before": "through279",
+      "after": "through282",
+      "occurrences": 3,
+      "input_sha256": "e6c601917848ca631cf1feb1c8b6c52e224cf3874b5b144fd0b11a9c7879c52d",
+      "output_sha256": "5dc258530da66512d2b82f9acdfad7abf118cf2d93cd2d405ca177597ec0324b"
+    },
+    {
+      "before": "",
+      "after": "\"\"\"CONDITIONAL full historical method: path adaptation only; current measured schema binding is unfinished.\"\"\"\nraise RuntimeError('SOURCE ONLY: root must preserve this full method and bind actual current freeze/review/copy-map/scope schemas, literal counts and source paths before releasing a separately reviewed executable adaptation')\n",
+      "occurrences": 1,
+      "kind": "prepend_fail_closed_guard",
+      "input_sha256": "5dc258530da66512d2b82f9acdfad7abf118cf2d93cd2d405ca177597ec0324b",
+      "output_sha256": "6d6626cc49eb742e721add9cb1353def6f25c70e3fbd852a178f4f9508f0c04c"
+    },
+    {
+      "before": "(P/'final-source-scope.json')",
+      "after": "(I/'through282-final-intake-scope/final-source-scope.json')",
+      "occurrences": 1,
+      "input_sha256": "6d6626cc49eb742e721add9cb1353def6f25c70e3fbd852a178f4f9508f0c04c",
+      "output_sha256": "4e0c2c3f6a334b567d8677f9918c7a5024be834b49e809f0463a7ee7c5e742a9"
+    }
+  ],
+  "conditional/release-final282-supplement-root.py": [
+    {
+      "before": "through279",
+      "after": "through282",
+      "occurrences": 6,
+      "input_sha256": "1fcbcfb75df16b4c3868ecf2f0196fe03cd1bb9722268045b9f14fb9eec073f7",
+      "output_sha256": "483ff1ca6aa57e8bb6a817f388a5e0cffe32a3825a9dbcf10b02b10dcf1d2e4b"
+    },
+    {
+      "before": "final279",
+      "after": "final282",
+      "occurrences": 2,
+      "input_sha256": "483ff1ca6aa57e8bb6a817f388a5e0cffe32a3825a9dbcf10b02b10dcf1d2e4b",
+      "output_sha256": "d5716e66f78a397375220ba4f49423c93b55a5a1dc47a775cc998fff3020a42f"
+    },
+    {
+      "before": "",
+      "after": "\"\"\"CONDITIONAL full historical method: path adaptation only; current measured schema binding is unfinished.\"\"\"\nraise RuntimeError('SOURCE ONLY: root must preserve this full method and bind actual current freeze/review/copy-map/scope schemas, literal counts and source paths before releasing a separately reviewed executable adaptation')\n",
+      "occurrences": 1,
+      "kind": "prepend_fail_closed_guard",
+      "input_sha256": "d5716e66f78a397375220ba4f49423c93b55a5a1dc47a775cc998fff3020a42f",
+      "output_sha256": "57ede202fd4254d7a0588600110ef2125468851bfa3f49674d139cbb024a85da"
+    }
+  ],
+  "conditional/verify-final282-initial-inventory-root.py": [
+    {
+      "before": "through279",
+      "after": "through282",
+      "occurrences": 4,
+      "input_sha256": "73ab8ba280b91932db21ae8b05e8533f10e9f714f68dbb70eb61926650328913",
+      "output_sha256": "a996847122849435f55120fffbcce96a2d1317f0bb7230c99c3e3116584f9d02"
+    },
+    {
+      "before": "c5p93",
+      "after": "c5p94",
+      "occurrences": 1,
+      "input_sha256": "a996847122849435f55120fffbcce96a2d1317f0bb7230c99c3e3116584f9d02",
+      "output_sha256": "ef0f8e9c8464b344cff1af99333d25e4c90eed553b554d3ee2c3ab1b5ced0b1d"
+    },
+    {
+      "before": "",
+      "after": "\"\"\"CONDITIONAL full historical method: path adaptation only; current measured schema binding is unfinished.\"\"\"\nraise RuntimeError('SOURCE ONLY: root must preserve this full method and bind actual current freeze/review/copy-map/scope schemas, literal counts and source paths before releasing a separately reviewed executable adaptation')\n",
+      "occurrences": 1,
+      "kind": "prepend_fail_closed_guard",
+      "input_sha256": "ef0f8e9c8464b344cff1af99333d25e4c90eed553b554d3ee2c3ab1b5ced0b1d",
+      "output_sha256": "afab4cc138ef3effd447cbe9e8e463859014b07a5623881c8cf2b7f3fda370ce"
+    },
+    {
+      "before": "(P/'final-source-scope.json')",
+      "after": "(I/'through282-final-intake-scope/final-source-scope.json')",
+      "occurrences": 3,
+      "input_sha256": "afab4cc138ef3effd447cbe9e8e463859014b07a5623881c8cf2b7f3fda370ce",
+      "output_sha256": "d89072e7c70cc49e1b2e051294524cd1b525e3f88011659b7b8ac5557e724eaf"
+    }
+  ],
+  "conditional/verify-final282-complete-inventory-root.py": [
+    {
+      "before": "through279",
+      "after": "through282",
+      "occurrences": 9,
+      "input_sha256": "3549e354656211c95cfd5394ce3db9adeea06b8b503719e074a19bab0731fa0e",
+      "output_sha256": "b466d19f11f26650cf9f9eaa493c748bb54b7c0190a4e4ee15e76019abcd7db5"
+    },
+    {
+      "before": "",
+      "after": "\"\"\"CONDITIONAL full historical method: path adaptation only; current measured schema binding is unfinished.\"\"\"\nraise RuntimeError('SOURCE ONLY: root must preserve this full method and bind actual current freeze/review/copy-map/scope schemas, literal counts and source paths before releasing a separately reviewed executable adaptation')\n",
+      "occurrences": 1,
+      "kind": "prepend_fail_closed_guard",
+      "input_sha256": "b466d19f11f26650cf9f9eaa493c748bb54b7c0190a4e4ee15e76019abcd7db5",
+      "output_sha256": "f5f0ac6df37aa77137b85fcbfd5c83b7ba9dd790093349f39060b8f2e3a9b8cc"
+    }
+  ]
+}

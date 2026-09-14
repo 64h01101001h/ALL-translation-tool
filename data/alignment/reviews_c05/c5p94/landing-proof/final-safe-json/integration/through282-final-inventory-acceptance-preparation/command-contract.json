@@ -1,0 +1,69 @@
+{
+  "status": "SOURCE_ONLY_PREPARED_REQUIRES_ROOT_REVIEW_AND_ACTUAL_PRODUCER_RESULTS",
+  "commands": [
+    {
+      "phase": "initial",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-inventory-acceptance-preparation/verify-final282-initial-inventory-root.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONOPTIMIZE": "0"
+      },
+      "source": {
+        "bytes": 6748,
+        "sha256": "74dfe57bbd2240c6f632a38bb432b6bfb51293821142560ffede4769c7263575"
+      },
+      "output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-initial-inventory-root-acceptance",
+      "output_must_not_exist": true,
+      "execution_count": 0
+    },
+    {
+      "phase": "complete",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-inventory-acceptance-preparation/verify-final282-complete-inventory-root.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONOPTIMIZE": "0"
+      },
+      "source": {
+        "bytes": 9291,
+        "sha256": "0ddbfafc32275d02388c778b50145760d2d0fd7ad32e292db1556502ad24415d"
+      },
+      "output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-inventory-root-acceptance",
+      "output_must_not_exist": true,
+      "execution_count": 0
+    }
+  ],
+  "baseline": "10968d16e701b698a0e1fbd845b353089d15ac39",
+  "initial_scope": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-scope/final-source-scope.json",
+    "sha256": "21ab8f7045158c6f75e13fd5f1da54223dbe49872c9f0195378f24e9a65c94ca"
+  },
+  "initial_composer_output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory",
+  "initial_outer_caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-caller",
+  "complete_assembler_output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-complete",
+  "complete_outer_caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-complete-caller",
+  "supplement_scope": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-supplement-scope/supplement-scope.json",
+  "root_supplement_release_external_list": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-supplement-root-release/external-input-boundary.json",
+  "root_supplement_release_caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-supplement-root-release-caller",
+  "required_sequence": [
+    "root approves these exact sources",
+    "actual initial composition and complete caller exit 0",
+    "initial acceptance with fresh outer recorder",
+    "literal supplement capture includes completed earlier acceptance/preparation and its callers",
+    "approved exact supplement release/external boundary",
+    "actual complete assembly and complete caller exit 0",
+    "complete acceptance with fresh outer recorder",
+    "later root banking/staging/diagnostic/commit gates remain separate"
+  ],
+  "raw_caller_schema": "command.json argv/cwd equal execution.json argv/cwd; flat stdout_bytes/stdout_sha256,stderr_bytes/stderr_sha256, exit=0; stdout.bin/stderr.bin/stdin.bin/exit.txt retained. Exact composer/assembler scope hash and output arguments checked.",
+  "pending_counts": "All producer output counts derived from actual full scope/LIST/coverage and proof; no speculative measured results."
+}

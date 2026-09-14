@@ -1,0 +1,64 @@
+"""Root's independent code review and exact entry-helper materialization."""
+from pathlib import Path
+import ast, datetime, hashlib, json
+
+B = Path(__file__).resolve().parent
+Q = B / 'reproduction-entry-preparation'
+O = B / 'root-reproduction-entry-code-review'
+assert not O.exists()
+
+def pin(path):
+    raw = path.read_bytes()
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+def j(path):
+    return json.loads(path.read_bytes())
+
+assert pin(Q / 'freeze.json')['sha256'] == '8f68d738cec3925096763aecf6c175a97616af6c316ab3de4217bd346834766d'
+files = {str(p.relative_to(Q)): pin(p) for p in Q.rglob('*') if p.is_file() and p != Q / 'freeze.json'}
+assert files == j(Q / 'freeze.json')['files'] and len(files) == 150
+source_pairs = j(Q / 'original-to-copy-manifest.json')
+assert len(source_pairs) == 55
+for row in source_pairs:
+    source, copy = Path(row['original']), Q / row['copy']
+    assert source.read_bytes() == copy.read_bytes()
+    assert pin(source) == {k: row[k] for k in ['bytes', 'sha256']}
+source = Q / 'approve-reproduction-method-root.py'
+assert pin(source) == dict(bytes=11605, sha256='ed9774cde3796292ba624a2b25e0b6c200c12d3942cdb8a8728d7d0f3a0431b4')
+old = (Q / 'inputs/prior-approve-reproduction-method-root.py').read_text()
+new = source.read_text()
+old_functions = {n.name: ast.dump(n, include_attributes=False) for n in ast.parse(old).body if isinstance(n, ast.FunctionDef)}
+new_functions = {n.name: ast.dump(n, include_attributes=False) for n in ast.parse(new).body if isinstance(n, ast.FunctionDef)}
+assert old_functions == new_functions
+start = "base=j(B/'baseline.json');assert base['commit']==HEAD and len(base['sha256'])==9"
+end = "save(O/'proof.json',entry)"
+assert old[old.index(start):old.index(end)+len(end)] == new[new.index(start):new.index(end)+len(end)]
+binding = j(Q / 'bindings.json')
+assert pin(Q / 'bindings.json')['sha256'] == 'b8a21526fcd2a2ed1c69c8f15d5ad909bb807664065a32c13018c2e21966c768'
+assert len(binding['packages']) == 5 and sum(x['file_count'] for x in binding['packages']) == 223
+assert len(binding['inputs']) == 22 and len(binding['external']) == 33 and len(binding['recipes']) == 7
+assert binding['mapped_count'] == 109
+expected = {
+    'prepare.py.txt': '43e817bca44c3cda9a6c30010324efed61abbf25ce414cf3c1dde41f07a6d405',
+    'run-once.py.txt': '531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0',
+    'run-isolated-readonly.py.txt': '1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca',
+    'verify-retention.py.txt': 'ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77',
+}
+assert {Path(x['path']).name: x['sha256'] for x in binding['materialize_exact_code']} == expected
+for row in binding['materialize_exact_code']:
+    assert pin(Path(row['path'])) == {k: row[k] for k in ['bytes', 'sha256']}
+target = B / source.name
+assert not target.exists() and not (B / 'reproduction-root-entry').exists()
+assert not (B.parent / 'integration/through282-generated-reproduction').exists()
+target.write_bytes(source.read_bytes())
+assert target.read_bytes() == source.read_bytes()
+O.mkdir()
+proof = dict(status='APPROVE_CURRENT_ENTRY_CODE', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             reviewer='Codex root, independent of entry author c05_253_255_reconcile', source=str(source), runtime=str(target),
+             source_pin=pin(source), preparation_freeze=pin(Q / 'freeze.json'), full_frozen_files=150, full_source_copy_pairs=55,
+             full_source_diff_report_binding_read=True, prior_helpers_ast_exact=True, prior_full_source_raw_state_block_exact=True,
+             approved_four_runtime_sources=expected, pending_actual_entry='HEAD, five package freezes, all full pairs/external aliases, exact payload/seed/source and raw Git/index/state must pass in the real entry invocation.',
+             later_gate='Actual isolated prepare/layer/view/retention plus complete post-run original/seed/Git/raw-state closure, banking and stage acceptance remain required.',
+             retention_source_transport_limit='Three preparation calls are retained as labeled conversation transcriptions; missing original raw streams remain unavailable. No runtime capture is fabricated.')
+(O / 'proof.json').write_text(json.dumps(proof, indent=2) + '\n')
+print(json.dumps(proof, indent=2))

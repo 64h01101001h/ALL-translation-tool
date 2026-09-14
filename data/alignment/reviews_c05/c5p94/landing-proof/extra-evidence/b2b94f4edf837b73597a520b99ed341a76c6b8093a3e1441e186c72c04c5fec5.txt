@@ -1,0 +1,118 @@
+"""Independent static source review. Never import or execute either closure source."""
+from pathlib import Path
+import ast, datetime, difflib, hashlib, json
+
+O=Path(__file__).resolve().parent; B=O.parent; A=B.parent; I=A/'integration'; P=B/'commit-closure-preparation'
+bindings=[]
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(name,value):
+ p=O/name;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(value,f,indent=2,ensure_ascii=False);f.write('\n')
+def retain(source,name):
+ before=source.stat();raw=source.read_bytes();after=source.stat()
+ fields=lambda s:(s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
+ assert fields(before)==fields(after)
+ dest=O/'sources'/name;dest.parent.mkdir(parents=True,exist_ok=True)
+ with dest.open('xb') as f:f.write(raw)
+ assert raw==dest.read_bytes()==source.read_bytes()
+ bindings.append(dict(original=str(source),copy=str(dest.relative_to(O)),observed_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),**pin(raw)))
+ return raw
+
+fraw=retain(P/'freeze.json','preparation/freeze.json');f=json.loads(fraw)
+assert pin(fraw)==dict(bytes=988,sha256='af796441692a1c8fa1310e8017ce79535b2bab5ce01022eca10a952d877290be')
+assert {str(x.relative_to(P)) for x in P.rglob('*') if x.is_file()}==set(f['files'])|{'freeze.json'}
+prep={}
+for name,expected in f['files'].items():
+ raw=retain(P/name,'preparation/'+name);assert pin(raw)==expected;prep[name]=raw
+old_path=I/'through279-commit-closure-preparation/commit_closure279.py'
+old=retain(old_path,'actual-prior-commit-closure.py.txt')
+assert old==prep['prior-commit-closure.py.txt']
+candidate=prep['commit_closure282.py'];entry=prep['ledger-entry.txt'];changes=json.loads(prep['changes.json'])
+assert pin(candidate)==dict(bytes=6446,sha256='8c53dabbec62e433513fb5f890364820feb8c63f5410a8227188c2f213ecafa2')
+assert pin(entry)==dict(bytes=3179,sha256='88b3df31dd9162765de114a9aea6731ba26ebcb0c360d812d635491933bfd4fe')
+assert len(changes)==7
+after=old.decode();offsets=[]
+for row in changes:
+ assert row['count']==1 and after.count(row['old'])==1 and row['new'] not in after
+ offsets.append(dict(offset=after.index(row['old']),**row));after=after.replace(row['old'],row['new'])
+assert after.encode()==candidate
+inverse=candidate.decode()
+for row in reversed(changes):
+ assert inverse.count(row['new'])==1;inverse=inverse.replace(row['new'],row['old'])
+assert inverse.encode()==old
+for name,left,right,lf,rf in [('complete.diff.txt',old,candidate,str(old_path),'commit_closure282.py'),('complete.inverse.diff.txt',candidate,old,'commit_closure282.py',str(old_path))]:
+ diff=''.join(difflib.unified_diff(left.decode().splitlines(True),right.decode().splitlines(True),fromfile=lf,tofile=rf)).encode()
+ if name=='complete.diff.txt':assert diff==prep[name]
+ (O/name).write_bytes(diff)
+ast.parse(candidate);old_ast=ast.parse(old);inverse_ast=ast.parse(inverse)
+assert ast.dump(old_ast,include_attributes=False)==ast.dump(inverse_ast,include_attributes=False)
+gates=[dict(line=n.lineno,source=ast.get_source_segment(old.decode(),n)) for n in ast.walk(old_ast) if isinstance(n,ast.Assert)]
+save('full-prior-assertion-map.json',gates)
+prepare=retain(B/'prepare-commit-closure-source-root.py','prepare-commit-closure-source-root.py.txt')
+prepare_ast=ast.parse(prepare)
+entry_node=next(n for n in prepare_ast.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='entry' for t in n.targets))
+assert ast.literal_eval(entry_node.value).encode()==entry
+recorder=retain(A/'record_external_step.py','record_external_step.py.txt')
+caller={}
+C=B/'commit-closure-preparation-caller'
+assert {x.name for x in C.iterdir() if x.is_file()}=={'command.json','execution.json','stdin.bin','stdout.bin','stderr.bin','exit.txt'}
+for name in sorted(x.name for x in C.iterdir() if x.is_file()):caller[name]=retain(C/name,'preparation-caller/'+name)
+cmd=json.loads(caller['command.json']);exe=json.loads(caller['execution.json']);stdout=json.loads(caller['stdout.bin'])
+assert cmd['argv']==['python3','-B','../campaign-artifacts/C05-280-282/prepare-commit-closure-source-root.py']
+assert Path(cmd['cwd'])==A.parent/'campaign-worktree'
+assert exe['argv']==cmd['argv'] and exe['cwd']==cmd['cwd'] and exe['exit']==0 and caller['exit.txt']==b'0\n'
+assert not caller['stdin.bin'] and not caller['stderr.bin']
+for field in ['stdout','stderr']:
+ assert exe[field+'_bytes']==len(caller[field+'.bin']) and exe[field+'_sha256']==pin(caller[field+'.bin'])['sha256']
+assert cmd['recorder_sha256']==exe['recorder_sha256']==pin(recorder)['sha256']
+assert stdout['status']=='SOURCE_PREPARED_ONLY' and stdout['freeze']==pin(fraw) and stdout['candidate']==pin(candidate)
+source_proof=json.loads(prep['preparation-proof.json'])
+assert source_proof['status']=='SOURCE_PREPARATION_ONLY' and source_proof['runtime'] is False and source_proof['syntax_only'] is True
+assert source_proof['original']==dict(path=str(old_path),**pin(old)) and source_proof['candidate']==pin(candidate) and source_proof['entry']==pin(entry)
+
+facts={}
+fact_paths={
+ 'baseline.json':B/'baseline.json',
+ 'actual-current-output-contract.json':B/'actual-current-output-contract.json',
+ 'root-final-semantic-review-verification-v3.json':B/'root-final-semantic-review-verification-v3/proof.json',
+ 'semantic-review.json':B/'semantic-review/review.json',
+ 'semantic-review.md':B/'semantic-review/review.md',
+ 'root-payload-result-acceptance.json':B/'root-payload-result-acceptance.json',
+ 'through279-root-closure.json':I/'through279-root-closure/proof.json',
+ 'through279-independent-proof.json':I/'through279-root-closure/independent-proof.json',
+ 'through279-main-proof-only.json':I/'through279-main-observation-01/runtime/proof.json',
+ 'retention-transcriptions.json':B/'reproduction-retention-provenance-supplement/conversation-tool-result-transcriptions.json',
+ 'retention-provenance-report.md':B/'reproduction-retention-provenance-supplement/report.md',
+ 'campaign-status-observation.md':A.parent/'CAMPAIGN_STATUS.md',
+ 'ctest-17.execution.json':B/'landing/ctest-17.execution.json',
+ 'ctest-17.stdout':B/'landing/ctest-17.stdout',
+ 'ctest-17.stderr':B/'landing/ctest-17.stderr',
+ 'ctest-17.exit':B/'landing/ctest-17.exit',
+}
+for name,path in fact_paths.items():facts[name]=retain(path,'facts/'+name)
+j=lambda name:json.loads(facts[name])
+actual=j('actual-current-output-contract.json');baseline=j('baseline.json');semantic=j('semantic-review.json');closed=j('through279-root-closure.json')
+assert actual['status']=='PASS_ACTUAL_MEASUREMENTS' and actual['source_date']=='2026-09-13'
+assert baseline['commit']==closed['final_head']=='10968d16e701b698a0e1fbd845b353089d15ac39'
+assert actual['counts']==dict(links=45402,nulls=11938,notes=1618,trees=11,heads=7092,pairs=15546,csv_main=22528,csv_reverse=22188,csv_course=24105,csv_changes=37)
+assert actual['counts']['links']-baseline['full_links']==127 and baseline['full_links']==45275
+assert actual['proven_acip_heads']==7089 and actual['root_ctest_seconds']==12.62 and actual['root_layer_runs']==actual['root_view_runs']==1
+assert semantic['total_spans']==124 and semantic['total_nulls']==4 and semantic['total_word_pairs']==102 and [s['span_count'] for s in semantic['segments']]==[54,46,24]
+assert all(s in facts['semantic-review.md'].decode() for s in ['15 material omission explanations','225 original dispositions','11 full refutations'])
+assert j('root-payload-result-acceptance.json')['payload_files']==13 and j('root-payload-result-acceptance.json')['source_specific_allowances']==2
+assert closed['integration']=='OPEN_NO_APPLICATION' and len(closed['consumer']['open_findings'])==4 and closed['consumer']['accepted'] is False
+assert closed['observed_MAIN']['apply_check_exits']==[0]*13 and closed['observed_MAIN']['applied'] is False
+assert closed['observed_MAIN']['from'].startswith('2026-09-13T23:40:') and closed['observed_MAIN']['through'].startswith('2026-09-13T23:42:')
+assert j('through279-main-proof-only.json')['applied'] is False
+transcriptions=j('retention-transcriptions.json');assert len(transcriptions)==3
+assert all(x['stdout_raw'] is None and x['stderr_raw'] is None and 'transcription' in x['record_type'].lower() for x in transcriptions)
+assert [x['known_tool_result']['exit_code'] for x in transcriptions]==[1,0,0]
+ctest=j('ctest-17.execution.json')
+assert ctest['exit']==0 and ctest['stderr_bytes']==0 and ctest['stdout_sha256']==pin(facts['ctest-17.stdout'])['sha256']
+assert b'100% tests passed out of 17' in facts['ctest-17.stdout'] and b'12.62 sec' in facts['ctest-17.stdout'] and not facts['ctest-17.stderr'] and facts['ctest-17.exit']==b'0\n'
+assert closed['deadline_utc']=='2026-09-15T13:00:00Z' and 'every1minute' in facts['campaign-status-observation.md'].decode()
+assert entry.startswith(b'\n') and entry.endswith(b'\n') and b'\r' not in entry and b'\t' not in entry and not any(x.endswith(b' ') for x in entry.split(b'\n'))
+assert b'2026-09-14 UTC' in entry and b'Producer metadata date is September 13 local time' in entry
+save('source-copy-bindings.json',bindings)
+save('static-proof.json',dict(status='PASS_STATIC_SOURCE_ONLY',candidate=pin(candidate),entry=pin(entry),preparation_freeze=pin(fraw),original=pin(old),replacement_count=len(changes),replacement_offsets=offsets,full_inverse_exact=True,entire_normalized_AST_equal=True,prior_assertion_count=len(gates),complete_preparation_files=len(f['files']),source_snapshots=len(bindings),preparation_caller=dict(exit=0,stdout=pin(caller['stdout.bin']),stderr=pin(caller['stderr.bin'])),new_target_executions=0,new_Git_SQL_build_test_calls=0,new_WT_writes=0))
+print(json.dumps(dict(status='PASS_STATIC_SOURCE_ONLY',candidate=pin(candidate),prior_assertions=len(gates),source_snapshots=len(bindings),target_executions=0)))

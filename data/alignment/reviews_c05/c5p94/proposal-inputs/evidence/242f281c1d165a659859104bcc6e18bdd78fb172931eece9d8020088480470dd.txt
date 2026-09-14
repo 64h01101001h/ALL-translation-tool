@@ -1,0 +1,39 @@
+from pathlib import Path
+import json,hashlib,difflib,datetime
+Q=Path(__file__).resolve().parent;B=Q.parent;D=B/'reconciled';N=D/'root-runtime-inputs'
+def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def load(p):return json.loads(p.read_bytes())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+a=Q/'prepare.py.txt';b=Q/'prepare-v2.py.txt';(Q/'v1-v2.diff').write_text(''.join(difflib.unified_diff(a.read_text().splitlines(True),b.read_text().splitlines(True),fromfile=str(a),tofile=str(b))))
+config=load(Q/'config.json');proof=load(Q/'validation.json');assert proof['query_count']==226 and proof['original_count']==225
+unchanged=[]
+for n in [280,281,282]:
+ p=D/str(n);f=load(p/'freeze.json');files={str(x.relative_to(p)):pin(x)for x in p.rglob('*')if x.is_file()and x!=p/'freeze.json'};assert files==f['files'];unchanged.append({'seq':n,'freeze':pin(p/'freeze.json'),'files':len(files)})
+for r in load(Q/'input-manifest.json'):
+ p=Path(r['original']);assert pin(p)=={k:r[k]for k in ['bytes','sha256']}
+ if 'copy'in r:assert p.read_bytes()==Path(r['copy']).read_bytes()
+old=load(D/'280/original-copy-manifest.json');new=load(N/'copy-manifest.json');assert len(old)==412 and new[:412]==[{**x,'copy':'280/'+x['copy']}for x in old]
+for r in new:assert Path(r['original']).read_bytes()==(D/r['copy']).read_bytes() and pin(D/r['copy'])=={k:r[k]for k in ['bytes','sha256']}
+assert (D/'run-generator-ro.py.txt').read_bytes()==(D/'280/run-generator-ro.py.txt').read_bytes()
+report="""Prepared concrete C05:280–282 mechanical-verifier config; no runtime or semantic approval.
+
+The approved config_contract.py accepted all concrete pinned fields: final counts 54/46/24 spans, 0/2/2 nulls, 47/36/19 nonnull d5; 225 original identities; all226 genuine descriptor bindings. Pure validation executed once after a separately preserved syntax-only failure and its one-character correction. No SQL, canonical generator or full verifier was run. Only fresh read-only HEAD and status were captured; HEAD is10968d16e701b698a0e1fbd845b353089d15ac39, with complete raw streams and actual command records under calls/.
+
+shared_directory is the inclusive B/reconciled. The exact412 original copy records are preserved with only a280/ path prefix. Sixteen additional mappings reference already frozen complete physical excerpts; each is byte-equal to its range of the full original physical source and retains source-proof/index/full original-record binding. They add no binary copies. Derived aliases cover422 actual logical paths, resolved paths, literal symlink values and full byte pins. All16 source extents survive as original/verified_full_source_pin/start/end plus source evidence and excerpt identity. The directly saved wrapper is byte-identical to frozen280/run-generator-ro.py.txt and preserves the absolute worktree plus read-only/query_only behavior.
+
+Every new query file projects its complete actual descriptor through exactly one approved schema branch: query_list, query_list_params or query_container_params. Count presence, SQL, parameter values and full row order/content are exact. query-derivations.json retains all original descriptors, their indices, source-key names and input pins; the frozen replay remains unchanged. No original record is renamed or rewritten.
+
+The governing actual_runs field is an inherited interface name, not a claim that normalized recipes were previously executed. Each11 recipe normalizes historical git -C WORKTREE show COMMIT:PATH, called from ROOT, to git show COMMIT:PATH with cwd WORKTREE for the later verifier. historical_actual_argv/cwd, complete original source_record, immutable copied stdout and actual historical call-producing sources are preserved. No governing Git command was replayed during this preparation. Root must approve this explicit equivalent-command projection; it is not a new original execution record.
+
+All three frozen reconciliation trees were fully enumerated and byte-verified unchanged at closure. The schemas/data are concrete, but the separately reviewed head-allowance runtime adaptation and root release remain prerequisites. The consumed old runtime still asserts empty allowances and would reject the two valid recorded sogs hits. Do not execute that old runtime merely because validate_config passes. The operator is a reused Codex model context and original reconciliation/tooling author; no independent semantic acceptance is claimed.
+
+The exact config is config.json. Source and syntax/actual preparation streams remain beside it. Runtime schemas and the226 complete query files are in ../reconciled/root-runtime-inputs/. The latter freeze is pinned in this package; existing large frozen payloads remain complete at their original paths with exact references, without redundant copies.
+"""
+(Q/'report.md').write_text(report)
+contract={'status':'PREPARED_PENDING_ROOT_REVIEW_AND_APPROVED_ALLOWANCE_RUNTIME','config':{'path':str(Q/'config.json'),**pin(Q/'config.json')},'shared_directory':str(D),'wrapper':{'path':str(D/'run-generator-ro.py.txt'),**pin(D/'run-generator-ro.py.txt')},'output_requirement':'Fresh external integration child, neither within nor ancestor of batch/worktree/shared/code/config directories; choose and pin exact output at release.','source_requirement':'Use the independently reviewed head-allowance-adapted runtime, with approved params-schema contract; old empty-allowance runtime is not executable for this data.','future_argv_template':['python3','-B','ABSOLUTE_APPROVED_RUNTIME/verify_reconciliation.py','--config',str(Q/'config.json'),'--config-sha256',pin(Q/'config.json')['sha256'],'--output','ABSOLUTE_FRESH_EXTERNAL_OUTPUT','--execute-reviewed-verification'],'environment':{'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0','GIT_OPTIONAL_LOCKS':'0'},'prerequisites':['Root full derivation/config review, including explicit historical -C/cwd recipe projection','Reviewed allowance runtime and exact code pins','HEAD/status/source/freeze pins remain exact at actual release','Fresh external output chosen by root'],'executed_full_runtime':False,'semantics_approved':False};save(Q/'command-contract.json',contract)
+save(Q/'derivation-proof.json',{'status':'PASS_PURE_CONFIG_AND_LOSSLESS_DERIVATION','unchanged_reconciled':unchanged,'copy_original_count':412,'copy_derived_count':428,'physical_extents':16,'aliases':422,'governing_recipes':11,'queries':226,'original_identities':225,'config':pin(Q/'config.json'),'wrapper':pin(D/'run-generator-ro.py.txt'),'pure_validation':pin(Q/'validation.json'),'raw_sources_not_duplicated':True,'runtime_executed':False,'failed_attempts':['syntax01 unmatched closing parenthesis before any preparation action; original source and exact full streams preserved'],'historical_governing_commands_not_replayed':True})
+for p in [N,Q]:
+ files={str(x.relative_to(p)):pin(x)for x in sorted(p.rglob('*'))if x.is_file()};assert 'freeze.json'not in files;save(p/'freeze.json',{'status':'FROZEN_CONFIG_PREPARATION_NOT_RELEASE','file_count':len(files),'total_bytes':sum(x['bytes']for x in files.values()),'files':files})
+ if p==N:save(Q/'runtime-inputs-pin.json',{'directory':str(N),'freeze':{'path':str(N/'freeze.json'),**pin(N/'freeze.json')},'wrapper_external_to_runtime_inputs_freeze':{'path':str(D/'run-generator-ro.py.txt'),**pin(D/'run-generator-ro.py.txt')}})
+for p in [N,Q]:assert load(p/'freeze.json')['files']=={str(x.relative_to(p)):pin(x)for x in p.rglob('*')if x.is_file()and x!=p/'freeze.json'}
+print(json.dumps({'status':'DONE','config':pin(Q/'config.json'),'config_freeze':pin(Q/'freeze.json'),'runtime_inputs_freeze':pin(N/'freeze.json'),'wrapper':pin(D/'run-generator-ro.py.txt')}))

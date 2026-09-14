@@ -1,0 +1,80 @@
+{
+  "verdict": "APPROVE_SOURCE_PREPARATION_ONLY",
+  "utc": "2026-09-14T01:24:57.954838+00:00",
+  "reviewer": "Codex /root/c05_280_282_english",
+  "correction_author": "Codex /root/c05_253_255_reconcile",
+  "role_disclosure": "I reviewed the prior postlanding preparation and raised F1; I did not author this correction. Earlier English-original/landing-helper/head-allowance roles are disclosed. This is code-only correction review and no semantic judgment.",
+  "source_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/postlanding-verification-correction01",
+  "source_freeze": {
+    "bytes": 25050,
+    "sha256": "5cbdcbde47cc5904e01c27e1776b3ccd7707d2132c020d540602e551cfa595b2"
+  },
+  "source_files": 142,
+  "source_bytes": 1981920,
+  "full_preserved_original_copy_pairs": 128,
+  "prior_preparation_freeze": {
+    "bytes": 18005,
+    "sha256": "51f1a05ca75f3afa710610eeffaba5b1ef43df7019009a489a7a831cd29d2208"
+  },
+  "prior_review_freeze": {
+    "bytes": 2709,
+    "sha256": "f4d3ec114e223b6b8ca5c6c57a2e3041014a7789e87b824cc81ef7b51aa65be9"
+  },
+  "candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/postlanding-verification-correction01/bank_root_proofs_through282.py.txt",
+    "bytes": 18169,
+    "sha256": "e39621efcf4e650b9c2da4f145197f082a230236c47532e54f0398fc57b05375"
+  },
+  "old_candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/postlanding-verification-preparation/known-parameter-candidates/bank_root_proofs_through282.py.txt",
+    "bytes": 18169,
+    "sha256": "e47ccae0d0a1af359405ff2d47d68a3015d5f15e40479d8acd1952ba9299ad93"
+  },
+  "sole_change": {
+    "line": 65,
+    "old": "data/alignment/reviews_c05/c5p93/landing-proof",
+    "new": "data/alignment/reviews_c05/c5p94/landing-proof",
+    "occurrences": 1
+  },
+  "exact_forward_diff": {
+    "bytes": 576,
+    "sha256": "612458c10d3ec09ed79e8bafd013211eab977b8a717e7f48c2ba93a153cc12c6"
+  },
+  "exact_inverse_diff": {
+    "bytes": 576,
+    "sha256": "36d405d83cff45fdf99af5f04eea81c2ca8b02f8d01c8ba7c794705360b83934"
+  },
+  "inverse_complete_byte_equal": true,
+  "all_other_ast_identical": true,
+  "original_trees_unchanged": true,
+  "resolved_findings": [
+    "F1"
+  ],
+  "open_findings": [],
+  "pending_runtime_fields": [
+    "semantic_final",
+    "semantic_root",
+    "landing",
+    "root_builds",
+    "root_tests",
+    "root_retention",
+    "payload",
+    "seed",
+    "entry",
+    "retention_literals",
+    "closure_literals",
+    "ordinary_extra",
+    "untracked",
+    "bank_history",
+    "release"
+  ],
+  "runtime_release": false,
+  "candidate_executions": 0,
+  "tests": 0,
+  "builds": 0,
+  "sql": 0,
+  "git": 0,
+  "landing": 0,
+  "banking": 0,
+  "limits": "Approves only the source preparation with the separately corrected destination. All 15 existing runtime fields remain pending actual measured outputs, current semantic/source/history interfaces and distinct root release. Prior contracts and retained gate requirements remain unchanged; no actual postlanding results inferred."
+}

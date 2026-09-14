@@ -1,0 +1,37 @@
+{
+  "status": "ACTUAL_READ_ONLY_DESCRIPTOR_ANALYSIS_NOT_RUNTIME_APPROVAL",
+  "utc": "2026-09-14T02:29:23.694489+00:00",
+  "raw_log": {
+    "bytes": 22544169,
+    "sha256": "efdb335112f0d032b4c46b9bda05026046e3cbb1670cae250f90147474ca758f"
+  },
+  "warning_count": 43903,
+  "warning_file_count": 69,
+  "warnings_by_kind": {
+    "trailing whitespace.": 43883,
+    "space before tab in indent.": 0,
+    "new blank line at EOF.": 20
+  },
+  "base_category_counts": {
+    "diff_context": 55,
+    "blank_eof": 8,
+    "pending_source_extension": 130,
+    "physical_bytes": 20757,
+    "canonical_csv_crlf": 22953
+  },
+  "pending_additional_files": 12,
+  "pure_functions_invoked": [
+    "digest",
+    "pin",
+    "check_pin",
+    "relative",
+    "parse_log",
+    "literal_warnings",
+    "diff_context_lines",
+    "ordinary_predicate",
+    "classify_physical"
+  ],
+  "target_Run_main_or_Git_executions": 0,
+  "WT_writes": 0,
+  "limits": "Read-only source descriptor investigation; Git index identity is supplied by actual root staging records and remains a required Run/audit gate, not newly read here."
+}

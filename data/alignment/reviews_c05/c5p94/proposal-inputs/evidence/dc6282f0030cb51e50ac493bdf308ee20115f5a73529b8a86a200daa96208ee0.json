@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "mu stegs byed pa",
+    "mu stegs byed pa"
+  ],
+  "rows": [
+    {
+      "id": 54511,
+      "wylie": "mu stegs byed pa",
+      "tibetan": "མུ་སྟེགས་བྱེད་པ",
+      "tibetan_source": "generated-ewts-v27-1",
+      "acip": "MU STEGS BYED PA",
+      "pronunciation": "mutek jepa",
+      "pronunciation_source": null,
+      "sanskrit": "{LC}tīrthakāra; {LC}tīrthyakara",
+      "hopkins_english": null,
+      "hgm_gloss": null,
+      "tier": null,
+      "hgm_source": null,
+      "status": "awaiting-hgm-equivalent",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"ILL\"]",
+      "corpus_n_segments": 1,
+      "raw": "{\"tibetan\": \"མུ་སྟེགས་བྱེད་པ\", \"wylie\": \"mu stegs byed pa\", \"wylie_variants\": [\"mu stegs byed pa\"], \"tenses\": null, \"sanskrit\": \"{LC}tīrthakāra; {LC}tīrthyakara\", \"hopkins_english\": null, \"hgm_gloss\": null, \"hgm_evidence\": null, \"status\": \"awaiting-hgm-equivalent\", \"acip\": \"MU STEGS BYED PA\", \"lc_source\": [\"main\"], \"lc_refs\": [\"{sc54}1125ka\", \"{sc35}3513\"], \"pronunciation\": \"mutek jepa\", \"scaffold_added\": \"lc-v27\", \"corpus_occurrences\": {\"courses\": [\"ILL\"], \"n_segments\": 1}, \"attestation_contexts\": [{\"course\": \"ILL\", \"tibetan_wylie\": \"de yi rnam par smin pas na, ,dga' ldan gnas kyi lha rgyal 'gyur, ,mu stegs byed pa thams cad kyi, ,nyon mongs lta gnas zlog byed pa, zhes gsungs so\", \"hgm_english\": \"And when this seed has ripened, A person becomes a Lord of Gods In the Heaven of Happiness; They turn back all the negative thoughts And mistaken ideas of every Person with lower views. An excellent mind [V.1b]\"}], \"tibetan_source\": \"generated-ewts-v27-1\"}"
+    }
+  ],
+  "count": 1
+}

@@ -1,0 +1,75 @@
+import pathlib,json,hashlib,os,sys,subprocess,datetime,importlib.util,shutil,traceback
+R=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');B=R/'campaign-artifacts/C05-280-282';W=R/'campaign-worktree';D=B/'reconciled';F=D/'280';Q=B/'reconciliation-verifier-config';N=D/'root-runtime-inputs';AD=B/'reconciliation-verifier-query-schema-adapter-v1'
+os.environ['PYTHONDONTWRITEBYTECODE']='1'
+def load(p):return json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def ref(p):return {'path':str(p),**pin(p)}
+def save(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+N.mkdir();(N/'queries').mkdir();(Q/'inputs').mkdir();(Q/'calls').mkdir();inputs=[]
+def consume(p,copy_small=False):
+ raw=p.read_bytes();record={'original':str(p),**pin(p),'retention':'Existing complete immutable original, external to this config tree.'}
+ if copy_small:
+  dest=Q/'inputs'/(hashlib.sha256(raw).hexdigest()+'.bin');dest.write_bytes(raw);assert dest.read_bytes()==p.read_bytes();record.update(copy=str(dest),retention='Full byte-identical retained copy.')
+ inputs.append(record);return raw
+for p in [AD/'config_contract.py',AD/'verify_reconciliation.py',AD/'freeze.json',B/'baseline.json',F/'original-copy-manifest.json',F/'source-aliases.json',F/'fixed-git-sources.json',F/'build-spine-fixed-source.json',F/'physical-proof.json',F/'additional-physical-proof.json',F/'run-generator-ro.py.txt',F/'collect-evidence-v2.py.txt',F/'finalize-evidence-v2.py.txt',F/'source-rows-full.json',F/'context-rows-full.json',B/'proposal-verification/execution-proof.json',B/'proposal-verification/root-resolved-spans.json']:
+ consume(p,True)
+# Fresh capture only; no verifier, SQL, source generator or governing Git replay.
+calls=[]
+for label,args in [('head',['git','rev-parse','HEAD']),('status',['git','status','--short'])]:
+ out=Q/'calls'/label;out.mkdir();start=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(args,cwd=W,capture_output=True,env={**os.environ,'GIT_OPTIONAL_LOCKS':'0'});end=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ for n,data in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(out/n).write_bytes(data)
+ record={'argv':args,'cwd':str(W),'environment':{'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'},'start':start,'end':end,'exit':r.returncode,'stdout':ref(out/'stdout.bin'),'stderr':ref(out/'stderr.bin')};save(out/'command.json',record);calls.append(record);assert r.returncode==0 and not r.stderr
+assert (Q/'calls/head/stdout.bin').read_text().strip()==load(B/'baseline.json')['commit']=='10968d16e701b698a0e1fbd845b353089d15ac39'
+# Lossless base copy-path projection, no binary payload duplicated.
+oldmaps=load(F/'original-copy-manifest.json');maps=[];deriv=[]
+for i,r in enumerate(oldmaps):
+ row={**r,'copy':'280/'+r['copy']};p=pathlib.Path(r['original']);copy=D/row['copy'];assert pin(p)=={k:r[k]for k in ['bytes','sha256']} and p.read_bytes()==copy.read_bytes();maps.append(row);deriv.append({'kind':'copy_prefix','index':i,'original_record':r,'derived_record':row})
+# Runtime requires each physical excerpt hash in the copied_hashes index. Reference the existing frozen excerpt as its already retained copy; prove it against its complete physical original/range.
+physical=[]
+for filename,pinkey in [('physical-proof.json','source_pin'),('additional-physical-proof.json','original_pin')]:
+ for i,r in enumerate(load(F/filename)):
+  src=pathlib.Path(r['original']);excerpt=pathlib.Path(r['excerpt']);a,z=r['byte_range'];assert pin(src)==r[pinkey] and src.read_bytes()[a:z]==excerpt.read_bytes() and pin(excerpt)=={k:r[k]for k in ['bytes','sha256']}
+  entry={'original':r['original'],'verified_full_source_pin':r[pinkey],'start':a,'end':z,'bytes':r['bytes'],'sha256':r['sha256'],'source_evidence':{'file':str(F/filename),'index':i,'record':r},'excerpt':str(excerpt)};physical.append(entry)
+  mapping={'original':str(excerpt),'copy':str(excerpt.relative_to(D)),'bytes':r['bytes'],'sha256':r['sha256'],'disposition':'Existing frozen excerpt; complete physical original and exact byte range independently bound in physical.json. No new physical payload copy.'}
+  if not any(x['original']==mapping['original']for x in maps):maps.append(mapping)
+  deriv.append({'kind':'physical_extent','source_file':str(F/filename),'index':i,'derived_record':entry,'excerpt_mapping':mapping})
+assert len(physical)==16 and len(maps)==428
+save(N/'copy-manifest.json',maps);save(N/'physical.json',physical)
+# Aliases name actual filesystem path role, not inferred authorship. Keep the original readlink text and full-byte pin.
+paths={r['original'] for r in oldmaps}|{r['alias']for r in load(F/'source-aliases.json')}|{str(W/'build/hgm_spine_v27_2.db')}
+aliases=[]
+for text in sorted(paths):
+ p=pathlib.Path(text);aliases.append({'logical':text,'resolved':str(p.resolve()),'symlink':os.readlink(p)if p.is_symlink()else None,**pin(p)})
+for r in load(F/'source-aliases.json'):
+ a=next(a for a in aliases if a['logical']==r['alias']);assert a['resolved']==r['resolved']and a['symlink']==r['link_text']and all(a[k]==r[k]for k in ['bytes','sha256'])
+save(N/'aliases.json',aliases)
+# Legacy actual_runs interface expresses the runtime replay command normal form.
+# This is an explicit cwd/-C normalization of a recorded historical action, NOT a claim these new argv were previously executed.
+governing=[]
+for i,r in enumerate(load(F/'fixed-git-sources.json')):
+ oldargv=['git','-C',str(W),'show',r['commit']+':'+r['git_path']];governing.append({'argv':['git','show',r['commit']+':'+r['git_path']],'cwd':str(W),'exit':r['exit'],'copy':str(pathlib.Path(r['copy']).relative_to(D)),'source_record':r,'historical_actual_argv':oldargv,'historical_actual_cwd':str(R),'derivation':'Exact Git -C worktree show invocation/cwd normalization for later runtime replay; original full stdout and historical call-producing source are retained. No Git show was run in config preparation.'})
+r=load(F/'build-spine-fixed-source.json');governing.append({'argv':['git','show',r['commit']+':'+r['git_path']],'cwd':str(W),'exit':r['exit'],'copy':str(pathlib.Path(r['copy']).relative_to(D)),'source_record':r,'historical_actual_argv':['git','-C',str(W),'show',r['commit']+':'+r['git_path']],'historical_actual_cwd':str(R),'derivation':'Same explicit -C/cwd normalization; historical source finalize-evidence-v2.py.txt and full output copy retained.'})
+for r in governing:assert (D/r['copy']).is_file()
+save(N/'governing.json',{'commit':load(B/'baseline.json')['commit'],'actual_runs':governing,'interface_provenance':'actual_runs is the inherited runtime replay interface name. Normalized argv are recipes; historical_actual_argv/cwd and source_record preserve the actual prior execution version.'})
+wrapper=D/'run-generator-ro.py.txt';assert not wrapper.exists();wrapper.write_bytes((F/'run-generator-ro.py.txt').read_bytes());assert wrapper.read_bytes()==(F/'run-generator-ro.py.txt').read_bytes()
+# Per-query projections bind full actual descriptors, including absence/presence of count.
+queries=[];qderiv=[];seen_descriptors=set()
+for i,r in enumerate(load(F/'query-replays.json'))):
+ p=pathlib.Path(r['descriptor_original']);desc=load(p);kind='query_container_params'if r['descriptor_container']=='queries'else'query_list_params'if r['parameter_key']=='params'else'query_list';binding={'kind':kind,'index':r['descriptor_index']};original=desc['queries'][r['descriptor_index']]if r['descriptor_container']=='queries'else desc[r['descriptor_index']];assert original==r['original_descriptor'];query={'sql':original['sql'],'parameters':original[r['parameter_key']],'rows':original['rows']}
+ if 'count'in original:query['count']=original['count']
+ assert query['sql']==r['sql'] and query['parameters']==r['parameters']and query['rows']==r['rows'];out=N/'queries'/f'{i:03d}.json';save(out,query);queries.append({'file':ref(out),'descriptor':ref(p),'binding':binding});qderiv.append({'replay_index':i,'replay_file':str(F/'query-replays.json'),'descriptor':ref(p),'binding':binding,'original_descriptor':original,'derived':ref(out),'parameter_source_key':r['parameter_key'],'count_present':('count'in original)})
+ if str(p)not in seen_descriptors:consume(p);seen_descriptors.add(str(p))
+assert len(queries)==226
+save(N/'query-derivations.json',qderiv)
+roles={'spec':'spec.json','body':'body.html','tuples':'final-tuples.json','decisions':'final-decisions.json','omissions':'omissions.json','dispositions':'original-dispositions.json','errata_analysis':'errata-analysis.json','allowances':'proposed-head-allowances.json','errata':'errata.json','proof':'proof.json'}
+originals=[];reconciled=[]
+for a in ['tibetan','english']:
+ for n in [280,281,282]:
+  p=B/a/str(n);originals.append({'angle':a,'seq':n,'directory':str(p),'freeze':ref(p/'freeze.json'),'spec':ref(p/'spec.json'),'declarations':ref(p/'intended-spans.json')});consume(p/'freeze.json')
+for n in [280,281,282]:
+ p=D/str(n);proof=load(p/'proof.json');reconciled.append({'seq':n,'directory':str(p),'freeze':ref(p/'freeze.json'),'counts':{k:proof['counts'][k]for k in ['spans','nulls','d5_nonnull']},'files':{k:ref(p/name)for k,name in roles.items()}});consume(p/'freeze.json')
+evidence={'reference_access':ref(B/'tibetan/280/evidence/required-access.json'),'copy_manifest':ref(N/'copy-manifest.json'),'aliases':ref(N/'aliases.json'),'governing':ref(N/'governing.json'),'source_context':ref(F/'context-rows-full.json'),'physical':ref(N/'physical.json'),'original_identities':ref(B/'proposal-verification/root-resolved-spans.json'),'original_proof':ref(B/'proposal-verification/execution-proof.json'),'source_snapshot':ref(B/'source.json'),'master':ref(W/'data/hgm_dictionary_v27_2.json.gz'),'corpus':ref(W/'data/full_parallel_corpus_v32.json.gz'),'database':ref(W/'build/hgm_spine_v27_2.db'),'generator':ref(W/'tools/gen_alignment_page.py'),'wrapper':ref(wrapper)}
+config={'schema':'reconciliation-277-v1','course':'C05','batch':str(B),'worktree':str(W),'shared_directory':str(D),'sequences':[280,281,282],'baseline':ref(B/'baseline.json'),'status_capture':ref(Q/'calls/status/stdout.bin'),'originals':originals,'reconciled':reconciled,'evidence':evidence,'context':{'sql':'SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq','parameters':['C05',274,288]},'query_directories':[str(N/'queries')],'queries':queries,'operator_role':'Root mechanical/source runtime; reused non-author reconciler prepared explicit config/derivations. No semantic approval.'}
+save(Q/'config.json',config);save(N/'schema-derivations.json',{'copy':deriv,'governing_sources':[ref(F/'fixed-git-sources.json'),ref(F/'build-spine-fixed-source.json')],'wrapper':{'original':ref(F/'run-generator-ro.py.txt'),'copy':ref(wrapper),'byte_equal':True},'alias_sources':[ref(F/'source-aliases.json'),ref(F/'original-copy-manifest.json')],'query_replay':ref(F/'query-replays.json')});save(Q/'input-manifest.json',inputs)
+spec=importlib.util.spec_from_file_location('approved_contract',AD/'config_contract.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);validation=m.validate_config(config);save(Q/'validation.json',validation)
+print(json.dumps({'status':'PASS_PURE_CONFIG_VALIDATION','config':ref(Q/'config.json'),'queries':len(queries),'copy_records':len(maps),'aliases':len(aliases),'physical_extents':len(physical),'governing_recipes':len(governing),'totals':validation['totals'],'original_count':validation['original_count'],'semantic_approval':False,'runtime_executed':False}))

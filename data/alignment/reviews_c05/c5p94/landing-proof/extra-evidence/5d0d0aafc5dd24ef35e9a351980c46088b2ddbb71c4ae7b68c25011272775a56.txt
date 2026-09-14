@@ -1,0 +1,62 @@
+"""Static byte/schema inspection only; never import or execute reviewed code."""
+import ast, difflib, hashlib, json
+from pathlib import Path
+
+OUT=Path(__file__).resolve().parent
+B=OUT.parent
+A=B/'reconciliation-verifier-query-schema-adapter-v1'
+OLD=B/'reconciliation-verifier-preparation'
+EXPECTED='20182faebdf0ffd132bd900ac378f5eb9705821ea0a195e02824b139593d1376'
+pins={}
+def read(p):
+    raw=p.read_bytes();pins[str(p)]={'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()};return raw
+def obj(p): return json.loads(read(p))
+assert hashlib.sha256(read(A/'freeze.json')).hexdigest()==EXPECTED
+prep=B/'semantic-source-preparation'
+assert hashlib.sha256(read(prep/'freeze.json')).hexdigest()=='a1bc493d0c4204581f930c53cdc036c7127604fcba96f081d629069aa75f642b'
+prep_freeze=obj(prep/'freeze.json')
+assert all((prep/name).stat().st_size==pin['bytes'] and hashlib.sha256((prep/name).read_bytes()).hexdigest()==pin['sha256'] for name,pin in prep_freeze['files'].items())
+freeze=obj(A/'freeze.json')
+assert set(freeze['files'])=={str(p.relative_to(A)) for p in A.rglob('*') if p.is_file() and p.name!='freeze.json'}
+for name,pin in freeze['files'].items():
+    raw=read(A/name);assert len(raw)==pin['bytes'] and hashlib.sha256(raw).hexdigest()==pin['sha256']
+old=read(A/'prior-config_contract.py.txt');new=read(A/'config_contract.py')
+assert read(OLD/'config_contract.py')==old
+assert read(OLD/'verify_reconciliation.py')==read(A/'verify_reconciliation.py')
+diff=''.join(difflib.unified_diff(old.decode().splitlines(keepends=True),new.decode().splitlines(keepends=True),fromfile='prior/config_contract.py',tofile='config_contract.py'))
+assert diff.encode()==read(A/'complete.diff')
+sm=difflib.SequenceMatcher(a=old.decode().splitlines(keepends=True),b=new.decode().splitlines(keepends=True))
+changes=[x for x in sm.get_opcodes() if x[0]!='equal']
+assert len(changes)==1 and changes[0][0]=='insert' and changes[0][4]-changes[0][3]==12
+at=ast.parse(new.decode());bt=ast.parse(old.decode())
+new_functions={n.name:ast.dump(n,include_attributes=False) for n in at.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef))}
+old_functions={n.name:ast.dump(n,include_attributes=False) for n in bt.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef))}
+assert set(new_functions)==set(old_functions)
+assert all(new_functions[k]==v for k,v in old_functions.items() if k!='bind_query')
+schema_results=[]
+for rel,nested,expected_count in [('tibetan/280/evidence/queries.json',True,69),('tibetan/280/evidence/supplementary-queries.json',False,5),('tibetan/280/evidence/additional-atom-queries.json',False,6)]:
+    d=obj(B/rel)
+    if nested:assert isinstance(d,dict) and set(d)=={'database','uri','queries'};records=d['queries']
+    else:records=d;assert isinstance(d,list)
+    assert len(records)==expected_count
+    assert all(isinstance(r,dict) and isinstance(r['params'],list) and 'parameters' not in r and type(r['count'])is int and r['count']==len(r['rows']) for r in records)
+    schema_results.append({'path':str(B/rel),'container_keys':list(d) if nested else None,'top_level_type':type(d).__name__,'record_count':len(records),'record_key_sets':sorted({tuple(sorted(r)) for r in records}),'all_count_keys_present':True,'all_params_are_lists':True,'all_count_values_equal_complete_row_lengths':True})
+streams={}
+for phase,expected_exit,passed,failed in [('red',1,27,80),('green',0,107,0)]:
+    d=A/(phase+'-caller');command=obj(d/'command.json');execution=obj(d/'execution.json');stdout=read(d/'stdout.bin');stderr=read(d/'stderr.bin');result=json.loads(stdout)
+    assert int(read(d/'exit.txt'))==execution['exit']==expected_exit and result['passed']==passed and result['failed']==failed
+    assert len(stdout)==execution['stdout_bytes'] and hashlib.sha256(stdout).hexdigest()==execution['stdout_sha256']
+    assert len(stderr)==execution['stderr_bytes']==0 and hashlib.sha256(stderr).hexdigest()==execution['stderr_sha256']
+    assert command['argv']==execution['argv'] and command['cwd']==execution['cwd']
+    assert command['argv'][:2]==['python3','-B']
+    test_path=Path(command['cwd'])/command['argv'][2];module_path=Path(command['cwd'])/command['argv'][3]
+    assert test_path.resolve()==(A/'test_actual_query_schemas.py').resolve()
+    assert module_path.resolve()==((OLD if phase=='red' else A)/'config_contract.py').resolve()
+    assert read(module_path)==(old if phase=='red' else new)
+    streams[phase]={'exit':expected_exit,'passed':passed,'failed':failed,'source_path':str(module_path),'streams_match_caller_pins':True}
+test=ast.parse(read(A/'test_actual_query_schemas.py').decode())
+runtime=ast.parse(read(A/'verify_reconciliation.py').decode())
+summary={'adapter_freeze_sha256':EXPECTED,'adapter_manifest_files':len(freeze['files']),'source_difference':{'single_insert':True,'added_lines':12,'old_byte_spans_unchanged':True,'functions_other_than_bind_query_ast_identical':True},'prior_module_equals_saved_prior':True,'runtime_byte_identical_to_prior':True,'source_preparation_frozen_files_unchanged':len(prep_freeze['files']),'actual_original_schemas':schema_results,'recorded_calls':streams,'reviewed_modules_imported':False,'tests_reexecuted':False,'sql_or_generator_or_runtime_executed':False,'runtime_import_statement':next(ast.unparse(n) for n in runtime.body if isinstance(n,ast.ImportFrom) and n.module=='config_contract'),'scope':'Static code review only; actual reconciled config and empty-head-allowance predicate validation remain pending.'}
+(OUT/'inspection.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+(OUT/'input-pins.json').write_text(json.dumps(pins,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'freeze_verified':EXPECTED,'old_branches_unchanged':True,'runtime_unchanged':True,'actual_descriptor_count':sum(r['record_count'] for r in schema_results),'recorded_red':streams['red'],'recorded_green':streams['green']}))

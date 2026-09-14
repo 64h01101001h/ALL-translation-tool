@@ -1,0 +1,11 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/english/280/run_generator_readonly.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciled/280/run-generator-ro.py.txt
+@@ -2,7 +2,7 @@
+ import os,runpy,sqlite3,sys
+ from pathlib import Path
+ assert sys.dont_write_bytecode
+-work=Path(__file__).resolve().parents[4]/'campaign-worktree'
++work = Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+ original_connect=sqlite3.connect
+ def readonly_connect(database,*args,**kwargs):
+     path=Path(database).resolve()

@@ -1,0 +1,69 @@
+from pathlib import Path
+import datetime, hashlib, json
+
+B = Path(__file__).resolve().parent
+O = B / 'root-preparation-acceptance'
+assert not O.exists()
+O.mkdir()
+
+def pin(p):
+    h = hashlib.sha256()
+    size = 0
+    with Path(p).open('rb') as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b''):
+            h.update(chunk)
+            size += len(chunk)
+    return dict(bytes=size, sha256=h.hexdigest())
+
+def check(p, expected):
+    got = pin(p)
+    assert got == {k: expected[k] for k in ('bytes', 'sha256')}, str(p)
+    return got
+
+records = []
+for name, expected_sha in [
+    ('semantic-source-preparation', 'a1bc493d0c4204581f930c53cdc036c7127604fcba96f081d629069aa75f642b'),
+    ('reconciliation-verifier-query-schema-adapter-v1', '20182faebdf0ffd132bd900ac378f5eb9705821ea0a195e02824b139593d1376'),
+    ('reconciliation-verifier-query-schema-review', 'b75dd688995f4193bcb5b07a4ee39f752eb744cb67256e98b2573e5d348771bc'),
+    ('landing-helper-preparation', '9c2b930509af3257d3a31dcfc5bd0e2a89604cf71ce1b12d9ac6faee681ae0e5'),
+]:
+    d = B / name
+    fp = pin(d / 'freeze.json')
+    assert fp['sha256'] == expected_sha
+    frozen = json.loads((d / 'freeze.json').read_bytes())['files']
+    if isinstance(frozen, list):
+        assert len({r['path'] for r in frozen}) == len(frozen)
+        frozen = {r['path']: r for r in frozen}
+    assert set(frozen) == {str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p != d / 'freeze.json'}
+    verified = {n: check(d / n, p) for n, p in frozen.items()}
+    inputs = {}
+    if (d / 'input-pins.json').exists():
+        for n, p in json.loads((d / 'input-pins.json').read_bytes()).items():
+            inputs[n] = check(Path(n), p)
+    copies = []
+    if (d / 'input-manifest.json').exists():
+        for r in json.loads((d / 'input-manifest.json').read_bytes()):
+            original = Path(r['original'])
+            assert str(original.resolve()) == r['resolved_original']
+            a, z = check(original, r), check(d / r['copy'], r)
+            assert original.read_bytes() == (d / r['copy']).read_bytes()
+            copies.append(dict(original=str(original), copy=r['copy'], pin=a))
+    assert pin(d / 'freeze.json') == fp
+    records.append(dict(directory=str(d), freeze=fp, files=verified, input_pins=inputs, full_original_copies=copies))
+
+review = json.loads((B / 'reconciliation-verifier-query-schema-review/review.json').read_bytes())
+assert review['verdict'] == 'APPROVE' and review['actionable_defects'] == []
+assert review['reviewed_config_contract_sha256'] == '432017fe3d3a6fbe30df42028d4cdc4342fd491b303d25a39c3027d8ed794b5d'
+assert pin(B / 'landing-helper-preparation/register-reviewed-page-and-index.py')['sha256'] == '327e7899981bbfe2cfb5b9c70345c8424670500164c87cedb0fa70c26314d9eb'
+proof = dict(
+    status='PASS_SOURCE_PREPARATION_AND_NARROW_CODE_REVIEW',
+    utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    reviewed_by='Codex root, distinct from preparation authors',
+    records=records,
+    source_preparation='Full findings read; all frozen bytes and 76 original input pins verified. No final semantic approval.',
+    query_adapter='Complete sources and independent review read; explicit params schema mapping accepted. Recorded tests reused without rerun. Runtime allowance handling remains pending.',
+    registration='Complete candidate, complete diff, report, pending contract, reuse assessment and proposed commands read. Narrow page94 bindings accepted at source level only; no execution release before final semantics.',
+    semantic_approval=False, actual_runtime_executed=False,
+    limitations=['Reconciled data and final semantic review remain pending.', 'No landing/build/test/MAIN/native actions performed by this acceptance.'])
+(O / 'proof.json').write_text(json.dumps(proof, ensure_ascii=False, indent=2) + '\n')
+print(json.dumps(dict(status=proof['status'], frozen_files=sum(len(r['files']) for r in records), input_pins=sum(len(r['input_pins']) for r in records), complete_original_copies=sum(len(r['full_original_copies']) for r in records), proof=pin(O / 'proof.json')), indent=2))

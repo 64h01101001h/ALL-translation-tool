@@ -1,0 +1,17 @@
+--- incorporate_root_proof.py.txt
++++ incorporate_root_proof_v2.py.txt
+@@ -10,12 +10,12 @@
+ def check(p,r):assert pin(p)=={k:r[k] for k in ['bytes','sha256']},str(p)
+ H=O/'history/02-before-root-proof';H.mkdir(parents=True,exist_ok=True)
+ for n in ['review.json','original-to-copy-manifest.json','packaging-preflight.json']:
+- assert not (H/n).exists();(H/n).write_bytes((O/n).read_bytes())
++ assert (H/n).read_bytes()==(O/n).read_bytes()
+ V=B/'root-reconciliation-verification';I=R/'campaign-artifacts/integration/through282-root-reconciliation-verification-attempt01'
+ proof=load(V/'execution-proof.json');report=load(V/'report.json');call=load(B/'root-reconciliation-runtime-caller/execution.json')
+ assert proof['status']=='PASS mechanical source and identity verification' and proof['baseline']==COMMIT and not proof['semantic_approval']
+ assert call['exit']==0 and call['stderr_bytes']==0 and call['argv'][-1]=='--execute-reviewed-verification'
+-assert not (B/'root-reconciliation-runtime-caller/stderr').read_bytes()
++assert not (B/'root-reconciliation-runtime-caller/stderr.bin').read_bytes()
+ assert (proof['original_identities'],proof['final_spans'],proof['nulls'],proof['nonnull_d5'],proof['queries'],proof['source_copy_records'],proof['aliases'],proof['governing_git_objects'],proof['physical_extents'],proof['canonical_replays'])==(225,124,4,102,226,428,422,11,16,3)
+ assert load(V/'resolved-spans.json')==load(O/'resolved-spans.json')
+ for root,own in zip(report,load(O/'measured-segments.json')):

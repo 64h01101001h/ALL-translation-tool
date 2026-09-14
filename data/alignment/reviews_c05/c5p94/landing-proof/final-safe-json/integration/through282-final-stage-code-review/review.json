@@ -1,0 +1,24 @@
+{
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "scope": "SOURCE_ONLY_CONDITIONAL_COMMAND_TEMPLATE",
+  "blocking_findings": [],
+  "observations": [
+    {
+      "id": "INDEX-STREAM-DEFINITION",
+      "blocking": false,
+      "meaning": "index_sha256 hashes full git ls-files --stage -z raw output, not binary .git/index"
+    }
+  ],
+  "candidate": {
+    "bytes": 48055,
+    "sha256": "b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee"
+  },
+  "target_executed": false,
+  "static_proof": {
+    "bytes": 4925,
+    "sha256": "9be872bd328d0dfd1798fc857ad04d2c3e7d3d9414f9b15e40f1e7a88378ead9"
+  },
+  "actual_runtime_bindings_approved": false,
+  "actual_DATA_approval": false
+}

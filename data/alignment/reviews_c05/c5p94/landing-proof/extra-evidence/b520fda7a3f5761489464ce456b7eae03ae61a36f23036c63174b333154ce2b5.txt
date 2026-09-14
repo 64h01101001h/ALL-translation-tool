@@ -1,0 +1,17 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/original-verifier-preparation/verify-complete-originals-v2.py.txt
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/verify-complete-originals.py
+@@ -3,10 +3,10 @@
+ import datetime, hashlib, importlib.util, json, os, subprocess, sys, traceback
+ sys.dont_write_bytecode=True
+ # Preparation only: root must bind these literal interfaces after both originals freeze.
+-EXPECTED_COMPLETION_FILE=None
+-EXPECTED_COMPLETION_STATUS=None
+-EXPECTED_TIBETAN_SPANS=None
+-EXPECTED_WRAPPER_RELATIVE_PATH=None
++EXPECTED_COMPLETION_FILE='originals-complete.json'
++EXPECTED_COMPLETION_STATUS='BOTH_FRESH_INDEPENDENT_ORIGINAL_ANGLES_FROZEN'
++EXPECTED_TIBETAN_SPANS=118
++EXPECTED_WRAPPER_RELATIVE_PATH='english/280/run_generator_readonly.py'
+ assert (isinstance(EXPECTED_COMPLETION_FILE,str) and EXPECTED_COMPLETION_FILE
+         and isinstance(EXPECTED_COMPLETION_STATUS,str) and EXPECTED_COMPLETION_STATUS
+         and type(EXPECTED_TIBETAN_SPANS) is int and EXPECTED_TIBETAN_SPANS>0

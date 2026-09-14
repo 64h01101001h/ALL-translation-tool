@@ -1,0 +1,24 @@
+import os,sys,pathlib,json,hashlib,subprocess,datetime,importlib.util
+os.environ['PYTHONDONTWRITEBYTECODE']='1'
+R=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');W=R/'campaign-worktree';B=R/'campaign-artifacts/C05-280-282';D=B/'reconciled/280'
+def pin(p):
+ b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+s=importlib.util.spec_from_file_location('gen',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)
+source={r['seq']:r for r in json.loads((D/'source-rows-full.json').read_bytes())};rows=[];executions=[]
+wrapper=B/'english/280/run_generator_readonly.py'
+for angle in ['tibetan','english']:
+ for seq in [280,281,282]:
+  p=B/angle/str(seq);out=D/'original-replays'/angle/str(seq);out.mkdir(parents=True)
+  spec=p/'spec.json';raw=spec.read_bytes();(out/'stdin.json').write_bytes(raw);argv=[sys.executable,'-B',str(wrapper)];start=datetime.datetime.now(datetime.timezone.utc).isoformat();run=subprocess.run(argv,input=raw,capture_output=True,cwd=W,env=os.environ.copy());end=datetime.datetime.now(datetime.timezone.utc).isoformat()
+  (out/'stdout.bin').write_bytes(run.stdout);(out/'stderr.bin').write_bytes(run.stderr);(out/'exit.txt').write_text(str(run.returncode)+'\n');proof={'argv':argv,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'start':start,'end':end,'exit':run.returncode,'stdin':pin(spec),'stdout':pin(out/'stdout.bin'),'stderr':pin(out/'stderr.bin'),'wrapper':{'path':str(wrapper),**pin(wrapper)},'canonical':{'path':str(W/'tools/gen_alignment_page.py'),**pin(W/'tools/gen_alignment_page.py')}};save(out/'execution.json',proof)
+  assert run.returncode==0 and run.stderr==b'' and run.stdout==(p/'body.html').read_bytes()
+  segment=json.loads(raw)['segments'][0];spans=segment['spans'];by={x['id']:x for x in spans};tr=g.resolve(source[seq]['wylie'],spans,'tib',seq);er=g.resolve(source[seq]['english'],g.with_members(spans,[by[i] for i in segment['eng_order']],source[seq]['english']),'eng',seq);decl=json.loads((p/'intended-spans.json').read_bytes());assert [x['id']for x in decl]==[x['id']for x in spans]
+  parent=None
+  for x,d in zip(spans,decl):
+   t=list(tr[x['id']]);e=list(er[x['id']]) if x['eng'] is not None else None;assert t==d['tib_range'] and e==d['eng_range']
+   rows.append({'angle':angle,'seq':seq,'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x['eng'],'tib_range':t,'eng_range':e,'original_span':x,'original_field_presence':list(x),'original_occurrence_declaration':d,'parent_id':parent if x['d']==7 else None})
+   if x['d']!=7:parent=x['id']
+  executions.append({'angle':angle,'seq':seq,'proof':str(out/'execution.json'),'canonical_exact':True})
+assert rows==json.loads((B/'proposal-verification/root-resolved-spans.json').read_bytes())
+save(D/'original-identities.json',rows);save(D/'original-replays.json',{'status':'PASS','identities':len(rows),'executions':executions});print(json.dumps({'status':'PASS','identities':len(rows),'canonical_replays':len(executions)}))

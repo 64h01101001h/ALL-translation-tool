@@ -1,0 +1,13 @@
+"""Actual caller capture for source preparation only."""
+import datetime,hashlib,json,os,subprocess,sys
+from pathlib import Path
+O=Path(__file__).resolve().parent;ROOT=O.parents[2];D=O/'caller-prepare01';D.mkdir()
+argv=[sys.executable,'-B',str(O/'prepare_known_adaptations.py.txt')]
+pin=lambda b:dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+command=dict(argv=argv,cwd=str(ROOT),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'},started_at=datetime.datetime.now(datetime.timezone.utc).isoformat())
+(D/'command.json').write_text(json.dumps(command,indent=2)+'\n');(D/'stdin.bin').write_bytes(b'')
+p=subprocess.run(argv,cwd=ROOT,input=b'',capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+for name,raw in [('stdout.bin',p.stdout),('stderr.bin',p.stderr),('exit.txt',(str(p.returncode)+'\n').encode())]:(D/name).write_bytes(raw)
+record={**command,'finished_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':p.returncode,'stdin':pin(b''),'stdout':pin(p.stdout),'stderr':pin(p.stderr),'target_runtime_executed':False}
+(D/'execution.json').write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(record,indent=2));sys.exit(p.returncode)

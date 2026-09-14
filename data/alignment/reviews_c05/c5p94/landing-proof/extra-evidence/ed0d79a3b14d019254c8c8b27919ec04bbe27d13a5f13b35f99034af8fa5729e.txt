@@ -1,0 +1,111 @@
+--- prior/freeze-final-payload-before-staging.py
++++ candidate/freeze-final-payload-before-staging.py
+@@ -19,7 +19,7 @@
+ def git(*args):
+     return subprocess.check_output(['git',*args],cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+ base = j(B/'baseline.json')
+-assert git('rev-parse','HEAD').decode().strip() == base['commit'] == '10968d16e701b698a0e1fbd845b353089d15ac39'
++assert git('rev-parse','HEAD').decode().strip() == base['commit'] == 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+ assert git('diff','--cached','--name-only','-z') == b''
+ build = j(L/'canonical-builds-once.json')
+ assert build['status']=='PASS' and build['baseline_commit']==base['commit']
+@@ -32,7 +32,7 @@
+     for stream in ('stdout','stderr'):
+         p=pin(raw(L/(label+'.'+stream)))
+         assert p==dict(bytes=record[stream+'_bytes'],sha256=record[stream+'_sha256'])
+-assert b'COVERAGE C05: 282/511' in raw(L/'build-layer.stdout')
++assert b'COVERAGE C05: 279/511' in raw(L/'build-layer.stdout')
+ seed=build['previous_main_csv_seed']
+ assert pin(raw(seed['path']))=={k:seed[k] for k in ('bytes','sha256')}
+ assert raw(seed['path'])==git('show',base['commit']+':docs/geshe_michael_roach_dictionary.csv')
+@@ -46,18 +46,13 @@
+ duration=re.findall(r'Total Test time \(real\) =\s+([0-9.]+) sec',log)
+ assert len(duration)==1
+ retention=j(L/'retention-source-check.json')
+-assert retention['baseline_commit']==base['commit'] and retention['segments']==[280,281,282]
+-assert base['full_links']==45275 and retention['prior_links_retained']==base['full_links']
++assert retention['baseline_commit']==base['commit'] and retention['segments']==[277,278,279]
++assert base['full_links']==45126 and retention['prior_links_retained']==base['full_links']
+ # Counts come from the actual approved interface, bound to its complete specs.
+ approved_review=j(B/'semantic-review/review.json')
+-assert approved_review['verdict']=='APPROVE'
+-assert approved_review['spec_verdict']==approved_review['quality_verdict']=='PASS'
+-assert approved_review['open_findings']==[]
+-root_semantic=j(B/'root-final-semantic-review-verification-v3/proof.json')
+-assert root_semantic['status']=='PASS' and root_semantic['head']==base['commit']
+-assert root_semantic['review_freeze']==pin(raw(B/'semantic-review/freeze.json'))
+-assert root_semantic['review_metadata']==pin(raw(B/'semantic-review/review.json'))
+-assert [row['seq'] for row in approved_review['segments']]==[280,281,282]
++assert approved_review['spec_verdict']==approved_review['quality_verdict']=='APPROVE'
++assert approved_review['open_findings']==[] and approved_review['baseline_commit']==base['commit']
++assert [row['seq'] for row in approved_review['segments']]==[277,278,279]
+ approved_spans=0
+ for row in approved_review['segments']:
+     assert type(row['span_count']) is int and row['span_count']>0
+@@ -74,22 +69,10 @@
+ assert course['baseline_commit']==base['commit'] and course['all_depths_counts_and_metadata_match_main_csv_refs']
+ meta=j(B/'semantic-review/review.json')
+ assert meta==approved_review
+-assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS' and meta['open_findings']==[]
++assert meta['spec_verdict']==meta['quality_verdict']=='APPROVE' and meta['open_findings']==[]
+ assert j(B/'semantic-review/bank-ready-errata.json')==[]
+-needed=j(B/'semantic-review/span-head-allow-needed.json')
+-assert set(needed)=={'pages_c05'} and set(needed['pages_c05'])=={'c5p94/s280w29','c5p94/s280w43'}
+-allow_rel='data/alignment/span_head_allow.json'
+-allow_before=git('show',base['commit']+':'+allow_rel)
+-assert allow_before==raw(L/'span-head-allow-before.json')
+-expected_allow=json.loads(allow_before)
+-assert not (set(expected_allow.get('pages_c05',{})) & set(needed['pages_c05']))
+-expected_allow.setdefault('pages_c05',{}).update(needed['pages_c05'])
+-assert j(W/allow_rel)==expected_allow
+-allow_mutation=j(L/'span-head-allow-mutation.json')
+-assert allow_mutation['status']=='PASS' and allow_mutation['prior_values_unchanged']
+-assert allow_mutation['before']==pin(allow_before) and allow_mutation['after']==pin(raw(W/allow_rel))
+-assert allow_mutation['added']==needed
+-for rel in ('docs/errata_register.json','docs/ERRATA_REGISTER.md'):
++assert j(B/'semantic-review/span-head-allow-needed.json')=={}
++for rel in ('docs/errata_register.json','docs/ERRATA_REGISTER.md','data/alignment/span_head_allow.json'):
+     p=W/rel
+     if p.exists(): assert raw(p)==git('show',base['commit']+':'+rel)
+ sources={'data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz'}
+@@ -101,21 +84,21 @@
+     if rel in sources:
+         assert digest==base['sha256'][rel]
+     elif value!=git('show',base['commit']+':'+rel): paths.append(rel)
+-paths.extend(['data/alignment/pages_c05/c5p93.html','data/alignment/pages_c05/c5p94.html',
+-              'data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p94.json','tools/build_alignment_layer.py',allow_rel])
+-assert len(paths)==len(set(paths))==13
++paths.extend(['data/alignment/pages_c05/c5p92.html','data/alignment/pages_c05/c5p93.html',
++              'data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p93.json','tools/build_alignment_layer.py'])
++assert len(paths)==len(set(paths))==12
+ registration=j(L/'course-registration-verification.json')
+ for rel,field in [('data/alignment/pages_c05/index.html','index_after'),('tools/build_alignment_layer.py','builder_after')]:
+     assert pin(raw(W/rel))==registration[field]
+-prior=git('show',base['commit']+':data/alignment/pages_c05/c5p93.html')
++prior=git('show',base['commit']+':data/alignment/pages_c05/c5p92.html')
+ nav=b'&larr; Previous</a></div>'
+ assert prior.count(nav)==2
+-assert raw(W/'data/alignment/pages_c05/c5p93.html')==prior.replace(nav,b"&larr; Previous</a><a href='c5p94.html'>Next &rarr;</a></div>")
+-land=j(W/'data/alignment/reviews_c05/c5p94/landing.json')
+-assert pin(raw(W/'data/alignment/specs_c05/c5p94.json'))['sha256']==land['spec_sha256']
++assert raw(W/'data/alignment/pages_c05/c5p92.html')==prior.replace(nav,b"&larr; Previous</a><a href='c5p93.html'>Next &rarr;</a></div>")
++land=j(W/'data/alignment/reviews_c05/c5p93/landing.json')
++assert pin(raw(W/'data/alignment/specs_c05/c5p93.json'))['sha256']==land['spec_sha256']
+ body=raw(L/'generator.stdout')
+ assert pin(body)['sha256']==land['body_sha256']
+-html=raw(W/'data/alignment/pages_c05/c5p94.html')
++html=raw(W/'data/alignment/pages_c05/c5p93.html')
+ assert body in html and b'AI (Codex)' in html and b'Codex (AI)' in html
+ OUT.mkdir()
+ files=[]; copies=[]
+@@ -135,8 +118,8 @@
+     actual_ctest_total_seconds=float(duration[0]),actual_ctest_run_count=1,
+     actual_build_invocations=len(build['runs']),actual_layer_invocations=1,actual_view_invocations=1,
+     actual_build_seed=seed,review_freeze=pin(raw(B/'semantic-review/freeze.json')),
+-    approved_errata_empty=True,approved_allowances_empty=False,approved_allowances=needed,prior_allowance_values_unchanged=True,payload_count=len(files),
+-    proof_inputs=[dict(path=str(L/n),**pin(raw(L/n))) for n in ['canonical-builds-once.json','course-registration-verification.json','retention-source-check.json','course-csv-retention.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit','span-head-allow-before.json','span-head-allow-mutation.json']]+[dict(path=str(B/n),**pin(raw(B/n))) for n in ['root-final-semantic-review-verification-v3/proof.json','semantic-review/review.json','semantic-review/freeze.json','semantic-review/span-head-allow-needed.json']])
++    approved_errata_empty=True,approved_allowances_empty=True,
++    proof_inputs=[dict(path=str(L/n),**pin(raw(L/n))) for n in ['canonical-builds-once.json','course-registration-verification.json','retention-source-check.json','course-csv-retention.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit']])
+ PROOF.write_text(json.dumps(proof,indent=2)+'\n')
+ assert git('diff','--cached','--name-only','-z')==b''
+ print(json.dumps(dict(status='PASS',payload_files=len(files),payload_bytes=sum(x['bytes'] for x in files),manifest=str(MANIFEST),source_proof=str(PROOF),tests=len(passed),test_seconds=float(duration[0]),build_invocations=len(build['runs'])),indent=2))

@@ -1,0 +1,65 @@
+{
+  "status": "APPROVE_EXACT_V2_SOURCE_ONLY",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "utc": "2026-09-14T03:36:40.485065+00:00",
+  "candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-release-initial-inventory-root-v2.py",
+    "bytes": 9928,
+    "sha256": "89233d9bac606afba0fbf775868af5a8f4a6e89d86c771627ab3e9e21efa6e2a"
+  },
+  "full_prior": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/release-final279-inventory-root.py",
+    "bytes": 2868,
+    "sha256": "e6c601917848ca631cf1feb1c8b6c52e224cf3874b5b144fd0b11a9c7879c52d"
+  },
+  "open_findings": [],
+  "resolved_findings": [
+    {
+      "id": "R1",
+      "status": "FIXED_EXACT_TUPLE_ONLY",
+      "before": "(SV,'attempt02/full-source-copy-manifest.json')",
+      "after": "(SV/'attempt02','full-source-copy-manifest.json')",
+      "full_inverse_restores_v1": true
+    }
+  ],
+  "full_v1_review_retained": true,
+  "all_other_bytes_unchanged": true,
+  "current_literal_review_interface": {
+    "status": "ACTUAL_FINISHED_LITERAL_REVIEW_API_MATCHES_SOURCE",
+    "freeze": {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-literal-scope-review/freeze.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-literal-scope-review/freeze.json",
+      "copy": "inputs/literal-review-freeze.json",
+      "bytes": 10591,
+      "sha256": "7b385b9fbf4ccd8e7b0308bcc9a3685eceec1151c900c82d9bb0c2277d2e91c3"
+    },
+    "review": {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-literal-scope-review/review.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-literal-scope-review/review.json",
+      "copy": "inputs/literal-review-review.json",
+      "bytes": 3965,
+      "sha256": "957ec1870c03e5ddcb6a744bd5c4a04f120eaa904595e5e9b7f0d24b4a1bf4fd"
+    },
+    "map": {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-literal-scope-review/full-original-to-copy-manifest.json",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-literal-scope-review/full-original-to-copy-manifest.json",
+      "copy": "inputs/literal-review-full-original-to-copy-manifest.json",
+      "bytes": 21166,
+      "sha256": "7b574361fe502caeff3e2c8b3c941d18026b0704c2ec32f5b15926176d10813c"
+    },
+    "map_base": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-literal-scope-review",
+    "rows": 38,
+    "source_copy_fields_relative_to_review_root": true,
+    "all_declared_copy_paths_exist": true,
+    "full_original_copy_bytes_not_rerun_here": true
+  },
+  "target_imports": 0,
+  "target_invocations": 0,
+  "Git_SQL_bank_stage_tests_commits": 0,
+  "actual_root_release": false,
+  "semantic_approval": false,
+  "root_historical_scope_capture_copy_receipt": "Root separately disclosed the same earlier parent-base issue and will retain a new explicit 67-successful-copy correction receipt; old captured scope and all old proof/callers remain immutable. No target failure is inferred.",
+  "required_runtime_environment": "Actual caller must use nonoptimized Python with bytecode disabled; assertions are the inherited checker contract.",
+  "writes_only": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-initial-inventory-release-code-review"
+}

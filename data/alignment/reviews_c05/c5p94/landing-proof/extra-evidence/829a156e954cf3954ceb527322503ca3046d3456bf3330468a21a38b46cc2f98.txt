@@ -1,0 +1,91 @@
+from pathlib import Path
+import ast, difflib, hashlib, json, os
+Q=Path(__file__).resolve().parent;B=Q.parent;A=B.parent;I=A/'integration';W=A.parent/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,x):
+ p=Q/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(x,f,indent=2);f.write('\n')
+maps=[]
+def retain(p,n):
+ raw=p.read_bytes();d=Q/'inputs'/n;d.parent.mkdir(parents=True,exist_ok=True)
+ with d.open('xb') as f:f.write(raw)
+ assert raw==p.read_bytes()==d.read_bytes();maps.append(dict(original=str(p),copy=str(d.relative_to(Q)),**pin(raw)));return raw
+old=retain(A/'C05-277-279/approve-reproduction-method-root.py','prior-approve-reproduction-method-root.py').decode()
+packages=[]
+for d in ['payload-freezer-preparation','reproduction-retention-preparation','reproduction-payload-code-review/payload01','reproduction-payload-code-review/retention01','postlanding-verification-preparation']:
+ root=B/d;fr=retain(root/'freeze.json',d+'/freeze.json');f=json.loads(fr);assert {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+ for n,h in f['files'].items():assert pin((root/n).read_bytes())=={k:h[k] for k in ('bytes','sha256')},(d,n)
+ packages.append(dict(directory=str(root),freeze=pin(fr),file_count=len(f['files'])))
+ retain(root/'report.md',d+'/report.md')
+pair_maps=[]
+for d,n in [('payload-freezer-preparation','original-to-copy-manifest.json'),('reproduction-retention-preparation','original-to-copy-manifest.json'),('postlanding-verification-preparation','original-to-copy-manifest.json'),('postlanding-verification-preparation','supplemental-original-to-copy-manifest.json'),('postlanding-verification-preparation','late-original-to-copy-manifest.json'),('reproduction-payload-code-review/payload01','extra-source-bindings.json')]:
+ root=B/d;raw=retain(root/n,d+'/'+n);rows=json.loads(raw)
+ for x in rows:
+  assert Path(x['original']).read_bytes()==(root/x['copy']).read_bytes() and pin((root/x['copy']).read_bytes())=={k:x[k] for k in ('bytes','sha256')}
+ pair_maps.append(dict(directory=str(root),manifest=n,count=len(rows)))
+for d in ['reproduction-payload-code-review/payload01','reproduction-payload-code-review/retention01']:retain(B/d/'review.json',d+'/review.json')
+recipes=[]
+for row in json.loads((B/'postlanding-verification-preparation/adaptation-proof.json').read_bytes())['candidates']:
+ base=B/'postlanding-verification-preparation';prior='inputs/prior-banking/bank_root_proofs_through279.py' if row['source'].startswith('bank_') else 'inputs/prior-reproduction/'+row['source']
+ recipes.append(dict(old=str(base/prior),current=str(base/row['candidate']),changes=row['replacements'],mode='replace'))
+for row in json.loads((B/'payload-freezer-preparation/adaptation-proof.json').read_bytes())['files']:
+ base=B/'payload-freezer-preparation';prior='inputs/prior-freezer.py.txt' if row['candidate'].startswith('freeze-') else 'inputs/prior-prepare.py.txt'
+ recipes.append(dict(old=str(base/prior),current=str(base/row['candidate']),changes=row['changes'],mode='replace'))
+recipes.append(dict(old=str(B/'reproduction-retention-preparation/prior-verify-retention.py.txt'),current=str(B/'reproduction-retention-preparation/verify-retention.py.txt'),changes=json.loads((B/'reproduction-retention-preparation/replacement-map.json').read_bytes()),mode='offsets'))
+def apply_recipe(r):
+ before=Path(r['old']).read_text();after=Path(r['current']).read_text();v=before
+ for c in r['changes']:
+  if r['mode']=='replace':assert v.count(c['old'])==c['count'];v=v.replace(c['old'],c['new'])
+  else:
+   for pos in reversed(c['before_offsets']):assert v[pos:pos+len(c['before'])]==c['before'];v=v[:pos]+c['after']+v[pos+len(c['before']):]
+ assert v==after
+ for c in reversed(r['changes']):
+  if r['mode']=='replace':assert v.count(c['new'])==c['count'];v=v.replace(c['new'],c['old'])
+  else:
+   for pos in reversed(c['after_offsets']):assert v[pos:pos+len(c['after'])]==c['after'];v=v[:pos]+c['before']+v[pos+len(c['after']):]
+ assert v==before;ast.parse(after)
+for r in recipes:
+ apply_recipe(r)
+ for key in ['old','current']:
+  p=Path(r[key]);retain(p,'recipe-sources/'+hashlib.sha256(str(p).encode()).hexdigest()[:12]+'-'+p.name)
+inputs=[]
+for n in ['baseline.json','actual-current-output-contract.json','root-payload-result-acceptance.json','root-final-semantic-review-verification-v3/proof.json','semantic-review/review.json','semantic-review/freeze.json','semantic-review/resolved-spans.json','semantic-review/span-head-allow-needed.json','landing/staged-payload-manifest.json','landing/staged-payload-source-proof.json','landing/canonical-builds-once.json','landing/retention-source-check.json','landing/course-csv-retention.json','landing/ctest-17.execution.json','landing/ctest-17.stdout','landing/ctest-17.stderr','landing/ctest-17.exit','landing/untracked-before-banking.stdout','landing/untracked-before-banking.command.json','landing/untracked-before-banking.execution.json','landing/untracked-before-banking.stderr','landing/untracked-before-banking.exit']:
+ raw=retain(B/n,'current/'+n);inputs.append(dict(path=str(B/n),**pin(raw)))
+external=[]
+for n in ['payload-freezer-preparation/actual-thirteen-source-pins.json','reproduction-retention-preparation/input-pins.json']:
+ for row in json.loads((B/n).read_bytes()):
+  p=Path(row['original']);raw=p.read_bytes();assert pin(raw)=={k:row[k] for k in ('bytes','sha256')}
+  external.append(dict(path=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,**pin(raw),descriptor=str(B/n)))
+spine=W/'build/hgm_spine_v27_2.db';external.append(dict(path=str(spine),resolved=str(spine.resolve()),symlink=os.readlink(spine) if spine.is_symlink() else None,**pin(spine.read_bytes()),descriptor='Actual complete source spine, no SQL execution'))
+code=[]
+for p in [B/'payload-freezer-preparation/prepare.py.txt',B/'postlanding-verification-preparation/known-parameter-candidates/run-once.py.txt',B/'postlanding-verification-preparation/known-parameter-candidates/run-isolated-readonly.py.txt',B/'reproduction-retention-preparation/verify-retention.py.txt']:
+ code.append(dict(path=str(p),**pin(p.read_bytes())))
+bindings=dict(packages=packages,pair_maps=pair_maps,recipes=recipes,inputs=inputs,external=external,materialize_exact_code=code,mapped_count=sum(x['count'] for x in pair_maps),external_count=len(external),transport_limit='Retention source preparation has genuine failure/version records but incomplete original raw caller transports. No missing stdout/stderr are fabricated; source-only reviews explicitly preserve this limit. Later supplements remain separate.')
+save('bindings.json',bindings)
+new=old;changes=[]
+def change(a,b):
+ global new
+ assert new.count(a)==1,(a[:100],new.count(a));new=new.replace(a,b);changes.append(dict(old=a,new=b,count=1))
+change("P=I/'through279-generated-reproduction-concrete-preparation';V=I/'through279-generated-reproduction-review';R=I/'through279-generated-reproduction';O=B/'reproduction-root-entry'", "P=B/'payload-freezer-preparation';P2=B/'reproduction-retention-preparation';V=B/'reproduction-payload-code-review';Q=B/'reproduction-entry-preparation';R=I/'through282-generated-reproduction';O=B/'reproduction-root-entry'")
+change("HEAD='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'","HEAD='10968d16e701b698a0e1fbd845b353089d15ac39'")
+start=new.index('pf=freeze(');end=new.index("base=j(B/'baseline.json')")
+block=(Q/'replacement-block.txt').read_text() if (Q/'replacement-block.txt').exists() else None
+assert block is not None,'Missing literal current release block; preparation is source-only'
+block=block.replace('BINDINGS_SHA',pin((Q/'bindings.json').read_bytes())['sha256']).replace('SPINE_SHA',external[-1]['sha256'])
+change(new[start:end],block)
+change("assert files[-1]['sha256']=='5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc'", "assert files[-1]['sha256']=='"+external[-1]['sha256']+"'")
+change("for x in j(P/'command-plan.json')['materialize_exact_code']:","for x in binding['materialize_exact_code']:")
+start=new.index("proof=dict(status='APPROVE_ONE_LOCAL_INDEPENDENT_REPRODUCTION'")
+ending="""proof=dict(status='APPROVE_ONE_LOCAL_INDEPENDENT_REPRODUCTION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=HEAD,package_freezes=binding['packages'],frozen_files=sum(x['file_count'] for x in binding['packages']),full_source_copy_pairs=mapped,full_external_pairs=len(external_pairs),semantic_files=871,landed_semantic_copies=872,code_mapping=mapping,source_entry=str(O/'proof.json'),root_read_complete_four_codes_diffs_reports_contract=True,source_transport_limit=binding['transport_limit'],scope='One preparation, one isolated layer/view with immutable incoming seed, one retention run. Mandatory reviewed later original/seed/Git/state closure. No repeated root production or tests, no MAIN/native/staging approval.')
+save(R/'root-runtime-release.json',proof);save(B/'reproduction-method-root-approval.json',proof)
+print(json.dumps(dict(status=proof['status'],runtime=str(R),whole_frozen_files=proof['frozen_files'],source_pairs=mapped,external_pairs=len(external_pairs))))
+"""
+change(new[start:],ending)
+ast.parse(new);inv=new
+for c in reversed(changes):assert inv.count(c['new'])==1;inv=inv.replace(c['new'],c['old'])
+assert inv==old
+(Q/'approve-reproduction-method-root.py').write_text(new)
+for ext,a,b in [('diff',old,new),('inverse.diff',new,old)]: (Q/('complete.'+ext)).write_text(''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='prior.py',tofile='current.py')))
+save('replacement-map.json',changes);save('original-to-copy-manifest.json',maps)
+save('proof.json',dict(status='PASS_SOURCE_ONLY_PREPARATION',old=pin(old.encode()),candidate=pin(new.encode()),bindings=pin((Q/'bindings.json').read_bytes()),copies=len(maps),frozen_packages=packages,recipe_count=len(recipes),complete_inverse=True,syntax_only=True,actual_runtime_executions=0))
+print(json.dumps(dict(status='PASS_SOURCE_ONLY',copies=len(maps),candidate=pin(new.encode()),bindings=pin((Q/'bindings.json').read_bytes()))))

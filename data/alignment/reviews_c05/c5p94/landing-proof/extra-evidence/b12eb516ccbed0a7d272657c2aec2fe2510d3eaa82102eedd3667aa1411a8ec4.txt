@@ -1,0 +1,27 @@
+--- before
++++ after
+@@ -67,18 +67,19 @@
+             tr=g.resolve(sources[seq]['wylie'],spans,'tib',seq)
+             ordered=g.with_members(spans,[byid[i] for i in segment['eng_order']],sources[seq]['english'])
+             er=g.resolve(sources[seq]['english'],ordered,'eng',seq)
+-            declared=json.loads((directory/('intended-spans.json' if angle=='tibetan' else 'occurrence-declarations.json')).read_bytes())
+-            declarations={x['id']:x for x in (declared if angle=='tibetan' else declared['declarations'])}
++            declared=json.loads((directory/'intended-spans.json').read_bytes())
++            assert isinstance(declared,list) and [x['id'] for x in declared]==[x['id'] for x in spans]
++            declarations={x['id']:x for x in declared}
+             assert set(declarations)==set(byid)
+             parent=None
+             for span in spans:
+                 ident=span['id']
+                 declaration=declarations[ident]
+-                expected_tib=declaration['tib_range'] if angle=='tibetan' else [declaration['tib']['start'],declaration['tib']['end']]
+-                expected_eng=declaration['eng_range'] if angle=='tibetan' else [declaration['eng']['start'],declaration['eng']['end']]
++                expected_tib=declaration['tib_range']
++                expected_eng=declaration['eng_range']
+                 assert list(tr[ident])==expected_tib and (None if span['eng'] is None else list(er[ident]))==expected_eng
+                 if span['d']!=7:parent=ident if span['d']==5 else None
+-                if angle=='english':assert declaration['parent']==(parent if span['d']==7 else None)
++                if 'parent' in declaration:assert declaration['parent']==(parent if span['d']==7 else None)
+                 records.append(dict(angle=angle,seq=seq,id=ident,d=span['d'],tib=span['tib'],eng=span['eng'],
+                     tib_range=list(tr[ident]),eng_range=None if span['eng'] is None else list(er[ident]),
+                     original_span=span,original_field_presence=list(span),original_occurrence_declaration=declaration,parent_id=parent if span['d']==7 else None))

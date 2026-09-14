@@ -1,0 +1,61 @@
+"""Source-only contract and static configured-test inventory; no candidate execution."""
+from pathlib import Path
+import ast, hashlib, json, re, os
+O=Path(__file__).resolve().parent; B=O.parent; A=B.parent; I=A/'integration'; W=A.parent/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,x):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(x,f,indent=2,ensure_ascii=False);f.write('\n')
+maps=[]
+def retain(p,n):
+ raw=p.read_bytes();d=O/'supplemental-inputs'/n;d.parent.mkdir(parents=True,exist_ok=True)
+ with d.open('xb') as f:f.write(raw)
+ assert raw==p.read_bytes()==d.read_bytes()
+ maps.append(dict(original=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,copy=str(d.relative_to(O)),**pin(raw)))
+ return raw
+old=json.loads(retain(A/'C05-277-279/landing/ctest-17.command.json','ctest-prior-actual-command.json'))
+retain(B/'landing-helper-preparation/next-commands.json','frozen-landing-next-commands.json')
+cmake=I/'course-csv-depth-fix/cmake-build'
+retain(cmake/'CTestTestfile.cmake','CTestTestfile.cmake')
+core=retain(cmake/'core/CTestTestfile.cmake','core-CTestTestfile.cmake').decode()
+bank=(O/'known-parameter-candidates/bank_root_proofs_through282.py.txt').read_text()
+tree=ast.parse(bank)
+names=next(ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='TESTS' for t in n.targets))
+regex=old['argv'][old['argv'].index('-R')+1]
+assert set(regex[2:-2].split('|'))==names and len(names)==17 and 'constitution' in names and 'acip_recovery' not in names
+lines=core.splitlines(); selected=[]
+for name in sorted(names):
+ add=[(i+1,l) for i,l in enumerate(lines) if l.startswith('add_test("'+name+'" ')]
+ props=[(i+1,l) for i,l in enumerate(lines) if l.startswith('set_tests_properties("'+name+'" ')]
+ assert len(add)==len(props)==1,name
+ assert str(W) in add[0][1],name
+ selected.append(dict(name=name,add_test=dict(line=add[0][0],literal=add[0][1]),properties=dict(line=props[0][0],literal=props[0][1])))
+save('configured-17-static-proof.json',dict(status='PASS_STATIC_SELECTION_ONLY',actual_prior_argv=old['argv'],cwd=str(W),configured_test_records=selected,expected_names=sorted(names),future_root_configuration_recheck_required=True,ctest_invocations=0,diagnosis='Frozen template used acip_recovery and WT/build; actual accepted inventory uses constitution and the configured external directory. No existing template changed.'))
+for n in ['reconciliation-verifier-head-allowance-preparation/verify_reconciliation.py','reconciliation-verifier-head-allowance-preparation/config_contract.py','reconciliation-verifier-config/config.json']:
+ retain(B/n,'current-history/'+n)
+save('supplemental-original-to-copy-manifest.json',maps)
+runtime=I/'through282-generated-reproduction'
+bankruntime=I/'through282-finalization-runtime/bank_root_proofs_through282.py'
+L=B/'landing'
+rels=['data/alignment/alignment_full_v1.json','data/alignment/alignment_evidence_v1.json']+['docs/geshe_michael_roach_dictionary'+s for s in ('.html','.csv','_reverse.csv','_by_course.csv','_changes.csv')]
+pending=[
+ ('semantic_final','Actual independent final APPROVE, all spec/quality verdicts, open_findings[], complete freeze count/pin, ordered tuples/nulls/D5, exact spec/body pins and current actual review schema'),
+ ('semantic_root','Actual final root preservation helper/version/proof status PASS, head=10968d16..., review_freeze exact bytes/sha256; preserve failures and interface adaptations'),
+ ('landing','Actual page94/spec94/review copies, registration/index plus approved source-licensed allowance delta; no empty-allowance carryover'),
+ ('root_builds','Actual two successful layer/view records with every stream and previous-main seed, measured seven output pins, metadata date and registered-page count'),
+ ('root_tests','One actual configured17 execution, all names/ordinals/total/durations/full stdout/stderr/exit, not invented numeric summary'),
+ ('root_retention','Actual full prior-data/source/notes/trees/CSV/ACIP retention; prior links45275, actual added total and per-segment groups, full count vector and exact changes CSV count'),
+ ('payload','Actual current payload manifest/source-proof schema, complete whitelist and all frozen/live pairs; prior12 interface must be reconfirmed with actual allowance sidecar. Never omit required changed sidecar to preserve a stale12 count'),
+ ('seed','Exact original incoming main CSV seed full equality to baseline Git bytes and immutable runtime copy, including intentional workspace seed transition'),
+ ('entry','Reviewed current root entry helper: exact source aliases/database/raw archives, baseline9, full raw HEAD/tracked/untracked/stages/cached names/index snapshot; stable through runtime; preserve non-Git archive truth'),
+ ('retention_literals','Concretize verify-retention.py from retained source with only measured literals and full inverse/diff; inspect actual final review schema before release'),
+ ('closure_literals','After actual runtime PASS, concretize close-evidence/root acceptance with actual checks_total/date/callers/freeze/registered pages/all counts, never prior224711/547/zero-failure by assumption'),
+ ('ordinary_extra','Root-reviewed complete exact actual extra-inputs LIST: full current original/resolver/config/release/failure/code/caller inventories plus entire reproduction/closure acceptance; safe copies or exact external raw originals'),
+ ('untracked','Actual pre-ordinary and pre-stage untracked capture; take after completed payload/reproduction prebank artifacts and preserve matching root entry/postrun stream. Any later-created files must be explicitly reconciled before capture/banking'),
+ ('bank_history','Current final semantic helper name/proof schema still pending; confirm all HISTORY rows, full root histories and freezer source. Current reusable code/contract/config replace absent verify-reconciliation-root.py truthfully'),
+ ('release','Distinct code/method review and root release; exact materialization maps and fresh absent runtime/output directories; all pending values must be bound before any execution'),
+]
+save('pending-input-contract.json',dict(status='NOT_RUNTIME_READY',baseline='10968d16e701b698a0e1fbd845b353089d15ac39',page=94,sequences=[280,281,282],proposed_only=dict(spans=124,nulls=4,d5_nonnull=102),prior_links=45275,output_paths=rels,output_pins=None,actual_counts=None,seed_pin=None,semantic_freeze=None,payload_manifest_pin=None,fields=[dict(key=k,value=None,requires=v) for k,v in pending]))
+save('command-contract.json',dict(status='PREPARATION_ONLY_NO_EXECUTION_RELEASE',environment=dict(PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0',GIT_OPTIONAL_LOCKS='0'),runtime=str(runtime),cwd=str(runtime),no_execution_from_preparation=True,root_prerequisite_ctest=dict(argv=old['argv'],cwd=str(W),executed_here=False,root_recheck_required=True),independent_steps=[dict(argv=['<reviewed actual Python executable>','-B',str(runtime/n)],cwd=str(runtime),order=i+1,executed=False) for i,n in enumerate(['prepare.py.txt','run-once.py.txt','verify-retention.py.txt'])],closure_steps='Only after actual runtime: reviewed measured close-evidence, full runtime freeze, separate root original/seed/Git/raw-state acceptance. Exact names/entry schemas pending.',bank_ordinary_argv=['<reviewed actual Python executable>','-B',str(bankruntime),'--phase','ordinary','--batch',str(B),'--worktree',str(W),'--run-output',str(I/'through282-banking-ordinary'),'--payload-manifest',str(L/'staged-payload-manifest.json'),'--payload-source-proof',str(L/'staged-payload-source-proof.json'),'--untracked-capture-stem','<actual pre-ordinary/pre-stage raw capture stem>','--extra-inputs','<reviewed complete actual extra-inputs LIST>'],bank_cwd=str(W),bank_runtime_executed=False,bank_after='Independent reproduction and reviewed root original/seed/state closure, final payload and all real prerequisites; do not stage before reproduction state acceptance.',capture='Every actual command/cwd/environment/stdin/full stdout/full stderr/exit/time in fresh outside caller directory; preserve any failure and partial runtime. No implicit retry. View stderr can be informational.',boundary='Ordinary pre-existing evidence only. Later ordinary internal+outer caller outputs must be retained at a truthful later boundary; do not claim self-banking. No final-whitespace/global/MAIN/native release here.'))
+save('history-binding-plan.json',dict(current_reconciliation_method='reusable configured verifier; no verify-reconciliation-root.py alias fabricated',known_history=next(ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='HISTORY' for t in n.targets)),required_extra_scopes=['all actual originals/reconciliation/semantic preparation and review source/caller histories not already full byte-paired at landed destination','root reconciliation release filename-assumption failure and corrected release, full actual verification output/caller and code+config+query descriptor bindings','all actual final semantic proof failures/corrections and root acceptance transports','all actual landing/registration/sidecar/payload helper versions and invocations','complete independent reproduction method/review/release/runtime/closure/root acceptance; immutable large payloads retained at exact external paths','ordinary inventory composer and earlier preparation/review/caller outputs, each with truthful cutoff'],schema=dict(record='original absolute path, bytes, sha256, retention',bank='retention=bank plus unique safe relative copy',external='retention=external plus explicit complete original disposition'),coverage='Before runtime root must enumerate actual finished scopes and compare resolved original/copy full bytes, not only hashes; missing actual inputs reject. No future scope/count invented.',measured_bank_schema='measured_tests is LIST17 full parsed named records; measured_build_invocations is LIST2 successful labeled records.'))
+print(json.dumps(dict(status='PASS_STATIC_CONTRACT',configured_names=len(names),supplemental_pairs=len(maps),pending_fields=len(pending),executions=0)))

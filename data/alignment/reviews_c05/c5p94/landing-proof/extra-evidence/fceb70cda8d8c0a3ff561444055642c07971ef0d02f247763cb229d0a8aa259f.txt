@@ -1,0 +1,93 @@
+"""Static source/AST/inverse review; no composer, banker or whitespace execution."""
+from pathlib import Path
+import ast, datetime, difflib, hashlib, json
+O=Path(__file__).resolve().parent;B=O.parent;A=B.parent;I=A/'integration'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,x):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(x,f,indent=2,ensure_ascii=False);f.write('\n')
+bindings=[]
+def retain(p,n):
+ s=p.stat();raw=p.read_bytes();t=p.stat();assert (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)
+ target=O/'sources'/n;target.parent.mkdir(parents=True,exist_ok=True)
+ with target.open('xb') as f:f.write(raw)
+ assert p.read_bytes()==raw==target.read_bytes()
+ bindings.append(dict(original=str(p),copy=str(target.relative_to(O)),resolved=str(p.resolve()),**pin(raw)))
+ return raw
+current_path=B/'compose-ordinary-bank-inventory-root.py'
+current=retain(current_path,'compose-v2.py.txt')
+assert pin(current)==dict(bytes=7547,sha256='5ce6d0ed3f24150f13be1afb844bc346557978d92d9f5572660a78caa3807e37')
+v1=retain(B/'ordinary-inventory-source-history/v1.py.txt','compose-v1.py.txt')
+assert pin(v1)==dict(bytes=6924,sha256='8197e4c87013ea3defaee64b633e0010b7d42f73e848b6003a5b76a48cfaf3a4')
+prior=retain(A/'C05-277-279/compose-ordinary-bank-inventory-root.py','compose-through279.py.txt')
+assert pin(prior)==dict(bytes=4478,sha256='7950d0c9e916268d474187335c6a140436fdaeacb282a5532f4d1373977683fb')
+banker=retain(B/'postlanding-verification-correction01/bank_root_proofs_through282.py.txt','corrected-banker.py.txt')
+assert pin(banker)==dict(bytes=18169,sha256='e39621efcf4e650b9c2da4f145197f082a230236c47532e54f0398fc57b05375')
+whitespace=retain(A/'C05-277-279/staging-whitespace-preparation/whitespace279.py','whitespace279.py.txt')
+declared=retain(B/'ordinary-inventory-source-history/v1-to-v2.diff.txt','v1-to-v2.diff.txt')
+correction=json.loads(retain(B/'ordinary-inventory-source-history/correction.json','correction.json'))
+assert correction['v1_sha256']==pin(v1)['sha256'] and correction['v2_sha256']==pin(current)['sha256']
+for name,left,right,lf,rf in [('v1-to-v2.diff.txt',v1,current,'v1.py.txt','compose-ordinary-bank-inventory-root.py'),('v2-to-v1.inverse.diff.txt',current,v1,'compose-ordinary-bank-inventory-root.py','v1.py.txt'),('through279-to-v2.diff.txt',prior,current,'through279/compose-ordinary-bank-inventory-root.py','through282/compose-ordinary-bank-inventory-root.py'),('v2-to-through279.inverse.diff.txt',current,prior,'through282/compose-ordinary-bank-inventory-root.py','through279/compose-ordinary-bank-inventory-root.py')]:
+ raw=''.join(difflib.unified_diff(left.decode().splitlines(True),right.decode().splitlines(True),fromfile=lf,tofile=rf)).encode()
+ if name=='v1-to-v2.diff.txt':assert raw==declared
+ (O/name).write_bytes(raw)
+t1,t2=ast.parse(v1),ast.parse(current);ast.parse(prior);bank_ast=ast.parse(banker);white_ast=ast.parse(whitespace)
+old_block="""        if key in new_content:
+            first, target = new_content[key]
+            assert read(first) == raw
+        else:
+            suffix = source.suffix.lower()
+            suffix = suffix if suffix in supported else '.txt' if suffix in {'.py', '.sh', '.diff', '.patch', '.jsonl'} else '.bin'
+            target = 'extra-evidence/' + value['sha256'] + suffix
+            new_content[key] = (source, target)
+        records.append(dict(original=str(source), retention='bank', copy=target, **value))
+        row.update(coverage='explicit-full-copy', copy=target)
+"""
+new_block="""        if key in new_content:
+            first, target = new_content[key]
+            assert read(first) == raw
+            # Downstream whitespace/staging maps require one bank record per
+            # destination. Preserve this complete alias as an external record,
+            # explicitly linking the first full copy planned by this inventory.
+            disposition = 'Complete original retained here; byte-identical to ' + str(first) + ', whose full new bank copy is planned at landing-proof/' + target
+            records.append(dict(original=str(source), retention='external', disposition=disposition, **value))
+            row.update(coverage='explicit-deduplicated-new-copy', copy=target, first_original=str(first))
+        else:
+            suffix = source.suffix.lower()
+            suffix = suffix if suffix in supported else '.txt' if suffix in {'.py', '.sh', '.diff', '.patch', '.jsonl'} else '.bin'
+            target = 'extra-evidence/' + value['sha256'] + suffix
+            new_content[key] = (source, target)
+            records.append(dict(original=str(source), retention='bank', copy=target, **value))
+            row.update(coverage='explicit-full-copy', copy=target)
+"""
+assert v1.decode().count(old_block)==1 and current.decode().count(new_block)==1
+assert v1.decode().replace(old_block,new_block)==current.decode() and current.decode().replace(new_block,old_block)==v1.decode()
+assert [ast.dump(n,include_attributes=False) for n in ast.walk(t1) if isinstance(n,ast.Assert)]==[ast.dump(n,include_attributes=False) for n in ast.walk(t2) if isinstance(n,ast.Assert)]
+helper_node=next(n for n in t2.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='helpers' for t in n.targets))
+helpers=ast.literal_eval(helper_node.value.generators[0].iter)
+assert len(helpers)==len(set(helpers))==11
+for n in helpers:retain(A/n,'helpers/'+n+'.txt')
+roots=next(n for n in t2.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='roots' for t in n.targets))
+assert ast.unparse(roots.value)=="[B, R, ACCEPT, I / 'through282-root-reconciliation-verification-attempt01']"
+deferred=next(n for n in t2.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='deferred' for t in n.targets))
+assert ast.unparse(deferred.value)=="[B / 'ordinary-inventory-caller']"
+source=current.decode();assert "accepted['status'] == 'PASS' and accepted['head'] == BASE" in source
+assert "assert paths == census()" in source and "assert read(existing) == raw" in source and "assert read(first) == raw" in source
+assert "assert str(source.resolve()) == row['resolved']" in source and "== row['symlink']" in source
+assert "elif len(raw) >= 2_000_000:" in source and "coverage='automatic-complete-landing-inventory'" in source
+assert "assert rel not in root_rows" in whitespace.decode()
+assert "records.append(dict(original=str(source), retention='external', disposition=disposition, **value))" in new_block
+assert "copy=target" not in new_block.split("records.append(dict(original=str(source), retention='external'")[1].split('\n')[0]
+assert "copy='root-review-history/' + name" in banker.decode() and "copy='payload-proof/' + source.name" in banker.decode() and "copy='banking-config/' + Path(path).name" in banker.decode()
+mutations=[dict(line=n.lineno,function=ast.unparse(n.func),call=ast.unparse(n)) for n in ast.walk(t2) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr in {'mkdir','write_text','write_bytes','unlink','rename','replace','open'}]
+assert len(mutations)==3 and {x['function'] for x in mutations}=={'O.mkdir',"(O / name).write_text","(O / 'proof.json').write_text"}
+read_node=next(n for n in t2.body if isinstance(n,ast.FunctionDef) and n.name=='read')
+assert 'st_dev' in ast.unparse(read_node) and 'st_ino' in ast.unparse(read_node) and 'st_ctime_ns' in ast.unparse(read_node)
+freeze=retain(B/'semantic-review/freeze.json','current-semantic-freeze.json')
+assert pin(freeze)['sha256']=='5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
+save('static-comparison.json',dict(status='PASS_STATIC_SOURCE_ONLY',current=pin(current),v1=pin(v1),prior=pin(prior),banker=pin(banker),whitespace=pin(whitespace),sole_v1_v2_change='Duplicate-small original disposition; first new-content occurrence stays bank, later matching complete original remains external with planned first-copy reference',full_inverse_exact=True,all_v1_assertions_identical=True,roots=[str(B),str(I/'through282-generated-reproduction'),str(I/'through282-generated-reproduction-root-acceptance'),str(I/'through282-root-reconciliation-verification-attempt01')],deferred=[str(B/'ordinary-inventory-caller')],helpers=helpers,downstream_unique_copy_predicate_preserved=True,mutation_sites=mutations,target_executions=0))
+for row in bindings:
+ p=Path(row['original']);assert p.read_bytes()==(O/row['copy']).read_bytes() and pin(p.read_bytes())=={k:row[k] for k in ('bytes','sha256')} and str(p.resolve())==row['resolved']
+save('source-copy-bindings.json',bindings)
+save('review.json',dict(verdict='APPROVE_SOURCE_PREPARATION_ONLY',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),reviewer='Codex /root/c05_280_282_english',author='Root Codex',role_disclosure='Independent non-author review of root composer. Earlier English/landing/allowance and code-review roles disclosed; no semantic review or runtime acceptance.',source=dict(path=str(current_path),**pin(current)),preserved_source_files=len(bindings),current_source_unchanged=True,root_v1_finding='Duplicate bank copy records conflict with whitespace279 Run.run unique-copy assertion',resolved_findings=['Duplicate new small source bank records'],open_findings=[],scope='Source review of explicit four-root plus eleven-helper census and corrected banker/whitespace input interface; no actual future inventory census or target execution.',checks=['Full current/prior/v1/banker/whitespace sources preserved; full diffs and exact correction inverse retained','Only named active ordinary-inventory caller deferred; complete per-path coverage rows retain full pins/resolved aliases; every nonlanding alias has a bank or external record','Semantic full-byte reuse follows fixed freeze and complete landed-copy checks; duplicate-new reuse compares full first-source bytes; large originals remain exact external records; no suffix-based omission','V2 emits one bank record for each new identical-content group; duplicate aliases retain external pins and planned target reference, satisfying downstream unique copy rows','Composer extra-evidence content targets are distinct from banker payload-proof, untracked-before, root-review-history, root-helpers and banking-config namespaces; automatic landing retains its own original-relative namespace','Actual census and all file pins/alias targets are rechecked before writing the four inventory JSON files; source itself performs zero WT/Git/SQL/test operations'],limits=['Future complete inventory must be produced only after actual root reproduction acceptance PASS with current baseline and13-file payload acceptance; source review does not manufacture those results','If later material evidence is created outside the four declared roots and eleven helpers, add it to an explicitly reviewed inventory scope before runtime; this approval is not a census of nonexistent future artifacts','All actual landing/source/caller records must be quiescent at inventory capture; the sole excluded active caller plus this inventory and later banking/caller/staging/whitespace/ledger/commit outputs need an explicit later boundary','Corrected banker remains subject to its separate current schema/root release conditions; this composer approval is not banking/staging/whitespace/runtime release','Unique generated copy names use SHA-256 plus suffix; same-size hash matches still require full byte equality, while downstream banker rejects conflicting target pins before bank writes'],target_executions=0,tests=0,Git=0,SQL=0,WT_mutations=0))
+print(json.dumps(dict(verdict='APPROVE_SOURCE_PREPARATION_ONLY',source_bytes=len(current),source_sha256=pin(current)['sha256'],source_snapshots=len(bindings),target_executions=0)))

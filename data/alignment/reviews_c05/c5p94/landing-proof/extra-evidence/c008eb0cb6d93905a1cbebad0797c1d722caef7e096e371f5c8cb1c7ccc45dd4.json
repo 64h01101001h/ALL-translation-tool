@@ -1,0 +1,121 @@
+{
+  "status": "PASS_SOURCE_ONLY_KNOWN_PARAMETER_EXTRACTION",
+  "candidates": [
+    {
+      "source": "prepare.py.txt",
+      "candidate": "known-parameter-candidates/prepare.py.txt",
+      "original": {
+        "bytes": 5097,
+        "sha256": "795dbf83954f82d6461bfcafd691588974ce5b146d4f3ed4a459c2f595a04df2"
+      },
+      "proposed": {
+        "bytes": 5097,
+        "sha256": "0e3deaeb77a7d68de4b79b91c9674a0e1437f1433394b56b1b7cdea0e338e916"
+      },
+      "replacements": [
+        {
+          "old": "C05-277-279",
+          "new": "C05-280-282",
+          "count": 1
+        },
+        {
+          "old": "c5p93",
+          "new": "c5p94",
+          "count": 2
+        },
+        {
+          "old": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+          "new": "10968d16e701b698a0e1fbd845b353089d15ac39",
+          "count": 1
+        }
+      ],
+      "inverse_exact": true,
+      "complete_diff_exact": true,
+      "syntax": "ast.parse only",
+      "executed": false
+    },
+    {
+      "source": "run-once.py.txt",
+      "candidate": "known-parameter-candidates/run-once.py.txt",
+      "original": {
+        "bytes": 2559,
+        "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+      },
+      "proposed": {
+        "bytes": 2559,
+        "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+      },
+      "replacements": [],
+      "inverse_exact": true,
+      "complete_diff_exact": true,
+      "syntax": "ast.parse only",
+      "executed": false
+    },
+    {
+      "source": "run-isolated-readonly.py.txt",
+      "candidate": "known-parameter-candidates/run-isolated-readonly.py.txt",
+      "original": {
+        "bytes": 1639,
+        "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+      },
+      "proposed": {
+        "bytes": 1639,
+        "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+      },
+      "replacements": [],
+      "inverse_exact": true,
+      "complete_diff_exact": true,
+      "syntax": "ast.parse only",
+      "executed": false
+    },
+    {
+      "source": "bank_root_proofs_through279.py",
+      "candidate": "known-parameter-candidates/bank_root_proofs_through282.py.txt",
+      "original": {
+        "bytes": 17890,
+        "sha256": "4fda2995ef53e3b9fe64c4d6ca30b8eb7f73f661d0dbcfc4c4cfe42d844428ba"
+      },
+      "proposed": {
+        "bytes": 18169,
+        "sha256": "e47ccae0d0a1af359405ff2d47d68a3015d5f15e40479d8acd1952ba9299ad93"
+      },
+      "replacements": [
+        {
+          "old": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+          "new": "10968d16e701b698a0e1fbd845b353089d15ac39",
+          "count": 1
+        },
+        {
+          "old": "PAGE, SEQS = 93, [277, 278, 279]",
+          "new": "PAGE, SEQS = 94, [280, 281, 282]",
+          "count": 1
+        },
+        {
+          "old": "C05-277-279",
+          "new": "C05-280-282",
+          "count": 1
+        },
+        {
+          "old": "[(b'279', b'232', b'280-511')]",
+          "new": "[(b'282', b'229', b'283-511')]",
+          "count": 1
+        },
+        {
+          "old": "    'verify-reconciliation-root.py',",
+          "new": "    'reconciliation-verifier-head-allowance-preparation/verify_reconciliation.py',\n    'reconciliation-verifier-head-allowance-preparation/config_contract.py',\n    'reconciliation-verifier-config/config.json',\n    'release-root-reconciliation-runtime-v2.py',\n    'root-reconciliation-runtime-release-v2/proof.json',",
+          "count": 1
+        }
+      ],
+      "inverse_exact": true,
+      "complete_diff_exact": true,
+      "syntax": "ast.parse only",
+      "executed": false
+    }
+  ],
+  "runtime_executions": 0,
+  "generators": 0,
+  "tests": 0,
+  "sql": 0,
+  "git": 0,
+  "release_ready": false
+}

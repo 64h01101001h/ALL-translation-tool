@@ -1,0 +1,12 @@
+from pathlib import Path
+import datetime,hashlib,json
+R=Path(__file__).resolve().parent
+p=R/'freeze.json';assert not p.exists()
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+for n in ['capture01','physical-refinement01','finalize01']:assert(R/n/'exit').read_bytes()==b'0\n'and not(R/n/'stderr').read_bytes()
+files={str(p.relative_to(R)):bp(p.read_bytes())for p in sorted(R.rglob('*'))if p.is_file()and p!=R/'freeze.json'}
+assert not any('__pycache__'in Path(n).parts for n in files)
+p.write_text(json.dumps({'status':'FROZEN_HISTORICAL_SOURCE_ONLY_PREPARATION','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'Reused Codex English-first model','files':files,'file_count':len(files),'total_bytes':sum(r['bytes']for r in files.values()),'excludes_only':'freeze.json','proposals':0,'canonical_runs':0,'semantic_approval':False,'baseline_created':False},indent=2)+'\n')
+for n,v in files.items():assert bp((R/n).read_bytes())==v
+assert set(files)=={str(p.relative_to(R))for p in R.rglob('*')if p.is_file()and p!=R/'freeze.json'}
+print(json.dumps({'status':'DONE','freeze':str(p),**bp(p.read_bytes()),'files':len(files),'total_bytes':sum(r['bytes']for r in files.values())}))

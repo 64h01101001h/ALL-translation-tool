@@ -1,0 +1,26 @@
+from pathlib import Path
+import datetime,hashlib,json
+B=Path(__file__).resolve().parent;I=B.parent/'integration';O=B/'root-ordinary-bank-method-release'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+assert __debug__ and not O.exists()
+accept=I/'through282-generated-reproduction-root-acceptance/proof.json';a=j(accept)
+assert a['status']=='PASS' and a['head']=='10968d16e701b698a0e1fbd845b353089d15ac39'
+assert a['all_seven_reproduced_outputs_byte_exact'] and a['all_thirteen_payload_files_byte_exact'] and a['live_head_index_untracked_state_unchanged']
+packages=j(B/'root-postlanding-correction-acceptance.json')['sources']
+packages.append(dict(directory=str(B/'ordinary-inventory-code-review'),freeze=dict(bytes=5757,sha256='5fdd33fd5177f55cb7dd03ec59aec8b7d7d25241d22e7783e966a407c3b09040'),files=36,bytes=329953))
+for rec in packages:
+ p=Path(rec['directory']);raw=(p/'freeze.json').read_bytes();assert pin(raw)==rec['freeze'];f=json.loads(raw)
+ assert len(f['files'])==rec['files'] and sum(x['bytes'] for x in f['files'].values())==rec['bytes']
+ assert {str(x.relative_to(p)) for x in p.rglob('*') if x.is_file()}==set(f['files'])|{'freeze.json'}
+ for name,expected in f['files'].items():assert pin((p/name).read_bytes())==expected
+composer=B/'compose-ordinary-bank-inventory-root.py';banker=B/'postlanding-verification-correction01/bank_root_proofs_through282.py.txt';target=B/'bank_root_proofs_through282.py'
+assert pin(composer.read_bytes())==dict(bytes=7547,sha256='5ce6d0ed3f24150f13be1afb844bc346557978d92d9f5572660a78caa3807e37')
+assert pin(banker.read_bytes())==dict(bytes=18169,sha256='e39621efcf4e650b9c2da4f145197f082a230236c47532e54f0398fc57b05375')
+assert not target.exists()
+assert not (B.parent.parent/'campaign-worktree/data/alignment/reviews_c05/c5p94/landing-proof').exists()
+O.mkdir()
+with target.open('xb') as out:out.write(banker.read_bytes())
+assert target.read_bytes()==banker.read_bytes()
+proof=dict(status='PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),required_reproduction_acceptance=pin(accept.read_bytes()),composer=dict(path=str(composer),**pin(composer.read_bytes())),banker=dict(original=str(banker),copy=str(target),**pin(target.read_bytes())),packages=packages,review='Root read the complete corrected banker and composer v2 plus independent reviews. Correct destination, actual semantic PASS/PASS interface, complete current source/test/seed/payload checks and evidence boundaries retained. Inventory requires quiescent inputs; the later phase must retain inventory/caller/bank outputs and new evidence added after its boundary.',runtime_executed=False,scope='Ordinary inventory and exact evidence-copy phase only; no staging, ledger, private commit, MAIN or device approval.')
+(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof,indent=2))

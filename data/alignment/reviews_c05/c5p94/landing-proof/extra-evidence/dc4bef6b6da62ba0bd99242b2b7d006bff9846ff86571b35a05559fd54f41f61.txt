@@ -1,0 +1,80 @@
+--- before
++++ after
+@@ -2,10 +2,19 @@
+ from pathlib import Path
+ import datetime, hashlib, importlib.util, json, os, subprocess, sys, traceback
+ sys.dont_write_bytecode=True
++# Preparation only: root must bind these literal interfaces after both originals freeze.
++EXPECTED_COMPLETION_FILE=None
++EXPECTED_COMPLETION_STATUS=None
++EXPECTED_TIBETAN_SPANS=None
++EXPECTED_WRAPPER_RELATIVE_PATH=None
++assert (isinstance(EXPECTED_COMPLETION_FILE,str) and EXPECTED_COMPLETION_FILE
++        and isinstance(EXPECTED_COMPLETION_STATUS,str) and EXPECTED_COMPLETION_STATUS
++        and type(EXPECTED_TIBETAN_SPANS) is int and EXPECTED_TIBETAN_SPANS>0
++        and isinstance(EXPECTED_WRAPPER_RELATIVE_PATH,str) and EXPECTED_WRAPPER_RELATIVE_PATH), 'PENDING: frozen original interfaces/count/wrapper must be bound and reviewed before execution'
+ batch=Path(__file__).parent;wt=batch.parents[1]/'campaign-worktree'
+ out=batch/'proposal-verification';out.mkdir()
+ proof={'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'RUNNING',
+-       'role':'Root authored Tibetan; this is mechanical verification only, not independent semantic approval.'}
++       'role':'Fresh independent original authors c05_280_282_tibetan and c05_280_282_english; root is not an original author. This is mechanical verification only, not independent semantic approval.'}
+ def pin(p):
+     raw=p.read_bytes();return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+ def save(p,obj):
+@@ -27,17 +36,17 @@
+ try:
+     baseline=json.loads((batch/'baseline.json').read_text())
+     for name,digest in baseline['sha256'].items():assert pin(wt/name)['sha256']==digest,name
+-    freezes=[freeze(a,s) for a in ['tibetan','english'] for s in [277,278,279]]
+-    own=json.loads((batch/'primary-tibetan-original-complete.json').read_text())
+-    assert own['status']=='ALL_THREE_ORIGINALS_FROZEN_BEFORE_CURRENT_ENGLISH_READ' and sum(r['spans'] for r in own['counts'])==146
++    freezes=[freeze(a,s) for a in ['tibetan','english'] for s in [280,281,282]]
++    own=json.loads((batch/EXPECTED_COMPLETION_FILE).read_text())
++    assert own['status']==EXPECTED_COMPLETION_STATUS and sum(r['spans'] for r in own['counts'])==EXPECTED_TIBETAN_SPANS
+     sys.path.insert(0,str(wt/'tools'))
+     definition=importlib.util.spec_from_file_location('canonical_generator',wt/'tools/gen_alignment_page.py')
+     g=importlib.util.module_from_spec(definition);definition.loader.exec_module(g)
+     sources={r['seq']:r for r in json.loads((batch/'source.json').read_text())}
+     results=[];records=[]
+-    wrapper=batch/'tibetan/277/run-canonical-readonly.py'
++    wrapper=batch/EXPECTED_WRAPPER_RELATIVE_PATH
+     for angle in ['tibetan','english']:
+-        for seq in [277,278,279]:
++        for seq in [280,281,282]:
+             directory=batch/angle/str(seq);raw=(directory/'spec.json').read_bytes();spec=json.loads(raw)
+             assert spec['course']=='C05' and [s['seq'] for s in spec['segments']]==[seq]
+             argv=[sys.executable,'-B',str(wrapper)]
+@@ -58,18 +67,19 @@
+             tr=g.resolve(sources[seq]['wylie'],spans,'tib',seq)
+             ordered=g.with_members(spans,[byid[i] for i in segment['eng_order']],sources[seq]['english'])
+             er=g.resolve(sources[seq]['english'],ordered,'eng',seq)
+-            declared=json.loads((directory/('intended-spans.json' if angle=='tibetan' else 'occurrence-declarations.json')).read_bytes())
+-            declarations={x['id']:x for x in (declared if angle=='tibetan' else declared['declarations'])}
++            declared=json.loads((directory/'intended-spans.json').read_bytes())
++            assert isinstance(declared,list) and [x['id'] for x in declared]==[x['id'] for x in spans]
++            declarations={x['id']:x for x in declared}
+             assert set(declarations)==set(byid)
+             parent=None
+             for span in spans:
+                 ident=span['id']
+                 declaration=declarations[ident]
+-                expected_tib=declaration['tib_range'] if angle=='tibetan' else [declaration['tib']['start'],declaration['tib']['end']]
+-                expected_eng=declaration['eng_range'] if angle=='tibetan' else [declaration['eng']['start'],declaration['eng']['end']]
++                expected_tib=declaration['tib_range']
++                expected_eng=declaration['eng_range']
+                 assert list(tr[ident])==expected_tib and (None if span['eng'] is None else list(er[ident]))==expected_eng
+                 if span['d']!=7:parent=ident if span['d']==5 else None
+-                if angle=='english':assert declaration['parent']==(parent if span['d']==7 else None)
++                if 'parent' in declaration:assert declaration['parent']==(parent if span['d']==7 else None)
+                 records.append(dict(angle=angle,seq=seq,id=ident,d=span['d'],tib=span['tib'],eng=span['eng'],
+                     tib_range=list(tr[ident]),eng_range=None if span['eng'] is None else list(er[ident]),
+                     original_span=span,original_field_presence=list(span),original_occurrence_declaration=declaration,parent_id=parent if span['d']==7 else None))
+@@ -78,7 +88,7 @@
+                 body_sha256=hashlib.sha256(run.stdout).hexdigest(),spec_sha256=hashlib.sha256(raw).hexdigest(),
+                 saved_body_identical=True))
+     assert len(results)==6 and len(records)==sum(r['spans'] for r in results)
+-    assert freezes==[freeze(a,s) for a in ['tibetan','english'] for s in [277,278,279]]
++    assert freezes==[freeze(a,s) for a in ['tibetan','english'] for s in [280,281,282]]
+     for name,digest in baseline['sha256'].items():assert pin(wt/name)['sha256']==digest,name
+     save(out/'report.json',results);save(out/'root-resolved-spans.json',records)
+     proof.update(status='PASS',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),

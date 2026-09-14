@@ -1,0 +1,104 @@
+"""One bounded source preparation; never import or execute any retained method."""
+from pathlib import Path
+import ast, difflib, hashlib, json, os
+
+O = Path(__file__).resolve().parent
+B = O.parent
+A = B.parent
+I = A / 'integration'
+P = I / 'through279-generated-reproduction-concrete-preparation'
+K = A / 'C05-277-279/page-banking-preparation'
+OLD = 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+NEW = '10968d16e701b698a0e1fbd845b353089d15ac39'
+records = []
+def pin(raw): return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+def save(name, value):
+    p = O / name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open('x') as f: json.dump(value, f, ensure_ascii=False, indent=2); f.write('\n')
+def copy(p, name):
+    raw = p.read_bytes()
+    d = O / 'inputs' / name
+    d.parent.mkdir(parents=True, exist_ok=True)
+    with d.open('xb') as f: f.write(raw)
+    assert raw == p.read_bytes() == d.read_bytes()
+    records.append(dict(original=str(p), resolved=str(p.resolve()), symlink=os.readlink(p) if p.is_symlink() else None, copy=str(d.relative_to(O)), **pin(raw)))
+    return raw
+
+methods = {}
+for name in ('prepare.py.txt', 'run-once.py.txt', 'run-isolated-readonly.py.txt', 'verify-retention.py.txt'):
+    methods[name] = copy(P / name, 'prior-reproduction/' + name)
+methods['bank_root_proofs_through279.py'] = copy(K / 'bank_root_proofs_through279.py', 'prior-banking/bank_root_proofs_through279.py')
+runtime = I / 'through279-finalization-runtime/bank_root_proofs_through279.py'
+assert runtime.read_bytes() == methods['bank_root_proofs_through279.py']
+copy(runtime, 'prior-banking/actual-runtime-bank.py.txt')
+for name in ('close-evidence.py.txt',):
+    methods[name] = copy(I / 'through279-generated-reproduction' / name, 'prior-closure/' + name)
+for name in ('approve-reproduction-method-root.py', 'accept-independent-reproduction-root.py', 'freeze-reproduction-runtime-root.py', 'release-reproduction-closure-root.py'):
+    methods[name] = copy(A / 'C05-277-279' / name, 'prior-root/' + name)
+for base, sub, names in (
+    (P, 'prior-reproduction', ['report.md', 'command-plan.md', 'command-plan.json', 'actual-measurements.json', 'adaptation-proof.json', 'freeze.json']),
+    (K, 'prior-banking', ['report.md', 'command-contract.json', 'schema-contract.json', 'proof.json', 'freeze.json']),
+    (I / 'through279-generated-reproduction-review', 'prior-reproduction-review', ['report.md', 'freeze.json']),
+    (I / 'through279-reproduction-closure-review', 'prior-closure-review', ['report.md', 'proof.json', 'freeze.json']),
+    (I / 'through279-generated-reproduction', 'prior-actual-runtime', ['final-proof.json', 'retention-proof.json', 'execution-proof.json', 'freeze.json']),
+    (I / 'through279-generated-reproduction-root-acceptance', 'prior-root-acceptance', ['proof.json']),
+    (B, 'current', ['baseline.json', 'root-reconciliation-verification/execution-proof.json', 'root-reconciliation-verification/report.json', 'root-reconciliation-runtime-release-v2/proof.json', 'root-reconciliation-runtime-release/failure.json', 'root-reconciliation-runtime-release/v2-complete.diff', 'release-root-reconciliation-runtime.py', 'release-root-reconciliation-runtime-v2.py']),
+):
+    for name in names: copy(base / name, sub + '/' + name)
+for sub in ('history/measurement-adaptation-v1', 'measurement-adaptation01'):
+    for p in sorted((P / sub).rglob('*')):
+        if p.is_file(): copy(p, 'historical-failure/' + str(p.relative_to(P)))
+for sub in ('root-reconciliation-runtime-release-caller', 'root-reconciliation-runtime-release-caller-v2'):
+    for p in sorted((B / sub).rglob('*')):
+        if p.is_file(): copy(p, 'current/' + str(p.relative_to(B)))
+
+adaptations = {
+    'prepare.py.txt': [('C05-277-279', 'C05-280-282', 1), ('c5p93', 'c5p94', 2), (OLD, NEW, 1)],
+    'run-once.py.txt': [],
+    'run-isolated-readonly.py.txt': [],
+    'bank_root_proofs_through279.py': [
+        (OLD, NEW, 1), ('PAGE, SEQS = 93, [277, 278, 279]', 'PAGE, SEQS = 94, [280, 281, 282]', 1),
+        ('C05-277-279', 'C05-280-282', 1),
+        ("[(b'279', b'232', b'280-511')]", "[(b'282', b'229', b'283-511')]", 1),
+        ("    'verify-reconciliation-root.py',", "    'reconciliation-verifier-head-allowance-preparation/verify_reconciliation.py',\n    'reconciliation-verifier-head-allowance-preparation/config_contract.py',\n    'reconciliation-verifier-config/config.json',\n    'release-root-reconciliation-runtime-v2.py',\n    'root-reconciliation-runtime-release-v2/proof.json',", 1),
+    ],
+}
+proofs = []
+for name, changes in adaptations.items():
+    old = methods[name].decode()
+    new = old
+    for before, after, count in changes:
+        assert new.count(before) == count, (name, before)
+        new = new.replace(before, after)
+    inv = new
+    for before, after, count in reversed(changes):
+        assert inv.count(after) == count, (name, after)
+        inv = inv.replace(after, before)
+    assert inv == old
+    ast.parse(new)
+    target = 'bank_root_proofs_through282.py.txt' if name.startswith('bank_') else name
+    path = O / 'known-parameter-candidates' / target
+    path.parent.mkdir(exist_ok=True)
+    with path.open('x') as f: f.write(new)
+    diff = ''.join(difflib.unified_diff(old.splitlines(True), new.splitlines(True), fromfile=name, tofile=target))
+    reverse = ''.join(difflib.unified_diff(new.splitlines(True), old.splitlines(True), fromfile=target, tofile=name))
+    for suffix, data in [('diff', diff), ('inverse.diff', reverse)]:
+        with (O / (target + '.' + suffix)).open('x') as f: f.write(data)
+    # Function bodies stay byte-for-AST exact; only module-level constant values change.
+    funcs = lambda text: [ast.dump(n, include_attributes=False) for n in ast.parse(text).body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))]
+    if name.startswith('bank_'):
+        # The current batch name and expected coverage reside inside main(). Apply inverse before comparing.
+        assert funcs(inv) == funcs(old)
+    proofs.append(dict(source=name, candidate=str(path.relative_to(O)), original=pin(old.encode()), proposed=pin(new.encode()), replacements=[dict(old=x, new=y, count=n) for x,y,n in changes], inverse_exact=True, complete_diff_exact=True, syntax='ast.parse only', executed=False))
+
+constants = []
+for name, raw in methods.items():
+    tree = ast.parse(raw.decode())
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Constant) and isinstance(node.value, (str,int,float)) and not isinstance(node.value,bool):
+            constants.append(dict(source=name, line=node.lineno, value=node.value))
+save('literal-inventory.json', constants)
+save('adaptation-proof.json', dict(status='PASS_SOURCE_ONLY_KNOWN_PARAMETER_EXTRACTION', candidates=proofs, runtime_executions=0, generators=0, tests=0, sql=0, git=0, release_ready=False))
+save('original-to-copy-manifest.json', records)
+print(json.dumps(dict(status='PASS_SOURCE_ONLY', full_copy_pairs=len(records), candidate_count=len(proofs), unexecuted=True)))

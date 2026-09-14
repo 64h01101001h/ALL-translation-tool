@@ -1,0 +1,13 @@
+[
+  {
+    "id": "R1",
+    "priority": "P2",
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-release-initial-inventory-root.py",
+    "line": 40,
+    "title": "Resolve successful-attempt copy paths relative to attempt02",
+    "detail": "The successful map is attempt02/full-source-copy-manifest.json, whose producer sets OUT to the attempt02 directory and writes each copy field relative to OUT. The candidate instead uses SV as its copy base at lines 45 and 49. All 67 earlier failed-attempt copies also exist and happen to match, so the checker currently validates and reports those different paths rather than the successful map copy identities.",
+    "minimal_change": "Replace (SV,'attempt02/full-source-copy-manifest.json') with (SV/'attempt02','full-source-copy-manifest.json'); retain the whole SV freeze check and all other guards.",
+    "observed_source_or_data_failure": false,
+    "target_invocations": 0
+  }
+]

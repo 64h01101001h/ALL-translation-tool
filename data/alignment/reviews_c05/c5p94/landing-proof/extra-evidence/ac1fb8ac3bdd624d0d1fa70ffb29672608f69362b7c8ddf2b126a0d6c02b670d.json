@@ -1,0 +1,171 @@
+{
+  "actual_counts": {
+    "links": 45402,
+    "nulls": 11938,
+    "notes": 1618,
+    "trees": 11,
+    "heads": 7092,
+    "pairs": 15546,
+    "csv_main": 22528,
+    "csv_reverse": 22188,
+    "csv_course": 24105,
+    "csv_changes": 37
+  },
+  "prior_links": 45275,
+  "added_links": 127,
+  "added_by_segment": {
+    "280": 55,
+    "281": 47,
+    "282": 25
+  },
+  "coverage": [
+    1,
+    282
+  ],
+  "page": "c5p94",
+  "review_spans": 124,
+  "review_nulls": 4,
+  "review_nonnull_d5": 102,
+  "acip": {
+    "headwords": 7092,
+    "proven": 7089,
+    "missing_heads": [
+      {
+        "tib": "kA ri kA",
+        "pairs": [
+          {
+            "eng": "Karika",
+            "refs": [
+              "C05:30",
+              "C05:31"
+            ],
+            "n": 2,
+            "acip": null
+          },
+          {
+            "eng": "karika",
+            "refs": [
+              "C05:31"
+            ],
+            "n": 1,
+            "acip": null
+          }
+        ]
+      },
+      {
+        "tib": "ko ShA",
+        "pairs": [
+          {
+            "eng": "kosha",
+            "refs": [
+              "C05:31"
+            ],
+            "n": 1,
+            "acip": null
+          }
+        ]
+      },
+      {
+        "tib": "manydzu goh ShA",
+        "pairs": [
+          {
+            "eng": "Manjugoshaya",
+            "refs": [
+              "C01:41"
+            ],
+            "n": 1,
+            "acip": null
+          }
+        ]
+      }
+    ],
+    "source_linked_spans": [
+      {
+        "course": "C01",
+        "page": "c1p01",
+        "seg": 41,
+        "id": "s41w3",
+        "d": 5,
+        "tib": "manydzu goh ShA",
+        "tib_acip": null,
+        "eng": "Manjugoshaya",
+        "case": false
+      },
+      {
+        "course": "C05",
+        "page": "c5p10",
+        "seg": 30,
+        "id": "s30w3",
+        "d": 5,
+        "tib": "kA ri kA",
+        "tib_acip": null,
+        "eng": "Karika",
+        "case": false
+      },
+      {
+        "course": "C05",
+        "page": "c5p11",
+        "seg": 31,
+        "id": "s31w18",
+        "d": 5,
+        "tib": "ko ShA",
+        "tib_acip": null,
+        "eng": "kosha",
+        "case": false
+      },
+      {
+        "course": "C05",
+        "page": "c5p11",
+        "seg": 31,
+        "id": "s31w20",
+        "d": 5,
+        "tib": "kA ri kA",
+        "tib_acip": null,
+        "eng": "karika",
+        "case": false
+      },
+      {
+        "course": "C05",
+        "page": "c5p11",
+        "seg": 31,
+        "id": "s31w6",
+        "d": 5,
+        "tib": "kA ri kA",
+        "tib_acip": null,
+        "eng": "Karika",
+        "case": false
+      }
+    ],
+    "historical_nonsegment": [
+      {
+        "course": "C01",
+        "page": "r2",
+        "seg": null,
+        "id": "xseg2829ldog",
+        "d": 5,
+        "tib": "ldog",
+        "tib_acip": null,
+        "eng": "stop",
+        "case": false
+      }
+    ],
+    "unchanged_historical_rows": true
+  },
+  "actual_layer_date": "2026-09-13",
+  "all_main_layer_dates": [
+    "2026-09-13"
+  ],
+  "source_date_discrepancy": "The supplied 2026-09-14 is the current UTC/preparation date, not the actual producer local layer date. Root confirmed the correction. No producer or test failed; the existing equality gate remains unchanged.",
+  "ctest_prior_actual": {
+    "exit": 0,
+    "tests": 17,
+    "reported_seconds": 12.62,
+    "reexecuted": false
+  },
+  "payload_population": 13,
+  "payload_population_authority": "Root instruction: complete payload preparation is being performed by another agent. Only the misleading frozen12 check label is changed to frozen13; the complete manifest iteration/equality gate is unchanged.",
+  "target_executed": false,
+  "SQL_executed": false,
+  "Git_executed": false,
+  "builds_or_tests_executed": false
+}

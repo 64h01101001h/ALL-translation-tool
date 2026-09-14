@@ -1,0 +1,46 @@
+import json,gzip,pathlib,hashlib,collections,importlib.util
+R=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');W=R/'campaign-worktree';A=R/'campaign-artifacts';D=A/'C05-280-282/reconciled/280'
+def save(n,x):(D/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+mi=collections.defaultdict(list)
+for section,v in master.items():
+ if isinstance(v,list):
+  for i,x in enumerate(v):mi[json.dumps(x,sort_keys=True,ensure_ascii=False)].append([section,i])
+ci=collections.defaultdict(list)
+for i,x in enumerate(corpus):ci[json.dumps(x,sort_keys=True,ensure_ascii=False)].append(i)
+entries={};segments={}
+for q in json.loads((D/'query-replays.json').read_bytes()):
+ for x in q['rows']:
+  if 'raw'not in x:continue
+  if 'hgm_gloss'in x:entries[x['id']]=x
+  elif 'course'in x:segments[x['id']]=x
+for x in json.loads((D/'context-rows-full.json').read_bytes()):segments[x['id']]=x
+proof=[]
+for kind,items,idx in [('master',entries,mi),('corpus',segments,ci)]:
+ for id,x in items.items():
+  obj=json.loads(x['raw']);key=json.dumps(obj,sort_keys=True,ensure_ascii=False);assert key in idx,(kind,id)
+  if kind=='master':
+   expected=json.dumps(obj.get('hgm_gloss'),ensure_ascii=False) if obj.get('hgm_gloss') else None
+   assert x['hgm_gloss']==expected,(id,x['hgm_gloss'],expected)
+  else:assert all(x[k]==obj[k] for k in ['course','wylie','english','acip'])
+  proof.append({'kind':kind,'id':id,'archive_positions':idx[key],'complete_raw_object':obj,'sql_row':x})
+save('archive-object-proof.json',{'status':'PASS','master_entries':len(entries),'corpus_segments':len(segments),'objects':proof})
+# Actual C15/C16 physical full-field matching, retaining complete extents and bytes.
+ph=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII');matches=[]
+for course,seq in [('C15',425),('C15',426),('C15',427),('C16',597),('C16',824)]:
+ row=next(x for x in segments.values() if x['course']==course and x['seq']==seq);p=ph/(course+'ReadingASCII.txt');raw=p.read_bytes();lines=raw.splitlines(keepends=True)
+ for field in ['acip','english']:
+  target=row[field];poss=[]
+  # Physical files have a paragraph per line or wrapped English; exact joined paragraph bounded search.
+  for i,l in enumerate(lines):
+   first=' '.join(l.decode('latin-1').split())
+   if not first or not target.startswith(first):continue
+   for j in range(i+1,min(i+80,len(lines))+1):
+    joined=' '.join(b''.join(lines[i:j]).decode('latin-1').split())
+    if joined==target:poss.append((i,j));break
+    if not target.startswith(joined):break
+  assert len(poss)==1,(course,seq,field,poss)
+  i,j=poss[0];part=b''.join(lines[i:j]);out=D/'physical'/f'{course}-{seq}-{field}.txt';out.write_bytes(part);matches.append({'course':course,'seq':seq,'field':field,'original':str(p),'original_pin':pin(p),'lines_1based_inclusive':[i+1,j],'byte_range':[sum(map(len,lines[:i])),sum(map(len,lines[:j]))],'excerpt':str(out),**pin(out),'full_field_whitespace_equal':True})
+save('additional-physical-proof.json',matches)
+print(json.dumps({'status':'PASS','master_entries':len(entries),'corpus_segments':len(segments),'physical_extents':len(matches)}))

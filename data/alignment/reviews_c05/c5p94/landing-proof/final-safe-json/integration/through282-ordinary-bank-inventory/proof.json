@@ -1,0 +1,24 @@
+{
+  "status": "PASS_COMPLETE_ACTUAL_PRE_ORDINARY_INVENTORY",
+  "utc": "2026-09-14T02:17:05.244418+00:00",
+  "head": "10968d16e701b698a0e1fbd845b353089d15ac39",
+  "sources": 5633,
+  "counts": {
+    "explicit-full-copy": 1277,
+    "explicit-existing-full-copy": 3820,
+    "explicit-deduplicated-new-copy": 432,
+    "explicit-complete-external": 46,
+    "automatic-complete-landing-inventory": 58
+  },
+  "records": 5575,
+  "distinct_new_full_copies": 1277,
+  "manifest": {
+    "bytes": 3510393,
+    "sha256": "6ae9233f0847054f0f9a8f9cd7578ccca8d2c55089d75edbad2026e691bb0f9e"
+  },
+  "required_reproduction_acceptance": {
+    "bytes": 1330,
+    "sha256": "52f04b931d7d4af0e54f7291f36786178adb82818c3b104839c8912269dd23a0"
+  },
+  "boundary": "Every current file under the four listed roots plus eleven complete helper sources; only the named active caller is deferred. Full identical content may share a copy after complete-byte comparison. This is source inventory, not bank/stage/semantic/consumer acceptance."
+}

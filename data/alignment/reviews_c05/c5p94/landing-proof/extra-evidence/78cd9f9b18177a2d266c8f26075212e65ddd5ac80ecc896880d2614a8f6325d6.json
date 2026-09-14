@@ -1,0 +1,116 @@
+[
+  {
+    "record_type": "Faithful transcription of visible conversation tool result; not original raw streams or a caller recorder",
+    "tool": "tools.exec_command via functions.exec",
+    "known_requested_arguments": {
+      "cmd": "python3 -B campaign-artifacts/C05-280-282/reproduction-retention-preparation/prepare_source.py.txt",
+      "yield_time_ms": 10000,
+      "max_output_tokens": 2000
+    },
+    "explicit_workdir_argument": null,
+    "conversation_workspace_context": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+    "measured_process_cwd": null,
+    "argv_capture": null,
+    "started_at": null,
+    "finished_at": null,
+    "environment_capture": null,
+    "stdin_raw": null,
+    "stdout_raw": null,
+    "stderr_raw": null,
+    "stdin_bytes": null,
+    "stdout_bytes": null,
+    "stderr_bytes": null,
+    "stdin_sha256": null,
+    "stdout_sha256": null,
+    "stderr_sha256": null,
+    "known_tool_result": {
+      "chunk_id": "f20534",
+      "wall_time_seconds": 1.030698459,
+      "exit_code": 1,
+      "original_token_count": 182,
+      "output": "Traceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/prepare_source.py.txt\", line 44, in <module>\n    ctest=load(L/'ctest-17.execution.json');assert ctest['exit']==0 and ctest['stderr_bytes']==0 and '100% tests passed, 0 tests failed out of 17' in (L/'ctest-17.stdout').read_text() and '12.62 sec' in (L/'ctest-17.stdout').read_text()\n                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "source_file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/prepare_source.py.txt",
+    "source_pin": {
+      "bytes": 15244,
+      "sha256": "44a4dbc5742041522872a5b9b5342279412cc45cf812af681ea3567ed56ef1a5"
+    },
+    "limitation": "The tool exposes one combined text output. No original stdout/stderr capture was saved for this preparation call. File sizes printed inside the output describe the source/freeze artifacts, not process-stream byte counts. Tool-reported wall time is not an independently recorded process timestamp."
+  },
+  {
+    "record_type": "Faithful transcription of visible conversation tool result; not original raw streams or a caller recorder",
+    "tool": "tools.exec_command via functions.exec",
+    "known_requested_arguments": {
+      "cmd": "python3 -B campaign-artifacts/C05-280-282/reproduction-retention-preparation/prepare_source_v2.py.txt",
+      "yield_time_ms": 10000,
+      "max_output_tokens": 2000
+    },
+    "explicit_workdir_argument": null,
+    "conversation_workspace_context": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+    "measured_process_cwd": null,
+    "argv_capture": null,
+    "started_at": null,
+    "finished_at": null,
+    "environment_capture": null,
+    "stdin_raw": null,
+    "stdout_raw": null,
+    "stderr_raw": null,
+    "stdin_bytes": null,
+    "stdout_bytes": null,
+    "stderr_bytes": null,
+    "stdin_sha256": null,
+    "stdout_sha256": null,
+    "stderr_sha256": null,
+    "known_tool_result": {
+      "chunk_id": "12c0ca",
+      "wall_time_seconds": 1.011620167,
+      "exit_code": 0,
+      "original_token_count": 77,
+      "output": "{\n  \"status\": \"SOURCE_READY_FOR_INDEPENDENT_REVIEW\",\n  \"files\": 24,\n  \"source\": {\n    \"bytes\": 11887,\n    \"sha256\": \"ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77\"\n  },\n  \"freeze\": {\n    \"bytes\": 3618,\n    \"sha256\": \"1f6092198c428bcc4ec372c0ba96d5bc2b654441934a95f73b08202f3f7104f2\"\n  }\n}\n"
+    },
+    "source_file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/prepare_source_v2.py.txt",
+    "source_pin": {
+      "bytes": 15228,
+      "sha256": "f9015ed5bcb89116c0f9635deb16494685c57b512f364a93e11583725fb84b47"
+    },
+    "limitation": "The tool exposes one combined text output. No original stdout/stderr capture was saved for this preparation call. File sizes printed inside the output describe the source/freeze artifacts, not process-stream byte counts. Tool-reported wall time is not an independently recorded process timestamp."
+  },
+  {
+    "record_type": "Faithful transcription of visible conversation tool result; not original raw streams or a caller recorder",
+    "tool": "tools.exec_command via functions.exec",
+    "known_requested_arguments": {
+      "cmd": "python3 -B campaign-artifacts/C05-280-282/reproduction-retention-preparation/amend_preparation_record.py.txt",
+      "yield_time_ms": 10000,
+      "max_output_tokens": 2000
+    },
+    "explicit_workdir_argument": null,
+    "conversation_workspace_context": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+    "measured_process_cwd": null,
+    "argv_capture": null,
+    "started_at": null,
+    "finished_at": null,
+    "environment_capture": null,
+    "stdin_raw": null,
+    "stdout_raw": null,
+    "stderr_raw": null,
+    "stdin_bytes": null,
+    "stdout_bytes": null,
+    "stderr_bytes": null,
+    "stdin_sha256": null,
+    "stdout_sha256": null,
+    "stderr_sha256": null,
+    "known_tool_result": {
+      "chunk_id": "936ae1",
+      "wall_time_seconds": 4.709e-06,
+      "exit_code": 0,
+      "original_token_count": 77,
+      "output": "{\n  \"status\": \"SOURCE_READY_FOR_INDEPENDENT_REVIEW\",\n  \"files\": 29,\n  \"source\": {\n    \"bytes\": 11887,\n    \"sha256\": \"ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77\"\n  },\n  \"freeze\": {\n    \"bytes\": 4432,\n    \"sha256\": \"9d745f8d8b103725188004c90566c02d6a123b87be13ca1da6c271d3ac261487\"\n  }\n}\n"
+    },
+    "source_file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/amend_preparation_record.py.txt",
+    "source_pin": {
+      "bytes": 2669,
+      "sha256": "42e8b1e54c317dd0be5d29aa8611818a7195b03f073495e1e464de9ecc6a2a75"
+    },
+    "limitation": "The tool exposes one combined text output. No original stdout/stderr capture was saved for this preparation call. File sizes printed inside the output describe the source/freeze artifacts, not process-stream byte counts. Tool-reported wall time is not an independently recorded process timestamp."
+  }
+]

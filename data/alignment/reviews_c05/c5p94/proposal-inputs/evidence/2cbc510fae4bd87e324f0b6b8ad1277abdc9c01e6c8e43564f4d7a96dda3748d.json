@@ -1,0 +1,49 @@
+{
+  "reconciler": "/root/c05_253_255_reconcile, Codex model; reused context and prior tooling author",
+  "original_authors": {
+    "tibetan": "/root/c05_280_282_tibetan",
+    "english": "/root/c05_280_282_english"
+  },
+  "neither_original_authored_by_reconciler": true,
+  "human_certification": false,
+  "originals_completed_before_original_reading": true,
+  "source_of_completion": "Parent dispatch plus six preserved actual freezes and root execution proof.",
+  "reconciliation_status": "PROVISIONAL; separate non-author semantic decision required for landing.",
+  "retention": "Every file in all six original trees, including historical specs/declarations, source scripts, failed attempts and all actual canonical streams, is preserved by full original/copy mapping. Original frozen notes remain unchanged.",
+  "current_failures": [
+    {
+      "files": [
+        "collect-evidence.py.txt",
+        "collection.stderr",
+        "collection.exit",
+        "history/collection01"
+      ],
+      "finding": "Wrong baseline key hashes. Actual sha256 key used in v2. Failure preceded source copying/query execution."
+    },
+    {
+      "files": [
+        "verify-archives.py.txt",
+        "archive-verification.stderr",
+        "archive-verification.exit"
+      ],
+      "finding": "A strict raw-gloss comparison rejected ten source empty-list versus SQL NULL fields. Actual build_spine.py line188 explicitly serializes only truthy lists. v2 binds that exact conversion, preserves each full raw object and full SQL row; no glossary/source changed."
+    },
+    {
+      "files": [
+        "generate-finals.py.txt",
+        "generate-finals.stderr",
+        "generate-finals.exit"
+      ],
+      "finding": "Wrapper path literal included spaces absent in actual source; assertion refused before any final canonical call. v2 uses exact source literal. No final spec/body revision or generator failure."
+    }
+  ],
+  "additional_failure": {
+    "files": [
+      "finalize-evidence.py.txt",
+      "finalize-evidence.stderr",
+      "finalize-evidence.exit"
+    ],
+    "finding": "Copied-evidence paths are relative to shared root. Initial preflight resolved against cwd and refused. V2 resolves D/copy exactly; original manifest bytes are unchanged."
+  },
+  "limits": "Corpus/physical agreement does not prove independent publication or ingestion lineage. P7 digital differences are evidence limits, not accepted corrections to C05. Hash/byte checks are mechanical, not semantic reading or approval."
+}

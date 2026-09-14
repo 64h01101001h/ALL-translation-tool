@@ -1,0 +1,15 @@
+{
+  "status": "HONEST_SOURCE_PREPARATION_TRANSPORT_LIMIT",
+  "earlier_source_preparers": [
+    "prepare-adapters.py",
+    "prepare-complete.py"
+  ],
+  "actual_commands": "PYTHONDONTWRITEBYTECODE=1 python3 -B <absolute source-preparer path>; tool transport printed output and exit 0",
+  "recording_limit": "Earlier source-only preparation tool results were not captured as independent raw stdout/stderr files; no raw streams reconstructed. Retained helper bytes and their generated candidate/diffs are preserved. Final static verification below uses a full actual recorder.",
+  "observed_stdout_transcriptions": [
+    "Initial adapter source AST prepared; complete adapter awaits actual current assembler source.",
+    "Complete adapter AST prepared against actual current assembler branches; not executed."
+  ],
+  "candidate_execution_count": 0,
+  "historical_count_literals_not_results": true
+}

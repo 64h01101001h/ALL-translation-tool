@@ -1,0 +1,31 @@
+import pathlib,json,hashlib,collections,datetime,shutil,os
+R=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');B=R/'campaign-artifacts/C05-280-282';D=B/'reconciled/280'
+def load(p):return json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+# Correct outer command spelling to the exact recorded relative shell argv; canonical child argv was already exact.
+old=D/'actual-helper-commands.json';shutil.copyfile(old,D/'history/pre-final-interface/actual-helper-commands.json');cmds=load(old)
+for x in cmds:x['argv'][2]=str(pathlib.Path(x['argv'][2]).relative_to(R))
+for code,prefix in [('finalize-evidence.py.txt','finalize-evidence'),('finalize-evidence-v2.py.txt','finalize-evidence02'),('finish.py.txt','finish')]:
+ cmds.append({'argv':['python3','-B',str((D/code).relative_to(R))],'cwd':str(R),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'source':pin(D/code),'stdout':{'path':str(D/(prefix+'.stdout')),**pin(D/(prefix+'.stdout'))},'stderr':{'path':str(D/(prefix+'.stderr')),**pin(D/(prefix+'.stderr'))},'exit':int((D/(prefix+'.exit')).read_text()),'time_record':'No separate outer recorder timestamps; actual canonical children have complete actual records.'})
+save(old,cmds)
+# Every original is reopened independently, including aliases sharing one content copy.
+manifest=load(D/'original-copy-manifest.json')
+for x in manifest:
+ p=pathlib.Path(x['original']);q=D/x['copy'];assert p.read_bytes()==q.read_bytes();assert pin(p)=={k:x[k]for k in ['bytes','sha256']}
+for x in load(D/'source-aliases.json'):
+ p=pathlib.Path(x['alias']);assert pin(p)=={k:x[k]for k in ['bytes','sha256']};assert str(p.resolve())==x['resolved'];assert p.is_symlink()==x['is_symlink'];assert (os.readlink(p)if p.is_symlink()else None)==x['link_text']
+db=load(D/'database-proof.json');assert pin(pathlib.Path(db['database']))==db['before']
+counts=[]
+for n in [280,281,282]:
+ p=B/'reconciled'/str(n);proof=load(p/'proof.json');assert pin(p/'spec.json')==proof['spec']and pin(p/'body.html')==proof['body'];assert (p/'body.html').read_bytes()==(p/'canonical/stdout.bin').read_bytes();assert not (p/'canonical/stderr.bin').read_bytes();assert int((p/'canonical/exit.txt').read_text())==0
+ counts.append({'seq':n,**proof['counts'],'spec':proof['spec'],'body':proof['body'],'dispositions':dict(collections.Counter(x['disposition']for x in load(p/'original-dispositions.json')))})
+save(D/'completion.json',{'status':'DONE_FROZEN_PROVISIONAL_RECONCILIATION','baseline':'10968d16e701b698a0e1fbd845b353089d15ac39','counts':counts,'total_spans':sum(x['spans']for x in counts),'total_original_dispositions':sum(x['original_dispositions']for x in counts),'all_nine_canonical_exit_zero_empty_stderr':True,'source_and_original_copy_final_reopen_pass':True,'original_records':len(manifest),'shared_schema_index':'evidence-schema-index.json','semantic_approval':False,'remaining':'Distinct semantic review and root acceptance; no repository landing in this role.'})
+# Complete frozen enumeration. Only each freeze excludes itself. Nested historical artifacts remain ordinary covered files.
+results=[]
+for n in [280,281,282]:
+ p=B/'reconciled'/str(n)
+ if n!=280:
+  save(p/'shared-evidence.json',{'directory':str(D),'freeze':{'path':str(D/'freeze.json'),**pin(D/'freeze.json')},'schema_index':{'path':str(D/'evidence-schema-index.json'),**pin(D/'evidence-schema-index.json')},'original_copy_manifest':{'path':str(D/'original-copy-manifest.json'),**pin(D/'original-copy-manifest.json')},'final_self_verification':{'path':str(D/'final-self-verification.json'),**pin(D/'final-self-verification.json')}})
+ paths=sorted(q for q in p.rglob('*')if q.is_file());assert not any(q.is_symlink()for q in paths);assert not(p/'freeze.json').exists();files={str(q.relative_to(p)):pin(q)for q in paths};save(p/'freeze.json',{'status':'FROZEN_PROVISIONAL_RECONCILIATION','seq':n,'file_count':len(files),'total_bytes':sum(x['bytes']for x in files.values()),'semantic_approval':False,'files':files});assert files=={str(q.relative_to(p)):pin(q)for q in p.rglob('*')if q.is_file()and q!=p/'freeze.json'};results.append({'seq':n,'files':len(files),'freeze':pin(p/'freeze.json')})
+print(json.dumps({'status':'DONE','freezes':results,'counts':counts}))

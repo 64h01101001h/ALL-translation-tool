@@ -1,0 +1,13 @@
+--- verify-archives.py.txt
++++ verify-archives-v2.py.txt
+@@ -20,7 +20,9 @@
+ for kind,items,idx in [('master',entries,mi),('corpus',segments,ci)]:
+  for id,x in items.items():
+   obj=json.loads(x['raw']);key=json.dumps(obj,sort_keys=True,ensure_ascii=False);assert key in idx,(kind,id)
+-  if kind=='master':assert json.loads(x['hgm_gloss'])==obj.get('hgm_gloss') if x['hgm_gloss'] is not None else obj.get('hgm_gloss') is None
++  if kind=='master':
++   expected=json.dumps(obj.get('hgm_gloss'),ensure_ascii=False) if obj.get('hgm_gloss') else None
++   assert x['hgm_gloss']==expected,(id,x['hgm_gloss'],expected)
+   else:assert all(x[k]==obj[k] for k in ['course','wylie','english','acip'])
+   proof.append({'kind':kind,'id':id,'archive_positions':idx[key],'complete_raw_object':obj,'sql_row':x})
+ save('archive-object-proof.json',{'status':'PASS','master_entries':len(entries),'corpus_segments':len(segments),'objects':proof})

@@ -1,0 +1,146 @@
+"""Independent file/AST review only; never imports or executes candidate code."""
+from pathlib import Path
+import ast
+import datetime
+import difflib
+import hashlib
+import json
+import os
+import re
+
+O = Path(__file__).resolve().parent
+B = O.parent
+P = B / 'postlanding-verification-preparation'
+EXPECTED_FREEZE = '51f1a05ca75f3afa710610eeffaba5b1ef43df7019009a489a7a831cd29d2208'
+def pin(raw):
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+def j(path):
+    return json.loads(path.read_bytes())
+def save(name, value):
+    with (O / name).open('x') as stream:
+        json.dump(value, stream, ensure_ascii=False, indent=2)
+        stream.write('\n')
+def stable(path):
+    before = path.stat()
+    raw = path.read_bytes()
+    after = path.stat()
+    assert (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns) == (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns)
+    return raw
+
+freeze_raw = stable(P / 'freeze.json')
+assert pin(freeze_raw)['sha256'] == EXPECTED_FREEZE
+f = json.loads(freeze_raw)
+assert f['status'] == 'FROZEN_SOURCE_ONLY_PREPARATION_RUNTIME_PENDING'
+assert f['file_count'] == len(f['files']) == 110
+assert f['total_bytes'] == sum(x['bytes'] for x in f['files'].values()) == 1707565
+assert f['candidate_executions'] == 0
+paths = {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()}
+assert paths == set(f['files']) | {'freeze.json'}
+files = []
+for name, expected in f['files'].items():
+    path = P / name
+    assert not path.is_symlink()
+    actual = pin(stable(path))
+    assert actual == expected, name
+    files.append(dict(path=str(path), **actual, exact_frozen_pin=True))
+with (O / 'reviewed-source-freeze.json').open('xb') as stream:
+    stream.write(freeze_raw)
+save('full-freeze-checks.json', files)
+
+bindings = []
+for name in ('original-to-copy-manifest.json', 'supplemental-original-to-copy-manifest.json', 'late-original-to-copy-manifest.json'):
+    for row in j(P / name):
+        original, copy = Path(row['original']), P / row['copy']
+        a, b = stable(original), stable(copy)
+        assert a == b and pin(a) == {k: row[k] for k in ('bytes', 'sha256')}
+        assert str(original.resolve()) == row['resolved']
+        assert (os.readlink(original) if original.is_symlink() else None) == row['symlink']
+        bindings.append(dict(manifest=str(P / name), **row, complete_original_copy_equal=True, stable_reads=True, resolved_and_symlink_equal=True))
+assert len(bindings) == 66
+save('full-source-copy-checks.json', bindings)
+
+comparisons = []
+for row in j(P / 'adaptation-proof.json')['candidates']:
+    original = next(x for x in bindings if x['original'].endswith('/' + row['source']) and ('concrete-preparation' in x['original'] or 'page-banking-preparation' in x['original']))
+    a = (P / original['copy']).read_text()
+    b = (P / row['candidate']).read_text()
+    forward = a
+    for change in row['replacements']:
+        assert forward.count(change['old']) == change['count']
+        forward = forward.replace(change['old'], change['new'])
+    assert forward == b
+    inverse = b
+    for change in reversed(row['replacements']):
+        assert inverse.count(change['new']) == change['count']
+        inverse = inverse.replace(change['new'], change['old'])
+    assert inverse == a
+    target = Path(row['candidate']).name
+    diff = ''.join(difflib.unified_diff(a.splitlines(True), b.splitlines(True), fromfile=row['source'], tofile=target))
+    reverse = ''.join(difflib.unified_diff(b.splitlines(True), a.splitlines(True), fromfile=target, tofile=row['source']))
+    assert (P / (target + '.diff')).read_text() == diff
+    assert (P / (target + '.inverse.diff')).read_text() == reverse
+    assert pin(a.encode()) == row['original'] and pin(b.encode()) == row['proposed']
+    old_ast, new_ast = ast.parse(a), ast.parse(b)
+    old_assertions = [ast.dump(n, include_attributes=False) for n in ast.walk(old_ast) if isinstance(n, ast.Assert)]
+    new_assertions = [ast.dump(n, include_attributes=False) for n in ast.walk(new_ast) if isinstance(n, ast.Assert)]
+    assert len(old_assertions) == len(new_assertions)
+    comparisons.append(dict(candidate=str(P / row['candidate']), source_original=original['original'], source_copy=str(P / original['copy']), original=row['original'], candidate_pin=row['proposed'], full_forward_diff=pin(diff.encode()), full_inverse_diff=pin(reverse.encode()), exact_declared_replacements=True, full_inverse_exact=True, old_assertions=len(old_assertions), new_assertions=len(new_assertions), syntax='ast.parse only', byte_identical=a == b, executed=False))
+assert len(comparisons) == 4 and sum(x['byte_identical'] for x in comparisons) == 2
+save('candidate-comparisons.json', comparisons)
+
+pending = j(P / 'pending-input-contract.json')
+expected_keys = ['semantic_final', 'semantic_root', 'landing', 'root_builds', 'root_tests', 'root_retention', 'payload', 'seed', 'entry', 'retention_literals', 'closure_literals', 'ordinary_extra', 'untracked', 'bank_history', 'release']
+assert [x['key'] for x in pending['fields']] == expected_keys
+assert all(x['value'] is None and x['requires'] for x in pending['fields'])
+assert pending['status'] == 'NOT_RUNTIME_READY'
+assert pending['baseline'] == j(B / 'baseline.json')['commit'] == '10968d16e701b698a0e1fbd845b353089d15ac39'
+assert pending['prior_links'] == j(B / 'baseline.json')['full_links'] == 45275
+assert pending['page'] == 94 and pending['sequences'] == [280, 281, 282]
+assert len(pending['output_paths']) == 7 and all(pending[k] is None for k in ('output_pins', 'actual_counts', 'seed_pin', 'semantic_freeze', 'payload_manifest_pin'))
+contract = j(P / 'command-contract.json')
+assert contract['status'] == 'PREPARATION_ONLY_NO_EXECUTION_RELEASE'
+assert contract['no_execution_from_preparation'] is True and contract['bank_runtime_executed'] is False
+assert contract['environment'] == {'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONOPTIMIZE': '0', 'GIT_OPTIONAL_LOCKS': '0'}
+assert [x['order'] for x in contract['independent_steps']] == [1, 2, 3]
+assert [Path(x['argv'][-1]).name for x in contract['independent_steps']] == ['prepare.py.txt', 'run-once.py.txt', 'verify-retention.py.txt']
+runtime = B.parent / 'integration/through282-generated-reproduction'
+assert contract['runtime'] == contract['cwd'] == str(runtime)
+assert all(x['cwd'] == str(runtime) and Path(x['argv'][-1]).parent == runtime and x['argv'][1] == '-B' and x['executed'] is False for x in contract['independent_steps'])
+assert runtime.parents[2] == B.parents[1]
+correction = j(B / 'ctest-plan-correction.json')
+assert contract['root_prerequisite_ctest']['argv'] == correction['future_argv']
+assert (B / 'ctest-plan-correction.json').read_bytes() == (P / 'late-inputs/01-ctest-plan-correction.json').read_bytes()
+ctest = j(P / 'late-inputs/07-stdout.bin')
+assert ctest['kind'] == 'ctestInfo' and len(ctest['tests']) == 17
+bank_path = P / 'known-parameter-candidates/bank_root_proofs_through282.py.txt'
+bank_text = bank_path.read_text()
+tree = ast.parse(bank_text)
+tests = next(ast.literal_eval(n.value) for n in tree.body if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'TESTS' for t in n.targets))
+assert len(tests) == 17 and tests == {x['name'] for x in ctest['tests']} == set(correction['tests'])
+assert 'constitution' in tests and 'acip_recovery' not in tests
+regex = correction['future_argv'][correction['future_argv'].index('-R') + 1]
+assert all(re.fullmatch(regex, name) for name in tests)
+assert set(regex[2:-2].split('|')) == tests
+cmake_lines = (P / 'supplemental-inputs/core-CTestTestfile.cmake').read_text().splitlines()
+configured = []
+for test in ctest['tests']:
+    name = test['name']
+    add = [(i + 1, s) for i, s in enumerate(cmake_lines) if s.startswith('add_test("' + name + '" ')]
+    props = [(i + 1, s) for i, s in enumerate(cmake_lines) if s.startswith('set_tests_properties("' + name + '" ')]
+    assert len(add) == len(props) == 1
+    command = re.findall(r'"([^"]*)"', add[0][1])[1:]
+    assert command == test['command']
+    configured.append(dict(name=name, command=command, add_test=dict(line=add[0][0], text=add[0][1]), properties=dict(line=props[0][0], text=props[0][1])))
+assert correction['future_argv'][2] == str(B.parent / 'integration/course-csv-depth-fix/cmake-build')
+save('configured-17-command-checks.json', dict(root_correction=dict(path=str(B / 'ctest-plan-correction.json'), **pin((B / 'ctest-plan-correction.json').read_bytes())), authoritative_future_argv=correction['future_argv'], actual_prior_configured_json=pin((P / 'late-inputs/07-stdout.bin').read_bytes()), records=configured, ctest_invocations=0))
+
+dest = next(n for n in ast.walk(tree) if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'dest' for t in n.targets))
+assert ast.literal_eval(dest.value.right) == 'data/alignment/reviews_c05/c5p93/landing-proof'
+finding = dict(id='F1', priority='P1', file=str(bank_path), line=dest.lineno, title='Bind the banking destination to current page94', observed=ast.literal_eval(dest.value.right), expected='data/alignment/reviews_c05/c5p94/landing-proof', impact='The page94 candidate still targets page93. Its ordinary phase requires dest absent and will reject an existing page93 bank; absent that bank, it would plan current evidence under the wrong page.', required_change='Preserve this frozen preparation. Produce a separate superseding narrow correction of the c5p93 destination literal, with complete old/candidate bytes, forward/inverse diff and source-only review. No runtime release follows from this review.')
+save('findings.json', [finding])
+for name, expected in f['files'].items():
+    assert pin(stable(P / name)) == expected
+assert stable(P / 'freeze.json') == freeze_raw
+assert {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()} == paths
+save('static-proof.json', dict(status='PASS_STATIC_CHECKS_WITH_ONE_CODE_FINDING', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), source_directory=str(P), source_freeze=pin(freeze_raw), full_frozen_files=110, full_frozen_bytes=1707565, full_source_copy_bindings=66, candidates=4, unchanged_wrappers=2, forward_and_inverse_diffs_exact=True, pending_fields=expected_keys, pending_fields_count=15, known_binding_failure='F1: bank destination still c5p93', ctest_exact_constitution17=True, source_freeze_unchanged=True, candidate_execution=0, build=0, tests=0, sql=0, git=0, landing=0, banking=0, semantic_judgment=False))
+print(json.dumps(dict(status='STATIC_REVIEW_COMPLETE_WITH_ONE_CODE_FINDING', frozen_files=110, source_copy_bindings=66, candidates=4, pending_fields=15, configured_tests=17, finding='F1', candidate_executions=0)))

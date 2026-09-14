@@ -1,0 +1,11 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciliation-verifier-config/prepare.py.txt
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciliation-verifier-config/prepare-v2.py.txt
+@@ -54,7 +54,7 @@
+ wrapper=D/'run-generator-ro.py.txt';assert not wrapper.exists();wrapper.write_bytes((F/'run-generator-ro.py.txt').read_bytes());assert wrapper.read_bytes()==(F/'run-generator-ro.py.txt').read_bytes()
+ # Per-query projections bind full actual descriptors, including absence/presence of count.
+ queries=[];qderiv=[];seen_descriptors=set()
+-for i,r in enumerate(load(F/'query-replays.json'))):
++for i,r in enumerate(load(F/'query-replays.json')):
+  p=pathlib.Path(r['descriptor_original']);desc=load(p);kind='query_container_params'if r['descriptor_container']=='queries'else'query_list_params'if r['parameter_key']=='params'else'query_list';binding={'kind':kind,'index':r['descriptor_index']};original=desc['queries'][r['descriptor_index']]if r['descriptor_container']=='queries'else desc[r['descriptor_index']];assert original==r['original_descriptor'];query={'sql':original['sql'],'parameters':original[r['parameter_key']],'rows':original['rows']}
+  if 'count'in original:query['count']=original['count']
+  assert query['sql']==r['sql'] and query['parameters']==r['parameters']and query['rows']==r['rows'];out=N/'queries'/f'{i:03d}.json';save(out,query);queries.append({'file':ref(out),'descriptor':ref(p),'binding':binding});qderiv.append({'replay_index':i,'replay_file':str(F/'query-replays.json'),'descriptor':ref(p),'binding':binding,'original_descriptor':original,'derived':ref(out),'parameter_source_key':r['parameter_key'],'count_present':('count'in original)})

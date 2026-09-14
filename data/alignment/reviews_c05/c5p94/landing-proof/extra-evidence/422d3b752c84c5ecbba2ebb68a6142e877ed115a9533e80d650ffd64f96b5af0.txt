@@ -1,0 +1,32 @@
+from pathlib import Path
+import json,hashlib,ast,datetime,os
+B=Path(__file__).resolve().parent;I=B.parent/'integration';P=I/'through279-reproduction-closure-preparation';V=I/'through279-reproduction-closure-review';R=I/'through279-generated-reproduction';O=I/'through279-reproduction-closure-root-release'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+O.mkdir(exist_ok=False)
+for base,sha,count in [(P,'c72e438be5580182990e59ab92fde3c74b68ebf89089a79cea458228ac1ab452',186),(V,'7051f019b32328af20607b49cb8cf19c7c91d492493ba11d04e73e343f99ff44',197)]:
+ assert pin((base/'freeze.json').read_bytes())['sha256']==sha;f=j(base/'freeze.json');assert len(f['files'])==count and {str(p.relative_to(base)) for p in base.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+ for n,x in f['files'].items():assert pin((base/n).read_bytes())==x
+maps=0
+for base,name in [(P,'phase01-source-map.json'),(P,'actual-input-source-map.json'),(V,'original-to-copy-manifest.json')]:
+ for x in j(base/name):
+  raw=Path(x['original']).read_bytes();assert pin(raw)=={k:x[k] for k in ('bytes','sha256')} and raw==(base/x['copy']).read_bytes();maps+=1
+assert maps==344
+v=j(V/'review.json');assert v['verdict']==v['spec_verdict']==v['quality_verdict']=='APPROVE' and v['open_findings']==[]
+for x in j(P/'adaptation-proof.json')['files']:
+ old=Path(x['original_path']).read_text();new=(P/x['file']).read_text();value=old
+ for c in x['changes']:assert value.count(c['old'])==c['count'];value=value.replace(c['old'],c['new'])
+ assert value==new
+ for c in reversed(x['changes']):value=value.replace(c['new'],c['old'])
+ assert value==old;ast.parse(new)
+ret=j(R/'retention-proof.json');checks=j(R/'retention-checks.json');assert ret['status']=='PASS' and len(checks)==ret['checks_total']==224711 and all(x['pass_'] is True for x in checks)
+assert len(j(R/'input-manifest.json'))==2711 and len(j(R/'registered-pages.json'))==547
+assert j(R/'execution-proof.json')['status']=='PASS' and not (R/'freeze.json').exists()
+mapping=[]
+for name,target in [('close-evidence.py.txt',R/'close-evidence.py.txt'),('accept-independent-reproduction-root.py',B/'accept-independent-reproduction-root.py')]:
+ source=P/name;raw=source.read_bytes();record=next(x for x in v['code'] if x['file']==name);assert pin(raw)=={k:record[k] for k in ('bytes','sha256')}
+ with target.open('xb') as stream:stream.write(raw)
+ assert target.read_bytes()==raw;mapping.append(dict(original=str(source),copy=str(target),**pin(raw)))
+proof=dict(status='APPROVE_EXACT_CLOSURE_AND_ROOT_ACCEPTANCE_RUNTIME',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),preparation_freeze=pin((P/'freeze.json').read_bytes()),independent_review_freeze=pin((V/'freeze.json').read_bytes()),whole_frozen_files=383,full_source_copy_pairs=maps,code_mapping=mapping,root_read_both_full_codes_diffs_contract_and_review=True,scope='Once close with actual full caller, then complete actual runtime freeze, then separate root acceptance once. Existing successful producers/tests are not rerun. No bank/stage/commit/native/MAIN approval supplied.')
+save(O/'proof.json',proof);save(R/'closure-runtime-release.json',proof);print(json.dumps(proof))

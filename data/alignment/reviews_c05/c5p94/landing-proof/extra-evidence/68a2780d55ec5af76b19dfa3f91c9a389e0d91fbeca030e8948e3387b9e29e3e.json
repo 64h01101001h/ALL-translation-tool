@@ -1,0 +1,53 @@
+{
+  "status": "DONE_APPROVED_FIXED_CHECKPOINT_WITH_OPEN_INTEGRATION",
+  "spec_verdict": "APPROVE_FIXED_CHECKPOINT_WITH_OPEN_INTEGRATION",
+  "quality_verdict": "APPROVE_FIXED_CHECKPOINT_WITH_OPEN_INTEGRATION",
+  "fixed_heads": {
+    "original_base": "455c92d6171bf3628dd0e81a2dcc4ceaa7594f2d",
+    "incoming_previous_csv_seed": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+    "data": "746a6f549207a4254049aab747cb898f530d1b44",
+    "page_documentation": "f7686dce07f03c356f565ec71c6bdbaa18cf11e7",
+    "parser_code": "59d668e5407b085494220f9f4d4601659ebe5dd0",
+    "final": "10968d16e701b698a0e1fbd845b353089d15ac39",
+    "observed_MAIN": "a1b626ccc63422b8ca0173fbac4a6a6c3471deac"
+  },
+  "open_findings": [],
+  "report": {
+    "path": "review.md",
+    "bytes": 21582,
+    "sha256": "7e035ca1ef054c84c87b34991594557378dea7325a9862cc2897e958b472a183"
+  },
+  "review": {
+    "path": "review.json",
+    "bytes": 10273,
+    "sha256": "b2c7119a66de5dfc77048b29c67958ec1fb2d1c3ecdda86901fd8b7acac167d8"
+  },
+  "evidence_manifest": {
+    "path": "original-to-copy-manifest.json",
+    "bytes": 7158252,
+    "sha256": "56c517514570197b2b79d7b0aa7782365cb28576c82ae1c5014ea0b81494d703"
+  },
+  "object_proof": {
+    "path": "object-conservation-proof.json",
+    "bytes": 2097,
+    "sha256": "8eb16489475945c857b4e75321b2296ef2009ed28aed598b9cd8c61c28890bdd"
+  },
+  "material_MAIN_proof": {
+    "path": "material-main-consumption-proof.json",
+    "bytes": 2254,
+    "sha256": "f59ee19270a1d9919e6014ecd73afdb04227ef0782e83152f1a8e7f5797928ca"
+  },
+  "accepted_evidence_proof": {
+    "path": "accepted-evidence-proof.json",
+    "bytes": 2988,
+    "sha256": "9d1b61b7b9a4e6f9017d9d827f124776ec7183142137020417b2cb2454628374"
+  },
+  "MAIN_integration": "OPEN",
+  "consumer": "FAILED_UNACCEPTED_PRIVATE_PACK",
+  "actual_new_reviewer_git_sql_build_test_partition_MAIN_calls": 0,
+  "precision_correction": {
+    "scope": "two reporting strings only; generation versus partition identity boundary and structural unchanged wording",
+    "history": "history/final-report-precision01",
+    "evidence_rerun": false
+  }
+}

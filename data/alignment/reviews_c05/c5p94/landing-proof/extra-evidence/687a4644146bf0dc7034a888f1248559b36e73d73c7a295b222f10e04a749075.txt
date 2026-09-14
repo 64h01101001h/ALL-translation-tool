@@ -1,0 +1,30 @@
+"""Record one explicitly supplied command in a fresh external evidence directory.
+
+Usage: python3 -B record_external_step.py RECORD_DIR CWD COMMAND [ARGS...]
+"""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess, sys, time
+
+directory, cwd, *argv = sys.argv[1:]
+assert argv
+target = Path(directory).resolve()
+work = Path(cwd).resolve(strict=True)
+assert not target.is_relative_to(Path(__file__).resolve().parent.parent/'campaign-worktree')
+target.mkdir(parents=True, exist_ok=False)
+env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', GIT_OPTIONAL_LOCKS='0')
+record = dict(argv=argv, cwd=str(work), started_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              environment_overrides=dict(PYTHONDONTWRITEBYTECODE='1', GIT_OPTIONAL_LOCKS='0'),
+              inherited_environment=True, stdin_bytes=0,
+              recorder_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+(target/'command.json').write_text(json.dumps(record,indent=2)+'\n')
+(target/'stdin.bin').write_bytes(b'')
+started = time.perf_counter()
+run = subprocess.run(argv,cwd=work,env=env,input=b'',capture_output=True)
+for name,data in [('stdout.bin',run.stdout),('stderr.bin',run.stderr),('exit.txt',(str(run.returncode)+'\n').encode())]:
+    (target/name).write_bytes(data)
+record.update(finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),wall_seconds=time.perf_counter()-started,
+              exit=run.returncode,stdout_bytes=len(run.stdout),stderr_bytes=len(run.stderr),
+              stdout_sha256=hashlib.sha256(run.stdout).hexdigest(),stderr_sha256=hashlib.sha256(run.stderr).hexdigest())
+(target/'execution.json').write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(dict(exit=run.returncode,evidence=str(target),stdout_bytes=len(run.stdout),stderr_bytes=len(run.stderr)),indent=2))
+sys.exit(run.returncode)

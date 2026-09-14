@@ -1,0 +1,24 @@
+--- prior-close-evidence.py.txt
++++ close-evidence.py.txt
+@@ -1,17 +1,17 @@
+ from pathlib import Path
+ import collections,hashlib,json
+-R=Path(__file__).resolve().parent;A=R.parents[1];B=A/'C05-277-279';W=A.parent/'campaign-worktree'
++R=Path(__file__).resolve().parent;A=R.parents[1];B=A/'C05-280-282';W=A.parent/'campaign-worktree'
+ def j(p):return json.loads(p.read_bytes())
+ def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+ checks=j(R/'retention-checks.json');ret=j(R/'retention-proof.json');execution=j(R/'execution-proof.json')
+-assert ret['status']==execution['status']=='PASS' and len(checks)==ret['checks_total']==224711 and all(x['pass_'] for x in checks)
+-assert execution['layer_invocations']==execution['view_invocations']==1 and len(execution['runs'])==2
++assert ret['status']==execution['status']=='PASS' and len(checks)==ret['checks_total']==223847 and all(x['pass_'] for x in checks)
++assert execution['layer_invocations']==execution['view_invocations']==1 and len(execution['runs'])==2 and len(execution['outputs'])==7
+ for label in ('prepare','run-once','retention'):
+  d=R/'caller-runs'/label;record=j(d/'execution.json');assert record['exit']==0 and (d/'exit.txt').read_bytes()==b'0\n'
+  for suffix in ('stdout','stderr'):
+   value=(d/(suffix+'.bin')).read_bytes();assert pin(value)==dict(bytes=record[suffix+'_bytes'],sha256=record[suffix+'_sha256'])
+  assert (d/'stderr.bin').read_bytes()==b''
+-rows=j(R/'input-manifest.json');out=[]
++rows=j(R/'input-manifest.json');assert len(rows)==1513;out=[]
+ for r in rows:
+  cp=R/r['copy'];value=cp.read_bytes();assert pin(value)=={k:r[k] for k in ('bytes','sha256')}
+  proof=dict(copy=r['copy'],role=r['role'],**pin(value))

@@ -1,0 +1,46 @@
+{
+  "status": "CHANGES_REQUESTED_ONE_COPY_IDENTITY_DEFECT",
+  "spec_verdict": "CHANGES_REQUESTED",
+  "quality_verdict": "CHANGES_REQUESTED",
+  "utc": "2026-09-14T03:34:09.625636+00:00",
+  "candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-release-initial-inventory-root.py",
+    "bytes": 9926,
+    "sha256": "308c500cbdb04fac1f68374fc9b88a99769b76194b9612fe0e687156be6903fb"
+  },
+  "prior": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/release-final279-inventory-root.py",
+    "bytes": 2868,
+    "sha256": "e6c601917848ca631cf1feb1c8b6c52e224cf3874b5b144fd0b11a9c7879c52d"
+  },
+  "open_findings": [
+    {
+      "id": "R1",
+      "priority": "P2",
+      "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-release-initial-inventory-root.py",
+      "line": 40,
+      "title": "Resolve successful-attempt copy paths relative to attempt02",
+      "detail": "The successful map is attempt02/full-source-copy-manifest.json, whose producer sets OUT to the attempt02 directory and writes each copy field relative to OUT. The candidate instead uses SV as its copy base at lines 45 and 49. All 67 earlier failed-attempt copies also exist and happen to match, so the checker currently validates and reports those different paths rather than the successful map copy identities.",
+      "minimal_change": "Replace (SV,'attempt02/full-source-copy-manifest.json') with (SV/'attempt02','full-source-copy-manifest.json'); retain the whole SV freeze check and all other guards.",
+      "observed_source_or_data_failure": false,
+      "target_invocations": 0
+    }
+  ],
+  "full_prior_and_current_source_read": true,
+  "actual_four_freeze_schemas_and_counts_match": true,
+  "actual_known_maps_parsed_in_full": true,
+  "exact_current_scope_pin_and_counts_match": true,
+  "known_guards_retained": "Full freeze/source/copy/review/candidate/root enumeration and exact original descriptors remain; current ordinary/census/routes/audit gates extend the prior. Historical fixed 195/110/4333 populations are not imported.",
+  "source_base_note": "The checker derives I from __file__. It must run at its actual integration source path; preserved review copies are not runnable substitutes.",
+  "target_imports": 0,
+  "target_invocations": 0,
+  "Git_SQL_bank_stage_tests_commits": 0,
+  "actual_initial_release": false,
+  "semantic_approval": false,
+  "writes_only": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-initial-inventory-release-code-review",
+  "limitations": [
+    "Future actual literal-review freeze/map is not yet reviewed by this task; its concrete API must match before release.",
+    "This is a source review, not an independent rerun of all ordinary/source/runtime verification.",
+    "The single finding is copy identity, not changed bytes or an observed target failure."
+  ]
+}

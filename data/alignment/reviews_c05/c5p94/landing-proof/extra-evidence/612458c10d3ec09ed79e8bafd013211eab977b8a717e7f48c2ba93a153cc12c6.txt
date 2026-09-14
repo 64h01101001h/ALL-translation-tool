@@ -1,0 +1,11 @@
+--- old-bank.py.txt
++++ corrected-bank.py.txt
+@@ -62,7 +62,7 @@
+     b, wt = Path(args.batch).resolve(strict=True), Path(args.worktree).resolve(strict=True)
+     assert b.name == 'C05-280-282'
+     landing = b / 'landing'; review = b / 'semantic-review'
+-    dest = wt / 'data/alignment/reviews_c05/c5p93/landing-proof'
++    dest = wt / 'data/alignment/reviews_c05/c5p94/landing-proof'
+     output = Path(args.run_output).absolute()
+     assert not output.resolve().is_relative_to(wt) and not output.resolve().is_relative_to(b)
+     output.mkdir(parents=True, exist_ok=False)

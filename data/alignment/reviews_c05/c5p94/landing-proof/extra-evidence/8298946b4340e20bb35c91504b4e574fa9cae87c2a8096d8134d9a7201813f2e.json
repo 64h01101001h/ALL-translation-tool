@@ -1,0 +1,122 @@
+{
+  "status": "PASS_SOURCE_ONLY_ADAPTATION",
+  "candidates": [
+    {
+      "candidate": "close-evidence.py.txt",
+      "old": {
+        "bytes": 4879,
+        "sha256": "7b3db3b8d72a5adf97054c8dd17f4011843ebfff28b0c72a767ba1442150807f"
+      },
+      "new": {
+        "bytes": 4935,
+        "sha256": "3395a15d3fb07ae6dbf9cad582fd72e00ac7658a204917b44530f4587e5b83e3"
+      },
+      "replacements": [
+        {
+          "old": "C05-277-279",
+          "new": "C05-280-282",
+          "count": 1
+        },
+        {
+          "old": "224711",
+          "new": "223847",
+          "count": 1
+        },
+        {
+          "old": "assert execution['layer_invocations']==execution['view_invocations']==1 and len(execution['runs'])==2",
+          "new": "assert execution['layer_invocations']==execution['view_invocations']==1 and len(execution['runs'])==2 and len(execution['outputs'])==7",
+          "count": 1
+        },
+        {
+          "old": "rows=j(R/'input-manifest.json');out=[]",
+          "new": "rows=j(R/'input-manifest.json');assert len(rows)==1513;out=[]",
+          "count": 1
+        }
+      ],
+      "full_inverse_exact": true,
+      "syntax_only": true
+    },
+    {
+      "candidate": "accept-independent-reproduction-root.py",
+      "old": {
+        "bytes": 10075,
+        "sha256": "10e6ec30c73654989f6c18beae2ea92fefe9a9bf42e5f794824a009d4bca1f72"
+      },
+      "new": {
+        "bytes": 10268,
+        "sha256": "87f638191a9e5b6782725b20e75459532fc71844fbb7fd8a07e5f782a105f935"
+      },
+      "replacements": [
+        {
+          "old": "through279-generated-reproduction",
+          "new": "through282-generated-reproduction",
+          "count": 2
+        },
+        {
+          "old": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+          "new": "10968d16e701b698a0e1fbd845b353089d15ac39",
+          "count": 1
+        },
+        {
+          "old": "retention['prior_links_retained']==45126 and retention['added_links']==149",
+          "new": "retention['prior_links_retained']==45275 and retention['added_links']==127",
+          "count": 1
+        },
+        {
+          "old": "[45275,11934,1615,11,7084,15517,22491,22151,24061,34]",
+          "new": "[45402,11938,1618,11,7092,15546,22528,22188,24105,37]",
+          "count": 1
+        },
+        {
+          "old": "224711",
+          "new": "223847",
+          "count": 2
+        },
+        {
+          "old": "(7084,7081,3,5,6)",
+          "new": "(7092,7089,3,5,6)",
+          "count": 1
+        },
+        {
+          "old": "len(js(R/'registered-pages.json'))==547",
+          "new": "len(js(R/'registered-pages.json'))==548",
+          "count": 1
+        },
+        {
+          "old": "closure_source=I/'through279-reproduction-closure-preparation/close-evidence.py.txt'",
+          "new": "closure_source=B/'reproduction-closure-preparation/close-evidence.py.txt'",
+          "count": 1
+        },
+        {
+          "old": "all_twelve_payload_files_byte_exact=True",
+          "new": "all_thirteen_payload_files_byte_exact=True",
+          "count": 1
+        },
+        {
+          "old": "acip_proven=7081,acip_heads=7084",
+          "new": "acip_proven=7089,acip_heads=7092",
+          "count": 1
+        },
+        {
+          "old": "for r in js(B/'landing/staged-payload-manifest.json')['files']:",
+          "new": "payload_manifest=js(B/'landing/staged-payload-manifest.json');assert len(payload_manifest['files'])==13 and len({r['path'] for r in payload_manifest['files']})==13\nfor r in payload_manifest['files']:",
+          "count": 1
+        },
+        {
+          "old": "manifest=js(R/'input-manifest.json');originals=[];git_blobs={}",
+          "new": "manifest=js(R/'input-manifest.json');assert len(manifest)==1513;originals=[];git_blobs={}",
+          "count": 1
+        },
+        {
+          "old": "Path(e['argv'][-1])==R/script",
+          "new": "(Path(e['cwd'])/Path(e['argv'][-1])).resolve()==(R/script).resolve()",
+          "count": 1
+        }
+      ],
+      "full_inverse_exact": true,
+      "syntax_only": true
+    }
+  ],
+  "root_acceptance_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction-root-acceptance",
+  "target_executions": 0
+}

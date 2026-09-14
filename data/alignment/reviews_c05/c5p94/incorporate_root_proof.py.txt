@@ -1,0 +1,80 @@
+"""Preserve and verify delivered root evidence; never execute its runtime or SQL."""
+import hashlib, importlib.util, json, os, subprocess
+from pathlib import Path
+O=Path(__file__).resolve().parent;B=O.parent;R=B.parents[1];W=R/'campaign-worktree'
+COMMIT='10968d16e701b698a0e1fbd845b353089d15ac39'
+def load(p):return json.loads(Path(p).read_bytes())
+def save(n,v):(O/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ raw=Path(p).read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def check(p,r):assert pin(p)=={k:r[k] for k in ['bytes','sha256']},str(p)
+H=O/'history/02-before-root-proof';H.mkdir(parents=True,exist_ok=True)
+for n in ['review.json','original-to-copy-manifest.json','packaging-preflight.json']:
+ assert not (H/n).exists();(H/n).write_bytes((O/n).read_bytes())
+V=B/'root-reconciliation-verification';I=R/'campaign-artifacts/integration/through282-root-reconciliation-verification-attempt01'
+proof=load(V/'execution-proof.json');report=load(V/'report.json');call=load(B/'root-reconciliation-runtime-caller/execution.json')
+assert proof['status']=='PASS mechanical source and identity verification' and proof['baseline']==COMMIT and not proof['semantic_approval']
+assert call['exit']==0 and call['stderr_bytes']==0 and call['argv'][-1]=='--execute-reviewed-verification'
+assert not (B/'root-reconciliation-runtime-caller/stderr').read_bytes()
+assert (proof['original_identities'],proof['final_spans'],proof['nulls'],proof['nonnull_d5'],proof['queries'],proof['source_copy_records'],proof['aliases'],proof['governing_git_objects'],proof['physical_extents'],proof['canonical_replays'])==(225,124,4,102,226,428,422,11,16,3)
+assert load(V/'resolved-spans.json')==load(O/'resolved-spans.json')
+for root,own in zip(report,load(O/'measured-segments.json')):
+ for name in ['seq','spec_bytes','spec_sha256','body_bytes','body_sha256']:assert root[name]==own[name]
+ assert (root['spans'],root['nulls'],root['word_pairs'],root['exit'])==(own['span_count'],own['null_count'],own['word_pair_count'],own['generator_exit'])
+ seq=root['seq'];assert (V/f'{seq}.stdout').read_bytes()==(O/f'reviewed-final/{seq}/body.html').read_bytes()
+ assert (V/f'{seq}.stdin').read_bytes()==(O/f'reviewed-final/{seq}/spec.json').read_bytes()
+ assert not (V/f'{seq}.stderr').read_bytes() and (V/f'{seq}.exit').read_text().strip()=='0'
+ assert load(V/f'{seq}.head-allowance-check.json')['actual_gated_hits']==load(B/f'reconciled/{seq}/proposed-head-allowances.json')['actual_gated_hits']
+runtime_map=load(V/'runtime-original-to-copy-manifest.json');assert len(runtime_map)==102
+assert {str(p) for p in I.rglob('*') if p.is_file()}=={r['original'] for r in runtime_map}
+for r in runtime_map:
+ check(r['original'],r);check(r['copy'],r);assert Path(r['original']).read_bytes()==Path(r['copy']).read_bytes()
+queries=load(V/'full-query-replays.json');assert len(queries)==226
+for q in queries:
+ descriptor=load(q['source']);assert {k:q[k] for k in ['sql','parameters','rows']}=={k:descriptor[k] for k in ['sql','parameters','rows']}
+current={r['seq']:r for r in load(O/'original-source-rows.json')['rows']}
+assert all(row==current[row['seq']] for row in load(V/'source-full-rows.json'))
+release=load(B/'root-reconciliation-runtime-release-v2/proof.json')
+for key,name in [('code','verify_reconciliation.py'),('contract','config_contract.py'),('config','config.json')]:check(V/name,release[key])
+assert release['argv']==call['argv']
+failure=load(B/'root-reconciliation-runtime-release/failure.json');assert failure['status']=='FAILED_ROOT_RELEASE_PRECHECK'
+for entry in release['freezes']:
+ d=Path(entry['directory']);check(d/'freeze.json',entry['freeze']);f=load(d/'freeze.json')['files']
+ pairs=f.items() if isinstance(f,dict) else [(x['path'],x) for x in f]
+ actual={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'};expected=set()
+ for n,p in pairs:
+  rel=str(Path(n).relative_to(d)) if Path(n).is_absolute() else n;expected.add(rel);check(d/rel,p)
+ assert actual==expected and len(expected)==entry['files']
+dirs=['root-reconciliation-verification','root-reconciliation-runtime-release','root-reconciliation-runtime-release-v2','root-reconciliation-runtime-release-caller','root-reconciliation-runtime-release-v2-caller','root-reconciliation-runtime-caller','reconciliation-verifier-config','reconciliation-verifier-head-allowance-preparation','reconciled/root-runtime-inputs']
+originals=[p for n in dirs for p in (B/n).rglob('*') if p.is_file() and '__pycache__' not in p.parts]
+originals += [p for p in I.rglob('*') if p.is_file()]
+originals += [B/n for n in ['release-root-reconciliation-runtime.py','release-root-reconciliation-runtime-v2.py','reconciled/run-generator-ro.py.txt','root-reconciled-content-reading.json','root-frozen-reconciliation-receipt.json']]
+copy_map=load(B/'reconciled/root-runtime-inputs/copy-manifest.json')
+for r in copy_map:
+ original=Path(r['original']);copy=B/'reconciled'/r['copy'];check(original,r);check(copy,r)
+ originals += [original,copy]
+old=load(O/'original-to-copy-manifest.json');by_original={r['original']:r for r in old}
+new=[]
+for p in sorted(set(x.resolve() for x in originals)):
+ if str(p) in by_original:
+  r=by_original[str(p)];check(p,r);assert p.read_bytes()==(O/r['copy']).read_bytes()
+ else:new.append(p)
+helper=R/'campaign-artifacts/copy_evidence_once_v2.py'
+spec=importlib.util.spec_from_file_location('reviewed_evidence_helper',helper);mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
+preservation=mod.preserve(O,O/'original-to-copy-manifest.json',new)
+# The eleventh governing file is newly needed for this supplemental proof.
+argv=['git','show',COMMIT+':tools/build_spine.py'];proc=subprocess.run(argv,cwd=W,capture_output=True,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+assert proc.returncode==0 and not proc.stderr
+run=O/'runs/git-source-10';run.mkdir()
+for n,raw in [('stdin.bin',b''),('stdout.bin',proc.stdout),('stderr.bin',proc.stderr),('exit.txt',b'0\n')]: (run/n).write_bytes(raw)
+save('runs/git-source-10/execution.json',dict(argv=argv,cwd=str(W),exit=proc.returncode,operation='Read immutable supplemental governing Git object; no runtime or SQL'))
+gits=load(O/'fixed-git-proof.json')+[dict(repository_relative_path='tools/build_spine.py',original_git_commit=COMMIT,**pin(run/'stdout.bin'))]
+git_by_hash={(r['sha256'],r['bytes']):r for r in gits};manifest=load(O/'original-to-copy-manifest.json')
+for r in manifest:
+ if (r['sha256'],r['bytes']) in git_by_hash:
+  g=git_by_hash[(r['sha256'],r['bytes'])];r['original_git_commit']=COMMIT;r['repository_relative_path']=g['repository_relative_path']
+ if Path(r['original']).is_relative_to(W):assert 'original_git_commit' in r
+save('original-to-copy-manifest.json',manifest)
+save('root-proof-inspection.json',dict(verdict='PASS',root_runtime_reexecuted=False,SQL_reexecuted=False,canonical_replays_repeated=False,runtime_map_records=102,runtime_report=pin(V/'report.json'),runtime_execution=pin(V/'execution-proof.json'),runtime_caller=pin(B/'root-reconciliation-runtime-caller/execution.json'),runtime_source=pin(V/'verify_reconciliation.py'),runtime_contract=pin(V/'config_contract.py'),runtime_config=pin(V/'config.json'),exact_seven_key_tuples_equal=True,exact_source_rows_equal=True,all_query_descriptors_equal=True,root_release_failure_preserved=True,source_preparation_unchanged=True,preservation=preservation,additional_git_object='tools/build_spine.py',notes='Read full runtime, narrow exact allowance diff and actual result. Root mechanical pass supplements the independent three canonical runs and semantic source judgment; it does not supply that judgment.'))
+review=load(O/'review.json');review.update(verdict='APPROVE',root_mechanical_proof={'status':'PASS','inspection':'root-proof-inspection.json','execution_sha256':pin(V/'execution-proof.json')['sha256']});save('review.json',review)
+print(json.dumps({'status':'ROOT_PROOF_INCORPORATED','manifest_records':len(manifest),'new_copy_result':preservation}))

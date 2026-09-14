@@ -1,0 +1,156 @@
+--- prior/verify_staged_through279.py
++++ prepared/verify_staged_through282.py
+@@ -1,9 +1,15 @@
+-"""PREPARED candidate: read-only through279 staging verification, no banking.
++"""PREPARED candidate: read-only through282 staging verification, no banking.
+ 
+ Requires actual final approvals/landing/builds/tests/banked proofs and an already
+ reviewed whitespace proof. Writes evidence only to a fresh external --output.
+ Run only after independent tooling review; this is not semantic approval.
+ """
++
++# PREPARATION ONLY: actual ordinary bank, ledgers and staged diagnostics are pending.
++PENDING_BINDINGS = {'ordinary_bank_manifest': None, 'ordinary_bank_file_count': None, 'ordinary_bank_external_count': None, 'ordinary_bank_write_run': None, 'final_bank_manifest': None, 'final_bank_write_run': None, 'final_bank_file_count': None, 'three_ledger_paths_and_approved_before_after_bytes': None, 'three_ledger_staging_contract_review': None, 'raw_untracked_before_banking_full_stream_and_caller': None, 'actual_index_and_unstaged_boundary': None, 'actual_raw_diagnostic_full_stream_and_caller': None, 'actual_staged_path_set_and_count': None, 'physical_source_descriptors_and_original_aliases': None, 'additional_warning_descriptor_contract': None, 'prior_closure_proof_relative': None, 'prior_closure_expected_status': None, 'whitespace_preparation_freeze_sha256': None, 'whitespace_preparation_file_count': None, 'whitespace_review_freeze_sha256': None, 'whitespace_review_file_count': None, 'additional_descriptor_entry_count': None, 'additional_descriptor_evidence_count': None, 'additional_descriptor_provenance_count': None, 'verified_frozen_file_count': None, 'original_copy_pair_count': None, 'warning_count': None, 'warning_file_count': None, 'raw_diagnostic_exit': None, 'independent_code_review_and_actual_runtime_release': None}
++if any(value is None for value in PENDING_BINDINGS.values()):
++    raise RuntimeError('Unbound through282 preparation; no staging, bank, Git, whitespace or verification runtime is released')
++
+ from pathlib import Path
+ import argparse
+ import collections
+@@ -16,8 +22,8 @@
+ import sys
+ import traceback
+ 
+-BASE = 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+-PAGE, SEQS = 93, [277, 278, 279]
++BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
++PAGE, SEQS = 94, [280, 281, 282]
+ TESTS = {'constitution', 'gen_alignment_page', 'alignment_gate_coverage',
+          'alignment_builder', 'dictionary_exports', 'no_broken_words',
+          'no_split_syllables', 'no_phonetics_in_layer', 'no_degenerate_members',
+@@ -43,11 +49,11 @@
+ 
+ def freeze_entries(freeze):
+     # Actual current immutable freeze: distinct SPEC and QUALITY verdicts, DICT pins.
+-    assert freeze['spec_verdict'] == freeze['quality_verdict'] == 'APPROVE'
++    assert freeze['status'] == 'FROZEN' and freeze['verdict'] == 'APPROVE' and freeze['page'] == 'c5p94'
+     rows = freeze['files']
+     assert isinstance(rows, dict) and rows
+     assert freeze['file_count'] == len(rows)
+-    assert freeze['total_bytes'] == sum(row['bytes'] for row in rows.values())
++    assert sum(row['bytes'] for row in rows.values()) == 48827659 and len(rows) == 871
+     for name, row in rows.items():
+         relative(name)
+         assert isinstance(row['bytes'], int) and row['bytes'] >= 0
+@@ -114,10 +120,10 @@
+     def __init__(self, args):
+         self.w = Path(args.worktree).resolve(strict=True)
+         self.b = Path(args.batch).resolve(strict=True)
+-        assert self.b.name == 'C05-277-279'
++        assert self.b.name == 'C05-280-282'
+         self.l = self.b / 'landing'
+         self.review = self.b / 'semantic-review'
+-        self.bank_rel = Path('data/alignment/reviews_c05/c5p93')
++        self.bank_rel = Path('data/alignment/reviews_c05/c5p94')
+         self.bank = self.w / self.bank_rel
+         self.out = Path(args.output).absolute()
+         assert not self.out.resolve().is_relative_to(self.w)
+@@ -308,12 +314,13 @@
+         current_untracked = self.git('ls-files', '--others', '--exclude-standard', '-z')[0]
+         baseline = self.obj(self.b / 'baseline.json')
+         assert baseline['commit'] == BASE and baseline['course_boundary'] == SEQS[0] - 1
+-        closed = self.obj(self.b.parent / 'integration/through276-root-closure/final-observed-main/proof.json')
+-        assert closed['status'] == 'PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276' and closed['final_head'] == BASE
++        closed = self.obj(self.b.parent / PENDING_BINDINGS['prior_closure_proof_relative'])
++        assert closed['status'] == PENDING_BINDINGS['prior_closure_expected_status'] and closed['final_head'] == BASE
+ 
+         # Exact semantic freeze and actual approval identities; no semantic judgment.
+         freeze_raw = self.raw(self.review / 'freeze.json')
+         freeze = json.loads(freeze_raw)
++        assert sha(freeze_raw) == '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
+         frozen = {}
+         for name, row in freeze_entries(freeze).items():
+             rel = str(relative(name))
+@@ -327,7 +334,7 @@
+         self.require(self.bank_rel / 'freeze.json', freeze_raw)
+         meta_raw = self.raw(self.review / 'review.json')
+         meta = json.loads(meta_raw)
+-        assert meta['verdict'] == meta['spec_verdict'] == meta['quality_verdict'] == 'APPROVE'
++        assert meta['verdict'] == 'APPROVE' and meta['spec_verdict'] == meta['quality_verdict'] == 'PASS'
+         assert meta['open_findings'] == []
+         assert [r['seq'] for r in meta['segments']] == SEQS
+         accepted = self.obj(self.l / 'root-semantic-acceptance-proof.json')
+@@ -371,13 +378,13 @@
+         assert self.raw(self.l / 'generator.stdout') == body and body
+         assert self.raw(self.l / 'generator.exit').strip() == b'0' and not self.raw(self.l / 'generator.stderr')
+         landed = self.obj(self.bank / 'landing.json')
+-        assert landed['course'] == 'C05' and landed['page'] == 'c5p93' and landed['segments'] == SEQS
++        assert landed['course'] == 'C05' and landed['page'] == 'c5p94' and landed['segments'] == SEQS
+         assert landed['generator_exit'] == 0 and landed['spec_sha256'] == sha(spec) and landed['body_sha256'] == sha(body)
+         self.require(self.bank_rel / 'landing.json', self.raw(self.bank / 'landing.json'))
+-        self.require('data/alignment/specs_c05/c5p93.json', spec)
+-        page = self.raw(self.w / 'data/alignment/pages_c05/c5p93.html')
++        self.require('data/alignment/specs_c05/c5p94.json', spec)
++        page = self.raw(self.w / 'data/alignment/pages_c05/c5p94.html')
+         assert body in page
+-        self.require('data/alignment/pages_c05/c5p93.html', page)
++        self.require('data/alignment/pages_c05/c5p94.html', page)
+ 
+         # Every source alias is reopened; historical originals use their exact commit.
+         manifest = self.obj(self.review / 'original-to-copy-manifest.json')
+@@ -407,20 +414,20 @@
+             new = self.raw(self.w / rel)
+             self.pincheck(old, registration[before_key]); self.pincheck(new, registration[after_key])
+             if rel.startswith('tools/'):
+-                needle = b'    "c5p92": [274, 275, 276],\n'
++                needle = b'    "c5p93": [277, 278, 279],\n'
+                 assert old.count(needle) == 1
+-                assert new == old.replace(needle, needle + b'    "c5p93": [277, 278, 279],\n')
++                assert new == old.replace(needle, needle + b'    "c5p94": [280, 281, 282],\n')
+             else:
+-                coverage = b'Reviewed campaign coverage: 276 of 511 source segments.'
+-                link = '<li><a href="c5p92.html">Page 92 · segments 274–276</a></li>'.encode()
++                coverage = b'Reviewed campaign coverage: 279 of 511 source segments.'
++                link = '<li><a href="c5p93.html">Page 93 · segments 277–279</a></li>'.encode()
+                 assert old.count(coverage) == old.count(link) == 1
+-                assert new == old.replace(coverage, b'Reviewed campaign coverage: 279 of 511 source segments.').replace(link, link + '\n<li><a href="c5p93.html">Page 93 · segments 277–279</a></li>'.encode())
++                assert new == old.replace(coverage, b'Reviewed campaign coverage: 282 of 511 source segments.').replace(link, link + '\n<li><a href="c5p94.html">Page 94 · segments 280–282</a></li>'.encode())
+             self.require(rel, new)
+-        previous = 'data/alignment/pages_c05/c5p92.html'
++        previous = 'data/alignment/pages_c05/c5p93.html'
+         old = self.old(previous)
+         nav = b'&larr; Previous</a></div>'
+         assert old.count(nav) == 2
+-        self.require(previous, old.replace(nav, b"&larr; Previous</a><a href='c5p93.html'>Next &rarr;</a></div>"))
++        self.require(previous, old.replace(nav, b"&larr; Previous</a><a href='c5p94.html'>Next &rarr;</a></div>"))
+ 
+         # Actual approved errata/allowance changes, never assumed present.
+         register = self.obj(self.l / 'review-copy-and-register-proof.json')
+@@ -472,7 +479,7 @@
+         assert not old_links - new_links
+         added = [json.loads(k) for k, n in (new_links - old_links).items() for _ in range(n)]
+         assert len(added) == totals['spans'] + len(SEQS)
+-        assert all(x['course'] == 'C05' and x['seg'] in SEQS and x['page'] == 'c5p93' for x in added)
++        assert all(x['course'] == 'C05' and x['seg'] in SEQS and x['page'] == 'c5p94' for x in added)
+         assert sum(x['eng'] is None for x in added) == totals['nulls']
+         norm = lambda value: ' '.join(value.split()) if value is not None else None
+         sentence_ids = {f's{seq}S' for seq in SEQS}
+@@ -495,7 +502,7 @@
+         for field in ('notes', 'trees'):
+             assert all(now[field].get(k) == v for k, v in before[field].items())
+         retention = self.obj(self.l / 'retention-source-check.json')
+-        assert retention['baseline_commit'] == BASE and retention['segments'] == SEQS and retention['page'] == 'c5p93'
++        assert retention['baseline_commit'] == BASE and retention['segments'] == SEQS and retention['page'] == 'c5p94'
+         assert retention['added_links'] == len(added) and retention['reviewed_analyst_spans'] == totals['spans']
+         assert retention['full_links'] == len(now['links']) and retention['null_exponents'] == sum(x['eng'] is None for x in now['links'])
+         for flag in ('prior_notes_trees_evidence_and_acip_retained', 'prior_csv_content_and_references_retained', 'source_hashes_unchanged', 'review_tuples_and_source_ranges_match', 'navigation_targets_exist'):
+@@ -605,7 +612,8 @@
+             assert rel not in payload_records
+             payload_records[rel] = row
+         payload_required = {rel for rel in self.required if not Path(rel).is_relative_to(self.bank_rel)}
+-        assert set(payload_records) == payload_required
++        assert set(payload_records) == payload_required and len(payload_records) == 13
++        assert 'data/alignment/span_head_allow.json' in payload_records
+         for rel, row in payload_records.items():
+             self.pincheck(self.required[rel], row)
+ 

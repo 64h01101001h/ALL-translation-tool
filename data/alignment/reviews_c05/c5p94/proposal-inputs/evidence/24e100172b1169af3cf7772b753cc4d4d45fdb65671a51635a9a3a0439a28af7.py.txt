@@ -1,0 +1,29 @@
+import os,sys,json,subprocess,hashlib,importlib.util,copy
+from pathlib import Path
+BASE=Path(__file__).resolve().parent.parent
+WORK=BASE.parents[2]/'campaign-worktree'
+def sha(b): return hashlib.sha256(b).hexdigest()
+def save(p,obj): p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+spec=importlib.util.spec_from_file_location('canonical',WORK/'tools/gen_alignment_page.py'); G=importlib.util.module_from_spec(spec);spec.loader.exec_module(G)
+rows={r['seq']:r for r in json.loads((BASE/'280/original-context-rows.json').read_text())['rows']}
+for seq in ([int(x) for x in sys.argv[1:]] or [280,281,282]):
+ out=BASE/str(seq); specbytes=(out/'spec.json').read_bytes(); data=json.loads(specbytes); seg=data['segments'][0]
+ intended=json.loads((out/'intended-spans.json').read_text()); spans=copy.deepcopy(seg['spans']); byid={s['id']:s for s in spans}
+ tr=G.resolve(rows[seq]['wylie'],spans,'tib',seq)
+ er=G.resolve(rows[seq]['english'],G.with_members(spans,[byid[s] for s in seg['eng_order']],rows[seq]['english']),'eng',seq)
+ comparisons=[{'id':r['id'],'tib_match':list(tr[r['id']])==r['tib_range'],'eng_match':(list(er[r['id']]) if r['id'] in er else None)==r['eng_range']} for r in intended]
+ save(out/'canonical-range-check.json',comparisons)
+ assert all(r['tib_match'] and r['eng_match'] for r in comparisons), (seq,comparisons)
+ attempts=[p for p in out.iterdir() if p.is_dir() and p.name.startswith('generator-attempt-')]
+ attempt=out/f'generator-attempt-{len(attempts)+1:02d}';attempt.mkdir()
+ (attempt/'spec.json').write_bytes(specbytes)
+ cmd=[sys.executable,'-B',str(BASE/'280/run_generator_readonly.py')]
+ result=subprocess.run(cmd,input=specbytes,capture_output=True,cwd=WORK,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (attempt/'stdout.html').write_bytes(result.stdout);(attempt/'stderr.txt').write_bytes(result.stderr);(attempt/'exit.txt').write_text(str(result.returncode)+'\n')
+ save(attempt/'invocation.json',{'argv':cmd,'cwd':str(WORK),'stdin':'spec.json','environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'canonical_script':str(WORK/'tools/gen_alignment_page.py'),'canonical_sha256':sha((WORK/'tools/gen_alignment_page.py').read_bytes()),'read_only_wrapper_sha256':sha((BASE/'280/run_generator_readonly.py').read_bytes())})
+ assert result.returncode==0 and not result.stderr, (seq,result.returncode,result.stderr.decode())
+ (out/'body.html').write_bytes(result.stdout)
+ (out/'generator.stdout.html').write_bytes(result.stdout);(out/'generator.stderr.txt').write_bytes(result.stderr);(out/'generator.exit.txt').write_text(str(result.returncode)+'\n')
+ assert (out/'body.html').read_bytes()==(out/'generator.stdout.html').read_bytes()==(attempt/'stdout.html').read_bytes()
+ proof={'seq':seq,'exit':result.returncode,'stderr_bytes':len(result.stderr),'body_bytes':len(result.stdout),'body_sha256':sha(result.stdout),'spec_sha256':sha(specbytes),'saved_body_exactly_equals_stdout':True,'canonical_ranges_equal_intended':True,'spans':len(spans),'d5':sum(s['d']==5 for s in spans),'d3':sum(s['d']==3 for s in spans),'d6':sum(s['d']==6 for s in spans),'nulls':sum(s['eng'] is None for s in spans),'non_null':sum(s['eng'] is not None for s in spans),'errata':len(json.loads((out/'errata.json').read_text())),'attempt':attempt.name}
+ save(out/'proof.json',proof);print(json.dumps(proof))

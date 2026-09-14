@@ -1,0 +1,134 @@
+[
+  {
+    "line": 14,
+    "source": "assert __debug__"
+  },
+  {
+    "line": 16,
+    "source": "assert len(a.data)==40 and all(c in '0123456789abcdef' for c in a.data)"
+  },
+  {
+    "line": 17,
+    "source": "assert not O.exists() and not O.resolve().is_relative_to(W) and not O.resolve().is_relative_to(S)"
+  },
+  {
+    "line": 30,
+    "source": "assert stage['status']=='PASS' and stage['head']==BASE and stage['segments']==[277,278,279]"
+  },
+  {
+    "line": 31,
+    "source": "assert stage['actual_coverage']==279 and stage['actual_added_links']==149"
+  },
+  {
+    "line": 33,
+    "source": "assert entry.startswith(b'\\n') and entry.endswith(b'\\n') and b'\\r' not in entry and b'\\t' not in entry"
+  },
+  {
+    "line": 34,
+    "source": "assert not any(x.endswith(b' ') for x in entry.split(b'\\n'))"
+  },
+  {
+    "line": 35,
+    "source": "assert git('data-parent','rev-parse',a.data+'^').decode().strip()==BASE"
+  },
+  {
+    "line": 36,
+    "source": "assert paths(git('data-changes','diff','--name-only','-z',BASE,a.data))==[x['path'] for x in stage['files']]"
+  },
+  {
+    "line": 46,
+    "source": "assert len(index_candidates)>=2 and len(set(index_candidates))==1"
+  },
+  {
+    "line": 57,
+    "source": "assert tree==index"
+  },
+  {
+    "line": 59,
+    "source": "assert not git('unstaged-entry','diff','--name-only','-z') and not git('staged-entry','diff','--cached','--name-only','-z')"
+  },
+  {
+    "line": 9,
+    "source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}"
+  },
+  {
+    "line": 26,
+    "source": "assert r.returncode==0 and not r.stderr,(label,r.returncode)"
+  },
+  {
+    "line": 28,
+    "source": "assert not b or b.endswith(b'\\0')"
+  },
+  {
+    "line": 50,
+    "source": "assert st==b'0' and name not in index"
+  },
+  {
+    "line": 55,
+    "source": "assert kind in (b'blob',b'commit') and name not in tree"
+  },
+  {
+    "line": 61,
+    "source": "assert not a.final and not a.append_proof"
+  },
+  {
+    "line": 62,
+    "source": "assert git('head','rev-parse','HEAD').decode().strip()==a.data"
+  },
+  {
+    "line": 74,
+    "source": "assert set(paths(git('append-changes','diff','--name-only','-z')))==set(NAMES)"
+  },
+  {
+    "line": 77,
+    "source": "assert a.final and a.append_proof"
+  },
+  {
+    "line": 78,
+    "source": "assert git('docs-parent','rev-parse',a.final+'^').decode().strip()==a.data"
+  },
+  {
+    "line": 79,
+    "source": "assert git('head','rev-parse','HEAD').decode().strip()==a.final"
+  },
+  {
+    "line": 80,
+    "source": "assert paths(git('docs-changes','diff','--name-only','-z',a.data,a.final))==sorted(NAMES)"
+  },
+  {
+    "line": 81,
+    "source": "assert ap['status']=='PASS_IDENTICAL_APPEND_WITH_EXACT_PRIOR_BYTES' and ap['data_head']==a.data"
+  },
+  {
+    "line": 82,
+    "source": "assert [x['path'] for x in ap['files']]==NAMES"
+  },
+  {
+    "line": 88,
+    "source": "assert residual==['data/teaching/dcc_captions']"
+  },
+  {
+    "line": 43,
+    "source": "assert Path(j['cwd']).resolve()==W"
+  },
+  {
+    "line": 44,
+    "source": "assert (d/'exit.txt').read_bytes()==b'0\\n' and not (d/'stderr.bin').read_bytes()"
+  },
+  {
+    "line": 66,
+    "source": "assert (W/name).read_bytes()==raw and entry not in raw"
+  },
+  {
+    "line": 71,
+    "source": "assert path.read_bytes()==raw"
+  },
+  {
+    "line": 73,
+    "source": "assert path.read_bytes()==raw+entry"
+  },
+  {
+    "line": 86,
+    "source": "assert after==before+entry==(W/row['path']).read_bytes()"
+  }
+]

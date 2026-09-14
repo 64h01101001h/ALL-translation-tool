@@ -1,0 +1,29 @@
+{
+  "status": "PENDING_ACTUAL_DIAGNOSTIC_AND_REVIEWED_PHASE_RELEASE",
+  "baseline": "10968d16e701b698a0e1fbd845b353089d15ac39",
+  "guarded_base": {
+    "bytes": 20520,
+    "sha256": "3e07e9f2e849c26c6f07d0c1acfd2a0c7a26e30ae0c3c357f13fad297ec4b066"
+  },
+  "pre_whitespace_inputs": [
+    "reviewed current candidate and independent code-review proof",
+    "actual ordinary bank manifest and bank/caller provenance",
+    "actual raw git diff --cached --check command/fullstdout/fullstderr/exit/caller",
+    "complete current semantic freeze and original-copy manifest",
+    "complete physical source descriptors and full originals/aliases",
+    "additional exact warning descriptors and all source/formatter/provenance evidence if actual diagnostic requires them"
+  ],
+  "later_phase_fields_not_prerequisites": [
+    "final bank manifest/write run/count",
+    "three ledgers append and DOCS commit",
+    "final staged verifier and closure results"
+  ],
+  "release_must_precede": "Run constructor/output writes and every Git/staged read; missing or mismatched release must fail closed",
+  "preserve_real_gates": true,
+  "warning_count": null,
+  "warning_file_count": null,
+  "additional_entries": null,
+  "raw_diagnostic_pin": null,
+  "old_warning_identities_not_promoted": true,
+  "root_runtime_release": false
+}

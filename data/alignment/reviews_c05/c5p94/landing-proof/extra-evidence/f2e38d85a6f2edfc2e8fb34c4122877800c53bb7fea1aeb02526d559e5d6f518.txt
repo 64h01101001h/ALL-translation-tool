@@ -1,0 +1,44 @@
+"""Preparation only: preserve read sources, adapt literals, compile syntax. Never run helpers."""
+from pathlib import Path
+import datetime,difflib,hashlib,json,re,sys
+D=Path(__file__).resolve().parent;B=D.parent;A=B.parent;W=A.parent/'campaign-worktree';P=A/'C05-277-279'
+def pin(raw):return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def save(name,obj):(D/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+assert sys.dont_write_bytecode
+sources=[(P/'landing-helper-preparation/candidate.py.txt','prior/landing-v2-candidate.py.txt'),(P/'landing-helper-preparation/old-land_reviewed_page.py.txt','prior/landing-v1.py.txt'),(P/'landing-helper-preparation/complete.diff','prior/landing-v1-to-v2.diff'),(P/'registration-preparation/register-reviewed-page-and-index.py','prior/register-page93.py.txt'),(P/'registration-preparation/prepare.py','prior/prepare-page93.py.txt'),(P/'registration-preparation/command-contract.json','prior/registration-command-contract.json'),(A/'integration/through279-root-closure/proof.json','boundary/through279-closure.json'),(B/'baseline.json','boundary/baseline.json'),(B/'baseline-boundary.json','boundary/baseline-boundary.json')]
+generic=['land_reviewed_page.py','land_reviewed_page_v2.py','run_generator_readonly.py','record_external_step.py','run_tool_readonly_sqlite.py','run_reviewed_builders_once.py','verify_semantic_acceptance.py','verify_reconciled_bodies.py','verify_review_copy_and_register.py','copy_evidence_once_v2.py','verify_landed_batch.py','verify_course_csv.py','verify_landed_batch_with_heading_migrations.py','verify_course_csv_with_heading_migrations.py']
+sources.extend((A/n,'generic/'+n+'.txt') for n in generic)
+canonical=['tools/gen_alignment_page.py','tools/wrap_alignment_page.py','tools/build_alignment_layer.py','tools/build_dictionary_view.py','tools/build_dictionary_exports.py','tools/merge_errata.py','tools/build_errata_register.py','tools/test_no_supplied_span_head.py','core/CMakeLists.txt','cmake/AllFixtureTests.cmake','CMakeLists.txt','docs/ALIGNMENT_LAYER_SPEC.md','data/alignment/pages_c05/index.html','data/alignment/span_head_allow.json']
+sources.extend((W/n,'canonical/'+n+('.txt' if n.endswith('.py') else '')) for n in canonical)
+manifest=[]
+for original,name in sources:
+ raw=original.read_bytes();target=D/'inputs'/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+ manifest.append({'original':str(original),'resolved_original':str(original.resolve()),'copy':str(target.relative_to(D)),**pin(raw)})
+save('input-manifest.json',manifest)
+old=(D/'inputs/prior/register-page93.py.txt').read_text()
+oldbase='f114fcb7a5a899b939ffc948ae9fdbbb746541fa';base='10968d16e701b698a0e1fbd845b353089d15ac39'
+masked=old.replace(oldbase,'__BASE__')
+nums={str(n):str(n+3) for n in range(274,281)};nums.update({str(n):str(n+1) for n in range(92,95)})
+pat=r'(?<!\d)(?:'+'|'.join(nums)+r')(?!\d)'
+changes=[{'offset_in_masked_source':m.start(),'before':m.group(),'after':nums[m.group()]} for m in re.finditer(pat,masked)]
+new=re.sub(pat,lambda m:nums[m.group()],masked).replace('__BASE__',base)
+priorclosure="closed = json.loads((B.parent / 'integration/through279-root-closure/final-observed-main/proof.json').read_text())\nassert closed['status'] == 'PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_279' and closed['final_head'] == BASE"
+newclosure="closed_raw = (B.parent / 'integration/through279-root-closure/proof.json').read_bytes()\nassert pin(closed_raw) == {'bytes': 4959, 'sha256': 'a26675e3375b3bcb65e7cf871c904db0ed646deec8c2d4aed2749bf3cc940a9a'}\nclosed = json.loads(closed_raw)\nassert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE\nassert closed['course'] == 'C05' and closed['verified_segments'] == 279 and closed['course_segments'] == 511\nassert closed['next_batch'] == SEQS and closed['next_batch_authorized_after_this_closure'] is True"
+assert new.count(priorclosure)==1
+new=new.replace(priorclosure,newclosure)
+candidate=D/'register-reviewed-page-and-index.py';candidate.write_text(new)
+(D/'registration-complete.diff').write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior/register-page93.py',tofile='candidate/register-page94.py')))
+save('registration-literal-changes.json',{'baseline_commit':[oldbase,base],'numeric_substitutions':changes,'closure_guard_before_after':[priorclosure,newclosure],'all_other_guard_logic':'Retained verbatim; full diff is authoritative.','runtime_executed':False})
+syntax=[]
+for path in [candidate,*[D/'inputs/generic'/ (n+'.txt') for n in generic],*[D/'inputs/canonical'/(n+'.txt') for n in canonical if n.endswith('.py')]]:
+ compile(path.read_bytes(),str(path),'exec');syntax.append({'path':str(path.relative_to(D)),**pin(path.read_bytes()),'check':'compile only; no module import or top-level execution'})
+save('syntax-only.json',syntax)
+closed=json.loads((D/'inputs/boundary/through279-closure.json').read_text());baseline=json.loads((D/'inputs/boundary/baseline.json').read_text())
+allow=json.loads((D/'inputs/canonical/data/alignment/span_head_allow.json').read_text())
+save('bindings.json',{'status':'PREPARATION_ONLY_RUNTIME_INPUTS_PENDING','role':'Codex technical preparation using the former English-author context; original proposals remain frozen. No new semantic judgment.','batch':str(B),'worktree':str(W),'page':94,'page_name':'c5p94','segments':[280,281,282],'previous_page':93,'previous_segments':[277,278,279],'previous_boundary':279,'next_boundary':282,'source_total':511,'BASE':base,'baseline_source_pin':pin((D/'inputs/boundary/baseline.json').read_bytes()),'closure_source_pin':pin((D/'inputs/boundary/through279-closure.json').read_bytes()),'incoming_counts':{k:baseline[k] for k in ['full_links','null_exponents','evidence_headwords','evidence_pairs']},'registry_insert':'    "c5p94": [280, 281, 282],\n','registry_previous':'    "c5p93": [277, 278, 279],\n','index_old_coverage':'Reviewed campaign coverage: 279 of 511 source segments.','index_new_coverage':'Reviewed campaign coverage: 282 of 511 source segments.','index_insert':'<li><a href="c5p94.html">Page 94 · segments 280–282</a></li>','index_previous':'<li><a href="c5p93.html">Page 93 · segments 277–279</a></li>','existing_allowance_category_counts':{k:len(v) for k,v in allow.items() if isinstance(v,dict)},'new_allowances':None,'new_errata':None,'final_counts_hashes_ranges':None,'closure_scope':'Fixed-data checkpoint only. MAIN integration, private consumer and phone/native acceptance remain open or unaccepted exactly as the closure states.','historical_automation_note':'Closure five-minute automation field is historical; root reports current one-minute scheduler separately. This preparation neither verifies nor changes scheduling.'})
+same=(A/'land_reviewed_page_v2.py').read_bytes()==(P/'landing-helper-preparation/candidate.py.txt').read_bytes()
+save('reuse-assessment.json',{'generic_landing_v2_equals_prior_candidate_bytes':same,'unchanged_reuse':[{'path':str(A/n),'pin':pin((A/n).read_bytes())} for n in generic if n not in ['land_reviewed_page.py','verify_landed_batch_with_heading_migrations.py','verify_course_csv_with_heading_migrations.py']],'do_not_use':[{'path':str(A/'land_reviewed_page.py'),'reason':'v1 omits complete generator/wrapper command/stream/preimage recording; approved generic v2 already supplies it.'},{'path':str(A/'verify_landed_batch_with_heading_migrations.py'),'reason':'Hard-coded page69/205–207 and 4aa4aa6 migration baseline; not generic.'},{'path':str(A/'verify_course_csv_with_heading_migrations.py'),'reason':'Hard-coded 4aa4aa6 migration baseline; use generic verify_course_csv.py for this already-closed baseline.'}],'candidate_needed':'Only page94 registration literals plus the actual through279 closure-schema guard. No generic helper rewrite.'})
+for r in manifest:
+ assert (D/r['copy']).read_bytes()==Path(r['original']).read_bytes()
+save('preparation-proof.json',{'status':'PASS_PREPARATION_ONLY','producer':'Codex technical preparation, former English-author context','landing_semantic_registration_retention_or_build_helper_executions':0,'generators_builders_tests':0,'git_calls':0,'sqlite_connections':0,'repository_writes':0,'original_proposal_writes':0,'source_copies':len(manifest),'all_consumed_original_copies_exact':True,'syntax_checks':len(syntax),'candidate':pin(candidate.read_bytes()),'generic_landing_reused_exact_prior_candidate':same,'runtime_semantic_inputs':'Not inspected; pending independent approval and root acceptance.','utc':datetime.datetime.now(datetime.timezone.utc).isoformat()})
+print(json.dumps({'status':'PASS_PREPARATION_ONLY','source_copies':len(manifest),'syntax_checks':len(syntax),'candidate':pin(candidate.read_bytes()),'generic_landing_unchanged':same},indent=2))

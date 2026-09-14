@@ -1,0 +1,39 @@
+import hashlib, json, re
+from datetime import datetime, timezone
+from pathlib import Path
+
+OUT=Path(__file__).resolve().parent
+def get(name): return json.loads((OUT/name).read_text())
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+pins=get('input-pins.json')
+drift=[]
+for path,pin in pins.items():
+    p=Path(path)
+    if not p.is_file() or p.stat().st_size!=pin['bytes'] or sha(p)!=pin['sha256']:
+        drift.append(path)
+assert not drift,drift
+queries=get('queries.json')['queries']; pool=get('source-rows.json')
+assert all(q['count']==len(q['row_refs']) and all(ref in pool for ref in q['row_refs']) for q in queries)
+proof=get('rechecks.json')
+assert all(r['rows_equal_original_evidence'] and r['actual_count']==r['claimed_count'] for r in proof['original_queries'])
+assert (OUT/'prepare.stderr.txt').read_bytes()==b''
+assert get('execution.json')['script_sha256']==sha(OUT/'prepare.py')
+rows={r['row']['seq']:r['row'] for r in pool.values() if r['table']=='corpus_segments' and r['row']['course']=='C05' and r['row']['seq'] in [280,281,282]}
+guards={}
+for seq,terms in {280:['five','statement','phlegm','desire','bile','anger'],281:['different','beings','three','appearing','ways'],282:['person','different','five','actions','performing']}.items():
+    guards[str(seq)]={t:[[m.start(),m.end()] for m in re.finditer(r'(?<![A-Za-z])'+re.escape(t)+r'(?![A-Za-z])',rows[seq]['english'])] for t in terms}
+assert len(guards['280']['five'])==5
+assert len(guards['281']['different'])==7 and len(guards['281']['beings'])==2
+assert len(guards['282']['five'])==4 and len(guards['282']['different'])==4
+physical=OUT/'physical-C05-lines-2727-2780.txt'
+source=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt'
+assert physical.read_bytes()==b''.join(source.read_bytes().splitlines(keepends=True)[2726:2780])
+proof_result={'input_pins_reverified':len(pins),'input_drift':drift,'query_reference_closure':True,'recorded_query_counts_match':True,'original_query_results_reproduced':len(proof['original_queries']),'source_occurrence_guards':guards,'physical_excerpt_byte_identity':True,'canonical_replay_performed':False,'semantic_approval':False}
+(OUT/'final-verification.json').write_text(json.dumps(proof_result,ensure_ascii=False,indent=2)+'\n')
+manifest={str(p.relative_to(OUT)):{'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(OUT.rglob('*')) if p.is_file() and p.name!='freeze.json'}
+freeze={'status':'FROZEN SOURCE PREPARATION ONLY','producer':'Codex independent source-preparation subagent','completed_at_utc':datetime.now(timezone.utc).isoformat(),'semantic_approval':False,'canonical_reconciled_replay_required_later':True,'files':manifest}
+(OUT/'freeze.json').write_text(json.dumps(freeze,ensure_ascii=False,indent=2)+'\n')
+for p in OUT.rglob('*'):
+    if p.is_file(): p.chmod(0o444)
+OUT.chmod(0o555)
+print(json.dumps({'status':freeze['status'],'files':len(manifest),'bytes':sum(v['bytes'] for v in manifest.values()),'input_pins_reverified':len(pins),'freeze_sha256':sha(OUT/'freeze.json')}))

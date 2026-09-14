@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "'khrul",
+    "'khrul"
+  ],
+  "rows": [
+    {
+      "id": 1604,
+      "wylie": "'khrul",
+      "tibetan": "འཁྲུལ",
+      "tibetan_source": null,
+      "acip": "'KHRUL",
+      "pronunciation": "trul",
+      "pronunciation_source": null,
+      "sanskrit": "'khrul/ 'khrul/ 'khruld/ 'khruld/; {MV}bhrānti; {LC}avidyā; {LC}bhrama; {LC}vibhrama; {LC}vivarta; {LC}saṃbhrānti; {LC}aparādha; {LC}bhrami; {LC}mūḍhatā; {LC}viskhalita; {LC}skhalita",
+      "hopkins_english": "mistake; be mistaken; be confused; err7 as noun: mistake, error",
+      "hgm_gloss": "[\"mistakenly took\", \"error\", \"doesn't always\", \"mistaken\", \"doesn't\", \"not a fact\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": "'khrul/ 'khrul/ 'khruld/ 'khruld",
+      "flags": null,
+      "corpus_courses": "[\"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P7\", \"P9\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+      "corpus_n_segments": 288,
+      "raw": "{\"tibetan\": \"འཁྲུལ\", \"wylie\": \"'khrul\", \"wylie_variants\": [\"'khrul\"], \"tenses\": \"'khrul/ 'khrul/ 'khruld/ 'khruld\", \"sanskrit\": \"'khrul/ 'khrul/ 'khruld/ 'khruld/; {MV}bhrānti; {LC}avidyā; {LC}bhrama; {LC}vibhrama; {LC}vivarta; {LC}saṃbhrānti; {LC}aparādha; {LC}bhrami; {LC}mūḍhatā; {LC}viskhalita; {LC}skhalita\", \"hopkins_english\": \"mistake; be mistaken; be confused; err7 as noun: mistake, error\", \"hgm_gloss\": [\"mistakenly took\", \"error\", \"doesn't always\", \"mistaken\", \"doesn't\", \"not a fact\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"trul\", \"acip\": \"'KHRUL\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P7\", \"P9\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 288}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1
+}

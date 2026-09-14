@@ -1,0 +1,58 @@
+"""Final evidence preflight and immutable review freeze; no runtime or SQL."""
+import hashlib,json,os
+from datetime import datetime,timezone
+from pathlib import Path
+O=Path(__file__).resolve().parent;B=O.parent;W=B.parents[1]/'campaign-worktree';COMMIT='10968d16e701b698a0e1fbd845b353089d15ac39'
+def load(p):return json.loads(Path(p).read_bytes())
+def save(n,v):(O/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def pin(p):
+ raw=Path(p).read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+assert not (O/'freeze.json').exists()
+manifest=load(O/'original-to-copy-manifest.json');assert len({r['original'] for r in manifest})==len(manifest)
+git={}
+for i in range(11):
+ d=O/f'runs/git-source-{i}';call=load(d/'execution.json');argv=call['argv']
+ assert argv[:2]==['git','show'] and argv[2].startswith(COMMIT+':') and call['exit']==0 and call['cwd']==str(W)
+ assert not (d/'stderr.bin').read_bytes() and (d/'exit.txt').read_text().strip()=='0'
+ git[(COMMIT,argv[2].split(':',1)[1])]=(d/'stdout.bin').read_bytes()
+for r in manifest:
+ assert set(r) in [set(['original','copy','sha256','bytes']),set(['original','copy','sha256','bytes','original_git_commit','repository_relative_path'])]
+ copy=(O/r['copy']).resolve();assert copy.is_relative_to(O) and copy.is_file() and copy.suffix.lower() in allowed
+ raw=copy.read_bytes();assert pin(copy)=={k:r[k] for k in ['bytes','sha256']}
+ if 'original_git_commit' in r:assert raw==git[(r['original_git_commit'],r['repository_relative_path'])]
+ else:assert raw==Path(r['original']).read_bytes()
+ if Path(r['original']).is_relative_to(W):assert r['original_git_commit']==COMMIT
+tuples=load(O/'resolved-spans.json');assert len(tuples)==124 and all(set(r)=={'seq','id','d','tib','eng','tib_range','eng_range'} for r in tuples)
+review=load(O/'review.json');assert review['verdict']=='APPROVE' and review['spec_verdict']==review['quality_verdict']=='PASS' and review['open_findings']==[]
+assert (review['total_spans'],review['total_nulls'],review['total_word_pairs'])==(124,4,102)
+for row in review['segments']:
+ seq=row['seq'];ts=[r for r in tuples if r['seq']==seq];assert len(ts)==row['span_count']
+ assert sum(t['eng'] is None for t in ts)==row['null_count'] and sum(t['d']==5 and t['eng'] is not None for t in ts)==row['word_pair_count']
+ for kind,suffix in [('spec','json'),('body','html')]:
+  name=f'{kind}.{suffix}';p=O/f'reviewed-final/{seq}'/name;assert pin(p)==dict(bytes=row[kind+'_bytes'],sha256=row[kind+'_sha256'])
+  assert p.read_bytes()==(B/f'reconciled/{seq}'/name).read_bytes()
+ run=O/f'runs/canonical-{seq}';assert (run/'stdout.bin').read_bytes()==(O/f'reviewed-final/{seq}/body.html').read_bytes()
+ assert (run/'stdin.bin').read_bytes()==(O/f'reviewed-final/{seq}/spec.json').read_bytes() and not (run/'stderr.bin').read_bytes()
+ assert (run/'exit.txt').read_text().strip()=='0' and row['generator_exit']==0
+assert load(O/'bank-ready-errata.json')==[]
+assert len(load(O/'errata-refutations.json'))==11 and all(r['refuted'] and set(r['five_grounds'])==set('abcde') for r in load(O/'errata-refutations.json'))
+assert set(load(O/'span-head-allow-needed.json')['pages_c05'])=={'c5p94/s280w29','c5p94/s280w43'}
+assert load(O/'root-proof-inspection.json')['verdict']=='PASS'
+assert not (O/'root-proof-v2.stderr.txt').read_bytes()
+save('packaging-preflight.json',dict(status='PASS',verified_original_records=len(manifest),distinct_copy_targets=len({r['copy'] for r in manifest}),git_pinned_records=sum('original_git_commit' in r for r in manifest),git_objects_compared=len(git),git_comparison='Full immutable Git stdout from eleven recorded actual successful reads; unchanged object reads not repeated for bookkeeping.',all_supported_extensions=True,all_source_or_immutable_git_bytes_equal=True,history_preserved=True,canonical_replays_repeated=False,root_runtime_reexecuted=False))
+save('finalization-record.json',dict(status='PASS_BEFORE_FREEZE',utc=datetime.now(timezone.utc).isoformat(),command=['python3','-B',str(O/'freeze_review.py.txt')],cwd=str(B.parents[1]),review_verdict='APPROVE',previous_pending_review='history/02-before-root-proof/review.json',actual_source_changes=False,actual_spec_changes=False,packaging_failures_preserved=['packaging-correction.json','root-proof-packaging-attempt01.json','root-proof-repair.diff.txt']))
+files={}
+for p in sorted(O.rglob('*')):
+ if p.is_file():
+  assert not p.is_symlink() and '__pycache__' not in p.parts and p.suffix.lower() in allowed
+  files[str(p.relative_to(O))]=pin(p)
+save('freeze.json',dict(status='FROZEN',verdict='APPROVE',course='C05',page='c5p94',seqs=[280,281,282],producer='Independent Codex semantic reviewer',human_editorial_acceptance=False,total_spans=124,total_nulls=4,total_word_pairs=102,file_count=len(files),files=files))
+for name,p in files.items():assert pin(O/name)==p
+assert {str(p.relative_to(O)) for p in O.rglob('*') if p.is_file()}==set(files)|{'freeze.json'}
+result=dict(verdict='APPROVE',files=len(files),bytes=sum(r['bytes'] for r in files.values()),freeze=pin(O/'freeze.json'),review=pin(O/'review.md'),review_json=pin(O/'review.json'),resolved=pin(O/'resolved-spans.json'),manifest_records=len(manifest))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555)
+print(json.dumps(result,indent=2))

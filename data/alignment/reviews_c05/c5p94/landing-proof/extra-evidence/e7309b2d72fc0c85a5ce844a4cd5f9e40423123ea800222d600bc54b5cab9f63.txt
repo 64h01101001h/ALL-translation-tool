@@ -1,0 +1,52 @@
+--- prior-plan/corrected-command-plan.json
++++ current-plan/corrected-command-plan.json
+@@ -4,14 +4,17 @@
+   "commands": [
+     {
+       "order": 0,
+-      "operation": "Root accepts the completed isolated reproduction and evidence closure",
+-      "argv": null,
+-      "required_actual": [
+-        "actual prepare/run/retention/full-evidence-close results and copied-original maps",
+-        "independent/root acceptance with exact hashes",
+-        "existing retention PASS223847 is supporting evidence, not final close acceptance"
+-      ],
+-      "executed": false
++      "operation": "Root actual isolated reproduction/evidence closure acceptance complete",
++      "argv": null,
++      "required_actual": [],
++      "executed": true,
++      "actual_evidence": {
++        "status": "ACTUAL_ROOT_PASS",
++        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction-root-acceptance/proof.json",
++        "bytes": 1330,
++        "sha256": "52f04b931d7d4af0e54f7291f36786178adb82818c3b104839c8912269dd23a0"
++      },
++      "executor": "Root, before this planning amendment"
+     },
+     {
+       "order": 1,
+@@ -20,8 +23,7 @@
+       "required_actual": [
+         "ordinary inventory and complete external-source pins",
+         "actual pre-banking/pre-staging raw untracked caller",
+-        "exact current13 payload including approved span_head_allow and source proof",
+-        "root actual reproduction close-evidence acceptance"
++        "exact current13 payload including approved span_head_allow and source proof"
+       ],
+       "executed": false
+     },
+@@ -322,5 +324,12 @@
+   "existing_canonical_builds_and_tests_reexecuted": false,
+   "data_commit_scope": "Exactly13payload plus semantic review/landing bank; zero ledger paths",
+   "docs_commit_scope": "Only three named ledgers, appended after DATA by closure helper",
+-  "planning_correction_only": true
++  "planning_correction_only": true,
++  "actual_ordinary_method_release": {
++    "status": "METHOD_RELEASED_INVENTORY_AND_BANK_NOT_RUN",
++    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/root-ordinary-bank-method-release/proof.json",
++    "bytes": 3384,
++    "sha256": "36181e416e1c370ec000acfbabcdfbe61f46d401e2c32e671fe6edb4c13c373a"
++  },
++  "ordered_commit_boundary": "ordinary bank → actual diagnostic → reviewed classifier prepare/audit → final bank → fresh DATA stage PASS → DATA commit →3ledger append → DOCS commit → bind"
+ }

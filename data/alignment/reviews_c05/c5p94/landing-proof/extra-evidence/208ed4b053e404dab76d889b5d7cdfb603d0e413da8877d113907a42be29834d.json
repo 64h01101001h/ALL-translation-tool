@@ -1,0 +1,15 @@
+{
+  "status": "SCOPED_QUERY_DESCRIPTOR_EXTENSION_AWAITING_INDEPENDENT_REVIEW",
+  "time": "2026-09-14T00:39:46.928756+00:00",
+  "author": "Root; independent of original authors and reconciler",
+  "change": "Two explicit genuine params schemas: query_container_params with exact database/uri/queries top keys; query_list_params with top-level list. Original descriptors remain unchanged. Normalized parameters are bound to original params by the named branch; sql/rows/count and count-key presence are checked by the unchanged common tail.",
+  "existing_behaviors": "All prior kinds and original filename adaptation preserved. verify_reconciliation.py byte-identical. No SQL or canonical runtime calls made by these tests.",
+  "tests": {
+    "red_positive_failures": 80,
+    "red_negative_passes": 27,
+    "green_passes": 107,
+    "green_failures": 0,
+    "covers": "80 actual original descriptors plus mutations to SQL, params, rows, count, negative/out-of-range/bool indices, ambiguous params+parameters and extra binding field."
+  },
+  "pending": "Independent source/test review, actual reconciled config, and actual head allowance predicate binding. Empty-allowance runtime limitation remains explicit; no semantic acceptance or execution release."
+}

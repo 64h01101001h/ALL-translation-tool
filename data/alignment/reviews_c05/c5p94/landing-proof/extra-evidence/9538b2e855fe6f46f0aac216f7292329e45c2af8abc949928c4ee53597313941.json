@@ -1,0 +1,7 @@
+{
+  "cause": "Downstream whitespace root_rows requires unique bank copy paths; v1 would emit duplicate bank records for deduplicated new bytes. No runtime executed.",
+  "correction": "Keep first bank record per content target; later complete original aliases are explicit external records referencing first source and planned full bank copy. Complete-byte dedup and coverage preserved.",
+  "v1_sha256": "8197e4c87013ea3defaee64b633e0010b7d42f73e848b6003a5b76a48cfaf3a4",
+  "v2_sha256": "5ce6d0ed3f24150f13be1afb844bc346557978d92d9f5572660a78caa3807e37",
+  "v2_bytes": 7547
+}

@@ -1,0 +1,61 @@
+from pathlib import Path
+import base64,gzip,hashlib,json,os,sqlite3,sys
+R=Path(__file__).resolve().parent;B=R.parent;A=B.parent;W=A.parent/'campaign-worktree';DATA=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP');maps=[]
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):
+ p=R/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x')as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+def retain(p,n):
+ p=Path(p);resolved=p.resolve();st=resolved.stat();raw=p.read_bytes();dst=R/'inputs'/n;dst.parent.mkdir(parents=True,exist_ok=True)
+ with dst.open('xb')as f:f.write(raw)
+ assert dst.read_bytes()==p.read_bytes()==raw and p.resolve()==resolved and resolved.stat()==st
+ maps.append({'original':str(p),'resolved':str(resolved),'symlink':os.readlink(p)if p.is_symlink()else None,'copy':str(dst.relative_to(R)),**bp(raw)});return raw
+def asset(p):
+ p=Path(p);resolved=p.resolve();st=resolved.stat();b=p.read_bytes();assert resolved.stat()==st and p.resolve()==resolved
+ return {'path':str(p),'resolved':str(resolved),'symlink':os.readlink(p)if p.is_symlink()else None,**bp(b)}
+for p,n in [(B/'english-brief.md','english-brief.md'),(B/'source.json','source.json'),(B/'context.json','context.json'),(A/'proposal-protocol.md','proposal-protocol.md'),(W/'AGENTS.md','AGENTS.md'),(W/'docs/ALIGNMENT_LAYER_SPEC.md','ALIGNMENT_LAYER_SPEC.md'),(W/'docs/alignment_briefs/PROPOSE_BRIEF.md','PROPOSE_BRIEF.md'),(W/'DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','ROADMAP.md'),(DATA/'Handoff/HANDOFF.md','HANDOFF.md'),(DATA/'Handoff/README.md','README.md'),(W/'data/alignment/C05_CAMPAIGN.md','C05_CAMPAIGN.md'),(W/'docs/errata_register.json','errata_register.json'),(A/'C05-277-279/english/277/capture_source.py','prior-capture_source.py.txt'),(A/'C05-277-279/english/277/capture_lexical.py','prior-capture_lexical.py.txt'),(A/'C05-277-279/english/277/record_command.py','record_command.py.txt')]:retain(p,n)
+assert not(B/'baseline.json').exists()
+snapshot=json.loads((R/'inputs/source.json').read_bytes());context=json.loads((R/'inputs/context.json').read_bytes());course=(R/'inputs/C05_CAMPAIGN.md').read_bytes();start=course.index(b'## Course shape');end=course.index(b'\n## Gates',start);(R/'course-shape.txt').write_bytes(course[start:end])
+save('course-shape-extent.json',{'original':str(W/'data/alignment/C05_CAMPAIGN.md'),'start':start,'end':end,**bp(course[start:end]),'inspection_limit':'Course-shape section used; initial terminal read also showed historical opening ledger lines1–90, not current/future judgments.'})
+masterbytes=retain(W/'data/hgm_dictionary_v27_2.json.gz','hgm_dictionary_v27_2.json.gz');corpusbytes=retain(W/'data/full_parallel_corpus_v32.json.gz','full_parallel_corpus_v32.json.gz')
+master=json.loads(gzip.decompress(masterbytes))['unified_entries'];corpus=json.loads(gzip.decompress(corpusbytes));bycourse={}
+for row in corpus:bycourse.setdefault(row['course'],[]).append(row)
+physical=retain(DATA/'To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt','C05ReadingASCII.txt')
+db=W/'build/hgm_spine_v27_2.db';before=asset(db);uri=db.resolve().as_uri()+'?mode=ro';c=sqlite3.connect(uri,uri=True);c.row_factory=sqlite3.Row;c.execute('PRAGMA query_only=ON');assert c.execute('PRAGMA query_only').fetchone()[0]==1;c.execute('BEGIN');queries=[];originals={}
+def query(role,sql,params):
+ rows=[dict(x)for x in c.execute(sql,params)];record={'role':role,'sql':sql,'parameters':params,'count':len(rows),'rows':rows};queries.append(record)
+ for row in rows:
+  if 'raw'in row:
+   raw=json.loads(row['raw']);key=('corpus',row['course'],row['seq'])if 'seq'in row else('master',row['id']);origin=bycourse[row['course']][row['seq']-1]if 'seq'in row else master[row['id']-1];assert raw==origin
+   if 'seq'in row:assert all(row[k]==origin[k]for k in ['course','acip','wylie','english'])
+   else:assert(json.loads(row['hgm_gloss'])if row['hgm_gloss']is not None else [])==(origin.get('hgm_gloss')or[])
+   originals[str(key)]={'source':'full_parallel_corpus_v32.json.gz'if 'seq'in row else'hgm_dictionary_v27_2.json.gz','original_locator':list(key),'row_id':row['id'],'complete_original_object':origin,'raw_string':row['raw'],'raw_utf8_pin':bp(row['raw'].encode())}
+ return rows
+query('complete SQLite schema','SELECT type,name,tbl_name,sql FROM sqlite_master ORDER BY type,name',[])
+query('spine metadata','SELECT * FROM meta ORDER BY key',[])
+rows=query('complete surrounding source rows','SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',context[0]['seq'],context[-1]['seq']]);fields=['id','course','seq','acip','wylie','english'];assert[{k:r[k]for k in fields}for r in rows]==context
+assert[{k:r[k]for k in fields}for r in rows if 280<=r['seq']<=282]==snapshot
+terms=['gzhan yang','dpal','chos kyi grags pa','lung',"'gal ba",'nad','nad lnga',"'byung ba",'gdon','nyon mongs pa','dug','dug lnga',"dngos 'bras",'khas blangs','mu stegs byed','bad kan',"'dod chags",'rgyu',"'bras", "rgyu 'bras",'mkhris pa','zhe sdang',"rjes su 'gro",'ldog',"'khrul", "'gog byed",'rlung','chos','gzhung',"'don pa",'sgyur ba','gnod pa',"'dus ma byas", "nam mkha'",'phrag dog','mi rigs pa','kha cig','dngos gcig','dngos po','yid','tha dad','don','ma grub',"'dod pa",'snang tshul',"mi 'dra ba",'gsum',"'byung ba",'gsungs pa',"mi 'thad",'brlan','gsher ba','phor pa','gang','cig car','bltas pa','tshad grub',"'gro ba",'skyes bu','gcig','yan lag','lnga','bya ba','byas pa','de\'i tshe','ma yin']
+terms=list(dict.fromkeys(terms));lex=[]
+for t in terms:
+ rr=query('exact HGM headword/variant: '+t,'SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON e.id=v.entry_id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id',[t,t]);lex.append({'term':t,'count':len(rr),'entries':[{k:r[k]for k in ['id','wylie','hgm_gloss','hgm_source','tier']}for r in rr]})
+for r in snapshot:query('full-field parallels C05:'+str(r['seq']),'SELECT * FROM corpus_segments WHERE acip=? OR wylie=? OR english=? ORDER BY course,seq',[r[k]for k in ['acip','wylie','english']])
+for t in ['nad lnga','gdon lnga',"dngos 'bras",'bad kan',"rjes su 'gro ldog", "'dus ma byas kyi nam mkha'",'dngos gcig yid','snang tshul mi','tshad grub','yan lag mi',"bya ba mi 'dra ba lnga"]:query('uncapped Wylie corpus counterevidence: '+t,'SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq',[t])
+for t in ['five poisons','direct result','uncreated space','protuberances','five different actions','a single thing','come and go according','cause-and-effect relationship']:query('uncapped exact English corpus counterevidence: '+t,'SELECT * FROM corpus_segments WHERE instr(english,?)>0 ORDER BY course,seq',[t])
+c.rollback();c.close();after=asset(db);assert before==after
+save('queries.json',queries);save('complete-raw-original-objects.json',list(originals.values()));save('lexical-reading.json',lex)
+# Preserve exact full paragraph fragments and their raw line-wrap bytes. Normalized comparison is diagnostic only.
+physicalproof=[]
+for r in snapshot:
+ for field in ['acip','english']:
+  full=r[field].encode();prefix=full[:32];offsets=[];at=0
+  while(at:=physical.find(prefix,at))>=0:offsets.append(at);at+=1
+  assert len(offsets)==1,(r['seq'],field,offsets)
+  start=offsets[0];end=physical.find(b'\r\n\r\n',start)
+  if end<0:end=len(physical)
+  fragment=physical[start:end];name=f'physical/{r["seq"]}-{field}.raw';(R/'physical').mkdir(exist_ok=True);(R/name).write_bytes(fragment)
+  physicalproof.append({'seq':r['seq'],'field':field,'original':str(DATA/'To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt'),'original_full_pin':bp(physical),'start':start,'end':end,'copy':name,**bp(fragment),'source_field_pin':bp(full),'raw_full_field_contiguous':fragment==full,'whitespace_diagnostic_equal':b' '.join(fragment.split())==b' '.join(full.split()),'normalization_retained_as_source':False})
+lo=min(x['start']for x in physicalproof);hi=max(x['end']for x in physicalproof);(R/'physical/full-local-extent.raw').write_bytes(physical[lo:hi]);save('physical-proof.json',{'fields':physicalproof,'full_local_extent':{'start':lo,'end':hi,**bp(physical[lo:hi])},'limit':'Literal physical digital file only; no independence/ingestion-lineage assertion. Any wrap comparison is diagnostic; all source bytes remain complete and unchanged.'})
+save('input-manifest.json',maps)
+save('source-proof.json',{'status':'PASS_HISTORICAL_SOURCE_ONLY_PREPARATION','producer':'Codex reused English-first model, no human certification','reported_current_HEAD_from_root':'f114fcb7a5a899b939ffc948ae9fdbbb746541fa','head_independently_queried':False,'baseline_created':False,'baseline_absent_at_capture':True,'context_rows':len(rows),'selected_rows':3,'snapshot_fields_per_row':6,'selected_field_comparisons':18,'query_count':len(queries),'query_only':1,'URI':uri,'transaction':'BEGIN/read-only queries/ROLLBACK','full_raw_original_objects':len(originals),'master_total_objects':len(master),'corpus_total_objects':len(corpus),'db_before':before,'db_after':after,'db_unchanged':True,'proposals':0,'canonical_runs':0,'semantic_approval':False})
+print(json.dumps({'status':'PASS','queries':len(queries),'raw_originals':len(originals),'HGM_terms':len(terms),'HGM_rows':sum(r['count']for r in lex),'zero_HGM_terms':[r['term']for r in lex if r['count']==0],'physical_fields':len(physicalproof)}))

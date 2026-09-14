@@ -1,0 +1,13 @@
+{
+  "original_copy_manifest": "LIST; original absolute resolved path, copy path relative to this shared directory, bytes,sha256",
+  "original_aliases": "source-aliases.json LIST preserves original alias/resolved/readlink/pin; baseline-fixed-git-bindings.json pins every accepted generated alias to immutable commit/path; no live historic alias claim after mutation",
+  "original_trees": "original-tree-preservation.json: complete six tree files including freezes and historical versions; copier filenames do not indicate authorship",
+  "queries": "query-replays.json LIST: descriptor_original,descriptor_index,descriptor_container (queries or null), original_descriptor exact complete object, parameter_key(params or parameters),sql,parameters,count,rows. Params is explicit replay-field mapping, not a changed original. Both top-level params lists and nested queries/params are present.",
+  "raw_archive": "archive-object-proof.json: objects LIST with kind,id,archive_positions,complete_raw_object,sql_row; counts 127 master,257 corpus. Source empty glossary list converts to SQL NULL exactly as actual build_spine.py; all raw objects retained.",
+  "physical": "physical-proof.json 6 full C05 extents, additional-physical-proof.json 10 C15/C16 extents; full original/source pin, lines,byte_range,complete excerpt and exact comparison. No inferred independent lineage.",
+  "source": "source-rows-full.json LIST3 and context-rows-full.json LIST15, all raw fields; database-proof.json URIro/query_only full file before/after pin",
+  "canonical": "original-replays.json and original-replays/{angle}/{seq}/execution.json full actual6 streams, current per-segment canonical/execution.json full actual3; wrapper stored at shared run-generator-ro.py.txt",
+  "decisions": "Each segment final-tuples/final-decisions/original-dispositions/omissions/errata-analysis/proposed-head-allowances/proof uses prior accepted interface; metadata pre-final-interface historical copies preserved.",
+  "allowances": "proposed-head-allowances.json: pages_c05 DICT key c5p94/s280w29 and c5p94/s280w43→source-licensor strings; actual_gated_hits LIST with exact PAT match,body range,tuple,licensor,key. Other segments empty.",
+  "self_review": "Mechanical schema/source self-check is not independent semantic approval."
+}

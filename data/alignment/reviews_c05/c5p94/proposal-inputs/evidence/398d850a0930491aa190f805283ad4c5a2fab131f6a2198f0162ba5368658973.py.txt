@@ -1,0 +1,45 @@
+from pathlib import Path
+import hashlib,json,os
+R=Path(__file__).resolve().parent;B=R.parent
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+source=json.loads((R/'inputs/source.json').read_bytes());raw=(R/'inputs/C05ReadingASCII.txt').read_bytes();old=json.loads((R/'physical-proof.json').read_bytes());maps=json.loads((R/'input-manifest.json').read_bytes());rows=[]
+# Prior broad extraction retained unchanged: ACIP starts continued through English.
+# The English field's independently unique prefix is the exact observed boundary.
+for r in source:
+ a=next(x for x in old['fields']if x['seq']==r['seq']and x['field']=='acip');e=next(x for x in old['fields']if x['seq']==r['seq']and x['field']=='english')
+ for field,start,end in [('acip',a['start'],e['start']),('english',e['start'],e['end'])]:
+  fragment=raw[start:end];name=f'physical/{r["seq"]}-{field}-exact-field-extent.raw';(R/name).write_bytes(fragment)
+  assert b' '.join(fragment.split())==r[field].encode()
+  rows.append({'seq':r['seq'],'field':field,'start':start,'end':end,'copy':name,**bp(fragment),'comparison':'Only ASCII whitespace collapse matches exact source field. Raw source/copy retained unchanged; no normalized source replacement.','field_utf8_pin':bp(r[field].encode())})
+# Full original C15 reading retained as a second local document witness, not claimed independent.
+p=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C15ReadingASCII.txt')
+physical15={'original':str(p),'exists':p.is_file(),'independent_publication_proved':False}
+if p.is_file():
+ b=p.read_bytes();dst=R/'inputs/C15ReadingASCII.txt';dst.write_bytes(b);assert dst.read_bytes()==p.read_bytes()==b
+ maps.append({'original':str(p),'resolved':str(p.resolve()),'symlink':os.readlink(p)if p.is_symlink()else None,'copy':str(dst.relative_to(R)),**bp(b)})
+ physical15.update(bp(b));physical15['field_prefix_occurrences']=[]
+ for r in source:
+  for field in ['acip','english']:
+   prefix=r[field].encode()[:32];offs=[];at=0
+   while(at:=b.find(prefix,at))>=0:offs.append(at);at+=1
+   physical15['field_prefix_occurrences'].append({'seq':r['seq'],'field':field,'prefix_utf8':prefix.decode(),'offsets':offs})
+put('physical-proof-v2.json',{'supersedes_extent_precision_only':'physical-proof.json remains unchanged with all earlier broad extents and capture helper/streams. No SQL repeat.','C05_original_full_pin':bp(raw),'fields':rows,'C15_availability':physical15})
+put('additional-input-manifest.json',maps[len(json.loads((R/'input-manifest.json').read_bytes())):])
+# Record exact selected full-field parallel equality, not only OR-match membership.
+queries=json.loads((R/'queries.json').read_bytes());matches=[]
+for r in source:
+ q=next(x for x in queries if x['role']=='full-field parallels C05:'+str(r['seq']))
+ for p in q['rows']:matches.append({'source_seq':r['seq'],'parallel_course':p['course'],'parallel_seq':p['seq'],'field_equal':{k:r[k]==p[k]for k in ['acip','wylie','english']},'id_course_seq_equal':{k:r[k]==p[k]for k in ['id','course','seq']}})
+put('parallel-field-identity.json',matches)
+put('uncertain-source-questions.json',[
+ {'seq':280,'source':'nyon mongs pa dug lnga','question':'English repeats five in apposition (five poisons--the five bad thoughts), while the selected Tibetan numeric wording is not two separate lnga tokens here. Future occurrence/depth decisions remain open; source-only prep makes no tuple.'},
+ {'seq':280,'source':"rjes su 'gro ldog 'khrul",'question':'English come/go plus failure-of-regularity wording and reordered phlegm/desire/bile/anger demand complete-clause role checking. A dictionary substring cannot determine separate atomic ownership.'},
+ {'seq':280,'source':"gzhung 'don pa sgyur ba",'question':'Both glossary entries for don-pa and sgyur-ba can contain twist around. Do not duplicate ownership from gloss equality. Mined gzhung gloss three principal paths is contextually unsuitable here; no source/master edit.'},
+ {'seq':280,'source':'P7:29','question':'Actual P7 English lacks jealousy before bracketed explanation and differs in punctuation. It is not an exact whole-field witness. C15:425 must be described by actual exact fields, not guessed independent ingestion.'},
+ {'seq':281,'source':'tshad grub','question':'The mined HGM English is the incomplete phrase confirmed by a valid. Actual source continues perception. Phrase scope/grammar must be independently settled later, not inferred from the truncated-looking mined gloss.'},
+ {'seq':281,'source':'P7:30','question':'P7 English omits differing perceptions in the quoted verse. The exact C05 text and digital C05 physical extent retain it. No source correction or independently published lineage is asserted.'},
+ {'seq':282,'source':'yan lag mi dra ba lngas','question':'First English occurrence explicates four limbs and head, later uses five different protuberances; preserve complete expansion and do not prematurely select a one-word/null correspondence. Agentive -s is not a separable atom.'},
+ {'seq':None,'source':'unbounded substring search','question':'nad lnga also finds gnad lnga (TCS12:146/147); those are retained counterexamples, not five-sicknesses lexical evidence. C13 hits stay flagged as blocked source correspondences and confer no C13 campaign approval.'},
+ {'seq':None,'source':'exact HGM no-hit records','question':"nad lnga, mu stegs byed, rjes su 'gro, dngos gcig had zero exact headword/variant results. Zero does not establish absent English or justify null."}])
+print(json.dumps({'status':'PASS','C05_exact_raw_field_extents':len(rows),'C15_available':physical15['exists'],'parallel_records':len(matches)}))

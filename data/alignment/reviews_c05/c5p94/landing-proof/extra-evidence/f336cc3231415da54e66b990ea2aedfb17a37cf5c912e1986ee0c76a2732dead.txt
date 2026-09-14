@@ -1,0 +1,80 @@
+"""Verify the course export against main-CSV refs and preserve prior groups.
+
+Usage: python3 campaign-artifacts/verify_course_csv.py BASE_COMMIT REPORT_PATH
+This checks export provenance; it does not assess semantic correspondence.
+"""
+from collections import Counter
+import csv
+import hashlib
+import io
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+WT = Path(__file__).resolve().parent.parent / "campaign-worktree"
+base, destination = sys.argv[1:]
+assert base.startswith("4aa4aa6")
+migrations = json.loads((WT.parent / "campaign-artifacts/integration/heading-trim-fix/migration.json").read_text())
+repairs = {(m["source_link"]["course"], m["source_link"]["tib"].strip(), m["old"], "1"): m for m in migrations if m["ref"] != "C05:206"}
+assert len(repairs) == 10
+applied_repairs = []
+main_path = "docs/geshe_michael_roach_dictionary.csv"
+course_path = "docs/geshe_michael_roach_dictionary_by_course.csv"
+
+
+def read_rows(raw):
+    return list(csv.DictReader(io.StringIO(raw.decode("utf-8-sig"), newline="")))
+
+
+main = read_rows((WT / main_path).read_bytes())
+raw = (WT / course_path).read_bytes()
+current = read_rows(raw)
+old = read_rows(subprocess.check_output(["git", "show", f"{base}:{course_path}"], cwd=WT))
+fields = ["course", "wylie", "acip", "tibetan_generated", "pronunciation_generated",
+          "english", "occurrences_in_course", "depth", "tier"]
+assert raw.startswith(b"\xef\xbb\xbf")
+assert b"\n" not in raw.replace(b"\r\n", b"")
+assert current and list(current[0]) == fields
+
+expected = Counter()
+metadata = {}
+for row in main:
+    if row["kind"] != "translation":
+        continue
+    for ref in row["refs"].split():
+        key = (ref.split(":")[0], row["wylie"], row["english"], row["depth"])
+        expected[key] += 1
+        values = {k: row[k] for k in ("acip", "tibetan_generated", "pronunciation_generated", "tier")}
+        assert key not in metadata or metadata[key] == values
+        metadata[key] = values
+
+key_of = lambda row: (row["course"], row["wylie"], row["english"], row["depth"])
+actual = {}
+for row in current:
+    key = key_of(row)
+    assert key not in actual, ("duplicate course/depth group", key)
+    actual[key] = int(row["occurrences_in_course"])
+    assert {k: row[k] for k in metadata[key]} == metadata[key], key
+assert actual == expected, "Export does not match the source-ref/depth groups"
+for row in old:
+    key = key_of(row)
+    if key in repairs:
+        m = repairs[key]
+        assert key not in actual
+        key = (key[0], key[1], m["new"], key[3])
+        applied_repairs.append(m["ref"])
+    assert key in actual and actual[key] >= int(row["occurrences_in_course"]), key
+
+assert len(applied_repairs) == 10
+
+report = {
+    "baseline_commit": base,
+    "prior_course_depth_groups_accounted_for": len(old), "prior_course_depth_keys_unchanged": len(old) - 10, "reviewed_heading_repairs": applied_repairs,
+    "current_course_depth_groups": len(current),
+    "all_depths_counts_and_metadata_match_main_csv_refs": True,
+    "encoding": "UTF-8 BOM, CRLF",
+    "course_csv_sha256": hashlib.sha256(raw).hexdigest(),
+}
+Path(destination).write_text(json.dumps(report, indent=2) + "\n")
+print(json.dumps(report, indent=2))

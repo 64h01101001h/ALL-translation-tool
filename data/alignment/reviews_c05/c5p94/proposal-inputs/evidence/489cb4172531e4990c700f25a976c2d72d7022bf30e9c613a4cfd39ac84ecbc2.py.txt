@@ -1,0 +1,61 @@
+"""Exercise only the isolated narrow block; never import/call the full runtime."""
+from pathlib import Path
+import copy,hashlib,importlib.util,json,sys
+assert sys.dont_write_bytecode
+D=Path(__file__).resolve().parent;W=D.parents[2]/'campaign-worktree'
+original_allow=json.loads((D/'inputs/frozen-280/proposed-head-allowances.json').read_bytes())
+original_body=(D/'inputs/frozen-280/body.html').read_bytes()
+original_spans=json.loads((D/'inputs/frozen-280/spec.json').read_bytes())['segments'][0]['spans']
+original_tuples=json.loads((D/'inputs/frozen-280/final-tuples.json').read_bytes())
+block=compile((D/'allowance-check-block.py.txt').read_bytes(),str(D/'allowance-check-block.py.txt'),'exec')
+results=[]
+def run_case(name,mutate=None,should_pass=False,empty=False):
+ allow=copy.deepcopy(original_allow);spans=copy.deepcopy(original_spans);tuples=copy.deepcopy(original_tuples);raw=original_body;seq=280
+ if empty:
+  seq=281;allow={'pages_c05':{},'actual_gated_hits':[],'predicate_source':copy.deepcopy(original_allow['predicate_source'])}
+  spans=[dict(id='w1',d=5,tib='dngos po',eng='object')];tuples=[dict(id='w1',d=5,tib='dngos po',eng='object',tib_range=[0,8],eng_range=[0,6],parent=None)]
+  raw=b'<span class="u" data-d="5" data-l="s281w1">object</span>'
+ state={'allow':allow,'spans':spans,'tuples':tuples,'raw':raw,'seq':seq}
+ if mutate:mutate(state)
+ captured={}
+ def read(p):
+  assert p.name=='proposed-head-allowances.json'
+  return copy.deepcopy(state['allow'])
+ def check(p,ref):
+  b=Path(p).read_bytes();assert dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())=={k:ref[k] for k in ['bytes','sha256']}
+ def save(n,v):
+  assert n not in captured;captured[n]=v
+ namespace=dict(Path=Path,importlib=importlib,read=read,check=check,save=save,d=D/'inputs/frozen-280',
+  W=W,COURSE='C05',SEQS=[280,281,282],raw=state['raw'],seq=state['seq'],
+  byid={s['id']:s for s in state['spans']},tuples=state['tuples'])
+ try:
+  exec(block,namespace)
+  accepted=True;failure=None
+ except AssertionError as e:accepted=False;failure=str(e)
+ assert accepted==should_pass,(name,accepted,should_pass,failure)
+ results.append({'case':name,'expected_accept':should_pass,'observed_accept':accepted,'assertion':failure,'captured_checks':captured})
+run_case('accept_actual_frozen_two_sogs_hits',should_pass=True)
+run_case('accept_no_predicate_hits_with_empty_mapping',should_pass=True,empty=True)
+run_case('reject_missing_declared_hit',lambda s:s['allow']['actual_gated_hits'].pop())
+run_case('reject_duplicate_declared_hit',lambda s:s['allow']['actual_gated_hits'].append(copy.deepcopy(s['allow']['actual_gated_hits'][0])))
+run_case('reject_missing_allowance',lambda s:s['allow']['pages_c05'].pop('c5p94/s280w29'))
+run_case('reject_extra_allowance',lambda s:s['allow']['pages_c05'].update({'c5p94/s280w999':'sogs: and so on'}))
+run_case('reject_wrong_page_key',lambda s:s['allow']['pages_c05'].update({'c5p93/s280w29':s['allow']['pages_c05'].pop('c5p94/s280w29')}))
+run_case('reject_wrong_label',lambda s:s['allow']['actual_gated_hits'][0].update(label='s281w29'))
+run_case('reject_wrong_depth',lambda s:s['allow']['actual_gated_hits'][0].update(depth=7))
+run_case('reject_wrong_prefix',lambda s:s['allow']['actual_gated_hits'][0].update(match='and '))
+run_case('reject_wrong_body_range',lambda s:s['allow']['actual_gated_hits'][0].update(body_range=[0,48]))
+run_case('reject_wrong_final_tuple',lambda s:s['allow']['actual_gated_hits'][0]['final_tuple'].update(eng='and the rest'))
+run_case('reject_wrong_record_licensor',lambda s:s['allow']['actual_gated_hits'][0].update(licensor='generic'))
+run_case('reject_empty_licensor_evidence',lambda s:s['allow']['pages_c05'].update({'c5p94/s280w29':'   '}))
+run_case('reject_generic_licensor_evidence',lambda s:s['allow']['pages_c05'].update({'c5p94/s280w29':'Approved exception to the head gate.'}))
+run_case('reject_missing_english_realization_in_evidence',lambda s:s['allow']['pages_c05'].update({'c5p94/s280w29':'sogs is the Tibetan licensor.'}))
+run_case('reject_extra_pages_category',lambda s:s['allow'].update(pages_c04={}))
+run_case('reject_predicate_pin_mismatch',lambda s:s['allow']['predicate_source'].update(sha256='0'*64))
+run_case('reject_predicate_path_mismatch',lambda s:s['allow']['predicate_source'].update(path=str(W/'tools/another.py')))
+run_case('reject_duplicate_actual_gated_label',lambda s:s.update(raw=s['raw']+b'<span class="u" data-d="5" data-l="s280w29">and so on</span>'))
+run_case('reject_actual_span_depth_mismatch',lambda s:next(x for x in s['spans'] if x['id']=='w29').update(d=3))
+run_case('reject_actual_span_text_mismatch',lambda s:next(x for x in s['spans'] if x['id']=='w29').update(eng='and many others'))
+report={'status':'PASS_FOCUSED_CONTROLS_ONLY','controls':len(results),'accepted':sum(r['observed_accept'] for r in results),'rejected':sum(not r['observed_accept'] for r in results),'full_runtime_imported':False,'full_runtime_verify_called':False,'canonical_generator_called':False,'SQL_Git_builder_landing_calls':0,'predicate_main_called':False,'predicate_import':'Actual current canonical gate imported inertly; PAT used unchanged.','results':results}
+(D/'focused-controls.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({k:v for k,v in report.items() if k!='results'},indent=2))

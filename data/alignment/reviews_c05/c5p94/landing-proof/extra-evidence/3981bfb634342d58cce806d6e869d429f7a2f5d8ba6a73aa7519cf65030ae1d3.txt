@@ -1,0 +1,65 @@
+"""Root-authorized sequential landing of separately reviewed C05:280–282.
+
+Every command has a fresh recorder directory. A failed command stops the chain.
+No semantic decision is manufactured by this orchestration.
+"""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess, sys
+
+B = Path(__file__).resolve().parent
+A = B.parent
+W = A.parent / 'campaign-worktree'
+L = B / 'landing'
+BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
+ENV = dict(os.environ, PYTHONOPTIMIZE='0', PYTHONDONTWRITEBYTECODE='1', GIT_OPTIONAL_LOCKS='0')
+
+def pin(raw):
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+def step(label, script, *args):
+    cmd = [sys.executable, '-B', str(A / 'record_external_step.py'), str(B / ('landing-caller-' + label)), str(W), sys.executable, '-B', str(script), *args]
+    subprocess.run(cmd, env=ENV, check=True)
+
+proof_path = B / 'root-final-semantic-review-verification-v3/proof.json'
+proof = json.loads(proof_path.read_bytes())
+assert proof['status'] == 'PASS' and proof['head'] == BASE
+assert proof['review_freeze'] == pin((B / 'semantic-review/freeze.json').read_bytes())
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=W, env=ENV).decode().strip() == BASE
+assert subprocess.check_output(['git', 'status', '--porcelain=v1', '-uall'], cwd=W, env=ENV) == b'?? data/teaching/dcc_captions\n'
+for relative in ['data/alignment/pages_c05/c5p94.html', 'data/alignment/specs_c05/c5p94.json', 'data/alignment/reviews_c05/c5p94']:
+    assert not (W / relative).exists(), relative
+assert not L.exists()
+L.mkdir()
+# Preserve the failed v1/v2 checker outputs; this conventional path is a copy
+# of the actual v3 result, with an explicit provenance record alongside it.
+copy = B / 'root-final-semantic-review-verification/proof.json'
+assert not copy.exists()
+copy.write_bytes(proof_path.read_bytes())
+(copy.parent / 'successful-v3-proof-copy.json').write_text(json.dumps(dict(original=str(proof_path), copy=str(copy), **pin(copy.read_bytes()), prior_failures_preserved=True), indent=2) + '\n')
+
+step('semantic-acceptance', A / 'verify_semantic_acceptance.py', '94', '280')
+step('materialize', A / 'land_reviewed_page_v2.py', '94', '280', '281', '282')
+step('landed-copy', A / 'verify_semantic_acceptance.py', '94', '280', '--landed')
+
+# Add only the two exact independently reviewed source licenses. All existing
+# values must match the incoming Git object, and their full preimage is saved.
+path = W / 'data/alignment/span_head_allow.json'
+old = path.read_bytes()
+assert old == subprocess.check_output(['git', 'show', BASE + ':data/alignment/span_head_allow.json'], cwd=W, env=ENV)
+wanted = json.loads((B / 'semantic-review/span-head-allow-needed.json').read_bytes())
+assert set(wanted) == {'pages_c05'}
+assert set(wanted['pages_c05']) == {'c5p94/s280w29', 'c5p94/s280w43'}
+data = json.loads(old)
+for key, value in wanted['pages_c05'].items():
+    assert key not in data['pages_c05'] and isinstance(value, str) and value.strip()
+    data['pages_c05'][key] = value
+new = (json.dumps(data, ensure_ascii=False, indent=2) + '\n').encode()
+assert not (L / 'span-head-allow-before.json').exists()
+(L / 'span-head-allow-before.json').write_bytes(old)
+path.write_bytes(new)
+assert path.read_bytes() == new
+(L / 'span-head-allow-mutation.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), status='PASS', before=pin(old), after=pin(new), added=wanted, source='semantic-review/span-head-allow-needed.json', prior_values_unchanged=True), ensure_ascii=False, indent=2) + '\n')
+
+step('review-copy', A / 'verify_review_copy_and_register.py', '94', '280')
+step('register', B / 'landing-helper-preparation/register-reviewed-page-and-index.py')
+step('builders', A / 'run_reviewed_builders_once.py', '94', '280')

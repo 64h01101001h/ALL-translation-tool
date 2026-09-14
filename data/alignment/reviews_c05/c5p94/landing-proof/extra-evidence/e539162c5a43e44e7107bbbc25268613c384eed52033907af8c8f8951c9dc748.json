@@ -1,0 +1,81 @@
+{
+  "status": "PREPARED_PENDING_INDEPENDENT_REVIEW_AND_ROOT_RELEASE",
+  "runtime": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction",
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "materialize_exact_code": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction-concrete-preparation/prepare.py.txt",
+      "bytes": 5097,
+      "sha256": "795dbf83954f82d6461bfcafd691588974ce5b146d4f3ed4a459c2f595a04df2",
+      "full_inverse_exact": true,
+      "full_diff_exact": true,
+      "assertion_count": 5,
+      "check_call_count": 0,
+      "syntax_only": true
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction-concrete-preparation/run-once.py.txt",
+      "bytes": 2559,
+      "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0",
+      "full_inverse_exact": true,
+      "full_diff_exact": true,
+      "assertion_count": 4,
+      "check_call_count": 0,
+      "syntax_only": true
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction-concrete-preparation/run-isolated-readonly.py.txt",
+      "bytes": 1639,
+      "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca",
+      "full_inverse_exact": true,
+      "full_diff_exact": true,
+      "assertion_count": 6,
+      "check_call_count": 0,
+      "syntax_only": true
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction-concrete-preparation/verify-retention.py.txt",
+      "bytes": 11698,
+      "sha256": "a390e0f89a64b873798dde798ad4aa5f60c1e2d9a01027ad1d4a882ce3515a35",
+      "full_inverse_exact": true,
+      "full_diff_exact": true,
+      "assertion_count": 1,
+      "check_call_count": 35,
+      "syntax_only": true
+    }
+  ],
+  "sequential_commands": [
+    [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction/prepare.py.txt"
+    ],
+    [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction/run-once.py.txt"
+    ],
+    [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction/verify-retention.py.txt"
+    ]
+  ],
+  "contract_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-generated-reproduction-concrete-preparation/command-plan.md",
+  "contract": {
+    "bytes": 6731,
+    "sha256": "83e078158457ec26a48839b0c0cc632d1f710d83e976c573ef84ee2b068db129"
+  },
+  "actual_measurements": {
+    "bytes": 4027,
+    "sha256": "a847d97b791a3d220cfb2773d455adfce6d54993f87e820ffff6467e1a7fb2fb"
+  },
+  "capture": "Fresh complete actual command/stdin/stdout/stderr/exit/start/end and all failures; no rerun of completed successful builders.",
+  "additional_entry_and_post_acceptance": "All original/source/seed/Git/state gates described in command-plan.md remain mandatory; exact current post-run closure adaptation requires review.",
+  "execution_count": 0
+}

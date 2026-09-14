@@ -1,0 +1,55 @@
+--- prepared/whitespace282.py
++++ prior/whitespace279.py
+@@ -1,22 +1,16 @@
+-"""PREPARED bounded C05:280–282 whitespace tooling. No CLI execution approved.
++"""PREPARED bounded C05:277–279 whitespace tooling. No CLI execution approved.
+ 
+ prepare retains classification pins from a later actual staged diagnostic;
+ audit reproduces that diagnostic and independently repeats every predicate.
+ Neither mode stages, banks, normalizes source, or supplies semantic approval.
+ """
+-
+-# PREPARATION ONLY: actual ordinary bank, ledgers and staged diagnostics are pending.
+-PENDING_BINDINGS = {'ordinary_bank_manifest': None, 'ordinary_bank_file_count': None, 'ordinary_bank_external_count': None, 'ordinary_bank_write_run': None, 'final_bank_manifest': None, 'final_bank_write_run': None, 'final_bank_file_count': None, 'three_ledger_paths_and_approved_before_after_bytes': None, 'three_ledger_staging_contract_review': None, 'raw_untracked_before_banking_full_stream_and_caller': None, 'actual_index_and_unstaged_boundary': None, 'actual_raw_diagnostic_full_stream_and_caller': None, 'actual_staged_path_set_and_count': None, 'physical_source_descriptors_and_original_aliases': None, 'additional_warning_descriptor_contract': None, 'prior_closure_proof_relative': None, 'prior_closure_expected_status': None, 'whitespace_preparation_freeze_sha256': None, 'whitespace_preparation_file_count': None, 'whitespace_review_freeze_sha256': None, 'whitespace_review_file_count': None, 'additional_descriptor_entry_count': None, 'additional_descriptor_evidence_count': None, 'additional_descriptor_provenance_count': None, 'verified_frozen_file_count': None, 'original_copy_pair_count': None, 'warning_count': None, 'warning_file_count': None, 'raw_diagnostic_exit': None, 'independent_code_review_and_actual_runtime_release': None}
+-if any(value is None for value in PENDING_BINDINGS.values()):
+-    raise RuntimeError('Unbound through282 preparation; no staging, bank, Git, whitespace or verification runtime is released')
+-
+ from pathlib import Path
+ from collections import defaultdict, Counter
+ import argparse, datetime, hashlib, json, os, re, subprocess, sys, traceback
+ sys.dont_write_bytecode = True
+ HERE = Path(__file__).resolve().parent
+-HEAD = '10968d16e701b698a0e1fbd845b353089d15ac39'
+-PREFIX = 'data/alignment/reviews_c05/c5p94/'
++HEAD = 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
++PREFIX = 'data/alignment/reviews_c05/c5p93/'
+ CSV = {'docs/geshe_michael_roach_dictionary' + x for x in ('.csv', '_reverse.csv', '_by_course.csv', '_changes.csv')}
+ WARNINGS = {'trailing whitespace.', 'space before tab in indent.', 'new blank line at EOF.'}
+ 
+@@ -151,7 +145,7 @@
+         self.a = args; self.root_aliases = []
+         self.w = self.capture_root(args.worktree, 'worktree')
+         self.review = self.capture_root(args.review, 'review')
+-        assert self.review.name == 'semantic-review' and self.review.parent.name == 'C05-280-282'
++        assert self.review.name == 'semantic-review' and self.review.parent.name == 'C05-277-279'
+         resolved_manifest = self.capture_root(args.root_manifest, 'root_manifest')
+         self.root_manifest = Path(args.root_manifest).absolute()
+         self.out = Path(args.output).absolute()
+@@ -203,7 +197,7 @@
+         head = self.git('rev-parse','HEAD')[0].decode().strip(); assert head == HEAD
+         index = self.git('ls-files','--stage','-z')[0]
+         freeze_raw = self.read(self.review/'freeze.json'); assert freeze_raw == self.read(HERE/'current-inputs/semantic-review/freeze.json')
+-        freeze = json.loads(freeze_raw); assert freeze['status'] == 'FROZEN' and freeze['verdict'] == 'APPROVE' and digest(freeze_raw) == '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b' and isinstance(freeze['files'],dict)
++        freeze = json.loads(freeze_raw); assert freeze['spec_verdict'] == freeze['quality_verdict'] == 'APPROVE' and isinstance(freeze['files'],dict)
+         frozen = freeze['files']; assert {str(p.relative_to(self.review)) for p in self.review.rglob('*') if p.is_file()} == set(frozen)|{'freeze.json'}
+         manifest_raw = self.read(self.review/'original-to-copy-manifest.json'); assert manifest_raw == self.read(HERE/'current-inputs/semantic-review/original-to-copy-manifest.json')
+         manifest = json.loads(manifest_raw); assert isinstance(manifest,list)
+@@ -235,7 +229,7 @@
+             prepared = self.obj(Path(self.a.prepared)/'prepared-pins.json')
+             assert prepared['head'] == HEAD and prepared['raw_log'] == pin(log) and prepared['review_freeze'] == pin(freeze_raw) and prepared['root_manifest'] == pin(root_raw)
+         else: assert not self.a.prepared
+-        build = self.obj(self.a.build_proof); assert build['status'] == 'PASS' and build['baseline_commit'] == HEAD and build['page'] == 94 and build['first_segment'] == 280
++        build = self.obj(self.a.build_proof); assert build['status'] == 'PASS' and build['baseline_commit'] == HEAD and build['page'] == 93 and build['first_segment'] == 277
+         for path, grouped in issues.items():
+             raw = self.staged(path); lines = literal_warnings(raw,grouped); witness = {}
+             if path in CSV:

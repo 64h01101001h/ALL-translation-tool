@@ -1,0 +1,52 @@
+{
+  "status": "PREPARATION_ONLY_ROOT_REVIEW_REQUIRED",
+  "candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/registration-preparation/register-reviewed-page-and-index.py",
+    "bytes": 8037,
+    "sha256": "aed207dbf618c745f1d2ba30752b78d4642a1a79f523dcf70fcd0681443f9e1c"
+  },
+  "BASE": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+  "page": 93,
+  "segments": [
+    277,
+    278,
+    279
+  ],
+  "future_argv": [
+    "python3",
+    "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/registration-preparation/register-reviewed-page-and-index.py"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "stdin": "empty",
+  "caller_capture": "A fresh external run directory outside this frozen preparation; retain actual argv/cwd/environment/stdin/stdout/stderr/exit. No current invocation authorized by preparation.",
+  "required_runtime_inputs": [
+    "authoritative through276 closure retained here, reread from its original path",
+    "actual final B/semantic-review/review.json: verdict APPROVE, open_findings[], ordered segments277\u2013279 with exact spec/body pins and generator exits",
+    "byte-identical WT/data/alignment/reviews_c05/c5p93/review.json",
+    "actual B/landing/root-semantic-acceptance-proof.json: page93, segments277\u2013279, exact_final_hashes_counts_and_ranges=true, review_json_sha256",
+    "B/reconciled/{277,278,279}/{spec.json,body.html} and matching B/semantic-review/reviewed-final plus WT review/reviewed-final copies",
+    "WT/data/alignment/specs_c05/c5p93.json exact approved ordered serialization",
+    "B/landing/generator.stdout, generator.exit=0, generator.stderr empty; exact individual body concatenation",
+    "WT/data/alignment/reviews_c05/c5p93/landing.json with canonical spec/body pins",
+    "WT/data/alignment/pages_c05/c5p1.html through c5p93.html, with actual approved page93 body",
+    "WT index.html and tools/build_alignment_layer.py byte-equal to BASE Git objects"
+  ],
+  "must_be_absent": [
+    "B/landing/course-registration-verification.json",
+    "B/landing/registration-preimages"
+  ],
+  "eventual_writes": [
+    "B/landing/registration-preimages/index.html",
+    "B/landing/registration-preimages/build_alignment_layer.py.txt",
+    "WT/data/alignment/pages_c05/index.html",
+    "WT/tools/build_alignment_layer.py",
+    "B/landing/course-registration-verification.json"
+  ],
+  "root_post_run_obligation": "Inspect exact actual streams and output pins against frozen prospective bytes, retain all preimages and failure evidence; only then builders under separate authorization. Existing baseline Git and semantic gates must pass at runtime."
+}

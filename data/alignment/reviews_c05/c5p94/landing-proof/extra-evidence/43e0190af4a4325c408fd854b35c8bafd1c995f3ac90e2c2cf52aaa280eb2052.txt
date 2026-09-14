@@ -1,0 +1,31 @@
+--- commit_closure282.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-commit-closure-preparation/commit_closure279.py
+@@ -3,7 +3,7 @@
+ """
+ from pathlib import Path
+ import argparse,datetime,hashlib,json,os,subprocess
+-BASE='10968d16e701b698a0e1fbd845b353089d15ac39'
++BASE='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+ NAMES=['data/alignment/C05_CAMPAIGN.md','docs/handoff/HANDOFF_LOG.md','docs/superpowers/plans/2026-09-12-aci-alignment-campaign.md']
+ def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+ def pincheck(b,p):assert pin(b)=={k:p[k] for k in ('bytes','sha256')}
+@@ -27,8 +27,8 @@
+  return r.stdout
+ def paths(b):assert not b or b.endswith(b'\0');return b.decode().split('\0')[:-1]
+ stage=json.loads((S/'root-final-stage-verification.json').read_bytes())
+-assert stage['status']=='PASS' and stage['head']==BASE and stage['segments']==[280,281,282]
+-assert stage['actual_coverage']==282 and stage['actual_added_links']==127
++assert stage['status']=='PASS' and stage['head']==BASE and stage['segments']==[277,278,279]
++assert stage['actual_coverage']==279 and stage['actual_added_links']==149
+ entry=Path(a.entry).read_bytes()
+ assert entry.startswith(b'\n') and entry.endswith(b'\n') and b'\r' not in entry and b'\t' not in entry
+ assert not any(x.endswith(b' ') for x in entry.split(b'\n'))
+@@ -86,7 +86,7 @@
+   pincheck(before,row['before']);pincheck(after,row['after']);assert after==before+entry==(W/row['path']).read_bytes()
+  residual=paths(git('untracked','ls-files','--others','--exclude-standard','-z'))
+  assert residual==['data/teaching/dcc_captions']
+- proof=dict(status='PASS_FIXED_DATA_COMMIT_BINDING_THROUGH_C05_282',incoming=BASE,data=a.data,final=a.final,whole_data_tree_entries=len(tree),entire_data_tree_equals_accepted_index=True,data_changed_paths=len(stage['files']),docs_only=sorted(NAMES),all_prior_ledgers_preserved_verbatim=True,untracked=residual,coverage=282,main_integration='OPEN_NO_APPLICATION; last read-only compatibility Sep13 23:40–23:42 UTC only',native_and_phone='Private pack FAILED_UNACCEPTED for four inherited C01 findings; installed resource through171 unchanged; no current device acceptance',boundary='Private fixed DATA/doc closure, not a new global291 or MAIN/native/device approval')
++ proof=dict(status='PASS_FIXED_DATA_COMMIT_BINDING_THROUGH_C05_279',incoming=BASE,data=a.data,final=a.final,whole_data_tree_entries=len(tree),entire_data_tree_equals_accepted_index=True,data_changed_paths=len(stage['files']),docs_only=sorted(NAMES),all_prior_ledgers_preserved_verbatim=True,untracked=residual,coverage=279,main_integration='OPEN; last applicability Sep13 17:25:51 UTC only',native_and_phone='verified through171 only; fresh integration pending',boundary='Private fixed DATA/doc closure, not a new global291 or MAIN/native/device approval')
+ proof.update(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),accepted_stage_proof=pin((S/'root-final-stage-verification.json').read_bytes()),accepted_entire_index=pin(index_candidates[0]))
+ (O/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))
+ 

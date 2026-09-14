@@ -1,0 +1,83 @@
+"""Original Tibetan-first hand-authored choices; positions declared independently of generator."""
+from pathlib import Path
+import json, re
+base=Path(__file__).resolve().parent.parent
+source=json.loads((base/'280/evidence/queries.json').read_text())['queries'][0]['rows']
+rows={r['seq']:r for r in source}
+all_decisions={}
+def spans_for(seq,title,choices,note,omissions,contentions):
+ row=rows[seq]; spans=[]; intentions=[]; cursor=0
+ for i,choice in enumerate(choices,1):
+  tib,eng,dep,occ,why=choice
+  ident=('p' if dep==6 else 'w')+str(i)
+  # Choice table is in Tibetan source order; suffixes remain source-exact.
+  pat=lambda text: re.compile(r'(?<![A-Za-z0-9\u0f00-\u0fff])'+re.escape(text)+r'(?![A-Za-z0-9\u0f00-\u0fff])')
+  matches=[m for m in pat(tib).finditer(row['wylie']) if m.start()>=cursor]
+  if not matches:raise ValueError((seq,tib,cursor))
+  tm=matches[0];cursor=tm.end();sp={'id':ident,'d':dep,'tib':tib,'eng':eng}
+  if eng is None:
+   sp.update(cls='case' if dep==6 else 'word',nul=why);er=None;actual_occ=None;ecount=0
+  else:
+   em=list(pat(eng).finditer(row['english']));m=em[occ-1];er=[m.start(),m.end()];actual_occ=occ;ecount=len(em)
+  spans.append(sp); intentions.append({'id':ident,'tib_range':[tm.start(),tm.end()],'eng_range':er,'tib':tib,'eng':eng,'english_occurrence_1_based':actual_occ,'english_total_exact_whole_word_occurrences':ecount,'reason':why})
+ order=[x['id'] for x in sorted((x for x in intentions if x['eng_range']),key=lambda x:x['eng_range'][0])]
+ occupied=[]
+ for x in sorted((x for x in intentions if x['eng_range']),key=lambda x:x['eng_range'][0]):
+  if occupied and x['eng_range'][0]<occupied[-1]['eng_range'][1]:raise ValueError(('overlap',seq,occupied[-1],x))
+  occupied.append(x)
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':note}]}
+ dest=base/str(seq); (dest/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(dest/'intended-spans.json').write_text(json.dumps(intentions,ensure_ascii=False,indent=2)+'\n')
+ (dest/'decisions.json').write_text(json.dumps({'producer':'Codex; independent Tibetan-first original proposal','status':'PROVISIONAL machine alignment; unreviewed; no semantic approval','source_role':'Original spine rows and original C05ReadingASCII.txt, plus HGM glossary/corpus; no other-angle or root judgments read.','omissions':omissions,'contentions':contentions,'shared_evidence':'../280/evidence','english_ownership':'Exact source occurrences declared in intended-spans.json before running canonical generator.'},ensure_ascii=False,indent=2)+'\n')
+ (dest/'errata.json').write_text('[]\n')
+ print(seq,len(spans),order)
+D=lambda t,e,o=1,r='Direct lexical match in this source; HGM glossary corroborates the reading.':(t,e,5,o,r)
+P=lambda t,e,o=1,r='Grammatical/discourse exponent in this source.':(t,e,6,o,r)
+Q=lambda t,e,o=1,r='Complete phrase correspondence, outside the dictionary depth.':(t,e,3,o,r)
+spans_for(280,'misapplied quotations and direct results',[
+ Q('gzhan yang','And anyway',r='Complete additive discourse recast; the unrelated auto-aligned glossary gloss supplies no authority for this occurrence.'),
+ D('dpal','glorious'),D('chos kyi grags pa','Dharmakirti',1,'Proper name; first explicit occurrence. The later Master Dharmakirti is supplied as the refuting subject.'),D('lung','statement',1),D('khyod','you',1),D("'gal ba",'contradicted'),D('khyod','You'),
+ D('nad','sicknesses'),D('lnga','five',1),D("'byung ba",'elements'),D('lnga','five',2),D('gdon','demons'),D('lnga','five',3),
+ D('nyon mongs pa','bad thoughts',1,'Owns the first explanatory bad thoughts; the bracketed translator comment is outside the Tibetan.'),D('dug','poisons'),D('lnga','five',4,'The number before poisons; the English repeats five before bad thoughts without a second Tibetan numeral.'),D("dngos 'bras",'direct result',1),D('khas blangs','taken the position'),
+ D('mu stegs byed','non-Buddhists',1,'Full established non-Buddhist designation; exact entry absent but mu stegs HGM glossary and the source/corpus support the rendering.'),D('bad kan','phlegm',1),D("'dod chags",'desire',1),D("rgyu 'bras",'cause-and-effect',1,'Lexical cause/effect compound; relationship is the English nominal frame and remains unwrapped.'),D('mkhris pa','bile',1),D('zhe sdang','anger',1,'Original source owns anger despite the exact dictionary entry having only provisional dislike; no dictionary change proposed.'),
+ D('sogs','and so on',1,'The closing gesture is licensed by sogs; no supplied noun captured.'),D('khas blangs pa','take the position'),D('bad kan','phlegm',2),D("'dod chags",'desire',2),D("rjes su 'gro ldog",'come and go',1,'Technical concomitance compound; HTG2016 explicitly lists come and go; C04:121/C16:597 support the causal context.'),D("'khrul","doesn't always",1,'Failure of invariable concomitance; this first instance qualifies desire/phlegm, not the later quotation.'),D('mkhris pa','bile',2),D('zhe sdang','anger',2),D("rjes su 'gro ldog",'come and go',2),D("'khrul","doesn't always",2),D("'gog byed",'refutes'),
+ D("'khrul","doesn't always hold",1,'Final quotation gives the full predicate of failed concomitance; the supplied subject relationship stays outside. Do not attach this to not a fact.'),P('phyir','for',1,'Causal particle inside quoted verse, rendered for before the relationship.'),D('rlung','wind'),D('sogs','and the rest',1,'Closing gesture licensed by sogs.'),D('ma yin','not',1,'Only the negative exponent is claimed; the truth-predicate fact and such are not separately forced onto chos.'),
+ D('gzhung','statement',3,'Selects this statement in the twist-around clause; statement in the prefatory To do so sentence is an added restatement.'),D('sgyur ba','twist around',1,'The change verb owns twist around; the invocation word don pa is not assigned the same English a second time.'),D('khyod','your',1),D('gnod pa','disproved'),D("'dus ma byas",'uncreated'),D("nam mkha'",'space'),D('phrag dog','jealousy'),D("dngos 'bras",'direct result',2),D("'dod pa",'assert'),D('mi rigs pa','wrong',1,'The negative evaluative compound owns wrong; how and it is remain unwrapped.')
+],
+'PROVISIONAL machine alignment by Codex, independent Tibetan-first original proposal; unreviewed. Repeated phlegm/desire/bile/anger and failed-concomitance predicates are assigned by their exact source occurrences. The second rgyu \'bras uses an English anaphor and is omitted; chos and \'don pa have no defensible separate selection here and are omitted. The translator\'s bracketed explanation remains unaligned. Four Tibetan occurrences of lnga own the first four English occurrences of five; the explanatory fifth five is supplied. Full source and uncertainty records accompany this proposal.',
+[
+ {'tib':"rgyu 'bras",'occurrence':2,'reason':'Rendered anaphorically as the same kind of relationship. Omitted because the causal content is distributed through reference to the first relationship; not nulled.'},
+ {'tib':'chos','reason':'Quoted predication is recast as not a fact ... are such. Ownership of a separate truth noun versus such is unresolved; omitted rather than null.'},
+ {'tib':"'don pa",'reason':'Invoking the passage participates in the larger twist-around recast; the dictionary lists the same English for both don pa and sgyur ba, but one English predicate cannot license both here. Only the change verb is paired.'},
+ {'tib':'bcas pa rnams','reason':'Aggregate inclusivity is distributed through the list and all; not forced onto one of these forms.'},
+ {'english':'Master Dharmakirti; To do so he makes the statement that says; translator bracketed explanation','reason':'Supplied/repeated explanatory material, without additional Tibetan lexical occurrences.'},
+ {'tib':'remaining case endings, copulas, report markers and closing causal connectives','reason':'Omitted as nonessential grammatical coverage; omission does not claim absent meaning.'}
+],
+[{'focus':"'khrul (third)",'judgment':"doesn't always hold is the final predicate of failed concomitance; challenge this atom before widening it to the supplied subject relationship."},{'focus':'gzhung','judgment':'The third English statement, in this statement, is selected deliberately. The quote-introducing second statement is left as a restatement.'}])
+spans_for(281,'one object and three appearances',[
+ P('yang','yet another',r='Additive reopening; else is a further English elaboration and remains unwrapped.'),D('kha cig','Someone'),D('na re','claim',r='Speech report is nominalized as claim in the English framing; make/might/come remain supplied.'),
+ D('dngos','thing'),D('gcig','single',1),D('yid','perceptions'),P('ni',None,r='Topic marker; the English has no separate topic particle. The noun perceptions is independently aligned.'),D('tha dad','differing'),P('phyir','Insofar as'),Q('don ma grub par','has no reality',r='Complete existential/reality recast; avoids falsely equating grub alone with has or ma grub alone with no.'),D("'dod pa",'say'),
+ D('dngos po','object',1),D('gcig','single',2),D('snang','appearing',1,'Split the transparent construction snang tshul into its lexical appearance and manner terms, whose English is discontinuous.'),D('tshul','ways',1,'The manner noun owns ways; do not make snang tshul own only appearing while dropping its manner component.'),D("mi 'dra ba",'different',2,'First described appearance differs; first English different is in the supplied bracketed beings.'),D('gsum','three',1),D('gsungs pa','expressed'),D("mi 'thad",'incorrect'),D('khyod','you',1),P('ltar','according to'),
+ D('dngos po','objects',1),D('gsum','three',2),D('snang','appearing',2),D('tshul','ways',2),D("mi 'dra ba",'different',4,'Second appearance-ways occurrence; different before objects has no separate mi dra ba.'),D('gsum','three',3),P('phyir','because'),
+ D("'gro ba",'beings',2,'The bracketed beings inside the verse are supplied by the translator; this occurrence is the later situation.'),D('gsum','three',4),D('brlan','wet'),P('zhing','and',3,'Conjunction between wet and flowing, not another repeated and.'),D('gsher ba','flowing'),D('phor pa','glass'),D('gang','full'),D('cig car du','together',r='Simultaneity owns together; sit down is the English scene-setting expansion.'),D('bltas pa','look'),
+ D('dngos po','objects',2),D('tshad grub pa','confirmed by a valid perception',r='Established HGM technical compound, explicitly listed in HTG2016; each is supplied and excluded.'),D('gsum','three',5),D('snang','appearing',3),D('tshul','ways',3),D("mi 'dra ba",'different',7),D('gsum','three',6)
+],
+'PROVISIONAL machine alignment by Codex, independent Tibetan-first original proposal; unreviewed. The quoted bracketed beings have no Tibetan in this shortened quotation. The three snang tshul constructions are split as snang/appearing and tshul/ways because their English exponents are discontinuous. The three occurrences of mi \'dra ba own only the different modifiers of ways. Don ma grub par is retained as a complete phrase at depth 3. Repeated numerals and conjunctions are resolved explicitly; broader speech and inference framing remains unwrapped.',
+[
+ {'tib':"'byung bar / 'byung ba'i (three occurrences)",'reason':'Occurrence/existence is distributed through can be, what is happening, there were and were appearing; omitted rather than assigning competing atoms or a false null.'},
+ {'tib':'der thal','reason':'Rendered as an expanded inferential reminder: And this certainly is your position; remember ... . No tighter defensible correspondence chosen.'},
+ {'tib':"de'i tshe na, final phyir, zer na and remaining grammar/report markers",'reason':'Distributed temporal, causal and report framing; no independent lexical match asserted.'},
+ {'english':'[these different beings]; different before the objects; different kinds of; sit down; each; Let\'s talk about that quotation above','reason':'Supplied clarification or scene/report framing. Do not duplicate Tibetan mi dra ba, gsum, gro ba or tshad grub pa onto these words.'}
+],
+[{'focus':'snang tshul','judgment':'The split into snang and tshul preserves both lexical components without enclosing discontinuous English in a false compound span.'},{'focus':'na re','judgment':'Claim is a nominal recast of the reporting verb, not an assertion that come or might has Tibetan lexical ownership.'}])
+spans_for(282,'the person and the five body parts',[
+ D("'o na",'Well now'),D('skyes bu','person',1),D('gcig',None,r='No separate numeral exponent in the first clause: unity is carried by the singular person construction. Do not claim the supplied indefinite article a.'),P('gis',None,r='Active-agent role is expressed by English subject order; there is no independent agentive word.'),D('yan lag','limbs',r='First lexical exponent of body parts; head is a further explicit unpacking of the same five-member set and is not paired again.'),
+ D('bya ba','actions',1),D("mi 'dra ba",'different',1),D('lnga','five',1),D('byas pa','perform'),D('skyes bu','person',2),D('gcig','one'),P('gis',None,r='Active-agent role is expressed by English subject order; no independent agentive word.'),D('bya ba','actions',2),D("mi 'dra ba",'different',2),D('lnga','five',2),D('byas pa','performing',1),Q('ma yin par thal',"wouldn't be",r='Complete negated counterfactual consequence phrase; avoids splitting would out of wouldn\'t or misassigning supplied you.'),
+ D('yan lag','protuberances'),D("mi 'dra ba",'different',3),D('lngas','five',3,'Whole numeral plus inseparable agentive s; the active-agent relation is expressed structurally.'),D('bya ba','actions',3),D("mi 'dra ba",'different',4),D('lnga','five',4),D('byas pa','performing',2),P('phyir','because')
+],
+'PROVISIONAL machine alignment by Codex, independent Tibetan-first original proposal; unreviewed. The original five body parts are unpacked as four limbs and a head in English. The first yan lag owns limbs once; first mi \'dra ba lngas is omitted as distributed content, never mispaired with four. The first gcig has no separate numeral exponent, its unity being carried by singular person; both gis mark agents expressed by English subject order. The later lngas is kept whole. Ma yin par thal/wouldn\'t be is a complete phrase at depth 3. This source supplies no number erratum.',
+[
+ {'tib':"mi 'dra ba lngas",'occurrence':'first, after first yan lag','reason':'Five distinct parts is unpacked as all four of his limbs, and his head. Its number/distinction content is distributed; omit instead of false lnga/four or a null.'},
+ {'tib':"de'i tshe na",'reason':'Temporal scenario is recast into suppose and is using ... to perform; no independently defended atom chosen.'},
+ {'english':'suppose; is using; all four of his; and his head; According to you, it; of his body; are','reason':'Scenario, possessive and subject expansions or distributed recast. The explicit head is not a second yan lag occurrence.'}
+],
+[{'focus':'first gcig null','judgment':'Affirmative no-separate-numeral judgment based on the singular person construction; this does not assert loss of the one-person meaning.'},{'focus':'first yan lag / limbs','judgment':'Retains the explicit lexical limb exponent; the remaining head and five-part unpacking stay unbanked. No lnga/four error is alleged.'}])

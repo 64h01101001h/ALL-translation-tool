@@ -1,0 +1,67 @@
+{
+  "source": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_supplied_span_head.py",
+  "bytes": 3788,
+  "sha256": "5783bbd12eff2b371a10852c32744a30ca9f8d226b66dd7907bd4af3aa721655",
+  "inert_import_only": true,
+  "main_called": false,
+  "runtime_verify_called": false,
+  "PAT": "<span class=\"u[^\"]*\" data-d=\"([57])\" data-l=\"(s\\d+\\w+)\">(?:<span class=\"u[^\"]*\" data-d=\"7\" data-l=\"s\\d+\\w+\">)?(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) ",
+  "FN": "(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) ",
+  "synthetic_observations": [
+    {
+      "case": "word",
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s280w29\">and so on</span>",
+      "matches": [
+        {
+          "range": [
+            0,
+            48
+          ],
+          "depth_capture": "5",
+          "label_capture": "s280w29",
+          "matched_prefix": "<span class=\"u\" data-d=\"5\" data-l=\"s280w29\">and "
+        }
+      ]
+    },
+    {
+      "case": "compound",
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s280w43\">and the rest</span>",
+      "matches": [
+        {
+          "range": [
+            0,
+            48
+          ],
+          "depth_capture": "5",
+          "label_capture": "s280w43",
+          "matched_prefix": "<span class=\"u\" data-d=\"5\" data-l=\"s280w43\">and "
+        }
+      ]
+    },
+    {
+      "case": "phrase",
+      "html": "<span class=\"u\" data-d=\"3\" data-l=\"s280p1\">and so on</span>",
+      "matches": []
+    },
+    {
+      "case": "member",
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s280w1\"><span class=\"u\" data-d=\"7\" data-l=\"s280m1\">and so on</span></span>",
+      "matches": [
+        {
+          "range": [
+            0,
+            90
+          ],
+          "depth_capture": "5",
+          "label_capture": "s280w1",
+          "matched_prefix": "<span class=\"u\" data-d=\"5\" data-l=\"s280w1\"><span class=\"u\" data-d=\"7\" data-l=\"s280m1\">and "
+        }
+      ]
+    },
+    {
+      "case": "empty",
+      "html": "<span class=\"u\" data-d=\"5\" data-l=\"s281w1\">object</span>",
+      "matches": []
+    }
+  ]
+}

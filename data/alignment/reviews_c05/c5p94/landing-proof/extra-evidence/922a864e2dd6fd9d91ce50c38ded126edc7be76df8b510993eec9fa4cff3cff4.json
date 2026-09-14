@@ -1,0 +1,67 @@
+{
+  "status": "PASS_STATIC_SOURCE_ONLY",
+  "current": {
+    "bytes": 7547,
+    "sha256": "5ce6d0ed3f24150f13be1afb844bc346557978d92d9f5572660a78caa3807e37"
+  },
+  "v1": {
+    "bytes": 6924,
+    "sha256": "8197e4c87013ea3defaee64b633e0010b7d42f73e848b6003a5b76a48cfaf3a4"
+  },
+  "prior": {
+    "bytes": 4478,
+    "sha256": "7950d0c9e916268d474187335c6a140436fdaeacb282a5532f4d1373977683fb"
+  },
+  "banker": {
+    "bytes": 18169,
+    "sha256": "e39621efcf4e650b9c2da4f145197f082a230236c47532e54f0398fc57b05375"
+  },
+  "whitespace": {
+    "bytes": 18898,
+    "sha256": "b38c18aa63a82a3e9fbf83a118160c1ab91509b8e8a6e038bfae69d7bd129144"
+  },
+  "sole_v1_v2_change": "Duplicate-small original disposition; first new-content occurrence stays bank, later matching complete original remains external with planned first-copy reference",
+  "full_inverse_exact": true,
+  "all_v1_assertions_identical": true,
+  "roots": [
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction-root-acceptance",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-root-reconciliation-verification-attempt01"
+  ],
+  "deferred": [
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/ordinary-inventory-caller"
+  ],
+  "helpers": [
+    "record_external_step.py",
+    "land_reviewed_page_v2.py",
+    "verify_semantic_acceptance.py",
+    "verify_review_copy_and_register.py",
+    "run_reviewed_builders_once.py",
+    "verify_landed_batch.py",
+    "verify_course_csv.py",
+    "run_generator_readonly.py",
+    "run_tool_readonly_sqlite.py",
+    "copy_evidence_once_v2.py",
+    "prepare_semantic_package_v2.py"
+  ],
+  "downstream_unique_copy_predicate_preserved": true,
+  "mutation_sites": [
+    {
+      "line": 120,
+      "function": "O.mkdir",
+      "call": "O.mkdir()"
+    },
+    {
+      "line": 136,
+      "function": "(O / 'proof.json').write_text",
+      "call": "(O / 'proof.json').write_text(json.dumps(proof, indent=2) + '\\n')"
+    },
+    {
+      "line": 127,
+      "function": "(O / name).write_text",
+      "call": "(O / name).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\\n')"
+    }
+  ],
+  "target_executions": 0
+}

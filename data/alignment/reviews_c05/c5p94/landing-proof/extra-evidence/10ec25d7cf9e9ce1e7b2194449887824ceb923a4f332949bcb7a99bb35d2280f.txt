@@ -1,0 +1,44 @@
+from pathlib import Path
+import json,hashlib,difflib,ast
+O=Path(__file__).resolve().parent;ROOT=O.parents[2];A=ROOT/'campaign-artifacts';W=ROOT/'campaign-worktree'
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,o):(O/n).write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+original=A/'C05-277-279/verify-complete-originals.py';old=original.read_bytes();s=old.decode();operations=[]
+def replace(a,b,n):
+ global s
+ assert s.count(a)==n,(a,s.count(a),n)
+ s=s.replace(a,b);operations.append({'old':a,'new':b,'occurrences':n})
+replace('sys.dont_write_bytecode=True\n', '''sys.dont_write_bytecode=True
+# Preparation only: root must bind these literal interfaces after both originals freeze.
+EXPECTED_COMPLETION_FILE=None
+EXPECTED_COMPLETION_STATUS=None
+EXPECTED_TIBETAN_SPANS=None
+EXPECTED_WRAPPER_RELATIVE_PATH=None
+assert (isinstance(EXPECTED_COMPLETION_FILE,str) and EXPECTED_COMPLETION_FILE
+        and isinstance(EXPECTED_COMPLETION_STATUS,str) and EXPECTED_COMPLETION_STATUS
+        and type(EXPECTED_TIBETAN_SPANS) is int and EXPECTED_TIBETAN_SPANS>0
+        and isinstance(EXPECTED_WRAPPER_RELATIVE_PATH,str) and EXPECTED_WRAPPER_RELATIVE_PATH), 'PENDING: frozen original interfaces/count/wrapper must be bound and reviewed before execution'
+''',1)
+replace('Root authored Tibetan; this is mechanical verification only, not independent semantic approval.','Fresh independent original authors c05_280_282_tibetan and c05_280_282_english; root is not an original author. This is mechanical verification only, not independent semantic approval.',1)
+replace('[277,278,279]','[280,281,282]',3)
+replace("batch/'primary-tibetan-original-complete.json'","batch/EXPECTED_COMPLETION_FILE",1)
+replace("own['status']=='ALL_THREE_ORIGINALS_FROZEN_BEFORE_CURRENT_ENGLISH_READ' and sum(r['spans'] for r in own['counts'])==146","own['status']==EXPECTED_COMPLETION_STATUS and sum(r['spans'] for r in own['counts'])==EXPECTED_TIBETAN_SPANS",1)
+replace("batch/'tibetan/277/run-canonical-readonly.py'","batch/EXPECTED_WRAPPER_RELATIVE_PATH",1)
+new=s.encode();(O/'prior-verify-complete-originals.py.txt').write_bytes(old);(O/'verify-complete-originals.py.txt').write_bytes(new)
+forward=''.join(difflib.unified_diff(old.decode().splitlines(True),s.splitlines(True),fromfile='prior-verify-complete-originals.py.txt',tofile='verify-complete-originals.py.txt'))
+backward=''.join(difflib.unified_diff(s.splitlines(True),old.decode().splitlines(True),fromfile='verify-complete-originals.py.txt',tofile='prior-verify-complete-originals.py.txt'))
+(O/'complete.diff').write_text(forward);(O/'inverse.diff').write_text(backward)
+restored=s
+for op in reversed(operations):
+ assert restored.count(op['new'])==op['occurrences'];restored=restored.replace(op['new'],op['old'])
+assert restored.encode()==old
+prior_ast=ast.parse(old);new_ast=ast.parse(new)
+a={n.name:ast.dump(n,include_attributes=False) for n in prior_ast.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))};b={n.name:ast.dump(n,include_attributes=False) for n in new_ast.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))};assert a==b
+compile(new,str(O/'verify-complete-originals.py.txt'),'exec') # Compile only; never exec/import the code object.
+inputs=[]
+for src,label in [(original,'prior root verifier'),(W/'tools/gen_alignment_page.py','actual unchanged canonical resolver/source'),(W/'tools/build_alignment_layer.py','canonical source imports and SPINE definition'),(A/'C05-277-279/tibetan/277/run-canonical-readonly.py','prior wrapper interface only; not current wrapper authority'),(W/'AGENTS.md','governing repository instructions')]:
+ raw=src.read_bytes();dst=O/('source-'+str(len(inputs))+'.txt');dst.write_bytes(raw);assert dst.read_bytes()==raw and src.read_bytes()==raw
+ inputs.append({'original':str(src),'copy':dst.name,**pin(raw),'role':label,'full_byte_equality':True})
+save('source-copy-manifest.json',inputs);save('literal-replacements.json',operations)
+save('proof.json',{'status':'PASS_SOURCE_PREPARATION_ONLY','prior':pin(old),'candidate':pin(new),'exact_inverse_restores_original':True,'all_named_functions_AST_unchanged':sorted(a),'pure_compile':'PASS; code object discarded without exec/import','actual_verifier_generator_SQL_runs':0,'current_originals_or_leads_read':False,'pending_guard_precedes_output_creation':s.index("'PENDING:")<s.index("out=batch/'proposal-verification'"),'pending_interfaces':['completion filename','completion status','measured Tibetan span total','actual frozen RO/query_only canonical wrapper relative path','both frozen proposal manifests and declaration/body/spec shapes'],'runtime_location_required':str(A/'C05-280-282/verify-complete-originals.py')})
+print(json.dumps({'status':'PASS_SOURCE_PREPARATION_ONLY','candidate':pin(new),'source_pairs':len(inputs),'literal_replacement_groups':len(operations)}))

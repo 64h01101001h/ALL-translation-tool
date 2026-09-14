@@ -1,0 +1,20 @@
+"""Record the planning-only preparation and freeze its separate artifacts."""
+import datetime,hashlib,json,os,subprocess,sys
+from pathlib import Path
+O=Path(__file__).resolve().parent;ROOT=O.parents[2];D=O/'caller';D.mkdir()
+def pin(p):
+ raw=p.read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+argv=[sys.executable,'-B',str(O/'prepare_correction.py.txt')];before=datetime.datetime.now(datetime.timezone.utc).isoformat();command=dict(argv=argv,cwd=str(ROOT),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'})
+(D/'command.json').write_text(json.dumps(command,indent=2)+'\n');(D/'stdin.bin').write_bytes(b'')
+p=subprocess.run(argv,cwd=ROOT,input=b'',capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+for n,b in [('stdout.bin',p.stdout),('stderr.bin',p.stderr),('exit.txt',(str(p.returncode)+'\n').encode())]:(D/n).write_bytes(b)
+execution={**command,'started_at':before,'finished_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':p.returncode,'stdin':pin(D/'stdin.bin'),'stdout':pin(D/'stdout.bin'),'stderr':pin(D/'stderr.bin')};(D/'execution.json').write_text(json.dumps(execution,indent=2)+'\n')
+assert p.returncode==0 and not p.stderr,p.stderr.decode()
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file()};assert 'freeze.json' not in files
+(O/'freeze.json').write_text(json.dumps(dict(status='FROZEN_PLANNING_CORRECTION_ONLY',files=files,file_count=len(files)),indent=2)+'\n')
+for n,r in files.items():assert pin(O/n)==r
+result=dict(status='PLANNING_CORRECTION_READY_FOR_REVIEW',files=len(files),freeze=pin(O/'freeze.json'),binder_plan=pin(O/'binder-plan.json'))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555);print(json.dumps(result,indent=2))

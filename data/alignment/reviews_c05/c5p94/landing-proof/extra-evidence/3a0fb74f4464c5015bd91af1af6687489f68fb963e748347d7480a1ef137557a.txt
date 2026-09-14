@@ -1,0 +1,110 @@
+"""Source-only adaptation. Never import/execute any candidate, Git, build or test."""
+import ast,difflib,hashlib,json
+from pathlib import Path
+O=Path(__file__).resolve().parent;B=O.parent;ROOT=B.parents[1];OLD=ROOT/'campaign-artifacts/C05-277-279';I=ROOT/'campaign-artifacts/integration'
+HEAD='10968d16e701b698a0e1fbd845b353089d15ac39'
+def pin(p):
+ raw=Path(p).read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(n,x):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def copy(p,n):
+ d=O/n;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(p.read_bytes());assert d.read_bytes()==p.read_bytes();return dict(original=str(p),copy=n,**pin(p))
+assert not (O/'freeze.json').exists()
+freeze=json.loads((B/'semantic-review/freeze.json').read_bytes());review=json.loads((B/'semantic-review/review.json').read_bytes())
+assert pin(B/'semantic-review/freeze.json')['sha256']=='5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
+assert freeze['verdict']=='APPROVE' and freeze['status']=='FROZEN' and freeze['file_count']==len(freeze['files'])==871
+assert sum(x['bytes'] for x in freeze['files'].values())==48827659
+assert review['verdict']=='APPROVE' and review['spec_verdict']==review['quality_verdict']=='PASS'
+payload=json.loads((B/'landing/staged-payload-manifest.json').read_bytes());assert payload['head']==HEAD and len(payload['files'])==13
+assert 'data/alignment/span_head_allow.json' in {r['path'] for r in payload['files']}
+mapping=[];source_specs=[
+ (OLD/'staging-whitespace-preparation/whitespace279.py','whitespace282.py'),
+ (OLD/'staging-whitespace-preparation/verify_staged_through279.py','verify_staged_through282.py'),
+ (OLD/'release-whitespace-actual-root.py','release-whitespace-actual-root.py'),
+ (OLD/'accept-whitespace-actual-root-v2.py','accept-whitespace-actual-root-v2.py')]
+pending={
+ 'ordinary_bank_manifest':None,'ordinary_bank_file_count':None,'ordinary_bank_external_count':None,'ordinary_bank_write_run':None,
+ 'final_bank_manifest':None,'final_bank_write_run':None,'final_bank_file_count':None,
+ 'three_ledger_paths_and_approved_before_after_bytes':None,'three_ledger_staging_contract_review':None,
+ 'raw_untracked_before_banking_full_stream_and_caller':None,'actual_index_and_unstaged_boundary':None,
+ 'actual_raw_diagnostic_full_stream_and_caller':None,'actual_staged_path_set_and_count':None,
+ 'physical_source_descriptors_and_original_aliases':None,'additional_warning_descriptor_contract':None,
+ 'prior_closure_proof_relative':None,'prior_closure_expected_status':None,
+ 'whitespace_preparation_freeze_sha256':None,'whitespace_preparation_file_count':None,
+ 'whitespace_review_freeze_sha256':None,'whitespace_review_file_count':None,
+ 'additional_descriptor_entry_count':None,'additional_descriptor_evidence_count':None,'additional_descriptor_provenance_count':None,
+ 'verified_frozen_file_count':None,'original_copy_pair_count':None,
+ 'warning_count':None,'warning_file_count':None,'raw_diagnostic_exit':None,
+ 'independent_code_review_and_actual_runtime_release':None}
+guard="\n# PREPARATION ONLY: actual ordinary bank, ledgers and staged diagnostics are pending.\nPENDING_BINDINGS = "+repr(pending)+"\nif any(value is None for value in PENDING_BINDINGS.values()):\n    raise RuntimeError('Unbound through282 preparation; no staging, bank, Git, whitespace or verification runtime is released')\n\n"
+all_maps={};proofs=[]
+for original,name in source_specs:
+ mapping.append(copy(original,'originals/'+original.name+'.txt'));before=original.read_text();after=before;ops=[]
+ def replace(a,z,reason,count=None):
+  global after
+  n=after.count(a);assert n>0 and (count is None or n==count),(name,a,n,count)
+  positions=[];p=0
+  while True:
+   p=after.find(a,p)
+   if p<0:break
+   positions.append(p);p+=len(a)
+  result_positions=[p+i*(len(z)-len(a)) for i,p in enumerate(positions)]
+  after=after.replace(a,z);ops.append(dict(before=a,after=z,occurrences=n,after_offsets=result_positions,reason=reason))
+ replace('f114fcb7a5a899b939ffc948ae9fdbbb746541fa',HEAD,'Actual fixed baseline',count=1) if 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa' in after else None
+ if 'C05-277-279' in after:replace('C05-277-279','C05-280-282','Current batch')
+ if 'through279' in after:replace('through279','through282','Current through282 artifact namespace')
+ if name=='whitespace282.py':
+  replace('C05:277–279','C05:280–282','Current source range',1)
+  replace('c5p93','c5p94','Current bank prefix',1)
+  replace("build['page'] == 93 and build['first_segment'] == 277","build['page'] == 94 and build['first_segment'] == 280",'Actual build page/range',1)
+  replace("freeze['spec_verdict'] == freeze['quality_verdict'] == 'APPROVE'","freeze['status'] == 'FROZEN' and freeze['verdict'] == 'APPROVE' and digest(freeze_raw) == '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'",'Strict actual current freeze identity; full dict/per-file predicates retained',1)
+ elif name=='verify_staged_through282.py':
+  replace('PAGE, SEQS = 93, [277, 278, 279]','PAGE, SEQS = 94, [280, 281, 282]','Actual page and segments',1)
+  replace('c5p93','c5p94','Current page references')
+  replace('c5p92','c5p93','Previous page references')
+  replace('[277, 278, 279]','[280, 281, 282]','Current registry entry',1)
+  replace('[274, 275, 276]','[277, 278, 279]','Previous registry anchor',1)
+  replace('Page 93 · segments 277–279','Page 94 · segments 280–282','Current index text',1)
+  replace('Page 92 · segments 274–276','Page 93 · segments 277–279','Previous index anchor',1)
+  replace('Reviewed campaign coverage: 279 of 511','Reviewed campaign coverage: 282 of 511','Current coverage target',1)
+  replace('Reviewed campaign coverage: 276 of 511','Reviewed campaign coverage: 279 of 511','Previous coverage anchor',1)
+  replace("self.b.parent / 'integration/through276-root-closure/final-observed-main/proof.json'","self.b.parent / PENDING_BINDINGS['prior_closure_proof_relative']",'Actual prior closure schema/path requires separate measured binding',1)
+  replace("closed['status'] == 'PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276'","closed['status'] == PENDING_BINDINGS['prior_closure_expected_status']",'No invented prior closure status',1)
+  replace("assert freeze['spec_verdict'] == freeze['quality_verdict'] == 'APPROVE'","assert freeze['status'] == 'FROZEN' and freeze['verdict'] == 'APPROVE' and freeze['page'] == 'c5p94'",'Exact current freeze schema',1)
+  replace("assert freeze['total_bytes'] == sum(row['bytes'] for row in rows.values())","assert sum(row['bytes'] for row in rows.values()) == 48827659 and len(rows) == 871",'Actual current frozen payload total; no omitted bytes gate',1)
+  replace("freeze = json.loads(freeze_raw)\n        frozen = {}","freeze = json.loads(freeze_raw)\n        assert sha(freeze_raw) == '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'\n        frozen = {}",'Exact frozen semantic package identity',1)
+  replace("meta['verdict'] == meta['spec_verdict'] == meta['quality_verdict'] == 'APPROVE'","meta['verdict'] == 'APPROVE' and meta['spec_verdict'] == meta['quality_verdict'] == 'PASS'",'Actual distinct review SPEC/QUALITY schema',1)
+  replace("assert set(payload_records) == payload_required","assert set(payload_records) == payload_required and len(payload_records) == 13\n        assert 'data/alignment/span_head_allow.json' in payload_records",'Actual approved13-file payload, including sidecar; no hidden exclusion',1)
+ elif name=='release-whitespace-actual-root.py':
+  replace('whitespace279.py','whitespace282.py','Current classifier name')
+  replace("'2c86e7c418204955b071ed972de598df60fa72cdfd0f3b473e1507d34557c1f9',400","PENDING_BINDINGS['whitespace_preparation_freeze_sha256'],PENDING_BINDINGS['whitespace_preparation_file_count']",'Current classifier freeze has not been measured',1)
+  replace("'b4c493ae0f5a0f10e3a1d9f46d13c6effab71429c4452fdd0d9b4347c499538c',419","PENDING_BINDINGS['whitespace_review_freeze_sha256'],PENDING_BINDINGS['whitespace_review_file_count']",'Current classifier review freeze has not been measured',1)
+  for oldtext,newtext in [("len(d['entries'])==37","len(d['entries'])==PENDING_BINDINGS['additional_descriptor_entry_count']"),("len(d['evidence'])==260","len(d['evidence'])==PENDING_BINDINGS['additional_descriptor_evidence_count']"),("len(d['provenance_maps'])==127","len(d['provenance_maps'])==PENDING_BINDINGS['additional_descriptor_provenance_count']"),("'verified_frozen_files':819","'verified_frozen_files':PENDING_BINDINGS['verified_frozen_file_count']"),("'original_copy_pairs':1675","'original_copy_pairs':PENDING_BINDINGS['original_copy_pair_count']"),("'additional_evidence':260","'additional_evidence':PENDING_BINDINGS['additional_descriptor_evidence_count']")]:replace(oldtext,newtext,'Prior measured population becomes explicit required current binding',1)
+ elif name=='accept-whitespace-actual-root-v2.py':
+  replace("p['warning_count']==59156","p['warning_count']==PENDING_BINDINGS['warning_count']",'Actual current warning total pending',1)
+  replace("len(p['files'])==110","len(p['files'])==PENDING_BINDINGS['warning_file_count']",'Actual current warning files pending',1)
+  replace("p['git_diff_check_exit']==2","p['git_diff_check_exit']==PENDING_BINDINGS['raw_diagnostic_exit']",'Accept exact actual0/2 diagnostic result, never presume warnings',1)
+  replace("b'2\\n'","(str(PENDING_BINDINGS['raw_diagnostic_exit'])+'\\n').encode()",'Actual diagnostic exit byte proof remains exact',1)
+  replace('literal_warnings=59156,warning_files=110',"literal_warnings=PENDING_BINDINGS['warning_count'],warning_files=PENDING_BINDINGS['warning_file_count']",'Actual summary totals pending',1)
+ # Insert the fail-closed guard after any module docstring, preserving that docstring.
+ tree=ast.parse(after);line=tree.body[0].end_lineno if isinstance(tree.body[0],ast.Expr) and isinstance(tree.body[0].value,ast.Constant) and isinstance(tree.body[0].value.value,str) else 0
+ lines=after.splitlines(keepends=True);offset=sum(map(len,lines[:line]));after=after[:offset]+guard+after[offset:]
+ reverse=after[:offset]+after[offset+len(guard):]
+ for op in reversed(ops):
+  for at in reversed(op['after_offsets']):
+   assert reverse[at:at+len(op['after'])]==op['after'];reverse=reverse[:at]+op['before']+reverse[at+len(op['after']):]
+ assert reverse==before
+ target=O/name;target.write_text(after);ast.parse(after)
+ all_maps[name]=dict(original=str(original),replacements=ops,guard_insertion=dict(offset=offset,text=guard),full_inverse_exact=True)
+ (O/(name+'.forward.diff.txt')).write_text(''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='prior/'+original.name,tofile='prepared/'+name)))
+ (O/(name+'.inverse.diff.txt')).write_text(''.join(difflib.unified_diff(after.splitlines(True),before.splitlines(True),fromfile='prepared/'+name,tofile='prior/'+original.name)))
+ (O/(name+'.ast.txt')).write_text(ast.dump(ast.parse(after),include_attributes=False,indent=2)+'\n')
+ proofs.append(dict(original=pin(original),candidate=pin(target),name=name,syntax_parsed_only=True,full_inverse_exact=True,pending_guard_before_any_runtime=True))
+save('replacement-map.json',all_maps);save('pending-measured-bindings.json',pending)
+# Retain the actual historical extension methods/maps once, without copying their large source trees.
+for p,n in [(I/'through279-whitespace-actual-preparation/whitespace279.py','historical-actual/whitespace279.py.txt'),(I/'through279-whitespace-actual-preparation/additional-root-descriptors.json','historical-actual/additional-root-descriptors.json'),(I/'through279-finalization-runtime/physical-source-descriptors.json','historical-actual/physical-source-descriptors.json')]:mapping.append(copy(p,n))
+for n in ['semantic-review/freeze.json','semantic-review/review.json','landing/staged-payload-manifest.json','landing/staged-payload-source-proof.json','landing/root-semantic-acceptance-proof.json','landing/root-frozen-input-copy-check.json']:
+ mapping.append(copy(B/n,'current-inputs/'+n))
+save('original-to-copy-manifest.json',mapping)
+save('source-proof.json',dict(status='SOURCE_PREPARED_WITH_REQUIRED_PENDING_BINDINGS',baseline=HEAD,page=94,segments=[280,281,282],sources=proofs,known_current_payload_files=13,approved_sidecar='data/alignment/span_head_allow.json',prior_diagnostic_counts_reused=False,target_imported=False,target_executed=False,Git_or_whitespace_or_stage_or_bank_or_tests_or_commit_run=False,semantic_judgment_changed=False))
+print(json.dumps({'status':'SOURCE_PREPARED_WITH_REQUIRED_PENDING_BINDINGS','candidate_files':4,'original_copy_records':len(mapping),'source_proof':pin(O/'source-proof.json')},indent=2))

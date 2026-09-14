@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>P3 &middot; The frame and the three classes (C02:26&ndash;30)</title>
+<style>
+  :root { --paper:#FAF6EE; --ink:#2B2118; --gold:#82672A; --act:#1E6B4E;
+          --machine:#B4540A; --soft:#78706A; --doc:#2E629E; --ppl:#6E3E8E; }
+  body { background:var(--paper); color:var(--ink);
+         font-family:"Iowan Old Style",Georgia,serif; margin:0;
+         padding:26px 34px; line-height:1.7; }
+  h1 { font-size:21px; color:#7C2D26; margin:0 0 2px; }
+  .sub { font-size:13px; color:var(--soft); }
+  .banner { background:#FDF3E7; border:1px solid var(--machine);
+            color:var(--machine); padding:10px 14px; font-size:13px;
+            margin:14px 0 16px; border-radius:3px; }
+  h2 { font-size:14px; color:var(--gold); letter-spacing:1.5px;
+       text-transform:uppercase; margin:26px 0 8px;
+       border-bottom:1px solid #E4DCC9; padding-bottom:3px; }
+  .controls { font-size:14px; margin:0 0 6px; }
+  .controls input { vertical-align:middle; accent-color:var(--gold); width:260px; }
+  #depthname { color:var(--gold); font-weight:600; }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:26px; margin:10px 0 8px; }
+  .lab { font-size:10px; letter-spacing:2px; color:var(--soft); margin-bottom:4px; }
+  .tib { font-size:16.5px; } .eng { font-size:15px; }
+  .u { border-radius:2px; }
+  .active { cursor:pointer; border-bottom:1px dotted #C9B98F; }
+  .hl { background:#F3E4B3 !important; border-bottom-color:var(--gold) !important; }
+  .pin { background:#EAD98F !important; outline:1px solid var(--gold); }
+  .case { color:var(--act); font-weight:600; }
+  .nul { color:var(--soft); font-size:10.5px; vertical-align:super; }
+  .note { font-size:12px; color:var(--soft); font-style:italic; margin:4px 0 0; }
+  .note b { color:var(--machine); font-style:normal; font-size:10px; letter-spacing:1px; }
+  .tree { font-family:"SF Mono",Menlo,monospace; font-size:12.5px;
+          background:#F6F1E4; border:1px solid #E4DCC9; border-radius:3px;
+          padding:14px 18px; margin:12px 0; overflow-x:auto; line-height:1.85; }
+  .tree .k { color:var(--doc); font-size:10.5px; letter-spacing:.5px; }
+  .tree .w { color:var(--ink); font-weight:600; }
+  .tree .e { color:var(--act); }
+  .tree .m { color:var(--machine); }
+  .tree i  { color:var(--soft); }
+  .legend { font-size:12px; color:var(--soft); border-top:1px solid #E4DCC9;
+            margin-top:22px; padding-top:10px; }
+  .wil { color:var(--ppl); }
+  .nav { font-size:13px; margin:6px 0 0; }
+  .nav a { color:var(--doc); text-decoration:none; margin-right:18px; }
+  .nav a:hover { text-decoration:underline; }
+</style>
+</head>
+<body data-depth="2">
+<h1>P3 &middot; The frame and the three classes (C02:26&ndash;30)</h1>
+<div class="sub">Kedrup Tenpa Dargye, <i>Analysis of the Perfection of Wisdom</i>, Three Refuges section &middot; corpus C02:26&ndash;30 &middot; grammar per <b>Joe Wilson, <i>Translating Buddhism from Tibetan</i></b></div>
+<div class="nav"><a href="index.html">&#8962; Index</a><a href="p02.html">&larr; Previous passage</a><a href="p04.html">Next passage &rarr;</a></div>
+<div class="banner"><b>MACHINE ALIGNMENT — AI (Claude), PROVISIONAL. PASS THREE: THE FULL-DEPTH RUN.</b>
+Not HGM dictionary material. Geshe Michael's English is verbatim and untouched; the
+machine matches spans of it and never composes. Grammar labels are the machine's
+analysis under Wilson's taxonomy (SOAS POS as cross-reference) and are themselves
+provisional. &#8709; marks a Tibetan morpheme with no English exponent. Input variants
+are flagged, never silently corrected.</div>
+<div class="controls">
+  Depth: <input type="range" id="depth" min="1" max="7" value="2">
+  <span id="depthname">2 &middot; Clause</span>
+  <span style="color:var(--soft);font-size:12px">&mdash; slide deeper; hover either language; click pins</span><br>
+  <span style="font-size:11.5px;color:var(--soft)">1 Sentence &middot; 2 Clause &middot; 3 Phrase &middot; 4 Embedded phrase &middot; 5 Word/compound &middot; 6 Morpheme &amp; particle &middot; 7 Syllable/compound member</span>
+</div>
+<h2>Segments 26&ndash;27 &mdash; the analytical frame</h2>
+<div class="pair">
+<div class="tib"><div class="lab">TIBETAN (WYLIE)</div>
+<span class="u" data-d="1" data-l="s26S"><span class="u" data-d="2" data-l="s26c1"><span class="u" data-d="3" data-l="s26p1"><span class="u" data-d="5" data-l="s26w1">'di</span><span class="u" data-d="6" data-l="s26m1 case">'i</span> <span class="u" data-d="5" data-l="s26w2">skabs</span> <span class="u" data-d="6" data-l="s26m2 case">su</span></span> <span class="u" data-d="3" data-l="s26p2"><span class="u" data-d="5" data-l="s26w3">mtha' dpyad</span> <span class="u" data-d="6" data-l="s26m3">pa</span> <span class="u" data-d="6" data-l="s26m4 case">la</span></span>,</span> <span class="u" data-d="2" data-l="s26c2"><span class="u" data-d="3" data-l="s26p3"><span class="u" data-d="5" data-l="s26w4">dgag</span> <span class="u" data-d="5" data-l="s26w5">gzhag</span> <span class="u" data-d="5" data-l="s26w6">spang</span> <span class="u" data-d="5" data-l="s26w7">gsum</span></span> <span class="u" data-d="6" data-l="s26m5 case">las</span></span></span><br>
+<span class="u" data-d="1" data-l="s27S">`, , <span class="u" data-d="2" data-l="s27c1"><span class="u" data-d="5" data-l="s27w1">gnyis pa</span> <span class="u" data-d="3" data-l="s27p1"><span class="u" data-d="5" data-l="s27w2">rang</span> <span class="u" data-d="6" data-l="s27m1 case">gi</span> <span class="u" data-d="5" data-l="s27w3">lugs</span></span> <span class="u" data-d="6" data-l="s27m2 case">la</span></span></span>
+</div>
+<div class="eng"><div class="lab">GESHE MICHAEL'S ENGLISH (VERBATIM)</div>
+<span class="u" data-d="1" data-l="s26S"><span class="u" data-d="2" data-l="s26c1">Our <span class="u" data-d="3" data-l="s26p2"><span class="u" data-d="5" data-l="s26w3">analysis</span></span> <span class="u" data-d="3" data-l="s26p1">of <span class="u" data-d="5" data-l="s26w1">this</span> <span class="u" data-d="5" data-l="s26w2">section</span></span> will proceed</span> <span class="u" data-d="2" data-l="s26c2"><span class="u" data-d="6" data-l="s26m5 case">in</span> <span class="u" data-d="3" data-l="s26p3"><span class="u" data-d="5" data-l="s26w7">three</span> parts: a <span class="u" data-d="5" data-l="s26w4">refutation of our opponent's position</span>, a <span class="u" data-d="5" data-l="s26w5">presentation of our own position</span>, and a <span class="u" data-d="5" data-l="s26w6">rebuttal of their objections</span></span>.</span><br></span>
+<span class="u" data-d="1" data-l="s27S"><span class="u" data-d="2" data-l="s27c1">Here is <span class="u" data-d="5" data-l="s27w1">the second</span> section, <span class="u" data-d="6" data-l="s27m2 case">in which</span> we present <span class="u" data-d="3" data-l="s27p1"><span class="u" data-d="5" data-l="s27w2">our own</span> <span class="u" data-d="5" data-l="s27w3">position</span></span>.</span></span>
+</div>
+</div>
+<div class="tree">
+<span class="k">SEG 26</span> <i>topic frame + enumeration from an ablative</i><br>
+&#9500;&#9472; <span class="w">'di'i skabs su</span> <i>dem.+<span class="m">'i</span> gen &middot; <span class="m">su</span> la-group</i> <span class="e">"of this section"</span><br>
+&#9500;&#9472; <span class="w">mtha' dpyad pa la</span> <i>vn.+<span class="m">pa</span> &middot; <span class="m">la</span> "with regard to"</i> <span class="e">"Our analysis&hellip; will proceed"</span><br>
+&#9492;&#9472; <span class="w">dgag gzhag spang gsum</span> <span class="m">las</span> <i class="wil">Wilson: ablative "from among"</i> <span class="e">"in three parts: a refutation&hellip; a presentation&hellip; a rebuttal&hellip;"</span><br>
+<span class="k">SEG 27</span> <i>ordinal header</i><br>
+&#9492;&#9472; <span class="w">gnyis pa</span> <i>ordinal (<span class="m">pa</span>)</i> <span class="e">"the second"</span> &middot; <span class="w">rang gi lugs</span> <span class="e">"our own position"</span> &middot; <span class="m">la</span> <span class="e">"in which"</span>
+</div>
+<div class="note"><b>AI NOTE</b> &mdash; "dgag gzhag spang gsum" is the monastic triad
+refute/establish/dispel named in three syllables; GMR's English unpacks each member
+("of our opponent's position", "of our own position", "of their objections" are all his).
+The unpacking is HIS, in his text &mdash; the machine only links the spans. "Our", "will
+proceed", "Here is", "we present" are his discourse frames with &#8709; Tibetan exponents.</div>
+
+<h2>Segment 28 &mdash; refuges of the three classes (i): the assertion and the Listeners</h2>
+<div class="pair">
+<div class="tib"><div class="lab">TIBETAN (WYLIE)</div>
+<span class="u" data-d="1" data-l="s28S1"><span class="u" data-d="2" data-l="s28c1"><span class="u" data-d="3" data-l="s28p1"><span class="u" data-d="5" data-l="s28w1"><span class="u" data-d="7" data-l="s28z1_0">dkon</span> <span class="u" data-d="7" data-l="s28z1_1">mchog</span></span> <span class="u" data-d="5" data-l="s28w2">gsum</span> <span class="u" data-d="6" data-l="s28m1">po</span> <span class="u" data-d="6" data-l="s28m2">de</span></span> <span class="u" data-d="3" data-l="s28p2"><span class="u" data-d="4" data-l="s28q1"><span class="u" data-d="4" data-l="s28q2"><span class="u" data-d="5" data-l="s28w3">rigs can</span> <span class="u" data-d="5" data-l="s28w4">gsum</span></span> <span class="u" data-d="6" data-l="s28m3 case">gyi</span> <span class="u" data-d="5" data-l="s28w5">skyabs</span> <span class="u" data-d="6" data-l="s28m4 case">su</span> <span class="u" data-d="5" data-l="s28w6">'jog</span> <span class="u" data-d="6" data-l="s28m5">pa</span></span><span class="u" data-d="6" data-l="s28m6 case">'i</span> <span class="u" data-d="5" data-l="s28w7">rgyu mtshan</span></span> <span class="u" data-d="5" data-l="s28w8">yod</span> <span class="u" data-d="6" data-l="s28m7">de</span>,</span>
+<span class="u" data-d="2" data-l="s28c2"><span class="u" data-d="3" data-l="s28p3"><span class="u" data-d="5" data-l="s28w9">rgyu</span><span class="u" data-d="6" data-l="s28m8 case">'i</span> <span class="u" data-d="5" data-l="s28w10">skyabs 'gro</span><span class="u" data-d="6" data-l="s28m9 case">'i</span> <span class="u" data-d="5" data-l="s28w11">dbang du byas na</span></span> <span class="u" data-d="3" data-l="s28p4"><span class="u" data-d="5" data-l="s28w12">rigs can</span> <span class="u" data-d="5" data-l="s28w13">gsum ka</span><span class="u" data-d="6" data-l="s28m10 case">s</span></span> <span class="u" data-d="3" data-l="s28p5"><span class="u" data-d="5" data-l="s28w14">dkon mchog</span> <span class="u" data-d="5" data-l="s28w15">gsum ka</span> <span class="u" data-d="6" data-l="s28m11 case">la</span></span> <span class="u" data-d="3" data-l="s28p6"><span class="u" data-d="5" data-l="s28w16">skyabs</span> <span class="u" data-d="6" data-l="s28m12 case">su</span> <span class="u" data-d="5" data-l="s28w17">'gro</span></span> <span class="u" data-d="6" data-l="s28m13">yang</span>,</span>
+<span class="u" data-d="2" data-l="s28c3"><span class="u" data-d="3" data-l="s28p7"><span class="u" data-d="5" data-l="s28w18">'bras bu</span><span class="u" data-d="6" data-l="s28m14 case">'i</span> <span class="u" data-d="5" data-l="s28w19">skyabs 'gro</span><span class="u" data-d="6" data-l="s28m15 case">'i</span> <span class="u" data-d="5" data-l="s28w20">dbang bu byas na</span></span> <span class="u" data-d="3" data-l="s28p8"><span class="u" data-d="4" data-l="s28q3"><span class="u" data-d="5" data-l="s28w21">nyan thos</span> <span class="u" data-d="6" data-l="s28m16 case">kyi</span> <span class="u" data-d="5" data-l="s28w22">rigs can</span></span> <span class="u" data-d="6" data-l="s28m17">rnams</span> <span class="u" data-d="6" data-l="s28m18 case">kyis</span></span> <span class="u" data-d="3" data-l="s28p9"><span class="u" data-d="4" data-l="s28q4"><span class="u" data-d="5" data-l="s28w23">dgra bcom pa</span><span class="u" data-d="6" data-l="s28m19 case">'i</span> <span class="u" data-d="5" data-l="s28w24">go 'phang</span></span></span> <span class="u" data-d="3" data-l="s28p10"><span class="u" data-d="4" data-l="s28q5"><span class="u" data-d="5" data-l="s28w25">thob bya</span><span class="u" data-d="6" data-l="s28m20 case">'i</span> <span class="u" data-d="5" data-l="s28w26">gtso bo</span><span class="u" data-d="6" data-l="s28m21 case">r</span></span> <span class="u" data-d="5" data-l="s28w27">byas nas</span></span> <span class="u" data-d="3" data-l="s28p11"><span class="u" data-d="5" data-l="s28w28">don du gnyer</span></span></span></span></div>
+<div class="eng"><div class="lab">GESHE MICHAEL&#39;S ENGLISH (VERBATIM)</div>
+<span class="u" data-d="1" data-l="s28S1"><span class="u" data-d="2" data-l="s28c1"><span class="u" data-d="5" data-l="s28w8">There is</span> <span class="u" data-d="3" data-l="s28p2">a <span class="u" data-d="5" data-l="s28w7">specific reason</span> why</span> <span class="u" data-d="3" data-l="s28p1">the <span class="u" data-d="5" data-l="s28w2">Three</span> <span class="u" data-d="5" data-l="s28w1">Jewels</span></span> <span class="u" data-d="3" data-l="s28p2">are <span class="u" data-d="5" data-l="s28w6">established</span> <span class="u" data-d="6" data-l="s28m4 case">as being</span> the <span class="u" data-d="5" data-l="s28w5">refuges</span> <span class="u" data-d="6" data-l="s28m3 case">for</span> <span class="u" data-d="4" data-l="s28q2"><span class="u" data-d="5" data-l="s28w3">practitioners</span> of the <span class="u" data-d="5" data-l="s28w4">three</span> classes</span></span>.<span class="u" data-d="6" data-l="s28m7"><span class="nul">∅→period+link</span></span></span>
+<span class="u" data-d="2" data-l="s28c2"><span class="u" data-d="3" data-l="s28p3"><span class="u" data-d="5" data-l="s28w11">From the point of view of</span> <span class="u" data-d="5" data-l="s28w9">cause</span> <span class="u" data-d="5" data-l="s28w10">refuge</span>,</span> <span class="u" data-d="3" data-l="s28p4"><span class="u" data-d="5" data-l="s28w12">practitioners</span> of <span class="u" data-d="5" data-l="s28w13">all three classes</span></span> <span class="u" data-d="3" data-l="s28p6"><span class="u" data-d="5" data-l="s28w17">take</span> <span class="u" data-d="5" data-l="s28w16">refuge</span></span> <span class="u" data-d="3" data-l="s28p5"><span class="u" data-d="6" data-l="s28m11 case">in</span> <span class="u" data-d="5" data-l="s28w15">all three</span> of the <span class="u" data-d="5" data-l="s28w14">Jewels</span></span>.</span>
+<span class="u" data-d="2" data-l="s28c3"><span class="u" data-d="6" data-l="s28m13">But</span> <span class="u" data-d="3" data-l="s28p7"><span class="u" data-d="5" data-l="s28w20">from the point of view of</span> <span class="u" data-d="5" data-l="s28w18">result</span> <span class="u" data-d="5" data-l="s28w19">refuge</span>,</span> <span class="u" data-d="3" data-l="s28p8">those <span class="u" data-d="6" data-l="s28m16 case">of</span> the <span class="u" data-d="4" data-l="s28q3"><span class="u" data-d="5" data-l="s28w21">Listener</span> <span class="u" data-d="5" data-l="s28w22">class</span></span></span> <span class="u" data-d="3" data-l="s28p10"><span class="u" data-d="5" data-l="s28w28">aspire</span> <span class="u" data-d="5" data-l="s28w26">chiefly</span> <span class="u" data-d="5" data-l="s28w25">to attain</span></span> <span class="u" data-d="3" data-l="s28p9"><span class="u" data-d="4" data-l="s28q4">the <span class="u" data-d="5" data-l="s28w24">state</span> <span class="u" data-d="6" data-l="s28m19 case">of</span> a <span class="u" data-d="5" data-l="s28w23">foe destroyer</span></span></span>.</span></div></div></span>
+<div class="tree">
+<span class="k">SENTENCE</span> <i>existential assertion sealed by semi-final <span class="m">de</span>, then a concessive pair</i><br>
+├─ <span class="k">CLAUSE 1 · existential</span> <span class="e">"There is a specific reason why…"</span><br>
+│&nbsp;&nbsp;├─ <span class="k">NP · topic</span> <span class="w">dkon mchog gsum po de</span> <span class="e">"the Three Jewels"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="w">dkon mchog</span> <i>n. compound (rare+supreme)</i> <span class="e">"Jewels"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="w">gsum</span> <i>cardinal</i> <span class="e">"Three"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="m">po</span> <i class="wil">Wilson: specifying particle (definite bundle)</i> <span class="nul">∅ — English uses "the"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="m">de</span> <i>demonstrative "that/those"</i> <span class="nul">∅ — folded into "the"</span><br>
+│&nbsp;&nbsp;├─ <span class="k">NP · complex</span> <span class="w">[rigs can gsum gyi skyabs su 'jog pa]'i rgyu mtshan</span> <span class="e">"a specific reason why … are established as being the refuges for practitioners of the three classes"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="k">EMBEDDED CLAUSE, nominalized</span> <i class="wil">Wilson: verbal noun in pa</i><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="k">NP</span> <span class="w">rigs can gsum</span> <span class="e">"practitioners of the three classes"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;│&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="w">rigs</span> <i>n. "class/lineage"</i> · <span class="w">can</span> <i class="wil">Wilson: possessive suffix particle → "one who has"</i> <span class="e">"practitioners"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;│&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="w">gsum</span> <i>cardinal</i> <span class="e">"three"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="m">gyi</span> <i class="wil">Wilson: genitive ('brel sgra), links agent-of-benefit to skyabs</i> <span class="e">"for"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="w">skyabs</span> <i>n.</i> <span class="e">"refuges"</span> · <span class="m">su</span> <i class="wil">Wilson: la-group 7 (terminative), predicative "as"</i> <span class="e">"as being"</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="w">'jog</span> <i>v. present "establish/posit"</i> <span class="e">"are established"</span> · <span class="m">pa</span> <i class="wil">nominalizer</i> <span class="nul">∅ — becomes English passive</span><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="m">'i</span> <i class="wil">genitive stacking the clause onto its head</i> <span class="e">"why"</span> <i>(the machine's boldest link: English signals the embedding with "why")</i><br>
+│&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="w">rgyu mtshan</span> <i>n. compound (cause+mark)</i> <span class="e">"a specific reason"</span><br>
+│&nbsp;&nbsp;├─ <span class="w">yod</span> <i class="wil">Wilson: verb of existence</i> <span class="e">"There is"</span><br>
+│&nbsp;&nbsp;└─ <span class="m">de</span> <i class="wil">Wilson: semi-final (ste-family after -d): "and here is the elaboration"</i> <span class="nul">∅ — his period + the colon-logic between sentences</span><br>
+├─ <span class="k">CLAUSE 2 · concessive</span> <span class="e">"From the point of view of cause refuge … take refuge in all three of the Jewels."</span><br>
+│&nbsp;&nbsp;├─ <span class="k">ADV FRAME</span> <span class="w">rgyu'i skyabs 'gro'i dbang du byas na</span> <i class="wil">idiom dbang du byas na, conditional na</i> <span class="e">"From the point of view of cause refuge"</span><br>
+│&nbsp;&nbsp;├─ <span class="k">AGENT</span> <span class="w">rigs can gsum ka·s</span> <i class="wil">collective ka + agentive (byed sgra, s after vowel)</i> <span class="e">"practitioners of all three classes"</span> <i>(agentive ∅ in English — subject position carries it)</i><br>
+│&nbsp;&nbsp;├─ <span class="k">GOAL</span> <span class="w">dkon mchog gsum ka la</span> <i class="wil">la-group: locus of refuge</i> <span class="e">"in all three of the Jewels"</span><br>
+│&nbsp;&nbsp;├─ <span class="k">PREDICATE</span> <span class="w">skyabs su 'gro</span> <i>the refuge formula itself</i> <span class="e">"take refuge"</span><br>
+│&nbsp;&nbsp;└─ <span class="m">yang</span> <i class="wil">Wilson: concessive "although"</i> <span class="e">"But"</span> <i>(crossing link — it opens HIS NEXT sentence)</i><br>
+└─ <span class="k">CLAUSE 3 · the contrast</span> <span class="e">"But from the point of view of result refuge, those of the Listener class aspire chiefly to attain the state of a foe destroyer."</span><br>
+&nbsp;&nbsp;&nbsp;├─ <span class="k">ADV FRAME</span> <span class="w">'bras bu'i skyabs 'gro'i dbang <span class="m">bu</span> byas na</span> <span class="e">"from the point of view of result refuge"</span> <i class="m">⚠ input reads "dbang bu" where the idiom is "dbang du" — flagged, not corrected</i><br>
+&nbsp;&nbsp;&nbsp;├─ <span class="k">AGENT</span> <span class="w">nyan thos kyi rigs can rnams kyis</span> <span class="e">"those of the Listener class"</span><br>
+&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="w">nyan thos</span> <i>n. "Listener" (śrāvaka: nyan hear + thos heard)</i> <span class="e">"Listener"</span><br>
+&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="m">kyi</span> <i class="wil">genitive</i> <span class="e">"of the"</span> · <span class="w">rigs can</span> <span class="e">"class"</span> <i>(possessor-of-class → his "those of the … class")</i><br>
+&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="m">rnams</span> <i class="wil">plural particle</i> <span class="nul">∅ — "those" is already plural</span> · <span class="m">kyis</span> <i class="wil">agentive</i> <span class="nul">∅ — subject position</span><br>
+&nbsp;&nbsp;&nbsp;├─ <span class="k">OBJECT NP</span> <span class="w">dgra bcom pa'i go 'phang</span> <span class="e">"the state of a foe destroyer"</span><br>
+&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="w">dgra bcom pa</span> <i>agent noun: dgra "foe" + bcom "destroyed" + pa</i> <span class="e">"a foe destroyer"</span> <i>(his signature rendering of arhat — matched, not glossed)</i><br>
+&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="m">'i</span> <i class="wil">genitive</i> <span class="e">"of"</span> · <span class="w">go 'phang</span> <i>n. "rank/state"</i> <span class="e">"the state"</span><br>
+&nbsp;&nbsp;&nbsp;└─ <span class="k">PREDICATE COMPLEX</span> <span class="w">thob bya'i gtso bor byas nas don du gnyer</span> <span class="e">"aspire chiefly to attain"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="w">thob bya</span> <i class="wil">Wilson: future verbal (bya) — "that which is to be attained"</i> <span class="e">"to attain"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="m">'i</span> genitive · <span class="w">gtso bo</span> <i>"the chief thing"</i> + <span class="m">r</span> <i class="wil">terminative (la-group, contracted)</i> <span class="e">"chiefly"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="w">byas nas</span> <i class="wil">v. "having made" + continuative nas</i> <span class="nul">∅ — absorbed into "aspire chiefly"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="w">don du gnyer</span> <i>idiom "pursue as one's aim"</i> <span class="e">"aspire"</span>
+</div>
+<div class="note"><b>AI NOTE — where the machine had to judge, and says so:</b>
+(1) the genitive <b>'i</b> that hangs the whole nominalized clause onto "rgyu mtshan" surfaces in English as <i>"why"</i> — a construction-level exponent, the least literal link on this page;
+(2) <b>yang</b> crosses a sentence boundary to become his opening <i>"But"</i>;
+(3) <b>byas nas</b> and both agentives have ∅ exponents — English syntax carries them;
+(4) the corpus reads <b>"dbang bu"</b> where the idiom is <i>dbang du</i> — flagged as an input variant, never silently corrected (rule 3);
+(5) GMR's sentence division differs from the Tibetan's (his period lands where <b>de</b> seals the existential; the Tibetan runs on) — the sentence-level link spans his two sentences deliberately.</div>
+
+<div class="legend"><b>Depth key (Wilson-grounded):</b> 1 Sentence · 2 Clause · 3 Phrase (case-marked argument frames) · 4 Embedded phrase (nominalized clauses, genitive chains) · 5 Word &amp; compound · 6 Morpheme &amp; particle (<span class="case">green = case/syntactic particles</span>: genitive <i>gyi/kyi/'i</i>, agentive <i>kyis/s</i>, la-group <i>la/su/r</i>, semi-final <i>de</i>, concessive <i>yang</i>, conditional <i>na</i>, plural <i>rnams</i>, specifier <i>po</i>, possessive <i>can</i>, nominalizers <i>pa/bya</i>).
+· Source: hgm_spine C02:26–28. English: Geshe Michael Roach, ACI Course 2, verbatim. Analysis &amp; links: Claude (AI), pass two, PROVISIONAL — evaluation only, not dictionary material.</div>
+<h2>Segment 29 &mdash; refuges of the three classes (ii): the Self-Made Buddhas</h2>
+<div class="pair">
+<div class="tib"><div class="lab">TIBETAN (WYLIE)</div>
+<span class="u" data-d="1" data-l="s29S"><span class="u" data-d="2" data-l="s29c1"><span class="u" data-d="3" data-l="s29p1"><span class="u" data-d="4" data-l="s29q1"><span class="u" data-d="5" data-l="s29w1"><span class="u" data-d="7" data-l="s29z1_0">rang</span> <span class="u" data-d="7" data-l="s29z1_1">rgyal</span></span> <span class="u" data-d="6" data-l="s29m1 case">gyi</span> <span class="u" data-d="5" data-l="s29w2">rigs</span> <span class="u" data-d="6" data-l="s29m2">can</span></span> <span class="u" data-d="6" data-l="s29m3">rnams</span> <span class="u" data-d="6" data-l="s29m4 case">kyis</span></span> <span class="u" data-d="3" data-l="s29p2"><span class="u" data-d="4" data-l="s29q2"><span class="u" data-d="5" data-l="s29w3">nyon sgrib</span> <span class="u" data-d="5" data-l="s29w4">spangs</span> <span class="u" data-d="6" data-l="s29m5">pa</span><span class="u" data-d="6" data-l="s29m6 case">'i</span></span> <span class="u" data-d="5" data-l="s29w5">'gog pa</span> <span class="u" data-d="6" data-l="s29m7 case">la</span></span> <span class="u" data-d="3" data-l="s29p3"><span class="u" data-d="4" data-l="s29q3"><span class="u" data-d="5" data-l="s29w6">mnyam par bzhag</span> <span class="u" data-d="6" data-l="s29m8">pa</span><span class="u" data-d="6" data-l="s29m9 case">'i</span></span> <span class="u" data-d="5" data-l="s29w7">mnyam bzhag ye shes</span></span> <span class="u" data-d="3" data-l="s29p4"><span class="u" data-d="4" data-l="s29q4"><span class="u" data-d="5" data-l="s29w8">thob bya</span><span class="u" data-d="6" data-l="s29m10 case">'i</span> <span class="u" data-d="5" data-l="s29w9">gtso bo</span><span class="u" data-d="6" data-l="s29m11 case">r</span></span> <span class="u" data-d="5" data-l="s29w10">byas nas</span></span> <span class="u" data-d="3" data-l="s29p5"><span class="u" data-d="5" data-l="s29w11">don du gnyer</span></span></span></span>
+</div>
+<div class="eng"><div class="lab">GESHE MICHAEL'S ENGLISH (VERBATIM)</div>
+<span class="u" data-d="1" data-l="s29S"><span class="u" data-d="2" data-l="s29c1"><span class="u" data-d="3" data-l="s29p1">Those <span class="u" data-d="6" data-l="s29m1 case">of</span> the <span class="u" data-d="4" data-l="s29q1"><span class="u" data-d="5" data-l="s29w2">class</span> of <span class="u" data-d="5" data-l="s29w1">Self-Made Buddhas</span></span></span> <span class="u" data-d="3" data-l="s29p5"><span class="u" data-d="5" data-l="s29w11">aspire</span></span> <span class="u" data-d="3" data-l="s29p4"><span class="u" data-d="5" data-l="s29w9">chiefly</span> <span class="u" data-d="5" data-l="s29w8">to attain</span></span> <span class="u" data-d="3" data-l="s29p3">that <span class="u" data-d="5" data-l="s29w7">meditative wisdom</span> <span class="u" data-d="4" data-l="s29q3">where they <span class="u" data-d="5" data-l="s29w6">abide in a meditation</span></span></span> <span class="u" data-d="3" data-l="s29p2"><span class="u" data-d="6" data-l="s29m7 case">of</span> <span class="u" data-d="5" data-l="s29w5">cessation</span>, <span class="u" data-d="4" data-l="s29q2">a state where all <span class="u" data-d="5" data-l="s29w3">the obstacles of the mental afflictions</span> have been <span class="u" data-d="5" data-l="s29w4">eliminated</span></span></span>.</span></span>
+</div>
+</div>
+<div class="tree">
+<span class="k">SENTENCE</span> <i>agentive subject + the standard aspiration frame (shared with segs 28 and 30)</i><br>
+&#9500;&#9472; <span class="k">SUBJECT &middot; agentive frame</span> <span class="w">rang rgyal gyi rigs can rnams kyis</span> <span class="e">"Those of the class of Self-Made Buddhas"</span><br>
+&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="w">rang rgyal</span> <i>n. compound "self-victor" (pratyekabuddha)</i> <span class="e">"Self-Made Buddhas"</span><br>
+&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="m">gyi</span> <i class="wil">genitive</i> <span class="e">"of"</span> &middot; <span class="w">rigs</span> <span class="e">"class"</span> &middot; <span class="m">can</span> <i class="wil">possessive suffix</i> <span class="e">"Those of the&hellip;" (with rnams)</span><br>
+&#9474;&nbsp;&nbsp;&#9492;&#9472; <span class="m">rnams</span> <i class="wil">plural</i> <span class="e">&#8709; (plural "Those")</span> &middot; <span class="m">kyis</span> <i class="wil">agentive</i> <span class="e">&#8709; (English subject position)</span><br>
+&#9500;&#9472; <span class="k">OBJECT &middot; the wisdom NP, twice-embedded</span><br>
+&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="k">EMBED 1</span> <span class="w">nyon sgrib spangs pa'i 'gog pa</span> <i>"cessation of having-eliminated the affliction-obstacles"</i><br>
+&#9474;&nbsp;&nbsp;&#9474;&nbsp;&nbsp;<span class="e">"cessation, a state where all the obstacles of the mental afflictions have been eliminated"</span><br>
+&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="m">la</span> <i class="wil">la-group: locus of equipoise</i> <span class="e">"of" / "in"</span><br>
+&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="k">EMBED 2</span> <span class="w">mnyam par bzhag pa'i</span> <i>vb. "set evenly" + <span class="m">pa'i</span></i> <span class="e">"where they abide in a meditation"</span><br>
+&#9474;&nbsp;&nbsp;&#9492;&#9472; <span class="k">HEAD</span> <span class="w">mnyam bzhag ye shes</span> <i>compound: equipoise-wisdom</i> <span class="e">"that meditative wisdom"</span><br>
+&#9492;&#9472; <span class="k">PREDICATE &middot; the aspiration frame</span><br>
+&nbsp;&nbsp;&nbsp;&#9500;&#9472; <span class="w">thob bya'i</span> <i class="wil"><span class="m">bya</span> future nominalizer: "to-be-attained"</i> <span class="e">"to attain"</span><br>
+&nbsp;&nbsp;&nbsp;&#9500;&#9472; <span class="w">gtso bor</span> <i><span class="m">r</span> terminative</i> <span class="e">"chiefly"</span> &middot; <span class="w">byas nas</span> <i>"having made" + <span class="m">nas</span></i> <span class="e">&#8709; &mdash; English syntax</span><br>
+&nbsp;&nbsp;&nbsp;&#9492;&#9472; <span class="w">don du gnyer</span> <i>"seek as aim"</i> <span class="e">"aspire"</span>
+</div>
+<div class="note"><b>AI NOTE</b> &mdash; the whole predicate <b>thob bya'i gtso bor byas nas don du
+gnyer</b> ("making it the chief thing to be attained, they strive") is the formula shared
+verbatim with segs 28 and 30; GMR compresses it to <b>"aspire chiefly to attain"</b> each
+time &mdash; a stable three-word exponent for a nine-syllable frame, strong corpus evidence
+for the span link. His "a state where all&hellip;" unpacks the compact past participle
+<b>spangs pa'i</b>; "all" has no Tibetan exponent (his emphasis on ma-lus-type totality is
+not in this line, unlike seg 57 where <i>ma lus par</i> IS present).</div>
+
+<h2>Segment 30 &mdash; refuges of the three classes (iii): the Greater Way, and the reason sealed</h2>
+<div class="pair">
+<div class="tib"><div class="lab">TIBETAN (WYLIE)</div>
+<span class="u" data-d="1" data-l="s30S"><span class="u" data-d="2" data-l="s30c1"><span class="u" data-d="3" data-l="s30p1"><span class="u" data-d="4" data-l="s30q1"><span class="u" data-d="5" data-l="s30w1"><span class="u" data-d="7" data-l="s30z1_0">theg</span> <span class="u" data-d="7" data-l="s30z1_1">chen</span></span> <span class="u" data-d="6" data-l="s30m1 case">gyi</span> <span class="u" data-d="5" data-l="s30w2">rigs</span> <span class="u" data-d="6" data-l="s30m2">can</span></span> <span class="u" data-d="6" data-l="s30m3">rnams</span> <span class="u" data-d="6" data-l="s30m4 case">kyis</span></span> <span class="u" data-d="3" data-l="s30p2"><span class="u" data-d="4" data-l="s30q2"><span class="u" data-d="5" data-l="s30w3">gdul bya</span> <span class="u" data-d="5" data-l="s30w4">rigs can</span> <span class="u" data-d="5" data-l="s30w5">gsum</span></span> <span class="u" data-d="6" data-l="s30m5 case">la</span></span> <span class="u" data-d="3" data-l="s30p3"><span class="u" data-d="4" data-l="s30q3"><span class="u" data-d="5" data-l="s30w6"><span class="u" data-d="7" data-l="s30z2_0">chos</span> <span class="u" data-d="7" data-l="s30z2_1">'khor</span></span> <span class="u" data-d="5" data-l="s30w7">rdzogs pa</span><span class="u" data-d="6" data-l="s30m6 case">r</span> <span class="u" data-d="5" data-l="s30w8">bskor</span> <span class="u" data-d="6" data-l="s30m7">ba</span><span class="u" data-d="6" data-l="s30m8 case">'i</span></span> <span class="u" data-d="5" data-l="s30w9">bdag rkyen</span></span> <span class="u" data-d="3" data-l="s30p4"><span class="u" data-d="6" data-l="s30m9">dang</span> <span class="u" data-d="5" data-l="s30w10">ldan</span> <span class="u" data-d="6" data-l="s30m10">pa</span><span class="u" data-d="6" data-l="s30m11 case">'i</span> <span class="u" data-d="5" data-l="s30w11">sangs rgyas dkon mchog</span></span> <span class="u" data-d="3" data-l="s30p5"><span class="u" data-d="4" data-l="s30q4"><span class="u" data-d="5" data-l="s30w12">thob bya</span><span class="u" data-d="6" data-l="s30m12 case">'i</span> <span class="u" data-d="5" data-l="s30w13">gtso bo</span><span class="u" data-d="6" data-l="s30m13 case">r</span></span> <span class="u" data-d="5" data-l="s30w14">don du gnyer bar byed</span> <span class="u" data-d="6" data-l="s30m14">pa</span><span class="u" data-d="6" data-l="s30m15 case">'i</span></span> <span class="u" data-d="5" data-l="s30w15">rgyu mtshan</span> <span class="u" data-d="6" data-l="s30m16 case">gyis</span></span> <span class="u" data-d="2" data-l="s30c2"><span class="u" data-d="3" data-l="s30p6"><span class="u" data-d="5" data-l="s30w16">dkon mchog gsum</span> <span class="u" data-d="6" data-l="s30m17">po</span> <span class="u" data-d="6" data-l="s30m18">de</span></span> <span class="u" data-d="3" data-l="s30p7"><span class="u" data-d="5" data-l="s30w17">rigs can</span> <span class="u" data-d="5" data-l="s30w18">gsum</span> <span class="u" data-d="6" data-l="s30m19 case">gyi</span></span> <span class="u" data-d="3" data-l="s30p8"><span class="u" data-d="5" data-l="s30w19">skyabs</span> <span class="u" data-d="6" data-l="s30m20 case">su</span> <span class="u" data-d="5" data-l="s30w20">bzhag pa</span></span> <span class="u" data-d="5" data-l="s30w21">yin pa'i phyir</span></span></span>
+</div>
+<div class="eng"><div class="lab">GESHE MICHAEL'S ENGLISH (VERBATIM)</div>
+<span class="u" data-d="1" data-l="s30S"><span class="u" data-d="2" data-l="s30c1"><span class="u" data-d="3" data-l="s30p1">Those <span class="u" data-d="6" data-l="s30m1 case">of</span> the <span class="u" data-d="5" data-l="s30w1">Greater Way</span></span> <span class="u" data-d="3" data-l="s30p5"><span class="u" data-d="5" data-l="s30w14">aspire</span> <span class="u" data-d="4" data-l="s30q4"><span class="u" data-d="5" data-l="s30w13">chiefly</span> <span class="u" data-d="5" data-l="s30w12">to attain</span></span></span> <span class="u" data-d="3" data-l="s30p4">the <span class="u" data-d="5" data-l="s30w11">Buddha Jewel</span>, one who <span class="u" data-d="5" data-l="s30w10">possesses</span></span> <span class="u" data-d="3" data-l="s30p3">that <span class="u" data-d="5" data-l="s30w9">cause</span> within him <span class="u" data-d="4" data-l="s30q3">which will allow him <span class="u" data-d="5" data-l="s30w8">to turn</span> the <span class="u" data-d="5" data-l="s30w6">wheel of the dharma</span>, <span class="u" data-d="5" data-l="s30w7">in its entirety</span>,</span></span> <span class="u" data-d="3" data-l="s30p2"><span class="u" data-d="6" data-l="s30m5 case">for</span> <span class="u" data-d="4" data-l="s30q2"><span class="u" data-d="5" data-l="s30w3">disciples</span> of all <span class="u" data-d="5" data-l="s30w5">three</span> <span class="u" data-d="5" data-l="s30w4">classes</span></span></span>.</span> <span class="u" data-d="2" data-l="s30c2">This then is <span class="u" data-d="5" data-l="s30w15">the reason</span> <span class="u" data-d="5" data-l="s30w21">why</span> <span class="u" data-d="3" data-l="s30p6"><span class="u" data-d="6" data-l="s30m18">the</span> <span class="u" data-d="5" data-l="s30w16">Three Jewels</span></span> <span class="u" data-d="3" data-l="s30p8">are <span class="u" data-d="5" data-l="s30w20">established</span> <span class="u" data-d="6" data-l="s30m20 case">as being</span> <span class="u" data-d="5" data-l="s30w19">refuges</span></span> <span class="u" data-d="3" data-l="s30p7"><span class="u" data-d="6" data-l="s30m19 case">for</span> <span class="u" data-d="5" data-l="s30w17">practitioners</span> of the <span class="u" data-d="5" data-l="s30w18">three</span> classes</span>.</span></span>
+</div>
+</div>
+<div class="tree">
+<span class="k">SENTENCE</span> <i>third member of the enumeration, then the instrumental seal on the whole syllogism of segs 28&ndash;30</i><br>
+&#9500;&#9472; <span class="k">CLAUSE 1 &middot; the Greater Way's aspiration</span><br>
+&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="k">SUBJECT</span> <span class="w">theg chen gyi rigs can rnams kyis</span> <span class="e">"Those of the Greater Way"</span> <i>&mdash; same frame as segs 28/29; GMR drops "class" here, his variation</i><br>
+&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="k">BENEFICIARY &middot; la-frame</span> <span class="w">gdul bya rigs can gsum la</span> <span class="e">"for disciples of all three classes"</span><br>
+&#9474;&nbsp;&nbsp;&#9474;&nbsp;&nbsp;&#9492;&#9472; <span class="w">gdul bya</span> <i class="wil"><span class="m">bya</span> future nominalizer: "those to be tamed"</i> <span class="e">"disciples"</span><br>
+&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="k">EMBED &middot; the cause NP</span> <span class="w">chos 'khor rdzogs par bskor ba'i bdag rkyen</span><br>
+&#9474;&nbsp;&nbsp;&#9474;&nbsp;&nbsp;<span class="e">"that cause within him which will allow him to turn the wheel of the dharma, in its entirety"</span><br>
+&#9474;&nbsp;&nbsp;&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="w">chos 'khor</span> <span class="e">"the wheel of the dharma"</span> &middot; <span class="w">rdzogs par</span> <span class="e">"in its entirety"</span> &middot; <span class="w">bskor ba'i</span> <span class="e">"to turn"</span><br>
+&#9474;&nbsp;&nbsp;&#9474;&nbsp;&nbsp;&#9492;&#9472; <span class="w">bdag rkyen</span> <i>technical: "dominant condition"</i> <span class="e">"that cause within him"</span> <i>&mdash; register, see note</i><br>
+&#9474;&nbsp;&nbsp;&#9500;&#9472; <span class="w">dang ldan pa'i</span> <i><span class="m">dang</span> + "possess"</i> <span class="e">"one who possesses"</span> &middot; <span class="w">sangs rgyas dkon mchog</span> <span class="e">"the Buddha Jewel"</span><br>
+&#9474;&nbsp;&nbsp;&#9492;&#9472; <span class="k">PREDICATE</span> <span class="w">thob bya'i gtso bor don du gnyer bar byed pa'i</span> <span class="e">"aspire chiefly to attain"</span> <i>&mdash; the shared formula, nominalized this time</i><br>
+&#9500;&#9472; <span class="k">SEAL &middot; instrumental</span> <span class="w">rgyu mtshan gyis</span> <i class="wil"><span class="m">gyis</span> agentive as "by reason of"</i> <span class="e">"This then is the reason why"</span><br>
+&#9492;&#9472; <span class="k">CLAUSE 2 &middot; the established thesis</span> <span class="w">dkon mchog gsum po de&hellip;skyabs su bzhag pa yin pa'i phyir</span><br>
+&nbsp;&nbsp;&nbsp;<span class="e">"the Three Jewels are established as being refuges for practitioners of the three classes"</span> <i>&mdash; <span class="m">su</span> la-group "as being", <span class="m">yin pa'i phyir</span> closes the reason begun at seg 28's <span class="m">yod de</span></i>
+</div>
+<div class="note"><b>AI NOTE</b> &mdash; (1) <b>bdag rkyen</b> is the technical term "dominant
+condition"; GMR renders <b>"that cause within him"</b> &mdash; register flag, linked verbatim,
+not normalized. (2) The syllogism arc: seg 28 opened with <i>yod de</i> ("There is a
+specific reason&hellip;"), segs 28c2&ndash;30c1 supplied the three classes, and <b>yin pa'i
+phyir</b> here closes it &mdash; GMR mirrors the arc with "There is a specific reason why&hellip;"
+&hellip; "This then is the reason why&hellip;". The sentence-level links honor his two-sentence
+recasting. (3) "This then", "within him", "which will allow him", "all" &mdash; his glue,
+&#8709; exponents. (4) <b>rnams kyis</b> again &#8709; into English subject position.</div>
+
+<div class="legend"><b>Depth key (Wilson-grounded, seven layers per Adam's ruling):</b> 1 Sentence &middot; 2 Clause &middot; 3 Phrase (case-marked argument frames) &middot; 4 Embedded phrase (nominalized clauses, genitive chains) &middot; 5 Word &amp; compound &middot; 6 Morpheme &amp; particle (<span class="case">green = case/syntactic particles</span>: genitive <i>gi/gyi/kyi/'i/yi</i>, agentive <i>gis/kyis/s</i>, la-group <i>la/su/tu/du/r/na</i>, semi-final <i>ste/de/te</i>, concessive <i>yang/kyang</i>, conditional <i>na</i>, plural <i>rnams/dag</i>, specifier <i>po</i>, possessive <i>can</i>, nominalizers <i>pa/ba/bya</i>, topic <i>ni</i>, coordinative <i>cing/zhing/shing</i>, conjunctive <i>dang</i>) &middot; 7 Syllable &amp; compound member (the members inside compounds and lexicalized phrases, e.g. <i>dkon mchog</i> = <i>dkon</i> "rare" + <i>mchog</i> "supreme").
+&middot; Source: hgm_spine_v27_2 corpus. English: Geshe Michael Roach, ACI Course 2, verbatim. Analysis &amp; links: Claude (AI), pass three, PROVISIONAL &mdash; evaluation only, not dictionary material.</div>
+<div class="nav"><a href="index.html">&#8962; Index</a><a href="p02.html">&larr; Previous passage</a><a href="p04.html">Next passage &rarr;</a></div>
+<script>
+const names={1:'1 \u00b7 Sentence',2:'2 \u00b7 Clause',3:'3 \u00b7 Phrase',4:'4 \u00b7 Embedded phrase',5:'5 \u00b7 Word / compound',6:'6 \u00b7 Morpheme / particle'};
+const slider=document.getElementById('depth'), nm=document.getElementById('depthname');
+function apply(){
+  const d=slider.value; nm.textContent=names[d];
+  document.querySelectorAll('.u').forEach(u=>{
+    u.classList.toggle('active', u.dataset.d===d);
+    u.classList.remove('hl','pin');
+  });
+}
+slider.addEventListener('input',apply); apply();
+const peers=el=>document.querySelectorAll(`[data-l="${el.dataset.l.split(' ')[0]}"]`);
+document.addEventListener('mouseover',e=>{const t=e.target.closest('.active');if(t)peers(t).forEach(p=>p.classList.add('hl'));});
+document.addEventListener('mouseout',e=>{const t=e.target.closest('.active');if(t)peers(t).forEach(p=>p.classList.remove('hl'));});
+document.addEventListener('click',e=>{
+  const t=e.target.closest('.active');
+  document.querySelectorAll('.pin').forEach(p=>p.classList.remove('pin'));
+  if(t)peers(t).forEach(p=>p.classList.add('pin'));
+});
+</script>
+</body>
+</html>

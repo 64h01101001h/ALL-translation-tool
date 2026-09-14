@@ -1,0 +1,36 @@
+{
+  "status": "CODE_PREPARATION_ONLY_NOT_RELEASED",
+  "role": "Codex independent tooling preparation, former English-author context; no semantic approval",
+  "batch_binding": {"course": "C05", "sequences": [280, 281, 282], "page": "c5p94"},
+  "approved_config_contract_unchanged": true,
+  "old_runtime_assertions_outside_allowance_check_unchanged": true,
+  "known_schema_bound_after_freeze": {
+    "source": "inputs/frozen-280/proposed-head-allowances.json",
+    "freeze_sha256": "84a1bdef98a98d20b557692a3f49ee353dcc518d68d36642bffcc8df1ab2900e",
+    "mapping_category": "pages_c05",
+    "mapping_keys": ["c5p94/s280w29", "c5p94/s280w43"],
+    "actual_gated_hit_record_fields": ["label", "depth", "match", "body_range", "final_tuple", "licensor", "allowance_key"],
+    "final_tuple_fields": ["id", "d", "tib", "eng", "tib_range", "eng_range", "parent"],
+    "body_range_units": "Python Unicode character offsets in UTF-8-decoded canonical body, exactly as re.Match.span() returns",
+    "predicate_source": "Pinned actual WT/tools/test_no_supplied_span_head.py; use its exact PAT object, no rewritten regex",
+    "licensor_evidence": "Per exact page/span key, a nonblank string containing the exact final Tibetan licensor and English realization. This checks explicit source binding, not semantic truth."
+  },
+  "retained_upstream_requirements": [
+    "Canonical generator output equals the frozen body byte-for-byte before the allowance block runs.",
+    "The final tuple list has already been resolved by the canonical generator against the complete original source rows, and compared exactly.",
+    "The complete final span objects and optional fields have already been compared against final decisions; the allowance block never reconstructs or edits them.",
+    "The allowance file, body, spec, tuples and source evidence are pinned by the unchanged config contract and full frozen-directory checks.",
+    "All source, provenance, query, original-disposition, errata and final count assertions outside this narrow check remain unchanged."
+  ],
+  "zero_hit_case": "Allowed only when actual PAT yields zero matches, actual_gated_hits is empty, and pages_c05 is empty for that segment.",
+  "nonempty_case": "Actual regex hits, declaration records and mapping keys must be exactly equal in identity and extent; unrelated or missing allowances fail.",
+  "root_pending_actions": [
+    "Read the complete source diff and focused control results independently.",
+    "Verify the final 280,281,282 schema/counts/file pins and full evidence inventory through the approved config contract.",
+    "Bind the final config JSON hash and fresh output location outside all protected roots; no config or output binding is supplied by this preparation.",
+    "Preserve this code freeze and independently approve/release the actual full runtime invocation, using this runtime and byte-identical config_contract.py together.",
+    "Review each source licensor semantically; this code cannot declare the correspondence sound."
+  ],
+  "current_actual_runtime_executions": 0,
+  "data_or_shared_source_writes": 0
+}

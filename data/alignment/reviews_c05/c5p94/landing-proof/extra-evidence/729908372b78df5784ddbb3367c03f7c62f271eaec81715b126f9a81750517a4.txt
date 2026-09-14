@@ -1,0 +1,96 @@
+"""Prepare exact known parameters and an unapplied conditional ledger entry."""
+from pathlib import Path
+import ast, datetime, difflib, hashlib, json
+
+B = Path(__file__).resolve().parent
+P = B / 'commit-closure-preparation'
+OLD = B.parent / 'integration/through279-commit-closure-preparation/commit_closure279.py'
+assert not P.exists()
+P.mkdir()
+before = OLD.read_text()
+changes = [
+    ('f114fcb7a5a899b939ffc948ae9fdbbb746541fa', '10968d16e701b698a0e1fbd845b353089d15ac39'),
+    ('[277,278,279]', '[280,281,282]'),
+    ("stage['actual_coverage']==279 and stage['actual_added_links']==149", "stage['actual_coverage']==282 and stage['actual_added_links']==127"),
+    ('PASS_FIXED_DATA_COMMIT_BINDING_THROUGH_C05_279', 'PASS_FIXED_DATA_COMMIT_BINDING_THROUGH_C05_282'),
+    ('coverage=279', 'coverage=282'),
+    ("main_integration='OPEN; last applicability Sep13 17:25:51 UTC only'", "main_integration='OPEN_NO_APPLICATION; last read-only compatibility Sep13 23:40–23:42 UTC only'"),
+    ("native_and_phone='verified through171 only; fresh integration pending'", "native_and_phone='Private pack FAILED_UNACCEPTED for four inherited C01 findings; installed resource through171 unchanged; no current device acceptance'"),
+]
+after = before
+records = []
+for old, new in changes:
+    assert after.count(old) == 1 and new not in after
+    after = after.replace(old, new)
+    records.append(dict(old=old, new=new, count=1))
+inverse = after
+for old, new in reversed(changes):
+    assert inverse.count(new) == 1
+    inverse = inverse.replace(new, old)
+assert inverse == before
+ast.parse(before)
+ast.parse(after)
+(P / 'prior-commit-closure.py.txt').write_text(before)
+(P / 'commit_closure282.py').write_text(after)
+(P / 'changes.json').write_text(json.dumps(records, indent=2) + '\n')
+(P / 'complete.diff.txt').write_text(''.join(difflib.unified_diff(before.splitlines(True), after.splitlines(True), fromfile=str(OLD), tofile='commit_closure282.py')))
+entry = '''
+
+### 2026-09-14 UTC — C05 segments 280–282 (page 94)
+
+Independent proposal, reconciliation and semantic review approved 124
+provisional correspondences (54/46/24), including four grammatical nulls and
+102 nonnull depth-5 correspondences. All 225 original proposal dispositions,
+15 material omission reasons and 11 investigated/refuted suspicions survive.
+Exactly two source-specific sogs head licenses were added; no errata were
+added. Uncertain correspondences remain unbanked. GMR's wording and master
+sources are unchanged; none of this machine work enters hgm_gloss. Complete
+sources, specs, proposals, decisions, generator results and semantic review
+are retained in reviews_c05/c5p94 and the external campaign evidence records.
+
+One root layer/view run and all 17 relevant fidelity suites passed; the suite
+took 12.62 seconds. The independent isolated reproduction matched all seven
+generated outputs byte for byte with the immutable incoming main CSV seed.
+Full retention preserved 45,275 prior links and added 127, including three
+sentence anchors. Coverage is 282 of 511 C05 segments, with 229 remaining.
+The full bank has 45,402 links, 11,938 nulls, 1,618 note blocks, 11 trees,
+7,092 heads and 15,546 evidence pairs. Proven ACIP covers 7,089 of 7,092
+heads; three missing heads and five source-linked spans remain explicit
+limits. Main/reverse/course CSV rows are 22,528/22,188/24,105; changes has
+37 rows. Producer metadata date is September 13 local time; the execution
+records are September 14 UTC. No date-driven regeneration was performed.
+
+The actual 13-file payload includes the two-license sidecar and preserves
+all prior sidecar values. Staged whitespace checks account for the original
+source and CSV bytes without normalization. Complete current bank and stage
+checks precede this append. Later bank, stage, commit and closure results
+remain external at their true boundaries; they are not claimed inside their
+own earlier input manifests. Source-preparation failures and corrections
+are preserved. Three retention-preparation caller results are explicitly
+labeled conversation transcriptions: original raw streams were unavailable.
+This limitation does not replace the full actual generator/build/test or
+independent reproduction captures. Fixed DATA and documentation commit
+identities are recorded by the subsequent root closure.
+
+Private JSON/HTML/CSV outputs are current through 282. MAIN remains
+OPEN_NO_APPLICATION; the September 13 23:40–23:42 UTC compatibility check
+passed all 13 chunks but applied nothing. The new private phone pack remains
+FAILED_UNACCEPTED for four inherited C01 source-correspondence defects and
+must not be installed. The existing through171 phone resource is unchanged;
+no current native rendering, device installation or saved data-root acceptance
+is claimed. No release, paid API, spending, account message or source/gloss
+correction occurred. C13 remains blocked upstream. Finish all C05 through511
+before C06, then proceed in order. Next regular outer checkpoint is291.
+The existing one-minute continuation ends September 15, 2026 at07:00
+America/Denver (13:00 UTC); safely checkpoint and pause at the deadline.
+'''
+assert entry.startswith('\n') and entry.endswith('\n') and '\r' not in entry and '\t' not in entry
+assert not any(line.endswith(' ') for line in entry.split('\n'))
+(P / 'ledger-entry.txt').write_text(entry)
+(P / 'report.md').write_text('Source preparation only. Exact known parameter/integration-limit substitutions preserve all DATA parent/tree/index/stage/append/bind gates. The ledger entry is an unapplied conditional draft: its reproduction, bank and staging claims require actual passing proofs before append. Root must bind actual DATA and final commit IDs; no commits or ledger writes occur in this preparation. Preserve later execution/caller proofs at their true external boundaries.\n')
+def pin(path):
+    raw = path.read_bytes()
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+(P / 'preparation-proof.json').write_text(json.dumps(dict(status='SOURCE_PREPARATION_ONLY', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), original=dict(path=str(OLD), **pin(OLD)), candidate=pin(P / 'commit_closure282.py'), entry=pin(P / 'ledger-entry.txt'), exact_inverse=True, syntax_only=True, runtime=False, pending=['actual independent reproduction/root acceptance', 'ordinary/final bank proofs', 'actual whitespace and finalstage PASS', 'DATA commit id', 'identical three-ledger append', 'documentation commit id', 'whole committed tree/index binding']), indent=2) + '\n')
+(P / 'freeze.json').write_text(json.dumps(dict(files={str(p.relative_to(P)): pin(p) for p in P.rglob('*') if p.is_file()}), indent=2) + '\n')
+print(json.dumps(j := dict(status='SOURCE_PREPARED_ONLY', freeze=pin(P / 'freeze.json'), candidate=pin(P / 'commit_closure282.py')), indent=2))

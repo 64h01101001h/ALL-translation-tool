@@ -1,0 +1,16 @@
+{
+  "status": "SOURCE_CORRECTION_BEFORE_ANY_INITIAL_RELEASE_RUNTIME",
+  "finding": "Successful attempt02 full-source-copy-manifest uses copies relative to attempt02; root source incorrectly resolved relative to parent review root, where matching earlier attempt copies exist.",
+  "change": "Change only source-map base to SV/attempt02 and map filename to full-source-copy-manifest.json. Full complete parent freeze remains unchanged.",
+  "old_candidate": {
+    "bytes": 9926,
+    "sha256": "308c500cbdb04fac1f68374fc9b88a99769b76194b9612fe0e687156be6903fb"
+  },
+  "new_candidate": {
+    "bytes": 9928,
+    "sha256": "89233d9bac606afba0fbf775868af5a8f4a6e89d86c771627ab3e9e21efa6e2a"
+  },
+  "runtime_calls": 0,
+  "scope_or_alignment_mutation": false,
+  "previous_root_scope_capture_release": "Earlier through282-release-scope-capture-root.py used same parent-base error. Its actual source/caller/proof and captured scope remain immutable; source pins and complete frozen contents were correct. A later explicit successful-copy correction receipt must bind all67 correct pairs."
+}

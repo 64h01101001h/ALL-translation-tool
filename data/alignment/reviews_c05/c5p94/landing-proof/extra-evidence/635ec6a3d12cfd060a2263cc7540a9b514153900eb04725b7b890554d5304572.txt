@@ -1,0 +1,76 @@
+"""Preserve conversation-result transcriptions, explicitly not original process streams."""
+import hashlib,json
+from pathlib import Path
+O=Path(__file__).resolve().parent;B=O.parent;ROOT=B.parents[1];P=B/'reproduction-retention-preparation'
+def pin(p):
+ raw=Path(p).read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(n,value):(O/n).write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+prior=json.loads((P/'freeze.json').read_bytes());assert pin(P/'freeze.json')['sha256']=='9d745f8d8b103725188004c90566c02d6a123b87be13ca1da6c271d3ac261487'
+for n,p in prior['files'].items():assert pin(P/n)==p
+assert len(prior['files'])==29
+traceback_text='''Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/prepare_source.py.txt", line 44, in <module>
+    ctest=load(L/'ctest-17.execution.json');assert ctest['exit']==0 and ctest['stderr_bytes']==0 and '100% tests passed, 0 tests failed out of 17' in (L/'ctest-17.stdout').read_text() and '12.62 sec' in (L/'ctest-17.stdout').read_text()
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+'''
+v2_output='''{
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW",
+  "files": 24,
+  "source": {
+    "bytes": 11887,
+    "sha256": "ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77"
+  },
+  "freeze": {
+    "bytes": 3618,
+    "sha256": "1f6092198c428bcc4ec372c0ba96d5bc2b654441934a95f73b08202f3f7104f2"
+  }
+}
+'''
+amend_output='''{
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW",
+  "files": 29,
+  "source": {
+    "bytes": 11887,
+    "sha256": "ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77"
+  },
+  "freeze": {
+    "bytes": 4432,
+    "sha256": "9d745f8d8b103725188004c90566c02d6a123b87be13ca1da6c271d3ac261487"
+  }
+}
+'''
+calls=[]
+for name,exit_code,output,chunk,wall,tokens in [
+ ('prepare_source.py.txt',1,traceback_text,'f20534',1.030698459,182),
+ ('prepare_source_v2.py.txt',0,v2_output,'12c0ca',1.011620167,77),
+ ('amend_preparation_record.py.txt',0,amend_output,'936ae1',0.000004709,77)]:
+ calls.append(dict(record_type='Faithful transcription of visible conversation tool result; not original raw streams or a caller recorder',tool='tools.exec_command via functions.exec',known_requested_arguments=dict(cmd='python3 -B campaign-artifacts/C05-280-282/reproduction-retention-preparation/'+name,yield_time_ms=10000,max_output_tokens=2000),explicit_workdir_argument=None,conversation_workspace_context=str(ROOT),measured_process_cwd=None,argv_capture=None,started_at=None,finished_at=None,environment_capture=None,stdin_raw=None,stdout_raw=None,stderr_raw=None,stdin_bytes=None,stdout_bytes=None,stderr_bytes=None,stdin_sha256=None,stdout_sha256=None,stderr_sha256=None,known_tool_result=dict(chunk_id=chunk,wall_time_seconds=wall,exit_code=exit_code,original_token_count=tokens,output=output),source_file=str(P/name),source_pin=pin(P/name),limitation='The tool exposes one combined text output. No original stdout/stderr capture was saved for this preparation call. File sizes printed inside the output describe the source/freeze artifacts, not process-stream byte counts. Tool-reported wall time is not an independently recorded process timestamp.'))
+save('conversation-tool-result-transcriptions.json',calls)
+inspection=[
+ (B/'retention-source-caller/command.json','Actual root verify_landed_batch.py caller, not this preparation'),
+ (B/'course-csv-retention-caller/command.json','Actual root verify_course_csv.py caller, not this preparation'),
+ (ROOT/'campaign-artifacts/integration/through279-generated-reproduction/caller-runs/retention/command.json','Prior through279 verifier runtime, not this preparation')]
+manifest=[]
+for i,(p,reason) in enumerate(inspection):
+ target=O/f'inspected-unrelated-call-{i+1}.json';target.write_bytes(p.read_bytes());manifest.append(dict(original=str(p),copy=target.name,reason=reason,**pin(p)))
+save('inspected-caller-manifest.json',manifest)
+save('search-record.json',dict(search_scope=[str(B),str(ROOT/'campaign-artifacts/integration')],commands=["rg --files campaign-artifacts/C05-280-282 campaign-artifacts/integration/through279-generated-reproduction | rg '(retention|prepare_source|recorded-caller)'","cat campaign-artifacts/C05-280-282/retention-source-caller/command.json campaign-artifacts/C05-280-282/course-csv-retention-caller/command.json campaign-artifacts/integration/through279-generated-reproduction/caller-runs/retention/command.json","rg -l --glob '*.json' --glob '*.stdout' --glob '*.stderr' --glob '*.log' 'reproduction-retention-preparation/(prepare_source(_v2)?|amend_preparation_record)\\.py\\.txt' campaign-artifacts/C05-280-282 campaign-artifacts/integration"],exact_reference_search_result=[str(P/'recorded-caller-correction.json'),str(P/'history/attempt01/failure.json'),str(P/'history/recorded-caller-correction/preparation-proof.json'),str(P/'preparation-proof.json')],original_preparation_caller_stream_files_found=[],conclusion='Only already-frozen self-records matched the preparation command references. Similar-named caller artifacts identify different root/earlier runtime commands. No original raw source-preparation caller streams were located in these searched artifact trees.',scope_limit='This is a bounded artifact search. It does not establish that no app-internal/session transport log exists elsewhere. The visible conversation results are preserved separately as transcriptions.'))
+save('frozen-preparation-pin.json',dict(directory=str(P),freeze=pin(P/'freeze.json'),files_checked=29,all_prior_files_unchanged=True,source=pin(P/'verify-retention.py.txt'),original_raw_stream_availability='Unavailable for these three source-preparation calls',supplement_changes_original_proof=False))
+(O/'report.md').write_text('''This supplement records a source-preparation provenance limitation. No original raw stdout/stderr caller captures for the v1 preparation, v2 preparation or metadata amendment were located in the batch/integration artifact trees. Similar-named callers belong to root landing/course checks or the earlier through279 runtime; their exact command files and pins are preserved to prevent misidentification.
+
+The three visible conversation tool results are transcribed in `conversation-tool-result-transcriptions.json`, with their known commands, exit codes and combined output. These are explicitly transcriptions, not original process streams. Original stdout/stderr/stdin captures, byte counts, stream hashes, actual argv/environment captures and start/end timestamps are unavailable and null. Tool-reported elapsed time is retained only as tool metadata. Output hashes and sizes printed by the preparation describe generated files and are not relabeled as stream metadata.
+
+The first call exited 1 on the preparation's overly specific CTest-summary wording; the actual saved CTest output reports all 17 passed. The corrected source preparation exited 0, followed by an exit-0 metadata-only caller-record correction. The original frozen failure record, full v1/v2 sources, source diff, correction history and candidate remain unchanged. This supplement neither upgrades the prior self-record into raw execution evidence nor asserts stronger caller provenance than is available.
+
+All 29 files in freeze `9d745f8d8b103725188004c90566c02d6a123b87be13ca1da6c271d3ac261487` were checked and remain exact. Candidate SHA-256 remains `ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77`. No preparation or candidate was rerun, and no SQL, Git, build or test was executed. This limitation concerns source-preparation caller evidence only; it changes no canonical data or test result. Independent review may accept this explicitly bounded provenance limitation.
+''')
+for n,p in prior['files'].items():assert pin(P/n)==p
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file()}
+save('freeze.json',dict(status='FROZEN_TRANSCRIPTION_SUPPLEMENT',raw_process_streams_preserved=False,files=files,file_count=len(files)))
+for n,p in files.items():assert pin(O/n)==p
+result=dict(files=len(files),freeze=pin(O/'freeze.json'),transcriptions=pin(O/'conversation-tool-result-transcriptions.json'),original_freeze_unchanged=pin(P/'freeze.json'))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+O.chmod(0o555)
+print(json.dumps(result,indent=2))

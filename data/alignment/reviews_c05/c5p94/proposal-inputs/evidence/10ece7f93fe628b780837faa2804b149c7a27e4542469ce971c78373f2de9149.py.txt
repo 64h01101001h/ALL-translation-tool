@@ -1,0 +1,47 @@
+"""Create only the narrow, batch-local allowance adapter; no verifier execution."""
+from pathlib import Path
+import difflib,hashlib,json,textwrap
+D=Path(__file__).resolve().parent
+old=(D/'inputs/old/verify_reconciliation.py').read_text()
+needle="   allow=read(d/'proposed-head-allowances.json');assert allow['pages_'+COURSE.lower()]=={} and allow['actual_gated_hits']==[];check(W/'tools/test_no_supplied_span_head.py',allow['predicate_source'])\n"
+replacement='''   allow=read(d/'proposed-head-allowances.json')
+   predicate=W/'tools/test_no_supplied_span_head.py';check(predicate,allow['predicate_source'])
+   if 'path' in allow['predicate_source']:assert Path(allow['predicate_source']['path'])==predicate
+   assert COURSE=='C05' and SEQS==[280,281,282], 'This reviewed adaptation is batch-local'
+   category='pages_'+COURSE.lower();allowances=allow[category]
+   assert isinstance(allowances,dict) and {k for k in allow if k.startswith('pages_')}=={category}
+   assert isinstance(allow['actual_gated_hits'],list)
+   gate_definition=importlib.util.spec_from_file_location('actual_head_predicate',predicate)
+   gate=importlib.util.module_from_spec(gate_definition);gate_definition.loader.exec_module(gate)
+   check(predicate,allow['predicate_source'])
+   body_text=raw.decode('utf-8');gated=list(gate.PAT.finditer(body_text))
+   assert len({m.group(2) for m in gated})==len(gated), 'Duplicate gated labels require explicit investigation'
+   tuple_by_id={t['id']:t for t in tuples};labels={f's{seq}{i}':i for i in byid};actual_hits=[]
+   for match in gated:
+    label=match.group(2);assert label in labels
+    span_id=labels[label];span=byid[span_id];depth=int(match.group(1))
+    assert span['d']==depth and depth in (5,7) and isinstance(span['eng'],str) and span['eng']
+    assert isinstance(span['tib'],str) and span['tib']
+    key='c5p94/'+label;assert key in allowances
+    reason=allowances[key];assert isinstance(reason,str) and reason.strip()
+    assert span['tib'] in reason and span['eng'] in reason, 'Name the exact Tibetan licensor and its English realization'
+    actual_hits.append(dict(label=label,depth=depth,match=match.group(0),body_range=list(match.span()),
+     final_tuple=tuple_by_id[span_id],licensor=span['tib'],allowance_key=key))
+   assert set(allowances)=={r['allowance_key'] for r in actual_hits}, 'Only actual source-bound gated keys may be proposed'
+   assert allow['actual_gated_hits']==actual_hits, 'Declared hits must equal the canonical predicate and final tuples exactly'
+   save(f'{seq}.head-allowance-check.json',dict(predicate_source=allow['predicate_source'],
+    page='c5p94',seq=seq,actual_gated_hits=actual_hits,allowances=allowances,semantic_approval=False))
+'''
+assert old.count(needle)==1
+new=old.replace(needle,replacement)
+assert new.replace(replacement,needle)==old
+(D/'verify_reconciliation.py').write_text(new)
+(D/'config_contract.py').write_bytes((D/'inputs/old/config_contract.py').read_bytes())
+(D/'allowance-check-block.py.txt').write_text(textwrap.dedent(replacement))
+(D/'complete.diff').write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='approved-query-adapter/verify_reconciliation.py',tofile='proposed-head-adapter/verify_reconciliation.py')))
+for name in ['verify_reconciliation.py','config_contract.py','allowance-check-block.py.txt']:
+ compile((D/name).read_bytes(),str(D/name),'exec')
+pin=lambda p:dict(bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+proof={'status':'PREPARED_ONLY_NO_FULL_RUNTIME_EXECUTION','old_runtime':pin(D/'inputs/old/verify_reconciliation.py'),'candidate_runtime':pin(D/'verify_reconciliation.py'),'approved_contract':pin(D/'config_contract.py'),'contract_unchanged':(D/'config_contract.py').read_bytes()==(D/'inputs/old/config_contract.py').read_bytes(),'all_old_bytes_outside_narrow_replacement_unchanged':True,'old_allowance_check':needle,'new_allowance_check':replacement,'syntax_checks_only':['candidate runtime','unchanged contract','isolated narrow block'],'final_schema_source':'inputs/frozen-280/proposed-head-allowances.json','source_freeze_sha256':'84a1bdef98a98d20b557692a3f49ee353dcc518d68d36642bffcc8df1ab2900e'}
+(D/'preparation-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+print(json.dumps({k:v for k,v in proof.items() if k not in ['old_allowance_check','new_allowance_check']},indent=2))

@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "dug lnga",
+    "dug lnga"
+  ],
+  "rows": [
+    {
+      "id": 23396,
+      "wylie": "dug lnga",
+      "tibetan": "དུག་ལྔ",
+      "tibetan_source": null,
+      "acip": "DUG LNGA",
+      "pronunciation": "dunga",
+      "pronunciation_source": null,
+      "sanskrit": null,
+      "hopkins_english": null,
+      "hgm_gloss": "[\"five poisons\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested (not in Great Dictionary)",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C14\", \"C18\", \"TCS03\"]",
+      "corpus_n_segments": 5,
+      "raw": "{\"tibetan\": \"དུག་ལྔ\", \"wylie\": \"dug lnga\", \"wylie_variants\": [\"dug lnga\"], \"tenses\": null, \"sanskrit\": null, \"hopkins_english\": null, \"hgm_gloss\": [\"five poisons\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"dunga\", \"acip\": \"DUG LNGA\", \"corpus_occurrences\": {\"courses\": [\"C14\", \"C18\", \"TCS03\"], \"n_segments\": 5}}"
+    }
+  ],
+  "count": 1
+}

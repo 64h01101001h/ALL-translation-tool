@@ -1,0 +1,22 @@
+--- prepare.py.txt
++++ prepare.py.txt
+@@ -1,7 +1,7 @@
+ from pathlib import Path
+ import os,sys,json,hashlib,importlib.util,subprocess,datetime
+ sys.dont_write_bytecode=True;os.environ.update(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+-R=Path(__file__).resolve().parent;ROOT=R.parents[2];W=ROOT/'campaign-worktree';B=ROOT/'campaign-artifacts/C05-280-282';L=B/'landing';S=R/'workspace';HEAD='10968d16e701b698a0e1fbd845b353089d15ac39';S.mkdir(exist_ok=False)
++R=Path(__file__).resolve().parent;ROOT=R.parents[2];W=ROOT/'campaign-worktree';B=ROOT/'campaign-artifacts/C05-277-279';L=B/'landing';S=R/'workspace';HEAD='f114fcb7a5a899b939ffc948ae9fdbbb746541fa';S.mkdir(exist_ok=False)
+ def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+ def save(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+ records=[]
+@@ -18,8 +18,8 @@
+ for course,cfg in sorted(m.COURSES.items()):
+  for page,seqs in sorted(cfg['pages'].items()):
+   dst=Path(cfg['dir'])/(page+'.html');rel=dst.relative_to(S);cp(W/rel,dst,'registered physical page consumed by layer');registered.append(dict(course=course,page=page,sequences=seqs,relative_path=str(rel)))
+-for rel in ['data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p94.json','build/hgm_spine_v27_2.db','data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']:cp(W/rel,S/rel,'current registered spec/source/provenance')
+-for p in sorted((W/'data/alignment/reviews_c05/c5p94').rglob('*')):
++for rel in ['data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p93.json','build/hgm_spine_v27_2.db','data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']:cp(W/rel,S/rel,'current registered spec/source/provenance')
++for p in sorted((W/'data/alignment/reviews_c05/c5p93').rglob('*')):
+  if p.is_file():cp(p,S/p.relative_to(W),'complete accepted semantic review plus histories; only top current review is approval')
+ outputrels=['data/alignment/alignment_full_v1.json','data/alignment/alignment_evidence_v1.json']+['docs/geshe_michael_roach_dictionary'+s for s in ('.html','.csv','_reverse.csv','_by_course.csv','_changes.csv')]
+ for rel in outputrels:

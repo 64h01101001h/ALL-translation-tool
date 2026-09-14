@@ -1,0 +1,422 @@
+[
+  {
+    "old_line": 40,
+    "new_line": 40,
+    "old_full_source": "require(resolved.is_file(), ('not regular file', str(p)))",
+    "new_full_source": "require(resolved.is_file(), ('not regular file', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 45,
+    "new_line": 45,
+    "old_full_source": "require(all(getattr(before, k) == getattr(after, k) for k in attrs), ('unstable read', str(p)))",
+    "new_full_source": "require(all(getattr(before, k) == getattr(after, k) for k in attrs), ('unstable read', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 46,
+    "new_line": 46,
+    "old_full_source": "require(len(raw) == after.st_size, ('short read', str(p)))",
+    "new_full_source": "require(len(raw) == after.st_size, ('short read', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 52,
+    "new_line": 52,
+    "old_full_source": "require(p.is_absolute(), ('relative original', str(p)))",
+    "new_full_source": "require(p.is_absolute(), ('relative original', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 63,
+    "new_line": 63,
+    "old_full_source": "require(descriptor(row['original']) == row, ('changed input identity', row['original']))",
+    "new_full_source": "require(descriptor(row['original']) == row, ('changed input identity', row['original']))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 65,
+    "new_line": 65,
+    "old_full_source": "require(pin(raw) == expected(row), ('changed input bytes', row['original']))",
+    "new_full_source": "require(pin(raw) == expected(row), ('changed input bytes', row['original']))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 71,
+    "new_line": 71,
+    "old_full_source": "require(root.is_dir() and not root.is_symlink(), ('invalid root', str(root)))",
+    "new_full_source": "require(root.is_dir() and not root.is_symlink(), ('invalid root', str(root)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 74,
+    "new_line": 74,
+    "old_full_source": "require(not (p.is_symlink() and p.is_dir()), ('directory symlink enumeration unsupported', str(p)))",
+    "new_full_source": "require(not (p.is_symlink() and p.is_dir()), ('directory symlink enumeration unsupported', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 75,
+    "new_line": 75,
+    "old_full_source": "require(not (p.is_symlink() and not p.exists()), ('broken symlink', str(p)))",
+    "new_full_source": "require(not (p.is_symlink() and not p.exists()), ('broken symlink', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 79,
+    "new_line": 79,
+    "old_full_source": "require(p.is_dir(), ('unsupported filesystem entry', str(p)))",
+    "new_full_source": "require(p.is_dir(), ('unsupported filesystem entry', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 104,
+    "new_line": 104,
+    "old_full_source": "require(value and not p.is_absolute() and '..' not in p.parts, ('unsafe relative path', value))",
+    "new_full_source": "require(value and not p.is_absolute() and '..' not in p.parts, ('unsafe relative path', value))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 122,
+    "new_line": 122,
+    "old_full_source": "require(os.environ.get('PYTHONDONTWRITEBYTECODE') == '1' and not sys.flags.optimize,\n            'Require bytecode disabled and optimization off')",
+    "new_full_source": "require(os.environ.get('PYTHONDONTWRITEBYTECODE') == '1' and not sys.flags.optimize,\n            'Require bytecode disabled and optimization off')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 125,
+    "new_line": 125,
+    "old_full_source": "require(output.is_absolute() and output.parent.resolve(strict=True) == I.resolve() and\n            output.name == 'through279-final-bank-inventory' and not output.exists(), 'fresh exact output required')",
+    "new_full_source": "require(output.is_absolute() and output.parent.resolve(strict=True) == I.resolve() and\n            output.name == 'through282-final-bank-inventory' and not output.exists(), 'fresh exact output required')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 128,
+    "new_line": 128,
+    "old_full_source": "require(pin(scope_raw)['sha256'] == args.scope_sha256, 'scope pin mismatch')",
+    "new_full_source": "require(pin(scope_raw)['sha256'] == args.scope_sha256, 'scope pin mismatch')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 130,
+    "new_line": 130,
+    "old_full_source": "require(scope['schema'] == 'through279-final-intake-v1' and scope['baseline'] == BASE, 'scope schema/baseline')",
+    "new_full_source": "require(scope['schema'] == 'through282-final-intake-v1' and scope['baseline'] == BASE, 'scope schema/baseline')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 131,
+    "new_line": 131,
+    "old_full_source": "require(scope['deferred_before_final_bank'] and scope['later_external_after_final_bank'], 'missing truthful boundaries')",
+    "new_full_source": "require(scope['deferred_before_final_bank'] and scope['later_external_after_final_bank'], 'missing truthful boundaries')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 140,
+    "new_line": 140,
+    "old_full_source": "require(old['phase'] == 'ordinary' and old['semantic_review_unchanged'] is True, 'ordinary manifest boundary')",
+    "new_full_source": "require(old['phase'] == 'ordinary' and old['semantic_review_unchanged'] is True, 'ordinary manifest boundary')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 141,
+    "new_line": 141,
+    "old_full_source": "require(read(DEST / 'root-proof-copy-manifest-before-whitespace.json') == controls['ordinary_manifest'], 'ordinary manifest copy')",
+    "new_full_source": "require(read(DEST / 'root-proof-copy-manifest-before-whitespace.json') == controls['ordinary_manifest'], 'ordinary manifest copy')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 145,
+    "new_line": 145,
+    "old_full_source": "require(pin(raw) == expected(row), ('ordinary original', row['original']))",
+    "new_full_source": "require(pin(raw) == expected(row), ('ordinary original', row['original']))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 147,
+    "new_line": 147,
+    "old_full_source": "require(target.resolve().is_relative_to(DEST.resolve()) and read(target) == raw, ('ordinary full copy', str(target)))",
+    "new_full_source": "require(target.resolve().is_relative_to(DEST.resolve()) and read(target) == raw, ('ordinary full copy', str(target)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 150,
+    "new_line": 150,
+    "old_full_source": "require(pin(read(row['path'])) == expected(row), ('ordinary external', row['path']))",
+    "new_full_source": "require(pin(read(row['path'])) == expected(row), ('ordinary external', row['path']))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 153,
+    "new_line": 153,
+    "old_full_source": "require(isinstance(prior_coverage, list), 'coverage schema')",
+    "new_full_source": "require(isinstance(prior_coverage, list), 'coverage schema')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 157,
+    "new_line": 157,
+    "old_full_source": "require(str(p) not in old_paths, ('duplicate prior logical path', str(p)))",
+    "new_full_source": "require(str(p) not in old_paths, ('duplicate prior logical path', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 160,
+    "new_line": 160,
+    "old_full_source": "require(pin(raw) == expected(row) and str(p.resolve()) == row['resolved'], ('prior coverage changed', str(p)))",
+    "new_full_source": "require(pin(raw) == expected(row) and str(p.resolve()) == row['resolved'], ('prior coverage changed', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 161,
+    "new_line": 161,
+    "old_full_source": "require((os.readlink(p) if p.is_symlink() else None) == row['symlink'], ('prior alias changed', str(p)))",
+    "new_full_source": "require((os.readlink(p) if p.is_symlink() else None) == row['symlink'], ('prior alias changed', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 163,
+    "new_line": 163,
+    "old_full_source": "require(read(row['banked_copy']) == raw, ('prior exclusion copy', str(p)))",
+    "new_full_source": "require(read(row['banked_copy']) == raw, ('prior exclusion copy', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 165,
+    "new_line": 165,
+    "old_full_source": "require(read(DEST / relative(row['copy'])) == raw, ('prior explicit copy', str(p)))",
+    "new_full_source": "require(read(DEST / relative(row['copy'])) == raw, ('prior explicit copy', str(p)))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 166,
+    "new_line": 166,
+    "old_full_source": "require(isinstance(strict_json(controls['ordinary_extra_inputs']), list), 'ordinary LIST schema')",
+    "new_full_source": "require(isinstance(strict_json(controls['ordinary_extra_inputs']), list), 'ordinary LIST schema')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 167,
+    "new_line": 167,
+    "old_full_source": "require(scope['controls']['ordinary_extra_inputs']['original'] ==\n                str(I / 'through279-ordinary-bank-inventory/extra-inputs.json'), 'old extra LIST path')",
+    "new_full_source": "require(scope['controls']['ordinary_extra_inputs']['original'] ==\n                str(I / 'through282-ordinary-bank-inventory/extra-inputs.json'), 'old extra LIST path')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 171,
+    "new_line": 171,
+    "old_full_source": "require(audit['status'] == 'PASS actual staged diagnostic reproduced and predicates verified' and\n                audit['mode'] == 'audit' and audit['baseline_head'] == BASE and\n                audit['all_warnings_accounted_for'] is True and audit['git_diff_check_exit'] == 2 and\n                audit['semantic_approval'] is False, 'actual audit prerequisite')",
+    "new_full_source": "require(audit['status'] == 'PASS actual staged diagnostic reproduced and predicates verified' and\n                audit['mode'] == 'audit' and audit['baseline_head'] == BASE and\n                audit['all_warnings_accounted_for'] is True and audit['git_diff_check_exit'] == 2 and\n                audit['semantic_approval'] is False, 'actual audit prerequisite')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 175,
+    "new_line": 175,
+    "old_full_source": "require(acceptance['status'] == 'PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and\n                acceptance['literal_warnings'] == audit['warning_count'] and\n                acceptance['normalization'] is False, 'actual root acceptance prerequisite')",
+    "new_full_source": "require(acceptance['status'] == 'PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and\n                acceptance['literal_warnings'] == audit['warning_count'] and\n                acceptance['normalization'] is False, 'actual root acceptance prerequisite')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 178,
+    "new_line": 178,
+    "old_full_source": "require(pin(controls['raw_diagnostic']) == {'bytes': audit['raw_log_bytes'], 'sha256': audit['raw_log_sha256']} and\n                audit['raw_log_kept_external'] == scope['controls']['raw_diagnostic']['original'] and\n                int(controls['raw_diagnostic_exit']) == audit['git_diff_check_exit'], 'full actual raw diagnostic binding')",
+    "new_full_source": "require(pin(controls['raw_diagnostic']) == {'bytes': audit['raw_log_bytes'], 'sha256': audit['raw_log_sha256']} and\n                audit['raw_log_kept_external'] == scope['controls']['raw_diagnostic']['original'] and\n                int(controls['raw_diagnostic_exit']) == audit['git_diff_check_exit'], 'full actual raw diagnostic binding')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 183,
+    "new_line": 183,
+    "old_full_source": "require(paths(group['root']) == [r['original'] for r in group['files']], ('root enumeration changed', group['root']))",
+    "new_full_source": "require(paths(group['root']) == [r['original'] for r in group['files']], ('root enumeration changed', group['root']))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 186,
+    "new_line": 186,
+    "old_full_source": "require(old_row == row, ('conflicting alias descriptor', row['original']))",
+    "new_full_source": "require(old_row == row, ('conflicting alias descriptor', row['original']))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 189,
+    "new_line": 189,
+    "old_full_source": "require(old_row == row, ('conflicting single descriptor', row['original']))",
+    "new_full_source": "require(old_row == row, ('conflicting single descriptor', row['original']))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 191,
+    "new_line": 191,
+    "old_full_source": "require(sorted(set(current_batch) - old_paths) == [r['original'] for r in scope['late_batch_files']],\n                'late batch enumeration changed; preserve and review scope refresh')",
+    "new_full_source": "require(sorted(set(current_batch) - old_paths) == [r['original'] for r in scope['late_batch_files']],\n                'late batch enumeration changed; preserve and review scope refresh')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 193,
+    "new_line": 193,
+    "old_full_source": "require(set(p for p in old_paths if Path(p).is_relative_to(B) and not Path(p).is_relative_to(L)) <= set(current_batch),\n                'prior batch file disappeared')",
+    "new_full_source": "require(set(p for p in old_paths if Path(p).is_relative_to(B) and not Path(p).is_relative_to(L)) <= set(current_batch),\n                'prior batch file disappeared')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 199,
+    "new_line": 199,
+    "old_full_source": "require(len(history) == 1, 'banker HISTORY schema')",
+    "new_full_source": "require(len(history) == 1, 'banker HISTORY schema')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 212,
+    "new_line": 212,
+    "old_full_source": "require([(str(p), c) for p, c in automatic] == [(r['source']['original'], r['copy']) for r in scope['automatic_inputs']],\n                'automatic source routing changed')",
+    "new_full_source": "require([(str(p), c) for p, c in automatic] == [(r['source']['original'], r['copy']) for r in scope['automatic_inputs']],\n                'automatic source routing changed')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 219,
+    "new_line": 219,
+    "old_full_source": "require(read(DEST / relative(copy)) == raw, ('automatic target changed', copy))",
+    "new_full_source": "require(read(DEST / relative(copy)) == raw, ('automatic target changed', copy))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 221,
+    "new_line": 221,
+    "old_full_source": "require(clean_json(p, raw), ('new automatic source needs separate review', str(p), copy))",
+    "new_full_source": "require(clean_json(p, raw), ('new automatic source needs separate review', str(p), copy))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 229,
+    "new_line": 229,
+    "old_full_source": "require(Path(source).is_relative_to(ART) and not Path(source).is_relative_to(output) and\n                    not Path(source).is_relative_to(DEST), ('source escape/self reference', logical))",
+    "new_full_source": "require(Path(source).is_relative_to(ART) and not Path(source).is_relative_to(output) and\n                    not Path(source).is_relative_to(DEST), ('source escape/self reference', logical))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 232,
+    "new_line": 232,
+    "old_full_source": "require(all(expected(x['record']) == pin(raw) for x in retained[source]), ('retained alias changed', logical))",
+    "new_full_source": "require(all(expected(x['record']) == pin(raw) for x in retained[source]), ('retained alias changed', logical))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 236,
+    "new_line": 236,
+    "old_full_source": "require(expected(new_by_source[source]) == pin(raw), 'conflicting resolved alias bytes')",
+    "new_full_source": "require(expected(new_by_source[source]) == pin(raw), 'conflicting resolved alias bytes')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 242,
+    "new_line": 242,
+    "old_full_source": "require(target not in new_targets, ('copy collision', target))",
+    "new_full_source": "require(target not in new_targets, ('copy collision', target))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 244,
+    "new_line": 244,
+    "old_full_source": "require(not (DEST / relative(target)).exists(), ('new destination already exists', target))",
+    "new_full_source": "require(not (DEST / relative(target)).exists(), ('new destination already exists', target))",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 253,
+    "new_line": 253,
+    "old_full_source": "require(rows, 'empty final intake')",
+    "new_full_source": "require(rows, 'empty final intake')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 257,
+    "new_line": 257,
+    "old_full_source": "require({r['resolved'] for r in group['files']} <= retained_after, 'ordinary internal file omitted')",
+    "new_full_source": "require({r['resolved'] for r in group['files']} <= retained_after, 'ordinary internal file omitted')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 258,
+    "new_line": 258,
+    "old_full_source": "require({scope['controls'][n]['resolved'] for n in ('audit_proof', 'raw_diagnostic')} <= retained_after,\n                'stage-required whitespace original omitted')",
+    "new_full_source": "require({scope['controls'][n]['resolved'] for n in ('audit_proof', 'raw_diagnostic')} <= retained_after,\n                'stage-required whitespace original omitted')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 266,
+    "new_line": 266,
+    "old_full_source": "require(paths(group['root']) == [r['original'] for r in group['files']], 'root changed during composition')",
+    "new_full_source": "require(paths(group['root']) == [r['original'] for r in group['files']], 'root changed during composition')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 267,
+    "new_line": 267,
+    "old_full_source": "require([p for p in paths(B) if not Path(p).is_relative_to(L)] == current_batch, 'batch changed during composition')",
+    "new_full_source": "require([p for p in paths(B) if not Path(p).is_relative_to(L)] == current_batch, 'batch changed during composition')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 270,
+    "new_line": 270,
+    "old_full_source": "require(pin(raw) == expected(row) and read(DEST / relative(row['copy'])) == raw, 'ordinary pair changed during reads')",
+    "new_full_source": "require(pin(raw) == expected(row) and read(DEST / relative(row['copy'])) == raw, 'ordinary pair changed during reads')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 272,
+    "new_line": 272,
+    "old_full_source": "require(pin(read(row['path'])) == expected(row), 'ordinary external changed during reads')",
+    "new_full_source": "require(pin(read(row['path'])) == expected(row), 'ordinary external changed during reads')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 275,
+    "new_line": 275,
+    "old_full_source": "require(str(Path(row['original']).resolve()) == row['resolved'] and\n                    (os.readlink(row['original']) if Path(row['original']).is_symlink() else None) == row['symlink'],\n                    'prior alias changed during reads')",
+    "new_full_source": "require(str(Path(row['original']).resolve()) == row['resolved'] and\n                    (os.readlink(row['original']) if Path(row['original']).is_symlink() else None) == row['symlink'],\n                    'prior alias changed during reads')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 278,
+    "new_line": 278,
+    "old_full_source": "require(pin(raw) == expected(row), 'prior coverage changed during reads')",
+    "new_full_source": "require(pin(raw) == expected(row), 'prior coverage changed during reads')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 280,
+    "new_line": 280,
+    "old_full_source": "require(read(row['banked_copy']) == raw, 'prior exclusion copy changed')",
+    "new_full_source": "require(read(row['banked_copy']) == raw, 'prior exclusion copy changed')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 282,
+    "new_line": 282,
+    "old_full_source": "require(read(DEST / relative(row['copy'])) == raw, 'prior copy changed')",
+    "new_full_source": "require(read(DEST / relative(row['copy'])) == raw, 'prior copy changed')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 283,
+    "new_line": 283,
+    "old_full_source": "require(paths(L) == scope['landing_file_paths'], 'landing enumeration changed during composition')",
+    "new_full_source": "require(paths(L) == scope['landing_file_paths'], 'landing enumeration changed during composition')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 287,
+    "new_line": 287,
+    "old_full_source": "require(read(DEST / relative(item['copy'])) == raw, 'automatic target changed during reads')",
+    "new_full_source": "require(read(DEST / relative(item['copy'])) == raw, 'automatic target changed during reads')",
+    "unchanged_outside_approved_substitutions": true
+  },
+  {
+    "old_line": 288,
+    "new_line": 288,
+    "old_full_source": "require(pin(read(args.scope)) == pin(scope_raw), 'scope changed')",
+    "new_full_source": "require(pin(read(args.scope)) == pin(scope_raw), 'scope changed')",
+    "unchanged_outside_approved_substitutions": true
+  }
+]

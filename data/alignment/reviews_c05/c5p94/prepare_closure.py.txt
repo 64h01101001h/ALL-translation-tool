@@ -1,0 +1,80 @@
+import hashlib,json,re,subprocess
+from pathlib import Path
+from datetime import datetime,timezone
+O=Path(__file__).resolve().parent;B=O.parent;W=B.parents[1]/'campaign-worktree';COMMIT='10968d16e701b698a0e1fbd845b353089d15ac39'
+def load(p):return json.loads(Path(p).read_bytes())
+def save(n,v):(O/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def pin(raw):return {'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}
+manifest=load(O/'original-to-copy-manifest.json')
+history=O/'history/01-before-packaging-preflight';history.mkdir(parents=True,exist_ok=True)
+if not (history/'original-to-copy-manifest.json').exists():(history/'original-to-copy-manifest.json').write_bytes((O/'original-to-copy-manifest.json').read_bytes())
+unique={}
+for r in manifest:
+ if r['original'] in unique:assert {k:r[k] for k in ['sha256','bytes']}=={k:unique[r['original']][k] for k in ['sha256','bytes']}
+ unique[r['original']]=r
+manifest=list(unique.values())
+git=load(O/'fixed-git-proof.json');git_by_hash={(r['sha256'],r['bytes']):r for r in git}
+for r in manifest:
+ if (r['sha256'],r['bytes']) in git_by_hash:
+  g=git_by_hash[(r['sha256'],r['bytes'])];r['original_git_commit']=COMMIT;r['repository_relative_path']=g['repository_relative_path']
+save('original-to-copy-manifest.json',manifest)
+save('packaging-correction.json',{'source_or_spec_changed':False,'canonical_replays_repeated':False,'reason':'Initial preservation gave the same wrapper original two manifest records, once as frozen evidence and once as the actual replay wrapper. Keep one original record pointing to the exact active replay copy. Preserve the initial manifest as history. All original bytes remain available; no input overwritten.','historical_worktree_snapshots':'Every preserved record whose complete bytes equal a verified final-baseline governing Git object now carries explicit commit/path pins.','final_original_records':len(manifest)})
+
+tuples=load(O/'resolved-spans.json');spans={(s['seq'],s['id']):s for s in tuples}
+# These source-specific groups record the independent review of every actual
+# span, including the core identities and explicit exceptions below.
+groups={280:[(1,1,'The additive transition is a complete phrase; no word-level auto-gloss is inferred.'),(2,7,'The source honorific, sole proper name, citation, contradiction and explicit pronouns have their own first-sentence owners.'),(8,20,'The counted sickness/element/demon list, affliction/poison terms, direct-result compound and assertion match the first source list; only four source numerals are spent.'),(21,30,'The non-Buddhist designation and cause/effect examples match their local source nouns and conjunctions; the tighter compound excludes relationship; the second relation is anaphoric.'),(31,40,'The repeated cause pairs and failed-concomitance predicates remain in their own clauses. The third failure verb owns the quoted predicate including hold, not the earlier not-a-fact denial.'),(41,44,'The quote retains its reason particle, wind, enumerative continuation and explicit negation; fact/such/copular syntax is not overcaptured.'),(45,54,'The source citation and twisting verb own the later main statement, followed by explicit your/disproved and the uncreated-space/direct-result/jealousy objection. The translator bracket is not a reservoir.')],281:[(1,3,'The additive speech introduction is split by actual source ownership. Na re is a reporting particle at d6, despite its nominal English realization claim.'),(4,11,'The shortened verse preserves thing/single/perceptions/differing and the whole negative reality predicate. The only null is the topic particle, not content from the omitted beings.'),(12,28,'The first two prose appearance constructions preserve both snang and tshul components, with three/different tied only to ways. Comparison, explicit you and because keep their local grammatical roles.'),(29,39,'The prose beings, simultaneous looking and wet/flowing glass scene have exact later occurrences. Agentive gyis has no independent English word; la and zhing own at and and.'),(40,46,'The final objects and numeral are distinct from the earlier claim. Tshad grub pa is a technical compound expressing confirmation by valid cognition; each is outside. The third manner construction has its own four lexical owners.')],282:[(1,4,'The opening discourse is a phrase. Person/limbs have exact nouns; gis is expressed through active subject syntax. The omitted first numeral/distinction is distributed through four limbs plus head.'),(5,8,'The first action, distinction, five and perform tokens refer to the opening scenario.'),(9,16,'The second person/one and action sequence belongs to the counterfactual conclusion. Agentive case has no separate exponent; ma owns only the confirmed negative affix.'),(17,24,'The later component/distinction/whole inflected five and final actions match the final reason. No suffix is split and no of-his-body material is overcaptured.')]}
+review=[]
+for t in tuples:
+ n=int(t['id'][1:]);matched=[text for a,z,text in groups[t['seq']] if a<=n<=z];assert len(matched)==1
+ review.append({'seq':t['seq'],'id':t['id'],'judgment':'SOUND','source_tuple':t,'independent_reason':matched[0]})
+assert len(review)==124;save('span-review.json',review)
+licenses={'pages_c05':{
+ 'c5p94/s280w29':"sogs: the first enumerative closure, Tibetan [291,295), licenses the complete local idiom 'and so on', English [423,432); and expresses that source closure.",
+ 'c5p94/s280w43':"sogs: the quoted enumerative continuation, Tibetan [459,463), licenses the complete local idiom 'and the rest', English [676,688); and expresses that source continuation."}}
+assert {x['key'] for x in load(O/'actual-head-hits.json')}==set(licenses['pages_c05']);save('span-head-allow-needed.json',licenses);save('bank-ready-errata.json',[])
+
+reasons={280:[
+ 'The fourth lnga counts poisons. Repeating five in the explanatory bad-thoughts apposition is defensible translation; deleting it is not a source correction.',
+ 'The complete C05 physical English and C15 counterpart contain jealousy under phrag dog. P7:29 is shorter and cannot correct that complete source.',
+ 'The three failure predicates correspond to three khrul occurrences. Chos ma yin is the distinct quoted denial. A glossary alternative cannot relocate an occurrence.',
+ 'The final bracket is an explanatory translator note, explicitly labeled in C15:425. Preserve its words outside alignment spans.',
+ 'Anger is attested in this GMR passage and fits zhe sdang. The provisional mined dislike gloss supplies no basis for emending the text.'
+ ],281:[
+ 'The current C05/C15 text and earlier full verse C05:248/C16:824 include differing perceptions. The P7:30 digital omission is not evidence for deleting the current reading.',
+ 'Bracketed participants clarify the truncated quotation; initial capitals mark verse lines. The full prior verse supplies context without restoring Tibetan here.',
+ 'Three objects is the interlocutor\'s stated consequence. The person/parts counterexample answers it; philosophical disagreement is not an English factual error.'
+ ],282:[
+ 'Four limbs plus one head are the five parts. C05:283 explicitly calls them five protuberances; the arithmetic discrepancy is illusory.',
+ 'Ma yin par thal is a negative consequence; would not be is defensible. Supplied rhetorical you does not require a new Tibetan pronoun.',
+ 'Well now is a defensible discourse rendering of the actual o na and is present in the HGM glossary. Other glossary renderings are alternatives, not corrections.'
+ ]}
+current={r['seq']:r for r in load(O/'original-source-rows.json')['rows']};ref=[]
+for seq in [280,281,282]:
+ candidates=load(B/'reconciled'/str(seq)/'errata-analysis.json')
+ for candidate,reason in zip(candidates,reasons[seq]):
+  text=current[seq]['english'];found=candidate['found'];hits=[list(m.span()) for m in re.finditer(re.escape(found),text)]
+  ref.append({'seq':seq,'id':candidate['id'],'found':found,'refuted':True,'reason':reason,'five_grounds':{
+   'a':{'field':'english','full_literal_found_ranges':hits,'all_found_ranges_match':hits==candidate['found_ranges']},
+   'b':'Complete pinned C05/C15 physical originals and the relevant C16 earlier quotation were inspected; P7 digital differences establish only their actual shorter extent. No independent publication or ingestion lineage is asserted.',
+   'c':'The original and current errata lists are empty; the full retained register and named E-044/E-071/E-076/E-107/E-111/E-121 classes were checked. No current selected-row candidate requires a new filing.',
+   'd':reason,
+   'e':{'actual_english_length':len(text),'literal_found_occurrences':len(hits),'source_query_evidence':'Frozen independent source-preparation query results retained and exact source pins rechecked; current selected rows freshly reopened. No unchanged broad query set was rerun just for bookkeeping.','actual_current_canonical_exit':0}},'retained_erratum':False})
+assert len(ref)==11 and all(r['five_grounds']['a']['all_found_ranges_match'] for r in ref);save('errata-refutations.json',ref)
+
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+git_cache={};checks=[]
+for r in manifest:
+ dest=O/r['copy'];assert dest.is_file() and dest.suffix.lower() in allowed;raw=dest.read_bytes();assert pin(raw)=={k:r[k] for k in ['sha256','bytes']}
+ if 'original_git_commit' in r:
+  key=(r['original_git_commit'],r['repository_relative_path'])
+  if key not in git_cache:
+   result=subprocess.run(['git','show',key[0]+':'+key[1]],cwd=W,capture_output=True);assert result.returncode==0 and not result.stderr;git_cache[key]=result.stdout
+  assert raw==git_cache[key]
+ else:assert raw==Path(r['original']).read_bytes()
+ checks.append({'original':r['original'],'copy':r['copy'],'verified':True,'immutable_git_object':r.get('original_git_commit')})
+assert all(p.suffix.lower() in allowed for p in O.rglob('*') if p.is_file())
+save('packaging-preflight.json',{'verified_original_records':len(checks),'distinct_copy_targets':len({r['copy'] for r in manifest}),'git_pinned_records':sum('original_git_commit' in r for r in manifest),'git_objects_compared':len(git_cache),'all_supported_extensions':True,'all_source_or_immutable_git_bytes_equal':True,'history_preserved':True})
+counts=load(O/'measured-segments.json')
+save('review.json',{'verdict':'PENDING_ROOT_MECHANICAL_PROOF','spec_verdict':'PASS','quality_verdict':'PASS','open_findings':[],'segments':counts,'total_spans':124,'total_nulls':4,'total_word_pairs':102,'independent_canonical_replays':3,'human_editorial_acceptance':False,'producer':'Codex independent semantic reviewer, non-author of either original or reconciled content','root_mechanical_proof':'pending actual delivery; not inferred from absence'})
+print(json.dumps({'status':'semantic_checks_complete_pending_root_proof','spans':124,'nulls':4,'word_pairs':102,'bank_ready_errata':0,'licenses':2,'manifest_records':len(manifest)}))

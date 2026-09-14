@@ -1,0 +1,35 @@
+--- verify-final-semantic-review-root.py
++++ verify-final-semantic-review-root-v2.py
+@@ -8,7 +8,7 @@
+ B = Path(__file__).resolve().parent
+ R = B / 'semantic-review'
+ W = B.parents[1] / 'campaign-worktree'
+-O = B / 'root-final-semantic-review-verification'
++O = B / 'root-final-semantic-review-verification-v2'
+ HEAD = '10968d16e701b698a0e1fbd845b353089d15ac39'
+ SEQS = [280, 281, 282]
+ assert not O.exists()
+@@ -135,7 +135,7 @@
+         else:
+             original = Path(r['original'])
+             raw = original.read_bytes()
+-            originals.setdefault(str(original.resolve()), []).append(r)
++        originals.setdefault(str(Path(r['original']).resolve()), []).append(r)
+         assert copied.read_bytes() == raw
+     assert len(git_objects) == 11
+     required_roots = [B / 'semantic-source-preparation', B / 'root-reconciliation-verification', B / 'root-reconciliation-runtime-release', B / 'root-reconciliation-runtime-release-caller', B / 'root-reconciliation-runtime-release-v2', B / 'root-reconciliation-runtime-release-v2-caller', B / 'root-reconciliation-runtime-caller']
+@@ -143,12 +143,14 @@
+         for path in root.rglob('*'):
+             if path.is_file():
+                 assert str(path.resolve()) in originals, str(path)
++                assert any((R / r['copy']).read_bytes() == path.read_bytes() for r in originals[str(path.resolve())]), str(path)
+     for seq in SEQS:
+         for angle in ['tibetan', 'english', 'reconciled']:
+             root = B / angle / str(seq)
+             for path in root.rglob('*'):
+                 if path.is_file():
+                     assert str(path.resolve()) in originals, str(path)
++                assert any((R / r['copy']).read_bytes() == path.read_bytes() for r in originals[str(path.resolve())]), str(path)
+     physical = read(R / 'physical-reopen-proof.json')
+     assert len(physical) == 16
+     for r in physical:

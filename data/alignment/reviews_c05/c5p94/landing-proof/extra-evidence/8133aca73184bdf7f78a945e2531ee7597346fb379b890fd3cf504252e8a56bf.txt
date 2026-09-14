@@ -1,0 +1,36 @@
+"""Finish the source-only plan and freeze; never execute planned commands."""
+import hashlib,json
+from pathlib import Path
+O=Path(__file__).resolve().parent;B=O.parent;ROOT=B.parents[1];W=ROOT/'campaign-worktree';I=ROOT/'campaign-artifacts/integration'
+def pin(p):
+ raw=p.read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(n,x):(O/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+runtime=I/'through282-finalization-runtime';raw=I/'through282-whitespace-runs/raw-diagnostic';prepared=I/'through282-whitespace-actual-prepare';audit=I/'through282-whitespace-actual-audit';current=I/'through282-whitespace-actual-runtime'
+common=['--worktree',str(W),'--review',str(B/'semantic-review'),'--root-manifest',str(B/'landing/root-proof-copy-manifest-before-whitespace.json'),'--root-manifest-bank-path','data/alignment/reviews_c05/c5p94/landing-proof/root-proof-copy-manifest-before-whitespace.json','--physical-descriptors',str(current/'physical-source-descriptors.json'),'--raw-log',str(raw/'stdout.bin'),'--raw-stderr',str(raw/'stderr.bin'),'--raw-exit',str(raw/'exit.txt'),'--raw-command',str(raw/'command.json'),'--build-proof',str(B/'landing/canonical-builds-once.json')]
+plan=[
+ dict(order=1,operation='Root binds ordinary bank, three-ledger and raw-state contracts',argv=None,required_actual=['ordinary inventory and external-source pins','three approved ledger full preimages/postimages and proof','actual pre-banking/pre-staging raw untracked caller','exact current13 payload and source proof'],executed=False),
+ dict(order=2,operation='Root banks ordinary evidence and stages exact reviewed paths',argv=None,required_actual=['approved bank helper and fresh external write-run','explicit complete path list; no broad add/path omission','all ordinary-bank/ledger/payload identities'],executed=False),
+ dict(order=3,operation='Capture first actual staged whitespace diagnostic with real recorder',argv=['git','diff','--cached','--check'],cwd=str(W),fresh_output=str(raw),expected_exit=None,required_actual=['exact staged state','full stdout/stderr/exit/command/environment capture'],executed=False),
+ dict(order=4,operation='Prepare and independently review only actual warning-specific classifier/descriptor adaptation',argv=None,required_actual=['full diagnostic and source ownership','complete current physical sources and provenance maps','reviewed classifier code and input freezes','resolve additional-classifier dependency'],executed=False),
+ dict(order=5,operation='Root releases exact reviewed current classifier/runtime inputs',argv=['python3','-B',str(B/'release-whitespace-actual-root.py')],script_origin=str(O/'release-whitespace-actual-root.py'),required_actual=['replace every pending field from reviewed current evidence','fresh runtime/output directories','reviewed four-source and ledger contracts'],executed=False),
+ dict(order=6,operation='Actual classifier prepare',argv=['python3','-B',str(current/'whitespace282.py'),'prepare',*common,'--output',str(prepared)],required_actual=['released current code/maps and exact raw diagnostic'],executed=False),
+ dict(order=7,operation='Actual classifier audit',argv=['python3','-B',str(current/'whitespace282.py'),'audit',*common,'--prepared',str(prepared),'--output',str(audit)],required_actual=['complete actual prepare output','unchanged full index/raw diagnostic'],executed=False),
+ dict(order=8,operation='Root accepts actual prepare/audit evidence',argv=['python3','-B',str(B/'accept-whitespace-actual-root-v2.py')],script_origin=str(O/'accept-whitespace-actual-root-v2.py'),required_actual=['actual callerstreams/exit codes','matching prepared pins','actual diagnostic count/file population/exit'],executed=False),
+ dict(order=9,operation='Root banks final whitespace proof and stages only approved new bank files',argv=None,required_actual=['actual final write events and exact bank-manifest transition','fresh boundary after bank/stage change'],executed=False),
+ dict(order=10,operation='Read-only final staging verification after reviewed ledger contract adaptation',argv=['python3','-B',str(runtime/'verify_staged_through282.py'),'--worktree',str(W),'--batch',str(B),'--output',str(I/'through282-final-stage-verification'),'--untracked-before',str(B/'landing/untracked-before-banking.stdout'),'--whitespace-proof',str(audit/'source-whitespace-proof.json'),'--whitespace-log',str(raw/'stdout.bin'),'--payload-manifest',str(B/'landing/staged-payload-manifest.json'),'--payload-source-proof',str(B/'landing/staged-payload-source-proof.json'),'--banking-ordinary-run',None,'--banking-final-run',None],required_actual=['two measured external bank-run arguments','three-ledger required-path proof integrated explicitly','exact current staged count/path set','all pending field values and independent code review'],executed=False)]
+save('command-plan.json',dict(status='PLAN_ONLY_NO_RUNTIME_RELEASE',working_baseline='10968d16e701b698a0e1fbd845b353089d15ac39',commands=plan,contains_unresolved_arguments=True,existing_canonical_builds_and_tests_reexecuted=False))
+manifest=json.loads((O/'original-to-copy-manifest.json').read_bytes())
+for r in manifest:assert pin(Path(r['original']))=={k:r[k] for k in ['bytes','sha256']}==pin(O/r['copy'])
+call=json.loads((O/'caller-prepare01/execution.json').read_bytes());assert call['exit']==0
+for key in ['stdin','stdout','stderr']:assert pin(O/f'caller-prepare01/{key}.bin')==call[key]
+assert not (O/'caller-prepare01/stderr.bin').read_bytes()
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file()}
+assert 'freeze.json' not in files
+save('freeze.json',dict(status='FROZEN_SOURCE_PREPARATION_PENDING_MEASURED_BINDINGS',file_count=len(files),files=files))
+for n,p in files.items():assert pin(O/n)==p
+result=dict(status='SOURCE_READY_FOR_REVIEW_WITH_PENDING_BINDINGS',files=len(files),freeze=pin(O/'freeze.json'),candidates={n:pin(O/n) for n in ['whitespace282.py','verify_staged_through282.py','release-whitespace-actual-root.py','accept-whitespace-actual-root-v2.py']})
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555)
+print(json.dumps(result,indent=2))

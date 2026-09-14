@@ -1,0 +1,161 @@
+{
+  "status": "SOURCE_ONLY_CONTRACT_NOT_AN_EXECUTABLE_SCOPE_OR_RUNTIME_RELEASE",
+  "candidate_schema": "through282-final-intake-v1",
+  "baseline": "10968d16e701b698a0e1fbd845b353089d15ac39",
+  "candidate_output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory",
+  "descriptor_schema": {
+    "exact_keys": [
+      "original",
+      "resolved",
+      "symlinks",
+      "bytes",
+      "sha256"
+    ],
+    "symlinks": "every symlink component in parent-to-leaf order, each exact path and os.readlink target; stable full bytes and before/after stat identity"
+  },
+  "controls": {
+    "ordinary_manifest": {
+      "current_source": {
+        "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/root-proof-copy-manifest-before-whitespace.json",
+        "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/root-proof-copy-manifest-before-whitespace.json",
+        "symlinks": [],
+        "bytes": 3435912,
+        "sha256": "e8accebefa7e3e38edcd14107ecb64fcb5660ff907a35bb717f5c3549cfe13a7"
+      },
+      "gate": "phase ordinary; semantic_review_unchanged true; exact DEST before-whitespace manifest; every full ordinary source/copy and external original rechecked twice"
+    },
+    "ordinary_coverage": {
+      "current_source": {
+        "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-ordinary-bank-inventory/coverage-and-exclusion-map.json",
+        "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-ordinary-bank-inventory/coverage-and-exclusion-map.json",
+        "symlinks": [],
+        "bytes": 4571878,
+        "sha256": "c949c1b497bee4c66c5c4bcbec69e48f609a1ea090e35f3dff64cb277b122a5e"
+      },
+      "gate": "complete LIST; each unique logical path, full byte pin, resolved identity, link target and all named copies rechecked twice"
+    },
+    "ordinary_extra_inputs": {
+      "current_source": {
+        "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-ordinary-bank-inventory/extra-inputs.json",
+        "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-ordinary-bank-inventory/extra-inputs.json",
+        "symlinks": [],
+        "bytes": 3510393,
+        "sha256": "6ae9233f0847054f0f9a8f9cd7578ccca8d2c55089d75edbad2026e691bb0f9e"
+      },
+      "gate": "LIST at exact through282-ordinary-bank-inventory/extra-inputs.json; original full bytes stay unchanged"
+    },
+    "audit_proof": {
+      "current_source": null,
+      "gate": "status PASS actual staged diagnostic reproduced and predicates verified; mode audit; baseline current HEAD; all_warnings_accounted_for true; git_diff_check_exit 2; semantic_approval false"
+    },
+    "root_acceptance": {
+      "current_source": null,
+      "gate": "status PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED; literal_warnings equals actual audit.warning_count; normalization false"
+    },
+    "raw_diagnostic": {
+      "current_source": null,
+      "gate": "full exact bytes/hash equal audit raw_log_bytes/raw_log_sha256; exact original path equals raw_log_kept_external; retain full original externally"
+    },
+    "raw_diagnostic_exit": {
+      "current_source": null,
+      "gate": "actual complete exit stream parses to audit.git_diff_check_exit, which remains 2"
+    },
+    "runtime_freeze": {
+      "current_source": null,
+      "gate": "full actual current runtime freeze; verified descriptor before and after as in prior scope; composer does not interpret its internal schema"
+    },
+    "banker": {
+      "current_source": {
+        "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/bank_root_proofs_through282.py",
+        "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/bank_root_proofs_through282.py",
+        "symlinks": [],
+        "bytes": 18169,
+        "sha256": "e39621efcf4e650b9c2da4f145197f082a230236c47532e54f0398fc57b05375"
+      },
+      "gate": "full exact source; parse AST HISTORY literal; reproduce all unavoidable automatic source/target routes; do not import or execute source"
+    },
+    "stage_verifier": {
+      "current_source": null,
+      "gate": "final reviewed and actually bound current source; verified full descriptor before and after as in prior scope; composer does not execute it or interpret its runtime bindings"
+    }
+  },
+  "semantic_control_reads": [
+    "ordinary_manifest",
+    "ordinary_coverage",
+    "ordinary_extra_inputs",
+    "audit_proof",
+    "root_acceptance",
+    "raw_diagnostic",
+    "raw_diagnostic_exit",
+    "banker"
+  ],
+  "additional_prior_controls_retained_and_verified": [
+    "runtime_freeze",
+    "stage_verifier"
+  ],
+  "required_scope_keys": [
+    "schema",
+    "baseline",
+    "controls",
+    "roots",
+    "individual_files",
+    "late_batch_files",
+    "automatic_inputs",
+    "landing_file_paths",
+    "deferred_before_final_bank",
+    "later_external_after_final_bank"
+  ],
+  "runtime_scope": null,
+  "runtime_scope_sha256": null,
+  "roots": null,
+  "individual_files": null,
+  "late_batch_files": null,
+  "automatic_inputs": null,
+  "landing_file_paths": null,
+  "source_census_requirements": [
+    "Freeze and enumerate every actual full current root selected for the scope; files in each root must be sorted exactly by absolute logical path, with every file descriptor. Do not infer current paths by renaming old scope paths.",
+    "Include the complete actual through282-banking-runs/ordinary root and its completed outer caller; complete actual through282-ordinary-bank-inventory and its completed caller wherever each exists.",
+    "Include all current through282 I evidence created after the ordinary initial census: initial stage and explicit pathspec preparations, reviews, releases, callers, stage/checkpoint outputs, complete diagnostic streams and command records, current whitespace preparation/review/runtime/prepare/audit/root release/root acceptance with their complete callers, final stage preparation/review/bindings/releases and full source helpers.",
+    "The observed I names are a discovery aid only. At the actual capture boundary perform a fresh complete through282 I census and explicitly assign every actual path to covered roots/individual files, retained prior coverage, deferred-before-final-bank, or later-external-after-final-bank. Preserve failed attempts and histories. Do not silently omit an unrecognized new path.",
+    "Reopen every ordinary coverage path and full original/copy; previously covered B nonlanding files remain byte-identical. Enumerate all current B minus landing. late_batch_files must be exactly sorted(current B nonlanding paths minus ordinary coverage paths): new paths only, no disappearance or in-place replacement of old B originals.",
+    "Capture the complete landing file-path enumeration and the banker automatic inputs in its exact order. Automatic routes include every landing file except the two root manifest files, complete HISTORY sources and both helper sources. Existing targets must be full-byte identical; a new automatic copied source must satisfy the unchanged clean-JSON predicate.",
+    "All logical aliases remain recorded. A duplicate resolved original may share a retention record only with exact full-byte identity. New copies are unaliased clean JSON smaller than 2000000 bytes; everything else retains full original bytes externally. No shortening, normalization, omitted source bodies or fabricated aliases.",
+    "Whole ordinary original/copy and alias checks, whole current B and landing checks, all controls and complete source-root enumerations run again before output. Current final populations remain actual measurements, never prior counts or current count constants."
+  ],
+  "observed_current_i_names_only_not_a_frozen_census": [
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-banking-callers",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-banking-runs",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-checkpoint-staged-root.py",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-explicit-stage-code-review",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-explicit-stage-root-release",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-explicit-stage-root-release-caller",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-explicit-stage-source-preparation",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-explicit-stage-source-preparation-caller",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-preparation",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-stage-code-review",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-stage-preparation",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction-root-acceptance",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-initial-stage-checkpoint",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-initial-stage-checkpoint-caller",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-ordinary-bank-inventory",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-prepare-stage-source-root.py",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-release-stage-pathspec-root.py",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-root-reconciliation-verification-attempt01",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-stage-runs",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-whitespace-runs",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-whitespace-source-preparation"
+  ],
+  "boundary_contract": {
+    "deferred_before_final_bank": "At actual scope capture list exact then-existing paths requiring later root supplement: this preparation and its completed caller/freeze, its independent review/release, actual composer output and completed external caller, and any later root supplement inputs outside that initial snapshot. Existing paths included initially must not also be falsely claimed deferred. The current executable scope remains absent.",
+    "later_external_after_final_bank": "Truthfully identify complete supplement invocation output and outer caller after its input snapshot, final banker internal outputs and full outer caller, final staged verifier/append/commit/root checkpoint outputs. They are not claimed captured before they exist. Anything newly banked after the final phase needs a separately reviewed supplemental boundary and fresh applicable stage verification.",
+    "self_banking": false,
+    "supplement_required_after_initial_composition": true,
+    "final_diagnostic_equality_still_required": true,
+    "data_then_docs": "Final bank, stage PASS, DATA commit with 13 payload paths plus review/bank; then append and stage exactly the three ledgers, DOCS commit, and closure bind. No ledger paths in the DATA required set."
+  },
+  "current_warning_count": null,
+  "current_warning_file_count": null,
+  "current_final_bank_count": null,
+  "candidate_execution_authorized_here": false
+}

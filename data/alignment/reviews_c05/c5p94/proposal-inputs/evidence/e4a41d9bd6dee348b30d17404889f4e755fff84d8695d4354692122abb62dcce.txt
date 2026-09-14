@@ -1,0 +1,110 @@
+import base64, gzip, hashlib, json, os, pathlib, sqlite3
+
+ROOT = pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+OUT = pathlib.Path(__file__).resolve().parent
+WT = ROOT / 'campaign-worktree'
+DATA = pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP')
+records = []
+
+def sha(b): return hashlib.sha256(b).hexdigest()
+def save(name, value):
+    p = OUT / name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open('x', encoding='utf-8') as f:
+        json.dump(value, f, ensure_ascii=False, indent=2)
+        f.write('\n')
+
+def retain(p, name):
+    p = pathlib.Path(p)
+    before = p.resolve(strict=True)
+    st = before.stat()
+    b = p.read_bytes()
+    target = OUT / 'inputs' / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with target.open('xb') as f: f.write(b)
+    assert target.read_bytes() == b == p.read_bytes()
+    assert p.resolve(strict=True) == before and before.stat() == st
+    records.append(dict(original=str(p), resolved=str(before), copy=str(target.relative_to(OUT)), bytes=len(b), sha256=sha(b)))
+    return b
+
+def pin(p):
+    p = pathlib.Path(p)
+    resolved = p.resolve(strict=True)
+    st = resolved.stat()
+    h = hashlib.sha256()
+    with p.open('rb') as f:
+        while b := f.read(1024*1024): h.update(b)
+    assert p.resolve(strict=True) == resolved and resolved.stat() == st
+    return dict(path=str(p), resolved=str(resolved), bytes=st.st_size, sha256=h.hexdigest(), device=st.st_dev, inode=st.st_ino, mtime_ns=st.st_mtime_ns, symlink=os.readlink(p) if p.is_symlink() else None)
+
+def main():
+    batch = ROOT / 'campaign-artifacts/C05-277-279'
+    for p, name in [
+        (ROOT/'campaign-artifacts/proposal-protocol.md','proposal-protocol.md'),
+        (batch/'english-brief.md','english-brief.md'),
+        (batch/'baseline.json','baseline.json'),
+        (WT/'AGENTS.md','AGENTS.md'),
+        (WT/'docs/ALIGNMENT_LAYER_SPEC.md','ALIGNMENT_LAYER_SPEC.md'),
+        (WT/'docs/alignment_briefs/PROPOSE_BRIEF.md','PROPOSE_BRIEF.md'),
+        (WT/'DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','ROADMAP.md'),
+        (DATA/'Handoff/HANDOFF.md','HANDOFF.md'),
+        (DATA/'Handoff/README.md','README.md')]: retain(p,name)
+    source = json.loads(retain(batch/'source.json','source.json'))
+    context = json.loads(retain(batch/'context.json','context.json'))
+    # Retain exactly the course-shape section; do not use ledger judgments.
+    p = WT/'data/alignment/C05_CAMPAIGN.md'
+    b = p.read_bytes(); start=b.index(b'## Course shape'); end=b.index(b'\n## Gates',start)
+    (OUT/'inputs/course-shape.txt').write_bytes(b[start:end])
+    save('course-shape-provenance.json',dict(original=str(p),original_bytes=len(b),original_sha256=sha(b),start=start,end_exclusive=end,excerpt_sha256=sha(b[start:end]),consumption='Only course shape used. Initial terminal read covered lines 1–105, including historical ledger text, without using its judgments.'))
+    db = WT/'build/hgm_spine_v27_2.db'
+    before = pin(db)
+    uri = db.resolve().as_uri()+'?mode=ro'
+    c = sqlite3.connect(uri,uri=True)
+    c.execute('PRAGMA query_only=ON')
+    assert c.execute('PRAGMA query_only').fetchone()==(1,)
+    c.execute('BEGIN')
+    schema = c.execute("SELECT type,name,tbl_name,sql FROM sqlite_master ORDER BY type,name").fetchall()
+    cols = c.execute('PRAGMA table_info(corpus_segments)').fetchall()
+    assert [r[1] for r in cols]==['id','course','seq','acip','wylie','english','raw']
+    sql = 'SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq'
+    names = [r[1] for r in cols]
+    rows = [dict(zip(names,r)) for r in c.execute(sql,('C05',271,285))]
+    metadata = c.execute('SELECT * FROM meta ORDER BY key').fetchall()
+    c.rollback(); c.close()
+    after = pin(db); assert before==after
+    save('sqlite-query.json',dict(uri=uri,query_only=1,transaction='BEGIN; read SELECTs; ROLLBACK',sql=sql,parameters=['C05',271,285],schema=schema,columns=cols,metadata=metadata,db_before=before,db_after=after,complete_database_retention='Original database retained externally at resolved path; complete queried rows retained here. No claim of immutable historical baseline.'))
+    save('sqlite-full-rows.json',rows)
+    save('sqlite-text-bytes.json',[dict(id=r['id'],seq=r['seq'],fields={k:dict(encoding='utf-8',base64=base64.b64encode(v.encode('utf-8')).decode(),bytes=len(v.encode('utf-8')),sha256=sha(v.encode('utf-8'))) for k,v in r.items() if isinstance(v,str)}) for r in rows])
+    fields=['id','course','seq','acip','wylie','english']
+    actual=[{k:r[k] for k in fields} for r in rows]
+    assert actual==context and len(rows)==15
+    selected=[r for r in actual if 277<=r['seq']<=279]
+    assert selected==source and len(selected)==3
+    corpus_bytes=retain(WT/'data/full_parallel_corpus_v32.json.gz','full_parallel_corpus_v32.json.gz')
+    corpus=json.loads(gzip.decompress(corpus_bytes))
+    assert isinstance(corpus,list)
+    course=[r for r in corpus if r.get('course')=='C05']
+    rawchecks=[]
+    for r in rows:
+        original=course[r['seq']-1]
+        assert json.loads(r['raw'])==original
+        assert all(original[k]==r[k] for k in ('course','acip','wylie','english'))
+        rawchecks.append(dict(seq=r['seq'],course_ordinal=r['seq'],raw_json_equal=True,fields_equal=['course','acip','wylie','english']))
+    save('corpus-source-proof.json',dict(total_records=len(corpus),course_records=len(course),checks=rawchecks,interpretation='Exact stored fields and complete raw-object equality, not independent proof of publication or ingestion lineage.'))
+    physical=DATA/'To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt'
+    pb=retain(physical,'C05ReadingASCII.txt')
+    anchors=[]
+    for r in source:
+        for field in ('acip','english'):
+            needle=r[field].encode('utf-8')[:32]
+            offsets=[];cursor=0
+            while (at:=pb.find(needle,cursor))>=0: offsets.append(at);cursor=at+1
+            anchors.append(dict(seq=r['seq'],field=field,exact_prefix_bytes=32,prefix_base64=base64.b64encode(needle).decode(),byte_offsets=offsets,full_field_contiguous_offsets=[i for i in offsets if pb.startswith(r[field].encode('utf-8'),i)]))
+    save('physical-availability.json',dict(source=str(physical),bytes=len(pb),sha256=sha(pb),anchors=anchors,limits='Availability and literal byte anchors only. No line-wrap normalization, reconstructed fields, source independence or ingestion-lineage assertion. Complete physical original retained for later authorized reading.'))
+    retain(WT/'data/hgm_dictionary_v27_2.json.gz','hgm_dictionary_v27_2.json.gz')
+    save('master-availability.json',dict(asset=pin(WT/'data/hgm_dictionary_v27_2.json.gz'),scope='Availability and full-byte hash only; no dictionary entry or lexical analysis.'))
+    save('input-manifest.json',records)
+    save('verification.json',dict(status='PASS',role='Codex reused English-first producer; source preparation only',selected_rows=3,selected_snapshot_fields_per_row=6,selected_field_comparisons=18,context_rows=15,context_field_comparisons=90,complete_sqlite_columns=7,full_corpus_raw_objects_equal=15,proposals=0,generator_runs=0,semantic_verdicts=0,baseline_created=False,db_bytes_unchanged=True,source_snapshot_sha256=sha((OUT/'inputs/source.json').read_bytes()),context_snapshot_sha256=sha((OUT/'inputs/context.json').read_bytes())))
+    print(json.dumps(json.loads((OUT/'verification.json').read_text()),indent=2))
+
+if __name__=='__main__': main()

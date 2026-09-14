@@ -1,0 +1,43 @@
+{
+  "verdict": "PASS",
+  "root_runtime_reexecuted": false,
+  "SQL_reexecuted": false,
+  "canonical_replays_repeated": false,
+  "runtime_map_records": 102,
+  "runtime_report": {
+    "bytes": 1164,
+    "sha256": "8a3364b9e2048ac77cbda17b33c449ab28a8eaa57ed44b6009ba3d87443a70a4"
+  },
+  "runtime_execution": {
+    "bytes": 4012,
+    "sha256": "c90c2d1305a7a7469f0eb4739e290449a3cba420fdb75fca41e3730177aed06b"
+  },
+  "runtime_caller": {
+    "bytes": 1475,
+    "sha256": "da6b404433269c957c97a8fd5c1069d8b4bd6d4a7f6f795288f3e6cbdf9d31eb"
+  },
+  "runtime_source": {
+    "bytes": 16371,
+    "sha256": "64b139112abeabd25d30daaf3c1dc77c28b7ce17bcc272a84d469923cabfbd96"
+  },
+  "runtime_contract": {
+    "bytes": 9729,
+    "sha256": "432017fe3d3a6fbe30df42028d4cdc4342fd491b303d25a39c3027d8ed794b5d"
+  },
+  "runtime_config": {
+    "bytes": 185674,
+    "sha256": "1a2c787e0b02b569fa0a836f465543dfae0b6737c8fddf66b0e45d747b0150bd"
+  },
+  "exact_seven_key_tuples_equal": true,
+  "exact_source_rows_equal": true,
+  "all_query_descriptors_equal": true,
+  "root_release_failure_preserved": true,
+  "source_preparation_unchanged": true,
+  "preservation": {
+    "original_records": 1450,
+    "distinct_copies": 752,
+    "new_copies": 310
+  },
+  "additional_git_object": "tools/build_spine.py",
+  "notes": "Read full runtime, narrow exact allowance diff and actual result. Root mechanical pass supplements the independent three canonical runs and semantic source judgment; it does not supply that judgment."
+}

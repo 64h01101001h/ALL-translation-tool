@@ -1,0 +1,38 @@
+from pathlib import Path
+import ast, difflib, hashlib, json, os
+O=Path(__file__).resolve().parent;B=O.parent
+P=B/'postlanding-verification-preparation';V=B/'postlanding-verification-code-review'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,v):
+ with (O/n).open('x') as f:json.dump(v,f,indent=2);f.write('\n')
+maps=[];snapshots=[]
+for root,label in [(P,'preparation'),(V,'review')]:
+ freeze=json.loads((root/'freeze.json').read_bytes());files=freeze['files'];assert isinstance(files,dict)
+ expected=set(files)|{'freeze.json'};actual={str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()};assert actual==expected
+ captured={}
+ for rel in sorted(expected):
+  src=root/rel;assert not src.is_symlink();raw=src.read_bytes()
+  if rel!='freeze.json':assert pin(raw)=={k:files[rel][k] for k in ('bytes','sha256')}
+  dst=O/'history'/label/rel;dst.parent.mkdir(parents=True,exist_ok=True)
+  with dst.open('xb') as f:f.write(raw)
+  assert raw==dst.read_bytes()==src.read_bytes();captured[rel]=pin(raw)
+  maps.append(dict(original=str(src),copy=str(dst.relative_to(O)),**pin(raw)))
+ snapshots.append(dict(root=str(root),files=captured))
+old=(P/'known-parameter-candidates/bank_root_proofs_through282.py.txt').read_bytes()
+before=b"data/alignment/reviews_c05/c5p93/landing-proof";after=b"data/alignment/reviews_c05/c5p94/landing-proof"
+assert old.count(before)==1 and old.count(after)==0
+new=old.replace(before,after);assert new.replace(after,before)==old
+ast.parse(new.decode());tree=ast.parse(new.decode());oldtree=ast.parse(old.decode())
+nodes=[n for n in ast.walk(tree) if isinstance(n,ast.Constant) and n.value==after.decode()];assert len(nodes)==1
+nodes[0].value=before.decode();assert ast.dump(tree,include_attributes=False)==ast.dump(oldtree,include_attributes=False)
+name='bank_root_proofs_through282.py.txt'
+(O/name).write_bytes(new)
+for name2,a,b in [('forward.diff',old,new),('inverse.diff',new,old)]:
+ (O/name2).write_text(''.join(difflib.unified_diff(a.decode().splitlines(True),b.decode().splitlines(True),fromfile='old-bank.py.txt' if name2=='forward.diff' else 'corrected-bank.py.txt',tofile='corrected-bank.py.txt' if name2=='forward.diff' else 'old-bank.py.txt')))
+for snap in snapshots:
+ root=Path(snap['root']);assert {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()}==set(snap['files'])
+ for n,v in snap['files'].items():assert pin((root/n).read_bytes())==v
+save('original-to-copy-manifest.json',maps)
+save('proof.json',dict(status='PASS_F1_SOURCE_ONLY_CORRECTION',finding='F1',old=pin(old),corrected=pin(new),old_path=str(P/'known-parameter-candidates'/name),new_path=str(O/name),replacement=dict(old=before.decode(),new=after.decode(),count=1),whole_preparation_and_review_preserved=True,history_files=len(maps),exact_inverse=True,all_other_ast_identical=True,syntax='ast.parse only; no candidate import or execution',candidate_executions=0,original_trees_unchanged=True,pending_runtime_contract=str(P/'pending-input-contract.json')))
+save('candidate-paths.json',dict(prepare=str(P/'known-parameter-candidates/prepare.py.txt'),run_once=str(P/'known-parameter-candidates/run-once.py.txt'),readonly_wrapper=str(P/'known-parameter-candidates/run-isolated-readonly.py.txt'),banker=str(O/name),pending_contract=str(P/'pending-input-contract.json'),command_contract=str(P/'command-contract.json'),status='PATH_ONLY_CORRECTION_REQUIRES_ROOT_REVIEW; ALL_PRIOR_RUNTIME_PREREQUISITES_RETAINED'))
+print(json.dumps(dict(status='PASS_F1_SOURCE_ONLY',history_files=len(maps),corrected=pin(new))))

@@ -1,0 +1,30 @@
+from pathlib import Path
+import ast, difflib, hashlib, json
+P=Path(__file__).resolve().parent
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(name,value):
+ with (P/name).open('x') as f:json.dump(value,f,indent=2);f.write('\n')
+rows=[]
+for name in ('original-to-copy-manifest.json','supplemental-original-to-copy-manifest.json','late-original-to-copy-manifest.json'):
+ for r in json.loads((P/name).read_bytes()):
+  old=Path(r['original']).read_bytes();new=(P/r['copy']).read_bytes()
+  assert old==new and pin(old)=={k:r[k] for k in ('bytes','sha256')}
+  assert str(Path(r['original']).resolve())==r['resolved']
+  rows.append(r)
+ad=json.loads((P/'adaptation-proof.json').read_bytes())
+for r in ad['candidates']:
+ name=r['source'];mapping=next(x for x in rows if x['original'].endswith('/'+name) and ('concrete-preparation' in x['original'] or 'page-banking-preparation' in x['original']))
+ old=(P/mapping['copy']).read_text();new=(P/r['candidate']).read_text();inv=new
+ for c in reversed(r['replacements']):
+  assert inv.count(c['new'])==c['count'];inv=inv.replace(c['new'],c['old'])
+ assert inv==old and pin(new.encode())==r['proposed']
+ target=Path(r['candidate']).name
+ diff=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile=name,tofile=target))
+ assert (P/(target+'.diff')).read_text()==diff
+ ast.parse(new)
+assert json.loads((P/'pending-input-contract.json').read_bytes())['output_pins'] is None
+assert json.loads((P/'command-contract.json').read_bytes())['status']=='PREPARATION_ONLY_NO_EXECUTION_RELEASE'
+for n in ('source-preparation-run01','contract-run01'):
+ assert (P/n/'exit').read_text().strip()=='0' and not (P/n/'stderr').read_bytes()
+save('verification-proof.json',dict(status='PASS_SOURCE_ONLY_COPY_SYNTAX_AND_INVERSE',full_source_copy_pairs=len(rows),known_parameter_candidates=len(ad['candidates']),unchanged_wrappers=2,pending_runtime_fields=15,builders=0,tests=0,sql=0,git=0,banking=0,reproduction=0,execution_approval=False))
+print(json.dumps(dict(status='PASS_SOURCE_ONLY',copy_pairs=len(rows),candidate_executions=0)))

@@ -1,0 +1,13 @@
+--- collect-evidence.py.txt
++++ collect-evidence-v2.py.txt
+@@ -24,8 +24,8 @@
+ orig += [A/'copy_evidence_once_v2.py',A/'copy_evidence_once_v2-verification.json']
+ baseline=load(B/'baseline.json');save('baseline-before.json',baseline)
+ aliases=[]
+-for rel in baseline['hashes']:
+- p=W/rel;q=p.resolve();v=pin(p);expected=baseline['hashes'][rel];assert v['sha256']==(expected if isinstance(expected,str) else expected['sha256'])
++for rel in baseline['sha256']:
++ p=W/rel;q=p.resolve();v=pin(p);expected=baseline['sha256'][rel];assert v['sha256']==(expected if isinstance(expected,str) else expected['sha256'])
+  aliases.append({'alias':str(p),'resolved':str(q),'is_symlink':p.is_symlink(),'link_text':os.readlink(p) if p.is_symlink() else None,**v})
+  if rel.endswith('.gz'):orig.append(q)
+ save('source-aliases.json',aliases)

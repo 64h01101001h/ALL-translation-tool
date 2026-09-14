@@ -1,0 +1,75 @@
+import os,sys,json,pathlib,hashlib,importlib.util,subprocess,sqlite3,gzip,datetime,traceback
+os.environ['PYTHONDONTWRITEBYTECODE']='1'
+R=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');A=R/'campaign-artifacts';B=A/'C05-280-282';W=R/'campaign-worktree';D=B/'reconciled/280'
+def pin(p):
+ b=pathlib.Path(p).read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):
+ p=D/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def load(p):return json.loads(pathlib.Path(p).read_bytes())
+s=importlib.util.spec_from_file_location('copyv2',A/'copy_evidence_once_v2.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+orig=[]
+for angle in ['tibetan','english']:
+ for seq in [280,281,282]:
+  p=B/angle/str(seq);f=load(p/'freeze.json');files=f['files'];rows=files.items() if isinstance(files,dict) else [(r.get('path',r.get('file')),r) for r in files]
+  for rel,v in rows:
+   pp=p/rel;assert pin(pp)=={k:v[k] for k in ['bytes','sha256']},pp
+  orig+=list(p.rglob('*'))
+# Complete batch source/dispatch/verification transport, excluding active reconciliation and unrelated future tooling.
+for p in B.iterdir():
+ if p.is_file():orig.append(p)
+for name in ['proposal-verification','original-verification-caller','root-resumed-source-check','english-source-preparation']:
+ if (B/name).exists():orig+=list((B/name).rglob('*'))
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','tools/test_no_supplied_span_head.py','data/alignment/span_head_allow.json','data/alignment/errata_register.json','docs/superpowers/plans/2026-09-12-aci-alignment-campaign.md']:
+ if (W/rel).is_file():orig.append(W/rel)
+orig += [A/'copy_evidence_once_v2.py',A/'copy_evidence_once_v2-verification.json']
+baseline=load(B/'baseline.json');save('baseline-before.json',baseline)
+aliases=[]
+for rel in baseline['sha256']:
+ p=W/rel;q=p.resolve();v=pin(p);expected=baseline['sha256'][rel];assert v['sha256']==(expected if isinstance(expected,str) else expected['sha256'])
+ aliases.append({'alias':str(p),'resolved':str(q),'is_symlink':p.is_symlink(),'link_text':os.readlink(p) if p.is_symlink() else None,**v})
+ if rel.endswith('.gz'):orig.append(q)
+save('source-aliases.json',aliases)
+physical=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII')
+for name in ['C05ReadingASCII.txt','C15ReadingASCII.txt','C16ReadingASCII.txt']:
+ orig.append(physical/name)
+orig=[p.resolve() for p in orig if p.is_file()];m.preserve(D,D/'original-copy-manifest.json',sorted(set(orig),key=str))
+# Immutable Git objects for mutable governing source aliases; each complete stdout retained.
+g=[]
+for p in orig:
+ try:rel=str(p.relative_to(W))
+ except ValueError:continue
+ run=subprocess.run(['git','-C',str(W),'show',baseline['commit']+':'+rel],capture_output=True,env=os.environ.copy())
+ name='git-source/'+hashlib.sha256(rel.encode()).hexdigest()+'.bin';(D/name).parent.mkdir(exist_ok=True);(D/name).write_bytes(run.stdout);(D/(name+'.stderr')).write_bytes(run.stderr)
+ assert run.returncode==0 and run.stdout==p.read_bytes(),rel
+ g.append({'original':str(p),'commit':baseline['commit'],'git_path':rel,'copy':str(D/name),**pin(D/name),'exit':run.returncode})
+save('fixed-git-sources.json',g)
+# Full independently executed original query sets, preserving source descriptors and actual key spelling.
+query_sources=[B/'tibetan/280/evidence'/n for n in ['queries.json','supplementary-queries.json','additional-atom-queries.json']]
+query_sources += [B/'english/280'/n for n in ['spine-lexical-full.json','corpus-material-queries-full.json','supplementary-corpus-queries-full.json']]
+query_sources += [B/n for n in ['root-lexical-preparation.json','root-additional-lexical-preparation.json','root-parallel-preparation.json']]
+db=(W/'build/hgm_spine_v27_2.db').resolve();before=pin(db);c=sqlite3.connect(db.as_uri()+'?mode=ro',uri=True);c.execute('PRAGMA query_only=ON');c.row_factory=sqlite3.Row
+queries=[]
+for p in query_sources:
+ x=load(p);x=x['queries'] if isinstance(x,dict) else x
+ for i,q in enumerate(x):
+  params=q.get('parameters',q.get('params',[]));rows=[dict(r) for r in c.execute(q['sql'],params).fetchall()];assert rows==q['rows'],(p,i)
+  if 'count' in q:assert q['count']==len(rows)
+  queries.append({'descriptor_original':str(p),'descriptor_index':i,'descriptor_container':'queries' if isinstance(load(p),dict) else None,'original_descriptor':q,'parameter_key':'parameters' if 'parameters'in q else 'params','sql':q['sql'],'parameters':params,'count':len(rows),'rows':rows})
+source=[dict(r) for r in c.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',280,282))];context=[dict(r) for r in c.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',274,288))]
+for actual,saved in [(source,load(B/'source.json')),(context,load(B/'context.json'))]:
+ assert len(actual)==len(saved)
+ for a,b in zip(actual,saved):assert all(a[k]==v for k,v in b.items())
+save('source-rows-full.json',source);save('context-rows-full.json',context);save('query-replays.json',queries)
+c.close();assert pin(db)==before;save('database-proof.json',{'database':str(db),'before':before,'after':pin(db),'mode':'ro','query_only':True,'query_sets':len(queries)})
+# Complete physical witness line extents; source comparison only joins whitespace, retained originals never transformed.
+raw=(physical/'C05ReadingASCII.txt').read_bytes();lines=raw.splitlines(keepends=True);proof=[]
+for row,desc in zip(source,load(B/'tibetan/280/evidence/physical-row-comparisons.json')):
+ for field,key in [('acip','tibetan_line_range_1_based'),('english','english_candidate_line_range_1_based')]:
+  a,z=desc[key];part=b''.join(lines[a-1:z]);joined=' '.join(part.decode('latin-1').split());assert joined==row[field]
+  name=f'physical/C05-{row["seq"]}-{field}.txt';(D/name).parent.mkdir(exist_ok=True);(D/name).write_bytes(part)
+  proof.append({'original':str(physical/'C05ReadingASCII.txt'),'source_pin':pin(physical/'C05ReadingASCII.txt'),'seq':row['seq'],'field':field,'lines_1based_inclusive':[a,z],'byte_range':[sum(map(len,lines[:a-1])),sum(map(len,lines[:z]))],'excerpt':str(D/name),**pin(D/name),'whitespace_join_equals_source':True})
+save('physical-proof.json',proof)
+# Full master/corpus reopened; map every distinct selected entry/segment object back to immutable original archives.
+master=gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes());corpus=gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes());save('archive-shapes.json',{'master_type':type(json.loads(master)).__name__,'master_keys':list(json.loads(master))[:12],'corpus_type':type(json.loads(corpus)).__name__,'corpus_keys':list(json.loads(corpus))[:12]})
+save('collection-proof.json',{'status':'PASS','original_copy_records':len(load(D/'original-copy-manifest.json')),'queries':len(queries),'source_rows':3,'context_rows':15,'physical_extents':len(proof),'role':'Reused Codex model context; prior tooling author; neither current original author; no human inspection or semantic approval.'})
+print(json.dumps(load(D/'collection-proof.json')))

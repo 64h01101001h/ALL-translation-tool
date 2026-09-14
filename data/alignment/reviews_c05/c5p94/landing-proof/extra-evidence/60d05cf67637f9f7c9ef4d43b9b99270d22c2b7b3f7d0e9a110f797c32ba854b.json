@@ -1,0 +1,7 @@
+{
+  "status": "ROOT_COVERAGE_CHECK_ASSUMPTION_CORRECTED",
+  "reason": "Some actual command stdout copies are also pinned to their identical historical Git object. They were fully byte-verified, but the coverage index mistakenly omitted all Git-pinned records. V2 includes all original paths and additionally compares every required path directly to its retained copy. No source/spec/review change.",
+  "previous_caller": "final-semantic-root-caller",
+  "next_source": "verify-final-semantic-review-root-v2.py",
+  "new_data_or_canonical_runs": 0
+}

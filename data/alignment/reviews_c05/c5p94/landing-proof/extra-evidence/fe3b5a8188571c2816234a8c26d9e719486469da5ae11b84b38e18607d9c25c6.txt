@@ -1,0 +1,69 @@
+from pathlib import Path
+import ast, difflib, hashlib, json, copy
+O=Path(__file__).resolve().parent;B=O.parent;A=B.parent;W=A.parent/'campaign-worktree';L=B/'landing'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,v):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(v,f,indent=2);f.write('\n')
+maps=[]
+def retain(p,n):
+ raw=p.read_bytes();d=O/'inputs'/n;d.parent.mkdir(parents=True,exist_ok=True)
+ with d.open('xb') as f:f.write(raw)
+ assert raw==p.read_bytes()==d.read_bytes();maps.append(dict(original=str(p),copy=str(d.relative_to(O)),**pin(raw)));return raw
+old=retain(A/'C05-277-279/payload-final-schema-preparation/freeze-final-payload-before-staging.py','prior-freezer.py.txt').decode()
+prep=retain(B/'postlanding-verification-preparation/known-parameter-candidates/prepare.py.txt','prior-prepare.py.txt').decode()
+for n in ['baseline.json','semantic-review/review.json','semantic-review/freeze.json','semantic-review/span-head-allow-needed.json','semantic-review/bank-ready-errata.json','root-final-semantic-review-verification-v3/proof.json','landing/span-head-allow-before.json','landing/span-head-allow-mutation.json','landing/canonical-builds-once.json','landing/retention-source-check.json','landing/course-csv-retention.json','landing/course-registration-verification.json','landing/prior-page-before-navigation.html']:
+ retain(B/n,n)
+for seq in [280,281,282]:retain(B/f'semantic-review/reviewed-final/{seq}/spec.json',f'final-specs/{seq}.json')
+for stem in ['ctest-17','build-layer','build-view']:
+ for suffix in ['command.json','stdout','stderr','exit']:
+  retain(L/f'{stem}.{suffix}',f'landing/{stem}.{suffix}')
+before=json.loads((L/'span-head-allow-before.json').read_bytes());needed=json.loads((B/'semantic-review/span-head-allow-needed.json').read_bytes());current=json.loads(retain(W/'data/alignment/span_head_allow.json','current-span-head-allow.json'))
+assert set(needed)=={'pages_c05'} and set(needed['pages_c05'])=={'c5p94/s280w29','c5p94/s280w43'}
+expected=copy.deepcopy(before)
+assert not (set(expected.get('pages_c05',{})) & set(needed['pages_c05']))
+expected.setdefault('pages_c05',{}).update(needed['pages_c05']);assert current==expected
+rootproof=json.loads((B/'root-final-semantic-review-verification-v3/proof.json').read_bytes())
+changes=[];new=old
+def change(a,b,count=1):
+ global new
+ assert new.count(a)==count,(a,new.count(a));new=new.replace(a,b);changes.append(dict(old=a,new=b,count=count))
+change('f114fcb7a5a899b939ffc948ae9fdbbb746541fa','10968d16e701b698a0e1fbd845b353089d15ac39')
+change('c5p93','__CURRENT_PAGE__',6)
+change('c5p92','c5p93',3)
+change('__CURRENT_PAGE__','c5p94',6)
+change('COVERAGE C05: 279/511','COVERAGE C05: 282/511')
+change('[277,278,279]','[280,281,282]',2)
+change("base['full_links']==45126","base['full_links']==45275")
+change("assert approved_review['spec_verdict']==approved_review['quality_verdict']=='APPROVE'\nassert approved_review['open_findings']==[] and approved_review['baseline_commit']==base['commit']", "assert approved_review['verdict']=='APPROVE'\nassert approved_review['spec_verdict']==approved_review['quality_verdict']=='PASS'\nassert approved_review['open_findings']==[]\nroot_semantic=j(B/'root-final-semantic-review-verification-v3/proof.json')\nassert root_semantic['status']=='PASS' and root_semantic['head']==base['commit']\nassert root_semantic['review_freeze']==pin(raw(B/'semantic-review/freeze.json'))\nassert root_semantic['review_metadata']==pin(raw(B/'semantic-review/review.json'))")
+change("assert meta['spec_verdict']==meta['quality_verdict']=='APPROVE' and meta['open_findings']==[]", "assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS' and meta['open_findings']==[]")
+change("assert j(B/'semantic-review/span-head-allow-needed.json')=={}\nfor rel in ('docs/errata_register.json','docs/ERRATA_REGISTER.md','data/alignment/span_head_allow.json'):", "needed=j(B/'semantic-review/span-head-allow-needed.json')\nassert set(needed)=={'pages_c05'} and set(needed['pages_c05'])=={'c5p94/s280w29','c5p94/s280w43'}\nallow_rel='data/alignment/span_head_allow.json'\nallow_before=git('show',base['commit']+':'+allow_rel)\nassert allow_before==raw(L/'span-head-allow-before.json')\nexpected_allow=json.loads(allow_before)\nassert not (set(expected_allow.get('pages_c05',{})) & set(needed['pages_c05']))\nexpected_allow.setdefault('pages_c05',{}).update(needed['pages_c05'])\nassert j(W/allow_rel)==expected_allow\nallow_mutation=j(L/'span-head-allow-mutation.json')\nassert allow_mutation['status']=='PASS' and allow_mutation['prior_values_unchanged']\nassert allow_mutation['before']==pin(allow_before) and allow_mutation['after']==pin(raw(W/allow_rel))\nassert allow_mutation['added']==needed\nfor rel in ('docs/errata_register.json','docs/ERRATA_REGISTER.md'):")
+change("'data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p94.json','tools/build_alignment_layer.py'])\nassert len(paths)==len(set(paths))==12", "'data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p94.json','tools/build_alignment_layer.py',allow_rel])\nassert len(paths)==len(set(paths))==13")
+change('approved_errata_empty=True,approved_allowances_empty=True,','approved_errata_empty=True,approved_allowances_empty=False,approved_allowances=needed,prior_allowance_values_unchanged=True,payload_count=len(files),')
+change("['canonical-builds-once.json','course-registration-verification.json','retention-source-check.json','course-csv-retention.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit']])", "['canonical-builds-once.json','course-registration-verification.json','retention-source-check.json','course-csv-retention.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit','span-head-allow-before.json','span-head-allow-mutation.json']]+[dict(path=str(B/n),**pin(raw(B/n))) for n in ['root-final-semantic-review-verification-v3/proof.json','semantic-review/review.json','semantic-review/freeze.json','semantic-review/span-head-allow-needed.json']])")
+def output(name,before,after,replacements):
+ ast.parse(after);value=after
+ for c in reversed(replacements):
+  assert value.count(c['new'])==c['count'],c;value=value.replace(c['new'],c['old'])
+ assert value==before
+ (O/name).write_text(after)
+ for ext,a,b in [('diff',before,after),('inverse.diff',after,before)]:
+  (O/(name+'.'+ext)).write_text(''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='prior/'+name,tofile='candidate/'+name)))
+ return dict(candidate=name,old=pin(before.encode()),new=pin(after.encode()),changes=replacements,full_inverse_exact=True,syntax_only=True,candidate_executed=False)
+proofs=[output('freeze-final-payload-before-staging.py',old,new,changes)]
+oldprep=prep
+pa="manifest=json.loads((L/'staged-payload-manifest.json').read_bytes())"
+pb=pa+"\nsource_proof=json.loads((L/'staged-payload-source-proof.json').read_bytes())\nassert source_proof['status']=='PASS' and source_proof['head']==manifest['head']==HEAD\nassert source_proof['manifest']==dict(path=str(L/'staged-payload-manifest.json'),**pin(L/'staged-payload-manifest.json'))\nassert len(manifest['files'])==source_proof['payload_count']==len(source_proof['files'])==13\nassert len({x['path'] for x in manifest['files']})==len(manifest['files'])"
+pc='root_frozen12_and_live_equal=True';pd="root_frozen_payload_count=len(manifest['files']),root_frozen_payload_and_live_equal=True"
+assert prep.count(pa)==prep.count(pc)==1;prep=prep.replace(pa,pb).replace(pc,pd)
+proofs.append(output('prepare.py.txt',oldprep,prep,[dict(old=pa,new=pb,count=1),dict(old=pc,new=pd,count=1)]))
+base=json.loads((B/'baseline.json').read_bytes());build=json.loads((L/'canonical-builds-once.json').read_bytes());rels=[r for r,h in build['output_sha256'].items() if h!=base['sha256'][r]]
+assert len(rels)==7
+rels+=['data/alignment/pages_c05/c5p93.html','data/alignment/pages_c05/c5p94.html','data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p94.json','tools/build_alignment_layer.py','data/alignment/span_head_allow.json'];assert len(rels)==len(set(rels))==13
+external=[]
+for rel in rels:
+ raw=(W/rel).read_bytes();external.append(dict(original=str(W/rel),path=rel,**pin(raw),disposition='Full existing live source retained at exact path; not copied into source preparation. Future actual freezer reopens and freezes it.'))
+save('actual-thirteen-source-pins.json',external)
+save('original-to-copy-manifest.json',maps)
+save('adaptation-proof.json',dict(status='PASS_SOURCE_PREPARATION_ONLY',files=proofs,actual_payload_sources=13,existing_allowance_values_exact=True,new_allowance_keys=sorted(needed['pages_c05']),root_semantic_proof=pin((B/'root-final-semantic-review-verification-v3/proof.json').read_bytes()),candidate_executions=0))
+print(json.dumps(dict(status='PASS_SOURCE_ONLY',copies=len(maps),actual_payload_sources=len(external),candidates=2)))

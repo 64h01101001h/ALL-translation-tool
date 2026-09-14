@@ -1,0 +1,49 @@
+import json,hashlib,re,datetime
+from pathlib import Path
+from html.parser import HTMLParser
+b=Path(__file__).resolve().parent.parent;e=b/'280/evidence'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+qs=json.loads((e/'queries.json').read_text())['queries'];rows={r['seq']:r for r in qs[0]['rows']}
+class Extract(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.stack=[];self.parts={'tib':[],'eng':[]}
+ def handle_starttag(self,tag,attrs):self.stack.append((tag,dict(attrs).get('class','')))
+ def handle_endtag(self,tag):
+  assert self.stack[-1][0]==tag,(tag,self.stack)
+  self.stack.pop()
+ def handle_data(self,s):
+  classes=[x[1] for x in self.stack]
+  if set(classes)&{'lab','nul','note'}:return
+  for name in self.parts:
+   if name in classes:self.parts[name].append(s)
+for seq in [280,281,282]:
+ d=b/str(seq);x=Extract();x.feed((d/'body.html').read_text());plain={k:''.join(v).strip() for k,v in x.parts.items()};run=d/'runs'/('002' if seq==282 else '001');assert (d/'spec.json').read_bytes()==(run/'spec.json').read_bytes();assert (d/'body.html').read_bytes()==(run/'stdout.html').read_bytes();proof={'seq':seq,'full_tibetan_matches_original':plain['tib']==rows[seq]['wylie'],'full_english_matches_original':plain['eng']==rows[seq]['english'],'null_explanations_excluded':True,'markup_closed':not x.stack,'final_spec_matches_recorded_generator_input':True,'final_body_matches_recorded_generator_stdout':True,'tibetan_sha256':hashlib.sha256(plain['tib'].encode()).hexdigest(),'english_sha256':hashlib.sha256(plain['eng'].encode()).hexdigest()};assert all(proof[k] for k in ['full_tibetan_matches_original','full_english_matches_original','markup_closed']);(d/'body-fidelity.json').write_text(json.dumps(proof,indent=2)+'\n')
+(d:=b/'280/evidence/attempts').mkdir(exist_ok=True)
+(d/'noncanonical-attempts.json').write_text(json.dumps([
+ {'attempt':'initial-brief-read','command':'cat campaign-artifacts/proposal-protocol.md campaign-artifacts/C05-280-282/tibetan-brief.md campaign-artifacts/C05-280-282/source.json campaign-artifacts/C05-280-282/context.json campaign-artifacts/C05-280-282/baseline.json','cwd':'campaign-worktree','exit':1,'stdout':'','stderr':'cat: campaign-artifacts/proposal-protocol.md: No such file or directory\ncat: campaign-artifacts/C05-280-282/tibetan-brief.md: No such file or directory\ncat: campaign-artifacts/C05-280-282/source.json: No such file or directory\ncat: campaign-artifacts/C05-280-282/context.json: No such file or directory\ncat: campaign-artifacts/C05-280-282/baseline.json: No such file or directory\n','resolution':'Read the exact authorized files in workspace root; batch parent was not globbed.'},
+ {'attempt':'shape-path-search','command':"rg --files docs | rg 'C05|COURSE|course_shape'",'cwd':'campaign-worktree','exit':1,'stdout':'','stderr':'','resolution':'Read the named required data/alignment/C05_CAMPAIGN.md course-shape section.'},
+ {'attempt':'split-syllable-gate-location','command':"rg -n 'split.syllable|def test_no_split|NO_SPLIT|BOUND' tests tools | head -60",'cwd':'campaign-worktree','observed_pipeline_exit':0,'stderr':'rg: tests: No such file or directory (os error 2)\n','resolution':'Located and read tools/test_no_split_syllables.py; no test or source edited.'},
+ {'attempt':'first-physical-source-decoding','interpreter':'PYTHONDONTWRITEBYTECODE=1 python3 -B','exit':1,'failing_expression':"(e/'C05ReadingASCII.txt').read_text().splitlines()",'prior_successful_work':'Full HTML column reconstruction passed for all three bodies before the read failed.','exception':"UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb8 in position 32644: invalid start byte",'resolution':'Read original saved bytes through reversible latin-1 mapping, explicitly without asserting source encoding; selected passages are ASCII and both columns equal the spine after whitespace joining.'},
+ {'attempt':'first-authored-281-conjunction','status':'superseded before canonical generation','preserved':'../../281/history/00-first-authored','resolution':'Changed zhing/and from fourth occurrence to third, the one between wet and flowing.'},
+ {'attempt':'first-gcig-null-282','status':'superseded after a mechanically passing generator run','preserved':'../../282/history/01-before-cardinality-revision and ../../282/runs/001','resolution':'Withdrew the null after considering that glossary gcig includes a: article/singularity ownership is distributed or uncertain, so omitted. Final spec/note generated in runs/002.'}
+],ensure_ascii=False,indent=2)+'\n')
+index={'producer':'Codex, independent Tibetan-first original pass','status':'PROVISIONAL machine alignment; unreviewed','source_database_mode':'SQLite URI mode=ro in all queries and in canonical generator connection wrapper','material_query_results':[{'path':n,'sha256':sha(e/n),'bytes':(e/n).stat().st_size} for n in ['queries.json','supplementary-queries.json','additional-atom-queries.json']],'selected_original_full_rows':{'path':'queries.json','label':'selected_original_full_rows','fields':'all seven SQLite columns including raw','count':3},'complete_local_argument':{'path':'queries.json','label':'complete_local_argument','course':'C05','seq_range':[242,290],'count':49},'query_counts':[{'label':q['label'],'count':q['count']} for q in qs],'physical_source':{'path':'C05ReadingASCII.txt','sha256':sha(e/'C05ReadingASCII.txt'),'comparisons':'physical-row-comparisons.json'},'six_snapshot_fields':'source-verification.json','parallel_limits':'parallel-comparisons.json; C15 has shared ACIP/Wylie for 280 and all three text fields for 281/282, but this is not proof of independent publication or ingestion lineage. P7:29 lacks jealousy and P7:30 lacks differing perceptions in English; shorter strings support only shared extent.','errata':'registered-class-check.json; no supported new selected-row erratum; errata lists empty.','evidence_scope':'Only permitted source/context/baseline/brief and this angle files were read in the batch. No other-angle, root leads, reconciliation or semantic reviews read. Repository/source/master files were not edited.'}
+(e/'index.json').write_text(json.dumps(index,ensure_ascii=False,indent=2)+'\n')
+for seq in [280,281,282]:
+ d=b/str(seq);v=json.loads((d/'verification.json').read_text());run='002' if seq==282 else '001';focus={280:"The final 'khrul/doesn't always hold is the first challenge; relationship stays supplied. The second rgyu 'bras, chos and 'don pa are omitted with reasons.",281:"snang/appearing and tshul/ways preserve both components of the discontinuous rendering. na re/claim is supported by the exact HGM entry; mi 'dra ba owns only the three modifiers of ways.",282:"The first mi 'dra ba lngas is distributed across four limbs and a head. First gcig is omitted after withdrawing an overly strong null; active-agent gis has no separate English word."}[seq]
+ lexical={280:"HGM HTG2016 supports phlegm, come and go, direct result, uncreated and jealousy. The exact zhe sdang entry only has provisional dislike; anger is independently attested in the original passage.",281:"Exact HTG2016 entries support snang/appearing, tshul/ways, na re/claim and tshad grub pa/confirmed by a valid perception. don ma grub par is a complete d3 recast.",282:"HTG2016 lists yan lag/limbs and protuberances, bya ba/actions, byas pa/performing, and gcig/a. The five-versus-four wording is an intentional unpacking, not a supported erratum."}[seq]
+ text='\n'.join([
+  f'C05:{seq} — Codex, independent Tibetan-first original proposal; PROVISIONAL machine alignment, unreviewed.',
+  focus,
+  lexical,
+  'Full source, complete SQL results and HGM entries: ../280/evidence/index.json; queries SHA-256 '+sha(e/'queries.json')+'.',
+  'All six snapshot fields match full original SQLite rows. Original C05 ASCII columns match after whitespace joining; exact line ranges and text are in ../280/evidence/physical-row-comparisons.json.',
+  'C15/P7 textual comparisons and limits are recorded in ../280/evidence/parallel-comparisons.json and queries.json; no publication or ingestion independence asserted. Errata: 0; registered classes checked.',
+  f"Counts: {v['spans']} spans; {v['null']} nulls; {v['d5']} d5 ({v['d5_nonnull']} nonnull); {v['d6']} d6; {v['d3']} d3; {v['d7']} d7. All intended ranges and complete rendered source columns verified.",
+  f"Final generator: EXIT=0; BODY_BYTES={(d/'body.html').stat().st_size}; STDERR_BYTES=0. Exact streams/input/exit: runs/{run}/. Real generator uses ../280/run_generator_ro.py solely to force SQLite URI mode=ro.",
+  'Spec SHA-256: '+sha(d/'spec.json')+'; body SHA-256: '+sha(d/'body.html')+'.',
+  'intended-spans.json declares every exact occurrence in spec order. decisions.json preserves omissions/contentions; history and ../280/evidence/attempts preserve superseded hypotheses and failures.',
+  'Files are frozen by freeze.json; mechanical success does not establish semantic correspondence or human approval.'
+ ])+'\n';(d/'report.md').write_text(text)
+# Freeze manifests are the last writes: every own file except this manifest itself.
+for seq in [280,281,282]:
+ d=b/str(seq);files=[{'path':str(f.relative_to(d)),'sha256':sha(f),'bytes':f.stat().st_size} for f in sorted(d.rglob('*')) if f.is_file() and f.name!='freeze.json'];manifest={'segment':f'C05:{seq}','angle':'tibetan-first','producer':'Codex','status':'FROZEN original proposal; PROVISIONAL machine alignment, unreviewed','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'file_count':len(files),'files':files};(d/'freeze.json').write_text(json.dumps(manifest,indent=2)+'\n');print(seq,'FROZEN',len(files),'files','freeze_sha256',sha(d/'freeze.json'))

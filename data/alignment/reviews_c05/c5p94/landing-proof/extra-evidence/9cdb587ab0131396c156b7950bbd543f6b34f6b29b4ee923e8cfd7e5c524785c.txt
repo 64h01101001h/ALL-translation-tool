@@ -1,0 +1,42 @@
+import pathlib,json,hashlib,datetime
+R=pathlib.Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment"); I=R/'campaign-artifacts/integration'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def chk(b,p):assert pin(b)=={k:p[k] for k in ('bytes','sha256')}
+out=I/'through279-whitespace-actual-root-acceptance'; assert not out.exists()
+runtime=I/'through279-whitespace-actual-runtime'
+release=json.loads((runtime/'root-release.json').read_bytes())
+for row in release['files']:raw=pathlib.Path(row['original']).read_bytes();chk(raw,row);assert raw==(runtime/row['copy']).read_bytes()
+counts={}
+for mode in ['prepare','audit']:
+ base=I/('through279-whitespace-actual-'+mode)
+ caller=I/('through279-whitespace-actual-'+mode+'-caller')
+ ex=json.loads((caller/'execution.json').read_bytes());assert ex['exit']==0
+ chk((caller/'stdout.bin').read_bytes(),{'bytes':ex['stdout_bytes'],'sha256':ex['stdout_sha256']});chk((caller/'stderr.bin').read_bytes(),{'bytes':ex['stderr_bytes'],'sha256':ex['stderr_sha256']})
+ assert not (caller/'stderr.bin').read_bytes()
+ rows=json.loads((base/'consumed-inputs.json').read_bytes())
+ for row in rows:
+  src=pathlib.Path(row['input_path']); assert str(src.resolve())==row['path']
+  raw=src.read_bytes();chk(raw,row);assert raw==(base/row['copy']).read_bytes()
+ p=json.loads((base/('whitespace-classification-preflight.json' if mode=='prepare' else 'source-whitespace-proof.json')).read_bytes())
+ assert p['mode']==mode and p['status'].startswith('PASS') and p['all_warnings_accounted_for'] is True
+ assert p['warning_count']==59156 and len(p['files'])==110 and p['git_diff_check_exit']==2
+ for rel,row in p['files'].items():chk((R/'campaign-worktree'/rel).read_bytes(),row)
+ counts[mode]={'consumed_full_pairs':len(rows),'proof':pin((base/('whitespace-classification-preflight.json' if mode=='prepare' else 'source-whitespace-proof.json')).read_bytes()),'actual_caller':pin((caller/'execution.json').read_bytes())}
+prep=I/'through279-whitespace-actual-prepare';audit=I/'through279-whitespace-actual-audit'
+assert (prep/'prepared-pins.json').read_bytes()==(audit/'prepared-pins.json').read_bytes()
+matches=[]
+for c in (audit/'commands').iterdir():
+ j=json.loads((c/'command.json').read_bytes())
+ if j['argv']==['git','diff','--cached','--check']:
+  assert (c/'stdout.bin').read_bytes()==(I/'through279-whitespace-runs/raw-diagnostic/stdout.bin').read_bytes()
+  assert (c/'exit.txt').read_bytes()==b'2\n' and not (c/'stderr.bin').read_bytes()
+  matches.append(str(c))
+assert len(matches)==1
+assert not (runtime/'freeze.json').exists()
+f={'files':{str(p.relative_to(runtime)):pin(p.read_bytes()) for p in sorted(runtime.rglob('*')) if p.is_file()},'excludes':['freeze.json'],'scope':'Root-released exact whitespace runtime; immutable after actual prepare/audit'}
+(runtime/'freeze.json').write_text(json.dumps(f,indent=2)+'\n')
+out.mkdir()
+proof=dict(status='PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),checks=counts,runtime_freeze=pin((runtime/'freeze.json').read_bytes()),actual_diagnostic_command=matches[0],literal_warnings=59156,warning_files=110,normalization=False,semantic_approval=False,final_bank_stage_commit_pending=True)
+(out/'proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+print(json.dumps(proof))
+

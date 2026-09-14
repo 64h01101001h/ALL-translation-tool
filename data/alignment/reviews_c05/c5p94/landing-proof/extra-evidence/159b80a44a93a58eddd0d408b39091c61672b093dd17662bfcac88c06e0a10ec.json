@@ -1,0 +1,111 @@
+{
+  "status": "SOURCE_ONLY_PENDING_ROOT_REVIEW",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "close_candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-closure-preparation/close-evidence.py.txt",
+    "bytes": 4935,
+    "sha256": "3395a15d3fb07ae6dbf9cad582fd72e00ac7658a204917b44530f4587e5b83e3"
+  },
+  "close_materialize": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/close-evidence.py.txt",
+  "close_future_argv": [
+    "python3",
+    "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/close-evidence.py.txt"
+  ],
+  "close_cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction",
+  "close_caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/caller-runs/close-evidence",
+  "then": "Complete actual close caller; root freezes entire R exactly including completed close source/proofs and all caller streams. Actual freeze file_count/total_bytes/pins must be measured, not guessed.",
+  "accept_candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-closure-preparation/accept-independent-reproduction-root.py",
+    "bytes": 10268,
+    "sha256": "87f638191a9e5b6782725b20e75459532fc71844fbb7fd8a07e5f782a105f935"
+  },
+  "accept_materialize": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/accept-independent-reproduction-root.py",
+  "accept_future_argv": [
+    "python3",
+    "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/accept-independent-reproduction-root.py"
+  ],
+  "accept_cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+  "accept_output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction-root-acceptance",
+  "accept_outer_caller": "Fresh external directory outside frozen R; exact location chosen and recorded by root.",
+  "actual_runtime_boundary": {
+    "status": "ACTUAL_SUCCESSFUL_RETENTION_BOUNDARY",
+    "checks_total": 223847,
+    "input_aliases": 1513,
+    "original_aliases": 1506,
+    "git_copies": 7,
+    "registered_pages": 548,
+    "source_date": "2026-09-13",
+    "counts": {
+      "links": 45402,
+      "nulls": 11938,
+      "notes": 1618,
+      "trees": 11,
+      "heads": 7092,
+      "pairs": 15546,
+      "csv_main": 22528,
+      "csv_reverse": 22188,
+      "csv_course": 24105,
+      "csv_changes": 37
+    },
+    "payload_files": 13,
+    "actual_callers": [
+      {
+        "label": "prepare",
+        "execution": {
+          "bytes": 842,
+          "sha256": "d36013ee7bb5166fc6298dbd65919089796b1b358ee62fcf2b32d960f4a9cb31"
+        },
+        "exit": 0,
+        "recorded_argv": [
+          "python3",
+          "-B",
+          "prepare.py.txt"
+        ],
+        "recorded_cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction",
+        "resolved_script": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/prepare.py.txt",
+        "old_literal_path_comparison": false
+      },
+      {
+        "label": "run-once",
+        "execution": {
+          "bytes": 991,
+          "sha256": "883f2934ac6e99edc03c510beb08e9ff0b43cdec4d874c1c6b2d563f9112fdae"
+        },
+        "exit": 0,
+        "recorded_argv": [
+          "python3",
+          "-B",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/run-once.py.txt"
+        ],
+        "recorded_cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction",
+        "resolved_script": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/run-once.py.txt",
+        "old_literal_path_comparison": true
+      },
+      {
+        "label": "retention",
+        "execution": {
+          "bytes": 998,
+          "sha256": "296d184de4f2462cde34bc23a64fea207225d968d914db9fc3978261c3ceef8a"
+        },
+        "exit": 0,
+        "recorded_argv": [
+          "python3",
+          "-B",
+          "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/verify-retention.py.txt"
+        ],
+        "recorded_cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction",
+        "resolved_script": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/verify-retention.py.txt",
+        "old_literal_path_comparison": true
+      }
+    ],
+    "actual_runtime_failed_attempts": 0,
+    "failure_basis": "Exactly three current caller directories and two successful isolated producer invocations; inherited source-preparation histories are separate. No current failed caller or producer invocation in this runtime."
+  },
+  "target_executions": 0
+}

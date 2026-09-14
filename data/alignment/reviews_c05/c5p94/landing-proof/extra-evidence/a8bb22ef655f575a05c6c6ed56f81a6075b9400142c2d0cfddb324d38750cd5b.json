@@ -1,0 +1,55 @@
+{
+  "status": "PENDING_ACTUAL_RUNTIME_FIELDS_NOT_EXECUTION_RELEASE",
+  "entry_pin": {
+    "bytes": 3179,
+    "sha256": "88b3df31dd9162765de114a9aea6731ba26ebcb0c360d812d635491933bfd4fe"
+  },
+  "candidate_pin": {
+    "bytes": 6446,
+    "sha256": "8c53dabbec62e433513fb5f890364820feb8c63f5410a8227188c2f213ecafa2"
+  },
+  "notes": "Root performs DATA and DOCS commits separately; this helper only appends and verifies. Do not substitute placeholder strings as IDs or directories.",
+  "pending_fields": [
+    "ACTUAL_FINAL_STAGE_OUTPUT",
+    "DATA_COMMIT_40_HEX",
+    "APPEND_OUTPUT_FRESH_EXTERNAL",
+    "DOCS_COMMIT_40_HEX",
+    "BIND_OUTPUT_FRESH_EXTERNAL"
+  ],
+  "append_argv": [
+    "python3",
+    "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/commit-closure-preparation/commit_closure282.py",
+    "append",
+    "--worktree",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "--stage",
+    "<ACTUAL_FINAL_STAGE_OUTPUT>",
+    "--data",
+    "<DATA_COMMIT_40_HEX>",
+    "--entry",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/commit-closure-preparation/ledger-entry.txt",
+    "--output",
+    "<APPEND_OUTPUT_FRESH_EXTERNAL>"
+  ],
+  "bind_argv": [
+    "python3",
+    "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/commit-closure-preparation/commit_closure282.py",
+    "bind",
+    "--worktree",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "--stage",
+    "<ACTUAL_FINAL_STAGE_OUTPUT>",
+    "--data",
+    "<DATA_COMMIT_40_HEX>",
+    "--entry",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/commit-closure-preparation/ledger-entry.txt",
+    "--output",
+    "<BIND_OUTPUT_FRESH_EXTERNAL>",
+    "--final",
+    "<DOCS_COMMIT_40_HEX>",
+    "--append-proof",
+    "<APPEND_OUTPUT_FRESH_EXTERNAL>/proof.json"
+  ]
+}

@@ -1,0 +1,93 @@
+"""Static review of F1 correction; no candidate import or execution."""
+from pathlib import Path
+import ast
+import datetime
+import difflib
+import hashlib
+import json
+
+O = Path(__file__).resolve().parent
+B = O.parent
+C = B / 'postlanding-verification-correction01'
+P = B / 'postlanding-verification-preparation'
+V = B / 'postlanding-verification-code-review'
+def pin(raw):
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+def j(p):
+    return json.loads(p.read_bytes())
+def save(n, v):
+    with (O / n).open('x') as f:
+        json.dump(v, f, indent=2, ensure_ascii=False)
+        f.write('\n')
+def freeze_check(root, sha):
+    raw = (root / 'freeze.json').read_bytes()
+    assert pin(raw)['sha256'] == sha
+    freeze = json.loads(raw)
+    assert len(freeze['files']) == freeze['file_count']
+    assert sum(r['bytes'] for r in freeze['files'].values()) == freeze['total_bytes']
+    assert {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()} == set(freeze['files']) | {'freeze.json'}
+    for n, record in freeze['files'].items():
+        p = root / n
+        assert not p.is_symlink() and pin(p.read_bytes()) == record
+    return freeze, pin(raw)
+
+cf, cp = freeze_check(C, '5cbdcbde47cc5904e01c27e1776b3ccd7707d2132c020d540602e551cfa595b2')
+pf, pp = freeze_check(P, '51f1a05ca75f3afa710610eeffaba5b1ef43df7019009a489a7a831cd29d2208')
+vf, vp = freeze_check(V, 'f4d3ec114e223b6b8ca5c6c57a2e3041014a7789e87b824cc81ef7b51aa65be9')
+assert cf['file_count'] == 142 and cf['total_bytes'] == 1981920
+with (O / 'reviewed-correction-freeze.json').open('xb') as f:
+    f.write((C / 'freeze.json').read_bytes())
+save('full-correction-file-checks.json', [dict(path=str(C / n), **r, verified=True) for n, r in cf['files'].items()])
+rows = j(C / 'original-to-copy-manifest.json')
+assert len(rows) == 128
+expected = {str(root / n): 'history/' + label + '/' + n for root, label, f in [(P, 'preparation', pf), (V, 'review', vf)] for n in set(f['files']) | {'freeze.json'}}
+assert len(expected) == 128 and {r['original']: r['copy'] for r in rows} == expected
+checked = []
+for row in rows:
+    original = Path(row['original'])
+    copy = C / row['copy']
+    raw = original.read_bytes()
+    assert raw == copy.read_bytes() and pin(raw) == {k: row[k] for k in ('bytes', 'sha256')}
+    checked.append(dict(**row, complete_original_copy_equal=True))
+save('full-preserved-copy-checks.json', checked)
+old_path = P / 'known-parameter-candidates/bank_root_proofs_through282.py.txt'
+new_path = C / 'bank_root_proofs_through282.py.txt'
+a, b = old_path.read_bytes(), new_path.read_bytes()
+before = b'data/alignment/reviews_c05/c5p93/landing-proof'
+after = b'data/alignment/reviews_c05/c5p94/landing-proof'
+assert a.count(before) == b.count(after) == 1 and a.count(after) == b.count(before) == 0
+assert a.replace(before, after) == b and b.replace(after, before) == a
+assert pin(a)['sha256'] == 'e47ccae0d0a1af359405ff2d47d68a3015d5f15e40479d8acd1952ba9299ad93'
+assert pin(b) == dict(bytes=18169, sha256='e39621efcf4e650b9c2da4f145197f082a230236c47532e54f0398fc57b05375')
+forward = ''.join(difflib.unified_diff(a.decode().splitlines(True), b.decode().splitlines(True), fromfile='old-bank.py.txt', tofile='corrected-bank.py.txt'))
+inverse = ''.join(difflib.unified_diff(b.decode().splitlines(True), a.decode().splitlines(True), fromfile='corrected-bank.py.txt', tofile='old-bank.py.txt'))
+assert (C / 'forward.diff').read_text() == forward and (C / 'inverse.diff').read_text() == inverse
+ta, tb = ast.parse(a), ast.parse(b)
+da = next(n for n in ast.walk(ta) if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'dest' for t in n.targets))
+db = next(n for n in ast.walk(tb) if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'dest' for t in n.targets))
+assert da.lineno == db.lineno == 65
+assert isinstance(db.value, ast.BinOp) and isinstance(db.value.left, ast.Name) and db.value.left.id == 'wt' and isinstance(db.value.op, ast.Div)
+assert ast.literal_eval(db.value.right) == after.decode()
+db.value.right.value = before.decode()
+assert ast.dump(ta, include_attributes=False) == ast.dump(tb, include_attributes=False)
+paths = j(C / 'candidate-paths.json')
+for key, name in [('prepare', 'prepare.py.txt'), ('run_once', 'run-once.py.txt'), ('readonly_wrapper', 'run-isolated-readonly.py.txt')]:
+    assert paths[key] == str(P / 'known-parameter-candidates' / name)
+assert paths['banker'] == str(new_path)
+assert paths['pending_contract'] == str(P / 'pending-input-contract.json')
+assert paths['command_contract'] == str(P / 'command-contract.json')
+pending = j(P / 'pending-input-contract.json')
+assert len(pending['fields']) == 15 and all(r['value'] is None for r in pending['fields'])
+assert pending['status'] == 'NOT_RUNTIME_READY'
+assert j(P / 'command-contract.json')['status'] == 'PREPARATION_ONLY_NO_EXECUTION_RELEASE'
+run = C / 'syntax-correction-run01'
+record = j(run / 'execution.json')
+assert record['exit'] == 0 and (run / 'exit').read_bytes() == b'0\n'
+assert not (run / 'stderr').read_bytes() and not (run / 'stdin').read_bytes()
+assert len((run / 'stdout').read_bytes()) == record['stdout_bytes'] == 165
+assert record['source_sha256'] == pin((C / 'correct-source.py').read_bytes())['sha256']
+for root, expected_pin in [(C, cp), (P, pp), (V, vp)]:
+    assert freeze_check(root, expected_pin['sha256'])[1] == expected_pin
+result = dict(verdict='APPROVE_SOURCE_PREPARATION_ONLY', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), reviewer='Codex /root/c05_280_282_english', correction_author='Codex /root/c05_253_255_reconcile', role_disclosure='I reviewed the prior postlanding preparation and raised F1; I did not author this correction. Earlier English-original/landing-helper/head-allowance roles are disclosed. This is code-only correction review and no semantic judgment.', source_directory=str(C), source_freeze=cp, source_files=142, source_bytes=1981920, full_preserved_original_copy_pairs=128, prior_preparation_freeze=pp, prior_review_freeze=vp, candidate=dict(path=str(new_path), **pin(b)), old_candidate=dict(path=str(old_path), **pin(a)), sole_change=dict(line=65, old=before.decode(), new=after.decode(), occurrences=1), exact_forward_diff=pin(forward.encode()), exact_inverse_diff=pin(inverse.encode()), inverse_complete_byte_equal=True, all_other_ast_identical=True, original_trees_unchanged=True, resolved_findings=['F1'], open_findings=[], pending_runtime_fields=[r['key'] for r in pending['fields']], runtime_release=False, candidate_executions=0, tests=0, builds=0, sql=0, git=0, landing=0, banking=0, limits='Approves only the source preparation with the separately corrected destination. All 15 existing runtime fields remain pending actual measured outputs, current semantic/source/history interfaces and distinct root release. Prior contracts and retained gate requirements remain unchanged; no actual postlanding results inferred.')
+save('review.json', result)
+print(json.dumps(dict(verdict=result['verdict'], correction_files=142, full_copy_pairs=128, resolved_finding='F1', pending_runtime_fields=15, candidate_executions=0)))

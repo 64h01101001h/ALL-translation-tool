@@ -1,0 +1,66 @@
+
+# PREPARATION ONLY: actual ordinary bank, ledgers and staged diagnostics are pending.
+PENDING_BINDINGS = {'ordinary_bank_manifest': None, 'ordinary_bank_file_count': None, 'ordinary_bank_external_count': None, 'ordinary_bank_write_run': None, 'final_bank_manifest': None, 'final_bank_write_run': None, 'final_bank_file_count': None, 'three_ledger_paths_and_approved_before_after_bytes': None, 'three_ledger_staging_contract_review': None, 'raw_untracked_before_banking_full_stream_and_caller': None, 'actual_index_and_unstaged_boundary': None, 'actual_raw_diagnostic_full_stream_and_caller': None, 'actual_staged_path_set_and_count': None, 'physical_source_descriptors_and_original_aliases': None, 'additional_warning_descriptor_contract': None, 'prior_closure_proof_relative': None, 'prior_closure_expected_status': None, 'whitespace_preparation_freeze_sha256': None, 'whitespace_preparation_file_count': None, 'whitespace_review_freeze_sha256': None, 'whitespace_review_file_count': None, 'additional_descriptor_entry_count': None, 'additional_descriptor_evidence_count': None, 'additional_descriptor_provenance_count': None, 'verified_frozen_file_count': None, 'original_copy_pair_count': None, 'warning_count': None, 'warning_file_count': None, 'raw_diagnostic_exit': None, 'independent_code_review_and_actual_runtime_release': None}
+if any(value is None for value in PENDING_BINDINGS.values()):
+    raise RuntimeError('Unbound through282 preparation; no staging, bank, Git, whitespace or verification runtime is released')
+
+import pathlib,json,hashlib,datetime,shutil
+R=pathlib.Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment")
+I=R/'campaign-artifacts/integration'
+P=I/'through282-whitespace-actual-preparation'
+V=I/'through282-whitespace-actual-review'
+OLD=I/'through282-finalization-runtime'
+OUT=I/'through282-whitespace-actual-root-release'
+NEW=I/'through282-whitespace-actual-runtime'
+def pin(b): return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def check(b,p): assert pin(b)=={k:p[k] for k in ('bytes','sha256')}
+assert __debug__ and not OUT.exists() and not NEW.exists()
+counts={}
+for base,sha,expected,mname in [(P,PENDING_BINDINGS['whitespace_preparation_freeze_sha256'],PENDING_BINDINGS['whitespace_preparation_file_count'],'complete-original-copy-manifest.json'),(V,PENDING_BINDINGS['whitespace_review_freeze_sha256'],PENDING_BINDINGS['whitespace_review_file_count'],'original-to-copy-manifest.json')]:
+ b=(base/'freeze.json').read_bytes(); assert pin(b)['sha256']==sha
+ j=json.loads(b); files=j['files']; assert len(files)==expected
+ assert {str(p.relative_to(base)) for p in base.rglob('*') if p.is_file()}==set(files)|{'freeze.json'}
+ for n,p in files.items(): check((base/n).read_bytes(),p)
+ rows=json.loads((base/mname).read_bytes())
+ for row in rows:
+  src=pathlib.Path(row['original']); cp=base/row['copy']; raw=src.read_bytes()
+  assert str(src.resolve(strict=True))==row['resolved_original']
+  check(raw,row); assert cp.read_bytes()==raw
+ counts[str(base)]={'freeze':pin(b),'files':len(files),'full_original_copy_pairs':len(rows)}
+v=json.loads((V/'review.json').read_bytes())
+assert v['spec_verdict']==v['quality_verdict']=='APPROVE' and v['open_findings']==[]
+for name,key in [('whitespace282.py','candidate'),('additional-root-descriptors.json','descriptor')]: check((P/name).read_bytes(),v[key])
+d=json.loads((P/'additional-root-descriptors.json').read_bytes())
+assert len(d['entries'])==PENDING_BINDINGS['additional_descriptor_entry_count'] and len(d['evidence'])==PENDING_BINDINGS['additional_descriptor_evidence_count'] and len(d['provenance_maps'])==PENDING_BINDINGS['additional_descriptor_provenance_count']
+values={}
+for rec in d['evidence']:
+ src=pathlib.Path(rec['path']); raw=src.read_bytes()
+ assert str(src.resolve(strict=True))==rec['resolved_path']
+ check(raw,rec); assert (P/rec['runtime_copy']).read_bytes()==raw
+ values[rec['path']]=raw
+for link in d['provenance_maps']:
+ assert link['record'] in json.loads(values[link['manifest']])
+ assert values[link['original']]==values[link['copy']]
+ check(values[link['original']],link['record'])
+root=R/'campaign-artifacts/C05-280-282/landing/root-proof-copy-manifest-before-whitespace.json'
+check(root.read_bytes(),d['root_manifest'])
+rootrows=json.loads(root.read_bytes())['files']
+for e in d['entries']:
+ assert e['root_record'] in rootrows
+ raw=(R/'campaign-worktree'/e['path']).read_bytes()
+ check(raw,e); assert raw==pathlib.Path(e['root_record']['original']).read_bytes()
+check((I/'through282-whitespace-runs/raw-diagnostic/stdout.bin').read_bytes(),d['raw_log'])
+OUT.mkdir(); NEW.mkdir()
+pairs=[]
+todo=[(P/n,n) for n in ['whitespace282.py','additional-root-descriptors.json']]
+todo += [(p,str(p.relative_to(P))) for p in sorted((P/'additional-evidence').rglob('*')) if p.is_file()]
+todo += [(OLD/n,n) for n in ['physical-source-descriptors.json','current-inputs/semantic-review/freeze.json','current-inputs/semantic-review/original-to-copy-manifest.json']]
+for src,n in todo:
+ raw=src.read_bytes(); dest=NEW/n; dest.parent.mkdir(parents=True,exist_ok=True); dest.write_bytes(raw)
+ assert dest.read_bytes()==src.read_bytes()
+ pairs.append(dict(original=str(src),resolved_original=str(src.resolve()),copy=n,**pin(raw)))
+proof=dict(status='PASS_ROOT_CODE_PROVENANCE_RELEASE_ACTUAL_PREPARE_AUDIT_PENDING',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),inputs=counts,approved_review=pin((V/'review.json').read_bytes()),materialized_runtime=str(NEW),files=pairs,worktree_or_index_mutated=False,source_normalization=False,production_calls=0,prepare_audit_calls=0)
+raw=(json.dumps(proof,indent=2,ensure_ascii=False)+'\n').encode()
+(OUT/'proof.json').write_bytes(raw); (NEW/'root-release.json').write_bytes(raw)
+print(json.dumps({'status':proof['status'],'runtime_files':len(pairs),'verified_frozen_files':PENDING_BINDINGS['verified_frozen_file_count'],'original_copy_pairs':PENDING_BINDINGS['original_copy_pair_count'],'additional_evidence':PENDING_BINDINGS['additional_descriptor_evidence_count']}))
+

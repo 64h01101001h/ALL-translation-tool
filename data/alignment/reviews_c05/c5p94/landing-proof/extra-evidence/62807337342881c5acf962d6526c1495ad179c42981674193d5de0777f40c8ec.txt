@@ -1,0 +1,21 @@
+--- prior/prepare.py.txt
++++ candidate/prepare.py.txt
+@@ -10,6 +10,11 @@
+ assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=W).decode().strip()==HEAD
+ save(R/'live-before.json',dict(head=HEAD,status=subprocess.check_output(['git','status','--porcelain=v1','--untracked-files=no'],cwd=W).decode(),utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))
+ manifest=json.loads((L/'staged-payload-manifest.json').read_bytes())
++source_proof=json.loads((L/'staged-payload-source-proof.json').read_bytes())
++assert source_proof['status']=='PASS' and source_proof['head']==manifest['head']==HEAD
++assert source_proof['manifest']==dict(path=str(L/'staged-payload-manifest.json'),**pin(L/'staged-payload-manifest.json'))
++assert len(manifest['files'])==source_proof['payload_count']==len(source_proof['files'])==13
++assert len({x['path'] for x in manifest['files']})==len(manifest['files'])
+ for x in manifest['files']:
+  p=W/x['path'];f=L/'payload-freeze'/x['path'];assert p.read_bytes()==f.read_bytes() and pin(p)=={k:x[k] for k in ('bytes','sha256')};cp(f,R/'expected-payload'/x['path'],'root actual pre-stage frozen payload')
+ for rel in ['tools/build_alignment_layer.py','tools/build_dictionary_view.py','tools/build_dictionary_exports.py','tools/gen_alignment_page.py','tools/dictionary_view_shell.html']+[str(x.relative_to(W)) for x in (W/'engines').glob('*.py')]:cp(W/rel,S/rel,'exact current code')
+@@ -30,5 +35,5 @@
+ for name in ['run_reviewed_builders_once.py','run_tool_readonly_sqlite.py','verify_landed_batch.py','verify_course_csv.py']:cp(ROOT/'campaign-artifacts'/name,R/'root-helpers'/(name+'.txt'),'actual root command helper inspected')
+ cp(ROOT/'campaign-artifacts/integration/continuation-through270-reproduce.py',R/'prior-method.py.txt','historical verification method reference, not executed')
+ ev=json.loads((R/'expected-payload/data/alignment/alignment_evidence_v1.json').read_bytes())
+-save(R/'input-manifest.json',records);save(R/'registered-pages.json',registered);save(R/'preparation-proof.json',dict(status='PASS',head=HEAD,files=len(records),registered_pages=len(registered),source_date=ev['meta']['date'],seed=pin(seed),seven_output_relpaths=outputrels,previous_main_seed_equals_immutable_git=True,root_frozen12_and_live_equal=True,isolated_workspace=str(S)))
++save(R/'input-manifest.json',records);save(R/'registered-pages.json',registered);save(R/'preparation-proof.json',dict(status='PASS',head=HEAD,files=len(records),registered_pages=len(registered),source_date=ev['meta']['date'],seed=pin(seed),seven_output_relpaths=outputrels,previous_main_seed_equals_immutable_git=True,root_frozen_payload_count=len(manifest['files']),root_frozen_payload_and_live_equal=True,isolated_workspace=str(S)))
+ print(json.dumps(dict(status='PREPARED',files=len(records),registered_pages=len(registered),date=ev['meta']['date'],seed=pin(seed)),indent=2))

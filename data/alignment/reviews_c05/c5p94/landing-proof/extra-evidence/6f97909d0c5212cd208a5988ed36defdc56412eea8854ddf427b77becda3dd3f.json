@@ -1,0 +1,94 @@
+{
+  "adapter_freeze_sha256": "20182faebdf0ffd132bd900ac378f5eb9705821ea0a195e02824b139593d1376",
+  "adapter_manifest_files": 18,
+  "source_difference": {
+    "single_insert": true,
+    "added_lines": 12,
+    "old_byte_spans_unchanged": true,
+    "functions_other_than_bind_query_ast_identical": true
+  },
+  "prior_module_equals_saved_prior": true,
+  "runtime_byte_identical_to_prior": true,
+  "source_preparation_frozen_files_unchanged": 18,
+  "actual_original_schemas": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/tibetan/280/evidence/queries.json",
+      "container_keys": [
+        "database",
+        "uri",
+        "queries"
+      ],
+      "top_level_type": "dict",
+      "record_count": 69,
+      "record_key_sets": [
+        [
+          "count",
+          "label",
+          "params",
+          "rows",
+          "sql"
+        ]
+      ],
+      "all_count_keys_present": true,
+      "all_params_are_lists": true,
+      "all_count_values_equal_complete_row_lengths": true
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/tibetan/280/evidence/supplementary-queries.json",
+      "container_keys": null,
+      "top_level_type": "list",
+      "record_count": 5,
+      "record_key_sets": [
+        [
+          "count",
+          "label",
+          "params",
+          "rows",
+          "sql"
+        ]
+      ],
+      "all_count_keys_present": true,
+      "all_params_are_lists": true,
+      "all_count_values_equal_complete_row_lengths": true
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/tibetan/280/evidence/additional-atom-queries.json",
+      "container_keys": null,
+      "top_level_type": "list",
+      "record_count": 6,
+      "record_key_sets": [
+        [
+          "count",
+          "label",
+          "params",
+          "rows",
+          "sql"
+        ]
+      ],
+      "all_count_keys_present": true,
+      "all_params_are_lists": true,
+      "all_count_values_equal_complete_row_lengths": true
+    }
+  ],
+  "recorded_calls": {
+    "red": {
+      "exit": 1,
+      "passed": 27,
+      "failed": 80,
+      "source_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciliation-verifier-preparation/config_contract.py",
+      "streams_match_caller_pins": true
+    },
+    "green": {
+      "exit": 0,
+      "passed": 107,
+      "failed": 0,
+      "source_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciliation-verifier-query-schema-adapter-v1/config_contract.py",
+      "streams_match_caller_pins": true
+    }
+  },
+  "reviewed_modules_imported": false,
+  "tests_reexecuted": false,
+  "sql_or_generator_or_runtime_executed": false,
+  "runtime_import_statement": "from config_contract import pinned, validate_config, bind_query",
+  "scope": "Static code review only; actual reconciled config and empty-head-allowance predicate validation remain pending."
+}

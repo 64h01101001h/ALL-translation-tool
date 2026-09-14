@@ -1,0 +1,96 @@
+{
+  "status": "PREPARATION_ONLY_INDEPENDENT_CODE_REVIEW_AND_ROOT_RELEASE_REQUIRED",
+  "never_execute_from_preparation": "Payload helper derives B from its own parent and must be copied byte-exact to the batch root after approval. Frozen preparation never receives runtime artifacts.",
+  "runtime_release": {
+    "payload": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/freeze-final-payload-before-staging.py",
+    "banking": "Root chooses a fresh runtime code location and records original-to-runtime byte mapping; banking batch/worktree paths are explicit CLI inputs.",
+    "required_mapping": "Full original/copy byte equality and reviewed candidate hashes; preserve any actual version history, never overwrite frozen preparation."
+  },
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "payload_future_argv": [
+    "python3",
+    "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/freeze-final-payload-before-staging.py"
+  ],
+  "payload_future_cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+  "payload_future_required_inputs": [
+    "exact current baseline.json with commit f114/full_links45126/nine pins",
+    "actual final semantic review: approved baseline, ordered277–279 span_count/spec pins, total_spans and complete reviewed-final spec bytes",
+    "actual empty bank-ready-errata[] and span-head-allow-needed{} or separately reviewed correction before execution",
+    "actual canonical-builds-once.json and full both successful command/stream/exit evidence; exact immutable previous-main CSV seed",
+    "actual17 named CTest stdout/stderr/exit with parsed duration",
+    "actual retention-source-check.json and course-csv-retention.json",
+    "actual accepted canonical page93/spec/review landing body and index/registry proof; BASE page92 with exact navigation-only addition",
+    "empty index; absent landing/payload-freeze, staged-payload-manifest.json, staged-payload-source-proof.json"
+  ],
+  "untracked_capture_order": "Take actual raw Git untracked snapshot after actual payload freeze and before ordinary banking and initial staging. Ordinary banking requires it; do not create a dependency cycle by taking it afterwards. Retain command/stdout/stderr/exit. Later root-bank files are later-created paths, not invented members of the earlier stream.",
+  "banking_future_argv_template": [
+    "python3",
+    "-B",
+    "<approved materialized bank_root_proofs_through279.py>",
+    "--phase",
+    "<ordinary OR final-whitespace>",
+    "--batch",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279",
+    "--worktree",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "--run-output",
+    "<fresh external directory outside B and WT>",
+    "--payload-manifest",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/landing/staged-payload-manifest.json",
+    "--payload-source-proof",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/landing/staged-payload-source-proof.json",
+    "--untracked-capture-stem",
+    "<actual pre-ordinary/pre-stage capture stem>",
+    "--extra-inputs",
+    "<root-reviewed complete actual extra-input JSON>"
+  ],
+  "final_phase_extra_args": [
+    "--whitespace-inputs",
+    "<root-reviewed complete actual whitespace evidence inventory>"
+  ],
+  "history_required_relative_B": [
+    "verify-complete-originals.py",
+    "proposal-verification/root-original-freeze-check.json",
+    "proposal-verification/execution-proof.json",
+    "verify-reconciliation-root.py",
+    "root-reconciliation-verification/execution-proof.json",
+    "root-reconciliation-verification/report.json",
+    "root-reconciliation-verification/resolved-spans.json",
+    "verify-final-semantic-review-root.py",
+    "root-final-semantic-review-verification/proof.json"
+  ],
+  "final_root_proof_schema": {
+    "relative_path": "root-final-semantic-review-verification/proof.json",
+    "status": "PASS",
+    "head": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+    "review_freeze": "Exact bytes/sha256 of the current complete verified semantic-review/freeze.json"
+  },
+  "explicit_inputs_schema": "JSON list; each record original absolute existing file, bytes, sha256, retention=bank with relative copy OR retention=external with disposition. Every original is fully read, pinned and retained; all actual caller/source/resolver streams and any current finding/correction/failure/version histories required. No empty or summary-only inventory claims completeness.",
+  "full_history_root_review_obligation": "Compare explicit inventory with every actual current role/caller/version/correction tree and preserved semantic manifest before CLI; complete bytes may remain external with exact pins. Universal HISTORY summaries are not exhaustive history evidence.",
+  "banking_required_proofs": [
+    "unchanged full semantic freeze and final root preservation pin",
+    "root-semantic-acceptance-proof and root-frozen-input-copy-check actual page/seq/head/hash/range attestations",
+    "course registration actualPASS",
+    "actual build/test/output records and coverage279/511,232open280–511",
+    "payload manifest and full original/copy source proof plus all its proof-input bytes",
+    "actual raw pre-ordinary untracked capture",
+    "every landing file at the phase boundary except explicit self-manifests",
+    "complete explicit extra inventory, and final-phase actual whitespace inventory"
+  ],
+  "later_boundary": "Both phase internal run-output directories and all caller records live outside B/landing, outside frozen prep. Final phase cannot self-bank subsequent caller streams; retain those externally with an explicit later reviewed boundary.",
+  "candidate_pins": {
+    "freeze-final-payload-before-staging.py": {
+      "bytes": 8218,
+      "sha256": "02f4bff23dfe604f62f4a21bdd37ff1daacd7bba4ca057176717a31c7a79cdfc"
+    },
+    "bank_root_proofs_through279.py": {
+      "bytes": 17890,
+      "sha256": "4fda2995ef53e3b9fe64c4d6ca30b8eb7f73f661d0dbcfc4c4cfe42d844428ba"
+    }
+  }
+}

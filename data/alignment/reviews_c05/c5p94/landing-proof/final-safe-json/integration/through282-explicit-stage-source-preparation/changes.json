@@ -1,0 +1,27 @@
+[
+  {
+    "old": "c5p93",
+    "new": "c5p94",
+    "count": 1
+  },
+  {
+    "old": "through279",
+    "new": "through282",
+    "count": 3
+  },
+  {
+    "old": "(277,278,279)",
+    "new": "(280,281,282)",
+    "count": 1
+  },
+  {
+    "old": "f=js(D/'freeze.json');assert f['spec_verdict']==f['quality_verdict']=='APPROVE' and f['file_count']==2070",
+    "new": "f=js(D/'freeze.json');assert f['status']=='FROZEN' and f['verdict']=='APPROVE' and f['file_count']==871\nassert pin((D/'freeze.json').read_bytes())['sha256']=='5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'\nmeta=js(D/'review.json');assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS'",
+    "count": 1
+  },
+  {
+    "old": "for r in js(L/'staged-payload-manifest.json')['files']:",
+    "new": "payload=js(L/'staged-payload-manifest.json');assert len(payload['files'])==13 and len({r['path'] for r in payload['files']})==13\nfor r in payload['files']:",
+    "count": 1
+  }
+]

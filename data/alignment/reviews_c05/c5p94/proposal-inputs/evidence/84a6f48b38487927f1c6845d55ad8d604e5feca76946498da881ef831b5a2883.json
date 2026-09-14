@@ -1,0 +1,49 @@
+[
+  {
+    "attempt": "initial-brief-read",
+    "command": "cat campaign-artifacts/proposal-protocol.md campaign-artifacts/C05-280-282/tibetan-brief.md campaign-artifacts/C05-280-282/source.json campaign-artifacts/C05-280-282/context.json campaign-artifacts/C05-280-282/baseline.json",
+    "cwd": "campaign-worktree",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "cat: campaign-artifacts/proposal-protocol.md: No such file or directory\ncat: campaign-artifacts/C05-280-282/tibetan-brief.md: No such file or directory\ncat: campaign-artifacts/C05-280-282/source.json: No such file or directory\ncat: campaign-artifacts/C05-280-282/context.json: No such file or directory\ncat: campaign-artifacts/C05-280-282/baseline.json: No such file or directory\n",
+    "resolution": "Read the exact authorized files in workspace root; batch parent was not globbed."
+  },
+  {
+    "attempt": "shape-path-search",
+    "command": "rg --files docs | rg 'C05|COURSE|course_shape'",
+    "cwd": "campaign-worktree",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "",
+    "resolution": "Read the named required data/alignment/C05_CAMPAIGN.md course-shape section."
+  },
+  {
+    "attempt": "split-syllable-gate-location",
+    "command": "rg -n 'split.syllable|def test_no_split|NO_SPLIT|BOUND' tests tools | head -60",
+    "cwd": "campaign-worktree",
+    "observed_pipeline_exit": 0,
+    "stderr": "rg: tests: No such file or directory (os error 2)\n",
+    "resolution": "Located and read tools/test_no_split_syllables.py; no test or source edited."
+  },
+  {
+    "attempt": "first-physical-source-decoding",
+    "interpreter": "PYTHONDONTWRITEBYTECODE=1 python3 -B",
+    "exit": 1,
+    "failing_expression": "(e/'C05ReadingASCII.txt').read_text().splitlines()",
+    "prior_successful_work": "Full HTML column reconstruction passed for all three bodies before the read failed.",
+    "exception": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb8 in position 32644: invalid start byte",
+    "resolution": "Read original saved bytes through reversible latin-1 mapping, explicitly without asserting source encoding; selected passages are ASCII and both columns equal the spine after whitespace joining."
+  },
+  {
+    "attempt": "first-authored-281-conjunction",
+    "status": "superseded before canonical generation",
+    "preserved": "../../281/history/00-first-authored",
+    "resolution": "Changed zhing/and from fourth occurrence to third, the one between wet and flowing."
+  },
+  {
+    "attempt": "first-gcig-null-282",
+    "status": "superseded after a mechanically passing generator run",
+    "preserved": "../../282/history/01-before-cardinality-revision and ../../282/runs/001",
+    "resolution": "Withdrew the null after considering that glossary gcig includes a: article/singularity ownership is distributed or uncertain, so omitted. Final spec/note generated in runs/002."
+  }
+]

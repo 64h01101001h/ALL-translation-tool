@@ -1,0 +1,83 @@
+{
+  "status": "PASS_STATIC_SOURCE_ONLY",
+  "candidate": {
+    "bytes": 6446,
+    "sha256": "8c53dabbec62e433513fb5f890364820feb8c63f5410a8227188c2f213ecafa2"
+  },
+  "entry": {
+    "bytes": 3179,
+    "sha256": "88b3df31dd9162765de114a9aea6731ba26ebcb0c360d812d635491933bfd4fe"
+  },
+  "preparation_freeze": {
+    "bytes": 988,
+    "sha256": "af796441692a1c8fa1310e8017ce79535b2bab5ce01022eca10a952d877290be"
+  },
+  "original": {
+    "bytes": 6334,
+    "sha256": "16230bab33208af750f40d33ba555617a099a7ce2c7f33ffe3dea480b47abe30"
+  },
+  "replacement_count": 7,
+  "replacement_offsets": [
+    {
+      "offset": 238,
+      "old": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+      "new": "10968d16e701b698a0e1fbd845b353089d15ac39",
+      "count": 1
+    },
+    {
+      "offset": 2202,
+      "old": "[277,278,279]",
+      "new": "[280,281,282]",
+      "count": 1
+    },
+    {
+      "offset": 2223,
+      "old": "stage['actual_coverage']==279 and stage['actual_added_links']==149",
+      "new": "stage['actual_coverage']==282 and stage['actual_added_links']==127",
+      "count": 1
+    },
+    {
+      "offset": 5508,
+      "old": "PASS_FIXED_DATA_COMMIT_BINDING_THROUGH_C05_279",
+      "new": "PASS_FIXED_DATA_COMMIT_BINDING_THROUGH_C05_282",
+      "count": 1
+    },
+    {
+      "offset": 5798,
+      "old": "coverage=279",
+      "new": "coverage=282",
+      "count": 1
+    },
+    {
+      "offset": 5811,
+      "old": "main_integration='OPEN; last applicability Sep13 17:25:51 UTC only'",
+      "new": "main_integration='OPEN_NO_APPLICATION; last read-only compatibility Sep13 23:40–23:42 UTC only'",
+      "count": 1
+    },
+    {
+      "offset": 5907,
+      "old": "native_and_phone='verified through171 only; fresh integration pending'",
+      "new": "native_and_phone='Private pack FAILED_UNACCEPTED for four inherited C01 findings; installed resource through171 unchanged; no current device acceptance'",
+      "count": 1
+    }
+  ],
+  "full_inverse_exact": true,
+  "entire_normalized_AST_equal": true,
+  "prior_assertion_count": 33,
+  "complete_preparation_files": 7,
+  "source_snapshots": 33,
+  "preparation_caller": {
+    "exit": 0,
+    "stdout": {
+      "bytes": 279,
+      "sha256": "2f4c6dd6ae3c061b76b83d2302a21150a2ab06f2b91430b61f8b1942d3b62da2"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "new_target_executions": 0,
+  "new_Git_SQL_build_test_calls": 0,
+  "new_WT_writes": 0
+}

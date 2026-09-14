@@ -1,0 +1,26 @@
+"""Record unchanged canonical generator streams and verify declared source occurrences."""
+import json, hashlib, os, subprocess, sys, importlib.util, copy, shutil
+from pathlib import Path
+base=Path(__file__).resolve().parent.parent
+wt=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+wrapper=base/'280/run_generator_ro.py'
+sp=importlib.util.spec_from_file_location('canonical_alignment_generator',wt/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(sp);sp.loader.exec_module(G)
+source=json.loads((base/'280/evidence/queries.json').read_text())['queries'][0]['rows'];rows={r['seq']:r for r in source}
+sha=lambda b:hashlib.sha256(b).hexdigest()
+for seq in [280,281,282]:
+ d=base/str(seq); run=d/'runs/001';run.mkdir(parents=True,exist_ok=False)
+ raw=(d/'spec.json').read_bytes();(run/'spec.json').write_bytes(raw)
+ cmd=[sys.executable,'-B',str(wrapper),str(wt)];r=subprocess.run(cmd,input=raw,capture_output=True,cwd=wt,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (run/'stdout.html').write_bytes(r.stdout);(run/'stderr.txt').write_bytes(r.stderr);(run/'exit.txt').write_text(str(r.returncode)+'\n')
+ record={'command':cmd,'cwd':str(wt),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite_mode':'URI mode=ro via preserved wrapper; no generator or gate logic edited','exit':r.returncode,'stdout_bytes':len(r.stdout),'stderr_bytes':len(r.stderr),'stdout_sha256':sha(r.stdout),'spec_sha256':sha(raw),'canonical_generator_sha256':sha((wt/'tools/gen_alignment_page.py').read_bytes()),'wrapper_sha256':sha(wrapper.read_bytes())}
+ (run/'run.json').write_text(json.dumps(record,indent=2)+'\n')
+ print(seq,'EXIT='+str(r.returncode),'BODY_BYTES='+str(len(r.stdout)),'STDERR_BYTES='+str(len(r.stderr)))
+ if r.stderr:print(r.stderr.decode())
+ if r.returncode or r.stderr:continue
+ (d/'body.html').write_bytes(r.stdout)
+ seg=json.loads(raw)['segments'][0];spans=seg['spans'];byid={s['id']:s for s in spans};tr=G.resolve(rows[seq]['wylie'],spans,'tib',seq);er=G.resolve(rows[seq]['english'],G.with_members(spans,[byid[i] for i in seg['eng_order']],rows[seq]['english']),'eng',seq)
+ intentions=json.loads((d/'intended-spans.json').read_text());checks=[]
+ for x in intentions:
+  checks.append({'id':x['id'],'tib_matches_declared':list(tr[x['id']])==x['tib_range'],'eng_matches_declared':(list(er[x['id']]) if x['id'] in er else None)==x['eng_range'],'tib_exact':rows[seq]['wylie'][slice(*x['tib_range'])]==x['tib'],'eng_exact':x['eng_range'] is None or rows[seq]['english'][slice(*x['eng_range'])]==x['eng']})
+ result={'canonical_exit':r.returncode,'stderr_bytes':len(r.stderr),'saved_body_matches_stdout':(d/'body.html').read_bytes()==r.stdout,'source_fields_verified':'../280/evidence/source-verification.json','spans':len(spans),'null':sum(s['eng'] is None for s in spans),'d5':sum(s['d']==5 for s in spans),'d5_nonnull':sum(s['d']==5 and s['eng'] is not None for s in spans),'d6':sum(s['d']==6 for s in spans),'d3':sum(s['d']==3 for s in spans),'d7':sum(s['d']==7 for s in spans),'intended_occurrence_checks':checks,'all_intended_occurrences_pass':all(all(v for k,v in x.items() if k!='id') for x in checks),'file_hashes':{n:{'bytes':(d/n).stat().st_size,'sha256':sha((d/n).read_bytes())} for n in ['spec.json','body.html','errata.json','intended-spans.json']}}
+ (d/'verification.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');print('INTENDED_OCCURRENCES',result['all_intended_occurrences_pass'])

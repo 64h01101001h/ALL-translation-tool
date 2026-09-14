@@ -1,0 +1,8 @@
+from pathlib import Path
+import json,subprocess,sys,hashlib,datetime,os
+q=Path(__file__).resolve().parent;p=q/'prepare-v2.py.txt'
+for label,args in [('syntax02',[sys.executable,'-B','-c','import pathlib,sys; p=pathlib.Path(sys.argv[1]); compile(p.read_bytes(),str(p),"exec"); print("SYNTAX PASS")',str(p)]),('prepare02',[sys.executable,'-B',str(p)])]:
+ start=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(args,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});end=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ for suffix,raw in [('stdout',r.stdout),('stderr',r.stderr),('exit',(str(r.returncode)+'\n').encode())]:(q/(label+'.'+suffix)).write_bytes(raw)
+ (q/(label+'.command.json')).write_text(json.dumps({'argv':args,'cwd':str(Path.cwd()),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'source_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'start':start,'end':end,'exit':r.returncode,'stdout_bytes':len(r.stdout),'stdout_sha256':hashlib.sha256(r.stdout).hexdigest(),'stderr_bytes':len(r.stderr),'stderr_sha256':hashlib.sha256(r.stderr).hexdigest()},indent=2)+'\n')
+ print(label,r.returncode,r.stdout.decode(),r.stderr.decode());assert r.returncode==0

@@ -1,0 +1,27 @@
+from pathlib import Path
+import json,hashlib,difflib,ast
+O=Path(__file__).resolve().parent;ROOT=O.parents[2];S=ROOT/'campaign-artifacts/reusable-reconciliation-verifier'
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+(O/'prior').mkdir()
+records=[]
+for n in ['verify_reconciliation.py','config_contract.py','root-approved-code-map.json']:
+ p=S/n;b=p.read_bytes();d=O/'prior'/n;d.write_bytes(b);assert d.read_bytes()==b
+ records.append({'original':str(p),'copy':str(d.relative_to(O)),**pin(b),'full_byte_equality':True})
+old=(O/'prior/config_contract.py').read_bytes();before="'intended-spans.json'if row['angle']=='tibetan'else'occurrence-declarations.json'";after="'intended-spans.json'"
+s=old.decode();assert s.count(before)==1;s=s.replace(before,after);new=s.encode()
+(O/'config_contract.py').write_bytes(new)
+ver=(O/'prior/verify_reconciliation.py').read_bytes();(O/'verify_reconciliation.py').write_bytes(ver);assert (O/'verify_reconciliation.py').read_bytes()==(S/'verify_reconciliation.py').read_bytes()
+# Reverse only the targeted row expression, not any unrelated filename.
+newrow="('declarations','intended-spans.json')";oldrow="('declarations',"+before+")"
+assert s.count(newrow)==1 and s.replace(newrow,oldrow).encode()==old
+for n,a,b in [('complete.diff',old.decode(),s),('inverse.diff',s,old.decode())]:
+ (O/n).write_text(''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='prior/config_contract.py' if n=='complete.diff' else 'config_contract.py',tofile='config_contract.py' if n=='complete.diff' else 'prior/config_contract.py')))
+for n in ['verify_reconciliation.py','config_contract.py']:
+ raw=(O/n).read_bytes();ast.parse(raw,filename=str(O/n));compile(raw,str(O/n),'exec')
+# No code object executed/imported; source normalized back through the one exact edit is identical.
+assert ast.dump(ast.parse(s.replace(newrow,oldrow)),include_attributes=False)==ast.dump(ast.parse(old),include_attributes=False)
+for r in records:
+ b=Path(r['original']).read_bytes();assert (O/r['copy']).read_bytes()==b and pin(b)=={k:r[k] for k in ['bytes','sha256']}
+(O/'source-copy-manifest.json').write_text(json.dumps(records,indent=2)+'\n')
+proof={'status':'PASS_SINGLE_FILENAME_ADAPTATION_SYNTAX_ONLY','verifier_byte_exact':pin(ver),'prior_contract':pin(old),'new_contract':pin(new),'only_replacement':{'old':before,'new':after,'occurrences':1},'exact_inverse_restores_original':True,'AST_after_exact_inverse_identical':True,'schema_version_unchanged':'reconciliation-277-v1','pure_syntax_files':2,'code_objects_executed':0,'candidate_modules_imported':0,'current_original_or_reconciliation_reads':0,'config_and_runtime_not_materialized':True}
+(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))

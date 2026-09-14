@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "'o na",
+    "'o na"
+  ],
+  "rows": [
+    {
+      "id": 17005,
+      "wylie": "'o na",
+      "tibetan": "འོ་ན",
+      "tibetan_source": null,
+      "acip": "'O NA",
+      "pronunciation": "o na",
+      "pronunciation_source": null,
+      "sanskrit": "{LC}atha; {LC}tarhi; {LC}hanta",
+      "hopkins_english": "well then; in that case [leads into a question]; now then; well; then",
+      "hgm_gloss": "[\"then\", \"one may begin\", \"now\", \"is it then possible\", \"according to you then\", \"what about\", \"well then\", \"if that's the case\", \"just\", \"well now\", \"well ... then\", \"what about a case where\", \"one might start with the following question\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P5\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+      "corpus_n_segments": 306,
+      "raw": "{\"tibetan\": \"འོ་ན\", \"wylie\": \"'o na\", \"wylie_variants\": [\"'o na\"], \"tenses\": null, \"sanskrit\": \"{LC}atha; {LC}tarhi; {LC}hanta\", \"hopkins_english\": \"well then; in that case [leads into a question]; now then; well; then\", \"hgm_gloss\": [\"then\", \"one may begin\", \"now\", \"is it then possible\", \"according to you then\", \"what about\", \"well then\", \"if that's the case\", \"just\", \"well now\", \"well ... then\", \"what about a case where\", \"one might start with the following question\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"o na\", \"acip\": \"'O NA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P5\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 306}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1
+}

@@ -1,0 +1,53 @@
+{
+  "actual_preparation_invocation": {
+    "kind": "ACTUAL_SOURCE_PREPARATION_CALLER",
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-preparation/prepare-source.py.txt"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONOPTIMIZE": "0"
+    },
+    "started_utc": "2026-09-14T02:42:41.801491+00:00",
+    "stdin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "actual_preparation_result": {
+    "kind": "ACTUAL_RAW_SOURCE_PREPARATION_TRANSPORT_NOT_COMPOSER_EXECUTION",
+    "started_utc": "2026-09-14T02:42:41.801491+00:00",
+    "finished_utc": "2026-09-14T02:42:41.957888+00:00",
+    "exit": 0,
+    "stdout": {
+      "bytes": 1877,
+      "sha256": "82a153ef62bca217cbcd293d10b5ba4da546cce26cebcacaa2139d70b38798af"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "target_executed": "prepare-source.py.txt",
+    "composer_imports_or_invocations": 0
+  },
+  "all_six_transport_members_preserved": true,
+  "exact_stdout_json_equals_author_proof": true,
+  "stdout_full_pin": {
+    "bytes": 1877,
+    "sha256": "82a153ef62bca217cbcd293d10b5ba4da546cce26cebcacaa2139d70b38798af"
+  },
+  "stderr_full_pin": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stdin_full_pin": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "candidate_execution": false,
+  "current_package_failure_history": [],
+  "failure_boundary": "All frozen package files and the complete actual source-preparation caller are copied. No preparation failure is asserted where none is recorded. Freeze-helper outer response is explicitly later external transport; it is not fabricated from the proof."
+}

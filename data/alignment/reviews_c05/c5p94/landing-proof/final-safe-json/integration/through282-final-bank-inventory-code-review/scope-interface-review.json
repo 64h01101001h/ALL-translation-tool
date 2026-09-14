@@ -1,0 +1,48 @@
+{
+  "all_prior_control_names_preserved": [
+    "ordinary_manifest",
+    "ordinary_coverage",
+    "ordinary_extra_inputs",
+    "audit_proof",
+    "root_acceptance",
+    "raw_diagnostic",
+    "raw_diagnostic_exit",
+    "runtime_freeze",
+    "banker",
+    "stage_verifier"
+  ],
+  "required_scope_keys_unchanged": [
+    "schema",
+    "baseline",
+    "controls",
+    "roots",
+    "individual_files",
+    "late_batch_files",
+    "automatic_inputs",
+    "landing_file_paths",
+    "deferred_before_final_bank",
+    "later_external_after_final_bank"
+  ],
+  "descriptor_keys": [
+    "original",
+    "resolved",
+    "symlinks",
+    "bytes",
+    "sha256"
+  ],
+  "pending_control_names_at_source_preparation_freeze": [
+    "audit_proof",
+    "root_acceptance",
+    "raw_diagnostic",
+    "raw_diagnostic_exit",
+    "runtime_freeze",
+    "stage_verifier"
+  ],
+  "stage_verifier_source_only_interpretation": "stage_verifier is the approved current verifier SOURCE descriptor and full pin, verified before and after. Actually bound current source means source identity bound in this reviewed scope. It does not require future final-bank bindings, a final staging release, actual final-stage execution or PASS. Those occur later; imposing them here would create a cycle. Existing binding/release evidence is included if it exists at capture; future evidence stays at its truthful later boundary.",
+  "scope_controls_caveat": "The inherited composer verifies every supplied control. Eight controls are consumed by name; complete inclusion of the two additional identity-only controls is a mandatory reviewed-scope contract, not a new intrinsic source schema assertion.",
+  "roots_caveat": "The inherited composer verifies selected root censuses; root must independently ensure the reviewed scope accounts for every actual current through282 evidence path, including callers, failures, late paths and explicit future boundaries. No actual runtime scope was reviewed here.",
+  "collision_caveat": "New explicit copy targets are injective full logical paths under final-safe-json and are checked unique and absent. Actual automatic routes and their intersections with explicit/current targets remain part of the reviewed runtime scope and downstream full-copy checks; this source review is not a measurement of future destinations.",
+  "old_scope_is_historical_only": true,
+  "runtime_scope_approved": false,
+  "runtime_release": false
+}

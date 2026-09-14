@@ -1,0 +1,12 @@
+{
+  "supersedes_freeze_sha256": "6053f0c981dc40cb74cc3cc858c5b3e2d74509fbca8f6060b377fabf5283d4ab",
+  "previous_full_freeze": "history/metadata-count-correction/freeze.json",
+  "reason": "The allowance sidecar has a _comment string. Its string length was incorrectly included in category-count metadata; retain only dictionary categories. This is a preparation metadata correction, with no source/allowance or semantic content changed.",
+  "changed_files": [
+    "prepare.py",
+    "bindings.json"
+  ],
+  "syntax_check": "compile corrected preparation source only; no execution",
+  "actual_prior_prepare_script": "history/metadata-count-correction/prepare.py",
+  "actual_prior_prepare_output_bindings": "history/metadata-count-correction/bindings.json"
+}

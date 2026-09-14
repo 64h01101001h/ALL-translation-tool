@@ -1,0 +1,25 @@
+"""Correct the recorded preparation caller; candidate source is unchanged."""
+import hashlib,json
+from pathlib import Path
+O=Path(__file__).resolve().parent
+def pin(p):
+ raw=p.read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+old=json.loads((O/'freeze.json').read_bytes())
+assert pin(O/'freeze.json')['sha256']=='1f6092198c428bcc4ec372c0ba96d5bc2b654441934a95f73b08202f3f7104f2'
+for n,r in old['files'].items():assert pin(O/n)==r
+H=O/'history/recorded-caller-correction';H.mkdir()
+for n in ['freeze.json','preparation-proof.json','report.md']:(H/n).write_bytes((O/n).read_bytes())
+p=O/'preparation-proof.json';p.chmod(0o644);proof=json.loads(p.read_bytes());before=proof['command'];proof['command']=['python3','-B',str(O/'prepare_source_v2.py.txt')];save(p,proof)
+p=O/'report.md';p.chmod(0o644);p.write_text(p.read_text()+'\nPreparation history is retained: the first preparation assertion expected a different CTest summary phrase; the actual saved output says all 17 tests passed. The corrected v2 preparation completed without executing a test or the candidate verifier. A subsequent metadata-only correction records that actual v2 caller rather than the hard-coded v1 filename. Prior source, partial-output pins, failure reason, exact fix, prior proof and prior freeze remain available.\n')
+save(O/'recorded-caller-correction.json',dict(reason='The successfully executed v2 preparation retained the v1 filename in its generated command record. Correct only that record and explain the preserved preparation history.',actual_successful_command=proof['command'],prior_recorded_command=before,executed_amendment=['python3','-B',str(O/'amend_preparation_record.py.txt')],candidate_source_unchanged=pin(O/'verify-retention.py.txt'),prior_freeze=pin(H/'freeze.json'),runtime_or_SQL_or_Git_or_build_or_tests_executed=False))
+for n,r in old['files'].items():assert pin(H/n if n in ['preparation-proof.json','report.md'] else O/n)==r
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file() and p!=O/'freeze.json'}
+(O/'freeze.json').chmod(0o644);save(O/'freeze.json',dict(status='FROZEN_SOURCE_PREPARATION',files=files,file_count=len(files)))
+for n,r in files.items():assert pin(O/n)==r
+result=dict(status='SOURCE_READY_FOR_INDEPENDENT_REVIEW',files=len(files),source=pin(O/'verify-retention.py.txt'),freeze=pin(O/'freeze.json'))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555)
+print(json.dumps(result,indent=2))

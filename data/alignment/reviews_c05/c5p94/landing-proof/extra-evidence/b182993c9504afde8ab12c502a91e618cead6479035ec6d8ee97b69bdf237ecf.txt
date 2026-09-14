@@ -1,0 +1,792 @@
+# allcore — the shared C++20 core: spine access, engine ports, query grammar.
+# SQLite: macOS's system libsqlite3 ships FTS5; the smoke test asserts FTS5 at
+# runtime. If a platform lacks it, vendor the amalgamation under third_party/
+# and flip USE_SYSTEM_SQLITE off.
+option(USE_SYSTEM_SQLITE "Link the system sqlite3 library" ON)
+
+add_library(allcore STATIC
+  src/tibdisplay.cpp
+  src/spine.cpp
+  src/textdiff.cpp
+  src/textspan.cpp
+  src/provenance.cpp
+  src/filewalk.cpp
+  src/versions.cpp
+  src/textnorm.cpp
+  src/textpatch.cpp
+  src/table.cpp
+  src/tablediff.cpp
+  src/idioms.cpp
+  src/zipstore.cpp
+  src/docx_redline.cpp
+    src/stardict.cpp
+  src/analysis.cpp
+  src/qc.cpp
+  src/lattice.cpp
+  src/particles.cpp
+  src/sanskrit.cpp
+  src/reader.cpp
+  src/verbclass.cpp
+  src/drills.cpp
+  src/progress.cpp
+  src/terminology.cpp
+  src/outline.cpp
+  src/hypfile.cpp
+  src/whitney.cpp
+  src/colloquial.cpp
+  src/backup.cpp
+  src/comments.cpp
+  src/dossier.cpp
+  src/glossary.cpp
+  src/proposals.cpp
+  src/regenreg.cpp
+  src/tibcal_phugpa.cpp
+  src/verse.cpp
+  src/wilsonparse.cpp
+  src/tibexport.cpp
+  src/quotation.cpp
+  src/verbstems.cpp
+  src/lexicon.cpp
+  src/tibcal.cpp
+  src/tibcal_day.cpp
+  src/affixnorm.cpp
+  src/searchnorm.cpp
+  src/libindex.cpp
+  src/gofer.cpp
+  src/acip_ewts.cpp
+  src/pron_engine.cpp
+  src/speak.cpp
+  src/thl_phonetics.cpp
+  src/ewts_unicode.cpp
+  src/spellcheck.cpp
+  src/refdict.cpp
+  src/mvp.cpp
+  src/poslex.cpp
+  src/abbr.cpp
+  src/authorsearch.cpp
+  src/subjects.cpp
+  src/contractions.cpp
+  src/botok_chunks.cpp
+  src/botok_trie.cpp
+  src/botok_tokenize.cpp
+  src/botok_segtrie.cpp
+  src/catalog_id.cpp
+  src/catalog_audit.cpp
+  src/catalog_name.cpp
+  src/catalog_list.cpp
+  src/title_xlat.cpp
+  src/tree_diff.cpp
+  src/catalog_register.cpp
+  src/worksheet.cpp
+  src/catalog_qc.cpp
+  src/shelf_suggest.cpp
+  src/tm84000.cpp
+  src/catalog_actions.cpp
+  src/textdna.cpp
+  src/unicode_wylie.cpp
+)
+target_include_directories(allcore PUBLIC include)
+
+if(USE_SYSTEM_SQLITE)
+  find_library(SQLITE3_LIB sqlite3 REQUIRED)
+  target_link_libraries(allcore PUBLIC ${SQLITE3_LIB} z)
+else()
+  if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/sqlite3.c")
+    message(FATAL_ERROR "USE_SYSTEM_SQLITE=OFF needs the vendored SQLite amalgamation at core/third_party/sqlite3.c (not in the repo — download from sqlite.org and place it there)")
+  endif()
+  target_sources(allcore PRIVATE third_party/sqlite3.c)
+  # SYSTEM: vendored-amalgamation warnings are upstream's, not ours -
+  # the STATIC-1 warning wall only polices code this repo can fix
+  target_include_directories(allcore SYSTEM PRIVATE third_party)
+  target_compile_definitions(allcore PRIVATE SQLITE_ENABLE_FTS5)
+endif()
+
+add_executable(spine_smoke tests/spine_smoke.cpp)
+target_link_libraries(spine_smoke PRIVATE allcore)
+add_test(NAME spine_smoke
+         COMMAND spine_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(analysis_smoke tests/analysis_smoke.cpp)
+target_link_libraries(analysis_smoke PRIVATE allcore)
+add_test(NAME analysis_smoke
+         COMMAND analysis_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
+                 ${CMAKE_SOURCE_DIR}/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md)
+
+add_executable(engines_battery tests/engines_battery.cpp)
+target_link_libraries(engines_battery PRIVATE allcore)
+add_executable(thl_battery tests/thl_battery.cpp)
+target_link_libraries(thl_battery PRIVATE allcore)
+add_test(NAME thl_battery COMMAND thl_battery)
+add_test(NAME engines_battery
+         COMMAND engines_battery ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
+                 ${CMAKE_SOURCE_DIR}/build/pron_reference.tsv
+                 ${CMAKE_SOURCE_DIR}/build/sanskrit_reference.tsv
+                 ${CMAKE_SOURCE_DIR}/data/pronunciation/gmr_mantra_evidence.csv)
+
+# The Kawachen audio bank: a C++ resolver must agree with the Python
+# prototype it was ported from, syllable for syllable, over the whole corpus.
+# Skips cleanly (77) where the audio is absent - it is a gitignored local
+# asset, so a fresh clone has none and that is not a failure.
+add_executable(speak_battery tests/speak_battery.cpp)
+target_link_libraries(speak_battery PRIVATE allcore)
+add_test(NAME speak_battery
+         COMMAND speak_battery ${CMAKE_SOURCE_DIR}/data/audio/kawachen
+                 ${CMAKE_SOURCE_DIR}/build/speak_reference.tsv)
+set_tests_properties(speak_battery PROPERTIES SKIP_RETURN_CODE 77)
+
+add_executable(spellcheck_smoke tests/spellcheck_smoke.cpp)
+target_link_libraries(spellcheck_smoke PRIVATE allcore)
+add_test(NAME spellcheck_smoke
+         COMMAND spellcheck_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
+                 ${CMAKE_SOURCE_DIR}/data/spellcheck)
+
+add_executable(gofer_smoke tests/gofer_smoke.cpp)
+target_link_libraries(gofer_smoke PRIVATE allcore)
+add_test(NAME gofer_smoke
+         COMMAND gofer_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
+                 ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/acipdocs)
+
+add_executable(lattice_smoke tests/lattice_smoke.cpp)
+target_link_libraries(lattice_smoke PRIVATE allcore)
+add_test(NAME lattice_smoke
+         COMMAND lattice_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(reader_smoke tests/reader_smoke.cpp)
+target_link_libraries(reader_smoke PRIVATE allcore)
+add_test(NAME reader_smoke
+         COMMAND reader_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(drills_smoke tests/drills_smoke.cpp)
+target_link_libraries(drills_smoke PRIVATE allcore)
+add_test(NAME drills_smoke
+         COMMAND drills_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(progress_smoke tests/progress_smoke.cpp)
+target_link_libraries(progress_smoke PRIVATE allcore)
+add_test(NAME progress_smoke COMMAND progress_smoke)
+
+add_executable(terminology_smoke tests/terminology_smoke.cpp)
+target_link_libraries(terminology_smoke PRIVATE allcore)
+add_test(NAME terminology_smoke
+         COMMAND terminology_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(filewalk_smoke tests/filewalk_smoke.cpp)
+target_link_libraries(filewalk_smoke PRIVATE allcore)
+add_test(NAME filewalk_smoke COMMAND filewalk_smoke)
+
+add_executable(versions_smoke tests/versions_smoke.cpp)
+target_link_libraries(versions_smoke PRIVATE allcore)
+add_test(NAME versions_smoke COMMAND versions_smoke)
+
+add_executable(textnorm_smoke tests/textnorm_smoke.cpp)
+target_link_libraries(textnorm_smoke PRIVATE allcore)
+add_test(NAME textnorm_smoke COMMAND textnorm_smoke)
+
+add_executable(textpatch_smoke tests/textpatch_smoke.cpp)
+target_link_libraries(textpatch_smoke PRIVATE allcore)
+add_test(NAME textpatch_smoke COMMAND textpatch_smoke)
+
+add_executable(zipstore_smoke tests/zipstore_smoke.cpp)
+target_link_libraries(zipstore_smoke PRIVATE allcore)
+add_test(NAME zipstore_smoke COMMAND zipstore_smoke)
+
+add_executable(docx_redline_smoke tests/docx_redline_smoke.cpp)
+target_link_libraries(docx_redline_smoke PRIVATE allcore)
+add_test(NAME docx_redline_smoke COMMAND docx_redline_smoke)
+
+add_executable(textdiff_smoke tests/textdiff_smoke.cpp)
+target_link_libraries(textdiff_smoke PRIVATE allcore)
+add_test(NAME textdiff_smoke COMMAND textdiff_smoke)
+
+add_executable(textspan_smoke tests/textspan_smoke.cpp)
+target_link_libraries(textspan_smoke PRIVATE allcore)
+add_test(NAME textspan_smoke COMMAND textspan_smoke)
+
+add_executable(idioms_smoke tests/idioms_smoke.cpp)
+target_link_libraries(idioms_smoke PRIVATE allcore)
+add_test(NAME idioms_smoke COMMAND idioms_smoke)
+
+add_executable(table_smoke tests/table_smoke.cpp)
+target_link_libraries(table_smoke PRIVATE allcore)
+add_test(NAME table_smoke COMMAND table_smoke)
+
+add_executable(tablediff_smoke tests/tablediff_smoke.cpp)
+target_link_libraries(tablediff_smoke PRIVATE allcore)
+add_test(NAME tablediff_smoke COMMAND tablediff_smoke)
+
+add_executable(outline_smoke tests/outline_smoke.cpp)
+target_link_libraries(outline_smoke PRIVATE allcore)
+add_test(NAME outline_smoke COMMAND outline_smoke)
+
+add_executable(hyp_smoke tests/hyp_smoke.cpp)
+target_link_libraries(hyp_smoke PRIVATE allcore)
+add_test(NAME hyp_smoke
+         COMMAND hyp_smoke
+                 ${CMAKE_SOURCE_DIR}/data/hypercontext_legacy/tutorial.hyp)
+
+add_executable(whitney_smoke tests/whitney_smoke.cpp)
+target_link_libraries(whitney_smoke PRIVATE allcore)
+add_test(NAME whitney_smoke
+         COMMAND whitney_smoke
+                 ${CMAKE_SOURCE_DIR}/data/whitney/whitney_roots.tsv)
+
+add_executable(colloquial_smoke tests/colloquial_smoke.cpp)
+target_link_libraries(colloquial_smoke PRIVATE allcore)
+add_test(NAME colloquial_smoke
+         COMMAND colloquial_smoke
+                 ${CMAKE_SOURCE_DIR}/data/pron_colloquial/colloquial_pron.tsv
+                 ${CMAKE_SOURCE_DIR}/data/honorifics/honorific_register.tsv
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(phugpa_smoke tests/phugpa_smoke.cpp)
+target_link_libraries(phugpa_smoke PRIVATE allcore)
+add_test(NAME phugpa_smoke
+         COMMAND phugpa_smoke
+                 ${CMAKE_SOURCE_DIR}/third_party/tcg_henning/fixtures)
+
+add_executable(regenreg_smoke tests/regenreg_smoke.cpp)
+target_link_libraries(regenreg_smoke PRIVATE allcore)
+add_test(NAME regenreg_smoke COMMAND regenreg_smoke)
+
+add_executable(proposals_smoke tests/proposals_smoke.cpp)
+target_link_libraries(proposals_smoke PRIVATE allcore)
+add_test(NAME proposals_smoke
+         COMMAND proposals_smoke ${CMAKE_CURRENT_BINARY_DIR})
+
+add_executable(verse_smoke tests/verse_smoke.cpp)
+target_link_libraries(verse_smoke PRIVATE allcore)
+add_test(NAME verse_smoke COMMAND verse_smoke)
+
+add_executable(quotation_smoke tests/quotation_smoke.cpp)
+target_link_libraries(quotation_smoke PRIVATE allcore)
+add_test(NAME quotation_smoke
+         COMMAND quotation_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(verbstems_smoke tests/verbstems_smoke.cpp)
+target_link_libraries(verbstems_smoke PRIVATE allcore)
+add_test(NAME verbstems_smoke
+         COMMAND verbstems_smoke ${CMAKE_SOURCE_DIR}/data/extracted/verb_stems.tsv)
+
+add_executable(lexicon_smoke tests/lexicon_smoke.cpp)
+target_link_libraries(lexicon_smoke PRIVATE allcore)
+add_test(NAME lexicon_smoke
+         COMMAND lexicon_smoke
+                 ${CMAKE_SOURCE_DIR}/data/extracted/monlam_lexicon_1.txt
+                 ${CMAKE_SOURCE_DIR}/data/extracted/monlam_lexicon_2.txt)
+
+add_executable(tibcal_smoke tests/tibcal_smoke.cpp)
+target_link_libraries(tibcal_smoke PRIVATE allcore)
+add_test(NAME tibcal_smoke COMMAND tibcal_smoke)
+
+add_executable(libindex_cli tools_libindex.cpp)
+target_link_libraries(libindex_cli PRIVATE allcore)
+
+add_executable(wynorm tools_wynorm.cpp)
+target_link_libraries(wynorm PRIVATE allcore)
+
+add_executable(searchnorm_smoke tests/searchnorm_smoke.cpp)
+target_link_libraries(searchnorm_smoke PRIVATE allcore)
+add_test(NAME searchnorm_smoke
+         COMMAND searchnorm_smoke
+                 ${CMAKE_SOURCE_DIR}/data/extracted/verb_lemmas.tsv)
+
+add_executable(affixnorm_smoke tests/affixnorm_smoke.cpp)
+target_link_libraries(affixnorm_smoke PRIVATE allcore)
+add_test(NAME affixnorm_smoke COMMAND affixnorm_smoke)
+
+add_executable(tibcal_day_smoke tests/tibcal_day_smoke.cpp)
+target_link_libraries(tibcal_day_smoke PRIVATE allcore)
+add_test(NAME tibcal_day_smoke
+         COMMAND tibcal_day_smoke
+                 ${CMAKE_SOURCE_DIR}/third_party/kck_henning/kck_fixtures.tsv
+                 ${CMAKE_SOURCE_DIR}/third_party/kck_henning/kck_year_fixtures.tsv)
+
+add_executable(tibexport_smoke tests/tibexport_smoke.cpp)
+target_link_libraries(tibexport_smoke PRIVATE allcore)
+add_test(NAME tibexport_smoke COMMAND tibexport_smoke)
+
+add_executable(libindex_smoke tests/libindex_smoke.cpp)
+target_link_libraries(libindex_smoke PRIVATE allcore)
+add_test(NAME libindex_smoke COMMAND libindex_smoke)
+
+# SQA PERF-2: stopping an index update must be safe, not just possible
+add_executable(libindex_cancel_smoke tests/libindex_cancel_smoke.cpp)
+target_link_libraries(libindex_cancel_smoke PRIVATE allcore)
+add_test(NAME libindex_cancel_smoke COMMAND libindex_cancel_smoke)
+
+add_executable(qc_smoke tests/qc_smoke.cpp)
+target_link_libraries(qc_smoke PRIVATE allcore)
+add_test(NAME qc_smoke
+         COMMAND qc_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
+                 ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/analysis598.md)
+
+add_executable(botok_smoke tests/botok_smoke.cpp)
+target_link_libraries(botok_smoke PRIVATE allcore)
+add_test(NAME botok_smoke
+         COMMAND botok_smoke ${CMAKE_SOURCE_DIR}/data/botok
+                 ${CMAKE_SOURCE_DIR}/build/botok_syls_reference.tsv)
+
+add_executable(botok_tok_smoke tests/botok_tok_smoke.cpp)
+target_link_libraries(botok_tok_smoke PRIVATE allcore)
+add_test(NAME botok_tok_smoke
+         COMMAND botok_tok_smoke ${CMAKE_SOURCE_DIR}/data/botok
+                 ${CMAKE_SOURCE_DIR}/build/botok_tok_scenarios.txt
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
+                 ${CMAKE_SOURCE_DIR}/build/botok_tok_corpus.tsv)
+
+add_executable(mvp_smoke tests/mvp_smoke.cpp)
+target_link_libraries(mvp_smoke PRIVATE allcore)
+add_test(NAME mvp_smoke
+         COMMAND mvp_smoke ${CMAKE_SOURCE_DIR}/data/extracted/mahavyutpatti.tsv)
+
+add_executable(poslex_smoke tests/poslex_smoke.cpp)
+target_link_libraries(poslex_smoke PRIVATE allcore)
+add_test(NAME poslex_smoke
+         COMMAND poslex_smoke ${CMAKE_SOURCE_DIR}/data/soas_pos/classical-lexicon.txt
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(abbr_smoke tests/abbr_smoke.cpp)
+target_link_libraries(abbr_smoke PRIVATE allcore)
+add_test(NAME abbr_smoke
+         COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
+                 ${CMAKE_SOURCE_DIR}/data/spellcheck
+                 ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
+
+add_executable(shelf_suggest_smoke tests/shelf_suggest_smoke.cpp)
+target_link_libraries(shelf_suggest_smoke PRIVATE allcore)
+add_test(NAME shelf_suggest_smoke
+         COMMAND shelf_suggest_smoke ${CMAKE_SOURCE_DIR}/library/sungbum)
+
+add_executable(catalog_qc_smoke tests/catalog_qc_smoke.cpp)
+target_link_libraries(catalog_qc_smoke PRIVATE allcore)
+add_test(NAME catalog_qc_smoke
+         COMMAND catalog_qc_smoke ${CMAKE_CURRENT_BINARY_DIR}
+                 ${CMAKE_SOURCE_DIR}/library/sungbum)
+
+add_executable(worksheet_smoke tests/worksheet_smoke.cpp)
+target_link_libraries(worksheet_smoke PRIVATE allcore)
+add_test(NAME worksheet_smoke COMMAND worksheet_smoke)
+
+add_executable(register_smoke tests/register_smoke.cpp)
+target_link_libraries(register_smoke PRIVATE allcore)
+add_test(NAME register_smoke
+         COMMAND register_smoke ${CMAKE_SOURCE_DIR}/library)
+
+add_executable(cleanup_smoke tests/cleanup_smoke.cpp)
+target_link_libraries(cleanup_smoke PRIVATE allcore)
+add_test(NAME cleanup_smoke
+         COMMAND cleanup_smoke ${CMAKE_SOURCE_DIR}/library)
+
+add_executable(tree_diff_smoke tests/tree_diff_smoke.cpp)
+target_link_libraries(tree_diff_smoke PRIVATE allcore)
+add_test(NAME tree_diff_smoke
+         COMMAND tree_diff_smoke ${CMAKE_CURRENT_BINARY_DIR}
+                 ${CMAKE_SOURCE_DIR}/library/kangyur)
+
+add_executable(title_xlat_smoke tests/title_xlat_smoke.cpp)
+target_link_libraries(title_xlat_smoke PRIVATE allcore)
+add_test(NAME title_xlat_smoke
+         COMMAND title_xlat_smoke ${CMAKE_SOURCE_DIR}/library)
+
+add_executable(catalog_list_smoke tests/catalog_list_smoke.cpp)
+target_link_libraries(catalog_list_smoke PRIVATE allcore)
+add_test(NAME catalog_list_smoke
+         COMMAND catalog_list_smoke ${CMAKE_SOURCE_DIR}/library/kangyur)
+
+add_executable(catalog_name_smoke tests/catalog_name_smoke.cpp)
+target_link_libraries(catalog_name_smoke PRIVATE allcore)
+add_test(NAME catalog_name_smoke
+         COMMAND catalog_name_smoke ${CMAKE_SOURCE_DIR}/library)
+
+add_executable(volsplit_smoke tests/volsplit_smoke.cpp)
+target_link_libraries(volsplit_smoke PRIVATE allcore)
+add_test(NAME volsplit_smoke
+         COMMAND volsplit_smoke ${CMAKE_SOURCE_DIR}/library)
+
+add_executable(catalog_audit_smoke tests/catalog_audit_smoke.cpp)
+target_link_libraries(catalog_audit_smoke PRIVATE allcore)
+add_test(NAME catalog_audit_smoke
+         COMMAND catalog_audit_smoke
+                 ${CMAKE_SOURCE_DIR}/data/extracted/mixed_nuts_bibliography.json
+                 ${CMAKE_SOURCE_DIR}/data/extracted/apparatus_bibliography.json
+                 ${CMAKE_SOURCE_DIR}/library)
+
+add_executable(catalog_id_smoke tests/catalog_id_smoke.cpp)
+target_link_libraries(catalog_id_smoke PRIVATE allcore)
+add_test(NAME catalog_id_smoke
+         COMMAND catalog_id_smoke ${CMAKE_SOURCE_DIR}/library)
+
+add_executable(stardict_smoke tests/stardict_smoke.cpp)
+target_link_libraries(stardict_smoke PRIVATE allcore)
+add_test(NAME stardict_smoke COMMAND stardict_smoke)
+
+add_executable(pron_standard_smoke tests/pron_standard_smoke.cpp)
+target_link_libraries(pron_standard_smoke PRIVATE allcore)
+add_test(NAME pron_standard_smoke COMMAND pron_standard_smoke)
+
+add_executable(subjects_smoke tests/subjects_smoke.cpp)
+target_link_libraries(subjects_smoke PRIVATE allcore)
+add_test(NAME subjects_smoke COMMAND subjects_smoke ${CMAKE_SOURCE_DIR}/data/extracted/work_subjects.tsv)
+
+add_executable(authorsearch_smoke tests/authorsearch_smoke.cpp)
+target_link_libraries(authorsearch_smoke PRIVATE allcore)
+add_test(NAME authorsearch_smoke COMMAND authorsearch_smoke)
+
+add_executable(contractions_smoke tests/contractions_smoke.cpp)
+target_link_libraries(contractions_smoke PRIVATE allcore)
+add_test(NAME contractions_smoke
+         COMMAND contractions_smoke ${CMAKE_SOURCE_DIR}/data/extracted/bsdus_tshig.tsv
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(acipcodes_smoke tests/acipcodes_smoke.cpp)
+target_link_libraries(acipcodes_smoke PRIVATE allcore)
+add_test(NAME acipcodes_smoke
+         COMMAND acipcodes_smoke ${CMAKE_SOURCE_DIR}/data/acip_codes/Acipcode.txt)
+
+add_executable(tm84000_smoke tests/tm84000_smoke.cpp)
+target_link_libraries(tm84000_smoke PRIVATE allcore)
+add_test(NAME tm84000_smoke
+         COMMAND tm84000_smoke ${CMAKE_SOURCE_DIR}/data/84000/tm_84000.tsv.gz
+                 ${CMAKE_BINARY_DIR})
+
+add_executable(catalog_actions_smoke tests/catalog_actions_smoke.cpp)
+target_link_libraries(catalog_actions_smoke PRIVATE allcore)
+add_test(NAME catalog_actions_smoke
+         COMMAND catalog_actions_smoke ${CMAKE_BINARY_DIR})
+
+add_executable(textdna_smoke tests/textdna_smoke.cpp)
+target_link_libraries(textdna_smoke PRIVATE allcore)
+add_test(NAME textdna_smoke COMMAND textdna_smoke)
+
+add_executable(forward_battery tests/forward_battery.cpp)
+target_link_libraries(forward_battery PRIVATE allcore)
+add_test(NAME forward_battery
+         COMMAND forward_battery
+                 ${CMAKE_SOURCE_DIR}/build/forward_reference.tsv)
+
+add_executable(weird_battery tests/weird_battery.cpp)
+target_link_libraries(weird_battery PRIVATE allcore)
+add_test(NAME weird_battery
+         COMMAND weird_battery
+                 ${CMAKE_SOURCE_DIR}/build/weird_top.tsv)
+
+add_executable(fuzz_smoke tests/fuzz_smoke.cpp)
+target_link_libraries(fuzz_smoke PRIVATE allcore)
+add_test(NAME fuzz_smoke COMMAND fuzz_smoke)
+
+add_executable(spine_resilience_smoke tests/spine_resilience_smoke.cpp)
+target_link_libraries(spine_resilience_smoke PRIVATE allcore)
+add_test(NAME spine_resilience_smoke
+         COMMAND spine_resilience_smoke
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(glossary_smoke tests/glossary_smoke.cpp)
+target_link_libraries(glossary_smoke PRIVATE allcore)
+add_test(NAME glossary_smoke COMMAND glossary_smoke)
+
+# SQA FAIL-1: the write-failure drill for the three stores whose
+# save() judged the stream before flushing it.
+add_executable(storeflush_smoke tests/storeflush_smoke.cpp)
+target_link_libraries(storeflush_smoke PRIVATE allcore)
+add_test(NAME storeflush_smoke COMMAND storeflush_smoke)
+
+# SQA PERF-1: the unindexed search's NEAR product and file walk are
+# both bounded, and both say so.
+add_executable(gofer_bound_smoke tests/gofer_bound_smoke.cpp)
+target_link_libraries(gofer_bound_smoke PRIVATE allcore)
+add_test(NAME gofer_bound_smoke COMMAND gofer_bound_smoke)
+
+add_executable(dossier_smoke tests/dossier_smoke.cpp)
+target_link_libraries(dossier_smoke PRIVATE allcore)
+add_test(NAME dossier_smoke COMMAND dossier_smoke)
+
+add_executable(comments_smoke tests/comments_smoke.cpp)
+target_link_libraries(comments_smoke PRIVATE allcore)
+add_test(NAME comments_smoke COMMAND comments_smoke)
+
+# SQA FAIL-2: the first test that can see a write which failed AFTER a
+# successful open. Driven by a script because it needs a RAM disk to
+# stage a real short write (an unwritable directory only exercises the
+# open guard, which was always correct — see the script's header).
+add_executable(shortwrite_probe tests/shortwrite_probe.cpp)
+target_link_libraries(shortwrite_probe PRIVATE allcore)
+add_test(NAME shortwrite
+         COMMAND ${CMAKE_SOURCE_DIR}/tools/test_shortwrite.sh
+                 $<TARGET_FILE:shortwrite_probe>)
+
+add_executable(backup_smoke tests/backup_smoke.cpp)
+target_link_libraries(backup_smoke PRIVATE allcore)
+add_test(NAME backup_smoke COMMAND backup_smoke)
+
+add_executable(towylie_battery tests/towylie_battery.cpp)
+target_link_libraries(towylie_battery PRIVATE allcore)
+add_test(NAME towylie_battery
+         COMMAND towylie_battery ${CMAKE_SOURCE_DIR}/build/towylie_reference.tsv)
+
+find_package(Python3 COMPONENTS Interpreter QUIET)
+
+# F3 link truth: outbound claims verified at the index level
+if(Python3_FOUND)
+  add_test(NAME link_truth
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/link_truth_check.py
+                   ${CMAKE_SOURCE_DIR})
+  # BUS FACTOR / BUILD-7, found 2026-08-25 by following
+  # docs/DEVELOPER_ONBOARDING.md on a clean clone. This verifies that
+  # every teaching video id has a caption source, and the captions
+  # (data/teaching/dcc_captions, 1,877 files) are gitignored - so on a
+  # clean checkout it reported 1,324 ids with no caption source and
+  # failed the documented `ctest -LE fixture` gate.
+  #
+  # It takes the REPO ROOT as its argument, not the caption directory,
+  # so the add_test override in cmake/AllFixtureTests.cmake could not
+  # see the dependency: the path it inspects is tracked, the data it
+  # reads is not.
+  set_tests_properties(link_truth PROPERTIES
+    LABELS "fixture"
+    # GATE-1 (SQA re-measurement): the old skip regex "with no
+    # caption source" was a SUBSTRING OF THE FAILURE MESSAGE, so a
+    # genuine failure (exit 1) was reported Skipped. The skip line
+    # and only the skip line matches now.
+    SKIP_REGULAR_EXPRESSION "caption corpus absent - skipped")
+endif()
+
+# The constitution (Fidelity engine, track C): process lessons as gates
+if(Python3_FOUND)
+  add_test(NAME constitution
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/constitution_check.py
+                   ${CMAKE_SOURCE_DIR})
+
+  # SQA STATIC-3: the checker's own shell-out contract. A rule that
+  # shells out must assert the subprocess RAN - L3 did not, so the
+  # file it polices could be deleted while the gate printed green.
+  # SQA TEST-1: the mutation harness's own contract. 13 of 21
+  # re-injected defects survived the battery; this is the tool that
+  # makes "the pin can fail" checkable instead of asserted.
+  # P0 2026-08-24: ~32 GB of fan-out scratch took the volume to 327 MiB
+  # free. This is the reclaimer, and these are the two rules that make
+  # deleting anything safe: never the current session, never inside the
+  # idle window.
+  # P1 2026-08-24: the machine-readable bill of materials. Its rules
+  # are the ones that matter - a dropped payload never appears, an
+  # unmapped licence says UNRESOLVED, and an unsettled payload says its
+  # terms are OPEN instead of reading as licensed.
+  # P1 2026-08-24: dependency vulnerability scanning. The pinned rule
+  # is the one that matters - a query that could not run must never
+  # read as "nothing found".
+  add_test(NAME vuln_check_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/vuln_check.py --selftest)
+
+  add_test(NAME sbom_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/sbom.py --selftest)
+
+  add_test(NAME scratch_gc_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/scratch_gc.py --selftest)
+
+  add_test(NAME mutate_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/mutate.py --selftest)
+
+  add_test(NAME constitution_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/constitution_check.py
+                   --selftest)
+
+  add_test(NAME ios_deploy_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_ios_deploy.py)
+  set_tests_properties(ios_deploy_selftest PROPERTIES SKIP_RETURN_CODE 77)
+
+  # Adam 2026-08-28: ACIP is the source of record for the equivalents,
+  # not the derived wylie. This proves span-level ACIP recovery and
+  # its round-trip, and pins the "shog inside tshogs" regression plus
+  # the one known-unrecoverable Sanskrit case.
+  add_test(NAME acip_recovery
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_acip_recovery.py)
+
+  add_test(NAME gen_alignment_page
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_gen_alignment_page.py)
+  add_test(NAME alignment_gate_coverage
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_alignment_gate_coverage.py)
+
+  add_test(NAME alignment_builder
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_alignment_builder.py)
+
+  add_test(NAME dictionary_exports
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_dictionary_exports.py)
+
+  add_test(NAME no_broken_words
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_no_broken_words.py)
+
+  add_test(NAME no_split_syllables
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_no_split_syllables.py)
+
+  add_test(NAME no_phonetics_in_layer
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_no_phonetics_in_layer.py)
+
+  add_test(NAME no_degenerate_members
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_no_degenerate_members.py)
+
+  # Rule-7 ratchet (2026-09-04 audit): d=5/d=7 English spans that begin with a
+  # supplied article or hinge may not increase in the shipped dirs and must
+  # be zero (or allowlisted with a licensor) in any new course directory.
+  add_test(NAME no_supplied_span_head
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_no_supplied_span_head.py)
+
+  # The four suites above check pages for internal well-formedness. None of
+  # them ever asked whether the text we SHIPPED still occurs in the text we
+  # CLAIM it came from - so a page could be perfectly well-formed and still
+  # bank a string the source does not contain. This one checks the layer
+  # against the spine itself; NOT-IN-CORPUS is Rule 10 mechanised.
+  # Both fixtures are passed as arguments so BUILD-7's wrapper can see them.
+  add_test(NAME layer_matches_spine
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_layer_matches_spine.py
+                   ${CMAKE_SOURCE_DIR}/data/alignment/alignment_full_v1.json
+                   ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+  # Same question, asked of the artifact with the higher stakes: the
+  # evidence layer is what becomes HGM TENTATIVE cards in front of a user.
+  # Checks English, wylie AND ACIP - ACIP is the source of record, so an
+  # ACIP that does not check out is worse than a wylie that doesn't.
+  add_test(NAME evidence_matches_spine
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_evidence_matches_spine.py
+                   ${CMAKE_SOURCE_DIR}/data/alignment/alignment_evidence_v1.json
+                   ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+  # The register is the artifact that LEAVES this building - ALL's editors
+  # and the director act on it. merge_errata.py checks a quote on the way
+  # in; nothing re-checked one after the spine moved underneath it. A stale
+  # quote makes us the unreliable party in a conversation about someone
+  # else's errors.
+  add_test(NAME errata_quotes_hold
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_errata_quotes_hold.py
+                   ${CMAKE_SOURCE_DIR}/docs/errata_register.json
+                   ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+  # Every gate above stops at the layer. The published dictionary is built
+  # by a SECOND code path that reshapes it, so the layer could be provably
+  # verbatim while the page in front of the reader said something else.
+  # Published must be exactly banked, or a trim of it, and nothing else.
+  add_test(NAME view_matches_layer
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_view_matches_layer.py
+                   ${CMAKE_SOURCE_DIR}/docs/geshe_michael_roach_dictionary.html
+                   ${CMAKE_SOURCE_DIR}/data/alignment/alignment_full_v1.json
+                   ${CMAKE_SOURCE_DIR}/data/alignment/alignment_evidence_v1.json)
+
+  # ERRATA_REGISTER.md and its sidecar drifted once already - the prose
+  # claimed 52 findings while the JSON held 78, and it was found by
+  # accident. The generator is deterministic, so regenerate and compare.
+  add_test(NAME generated_docs_in_sync
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_generated_docs_in_sync.py)
+
+  # Every other layer gate reads the LAYER - the artifact that had already
+  # lost the data. This one compares the layer's builder against the PAGES,
+  # which is the only place a silent parser drop is visible. It found 1,260
+  # spans, 2.7% of all analysis, discarded because the builder required
+  # class="u" exactly while the generator writes "u noun", "u verb-nominal".
+  add_test(NAME builder_sees_every_span
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_builder_sees_every_span.py)
+
+  # The most dangerous way the register can be wrong is to report a PUBLISHED
+  # READING as a local corruption - telling an editor to change a text that is
+  # already correct. The guard is the parallel witness in C16/P1/EM/TCS. This
+  # does not judge which case applies (a mechanical test cannot); it enforces
+  # that an entry with a witness NAMES it.
+  add_test(NAME errata_name_their_witnesses
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_errata_name_their_witnesses.py
+                   ${CMAKE_SOURCE_DIR}/docs/errata_register.json
+                   ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+endif()
+
+# BUILD-7: the battery must say what it did NOT run. fixture_gate holds
+# the skip machinery (cmake/AllFixtureTests.cmake) and keeps
+# docs/FIXTURES.md in step with the fixtures the suites actually read;
+# it carries its own hermetic proof, so it goes red if the wrapper is
+# removed. Neither suite reads an untracked fixture, so both run from a
+# clean checkout — which is the point.
+if(Python3_FOUND)
+  add_test(NAME fixture_gate
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/fixture_gate_check.py
+                   ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
+                   ${CMAKE_COMMAND} ${CMAKE_CTEST_COMMAND})
+endif()
+
+# BUILD-7 / house rule 4: a suite handed no data FAILS. Before
+# 2026-08-23 these three exited 0 against a path that does not exist,
+# one of them printing "(measured 31%)" from a string literal.
+if(Python3_FOUND)
+  add_test(NAME no_vacuous_pass
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/no_vacuous_pass_check.py
+                   ${CMAKE_CURRENT_BINARY_DIR}
+                   $<TARGET_FILE:catalog_id_smoke>
+                   $<TARGET_FILE:catalog_qc_smoke>
+                   $<TARGET_FILE:shelf_suggest_smoke>)
+endif()
+
+# BUILD-6: the release must be able to say what it was built from.
+if(Python3_FOUND)
+  add_test(NAME build_manifest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/build_manifest_check.py
+                   ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+endif()
+
+# SQA BUILD-2/4/5: the payload gate that actually opens the payload.
+# The selftest stages synthetic trees in a temp dir and asserts the
+# walk's verdict on each: an unmanifested file inside a CREDITED
+# directory must fail (that is BUILD-4 exactly — the old rule credited
+# 102 MB of data/extracted on the keyword "84000"), a `drop` tree that
+# survived the prune must fail (BUILD-5 — THL records in a DMG whose
+# notices said they were not redistributed), team-only payload must
+# fail a market press, and the pre-fix eight-line README must fail the
+# team stamp check. Reverting any of those behaviours turns this red;
+# it was mutation-tested that way before it was committed.
+if(Python3_FOUND)
+  # 2026-08-26: the repo-tree counterpart - every git-tracked file must
+  # fall under a row of docs/REPO_LICENSING.md, so material cannot be
+  # public without recorded terms (the gate three book texts never met).
+  add_test(NAME repo_licensing
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/repo_license_check.py)
+  add_test(NAME payload_manifest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/manifest_check.py
+                   --selftest ${CMAKE_SOURCE_DIR})
+  # 2026-09-10: the Kawachen audio store has two views of the same 3,002
+  # recordings - files named by site key plus spelling, and a by-sound
+  # symlink tree - and both are derived from one manifest. This catches
+  # either drifting from it. Skipped cleanly when the audio is absent,
+  # since it is a gitignored local asset, not part of a checkout.
+  add_test(NAME kawachen_index
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/kawachen_index.py --check)
+  set_tests_properties(kawachen_index PROPERTIES SKIP_RETURN_CODE 77)
+endif()
+
+# the iOS drill pack (path A): every drill generated on the Mac by the same
+# allcore the desktop uses, so the phone inherits its fixes and its refusals
+add_executable(build_drill_pack ${CMAKE_SOURCE_DIR}/tools/build_drill_pack.cpp)
+target_link_libraries(build_drill_pack PRIVATE allcore)

@@ -1,0 +1,22 @@
+{
+  "status": "PREPARATION_ONLY_NOT_RUNTIME_RELEASE",
+  "local_pair": ["verify_reconciliation.py", "config_contract.py"],
+  "schema_unchanged": "reconciliation-277-v1",
+  "argv_template": [
+    "<reviewed absolute Python executable>", "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciliation-verifier-preparation/verify_reconciliation.py",
+    "--config", "<absolute actual frozen config path>",
+    "--config-sha256", "<actual reviewed full config SHA256>",
+    "--output", "<absolute fresh output outside every protected directory>",
+    "--execute-reviewed-verification"
+  ],
+  "environment_requirements": {"PYTHONDONTWRITEBYTECODE": "1", "PYTHONOPTIMIZE": "0"},
+  "import_resolution": "Use normal direct script invocation; preserve script-directory config_contract import, without -I/-P/PYTHONSAFEPATH settings that remove it.",
+  "proposed_config_directory_not_created": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciliation-verifier-config",
+  "proposed_output_not_created": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-root-reconciliation-verification-attempt01",
+  "protected": ["resolved batch", "resolved worktree", "resolved shared evidence directory", "resolved local pair directory", "resolved config parent"],
+  "important_output_limit": "The guard rejects ancestor as well as descendant overlap. Do not place the config directly in integration if output is under integration.",
+  "runtime_config_and_input_descriptors": null,
+  "actual_reconciliation_freezes_and_counts": null,
+  "new_execution_or_semantic_approval": false
+}

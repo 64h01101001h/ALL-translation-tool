@@ -1,0 +1,26 @@
+{
+  "status": "PREPARED_ONLY_NO_FULL_RUNTIME_EXECUTION",
+  "old_runtime": {
+    "bytes": 14332,
+    "sha256": "7c1f6ceb0b506a6df941add09f12078e76d8000815832cb4ee85a9cc5ba29d58"
+  },
+  "candidate_runtime": {
+    "bytes": 16371,
+    "sha256": "64b139112abeabd25d30daaf3c1dc77c28b7ce17bcc272a84d469923cabfbd96"
+  },
+  "approved_contract": {
+    "bytes": 9729,
+    "sha256": "432017fe3d3a6fbe30df42028d4cdc4342fd491b303d25a39c3027d8ed794b5d"
+  },
+  "contract_unchanged": true,
+  "all_old_bytes_outside_narrow_replacement_unchanged": true,
+  "old_allowance_check": "   allow=read(d/'proposed-head-allowances.json');assert allow['pages_'+COURSE.lower()]=={} and allow['actual_gated_hits']==[];check(W/'tools/test_no_supplied_span_head.py',allow['predicate_source'])\n",
+  "new_allowance_check": "   allow=read(d/'proposed-head-allowances.json')\n   predicate=W/'tools/test_no_supplied_span_head.py';check(predicate,allow['predicate_source'])\n   if 'path' in allow['predicate_source']:assert Path(allow['predicate_source']['path'])==predicate\n   assert COURSE=='C05' and SEQS==[280,281,282], 'This reviewed adaptation is batch-local'\n   category='pages_'+COURSE.lower();allowances=allow[category]\n   assert isinstance(allowances,dict) and {k for k in allow if k.startswith('pages_')}=={category}\n   assert isinstance(allow['actual_gated_hits'],list)\n   gate_definition=importlib.util.spec_from_file_location('actual_head_predicate',predicate)\n   gate=importlib.util.module_from_spec(gate_definition);gate_definition.loader.exec_module(gate)\n   check(predicate,allow['predicate_source'])\n   body_text=raw.decode('utf-8');gated=list(gate.PAT.finditer(body_text))\n   assert len({m.group(2) for m in gated})==len(gated), 'Duplicate gated labels require explicit investigation'\n   tuple_by_id={t['id']:t for t in tuples};labels={f's{seq}{i}':i for i in byid};actual_hits=[]\n   for match in gated:\n    label=match.group(2);assert label in labels\n    span_id=labels[label];span=byid[span_id];depth=int(match.group(1))\n    assert span['d']==depth and depth in (5,7) and isinstance(span['eng'],str) and span['eng']\n    assert isinstance(span['tib'],str) and span['tib']\n    key='c5p94/'+label;assert key in allowances\n    reason=allowances[key];assert isinstance(reason,str) and reason.strip()\n    assert span['tib'] in reason and span['eng'] in reason, 'Name the exact Tibetan licensor and its English realization'\n    actual_hits.append(dict(label=label,depth=depth,match=match.group(0),body_range=list(match.span()),\n     final_tuple=tuple_by_id[span_id],licensor=span['tib'],allowance_key=key))\n   assert set(allowances)=={r['allowance_key'] for r in actual_hits}, 'Only actual source-bound gated keys may be proposed'\n   assert allow['actual_gated_hits']==actual_hits, 'Declared hits must equal the canonical predicate and final tuples exactly'\n   save(f'{seq}.head-allowance-check.json',dict(predicate_source=allow['predicate_source'],\n    page='c5p94',seq=seq,actual_gated_hits=actual_hits,allowances=allowances,semantic_approval=False))\n",
+  "syntax_checks_only": [
+    "candidate runtime",
+    "unchanged contract",
+    "isolated narrow block"
+  ],
+  "final_schema_source": "inputs/frozen-280/proposed-head-allowances.json",
+  "source_freeze_sha256": "84a1bdef98a98d20b557692a3f49ee353dcc518d68d36642bffcc8df1ab2900e"
+}

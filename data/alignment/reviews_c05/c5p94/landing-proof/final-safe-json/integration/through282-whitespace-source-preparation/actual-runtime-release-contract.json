@@ -1,0 +1,60 @@
+{
+  "status": "REQUIRED_ROOT_REVIEW_AND_RELEASE_CONTRACT_NOT_RUNTIME_RELEASE",
+  "runtime_directory": "<ROOT_MATERIALIZED_RUNTIME>",
+  "runtime_files": [
+    "whitespace282.py",
+    "additional-root-descriptors.json",
+    "physical-source-descriptors.json",
+    "current-inputs/semantic-review/freeze.json",
+    "current-inputs/semantic-review/original-to-copy-manifest.json",
+    "additional-evidence/*"
+  ],
+  "required_root_release_fields": {
+    "status": "PASS_ROOT_CODE_PROVENANCE_RELEASE_ACTUAL_PREPARE_AUDIT_PENDING",
+    "materialized_runtime": "absolute actual runtime directory equal HERE",
+    "files": "unique copy records with original and complete bytes/SHA pins for each required file",
+    "inputs": "source-preparation and independent-review directories, each with exact actual freeze pin",
+    "approved_review": "exact independent review.json bytes/SHA pin",
+    "worktree_or_index_mutated": false,
+    "source_normalization": false,
+    "production_calls": 0,
+    "prepare_audit_calls": 0
+  },
+  "independent_review_fields": {
+    "spec_verdict": "APPROVE",
+    "quality_verdict": "APPROVE",
+    "open_findings": [],
+    "candidate": {
+      "bytes": 31981,
+      "sha256": "14977fae53ea509a99f22e34f87e5fa81c00b0b2536a9a315281a30d4e3a6574"
+    },
+    "descriptor": {
+      "bytes": 69418,
+      "sha256": "7fed8e2eabd5a2766a04d8823dfacb16d333961b4349dc258fe4bd4631e3906d"
+    },
+    "scope": "Source preparation only; actual prepare/audit pending"
+  },
+  "additional_evidence_rows": 65,
+  "provenance_links": 4,
+  "descriptor_entries": 12,
+  "actual_ordinary_manifest": {
+    "bytes": 3435912,
+    "sha256": "e8accebefa7e3e38edcd14107ecb64fcb5660ff907a35bb717f5c3549cfe13a7"
+  },
+  "raw_diagnostic": {
+    "bytes": 22544169,
+    "sha256": "efdb335112f0d032b4c46b9bda05026046e3cbb1670cae250f90147474ca758f"
+  },
+  "physical_descriptors": {
+    "bytes": 2217,
+    "sha256": "ed5d1012ea13adf297e32f6bf64918485bd4b4cb86ddc0f2c9ab21c812ac7b00"
+  },
+  "release_guard_placement": "main calls require_runtime_release(args) after argparse/assert-debug and before Run(args), hence before output writes or Git",
+  "not_required_in_this_phase": [
+    "final banking",
+    "final staged verification",
+    "three ledger append",
+    "DATA or DOCS commits"
+  ],
+  "root_release_already_created": false
+}

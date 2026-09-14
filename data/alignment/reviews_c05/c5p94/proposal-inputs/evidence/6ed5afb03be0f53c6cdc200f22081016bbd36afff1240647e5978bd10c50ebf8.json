@@ -1,0 +1,250 @@
+{
+  "status": "PASS_FOCUSED_CONTROLS_ONLY",
+  "controls": 22,
+  "accepted": 2,
+  "rejected": 20,
+  "full_runtime_imported": false,
+  "full_runtime_verify_called": false,
+  "canonical_generator_called": false,
+  "SQL_Git_builder_landing_calls": 0,
+  "predicate_main_called": false,
+  "predicate_import": "Actual current canonical gate imported inertly; PAT used unchanged.",
+  "results": [
+    {
+      "case": "accept_actual_frozen_two_sogs_hits",
+      "expected_accept": true,
+      "observed_accept": true,
+      "assertion": null,
+      "captured_checks": {
+        "280.head-allowance-check.json": {
+          "predicate_source": {
+            "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_supplied_span_head.py",
+            "bytes": 3788,
+            "sha256": "5783bbd12eff2b371a10852c32744a30ca9f8d226b66dd7907bd4af3aa721655"
+          },
+          "page": "c5p94",
+          "seq": 280,
+          "actual_gated_hits": [
+            {
+              "label": "s280w29",
+              "depth": 5,
+              "match": "<span class=\"u\" data-d=\"5\" data-l=\"s280w29\">and ",
+              "body_range": [
+                5709,
+                5757
+              ],
+              "final_tuple": {
+                "id": "w29",
+                "d": 5,
+                "tib": "sogs",
+                "eng": "and so on",
+                "tib_range": [
+                  291,
+                  295
+                ],
+                "eng_range": [
+                  423,
+                  432
+                ],
+                "parent": null
+              },
+              "licensor": "sogs",
+              "allowance_key": "c5p94/s280w29"
+            },
+            {
+              "label": "s280w43",
+              "depth": 5,
+              "match": "<span class=\"u\" data-d=\"5\" data-l=\"s280w43\">and ",
+              "body_range": [
+                6594,
+                6642
+              ],
+              "final_tuple": {
+                "id": "w43",
+                "d": 5,
+                "tib": "sogs",
+                "eng": "and the rest",
+                "tib_range": [
+                  459,
+                  463
+                ],
+                "eng_range": [
+                  676,
+                  688
+                ],
+                "parent": null
+              },
+              "licensor": "sogs",
+              "allowance_key": "c5p94/s280w43"
+            }
+          ],
+          "allowances": {
+            "c5p94/s280w29": "sogs: enumerative closing gesture licenses the complete idiom 'and so on'; literal and is source-licensed.",
+            "c5p94/s280w43": "sogs: enumerative closing gesture licenses the complete idiom 'and the rest'; literal and is source-licensed."
+          },
+          "semantic_approval": false
+        }
+      }
+    },
+    {
+      "case": "accept_no_predicate_hits_with_empty_mapping",
+      "expected_accept": true,
+      "observed_accept": true,
+      "assertion": null,
+      "captured_checks": {
+        "281.head-allowance-check.json": {
+          "predicate_source": {
+            "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_supplied_span_head.py",
+            "bytes": 3788,
+            "sha256": "5783bbd12eff2b371a10852c32744a30ca9f8d226b66dd7907bd4af3aa721655"
+          },
+          "page": "c5p94",
+          "seq": 281,
+          "actual_gated_hits": [],
+          "allowances": {},
+          "semantic_approval": false
+        }
+      }
+    },
+    {
+      "case": "reject_missing_declared_hit",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Declared hits must equal the canonical predicate and final tuples exactly",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_duplicate_declared_hit",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Declared hits must equal the canonical predicate and final tuples exactly",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_missing_allowance",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_extra_allowance",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Only actual source-bound gated keys may be proposed",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_wrong_page_key",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_wrong_label",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Declared hits must equal the canonical predicate and final tuples exactly",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_wrong_depth",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Declared hits must equal the canonical predicate and final tuples exactly",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_wrong_prefix",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Declared hits must equal the canonical predicate and final tuples exactly",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_wrong_body_range",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Declared hits must equal the canonical predicate and final tuples exactly",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_wrong_final_tuple",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Declared hits must equal the canonical predicate and final tuples exactly",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_wrong_record_licensor",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Declared hits must equal the canonical predicate and final tuples exactly",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_empty_licensor_evidence",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_generic_licensor_evidence",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Name the exact Tibetan licensor and its English realization",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_missing_english_realization_in_evidence",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Name the exact Tibetan licensor and its English realization",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_extra_pages_category",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_predicate_pin_mismatch",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_predicate_path_mismatch",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_duplicate_actual_gated_label",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Duplicate gated labels require explicit investigation",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_actual_span_depth_mismatch",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "",
+      "captured_checks": {}
+    },
+    {
+      "case": "reject_actual_span_text_mismatch",
+      "expected_accept": false,
+      "observed_accept": false,
+      "assertion": "Name the exact Tibetan licensor and its English realization",
+      "captured_checks": {}
+    }
+  ]
+}

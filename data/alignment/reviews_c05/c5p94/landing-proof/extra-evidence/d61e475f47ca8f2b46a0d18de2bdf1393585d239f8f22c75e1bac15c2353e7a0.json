@@ -1,0 +1,163 @@
+{
+  "status": "CONCRETE_PREPARATION_NOT_EXECUTED",
+  "files": [
+    {
+      "file": "prepare.py.txt",
+      "original": {
+        "bytes": 5097,
+        "sha256": "29afb47c427d4848cead3c4432ed1049332c1a83a40bc51a53fce1bb5156e374"
+      },
+      "candidate": {
+        "bytes": 5097,
+        "sha256": "795dbf83954f82d6461bfcafd691588974ce5b146d4f3ed4a459c2f595a04df2"
+      },
+      "changes": [
+        {
+          "old": "C05-274-276",
+          "new": "C05-277-279",
+          "count": 1
+        },
+        {
+          "old": "c5p92",
+          "new": "c5p93",
+          "count": 2
+        },
+        {
+          "old": "81942cfc6022a785894d3cc2a20de81dc4c6f599",
+          "new": "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+          "count": 1
+        }
+      ],
+      "full_inverse_exact": true,
+      "syntax": "AST only",
+      "executed": false
+    },
+    {
+      "file": "run-once.py.txt",
+      "original": {
+        "bytes": 2559,
+        "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+      },
+      "candidate": {
+        "bytes": 2559,
+        "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+      },
+      "changes": [],
+      "full_inverse_exact": true,
+      "syntax": "AST only",
+      "executed": false
+    },
+    {
+      "file": "run-isolated-readonly.py.txt",
+      "original": {
+        "bytes": 1639,
+        "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+      },
+      "candidate": {
+        "bytes": 1639,
+        "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+      },
+      "changes": [],
+      "full_inverse_exact": true,
+      "syntax": "AST only",
+      "executed": false
+    },
+    {
+      "file": "verify-retention.py.txt",
+      "original": {
+        "bytes": 11698,
+        "sha256": "d75195561cd87782920c8c7cb85c73dd86678c4ebfb9c9d41389cc047e378ec2"
+      },
+      "candidate": {
+        "bytes": 11698,
+        "sha256": "a390e0f89a64b873798dde798ad4aa5f60c1e2d9a01027ad1d4a882ce3515a35"
+      },
+      "changes": [
+        {
+          "old": "C05-274-276",
+          "new": "C05-277-279",
+          "count": 1
+        },
+        {
+          "old": "c5p92",
+          "new": "c5p93",
+          "count": 2
+        },
+        {
+          "old": "len(old['links'])==45011",
+          "new": "len(old['links'])==45126",
+          "count": 1
+        },
+        {
+          "old": "115 new links confined to274–276",
+          "new": "149 new links confined to277–279",
+          "count": 1
+        },
+        {
+          "old": "len(added)==115",
+          "new": "len(added)==149",
+          "count": 1
+        },
+        {
+          "old": "(274,275,276)",
+          "new": "(277,278,279)",
+          "count": 3
+        },
+        {
+          "old": "Entire44-row",
+          "new": "Entire34-row",
+          "count": 1
+        },
+        {
+          "old": "len(delta)==44",
+          "new": "len(delta)==34",
+          "count": 1
+        },
+        {
+          "old": "7080",
+          "new": "7081",
+          "count": 4
+        },
+        {
+          "old": "7083",
+          "new": "7084",
+          "count": 5
+        },
+        {
+          "old": "exact276coverage",
+          "new": "exact279coverage",
+          "count": 1
+        },
+        {
+          "old": "range(1,277)",
+          "new": "range(1,280)",
+          "count": 1
+        },
+        {
+          "old": "Accepted current112tuple",
+          "new": "Accepted current146tuple",
+          "count": 1
+        },
+        {
+          "old": "len(tuples)==112",
+          "new": "len(tuples)==146",
+          "count": 1
+        },
+        {
+          "old": "[45126,11926,1612,11,7084,15500,22457,22117,24024,44]",
+          "new": "[45275,11934,1615,11,7084,15517,22491,22151,24061,34]",
+          "count": 1
+        }
+      ],
+      "full_inverse_exact": true,
+      "syntax": "AST only",
+      "executed": false
+    }
+  ],
+  "actual_measurements": {
+    "bytes": 4027,
+    "sha256": "a847d97b791a3d220cfb2773d455adfce6d54993f87e820ffff6467e1a7fb2fb"
+  },
+  "all_prior_gates_retained_by_exact_inverse": true,
+  "no_dynamic_count_gates": true
+}

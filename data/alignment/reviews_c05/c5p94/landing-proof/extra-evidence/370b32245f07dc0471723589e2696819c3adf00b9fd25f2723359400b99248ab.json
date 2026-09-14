@@ -1,0 +1,45 @@
+{
+  "status": "PASS_PURE_SYNTAX_INTERFACE_ADAPTATION_ONLY",
+  "candidate": {
+    "bytes": 7410,
+    "sha256": "9f6e71fd9f10bd129bacf5c8b6e332077b1de30dda829c2928f3c28c3a6d4b2f"
+  },
+  "previous_candidate": {
+    "bytes": 7572,
+    "sha256": "a2ae9e4b29c68a0c374cdefe4eee28b2542f11ea809778cf270bfafc8fc1f8e4"
+  },
+  "changes": [
+    {
+      "old": "directory/('intended-spans.json' if angle=='tibetan' else 'occurrence-declarations.json')",
+      "new": "directory/'intended-spans.json'",
+      "occurrences": 1
+    },
+    {
+      "old": "declarations={x['id']:x for x in (declared if angle=='tibetan' else declared['declarations'])}",
+      "new": "assert isinstance(declared,list) and [x['id'] for x in declared]==[x['id'] for x in spans]\n            declarations={x['id']:x for x in declared}",
+      "occurrences": 1
+    },
+    {
+      "old": "declaration['tib_range'] if angle=='tibetan' else [declaration['tib']['start'],declaration['tib']['end']]",
+      "new": "declaration['tib_range']",
+      "occurrences": 1
+    },
+    {
+      "old": "declaration['eng_range'] if angle=='tibetan' else [declaration['eng']['start'],declaration['eng']['end']]",
+      "new": "declaration['eng_range']",
+      "occurrences": 1
+    },
+    {
+      "old": "if angle=='english':assert declaration['parent']==(parent if span['d']==7 else None)",
+      "new": "if 'parent' in declaration:assert declaration['parent']==(parent if span['d']==7 else None)",
+      "occurrences": 1
+    }
+  ],
+  "exact_reverse": true,
+  "all_named_functions_AST_unchanged": true,
+  "common_list_spec_order_required": true,
+  "optional_parent_checked_when_present_in_either_angle": true,
+  "source_of_new_contract": "Root message: both active original readers instructed to provide intended-spans.json LIST in spec order with id/tib_range/eng_range (null for null exponent); additional reasoning fields optional. Neither current original directory inspected.",
+  "pending": "Frozen completion filename/status/Tibetan total/actual reader-owned RO wrapper and all runtime pins remain unbound.",
+  "candidate_execution": false
+}

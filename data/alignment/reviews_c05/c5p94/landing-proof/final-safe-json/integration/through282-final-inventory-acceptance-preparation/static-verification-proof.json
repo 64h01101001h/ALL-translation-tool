@@ -1,0 +1,75 @@
+{
+  "status": "PASS_STATIC_SOURCE_REVIEW_ONLY",
+  "full_original_copy_pairs": 30,
+  "measured_scope_counts": {
+    "roots": 43,
+    "primary_descriptor_occurrences": 4237,
+    "primary_logical_aliases": 4228,
+    "automatic_descriptors": 73,
+    "control_descriptors": 10,
+    "all_descriptor_occurrences": 4320
+  },
+  "candidates": {
+    "initial": {
+      "source": {
+        "bytes": 6748,
+        "sha256": "74dfe57bbd2240c6f632a38bb432b6bfb51293821142560ffede4769c7263575"
+      },
+      "prior": {
+        "bytes": 3839,
+        "sha256": "73ab8ba280b91932db21ae8b05e8533f10e9f714f68dbb70eb61926650328913"
+      },
+      "forward_inverse_byte_exact": true,
+      "syntax_compiled_not_executed": true,
+      "pin_chk_ast_exact": true,
+      "literal_clean_json_assertion_ast_exact": true,
+      "actual_producer_proof_fields": [
+        "bank_records",
+        "coverage_pin",
+        "external_records",
+        "list_pin",
+        "list_records",
+        "ordinary_externals_verified",
+        "ordinary_files_verified",
+        "prior_coverage_verified",
+        "same_original_exclusions",
+        "scope_pin",
+        "source_aliases",
+        "status"
+      ]
+    },
+    "complete": {
+      "source": {
+        "bytes": 9291,
+        "sha256": "0ddbfafc32275d02388c778b50145760d2d0fd7ad32e292db1556502ad24415d"
+      },
+      "prior": {
+        "bytes": 3767,
+        "sha256": "3549e354656211c95cfd5394ce3db9adeea06b8b503719e074a19bab0731fa0e"
+      },
+      "forward_inverse_byte_exact": true,
+      "syntax_compiled_not_executed": true,
+      "pin_chk_ast_exact": true,
+      "literal_clean_json_assertion_ast_exact": true,
+      "actual_producer_proof_fields": [
+        "added_rows",
+        "all_logical_aliases",
+        "final_list",
+        "final_rows",
+        "initial_rows",
+        "initial_rows_preserved_exactly",
+        "resolved_originals_unique",
+        "scope_pin",
+        "status"
+      ]
+    }
+  },
+  "conservation_data_controls": [
+    "complete set accepted",
+    "surplus rejected",
+    "omission rejected"
+  ],
+  "candidate_imports": 0,
+  "candidate_executions": 0,
+  "git_sql_bank_stage_build_commands": 0
+}

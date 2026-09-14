@@ -1,0 +1,60 @@
+from pathlib import Path
+import ast, datetime, hashlib, json
+B=Path(__file__).resolve().parent
+P=B/'reproduction-closure-preparation'
+R=B.parent/'integration/through282-generated-reproduction'
+O=B/'root-reproduction-closure-code-review'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def expected(r):return {k:r[k] for k in ('bytes','sha256')}
+assert __debug__ and not O.exists()
+fr=(P/'freeze.json').read_bytes()
+assert pin(fr)['sha256']=='f78bb56ebedf27088dede254d4882159caf38633172c8e7bc70d6db75425d123'
+f=json.loads(fr)
+assert len(f['files'])==f['file_count']==75
+assert sum(x['bytes'] for x in f['files'].values())==f['total_bytes']==1043984
+assert {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+for n,r in f['files'].items():assert pin((P/n).read_bytes())==r
+mapping=j(P/'original-to-copy-manifest.json')+j(P/'prior-source-mapping.json')
+assert len(mapping)==53
+for row in mapping:
+ raw=Path(row['original']).read_bytes()
+ assert raw==(P/row['copy']).read_bytes() and pin(raw)==expected(row)
+external=j(P/'external-full-source-pins.json');assert len(external)==54
+for row in external:assert pin(Path(row['path']).read_bytes())==expected(row)
+ap=j(P/'adaptation-proof.json')
+assert ap['status']=='PASS_SOURCE_ONLY_ADAPTATION' and ap['target_executions']==0
+pins={'close-evidence.py.txt':'3395a15d3fb07ae6dbf9cad582fd72e00ac7658a204917b44530f4587e5b83e3','accept-independent-reproduction-root.py':'87f638191a9e5b6782725b20e75459532fc71844fbb7fd8a07e5f782a105f935'}
+for row in ap['candidates']:
+ name=row['candidate'];old=(P/('prior-'+name)).read_bytes();new=(P/name).read_bytes()
+ assert pin(old)==row['old'] and pin(new)==row['new'] and pin(new)['sha256']==pins[name]
+ value=old.decode()
+ for change in row['replacements']:
+  assert value.count(change['old'])==change['count']
+  value=value.replace(change['old'],change['new'])
+ assert value.encode()==new
+ for change in reversed(row['replacements']):value=value.replace(change['new'],change['old'])
+ assert value.encode()==old
+ ast.parse(new)
+ret=j(R/'retention-proof.json');prep=j(R/'preparation-proof.json');exe=j(R/'execution-proof.json')
+assert ret['status']==prep['status']==exe['status']=='PASS'
+assert ret['checks_total']==223847 and ret['prior_links_retained']==45275 and ret['added_links']==127
+assert prep['files']==1513 and prep['registered_pages']==548 and prep['source_date']=='2026-09-13' and prep['root_frozen_payload_count']==13
+assert len(exe['outputs'])==7
+for label in ('prepare','run-once','retention'):
+ d=R/'caller-runs'/label;command=j(d/'command.json');record=j(d/'execution.json')
+ assert command['argv']==record['argv'] and command['cwd']==record['cwd']==str(R)
+ assert record['exit']==0 and (d/'exit.txt').read_bytes()==b'0\n' and not (d/'stderr.bin').read_bytes()
+ for suffix in ('stdout','stderr'):
+  assert pin((d/(suffix+'.bin')).read_bytes())==dict(bytes=record[suffix+'_bytes'],sha256=record[suffix+'_sha256'])
+outputs=[(P/'close-evidence.py.txt',R/'close-evidence.py.txt'),(P/'accept-independent-reproduction-root.py',B/'accept-independent-reproduction-root.py')]
+assert all(not target.exists() for _,target in outputs)
+O.mkdir()
+copies=[]
+for source,target in outputs:
+ raw=source.read_bytes()
+ with target.open('xb') as out:out.write(raw)
+ assert target.read_bytes()==raw
+ copies.append(dict(original=str(source),copy=str(target),**pin(raw)))
+proof=dict(status='PASS_INDEPENDENT_ROOT_CODE_REVIEW_AND_RELEASE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_freeze=pin(fr),source_files=75,full_original_copy_pairs=53,complete_external_pins=54,code_mapping=copies,review='Root fully read both current sources, complete prior acceptance, exact full prior-to-current diffs, report and actual measured bindings. Every prior source reconstructed exactly; changes restricted to recorded current values, strengthened cardinalities and truthful cwd resolution for relative prepare argv. All existing raw-state, immutable Git/seed, full source and output/13-payload checks retained.',scope='Release only. Actual close caller, runtime freeze and root acceptance must follow in order; no semantic, stage, bank, MAIN or device acceptance.')
+(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof,indent=2))

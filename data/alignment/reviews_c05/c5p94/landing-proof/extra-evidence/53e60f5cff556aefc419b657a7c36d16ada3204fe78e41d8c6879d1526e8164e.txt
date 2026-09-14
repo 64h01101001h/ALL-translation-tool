@@ -1,0 +1,79 @@
+"""File, source-diff, AST and recorded-interface review; never executes candidates."""
+from pathlib import Path
+import ast, copy, datetime, difflib, hashlib, json, re
+O=Path(__file__).resolve().parent;B=O.parents[1];P=B/'payload-freezer-preparation';L=B/'landing';W=B.parents[1]/'campaign-worktree'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def save(n,x):
+ with (O/n).open('x') as f:json.dump(x,f,indent=2,ensure_ascii=False);f.write('\n')
+freeze_raw=(P/'freeze.json').read_bytes();assert pin(freeze_raw)['sha256']=='09e7c5cd64c688a71fcdf39de0d76d12217c0008989675278b0171a15402eb2e'
+f=json.loads(freeze_raw);assert len(f['files'])==f['file_count']==49 and sum(x['bytes'] for x in f['files'].values())==f['total_bytes']==344788
+assert {str(x.relative_to(P)) for x in P.rglob('*') if x.is_file()}==set(f['files'])|{'freeze.json'}
+for n,v in f['files'].items():assert pin((P/n).read_bytes())==v and not (P/n).is_symlink()
+(O/'reviewed-source-freeze.json').write_bytes(freeze_raw)
+save('full-freeze-checks.json',[dict(path=str(P/n),**v,verified=True) for n,v in f['files'].items()])
+rows=j(P/'original-to-copy-manifest.json');assert len(rows)==31
+for r in rows:
+ a=Path(r['original']).read_bytes();assert a==(P/r['copy']).read_bytes() and pin(a)=={k:r[k] for k in ('bytes','sha256')}
+save('complete-source-copy-checks.json',[dict(**r,full_bytes_equal=True) for r in rows])
+comparisons=[]
+for r in j(P/'adaptation-proof.json')['files']:
+ n=r['candidate'];old=P/('inputs/prior-freezer.py.txt' if n.startswith('freeze') else 'inputs/prior-prepare.py.txt');a=old.read_text();b=(P/n).read_text();value=a
+ for c in r['changes']:
+  assert value.count(c['old'])==c['count'];value=value.replace(c['old'],c['new'])
+ assert value==b
+ for c in reversed(r['changes']):
+  assert value.count(c['new'])==c['count'];value=value.replace(c['new'],c['old'])
+ assert value==a
+ assert pin(a.encode())==r['old'] and pin(b.encode())==r['new']
+ diffs={}
+ for suffix,left,right in [('diff',a,b),('inverse.diff',b,a)]:
+  d=''.join(difflib.unified_diff(left.splitlines(True),right.splitlines(True),fromfile='prior/'+n,tofile='candidate/'+n))
+  assert (P/(n+'.'+suffix)).read_text()==d;diffs[suffix]=pin(d.encode())
+ ta,tb=ast.parse(a),ast.parse(b)
+ comparisons.append(dict(candidate=str(P/n),old_source=str(old),original=r['old'],candidate_pin=r['new'],complete_forward_inverse=True,diffs=diffs,old_assertions=sum(isinstance(x,ast.Assert) for x in ast.walk(ta)),new_assertions=sum(isinstance(x,ast.Assert) for x in ast.walk(tb)),syntax_only=True))
+save('complete-candidate-comparisons.json',comparisons)
+externals=j(P/'actual-thirteen-source-pins.json');assert len(externals)==13 and len({x['path'] for x in externals})==13
+for r in externals:
+ p=Path(r['original']);assert p==W/r['path'];before=p.stat();raw=p.read_bytes();after=p.stat()
+ assert (before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_size,after.st_mtime_ns,after.st_ctime_ns)
+ assert pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+save('actual-thirteen-source-checks.json',[dict(**r,full_bytes_read_and_pin_verified=True) for r in externals])
+base=j(P/'inputs/baseline.json');build=j(P/'inputs/landing/canonical-builds-once.json');ret=j(P/'inputs/landing/retention-source-check.json');review=j(P/'inputs/semantic-review/review.json');root=j(P/'inputs/root-final-semantic-review-verification-v3/proof.json')
+assert base['commit']==build['baseline_commit']==ret['baseline_commit']==root['head']=='10968d16e701b698a0e1fbd845b353089d15ac39'
+assert review['verdict']=='APPROVE' and review['spec_verdict']==review['quality_verdict']=='PASS' and review['open_findings']==[]
+assert root['status']=='PASS' and root['review_metadata']==pin((P/'inputs/semantic-review/review.json').read_bytes()) and root['review_freeze']==pin((P/'inputs/semantic-review/freeze.json').read_bytes())
+assert [x['seq'] for x in review['segments']]==[280,281,282]
+spans=[]
+for r in review['segments']:
+ raw=(P/f"inputs/final-specs/{r['seq']}.json").read_bytes();assert pin(raw)==dict(bytes=r['spec_bytes'],sha256=r['spec_sha256']);s=json.loads(raw)['segments'];assert len(s)==1 and s[0]['seq']==r['seq'] and len(s[0]['spans'])==r['span_count'];spans.extend(s[0]['spans'])
+assert len(spans)==review['total_spans']==124 and ret['added_links']==127 and ret['added_by_segment']=={'280':55,'281':47,'282':25} and ret['prior_links_retained']==45275
+assert sum(x['eng'] is None for x in spans)==review['total_nulls']==4
+needed=j(P/'inputs/semantic-review/span-head-allow-needed.json');before=j(P/'inputs/landing/span-head-allow-before.json');current=j(P/'inputs/current-span-head-allow.json');mutation=j(P/'inputs/landing/span-head-allow-mutation.json')
+assert set(needed)=={'pages_c05'} and set(needed['pages_c05'])=={'c5p94/s280w29','c5p94/s280w43'}
+assert all(isinstance(x,str) and x.strip() for x in needed['pages_c05'].values())
+expected=copy.deepcopy(before);assert not set(expected['pages_c05'])&set(needed['pages_c05']);expected['pages_c05'].update(needed['pages_c05']);assert current==expected
+assert mutation['before']==pin((P/'inputs/landing/span-head-allow-before.json').read_bytes()) and mutation['after']==pin((P/'inputs/current-span-head-allow.json').read_bytes()) and mutation['added']==needed and mutation['status']=='PASS' and mutation['prior_values_unchanged']
+sf=j(P/'inputs/semantic-review/freeze.json')['files'];sf={r['path']:r for r in sf} if isinstance(sf,list) else sf
+assert {k:sf['span-head-allow-needed.json'][k] for k in ('bytes','sha256')}==pin((P/'inputs/semantic-review/span-head-allow-needed.json').read_bytes())
+assert {x['path'] for x in externals}=={r for r,h in build['output_sha256'].items() if h!=base['sha256'][r]}|{'data/alignment/pages_c05/c5p93.html','data/alignment/pages_c05/c5p94.html','data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p94.json','tools/build_alignment_layer.py','data/alignment/span_head_allow.json'}
+extra=[]
+for n in ['ctest-plan-correction.json','landing/ctest-17.execution.json','landing/ctest-17-transport-map.json','root-postlanding-correction-acceptance.json']:
+ raw=(B/n).read_bytes();target=O/('actual-'+Path(n).name);target.write_bytes(raw);extra.append(dict(original=str(B/n),copy=target.name,**pin(raw)))
+for r in j(L/'ctest-17-transport-map.json'):
+ a=Path(r['original']).read_bytes();assert a==Path(r['copy']).read_bytes() and pin(a)=={k:r[k] for k in ('bytes','sha256')}
+log=(P/'inputs/landing/ctest-17.stdout').read_text();passed=re.findall(r'^\s*(\d+)/17 Test\s+#(\d+): ([a-z_]+) .* Passed\s+([0-9.]+) sec$',log,re.M)
+assert len(passed)==17 and [int(x[0]) for x in passed]==list(range(1,18)) and {x[2] for x in passed}==set(j(B/'ctest-plan-correction.json')['tests'])
+assert re.findall(r'Total Test time \(real\) =\s+([0-9.]+) sec',log)==['12.62']
+assert j(L/'ctest-17.command.json')['argv']==j(B/'ctest-plan-correction.json')['future_argv']
+ex=j(L/'ctest-17.execution.json');assert ex['exit']==0 and ex['stdout_sha256']==pin(log.encode())['sha256'] and ex['stderr_bytes']==0
+ev=j(W/'data/alignment/alignment_evidence_v1.json');assert ev['meta']['date']=='2026-09-13'
+source_date=ev['meta']['date'];del ev
+contract=j(P/'command-contract.json');assert contract['freezer_materialization']==str(B/'freeze-final-payload-before-staging.py') and contract['future_argv']==['python3','-B',str(B/'freeze-final-payload-before-staging.py')] and contract['future_cwd']==str(W)
+assert contract['environment']=={'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0','GIT_OPTIONAL_LOCKS':'0'}
+assert contract['prepare_runtime']==str(B.parent/'integration/through282-generated-reproduction/prepare.py.txt') and contract['root_review_required'] and contract['runtime_executions']==0
+for n,v in f['files'].items():assert pin((P/n).read_bytes())==v
+assert (P/'freeze.json').read_bytes()==freeze_raw
+save('extra-source-bindings.json',extra)
+save('review.json',dict(verdict='APPROVE_SOURCE_PREPARATION_ONLY',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),reviewer='Codex /root/c05_280_282_english',author='Codex /root/c05_253_255_reconcile',role_disclosure='Non-author of payload freezer and prepare13 adapter; earlier English-original/landing-helper/allowance-adapter and postlanding code-review roles disclosed. No semantic judgment.',source_directory=str(P),source_freeze=pin(freeze_raw),source_files=49,source_bytes=344788,complete_source_copy_pairs=31,full_live_payload_source_pins=13,candidates=comparisons,accepted_review_schema=dict(verdict='APPROVE',spec_verdict='PASS',quality_verdict='PASS',baseline_binding='Actual v3 root proof binds current metadata and complete freeze'),actual_measured_bindings=dict(spans=124,nulls=4,prior_links=45275,added_links=127,added_by_segment={'280':55,'281':47,'282':25},source_date=source_date,ctest_records=17,ctest_seconds=12.62,payload_files=13),source_specific_allowances=needed,all_prior_sidecar_values_preserved=True,open_findings=[],limits='Source preparation approval only. Root must separately pin/materialize/release the exact freezer and record its one actual invocation. prepare13 and all independent reproduction/retention/entry/closure/banking runtime remain unreleased. Current semantic review is consumed as accepted input, not re-judged. No baseline Git query, candidate import/execution, build, test, SQL, landing or banking performed.',candidate_executions=0,tests=0,git=0,sql=0,builds=0,banks=0))
+print(json.dumps(dict(verdict='APPROVE_SOURCE_PREPARATION_ONLY',files=49,source_copy_pairs=31,payload_source_pins=13,candidates=2,ctest_reruns=0)))

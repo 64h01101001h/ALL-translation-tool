@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/verify-final-semantic-review-root-v2.py", line 153, in <module>
+    assert any((R / r['copy']).read_bytes() == path.read_bytes() for r in originals[str(path.resolve())]), str(path)
+                                                                          ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+KeyError: '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/tibetan/280/evidence'

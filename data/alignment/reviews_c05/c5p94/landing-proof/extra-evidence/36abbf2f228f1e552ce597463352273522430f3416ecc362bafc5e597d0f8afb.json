@@ -1,0 +1,224 @@
+{
+  "baseline_commit": [
+    "f114fcb7a5a899b939ffc948ae9fdbbb746541fa",
+    "10968d16e701b698a0e1fbd845b353089d15ac39"
+  ],
+  "numeric_substitutions": [
+    {
+      "offset_in_masked_source": 25,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 537,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 542,
+      "before": "277",
+      "after": "280"
+    },
+    {
+      "offset_in_masked_source": 547,
+      "before": "278",
+      "after": "281"
+    },
+    {
+      "offset_in_masked_source": 552,
+      "before": "279",
+      "after": "282"
+    },
+    {
+      "offset_in_masked_source": 619,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 1830,
+      "before": "276",
+      "after": "279"
+    },
+    {
+      "offset_in_masked_source": 1961,
+      "before": "276",
+      "after": "279"
+    },
+    {
+      "offset_in_masked_source": 4083,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 4499,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 4742,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 5140,
+      "before": "276",
+      "after": "279"
+    },
+    {
+      "offset_in_masked_source": 5213,
+      "before": "279",
+      "after": "282"
+    },
+    {
+      "offset_in_masked_source": 5270,
+      "before": "92",
+      "after": "93"
+    },
+    {
+      "offset_in_masked_source": 5284,
+      "before": "92",
+      "after": "93"
+    },
+    {
+      "offset_in_masked_source": 5298,
+      "before": "274",
+      "after": "277"
+    },
+    {
+      "offset_in_masked_source": 5302,
+      "before": "276",
+      "after": "279"
+    },
+    {
+      "offset_in_masked_source": 5344,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 5358,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 5372,
+      "before": "277",
+      "after": "280"
+    },
+    {
+      "offset_in_masked_source": 5376,
+      "before": "279",
+      "after": "282"
+    },
+    {
+      "offset_in_masked_source": 5559,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 5749,
+      "before": "94",
+      "after": "95"
+    },
+    {
+      "offset_in_masked_source": 5849,
+      "before": "94",
+      "after": "95"
+    },
+    {
+      "offset_in_masked_source": 5967,
+      "before": "92",
+      "after": "93"
+    },
+    {
+      "offset_in_masked_source": 5973,
+      "before": "274",
+      "after": "277"
+    },
+    {
+      "offset_in_masked_source": 5978,
+      "before": "275",
+      "after": "278"
+    },
+    {
+      "offset_in_masked_source": 5983,
+      "before": "276",
+      "after": "279"
+    },
+    {
+      "offset_in_masked_source": 6015,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 6021,
+      "before": "277",
+      "after": "280"
+    },
+    {
+      "offset_in_masked_source": 6026,
+      "before": "278",
+      "after": "281"
+    },
+    {
+      "offset_in_masked_source": 6031,
+      "before": "279",
+      "after": "282"
+    },
+    {
+      "offset_in_masked_source": 6395,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 6411,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 6462,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 6595,
+      "before": "280",
+      "after": "283"
+    },
+    {
+      "offset_in_masked_source": 7246,
+      "before": "276",
+      "after": "279"
+    },
+    {
+      "offset_in_masked_source": 7252,
+      "before": "279",
+      "after": "282"
+    },
+    {
+      "offset_in_masked_source": 7291,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 7350,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 7554,
+      "before": "93",
+      "after": "94"
+    },
+    {
+      "offset_in_masked_source": 7582,
+      "before": "279",
+      "after": "282"
+    }
+  ],
+  "closure_guard_before_after": [
+    "closed = json.loads((B.parent / 'integration/through279-root-closure/final-observed-main/proof.json').read_text())\nassert closed['status'] == 'PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_279' and closed['final_head'] == BASE",
+    "closed_raw = (B.parent / 'integration/through279-root-closure/proof.json').read_bytes()\nassert pin(closed_raw) == {'bytes': 4959, 'sha256': 'a26675e3375b3bcb65e7cf871c904db0ed646deec8c2d4aed2749bf3cc940a9a'}\nclosed = json.loads(closed_raw)\nassert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE\nassert closed['course'] == 'C05' and closed['verified_segments'] == 279 and closed['course_segments'] == 511\nassert closed['next_batch'] == SEQS and closed['next_batch_authorized_after_this_closure'] is True"
+  ],
+  "all_other_guard_logic": "Retained verbatim; full diff is authoritative.",
+  "runtime_executed": false
+}

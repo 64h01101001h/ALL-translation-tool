@@ -1,0 +1,92 @@
+"""Append reviewed ledgers after DATA, then bind the complete committed trees.
+No commits, stage writes, builds, semantic changes or MAIN access here.
+"""
+from pathlib import Path
+import argparse,datetime,hashlib,json,os,subprocess
+BASE='10968d16e701b698a0e1fbd845b353089d15ac39'
+NAMES=['data/alignment/C05_CAMPAIGN.md','docs/handoff/HANDOFF_LOG.md','docs/superpowers/plans/2026-09-12-aci-alignment-campaign.md']
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def pincheck(b,p):assert pin(b)=={k:p[k] for k in ('bytes','sha256')}
+p=argparse.ArgumentParser()
+p.add_argument('mode',choices=['append','bind'])
+for n in ['worktree','stage','data','entry','output']:p.add_argument('--'+n,required=True)
+p.add_argument('--final');p.add_argument('--append-proof')
+a=p.parse_args();assert __debug__
+W=Path(a.worktree).resolve(strict=True);S=Path(a.stage).resolve(strict=True);O=Path(a.output)
+assert len(a.data)==40 and all(c in '0123456789abcdef' for c in a.data)
+assert not O.exists() and not O.resolve().is_relative_to(W) and not O.resolve().is_relative_to(S)
+O.mkdir(parents=True)
+def git(label,*args):
+ d=O/label;d.mkdir();argv=['git',*args]
+ (d/'command.json').write_text(json.dumps(dict(argv=argv,cwd=str(W),environment_overrides={'GIT_OPTIONAL_LOCKS':'0'}),indent=2)+'\n');(d/'stdin.bin').write_bytes(b'')
+ started=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ r=subprocess.run(argv,cwd=W,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1'),input=b'',capture_output=True)
+ for n,b in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',f'{r.returncode}\n'.encode())]:(d/n).write_bytes(b)
+ (d/'execution.json').write_text(json.dumps(dict(argv=argv,cwd=str(W),started_at=started,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=r.returncode,stdout=pin(r.stdout),stderr=pin(r.stderr)),indent=2)+'\n')
+ assert r.returncode==0 and not r.stderr,(label,r.returncode)
+ return r.stdout
+def paths(b):assert not b or b.endswith(b'\0');return b.decode().split('\0')[:-1]
+stage=json.loads((S/'root-final-stage-verification.json').read_bytes())
+assert stage['status']=='PASS' and stage['head']==BASE and stage['segments']==[280,281,282]
+assert stage['actual_coverage']==282 and stage['actual_added_links']==127
+entry=Path(a.entry).read_bytes()
+assert entry.startswith(b'\n') and entry.endswith(b'\n') and b'\r' not in entry and b'\t' not in entry
+assert not any(x.endswith(b' ') for x in entry.split(b'\n'))
+assert git('data-parent','rev-parse',a.data+'^').decode().strip()==BASE
+assert paths(git('data-changes','diff','--name-only','-z',BASE,a.data))==[x['path'] for x in stage['files']]
+index_candidates=[]
+for d in sorted((S/'commands').iterdir()):
+ command=d/'command.json'
+ if not command.exists():continue
+ j=json.loads(command.read_bytes())
+ if j['argv']==['git','ls-files','--stage','-z']:
+  assert Path(j['cwd']).resolve()==W
+  assert (d/'exit.txt').read_bytes()==b'0\n' and not (d/'stderr.bin').read_bytes()
+  index_candidates.append((d/'stdout.bin').read_bytes())
+assert len(index_candidates)>=2 and len(set(index_candidates))==1
+index={}
+for row in index_candidates[0].split(b'\0'):
+ if not row:continue
+ meta,name=row.split(b'\t',1);mode,oid,st=meta.split();assert st==b'0' and name not in index
+ index[name]=(mode,oid)
+tree={}
+for row in git('data-tree','ls-tree','-r','-z',a.data).split(b'\0'):
+ if not row:continue
+ meta,name=row.split(b'\t',1);mode,kind,oid=meta.split();assert kind in (b'blob',b'commit') and name not in tree
+ tree[name]=(mode,oid)
+assert tree==index
+for row in stage['files']:pincheck((W/row['path']).read_bytes(),row)
+assert not git('unstaged-entry','diff','--name-only','-z') and not git('staged-entry','diff','--cached','--name-only','-z')
+if a.mode=='append':
+ assert not a.final and not a.append_proof
+ assert git('head','rev-parse','HEAD').decode().strip()==a.data
+ records=[]
+ for i,name in enumerate(NAMES):
+  raw=git('old-ledger-'+str(i),'show',a.data+':'+name)
+  assert (W/name).read_bytes()==raw and entry not in raw
+  (O/('preimage-'+str(i)+'.md')).write_bytes(raw)
+  records.append(dict(path=name,before=pin(raw),after=pin(raw+entry)))
+ for i,row in enumerate(records):
+  path=W/row['path'];raw=(O/('preimage-'+str(i)+'.md')).read_bytes()
+  assert path.read_bytes()==raw
+  with path.open('ab') as f:f.write(entry)
+  assert path.read_bytes()==raw+entry
+ assert set(paths(git('append-changes','diff','--name-only','-z')))==set(NAMES)
+ proof=dict(status='PASS_IDENTICAL_APPEND_WITH_EXACT_PRIOR_BYTES',data_head=a.data,entry=pin(entry),files=records)
+else:
+ assert a.final and a.append_proof
+ assert git('docs-parent','rev-parse',a.final+'^').decode().strip()==a.data
+ assert git('head','rev-parse','HEAD').decode().strip()==a.final
+ assert paths(git('docs-changes','diff','--name-only','-z',a.data,a.final))==sorted(NAMES)
+ ap=json.loads(Path(a.append_proof).read_bytes());assert ap['status']=='PASS_IDENTICAL_APPEND_WITH_EXACT_PRIOR_BYTES' and ap['data_head']==a.data
+ pincheck(entry,ap['entry']);assert [x['path'] for x in ap['files']]==NAMES
+ for i,row in enumerate(ap['files']):
+  before=git('old-ledger-'+str(i),'show',a.data+':'+row['path'])
+  after=git('new-ledger-'+str(i),'show',a.final+':'+row['path'])
+  pincheck(before,row['before']);pincheck(after,row['after']);assert after==before+entry==(W/row['path']).read_bytes()
+ residual=paths(git('untracked','ls-files','--others','--exclude-standard','-z'))
+ assert residual==['data/teaching/dcc_captions']
+ proof=dict(status='PASS_FIXED_DATA_COMMIT_BINDING_THROUGH_C05_282',incoming=BASE,data=a.data,final=a.final,whole_data_tree_entries=len(tree),entire_data_tree_equals_accepted_index=True,data_changed_paths=len(stage['files']),docs_only=sorted(NAMES),all_prior_ledgers_preserved_verbatim=True,untracked=residual,coverage=282,main_integration='OPEN_NO_APPLICATION; last read-only compatibility Sep13 23:40–23:42 UTC only',native_and_phone='Private pack FAILED_UNACCEPTED for four inherited C01 findings; installed resource through171 unchanged; no current device acceptance',boundary='Private fixed DATA/doc closure, not a new global291 or MAIN/native/device approval')
+proof.update(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),accepted_stage_proof=pin((S/'root-final-stage-verification.json').read_bytes()),accepted_entire_index=pin(index_candidates[0]))
+(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))
+

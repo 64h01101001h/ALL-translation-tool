@@ -1,0 +1,149 @@
+"""Register approved page93 before builders; never supplies semantic approval.
+
+Prepared while reconciliation runs. Execution requires the separate completed
+semantic approval, root acceptance proof and exact already-landed page body.
+No database, generated export or source text is modified by this helper.
+"""
+from pathlib import Path
+import ast
+import copy
+import datetime
+import hashlib
+import json
+import os
+import re
+import subprocess
+
+B = Path(__file__).resolve().parent.parent
+W = B.parents[1] / 'campaign-worktree'
+PAGE, SEQS = 93, [277, 278, 279]
+BASE = 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+REVIEW = W / 'data/alignment/reviews_c05/c5p93'
+PAGES = W / 'data/alignment/pages_c05'
+OUT = B / 'landing/course-registration-verification.json'
+ENV = dict(os.environ, GIT_OPTIONAL_LOCKS='0', PYTHONDONTWRITEBYTECODE='1')
+
+def pin(raw):
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=W, env=ENV)
+
+def course_pages(raw):
+    tree = ast.parse(raw)
+    assignments = [n for n in tree.body if isinstance(n, ast.Assign)
+                   and any(isinstance(t, ast.Name) and t.id == 'COURSES' for t in n.targets)]
+    assert len(assignments) == 1
+    root = assignments[0].value
+    assert isinstance(root, ast.Dict)
+    current = next(v for k, v in zip(root.keys, root.values)
+                   if isinstance(k, ast.Constant) and k.value == 'C05')
+    assert isinstance(current, ast.Dict)
+    entries = next(v for k, v in zip(current.keys, current.values)
+                   if isinstance(k, ast.Constant) and k.value == 'pages')
+    return ast.literal_eval(entries)
+
+assert not OUT.exists(), 'Preserve earlier execution and outputs before another run'
+assert git('rev-parse', 'HEAD').decode().strip() == BASE
+closed = json.loads((B.parent / 'integration/through276-root-closure/final-observed-main/proof.json').read_text())
+assert closed['status'] == 'PASS_ROOT_FIXED_DATA_CLOSED_THROUGH_C05_276' and closed['final_head'] == BASE
+meta_raw = (B / 'semantic-review/review.json').read_bytes()
+meta = json.loads(meta_raw)
+assert meta['verdict'] == 'APPROVE' and meta['open_findings'] == []
+assert (REVIEW / 'review.json').read_bytes() == meta_raw
+acceptance = json.loads((B / 'landing/root-semantic-acceptance-proof.json').read_text())
+assert acceptance['page'] == PAGE and acceptance['segments'] == SEQS
+assert acceptance['exact_final_hashes_counts_and_ranges']
+assert acceptance['review_json_sha256'] == pin(meta_raw)['sha256']
+# Tie every landed byte stream to the separately approved individual inputs.
+# The actual landing helper serializes this ordered spec and the canonical
+# generator concatenates its per-segment bodies with their terminating newline.
+assert isinstance(meta['segments'], list)
+assert [row['seq'] for row in meta['segments']] == SEQS
+expected_spec = {'course': 'C05', 'segments': []}
+expected_bodies = []
+for row in meta['segments']:
+    seq = row['seq']
+    current = B / 'reconciled' / str(seq)
+    accepted = B / 'semantic-review/reviewed-final' / str(seq)
+    landed_accepted = REVIEW / 'reviewed-final' / str(seq)
+    individual_spec = (current / 'spec.json').read_bytes()
+    individual_body = (current / 'body.html').read_bytes()
+    assert pin(individual_spec) == {'bytes': row['spec_bytes'], 'sha256': row['spec_sha256']}
+    assert pin(individual_body) == {'bytes': row['body_bytes'], 'sha256': row['body_sha256']}
+    assert individual_spec == (accepted / 'spec.json').read_bytes() == (landed_accepted / 'spec.json').read_bytes()
+    assert individual_body == (accepted / 'body.html').read_bytes() == (landed_accepted / 'body.html').read_bytes()
+    part = json.loads(individual_spec)
+    assert part['course'] == 'C05' and [seg['seq'] for seg in part['segments']] == [seq]
+    assert row['generator_exit'] == 0 and individual_body
+    expected_spec['segments'].extend(part['segments'])
+    expected_bodies.append(individual_body)
+expected_spec_bytes = (json.dumps(expected_spec, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
+spec_bytes = (W / 'data/alignment/specs_c05/c5p93.json').read_bytes()
+assert spec_bytes == expected_spec_bytes
+body = (B / 'landing/generator.stdout').read_bytes()
+assert body == b''.join(expected_bodies)
+assert (B / 'landing/generator.exit').read_text().strip() == '0'
+assert not (B / 'landing/generator.stderr').read_bytes()
+landing_meta = json.loads((REVIEW / 'landing.json').read_text())
+assert landing_meta['course'] == 'C05' and landing_meta['page'] == 'c5p93' and landing_meta['segments'] == SEQS
+assert landing_meta['generator_exit'] == 0
+assert landing_meta['spec_sha256'] == pin(spec_bytes)['sha256']
+assert landing_meta['body_sha256'] == pin(body)['sha256']
+assert body and body in (PAGES / 'c5p93.html').read_bytes()
+
+index = PAGES / 'index.html'
+builder = W / 'tools/build_alignment_layer.py'
+old_index, old_builder = index.read_bytes(), builder.read_bytes()
+assert old_index == git('show', BASE + ':data/alignment/pages_c05/index.html')
+assert old_builder == git('show', BASE + ':tools/build_alignment_layer.py')
+text = old_index.decode('utf-8')
+old_coverage = 'Reviewed campaign coverage: 276 of 511 source segments.'
+new_coverage = 'Reviewed campaign coverage: 279 of 511 source segments.'
+old_link = '<li><a href="c5p92.html">Page 92 · segments 274–276</a></li>'
+new_link = '<li><a href="c5p93.html">Page 93 · segments 277–279</a></li>'
+assert text.count(old_coverage) == text.count(old_link) == 1 and new_link not in text
+assert list(map(int, re.findall(r'href="c5p(\d+)\.html"', text))) == list(range(1, 93))
+new_text = text.replace(old_coverage, new_coverage).replace(old_link, old_link + '\n' + new_link)
+assert list(map(int, re.findall(r'href="c5p(\d+)\.html"', new_text))) == list(range(1, 94))
+assert new_text.count(new_coverage) == 1 and old_coverage not in new_text
+for page in range(1, 94):
+    assert (PAGES / f'c5p{page}.html').is_file()
+new_index = new_text.encode('utf-8')
+
+previous_line = b'    "c5p92": [274, 275, 276],\n'
+added_line = b'    "c5p93": [277, 278, 279],\n'
+assert old_builder.count(previous_line) == 1 and added_line not in old_builder
+new_builder = old_builder.replace(previous_line, previous_line + added_line)
+before_registry = course_pages(old_builder)
+after_registry = course_pages(new_builder)
+expected_registry = copy.deepcopy(before_registry)
+assert list(before_registry) == [f'c5p{p}' for p in range(1, 93)]
+assert 'c5p93' not in expected_registry
+expected_registry['c5p93'] = SEQS
+assert after_registry == expected_registry
+assert [n for seqs in after_registry.values() for n in seqs] == list(range(1, 280))
+compile(new_builder, str(builder), 'exec')  # Syntax only; no builder execution.
+
+# Preserve both complete preimages before either authorized mutation.
+history = B / 'landing/registration-preimages'
+history.mkdir()
+(history / 'index.html').write_bytes(old_index)
+(history / 'build_alignment_layer.py.txt').write_bytes(old_builder)
+index.write_bytes(new_index)
+builder.write_bytes(new_builder)
+assert index.read_bytes() == new_index and builder.read_bytes() == new_builder
+result = dict(
+    utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), status='PASS',
+    page=PAGE, segments=SEQS, reviewed_head=BASE,
+    only_transformations=['276 to279 index coverage', 'append exact page93 index link',
+                          'append exact c5p93 registry entry'],
+    index_before=pin(old_index), index_after=pin(new_index),
+    builder_before=pin(old_builder), builder_after=pin(new_builder),
+    registry_added_bytes=len(added_line), page_count=93, covered_source_segments=279,
+    all_page_targets_exist=True, all_previous_registry_entries_exact=True,
+    accepted_page_body=pin(body), accepted_page_spec=pin(spec_bytes),
+    all_individual_approval_pins_match=True, exact_approved_spec_and_body_composition=True,
+    actual_builders_executed_by_this_helper=0)
+OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
+print(json.dumps(result, ensure_ascii=False, indent=2))

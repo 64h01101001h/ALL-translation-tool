@@ -1,0 +1,260 @@
+{
+  "status": "PENDING_FINAL_SEMANTIC_INPUTS_NOT_EXECUTED",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "record_each_executable_step": {
+    "argv_prefix": [
+      "python3",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/record_external_step.py",
+      "<fresh B/landing/commands/step-NN directory>",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree"
+    ],
+    "append": "The exact step argv above. Keep this caller output outside frozen landing-helper-preparation.",
+    "stdin": "empty"
+  },
+  "steps": [
+    {
+      "order": 1,
+      "description": "Finalize reconciliations and source/range proof; retain existing exact proof if already current. Otherwise replay unchanged generator with the generic verifier.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_reconciled_bodies.py",
+        "280",
+        "281",
+        "282"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Final note/spec/body bytes frozen; explicit eng_order compatible with this verifier."
+      ],
+      "conditional": "Do not repeat if current complete proof already binds these exact final bytes."
+    },
+    {
+      "order": 2,
+      "description": "Package all original/source/review evidence and obtain independent semantic approval. Use the existing copier for complete evidence files; preserve required direct specs/bodies/reports.",
+      "argv": null,
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Pending exact complete original evidence path list; historical Git snapshots require their own original pins."
+      ]
+    },
+    {
+      "order": 3,
+      "description": "Root reads and accepts complete final semantic evidence, then pins approved identity.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_semantic_acceptance.py",
+        "94",
+        "280"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Final semantic APPROVE/open_findings[]; ordered rows/counts/pins; full manifests; source-specific allowances and bank-ready errata explicitly finalized."
+      ]
+    },
+    {
+      "order": 4,
+      "description": "Materialize exact approved c5p94 body with unchanged generic v2 landing helper.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/land_reviewed_page_v2.py",
+        "94",
+        "280",
+        "281",
+        "282"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Root acceptance complete; absent c5p94 output/spec/review destination; preserve any previous external landing attempt; c5p93 navigation precondition holds."
+      ]
+    },
+    {
+      "order": 5,
+      "description": "Verify full required original copies at the landed destination.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_semantic_acceptance.py",
+        "94",
+        "280",
+        "--landed"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Exact extension-safe evidence manifest coverage, including source scripts/binaries; no missing excluded-suffix originals."
+      ]
+    },
+    {
+      "order": 6,
+      "description": "Merge only nonempty, independently approved errata through the canonical source-checking tool.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_tool_readonly_sqlite.py",
+        "tools/merge_errata.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/alignment/reviews_c05/c5p94/bank-ready-errata.json",
+        "--course",
+        "C05",
+        "--apply"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Final skeptical dispositions and named source/witness evidence."
+      ],
+      "conditional": "If final approved list is empty, retain explicit empty evidence and leave register unchanged."
+    },
+    {
+      "order": 7,
+      "description": "Rebuild errata prose only if the approved merge changed the sidecar.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_tool_readonly_sqlite.py",
+        "tools/build_errata_register.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "conditional": "Only after a nonempty approved register delta."
+    },
+    {
+      "order": 8,
+      "description": "Apply exact finalized source-specific head allowances while preserving prior file entries.",
+      "argv": null,
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Pending explicit reviewed span-head-allow-needed.json, named licensors and final c5p94 span IDs; preserve full original sidecar. No new allowance values are generated in this preparation."
+      ]
+    },
+    {
+      "order": 9,
+      "description": "Verify complete supported review copies, exact new errata and exactly reviewed allowance deltas.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_review_copy_and_register.py",
+        "94",
+        "280"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false
+    },
+    {
+      "order": 10,
+      "description": "Register page94 and coverage282 using the reviewed candidate.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing-helper-preparation/register-reviewed-page-and-index.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Root code/diff approval; exact closed through279 proof; actual HEAD=BASE; final semantic/root pins; already-landed exact approved bytes; BASE index/builder preimages."
+      ]
+    },
+    {
+      "order": 11,
+      "description": "Run the two unchanged canonical builders once, retaining previous main CSV seed and full diagnostics.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_reviewed_builders_once.py",
+        "94",
+        "280"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Successful prior registration and review-copy proofs; no prior builder run paths; source/master inputs unchanged."
+      ]
+    },
+    {
+      "order": 12,
+      "description": "Run configured canonical fidelity suites and preserve full actual results; suite names are read from current core/CMakeLists.txt.",
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build",
+        "--output-on-failure",
+        "-R",
+        "^(acip_recovery|gen_alignment_page|alignment_gate_coverage|alignment_builder|dictionary_exports|no_broken_words|no_split_syllables|no_phonetics_in_layer|no_degenerate_members|no_supplied_span_head|layer_matches_spine|evidence_matches_spine|errata_quotes_hold|view_matches_layer|generated_docs_in_sync|builder_sees_every_span|errata_name_their_witnesses)$"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Successful final builders and approved sidecars; no fixture skips or vacuous pass accepted."
+      ]
+    },
+    {
+      "order": 13,
+      "description": "Retain current valid fixture/no-vacuous gate evidence; run these gates if required evidence is absent or affected.",
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build",
+        "--output-on-failure",
+        "-R",
+        "^(fixture_gate|no_vacuous_pass)$"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "conditional": "Existing configured gate proof may be reused only when its code/configuration/fixtures still apply."
+    },
+    {
+      "order": 14,
+      "description": "Verify old link/note/tree/evidence/master/source/CSV retention and the new approved source ranges.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_landed_batch.py",
+        "94",
+        "280",
+        "281",
+        "282"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "Final shape supports the generic three enclosing sentence links; otherwise review verifier adaptation without deleting accepted optional fields."
+      ]
+    },
+    {
+      "order": 15,
+      "description": "Verify course export counts and metadata from main CSV source references.",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_course_csv.py",
+        "10968d16e701b698a0e1fbd845b353089d15ac39",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/course-csv-check.json"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false
+    },
+    {
+      "order": 16,
+      "description": "Complete root evidence closure and independent verification; preserve all final originals, copies, prior/failure attempts, streams, generated files and freezes.",
+      "argv": null,
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "executed": false,
+      "requires": [
+        "No proof from this preparation claims final semantic, landing, source retention, native or MAIN acceptance."
+      ]
+    }
+  ],
+  "no_staging_commit_MAIN_or_native_commands_in_this_preparation": true
+}

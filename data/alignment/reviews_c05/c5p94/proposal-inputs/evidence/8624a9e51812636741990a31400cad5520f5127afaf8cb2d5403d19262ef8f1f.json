@@ -1,0 +1,25 @@
+[
+  {
+    "step": "initial protocol read",
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "command": "cat campaign-artifacts/proposal-protocol.md",
+    "exit": 1,
+    "stderr": "cat: campaign-artifacts/proposal-protocol.md: No such file or directory",
+    "resolution": "Read exact authorized artifact path in project root."
+  },
+  {
+    "step": "handoff location probes",
+    "paths": [
+      "campaign-worktree/Handoff/HANDOFF.md",
+      "campaign-worktree/Handoff/README.md"
+    ],
+    "outcome": "not found",
+    "resolution": "Read original required Desktop data-project paths."
+  },
+  {
+    "step": "original glossary filename search",
+    "command": "rg --files data-project | rg -i (glossary|HTG2016)",
+    "outcome": "no paths returned",
+    "resolution": "Read full entries from current master and spine; hgm_source and original raw evidence preserved."
+  }
+]

@@ -1,0 +1,44 @@
+"""Release only the reviewed external payload snapshot; no reproduction/staging."""
+from pathlib import Path
+import datetime, hashlib, json
+
+B = Path(__file__).resolve().parent
+P = B / 'payload-freezer-preparation'
+V = B / 'reproduction-payload-code-review/payload01'
+O = B / 'root-payload-freezer-release'
+assert not O.exists()
+
+def pin(p):
+    raw = p.read_bytes()
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+def j(p):
+    return json.loads(p.read_bytes())
+
+for directory, expected, count in [
+    (P, '09e7c5cd64c688a71fcdf39de0d76d12217c0008989675278b0171a15402eb2e', 49),
+    (V, '5759f622db6dd9952d5e40db488394ddc6cb9486175c9121d9a891a3bc24d994', 19),
+]:
+    assert pin(directory / 'freeze.json')['sha256'] == expected
+    files = {str(p.relative_to(directory)): pin(p) for p in directory.rglob('*') if p.is_file() and p != directory / 'freeze.json'}
+    assert files == j(directory / 'freeze.json')['files'] and len(files) == count
+for record in j(P / 'original-to-copy-manifest.json'):
+    source, copy = Path(record['original']), P / record['copy']
+    assert source.read_bytes() == copy.read_bytes()
+    assert pin(source) == {k: record[k] for k in ['bytes', 'sha256']}
+for record in j(P / 'actual-thirteen-source-pins.json'):
+    assert pin(Path(record['original'])) == {k: record[k] for k in ['bytes', 'sha256']}
+review = j(V / 'review.json')
+assert review['verdict'] == 'APPROVE_SOURCE_PREPARATION_ONLY' and review['open_findings'] == []
+assert review['source_freeze'] == pin(P / 'freeze.json')
+source = P / 'freeze-final-payload-before-staging.py'
+assert pin(source) == dict(bytes=9656, sha256='ccd80ace5e58e8dd6556f7e5da9eadc53adcc1dd8641f0859d5694efa160f384')
+target = B / source.name
+assert not target.exists()
+assert not any((B / 'landing' / name).exists() for name in ['payload-freeze', 'staged-payload-manifest.json', 'staged-payload-source-proof.json'])
+target.write_bytes(source.read_bytes())
+assert target.read_bytes() == source.read_bytes()
+O.mkdir()
+proof = dict(status='APPROVE_ONE_PAYLOAD_FREEZE', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), source=str(source), runtime=str(target), source_pin=pin(source), source_freeze=pin(P / 'freeze.json'), independent_review_freeze=pin(V / 'freeze.json'), full_frozen_files=68, full_original_copy_pairs=31, current_payload_source_files=13, root_read_complete_sources_diffs_reports=True, scope='One external payload freeze only. Independent reproduction, banking and staging are not released.')
+(O / 'proof.json').write_text(json.dumps(proof, indent=2) + '\n')
+print(json.dumps(proof, indent=2))

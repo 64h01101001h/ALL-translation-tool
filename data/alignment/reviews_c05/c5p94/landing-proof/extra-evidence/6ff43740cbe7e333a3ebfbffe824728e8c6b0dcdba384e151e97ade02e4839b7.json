@@ -1,0 +1,20 @@
+{
+  "search_scope": [
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration"
+  ],
+  "commands": [
+    "rg --files campaign-artifacts/C05-280-282 campaign-artifacts/integration/through279-generated-reproduction | rg '(retention|prepare_source|recorded-caller)'",
+    "cat campaign-artifacts/C05-280-282/retention-source-caller/command.json campaign-artifacts/C05-280-282/course-csv-retention-caller/command.json campaign-artifacts/integration/through279-generated-reproduction/caller-runs/retention/command.json",
+    "rg -l --glob '*.json' --glob '*.stdout' --glob '*.stderr' --glob '*.log' 'reproduction-retention-preparation/(prepare_source(_v2)?|amend_preparation_record)\\.py\\.txt' campaign-artifacts/C05-280-282 campaign-artifacts/integration"
+  ],
+  "exact_reference_search_result": [
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/recorded-caller-correction.json",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/history/attempt01/failure.json",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/history/recorded-caller-correction/preparation-proof.json",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/preparation-proof.json"
+  ],
+  "original_preparation_caller_stream_files_found": [],
+  "conclusion": "Only already-frozen self-records matched the preparation command references. Similar-named caller artifacts identify different root/earlier runtime commands. No original raw source-preparation caller streams were located in these searched artifact trees.",
+  "scope_limit": "This is a bounded artifact search. It does not establish that no app-internal/session transport log exists elsewhere. The visible conversation results are preserved separately as transcriptions."
+}

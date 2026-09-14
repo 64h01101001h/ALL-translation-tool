@@ -1,0 +1,97 @@
+{
+  "generic_landing_v2_equals_prior_candidate_bytes": true,
+  "unchanged_reuse": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/land_reviewed_page_v2.py",
+      "pin": {
+        "bytes": 6145,
+        "sha256": "1cfe6a27799b478231564c83596039bba00216bccdcf9f84cb5f0d40f3d5f34f"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_generator_readonly.py",
+      "pin": {
+        "bytes": 666,
+        "sha256": "584e87317a295d3bfb0e2bbd96d7c69a2497286c728f75d64f01dc0aa4ba2747"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/record_external_step.py",
+      "pin": {
+        "bytes": 1864,
+        "sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_tool_readonly_sqlite.py",
+      "pin": {
+        "bytes": 687,
+        "sha256": "c9c587ca1715dd333c98a743db2fa1c9d6e05eec597891ad42a7d3c17ab74801"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_reviewed_builders_once.py",
+      "pin": {
+        "bytes": 3863,
+        "sha256": "59b9f6a597a55dd526924214587d30a5535729f26dede6c90cdbd5cca627e46e"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_semantic_acceptance.py",
+      "pin": {
+        "bytes": 4179,
+        "sha256": "14ffe2f54a4dc96a607eee9d4c7d9e6122fad16b7f7d9615064fc48d654b884d"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_reconciled_bodies.py",
+      "pin": {
+        "bytes": 3665,
+        "sha256": "700322de61dcb44dac46935f60ff69bfc24fd4d79a07ff511d2d261ba109b8ea"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_review_copy_and_register.py",
+      "pin": {
+        "bytes": 2778,
+        "sha256": "a06c403abf0fca5efa3e469a61375a489f92e7c2dd1a2d5f9987d8ed584613b3"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/copy_evidence_once_v2.py",
+      "pin": {
+        "bytes": 3683,
+        "sha256": "b8eabf4b53c29174d7f67c2f723007d429edc1e153ee3e5b32ff0a6e6fa147d1"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_landed_batch.py",
+      "pin": {
+        "bytes": 6629,
+        "sha256": "056ca1d0b9d95a95313e8cbc25bc41d1e878e7a5de0c1aa60796f30c499d3d18"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_course_csv.py",
+      "pin": {
+        "bytes": 2548,
+        "sha256": "8bc8ddd582dc707db89d964cefbe4a26d072d7c56e9b6850d0f62cc21bb57ba5"
+      }
+    }
+  ],
+  "do_not_use": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/land_reviewed_page.py",
+      "reason": "v1 omits complete generator/wrapper command/stream/preimage recording; approved generic v2 already supplies it."
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_landed_batch_with_heading_migrations.py",
+      "reason": "Hard-coded page69/205–207 and 4aa4aa6 migration baseline; not generic."
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/verify_course_csv_with_heading_migrations.py",
+      "reason": "Hard-coded 4aa4aa6 migration baseline; use generic verify_course_csv.py for this already-closed baseline."
+    }
+  ],
+  "candidate_needed": "Only page94 registration literals plus the actual through279 closure-schema guard. No generic helper rewrite."
+}

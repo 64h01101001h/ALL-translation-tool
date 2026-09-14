@@ -1,0 +1,24 @@
+--- v1.py.txt
++++ compose-ordinary-bank-inventory-root.py
+@@ -96,13 +96,19 @@
+         if key in new_content:
+             first, target = new_content[key]
+             assert read(first) == raw
++            # Downstream whitespace/staging maps require one bank record per
++            # destination. Preserve this complete alias as an external record,
++            # explicitly linking the first full copy planned by this inventory.
++            disposition = 'Complete original retained here; byte-identical to ' + str(first) + ', whose full new bank copy is planned at landing-proof/' + target
++            records.append(dict(original=str(source), retention='external', disposition=disposition, **value))
++            row.update(coverage='explicit-deduplicated-new-copy', copy=target, first_original=str(first))
+         else:
+             suffix = source.suffix.lower()
+             suffix = suffix if suffix in supported else '.txt' if suffix in {'.py', '.sh', '.diff', '.patch', '.jsonl'} else '.bin'
+             target = 'extra-evidence/' + value['sha256'] + suffix
+             new_content[key] = (source, target)
+-        records.append(dict(original=str(source), retention='bank', copy=target, **value))
+-        row.update(coverage='explicit-full-copy', copy=target)
++            records.append(dict(original=str(source), retention='bank', copy=target, **value))
++            row.update(coverage='explicit-full-copy', copy=target)
+     coverage.append(row)
+ 
+ assert paths == census(), 'Evidence tree changed during inventory; preserve attempt and retry only after resolving it'

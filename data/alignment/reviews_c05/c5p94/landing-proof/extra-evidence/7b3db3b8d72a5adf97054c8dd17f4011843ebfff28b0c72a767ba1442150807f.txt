@@ -1,0 +1,47 @@
+from pathlib import Path
+import collections,hashlib,json
+R=Path(__file__).resolve().parent;A=R.parents[1];B=A/'C05-277-279';W=A.parent/'campaign-worktree'
+def j(p):return json.loads(p.read_bytes())
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+checks=j(R/'retention-checks.json');ret=j(R/'retention-proof.json');execution=j(R/'execution-proof.json')
+assert ret['status']==execution['status']=='PASS' and len(checks)==ret['checks_total']==224711 and all(x['pass_'] for x in checks)
+assert execution['layer_invocations']==execution['view_invocations']==1 and len(execution['runs'])==2
+for label in ('prepare','run-once','retention'):
+ d=R/'caller-runs'/label;record=j(d/'execution.json');assert record['exit']==0 and (d/'exit.txt').read_bytes()==b'0\n'
+ for suffix in ('stdout','stderr'):
+  value=(d/(suffix+'.bin')).read_bytes();assert pin(value)==dict(bytes=record[suffix+'_bytes'],sha256=record[suffix+'_sha256'])
+ assert (d/'stderr.bin').read_bytes()==b''
+rows=j(R/'input-manifest.json');out=[]
+for r in rows:
+ cp=R/r['copy'];value=cp.read_bytes();assert pin(value)=={k:r[k] for k in ('bytes','sha256')}
+ proof=dict(copy=r['copy'],role=r['role'],**pin(value))
+ if 'original' in r:
+  original=Path(r['original']);before=original.stat();raw=original.read_bytes();after=original.stat()
+  assert raw==value and (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns)
+  assert cp.read_bytes()==value
+  proof.update(original=r['original'],resolved_original=str(original.resolve()),complete_original_copy_equal=True)
+ else:
+  proof.update(original_git_commit=r['original_git_commit'],repository_relative_path=r['repository_relative_path'],original_git_reread='Deferred to separate root post-acceptance; original preparation Git capture retained')
+ if 'materialized_initial_path' in r:proof['materialized_initial_path']=r['materialized_initial_path']
+ out.append(proof)
+seedrows=[r for r in rows if 'seed' in r['role']];assert len(seedrows)==2 and all(r['copy']=='seed/previous-main-csv-seed.bin' for r in seedrows)
+seed=(R/'seed/previous-main-csv-seed.bin').read_bytes();assert pin(seed)==j(R/'preparation-proof.json')['seed']
+view=j(R/'executions/view/execution.json');assert view['seed_before_first_view']==pin(seed)
+assert (R/'workspace/docs/geshe_michael_roach_dictionary.csv').read_bytes()!=seed
+assert (R/'workspace/docs/geshe_michael_roach_dictionary.csv').read_bytes()==(R/'expected-payload/docs/geshe_michael_roach_dictionary.csv').read_bytes()
+base=j(B/'baseline.json');base_checks=[]
+for rel,h in base['sha256'].items():
+ p=R/('workspace' if rel.endswith('.gz') else 'previous-generated')/rel
+ assert pin(p.read_bytes())['sha256']==h;base_checks.append(dict(path=str(p),**pin(p.read_bytes())))
+outputs=[]
+for r in execution['outputs']:
+ rel=r['path'];a=(R/'workspace'/rel).read_bytes();assert a==(R/'expected-payload'/rel).read_bytes()==(W/rel).read_bytes()==(R/'reproduced-outputs'/rel).read_bytes()
+ outputs.append(dict(path=rel,**pin(a)))
+for label in ('layer','view'):
+ guard=j(R/'executions'/label/'runtime-guards.json');assert guard['date_override']=='2026-09-13' and guard['bytecode_disabled'] and guard['write_scope']==str(R)
+ assert all(x['query_only']==1 and x['uri'].endswith('?mode=ro') for x in guard['sqlite_connections'])
+before=j(R/'live-before.json');after=j(R/'live-after.json');assert before['head']==after['head']==base['commit'] and before['status']==after['status']
+(R/'post-run-original-copy-checks.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+proof=dict(status='PASS_REPRODUCTION_AND_LOCAL_RETENTION',scope='No new semantic/staging/MAIN/global/device approval; separate root original/Git/state post-acceptance remains',counts=ret['counts'],checks_total=len(checks),retention_check_categories=dict(collections.Counter(x['check'] for x in checks)),input_aliases=len(rows),original_copy_aliases=sum('original' in x for x in rows),git_baseline_copies=sum('original_git_commit' in x for x in rows),known_nine_baseline_copies=base_checks,actual_layer_invocations=1,actual_view_invocations=1,actual_new_ctest_invocations=0,outputs=outputs,seed=dict(immutable_copy='seed/previous-main-csv-seed.bin',**pin(seed)),intentional_workspace_seed_transition=True,source_date='2026-09-13',registered_pages=len(j(R/'registered-pages.json')),observed_head=after['head'],observed_tracked_status_unchanged=True,acip=j(R/'acip-incomplete-evidence.json'),failure_attempts=0,root_final_acceptance='PENDING')
+(R/'final-proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps(dict(status=proof['status'],checks=len(checks),input_aliases=len(rows),original_copy_aliases=proof['original_copy_aliases'],outputs=len(outputs),seed_version='PASS',no_repeated_generation=True),indent=2))

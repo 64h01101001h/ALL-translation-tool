@@ -1,0 +1,20 @@
+--- release-root-reconciliation-runtime.py
++++ release-root-reconciliation-runtime-v2.py
+@@ -6,7 +6,7 @@
+ Q = B / 'reconciliation-verifier-config'
+ D = B / 'reconciled'
+ N = D / 'root-runtime-inputs'
+-O = B / 'root-reconciliation-runtime-release'
++O = B / 'root-reconciliation-runtime-release-v2'
+ assert not O.exists()
+ O.mkdir()
+ 
+@@ -60,7 +60,7 @@
+ assert tests['status'] == 'PASS_FOCUSED_CONTROLS_ONLY' and (tests['controls'], tests['accepted'], tests['rejected']) == (22, 2, 20)
+ assert all(r['expected_accept'] == r['observed_accept'] for r in tests['results'])
+ call = load(A / 'controls-run01/execution.json')
+-assert call['exit'] == 0 and not (A / 'controls-run01/stderr.bin').read_bytes()
++assert call['exit'] == 0 and not (A / 'controls-run01/stderr').read_bytes()
+ 
+ config_pin = pin(Q / 'config.json')
+ assert config_pin == dict(bytes=185674, sha256='1a2c787e0b02b569fa0a836f465543dfae0b6737c8fddf66b0e45d747b0150bd')

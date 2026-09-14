@@ -1,0 +1,280 @@
+#!/usr/bin/env python3
+"""Independent bounded reproduction. Tracked inputs read at a fixed commit;
+builder writes captured in memory; SQLite connections forced read-only.
+Only the final evidence JSON is written alongside this script.
+"""
+import sys
+sys.dont_write_bytecode = True
+import collections, contextlib, copy, csv, datetime, hashlib, io, json, os, re, sqlite3, subprocess, types
+from pathlib import Path
+
+WT = Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+ART = WT.parent / 'campaign-artifacts/integration'
+HEAD, PREV, LAST = sys.argv[1], sys.argv[2], int(sys.argv[3])
+BASE = '2487bfcd73a1463d135a4544a01535ba5c99cab0'
+def git(*args):
+    return subprocess.check_output(['git', '-C', str(WT), *args])
+HEAD = git('rev-parse', HEAD).decode().strip()
+tracked = set(git('ls-tree', '-r', '--name-only', HEAD).decode().splitlines())
+cache = {}
+def blob(p, rev=HEAD):
+    k = (rev, p)
+    if k not in cache:
+        cache[k] = git('show', f'{rev}:{p}')
+    return cache[k]
+def obj(p, rev=HEAD): return json.loads(blob(p, rev))
+def sha(b): return hashlib.sha256(b).hexdigest()
+checks = []
+def check(name, condition, detail=None):
+    checks.append({'check': name, 'pass': bool(condition), 'detail': detail})
+    if not condition: raise AssertionError(name + ': ' + str(detail))
+outputs, overrides = {}, {}
+real_io_open, real_exists, real_makedirs, real_replace = io.open, os.path.exists, os.makedirs, os.replace
+real_connect = sqlite3.connect
+def rel(p):
+    try: return str(Path(p).relative_to(WT))
+    except (ValueError, TypeError): return None
+def ro_connect(p, *a, **kw):
+    check('SQLite connection read-only', 'mode=rw' not in str(p))
+    if not str(p).startswith('file:'): p = Path(p).resolve().as_uri() + '?mode=ro'
+    elif 'mode=ro' not in str(p): raise AssertionError('Non-readonly URI')
+    kw['uri'] = True
+    c=real_connect(p, *a, **kw)
+    c.execute('PRAGMA query_only=ON')
+    check('SQLite query_only enabled',c.execute('PRAGMA query_only').fetchone()[0]==1)
+    return c
+class Capture(io.StringIO):
+    def __init__(self, encoding): super().__init__(newline=''); self.codec = encoding or 'utf-8'
+    def close(self): pass
+    def bytes(self): return self.getvalue().encode(self.codec)
+def virtual_open(p, mode='r', buffering=-1, encoding=None, *a, **kw):
+    if isinstance(p,int): return real_io_open(p,mode,buffering,encoding,*a,**kw)
+    p = str(p)
+    if any(c in mode for c in 'wax+'):
+        check('Builder write captured', rel(p) is not None, p)
+        f = Capture(encoding); outputs[p] = f; return f
+    if p in outputs: b = outputs[p].bytes()
+    elif p in overrides: b = overrides[p]
+    elif rel(p) in tracked: b = blob(rel(p))
+    else: return real_io_open(p, mode, buffering, encoding, *a, **kw)
+    return io.BytesIO(b) if 'b' in mode else io.StringIO(b.decode(encoding or 'utf-8'), newline=kw.get('newline'))
+def virtual_exists(p):
+    r = rel(p)
+    return True if str(p) in outputs or str(p) in overrides or r in tracked else real_exists(p)
+def virtual_replace(a, b): outputs[str(b)] = outputs.pop(str(a))
+def module(name):
+    m = types.ModuleType(name); m.__file__ = str(WT / 'tools' / (name + '.py'))
+    sys.modules[name] = m
+    exec(compile(blob('tools/' + name + '.py'), m.__file__, 'exec'), m.__dict__)
+    return m
+io.open, os.path.exists, os.makedirs, os.replace, sqlite3.connect = virtual_open, virtual_exists, lambda *a, **k: None, virtual_replace, ro_connect
+os.environ['PYTHONDONTWRITEBYTECODE']='1'
+for engine in sorted(p for p in tracked if p.startswith('engines/') and p.endswith('.py')):
+    assert (WT/engine).read_bytes()==blob(engine), engine
+sys.path.insert(0, str(WT / 'engines'))
+log = io.StringIO()
+try:
+    B = module('build_alignment_layer')
+    G = module('gen_alignment_page')
+    V = module('build_dictionary_view')
+    E = module('build_dictionary_exports')
+    ev = obj('data/alignment/alignment_evidence_v1.json')
+    class FrozenDate(datetime.date):
+        @classmethod
+        def today(cls): return cls.fromisoformat(ev['meta']['date'])
+    B.date = FrozenDate
+    con = ro_connect(B.SPINE); con.row_factory = sqlite3.Row
+    reviewed = []
+    for page in range(90, (LAST + 2) // 3 + 1):
+        pp = f'data/alignment/specs_c05/c5p{page}.json'
+        rp = f'data/alignment/reviews_c05/c5p{page}/'
+        spec, landing, review = obj(pp), obj(rp+'landing.json'), obj(rp+'review.json')
+        check(f'c5p{page} spec manifest SHA', sha(blob(pp)) == landing['spec_sha256'], sha(blob(pp)))
+        check(f'c5p{page} semantic approval', review['verdict'] == 'APPROVE' and not review.get('open_findings', review.get('blocking_count',review.get('blocking_findings',0))))
+        stdout, stderr = io.StringIO(), io.StringIO()
+        prev_stdin = sys.stdin; sys.stdin = io.StringIO(json.dumps(spec, ensure_ascii=False))
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr): G.main()
+        sys.stdin = prev_stdin
+        body = stdout.getvalue().encode()
+        check(f'c5p{page} generator stderr', not stderr.getvalue(), stderr.getvalue())
+        check(f'c5p{page} body manifest SHA', sha(body) == landing['body_sha256'], sha(body))
+        check(f'c5p{page} body present in accepted HTML', body in blob(f'data/alignment/pages_c05/c5p{page}.html'))
+        tuples = review.get('reviewed_tuples') or obj(rp+'resolved-spans.json')
+        generator_checks=review['segments']
+        hashes = [{k: t[k] for k in ('seq','id','d','tib','eng','tib_range','eng_range')} for t in tuples]
+        tuple_sha=sha(json.dumps(hashes, sort_keys=True, ensure_ascii=False, separators=(',',':')).encode())
+        if 'reviewed_tuple_sha256' in review: check(f'c5p{page} reviewed tuple hash', tuple_sha == review['reviewed_tuple_sha256'])
+        if isinstance(generator_checks,dict): generator_checks=generator_checks['final']
+        bykey = {(t['seq'], t['id']): t for t in tuples}
+        count = 0
+        for seg in spec['segments']:
+            source = dict(con.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?', ('C05', seg['seq'])).fetchone())
+            gc=next(x for x in generator_checks if x['seq']==seg['seq'])
+            check(f"Individual measured span/null/word-pair counts {seg['seq']}", len(seg['spans'])==gc.get('span_count',gc.get('spans')) and sum(x['eng'] is None for x in seg['spans'])==gc.get('null_count',gc.get('nulls')) and sum(x['d']==5 and x['eng'] is not None for x in seg['spans'])==gc.get('word_pair_count',gc.get('word_pairs')))
+
+            rawspec=WT.parent/f'campaign-artifacts/C05-{(page-1)*3+1}-{page*3}/reconciled/{seg["seq"]}/spec.json'
+            segment_bytes=blob(next(p for p in (rp+f'reviewed-final/{seg["seq"]}/spec.json',rp+f'{seg["seq"]}/spec.json',rp+f'final-{seg["seq"]}.spec.json',rp+f'{seg["seq"]}-spec.json', rp+f'reconciled-{seg["seq"]}.spec.json', rp+f'reconciled-{seg["seq"]}/spec.json', rp+f'final-{seg["seq"]}/spec.json') if p in tracked))
+            check(f"Final reconciled spec SHA {seg['seq']}",sha(segment_bytes)==gc['spec_sha256'] and len(segment_bytes)==gc['spec_bytes'],sha(segment_bytes))
+            check(f"Final reconciled spec equals assembled segment {seg['seq']}",json.loads(segment_bytes)['segments']==[seg])
+            stdout1, stderr1=io.StringIO(),io.StringIO(); sys.stdin=io.StringIO(segment_bytes.decode())
+            with contextlib.redirect_stdout(stdout1),contextlib.redirect_stderr(stderr1): G.main()
+            sys.stdin=prev_stdin
+            check(f"Individual generator exact committed body {seg['seq']}", not stderr1.getvalue() and stdout1.getvalue().encode()==blob(next(p for p in (rp+'reviewed-final/'+str(seg['seq'])+'/body.html',rp+str(seg['seq'])+'/body.html',rp+str(seg['seq'])+'.stdout.html',rp+str(seg['seq'])+'.stdout',rp+'reconciled-'+str(seg['seq'])+'/generator.stdout',rp+'reconciled-'+str(seg['seq'])+'.stdout',rp+'reconciled-'+str(seg['seq'])+'.stdout.html') if p in tracked)) and sha(stdout1.getvalue().encode())==gc['body_sha256'] and len(stdout1.getvalue().encode())==gc['body_bytes'])
+            tr=G.resolve(source['wylie'],seg['spans'],'tib',seg['seq'])
+            sm={x['id']:x for x in seg['spans']}
+            er=G.resolve(source['english'],G.with_members(seg['spans'],[sm[i] for i in seg['eng_order']],source['english']),'eng',seg['seq'])
+            for sp in seg['spans']:
+                tt=bykey[(seg['seq'],sp['id'])]
+                check(f"Actual generator ranges {seg['seq']}:{sp['id']}",list(tr[sp['id']])==tt['tib_range'] and (list(er[sp['id']])==tt['eng_range'] if sp['eng'] is not None else tt['eng_range'] is None))
+                count += 1; t = bykey[(seg['seq'],sp['id'])]
+                check(f"review/spec/source tuple {seg['seq']}:{sp['id']}", all(t[k] == sp[k] for k in ('id','d','tib','eng')) and source['wylie'][slice(*t['tib_range'])] == sp['tib'] and (t['eng_range'] is None if sp['eng'] is None else source['english'][slice(*t['eng_range'])] == sp['eng']))
+        check(f'c5p{page} all spans covered by review', count == len(tuples) and count == review.get('total_spans',review.get('totals',{}).get('spans')), count)
+        reviewed.append({'page': page, 'span_count': count, 'spec_sha256': landing['spec_sha256'], 'body_sha256': sha(body), 'review_tuple_sha256': tuple_sha,'review_tuple_hash_independently_computed_only': 'reviewed_tuple_sha256' not in review})
+    with contextlib.redirect_stdout(log), contextlib.redirect_stderr(log): B.main()
+    for p in ('data/alignment/alignment_full_v1.json','data/alignment/alignment_evidence_v1.json'):
+        check('Fresh exact JSON: '+p, outputs[str(WT/p)].bytes() == blob(p), sha(outputs[str(WT/p)].bytes()))
+    overrides[str(WT/'docs/geshe_michael_roach_dictionary.csv')] = blob('docs/geshe_michael_roach_dictionary.csv', PREV)
+    with contextlib.redirect_stdout(log), contextlib.redirect_stderr(log): V.main()
+    for suffix in ('.html','.csv','_reverse.csv','_by_course.csv','_changes.csv'):
+        p = 'docs/geshe_michael_roach_dictionary'+suffix
+        check('Fresh exact export: '+p, outputs[str(WT/p)].bytes() == blob(p), {'sha256': sha(outputs[str(WT/p)].bytes()), 'previous_export': PREV if suffix == '_changes.csv' else None})
+    full, old = obj('data/alignment/alignment_full_v1.json'), obj('data/alignment/alignment_full_v1.json', BASE)
+    key = lambda x: (x['course'],x['page'],x['seg'],x['id'],x['d'])
+    oldl, newl = {key(x):x for x in old['links']}, {key(x):x for x in full['links']}
+    check('Every prior full link retained exactly', all(newl.get(k)==v for k,v in oldl.items()), len(oldl))
+    added = [v for k,v in newl.items() if k not in oldl]
+    check('New links confined to accepted continuation rows', all(v['course']=='C05' and 268<=v['seg']<=LAST for v in added))
+    for k in ('notes','trees'): check('Every prior '+k+' value retained', all(full[k].get(n)==v for n,v in old[k].items()),len(old[k]))
+    olde = obj('data/alignment/alignment_evidence_v1.json', BASE)
+    pair_add_refs = []
+    for w, pairs in olde['pairs'].items():
+        current = {p['eng']:p for p in ev['pairs'][w]}
+        for p in pairs:
+            n=current.get(p['eng']); check('Prior evidence pair retained', n is not None and n['acip']==p['acip'] and set(p['refs']) <= set(n['refs']) and n['n']==len(n['refs']))
+    check('Every prior ACIP index retained', all(ev['acip_index'].get(k)==v for k,v in olde['acip_index'].items()),len(olde['acip_index']))
+    for w, pairs in ev['pairs'].items():
+        op = {p['eng']:p for p in olde['pairs'].get(w,[])}
+        for p in pairs: pair_add_refs += list(set(p['refs'])-set(op.get(p['eng'],{}).get('refs',[])))
+    check('New evidence citations confined', all(r.startswith('C05:') and 268<=int(r.split(':')[1])<=LAST for r in pair_add_refs))
+    def rows(suffix, rev=HEAD): return list(csv.DictReader(io.StringIO(blob('docs/geshe_michael_roach_dictionary'+suffix,rev).decode('utf-8-sig'),newline='')))
+    migration_map={} # No new heading migration authorized in this continuation.
+    raw_rows=rows
+    def rows(suffix,rev=HEAD):
+        rr=raw_rows(suffix,rev)
+        if rev==BASE:
+            for r in rr:
+                if r.get('depth')=='1': r['english']=migration_map.get((r['wylie'],r['english']),r['english'])
+        return rr
+    oldcsv,newcsv=rows('.csv',BASE),rows('.csv')
+    rk=lambda r: (r['wylie'],r['english'],r['kind'],r['depth'])
+    nmap={rk(r):r for r in newcsv}; differing=collections.Counter(); changes=[]; acip_metadata_additions=[]
+    variable={'occurrences','courses','n_courses','refs','first_ref','source_pages','layer_date'}
+    for r in oldcsv:
+        n=nmap.get(rk(r)); check('Prior CSV lexical record retained', n is not None)
+        ds=[k for k in r if r[k]!=n[k]]; differing.update(ds)
+        allowed=set(variable)
+        if (r['acip'],r['in_acip_index']) != (n['acip'],n['in_acip_index']):
+            proven = r['acip']=='' and r['in_acip_index']=='no' and n['in_acip_index']=='yes' and ev['acip_index'].get(n['acip'])==r['wylie'] and n['acip'] not in olde['acip_index'] and any(x['d']==5 and x['tib']==r['wylie'] and x['tib_acip']==n['acip'] and x['eng'] for x in added)
+            check('New ACIP metadata proven by new d5 bank witness',proven,rk(r))
+            allowed.update(('acip','in_acip_index'))
+            acip_metadata_additions.append({'key':rk(r),'old_acip':r['acip'],'new_acip':n['acip'],'old_index_flag':r['in_acip_index'],'new_index_flag':n['in_acip_index'],'content_and_refs_unchanged':all(r[k]==n[k] for k in ('wylie','english','kind','depth','refs'))})
+        check('Prior CSV semantic fields retained', all(r[k]==n[k] for k in r if k not in allowed), {'key':rk(r),'fields':ds} if not all(r[k]==n[k] for k in r if k not in allowed) else None)
+        oldrefs,newrefs=set(r['refs'].split()),set(n['refs'].split())
+        check('Prior CSV citations retained', oldrefs<=newrefs)
+        check('CSV citation additions confined', all(x.startswith('C05:') and 268<=int(x.split(':')[1])<=LAST for x in newrefs-oldrefs))
+        check('CSV occurrence and course metadata derived', int(n['occurrences'])==len(newrefs) and set(n['courses'].split())=={x.split(':')[0] for x in newrefs} and int(n['n_courses'])==len(n['courses'].split()) and n['first_ref']==n['refs'].split()[0])
+    check('All main CSV layer_date equals bank meta', all(r['layer_date']==ev['meta']['date'] for r in newcsv))
+    check('All main CSV source_pages equals bank meta', all(r['source_pages']==ev['meta']['source_pages'] for r in newcsv))
+    extra_csv_retention = {}
+    for suffix in ('_reverse.csv','_by_course.csv'):
+        orows,nrows = rows(suffix,BASE),rows(suffix)
+        if suffix=='_by_course.csv':
+            old_depth={(r['course'],r['wylie'],r['english'],r['depth']):int(r['occurrences_in_course']) for r in orows}
+            new_depth={(r['course'],r['wylie'],r['english'],r['depth']):int(r['occurrences_in_course']) for r in nrows}
+            check('Every prior course depth group retained',all(new_depth.get(k,0)>=v for k,v in old_depth.items()),len(old_depth))
+            oldcounts=collections.Counter();newcounts=collections.Counter(); oldinfo={};newinfo={}
+            triple=lambda r:(r['course'],r['wylie'],r['english'])
+            for r in orows: oldcounts[triple(r)]+=int(r['occurrences_in_course']);oldinfo[triple(r)]=r
+            for r in nrows: newcounts[triple(r)]+=int(r['occurrences_in_course']);newinfo[triple(r)]=r
+            check('Prior course pair totals retained across honest depth splits',all(newcounts[k]>=v for k,v in oldcounts.items()),len(oldcounts))
+            for k,r in oldinfo.items():
+                n=newinfo.get(k);check('Prior course pair still present',n is not None,k)
+                allowed={'depth','occurrences_in_course'}
+                if r['acip']!=n['acip']:
+                    proven=r['acip']=='' and ev['acip_index'].get(n['acip'])==r['wylie'] and any(x['key'][0]==r['wylie'] and x['new_acip']==n['acip'] for x in acip_metadata_additions)
+                    check('Course ACIP enrichment proven by new d5 source witness',proven,{'key':k,'new_acip':n['acip']});allowed.add('acip')
+                check('Prior course pair lexical fields retained',all(r[f]==n[f] for f in r if f not in allowed),k)
+            expected=collections.Counter()
+            for r in newcsv:
+                if r['kind']=='translation':
+                    for ref in r['refs'].split(): expected[(ref.split(':')[0],r['wylie'],r['english'],r['depth'])]+=1
+            actual={(r['course'],r['wylie'],r['english'],r['depth']):int(r['occurrences_in_course']) for r in nrows}
+            mains={(r['wylie'],r['english'],r['depth']):r for r in newcsv if r['kind']=='translation'}
+            check('Every course CSV lexical/provenance field matches main export',all(all(r[k]==mains[(r['wylie'],r['english'],r['depth'])][k] for k in ('wylie','english','depth','acip','tibetan_generated','pronunciation_generated','tier')) for r in nrows))
+            check('Every course/depth CSV record equals independent main-CSV citation oracle',actual==dict(expected) and len(actual)==len(nrows),{'expected_rows':len(expected),'actual_rows':len(nrows)})
+            extra_csv_retention[suffix]={'prior_course_pair_groups':len(oldcounts),'new_course_pair_groups':len(newcounts),'new_depth_rows':len(nrows),'independent_depth_oracle':'PASS','old_pair_totals_and_lexical_fields_retained':True}
+            continue
+        kk = (lambda r:(r['course'],r['wylie'],r['english'])) if suffix=='_by_course.csv' else (lambda r:(r['wylie'],r['english'],r['depth']))
+        nm = {kk(r):r for r in nrows}; changes = collections.Counter()
+        for r in orows:
+            n = nm.get(kk(r)); check('Prior derived CSV record retained', n is not None, suffix)
+            allowed = {'occurrences','courses','refs'} if suffix=='_reverse.csv' else {'occurrences_in_course','depth'}
+            if r['acip'] != n['acip']:
+                proven=r['acip']=='' and ev['acip_index'].get(n['acip'])==r['wylie'] and any(x['key'][0]==r['wylie'] and x['new_acip']==n['acip'] for x in acip_metadata_additions)
+                check('Derived CSV ACIP enrichment proven by new d5 source witness',proven,{'file':suffix,'key':kk(r),'new_acip':n['acip']})
+                allowed.add('acip')
+            check('Prior derived CSV lexical fields retained', all(r[k]==n[k] for k in r if k not in allowed), {'file':suffix,'key':kk(r)} if not all(r[k]==n[k] for k in r if k not in allowed) else None)
+            if 'refs' in r: check('Prior reverse CSV references retained',set(r['refs'].split())<=set(n['refs'].split()))
+            else: check('Prior course CSV counts retained',int(n['occurrences_in_course'])>=int(r['occurrences_in_course']))
+            changes.update(k for k in r if r[k]!=n[k])
+        extra_csv_retention[suffix] = {'prior_records_retained':len(orows),'new_records':len(nrows),'fields_changed':dict(changes)}
+    prior_delta=rows('_changes.csv',BASE)
+    check('Prior incremental changes still present in main CSV',all((r['wylie'],r['english'],r['kind'],r['depth']) in nmap for r in prior_delta if r['change']!='withdrawn'))
+    def payload(rev): return json.loads(re.search(r'const PAYLOAD = (.*?);\n',blob('docs/geshe_michael_roach_dictionary.html',rev).decode(),re.S).group(1))
+    def pv(p):
+        out={}
+        for d,ents in list(p['depths'].items())+[('phonetic',p['phonetics'])]:
+            for t,a,rl in ents:
+                for e,refs in rl: out[(d,t,a,e)]=set(refs)
+        return out
+    op,np=pv(payload(BASE)),pv(payload(HEAD))
+    op={(d,t,a,migration_map.get((t,e),e) if d=='1' else e):refs for (d,t,a,e),refs in op.items()}
+    check('Prior dictionary HTML tuples and citations retained', all(k in np and refs<=np[k] for k,refs in op.items()),len(op))
+    check('C05 registry incomplete and contiguous boundary', B.COURSES['C05']['complete'] is False and sorted(q for v in B.COURSES['C05']['pages'].values() for q in v)==list(range(1,LAST+1)))
+    for page in range(80,(LAST+2)//3+1):
+        p=f'data/alignment/pages_c05/c5p{page}.html'; text=blob(p).decode()
+        hrefs=re.findall(r'href=[\'\"]([^\'\"]+)[\'\"]',text)
+        for href in hrefs:
+            if not re.match(r'(?:https?:|#|mailto:)',href):
+                target=str((Path(p).parent/href.split('#')[0]))
+                check('Page navigation target exists',target in tracked,target)
+        check('Provisional page label retained','PROVISIONAL' in text,p)
+        if page>=81: check('Current producer labelled Codex','MACHINE ALIGNMENT — AI (Codex)' in text,p)
+    index=blob('data/alignment/pages_c05/index.html').decode()
+    check('Index links every accepted C05 page', all(f'c5p{p}.html' in index for p in range(1,(LAST+2)//3+1)))
+    check('Index reports exact numeric coverage', f'{LAST} of 511' in index)
+    check('Evidence honesty labels preserved',ev['meta']['tier']=='TENTATIVE (machine-matched, unreviewed)' and 'never enters hgm_gloss' in ev['meta']['rule'] and 'never that the correspondence is CORRECT' in ev['meta']['limit'])
+    provenance=[]
+    baseline=json.loads(Path(WT.parent/'campaign-artifacts/C05-268-270/baseline.json').read_text())
+    for p in ('data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz'):
+        actual=sha((WT/p).read_bytes()); check('Source/master SHA retained '+p,actual==baseline['sha256'][p]); provenance.append({'path':str(WT/p),'sha256':actual})
+    for page in range(90,(LAST+2)//3+1):
+        saved_sources = obj(next(p for p in (f'data/alignment/reviews_c05/c5p{page}/evidence/source-full-rows.json',f'data/alignment/reviews_c05/c5p{page}/evidence/current-context-242-313.json',f'data/alignment/reviews_c05/c5p{page}/independently-reopened-source.json',f'data/alignment/reviews_c05/c5p{page}/independent-source.json',f'data/alignment/reviews_c05/c5p{page}/source-originals/spine-context.json',f'data/alignment/reviews_c05/c5p{page}/independent-evidence/original-source-context-full.json',f'data/alignment/reviews_c05/c5p{page}/independent-source-rows.json',f'data/alignment/reviews_c05/c5p{page}/source-reopened.json',f'data/alignment/reviews_c05/c5p{page}/independent-source-originals.json',f'data/alignment/reviews_c05/c5p{page}/source-originals.json',f'data/alignment/reviews_c05/c5p{page}/independent-source-context.json',f'data/alignment/reviews_c05/c5p{page}/original-source-context.json',f'data/alignment/reviews_c05/c5p{page}/independent-evidence/source-context-original.json') if p in tracked))
+        for source in saved_sources:
+            live=con.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(source['course'],source['seq'])).fetchone()
+            check('Review source snapshot matches live RO spine',dict(live)==source,f"{source['course']}:{source['seq']}")
+    con.close()
+    result={'commit':HEAD,'retention_base':BASE,'changes_export_base':PREV,'date_fixed_to_committed_meta_for_reproduction':ev['meta']['date'],'counts':{'links':len(full['links']),'nulls':sum(not l['eng'] for l in full['links']),'note_blocks':sum(len(n) for n in full['notes'].values()),'tree_blocks':sum(len(n) for n in full['trees'].values()),'evidence_headwords':len(ev['pairs']),'evidence_pairs':sum(len(x) for x in ev['pairs'].values()),'prior_links_retained':len(oldl),'added_links':len(added),'added_by_segment':dict(collections.Counter(x['seg'] for x in added)),'prior_csv_rows':len(oldcsv),'new_csv_rows':len(newcsv),'old_csv_fields_changed':dict(differing),'csv_export_rows':{x:len(rows(x)) for x in ('.csv','_reverse.csv','_by_course.csv','_changes.csv')},'coverage':f'{LAST}/511','open':511-LAST},'extra_csv_retention':extra_csv_retention,'reviewed_pages':reviewed,'source_hashes':provenance,'source_pages':ev['meta']['source_pages'],'checks_total':len(checks),'failures':[x for x in checks if not x['pass']],'builder_log':log.getvalue(),'significant_checks':[x for x in checks if not x['check'].startswith(('Prior evidence','Prior CSV','Prior derived','Prior reverse','Prior course','CSV ','SQLite','Builder','review/spec'))]}
+finally:
+    io.open, os.path.exists, os.makedirs, os.replace, sqlite3.connect = real_io_open, real_exists, real_makedirs, real_replace, real_connect
+import tempfile
+reproduced_dir=Path(tempfile.mkdtemp(prefix='aci-through270-seven-outputs-'))
+reproduced_files=[]
+for name, captured in outputs.items():
+    data=captured.bytes(); outpath=reproduced_dir/Path(name).name;outpath.write_bytes(data);reproduced_files.append({'path':name,'copy':str(outpath),'bytes':len(data),'sha256':sha(data)})
+result['reproduced_files']=reproduced_files
+check('No ACIP metadata enrichment in this checkpoint',not acip_metadata_additions)
+result['acip_metadata_additions']=acip_metadata_additions
+out=ART/f"continuation-through270-reproduce-{LAST}{('-'+sys.argv[4]) if len(sys.argv)>4 else ''}.json"
+out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'output':str(out),'commit':HEAD,'checks':len(checks),'counts':result['counts'],'failures':result['failures']},indent=2))

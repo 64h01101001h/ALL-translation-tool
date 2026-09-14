@@ -1,0 +1,3286 @@
+{
+  "database": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "queries": [
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#0:selected_original_full_rows",
+        "independent:selected"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+      "parameters": [
+        "C05",
+        280,
+        282
+      ],
+      "count": 3,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:1663",
+        "corpus_segments:1664"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#1:complete_local_argument"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+      "parameters": [
+        "C05",
+        242,
+        290
+      ],
+      "count": 49,
+      "row_refs": [
+        "corpus_segments:1624",
+        "corpus_segments:1625",
+        "corpus_segments:1626",
+        "corpus_segments:1627",
+        "corpus_segments:1628",
+        "corpus_segments:1629",
+        "corpus_segments:1630",
+        "corpus_segments:1631",
+        "corpus_segments:1632",
+        "corpus_segments:1633",
+        "corpus_segments:1634",
+        "corpus_segments:1635",
+        "corpus_segments:1636",
+        "corpus_segments:1637",
+        "corpus_segments:1638",
+        "corpus_segments:1639",
+        "corpus_segments:1640",
+        "corpus_segments:1641",
+        "corpus_segments:1642",
+        "corpus_segments:1643",
+        "corpus_segments:1644",
+        "corpus_segments:1645",
+        "corpus_segments:1646",
+        "corpus_segments:1647",
+        "corpus_segments:1648",
+        "corpus_segments:1649",
+        "corpus_segments:1650",
+        "corpus_segments:1651",
+        "corpus_segments:1652",
+        "corpus_segments:1653",
+        "corpus_segments:1654",
+        "corpus_segments:1655",
+        "corpus_segments:1656",
+        "corpus_segments:1657",
+        "corpus_segments:1658",
+        "corpus_segments:1659",
+        "corpus_segments:1660",
+        "corpus_segments:1661",
+        "corpus_segments:1662",
+        "corpus_segments:1663",
+        "corpus_segments:1664",
+        "corpus_segments:1665",
+        "corpus_segments:1666",
+        "corpus_segments:1667",
+        "corpus_segments:1668",
+        "corpus_segments:1669",
+        "corpus_segments:1670",
+        "corpus_segments:1671",
+        "corpus_segments:1672"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#2:lexical_exact:gzhan yang",
+        "independent:lexical:gzhan yang"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gzhan yang"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:16393"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#3:lexical_exact:dpal",
+        "independent:lexical:dpal"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "dpal"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:11177"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#4:lexical_exact:chos kyi grags pa",
+        "independent:lexical:chos kyi grags pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "chos kyi grags pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:4621"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#5:lexical_exact:lung",
+        "independent:lexical:lung"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "lung"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:19435"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#6:lexical_exact:'gal ba",
+        "independent:lexical:'gal ba"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'gal ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:2555"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#7:lexical_exact:nad",
+        "independent:lexical:nad"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "nad"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:10147"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#8:lexical_exact:'byung ba",
+        "independent:lexical:'byung ba"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'byung ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:13375"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#9:lexical_exact:gdon",
+        "independent:lexical:gdon"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gdon"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9048"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#10:lexical_exact:nyon mongs pa",
+        "independent:lexical:nyon mongs pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "nyon mongs pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:5900"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#11:lexical_exact:dug",
+        "independent:lexical:dug"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "dug"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:8279"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#12:lexical_exact:dngos 'bras",
+        "independent:lexical:dngos 'bras"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "dngos 'bras"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3743"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#13:lexical_exact:khas blangs",
+        "independent:lexical:khas blangs"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "khas blangs"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1137"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#14:lexical_exact:mu stegs byed",
+        "independent:lexical:mu stegs byed"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "mu stegs byed"
+      ],
+      "count": 0,
+      "row_refs": []
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#15:lexical_exact:bad kan",
+        "independent:lexical:bad kan"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "bad kan"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:12315"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#16:lexical_exact:'dod chags",
+        "independent:lexical:'dod chags"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'dod chags"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9635"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#17:lexical_exact:rgyu 'bras",
+        "independent:lexical:rgyu 'bras"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "rgyu 'bras"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:2916"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#18:lexical_exact:mkhris pa",
+        "independent:lexical:mkhris pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "mkhris pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1477"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#19:lexical_exact:zhe sdang",
+        "independent:lexical:zhe sdang"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "zhe sdang"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:16268"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#20:lexical_exact:rjes su 'gro ldog",
+        "independent:lexical:rjes su 'gro ldog"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "rjes su 'gro ldog"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:22934"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#21:lexical_exact:'khrul",
+        "independent:lexical:'khrul"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'khrul"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1604"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#22:lexical_exact:'gog byed",
+        "independent:lexical:'gog byed"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'gog byed"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:2592"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#23:lexical_exact:rlung",
+        "independent:lexical:rlung"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "rlung"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:19154"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#24:lexical_exact:chos"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "chos"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:4609"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#25:lexical_exact:gzhung",
+        "independent:lexical:gzhung"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gzhung"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:16482"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#26:lexical_exact:'don pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'don pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9709"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#27:lexical_exact:sgyur ba",
+        "independent:lexical:sgyur ba"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "sgyur ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3104"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#28:lexical_exact:'dus ma byas",
+        "independent:lexical:'dus ma byas"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'dus ma byas"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9597"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#29:lexical_exact:nam mkha'",
+        "independent:lexical:nam mkha'"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "nam mkha'"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:10167"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#30:lexical_exact:phrag dog",
+        "independent:lexical:phrag dog"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "phrag dog"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:12087"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#31:lexical_exact:'dod pa",
+        "independent:lexical:'dod pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'dod pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9661"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#32:lexical_exact:mi rigs pa",
+        "independent:lexical:mi rigs pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "mi rigs pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:24609"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#33:lexical_exact:kha cig",
+        "independent:lexical:kha cig"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "kha cig"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1003"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#34:lexical_exact:dngos",
+        "independent:lexical:dngos"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "dngos"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3646"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#35:lexical_exact:yid",
+        "independent:lexical:yid"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "yid"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:17446"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#36:lexical_exact:tha dad",
+        "independent:lexical:tha dad"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "tha dad"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:7220"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#37:lexical_exact:don"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "don"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:8617"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#38:lexical_exact:ma grub"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "ma grub"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:13715"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#39:lexical_exact:dngos po",
+        "independent:lexical:dngos po"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "dngos po"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3672"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#40:lexical_exact:snang tshul"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "snang tshul"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:11049"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#41:lexical_exact:mi 'dra ba",
+        "independent:lexical:mi 'dra ba"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "mi 'dra ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:14183"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#42:lexical_exact:gsum",
+        "independent:lexical:gsum"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gsum"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:21224"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#43:lexical_exact:gsungs pa",
+        "independent:lexical:gsungs pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gsungs pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:21221"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#44:lexical_exact:mi 'thad",
+        "independent:lexical:mi 'thad"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "mi 'thad"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:14166"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#45:lexical_exact:khyod",
+        "independent:lexical:khyod"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "khyod"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1347"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#46:lexical_exact:brlan",
+        "independent:lexical:brlan"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "brlan"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:19192"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#47:lexical_exact:gsher ba",
+        "independent:lexical:gsher ba"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gsher ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:20149"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#48:lexical_exact:phor pa",
+        "independent:lexical:phor pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "phor pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:24066"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#49:lexical_exact:gang",
+        "independent:lexical:gang"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gang"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1648"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#50:lexical_exact:cig car du",
+        "independent:lexical:cig car du"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "cig car du"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:4169"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#51:lexical_exact:bltas pa",
+        "independent:lexical:bltas pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "bltas pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:7117"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#52:lexical_exact:tshad grub pa",
+        "independent:lexical:tshad grub pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "tshad grub pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:24799"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#53:lexical_exact:skyes bu",
+        "independent:lexical:skyes bu"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "skyes bu"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:804"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#54:lexical_exact:gcig",
+        "independent:lexical:gcig"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gcig"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:4216"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#55:lexical_exact:yan lag",
+        "independent:lexical:yan lag"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "yan lag"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:17346"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#56:lexical_exact:lnga",
+        "independent:lexical:lnga"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "lnga"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3997"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#57:lexical_exact:bya ba",
+        "independent:lexical:bya ba"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "bya ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:12506"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#58:lexical_exact:byas pa",
+        "independent:lexical:byas pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "byas pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:12732"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#59:quotation",
+        "english/280/corpus-material-queries-full.json#14:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%dngos gcig yid ni tha dad phyir%"
+      ],
+      "count": 11,
+      "row_refs": [
+        "corpus_segments:1630",
+        "corpus_segments:1663",
+        "corpus_segments:5945",
+        "corpus_segments:5977",
+        "corpus_segments:6842",
+        "corpus_segments:8912",
+        "corpus_segments:32876",
+        "corpus_segments:29648",
+        "corpus_segments:34700",
+        "corpus_segments:34919",
+        "corpus_segments:35000"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#60:phlegm_desire"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%bad kan%",
+        "%'dod chags%"
+      ],
+      "count": 3,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976",
+        "corpus_segments:34918"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#61:five_protuberances"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%five different protuberances%"
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1664",
+        "corpus_segments:5978"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#62:rjes_variation"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND (english LIKE ? OR english LIKE ?) ORDER BY course,seq",
+      "parameters": [
+        "%rjes su 'gro%",
+        "%come and go%",
+        "%relationship%"
+      ],
+      "count": 5,
+      "row_refs": [
+        "corpus_segments:1305",
+        "corpus_segments:1662",
+        "corpus_segments:5976",
+        "corpus_segments:6615",
+        "corpus_segments:34918"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#63:direct_result"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%dngos 'bras%",
+        "%direct result%"
+      ],
+      "count": 25,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:4584",
+        "corpus_segments:4586",
+        "corpus_segments:4587",
+        "corpus_segments:4595",
+        "corpus_segments:4596",
+        "corpus_segments:4598",
+        "corpus_segments:4600",
+        "corpus_segments:4601",
+        "corpus_segments:4652",
+        "corpus_segments:4653",
+        "corpus_segments:4654",
+        "corpus_segments:5976",
+        "corpus_segments:26349",
+        "corpus_segments:26350",
+        "corpus_segments:26352",
+        "corpus_segments:26360",
+        "corpus_segments:26361",
+        "corpus_segments:26365",
+        "corpus_segments:26366",
+        "corpus_segments:26368",
+        "corpus_segments:26401",
+        "corpus_segments:26402",
+        "corpus_segments:26406",
+        "corpus_segments:34918"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#64:valid_established"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%tshad grub%",
+        "%confirmed%"
+      ],
+      "count": 11,
+      "row_refs": [
+        "corpus_segments:1663",
+        "corpus_segments:1667",
+        "corpus_segments:1695",
+        "corpus_segments:5977",
+        "corpus_segments:5981",
+        "corpus_segments:6009",
+        "corpus_segments:6868",
+        "corpus_segments:8929",
+        "corpus_segments:34919",
+        "corpus_segments:34920",
+        "corpus_segments:34937"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#65:flowing"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%gsher ba%",
+        "%flowing%"
+      ],
+      "count": 66,
+      "row_refs": [
+        "corpus_segments:1638",
+        "corpus_segments:1639",
+        "corpus_segments:1644",
+        "corpus_segments:1645",
+        "corpus_segments:1648",
+        "corpus_segments:1649",
+        "corpus_segments:1652",
+        "corpus_segments:1656",
+        "corpus_segments:1661",
+        "corpus_segments:1663",
+        "corpus_segments:1666",
+        "corpus_segments:1668",
+        "corpus_segments:1669",
+        "corpus_segments:1670",
+        "corpus_segments:1676",
+        "corpus_segments:1679",
+        "corpus_segments:1682",
+        "corpus_segments:1690",
+        "corpus_segments:1694",
+        "corpus_segments:5952",
+        "corpus_segments:5953",
+        "corpus_segments:5958",
+        "corpus_segments:5959",
+        "corpus_segments:5962",
+        "corpus_segments:5963",
+        "corpus_segments:5966",
+        "corpus_segments:5970",
+        "corpus_segments:5975",
+        "corpus_segments:5977",
+        "corpus_segments:5980",
+        "corpus_segments:5982",
+        "corpus_segments:5983",
+        "corpus_segments:5984",
+        "corpus_segments:5990",
+        "corpus_segments:5993",
+        "corpus_segments:5996",
+        "corpus_segments:6004",
+        "corpus_segments:6008",
+        "corpus_segments:6850",
+        "corpus_segments:6851",
+        "corpus_segments:6856",
+        "corpus_segments:6857",
+        "corpus_segments:6860",
+        "corpus_segments:6861",
+        "corpus_segments:6863",
+        "corpus_segments:6867",
+        "corpus_segments:8916",
+        "corpus_segments:8917",
+        "corpus_segments:8920",
+        "corpus_segments:8921",
+        "corpus_segments:8924",
+        "corpus_segments:8928",
+        "corpus_segments:25811",
+        "corpus_segments:34907",
+        "corpus_segments:34909",
+        "corpus_segments:34910",
+        "corpus_segments:34911",
+        "corpus_segments:34917",
+        "corpus_segments:34919",
+        "corpus_segments:34921",
+        "corpus_segments:34922",
+        "corpus_segments:34924",
+        "corpus_segments:34927",
+        "corpus_segments:34929",
+        "corpus_segments:35003",
+        "corpus_segments:15408"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#66:exact_field_parallels:280"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE (acip=? OR wylie=? OR english=?) AND id<>? ORDER BY course,seq",
+      "parameters": [
+        "GZHAN YANG , DPAL CHOS KYI GRAGS PA'I LUNG DANG KHYOD 'GAL BA YIN TE, KHYOD KYI NAD LNGA DANG , 'BYUNG BA LNGA DANG , GDON LNGA DANG BCAS PA RNAMS, NYON MONGS PA DUG LNGA'I DNGOS 'BRAS SU KHAS BLANGS, MU STEGS BYED KYI BAD KAN DANG 'DOD CHAGS RGYU 'BRAS, MKHRIS PA DANG ZHE SDANG RGYU 'BRAS SOGS SU KHAS BLANGS PA LA, BAD KAN DANG 'DOD CHAGS RJES SU 'GRO LDOG 'KHRUL, MKHRIS PA DANG ZHE SDANG RJES SU 'GRO LDOG 'KHRUL PAS DE 'GOG BYED KYI, 'KHRUL PHYIR RLUNG SOGS CHOS MA YIN, , ZHES PA'I GZHUNG 'DON PA SGYUR BA'I SGO NAS KHYOD LA GNOD PA'I PHYIR DANG , 'DUS MA BYAS KYI NAM MKHA' PHRAG DOG GI DNGOS 'BRAS SU 'DOD PA MI RIGS PA'I PHYIR,",
+        "gzhan yang , dpal chos kyi grags pa'i lung dang khyod 'gal ba yin te, khyod kyi nad lnga dang , 'byung ba lnga dang , gdon lnga dang bcas pa rnams, nyon mongs pa dug lnga'i dngos 'bras su khas blangs, mu stegs byed kyi bad kan dang 'dod chags rgyu 'bras, mkhris pa dang zhe sdang rgyu 'bras sogs su khas blangs pa la, bad kan dang 'dod chags rjes su 'gro ldog 'khrul, mkhris pa dang zhe sdang rjes su 'gro ldog 'khrul pas de 'gog byed kyi, 'khrul phyir rlung sogs chos ma yin, , zhes pa'i gzhung 'don pa sgyur ba'i sgo nas khyod la gnod pa'i phyir dang , 'dus ma byas kyi nam mkha' phrag dog gi dngos 'bras su 'dod pa mi rigs pa'i phyir",
+        "And anyway, maybe it's you who have contradicted a statement of the glorious Dharmakirti. You have taken the position that the five sicknesses, and the five elements, and the five demons are all the direct result of the five poisons--the five bad thoughts. But when the non-Buddhists take the position that phlegm and desire have a cause-and-effect relationship, and that bile and anger have the same kind of relationship, and so on, then Master Dharmakirti refutes them by showing that desire doesn't always come and go according to the phlegm, and anger doesn't always come and go according to the bile. To do so he makes the statement that says, \"It's not a fact that wind and the rest are such, for the relationship doesn't always hold.\" We could twist around this statement too and say that it disproved your position; and add as well how wrong it is to assert that uncreated space could ever be the direct result of jealousy. [The point seems to be that, although your position about the bad thoughts, and our original position on the nature of the three beings' perceptions, are both correct, you could always twist around some quotation by a master, take it out of context or misinterpret it, and try to show they were wrong.]",
+        1662
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:5976"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#67:exact_field_parallels:281"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE (acip=? OR wylie=? OR english=?) AND id<>? ORDER BY course,seq",
+      "parameters": [
+        "YANG KHA CIG NA RE, DNGOS GCIG YID NI THA DAD PHYIR, , DON MA GRUB PAR 'DOD PA YIN, , ZHES DNGOS PO GCIG LA SNANG TSUL MI 'DRA BA GSUM 'BYUNG BAR GSUNGS PA MI 'THAD PAR THAL, KHYOD LTAR NA DNGOS PO GSUM LA SNANG TSUL MI 'DRA BA GSUM 'BYUNG BA'I PHYIR, DER THAL, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA DE'I TSE NA, DNGOS PO TSAD GRUB PA GSUM LA SNANG TSUL MI 'DRA BA GSUM 'BYUNG BA'I PHYIR, ZER NA,",
+        "yang kha cig na re, dngos gcig yid ni tha dad phyir, , don ma grub par 'dod pa yin, , zhes dngos po gcig la snang tshul mi 'dra ba gsum 'byung bar gsungs pa mi 'thad par thal, khyod ltar na dngos po gsum la snang tshul mi 'dra ba gsum 'byung ba'i phyir, der thal, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa de'i tshe na, dngos po tshad grub pa gsum la snang tshul mi 'dra ba gsum 'byung ba'i phyir, zer na",
+        "Someone else might come and make yet another claim: Let's talk about that quotation above, where it said: Insofar as [these different beings] have differing perceptions Of a single thing, we say it has no reality. The idea being expressed here is that a single object can be appearing in three different ways. This is incorrect because, according to you, what's happening is that three different objects are appearing in three different ways. And this certainly is your position; remember, you were describing a situation where three different kinds of beings sit down together and look at a glass full of something that's wet and flowing. You said that there were three different objects, each confirmed by a valid perception, and that they were appearing in three different ways.",
+        1663
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:5977"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/queries.json#68:exact_field_parallels:282"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE (acip=? OR wylie=? OR english=?) AND id<>? ORDER BY course,seq",
+      "parameters": [
+        "'O NA, SKYES BU GCIG GIS YAN LAG MI 'DRA BA LNGAS BYA BA MI 'DRA BA LNGA BYAS PA DE'I TSE NA, SKYES BU GCIG GIS BYA BA MI 'DRA BA LNGA BYAS PA MA YIN PAR THAL, YAN LAG MI 'DRA BA LNGAS BYA BA MI 'DRA BA LNGA BYAS PA'I PHYIR,",
+        "'o na, skyes bu gcig gis yan lag mi 'dra ba lngas bya ba mi 'dra ba lnga byas pa de'i tshe na, skyes bu gcig gis bya ba mi 'dra ba lnga byas pa ma yin par thal, yan lag mi 'dra ba lngas bya ba mi 'dra ba lnga byas pa'i phyir",
+        "Well now, suppose a person is using all four of his limbs, and his head, to perform five different actions. According to you, it wouldn't be one person performing five different actions, because five different protuberances of his body are performing five different actions.",
+        1664
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:5978"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/supplementary-queries.json#0:mu_stegs"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie LIKE ? ORDER BY id",
+      "parameters": [
+        "mu stegs%"
+      ],
+      "count": 29,
+      "row_refs": [
+        "entries:14448",
+        "entries:14449",
+        "entries:14450",
+        "entries:14451",
+        "entries:14452",
+        "entries:14453",
+        "entries:14454",
+        "entries:14455",
+        "entries:14456",
+        "entries:14457",
+        "entries:14458",
+        "entries:14459",
+        "entries:54494",
+        "entries:54495",
+        "entries:54506",
+        "entries:54507",
+        "entries:54508",
+        "entries:54509",
+        "entries:54510",
+        "entries:54511",
+        "entries:54512",
+        "entries:54513",
+        "entries:91327",
+        "entries:91328",
+        "entries:91329",
+        "entries:91330",
+        "entries:91331",
+        "entries:91332",
+        "entries:91333"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/supplementary-queries.json#1:anger"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie LIKE ? ORDER BY id",
+      "parameters": [
+        "zhe sdang%"
+      ],
+      "count": 22,
+      "row_refs": [
+        "entries:16268",
+        "entries:16269",
+        "entries:16270",
+        "entries:37384",
+        "entries:57604",
+        "entries:57605",
+        "entries:57606",
+        "entries:57607",
+        "entries:57608",
+        "entries:57609",
+        "entries:57610",
+        "entries:57611",
+        "entries:57612",
+        "entries:57613",
+        "entries:57614",
+        "entries:57615",
+        "entries:94896",
+        "entries:94897",
+        "entries:94898",
+        "entries:94899",
+        "entries:94900",
+        "entries:94901"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/supplementary-queries.json#2:gnod"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie IN (?,?,?) ORDER BY id",
+      "parameters": [
+        "gnod pa",
+        "sgyur",
+        "'o na"
+      ],
+      "count": 3,
+      "row_refs": [
+        "entries:3103",
+        "entries:10388",
+        "entries:17005"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/supplementary-queries.json#3:chose_formula"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%chos ma yin%"
+      ],
+      "count": 47,
+      "row_refs": [
+        "corpus_segments:24901",
+        "corpus_segments:24903",
+        "corpus_segments:24904",
+        "corpus_segments:24911",
+        "corpus_segments:25340",
+        "corpus_segments:25652",
+        "corpus_segments:25653",
+        "corpus_segments:158",
+        "corpus_segments:1662",
+        "corpus_segments:4355",
+        "corpus_segments:4357",
+        "corpus_segments:4443",
+        "corpus_segments:4630",
+        "corpus_segments:4731",
+        "corpus_segments:4927",
+        "corpus_segments:4929",
+        "corpus_segments:4994",
+        "corpus_segments:4995",
+        "corpus_segments:5032",
+        "corpus_segments:5034",
+        "corpus_segments:5036",
+        "corpus_segments:5236",
+        "corpus_segments:5976",
+        "corpus_segments:6082",
+        "corpus_segments:6285",
+        "corpus_segments:8445",
+        "corpus_segments:8447",
+        "corpus_segments:8491",
+        "corpus_segments:8493",
+        "corpus_segments:8495",
+        "corpus_segments:8541",
+        "corpus_segments:25870",
+        "corpus_segments:25871",
+        "corpus_segments:30160",
+        "corpus_segments:30375",
+        "corpus_segments:30437",
+        "corpus_segments:30445",
+        "corpus_segments:34918",
+        "corpus_segments:32312",
+        "corpus_segments:32313",
+        "corpus_segments:21889",
+        "corpus_segments:21890",
+        "corpus_segments:21891",
+        "corpus_segments:21892",
+        "corpus_segments:22538",
+        "corpus_segments:22539",
+        "corpus_segments:11799"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/supplementary-queries.json#4:lexical_recast"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%sgyur%",
+        "%twist around%"
+      ],
+      "count": 3,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976",
+        "corpus_segments:34918"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/additional-atom-queries.json#0:lexical_exact:na re",
+        "independent:lexical:na re"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "na re"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:10095"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/additional-atom-queries.json#1:lexical_exact:snang",
+        "independent:lexical:snang"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "snang"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:11010"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/additional-atom-queries.json#2:lexical_exact:tshul",
+        "independent:lexical:tshul"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "tshul"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:15458"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/additional-atom-queries.json#3:lexical_exact:ma yin",
+        "independent:lexical:ma yin"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "ma yin"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:13878"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/additional-atom-queries.json#4:lexical_exact:phyir",
+        "independent:lexical:phyir"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "phyir"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:11962"
+      ]
+    },
+    {
+      "labels": [
+        "tibetan/280/evidence/additional-atom-queries.json#5:lexical_exact:ltar",
+        "independent:lexical:ltar"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "ltar"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:6869"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/original-context-rows.json#0:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+      "parameters": [
+        "C05",
+        260,
+        290
+      ],
+      "count": 31,
+      "row_refs": [
+        "corpus_segments:1642",
+        "corpus_segments:1643",
+        "corpus_segments:1644",
+        "corpus_segments:1645",
+        "corpus_segments:1646",
+        "corpus_segments:1647",
+        "corpus_segments:1648",
+        "corpus_segments:1649",
+        "corpus_segments:1650",
+        "corpus_segments:1651",
+        "corpus_segments:1652",
+        "corpus_segments:1653",
+        "corpus_segments:1654",
+        "corpus_segments:1655",
+        "corpus_segments:1656",
+        "corpus_segments:1657",
+        "corpus_segments:1658",
+        "corpus_segments:1659",
+        "corpus_segments:1660",
+        "corpus_segments:1661",
+        "corpus_segments:1662",
+        "corpus_segments:1663",
+        "corpus_segments:1664",
+        "corpus_segments:1665",
+        "corpus_segments:1666",
+        "corpus_segments:1667",
+        "corpus_segments:1668",
+        "corpus_segments:1669",
+        "corpus_segments:1670",
+        "corpus_segments:1671",
+        "corpus_segments:1672"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#0:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "gzhan yang"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:16393"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#1:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "dpal"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:11177"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#2:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "chos kyi grags pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:4621"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#3:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "lung"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:19435"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#4:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'gal ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:2555"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#5:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "nad"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:10147"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#6:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "lnga"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3997"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#7:",
+        "english/280/spine-lexical-full.json#43:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'byung ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:13375"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#8:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "gdon"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9048"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#9:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "nyon mongs pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:5900"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#10:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "dug"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:8279"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#11:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "dngos 'bras"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3743"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#12:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "khas blangs"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1137"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#13:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "mu stegs byed"
+      ],
+      "count": 0,
+      "row_refs": []
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#14:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "bad kan"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:12315"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#15:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'dod chags"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9635"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#16:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "rgyu 'bras"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:2916"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#17:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "mkhris pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1477"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#18:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "zhe sdang"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:16268"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#19:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "rjes su 'gro ldog"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:22934"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#20:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'khrul"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1604"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#21:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'gog byed"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:2592"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#22:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "rlung"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:19154"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#23:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "sogs"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:20919"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#24:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "chos"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:4609"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#25:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "gzhung"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:16482"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#26:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'don pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9709"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#27:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "sgyur ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3104"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#28:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "gnod pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:10388"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#29:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'dus ma byas"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9597"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#30:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "nam mkha'"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:10167"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#31:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "phrag dog"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:12087"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#32:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'dod pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:9661"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#33:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "mi rigs pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:24609"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#34:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "dngos"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3646"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#35:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "dngos po"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:3672"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#36:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "yid"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:17446"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#37:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "tha dad"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:7220"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#38:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "don"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:8617"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#39:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "grub pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:2046"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#40:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "snang tshul"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:11049"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#41:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "mi 'dra ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:14183"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#42:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "gsum"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:21224"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#44:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "mi 'thad pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:24556"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#45:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "khyod"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1347"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#46:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'gro ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:2677"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#47:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "brlan"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:19192"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#48:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "gsher ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:20149"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#49:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "phor pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:24066"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#50:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "gang"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1648"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#51:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "cig car du"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:4169"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#52:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "bltas pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:7117"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#53:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "tshad grub"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:15285"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#54:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "tshad ma"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:15288"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#55:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "'o na"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:17005"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#56:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "skyes bu"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:804"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#57:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "gcig"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:4216"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#58:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "yan lag"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:17346"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#59:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "bya ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:12506"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#60:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "byas pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:12732"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#61:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "ma yin"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:13878"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/spine-lexical-full.json#62:"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=?",
+      "parameters": [
+        "phyir"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:11962"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#0:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        "GZHAN YANG , DPAL CHOS KYI GRAGS PA'I LUNG DANG KHYOD 'GAL BA YIN TE, KHYOD KYI NAD LNGA DANG , 'BYUNG BA LNGA DANG , GDON LNGA DANG BCAS PA RNAMS, NYON MONGS PA DUG LNGA'I DNGOS 'BRAS SU KHAS BLANGS, MU STEGS BYED KYI BAD KAN DANG 'DOD CHAGS RGYU 'BRAS, MKHRIS PA DANG ZHE SDANG RGYU 'BRAS SOGS SU KHAS BLANGS PA LA, BAD KAN DANG 'DOD CHAGS RJES SU 'GRO LDOG 'KHRUL, MKHRIS PA DANG ZHE SDANG RJES SU 'GRO LDOG 'KHRUL PAS DE 'GOG BYED KYI, 'KHRUL PHYIR RLUNG SOGS CHOS MA YIN, , ZHES PA'I GZHUNG 'DON PA SGYUR BA'I SGO NAS KHYOD LA GNOD PA'I PHYIR DANG , 'DUS MA BYAS KYI NAM MKHA' PHRAG DOG GI DNGOS 'BRAS SU 'DOD PA MI RIGS PA'I PHYIR,"
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#1:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "gzhan yang , dpal chos kyi grags pa'i lung dang khyod 'gal ba yin te, khyod kyi nad lnga dang , 'byung ba lnga dang , gdon lnga dang bcas pa rnams, nyon mongs pa dug lnga'i dngos 'bras su khas blangs, mu stegs byed kyi bad kan dang 'dod chags rgyu 'bras, mkhris pa dang zhe sdang rgyu 'bras sogs su khas blangs pa la, bad kan dang 'dod chags rjes su 'gro ldog 'khrul, mkhris pa dang zhe sdang rjes su 'gro ldog 'khrul pas de 'gog byed kyi, 'khrul phyir rlung sogs chos ma yin, , zhes pa'i gzhung 'don pa sgyur ba'i sgo nas khyod la gnod pa'i phyir dang , 'dus ma byas kyi nam mkha' phrag dog gi dngos 'bras su 'dod pa mi rigs pa'i phyir"
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#2:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "And anyway, maybe it's you who have contradicted a statement of the glorious Dharmakirti. You have taken the position that the five sicknesses, and the five elements, and the five demons are all the direct result of the five poisons--the five bad thoughts. But when the non-Buddhists take the position that phlegm and desire have a cause-and-effect relationship, and that bile and anger have the same kind of relationship, and so on, then Master Dharmakirti refutes them by showing that desire doesn't always come and go according to the phlegm, and anger doesn't always come and go according to the bile. To do so he makes the statement that says, \"It's not a fact that wind and the rest are such, for the relationship doesn't always hold.\" We could twist around this statement too and say that it disproved your position; and add as well how wrong it is to assert that uncreated space could ever be the direct result of jealousy. [The point seems to be that, although your position about the bad thoughts, and our original position on the nature of the three beings' perceptions, are both correct, you could always twist around some quotation by a master, take it out of context or misinterpret it, and try to show they were wrong.]"
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1662"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#3:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        "YANG KHA CIG NA RE, DNGOS GCIG YID NI THA DAD PHYIR, , DON MA GRUB PAR 'DOD PA YIN, , ZHES DNGOS PO GCIG LA SNANG TSUL MI 'DRA BA GSUM 'BYUNG BAR GSUNGS PA MI 'THAD PAR THAL, KHYOD LTAR NA DNGOS PO GSUM LA SNANG TSUL MI 'DRA BA GSUM 'BYUNG BA'I PHYIR, DER THAL, 'GRO BA GSUM GYIS BRLAN ZHING GSHER BA PHOR PA GANG LA CIG CAR DU BLTAS PA DE'I TSE NA, DNGOS PO TSAD GRUB PA GSUM LA SNANG TSUL MI 'DRA BA GSUM 'BYUNG BA'I PHYIR, ZER NA,"
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1663",
+        "corpus_segments:5977"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#4:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "yang kha cig na re, dngos gcig yid ni tha dad phyir, , don ma grub par 'dod pa yin, , zhes dngos po gcig la snang tshul mi 'dra ba gsum 'byung bar gsungs pa mi 'thad par thal, khyod ltar na dngos po gsum la snang tshul mi 'dra ba gsum 'byung ba'i phyir, der thal, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa de'i tshe na, dngos po tshad grub pa gsum la snang tshul mi 'dra ba gsum 'byung ba'i phyir, zer na"
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1663",
+        "corpus_segments:5977"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#5:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "Someone else might come and make yet another claim: Let's talk about that quotation above, where it said: Insofar as [these different beings] have differing perceptions Of a single thing, we say it has no reality. The idea being expressed here is that a single object can be appearing in three different ways. This is incorrect because, according to you, what's happening is that three different objects are appearing in three different ways. And this certainly is your position; remember, you were describing a situation where three different kinds of beings sit down together and look at a glass full of something that's wet and flowing. You said that there were three different objects, each confirmed by a valid perception, and that they were appearing in three different ways."
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1663",
+        "corpus_segments:5977"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#6:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        "'O NA, SKYES BU GCIG GIS YAN LAG MI 'DRA BA LNGAS BYA BA MI 'DRA BA LNGA BYAS PA DE'I TSE NA, SKYES BU GCIG GIS BYA BA MI 'DRA BA LNGA BYAS PA MA YIN PAR THAL, YAN LAG MI 'DRA BA LNGAS BYA BA MI 'DRA BA LNGA BYAS PA'I PHYIR,"
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1664",
+        "corpus_segments:5978"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#7:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "'o na, skyes bu gcig gis yan lag mi 'dra ba lngas bya ba mi 'dra ba lnga byas pa de'i tshe na, skyes bu gcig gis bya ba mi 'dra ba lnga byas pa ma yin par thal, yan lag mi 'dra ba lngas bya ba mi 'dra ba lnga byas pa'i phyir"
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1664",
+        "corpus_segments:5978"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#8:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "Well now, suppose a person is using all four of his limbs, and his head, to perform five different actions. According to you, it wouldn't be one person performing five different actions, because five different protuberances of his body are performing five different actions."
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1664",
+        "corpus_segments:5978"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#9:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%phlegm and desire%"
+      ],
+      "count": 3,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976",
+        "corpus_segments:34918"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#10:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%rjes su 'gro ldog 'khrul%"
+      ],
+      "count": 3,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976",
+        "corpus_segments:34918"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#11:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%protuberances%"
+      ],
+      "count": 6,
+      "row_refs": [
+        "corpus_segments:1664",
+        "corpus_segments:1665",
+        "corpus_segments:5978",
+        "corpus_segments:5979",
+        "corpus_segments:18080",
+        "corpus_segments:19658"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#12:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%yan lag mi 'dra ba lngas%"
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1664",
+        "corpus_segments:5978"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#13:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%Insofar as%"
+      ],
+      "count": 32,
+      "row_refs": [
+        "corpus_segments:379",
+        "corpus_segments:1446",
+        "corpus_segments:1630",
+        "corpus_segments:1663",
+        "corpus_segments:1986",
+        "corpus_segments:1987",
+        "corpus_segments:5945",
+        "corpus_segments:5977",
+        "corpus_segments:6842",
+        "corpus_segments:7082",
+        "corpus_segments:7083",
+        "corpus_segments:8912",
+        "corpus_segments:24202",
+        "corpus_segments:27165",
+        "corpus_segments:27242",
+        "corpus_segments:27379",
+        "corpus_segments:27870",
+        "corpus_segments:30012",
+        "corpus_segments:34700",
+        "corpus_segments:34919",
+        "corpus_segments:35000",
+        "corpus_segments:32300",
+        "corpus_segments:32402",
+        "corpus_segments:21857",
+        "corpus_segments:21862",
+        "corpus_segments:21863",
+        "corpus_segments:22053",
+        "corpus_segments:22528",
+        "corpus_segments:15457",
+        "corpus_segments:17616",
+        "corpus_segments:18041",
+        "corpus_segments:18096"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#15:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%confirmed by a valid perception%"
+      ],
+      "count": 13,
+      "row_refs": [
+        "corpus_segments:1652",
+        "corpus_segments:1663",
+        "corpus_segments:1667",
+        "corpus_segments:1695",
+        "corpus_segments:5966",
+        "corpus_segments:5977",
+        "corpus_segments:5981",
+        "corpus_segments:6009",
+        "corpus_segments:6868",
+        "corpus_segments:8924",
+        "corpus_segments:8929",
+        "corpus_segments:34919",
+        "corpus_segments:34937"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#16:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%direct result of jealousy%"
+      ],
+      "count": 2,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#17:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%bad thoughts%"
+      ],
+      "count": 46,
+      "row_refs": [
+        "corpus_segments:81",
+        "corpus_segments:148",
+        "corpus_segments:205",
+        "corpus_segments:553",
+        "corpus_segments:554",
+        "corpus_segments:1001",
+        "corpus_segments:1184",
+        "corpus_segments:1340",
+        "corpus_segments:1619",
+        "corpus_segments:1662",
+        "corpus_segments:1964",
+        "corpus_segments:2320",
+        "corpus_segments:2471",
+        "corpus_segments:2954",
+        "corpus_segments:2956",
+        "corpus_segments:2965",
+        "corpus_segments:2966",
+        "corpus_segments:3016",
+        "corpus_segments:3585",
+        "corpus_segments:5976",
+        "corpus_segments:6269",
+        "corpus_segments:6270",
+        "corpus_segments:6647",
+        "corpus_segments:6832",
+        "corpus_segments:7068",
+        "corpus_segments:7340",
+        "corpus_segments:7563",
+        "corpus_segments:7564",
+        "corpus_segments:7568",
+        "corpus_segments:7857",
+        "corpus_segments:33171",
+        "corpus_segments:34325",
+        "corpus_segments:34545",
+        "corpus_segments:34757",
+        "corpus_segments:34889",
+        "corpus_segments:34918",
+        "corpus_segments:32260",
+        "corpus_segments:21803",
+        "corpus_segments:9331",
+        "corpus_segments:9333",
+        "corpus_segments:9338",
+        "corpus_segments:9831",
+        "corpus_segments:10028",
+        "corpus_segments:14148",
+        "corpus_segments:14254",
+        "corpus_segments:14548"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/corpus-material-queries-full.json#18:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%cause-and-effect relationship%"
+      ],
+      "count": 4,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976",
+        "corpus_segments:28632",
+        "corpus_segments:34918"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/supplementary-corpus-queries-full.json#0:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%mu stegs byed%",
+        "%non-Buddhists%"
+      ],
+      "count": 4,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976",
+        "corpus_segments:34918",
+        "corpus_segments:17313"
+      ]
+    },
+    {
+      "labels": [
+        "english/280/supplementary-corpus-queries-full.json#1:"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND wylie LIKE ? AND english LIKE ? ORDER BY seq",
+      "parameters": [
+        "C05",
+        "%zhe sdang%",
+        "%anger%"
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1662"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:source.json:280",
+        "independent:snapshot:context.json:280"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        280
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1662"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:source.json:281",
+        "independent:snapshot:context.json:281"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        281
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1663"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:source.json:282",
+        "independent:snapshot:context.json:282"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        282
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1664"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:274"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        274
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1656"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:275"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        275
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1657"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:276"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        276
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1658"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:277"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        277
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1659"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:278"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        278
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1660"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:279"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        279
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1661"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:283"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        283
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1665"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:284"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        284
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1666"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:285"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        285
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1667"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:286"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        286
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1668"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:287"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        287
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1669"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snapshot:context.json:288"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq=?",
+      "parameters": [
+        "C05",
+        288
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:1670"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:'byung"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'byung"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:13361"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:'gro ba"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'gro ba"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:2677"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:'gro ldog"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'gro ldog"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:72553"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:'o na"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "'o na"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:17005"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:dang"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "dang"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:8107"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:don ma grub par"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "don ma grub par"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:43787"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:gis"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gis"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1792"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:gnod pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gnod pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:10388"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:gyis"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "gyis"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1934"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:khas blangs pa"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "khas blangs pa"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:1139"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:khyod ltar na"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "khyod ltar na"
+      ],
+      "count": 0,
+      "row_refs": []
+    },
+    {
+      "labels": [
+        "independent:lexical:la"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "la"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:19193"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:lngas"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "lngas"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:35336"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:ma"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "ma"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:13694"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:ma yin par thal"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "ma yin par thal"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:24483"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:mi 'thad par"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "mi 'thad par"
+      ],
+      "count": 0,
+      "row_refs": []
+    },
+    {
+      "labels": [
+        "independent:lexical:mi rigs"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "mi rigs"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:14301"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:mi thad"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "mi thad"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:54007"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:ni"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "ni"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:10208"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:rjes su"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "rjes su"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:5391"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:snang tshul mi 'dra ba gsum 'byung ba"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "snang tshul mi 'dra ba gsum 'byung ba"
+      ],
+      "count": 0,
+      "row_refs": []
+    },
+    {
+      "labels": [
+        "independent:lexical:snang tshul mi 'dra ba gsum 'byung bar"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "snang tshul mi 'dra ba gsum 'byung bar"
+      ],
+      "count": 0,
+      "row_refs": []
+    },
+    {
+      "labels": [
+        "independent:lexical:sogs"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "sogs"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:20919"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:tshad grub"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "tshad grub"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:15285"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:yang"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "yang"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:17092"
+      ]
+    },
+    {
+      "labels": [
+        "independent:lexical:zhing"
+      ],
+      "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+      "parameters": [
+        "zhing"
+      ],
+      "count": 1,
+      "row_refs": [
+        "entries:16199"
+      ]
+    },
+    {
+      "labels": [
+        "independent:snang_tshul_with_appearing"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%snang tshul%",
+        "%appearing%"
+      ],
+      "count": 9,
+      "row_refs": [
+        "corpus_segments:1663",
+        "corpus_segments:1666",
+        "corpus_segments:5977",
+        "corpus_segments:5980",
+        "corpus_segments:32804",
+        "corpus_segments:32807",
+        "corpus_segments:32905",
+        "corpus_segments:28411",
+        "corpus_segments:34919"
+      ]
+    },
+    {
+      "labels": [
+        "independent:tshad_grub"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%tshad grub%"
+      ],
+      "count": 12,
+      "row_refs": [
+        "corpus_segments:1663",
+        "corpus_segments:1667",
+        "corpus_segments:1695",
+        "corpus_segments:5977",
+        "corpus_segments:5981",
+        "corpus_segments:6009",
+        "corpus_segments:6868",
+        "corpus_segments:8929",
+        "corpus_segments:35247",
+        "corpus_segments:34919",
+        "corpus_segments:34920",
+        "corpus_segments:34937"
+      ]
+    },
+    {
+      "labels": [
+        "independent:khrul_doesnt_always"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%'khrul%",
+        "%doesn't always%"
+      ],
+      "count": 3,
+      "row_refs": [
+        "corpus_segments:1662",
+        "corpus_segments:5976",
+        "corpus_segments:34918"
+      ]
+    },
+    {
+      "labels": [
+        "independent:cause_effect_relationship"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%rgyu 'bras%",
+        "%relationship%"
+      ],
+      "count": 11,
+      "row_refs": [
+        "corpus_segments:1471",
+        "corpus_segments:1662",
+        "corpus_segments:5976",
+        "corpus_segments:26931",
+        "corpus_segments:26932",
+        "corpus_segments:26933",
+        "corpus_segments:24026",
+        "corpus_segments:28632",
+        "corpus_segments:34918",
+        "corpus_segments:37220",
+        "corpus_segments:16751"
+      ]
+    },
+    {
+      "labels": [
+        "independent:o_na"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+      "parameters": [
+        "%'o na%",
+        "%Well now%"
+      ],
+      "count": 13,
+      "row_refs": [
+        "corpus_segments:175",
+        "corpus_segments:1664",
+        "corpus_segments:5862",
+        "corpus_segments:5978",
+        "corpus_segments:6094",
+        "corpus_segments:27838",
+        "corpus_segments:29777",
+        "corpus_segments:30818",
+        "corpus_segments:32692",
+        "corpus_segments:22466",
+        "corpus_segments:9974",
+        "corpus_segments:20985",
+        "corpus_segments:21366"
+      ]
+    },
+    {
+      "labels": [
+        "independent:C16_P1_TCS_quotation"
+      ],
+      "sql": "SELECT * FROM corpus_segments WHERE (course='C16' OR course='P1' OR course LIKE 'TCS%') AND (wylie LIKE ? OR english LIKE ?) ORDER BY course,seq",
+      "parameters": [
+        "%dngos gcig yid%",
+        "%five different protuberances%"
+      ],
+      "count": 1,
+      "row_refs": [
+        "corpus_segments:6842"
+      ]
+    }
+  ]
+}

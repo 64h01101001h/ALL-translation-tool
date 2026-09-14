@@ -1,0 +1,289 @@
+{
+  "root_correction": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/ctest-plan-correction.json",
+    "bytes": 6220,
+    "sha256": "8653b9a96af3a7bb52a689f55deef7cb3bccfaf43edd6de784792b0124f4f343"
+  },
+  "authoritative_future_argv": [
+    "ctest",
+    "--test-dir",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/course-csv-depth-fix/cmake-build",
+    "-R",
+    "^(constitution|gen_alignment_page|alignment_gate_coverage|alignment_builder|dictionary_exports|no_broken_words|no_split_syllables|no_phonetics_in_layer|no_degenerate_members|no_supplied_span_head|layer_matches_spine|evidence_matches_spine|errata_quotes_hold|view_matches_layer|generated_docs_in_sync|builder_sees_every_span|errata_name_their_witnesses)$",
+    "--output-on-failure"
+  ],
+  "actual_prior_configured_json": {
+    "bytes": 17200,
+    "sha256": "fa9fc32099b1112659fab7be5ea25444bac8f836c449deb851c2cf259bb9d1ef"
+  },
+  "records": [
+    {
+      "name": "constitution",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/constitution_check.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree"
+      ],
+      "add_test": {
+        "line": 169,
+        "text": "add_test(\"constitution\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/constitution_check.py\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree\")"
+      },
+      "properties": {
+        "line": 170,
+        "text": "set_tests_properties(\"constitution\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;556;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "gen_alignment_page",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_gen_alignment_page.py"
+      ],
+      "add_test": {
+        "line": 185,
+        "text": "add_test(\"gen_alignment_page\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_gen_alignment_page.py\")"
+      },
+      "properties": {
+        "line": 186,
+        "text": "set_tests_properties(\"gen_alignment_page\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;612;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "alignment_gate_coverage",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_alignment_gate_coverage.py"
+      ],
+      "add_test": {
+        "line": 187,
+        "text": "add_test(\"alignment_gate_coverage\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_alignment_gate_coverage.py\")"
+      },
+      "properties": {
+        "line": 188,
+        "text": "set_tests_properties(\"alignment_gate_coverage\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;615;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "alignment_builder",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_alignment_builder.py"
+      ],
+      "add_test": {
+        "line": 189,
+        "text": "add_test(\"alignment_builder\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_alignment_builder.py\")"
+      },
+      "properties": {
+        "line": 190,
+        "text": "set_tests_properties(\"alignment_builder\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;619;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "dictionary_exports",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_exports.py"
+      ],
+      "add_test": {
+        "line": 191,
+        "text": "add_test(\"dictionary_exports\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_exports.py\")"
+      },
+      "properties": {
+        "line": 192,
+        "text": "set_tests_properties(\"dictionary_exports\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;623;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "no_broken_words",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_broken_words.py"
+      ],
+      "add_test": {
+        "line": 193,
+        "text": "add_test(\"no_broken_words\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_broken_words.py\")"
+      },
+      "properties": {
+        "line": 194,
+        "text": "set_tests_properties(\"no_broken_words\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;627;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "no_split_syllables",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_split_syllables.py"
+      ],
+      "add_test": {
+        "line": 195,
+        "text": "add_test(\"no_split_syllables\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_split_syllables.py\")"
+      },
+      "properties": {
+        "line": 196,
+        "text": "set_tests_properties(\"no_split_syllables\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;631;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "no_phonetics_in_layer",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_phonetics_in_layer.py"
+      ],
+      "add_test": {
+        "line": 197,
+        "text": "add_test(\"no_phonetics_in_layer\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_phonetics_in_layer.py\")"
+      },
+      "properties": {
+        "line": 198,
+        "text": "set_tests_properties(\"no_phonetics_in_layer\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;635;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "no_degenerate_members",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_degenerate_members.py"
+      ],
+      "add_test": {
+        "line": 199,
+        "text": "add_test(\"no_degenerate_members\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_degenerate_members.py\")"
+      },
+      "properties": {
+        "line": 200,
+        "text": "set_tests_properties(\"no_degenerate_members\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;639;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "no_supplied_span_head",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_supplied_span_head.py"
+      ],
+      "add_test": {
+        "line": 201,
+        "text": "add_test(\"no_supplied_span_head\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_no_supplied_span_head.py\")"
+      },
+      "properties": {
+        "line": 202,
+        "text": "set_tests_properties(\"no_supplied_span_head\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;646;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "layer_matches_spine",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_layer_matches_spine.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/alignment/alignment_full_v1.json",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db"
+      ],
+      "add_test": {
+        "line": 203,
+        "text": "add_test(\"layer_matches_spine\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_layer_matches_spine.py\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/alignment/alignment_full_v1.json\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db\")"
+      },
+      "properties": {
+        "line": 204,
+        "text": "set_tests_properties(\"layer_matches_spine\" PROPERTIES  LABELS \"fixture\" _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;656;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "evidence_matches_spine",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_evidence_matches_spine.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/alignment/alignment_evidence_v1.json",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db"
+      ],
+      "add_test": {
+        "line": 205,
+        "text": "add_test(\"evidence_matches_spine\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_evidence_matches_spine.py\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/alignment/alignment_evidence_v1.json\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db\")"
+      },
+      "properties": {
+        "line": 206,
+        "text": "set_tests_properties(\"evidence_matches_spine\" PROPERTIES  LABELS \"fixture\" _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;666;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "errata_quotes_hold",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_errata_quotes_hold.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/docs/errata_register.json",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db"
+      ],
+      "add_test": {
+        "line": 207,
+        "text": "add_test(\"errata_quotes_hold\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_errata_quotes_hold.py\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/docs/errata_register.json\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db\")"
+      },
+      "properties": {
+        "line": 208,
+        "text": "set_tests_properties(\"errata_quotes_hold\" PROPERTIES  LABELS \"fixture\" _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;677;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "view_matches_layer",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_view_matches_layer.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/docs/geshe_michael_roach_dictionary.html",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/alignment/alignment_full_v1.json",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/alignment/alignment_evidence_v1.json"
+      ],
+      "add_test": {
+        "line": 209,
+        "text": "add_test(\"view_matches_layer\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_view_matches_layer.py\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/docs/geshe_michael_roach_dictionary.html\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/alignment/alignment_full_v1.json\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/alignment/alignment_evidence_v1.json\")"
+      },
+      "properties": {
+        "line": 210,
+        "text": "set_tests_properties(\"view_matches_layer\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;687;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "generated_docs_in_sync",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_generated_docs_in_sync.py"
+      ],
+      "add_test": {
+        "line": 211,
+        "text": "add_test(\"generated_docs_in_sync\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_generated_docs_in_sync.py\")"
+      },
+      "properties": {
+        "line": 212,
+        "text": "set_tests_properties(\"generated_docs_in_sync\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;697;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "builder_sees_every_span",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_builder_sees_every_span.py"
+      ],
+      "add_test": {
+        "line": 213,
+        "text": "add_test(\"builder_sees_every_span\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_builder_sees_every_span.py\")"
+      },
+      "properties": {
+        "line": 214,
+        "text": "set_tests_properties(\"builder_sees_every_span\" PROPERTIES  _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;706;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    },
+    {
+      "name": "errata_name_their_witnesses",
+      "command": [
+        "/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_errata_name_their_witnesses.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/docs/errata_register.json",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db"
+      ],
+      "add_test": {
+        "line": 215,
+        "text": "add_test(\"errata_name_their_witnesses\" \"/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_errata_name_their_witnesses.py\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/docs/errata_register.json\" \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db\")"
+      },
+      "properties": {
+        "line": 216,
+        "text": "set_tests_properties(\"errata_name_their_witnesses\" PROPERTIES  LABELS \"fixture\" _BACKTRACE_TRIPLES \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/cmake/AllFixtureTests.cmake;98;_add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;715;add_test;/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/core/CMakeLists.txt;0;\")"
+      }
+    }
+  ],
+  "ctest_invocations": 0
+}

@@ -1,0 +1,44 @@
+--- bank_root_proofs_through279.py
++++ bank_root_proofs_through282.py.txt
+@@ -15,8 +15,8 @@
+ import subprocess
+ import traceback
+ 
+-BASE = 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+-PAGE, SEQS = 93, [277, 278, 279]
++BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
++PAGE, SEQS = 94, [280, 281, 282]
+ LARGE_BYTES = 2_000_000
+ TESTS = {'constitution', 'gen_alignment_page', 'alignment_gate_coverage', 'alignment_builder',
+          'dictionary_exports', 'no_broken_words', 'no_split_syllables', 'no_phonetics_in_layer',
+@@ -27,7 +27,11 @@
+     'verify-complete-originals.py',
+     'proposal-verification/root-original-freeze-check.json',
+     'proposal-verification/execution-proof.json',
+-    'verify-reconciliation-root.py',
++    'reconciliation-verifier-head-allowance-preparation/verify_reconciliation.py',
++    'reconciliation-verifier-head-allowance-preparation/config_contract.py',
++    'reconciliation-verifier-config/config.json',
++    'release-root-reconciliation-runtime-v2.py',
++    'root-reconciliation-runtime-release-v2/proof.json',
+     'root-reconciliation-verification/execution-proof.json',
+     'root-reconciliation-verification/report.json',
+     'root-reconciliation-verification/resolved-spans.json',
+@@ -56,7 +60,7 @@
+     if not __debug__:
+         raise RuntimeError('Assertions must remain enabled')
+     b, wt = Path(args.batch).resolve(strict=True), Path(args.worktree).resolve(strict=True)
+-    assert b.name == 'C05-277-279'
++    assert b.name == 'C05-280-282'
+     landing = b / 'landing'; review = b / 'semantic-review'
+     dest = wt / 'data/alignment/reviews_c05/c5p93/landing-proof'
+     output = Path(args.run_output).absolute()
+@@ -189,7 +193,7 @@
+                 measured_builds.append(dict(record=str(record_path), label=label, exit=run['exit']))
+         assert len(build['runs']) == 2 and all(run['exit'] == 0 for run in build['runs'])
+         coverage = re.findall(rb'^COVERAGE C05: (\d+)/511 segments scanned, (\d+) open \(([^)]+)\)$', read(landing / 'build-layer.stdout'), re.M)
+-        assert coverage == [(b'279', b'232', b'280-511')]
++        assert coverage == [(b'282', b'229', b'283-511')]
+         for path, expected in build['output_sha256'].items():
+             assert pin(read(wt / relpath(path)))['sha256'] == expected
+         stdout = read(landing / 'ctest-17.stdout')

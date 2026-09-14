@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "grub",
+    "grub"
+  ],
+  "rows": [
+    {
+      "id": 2029,
+      "wylie": "grub",
+      "tibetan": "གྲུབ",
+      "tibetan_source": null,
+      "acip": "GRUB",
+      "pronunciation": "drup",
+      "pronunciation_source": null,
+      "sanskrit": "sidh; {MSA,MV}siddha; siddhi; {MSA}āpti (e.g.: manorathāpti); {LC}āgata; {LC}asiddha; {LC}siddhavidyā; {LC}saṃsiddhi",
+      "hopkins_english": "be established; be accomplished; establish; exist; achieve",
+      "hgm_gloss": "[\"possible\", \"has become\", \"proof\", \"he can\", \"coming into existence\", \"come to\", \"reached\", \"reach the state\", \"establish\", \"true\", \"exist\", \"was\", \"actually exist\", \"existed\", \"you can say\", \"something which is true\", \"have\", \"existence\", \"established\", \"proven\", \"being\", \"exists\", \"be\", \"correct\", \"started\", \"accomplished one\", \"were\", \"were to exist\", \"have ... existence\", \"existing\", \"would ... be\", \"came\", \"did ... exist ... did ... exist\", \"something were\", \"to exist\", \"something existed\", \"to be\", \"showing\", \"conclusion\", \"assertion\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": "'grub 'grub 'grubs/grub grubs",
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 3319,
+      "raw": "{\"tibetan\": \"གྲུབ\", \"wylie\": \"grub\", \"wylie_variants\": [\"grub\"], \"tenses\": \"'grub 'grub 'grubs/grub grubs\", \"sanskrit\": \"sidh; {MSA,MV}siddha; siddhi; {MSA}āpti (e.g.: manorathāpti); {LC}āgata; {LC}asiddha; {LC}siddhavidyā; {LC}saṃsiddhi\", \"hopkins_english\": \"be established; be accomplished; establish; exist; achieve\", \"hgm_gloss\": [\"possible\", \"has become\", \"proof\", \"he can\", \"coming into existence\", \"come to\", \"reached\", \"reach the state\", \"establish\", \"true\", \"exist\", \"was\", \"actually exist\", \"existed\", \"you can say\", \"something which is true\", \"have\", \"existence\", \"established\", \"proven\", \"being\", \"exists\", \"be\", \"correct\", \"started\", \"accomplished one\", \"were\", \"were to exist\", \"have ... existence\", \"existing\", \"would ... be\", \"came\", \"did ... exist ... did ... exist\", \"something were\", \"to exist\", \"something existed\", \"to be\", \"showing\", \"conclusion\", \"assertion\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"drup\", \"acip\": \"GRUB\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 3319}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "count": 1
+}

@@ -1,0 +1,32 @@
+from pathlib import Path
+import copy,importlib.util,json,sys
+b=Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282")
+source=Path(sys.argv[1])
+s=importlib.util.spec_from_file_location('scoped_contract',source);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+cases=[('query_container_params',b/'tibetan/280/evidence/queries.json',True),('query_list_params',b/'tibetan/280/evidence/supplementary-queries.json',False),('query_list_params',b/'tibetan/280/evidence/additional-atom-queries.json',False)]
+passed=[];failures=[]
+def check(label,fn,accept):
+ try: fn(); actual=True
+ except (AssertionError,KeyError,IndexError,TypeError):actual=False
+ if actual!=accept:failures.append({'label':label,'expected_accept':accept,'actual_accept':actual})
+ else:passed.append(label)
+for kind,path,nested in cases:
+ descriptor=json.loads(path.read_bytes());records=descriptor['queries'] if nested else descriptor
+ for i,r in enumerate(records):
+  query={k:r[k] for k in ('sql','rows')};query['parameters']=r['params']
+  if 'count'in r:query['count']=r['count']
+  binding={'kind':kind,'index':i}
+  check(f'{kind}/positive/{i}',lambda q=query,d=descriptor,z=binding:m.bind_query(q,d,z),True)
+ r=records[0];query={k:r[k] for k in ('sql','count','rows')};query['parameters']=r['params'];binding={'kind':kind,'index':0}
+ for key,value in [('sql','SELECT 1'),('parameters',['wrong']),('rows',[]),('count',-1)]:
+  mutated=copy.deepcopy(query);mutated[key]=value
+  check(f'{kind}/reject/{path.name}/{key}',lambda q=mutated,d=descriptor,z=binding:m.bind_query(q,d,z),False)
+ for index in (-1,len(records),True):
+  bad={'kind':kind,'index':index}
+  check(f'{kind}/reject/index/{path.name}/{index}',lambda z=bad,q=query,d=descriptor:m.bind_query(q,d,z),False)
+ duplicate=copy.deepcopy(descriptor);target=duplicate['queries'][0] if nested else duplicate[0];target['parameters']=target['params']
+ check(f'{kind}/reject/ambiguous-parameter-key/{path.name}',lambda d=duplicate,q=query,z=binding:m.bind_query(q,d,z),False)
+ extra={'kind':kind,'index':0,'parameter_key':'params'}
+ check(f'{kind}/reject/unregistered-binding-field/{path.name}',lambda z=extra,q=query,d=descriptor:m.bind_query(q,d,z),False)
+print(json.dumps({'source':str(source),'passed':len(passed),'failed':len(failures),'failures':failures},indent=2))
+sys.exit(bool(failures))

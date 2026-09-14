@@ -1,0 +1,8 @@
+{
+  "status": "FAILED_ROOT_LEXICAL_PLACEHOLDER_COUNT",
+  "actual_count": 6,
+  "expected": 4,
+  "cause": "Unscoped text count also included two normal parent=None assignments. The four named release bindings are correctly None. Full freeze/source hash checks before this assertion passed. No candidate run or modification occurred.",
+  "traceback": "File <stdin>, line 9: AssertionError",
+  "correction": "Inspect only the four named top-level assignments using Python AST."
+}

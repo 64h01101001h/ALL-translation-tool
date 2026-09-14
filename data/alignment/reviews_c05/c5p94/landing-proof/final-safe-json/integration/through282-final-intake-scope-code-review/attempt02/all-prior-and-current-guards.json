@@ -1,0 +1,1199 @@
+{
+  "capture-finished-scope.py": {
+    "prior": [
+      {
+        "line": 9,
+        "full_source": "assert q.is_file() and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)",
+        "matching_current_full_source": "assert q.is_file() and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)"
+      },
+      {
+        "line": 14,
+        "full_source": "assert not(f.is_symlink() and f.is_dir())",
+        "matching_current_full_source": "assert not(f.is_symlink() and f.is_dir())"
+      },
+      {
+        "line": 16,
+        "full_source": "assert f.is_dir()",
+        "matching_current_full_source": "assert f.is_dir()"
+      },
+      {
+        "line": 33,
+        "full_source": "assert len(history)==1",
+        "matching_current_full_source": "assert len(history)==1"
+      },
+      {
+        "line": 39,
+        "full_source": "assert desc(x['original'])==x",
+        "matching_current_full_source": "assert desc(x['original'])==x"
+      },
+      {
+        "line": 40,
+        "full_source": "assert [x['original'] for x in tree(Path(g['root']))]==[x['original'] for x in g['files']]",
+        "matching_current_full_source": "assert [x['original'] for x in tree(Path(g['root']))]==[x['original'] for x in g['files']]"
+      }
+    ],
+    "current": [
+      {
+        "line": 9,
+        "full_source": "assert q.is_file() and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)"
+      },
+      {
+        "line": 14,
+        "full_source": "assert not(f.is_symlink() and f.is_dir())"
+      },
+      {
+        "line": 16,
+        "full_source": "assert f.is_dir()"
+      },
+      {
+        "line": 23,
+        "full_source": "assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and not sys.flags.optimize"
+      },
+      {
+        "line": 24,
+        "full_source": "assert not P.exists()"
+      },
+      {
+        "line": 26,
+        "full_source": "assert caller.is_dir() and not caller.is_symlink()"
+      },
+      {
+        "line": 28,
+        "full_source": "assert all(not p.exists() for p in deferred if p not in (P,caller))"
+      },
+      {
+        "line": 31,
+        "full_source": "assert (p.is_file() or p.is_dir()) and not(p.is_symlink() and p.is_dir())"
+      },
+      {
+        "line": 34,
+        "full_source": "assert len(old)==5633 and len(oldpaths)==5633"
+      },
+      {
+        "line": 35,
+        "full_source": "assert len(json.loads((I/'through282-ordinary-bank-inventory/extra-inputs.json').read_bytes()))==5575"
+      },
+      {
+        "line": 38,
+        "full_source": "assert {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')} and d['resolved']==row['resolved']"
+      },
+      {
+        "line": 39,
+        "full_source": "assert (os.readlink(p) if p.is_symlink() else None)==row['symlink']"
+      },
+      {
+        "line": 41,
+        "full_source": "assert 'through282-banking-runs' in roots"
+      },
+      {
+        "line": 47,
+        "full_source": "assert audit['status']=='PASS actual staged diagnostic reproduced and predicates verified' and audit['mode']=='audit'"
+      },
+      {
+        "line": 48,
+        "full_source": "assert audit['baseline_head']=='10968d16e701b698a0e1fbd845b353089d15ac39' and audit['all_warnings_accounted_for'] is True"
+      },
+      {
+        "line": 49,
+        "full_source": "assert audit['git_diff_check_exit']==2 and audit['semantic_approval'] is False"
+      },
+      {
+        "line": 50,
+        "full_source": "assert acceptance['status']=='PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and acceptance['normalization'] is False"
+      },
+      {
+        "line": 51,
+        "full_source": "assert acceptance['literal_warnings']==audit['warning_count']"
+      },
+      {
+        "line": 52,
+        "full_source": "assert {k:controls['raw_diagnostic'][k] for k in ('bytes','sha256')}==dict(bytes=audit['raw_log_bytes'],sha256=audit['raw_log_sha256'])"
+      },
+      {
+        "line": 53,
+        "full_source": "assert controls['raw_diagnostic']['original']==audit['raw_log_kept_external']"
+      },
+      {
+        "line": 54,
+        "full_source": "assert int(Path(controls['raw_diagnostic_exit']['original']).read_bytes())==audit['git_diff_check_exit']"
+      },
+      {
+        "line": 57,
+        "full_source": "assert {p for p in oldpaths if Path(p).is_relative_to(B) and not Path(p).is_relative_to(L)}<={x['original'] for x in batch_nonlanding}"
+      },
+      {
+        "line": 60,
+        "full_source": "assert all(p.is_absolute() and p.is_file() and p.resolve(strict=True).is_relative_to(I) for p in extra)"
+      },
+      {
+        "line": 70,
+        "full_source": "assert len(history)==1"
+      },
+      {
+        "line": 76,
+        "full_source": "assert desc(x['original'])==x"
+      },
+      {
+        "line": 77,
+        "full_source": "assert [x['original'] for x in tree(Path(g['root']))]==[x['original'] for x in g['files']]"
+      },
+      {
+        "line": 78,
+        "full_source": "assert [str(p) for p in current_i()]==initial_i_names"
+      },
+      {
+        "line": 79,
+        "full_source": "assert [x['original'] for x in tree(B) if not Path(x['original']).is_relative_to(L)]==[x['original'] for x in batch_nonlanding]"
+      },
+      {
+        "line": 80,
+        "full_source": "assert [str(p) for p in sorted(L.rglob('*'),key=str) if p.is_file()]==scope['landing_file_paths']"
+      },
+      {
+        "line": 81,
+        "full_source": "assert len(json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes()))==5633"
+      },
+      {
+        "line": 84,
+        "full_source": "assert {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')} and d['resolved']==row['resolved']"
+      },
+      {
+        "line": 85,
+        "full_source": "assert (os.readlink(p) if p.is_symlink() else None)==row['symlink']"
+      }
+    ]
+  },
+  "assemble-final-supplement.py": {
+    "prior": [
+      {
+        "line": 28,
+        "full_source": "c.require(os.environ.get('PYTHONDONTWRITEBYTECODE') == '1' and not sys.flags.optimize, 'bytecode/optimization contract')",
+        "matching_current_full_source": "c.require(os.environ.get('PYTHONDONTWRITEBYTECODE') == '1' and not sys.flags.optimize, 'bytecode/optimization contract')"
+      },
+      {
+        "line": 30,
+        "full_source": "c.require(c.pin(scope_raw)['sha256'] == args.scope_sha256, 'later scope pin')",
+        "matching_current_full_source": "c.require(c.pin(scope_raw)['sha256'] == args.scope_sha256, 'later scope pin')"
+      },
+      {
+        "line": 32,
+        "full_source": "c.require(scope['schema'] == 'through279-final-supplement-v1' and scope['baseline'] == c.BASE, 'later scope schema')",
+        "matching_current_full_source": "c.require(scope['schema'] == 'through282-final-supplement-v1' and scope['baseline'] == c.BASE, 'later scope schema')"
+      },
+      {
+        "line": 34,
+        "full_source": "c.require(out.is_absolute() and out.parent.resolve(strict=True) == c.I.resolve() and\n              out.name == 'through279-final-bank-inventory-complete' and not out.exists(), 'fresh exact supplement output')",
+        "matching_current_full_source": "c.require(out.is_absolute() and out.parent.resolve(strict=True) == c.I.resolve() and\n              out.name == 'through282-final-bank-inventory-complete' and not out.exists(), 'fresh exact supplement output')"
+      },
+      {
+        "line": 36,
+        "full_source": "c.require(scope['later_external_after_snapshot'], 'missing later caller boundary')",
+        "matching_current_full_source": "c.require(scope['later_external_after_snapshot'], 'missing later caller boundary')"
+      },
+      {
+        "line": 49,
+        "full_source": "c.require(set(scope['controls']) == set(required_control_paths), 'supplement control keys')",
+        "matching_current_full_source": "c.require(set(scope['controls']) == set(required_control_paths), 'supplement control keys')"
+      },
+      {
+        "line": 51,
+        "full_source": "c.require(scope['controls'][key]['original'] == str(path), ('supplement control path', key))",
+        "matching_current_full_source": "c.require(scope['controls'][key]['original'] == str(path), ('supplement control path', key))"
+      },
+      {
+        "line": 56,
+        "full_source": "c.require(proof['status'] == 'PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT' and\n                  proof['list_pin'] == c.pin(controls['initial_list']) and proof['scope_pin'] == c.pin(controls['initial_scope']) and\n                  proof['coverage_pin'] == c.pin(controls['initial_coverage']), 'initial composition chain')",
+        "matching_current_full_source": "c.require(proof['status'] == 'PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT' and\n                  proof['list_pin'] == c.pin(controls['initial_list']) and proof['scope_pin'] == c.pin(controls['initial_scope']) and\n                  proof['coverage_pin'] == c.pin(controls['initial_coverage']), 'initial composition chain')"
+      },
+      {
+        "line": 59,
+        "full_source": "c.require(scope['required_completed_roots'] == initial_scope['deferred_before_final_bank'], 'deferred scope must be exact')",
+        "matching_current_full_source": "c.require(scope['required_completed_roots'] == initial_scope['deferred_before_final_bank'], 'deferred scope must be exact')"
+      },
+      {
+        "line": 61,
+        "full_source": "c.require(len({g['root'] for g in groups}) == len(groups) and\n                  set(scope['required_completed_roots']) <= {g['root'] for g in groups}, 'every deferred tree must now be complete')",
+        "matching_current_full_source": "c.require(len({g['root'] for g in groups}) == len(groups) and\n                  set(scope['required_completed_roots']) <= {g['root'] for g in groups}, 'every deferred tree must now be complete')"
+      },
+      {
+        "line": 65,
+        "full_source": "c.require(c.paths(group['root']) == [r['original'] for r in group['files']], ('later root enumeration', group['root']))",
+        "matching_current_full_source": "c.require(c.paths(group['root']) == [r['original'] for r in group['files']], ('later root enumeration', group['root']))"
+      },
+      {
+        "line": 67,
+        "full_source": "c.require(not Path(row['resolved']).is_relative_to(out), 'supplement self reference')",
+        "matching_current_full_source": "c.require(not Path(row['resolved']).is_relative_to(out), 'supplement self reference')"
+      },
+      {
+        "line": 69,
+        "full_source": "c.require(old_row == row, 'conflicting later alias identity')",
+        "matching_current_full_source": "c.require(old_row == row, 'conflicting later alias identity')"
+      },
+      {
+        "line": 72,
+        "full_source": "c.require(old_row == row, 'conflicting later individual identity')",
+        "matching_current_full_source": "c.require(old_row == row, 'conflicting later individual identity')"
+      },
+      {
+        "line": 74,
+        "full_source": "c.require(c.pin(controls['ordinary_manifest']) == c.expected(initial_scope['controls']['ordinary_manifest']) and\n                  controls['ordinary_manifest'] == c.read(c.DEST / 'root-proof-copy-manifest-before-whitespace.json'), 'ordinary manifest unchanged')",
+        "matching_current_full_source": "c.require(c.pin(controls['ordinary_manifest']) == c.expected(initial_scope['controls']['ordinary_manifest']) and\n                  controls['ordinary_manifest'] == c.read(c.DEST / 'root-proof-copy-manifest-before-whitespace.json'), 'ordinary manifest unchanged')"
+      },
+      {
+        "line": 79,
+        "full_source": "c.require(c.pin(raw) == c.expected(row) and c.read(c.DEST / c.relative(row['copy'])) == raw, 'ordinary complete pair')",
+        "matching_current_full_source": "c.require(c.pin(raw) == c.expected(row) and c.read(c.DEST / c.relative(row['copy'])) == raw, 'ordinary complete pair')"
+      },
+      {
+        "line": 82,
+        "full_source": "c.require(c.pin(c.read(row['path'])) == c.expected(row), 'ordinary external')",
+        "matching_current_full_source": "c.require(c.pin(c.read(row['path'])) == c.expected(row), 'ordinary external')"
+      },
+      {
+        "line": 88,
+        "full_source": "c.require(source == row['original'] and source not in by_source, 'duplicate/noncanonical initial resolved original')",
+        "matching_current_full_source": "c.require(source == row['original'] and source not in by_source, 'duplicate/noncanonical initial resolved original')"
+      },
+      {
+        "line": 89,
+        "full_source": "c.require(c.pin(c.read(source)) == c.expected(row), 'initial retained source changed')",
+        "matching_current_full_source": "c.require(c.pin(c.read(source)) == c.expected(row), 'initial retained source changed')"
+      },
+      {
+        "line": 90,
+        "full_source": "c.require(row['retention'] in ('bank', 'external'), 'initial retention schema')",
+        "matching_current_full_source": "c.require(row['retention'] in ('bank', 'external'), 'initial retention schema')"
+      },
+      {
+        "line": 92,
+        "full_source": "c.require(row['copy'] not in targets and c.clean_json(source, c.read(source)), 'initial cleanJSON/target')",
+        "matching_current_full_source": "c.require(row['copy'] not in targets and c.clean_json(source, c.read(source)), 'initial cleanJSON/target')"
+      },
+      {
+        "line": 95,
+        "full_source": "c.require(row['disposition'], 'initial external disposition')",
+        "matching_current_full_source": "c.require(row['disposition'], 'initial external disposition')"
+      },
+      {
+        "line": 99,
+        "full_source": "c.require(Path(source).is_relative_to(c.ART) and not Path(source).is_relative_to(c.DEST) and\n                      not Path(source).is_relative_to(out), 'later source escape/self reference')",
+        "matching_current_full_source": "c.require(Path(source).is_relative_to(c.ART) and not Path(source).is_relative_to(c.DEST) and\n                      not Path(source).is_relative_to(out), 'later source escape/self reference')"
+      },
+      {
+        "line": 102,
+        "full_source": "c.require(c.expected(by_source[source]) == c.pin(raw), 'duplicate original conflicting bytes')",
+        "matching_current_full_source": "c.require(c.expected(by_source[source]) == c.pin(raw), 'duplicate original conflicting bytes')"
+      },
+      {
+        "line": 106,
+        "full_source": "c.require(all(c.expected(r) == c.pin(raw) for r in retained[source]), 'ordinary retained alias changed')",
+        "matching_current_full_source": "c.require(all(c.expected(r) == c.pin(raw) for r in retained[source]), 'ordinary retained alias changed')"
+      },
+      {
+        "line": 111,
+        "full_source": "c.require(copy not in targets and not (c.DEST / c.relative(copy)).exists(), 'later copy collision')",
+        "matching_current_full_source": "c.require(copy not in targets and not (c.DEST / c.relative(copy)).exists(), 'later copy collision')"
+      },
+      {
+        "line": 120,
+        "full_source": "c.require(c.paths(group['root']) == [r['original'] for r in group['files']], 'initial source root changed')",
+        "matching_current_full_source": "c.require(c.paths(group['root']) == [r['original'] for r in group['files']], 'initial source root changed')"
+      },
+      {
+        "line": 125,
+        "full_source": "c.require(rows[:len(first)] == first and len(by_source) == len(rows), 'initial rows altered or resolved originals duplicated')",
+        "matching_current_full_source": "c.require(rows[:len(first)] == first and len(by_source) == len(rows), 'initial rows altered or resolved originals duplicated')"
+      },
+      {
+        "line": 127,
+        "full_source": "c.require(c.pin(controls['ordinary_extra_inputs']) == c.expected(initial_scope['controls']['ordinary_extra_inputs']), 'old extra LIST altered')",
+        "matching_current_full_source": "c.require(c.pin(controls['ordinary_extra_inputs']) == c.expected(initial_scope['controls']['ordinary_extra_inputs']), 'old extra LIST altered')"
+      },
+      {
+        "line": 129,
+        "full_source": "c.require(c.paths(group['root']) == [r['original'] for r in group['files']], 'later root changed during reads')",
+        "matching_current_full_source": "c.require(c.paths(group['root']) == [r['original'] for r in group['files']], 'later root changed during reads')"
+      },
+      {
+        "line": 132,
+        "full_source": "c.require(c.pin(c.read(row['original'])) == c.expected(row), 'retained source changed during reads')",
+        "matching_current_full_source": "c.require(c.pin(c.read(row['original'])) == c.expected(row), 'retained source changed during reads')"
+      },
+      {
+        "line": 135,
+        "full_source": "c.require(c.pin(raw) == c.expected(row) and c.read(c.DEST / c.relative(row['copy'])) == raw, 'ordinary pair changed')",
+        "matching_current_full_source": "c.require(c.pin(raw) == c.expected(row) and c.read(c.DEST / c.relative(row['copy'])) == raw, 'ordinary pair changed')"
+      },
+      {
+        "line": 137,
+        "full_source": "c.require(c.pin(c.read(row['path'])) == c.expected(row), 'ordinary external changed')",
+        "matching_current_full_source": "c.require(c.pin(c.read(row['path'])) == c.expected(row), 'ordinary external changed')"
+      },
+      {
+        "line": 138,
+        "full_source": "c.require(c.read(args.scope) == scope_raw and Path(args.composer).read_bytes() == raw_composer, 'scope/helper changed')",
+        "matching_current_full_source": "c.require(c.read(args.scope) == scope_raw and Path(args.composer).read_bytes() == raw_composer, 'scope/helper changed')"
+      }
+    ],
+    "current": [
+      {
+        "line": 28,
+        "full_source": "c.require(os.environ.get('PYTHONDONTWRITEBYTECODE') == '1' and not sys.flags.optimize, 'bytecode/optimization contract')"
+      },
+      {
+        "line": 30,
+        "full_source": "c.require(c.pin(scope_raw)['sha256'] == args.scope_sha256, 'later scope pin')"
+      },
+      {
+        "line": 32,
+        "full_source": "c.require(scope['schema'] == 'through282-final-supplement-v1' and scope['baseline'] == c.BASE, 'later scope schema')"
+      },
+      {
+        "line": 34,
+        "full_source": "c.require(out.is_absolute() and out.parent.resolve(strict=True) == c.I.resolve() and\n              out.name == 'through282-final-bank-inventory-complete' and not out.exists(), 'fresh exact supplement output')"
+      },
+      {
+        "line": 36,
+        "full_source": "c.require(scope['later_external_after_snapshot'], 'missing later caller boundary')"
+      },
+      {
+        "line": 49,
+        "full_source": "c.require(set(scope['controls']) == set(required_control_paths), 'supplement control keys')"
+      },
+      {
+        "line": 51,
+        "full_source": "c.require(scope['controls'][key]['original'] == str(path), ('supplement control path', key))"
+      },
+      {
+        "line": 56,
+        "full_source": "c.require(proof['status'] == 'PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT' and\n                  proof['list_pin'] == c.pin(controls['initial_list']) and proof['scope_pin'] == c.pin(controls['initial_scope']) and\n                  proof['coverage_pin'] == c.pin(controls['initial_coverage']), 'initial composition chain')"
+      },
+      {
+        "line": 59,
+        "full_source": "c.require(scope['required_completed_roots'] == initial_scope['deferred_before_final_bank'], 'deferred scope must be exact')"
+      },
+      {
+        "line": 61,
+        "full_source": "c.require(len({g['root'] for g in groups}) == len(groups) and\n                  set(scope['required_completed_roots']) <= {g['root'] for g in groups}, 'every deferred tree must now be complete')"
+      },
+      {
+        "line": 65,
+        "full_source": "c.require(c.paths(group['root']) == [r['original'] for r in group['files']], ('later root enumeration', group['root']))"
+      },
+      {
+        "line": 67,
+        "full_source": "c.require(not Path(row['resolved']).is_relative_to(out), 'supplement self reference')"
+      },
+      {
+        "line": 69,
+        "full_source": "c.require(old_row == row, 'conflicting later alias identity')"
+      },
+      {
+        "line": 72,
+        "full_source": "c.require(old_row == row, 'conflicting later individual identity')"
+      },
+      {
+        "line": 74,
+        "full_source": "c.require(c.pin(controls['ordinary_manifest']) == c.expected(initial_scope['controls']['ordinary_manifest']) and\n                  controls['ordinary_manifest'] == c.read(c.DEST / 'root-proof-copy-manifest-before-whitespace.json'), 'ordinary manifest unchanged')"
+      },
+      {
+        "line": 79,
+        "full_source": "c.require(c.pin(raw) == c.expected(row) and c.read(c.DEST / c.relative(row['copy'])) == raw, 'ordinary complete pair')"
+      },
+      {
+        "line": 82,
+        "full_source": "c.require(c.pin(c.read(row['path'])) == c.expected(row), 'ordinary external')"
+      },
+      {
+        "line": 88,
+        "full_source": "c.require(source == row['original'] and source not in by_source, 'duplicate/noncanonical initial resolved original')"
+      },
+      {
+        "line": 89,
+        "full_source": "c.require(c.pin(c.read(source)) == c.expected(row), 'initial retained source changed')"
+      },
+      {
+        "line": 90,
+        "full_source": "c.require(row['retention'] in ('bank', 'external'), 'initial retention schema')"
+      },
+      {
+        "line": 92,
+        "full_source": "c.require(row['copy'] not in targets and c.clean_json(source, c.read(source)), 'initial cleanJSON/target')"
+      },
+      {
+        "line": 95,
+        "full_source": "c.require(row['disposition'], 'initial external disposition')"
+      },
+      {
+        "line": 99,
+        "full_source": "c.require(Path(source).is_relative_to(c.ART) and not Path(source).is_relative_to(c.DEST) and\n                      not Path(source).is_relative_to(out), 'later source escape/self reference')"
+      },
+      {
+        "line": 102,
+        "full_source": "c.require(c.expected(by_source[source]) == c.pin(raw), 'duplicate original conflicting bytes')"
+      },
+      {
+        "line": 106,
+        "full_source": "c.require(all(c.expected(r) == c.pin(raw) for r in retained[source]), 'ordinary retained alias changed')"
+      },
+      {
+        "line": 111,
+        "full_source": "c.require(copy not in targets and not (c.DEST / c.relative(copy)).exists(), 'later copy collision')"
+      },
+      {
+        "line": 120,
+        "full_source": "c.require(c.paths(group['root']) == [r['original'] for r in group['files']], 'initial source root changed')"
+      },
+      {
+        "line": 125,
+        "full_source": "c.require(rows[:len(first)] == first and len(by_source) == len(rows), 'initial rows altered or resolved originals duplicated')"
+      },
+      {
+        "line": 127,
+        "full_source": "c.require(c.pin(controls['ordinary_extra_inputs']) == c.expected(initial_scope['controls']['ordinary_extra_inputs']), 'old extra LIST altered')"
+      },
+      {
+        "line": 129,
+        "full_source": "c.require(c.paths(group['root']) == [r['original'] for r in group['files']], 'later root changed during reads')"
+      },
+      {
+        "line": 132,
+        "full_source": "c.require(c.pin(c.read(row['original'])) == c.expected(row), 'retained source changed during reads')"
+      },
+      {
+        "line": 135,
+        "full_source": "c.require(c.pin(raw) == c.expected(row) and c.read(c.DEST / c.relative(row['copy'])) == raw, 'ordinary pair changed')"
+      },
+      {
+        "line": 137,
+        "full_source": "c.require(c.pin(c.read(row['path'])) == c.expected(row), 'ordinary external changed')"
+      },
+      {
+        "line": 138,
+        "full_source": "c.require(c.read(args.scope) == scope_raw and Path(args.composer).read_bytes() == raw_composer, 'scope/helper changed')"
+      }
+    ]
+  },
+  "capture-final282-supplement-scope-root.py": {
+    "prior": [
+      {
+        "line": 7,
+        "full_source": "assert (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns)",
+        "matching_current_full_source": "assert (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns)"
+      },
+      {
+        "line": 9,
+        "full_source": "assert not O.exists()",
+        "matching_current_full_source": "assert not O.exists()"
+      },
+      {
+        "line": 12,
+        "full_source": "assert p['status']=='PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT'",
+        "matching_current_full_source": "assert p['status']=='PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT'"
+      },
+      {
+        "line": 13,
+        "full_source": "assert pin((first/'final-whitespace-inputs-initial.json').read_bytes())==p['list_pin']",
+        "matching_current_full_source": "assert pin((first/'final-whitespace-inputs-initial.json').read_bytes())==p['list_pin']"
+      },
+      {
+        "line": 14,
+        "full_source": "assert pin((first/'coverage-and-exclusion-map.json').read_bytes())==p['coverage_pin']",
+        "matching_current_full_source": "assert pin((first/'coverage-and-exclusion-map.json').read_bytes())==p['coverage_pin']"
+      },
+      {
+        "line": 15,
+        "full_source": "assert e['exit']==0",
+        "matching_current_full_source": "assert e['exit']==0"
+      },
+      {
+        "line": 17,
+        "full_source": "assert pin((caller/(name+'.bin')).read_bytes())==dict(bytes=e[name+'_bytes'],sha256=e[name+'_sha256'])",
+        "matching_current_full_source": "assert pin((caller/(name+'.bin')).read_bytes())==dict(bytes=e[name+'_bytes'],sha256=e[name+'_sha256'])"
+      },
+      {
+        "line": 18,
+        "full_source": "assert (caller/'exit.txt').read_bytes()==b'0\\n' and not (caller/'stderr.bin').read_bytes()",
+        "matching_current_full_source": "assert (caller/'exit.txt').read_bytes()==b'0\\n' and not (caller/'stderr.bin').read_bytes()"
+      },
+      {
+        "line": 23,
+        "full_source": "assert root.is_dir() and not root.is_symlink()",
+        "matching_current_full_source": "assert root.is_dir() and not root.is_symlink()"
+      },
+      {
+        "line": 24,
+        "full_source": "assert paths",
+        "matching_current_full_source": "assert paths"
+      },
+      {
+        "line": 33,
+        "full_source": "assert sorted(str(x) for x in Path(g['root']).rglob('*') if x.is_file())==[x['original'] for x in g['files']]",
+        "matching_current_full_source": "assert sorted(str(x) for x in Path(g['root']).rglob('*') if x.is_file())==[x['original'] for x in g['files']]"
+      },
+      {
+        "line": 34,
+        "full_source": "assert desc(row['original'])==row",
+        "matching_current_full_source": "assert desc(row['original'])==row"
+      }
+    ],
+    "current": [
+      {
+        "line": 7,
+        "full_source": "assert (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns)"
+      },
+      {
+        "line": 14,
+        "full_source": "assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and not sys.flags.optimize"
+      },
+      {
+        "line": 15,
+        "full_source": "assert not O.exists()"
+      },
+      {
+        "line": 17,
+        "full_source": "assert active_caller.is_dir() and not active_caller.is_symlink()"
+      },
+      {
+        "line": 19,
+        "full_source": "assert (p.is_file() or p.is_dir()) and not(p.is_symlink() and p.is_dir())"
+      },
+      {
+        "line": 22,
+        "full_source": "assert p['status']=='PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT'"
+      },
+      {
+        "line": 23,
+        "full_source": "assert pin((first/'final-whitespace-inputs-initial.json').read_bytes())==p['list_pin']"
+      },
+      {
+        "line": 24,
+        "full_source": "assert pin((first/'coverage-and-exclusion-map.json').read_bytes())==p['coverage_pin']"
+      },
+      {
+        "line": 25,
+        "full_source": "assert e['exit']==0"
+      },
+      {
+        "line": 27,
+        "full_source": "assert pin((caller/(name+'.bin')).read_bytes())==dict(bytes=e[name+'_bytes'],sha256=e[name+'_sha256'])"
+      },
+      {
+        "line": 28,
+        "full_source": "assert (caller/'exit.txt').read_bytes()==b'0\\n' and not (caller/'stderr.bin').read_bytes()"
+      },
+      {
+        "line": 31,
+        "full_source": "assert all(p.is_dir() for p in roots)"
+      },
+      {
+        "line": 34,
+        "full_source": "assert root.is_dir() and not root.is_symlink()"
+      },
+      {
+        "line": 36,
+        "full_source": "assert not(f.is_symlink() and f.is_dir()) and (f.is_file() or f.is_dir())"
+      },
+      {
+        "line": 37,
+        "full_source": "assert paths"
+      },
+      {
+        "line": 40,
+        "full_source": "assert all(x.is_absolute() and x.is_file() and x.resolve(strict=True).is_relative_to(I) for x in extra)"
+      },
+      {
+        "line": 44,
+        "full_source": "assert len(ordinary)==5633 and len(json.loads((I/'through282-ordinary-bank-inventory/extra-inputs.json').read_bytes()))==5575"
+      },
+      {
+        "line": 48,
+        "full_source": "assert (f.is_file() or f.is_dir()) and not(f.is_symlink() and f.is_dir())"
+      },
+      {
+        "line": 49,
+        "full_source": "assert set(prior_batch)<=set(current_batch)"
+      },
+      {
+        "line": 51,
+        "full_source": "assert d['resolved']==row['resolved'] and {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')}"
+      },
+      {
+        "line": 59,
+        "full_source": "assert sorted(str(x) for x in Path(g['root']).rglob('*') if x.is_file())==[x['original'] for x in g['files']]"
+      },
+      {
+        "line": 60,
+        "full_source": "assert desc(row['original'])==row"
+      },
+      {
+        "line": 61,
+        "full_source": "assert sorted(str(p) for p in I.glob('through282*'))==initial_i_names"
+      },
+      {
+        "line": 62,
+        "full_source": "assert sorted(str(x) for x in B.rglob('*') if x.is_file() and not x.is_relative_to(L))==current_batch"
+      },
+      {
+        "line": 63,
+        "full_source": "assert desc(row['original'])==row"
+      }
+    ]
+  },
+  "conditional/release-final282-inventory-root.py": {
+    "prior": [
+      {
+        "line": 5,
+        "full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}",
+        "matching_current_full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}"
+      },
+      {
+        "line": 6,
+        "full_source": "assert not O.exists()",
+        "matching_current_full_source": "assert not O.exists()"
+      },
+      {
+        "line": 8,
+        "full_source": "assert pin(raw)['sha256']==sha",
+        "matching_current_full_source": "assert pin(raw)['sha256']==sha"
+      },
+      {
+        "line": 9,
+        "full_source": "assert len(files)==n",
+        "matching_current_full_source": "assert len(files)==n"
+      },
+      {
+        "line": 10,
+        "full_source": "assert {str(x.relative_to(base)) for x in base.rglob('*') if x.is_file()}==set(files)|{'freeze.json'}",
+        "matching_current_full_source": "assert {str(x.relative_to(base)) for x in base.rglob('*') if x.is_file()}==set(files)|{'freeze.json'}"
+      },
+      {
+        "line": 15,
+        "full_source": "assert raw==(base/row['copy']).read_bytes()",
+        "matching_current_full_source": "assert raw==(base/row['copy']).read_bytes()"
+      },
+      {
+        "line": 16,
+        "full_source": "assert str(src.resolve(strict=True))==row['resolved_original']",
+        "matching_current_full_source": "assert str(src.resolve(strict=True))==row['resolved_original']"
+      },
+      {
+        "line": 18,
+        "full_source": "assert count==110",
+        "matching_current_full_source": "assert count==110"
+      },
+      {
+        "line": 20,
+        "full_source": "assert review['spec_verdict']==review['quality_verdict']=='APPROVE' and not review['open_findings']",
+        "matching_current_full_source": "assert review['spec_verdict']==review['quality_verdict']=='APPROVE' and not review['open_findings']"
+      },
+      {
+        "line": 25,
+        "full_source": "assert sorted(str(x) for x in Path(group['root']).rglob('*') if x.is_file())==[x['original'] for x in group['files']]",
+        "matching_current_full_source": "assert sorted(str(x) for x in Path(group['root']).rglob('*') if x.is_file())==[x['original'] for x in group['files']]"
+      },
+      {
+        "line": 27,
+        "full_source": "assert len(rows)==4333",
+        "matching_current_full_source": "assert len(rows)==4333"
+      },
+      {
+        "line": 29,
+        "full_source": "assert str(src.resolve(strict=True))==row['resolved']",
+        "matching_current_full_source": "assert str(src.resolve(strict=True))==row['resolved']"
+      },
+      {
+        "line": 31,
+        "full_source": "assert aliases==row['symlinks']",
+        "matching_current_full_source": "assert aliases==row['symlinks']"
+      }
+    ],
+    "current": [
+      {
+        "line": 7,
+        "full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}"
+      },
+      {
+        "line": 8,
+        "full_source": "assert not O.exists()"
+      },
+      {
+        "line": 10,
+        "full_source": "assert pin(raw)['sha256']==sha"
+      },
+      {
+        "line": 11,
+        "full_source": "assert len(files)==n"
+      },
+      {
+        "line": 12,
+        "full_source": "assert {str(x.relative_to(base)) for x in base.rglob('*') if x.is_file()}==set(files)|{'freeze.json'}"
+      },
+      {
+        "line": 17,
+        "full_source": "assert raw==(base/row['copy']).read_bytes()"
+      },
+      {
+        "line": 18,
+        "full_source": "assert str(src.resolve(strict=True))==row['resolved_original']"
+      },
+      {
+        "line": 20,
+        "full_source": "assert count==110"
+      },
+      {
+        "line": 22,
+        "full_source": "assert review['spec_verdict']==review['quality_verdict']=='APPROVE' and not review['open_findings']"
+      },
+      {
+        "line": 27,
+        "full_source": "assert sorted(str(x) for x in Path(group['root']).rglob('*') if x.is_file())==[x['original'] for x in group['files']]"
+      },
+      {
+        "line": 29,
+        "full_source": "assert len(rows)==4333"
+      },
+      {
+        "line": 31,
+        "full_source": "assert str(src.resolve(strict=True))==row['resolved']"
+      },
+      {
+        "line": 33,
+        "full_source": "assert aliases==row['symlinks']"
+      }
+    ]
+  },
+  "conditional/release-final282-supplement-root.py": {
+    "prior": [
+      {
+        "line": 5,
+        "full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}",
+        "matching_current_full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}"
+      },
+      {
+        "line": 6,
+        "full_source": "assert not O.exists()",
+        "matching_current_full_source": "assert not O.exists()"
+      },
+      {
+        "line": 7,
+        "full_source": "assert pin(raw)['sha256']=='4759eaf8c23463836b1213312ed1398da1f9352c30306263a7ea15248d42afa0'",
+        "matching_current_full_source": "assert pin(raw)['sha256']=='4759eaf8c23463836b1213312ed1398da1f9352c30306263a7ea15248d42afa0'"
+      },
+      {
+        "line": 8,
+        "full_source": "assert len(f)==33 and {str(x.relative_to(V)) for x in V.rglob('*') if x.is_file()}==set(f)|{'freeze.json'}",
+        "matching_current_full_source": "assert len(f)==33 and {str(x.relative_to(V)) for x in V.rglob('*') if x.is_file()}==set(f)|{'freeze.json'}"
+      },
+      {
+        "line": 10,
+        "full_source": "assert v['spec_verdict']==v['quality_verdict']=='APPROVE' and not v['open_findings']",
+        "matching_current_full_source": "assert v['spec_verdict']==v['quality_verdict']=='APPROVE' and not v['open_findings']"
+      },
+      {
+        "line": 13,
+        "full_source": "assert str(src.resolve())==row['resolved']",
+        "matching_current_full_source": "assert str(src.resolve())==row['resolved']"
+      },
+      {
+        "line": 13,
+        "full_source": "assert (V/row['copy']).read_bytes()==b",
+        "matching_current_full_source": "assert (V/row['copy']).read_bytes()==b"
+      },
+      {
+        "line": 16,
+        "full_source": "assert sorted(str(x) for x in Path(g['root']).rglob('*') if x.is_file())==[x['original'] for x in g['files']]",
+        "matching_current_full_source": "assert sorted(str(x) for x in Path(g['root']).rglob('*') if x.is_file())==[x['original'] for x in g['files']]"
+      },
+      {
+        "line": 18,
+        "full_source": "assert len(rows)==264",
+        "matching_current_full_source": "assert len(rows)==264"
+      },
+      {
+        "line": 20,
+        "full_source": "assert str(src.resolve(strict=True))==row['resolved']",
+        "matching_current_full_source": "assert str(src.resolve(strict=True))==row['resolved']"
+      },
+      {
+        "line": 21,
+        "full_source": "assert [dict(path=str(x),target=os.readlink(x)) for x in (*reversed(src.parents),src) if x.is_symlink()]==row['symlinks']",
+        "matching_current_full_source": "assert [dict(path=str(x),target=os.readlink(x)) for x in (*reversed(src.parents),src) if x.is_symlink()]==row['symlinks']"
+      }
+    ],
+    "current": [
+      {
+        "line": 7,
+        "full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}"
+      },
+      {
+        "line": 8,
+        "full_source": "assert not O.exists()"
+      },
+      {
+        "line": 9,
+        "full_source": "assert pin(raw)['sha256']=='4759eaf8c23463836b1213312ed1398da1f9352c30306263a7ea15248d42afa0'"
+      },
+      {
+        "line": 10,
+        "full_source": "assert len(f)==33 and {str(x.relative_to(V)) for x in V.rglob('*') if x.is_file()}==set(f)|{'freeze.json'}"
+      },
+      {
+        "line": 12,
+        "full_source": "assert v['spec_verdict']==v['quality_verdict']=='APPROVE' and not v['open_findings']"
+      },
+      {
+        "line": 15,
+        "full_source": "assert str(src.resolve())==row['resolved']"
+      },
+      {
+        "line": 15,
+        "full_source": "assert (V/row['copy']).read_bytes()==b"
+      },
+      {
+        "line": 18,
+        "full_source": "assert sorted(str(x) for x in Path(g['root']).rglob('*') if x.is_file())==[x['original'] for x in g['files']]"
+      },
+      {
+        "line": 20,
+        "full_source": "assert len(rows)==264"
+      },
+      {
+        "line": 22,
+        "full_source": "assert str(src.resolve(strict=True))==row['resolved']"
+      },
+      {
+        "line": 23,
+        "full_source": "assert [dict(path=str(x),target=os.readlink(x)) for x in (*reversed(src.parents),src) if x.is_symlink()]==row['symlinks']"
+      }
+    ]
+  },
+  "conditional/verify-final282-initial-inventory-root.py": {
+    "prior": [
+      {
+        "line": 5,
+        "full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}",
+        "matching_current_full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}"
+      },
+      {
+        "line": 6,
+        "full_source": "assert not O.exists()",
+        "matching_current_full_source": "assert not O.exists()"
+      },
+      {
+        "line": 7,
+        "full_source": "assert p['status']=='PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT'",
+        "matching_current_full_source": "assert p['status']=='PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT'"
+      },
+      {
+        "line": 14,
+        "full_source": "assert len(scope)==len(coverage)==4250 and len(rows)==2453",
+        "matching_current_full_source": "assert len(scope)==len(coverage)==4250 and len(rows)==2453"
+      },
+      {
+        "line": 15,
+        "full_source": "assert set(scope)=={row['original'] for row in coverage}",
+        "matching_current_full_source": "assert set(scope)=={row['original'] for row in coverage}"
+      },
+      {
+        "line": 16,
+        "full_source": "assert len(by)==len(rows)",
+        "matching_current_full_source": "assert len(by)==len(rows)"
+      },
+      {
+        "line": 19,
+        "full_source": "assert src.is_absolute() and str(src.resolve())==row['original']",
+        "matching_current_full_source": "assert src.is_absolute() and str(src.resolve())==row['original']"
+      },
+      {
+        "line": 21,
+        "full_source": "assert src.suffix=='.json' and len(raw)<2000000 and not src.is_symlink()",
+        "matching_current_full_source": "assert src.suffix=='.json' and len(raw)<2000000 and not src.is_symlink()"
+      },
+      {
+        "line": 23,
+        "full_source": "assert b'\\r' not in raw and b'\\t' not in raw and not raw.endswith(b'\\n\\n') and not any(x.endswith(b' ') for x in raw.split(b'\\n'))",
+        "matching_current_full_source": "assert b'\\r' not in raw and b'\\t' not in raw and not raw.endswith(b'\\n\\n') and not any(x.endswith(b' ') for x in raw.split(b'\\n'))"
+      },
+      {
+        "line": 24,
+        "full_source": "assert not dest.is_absolute() and '..' not in dest.parts and not (D/dest).exists()",
+        "matching_current_full_source": "assert not dest.is_absolute() and '..' not in dest.parts and not (D/dest).exists()"
+      },
+      {
+        "line": 25,
+        "full_source": "assert row['retention']=='external' and row['disposition']",
+        "matching_current_full_source": "assert row['retention']=='external' and row['disposition']"
+      },
+      {
+        "line": 29,
+        "full_source": "assert all(row[k]==v for k,v in original.items())",
+        "matching_current_full_source": "assert all(row[k]==v for k,v in original.items())"
+      },
+      {
+        "line": 30,
+        "full_source": "assert str(src.resolve())==row['resolved']",
+        "matching_current_full_source": "assert str(src.resolve())==row['resolved']"
+      },
+      {
+        "line": 31,
+        "full_source": "assert aliases==row['symlinks']",
+        "matching_current_full_source": "assert aliases==row['symlinks']"
+      },
+      {
+        "line": 33,
+        "full_source": "assert row['resolved'] not in by",
+        "matching_current_full_source": "assert row['resolved'] not in by"
+      },
+      {
+        "line": 35,
+        "full_source": "assert rec in old['files' if ref['kind']=='bank' else 'external_actual_bytes_retained']",
+        "matching_current_full_source": "assert rec in old['files' if ref['kind']=='bank' else 'external_actual_bytes_retained']"
+      },
+      {
+        "line": 36,
+        "full_source": "assert str(Path(rec['original' if ref['kind']=='bank' else 'path']).resolve())==row['resolved']",
+        "matching_current_full_source": "assert str(Path(rec['original' if ref['kind']=='bank' else 'path']).resolve())==row['resolved']"
+      },
+      {
+        "line": 38,
+        "full_source": "assert (D/rec['copy']).read_bytes()==raw",
+        "matching_current_full_source": "assert (D/rec['copy']).read_bytes()==raw"
+      },
+      {
+        "line": 39,
+        "full_source": "assert row['retention_record']==by[row['resolved']]",
+        "matching_current_full_source": "assert row['retention_record']==by[row['resolved']]"
+      },
+      {
+        "line": 40,
+        "full_source": "assert (bank,external,excluded)==(349,2104,1797)",
+        "matching_current_full_source": "assert (bank,external,excluded)==(349,2104,1797)"
+      },
+      {
+        "line": 41,
+        "full_source": "assert e['exit']==0",
+        "matching_current_full_source": "assert e['exit']==0"
+      }
+    ],
+    "current": [
+      {
+        "line": 7,
+        "full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}"
+      },
+      {
+        "line": 8,
+        "full_source": "assert not O.exists()"
+      },
+      {
+        "line": 9,
+        "full_source": "assert p['status']=='PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT'"
+      },
+      {
+        "line": 16,
+        "full_source": "assert len(scope)==len(coverage)==4250 and len(rows)==2453"
+      },
+      {
+        "line": 17,
+        "full_source": "assert set(scope)=={row['original'] for row in coverage}"
+      },
+      {
+        "line": 18,
+        "full_source": "assert len(by)==len(rows)"
+      },
+      {
+        "line": 21,
+        "full_source": "assert src.is_absolute() and str(src.resolve())==row['original']"
+      },
+      {
+        "line": 23,
+        "full_source": "assert src.suffix=='.json' and len(raw)<2000000 and not src.is_symlink()"
+      },
+      {
+        "line": 25,
+        "full_source": "assert b'\\r' not in raw and b'\\t' not in raw and not raw.endswith(b'\\n\\n') and not any(x.endswith(b' ') for x in raw.split(b'\\n'))"
+      },
+      {
+        "line": 26,
+        "full_source": "assert not dest.is_absolute() and '..' not in dest.parts and not (D/dest).exists()"
+      },
+      {
+        "line": 27,
+        "full_source": "assert row['retention']=='external' and row['disposition']"
+      },
+      {
+        "line": 31,
+        "full_source": "assert all(row[k]==v for k,v in original.items())"
+      },
+      {
+        "line": 32,
+        "full_source": "assert str(src.resolve())==row['resolved']"
+      },
+      {
+        "line": 33,
+        "full_source": "assert aliases==row['symlinks']"
+      },
+      {
+        "line": 35,
+        "full_source": "assert row['resolved'] not in by"
+      },
+      {
+        "line": 37,
+        "full_source": "assert rec in old['files' if ref['kind']=='bank' else 'external_actual_bytes_retained']"
+      },
+      {
+        "line": 38,
+        "full_source": "assert str(Path(rec['original' if ref['kind']=='bank' else 'path']).resolve())==row['resolved']"
+      },
+      {
+        "line": 40,
+        "full_source": "assert (D/rec['copy']).read_bytes()==raw"
+      },
+      {
+        "line": 41,
+        "full_source": "assert row['retention_record']==by[row['resolved']]"
+      },
+      {
+        "line": 42,
+        "full_source": "assert (bank,external,excluded)==(349,2104,1797)"
+      },
+      {
+        "line": 43,
+        "full_source": "assert e['exit']==0"
+      }
+    ]
+  },
+  "conditional/verify-final282-complete-inventory-root.py": {
+    "prior": [
+      {
+        "line": 5,
+        "full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}",
+        "matching_current_full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}"
+      },
+      {
+        "line": 6,
+        "full_source": "assert not O.exists()",
+        "matching_current_full_source": "assert not O.exists()"
+      },
+      {
+        "line": 7,
+        "full_source": "assert p['status']=='PASS_COMPLETE_REVIEWED_SNAPSHOT_WITH_LATER_EXTERNAL_CALLER'",
+        "matching_current_full_source": "assert p['status']=='PASS_COMPLETE_REVIEWED_SNAPSHOT_WITH_LATER_EXTERNAL_CALLER'"
+      },
+      {
+        "line": 10,
+        "full_source": "assert len(first)==2453 and len(rows)==2711 and rows[:len(first)]==first",
+        "matching_current_full_source": "assert len(first)==2453 and len(rows)==2711 and rows[:len(first)]==first"
+      },
+      {
+        "line": 11,
+        "full_source": "assert len(by)==len(rows)",
+        "matching_current_full_source": "assert len(by)==len(rows)"
+      },
+      {
+        "line": 14,
+        "full_source": "assert str(src.resolve(strict=True))==row['original']",
+        "matching_current_full_source": "assert str(src.resolve(strict=True))==row['original']"
+      },
+      {
+        "line": 16,
+        "full_source": "assert src.suffix=='.json' and len(b)<2000000",
+        "matching_current_full_source": "assert src.suffix=='.json' and len(b)<2000000"
+      },
+      {
+        "line": 18,
+        "full_source": "assert b'\\r' not in b and b'\\t' not in b and not b.endswith(b'\\n\\n') and not any(x.endswith(b' ') for x in b.split(b'\\n'))",
+        "matching_current_full_source": "assert b'\\r' not in b and b'\\t' not in b and not b.endswith(b'\\n\\n') and not any(x.endswith(b' ') for x in b.split(b'\\n'))"
+      },
+      {
+        "line": 19,
+        "full_source": "assert row['retention']=='external' and row['disposition']",
+        "matching_current_full_source": "assert row['retention']=='external' and row['disposition']"
+      },
+      {
+        "line": 23,
+        "full_source": "assert len(expected)==len(coverage)==258 and set(expected)=={r['original'] for r in coverage}",
+        "matching_current_full_source": "assert len(expected)==len(coverage)==258 and set(expected)=={r['original'] for r in coverage}"
+      },
+      {
+        "line": 25,
+        "full_source": "assert all(row[k]==v for k,v in expected[row['original']].items())",
+        "matching_current_full_source": "assert all(row[k]==v for k,v in expected[row['original']].items())"
+      },
+      {
+        "line": 26,
+        "full_source": "assert row['record']==by[row['resolved']]",
+        "matching_current_full_source": "assert row['record']==by[row['resolved']]"
+      },
+      {
+        "line": 37,
+        "full_source": "assert e['exit']==0",
+        "matching_current_full_source": "assert e['exit']==0"
+      },
+      {
+        "line": 39,
+        "full_source": "assert not (caller/'stderr.bin').read_bytes()",
+        "matching_current_full_source": "assert not (caller/'stderr.bin').read_bytes()"
+      }
+    ],
+    "current": [
+      {
+        "line": 7,
+        "full_source": "assert pin(b)=={k:p[k] for k in ('bytes','sha256')}"
+      },
+      {
+        "line": 8,
+        "full_source": "assert not O.exists()"
+      },
+      {
+        "line": 9,
+        "full_source": "assert p['status']=='PASS_COMPLETE_REVIEWED_SNAPSHOT_WITH_LATER_EXTERNAL_CALLER'"
+      },
+      {
+        "line": 12,
+        "full_source": "assert len(first)==2453 and len(rows)==2711 and rows[:len(first)]==first"
+      },
+      {
+        "line": 13,
+        "full_source": "assert len(by)==len(rows)"
+      },
+      {
+        "line": 16,
+        "full_source": "assert str(src.resolve(strict=True))==row['original']"
+      },
+      {
+        "line": 18,
+        "full_source": "assert src.suffix=='.json' and len(b)<2000000"
+      },
+      {
+        "line": 20,
+        "full_source": "assert b'\\r' not in b and b'\\t' not in b and not b.endswith(b'\\n\\n') and not any(x.endswith(b' ') for x in b.split(b'\\n'))"
+      },
+      {
+        "line": 21,
+        "full_source": "assert row['retention']=='external' and row['disposition']"
+      },
+      {
+        "line": 25,
+        "full_source": "assert len(expected)==len(coverage)==258 and set(expected)=={r['original'] for r in coverage}"
+      },
+      {
+        "line": 27,
+        "full_source": "assert all(row[k]==v for k,v in expected[row['original']].items())"
+      },
+      {
+        "line": 28,
+        "full_source": "assert row['record']==by[row['resolved']]"
+      },
+      {
+        "line": 39,
+        "full_source": "assert e['exit']==0"
+      },
+      {
+        "line": 41,
+        "full_source": "assert not (caller/'stderr.bin').read_bytes()"
+      }
+    ]
+  }
+}

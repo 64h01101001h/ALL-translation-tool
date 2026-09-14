@@ -1,0 +1,197 @@
+import gzip, hashlib, json, os, sqlite3, sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+OUT = Path(__file__).resolve().parent
+B = OUT.parent
+ROOT = B.parents[1]
+WT = ROOT / 'campaign-worktree'
+def dump(name, obj):
+    (OUT/name).write_text(json.dumps(obj, ensure_ascii=False, indent=2)+'\n')
+def sha(data): return hashlib.sha256(data).hexdigest()
+pins = {}
+def read(path):
+    path = Path(path)
+    data = path.read_bytes()
+    pins[str(path)] = {'sha256':sha(data), 'bytes':len(data)}
+    return data
+def obj(path): return json.loads(read(path))
+
+access = [Path.home()/p for p in [
+    'Desktop/HGM DICTIONARY - TRANSLATION APP',
+    'ACIP Software Developmeent/Gofer Developmetn Files',
+    "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool",
+    "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary",
+    "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary",
+    "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",
+    'ACIP Software Developmeent/tibetan-spellchecker', 'Tibetan Translation Tool']]
+assert all(os.access(p, os.R_OK) for p in access)
+dump('required-access.json', {str(p):True for p in access})
+for path in [WT/'AGENTS.md', WT/'docs/ALIGNMENT_LAYER_SPEC.md', WT/'docs/alignment_briefs/RECONCILE_BRIEF.md', WT/'docs/alignment_briefs/REFUTE_BRIEF.md', WT/'data/alignment/C05_CAMPAIGN.md']:
+    read(path)
+snapshots = {n:obj(B/n) for n in ['source.json','context.json','baseline.json']}
+originals = {}
+heads=set()
+for angle in ['tibetan','english']:
+    for seq in [280,281,282]:
+        base=B/angle/str(seq)
+        for name in ['spec.json','report.md','decisions.json','errata.json','intended-spans.json','freeze.json']:
+            data=read(base/name)
+            originals[str((base/name).relative_to(B))] = {'sha256':sha(data),'bytes':len(data)}
+        spec=obj(base/'spec.json')
+        heads.update(s['tib'] for s in spec['segments'][0]['spans'])
+        assert obj(base/'errata.json') == []
+
+db=WT/'build/hgm_spine_v27_2.db'
+db_actual=db.resolve()
+read(db_actual)
+con=sqlite3.connect(db_actual.as_uri()+'?mode=ro',uri=True)
+con.row_factory=sqlite3.Row
+rowpool={}
+querylog=[]
+querycache={}
+def query(label,sql,params=()):
+    key=(sql,tuple(params))
+    if key in querycache:
+        q=querycache[key]; q['labels'].append(label)
+        return [rowpool[r]['row'] for r in q['row_refs']]
+    rows=[dict(r) for r in con.execute(sql,params)]
+    table='corpus_segments' if 'FROM corpus_segments' in sql else 'entries'
+    refs=[]
+    for row in rows:
+        ref=table+':'+str(row['id'])
+        record={'table':table,'row':row}
+        assert ref not in rowpool or rowpool[ref]==record
+        rowpool[ref]=record; refs.append(ref)
+    q={'labels':[label],'sql':sql,'parameters':list(params),'count':len(rows),'row_refs':refs}
+    querycache[key]=q; querylog.append(q)
+    return rows
+
+# Read and re-execute both authors' actual source-query evidence. Preserve
+# complete results once per database row, rather than repeat shared witnesses.
+evidence_files=[
+ 'tibetan/280/evidence/queries.json',
+ 'tibetan/280/evidence/supplementary-queries.json',
+ 'tibetan/280/evidence/additional-atom-queries.json',
+ 'english/280/original-context-rows.json',
+ 'english/280/spine-lexical-full.json',
+ 'english/280/corpus-material-queries-full.json',
+ 'english/280/supplementary-corpus-queries-full.json']
+rechecks=[]
+for rel in evidence_files:
+    evidence=obj(B/rel)
+    queries=evidence['queries'] if isinstance(evidence,dict) and 'queries' in evidence else [evidence] if isinstance(evidence,dict) else evidence
+    for i,q in enumerate(queries):
+        label=f'{rel}#{i}:'+q.get('label','')
+        rows=query(label,q['sql'],q.get('params',q.get('parameters',[])))
+        equality=rows==q['rows']
+        rechecks.append({'evidence':rel,'query_index':i,'rows_equal_original_evidence':equality,'actual_count':len(rows),'claimed_count':q['count']})
+        assert equality and len(rows)==q['count'], label
+
+selected=query('independent:selected','SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',280,282))
+snapshot_checks=[]
+for filename in ['source.json','context.json']:
+    for r in snapshots[filename]:
+        rows=query('independent:snapshot:'+filename+':'+str(r['seq']),'SELECT * FROM corpus_segments WHERE course=? AND seq=?',(r['course'],r['seq']))
+        fields={k:r[k]==rows[0][k] for k in ['id','course','seq','acip','wylie','english']}
+        assert all(fields.values())
+        snapshot_checks.append({'snapshot':filename,'seq':r['seq'],'fields':fields})
+heads.update(['snang','tshul',"'byung",'na re','yang','ma','ma yin','mi thad','mi rigs',"'khrul",'tshad grub','tshad grub pa',"rgyu 'bras",'rjes su',"'gro ldog",'lngas',"'o na",'ltar'])
+for head in sorted(heads):
+    query('independent:lexical:'+head,'SELECT * FROM entries WHERE wylie=? ORDER BY id',(head,))
+for label,where,params in [
+ ('snang_tshul_with_appearing',"wylie LIKE ? AND english LIKE ?",('%snang tshul%','%appearing%')),
+ ('tshad_grub',"wylie LIKE ?",('%tshad grub%',)),
+ ('khrul_doesnt_always',"wylie LIKE ? AND english LIKE ?",("%'khrul%","%doesn't always%")),
+ ('cause_effect_relationship',"wylie LIKE ? AND english LIKE ?",("%rgyu 'bras%",'%relationship%')),
+ ('o_na',"wylie LIKE ? AND english LIKE ?",("%'o na%",'%Well now%')),
+ ('C16_P1_TCS_quotation',"(course='C16' OR course='P1' OR course LIKE 'TCS%') AND (wylie LIKE ? OR english LIKE ?)",('%dngos gcig yid%','%five different protuberances%'))]:
+    query('independent:'+label,'SELECT * FROM corpus_segments WHERE '+where+' ORDER BY course,seq',params)
+
+masterpath=WT/'data/hgm_dictionary_v27_2.json.gz'
+master=json.loads(gzip.decompress(read(masterpath)))
+master_results={}
+for layer in ['unified_entries','curated_entries','glossary_entries']:
+    master_results[layer]=[{'source_index':i,'entry':e} for i,e in enumerate(master[layer]) if e.get('wylie') in heads or any(v in heads for v in e.get('wylie_variants',[])) or e.get('wylie','').startswith('mu stegs')]
+# Reopen the original master-derived records, compare full retained entries.
+master_rechecks=[]
+for rel in ['english/280/current-master-lexical-full.json','english/280/original-hgm-glossary-and-extra-lexical.json']:
+    ev=obj(B/rel)
+    if 'entries' in ev:
+        pools={'unified_entries':ev['entries']}
+    else:
+        pools=ev['full_results']
+    for layer,entries in pools.items():
+        assert layer in master, layer
+        for e in entries:
+            assert e in master[layer], (rel,layer,e.get('wylie'))
+        master_rechecks.append({'evidence':rel,'layer':layer,'count':len(entries),'all_complete_entries_found_in_original_master':True})
+
+# Reopen original physical bytes; use exact line-byte excerpts for selected rows
+# and the next reply. Whole immutable copies already exist in both originals.
+physical=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt'
+physical_bytes=read(physical)
+lines=physical_bytes.splitlines(keepends=True)
+physical_ranges={280:((2727,2728),(2729,2746)),281:((2747,2747),(2748,2764)),282:((2765,2765),(2766,2770))}
+physical_checks=[]
+for r in selected:
+    tr,er=physical_ranges[r['seq']]
+    tib=b''.join(lines[tr[0]-1:tr[1]])
+    eng=b''.join(lines[er[0]-1:er[1]])
+    ta=' '.join(tib.decode('latin-1').split())
+    en=' '.join(eng.decode('latin-1').split())
+    assert ta==r['acip'] and en==r['english']
+    physical_checks.append({'seq':r['seq'],'tibetan_lines_1based':tr,'english_lines_1based':er,'acip_whitespace_join_equals_spine':True,'english_whitespace_join_equals_spine':True})
+(OUT/'physical-C05-lines-2727-2780.txt').write_bytes(b''.join(lines[2726:2780]))
+for rel in ['tibetan/280/evidence/C05ReadingASCII.txt','english/280/physical-C05ReadingASCII.original.txt']:
+    assert read(B/rel)==physical_bytes
+
+# Read complete source-specific dispositions and provenance references from both
+# originals, without importing any active reconciliation or root judgment.
+for rel in ['tibetan/280/evidence/parallel-comparisons.json','tibetan/280/evidence/physical-row-comparisons.json','tibetan/280/evidence/registered-class-check.json','tibetan/280/evidence/source-verification.json','tibetan/280/evidence/index.json','english/280/registered-class-check.json','english/280/physical-original-provenance.json','english/280/snapshot-verification.json']:
+    obj(B/rel)
+for seq in [280,281,282]:
+    for name in ['evidence-references.json','errata-check.json','final-occurrence-audit.json']:
+        obj(B/'english'/str(seq)/name)
+register=obj(WT/'docs/errata_register.json')
+records=register if isinstance(register,list) else register.get('errata',register.get('entries',[]))
+assert isinstance(records,list)
+class_ids=['E-044','E-071','E-076','E-107','E-111','E-121']
+selected_register=[r for r in records if any('C05:'+str(seq) in json.dumps(r,ensure_ascii=False) for seq in [280,281,282])]
+retained=[r for r in records if r.get('item_id') in class_ids]
+dump('registered-errata-results.json',{'class_ids':class_ids,'semantics':'Exact item_id match for named registered classes; literal C05:280/C05:281/C05:282 search through every complete serialized register record.','class_count':len(retained),'records':retained,'selected_row_matches':selected_register})
+
+# Occurrence comparison is explicit source-offset analysis, not a substitute for
+# later replay of actual reconciled specs through the canonical resolver.
+# Specs, reports and decisions are already frozen originals; pin them by hash
+# and retain only comparative differences, avoiding duplicate full copies.
+occurrences={}
+for row in selected:
+    seq=row['seq']; comparisons={}; checks={}
+    for angle in ['tibetan','english']:
+        source=obj(B/angle/str(seq)/'spec.json')['segments'][0]
+        intended=obj(B/angle/str(seq)/'intended-spans.json')
+        index={s['id']:s for s in intended}
+        result=[]
+        for span in source['spans']:
+            rec=index[span['id']]
+            tr=rec['tib_range']; er=rec['eng_range']
+            assert row['wylie'][tr[0]:tr[1]]==span['tib']
+            assert er is None if span['eng'] is None else row['english'][er[0]:er[1]]==span['eng']
+            result.append({'id':span['id'],'d':span['d'],'tib':span['tib'],'eng':span['eng'],'tib_range':tr,'eng_range':er})
+        comparisons[angle]=result
+        checks[angle]={'span_count':len(result),'all_declared_source_ranges_match':True}
+    def signature(r): return (r['d'],r['tib'],r['eng'],tuple(r['tib_range']),tuple(r['eng_range']) if r['eng_range'] is not None else None)
+    keys={a:{signature(r) for r in rs} for a,rs in comparisons.items()}
+    occurrences[str(seq)]={'checks':checks,'shared_count':len(keys['tibetan'] & keys['english']),
+        'tibetan_only':[r for r in comparisons['tibetan'] if signature(r) not in keys['english']],
+        'english_only':[r for r in comparisons['english'] if signature(r) not in keys['tibetan']]}
+dump('proposal-differences.json',occurrences)
+dump('source-rows.json',rowpool)
+dump('queries.json',{'database':str(db_actual),'uri':db_actual.as_uri()+'?mode=ro','queries':querylog})
+dump('master-results.json',{'source':str(masterpath),'heads_exact_or_variant':sorted(heads),'extra_prefix':'mu stegs','layers':master_results})
+dump('rechecks.json',{'original_queries':rechecks,'master_evidence':master_rechecks,'snapshots':snapshot_checks,'physical':physical_checks})
+dump('input-pins.json',pins)
+dump('original-file-pins.json',originals)
+dump('execution.json',{'started_by':'Codex independent source-preparation subagent','completed_at_utc':datetime.now(timezone.utc).isoformat(),'argv':sys.argv,'script_sha256':sha(Path(__file__).read_bytes()),'python':sys.executable,'python_version':sys.version,'cwd':str(Path.cwd()),'sqlite_mode':'URI mode=ro','no_canonical_replay':True,'original_query_count':len(rechecks),'distinct_executed_queries':len(querylog),'deduplicated_complete_rows':len(rowpool),'physical_excerpt_original_lines':[2727,2780],'originals_and_material_evidence_rechecked':True,'scope':'source preparation only; no final semantic approval; no active reconciled or root-review-target files read'})
+print(json.dumps({'original_queries_rechecked':len(rechecks),'distinct_queries':len(querylog),'complete_unique_rows':len(rowpool),'master_counts':{k:len(v) for k,v in master_results.items()},'snapshots_match':True,'physical_match':True}))

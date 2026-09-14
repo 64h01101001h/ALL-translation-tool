@@ -1,0 +1,153 @@
+import ast, difflib, hashlib, importlib.util, json, os, re, sqlite3, subprocess, sys
+from datetime import datetime, timezone
+from html.parser import HTMLParser
+from pathlib import Path
+OUT=Path(__file__).resolve().parent;B=OUT.parent;ROOT=B.parents[1];W=ROOT/'campaign-worktree';D=B/'reconciled/280'
+COMMIT='10968d16e701b698a0e1fbd845b353089d15ac39'
+M=OUT/'original-to-copy-manifest.json';records=[];calls=[]
+def save(name,obj): (OUT/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def load(p): return json.loads(Path(p).read_bytes())
+def pin(raw):return {'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}
+def copy(p,relative):
+ raw=p.read_bytes();dest=OUT/relative;dest.parent.mkdir(parents=True,exist_ok=True)
+ if dest.exists():assert dest.read_bytes()==raw
+ else:dest.write_bytes(raw)
+ r={'original':str(p.absolute()),'copy':relative,**pin(raw)};records.append(r);return r
+def command(argv,label,stdin=b''):
+ start=datetime.now(timezone.utc).isoformat();r=subprocess.run(argv,cwd=W,input=stdin,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0',GIT_OPTIONAL_LOCKS='0'))
+ p=OUT/'runs'/label;p.mkdir(parents=True,exist_ok=True)
+ for name,data in [('stdin.bin',stdin),('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:
+  assert not (p/name).exists();(p/name).write_bytes(data)
+ rec={'argv':argv,'cwd':str(W),'started_at':start,'finished_at':datetime.now(timezone.utc).isoformat(),'exit':r.returncode,'streams':{k:pin((p/k).read_bytes()) for k in ['stdin.bin','stdout.bin','stderr.bin']}}
+ (p/'execution.json').write_text(json.dumps(rec,indent=2)+'\n');calls.append(rec)
+ assert r.returncode==0 and not r.stderr,(label,r.returncode,r.stderr)
+ return r.stdout
+
+# Read every package byte and parse every complete embedded JSON/text/diff.
+sections=[]
+for name,size,digest in [('semantic-input-review-package.txt',647675,'42617a6429b579a0d8263d7d1aa7c49e29da491f8dddb0925a1f53b6dfda3ed5'),('semantic-input-review-supplement.txt',26612,'946b7d02796824eb8cb99f70ae05ade73eb2efaec26cab50c63318805e2f6dd7')]:
+ raw=(B/name).read_bytes();assert pin(raw)=={'bytes':size,'sha256':digest};copy(B/name,'inputs/'+name)
+ parts=re.split(r'^===== (.+?) =====\n',raw.decode(),flags=re.M)
+ for i in range(1,len(parts),2):
+  label,body=parts[i:i+2];p=B/label
+  if p.is_file():
+   assert body.rstrip('\n')==p.read_text().rstrip('\n'),label
+   if p.suffix=='.json':load(p)
+  elif label.endswith('HASHES') or label.endswith('PINS'):
+   for q in json.loads(body):
+    path=B/q['path'];assert pin(path.read_bytes())=={k:q[k] for k in ['bytes','sha256']}
+  else:assert label.startswith('COMPLETE '),label
+  sections.append({'package':name,'section':label,'complete_characters':len(body),'sha256':hashlib.sha256(body.encode()).hexdigest()})
+save('package-read-proof.json',sections)
+
+core={'spec.json','body.html','report.md','errata.json','decisions.json','intended-spans.json','freeze.json','final-tuples.json','final-decisions.json','omissions.json','original-dispositions.json','errata-analysis.json','proposed-head-allowances.json','proof.json','shared-evidence.json'}
+remaining=[];trees=[]
+for angle in ['tibetan','english','reconciled']:
+ for seq in [280,281,282]:
+  d=B/angle/str(seq);f=load(d/'freeze.json')['files'];f={r['path']:r for r in f} if isinstance(f,list) else f
+  assert set(f)=={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}
+  for name,r in f.items():assert pin((d/name).read_bytes())=={k:r[k] for k in ['bytes','sha256']}
+  prefix=('reviewed-final' if angle=='reconciled' else 'proposal-inputs/'+angle)+'/'+str(seq)
+  for p in sorted(d.rglob('*')):
+   if not p.is_file() or '__pycache__' in p.parts:continue
+   if p.name in core:copy(p,prefix+'/'+str(p.relative_to(d)))
+   else:remaining.append(p)
+  trees.append({'angle':angle,'seq':seq,'files':len(f),'freeze':pin((d/'freeze.json').read_bytes())})
+for p in sorted((B/'semantic-source-preparation').rglob('*')):
+ if p.is_file():remaining.append(p)
+for name in ['semantic-review-brief-v2.md','root-review-targets.md','root-review-targets-resumed-addendum.md','root-frozen-reconciliation-receipt.json','baseline.json','source.json','context.json']:
+ copy(B/name,'inputs/'+name)
+for p in [ROOT/'campaign-artifacts/semantic-review-protocol.md',ROOT/'campaign-artifacts/copy_evidence_once_v2.py',ROOT/'campaign-artifacts/land_reviewed_page.py']:
+ copy(p,'inputs/'+p.name+('.txt' if p.suffix=='.py' else ''))
+
+# Reopen all underlying original source/evidence files identified by the
+# reconciler, verifying its exact complete preserved copy before reusing it.
+for r in load(D/'original-copy-manifest.json'):
+ p=Path(r['original']);raw=p.read_bytes();assert pin(raw)=={k:r[k] for k in ['bytes','sha256']} and raw==(D/r['copy']).read_bytes();remaining.append(p)
+save('original-to-copy-manifest.json',records)
+helper=ROOT/'campaign-artifacts/copy_evidence_once_v2.py';definition=importlib.util.spec_from_file_location('review_copy_helper',helper);module=importlib.util.module_from_spec(definition);definition.loader.exec_module(module)
+already={r['original'] for r in records};remaining=sorted({p.resolve() for p in remaining if str(p.resolve()) not in already})
+copy_result=module.preserve(OUT,M,remaining);records=load(M)
+
+# Mutable worktree snapshots have immutable final-baseline Git-object pins.
+git_proofs=[]
+by_original={r['original']:r for r in records};by_content={(r['sha256'],r['bytes']):r['copy'] for r in records}
+for i,r in enumerate(load(D/'fixed-git-sources.json')):
+ assert r['commit']==COMMIT
+ raw=command(['git','show',COMMIT+':'+r['git_path']],f'git-source-{i}')
+ assert raw==Path(r['copy']).read_bytes() and pin(raw)=={k:r[k] for k in ['bytes','sha256']}
+ key=(r['sha256'],r['bytes']);relative=by_content[key]
+ entry={'original':r['original'],'copy':relative,**pin(raw),'original_git_commit':COMMIT,'repository_relative_path':r['git_path']}
+ if r['original'] in by_original:records.remove(by_original[r['original']])
+ records.append(entry);by_original[r['original']]=entry;git_proofs.append(entry)
+save('original-to-copy-manifest.json',records);save('fixed-git-proof.json',git_proofs);save('input-tree-proof.json',trees)
+
+# Read the selected original source again with SQLite read-only access.
+db=W/'build/hgm_spine_v27_2.db';con=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+sql='SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq';params=['C05',274,288]
+rows=[dict(r) for r in con.execute(sql,params)];con.close();sources={r['seq']:r for r in rows}
+assert rows==load(D/'context-rows-full.json')
+save('original-source-rows.json',{'database':str(db.resolve()),'uri':db.resolve().as_uri()+'?mode=ro','sql':sql,'parameters':params,'count':len(rows),'rows':rows})
+
+# Full physical-source byte checks for the actual selected and witness extents.
+phys=[]
+for r in load(D/'physical-proof.json')+load(D/'additional-physical-proof.json'):
+ p=Path(r['original']);raw=p.read_bytes();expected=r.get('source_pin',r.get('original_pin'));assert pin(raw)==expected
+ a,z=r['byte_range'];piece=raw[a:z];assert piece==Path(r['excerpt']).read_bytes() and pin(piece)=={k:r[k] for k in ['bytes','sha256']}
+ phys.append({'original':str(p),'seq':r['seq'],'field':r['field'],'byte_range':[a,z],'source_pin':pin(raw),'excerpt_pin':pin(piece),'exact':True})
+save('physical-reopen-proof.json',phys)
+
+# Three actual, unchanged canonical replays. The read-only wrapper was reviewed
+# as text; the copy retains its exact bytes and restricts SQLite to this spine.
+copy(D/'run-generator-ro.py.txt','run-generator-ro.py.txt');save('original-to-copy-manifest.json',records)
+gpath=W/'tools/gen_alignment_page.py';sys.path.insert(0,str(W/'tools'));definition=importlib.util.spec_from_file_location('review_canonical_generator',gpath);g=importlib.util.module_from_spec(definition);definition.loader.exec_module(g)
+gate_def=importlib.util.spec_from_file_location('review_head_predicate',W/'tools/test_no_supplied_span_head.py');gate=importlib.util.module_from_spec(gate_def);gate_def.loader.exec_module(gate)
+class Anchors(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.depth=0;self.values=[];self.text=[]
+ def handle_starttag(self,tag,attrs):
+  if self.depth:self.depth+=1
+  elif tag=='span' and dict(attrs).get('data-d')=='1':self.depth=1;self.text=[]
+ def handle_endtag(self,tag):
+  if self.depth:
+   self.depth-=1
+   if not self.depth:self.values.append(''.join(self.text))
+ def handle_data(self,data):
+  if self.depth:self.text.append(data)
+resolved=[];counts=[];head_hits=[];identity_proof=[];errata_ranges=[]
+for seq in [280,281,282]:
+ d=B/'reconciled'/str(seq);spec=load(d/'spec.json');s=spec['segments'][0];spans=s['spans'];byid={x['id']:x for x in spans}
+ body=command([sys.executable,'-B',str(OUT/'run-generator-ro.py.txt')],f'canonical-{seq}',(d/'spec.json').read_bytes());assert body==(d/'body.html').read_bytes()
+ nulls=sum(x['eng'] is None for x in spans);cleaned,nn=re.subn(r'<span class="nul">.*?</span>','',body.decode());assert nn==nulls
+ parser=Anchors();parser.feed(cleaned);assert parser.values==[sources[seq]['wylie'],sources[seq]['english']]
+ tr=g.resolve(sources[seq]['wylie'],spans,'tib',seq);order=g.with_members(spans,[byid[x] for x in s['eng_order']],sources[seq]['english']);er=g.resolve(sources[seq]['english'],order,'eng',seq)
+ local=[{'seq':seq,'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x['eng'],'tib_range':list(tr[x['id']]),'eng_range':None if x['eng'] is None else list(er[x['id']])} for x in spans]
+ assert [{k:v for k,v in x.items() if k!='seq'}|{'parent':None} for x in local]==load(d/'final-tuples.json')
+ decisions=load(d/'final-decisions.json');assert [x['final_span'] for x in decisions]==spans and all(x['rationale'] for x in decisions)
+ for x in load(d/'original-dispositions.json'):
+  ident=x['original_identity'];original=load(B/ident['angle']/str(seq)/'spec.json')['segments'][0]['spans'];original=next(y for y in original if y['id']==ident['id'])
+  assert original==x['original_span'] and list(original)==x['original_key_order'] and set(x['final_ids'])<=set(byid) and x['reason']
+  identity_proof.append({'angle':ident['angle'],'seq':seq,'id':ident['id'],'disposition':x['disposition'],'final_ids':x['final_ids']})
+ omitted=load(d/'omissions.json')
+ for side,field,rng in [('tib','wylie','tib_range'),('eng','english','eng_range')]:
+  text=sources[seq][field];covered=[False]*len(text)
+  for x in local:
+   if x[rng] is not None:a,z=x[rng];assert text[a:z]==x[side];covered[a:z]=[True]*(z-a)
+  gaps=[];i=0
+  while i<len(text):
+   if covered[i]:i+=1;continue
+   z=i+1
+   while z<len(text) and not covered[z]:z+=1
+   gaps.append({'start':i,'end':z,'text':text[i:z]});i=z
+  assert gaps==omitted['full_unwrapped_complements'][side]
+ for e in load(d/'errata-analysis.json'):
+  assert e['refuted'] and not e['retained_erratum'] and set(e['five_grounds'])==set('abcde')
+  for a,z in e['found_ranges']:assert sources[seq][e['found_field']][a:z]==e['found']
+  errata_ranges.append({'seq':seq,'id':e['id'],'found':e['found'],'ranges':e['found_ranges'],'found_verbatim':True,'english_length':len(sources[seq]['english'])})
+ for m in gate.PAT.finditer(body.decode()):head_hits.append({'seq':seq,'key':'c5p94/'+m.group(2),'body_range':list(m.span()),'match':m.group(0)})
+ assert load(d/'errata.json')==[]
+ counts.append({'seq':seq,'span_count':len(spans),'null_count':nulls,'word_pair_count':sum(x['d']==5 and x['eng'] is not None for x in spans),'spec_sha256':pin((d/'spec.json').read_bytes())['sha256'],'spec_bytes':len((d/'spec.json').read_bytes()),'body_sha256':pin(body)['sha256'],'body_bytes':len(body),'generator_exit':0});resolved.extend(local)
+assert len(identity_proof)==len({(x['angle'],x['seq'],x['id']) for x in identity_proof})==225
+assert len(resolved)==124 and len(head_hits)==2
+save('resolved-spans.json',resolved);save('measured-segments.json',counts);save('original-disposition-inspection.json',identity_proof);save('errata-source-checks.json',errata_ranges);save('actual-head-hits.json',head_hits)
+save('setup-proof.json',{'status':'SOURCE_AND_REPLAYS_COMPLETE_PENDING_SEMANTIC_CLOSURE_AND_ROOT_PROOF','copy_helper':pin(helper.read_bytes()),'copy_result':copy_result,'package_sections':len(sections),'original_identities':225,'final_spans':124,'canonical_replays':3,'head_hits':2,'generator':pin(gpath.read_bytes()),'calls':calls,'semantic_approval':False})
+print(json.dumps({'segments':counts,'copies':len(records),'pending':'Independent semantic findings and root mechanical proof before closure'}))

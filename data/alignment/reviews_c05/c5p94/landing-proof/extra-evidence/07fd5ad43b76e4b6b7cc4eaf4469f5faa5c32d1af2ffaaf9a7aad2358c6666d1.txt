@@ -1,0 +1,21 @@
+--- prior/config_contract.py
++++ config_contract.py
+@@ -39,6 +39,18 @@
+  elif kind=='query_list':
+   assert set(binding)=={'kind','index'} and isinstance(descriptor,list)
+   i=binding['index'];assert type(i)is int and 0<=i<len(descriptor);source=descriptor[i]
++ elif kind in ('query_container_params','query_list_params'):
++  assert set(binding)=={'kind','index'}
++  if kind=='query_container_params':
++   assert isinstance(descriptor,dict) and set(descriptor)=={'database','uri','queries'}
++   records=descriptor['queries']
++  else:records=descriptor
++  assert isinstance(records,list)
++  i=binding['index'];assert type(i)is int and 0<=i<len(records)
++  original=records[i];assert isinstance(original,dict) and 'parameters' not in original
++  assert isinstance(original['params'],list)
++  source={'sql':original['sql'],'parameters':original['params'],'rows':original['rows']}
++  if 'count'in original:source['count']=original['count']
+  elif kind=='hgm_results':
+   assert set(binding)=={'kind','term'} and isinstance(descriptor,dict)
+   assert descriptor['parameters_per_term']=='[term,term]'

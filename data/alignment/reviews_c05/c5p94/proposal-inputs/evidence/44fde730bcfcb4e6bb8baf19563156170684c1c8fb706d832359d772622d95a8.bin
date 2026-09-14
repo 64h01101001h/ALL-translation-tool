@@ -1,0 +1,11 @@
+--- generate-finals.py.txt
++++ generate-finals-v2.py.txt
+@@ -3,7 +3,7 @@
+ R=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');B=R/'campaign-artifacts/C05-280-282';D=B/'reconciled/280';W=R/'campaign-worktree'
+ def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+ def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+-original=B/'english/280/run_generator_readonly.py';text=original.read_text();old="work = Path(__file__).resolve().parents[4] / 'campaign-worktree'";print(text)
++original=B/'english/280/run_generator_readonly.py';text=original.read_text();old="work=Path(__file__).resolve().parents[4]/'campaign-worktree'";print(text)
+ # Copy original wrapper with only its path resolution made explicit for this differently nested retained copy.
+ assert old in text
+ new=text.replace(old,'work = Path('+repr(str(W))+')');wrapper=D/'run-generator-ro.py.txt';wrapper.write_text(new);(D/'wrapper.diff').write_text(''.join(difflib.unified_diff(text.splitlines(True),new.splitlines(True),fromfile=str(original),tofile=str(wrapper))))

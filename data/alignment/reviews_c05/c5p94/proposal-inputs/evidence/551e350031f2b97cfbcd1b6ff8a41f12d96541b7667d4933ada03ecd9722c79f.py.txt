@@ -1,0 +1,118 @@
+from pathlib import Path
+import datetime, difflib, hashlib, importlib.util, json, textwrap
+
+B = Path(__file__).resolve().parent
+A = B / 'reconciliation-verifier-head-allowance-preparation'
+Q = B / 'reconciliation-verifier-config'
+D = B / 'reconciled'
+N = D / 'root-runtime-inputs'
+O = B / 'root-reconciliation-runtime-release'
+assert not O.exists()
+O.mkdir()
+
+def pin(p):
+    raw = Path(p).read_bytes()
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+def check(p, expected):
+    actual = pin(p)
+    assert actual == {k: expected[k] for k in ('bytes', 'sha256')}, str(p)
+    return actual
+
+def load(p):
+    return json.loads(Path(p).read_bytes())
+
+freezes = []
+for directory, expected in [
+    (A, '3dbf45d27726c19c5e13949a39a96432b8ad35da893d9d2c4f28db795dcb5bf4'),
+    (Q, '9c7c534bd81f18f731c0834e055829f0221b41c2f9726c8dfc6489849024fb62'),
+    (N, '830f7992b2a67bf686fb22e1423c32955e548701a596bfbb581ba53ff4c49466'),
+]:
+    freeze_pin = pin(directory / 'freeze.json')
+    assert freeze_pin['sha256'] == expected
+    files = load(directory / 'freeze.json')['files']
+    if isinstance(files, list):
+        assert len(files) == len({r['path'] for r in files})
+        files = {r['path']: r for r in files}
+    assert set(files) == {str(p.relative_to(directory)) for p in directory.rglob('*') if p.is_file() and p != directory / 'freeze.json'}
+    for name, record in files.items():
+        check(directory / name, record)
+    freezes.append(dict(directory=str(directory), freeze=freeze_pin, files=len(files)))
+
+for name in ['input-manifest.json', 'actual280-input-manifest.json']:
+    for r in load(A / name):
+        check(r['original'], r)
+        assert Path(r['original']).read_bytes() == (A / r['copy']).read_bytes()
+for r in load(Q / 'input-manifest.json'):
+    check(r['original'], r)
+    if 'copy' in r:
+        assert Path(r['original']).read_bytes() == Path(r['copy']).read_bytes()
+
+preparation = load(A / 'preparation-proof.json')
+old = (A / 'inputs/old/verify_reconciliation.py').read_text()
+candidate = (A / 'verify_reconciliation.py').read_text()
+assert old.count(preparation['old_allowance_check']) == 1
+assert old.replace(preparation['old_allowance_check'], preparation['new_allowance_check']) == candidate
+assert textwrap.dedent(preparation['new_allowance_check']) == (A / 'allowance-check-block.py.txt').read_text()
+assert (A / 'config_contract.py').read_bytes() == (B / 'reconciliation-verifier-query-schema-adapter-v1/config_contract.py').read_bytes()
+assert pin(A / 'verify_reconciliation.py')['sha256'] == '64b139112abeabd25d30daaf3c1dc77c28b7ce17bcc272a84d469923cabfbd96'
+tests = load(A / 'focused-controls.json')
+assert tests['status'] == 'PASS_FOCUSED_CONTROLS_ONLY' and (tests['controls'], tests['accepted'], tests['rejected']) == (22, 2, 20)
+assert all(r['expected_accept'] == r['observed_accept'] for r in tests['results'])
+call = load(A / 'controls-run01/execution.json')
+assert call['exit'] == 0 and not (A / 'controls-run01/stderr.bin').read_bytes()
+
+config_pin = pin(Q / 'config.json')
+assert config_pin == dict(bytes=185674, sha256='1a2c787e0b02b569fa0a836f465543dfae0b6737c8fddf66b0e45d747b0150bd')
+config = load(Q / 'config.json')
+definition = importlib.util.spec_from_file_location('reviewed_pure_contract', A / 'config_contract.py')
+contract = importlib.util.module_from_spec(definition)
+definition.loader.exec_module(contract)
+validation = contract.validate_config(config)
+assert validation == load(Q / 'validation.json')
+assert validation['totals'] == dict(spans=124, nulls=4, d5_nonnull=102)
+assert validation['original_count'] == 225 and validation['query_count'] == 226
+assert config['shared_directory'] == str(D) and config['sequences'] == [280, 281, 282]
+
+originals = load(D / '280/original-copy-manifest.json')
+derived = load(N / 'copy-manifest.json')
+assert derived[:412] == [{**r, 'copy': '280/' + r['copy']} for r in originals]
+assert len(originals) == 412 and len(derived) == 428
+for r in derived[412:]:
+    assert Path(r['original']).resolve() == (D / r['copy']).resolve()
+    check(r['original'], r)
+replays = load(D / '280/query-replays.json')
+derivations = load(N / 'query-derivations.json')
+assert len(replays) == len(derivations) == len(config['queries']) == 226
+for i, (r, derived_query, binding) in enumerate(zip(replays, derivations, config['queries'])):
+    assert derived_query['replay_index'] == i
+    assert derived_query['original_descriptor'] == r['original_descriptor']
+    assert derived_query['descriptor']['path'] == r['descriptor_original']
+    assert derived_query['parameter_source_key'] == r['parameter_key']
+    assert derived_query['binding'] == binding['binding']
+    q = load(binding['file']['path'])
+    assert q['sql'] == r['sql'] and q['parameters'] == r['parameters'] and q['rows'] == r['rows']
+    assert ('count' in q) == ('count' in r['original_descriptor'])
+physical = load(N / 'physical.json')
+assert len(physical) == 16
+for r in physical:
+    src = r['source_evidence']
+    old_record = load(src['file'])[src['index']]
+    assert old_record == src['record']
+    assert r['original'] == old_record['original'] and [r['start'], r['end']] == old_record['byte_range']
+    assert Path(r['original']).read_bytes()[r['start']:r['end']] == Path(r['excerpt']).read_bytes()
+governing = load(N / 'governing.json')
+assert len(governing['actual_runs']) == 11
+for r in governing['actual_runs']:
+    original = r['source_record']
+    obj = original['commit'] + ':' + original['git_path']
+    assert r['argv'] == ['git', 'show', obj] and r['cwd'] == config['worktree']
+    assert r['historical_actual_argv'] == ['git', '-C', config['worktree'], 'show', obj]
+    assert (D / r['copy']).read_bytes() == Path(original['copy']).read_bytes()
+
+output = B.parent / 'integration/through282-root-reconciliation-verification-attempt01'
+assert not output.exists() and output.parent.is_dir()
+argv = ['python3', '-B', str(A / 'verify_reconciliation.py'), '--config', str(Q / 'config.json'), '--config-sha256', config_pin['sha256'], '--output', str(output), '--execute-reviewed-verification']
+proof = dict(status='ROOT_APPROVED_SOURCE_CONFIG_AND_ACTUAL_RUNTIME_RELEASE', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), code=pin(A / 'verify_reconciliation.py'), contract=pin(A / 'config_contract.py'), config=config_pin, freezes=freezes, validation=validation, focused_controls_reused=dict(accepted=2, rejected=20, tests_rerun=False), root_review='Complete prior runtime/contract, narrow diff/block/test source, reports/pending contracts, full config derivation source and actual source relationships reviewed. Only the allowance assertion changes; all previous bytes retained. Config mappings, all226 original descriptor projections,16 physical extents and11 explicit Git -C/cwd normalizations checked. Historical recipes are not falsely claimed newly executed.', argv=argv, environment=dict(PYTHONOPTIMIZE='0', PYTHONDONTWRITEBYTECODE='1'), semantic_approval=False, actual_runtime_result='pending')
+(O / 'proof.json').write_text(json.dumps(proof, ensure_ascii=False, indent=2) + '\n')
+print(json.dumps(dict(status=proof['status'], output=str(output), proof=pin(O / 'proof.json')), indent=2))

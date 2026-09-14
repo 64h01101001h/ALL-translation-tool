@@ -1,0 +1,40 @@
+{
+  "prior": {
+    "bytes": 11698,
+    "sha256": "a390e0f89a64b873798dde798ad4aa5f60c1e2d9a01027ad1d4a882ce3515a35"
+  },
+  "candidate": {
+    "bytes": 11887,
+    "sha256": "ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77"
+  },
+  "replacement_operations": 15,
+  "full_inverse_exact": true,
+  "forward_diff": {
+    "bytes": 13605,
+    "sha256": "1e932278fbf737e544387dad70a6aa42238e0429c14d07399e84de0327ba0acd"
+  },
+  "inverse_diff": {
+    "bytes": 13605,
+    "sha256": "1d625cea60f51688d383e3699e70e75ddc61a5337a87c6383c643754c483c02b"
+  },
+  "full_saved_asts_exact": true,
+  "prior_check_sites": 35,
+  "current_check_sites": 35,
+  "added_calls": {
+    "dict": 1,
+    "collections.Counter": 1,
+    "sum": 2
+  },
+  "all_prior_call_sites_preserved": true,
+  "unchanged_literal_guards": [
+    "?mode=ro",
+    "PRAGMA query_only=ON",
+    "TENTATIVE (machine-matched, unreviewed)",
+    "never enters hgm_gloss",
+    "never that the correspondence is CORRECT",
+    "builder_rejection_threshold_percent=95",
+    "'xseg2829ldog'",
+    "n['layer_date']==ev['meta']['date'] and n['source_pages']==ev['meta']['source_pages']"
+  ],
+  "candidate_executed": false
+}

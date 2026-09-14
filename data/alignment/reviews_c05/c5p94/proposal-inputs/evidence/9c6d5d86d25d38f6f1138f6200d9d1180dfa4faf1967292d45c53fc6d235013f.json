@@ -1,0 +1,70 @@
+{
+  "status": "DESIGN_ONLY_NO_RUNTIME_EXECUTION",
+  "test_cases": [
+    {
+      "case": "accept_empty",
+      "intent": "No canonical PAT hits, no declared hits, empty pages_c05 mapping."
+    },
+    {
+      "case": "accept_exact_nonempty",
+      "intent": "Canonical PAT hits bind exactly to final span IDs/depths/text; mapping keys equal their c5p94/labels; each licensor is nonempty and names the actual Tibetan licensor."
+    },
+    {
+      "case": "reject_missing_hit",
+      "intent": "One actual PAT match omitted from actual_gated_hits."
+    },
+    {
+      "case": "reject_fabricated_hit",
+      "intent": "A declared hit has no byte-exact actual PAT match in final body."
+    },
+    {
+      "case": "reject_extra_allowance",
+      "intent": "Any mapping key has no actual canonical gated match."
+    },
+    {
+      "case": "reject_missing_allowance",
+      "intent": "A matched/declared hit lacks its exact mapping key."
+    },
+    {
+      "case": "reject_other_page_or_segment",
+      "intent": "Mapping uses c5p93 or another segment label."
+    },
+    {
+      "case": "reject_wrong_span_id",
+      "intent": "Declared label/id does not identify the exact final accepted span."
+    },
+    {
+      "case": "reject_wrong_depth",
+      "intent": "Declared or regex d=5/7 differs from actual span d."
+    },
+    {
+      "case": "reject_wrong_matched_prefix_or_offset",
+      "intent": "Declared source match differs from the canonical PAT match."
+    },
+    {
+      "case": "reject_wrong_english_or_tibetan",
+      "intent": "Declared hit text differs from the final spec/source tuple."
+    },
+    {
+      "case": "reject_blank_or_generic_licensor",
+      "intent": "Whitespace-only or generic exception string lacking the actual Tibetan licensor."
+    },
+    {
+      "case": "reject_predicate_change",
+      "intent": "Canonical source bytes differ from the proposed predicate_source pin."
+    },
+    {
+      "case": "retain_optional_fields",
+      "intent": "Keep complete accepted spans including cls/nul/subword; this check must not replace them with a projected schema."
+    },
+    {
+      "case": "retain_canonical_scope",
+      "intent": "d1\u20134 are untouched; canonical PAT handles d5 and d7 and nested-member prefix exactly, with no new heuristic or regex."
+    },
+    {
+      "case": "reject_duplicate_hit_labels",
+      "intent": "Duplicated declared records cannot stand in for a missing match."
+    }
+  ],
+  "schema_binding": "Use actual frozen record schema once declared; do not rewrite frozen data to fit invented field names."
+}

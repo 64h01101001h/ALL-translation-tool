@@ -1,0 +1,79 @@
+"""Prepare source only after the actual successful retention boundary; never execute targets."""
+from pathlib import Path
+import ast, difflib, hashlib, json
+P=Path(__file__).resolve().parent;B=P.parent;A=B.parent;I=A/'integration';R=I/'through282-generated-reproduction';W=A.parent/'campaign-worktree'
+def j(p):return json.loads(p.read_bytes())
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(n,x):
+ with (P/n).open('x') as f:json.dump(x,f,indent=2);f.write('\n')
+retcall=j(R/'caller-runs/retention/execution.json');ret=j(R/'retention-proof.json')
+assert retcall['exit']==0 and ret['status']=='PASS'
+checks=j(R/'retention-checks.json');assert len(checks)==ret['checks_total'] and all(x['pass_'] is True for x in checks)
+execution=j(R/'execution-proof.json');assert execution['status']=='PASS' and len(execution['runs'])==2 and len(execution['outputs'])==7
+assert execution['layer_invocations']==execution['view_invocations']==1
+manifest=j(R/'input-manifest.json');prep=j(R/'preparation-proof.json');assert len(manifest)==prep['files']
+assert prep['registered_pages']==548 and prep['source_date']=='2026-09-13' and prep['root_frozen_payload_count']==13
+assert list(ret['counts'].values())==[45402,11938,1618,11,7092,15546,22528,22188,24105,37]
+assert ret['prior_links_retained']==45275 and ret['added_links']==127
+assert ret['added_by_segment']=={'280':55,'281':47,'282':25}
+maps=[];bound=[]
+def retain(p,n):
+ raw=p.read_bytes();d=P/'inputs'/n;d.parent.mkdir(parents=True,exist_ok=True)
+ with d.open('xb') as f:f.write(raw)
+ assert raw==p.read_bytes()==d.read_bytes();maps.append(dict(original=str(p),copy=str(d.relative_to(P)),**pin(raw)))
+def bind(p):
+ raw=p.read_bytes();bound.append(dict(path=str(p),**pin(raw),retention='Full original retained externally; preparation does not duplicate this runtime payload.'))
+for n in ['retention-proof.json','execution-proof.json','preparation-proof.json','registered-pages.json','input-manifest.json','live-before.json','live-after.json','root-runtime-release.json','acip-incomplete-evidence.json']:
+ retain(R/n,'runtime/'+n)
+bind(R/'retention-checks.json')
+actual_calls=[]
+for label in ['prepare','run-once','retention']:
+ d=R/'caller-runs'/label;c=j(d/'command.json');e=j(d/'execution.json')
+ assert e['exit']==0 and c['argv']==e['argv'] and c['cwd']==e['cwd']==str(R)
+ script={'prepare':'prepare.py.txt','run-once':'run-once.py.txt','retention':'verify-retention.py.txt'}[label]
+ assert (Path(e['cwd'])/Path(e['argv'][-1])).resolve()==(R/script).resolve()
+ assert (d/'exit.txt').read_bytes()==b'0\n' and (d/'stdin.bin').read_bytes()==(d/'stderr.bin').read_bytes()==b''
+ for n in ['stdout','stderr']:assert pin((d/(n+'.bin')).read_bytes())==dict(bytes=e[n+'_bytes'],sha256=e[n+'_sha256'])
+ for p in sorted(d.iterdir()):
+  if p.is_file():retain(p,'runtime/caller-runs/'+label+'/'+p.name)
+ actual_calls.append(dict(label=label,execution=pin((d/'execution.json').read_bytes()),exit=e['exit'],recorded_argv=e['argv'],recorded_cwd=e['cwd'],resolved_script=str((Path(e['cwd'])/Path(e['argv'][-1])).resolve()),old_literal_path_comparison=Path(e['argv'][-1])==R/script))
+assert {p.name for p in (R/'caller-runs').iterdir() if p.is_dir()}=={'prepare','run-once','retention'}
+for label in ['layer','view']:
+ d=R/'executions'/label;e=j(d/'execution.json');assert e['exit']==0
+ for p in sorted(d.iterdir()):
+  if p.is_file():retain(p,'runtime/executions/'+label+'/'+p.name)
+for n in ['baseline.json','actual-current-output-contract.json','landing/staged-payload-manifest.json','landing/staged-payload-source-proof.json','root-payload-result-acceptance.json','reproduction-root-entry/proof.json']:
+ retain(B/n,'batch/'+n)
+payload=j(B/'landing/staged-payload-manifest.json');assert len(payload['files'])==13
+for row in payload['files']:
+ rel=row['path'];raw=(W/rel).read_bytes();assert pin(raw)=={k:row[k] for k in ('bytes','sha256')}
+ assert raw==(R/'expected-payload'/rel).read_bytes()==(B/'landing/payload-freeze'/rel).read_bytes()
+ for p in [W/rel,R/'expected-payload'/rel,B/'landing/payload-freeze'/rel]:bind(p)
+for row in execution['outputs']:
+ rel=row['path'];assert (W/rel).read_bytes()==(R/'workspace'/rel).read_bytes()==(R/'reproduced-outputs'/rel).read_bytes()
+ for p in [R/'workspace'/rel,R/'reproduced-outputs'/rel]:bind(p)
+for name in ['prepare.py.txt','run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt']:retain(R/name,'runtime-source/'+name)
+changes=[]
+def adapt(name,prior,replacements):
+ old=(P/prior).read_text();new=old;rows=[]
+ for a,b,count in replacements:
+  assert new.count(a)==count,(name,a,new.count(a));new=new.replace(a,b);rows.append(dict(old=a,new=b,count=count))
+ inv=new
+ for c in reversed(rows):assert inv.count(c['new'])==c['count'];inv=inv.replace(c['new'],c['old'])
+ assert inv==old;ast.parse(new)
+ (P/name).write_text(new)
+ for suffix,a,b in [('diff',old,new),('inverse.diff',new,old)]:
+  (P/(name+'.'+suffix)).write_text(''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile=prior,tofile=name)))
+ changes.append(dict(candidate=name,old=pin(old.encode()),new=pin(new.encode()),replacements=rows,full_inverse_exact=True,syntax_only=True))
+closechanges=[('C05-277-279','C05-280-282',1),('224711',str(len(checks)),1)]
+closechanges.append(("assert execution['layer_invocations']==execution['view_invocations']==1 and len(execution['runs'])==2", "assert execution['layer_invocations']==execution['view_invocations']==1 and len(execution['runs'])==2 and len(execution['outputs'])==7",1))
+closechanges.append(("rows=j(R/'input-manifest.json');out=[]", "rows=j(R/'input-manifest.json');assert len(rows)=="+str(len(manifest))+";out=[]",1))
+adapt('close-evidence.py.txt','prior-close-evidence.py.txt',closechanges)
+acceptchanges=[('through279-generated-reproduction','through282-generated-reproduction',2),('f114fcb7a5a899b939ffc948ae9fdbbb746541fa','10968d16e701b698a0e1fbd845b353089d15ac39',1),("retention['prior_links_retained']==45126 and retention['added_links']==149","retention['prior_links_retained']==45275 and retention['added_links']==127",1),('[45275,11934,1615,11,7084,15517,22491,22151,24061,34]','[45402,11938,1618,11,7092,15546,22528,22188,24105,37]',1),('224711',str(len(checks)),2),('(7084,7081,3,5,6)','(7092,7089,3,5,6)',1),("len(js(R/'registered-pages.json'))==547","len(js(R/'registered-pages.json'))==548",1),("closure_source=I/'through279-reproduction-closure-preparation/close-evidence.py.txt'","closure_source=B/'reproduction-closure-preparation/close-evidence.py.txt'",1),('all_twelve_payload_files_byte_exact=True','all_thirteen_payload_files_byte_exact=True',1),('acip_proven=7081,acip_heads=7084','acip_proven=7089,acip_heads=7092',1)]
+acceptchanges.append(("for r in js(B/'landing/staged-payload-manifest.json')['files']:","payload_manifest=js(B/'landing/staged-payload-manifest.json');assert len(payload_manifest['files'])==13 and len({r['path'] for r in payload_manifest['files']})==13\nfor r in payload_manifest['files']:",1))
+acceptchanges.append(("manifest=js(R/'input-manifest.json');originals=[];git_blobs={}","manifest=js(R/'input-manifest.json');assert len(manifest)=="+str(len(manifest))+";originals=[];git_blobs={}",1))
+acceptchanges.append(("Path(e['argv'][-1])==R/script", "(Path(e['cwd'])/Path(e['argv'][-1])).resolve()==(R/script).resolve()",1))
+adapt('accept-independent-reproduction-root.py','prior-accept-independent-reproduction-root.py',acceptchanges)
+save('actual-bindings.json',dict(status='ACTUAL_SUCCESSFUL_RETENTION_BOUNDARY',checks_total=len(checks),input_aliases=len(manifest),original_aliases=sum('original' in r for r in manifest),git_copies=sum('original_git_commit' in r for r in manifest),registered_pages=548,source_date='2026-09-13',counts=ret['counts'],payload_files=13,actual_callers=actual_calls,actual_runtime_failed_attempts=0,failure_basis='Exactly three current caller directories and two successful isolated producer invocations; inherited source-preparation histories are separate. No current failed caller or producer invocation in this runtime.'))
+save('original-to-copy-manifest.json',maps);save('external-full-source-pins.json',bound);save('adaptation-proof.json',dict(status='PASS_SOURCE_ONLY_ADAPTATION',candidates=changes,root_acceptance_path=str(I/'through282-generated-reproduction-root-acceptance'),target_executions=0))
+print(json.dumps(dict(status='PASS_SOURCE_ONLY',checks_total=len(checks),input_aliases=len(manifest),copies=len(maps),external_pins=len(bound))))

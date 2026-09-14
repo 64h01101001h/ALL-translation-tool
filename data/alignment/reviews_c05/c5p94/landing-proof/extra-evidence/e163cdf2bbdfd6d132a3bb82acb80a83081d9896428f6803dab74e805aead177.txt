@@ -1,0 +1,83 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess
+B=Path(__file__).resolve().parent;A=B.parent;ROOT=A.parent;W=ROOT/'campaign-worktree';I=A/'integration'
+R=I/'through282-generated-reproduction';O=B/'checkpoint-reproduction-accepted'
+BASE='10968d16e701b698a0e1fbd845b353089d15ac39'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+assert __debug__ and not O.exists()
+accept_path=I/'through282-generated-reproduction-root-acceptance/proof.json';accept=j(accept_path)
+assert accept['status']=='PASS' and accept['head']==BASE and accept['retention_checks']==223847
+assert accept['all_seven_reproduced_outputs_byte_exact'] and accept['all_thirteen_payload_files_byte_exact'] and accept['live_head_index_untracked_state_unchanged']
+assert j(B/'reproduction-root-acceptance-caller/execution.json')['exit']==0
+assert not (I/'through282-ordinary-bank-inventory').exists()
+assert not (W/'data/alignment/reviews_c05/c5p94/landing-proof').exists()
+O.mkdir()
+state={}
+for label,args in [('head',['rev-parse','HEAD']),('tracked_status',['status','--porcelain=v1','--untracked-files=no']),('untracked',['ls-files','--others','--exclude-standard','-z']),('stages',['ls-files','--stage','-z']),('cached_names',['diff','--cached','--name-only','-z'])]:
+ d=O/'commands'/label;d.mkdir(parents=True);argv=['git',*args]
+ (d/'command.json').write_text(json.dumps(dict(argv=argv,cwd=str(W),environment_overrides={'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1'}),indent=2)+'\n')
+ (d/'stdin.bin').write_bytes(b'');start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ r=subprocess.run(argv,cwd=W,input=b'',capture_output=True,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1'))
+ for n,raw in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',f'{r.returncode}\n'.encode())]:(d/n).write_bytes(raw)
+ (d/'execution.json').write_text(json.dumps(dict(argv=argv,cwd=str(W),start=start,end=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=r.returncode,stdout=pin(r.stdout),stderr=pin(r.stderr)),indent=2)+'\n')
+ assert r.returncode==0 and not r.stderr
+ assert r.stdout==(B/'reproduction-root-entry'/(label+'.bin')).read_bytes()
+ state[label]=pin(r.stdout)
+assert (O/'commands/head/stdout.bin').read_bytes().decode().strip()==BASE
+assert not (O/'commands/cached_names/stdout.bin').read_bytes()
+for rec in j(B/'landing/staged-payload-manifest.json')['files']:
+ assert pin((W/rec['path']).read_bytes())=={k:rec[k] for k in ('bytes','sha256')}
+now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+next_text=f'''## Accepted reproduction checkpoint {now}
+
+The official existing scheduler is ACTIVE every minute until Tuesday September15,2026 at07:00America/Denver (13:00UTC). No duplicate was created. Root verified its actual saved configuration this turn. At deadline stop starting work, finish/checkpoint the active batch, report verified progress and limits, and pause that automation through the official tool.
+
+Closed private boundary remains C05 through279/511 at {BASE}. Current page94 covers280–282 and is generated through282/511,229open. Do not start283–285, C06 or C13 now. Reproduction, retention and root acceptance are COMPLETE; ordinary inventory, ordinary/final evidence banking, staging, whitespace, DATA and DOCS commits are NOT STARTED. Do not rerun successful generation, tests, payload freezing or independent reproduction for bookkeeping.
+
+Actual independent preparation PASS:1513input aliases,548registeredpages,date2026-09-13,13payload files. Independent layer/view each ran once and reproduced all7generated files exactly;223847retention checks PASS,45275oldlinks retained,127newlinks55/47/25. Actual close caller PASS. Whole immutable runtime at campaign-artifacts/integration/through282-generated-reproduction is frozen1581files539477646bytes; freeze327382bytes SHA1a3326b61e1475a9b2ee2c808a2df84ed5489a09b25df112109b6b05f697f190. Root acceptance PASS at02:08:40UTC at integration/through282-generated-reproduction-root-acceptance/proof.json. It verifies1513full original/copy aliases,7historicalGit objects,9baseline hashes,10current source/output aliases,13payload files, all7outputs, immutable seed and unchanged raw HEAD/index/tracked/untracked/stages. Full actual callers are R/caller-runs/{{prepare,run-once,retention,close-evidence}} and B/reproduction-{{freeze,root-acceptance}}-caller. Prepare's relative argv is preserved and truthfully resolved against its recorded cwd. No rerun or fabricated transport.
+
+Source releases: B/reproduction-closure-preparation75files freeze f78bb56ebedf27088dede254d4882159caf38633172c8e7bc70d6db75425d123; root-reviewed/materialized close3395a15d3fb07ae6dbf9cad582fd72e00ac7658a204917b44530f4587e5b83e3 and acceptance87f638191a9e5b6782725b20e75459532fc71844fbb7fd8a07e5f782a105f935. Code/source review and release callers are retained. Earlier source-preparation failures and three labeled retention-preparation transcriptions remain evidence limitations, never relabeled as raw streams or current runtime failures.
+
+NEXT: use complete reviewed B/compose-ordinary-bank-inventory-root.py v2 (7547bytes SHA5ce6d0ed3f24150f13be1afb844bc346557978d92d9f5572660a78caa3807e37). Independent composer review36files freeze5fdd33fd5177f55cb7dd03ec59aec8b7d7d25241d22e7783e966a407c3b09040. Root method release PASS at B/root-ordinary-bank-method-release/proof.json. Corrected banker now byte-exact materialized at B/bank_root_proofs_through282.py18169bytes SHAe39621efcf4e650b9c2da4f145197f082a230236c47532e54f0398fc57b05375. Its independently reviewed sole destination correction points to c5p94. Require all B writers quiescent before inventory. Recorder: A/record_external_step.py RECORD_DIR CWD COMMAND ARGS. Run composer with B/ordinary-inventory-caller as its exact deferred current caller. Output I/through282-ordinary-bank-inventory must be fresh. It inventories every current B/R/rootacceptance/reconciliation-attempt file and11helpers; no extension-based exclusions. Small exact duplicates retain one complete new bank copy with per-alias external pins; prior v1 duplicate-copy defect and full correction history survive.
+
+Then run corrected banker --phase ordinary --batch B --worktree W --run-output I/through282-banking-runs/ordinary --payload-manifest B/landing/staged-payload-manifest.json --payload-source-proof B/landing/staged-payload-source-proof.json --untracked-capture-stem B/landing/untracked-before-banking --extra-inputs I/through282-ordinary-bank-inventory/extra-inputs.json using a fresh actual external caller outside B/W. Preserve complete ordinary output and caller at the later final phase; inventory deliberately cannot cover itself or later callers. Do not claim ordinary bank exists until actual successful execution. No broad staging or normalization.
+
+Staging remains source preparation only: B/staging-whitespace-preparation44files freezec738ab4332ef52efd21a6aa41558c9b07265ca8ca2a86ff87eda693221b33654 contains explicit pending guards. Separate B/staging-ledger-plan-correction supersedes its mistaken planning demand to include3ledgers in DATA. Correct order: ordinary bank; exact payload13+review/bank stage; actual complete raw whitespace diagnostic; source-bound current classifier/descriptor adaptation and independent review; actual prepare/audit and acceptance; final bank with truthful later-evidence inventory; final exact stage/source/index verification; DATA commit; only then append same entry to3ledgers, stage them and separate DOCS commit; final bind. Never inherit old warning populations/exemptions or invent current bank/stage counts. Source current closed-through279 proof path/schema must be bound from actual I/through279-root-closure/proof.json. Read current candidate in full before final release.
+
+Planning correction is complete and root read/verified: B/staging-ledger-plan-correction43files freeze6799bytes SHAda641ca6c4458ded708bfae089299a2a86e8449e759aad120303fd2e7df921c6; binder-plan.json SHAa6720a1de6829d556f9c7254b20d3728ee606a8d742b74597a46a3b2b8bc0c77. Its full earlier/current plans and differences preserve the mistaken prior demand without adopting it. All three agents are finished and no batch writers remain. This is not executable source approval.
+
+Conditional B/commit-closure-preparation/commit_closure282.py and ledger-entry.txt are independently APPROVE_SOURCE_PREPARATION_ONLY: code6446bytes SHA8c53dabbec62e433513fb5f890364820feb8c63f5410a8227188c2f213ecafa2, draft3179bytes SHA88b3df31dd9162765de114a9aea6731ba26ebcb0c360d812d635491933bfd4fe, review49files freeze6870fa7e08fd9f4ecc30b890bba58ad99ec51fe15ccf6124ac1b3e5744a7e0c7. All33old assertions/whole DATA tree=index/stage pins/full preimages/three-path DOCS binding retained. Release only after actual ordinary/final bank, whitespace and finalstage PASS. Three ledgers: data/alignment/C05_CAMPAIGN.md; docs/handoff/HANDOFF_LOG.md; docs/superpowers/plans/2026-09-12-aci-alignment-campaign.md. No ledger edits or private commits yet.
+
+Current measured counts remain45402links/11938nulls/1618notes/11trees/7092heads/15546pairs; CSV22528main/22188reverse/24105course/37changes. Page94:124provisional spans54/46/24,4null,102nonnullD5,225original dispositions,15omission reasons,11refutations,2source-head licenses,0errata. Actual original semantic freeze871files5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b;17CTest PASS once12.62s. Frozen13payload41,162,233bytes unchanged. ACIP7089/7092,3missingheads/5source-linked spans plus1historical nonsegment unresolved. Every generated alignment remains provisional; never hgm_gloss.
+
+Integration limits unchanged: MAIN OPEN_NO_APPLICATION, historicalSep13 23:40–23:42 read-only13/13 compatibility only; private phone pack FAILED_UNACCEPTED for4inheritedC01 findings, old installed iOSresource through171 unchanged, no device acceptance/install. C13 blocked upstream. No paid API, spending, resets, messages from Adam accounts, releases, MAIN/source/master/spine writes, phone installation or overwriting other work. Preserve dcc_captions. Last resource observation02:04UTC:73%weekly used/27%remaining and13GiBinternal/727GiBexternal; no reset/cleanup action. Next regular outer checkpoint291; priorthrough279 global closure stays historical and closed.
+
+This checkpoint is outside the immutable R; future inventory includes it. Historical plan sections below remain preserved and are superseded only for steps explicitly completed here.
+'''
+status=f'''# ACI campaign status
+
+Updated {now}
+
+Closed and privately committed: C05 through279/511 at {BASE}. Page94 (280–282) is generated and verified through282/511, with229segments open. It has passed independent semantic review, original/source identity, canonical builds, all17suites, source/export retention, independent exact reproduction and root acceptance. It is uncommitted; ordinary/final evidence banking, staging/whitespace and DATA/DOCS closure remain next. Do not start283–285 yet.
+
+Independent reproduction:7/7generated files byte-exact;223847retention checks PASS; all45275old links preserved and127added. Whole runtime1581files539477646bytes frozen. Root acceptance at02:08:40UTC verified1513full input aliases,7Git objects,9baseline and10source/output aliases, all13payload files, immutable CSVseed and unchanged raw checkout/index state. No successful production/test run was repeated for bookkeeping.
+
+Current counts45402links/11938nulls/1618notes/11trees/7092heads/15546pairs; CSV22528/22188/24105/37. Page94 includes124reviewed provisional spans,4nulls,102nonnullD5,225original dispositions,15omission reasons,2source-specific head licenses and0errata. All17CTest suites passed once in12.62s. ACIP7089/7092 with3missingheads and5historical source-linked spans unresolved. No hgm_gloss promotion.
+
+Next actions and exact source/runtime/caller pins: campaign-artifacts/C05-280-282/next-reproduction-actions.md, newest checkpoint first. Composer v2 and corrected banker are independently reviewed and root-released; not executed. Staging sources have unbound guards. DATA must contain13payload+review/bank; append3ledgers only after DATA, followed by separate DOCS commit and full final bind. Complete earlier failures and transcription-only preparation transport limits remain preserved. Raw index has no staged paths; other work including dcc_captions remains untouched.
+
+MAIN OPEN_NO_APPLICATION; last compatibility-only observation Sep13 23:40–23:42UTC. Private phone pack FAILED_UNACCEPTED for4inheritedC01 findings; no installation; old iOSresource through171 unchanged. C13 blocked upstream. Finish allC05/511 beforeC06. Prior globalthrough279 closure is CLOSED; nextregularouter291.
+
+Existing scheduler ACTIVE every1minute through Tuesday September15,2026 at07:00America/Denver (13:00UTC). Atdeadline stopstarting, finish/checkpointactivebatch, reportlimits andpause. No repeated permission requests, spending, paidAPIs, resets, accountmessages, releases, MAINwrites, phoneinstalls or overwritingothers. Resource observation:73%weeklyused/27%remaining;13GiBinternal/727GiBexternal.
+'''
+updates=[(ROOT/'CAMPAIGN_STATUS.md',status.encode()),(ROOT/'CAMPAIGN_CONTINUATION.md',None),(B/'next-reproduction-actions.md',None)]
+records=[]
+for i,(path,replacement) in enumerate(updates):
+ before=path.read_bytes();(O/f'before-{i}.md').write_bytes(before)
+ after=replacement if replacement is not None else before+b'\n'+next_text.encode() if i==1 else next_text.encode()+b'\n'+before
+ assert path.read_bytes()==before
+ path.write_bytes(after);assert path.read_bytes()==after
+ (O/f'after-{i}.md').write_bytes(after);records.append(dict(path=str(path),before=pin(before),after=pin(after)))
+proof=dict(status='CHECKPOINTED_AFTER_ACCEPTED_REPRODUCTION_BEFORE_ORDINARY_BANK',utc=now,closed_head=BASE,closed_through=279,generated_through=282,ordinary_bank_started=False,staging_started=False,accepted_reproduction=pin(accept_path.read_bytes()),state=state,updates=records,scope='Precise continuation checkpoint. No new source generation/tests, bank, stage, commit, MAIN or device mutation.')
+(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof,indent=2))

@@ -1,0 +1,11 @@
+--- prior/config_contract.py
++++ config_contract.py
+@@ -98,7 +98,7 @@
+  for row in c['originals']:
+   assert set(row)=={'angle','seq','directory','freeze','spec','declarations'};d=Path(row['directory']);assert d==batch/row['angle']/str(row['seq'])
+   assert Path(row['freeze']['path'])==d/'freeze.json';f=json.loads(pinned(row['freeze']))['files'];f={r['path']:r for r in f}if isinstance(f,list)else f
+-  for k,name in [('spec','spec.json'),('declarations','intended-spans.json'if row['angle']=='tibetan'else'occurrence-declarations.json')]:
++  for k,name in [('spec','spec.json'),('declarations','intended-spans.json')]:
+    r=row[k];assert Path(r['path'])==d/name;pinned(r);assert {j:r[j]for j in ['bytes','sha256']}=={j:f[name][j]for j in ['bytes','sha256']}
+   part=json.loads(pinned(row['spec']));assert part['course']==c['course']and len(part['segments'])==1 and part['segments'][0]['seq']==row['seq']
+   original_specs.append({'angle':row['angle'],'seq':row['seq'],'spans':part['segments'][0]['spans']});original_freezes.append((row['angle'],row['seq'],row['freeze']['sha256']))

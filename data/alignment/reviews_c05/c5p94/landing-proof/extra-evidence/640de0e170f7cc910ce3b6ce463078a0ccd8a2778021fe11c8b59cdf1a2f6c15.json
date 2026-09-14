@@ -1,0 +1,8 @@
+{
+  "kind": "reviewer_disclosure_not_original_raw_caller_capture",
+  "notes": [
+    "One earlier source-read request used v1-to-v2.diff instead of the actual v1-to-v2.diff.txt path; it ended with FileNotFoundError. The corrected exact path was then fully read and preserved.",
+    "Two shell calls used python, which was absent (tool-reported exit127, zsh:1: command not found: python). Neither executed Python or wrote the requested file. Python3 -B then completed the intended own-review edit and own static audit.",
+    "Full raw stdin/stdout/stderr and exit for the actual own static source audit are retained under static-review-run01. No composer, banker, whitespace, generator, build, CTest, Git or SQL target ran."
+  ]
+}

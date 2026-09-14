@@ -1,0 +1,82 @@
+{
+  "status": "APPROVE_ONE_LOCAL_INDEPENDENT_REPRODUCTION",
+  "utc": "2026-09-14T01:51:58.993624+00:00",
+  "head": "10968d16e701b698a0e1fbd845b353089d15ac39",
+  "package_freezes": [
+    {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/payload-freezer-preparation",
+      "freeze": {
+        "bytes": 7572,
+        "sha256": "09e7c5cd64c688a71fcdf39de0d76d12217c0008989675278b0171a15402eb2e"
+      },
+      "file_count": 49
+    },
+    {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation",
+      "freeze": {
+        "bytes": 4432,
+        "sha256": "9d745f8d8b103725188004c90566c02d6a123b87be13ca1da6c271d3ac261487"
+      },
+      "file_count": 29
+    },
+    {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-payload-code-review/payload01",
+      "freeze": {
+        "bytes": 3253,
+        "sha256": "5759f622db6dd9952d5e40db488394ddc6cb9486175c9121d9a891a3bc24d994"
+      },
+      "file_count": 19
+    },
+    {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-payload-code-review/retention01",
+      "freeze": {
+        "bytes": 2775,
+        "sha256": "d87c6df3c4d418d8919de70359a8883ba077331f64bcb1e078a650fc0df224c1"
+      },
+      "file_count": 16
+    },
+    {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/postlanding-verification-preparation",
+      "freeze": {
+        "bytes": 18005,
+        "sha256": "51f1a05ca75f3afa710610eeffaba5b1ef43df7019009a489a7a831cd29d2208"
+      },
+      "file_count": 110
+    }
+  ],
+  "frozen_files": 223,
+  "full_source_copy_pairs": 109,
+  "full_external_pairs": 885,
+  "semantic_files": 871,
+  "landed_semantic_copies": 872,
+  "code_mapping": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/payload-freezer-preparation/prepare.py.txt",
+      "copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/prepare.py.txt",
+      "bytes": 5606,
+      "sha256": "43e817bca44c3cda9a6c30010324efed61abbf25ce414cf3c1dde41f07a6d405"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/postlanding-verification-preparation/known-parameter-candidates/run-once.py.txt",
+      "copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/run-once.py.txt",
+      "bytes": 2559,
+      "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/postlanding-verification-preparation/known-parameter-candidates/run-isolated-readonly.py.txt",
+      "copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/run-isolated-readonly.py.txt",
+      "bytes": 1639,
+      "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-retention-preparation/verify-retention.py.txt",
+      "copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction/verify-retention.py.txt",
+      "bytes": 11887,
+      "sha256": "ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77"
+    }
+  ],
+  "source_entry": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reproduction-root-entry/proof.json",
+  "root_read_complete_four_codes_diffs_reports_contract": true,
+  "source_transport_limit": "Retention source preparation has genuine failure/version records but incomplete original raw caller transports. No missing stdout/stderr are fabricated; source-only reviews explicitly preserve this limit. Later supplements remain separate.",
+  "scope": "One preparation, one isolated layer/view with immutable incoming seed, one retention run. Mandatory reviewed later original/seed/Git/state closure. No repeated root production or tests, no MAIN/native/staging approval."
+}

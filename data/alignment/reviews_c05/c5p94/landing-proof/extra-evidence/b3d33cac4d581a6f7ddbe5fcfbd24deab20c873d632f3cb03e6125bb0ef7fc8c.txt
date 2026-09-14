@@ -1,0 +1,11 @@
+--- prepare_source.py.txt
++++ prepare_source_v2.py.txt
+@@ -41,7 +41,7 @@
+ copymap=[]
+ for name in ['retention-source-check.json','course-csv-retention.json','canonical-builds-once.json','ctest-17.execution.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit']:
+  p=L/name;r=source_pin(p,'Actual prior root proof, never rerun');dest=O/'root-proof-inputs'/name;dest.parent.mkdir(exist_ok=True);dest.write_bytes(p.read_bytes());copymap.append(dict(original=str(p),copy=str(dest.relative_to(O)),**pin(p)))
+-ctest=load(L/'ctest-17.execution.json');assert ctest['exit']==0 and ctest['stderr_bytes']==0 and '100% tests passed, 0 tests failed out of 17' in (L/'ctest-17.stdout').read_text() and '12.62 sec' in (L/'ctest-17.stdout').read_text()
++ctest=load(L/'ctest-17.execution.json');assert ctest['exit']==0 and ctest['stderr_bytes']==0 and '100% tests passed out of 17' in (L/'ctest-17.stdout').read_text() and '12.62 sec' in (L/'ctest-17.stdout').read_text()
+ source_pin(W/'AGENTS.md','Actual governing instructions read, not changed')
+ save('actual-assertion-basis.json',dict(actual_counts=counts,prior_links=45275,added_links=127,added_by_segment=groups,coverage=[1,282],page='c5p94',review_spans=124,review_nulls=4,review_nonnull_d5=102,acip=dict(headwords=7092,proven=7089,missing_heads=missing,source_linked_spans=missspans,historical_nonsegment=excluded,unchanged_historical_rows=True),actual_layer_date=ev['meta']['date'],all_main_layer_dates=dates,source_date_discrepancy='The supplied 2026-09-14 is the current UTC/preparation date, not the actual producer local layer date. Root confirmed the correction. No producer or test failed; the existing equality gate remains unchanged.',ctest_prior_actual=dict(exit=ctest['exit'],tests=17,reported_seconds=12.62,reexecuted=False),payload_population=13,payload_population_authority='Root instruction: complete payload preparation is being performed by another agent. Only the misleading frozen12 check label is changed to frozen13; the complete manifest iteration/equality gate is unchanged.',target_executed=False,SQL_executed=False,Git_executed=False,builds_or_tests_executed=False))
+ replacements=[

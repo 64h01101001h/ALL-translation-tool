@@ -1,0 +1,51 @@
+import json, sqlite3, gzip, hashlib, os
+from pathlib import Path
+OUT=Path(__file__).resolve().parent
+PROJECT=OUT.parents[3]
+WORK=PROJECT/'campaign-worktree'
+def save(name,obj): (OUT/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+db=WORK/'build/hgm_spine_v27_2.db'
+con=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True); con.row_factory=sqlite3.Row
+def query(sql,params=()):
+ rows=[dict(r) for r in con.execute(sql,params)]
+ return {'sql':sql,'parameters':params,'count':len(rows),'rows':rows}
+context=query('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',260,290))
+save('original-context-rows.json',context)
+selected={r['seq']:r for r in context['rows'] if r['seq'] in (280,281,282)}
+verification=[]
+for snapshot in ('source.json','context.json'):
+ rows=json.loads((OUT.parents[1]/snapshot).read_text())
+ for row in rows:
+  original=dict(con.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(row['course'],row['seq'])).fetchone())
+  verification.append({'snapshot':snapshot,'course':row['course'],'seq':row['seq'],'fields':{k:row[k]==original[k] for k in ('id','course','seq','acip','wylie','english')}})
+save('snapshot-verification.json',verification)
+heads=['gzhan yang','dpal','chos kyi grags pa','lung',"'gal ba",'nad','lnga',"'byung ba",'gdon','nyon mongs pa','dug',"dngos 'bras",'khas blangs','mu stegs byed','bad kan',"'dod chags","rgyu 'bras",'mkhris pa','zhe sdang',"rjes su 'gro ldog","'khrul","'gog byed",'rlung','sogs','chos','gzhung',"'don pa",'sgyur ba','gnod pa',"'dus ma byas", "nam mkha'",'phrag dog',"'dod pa",'mi rigs pa','dngos','dngos po','yid','tha dad','don','grub pa','snang tshul',"mi 'dra ba",'gsum',"'byung ba","mi 'thad pa",'khyod',"'gro ba",'brlan','gsher ba','phor pa','gang','cig car du','bltas pa','tshad grub','tshad ma',"'o na",'skyes bu','gcig','yan lag','bya ba','byas pa','ma yin','phyir']
+lex=[query('SELECT * FROM entries WHERE wylie=?',(h,)) for h in heads]
+save('spine-lexical-full.json',lex)
+master_path=WORK/'data/hgm_dictionary_v27_2.json.gz'
+master=json.loads(gzip.decompress(master_path.read_bytes()))
+entries=master['entries'] if isinstance(master,dict) and 'entries' in master else master
+if isinstance(entries,dict): entries=list(entries.values())
+hits=[e for e in entries if e.get('wylie') in heads or any(v in heads for v in e.get('wylie_variants',[]))]
+save('current-master-lexical-full.json',{'source':str(master_path),'sha256':sha(master_path),'headwords':heads,'count':len(hits),'entries':hits})
+queries=[]
+for s,r in selected.items():
+ for f in ('acip','wylie','english'):
+  queries.append(query('SELECT * FROM corpus_segments WHERE '+f+'=? ORDER BY course,seq',(r[f],)))
+for field,phrase in [('english','phlegm and desire'),('wylie',"rjes su 'gro ldog 'khrul"),('english','protuberances'),('wylie','yan lag mi \'dra ba lngas'),('english','Insofar as'),('wylie','dngos gcig yid ni tha dad phyir'),('english','confirmed by a valid perception'),('english','direct result of jealousy'),('english','bad thoughts'),('english','cause-and-effect relationship')]:
+ queries.append(query('SELECT * FROM corpus_segments WHERE '+field+' LIKE ? ORDER BY course,seq',('%'+phrase+'%',)))
+save('corpus-material-queries-full.json',queries)
+physical=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt')
+b=physical.read_bytes(); text=b.decode('utf-8',errors='strict'); lines=text.splitlines(keepends=True)
+start=next(i for i,l in enumerate(lines) if 'GZHAN YANG' in l and 'DPAL CHOS' in l)
+end=next(i for i in range(start+1,len(lines)) if 'YANG KHA CIG NA RE' in lines[i] and 'NYI SHU' in ''.join(lines[i:i+5]))
+chunk=''.join(lines[max(0,start-110):end+70]); (OUT/'physical-original-context.txt').write_text(chunk)
+save('physical-original-provenance.json',{'source':str(physical),'sha256':sha(physical),'encoding':'UTF-8 strict','excerpt_start_line_1based':max(0,start-110)+1,'excerpt_end_line_inclusive':end+70,'excerpt_sha256':sha(OUT/'physical-original-context.txt'),'original_total_lines':len(lines)})
+reg=WORK/'docs/errata_register.json'; data=json.loads(reg.read_text()); save('registered-errata-original.json',{'source':str(reg),'sha256':sha(reg),'data':data})
+save('attempted-failures.json',[{'step':'initial protocol read','cwd':str(WORK),'command':'cat campaign-artifacts/proposal-protocol.md','exit':1,'stderr':'cat: campaign-artifacts/proposal-protocol.md: No such file or directory','resolution':'Read exact authorized artifact path in project root.'},{'step':'handoff location probes','paths':['campaign-worktree/Handoff/HANDOFF.md','campaign-worktree/Handoff/README.md'],'outcome':'not found','resolution':'Read original required Desktop data-project paths.'},{'step':'original glossary filename search','command':'rg --files data-project | rg -i (glossary|HTG2016)','outcome':'no paths returned','resolution':'Read full entries from current master and spine; hgm_source and original raw evidence preserved.'}])
+print('six-field verification',all(all(v['fields'].values()) for v in verification))
+print('physical excerpt',start,end)
+for q in lex:
+ for e in q['rows']: print(e['wylie'],e['hgm_gloss'],e['tier'])
+print('query counts',[(q['parameters'][0][:70],q['count']) for q in queries])

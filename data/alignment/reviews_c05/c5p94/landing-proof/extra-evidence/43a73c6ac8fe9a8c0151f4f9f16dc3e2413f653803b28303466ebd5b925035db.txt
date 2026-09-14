@@ -1,0 +1,185 @@
+--- frozen-before/command-plan.json
++++ corrected-plan/command-plan.json
+@@ -3,14 +3,25 @@
+   "working_baseline": "10968d16e701b698a0e1fbd845b353089d15ac39",
+   "commands": [
+     {
++      "order": 0,
++      "operation": "Root accepts the completed isolated reproduction and evidence closure",
++      "argv": null,
++      "required_actual": [
++        "actual prepare/run/retention/full-evidence-close results and copied-original maps",
++        "independent/root acceptance with exact hashes",
++        "existing retention PASS223847 is supporting evidence, not final close acceptance"
++      ],
++      "executed": false
++    },
++    {
+       "order": 1,
+-      "operation": "Root binds ordinary bank, three-ledger and raw-state contracts",
+-      "argv": null,
+-      "required_actual": [
+-        "ordinary inventory and external-source pins",
+-        "three approved ledger full preimages/postimages and proof",
++      "operation": "Root binds ordinary bank and true pre-DATA raw-state contracts",
++      "argv": null,
++      "required_actual": [
++        "ordinary inventory and complete external-source pins",
+         "actual pre-banking/pre-staging raw untracked caller",
+-        "exact current13 payload and source proof"
++        "exact current13 payload including approved span_head_allow and source proof",
++        "root actual reproduction close-evidence acceptance"
+       ],
+       "executed": false
+     },
+@@ -20,8 +31,8 @@
+       "argv": null,
+       "required_actual": [
+         "approved bank helper and fresh external write-run",
+-        "explicit complete path list; no broad add/path omission",
+-        "all ordinary-bank/ledger/payload identities"
++        "explicit complete DATA path list:13payload+review/bank, no ledgers",
++        "all ordinary-bank/review/payload identities"
+       ],
+       "executed": false
+     },
+@@ -65,9 +76,9 @@
+       ],
+       "script_origin": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/staging-whitespace-preparation/release-whitespace-actual-root.py",
+       "required_actual": [
+-        "replace every pending field from reviewed current evidence",
++        "bind reviewed current DATA values; obsolete ledger prerequisites removed only in a newly reviewed adaptation",
+         "fresh runtime/output directories",
+-        "reviewed four-source and ledger contracts"
++        "reviewed four-source DATA and classifier contracts"
+       ],
+       "executed": false
+     },
+@@ -174,7 +185,7 @@
+     },
+     {
+       "order": 10,
+-      "operation": "Read-only final staging verification after reviewed ledger contract adaptation",
++      "operation": "Read-only final DATA staging verification; preserve13payload+review/bank required-set",
+       "argv": [
+         "python3",
+         "-B",
+@@ -202,13 +213,114 @@
+       ],
+       "required_actual": [
+         "two measured external bank-run arguments",
+-        "three-ledger required-path proof integrated explicitly",
+-        "exact current staged count/path set",
+-        "all pending field values and independent code review"
++        "exact current DATA staged count/path set; no ledgers",
++        "all DATA pending values and independent code review",
++        "unchanged fixed HEAD10968 and canonical payload"
++      ],
++      "executed": false
++    },
++    {
++      "order": 11,
++      "operation": "Root creates DATA commit from exactly the accepted entire staged index",
++      "argv": null,
++      "required_actual": [
++        "accepted fresh DATA stage proof with exact file list and index bytes",
++        "approved commit message",
++        "actual DATA commit hash whose parent is10968"
++      ],
++      "excluded_paths": [
++        "data/alignment/C05_CAMPAIGN.md",
++        "docs/handoff/HANDOFF_LOG.md",
++        "docs/superpowers/plans/2026-09-12-aci-alignment-campaign.md"
++      ],
++      "executed": false
++    },
++    {
++      "order": 12,
++      "operation": "After DATA, append finalized identical ledger entry with reviewed closure helper",
++      "argv": [
++        "python3",
++        "-B",
++        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/commit-closure-preparation/commit_closure282.py",
++        "append",
++        "--worktree",
++        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
++        "--stage",
++        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-stage-verification",
++        "--data",
++        null,
++        "--entry",
++        null,
++        "--output",
++        null
++      ],
++      "conditional_entry_candidate": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/commit-closure-preparation/ledger-entry.txt",
++      "required_actual": [
++        "independent code approval and root release of current closure helper",
++        "actual DATA hash",
++        "final entry bound to actual reproduction/bank/stage results",
++        "fresh external append output",
++        "clean tracked index/worktree at DATA and complete tree equals accepted index"
++      ],
++      "ledger_paths": [
++        "data/alignment/C05_CAMPAIGN.md",
++        "docs/handoff/HANDOFF_LOG.md",
++        "docs/superpowers/plans/2026-09-12-aci-alignment-campaign.md"
++      ],
++      "executed": false
++    },
++    {
++      "order": 13,
++      "operation": "Root stages exactly the three appended ledger paths and creates DOCS commit",
++      "argv": null,
++      "required_actual": [
++        "actual append proof with full preimages and identical approved entry",
++        "exact three-path staged diff",
++        "actual DOCS hash whose parent is DATA"
++      ],
++      "only_paths": [
++        "data/alignment/C05_CAMPAIGN.md",
++        "docs/handoff/HANDOFF_LOG.md",
++        "docs/superpowers/plans/2026-09-12-aci-alignment-campaign.md"
++      ],
++      "executed": false
++    },
++    {
++      "order": 14,
++      "operation": "Bind DATA and DOCS commits to exact accepted index and three full append transitions",
++      "argv": [
++        "python3",
++        "-B",
++        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/commit-closure-preparation/commit_closure282.py",
++        "bind",
++        "--worktree",
++        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
++        "--stage",
++        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-stage-verification",
++        "--data",
++        null,
++        "--entry",
++        null,
++        "--output",
++        null,
++        "--final",
++        null,
++        "--append-proof",
++        null
++      ],
++      "required_actual": [
++        "actual DATA/DOCS hashes",
++        "actual append proof",
++        "exact finalized entry bytes",
++        "fresh external bind output",
++        "unchanged non-ledger DATA tree and exact three DOCS paths"
+       ],
+       "executed": false
+     }
+   ],
+   "contains_unresolved_arguments": true,
+-  "existing_canonical_builds_and_tests_reexecuted": false
++  "existing_canonical_builds_and_tests_reexecuted": false,
++  "data_commit_scope": "Exactly13payload plus semantic review/landing bank; zero ledger paths",
++  "docs_commit_scope": "Only three named ledgers, appended after DATA by closure helper",
++  "planning_correction_only": true
+ }

@@ -1,0 +1,38 @@
+"""Preserve the completed prior freeze, make the requested factual prose correction, refreeze."""
+import difflib,hashlib,json
+from datetime import datetime,timezone
+from pathlib import Path
+O=Path(__file__).resolve().parent
+def load(p):return json.loads(Path(p).read_bytes())
+def pin(p):
+ raw=Path(p).read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(p,value):Path(p).write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+prior=load(O/'freeze.json');assert pin(O/'freeze.json')['sha256']=='15b9a90a9aae3f973ff9235dab619ea49ec2dcecb950e5af44fb2a45b8a4c91c'
+for name,p in prior['files'].items():assert pin(O/name)==p
+history=O/'history/03-report-wording-correction';history.mkdir()
+for name in ['review.md','freeze.json']:(history/name).write_bytes((O/name).read_bytes())
+old=(O/'review.md').read_text();before='including its repeated name, thoughts and twisting vocabulary';after='including its repeated thoughts and twisting vocabulary';assert old.count(before)==1
+source=next(r for r in load(O/'original-source-rows.json')['rows'] if r['seq']==280)['english'];start=source.index('[')
+assert source.index('Master Dharmakirti')<start and 'Dharmakirti' not in source[start:] and 'a master' in source[start:]
+new=old.replace(before,after);(O/'review.md').chmod(0o644);(O/'review.md').write_text(new)
+(history/'complete.diff.txt').write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior-frozen/review.md',tofile='final/review.md')))
+save(history/'root-finding.json',dict(finding='The final C05:280 bracket contains generic a master, not a repeated proper name. The second Master Dharmakirti is outside that bracket before refutes.',requested_action='Change only the clause naming the bracket contents; preserve prior report, diff and finding. No spec/body/canonical rerun.',independent_source_check=dict(english_bracket_start=start,second_proper_name_range=[source.index('Master Dharmakirti'),source.index('Master Dharmakirti')+len('Master Dharmakirti')],bracket_contains_no_Dharmakirti=True),prior_report=pin(history/'review.md'),current_report=pin(O/'review.md')))
+save(history/'prior-freeze-replay.json',dict(prior_freeze=pin(history/'freeze.json'),prior_file_count=len(prior['files']),all_prior_bytes_checked_before_edit=True,prior_file_resolution='Every prior file remains byte-identical at the same review-relative path except review.md, whose exact prior bytes are history/03-report-wording-correction/review.md. The prior freeze is preserved here verbatim.',only_modified_prior_file='review.md',source_changed=False,spec_changed=False,body_changed=False,tuples_changed=False,canonical_replays_repeated=False))
+save(O/'report-amendment.json',dict(status='PASS_REPORT_ONLY_CORRECTION',utc=datetime.now(timezone.utc).isoformat(),command=['python3','-B',str(O/'amend_report_only.py.txt')],history='history/03-report-wording-correction',verdict='APPROVE',semantic_verdict_changed=False,old_freeze=pin(history/'freeze.json'),report=pin(O/'review.md')))
+for name,p in prior['files'].items():assert pin(history/'review.md' if name=='review.md' else O/name)==p
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+files={}
+for p in sorted(O.rglob('*')):
+ if p.is_file() and p!=O/'freeze.json':
+  assert not p.is_symlink() and p.suffix.lower() in allowed and '__pycache__' not in p.parts
+  files[str(p.relative_to(O))]=pin(p)
+current={k:v for k,v in prior.items() if k not in ['files','file_count']};current.update(file_count=len(files),files=files,report_only_amendment='report-amendment.json')
+(O/'freeze.json').chmod(0o644);save(O/'freeze.json',current)
+for name,p in files.items():assert pin(O/name)==p
+assert {str(p.relative_to(O)) for p in O.rglob('*') if p.is_file()}==set(files)|{'freeze.json'}
+result=dict(verdict='APPROVE',files=len(files),bytes=sum(r['bytes'] for r in files.values()),freeze=pin(O/'freeze.json'),review=pin(O/'review.md'),review_json=pin(O/'review.json'),resolved=pin(O/'resolved-spans.json'),manifest_records=len(load(O/'original-to-copy-manifest.json')))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555)
+print(json.dumps(result,indent=2))
