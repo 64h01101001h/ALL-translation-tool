@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json,re,gzip,sqlite3,hashlib\nN=Path.cwd();S=N/'semantic-review';pin=json.loads((N/'tibetan/evidence/source-pins.json').read_text());con=sqlite3.connect('file:'+pin['spine']['path']+'?mode=ro',uri=True);con.row_factory=sqlite3.Row\nrows=[dict(r) for r in con.execute(\"select * from corpus_segments where course='C05' and seq between325 and327\".replace('between325','between 325').replace('and327','and 327'))]\nreg=json.loads((S/'governing/docs/errata_register.json').read_text());master=json.loads(gzip.decompress(Path(pin['master']['path']).read_bytes()))\noutput={'register_count':len(reg),'register_direct_candidate_records':[r for r in reg if any(q in json.dumps(r,ensure_ascii=False).lower() for q in ['gngsde','gzhan dkar','c05:325','c05:326'])],'rows':[],'exact_master_gngsde_pa':{k:sum(r.get('wylie')=='gngsde pa' for r in master[k]) for k in ['unified_entries','curated_entries','glossary_entries']}}\nfor r in rows:\n e={'seq':r['seq'],'lengths':{k:len(r[k]) for k in ['acip','wylie','english']},'exact_corpus_counts':{k:con.execute('select count(*) from corpus_segments where '+k+'=?',(r[k],)).fetchone()[0] for k in ['acip','wylie','english']}}\n if r['seq'] in [325,327]:e['logical_verse_syllables']=[len(t.split()) for t in r['wylie'].split(',') if t.strip()]\n if r['seq']==325:e['found_count']=r['acip'].count(\"'DOD PA LAS SKYES GZHAN DKAR\")\n if r['seq']==326:e['found_count']=r['acip'].count('GNGSDE PA GZHAN NI')\n output['rows'].append(e)\noutput['dmyal_ba_myong_rows']=[{'course':r['course'],'seq':r['seq']} for r in con.execute('select * from corpus_segments where wylie like ? order by id',('%dmyal ba myong%',))]\noutput['gngsde_rows']=[{'course':r['course'],'seq':r['seq']} for r in con.execute('select * from corpus_segments where wylie like ? order by id',('%gngsde%',))]\noutput['no_mechanism_or_publication_independence_inferred']=True\nassert output['register_count']==196 and output['register_direct_candidate_records']==[]\nassert [x.get('logical_verse_syllables') for x in output['rows']]==[[7,7,7,6],None,[7,7,7,7,7]]\nprint(json.dumps(output,ensure_ascii=False,indent=2))"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-325-327",
+  "started_at": "2026-09-14T22:46:24.171108+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+}

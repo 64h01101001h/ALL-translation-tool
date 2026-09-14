@@ -1,0 +1,84 @@
+[
+  {
+    "file": "evidence/original-spine-context.json",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      319,
+      333
+    ],
+    "count": 15
+  },
+  {
+    "file": "evidence/corpus-dkar-ending.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY id",
+    "parameters": [
+      "%mthong bas spang bya gnag%"
+    ],
+    "count": 1
+  },
+  {
+    "file": "evidence/corpus-dmyal-myoung.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY id",
+    "parameters": [
+      "%dmyal ba myong%"
+    ],
+    "count": 3
+  },
+  {
+    "file": "evidence/corpus-english-white-black.json",
+    "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY id",
+    "parameters": [
+      "%According to others, understood%"
+    ],
+    "count": 1
+  },
+  {
+    "file": "evidence/corpus-exact-325.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "gzhan ni dmyal ba myong 'gyur dang , ,'dod gzhan myong 'gyur gnyis su rig,gzhan ni mthong bas spang bya gnag,'dod pa las skyes gzhan dkar"
+    ],
+    "count": 1
+  },
+  {
+    "file": "evidence/corpus-exact-326.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "[iv.249-52] gngsde pa gzhan ni dmyal ba myong bar 'gyur ba'i las de nag po dang , 'dod pa'i 'gro ba gzhan myong bar 'gyur ba'i las ni dkar gnag gnyis ka'i las su rig go zhes zer, yang sde pa gzhan ni mthong bas spang bar bya ba'i las de gnag pa dang , 'dod pa las skyes pa gzhan dkar gnag gnyis ka'i las su 'dod do"
+    ],
+    "count": 1
+  },
+  {
+    "file": "evidence/corpus-exact-327.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "sbyor ba rtsa ba gsum las skyes, ,de yi mjug thogs las byung phyir, ,brnab sems sogs rtsa gsum las skyes, ,dge ba sbyor dang mjug bcas rnams, ,chags sdang gti mug med las skyes"
+    ],
+    "count": 2
+  },
+  {
+    "file": "evidence/corpus-gngsde.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY id",
+    "parameters": [
+      "%gngsde%"
+    ],
+    "count": 1
+  },
+  {
+    "file": "evidence/corpus-mjug-thogs.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY id",
+    "parameters": [
+      "%mjug thogs%"
+    ],
+    "count": 24
+  },
+  {
+    "file": "evidence/corpus-spang-bya-gnag.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY id",
+    "parameters": [
+      "%spang%gnag%"
+    ],
+    "count": 2
+  }
+]

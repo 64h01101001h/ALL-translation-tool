@@ -1,0 +1,65 @@
+{
+  "initial_verdict": "NEEDS_CORRECTION",
+  "initial_freeze_sha256": "169213fe6bde430bc41bdb0e77e64cc695afc3dbe685b985ace96ad2f554b72a",
+  "final_freeze_sha256": "d358419ae63c87725020ca3d88a4e7d00af9dc0ff61bd5a6f5a1b2fb412c330b",
+  "final_verdict": "RESOLVED",
+  "initial_findings": [
+    {
+      "id": "S325-OTHER-2",
+      "seq": 325,
+      "file": "325/original-other-dispositions.json",
+      "selector": {
+        "angle": "tibetan",
+        "field": "material_omissions",
+        "index": 2
+      },
+      "status": "NEEDS_CORRECTION",
+      "finding": "Final dkar/absent gnag observation has an unrelated CHANGE/su-as rationale; retain omission and give its actual source-anomaly ruling."
+    },
+    {
+      "id": "S325-OTHER-3",
+      "seq": 325,
+      "file": "325/original-other-dispositions.json",
+      "selector": {
+        "angle": "tibetan",
+        "field": "material_omissions",
+        "index": 3
+      },
+      "status": "NEEDS_CORRECTION",
+      "finding": "Listed English frame words omit no as; CHANGE/su-as incorrectly alters this unchanged omission."
+    },
+    {
+      "id": "S325-RATIONALE-1",
+      "seq": 325,
+      "file": "325/original-other-dispositions.json",
+      "selector": {
+        "angle": "english",
+        "field": "rationales",
+        "index": 1
+      },
+      "status": "NEEDS_CORRECTION",
+      "finding": "The gzhan/Sunlight source-role observation receives unrelated CHANGE/su-as rationale."
+    },
+    {
+      "id": "S326-DE-ONES",
+      "seq": 326,
+      "file": "326/original-dispositions.json",
+      "selector": {
+        "angle": "tibetan",
+        "ids": [
+          "w5",
+          "w26"
+        ]
+      },
+      "status": "NEEDS_CORRECTION",
+      "finding": "Both de/ones omissions incorrectly use malformed-gngsde reason; actual lexical indeterminacy reason already exists in omissions.json."
+    }
+  ],
+  "corrected_records": 5,
+  "changed_payload_files": [
+    "325/original-other-dispositions.json",
+    "326/original-dispositions.json"
+  ],
+  "independent_resolution": "Read the complete original values and corrected records at explicit identities. Three325 records now ACCEPT with actual color/source, listed-frame, and gzhan evidence reasons. Both326 de/ones records remain OMIT with actual ambiguous nominal-head ownership reason. The captured final verification confirms exactly those five changes and no spec/body/range/native changes.",
+  "history": "review-history/initial-review.json and initial-review.md retain the actual NEEDS_CORRECTION verdicts."
+}

@@ -1,0 +1,234 @@
+{
+  "schema": "c05-independent-errata-review-v1",
+  "verdict": "RETAIN_TWO_LINKED_LOW_PROBABLE_OBSERVATIONS",
+  "count": 2,
+  "independent_defect_count_established": false,
+  "source_edits_authorized": false,
+  "banked_correction_authority": false,
+  "shared_boundary_assessment": {
+    "possible_common_cause": true,
+    "independent_defect_count_established": false,
+    "mechanism": "UNCERTAIN",
+    "restoration": "UNCERTAIN",
+    "registered_e111_application": "NOT_ESTABLISHED",
+    "reason": "The short DKAR line and following GNGSDE may be symptoms of one boundary defect. E-111 demonstrates a clean final-syllable spill with LDOG at the next row and undivided witnesses. GNGSDE is not a clean GNAG witness, and no corrected undivided same-passage witness was verified here. Similar shape neither establishes E-111 applicability nor proves two independent defects. These two observed loci remain linked questions and must not be treated as duplicate confirmed correction authority."
+  },
+  "candidates": [
+    {
+      "seq": 325,
+      "candidate": {
+        "kind": "TIBETAN_SPELLING",
+        "found": "'DOD PA LAS SKYES GZHAN DKAR",
+        "expected": "For human review: check whether the final verse line is incomplete after DKAR, possibly lacking GNAG. This is an editorial question, not replacement source wording.",
+        "severity": "LOW",
+        "confidence": "PROBABLE",
+        "evidence": "Original physical ASCII bytes and spine ACIP/Wylie agree on the six-syllable tail; English says 'White and black'. The adjacent commentary has 'DKAR GNAG GNYIS KA'I LAS'. All three other verse lines have seven syllables. Grounds checked: (a) source/ingestion: literal DKAR ending already occurs in the original ASCII, so no inferred converter loss; (b) lexical: complete master dkar=white, gnag=black, dkar gnag=white and black distinguish the missing complement; (c) grammar/verse compression: elliptical verse is possible, so the seven-syllable comparison supports a question, not a certified restoration; (d) parallel/context: exact verse Wylie and English each return only C05:325, and dmyal ba myong query gives C05:325/326 plus unrelated AK:292; no independent publication witness has been verified; (e) prior register/apparatus: all196 records screened for gng/gzhan dkar/C05:325/C05:326 with no matching item, bracketed verse references and following headings are separate known classes. Digital agreement is not publication independence. No original/master change and no invented black pair; dkar aligns only to White. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+        "seq": 325
+      },
+      "refuted": false,
+      "verdict": "RETAIN_LOW_PROBABLE_FOR_HUMAN_REVIEW",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "confidence_scope": "Observed textual anomaly only; not an established replacement or ingestion mechanism.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "status": "EXACT",
+          "field": "acip",
+          "quoted": "'DOD PA LAS SKYES GZHAN DKAR",
+          "character_range": [
+            110,
+            138
+          ],
+          "occurrences": 1,
+          "source": {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-325-327/source.json",
+            "copy": "proposal-inputs/evidence/b2b3709fa76d8c41acbbcaf096a1f5af52878418ef81be3207e331de612daa80.json"
+          },
+          "physical_original": {
+            "original": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+            "copy": "proposal-inputs/evidence/5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb.txt"
+          },
+          "assessment": "The same literal anomaly is present in the original physical ASCII and the ingested source. This supports source identity and defeats a confident converter-loss claim; it does not establish publication-level correctness."
+        },
+        "b_independent_publication": {
+          "status": "NO_INDEPENDENT_CORRECTED_WITNESS_VERIFIED",
+          "exact_corpus_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "assessment": "The adjacent326 commentary has the complete two-color phrase, while 325 exact corpus rows are unique. The broad dmyal ba myong result also contains unrelated AK:292, which is not a corrected witness to this verse. Source copies and repeated digital serialization are not independent publications.",
+          "effect": "Absence of an authoritative restoration blocks correction certainty. It is weighed against local positive anomaly evidence, not treated as positive proof of error."
+        },
+        "c_registered_class": {
+          "status": "EXACT_OR_DUPLICATE_DEFECT_NOT_ESTABLISHED",
+          "register": "governing/docs/errata_register.json",
+          "register_count": 196,
+          "direct_325_326_matching_records": 0,
+          "complete_records_read": [
+            "E-044",
+            "E-071",
+            "E-076",
+            "E-106",
+            "E-107",
+            "E-111",
+            "E-121",
+            "E-147"
+          ],
+          "e111": {
+            "possible_common_cause": true,
+            "independent_defect_count_established": false,
+            "mechanism": "UNCERTAIN",
+            "restoration": "UNCERTAIN",
+            "registered_e111_application": "NOT_ESTABLISHED",
+            "reason": "The short DKAR line and following GNGSDE may be symptoms of one boundary defect. E-111 demonstrates a clean final-syllable spill with LDOG at the next row and undivided witnesses. GNGSDE is not a clean GNAG witness, and no corrected undivided same-passage witness was verified here. Similar shape neither establishes E-111 applicability nor proves two independent defects. These two observed loci remain linked questions and must not be treated as duplicate confirmed correction authority."
+          },
+          "assessment": "The existing following-heading and citation-apparatus classes are not filed again. E-111 was read in full, including its folded mirror claim and eight-boundary class. Do not infer that a lack of a direct C05:325/326 item proves this is a new independent defect."
+        },
+        "d_defensibility": {
+          "status": "PROBABLE_ANOMALY_WITH_DEFENSIBLE_COUNTERREADINGS",
+          "positive_evidence": "The final verse line has six syllables against seven in each preceding line. English says White and black, and adjacent commentary explicitly names dkar gnag gnyis ka. Complete dkar/gnag/dkar gnag entries support the color distinction. Their convergence supports a low-severity question about incomplete source wording.",
+          "counterevidence": "Verse can be elliptical; the English may spell out a category compressed in the Tibetan. Physical agreement shows no post-source loss. A six-syllable line does not identify the absent syllable, and GNGSDE cannot certify GNAG. No restoration is established.",
+          "competing_tibetan_first_assessment": "UNCERTAIN; no new erratum. Preserved intact in the proposal evidence and final errata-review.json. Its lack-of-corrected-witness concern limits this decision to probable observation, while the convergent local evidence justifies retaining the human-review question.",
+          "alignment_consequence": "Only dkar→White is aligned. Final and black remains unwrapped."
+        },
+        "e_counts": {
+          "status": "MEASURED",
+          "field_lengths": {
+            "acip": 138,
+            "wylie": 137,
+            "english": 177
+          },
+          "exact_quote_occurrences": 1,
+          "logical_verse_syllables": [
+            7,
+            7,
+            7,
+            6
+          ],
+          "english_at_1500": false,
+          "exact_gngsde_pa_master_counts": null,
+          "native_evidence": "errata-counts-native/execution.json; errata-counts-native/stdout.bin",
+          "assessment": "Counts check the actual literal claim and bounded query scope. They do not establish publication independence, a reconstruction, or an independent defect count."
+        }
+      },
+      "independent_reason": "Local positive evidence survives the five-ground skeptical test at LOW/PROBABLE. Counterreadings and absent corrected witnesses prevent certainty and remain part of the retained record.",
+      "common_boundary_question": {
+        "possible_common_cause": true,
+        "independent_defect_count_established": false,
+        "mechanism": "UNCERTAIN",
+        "restoration": "UNCERTAIN",
+        "registered_e111_application": "NOT_ESTABLISHED",
+        "reason": "The short DKAR line and following GNGSDE may be symptoms of one boundary defect. E-111 demonstrates a clean final-syllable spill with LDOG at the next row and undivided witnesses. GNGSDE is not a clean GNAG witness, and no corrected undivided same-passage witness was verified here. Similar shape neither establishes E-111 applicability nor proves two independent defects. These two observed loci remain linked questions and must not be treated as duplicate confirmed correction authority."
+      }
+    },
+    {
+      "seq": 326,
+      "candidate": {
+        "kind": "TIBETAN_SPELLING",
+        "found": "GNGSDE PA GZHAN NI",
+        "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+        "severity": "LOW",
+        "confidence": "PROBABLE",
+        "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+        "seq": 326
+      },
+      "refuted": false,
+      "verdict": "RETAIN_LOW_PROBABLE_FOR_HUMAN_REVIEW",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "confidence_scope": "Observed textual anomaly only; not an established replacement or ingestion mechanism.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "status": "EXACT",
+          "field": "acip",
+          "quoted": "GNGSDE PA GZHAN NI",
+          "character_range": [
+            12,
+            30
+          ],
+          "occurrences": 1,
+          "source": {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-325-327/source.json",
+            "copy": "proposal-inputs/evidence/b2b3709fa76d8c41acbbcaf096a1f5af52878418ef81be3207e331de612daa80.json"
+          },
+          "physical_original": {
+            "original": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+            "copy": "proposal-inputs/evidence/5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb.txt"
+          },
+          "assessment": "The same literal anomaly is present in the original physical ASCII and the ingested source. This supports source identity and defeats a confident converter-loss claim; it does not establish publication-level correctness."
+        },
+        "b_independent_publication": {
+          "status": "NO_INDEPENDENT_CORRECTED_WITNESS_VERIFIED",
+          "exact_corpus_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "assessment": "The gngsde predicate returns only326. Exact326 ACIP/Wylie/English each has one row. Later clean sde pa in the same passage is a local comparator, not an independent publication or a corrected opening witness.",
+          "effect": "Absence of an authoritative restoration blocks correction certainty. It is weighed against local positive anomaly evidence, not treated as positive proof of error."
+        },
+        "c_registered_class": {
+          "status": "EXACT_OR_DUPLICATE_DEFECT_NOT_ESTABLISHED",
+          "register": "governing/docs/errata_register.json",
+          "register_count": 196,
+          "direct_325_326_matching_records": 0,
+          "complete_records_read": [
+            "E-044",
+            "E-071",
+            "E-076",
+            "E-106",
+            "E-107",
+            "E-111",
+            "E-121",
+            "E-147"
+          ],
+          "e111": {
+            "possible_common_cause": true,
+            "independent_defect_count_established": false,
+            "mechanism": "UNCERTAIN",
+            "restoration": "UNCERTAIN",
+            "registered_e111_application": "NOT_ESTABLISHED",
+            "reason": "The short DKAR line and following GNGSDE may be symptoms of one boundary defect. E-111 demonstrates a clean final-syllable spill with LDOG at the next row and undivided witnesses. GNGSDE is not a clean GNAG witness, and no corrected undivided same-passage witness was verified here. Similar shape neither establishes E-111 applicability nor proves two independent defects. These two observed loci remain linked questions and must not be treated as duplicate confirmed correction authority."
+          },
+          "assessment": "The existing following-heading and citation-apparatus classes are not filed again. E-111 was read in full, including its folded mirror claim and eight-boundary class. Do not infer that a lack of a direct C05:325/326 item proves this is a new independent defect."
+        },
+        "d_defensibility": {
+          "status": "PROBABLE_ANOMALY_WITH_DEFENSIBLE_COUNTERREADINGS",
+          "positive_evidence": "The original GNGSDE token has an anomalous prefix before a locally expected group expression. Full master evidence attests sde pa as groups/schools but has no exact gngsde pa in all three collections. Later YANG SDE PA GZHAN NI and the two English group introductions provide the local structural contrast.",
+          "counterevidence": "Lexicon absence alone is not proof. A source-specific mark or already-corrupt upstream text is possible. The prefix could be linked to the preceding short line rather than be an independent defect. Nothing proves a specific deletion, replacement, or clean GNAG spill.",
+          "competing_tibetan_first_assessment": "UNCERTAIN; no new erratum. Preserved intact in the proposal evidence and final errata-review.json. Its lack-of-corrected-witness concern limits this decision to probable observation, while the convergent local evidence justifies retaining the human-review question.",
+          "alignment_consequence": "gngsde pa remains unbanked. No internal sde is extracted and no first groups is assigned to the later intact sde pa."
+        },
+        "e_counts": {
+          "status": "MEASURED",
+          "field_lengths": {
+            "acip": 315,
+            "wylie": 314,
+            "english": 638
+          },
+          "exact_quote_occurrences": 1,
+          "logical_verse_syllables": null,
+          "english_at_1500": false,
+          "exact_gngsde_pa_master_counts": {
+            "unified": 0,
+            "curated": 0,
+            "glossary": 0
+          },
+          "native_evidence": "errata-counts-native/execution.json; errata-counts-native/stdout.bin",
+          "assessment": "Counts check the actual literal claim and bounded query scope. They do not establish publication independence, a reconstruction, or an independent defect count."
+        }
+      },
+      "independent_reason": "Local positive evidence survives the five-ground skeptical test at LOW/PROBABLE. Counterreadings and absent corrected witnesses prevent certainty and remain part of the retained record.",
+      "common_boundary_question": {
+        "possible_common_cause": true,
+        "independent_defect_count_established": false,
+        "mechanism": "UNCERTAIN",
+        "restoration": "UNCERTAIN",
+        "registered_e111_application": "NOT_ESTABLISHED",
+        "reason": "The short DKAR line and following GNGSDE may be symptoms of one boundary defect. E-111 demonstrates a clean final-syllable spill with LDOG at the next row and undivided witnesses. GNGSDE is not a clean GNAG witness, and no corrected undivided same-passage witness was verified here. Similar shape neither establishes E-111 applicability nor proves two independent defects. These two observed loci remain linked questions and must not be treated as duplicate confirmed correction authority."
+      }
+    }
+  ],
+  "other_original_screen_rulings": "All original Tibetan five-category screens were independently read with the complete material register/source/corpus/master evidence. English capitals, explanatory two/both and path-of wording, complete transition/heading and verse apparatus do not create additional errata. C05:327 negative scope is confirmed by333; duplicated C16 text is not claimed to be an independent publication. No additional candidate retained."
+}

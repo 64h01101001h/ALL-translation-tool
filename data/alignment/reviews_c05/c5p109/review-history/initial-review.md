@@ -1,0 +1,1 @@
+NEEDS_CORRECTION — frozen reconciliation169213fe has five misplaced disposition explanations (three grouped records in325 and two de/ones records in326). The78 span choices are provisionally sound, but the incorrect decision trail must be corrected before acceptance. Original findings remain open; awaiting a corrected immutable freeze.

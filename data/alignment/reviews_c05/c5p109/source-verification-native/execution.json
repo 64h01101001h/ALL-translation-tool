@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json,hashlib,gzip,sqlite3\nN=Path.cwd(); W=N.parent.parent/'campaign-worktree'\ndef sha(p):\n b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\npins=json.loads((N/'tibetan/evidence/source-pins.json').read_text())\nfor k,v in pins.items():assert sha(Path(v['path']))=={z:v[z] for z in ('bytes','sha256')},k\nfreezes={}\nfor role,digest in [('tibetan','23bc3f0044a6a4d397e593d762c7e74fdd10d792391c17461468740af50bb0b7'),('english','ccbeba4eea21c4ce3c53ec0b13d40e0f58002194c1fd7bec3259cab85e002d99')]:\n p=N/role/'freeze.json';assert sha(p)['sha256']==digest\n f=json.loads(p.read_text())\n for rel,meta in f['files'].items():assert sha(p.parent/rel)==meta,(role,rel)\n freezes[role]=dict(sha256=digest,files=len(f['files']))\nmaster=json.loads(gzip.decompress(Path(pins['master']['path']).read_bytes()));checked=0\nfor rel in ['tibetan/evidence/full-lexical-evidence.json','tibetan/evidence/supplemental-full-lexical-evidence.json']:\n for q in json.loads((N/rel).read_text()):\n  for r in q['master_records']:assert master[r['collection']][r['index']]==r['entry'];checked+=1\nfor rel in ['english/evidence/master-lexical.json','english/evidence/master-followup.json']:\n for collection,records in json.loads((N/rel).read_text())['records'].items():\n  for r in records:assert master[collection][r['index']]==r['record'];checked+=1\ncon=sqlite3.connect('file:'+pins['spine']['path']+'?mode=ro',uri=True);con.row_factory=sqlite3.Row\nfor row in json.loads((N/'context.json').read_text()):\n orig=dict(con.execute('select * from corpus_segments where course=? and seq=?',(row['course'],row['seq'])).fetchone())\n assert all(orig[k]==v for k,v in row.items())\nqueries=0\nfor q in json.loads((N/'tibetan/evidence/corpus-query-evidence.json').read_text()):\n rows=[dict(r) for r in con.execute(q['sql'],q['params'])];assert rows==q['rows'] and len(rows)==q['count'];queries+=1\nfor q in json.loads((N/'english/evidence/query-index.json').read_text()):\n data=json.loads((N/'english'/q['file']).read_text());rows=data if isinstance(data,list) else data['records'];assert [dict(r) for r in con.execute(q['sql'],q['parameters'])]==rows;queries+=1\nphysical=Path(pins['physical']['path']).read_bytes(); proof=json.loads((N/'root-preparation-proof.json').read_text())\nfor e in proof['physical_extents']:\n b=physical[e['start']:e['start']+e['bytes']];assert b.decode()==e['original_text'] and hashlib.sha256(b).hexdigest()==e['sha256']\nprint(json.dumps(dict(status='PASS_IDENTITY_AND_REPLAY_ONLY',source_pins=pins,proposal_freezes=freezes,complete_master_object_occurrences_verified=checked,complete_context_rows_verified=15,recorded_query_replays=queries,physical_extents_verified=6,native_generations=0,semantics='No semantic verdict supplied by these checks.'),indent=2))"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-325-327",
+  "started_at": "2026-09-14T22:40:57.345682+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-14T22:40:59.439635+00:00",
+  "wall_seconds": 2.0934867500327528,
+  "exit": 0,
+  "stdout_bytes": 2273,
+  "stderr_bytes": 0,
+  "stdout_sha256": "5f290cc17ad1e4a1fb42a8cca660e86b7a2778651013f2333d2551066f6685cf",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

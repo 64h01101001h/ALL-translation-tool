@@ -1,0 +1,402 @@
+[
+  {
+    "kind": "TIBETAN_SPELLING",
+    "found": "DE YI MJUG THOGS LAS BYUNG PHYIR",
+    "expected": "Retain source spelling.",
+    "decision": "Refuted as a new erratum",
+    "five_refutation_grounds": {
+      "a_quote": {
+        "field": "acip",
+        "quoted": "DE YI MJUG THOGS LAS BYUNG PHYIR",
+        "character_range": [
+          35,
+          67
+        ],
+        "source": "../evidence/source.json",
+        "physical_source": "../evidence/physical-source-proof.json",
+        "exact": true
+      },
+      "b_parallel": {
+        "sql_evidence": "../evidence/corpus-query-evidence.json",
+        "external_evidence": "../evidence/external-corpus-evidence.json",
+        "query_labels": [
+          "327-acip-exact",
+          "327-wylie-exact",
+          "327-english-exact",
+          "327-undertaking"
+        ],
+        "counts": {
+          "327-acip-exact": 2,
+          "327-wylie-exact": 2,
+          "327-english-exact": 2,
+          "327-undertaking": 6
+        },
+        "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+        "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+      },
+      "c_registered": {
+        "register": "../evidence/pinned/docs/errata_register.json",
+        "complete_selected_records": "../evidence/registered-complete-records.json",
+        "register_count": 196,
+        "direct_segment_records": 0,
+        "considered_classes": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121",
+          "registered following-heading class"
+        ],
+        "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+      },
+      "d_defensibility": {
+        "assessment": "No independent orthographic defect established. Whole de yi is a grammatical demonstrative here despite the unrelated lastly master gloss; mjug thogs is the immediate-succession compound.",
+        "full_master_evidence": [
+          "../evidence/full-lexical-evidence.json",
+          "../evidence/supplemental-full-lexical-evidence.json"
+        ],
+        "context": "../evidence/full-source-context-rows.json"
+      },
+      "e_counts": {
+        "field_lengths": {
+          "acip": 178,
+          "wylie": 176,
+          "english": 213
+        },
+        "exact_quote_occurrences": 1,
+        "english_at_1500": false,
+        "logical_verse_syllables": [
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+      }
+    },
+    "refuted": true,
+    "new_erratum": false
+  },
+  {
+    "kind": "ENGLISH_TYPO",
+    "found": "The undertakings come from the root three.",
+    "expected": "Retain compressed verse order.",
+    "decision": "Refuted as a new erratum",
+    "five_refutation_grounds": {
+      "a_quote": {
+        "field": "english",
+        "quoted": "The undertakings come from the root three.",
+        "character_range": [
+          0,
+          42
+        ],
+        "source": "../evidence/source.json",
+        "physical_source": "../evidence/physical-source-proof.json",
+        "exact": true
+      },
+      "b_parallel": {
+        "sql_evidence": "../evidence/corpus-query-evidence.json",
+        "external_evidence": "../evidence/external-corpus-evidence.json",
+        "query_labels": [
+          "327-acip-exact",
+          "327-wylie-exact",
+          "327-english-exact",
+          "327-undertaking"
+        ],
+        "counts": {
+          "327-acip-exact": 2,
+          "327-wylie-exact": 2,
+          "327-english-exact": 2,
+          "327-undertaking": 6
+        },
+        "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+        "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+      },
+      "c_registered": {
+        "register": "../evidence/pinned/docs/errata_register.json",
+        "complete_selected_records": "../evidence/registered-complete-records.json",
+        "register_count": 196,
+        "direct_segment_records": 0,
+        "considered_classes": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121",
+          "registered following-heading class"
+        ],
+        "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+      },
+      "d_defensibility": {
+        "assessment": "Root three is compressed verse phrasing for the three roots. Following prose 329–330 explains those roots; no typo correction is warranted.",
+        "full_master_evidence": [
+          "../evidence/full-lexical-evidence.json",
+          "../evidence/supplemental-full-lexical-evidence.json"
+        ],
+        "context": "../evidence/full-source-context-rows.json"
+      },
+      "e_counts": {
+        "field_lengths": {
+          "acip": 178,
+          "wylie": 176,
+          "english": 213
+        },
+        "exact_quote_occurrences": 1,
+        "english_at_1500": false,
+        "logical_verse_syllables": [
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+      }
+    },
+    "refuted": true,
+    "new_erratum": false
+  },
+  {
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "From no desire, dislike, ignorance.",
+    "expected": "Retain shared negative scope.",
+    "decision": "Refuted as a new erratum",
+    "five_refutation_grounds": {
+      "a_quote": {
+        "field": "english",
+        "quoted": "From no desire, dislike, ignorance.",
+        "character_range": [
+          178,
+          213
+        ],
+        "source": "../evidence/source.json",
+        "physical_source": "../evidence/physical-source-proof.json",
+        "exact": true
+      },
+      "b_parallel": {
+        "sql_evidence": "../evidence/corpus-query-evidence.json",
+        "external_evidence": "../evidence/external-corpus-evidence.json",
+        "query_labels": [
+          "327-acip-exact",
+          "327-wylie-exact",
+          "327-english-exact",
+          "327-undertaking"
+        ],
+        "counts": {
+          "327-acip-exact": 2,
+          "327-wylie-exact": 2,
+          "327-english-exact": 2,
+          "327-undertaking": 6
+        },
+        "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+        "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+      },
+      "c_registered": {
+        "register": "../evidence/pinned/docs/errata_register.json",
+        "complete_selected_records": "../evidence/registered-complete-records.json",
+        "register_count": 196,
+        "direct_segment_records": 0,
+        "considered_classes": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121",
+          "registered following-heading class"
+        ],
+        "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+      },
+      "d_defensibility": {
+        "assessment": "Tibetan med scopes the three coordinated roots. Prose 333 makes all three negatives explicit. The verse does not assert desire absent but dislike and ignorance present.",
+        "full_master_evidence": [
+          "../evidence/full-lexical-evidence.json",
+          "../evidence/supplemental-full-lexical-evidence.json"
+        ],
+        "context": "../evidence/full-source-context-rows.json"
+      },
+      "e_counts": {
+        "field_lengths": {
+          "acip": 178,
+          "wylie": 176,
+          "english": 213
+        },
+        "exact_quote_occurrences": 1,
+        "english_at_1500": false,
+        "logical_verse_syllables": [
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+      }
+    },
+    "refuted": true,
+    "new_erratum": false
+  },
+  {
+    "kind": "INGEST_ARTEFACT",
+    "found": "CHAGS SDANG GTI MUG MED LAS SKYES",
+    "expected": "Retain complete five-line verse.",
+    "decision": "Refuted as a new erratum",
+    "five_refutation_grounds": {
+      "a_quote": {
+        "field": "acip",
+        "quoted": "CHAGS SDANG GTI MUG MED LAS SKYES",
+        "character_range": [
+          144,
+          177
+        ],
+        "source": "../evidence/source.json",
+        "physical_source": "../evidence/physical-source-proof.json",
+        "exact": true
+      },
+      "b_parallel": {
+        "sql_evidence": "../evidence/corpus-query-evidence.json",
+        "external_evidence": "../evidence/external-corpus-evidence.json",
+        "query_labels": [
+          "327-acip-exact",
+          "327-wylie-exact",
+          "327-english-exact",
+          "327-undertaking"
+        ],
+        "counts": {
+          "327-acip-exact": 2,
+          "327-wylie-exact": 2,
+          "327-english-exact": 2,
+          "327-undertaking": 6
+        },
+        "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+        "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+      },
+      "c_registered": {
+        "register": "../evidence/pinned/docs/errata_register.json",
+        "complete_selected_records": "../evidence/registered-complete-records.json",
+        "register_count": 196,
+        "direct_segment_records": 0,
+        "considered_classes": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121",
+          "registered following-heading class"
+        ],
+        "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+      },
+      "d_defensibility": {
+        "assessment": "Physical source has the complete final line and English line; no heading or exact 1500-character cap occurs. C16:852 equality alone does not establish an independent publication or ingestion lineage.",
+        "full_master_evidence": [
+          "../evidence/full-lexical-evidence.json",
+          "../evidence/supplemental-full-lexical-evidence.json"
+        ],
+        "context": "../evidence/full-source-context-rows.json"
+      },
+      "e_counts": {
+        "field_lengths": {
+          "acip": 178,
+          "wylie": 176,
+          "english": 213
+        },
+        "exact_quote_occurrences": 1,
+        "english_at_1500": false,
+        "logical_verse_syllables": [
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+      }
+    },
+    "refuted": true,
+    "new_erratum": false
+  },
+  {
+    "kind": "FORMATTING",
+    "found": "Coveting and the rest",
+    "expected": "Retain verse capitalization.",
+    "decision": "Refuted as a new erratum",
+    "five_refutation_grounds": {
+      "a_quote": {
+        "field": "english",
+        "quoted": "Coveting and the rest",
+        "character_range": [
+          87,
+          108
+        ],
+        "source": "../evidence/source.json",
+        "physical_source": "../evidence/physical-source-proof.json",
+        "exact": true
+      },
+      "b_parallel": {
+        "sql_evidence": "../evidence/corpus-query-evidence.json",
+        "external_evidence": "../evidence/external-corpus-evidence.json",
+        "query_labels": [
+          "327-acip-exact",
+          "327-wylie-exact",
+          "327-english-exact",
+          "327-undertaking"
+        ],
+        "counts": {
+          "327-acip-exact": 2,
+          "327-wylie-exact": 2,
+          "327-english-exact": 2,
+          "327-undertaking": 6
+        },
+        "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+        "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+      },
+      "c_registered": {
+        "register": "../evidence/pinned/docs/errata_register.json",
+        "complete_selected_records": "../evidence/registered-complete-records.json",
+        "register_count": 196,
+        "direct_segment_records": 0,
+        "considered_classes": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121",
+          "registered following-heading class"
+        ],
+        "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+      },
+      "d_defensibility": {
+        "assessment": "Capital Coveting is physically line-initial; the preceding causal clause remains connected by its comma. No formatting correction is required.",
+        "full_master_evidence": [
+          "../evidence/full-lexical-evidence.json",
+          "../evidence/supplemental-full-lexical-evidence.json"
+        ],
+        "context": "../evidence/full-source-context-rows.json"
+      },
+      "e_counts": {
+        "field_lengths": {
+          "acip": 178,
+          "wylie": 176,
+          "english": 213
+        },
+        "exact_quote_occurrences": 1,
+        "english_at_1500": false,
+        "logical_verse_syllables": [
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+      }
+    },
+    "refuted": true,
+    "new_erratum": false
+  }
+]

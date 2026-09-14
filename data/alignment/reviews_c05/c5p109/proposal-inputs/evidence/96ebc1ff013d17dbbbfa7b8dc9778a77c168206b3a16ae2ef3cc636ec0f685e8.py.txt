@@ -1,0 +1,67 @@
+"""Compact packaging checks adapted from the existing proposal package helper."""
+import datetime, hashlib, html, json, pathlib, re
+R=pathlib.Path(__file__).resolve().parents[1];N=R.parent
+def read(p):return json.loads(p.read_text())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def ident(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+source={x['seq']:x for x in read(N/'source.json')};summaries=[];ordered=[]
+for seq in [325,326,327]:
+ D=R/str(seq);raw=(D/'spec.json').read_bytes();s=read(D/'spec.json')['segments'][0]['spans'];body=(D/'body.html').read_bytes()
+ actual=read(D/'resolved-ranges.json');keys=['seq','id','d','tib','eng','tib_range','eng_range'];rows=[{k:x[k]for k in keys}for x in actual]
+ assert rows==read(D/'intended-ranges.json')
+ put(D/'final-ordered-tuples.json',rows);ordered.extend(rows)
+ for tool,content in [('generator',body),('resolver',(D/'resolved-ranges.json').read_bytes())]:
+  p=R/'native'/f'{seq}-{tool}-v1';assert (p/'stdin.bin').read_bytes()==raw and (p/'stdout.bin').read_bytes()==content and (p/'stderr.bin').read_bytes()==b'' and (p/'exit.txt').read_text()=='0\n'
+  execution=read(p/'execution.json');assert execution['exit']==0
+  for name in ['stdin','stdout','stderr']:assert execution['streams'][name]==ident((p/(name+'.bin')).read_bytes())
+ for side,field in [('tib','wylie'),('eng','english')]:
+  m=re.search('<div class="'+side+'"><div class="lab">.*?</div>\n(.*?)\n</div>',body.decode(),re.S);assert m
+  without_nulls=re.sub(r'<span class="nul">.*?</span>','',m[1],flags=re.S)
+  assert html.unescape(re.sub('<[^>]+>','',without_nulls))==source[seq][field]
+ # The complements are data, not another resolver: all intervals come from the native canonical result above.
+ gaps={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  ext=sorted([x[side+'_range'] for x in rows if x[side+'_range'] is not None and x['d']!=7]);cur=0;items=[]
+  for a,b in ext:
+   if cur<a:items.append({'range':[cur,a],'text':source[seq][field][cur:a]})
+   cur=max(cur,b)
+  if cur<len(source[seq][field]):items.append({'range':[cur,len(source[seq][field])],'text':source[seq][field][cur:]})
+  gaps[side]=items
+ put(D/'complete-unwrapped-extents.json',{'seq':seq,'range_convention':'zero-based half-open characters','source':'../../source.json','material_reasons':'omissions.json','unwrapped':gaps})
+ count={'spans':len(s),'nulls':sum(x['eng']is None for x in s),'d5_total':sum(x['d']==5 for x in s),'word_pairs':sum(x['d']==5 and x['eng']is not None for x in s),'d7':sum(x['d']==7 for x in s),'d6':sum(x['d']==6 for x in s),'errata':len(read(D/'errata.json'))}
+ no_supplied_heads=all(x['d'] not in [5,7] or x['eng'] is None or x['eng'].split()[0].lower() not in ['the','a','an','and','or','his','our','your','i','you'] for x in s);assert no_supplied_heads
+ p={'seq':seq,'status':'PASS_MECHANICAL_ONLY','generator_exit':0,'resolver_exit':0,'stderr_bytes':0,'spec_bytes':len(raw),'spec_sha256':ident(raw)['sha256'],'body_bytes':len(body),'body_sha256':ident(body)['sha256'],'body_equals_native_stdout':True,'source_plaintexts_exact_after_markup_and_null_marker_removal':True,'canonical_ranges_equal_preselected_intent':True,'no_supplied_d5_d7_heads':True,'counts':count,'native_generator_path':f'../native/{seq}-generator-v1','native_resolver_path':f'../native/{seq}-resolver-v1'}
+ put(D/'verification.json',p);summaries.append(p)
+ audit=read(D/'errata-review.json');audit['original_screen_dispositions']=[]
+ for a in ['tibetan','english']:
+  screen=audit['originals'][a]['screen'];records=screen if isinstance(screen,list)else [{'kind':k,'assessment':v}for k,v in screen['categories'].items()]
+  for i,z in enumerate(records):
+   kind=z['kind'];decision='CHANGE' if a=='tibetan' and seq<327 and kind=='TIBETAN_SPELLING' else 'ACCEPT'
+   audit['original_screen_dispositions'].append({'angle':a,'index':i,'original':z,'decision':decision,'reason':audit['category_dispositions'][kind]+' '+(audit['decision_reason'] if kind=='TIBETAN_SPELLING' else '')})
+ audit['original_errata_dispositions']=[{'angle':a,'original':audit['originals'][a]['errata'],'decision':'CHANGE' if a=='tibetan' and seq<327 else 'ACCEPT','reason':audit['decision_reason']}for a in ['tibetan','english']]
+ put(D/'errata-review.json',audit)
+ differences={325:'Tighter myong/experience and mthong/seeing boundaries; su/as is retained. The second experience and final black remain unbanked.',326:'Reject isolated gyur/bring and uncertain de/ones atoms. Retain myong/experience, once-only rig/su, and the two dang connectives in their own clauses.',327:'Use de/them; classify sogs as an enumerative particle owning and the rest. Retain the rnams plural-fusion null and the shared med/no scope.'}[seq]
+ lines=[f'C05:{seq} — PROVISIONAL Codex reconciliation; independent acceptance remains required.',
+ 'Source/proposal origin: daad5db6ea6207085dc820101b3a2e9aaf942417, through324.',
+ 'Actual acceptance baseline supplied: daad5db6ea6207085dc820101b3a2e9aaf942417, through324; this is a distinct baseline role, not acceptance of this batch.',
+ differences,
+ 'Every original span decision has ACCEPT/CHANGE/OMIT with its intact source record in original-dispositions.json.',
+ 'Every original grouped rationale and omission is retained with a disposition in original-other-dispositions.json.',
+ 'Final span rationales and selected occurrences: final-rationales.json; canonical ordered tuples: final-ordered-tuples.json.',
+ 'All material omissions and every unwrapped extent: omissions.json and complete-unwrapped-extents.json.',
+ 'Complete source/context319–333 and material full master/corpus records were read; exact reused identities and reading scope are in ../evidence/reading-scope-and-identities.json.',
+ 'Both source anomalies survive as LOW/PROBABLE questions, while restoration/mechanism remains uncertain; all five grounds and competing original rulings are in errata-review.json.' if seq<327 else 'No errata survive. The source and C05:333 explain temporal succession and shared negation; C16 equality is not independent-publication evidence.',
+ f"Spans={count['spans']}; nulls={count['nulls']}; non-null d5 word pairs={count['word_pairs']}; total d5={count['d5_total']}; d7={count['d7']}; errata={count['errata']}.",
+ f'Final canonical generator EXIT=0; stdout/body bytes={len(body)}; stderr bytes=0.',
+ 'Final canonical resolver EXIT=0; stderr bytes=0; every actual range equals the preselected intended range.',
+ f'Native command, exact stdin/stdout/stderr and exit: ../native/{seq}-generator-v1/ and ../native/{seq}-resolver-v1/.',
+ f"Spec SHA256={p['spec_sha256']}; body SHA256={p['body_sha256']}.",
+ 'No final-generation failures. Original proposal failures remain preserved by their immutable freeze identities; no original generator was rerun.',
+ 'Mechanical fidelity does not establish semantic correctness. GMR wording and source remain exact; no hgm_gloss promotion.',
+ 'Nonempty errata require the existing reviewed errata route; no empty-policy closure claim is made.' if seq<327 else 'No new span-head policy entry is needed.']
+ assert 10<=len(lines)<=25;(D/'report.md').write_text('\n'.join(lines)+'\n')
+put(R/'resolved-spans.json',ordered)
+totals={k:sum(x['counts'][k]for x in summaries)for k in summaries[0]['counts']}
+summary={'status':'FROZEN_READY_FOR_INDEPENDENT_REVIEW','producer':'Codex independent reconciler','source_origin_git_commit':'daad5db6ea6207085dc820101b3a2e9aaf942417','actual_acceptance_baseline':'daad5db6ea6207085dc820101b3a2e9aaf942417','actual_baseline_accepted_through':324,'segments':summaries,'totals':totals,'original_span_dispositions':sum(len(read(R/str(s)/'original-dispositions.json'))for s in [325,326,327]),'native_generators':3,'native_resolvers':3,'native_generator_failures':0,'native_resolver_failures':0,'new_original_proposal_generations':0,'policy_limit':'Two LOW/PROBABLE errata require the existing reviewed errata route. No semantic approval claimed.'}
+put(R/'summary.json',summary)
+print(json.dumps({'status':'PASS_MECHANICAL_ONLY','totals':totals,'original_span_dispositions':summary['original_span_dispositions']},indent=2))

@@ -1,0 +1,103 @@
+{
+  "kind": "EVIDENCE_RATIONALE_CORRECTION_ONLY",
+  "utc": "2026-09-14T22:46:22.526457+00:00",
+  "reason": "Evidence-only correction of two326 de→ones reasons and three325 grouped dispositions whose reasons had been misassigned by keyword matching. All original records and both original affected files remain preserved.",
+  "affected_file": "326/original-dispositions.json",
+  "original_file": {
+    "path": "correction-history/de-ones-rationale-01/original-dispositions.json",
+    "bytes": 72730,
+    "sha256": "40aeccba7e9300152780f3f8a15ccd080fdbbc89dfb10b2c9dd84c36aa89521a"
+  },
+  "corrected_file": {
+    "bytes": 73034,
+    "sha256": "2238446b95abdee7a9d7a49c0e1e655e6f973841316bc35662f1653fee5696a3"
+  },
+  "original_freeze": {
+    "path": "correction-history/de-ones-rationale-01/original-freeze.json",
+    "bytes": 13627,
+    "sha256": "169213fe6bde430bc41bdb0e77e64cc695afc3dbe685b985ace96ad2f554b72a"
+  },
+  "changes": [
+    {
+      "angle": "tibetan",
+      "original_id": "w5",
+      "before": "Malformed opening remains exact and unbanked. No internal sde extraction and no accidental use of the later intact sde pa.",
+      "after": "The demonstratives resume the source deeds; English ones also supplies a nominal head for the color adjectives. No sufficiently distinct local evidence assigns ones specifically to de rather than nominalizing color/deed syntax. Omit the uncertain atom instead of nulling it."
+    },
+    {
+      "angle": "tibetan",
+      "original_id": "w26",
+      "before": "Malformed opening remains exact and unbanked. No internal sde extraction and no accidental use of the later intact sde pa.",
+      "after": "The demonstratives resume the source deeds; English ones also supplies a nominal head for the color adjectives. No sufficiently distinct local evidence assigns ones specifically to de rather than nominalizing color/deed syntax. Omit the uncertain atom instead of nulling it."
+    }
+  ],
+  "unchanged": "All specs, bodies, ranges, native results, selected spans, omissions and other decisions remain byte-identical to the original freeze. No generator/resolver reruns or source queries.",
+  "additional_affected_file": "325/original-other-dispositions.json",
+  "additional_original_file": {
+    "path": "correction-history/de-ones-rationale-01/325-original-other-dispositions.json",
+    "bytes": 6816,
+    "sha256": "fdcaac8b5c3de09988842a84934cb392c4500898c499ecc20890b22d1affdaa4"
+  },
+  "additional_corrected_file": {
+    "bytes": 7336,
+    "sha256": "7b4e05b0932957f967afa49a369b1cd6a538a60a6d8456980fc905bc2b9ff9fa"
+  },
+  "additional_changes": [
+    {
+      "angle": "tibetan",
+      "field": "material_omissions",
+      "index": 2,
+      "before": {
+        "decision": "CHANGE",
+        "reason": "su has a secure as exponent in the shared gnyis su rig classification. Other framing remains omitted."
+      },
+      "after": {
+        "decision": "ACCEPT",
+        "reason": "Retain final dkar→White and omit the absent final gnag/black correspondence. The six-syllable tail and following GNGSDE remain source evidence, with no independently verified corrected witness or restoration. The separate LOW/PROBABLE anomaly assessment is recorded in errata-review.json; it does not license an extra black alignment."
+      }
+    },
+    {
+      "angle": "tibetan",
+      "field": "material_omissions",
+      "index": 3,
+      "before": {
+        "decision": "CHANGE",
+        "reason": "su has a secure as exponent in the shared gnyis su rig classification. Other framing remains omitted."
+      },
+      "after": {
+        "decision": "ACCEPT",
+        "reason": "Retain the listed English frame-word omissions: According to, those, For a, articles, the second for, what, is and relative that. This original list does not omit as, so the separately accepted su→as span does not change this decision."
+      }
+    },
+    {
+      "angle": "english",
+      "field": "rationales",
+      "index": 1,
+      "before": {
+        "decision": "CHANGE",
+        "reason": "su has a secure as exponent in the shared gnyis su rig classification. Other framing remains omitted."
+      },
+      "after": {
+        "decision": "ACCEPT",
+        "reason": "Retain the four occurrence-specific gzhan→others/other alignments supported by the local source contrasts. The unrelated auto-aligned Sunlight gloss is not used; reference other/another remains comparative evidence and is not promoted to hgm_gloss."
+      }
+    }
+  ],
+  "intermediate_freeze": {
+    "path": "correction-history/de-ones-rationale-01/intermediate-freeze.json",
+    "bytes": 14178,
+    "sha256": "6be76d882a4888f43a8729d19d005671084422458a0c1ae6a81f6b960b5a8089",
+    "scope": "First two326 reasons had already been corrected and frozen before the expanded steering arrived. Original note is preserved as initial-correction-note.json."
+  },
+  "grouped_disposition_audit": {
+    "read_all": 44,
+    "by_segment": {
+      "325": 13,
+      "326": 18,
+      "327": 13
+    },
+    "defective_grouped_records_corrected": 3,
+    "unchanged_grouped_records": 41,
+    "scope": "Read every original grouped statement against its current disposition and final span/omission decision; no other unrelated grouped reasons found. Root and independent skeptic reported the same scope."
+  }
+}

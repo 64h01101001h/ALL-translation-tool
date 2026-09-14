@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**196 entries**: **148 document errata** (6 HIGH, 71 MEDIUM, 71 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**198 entries**: **150 document errata** (6 HIGH, 71 MEDIUM, 73 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 104 |
+| Tibetan spelling | 106 |
 | English typo | 28 |
 | Digitisation artefact | 24 |
 | English factual error | 9 |
@@ -120,7 +120,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:89` | Neither of the purpose of its ultimate purpose subsumes the other | Neither the purpose nor its ultimate purpose subsumes the other | Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the  | PROBABLE |
 | `C05:92` | dug 'das | dug mdas (dug mda' + instrumental -s) | Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal wi | PROBABLE |
 
-## Low severity &mdash; 71 entries
+## Low severity &mdash; 73 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -187,6 +187,8 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:302` | and then as the sizzle in his throat and stomach | and then as they sizzle in his throat and stomach | Independent Codex review; all five grounds are in errata-five-grounds.json. Exact C05:302 phrase occurs once in English/raw and physical C05ReadingASCII.txt line3015. Full original HGM tshig pa records give sizzle; plural pus and blood supplies they, whereas t | PROBABLE |
 | `C05:322` | CHOS BZOD PA ZHI | For human editorial review: CHOS BZOD PA BZHI; the proposed B is not applied. | The quoted ZHI is present in ACIP and its physical source, with zhi in Wylie. A peaceful/calm zhi qualifier is grammatically conceivable, but it fails to account for this clause's explicit four instants plus eight instants making twelve. BZHI is supported by t | PROBABLE |
 | `C05:324` | virtue of the formless realm | For GMR’s editorial ruling: virtue of the form realm is favored by the local source argument; neither source f | The source reads GZUGS KYI DGE BA and the English reads virtue of the formless realm. C05:318 explicitly identifies white virtue with the realm of form; this same argument names the fourth concentration and white deeds. C05:152,154,381 contrast gzugs with gzug | PROBABLE |
+| `C05:325` | 'DOD PA LAS SKYES GZHAN DKAR | For human review: check whether the final verse line is incomplete after DKAR, possibly lacking GNAG. This is  | Original physical ASCII bytes and spine ACIP/Wylie agree on the six-syllable tail; English says 'White and black'. The adjacent commentary has 'DKAR GNAG GNYIS KA'I LAS'. All three other verse lines have seven syllables. Grounds checked: (a) source/ingestion:  | PROBABLE |
+| `C05:326` | GNGSDE PA GZHAN NI | For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening | The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is at | PROBABLE |
 | `C05:38` | stained or without stain." the first two of the chapters are devoted | stained or without stain." The first two of the chapters are devoted | Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the  | PROBABLE |
 | `C05:68` | mngon ba sde bdun po | mngon pa sde bdun po | ACIP (source of record): 'MNGON BA SDE BDUN PO'. The same row spells the word 'mngon pa'i mdzod' two words later, and the surrounding rows read 'mngon pa'. 'mngon ba' occurs in only 3 of 42,199 rows: C05:68, C16:706 (byte-identical re-ingest of the same file,  | PROBABLE |
 | `C05:71` | srid pa'i rgya mcho 'dir 'khyam | srid pa'i rgya mtsho 'dir 'khyam | ACIP verbatim: "NYON MONGS PAS KYANG 'JIG RTEN PA RNAMS SRID PA'I RGYA MCHO 'DIR 'KHYAM STE". This is NOT the TS = tsha keying convention (C04 ledger, MTSAMS/MTSAN): under that convention mtsho keys as MTSO, and the corpus has 503 rows with ACIP `RGYA MTSO` an | CONFIRMED |
@@ -280,7 +282,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 148 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 150 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 24 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 

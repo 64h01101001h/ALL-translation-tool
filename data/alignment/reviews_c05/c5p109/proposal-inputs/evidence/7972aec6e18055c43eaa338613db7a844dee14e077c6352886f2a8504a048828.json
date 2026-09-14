@@ -1,0 +1,997 @@
+{
+  "seq": 325,
+  "source_origin_git_commit": "daad5db6ea6207085dc820101b3a2e9aaf942417",
+  "originals": {
+    "tibetan": {
+      "errata": [],
+      "screen": [
+        {
+          "kind": "TIBETAN_SPELLING",
+          "found": "'DOD PA LAS SKYES GZHAN DKAR",
+          "expected": "No restoration asserted; retain exact DKAR ending.",
+          "decision": "UNCERTAIN source/boundary question; no new erratum or correction authority established",
+          "five_refutation_grounds": {
+            "a_quote": {
+              "field": "acip",
+              "quoted": "'DOD PA LAS SKYES GZHAN DKAR",
+              "character_range": [
+                110,
+                138
+              ],
+              "source": "../evidence/source.json",
+              "physical_source": "../evidence/physical-source-proof.json",
+              "exact": true
+            },
+            "b_parallel": {
+              "sql_evidence": "../evidence/corpus-query-evidence.json",
+              "external_evidence": "../evidence/external-corpus-evidence.json",
+              "query_labels": [
+                "325-acip-exact",
+                "325-wylie-exact",
+                "325-english-exact",
+                "325-verse-opening",
+                "325-verse-closing",
+                "325-seeing"
+              ],
+              "counts": {
+                "325-acip-exact": 1,
+                "325-wylie-exact": 1,
+                "325-english-exact": 1,
+                "325-verse-opening": 1,
+                "325-verse-closing": 1,
+                "325-seeing": 1
+              },
+              "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+              "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+            },
+            "c_registered": {
+              "register": "../evidence/pinned/docs/errata_register.json",
+              "complete_selected_records": "../evidence/registered-complete-records.json",
+              "register_count": 196,
+              "direct_segment_records": 0,
+              "considered_classes": [
+                "E-044",
+                "E-071",
+                "E-076",
+                "E-107",
+                "E-111",
+                "E-121",
+                "registered following-heading class"
+              ],
+              "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+            },
+            "d_defensibility": {
+              "assessment": "Final-line loss or spill is plausible, but the physical file agrees and no independent corrected same-passage witness was located. dkar maps only White; final English and black is unbanked.",
+              "full_master_evidence": [
+                "../evidence/full-lexical-evidence.json",
+                "../evidence/supplemental-full-lexical-evidence.json"
+              ],
+              "context": "../evidence/full-source-context-rows.json"
+            },
+            "e_counts": {
+              "field_lengths": {
+                "acip": 138,
+                "wylie": 137,
+                "english": 177
+              },
+              "exact_quote_occurrences": 1,
+              "english_at_1500": false,
+              "logical_verse_syllables": [
+                7,
+                7,
+                7,
+                6
+              ],
+              "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+            }
+          },
+          "refuted": false,
+          "new_erratum": false
+        },
+        {
+          "kind": "ENGLISH_TYPO",
+          "found": "those For a hell experience",
+          "expected": "Retain line-initial For.",
+          "decision": "Refuted as a new erratum",
+          "five_refutation_grounds": {
+            "a_quote": {
+              "field": "english",
+              "quoted": "those For a hell experience",
+              "character_range": [
+                35,
+                62
+              ],
+              "source": "../evidence/source.json",
+              "physical_source": "../evidence/physical-source-proof.json",
+              "exact": true
+            },
+            "b_parallel": {
+              "sql_evidence": "../evidence/corpus-query-evidence.json",
+              "external_evidence": "../evidence/external-corpus-evidence.json",
+              "query_labels": [
+                "325-acip-exact",
+                "325-wylie-exact",
+                "325-english-exact",
+                "325-verse-opening",
+                "325-verse-closing",
+                "325-seeing"
+              ],
+              "counts": {
+                "325-acip-exact": 1,
+                "325-wylie-exact": 1,
+                "325-english-exact": 1,
+                "325-verse-opening": 1,
+                "325-verse-closing": 1,
+                "325-seeing": 1
+              },
+              "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+              "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+            },
+            "c_registered": {
+              "register": "../evidence/pinned/docs/errata_register.json",
+              "complete_selected_records": "../evidence/registered-complete-records.json",
+              "register_count": 196,
+              "direct_segment_records": 0,
+              "considered_classes": [
+                "E-044",
+                "E-071",
+                "E-076",
+                "E-107",
+                "E-111",
+                "E-121",
+                "registered following-heading class"
+              ],
+              "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+            },
+            "d_defensibility": {
+              "assessment": "The physical verse has a line break before For. Mid-sentence capitalization reflects lineation rather than a demonstrated typo.",
+              "full_master_evidence": [
+                "../evidence/full-lexical-evidence.json",
+                "../evidence/supplemental-full-lexical-evidence.json"
+              ],
+              "context": "../evidence/full-source-context-rows.json"
+            },
+            "e_counts": {
+              "field_lengths": {
+                "acip": 138,
+                "wylie": 137,
+                "english": 177
+              },
+              "exact_quote_occurrences": 1,
+              "english_at_1500": false,
+              "logical_verse_syllables": [
+                7,
+                7,
+                7,
+                6
+              ],
+              "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+            }
+          },
+          "refuted": true,
+          "new_erratum": false
+        },
+        {
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "Others, what seeing eliminates is black",
+          "expected": "Retain the report of an alternative doctrinal view.",
+          "decision": "Refuted as a new erratum",
+          "five_refutation_grounds": {
+            "a_quote": {
+              "field": "english",
+              "quoted": "Others, what seeing eliminates is black",
+              "character_range": [
+                90,
+                129
+              ],
+              "source": "../evidence/source.json",
+              "physical_source": "../evidence/physical-source-proof.json",
+              "exact": true
+            },
+            "b_parallel": {
+              "sql_evidence": "../evidence/corpus-query-evidence.json",
+              "external_evidence": "../evidence/external-corpus-evidence.json",
+              "query_labels": [
+                "325-acip-exact",
+                "325-wylie-exact",
+                "325-english-exact",
+                "325-verse-opening",
+                "325-verse-closing",
+                "325-seeing"
+              ],
+              "counts": {
+                "325-acip-exact": 1,
+                "325-wylie-exact": 1,
+                "325-english-exact": 1,
+                "325-verse-opening": 1,
+                "325-verse-closing": 1,
+                "325-seeing": 1
+              },
+              "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+              "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+            },
+            "c_registered": {
+              "register": "../evidence/pinned/docs/errata_register.json",
+              "complete_selected_records": "../evidence/registered-complete-records.json",
+              "register_count": 196,
+              "direct_segment_records": 0,
+              "considered_classes": [
+                "E-044",
+                "E-071",
+                "E-076",
+                "E-107",
+                "E-111",
+                "E-121",
+                "registered following-heading class"
+              ],
+              "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+            },
+            "d_defensibility": {
+              "assessment": "The parallel prose at 326 explicitly reports rival classifications; seeing actively eliminates is a defensible passive-to-active recast of mthong bas spang bya. No independent factual contradiction is established.",
+              "full_master_evidence": [
+                "../evidence/full-lexical-evidence.json",
+                "../evidence/supplemental-full-lexical-evidence.json"
+              ],
+              "context": "../evidence/full-source-context-rows.json"
+            },
+            "e_counts": {
+              "field_lengths": {
+                "acip": 138,
+                "wylie": 137,
+                "english": 177
+              },
+              "exact_quote_occurrences": 1,
+              "english_at_1500": false,
+              "logical_verse_syllables": [
+                7,
+                7,
+                7,
+                6
+              ],
+              "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+            }
+          },
+          "refuted": true,
+          "new_erratum": false
+        },
+        {
+          "kind": "INGEST_ARTEFACT",
+          "found": "'DOD PA LAS SKYES GZHAN DKAR",
+          "expected": "Retain row boundary; no source resegmentation.",
+          "decision": "UNCERTAIN source/boundary question; no new erratum or correction authority established",
+          "five_refutation_grounds": {
+            "a_quote": {
+              "field": "acip",
+              "quoted": "'DOD PA LAS SKYES GZHAN DKAR",
+              "character_range": [
+                110,
+                138
+              ],
+              "source": "../evidence/source.json",
+              "physical_source": "../evidence/physical-source-proof.json",
+              "exact": true
+            },
+            "b_parallel": {
+              "sql_evidence": "../evidence/corpus-query-evidence.json",
+              "external_evidence": "../evidence/external-corpus-evidence.json",
+              "query_labels": [
+                "325-acip-exact",
+                "325-wylie-exact",
+                "325-english-exact",
+                "325-verse-opening",
+                "325-verse-closing",
+                "325-seeing"
+              ],
+              "counts": {
+                "325-acip-exact": 1,
+                "325-wylie-exact": 1,
+                "325-english-exact": 1,
+                "325-verse-opening": 1,
+                "325-verse-closing": 1,
+                "325-seeing": 1
+              },
+              "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+              "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+            },
+            "c_registered": {
+              "register": "../evidence/pinned/docs/errata_register.json",
+              "complete_selected_records": "../evidence/registered-complete-records.json",
+              "register_count": 196,
+              "direct_segment_records": 0,
+              "considered_classes": [
+                "E-044",
+                "E-071",
+                "E-076",
+                "E-107",
+                "E-111",
+                "E-121",
+                "registered following-heading class"
+              ],
+              "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+            },
+            "d_defensibility": {
+              "assessment": "Possible final-syllable spill relates to registered E-111. GNGSDE at the next opening is not a clean GNAG witness. Neither converter loss nor exact 1500-character cap is demonstrated.",
+              "full_master_evidence": [
+                "../evidence/full-lexical-evidence.json",
+                "../evidence/supplemental-full-lexical-evidence.json"
+              ],
+              "context": "../evidence/full-source-context-rows.json"
+            },
+            "e_counts": {
+              "field_lengths": {
+                "acip": 138,
+                "wylie": 137,
+                "english": 177
+              },
+              "exact_quote_occurrences": 1,
+              "english_at_1500": false,
+              "logical_verse_syllables": [
+                7,
+                7,
+                7,
+                6
+              ],
+              "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+            }
+          },
+          "refuted": false,
+          "new_erratum": false
+        },
+        {
+          "kind": "FORMATTING",
+          "found": "White and black, others that come from desire.",
+          "expected": "Retain verse capitalization and punctuation.",
+          "decision": "Refuted as a new erratum",
+          "five_refutation_grounds": {
+            "a_quote": {
+              "field": "english",
+              "quoted": "White and black, others that come from desire.",
+              "character_range": [
+                131,
+                177
+              ],
+              "source": "../evidence/source.json",
+              "physical_source": "../evidence/physical-source-proof.json",
+              "exact": true
+            },
+            "b_parallel": {
+              "sql_evidence": "../evidence/corpus-query-evidence.json",
+              "external_evidence": "../evidence/external-corpus-evidence.json",
+              "query_labels": [
+                "325-acip-exact",
+                "325-wylie-exact",
+                "325-english-exact",
+                "325-verse-opening",
+                "325-verse-closing",
+                "325-seeing"
+              ],
+              "counts": {
+                "325-acip-exact": 1,
+                "325-wylie-exact": 1,
+                "325-english-exact": 1,
+                "325-verse-opening": 1,
+                "325-verse-closing": 1,
+                "325-seeing": 1
+              },
+              "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+              "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+            },
+            "c_registered": {
+              "register": "../evidence/pinned/docs/errata_register.json",
+              "complete_selected_records": "../evidence/registered-complete-records.json",
+              "register_count": 196,
+              "direct_segment_records": 0,
+              "considered_classes": [
+                "E-044",
+                "E-071",
+                "E-076",
+                "E-107",
+                "E-111",
+                "E-121",
+                "registered following-heading class"
+              ],
+              "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+            },
+            "d_defensibility": {
+              "assessment": "The physical source starts this verse line with White. Source/English mismatch is retained as a separate uncertain source question, not converted into a typography correction.",
+              "full_master_evidence": [
+                "../evidence/full-lexical-evidence.json",
+                "../evidence/supplemental-full-lexical-evidence.json"
+              ],
+              "context": "../evidence/full-source-context-rows.json"
+            },
+            "e_counts": {
+              "field_lengths": {
+                "acip": 138,
+                "wylie": 137,
+                "english": 177
+              },
+              "exact_quote_occurrences": 1,
+              "english_at_1500": false,
+              "logical_verse_syllables": [
+                7,
+                7,
+                7,
+                6
+              ],
+              "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+            }
+          },
+          "refuted": true,
+          "new_erratum": false
+        }
+      ]
+    },
+    "english": {
+      "errata": [
+        {
+          "kind": "TIBETAN_SPELLING",
+          "found": "'DOD PA LAS SKYES GZHAN DKAR",
+          "expected": "For human review: check whether the final verse line is incomplete after DKAR, possibly lacking GNAG. This is an editorial question, not replacement source wording.",
+          "severity": "LOW",
+          "confidence": "PROBABLE",
+          "evidence": "Original physical ASCII bytes and spine ACIP/Wylie agree on the six-syllable tail; English says 'White and black'. The adjacent commentary has 'DKAR GNAG GNYIS KA'I LAS'. All three other verse lines have seven syllables. Grounds checked: (a) source/ingestion: literal DKAR ending already occurs in the original ASCII, so no inferred converter loss; (b) lexical: complete master dkar=white, gnag=black, dkar gnag=white and black distinguish the missing complement; (c) grammar/verse compression: elliptical verse is possible, so the seven-syllable comparison supports a question, not a certified restoration; (d) parallel/context: exact verse Wylie and English each return only C05:325, and dmyal ba myong query gives C05:325/326 plus unrelated AK:292; no independent publication witness has been verified; (e) prior register/apparatus: all196 records screened for gng/gzhan dkar/C05:325/C05:326 with no matching item, bracketed verse references and following headings are separate known classes. Digital agreement is not publication independence. No original/master change and no invented black pair; dkar aligns only to White.",
+          "seq": 325
+        }
+      ],
+      "screen": {
+        "seq": 325,
+        "categories": {
+          "TIBETAN_SPELLING": "One LOW/PROBABLE editorial question with all five grounds in errata.json.",
+          "ENGLISH_TYPO": "No new typo established. Exact capitalization, line compression and punctuation remain unchanged.",
+          "ENGLISH_FACTUAL_ERROR": "The final White and black exceeds the surviving dkar. This is the same incomplete-source question, not a second allegation against English.",
+          "INGEST_ARTEFACT": "Original physical extent preserves the observed passage. No publication-level original or ingestion-loss inference is made. Bracketed verse references are apparatus; English is below1500cap.",
+          "FORMATTING": "Original verse capitalization and shads remain verbatim; no normalization proposed."
+        },
+        "evidence": {
+          "complete_source": "../evidence/original-spine-context.json",
+          "physical_original_and_extent": "../evidence/physical-extent.json",
+          "counted_original_corpus_queries": "../evidence/query-index.json",
+          "complete_lexical_records": [
+            "../evidence/master-lexical.json",
+            "../evidence/master-followup.json"
+          ],
+          "prior196register": "../evidence/errata-register-screen.json"
+        },
+        "limitations": "Digital copies are not independent publications. Both proposed corrections remain human editorial questions; no source or master changes."
+      }
+    }
+  },
+  "category_dispositions": {
+    "TIBETAN_SPELLING": "Retain one LOW/PROBABLE source-text question; restoration remains UNCERTAIN.",
+    "ENGLISH_TYPO": "No new error; preserve verse line capitals and prose explanatory repetition.",
+    "ENGLISH_FACTUAL_ERROR": "No new allegation against GMR. The source deficiency in 325 is one source question; 326 reports alternative classifications; 327 has shared negative scope.",
+    "INGEST_ARTEFACT": "No new ingestion-mechanism claim. The physical ASCII already carries both anomalies; GNG is not a clean GNAG witness. E-111 spill class considered but not established. Following heading in326 remains the registered class.",
+    "FORMATTING": "No new formatting error; verse capitals, punctuation and reference apparatus remain exact."
+  },
+  "five_grounds": {
+    "quote": "Both candidates quote exact ACIP in their own row, occurring once; source-reading-receipt pins the original spine and physical windows.",
+    "source_and_lexicon": "Physical ASCII matches the anomaly. Full dkar/gnag/dkar gnag and sde pa records support the contrasting colors and group noun; no exact gngsde pa master entry. Absence from a dictionary is not proof by itself.",
+    "grammar_and_counterevidence": "325: six syllables versus 7/7/7, own English White and black, and next prose dkar gnag converge on a missing complement; verse ellipsis remains possible. 326: fused GNGSDE contrasts with intact later SDE PA and paired English groups; an unknown source mark remains possible. Neither GNG→GNAG nor removal/restoration is established.",
+    "parallel": "Whole-field exact ACIP/Wylie/English queries find only own rows325/326; 327 also matches C16:852. The dmyal ba myong query finds325/326 and different AK:292. These are digital comparisons, not independently verified publication witnesses.",
+    "registered_and_counts": "All196-record original screen has no exact candidate/segment match. E-044, E-107, E-111 and following-heading classes considered. English lengths177/638/213 are below1500;325 verse counts7/7/7/6;327 counts7/7/7/7/7. Candidate325 and326 are separate observations, and a future proven common boundary defect must consolidate them."
+  },
+  "decision_reason": "Internal spelling/metrical, semantic and paired-context evidence supports probable defects despite the lack of authoritative restorations. Keep candidates for independent skeptical and human review without changing any source.",
+  "policy_limit": "Nonempty errata require the existing reviewed errata path; do not relabel them empty for closure.",
+  "original_screen_dispositions": [
+    {
+      "angle": "tibetan",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "found": "'DOD PA LAS SKYES GZHAN DKAR",
+        "expected": "No restoration asserted; retain exact DKAR ending.",
+        "decision": "UNCERTAIN source/boundary question; no new erratum or correction authority established",
+        "five_refutation_grounds": {
+          "a_quote": {
+            "field": "acip",
+            "quoted": "'DOD PA LAS SKYES GZHAN DKAR",
+            "character_range": [
+              110,
+              138
+            ],
+            "source": "../evidence/source.json",
+            "physical_source": "../evidence/physical-source-proof.json",
+            "exact": true
+          },
+          "b_parallel": {
+            "sql_evidence": "../evidence/corpus-query-evidence.json",
+            "external_evidence": "../evidence/external-corpus-evidence.json",
+            "query_labels": [
+              "325-acip-exact",
+              "325-wylie-exact",
+              "325-english-exact",
+              "325-verse-opening",
+              "325-verse-closing",
+              "325-seeing"
+            ],
+            "counts": {
+              "325-acip-exact": 1,
+              "325-wylie-exact": 1,
+              "325-english-exact": 1,
+              "325-verse-opening": 1,
+              "325-verse-closing": 1,
+              "325-seeing": 1
+            },
+            "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+            "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+          },
+          "c_registered": {
+            "register": "../evidence/pinned/docs/errata_register.json",
+            "complete_selected_records": "../evidence/registered-complete-records.json",
+            "register_count": 196,
+            "direct_segment_records": 0,
+            "considered_classes": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121",
+              "registered following-heading class"
+            ],
+            "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+          },
+          "d_defensibility": {
+            "assessment": "Final-line loss or spill is plausible, but the physical file agrees and no independent corrected same-passage witness was located. dkar maps only White; final English and black is unbanked.",
+            "full_master_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "context": "../evidence/full-source-context-rows.json"
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 138,
+              "wylie": 137,
+              "english": 177
+            },
+            "exact_quote_occurrences": 1,
+            "english_at_1500": false,
+            "logical_verse_syllables": [
+              7,
+              7,
+              7,
+              6
+            ],
+            "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+          }
+        },
+        "refuted": false,
+        "new_erratum": false
+      },
+      "decision": "CHANGE",
+      "reason": "Retain one LOW/PROBABLE source-text question; restoration remains UNCERTAIN. Internal spelling/metrical, semantic and paired-context evidence supports probable defects despite the lack of authoritative restorations. Keep candidates for independent skeptical and human review without changing any source."
+    },
+    {
+      "angle": "tibetan",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "found": "those For a hell experience",
+        "expected": "Retain line-initial For.",
+        "decision": "Refuted as a new erratum",
+        "five_refutation_grounds": {
+          "a_quote": {
+            "field": "english",
+            "quoted": "those For a hell experience",
+            "character_range": [
+              35,
+              62
+            ],
+            "source": "../evidence/source.json",
+            "physical_source": "../evidence/physical-source-proof.json",
+            "exact": true
+          },
+          "b_parallel": {
+            "sql_evidence": "../evidence/corpus-query-evidence.json",
+            "external_evidence": "../evidence/external-corpus-evidence.json",
+            "query_labels": [
+              "325-acip-exact",
+              "325-wylie-exact",
+              "325-english-exact",
+              "325-verse-opening",
+              "325-verse-closing",
+              "325-seeing"
+            ],
+            "counts": {
+              "325-acip-exact": 1,
+              "325-wylie-exact": 1,
+              "325-english-exact": 1,
+              "325-verse-opening": 1,
+              "325-verse-closing": 1,
+              "325-seeing": 1
+            },
+            "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+            "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+          },
+          "c_registered": {
+            "register": "../evidence/pinned/docs/errata_register.json",
+            "complete_selected_records": "../evidence/registered-complete-records.json",
+            "register_count": 196,
+            "direct_segment_records": 0,
+            "considered_classes": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121",
+              "registered following-heading class"
+            ],
+            "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+          },
+          "d_defensibility": {
+            "assessment": "The physical verse has a line break before For. Mid-sentence capitalization reflects lineation rather than a demonstrated typo.",
+            "full_master_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "context": "../evidence/full-source-context-rows.json"
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 138,
+              "wylie": 137,
+              "english": 177
+            },
+            "exact_quote_occurrences": 1,
+            "english_at_1500": false,
+            "logical_verse_syllables": [
+              7,
+              7,
+              7,
+              6
+            ],
+            "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+          }
+        },
+        "refuted": true,
+        "new_erratum": false
+      },
+      "decision": "ACCEPT",
+      "reason": "No new error; preserve verse line capitals and prose explanatory repetition. "
+    },
+    {
+      "angle": "tibetan",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "Others, what seeing eliminates is black",
+        "expected": "Retain the report of an alternative doctrinal view.",
+        "decision": "Refuted as a new erratum",
+        "five_refutation_grounds": {
+          "a_quote": {
+            "field": "english",
+            "quoted": "Others, what seeing eliminates is black",
+            "character_range": [
+              90,
+              129
+            ],
+            "source": "../evidence/source.json",
+            "physical_source": "../evidence/physical-source-proof.json",
+            "exact": true
+          },
+          "b_parallel": {
+            "sql_evidence": "../evidence/corpus-query-evidence.json",
+            "external_evidence": "../evidence/external-corpus-evidence.json",
+            "query_labels": [
+              "325-acip-exact",
+              "325-wylie-exact",
+              "325-english-exact",
+              "325-verse-opening",
+              "325-verse-closing",
+              "325-seeing"
+            ],
+            "counts": {
+              "325-acip-exact": 1,
+              "325-wylie-exact": 1,
+              "325-english-exact": 1,
+              "325-verse-opening": 1,
+              "325-verse-closing": 1,
+              "325-seeing": 1
+            },
+            "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+            "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+          },
+          "c_registered": {
+            "register": "../evidence/pinned/docs/errata_register.json",
+            "complete_selected_records": "../evidence/registered-complete-records.json",
+            "register_count": 196,
+            "direct_segment_records": 0,
+            "considered_classes": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121",
+              "registered following-heading class"
+            ],
+            "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+          },
+          "d_defensibility": {
+            "assessment": "The parallel prose at 326 explicitly reports rival classifications; seeing actively eliminates is a defensible passive-to-active recast of mthong bas spang bya. No independent factual contradiction is established.",
+            "full_master_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "context": "../evidence/full-source-context-rows.json"
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 138,
+              "wylie": 137,
+              "english": 177
+            },
+            "exact_quote_occurrences": 1,
+            "english_at_1500": false,
+            "logical_verse_syllables": [
+              7,
+              7,
+              7,
+              6
+            ],
+            "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+          }
+        },
+        "refuted": true,
+        "new_erratum": false
+      },
+      "decision": "ACCEPT",
+      "reason": "No new allegation against GMR. The source deficiency in 325 is one source question; 326 reports alternative classifications; 327 has shared negative scope. "
+    },
+    {
+      "angle": "tibetan",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "found": "'DOD PA LAS SKYES GZHAN DKAR",
+        "expected": "Retain row boundary; no source resegmentation.",
+        "decision": "UNCERTAIN source/boundary question; no new erratum or correction authority established",
+        "five_refutation_grounds": {
+          "a_quote": {
+            "field": "acip",
+            "quoted": "'DOD PA LAS SKYES GZHAN DKAR",
+            "character_range": [
+              110,
+              138
+            ],
+            "source": "../evidence/source.json",
+            "physical_source": "../evidence/physical-source-proof.json",
+            "exact": true
+          },
+          "b_parallel": {
+            "sql_evidence": "../evidence/corpus-query-evidence.json",
+            "external_evidence": "../evidence/external-corpus-evidence.json",
+            "query_labels": [
+              "325-acip-exact",
+              "325-wylie-exact",
+              "325-english-exact",
+              "325-verse-opening",
+              "325-verse-closing",
+              "325-seeing"
+            ],
+            "counts": {
+              "325-acip-exact": 1,
+              "325-wylie-exact": 1,
+              "325-english-exact": 1,
+              "325-verse-opening": 1,
+              "325-verse-closing": 1,
+              "325-seeing": 1
+            },
+            "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+            "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+          },
+          "c_registered": {
+            "register": "../evidence/pinned/docs/errata_register.json",
+            "complete_selected_records": "../evidence/registered-complete-records.json",
+            "register_count": 196,
+            "direct_segment_records": 0,
+            "considered_classes": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121",
+              "registered following-heading class"
+            ],
+            "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+          },
+          "d_defensibility": {
+            "assessment": "Possible final-syllable spill relates to registered E-111. GNGSDE at the next opening is not a clean GNAG witness. Neither converter loss nor exact 1500-character cap is demonstrated.",
+            "full_master_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "context": "../evidence/full-source-context-rows.json"
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 138,
+              "wylie": 137,
+              "english": 177
+            },
+            "exact_quote_occurrences": 1,
+            "english_at_1500": false,
+            "logical_verse_syllables": [
+              7,
+              7,
+              7,
+              6
+            ],
+            "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+          }
+        },
+        "refuted": false,
+        "new_erratum": false
+      },
+      "decision": "ACCEPT",
+      "reason": "No new ingestion-mechanism claim. The physical ASCII already carries both anomalies; GNG is not a clean GNAG witness. E-111 spill class considered but not established. Following heading in326 remains the registered class. "
+    },
+    {
+      "angle": "tibetan",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "found": "White and black, others that come from desire.",
+        "expected": "Retain verse capitalization and punctuation.",
+        "decision": "Refuted as a new erratum",
+        "five_refutation_grounds": {
+          "a_quote": {
+            "field": "english",
+            "quoted": "White and black, others that come from desire.",
+            "character_range": [
+              131,
+              177
+            ],
+            "source": "../evidence/source.json",
+            "physical_source": "../evidence/physical-source-proof.json",
+            "exact": true
+          },
+          "b_parallel": {
+            "sql_evidence": "../evidence/corpus-query-evidence.json",
+            "external_evidence": "../evidence/external-corpus-evidence.json",
+            "query_labels": [
+              "325-acip-exact",
+              "325-wylie-exact",
+              "325-english-exact",
+              "325-verse-opening",
+              "325-verse-closing",
+              "325-seeing"
+            ],
+            "counts": {
+              "325-acip-exact": 1,
+              "325-wylie-exact": 1,
+              "325-english-exact": 1,
+              "325-verse-opening": 1,
+              "325-verse-closing": 1,
+              "325-seeing": 1
+            },
+            "scope": "Actual recorded exact whole-field predicates plus named substring predicates; full material records retained.",
+            "limit": "325/326 exact queries return only own row; 327 matches C16:852 in ACIP/Wylie/English. Equality is not independent-publication or ingestion proof."
+          },
+          "c_registered": {
+            "register": "../evidence/pinned/docs/errata_register.json",
+            "complete_selected_records": "../evidence/registered-complete-records.json",
+            "register_count": 196,
+            "direct_segment_records": 0,
+            "considered_classes": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121",
+              "registered following-heading class"
+            ],
+            "conclusion": "Do not refile registered classes; uncertainty is not positive correction evidence."
+          },
+          "d_defensibility": {
+            "assessment": "The physical source starts this verse line with White. Source/English mismatch is retained as a separate uncertain source question, not converted into a typography correction.",
+            "full_master_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "context": "../evidence/full-source-context-rows.json"
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 138,
+              "wylie": 137,
+              "english": 177
+            },
+            "exact_quote_occurrences": 1,
+            "english_at_1500": false,
+            "logical_verse_syllables": [
+              7,
+              7,
+              7,
+              6
+            ],
+            "complete_counts": "decisions.json literal occurrence lists and ../evidence/corpus-query-evidence.json exact counts"
+          }
+        },
+        "refuted": true,
+        "new_erratum": false
+      },
+      "decision": "ACCEPT",
+      "reason": "No new formatting error; verse capitals, punctuation and reference apparatus remain exact. "
+    },
+    {
+      "angle": "english",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "assessment": "One LOW/PROBABLE editorial question with all five grounds in errata.json."
+      },
+      "decision": "ACCEPT",
+      "reason": "Retain one LOW/PROBABLE source-text question; restoration remains UNCERTAIN. Internal spelling/metrical, semantic and paired-context evidence supports probable defects despite the lack of authoritative restorations. Keep candidates for independent skeptical and human review without changing any source."
+    },
+    {
+      "angle": "english",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "assessment": "No new typo established. Exact capitalization, line compression and punctuation remain unchanged."
+      },
+      "decision": "ACCEPT",
+      "reason": "No new error; preserve verse line capitals and prose explanatory repetition. "
+    },
+    {
+      "angle": "english",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "assessment": "The final White and black exceeds the surviving dkar. This is the same incomplete-source question, not a second allegation against English."
+      },
+      "decision": "ACCEPT",
+      "reason": "No new allegation against GMR. The source deficiency in 325 is one source question; 326 reports alternative classifications; 327 has shared negative scope. "
+    },
+    {
+      "angle": "english",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "assessment": "Original physical extent preserves the observed passage. No publication-level original or ingestion-loss inference is made. Bracketed verse references are apparatus; English is below1500cap."
+      },
+      "decision": "ACCEPT",
+      "reason": "No new ingestion-mechanism claim. The physical ASCII already carries both anomalies; GNG is not a clean GNAG witness. E-111 spill class considered but not established. Following heading in326 remains the registered class. "
+    },
+    {
+      "angle": "english",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "assessment": "Original verse capitalization and shads remain verbatim; no normalization proposed."
+      },
+      "decision": "ACCEPT",
+      "reason": "No new formatting error; verse capitals, punctuation and reference apparatus remain exact. "
+    }
+  ],
+  "original_errata_dispositions": [
+    {
+      "angle": "tibetan",
+      "original": [],
+      "decision": "CHANGE",
+      "reason": "Internal spelling/metrical, semantic and paired-context evidence supports probable defects despite the lack of authoritative restorations. Keep candidates for independent skeptical and human review without changing any source."
+    },
+    {
+      "angle": "english",
+      "original": [
+        {
+          "kind": "TIBETAN_SPELLING",
+          "found": "'DOD PA LAS SKYES GZHAN DKAR",
+          "expected": "For human review: check whether the final verse line is incomplete after DKAR, possibly lacking GNAG. This is an editorial question, not replacement source wording.",
+          "severity": "LOW",
+          "confidence": "PROBABLE",
+          "evidence": "Original physical ASCII bytes and spine ACIP/Wylie agree on the six-syllable tail; English says 'White and black'. The adjacent commentary has 'DKAR GNAG GNYIS KA'I LAS'. All three other verse lines have seven syllables. Grounds checked: (a) source/ingestion: literal DKAR ending already occurs in the original ASCII, so no inferred converter loss; (b) lexical: complete master dkar=white, gnag=black, dkar gnag=white and black distinguish the missing complement; (c) grammar/verse compression: elliptical verse is possible, so the seven-syllable comparison supports a question, not a certified restoration; (d) parallel/context: exact verse Wylie and English each return only C05:325, and dmyal ba myong query gives C05:325/326 plus unrelated AK:292; no independent publication witness has been verified; (e) prior register/apparatus: all196 records screened for gng/gzhan dkar/C05:325/C05:326 with no matching item, bracketed verse references and following headings are separate known classes. Digital agreement is not publication independence. No original/master change and no invented black pair; dkar aligns only to White.",
+          "seq": 325
+        }
+      ],
+      "decision": "ACCEPT",
+      "reason": "Internal spelling/metrical, semantic and paired-context evidence supports probable defects despite the lack of authoritative restorations. Keep candidates for independent skeptical and human review without changing any source."
+    }
+  ]
+}
