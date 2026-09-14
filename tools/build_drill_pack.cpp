@@ -10,6 +10,7 @@
 // Tibetan is converted here too, through allcore::acipDisplayPieces, so the app
 // only ever renders Unicode it was handed. Anything that would not convert
 // arrives already flagged in ⟨ ⟩ and can never be mistaken for script.
+#include "allcore/chantline.h"
 #include "allcore/drills.h"
 #include "allcore/lattice.h"
 #include "allcore/spine.h"
@@ -826,6 +827,12 @@ int main(int argc, char** argv) {
                 for (const BL& p : v) {
                     if (p.tib.empty() || p.eng.empty() || p.acip.empty())
                         continue;
+                    // The bank does not pass through isDrillable, so the
+                    // chanted prayers reach this drill by their own road: 23
+                    // cards presented "dakki jinsok gyipay sunam kyi," as his
+                    // English, under a badge reading ATTESTED. It is the sound
+                    // of the Tibetan, not a rendering of it.
+                    if (allcore::englishIsNotEnglish(p.eng, p.acip)) continue;
                     // the SHALLOWEST layer strictly under this span
                     std::vector<const BL*> kids;
                     int kidDepth = 99;

@@ -30,6 +30,7 @@ add_library(allcore STATIC
   src/cases.cpp
   src/drills.cpp
   src/progress.cpp
+  src/chantline.cpp
   src/terminology.cpp
   src/outline.cpp
   src/hypfile.cpp
