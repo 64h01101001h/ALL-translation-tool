@@ -285,7 +285,11 @@ form**. They end in:
 That answers the question the first version left open, and answers it against
 the hypothesis I preferred. These are not implied-verb constructions. Two end
 in *shog*, the optative — **a real verb form the Wilson tables do not have**,
-and a concrete gap worth closing.
+and a concrete gap worth closing. **Closed, 2026-09-13**: `isBenedictiveShog`
+in core/src/reader.cpp admits it as a closed-class verb, but only in final
+position, because `shog bu` is paper and the whole-chunk search was returning
+`SHOG BU GCIG` as a confident verb. Step 2 now reads
+"shog ATTESTED — closed-class verb (rule table)".
 
 #### Corrected against the whole corpus, 2026-09-13
 
