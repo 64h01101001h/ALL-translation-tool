@@ -1,0 +1,37 @@
+--- prior/register-reviewed-page-and-index.py
++++ candidates/register-reviewed-page-and-index.py
+@@ -24,6 +24,23 @@
+ PAGES = W / 'data/alignment/pages_c05'
+ OUT = B / 'landing/course-registration-verification.json'
+ ENV = dict(os.environ, GIT_OPTIONAL_LOCKS='0', PYTHONDONTWRITEBYTECODE='1')
++
++def review_segment_pin(row, name, review):
++    assert name in ('spec', 'body') and type(row['seq']) is int
++    flat = (name + '_bytes', name + '_sha256')
++    if name in row:
++        assert not any(k in row for k in flat), 'Ambiguous nested and flat pin fields'
++        r = row[name]
++        assert isinstance(r, dict) and set(r) == {'path', 'bytes', 'sha256'}
++        expected = review / 'reviewed-final' / str(row['seq']) / ('spec.json' if name == 'spec' else 'body.html')
++        assert Path(r['path']).is_absolute() and Path(r['path']) == expected
++        result = {k: r[k] for k in ('bytes', 'sha256')}
++    else:
++        result = {'bytes': row[flat[0]], 'sha256': row[flat[1]]}
++    assert type(result['bytes']) is int and result['bytes'] >= 0
++    assert isinstance(result['sha256'], str) and len(result['sha256']) == 64
++    assert all(c in '0123456789abcdef' for c in result['sha256'])
++    return result
+ 
+ def pin(raw):
+     return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+@@ -79,8 +96,8 @@
+     landed_accepted = REVIEW / 'reviewed-final' / str(seq)
+     individual_spec = (current / 'spec.json').read_bytes()
+     individual_body = (current / 'body.html').read_bytes()
+-    assert pin(individual_spec) == {'bytes': row['spec_bytes'], 'sha256': row['spec_sha256']}
+-    assert pin(individual_body) == {'bytes': row['body_bytes'], 'sha256': row['body_sha256']}
++    assert pin(individual_spec) == review_segment_pin(row, 'spec', B / 'semantic-review')
++    assert pin(individual_body) == review_segment_pin(row, 'body', B / 'semantic-review')
+     assert individual_spec == (accepted / 'spec.json').read_bytes() == (landed_accepted / 'spec.json').read_bytes()
+     assert individual_body == (accepted / 'body.html').read_bytes() == (landed_accepted / 'body.html').read_bytes()
+     part = json.loads(individual_spec)

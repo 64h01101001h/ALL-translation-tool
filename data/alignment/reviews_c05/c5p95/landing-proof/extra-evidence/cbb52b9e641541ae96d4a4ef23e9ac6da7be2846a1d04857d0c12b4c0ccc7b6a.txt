@@ -1,0 +1,52 @@
+from pathlib import Path
+import ast,json,hashlib,difflib,sys
+D=Path(__file__).resolve().parent;I=D.parent;A=I.parent;ROOT=A.parent;W=ROOT/'campaign-worktree';OLD=A/'C05-280-282';B=A/'C05-283-285'
+assert sys.dont_write_bytecode and __debug__
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,o):
+ with (D/n).open('x') as f:f.write(json.dumps(o,indent=2)+'\n')
+P=OLD/'original-verifier-preparation';freeze=json.loads((P/'freeze.json').read_bytes());assert isinstance(freeze['files'],dict)
+assert set(freeze['files'])=={str(p.relative_to(P)) for p in P.rglob('*') if p.is_file() and p!=P/'freeze.json'}
+records=[]
+def retain(src,dst):
+ b=src.read_bytes();dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(b);assert src.read_bytes()==dst.read_bytes()==b
+ records.append({'original':str(src),'resolved':str(src.resolve(strict=True)),'copy':str(dst.relative_to(D)),**pin(b),'full_byte_equality':True})
+for p in sorted(P.rglob('*')):
+ if p.is_file():
+  if p!=P/'freeze.json':assert pin(p.read_bytes())==freeze['files'][str(p.relative_to(P))]
+  retain(p,D/'prior-preparation'/p.relative_to(P))
+paths=[OLD/'verify-complete-originals.py',OLD/'release-original-verifier.py',OLD/'original-verifier-release/proof.json',OLD/'original-verifier-release/exact-binding.diff',OLD/'originals-complete.json',I/'through285-dispatch-record.json',I/'through285-source-resumption-check/proof.json',A/'proposal-protocol.md',W/'AGENTS.md',W/'docs/ALIGNMENT_LAYER_SPEC.md',W/'docs/alignment_briefs/RECONCILE_BRIEF.md',W/'docs/alignment_briefs/REFUTE_BRIEF.md',B/'baseline.json',B/'source.json']
+for i,p in enumerate(paths):retain(p,D/'inputs'/f'{i:02d}-{p.name}')
+old=(OLD/'verify-complete-originals.py').read_bytes();(D/'prior-verify-complete-originals.py').write_bytes(old)
+release=(OLD/'release-original-verifier.py').read_bytes();(D/'prior-release-original-verifier.py').write_bytes(release)
+s=old.decode();changes=[]
+def replace(a,b,count):
+ global s
+ assert s.count(a)==count and b not in s,(a,s.count(a))
+ changes.append({'before':a,'after':b,'occurrences':count})
+ s=s.replace(a,b)
+for a,b in [("EXPECTED_COMPLETION_FILE='originals-complete.json'","EXPECTED_COMPLETION_FILE=None"),("EXPECTED_COMPLETION_STATUS='BOTH_FRESH_INDEPENDENT_ORIGINAL_ANGLES_FROZEN'","EXPECTED_COMPLETION_STATUS=None"),('EXPECTED_TIBETAN_SPANS=118','EXPECTED_TIBETAN_SPANS=None'),("EXPECTED_WRAPPER_RELATIVE_PATH='english/280/run_generator_readonly.py'","EXPECTED_WRAPPER_RELATIVE_PATH=None")]:replace(a,b,1)
+replace('[280,281,282]','[283,284,285]',3)
+replace('Fresh independent original authors c05_280_282_tibetan and c05_280_282_english; root is not an original author. This is mechanical verification only, not independent semantic approval.','Independent original authors c05_280_282_review_sources (Tibetan-first) and c05_280_282_english (English-first), as recorded in through285-dispatch-record.json; existing agent contexts are reused. Root and this verifier preparer are not current original authors. This is mechanical verification only, not independent semantic approval.',1)
+new=s.encode();(D/'verify-complete-originals.py.txt').write_bytes(new)
+for n,a,b in [('forward.diff',old,new),('inverse.diff',new,old)]:
+ (D/n).write_text(''.join(difflib.unified_diff(a.decode().splitlines(True),b.decode().splitlines(True),fromfile='prior' if n=='forward.diff' else 'candidate',tofile='candidate' if n=='forward.diff' else 'prior')))
+restored=s
+for r in reversed(changes):assert restored.count(r['after'])==r['occurrences'];restored=restored.replace(r['after'],r['before'])
+assert restored.encode()==old
+get=lambda raw:{n.name:ast.dump(n,include_attributes=False) for n in ast.parse(raw).body if isinstance(n,(ast.FunctionDef,ast.ClassDef))}
+assert get(old)==get(new)
+assert ast.dump(ast.parse(restored),include_attributes=False)==ast.dump(ast.parse(old),include_attributes=False)
+compile(new,str(D/'verify-complete-originals.py.txt'),'exec')
+# The exact prior pending guard occurs before output creation and any original read.
+tree=ast.parse(new);guard=next(n for n in tree.body if isinstance(n,ast.Assert));mkdir=next(n for n in tree.body if isinstance(n,ast.Expr) and isinstance(n.value,ast.Call) and isinstance(n.value.func,ast.Attribute) and n.value.func.attr=='mkdir')
+assert guard.lineno<mkdir.lineno
+pending={t.id:n.value.value for n in tree.body if isinstance(n,ast.Assign) and isinstance(n.value,ast.Constant) for t in n.targets if isinstance(t,ast.Name) and t.id.startswith('EXPECTED_')}
+assert pending==dict.fromkeys(['EXPECTED_COMPLETION_FILE','EXPECTED_COMPLETION_STATUS','EXPECTED_TIBETAN_SPANS','EXPECTED_WRAPPER_RELATIVE_PATH'])
+dispatch=json.loads((I/'through285-dispatch-record.json').read_bytes())
+assert [(r['agent'],r['role']) for r in dispatch['agents'][:2]]==[('/root/c05_280_282_review_sources','tibetan-first proposer'),('/root/c05_280_282_english','english-first proposer')]
+assert dispatch['sequences']==[283,284,285] and dispatch['baseline_head']=='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert pin((B/'baseline.json').read_bytes())=={k:dispatch['baseline'][k] for k in ['bytes','sha256']}
+save('original-copy-manifest.json',records);save('literal-replacement-map.json',changes)
+save('source-proof.json',{'status':'PASS_PURE_SOURCE_PREPARATION_ONLY','prior':pin(old),'candidate':pin(new),'retained_prior_release':pin(release),'full_original_copy_pairs':len(records),'prior_preparation_freeze':pin((P/'freeze.json').read_bytes()),'prior_preparation_members_exact':len(freeze['files']),'change_groups':len(changes),'literal_occurrences_changed':sum(r['occurrences'] for r in changes),'full_inverse_exact':True,'whole_module_AST_after_inverse_exact':True,'named_function_ASTs_unchanged':sorted(get(old)),'pending_guard_unchanged_and_before_output':True,'all_four_release_literals_pending':True,'actual_producer_dispatch_bound':pin((I/'through285-dispatch-record.json').read_bytes()),'candidate_imports':0,'candidate_executions':0,'current_angle_files_read':0,'canonical_SQL_Git_test_commands':0})
+print(json.dumps({'status':'PASS_PURE_SOURCE_PREPARATION_ONLY','candidate':pin(new),'full_source_copy_pairs':len(records),'prior_preparation_members':len(freeze['files']),'candidate_executions':0}))

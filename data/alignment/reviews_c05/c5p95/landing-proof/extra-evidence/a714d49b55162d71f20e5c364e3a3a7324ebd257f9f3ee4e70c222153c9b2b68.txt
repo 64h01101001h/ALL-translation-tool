@@ -1,0 +1,57 @@
+--- bank_root_proofs_through285_final.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-banking-preparation/candidates/bank_root_proofs_through285.py
+@@ -56,41 +56,16 @@
+     for name in ('batch', 'worktree', 'run-output', 'payload-manifest', 'payload-source-proof', 'untracked-capture-stem', 'extra-inputs'):
+         parser.add_argument('--' + name, required=True)
+     parser.add_argument('--whitespace-inputs')
+-    parser.add_argument('--final-release', required=True)
+-    parser.add_argument('--final-release-sha256', required=True)
+     args = parser.parse_args()
+     if not __debug__:
+         raise RuntimeError('Assertions must remain enabled')
+     b, wt = Path(args.batch).resolve(strict=True), Path(args.worktree).resolve(strict=True)
+     assert b.name == 'C05-283-285'
+-    assert args.phase == 'final-whitespace', 'Ordinary producer remains immutable; this is a distinct final-phase source'
+-    release_path = Path(args.final_release)
+-    integration = b.parent / 'integration'
+-    assert release_path.is_absolute() and release_path.resolve(strict=True).is_relative_to(integration.resolve(strict=True))
+-    release_raw = release_path.read_bytes()
+-    assert pin(release_raw)['sha256'] == args.final_release_sha256
+-    release = json.loads(release_raw)
+-    assert release['status'] == 'PASS_ROOT_RELEASE_OF_REVIEWED_FINAL_BANK_METHOD'
+-    assert release['baseline'] == BASE and release['page'] == PAGE and release['sequences'] == SEQS
+-    assert release['banker']['path'] == str(Path(__file__).resolve())
++    assert args.phase == 'ordinary', 'Final-whitespace source bindings/review remain pending; prior final-phase code is preserved below'
++    release = json.loads((b / 'root-ordinary-bank-method-release/proof.json').read_bytes())
++    assert release['status'] == 'PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD'
++    assert release['banker']['copy'] == str(Path(__file__).resolve())
+     assert pin(Path(__file__).read_bytes()) == {k: release['banker'][k] for k in ('bytes', 'sha256')}
+-    bound = release['inputs']
+-    assert set(bound) == {'reproduction_acceptance','ordinary_manifest','ordinary_extra_inputs','final_whitespace_inputs','whitespace_root_acceptance'}
+-    values = {}
+-    for role, record in bound.items():
+-        source = Path(record['path']); assert source.is_absolute()
+-        raw = source.read_bytes(); assert pin(raw) == {k:record[k] for k in ('bytes','sha256')}
+-        values[role] = json.loads(raw)
+-    for role, path in [('ordinary_manifest',b/'landing/root-proof-copy-manifest-before-whitespace.json'),('ordinary_extra_inputs',Path(args.extra_inputs)),('final_whitespace_inputs',Path(args.whitespace_inputs))]:
+-        assert Path(bound[role]['path']).resolve(strict=True) == path.resolve(strict=True)
+-    reproduction = values['reproduction_acceptance']
+-    assert reproduction['status'] == 'PASS' and reproduction['head'] == BASE
+-    assert reproduction['all_seven_reproduced_outputs_byte_exact'] is reproduction['all_thirteen_payload_files_byte_exact'] is reproduction['live_head_index_untracked_state_unchanged'] is True
+-    assert values['ordinary_manifest']['phase'] == 'ordinary' and values['ordinary_manifest']['semantic_review_unchanged'] is True
+-    ws = values['whitespace_root_acceptance']
+-    assert ws['status'] == 'PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and ws['normalization'] is False and ws['semantic_approval'] is False
+-    assert isinstance(values['ordinary_extra_inputs'],list) and values['ordinary_extra_inputs']
+-    assert isinstance(values['final_whitespace_inputs'],list) and values['final_whitespace_inputs']
+     landing = b / 'landing'; review = b / 'semantic-review'
+     dest = wt / 'data/alignment/reviews_c05/c5p95/landing-proof'
+     output = Path(args.run_output).absolute()
+@@ -164,8 +139,6 @@
+         add(Path(path), copy='banking-config/' + Path(path).name)
+ 
+     try:
+-        assert read(release_path) == release_raw
+-        for row in bound.values(): match(read(row['path']), row)
+         argv = ['git', 'rev-parse', 'HEAD']
+         (output / 'head-command.json').write_text(json.dumps(dict(argv=argv, cwd=str(wt), environment_overrides={'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1'}), indent=2) + '\n')
+         result = subprocess.run(argv, cwd=wt, env=dict(os.environ, GIT_OPTIONAL_LOCKS='0', PYTHONDONTWRITEBYTECODE='1'), input=b'', capture_output=True)

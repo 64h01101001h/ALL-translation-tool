@@ -1,0 +1,24 @@
+{
+  "status": "PASS_FOCUSED_SOURCE_AND_FIXTURE_CONTROLS_ONLY",
+  "controls": 74,
+  "expected_passes": 4,
+  "expected_rejections": 70,
+  "actual_original_censuses_unchanged": 6,
+  "actual_original_files_including_manifests": 350,
+  "whole_source_inverse_and_AST_exact": true,
+  "unchanged_named_functions": [
+    "pinned",
+    "batch_counts",
+    "original_inventory",
+    "bind_query",
+    "release_inputs",
+    "main",
+    "run",
+    "SourceAnchors"
+  ],
+  "candidate_module_imported": false,
+  "real_verify_or_validate_config_executed": false,
+  "SQL_Git_generators_full_tests": false,
+  "semantic_approval": false,
+  "scope": "Only exact AST-extracted helper functions execute, and only against synthetic fixture inputs. Actual originals are inspected separately as immutable schema/census data."
+}

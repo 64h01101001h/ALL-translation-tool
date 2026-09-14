@@ -1,0 +1,21 @@
+--- before/release-ordinary-bank-method-root.py
++++ candidates/release-ordinary-bank-method-root.py
+@@ -33,7 +33,7 @@
+ composer=B/'compose-ordinary-bank-inventory-root.py'
+ banker=I/'through285-ordinary-banking-preparation/candidates/bank_root_proofs_through285.py'
+ target=B/'bank_root_proofs_through285.py'
+-assert pin(composer.read_bytes())=={'bytes': 9014, 'sha256': '6a38645ecc0b4d94b7fb0b177353004c1daf2b5d02910bca8a4fe01126dcc9be'}
++assert pin(composer.read_bytes())=={'bytes': 9114, 'sha256': '5473a64d05f490092eb375a25ee26ec3bebd04f65930aa8088dc94c6ab89ae18'}
+ assert pin(banker.read_bytes())=={'bytes': 18802, 'sha256': '6db5614639288cbbc38b0ea768ffbec766c5dc060078a609801ca5fba2db41ec'}
+ assert not target.exists()
+ assert not (B.parent.parent/'campaign-worktree/data/alignment/reviews_c05/c5p95/landing-proof').exists()
+@@ -41,7 +41,8 @@
+ paths=[Path(x)for x in binding['integration_inputs']];deferred=[Path(x)for x in binding['deferred_active_callers']]
+ assert paths and len(paths)==len(set(paths)) and reproduction in paths and accept.parent in paths
+ assert all(p.parent==I and p.name.startswith('through285')for p in paths)
+-assert deferred and all(p.is_absolute()for p in deferred)
++assert len(deferred)==1 and all(p.is_absolute() for p in deferred)
++assert all(p.parent in (B,I) and 'ordinary' in p.name and 'inventory' in p.name and p.name.endswith('caller') for p in deferred)
+ assert set(paths)=={p for p in I.iterdir()if p.name.startswith('through285') and p!=I/'through285-ordinary-bank-inventory' and p not in deferred}
+ O.mkdir()
+ with (O/'bindings.json').open('xb')as out:out.write(raw)

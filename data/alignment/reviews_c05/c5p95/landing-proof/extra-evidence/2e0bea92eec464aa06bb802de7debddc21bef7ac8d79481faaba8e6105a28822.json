@@ -1,0 +1,93 @@
+[
+  {
+    "version": "prior",
+    "owner": "inputs/prior-config_contract.py",
+    "function": "pinned",
+    "full_source": "def pinned(ref):\n assert set(ref)=={'path','bytes','sha256'}\n p=Path(ref['path']);assert p.is_absolute() and p.is_file()\n assert type(ref['bytes'])is int and ref['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',ref['sha256'])\n raw=p.read_bytes();assert len(raw)==ref['bytes'] and hashlib.sha256(raw).hexdigest()==ref['sha256']\n assert p.read_bytes()==raw\n return raw\n",
+    "sha256": "18f3c84efea4ed7ba0df0733c05e93663e93c77e647b1ee99be96d4477fec0c6"
+  },
+  {
+    "version": "prior",
+    "owner": "inputs/prior-verify_reconciliation.py",
+    "function": "read",
+    "full_source": "def read(p):return json.loads(Path(p).read_bytes())\n",
+    "sha256": "783b63f9f164ed5a6c4d24e209c2429966495c7b20c37ba5fdf2cbe37b7db7a1"
+  },
+  {
+    "version": "prior",
+    "owner": "inputs/prior-verify_reconciliation.py",
+    "function": "bp",
+    "full_source": "def bp(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n",
+    "sha256": "131c4411ccc43c399863b3959c8966e9d7f55211fc41c6812cca0591e085b8b9"
+  },
+  {
+    "version": "prior",
+    "owner": "inputs/prior-verify_reconciliation.py",
+    "function": "pin",
+    "full_source": "def pin(p):return bp(Path(p).read_bytes())\n",
+    "sha256": "e99da4f65666cd261ac7e9076121af836ef875c8b04ad7e068dc26bd8ecfc551"
+  },
+  {
+    "version": "prior",
+    "owner": "inputs/prior-verify_reconciliation.py",
+    "function": "check",
+    "full_source": "def check(p,r):assert pin(p)=={k:r[k] for k in ('bytes','sha256')},str(p)\n",
+    "sha256": "6d7e37b61dd501da1cbb56348f26820b92fb4c10ebf718b15af8dc7a06685d84"
+  },
+  {
+    "version": "prior",
+    "owner": "inputs/prior-verify_reconciliation.py",
+    "function": "frozen",
+    "full_source": "def frozen(d):\n  f=read(d/'freeze.json')['files'];items=f.items() if isinstance(f,dict) else [(r['path'],r) for r in f];expected={}\n  for n,r in items:\n   p=Path(n);n=str(p.relative_to(d)) if p.is_absolute() else n\n   assert not Path(n).is_absolute() and '..' not in Path(n).parts and n not in expected\n   expected[n]=r\n  assert set(expected)=={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}\n  for n,r in expected.items():check(d/n,r)\n  return dict(path=str(d),freeze=pin(d/'freeze.json'),files=len(expected))\n",
+    "sha256": "9e3f79ef456226be29d4116217a6414631710e09986bb038cb28db9ea525fe2d"
+  },
+  {
+    "version": "candidate",
+    "owner": "config_contract.py",
+    "function": "pinned",
+    "full_source": "def pinned(ref):\n assert set(ref)=={'path','bytes','sha256'}\n p=Path(ref['path']);assert p.is_absolute() and p.is_file()\n assert type(ref['bytes'])is int and ref['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',ref['sha256'])\n raw=p.read_bytes();assert len(raw)==ref['bytes'] and hashlib.sha256(raw).hexdigest()==ref['sha256']\n assert p.read_bytes()==raw\n return raw\n",
+    "sha256": "18f3c84efea4ed7ba0df0733c05e93663e93c77e647b1ee99be96d4477fec0c6"
+  },
+  {
+    "version": "candidate",
+    "owner": "config_contract.py",
+    "function": "original_freeze",
+    "full_source": "def original_freeze(row):\n \"\"\"Read the explicitly pinned original manifest in its genuine angle schema.\"\"\"\n d=Path(row['directory']);names={'tibetan':'freeze-manifest.json','english':'freeze.json'}\n assert d.is_absolute() and row['angle'] in names\n manifest=d/names[row['angle']];assert Path(row['freeze']['path'])==manifest\n value=json.loads(pinned(row['freeze']))\n if row['angle']=='tibetan':assert isinstance(value,list);files=value\n else:assert isinstance(value,dict) and isinstance(value['files'],list);files=value['files']\n expected={}\n for r in files:\n  assert isinstance(r,dict) and set(r)=={'path','bytes','sha256'} and isinstance(r['path'],str)\n  p=Path(r['path']);n=str(p.relative_to(d)) if p.is_absolute() else str(p)\n  assert n not in ('','.','..') and not Path(n).is_absolute() and '..' not in Path(n).parts and n not in expected\n  assert n!=manifest.name and (d/n).is_file() and (d/n).resolve().is_relative_to(d.resolve())\n  assert type(r['bytes'])is int and r['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',r['sha256'])\n  expected[n]=r\n return expected\n",
+    "sha256": "96cc80d540e3519eb9f0b8b17c42b8eb9e269c8df30f4010c9750ed19b03f692"
+  },
+  {
+    "version": "candidate",
+    "owner": "verify_reconciliation.py",
+    "function": "read",
+    "full_source": "def read(p):return json.loads(Path(p).read_bytes())\n",
+    "sha256": "783b63f9f164ed5a6c4d24e209c2429966495c7b20c37ba5fdf2cbe37b7db7a1"
+  },
+  {
+    "version": "candidate",
+    "owner": "verify_reconciliation.py",
+    "function": "bp",
+    "full_source": "def bp(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n",
+    "sha256": "131c4411ccc43c399863b3959c8966e9d7f55211fc41c6812cca0591e085b8b9"
+  },
+  {
+    "version": "candidate",
+    "owner": "verify_reconciliation.py",
+    "function": "pin",
+    "full_source": "def pin(p):return bp(Path(p).read_bytes())\n",
+    "sha256": "e99da4f65666cd261ac7e9076121af836ef875c8b04ad7e068dc26bd8ecfc551"
+  },
+  {
+    "version": "candidate",
+    "owner": "verify_reconciliation.py",
+    "function": "check",
+    "full_source": "def check(p,r):assert pin(p)=={k:r[k] for k in ('bytes','sha256')},str(p)\n",
+    "sha256": "6d7e37b61dd501da1cbb56348f26820b92fb4c10ebf718b15af8dc7a06685d84"
+  },
+  {
+    "version": "candidate",
+    "owner": "verify_reconciliation.py",
+    "function": "frozen",
+    "full_source": "def frozen(row):\n  d=Path(row['directory']);manifest=Path(row['freeze']['path'])\n  if 'angle' in row:f=original_freeze(row)\n  else:\n   assert manifest==d/'freeze.json'\n   f=json.loads(pinned(row['freeze']))['files'];assert isinstance(f,dict)\n  items=f.items();expected={}\n  for n,r in items:\n   p=Path(n);n=str(p.relative_to(d)) if p.is_absolute() else n\n   assert not Path(n).is_absolute() and '..' not in Path(n).parts and n not in expected\n   expected[n]=r\n  assert set(expected)=={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=manifest}\n  for n,r in expected.items():check(d/n,r)\n  return dict(path=str(d),freeze=pin(manifest),files=len(expected))\n",
+    "sha256": "f0e3fea21b1994ce905dde4a7b3ad0e65bc9a44e7abd2bd91fd0514ea94c3556"
+  }
+]

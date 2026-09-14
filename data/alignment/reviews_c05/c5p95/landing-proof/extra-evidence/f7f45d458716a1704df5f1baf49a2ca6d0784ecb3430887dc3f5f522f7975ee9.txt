@@ -1,0 +1,84 @@
+from pathlib import Path
+import ast,copy,hashlib,json
+O=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-query-shape-adapter');assert __debug__
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):
+    with (O/n).open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+functions={};extracted=[]
+for version,name in [('prior','inputs/prior-config_contract.py'),('candidate','config_contract.py')]:
+    src=(O/name).read_text();node=next(n for n in ast.parse(src).body if isinstance(n,ast.FunctionDef) and n.name=='bind_query');text=ast.get_source_segment(src,node)+'\n';env={};exec(compile(text,'EXTRACTED_PURE_FIXTURE_ONLY:'+name,'exec'),env);functions[version]=env['bind_query'];extracted.append({'version':version,'owner':name,'source':text,**pin(text.encode())})
+save('exact-extracted-bind-functions.json',extracted);results=[]
+def run(label,q,d,b,expected='reject',version='candidate',ref=None):
+    before=copy.deepcopy((q,d,b));exc=None;value=None
+    try:value=functions[version](q,d,b)
+    except Exception as e:exc={'type':type(e).__name__,'message':str(e)}
+    actual='reject' if exc else 'pass';assert actual==expected,(label,actual,exc);assert (q,d,b)==before
+    record={'label':label,'version':version,'expected':expected,'actual':actual,'return':value,'exception':exc,'binding':b,'query_keys':list(q),'query_pin':pin((json.dumps(q,ensure_ascii=False,sort_keys=True)+'\n').encode()),'source_reference':ref,'inputs_unchanged':True}
+    if ref is None:record.update(query=q,descriptor=d)
+    results.append(record)
+actual=json.loads((O/'actual-original-select-inventory.json').read_text());cache={}
+for row in actual:
+    file=row['descriptor']['copy']
+    if file not in cache:cache[file]=json.loads((O/file).read_text())
+    descriptor=cache[file];record=descriptor if row['source_index'] is None else descriptor['queries'][row['source_index']]
+    query={k:record[k] for k in ['sql','parameters','rows','count','row_count'] if k in record}
+    ref={'file':file,'source_index':row['source_index'],'source_pin':{k:row['descriptor'][k] for k in ['bytes','sha256']}}
+    run('complete genuine frozen SELECT',query,descriptor,row['binding'],'pass',ref=ref)
+    run('prior genuine original schema behavior',query,descriptor,row['binding'],'reject' if row['angle']=='tibetan' else 'pass','prior',ref)
+controls=json.loads((O/'separate-control-evidence.json').read_text())
+for row in controls:
+    descriptor=json.loads((O/row['descriptor']['copy']).read_text());r=row['full_original_control_record'];q={k:r[k] for k in ['sql','parameters','rows','row_count']}
+    run('actual PRAGMA remains rejected as lexical SELECT',q,descriptor,row['binding'],ref={'file':row['descriptor']['copy'],'source_index':row['source_index']})
+def fixture(kind,counts=None,sql='SELECT value FROM fixture WHERE key=?'):
+    counts={'row_count':1} if counts is None else counts
+    q={'sql':sql,'parameters':['key'],'rows':[{'value':'fixture'}],**counts}
+    if kind=='standalone':d=copy.deepcopy(q);b={'kind':'standalone'}
+    elif kind=='query_list':d=[copy.deepcopy(q)];b={'kind':kind,'index':0}
+    elif kind in ['query_container_params','query_list_params']:
+        record={'sql':sql,'params':['key'],'rows':copy.deepcopy(q['rows']),**counts};d={'database':'fixture','uri':'file:fixture?mode=ro','queries':[record]} if kind=='query_container_params' else [record];b={'kind':kind,'index':0}
+    elif kind=='hgm_results':
+        assert not counts;q['parameters']=['key','key'];d={'sql':sql,'parameters_per_term':'[term,term]','results':{'key':copy.deepcopy(q['rows'])}};b={'kind':kind,'term':'key'}
+    else:
+        assert kind in ['parameters-main','parameters-supplement'];record={'label':'fixture',**copy.deepcopy(q)}
+        d={'database':{'fixture':True},'uri':'file:fixture?mode=ro','query_only':True,'queries':[record]} if kind=='parameters-main' else {'uri':'file:fixture?mode=ro','query_only':True,'queries':[record],'master_original':'fixture','master_pin':{'bytes':0,'sha256':'0'*64},'full_master_records':[]};b={'kind':'query_container_parameters','index':0}
+    return q,d,b
+kinds=['standalone','query_list','query_container_params','query_list_params','hgm_results','parameters-main','parameters-supplement']
+for kind in kinds:
+    counts={} if kind=='hgm_results' else {'row_count':1}
+    q,d,b=fixture(kind,counts);run('valid supported '+kind,q,d,b,'pass')
+    for label,edit in [('wrong parameters',lambda q:q.update(parameters=['wrong'])),('wrong SQL',lambda q:q.update(sql='SELECT wrong FROM fixture')),('wrong rows',lambda q:q.update(rows=[])),('non-list parameters',lambda q:q.update(parameters='key')),('non-list rows',lambda q:q.update(rows={'value':'fixture'}))]:
+        a,c,e=copy.deepcopy((q,d,b));edit(a);run(kind+': '+label,a,c,e)
+    for sql in ['PRAGMA query_only','UPDATE fixture SET value=1','WITH c AS (SELECT 1) SELECT * FROM c','DELETE FROM fixture']:
+        a,c,e=fixture(kind,counts,sql);run(kind+': non-SELECT even when descriptor agrees',a,c,e)
+    a,c,e=copy.deepcopy((q,d,b));e['kind']='unrecognized';run(kind+': unknown binding',a,c,e)
+    a,c,e=copy.deepcopy((q,d,b));e['extra']=True;run(kind+': unexpected binding key',a,c,e)
+    for key in ['count','row_count']:
+        a,c,e=copy.deepcopy((q,d,b))
+        if key in a:a.pop(key);run(kind+': missing actual '+key,a,c,e)
+        else:a[key]=1;run(kind+': invented '+key,a,c,e)
+    if 'index' in b:
+        for index in [-1,1,True,'0',None]:
+            a,c,e=copy.deepcopy((q,d,b));e['index']=index;run(kind+': invalid index '+repr(index),a,c,e)
+        a,c,e=copy.deepcopy((q,d,b));e.pop('index');run(kind+': missing index',a,c,e)
+for kind in ['standalone','query_list','query_container_params','query_list_params']:
+    for counts in [{},{'count':1},{'row_count':1},{'count':1,'row_count':1}]:
+        q,d,b=fixture(kind,counts);run(kind+': preserve exact legacy count-key set '+str(list(counts)),q,d,b,'pass')
+        for key in counts:
+            for invalid in [True,-1,0,2,1.0,'1',None]:
+                a,c,e=copy.deepcopy((q,d,b));a[key]=invalid;run(kind+': query '+key+' invalid '+repr(invalid),a,c,e)
+                bad={**counts,key:invalid};a,c,e=fixture(kind,bad);run(kind+': matching source/query '+key+' invalid '+repr(invalid),a,c,e)
+for kind in ['parameters-main','parameters-supplement']:
+    for label,edit in [('unknown outer field',lambda d:d.update(extra=True)),('missing query_only',lambda d:d.pop('query_only')),('query_only integer',lambda d:d.update(query_only=1)),('query_only false',lambda d:d.update(query_only=False)),('queries not list',lambda d:d.update(queries={})),('record missing row_count',lambda d:d['queries'][0].pop('row_count')),('record invented count',lambda d:d['queries'][0].update(count=1)),('record uses params',lambda d:d['queries'][0].update(params=d['queries'][0].pop('parameters'))),('record missing label',lambda d:d['queries'][0].pop('label'))]:
+        q,d,b=fixture(kind);edit(d);run(kind+': '+label,q,d,b)
+    for bad in [True,-1,0,2,1.0,'1',None]:
+        q,d,b=fixture(kind,{'row_count':bad});run(kind+': invalid row_count '+repr(bad),q,d,b)
+q,d,b=fixture('standalone');q['row_count']=999;run('prior row_count defect demonstrated without SQL',q,d,b,'pass','prior');run('candidate rejects that same row_count mismatch',q,d,b)
+q,d,b=fixture('parameters-main');q['count']=q.pop('row_count');run('normalized count-only replay cannot masquerade as row_count source',q,d,b);q['row_count']=q.pop('count');run('explicit new projection restores actual count-key presence',q,d,b,'pass')
+# All other source bytes remain exactly conserved; runtime stays unchanged.
+old=(O/'inputs/prior-config_contract.py').read_text();new=(O/'config_contract.py').read_text();restored=new
+for row in reversed(json.loads((O/'replacement-map.json').read_text())):assert restored.count(row['new'])==1;restored=restored.replace(row['new'],row['old'])
+assert restored==old and ast.dump(ast.parse(restored))==ast.dump(ast.parse(old));assert (O/'verify_reconciliation.py').read_bytes()==(O/'inputs/prior-verify_reconciliation.py').read_bytes()
+for row in json.loads((O/'original-to-copy-manifest.json').read_text()):assert pin(Path(row['original']).read_bytes())==pin((O/row['copy']).read_bytes())=={k:row[k] for k in ['bytes','sha256']}
+save('focused-control-results.json',results)
+proof={'status':'PASS_SOURCE_EXTRACTED_DESCRIPTOR_CONTROLS','controls':len(results),'expected_passes':sum(r['actual']=='pass' for r in results),'expected_rejections':sum(r['actual']=='reject' for r in results),'candidate_genuine_original_SELECT_acceptances':140,'actual_PRAGMA_rejections':1,'input_mutation':False,'runtime_byte_identical':True,'whole_source_inverse_and_AST_exact':True,'all_original_and_base_source_copies_unchanged':True,'candidate_module_imported':False,'actual_config_validation_or_SQL_Git_generator_builder_suite_calls':False,'scope':'Only the exact AST-extracted bind_query functions evaluated immutable original descriptor objects and synthetic fixtures. No SQL statements were executed.'}
+save('focused-controls-proof.json',proof);print(json.dumps(proof))

@@ -1,0 +1,101 @@
+import datetime
+import gzip
+import hashlib
+import json
+import re
+from pathlib import Path
+import sqlite3
+import sys
+
+assert __debug__ and sys.dont_write_bytecode
+P=Path(__file__).resolve().parent
+B=P.parent
+R=B.parent.parent
+W=R/'campaign-worktree'
+D=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP')
+assert datetime.datetime.now(datetime.timezone.utc) < datetime.datetime(2026,9,15,13,tzinfo=datetime.timezone.utc)
+def dump(name,value):
+    path=P/name
+    path.parent.mkdir(parents=True,exist_ok=True)
+    assert not path.exists(),path
+    path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+def pin(path):
+    raw=path.read_bytes()
+    return {'path':str(path),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+copies=[]
+def copy(path):
+    raw=path.read_bytes()
+    h=hashlib.sha256(raw).hexdigest()
+    dest=P/'original-evidence'/h
+    if not dest.exists():dest.write_bytes(raw)
+    assert dest.read_bytes()==raw
+    copies.append({'original_path':str(path),'resolved_original_path':str(path.resolve()),'copy_path':str(dest),'bytes':len(raw),'sha256':h})
+    if path.resolve()!=path:
+        actual=path.resolve()
+        assert actual.read_bytes()==raw
+        copies.append({'original_path':str(actual),'resolved_original_path':str(actual),'copy_path':str(dest),'bytes':len(raw),'sha256':h})
+    return copies[-1]
+paths=[W/'AGENTS.md',W/'docs/ALIGNMENT_LAYER_SPEC.md',W/'docs/NEVER_BANK_A_FALSEHOOD.md',W/'docs/alignment_briefs/RECONCILE_BRIEF.md',W/'docs/alignment_briefs/REFUTE_BRIEF.md',R/'campaign-artifacts/semantic-review-protocol.md',R/'campaign-artifacts/THROUGHPUT_REFINEMENT.md']
+paths.extend(B/n for n in ['baseline.json','source.json','context.json','preparation-freeze.json'])
+paths.extend([W/'data/hgm_dictionary_v27_2.json.gz',W/'data/full_parallel_corpus_v32.json.gz',D/'Handoff/release/hgm_dictionary_v27_2.json.gz',D/'Handoff/data/full_parallel_corpus_v32.json.gz'])
+physical=D/'To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt'
+paths.append(physical)
+for path in paths:
+    if path.is_file():copy(path)
+dump('original-copy-manifest.json',copies)
+rows=json.loads((P/'queries/02-context.json').read_text())['rows']
+phys=physical.read_bytes()
+txt=phys.decode('latin-1')
+assert txt.encode('latin-1')==phys
+physical_matches=[]
+for row in rows:
+    for field in ['acip','english']:
+        target=row[field]
+        expr=r'\s+'.join(re.escape(token) for token in target.split())
+        matches=list(re.finditer(expr,txt))
+        result={'seq':row['seq'],'field':field,'original_text':target,'matching_method':'literal non-whitespace tokens with one-or-more whitespace between; byte-preserving Latin-1 view (not an encoding attribution)','regex':expr,'count':len(matches),'matches':[]}
+        for m in matches:
+            assert ' '.join(m.group(0).split())==' '.join(target.split())
+            result['matches'].append({'byte_range':[m.start(),m.end()],'line_range':[txt.count('\n',0,m.start())+1,txt.count('\n',0,m.end())+1],'raw_sha256':hashlib.sha256(phys[m.start():m.end()]).hexdigest(),'raw_text':m.group(0)})
+        physical_matches.append(result)
+dump('physical-extents.json',physical_matches)
+assert all(x['count']==1 for x in physical_matches),[(x['seq'],x['field'],x['count']) for x in physical_matches if x['count']!=1]
+extent=[min(x['matches'][0]['byte_range'][0] for x in physical_matches),max(x['matches'][0]['byte_range'][1] for x in physical_matches)]
+(P/'physical-context277-291.bin').write_bytes(phys[extent[0]:extent[1]])
+dump('physical-context-pin.json',{'physical':pin(physical),'byte_range':extent,'excerpt':pin(P/'physical-context277-291.bin'),'encoding_note':'Lossless Latin-1 for byte inspection; no claim that original publication encoding is Latin-1. Full original bytes preserved.'})
+archive_shapes=[]
+archive_objects={}
+for path in paths:
+    if path.is_file() and path.name.endswith('.json.gz'):
+        obj=json.loads(gzip.decompress(path.read_bytes()))
+        archive_objects[path.name]=obj
+        archive_shapes.append({'path':str(path),'pin':pin(path),'type':type(obj).__name__,'keys':list(obj) if isinstance(obj,dict) else None,'count':len(obj),'list_counts':{k:len(v) for k,v in obj.items() if isinstance(v,list)} if isinstance(obj,dict) else None})
+dump('archive-shapes.json',archive_shapes)
+db=W/'build/hgm_spine_v27_2.db'
+c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True)
+c.row_factory=sqlite3.Row
+c.execute('PRAGMA query_only=ON')
+assert c.execute('PRAGMA query_only').fetchone()[0]==1
+qindex=[]
+def query(name,sql,params):
+    result=[dict(x) for x in c.execute(sql,params)]
+    dump('queries/'+name+'.json',{'name':name,'database':str(db),'uri':db.resolve().as_uri()+'?mode=ro','connection_initialization_sql':'PRAGMA query_only=ON','sql':sql,'parameters':params,'count':len(result),'rows':result})
+    qindex.append({'name':name,'count':len(result),'path':str(P/'queries'/f'{name}.json')})
+    return result
+terms=['skyon med','yan lag','lnga','skyes bu','cha shas','bya ba','byas','\'jog','dgos','snga ma','mtshungs','rnag','khrag','rnag khrag','sogs','dngos po','brlan','gsher','phor pa','gang','snang','steng','snang tshul','mi \'dra ba','kha cig','phan tshun','go sa','\'gog pa','las can','\'gro ba','chu','cig car','bltas','tshad grub','tshad ma','srid','khas blangs']
+dump('independent-query-design.json',{'purpose':'Source preparation only: glossary and corpus evidence selected directly from C05:283–285 originals, without access to final proposals or reconciliation. No correspondence verdicts.','exact_lexical_terms':terms,'corpus_phrases':[]})
+lex=[]
+for index,term in enumerate(terms):
+    found=query(f'{index+3:02d}-entry','SELECT * FROM entries WHERE wylie = ? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie = ?) ORDER BY id',[term,term])
+    lex.append({'term':term,'count':len(found),'rows':[{'id':r['id'],'wylie':r['wylie'],'hgm_gloss':r['hgm_gloss'],'tier':r['tier'],'hgm_source':r['hgm_source'],'status':r['status']} for r in found]})
+corpus_terms=[('wylie','phan tshun go sa'),('wylie','tshad grub'),('wylie','brlan zhing gsher ba'),('wylie',"'jog dgos"),('wylie','las can gyi'),('wylie',"snang tshul mi 'dra ba"),('english','five protuberances'),('english','block each other from entering the space')]
+corp=[]
+for index,(field,term) in enumerate(corpus_terms):
+    assert field in ['wylie','english']
+    found=query(f'{index+50:02d}-corpus',f'SELECT * FROM corpus_segments WHERE {field} LIKE ? ORDER BY course, seq',['%'+term+'%'])
+    corp.append({'field':field,'term':term,'count':len(found),'citations':[f"{r['course']}:{r['seq']}" for r in found]})
+dump('hgm-summary.json',lex)
+dump('corpus-summary.json',corp)
+dump('query-index02.json',qindex)
+dump('source-proof02.json',{'status':'SOURCE_PREPARATION_ONLY','recorded_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer_role':'fresh Codex independent semantic reviewer; source preparation only','producer_model':'GPT-6 family per inherited developer identity; exact runtime model identifier not exposed','baseline':'fb9182dc6fca2230be3bc5169ba1288a22430280','baseline_nine_match':True,'database':pin(db),'database_query_only':True,'context_count':15,'source_count':3,'physical_field_matches':len(physical_matches),'scope_exposure':'Initial metadata read of originals-complete.json exposed author span/null counts and path/hash pins only. Author and reconciler specs/reports, root-review-targets and comparison/review judgments have not been read. Root acknowledged the limited metadata exposure on 2026-09-14; source-only independence retained. No semantic verdict or final spec created.','preserved_failed_attempt':'prepare01.py and calls/prepare01: UTF-8 decode failed on original byte 0xb8 at byte 32644; retry uses byte-preserving Latin-1 for inspection without changing original.'})
+print(json.dumps({'archive_shapes':archive_shapes,'physical_field_matches':len(physical_matches),'physical_extent':extent,'hgm_summary':lex,'corpus_summary':corp},ensure_ascii=False,indent=2))

@@ -1,0 +1,11 @@
+--- run-generator-ro.py.txt
++++ run-generator-ro-v2.py.txt
+@@ -4,7 +4,7 @@
+ assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and os.environ.get('PYTHONOPTIMIZE')=='0'
+ auditpath=Path(sys.argv[1]);assert any(auditpath.is_relative_to(A/str(s)) for s in [283,284,285]);assert not auditpath.exists()
+ generator=W/'tools/gen_alignment_page.py';spine=(W/'build/hgm_spine_v27_2.db').resolve();uri=spine.as_uri()+'?mode=ro'
+-sources=[generator,W/'tools/build_alignment_layer.py',W/'tools/hgm_tools.py']
++sources=[generator,W/'tools/build_alignment_layer.py',W/'engines/hgm_tools.py']
+ def pin(p):
+     b=p.read_bytes();return {'original':str(p),'resolved':str(p.resolve()),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+ before=[pin(p) for p in sources];db_before=pin(spine);connect_original=sqlite3.connect;old_profile=sys.getprofile();connections=[];queries=[];resolutions=[]

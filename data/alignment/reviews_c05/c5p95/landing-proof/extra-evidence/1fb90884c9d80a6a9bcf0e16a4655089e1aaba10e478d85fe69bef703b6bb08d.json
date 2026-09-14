@@ -1,0 +1,26 @@
+[
+  {
+    "old": "composer=B/'compose-ordinary-bank-inventory-root.py'",
+    "new": "composer=B/'compose-ordinary-bank-inventory-with-final-route-root.py'",
+    "count": 1,
+    "after_positions": [
+      2595
+    ]
+  },
+  {
+    "old": "{'bytes': 9114, 'sha256': '5473a64d05f490092eb375a25ee26ec3bebd04f65930aa8088dc94c6ab89ae18'}",
+    "new": "{'bytes': 11816, 'sha256': '406154d3c40bf31ffa10ce19c66c551170fb99b9d0ee0b3f2d14b318cb928cb3'}",
+    "count": 1,
+    "after_positions": [
+      2835
+    ]
+  },
+  {
+    "old": "assert any(rec.get('role')=='code_review' and Path(rec['directory'])!=I/'through285-ordinary-banking-preparation' for rec in packages)\n",
+    "new": "assert any(rec.get('role')=='code_review' and Path(rec['directory'])!=I/'through285-ordinary-banking-preparation' for rec in packages)\nroute_preparation=I/'through285-ordinary-final-banker-route-preparation'\nassert any(rec.get('role')=='source_preparation' and Path(rec['directory'])==route_preparation for rec in packages)\nassert any(rec.get('role')=='source_preparation' and Path(rec['directory'])==I/'through285-final-banking-stage-preparation' for rec in packages)\nassert any(rec.get('role')=='code_review' and rec.get('reviews_source_preparation')==str(route_preparation) and Path(rec['directory']) not in (route_preparation,I/'through285-ordinary-banking-preparation',I/'through285-final-banking-stage-preparation') for rec in packages)\n",
+    "count": 1,
+    "after_positions": [
+      1755
+    ]
+  }
+]

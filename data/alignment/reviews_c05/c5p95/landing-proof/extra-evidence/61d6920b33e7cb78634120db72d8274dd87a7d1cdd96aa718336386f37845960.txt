@@ -1,0 +1,54 @@
+"""Independent source/file review only; never import or execute a candidate."""
+from pathlib import Path
+import ast,difflib,hashlib,json,os
+O=Path(__file__).resolve().parent;I=O.parent;A=I.parent;B=A/'C05-280-282';P=I/'through282-explicit-stage-source-preparation';C=I/'through282-explicit-stage-source-preparation-caller'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(n,x):
+ with (O/n).open('x') as f:json.dump(x,f,indent=2);f.write('\n')
+maps=[]
+def retain(p,n):
+ raw=p.read_bytes();d=O/'inputs'/n;d.parent.mkdir(parents=True,exist_ok=True)
+ with d.open('xb') as f:f.write(raw)
+ assert raw==p.read_bytes()==d.read_bytes();maps.append(dict(original=str(p),resolved=str(p.resolve()),copy=str(d.relative_to(O)),**pin(raw)));return raw
+f=json.loads((P/'freeze.json').read_bytes());assert isinstance(f['files'],dict)
+assert {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+assert len(f['files'])==f['file_count'] and sum(x['bytes'] for x in f['files'].values())==f['total_bytes']
+for n in list(f['files'])+['freeze.json']:
+ raw=retain(P/n,'preparation/'+n)
+ if n!='freeze.json':assert pin(raw)==f['files'][n]
+for p in sorted(C.iterdir()):
+ if p.is_file():retain(p,'caller/'+p.name)
+retain(I/'through282-prepare-stage-source-root.py','source-preparation-producer.py')
+source_pairs=json.loads((P/'input-copy-map.json').read_bytes())
+for r in source_pairs:
+ raw=Path(r['original']).read_bytes();assert raw==(P/r['copy']).read_bytes() and pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+old=(P/'complete-prior.py.txt').read_text();prior=A/'C05-277-279/prepare-explicit-stage-inputs.py';assert prior.read_bytes()==old.encode();retain(prior,'original-prior.py.txt')
+new=(P/'prepare-explicit-stage-inputs.py').read_text();recipe=json.loads((P/'changes.json').read_bytes());value=old
+for c in recipe:assert value.count(c['old'])==c['count'];value=value.replace(c['old'],c['new'])
+assert value==new
+for c in reversed(recipe):assert value.count(c['new'])==c['count'];value=value.replace(c['new'],c['old'])
+assert value==old
+expected=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile=str(prior),tofile='prepare-explicit-stage-inputs.py'));assert expected==(P/'complete.diff').read_text()
+(O/'independent-inverse.diff').write_text(''.join(difflib.unified_diff(new.splitlines(True),old.splitlines(True),fromfile='current.py',tofile='prior.py')))
+ot=ast.parse(old);nt=ast.parse(new)
+funcs=lambda t:{n.name:ast.dump(n,include_attributes=False) for n in t.body if isinstance(n,ast.FunctionDef)}
+assert funcs(ot)==funcs(nt)
+# Apart from reviewed page/through labels the entire bank/tree/index/pathspec tail is exact.
+start="for phase,name in [('ordinary'"
+assert old[old.index(start):].replace('through279','through282')==new[new.index(start):]
+assert "cmd=['git','diff','--cached','--name-only','-z']" in new
+assert len([n for n in ast.walk(nt) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and isinstance(n.func.value,ast.Name) and n.func.value.id=='subprocess'])==1
+semantic=json.loads((B/'semantic-review/freeze.json').read_bytes());meta=json.loads((B/'semantic-review/review.json').read_bytes());payload=json.loads((B/'landing/staged-payload-manifest.json').read_bytes())
+assert semantic['status']=='FROZEN' and semantic['verdict']=='APPROVE' and semantic['file_count']==len(semantic['files'])==871
+assert pin((B/'semantic-review/freeze.json').read_bytes())['sha256']=='5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
+assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS' and meta['open_findings']==[]
+assert len(payload['files'])==len({r['path'] for r in payload['files']})==13
+assert not ({r['path'] for r in payload['files']} & {'AGENTS.md','docs/superpowers/plans/2026-09-12-aci-alignment-campaign.md','ALIGNMENT_LAYER_SPEC.md'})
+c=json.loads((C/'command.json').read_bytes());e=json.loads((C/'execution.json').read_bytes());assert c['argv']==e['argv'] and c['cwd']==e['cwd'] and e['exit']==0
+assert Path(e['argv'][-1])==I/'through282-prepare-stage-source-root.py'
+for n in ['stdout','stderr']:assert pin((C/(n+'.bin')).read_bytes())==dict(bytes=e[n+'_bytes'],sha256=e[n+'_sha256'])
+assert (C/'stdin.bin').read_bytes()==(C/'stderr.bin').read_bytes()==b'' and (C/'exit.txt').read_bytes()==b'0\n'
+for n,x in f['files'].items():assert pin((P/n).read_bytes())==x
+save('original-to-copy-manifest.json',maps)
+save('proof.json',dict(status='PASS_INDEPENDENT_STATIC_SOURCE_REVIEW',source=pin(new.encode()),source_freeze=pin((P/'freeze.json').read_bytes()),full_preparation_files=len(f['files']),review_copies=len(maps),full_input_source_pairs=len(source_pairs),full_recipe_forward_inverse_exact=True,complete_diff_exact=True,all_helper_function_ast_exact=True,bank_tree_index_and_pathspec_tail_exact_except_through_label=True,actual_semantic_file_count=871,actual_payload_count=13,producer_caller_exit=0,candidate_executions=0,git_sql_build_test_bank_stage_invocations=0))
+print(json.dumps(dict(status='PASS_SOURCE_ONLY_REVIEW',copies=len(maps),pairs=len(source_pairs),source=pin(new.encode()))))

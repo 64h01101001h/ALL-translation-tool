@@ -1,0 +1,71 @@
+--- current/config_contract-complete
++++ prior/config_contract-complete
+@@ -39,15 +39,6 @@
+  elif kind=='query_list':
+   assert set(binding)=={'kind','index'} and isinstance(descriptor,list)
+   i=binding['index'];assert type(i)is int and 0<=i<len(descriptor);source=descriptor[i]
+- elif kind=='query_container_parameters':
+-  assert set(binding)=={'kind','index'} and isinstance(descriptor,dict)
+-  assert set(descriptor) in ({'database','uri','query_only','queries'},
+-   {'uri','query_only','queries','master_original','master_pin','full_master_records'})
+-  assert descriptor['query_only'] is True and isinstance(descriptor['queries'],list)
+-  i=binding['index'];assert type(i)is int and 0<=i<len(descriptor['queries'])
+-  source=descriptor['queries'][i]
+-  assert isinstance(source,dict) and set(source)=={'label','sql','parameters','row_count','rows'}
+-  assert isinstance(source['label'],str)
+  elif kind in ('query_container_params','query_list_params'):
+   assert set(binding)=={'kind','index'}
+   if kind=='query_container_params':
+@@ -59,8 +50,7 @@
+   original=records[i];assert isinstance(original,dict) and 'parameters' not in original
+   assert isinstance(original['params'],list)
+   source={'sql':original['sql'],'parameters':original['params'],'rows':original['rows']}
+-  for count_key in ('count','row_count'):
+-   if count_key in original:source[count_key]=original[count_key]
++  if 'count'in original:source['count']=original['count']
+  elif kind=='hgm_results':
+   assert set(binding)=={'kind','term'} and isinstance(descriptor,dict)
+   assert descriptor['parameters_per_term']=='[term,term]'
+@@ -71,29 +61,11 @@
+  for key in ['sql','parameters','rows']:assert query[key]==source[key],key
+  assert isinstance(query['sql'],str) and query['sql'].lstrip().upper().startswith('SELECT ')
+  assert isinstance(query['parameters'],list)and isinstance(query['rows'],list)
+- for count_key in ('count','row_count'):
+-  assert (count_key in query)==(count_key in source),'Count presence differs from the actual original descriptor: '+count_key
+-  if count_key in source:
+-   assert type(source[count_key])is int and type(query[count_key])is int
+-   assert source[count_key]>=0 and query[count_key]>=0
+-   assert query[count_key]==source[count_key]==len(query['rows'])
++ assert ('count'in query)==('count'in source),'Count presence differs from the actual original descriptor'
++ if 'count'in source:
++  assert type(source['count'])is int and type(query['count'])is int
++  assert query['count']==source['count']==len(query['rows'])
+  return len(query['rows'])
+-
+-def proof_counts(report,seq):
+- assert isinstance(report,dict) and type(seq)is int and seq>0
+- assert type(report['seq'])is int and report['seq']==seq
+- keys=('spans','nulls','d5_nonnull')
+- if 'counts' in report:
+-  assert isinstance(report['counts'],dict) and not any(k in report for k in keys)
+-  source=report['counts']
+- else:
+-  assert report['status']=='PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION'
+-  source=report
+- counts={k:source[k] for k in keys}
+- assert all(type(n)is int for n in counts.values())
+- assert counts['spans']>0 and 0<=counts['nulls']<=counts['spans']
+- assert 0<=counts['d5_nonnull']<=counts['spans']-counts['nulls']
+- return counts
+ 
+ def original_freeze(row):
+  """Read the explicitly pinned original manifest in its genuine angle schema."""
+@@ -147,7 +119,7 @@
+   assert set(row['files'])==set(roles)
+   for k,filename in roles.items():
+    r=row['files'][k];assert Path(r['path'])==d/filename;pinned(r);assert {j:r[j]for j in ['bytes','sha256']}==f['files'][filename]
+-  report=json.loads(pinned(row['files']['proof']));assert row['counts']==proof_counts(report,row['seq'])
++  report=json.loads(pinned(row['files']['proof']));assert row['counts']=={k:report['counts'][k]for k in totals}
+   spec=json.loads(pinned(row['files']['spec']));assert spec['course']==c['course']and len(spec['segments'])==1
+   part=spec['segments'][0];sp=part['spans'];assert part['seq']==row['seq']and len(sp)==len({x['id']for x in sp})==row['counts']['spans']
+   assert sum(x['eng']is None for x in sp)==row['counts']['nulls']and sum(x['d']==5 and x['eng']is not None for x in sp)==row['counts']['d5_nonnull']

@@ -1,0 +1,15 @@
+{
+  "reason": "Actual semantic-schema package files LIST; retain originals and existing exact partial copies.",
+  "changes": [
+    {
+      "before": " with p.open('xb') as f:f.write(b)",
+      "after": " if p.exists():assert p.read_bytes()==b\n else:\n  with p.open('xb') as f:f.write(b)"
+    },
+    {
+      "before": " d=I/rel;f=j(d/'freeze.json');assert isinstance(f['files'],dict)\n assert {str(p.relative_to(d)) for p in d.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}\n for n,x in f['files'].items():assert pin(raw(d/n))==x",
+      "after": " d=I/rel;f=j(d/'freeze.json');entries=f['files']\n if rel=='through285-semantic-schema-helper-preparation':\n  assert isinstance(entries,list) and all(set(x)=={'path','bytes','sha256'} for x in entries)\n  assert len({x['path'] for x in entries})==len(entries)\n  entries={x['path']:{k:x[k] for k in ('bytes','sha256')} for x in entries}\n else:assert isinstance(entries,dict)\n assert {str(p.relative_to(d)) for p in d.rglob('*') if p.is_file()}==set(entries)|{'freeze.json'}\n for n,x in entries.items():assert pin(raw(d/n))==x"
+    }
+  ],
+  "first_actual_caller": "source-collection-caller",
+  "next_actual_caller": "source-collection-v2-caller"
+}

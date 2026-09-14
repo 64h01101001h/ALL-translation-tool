@@ -1,0 +1,35 @@
+{
+  "original_query_file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-source-preparation/queries/13-entry.json",
+  "original_query": {
+    "bytes": 3938,
+    "sha256": "9c7f9d454bdad363b86e260da4b6cda52776e725a40e1bf8d50c95f5b7ae79fb"
+  },
+  "sql": "SELECT * FROM entries WHERE wylie = ? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie = ?) ORDER BY id",
+  "parameters": [
+    "mtshungs",
+    "mtshungs"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 15769,
+      "wylie": "mtshungs",
+      "tibetan": "མཚུངས",
+      "tibetan_source": null,
+      "acip": "MTSUNGS",
+      "pronunciation": "tsung",
+      "pronunciation_source": null,
+      "sanskrit": "{C,L}sama; {MSA,MV}samāna; {MSA}samāna-bhāva; {C}tulya; {MV}sādharmya; {LC}iva; {LC}anantatulya; {LC}kāṣṭhatulya; {LC}nibha; {LC}pratima; {LC}sadṛśa; {LC}sādṛśya; {LC}anukāra; {LC}!!ābha; {LC}!!upama; {LC}evam; {LC}tulā; {LC}pratinidhi; {LC}māgha; {LC}yathā; {LC}!!vat; {LC}saṃkāśa; {LC}saṃnibha; {LC}samāḥ; {LC}sākṣāt; {LC}sāmya; {LC}sodara",
+      "hopkins_english": "similar; like; equal",
+      "hgm_gloss": "[\"equally\", \"parallel\", \"we could just as well\", \"same\", \"the same\", \"the same thing\", \"just the same\", \"the same as\", \"would be just the same\", \"equivalent\", \"exactly the same\", \"identical\", \"exactly the same!\", \"similar\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+      "corpus_n_segments": 415,
+      "raw": "{\"tibetan\": \"མཚུངས\", \"wylie\": \"mtshungs\", \"wylie_variants\": [\"mtshungs\"], \"tenses\": null, \"sanskrit\": \"{C,L}sama; {MSA,MV}samāna; {MSA}samāna-bhāva; {C}tulya; {MV}sādharmya; {LC}iva; {LC}anantatulya; {LC}kāṣṭhatulya; {LC}nibha; {LC}pratima; {LC}sadṛśa; {LC}sādṛśya; {LC}anukāra; {LC}!!ābha; {LC}!!upama; {LC}evam; {LC}tulā; {LC}pratinidhi; {LC}māgha; {LC}yathā; {LC}!!vat; {LC}saṃkāśa; {LC}saṃnibha; {LC}samāḥ; {LC}sākṣāt; {LC}sāmya; {LC}sodara\", \"hopkins_english\": \"similar; like; equal\", \"hgm_gloss\": [\"equally\", \"parallel\", \"we could just as well\", \"same\", \"the same\", \"the same thing\", \"just the same\", \"the same as\", \"would be just the same\", \"equivalent\", \"exactly the same\", \"identical\", \"exactly the same!\", \"similar\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"tsung\", \"acip\": \"MTSUNGS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 415}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

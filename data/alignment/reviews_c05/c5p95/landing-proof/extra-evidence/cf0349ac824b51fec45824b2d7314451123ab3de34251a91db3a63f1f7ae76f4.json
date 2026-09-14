@@ -1,0 +1,35 @@
+{
+  "original_query_file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-source-preparation/queries/20-entry.json",
+  "original_query": {
+    "bytes": 2073,
+    "sha256": "01a00a60eb59a4bd882802cb0b6ade4857ad15c55013352d6e9f5a1d3d444de0"
+  },
+  "sql": "SELECT * FROM entries WHERE wylie = ? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie = ?) ORDER BY id",
+  "parameters": [
+    "gsher",
+    "gsher"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 25553,
+      "wylie": "gsher",
+      "tibetan": "གཤེར",
+      "tibetan_source": null,
+      "acip": "GSHER",
+      "pronunciation": "sher",
+      "pronunciation_source": null,
+      "sanskrit": "{LC}saṃsveda; {LC}anāyāsakṛta; {LC}ārdra; {LC}ardraka; {LC}utkledin; {LC}drava; {LC}stema",
+      "hopkins_english": null,
+      "hgm_gloss": "[\"moisture\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested (not in Great Dictionary)",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C04\", \"C05\", \"C06\", \"C08\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"MB2\", \"P6\", \"P7\", \"P9\", \"SPF\", \"Sunlight\", \"TCS10\", \"TCS13\", \"TCS15\", \"TCS16Reading\"]",
+      "corpus_n_segments": 92,
+      "raw": "{\"tibetan\": \"གཤེར\", \"wylie\": \"gsher\", \"wylie_variants\": [\"gsher\"], \"tenses\": null, \"sanskrit\": \"{LC}saṃsveda; {LC}anāyāsakṛta; {LC}ārdra; {LC}ardraka; {LC}utkledin; {LC}drava; {LC}stema\", \"hopkins_english\": null, \"hgm_gloss\": [\"moisture\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"sher\", \"acip\": \"GSHER\", \"corpus_occurrences\": {\"courses\": [\"C04\", \"C05\", \"C06\", \"C08\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"MB2\", \"P6\", \"P7\", \"P9\", \"SPF\", \"Sunlight\", \"TCS10\", \"TCS13\", \"TCS15\", \"TCS16Reading\"], \"n_segments\": 92}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

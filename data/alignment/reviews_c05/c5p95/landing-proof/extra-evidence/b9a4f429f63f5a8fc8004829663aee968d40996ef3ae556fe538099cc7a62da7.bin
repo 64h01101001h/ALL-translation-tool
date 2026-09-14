@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-config-preparation/construct-current-config.py.txt", line 180, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-config-preparation/construct-current-config.py.txt", line 160, in main
+    summary=module.validate_config(config)
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-query-shape-adapter/config_contract.py", line 175, in validate_config
+    assert src['path']in copied and {k:src[k]for k in ['bytes','sha256']}=={k:copied[src['path']][k]for k in ['bytes','sha256']}
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

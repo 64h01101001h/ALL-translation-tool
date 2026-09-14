@@ -1,0 +1,93 @@
+from pathlib import Path
+import ast,collections,difflib,hashlib,json,os
+assert __debug__
+O=Path(__file__).resolve().parent;I=O.parent;A=I.parent;B=A/'C05-283-285';W=A.parent/'campaign-worktree';P=I/'through285-final-banking-stage-preparation';D=B/'semantic-review'
+assert not (O/'freeze.json').exists()
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def read(p):
+ a=p.stat();raw=p.read_bytes();z=p.stat();assert (a.st_dev,a.st_ino,a.st_size,a.st_mtime_ns,a.st_ctime_ns)==(z.st_dev,z.st_ino,z.st_size,z.st_mtime_ns,z.st_ctime_ns),p
+ return raw
+def j(p):return json.loads(read(p))
+def write(n,raw):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb') as f:f.write(raw)
+def save(n,x):write(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+copies=[]
+def cp(p,n):
+ raw=read(p);write(n,raw);assert read(p)==(O/n).read_bytes();copies.append(dict(original=str(p),resolved_original=str(p.resolve()),copy=n,**pin(raw)))
+fraw=read(P/'freeze.json');assert pin(fraw)==dict(bytes=66976,sha256='7cb4ec0831e41bae1aea258181d43f1a0c48ed8148df8a3104e7c6e754c273fa')
+f=json.loads(fraw);assert len(f['files'])==353 and sum(x['bytes'] for x in f['files'].values())==12684456
+assert {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+for n,v in f['files'].items():
+ assert not (P/n).is_symlink();assert pin(read(P/n))==v
+source_pairs=j(P/'original-to-copy-manifest.json');assert len(source_pairs)==278
+pair_receipts=[]
+for r in source_pairs:
+ p=Path(r['original']);raw=read(p);assert str(p.resolve())==r['resolved_original'] and raw==read(P/r['copy']) and pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+ assert r['symlink_components']==[] and not any(a.is_symlink() for a in [p,*p.parents])
+ pair_receipts.append(dict(original=str(p),copy=str(P/r['copy']),resolved_original=str(p.resolve()),**pin(raw),complete_bytes_equal=True))
+save('author-package-verification.json',dict(freeze=pin(fraw),members=353,member_bytes=12684456,complete_census_equal=True,all_members_exact=True,complete_original_copy_pairs=pair_receipts))
+selected=['freeze.json','original-to-copy-manifest.json','report.md','static-source-proof-final.json','pending-interface.json','runtime-command-contract.json','final-bindings-template-final.json','ordinary-required-final-banker-route.json','source-correction01.json']
+for n in selected:cp(P/n,'author-evidence/'+n)
+oldpaths={'verify_staged_through285.py':I/'through282-final-stage-preparation/verify_staged_through282.py','prepare-explicit-stage-inputs.py':I/'through282-explicit-stage-source-preparation/prepare-explicit-stage-inputs.py'}
+conservation=[]
+for name,oldpath in oldpaths.items():
+ cp(P/'final-candidates'/name,'reviewed-sources/'+name);cp(oldpath,'prior-sources/'+oldpath.name)
+ for directory,suffix in [('final-changes','.json'),('final-diffs','.forward.diff'),('final-diffs','.inverse.diff')]:cp(P/directory/(name+suffix),'source-history/'+name+suffix)
+ old=read(oldpath).decode();new=read(P/'final-candidates'/name).decode();changes=j(P/'final-changes'/(name+'.json'));value=old
+ for c in changes:
+  assert value.count(c['old'])==c['count'];value=value.replace(c['old'],c['new'])
+ assert value==new
+ for c in reversed(changes):
+  assert len(c['after_positions'])==c['count']
+  for at in reversed(c['after_positions']):assert value[at:at+len(c['new'])]==c['new'];value=value[:at]+c['old']+value[at+len(c['new']):]
+ assert value==old and ast.dump(ast.parse(value))==ast.dump(ast.parse(old));ast.parse(new)
+ def functions(text):
+  return {x.name:ast.get_source_segment(text,x) for x in ast.walk(ast.parse(text)) if isinstance(x,(ast.FunctionDef,ast.AsyncFunctionDef))}
+ of,nf=functions(old),functions(new);unchanged=[k for k,v in of.items() if nf.get(k)==v];changed=[k for k in of if k not in unchanged]
+ conservation.append(dict(name=name,prior=pin(old.encode()),candidate=pin(new.encode()),whole_forward_inverse_exact=True,AST_inverse_exact=True,old_functions=len(of),unchanged_functions=unchanged,changed_functions=changed,assertions_before=sum(isinstance(x,ast.Assert) for x in ast.walk(ast.parse(old))),assertions_after=sum(isinstance(x,ast.Assert) for x in ast.walk(ast.parse(new)))))
+save('independent-source-conservation.json',conservation)
+assert len(conservation[0]['unchanged_functions'])==18 and len(conservation[1]['unchanged_functions'])==3
+verifier=read(P/'final-candidates/verify_staged_through285.py').decode();tree=ast.parse(verifier);function=next(x for x in tree.body if isinstance(x,ast.FunctionDef) and x.name=='load_release_bindings')
+stores=[dict(line=x.lineno,statement=ast.get_source_segment(verifier,x)) for x in ast.walk(function) if isinstance(x,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='path' for t in x.targets)]
+assert len(stores)==2 and 'args.bindings' in stores[0]['statement'] and "pins[role]['path']" in stores[1]['statement']
+final_reread=next(x for x in ast.walk(function) if isinstance(x,ast.Assert) and ast.get_source_segment(verifier,x)=='assert path.read_bytes() == raw')
+save('binding-path-def-use-evidence.json',dict(candidate=pin(verifier.encode()),function='load_release_bindings',assignments=stores,final_reread=dict(line=final_reread.lineno,statement=ast.get_source_segment(verifier,final_reread)),loop_roles=['ordinary_result','final_result','reproduction_acceptance'],conclusion='The last loop iteration leaves path referring to reproduction_acceptance. raw remains the original binding bytes. The reread therefore compares different genuine schemas and fails; no target execution or fabricated runtime binding was needed to establish this source defect.',minimal_correction='Rename only the new loop variable path to role_path and its uses inside that loop. Preserve the original binding path and exact final reread.'))
+for n in ['review.json','audit-proof.json','completion-proof.json','freeze.json','original-copy-manifest.json','additional-original-copy-manifest.json']:
+ cp(D/n,'current-schema/'+n)
+actual_maps=[j(D/n) for n in ['original-copy-manifest.json','additional-original-copy-manifest.json']];maps=[r for rows in actual_maps for r in rows];assert len(maps)==1278
+assert all(set(r)=={'original_path','copy_path','content_addressed_copy','bytes','sha256'} for r in maps)
+builder=[r for r in maps if Path(r['original_path']).resolve()==(W/'tools/build_alignment_layer.py').resolve()];assert len(builder)==1;r=builder[0]
+assert r['copy_path']==str(D/'governing/build_alignment_layer.py') and r['bytes']==39640 and r['sha256']=='f34db3d81708aa2143710d91ac4a1abcbf93dba4d33a0abfb00a51fe511975f1'
+old=read(Path(r['copy_path']));assert pin(old)=={k:r[k] for k in ('bytes','sha256')} and read(Path(r['content_addressed_copy']))==old and read(B/'landing/registration-preimages/build_alignment_layer.py.txt')==old
+new=read(W/'tools/build_alignment_layer.py');needle=b'    "c5p94": [280, 281, 282],\n';assert old.count(needle)==1 and new==old.replace(needle,needle+b'    "c5p95": [283, 284, 285],\n')
+cp(Path(r['copy_path']),'builder-exception/frozen-original.py.txt');cp(W/'tools/build_alignment_layer.py','builder-exception/current-physical.py.txt');cp(B/'landing/course-registration-verification.json','builder-exception/registration-proof.json')
+save('builder-exception-proof.json',dict(status='EXACT_SOURCE_EXCEPTION_CHECKED_WITHOUT_GIT',record=r,original_pin=pin(old),live_pin=pin(new),frozen_copy_equals_object_and_registration_preimage=True,current_physical_full_transform_exact=True,matching_original_paths_in_complete_1278_rows=1,source_gate='Only the exact resolved builder path, exact governing copy and literal old pin can use the explicit BASE Git route. Current complete builder independently passes the original registration transform gate. No frozen map is rewritten. Actual BASE Git reread remains the existing verifier/runtime gate and was not executed in this code review.'))
+meta=j(D/'review.json');assert meta['verdict']=='APPROVE' and meta['totals']['spans']==76 and meta['totals']['nulls']==0 and meta['totals']['d5_nonnull']==61
+for row in meta['segments']:
+ assert set(row['spec'])==set(row['body'])=={'path','bytes','sha256'} and all(type(row[k]) is int for k in ['seq','spans','nulls','d5_nonnull'])
+ assert all(Path(row[k]['path'])==D/'reviewed-final'/str(row['seq'])/('spec.json' if k=='spec' else 'body.html') for k in ['spec','body'])
+repro=I/'through285-generated-reproduction-root-acceptance/proof.json';cp(repro,'actual-reproduction-root-acceptance.json');assert pin(read(repro))==dict(bytes=1331,sha256='fe377d7d9b00a251b5e7c361b8e36cac5a4af450e176ce9a6e87dc17bcd4b642')
+assert j(repro)['retention_checks']==225597 and j(repro)['frozen_files']==3099
+cp(P/'final-candidates/bank_root_proofs_through285_final.py','route-reference/bank_root_proofs_through285_final.py.txt')
+route=j(P/'ordinary-required-final-banker-route.json')['required_explicit_input'];contract=j(P/'runtime-command-contract.json')
+assert route['original']==contract['final_banker_argv'][2]==str(P/'final-candidates/bank_root_proofs_through285_final.py')
+assert route['copy']=='root-helpers/bank_root_proofs_through285_final.py.txt'
+save('route-operational-constraint.json',dict(status='NO_ADDITIONAL_DEFECT_FOR_DOCUMENTED_Q_EXECUTION',ordinary_original=route['original'],automatic_final_original=contract['final_banker_argv'][2],copy=route['copy'],same_full_record_deduplicates=True,constraint='Execute the final banker directly from the documented immutable Q/final-candidates source. Do not materialize a different B source path under this ordinary route. Its automatic source record must retain the identical original path, copy target and source pins. This review does not independently approve the final banker or future intake descriptors.'))
+finding=dict(id='STAGE-001',priority='P1',file=str(P/'final-candidates/verify_staged_through285.py'),line=stores[1]['line'],end_line=stores[1]['line']+1,title='Preserve the binding path across the new role loop',body='The new role loop reuses path, which originally identifies the binding JSON. After its last iteration path points to reproduction_acceptance, so the retained final assert path.read_bytes()==raw compares reproduction proof bytes with binding JSON and rejects a valid release before staging verification. Rename this new loop variable to role_path and retain the exact final reread.',candidate_sha256=pin(verifier.encode())['sha256'],evidence='binding-path-def-use-evidence.json')
+save('review.json',dict(verdict='REQUEST_CHANGES',scope='Independent CODE review of final staging verifier and pathspec only; no semantic review or runtime release',author_role='Independent of these two implementation sources; prior Tibetan proposer and reproduction tooling author, disclosed',open_findings=[finding],source_verdicts={'verify_staged_through285.py':'REQUEST_CHANGES','prepare-explicit-stage-inputs.py':'APPROVE_SOURCE_ONLY_PENDING_ACTUAL_ROOT_RELEASE'},reviewed_sources=[dict(path=str(P/'final-candidates'/n),**pin(read(P/'final-candidates'/n))) for n in oldpaths],author_freeze=pin(fraw),author_members_verified=353,author_original_copy_pairs_verified=278,source_conservation=conservation,actual_reproduction_acceptance=pin(read(repro)),actual_retention_checks=225597,pending='Actual ordinary/final bank, diagnostic/classifier/whitespace, final staged/index/untracked stream measurements and fresh reviewed binding; DATA precedes exactly three ledger appends and DOCS. No legacy warning populations or future counts assumed.',tests_or_target_execution=0,candidate_imports=0,Git_SQL_bank_stage_calls=0,author_B_W_changes=False))
+save('original-to-copy-manifest.json',copies)
+write('review.md',b'''REQUEST CHANGES for verifier d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c. The new role loop in load_release_bindings overwrites the original binding-file path. Its final iteration selects reproduction_acceptance, so the unchanged final reread compares that proof against binding JSON and fails. Rename the new loop variable to role_path, retaining the binding path and final reread. Static def-use evidence establishes this definite blocker; no candidate execution or synthetic runtime binding was necessary.
+
+The 5,826-byte pathspec source b40fb94ca8019c2c552747dba56467c17dd0a23b2f980807de6d758ec32762b8 is approved as source only. Its three original functions, complete required-tree equality, initial empty-index and final unchanged-old/bank-delta-only gates survive. The verifier retains 18 of 22 prior functions byte-for-byte, all exact stage/source/payload/ordinary-final write/untracked/whitespace and final reread gates, plus genuine current nested semantic and allowance interfaces. All full forward/inverse recipes and parsed AST conservation were independently checked. Every one of the 353 frozen author members and 278 source-copy pairs matched. Full source and failure history remain in the immutable author package; selected sources, both priors, complete diffs/maps and independent copy receipts are retained here.
+
+The sole builder exception matches one row among all 1,278 actual source-map rows: governing/build_alignment_layer.py at the exact 39,640-byte historical pin. Its object and registration preimage are identical. The complete current physical builder is exactly that original plus the page95 registry line. The verifier still requires the explicit BASE Git blob and separately checks the current full registration transform; no other current source can acquire this exemption and no frozen map changes.
+
+Actual reproduction acceptance is now pinned at 3,099 runtime files and 225,597 retention checks, retaining the historical failed preparation. The author template honestly remains unbound for later actual bank/whitespace/index/commit facts. Future root binding must use the actual acceptance and remaining measured inputs, preserve raw NUL/index and full diagnostic bytes, and keep DATA before the three ledger appends and DOCS. No current warning population is inferred from historical descriptors.
+
+The documented final-banker route executes directly from the immutable Q/final-candidates source, matching the ordinary record original and destination. That identical full record deduplicates. Materializing and running a different B source path would not satisfy this operational identity constraint. Banker/intake approval remains separate.
+
+This is an independent code review by the prior Tibetan proposer/reproduction tooling author, not semantic acceptance. No target import/execution, Git, SQL, test, bank or stage command was run; no author package, B or worktree file was changed. One source defect remains open pending the root-authored narrow correction and its review.
+''')
+assert read(P/'freeze.json')==fraw
+print(json.dumps(dict(verdict='REQUEST_CHANGES',open_findings=1,pathspec='APPROVE_SOURCE_ONLY',author_members=353,source_pairs=278,review_copies=len(copies),report=pin(read(O/'review.json')))))

@@ -1,0 +1,40 @@
+{
+  "compose-ordinary-bank-inventory-with-final-route-root.py": {
+    "original": {
+      "bytes": 9114,
+      "sha256": "5473a64d05f490092eb375a25ee26ec3bebd04f65930aa8088dc94c6ab89ae18"
+    },
+    "candidate": {
+      "bytes": 11816,
+      "sha256": "406154d3c40bf31ffa10ce19c66c551170fb99b9d0ee0b3f2d14b318cb928cb3"
+    },
+    "full_inverse_byte_exact": true,
+    "AST_only": true,
+    "all_prior_functions_byte_identical": [
+      "census",
+      "j",
+      "pin",
+      "read"
+    ],
+    "assertions_before": 31,
+    "assertions_after": 45
+  },
+  "release-ordinary-bank-with-final-route-root.py": {
+    "original": {
+      "bytes": 5000,
+      "sha256": "5ba979627824996c90fe7a87ead1e88c9c58c4ededad50cc2777823b09a9f0a8"
+    },
+    "candidate": {
+      "bytes": 5626,
+      "sha256": "ce3ca056f25b50a038dd0e7aeaa055b2502b02bfc49139f7b52864ddc27c3317"
+    },
+    "full_inverse_byte_exact": true,
+    "AST_only": true,
+    "all_prior_functions_byte_identical": [
+      "j",
+      "pin"
+    ],
+    "assertions_before": 30,
+    "assertions_after": 33
+  }
+}

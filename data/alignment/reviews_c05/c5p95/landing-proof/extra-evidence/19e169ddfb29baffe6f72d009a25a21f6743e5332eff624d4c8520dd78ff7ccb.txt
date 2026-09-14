@@ -1,0 +1,41 @@
+"""Source inspection corrections only; every initial candidate remains untouched."""
+from pathlib import Path
+import ast,difflib,hashlib,json
+P=Path(__file__).resolve().parent
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def put(n,b):
+ p=P/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb') as f:f.write(b)
+def js(n,v):put(n,(json.dumps(v,indent=2)+'\n').encode())
+initial=json.loads((P/'static-source-proof.json').read_bytes());final={};pins={}
+for name in initial:
+ s=(P/'candidates'/name).read_text();changes=json.loads((P/'changes'/f'{name}.json').read_bytes())
+ def edit(a,b):
+  global s
+  assert s.count(a)==1,(name,a)
+  at=s.index(a);changes.append(dict(old=a,new=b,count=1,after_positions=[at]));s=s.replace(a,b)
+ if name=='verify_staged_through285.py':
+  edit('    # Actual current immutable freeze: distinct SPEC and QUALITY verdicts, DICT pins.', '    # Actual current immutable semantic approval and source-fidelity evidence, DICT pins.')
+  # Keep the complete earlier final tuple LIST used by the downstream Counter.
+  edit("            tuples = {r['id']: r for r in self.obj(final / 'final-tuples.json')}","            head_tuples = {r['id']: r for r in self.obj(final / 'final-tuples.json')}")
+  edit("                assert t == tuples[t['id']] and t['tib'] == hit['licensor'] == license['licensor']", "                assert t == head_tuples[t['id']] and t['tib'] == hit['licensor'] == license['licensor']")
+ if name=='prepare-explicit-stage-inputs.py':
+  edit("meta=js(D/'review.json');assert meta['verdict']=='APPROVE' and meta['open_findings']==[] and meta['totals']['spans']==76 and meta['baseline']==BASE", "meta=js(D/'review.json');assert meta['verdict']=='APPROVE' and meta['open_findings']==[] and meta['totals']['spans']==76 and meta['baseline']==BASE\nfidelity=js(D/'audit-proof.json');assert fidelity['status']=='ACTUAL_CANONICAL_AND_SOURCE_FIDELITY_PASS_ONLY' and fidelity['spans']==76\ncompletion=js(D/'completion-proof.json');assert completion['status']=='COMPLETE_INDEPENDENT_SEMANTIC_APPROVAL' and completion['review']==pin((D/'review.json').read_bytes())\nindependent_raw=(I/'through285-root-independent-review-verification/proof.json').read_bytes()\nassert pin(independent_raw)==dict(bytes=1635,sha256='eb3ee19dd186e63dd830be05421245019cf6555684bf83ee9a967ff00c935a50')\nindependent=json.loads(independent_raw);assert independent['status']=='PASS_ROOT_REVIEW_OF_INDEPENDENT_SEMANTIC_APPROVAL_AND_MECHANICAL_RESULT' and independent['baseline']==BASE and independent['semantic_freeze']==pin((D/'freeze.json').read_bytes())")
+ inv=s
+ for r in reversed(changes):
+  for at in reversed(r['after_positions']):
+   assert inv[at:at+len(r['new'])]==r['new'];inv=inv[:at]+r['old']+inv[at+len(r['new']):]
+ assert pin(inv.encode())==initial[name]['original']
+ tree=ast.parse(s);oldtree=ast.parse(inv)
+ oldfunc={n.name:ast.get_source_segment(inv,n) for n in ast.walk(oldtree) if isinstance(n,ast.FunctionDef)}
+ newfunc={n.name:ast.get_source_segment(s,n) for n in ast.walk(tree) if isinstance(n,ast.FunctionDef)}
+ put('final-candidates/'+name,s.encode());js('final-changes/'+name+'.json',changes)
+ for tag,left,right in [('forward',inv,s),('inverse',s,inv)]:
+  put('final-diffs/'+name+'.'+tag+'.diff',''.join(difflib.unified_diff(left.splitlines(True),right.splitlines(True),fromfile='complete-original' if tag=='forward' else name,tofile=name if tag=='forward' else 'complete-original')).encode())
+ put('final-ast/'+name+'.txt',ast.dump(tree,indent=2).encode())
+ final[name]=dict(original=initial[name]['original'],candidate=pin(s.encode()),full_inverse_exact=True,AST_only=True,old_functions=len(oldfunc),unchanged_functions=[n for n in oldfunc if oldfunc[n]==newfunc.get(n)],changed_functions=[n for n in oldfunc if oldfunc[n]!=newfunc.get(n)],assertions_before=sum(isinstance(n,ast.Assert) for n in ast.walk(oldtree)),assertions_after=sum(isinstance(n,ast.Assert) for n in ast.walk(tree)))
+ pins[name]=pin(s.encode())
+js('candidate-pins-final.json',pins);js('static-source-proof-final.json',final)
+template=json.loads((P/'final-bindings-template.json').read_bytes());template['verifier_sha256']=pins['verify_staged_through285.py']['sha256'];js('final-bindings-template-final.json',template)
+js('source-correction01.json',dict(reason='Source inspection caught local tuples name shadowing in newly extracted allowance block before any runtime; renamed only that lookup. Pathspec now explicitly retains actual current fidelity/completion/root approval identities. Updated stale comment.',original_candidates_preserved='candidates/',final_candidates='final-candidates/',target_executions=0))
+print(json.dumps(dict(status='SOURCE_CORRECTION_ONLY',candidates=pins,all_inverse_exact=True,target_executions=0),indent=2))

@@ -1,0 +1,10 @@
+"""Raw transport for source-only preparation; no candidate import or execution."""
+import datetime,hashlib,json,os,subprocess,sys
+from pathlib import Path
+O=Path(__file__).resolve().parent;ROOT=O.parents[2];D=O/'caller-prepare01';D.mkdir()
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+argv=[sys.executable,'-B',str(O/'prepare_source.py.txt')];command=dict(argv=argv,cwd=str(ROOT),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'})
+(D/'command.json').write_text(json.dumps(command,indent=2)+'\n');(D/'stdin.bin').write_bytes(b'');started=datetime.datetime.now(datetime.timezone.utc).isoformat()
+p=subprocess.run(argv,cwd=ROOT,input=b'',capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+for n,b in [('stdout.bin',p.stdout),('stderr.bin',p.stderr),('exit.txt',(str(p.returncode)+'\n').encode())]:(D/n).write_bytes(b)
+record={**command,'started_at':started,'finished_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':p.returncode,'stdin':pin(b''),'stdout':pin(p.stdout),'stderr':pin(p.stderr),'target_runtime_executed':False};(D/'execution.json').write_text(json.dumps(record,indent=2)+'\n');print(json.dumps(record,indent=2));sys.exit(p.returncode)

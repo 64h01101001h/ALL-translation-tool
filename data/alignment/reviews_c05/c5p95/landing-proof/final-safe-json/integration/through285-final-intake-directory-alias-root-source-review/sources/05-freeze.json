@@ -1,0 +1,910 @@
+{
+  "status": "FROZEN_SOURCE_ONLY_PREPARATION",
+  "file_count": 225,
+  "total_bytes": 3000755,
+  "files": {
+    "actual-alias-source-receipt.json": {
+      "bytes": 9798,
+      "sha256": "f76aac67090402ee2577dff65f030e24838523bf7a6ff601f4dcb3abdf1646fe"
+    },
+    "actual-failure-analysis/0-payload.txt": {
+      "bytes": 16,
+      "sha256": "565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356"
+    },
+    "actual-failure-analysis/1-payload.txt": {
+      "bytes": 16,
+      "sha256": "565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356"
+    },
+    "actual-failure-analysis/aliases.json": {
+      "bytes": 5251,
+      "sha256": "a84a80df7626b75a490b8add31f595018ffc2fc8531a848270fa92e674f1c6a4"
+    },
+    "actual-failure-analysis/executed-capture-source.py.txt": {
+      "bytes": 12838,
+      "sha256": "14c1de8bfbab06bc18fa2f2db48d8f7614cbf409b92fe43b2bdc3db63825c5eb"
+    },
+    "actual-failure-analysis/freeze.json": {
+      "bytes": 1520,
+      "sha256": "501138e9da5db1dc3a8d6f3ab627b86123ec66d7f7c791d5921b69eb6aa06c20"
+    },
+    "actual-failure-analysis/native-command.json": {
+      "bytes": 703,
+      "sha256": "bec7edc5d99aa5def53c54b43d6761593546e24f755835e05576881b3ea41a66"
+    },
+    "actual-failure-analysis/native-execution.json": {
+      "bytes": 1025,
+      "sha256": "8b90fe6d016134075ad0af189dbb415268b0b6d496b790ebe520809b667e23d1"
+    },
+    "actual-failure-analysis/native-exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "actual-failure-analysis/native-stderr.bin": {
+      "bytes": 1533,
+      "sha256": "fc2936aabcb31f6ae2d3fb6be8861e27d3ce4b5a12ce0ad832177739bffad3e1"
+    },
+    "actual-failure-analysis/native-stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-failure-analysis/native-stdout.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-failure-analysis/proof.json": {
+      "bytes": 980,
+      "sha256": "4b06fff21db7ba0ca81c13c34ccfcbcce0c663cccd25a1b3eabb984256e6da92"
+    },
+    "actual-fixture/0-direct-payload.txt": {
+      "bytes": 16,
+      "sha256": "565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356"
+    },
+    "actual-fixture/0-existing-bank-copy.txt": {
+      "bytes": 16,
+      "sha256": "565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356"
+    },
+    "actual-fixture/0-logical-payload.txt": {
+      "bytes": 16,
+      "sha256": "565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356"
+    },
+    "actual-fixture/1-direct-payload.txt": {
+      "bytes": 16,
+      "sha256": "565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356"
+    },
+    "actual-fixture/1-existing-bank-copy.txt": {
+      "bytes": 16,
+      "sha256": "565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356"
+    },
+    "actual-fixture/1-logical-payload.txt": {
+      "bytes": 16,
+      "sha256": "565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356"
+    },
+    "actual-fixture/focused-controls.py.txt": {
+      "bytes": 11039,
+      "sha256": "127506324266c55695f1ee882c286d75d146b7e13879184ecee8f5de4ec049a8"
+    },
+    "candidates/assemble-final-supplement.py": {
+      "bytes": 11160,
+      "sha256": "21a86e5eecb35ec4206faee2f7627aedbee32284d09e08ed69aa0a62b9036bfe"
+    },
+    "candidates/capture-final285-supplement-scope-root.py": {
+      "bytes": 13641,
+      "sha256": "2fd3f271ec64a5368b314c6a1da41885b2a509236a0d01398d11b941f1209e0f"
+    },
+    "candidates/capture-finished-scope.py": {
+      "bytes": 18556,
+      "sha256": "8b2dddda4facf40b9639c440309f2278f674e4c602bab3075e95696e87bba233"
+    },
+    "candidates/compose-final-inputs.py": {
+      "bytes": 25950,
+      "sha256": "763891e076c36284fb1d8c46612d7e5d7b0a354886b6b4a59481240fab98b2eb"
+    },
+    "changes/assemble-final-supplement.py.json": {
+      "bytes": 1058,
+      "sha256": "74c235e4370b22df8afc7683afd642c05dc8e7c821b3cae5d695adad355a683b"
+    },
+    "changes/capture-final285-supplement-scope-root.py.json": {
+      "bytes": 8463,
+      "sha256": "a2654dbd54141d9a8d9b4358cfe32c4ef7955717e19f086b6e11d72c8a4c1cdc"
+    },
+    "changes/capture-finished-scope.py.json": {
+      "bytes": 8630,
+      "sha256": "a7862724691eb00b4bea97b090ce9ffe791fdf42dc3540f1c84189fcb30797b1"
+    },
+    "changes/compose-final-inputs.py.json": {
+      "bytes": 7861,
+      "sha256": "56814b04d00ef57ad18e38708207bf5f13048deab555967474c9b0857c2fdf17"
+    },
+    "diffs/assemble-final-supplement.py.forward.diff": {
+      "bytes": 1545,
+      "sha256": "4953bd38bc6e3090c09bf69e4d94a445583f05c0591c42c3540cf35558445c72"
+    },
+    "diffs/assemble-final-supplement.py.inverse.diff": {
+      "bytes": 1545,
+      "sha256": "08755a397bd9312f9a4fe8ce0c18265f3c87ad269ab68b464edacc19ad5b9129"
+    },
+    "diffs/capture-final285-supplement-scope-root.py.forward.diff": {
+      "bytes": 11019,
+      "sha256": "7590808208da14e520ddffebee3f401c3366439199eb3da47b6dcf2d80eaffcc"
+    },
+    "diffs/capture-final285-supplement-scope-root.py.inverse.diff": {
+      "bytes": 11019,
+      "sha256": "b29fc9f062cb2d7a5f1715b21f40dd9af50e1bd1ea6ae14f9da69d3f16f066e4"
+    },
+    "diffs/capture-finished-scope.py.forward.diff": {
+      "bytes": 13260,
+      "sha256": "20b768597126fe7a62122e67c02d4991a7a7fc140760a2f9f99ef405535902dd"
+    },
+    "diffs/capture-finished-scope.py.inverse.diff": {
+      "bytes": 13260,
+      "sha256": "c070c49be3d153ad91fd02ff95bf777bf98e610d8950d1ec5c58d6f9c7570eac"
+    },
+    "diffs/compose-final-inputs.py.forward.diff": {
+      "bytes": 7955,
+      "sha256": "301ef17a6a1f663f51382205f1c05b8521a23f9ce0bd46cf1d93a67688d16520"
+    },
+    "diffs/compose-final-inputs.py.inverse.diff": {
+      "bytes": 7955,
+      "sha256": "131232dd2b11714f0ee35dbf0bbae819071a21dc30b459be6faf333ed6b63a5e"
+    },
+    "directory-alias-registry.json": {
+      "bytes": 2489,
+      "sha256": "d4301f0a91c846b7a9f1b156b995a708b04b42156484de9ec2f4fb80f2c20a11"
+    },
+    "failed-native-caller/command.json": {
+      "bytes": 703,
+      "sha256": "bec7edc5d99aa5def53c54b43d6761593546e24f755835e05576881b3ea41a66"
+    },
+    "failed-native-caller/execution.json": {
+      "bytes": 1025,
+      "sha256": "8b90fe6d016134075ad0af189dbb415268b0b6d496b790ebe520809b667e23d1"
+    },
+    "failed-native-caller/exit.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "failed-native-caller/stderr.bin": {
+      "bytes": 1533,
+      "sha256": "fc2936aabcb31f6ae2d3fb6be8861e27d3ce4b5a12ce0ad832177739bffad3e1"
+    },
+    "failed-native-caller/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "failed-native-caller/stdout.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "freeze-preparation.py.txt": {
+      "bytes": 934,
+      "sha256": "c37fc96ae162dc3163ed92045b7f114e9c88c63ba6d6a062795d8097d57d1297"
+    },
+    "future-command-plan.json": {
+      "bytes": 8707,
+      "sha256": "ed75ab08ddefa2ed11e868511a36edf8fbe61011a9d6a89f53be61596433fcc0"
+    },
+    "inverse-restored/assemble-final-supplement.py": {
+      "bytes": 10824,
+      "sha256": "2ff25fb6a5f4f7d5580dd58ce232b4c1d3aecfe497442071cceb9ef4dc3a09c5"
+    },
+    "inverse-restored/capture-final285-supplement-scope-root.py": {
+      "bytes": 7953,
+      "sha256": "55c998300ce35f3654f2ab6448cce851e5b5b039769d1989a922bc9075799a43"
+    },
+    "inverse-restored/capture-finished-scope.py": {
+      "bytes": 12838,
+      "sha256": "14c1de8bfbab06bc18fa2f2db48d8f7614cbf409b92fe43b2bdc3db63825c5eb"
+    },
+    "inverse-restored/compose-final-inputs.py": {
+      "bytes": 20403,
+      "sha256": "38d155495c222d59ff6fd13f4a98ff42b8bd2c762b9ddd29498181d781896cb4"
+    },
+    "original-to-copy-manifest.json": {
+      "bytes": 128631,
+      "sha256": "6900ef28ea3cb317819505b0baa00796c7d96cbd5d219dbdc2a4d962074c2449"
+    },
+    "prepare-correction.py.txt": {
+      "bytes": 19034,
+      "sha256": "6b1ba278896ed9d940673a28503836867780ae1fc144855ac83b9773ddb1c18a"
+    },
+    "prior-package/actual/audit_proof.json": {
+      "bytes": 1540290,
+      "sha256": "9fd340f52acbae0fc6f0af7f23641eb1d201175e6b0e262667a33dcd934b4ea2"
+    },
+    "prior-package/actual/callers/audit/command.json": {
+      "bytes": 2777,
+      "sha256": "13fb7132a1c87fc86d9c03cdf621a487073d5bc702f4d6bd2acaf96ae32d7af7"
+    },
+    "prior-package/actual/callers/audit/execution.json": {
+      "bytes": 3100,
+      "sha256": "cd2be053ea2266fe2c1df93946b6cad1310dfd9fe4f3c116fdb244d361af101b"
+    },
+    "prior-package/actual/callers/audit/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "prior-package/actual/callers/audit/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/actual/callers/audit/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/actual/callers/audit/stdout.bin": {
+      "bytes": 1312,
+      "sha256": "efc865fcc5f2dd02f9ddb9ac6ae95b4c768b95ccba115958b6f2cbce263e87eb"
+    },
+    "prior-package/actual/callers/prepare/command.json": {
+      "bytes": 2605,
+      "sha256": "1dc29178d312ddbe993f908ef12e273a0a15f54bec1fe21dc08a250b915b80e1"
+    },
+    "prior-package/actual/callers/prepare/execution.json": {
+      "bytes": 2928,
+      "sha256": "bb13d5ffc73e57a096ef518fafc214977f2c1623d1fe2a4fbc1a1e2fb64eae66"
+    },
+    "prior-package/actual/callers/prepare/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "prior-package/actual/callers/prepare/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/actual/callers/prepare/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/actual/callers/prepare/stdout.bin": {
+      "bytes": 1306,
+      "sha256": "9a4e22cb17817611394a05e0960568636108bbfad70647400341b1a893066480"
+    },
+    "prior-package/actual/callers/root-acceptance/command.json": {
+      "bytes": 559,
+      "sha256": "221407ab90cc7defd4df0c1ba02b25f662dd07400c4688ff0596b64e046ffe14"
+    },
+    "prior-package/actual/callers/root-acceptance/execution.json": {
+      "bytes": 882,
+      "sha256": "e4fd7d78b6ae3fa36218c0801d1e78550df3406395c79978339f941400a1a31a"
+    },
+    "prior-package/actual/callers/root-acceptance/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "prior-package/actual/callers/root-acceptance/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/actual/callers/root-acceptance/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/actual/callers/root-acceptance/stdout.bin": {
+      "bytes": 1079,
+      "sha256": "6b576f79683f3d33a626ee46c3c3e0c79b773754096d42f71e404ddb62c1c0e2"
+    },
+    "prior-package/actual/callers/runtime/command.json": {
+      "bytes": 692,
+      "sha256": "e19be10d56beb053080c4d9ba13d7981a73c341ecd6899899a3fc518b1ec8e81"
+    },
+    "prior-package/actual/callers/runtime/execution.json": {
+      "bytes": 1014,
+      "sha256": "7b4b2f9be5ac84546fa18d133e12d8cb1d1b6c5dd4e3a0f47656a21242c85858"
+    },
+    "prior-package/actual/callers/runtime/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "prior-package/actual/callers/runtime/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/actual/callers/runtime/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/actual/callers/runtime/stdout.bin": {
+      "bytes": 184,
+      "sha256": "123e596f74ce90964e7bcf6e035b636047c9bfaf397781464b276105f2607a4e"
+    },
+    "prior-package/actual/checkpoint-proof.json": {
+      "bytes": 7333,
+      "sha256": "70a8ffe2eeab68f38c2e190d083eef5a196eeb704b3c807fd7cf92feeef32693"
+    },
+    "prior-package/actual/helpers/accept-whitespace285-actual-root.py": {
+      "bytes": 3373,
+      "sha256": "277670d693a39fe0f83f691a3d24c8e03bc1861c87a176fbc1226e275b50cc10"
+    },
+    "prior-package/actual/helpers/prepare-through285-whitespace-acceptance-source.py": {
+      "bytes": 3373,
+      "sha256": "80634d9160f29af258157c1410da1752a3799cca1888c96631752c5e256697fb"
+    },
+    "prior-package/actual/helpers/release-whitespace285-actual-root.py": {
+      "bytes": 5208,
+      "sha256": "802b843a68c448a00c2900fcd4a87cd41af06aef5ddbbf212d4024d35322913a"
+    },
+    "prior-package/actual/next-actions.md": {
+      "bytes": 10734,
+      "sha256": "80949c16ffae69935e1333a2b341da545a8465400702890f7be3dfcb343dcb2e"
+    },
+    "prior-package/actual/root_acceptance.json": {
+      "bytes": 1269,
+      "sha256": "c41e54553ab7e7feaddabb5ac20cadbdcfac6dad102040e101cb39d2ebbf633e"
+    },
+    "prior-package/actual/runtime_freeze.json": {
+      "bytes": 19701,
+      "sha256": "eb95dcc7f07b6b2c336750d4781585580736ed024af8bedb74a4ec91bc5bef89"
+    },
+    "prior-package/actual-whitespace-bindings.json": {
+      "bytes": 6323,
+      "sha256": "e16e49b5a06d70441bd4c7aec77b1dd0db1ce2efac44fe6a42344f01282532d4"
+    },
+    "prior-package/bind-sources.py.txt": {
+      "bytes": 17284,
+      "sha256": "6fc201875a9d44d5138fca711d9b03bf4e5deb3158b72b51cda3a519b3850abc"
+    },
+    "prior-package/candidates/assemble-final-supplement.py": {
+      "bytes": 10824,
+      "sha256": "2ff25fb6a5f4f7d5580dd58ce232b4c1d3aecfe497442071cceb9ef4dc3a09c5"
+    },
+    "prior-package/candidates/capture-final285-supplement-scope-root.py": {
+      "bytes": 7953,
+      "sha256": "55c998300ce35f3654f2ab6448cce851e5b5b039769d1989a922bc9075799a43"
+    },
+    "prior-package/candidates/capture-finished-scope.py": {
+      "bytes": 12838,
+      "sha256": "14c1de8bfbab06bc18fa2f2db48d8f7614cbf409b92fe43b2bdc3db63825c5eb"
+    },
+    "prior-package/candidates/compose-final-inputs.py": {
+      "bytes": 20403,
+      "sha256": "38d155495c222d59ff6fd13f4a98ff42b8bd2c762b9ddd29498181d781896cb4"
+    },
+    "prior-package/changes/assemble-final-supplement.py.json": {
+      "bytes": 382,
+      "sha256": "f790cff84348b0a6871cfeeb7fa7317511f2b8d07d45fc4aae80b5152fbce5bf"
+    },
+    "prior-package/changes/capture-final285-supplement-scope-root.py.json": {
+      "bytes": 2648,
+      "sha256": "b21e1b6825c3e7df0af4720b63f45d0afbc55218754dd63e92aad57a14337064"
+    },
+    "prior-package/changes/capture-finished-scope.py.json": {
+      "bytes": 2644,
+      "sha256": "27141840f51deab1c1ee918a84dd9e074460a9230bd20c751065c6fc56dab2ae"
+    },
+    "prior-package/changes/compose-final-inputs.py.json": {
+      "bytes": 383,
+      "sha256": "8c48080053700a923a2449bb37c582ac0057c57a599fb8e174ef435bd0906573"
+    },
+    "prior-package/diffs/assemble-final-supplement.py.forward.diff": {
+      "bytes": 484,
+      "sha256": "ee9791881c6dddd1ffafacfa76966d3f6c29ab3f8d0cb150603b2a841c516ff9"
+    },
+    "prior-package/diffs/assemble-final-supplement.py.inverse.diff": {
+      "bytes": 484,
+      "sha256": "38f26adab0a87b1be98bb0910a54dfa3c0f05fc3dfb9fe657d8a5a7f03c60f7d"
+    },
+    "prior-package/diffs/capture-final285-supplement-scope-root.py.forward.diff": {
+      "bytes": 2191,
+      "sha256": "aaba3bac5cf11d58e46554e98a9810001a6d4b69ef5ed4e548bcad3af9db2d2f"
+    },
+    "prior-package/diffs/capture-final285-supplement-scope-root.py.inverse.diff": {
+      "bytes": 2191,
+      "sha256": "a2b57b4ed28a1034bf0ee36c336fc6007c27448bdb8ffeac9aa96f12d3a28e4b"
+    },
+    "prior-package/diffs/capture-finished-scope.py.forward.diff": {
+      "bytes": 2043,
+      "sha256": "c90deae37d963542f5eaf9df1b1b1d84d318803976dceaf85b388cdda50a1009"
+    },
+    "prior-package/diffs/capture-finished-scope.py.inverse.diff": {
+      "bytes": 2043,
+      "sha256": "17cd3cdde4596e81a63b99e9f83d32a70b3efebafbb7f5c7d52e000185ec9258"
+    },
+    "prior-package/diffs/compose-final-inputs.py.forward.diff": {
+      "bytes": 453,
+      "sha256": "55db75afa58ca4a40dea41d18961f581c8c229f505d757d56c55f99f266514f6"
+    },
+    "prior-package/diffs/compose-final-inputs.py.inverse.diff": {
+      "bytes": 453,
+      "sha256": "f2e8377a6ca60c71996a0992ead95ac309d5b615d8717a8bced4054cd6bccb96"
+    },
+    "prior-package/freeze-preparation.py.txt": {
+      "bytes": 934,
+      "sha256": "c37fc96ae162dc3163ed92045b7f114e9c88c63ba6d6a062795d8097d57d1297"
+    },
+    "prior-package/freeze.json": {
+      "bytes": 27285,
+      "sha256": "0be5b1b309140f1cba957c47b816643998b102d079b6912ed13c95a0b51dc98f"
+    },
+    "prior-package/future-command-plan.json": {
+      "bytes": 8071,
+      "sha256": "962ed17fc0aa856e5dddec7977a78316515b6fd3e9144595348fddbb06d33899"
+    },
+    "prior-package/inverse-restored/assemble-final-supplement.py": {
+      "bytes": 10979,
+      "sha256": "d75d6697e4251cfdb2aaaa586078c468864785e68a98230ea15b05e166a7b181"
+    },
+    "prior-package/inverse-restored/capture-final285-supplement-scope-root.py": {
+      "bytes": 6658,
+      "sha256": "6af538aafdab5cbdaf8e568b6c25139953c89639a0fafcc33e8dade7d349d37c"
+    },
+    "prior-package/inverse-restored/capture-finished-scope.py": {
+      "bytes": 11547,
+      "sha256": "684eb7aa9c055112ddbd5f198394a9f0de59da711b464b534530886fa45152b6"
+    },
+    "prior-package/inverse-restored/compose-final-inputs.py": {
+      "bytes": 20558,
+      "sha256": "64eb4c419b1b1d056ea68034a867fb809dd63412abca9b3ac8def1dc3a3fcf9c"
+    },
+    "prior-package/original-to-copy-manifest.json": {
+      "bytes": 77042,
+      "sha256": "52ee42f53476a9c7122bad2c84c7a9c7c4f2fbdc4a8983f329efc4da86f219d1"
+    },
+    "prior-package/prior-package/AST-and-inverse-proof.json": {
+      "bytes": 2246,
+      "sha256": "6d10bb2c3c4bf08ab4c4e8bd667c046682e59f16c16536d0ddd9e278dd51f9a5"
+    },
+    "prior-package/prior-package/actual-existing-ordinary-schema.json": {
+      "bytes": 1870,
+      "sha256": "e2584fc978812cab871efdc0e63c305dc51b179591ab90f96376885dc98987cc"
+    },
+    "prior-package/prior-package/candidates/assemble-final-supplement.py": {
+      "bytes": 10979,
+      "sha256": "d75d6697e4251cfdb2aaaa586078c468864785e68a98230ea15b05e166a7b181"
+    },
+    "prior-package/prior-package/candidates/capture-final285-supplement-scope-root.py": {
+      "bytes": 6658,
+      "sha256": "6af538aafdab5cbdaf8e568b6c25139953c89639a0fafcc33e8dade7d349d37c"
+    },
+    "prior-package/prior-package/candidates/capture-finished-scope.py": {
+      "bytes": 11547,
+      "sha256": "684eb7aa9c055112ddbd5f198394a9f0de59da711b464b534530886fa45152b6"
+    },
+    "prior-package/prior-package/candidates/compose-final-inputs.py": {
+      "bytes": 20558,
+      "sha256": "64eb4c419b1b1d056ea68034a867fb809dd63412abca9b3ac8def1dc3a3fcf9c"
+    },
+    "prior-package/prior-package/changes/assemble-final-supplement.py.json": {
+      "bytes": 627,
+      "sha256": "d2ff374b4a8ffc27969b9f52e8642c7d082232fa34eca15dae098da4a8d7c1f5"
+    },
+    "prior-package/prior-package/changes/capture-final285-supplement-scope-root.py.json": {
+      "bytes": 1995,
+      "sha256": "2786125420338dc60d40a5bbd72c27d2cf9298b006b9ca02aaa22823022c8080"
+    },
+    "prior-package/prior-package/changes/capture-finished-scope.py.json": {
+      "bytes": 7149,
+      "sha256": "20c121a9bb03c00e9d1914cdc269b160a8529f36de47c6b88967636ab1fdcc07"
+    },
+    "prior-package/prior-package/changes/compose-final-inputs.py.json": {
+      "bytes": 4304,
+      "sha256": "aeb7cca1afabc80c1234825bd2533bf991449f7726a8797bddecc059fa8e82ce"
+    },
+    "prior-package/prior-package/command-plan.json": {
+      "bytes": 2972,
+      "sha256": "9a23c4eba81951546c760941381a46b8b915423c8e8a6c84f3e9d7b67bcd2a3d"
+    },
+    "prior-package/prior-package/current-controls/accept-whitespace285-actual-root.py": {
+      "bytes": 3373,
+      "sha256": "277670d693a39fe0f83f691a3d24c8e03bc1861c87a176fbc1226e275b50cc10"
+    },
+    "prior-package/prior-package/current-controls/bank_root_proofs_through285_final.py": {
+      "bytes": 20978,
+      "sha256": "2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f"
+    },
+    "prior-package/prior-package/current-controls/prepare-through285-whitespace-acceptance-source.py": {
+      "bytes": 3373,
+      "sha256": "80634d9160f29af258157c1410da1752a3799cca1888c96631752c5e256697fb"
+    },
+    "prior-package/prior-package/current-controls/verify_staged_through285.py": {
+      "bytes": 57112,
+      "sha256": "d77253e906657f58962211d0aaa584df9272af4e2055faeb1bc62fccd7f1b0be"
+    },
+    "prior-package/prior-package/current-evidence/next-actions.md": {
+      "bytes": 6261,
+      "sha256": "930dbb745790e951913b93ffe2f628a3a991ea26a7e6b62e8ff59b6310e1984b"
+    },
+    "prior-package/prior-package/current-evidence/ordinary-inventory-proof.json": {
+      "bytes": 3067,
+      "sha256": "3e79c36b393b143fd3df5360952a91c0aa441fe51670bdbc1fc2a820bb230313"
+    },
+    "prior-package/prior-package/diffs/assemble-final-supplement.py.forward.diff": {
+      "bytes": 3266,
+      "sha256": "341c5857507d5eedcafe52ca46091d6a88c433b8d27f2d09f1de632d4eb55eeb"
+    },
+    "prior-package/prior-package/diffs/assemble-final-supplement.py.inverse.diff": {
+      "bytes": 3266,
+      "sha256": "e61503e3a824e544cf4d37bdf95bd12ffc011872fe1543012fd49dff6a22d5d5"
+    },
+    "prior-package/prior-package/diffs/capture-final285-supplement-scope-root.py.forward.diff": {
+      "bytes": 7900,
+      "sha256": "60d0041ca5fffbb40ce00e430eb89bef4f8238c3aeb43ab23080548aa569ca11"
+    },
+    "prior-package/prior-package/diffs/capture-final285-supplement-scope-root.py.inverse.diff": {
+      "bytes": 7900,
+      "sha256": "f374a44808b551104e9d149cf21bb01c7bbfa293231f7f9b682bb46bf695577a"
+    },
+    "prior-package/prior-package/diffs/capture-finished-scope.py.forward.diff": {
+      "bytes": 13813,
+      "sha256": "775157509a58232cf806b0159ebd147451a4fe0d4b973457a600da050cdb14ac"
+    },
+    "prior-package/prior-package/diffs/capture-finished-scope.py.inverse.diff": {
+      "bytes": 13813,
+      "sha256": "4f55e6a0e372aec6febef945d689294be34c955184c4214257aeaf0dcf9dd523"
+    },
+    "prior-package/prior-package/diffs/compose-final-inputs.py.forward.diff": {
+      "bytes": 7800,
+      "sha256": "74ecc4e582472060a4ffedc0861bc6f73a6fa71a03ffcc951fba4ea5ed4e39cc"
+    },
+    "prior-package/prior-package/diffs/compose-final-inputs.py.inverse.diff": {
+      "bytes": 7800,
+      "sha256": "3fd12e9c5ac33e4219dc91928a7e3d2756514559ded55392ee64798576fd5b16"
+    },
+    "prior-package/prior-package/final-packaging-caller/command.json": {
+      "bytes": 637,
+      "sha256": "82f525de4921f849b88984b2014b13b11e961f2165e8f7e5f0b7736e58cd9c2d"
+    },
+    "prior-package/prior-package/final-packaging-caller/execution.json": {
+      "bytes": 357,
+      "sha256": "09d4c02e9ce2de3b1e88f308b463f451fbc1094cd94480c73c031f4098f4bc3a"
+    },
+    "prior-package/prior-package/final-packaging-caller/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "prior-package/prior-package/final-packaging-caller/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/prior-package/final-packaging-caller/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/prior-package/final-packaging-caller/stdout.bin": {
+      "bytes": 125,
+      "sha256": "a1b35dec4fa339a79d6c59d3296e18365082b4ee9cc8c0e9abe91060fd1b6a03"
+    },
+    "prior-package/prior-package/finish-source-package.py.txt": {
+      "bytes": 4260,
+      "sha256": "40af2c2ebc3a3ac29740ab590218e2bfd0b024f95284d50422eafcb5784e6c42"
+    },
+    "prior-package/prior-package/freeze-preparation.py.txt": {
+      "bytes": 934,
+      "sha256": "c37fc96ae162dc3163ed92045b7f114e9c88c63ba6d6a062795d8097d57d1297"
+    },
+    "prior-package/prior-package/freeze.json": {
+      "bytes": 10061,
+      "sha256": "d45f5838d017e00d475071a7d50932d025da17c413a659f6da8d36042ee634b1"
+    },
+    "prior-package/prior-package/history/source-map-before-control-packaging.json": {
+      "bytes": 9150,
+      "sha256": "99279e93f9696363e4201ae305d56d2714d33ca6253adca94d5a142f0abeda2a"
+    },
+    "prior-package/prior-package/known-current-input-pins.json": {
+      "bytes": 2276,
+      "sha256": "da9eba424c25e4dba9e1439813f44d501293bf14bc7df62ec7fdeeff53322cb8"
+    },
+    "prior-package/prior-package/original-to-copy-manifest.json": {
+      "bytes": 14956,
+      "sha256": "e9a6121f9ce7f63eb32d37c03381c2a9543d84c7e67860eff289ca6f2b089ddc"
+    },
+    "prior-package/prior-package/pending-release-bindings.json": {
+      "bytes": 3520,
+      "sha256": "9bf54a749d97c98043ea106cb6dcd3a0fac80a21c2129a13e3ad17bfe7ec9301"
+    },
+    "prior-package/prior-package/prepare-sources.py.txt": {
+      "bytes": 17086,
+      "sha256": "e85c1b66b17f8797609a206035c1ffe299ac5ccaf755005d4d988843550b3a6e"
+    },
+    "prior-package/prior-package/prior/assemble-final-supplement.py": {
+      "bytes": 10824,
+      "sha256": "d7fdc1259c7ee59d067c984995f7c0ec34bec2ce52efeb446bd978c760c75ddb"
+    },
+    "prior-package/prior-package/prior/capture-final282-supplement-scope-root.py": {
+      "bytes": 6353,
+      "sha256": "b6db9b677715dde17e722493bd6efd26869f14d7651600bb1301b67d584e1032"
+    },
+    "prior-package/prior-package/prior/capture-finished-scope.py": {
+      "bytes": 8554,
+      "sha256": "d8493062801bcd76620971bd5351e8e4925c9d60ae1efa92be624f0bc324a9e7"
+    },
+    "prior-package/prior-package/prior/compose-final-inputs.py": {
+      "bytes": 17928,
+      "sha256": "1401fb175809ad7b82465797f70c81e36f1df1e4f458ca5e9e294c22332e03da"
+    },
+    "prior-package/prior-package/prior-controls/through282-final-bank-inventory-preparation/prior-scope-boundary-extract.json": {
+      "bytes": 11719,
+      "sha256": "1c6cc9ee922f35ae3b2280e1e81f8768e776c80aa009999984eeab3ab70a3836"
+    },
+    "prior-package/prior-package/prior-controls/through282-final-bank-inventory-preparation/scope-contract.json": {
+      "bytes": 13280,
+      "sha256": "21d89df6d7b13159e294992ac0b82e553b7175f181a5ebae3bfa9ccdc087c2a2"
+    },
+    "prior-package/prior-package/prior-controls/through282-final-bank-inventory-preparation/scope-contract.md": {
+      "bytes": 2779,
+      "sha256": "d73a55a5be4e427653a4aed8fb7deb4787b5ad8bf32903394fedacfb81f54d76"
+    },
+    "prior-package/prior-package/prior-controls/through282-final-intake-scope-preparation/command-plan.json": {
+      "bytes": 3484,
+      "sha256": "ba9a74965a0048c6e74a53660109c479e42881c74d896bb210717c7f2062e2c2"
+    },
+    "prior-package/prior-package/prior-controls/through282-final-intake-scope-preparation/current-source-control-pins.json": {
+      "bytes": 3374,
+      "sha256": "9833db797b50992408aeca0ead2452f71c8aa2a3d25dc003e2fd67e1147c50c2"
+    },
+    "prior-package/prior-package/prior-controls/through282-final-intake-scope-preparation/pending-release-bindings.json": {
+      "bytes": 1161,
+      "sha256": "0200e4e23f7c9dd27973032bfbfb87b9691a73f926d7490b833b927f1af34add"
+    },
+    "prior-package/prior-package/prior-controls/through282-final-intake-scope-preparation/source-pins.json": {
+      "bytes": 3773,
+      "sha256": "a373fade9b2f907603d7197a8d5890b1804351c926f5fd26c497707d23fb5f85"
+    },
+    "prior-package/prior-package/proof.json": {
+      "bytes": 3103,
+      "sha256": "a15f3a731d89740fc1c2d69f5bab24f0da64956f518f7756e45dfd723afe8808"
+    },
+    "prior-package/prior-package/record-command.py.txt": {
+      "bytes": 1269,
+      "sha256": "fb3619f9b13c6cac6bb86995ee6c2d298ca6a6b45d18638c4409fba556c4fdb6"
+    },
+    "prior-package/prior-package/report.md": {
+      "bytes": 3699,
+      "sha256": "825a0f0bcbd5624165b2a1d303c4ddbac6ff820e47794566e3bc623f0a18e6b0"
+    },
+    "prior-package/prior-package/required-individual-helper.json": {
+      "bytes": 666,
+      "sha256": "d7654ed4895d9c6f7d1d505cf50051eb5299809aa0284fda553d6ea798921302"
+    },
+    "prior-package/prior-package/source-preparation-caller/command.json": {
+      "bytes": 632,
+      "sha256": "c74a2fe7bbf8101dc6164b4a18b53ee87b2db32054ef2fc63cd5a4c9edbf97f6"
+    },
+    "prior-package/prior-package/source-preparation-caller/execution.json": {
+      "bytes": 357,
+      "sha256": "86416b791100d40d66e2992ce57a4d6948fba81a7c580b3990b0618f764172d2"
+    },
+    "prior-package/prior-package/source-preparation-caller/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "prior-package/prior-package/source-preparation-caller/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/prior-package/source-preparation-caller/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/prior-package/source-preparation-caller/stdout.bin": {
+      "bytes": 170,
+      "sha256": "6a56fb147307b4dcd916bb51225d98bdebd67d64ecaf1661b394014831f8f375"
+    },
+    "prior-package/prior-package/source-recipes.json": {
+      "bytes": 17978,
+      "sha256": "2c176d6f6329812997628e8e237b52ad3a9bd0e4f1014bca7c7051c43b31029d"
+    },
+    "prior-package/prior-package/transport-source-map.json": {
+      "bytes": 708,
+      "sha256": "73e7aa80335390303909f6408c6b977f4c36148e076b97fd6786d872423b2568"
+    },
+    "prior-package/prior-root-review/freeze.json": {
+      "bytes": 5033,
+      "sha256": "fae32b58146b15cd84789d1b697fc8de842a06447dc1ee80b9ff2635c44a924d"
+    },
+    "prior-package/prior-root-review/original-to-copy-manifest.json": {
+      "bytes": 9740,
+      "sha256": "ef97e036591eb2b78e057c0625ed9bf7ded7532b396dc6ebf4cba2fbec97b2c3"
+    },
+    "prior-package/prior-root-review/prior-root-reader-failure.stderr": {
+      "bytes": 369,
+      "sha256": "9337666d71b34512d875566624e552760db24947d7dc56372393156114bad57a"
+    },
+    "prior-package/prior-root-review/prior-root-reader.py.txt": {
+      "bytes": 4722,
+      "sha256": "c621c0906fab08f587f1a5277ae75dc10a5d974b847cce6f18476138fc3c5ff0"
+    },
+    "prior-package/prior-root-review/proof.json": {
+      "bytes": 3826,
+      "sha256": "0aab2d721b0db7a9e49464ea3c29896123059a5fe34143ae21cdc335ca1daecd"
+    },
+    "prior-package/prior-root-review/reviewed-sources/AST-and-inverse-proof.json": {
+      "bytes": 2246,
+      "sha256": "6d10bb2c3c4bf08ab4c4e8bd667c046682e59f16c16536d0ddd9e278dd51f9a5"
+    },
+    "prior-package/prior-root-review/reviewed-sources/candidates/assemble-final-supplement.py": {
+      "bytes": 10979,
+      "sha256": "d75d6697e4251cfdb2aaaa586078c468864785e68a98230ea15b05e166a7b181"
+    },
+    "prior-package/prior-root-review/reviewed-sources/candidates/capture-final285-supplement-scope-root.py": {
+      "bytes": 6658,
+      "sha256": "6af538aafdab5cbdaf8e568b6c25139953c89639a0fafcc33e8dade7d349d37c"
+    },
+    "prior-package/prior-root-review/reviewed-sources/candidates/capture-finished-scope.py": {
+      "bytes": 11547,
+      "sha256": "684eb7aa9c055112ddbd5f198394a9f0de59da711b464b534530886fa45152b6"
+    },
+    "prior-package/prior-root-review/reviewed-sources/candidates/compose-final-inputs.py": {
+      "bytes": 20558,
+      "sha256": "64eb4c419b1b1d056ea68034a867fb809dd63412abca9b3ac8def1dc3a3fcf9c"
+    },
+    "prior-package/prior-root-review/reviewed-sources/command-plan.json": {
+      "bytes": 2972,
+      "sha256": "9a23c4eba81951546c760941381a46b8b915423c8e8a6c84f3e9d7b67bcd2a3d"
+    },
+    "prior-package/prior-root-review/reviewed-sources/diffs/assemble-final-supplement.py.forward.diff": {
+      "bytes": 3266,
+      "sha256": "341c5857507d5eedcafe52ca46091d6a88c433b8d27f2d09f1de632d4eb55eeb"
+    },
+    "prior-package/prior-root-review/reviewed-sources/diffs/assemble-final-supplement.py.inverse.diff": {
+      "bytes": 3266,
+      "sha256": "e61503e3a824e544cf4d37bdf95bd12ffc011872fe1543012fd49dff6a22d5d5"
+    },
+    "prior-package/prior-root-review/reviewed-sources/diffs/capture-final285-supplement-scope-root.py.forward.diff": {
+      "bytes": 7900,
+      "sha256": "60d0041ca5fffbb40ce00e430eb89bef4f8238c3aeb43ab23080548aa569ca11"
+    },
+    "prior-package/prior-root-review/reviewed-sources/diffs/capture-final285-supplement-scope-root.py.inverse.diff": {
+      "bytes": 7900,
+      "sha256": "f374a44808b551104e9d149cf21bb01c7bbfa293231f7f9b682bb46bf695577a"
+    },
+    "prior-package/prior-root-review/reviewed-sources/diffs/capture-finished-scope.py.forward.diff": {
+      "bytes": 13813,
+      "sha256": "775157509a58232cf806b0159ebd147451a4fe0d4b973457a600da050cdb14ac"
+    },
+    "prior-package/prior-root-review/reviewed-sources/diffs/capture-finished-scope.py.inverse.diff": {
+      "bytes": 13813,
+      "sha256": "4f55e6a0e372aec6febef945d689294be34c955184c4214257aeaf0dcf9dd523"
+    },
+    "prior-package/prior-root-review/reviewed-sources/diffs/compose-final-inputs.py.forward.diff": {
+      "bytes": 7800,
+      "sha256": "74ecc4e582472060a4ffedc0861bc6f73a6fa71a03ffcc951fba4ea5ed4e39cc"
+    },
+    "prior-package/prior-root-review/reviewed-sources/diffs/compose-final-inputs.py.inverse.diff": {
+      "bytes": 7800,
+      "sha256": "3fd12e9c5ac33e4219dc91928a7e3d2756514559ded55392ee64798576fd5b16"
+    },
+    "prior-package/prior-root-review/reviewed-sources/freeze.json": {
+      "bytes": 10061,
+      "sha256": "d45f5838d017e00d475071a7d50932d025da17c413a659f6da8d36042ee634b1"
+    },
+    "prior-package/prior-root-review/reviewed-sources/known-current-input-pins.json": {
+      "bytes": 2276,
+      "sha256": "da9eba424c25e4dba9e1439813f44d501293bf14bc7df62ec7fdeeff53322cb8"
+    },
+    "prior-package/prior-root-review/reviewed-sources/original-to-copy-manifest.json": {
+      "bytes": 14956,
+      "sha256": "e9a6121f9ce7f63eb32d37c03381c2a9543d84c7e67860eff289ca6f2b089ddc"
+    },
+    "prior-package/prior-root-review/reviewed-sources/pending-release-bindings.json": {
+      "bytes": 3520,
+      "sha256": "9bf54a749d97c98043ea106cb6dcd3a0fac80a21c2129a13e3ad17bfe7ec9301"
+    },
+    "prior-package/prior-root-review/reviewed-sources/prior/assemble-final-supplement.py": {
+      "bytes": 10824,
+      "sha256": "d7fdc1259c7ee59d067c984995f7c0ec34bec2ce52efeb446bd978c760c75ddb"
+    },
+    "prior-package/prior-root-review/reviewed-sources/prior/capture-final282-supplement-scope-root.py": {
+      "bytes": 6353,
+      "sha256": "b6db9b677715dde17e722493bd6efd26869f14d7651600bb1301b67d584e1032"
+    },
+    "prior-package/prior-root-review/reviewed-sources/prior/capture-finished-scope.py": {
+      "bytes": 8554,
+      "sha256": "d8493062801bcd76620971bd5351e8e4925c9d60ae1efa92be624f0bc324a9e7"
+    },
+    "prior-package/prior-root-review/reviewed-sources/prior/compose-final-inputs.py": {
+      "bytes": 17928,
+      "sha256": "1401fb175809ad7b82465797f70c81e36f1df1e4f458ca5e9e294c22332e03da"
+    },
+    "prior-package/prior-root-review/reviewed-sources/report.md": {
+      "bytes": 3699,
+      "sha256": "825a0f0bcbd5624165b2a1d303c4ddbac6ff820e47794566e3bc623f0a18e6b0"
+    },
+    "prior-package/prior-root-review/reviewed-sources/required-individual-helper.json": {
+      "bytes": 666,
+      "sha256": "d7654ed4895d9c6f7d1d505cf50051eb5299809aa0284fda553d6ea798921302"
+    },
+    "prior-package/prior-root-review/reviewed-sources/source-recipes.json": {
+      "bytes": 17978,
+      "sha256": "2c176d6f6329812997628e8e237b52ad3a9bd0e4f1014bca7c7051c43b31029d"
+    },
+    "prior-package/proof.json": {
+      "bytes": 3702,
+      "sha256": "e47306a10d0509706cc8acd95fb8b79e8d8538ad259a12f0c46e32066a04dc0c"
+    },
+    "prior-package/record-command.py.txt": {
+      "bytes": 1269,
+      "sha256": "fb3619f9b13c6cac6bb86995ee6c2d298ca6a6b45d18638c4409fba556c4fdb6"
+    },
+    "prior-package/report.md": {
+      "bytes": 2332,
+      "sha256": "bebcc5cf1d2fbaa7154e5bbf7729d2ff3c2c2f334813d5a89c9dfaeae490df5f"
+    },
+    "prior-package/source-binding-caller/command.json": {
+      "bytes": 638,
+      "sha256": "4a8a57cb28af06e3cfc32cc33333aa7797d269d07bfdb2aa1fc829a331ffbc7b"
+    },
+    "prior-package/source-binding-caller/execution.json": {
+      "bytes": 357,
+      "sha256": "62f32f86d48af9be8d91db2d8f6f0aed9eb13b99a0e26db3267a1c470814c448"
+    },
+    "prior-package/source-binding-caller/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "prior-package/source-binding-caller/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/source-binding-caller/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prior-package/source-binding-caller/stdout.bin": {
+      "bytes": 730,
+      "sha256": "1ef014f71c7d470ceebb10b5f90174a11fa0fa0894f3737c6481233d23bd8388"
+    },
+    "prior-package/source-recipes.json": {
+      "bytes": 9325,
+      "sha256": "17f634e70691939039e89c73b361e2e61c4f398d34141ac4730dcc6617391f47"
+    },
+    "prior-package/transport-source-map.json": {
+      "bytes": 696,
+      "sha256": "cf16bc76cf62fb5624e477c773859d1239427f9dbb08dc473d18c0d11de3dfb8"
+    },
+    "proof.json": {
+      "bytes": 1764,
+      "sha256": "064908b839c6f877bf167edcf8a1db941668a3bf052da1475636e8e78d85fb3b"
+    },
+    "record-command.py.txt": {
+      "bytes": 1269,
+      "sha256": "fb3619f9b13c6cac6bb86995ee6c2d298ca6a6b45d18638c4409fba556c4fdb6"
+    },
+    "report.md": {
+      "bytes": 2714,
+      "sha256": "92955ed87cfc1c38bb32f8d1e6215b3cb5fc9c78794d36be5ff03a2523234b2d"
+    },
+    "source-preparation-caller/command.json": {
+      "bytes": 644,
+      "sha256": "d3d54980b26c19d643afd5b62e3d45a73a8ea3899f2775c32dec19b0a446f24f"
+    },
+    "source-preparation-caller/execution.json": {
+      "bytes": 357,
+      "sha256": "db738c8d3fc6b97443e81f102a2361386fef1aaf5e4651f7c0c2dba47e29a860"
+    },
+    "source-preparation-caller/exit.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "source-preparation-caller/stderr.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source-preparation-caller/stdin.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source-preparation-caller/stdout.bin": {
+      "bytes": 726,
+      "sha256": "6cddefb34f521102ab8e945b61af6fa8f47f924b387baa63024663a770bfd2c0"
+    },
+    "source-recipes.json": {
+      "bytes": 29847,
+      "sha256": "d747ef51a1c4add2b020df07d0b2f2f105e06353294fe5e77ded0820435eac63"
+    },
+    "strict-directory-alias-readers.py.txt": {
+      "bytes": 5775,
+      "sha256": "01cb632d9a9513341e0a0db65a42b421f11e314f469849838d39efbcfc22c2d4"
+    },
+    "strict-walker-functions.py.txt": {
+      "bytes": 3470,
+      "sha256": "43197cb063b630ef8d99dd11dc693a3f4cb69ae2883ae1096a821a9b872892bd"
+    },
+    "transport-source-map.json": {
+      "bytes": 714,
+      "sha256": "c6d939648eb592e1147c71696d58fa39450f1d282dd4b52d566f1c46191bff8d"
+    }
+  },
+  "excludes": [
+    "freeze.json"
+  ]
+}

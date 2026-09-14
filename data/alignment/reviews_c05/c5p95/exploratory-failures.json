@@ -1,0 +1,35 @@
+{
+  "record_type": "Honest retrospective transcription of initial tool-result failures; not native captured process streams. All substantive preparation, query, archive and canonical work subsequently has native recorder outputs.",
+  "failures": [
+    {
+      "operation": "cat release.json",
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/integration/through285-frozen-final-read-and-parallel-semantic-release",
+      "process_started": false,
+      "tool_result": "exec_command failed: CreateProcess { message: \"Rejected(\\\"Failed to create unified exec process: No such file or directory (os error 2)\\\")\" }",
+      "resolution": "Located integration under campaign-artifacts with rg --files; subsequently read and verified the full release bytes and SHA-256."
+    },
+    {
+      "operation": "cat review-questions.md",
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/integration/through285-root-proposal-comparison",
+      "process_started": false,
+      "tool_result": "exec_command failed: CreateProcess { message: \"Rejected(\\\"Failed to create unified exec process: No such file or directory (os error 2)\\\")\" }",
+      "resolution": "Read the complete file from campaign-artifacts/integration and preserved its full original copy."
+    },
+    {
+      "operation": "Exploratory one-line Python print of final rationales for284/285",
+      "exit": 1,
+      "stdout_bytes": 0,
+      "error": "SyntaxError: unexpected character after line continuation character",
+      "cause": "Escaped quotes inside an f-string expression in the exploratory command.",
+      "resolution": "Wrote read-decisions.py and successfully read every full rationale through calls/read-spans. No source or evidence output was changed by the failed print command."
+    },
+    {
+      "operation": "Exploratory one-line Python print of omission reasons for284/285",
+      "exit": 1,
+      "stdout_bytes": 0,
+      "error": "SyntaxError: unexpected character after line continuation character",
+      "cause": "Escaped quotes inside an f-string expression in the exploratory command.",
+      "resolution": "Wrote read-decisions.py and successfully read every full material omission through calls/read-omissions. No source or evidence output was changed by the failed print command."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "rnag",
+    "rnag"
+  ],
+  "rows": [
+    {
+      "id": 10448,
+      "wylie": "rnag",
+      "tibetan": "རྣག",
+      "tibetan_source": null,
+      "acip": "RNAG",
+      "pronunciation": "nak",
+      "pronunciation_source": null,
+      "sanskrit": "pūya; {LC}pūti; {LC}kāla; {LC}dhyāma; {LC}pūra",
+      "hopkins_english": "pus",
+      "hgm_gloss": "[\"blood and pus\", \"pus\", \"blood\", \"pus?\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C05\", \"C08\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"]",
+      "corpus_n_segments": 111,
+      "raw": "{\"tibetan\": \"རྣག\", \"wylie\": \"rnag\", \"wylie_variants\": [\"rnag\"], \"tenses\": null, \"sanskrit\": \"pūya; {LC}pūti; {LC}kāla; {LC}dhyāma; {LC}pūra\", \"hopkins_english\": \"pus\", \"hgm_gloss\": [\"blood and pus\", \"pus\", \"blood\", \"pus?\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"nak\", \"acip\": \"RNAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C05\", \"C08\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"], \"n_segments\": 111}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "row_count": 1
+}

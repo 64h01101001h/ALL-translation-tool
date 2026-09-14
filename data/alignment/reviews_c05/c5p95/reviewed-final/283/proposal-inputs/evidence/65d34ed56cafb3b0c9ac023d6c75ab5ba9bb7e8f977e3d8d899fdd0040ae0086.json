@@ -1,0 +1,212 @@
+{
+  "method": "Actual unchanged canonical source executed by runpy as __main__; only sqlite3.connect is constrained to the expected spine via URI mode=ro and query_only. A profile callback records actual return values of canonical resolve without replacing or editing it.",
+  "canonical_sources_before": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/build_alignment_layer.py",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/build_alignment_layer.py",
+      "bytes": 39640,
+      "sha256": "f34db3d81708aa2143710d91ac4a1abcbf93dba4d33a0abfb00a51fe511975f1"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/engines/hgm_tools.py",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/engines/hgm_tools.py",
+      "bytes": 2632,
+      "sha256": "11788e9fc3dc98e76ae9e1c3081e380696b3b75f65fbbeca148efaca274b77c6"
+    }
+  ],
+  "canonical_sources_after": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/build_alignment_layer.py",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/build_alignment_layer.py",
+      "bytes": 39640,
+      "sha256": "f34db3d81708aa2143710d91ac4a1abcbf93dba4d33a0abfb00a51fe511975f1"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/engines/hgm_tools.py",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/engines/hgm_tools.py",
+      "bytes": 2632,
+      "sha256": "11788e9fc3dc98e76ae9e1c3081e380696b3b75f65fbbeca148efaca274b77c6"
+    }
+  ],
+  "sources_unchanged": true,
+  "spine_before": {
+    "original": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+    "resolved": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+    "bytes": 249167872,
+    "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc"
+  },
+  "spine_after": {
+    "original": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+    "resolved": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+    "bytes": 249167872,
+    "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc"
+  },
+  "spine_unchanged": true,
+  "connections": [
+    {
+      "canonical_requested_database": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+      "actual_uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+      "uri": true,
+      "query_only": 1
+    }
+  ],
+  "actual_sql_trace": [
+    "select wylie, english from corpus_segments where course='C05' and seq=283"
+  ],
+  "canonical_resolve_returns": [
+    {
+      "seq": 283,
+      "side": "tib",
+      "ranges": {
+        "w1": [
+          11,
+          20
+        ],
+        "w2": [
+          22,
+          27
+        ],
+        "w3": [
+          28,
+          31
+        ],
+        "w4": [
+          36,
+          43
+        ],
+        "w5": [
+          44,
+          48
+        ],
+        "w6": [
+          55,
+          63
+        ],
+        "w7": [
+          69,
+          77
+        ],
+        "w8": [
+          78,
+          81
+        ],
+        "p9": [
+          82,
+          85
+        ],
+        "w10": [
+          91,
+          97
+        ],
+        "w11": [
+          98,
+          102
+        ],
+        "w12": [
+          107,
+          115
+        ],
+        "w13": [
+          120,
+          126
+        ],
+        "w14": [
+          127,
+          131
+        ],
+        "w15": [
+          136,
+          140
+        ],
+        "w16": [
+          141,
+          145
+        ]
+      }
+    },
+    {
+      "seq": 283,
+      "side": "eng",
+      "ranges": {
+        "w1": [
+          39,
+          55
+        ],
+        "w3": [
+          69,
+          71
+        ],
+        "w2": [
+          77,
+          84
+        ],
+        "w5": [
+          95,
+          99
+        ],
+        "w4": [
+          100,
+          113
+        ],
+        "w8": [
+          114,
+          117
+        ],
+        "w7": [
+          122,
+          127
+        ],
+        "w6": [
+          139,
+          145
+        ],
+        "p9": [
+          147,
+          149
+        ],
+        "w16": [
+          153,
+          160
+        ],
+        "w15": [
+          161,
+          164
+        ],
+        "w11": [
+          189,
+          199
+        ],
+        "w10": [
+          205,
+          212
+        ],
+        "w12": [
+          218,
+          224
+        ],
+        "w14": [
+          228,
+          238
+        ],
+        "w13": [
+          244,
+          251
+        ]
+      }
+    }
+  ],
+  "bytecode_disabled": true,
+  "assertions_enabled": true
+}

@@ -1,0 +1,32 @@
+"""Retain source/schema evidence and validate AST only; never execute binding or Git."""
+from pathlib import Path
+import ast,hashlib,json
+O=Path(__file__).resolve().parent;I=O.parent;A=I.parent;B=A/'C05-280-282'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,v):
+ with (O/n).open('x') as f:json.dump(v,f,ensure_ascii=False,indent=2);f.write('\n')
+paths=[I/'through282-final-stage-preparation'/n for n in ['verify_staged_through282.py','final-bindings-template.json','freeze.json','command-plan.json']]
+paths += [I/'through282-final-stage-code-review'/n for n in ['report.md','review.json','runtime-contract.json','freeze.json']]
+paths += [I/'through282-whitespace-actual-root-acceptance/proof.json',I/'through282-whitespace-actual-audit/source-whitespace-proof.json',I/'through282-banking-runs/ordinary/result.json',B/'landing/staged-payload-manifest.json',B/'landing/staged-payload-source-proof.json',B/'commit-closure-preparation/commit_closure282.py']
+for directory in [I/'through282-whitespace-runs/raw-diagnostic',I/'through282-banking-callers/ordinary',I/'through282-whitespace-actual-audit-caller',I/'through282-whitespace-actual-root-acceptance-caller']:
+ paths.extend(directory/n for n in ['command.json','execution.json','exit.txt','stdin.bin','stdout.bin','stderr.bin'])
+records=[]
+for i,p in enumerate(paths):
+ raw=p.read_bytes()
+ if len(raw)>2000000:
+  records.append(dict(original=str(p),disposition='Complete original retained externally; no redundant diagnostic copy',**pin(raw)));continue
+ n=f'inputs/{i:03d}-{p.name}';dest=O/n;dest.parent.mkdir(exist_ok=True)
+ with dest.open('xb') as f:f.write(raw)
+ assert dest.read_bytes()==p.read_bytes();records.append(dict(original=str(p),copy=n,**pin(raw)))
+source=(O/'bind_final_stage.py').read_bytes();tree=ast.parse(source)
+assert not any(isinstance(n,(ast.Import,ast.ImportFrom)) and ('verify_staged' in ast.unparse(n)) for n in ast.walk(tree))
+p=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='prerequisites')
+assert not any(any(x in ast.unparse(n.func) for x in ['mkdir','subprocess','save','git']) for n in ast.walk(p) if isinstance(n,ast.Call))
+m=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='main')
+calls=[(n.lineno,ast.unparse(n.func)) for n in ast.walk(m) if isinstance(n,ast.Call)]
+assert min(l for l,n in calls if n=='prerequisites')<min(l for l,n in calls if n=='out.mkdir')<min(l for l,n in calls if n=='git')
+for r in records:assert pin(Path(r['original']).read_bytes())=={k:r[k] for k in ['bytes','sha256']}
+save('original-to-copy-manifest.json',records)
+save('syntax-proof.json',dict(status='PASS_AST_SOURCE_PREPARATION_ONLY',candidate=pin(source),source_records=len(records),full_copies=sum('copy' in r for r in records),externals=sum('copy' not in r for r in records),prerequisites_before_output_and_commands=True,no_target_import_or_execution=True,no_Git_SQL_tests=True,filled_bindings_created=False))
+save('command-plan.json',dict(status='UNEXECUTED_REQUIRES_ROOT_SOURCE_REVIEW_AND_FINISHED_FINAL_BANK_STAGE',argv=['python3','-B',str(O/'bind_final_stage.py'),'--output',str(I/'through282-final-stage-bindings'),'--final-bank-caller',None,'--execute-reviewed-binding'],environment={'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0','GIT_OPTIONAL_LOCKS':'0'},cwd=str(O),final_bank_caller='Supply the actual completed final-whitespace outer caller directory; exact argv/phase/B/W/run-output and full streams are checked, no guessed path',target_verifier=str(I/'through282-final-stage-preparation/verify_staged_through282.py'),target_verifier_sha256='b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee',future_verifier_output=str(I/'through282-final-stage-verification'),runtime_output=str(I/'through282-final-stage-bindings'),recorded_Git_commands=10,banking_of_own_bindings_required=False))
+print(json.dumps(dict(status='PASS_AST_SOURCE_PREPARATION_ONLY',candidate=pin(source),records=len(records)),indent=2))

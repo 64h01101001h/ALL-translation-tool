@@ -1,0 +1,75 @@
+--- candidates/compose-ordinary-bank-inventory-root.py
++++ prior/compose-ordinary-bank-inventory-root.py
+@@ -11,15 +11,10 @@
+ A = B.parent
+ I = A / 'integration'
+ W = A.parent / 'campaign-worktree'
+-O = I / 'through285-ordinary-bank-inventory'
+-BASE = 'fb9182dc6fca2230be3bc5169ba1288a22430280'
+-assert B.name == 'C05-283-285'
+-method = json.loads((B / 'root-ordinary-bank-method-release/proof.json').read_bytes())
+-assert method['status'] == 'PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD'
+-assert method['composer']['path'] == str(Path(__file__).resolve())
+-assert hashlib.sha256(Path(__file__).read_bytes()).hexdigest() == method['composer']['sha256']
+-R = Path(method['reproduction_directory'])
+-ACCEPT = Path(method['reproduction_acceptance_directory'])
++O = I / 'through282-ordinary-bank-inventory'
++BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
++R = I / 'through282-generated-reproduction'
++ACCEPT = I / 'through282-generated-reproduction-root-acceptance'
+ 
+ def pin(raw):
+     return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+@@ -40,22 +35,11 @@
+ assert accepted['status'] == 'PASS' and accepted['head'] == BASE
+ assert j(B / 'baseline.json')['commit'] == BASE
+ assert j(B / 'root-payload-result-acceptance.json')['payload_files'] == 13
+-assert pin(read(ACCEPT / 'proof.json')) == method['required_reproduction_acceptance']
+-assert accepted['all_seven_reproduced_outputs_byte_exact'] and accepted['all_thirteen_payload_files_byte_exact'] and accepted['live_head_index_untracked_state_unchanged']
+-integration_inputs = [Path(p) for p in method['integration_inputs']]
+-assert len(integration_inputs) == len(set(integration_inputs)) and R in integration_inputs and ACCEPT in integration_inputs
+-assert I / 'through285-root-reconciliation-verification-attempt01' in integration_inputs
+-assert all(p.parent == I and p.name.startswith('through285') for p in integration_inputs)
+-roots = [B] + integration_inputs
+-assert all((p.is_dir() or p.is_file()) and not O.is_relative_to(p) for p in roots)
++roots = [B, R, ACCEPT, I / 'through282-root-reconciliation-verification-attempt01']
++assert all(p.is_dir() and not O.is_relative_to(p) for p in roots)
+ # The currently active outer recorder is an explicit later boundary. Source
+ # preparation, failed attempts, checkpoints, and every other B file are included.
+-deferred = [Path(p) for p in method['deferred_active_callers']]
+-assert len(deferred) == 1
+-assert all(p.parent in (B, I) and 'ordinary' in p.name and 'inventory' in p.name and p.name.endswith('caller') for p in deferred)
+-assert all(p.is_absolute() and not p.is_relative_to(B / 'semantic-review') for p in deferred)
+-expected_integration = {p for p in I.iterdir() if p.name.startswith('through285') and p != O and p not in deferred}
+-assert set(integration_inputs) == expected_integration, 'Every current through285 integration item must be explicitly included or the exact active caller deferred'
++deferred = [B / 'ordinary-inventory-caller']
+ helpers = [A / name for name in [
+     'record_external_step.py', 'land_reviewed_page_v2.py',
+     'verify_semantic_acceptance.py', 'verify_review_copy_and_register.py',
+@@ -67,15 +51,15 @@
+ assert all(p.is_file() for p in helpers)
+ 
+ def census():
+-    return {p for root in roots for p in ([root] if root.is_file() else root.rglob('*'))
++    return {p for root in roots for p in root.rglob('*')
+             if p.is_file() and not any(p.is_relative_to(d) for d in deferred)} | set(helpers)
+ 
+ paths = census()
+ assert all(p.is_relative_to(A) for p in paths)
+ semantic = B / 'semantic-review'
+-landed = W / 'data/alignment/reviews_c05/c5p95'
++landed = W / 'data/alignment/reviews_c05/c5p94'
+ sf = j(semantic / 'freeze.json')
+-assert pin(read(semantic / 'freeze.json'))['sha256'] == '8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445'
++assert pin(read(semantic / 'freeze.json'))['sha256'] == '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
+ assert {str(p.relative_to(semantic)) for p in semantic.rglob('*') if p.is_file()} == set(sf['files']) | {'freeze.json'}
+ bank_index = {}
+ for name in list(sf['files']) + ['freeze.json']:
+@@ -148,6 +132,6 @@
+              head=BASE, sources=len(coverage), counts=counts, records=len(records),
+              distinct_new_full_copies=len(new_content), manifest=pin(read(O / 'extra-inputs.json')),
+              required_reproduction_acceptance=pin(read(ACCEPT / 'proof.json')),
+-             boundary='Every current B file and explicitly declared current through285 integration item plus eleven complete helper sources; only exact active caller directories are deferred. Full identical content may share a copy after complete-byte comparison. This is source inventory, not bank/stage/semantic/consumer acceptance.')
++             boundary='Every current file under the four listed roots plus eleven complete helper sources; only the named active caller is deferred. Full identical content may share a copy after complete-byte comparison. This is source inventory, not bank/stage/semantic/consumer acceptance.')
+ (O / 'proof.json').write_text(json.dumps(proof, indent=2) + '\n')
+ print(json.dumps(proof, indent=2))

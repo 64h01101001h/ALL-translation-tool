@@ -1,0 +1,65 @@
+{
+  "utc": "2026-09-12T20:20:49.759959+00:00",
+  "status": "SOURCE/CONTEXT/BRIEF PREPARATION ONLY; no baseline, reader, lexical review or proposal",
+  "source_sha256": "7102e42eab0048452bc5ebe68c1e68b4abf28585bbc9ee43bdbeafb2bedc6c20",
+  "source_rows": 3,
+  "context_rows": 15,
+  "query": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+  "parameters": [
+    "C05",
+    277,
+    291
+  ],
+  "physical_original": {
+    "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+    "bytes": 329826,
+    "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+  },
+  "whitespace_only_ascii_lookup_matches": [
+    {
+      "seq": 283,
+      "field": "acip",
+      "normalized_byte_offset": 186542,
+      "bytes": 165,
+      "matches": 1
+    },
+    {
+      "seq": 283,
+      "field": "english",
+      "normalized_byte_offset": 186708,
+      "bytes": 252,
+      "matches": 1
+    },
+    {
+      "seq": 284,
+      "field": "acip",
+      "normalized_byte_offset": 186961,
+      "bytes": 262,
+      "matches": 1
+    },
+    {
+      "seq": 284,
+      "field": "english",
+      "normalized_byte_offset": 187224,
+      "bytes": 355,
+      "matches": 1
+    },
+    {
+      "seq": 285,
+      "field": "acip",
+      "normalized_byte_offset": 187580,
+      "bytes": 252,
+      "matches": 1
+    },
+    {
+      "seq": 285,
+      "field": "english",
+      "normalized_byte_offset": 187833,
+      "bytes": 573,
+      "matches": 1
+    }
+  ],
+  "source_bytes_unchanged": true,
+  "future_semantic_brief": "semantic-review-brief-v2.md",
+  "prior_read_failure": "An attempted read of assumed prepare_next_batch.py exited1 because no such helper exists; actual files inspected and explicit source capture used. No earlier evidence changed."
+}

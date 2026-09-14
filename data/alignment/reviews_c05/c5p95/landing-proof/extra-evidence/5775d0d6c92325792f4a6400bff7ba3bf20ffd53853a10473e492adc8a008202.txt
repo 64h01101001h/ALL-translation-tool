@@ -1,0 +1,27 @@
+import datetime
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+assert __debug__ and sys.dont_write_bytecode
+BASE = Path(__file__).resolve().parent
+name, *command = sys.argv[1:]
+assert name and command and '/' not in name
+out = BASE / 'calls' / name
+out.mkdir(parents=True, exist_ok=False)
+env = os.environ.copy()
+env['PYTHONDONTWRITEBYTECODE'] = '1'
+start = datetime.datetime.now(datetime.timezone.utc).isoformat()
+(out / 'command.json').write_text(json.dumps({'argv': command, 'cwd': str(BASE), 'environment_overrides': {'PYTHONDONTWRITEBYTECODE':'1'}, 'started_at': start}, indent=2) + '\n')
+(out / 'stdin.bin').write_bytes(b'')
+result = subprocess.run(command, cwd=BASE, env=env, input=b'', capture_output=True)
+(out / 'stdout.bin').write_bytes(result.stdout)
+(out / 'stderr.bin').write_bytes(result.stderr)
+(out / 'exit.txt').write_text(str(result.returncode) + '\n')
+(out / 'execution.json').write_text(json.dumps({'started_at': start, 'ended_at': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'exit':result.returncode,'stdout_bytes':len(result.stdout),'stdout_sha256':hashlib.sha256(result.stdout).hexdigest(),'stderr_bytes':len(result.stderr),'stderr_sha256':hashlib.sha256(result.stderr).hexdigest()},indent=2)+'\n')
+sys.stdout.buffer.write(result.stdout)
+sys.stderr.buffer.write(result.stderr)
+sys.exit(result.returncode)

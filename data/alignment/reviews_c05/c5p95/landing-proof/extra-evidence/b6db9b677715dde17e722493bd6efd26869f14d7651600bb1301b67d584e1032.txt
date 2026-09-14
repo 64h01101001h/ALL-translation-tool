@@ -1,0 +1,67 @@
+from pathlib import Path
+import json,hashlib,os,datetime,argparse,sys
+I=Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration");P=I/'through282-final-intake-scope';O=I/'through282-final-supplement-scope'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def desc(p):
+ p=Path(p);r=p.resolve(strict=True);before=r.stat();raw=r.read_bytes();after=r.stat()
+ assert (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns)
+ return dict(original=str(p),resolved=str(r),symlinks=[dict(path=str(x),target=os.readlink(x)) for x in (*reversed(p.parents),p) if x.is_symlink()],**pin(raw))
+parser=argparse.ArgumentParser(description='Capture complete actual later scope only; no composer or supplement execution')
+parser.add_argument('--execute-reviewed-capture',action='store_true',required=True)
+parser.add_argument('--writers-quiescent',action='store_true',required=True)
+parser.add_argument('--extra-file',action='append',default=[])
+args=parser.parse_args()
+assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and not sys.flags.optimize
+assert not O.exists()
+active_caller=I/'through282-final-supplement-scope-caller'
+assert active_caller.is_dir() and not active_caller.is_symlink()
+initial_i_names=sorted(str(p) for p in I.glob('through282*'))
+for p in I.glob('through282*'):assert (p.is_file() or p.is_dir()) and not(p.is_symlink() and p.is_dir())
+s=json.loads((P/'final-source-scope.json').read_bytes())
+first=I/'through282-final-bank-inventory';p=json.loads((first/'proof.json').read_bytes())
+assert p['status']=='PASS_INITIAL_COMPOSITION_REQUIRES_LATER_ROOT_SUPPLEMENT'
+assert pin((first/'final-whitespace-inputs-initial.json').read_bytes())==p['list_pin']
+assert pin((first/'coverage-and-exclusion-map.json').read_bytes())==p['coverage_pin']
+caller=I/'through282-final-bank-inventory-caller';e=json.loads((caller/'execution.json').read_bytes());assert e['exit']==0
+for name in ['stdout','stderr']:
+ assert pin((caller/(name+'.bin')).read_bytes())==dict(bytes=e[name+'_bytes'],sha256=e[name+'_sha256'])
+assert (caller/'exit.txt').read_bytes()==b'0\n' and not (caller/'stderr.bin').read_bytes()
+controls={'initial_list':first/'final-whitespace-inputs-initial.json','initial_proof':first/'proof.json','initial_coverage':first/'coverage-and-exclusion-map.json','initial_scope':P/'final-source-scope.json','ordinary_manifest':I.parent/'C05-280-282/landing/root-proof-copy-manifest-before-whitespace.json','ordinary_extra_inputs':I/'through282-ordinary-bank-inventory/extra-inputs.json'}
+roots=sorted(set([Path(x) for x in s['deferred_before_final_bank']]+[p for p in I.glob('through282*') if p.is_dir() and p not in (O,active_caller)]),key=str)
+assert all(p.is_dir() for p in roots)
+groups=[]
+for root in roots:
+ assert root.is_dir() and not root.is_symlink()
+ for f in root.rglob('*'):
+  assert not(f.is_symlink() and f.is_dir()) and (f.is_file() or f.is_dir())
+ paths=sorted(str(x) for x in root.rglob('*') if x.is_file()); assert paths
+ groups.append(dict(root=str(root),files=[desc(x) for x in paths]))
+extra=[I/'release-whitespace282-actual-root.py',I/'accept-whitespace282-actual-root.py']+[Path(x) for x in args.extra_file]
+assert all(x.is_absolute() and x.is_file() and x.resolve(strict=True).is_relative_to(I) for x in extra)
+individual=sorted(set([p for p in I.glob('through282*') if p.is_file()]+extra+[Path(__file__).resolve()]),key=str)
+B=I.parent/'C05-280-282';L=B/'landing'
+ordinary=json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes())
+assert len(ordinary)==5633 and len(json.loads((I/'through282-ordinary-bank-inventory/extra-inputs.json').read_bytes()))==5575
+prior_batch={row['original']:row for row in ordinary if Path(row['original']).is_relative_to(B) and not Path(row['original']).is_relative_to(L)}
+prior_batch.update({row['original']:row for row in s['late_batch_files']})
+current_batch=sorted(str(x) for x in B.rglob('*') if x.is_file() and not x.is_relative_to(L))
+for f in B.rglob('*'):assert (f.is_file() or f.is_dir()) and not(f.is_symlink() and f.is_dir())
+assert set(prior_batch)<=set(current_batch)
+for logical,row in prior_batch.items():
+ d=desc(logical);assert d['resolved']==row['resolved'] and {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')}
+individual=sorted(set(individual+[Path(x) for x in current_batch if x not in prior_batch]),key=str)
+scope=dict(schema='through282-final-supplement-v1',baseline=s['baseline'],controls={k:desc(v) for k,v in controls.items()},required_completed_roots=s['deferred_before_final_bank'],roots=groups,individual_files=[desc(x) for x in individual],later_external_after_snapshot=[
+'Complete current supplement-scope JSON, capture proof/helper and actual outer caller after scope creation, independently pinned and retained by root before assembly',
+'Complete later literal-scope review, root release and full callers, retained externally without claiming pre-snapshot inclusion',
+'Complete supplement output/full caller, final banker output/full caller and final-stage preparation/verification/Git commands',
+'Complete later DATA/docs append/commits/root binding/checkpoint/early global observations'])
+for g in groups:
+ assert sorted(str(x) for x in Path(g['root']).rglob('*') if x.is_file())==[x['original'] for x in g['files']]
+ for row in g['files']:assert desc(row['original'])==row
+assert sorted(str(p) for p in I.glob('through282*'))==initial_i_names
+assert sorted(str(x) for x in B.rglob('*') if x.is_file() and not x.is_relative_to(L))==current_batch
+for row in list(scope['controls'].values())+scope['individual_files']:assert desc(row['original'])==row
+O.mkdir();raw=(json.dumps(scope,indent=2)+'\n').encode();(O/'supplement-scope.json').write_bytes(raw)
+proof=dict(status='PASS_LITERAL_ACTUAL_SCOPE_CAPTURE_PENDING_ROOT_RELEASE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),scope=pin(raw),root_count=len(groups),file_descriptors=sum(len(x['files']) for x in groups),individual_files=len(individual),initial_actual_proof=pin((first/'proof.json').read_bytes()),scope_output_and_later_caller_external=True)
+(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))
+

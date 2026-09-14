@@ -1,0 +1,72 @@
+{
+  "status": "CLOSED_FIXED_CHECKPOINT_THROUGH282_WITH_OPEN_INTEGRATION",
+  "utc": "2026-09-14T04:02:38.441052+00:00",
+  "incoming": "10968d16e701b698a0e1fbd845b353089d15ac39",
+  "data_head": "de1c6f3beb784d47d006af5dae6f23d8ce65e64f",
+  "final_head": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+  "verified_segments": 282,
+  "total_c05_segments": 511,
+  "remaining_c05": 229,
+  "next_batch": [
+    283,
+    284,
+    285
+  ],
+  "fixed_binding": {
+    "bytes": 1315,
+    "sha256": "0c96d8943874f46dbaebb5348174da1c9ab2a2331f2b2eb402a871730cc84960"
+  },
+  "final_stage": {
+    "bytes": 1177606,
+    "sha256": "0e85924f2089b25a54cfce5ce2aabce36544148f499e58cb4c0d3bd55df1f5cc"
+  },
+  "state": {
+    "head": {
+      "bytes": 41,
+      "sha256": "22bd79b0a4a4a91e2a30f317678d51cce33a4be9b82d076036f36e06760dd482"
+    },
+    "unstaged": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "staged": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "untracked": {
+      "bytes": 27,
+      "sha256": "cf1b5d8af66bb842339b98cd5568c684ef07354e5934b7bb5688681f46ecced8"
+    },
+    "index": {
+      "bytes": 4742552,
+      "sha256": "3c2645211e508f98f504aa2ef2bcd7d6ffc29e2f25bdc08c156d6a27038f830d"
+    }
+  },
+  "main_integration": "OPEN_NO_APPLICATION",
+  "phone_integration": "FAILED_UNACCEPTED: four inherited C01 correspondences; installed through171 unchanged",
+  "next_regular_outer_checkpoint": 291,
+  "c13": "BLOCKED_UPSTREAM",
+  "automation": "ACTIVE every minute until 2026-09-15T13:00:00Z",
+  "checkpoint_documents": {
+    "CAMPAIGN_STATUS.md": {
+      "before": {
+        "bytes": 2182,
+        "sha256": "1a58167cfab3d215f3e5e0c46ab4e8453d9cc4873848867f0284c6d330fe61e3"
+      },
+      "after": {
+        "bytes": 1253,
+        "sha256": "cc27479817221e4dd8f06ebc7c64752b5dcb50f26475e835fad82ba2bdb267ea"
+      }
+    },
+    "CAMPAIGN_CONTINUATION.md": {
+      "before": {
+        "bytes": 468588,
+        "sha256": "d769de0524518069d7e6fe2cb4877871d9349339f5896a54a61cec79c508cbed"
+      },
+      "after": {
+        "bytes": 472579,
+        "sha256": "c15604a513f1412bdde2e914a30cfc15e4bdb156863aa21b46f8acf81bfee395"
+      }
+    }
+  }
+}

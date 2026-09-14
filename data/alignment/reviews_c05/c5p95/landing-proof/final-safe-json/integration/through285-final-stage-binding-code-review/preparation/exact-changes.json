@@ -1,0 +1,182 @@
+[
+  {
+    "before": "through282",
+    "after": "through285",
+    "occurrences": 20
+  },
+  {
+    "before": "B=A/'C05-280-282'",
+    "after": "B=A/'C05-283-285'",
+    "occurrences": 1
+  },
+  {
+    "before": "P=I/'through285-final-stage-preparation';REVIEW=I/'through285-final-stage-code-review'",
+    "after": "P=I/'through285-final-banking-stage-preparation';REVIEW=I/'through285-stage-binding-path-correction-review'\nCODE=I/'through285-stage-binding-path-correction/verify_staged_through285.py'\nREPRODUCTION=I/'through285-generated-reproduction-root-acceptance/proof.json'\nHISTORICAL_CODE_SHA='d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c'\nBANK=W/'data/alignment/reviews_c05/c5p95/landing-proof'",
+    "occurrences": 1
+  },
+  {
+    "before": "BASE='10968d16e701b698a0e1fbd845b353089d15ac39'",
+    "after": "BASE='fb9182dc6fca2230be3bc5169ba1288a22430280'",
+    "occurrences": 1
+  },
+  {
+    "before": "CODE_SHA='b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee'",
+    "after": "CODE_SHA='d77253e906657f58962211d0aaa584df9272af4e2055faeb1bc62fccd7f1b0be'",
+    "occurrences": 1
+  },
+  {
+    "before": "REVIEW_SHA='81af1a77b2c6285a91499c6d0a595816a079363628abc9bb367aa0116d907899'",
+    "after": "REVIEW_SHA='7f5f87dc8b70adacde9caf1a290167686bfa4732953b9dd4d69cb58096f8903b'",
+    "occurrences": 1
+  },
+  {
+    "before": "LOG=I/'through285-whitespace-runs/raw-diagnostic/stdout.bin'",
+    "after": "LOG=I/'through285-stage-runs/initial-whitespace-caller/stdout.bin'",
+    "occurrences": 1
+  },
+  {
+    "before": "INPUTS={}",
+    "after": "INPUTS={}\nCALLERS={}",
+    "occurrences": 1
+  },
+  {
+    "before": " d=Path(d);assert d.is_absolute() and d.resolve(strict=True).is_relative_to(I.resolve())",
+    "after": " d=Path(d);assert d.is_absolute()\n ordinary_caller=B/'ordinary-bank-caller'\n assert d.resolve(strict=True).is_relative_to(I.resolve()) or (d==ordinary_caller and d.resolve(strict=True)==B.resolve(strict=True)/'ordinary-bank-caller'), 'Only the exact ordinary B caller extends the retained I boundary'",
+    "occurrences": 1
+  },
+  {
+    "before": " return command,execution",
+    "after": " CALLERS[str(d)]={name:read(d/name) for name in ('command.json','execution.json','stdin.bin','stdout.bin','stderr.bin','exit.txt')}\n return command,execution",
+    "occurrences": 1
+  },
+  {
+    "before": " assert pin(read(P/'verify_staged_through285.py'))['sha256']==CODE_SHA",
+    "after": " assert Path(args.final_bank_caller)==I/'through285-final-bank-caller', 'Exact planned final bank caller only'\n assert pin(read(CODE))['sha256']==CODE_SHA",
+    "occurrences": 1
+  },
+  {
+    "before": " assert review['spec_verdict']==review['quality_verdict']=='APPROVE' and not review['blocking_findings']\n assert review['candidate']==pin(read(P/'verify_staged_through285.py'))",
+    "after": " assert review['verdict']=='APPROVE' and review['open_findings']==[] and review['resolved_findings']==['STAGE-001']\n assert Path(review['corrected_source']['path'])==CODE;check(read(CODE),review['corrected_source'])\n prior_review_path=I/'through285-final-stage-independent-code-review/review.json'\n assert Path(review['prior_review']['path'])==prior_review_path\n prior_review_raw=read(prior_review_path);check(prior_review_raw,review['prior_review']);prior_review=json.loads(prior_review_raw)\n assert prior_review['verdict']=='REQUEST_CHANGES' and [r['id'] for r in prior_review['open_findings']]==['STAGE-001']\n for rel,r in json.loads(rf)['files'].items():check(read(REVIEW/relative(rel)),r)\n correction_freeze=read(CODE.parent/'freeze.json');check(correction_freeze,review['correction_freeze'])\n for rel,r in json.loads(correction_freeze)['files'].items():check(read(CODE.parent/relative(rel)),r)",
+    "occurrences": 1
+  },
+  {
+    "before": "P/'final-bindings-template.json'",
+    "after": "P/'final-bindings-template-final.json'",
+    "occurrences": 2
+  },
+  {
+    "before": "'429154a6e1122ee96222a13353273a1df28b63300abebec9fb91d4b9f8e983b9'",
+    "after": "'7cb4ec0831e41bae1aea258181d43f1a0c48ed8148df8a3104e7c6e754c273fa'",
+    "occurrences": 1
+  },
+  {
+    "before": "pf['files']['final-bindings-template.json']",
+    "after": "pf['files']['final-bindings-template-final.json']",
+    "occurrences": 1
+  },
+  {
+    "before": "template['page']==94 and template['sequences']==[280,281,282] and template['verifier_sha256']==CODE_SHA",
+    "after": "template['page']==95 and template['sequences']==[283,284,285] and template['verifier_sha256']==HISTORICAL_CODE_SHA\n # The frozen author template is historical; only this in-memory runtime copy gets the independently approved correction.\n template['verifier_sha256']=CODE_SHA",
+    "occurrences": 1
+  },
+  {
+    "before": "len(template['expected'])==11",
+    "after": "len(template['expected'])==12",
+    "occurrences": 2
+  },
+  {
+    "before": "len(template['input_pins'])==13",
+    "after": "len(template['input_pins'])==14",
+    "occurrences": 1
+  },
+  {
+    "before": " for phase,name,outer in [('ordinary','root-proof-copy-manifest-before-whitespace.json',I/'through285-banking-callers/ordinary'),('final-whitespace','root-proof-copy-manifest.json',Path(args.final_bank_caller))]:\n  directory=I/'through285-banking-runs'/phase;raw=read(L/name);manifest=json.loads(raw);result=obj(directory/'result.json')",
+    "after": " for phase,name,directory,outer in [('ordinary','root-proof-copy-manifest-before-whitespace.json',I/'through285-ordinary-bank-run',B/'ordinary-bank-caller'),('final-whitespace','root-proof-copy-manifest.json',I/'through285-final-bank-run',Path(args.final_bank_caller))]:\n  raw=read(L/name);manifest=json.loads(raw);result=obj(directory/'result.json')\n  if phase=='ordinary':check(raw,dict(bytes=9423149,sha256='cd3f374127d342a654cf3ad481a733becdd0173dcf836937b2d3b11219d8d000'))",
+    "occurrences": 1
+  },
+  {
+    "before": "  assert result['writes']==obj(directory/'write-events.json')",
+    "after": "  assert result['writes']==obj(directory/'write-events.json')\n  for record in manifest['files']:\n   original=Path(record['original']);copy_path=BANK/relative(record['copy'])\n   assert copy_path.resolve(strict=True).is_relative_to(BANK.resolve(strict=True))\n   original_raw=read(original);check(original_raw,record);assert read(copy_path)==original_raw\n  for record in manifest['external_actual_bytes_retained']:check(read(Path(record['path'])),record)",
+    "occurrences": 1
+  },
+  {
+    "before": " whitespace=obj(WS);accept=obj(ACCEPT)",
+    "after": " reproduction_raw=read(REPRODUCTION);check(reproduction_raw,dict(bytes=1331,sha256='fe377d7d9b00a251b5e7c361b8e36cac5a4af450e176ce9a6e87dc17bcd4b642'));reproduction=json.loads(reproduction_raw)\n assert reproduction['status']=='PASS' and reproduction['head']==BASE\n assert type(reproduction['retention_checks']) is int and reproduction['retention_checks']>0\n assert reproduction['all_seven_reproduced_outputs_byte_exact'] is reproduction['all_thirteen_payload_files_byte_exact'] is reproduction['live_head_index_untracked_state_unchanged'] is True\n whitespace=obj(WS);accept=obj(ACCEPT)",
+    "occurrences": 1
+  },
+  {
+    "before": " caller(I/'through285-whitespace-actual-root-acceptance-caller')",
+    "after": " caller(I/'through285-whitespace-actual-root-acceptance-caller')\n runtime=I/'through285-whitespace-actual-runtime';prepare=I/'through285-whitespace-actual-prepare'\n caller(I/'through285-whitespace-actual-runtime-caller')\n prepare_caller=I/'through285-whitespace-actual-prepare-caller';pc,pe=caller(prepare_caller)\n assert 'prepare' in pc['argv'] and pc['argv'][pc['argv'].index('--output')+1]==str(prepare)\n check(read(prepare_caller/'execution.json'),accept['checks']['prepare']['actual_caller'])\n prepare_raw=read(prepare/'whitespace-classification-preflight.json');check(prepare_raw,accept['checks']['prepare']['proof']);prepared=json.loads(prepare_raw)\n assert prepared['mode']=='prepare' and prepared['status'].startswith('PASS') and prepared['all_warnings_accounted_for'] is True\n assert prepared['warning_count']==whitespace['warning_count'] and prepared['files']==whitespace['files']\n assert read(prepare/'prepared-pins.json')==read(WS.parent/'prepared-pins.json')\n runtime_freeze=read(runtime/'freeze.json');check(runtime_freeze,accept['runtime_freeze'])\n for rel,r in json.loads(runtime_freeze)['files'].items():check(read(runtime/relative(rel)),r)\n for mode,directory in [('prepare',prepare),('audit',WS.parent)]:\n  consumed=obj(directory/'consumed-inputs.json');assert len(consumed)==accept['checks'][mode]['consumed_full_pairs']\n  for record in consumed:\n   original=Path(record['input_path']);assert str(original.resolve(strict=True))==record['path']\n   original_raw=read(original);check(original_raw,record);assert read(directory/relative(record['copy']))==original_raw",
+    "occurrences": 1
+  },
+  {
+    "before": " raw=read(LOG);assert len(raw)==whitespace['raw_log_bytes'] and pin(raw)['sha256']==whitespace['raw_log_sha256']",
+    "after": " raw=read(LOG);check(raw,dict(bytes=32794535,sha256='94799cb5a45a2b827d990f0ca2cda2a0d0e48debe747b5a89dd46625ced0ad10'))\n assert len(raw)==whitespace['raw_log_bytes'] and pin(raw)['sha256']==whitespace['raw_log_sha256']",
+    "occurrences": 1
+  },
+  {
+    "before": "all six dynamic input roles",
+    "after": "all seven dynamic input roles",
+    "occurrences": 1
+  },
+  {
+    "before": "I/'through285-banking-runs/ordinary/result.json'",
+    "after": "I/'through285-ordinary-bank-run/result.json'",
+    "occurrences": 1
+  },
+  {
+    "before": "I/'through285-banking-runs/final-whitespace/result.json'",
+    "after": "I/'through285-final-bank-run/result.json'",
+    "occurrences": 1
+  },
+  {
+    "before": "'whitespace_proof':WS,'whitespace_log':LOG}",
+    "after": "'whitespace_proof':WS,'whitespace_log':LOG,'reproduction_acceptance':REPRODUCTION}",
+    "occurrences": 1
+  },
+  {
+    "before": " return template,ordinary,final,whitespace",
+    "after": " return template,ordinary,final,whitespace,reproduction",
+    "occurrences": 1
+  },
+  {
+    "before": " template,ordinary,final,ws=prerequisites(args)",
+    "after": " template,ordinary,final,ws,reproduction=prerequisites(args)",
+    "occurrences": 1
+  },
+  {
+    "before": "  commands=[['rev-parse'",
+    "after": "  for caller_path,streams in CALLERS.items():\n   target=out/'native-callers'/Path(caller_path).name;target.mkdir(parents=True,exist_ok=False)\n   for name,raw in streams.items():(target/name).write_bytes(raw)\n  save('native-caller-map.json',{path:str(out/'native-callers'/Path(path).name) for path in CALLERS})\n  commands=[['rev-parse'",
+    "occurrences": 1
+  },
+  {
+    "before": "final_untracked_sha256=pin(untracked)['sha256'])",
+    "after": "final_untracked_sha256=pin(untracked)['sha256'],reproduction_retention_checks=reproduction['retention_checks'])",
+    "occurrences": 1
+  },
+  {
+    "before": "baseline=BASE,page=94,sequences=[280,281,282]",
+    "after": "baseline=BASE,page=95,sequences=[283,284,285]",
+    "occurrences": 1
+  },
+  {
+    "before": "raw_git_commands=counter,",
+    "after": "raw_git_commands=counter,actual_native_callers=len(CALLERS),reproduction_acceptance=pin(read(REPRODUCTION)),",
+    "occurrences": 1
+  },
+  {
+    "before": "str(P/'verify_staged_through285.py')",
+    "after": "str(CODE)",
+    "occurrences": 1
+  },
+  {
+    "before": "str(I/'through285-banking-runs/ordinary')",
+    "after": "str(I/'through285-ordinary-bank-run')",
+    "occurrences": 1
+  },
+  {
+    "before": "str(I/'through285-banking-runs/final-whitespace')",
+    "after": "str(I/'through285-final-bank-run')",
+    "occurrences": 1
+  }
+]

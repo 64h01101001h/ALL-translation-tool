@@ -1,0 +1,53 @@
+from pathlib import Path
+from html.parser import HTMLParser
+import hashlib,json
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');A=R/'campaign-artifacts/C05-283-285/tibetan'
+assert __debug__
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,x):
+    with p.open('xb') as f:f.write((json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+class Body(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True);self.stack=[];self.side=None;self.active=False;self.text={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}}
+    def handle_starttag(self,tag,attrs):
+        d=dict(attrs);old=(self.side,self.active)
+        if tag=='div' and d.get('class') in ['tib','eng']:self.side=d['class']
+        if tag=='span' and d.get('data-d')=='1':self.active=True
+        mark=(self.side,d.get('data-l'),len(self.text[self.side])) if self.side and self.active and tag=='span' and d.get('data-l') else None
+        self.stack.append((tag,old,mark))
+    def handle_data(self,data):
+        if self.side and self.active:self.text[self.side]+=data
+    def handle_endtag(self,tag):
+        t,old,mark=self.stack.pop();assert t==tag,(t,tag)
+        if mark:
+            side,lab,start=mark;self.ranges[side][lab]=[start,len(self.text[side])]
+        self.side,self.active=old
+out=[]
+for seq in [283,284,285]:
+    O=A/str(seq);C=O/('canonical-attempt02' if seq==283 else 'canonical-attempt01');specbytes=(O/'spec.json').read_bytes();spec=json.loads(specbytes);seg=spec['segments'][0];body=(O/'body.html').read_bytes();row=json.loads((O/'source-row.json').read_text());audit=json.loads((C/'runtime-audit.json').read_text());expected=json.loads((O/'intended-ranges.json').read_text())
+    assert (C/'exit.txt').read_bytes()==b'0\n' and (C/'stderr.txt').read_bytes()==b'' and (C/'stdout.txt').read_bytes()==body and (C/'stdin.bin').read_bytes()==specbytes
+    assert audit['sources_unchanged'] and audit['spine_unchanged'] and len(audit['connections'])==1 and len(audit['canonical_resolve_returns'])==2
+    actual={r['side']:r['ranges'] for r in audit['canonical_resolve_returns']};assert set(actual)=={'tib','eng'}
+    parser=Body();parser.feed(body.decode());assert parser.text=={'tib':row['wylie'],'eng':row['english']}
+    assert [r['id'] for r in expected]==[s['id'] for s in seg['spans']]
+    for s,r in zip(seg['spans'],expected):
+        assert set(r)=={'id','d','tib','eng','tib_range','eng_range','parent'}
+        for side,key,field in [('tib','tib_range','wylie'),('eng','eng_range','english')]:
+            assert actual[side][s['id']]==r[key]==parser.ranges[side]['s'+str(seq)+s['id']],(seq,s['id'],side)
+            lo,hi=r[key];assert row[field][lo:hi]==s[side]
+        assert s['tib']==r['tib'] and s['eng']==r['eng'] and s['d']==r['d']
+    save(O/'intended-spans.json',expected)
+    counts={'spans':len(seg['spans']),'null':sum(s['eng'] is None for s in seg['spans']),'nonnull_d5':sum(s['d']==5 and s['eng'] is not None for s in seg['spans']),'d3':sum(s['d']==3 for s in seg['spans']),'d6':sum(s['d']==6 for s in seg['spans']),'d7':sum(s['d']==7 for s in seg['spans']),'generated_groups_including_sentence':len(seg['spans'])+1}
+    licenses=[{'course':'C05','seq':seq,'id':s['id'],'tib':s['tib'],'eng':s['eng'],'licensor':'sogs','reason':'The exact phrase and the other is a list-closing gesture licensed by sogs (HGM entry 20919). The following two is excluded; no noun or numeral is imported.'} for s in seg['spans'] if s['tib']=='sogs']
+    save(O/'span-head-licenses.json',licenses)
+    shared=[]
+    for p in [A/'283/run-generator-ro-v2.py.txt',A/'283/run-canonical-attempt-v2.py.txt',A/'283/record-command.py.txt',A/'283/author-proposals.py.txt',A/'283/evidence/source-proof.json',A/'283/evidence/original-to-copy-map.json']:
+        shared.append({'original':str(p),'resolved':str(p.resolve()),'pin':pin(p.read_bytes()),'storage':'Retained exactly once in this own-angle batch; no copy is omitted from the listed path.'})
+    save(O/'shared-evidence-references.json',shared)
+    proof={'status':'PASS_CANONICAL_FIDELITY_AND_INTENDED_OCCURRENCES','producer':'Codex','angle':'Tibetan-first','course':'C05','seq':seq,'counts':counts,'spec':pin(specbytes),'body':pin(body),'intended_spans':pin((O/'intended-spans.json').read_bytes()),'errata':pin((O/'errata.json').read_bytes()),'errata_count':0,'canonical_attempt':str(C),'canonical_exit':0,'stderr':pin(b''),'body_equals_actual_stdout':True,'actual_profiled_canonical_ranges_equal_independent_author_intent':True,'emitted_html_spans_equal_canonical_and_intent':True,'stripped_full_sides_equal_original_spine_fields':True,'original_sources_unchanged':True,'head_licenses':licenses,'failed_attempts':[{'directory':str(O/'canonical-attempt01'),'exit':1,'canonical_entered':False,'reason':'Initial wrapper checked a nonexistent tools/hgm_tools.py dependency path; separate v2 uses the actual engines path.'}] if seq==283 else [],'semantic_acceptance':False,'limitation':'This independently authored proposal is provisional. Mechanical fidelity does not prove semantic correctness.'}
+    save(O/'proof.json',proof)
+    specific={283:'The two actions/person predicates are separate; the reply frame is d3, and the pronoun-expanded second “five” is unpaired.',284:'Repeated wet/flowing, glass/full and three/three/three targets are explicit; sogs excludes “two”, and steng owns only “upon”.',285:'ma owns “not”; can/las split “with”/“karma”; spatial roles and all three object/numeral occurrences remain distinct.'}[seq]
+    lines=[f'C05:{seq} — independent Tibetan-first proposal by Codex; PROVISIONAL.',specific,f'Counts: {counts["spans"]} spans; {counts["null"]} nulls; {counts["nonnull_d5"]} non-null d5; d3/d6/d7 = {counts["d3"]}/{counts["d6"]}/{counts["d7"]}.','Source: all six selected snapshot fields independently match the read-only spine; complete 277–291 context verified.','Evidence: shared 283/evidence/ retains full query results, material master/corpus records, physical C05/C15 sources, governing originals and exact original-to-copy aliases; decisions.json pins the specific files.','Text comparisons: C15:428 shares ACIP/Wylie but differs in English punctuation; C15:429–430 share all three text fields. This establishes no ingestion or independent-publication lineage.','Errata: []; no new demonstrable defect. Distributed/supplied wording is omitted with explicit reasons, not falsely nulled.',f'Canonical EXIT=0; empty stderr; body is actual stdout ({len(body)} bytes), SHA256 {pin(body)["sha256"]}.',f'Spec: {len(specbytes)} bytes, SHA256 {pin(specbytes)["sha256"]}; actual zero-based half-open ranges in intended-spans.json match author intent and emitted HTML.','Proof and actual command/stdin/stdout/stderr/exit are retained; 283 also preserves the failed pre-generator wrapper attempt and exact correction. No semantic acceptance or other-angle inspection.']
+    with (O/'report.md').open('x') as f:f.write('\n'.join(lines)+'\n')
+    out.append({'seq':seq,'counts':counts,'spec':proof['spec'],'body':proof['body']})
+print(json.dumps({'status':'PASS','segments':out}))

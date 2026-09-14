@@ -1,0 +1,119 @@
+"""Create a complete final-stage source adaptation, without running/importing it."""
+import ast,difflib,hashlib,json
+from pathlib import Path
+O=Path(__file__).resolve().parent;ROOT=O.parents[2];B=ROOT/'campaign-artifacts/C05-280-282';I=ROOT/'campaign-artifacts/integration';W=ROOT/'campaign-worktree';S=B/'staging-whitespace-preparation'
+def pin(p):
+ raw=Path(p).read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def load(p):return json.loads(Path(p).read_bytes())
+def save(n,x):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest=[]
+def copy(p,n):
+ d=O/n;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(p.read_bytes());assert d.read_bytes()==p.read_bytes();manifest.append(dict(original=str(p),copy=n,**pin(p)))
+prior=S/'verify_staged_through282.py';assert pin(prior)['sha256']=='e367a939b2db3182427a6ce3d69b17ecff5c2a3211dbf15081161c2ea9efd343'
+copy(prior,'prior-verify_staged_through282.py.txt')
+for p,n in [(S/'freeze.json','source-inputs/staging-freeze.json'),(B/'staging-ledger-plan-correction/binder-plan.json','source-inputs/corrected-binder-plan.json'),(B/'staging-ledger-plan-correction/corrected-command-plan.json','source-inputs/corrected-command-plan.json'),(B/'staging-ledger-plan-correction/freeze.json','source-inputs/planning-freeze.json')]:copy(p,n)
+closed=I/'through279-root-closure/proof.json';c=load(closed)
+assert c['status']=='CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and c['final_head']=='10968d16e701b698a0e1fbd845b353089d15ac39' and c['verified_segments']==279
+known_paths={'prior_closure':closed,'reproduction_acceptance':I/'through282-generated-reproduction-root-acceptance/proof.json','semantic_freeze':B/'semantic-review/freeze.json','semantic_review':B/'semantic-review/review.json','payload_manifest':B/'landing/staged-payload-manifest.json','payload_source_proof':B/'landing/staged-payload-source-proof.json','untracked_before':B/'landing/untracked-before-banking.stdout'}
+known={}
+for role,p in known_paths.items():copy(p,'source-inputs/'+role+('.bin' if role=='untracked_before' else '.json'));known[role]=dict(path=str(p),**pin(p))
+assert load(known_paths['reproduction_acceptance'])['retention_checks']==223847
+assert len(load(known_paths['payload_manifest'])['files'])==13
+old=prior.read_text();new=old;changes=[]
+def replace(a,b,why,count=1):
+ global new
+ assert new.count(a)==count,(a,new.count(a),count)
+ offsets=[];at=0
+ while True:
+  at=new.find(a,at)
+  if at<0:break
+  offsets.append(at);at+=len(a)
+ after_offsets=[p+i*(len(b)-len(a)) for i,p in enumerate(offsets)]
+ new=new.replace(a,b);changes.append(dict(before=a,after=b,occurrences=count,after_offsets=after_offsets,reason=why))
+start=new.index('# PREPARATION ONLY:');end=new.index('from pathlib import Path',start)
+replace(new[start:end],'','Remove the blanket preparation guard, including both mistaken ledger-DATA requirements. Replace it with the narrowly validated explicit final-release file below.')
+known_literal=repr(known)
+loader='''KNOWN_INPUT_PINS = '''+known_literal+'''
+EXPECTED_BINDING_KEYS = {'ordinary_bank_file_count','ordinary_external_count','final_bank_file_count','final_external_count','staged_count','warning_count','warning_file_count','diagnostic_exit','index_sha256','staged_path_stream_sha256','final_untracked_sha256'}
+EXPECTED_INPUT_ROLES = set(KNOWN_INPUT_PINS) | {'ordinary_manifest','final_manifest','ordinary_result','final_result','whitespace_proof','whitespace_log'}
+
+
+def load_release_bindings(args):
+    if not args.execute_reviewed_verification:
+        raise RuntimeError('Explicit reviewed final-stage runtime release is required')
+    path = Path(args.bindings)
+    assert path.is_absolute() and path.is_file() and re.fullmatch('[0-9a-f]{64}', args.bindings_sha256)
+    raw = path.read_bytes()
+    assert sha(raw) == args.bindings_sha256
+    binding = json.loads(raw)
+    assert set(binding) == {'schema','baseline','page','sequences','verifier_sha256','expected','input_pins'}
+    assert binding['schema'] == 'through282-final-data-stage-bindings-v1'
+    assert binding['baseline'] == BASE and binding['page'] == PAGE and binding['sequences'] == SEQS
+    assert binding['verifier_sha256'] == sha(Path(__file__).read_bytes())
+    expected = binding['expected']
+    assert isinstance(expected, dict) and set(expected) == EXPECTED_BINDING_KEYS
+    assert all(value is not None for value in expected.values()), 'Unbound measured final bank/stage/whitespace facts'
+    for key, value in expected.items():
+        if key.endswith('_sha256'): assert isinstance(value, str) and re.fullmatch('[0-9a-f]{64}', value)
+        else: assert type(value) is int and value >= 0
+    assert expected['staged_count'] > 13 and expected['diagnostic_exit'] in (0, 2)
+    pins = binding['input_pins']
+    assert isinstance(pins, dict) and set(pins) == EXPECTED_INPUT_ROLES
+    batch = Path(args.batch).resolve(strict=True); integration = batch.parent / 'integration'
+    ordinary = integration / 'through282-banking-runs/ordinary'; final = integration / 'through282-banking-runs/final-whitespace'
+    assert Path(args.banking_ordinary_run).resolve(strict=True) == ordinary.resolve(strict=True)
+    assert Path(args.banking_final_run).resolve(strict=True) == final.resolve(strict=True)
+    paths = {role: Path(record['path']) for role, record in KNOWN_INPUT_PINS.items()}
+    paths.update(ordinary_manifest=batch/'landing/root-proof-copy-manifest-before-whitespace.json', final_manifest=batch/'landing/root-proof-copy-manifest.json', ordinary_result=ordinary/'result.json', final_result=final/'result.json', whitespace_proof=Path(args.whitespace_proof), whitespace_log=Path(args.whitespace_log))
+    for role, record in pins.items():
+        assert isinstance(record, dict) and set(record) == {'path','bytes','sha256'}
+        assert isinstance(record['path'], str) and Path(record['path']).is_absolute()
+        assert type(record['bytes']) is int and record['bytes'] >= 0
+        assert isinstance(record['sha256'], str) and re.fullmatch('[0-9a-f]{64}', record['sha256'])
+        source = Path(record['path']); assert source.resolve(strict=True) == paths[role].resolve(strict=True)
+        value = source.read_bytes(); assert len(value) == record['bytes'] and sha(value) == record['sha256']
+        if role in KNOWN_INPUT_PINS: assert record == KNOWN_INPUT_PINS[role]
+    for role, supplied in [('untracked_before',args.untracked_before),('payload_manifest',args.payload_manifest),('payload_source_proof',args.payload_source_proof)]:
+        assert Path(supplied).resolve(strict=True) == paths[role].resolve(strict=True)
+    assert path.read_bytes() == raw
+    args.bound_release = binding; args.bound_release_raw = raw
+    return binding
+
+
+'''
+replace('class Check:\n',loader+'class Check:\n','New explicit reviewed/hash-bound release input gate; no caller/file read can substitute a guessed population.')
+replace('        self.args = args\n','        self.args = args\n        self.release = args.bound_release\n        assert self.raw(Path(args.bindings)) == args.bound_release_raw\n        for record in self.release[\'input_pins\'].values():\n            self.pincheck(self.raw(Path(record[\'path\'])), record)\n','Retain all final binding inputs in existing full-byte reread gate.')
+replace("        index_before = self.git('ls-files', '--stage', '-z')[0]\n","        index_before = self.git('ls-files', '--stage', '-z')[0]\n        assert sha(index_before) == self.release['expected']['index_sha256']\n",'Bind the actual complete index snapshot, retaining all final index equality checks.')
+replace("        staged = self.git('diff', '--cached', '--name-only', '-z')[0].decode().split('\\0')[:-1]\n","        staged_raw = self.git('diff', '--cached', '--name-only', '-z')[0]\n        staged = staged_raw.decode().split('\\0')[:-1]\n        assert sha(staged_raw) == self.release['expected']['staged_path_stream_sha256']\n        assert len(staged) == self.release['expected']['staged_count']\n",'Bind the exact observed staged stream and measured count without changing required-set membership.')
+replace("        current_untracked = self.git('ls-files', '--others', '--exclude-standard', '-z')[0]\n","        current_untracked = self.git('ls-files', '--others', '--exclude-standard', '-z')[0]\n        assert sha(current_untracked) == self.release['expected']['final_untracked_sha256']\n",'Bind actual final raw untracked state; preserve original before/after transition.')
+replace("        closed = self.obj(self.b.parent / PENDING_BINDINGS['prior_closure_proof_relative'])\n        assert closed['status'] == PENDING_BINDINGS['prior_closure_expected_status'] and closed['final_head'] == BASE\n","        closed = self.obj(Path(KNOWN_INPUT_PINS['prior_closure']['path']))\n        assert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE\n        assert closed['verified_segments'] == 279 and closed['next_batch'] == SEQS\n        reproduction = self.obj(Path(KNOWN_INPUT_PINS['reproduction_acceptance']['path']))\n        assert reproduction['status'] == 'PASS' and reproduction['head'] == BASE and reproduction['retention_checks'] == 223847\n",'Actual prior closure schema and actual accepted current reproduction are pinned; no invented nested path/status.')
+replace("        assert root_manifest['semantic_review_unchanged'] is True and root_manifest['phase'] == 'final-whitespace'\n","        assert root_manifest['semantic_review_unchanged'] is True and root_manifest['phase'] == 'final-whitespace'\n        assert len(root_manifest['files']) == self.release['expected']['final_bank_file_count']\n        assert len(root_manifest['external_actual_bytes_retained']) == self.release['expected']['final_external_count']\n",'Bind measured final bank populations, preserving full source/byte checks.')
+replace("        assert previous['phase'] == 'ordinary' and previous['semantic_review_unchanged'] is True\n","        assert previous['phase'] == 'ordinary' and previous['semantic_review_unchanged'] is True\n        assert len(previous['files']) == self.release['expected']['ordinary_bank_file_count']\n        assert len(previous['external_actual_bytes_retained']) == self.release['expected']['ordinary_external_count']\n",'Bind measured ordinary bank populations; no previous-batch count reused.')
+replace("        assert whitespace['all_warnings_accounted_for'] is True\n","        assert whitespace['all_warnings_accounted_for'] is True\n        assert whitespace['warning_count'] == self.release['expected']['warning_count']\n        assert len(whitespace['files']) == self.release['expected']['warning_file_count']\n        assert whitespace['git_diff_check_exit'] == self.release['expected']['diagnostic_exit']\n",'Exact actual final whitespace quantities; existing reproduced diagnostic remains mandatory.')
+replace("                    staged_count=len(staged_files), files=staged_files, source_hashes_unchanged=True,\n","                    staged_count=len(staged_files), files=staged_files, source_hashes_unchanged=True,\n                    reviewed_binding_sha256=sha(self.args.bound_release_raw), reviewed_binding_expected=self.release['expected'],\n",'Report the precise released input identity.')
+replace('    args = parser.parse_args()\n','    parser.add_argument(\'--bindings\', required=True)\n    parser.add_argument(\'--bindings-sha256\', required=True)\n    parser.add_argument(\'--execute-reviewed-verification\', action=\'store_true\')\n    args = parser.parse_args()\n','Explicit release inputs added to CLI.')
+replace('    check = Check(args)\n','    load_release_bindings(args)\n    check = Check(args)\n','Reject incomplete/unreviewed inputs before output creation or Git calls.')
+assert 'PENDING_BINDINGS' not in new and 'three_ledger' not in new
+reverse=new
+for item in reversed(changes):
+ for at in reversed(item['after_offsets']):
+  assert reverse[at:at+len(item['after'])]==item['after'];reverse=reverse[:at]+item['before']+reverse[at+len(item['after']):]
+assert reverse==old
+(O/'verify_staged_through282.py').write_text(new);prior_ast=ast.parse(old);candidate_ast=ast.parse(new)
+def functions(tree,text):return {x.name:ast.get_source_segment(text,x) for x in ast.walk(tree) if isinstance(x,ast.FunctionDef)}
+op,np=functions(prior_ast,old),functions(candidate_ast,new)
+critical=['freeze_entries','allowance_result','nul_paths','untracked_transition','check_final_head','raw','obj','git','old','require','pincheck','verify_source_archive','verify_payload_source','verify_untracked_capture','verify_banking_writes']
+assert all(op[k]==np[k] for k in critical)
+save('exact-replacement-map.json',changes)
+for name,a,z in [('forward.diff.txt',old,new),('inverse.diff.txt',new,old)]:(O/name).write_text(''.join(difflib.unified_diff(a.splitlines(True),z.splitlines(True),fromfile='before' if a==old else 'after',tofile='after' if z==new else 'before')))
+(O/'prior.ast.txt').write_text(ast.dump(prior_ast,include_attributes=False,indent=2)+'\n');(O/'current.ast.txt').write_text(ast.dump(candidate_ast,include_attributes=False,indent=2)+'\n')
+expected_keys=['ordinary_bank_file_count','ordinary_external_count','final_bank_file_count','final_external_count','staged_count','warning_count','warning_file_count','diagnostic_exit','index_sha256','staged_path_stream_sha256','final_untracked_sha256']
+pins=dict(known)
+future={'ordinary_manifest':str(B/'landing/root-proof-copy-manifest-before-whitespace.json'),'final_manifest':str(B/'landing/root-proof-copy-manifest.json'),'ordinary_result':str(I/'through282-banking-runs/ordinary/result.json'),'final_result':str(I/'through282-banking-runs/final-whitespace/result.json'),'whitespace_proof':None,'whitespace_log':None}
+for role,path in future.items():pins[role]=dict(path=path,bytes=None,sha256=None)
+save('final-bindings-template.json',dict(schema='through282-final-data-stage-bindings-v1',baseline='10968d16e701b698a0e1fbd845b353089d15ac39',page=94,sequences=[280,281,282],verifier_sha256=pin(O/'verify_staged_through282.py')['sha256'],expected={k:None for k in expected_keys},input_pins=pins))
+save('static-source-proof.json',dict(status='PASS_SOURCE_PREPARATION_ONLY',prior=pin(prior),candidate=pin(O/'verify_staged_through282.py'),exact_inverse_reconstruction=True,unchanged_complete_functions=critical,all_old_functions_present=set(op)<=set(np),new_function='load_release_bindings',full_source_and_historical_Git_gates_retained=True,DATA_payload13_and_allowance_preserved=True,semantic_freeze871_and_APPROVE_PASS_PASS_preserved=True,no_ledger_paths_added=True,unknown_actual_counts_all_null=True,only_ast_parsed=True,target_imported=False,target_executed=False,Git_SQL_tests_staging_bank_commit_run=False))
+save('original-to-copy-manifest.json',manifest)
+for r in manifest:assert pin(r['original'])=={k:r[k] for k in ['bytes','sha256']}==pin(O/r['copy'])
+print(json.dumps({'status':'SOURCE_PREPARED_PENDING_FINAL_RELEASE_BINDINGS','candidate':pin(O/'verify_staged_through282.py'),'original_copy_records':len(manifest)},indent=2))

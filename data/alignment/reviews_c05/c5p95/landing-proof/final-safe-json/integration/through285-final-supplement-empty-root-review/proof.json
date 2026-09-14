@@ -1,0 +1,41 @@
+{
+  "status": "PASS_INDEPENDENT_SOURCE_REVIEW_ONLY",
+  "candidate": {
+    "bytes": 14705,
+    "sha256": "77ba1c4a640ee1c85d3b53e8821ccc3a36d1716c467b1ead17ada13cf2791f65"
+  },
+  "old": {
+    "bytes": 13641,
+    "sha256": "2fd3f271ec64a5368b314c6a1da41885b2a509236a0d01398d11b941f1209e0f"
+  },
+  "source_freeze": {
+    "bytes": 1603,
+    "sha256": "f6957430e350fd5e8d9c7314fc2ce6b412921e0cd415c5a102df1b0d384ff03d"
+  },
+  "source_members": 11,
+  "source_copy_pairs": 28,
+  "edits": 6,
+  "full_forward_inverse_exact": true,
+  "all_original_functions_byte_identical": true,
+  "empty_roots": [
+    {
+      "root": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-config-v2-root-source-review",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-config-v2-root-source-review",
+      "device": 16777230,
+      "inode": 261219531,
+      "entries": []
+    },
+    {
+      "root": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-root-produced-measurements",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-root-produced-measurements",
+      "device": 16777230,
+      "inode": 261238387,
+      "entries": []
+    }
+  ],
+  "assembler_accepts_explicit_empty_groups": true,
+  "assembler_empty_root_limit": "It rechecks c.paths(root)==[] and preserves groups in the pinned input scope; it does not interpret empty_roots device/inode metadata. Actual literal review/root release must verify those metadata and retain full scope. No synthetic file or retention row is needed for an empty directory.",
+  "candidate_imports": 0,
+  "capture_composer_assembler_calls": 0,
+  "Git_SQL_test_bank_stage_calls": 0
+}

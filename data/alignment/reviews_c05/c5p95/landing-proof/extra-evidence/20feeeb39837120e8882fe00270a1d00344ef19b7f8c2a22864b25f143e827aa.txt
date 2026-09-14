@@ -1,0 +1,236 @@
+"""File-only source adaptation; never imports or invokes any prepared helper."""
+from pathlib import Path
+import ast, datetime, difflib, hashlib, json, os
+P=Path(__file__).resolve().parent; I=P.parent; A=I.parent; ROOT=A.parent
+B=A/'C05-283-285'; OLD=A/'C05-280-282'; W=ROOT/'campaign-worktree'
+assert P==I/'through285-final-banking-stage-preparation' and __debug__
+BASE='fb9182dc6fca2230be3bc5169ba1288a22430280'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def put(n,raw):
+ p=P/n;p.parent.mkdir(parents=True,exist_ok=True)
+ if p.exists():
+  assert p.read_bytes()==raw
+  return
+ with p.open('xb') as f:f.write(raw)
+ assert p.read_bytes()==raw
+def js(n,v):put(n,(json.dumps(v,ensure_ascii=False,indent=2)+'\n').encode())
+maps=[]
+def retain(path):
+ path=Path(path);raw=path.read_bytes();n='inputs/'+str(path.relative_to(A))
+ p=P/n
+ if p.exists():assert p.read_bytes()==raw
+ else:put(n,raw)
+ aliases=[dict(path=str(q),target=os.readlink(q)) for q in (*reversed(path.parents),path) if q.is_symlink()]
+ row=dict(original=str(path),resolved_original=str(path.resolve(strict=True)),copy=n,symlink_components=aliases,**pin(raw))
+ if row not in maps:maps.append(row)
+ return raw
+sources={
+ 'stage':I/'through282-final-stage-preparation/verify_staged_through282.py',
+ 'pathspec':I/'through282-explicit-stage-source-preparation/prepare-explicit-stage-inputs.py',
+ 'banker':I/'through285-ordinary-banking-preparation/candidates/bank_root_proofs_through285.py',
+ 'accepted_bank':OLD/'bank_root_proofs_through282.py',
+ 'acceptance':B/'landing-helper-preparation/verify-semantic-acceptance285.py',
+ 'copyregister':B/'landing-helper-preparation/verify-review-copy-and-register285.py',
+ 'whitespace':I/'through282-whitespace-source-preparation/whitespace282.py',
+ 'composer':I/'through282-final-bank-inventory-preparation/compose-final-inputs.py',
+ 'binder':I/'through282-final-stage-binding-preparation/bind_final_stage.py',
+ 'release_ws':I/'release-whitespace282-actual-root.py',
+ 'accept_ws':I/'accept-whitespace282-actual-root.py',
+ 'copy_once':A/'copy_evidence_once_v2.py',
+}
+raws={k:retain(v) for k,v in sources.items()}
+# Complete small contracts, approvals, full native evidence and historical recipe bytes.
+for dirname in ['through282-final-stage-preparation','through282-explicit-stage-source-preparation',
+ 'through282-final-stage-code-review','through282-explicit-stage-code-review',
+ 'through282-whitespace-source-preparation','through282-whitespace-code-review',
+ 'through282-final-bank-inventory-preparation','through282-final-intake-scope-preparation',
+ 'through282-final-stage-binding-preparation','through282-whitespace-root-method-preparation',
+ 'through285-ordinary-bank-root-source-review']:
+ directory=I/dirname
+ for p in sorted(directory.iterdir()):
+  if p.is_file():retain(p)
+  elif p.is_dir() and ('caller' in p.name or p.name=='failures'):
+   for q in sorted(p.rglob('*')):
+    if q.is_file():retain(q)
+for n in ['baseline.json','source.json','semantic-review/freeze.json','semantic-review/review.json',
+ 'semantic-review/audit-proof.json','semantic-review/completion-proof.json',
+ 'semantic-review/original-copy-manifest.json','semantic-review/additional-original-copy-manifest.json',
+ 'landing/staged-payload-manifest.json','landing/staged-payload-source-proof.json',
+ 'landing/root-semantic-acceptance-proof.json','landing/root-frozen-input-copy-check.json',
+ 'landing/review-copy-and-register-proof.json','landing/course-registration-verification.json',
+ 'landing/retention-source-check.json','landing/course-csv-retention.json',
+ 'landing/canonical-builds-once.json','landing/build-layer.command.json','landing/build-layer.stdout',
+ 'landing/build-layer.stderr','landing/build-layer.exit','landing/build-view.command.json',
+ 'landing/build-view.stdout','landing/build-view.stderr','landing/build-view.exit',
+ 'landing/ctest-17.command.json','landing/ctest-17.execution.json','landing/ctest-17.stdout',
+ 'landing/ctest-17.stderr','landing/ctest-17.exit','landing/untracked-before-banking.command.json',
+ 'landing/untracked-before-banking.stdout','landing/untracked-before-banking.stderr','landing/untracked-before-banking.exit',
+ 'landing/untracked-before-banking-native-provenance.json','root-payload-result-acceptance.json',
+ 'landing/registration-preimages/build_alignment_layer.py.txt','semantic-review/governing/build_alignment_layer.py']:
+ retain(B/n)
+for n in ['through282-root-closure/proof.json','through285-root-independent-review-verification/proof.json',
+ 'through285-root-reconciliation-verification-attempt01/execution-proof.json']:
+ retain(I/n)
+for seq in (283,284,285):
+ for n in ['proposed-head-allowances.json','final-tuples.json','body.html','spec.json','proof.json']:
+  retain(B/f'reconciled/{seq}/{n}')
+ retain(I/f'through285-root-reconciliation-verification-attempt01/{seq}.head-allowance-check.json')
+
+changes={};candidates={};proofs={}
+def begin(key):changes[key]=[];return raws[key].decode()
+def replace(key,s,old,new):
+ assert old!=new and old in s,(key,old)
+ count=s.count(old);positions=[];start=0;delta=0
+ while True:
+  at=s.find(old,start)
+  if at<0:break
+  positions.append(at+delta);delta+=len(new)-len(old);start=at+len(old)
+ changes[key].append(dict(old=old,new=new,count=count,after_positions=positions))
+ return s.replace(old,new)
+def finish(key,name,s):
+ original=raws[key].decode();inverse=s
+ for r in reversed(changes[key]):
+  assert len(r['after_positions'])==r['count']
+  for at in reversed(r['after_positions']):
+   assert inverse[at:at+len(r['new'])]==r['new'],(key,'inverse exact location',r)
+   inverse=inverse[:at]+r['old']+inverse[at+len(r['new']):]
+ assert inverse==original
+ tree=ast.parse(s);prior=ast.parse(original)
+ put('candidates/'+name,s.encode());js('changes/'+name+'.json',changes[key])
+ for label,left,right in [('forward',original,s),('inverse',s,original)]:
+  put('diffs/'+name+'.'+label+'.diff',''.join(difflib.unified_diff(left.splitlines(True),right.splitlines(True),fromfile=str(sources[key]) if label=='forward' else name,tofile=name if label=='forward' else str(sources[key]))).encode())
+ put('ast/'+name+'.txt',ast.dump(tree,indent=2).encode())
+ oldfunc={n.name:ast.get_source_segment(original,n) for n in ast.walk(prior) if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef))}
+ newfunc={n.name:ast.get_source_segment(s,n) for n in ast.walk(tree) if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef))}
+ proofs[name]=dict(original=pin(raws[key]),candidate=pin(s.encode()),inverse_full_bytes=True,ast_parsed_only=True,
+  old_functions=len(oldfunc),unchanged_functions=[n for n in oldfunc if newfunc.get(n)==oldfunc[n]],
+  changed_functions=[n for n in oldfunc if newfunc.get(n)!=oldfunc[n]],
+  assertions_before=sum(isinstance(n,ast.Assert) for n in ast.walk(prior)),assertions_after=sum(isinstance(n,ast.Assert) for n in ast.walk(tree)))
+ candidates[name]=pin(s.encode())
+
+# Exact source-extracted already accepted schema readers; never called here.
+accept=raws['acceptance'].decode();at=ast.parse(accept)
+functions={n.name:ast.get_source_segment(accept,n) for n in at.body if isinstance(n,ast.FunctionDef)}
+reader='\n\n'.join(functions[n] for n in ['review_segment_pin','review_segment_counts','review_total'])+'\n'
+copy_reader=functions['review_copy_manifest'].replace('def review_copy_manifest(review):','def review_copy_manifest(review, read):').replace('legacy.read_bytes()','read(legacy)').replace('(review / name).read_bytes()','read(review / name)')
+reader+='\n'+copy_reader+'\n'
+put('extracted-schema-readers.py.txt',reader.encode())
+
+s=begin('stage')
+for a,z in [('through282','through285'),('C05-280-282','C05-283-285'),('10968d16e701b698a0e1fbd845b353089d15ac39',BASE),
+ ('c5p94','c5p95'),('c5p93','c5p94'),('PAGE, SEQS = 94, [280, 281, 282]','PAGE, SEQS = 95, [283, 284, 285]'),
+ ('[280, 281, 282]','[283, 284, 285]'),('[277, 278, 279]','[280, 281, 282]'),
+ ('Page 94 · segments 280–282','Page 95 · segments 283–285'),('Page 93 · segments 277–279','Page 94 · segments 280–282'),
+ ('coverage: 282 of 511','coverage: 285 of 511'),('coverage: 279 of 511','coverage: 282 of 511'),
+ ('CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION','CLOSED_FIXED_CHECKPOINT_THROUGH282_WITH_OPEN_INTEGRATION'),
+ ("closed['verified_segments'] == 279","closed['verified_segments'] == 282")]:
+ s=replace('stage',s,a,z)
+s=replace('stage',s,"    assert freeze['status'] == 'FROZEN' and freeze['verdict'] == 'APPROVE' and freeze['page'] == 'c5p95'", "    assert freeze['status'] == 'FROZEN_INDEPENDENT_SEMANTIC_APPROVAL' and freeze['verdict'] == 'APPROVE'\n    assert freeze['baseline_commit'] == BASE and freeze['open_findings'] == []")
+s=replace('stage',s,'48827659 and len(rows) == 871','602052638 and len(rows) == 2386')
+known={role:dict(path=str(path),**pin(retain(path))) for role,path in {
+ 'prior_closure':I/'through282-root-closure/proof.json',
+ 'semantic_freeze':B/'semantic-review/freeze.json','semantic_review':B/'semantic-review/review.json',
+ 'payload_manifest':B/'landing/staged-payload-manifest.json','payload_source_proof':B/'landing/staged-payload-source-proof.json',
+ 'untracked_before':B/'landing/untracked-before-banking.stdout',
+ 'independent_review':I/'through285-root-independent-review-verification/proof.json'}.items()}
+oldline=next(x for x in s.splitlines() if x.startswith('KNOWN_INPUT_PINS = '))
+s=replace('stage',s,oldline,'KNOWN_INPUT_PINS = '+repr(known))
+s=replace('stage',s,"'final_untracked_sha256'}","'final_untracked_sha256','reproduction_retention_checks'}")
+s=replace('stage',s,"'whitespace_proof','whitespace_log'}","'whitespace_proof','whitespace_log','reproduction_acceptance'}")
+s=replace('stage',s,"    ordinary = integration / 'through285-banking-runs/ordinary'; final = integration / 'through285-banking-runs/final-whitespace'", "    ordinary = Path(pins['ordinary_result']['path']).parent; final = Path(pins['final_result']['path']).parent\n    for role in ('ordinary_result','final_result','reproduction_acceptance'):\n        path = Path(pins[role]['path'])\n        assert path.is_absolute() and path.resolve(strict=True).is_relative_to(integration.resolve(strict=True))\n    assert ordinary != final and pins['ordinary_result']['path'].endswith('/result.json') and pins['final_result']['path'].endswith('/result.json')")
+s=replace('stage',s,"whitespace_log=Path(args.whitespace_log))","whitespace_log=Path(args.whitespace_log), reproduction_acceptance=Path(pins['reproduction_acceptance']['path']))")
+s=replace('stage',s,"Path(KNOWN_INPUT_PINS['reproduction_acceptance']['path'])","Path(self.release['input_pins']['reproduction_acceptance']['path'])")
+s=replace('stage',s,"reproduction['retention_checks'] == 223847","reproduction['retention_checks'] == self.release['expected']['reproduction_retention_checks']\n        assert type(reproduction['retention_checks']) is int and reproduction['retention_checks'] > 0\n        assert reproduction['all_seven_reproduced_outputs_byte_exact'] is True\n        assert reproduction['all_thirteen_payload_files_byte_exact'] is True\n        assert reproduction['live_head_index_untracked_state_unchanged'] is True")
+fsha=pin(retain(B/'semantic-review/freeze.json'))['sha256']
+s=replace('stage',s,'5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b',fsha)
+s=replace('stage',s,"        assert meta['verdict'] == 'APPROVE' and meta['spec_verdict'] == meta['quality_verdict'] == 'PASS'", "        assert meta['verdict'] == 'APPROVE' and meta['baseline'] == BASE and meta['page'] == 'c5p95'\n        fidelity = self.obj(self.review / 'audit-proof.json')\n        assert fidelity['status'] == 'ACTUAL_CANONICAL_AND_SOURCE_FIDELITY_PASS_ONLY' and fidelity['spans'] == 76\n        completion = self.obj(self.review / 'completion-proof.json')\n        assert completion['status'] == 'COMPLETE_INDEPENDENT_SEMANTIC_APPROVAL'\n        self.pincheck(meta_raw, completion['review'])\n        independent = self.obj(Path(KNOWN_INPUT_PINS['independent_review']['path']))\n        assert independent['status'] == 'PASS_ROOT_REVIEW_OF_INDEPENDENT_SEMANTIC_APPROVAL_AND_MECHANICAL_RESULT'\n        assert independent['baseline'] == BASE and independent['semantic_freeze'] == dict(bytes=len(freeze_raw), sha256=sha(freeze_raw))")
+s=replace('stage',s,"dict(bytes=row[key + '_bytes'], sha256=row[key + '_sha256'])","review_segment_pin(row, key, self.review)")
+s=replace('stage',s,"dict(spans=row['span_count'], nulls=row['null_count'], word_pairs=row['word_pair_count'])","review_segment_counts(row)")
+s=replace('stage',s,"assert all(meta['total_' + k] == v for k, v in totals.items())","assert all(review_total(meta, k) == v for k, v in totals.items())\n        assert totals == dict(spans=76, nulls=0, word_pairs=61)")
+s=replace('stage',s,"        manifest = self.obj(self.review / 'original-to-copy-manifest.json')","        manifest, manifest_sources = review_copy_manifest(self.review, self.raw)\n        assert manifest_sources == accepted['manifest_sources'] == copied['manifest_sources']\n        assert len(manifest) == 1278")
+s=replace('stage',s,"            else:\n                original = self.raw(Path(row['original']))\n            assert original == raw", "            elif Path(row['original']).resolve(strict=True) == (self.w / 'tools/build_alignment_layer.py').resolve(strict=True):\n                # Exact frozen pre-registration source; current builder is checked in full below.\n                assert row['copy'] == 'governing/build_alignment_layer.py'\n                assert row['bytes'] == 39640 and row['sha256'] == 'f34db3d81708aa2143710d91ac4a1abcbf93dba4d33a0abfb00a51fe511975f1'\n                original = self.old('tools/build_alignment_layer.py')\n                assert original == self.raw(self.l / 'registration-preimages/build_alignment_layer.py.txt')\n            else:\n                original = self.raw(Path(row['original']))\n            assert original == raw\n            if 'content_addressed_copy' in row:\n                object_rel = str(relative(row['content_addressed_copy']))\n                assert object_rel in frozen and self.raw(self.review / object_rel) == raw\n                self.require(self.bank_rel / object_rel, raw)")
+cr=raws['copyregister'].decode()
+allow=cr[cr.index("mechanical = art / 'integration/through285-root-reconciliation-verification-attempt01'"):cr.index('if isinstance(wanted,list):')]
+allow=allow.replace("art / 'integration/through285-root-reconciliation-verification-attempt01'","self.b.parent / 'integration/through285-root-reconciliation-verification-attempt01'")
+allow=allow.replace("(mechanical / 'execution-proof.json').read_bytes()","self.raw(mechanical / 'execution-proof.json')").replace('hashlib.sha256(proof_raw).hexdigest()','sha(proof_raw)').replace("== base","== BASE")
+allow=allow.replace("batch / 'reconciled'","self.b / 'reconciled'").replace("wt / 'tools/test_no_supplied_span_head.py'","self.w / 'tools/test_no_supplied_span_head.py'")
+allow=allow.replace("json.loads((final / 'proposed-head-allowances.json').read_bytes())","self.obj(final / 'proposed-head-allowances.json')").replace("json.loads((mechanical / f'{seq}.head-allowance-check.json').read_bytes())","self.obj(mechanical / f'{seq}.head-allowance-check.json')")
+allow=allow.replace('predicate.read_bytes()','self.raw(predicate)').replace('hashlib.sha256(predicate_raw).hexdigest()','sha(predicate_raw)').replace("json.loads((final / 'final-tuples.json').read_bytes())","self.obj(final / 'final-tuples.json')").replace("(final / 'body.html').read_text()","self.raw(final / 'body.html').decode()")
+old="        needed_path = self.review / 'span-head-allow-needed.json'\n        wanted = self.obj(needed_path) if needed_path.exists() else {}"
+new="        assert not (self.review / 'span-head-allow-needed.json').exists()\n"+'\n'.join('        '+line if line else '' for line in allow.splitlines())
+s=replace('stage',s,old,new)
+s=replace('stage',s,'\n\nclass Check:', '\n\n'+reader+'\nclass Check:')
+finish('stage','verify_staged_through285.py',s)
+
+s=begin('pathspec')
+for a,z in [('c5p94','c5p95'),('through282-stage-runs','through285-stage-runs'),('(280,281,282)','(283,284,285)'),
+ ("f['status']=='FROZEN'","f['status']=='FROZEN_INDEPENDENT_SEMANTIC_APPROVAL'"),('file_count\']==871','file_count\']==2386'),
+ ('5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b',fsha),
+ ("meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS'","meta['verdict']=='APPROVE' and meta['open_findings']==[] and meta['totals']['spans']==76 and meta['baseline']==BASE")]:
+ s=replace('pathspec',s,a,z)
+s=replace('pathspec',s,"mode=sys.argv[1];assert mode in ('initial','final');O=I/'through285-stage-runs'/(mode+'-preparation');O.mkdir(parents=True,exist_ok=False)", "BASE='"+BASE+"'\nassert B.name=='C05-283-285' and Path(__file__).resolve()==B/'prepare-explicit-stage-inputs.py' and __debug__\nmode=sys.argv[1];assert mode in ('initial','final');O=I/'through285-stage-runs'/(mode+'-preparation')\nrelease=json.loads((B/'root-stage-pathspec-release.json').read_bytes())\nassert release['status']=='PASS_ROOT_RELEASE_OF_REVIEWED_STAGE_PATHSPEC_SOURCE' and release['baseline']==BASE\nsource=Path(__file__).read_bytes();assert release['source']==dict(bytes=len(source),sha256=hashlib.sha256(source).hexdigest())\nrepro=release['reproduction_acceptance'];rp=Path(repro['path']);assert rp.is_absolute() and rp.resolve().is_relative_to(I.resolve())\nraw=rp.read_bytes();assert dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())=={k:repro[k] for k in ('bytes','sha256')}\nproof=json.loads(raw);assert proof['status']=='PASS' and proof['head']==BASE\nassert proof['all_seven_reproduced_outputs_byte_exact'] is proof['all_thirteen_payload_files_byte_exact'] is proof['live_head_index_untracked_state_unchanged'] is True\nO.mkdir(parents=True,exist_ok=False)")
+s=replace('pathspec',s,"assert js(I/'through282-generated-reproduction-root-acceptance/proof.json')['status']=='PASS'", "assert proof['status']=='PASS'  # Exact released reproduction identity read before any output mutation.")
+finish('pathspec','prepare-explicit-stage-inputs.py',s)
+
+s=begin('banker')
+s=replace('banker',s,"    parser.add_argument('--whitespace-inputs')", "    parser.add_argument('--whitespace-inputs')\n    parser.add_argument('--final-release', required=True)\n    parser.add_argument('--final-release-sha256', required=True)")
+start=s.index("    assert args.phase == 'ordinary'")
+end=s.index("    landing = b / 'landing'",start)
+old=s[start:end]
+new='''    assert args.phase == 'final-whitespace', 'Ordinary producer remains immutable; this is a distinct final-phase source'
+    release_path = Path(args.final_release)
+    integration = b.parent / 'integration'
+    assert release_path.is_absolute() and release_path.resolve(strict=True).is_relative_to(integration.resolve(strict=True))
+    release_raw = release_path.read_bytes()
+    assert pin(release_raw)['sha256'] == args.final_release_sha256
+    release = json.loads(release_raw)
+    assert release['status'] == 'PASS_ROOT_RELEASE_OF_REVIEWED_FINAL_BANK_METHOD'
+    assert release['baseline'] == BASE and release['page'] == PAGE and release['sequences'] == SEQS
+    assert release['banker']['path'] == str(Path(__file__).resolve())
+    assert pin(Path(__file__).read_bytes()) == {k: release['banker'][k] for k in ('bytes', 'sha256')}
+    bound = release['inputs']
+    assert set(bound) == {'reproduction_acceptance','ordinary_manifest','ordinary_extra_inputs','final_whitespace_inputs','whitespace_root_acceptance'}
+    values = {}
+    for role, record in bound.items():
+        source = Path(record['path']); assert source.is_absolute()
+        raw = source.read_bytes(); assert pin(raw) == {k:record[k] for k in ('bytes','sha256')}
+        values[role] = json.loads(raw)
+    for role, path in [('ordinary_manifest',b/'landing/root-proof-copy-manifest-before-whitespace.json'),('ordinary_extra_inputs',Path(args.extra_inputs)),('final_whitespace_inputs',Path(args.whitespace_inputs))]:
+        assert Path(bound[role]['path']).resolve(strict=True) == path.resolve(strict=True)
+    reproduction = values['reproduction_acceptance']
+    assert reproduction['status'] == 'PASS' and reproduction['head'] == BASE
+    assert reproduction['all_seven_reproduced_outputs_byte_exact'] is reproduction['all_thirteen_payload_files_byte_exact'] is reproduction['live_head_index_untracked_state_unchanged'] is True
+    assert values['ordinary_manifest']['phase'] == 'ordinary' and values['ordinary_manifest']['semantic_review_unchanged'] is True
+    ws = values['whitespace_root_acceptance']
+    assert ws['status'] == 'PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and ws['normalization'] is False and ws['semantic_approval'] is False
+    assert isinstance(values['ordinary_extra_inputs'],list) and values['ordinary_extra_inputs']
+    assert isinstance(values['final_whitespace_inputs'],list) and values['final_whitespace_inputs']
+'''
+s=replace('banker',s,old,new)
+s=replace('banker',s,"    try:\n        argv = ['git', 'rev-parse', 'HEAD']", "    try:\n        assert read(release_path) == release_raw\n        for row in bound.values(): match(read(row['path']), row)\n        argv = ['git', 'rev-parse', 'HEAD']")
+# Distinct source filename prevents collision with immutable ordinary helper copy.
+finish('banker','bank_root_proofs_through285_final.py',s)
+
+# Reusable shared copy helper is retained unchanged; no redundant new executable.
+js('candidate-pins.json',candidates);js('static-source-proof.json',proofs)
+pending_expected={k:None for k in ['ordinary_bank_file_count','ordinary_external_count','final_bank_file_count','final_external_count','staged_count','warning_count','warning_file_count','diagnostic_exit','index_sha256','staged_path_stream_sha256','final_untracked_sha256','reproduction_retention_checks']}
+pending_pins=dict(known)
+for role in ['reproduction_acceptance','ordinary_manifest','final_manifest','ordinary_result','final_result','whitespace_proof','whitespace_log']:
+ pending_pins[role]=dict(path=None,bytes=None,sha256=None)
+js('final-bindings-template.json',dict(schema='through285-final-data-stage-bindings-v1',baseline=BASE,page=95,sequences=[283,284,285],verifier_sha256=candidates['verify_staged_through285.py']['sha256'],expected=pending_expected,input_pins=pending_pins))
+js('pending-interface.json',dict(status='SOURCE_PREPARATION_ONLY_NOT_RUNTIME_RELEASE',
+ current=dict(baseline=BASE,page=95,sequences=[283,284,285],semantic_members=2386,semantic_member_bytes=602052638,spans=76,nulls=0,d5_nonnull=61,payload_files=13,payload_bytes=41185332,tests=17),
+ pending=['actual reproduction acceptance path/pin and measured retention checks','ordinary manifest/extra LIST/run/caller/path pins and all measured counts','initial stage pathspec/run/caller and complete actual raw diagnostic','physical original descriptors with complete raw copies, aliases and extents','source-specific additional warning descriptors and reviewed classifier/source release','actual prepare/audit/root acceptance full streams and pins','finite final inventory scope, initial LIST and later supplement + full controls/aliases','final bank release/input LIST/run/caller full pins and counts','final delta stage and full index/staged/untracked stream hashes','DATA commit, exactly three subsequent ledger appends, DOCS commit, final closure'],
+ byte_identity_boundary='Raw stdout/CRLF and NUL-delimited index-entry stream retained; no normalization. index_sha256 means git ls-files --stage -z, not .git/index binary.',
+ external_boundary='Selected sources and native preparation callers copied in full. Existing proposals/reviews/failures remain in full immutable originals; this source package does not clone the full 602MB semantic tree. Final inventory and all later callers need their own truthful finite intake/external boundary.',
+ warning_reference='Complete through282 actual classifier and descriptors are historical reference only; no old 12-case/130-warning/43903-warning or continuation-line identity is a current allowance. Current diagnostic has not been classified here.',
+ source_role='Codex /root/c05_280_282_english; current tooling author. Prior English proposer/tooling roles reused; neither independent code nor semantic approval.',
+ commands_executed=dict(target_imports=0,target_executions=0,Git=0,SQL=0,tests=0,builders=0,bank=0,stage=0,commits=0)))
+js('source-differences.json',dict(schema=['Nested segment spec/body pins and spans/nulls/d5_nonnull/totals; accepted exact reader source retained.','Current APPROVE plus canonical-fidelity/completion and pinned actual root independent review; no fabricated SPEC/QUALITY fields.','Two full copy maps with every raw original/copy/object triple; exact current semantic2386-member census.','Exactly one live builder original is now registered: unchanged frozen baseline source and object bound to exact BASE Git blob + full registration preimage, then exact current transform check. No other live-source exception.','Two reviewed head licenses tied to exact mechanical hits/predicate/tuples/body ranges and frozen proposed reason strings; no fabricated span-head file.','Reproduction paths/counts and bank paths/counts are future reviewed bindings, not stale223847 or old run names.'],
+ deferred_adaptations=['Actual diagnostic-specific whitespace source and release/acceptance','Final intake composer/scope/supplement five batch/path bindings and distinct final banker basename automatic route','Final staged binding producer from full preserved prior; consume actual data only'],
+ unchanged_reuse=['copy_evidence_once_v2.py unchanged full source retained; no execution or needless duplicate wrapper','Nine whitespace lexical/literal/physical/diff predicates remain complete in preserved accepted historical source; future source must retain their exact behavior']))
+for row in maps:
+ raw=Path(row['original']).read_bytes();assert pin(raw)=={k:row[k] for k in ('bytes','sha256')} and (P/row['copy']).read_bytes()==raw
+ assert str(Path(row['original']).resolve(strict=True))==row['resolved_original']
+js('original-to-copy-manifest.json',maps)
+print(json.dumps(dict(status='SOURCE_PREPARATION_ONLY',candidates=candidates,full_source_pairs=len(maps),target_executions=0),indent=2))

@@ -1,0 +1,32 @@
+{
+  "source_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/reconciled/283/queries/091.json",
+  "uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+  "parameters": [
+    "byas",
+    "byas"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 12728,
+      "wylie": "byas",
+      "tibetan": "བྱས",
+      "tibetan_source": null,
+      "acip": "BYAS",
+      "pronunciation": "je",
+      "pronunciation_source": null,
+      "sanskrit": "bya/ byed/ byas/ byos/; kṛta; {MSA}kārita; {C}saṃskṛta; {LC}akarot; {LC}akalpayat; {LC}akārayat; {LC}ādadhe; {LC}iṣṭa",
+      "hopkins_english": "verb: do; act; perform; fabricate; take ... as {BJ 37.4}7 noun: action; activity; performance; {C}produced; conditioned; compounded; effected",
+      "hgm_gloss": "[\"may\", \"have done\", \"commit\", \"make\", \"felt\", \"performing\", \"had\", \"is committed\", \"activities\", \"has been\", \"develop\", \"doing\", \"commits\", \"rolled them up\", \"did\", \"undertake\", \"[please note that the tibetan rtag par gyis here should be read brtag par gyis, as in the root text. we have left the original spelling because both editions available to us read it this way.]\", \"attempts to\", \"causes\", \"have set down\", \"works\", \"made\", \"acts\", \"brings\", \"has\", \"done\", \"activity\", \"committed\", \"have served\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": "bya/ byed/ byas/ byos",
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 3336,
+      "raw": "{\"tibetan\": \"བྱས\", \"wylie\": \"byas\", \"wylie_variants\": [\"byas\"], \"tenses\": \"bya/ byed/ byas/ byos\", \"sanskrit\": \"bya/ byed/ byas/ byos/; kṛta; {MSA}kārita; {C}saṃskṛta; {LC}akarot; {LC}akalpayat; {LC}akārayat; {LC}ādadhe; {LC}iṣṭa\", \"hopkins_english\": \"verb: do; act; perform; fabricate; take ... as {BJ 37.4}7 noun: action; activity; performance; {C}produced; conditioned; compounded; effected\", \"hgm_gloss\": [\"may\", \"have done\", \"commit\", \"make\", \"felt\", \"performing\", \"had\", \"is committed\", \"activities\", \"has been\", \"develop\", \"doing\", \"commits\", \"rolled them up\", \"did\", \"undertake\", \"[please note that the tibetan rtag par gyis here should be read brtag par gyis, as in the root text. we have left the original spelling because both editions available to us read it this way.]\", \"attempts to\", \"causes\", \"have set down\", \"works\", \"made\", \"acts\", \"brings\", \"has\", \"done\", \"activity\", \"committed\", \"have served\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"je\", \"acip\": \"BYAS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 3336}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

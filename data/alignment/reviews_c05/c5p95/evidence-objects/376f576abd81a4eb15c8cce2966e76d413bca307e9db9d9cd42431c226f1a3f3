@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+  "parameters": [
+    "gang",
+    "gang"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 1648,
+      "wylie": "gang",
+      "tibetan": "གང",
+      "tibetan_source": null,
+      "acip": "GANG",
+      "pronunciation": "gang",
+      "pronunciation_source": null,
+      "sanskrit": "{LCh}ka, {C}katara; {MSA}yad; {MV. IV.4}katame; {LC}kaḥ; {LC}katama; {LC}kasyacid; {LC}nāpi kasyacid dharmasya prahāṇāyābhiyukto bhavati; {LC}kā; {LC}kim; {LC}ākīrṇa; {LC}pūrṇa; {LC}pūrṇita; {LC}yaḥ; {LC}yattu; {LC}yadi; {LC}yad yad; {LC}gram; {LC}yasya; {LC}yā; {LC}ye; {LC}ye ca; {LC}hi; {LC}agnikhadā; {LC}apūryata; {LC}abhikīrṇa; {LC}ābhoga; {LC}unmita; {LC}kīrṇa; {LC}bharita; {LC}bhṛta; {LC}yat; {LC}yat kiñcit; {LC}yatra; {LC}yena; {LC}tavakṣīri; {LC}prastha",
+      "hopkins_english": "relative and interrogative pronoun: what; who; which; {PH}anything; that; what",
+      "hgm_gloss": "[\"which\", \"what\", \"whom\", \"fill\", \"any\", \"somehow\", \"whether\", \"filled\", \"the place\", \"with\", \"who\", \"those\", \"one\", \"achieved thus\", \"that\", \"certain\", \"anyone\", \"what ... ?\", \"filled with\", \"it\", \"anything\", \"when\", \"such that\", \"someone\", \"full\", \"how\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 5200,
+      "raw": "{\"tibetan\": \"གང\", \"wylie\": \"gang\", \"wylie_variants\": [\"gang\"], \"tenses\": null, \"sanskrit\": \"{LCh}ka, {C}katara; {MSA}yad; {MV. IV.4}katame; {LC}kaḥ; {LC}katama; {LC}kasyacid; {LC}nāpi kasyacid dharmasya prahāṇāyābhiyukto bhavati; {LC}kā; {LC}kim; {LC}ākīrṇa; {LC}pūrṇa; {LC}pūrṇita; {LC}yaḥ; {LC}yattu; {LC}yadi; {LC}yad yad; {LC}gram; {LC}yasya; {LC}yā; {LC}ye; {LC}ye ca; {LC}hi; {LC}agnikhadā; {LC}apūryata; {LC}abhikīrṇa; {LC}ābhoga; {LC}unmita; {LC}kīrṇa; {LC}bharita; {LC}bhṛta; {LC}yat; {LC}yat kiñcit; {LC}yatra; {LC}yena; {LC}tavakṣīri; {LC}prastha\", \"hopkins_english\": \"relative and interrogative pronoun: what; who; which; {PH}anything; that; what\", \"hgm_gloss\": [\"which\", \"what\", \"whom\", \"fill\", \"any\", \"somehow\", \"whether\", \"filled\", \"the place\", \"with\", \"who\", \"those\", \"one\", \"achieved thus\", \"that\", \"certain\", \"anyone\", \"what ... ?\", \"filled with\", \"it\", \"anything\", \"when\", \"such that\", \"someone\", \"full\", \"how\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"gang\", \"acip\": \"GANG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 5200}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

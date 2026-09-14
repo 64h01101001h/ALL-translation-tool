@@ -1,0 +1,74 @@
+from pathlib import Path
+import ast,difflib,hashlib,json
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');A=R/'campaign-artifacts';I=A/'integration';P=I/'through285-reconciliation-verifier-original-freeze-adapter';O=I/'through285-reconciliation-verifier-query-shape-adapter';B=A/'C05-283-285'
+assert __debug__
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(p,b):
+    p.parent.mkdir(parents=True,exist_ok=True)
+    with p.open('xb') as f:f.write(b)
+def save(p,x):write(p,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+mapping=[]
+def take(p,n):
+    b=p.read_bytes();write(O/n,b);assert p.read_bytes()==b;mapping.append({'original':str(p),'resolved':str(p.resolve()),'symlink':str(p.readlink()) if p.is_symlink() else None,'copy':n,**pin(b)});return b
+runtime=take(P/'verify_reconciliation.py','inputs/prior-verify_reconciliation.py');contract=take(P/'config_contract.py','inputs/prior-config_contract.py')
+assert pin(runtime)=={'bytes':16475,'sha256':'945086f1b2f93b40f9fa8f59535f0c9fc29972f6d1c01beea3d6fddaf23ea4ac'}
+assert pin(contract)=={'bytes':10668,'sha256':'caff81a7c2b1da46e7630428d4b1ff0ac64cc0e82e9716f59ae3563d68519561'}
+take(P/'freeze.json','inputs/prior-preparation-freeze.json');take(P/'report.md','inputs/prior-report.md');take(I/'through285-reconciliation-freeze-adapter-root-review/proof.json','inputs/root-base-source-approval.json')
+inventory=[];control=[];nonquery=[];freezes=[]
+for angle,filename in [('tibetan','freeze-manifest.json'),('english','freeze.json')]:
+    for seq in [283,284,285]:
+        d=B/angle/str(seq);fb=take(d/filename,f'inputs/freezes/{angle}-{seq}-{filename}');v=json.loads(fb);members=v if isinstance(v,list) else v['files'];freezes.append({'angle':angle,'seq':seq,'path':str(d/filename),**pin(fb)})
+        for row in members:
+            rel=row['path']
+            wanted=(angle=='tibetan' and rel in ['evidence/sqlite-query-results.json','evidence/supplement-lexical-queries.json']) or (angle=='english' and rel.startswith('queries/') and rel.endswith('.json'))
+            if not wanted:continue
+            raw=take(d/rel,f'inputs/original-descriptors/{angle}-{seq}/{rel}');assert pin(raw)=={k:row[k] for k in ['bytes','sha256']};obj=json.loads(raw);ref={'original':str(d/rel),'copy':f'inputs/original-descriptors/{angle}-{seq}/{rel}',**pin(raw)}
+            if angle=='tibetan':
+                assert set(obj) in [{'database','uri','query_only','queries'},{'uri','query_only','queries','master_original','master_pin','full_master_records'}] and obj['query_only'] is True and isinstance(obj['queries'],list)
+                records=[(i,r,{'kind':'query_container_parameters','index':i}) for i,r in enumerate(obj['queries'])]
+            elif isinstance(obj,dict) and 'sql' in obj:records=[(None,obj,{'kind':'standalone'})]
+            else:nonquery.append({'descriptor':ref,'shape':type(obj).__name__,'reason':'Original metadata/control descriptor without an SQL statement; retained unchanged, not a lexical SELECT.'});continue
+            for index,record,binding in records:
+                expected={'label','sql','parameters','row_count','rows'} if angle=='tibetan' else {'sql','parameters','row_count','rows'};assert set(record)==expected
+                assert type(record['row_count'])is int and record['row_count']==len(record['rows']) and 'count' not in record
+                data={'angle':angle,'seq':seq,'descriptor':ref,'binding':binding,'source_index':index,'outer_keys':list(obj) if isinstance(obj,dict) else None,'record_keys':list(record),'sql':record['sql'],'parameters':record['parameters'],'row_count':record['row_count'],'count_present':False,'row_count_present':True}
+                if record['sql'].lstrip().upper().startswith('SELECT '):inventory.append(data)
+                else:
+                    assert record=={'label':'query-only','sql':'PRAGMA query_only','parameters':[],'row_count':1,'rows':[{'query_only':1}]}
+                    control.append({**data,'full_original_control_record':record,'disposition':'Retain full original container/map and this exact indexed control record outside the SELECT replay inventory. Never turn PRAGMA into SELECT or bind it as lexical evidence.'})
+assert len(inventory)==140 and len(control)==1 and len(nonquery)==3
+save(O/'actual-original-select-inventory.json',inventory);save(O/'separate-control-evidence.json',control);save(O/'nonquery-original-descriptors.json',nonquery);save(O/'actual-original-freeze-pins.json',freezes)
+newbranch=""" elif kind=='query_container_parameters':
+  assert set(binding)=={'kind','index'} and isinstance(descriptor,dict)
+  assert set(descriptor) in ({'database','uri','query_only','queries'},
+   {'uri','query_only','queries','master_original','master_pin','full_master_records'})
+  assert descriptor['query_only'] is True and isinstance(descriptor['queries'],list)
+  i=binding['index'];assert type(i)is int and 0<=i<len(descriptor['queries'])
+  source=descriptor['queries'][i]
+  assert isinstance(source,dict) and set(source)=={'label','sql','parameters','row_count','rows'}
+  assert isinstance(source['label'],str)
+"""
+countold=""" assert ('count'in query)==('count'in source),'Count presence differs from the actual original descriptor'
+ if 'count'in source:
+  assert type(source['count'])is int and type(query['count'])is int
+  assert query['count']==source['count']==len(query['rows'])
+"""
+countnew=""" for count_key in ('count','row_count'):
+  assert (count_key in query)==(count_key in source),'Count presence differs from the actual original descriptor: '+count_key
+  if count_key in source:
+   assert type(source[count_key])is int and type(query[count_key])is int
+   assert source[count_key]>=0 and query[count_key]>=0
+   assert query[count_key]==source[count_key]==len(query['rows'])
+"""
+changes=[{'old':" elif kind in ('query_container_params','query_list_params'):\n",'new':newbranch+" elif kind in ('query_container_params','query_list_params'):\n",'reason':'One explicit indexed parameters-container binding for only the two fully observed Tibetan outer key sets and exact genuine record key set.'},{'old':"  if 'count'in original:source['count']=original['count']\n",'new':"  for count_key in ('count','row_count'):\n   if count_key in original:source[count_key]=original[count_key]\n",'reason':'Existing params bindings preserve either actual count key instead of dropping row_count during explicit parameter-name normalization.'},{'old':countold,'new':countnew,'reason':'Validate presence, strict integer/nonnegative type and exact row length for both count spellings across every binding. Neither key is renamed, invented or discarded.'}]
+old=contract.decode();new=old
+for c in changes:assert new.count(c['old'])==1;new=new.replace(c['old'],c['new'])
+inverse=new
+for c in reversed(changes):assert inverse.count(c['new'])==1;inverse=inverse.replace(c['new'],c['old'])
+assert inverse==old and ast.dump(ast.parse(inverse))==ast.dump(ast.parse(old));compile(new,'config_contract.py','exec');compile(runtime,'verify_reconciliation.py','exec')
+write(O/'verify_reconciliation.py',runtime);write(O/'config_contract.py',new.encode());save(O/'replacement-map.json',changes)
+for name,a,b in [('config_contract.py',old,new),('verify_reconciliation.py',runtime.decode(),runtime.decode())]:
+    write(O/(name+'.forward.diff'),''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='prior/'+name,tofile='candidate/'+name)).encode());write(O/(name+'.inverse.diff'),''.join(difflib.unified_diff(b.splitlines(True),a.splitlines(True),fromfile='candidate/'+name,tofile='prior/'+name)).encode())
+save(O/'original-to-copy-manifest.json',mapping)
+proof={'status':'SOURCE_ONLY_ADAPTER_PREPARED','role':'Codex code/schema preparation; Tibetan original author, no semantic acceptance','runtime':pin(runtime),'contract':pin(new.encode()),'runtime_byte_identical':True,'whole_source_inverse_and_AST_exact':True,'compile_only_no_module_execution':True,'actual_select_records':len(inventory),'Tibetan_SELECT':65,'English_SELECT':75,'separate_PRAGMA_controls':1,'non_SQL_original_metadata_descriptors':3,'base_and_original_inputs_unchanged':True,'candidate_executed_or_materialized':False,'current_final_correspondences_read':False}
+save(O/'source-proof.json',proof);print(json.dumps(proof))

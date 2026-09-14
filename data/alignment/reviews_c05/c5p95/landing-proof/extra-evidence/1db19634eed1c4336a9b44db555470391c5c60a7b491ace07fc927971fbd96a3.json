@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json, hashlib, ast, difflib, datetime\nP=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-preparation\")\nO=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-root-source-review\")\nassert not O.exists()\ndef pin(p):\n b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\nf=json.loads((P/'freeze.json').read_text())\nassert pin(P/'freeze.json')==dict(bytes=7273,sha256='d7d694097245b28f34c7b8a9eb56daf7173531cf263d6f10743969211165bb7c')\nassert set(f['files'])=={str(p.relative_to(P)) for p in P.rglob('*') if p.is_file() and p.name!='freeze.json'}\nfor rel,v in f['files'].items(): assert pin(P/rel)==v,rel\ncopies=json.loads((P/'original-copy-manifest.json').read_text())\nassert len(copies)==27 and len({r['original'] for r in copies})==27\nfor row in copies:\n src=Path(row['original']);dst=P/row['copy']\n assert src.resolve()==Path(row['resolved'])\n assert src.read_bytes()==dst.read_bytes()\n assert pin(src)=={k:row[k] for k in ('bytes','sha256')}\nprior=(P/'prior-verify_reconciliation.py').read_text();new=(P/'verify_reconciliation.py').read_text()\nmapping=json.loads((P/'replacement-map.json').read_text())\nassert len(mapping)==3\ncandidate=prior\nfor row in mapping:\n assert candidate.count(row['before'])==row['occurrences']==1\n candidate=candidate.replace(row['before'],row['after'])\nassert candidate==new\nassert (P/'prior-config_contract.py').read_bytes()==(P/'config_contract.py').read_bytes()\nassert ''.join(difflib.unified_diff(prior.splitlines(True),new.splitlines(True),fromfile='prior',tofile='candidate'))==(P/'forward.diff').read_text()\nassert sum(isinstance(n,ast.Assert) for n in ast.walk(ast.parse(prior)))==sum(isinstance(n,ast.Assert) for n in ast.walk(ast.parse(new)))==76\nout=dict(status='PASS_ROOT_SOURCE_REVIEW_CONDITIONAL_ON_FROZEN_ACTUAL_CONFIG',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),freeze=pin(P/'freeze.json'),frozen_members=len(f['files']),frozen_bytes=f['bytes_total'],full_original_copy_pairs=27,changed_literals=3,assertions=76,runtime=pin(P/'verify_reconciliation.py'),contract=pin(P/'config_contract.py'),root_full_source_read=True,candidate_executions=0,semantic_approval=False,conditions=['Both independent original passes must freeze and receive complete canonical replay before reconciliation.','Use actual final input pins and counts; do not reuse old config or invoke until source-bound config is reviewed.','Mechanical source verification does not accept correspondences; independent semantic review remains required.','If any actual erratum survives, retain it and review the schema rather than falsely refuting it.'])\nO.mkdir()\n(O/'proof.json').write_text(json.dumps(out,indent=2)+'\\n')\nprint(json.dumps(out,indent=2))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-14T04:22:44.552098+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+}

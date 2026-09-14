@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "import json; p=\"reviewed-final/283/query-descriptors.json\"; o=json.load(open(p)); print(type(o),len(o)); print(json.dumps(o[:2] if isinstance(o,list) else {k:(v[:1] if isinstance(v,list) else v) for k,v in o.items()},indent=2))"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0"
+  },
+  "started_at": "2026-09-14T05:20:11.401714+00:00"
+}

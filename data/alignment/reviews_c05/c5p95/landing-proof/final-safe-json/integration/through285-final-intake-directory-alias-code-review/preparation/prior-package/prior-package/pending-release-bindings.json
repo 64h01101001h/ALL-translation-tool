@@ -1,0 +1,55 @@
+{
+  "status": "PENDING_ACTUAL_REVIEWED_RELEASE_NO_CENSUS_PERFORMED",
+  "initial_active_caller": null,
+  "supplement_active_caller": null,
+  "additional_full_whitespace_release_and_acceptance_helpers": null,
+  "whitespace_audit_pin": null,
+  "whitespace_root_acceptance_pin": null,
+  "whitespace_runtime_freeze_pin": null,
+  "actual_initial_scope_pin": null,
+  "actual_initial_scope_counts": null,
+  "actual_completed_deferred_roots": null,
+  "actual_supplement_scope_pin": null,
+  "actual_supplement_counts": null,
+  "actual_source_review_receipts": null,
+  "actual_initial_composer_and_supplement_callers": null,
+  "known_current_controls": {
+    "ordinary_manifest": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/landing/root-proof-copy-manifest-before-whitespace.json",
+      "bytes": 9423149,
+      "sha256": "cd3f374127d342a654cf3ad481a733becdd0173dcf836937b2d3b11219d8d000"
+    },
+    "ordinary_coverage": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-bank-inventory/coverage-and-exclusion-map.json",
+      "bytes": 12598988,
+      "sha256": "28f03ab5eccddd621998adee19762af444f0d3a71db81737a5002a9f62d6f9d4"
+    },
+    "ordinary_extra_inputs": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-bank-inventory/extra-inputs.json",
+      "bytes": 9679681,
+      "sha256": "22dcb58359970063266484235f30ed9bc7f4fbbd641ba9ee7d0342a4af0cefb0"
+    },
+    "raw_diagnostic": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-runs/initial-whitespace-caller/stdout.bin",
+      "bytes": 32794535,
+      "sha256": "94799cb5a45a2b827d990f0ca2cda2a0d0e48debe747b5a89dd46625ced0ad10"
+    },
+    "raw_diagnostic_exit": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-runs/initial-whitespace-caller/exit.txt",
+      "bytes": 2,
+      "sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    "banker": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/bank_root_proofs_through285_final.py",
+      "bytes": 20978,
+      "sha256": "2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f"
+    },
+    "stage_verifier": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-binding-path-correction/verify_staged_through285.py",
+      "bytes": 57112,
+      "sha256": "d77253e906657f58962211d0aaa584df9272af4e2055faeb1bc62fccd7f1b0be"
+    }
+  },
+  "guard_removal": "A separately reviewed literal source binding must fill the None values and remove only the explicit source-only execution barriers after actual immutable whitespace/source approvals, caller identities and writer quiescence exist. Never run these guarded candidates unchanged.",
+  "runtime_helper_behavior": "compose-final-inputs helper functions are unchanged and inert on import; its guarded main cannot compose. assemble-final-supplement main is also guarded. No target was imported in this preparation."
+}

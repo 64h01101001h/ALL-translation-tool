@@ -1,0 +1,182 @@
+{
+  "status": "PASS_STATIC_SOURCE_REVIEW",
+  "utc": "2026-09-14T02:31:40.609112+00:00",
+  "candidate": {
+    "bytes": 48055,
+    "sha256": "b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee"
+  },
+  "preparation_freeze": {
+    "bytes": 4878,
+    "sha256": "429154a6e1122ee96222a13353273a1df28b63300abebec9fb91d4b9f8e983b9"
+  },
+  "preparation_frozen_files": 32,
+  "complete_preparation_files_with_freeze": 33,
+  "full_original_copy_alias_records": 45,
+  "preparation_original_pairs": 12,
+  "exact_forward_inverse": true,
+  "exact_unified_diffs": true,
+  "exact_AST_dumps": true,
+  "changed_old_functions": [
+    "__init__",
+    "run",
+    "main"
+  ],
+  "critical_complete_functions": [
+    {
+      "name": "freeze_entries",
+      "full_lines_pin": {
+        "bytes": 621,
+        "sha256": "25450af732c7f59f79064cd9a17171d2d9f5e804f7b5549ff5a9d6a41eb4fc8c"
+      },
+      "prior_line": 50,
+      "current_line": 45
+    },
+    {
+      "name": "allowance_result",
+      "full_lines_pin": {
+        "bytes": 981,
+        "sha256": "96f1ecbc3733f01061248448d3e6052715c22b64f205b1a9419e0efd1ff4f430"
+      },
+      "prior_line": 64,
+      "current_line": 59
+    },
+    {
+      "name": "nul_paths",
+      "full_lines_pin": {
+        "bytes": 290,
+        "sha256": "56bca3a87d4e6ad564897e2b0646d61f91d47cd6f6bab5e0092229c326e0f5d8"
+      },
+      "prior_line": 87,
+      "current_line": 82
+    },
+    {
+      "name": "untracked_transition",
+      "full_lines_pin": {
+        "bytes": 1381,
+        "sha256": "c579de99439b80b600b1544b8e590c909a268567c9e830d01d9e1db6006cf9a4"
+      },
+      "prior_line": 96,
+      "current_line": 91
+    },
+    {
+      "name": "check_final_head",
+      "full_lines_pin": {
+        "bytes": 103,
+        "sha256": "36299e23f513b03cada37088b2f1d8862f195ca14b3f5b3534faf4befc96cadb"
+      },
+      "prior_line": 115,
+      "current_line": 110
+    },
+    {
+      "name": "raw",
+      "full_lines_pin": {
+        "bytes": 312,
+        "sha256": "97a2e01dc39f5671e7f3414f1d08666023fcd55f4cbcad41c47ed2b8b56f138e"
+      },
+      "prior_line": 139,
+      "current_line": 185
+    },
+    {
+      "name": "obj",
+      "full_lines_pin": {
+        "bytes": 61,
+        "sha256": "be9b856ce8820be6c1575771622c01f1e15e159e88ce1f6ef8055e063bdd84d5"
+      },
+      "prior_line": 149,
+      "current_line": 195
+    },
+    {
+      "name": "git",
+      "full_lines_pin": {
+        "bytes": 928,
+        "sha256": "4f01bf61ce54ac1b6636c769af179bc888c2ce016a6e11441c1e15343095e157"
+      },
+      "prior_line": 152,
+      "current_line": 198
+    },
+    {
+      "name": "old",
+      "full_lines_pin": {
+        "bytes": 99,
+        "sha256": "5f697287c05c005ab4be39325779089e6013ca410caf0fa37053498cb7bd28fa"
+      },
+      "prior_line": 168,
+      "current_line": 214
+    },
+    {
+      "name": "require",
+      "full_lines_pin": {
+        "bytes": 232,
+        "sha256": "62d6b75e20e1ff981e030943b069f5e8911d0cd5f6e6b6df8748a88710fa124c"
+      },
+      "prior_line": 172,
+      "current_line": 218
+    },
+    {
+      "name": "pincheck",
+      "full_lines_pin": {
+        "bytes": 121,
+        "sha256": "0f67196b584f1605289998032d76f6c3aee76ac2c73defc187b0e40edaa5db80"
+      },
+      "prior_line": 179,
+      "current_line": 225
+    },
+    {
+      "name": "verify_source_archive",
+      "full_lines_pin": {
+        "bytes": 1894,
+        "sha256": "7dc3a3467ea4c6f4ee9dec069179a3cd92a78c9c20e9f9602f3a5c066fe236df"
+      },
+      "prior_line": 182,
+      "current_line": 228
+    },
+    {
+      "name": "verify_payload_source",
+      "full_lines_pin": {
+        "bytes": 1533,
+        "sha256": "af27a0ea77468eabadf09eed58d73afa0bfe65f773ffced5b40f40d4f7185588"
+      },
+      "prior_line": 216,
+      "current_line": 262
+    },
+    {
+      "name": "verify_untracked_capture",
+      "full_lines_pin": {
+        "bytes": 626,
+        "sha256": "e4189deb04b6449f489904f9f14c779f4b9534da46e37a7d87700354113ab730"
+      },
+      "prior_line": 243,
+      "current_line": 289
+    },
+    {
+      "name": "verify_banking_writes",
+      "full_lines_pin": {
+        "bytes": 3786,
+        "sha256": "3c1d57ad1dafa2ba15a9b7401dc949a5a1ac3ebb680323116ba9dec0c63e0f08"
+      },
+      "prior_line": 255,
+      "current_line": 301
+    }
+  ],
+  "known_full_pins": 7,
+  "future_input_pin_roles": [
+    "final_manifest",
+    "final_result",
+    "ordinary_manifest",
+    "ordinary_result",
+    "whitespace_log",
+    "whitespace_proof"
+  ],
+  "unbound_expected_values": 11,
+  "gate_before_constructor_and_output": true,
+  "gate_has_no_Git_subprocess_or_output_calls": true,
+  "gate_order_assessment": "Static AST/source proof only; no candidate function was executed",
+  "semantic_files": 871,
+  "semantic_bytes": 48827659,
+  "payload_files": 13,
+  "source_code_hash_cycle": false,
+  "actual_source_preparation_exit": 0,
+  "target_imported": false,
+  "target_executed": false,
+  "Git_SQL_tests_stage_bank_WT_writes": false
+}

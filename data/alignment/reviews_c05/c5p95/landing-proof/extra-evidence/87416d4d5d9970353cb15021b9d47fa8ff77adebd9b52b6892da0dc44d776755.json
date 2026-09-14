@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "srid",
+    "srid"
+  ],
+  "rows": [
+    {
+      "id": 20964,
+      "wylie": "srid",
+      "tibetan": "སྲིད",
+      "tibetan_source": null,
+      "acip": "SRID",
+      "pronunciation": "si",
+      "pronunciation_source": null,
+      "sanskrit": "bhū; {MSA}bhava; {MSA}mi srid = asaṃbhava; {LC}āyāma; {LC}āroha; {LC}keva cireṇa; {LC}bhavati; {LC}bhavet; {LC}bhoga; {LC}vyayāma; {LC}saṃbhāvyate; {LC}āyata; {LC}bhaviṣyati; {LC}ruci; {LC}rocate",
+      "hopkins_english": "be possible; occur; be; depth; height; length; extension; {PH}length",
+      "hgm_gloss": "[\"life\", \"being\", \"beings\", \"inbetween\", \"height\", \"state\", \"being ... being\", \"suffering existence\", \"possible\", \"world\", \"rebirth\", \"possibility\", \"need\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 948,
+      "raw": "{\"tibetan\": \"སྲིད\", \"wylie\": \"srid\", \"wylie_variants\": [\"srid\"], \"tenses\": null, \"sanskrit\": \"bhū; {MSA}bhava; {MSA}mi srid = asaṃbhava; {LC}āyāma; {LC}āroha; {LC}keva cireṇa; {LC}bhavati; {LC}bhavet; {LC}bhoga; {LC}vyayāma; {LC}saṃbhāvyate; {LC}āyata; {LC}bhaviṣyati; {LC}ruci; {LC}rocate\", \"hopkins_english\": \"be possible; occur; be; depth; height; length; extension; {PH}length\", \"hgm_gloss\": [\"life\", \"being\", \"beings\", \"inbetween\", \"height\", \"state\", \"being ... being\", \"suffering existence\", \"possible\", \"world\", \"rebirth\", \"possibility\", \"need\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"si\", \"acip\": \"SRID\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 948}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ],
+  "row_count": 1
+}

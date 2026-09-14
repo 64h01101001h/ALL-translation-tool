@@ -1,0 +1,53 @@
+{
+  "status": "PASS_COMPLETE_ACTUAL_PRE_ORDINARY_INVENTORY",
+  "utc": "2026-09-14T07:00:27.716005+00:00",
+  "head": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+  "sources": 14689,
+  "counts": {
+    "explicit-full-copy": 2378,
+    "explicit-existing-full-copy": 10351,
+    "automatic-complete-landing-inventory": 60,
+    "explicit-deduplicated-new-copy": 1823,
+    "explicit-complete-external": 77
+  },
+  "records": 14630,
+  "distinct_new_full_copies": 2379,
+  "generic_distinct_new_full_copies": 2378,
+  "generic_records_before_required_route": 14629,
+  "required_additional_full_copies": 1,
+  "required_extra_copy_records": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/bank_root_proofs_through285_final.py",
+      "retention": "bank",
+      "copy": "root-helpers/bank_root_proofs_through285_final.py.txt",
+      "bytes": 20978,
+      "sha256": "2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f"
+    }
+  ],
+  "required_extra_copy_source_coverage": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/bank_root_proofs_through285_final.py",
+      "resolved": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/bank_root_proofs_through285_final.py",
+      "symlink": null,
+      "bytes": 20978,
+      "sha256": "2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f",
+      "coverage": "explicit-deduplicated-new-copy",
+      "copy": "extra-evidence/2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f.txt",
+      "first_original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/candidates/bank_root_proofs_through285_final.py"
+    }
+  ],
+  "required_extra_copy_proof": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/ordinary-required-final-banker-route.json",
+    "bytes": 1010,
+    "sha256": "72b5750f5977273d7dbf148c61249bc6cf750360334f3ca5b63265991622529e"
+  },
+  "manifest": {
+    "bytes": 9679681,
+    "sha256": "22dcb58359970063266484235f30ed9bc7f4fbbd641ba9ee7d0342a4af0cefb0"
+  },
+  "required_reproduction_acceptance": {
+    "bytes": 1331,
+    "sha256": "fe377d7d9b00a251b5e7c361b8e36cac5a4af450e176ce9a6e87dc17bcd4b642"
+  },
+  "boundary": "Every current B file and explicitly declared current through285 integration item plus eleven complete helper sources; only exact active caller directories are deferred. Full identical content may share a copy after complete-byte comparison. This is source inventory, not bank/stage/semantic/consumer acceptance."
+}

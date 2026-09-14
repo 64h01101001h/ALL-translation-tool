@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/reconciled/283/reopen-evidence.py", line 22, in <module>
+    p=B/angle/str(seq);f=p/('freeze-manifest.json' if angle=='tibetan' else 'freeze.json');o=load(f);rows=o if isinstance(o,list) else [{'path':k,**v} for k,v in o['files'].items()]
+                                                                                                                                                                  ^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'items'

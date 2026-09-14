@@ -1,0 +1,49 @@
+from pathlib import Path
+import ast,difflib,hashlib,json
+assert __debug__
+O=Path(__file__).resolve().parent;I=O.parent;P=I/'through285-stage-binding-path-correction';V=I/'through285-final-stage-independent-code-review'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def write(n,b):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb') as f:f.write(b)
+def save(n,x):write(n,(json.dumps(x,indent=2)+'\n').encode())
+f=j(P/'freeze.json');assert f['file_count']==len(f['files'])==8 and f['total_bytes']==sum(r['bytes'] for r in f['files'].values())==132091
+assert {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+copies=[]
+for n in [*f['files'],'freeze.json']:
+ p=P/n;assert not p.is_symlink();raw=p.read_bytes()
+ if n!='freeze.json':assert pin(raw)==f['files'][n]
+ write('correction-source/'+n,raw);assert (O/'correction-source'/n).read_bytes()==p.read_bytes();copies.append(dict(original=str(p),copy='correction-source/'+n,**pin(raw)))
+pairs=j(P/'original-to-copy-manifest.json');assert len(pairs)==3
+for r in pairs:
+ raw=Path(r['original']).read_bytes();assert raw==(P/r['copy']).read_bytes() and pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+old=(P/'prior-verify_staged_through285.py').read_text();new=(P/'verify_staged_through285.py').read_text()
+assert pin(old.encode())==dict(bytes=57097,sha256='d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c')
+assert pin(new.encode())==dict(bytes=57112,sha256='d77253e906657f58962211d0aaa584df9272af4e2055faeb1bc62fccd7f1b0be')
+before="        path = Path(pins[role]['path'])\n        assert path.is_absolute() and path.resolve(strict=True).is_relative_to(integration.resolve(strict=True))"
+after="        role_path = Path(pins[role]['path'])\n        assert role_path.is_absolute() and role_path.resolve(strict=True).is_relative_to(integration.resolve(strict=True))"
+assert old.count(before)==new.count(after)==1 and old.replace(before,after)==new and new.replace(after,before)==old
+assert ast.dump(ast.parse(new.replace(after,before)))==ast.dump(ast.parse(old))
+oldtree,newtree=ast.parse(old),ast.parse(new)
+changed=[getattr(a,'name',type(a).__name__) for a,b in zip(oldtree.body,newtree.body) if ast.dump(a)!=ast.dump(b)]
+assert len(oldtree.body)==len(newtree.body) and changed==['load_release_bindings']
+fn=next(x for x in newtree.body if isinstance(x,ast.FunctionDef) and x.name=='load_release_bindings')
+pathstores=[x for x in ast.walk(fn) if isinstance(x,ast.Name) and isinstance(x.ctx,ast.Store) and x.id=='path'];assert len(pathstores)==1
+assert ast.get_source_segment(new,fn).count('assert path.read_bytes() == raw')==1
+assert len([x for x in ast.walk(fn) if isinstance(x,ast.Name) and x.id=='role_path'])==3
+for suffix,first,second in [('forward.diff',old,new),('inverse.diff',new,old)]:
+ actual=(P/suffix).read_text().splitlines(True)
+ expected=''.join(difflib.unified_diff(first.splitlines(True),second.splitlines(True)))
+ assert ''.join(actual[2:])==''.join(expected.splitlines(True)[2:])
+prior=j(V/'review.json');assert prior['verdict']=='REQUEST_CHANGES' and [r['id'] for r in prior['open_findings']]==['STAGE-001']
+assert (V/'review.json').read_bytes()==(P/'independent-review.json').read_bytes()
+proof=dict(verdict='APPROVE',scope='Independent bounded CODE follow-up for STAGE-001 only; no semantic or runtime acceptance',corrected_source=dict(path=str(P/'verify_staged_through285.py'),**pin(new.encode())),prior_review=dict(path=str(V/'review.json'),**pin((V/'review.json').read_bytes())),correction_freeze=dict(path=str(P/'freeze.json'),**pin((P/'freeze.json').read_bytes())),correction_members_verified=8,correction_original_copy_pairs_verified=3,only_changed_definition=changed[0],exact_change='Three path-name references in the added role loop become role_path; no other source bytes differ.',whole_forward_inverse_exact=True,inverse_AST_exact=True,final_binding_reread_unchanged=True,binding_path_has_only_original_assignment=True,resolved_findings=['STAGE-001'],open_findings=[],prior_pathspec_source_verdict='APPROVE_SOURCE_ONLY_PENDING_ACTUAL_ROOT_RELEASE',pending='Root must bind corrected verifier SHA d77253e9… in actual final bindings and source controls; every bank/whitespace/stage/index population remains measured at its actual boundary. Original author template still pins the superseded d11a… source and is immutable historical evidence, not a ready runtime binding.',candidate_imports=0,candidate_executions=0,Git_SQL_tests_bank_stage_calls=0,prior_packages_B_W_unchanged=True)
+save('review.json',proof);save('original-to-copy-manifest.json',copies)
+write('review.md',b'''APPROVE the corrected verifier source d77253e906657f58962211d0aaa584df9272af4e2055faeb1bc62fccd7f1b0be (57,112 bytes). STAGE-001 is resolved: only the three name references inside the added input-role loop change from path to role_path. The original binding-file path now retains its sole assignment and the exact final full-byte reread is unchanged.
+
+All eight frozen correction members and three original/copy pairs matched. Whole-source forward/inverse equality, exact diff bodies and inverse AST conservation passed; load_release_bindings is the sole changed definition. This follows the prior complete source review without rerunning controls or importing/executing a target. The prior pathspec source approval and documented Q-path banker identity constraint remain unchanged.
+
+No code findings remain. This approves code only. Root must bind the corrected verifier hash into the actual final release and source-control records; the original immutable template carries the superseded source pin. Actual bank, whitespace, staged/index/untracked populations and runtime release remain separate. No prior package, B or worktree was changed; no Git, SQL, tests, bank or stage command was run.
+''')
+print(json.dumps(dict(verdict='APPROVE',resolved='STAGE-001',source=pin(new.encode()),review=pin((O/'review.json').read_bytes()),candidate_executions=0)))

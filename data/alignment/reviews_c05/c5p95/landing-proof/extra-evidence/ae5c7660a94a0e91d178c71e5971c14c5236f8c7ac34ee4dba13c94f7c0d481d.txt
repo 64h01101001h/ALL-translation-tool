@@ -1,0 +1,9 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,sys
+O=Path(__file__).resolve().parent;D=O/'caller-prepare02';D.mkdir()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+argv=[sys.executable,'-B',str(O/'prepare_evidence_v2.py')];cmd=dict(argv=argv,cwd=str(O),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'})
+(D/'command.json').write_text(json.dumps(cmd,indent=2)+'\n');(D/'stdin.bin').write_bytes(b'');start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+p=subprocess.run(argv,cwd=O,input=b'',capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+for n,b in [('stdout.bin',p.stdout),('stderr.bin',p.stderr),('exit.txt',f'{p.returncode}\n'.encode())]:(D/n).write_bytes(b)
+(D/'execution.json').write_text(json.dumps(dict(**cmd,started_at=start,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=p.returncode,stdout=pin(p.stdout),stderr=pin(p.stderr)),indent=2)+'\n');print(p.stdout.decode(),end='');print(p.stderr.decode(),end='',file=sys.stderr);sys.exit(p.returncode)

@@ -1,0 +1,892 @@
+[
+  {
+    "path": "queries/argument-277-291.json",
+    "bytes": 45446,
+    "sha256": "83ee913be59860b9072592befb17300aa470b7f087c35bd2b886d08052ae8eab",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      277,
+      291
+    ],
+    "row_count": 15,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-assertion-position.json",
+    "bytes": 22182,
+    "sha256": "fc0bafc14a86bce747b5901df286a9003618816f8a7830681c16b995cde4b4fe",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? AND length(english)<500 ORDER BY course,seq",
+    "parameters": [
+      "%khas blangs pa%",
+      "%position%"
+    ],
+    "row_count": 13,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-case-same.json",
+    "bytes": 20186,
+    "sha256": "7bfdf5afa3972456982ad3bb9231f388ab4ae44b32fa3f33ee0bb632e4015d72",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%snga ma%mtshungs%"
+    ],
+    "row_count": 8,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-expanded-valid.json",
+    "bytes": 52535,
+    "sha256": "9b4f5b68d5cc6851766c7f84a6690f663fda7e83f2e9ec157547c43dac84fc4c",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%tshad mas grub%"
+    ],
+    "row_count": 24,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-limbs-person.json",
+    "bytes": 29401,
+    "sha256": "0418ca81dd023c229bd0c936c0a299116bb8fd55a8c3d7ff4c6b77355a21f524",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%yan lag%skyes bu%"
+    ],
+    "row_count": 12,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-mutual-spatial.json",
+    "bytes": 31583,
+    "sha256": "08ac3ea803b35278b721c2957fface4dca028d04a7a99433a2fd7cb6218f1fd0",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%phan tshun%go sa%"
+    ],
+    "row_count": 9,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-parts.json",
+    "bytes": 361735,
+    "sha256": "67111ae018b88057fe7a429e19c139578dc282953285648a4a60da3d6fd9c55b",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%cha shas%"
+    ],
+    "row_count": 171,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-simultaneous-look.json",
+    "bytes": 163089,
+    "sha256": "25dcad061f6227c26119c12ee9d3881582768aeaacdef95ae97c7ef1ee1626b5",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%cig car%blta%"
+    ],
+    "row_count": 46,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-speaking-formula.json",
+    "bytes": 124274,
+    "sha256": "9cb0c0a78cd5f778ae6434f52f96e6c907b673102f2cf6f319669e7abbfe1130",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%kho na re%",
+      "%someone%"
+    ],
+    "row_count": 64,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-valid-established.json",
+    "bytes": 34968,
+    "sha256": "596ee46efba697cba5f7c7e870de151f63493ccb05aaeb44922965faf27fe3c6",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%tshad grub%"
+    ],
+    "row_count": 12,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/corpus-wet-flowing.json",
+    "bytes": 213228,
+    "sha256": "5a017b952a4a4c7dd80aeaa40724f3558516d09abc64903cec75b0f83133f00d",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%brlan%gsher%"
+    ],
+    "row_count": 64,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-00.json",
+    "bytes": 4713,
+    "sha256": "97749d519576887fb87c1c2361ce2ecc3434f417075f8b66875bfec20dc1ae6c",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "byas pa",
+      "byas pa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-01.json",
+    "bytes": 4194,
+    "sha256": "7eeea846bc6221d23f26ac8ab754f9b22b232f39a6e74236aea222d9ec8e4f70",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "byas",
+      "byas"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-02.json",
+    "bytes": 2369,
+    "sha256": "43dc03888f81584cf4fd19013f2982ae539f1b0bb523b233ab2a47974919a059",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "kho",
+      "kho"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-03.json",
+    "bytes": 2289,
+    "sha256": "08e5679c2fe8834656685fe240b11ba2a8d83d8610f379fd7c73344b29842b0a",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "na re",
+      "na re"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-04.json",
+    "bytes": 3719,
+    "sha256": "f71b95dd0c020aaf48ecfad4fd076b943bdad796d9d065115447e58fbae25d08",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "skyon",
+      "skyon"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-05.json",
+    "bytes": 11355,
+    "sha256": "a11640e06a9b4ea40b8de5c6852930007095d1692b32b04095a07a82c7bc1ece",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "med",
+      "med"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-06.json",
+    "bytes": 3467,
+    "sha256": "fe2262e39c82bf067fddd5dbfa1b4af1e42f922759d69f1fd3bd6574dd6f6c95",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "yan lag",
+      "yan lag"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-07.json",
+    "bytes": 3055,
+    "sha256": "86464d7cd2f52752384b143d0817197562b5b96ead7818e3e9c2e23553e3b70a",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "lnga",
+      "lnga"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-08.json",
+    "bytes": 5761,
+    "sha256": "434bb1dff389bd1589ab4e33fd817965275dec271dd8330a171cb7a7bf8689b6",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "skyes bu",
+      "skyes bu"
+    ],
+    "row_count": 2,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-09.json",
+    "bytes": 2325,
+    "sha256": "c313b259b98a780309cf69e359f884bb7a7fe02a92306827638a727d1109bc82",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "cha shas",
+      "cha shas"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-10.json",
+    "bytes": 6285,
+    "sha256": "aca91930c620275a3808ff243b0fb3a13c4305feabd7efb4b8ee0883518b1680",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "yin",
+      "yin"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-11.json",
+    "bytes": 4712,
+    "sha256": "c3fa634f6ff19cc6ad3b7feebd14a612bc2f9893522b50fb9ccb032226de5719",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "bya ba",
+      "bya ba"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-12.json",
+    "bytes": 3275,
+    "sha256": "1c01306eb34b042873c758c8ed7f37d1ec038e87b711272bb71e561de95507c3",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'jog",
+      "'jog"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-13.json",
+    "bytes": 3509,
+    "sha256": "ea54e5d0b4bfb074a7908362d7c44dda64d993c95643fe178da51fecc025d4b9",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "dgos",
+      "dgos"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-14.json",
+    "bytes": 9671,
+    "sha256": "cf64c2942a53a657a650c490b52c52b925d9c69d808a3073e74926cd419d883a",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "phyir",
+      "phyir"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-15.json",
+    "bytes": 3435,
+    "sha256": "b3bff1f1338c39961fcd6fe54e698709eac411a44ed9fa7f2b3cf2069e68c0ab",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "zer",
+      "zer"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-16.json",
+    "bytes": 3104,
+    "sha256": "86ab721f14718c3269ebc42dc98051310ab94fe1746ed2fa737d8422c36c89f1",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snga ma",
+      "snga ma"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-17.json",
+    "bytes": 3616,
+    "sha256": "444c0a7dd6c709a07440f683e5435ed5f31e91eb2533584fc485be4502681961",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "mtshungs",
+      "mtshungs"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-18.json",
+    "bytes": 1598,
+    "sha256": "f37a3e8de639b82b643b8b52dc6f4dea59a7cdb637abd3dd02e687b2214b6370",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "rnag",
+      "rnag"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-19.json",
+    "bytes": 2438,
+    "sha256": "1a90049f3c20d1bddb0836fcf0d4a9b56ea99998c25b651f6ebd9852f1dd8f00",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "khrag",
+      "khrag"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-20.json",
+    "bytes": 6194,
+    "sha256": "f083c1333806a5f0c3a28a41cd5bafa1200d1e13ed3cbf22a5c8c52383eb0c01",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "sogs",
+      "sogs"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-21.json",
+    "bytes": 3777,
+    "sha256": "60a99f87d18a1d24940f94782fc7bff3a81bd550922ed17e91b62155d6ae6b1f",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "sogs pa",
+      "sogs pa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-22.json",
+    "bytes": 4857,
+    "sha256": "2ae89ffe81a9320e731c3c1a2804220ac928990794be551433bd9b28005c4f65",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "dngos po",
+      "dngos po"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-23.json",
+    "bytes": 4668,
+    "sha256": "da427ae8d5f1ee0c10812a4678fd3d3de0300435277d84264b816c283c519c5d",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gsum",
+      "gsum"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-24.json",
+    "bytes": 1445,
+    "sha256": "31b2c5e15dd2bcbc912d709fb37b847624fda83b13b9805b90ac059e729fc90e",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "brlan",
+      "brlan"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-25.json",
+    "bytes": 1542,
+    "sha256": "932138bf8e9e047a0c2f03e62a34def98d72aba575cf7ff0ee54c7f9ab18a145",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gsher ba",
+      "gsher ba"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-26.json",
+    "bytes": 1503,
+    "sha256": "8d682a69a3438467c0201da6b707542c05b26b5557364f2e18a69a74de2ad2da",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "phor pa",
+      "phor pa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-27.json",
+    "bytes": 4311,
+    "sha256": "0c6834f6eb9801670f40e046bd126db91d7d1fb62a36e0ad213c53d4d6da81a4",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gang",
+      "gang"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-28.json",
+    "bytes": 1573,
+    "sha256": "bf81b48d9b17c57deba7cddec21e08641842852e14a9d1f77826eebd5a345044",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gang po",
+      "gang po"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-29.json",
+    "bytes": 4996,
+    "sha256": "7483f53f89a12e95880f660bebecad3b86cc388837445d96af565beb3b1b3453",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snang ba",
+      "snang ba"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-30.json",
+    "bytes": 3190,
+    "sha256": "2f63d71dedae2606bef5a3a1a4d5132237544971ea14d2bcfdc5b2cf2676e9b5",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "steng",
+      "steng"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-31.json",
+    "bytes": 3291,
+    "sha256": "3a94c645fb1a1cd0893295582065ef67e19a4f1f6bb547cc915d5678ef9b37bc",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "steng du",
+      "steng du"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-32.json",
+    "bytes": 1644,
+    "sha256": "335685a31a6293eeaafe0cb248bb8599a55c187d249c3f5c72bdb5ae473b1446",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snang tshul",
+      "snang tshul"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-33.json",
+    "bytes": 2648,
+    "sha256": "9fa19624734cc560b3a2df2fb626caae1f8676b8f3cd951e472f1c1941934c29",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "mi 'dra ba",
+      "mi 'dra ba"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-34.json",
+    "bytes": 2804,
+    "sha256": "261b287b16aa2e393a4cfa007ab58c39da6ce5425a185bf5ec6f3f89beff2ff4",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "kha cig",
+      "kha cig"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-35.json",
+    "bytes": 2704,
+    "sha256": "fe9e59fc6a4c31980f939cc08c6831fe3a767f5f90e82f840b3f362ab6cb6d26",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "phan tshun",
+      "phan tshun"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-36.json",
+    "bytes": 1661,
+    "sha256": "ef62eac63dcde38895b10afa227ec7107b7ff9b468759a6cb8b13c8390cac8df",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "go sa",
+      "go sa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-37.json",
+    "bytes": 3438,
+    "sha256": "3ca8623d67c20ac76c25b709fcc5d2bf7fd71d63168911c1646b5b8a6a2e980f",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'gog pa",
+      "'gog pa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-38.json",
+    "bytes": 4143,
+    "sha256": "141cd6eb2c49e6f1bd332ca34a45552c3a24e422ac4c7e78f3fc9689bea82e7c",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "las",
+      "las"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-39.json",
+    "bytes": 1451,
+    "sha256": "960eb9c595f440466ed5effd317003adea34b1a32143546611e0e07f3c5b0f22",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "las can",
+      "las can"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-40.json",
+    "bytes": 5890,
+    "sha256": "00ec958e1a1c13edf7f671f2a6fa1f5d6a6466e3ecf3b3d74f743f6a80e76226",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'gro ba",
+      "'gro ba"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-41.json",
+    "bytes": 4058,
+    "sha256": "17c20f3e02bcd53379d32b5bf4153a728b79c026cac5169347ca9ac7fe22cf4f",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "chu",
+      "chu"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-42.json",
+    "bytes": 2478,
+    "sha256": "f017651f0792aec7ed6cd9cf6550eda446d9e6777ad8d9bdf2b1d649852f9a4c",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "cig car",
+      "cig car"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-43.json",
+    "bytes": 2189,
+    "sha256": "31754a02187d3991cc722c975d043efb924094f9e113a3e18438293f11d542f4",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "bltas pa",
+      "bltas pa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-44.json",
+    "bytes": 3821,
+    "sha256": "fe2f4fad23bba5e50b56b03c0e8ccd576db2f1629c210c2fdae79cd8f405763c",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad",
+      "tshad"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-45.json",
+    "bytes": 3226,
+    "sha256": "cc5e8623ef02230a8f49aaf5be9f7504bd1a09a2b64e728becbb91ae0508595f",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad ma",
+      "tshad ma"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-46.json",
+    "bytes": 3996,
+    "sha256": "ecb76cdc9ca2c9897c677b11640717ec248008c5478b31b39c0ba69c8281e54f",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "grub pa",
+      "grub pa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-47.json",
+    "bytes": 1520,
+    "sha256": "484aba9c3882d4d78949e2d3742c677331000ec10af5a62c07d0bf77a638e85f",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad grub",
+      "tshad grub"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-48.json",
+    "bytes": 1386,
+    "sha256": "9da4ea7e0dd4f6342fdb123cc4324c130deb9cc457afb4ca82aa4343aa4d96e7",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad grub pa",
+      "tshad grub pa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-49.json",
+    "bytes": 3326,
+    "sha256": "095a416edbd9418c91e06e45256c030870c352e184f7f67d2d6f73c8d35752c4",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "srid",
+      "srid"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-50.json",
+    "bytes": 4301,
+    "sha256": "b888785d2e066335f6bd7f9488b0626c9ac81b29d9a007655cbfdb078805b548",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "srid pa",
+      "srid pa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-51.json",
+    "bytes": 2862,
+    "sha256": "a969ba8b018c7443b35f08566eae5efb14460c3ed35ffb1376ca84c90fe31e5e",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "khas blangs",
+      "khas blangs"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-52.json",
+    "bytes": 2437,
+    "sha256": "472d5143bc28ff4491ae54a9696334e203a7436fadfb2e170e0d5828f45def35",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "khas blangs pa",
+      "khas blangs pa"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-53.json",
+    "bytes": 5894,
+    "sha256": "22f5b0f8629aac53534769941e8e09948d2aa2601bf7ca8d8b87d8a0a9e0df3c",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "yang",
+      "yang"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-54.json",
+    "bytes": 3545,
+    "sha256": "993c4841023f8dc8e9b9ba342e1e45f76deb526e04ee800c26795fadf0777057",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "zhing",
+      "zhing"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-55.json",
+    "bytes": 7094,
+    "sha256": "3c281c4d6ee6460be055bf392980689d7d031805b877c93805d7f029d0ec25b3",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "na",
+      "na"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-56.json",
+    "bytes": 4348,
+    "sha256": "a193db2934f7bafaad9da63dcadbdf0c48a794835af172008e7b533225c983d8",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "can",
+      "can"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/lexical-snang.json",
+    "bytes": 4709,
+    "sha256": "6d6b2e4ac46fc0aae236c729446103f459e36b1907235703a00ace3fadefc722",
+    "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "snang"
+    ],
+    "row_count": 1,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/meta.json",
+    "bytes": 975,
+    "sha256": "3667c9b9db38df97a857ed11f2feb32697681d0ddab1f3a107bc64288a69bb7d",
+    "sql": "SELECT * FROM meta ORDER BY key",
+    "parameters": [],
+    "row_count": 11,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/parallel-283.json",
+    "bytes": 3525,
+    "sha256": "34f1e988ac15b09ea0ffa373aeec03418642ca6e1fb0fdce96511e21cf2f9b0f",
+    "sql": "SELECT * FROM corpus_segments WHERE acip=? OR wylie=? OR english=? ORDER BY course,seq",
+    "parameters": [
+      "BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,",
+      "byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na",
+      "In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that, when the five are performing some actions, the person is performing some actions."
+    ],
+    "row_count": 2,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/parallel-284.json",
+    "bytes": 5020,
+    "sha256": "7d374f391896da3b9f1f61bb876969547ef080641127b5c92c2f96eb727a8627",
+    "sql": "SELECT * FROM corpus_segments WHERE acip=? OR wylie=? OR english=? ORDER BY course,seq",
+    "parameters": [
+      "SNGA MA YANG DE DANG MTSUNGS TE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I CHA SHAS YIN PAS DE GSUM SNANG BA NA, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I STENG DU SNANG TSUL MI 'DRA BA GSUM SNANG BAR 'JOG PA'I PHYIR,",
+      "snga ma yang de dang mtshungs te, rnag khrag la sogs pa'i dngos po gsum po de, brlan zhing gsher ba phor pa gang po de'i cha shas yin pas de gsum snang ba na, brlan zhing gsher ba phor pa gang po de'i steng du snang tshul mi 'dra ba gsum snang bar 'jog pa'i phyir",
+      "Well the case above is exactly the same! The three things mentioned, the blood and pus and the other two, are all parts of the glass full of something wet and flowing. When the three appear then we can say that the glass full of a thing which is wet and flowing is acting as a basis, and that three different ways of appearing are being displayed upon it."
+    ],
+    "row_count": 2,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/parallel-285.json",
+    "bytes": 6015,
+    "sha256": "1a1617eb1f513261164151edf9f41269f6af0dcbb98f6d1610b4e687ba7abcea",
+    "sql": "SELECT * FROM corpus_segments WHERE acip=? OR wylie=? OR english=? ORDER BY course,seq",
+    "parameters": [
+      "YANG KHA CIG NA RE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE PHAN TSUN GO SA 'GOG PA'I DNGOS PO MA YIN PAR THAL, LAS CAN GYI 'GRO BA GSUM GYI CHU PHOR PA GANG LA CIG CAR DU BLTAS PA DE'I TSE NA, DNGOS PO TSAD GRUB PA GSUM SRID PAR KHAS BLANGS PA LA,",
+      "yang kha cig na re, rnag khrag la sogs pa'i dngos po gsum po de phan tshun go sa 'gog pa'i dngos po ma yin par thal, las can gyi 'gro ba gsum gyi chu phor pa gang la cig car du bltas pa de'i tshe na, dngos po tshad grub pa gsum srid par khas blangs pa la",
+      "Someone else may come now and make yet another argument: Let's talk about these three things: the pus and blood, and the other two. Are you implying then that these are not types of objects which would block each other from entering the space that each one occupies? After all, you were talking about a situation where those three types of beings, each with their own karma, sit down together and look at a glass full of water. And you said that your position was that it was possible for there to be three different objects there, each one confirmed by a valid perception."
+    ],
+    "row_count": 2,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/schema.json",
+    "bytes": 1669,
+    "sha256": "c5888c480c56bc06a855216329eefb0c02bd34221180be70a832ec561c378d74",
+    "sql": "SELECT type,name,sql FROM sqlite_master WHERE name IN ('entries','entry_variants','corpus_segments','meta') ORDER BY name",
+    "parameters": [],
+    "row_count": 4,
+    "full_rows_retained": true
+  },
+  {
+    "path": "queries/target-rows.json",
+    "bytes": 5919,
+    "sha256": "022c9c8be37c802f52bf4268acdc3b710ad16d15d8b389948fa7c50bb2a8de98",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      283,
+      285
+    ],
+    "row_count": 3,
+    "full_rows_retained": true
+  }
+]

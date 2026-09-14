@@ -1,0 +1,18 @@
+from pathlib import Path
+import hashlib,json
+A=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/tibetan')
+assert __debug__
+out=[]
+for seq in [284,285,283]:
+    O=A/str(seq);target=O/'freeze-manifest.json';assert not target.exists();rows=[]
+    for p in sorted(O.rglob('*')):
+        assert not p.is_symlink(),str(p)
+        if p.is_file():
+            assert '__pycache__' not in p.parts and p.suffix!='.pyc';b=p.read_bytes();rows.append({'path':str(p.relative_to(O)),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+    b=(json.dumps(rows,ensure_ascii=False,indent=2)+'\n').encode()
+    with target.open('xb') as f:f.write(b)
+    assert {str(p.relative_to(O)) for p in O.rglob('*') if p.is_file()}=={r['path'] for r in rows}|{'freeze-manifest.json'}
+    for r in rows:
+        data=(O/r['path']).read_bytes();assert len(data)==r['bytes'] and hashlib.sha256(data).hexdigest()==r['sha256']
+    out.append({'seq':seq,'path':str(target),'members':len(rows),'member_bytes':sum(r['bytes'] for r in rows),'freeze_bytes':len(b),'freeze_sha256':hashlib.sha256(b).hexdigest()})
+print(json.dumps({'status':'FROZEN_COMPLETE_OWN_SEGMENT_TREES','manifests':out}))

@@ -1,0 +1,10 @@
+--- candidates/freeze-reproduction-runtime-root.py
++++ prior/freeze-reproduction-runtime-root.py
+@@ -1,6 +1,6 @@
+ from pathlib import Path
+ import json,hashlib,datetime
+-B=Path(__file__).resolve().parent;R=B.parent/'integration/through285-generated-reproduction-attempt02'
++B=Path(__file__).resolve().parent;R=B.parent/'integration/through282-generated-reproduction'
+ def pin(p):
+  s=p.stat();raw=p.read_bytes();t=p.stat();assert (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)
+  return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())

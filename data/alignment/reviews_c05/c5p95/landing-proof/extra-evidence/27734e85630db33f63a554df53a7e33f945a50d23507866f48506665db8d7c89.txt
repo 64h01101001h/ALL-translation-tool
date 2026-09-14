@@ -1,0 +1,13 @@
+from pathlib import Path
+import datetime,hashlib,json
+P=Path(__file__).resolve().parent
+assert __debug__ and not (P/'freeze.json').exists()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+rows={str(p.relative_to(P)):pin(p.read_bytes()) for p in sorted(P.rglob('*')) if p.is_file()}
+assert 'report.md' in rows and 'caller-finalize01/execution.json' in rows
+for n,r in rows.items():assert pin((P/n).read_bytes())==r
+f=dict(status='FROZEN_SOURCE_PREPARATION_ONLY',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),producer='Codex /root/c05_280_282_english',file_count=len(rows),total_bytes=sum(r['bytes'] for r in rows.values()),files=rows,excludes=['freeze.json itself'],limits='No target execution; source-only candidates and actual pending contracts. Native preparation failures and complete historical sources retained. Direct final freeze-tool stdout is later external.')
+raw=(json.dumps(f,indent=2)+'\n').encode()
+with (P/'freeze.json').open('xb') as out:out.write(raw)
+assert {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()}==set(rows)|{'freeze.json'}
+print(json.dumps(dict(freeze=str(P/'freeze.json'),file_count=len(rows),total_bytes=f['total_bytes'],**pin(raw)),indent=2))

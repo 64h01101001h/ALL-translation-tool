@@ -1,0 +1,828 @@
+{
+  "status": "FROZEN_SOURCE_QUERY_AND_PROOF_SCHEMA_ADAPTER",
+  "files": [
+    {
+      "path": "actual-original-freeze-pins.json",
+      "bytes": 1844,
+      "sha256": "c23e5426046d34de96d2c4d4c1ae144372d5918dc1051a9b288c2a2c61e4df6c"
+    },
+    {
+      "path": "actual-original-select-inventory.json",
+      "bytes": 143102,
+      "sha256": "6068f295f73402b517691b872cd814ae484ad693d8d5cbc0f8d76f2715f810ca"
+    },
+    {
+      "path": "actual-proof-shapes.json",
+      "bytes": 5519,
+      "sha256": "768fb3619376489b91f59026ff7f32a10dea8b324e62b15c67e4d251d9e01977"
+    },
+    {
+      "path": "config-preparation-interface.json",
+      "bytes": 2959,
+      "sha256": "a3e9018abdef6074170c1d4412e05f1b016f254457f9f00db7366582237e8707"
+    },
+    {
+      "path": "config_contract-complete.forward.diff",
+      "bytes": 4195,
+      "sha256": "2dbc2928bbaad8dc753b829fcf2583f5faff7126b8e2fcddb3e0d43ede0825d2"
+    },
+    {
+      "path": "config_contract-complete.inverse.diff",
+      "bytes": 4195,
+      "sha256": "d4d278e0d71fa2ac75847dad3b8f9e9042aee851bb769d5f028a6dbf0e8d759b"
+    },
+    {
+      "path": "config_contract.py",
+      "bytes": 12106,
+      "sha256": "a292150ee05ef7d042c309cba5e82aa076487619f3ba223e3212e24aaaa4076a"
+    },
+    {
+      "path": "config_contract.py.forward.diff",
+      "bytes": 2584,
+      "sha256": "562cfec22f65b3c54b0aeaecec16408574c0e457abcf1465b713ef323bcf6355"
+    },
+    {
+      "path": "config_contract.py.inverse.diff",
+      "bytes": 2584,
+      "sha256": "c1020a06d3f3eb6e565c387d8494680dda6d38b3614e9fe1ab80a0909828ff52"
+    },
+    {
+      "path": "exact-extracted-bind-functions.json",
+      "bytes": 5175,
+      "sha256": "1aff82489809334592034a45c6ff2e1e175c9dbd9e0405fa4a6345b6785534da"
+    },
+    {
+      "path": "exact-extracted-proof-counts.json",
+      "bytes": 769,
+      "sha256": "6b7783f926e46ecd39f035dbf2d4ac058ba565a37d185255c0d13594540ee8a1"
+    },
+    {
+      "path": "extend-proof-shape.py.txt",
+      "bytes": 5383,
+      "sha256": "d6d028f20219bf3f0703cb71a37c08f2d8d4a9b212a0d504bb59329a4b423e08"
+    },
+    {
+      "path": "finalization-caller/command.json",
+      "bytes": 649,
+      "sha256": "1c873428991297c94f6ccc20797f104aebbbf24118de30f2208be1b0399901a0"
+    },
+    {
+      "path": "finalization-caller/execution.json",
+      "bytes": 357,
+      "sha256": "29b5968f884ef40c090a5f0dc6aa382ca7549c2c9380fe3f133afd06d546b91c"
+    },
+    {
+      "path": "finalization-caller/exit.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "finalization-caller/stderr.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "finalization-caller/stdin.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "finalization-caller/stdout.bin",
+      "bytes": 368,
+      "sha256": "4010b3e5ab80e8f272356301fa6cf36ac8ad2b0d09b6dff3023cc7d7382a6f07"
+    },
+    {
+      "path": "finalize-preparation.py.txt",
+      "bytes": 9218,
+      "sha256": "fdcb0030b27b5e5f63a2d3a18de3cd3bcd51904bbea56b0b899837c6fecad9b1"
+    },
+    {
+      "path": "focused-control-results.json",
+      "bytes": 687491,
+      "sha256": "6c272972fc651855dc491633d12687781773c6ec7ab6601d4ed49054a3298c4a"
+    },
+    {
+      "path": "focused-controls-caller/command.json",
+      "bytes": 645,
+      "sha256": "1ae7ff447ff20c54092b0d75bd1496e107809968c20da550e04815e0119bee31"
+    },
+    {
+      "path": "focused-controls-caller/execution.json",
+      "bytes": 357,
+      "sha256": "9c2455631e3ff85bec06e10fcd5b0510676806f0b831cb4a07449b26aee867e4"
+    },
+    {
+      "path": "focused-controls-caller/exit.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "focused-controls-caller/stderr.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "focused-controls-caller/stdin.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "focused-controls-caller/stdout.bin",
+      "bytes": 645,
+      "sha256": "b8c21abda7bf76dae4aeb49aaf8cb28710ea163ce20cb34716505804944a35bf"
+    },
+    {
+      "path": "focused-controls-proof.json",
+      "bytes": 673,
+      "sha256": "d4b7a47833c36850bdab0dffe2963e2c25df01cffe44960b0d7cba18be04e8fb"
+    },
+    {
+      "path": "focused-controls.py.txt",
+      "bytes": 9231,
+      "sha256": "f7f45d458716a1704df5f1baf49a2ca6d0784ecb3430887dc3f5f522f7975ee9"
+    },
+    {
+      "path": "freeze-preparation.py.txt",
+      "bytes": 1393,
+      "sha256": "48d83f049ded5f204b576d708397b5e45299296a66b11a1925f66fafe3f05c5f"
+    },
+    {
+      "path": "history/query-only-config_contract.py.txt",
+      "bytes": 11457,
+      "sha256": "1c906b06043ec9543afd9976ab297ab013f83764ee56588317a0ea7b0992072f"
+    },
+    {
+      "path": "inputs/freezes/english-283-freeze.json",
+      "bytes": 24911,
+      "sha256": "2576df055706f0e9baf1c52348e39868d0f8202c3fc67ba70d6c56755e2ea6a9"
+    },
+    {
+      "path": "inputs/freezes/english-284-freeze.json",
+      "bytes": 3953,
+      "sha256": "009e7efa679c8c2d9e450a6e055ad7b572e6446622a3d77cde3c1db4945c0dae"
+    },
+    {
+      "path": "inputs/freezes/english-285-freeze.json",
+      "bytes": 3953,
+      "sha256": "d937ea2464d3b7881d6e013d1c87652f506147de9904e9170224036dcd6f1e47"
+    },
+    {
+      "path": "inputs/freezes/tibetan-283-freeze-manifest.json",
+      "bytes": 17255,
+      "sha256": "5abec4f7dfb5bc8ef7081aa8116660a2ff8cd63f9f31cc776a96a7c94b5a5e6e"
+    },
+    {
+      "path": "inputs/freezes/tibetan-284-freeze-manifest.json",
+      "bytes": 3549,
+      "sha256": "65c62eb43f97d9a6e2a8464862a9740c14a91ff143c8c88604f9398d499204f3"
+    },
+    {
+      "path": "inputs/freezes/tibetan-285-freeze-manifest.json",
+      "bytes": 3549,
+      "sha256": "786d2d2fcf71f836210a7e61e4758322133afbb6a0572738e85cf1c1066598cf"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/argument-277-291.json",
+      "bytes": 45446,
+      "sha256": "83ee913be59860b9072592befb17300aa470b7f087c35bd2b886d08052ae8eab"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-assertion-position.json",
+      "bytes": 22182,
+      "sha256": "fc0bafc14a86bce747b5901df286a9003618816f8a7830681c16b995cde4b4fe"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-case-same.json",
+      "bytes": 20186,
+      "sha256": "7bfdf5afa3972456982ad3bb9231f388ab4ae44b32fa3f33ee0bb632e4015d72"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-expanded-valid.json",
+      "bytes": 52535,
+      "sha256": "9b4f5b68d5cc6851766c7f84a6690f663fda7e83f2e9ec157547c43dac84fc4c"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-limbs-person.json",
+      "bytes": 29401,
+      "sha256": "0418ca81dd023c229bd0c936c0a299116bb8fd55a8c3d7ff4c6b77355a21f524"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-mutual-spatial.json",
+      "bytes": 31583,
+      "sha256": "08ac3ea803b35278b721c2957fface4dca028d04a7a99433a2fd7cb6218f1fd0"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-parts.json",
+      "bytes": 361735,
+      "sha256": "67111ae018b88057fe7a429e19c139578dc282953285648a4a60da3d6fd9c55b"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-simultaneous-look.json",
+      "bytes": 163089,
+      "sha256": "25dcad061f6227c26119c12ee9d3881582768aeaacdef95ae97c7ef1ee1626b5"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-speaking-formula.json",
+      "bytes": 124274,
+      "sha256": "9cb0c0a78cd5f778ae6434f52f96e6c907b673102f2cf6f319669e7abbfe1130"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-valid-established.json",
+      "bytes": 34968,
+      "sha256": "596ee46efba697cba5f7c7e870de151f63493ccb05aaeb44922965faf27fe3c6"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/corpus-wet-flowing.json",
+      "bytes": 213228,
+      "sha256": "5a017b952a4a4c7dd80aeaa40724f3558516d09abc64903cec75b0f83133f00d"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-00.json",
+      "bytes": 4713,
+      "sha256": "97749d519576887fb87c1c2361ce2ecc3434f417075f8b66875bfec20dc1ae6c"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-01.json",
+      "bytes": 4194,
+      "sha256": "7eeea846bc6221d23f26ac8ab754f9b22b232f39a6e74236aea222d9ec8e4f70"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-02.json",
+      "bytes": 2369,
+      "sha256": "43dc03888f81584cf4fd19013f2982ae539f1b0bb523b233ab2a47974919a059"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-03.json",
+      "bytes": 2289,
+      "sha256": "08e5679c2fe8834656685fe240b11ba2a8d83d8610f379fd7c73344b29842b0a"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-04.json",
+      "bytes": 3719,
+      "sha256": "f71b95dd0c020aaf48ecfad4fd076b943bdad796d9d065115447e58fbae25d08"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-05.json",
+      "bytes": 11355,
+      "sha256": "a11640e06a9b4ea40b8de5c6852930007095d1692b32b04095a07a82c7bc1ece"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-06.json",
+      "bytes": 3467,
+      "sha256": "fe2262e39c82bf067fddd5dbfa1b4af1e42f922759d69f1fd3bd6574dd6f6c95"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-07.json",
+      "bytes": 3055,
+      "sha256": "86464d7cd2f52752384b143d0817197562b5b96ead7818e3e9c2e23553e3b70a"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-08.json",
+      "bytes": 5761,
+      "sha256": "434bb1dff389bd1589ab4e33fd817965275dec271dd8330a171cb7a7bf8689b6"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-09.json",
+      "bytes": 2325,
+      "sha256": "c313b259b98a780309cf69e359f884bb7a7fe02a92306827638a727d1109bc82"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-10.json",
+      "bytes": 6285,
+      "sha256": "aca91930c620275a3808ff243b0fb3a13c4305feabd7efb4b8ee0883518b1680"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-11.json",
+      "bytes": 4712,
+      "sha256": "c3fa634f6ff19cc6ad3b7feebd14a612bc2f9893522b50fb9ccb032226de5719"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-12.json",
+      "bytes": 3275,
+      "sha256": "1c01306eb34b042873c758c8ed7f37d1ec038e87b711272bb71e561de95507c3"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-13.json",
+      "bytes": 3509,
+      "sha256": "ea54e5d0b4bfb074a7908362d7c44dda64d993c95643fe178da51fecc025d4b9"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-14.json",
+      "bytes": 9671,
+      "sha256": "cf64c2942a53a657a650c490b52c52b925d9c69d808a3073e74926cd419d883a"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-15.json",
+      "bytes": 3435,
+      "sha256": "b3bff1f1338c39961fcd6fe54e698709eac411a44ed9fa7f2b3cf2069e68c0ab"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-16.json",
+      "bytes": 3104,
+      "sha256": "86ab721f14718c3269ebc42dc98051310ab94fe1746ed2fa737d8422c36c89f1"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-17.json",
+      "bytes": 3616,
+      "sha256": "444c0a7dd6c709a07440f683e5435ed5f31e91eb2533584fc485be4502681961"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-18.json",
+      "bytes": 1598,
+      "sha256": "f37a3e8de639b82b643b8b52dc6f4dea59a7cdb637abd3dd02e687b2214b6370"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-19.json",
+      "bytes": 2438,
+      "sha256": "1a90049f3c20d1bddb0836fcf0d4a9b56ea99998c25b651f6ebd9852f1dd8f00"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-20.json",
+      "bytes": 6194,
+      "sha256": "f083c1333806a5f0c3a28a41cd5bafa1200d1e13ed3cbf22a5c8c52383eb0c01"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-21.json",
+      "bytes": 3777,
+      "sha256": "60a99f87d18a1d24940f94782fc7bff3a81bd550922ed17e91b62155d6ae6b1f"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-22.json",
+      "bytes": 4857,
+      "sha256": "2ae89ffe81a9320e731c3c1a2804220ac928990794be551433bd9b28005c4f65"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-23.json",
+      "bytes": 4668,
+      "sha256": "da427ae8d5f1ee0c10812a4678fd3d3de0300435277d84264b816c283c519c5d"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-24.json",
+      "bytes": 1445,
+      "sha256": "31b2c5e15dd2bcbc912d709fb37b847624fda83b13b9805b90ac059e729fc90e"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-25.json",
+      "bytes": 1542,
+      "sha256": "932138bf8e9e047a0c2f03e62a34def98d72aba575cf7ff0ee54c7f9ab18a145"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-26.json",
+      "bytes": 1503,
+      "sha256": "8d682a69a3438467c0201da6b707542c05b26b5557364f2e18a69a74de2ad2da"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-27.json",
+      "bytes": 4311,
+      "sha256": "0c6834f6eb9801670f40e046bd126db91d7d1fb62a36e0ad213c53d4d6da81a4"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-28.json",
+      "bytes": 1573,
+      "sha256": "bf81b48d9b17c57deba7cddec21e08641842852e14a9d1f77826eebd5a345044"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-29.json",
+      "bytes": 4996,
+      "sha256": "7483f53f89a12e95880f660bebecad3b86cc388837445d96af565beb3b1b3453"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-30.json",
+      "bytes": 3190,
+      "sha256": "2f63d71dedae2606bef5a3a1a4d5132237544971ea14d2bcfdc5b2cf2676e9b5"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-31.json",
+      "bytes": 3291,
+      "sha256": "3a94c645fb1a1cd0893295582065ef67e19a4f1f6bb547cc915d5678ef9b37bc"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-32.json",
+      "bytes": 1644,
+      "sha256": "335685a31a6293eeaafe0cb248bb8599a55c187d249c3f5c72bdb5ae473b1446"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-33.json",
+      "bytes": 2648,
+      "sha256": "9fa19624734cc560b3a2df2fb626caae1f8676b8f3cd951e472f1c1941934c29"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-34.json",
+      "bytes": 2804,
+      "sha256": "261b287b16aa2e393a4cfa007ab58c39da6ce5425a185bf5ec6f3f89beff2ff4"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-35.json",
+      "bytes": 2704,
+      "sha256": "fe9e59fc6a4c31980f939cc08c6831fe3a767f5f90e82f840b3f362ab6cb6d26"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-36.json",
+      "bytes": 1661,
+      "sha256": "ef62eac63dcde38895b10afa227ec7107b7ff9b468759a6cb8b13c8390cac8df"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-37.json",
+      "bytes": 3438,
+      "sha256": "3ca8623d67c20ac76c25b709fcc5d2bf7fd71d63168911c1646b5b8a6a2e980f"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-38.json",
+      "bytes": 4143,
+      "sha256": "141cd6eb2c49e6f1bd332ca34a45552c3a24e422ac4c7e78f3fc9689bea82e7c"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-39.json",
+      "bytes": 1451,
+      "sha256": "960eb9c595f440466ed5effd317003adea34b1a32143546611e0e07f3c5b0f22"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-40.json",
+      "bytes": 5890,
+      "sha256": "00ec958e1a1c13edf7f671f2a6fa1f5d6a6466e3ecf3b3d74f743f6a80e76226"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-41.json",
+      "bytes": 4058,
+      "sha256": "17c20f3e02bcd53379d32b5bf4153a728b79c026cac5169347ca9ac7fe22cf4f"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-42.json",
+      "bytes": 2478,
+      "sha256": "f017651f0792aec7ed6cd9cf6550eda446d9e6777ad8d9bdf2b1d649852f9a4c"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-43.json",
+      "bytes": 2189,
+      "sha256": "31754a02187d3991cc722c975d043efb924094f9e113a3e18438293f11d542f4"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-44.json",
+      "bytes": 3821,
+      "sha256": "fe2f4fad23bba5e50b56b03c0e8ccd576db2f1629c210c2fdae79cd8f405763c"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-45.json",
+      "bytes": 3226,
+      "sha256": "cc5e8623ef02230a8f49aaf5be9f7504bd1a09a2b64e728becbb91ae0508595f"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-46.json",
+      "bytes": 3996,
+      "sha256": "ecb76cdc9ca2c9897c677b11640717ec248008c5478b31b39c0ba69c8281e54f"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-47.json",
+      "bytes": 1520,
+      "sha256": "484aba9c3882d4d78949e2d3742c677331000ec10af5a62c07d0bf77a638e85f"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-48.json",
+      "bytes": 1386,
+      "sha256": "9da4ea7e0dd4f6342fdb123cc4324c130deb9cc457afb4ca82aa4343aa4d96e7"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-49.json",
+      "bytes": 3326,
+      "sha256": "095a416edbd9418c91e06e45256c030870c352e184f7f67d2d6f73c8d35752c4"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-50.json",
+      "bytes": 4301,
+      "sha256": "b888785d2e066335f6bd7f9488b0626c9ac81b29d9a007655cbfdb078805b548"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-51.json",
+      "bytes": 2862,
+      "sha256": "a969ba8b018c7443b35f08566eae5efb14460c3ed35ffb1376ca84c90fe31e5e"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-52.json",
+      "bytes": 2437,
+      "sha256": "472d5143bc28ff4491ae54a9696334e203a7436fadfb2e170e0d5828f45def35"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-53.json",
+      "bytes": 5894,
+      "sha256": "22f5b0f8629aac53534769941e8e09948d2aa2601bf7ca8d8b87d8a0a9e0df3c"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-54.json",
+      "bytes": 3545,
+      "sha256": "993c4841023f8dc8e9b9ba342e1e45f76deb526e04ee800c26795fadf0777057"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-55.json",
+      "bytes": 7094,
+      "sha256": "3c281c4d6ee6460be055bf392980689d7d031805b877c93805d7f029d0ec25b3"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-56.json",
+      "bytes": 4348,
+      "sha256": "a193db2934f7bafaad9da63dcadbdf0c48a794835af172008e7b533225c983d8"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-index.json",
+      "bytes": 29890,
+      "sha256": "f03b1cc4bd00d28df4b2e9470b26d40196015a7f10b74d185a7a84e36dcbfb79"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/lexical-snang.json",
+      "bytes": 4709,
+      "sha256": "6d6b2e4ac46fc0aae236c729446103f459e36b1907235703a00ace3fadefc722"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/meta.json",
+      "bytes": 975,
+      "sha256": "3667c9b9db38df97a857ed11f2feb32697681d0ddab1f3a107bc64288a69bb7d"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/parallel-283.json",
+      "bytes": 3525,
+      "sha256": "34f1e988ac15b09ea0ffa373aeec03418642ca6e1fb0fdce96511e21cf2f9b0f"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/parallel-284.json",
+      "bytes": 5020,
+      "sha256": "7d374f391896da3b9f1f61bb876969547ef080641127b5c92c2f96eb727a8627"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/parallel-285.json",
+      "bytes": 6015,
+      "sha256": "1a1617eb1f513261164151edf9f41269f6af0dcbb98f6d1610b4e687ba7abcea"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/schema.json",
+      "bytes": 1669,
+      "sha256": "c5888c480c56bc06a855216329eefb0c02bd34221180be70a832ec561c378d74"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/snapshot-verification.json",
+      "bytes": 4011,
+      "sha256": "6b0db744b2b92e6c333fca05d52a13451a3ae78590bbb8f46f2cc897f6b5db30"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/source-boundary.json",
+      "bytes": 818,
+      "sha256": "ba07ac032c6b947c037116d6d5b2e823a3866c46b081b95d32f2ea25f3cf49b1"
+    },
+    {
+      "path": "inputs/original-descriptors/english-283/queries/target-rows.json",
+      "bytes": 5919,
+      "sha256": "022c9c8be37c802f52bf4268acdc3b710ad16d15d8b389948fa7c50bb2a8de98"
+    },
+    {
+      "path": "inputs/original-descriptors/tibetan-283/evidence/sqlite-query-results.json",
+      "bytes": 698872,
+      "sha256": "d70f0a5503c39a760a9b8da4d1e9d7957fbc05e4989e9b592fdfdf468f7684f7"
+    },
+    {
+      "path": "inputs/original-descriptors/tibetan-283/evidence/supplement-lexical-queries.json",
+      "bytes": 16432,
+      "sha256": "5bf0b263ce047823ed281f9f52043b7e087c912d5a4ab5613e523f03b4a217a3"
+    },
+    {
+      "path": "inputs/prior-config_contract.py",
+      "bytes": 10668,
+      "sha256": "caff81a7c2b1da46e7630428d4b1ff0ac64cc0e82e9716f59ae3563d68519561"
+    },
+    {
+      "path": "inputs/prior-preparation-freeze.json",
+      "bytes": 50630,
+      "sha256": "9139d2c3bb74466c8a3656e3bb8c5f133f215d5ff22418cd97fcc85081de38eb"
+    },
+    {
+      "path": "inputs/prior-report.md",
+      "bytes": 3102,
+      "sha256": "0e61b771ba6a53d0a2a11fdb8555737e30ceef75b8a021282a9ba71d6f019772"
+    },
+    {
+      "path": "inputs/prior-verify_reconciliation.py",
+      "bytes": 16475,
+      "sha256": "945086f1b2f93b40f9fa8f59535f0c9fc29972f6d1c01beea3d6fddaf23ea4ac"
+    },
+    {
+      "path": "inputs/proof-shapes/current-proof-283.json",
+      "bytes": 2630,
+      "sha256": "71239c9ec3e2a0ada37fd5379ebd359a4e1751e293f04228f9b1593141e552a1"
+    },
+    {
+      "path": "inputs/proof-shapes/current-proof-284.json",
+      "bytes": 2630,
+      "sha256": "340a9a2a3c6131acc82302c69d19764de037920765aa4a6fe1543e09da9a08d7"
+    },
+    {
+      "path": "inputs/proof-shapes/current-proof-285.json",
+      "bytes": 2630,
+      "sha256": "b23c1ae8bedca239a7a04a7fff4a35c69d25245e4c45226c0d05a5bb056e4ef2"
+    },
+    {
+      "path": "inputs/proof-shapes/current-runtime-schema-handoff.json",
+      "bytes": 5344,
+      "sha256": "ffef3dc2d5fde5b079ef7d491f7cd822b4d07159156a1b8dd17fac70e7524951"
+    },
+    {
+      "path": "inputs/proof-shapes/prior-nested-proof-280.json",
+      "bytes": 3067,
+      "sha256": "88d703032ff7213f3b1dd5b7c26c43f5e2012935b6966bc1deb71922bd9ea245"
+    },
+    {
+      "path": "inputs/root-base-source-approval.json",
+      "bytes": 1396,
+      "sha256": "b50334ed0c4f8ce825592a084ecc3a1b79231a3bbe7c0b5aecf325736e1971be"
+    },
+    {
+      "path": "nonquery-original-descriptors.json",
+      "bytes": 1643,
+      "sha256": "28f2464a560c3cbcc1b2c597a2ee600d6654278870364e8d16b6df732acf7b09"
+    },
+    {
+      "path": "original-to-copy-manifest.json",
+      "bytes": 50278,
+      "sha256": "2ea3afd96396f897ed35920fd1d0cce0130fea1868b74224720107f5c909e5a1"
+    },
+    {
+      "path": "prepare-adapter.py.txt",
+      "bytes": 8349,
+      "sha256": "4d16397a5aff61aa089e18cda34d9583ed02d39bffe747a9baa1b61afc2fa36b"
+    },
+    {
+      "path": "proof-shape-control-results.json",
+      "bytes": 55382,
+      "sha256": "2f8edba5b08bf79a6e13e89f355cb1362f713849a12950b9c7a313fe7a8b72fc"
+    },
+    {
+      "path": "proof-shape-controls-caller/command.json",
+      "bytes": 649,
+      "sha256": "cd710e8f1c62bf59321388825a59c76e987ba7dc8904b1f7de7a494b5e8b9131"
+    },
+    {
+      "path": "proof-shape-controls-caller/execution.json",
+      "bytes": 357,
+      "sha256": "208dca61e4f5ce805c670c61ed7a4b4d96829bfad262da11201d5cc7798115a2"
+    },
+    {
+      "path": "proof-shape-controls-caller/exit.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "proof-shape-controls-caller/stderr.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "proof-shape-controls-caller/stdin.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "proof-shape-controls-caller/stdout.bin",
+      "bytes": 503,
+      "sha256": "ddf57096b21779907a6cecb29c5e308cedce3c5f309d37221babcc34372f3b2e"
+    },
+    {
+      "path": "proof-shape-controls-proof.json",
+      "bytes": 529,
+      "sha256": "d669d6bdb3f59ef0a2560830f32191ebecfb984e8fbf44b87588e9eae6375467"
+    },
+    {
+      "path": "proof-shape-controls.py.txt",
+      "bytes": 5216,
+      "sha256": "bbf5fd1b4c6056c0d2660c3195731cd5d4b13b16d148c295a53a98e5946a84b3"
+    },
+    {
+      "path": "proof-shape-original-to-copy-manifest.json",
+      "bytes": 2480,
+      "sha256": "2933f810f515ac190c9bac3c62cc628628da7a0c8a7eb63cb416b0f574812d66"
+    },
+    {
+      "path": "proof-shape-replacement-map.json",
+      "bytes": 1365,
+      "sha256": "46dd27413015b241dd52643564b097caeef9d6ad0a9ff094571435271fa7b8ba"
+    },
+    {
+      "path": "proof-shape-source-caller/command.json",
+      "bytes": 647,
+      "sha256": "42aa5c6e126211f8e21ff5e999a953634897c4370985081d6957e7b99308a589"
+    },
+    {
+      "path": "proof-shape-source-caller/execution.json",
+      "bytes": 357,
+      "sha256": "22ab86a9e005ee762f36bcad2d9d66638469879d02beda1c435ef980d097c613"
+    },
+    {
+      "path": "proof-shape-source-caller/exit.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "proof-shape-source-caller/stderr.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "proof-shape-source-caller/stdin.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "proof-shape-source-caller/stdout.bin",
+      "bytes": 484,
+      "sha256": "c56a697265c29adb298a442b83020d90b135bf3997c3ff901893c979a7112b1c"
+    },
+    {
+      "path": "proof-shape-source-proof.json",
+      "bytes": 868,
+      "sha256": "8fb3d085aabd7a2e62176bd745831df6870da4b87e35eefc6c5290b7a93cfeed"
+    },
+    {
+      "path": "proof-shape.forward.diff",
+      "bytes": 1882,
+      "sha256": "1b39d8cb9dab848bff6a0632f4cec669530bdbe22c46abb0cc577600ac00b39b"
+    },
+    {
+      "path": "proof-shape.inverse.diff",
+      "bytes": 1882,
+      "sha256": "d38dccda468f4fc1b7dcfb5766fe71cbd459ea33ed8063b53978fce35618836e"
+    },
+    {
+      "path": "proof.json",
+      "bytes": 2445,
+      "sha256": "48a679249832e9942de552eb05c5a57f0f0c6a37b257067a67de2f21c5de77a4"
+    },
+    {
+      "path": "record-command.py.txt",
+      "bytes": 1396,
+      "sha256": "1b6baa1997755c7ade429d645bf2032d52952b64563b9d2f63a617ce1043c7e7"
+    },
+    {
+      "path": "replacement-map.json",
+      "bytes": 2176,
+      "sha256": "d04b0cf960e9ba32d7f0b44a574fba0cf47dbf13dbd0f88f89269cdc214a00d0"
+    },
+    {
+      "path": "report.md",
+      "bytes": 4185,
+      "sha256": "543de7aff788db687bd5d8d1f5361fefd14235d44537d6d57aaaa5bf2e3f5d35"
+    },
+    {
+      "path": "separate-control-evidence.json",
+      "bytes": 1319,
+      "sha256": "848ef4e70da5f6148ca13fef986e27a0ea5c20cb2b7d921926dd9156457763eb"
+    },
+    {
+      "path": "source-preparation-caller/command.json",
+      "bytes": 644,
+      "sha256": "7277c98f0b2c4c9181785d4fac983a53c8833f90e5c2c37a7162ebe82c1650c0"
+    },
+    {
+      "path": "source-preparation-caller/execution.json",
+      "bytes": 357,
+      "sha256": "bbb171b07cda3189089d19e9d2a8c487b4849f2c83e013dd976fe2c2d5a3f955"
+    },
+    {
+      "path": "source-preparation-caller/exit.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "source-preparation-caller/stderr.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-preparation-caller/stdin.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-preparation-caller/stdout.bin",
+      "bytes": 749,
+      "sha256": "d333b2256d8134a148032bb84656f6c2ec92c8170c538155791c07e2a0f0a790"
+    },
+    {
+      "path": "source-proof.json",
+      "bytes": 805,
+      "sha256": "de99aaa897247678a1a83777ced4f395cbadb3d92731cc9bfac77490ef5bf748"
+    },
+    {
+      "path": "verify_reconciliation.py",
+      "bytes": 16475,
+      "sha256": "945086f1b2f93b40f9fa8f59535f0c9fc29972f6d1c01beea3d6fddaf23ea4ac"
+    },
+    {
+      "path": "verify_reconciliation.py.forward.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verify_reconciliation.py.inverse.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "file_count": 164,
+  "total_bytes": 3317656,
+  "boundary": "Complete current and earlier source/fixture/evidence/caller history, excluding only this manifest. No real config/runtime execution or semantic approval."
+}

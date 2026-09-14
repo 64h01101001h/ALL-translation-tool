@@ -1,0 +1,146 @@
+from pathlib import Path
+import hashlib,json,re
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');A=R/'campaign-artifacts/C05-283-285/tibetan';E=A/'283/evidence'
+assert __debug__
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,x):
+    with p.open('xb') as f:f.write((json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+rows=json.loads((E/'selected-full-rows.json').read_text())
+if isinstance(rows,dict):rows=rows['rows']
+def hits(text,piece):
+    return [m.start() for m in re.finditer(r'(?<![A-Za-z0-9\u0F00-\u0FFF])'+re.escape(piece)+r'(?![A-Za-z0-9\u0F00-\u0FFF])',text)]
+notes={
+283:'PROVISIONAL machine alignment by Codex (independent Tibetan-first proposal). The two person/action predicates keep their separate occurrences. The opening attributed reply is a phrase at depth 3. The second English “five” expands the pronoun des; it is not a second lnga. The introductory reasoning, conditional/reporting frame and distributed grammatical wording remain unpaired rather than being asserted null. No new erratum is proposed.',
+284:'PROVISIONAL machine alignment by Codex (independent Tibetan-first proposal). Both wet/flowing and glass/full descriptions, and all three gsum occurrences, are distinguished. rnag khrag is the blood-and-pus compound, whose members cross in English. sogs owns only “and the other”; the supplied number “two” remains unpaired. steng owns “upon”, while the expanded basis wording remains unpaired. Unresolved connective and grammatical content is omitted, not asserted null. No new erratum is proposed.',
+285:'PROVISIONAL machine alignment by Codex (independent Tibetan-first proposal). The negative ma owns “not”; the three dngos po and three gsum occurrences have separate targets. sogs owns only “and the other”, leaving “two” unpaired. las and the syllable-level possessive can own “karma” and “with”; “their own” remains unpaired. tshad grub pa is the established epistemic compound, with strictly tighter members for tshad and grub. The rhetorical frame, “sit down”, supplied “different”, and distributed reporting wording remain unpaired rather than asserted null. No new erratum is proposed.'}
+titles={283:'the actions of parts and the person',284:'three appearances and the glass',285:'the objection about occupying space'}
+allout=[]
+for seq in [283,284,285]:
+    O=A/str(seq);O.mkdir(exist_ok=True);row=next(x for x in rows if x['seq']==seq);spans=[];decisions=[];positions={};parents={};cur=0;parent=None
+    def add(tib,eng,why,d=5,n=1,member=False,anchor=None):
+        global cur,parent
+        ident=('m' if member else 'p' if d==6 else 'w')+str(len(spans)+1)
+        sp={'id':ident,'d':7 if member else d,'tib':tib,'eng':eng}
+        if member:
+            assert parent is not None
+            ps=next(s for s in spans if s['id']==parent)
+            assert ps['tib'].count(tib)==1 and ps['eng'].count(eng)==1
+            assert tib!=ps['tib'] and eng!=ps['eng']
+            tr=[positions[parent]['tib'][0]+ps['tib'].index(tib),positions[parent]['tib'][0]+ps['tib'].index(tib)+len(tib)]
+            er=[positions[parent]['eng'][0]+ps['eng'].index(eng),positions[parent]['eng'][0]+ps['eng'].index(eng)+len(eng)]
+            parents[ident]=parent
+        else:
+            th=[i for i in hits(row['wylie'],tib) if i>=cur];assert th,(seq,tib,cur);at=th[0];tr=[at,at+len(tib)];cur=tr[1]
+            eh=hits(row['english'],eng)
+            if anchor:
+                assert row['english'].count(anchor)==1,(seq,anchor)
+                lo=row['english'].index(anchor);eh=[i for i in eh if lo<=i and i+len(eng)<=lo+len(anchor)]
+            assert len(eh)>=n,(seq,eng,n,eh);at=eh[n-1];er=[at,at+len(eng)]
+            parents[ident]=None
+            if d==5:parent=ident
+        spans.append(sp);positions[ident]={'tib':tr,'eng':er}
+        decisions.append({'id':ident,'decision':'PROPOSE','depth':sp['d'],'tib':tib,'eng':eng,'rationale':why,'intended_tib_range':tr,'intended_eng_range':er,'english_whole_word_occurrence':hits(row['english'],eng).index(er[0])+1 if not member else None,'parent':parents[ident]})
+    if seq==283:
+        add('kho na re','someone responds','A complete attributed-reply phrase: kho supplies the speaker and na re the speech act. This is not a lexical compound and is therefore d3.',d=3)
+        add('skyon','problem','The denied fault/problem in skyon med; HGM skyon and the entire objection agree.')
+        add('med','no','Existential negation supplies the lowercase no after there\'s. The opening emphatic No is not claimed a second time.')
+        add('yan lag','protuberances','The five limbs/extensions of the previous argument; HGM yan lag explicitly includes protuberances.')
+        add('lnga','five','Only the first English five is the explicit numeral lnga; the later five paraphrases des.')
+        add('skyes bu','person','First person is the possessor of the five parts.',n=1)
+        add('cha shas','parts','The limbs are parts of the person, not five independently acting persons.')
+        add('yin','are','Copula in the parts predicate owns are all parts, not the auxiliary are performing.',anchor='are all parts')
+        add('pas','so','Standalone causal pas after yin introduces the consequence that the person is acting.',d=6)
+        add('bya ba','actions','First action-object under des, referring to the five limbs.',n=1)
+        add('byas','performing','First action predicate after the limb pronoun; excludes auxiliary are and supplied some.',n=1)
+        add('skyes bu','person','Second person is the agent of the second action predicate.',n=2)
+        add('bya ba','actions','Second action-object, explicitly attached to the person predicate.',n=2)
+        add('byas','performing','Second action predicate under skyes bu des.',n=2)
+        add("'jog",'say','Positing/attributing the action to the person; HGM includes say.')
+        add('dgos','have to','Necessity is expressed by have to, without adding supplied we.')
+        omissions=[
+          {'tib':'byas pa la','eng':'In response to this line of reasoning','reason':'Anaphoric introduction refers to the completed prior argument; no separate word reasoning or line in this row. The full rhetorical recast is left open.'},
+          {'tib':"po de; de'i; des (after yin pas); des (after second skyes bu)",'eng':'the one; the five; of; grammatical agents','reason':'Reference and case are distributed across the English. In particular des is not a second numeral five; no source gcig licenses one as a lexical numeral.'},
+          {'tib':"pas (after first byas); par; pa'i phyir; zer na; de after med",'eng':'when; that; reporting and conditional framing','reason':'The temporal, attributive and final reason/reporting construction is distributed; no affirmative no-exponent null is claimed.'},
+          {'tib':None,'eng':"No, there's; such; here; all; we; some; articles and verbal auxiliaries",'reason':'These English expansions are left verbatim and unpaired; words already owned by lexical spans are excluded from this residual wording description.'}]
+    if seq==284:
+        add('snga ma','above','The previous case is referred to; above is the lexical anaphoric orientation, while case is supplied.')
+        add('mtshungs','same','Equivalence between the limb analogy and the former glass example; excludes the supplied the/exactly.')
+        add('rnag khrag','blood and pus','Established substance compound, explicitly attested in HGM with this English order; both source constituents are present.')
+        add('rnag','pus','The pus constituent; its English follows blood although its Tibetan precedes khrag.',member=True)
+        add('khrag','blood','The blood constituent inside the same compound.',member=True)
+        add('sogs','and the other','Enumeration closing gesture only, attested as this exact HGM gloss. The number two is supplied by the contextual list of three and is excluded.')
+        add('dngos po','things','First list names three things, not three ways of appearing.')
+        add('gsum','three','First numeral modifies the three things.',n=1)
+        add('brlan','wet','First wet quality of the glass contents.',n=1)
+        add('zhing','and','Standalone conjunction joining wet and flowing in the first description.',d=6,anchor='something wet and flowing')
+        add('gsher ba','flowing','First flowing quality; the established brlan zhing gsher ba expression is split into defensible words and conjunction.',n=1)
+        add('phor pa','glass','First vessel mention.',n=1)
+        add('gang','full','First fullness predication, not the indefinite something.',n=1)
+        add('cha shas','parts','The three objects are parts of the contents as stated by this analogy.')
+        add('yin','are','Copula of are all parts, not the passive auxiliary are being displayed.',anchor='are all parts')
+        add('gsum','three','Second numeral refers to the objects when they appear.',n=2)
+        add('snang ba','appear','Appearance predicate of the three objects; lexical snang is nominalized before the temporal particle.')
+        add('na','When','Standalone temporal particle after snang ba owns the capitalized When.',d=6)
+        add('brlan','wet','Second description repeats the wet quality; it does not reuse the first English occurrence.',n=2)
+        add('zhing','and','Standalone conjunction in the second wet/flowing description.',d=6,anchor='which is wet and flowing')
+        add('gsher ba','flowing','Second flowing quality.',n=2)
+        add('phor pa','glass','Second glass is the basis on which the appearances are described.',n=2)
+        add('gang','full','Second fullness predication.',n=2)
+        add('steng','upon','The spatial relation of the appearances to their basis; HGM explicitly includes upon. The extended acting-as-a-basis wording is not captured as a lexical gloss.')
+        add('snang tshul','ways of appearing','Established compound for manner of appearance, distinct from each flanking snang predicate.')
+        add("mi 'dra ba",'different','Established adjective different, containing its own negation; it is not a separate denial of appearance.')
+        add('gsum','three','Third numeral modifies the different ways of appearing.',n=3)
+        add('snang','displayed','The final appearance predicate is rendered in the passive displayed; the passive auxiliaries are not part of the lexical target.')
+        add("'jog",'say','Positing the three appearances, rendered say; we can is supplied.')
+        omissions=[
+          {'tib':'yang de dang ... te; de; po; de\'i; yin pas; du; bar; pa\'i phyir','eng':'Well; exactly the; mentioned; then; we can; that; connective and grammatical wording','reason':'Connective, deictic, case and reasoning content is distributed; omitted rather than falsely nulled.'},
+          {'tib':"la sogs pa'i (residue beyond sogs)",'eng':'two','reason':'sogs licenses only the list-closing gesture and no explicit gnyis occurs. two is a contextual enumeration expansion.'},
+          {'tib':"de'i steng du (residue beyond steng)",'eng':'is acting as a basis; it','reason':'This is GMR\'s expanded description of the substrate relation, not an independently stated lexical gzhi. upon remains licensed by steng.'},
+          {'tib':None,'eng':'case; something; a thing which is; all; are being; articles','reason':'Supplied nouns, relative-frame content and auxiliaries remain verbatim and unpaired.'}]
+    if seq==285:
+        add('kha cig','Someone','Indefinite speaker is explicit in kha cig; the opening capital is preserved.')
+        add('rnag khrag','pus and blood','Same established compound now with source-order English; it names a single kind of substance in the list.')
+        add('rnag','pus','Pus constituent inside the compound.',member=True)
+        add('khrag','blood','Blood constituent inside the compound.',member=True)
+        add('sogs','and the other','Exact HGM-attested closing gesture only; excludes supplied two.')
+        add('dngos po','things','First object noun in the introductory list.')
+        add('gsum','three','First numeral refers to the three things in the list.',n=1)
+        add('phan tshun','each other','Reciprocal participants in spatial exclusion; the later each one is not captured.')
+        add('go sa','space','Occupied spatial location, not an agent or a separate object.')
+        add("'gog pa",'block','Blocking/excluding from a place. The whole nominalized verb fits the attributive predicate without capturing the supplied relative clause.')
+        add('dngos po','objects','Second object noun is the classification under dispute.',n=1)
+        add('ma','not','Explicit negative of the object classification; distinct from the interrogative framing.',d=6)
+        add('yin','are','Copula in these are not; capitalized Are in the rhetorical question opening is not claimed.',anchor='these are not')
+        add('las','karma','Karmic qualification of the three beings; excludes the supplied possessive pronouns.')
+        add('can','with','Possessive suffix is a separate Wylie syllable, functioning grammatically here; exact with gloss is independently verified for can.',d=6)
+        add("'gro ba",'beings','Beings endowed with karma, not the three objects.')
+        add('gsum','three','Second numeral qualifies the beings.',n=2)
+        add('chu','water','Only this passage\'s explicit chu owns water; no wet/flowing phrase is substituted.')
+        add('phor pa','glass','Vessel which the beings look at.')
+        add('gang','full','Fullness of the glass.')
+        add('la','at','Object/locative particle after gang owns at in look at, not an earlier la within the enumeration.',d=6,anchor='look at a glass')
+        add('cig car du','together','Established adverb of simultaneity; sit down has no seated-posture licensor and is excluded.')
+        add('bltas','look','Looking predicate, without the supplied and.')
+        add('dngos po','objects','Third object noun is the objects whose existence is asserted.',n=2)
+        add('tshad grub pa','confirmed by a valid perception','Established epistemic compound: tshad identifies valid cognition as the warrant and grub its establishment. Independent current syntax and corpus C05:281,313 support the compound, not merely the glossary entry. Excludes each one.')
+        add('tshad','valid perception','The evidential-cognition member within the compound.',member=True)
+        add('grub','confirmed','The establishment member within the same compound; source and English member order cross.',member=True)
+        add('gsum','three','Third numeral modifies the confirmed objects. different is a supplied expansion, not part of gsum.',n=3)
+        add('srid','possible','Possibility of these objects existing, excluding the supplied existential/infinitive frame.')
+        add('khas blangs','position','GMR\'s nominal recast of accepting/asserting a position; this exact gloss is attested for khas blangs. The earlier you said is not aligned to the same source a second time.')
+        omissions=[
+          {'tib':'yang ... na re; par thal','eng':"else may come now and make yet another argument; Let's talk about; Are you implying then that",'reason':'Rhetorical and inferential framing is distributed and not converted into isolated lexical equivalents. The explicit kha cig, yin and ma contributions remain paired.'},
+          {'tib':"la sogs pa'i (residue); po de; pa'i; gyi; gyi; pa de'i tshe na; par; pa la",'eng':'two; these; types of; each one; situation where; temporal, case and reporting frame','reason':'Enumeration expansion and grammatical reference cannot be assigned defensible separate atoms here; no no-exponent null is asserted.'},
+          {'tib':'las can (residue beyond las and can)','eng':'each; their own','reason':'with and karma are separately licensed; the English individualized possessive expression is not overcaptured in a lexical compound.'},
+          {'tib':None,'eng':'sit down; different; your; you said; for there to be; articles and auxiliaries','reason':'No seated-posture source or separate mi \'dra ba occurs. Repeated reported position and grammatical expansions remain unpaired.'}]
+    order=sorted((s['id'] for s in spans if s['d']!=7),key=lambda i:positions[i]['eng'][0])
+    flat=[positions[i]['eng'] for i in order];assert all(a[1]<=b[0] for a,b in zip(flat,flat[1:]))
+    spec={'course':'C05','segments':[{'seq':seq,'title':titles[seq],'spans':spans,'eng_order':order,'note':notes[seq]}]}
+    save(O/'spec.json',spec);save(O/'errata.json',[]);save(O/'source-row.json',row)
+    shared=[]
+    for n in ['sqlite-query-results.json','supplement-lexical-queries.json','full-master-entry-evidence.json','full-corpus-record-evidence.json','physical-source-extents.json','C15-429-physical-supplement.json','original-to-copy-map.json','large-originals-retained-externally.json']:
+        p=E/n;shared.append({'path':str(p),'pin':pin(p.read_bytes())})
+    save(O/'decisions.json',{'producer':'Codex','role':'independent Tibetan-first proposer','course':'C05','seq':seq,'spans':decisions,'omissions':omissions,'nulls':[],'null_judgment':'No selected atom is asserted to lack a separate exponent; uncertain/distributed material is omitted explicitly.','depth_method':'Lexical atoms and established compounds at d5; standalone grammatical syllables at d6; unique tighter compound members at d7; complete attributed reply at d3 only.','shared_evidence':shared,'errata':{'new':[],'assessment':'No demonstrable factual mistranslation or new source defect established. C05 physical ACIP/English match after collapsing line wraps. C15:428 shares ACIP/Wylie but differs in English punctuation; C15:429,430 share all three text fields. No independent publication or ingestion lineage is inferred.','registered_classes_rechecked':'Full errata_register.json and Rule 10 retained in shared governing originals; no heading, cap, converter escape or other new registered-class event is claimed in these three rows.'},'scope_limitations':'Proposal only, no other angle read; canonical fidelity is not semantic acceptance.'})
+    save(O/'intended-ranges.json',[{'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s['eng'],'tib_range':positions[s['id']]['tib'],'eng_range':positions[s['id']]['eng'],'parent':parents[s['id']]} for s in spans])
+    allout.append({'seq':seq,'spans':len(spans),'nulls':0,'nonnull_d5':sum(s['d']==5 for s in spans),'d6':sum(s['d']==6 for s in spans),'d7':sum(s['d']==7 for s in spans),'d3':sum(s['d']==3 for s in spans)})
+print(json.dumps({'status':'AUTHORED_NOT_YET_CANONICALLY_GENERATED','segments':allout}))

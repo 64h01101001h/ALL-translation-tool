@@ -1,0 +1,29 @@
+{
+  "source_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/reconciled/283/queries/073.json",
+  "uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "sql": "SELECT type,name,sql FROM sqlite_master WHERE name IN ('entries','entry_variants','corpus_segments','meta') ORDER BY name",
+  "parameters": [],
+  "count": 4,
+  "rows": [
+    {
+      "type": "table",
+      "name": "corpus_segments",
+      "sql": "CREATE TABLE corpus_segments (\n  id INTEGER PRIMARY KEY,\n  course TEXT NOT NULL,\n  seq INTEGER NOT NULL,              -- position within course (line number for NEAR)\n  acip TEXT,\n  wylie TEXT,\n  english TEXT,\n  raw TEXT NOT NULL\n)"
+    },
+    {
+      "type": "table",
+      "name": "entries",
+      "sql": "CREATE TABLE entries (\n  id INTEGER PRIMARY KEY,            -- stable ordinal in release order\n  wylie TEXT NOT NULL,\n  tibetan TEXT,\n  tibetan_source TEXT,               -- NULL = source-attested; else generated-*\n  acip TEXT,\n  pronunciation TEXT,\n  pronunciation_source TEXT,\n  sanskrit TEXT,\n  hopkins_english TEXT,\n  hgm_gloss TEXT,                    -- JSON array; BINDING equivalents (rule 1)\n  tier TEXT,                         -- curated | glossary | auto-aligned | NULL\n  hgm_source TEXT,\n  status TEXT,\n  tenses TEXT,\n  flags TEXT,                        -- JSON array\n  corpus_courses TEXT,               -- JSON array\n  corpus_n_segments INTEGER,\n  raw TEXT NOT NULL                  -- complete source entry JSON, verbatim\n)"
+    },
+    {
+      "type": "table",
+      "name": "entry_variants",
+      "sql": "CREATE TABLE entry_variants (\n  entry_id INTEGER NOT NULL REFERENCES entries(id),\n  wylie TEXT NOT NULL\n)"
+    },
+    {
+      "type": "table",
+      "name": "meta",
+      "sql": "CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT)"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+[
+  {
+    "old": "c5p94",
+    "new": "c5p95",
+    "count": 1,
+    "after_positions": [
+      326
+    ]
+  },
+  {
+    "old": "through282-stage-runs",
+    "new": "through285-stage-runs",
+    "count": 2,
+    "after_positions": [
+      416,
+      3058
+    ]
+  },
+  {
+    "old": "(280,281,282)",
+    "new": "(283,284,285)",
+    "count": 1,
+    "after_positions": [
+      1741
+    ]
+  },
+  {
+    "old": "f['status']=='FROZEN'",
+    "new": "f['status']=='FROZEN_INDEPENDENT_SEMANTIC_APPROVAL'",
+    "count": 1,
+    "after_positions": [
+      1274
+    ]
+  },
+  {
+    "old": "file_count']==871",
+    "new": "file_count']==2386",
+    "count": 1,
+    "after_positions": [
+      1361
+    ]
+  },
+  {
+    "old": "5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b",
+    "new": "8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445",
+    "count": 1,
+    "after_positions": [
+      1435
+    ]
+  },
+  {
+    "old": "meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS'",
+    "new": "meta['verdict']=='APPROVE' and meta['open_findings']==[] and meta['totals']['spans']==76 and meta['baseline']==BASE",
+    "count": 1,
+    "after_positions": [
+      1533
+    ]
+  },
+  {
+    "old": "mode=sys.argv[1];assert mode in ('initial','final');O=I/'through285-stage-runs'/(mode+'-preparation');O.mkdir(parents=True,exist_ok=False)",
+    "new": "BASE='fb9182dc6fca2230be3bc5169ba1288a22430280'\nassert B.name=='C05-283-285' and Path(__file__).resolve()==B/'prepare-explicit-stage-inputs.py' and __debug__\nmode=sys.argv[1];assert mode in ('initial','final');O=I/'through285-stage-runs'/(mode+'-preparation')\nrelease=json.loads((B/'root-stage-pathspec-release.json').read_bytes())\nassert release['status']=='PASS_ROOT_RELEASE_OF_REVIEWED_STAGE_PATHSPEC_SOURCE' and release['baseline']==BASE\nsource=Path(__file__).read_bytes();assert release['source']==dict(bytes=len(source),sha256=hashlib.sha256(source).hexdigest())\nrepro=release['reproduction_acceptance'];rp=Path(repro['path']);assert rp.is_absolute() and rp.resolve().is_relative_to(I.resolve())\nraw=rp.read_bytes();assert dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())=={k:repro[k] for k in ('bytes','sha256')}\nproof=json.loads(raw);assert proof['status']=='PASS' and proof['head']==BASE\nassert proof['all_seven_reproduced_outputs_byte_exact'] is proof['all_thirteen_payload_files_byte_exact'] is proof['live_head_index_untracked_state_unchanged'] is True\nO.mkdir(parents=True,exist_ok=False)",
+    "count": 1,
+    "after_positions": [
+      359
+    ]
+  },
+  {
+    "old": "assert js(I/'through282-generated-reproduction-root-acceptance/proof.json')['status']=='PASS'",
+    "new": "assert proof['status']=='PASS'  # Exact released reproduction identity read before any output mutation.",
+    "count": 1,
+    "after_positions": [
+      1596
+    ]
+  }
+]

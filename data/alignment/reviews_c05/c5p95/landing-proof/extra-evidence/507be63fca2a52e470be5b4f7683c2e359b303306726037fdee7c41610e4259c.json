@@ -1,0 +1,58 @@
+{
+  "status": "SOURCE_ONLY_ROOT_BINDINGS_PENDING",
+  "source_package_required_roles": [
+    {
+      "role": "source_preparation",
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-banking-preparation"
+    },
+    {
+      "role": "source_preparation",
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation"
+    },
+    {
+      "role": "source_preparation",
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-final-banker-route-preparation"
+    },
+    {
+      "role": "code_review",
+      "directory": null,
+      "reviews_source_preparation": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-final-banker-route-preparation"
+    }
+  ],
+  "per_package_actual_fields": [
+    "directory",
+    "role",
+    "freeze {bytes,sha256}",
+    "files",
+    "bytes",
+    "reviews_source_preparation (required for new route code review)"
+  ],
+  "unchanged_top_level_release_fields": [
+    "reproduction_directory",
+    "reproduction_acceptance",
+    "source_packages",
+    "integration_inputs",
+    "deferred_active_callers",
+    "root_review_statement"
+  ],
+  "actual_reproduction_observation": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-root-acceptance/proof.json",
+    "bytes": 1331,
+    "sha256": "fe377d7d9b00a251b5e7c361b8e36cac5a4af450e176ce9a6e87dc17bcd4b642",
+    "status": "PASS",
+    "retention_checks": 225597,
+    "bound_into_release_here": false
+  },
+  "future_materialization": {
+    "composer": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/compose-ordinary-bank-inventory-with-final-route-root.py",
+    "release": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/release-ordinary-bank-with-final-route-root.py",
+    "old_sources_unchanged": true,
+    "banker": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/bank_root_proofs_through285.py"
+  },
+  "exact_integration_scope": null,
+  "exact_one_active_inventory_caller": null,
+  "actual_source_review_package": null,
+  "actual_release_bindings": null,
+  "ordinary_inventory_output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-bank-inventory",
+  "execution_boundary": "Root must materialize the exact new sources and supply full actual package freezes/current integration census/one active caller and reproduction pins; this preparation is not inventory, bank, stage, commit or semantic acceptance. Final source-specific whitespace and final bank bindings remain separate."
+}

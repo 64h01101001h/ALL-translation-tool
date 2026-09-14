@@ -1,0 +1,28 @@
+{
+  "status": "PASS_ROOT_SOURCE_REVIEW_PENDING_ACTUAL_ORIGINAL_FREEZES",
+  "utc": "2026-09-14T04:28:25.987273+00:00",
+  "freeze": {
+    "bytes": 9527,
+    "sha256": "19c27f7f4a1ac066e5cd306d17a9361cc067e8496f9b35dddc7c08d54c272204"
+  },
+  "candidate": {
+    "bytes": 7561,
+    "sha256": "79594a950bd8aafb73b47bc90bb373e3085b7c55abe1edbb396e7dcc80feacd7"
+  },
+  "full_original_copy_pairs": 43,
+  "frozen_members": 62,
+  "bytes_total": 300738,
+  "literal_changes": 8,
+  "pending_release_bindings": 4,
+  "root_full_source_read": true,
+  "candidate_executions": 0,
+  "semantic_approval": false,
+  "conditions": [
+    "Bind actual six frozen outputs, counts, completion identities and read-only wrapper after all originals finish.",
+    "Check actual HEAD, baseline and original source snapshot separately; runtime checks baseline hashes but does not query HEAD.",
+    "Materialize only in C05-283-285; preserve prior source and full binding diff.",
+    "No relative_path-only LIST freeze rows without separate narrow source correction.",
+    "Retain all raw canonical replay outputs and ordered complete original identities; passing is not semantic approval."
+  ],
+  "read_discovery_note": "A read-only cat attempted replacement-map.json, which does not exist here; the actual literal-replacement-map.json was subsequently read in full. No files were changed by that failed read."
+}

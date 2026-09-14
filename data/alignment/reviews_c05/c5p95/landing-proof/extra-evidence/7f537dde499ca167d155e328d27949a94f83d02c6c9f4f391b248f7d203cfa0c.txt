@@ -1,0 +1,60 @@
+--- candidates/land-reviewed-page285.py
++++ prior/land-reviewed-page285.py
+@@ -14,36 +14,13 @@
+ import subprocess
+ import sys
+ 
+-helper = Path(__file__).resolve()
+-local_batch = helper.parent.parent
+-assert local_batch.name == 'C05-283-285' and helper == local_batch / 'landing-helper-preparation/land-reviewed-page285.py'
+-art = local_batch.parent
++art = Path(__file__).resolve().parent
+ root = art.parent / "campaign-worktree"
+ page, *seqs = map(int, sys.argv[1:])
+-assert page == 95 and seqs == [283, 284, 285]
+-if not __debug__: raise RuntimeError('Assertions must remain enabled')
+ assert len(seqs) == 3 and seqs == list(range(seqs[0], seqs[0] + 3))
+ batch = art / f"C05-{seqs[0]}-{seqs[-1]}"
+ review = batch / "semantic-review"
+ assert (review / "review.md").is_file() and (review / "review.json").is_file()
+-def frozen_review_files(review):
+-    freeze = review / 'freeze.json'
+-    frozen_raw = freeze.read_bytes()
+-    assert len(frozen_raw) == 445105 and hashlib.sha256(frozen_raw).hexdigest() == '8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445'
+-    frozen = json.loads(frozen_raw)
+-    assert Path(frozen['root']) == review and frozen['baseline_commit'] == 'fb9182dc6fca2230be3bc5169ba1288a22430280'
+-    assert frozen['verdict'] == 'APPROVE' and frozen['open_findings'] == []
+-    assert isinstance(frozen['files'], dict) and len(frozen['files']) == frozen['file_count'] == 2386
+-    assert set(frozen['files']) == {str(p.relative_to(review)) for p in review.rglob('*') if p.is_file() and p != freeze}
+-    for name, r in frozen['files'].items():
+-        path = Path(name)
+-        assert name not in ('', '.', '..') and not path.is_absolute() and '..' not in path.parts
+-        assert (review / path).resolve().is_relative_to(review.resolve())
+-        raw = (review / path).read_bytes()
+-        assert len(raw) == r['bytes'] and hashlib.sha256(raw).hexdigest() == r['sha256'], name
+-    return list(frozen['files']) + ['freeze.json']
+-
+-frozen_files = frozen_review_files(review)
+ name = f"c5p{page}"
+ out = root / "data/alignment/pages_c05" / f"{name}.html"
+ assert not out.exists(), "Refusing to overwrite a landed page"
+@@ -117,14 +94,11 @@
+ spec_path.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + "\n")
+ review_dir = root / "data/alignment/reviews_c05" / name
+ review_dir.mkdir(parents=True, exist_ok=False)
+-assert frozen_files == frozen_review_files(review)
+-for relative_name in frozen_files:
+-    file = review / relative_name
+-    target = review_dir / relative_name
+-    target.parent.mkdir(parents=True, exist_ok=True)
+-    shutil.copy2(file, target)
+-    assert target.read_bytes() == file.read_bytes(), relative_name
+-assert frozen_files == frozen_review_files(review)
++for file in review.rglob("*"):
++    if file.is_file() and file.suffix.lower() in (".json", ".md", ".html", ".stderr", ".stdout", ".log", ".txt", ".bin", ".exit"):
++        target = review_dir / file.relative_to(review)
++        target.parent.mkdir(parents=True, exist_ok=True)
++        shutil.copy2(file, target)
+ for seq in seqs:
+     shutil.copy2(batch / f"reconciled/{seq}/report.md", review_dir / f"{seq}-reconciliation.md")
+ manifest = {

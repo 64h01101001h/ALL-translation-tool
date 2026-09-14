@@ -1,0 +1,33 @@
+from pathlib import Path
+import json,hashlib,datetime,difflib,ast
+b=Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282")
+o=b/'original-verifier-release';o.mkdir(exist_ok=False)
+def pin(p):
+ raw=p.read_bytes();return {'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+counts=[];freezes=[]
+for angle in ('tibetan','english'):
+ for seq in (280,281,282):
+  d=b/angle/str(seq);f=json.loads((d/'freeze.json').read_text());entries=f['files'];assert isinstance(entries,list)
+  assert len({r['path'] for r in entries})==len(entries)
+  assert {r['path'] for r in entries}=={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}
+  for row in entries:
+   p=d/row['path'];q=pin(p);assert q['bytes']==row['bytes'] and q['sha256']==row['sha256'],p
+  s=json.loads((d/'spec.json').read_text());assert s['course']=='C05' and len(s['segments'])==1 and s['segments'][0]['seq']==seq
+  spans=s['segments'][0]['spans'];decl=json.loads((d/'intended-spans.json').read_text())
+  assert isinstance(decl,list) and [v['id'] for v in spans]==[v['id'] for v in decl]
+  counts.append({'angle':angle,'seq':seq,'spans':len(spans),'nulls':sum(v['eng'] is None for v in spans),'d5_nonnull':sum(v['d']==5 and v['eng'] is not None for v in spans),'spec':pin(d/'spec.json'),'body':pin(d/'body.html')})
+  freezes.append({'angle':angle,'seq':seq,'files':len(entries),'freeze':pin(d/'freeze.json')})
+assert [x['spans'] for x in counts]==[50,44,24,51,32,24]
+complete={'status':'BOTH_FRESH_INDEPENDENT_ORIGINAL_ANGLES_FROZEN','time':datetime.datetime.now(datetime.timezone.utc).isoformat(),'counts':[x for x in counts if x['angle']=='tibetan'],'all_counts':counts,'freezes':freezes,'roles':{'tibetan':'c05_280_282_tibetan','english':'c05_280_282_english'},'root_original_author':False,'semantic_acceptance':False}
+p=b/'originals-complete.json';assert not p.exists();p.write_text(json.dumps(complete,indent=2)+'\n')
+source=b/'original-verifier-preparation/verify-complete-originals-v2.py.txt';old=source.read_text()
+assert pin(source)['sha256']=='9f6e71fd9f10bd129bacf5c8b6e332077b1de30dda829c2928f3c28c3a6d4b2f'
+changes={'EXPECTED_COMPLETION_FILE=None':"EXPECTED_COMPLETION_FILE='originals-complete.json'",'EXPECTED_COMPLETION_STATUS=None':"EXPECTED_COMPLETION_STATUS='BOTH_FRESH_INDEPENDENT_ORIGINAL_ANGLES_FROZEN'",'EXPECTED_TIBETAN_SPANS=None':'EXPECTED_TIBETAN_SPANS=118','EXPECTED_WRAPPER_RELATIVE_PATH=None':"EXPECTED_WRAPPER_RELATIVE_PATH='english/280/run_generator_readonly.py'"}
+new=old
+for a,z in changes.items():assert new.count(a)==1;new=new.replace(a,z)
+ast.parse(new)
+target=b/'verify-complete-originals.py';assert not target.exists();target.write_text(new)
+(o/'exact-binding.diff').write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile=str(source),tofile=str(target))))
+proof={'status':'RELEASE_SIX_ORIGINAL_REPLAYS','time':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source':pin(source),'materialized':pin(target),'completion':pin(p),'changes':changes,'wrapper':pin(b/'english/280/run_generator_readonly.py'),'wrapper_full_source_read':True,'wrapper_behavior':'Unchanged canonical runpy target; exact expected spine only, URI mode=ro and query_only=ON; no args required.','original_freezes':freezes,'all_original_spans':sum(x['spans'] for x in counts),'all_reports_specs_read':True,'semantic_acceptance':False}
+(o/'proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+print(json.dumps({'status':proof['status'],'spans':proof['all_original_spans'],'files':sum(x['files'] for x in freezes),'wrapper':proof['wrapper'],'materialized':proof['materialized']}))

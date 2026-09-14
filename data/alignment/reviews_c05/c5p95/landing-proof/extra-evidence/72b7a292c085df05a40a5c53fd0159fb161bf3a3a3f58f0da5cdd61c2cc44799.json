@@ -1,0 +1,52 @@
+{
+  "status": "SOURCE_SCHEMA_ADAPTER_PREPARED_FOR_ROOT_REVIEW",
+  "producer": "Codex",
+  "role": "Code/schema preparation; author of Tibetan originals, not an independent semantic reviewer",
+  "sources": {
+    "verify_reconciliation.py": {
+      "bytes": 16475,
+      "sha256": "945086f1b2f93b40f9fa8f59535f0c9fc29972f6d1c01beea3d6fddaf23ea4ac"
+    },
+    "config_contract.py": {
+      "bytes": 10668,
+      "sha256": "caff81a7c2b1da46e7630428d4b1ff0ac64cc0e82e9716f59ae3563d68519561"
+    }
+  },
+  "actual_original_schema_file": "original-freeze-schemas.json",
+  "actual_originals": 6,
+  "actual_original_members": 344,
+  "actual_original_files_including_manifests": 350,
+  "original_censuses_before_after_exact": true,
+  "original_copies": 11,
+  "focused_controls": {
+    "status": "PASS_FOCUSED_SOURCE_AND_FIXTURE_CONTROLS_ONLY",
+    "controls": 74,
+    "expected_passes": 4,
+    "expected_rejections": 70,
+    "actual_original_censuses_unchanged": 6,
+    "actual_original_files_including_manifests": 350,
+    "whole_source_inverse_and_AST_exact": true,
+    "unchanged_named_functions": [
+      "pinned",
+      "batch_counts",
+      "original_inventory",
+      "bind_query",
+      "release_inputs",
+      "main",
+      "run",
+      "SourceAnchors"
+    ],
+    "candidate_module_imported": false,
+    "real_verify_or_validate_config_executed": false,
+    "SQL_Git_generators_full_tests": false,
+    "semantic_approval": false,
+    "scope": "Only exact AST-extracted helper functions execute, and only against synthetic fixture inputs. Actual originals are inspected separately as immutable schema/census data."
+  },
+  "actual_candidate_execution": false,
+  "SQL_Git_generator_full_tests": false,
+  "current_reconciliation_or_final_specs_read": false,
+  "semantic_approval": false,
+  "source_preparation_failure_retained": "source-preparation-caller, prepare-adapter.py.txt, preparation-failure-history.json, full v1/v2 sources and diffs",
+  "fixture_symlinks": 4,
+  "future_release": "Root must review these exact sources, bind the actual descriptors and separately authorize mechanical verification. Existing semantic review remains separate."
+}

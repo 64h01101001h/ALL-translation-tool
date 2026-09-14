@@ -1,0 +1,31 @@
+{
+  "current_preparation_failures": [
+    {
+      "caller": "evidence-caller01",
+      "source": "reopen-evidence.py",
+      "exit": 1,
+      "reason": "English actual freeze files is LIST, unlike the provisional remembered shape."
+    },
+    {
+      "caller": "evidence-caller02",
+      "source": "reopen-evidence-v2.py",
+      "exit": 1,
+      "reason": "An explicit external-only SQLite source record legitimately has no copy key."
+    },
+    {
+      "caller": "evidence-caller03",
+      "source": "reopen-evidence-v3.py",
+      "exit": 1,
+      "reason": "Master container uses unified_entries, not entries; full successful schema read from retained own source-preparation helper."
+    }
+  ],
+  "continuation": "reopen-evidence-v4.py resumes at SQL after completed copies/Git/physical evidence, preserving all earlier outputs; evidence-caller04 succeeds and all six canonical replays pass.",
+  "exploratory_transport_limit": [
+    {
+      "kind": "tool-output transcription only",
+      "exit": 1,
+      "reason": "Attempted read of nonexistent source-preparation/evidence02.py; actual file read-evidence02.py was read next. No source write or canonical invocation."
+    }
+  ],
+  "original_failures": "All complete original files, including Tibetan wrapper-path failure and correction, English authoring-attempt00/source-binding-attempt01/02/operation-capture-transcriptions, are preserved under full original-copy maps; their reported transport limits are retained."
+}

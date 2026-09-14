@@ -1,0 +1,21 @@
+--- bind-runtime-sources.py.txt
++++ bind-runtime-sources-v2.py.txt
+@@ -6,7 +6,9 @@
+ def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+ def put(n,b):
+  p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+- with p.open('xb') as f:f.write(b)
++ if p.exists():assert p.read_bytes()==b
++ else:
++  with p.open('xb') as f:f.write(b)
+ def save(n,x):put(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+ recipes=[];proofs=[]
+ def make(n,changes,prefix=''):
+@@ -47,7 +49,6 @@
+  ('7089/7092','7090/7093','actual ACIP population'),
+  ("len(ev['pairs'])==7092 and len(ev['acip_index'])==7089","len(ev['pairs'])==7093 and len(ev['acip_index'])==7090",'actual full evidence/index count'),
+  ('headwords=7092,proven=7089','headwords=7093,proven=7090','actual complete ACIP disclosure'),
+- ('100*7089/7092','100*7090/7093','actual fraction; rounded printed100.0 remains incomplete'),
+  ('C05 exact282coverage','C05 exact285coverage','actual target coverage'),
+  ('list(range(1,283))','list(range(1,286))','actual contiguous285 coverage'),
+  ('Accepted current124tuple interface','Accepted current76tuple interface','actual independent reviewed interface'),

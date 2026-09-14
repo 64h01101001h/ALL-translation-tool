@@ -1,0 +1,77 @@
+{
+  "counts": [
+    {
+      "seq": 283,
+      "spans": 16,
+      "nulls": 0,
+      "d5_nonnull": 14
+    },
+    {
+      "seq": 284,
+      "spans": 29,
+      "nulls": 0,
+      "d5_nonnull": 24
+    },
+    {
+      "seq": 285,
+      "spans": 31,
+      "nulls": 0,
+      "d5_nonnull": 23
+    }
+  ],
+  "original_spans": 145,
+  "original_freeze_members": 344,
+  "SELECTs": 209,
+  "controls": 1,
+  "query_shapes": [
+    {
+      "shape": [
+        "SELECT",
+        "standalone",
+        [
+          "row_count"
+        ]
+      ],
+      "count": 80
+    },
+    {
+      "shape": [
+        "CONTROL",
+        "query_container_parameters",
+        [
+          "row_count"
+        ]
+      ],
+      "count": 1
+    },
+    {
+      "shape": [
+        "SELECT",
+        "query_container_parameters",
+        [
+          "row_count"
+        ]
+      ],
+      "count": 65
+    },
+    {
+      "shape": [
+        "SELECT",
+        "standalone",
+        [
+          "count"
+        ]
+      ],
+      "count": 64
+    }
+  ],
+  "source_copy_records": 623,
+  "aliases": 625,
+  "physical_extents": 12,
+  "governing_fixed_objects": 10,
+  "historical_completion_members": 916,
+  "historical_completion_bytes": 285051498,
+  "outside_historical_boundary_now": [],
+  "target_executions": 0,
+  "SQL_Git_canonical_tests": 0
+}

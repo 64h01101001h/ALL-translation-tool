@@ -1,0 +1,40 @@
+{
+  "status": "PASS_SOURCE_PREPARATION_ONLY",
+  "prior": {
+    "bytes": 41978,
+    "sha256": "e367a939b2db3182427a6ce3d69b17ecff5c2a3211dbf15081161c2ea9efd343"
+  },
+  "candidate": {
+    "bytes": 48055,
+    "sha256": "b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee"
+  },
+  "exact_inverse_reconstruction": true,
+  "unchanged_complete_functions": [
+    "freeze_entries",
+    "allowance_result",
+    "nul_paths",
+    "untracked_transition",
+    "check_final_head",
+    "raw",
+    "obj",
+    "git",
+    "old",
+    "require",
+    "pincheck",
+    "verify_source_archive",
+    "verify_payload_source",
+    "verify_untracked_capture",
+    "verify_banking_writes"
+  ],
+  "all_old_functions_present": true,
+  "new_function": "load_release_bindings",
+  "full_source_and_historical_Git_gates_retained": true,
+  "DATA_payload13_and_allowance_preserved": true,
+  "semantic_freeze871_and_APPROVE_PASS_PASS_preserved": true,
+  "no_ledger_paths_added": true,
+  "unknown_actual_counts_all_null": true,
+  "only_ast_parsed": true,
+  "target_imported": false,
+  "target_executed": false,
+  "Git_SQL_tests_staging_bank_commit_run": false
+}

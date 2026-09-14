@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport datetime,hashlib,json\nO=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration\")/'through285-reproduction-closure-root-binding';B=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285\");R=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-attempt02\")\ndef pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\np=json.loads((O/'preparation-proof.json').read_bytes());assert p['checks_total']==225597 and p['input_aliases']==3031 and p['prior_failed_preparation_attempts']==1\ntargets=[R/'close-evidence.py.txt',B/'accept-independent-reproduction-root.py',B/'freeze-reproduction-runtime-root.py']\nassert all(not t.exists()for t in targets) and not(O/'root-source-review-and-release.json').exists()\nrecords=[]\nfor r,t in zip(p['candidates'],targets):\n s=Path(r['path']);raw=s.read_bytes();assert pin(raw)=={k:r[k]for k in ('bytes','sha256')}\n with t.open('xb')as f:f.write(raw)\n assert t.read_bytes()==raw;records.append(dict(original=str(s),copy=str(t),**pin(raw)))\nproof=dict(status='PASS_ROOT_REVIEW_AND_RELEASE_OF_ACTUALLY_BOUND_CLOSURE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),code_mapping=records,checks_total=225597,input_aliases=3031,prior_failed_preparation_attempts=1,root_read_full_prior_and_guarded_sources_and_all_final_diffs=True,source_forward_inverse_and_AST_verified=True,open_findings=[],review='Root reviewed the actual measured constants and complete final diffs against fully read prior sources. Current second-runtime and second-entry paths are explicit. All original-copy/Git/seed/raw-state/13-payload/native caller checks remain. Root acceptance additionally verifies the complete unchanged3043-file failed first attempt and records failure count1. Execute close, freeze only after its caller ends, then root acceptance outside the immutable runtime.',execution_pending=['close-evidence','runtime-freeze','root-acceptance'])\n(O/'root-source-review-and-release.json').write_text(json.dumps(proof,indent=2)+'\\n')\nfiles={str(f.relative_to(O)):pin(f.read_bytes())for f in sorted(O.rglob('*'))if f.is_file()}\n(O/'freeze.json').write_text(json.dumps(dict(status='IMMUTABLE_ROOT_CLOSURE_SOURCE_BINDINGS_AND_REVIEW',files=files),indent=2)+'\\n')\nprint(json.dumps(dict(status=proof['status'],code_mapping=records,source_freeze=pin((O/'freeze.json').read_bytes())),indent=2))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+  "started_at": "2026-09-14T06:38:29.416073+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-14T06:38:29.454821+00:00",
+  "wall_seconds": 0.03829908277839422,
+  "exit": 0,
+  "stdout_bytes": 1781,
+  "stderr_bytes": 0,
+  "stdout_sha256": "645a2d615d250e9021c3c572658ed8ac1af1eb06d192d6e6f117b9acc0795bf1",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

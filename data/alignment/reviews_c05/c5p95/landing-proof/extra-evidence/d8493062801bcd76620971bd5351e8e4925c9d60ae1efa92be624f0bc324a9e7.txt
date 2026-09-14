@@ -1,0 +1,91 @@
+"""Capture actual finished source identities only; does not execute composer/banker."""
+from pathlib import Path
+import ast, hashlib, json, os, argparse, sys
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+A=R/'campaign-artifacts'; I=A/'integration'; B=A/'C05-280-282'; L=B/'landing'; P=I/'through282-final-intake-scope'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def desc(p):
+ p=Path(p);q=p.resolve(strict=True);s=q.stat();b=q.read_bytes();t=q.stat()
+ assert q.is_file() and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)
+ return dict(original=str(p),resolved=str(q),symlinks=[dict(path=str(x),target=os.readlink(x)) for x in (*reversed(p.parents),p) if x.is_symlink()],**pin(b))
+def tree(p):
+ out=[]
+ for f in sorted(p.rglob('*'),key=str):
+  assert not(f.is_symlink() and f.is_dir())
+  if f.is_file():out.append(desc(f))
+  else:assert f.is_dir()
+ return out
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--execute-reviewed-capture',action='store_true',required=True)
+parser.add_argument('--writers-quiescent',action='store_true',required=True)
+parser.add_argument('--extra-file',action='append',default=[])
+args=parser.parse_args()
+assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and not sys.flags.optimize
+assert not P.exists()
+caller=I/'through282-final-intake-scope-caller'
+assert caller.is_dir() and not caller.is_symlink()
+deferred=[P,caller,I/'through282-final-bank-inventory',I/'through282-final-bank-inventory-caller',I/'through282-final-bank-inventory-root-release',I/'through282-final-bank-inventory-root-release-caller']
+assert all(not p.exists() for p in deferred if p not in (P,caller))
+def current_i():return sorted(I.glob('through282*'),key=str)
+initial_i_names=[str(p) for p in current_i()]
+for p in current_i():assert (p.is_file() or p.is_dir()) and not(p.is_symlink() and p.is_dir())
+old=json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes())
+oldpaths={x['original'] for x in old}
+assert len(old)==5633 and len(oldpaths)==5633
+assert len(json.loads((I/'through282-ordinary-bank-inventory/extra-inputs.json').read_bytes()))==5575
+for row in old:
+ p=Path(row['original']);d=desc(p)
+ assert {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')} and d['resolved']==row['resolved']
+ assert (os.readlink(p) if p.is_symlink() else None)==row['symlink']
+roots=[str(p.relative_to(I)) for p in current_i() if p.is_dir() and p not in deferred]
+assert 'through282-banking-runs' in roots
+roots.append('through282-banking-runs/ordinary')
+roots=sorted(set(roots))
+controls={k:desc(p) for k,p in dict(ordinary_manifest=L/'root-proof-copy-manifest-before-whitespace.json',ordinary_coverage=I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json',ordinary_extra_inputs=I/'through282-ordinary-bank-inventory/extra-inputs.json',audit_proof=I/'through282-whitespace-actual-audit/source-whitespace-proof.json',root_acceptance=I/'through282-whitespace-actual-root-acceptance/proof.json',raw_diagnostic=I/'through282-whitespace-runs/raw-diagnostic/stdout.bin',raw_diagnostic_exit=I/'through282-whitespace-runs/raw-diagnostic/exit.txt',runtime_freeze=I/'through282-whitespace-actual-runtime/freeze.json',banker=B/'bank_root_proofs_through282.py',stage_verifier=I/'through282-final-stage-preparation/verify_staged_through282.py').items()}
+audit=json.loads(Path(controls['audit_proof']['original']).read_bytes())
+acceptance=json.loads(Path(controls['root_acceptance']['original']).read_bytes())
+assert audit['status']=='PASS actual staged diagnostic reproduced and predicates verified' and audit['mode']=='audit'
+assert audit['baseline_head']=='10968d16e701b698a0e1fbd845b353089d15ac39' and audit['all_warnings_accounted_for'] is True
+assert audit['git_diff_check_exit']==2 and audit['semantic_approval'] is False
+assert acceptance['status']=='PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and acceptance['normalization'] is False
+assert acceptance['literal_warnings']==audit['warning_count']
+assert {k:controls['raw_diagnostic'][k] for k in ('bytes','sha256')}==dict(bytes=audit['raw_log_bytes'],sha256=audit['raw_log_sha256'])
+assert controls['raw_diagnostic']['original']==audit['raw_log_kept_external']
+assert int(Path(controls['raw_diagnostic_exit']['original']).read_bytes())==audit['git_diff_check_exit']
+batch=tree(B)
+batch_nonlanding=[x for x in batch if not Path(x['original']).is_relative_to(L)]
+assert {p for p in oldpaths if Path(p).is_relative_to(B) and not Path(p).is_relative_to(L)}<={x['original'] for x in batch_nonlanding}
+late=[x for x in batch_nonlanding if x['original'] not in oldpaths]
+extra=[I/'release-whitespace282-actual-root.py',I/'accept-whitespace282-actual-root.py']+[Path(p) for p in args.extra_file]
+assert all(p.is_absolute() and p.is_file() and p.resolve(strict=True).is_relative_to(I) for p in extra)
+individual_paths=sorted(set([p for p in current_i() if p.is_file()]+extra),key=str)
+individual=[desc(p) for p in individual_paths]
+automatic=[]
+for p in sorted(L.rglob('*'),key=str):
+ if not p.is_file() or p.parent==L and p.name in ('root-proof-copy-manifest-before-whitespace.json','root-proof-copy-manifest.json'):continue
+ rel=p.relative_to(L)
+ automatic.append(dict(source=desc(p),copy=None if p.name=='previous-main-csv-seed.bin' or 'payload-freeze' in rel.parts or p.stat().st_size>=2000000 else str(rel)))
+t=ast.parse(Path(controls['banker']['original']).read_text())
+history=[ast.literal_eval(n.value) for n in t.body if isinstance(n,ast.Assign) and any(isinstance(x,ast.Name) and x.id=='HISTORY' for x in n.targets)]
+assert len(history)==1
+for name in history[0]:automatic.append(dict(source=desc(B/name),copy='root-review-history/'+name+('.txt' if Path(name).suffix=='.py' else '')))
+automatic.extend([dict(source=desc(B/'freeze-final-payload-before-staging.py'),copy='root-helpers/freeze-final-payload-before-staging.py.txt'),dict(source=controls['banker'],copy='root-helpers/bank_root_proofs_through282.py.txt')])
+scope=dict(schema='through282-final-intake-v1',baseline='10968d16e701b698a0e1fbd845b353089d15ac39',controls=controls,roots=[dict(root=str(I/n),context='Actual completed source evidence; no authorship inferred',files=tree(I/n)) for n in roots],individual_files=individual,late_batch_files=late,automatic_inputs=automatic,landing_file_paths=[str(p) for p in sorted(L.rglob('*'),key=str) if p.is_file()],deferred_before_final_bank=[str(p) for p in deferred],later_external_after_final_bank=['Final supplement invocation output and outer caller after its input snapshot','Final banker internal output and complete outer caller','Later final staging verifier/append/commit/root checkpoint outputs'])
+# Verify complete original identities again; no source/copy byte substitutions.
+allrows=list(controls.values())+individual+late+[x['source'] for x in automatic]+[x for g in scope['roots'] for x in g['files']]
+for x in allrows:assert desc(x['original'])==x
+for g in scope['roots']:assert [x['original'] for x in tree(Path(g['root']))]==[x['original'] for x in g['files']]
+assert [str(p) for p in current_i()]==initial_i_names
+assert [x['original'] for x in tree(B) if not Path(x['original']).is_relative_to(L)]==[x['original'] for x in batch_nonlanding]
+assert [str(p) for p in sorted(L.rglob('*'),key=str) if p.is_file()]==scope['landing_file_paths']
+assert len(json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes()))==5633
+for row in old:
+ p=Path(row['original']);d=desc(p)
+ assert {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')} and d['resolved']==row['resolved']
+ assert (os.readlink(p) if p.is_symlink() else None)==row['symlink']
+P.mkdir(exist_ok=False)
+raw=(json.dumps(scope,indent=2,ensure_ascii=True)+'\n').encode()
+(P/'final-source-scope.json').write_bytes(raw)
+proof=dict(status='PASS_CAPTURE_ONLY_NOT_COMPOSITION',scope=pin(raw),roots=len(roots),root_file_aliases=sum(len(g['files']) for g in scope['roots']),late_batch_files=len(late),individual_files=len(individual),automatic_inputs=len(automatic),all_descriptor_occurrences=len(allrows),external_original_bytes_read_in_full=True,composer_invocations=0,stage_verifier_role='Frozen source control; later final runtime bindings are outside this snapshot',capture_argv=sys.argv,full_through282_i_census=True)
+(P/'source-capture-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+print(json.dumps(proof))

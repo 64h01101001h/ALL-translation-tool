@@ -1,0 +1,58 @@
+"""Derive exact reviewed file pathspec after an actual bank phase; no Git mutation."""
+from pathlib import Path
+import json,hashlib,sys,os,subprocess,datetime
+B=Path(__file__).resolve().parent;I=B.parent/'integration';W=B.parents[1]/'campaign-worktree';L=B/'landing';D=B/'semantic-review';REL=Path('data/alignment/reviews_c05/c5p95');BANK=REL/'landing-proof'
+BASE='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert B.name=='C05-283-285' and Path(__file__).resolve()==B/'prepare-explicit-stage-inputs.py' and __debug__
+mode=sys.argv[1];assert mode in ('initial','final');O=I/'through285-stage-runs'/(mode+'-preparation')
+release=json.loads((B/'root-stage-pathspec-release.json').read_bytes())
+assert release['status']=='PASS_ROOT_RELEASE_OF_REVIEWED_STAGE_PATHSPEC_SOURCE' and release['baseline']==BASE
+source=Path(__file__).read_bytes();assert release['source']==dict(bytes=len(source),sha256=hashlib.sha256(source).hexdigest())
+repro=release['reproduction_acceptance'];rp=Path(repro['path']);assert rp.is_absolute() and rp.resolve().is_relative_to(I.resolve())
+raw=rp.read_bytes();assert dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())=={k:repro[k] for k in ('bytes','sha256')}
+proof=json.loads(raw);assert proof['status']=='PASS' and proof['head']==BASE
+assert proof['all_seven_reproduced_outputs_byte_exact'] is proof['all_thirteen_payload_files_byte_exact'] is proof['live_head_index_untracked_state_unchanged'] is True
+O.mkdir(parents=True,exist_ok=False)
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def js(p):return json.loads(p.read_bytes())
+assert proof['status']=='PASS'  # Exact released reproduction identity read before any output mutation.
+required={}
+def add(rel,raw):
+ name=str(rel);assert not Path(name).is_absolute() and '..' not in Path(name).parts
+ assert (W/name).read_bytes()==raw
+ row=dict(path=name,**pin(raw));assert name not in required or required[name]==row;required[name]=row
+payload=js(L/'staged-payload-manifest.json');assert len(payload['files'])==13 and len({r['path'] for r in payload['files']})==13
+for r in payload['files']:
+ raw=(L/'payload-freeze'/r['path']).read_bytes();assert pin(raw)=={k:r[k] for k in ('bytes','sha256')};add(r['path'],raw)
+f=js(D/'freeze.json');assert f['status']=='FROZEN_INDEPENDENT_SEMANTIC_APPROVAL' and f['verdict']=='APPROVE' and f['file_count']==2386
+assert pin((D/'freeze.json').read_bytes())['sha256']=='8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445'
+meta=js(D/'review.json');assert meta['verdict']=='APPROVE' and meta['open_findings']==[] and meta['totals']['spans']==76 and meta['baseline']==BASE
+fidelity=js(D/'audit-proof.json');assert fidelity['status']=='ACTUAL_CANONICAL_AND_SOURCE_FIDELITY_PASS_ONLY' and fidelity['spans']==76
+completion=js(D/'completion-proof.json');assert completion['status']=='COMPLETE_INDEPENDENT_SEMANTIC_APPROVAL' and completion['review']==pin((D/'review.json').read_bytes())
+independent_raw=(I/'through285-root-independent-review-verification/proof.json').read_bytes()
+assert pin(independent_raw)==dict(bytes=1635,sha256='eb3ee19dd186e63dd830be05421245019cf6555684bf83ee9a967ff00c935a50')
+independent=json.loads(independent_raw);assert independent['status']=='PASS_ROOT_REVIEW_OF_INDEPENDENT_SEMANTIC_APPROVAL_AND_MECHANICAL_RESULT' and independent['baseline']==BASE and independent['semantic_freeze']==pin((D/'freeze.json').read_bytes())
+for n,r in f['files'].items():
+ raw=(D/n).read_bytes();assert pin(raw)==r;add(REL/n,raw)
+add(REL/'freeze.json',(D/'freeze.json').read_bytes())
+for seq in (283,284,285):add(REL/(str(seq)+'-reconciliation.md'),(B/f'reconciled/{seq}/report.md').read_bytes())
+add(REL/'landing.json',(W/REL/'landing.json').read_bytes())
+for phase,name in [('ordinary','root-proof-copy-manifest-before-whitespace.json')]+([('final-whitespace','root-proof-copy-manifest.json')] if mode=='final' else []):
+ raw=(L/name).read_bytes();m=json.loads(raw);assert m['phase']==phase and m['semantic_review_unchanged'] and m['semantic_review_freeze']==pin((D/'freeze.json').read_bytes())
+ for r in m['files']:
+  source=Path(r['original']);data=source.read_bytes();assert pin(data)=={k:r[k] for k in ('bytes','sha256')};add(BANK/r['copy'],data)
+ add(BANK/name,raw)
+assert {str(p.relative_to(W)) for p in (W/REL).rglob('*') if p.is_file()}=={n for n in required if Path(n).is_relative_to(REL)}
+cmd=['git','diff','--cached','--name-only','-z'];r=subprocess.run(cmd,cwd=W,input=b'',capture_output=True,env=dict(os.environ,GIT_OPTIONAL_LOCKS='0'))
+(O/'command.json').write_text(json.dumps(dict(argv=cmd,cwd=str(W)),indent=2)+'\n')
+for n,raw in [('stdin.bin',b''),('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(O/n).write_bytes(raw)
+assert r.returncode==0 and not r.stderr
+if mode=='initial':
+ assert r.stdout==b'';names=sorted(required)
+else:
+ initial=js(I/'through285-stage-runs/initial-preparation/proof.json');old={x['path']:x for x in initial['files']}
+ assert set(r.stdout.decode().split('\0')[:-1])==set(old) and all(required[n]==v for n,v in old.items())
+ names=sorted(set(required)-set(old));assert names and all(Path(n).is_relative_to(BANK) for n in names)
+raw=b''.join(os.fsencode(n)+b'\0' for n in names);(O/'pathspec.bin').write_bytes(raw)
+proof=dict(status='PASS',mode=mode,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),files=[required[n] for n in sorted(required)],pathspec=dict(path=str(O/'pathspec.bin'),**pin(raw)),paths_to_stage=len(names),expected_stage_files=len(required),scope='Exact actual reviewed payload/full semantic tree/full bank originals; no stage mutation or semantic approval. Final full staging verifier remains required.')
+(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps({k:v for k,v in proof.items() if k!='files'},indent=2))

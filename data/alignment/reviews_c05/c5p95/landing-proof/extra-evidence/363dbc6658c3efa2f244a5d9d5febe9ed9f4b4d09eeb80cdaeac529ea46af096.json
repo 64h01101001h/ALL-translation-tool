@@ -1,0 +1,38 @@
+[
+  {
+    "before": "N=R/'root-runtime-inputs';W=ROOT/'campaign-worktree'",
+    "after": "N=R/'root-runtime-inputs-v2';W=ROOT/'campaign-worktree'",
+    "occurrences": 1,
+    "reason": "Use fresh v2 output; preserve original failed subtree in place."
+  },
+  {
+    "before": "assert P.name=='through285-reconciliation-config-preparation'and not N.exists()and not N.is_symlink()",
+    "after": "assert P.name=='through285-reconciliation-config-preparation-v2'and not N.exists()and not N.is_symlink()",
+    "occurrences": 1,
+    "reason": "Bind exact v2 preparation location; ROOT remains derived from same three-level path."
+  },
+  {
+    "before": " assert extra_before==plan['existing_outside_historical_boundary']",
+    "after": " assert extra_before==plan['existing_outside_historical_boundary']\n failed=R/'root-runtime-inputs';failed_rows=load(P/'failed-runtime-inputs-manifest.json')\n assert len(failed_rows)==224 and load(failed/'construction-proof.json')['status']=='FAILED_CONSTRUCTION_ONLY'\n expected_failed=set()\n for row in failed_rows:\n  original=Path(row['original']);assert original.is_relative_to(failed)\n  name=str(original.relative_to(failed));assert name not in expected_failed;expected_failed.add(name)\n  assert check(original,row)==check(P/relative(row['copy']),row)\n assert expected_failed=={str(p.relative_to(failed))for p in failed.rglob('*')if p.is_file()}",
+    "occurrences": 1,
+    "reason": "Preflight exact retained failed224-file census and bytes before any output mutation."
+  },
+  {
+    "before": " copy_ref=emit('copy-manifest.json',maps)",
+    "after": " # The eleven frozen reconciler-created descriptors are genuine originals,\n # absent from the old623-record map. Preserve complete bytes in new v2 copies.\n queryplans=load(P/'query-binding-plan.json')\n existing={r['original']:r for r in maps};assert len(existing)==623\n missing={r['descriptor']['path']for r in queryplans if r['descriptor']['path']not in existing}\n expected_missing={str(D/'queries'/f'{i:03d}.json')for i in range(199,210)}\n assert missing==expected_missing\n for original in sorted(missing):\n  p=Path(original);name='descriptor-copies/'+p.name;data=raw(p)\n  assert bp(data)==plan['additional_descriptor_pins'][original]\n  newref=emit(name,data)\n  maps.append({'original':original,'copy':str((N/name).relative_to(R)),**bp(data),\n   'disposition':'Complete frozen reconciler-created standalone descriptor copied unchanged into fresh v2 runtime inputs; absent from historical623-row source map.'})\n assert len(maps)==len({r['original']for r in maps})==634\n copied={r['original']:r for r in maps};coverage=[]\n # Complete descriptor-to-map membership, pins and full copy bytes are checked\n # for all210 operations, including the retained control, before N.mkdir().\n for planned in queryplans:\n  descriptor=planned['descriptor'];r=copied[descriptor['path']]\n  assert {k:r[k]for k in ['bytes','sha256']}=={k:descriptor[k]for k in ['bytes','sha256']}\n  data=check(descriptor['path'],descriptor);copy=R/relative(r['copy'])\n  if copy.is_relative_to(N):assert data==payloads[str(copy.relative_to(N))]\n  else:assert data==check(copy,r)\n  coverage.append({'source_inventory_index':planned['index'],'descriptor':descriptor,'copy_mapping':r,'category':planned['kind'],'complete_bytes_equal':True})\n assert len(coverage)==210 and sum(r['category']=='SELECT'for r in coverage)==209\n emit('descriptor-coverage.json',coverage)\n copy_ref=emit('copy-manifest.json',maps)",
+    "occurrences": 1,
+    "reason": "Add full11 missing descriptor copies and complete fail-closed map coverage preflight before writes."
+  },
+  {
+    "before": "'projection':'Prefix each copy with 283/; all other fields preserved','records':623",
+    "after": "'projection':'Preserve old623 rows with copy prefix283/ only; append11 explicitly retained full descriptor copies in fresh root-runtime-inputs-v2','original_records':623,'additional_descriptor_records':11,'records':634",
+    "occurrences": 1,
+    "reason": "Truthful derived metadata distinguishes unchanged prior mappings from explicit additions."
+  },
+  {
+    "before": "historical_members_preserved=916,new_directory=str(N),SQL_Git_canonical_verifier_executions=0",
+    "after": "historical_members_preserved=916,failed_runtime_members_preserved=224,source_copy_records=634,descriptor_coverage_operations=210,new_directory=str(N),SQL_Git_canonical_verifier_executions=0",
+    "occurrences": 1,
+    "reason": "Report preserved failed boundary and actual derived mapping coverage on future success."
+  }
+]

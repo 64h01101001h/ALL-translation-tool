@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport datetime,hashlib,json\nR=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment\");I=R/'campaign-artifacts/integration';O=I/'through285-query-shape-followup-checkpoint'\nO.mkdir(exist_ok=False)\ndef pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())\nutc=datetime.datetime.now(datetime.timezone.utc).isoformat()\ncont=R/'CAMPAIGN_CONTINUATION.md';before=cont.read_bytes()\nprior=I/'through285-source-and-registration-checkpoint/CAMPAIGN_CONTINUATION.after.md'\nassert prior.read_bytes()==before\nnote=f\"\"\"\n## Pending query-shape adaptation \u2014 {utc}\n\nResume from through285-source-and-registration-checkpoint/next-actions.md under campaign-artifacts/integration, with this additional pending step. The reconciler reports final candidates of 16/29/31 spans, 0/0/0 nulls and 14/24/23 non-null d5 spans, 145 dispositions (129 retained, 16 recast), and two actual sogs/and the other head hits. These are agent-reported counts awaiting frozen-input root verification and independent semantic review; committed coverage remains 282/511.\n\nThe genuine evidence inventory contains 210 operations: 209 SELECTs and one original PRAGMA query_only control. Actual Tibetan frozen query containers use parameters and row_count plus outer query_only; English standalone descriptors also use row_count. Root inspected the approved contract/runtime and confirmed the existing container binding expects params and count. Do not silently rename original fields, invent count absence, or pass the PRAGMA through SELECT-only verification.\n\nExisting agent /root/c05_280_282_review_sources is preparing only a narrow source/schema adapter at integration/through285-reconciliation-verifier-query-shape-adapter, based on the immutable approved original-freeze adapter. It must establish exact original shapes, preserve count/row_count key presence and lengths, conserve existing bindings and SELECT-only checks, and retain the PRAGMA separately as control evidence. Complete source copies, diffs and focused positive/negative source-extracted fixtures are required. No actual config validation or SQL/canonical/runtime execution is authorized by that preparation. Root must review and approve the actual candidate before binding the final config. Page95 registration source remains separately approved and unmaterialized. The reconciler continues completion/freeze; the fresh independent semantic reviewer waits for actual final-input release.\n\"\"\"\nentry=note.encode();(O/'continuation-addendum.md').write_bytes(entry)\nassert cont.read_bytes()==before\ncont.write_bytes(before+entry)\nproof=dict(status='CHECKPOINT_QUERY_SCHEMA_ADAPTER_PREPARATION_ACTIVE',utc=utc,verified_segments=282,final_counts_status='AGENT_REPORTED_PENDING_ROOT_AND_INDEPENDENT_SEMANTIC_REVIEW',prior_complete_continuation_copy=str(prior),before=pin(before),appended_bytes=pin(entry),after=pin(cont.read_bytes()),previous_checkpoint=str(I/'through285-source-and-registration-checkpoint/next-actions.md'),active_code_agent='/root/c05_280_282_review_sources',active_reconciler='/root/c05_253_255_reconcile',semantic_reviewer_waiting='/root/c05_283_285_semantic',scheduler_changed=False)\n(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\\n');print(json.dumps(proof))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-14T05:08:40.754480+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-14T05:08:40.791897+00:00",
+  "wall_seconds": 0.03691708389669657,
+  "exit": 0,
+  "stdout_bytes": 1174,
+  "stderr_bytes": 0,
+  "stdout_sha256": "a4fb0a2dc937892d7c6ccc869145687ace902da21291302b33a00a54030f2ec9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

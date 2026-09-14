@@ -1,0 +1,25 @@
+"""Freeze only the completed source package and actual preparation transport."""
+from pathlib import Path
+import datetime
+import hashlib
+import json
+
+OUT = Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-preparation')
+require = lambda ok, message: None if ok else (_ for _ in ()).throw(ValueError(message))
+require(not (OUT / 'freeze.json').exists(), 'freeze exists')
+require(json.loads((OUT / 'code-only-caller/result.json').read_bytes())['exit'] == 0, 'source preparation did not pass')
+rows = []
+for p in sorted(OUT.rglob('*')):
+    require(not p.is_symlink(), 'unexpected package alias')
+    require('__pycache__' not in p.parts and p.suffix != '.pyc', 'cache file')
+    if p.is_file():
+        raw = p.read_bytes()
+        rows.append({'path': str(p.relative_to(OUT)), 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()})
+value = {'status': 'FROZEN_SOURCE_ONLY_PREPARATION_NO_RUNTIME_RELEASE',
+         'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+         'boundary': 'Every existing file in this directory except this freeze; complete actual code-only preparation caller included. Outer freeze tool response is later external transport, not claimed captured here.',
+         'file_count': len(rows), 'total_bytes': sum(r['bytes'] for r in rows), 'files': rows}
+raw = (json.dumps(value, indent=2, ensure_ascii=True, allow_nan=False) + '\n').encode()
+with (OUT / 'freeze.json').open('xb') as f:
+    f.write(raw)
+print(json.dumps({'path': str(OUT / 'freeze.json'), 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest(), 'file_count': len(rows), 'total_bytes': value['total_bytes']}, sort_keys=True))

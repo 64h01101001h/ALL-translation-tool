@@ -1,0 +1,34 @@
+{
+  "status": "PASS_ROOT_SOURCE_SCHEMA_REVIEW_PENDING_ACTUAL_RECONCILIATION_CONFIG",
+  "utc": "2026-09-14T04:49:39.224994+00:00",
+  "freeze": {
+    "bytes": 50630,
+    "sha256": "9139d2c3bb74466c8a3656e3bb8c5f133f215d5ff22418cd97fcc85081de38eb"
+  },
+  "frozen_files": 291,
+  "original_copy_pairs": 11,
+  "original_files_including_manifests": 350,
+  "fixture_controls_inspected": 74,
+  "fixture_expected_acceptances": 4,
+  "fixture_expected_rejections": 70,
+  "fixture_symlinks_verified": 4,
+  "runtime": {
+    "bytes": 16475,
+    "sha256": "945086f1b2f93b40f9fa8f59535f0c9fc29972f6d1c01beea3d6fddaf23ea4ac"
+  },
+  "contract": {
+    "bytes": 10668,
+    "sha256": "caff81a7c2b1da46e7630428d4b1ff0ac64cc0e82e9716f59ae3563d68519561"
+  },
+  "full_changed_source_and_control_script_read": true,
+  "remaining_source_inverse_identity_checked": true,
+  "root_reexecuted_fixture_suite": false,
+  "actual_config_or_runtime_executions": 0,
+  "semantic_acceptance": false,
+  "conditions": [
+    "Use exact actual frozen reconciliation files, queries and source descriptors; unknown schemas require a separate narrow review.",
+    "Final reconciled freeze.json files DICT remains unchanged.",
+    "Actual original manifests remain unchanged and retain their true per-angle filenames and structures.",
+    "Independent semantic review remains required; both code adapters disclose original-author roles."
+  ]
+}

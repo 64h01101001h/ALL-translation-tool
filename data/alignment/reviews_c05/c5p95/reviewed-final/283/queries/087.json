@@ -1,0 +1,50 @@
+{
+  "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+  "parameters": [
+    "skyes bu",
+    "skyes bu"
+  ],
+  "count": 2,
+  "rows": [
+    {
+      "id": 804,
+      "wylie": "skyes bu",
+      "tibetan": "སྐྱེས་བུ",
+      "tibetan_source": null,
+      "acip": "SKYES BU",
+      "pronunciation": "kyebu",
+      "pronunciation_source": null,
+      "sanskrit": "{MSA,MV,C}puruṣa; {C}jana; {C} pumān; {C}puṃs; pudgala/puruṣa; {LC}nara; {LC}puṃs (pumān); {LC}puṅgava; {LC}jantu; {LC}nṛ; {LC}tatpuruṣa; {LC}akṣipuruṣa; {LC}paruṣa",
+      "hopkins_english": "being; creature; person; {PH}The Person; {C}person; personality; (some) one; men",
+      "hgm_gloss": "[\"people\", \"a person\", \"person\", \"being\", \"practitioners\", \"birth\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18Commentary\"]",
+      "corpus_n_segments": 283,
+      "raw": "{\"tibetan\": \"སྐྱེས་བུ\", \"wylie\": \"skyes bu\", \"wylie_variants\": [\"skyes bu\"], \"tenses\": null, \"sanskrit\": \"{MSA,MV,C}puruṣa; {C}jana; {C} pumān; {C}puṃs; pudgala/puruṣa; {LC}nara; {LC}puṃs (pumān); {LC}puṅgava; {LC}jantu; {LC}nṛ; {LC}tatpuruṣa; {LC}akṣipuruṣa; {LC}paruṣa\", \"hopkins_english\": \"being; creature; person; {PH}The Person; {C}person; personality; (some) one; men\", \"hgm_gloss\": [\"people\", \"a person\", \"person\", \"being\", \"practitioners\", \"birth\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"kyebu\", \"acip\": \"SKYES BU\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 283}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    },
+    {
+      "id": 1740,
+      "wylie": "gang zag",
+      "tibetan": "གང་ཟག། སྐྱེས་བུ",
+      "tibetan_source": null,
+      "acip": "GANG ZAG",
+      "pronunciation": "gangsak",
+      "pronunciation_source": "GMR card (C13 Language Study Guide)",
+      "sanskrit": "{C,MSA,MV}pudgala; puruṣa; pudgala/puruṣa; {LC}nara; {LC}puṃs (pumān); {LC}puṅgava; {LC}jantu; {LC}nṛ; {LC}puṃs; {LC}tatpuruṣa; {LC}akṣipuruṣa; {LC}paruṣa; {LC}ātma; {LC}bhūtātman; {LC}sattva; {LC}pudrala",
+      "hopkins_english": "person; individual",
+      "hgm_gloss": "[\"persons\", \"person\", \"the person\", \"type of person\", \"people\", \"the type of person\", \"another\", \"individual\", \"beings\", \"normal person\", \"individuals\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS03\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+      "corpus_n_segments": 896,
+      "raw": "{\"tibetan\": \"གང་ཟག། སྐྱེས་བུ\", \"wylie\": \"gang zag\", \"wylie_variants\": [\"gang zag\", \"skyes bu\"], \"tenses\": null, \"sanskrit\": \"{C,MSA,MV}pudgala; puruṣa; pudgala/puruṣa; {LC}nara; {LC}puṃs (pumān); {LC}puṅgava; {LC}jantu; {LC}nṛ; {LC}puṃs; {LC}tatpuruṣa; {LC}akṣipuruṣa; {LC}paruṣa; {LC}ātma; {LC}bhūtātman; {LC}sattva; {LC}pudrala\", \"hopkins_english\": \"person; individual\", \"hgm_gloss\": [\"persons\", \"person\", \"the person\", \"type of person\", \"people\", \"the type of person\", \"another\", \"individual\", \"beings\", \"normal person\", \"individuals\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"gangsak\", \"acip\": \"GANG ZAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS03\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 896}, \"pronunciation_source\": \"GMR card (C13 Language Study Guide)\", \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

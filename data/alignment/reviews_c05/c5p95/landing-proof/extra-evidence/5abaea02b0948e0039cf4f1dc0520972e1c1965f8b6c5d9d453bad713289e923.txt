@@ -1,0 +1,30 @@
+"""Freeze review artifacts only; do not execute reviewed code."""
+from pathlib import Path
+import hashlib,json
+O=Path(__file__).resolve().parent
+
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,v):
+ with (O/n).open('x') as f:f.write(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+p=O/'inputs/preparation';proof=json.loads((O/'static-proof.json').read_bytes())
+save('review.json',dict(spec_verdict='APPROVE',quality_verdict='APPROVE',scope='SOURCE_ONLY_CONDITIONAL_COMMAND_TEMPLATE',blocking_findings=[],observations=[dict(id='INDEX-STREAM-DEFINITION',blocking=False,meaning='index_sha256 hashes full git ls-files --stage -z raw output, not binary .git/index')],candidate=pin(p/'verify_staged_through282.py'),target_executed=False,static_proof=pin(O/'static-proof.json'),actual_runtime_bindings_approved=False,actual_DATA_approval=False))
+save('runtime-contract.json',dict(status='SOURCE_APPROVED_ACTUAL_BINDINGS_AND_ROOT_RELEASE_REQUIRED',source_original=str(O.parent/'through282-final-stage-preparation/verify_staged_through282.py'),source_pin=pin(p/'verify_staged_through282.py'),command_plan=pin(p/'command-plan.json'),template_pin=pin(p/'final-bindings-template.json'),argv_template=json.loads((p/'command-plan.json').read_bytes())['argv'],environment={'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'},assertions_enabled=True,expected_hash_definitions={'index_sha256':['git','ls-files','--stage','-z'],'staged_path_stream_sha256':['git','diff','--cached','--name-only','-z'],'final_untracked_sha256':['git','ls-files','--others','--exclude-standard','-z']},future_roles=proof['future_input_pin_roles'],future_values=11,template_not_runnable=True,binding_file_must_be_reviewed_and_hash_pinned=True,whitespace_classifier_approval_separate=True,actual_verifier_result_pending=True,output_must_be_fresh_external=True))
+save('interruption-provenance.json',dict(status='RETAINED_MESSAGE_PROVENANCE_NOT_PROVIDER_RAW_TRANSPORT',parent_message="Your previous review turn ended with temporary 'Selected model is at capacity' after no-blocker static finding and index-stream clarification. Resume the SAME bounded review using preserved partial I/through282-final-stage-code-review artifacts, retaining actual failure/partial history; do not restart or rerun completed static audits.",observation='On resume, ls -la of the requested review directory returned exit 1: No such file or directory. No completed on-disk static audit existed to rerun. Prior direct source reads were reused. The independent static audit was then run once.',raw_provider_failure_transport_available=False,minor_read_command_corrections=['A prior read requested bindings-template.json; actual filename is final-bindings-template.json. That failed read was corrected without target execution.'],candidate_failures_observed=[]))
+for r in json.loads((O/'original-to-copy-manifest.json').read_bytes()):
+ assert Path(r['original']).read_bytes()==(O/r['copy']).read_bytes()
+ assert pin(O/r['copy'])=={k:r[k] for k in ['bytes','sha256']}
+e=json.loads((O/'caller-static01/execution.json').read_bytes());assert e['exit']==0
+for n in ['stdin','stdout','stderr']:assert pin(O/f'caller-static01/{n}.bin')==e[n]
+assert not (O/'caller-static01/stderr.bin').read_bytes()
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file()}
+assert 'freeze.json' not in files
+save('freeze.json',dict(status='FROZEN_SOURCE_REVIEW',spec_verdict='APPROVE',quality_verdict='APPROVE',files=files,file_count=len(files),total_bytes=sum(p['bytes'] for p in files.values()),target_executed=False))
+assert set(files)|{'freeze.json'}=={str(p.relative_to(O)) for p in O.rglob('*') if p.is_file()}
+for n,r in files.items():assert pin(O/n)==r
+result=dict(freeze=pin(O/'freeze.json'),files=len(files),bytes=sum(p['bytes'] for p in files.values()),report=pin(O/'report.md'))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555)
+print(json.dumps(result,indent=2))

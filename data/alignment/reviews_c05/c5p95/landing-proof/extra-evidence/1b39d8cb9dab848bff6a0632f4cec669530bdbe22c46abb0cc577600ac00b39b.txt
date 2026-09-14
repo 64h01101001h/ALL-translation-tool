@@ -1,0 +1,34 @@
+--- prior/proof-shape
++++ current/proof-shape
+@@ -79,6 +79,22 @@
+    assert query[count_key]==source[count_key]==len(query['rows'])
+  return len(query['rows'])
+ 
++def proof_counts(report,seq):
++ assert isinstance(report,dict) and type(seq)is int and seq>0
++ assert type(report['seq'])is int and report['seq']==seq
++ keys=('spans','nulls','d5_nonnull')
++ if 'counts' in report:
++  assert isinstance(report['counts'],dict) and not any(k in report for k in keys)
++  source=report['counts']
++ else:
++  assert report['status']=='PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION'
++  source=report
++ counts={k:source[k] for k in keys}
++ assert all(type(n)is int for n in counts.values())
++ assert counts['spans']>0 and 0<=counts['nulls']<=counts['spans']
++ assert 0<=counts['d5_nonnull']<=counts['spans']-counts['nulls']
++ return counts
++
+ def original_freeze(row):
+  """Read the explicitly pinned original manifest in its genuine angle schema."""
+  d=Path(row['directory']);names={'tibetan':'freeze-manifest.json','english':'freeze.json'}
+@@ -131,7 +147,7 @@
+   assert set(row['files'])==set(roles)
+   for k,filename in roles.items():
+    r=row['files'][k];assert Path(r['path'])==d/filename;pinned(r);assert {j:r[j]for j in ['bytes','sha256']}==f['files'][filename]
+-  report=json.loads(pinned(row['files']['proof']));assert row['counts']=={k:report['counts'][k]for k in totals}
++  report=json.loads(pinned(row['files']['proof']));assert row['counts']==proof_counts(report,row['seq'])
+   spec=json.loads(pinned(row['files']['spec']));assert spec['course']==c['course']and len(spec['segments'])==1
+   part=spec['segments'][0];sp=part['spans'];assert part['seq']==row['seq']and len(sp)==len({x['id']for x in sp})==row['counts']['spans']
+   assert sum(x['eng']is None for x in sp)==row['counts']['nulls']and sum(x['d']==5 and x['eng']is not None for x in sp)==row['counts']['d5_nonnull']

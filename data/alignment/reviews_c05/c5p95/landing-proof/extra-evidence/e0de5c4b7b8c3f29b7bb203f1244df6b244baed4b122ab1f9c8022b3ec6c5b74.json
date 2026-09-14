@@ -1,0 +1,31 @@
+{
+  "status": "PASS_ROOT_NARROW_SOURCE_CORRECTION_INDEPENDENT_RECHECK_PENDING",
+  "utc": "2026-09-14T06:57:10.953106+00:00",
+  "finding": "STAGE-001",
+  "baseline": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+  "before": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/verify_staged_through285.py",
+    "bytes": 57097,
+    "sha256": "d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c"
+  },
+  "after": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-binding-path-correction/verify_staged_through285.py",
+    "bytes": 57112,
+    "sha256": "d77253e906657f58962211d0aaa584df9272af4e2055faeb1bc62fccd7f1b0be"
+  },
+  "independent_review": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-stage-independent-code-review/review.json",
+    "bytes": 4632,
+    "sha256": "4fb076a2697aeb5f475eaabeae0185995fd80110ea95c6de9ab774e1d28ca4af"
+  },
+  "independent_review_members_verified": 48,
+  "sole_changed_top_level_definition": "load_release_bindings",
+  "change": "Use role_path only in input-role containment loop; preserve original bindings path and final full reread.",
+  "whole_inverse_and_AST_exact": true,
+  "root_full_verifier_read": true,
+  "root_pathspec_full_read": true,
+  "root_final_banker_full_read": true,
+  "candidate_execution": false,
+  "Git_SQL_tests_bank_stage_or_worktree_writes": false,
+  "runtime_bindings_pending": true
+}

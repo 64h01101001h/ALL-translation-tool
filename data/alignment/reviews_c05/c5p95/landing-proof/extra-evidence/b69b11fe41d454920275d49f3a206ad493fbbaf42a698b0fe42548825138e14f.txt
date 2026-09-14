@@ -1,0 +1,31 @@
+--- collect-source.py.txt
++++ collect-source-v2.py.txt
+@@ -9,7 +9,9 @@
+ def j(p):return json.loads(raw(p))
+ def put(n,b):
+  p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+- with p.open('xb') as f:f.write(b)
++ if p.exists():assert p.read_bytes()==b
++ else:
++  with p.open('xb') as f:f.write(b)
+ def save(n,x):put(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+ copies=[];external={};packages=[];maps=[]
+ def cp(p,n,role):
+@@ -17,9 +19,14 @@
+ def ext(p,role):
+  p=Path(p);b=raw(p);r=dict(path=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,role=role,**pin(b));external[str(p)]=r;return b
+ for rel,mapnames in [('through285-generated-reproduction-preparation',['original-to-copy-manifest.json']),('through285-payload-freezer-preparation',['original-to-copy-manifest.json','transport-helper-original-copy-map.json']),('through285-semantic-schema-helper-preparation',['source-copy-manifest.json'])]:
+- d=I/rel;f=j(d/'freeze.json');assert isinstance(f['files'],dict)
+- assert {str(p.relative_to(d)) for p in d.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+- for n,x in f['files'].items():assert pin(raw(d/n))==x
++ d=I/rel;f=j(d/'freeze.json');entries=f['files']
++ if rel=='through285-semantic-schema-helper-preparation':
++  assert isinstance(entries,list) and all(set(x)=={'path','bytes','sha256'} for x in entries)
++  assert len({x['path'] for x in entries})==len(entries)
++  entries={x['path']:{k:x[k] for k in ('bytes','sha256')} for x in entries}
++ else:assert isinstance(entries,dict)
++ assert {str(p.relative_to(d)) for p in d.rglob('*') if p.is_file()}==set(entries)|{'freeze.json'}
++ for n,x in entries.items():assert pin(raw(d/n))==x
+  packages.append(dict(directory=str(d),freeze=pin(raw(d/'freeze.json')),file_count=len(f['files'])))
+  cp(d/'freeze.json','inputs/packages/'+rel+'/freeze.json','whole immutable source preparation reference')
+  for n in mapnames:

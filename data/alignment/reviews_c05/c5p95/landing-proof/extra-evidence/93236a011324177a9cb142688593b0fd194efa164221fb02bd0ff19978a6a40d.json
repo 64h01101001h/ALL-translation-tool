@@ -1,0 +1,18 @@
+[
+  {
+    "old": "O.mkdir()\n",
+    "new": "# This one additional full copy preserves the existing generic record/alias.\n# Its future automatic final-banker target must pre-exist the raw diagnostic.\nroute_source = I / 'through285-final-banking-stage-preparation/ordinary-required-final-banker-route.json'\nroute_raw = read(route_source)\nassert pin(route_raw) == {'bytes': 1010, 'sha256': '72b5750f5977273d7dbf148c61249bc6cf750360334f3ca5b63265991622529e'}\nrequired_route = json.loads(route_raw)['required_explicit_input']\nassert required_route == dict(original=str(I / 'through285-final-banking-stage-preparation/final-candidates/bank_root_proofs_through285_final.py'), retention='bank', copy='root-helpers/bank_root_proofs_through285_final.py.txt', bytes=20978, sha256='2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f')\nrequired_source = Path(required_route['original'])\nassert required_source in paths and route_source in paths\nrequired_raw = read(required_source)\nassert pin(required_raw) == {k: required_route[k] for k in ('bytes', 'sha256')}\nsource_coverage = [row for row in coverage if row['original'] == str(required_source)]\nassert len(source_coverage) == 1 and {k: source_coverage[0][k] for k in ('bytes', 'sha256')} == pin(required_raw)\nassert str(required_source.resolve()) == source_coverage[0]['resolved']\nassert (os.readlink(required_source) if required_source.is_symlink() else None) == source_coverage[0]['symlink']\ngeneric_record_count = len(records)\ngeneric_bank_targets = [row['copy'] for row in records if row['retention'] == 'bank']\nassert len(generic_bank_targets) == len(set(generic_bank_targets)) == len(new_content)\nassert required_route['copy'] not in generic_bank_targets\nassert not (landed / 'landing-proof' / required_route['copy']).exists()\nrequired_extra_copies = [dict(required_route)]\nrecords.extend(required_extra_copies)\nbank_targets = [row['copy'] for row in records if row['retention'] == 'bank']\nassert len(bank_targets) == len(set(bank_targets)) == len(new_content) + len(required_extra_copies)\nassert records[-1] == required_route and len(records) == generic_record_count + 1\nassert read(required_source) == required_raw and read(route_source) == route_raw\nassert paths == census(), 'Evidence tree changed during required extra-copy preparation'\nO.mkdir()\n",
+    "count": 1,
+    "after_positions": [
+      7591
+    ]
+  },
+  {
+    "old": "             distinct_new_full_copies=len(new_content), manifest=pin(read(O / 'extra-inputs.json')),",
+    "new": "             distinct_new_full_copies=len(new_content) + len(required_extra_copies),\n             generic_distinct_new_full_copies=len(new_content), generic_records_before_required_route=generic_record_count,\n             required_additional_full_copies=len(required_extra_copies), required_extra_copy_records=required_extra_copies,\n             required_extra_copy_source_coverage=source_coverage,\n             required_extra_copy_proof=dict(path=str(route_source), **pin(route_raw)),\n             manifest=pin(read(O / 'extra-inputs.json')),",
+    "count": 1,
+    "after_positions": [
+      10754
+    ]
+  }
+]

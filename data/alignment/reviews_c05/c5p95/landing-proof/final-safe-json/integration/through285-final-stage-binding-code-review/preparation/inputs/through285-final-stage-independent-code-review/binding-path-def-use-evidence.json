@@ -1,0 +1,28 @@
+{
+  "candidate": {
+    "bytes": 57097,
+    "sha256": "d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c"
+  },
+  "function": "load_release_bindings",
+  "assignments": [
+    {
+      "line": 123,
+      "statement": "path = Path(args.bindings)"
+    },
+    {
+      "line": 144,
+      "statement": "path = Path(pins[role]['path'])"
+    }
+  ],
+  "final_reread": {
+    "line": 161,
+    "statement": "assert path.read_bytes() == raw"
+  },
+  "loop_roles": [
+    "ordinary_result",
+    "final_result",
+    "reproduction_acceptance"
+  ],
+  "conclusion": "The last loop iteration leaves path referring to reproduction_acceptance. raw remains the original binding bytes. The reread therefore compares different genuine schemas and fails; no target execution or fabricated runtime binding was needed to establish this source defect.",
+  "minimal_correction": "Rename only the new loop variable path to role_path and its uses inside that loop. Preserve the original binding path and exact final reread."
+}

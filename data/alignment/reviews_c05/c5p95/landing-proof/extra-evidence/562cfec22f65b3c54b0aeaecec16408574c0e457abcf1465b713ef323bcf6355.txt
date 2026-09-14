@@ -1,0 +1,45 @@
+--- prior/config_contract.py
++++ candidate/config_contract.py
+@@ -39,6 +39,15 @@
+  elif kind=='query_list':
+   assert set(binding)=={'kind','index'} and isinstance(descriptor,list)
+   i=binding['index'];assert type(i)is int and 0<=i<len(descriptor);source=descriptor[i]
++ elif kind=='query_container_parameters':
++  assert set(binding)=={'kind','index'} and isinstance(descriptor,dict)
++  assert set(descriptor) in ({'database','uri','query_only','queries'},
++   {'uri','query_only','queries','master_original','master_pin','full_master_records'})
++  assert descriptor['query_only'] is True and isinstance(descriptor['queries'],list)
++  i=binding['index'];assert type(i)is int and 0<=i<len(descriptor['queries'])
++  source=descriptor['queries'][i]
++  assert isinstance(source,dict) and set(source)=={'label','sql','parameters','row_count','rows'}
++  assert isinstance(source['label'],str)
+  elif kind in ('query_container_params','query_list_params'):
+   assert set(binding)=={'kind','index'}
+   if kind=='query_container_params':
+@@ -50,7 +59,8 @@
+   original=records[i];assert isinstance(original,dict) and 'parameters' not in original
+   assert isinstance(original['params'],list)
+   source={'sql':original['sql'],'parameters':original['params'],'rows':original['rows']}
+-  if 'count'in original:source['count']=original['count']
++  for count_key in ('count','row_count'):
++   if count_key in original:source[count_key]=original[count_key]
+  elif kind=='hgm_results':
+   assert set(binding)=={'kind','term'} and isinstance(descriptor,dict)
+   assert descriptor['parameters_per_term']=='[term,term]'
+@@ -61,10 +71,12 @@
+  for key in ['sql','parameters','rows']:assert query[key]==source[key],key
+  assert isinstance(query['sql'],str) and query['sql'].lstrip().upper().startswith('SELECT ')
+  assert isinstance(query['parameters'],list)and isinstance(query['rows'],list)
+- assert ('count'in query)==('count'in source),'Count presence differs from the actual original descriptor'
+- if 'count'in source:
+-  assert type(source['count'])is int and type(query['count'])is int
+-  assert query['count']==source['count']==len(query['rows'])
++ for count_key in ('count','row_count'):
++  assert (count_key in query)==(count_key in source),'Count presence differs from the actual original descriptor: '+count_key
++  if count_key in source:
++   assert type(source[count_key])is int and type(query[count_key])is int
++   assert source[count_key]>=0 and query[count_key]>=0
++   assert query[count_key]==source[count_key]==len(query['rows'])
+  return len(query['rows'])
+ 
+ def original_freeze(row):

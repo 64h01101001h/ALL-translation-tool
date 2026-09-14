@@ -1,0 +1,62 @@
+[
+  {
+    "before": "through282",
+    "after": "through285",
+    "count": 5
+  },
+  {
+    "before": "import pathlib,json,hashlib,datetime,shutil",
+    "after": "import pathlib,json,hashlib,datetime,shutil,argparse,re",
+    "count": 1
+  },
+  {
+    "before": "assert __debug__ and not OUT.exists() and not NEW.exists()",
+    "after": "assert __debug__ and not OUT.exists() and not NEW.exists()\nparser=argparse.ArgumentParser(description='Materialize exact independently reviewed whitespace runtime; no prepare/audit execution.')\nparser.add_argument('--review-freeze-sha256',required=True)\nparser.add_argument('--review-files',required=True,type=int)\nargs=parser.parse_args()\nassert re.fullmatch('[0-9a-f]{64}',args.review_freeze_sha256) and args.review_files>0",
+    "count": 1
+  },
+  {
+    "before": "(P,'a200bda571b180338997a1ce31a6ee6b3775a50cad5cb1334cb6bca102eba2dd',316,'complete-original-copy-manifest.json'),(V,'028a4abc5a20b1f1e239d5c4b4bc6c516a3ae5b152ae1d8e076f2fd1bfb4a944',343,'original-to-copy-manifest.json')",
+    "after": "(P,'e04602ca198ecdd922e5bc55293b5641eb48032536da9e69cf56b33898a67238',346,'full-original-to-copy-manifest.json'),(V,args.review_freeze_sha256,args.review_files,'original-to-copy-manifest.json')",
+    "count": 1
+  },
+  {
+    "before": "'whitespace282.py'",
+    "after": "'whitespace285.py'",
+    "count": 2
+  },
+  {
+    "before": "assert len(d['entries'])==12 and len(d['evidence'])==65 and len(d['provenance_maps'])==4",
+    "after": "assert len(d['entries'])==16 and len(d['evidence'])==99 and len(d['provenance_maps'])==0",
+    "count": 1
+  },
+  {
+    "before": "R/'campaign-artifacts/C05-280-282/landing/root-proof-copy-manifest-before-whitespace.json'",
+    "after": "R/'campaign-artifacts/C05-283-285/landing/root-proof-copy-manifest-before-whitespace.json'",
+    "count": 1
+  },
+  {
+    "before": "I/'through285-whitespace-runs/raw-diagnostic/stdout.bin'",
+    "after": "I/'through285-stage-runs/initial-whitespace-caller/stdout.bin'",
+    "count": 1
+  },
+  {
+    "before": "'current-inputs/semantic-review/original-to-copy-manifest.json'",
+    "after": "'current-inputs/semantic-review/original-copy-manifest.json','current-inputs/semantic-review/additional-original-copy-manifest.json'",
+    "count": 1
+  },
+  {
+    "before": "OUT.mkdir(); NEW.mkdir()\npairs=[]",
+    "after": "pairs=[]",
+    "count": 1
+  },
+  {
+    "before": "for src,n in todo:\n raw=src.read_bytes(); dest=NEW/n;",
+    "after": "inventory=json.loads((P/'runtime-file-inventory.json').read_bytes())\nassert len(todo)==len(inventory)==94 and len({n for s,n in todo})==94\nplanned={str(s):dict(copy=n,**pin(s.read_bytes())) for s,n in todo}\nassert len(planned)==94\nassert planned=={r['original']:{k:r[k]for k in ('copy','bytes','sha256')}for r in inventory}\nassert all(s.resolve(strict=True).is_relative_to(P.resolve(strict=True)) and pathlib.Path(n).parts and not pathlib.Path(n).is_absolute() and '..'not in pathlib.Path(n).parts for s,n in todo)\nOUT.mkdir(); NEW.mkdir()\nfor src,n in todo:\n raw=src.read_bytes(); dest=NEW/n;",
+    "count": 1
+  },
+  {
+    "before": "print(json.dumps({'status':proof['status'],'runtime_files':len(pairs),'verified_frozen_files':659,'original_copy_pairs':1037,'additional_evidence':65}))",
+    "after": "print(json.dumps({'status':proof['status'],'runtime_files':len(pairs),'verified_frozen_files':sum(r['files']for r in counts.values()),'original_copy_pairs':sum(r['full_original_copy_pairs']for r in counts.values()),'additional_evidence':99}))",
+    "count": 1
+  }
+]

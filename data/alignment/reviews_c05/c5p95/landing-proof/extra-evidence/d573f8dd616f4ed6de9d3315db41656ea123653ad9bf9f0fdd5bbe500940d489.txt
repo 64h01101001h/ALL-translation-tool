@@ -1,0 +1,101 @@
+raise RuntimeError('SOURCE ONLY: actual runtime checks/aliases and reviewed closure source must be bound after successful independent reproduction')
+PENDING_CHECKS_TOTAL = None
+PENDING_INPUT_ALIASES = None
+PENDING_ACTUAL_CLOSURE_SOURCE = None
+from pathlib import Path
+import json,hashlib,datetime,os,subprocess
+B=Path(__file__).resolve().parent;I=B.parent/'integration';R=I/'through285-generated-reproduction';W=B.parents[1]/'campaign-worktree';O=I/'through285-generated-reproduction-root-acceptance';HEAD='fb9182dc6fca2230be3bc5169ba1288a22430280'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def js(p):return json.loads(p.read_bytes())
+f=js(R/'freeze.json');assert isinstance(f['files'],dict)
+O.mkdir(parents=True,exist_ok=False);commands=[]
+def git(args):
+ d=O/'commands'/str(len(commands)+1);d.mkdir(parents=True)
+ argv=['git',*args];env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0')
+ (d/'command.json').write_text(json.dumps(dict(argv=argv,cwd=str(W),environment_overrides=dict(GIT_OPTIONAL_LOCKS='0',PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0')),indent=2)+'\n');(d/'stdin.bin').write_bytes(b'')
+ r=subprocess.run(argv,cwd=W,env=env,input=b'',capture_output=True)
+ for n,raw in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(d/n).write_bytes(raw)
+ assert r.returncode==0 and not r.stderr
+ commands.append(dict(directory=str(d),argv=argv,stdout=pin(r.stdout)));return r.stdout
+assert git(['rev-parse','HEAD']).decode().strip()==HEAD
+assert {str(p.relative_to(R)) for p in R.rglob('*') if p.is_file()}==set(f['files'])|{'freeze.json'}
+assert len(f['files'])==f['file_count'] and sum(r['bytes'] for r in f['files'].values())==f['total_bytes']
+for n,r in f['files'].items():assert pin((R/n).read_bytes())==r
+release=js(R/'root-runtime-release.json')
+for r in release['code_mapping']:assert Path(r['original']).read_bytes()==Path(r['copy']).read_bytes() and pin(Path(r['copy']).read_bytes())=={k:r[k] for k in ('bytes','sha256')}
+execution=js(R/'execution-proof.json');retention=js(R/'retention-proof.json');checks=js(R/'retention-checks.json')
+assert execution['status']==retention['status']=='PASS' and len(execution['runs'])==2 and len(execution['outputs'])==7
+assert execution['layer_invocations']==execution['view_invocations']==1 and execution['first_view_seed_exact']
+assert retention['prior_links_retained']==45402 and retention['added_links']==79 and retention['failures']==[]
+assert list(retention['counts'].values())==[45481,11938,1621,11,7093,15557,22546,22206,24126,18]
+assert len(checks)==retention['checks_total']==PENDING_CHECKS_TOTAL and all(x['pass_'] is True for x in checks)
+for label,run in zip(('layer','view'),execution['runs']):
+ d=R/'executions'/label;c=js(d/'command.json');e=js(d/'execution.json')
+ assert c['argv']==e['argv']==run['argv'] and c['cwd']==e['cwd']==run['cwd']==str(R/'workspace')
+ assert e==run and (d/'stdin.bin').read_bytes()==b'' and (d/'exit').read_bytes()==b'0\n'
+ for n in ('stdout','stderr'):assert pin((d/n).read_bytes())==run[n]
+ g=js(d/'runtime-guards.json');assert g['date_override']=='2026-09-13' and g['bytecode_disabled'] and g['write_scope']==str(R)
+ assert all(x['query_only']==1 and '?mode=ro' in x['uri'] for x in g['sqlite_connections'])
+manifest=js(R/'input-manifest.json');assert len(manifest)==PENDING_INPUT_ALIASES;originals=[];git_blobs={}
+for r in manifest:
+ cp=R/r['copy'];assert cp.resolve().is_relative_to(R.resolve());raw=cp.read_bytes();assert pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+ if 'original_git_commit' in r:
+  assert r['original_git_commit']==HEAD
+  rel=r['repository_relative_path'];key=HEAD+':'+rel
+  if key not in git_blobs:git_blobs[key]=git(['show',key])
+  assert git_blobs[key]==raw
+ else:
+  origin=Path(r['original']);s=origin.stat();actual=origin.read_bytes();t=origin.stat();assert actual==raw and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns);assert cp.read_bytes()==raw
+ originals.append(r)
+base=js(B/'baseline.json');assert len(base['sha256'])==9 and len(git_blobs)==7
+for rel,h in base['sha256'].items():
+ cp=R/('workspace' if rel.startswith('data/') and rel.endswith('.gz') else 'previous-generated')/rel
+ assert pin(cp.read_bytes())['sha256']==h
+ if rel.endswith('.gz'):assert cp.read_bytes()==(W/rel).read_bytes()
+entry=js(B/'reproduction-root-entry/proof.json')
+assert entry['status']=='PASS_BEFORE_INDEPENDENT_RUNTIME' and entry['head']==HEAD and entry['baseline_hashes']==base['sha256']
+state_commands=[('head',['rev-parse','HEAD']),('tracked_status',['status','--porcelain=v1','--untracked-files=no']),('untracked',['ls-files','--others','--exclude-standard','-z']),('stages',['ls-files','--stage','-z']),('cached_names',['diff','--cached','--name-only','-z'])]
+assert set(entry['state'])=={x[0] for x in state_commands}|{'index'}
+def verify_entry_state(boundary):
+ results={}
+ for label,args in state_commands:
+  expected=(B/'reproduction-root-entry'/(label+'.bin')).read_bytes();assert pin(expected)==entry['state'][label]
+  actual=git(args);assert actual==expected;results[label]=pin(actual)
+ indexpath=Path(git(['rev-parse','--git-path','index']).decode().strip());indexpath=indexpath if indexpath.is_absolute() else W/indexpath
+ assert str(indexpath.resolve())==entry['index_path']
+ expected=(B/'reproduction-root-entry/index.bin').read_bytes();assert pin(expected)==entry['state']['index']
+ s=indexpath.stat();actual=indexpath.read_bytes();t=indexpath.stat()
+ assert actual==expected and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)
+ results['index']=pin(actual);(O/(boundary+'-state.json')).write_text(json.dumps(results,indent=2)+'\n')
+verify_entry_state('before-final-source-checks')
+for r in entry['files']:
+ p=Path(r['path']);s=p.stat();assert str(p.resolve())==r['resolved'] and (os.readlink(p) if p.is_symlink() else None)==r['symlink']
+ actual=p.read_bytes();t=p.stat();assert (s.st_dev,s.st_ino)==(r['device'],r['inode']) and pin(actual)=={k:r[k] for k in ('bytes','sha256')} and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)
+payload_manifest=js(B/'landing/staged-payload-manifest.json');assert len(payload_manifest['files'])==13 and len({r['path'] for r in payload_manifest['files']})==13
+for r in payload_manifest['files']:
+ raw=(W/r['path']).read_bytes();assert pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+ assert raw==(R/'expected-payload'/r['path']).read_bytes()==(B/'landing/payload-freeze'/r['path']).read_bytes()
+for r in execution['outputs']:
+ raw=(W/r['path']).read_bytes();assert raw==(R/'workspace'/r['path']).read_bytes()==(R/'reproduced-outputs'/r['path']).read_bytes() and pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+seed=R/'seed/previous-main-csv-seed.bin';assert seed.read_bytes()==(B/'landing/previous-main-csv-seed.bin').read_bytes()==git_blobs[HEAD+':docs/geshe_michael_roach_dictionary.csv']
+seedrows=[r for r in manifest if 'materialized_initial_path' in r];assert len(seedrows)==1 and seedrows[0]['copy']=='seed/previous-main-csv-seed.bin'
+assert (R/seedrows[0]['materialized_initial_path']).read_bytes()==(W/'docs/geshe_michael_roach_dictionary.csv').read_bytes()
+acip=js(R/'acip-incomplete-evidence.json');assert (acip['headwords'],acip['proven'],acip['missing'],acip['unproven_source_linked_span_count'],acip['full_bank_d5_english_unproven_count'])==(7093,7090,3,5,6)
+assert len(js(R/'registered-pages.json'))==549
+before=js(R/'live-before.json');after=js(R/'live-after.json');assert before['head']==after['head']==HEAD and before['status']==after['status']
+assert git(['status','--porcelain=v1','--untracked-files=no']).decode()==after['status']
+assert git(['ls-files','--others','--exclude-standard','-z'])==(B/'landing/untracked-before-banking.stdout').read_bytes()
+assert git(['diff','--cached','--name-only','-z'])==b''
+assert git(['rev-parse','HEAD']).decode().strip()==HEAD
+for n,r in f['files'].items():assert pin((R/n).read_bytes())==r
+closure=js(R/'final-proof.json');assert closure['status']=='PASS_REPRODUCTION_AND_LOCAL_RETENTION' and closure['counts']==retention['counts'] and closure['checks_total']==PENDING_CHECKS_TOTAL
+assert closure['input_aliases']==len(manifest) and closure['actual_layer_invocations']==closure['actual_view_invocations']==1 and closure['actual_new_ctest_invocations']==0
+closure_source=Path(PENDING_ACTUAL_CLOSURE_SOURCE);assert (R/'close-evidence.py.txt').read_bytes()==closure_source.read_bytes()
+for label,script in [('prepare','prepare.py.txt'),('run-once','run-once.py.txt'),('retention','verify-retention.py.txt'),('close-evidence','close-evidence.py.txt')]:
+ d=R/'caller-runs'/label;c=js(d/'command.json');e=js(d/'execution.json')
+ assert c['argv']==e['argv'] and c['cwd']==e['cwd']==str(R) and (Path(e['cwd'])/Path(e['argv'][-1])).resolve()==(R/script).resolve() and e['exit']==0
+ assert (d/'exit.txt').read_bytes()==b'0\n' and (d/'stdin.bin').read_bytes()==b'' and (d/'stderr.bin').read_bytes()==b''
+ for n in ['stdout','stderr']:assert pin((d/(n+'.bin')).read_bytes())==dict(bytes=e[n+'_bytes'],sha256=e[n+'_sha256'])
+verify_entry_state('after-all-acceptance-checks')
+result=dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=HEAD,complete_runtime_freeze=pin((R/'freeze.json').read_bytes()),frozen_files=len(f['files']),frozen_bytes=f['total_bytes'],full_original_copy_records=len(originals),actual_historical_git_objects=len(git_blobs),all_nine_baseline_hashes_verified=True,all_ten_current_source_output_aliases_unchanged=True,all_seven_reproduced_outputs_byte_exact=True,all_thirteen_payload_files_byte_exact=True,immutable_seed_transition_verified=True,independent_layer_invocations=1,independent_view_invocations=1,root_tests_not_repeated=True,retention_checks=len(checks),counts=retention['counts'],acip_proven=7090,acip_heads=7093,original_history_and_failures_retained=True,live_head_index_untracked_state_unchanged=True,scope='Independent generated reproduction/source/retention acceptance only. Actual bank/stage/whitespace/private commits and native/MAIN integration remain separate.')
+(O/'original-copy-checks.json').write_text(json.dumps(originals,indent=2)+'\n');(O/'actual-git-records.json').write_text(json.dumps(commands,indent=2)+'\n');(O/'proof.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

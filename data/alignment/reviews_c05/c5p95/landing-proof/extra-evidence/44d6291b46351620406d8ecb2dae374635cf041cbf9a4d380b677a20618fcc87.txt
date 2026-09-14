@@ -1,0 +1,52 @@
+from pathlib import Path
+import ast,json,hashlib,difflib,sys
+D=Path(__file__).resolve().parent;I=D.parent;A=I.parent;ROOT=A.parent;W=ROOT/'campaign-worktree';B=A/'C05-283-285';OLD=A/'C05-280-282'
+assert D.name=='through285-reconciliation-verifier-preparation' and sys.dont_write_bytecode and __debug__
+def pin(raw):return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def save(name,obj):
+ with (D/name).open('x') as f:f.write(json.dumps(obj,indent=2)+'\n')
+paths=[OLD/'reconciliation-verifier-head-allowance-preparation'/n for n in ['verify_reconciliation.py','config_contract.py','report.md','pending-contract.json','preparation-proof.json','complete.diff','freeze.json','input-manifest.json','focused-controls.json','history/initial-pending-design.json']]
+paths +=[OLD/'root-reconciliation-verification'/n for n in ['verify_reconciliation.py','config_contract.py','config.json','config-validation.json','execution-proof.json','root-result-acceptance.json','runtime-original-to-copy-manifest.json']]
+paths +=[OLD/'reconciled/run-generator-ro.py.txt',W/'tools/gen_alignment_page.py',W/'tools/test_no_supplied_span_head.py',W/'docs/ALIGNMENT_LAYER_SPEC.md',W/'docs/alignment_briefs/RECONCILE_BRIEF.md',W/'docs/alignment_briefs/REFUTE_BRIEF.md']
+paths +=[B/n for n in ['baseline.json','source.json','context.json']]+[I/'through285-source-resumption-check/proof.json']
+(D/'inputs').mkdir();records=[]
+for idx,p in enumerate(paths):
+ assert not p.is_relative_to(B/'tibetan') and not p.is_relative_to(B/'english')
+ raw=p.read_bytes();dest=D/'inputs'/f'{idx:02d}-{p.name}';dest.write_bytes(raw)
+ assert dest.read_bytes()==p.read_bytes()==raw
+ records.append({'original':str(p),'resolved':str(p.resolve(strict=True)),'copy':str(dest.relative_to(D)),**pin(raw),'full_byte_equality':True})
+save('original-copy-manifest.json',records)
+P=OLD/'reconciliation-verifier-head-allowance-preparation';R=OLD/'root-reconciliation-verification'
+old=(P/'verify_reconciliation.py').read_bytes();contract=(P/'config_contract.py').read_bytes()
+assert old==(R/'verify_reconciliation.py').read_bytes() and contract==(R/'config_contract.py').read_bytes()
+assert pin(old)['sha256']=='64b139112abeabd25d30daaf3c1dc77c28b7ce17bcc272a84d469923cabfbd96'
+assert pin(contract)['sha256']=='432017fe3d3a6fbe30df42028d4cdc4342fd491b303d25a39c3027d8ed794b5d'
+(D/'prior-verify_reconciliation.py').write_bytes(old);(D/'prior-config_contract.py').write_bytes(contract)
+changes=[("assert COURSE=='C05' and SEQS==[280,281,282]", "assert COURSE=='C05' and SEQS==[283,284,285]"),("key='c5p94/'+label", "key='c5p95/'+label"),("page='c5p94',seq=seq", "page='c5p95',seq=seq")]
+s=old.decode();mapping=[]
+for a,b in changes:
+ assert s.count(a)==1 and b not in s
+ mapping.append({'before':a,'after':b,'occurrences':1,'old_line':s[:s.index(a)].count('\n')+1})
+ s=s.replace(a,b)
+new=s.encode();(D/'verify_reconciliation.py').write_bytes(new);(D/'config_contract.py').write_bytes(contract)
+save('replacement-map.json',mapping)
+for name,a,b in [('forward.diff',old,new),('inverse.diff',new,old)]:
+ (D/name).write_text(''.join(difflib.unified_diff(a.decode().splitlines(True),b.decode().splitlines(True),fromfile='prior' if name=='forward.diff' else 'candidate',tofile='candidate' if name=='forward.diff' else 'prior')))
+reverse=s
+for a,b in reversed(changes):assert reverse.count(b)==1;reverse=reverse.replace(b,a)
+assert reverse.encode()==old
+old_ast=ast.parse(old);new_ast=ast.parse(new)
+# Reverse only the three concrete identifier substitutions, then compare whole-module AST.
+assert ast.dump(ast.parse(reverse),include_attributes=False)==ast.dump(old_ast,include_attributes=False)
+for name,raw in [('verify_reconciliation.py',new),('config_contract.py',contract)]:compile(raw,str(D/name),'exec')
+old_asserts=[ast.dump(n,include_attributes=False) for n in ast.walk(old_ast) if isinstance(n,ast.Assert)]
+new_asserts=[ast.dump(n,include_attributes=False) for n in ast.walk(new_ast) if isinstance(n,ast.Assert)]
+assert len(old_asserts)==len(new_asserts) and sum(a!=b for a,b in zip(old_asserts,new_asserts))==1
+base=json.loads((B/'baseline.json').read_bytes());source=json.loads((B/'source.json').read_bytes());context=json.loads((B/'context.json').read_bytes());proof=json.loads((I/'through285-source-resumption-check/proof.json').read_bytes())
+assert base['commit']=='fb9182dc6fca2230be3bc5169ba1288a22430280' and base['course_boundary']==282
+for name in ['baseline','source','context']:assert pin((B/(name+'.json')).read_bytes())==proof[name]
+assert proof['status']=='PASS_REUSED_SOURCE_PREPARATION_AND_CURRENT_CLOSED_BASELINE' and proof['baseline_head']==base['commit']
+assert [r['seq'] for r in source]==[283,284,285] and [r['seq'] for r in context]==list(range(277,292))
+assert [r for r in context if r['seq'] in [283,284,285]]==source
+save('source-proof.json',{'status':'PASS_SOURCE_ONLY_THREE_LITERAL_SUBSTITUTIONS','prior_runtime':pin(old),'candidate_runtime':pin(new),'contract':pin(contract),'contract_byte_identical':True,'accepted_runtime_source_pair_exact':True,'reversible_source_identity':True,'whole_module_ast_after_inverse_exact':True,'assertions':len(old_asserts),'changed_assertions':1,'unchanged_assertions':len(old_asserts)-1,'source_context_baseline_resumption_pins_exact':True,'candidate_imports':0,'candidate_executions':0,'config_validation_calls':0,'new_proposal_directories_read':False,'source_sql_git_canonical_commands':0})
+print(json.dumps({'status':'PASS_SOURCE_ONLY_THREE_LITERAL_SUBSTITUTIONS','full_copy_pairs':len(records),'candidate':pin(new),'contract':pin(contract),'assertions':len(old_asserts),'candidate_executions':0}))

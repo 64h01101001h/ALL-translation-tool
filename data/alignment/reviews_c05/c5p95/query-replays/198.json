@@ -1,0 +1,32 @@
+{
+  "source_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/reconciled/283/queries/198.json",
+  "uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "tshad",
+    "tshad"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 15282,
+      "wylie": "tshad",
+      "tibetan": "ཚད",
+      "tibetan_source": null,
+      "acip": "TSAD",
+      "pronunciation": "tse",
+      "pronunciation_source": null,
+      "sanskrit": "{N,C,MSA}pramāṇa; {C,MSA}parimāṇa; {MSA}māna; {LC}āyuḥpramāṇa; {LC}pramāṇu; {LC}pramita; {LC}prameya; {LC}!!dhā, nilaya; {LC}pratimāna; {LC}pramātṛ; {LC}prastha; {LC}mātrā; {LC}uttamayā mātrayā; {LC}vāla; {LC}sthalya",
+      "hopkins_english": "size; measure; {PH}measure; extent; certain amount; {C}valid cognizer; valid cognition; valid means of knowledge; measurement; extent; as large as; which has the dimensions of; limitation",
+      "hgm_gloss": "[\"what they cal\", \"distances\", \"measure\", \"length\", \"dimensions\", \"measurement\", \"size ... size\", \"what\", \"totally correct\", \"valid perceptions\", \"everything\", \"valid perception\", \"entire extent\", \"correct perception\", \"correctness\", \"measured\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 901,
+      "raw": "{\"tibetan\": \"ཚད\", \"wylie\": \"tshad\", \"wylie_variants\": [\"tshad\"], \"tenses\": null, \"sanskrit\": \"{N,C,MSA}pramāṇa; {C,MSA}parimāṇa; {MSA}māna; {LC}āyuḥpramāṇa; {LC}pramāṇu; {LC}pramita; {LC}prameya; {LC}!!dhā, nilaya; {LC}pratimāna; {LC}pramātṛ; {LC}prastha; {LC}mātrā; {LC}uttamayā mātrayā; {LC}vāla; {LC}sthalya\", \"hopkins_english\": \"size; measure; {PH}measure; extent; certain amount; {C}valid cognizer; valid cognition; valid means of knowledge; measurement; extent; as large as; which has the dimensions of; limitation\", \"hgm_gloss\": [\"what they cal\", \"distances\", \"measure\", \"length\", \"dimensions\", \"measurement\", \"size ... size\", \"what\", \"totally correct\", \"valid perceptions\", \"everything\", \"valid perception\", \"entire extent\", \"correct perception\", \"correctness\", \"measured\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"tse\", \"acip\": \"TSAD\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 901}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

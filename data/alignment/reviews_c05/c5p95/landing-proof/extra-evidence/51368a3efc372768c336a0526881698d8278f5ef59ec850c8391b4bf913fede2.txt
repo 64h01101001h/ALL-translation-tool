@@ -1,0 +1,61 @@
+--- candidates/accept-independent-reproduction-root.py
++++ prior/accept-independent-reproduction-root.py
+@@ -1,9 +1,10 @@
+-PENDING_CHECKS_TOTAL = 225597
+-PENDING_INPUT_ALIASES = 3031
+-PENDING_ACTUAL_CLOSURE_SOURCE = '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reproduction-closure-root-binding/candidates/close-evidence.py.txt'
++raise RuntimeError('SOURCE ONLY: actual runtime checks/aliases and reviewed closure source must be bound after successful independent reproduction')
++PENDING_CHECKS_TOTAL = None
++PENDING_INPUT_ALIASES = None
++PENDING_ACTUAL_CLOSURE_SOURCE = None
+ from pathlib import Path
+ import json,hashlib,datetime,os,subprocess
+-B=Path(__file__).resolve().parent;I=B.parent/'integration';R=I/'through285-generated-reproduction-attempt02';W=B.parents[1]/'campaign-worktree';O=I/'through285-generated-reproduction-root-acceptance';HEAD='fb9182dc6fca2230be3bc5169ba1288a22430280'
++B=Path(__file__).resolve().parent;I=B.parent/'integration';R=I/'through285-generated-reproduction';W=B.parents[1]/'campaign-worktree';O=I/'through285-generated-reproduction-root-acceptance';HEAD='fb9182dc6fca2230be3bc5169ba1288a22430280'
+ def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+ def js(p):return json.loads(p.read_bytes())
+ f=js(R/'freeze.json');assert isinstance(f['files'],dict)
+@@ -21,12 +22,6 @@
+ assert len(f['files'])==f['file_count'] and sum(r['bytes'] for r in f['files'].values())==f['total_bytes']
+ for n,r in f['files'].items():assert pin((R/n).read_bytes())==r
+ release=js(R/'root-runtime-release.json')
+-history=release['prior_failed_runtime'];prior_failed=Path(history['directory']);prior_map=Path(history['inventory']['path'])
+-assert pin(prior_map.read_bytes())=={k:history['inventory'][k] for k in ('bytes','sha256')}
+-failed_files=js(prior_map);assert failed_files['root']==str(prior_failed) and len(failed_files['files'])==history['files']==3043
+-assert {str(p.relative_to(prior_failed)) for p in prior_failed.rglob('*') if p.is_file()}==set(failed_files['files'])
+-for name,expected in failed_files['files'].items():assert pin((prior_failed/name).read_bytes())==expected
+-assert not(prior_failed/'executions').exists() and js(prior_failed/'caller-runs/prepare/execution.json')['exit']==1
+ for r in release['code_mapping']:assert Path(r['original']).read_bytes()==Path(r['copy']).read_bytes() and pin(Path(r['copy']).read_bytes())=={k:r[k] for k in ('bytes','sha256')}
+ execution=js(R/'execution-proof.json');retention=js(R/'retention-proof.json');checks=js(R/'retention-checks.json')
+ assert execution['status']==retention['status']=='PASS' and len(execution['runs'])==2 and len(execution['outputs'])==7
+@@ -57,18 +52,18 @@
+  cp=R/('workspace' if rel.startswith('data/') and rel.endswith('.gz') else 'previous-generated')/rel
+  assert pin(cp.read_bytes())['sha256']==h
+  if rel.endswith('.gz'):assert cp.read_bytes()==(W/rel).read_bytes()
+-entry=js(B/'reproduction-root-entry-attempt02/proof.json')
++entry=js(B/'reproduction-root-entry/proof.json')
+ assert entry['status']=='PASS_BEFORE_INDEPENDENT_RUNTIME' and entry['head']==HEAD and entry['baseline_hashes']==base['sha256']
+ state_commands=[('head',['rev-parse','HEAD']),('tracked_status',['status','--porcelain=v1','--untracked-files=no']),('untracked',['ls-files','--others','--exclude-standard','-z']),('stages',['ls-files','--stage','-z']),('cached_names',['diff','--cached','--name-only','-z'])]
+ assert set(entry['state'])=={x[0] for x in state_commands}|{'index'}
+ def verify_entry_state(boundary):
+  results={}
+  for label,args in state_commands:
+-  expected=(B/'reproduction-root-entry-attempt02'/(label+'.bin')).read_bytes();assert pin(expected)==entry['state'][label]
++  expected=(B/'reproduction-root-entry'/(label+'.bin')).read_bytes();assert pin(expected)==entry['state'][label]
+   actual=git(args);assert actual==expected;results[label]=pin(actual)
+  indexpath=Path(git(['rev-parse','--git-path','index']).decode().strip());indexpath=indexpath if indexpath.is_absolute() else W/indexpath
+  assert str(indexpath.resolve())==entry['index_path']
+- expected=(B/'reproduction-root-entry-attempt02/index.bin').read_bytes();assert pin(expected)==entry['state']['index']
++ expected=(B/'reproduction-root-entry/index.bin').read_bytes();assert pin(expected)==entry['state']['index']
+  s=indexpath.stat();actual=indexpath.read_bytes();t=indexpath.stat()
+  assert actual==expected and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)
+  results['index']=pin(actual);(O/(boundary+'-state.json')).write_text(json.dumps(results,indent=2)+'\n')
+@@ -94,7 +89,7 @@
+ assert git(['rev-parse','HEAD']).decode().strip()==HEAD
+ for n,r in f['files'].items():assert pin((R/n).read_bytes())==r
+ closure=js(R/'final-proof.json');assert closure['status']=='PASS_REPRODUCTION_AND_LOCAL_RETENTION' and closure['counts']==retention['counts'] and closure['checks_total']==PENDING_CHECKS_TOTAL
+-assert closure['failure_attempts']==1 and closure['input_aliases']==len(manifest) and closure['actual_layer_invocations']==closure['actual_view_invocations']==1 and closure['actual_new_ctest_invocations']==0
++assert closure['input_aliases']==len(manifest) and closure['actual_layer_invocations']==closure['actual_view_invocations']==1 and closure['actual_new_ctest_invocations']==0
+ closure_source=Path(PENDING_ACTUAL_CLOSURE_SOURCE);assert (R/'close-evidence.py.txt').read_bytes()==closure_source.read_bytes()
+ for label,script in [('prepare','prepare.py.txt'),('run-once','run-once.py.txt'),('retention','verify-retention.py.txt'),('close-evidence','close-evidence.py.txt')]:
+  d=R/'caller-runs'/label;c=js(d/'command.json');e=js(d/'execution.json')

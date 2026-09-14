@@ -1,0 +1,17 @@
+"""Execute the unchanged real canonical script; constrain SQLite opens to read-only URI."""
+import os,runpy,sqlite3,sys
+from pathlib import Path
+assert sys.dont_write_bytecode
+work = Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+original_connect=sqlite3.connect
+def readonly_connect(database,*args,**kwargs):
+    path=Path(database).resolve()
+    assert path== (work/'build/hgm_spine_v27_2.db').resolve(), path
+    kwargs['uri']=True
+    connection=original_connect(path.as_uri()+'?mode=ro',*args,**kwargs)
+    connection.execute('PRAGMA query_only=ON')
+    return connection
+sqlite3.connect=readonly_connect
+os.chdir(work)
+sys.argv=[str(work/'tools/gen_alignment_page.py')]
+runpy.run_path(sys.argv[0],run_name='__main__')

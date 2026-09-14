@@ -1,0 +1,45 @@
+from pathlib import Path
+import sqlite3,json,hashlib,os,sys,subprocess,datetime,importlib.util,gzip
+D=Path(__file__).resolve().parent;B=D.parent;A=B.parent;ROOT=A.parent;W=ROOT/'campaign-worktree';I=A/'integration';BASE='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert sys.dont_write_bytecode and __debug__
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,o):
+ p=D/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(o,f,indent=2,ensure_ascii=False);f.write('\n')
+def run(a,label):
+ r=subprocess.run(a,cwd=W,input=b'',capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0',GIT_OPTIONAL_LOCKS='0'))
+ d=D/'calls'/label;d.mkdir(parents=True)
+ for n,b in [('stdin.bin',b''),('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(d/n).write_bytes(b)
+ obj=dict(argv=a,cwd=str(W),exit=r.returncode,stdout=pin(r.stdout),stderr=pin(r.stderr));save('calls/'+label+'/command.json',obj)
+ assert r.returncode==0 and not r.stderr;return r.stdout
+head=run(['git','rev-parse','HEAD'],'head-before');assert head.decode().strip()==BASE
+status=run(['git','status','--short'],'status-before')
+base=json.loads((B/'baseline.json').read_bytes());assert base['commit']==BASE
+for n,h in base['sha256'].items():assert pin((W/n).read_bytes())['sha256']==h,n
+paths=[B/'baseline.json',B/'source.json',B/'context.json',A/'proposal-protocol.md',A/'copy_evidence_once_v2.py',A/'copy_evidence_once_v2-verification.json']
+gov=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/alignment_briefs/PROPOSE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/errata_register.json','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/test_no_supplied_span_head.py']
+records=[]
+for idx,n in enumerate(gov):
+ raw=run(['git','show',BASE+':'+n],f'governing-{idx:02d}');assert raw==(W/n).read_bytes()
+ target=D/'governing'/f'{idx:02d}-{Path(n).name}';target.parent.mkdir(exist_ok=True);target.write_bytes(raw)
+ records.append({'object':BASE+':'+n,'argv':['git','show',BASE+':'+n],'cwd':str(W),'exit':0,'copy':str(target.relative_to(D)),**pin(raw)})
+paths += [W/n for n in gov]
+physical=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt')
+paths += [physical,W/'data/hgm_dictionary_v27_2.json.gz',W/'data/full_parallel_corpus_v32.json.gz']
+helper=A/'copy_evidence_once_v2.py';assert pin(helper.read_bytes())['sha256']=='b8eabf4b53c29174d7f67c2f723007d429edc1e153ee3e5b32ff0a6e6fa147d1'
+spec=importlib.util.spec_from_file_location('approved_evidence_copy_v2',helper);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+result=m.preserve(D,D/'original-copy-manifest.json',paths);save('copy-proof.json',{'selected_helper':str(helper),**pin(helper.read_bytes()),'approval':str(A/'copy_evidence_once_v2-verification.json'),'result':result})
+save('original-aliases.json',[{'logical':str(p),'resolved':str(p.resolve()),'symlink':os.readlink(p) if p.is_symlink() else None,**pin(p.read_bytes())} for p in paths]);save('governing.json',{'commit':BASE,'actual_runs':records})
+dbp=W/'build/hgm_spine_v27_2.db';before=pin(dbp.read_bytes());uri=dbp.resolve().as_uri()+'?mode=ro';db=sqlite3.connect(uri,uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON');assert db.execute('PRAGMA query_only').fetchone()[0]==1;db.execute('BEGIN')
+queries=[]
+def query(label,sql,params):
+ rows=[dict(r) for r in db.execute(sql,params)];q={'label':label,'sql':sql,'parameters':params,'count':len(rows),'rows':rows};queries.append(q);save('queries/'+label+'.json',q);return rows
+schema=query('00-schema',"SELECT name,sql FROM sqlite_master WHERE type='table' AND name IN ('entries','hgm_entries','dictionary_entries','corpus_segments') ORDER BY name",[])
+context=query('01-context','SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',277,291]);save('context-rows-full.json',context)
+source=[{k:r[k] for k in ['id','course','seq','acip','wylie','english']} for r in context if 283<=r['seq']<=285];assert source==json.loads((B/'source.json').read_bytes());save('source-rows-full.json',[r for r in context if 283<=r['seq']<=285])
+assert [{k:r[k] for k in ['id','course','seq','acip','wylie','english']} for r in context]==json.loads((B/'context.json').read_bytes())
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));course=[r for r in corpus if r['course']=='C05'];assert all(json.loads(r['raw'])==course[r['seq']-1] for r in context)
+save('raw-source-archive-equality.json',[{'seq':r['seq'],'raw_object':json.loads(r['raw']),'full_object_equals_course_archive_index':r['seq']-1} for r in context])
+db.rollback();db.close();assert pin(dbp.read_bytes())==before
+save('source-proof01.json',{'status':'PASS_CURRENT_SOURCE_CONTEXT_GOVERNANCE_COPIES','baseline':BASE,'database':{'path':str(dbp),'uri':uri,**before},'query_only':True,'source_rows':len(source),'context_rows':len(context),'queries':len(queries),'full_raw_archive_equality':True,'physical_original':{'path':str(physical),**pin(physical.read_bytes())},'no_proposals_or_root_leads_read':True,'no_specs_or_decisions_written':True})
+print(json.dumps({'status':'PASS_CURRENT_SOURCE_CONTEXT_GOVERNANCE_COPIES','schema':schema,'source_rows':len(source),'context_rows':len(context),'copies':result,'spine':before},indent=2))

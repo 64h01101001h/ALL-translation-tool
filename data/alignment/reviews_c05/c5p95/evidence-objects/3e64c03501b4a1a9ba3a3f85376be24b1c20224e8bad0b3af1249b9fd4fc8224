@@ -1,0 +1,74 @@
+"""Independent Tibetan-first full source and lexical evidence; SQLite read-only."""
+from pathlib import Path
+import datetime,gzip,hashlib,json,os,sqlite3
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');W=R/'campaign-worktree';B=R/'campaign-artifacts/C05-283-285';O=B/'tibetan/283';E=O/'evidence'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def desc(p):
+ p=Path(p);q=p.resolve(strict=True);a=q.stat();b=q.read_bytes();z=q.stat();assert len(b)==z.st_size and all(getattr(a,k)==getattr(z,k) for k in ('st_dev','st_ino','st_size','st_mtime_ns','st_ctime_ns'))
+ return b,dict(original=str(p),resolved=str(q),symlinks=[dict(path=str(x),target=os.readlink(x)) for x in (*reversed(p.parents),p) if x.is_symlink()],**pin(b))
+def write(n,b):
+ p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb') as f:f.write(b)
+def save(n,v):write(n,(json.dumps(v,indent=2,ensure_ascii=False,allow_nan=False)+'\n').encode())
+assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+source=json.loads((B/'source.json').read_bytes());context=json.loads((B/'context.json').read_bytes());baseline=json.loads((B/'baseline.json').read_bytes())
+assert baseline['commit']=='fb9182dc6fca2230be3bc5169ba1288a22430280'
+copies=[];originals=[]
+for path,name in [(B/'tibetan-brief.md','governing/tibetan-brief.md'),(R/'campaign-artifacts/proposal-protocol.md','governing/proposal-protocol.md'),(W/'AGENTS.md','governing/AGENTS.md'),(W/'docs/ALIGNMENT_LAYER_SPEC.md','governing/ALIGNMENT_LAYER_SPEC.md'),(W/'docs/alignment_briefs/PROPOSE_BRIEF.md','governing/PROPOSE_BRIEF.md'),(W/'data/alignment/C05_CAMPAIGN.md','governing/C05_CAMPAIGN.md'),(W/'docs/NEVER_BANK_A_FALSEHOOD.md','governing/NEVER_BANK_A_FALSEHOOD.md'),(W/'docs/errata_register.json','governing/errata_register.json'),(B/'source.json','snapshots/source.json'),(B/'context.json','snapshots/context.json'),(B/'baseline.json','snapshots/baseline.json'),(W/'tools/gen_alignment_page.py','canonical/gen_alignment_page.py.txt'),(W/'tools/build_alignment_layer.py','canonical/build_alignment_layer.py.txt'),(W/'engines/hgm_tools.py','canonical/hgm_tools.py.txt')]:
+ raw,d=desc(path);write(name,raw);copies.append(dict(**d,copy=name))
+db=W/'build/hgm_spine_v27_2.db';raw,dbpin=desc(db);originals.append(dict(**dbpin,retention='external',disposition='Complete original immutable read-only spine; exact full rows and query records preserved below'))
+uri=db.resolve().as_uri()+'?mode=ro';c=sqlite3.connect(uri,uri=True);c.execute('PRAGMA query_only=ON');c.row_factory=sqlite3.Row
+queries=[]
+def q(label,sql,params=()):
+ rows=[dict(r) for r in c.execute(sql,params)];queries.append(dict(label=label,sql=sql,parameters=list(params),row_count=len(rows),rows=rows));return rows
+q('query-only','PRAGMA query_only');q('metadata','SELECT * FROM meta ORDER BY key');q('schema',"SELECT name,sql FROM sqlite_master WHERE type='table' AND name IN ('corpus_segments','entries','entry_variants','meta') ORDER BY name")
+selected=q('selected-full-original-rows','SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',283,285))
+neighbors=q('complete-context-original-rows','SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',277,291))
+fields=['id','course','seq','acip','wylie','english'];assert [{k:r[k] for k in fields} for r in selected]==source;assert [{k:r[k] for k in fields} for r in neighbors]==context
+terms=['byas pa','kho','na re','skyon','med','yan lag','lnga','skyes bu','cha shas','yin','bya ba','byas',"'jog",'dgos','phyir','snga ma','mtshungs','rnag khrag','rnag','khrag','sogs','dngos po','gsum','brlan','brlan zhing gsher ba','gsher ba','phor pa','gang','snang ba','steng','snang tshul',"mi 'dra ba",'kha cig','phan tshun','go sa',"'gog pa",'las can','las',"'gro ba",'chu','cig car','cig car du','bltas','tshad','tshad grub','tshad grub pa','grub','srid','khas blangs']
+entries={}
+for term in terms:
+ hits=q('HGM-and-full-entry:'+term,'SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id',(term,term))
+ for r in hits:entries[r['id']]=r
+parallel=[]
+for r in selected:
+ hits=q('full-text-parallels:'+str(r['seq']),'SELECT * FROM corpus_segments WHERE wylie=? OR english=? ORDER BY course,seq',(r['wylie'],r['english']));parallel+=hits
+for term in ["go sa 'gog",'brlan zhing gsher ba','tshad grub','des bya ba byas','yan lag lnga',"'jog dgos"]:
+ q('corpus-compound-context:'+term,'SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq',(term,))
+q('enumerative-other-two-context','SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND instr(english,?)>0 ORDER BY course,seq',('sogs','other two'))
+c.close();save('sqlite-query-results.json',dict(database=dbpin,uri=uri,query_only=True,queries=queries));save('selected-full-rows.json',selected)
+master_raw,md=desc(W/'data/hgm_dictionary_v27_2.json.gz');corpus_raw,cd=desc(W/'data/full_parallel_corpus_v32.json.gz');assert md['sha256']==baseline['sha256']['data/hgm_dictionary_v27_2.json.gz'];assert cd['sha256']==baseline['sha256']['data/full_parallel_corpus_v32.json.gz']
+master=json.loads(gzip.decompress(master_raw));masterrows=[]
+for entryid,row in sorted(entries.items()):
+ original=master['unified_entries'][entryid-1];assert original==json.loads(row['raw']);masterrows.append(dict(spine_entry_id=entryid,zero_based_master_index=entryid-1,entry=original))
+save('full-master-entry-evidence.json',dict(source=md,selection='unified_entries at spine id minus one, exact JSON object equality to complete entries.raw',records=masterrows))
+corpus=json.loads(gzip.decompress(corpus_raw));counts={};cr=[]
+for i,row in enumerate(corpus):
+ course=row['course'];counts[course]=counts.get(course,0)+1
+ if course=='C05' and 277<=counts[course]<=291:
+  expected=next(x for x in neighbors if x['seq']==counts[course]);assert row==json.loads(expected['raw']);cr.append(dict(zero_based_index=i,course_seq=counts[course],row=row))
+save('full-corpus-record-evidence.json',dict(source=cd,selection='course sequence obtained by counting original corpus order within each course; exact JSON object equality to corpus_segments.raw',records=cr))
+for d in [md,cd]:originals.append(dict(**d,retention='external',disposition='Complete original immutable gzip retained at exact original/resolved path; complete material extracted original records preserved, no master mutation'))
+physical_root=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII')
+physical=[]
+for course in sorted({'C05'}|{r['course'] for r in parallel}):
+ path=physical_root/(course+'ReadingASCII.txt')
+ if not path.is_file():physical.append(dict(course=course,path=str(path),available=False,independent_publication_not_inferred=True));continue
+ raw,d=desc(path);name='physical/'+course+'ReadingASCII.txt';write(name,raw);copies.append(dict(**d,copy=name));hits=[]
+ for target in selected:
+  needle=target['acip'].encode();start=0
+  while True:
+   at=raw.find(needle,start)
+   if at<0:break
+   end=raw.find(b'\r\n\r\n',at)
+   if end<0:end=raw.find(b'\n\n',at)
+   if end<0:end=len(raw)
+   block=raw[at:end];rest=block[len(needle):];folded=b' '.join(rest.split()).decode('utf-8')
+   hits.append(dict(target_seq=target['seq'],acip_byte_range=[at,at+len(needle)],physical_block_byte_range=[at,end],acip_line=raw[:at].count(b'\n')+1,full_raw_block=block.decode('utf-8'),line_wrap_collapsed_english=folded,english_equal_to_spine=folded==target['english']))
+   start=at+len(needle)
+ physical.append(dict(course=course,available=True,source=d,hits=hits,independent_publication_not_inferred=True))
+save('physical-source-extents.json',physical)
+save('original-to-copy-map.json',copies);save('large-originals-retained-externally.json',originals)
+summary=dict(status='PASS_INDEPENDENT_TIBETAN_FIRST_SOURCE_VERIFICATION',producer='Codex',role='Tibetan-first proposer C05:283-285',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),baseline=baseline['commit'],six_fields=fields,selected_rows=3,context_rows=len(neighbors),queries=len(queries),full_entry_records=len(entries),complete_master_records_equal=True,complete_corpus_records_equal=True,physical_files=[x['course'] for x in physical if x['available']],other_angle_or_root_judgments_read=False)
+save('source-proof.json',summary);print(json.dumps(summary))
+print(json.dumps([dict(term=r['label'],hits=[dict(wylie=x['wylie'],hgm_gloss=x['hgm_gloss'],tier=x['tier']) for x in r['rows']]) for r in queries if r['label'].startswith('HGM')],ensure_ascii=False))

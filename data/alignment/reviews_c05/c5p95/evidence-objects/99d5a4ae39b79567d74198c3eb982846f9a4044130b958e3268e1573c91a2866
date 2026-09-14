@@ -1,0 +1,14 @@
+from pathlib import Path
+import difflib,hashlib,json
+O=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/tibetan/283')
+assert __debug__
+changes=[('run-generator-ro.py.txt','run-generator-ro-v2.py.txt',[("W/'tools/hgm_tools.py'","W/'engines/hgm_tools.py'")]),('run-canonical-attempt.py.txt','run-canonical-attempt-v2.py.txt',[("C=O/'canonical-attempt01'","attempt=sys.argv[2];assert attempt in ['01','02'];C=O/('canonical-attempt'+attempt)"),("283/run-generator-ro.py.txt","283/run-generator-ro-v2.py.txt")])]
+records=[]
+for old,new,replacements in changes:
+    before=(O/old).read_text();after=before
+    for a,b in replacements:assert after.count(a)==1;after=after.replace(a,b)
+    for n,s in [(new,after),(new+'.forward.diff',''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile=old,tofile=new))),(new+'.inverse.diff',''.join(difflib.unified_diff(after.splitlines(True),before.splitlines(True),fromfile=new,tofile=old)))]:
+        with (O/n).open('x') as f:f.write(s)
+    records.append({'old':old,'new':new,'replacement_map':replacements,'old_sha256':hashlib.sha256(before.encode()).hexdigest(),'new_sha256':hashlib.sha256(after.encode()).hexdigest()})
+with (O/'launcher-correction.json').open('x') as f:json.dump({'reason':'First 283 invocation failed in the wrapper dependency pin guard before runpy or any SQLite connection. Canonical build_alignment_layer.py imports engines/hgm_tools.py, already present in the original-to-copy map. The wrapper v2 corrects only that path. The new attempt recorder accepts an explicit attempt number and points to the v2 wrapper; originals and actual failed streams remain unchanged. No spec, generator or source correction.','changes':records},f,indent=2);f.write('\n')
+print(json.dumps({'status':'SOURCE_PATH_CORRECTED','new_wrapper':'run-generator-ro-v2.py.txt','prior_actual_failure_retained':'canonical-attempt01'}))

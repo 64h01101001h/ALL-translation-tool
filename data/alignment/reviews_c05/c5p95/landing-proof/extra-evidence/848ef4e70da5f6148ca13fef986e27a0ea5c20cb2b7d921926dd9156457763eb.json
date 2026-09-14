@@ -1,0 +1,47 @@
+[
+  {
+    "angle": "tibetan",
+    "seq": 283,
+    "descriptor": {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/tibetan/283/evidence/sqlite-query-results.json",
+      "copy": "inputs/original-descriptors/tibetan-283/evidence/sqlite-query-results.json",
+      "bytes": 698872,
+      "sha256": "d70f0a5503c39a760a9b8da4d1e9d7957fbc05e4989e9b592fdfdf468f7684f7"
+    },
+    "binding": {
+      "kind": "query_container_parameters",
+      "index": 0
+    },
+    "source_index": 0,
+    "outer_keys": [
+      "database",
+      "uri",
+      "query_only",
+      "queries"
+    ],
+    "record_keys": [
+      "label",
+      "sql",
+      "parameters",
+      "row_count",
+      "rows"
+    ],
+    "sql": "PRAGMA query_only",
+    "parameters": [],
+    "row_count": 1,
+    "count_present": false,
+    "row_count_present": true,
+    "full_original_control_record": {
+      "label": "query-only",
+      "sql": "PRAGMA query_only",
+      "parameters": [],
+      "row_count": 1,
+      "rows": [
+        {
+          "query_only": 1
+        }
+      ]
+    },
+    "disposition": "Retain full original container/map and this exact indexed control record outside the SELECT replay inventory. Never turn PRAGMA into SELECT or bind it as lexical evidence."
+  }
+]

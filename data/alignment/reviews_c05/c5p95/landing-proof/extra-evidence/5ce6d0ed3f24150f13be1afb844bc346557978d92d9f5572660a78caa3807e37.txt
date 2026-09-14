@@ -1,0 +1,137 @@
+"""Enumerate complete current evidence after accepted independent reproduction.
+
+This script only writes a fresh external inventory. It never banks, stages,
+changes sources, or manufactures acceptance. Later caller/ordinary-bank outputs
+are explicitly outside its boundary and must be included by the final phase.
+"""
+from pathlib import Path
+import datetime, hashlib, json, os
+
+B = Path(__file__).resolve().parent
+A = B.parent
+I = A / 'integration'
+W = A.parent / 'campaign-worktree'
+O = I / 'through282-ordinary-bank-inventory'
+BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
+R = I / 'through282-generated-reproduction'
+ACCEPT = I / 'through282-generated-reproduction-root-acceptance'
+
+def pin(raw):
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+def read(path):
+    before = path.stat()
+    value = path.read_bytes()
+    after = path.stat()
+    fields = lambda s: (s.st_dev, s.st_ino, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+    assert fields(before) == fields(after), ('changed during read', str(path))
+    return value
+
+def j(path):
+    return json.loads(read(path))
+
+assert not O.exists()
+accepted = j(ACCEPT / 'proof.json')
+assert accepted['status'] == 'PASS' and accepted['head'] == BASE
+assert j(B / 'baseline.json')['commit'] == BASE
+assert j(B / 'root-payload-result-acceptance.json')['payload_files'] == 13
+roots = [B, R, ACCEPT, I / 'through282-root-reconciliation-verification-attempt01']
+assert all(p.is_dir() and not O.is_relative_to(p) for p in roots)
+# The currently active outer recorder is an explicit later boundary. Source
+# preparation, failed attempts, checkpoints, and every other B file are included.
+deferred = [B / 'ordinary-inventory-caller']
+helpers = [A / name for name in [
+    'record_external_step.py', 'land_reviewed_page_v2.py',
+    'verify_semantic_acceptance.py', 'verify_review_copy_and_register.py',
+    'run_reviewed_builders_once.py', 'verify_landed_batch.py',
+    'verify_course_csv.py', 'run_generator_readonly.py',
+    'run_tool_readonly_sqlite.py', 'copy_evidence_once_v2.py',
+    'prepare_semantic_package_v2.py',
+]]
+assert all(p.is_file() for p in helpers)
+
+def census():
+    return {p for root in roots for p in root.rglob('*')
+            if p.is_file() and not any(p.is_relative_to(d) for d in deferred)} | set(helpers)
+
+paths = census()
+assert all(p.is_relative_to(A) for p in paths)
+semantic = B / 'semantic-review'
+landed = W / 'data/alignment/reviews_c05/c5p94'
+sf = j(semantic / 'freeze.json')
+assert pin(read(semantic / 'freeze.json'))['sha256'] == '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
+assert {str(p.relative_to(semantic)) for p in semantic.rglob('*') if p.is_file()} == set(sf['files']) | {'freeze.json'}
+bank_index = {}
+for name in list(sf['files']) + ['freeze.json']:
+    source, copy = semantic / name, landed / name
+    raw = read(source)
+    assert read(copy) == raw
+    if name != 'freeze.json':
+        assert pin(raw) == sf['files'][name]
+    key = (len(raw), pin(raw)['sha256'])
+    bank_index.setdefault(key, copy)
+
+records, coverage, new_content = [], [], {}
+supported = {'.json', '.md', '.html', '.stderr', '.stdout', '.log', '.txt', '.bin', '.exit'}
+for source in sorted(paths):
+    raw = read(source)
+    value = pin(raw)
+    key = (value['bytes'], value['sha256'])
+    row = dict(original=str(source), resolved=str(source.resolve()),
+               symlink=os.readlink(source) if source.is_symlink() else None, **value)
+    if source.is_relative_to(B / 'landing'):
+        # The banker itself inventories every landing file and validates it.
+        row.update(coverage='automatic-complete-landing-inventory')
+    elif key in bank_index:
+        existing = bank_index[key]
+        assert read(existing) == raw  # Hash equality alone never licenses reuse.
+        disposition = 'Complete original retained here and byte-identical to the already banked semantic source at ' + str(existing)
+        records.append(dict(original=str(source), retention='external', disposition=disposition, **value))
+        row.update(coverage='explicit-existing-full-copy', banked_copy=str(existing))
+    elif len(raw) >= 2_000_000:
+        disposition = 'Complete large original retained at this exact pinned path; no truncation, normalization, or missing suffix selection.'
+        records.append(dict(original=str(source), retention='external', disposition=disposition, **value))
+        row.update(coverage='explicit-complete-external')
+    else:
+        if key in new_content:
+            first, target = new_content[key]
+            assert read(first) == raw
+            # Downstream whitespace/staging maps require one bank record per
+            # destination. Preserve this complete alias as an external record,
+            # explicitly linking the first full copy planned by this inventory.
+            disposition = 'Complete original retained here; byte-identical to ' + str(first) + ', whose full new bank copy is planned at landing-proof/' + target
+            records.append(dict(original=str(source), retention='external', disposition=disposition, **value))
+            row.update(coverage='explicit-deduplicated-new-copy', copy=target, first_original=str(first))
+        else:
+            suffix = source.suffix.lower()
+            suffix = suffix if suffix in supported else '.txt' if suffix in {'.py', '.sh', '.diff', '.patch', '.jsonl'} else '.bin'
+            target = 'extra-evidence/' + value['sha256'] + suffix
+            new_content[key] = (source, target)
+            records.append(dict(original=str(source), retention='bank', copy=target, **value))
+            row.update(coverage='explicit-full-copy', copy=target)
+    coverage.append(row)
+
+assert paths == census(), 'Evidence tree changed during inventory; preserve attempt and retry only after resolving it'
+for row in coverage:
+    source = Path(row['original'])
+    assert pin(read(source)) == {k: row[k] for k in ['bytes', 'sha256']}
+    assert str(source.resolve()) == row['resolved']
+    assert (os.readlink(source) if source.is_symlink() else None) == row['symlink']
+O.mkdir()
+for name, value in [
+    ('extra-inputs.json', records), ('coverage-and-exclusion-map.json', coverage),
+    ('scope.json', dict(roots=list(map(str, roots)), explicit_helper_files=list(map(str, helpers)),
+                       deferred_active_caller_directories=list(map(str, deferred)),
+                       later_outputs='This inventory and its later caller, ordinary bank output/caller, staging/whitespace and subsequent ledger/commit proofs must be captured at a truthful later boundary.')),
+]:
+    (O / name).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+counts = {}
+for row in coverage:
+    counts[row['coverage']] = counts.get(row['coverage'], 0) + 1
+proof = dict(status='PASS_COMPLETE_ACTUAL_PRE_ORDINARY_INVENTORY', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             head=BASE, sources=len(coverage), counts=counts, records=len(records),
+             distinct_new_full_copies=len(new_content), manifest=pin(read(O / 'extra-inputs.json')),
+             required_reproduction_acceptance=pin(read(ACCEPT / 'proof.json')),
+             boundary='Every current file under the four listed roots plus eleven complete helper sources; only the named active caller is deferred. Full identical content may share a copy after complete-byte comparison. This is source inventory, not bank/stage/semantic/consumer acceptance.')
+(O / 'proof.json').write_text(json.dumps(proof, indent=2) + '\n')
+print(json.dumps(proof, indent=2))

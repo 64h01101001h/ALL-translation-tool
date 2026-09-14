@@ -1,0 +1,125 @@
+from pathlib import Path
+import ast,datetime,difflib,hashlib,json,os
+assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+P=Path(__file__).resolve().parent;ROOT=P.parents[2];I=ROOT/'campaign-artifacts/integration';B=ROOT/'campaign-artifacts/C05-283-285';R=B/'reconciled';D=R/'283'
+OLD=I/'through285-reconciliation-config-preparation';FAILED=R/'root-runtime-inputs';N=R/'root-runtime-inputs-v2';CALLER=I/'through285-current-config-construction-caller'
+assert P.name=='through285-reconciliation-config-preparation-v2'and not N.exists()
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def ref(p):return {'path':str(p),**bp(p.read_bytes())}
+def load(p):return json.loads(p.read_bytes())
+def save(n,x):write(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+def write(n,b):
+ p=P/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb')as f:f.write(b)
+maps=[]
+def preserve(original,dest):
+ b=original.read_bytes();write(dest,b);assert original.read_bytes()==b
+ row={'original':str(original),'resolved_original':str(original.resolve()),'copy':dest,**bp(b)};maps.append(row);return row
+oldfreeze=OLD/'freeze.json';assert ref(oldfreeze)['sha256']=='30cfbd427790b313047cc6624cc64a89c904a34e3d5c98533cd28e87024b2704'
+f=load(oldfreeze);assert len(f['files'])==272
+assert {r['path']for r in f['files']}=={str(p.relative_to(OLD))for p in OLD.rglob('*')if p.is_file()and p!=oldfreeze}
+for row in f['files']:
+ p=OLD/row['path'];assert bp(p.read_bytes())=={k:row[k]for k in ['bytes','sha256']};preserve(p,'prior-preparation/'+row['path'])
+preserve(oldfreeze,'prior-preparation/freeze.json')
+for p in sorted(CALLER.rglob('*')):
+ if p.is_file():preserve(p,'failed-construction-caller/'+str(p.relative_to(CALLER)))
+assert load(FAILED/'construction-proof.json')['status']=='FAILED_CONSTRUCTION_ONLY'
+failed=[]
+for p in sorted(FAILED.rglob('*')):
+ if p.is_file():failed.append(preserve(p,'failed-runtime-inputs/'+str(p.relative_to(FAILED))))
+assert len(failed)==224
+save('failed-runtime-inputs-manifest.json',failed)
+source=(OLD/'construct-current-config.py.txt').read_text()
+assert bp(source.encode())=={'bytes':16560,'sha256':'86563332f035da1845fe6b1794e37aea9cd94f2faf52b17c19cd1abf785919a7'}
+replacements=[]
+def replace(before,after,reason):
+ global source
+ assert source.count(before)==1,(reason,source.count(before))
+ replacements.append({'before':before,'after':after,'occurrences':1,'reason':reason});source=source.replace(before,after,1)
+replace("N=R/'root-runtime-inputs';W=ROOT/'campaign-worktree'","N=R/'root-runtime-inputs-v2';W=ROOT/'campaign-worktree'",'Use fresh v2 output; preserve original failed subtree in place.')
+replace("assert P.name=='through285-reconciliation-config-preparation'and not N.exists()and not N.is_symlink()","assert P.name=='through285-reconciliation-config-preparation-v2'and not N.exists()and not N.is_symlink()",'Bind exact v2 preparation location; ROOT remains derived from same three-level path.')
+replace(" assert extra_before==plan['existing_outside_historical_boundary']", """ assert extra_before==plan['existing_outside_historical_boundary']
+ failed=R/'root-runtime-inputs';failed_rows=load(P/'failed-runtime-inputs-manifest.json')
+ assert len(failed_rows)==224 and load(failed/'construction-proof.json')['status']=='FAILED_CONSTRUCTION_ONLY'
+ expected_failed=set()
+ for row in failed_rows:
+  original=Path(row['original']);assert original.is_relative_to(failed)
+  name=str(original.relative_to(failed));assert name not in expected_failed;expected_failed.add(name)
+  assert check(original,row)==check(P/relative(row['copy']),row)
+ assert expected_failed=={str(p.relative_to(failed))for p in failed.rglob('*')if p.is_file()}""",'Preflight exact retained failed224-file census and bytes before any output mutation.')
+replace(" copy_ref=emit('copy-manifest.json',maps)", """ # The eleven frozen reconciler-created descriptors are genuine originals,
+ # absent from the old623-record map. Preserve complete bytes in new v2 copies.
+ queryplans=load(P/'query-binding-plan.json')
+ existing={r['original']:r for r in maps};assert len(existing)==623
+ missing={r['descriptor']['path']for r in queryplans if r['descriptor']['path']not in existing}
+ expected_missing={str(D/'queries'/f'{i:03d}.json')for i in range(199,210)}
+ assert missing==expected_missing
+ for original in sorted(missing):
+  p=Path(original);name='descriptor-copies/'+p.name;data=raw(p)
+  assert bp(data)==plan['additional_descriptor_pins'][original]
+  newref=emit(name,data)
+  maps.append({'original':original,'copy':str((N/name).relative_to(R)),**bp(data),
+   'disposition':'Complete frozen reconciler-created standalone descriptor copied unchanged into fresh v2 runtime inputs; absent from historical623-row source map.'})
+ assert len(maps)==len({r['original']for r in maps})==634
+ copied={r['original']:r for r in maps};coverage=[]
+ # Complete descriptor-to-map membership, pins and full copy bytes are checked
+ # for all210 operations, including the retained control, before N.mkdir().
+ for planned in queryplans:
+  descriptor=planned['descriptor'];r=copied[descriptor['path']]
+  assert {k:r[k]for k in ['bytes','sha256']}=={k:descriptor[k]for k in ['bytes','sha256']}
+  data=check(descriptor['path'],descriptor);copy=R/relative(r['copy'])
+  if copy.is_relative_to(N):assert data==payloads[str(copy.relative_to(N))]
+  else:assert data==check(copy,r)
+  coverage.append({'source_inventory_index':planned['index'],'descriptor':descriptor,'copy_mapping':r,'category':planned['kind'],'complete_bytes_equal':True})
+ assert len(coverage)==210 and sum(r['category']=='SELECT'for r in coverage)==209
+ emit('descriptor-coverage.json',coverage)
+ copy_ref=emit('copy-manifest.json',maps)""",'Add full11 missing descriptor copies and complete fail-closed map coverage preflight before writes.')
+replace("'projection':'Prefix each copy with 283/; all other fields preserved','records':623", "'projection':'Preserve old623 rows with copy prefix283/ only; append11 explicitly retained full descriptor copies in fresh root-runtime-inputs-v2','original_records':623,'additional_descriptor_records':11,'records':634",'Truthful derived metadata distinguishes unchanged prior mappings from explicit additions.')
+replace("historical_members_preserved=916,new_directory=str(N),SQL_Git_canonical_verifier_executions=0", "historical_members_preserved=916,failed_runtime_members_preserved=224,source_copy_records=634,descriptor_coverage_operations=210,new_directory=str(N),SQL_Git_canonical_verifier_executions=0",'Report preserved failed boundary and actual derived mapping coverage on future success.')
+ast.parse(source)
+write('construct-current-config.py.txt',source.encode())
+save('literal-replacements.json',replacements)
+original=(OLD/'construct-current-config.py.txt').read_text();back=source
+for r in reversed(replacements):
+ assert back.count(r['after'])==1;back=back.replace(r['after'],r['before'],1)
+assert back==original
+for n,a,b,af,bf in [('forward.diff',original,source,'prior-preparation/construct-current-config.py.txt','construct-current-config.py.txt'),('inverse.diff',source,original,'construct-current-config.py.txt','prior-preparation/construct-current-config.py.txt')]:write(n,''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile=af,tofile=bf)).encode())
+old_inputs=load(OLD/'input-source-manifest.json');new_inputs=[{**r,**({'copy':'prior-preparation/'+r['copy']}if 'copy'in r else {})}for r in old_inputs]
+save('input-source-manifest.json',new_inputs)
+preserve(OLD/'query-binding-plan.json','query-binding-plan.json')
+plan=load(OLD/'construction-plan.json');plan['new_output_directory']=str(N)
+plan['existing_outside_historical_boundary']=['root-runtime-inputs/'+str(Path(r['original']).relative_to(FAILED))for r in failed]
+plan['existing_outside_historical_boundary'].sort()
+plan['additional_descriptor_pins']={}
+for n in range(199,210):
+ p=D/'queries'/f'{n:03d}.json';plan['additional_descriptor_pins'][str(p)]=bp(p.read_bytes());preserve(p,'additional-descriptors/'+p.name)
+plan['release_conditions']=[x.replace('Target root-runtime-inputs must','Target root-runtime-inputs-v2 must')for x in plan['release_conditions']]
+plan['retained_failure']={'caller':str(CALLER),'failed_directory':str(FAILED),'files':224,'proof':ref(FAILED/'construction-proof.json'),'snapshot':ref(P/'failed-runtime-inputs-manifest.json'),'reason':'Actual prior construction reached pure validate_config and failed because11 descriptor originals were absent from623-row copy map. No incorrect existing pin was found.'}
+save('construction-plan.json',plan)
+inv=load(OLD/'planned-output-inventory.json')+['descriptor-coverage.json']+[f'descriptor-copies/{n:03d}.json'for n in range(199,210)]
+assert len(inv)==len(set(inv))==237;save('planned-output-inventory.json',sorted(inv))
+saved_config=load(FAILED/'config.json');oldmaps=load(FAILED/'copy-manifest.json');byoriginal={r['original']:r for r in oldmaps}
+missing=[];wrong=[]
+for q in saved_config['queries']:
+ r=q['descriptor'];old=byoriginal.get(r['path'])
+ if old is None:missing.append(r)
+ elif any(r[k]!=old[k]for k in ['bytes','sha256']):wrong.append(r)
+assert len(missing)==11 and not wrong and {r['path']for r in missing}==set(plan['additional_descriptor_pins'])
+save('failure-analysis.json',{'status':'ACTUAL_RETAINED_CONSTRUCTION_FAILURE_DIAGNOSED_FROM_COMPLETE_SAVED_DATA','caller':ref(CALLER/'execution.json'),'failed_proof':ref(FAILED/'construction-proof.json'),'saved_config':ref(FAILED/'config.json'),'saved_copy_map':ref(FAILED/'copy-manifest.json'),'missing_descriptors':missing,'wrong_existing_descriptor_pins':wrong,'original_map_records':623,'new_map_records':634,'reason':'The prior source review did not establish complete descriptor-to-copy-map data coverage. The unchanged validator correctly rejected11 reconciler-created descriptors. This is a genuine target construction failure, not a syntax or proposed-test failure.','constructor_reruns_by_this_preparer':0,'validator_invocations_by_this_preparer':0})
+# Bind unchanged current adapter and its full freeze/interface evidence.
+AD=I/'through285-reconciliation-verifier-query-shape-adapter'
+for name in ['config_contract.py','verify_reconciliation.py','freeze.json','config-preparation-interface.json']:
+ preserve(AD/name,'current-adapter/'+name)
+assert ref(AD/'config_contract.py')==plan['adapter']['contract']and ref(AD/'verify_reconciliation.py')==plan['adapter']['runtime']
+save('source-copy-manifest.json',maps)
+save('metadata-projection-proof.json',{'input_source_manifest':'Only each relative copy path receives prior-preparation/; all original/resolved/alias/full byte pins unchanged. Prior file preserved whole.','query_binding_plan':'Whole byte-identical prior file.','constructor_source_replacements':len(replacements),'full_forward_inverse_byte_identity':True,'adapter_source_unchanged':True,'AST_parse_only':True,'source_root_binding':'P is v2 preparation; ROOT=P.parents[2], same physical depth; output R/root-runtime-inputs-v2 only.','prior_failed_224_files_retained_whole':True,'new_inventory_files':237,'new_freeze_members':236,'constructor_imports':0,'constructor_executions':0,'validator_SQL_Git_canonical_tests':0})
+write('report.md',b'''Prepared v2 source only; no constructor/import/validator/SQL/Git/canonical/test execution.
+
+The actual first construction failed inside the unchanged pure validator: eleven frozen reconciler-created standalone descriptor originals (283/queries/199.json through209.json) were absent from the623-row original-copy map. Complete saved config inspection confirms exactly11 missing descriptors and zero wrong existing pins. The full failed caller and all224 failed output files are copied and pinned here; their originals remain unchanged. Earlier code-only approval did not establish this data-coverage condition.
+
+The narrow correction starts from the exact16,560-byte source. Six explicit source replacements select the fresh v2 preparation/output, verify the old failed224-file boundary, add11 full unchanged descriptor copies with explicit mappings, preflight all210 descriptor operations before output mutation, and truthfully report634 mapping rows. The old623 rows keep only their existing283/ copy-path prefix. No validator or runtime source changes occur. All209 SELECT projections retain their exact original count-key presence and the PRAGMA remains separately retained. Full forward/inverse source diffs and the exact replacement map are preserved.
+
+The new plan lists237 files (236 freeze members). It keeps all916 historical completion members and every existing failed-output byte unchanged before and after future construction. The current whole directory is explicitly larger than its historical916-file snapshot. Root source review and explicit release remain pending. Current adapter pins are unchanged; the constructor has only been AST-parsed. The producer is Codex c05_280_282_english, reusing prior English-original and constructor-author context for tooling correction; no independent semantic approval is claimed.
+''')
+save('preparation-proof.json',{'status':'SOURCE_V2_PREPARATION_COMPLETE_PENDING_REVIEW_RELEASE','finished_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'candidate':ref(P/'construct-current-config.py.txt'),'prior':ref(OLD/'construct-current-config.py.txt'),'prior_freeze':ref(oldfreeze),'actual_failure':ref(P/'failure-analysis.json'),'mapping_records':634,'new_full_descriptor_copies':11,'planned_files':237,'historical_completion_members':916,'preserved_failed_members':224,'source_only':True,'constructor_executions':0,'semantic_approval':False})
+print(json.dumps({'status':'SOURCE_V2_PREPARATION_READY_TO_FREEZE','candidate':ref(P/'construct-current-config.py.txt'),'source_copy_records':len(maps),'planned_files':237,'constructor_executed':False}))

@@ -1,0 +1,108 @@
+[
+  {
+    "before": "through282",
+    "after": "through285",
+    "count": 14,
+    "before_offsets": [
+      199,
+      235,
+      1266,
+      1420,
+      1452,
+      1606,
+      1948,
+      2623,
+      2766,
+      3468,
+      3604,
+      3737,
+      4562,
+      5560
+    ],
+    "after_offsets": [
+      199,
+      235,
+      1266,
+      1420,
+      1452,
+      1606,
+      1948,
+      2623,
+      2766,
+      3468,
+      3604,
+      3737,
+      4562,
+      5560
+    ]
+  },
+  {
+    "before": "C05-280-282",
+    "after": "C05-283-285",
+    "count": 2,
+    "before_offsets": [
+      2527,
+      3553
+    ],
+    "after_offsets": [
+      2527,
+      3553
+    ]
+  },
+  {
+    "before": "5633",
+    "after": "14689",
+    "count": 1,
+    "before_offsets": [
+      3709
+    ],
+    "after_offsets": [
+      3709
+    ]
+  },
+  {
+    "before": "5575",
+    "after": "14630",
+    "count": 1,
+    "before_offsets": [
+      3809
+    ],
+    "after_offsets": [
+      3809
+    ]
+  },
+  {
+    "before": "active_caller=I/'through285-final-supplement-scope-caller'",
+    "after": "active_caller=Path(PENDING_ACTIVE_CALLER)\nassert active_caller==I/'through285-final-supplement-scope-caller'",
+    "count": 1,
+    "before_offsets": [
+      1249
+    ],
+    "after_offsets": [
+      1249
+    ]
+  },
+  {
+    "before": "[I/'release-whitespace282-actual-root.py',I/'accept-whitespace282-actual-root.py']",
+    "after": "[I/'prepare-through285-whitespace-acceptance-source.py']+list(map(Path,PENDING_ADDITIONAL_HELPERS))",
+    "count": 1,
+    "before_offsets": [
+      3254
+    ],
+    "after_offsets": [
+      3254
+    ]
+  },
+  {
+    "before": "",
+    "after": "raise RuntimeError('SOURCE ONLY: actual scope release, quiescent writers, exact caller/helper identities and whitespace pins remain pending')\nPENDING_ACTIVE_CALLER = None\nPENDING_ADDITIONAL_HELPERS = None\nPENDING_WHITESPACE_PINS = None\n",
+    "count": 1,
+    "before_offsets": [
+      0
+    ],
+    "after_offsets": [
+      0
+    ],
+    "kind": "prepend"
+  }
+]

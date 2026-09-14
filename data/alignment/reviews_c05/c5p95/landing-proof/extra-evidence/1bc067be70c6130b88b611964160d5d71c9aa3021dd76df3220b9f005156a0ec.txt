@@ -1,0 +1,213 @@
+"""Prepare full-source adaptations only. No prepared helper is imported or executed."""
+from pathlib import Path
+import ast
+import datetime
+import difflib
+import hashlib
+import json
+import os
+
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+I=R/'campaign-artifacts/integration'
+O=I/'through282-final-intake-scope-preparation'
+OLD=I/'through279-final-bank-inventory-preparation'
+BASE='10968d16e701b698a0e1fbd845b353089d15ac39'
+
+def require(ok, why):
+ if not ok: raise ValueError(why)
+def pin(raw): return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def read(p):
+ p=Path(p);q=p.resolve(strict=True);a=q.stat();raw=q.read_bytes();b=q.stat()
+ require(q.is_file() and tuple(getattr(a,k) for k in ('st_dev','st_ino','st_size','st_mtime_ns','st_ctime_ns'))==tuple(getattr(b,k) for k in ('st_dev','st_ino','st_size','st_mtime_ns','st_ctime_ns')) and len(raw)==b.st_size,('unstable',str(p)))
+ return raw,dict(original=str(p),resolved=str(q),symlinks=[dict(path=str(x),target=os.readlink(x)) for x in (*reversed(p.parents),p) if x.is_symlink()],**pin(raw))
+def write(name,raw):
+ p=O/name;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb') as f:f.write(raw)
+ return dict(path=str(p),**pin(raw))
+def save(name,value):return write(name,(json.dumps(value,indent=2,ensure_ascii=True,allow_nan=False)+'\n').encode())
+
+sources={
+ 'capture-finished-scope.py':OLD/'capture-finished-scope.py',
+ 'assemble-final-supplement.py':OLD/'assemble-final-supplement.py',
+ 'capture-final282-supplement-scope-root.py':I/'capture-final279-supplement-scope-root.py',
+ 'conditional/release-final282-inventory-root.py':I/'release-final279-inventory-root.py',
+ 'conditional/release-final282-supplement-root.py':I/'release-final279-supplement-root.py',
+ 'conditional/verify-final282-initial-inventory-root.py':I/'verify-final279-initial-inventory-root.py',
+ 'conditional/verify-final282-complete-inventory-root.py':I/'verify-final279-complete-inventory-root.py',
+}
+allpins={};maps={};candidatepins={};fidelity={}
+for name,path in sources.items():
+ raw,desc=read(path);allpins[name]=desc;old=raw.decode();text=old;edits=[]
+ def replace(before,after,count=None):
+  global text
+  observed=text.count(before)
+  require(observed>0 and (count is None or observed==count),('replacement count',name,before,observed,count))
+  previous=text;text=text.replace(before,after)
+  edits.append(dict(before=before,after=after,occurrences=observed,input_sha256=pin(previous.encode())['sha256'],output_sha256=pin(text.encode())['sha256']))
+ for before,after in [('through279','through282'),('C05-277-279','C05-280-282'),('c5p93','c5p94'),('f114fcb7a5a899b939ffc948ae9fdbbb746541fa',BASE),('final279','final282')]:
+  if before in text:replace(before,after)
+ if name=='capture-finished-scope.py':
+  replace("P=I/'through282-final-bank-inventory-preparation'","P=I/'through282-final-intake-scope'",1)
+  replace('import ast, hashlib, json, os','import ast, hashlib, json, os, argparse, sys',1)
+  anchor="old=json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes())"
+  prefix='''parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--execute-reviewed-capture',action='store_true',required=True)
+parser.add_argument('--writers-quiescent',action='store_true',required=True)
+parser.add_argument('--extra-file',action='append',default=[])
+args=parser.parse_args()
+assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and not sys.flags.optimize
+assert not P.exists()
+caller=I/'through282-final-intake-scope-caller'
+assert caller.is_dir() and not caller.is_symlink()
+deferred=[P,caller,I/'through282-final-bank-inventory',I/'through282-final-bank-inventory-caller',I/'through282-final-bank-inventory-root-release',I/'through282-final-bank-inventory-root-release-caller']
+assert all(not p.exists() for p in deferred if p not in (P,caller))
+def current_i():return sorted(I.glob('through282*'),key=str)
+initial_i_names=[str(p) for p in current_i()]
+for p in current_i():assert (p.is_file() or p.is_dir()) and not(p.is_symlink() and p.is_dir())
+'''
+  replace(anchor,prefix+anchor,1)
+  begin=text.index("roots=['through282-banking-ordinary'")
+  end=text.index('controls={',begin)
+  replace(text[begin:end],'''assert len(old)==5633 and len(oldpaths)==5633
+assert len(json.loads((I/'through282-ordinary-bank-inventory/extra-inputs.json').read_bytes()))==5575
+for row in old:
+ p=Path(row['original']);d=desc(p)
+ assert {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')} and d['resolved']==row['resolved']
+ assert (os.readlink(p) if p.is_symlink() else None)==row['symlink']
+roots=[str(p.relative_to(I)) for p in current_i() if p.is_dir() and p not in deferred]
+assert 'through282-banking-runs' in roots
+roots.append('through282-banking-runs/ordinary')
+roots=sorted(set(roots))
+''',1)
+  replace("banker=I/'through282-finalization-runtime/bank_root_proofs_through282.py'","banker=B/'bank_root_proofs_through282.py'",1)
+  replace("stage_verifier=I/'through282-finalization-runtime/verify_staged_through282.py'","stage_verifier=I/'through282-final-stage-preparation/verify_staged_through282.py'",1)
+  start=text.index('late=[desc(');end=text.index('automatic=[]',start)
+  replace(text[start:end],'''audit=json.loads(Path(controls['audit_proof']['original']).read_bytes())
+acceptance=json.loads(Path(controls['root_acceptance']['original']).read_bytes())
+assert audit['status']=='PASS actual staged diagnostic reproduced and predicates verified' and audit['mode']=='audit'
+assert audit['baseline_head']=='10968d16e701b698a0e1fbd845b353089d15ac39' and audit['all_warnings_accounted_for'] is True
+assert audit['git_diff_check_exit']==2 and audit['semantic_approval'] is False
+assert acceptance['status']=='PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and acceptance['normalization'] is False
+assert acceptance['literal_warnings']==audit['warning_count']
+assert {k:controls['raw_diagnostic'][k] for k in ('bytes','sha256')}==dict(bytes=audit['raw_log_bytes'],sha256=audit['raw_log_sha256'])
+assert controls['raw_diagnostic']['original']==audit['raw_log_kept_external']
+assert int(Path(controls['raw_diagnostic_exit']['original']).read_bytes())==audit['git_diff_check_exit']
+batch=tree(B)
+batch_nonlanding=[x for x in batch if not Path(x['original']).is_relative_to(L)]
+assert {p for p in oldpaths if Path(p).is_relative_to(B) and not Path(p).is_relative_to(L)}<={x['original'] for x in batch_nonlanding}
+late=[x for x in batch_nonlanding if x['original'] not in oldpaths]
+extra=[I/'release-whitespace282-actual-root.py',I/'accept-whitespace282-actual-root.py']+[Path(p) for p in args.extra_file]
+assert all(p.is_absolute() and p.is_file() and p.resolve(strict=True).is_relative_to(I) for p in extra)
+individual_paths=sorted(set([p for p in current_i() if p.is_file()]+extra),key=str)
+individual=[desc(p) for p in individual_paths]
+''',1)
+  old_deferred="deferred_before_final_bank=[str(P),str(I/'through282-final-bank-inventory-review'),str(I/'through282-final-bank-inventory'),str(I/'through282-final-bank-inventory-caller')]"
+  replace(old_deferred,"deferred_before_final_bank=[str(p) for p in deferred]",1)
+  replace("raw=(json.dumps(scope,indent=2,ensure_ascii=True)+'\\n').encode()",'''assert [str(p) for p in current_i()]==initial_i_names
+assert [x['original'] for x in tree(B) if not Path(x['original']).is_relative_to(L)]==[x['original'] for x in batch_nonlanding]
+assert [str(p) for p in sorted(L.rglob('*'),key=str) if p.is_file()]==scope['landing_file_paths']
+assert len(json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes()))==5633
+for row in old:
+ p=Path(row['original']);d=desc(p)
+ assert {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')} and d['resolved']==row['resolved']
+ assert (os.readlink(p) if p.is_symlink() else None)==row['symlink']
+P.mkdir(exist_ok=False)
+raw=(json.dumps(scope,indent=2,ensure_ascii=True)+'\\n').encode()''',1)
+  replace("composer_invocations=0)","composer_invocations=0,stage_verifier_role='Frozen source control; later final runtime bindings are outside this snapshot',capture_argv=sys.argv,full_through282_i_census=True)",1)
+ elif name=='assemble-final-supplement.py':
+  replace("c.I / 'through282-final-bank-inventory-preparation/final-source-scope.json'","c.I / 'through282-final-intake-scope/final-source-scope.json'",1)
+ elif name=='capture-final282-supplement-scope-root.py':
+  replace("P=I/'through282-final-bank-inventory-preparation'","P=I/'through282-final-intake-scope'",1)
+  replace('import json,hashlib,os,datetime','import json,hashlib,os,datetime,argparse,sys',1)
+  replace('assert not O.exists()', '''parser=argparse.ArgumentParser(description='Capture complete actual later scope only; no composer or supplement execution')
+parser.add_argument('--execute-reviewed-capture',action='store_true',required=True)
+parser.add_argument('--writers-quiescent',action='store_true',required=True)
+parser.add_argument('--extra-file',action='append',default=[])
+args=parser.parse_args()
+assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and not sys.flags.optimize
+assert not O.exists()
+active_caller=I/'through282-final-supplement-scope-caller'
+assert active_caller.is_dir() and not active_caller.is_symlink()
+initial_i_names=sorted(str(p) for p in I.glob('through282*'))''',1)
+  replace("initial_i_names=sorted(str(p) for p in I.glob('through282*'))", "initial_i_names=sorted(str(p) for p in I.glob('through282*'))\nfor p in I.glob('through282*'):assert (p.is_file() or p.is_dir()) and not(p.is_symlink() and p.is_dir())",1)
+  begin=text.index('roots=[Path(x)');end=text.index('groups=[]',begin)
+  replace(text[begin:end],'''roots=sorted(set([Path(x) for x in s['deferred_before_final_bank']]+[p for p in I.glob('through282*') if p.is_dir() and p not in (O,active_caller)]),key=str)
+assert all(p.is_dir() for p in roots)
+''',1)
+  replace(" paths=sorted(str(x) for x in root.rglob('*') if x.is_file()); assert paths", " for f in root.rglob('*'):\n  assert not(f.is_symlink() and f.is_dir()) and (f.is_file() or f.is_dir())\n paths=sorted(str(x) for x in root.rglob('*') if x.is_file()); assert paths",1)
+  begin=text.index('individual=[I/');end=text.index('scope=dict(',begin)
+  replace(text[begin:end],'''extra=[I/'release-whitespace282-actual-root.py',I/'accept-whitespace282-actual-root.py']+[Path(x) for x in args.extra_file]
+assert all(x.is_absolute() and x.is_file() and x.resolve(strict=True).is_relative_to(I) for x in extra)
+individual=sorted(set([p for p in I.glob('through282*') if p.is_file()]+extra+[Path(__file__).resolve()]),key=str)
+B=I.parent/'C05-280-282';L=B/'landing'
+ordinary=json.loads((I/'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json').read_bytes())
+assert len(ordinary)==5633 and len(json.loads((I/'through282-ordinary-bank-inventory/extra-inputs.json').read_bytes()))==5575
+prior_batch={row['original']:row for row in ordinary if Path(row['original']).is_relative_to(B) and not Path(row['original']).is_relative_to(L)}
+prior_batch.update({row['original']:row for row in s['late_batch_files']})
+current_batch=sorted(str(x) for x in B.rglob('*') if x.is_file() and not x.is_relative_to(L))
+for f in B.rglob('*'):assert (f.is_file() or f.is_dir()) and not(f.is_symlink() and f.is_dir())
+assert set(prior_batch)<=set(current_batch)
+for logical,row in prior_batch.items():
+ d=desc(logical);assert d['resolved']==row['resolved'] and {k:d[k] for k in ('bytes','sha256')}=={k:row[k] for k in ('bytes','sha256')}
+individual=sorted(set(individual+[Path(x) for x in current_batch if x not in prior_batch]),key=str)
+''',1)
+  replace("O.mkdir();raw=(json.dumps(scope,indent=2)+'\\n').encode();", "assert sorted(str(p) for p in I.glob('through282*'))==initial_i_names\nassert sorted(str(x) for x in B.rglob('*') if x.is_file() and not x.is_relative_to(L))==current_batch\nfor row in list(scope['controls'].values())+scope['individual_files']:assert desc(row['original'])==row\nO.mkdir();raw=(json.dumps(scope,indent=2)+'\\n').encode();",1)
+ elif name.startswith('conditional/'):
+  # These complete old release/acceptance programs depend on actual later review schemas,
+  # literal populations and copy-map layouts. No guessed adaptation of those is runnable.
+  prefix='''"""CONDITIONAL full historical method: path adaptation only; current measured schema binding is unfinished."""
+raise RuntimeError('SOURCE ONLY: root must preserve this full method and bind actual current freeze/review/copy-map/scope schemas, literal counts and source paths before releasing a separately reviewed executable adaptation')
+'''
+  previous=text;text=prefix+text
+  edits.append(dict(before='',after=prefix,occurrences=1,kind='prepend_fail_closed_guard',input_sha256=pin(previous.encode())['sha256'],output_sha256=pin(text.encode())['sha256']))
+  # These paths must address the fresh current scope, not write into a frozen preparation.
+  if "(P/'final-source-scope.json')" in text:replace("(P/'final-source-scope.json')","(I/'through282-final-intake-scope/final-source-scope.json')")
+ reconstructed=text
+ for edit in reversed(edits):
+  require(pin(reconstructed.encode())['sha256']==edit['output_sha256'],('inverse input hash',name))
+  if edit.get('kind')=='prepend_fail_closed_guard':
+   require(reconstructed.startswith(edit['after']),name);reconstructed=reconstructed[len(edit['after']):]
+  else:
+   # Replacement slices can contain their own before text. Reverse exact output using
+   # the one-step input retained by the before/after map and full intermediate hash.
+   require(reconstructed.count(edit['after'])==edit['occurrences'],('inverse occurrence',name,edit['after']))
+   reconstructed=reconstructed.replace(edit['after'],edit['before'])
+  require(pin(reconstructed.encode())['sha256']==edit['input_sha256'],('inverse output hash',name))
+ require(reconstructed.encode()==raw,('full inverse',name))
+ old_ast=ast.parse(old);new_ast=ast.parse(text)
+ write('originals/'+Path(name).name+'.through279.txt',raw)
+ candidatepins[name]=write(name,text.encode())
+ write('diffs/'+Path(name).name+'.forward.diff',''.join(difflib.unified_diff(old.splitlines(True),text.splitlines(True),fromfile=str(path),tofile=str(O/name))).encode())
+ write('diffs/'+Path(name).name+'.inverse.diff',''.join(difflib.unified_diff(text.splitlines(True),old.splitlines(True),fromfile=str(O/name),tofile=str(path))).encode())
+ oldguards=sum(isinstance(n,ast.Assert) or isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='require' for n in ast.walk(old_ast))
+ newguards=sum(isinstance(n,ast.Assert) or isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='require' for n in ast.walk(new_ast))
+ require(newguards>=oldguards,('guard population decreased',name))
+ oldfuncs={n.name:ast.get_source_segment(old,n) for n in old_ast.body if isinstance(n,ast.FunctionDef)}
+ newfuncs={n.name:ast.get_source_segment(text,n) for n in new_ast.body if isinstance(n,ast.FunctionDef)}
+ fidelity[name]=dict(old_guards=oldguards,current_guards=newguards,full_inverse_bytes=True,unchanged_function_sources=[k for k in oldfuncs if oldfuncs[k]==newfuncs.get(k)],syntax_only=True,imports_or_invocations=0)
+ maps[name]=edits
+for name,path in sources.items():require(read(path)[1]==allpins[name],('source changed',name))
+save('source-pins.json',allpins);save('replacement-map.json',maps);save('AST-and-inverse-proof.json',fidelity)
+save('candidate-pins.json',candidatepins)
+current_sources={}
+for role,path in dict(composer=I/'through282-final-bank-inventory-preparation/compose-final-inputs.py',stage_source=I/'through282-final-stage-preparation/verify_staged_through282.py',actual_whitespace_root_acceptance=I/'through282-whitespace-actual-root-acceptance/proof.json',actual_whitespace_runtime_freeze=I/'through282-whitespace-actual-runtime/freeze.json',root_whitespace_release_source=I/'release-whitespace282-actual-root.py',root_whitespace_acceptance_source=I/'accept-whitespace282-actual-root.py').items():
+ _,current_sources[role]=read(path)
+save('current-source-control-pins.json',dict(status='READ_ONLY_SOURCE_IDENTITIES_NOT_ACTUAL_SCOPE_CAPTURE',sources=current_sources,writer_quiescence_release=False))
+save('pending-release-bindings.json',dict(status='CONDITIONAL_METHODS_UNRUN',initial_root_release=['actual independently reviewed source packages and exact freeze schemas/pins/populations','actual copy-map paths/schemas and full original-copy population','actual current scope descriptor/root populations and literal approval schema','candidate locations: composer in frozen final-bank-inventory-preparation, three new concrete helpers here; scope in fresh final-intake-scope'],supplement_root_release=['actual literal scope independent review freeze/schema/pin/population','actual full copy-map schema/population','actual scope descriptor population','completed actual initial acceptance/callers and full later external boundary'],initial_and_complete_acceptance=['actual source/coverage/LIST populations and bank/external/exclusion counts','actual full current command transport schema and original stream pins','fresh exact output roots','full alias cases: coverage may legitimately point to ordinary retained records; root must adapt actual schema rather than retain old observed-only record shortcut']))
+save('command-plan.json',dict(status='SOURCE_ONLY_NO_CAPTURE_RELEASE',initial_capture=dict(argv=['python3','-B',str(O/'capture-finished-scope.py'),'--execute-reviewed-capture','--writers-quiescent'],optional_extra_file='Repeat --extra-file with each actual completed non-through282-prefixed I helper not already listed. Two whitespace root helper paths are mandatory.',output=str(I/'through282-final-intake-scope'),caller=str(I/'through282-final-intake-scope-caller')),initial_composer=dict(path=str(I/'through282-final-bank-inventory-preparation/compose-final-inputs.py'),scope=str(I/'through282-final-intake-scope/final-source-scope.json'),status='Not invoked by this package; actual literal scope review/root release first'),supplement_capture=dict(argv=['python3','-B',str(O/'capture-final282-supplement-scope-root.py'),'--execute-reviewed-capture','--writers-quiescent'],output=str(I/'through282-final-supplement-scope'),caller=str(I/'through282-final-supplement-scope-caller')),assembler=dict(path=str(O/'assemble-final-supplement.py'),composer=str(I/'through282-final-bank-inventory-preparation/compose-final-inputs.py'),output=str(I/'through282-final-bank-inventory-complete'),status='Exact actual composer SHA, supplement scope SHA, separate literal scope review and root release required; helper imports only reviewed inert composer at actual later execution, never during this preparation'),environment_overrides=dict(PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0'),caller_contract='Fresh actual external caller captures exact argv/cwd/environment/stdin/full stdout/full stderr/exit/timing; preserve every failure and partial output. Do not retry into existing fixed output. Capture outputs and active callers are deferred until actually complete. Later supplement/release/bank/stage/commit callers remain explicit full external evidence, no recursive self-banking.',root_writer_quiescence_not_yet_released=True,scope_capture_invocations=0))
+write('report.md',b'''Prepared full-source adaptations of the prior capture, supplement assembly, both root releases and both root acceptance programs. Every original is preserved in full with exact ordered replacement maps, forward/inverse diffs and syntax-only comparison. No prepared helper was imported or invoked.
+
+The initial capture writes to fresh integration/through282-final-intake-scope, leaving frozen composer preparation unchanged. It requires explicit reviewed-capture and writers-quiescent flags, real matching audit/root acceptance and raw exit 2, the complete 5633-path ordinary coverage and 5575-record original extra LIST, every current through282-prefixed integration artifact, both named whitespace root helper sources, and every supplied additional non-prefixed helper. All current batch files outside landing are checked; old originals remain exact, new paths are explicit. Current ordinary subtree is also named directly for the unchanged composer gate. Source and alias identities and full enumerations are repeated before output.
+
+The stage verifier control pins the frozen SOURCE at through282-final-stage-preparation/verify_staged_through282.py. Future final runtime bindings are not a prerequisite for the pre-bank scope. The previous package's wording asking for final bindings is superseded on this point. The accepted source must remain immutable; later executable adaptations and bindings have their own full sources and late boundary.
+
+The initial scope and its active caller, actual initial inventory and its caller, and initial root release and its caller are explicit required later roots. The later capture requires complete successful initial streams, includes those exact deferred roots and the then-complete current through282 integration census, both whitespace helper sources, extra helper sources and any new batch paths. The actual later scope, active caller, release, assembly and final bank/stage/commit output are honestly external after their snapshots. Neither capture claims self-inclusion or performs banking. Root must establish quiescence and actual literal-scope approval; this is a finite two-snapshot workflow.
+
+The supplement assembler preserves every old algorithmic guard. Its only substantive path change beyond through/batch numbering is the exact initial_scope location in the fresh scope directory. It will load the exact reviewed inert composer only when root later invokes it; no imports occurred during preparation.
+
+The four programs under conditional/ preserve the complete historical release/acceptance methods, known path adaptations and every old guard, preceded by an unconditional fail-closed exception. Historical freeze formats, copy-map layouts and measured counts are not portable to the current packages. They cannot run until root binds actual current schemas, paths, pins and literal populations in a separately preserved executable adaptation. In particular the old completed-inventory checker only encountered new explicit record coverage, whereas current complete evidence may legitimately include already-retained ordinary alias dispositions; do not claim that historical shape is the current contract. pending-release-bindings.json lists the exact unresolved classes. These programs grant no approval and expose no guessed current counts.
+
+Only this new preparation directory was written. No actual scope capture/freeze, composer/supplement execution, Git, SQL, bank, stage, test, commit or worktree/batch mutation occurred. The source-only command transport is captured separately in code-only-caller, including exact raw output and failure history if any. Independent review and root release remain necessary.
+''')
+proof=dict(status='PASS_SOURCE_ONLY_SCOPE_AND_SUPPLEMENT_PREPARATION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),candidates=candidatepins,full_prior_sources=len(sources),all_inverses_exact=True,scope_capture_invocations=0,candidate_imports=0,candidate_invocations=0,conditional_root_methods=4,actual_scope=None,writer_quiescence_release=False,writes_only=str(O))
+save('proof.json',proof);print(json.dumps(proof,sort_keys=True))

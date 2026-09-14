@@ -1,0 +1,127 @@
+[
+  {
+    "before": "through282-generated-reproduction",
+    "after": "through285-generated-reproduction",
+    "before_offsets": [
+      132,
+      207
+    ],
+    "after_offsets": [
+      132,
+      207
+    ],
+    "reason": "current runtime and acceptance paths"
+  },
+  {
+    "before": "10968d16e701b698a0e1fbd845b353089d15ac39",
+    "after": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+    "before_offsets": [
+      264
+    ],
+    "after_offsets": [
+      264
+    ],
+    "reason": "actual incoming HEAD"
+  },
+  {
+    "before": "retention['prior_links_retained']==45275 and retention['added_links']==127",
+    "after": "retention['prior_links_retained']==45402 and retention['added_links']==79",
+    "before_offsets": [
+      2169
+    ],
+    "after_offsets": [
+      2169
+    ],
+    "reason": "actual prior/additions"
+  },
+  {
+    "before": "[45402,11938,1618,11,7092,15546,22528,22188,24105,37]",
+    "after": "[45481,11938,1621,11,7093,15557,22546,22206,24126,18]",
+    "before_offsets": [
+      2316
+    ],
+    "after_offsets": [
+      2316
+    ],
+    "reason": "literal verified actual producer counts"
+  },
+  {
+    "before": "==223847",
+    "after": "==PENDING_CHECKS_TOTAL",
+    "before_offsets": [
+      2415,
+      8038
+    ],
+    "after_offsets": [
+      2415,
+      8052
+    ],
+    "reason": "future actual successful independent runtime record count"
+  },
+  {
+    "before": "len(manifest)==1513",
+    "after": "len(manifest)==PENDING_INPUT_ALIASES",
+    "before_offsets": [
+      3130
+    ],
+    "after_offsets": [
+      3130
+    ],
+    "reason": "future actual full input aliases"
+  },
+  {
+    "before": "(7092,7089,3,5,6)",
+    "after": "(7093,7090,3,5,6)",
+    "before_offsets": [
+      7305
+    ],
+    "after_offsets": [
+      7305
+    ],
+    "reason": "actual independently measured ACIP incompleteness"
+  },
+  {
+    "before": "len(js(R/'registered-pages.json'))==548",
+    "after": "len(js(R/'registered-pages.json'))==549",
+    "before_offsets": [
+      7330
+    ],
+    "after_offsets": [
+      7330
+    ],
+    "reason": "full measured registry"
+  },
+  {
+    "before": "closure_source=B/'reproduction-closure-preparation/close-evidence.py.txt'",
+    "after": "closure_source=Path(PENDING_ACTUAL_CLOSURE_SOURCE)",
+    "before_offsets": [
+      8265
+    ],
+    "after_offsets": [
+      8265
+    ],
+    "reason": "actual later reviewed literal-bound closure source must be supplied; guarded source is not executable approval"
+  },
+  {
+    "before": "acip_proven=7089,acip_heads=7092",
+    "after": "acip_proven=7090,acip_heads=7093",
+    "before_offsets": [
+      9743
+    ],
+    "after_offsets": [
+      9743
+    ],
+    "reason": "actual ACIP counts"
+  },
+  {
+    "before": "",
+    "after": "raise RuntimeError('SOURCE ONLY: actual runtime checks/aliases and reviewed closure source must be bound after successful independent reproduction')\nPENDING_CHECKS_TOTAL = None\nPENDING_INPUT_ALIASES = None\nPENDING_ACTUAL_CLOSURE_SOURCE = None\n",
+    "before_offsets": [
+      0
+    ],
+    "after_offsets": [
+      0
+    ],
+    "reason": "Hold until actual future runtime counters and closure source exist."
+  }
+]

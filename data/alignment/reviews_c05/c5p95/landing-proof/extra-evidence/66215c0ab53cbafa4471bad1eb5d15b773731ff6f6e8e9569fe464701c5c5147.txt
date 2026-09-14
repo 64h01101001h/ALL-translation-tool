@@ -1,0 +1,26 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-banking-preparation/candidates/release-ordinary-bank-method-root.py
++++ release-ordinary-bank-with-final-route-root.py
+@@ -19,6 +19,10 @@
+ packages=binding['source_packages'];assert isinstance(packages,list) and packages
+ assert any(rec.get('role')=='source_preparation' and Path(rec['directory'])==I/'through285-ordinary-banking-preparation' for rec in packages)
+ assert any(rec.get('role')=='code_review' and Path(rec['directory'])!=I/'through285-ordinary-banking-preparation' for rec in packages)
++route_preparation=I/'through285-ordinary-final-banker-route-preparation'
++assert any(rec.get('role')=='source_preparation' and Path(rec['directory'])==route_preparation for rec in packages)
++assert any(rec.get('role')=='source_preparation' and Path(rec['directory'])==I/'through285-final-banking-stage-preparation' for rec in packages)
++assert any(rec.get('role')=='code_review' and rec.get('reviews_source_preparation')==str(route_preparation) and Path(rec['directory']) not in (route_preparation,I/'through285-ordinary-banking-preparation',I/'through285-final-banking-stage-preparation') for rec in packages)
+ for rec in packages:
+  p=Path(rec['directory']);fraw=(p/'freeze.json').read_bytes();assert pin(fraw)==rec['freeze'];f=json.loads(fraw)
+  entries=f['files']
+@@ -30,10 +34,10 @@
+  for name,expected in entries.items():
+   n=Path(name);assert name and not n.is_absolute() and '..'not in n.parts
+   assert pin((p/n).read_bytes())==expected
+-composer=B/'compose-ordinary-bank-inventory-root.py'
++composer=B/'compose-ordinary-bank-inventory-with-final-route-root.py'
+ banker=I/'through285-ordinary-banking-preparation/candidates/bank_root_proofs_through285.py'
+ target=B/'bank_root_proofs_through285.py'
+-assert pin(composer.read_bytes())=={'bytes': 9114, 'sha256': '5473a64d05f490092eb375a25ee26ec3bebd04f65930aa8088dc94c6ab89ae18'}
++assert pin(composer.read_bytes())=={'bytes': 11816, 'sha256': '406154d3c40bf31ffa10ce19c66c551170fb99b9d0ee0b3f2d14b318cb928cb3'}
+ assert pin(banker.read_bytes())=={'bytes': 18802, 'sha256': '6db5614639288cbbc38b0ea768ffbec766c5dc060078a609801ca5fba2db41ec'}
+ assert not target.exists()
+ assert not (B.parent.parent/'campaign-worktree/data/alignment/reviews_c05/c5p95/landing-proof').exists()

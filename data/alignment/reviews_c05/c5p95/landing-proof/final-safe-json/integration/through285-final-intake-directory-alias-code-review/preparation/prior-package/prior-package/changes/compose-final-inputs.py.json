@@ -1,0 +1,100 @@
+[
+  {
+    "before": "through282",
+    "after": "through285",
+    "count": 6,
+    "before_offsets": [
+      34,
+      4242,
+      4512,
+      7247,
+      10745,
+      13833
+    ],
+    "after_offsets": [
+      34,
+      4242,
+      4512,
+      7247,
+      10745,
+      13833
+    ]
+  },
+  {
+    "before": "C05-280-282",
+    "after": "C05-283-285",
+    "count": 1,
+    "before_offsets": [
+      468
+    ],
+    "after_offsets": [
+      468
+    ]
+  },
+  {
+    "before": "10968d16e701b698a0e1fbd845b353089d15ac39",
+    "after": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+    "count": 1,
+    "before_offsets": [
+      588
+    ],
+    "after_offsets": [
+      588
+    ]
+  },
+  {
+    "before": "c5p94",
+    "after": "c5p95",
+    "count": 1,
+    "before_offsets": [
+      559
+    ],
+    "after_offsets": [
+      559
+    ]
+  },
+  {
+    "before": "through285-banking-runs/ordinary",
+    "after": "through285-ordinary-bank-run",
+    "count": 1,
+    "before_offsets": [
+      13833
+    ],
+    "after_offsets": [
+      13833
+    ]
+  },
+  {
+    "before": "def main():",
+    "after": "def main():\n    raise RuntimeError('SOURCE ONLY: actual reviewed scope and release bindings are pending; helper definitions remain inert for later reviewed assembly')",
+    "count": 1,
+    "before_offsets": [
+      3588
+    ],
+    "after_offsets": [
+      3588
+    ]
+  },
+  {
+    "before": "'root-helpers/bank_root_proofs_through285.py.txt'",
+    "after": "'root-helpers/bank_root_proofs_through285_final.py.txt'",
+    "count": 1,
+    "before_offsets": [
+      10869
+    ],
+    "after_offsets": [
+      10869
+    ]
+  },
+  {
+    "before": "old = strict_json(controls['ordinary_manifest'])",
+    "after": "known={'ordinary_manifest': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/landing/root-proof-copy-manifest-before-whitespace.json', 'bytes': 9423149, 'sha256': 'cd3f374127d342a654cf3ad481a733becdd0173dcf836937b2d3b11219d8d000'}, 'ordinary_coverage': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-bank-inventory/coverage-and-exclusion-map.json', 'bytes': 12598988, 'sha256': '28f03ab5eccddd621998adee19762af444f0d3a71db81737a5002a9f62d6f9d4'}, 'ordinary_extra_inputs': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-bank-inventory/extra-inputs.json', 'bytes': 9679681, 'sha256': '22dcb58359970063266484235f30ed9bc7f4fbbd641ba9ee7d0342a4af0cefb0'}, 'raw_diagnostic': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-runs/initial-whitespace-caller/stdout.bin', 'bytes': 32794535, 'sha256': '94799cb5a45a2b827d990f0ca2cda2a0d0e48debe747b5a89dd46625ced0ad10'}, 'raw_diagnostic_exit': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-runs/initial-whitespace-caller/exit.txt', 'bytes': 2, 'sha256': '53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3'}, 'banker': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/bank_root_proofs_through285_final.py', 'bytes': 20978, 'sha256': '2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f'}, 'stage_verifier': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-binding-path-correction/verify_staged_through285.py', 'bytes': 57112, 'sha256': 'd77253e906657f58962211d0aaa584df9272af4e2055faeb1bc62fccd7f1b0be'}}\n        for role,row in known.items():\n            require(scope['controls'][role]['original']==row['path'] and pin(controls[role])==expected(row), ('actual current control pin',role))\n        old = strict_json(controls['ordinary_manifest'])\n        require(len(old['files'])==2447 and len(old['external_actual_bytes_retained'])==12263, 'actual ordinary populations')",
+    "count": 1,
+    "before_offsets": [
+      5264
+    ],
+    "after_offsets": [
+      5264
+    ]
+  }
+]

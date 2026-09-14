@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/bind-runtime-sources.py.txt", line 39, in <module>
+    make('verify-retention.py.txt',common+[
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     ("len(old['links'])==45275","len(old['links'])==45402",'actual prior complete links'),
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<16 lines>...
+     ('[45402,11938,1618,11,7092,15546,22528,22188,24105,37]','[45481,11938,1621,11,7093,15557,22546,22206,24126,18]','literal measured current output vector, never self-derived expected values')
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ])
+    ^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/bind-runtime-sources.py.txt", line 17, in make
+    assert offsets,(n,a);after=[];shift=0
+           ^^^^^^^
+AssertionError: ('verify-retention.py.txt', '100*7089/7092')

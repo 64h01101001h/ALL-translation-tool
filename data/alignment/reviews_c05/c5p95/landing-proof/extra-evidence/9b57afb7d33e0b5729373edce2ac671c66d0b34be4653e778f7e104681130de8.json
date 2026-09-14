@@ -1,0 +1,1348 @@
+[
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "byas pa",
+      "byas pa"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 12732,
+        "wylie": "byas pa",
+        "tibetan": "བྱས་པ",
+        "tibetan_source": null,
+        "acip": "BYAS PA",
+        "pronunciation": "jepa",
+        "pronunciation_source": "GMR card (C07 Language Study Guide)",
+        "sanskrit": "bya/ byed/ byas/ byos/; {LCh,MSA}kṛta; {MSA}ākṛti; {MV} sgyu ma byas pa = māyā-kṛta; {MV}bshad pa ... byas pa = vyākhyām ... upanibadhya; {LC}abhyupeta; {LC}āhita; {LC}uttha; {LC}kalita; {LC}kalpita; {LC}kārikā; {LC}kāritābhūt; {LC}kṛtvā; {LC}cakāra, cakruḥ; {LC}cita; {LC}!!ja; {LC}datta; {LC}nivartita; {LC}yojita; {LC}viracita; {LC}vihita; {LC}sampādita",
+        "hopkins_english": "treated; product; produced thing{N}; do; act; perform; fabricate; performance; deed; action; produced phenomenon",
+        "hgm_gloss": "[\"committed\", \"has been\", \"has done\", \"to do\", \"acted\", \"following\", \"made\", \"to apply\", \"gains\", \"gave\", \"did\", \"do\", \"making\", \"make\", \"do something\", \"occurs\", \"performing\", \"illustration\", \"when\", \"something that was created\", \"perform\", \"something\", \"present\", \"to undertake\", \"respond\", \"brings\", \"result\", \"provides\", \"taking\", \"works\", \"exists\", \"complete\", \"done\", \"takes\", \"composed\", \"happens\", \"create\", \"brought\", \"deed\", \"commits\", \"went through\", \"action\", \"given\", \"performed\", \"committing\", \"act\", \"expressing\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": "bya/ byed/ byas/ byos",
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 718,
+        "raw": "{\"tibetan\": \"བྱས་པ\", \"wylie\": \"byas pa\", \"wylie_variants\": [\"byas pa\"], \"tenses\": \"bya/ byed/ byas/ byos\", \"sanskrit\": \"bya/ byed/ byas/ byos/; {LCh,MSA}kṛta; {MSA}ākṛti; {MV} sgyu ma byas pa = māyā-kṛta; {MV}bshad pa ... byas pa = vyākhyām ... upanibadhya; {LC}abhyupeta; {LC}āhita; {LC}uttha; {LC}kalita; {LC}kalpita; {LC}kārikā; {LC}kāritābhūt; {LC}kṛtvā; {LC}cakāra, cakruḥ; {LC}cita; {LC}!!ja; {LC}datta; {LC}nivartita; {LC}yojita; {LC}viracita; {LC}vihita; {LC}sampādita\", \"hopkins_english\": \"treated; product; produced thing{N}; do; act; perform; fabricate; performance; deed; action; produced phenomenon\", \"hgm_gloss\": [\"committed\", \"has been\", \"has done\", \"to do\", \"acted\", \"following\", \"made\", \"to apply\", \"gains\", \"gave\", \"did\", \"do\", \"making\", \"make\", \"do something\", \"occurs\", \"performing\", \"illustration\", \"when\", \"something that was created\", \"perform\", \"something\", \"present\", \"to undertake\", \"respond\", \"brings\", \"result\", \"provides\", \"taking\", \"works\", \"exists\", \"complete\", \"done\", \"takes\", \"composed\", \"happens\", \"create\", \"brought\", \"deed\", \"commits\", \"went through\", \"action\", \"given\", \"performed\", \"committing\", \"act\", \"expressing\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"jepa\", \"acip\": \"BYAS PA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 718}, \"pronunciation_source\": \"GMR card (C07 Language Study Guide)\", \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "kho na re",
+      "kho na re"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 22018,
+        "wylie": "kho na re",
+        "tibetan": "ཁོ་ན་རེ",
+        "tibetan_source": null,
+        "acip": "KHO NA RE",
+        "pronunciation": "ko na re",
+        "pronunciation_source": null,
+        "sanskrit": null,
+        "hopkins_english": null,
+        "hgm_gloss": "[\"someone might raise the following objection:\", \"someone may make the following objection:\", \"someone might ask\", \"someone may object to the last point,\", \"one might raise the following objection\", \"the opponent may respond as follows\", \"someone may\", \"someone\", \"then someone else comes and makes the following claim\", \"someone may make the following objection\", \"someone may answer\", \"someone may object\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested (not in Great Dictionary)",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C05\", \"C08\", \"C12\", \"C13\", \"C15\", \"C16\", \"C18\", \"DTE\", \"GK\", \"P7\", \"TCS06\", \"TCS07\", \"TCS17\"]",
+        "corpus_n_segments": 77,
+        "raw": "{\"tibetan\": \"ཁོ་ན་རེ\", \"wylie\": \"kho na re\", \"wylie_variants\": [\"kho na re\"], \"tenses\": null, \"sanskrit\": null, \"hopkins_english\": null, \"hgm_gloss\": [\"someone might raise the following objection:\", \"someone may make the following objection:\", \"someone might ask\", \"someone may object to the last point,\", \"one might raise the following objection\", \"the opponent may respond as follows\", \"someone may\", \"someone\", \"then someone else comes and makes the following claim\", \"someone may make the following objection\", \"someone may answer\", \"someone may object\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"ko na re\", \"acip\": \"KHO NA RE\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C08\", \"C12\", \"C13\", \"C15\", \"C16\", \"C18\", \"DTE\", \"GK\", \"P7\", \"TCS06\", \"TCS07\", \"TCS17\"], \"n_segments\": 77}}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "skyon med",
+      "skyon med"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 869,
+        "wylie": "skyon med",
+        "tibetan": "སྐྱོན་མེད",
+        "tibetan_source": null,
+        "acip": "SKYON MED",
+        "pronunciation": "kyunme",
+        "pronunciation_source": null,
+        "sanskrit": "{C}niyāmata; {C}nyāma; nirdoṣa; {LC}akhinna; {LC}acchidra; {LC}adoṣa; {LC}anavadya; {LC}anāmaya; {LC}niratyaya; {LC}nirmala; {LC}aduṣṭa; {LC}nirgada",
+        "hopkins_english": "faultless; flawless; flawlessness; {C}certainly; (lit.: re-drawing); the way of salvation (of Śrāvakas and Pratyekabuddhas); the fixed condition (of Bodhisattvas); ripening; (distinctive) way of salvation (of Bodhisattvas); definite way of certain salvation",
+        "hgm_gloss": "[\"and yet it does not\", \"there is no problem\", \"no contradiction\", \"there is no such problem\", \"no problem\", \"and yet there is no such problem\", \"there's no problem\", \"there's no such problem\", \"no such problem\", \"not a problem\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C03\", \"C04\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P5\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS03\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS17\"]",
+        "corpus_n_segments": 139,
+        "raw": "{\"tibetan\": \"སྐྱོན་མེད\", \"wylie\": \"skyon med\", \"wylie_variants\": [\"skyon med\"], \"tenses\": null, \"sanskrit\": \"{C}niyāmata; {C}nyāma; nirdoṣa; {LC}akhinna; {LC}acchidra; {LC}adoṣa; {LC}anavadya; {LC}anāmaya; {LC}niratyaya; {LC}nirmala; {LC}aduṣṭa; {LC}nirgada\", \"hopkins_english\": \"faultless; flawless; flawlessness; {C}certainly; (lit.: re-drawing); the way of salvation (of Śrāvakas and Pratyekabuddhas); the fixed condition (of Bodhisattvas); ripening; (distinctive) way of salvation (of Bodhisattvas); definite way of certain salvation\", \"hgm_gloss\": [\"and yet it does not\", \"there is no problem\", \"no contradiction\", \"there is no such problem\", \"no problem\", \"and yet there is no such problem\", \"there's no problem\", \"there's no such problem\", \"no such problem\", \"not a problem\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"kyunme\", \"acip\": \"SKYON MED\", \"corpus_occurrences\": {\"courses\": [\"C03\", \"C04\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P5\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS03\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS17\"], \"n_segments\": 139}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "skyon",
+      "skyon"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 860,
+        "wylie": "skyon",
+        "tibetan": "སྐྱོན",
+        "tibetan_source": null,
+        "acip": "SKYON",
+        "pronunciation": "kyun",
+        "pronunciation_source": null,
+        "sanskrit": "{MSA,C,MV}doṣa; apakṣāla; {LC}aṅgaṇa; {LC}apakṣaṇa; {LC}aparādha; {LC}avalepa; {LC}ādīnava; {LC}āpatti; {LC}āma; {LC}āmaya; {LC}anāmaya); {LC}āvila; {LC}ūna; {LC}kalaṅka; {LC}kali; {LC}chala; {LC}duṣṭa; {LC}punaruktadoṣa-jahā; {LC}paryāpti; {LC}phalgu; {LC}śvitra; {LC}hāni; {LC}avalepa, ādīnava, āpatti; {LC}duṣyati; {LC}punarukta??doṣajahā; {LC}paryāpti śa.dā.; {LC}nindā; {LC}malīmasa; {LC}virodha",
+        "hopkins_english": "fault; disadvantage; fallacy; defect; flaw; {PH}fault; mistake; {C}defect; hatred; fault",
+        "hgm_gloss": "[\"problems\", \"problem\", \"faults\", \"criticizing\", \"criticism\", \"philosophical\", \"might be correct\", \"problematic\", \"fault\", \"mistake\", \"reveals\", \"defect\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 538,
+        "raw": "{\"tibetan\": \"སྐྱོན\", \"wylie\": \"skyon\", \"wylie_variants\": [\"skyon\"], \"tenses\": null, \"sanskrit\": \"{MSA,C,MV}doṣa; apakṣāla; {LC}aṅgaṇa; {LC}apakṣaṇa; {LC}aparādha; {LC}avalepa; {LC}ādīnava; {LC}āpatti; {LC}āma; {LC}āmaya; {LC}anāmaya); {LC}āvila; {LC}ūna; {LC}kalaṅka; {LC}kali; {LC}chala; {LC}duṣṭa; {LC}punaruktadoṣa-jahā; {LC}paryāpti; {LC}phalgu; {LC}śvitra; {LC}hāni; {LC}avalepa, ādīnava, āpatti; {LC}duṣyati; {LC}punarukta??doṣajahā; {LC}paryāpti śa.dā.; {LC}nindā; {LC}malīmasa; {LC}virodha\", \"hopkins_english\": \"fault; disadvantage; fallacy; defect; flaw; {PH}fault; mistake; {C}defect; hatred; fault\", \"hgm_gloss\": [\"problems\", \"problem\", \"faults\", \"criticizing\", \"criticism\", \"philosophical\", \"might be correct\", \"problematic\", \"fault\", \"mistake\", \"reveals\", \"defect\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"kyun\", \"acip\": \"SKYON\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 538}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "yan lag",
+      "yan lag"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 17346,
+        "wylie": "yan lag",
+        "tibetan": "ཡན་ལག",
+        "tibetan_source": null,
+        "acip": "YAN LAG",
+        "pronunciation": "yenlak",
+        "pronunciation_source": null,
+        "sanskrit": "{C,MSA,MV}aṅga; {N}avayava; {LC}aṃga; {LC}vodhyaṃga sapta; {LC}aṃgatā; {LC}avayavatva; {LC}parikara; {LC}pratyaṃga; {LC}maṇḍalaka; {LC}śākhā; {LC}aṅgana; {LC}kalā; {LC}parikara, pratīka; {LC}sthāna",
+        "hopkins_english": "limb; branch; member; part; element; link; secondary color",
+        "hgm_gloss": "[\"necessary components\", \"qualities\", \"ancillary\", \"secondary\", \"components\", \"branches\", \"the branches\", \"part\", \"parts\", \"limbs\", \"various elements\", \"protuberances\", \"divisions\", \"link\", \"detail\", \"links\", \"details\", \"branch\", \"elements\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 511,
+        "raw": "{\"tibetan\": \"ཡན་ལག\", \"wylie\": \"yan lag\", \"wylie_variants\": [\"yan lag\"], \"tenses\": null, \"sanskrit\": \"{C,MSA,MV}aṅga; {N}avayava; {LC}aṃga; {LC}vodhyaṃga sapta; {LC}aṃgatā; {LC}avayavatva; {LC}parikara; {LC}pratyaṃga; {LC}maṇḍalaka; {LC}śākhā; {LC}aṅgana; {LC}kalā; {LC}parikara, pratīka; {LC}sthāna\", \"hopkins_english\": \"limb; branch; member; part; element; link; secondary color\", \"hgm_gloss\": [\"necessary components\", \"qualities\", \"ancillary\", \"secondary\", \"components\", \"branches\", \"the branches\", \"part\", \"parts\", \"limbs\", \"various elements\", \"protuberances\", \"divisions\", \"link\", \"detail\", \"links\", \"details\", \"branch\", \"elements\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"yenlak\", \"acip\": \"YAN LAG\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 511}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "lnga po",
+      "lnga po"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 4000,
+        "wylie": "lnga po",
+        "tibetan": "ལྔ་པོ",
+        "tibetan_source": null,
+        "acip": "LNGA PO",
+        "pronunciation": "ngapo",
+        "pronunciation_source": null,
+        "sanskrit": "{MSA,MV}pañca; {LC}pañcamī; {LC}bṛhat pañcamūlam; {LC}pañcaka",
+        "hopkins_english": "all five {T}",
+        "hgm_gloss": "[\"these five\", \"five ... all\", \"the five\", \"five\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C03\", \"C05\", \"C07\", \"C09\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P8\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS05\", \"TCS09\", \"TCS11\", \"TCS14\", \"TCS16KaliWang\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 79,
+        "raw": "{\"tibetan\": \"ལྔ་པོ\", \"wylie\": \"lnga po\", \"wylie_variants\": [\"lnga po\"], \"tenses\": null, \"sanskrit\": \"{MSA,MV}pañca; {LC}pañcamī; {LC}bṛhat pañcamūlam; {LC}pañcaka\", \"hopkins_english\": \"all five {T}\", \"hgm_gloss\": [\"these five\", \"five ... all\", \"the five\", \"five\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"ngapo\", \"acip\": \"LNGA PO\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C03\", \"C05\", \"C07\", \"C09\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P8\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS05\", \"TCS09\", \"TCS11\", \"TCS14\", \"TCS16KaliWang\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 79}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "skyes bu",
+      "skyes bu"
+    ],
+    "count": 2,
+    "rows": [
+      {
+        "id": 804,
+        "wylie": "skyes bu",
+        "tibetan": "སྐྱེས་བུ",
+        "tibetan_source": null,
+        "acip": "SKYES BU",
+        "pronunciation": "kyebu",
+        "pronunciation_source": null,
+        "sanskrit": "{MSA,MV,C}puruṣa; {C}jana; {C} pumān; {C}puṃs; pudgala/puruṣa; {LC}nara; {LC}puṃs (pumān); {LC}puṅgava; {LC}jantu; {LC}nṛ; {LC}tatpuruṣa; {LC}akṣipuruṣa; {LC}paruṣa",
+        "hopkins_english": "being; creature; person; {PH}The Person; {C}person; personality; (some) one; men",
+        "hgm_gloss": "[\"people\", \"a person\", \"person\", \"being\", \"practitioners\", \"birth\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 283,
+        "raw": "{\"tibetan\": \"སྐྱེས་བུ\", \"wylie\": \"skyes bu\", \"wylie_variants\": [\"skyes bu\"], \"tenses\": null, \"sanskrit\": \"{MSA,MV,C}puruṣa; {C}jana; {C} pumān; {C}puṃs; pudgala/puruṣa; {LC}nara; {LC}puṃs (pumān); {LC}puṅgava; {LC}jantu; {LC}nṛ; {LC}tatpuruṣa; {LC}akṣipuruṣa; {LC}paruṣa\", \"hopkins_english\": \"being; creature; person; {PH}The Person; {C}person; personality; (some) one; men\", \"hgm_gloss\": [\"people\", \"a person\", \"person\", \"being\", \"practitioners\", \"birth\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"kyebu\", \"acip\": \"SKYES BU\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 283}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      },
+      {
+        "id": 1740,
+        "wylie": "gang zag",
+        "tibetan": "གང་ཟག། སྐྱེས་བུ",
+        "tibetan_source": null,
+        "acip": "GANG ZAG",
+        "pronunciation": "gangsak",
+        "pronunciation_source": "GMR card (C13 Language Study Guide)",
+        "sanskrit": "{C,MSA,MV}pudgala; puruṣa; pudgala/puruṣa; {LC}nara; {LC}puṃs (pumān); {LC}puṅgava; {LC}jantu; {LC}nṛ; {LC}puṃs; {LC}tatpuruṣa; {LC}akṣipuruṣa; {LC}paruṣa; {LC}ātma; {LC}bhūtātman; {LC}sattva; {LC}pudrala",
+        "hopkins_english": "person; individual",
+        "hgm_gloss": "[\"persons\", \"person\", \"the person\", \"type of person\", \"people\", \"the type of person\", \"another\", \"individual\", \"beings\", \"normal person\", \"individuals\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS03\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 896,
+        "raw": "{\"tibetan\": \"གང་ཟག། སྐྱེས་བུ\", \"wylie\": \"gang zag\", \"wylie_variants\": [\"gang zag\", \"skyes bu\"], \"tenses\": null, \"sanskrit\": \"{C,MSA,MV}pudgala; puruṣa; pudgala/puruṣa; {LC}nara; {LC}puṃs (pumān); {LC}puṅgava; {LC}jantu; {LC}nṛ; {LC}puṃs; {LC}tatpuruṣa; {LC}akṣipuruṣa; {LC}paruṣa; {LC}ātma; {LC}bhūtātman; {LC}sattva; {LC}pudrala\", \"hopkins_english\": \"person; individual\", \"hgm_gloss\": [\"persons\", \"person\", \"the person\", \"type of person\", \"people\", \"the type of person\", \"another\", \"individual\", \"beings\", \"normal person\", \"individuals\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"gangsak\", \"acip\": \"GANG ZAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS03\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 896}, \"pronunciation_source\": \"GMR card (C13 Language Study Guide)\", \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "cha shas",
+      "cha shas"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 4384,
+        "wylie": "cha shas",
+        "tibetan": "ཆ་ཤས",
+        "tibetan_source": null,
+        "acip": "CHA SHAS",
+        "pronunciation": "chashe",
+        "pronunciation_source": null,
+        "sanskrit": "{LCh}avayava; {LC}aṃśa; {LC}kalā; {LC}koṭi; {LC}bhāga; {LC}siddhānta; {LC}phalāṃśaleśa; {LC}aṃśaka; {LC}kaṇa; {LC}dānakaṇa; {LC}piśita; {LC}prakaraṇa; {LC}lava; {LC}leśa; {LC}vṛttānta",
+        "hopkins_english": "factor; part",
+        "hgm_gloss": "[\"parts\", \"part\", \"piece\", \"distinct parts\", \"fragments\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C05\", \"C06\", \"C08\", \"C09\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS03\", \"TCS06\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 162,
+        "raw": "{\"tibetan\": \"ཆ་ཤས\", \"wylie\": \"cha shas\", \"wylie_variants\": [\"cha shas\"], \"tenses\": null, \"sanskrit\": \"{LCh}avayava; {LC}aṃśa; {LC}kalā; {LC}koṭi; {LC}bhāga; {LC}siddhānta; {LC}phalāṃśaleśa; {LC}aṃśaka; {LC}kaṇa; {LC}dānakaṇa; {LC}piśita; {LC}prakaraṇa; {LC}lava; {LC}leśa; {LC}vṛttānta\", \"hopkins_english\": \"factor; part\", \"hgm_gloss\": [\"parts\", \"part\", \"piece\", \"distinct parts\", \"fragments\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"chashe\", \"acip\": \"CHA SHAS\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C05\", \"C06\", \"C08\", \"C09\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS03\", \"TCS06\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 162}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "yin pas",
+      "yin pas"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 25109,
+        "wylie": "yin pas",
+        "tibetan": "ཡིན་པས",
+        "tibetan_source": null,
+        "acip": "YIN PAS",
+        "pronunciation": "yinpe",
+        "pronunciation_source": null,
+        "sanskrit": "{LC}iti; {LC}iti kṛtvā; {LC}bhavatīti",
+        "hopkins_english": null,
+        "hgm_gloss": "[\"does\", \"is\", \"it is\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested (not in Great Dictionary)",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 1126,
+        "raw": "{\"tibetan\": \"ཡིན་པས\", \"wylie\": \"yin pas\", \"wylie_variants\": [\"yin pas\"], \"tenses\": null, \"sanskrit\": \"{LC}iti; {LC}iti kṛtvā; {LC}bhavatīti\", \"hopkins_english\": null, \"hgm_gloss\": [\"does\", \"is\", \"it is\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"yinpe\", \"acip\": \"YIN PAS\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 1126}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "bya ba",
+      "bya ba"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 12506,
+        "wylie": "bya ba",
+        "tibetan": "བྱ་བ",
+        "tibetan_source": null,
+        "acip": "BYA BA",
+        "pronunciation": "jawa",
+        "pronunciation_source": null,
+        "sanskrit": "bya/ byed/ byas/ byos/; {C,MV,MSA}kriyā; {C}kartavya; {MSA,MV} kṛtya; {MSA}kartavyatā; {C,MV,MSA}kārya; {C,MV,MSA}karaṇīya; {N}vyāpāra; {N}vyāpāra-karaṇa; {L}pravṛtti; {LC}iṣṭa; {LC}karomi; {LC}karṇa; {LC}kalanā; {LC}!!kāra; {LC}kurvat; {LC}kriyate; {LC}śarīracintā; {LC}prakriyā; {LC}bhe dana; {LC}vyavasita; {LC}samācaret",
+        "hopkins_english": "activities{N}; deed; doing; action; do; indicator of object of a verb [future of byed pa, to do; make; perform]; function; {C}works; activity; tell; mention; cause; arise; 'what is to be done', i.e., duty; should be effected; what had to be done; should be performed; work; function; business; task; {GD:623} functional intermediary",
+        "hgm_gloss": "[\"to accomplish\", \"should\", \"performing deeds\", \"activities\", \"to engage\", \"task\", \"must be\", \"has to\", \"the activities\", \"make\", \"do\", \"commission\", \"actions\", \"belonging to\", \"function\", \"may\", \"functions\", \"belonging\", \"belong to\", \"applying\", \"what\", \"able\", \"must\", \"putting\", \"started\", \"acts\", \"put\", \"being done\", \"brings\", \"set forth\", \"been\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": "bya/ byed/ byas/ byos",
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 1135,
+        "raw": "{\"tibetan\": \"བྱ་བ\", \"wylie\": \"bya ba\", \"wylie_variants\": [\"bya ba\"], \"tenses\": \"bya/ byed/ byas/ byos\", \"sanskrit\": \"bya/ byed/ byas/ byos/; {C,MV,MSA}kriyā; {C}kartavya; {MSA,MV} kṛtya; {MSA}kartavyatā; {C,MV,MSA}kārya; {C,MV,MSA}karaṇīya; {N}vyāpāra; {N}vyāpāra-karaṇa; {L}pravṛtti; {LC}iṣṭa; {LC}karomi; {LC}karṇa; {LC}kalanā; {LC}!!kāra; {LC}kurvat; {LC}kriyate; {LC}śarīracintā; {LC}prakriyā; {LC}bhe dana; {LC}vyavasita; {LC}samācaret\", \"hopkins_english\": \"activities{N}; deed; doing; action; do; indicator of object of a verb [future of byed pa, to do; make; perform]; function; {C}works; activity; tell; mention; cause; arise; 'what is to be done', i.e., duty; should be effected; what had to be done; should be performed; work; function; business; task; {GD:623} functional intermediary\", \"hgm_gloss\": [\"to accomplish\", \"should\", \"performing deeds\", \"activities\", \"to engage\", \"task\", \"must be\", \"has to\", \"the activities\", \"make\", \"do\", \"commission\", \"actions\", \"belonging to\", \"function\", \"may\", \"functions\", \"belonging\", \"belong to\", \"applying\", \"what\", \"able\", \"must\", \"putting\", \"started\", \"acts\", \"put\", \"being done\", \"brings\", \"set forth\", \"been\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"jawa\", \"acip\": \"BYA BA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 1135}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "byas",
+      "byas"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 12728,
+        "wylie": "byas",
+        "tibetan": "བྱས",
+        "tibetan_source": null,
+        "acip": "BYAS",
+        "pronunciation": "je",
+        "pronunciation_source": null,
+        "sanskrit": "bya/ byed/ byas/ byos/; kṛta; {MSA}kārita; {C}saṃskṛta; {LC}akarot; {LC}akalpayat; {LC}akārayat; {LC}ādadhe; {LC}iṣṭa",
+        "hopkins_english": "verb: do; act; perform; fabricate; take ... as {BJ 37.4}7 noun: action; activity; performance; {C}produced; conditioned; compounded; effected",
+        "hgm_gloss": "[\"may\", \"have done\", \"commit\", \"make\", \"felt\", \"performing\", \"had\", \"is committed\", \"activities\", \"has been\", \"develop\", \"doing\", \"commits\", \"rolled them up\", \"did\", \"undertake\", \"[please note that the tibetan rtag par gyis here should be read brtag par gyis, as in the root text. we have left the original spelling because both editions available to us read it this way.]\", \"attempts to\", \"causes\", \"have set down\", \"works\", \"made\", \"acts\", \"brings\", \"has\", \"done\", \"activity\", \"committed\", \"have served\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": "bya/ byed/ byas/ byos",
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 3336,
+        "raw": "{\"tibetan\": \"བྱས\", \"wylie\": \"byas\", \"wylie_variants\": [\"byas\"], \"tenses\": \"bya/ byed/ byas/ byos\", \"sanskrit\": \"bya/ byed/ byas/ byos/; kṛta; {MSA}kārita; {C}saṃskṛta; {LC}akarot; {LC}akalpayat; {LC}akārayat; {LC}ādadhe; {LC}iṣṭa\", \"hopkins_english\": \"verb: do; act; perform; fabricate; take ... as {BJ 37.4}7 noun: action; activity; performance; {C}produced; conditioned; compounded; effected\", \"hgm_gloss\": [\"may\", \"have done\", \"commit\", \"make\", \"felt\", \"performing\", \"had\", \"is committed\", \"activities\", \"has been\", \"develop\", \"doing\", \"commits\", \"rolled them up\", \"did\", \"undertake\", \"[please note that the tibetan rtag par gyis here should be read brtag par gyis, as in the root text. we have left the original spelling because both editions available to us read it this way.]\", \"attempts to\", \"causes\", \"have set down\", \"works\", \"made\", \"acts\", \"brings\", \"has\", \"done\", \"activity\", \"committed\", \"have served\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"je\", \"acip\": \"BYAS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 3336}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'jog",
+      "'jog"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 5312,
+        "wylie": "'jog",
+        "tibetan": "འཇོག",
+        "tibetan_source": null,
+        "acip": "'JOG",
+        "pronunciation": "jok",
+        "pronunciation_source": null,
+        "sanskrit": "sthāna{MSA}; {C}nikṣipati (=pātayati); {LC}(pra) bhāvayanti; {LC}avakṣepaṇa; {LC}dhatte; {LC}nikṣepa, prakṣepa; {LC}vigāhate; {LC}sthāpana",
+        "hopkins_english": "posit; establish; deposit; designate; put; set aside; {C}let drop; throw/put down; lays aside",
+        "hgm_gloss": "[\"posit\", \"establish\", \"case\", \"decides\", \"establishing\", \"distinctions\", \"draws a distinction between\", \"make any distinction between\", \"establish ... establish\", \"describe\", \"established\", \"decide\", \"say\", \"be established\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": "gzhag 'jog bzhag zhog",
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C09\", \"C10\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 684,
+        "raw": "{\"tibetan\": \"འཇོག\", \"wylie\": \"'jog\", \"wylie_variants\": [\"'jog\"], \"tenses\": \"gzhag 'jog bzhag zhog\", \"sanskrit\": \"sthāna{MSA}; {C}nikṣipati (=pātayati); {LC}(pra) bhāvayanti; {LC}avakṣepaṇa; {LC}dhatte; {LC}nikṣepa, prakṣepa; {LC}vigāhate; {LC}sthāpana\", \"hopkins_english\": \"posit; establish; deposit; designate; put; set aside; {C}let drop; throw/put down; lays aside\", \"hgm_gloss\": [\"posit\", \"establish\", \"case\", \"decides\", \"establishing\", \"distinctions\", \"draws a distinction between\", \"make any distinction between\", \"establish ... establish\", \"describe\", \"established\", \"decide\", \"say\", \"be established\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"jok\", \"acip\": \"'JOG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C09\", \"C10\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 684}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'jog dgos",
+      "'jog dgos"
+    ],
+    "count": 0,
+    "rows": []
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "dgos",
+      "dgos"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 2434,
+        "wylie": "dgos",
+        "tibetan": "དགོས",
+        "tibetan_source": null,
+        "acip": "DGOS",
+        "pronunciation": "gu",
+        "pronunciation_source": null,
+        "sanskrit": "{C}kārya; {MSA}prayojana; {LC}yukta; {LC}ayuvata; {LC}karma; {LC}kṛta",
+        "hopkins_english": "must; need; purpose; necessity; need to; necessary; {C}work; business; function; task",
+        "hgm_gloss": "[\"must\", \"should\", \"must be\", \"have to\", \"had\", \"must ... must\", \"you should\", \"necessary\", \"be forced\", \"is supposed to be\", \"need\", \"of course\", \"is necessary\", \"necessarily\", \"would have to be\", \"required\", \"is ... necessary\", \"would be\", \"would have\", \"must be present\", \"goal\", \"purpose\", \"would\", \"would have to\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 2625,
+        "raw": "{\"tibetan\": \"དགོས\", \"wylie\": \"dgos\", \"wylie_variants\": [\"dgos\"], \"tenses\": null, \"sanskrit\": \"{C}kārya; {MSA}prayojana; {LC}yukta; {LC}ayuvata; {LC}karma; {LC}kṛta\", \"hopkins_english\": \"must; need; purpose; necessity; need to; necessary; {C}work; business; function; task\", \"hgm_gloss\": [\"must\", \"should\", \"must be\", \"have to\", \"had\", \"must ... must\", \"you should\", \"necessary\", \"be forced\", \"is supposed to be\", \"need\", \"of course\", \"is necessary\", \"necessarily\", \"would have to be\", \"required\", \"is ... necessary\", \"would be\", \"would have\", \"must be present\", \"goal\", \"purpose\", \"would\", \"would have to\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"gu\", \"acip\": \"DGOS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 2625}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snga ma",
+      "snga ma"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 4017,
+        "wylie": "snga ma",
+        "tibetan": "སྔ་མ",
+        "tibetan_source": null,
+        "acip": "SNGA MA",
+        "pronunciation": "ngama",
+        "pronunciation_source": null,
+        "sanskrit": "{C,MSA}pūrva; {C}purima; {LC}pūrvaka; {LC}prāk; {LC}prācī; {LC}purataḥ; {LC}prāgjanma",
+        "hopkins_english": "former; earlier; prior; early; {C}first; the first one",
+        "hgm_gloss": "[\"before\", \"former\", \"the former method\", \"first reference\", \"what we have just been talking about\", \"earlier\", \"last\", \"previous\", \"above\", \"earlier instance\", \"original\", \"first part\", \"just mentioned\", \"already\", \"beginning part of this ... section\", \"past\", \"previously\", \"former instances\", \"first\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS03\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 428,
+        "raw": "{\"tibetan\": \"སྔ་མ\", \"wylie\": \"snga ma\", \"wylie_variants\": [\"snga ma\"], \"tenses\": null, \"sanskrit\": \"{C,MSA}pūrva; {C}purima; {LC}pūrvaka; {LC}prāk; {LC}prācī; {LC}purataḥ; {LC}prāgjanma\", \"hopkins_english\": \"former; earlier; prior; early; {C}first; the first one\", \"hgm_gloss\": [\"before\", \"former\", \"the former method\", \"first reference\", \"what we have just been talking about\", \"earlier\", \"last\", \"previous\", \"above\", \"earlier instance\", \"original\", \"first part\", \"just mentioned\", \"already\", \"beginning part of this ... section\", \"past\", \"previously\", \"former instances\", \"first\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"ngama\", \"acip\": \"SNGA MA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS03\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 428}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "mtshungs",
+      "mtshungs"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 15769,
+        "wylie": "mtshungs",
+        "tibetan": "མཚུངས",
+        "tibetan_source": null,
+        "acip": "MTSUNGS",
+        "pronunciation": "tsung",
+        "pronunciation_source": null,
+        "sanskrit": "{C,L}sama; {MSA,MV}samāna; {MSA}samāna-bhāva; {C}tulya; {MV}sādharmya; {LC}iva; {LC}anantatulya; {LC}kāṣṭhatulya; {LC}nibha; {LC}pratima; {LC}sadṛśa; {LC}sādṛśya; {LC}anukāra; {LC}!!ābha; {LC}!!upama; {LC}evam; {LC}tulā; {LC}pratinidhi; {LC}māgha; {LC}yathā; {LC}!!vat; {LC}saṃkāśa; {LC}saṃnibha; {LC}samāḥ; {LC}sākṣāt; {LC}sāmya; {LC}sodara",
+        "hopkins_english": "similar; like; equal",
+        "hgm_gloss": "[\"equally\", \"parallel\", \"we could just as well\", \"same\", \"the same\", \"the same thing\", \"just the same\", \"the same as\", \"would be just the same\", \"equivalent\", \"exactly the same\", \"identical\", \"exactly the same!\", \"similar\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 415,
+        "raw": "{\"tibetan\": \"མཚུངས\", \"wylie\": \"mtshungs\", \"wylie_variants\": [\"mtshungs\"], \"tenses\": null, \"sanskrit\": \"{C,L}sama; {MSA,MV}samāna; {MSA}samāna-bhāva; {C}tulya; {MV}sādharmya; {LC}iva; {LC}anantatulya; {LC}kāṣṭhatulya; {LC}nibha; {LC}pratima; {LC}sadṛśa; {LC}sādṛśya; {LC}anukāra; {LC}!!ābha; {LC}!!upama; {LC}evam; {LC}tulā; {LC}pratinidhi; {LC}māgha; {LC}yathā; {LC}!!vat; {LC}saṃkāśa; {LC}saṃnibha; {LC}samāḥ; {LC}sākṣāt; {LC}sāmya; {LC}sodara\", \"hopkins_english\": \"similar; like; equal\", \"hgm_gloss\": [\"equally\", \"parallel\", \"we could just as well\", \"same\", \"the same\", \"the same thing\", \"just the same\", \"the same as\", \"would be just the same\", \"equivalent\", \"exactly the same\", \"identical\", \"exactly the same!\", \"similar\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"tsung\", \"acip\": \"MTSUNGS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 415}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "rnag khrag",
+      "rnag khrag"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 23908,
+        "wylie": "rnag khrag",
+        "tibetan": "རྣག་ཁྲག",
+        "tibetan_source": null,
+        "acip": "RNAG KHRAG",
+        "pronunciation": "naktrak",
+        "pronunciation_source": null,
+        "sanskrit": "{LC}pūyaśoṇita",
+        "hopkins_english": null,
+        "hgm_gloss": "[\"pus and blood\", \"blood and pus\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested (not in Great Dictionary)",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C05\", \"C15\", \"C16\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"]",
+        "corpus_n_segments": 91,
+        "raw": "{\"tibetan\": \"རྣག་ཁྲག\", \"wylie\": \"rnag khrag\", \"wylie_variants\": [\"rnag khrag\"], \"tenses\": null, \"sanskrit\": \"{LC}pūyaśoṇita\", \"hopkins_english\": null, \"hgm_gloss\": [\"pus and blood\", \"blood and pus\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"naktrak\", \"acip\": \"RNAG KHRAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C05\", \"C15\", \"C16\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"], \"n_segments\": 91}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "rnag",
+      "rnag"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 10448,
+        "wylie": "rnag",
+        "tibetan": "རྣག",
+        "tibetan_source": null,
+        "acip": "RNAG",
+        "pronunciation": "nak",
+        "pronunciation_source": null,
+        "sanskrit": "pūya; {LC}pūti; {LC}kāla; {LC}dhyāma; {LC}pūra",
+        "hopkins_english": "pus",
+        "hgm_gloss": "[\"blood and pus\", \"pus\", \"blood\", \"pus?\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C05\", \"C08\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"]",
+        "corpus_n_segments": 111,
+        "raw": "{\"tibetan\": \"རྣག\", \"wylie\": \"rnag\", \"wylie_variants\": [\"rnag\"], \"tenses\": null, \"sanskrit\": \"pūya; {LC}pūti; {LC}kāla; {LC}dhyāma; {LC}pūra\", \"hopkins_english\": \"pus\", \"hgm_gloss\": [\"blood and pus\", \"pus\", \"blood\", \"pus?\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"nak\", \"acip\": \"RNAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C05\", \"C08\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"], \"n_segments\": 111}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "khrag",
+      "khrag"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 1368,
+        "wylie": "khrag",
+        "tibetan": "ཁྲག",
+        "tibetan_source": null,
+        "acip": "KHRAG",
+        "pronunciation": "trak",
+        "pronunciation_source": null,
+        "sanskrit": "{LCh,C}rudhira; {LC}aṅgaja; {LC}asra; {LC}kīlāla; {LC}rakta; {LC}lohita; {LC}śoṇita; {LC}asṛk; {LC}ārttava; {LC}kṣataja; {LC}rattka??",
+        "hopkins_english": "blood",
+        "hgm_gloss": "[\"blood\", \"pus\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C05\", \"C07\", \"C08\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P5\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 257,
+        "raw": "{\"tibetan\": \"ཁྲག\", \"wylie\": \"khrag\", \"wylie_variants\": [\"khrag\"], \"tenses\": null, \"sanskrit\": \"{LCh,C}rudhira; {LC}aṅgaja; {LC}asra; {LC}kīlāla; {LC}rakta; {LC}lohita; {LC}śoṇita; {LC}asṛk; {LC}ārttava; {LC}kṣataja; {LC}rattka??\", \"hopkins_english\": \"blood\", \"hgm_gloss\": [\"blood\", \"pus\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"trak\", \"acip\": \"KHRAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C05\", \"C07\", \"C08\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P5\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 257}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "la sogs pa",
+      "la sogs pa"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 19208,
+        "wylie": "la sogs pa",
+        "tibetan": "ལ་སོགས་པ",
+        "tibetan_source": null,
+        "acip": "LA SOGS PA",
+        "pronunciation": "lasokpa",
+        "pronunciation_source": null,
+        "sanskrit": "sogs; {MSA}ādi; {C}ārabhya; {C}pramukha; {MSA}prabhṛti; {LC}ādya; {LC}prabhṛti, pramukha",
+        "hopkins_english": "etc.; and so forth; {C}with; (from the) beginning; begin; take hold of; about; concerning; with reference to; regarding; starting from; having turned his mind to; stimulated by; initially founded on; if I take into consideration; following on; headed (by); at the head of; be",
+        "hgm_gloss": "[\"and others of the like\", \"like\", \"and all the rest\", \"or the like\", \"and so on\", \"any\", \"and the like\", \"in other\", \"various\", \"and other such things\", \"and the rest\", \"and such\", \"other types such as\", \"like a\", \"start with\", \"or other types of beings\", \"too\", \"and on and on\", \"anything else\", \"or other details\", \"whatever\", \"such as\", \"and the other\", \"or anything of the like\", \"and everything else\", \"and all other\", \"and other such\", \"and all the others as well\", \"and others as well\", \"or any of the rest\", \"and other\", \"and ... other\", \"works like\", \"nor by the rest\", \"and each of the others\", \"or such\", \"something else\", \"and others\", \"or whatever\", \"and so forth\", \"a number of\", \"such\", \"and other such objects\", \"other\", \"or more\", \"or however\", \"the like\", \"or even more\", \"or someone else\", \"and all the other pains\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": "sogs",
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 888,
+        "raw": "{\"tibetan\": \"ལ་སོགས་པ\", \"wylie\": \"la sogs pa\", \"wylie_variants\": [\"la sogs pa\"], \"tenses\": \"sogs\", \"sanskrit\": \"sogs; {MSA}ādi; {C}ārabhya; {C}pramukha; {MSA}prabhṛti; {LC}ādya; {LC}prabhṛti, pramukha\", \"hopkins_english\": \"etc.; and so forth; {C}with; (from the) beginning; begin; take hold of; about; concerning; with reference to; regarding; starting from; having turned his mind to; stimulated by; initially founded on; if I take into consideration; following on; headed (by); at the head of; be\", \"hgm_gloss\": [\"and others of the like\", \"like\", \"and all the rest\", \"or the like\", \"and so on\", \"any\", \"and the like\", \"in other\", \"various\", \"and other such things\", \"and the rest\", \"and such\", \"other types such as\", \"like a\", \"start with\", \"or other types of beings\", \"too\", \"and on and on\", \"anything else\", \"or other details\", \"whatever\", \"such as\", \"and the other\", \"or anything of the like\", \"and everything else\", \"and all other\", \"and other such\", \"and all the others as well\", \"and others as well\", \"or any of the rest\", \"and other\", \"and ... other\", \"works like\", \"nor by the rest\", \"and each of the others\", \"or such\", \"something else\", \"and others\", \"or whatever\", \"and so forth\", \"a number of\", \"such\", \"and other such objects\", \"other\", \"or more\", \"or however\", \"the like\", \"or even more\", \"or someone else\", \"and all the other pains\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"lasokpa\", \"acip\": \"LA SOGS PA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 888}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "dngos po",
+      "dngos po"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 3672,
+        "wylie": "dngos po",
+        "tibetan": "དངོས་པོ",
+        "tibetan_source": null,
+        "acip": "DNGOS PO",
+        "pronunciation": "ngupo",
+        "pronunciation_source": "GMR card (C11 Language Study Guide)",
+        "sanskrit": "{LCh,MSA,MV,C,L}vastu; {LCh,MSA,MV,C,L}bhāva; {L}dravya; {L}mūla; {MSA}upadhi; {C}padārtha; {GD:106}sat; {LC}artha; {LC}ekabhāva; {LC}dravyatā; {LC}pakṣa; {LC}pada; {LC}bhava; {LC}bhavatva; {LC}bhikṣu-(bhikṣuṇī) bhāva; {LC}bhāvatva; {LC}catuḥsaṃgrahavastu; {LC}viṣayasya vastutvam; {LC}vastutva; {LC}vāstava; {LC}ṛktha; {LC}tadbhava; {LC}vasū",
+        "hopkins_english": "category; thing; [effective] thing; functioning thing; effective thing; functioning actuality; actuality; {N}topic; {C}actual reality; real thing; substantial (entity); root; basis; underlying reality; (objective) entity; objective reality; property; possession; cause; objectively existing entity; objective basis; existence; (= 5 skandhas); positivity; positi",
+        "hgm_gloss": "[\"things\", \"functional things\", \"functioning thing\", \"thing\", \"working things\", \"something\", \"something that functioned\", \"functional objects\", \"things that function\", \"thing that does function\", \"thing that did function\", \"thing which ... function\", \"working thing\", \"functioning\", \"things which function\", \"things which perform a function\", \"objects\", \"substances\", \"functional thing\", \"object\", \"functioning things\", \"nature of being a thing ... nature of being a thing\", \"phenomena\", \"things that perform a function\", \"acts\", \"put\", \"actually\", \"have any affect\", \"entities\", \"produced\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P5\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 943,
+        "raw": "{\"tibetan\": \"དངོས་པོ\", \"wylie\": \"dngos po\", \"wylie_variants\": [\"dngos po\"], \"tenses\": null, \"sanskrit\": \"{LCh,MSA,MV,C,L}vastu; {LCh,MSA,MV,C,L}bhāva; {L}dravya; {L}mūla; {MSA}upadhi; {C}padārtha; {GD:106}sat; {LC}artha; {LC}ekabhāva; {LC}dravyatā; {LC}pakṣa; {LC}pada; {LC}bhava; {LC}bhavatva; {LC}bhikṣu-(bhikṣuṇī) bhāva; {LC}bhāvatva; {LC}catuḥsaṃgrahavastu; {LC}viṣayasya vastutvam; {LC}vastutva; {LC}vāstava; {LC}ṛktha; {LC}tadbhava; {LC}vasū\", \"hopkins_english\": \"category; thing; [effective] thing; functioning thing; effective thing; functioning actuality; actuality; {N}topic; {C}actual reality; real thing; substantial (entity); root; basis; underlying reality; (objective) entity; objective reality; property; possession; cause; objectively existing entity; objective basis; existence; (= 5 skandhas); positivity; positi\", \"hgm_gloss\": [\"things\", \"functional things\", \"functioning thing\", \"thing\", \"working things\", \"something\", \"something that functioned\", \"functional objects\", \"things that function\", \"thing that does function\", \"thing that did function\", \"thing which ... function\", \"working thing\", \"functioning\", \"things which function\", \"things which perform a function\", \"objects\", \"substances\", \"functional thing\", \"object\", \"functioning things\", \"nature of being a thing ... nature of being a thing\", \"phenomena\", \"things that perform a function\", \"acts\", \"put\", \"actually\", \"have any affect\", \"entities\", \"produced\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"ngupo\", \"acip\": \"DNGOS PO\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P5\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 943}, \"pronunciation_source\": \"GMR card (C11 Language Study Guide)\", \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gsum po",
+      "gsum po"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 21228,
+        "wylie": "gsum po",
+        "tibetan": "གསུམ་པོ",
+        "tibetan_source": null,
+        "acip": "GSUM PO",
+        "pronunciation": "sumpo",
+        "pronunciation_source": null,
+        "sanskrit": "{LC}trayaḥ; {LC}ete trayaḥ satpuruṣāḥ; {LC}tṛtīya; {LC}trai!!; {LC}traya; {LC}alaṅkāratraya; {LC}niryāṇatraya; {LC}trayāḥ; {LC}trayī; {LC}tri; {LC}tridhā; {LC}trīṇi; {LC}trīn",
+        "hopkins_english": "the three",
+        "hgm_gloss": "[\"three\", \"the three\", \"these three\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C02\", \"C05\", \"C06\", \"C07\", \"C08\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 196,
+        "raw": "{\"tibetan\": \"གསུམ་པོ\", \"wylie\": \"gsum po\", \"wylie_variants\": [\"gsum po\"], \"tenses\": null, \"sanskrit\": \"{LC}trayaḥ; {LC}ete trayaḥ satpuruṣāḥ; {LC}tṛtīya; {LC}trai!!; {LC}traya; {LC}alaṅkāratraya; {LC}niryāṇatraya; {LC}trayāḥ; {LC}trayī; {LC}tri; {LC}tridhā; {LC}trīṇi; {LC}trīn\", \"hopkins_english\": \"the three\", \"hgm_gloss\": [\"three\", \"the three\", \"these three\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"sumpo\", \"acip\": \"GSUM PO\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C02\", \"C05\", \"C06\", \"C07\", \"C08\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 196}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "brlan",
+      "brlan"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 19192,
+        "wylie": "brlan",
+        "tibetan": "བརླན",
+        "tibetan_source": null,
+        "acip": "BRLAN",
+        "pronunciation": "len",
+        "pronunciation_source": null,
+        "sanskrit": "{LC}ārdra; {LC}rāgārdra; {LC}ārdrasantānatā; {LC}drava; {LC}ambulamba",
+        "hopkins_english": "wet; damp [quality of water]",
+        "hgm_gloss": "[\"wet\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"ILL\", \"P7\", \"P9\"]",
+        "corpus_n_segments": 66,
+        "raw": "{\"tibetan\": \"བརླན\", \"wylie\": \"brlan\", \"wylie_variants\": [\"brlan\"], \"tenses\": null, \"sanskrit\": \"{LC}ārdra; {LC}rāgārdra; {LC}ārdrasantānatā; {LC}drava; {LC}ambulamba\", \"hopkins_english\": \"wet; damp [quality of water]\", \"hgm_gloss\": [\"wet\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"len\", \"acip\": \"BRLAN\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"ILL\", \"P7\", \"P9\"], \"n_segments\": 66}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gsher ba",
+      "gsher ba"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 20149,
+        "wylie": "gsher ba",
+        "tibetan": "གཤེར་བ",
+        "tibetan_source": null,
+        "acip": "GSHER BA",
+        "pronunciation": "sherwa",
+        "pronunciation_source": null,
+        "sanskrit": "{LC}ārdra; {LC}drava; {LC}dravatva; {LC}pariṣyanda; {LC}sneha; {LC}pariṣyanda, samunna, sārdra, sneha",
+        "hopkins_english": "moistening",
+        "hgm_gloss": "[\"flowing\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"DTE\", \"P7\", \"P9\", \"TCS10\"]",
+        "corpus_n_segments": 66,
+        "raw": "{\"tibetan\": \"གཤེར་བ\", \"wylie\": \"gsher ba\", \"wylie_variants\": [\"gsher ba\"], \"tenses\": null, \"sanskrit\": \"{LC}ārdra; {LC}drava; {LC}dravatva; {LC}pariṣyanda; {LC}sneha; {LC}pariṣyanda, samunna, sārdra, sneha\", \"hopkins_english\": \"moistening\", \"hgm_gloss\": [\"flowing\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"sherwa\", \"acip\": \"GSHER BA\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"DTE\", \"P7\", \"P9\", \"TCS10\"], \"n_segments\": 66}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "phor pa",
+      "phor pa"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 24066,
+        "wylie": "phor pa",
+        "tibetan": "ཕོར་པ",
+        "tibetan_source": null,
+        "acip": "PHOR PA",
+        "pronunciation": "porpa",
+        "pronunciation_source": null,
+        "sanskrit": "{LC}saraka; {LC}ulūkhala; {LC}khāri, pātra, śarāvaka; {LC}taṭvaka",
+        "hopkins_english": null,
+        "hgm_gloss": "[\"glass\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested (not in Great Dictionary)",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"EM\", \"P7\", \"P9\", \"TCS09\"]",
+        "corpus_n_segments": 70,
+        "raw": "{\"tibetan\": \"ཕོར་པ\", \"wylie\": \"phor pa\", \"wylie_variants\": [\"phor pa\"], \"tenses\": null, \"sanskrit\": \"{LC}saraka; {LC}ulūkhala; {LC}khāri, pātra, śarāvaka; {LC}taṭvaka\", \"hopkins_english\": null, \"hgm_gloss\": [\"glass\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"porpa\", \"acip\": \"PHOR PA\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"EM\", \"P7\", \"P9\", \"TCS09\"], \"n_segments\": 70}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gang po",
+      "gang po"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 22118,
+        "wylie": "gang po",
+        "tibetan": "གང་པོ",
+        "tibetan_source": null,
+        "acip": "GANG PO",
+        "pronunciation": "gangpo",
+        "pronunciation_source": null,
+        "sanskrit": "{LC}pūrṇa; {LC}pūrṇo maitrāyaṇīputraḥ; {LC}pūrṇaka; {LC}parava; {LC}supūrṇa",
+        "hopkins_english": null,
+        "hgm_gloss": "[\"full of\", \"filled with\", \"full\", \"filled\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested (not in Great Dictionary)",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"P7\", \"P9\"]",
+        "corpus_n_segments": 40,
+        "raw": "{\"tibetan\": \"གང་པོ\", \"wylie\": \"gang po\", \"wylie_variants\": [\"gang po\"], \"tenses\": null, \"sanskrit\": \"{LC}pūrṇa; {LC}pūrṇo maitrāyaṇīputraḥ; {LC}pūrṇaka; {LC}parava; {LC}supūrṇa\", \"hopkins_english\": null, \"hgm_gloss\": [\"full of\", \"filled with\", \"full\", \"filled\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"gangpo\", \"acip\": \"GANG PO\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"P7\", \"P9\"], \"n_segments\": 40}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snang ba",
+      "snang ba"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 11018,
+        "wylie": "snang ba",
+        "tibetan": "སྣང་བ",
+        "tibetan_source": null,
+        "acip": "SNANG BA",
+        "pronunciation": "nangwa",
+        "pronunciation_source": null,
+        "sanskrit": "{MSA}avabhāsa; {MSA}ābhāsa; {GD} pratibhā; {C,TN,N}pratibhāsa; {MV}pratibhās-; {C,MSA,MV}pratibhāṣa {C}(=prabhāsa); {MSA} pratibhāṣita; {MSA}āloka; {C,MV}darśana; {C} dṛśyate; (√dṛś): {MSA}dṛśyase; {C}prakāśa (=āloka); {TN}khyāti; {MSA}khyāna; {MV} prakhyāna;; {LC}anujñāta; {LC}abhilakṣita; {LC}avabhāsamāna; {LC}avabhāsitva; {LC}ādarśa; {LC}!!ābha; {LC}ābhatva; {LC}ābhāsante; {LC}samantāloka; {LC}āvirbhāva; {LC}īkṣase; {LC}jyotis; {LC}adarśana; {LC}dṛśyatva; {LC}dṛśyamāna; {LC}dṛṣṭa; {LC}dyuti; {LC}nirbhāsa; {LC}prajñāyate; {LC}pradhṛṣya; {LC}suvarṇaprabhāsitā; {LC}bhāsamāna; {LC}vyañjaka; {LC}yāvat pratyayasāmagrī tāvat kāyaḥ pumāniva, evaṃ karāda sā yāvattāvatkāyo&tra dṛśyate,,; {LC}ātapa; {LC}ālokatā; {LC}ālokana; {LC}kṣata; {LC}grāhaka, ghṛṇi; {LC}jyoti; {LC}dīpa; {LC}dīpta; {LC}bimbita; {LC}bhānu; {LC}bhāsate; {LC}bhāsanta, bhrājiṣṇu; {LC}ruci",
+        "hopkins_english": "appearance; appear; perceive; light; illuminate; illumination; {PH}luminosity; {C}sight; exhibit; visible; (act of) seeing; exhibition; vision; is seen; has appeared; has seen; reflection (of an object in a mirror); reflection of an object in water; image; reflected image; reflection of the moon in water; apparition; {N} appearing",
+        "hgm_gloss": "[\"appearance\", \"the appearance of things\"]",
+        "tier": "curated",
+        "hgm_source": null,
+        "status": "hgm-attested",
+        "tenses": "snang snang snang snang",
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C08\", \"C09\", \"C10\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Mantras\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 573,
+        "raw": "{\"tibetan\": \"སྣང་བ\", \"wylie\": \"snang ba\", \"wylie_variants\": [\"snang ba\"], \"tenses\": \"snang snang snang snang\", \"sanskrit\": \"{MSA}avabhāsa; {MSA}ābhāsa; {GD} pratibhā; {C,TN,N}pratibhāsa; {MV}pratibhās-; {C,MSA,MV}pratibhāṣa {C}(=prabhāsa); {MSA} pratibhāṣita; {MSA}āloka; {C,MV}darśana; {C} dṛśyate; (√dṛś): {MSA}dṛśyase; {C}prakāśa (=āloka); {TN}khyāti; {MSA}khyāna; {MV} prakhyāna;; {LC}anujñāta; {LC}abhilakṣita; {LC}avabhāsamāna; {LC}avabhāsitva; {LC}ādarśa; {LC}!!ābha; {LC}ābhatva; {LC}ābhāsante; {LC}samantāloka; {LC}āvirbhāva; {LC}īkṣase; {LC}jyotis; {LC}adarśana; {LC}dṛśyatva; {LC}dṛśyamāna; {LC}dṛṣṭa; {LC}dyuti; {LC}nirbhāsa; {LC}prajñāyate; {LC}pradhṛṣya; {LC}suvarṇaprabhāsitā; {LC}bhāsamāna; {LC}vyañjaka; {LC}yāvat pratyayasāmagrī tāvat kāyaḥ pumāniva, evaṃ karāda sā yāvattāvatkāyo&tra dṛśyate,,; {LC}ātapa; {LC}ālokatā; {LC}ālokana; {LC}kṣata; {LC}grāhaka, ghṛṇi; {LC}jyoti; {LC}dīpa; {LC}dīpta; {LC}bimbita; {LC}bhānu; {LC}bhāsate; {LC}bhāsanta, bhrājiṣṇu; {LC}ruci\", \"hopkins_english\": \"appearance; appear; perceive; light; illuminate; illumination; {PH}luminosity; {C}sight; exhibit; visible; (act of) seeing; exhibition; vision; is seen; has appeared; has seen; reflection (of an object in a mirror); reflection of an object in water; image; reflected image; reflection of the moon in water; apparition; {N} appearing\", \"hgm_gloss\": [\"appearance\", \"the appearance of things\"], \"hgm_evidence\": {\"tier\": \"curated\", \"id\": \"0024\", \"status\": \"verified\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"nangwa\", \"acip\": \"SNANG BA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C08\", \"C09\", \"C10\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Mantras\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 573}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "steng du",
+      "steng du"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 6941,
+        "wylie": "steng du",
+        "tibetan": "སྟེང་དུ",
+        "tibetan_source": null,
+        "acip": "STENG DU",
+        "pronunciation": "teng du",
+        "pronunciation_source": null,
+        "sanskrit": "{LC}agre; {LC}ekarajāgre; {LC}upari; {LC}uparyasthīni nipetatuḥ; {LC}uparitaḥ; {LC}na gulphe gulphamādhāya; {LC}utsaṅge; {LC}upariṣṭāt; {LC}ūrdhva!!; {LC}ūrdhvam; {LC}!!pṛṣṭhe",
+        "hopkins_english": "[top-on]; on top of; in terms of; in addition to; related with [like the possession of an attribute]; in relation to; {PH}in addition (to); in relation (to); in terms (of)",
+        "hgm_gloss": "[\"on top\", \"along in\", \"above\", \"upon\", \"standing\", \"on\", \"about\", \"at all\", \"acting as a basis\", \"any case\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 437,
+        "raw": "{\"tibetan\": \"སྟེང་དུ\", \"wylie\": \"steng du\", \"wylie_variants\": [\"steng du\"], \"tenses\": null, \"sanskrit\": \"{LC}agre; {LC}ekarajāgre; {LC}upari; {LC}uparyasthīni nipetatuḥ; {LC}uparitaḥ; {LC}na gulphe gulphamādhāya; {LC}utsaṅge; {LC}upariṣṭāt; {LC}ūrdhva!!; {LC}ūrdhvam; {LC}!!pṛṣṭhe\", \"hopkins_english\": \"[top-on]; on top of; in terms of; in addition to; related with [like the possession of an attribute]; in relation to; {PH}in addition (to); in relation (to); in terms (of)\", \"hgm_gloss\": [\"on top\", \"along in\", \"above\", \"upon\", \"standing\", \"on\", \"about\", \"at all\", \"acting as a basis\", \"any case\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"teng du\", \"acip\": \"STENG DU\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 437}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snang tshul",
+      "snang tshul"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 11049,
+        "wylie": "snang tshul",
+        "tibetan": "སྣང་ཚུལ",
+        "tibetan_source": null,
+        "acip": "SNANG TSUL",
+        "pronunciation": "nangtsul",
+        "pronunciation_source": null,
+        "sanskrit": null,
+        "hopkins_english": "mode of appearance",
+        "hgm_gloss": "[\"ways of appearing\", \"appeared one way\", \"appearing\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": "snang snang snang snang",
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C03\", \"C05\", \"C15\", \"C16\", \"DDA\", \"EM\", \"ILL\", \"P1\", \"P7\", \"SOS\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS10\", \"TCS13\"]",
+        "corpus_n_segments": 42,
+        "raw": "{\"tibetan\": \"སྣང་ཚུལ\", \"wylie\": \"snang tshul\", \"wylie_variants\": [\"snang tshul\"], \"tenses\": \"snang snang snang snang\", \"sanskrit\": null, \"hopkins_english\": \"mode of appearance\", \"hgm_gloss\": [\"ways of appearing\", \"appeared one way\", \"appearing\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"nangtsul\", \"acip\": \"SNANG TSUL\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C03\", \"C05\", \"C15\", \"C16\", \"DDA\", \"EM\", \"ILL\", \"P1\", \"P7\", \"SOS\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS10\", \"TCS13\"], \"n_segments\": 42}}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "mi 'dra ba",
+      "mi 'dra ba"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 14183,
+        "wylie": "mi 'dra ba",
+        "tibetan": "མི་འདྲ་བ",
+        "tibetan_source": null,
+        "acip": "MI 'DRA BA",
+        "pronunciation": "mindrawa",
+        "pronunciation_source": null,
+        "sanskrit": "{C,MV}pratikūla; {MSA} vilakṣaṇatva; {MSA}vailakṣaṇya; {GD:119} asadṛśa; {LC}asādṛśya; {LC}asārūpya; {LC}viṣama; {LC}visadṛśa",
+        "hopkins_english": "dissimilar; different; being specific, i.e., individual {GD:119}; not alike; {C}averse to; repugnant; revulsion",
+        "hgm_gloss": "[\"different\", \"dissimilar\", \"variety\", \"different permutations\", \"different combinations\", \"differences\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C11\", \"C12\", \"C14\", \"C15\", \"C16\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P4\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS04Mantras\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 123,
+        "raw": "{\"tibetan\": \"མི་འདྲ་བ\", \"wylie\": \"mi 'dra ba\", \"wylie_variants\": [\"mi 'dra ba\"], \"tenses\": null, \"sanskrit\": \"{C,MV}pratikūla; {MSA} vilakṣaṇatva; {MSA}vailakṣaṇya; {GD:119} asadṛśa; {LC}asādṛśya; {LC}asārūpya; {LC}viṣama; {LC}visadṛśa\", \"hopkins_english\": \"dissimilar; different; being specific, i.e., individual {GD:119}; not alike; {C}averse to; repugnant; revulsion\", \"hgm_gloss\": [\"different\", \"dissimilar\", \"variety\", \"different permutations\", \"different combinations\", \"differences\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"mindrawa\", \"acip\": \"MI 'DRA BA\", \"corpus_occurrences\": {\"courses\": [\"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C11\", \"C12\", \"C14\", \"C15\", \"C16\", \"C18\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P4\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS04Mantras\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 123}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snang bar",
+      "snang bar"
+    ],
+    "count": 0,
+    "rows": []
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "yang kha cig na re",
+      "yang kha cig na re"
+    ],
+    "count": 0,
+    "rows": []
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "phan tshun",
+      "phan tshun"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 11678,
+        "wylie": "phan tshun",
+        "tibetan": "ཕན་ཚུན",
+        "tibetan_source": null,
+        "acip": "PHAN TSUN",
+        "pronunciation": "pentsun",
+        "pronunciation_source": null,
+        "sanskrit": "{LCh,MSA}anyonya; {C} parasparam; {C}mitha; {LC}anyamanya!!; {LC}anyo&nya; {LC}anvaya; {LC}itaretara; {LC}itaścāmutaśca; {LC}itastataḥ; {LC}tiryak; {LC}paramparam; {LC}paraspareṇa; {LC}mithaḥ; {LC}saṃbheda; {LC}paramparāka; {LC}saṃbādha, saṃbheda",
+        "hopkins_english": "mutual; mutually{D2}; {PH}opposite sides",
+        "hgm_gloss": "[\"each other ... each other ... each other\", \"each other\", \"side by side\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C05\", \"C08\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"TCS02\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 154,
+        "raw": "{\"tibetan\": \"ཕན་ཚུན\", \"wylie\": \"phan tshun\", \"wylie_variants\": [\"phan tshun\"], \"tenses\": null, \"sanskrit\": \"{LCh,MSA}anyonya; {C} parasparam; {C}mitha; {LC}anyamanya!!; {LC}anyo&nya; {LC}anvaya; {LC}itaretara; {LC}itaścāmutaśca; {LC}itastataḥ; {LC}tiryak; {LC}paramparam; {LC}paraspareṇa; {LC}mithaḥ; {LC}saṃbheda; {LC}paramparāka; {LC}saṃbādha, saṃbheda\", \"hopkins_english\": \"mutual; mutually{D2}; {PH}opposite sides\", \"hgm_gloss\": [\"each other ... each other ... each other\", \"each other\", \"side by side\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"pentsun\", \"acip\": \"PHAN TSUN\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C05\", \"C08\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"TCS02\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18LamaChupa\"], \"n_segments\": 154}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "go sa 'gog pa",
+      "go sa 'gog pa"
+    ],
+    "count": 0,
+    "rows": []
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "go sa",
+      "go sa"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 1865,
+        "wylie": "go sa",
+        "tibetan": "གོ་ས",
+        "tibetan_source": null,
+        "acip": "GO SA",
+        "pronunciation": "gosa",
+        "pronunciation_source": null,
+        "sanskrit": null,
+        "hopkins_english": "place; area; rank; station",
+        "hgm_gloss": "[\"point in space\", \"space taken up\", \"space which they themselves occupy\", \"space they occupy\", \"space\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C05\", \"C08\", \"C11\", \"C14\", \"C15\", \"C16\", \"EM\", \"GIE\", \"ILL\", \"P7\", \"Sunlight\", \"TCS06\", \"TCS13\", \"TCS16Reading\", \"TCS17\"]",
+        "corpus_n_segments": 31,
+        "raw": "{\"tibetan\": \"གོ་ས\", \"wylie\": \"go sa\", \"wylie_variants\": [\"go sa\"], \"tenses\": null, \"sanskrit\": null, \"hopkins_english\": \"place; area; rank; station\", \"hgm_gloss\": [\"point in space\", \"space taken up\", \"space which they themselves occupy\", \"space they occupy\", \"space\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"gosa\", \"acip\": \"GO SA\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C08\", \"C11\", \"C14\", \"C15\", \"C16\", \"EM\", \"GIE\", \"ILL\", \"P7\", \"Sunlight\", \"TCS06\", \"TCS13\", \"TCS16Reading\", \"TCS17\"], \"n_segments\": 31}}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'gog pa",
+      "'gog pa"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 2580,
+        "wylie": "'gog pa",
+        "tibetan": "འགོག་པ",
+        "tibetan_source": null,
+        "acip": "'GOG PA",
+        "pronunciation": "gokpa",
+        "pronunciation_source": null,
+        "sanskrit": "{L,MSA,MV}nirodha; {C}nirodhi; {C}nirodhika; {C}niṣedha; lam ‘gog pa = {MSA} paripantha; {LC}ityasya ca loṭ; {LC}avarodha; {LC}upanidhi; {LC}nikṣepa; {LC}nyāsa; {LC}pratibandha; {LC}pratiṣedha; {LC}pratiṣedhaka; {LC}pratyādeśa; {LC}pravāraṇa; {LC}nivāraka; {LC}saṃrodha; {LC}saṃjñānirodha; {LC}ākṣipta; {LC}ākṣepa; {LC}pratiṣidhyate; {LC}yati; {LC}ruddha; {LC}vyāvṛtti; {LC}saṃrundhe",
+        "hopkins_english": "cessation; stopping; {C}which stops; inadmissible; refrain; repudiation",
+        "hgm_gloss": "[\"stop\", \"put an end\", \"eliminate\", \"refutation\", \"disprove\", \"deny\", \"disproving\", \"denying\", \"denies\", \"deny the possibility that\", \"block\", \"cessation\", \"denial\", \"end\", \"end ... end\", \"denying the existence\", \"refute\", \"which we use for denying\", \"denying that things\", \"process of eliminating\", \"cessations\", \"no\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C02\", \"C05\", \"C08\", \"C10\", \"C11\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P3\", \"P5\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS04Mantras\", \"TCS05\", \"TCS07\", \"TCS13\", \"TCS15\", \"TCS17\"]",
+        "corpus_n_segments": 178,
+        "raw": "{\"tibetan\": \"འགོག་པ\", \"wylie\": \"'gog pa\", \"wylie_variants\": [\"'gog pa\"], \"tenses\": null, \"sanskrit\": \"{L,MSA,MV}nirodha; {C}nirodhi; {C}nirodhika; {C}niṣedha; lam ‘gog pa = {MSA} paripantha; {LC}ityasya ca loṭ; {LC}avarodha; {LC}upanidhi; {LC}nikṣepa; {LC}nyāsa; {LC}pratibandha; {LC}pratiṣedha; {LC}pratiṣedhaka; {LC}pratyādeśa; {LC}pravāraṇa; {LC}nivāraka; {LC}saṃrodha; {LC}saṃjñānirodha; {LC}ākṣipta; {LC}ākṣepa; {LC}pratiṣidhyate; {LC}yati; {LC}ruddha; {LC}vyāvṛtti; {LC}saṃrundhe\", \"hopkins_english\": \"cessation; stopping; {C}which stops; inadmissible; refrain; repudiation\", \"hgm_gloss\": [\"stop\", \"put an end\", \"eliminate\", \"refutation\", \"disprove\", \"deny\", \"disproving\", \"denying\", \"denies\", \"deny the possibility that\", \"block\", \"cessation\", \"denial\", \"end\", \"end ... end\", \"denying the existence\", \"refute\", \"which we use for denying\", \"denying that things\", \"process of eliminating\", \"cessations\", \"no\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"gokpa\", \"acip\": \"'GOG PA\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C02\", \"C05\", \"C08\", \"C10\", \"C11\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P3\", \"P5\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS04Mantras\", \"TCS05\", \"TCS07\", \"TCS13\", \"TCS15\", \"TCS17\"], \"n_segments\": 178}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "ma yin par thal",
+      "ma yin par thal"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 24483,
+        "wylie": "ma yin par thal",
+        "tibetan": "མ་ཡིན་པར་ཐལ",
+        "tibetan_source": null,
+        "acip": "MA YIN PAR THAL",
+        "pronunciation": "mayinpar tel",
+        "pronunciation_source": null,
+        "sanskrit": null,
+        "hopkins_english": null,
+        "hgm_gloss": "[\"are they then not\", \"isn't it though not true that\", \"isn't it not the case that\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested (not in Great Dictionary)",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C04\", \"C05\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"EM\", \"GK\", \"P7\", \"P9\", \"SOS\", \"Sunlight\", \"TCS06\"]",
+        "corpus_n_segments": 299,
+        "raw": "{\"tibetan\": \"མ་ཡིན་པར་ཐལ\", \"wylie\": \"ma yin par thal\", \"wylie_variants\": [\"ma yin par thal\"], \"tenses\": null, \"sanskrit\": null, \"hopkins_english\": null, \"hgm_gloss\": [\"are they then not\", \"isn't it though not true that\", \"isn't it not the case that\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"mayinpar tel\", \"acip\": \"MA YIN PAR THAL\", \"corpus_occurrences\": {\"courses\": [\"C04\", \"C05\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"EM\", \"GK\", \"P7\", \"P9\", \"SOS\", \"Sunlight\", \"TCS06\"], \"n_segments\": 299}}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "las can",
+      "las can"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 19364,
+        "wylie": "las can",
+        "tibetan": "ལས་ཅན",
+        "tibetan_source": null,
+        "acip": "LAS CAN",
+        "pronunciation": "lechen",
+        "pronunciation_source": null,
+        "sanskrit": "{MSA}karmaka; {LC}kārmuka",
+        "hopkins_english": "having action/ karma; active",
+        "hgm_gloss": "[\"with their own karma\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"EM\", \"GIE\", \"P7\", \"TCS05\", \"TCS17\"]",
+        "corpus_n_segments": 23,
+        "raw": "{\"tibetan\": \"ལས་ཅན\", \"wylie\": \"las can\", \"wylie_variants\": [\"las can\"], \"tenses\": null, \"sanskrit\": \"{MSA}karmaka; {LC}kārmuka\", \"hopkins_english\": \"having action/ karma; active\", \"hgm_gloss\": [\"with their own karma\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"lechen\", \"acip\": \"LAS CAN\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"EM\", \"GIE\", \"P7\", \"TCS05\", \"TCS17\"], \"n_segments\": 23}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'gro ba",
+      "'gro ba"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 2677,
+        "wylie": "'gro ba",
+        "tibetan": "འགྲོ་བ",
+        "tibetan_source": null,
+        "acip": "'GRO BA",
+        "pronunciation": "drowa",
+        "pronunciation_source": "GMR card (C14 Language Study Guide)",
+        "sanskrit": "{L,MV,MSA,C}gati; gantṛ; {L,MV,MSA,C}gamana; {C}gacchati; {MSA} upaga; {MSA}ga (e.g.: pāra-ga); {MSA}gāmitā; {MSA}gāmin; {C,MSA,MV}jagat; {C}jagatī; {C} saṃkrāmati; {C}prakrāmati; {C}abhikramaṇa; {C}avakrānti; {C}vrajate; {MSA}yāti; {MSA} yāna; {LC}adhigati; {LC}anucaṃkramati; {LC}avakramati; {LC}ākramaṇa; {LC}āgati; {LC}upasaṃkramati; {LC}upasaṃkramitum; {LC}gacchāmi; {LC}gata; {LC}ūrdhvagata; {LC}apāyagati; {LC}svargati; {LC}tiryaggati; {LC}bhavagati; {LC}gantum; {LC}!!gamatā; {LC}pūrvaṃgamatā; {LC}śaraṇagamana; {LC}akvacidgamana; {LC}gāmanī; {LC}!!gāmitā; {LC}viśeṣagāmitā; {LC}gāminī; {LC}caṃkramati; {LC}carat; {LC}jaṃgama; {LC}jana; {LC}jāti; {LC}nipātin; {LC}nirgama; {LC}parāyaṇa; {LC}prakramate; {LC}prayāṇa; {LC}pravṛtti; {LC}samyakprahāṇaprasaṭhāriḥ; {LC}praskanda; {LC}mantraṇā; {LC}yāyāt; {LC}yāyin; {LC}loka; {LC}viprakramaṇa; {LC}saṃgīti; {LC}cārikāṃ carati; {LC}añcati; {LC}ayana; {LC}itvarī; {LC}ṛ, !!ga; {LC}gacchantaḥ; {LC}gacchanti; {LC}gantakāma; {LC}!!gama; {LC}gamanīya; {LC}gamya; {LC}!!gāmin; {LC}gāhamāna; {LC}caṃkrama; {LC}calati; {LC}jaṅgama; {LC}prayāt; {LC}prayāti; {LC}pravāha; {LC}prasarpat; {LC}prasthāna; {LC}bhava; {LC}yātrā; {LC}yāhi; {LC}vraji; {LC}saṅgīta, saṅgīti; {LC}sarvajagatī; {LC}syanna",
+        "hopkins_english": "transmigrator; transmigration; going; go away from; {PH}transmigration; rebirth; {C}goes; go away; walk; go through; come to; journey; the journey will bring to; the world; to pass on; transmigrates; pass away from; come along; going out",
+        "hgm_gloss": "[\"living being(s)\"]",
+        "tier": "curated",
+        "hgm_source": null,
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 744,
+        "raw": "{\"tibetan\": \"འགྲོ་བ\", \"wylie\": \"'gro ba\", \"wylie_variants\": [\"'gro ba\"], \"tenses\": null, \"sanskrit\": \"{L,MV,MSA,C}gati; gantṛ; {L,MV,MSA,C}gamana; {C}gacchati; {MSA} upaga; {MSA}ga (e.g.: pāra-ga); {MSA}gāmitā; {MSA}gāmin; {C,MSA,MV}jagat; {C}jagatī; {C} saṃkrāmati; {C}prakrāmati; {C}abhikramaṇa; {C}avakrānti; {C}vrajate; {MSA}yāti; {MSA} yāna; {LC}adhigati; {LC}anucaṃkramati; {LC}avakramati; {LC}ākramaṇa; {LC}āgati; {LC}upasaṃkramati; {LC}upasaṃkramitum; {LC}gacchāmi; {LC}gata; {LC}ūrdhvagata; {LC}apāyagati; {LC}svargati; {LC}tiryaggati; {LC}bhavagati; {LC}gantum; {LC}!!gamatā; {LC}pūrvaṃgamatā; {LC}śaraṇagamana; {LC}akvacidgamana; {LC}gāmanī; {LC}!!gāmitā; {LC}viśeṣagāmitā; {LC}gāminī; {LC}caṃkramati; {LC}carat; {LC}jaṃgama; {LC}jana; {LC}jāti; {LC}nipātin; {LC}nirgama; {LC}parāyaṇa; {LC}prakramate; {LC}prayāṇa; {LC}pravṛtti; {LC}samyakprahāṇaprasaṭhāriḥ; {LC}praskanda; {LC}mantraṇā; {LC}yāyāt; {LC}yāyin; {LC}loka; {LC}viprakramaṇa; {LC}saṃgīti; {LC}cārikāṃ carati; {LC}añcati; {LC}ayana; {LC}itvarī; {LC}ṛ, !!ga; {LC}gacchantaḥ; {LC}gacchanti; {LC}gantakāma; {LC}!!gama; {LC}gamanīya; {LC}gamya; {LC}!!gāmin; {LC}gāhamāna; {LC}caṃkrama; {LC}calati; {LC}jaṅgama; {LC}prayāt; {LC}prayāti; {LC}pravāha; {LC}prasarpat; {LC}prasthāna; {LC}bhava; {LC}yātrā; {LC}yāhi; {LC}vraji; {LC}saṅgīta, saṅgīti; {LC}sarvajagatī; {LC}syanna\", \"hopkins_english\": \"transmigrator; transmigration; going; go away from; {PH}transmigration; rebirth; {C}goes; go away; walk; go through; come to; journey; the journey will bring to; the world; to pass on; transmigrates; pass away from; come along; going out\", \"hgm_gloss\": [\"living being(s)\"], \"hgm_evidence\": {\"tier\": \"curated\", \"id\": \"0031\", \"status\": \"verified\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"drowa\", \"acip\": \"'GRO BA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 744}, \"pronunciation_source\": \"GMR card (C14 Language Study Guide)\", \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "cig car du",
+      "cig car du"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 4169,
+        "wylie": "cig car du",
+        "tibetan": "ཅིག་ཅར་དུ",
+        "tibetan_source": null,
+        "acip": "CIG CAR DU",
+        "pronunciation": "chikchar du",
+        "pronunciation_source": null,
+        "sanskrit": "{LCh}yugapad; {LC}yugapat",
+        "hopkins_english": "simultaneous; at one time; simultaneously",
+        "hgm_gloss": "[\"sit down together\", \"at the same time\", \"all sit down\", \"all together\", \"all sit down together\", \"all at once\", \"in one step\", \"at once\", \"together\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C04\", \"C05\", \"C09\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GK\", \"ILL\", \"P7\", \"SOS\", \"TCS03\", \"TCS10\", \"TCS14\"]",
+        "corpus_n_segments": 73,
+        "raw": "{\"tibetan\": \"ཅིག་ཅར་དུ\", \"wylie\": \"cig car du\", \"wylie_variants\": [\"cig car du\"], \"tenses\": null, \"sanskrit\": \"{LCh}yugapad; {LC}yugapat\", \"hopkins_english\": \"simultaneous; at one time; simultaneously\", \"hgm_gloss\": [\"sit down together\", \"at the same time\", \"all sit down\", \"all together\", \"all sit down together\", \"all at once\", \"in one step\", \"at once\", \"together\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"chikchar du\", \"acip\": \"CIG CAR DU\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C04\", \"C05\", \"C09\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GK\", \"ILL\", \"P7\", \"SOS\", \"TCS03\", \"TCS10\", \"TCS14\"], \"n_segments\": 73}, \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "bltas pa",
+      "bltas pa"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 7117,
+        "wylie": "bltas pa",
+        "tibetan": "བལྟས་པ",
+        "tibetan_source": null,
+        "acip": "BLTAS PA",
+        "pronunciation": "tepa",
+        "pronunciation_source": null,
+        "sanskrit": "{C}vyavalokayati; {LC}apekṣā; {LC}vyavalokita; {LC}!!darśa; {LC}prekṣate; {LC}samullokita; {LC}puraskṛta; {LC}ālokana; {LC}ālokita; {LC}dṛṣṭa; {LC}vilokayat",
+        "hopkins_english": "verb: to view; to look7 noun: view; false view; {C}behold; survey; consider; look down (from on high)",
+        "hgm_gloss": "[\"looks\", \"look\", \"looking\", \"is looked\", \"look upon\", \"look at\", \"looked upon\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"P7\", \"TCS05\", \"TCS06\", \"TCS13\", \"TCS14\", \"TCS17\"]",
+        "corpus_n_segments": 74,
+        "raw": "{\"tibetan\": \"བལྟས་པ\", \"wylie\": \"bltas pa\", \"wylie_variants\": [\"bltas pa\"], \"tenses\": null, \"sanskrit\": \"{C}vyavalokayati; {LC}apekṣā; {LC}vyavalokita; {LC}!!darśa; {LC}prekṣate; {LC}samullokita; {LC}puraskṛta; {LC}ālokana; {LC}ālokita; {LC}dṛṣṭa; {LC}vilokayat\", \"hopkins_english\": \"verb: to view; to look7 noun: view; false view; {C}behold; survey; consider; look down (from on high)\", \"hgm_gloss\": [\"looks\", \"look\", \"looking\", \"is looked\", \"look upon\", \"look at\", \"looked upon\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"tepa\", \"acip\": \"BLTAS PA\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"P7\", \"TCS05\", \"TCS06\", \"TCS13\", \"TCS14\", \"TCS17\"], \"n_segments\": 74}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "de'i tshe",
+      "de'i tshe"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 8584,
+        "wylie": "de'i tshe",
+        "tibetan": "དེའི་ཚེ",
+        "tibetan_source": null,
+        "acip": "DE'I TSE",
+        "pronunciation": "dey tse",
+        "pronunciation_source": null,
+        "sanskrit": "{C}tadā; velā; {C}(tatra-) avasthāyām; {LC}tasyāṃ velāyām; {LC}tena kālena; {LC}tena khalu punaḥ samayena; {LC}tataḥ; {LC}tasmin samaye; {LC}tasyaṃ velāyām; {LC}tena ca samayena",
+        "hopkins_english": "at that time; {C}then; occasion; thereupon",
+        "hgm_gloss": "[\"during this period\", \"these first\", \"at this point\", \"at this stage\", \"at this particular point\", \"at this particular moment\", \"in such a case\", \"if this were the case\", \"in those days\", \"when\", \"as\", \"in this situation\", \"at this point then\", \"think of a case where\", \"in this same situation\", \"at this same time\", \"this situation\", \"at this point in time\", \"at this particular point in time\", \"point\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P5\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS06\", \"TCS07\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\"]",
+        "corpus_n_segments": 471,
+        "raw": "{\"tibetan\": \"དེའི་ཚེ\", \"wylie\": \"de'i tshe\", \"wylie_variants\": [\"de'i tshe\"], \"tenses\": null, \"sanskrit\": \"{C}tadā; velā; {C}(tatra-) avasthāyām; {LC}tasyāṃ velāyām; {LC}tena kālena; {LC}tena khalu punaḥ samayena; {LC}tataḥ; {LC}tasmin samaye; {LC}tasyaṃ velāyām; {LC}tena ca samayena\", \"hopkins_english\": \"at that time; {C}then; occasion; thereupon\", \"hgm_gloss\": [\"during this period\", \"these first\", \"at this point\", \"at this stage\", \"at this particular point\", \"at this particular moment\", \"in such a case\", \"if this were the case\", \"in those days\", \"when\", \"as\", \"in this situation\", \"at this point then\", \"think of a case where\", \"in this same situation\", \"at this same time\", \"this situation\", \"at this point in time\", \"at this particular point in time\", \"point\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"dey tse\", \"acip\": \"DE'I TSE\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P5\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS06\", \"TCS07\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\"], \"n_segments\": 471}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad grub pa",
+      "tshad grub pa"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 24799,
+        "wylie": "tshad grub pa",
+        "tibetan": "ཚད་གྲུབ་པ",
+        "tibetan_source": null,
+        "acip": "TSAD GRUB PA",
+        "pronunciation": "tsedruppa",
+        "pronunciation_source": null,
+        "sanskrit": null,
+        "hopkins_english": null,
+        "hgm_gloss": "[\"confirmed by a valid perception\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested (not in Great Dictionary)",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"P7\"]",
+        "corpus_n_segments": 11,
+        "raw": "{\"tibetan\": \"ཚད་གྲུབ་པ\", \"wylie\": \"tshad grub pa\", \"wylie_variants\": [\"tshad grub pa\"], \"tenses\": null, \"sanskrit\": null, \"hopkins_english\": null, \"hgm_gloss\": [\"confirmed by a valid perception\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"tsedruppa\", \"acip\": \"TSAD GRUB PA\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"P7\"], \"n_segments\": 11}}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad grub",
+      "tshad grub"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 15285,
+        "wylie": "tshad grub",
+        "tibetan": "ཚད་གྲུབ",
+        "tibetan_source": null,
+        "acip": "TSAD GRUB",
+        "pronunciation": "tsedrup",
+        "pronunciation_source": null,
+        "sanskrit": "*pramāṇasiddha",
+        "hopkins_english": "valid establishment",
+        "hgm_gloss": "[\"confirmed by a valid\"]",
+        "tier": "auto-aligned",
+        "hgm_source": null,
+        "status": "hgm-auto (mined)",
+        "tenses": "'grub 'grub 'grubs/grub grubs",
+        "flags": null,
+        "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"P7\"]",
+        "corpus_n_segments": 12,
+        "raw": "{\"tibetan\": \"ཚད་གྲུབ\", \"wylie\": \"tshad grub\", \"wylie_variants\": [\"tshad grub\"], \"tenses\": \"'grub 'grub 'grubs/grub grubs\", \"sanskrit\": \"*pramāṇasiddha\", \"hopkins_english\": \"valid establishment\", \"hgm_gloss\": [\"confirmed by a valid\"], \"hgm_evidence\": {\"tier\": \"auto-aligned\", \"method\": \"intersection\", \"confidence\": \"medium\", \"n_attestations\": 6}, \"status\": \"hgm-auto (mined)\", \"pronunciation\": \"tsedrup\", \"acip\": \"TSAD GRUB\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"P7\"], \"n_segments\": 12}, \"hopkins_realigned\": \"uma-v26\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "srid pa",
+      "srid pa"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 20970,
+        "wylie": "srid pa",
+        "tibetan": "སྲིད་པ",
+        "tibetan_source": null,
+        "acip": "SRID PA",
+        "pronunciation": "sipa",
+        "pronunciation_source": null,
+        "sanskrit": "{LCh,C,MSA.MV}bhava; {N}sattva; {N}prabhavati; {C}ātmā-bhāva; {MV}sambhava; {LC}saṃbhava; {LC}asaṃbhava; {LC}saṃbhavati; {LC}saṃbhāvanā; {LC}saṃbhāvya; {LC}udbhava; {LC}bhuvana; {LC}lalya; {LC}saṃbhava, saṃbhavati; {LC}saṃbhāvyate; {LC}svabhāva",
+        "hopkins_english": "lasts (as in ཇཇཇཇཇཇཇཇཇཇ as long as… lasts); existence; cyclic existence; be; mundane existence; length; extension; government; be possible; occur; worldly existence; {PH}equivalence [one of the eleven pramāṇas attributed to Caraka]; length; extension; government; {C}becoming; personality; body; frame; personal existence; extent",
+        "hgm_gloss": "[\"cyclic life\", \"life\", \"round\", \"the ripe force of deeds\", \"the birth\", \"the being\", \"types of lives\", \"being\", \"birth\", \"beings\", \"next life\", \"beings ... being\", \"lives\", \"possible\", \"births\", \"suffering life\", \"a rebirth\", \"taking births\", \"suffering existence\", \"cyclic existence\", \"possible for there to be\", \"suffering circle of life\", \"circle\", \"exist\", \"circle of life\", \"could ever be\", \"rebirth?\", \"ripened karma\", \"possibility\", \"to be\", \"existence\", \"ripe force of deeds\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C03\", \"C04\", \"C05\", \"C08\", \"C09\", \"C10\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GK\", \"ILL\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS03\", \"TCS04Initiation\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+        "corpus_n_segments": 203,
+        "raw": "{\"tibetan\": \"སྲིད་པ\", \"wylie\": \"srid pa\", \"wylie_variants\": [\"srid pa\"], \"tenses\": null, \"sanskrit\": \"{LCh,C,MSA.MV}bhava; {N}sattva; {N}prabhavati; {C}ātmā-bhāva; {MV}sambhava; {LC}saṃbhava; {LC}asaṃbhava; {LC}saṃbhavati; {LC}saṃbhāvanā; {LC}saṃbhāvya; {LC}udbhava; {LC}bhuvana; {LC}lalya; {LC}saṃbhava, saṃbhavati; {LC}saṃbhāvyate; {LC}svabhāva\", \"hopkins_english\": \"lasts (as in ཇཇཇཇཇཇཇཇཇཇ as long as… lasts); existence; cyclic existence; be; mundane existence; length; extension; government; be possible; occur; worldly existence; {PH}equivalence [one of the eleven pramāṇas attributed to Caraka]; length; extension; government; {C}becoming; personality; body; frame; personal existence; extent\", \"hgm_gloss\": [\"cyclic life\", \"life\", \"round\", \"the ripe force of deeds\", \"the birth\", \"the being\", \"types of lives\", \"being\", \"birth\", \"beings\", \"next life\", \"beings ... being\", \"lives\", \"possible\", \"births\", \"suffering life\", \"a rebirth\", \"taking births\", \"suffering existence\", \"cyclic existence\", \"possible for there to be\", \"suffering circle of life\", \"circle\", \"exist\", \"circle of life\", \"could ever be\", \"rebirth?\", \"ripened karma\", \"possibility\", \"to be\", \"existence\", \"ripe force of deeds\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"sipa\", \"acip\": \"SRID PA\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C03\", \"C04\", \"C05\", \"C08\", \"C09\", \"C10\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GK\", \"ILL\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS03\", \"TCS04Initiation\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 203}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "srid",
+      "srid"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 20964,
+        "wylie": "srid",
+        "tibetan": "སྲིད",
+        "tibetan_source": null,
+        "acip": "SRID",
+        "pronunciation": "si",
+        "pronunciation_source": null,
+        "sanskrit": "bhū; {MSA}bhava; {MSA}mi srid = asaṃbhava; {LC}āyāma; {LC}āroha; {LC}keva cireṇa; {LC}bhavati; {LC}bhavet; {LC}bhoga; {LC}vyayāma; {LC}saṃbhāvyate; {LC}āyata; {LC}bhaviṣyati; {LC}ruci; {LC}rocate",
+        "hopkins_english": "be possible; occur; be; depth; height; length; extension; {PH}length",
+        "hgm_gloss": "[\"life\", \"being\", \"beings\", \"inbetween\", \"height\", \"state\", \"being ... being\", \"suffering existence\", \"possible\", \"world\", \"rebirth\", \"possibility\", \"need\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": null,
+        "flags": null,
+        "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+        "corpus_n_segments": 948,
+        "raw": "{\"tibetan\": \"སྲིད\", \"wylie\": \"srid\", \"wylie_variants\": [\"srid\"], \"tenses\": null, \"sanskrit\": \"bhū; {MSA}bhava; {MSA}mi srid = asaṃbhava; {LC}āyāma; {LC}āroha; {LC}keva cireṇa; {LC}bhavati; {LC}bhavet; {LC}bhoga; {LC}vyayāma; {LC}saṃbhāvyate; {LC}āyata; {LC}bhaviṣyati; {LC}ruci; {LC}rocate\", \"hopkins_english\": \"be possible; occur; be; depth; height; length; extension; {PH}length\", \"hgm_gloss\": [\"life\", \"being\", \"beings\", \"inbetween\", \"height\", \"state\", \"being ... being\", \"suffering existence\", \"possible\", \"world\", \"rebirth\", \"possibility\", \"need\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"si\", \"acip\": \"SRID\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 948}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "khas blangs pa",
+      "khas blangs pa"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 1139,
+        "wylie": "khas blangs pa",
+        "tibetan": "ཁས་བླངས་པ",
+        "tibetan_source": null,
+        "acip": "KHAS BLANGS PA",
+        "pronunciation": "kelangpa",
+        "pronunciation_source": null,
+        "sanskrit": "blang/ len/ blangs/ lend/; {MSA}abhyupagata; {C} upagata; iṣyate; {LC}abhyupagama; {LC}abhyupeta; {LC}anumata; {LC}ukta",
+        "hopkins_english": "[by-mouth-take]; assert; accept; promise; {C}takes place; can be approached; has admitted into himself",
+        "hgm_gloss": "[\"refer\", \"agree\", \"accept\", \"asserted\", \"assert\", \"believe\", \"is describing\", \"position\", \"take the position\", \"representatives of other viewpoints\", \"belief\", \"agreed\"]",
+        "tier": "glossary",
+        "hgm_source": "HTG2016",
+        "status": "hgm-attested",
+        "tenses": "blang/ len/ blangs/ lend",
+        "flags": null,
+        "corpus_courses": "[\"C01\", \"C03\", \"C05\", \"C07\", \"C09\", \"C10\", \"C11\", \"C12\", \"C15\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P7\", \"TCS05\"]",
+        "corpus_n_segments": 61,
+        "raw": "{\"tibetan\": \"ཁས་བླངས་པ\", \"wylie\": \"khas blangs pa\", \"wylie_variants\": [\"khas blangs pa\"], \"tenses\": \"blang/ len/ blangs/ lend\", \"sanskrit\": \"blang/ len/ blangs/ lend/; {MSA}abhyupagata; {C} upagata; iṣyate; {LC}abhyupagama; {LC}abhyupeta; {LC}anumata; {LC}ukta\", \"hopkins_english\": \"[by-mouth-take]; assert; accept; promise; {C}takes place; can be approached; has admitted into himself\", \"hgm_gloss\": [\"refer\", \"agree\", \"accept\", \"asserted\", \"assert\", \"believe\", \"is describing\", \"position\", \"take the position\", \"representatives of other viewpoints\", \"belief\", \"agreed\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"kelangpa\", \"acip\": \"KHAS BLANGS PA\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C03\", \"C05\", \"C07\", \"C09\", \"C10\", \"C11\", \"C12\", \"C15\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P7\", \"TCS05\"], \"n_segments\": 61}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+      }
+    ]
+  }
+]

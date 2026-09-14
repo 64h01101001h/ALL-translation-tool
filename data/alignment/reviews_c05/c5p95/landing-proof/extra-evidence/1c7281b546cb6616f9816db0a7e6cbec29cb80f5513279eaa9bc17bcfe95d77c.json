@@ -1,0 +1,278 @@
+[
+  {
+    "old": "page94",
+    "new": "page95",
+    "count": 2,
+    "reason": "Current page label in helper documentation and emitted operation description.",
+    "input_character_ranges": [
+      [
+        21,
+        27
+      ],
+      [
+        7665,
+        7671
+      ]
+    ]
+  },
+  {
+    "old": "PAGE, SEQS = 94, [280, 281, 282]",
+    "new": "PAGE, SEQS = 95, [283, 284, 285]",
+    "count": 1,
+    "reason": "Concrete destination page and contiguous next segment batch.",
+    "input_character_ranges": [
+      [
+        524,
+        556
+      ]
+    ]
+  },
+  {
+    "old": "BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'",
+    "new": "BASE = 'fb9182dc6fca2230be3bc5169ba1288a22430280'",
+    "count": 1,
+    "reason": "Actual fixed closed282 head.",
+    "input_character_ranges": [
+      [
+        557,
+        606
+      ]
+    ]
+  },
+  {
+    "old": "W = B.parents[1] / 'campaign-worktree'\n",
+    "new": "W = B.parents[1] / 'campaign-worktree'\nassert B.name == 'C05-283-285'\nassert Path(__file__).resolve() == B / 'landing-helper-preparation/register-reviewed-page-and-index.py'\n",
+    "count": 1,
+    "reason": "Preserve __file__-relative B/W and fail before Git or mutation from the preparation directory or another materialization path.",
+    "input_character_ranges": [
+      [
+        485,
+        524
+      ]
+    ]
+  },
+  {
+    "old": "closed_raw = (B.parent / 'integration/through279-root-closure/proof.json').read_bytes()\nassert pin(closed_raw) == {'bytes': 4959, 'sha256': 'a26675e3375b3bcb65e7cf871c904db0ed646deec8c2d4aed2749bf3cc940a9a'}\nclosed = json.loads(closed_raw)\nassert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE\nassert closed['course'] == 'C05' and closed['verified_segments'] == 279 and closed['course_segments'] == 511\nassert closed['next_batch'] == SEQS and closed['next_batch_authorized_after_this_closure'] is True\n",
+    "new": "closed_raw = (B.parent / 'integration/through282-root-closure/proof.json').read_bytes()\nassert pin(closed_raw) == {'bytes': 2267, 'sha256': '80d9ee5b45d2f69e42e699b62edbf1fdcde8b199c31529f35340ef8a42a66554'}\nclosed = json.loads(closed_raw)\nassert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH282_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE\nassert closed['verified_segments'] == 282 and closed['total_c05_segments'] == 511 and closed['remaining_c05'] == 229\nassert closed['next_batch'] == SEQS\nbaseline_raw = (B / 'baseline.json').read_bytes()\nassert pin(baseline_raw) == {'bytes': 1456, 'sha256': '0a881939b7ac80f7f1b18ca00b836d0e3d56738b944b8e17d153f85e64a0ee6f'}\nbaseline = json.loads(baseline_raw)\nassert baseline['commit'] == BASE and baseline['course_boundary'] == closed['verified_segments']\n",
+    "count": 1,
+    "reason": "Adapt the exact actual closure schema and full pin; course identity is the fixed C05 batch/path, total_c05_segments replaces old course_segments, and the absent historical authorization Boolean is not invented. Bind actual current baseline bytes/head/boundary.",
+    "input_character_ranges": [
+      [
+        1810,
+        2377
+      ]
+    ]
+  },
+  {
+    "old": "c5p94",
+    "new": "c5p95",
+    "count": 9,
+    "reason": "Destination review/spec/page/landing metadata/registry paths and labels.",
+    "input_character_ranges": [
+      [
+        648,
+        653
+      ],
+      [
+        4458,
+        4463
+      ],
+      [
+        4874,
+        4879
+      ],
+      [
+        5117,
+        5122
+      ],
+      [
+        5719,
+        5724
+      ],
+      [
+        6390,
+        6395
+      ],
+      [
+        6786,
+        6791
+      ],
+      [
+        6837,
+        6842
+      ],
+      [
+        7725,
+        7730
+      ]
+    ]
+  },
+  {
+    "old": "c5p93",
+    "new": "c5p94",
+    "count": 2,
+    "reason": "Existing last index page and registry anchor.",
+    "input_character_ranges": [
+      [
+        5645,
+        5650
+      ],
+      [
+        6342,
+        6347
+      ]
+    ]
+  },
+  {
+    "old": "Page 93 · segments 277–279",
+    "new": "Page 94 · segments 280–282",
+    "count": 1,
+    "reason": "Exact existing index anchor label.",
+    "input_character_ranges": [
+      [
+        5657,
+        5683
+      ]
+    ]
+  },
+  {
+    "old": "Page 94 · segments 280–282",
+    "new": "Page 95 · segments 283–285",
+    "count": 1,
+    "reason": "Exact new index label.",
+    "input_character_ranges": [
+      [
+        5731,
+        5757
+      ]
+    ]
+  },
+  {
+    "old": "Reviewed campaign coverage: 279 of 511 source segments.",
+    "new": "Reviewed campaign coverage: 282 of 511 source segments.",
+    "count": 1,
+    "reason": "Actual incoming index coverage.",
+    "input_character_ranges": [
+      [
+        5490,
+        5545
+      ]
+    ]
+  },
+  {
+    "old": "Reviewed campaign coverage: 282 of 511 source segments.",
+    "new": "Reviewed campaign coverage: 285 of 511 source segments.",
+    "count": 1,
+    "reason": "Only proposed post-registration coverage.",
+    "input_character_ranges": [
+      [
+        5563,
+        5618
+      ]
+    ]
+  },
+  {
+    "old": "range(1, 94)",
+    "new": "range(1, 95)",
+    "count": 2,
+    "reason": "Incoming page index/registry range 1–94.",
+    "input_character_ranges": [
+      [
+        5928,
+        5940
+      ],
+      [
+        6764,
+        6776
+      ]
+    ]
+  },
+  {
+    "old": "range(1, 95)",
+    "new": "range(1, 96)",
+    "count": 2,
+    "reason": "Proposed page index/target range 1–95.",
+    "input_character_ranges": [
+      [
+        6118,
+        6130
+      ],
+      [
+        6218,
+        6230
+      ]
+    ]
+  },
+  {
+    "old": "[277, 278, 279]",
+    "new": "[280, 281, 282]",
+    "count": 1,
+    "reason": "Existing c5p94 registry values.",
+    "input_character_ranges": [
+      [
+        6350,
+        6365
+      ]
+    ]
+  },
+  {
+    "old": "[280, 281, 282],\\n",
+    "new": "[283, 284, 285],\\n",
+    "count": 1,
+    "reason": "Proposed c5p95 registry values.",
+    "input_character_ranges": [
+      [
+        6398,
+        6416
+      ]
+    ]
+  },
+  {
+    "old": "range(1, 283)",
+    "new": "range(1, 286)",
+    "count": 1,
+    "reason": "Exact complete post-registration segment coverage 1–285.",
+    "input_character_ranges": [
+      [
+        6964,
+        6977
+      ]
+    ]
+  },
+  {
+    "old": "279 to282 index coverage",
+    "new": "282 to285 index coverage",
+    "count": 1,
+    "reason": "Truthful emitted operation description.",
+    "input_character_ranges": [
+      [
+        7624,
+        7648
+      ]
+    ]
+  },
+  {
+    "old": "page_count=94, covered_source_segments=282",
+    "new": "page_count=95, covered_source_segments=285",
+    "count": 1,
+    "reason": "Truthful emitted page/coverage metadata.",
+    "input_character_ranges": [
+      [
+        7921,
+        7963
+      ]
+    ]
+  },
+  {
+    "old": "old_index, old_builder = index.read_bytes(), builder.read_bytes()\n",
+    "new": "old_index, old_builder = index.read_bytes(), builder.read_bytes()\nassert pin(old_index) == {'bytes': 7003, 'sha256': '58f2527eddcefdd6a449821afd0e9417e77910de432b209cf490cda54e434bc7'}\nassert pin(old_builder) == {'bytes': 39640, 'sha256': 'f34db3d81708aa2143710d91ac4a1abcbf93dba4d33a0abfb00a51fe511975f1'}\n",
+    "count": 1,
+    "reason": "Bind the exact current full preimages in addition to the preserved runtime git-show BASE comparisons.",
+    "input_character_ranges": [
+      [
+        5220,
+        5286
+      ]
+    ]
+  }
+]

@@ -1,0 +1,73 @@
+import datetime
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+assert __debug__ and sys.dont_write_bytecode
+P=Path(__file__).resolve().parent
+B=P.parent
+W=B.parent.parent/'campaign-worktree'
+D=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP')
+assert datetime.datetime.now(datetime.timezone.utc) < datetime.datetime(2026,9,15,13,tzinfo=datetime.timezone.utc)
+def dump(name,obj):
+    p=P/name
+    assert not p.exists(),p
+    p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def pin(path):
+    b=path.read_bytes()
+    return {'path':str(path),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+masterpath=D/'Handoff/release/hgm_dictionary_v27_2.json.gz'
+corpuspath=D/'Handoff/data/full_parallel_corpus_v32.json.gz'
+master=json.loads(gzip.decompress(masterpath.read_bytes()))
+corpus=json.loads(gzip.decompress(corpuspath.read_bytes()))
+assert len(master['unified_entries'])==105634 and len(corpus)==42199
+archive_checks=[]
+unique_entries=set()
+unique_segments=set()
+queries=[]
+for path in sorted((P/'queries').glob('*.json')):
+    obj=json.loads(path.read_text())
+    assert obj['count']==len(obj['rows'])
+    queries.append({'file':str(path),'sha256':pin(path)['sha256'],'sql':obj['sql'],'parameters':obj['parameters'],'count':obj['count']})
+    if 'FROM entries WHERE' in obj['sql']:
+        archive=master['unified_entries']
+        orig=masterpath
+        prefix='unified_entries'
+    elif 'FROM corpus_segments WHERE' in obj['sql']:
+        archive=corpus
+        orig=corpuspath
+        prefix=''
+    else:continue
+    for row in obj['rows']:
+        raw=json.loads(row['raw'])
+        index=row['id']-1
+        assert raw==archive[index],(path,row['id'])
+        if prefix:unique_entries.add(row['id'])
+        else:unique_segments.add(row['id'])
+        archive_checks.append({'query_file':str(path),'row_id':row['id'],'course':row.get('course'),'seq':row.get('seq'),'raw_column_sha256':hashlib.sha256(row['raw'].encode()).hexdigest(),'original_archive':str(orig),'archive_json_pointer':f'/{prefix}/{index}' if prefix else f'/{index}','all_fields_equal':True})
+dump('raw-archive-equality.json',{'comparison':'json.loads(SQL full row raw) == original archive object at recorded JSON pointer; no field subset','master':pin(masterpath),'corpus':pin(corpuspath),'master_unified_count':len(master['unified_entries']),'corpus_count':len(corpus),'queried_row_instances':len(archive_checks),'distinct_master_entries':len(unique_entries),'distinct_corpus_segments':len(unique_segments),'checks':archive_checks})
+dump('query-index.json',queries)
+mapping=json.loads((P/'original-copy-manifest.json').read_text())
+for item in mapping:
+    assert pin(Path(item['original_path']))['sha256']==item['sha256']
+    assert pin(Path(item['copy_path']))['sha256']==item['sha256']
+stored={p.name for p in (P/'original-evidence').iterdir()}
+referenced={x['sha256'] for x in mapping}
+assert stored==referenced,(stored-referenced,referenced-stored)
+dump('evidence-copy-verification.json',{'map_entries':len(mapping),'distinct_original_paths':len({x['original_path'] for x in mapping}),'unique_exact_byte_copies':len(stored),'all_original_and_copy_hashes_reopened_match':True,'all_stored_copies_referenced':True})
+baseline=json.loads((B/'baseline.json').read_text())
+hashchecks=[]
+for rel,h in baseline['sha256'].items():
+    p=pin(W/rel)
+    assert p['sha256']==h
+    hashchecks.append(p)
+head=subprocess.run(['git','-C',str(W),'rev-parse','HEAD'],capture_output=True)
+assert head.returncode==0 and head.stdout.decode().strip()==baseline['commit']
+dump('baseline-completion-proof.json',{'baseline_commit':baseline['commit'],'course_boundary':baseline['course_boundary'],'head_command':{'argv':['git','-C',str(W),'rev-parse','HEAD'],'stdout':head.stdout.decode(),'stderr':head.stderr.decode(),'exit':head.returncode},'hashes':hashchecks})
+physical=json.loads((P/'physical-extents.json').read_text())
+assert len(physical)==30 and all(r['count']==1 for r in physical)
+dump('completion-proof.json',{'status':'SOURCE_PREPARATION_COMPLETE_WAITING_FOR_FINAL_RELEASE','completed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'course':'C05','seq':[283,284,285],'context':[277,291],'baseline':baseline['commit'],'baseline_files_verified':9,'full_source_rows':3,'full_context_rows':15,'physical_acip_english_matches':30,'query_count':len(queries),'full_query_rows':sum(q['count'] for q in queries),'archive_comparisons':len(archive_checks),'unique_master_entries':len(unique_entries),'unique_corpus_segments':len(unique_segments),'semantics_reviewed':False,'final_specs_created':False,'generator_or_tests_run':False,'publication_independence_claimed':False})
+print(json.dumps({'queries':len(queries),'row_instances_compared_to_original_archives':len(archive_checks),'unique_master_entries':len(unique_entries),'unique_corpus_segments':len(unique_segments),'physical_field_matches':30,'baseline_files':9,'copy_map_entries':len(mapping),'unique_original_byte_copies':len(stored)},indent=2))

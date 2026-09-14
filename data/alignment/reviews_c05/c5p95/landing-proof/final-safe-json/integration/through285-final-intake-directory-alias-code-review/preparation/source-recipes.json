@@ -1,0 +1,230 @@
+[
+  {
+    "prior": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-runtime-source-preparation/candidates/capture-finished-scope.py",
+    "prior_copy": "prior-package/candidates/capture-finished-scope.py",
+    "prior_pin": {
+      "bytes": 12838,
+      "sha256": "14c1de8bfbab06bc18fa2f2db48d8f7614cbf409b92fe43b2bdc3db63825c5eb"
+    },
+    "candidate": "candidates/capture-finished-scope.py",
+    "candidate_pin": {
+      "bytes": 18556,
+      "sha256": "8b2dddda4facf40b9639c440309f2278f674e4c602bab3075e95696e87bba233"
+    },
+    "changes": [
+      {
+        "start": 1893,
+        "old": "def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n",
+        "new": "_INTAKE_DIRECTORY_ALIAS_REGISTRY = {'/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan/linked': {'directory_alias': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan/linked', 'raw_target': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan-external', 'resolved_directory': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan-external', 'link_identity': {'device': 16777230, 'inode': 261195033}, 'directory_identity': {'device': 16777230, 'inode': 261195031}, 'members': [{'relative': 'payload.txt', 'bytes': 16, 'sha256': '565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356'}]}, '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english/linked': {'directory_alias': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english/linked', 'raw_target': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english-external', 'resolved_directory': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english-external', 'link_identity': {'device': 16777230, 'inode': 261195167}, 'directory_identity': {'device': 16777230, 'inode': 261195165}, 'members': [{'relative': 'payload.txt', 'bytes': 16, 'sha256': '565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356'}]}}\n\ndef intake_directory_alias_descriptor(path):\n    \"\"\"Only two pinned flat fixture targets; never generic link traversal.\"\"\"\n    path = Path(path)\n    assert str(path) in _INTAKE_DIRECTORY_ALIAS_REGISTRY, ('Unregistered directory alias', str(path))\n    record = _INTAKE_DIRECTORY_ALIAS_REGISTRY[str(path)]\n    assert path.is_symlink() and path.is_dir()\n    assert os.readlink(path) == record['raw_target']\n    target = path.resolve(strict=True)\n    assert str(target) == record['resolved_directory'] == record['raw_target']\n    assert not target.is_symlink() and target.is_dir()\n    assert all(not p.is_symlink() for p in (target, *target.parents))\n    link_stat = path.lstat(); target_stat = target.stat()\n    assert {'device': link_stat.st_dev, 'inode': link_stat.st_ino} == record['link_identity']\n    assert {'device': target_stat.st_dev, 'inode': target_stat.st_ino} == record['directory_identity']\n    children = sorted(target.iterdir(), key=str)\n    assert [p.name for p in children] == ['payload.txt']\n    child = children[0]\n    assert child.is_file() and not child.is_symlink()\n    before = child.stat(); raw = child.read_bytes(); after = child.stat()\n    keys = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')\n    assert all(getattr(before, k) == getattr(after, k) for k in keys)\n    members = [dict(relative='payload.txt', bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())]\n    assert members == record['members']\n    logical = path/'payload.txt'\n    assert logical.resolve(strict=True) == child and logical.read_bytes() == raw\n    assert os.readlink(path) == record['raw_target'] and path.resolve(strict=True) == target\n    assert (path.lstat().st_dev, path.lstat().st_ino) == (link_stat.st_dev, link_stat.st_ino)\n    assert (target.stat().st_dev, target.stat().st_ino) == (target_stat.st_dev, target_stat.st_ino)\n    assert sorted(p.name for p in target.iterdir()) == ['payload.txt']\n    return dict(record, logical_children=[str(logical)])\n\n\ndef directory_alias_descriptors():\n    assert len(_INTAKE_DIRECTORY_ALIAS_REGISTRY) == 2\n    return [intake_directory_alias_descriptor(path) for path in sorted(_INTAKE_DIRECTORY_ALIAS_REGISTRY)]\n\n\ndef strict_intake_paths(root):\n    \"\"\"Full ordinary traversal plus the exact registered logical child aliases.\"\"\"\n    root = Path(root)\n    assert root.is_absolute() and root.is_dir() and not root.is_symlink()\n    found = []\n    def visit(directory, ancestors):\n        resolved = directory.resolve(strict=True)\n        assert str(resolved) not in ancestors, ('Directory cycle', str(directory))\n        assert resolved.is_relative_to(root.resolve(strict=True)), ('Directory escape', str(directory))\n        ancestors = ancestors | {str(resolved)}\n        for path in sorted(directory.iterdir(), key=str):\n            assert not (path.is_symlink() and not path.exists()), ('Broken symlink', str(path))\n            if path.is_symlink() and path.is_dir():\n                record = intake_directory_alias_descriptor(path)\n                assert record['resolved_directory'] not in ancestors, ('Directory alias cycle', str(path))\n                found.extend(record['logical_children'])\n            elif path.is_file():\n                found.append(str(path))\n            else:\n                assert path.is_dir() and not path.is_symlink(), ('Unsupported entry', str(path))\n                visit(path, ancestors)\n    visit(root, set())\n    assert len(found) == len(set(found))\n    return sorted(found)\n\n\ndef pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n",
+        "reason": "Embed the identical source-bound two-alias registry and strict walker; no module import or generic link traversal."
+      },
+      {
+        "start": 0,
+        "old": "PENDING_ACTIVE_CALLER = '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-caller'",
+        "new": "PENDING_ACTIVE_CALLER = '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-caller-attempt02'",
+        "reason": "Fresh actual retry caller; original failed caller remains included in current I evidence."
+      },
+      {
+        "start": 8757,
+        "old": "assert caller==I/'through285-final-intake-scope-caller'",
+        "new": "assert caller==I/'through285-final-intake-scope-caller-attempt02'",
+        "reason": "Keep exact caller assertion; deferred list uses this actual caller variable."
+      },
+      {
+        "start": 8139,
+        "old": "def tree(p):\n out=[]\n for f in sorted(p.rglob('*'),key=str):\n  assert not(f.is_symlink() and f.is_dir())\n  if f.is_file():out.append(desc(f))\n  else:assert f.is_dir()\n return out\n",
+        "new": "def tree(p):\n return [desc(f) for f in strict_intake_paths(p)]\n",
+        "reason": "Full census now emits both exact logical payload aliases while retaining existing desc symlink components."
+      },
+      {
+        "start": 15090,
+        "old": "for p in sorted(L.rglob('*'),key=str):",
+        "new": "for p in map(Path,strict_intake_paths(L)):",
+        "reason": "Use the same strict enumeration for automatic landing routes."
+      },
+      {
+        "start": 16421,
+        "old": "[str(p) for p in sorted(L.rglob('*'),key=str) if p.is_file()]",
+        "new": "strict_intake_paths(L)",
+        "reason": "Use identical complete landing census and reread."
+      },
+      {
+        "start": 17298,
+        "old": "[str(p) for p in sorted(L.rglob('*'),key=str) if p.is_file()]",
+        "new": "strict_intake_paths(L)",
+        "reason": "Use identical complete landing census and reread."
+      },
+      {
+        "start": 16082,
+        "old": "scope=dict(schema='through285-final-intake-v1',",
+        "new": "scope=dict(directory_aliases=directory_alias_descriptors(),schema='through285-final-intake-v1',",
+        "reason": "Retain full actual directory link and target identities separately from child file descriptors."
+      },
+      {
+        "start": 17755,
+        "old": "P.mkdir(exist_ok=False)",
+        "new": "assert directory_alias_descriptors()==scope['directory_aliases']\nP.mkdir(exist_ok=False)",
+        "reason": "Reread both directory identities immediately before successful scope output."
+      }
+    ],
+    "whole_forward_inverse_exact": true,
+    "AST_parsed": true,
+    "unchanged_other_functions": [
+      "pin",
+      "desc",
+      "current_i"
+    ]
+  },
+  {
+    "prior": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-runtime-source-preparation/candidates/compose-final-inputs.py",
+    "prior_copy": "prior-package/candidates/compose-final-inputs.py",
+    "prior_pin": {
+      "bytes": 20403,
+      "sha256": "38d155495c222d59ff6fd13f4a98ff42b8bd2c762b9ddd29498181d781896cb4"
+    },
+    "candidate": "candidates/compose-final-inputs.py",
+    "candidate_pin": {
+      "bytes": 25950,
+      "sha256": "763891e076c36284fb1d8c46612d7e5d7b0a354886b6b4a59481240fab98b2eb"
+    },
+    "changes": [
+      {
+        "start": 650,
+        "old": "def require(ok, detail):\n",
+        "new": "_INTAKE_DIRECTORY_ALIAS_REGISTRY = {'/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan/linked': {'directory_alias': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan/linked', 'raw_target': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan-external', 'resolved_directory': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan-external', 'link_identity': {'device': 16777230, 'inode': 261195033}, 'directory_identity': {'device': 16777230, 'inode': 261195031}, 'members': [{'relative': 'payload.txt', 'bytes': 16, 'sha256': '565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356'}]}, '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english/linked': {'directory_alias': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english/linked', 'raw_target': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english-external', 'resolved_directory': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english-external', 'link_identity': {'device': 16777230, 'inode': 261195167}, 'directory_identity': {'device': 16777230, 'inode': 261195165}, 'members': [{'relative': 'payload.txt', 'bytes': 16, 'sha256': '565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356'}]}}\n\ndef intake_directory_alias_descriptor(path):\n    \"\"\"Only two pinned flat fixture targets; never generic link traversal.\"\"\"\n    path = Path(path)\n    assert str(path) in _INTAKE_DIRECTORY_ALIAS_REGISTRY, ('Unregistered directory alias', str(path))\n    record = _INTAKE_DIRECTORY_ALIAS_REGISTRY[str(path)]\n    assert path.is_symlink() and path.is_dir()\n    assert os.readlink(path) == record['raw_target']\n    target = path.resolve(strict=True)\n    assert str(target) == record['resolved_directory'] == record['raw_target']\n    assert not target.is_symlink() and target.is_dir()\n    assert all(not p.is_symlink() for p in (target, *target.parents))\n    link_stat = path.lstat(); target_stat = target.stat()\n    assert {'device': link_stat.st_dev, 'inode': link_stat.st_ino} == record['link_identity']\n    assert {'device': target_stat.st_dev, 'inode': target_stat.st_ino} == record['directory_identity']\n    children = sorted(target.iterdir(), key=str)\n    assert [p.name for p in children] == ['payload.txt']\n    child = children[0]\n    assert child.is_file() and not child.is_symlink()\n    before = child.stat(); raw = child.read_bytes(); after = child.stat()\n    keys = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')\n    assert all(getattr(before, k) == getattr(after, k) for k in keys)\n    members = [dict(relative='payload.txt', bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())]\n    assert members == record['members']\n    logical = path/'payload.txt'\n    assert logical.resolve(strict=True) == child and logical.read_bytes() == raw\n    assert os.readlink(path) == record['raw_target'] and path.resolve(strict=True) == target\n    assert (path.lstat().st_dev, path.lstat().st_ino) == (link_stat.st_dev, link_stat.st_ino)\n    assert (target.stat().st_dev, target.stat().st_ino) == (target_stat.st_dev, target_stat.st_ino)\n    assert sorted(p.name for p in target.iterdir()) == ['payload.txt']\n    return dict(record, logical_children=[str(logical)])\n\n\ndef directory_alias_descriptors():\n    assert len(_INTAKE_DIRECTORY_ALIAS_REGISTRY) == 2\n    return [intake_directory_alias_descriptor(path) for path in sorted(_INTAKE_DIRECTORY_ALIAS_REGISTRY)]\n\n\ndef strict_intake_paths(root):\n    \"\"\"Full ordinary traversal plus the exact registered logical child aliases.\"\"\"\n    root = Path(root)\n    assert root.is_absolute() and root.is_dir() and not root.is_symlink()\n    found = []\n    def visit(directory, ancestors):\n        resolved = directory.resolve(strict=True)\n        assert str(resolved) not in ancestors, ('Directory cycle', str(directory))\n        assert resolved.is_relative_to(root.resolve(strict=True)), ('Directory escape', str(directory))\n        ancestors = ancestors | {str(resolved)}\n        for path in sorted(directory.iterdir(), key=str):\n            assert not (path.is_symlink() and not path.exists()), ('Broken symlink', str(path))\n            if path.is_symlink() and path.is_dir():\n                record = intake_directory_alias_descriptor(path)\n                assert record['resolved_directory'] not in ancestors, ('Directory alias cycle', str(path))\n                found.extend(record['logical_children'])\n            elif path.is_file():\n                found.append(str(path))\n            else:\n                assert path.is_dir() and not path.is_symlink(), ('Unsupported entry', str(path))\n                visit(path, ancestors)\n    visit(root, set())\n    assert len(found) == len(set(found))\n    return sorted(found)\n\n\ndef require(ok, detail):\n",
+        "reason": "Embed the identical source-bound two-alias registry and strict walker; no module import or generic link traversal."
+      },
+      {
+        "start": 7844,
+        "old": "def paths(root):\n    root = Path(root)\n    require(root.is_dir() and not root.is_symlink(), ('invalid root', str(root)))\n    found = []\n    for p in root.rglob('*'):\n        require(not (p.is_symlink() and p.is_dir()), ('directory symlink enumeration unsupported', str(p)))\n        require(not (p.is_symlink() and not p.exists()), ('broken symlink', str(p)))\n        if p.is_file():\n            found.append(str(p))\n        else:\n            require(p.is_dir(), ('unsupported filesystem entry', str(p)))\n    return sorted(found)",
+        "new": "def paths(root):\n    return strict_intake_paths(root)",
+        "reason": "Composer enumeration exactly shares capture semantics, preserving unsafe-root/broken-link/type/cycle/escape rejection."
+      },
+      {
+        "start": 9896,
+        "old": "    require(scope['deferred_before_final_bank'] and scope['later_external_after_final_bank'], 'missing truthful boundaries')\n",
+        "new": "    require(scope['deferred_before_final_bank'] and scope['later_external_after_final_bank'], 'missing truthful boundaries')\n    require(scope['directory_aliases'] == directory_alias_descriptors(), 'actual source-bound directory aliases changed')\n",
+        "reason": "Require the exact captured directory identities before creating composition output."
+      },
+      {
+        "start": 23989,
+        "old": "        require(pin(read(args.scope)) == pin(scope_raw), 'scope changed')\n",
+        "new": "        require(pin(read(args.scope)) == pin(scope_raw), 'scope changed')\n        require(scope['directory_aliases'] == directory_alias_descriptors(), 'directory aliases changed during composition')\n",
+        "reason": "Recheck all two alias directories and complete target children before writing the initial list."
+      }
+    ],
+    "whole_forward_inverse_exact": true,
+    "AST_parsed": true,
+    "unchanged_other_functions": [
+      "require",
+      "pin",
+      "expected",
+      "read",
+      "descriptor",
+      "verified",
+      "strict_json",
+      "clean_json",
+      "relative",
+      "save"
+    ]
+  },
+  {
+    "prior": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-runtime-source-preparation/candidates/capture-final285-supplement-scope-root.py",
+    "prior_copy": "prior-package/candidates/capture-final285-supplement-scope-root.py",
+    "prior_pin": {
+      "bytes": 7953,
+      "sha256": "55c998300ce35f3654f2ab6448cce851e5b5b039769d1989a922bc9075799a43"
+    },
+    "candidate": "candidates/capture-final285-supplement-scope-root.py",
+    "candidate_pin": {
+      "bytes": 13641,
+      "sha256": "2fd3f271ec64a5368b314c6a1da41885b2a509236a0d01398d11b941f1209e0f"
+    },
+    "changes": [
+      {
+        "start": 1801,
+        "old": "def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n",
+        "new": "_INTAKE_DIRECTORY_ALIAS_REGISTRY = {'/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan/linked': {'directory_alias': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan/linked', 'raw_target': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan-external', 'resolved_directory': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan-external', 'link_identity': {'device': 16777230, 'inode': 261195033}, 'directory_identity': {'device': 16777230, 'inode': 261195031}, 'members': [{'relative': 'payload.txt', 'bytes': 16, 'sha256': '565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356'}]}, '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english/linked': {'directory_alias': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english/linked', 'raw_target': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english-external', 'resolved_directory': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english-external', 'link_identity': {'device': 16777230, 'inode': 261195167}, 'directory_identity': {'device': 16777230, 'inode': 261195165}, 'members': [{'relative': 'payload.txt', 'bytes': 16, 'sha256': '565b24bc77ebeee74f70f6c608e099956666c3589ed85146fcea7e77d9f25356'}]}}\n\ndef intake_directory_alias_descriptor(path):\n    \"\"\"Only two pinned flat fixture targets; never generic link traversal.\"\"\"\n    path = Path(path)\n    assert str(path) in _INTAKE_DIRECTORY_ALIAS_REGISTRY, ('Unregistered directory alias', str(path))\n    record = _INTAKE_DIRECTORY_ALIAS_REGISTRY[str(path)]\n    assert path.is_symlink() and path.is_dir()\n    assert os.readlink(path) == record['raw_target']\n    target = path.resolve(strict=True)\n    assert str(target) == record['resolved_directory'] == record['raw_target']\n    assert not target.is_symlink() and target.is_dir()\n    assert all(not p.is_symlink() for p in (target, *target.parents))\n    link_stat = path.lstat(); target_stat = target.stat()\n    assert {'device': link_stat.st_dev, 'inode': link_stat.st_ino} == record['link_identity']\n    assert {'device': target_stat.st_dev, 'inode': target_stat.st_ino} == record['directory_identity']\n    children = sorted(target.iterdir(), key=str)\n    assert [p.name for p in children] == ['payload.txt']\n    child = children[0]\n    assert child.is_file() and not child.is_symlink()\n    before = child.stat(); raw = child.read_bytes(); after = child.stat()\n    keys = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')\n    assert all(getattr(before, k) == getattr(after, k) for k in keys)\n    members = [dict(relative='payload.txt', bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())]\n    assert members == record['members']\n    logical = path/'payload.txt'\n    assert logical.resolve(strict=True) == child and logical.read_bytes() == raw\n    assert os.readlink(path) == record['raw_target'] and path.resolve(strict=True) == target\n    assert (path.lstat().st_dev, path.lstat().st_ino) == (link_stat.st_dev, link_stat.st_ino)\n    assert (target.stat().st_dev, target.stat().st_ino) == (target_stat.st_dev, target_stat.st_ino)\n    assert sorted(p.name for p in target.iterdir()) == ['payload.txt']\n    return dict(record, logical_children=[str(logical)])\n\n\ndef directory_alias_descriptors():\n    assert len(_INTAKE_DIRECTORY_ALIAS_REGISTRY) == 2\n    return [intake_directory_alias_descriptor(path) for path in sorted(_INTAKE_DIRECTORY_ALIAS_REGISTRY)]\n\n\ndef strict_intake_paths(root):\n    \"\"\"Full ordinary traversal plus the exact registered logical child aliases.\"\"\"\n    root = Path(root)\n    assert root.is_absolute() and root.is_dir() and not root.is_symlink()\n    found = []\n    def visit(directory, ancestors):\n        resolved = directory.resolve(strict=True)\n        assert str(resolved) not in ancestors, ('Directory cycle', str(directory))\n        assert resolved.is_relative_to(root.resolve(strict=True)), ('Directory escape', str(directory))\n        ancestors = ancestors | {str(resolved)}\n        for path in sorted(directory.iterdir(), key=str):\n            assert not (path.is_symlink() and not path.exists()), ('Broken symlink', str(path))\n            if path.is_symlink() and path.is_dir():\n                record = intake_directory_alias_descriptor(path)\n                assert record['resolved_directory'] not in ancestors, ('Directory alias cycle', str(path))\n                found.extend(record['logical_children'])\n            elif path.is_file():\n                found.append(str(path))\n            else:\n                assert path.is_dir() and not path.is_symlink(), ('Unsupported entry', str(path))\n                visit(path, ancestors)\n    visit(root, set())\n    assert len(found) == len(set(found))\n    return sorted(found)\n\n\ndef pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n",
+        "reason": "Embed the identical source-bound two-alias registry and strict walker; no module import or generic link traversal."
+      },
+      {
+        "start": 8896,
+        "old": "s=json.loads((P/'final-source-scope.json').read_bytes())\n",
+        "new": "s=json.loads((P/'final-source-scope.json').read_bytes())\nassert s['directory_aliases']==directory_alias_descriptors()\n",
+        "reason": "Consume the actual successful initial directory identities, alongside its actual deferred root list."
+      },
+      {
+        "start": 10368,
+        "old": " for f in root.rglob('*'):\n  assert not(f.is_symlink() and f.is_dir()) and (f.is_file() or f.is_dir())\n paths=sorted(str(x) for x in root.rglob('*') if x.is_file()); assert paths\n",
+        "new": " paths=strict_intake_paths(root); assert paths\n",
+        "reason": "Retain both source-bound logical aliases in every later root group, rejecting all other directory links."
+      },
+      {
+        "start": 11337,
+        "old": "current_batch=sorted(str(x) for x in B.rglob('*') if x.is_file() and not x.is_relative_to(L))\nfor f in B.rglob('*'):assert (f.is_file() or f.is_dir()) and not(f.is_symlink() and f.is_dir())\n",
+        "new": "current_batch=[x for x in strict_intake_paths(B) if not Path(x).is_relative_to(L)]\n",
+        "reason": "Keep full B census and rejection with the same walker."
+      },
+      {
+        "start": 11740,
+        "old": "scope=dict(schema='through285-final-supplement-v1',",
+        "new": "scope=dict(directory_aliases=directory_alias_descriptors(),schema='through285-final-supplement-v1',",
+        "reason": "Explicit directory identities remain part of later scope, not merely logical child rows."
+      },
+      {
+        "start": 12607,
+        "old": "sorted(str(x) for x in Path(g['root']).rglob('*') if x.is_file())",
+        "new": "strict_intake_paths(g['root'])",
+        "reason": "Later full root reread uses the same alias-aware strict census."
+      },
+      {
+        "start": 12809,
+        "old": "sorted(str(x) for x in B.rglob('*') if x.is_file() and not x.is_relative_to(L))",
+        "new": "[x for x in strict_intake_paths(B) if not Path(x).is_relative_to(L)]",
+        "reason": "Later full B reread retains the same logical populations."
+      },
+      {
+        "start": 12997,
+        "old": "O.mkdir();raw=",
+        "new": "assert directory_alias_descriptors()==scope['directory_aliases']==s['directory_aliases']\nO.mkdir();raw=",
+        "reason": "Verify initial/current directory identity equality before writing later scope."
+      }
+    ],
+    "whole_forward_inverse_exact": true,
+    "AST_parsed": true,
+    "unchanged_other_functions": [
+      "pin",
+      "desc"
+    ]
+  },
+  {
+    "prior": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-runtime-source-preparation/candidates/assemble-final-supplement.py",
+    "prior_copy": "prior-package/candidates/assemble-final-supplement.py",
+    "prior_pin": {
+      "bytes": 10824,
+      "sha256": "2ff25fb6a5f4f7d5580dd58ce232b4c1d3aecfe497442071cceb9ef4dc3a09c5"
+    },
+    "candidate": "candidates/assemble-final-supplement.py",
+    "candidate_pin": {
+      "bytes": 11160,
+      "sha256": "21a86e5eecb35ec4206faee2f7627aedbee32284d09e08ed69aa0a62b9036bfe"
+    },
+    "changes": [
+      {
+        "start": 3137,
+        "old": "        initial_scope = c.strict_json(controls['initial_scope'])\n",
+        "new": "        initial_scope = c.strict_json(controls['initial_scope'])\n        c.require(scope['directory_aliases'] == initial_scope['directory_aliases'] == c.directory_alias_descriptors(), 'complete initial/later directory alias identities')\n",
+        "reason": "Assembler uses the exact pinned composer walker and requires both actual scope directory inventories to agree."
+      },
+      {
+        "start": 9750,
+        "old": "        c.require(c.read(args.scope) == scope_raw and Path(args.composer).read_bytes() == raw_composer, 'scope/helper changed')\n",
+        "new": "        c.require(c.read(args.scope) == scope_raw and Path(args.composer).read_bytes() == raw_composer, 'scope/helper changed')\n        c.require(scope['directory_aliases'] == initial_scope['directory_aliases'] == c.directory_alias_descriptors(), 'directory aliases changed during assembly')\n",
+        "reason": "Retain final alias reread alongside complete scope/helper equality."
+      }
+    ],
+    "whole_forward_inverse_exact": true,
+    "AST_parsed": true,
+    "unchanged_other_functions": []
+  }
+]

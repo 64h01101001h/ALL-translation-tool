@@ -1,0 +1,54 @@
+from pathlib import Path
+import hashlib,json,os
+assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+P=Path(__file__).resolve().parent;ROOT=P.parents[2];B=ROOT/'campaign-artifacts/C05-283-285'
+assert P.name=='through285-semantic-schema-helper-preparation'and not(P/'freeze.json').exists()
+def save(n,x):
+ with (P/n).open('x')as f:json.dump(x,f,indent=2);f.write('\n')
+target=B/'landing-helper-preparation'
+save('command-contract.json',{
+ 'status':'SOURCE_ONLY_PENDING_ROOT_REVIEW_AND_EXACT_MATERIALIZATION',
+ 'environment':{'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'},
+ 'materialization':[{ 'source':str(p),'destination':str(target/p.name),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'performed':False}for p in sorted((P/'candidates').iterdir())],
+ 'ordered_root_actions':[
+  {'action':'Root reviews all four exact sources, diffs and this freeze; confirms actual independent semantic and mechanical results.'},
+  {'action':'Root materializes only exact approved candidate bytes at their guarded new batch-local paths; source package and frozen originals stay unchanged.'},
+  {'argv':['python3','-B',str(target/'verify-semantic-acceptance285.py'),'95','283']},
+  {'argv':['python3','-B',str(target/'land-reviewed-page285.py'),'95','283','284','285']},
+  {'argv':['python3','-B',str(target/'verify-semantic-acceptance285.py'),'95','283','--landed'],'timing':'Before builder registration: the frozen semantic source map includes the live baseline build_alignment_layer.py as an original.'},
+  {'action':'Root adds exactly the two source-licensed pages_c05 allowance values from the actual mechanical/reconciled maps, preserving every prior value; no errata additions are expected.'},
+  {'argv':['python3','-B',str(target/'verify-review-copy-and-register285.py'),'95','283']},
+  {'argv':['python3','-B',str(target/'register-reviewed-page-and-index.py')]},
+  {'action':'Only after those actual gates, root separately releases the canonical builders once under their existing contracts.'}
+ ],
+ 'executed_actions':[],
+ 'later_original_boundary':'After registration changes the builder, its historical frozen source copies remain exact baseline evidence. Do not rerun pre-registration original-live-equality assertions as though that mutable source were unchanged.',
+ 'proof_paths_unchanged':['landing/root-semantic-acceptance-proof.json','landing/root-frozen-input-copy-check.json','landing/review-copy-and-register-proof.json','landing/course-registration-verification.json'],
+ 'scope':'No candidate has run. Native caller capture and further runtime proof remain root responsibilities.'
+})
+save('head-reader-contract.json',{
+ 'missing_legacy_source':'semantic-review/span-head-allow-needed.json is absent and must not be fabricated.',
+ 'current_semantic_source':'Frozen review.json head_licensors; exactly c5p95/s284w6 and c5p95/s285w5, both LICENSED, with original seq/id/licensor/reason.',
+ 'actual_mechanical_source':'integration/through285-root-reconciliation-verification-attempt01/{283,284,285}.head-allowance-check.json, under actual pinned4107-byte PASS proof9af274e2621d377cbab7ea24d0d57e4b79bad2b597e9ca0194469d2849914fa6.',
+ 'source_crosschecks':'Complete actual hit records equal reconciled proposed-head-allowances.json; full tuple/label/body-range matches; predicate path/bytes/SHA equals the real current predicate; no predicate import or implementation substitute.',
+ 'values':'Use each entire actual mechanical allowances[key] string, required byte-for-string equality with reconciled pages_c05 values. Semantic LICENSED records approve the matched licensor and realization; their reason strings are retained separately and never substituted into frozen originals.',
+ 'prior_register_conservation':'Original ba deep copy and na==allowed predicate is retained; keys must be absent from prior category and only exact two reviewed values may be added.',
+ 'preparation_semantic_judgment':False,
+ 'predicate_or_target_execution':False
+})
+save('capture-boundary.json',{
+ 'preparation_caller':'preparation-caller retains actual source-preparation argv/cwd/environment, stdin/stdout/stderr/exit and timestamps. Exit0 means source copies/diff/inverse/AST/data-schema inspection only.',
+ 'source_failures':[],
+ 'truncated_discovery':'Initial file discovery listed paths only; complete relevant source files and protocols were subsequently read and retained. No candidate was executed to explore a schema.',
+ 'full_map_evidence':'1278 actual original/copy/object triples were read in full and equal; their full original records/aliases are retained in actual-copy-schema-evidence.json. Large originals and copy aliases remain complete in the frozen review; they are not cloned into this source capsule.',
+ 'actual_proof_limit':'Current mechanical PASS and independent root review proofs were read and copied after root reported completion. This source producer did not run or independently reproduce those workflows.',
+ 'outer_capture_limit':'The native child preparation streams are retained. Outer recorder submission and final freeze completion are conversation tool records, not invented native capture files.',
+ 'no_postfreeze_writes':True
+})
+rows=[]
+for p in sorted(P.rglob('*')):
+ if p.is_file():
+  b=p.read_bytes();rows.append({'path':str(p.relative_to(P)),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+save('freeze.json',{'status':'IMMUTABLE_SEMANTIC_SCHEMA_SOURCE_PREPARATION_ONLY','schema':'object with files LIST; paths relative to capsule root; excludes only this freeze.json','files':rows})
+b=(P/'freeze.json').read_bytes()
+print(json.dumps({'status':'FROZEN_SOURCE_PREPARATION_ONLY','files':len(rows),'member_bytes':sum(r['bytes']for r in rows),'freeze_bytes':len(b),'freeze_sha256':hashlib.sha256(b).hexdigest(),'target_executions':0}))

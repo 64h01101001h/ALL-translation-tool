@@ -1,0 +1,53 @@
+--- prior
++++ candidate
+@@ -3,10 +3,10 @@
+ import datetime, hashlib, importlib.util, json, os, subprocess, sys, traceback
+ sys.dont_write_bytecode=True
+ # Preparation only: root must bind these literal interfaces after both originals freeze.
+-EXPECTED_COMPLETION_FILE='originals-complete.json'
+-EXPECTED_COMPLETION_STATUS='BOTH_FRESH_INDEPENDENT_ORIGINAL_ANGLES_FROZEN'
+-EXPECTED_TIBETAN_SPANS=118
+-EXPECTED_WRAPPER_RELATIVE_PATH='english/280/run_generator_readonly.py'
++EXPECTED_COMPLETION_FILE=None
++EXPECTED_COMPLETION_STATUS=None
++EXPECTED_TIBETAN_SPANS=None
++EXPECTED_WRAPPER_RELATIVE_PATH=None
+ assert (isinstance(EXPECTED_COMPLETION_FILE,str) and EXPECTED_COMPLETION_FILE
+         and isinstance(EXPECTED_COMPLETION_STATUS,str) and EXPECTED_COMPLETION_STATUS
+         and type(EXPECTED_TIBETAN_SPANS) is int and EXPECTED_TIBETAN_SPANS>0
+@@ -14,7 +14,7 @@
+ batch=Path(__file__).parent;wt=batch.parents[1]/'campaign-worktree'
+ out=batch/'proposal-verification';out.mkdir()
+ proof={'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'RUNNING',
+-       'role':'Fresh independent original authors c05_280_282_tibetan and c05_280_282_english; root is not an original author. This is mechanical verification only, not independent semantic approval.'}
++       'role':'Independent original authors c05_280_282_review_sources (Tibetan-first) and c05_280_282_english (English-first), as recorded in through285-dispatch-record.json; existing agent contexts are reused. Root and this verifier preparer are not current original authors. This is mechanical verification only, not independent semantic approval.'}
+ def pin(p):
+     raw=p.read_bytes();return dict(path=str(p),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+ def save(p,obj):
+@@ -36,7 +36,7 @@
+ try:
+     baseline=json.loads((batch/'baseline.json').read_text())
+     for name,digest in baseline['sha256'].items():assert pin(wt/name)['sha256']==digest,name
+-    freezes=[freeze(a,s) for a in ['tibetan','english'] for s in [280,281,282]]
++    freezes=[freeze(a,s) for a in ['tibetan','english'] for s in [283,284,285]]
+     own=json.loads((batch/EXPECTED_COMPLETION_FILE).read_text())
+     assert own['status']==EXPECTED_COMPLETION_STATUS and sum(r['spans'] for r in own['counts'])==EXPECTED_TIBETAN_SPANS
+     sys.path.insert(0,str(wt/'tools'))
+@@ -46,7 +46,7 @@
+     results=[];records=[]
+     wrapper=batch/EXPECTED_WRAPPER_RELATIVE_PATH
+     for angle in ['tibetan','english']:
+-        for seq in [280,281,282]:
++        for seq in [283,284,285]:
+             directory=batch/angle/str(seq);raw=(directory/'spec.json').read_bytes();spec=json.loads(raw)
+             assert spec['course']=='C05' and [s['seq'] for s in spec['segments']]==[seq]
+             argv=[sys.executable,'-B',str(wrapper)]
+@@ -88,7 +88,7 @@
+                 body_sha256=hashlib.sha256(run.stdout).hexdigest(),spec_sha256=hashlib.sha256(raw).hexdigest(),
+                 saved_body_identical=True))
+     assert len(results)==6 and len(records)==sum(r['spans'] for r in results)
+-    assert freezes==[freeze(a,s) for a in ['tibetan','english'] for s in [280,281,282]]
++    assert freezes==[freeze(a,s) for a in ['tibetan','english'] for s in [283,284,285]]
+     for name,digest in baseline['sha256'].items():assert pin(wt/name)['sha256']==digest,name
+     save(out/'report.json',results);save(out/'root-resolved-spans.json',records)
+     proof.update(status='PASS',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),

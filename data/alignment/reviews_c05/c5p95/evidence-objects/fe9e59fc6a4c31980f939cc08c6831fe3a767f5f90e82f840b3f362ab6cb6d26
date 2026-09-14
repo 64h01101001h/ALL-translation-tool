@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "phan tshun",
+    "phan tshun"
+  ],
+  "row_count": 1,
+  "rows": [
+    {
+      "id": 11678,
+      "wylie": "phan tshun",
+      "tibetan": "ཕན་ཚུན",
+      "tibetan_source": null,
+      "acip": "PHAN TSUN",
+      "pronunciation": "pentsun",
+      "pronunciation_source": null,
+      "sanskrit": "{LCh,MSA}anyonya; {C} parasparam; {C}mitha; {LC}anyamanya!!; {LC}anyo&nya; {LC}anvaya; {LC}itaretara; {LC}itaścāmutaśca; {LC}itastataḥ; {LC}tiryak; {LC}paramparam; {LC}paraspareṇa; {LC}mithaḥ; {LC}saṃbheda; {LC}paramparāka; {LC}saṃbādha, saṃbheda",
+      "hopkins_english": "mutual; mutually{D2}; {PH}opposite sides",
+      "hgm_gloss": "[\"each other ... each other ... each other\", \"each other\", \"side by side\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C05\", \"C08\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"TCS02\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 154,
+      "raw": "{\"tibetan\": \"ཕན་ཚུན\", \"wylie\": \"phan tshun\", \"wylie_variants\": [\"phan tshun\"], \"tenses\": null, \"sanskrit\": \"{LCh,MSA}anyonya; {C} parasparam; {C}mitha; {LC}anyamanya!!; {LC}anyo&nya; {LC}anvaya; {LC}itaretara; {LC}itaścāmutaśca; {LC}itastataḥ; {LC}tiryak; {LC}paramparam; {LC}paraspareṇa; {LC}mithaḥ; {LC}saṃbheda; {LC}paramparāka; {LC}saṃbādha, saṃbheda\", \"hopkins_english\": \"mutual; mutually{D2}; {PH}opposite sides\", \"hgm_gloss\": [\"each other ... each other ... each other\", \"each other\", \"side by side\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"pentsun\", \"acip\": \"PHAN TSUN\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C05\", \"C08\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"TCS02\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS17\", \"TCS18LamaChupa\"], \"n_segments\": 154}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

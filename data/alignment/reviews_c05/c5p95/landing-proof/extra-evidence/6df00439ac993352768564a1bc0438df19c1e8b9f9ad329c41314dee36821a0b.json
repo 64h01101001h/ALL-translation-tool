@@ -1,0 +1,107 @@
+{
+  "status": "SOURCE_ONLY_FUTURE_COMMAND_PLAN_NOT_EXECUTION",
+  "correct_entry_location": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/approve-reproduction-method-root.py",
+  "entry_flags": [
+    "--source-review-proof <actual external root receipt>",
+    "--source-review-sha256 <actual receipt SHA256>"
+  ],
+  "entry_source": {
+    "bytes": 15181,
+    "sha256": "58695746f9777854cf5c84c275762bf250c7d95538022243a1d61ac98a97d964"
+  },
+  "receipt_contract": "root-source-review-receipt-contract.json",
+  "initial_runtime_sources": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/prepare.py.txt",
+      "bytes": 5854,
+      "sha256": "fc6221f0525b252abc259bdcaba5aa420c9403dcf8745b96e424aa76407a124b"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/run-once.py.txt",
+      "bytes": 2559,
+      "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/run-isolated-readonly.py.txt",
+      "bytes": 1639,
+      "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/verify-retention.py.txt",
+      "bytes": 11882,
+      "sha256": "c9b09d5b3c34632e1c225d9ba2ee4bcc895a087444e8cf071492050602cfee3c"
+    }
+  ],
+  "recorder": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/record_external_step.py",
+    "bytes": 1864,
+    "sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+  },
+  "commands": [
+    {
+      "label": "prepare",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/record_external_step.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction/caller-runs/prepare",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction",
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction/prepare.py.txt"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONOPTIMIZE": "0"
+      },
+      "requires": "Actual external root source-review receipt and successful root entry materialization; run once in this order; preserve every failed attempt"
+    },
+    {
+      "label": "run-once",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/record_external_step.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction/caller-runs/run-once",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction",
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction/run-once.py.txt"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONOPTIMIZE": "0"
+      },
+      "requires": "Actual external root source-review receipt and successful root entry materialization; run once in this order; preserve every failed attempt"
+    },
+    {
+      "label": "retention",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/record_external_step.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction/caller-runs/retention",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction",
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction/verify-retention.py.txt"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONOPTIMIZE": "0"
+      },
+      "requires": "Actual external root source-review receipt and successful root entry materialization; run once in this order; preserve every failed attempt"
+    }
+  ],
+  "later_closure": "After actual three runs, read complete results and bind checks_total, input_aliases and truthful failure history in a separately reviewed close-evidence source; preserve guarded source and exact diffs. Execute close through the native recorder, finish its caller, then freeze all runtime files including failed history. Bind and separately review root acceptance using actual closure source and runtime counts before invocation. Root acceptance caller remains outside the frozen runtime.",
+  "forbidden_in_this_preparation": [
+    "Candidate imports or invocation",
+    "Builders, generators, SQL, Git, tests",
+    "B or worktree writes",
+    "Runtime materialization"
+  ],
+  "transport": "The source-preparation recorder uses nested stdout/stderr pins. The complete unchanged future runtime recorder uses stdout_bytes/stdout_sha256 and matching stderr fields, as required by the original closure and root acceptance. They are separate interfaces; no fabricated transport conversion."
+}

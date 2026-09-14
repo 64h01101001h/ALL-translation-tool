@@ -1,0 +1,133 @@
+{
+  "status": "APPROVE_CODE_AND_SCHEMA_ONLY",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "reviewed_at_utc": "2026-09-14T04:43:13.034394+00:00",
+  "producer": "Codex agent /root/c05_280_282_english",
+  "role": "Independent review of root-authored actual-binding code and transport; English original and read-only wrapper author, with prior original-author context reused. This is not independent semantic review.",
+  "candidate": {
+    "bytes": 7870,
+    "sha256": "28d5c6e267db08f9e9e80d24ada3da46a9fbd39186cbf8df730483708e408254"
+  },
+  "prior": {
+    "bytes": 7561,
+    "sha256": "79594a950bd8aafb73b47bc90bb373e3085b7c55abe1edbb396e7dcc80feacd7"
+  },
+  "wrapper": {
+    "bytes": 1019,
+    "sha256": "e699f35d66b2c7ca878fd90c2b1be4fbdd45ce1abc674954744647a73a2d8c61"
+  },
+  "completion": {
+    "bytes": 9017,
+    "sha256": "b60dfaa0aca35c9b8c88177dd707f0e4c3fd3a62dadd1cc14bfe21143b43de7b"
+  },
+  "literals": {
+    "EXPECTED_COMPLETION_FILE": "originals-complete.json",
+    "EXPECTED_COMPLETION_STATUS": "BOTH_INDEPENDENT_ORIGINAL_ANGLES_FROZEN",
+    "EXPECTED_TIBETAN_SPANS": 75,
+    "EXPECTED_WRAPPER_RELATIVE_PATH": "english/283/run_canonical_readonly.py"
+  },
+  "source_comparison": {
+    "literal_bindings": 4,
+    "freeze_reader_changes": 2,
+    "total_exact_replacement_groups": 6,
+    "full_forward_and_inverse_byte_identity": true,
+    "entire_original_suffix_from_freeze_expected_map_through_end_unchanged": true,
+    "canonical_and_resolver_source_unchanged": true,
+    "old_assert_nodes": 18,
+    "current_assert_nodes": 20
+  },
+  "actual_original_schema": {
+    "tibetan_freeze": "freeze-manifest.json; top-level LIST",
+    "english_freeze": "freeze.json; object with files LIST",
+    "required_member_fields": [
+      "path",
+      "bytes",
+      "sha256"
+    ],
+    "duplicate_path_and_normalized_path_rejection": true,
+    "exact_directory_census_and_full_member_hash_checks": true,
+    "freeze_count": 6,
+    "fully_reopened_member_count": 344,
+    "tibetan_member_counts": [
+      111,
+      24,
+      24
+    ],
+    "english_member_counts": [
+      147,
+      19,
+      19
+    ],
+    "tibetan_span_counts": [
+      16,
+      29,
+      30
+    ],
+    "english_span_counts": [
+      15,
+      27,
+      28
+    ],
+    "total_span_count": 145,
+    "total_null_count": 0,
+    "intended_declarations": "All six are LISTs in exact spec ID order with actual integer half-open range shapes. No canonical resolution was executed by this reviewer.",
+    "optional_fields": "Complete original fields and presence lists remain retained by unchanged runtime. Current specs use id/d/tib/eng; Tibetan declarations supply parent, and English declarations additionally preserve occurrence and reasoning fields."
+  },
+  "wrapper_review": {
+    "canonical_sha_check": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e",
+    "sqlite_mode": "URI mode=ro, PRAGMA query_only=ON, exact resolved spine, no alternate connect arguments",
+    "canonical_execution_method": "Unchanged canonical generator via runpy.run_path with original stdin/stdout and sys.argv reset",
+    "matching_substitute": false,
+    "reviewer_execution": false
+  },
+  "materialization_contract": {
+    "helper": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/verify-complete-originals.py",
+    "completion": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/originals-complete.json",
+    "output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/proposal-verification",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONOPTIMIZE": "0"
+    }
+  },
+  "retained_gates": [
+    "Fresh exclusive output directory and exclusive output files",
+    "Baseline pin before and after runtime",
+    "All six exact freeze censuses, member bytes and hashes before and after runtime",
+    "Completion status and Tibetan total 75",
+    "Single course and segment, ordered unique IDs and exact saved canonical body",
+    "Full canonical stdout/stderr/exit capture; exit zero and empty stderr required",
+    "Real canonical resolver and with_members, exact declared occurrence ranges and optional parent checks",
+    "Complete original span and occurrence records, original field presence, six-result counts",
+    "Full failure traceback retention and re-raise"
+  ],
+  "evidence": {
+    "source_copy_manifest": "source-copy-manifest.json",
+    "source_copy_manifest_schema": "LIST; copy paths relative to this top review root",
+    "copied_source_files": 117,
+    "candidate_original_to_copy_pairs_checked": 24,
+    "full_original_member_pins": "full-original-member-pins-external.json",
+    "full_original_retention": "All 344 full original members retained in their frozen source directories, independently reopened and pinned; no duplicate large evidence tree created here.",
+    "structured_measurements": "measured-bindings.json",
+    "full_forward_diff": "actual-binding/forward.diff",
+    "full_inverse_diff": "full-inverse.diff",
+    "full_preparation_and_history": "prior-preparation/",
+    "actual_binding_and_caller": [
+      "actual-binding/",
+      "actual-binding-caller/"
+    ]
+  },
+  "limits": {
+    "semantic_verdict": false,
+    "candidate_imports": 0,
+    "candidate_executions": 0,
+    "canonical_or_resolver_invocations": 0,
+    "tests_Git_SQL_API_invocations_by_reviewer": 0,
+    "fresh_HEAD_or_SQL_attestation": false,
+    "HEAD_and_six_source_fields": "Reviewed recorded root caller outputs and compared recorded source rows to batch snapshot. No fresh Git or SQLite query by this reviewer.",
+    "runtime_acceptance": false,
+    "execution_release": "Root must separately release and materialize the exact source and completion bytes in the batch directory, retaining the approved PYTHONOPTIMIZE=0 / bytecode-disabled caller contract. Runtime output must be new.",
+    "current_original_meaning": "Counts and declaration schemas were checked mechanically; source fidelity and semantic correctness remain outside this review."
+  }
+}

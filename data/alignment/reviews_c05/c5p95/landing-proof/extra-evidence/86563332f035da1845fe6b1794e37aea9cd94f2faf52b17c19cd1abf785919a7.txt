@@ -1,0 +1,180 @@
+"""Current source-bound config construction only. Separate reviewed release required.
+No SQL, Git, canonical generator, resolver, builder, or verifier invocation.
+The sole imported project function is the pinned pure config contract, after writes.
+"""
+from pathlib import Path
+import argparse,datetime,hashlib,importlib.util,json,os,sys,traceback
+
+P=Path(__file__).resolve().parent
+ROOT=P.parents[2]
+B=ROOT/'campaign-artifacts/C05-283-285'
+R=B/'reconciled';D=R/'283';N=R/'root-runtime-inputs';W=ROOT/'campaign-worktree'
+SEQS=[283,284,285]
+BASE='fb9182dc6fca2230be3bc5169ba1288a22430280'
+ROLE='Codex c05_280_282_english prepared this mechanical config constructor, reusing original English author context. No independent semantic approval. Root separately releases construction and later verifier execution.'
+
+def bp(raw):return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def raw(p):return Path(p).read_bytes()
+def load(p):return json.loads(raw(p))
+def ref(p):return {'path':str(p),**bp(raw(p))}
+def check(p,pin):
+ b=raw(p);assert bp(b)=={k:pin[k]for k in ['bytes','sha256']},str(p);assert raw(p)==b;return b
+def relative(name):
+ p=Path(name);assert isinstance(name,str)and name not in ('','.','..')and not p.is_absolute()and '..'not in p.parts
+ return p
+def check_freeze(d,fp,rows):
+ expected={}
+ for name,pin in rows:
+  p=Path(name);name=str(p.relative_to(d))if p.is_absolute()else name;relative(name)
+  assert name not in expected and name!=fp.name;assert (d/name).resolve().is_relative_to(d.resolve())
+  check(d/name,pin);expected[name]=pin
+ assert set(expected)=={str(p.relative_to(d))for p in d.rglob('*')if p.is_file()and p!=fp}
+ return {'directory':str(d),'freeze':ref(fp),'members':len(expected)}
+
+def main():
+ if not __debug__:raise RuntimeError('Assertions must remain enabled')
+ assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'and os.environ.get('PYTHONOPTIMIZE','0')=='0'
+ sys.dont_write_bytecode=True
+ parser=argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--preparation-freeze-sha256',required=True)
+ parser.add_argument('--execute-reviewed-construction',action='store_true')
+ args=parser.parse_args();assert args.execute_reviewed_construction
+ assert P.name=='through285-reconciliation-config-preparation'and not N.exists()and not N.is_symlink()
+ pf=P/'freeze.json';assert bp(raw(pf))['sha256']==args.preparation_freeze_sha256
+ f=load(pf);assert isinstance(f['files'],list)
+ check_freeze(P,pf,((r['path'],r)for r in f['files']))
+ plan=load(P/'construction-plan.json');assert plan['status']=='CURRENT_SOURCE_BOUND_PLAN_PENDING_ROOT_EXECUTION'
+ adapter=plan['adapter'];contract=Path(adapter['contract']['path']);runtime=Path(adapter['runtime']['path'])
+ check(contract,adapter['contract']);check(runtime,adapter['runtime'])
+ payloads={}
+ def emit(name,data):
+  relative(name);assert name not in payloads
+  payloads[name]=data if isinstance(data,bytes)else (json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode()
+  return {'path':str(N/name),**bp(payloads[name])}
+ # Every selected source remains pinned. Superseded adapter capture bytes are
+ # retained copies, not an assertion that its subsequently corrected path is old.
+ inputs=load(P/'input-source-manifest.json')
+ adapter_paths={adapter['contract']['path'],adapter['runtime']['path']}
+ for row in inputs:
+  if row['original']not in adapter_paths:
+   check(row['original'],row);p=Path(row['original'])
+   assert str(p.resolve())==row['resolved_original']and (os.readlink(p)if p.is_symlink()else None)==row['symlink']
+  if 'copy'in row:check(P/relative(row['copy']),row)
+ boundary_path=R/'completion-boundary-freeze.json';boundary=load(boundary_path)
+ assert boundary['file_count']==len(boundary['files'])==916
+ for name,pin in boundary['files'].items():check(R/relative(name),pin)
+ before={str(p.relative_to(R)):bp(raw(p))for p in R.rglob('*')if p.is_file()}
+ extra_before=sorted(set(before)-set(boundary['files'])-{'completion-boundary-freeze.json'})
+ assert extra_before==plan['existing_outside_historical_boundary']
+ base=load(B/'baseline.json');assert base['commit']==BASE and base['course_boundary']==282
+ status=D/'completion-state/status.stdout.bin';check(status,plan['status_capture'])
+ assert raw(status)==b'?? data/teaching/dcc_captions\n'
+ original_rows=[];originals={};freezes=[]
+ for angle in ['tibetan','english']:
+  for seq in SEQS:
+   d=B/angle/str(seq);fp=d/('freeze-manifest.json'if angle=='tibetan'else'freeze.json');f=load(fp);entries=f if angle=='tibetan'else f['files']
+   assert isinstance(entries,list);freezes.append(check_freeze(d,fp,((r['path'],r)for r in entries)))
+   original_rows.append({'angle':angle,'seq':seq,'directory':str(d),'freeze':ref(fp),'spec':ref(d/'spec.json'),'declarations':ref(d/'intended-spans.json')})
+   spec=load(d/'spec.json');assert spec['course']=='C05'and len(spec['segments'])==1 and spec['segments'][0]['seq']==seq
+   for s in spec['segments'][0]['spans']:
+    k=(angle,seq,s['id']);assert k not in originals;originals[k]=s
+ identities=load(B/'proposal-verification/root-resolved-spans.json');assert len(identities)==len(originals)==145
+ assert len({(r['angle'],r['seq'],r['id'])for r in identities})==145
+ for r in identities:
+  sp=originals[(r['angle'],r['seq'],r['id'])];assert r['original_span']==sp and r['original_field_presence']==list(sp)
+ original_proof=load(B/'proposal-verification/execution-proof.json');assert original_proof['status']=='PASS'and original_proof['original_identities']==145
+ assert [(r['angle'],r['seq'],r['freeze_sha256'])for r in original_proof['freezes']]==[(r['angle'],r['seq'],r['freeze']['sha256'])for r in original_rows]
+ roles={'spec':'spec.json','body':'body.html','tuples':'final-tuples.json','decisions':'final-decisions.json','omissions':'omissions.json','dispositions':'original-dispositions.json','errata_analysis':'errata-analysis.json','allowances':'proposed-head-allowances.json','errata':'errata.json','proof':'proof.json'}
+ finals=[]
+ for seq in SEQS:
+  d=R/str(seq);f=load(d/'freeze.json');freezes.append(check_freeze(d,d/'freeze.json',f['files'].items()))
+  s=load(d/'spec.json');assert s['course']=='C05'and len(s['segments'])==1 and s['segments'][0]['seq']==seq
+  sp=s['segments'][0]['spans'];assert len(sp)==len({r['id']for r in sp})
+  counts={'spans':len(sp),'nulls':sum(r['eng']is None for r in sp),'d5_nonnull':sum(r['d']==5 and r['eng']is not None for r in sp)}
+  proof=load(d/'proof.json');assert proof['seq']==seq and proof['status']=='PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION'and 'counts'not in proof
+  assert all(type(proof[k])is int and proof[k]==v for k,v in counts.items())
+  finals.append({'seq':seq,'directory':str(d),'freeze':ref(d/'freeze.json'),'counts':counts,'files':{k:ref(d/name)for k,name in roles.items()}})
+ assert {k:sum(r['counts'][k]for r in finals)for k in ['spans','nulls','d5_nonnull']}=={'spans':76,'nulls':0,'d5_nonnull':61}
+ source_maps=load(D/'original-copy-manifest.json');assert len(source_maps)==len({r['original']for r in source_maps})==623
+ maps=[]
+ for r in source_maps:
+  relative(r['copy']);a=check(r['original'],r);assert a==check(D/r['copy'],r)
+  maps.append({**r,'copy':'283/'+r['copy']})
+ copy_ref=emit('copy-manifest.json',maps)
+ aliases=load(D/'original-aliases.json');assert len(aliases)==625
+ for r in aliases:
+  p=Path(r['logical']);check(p,r);assert str(p.resolve())==r['resolved']and (os.readlink(p)if p.is_symlink()else None)==r['symlink']
+ alias_ref=emit('aliases.json',raw(D/'original-aliases.json'))
+ physical=load(D/'physical-extents.json');assert len(physical)==12
+ for r in physical:
+  whole=check(r['original'],r['verified_full_source_pin']);part=check(D/relative(r['excerpt']),r)
+  assert whole[r['start']:r['end']]==part and any(x['sha256']==r['sha256']and check(R/x['copy'],x)==part for x in maps)
+ physical_ref=emit('physical.json',[{**r,'excerpt':'283/'+r['excerpt']}for r in physical])
+ governing=load(D/'governing-current.json');assert governing['commit']==BASE and len(governing['actual_runs'])==10
+ grows=[]
+ for r in governing['actual_runs']:
+  assert r['argv']==['git','show',r['object']]and r['object'].startswith(BASE+':')and r['cwd']==str(W)and r['exit']==0
+  ex=load(D/relative(r['execution']));assert all(ex[k]==r[k]for k in ['argv','cwd','exit'])
+  call=(D/r['execution']).parent;assert check(D/relative(r['copy']),r)==check(call/'stdout.bin',ex['stdout'])and raw(call/'stderr.bin')==b''and raw(call/'exit.txt')==b'0\n'
+  grows.append({**r,'copy':'283/'+r['copy'],'execution':'283/'+r['execution']})
+ gov_ref=emit('governing.json',{'commit':BASE,'actual_runs':grows})
+ queryplans=load(P/'query-binding-plan.json');descriptors=load(D/'query-descriptors.json');assert len(queryplans)==len(descriptors)==210
+ queries=[];derivations=[];control_count=0;row_count_records=0;count_records=0
+ for planned,entry in zip(queryplans,descriptors):
+  assert entry==planned['record'];desc=json.loads(check(planned['descriptor']['path'],planned['descriptor']));source=desc
+  for k in entry['selector']:source=source[k]
+  assert [k for k in ['count','row_count']if k in source]==entry['count_keys_present']
+  q={k:source[k]for k in ['sql','parameters','rows']}
+  for k in ['count','row_count']:
+   if k in source:assert type(source[k])is int and source[k]>=0 and source[k]==len(source['rows']);q[k]=source[k]
+  retained=load(D/entry['path']);assert all(retained[k]==q[k]for k in ['sql','parameters','rows'])and retained['count']==len(q['rows'])
+  qref=emit(planned['future_relative_path'],q)
+  if planned['kind']=='CONTROL':
+   assert q=={'sql':'PRAGMA query_only','parameters':[],'rows':[{'query_only':1}],'row_count':1};control_count+=1
+  else:
+   assert q['sql'].lstrip().upper().startswith('SELECT ')
+   queries.append({'file':qref,'descriptor':planned['descriptor'],'binding':planned['binding']})
+   row_count_records+='row_count'in q;count_records+='count'in q
+  derivations.append({'source_inventory_index':planned['index'],'source_inventory_record':entry,'descriptor':planned['descriptor'],'selector':entry['selector'],'full_selected_original':source,'derived':qref,'retained_normalized':ref(D/entry['path']),'binding':planned['binding'],'category':planned['kind'],'count_keys_present':entry['count_keys_present']})
+ assert len(queries)==209 and control_count==1 and row_count_records==145 and count_records==64
+ emit('query-derivations.json',derivations)
+ context=load(D/'context-rows-full.json');assert [r['seq']for r in context]==list(range(277,292))and all(r['course']=='C05'for r in context)
+ source={r['seq']:r for r in context};assert [{k:source[s][k]for k in ['id','course','seq','acip','wylie','english']}for s in SEQS]==load(B/'source.json')
+ evidence={'reference_access':ref(B/'english/283/required-reference-access.json'),'copy_manifest':copy_ref,'aliases':alias_ref,'governing':gov_ref,'source_context':ref(D/'context-rows-full.json'),'physical':physical_ref,'original_identities':ref(B/'proposal-verification/root-resolved-spans.json'),'original_proof':ref(B/'proposal-verification/execution-proof.json'),'source_snapshot':ref(B/'source.json'),'master':ref(W/'data/hgm_dictionary_v27_2.json.gz'),'corpus':ref(W/'data/full_parallel_corpus_v32.json.gz'),'database':ref(W/'build/hgm_spine_v27_2.db'),'generator':ref(W/'tools/gen_alignment_page.py'),'wrapper':ref(R/'run-generator-ro.py.txt')}
+ config={'schema':'reconciliation-277-v1','course':'C05','batch':str(B),'worktree':str(W),'shared_directory':str(R),'sequences':SEQS,'baseline':ref(B/'baseline.json'),'status_capture':ref(status),'originals':original_rows,'reconciled':finals,'evidence':evidence,'context':{'sql':'SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq','parameters':['C05',277,291]},'query_directories':[str(N/'queries')],'queries':queries,'operator_role':ROLE}
+ emit('config.json',config)
+ emit('source-inputs.json',{'preparation_freeze':ref(pf),'source_manifest':ref(P/'input-source-manifest.json'),'full_source_records':inputs,'current_adapter':adapter,'superseded_adapter_source_rule':'Old copied adapter bytes remain historical; current adapter source identity is bound separately above.'})
+ emit('schema-derivations.json',{'copy_manifest':{'source':ref(D/'original-copy-manifest.json'),'projection':'Prefix each copy with 283/; all other fields preserved','records':623},'aliases':{'source':ref(D/'original-aliases.json'),'projection':'Whole unchanged bytes','records':625},'physical':{'source':ref(D/'physical-extents.json'),'projection':'Prefix excerpt paths with 283/; preserve all12 full original extents','records':12},'governing':{'source':ref(D/'governing-current.json'),'projection':'Prefix copy and execution paths with 283/; argv/cwd/exit exactly actual recorded calls','records':10},'wrapper':{'source':ref(R/'run-generator-ro.py.txt'),'projection':'Existing immutable shared wrapper reused unchanged'},'queries':{'source':ref(D/'query-descriptors.json'),'projection':'209 SELECT records with exact original count-key presence; original PRAGMA descriptor separately retained as controls/075.json','SELECT':209,'controls':1},'final_counts_source':'Actual specs compared to unchanged direct top-level final proofs; no proof rewrite.','original_identities_source':ref(B/'proposal-verification/root-resolved-spans.json'),'semantic_approval':False})
+ emit('historical-boundary-preservation.json',{'source':ref(boundary_path),'recorded_members':916,'all_recorded_members':boundary['files'],'recorded_total_bytes':boundary['total_bytes'],'existing_later_files_before':extra_before,'authorized_new_subtree':str(N),'boundary':'This916-file manifest is a historical completion snapshot. Later root-runtime-inputs additions are outside it. Exact current whole-directory census is not asserted to remain916. All nine segment freezes remain exact before/after.'})
+ emit('reviewed-sources/construct-current-config.py.txt',raw(__file__))
+ emit('reviewed-sources/config_contract.py',raw(contract));emit('reviewed-sources/verify_reconciliation.py',raw(runtime))
+ emit('construction-plan.json',raw(P/'construction-plan.json'))
+ expected=load(P/'planned-output-inventory.json');assert set(expected)==set(payloads)|{'construction-proof.json','freeze.json'}
+ # This is the only mutation boundary. Every destination is under a new N.
+ N.mkdir();proof={'status':'RUNNING_CONSTRUCTION_ONLY','operator_role':ROLE,'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'runtime_executed':False,'semantic_approval':False}
+ try:
+  for name,data in payloads.items():
+   dest=N/relative(name);dest.parent.mkdir(parents=True,exist_ok=True)
+   with dest.open('xb')as stream:stream.write(data)
+  definition=importlib.util.spec_from_file_location('reviewed_pure_config_contract',contract);module=importlib.util.module_from_spec(definition);definition.loader.exec_module(module)
+  summary=module.validate_config(config)
+  assert summary['totals']=={'spans':76,'nulls':0,'d5_nonnull':61}and summary['original_count']==145 and summary['query_count']==209
+  for name,pin in before.items():check(R/name,pin)
+  assert {str(p.relative_to(R))for p in R.rglob('*')if p.is_file()and not p.is_relative_to(N)}==set(before)
+  for row in original_rows:
+   d=Path(row['directory']);fp=Path(row['freeze']['path']);f=load(fp);a=f if row['angle']=='tibetan'else f['files'];check_freeze(d,fp,((r['path'],r)for r in a))
+  for row in finals:
+   d=Path(row['directory']);fp=d/'freeze.json';check_freeze(d,fp,load(fp)['files'].items())
+  check(contract,adapter['contract']);check(runtime,adapter['runtime'])
+  proof.update(status='PASS_CONFIG_CONSTRUCTION_AND_PURE_SCHEMA_VALIDATION',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),summary=summary,config=ref(N/'config.json'),historical_members_preserved=916,new_directory=str(N),SQL_Git_canonical_verifier_executions=0)
+ except Exception:
+  proof.update(status='FAILED_CONSTRUCTION_ONLY',failure=traceback.format_exc());raise
+ finally:
+  with (N/'construction-proof.json').open('x')as f:json.dump(proof,f,indent=2);f.write('\n')
+ if proof['status'].startswith('PASS'):
+  names={str(p.relative_to(N))for p in N.rglob('*')if p.is_file()};assert names==set(expected)-{'freeze.json'}
+  rows=[{'path':name,**bp(raw(N/name))}for name in sorted(names)]
+  with (N/'freeze.json').open('x')as f:json.dump({'status':'CONFIG_INPUTS_FROZEN_NO_VERIFIER_EXECUTION','files':rows},f,indent=2);f.write('\n')
+  print(json.dumps({'status':proof['status'],'config':ref(N/'config.json'),'freeze':ref(N/'freeze.json'),'files':len(rows),'semantic_approval':False,'runtime_executed':False}))
+
+if __name__=='__main__':main()

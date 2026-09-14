@@ -1,0 +1,62 @@
+{
+  "status": "READY_FOR_INDEPENDENT_CODE_REVIEW_SOURCE_ONLY",
+  "producer": "Codex /root/c05_280_282_english",
+  "role": "Source/descriptor author, not independent semantic or code approver",
+  "utc": "2026-09-14T02:41:11.967558+00:00",
+  "candidate": {
+    "bytes": 31981,
+    "sha256": "14977fae53ea509a99f22e34f87e5fa81c00b0b2536a9a315281a30d4e3a6574"
+  },
+  "descriptor": {
+    "bytes": 69418,
+    "sha256": "7fed8e2eabd5a2766a04d8823dfacb16d333961b4349dc258fe4bd4631e3906d"
+  },
+  "actual_diagnostic": {
+    "bytes": 22544169,
+    "sha256": "efdb335112f0d032b4c46b9bda05026046e3cbb1670cae250f90147474ca758f"
+  },
+  "actual_warnings": 43903,
+  "actual_warning_files": 69,
+  "base_predicate_warnings": 43773,
+  "additional_files": 12,
+  "additional_warnings": 130,
+  "additional_categories": {
+    "archived_cmake_generated_header": 6,
+    "archived_current_canonical_csv_crlf": 38,
+    "archived_prebatch_continuation_line": 7,
+    "archived_prior_canonical_csv_crlf": 35,
+    "recorded_ctest_json_formatter": 44
+  },
+  "original_copy_records": 360,
+  "all_original_copy_bytes_and_aliases_checked": true,
+  "prior_initial_boundary_members_unchanged": true,
+  "real_prior_assertions_retained": 75,
+  "pure_predicates_unchanged": 9,
+  "source_replacement_count": 6,
+  "new_target_CLI_Git_SQL_build_test_calls": 0,
+  "pure_readonly_analysis_functions_invoked": [
+    "digest",
+    "pin",
+    "check_pin",
+    "relative",
+    "parse_log",
+    "literal_warnings",
+    "diff_context_lines",
+    "ordinary_predicate",
+    "classify_physical"
+  ],
+  "candidate_imported_or_executed": false,
+  "WT_or_index_mutation": false,
+  "normalization": false,
+  "root_release_present": false,
+  "independent_code_review": "PENDING",
+  "actual_prepare_audit": "PENDING",
+  "later_bank_stage_ledger_closure": "PENDING_SEPARATE_PHASES",
+  "limitations": [
+    "Pure predicates were invoked solely by a recorded read-only descriptor analyzer; neither candidate nor Run/main was imported or executed.",
+    "Historical pre-batch continuation identity is a preserved external checkpoint preimage, not a Git blob. Its available status-caller-result is a tool-result wrapper, not full raw process streams.",
+    "No current ROOT/CAMPAIGN_CONTINUATION bytes were bound or assumed unchanged.",
+    "Literal provenance does not add semantic acceptance; all review/source/index/alias/raw-stream gates remain separate.",
+    "Every final approval and runtime result remains pending; exact input/source comparison is not a staged audit."
+  ]
+}

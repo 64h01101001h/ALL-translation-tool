@@ -1,0 +1,30 @@
+{
+  "preparation_target_failures": [],
+  "source_lookup_failures": [
+    {
+      "kind": "conversation tool-result transcription",
+      "command": "cat campaign-artifacts/C05-283-285/reconciled/runtime-schema-handoff.json",
+      "exit": 1,
+      "diagnostic": "No such file or directory",
+      "resolution": "Actual frozen path is reconciled/283/runtime-schema-handoff.json; subsequently consumed fully."
+    },
+    {
+      "kind": "conversation tool-result transcription",
+      "command": "rg --files original-freeze-adapter query-shape-adapter",
+      "exit": 2,
+      "diagnostic": "query-shape-adapter directory did not exist yet; listing output truncated",
+      "resolution": "The query adapter author confirmed the schema and exact stable source, which was subsequently read fully and copied."
+    },
+    {
+      "kind": "read-only inspection result",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/reconciled/283/reference-access.json",
+      "result": "Missing; no exception or target attempt",
+      "resolution": "Actual full reference-access evidence is english/283/required-reference-access.json."
+    }
+  ],
+  "truncated_discovery_output": "Initial combined query-descriptor listing exceeded tool output. All210 full descriptor records and every selected full source were subsequently read, retained or externally pinned, and measured by capture_source_inputs.py. No truncated preview is used as source evidence.",
+  "source_inspection_caller": "source-inspection-caller/ contains actual native stdin/stdout/stderr/exit and command/execution JSON; this was an independent file inspection script, never the config constructor.",
+  "prior_failures": "Whole previous config source, syntax01/syntax02 and actual preparation02 caller streams retained through input-source-manifest.json; historical syntax failure does not describe this new candidate.",
+  "adapter_capture_history": "Earlier 11,457-byte contract captured before author added proof_counts. It remains retained in inputs; current-adapter/config_contract.py and construction-plan.json separately bind final12,106-byte source. No historical capture is overwritten.",
+  "outer_record_limit": "The wrapper that launched source inspection was submitted through the conversation tool, while its exact argv/cwd/environment and native child streams are retained. No original native outer shell recorder is claimed."
+}

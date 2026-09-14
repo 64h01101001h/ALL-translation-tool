@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport datetime,hashlib,json\nROOT=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment\");I=ROOT/'campaign-artifacts/integration';B=ROOT/'campaign-artifacts/C05-283-285'\ndef pin(p):\n b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\np=I/'through285-dispatch-record.json';assert not p.exists()\np.write_text(json.dumps(dict(status='TWO_INDEPENDENT_PROPOSAL_PASSES_DISPATCHED',recorded_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),dispatch_time_note='Recorded after successful followup_task returns; exact model-scheduler start time is not exposed by that tool.',baseline_head='fb9182dc6fca2230be3bc5169ba1288a22430280',sequences=[283,284,285],agents=[dict(agent='/root/c05_280_282_review_sources',role='tibetan-first proposer',write_scope=str(B/'tibetan')),dict(agent='/root/c05_280_282_english',role='english-first proposer',write_scope=str(B/'english')),dict(agent='/root/c05_253_255_reconcile',role='source-only reusable verifier preparation; no proposal access',write_scope=str(I/'through285-reconciliation-verifier-preparation'))],model='Existing agent settings inherited; no model override in these dispatch tools',source=pin(B/'source.json'),context=pin(B/'context.json'),baseline=pin(B/'baseline.json'),proposal_protocol=pin(ROOT/'campaign-artifacts/proposal-protocol.md'),independence='Each proposer can read its angle brief, original source/context/baseline and own outputs only within the batch. Root leads and other proposals withheld until both freeze.',usage_observation=dict(used_percent=81,remaining_percent=19,window_minutes=10080,source='get_usage_limits tool observation in this turn; no reset redeemed')),indent=2)+'\\n')\nprint('Dispatch and current usage observation recorded.')\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-14T04:14:58.868417+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+}

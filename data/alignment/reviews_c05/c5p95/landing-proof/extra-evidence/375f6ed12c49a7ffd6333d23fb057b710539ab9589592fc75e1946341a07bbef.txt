@@ -1,0 +1,54 @@
+--- prior/verify_reconciliation.py
++++ candidate/verify_reconciliation.py
+@@ -5,7 +5,7 @@
+ from collections import Counter
+ from html.parser import HTMLParser
+ import argparse,datetime,gzip,hashlib,importlib.util,json,os,re,sqlite3,subprocess,sys,traceback
+-from config_contract import pinned,validate_config,bind_query
++from config_contract import pinned,validate_config,bind_query,original_freeze
+ sys.dont_write_bytecode=True
+ 
+ def release_inputs(args):
+@@ -40,15 +40,20 @@
+   calls.append(call);save(label+'.command.json',call)
+   assert r.returncode==0 and not r.stderr,(label,r.returncode,r.stderr)
+   return r.stdout
+- def frozen(d):
+-  f=read(d/'freeze.json')['files'];items=f.items() if isinstance(f,dict) else [(r['path'],r) for r in f];expected={}
++ def frozen(row):
++  d=Path(row['directory']);manifest=Path(row['freeze']['path'])
++  if 'angle' in row:f=original_freeze(row)
++  else:
++   assert manifest==d/'freeze.json'
++   f=json.loads(pinned(row['freeze']))['files'];assert isinstance(f,dict)
++  items=f.items();expected={}
+   for n,r in items:
+    p=Path(n);n=str(p.relative_to(d)) if p.is_absolute() else n
+    assert not Path(n).is_absolute() and '..' not in Path(n).parts and n not in expected
+    expected[n]=r
+-  assert set(expected)=={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=d/'freeze.json'}
++  assert set(expected)=={str(p.relative_to(d)) for p in d.rglob('*') if p.is_file() and p!=manifest}
+   for n,r in expected.items():check(d/n,r)
+-  return dict(path=str(d),freeze=pin(d/'freeze.json'),files=len(expected))
++  return dict(path=str(d),freeze=pin(manifest),files=len(expected))
+  class SourceAnchors(HTMLParser):
+   def __init__(self):super().__init__(convert_charrefs=True);self.depth=0;self.values=[];self.current=[]
+   def handle_starttag(self,tag,attrs):
+@@ -71,7 +76,7 @@
+   assert run(['git','rev-parse','HEAD'],'head').decode().strip()==base['commit']
+   assert run(['git','status','--short'],'status-before')==pinned(C['status_capture'])
+   for n,h in base['sha256'].items():assert pin(W/n)['sha256']==h,n
+-  freezes=[frozen(Path(row['directory'])) for row in freeze_rows]
++  freezes=[frozen(row) for row in freeze_rows]
+   for row in freeze_rows:pinned(row['freeze'])
+   for r in read(ep('reference_access')):assert r['readable'] and Path(r['path']).is_dir() and os.access(r['path'],os.R_OK)
+   mappings=read(ep('copy_manifest'));assert mappings==json.loads(pinned(E['copy_manifest']))
+@@ -192,7 +197,7 @@
+    assert sum(s['eng'] is None for s in spans)==nulls and sum(s['d']==5 and s['eng'] is not None for s in spans)==d5
+    finals+=local;results.append(dict(seq=seq,exit=0,spans=count,nulls=nulls,word_pairs=d5,spec_bytes=pin(d/'spec.json')['bytes'],spec_sha256=pin(d/'spec.json')['sha256'],body_bytes=len(raw),body_sha256=bp(raw)['sha256'],saved_body_identical=True,source_anchors_verbatim=True))
+   assert len(finals)==summary['totals']['spans'] and len(seen)==len(set(seen))==summary['original_count'] and set(seen)==set(originals)
+-  assert freezes==[frozen(Path(row['directory'])) for row in freeze_rows]
++  assert freezes==[frozen(row) for row in freeze_rows]
+   assert validate_config(C)==summary
+   for ref in E.values():pinned(ref)
+   for n,h in base['sha256'].items():assert pin(W/n)['sha256']==h,n

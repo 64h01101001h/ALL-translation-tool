@@ -1,0 +1,51 @@
+from pathlib import Path
+import ast,datetime,difflib,hashlib,json
+R=Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment");I=R/'campaign-artifacts/integration'
+P=I/'through285-final-banking-stage-preparation'
+V=I/'through285-final-stage-independent-code-review'
+O=I/'through285-stage-binding-path-correction'
+assert __debug__ and not O.exists()
+def pin(raw):return {'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+def dump(p,obj):p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+rvraw=(V/'review.json').read_bytes()
+assert pin(rvraw)=={'bytes':4632,'sha256':'4fb076a2697aeb5f475eaabeae0185995fd80110ea95c6de9ab774e1d28ca4af'}
+rv=json.loads(rvraw)
+assert rv['verdict']=='REQUEST_CHANGES' and [x['id']for x in rv['open_findings']]==['STAGE-001']
+fr=(V/'freeze.json').read_bytes()
+assert pin(fr)=={'bytes':7769,'sha256':'6fcac60e9a8b7d3141003586286954b1731fd2ad4fc00f5bf17bf979ea30ebf7'}
+entries=json.loads(fr)['files']
+assert len(entries)==48 and sum(x['bytes']for x in entries.values())==2289651
+assert {str(p.relative_to(V))for p in V.rglob('*')if p.is_file()}==set(entries)|{'freeze.json'}
+for name,expected in entries.items():assert pin((V/name).read_bytes())==expected
+source=P/'final-candidates/verify_staged_through285.py'
+old=source.read_bytes()
+assert pin(old)=={'bytes':57097,'sha256':'d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c'}
+before=b"        path = Path(pins[role]['path'])\n        assert path.is_absolute() and path.resolve(strict=True).is_relative_to(integration.resolve(strict=True))\n"
+after=b"        role_path = Path(pins[role]['path'])\n        assert role_path.is_absolute() and role_path.resolve(strict=True).is_relative_to(integration.resolve(strict=True))\n"
+assert old.count(before)==1 and not old.count(after)
+new=old.replace(before,after)
+assert new.count(after)==1 and new.replace(after,before)==old
+tree=ast.parse(new)
+def funcs(raw):
+ t=ast.parse(raw);lines=raw.splitlines(keepends=True)
+ return {n.name:b''.join(lines[n.lineno-1:n.end_lineno])for n in t.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef,ast.ClassDef))}
+fo,fn=funcs(old),funcs(new)
+assert set(fo)==set(fn) and [k for k in fo if fo[k]!=fn[k]]==['load_release_bindings']
+assert b"    assert path.read_bytes() == raw\n" in fn['load_release_bindings']
+assert ast.dump(ast.parse(new.replace(after,before)))==ast.dump(ast.parse(old))
+O.mkdir()
+pairs=[]
+for original,name,raw in [(source,'prior-verify_staged_through285.py',old),(V/'review.json','independent-review.json',rvraw),(V/'freeze.json','independent-review-freeze.json',fr)]:
+ (O/name).write_bytes(raw);assert (O/name).read_bytes()==original.read_bytes()
+ pairs.append({'original':str(original),'copy':name,**pin(raw)})
+out=O/'verify_staged_through285.py';out.write_bytes(new)
+(O/'forward.diff').write_text(''.join(difflib.unified_diff(old.decode().splitlines(keepends=True),new.decode().splitlines(keepends=True),fromfile=str(source),tofile=str(out))))
+(O/'inverse.diff').write_text(''.join(difflib.unified_diff(new.decode().splitlines(keepends=True),old.decode().splitlines(keepends=True),fromfile=str(out),tofile=str(source))))
+dump(O/'original-to-copy-manifest.json',pairs)
+proof={'status':'PASS_ROOT_NARROW_SOURCE_CORRECTION_INDEPENDENT_RECHECK_PENDING','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'finding':'STAGE-001','baseline':'fb9182dc6fca2230be3bc5169ba1288a22430280','before':{'path':str(source),**pin(old)},'after':{'path':str(out),**pin(new)},'independent_review':{'path':str(V/'review.json'),**pin(rvraw)},'independent_review_members_verified':48,'sole_changed_top_level_definition':'load_release_bindings','change':'Use role_path only in input-role containment loop; preserve original bindings path and final full reread.','whole_inverse_and_AST_exact':True,'root_full_verifier_read':True,'root_pathspec_full_read':True,'root_final_banker_full_read':True,'candidate_execution':False,'Git_SQL_tests_bank_stage_or_worktree_writes':False,'runtime_bindings_pending':True}
+dump(O/'proof.json',proof)
+assert source.read_bytes()==old and (V/'review.json').read_bytes()==rvraw and (V/'freeze.json').read_bytes()==fr
+f={str(p.relative_to(O)):pin(p.read_bytes())for p in sorted(O.rglob('*'))if p.is_file()}
+freeze={'status':'FROZEN_SOURCE_ONLY_CORRECTION','file_count':len(f),'total_bytes':sum(x['bytes']for x in f.values()),'files':f}
+dump(O/'freeze.json',freeze)
+print(json.dumps({'status':proof['status'],'candidate':proof['after'],'files':len(f),'bytes':freeze['total_bytes'],'freeze':pin((O/'freeze.json').read_bytes())},indent=2))

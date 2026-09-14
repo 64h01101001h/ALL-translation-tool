@@ -1,0 +1,32 @@
+[
+  {
+    "before": "EXPECTED_COMPLETION_FILE=None",
+    "after": "EXPECTED_COMPLETION_FILE='originals-complete.json'",
+    "occurrences": 1
+  },
+  {
+    "before": "EXPECTED_COMPLETION_STATUS=None",
+    "after": "EXPECTED_COMPLETION_STATUS='BOTH_INDEPENDENT_ORIGINAL_ANGLES_FROZEN'",
+    "occurrences": 1
+  },
+  {
+    "before": "EXPECTED_TIBETAN_SPANS=None",
+    "after": "EXPECTED_TIBETAN_SPANS=75",
+    "occurrences": 1
+  },
+  {
+    "before": "EXPECTED_WRAPPER_RELATIVE_PATH=None",
+    "after": "EXPECTED_WRAPPER_RELATIVE_PATH='english/283/run_canonical_readonly.py'",
+    "occurrences": 1
+  },
+  {
+    "before": "directory=batch/angle/str(seq);fp=directory/'freeze.json';f=json.loads(fp.read_text())",
+    "after": "directory=batch/angle/str(seq);fp=directory/('freeze-manifest.json' if angle=='tibetan' else 'freeze.json');f=json.loads(fp.read_text())",
+    "occurrences": 1
+  },
+  {
+    "before": "    entries=f['files'] if isinstance(f['files'],dict) else {r.get('relative_path',r['path']):r for r in f['files']}",
+    "after": "    rows=f if angle=='tibetan' else f['files']\n    assert isinstance(rows,list) and all(isinstance(r,dict) and isinstance(r.get('path'),str) for r in rows)\n    assert len({r['path'] for r in rows})==len(rows), 'Duplicate original freeze paths'\n    entries={r['path']:r for r in rows}",
+    "occurrences": 1
+  }
+]

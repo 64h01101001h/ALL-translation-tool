@@ -1,0 +1,130 @@
+{
+  "status": "SOURCE_CORRECTION_PENDING_ROOT_REVIEW_NO_RETRY_EXECUTED",
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0"
+  },
+  "authoritative_sources": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-directory-alias-correction/candidates",
+  "materialization": "Root may execute these frozen full candidate paths directly after review. No new runtime directory or overwrite is required. Do not place executable copies in mutable output/caller trees or alter captured source roots later.",
+  "import_behavior": "No candidate derives I/B from HERE. Both capture tools use fixed absolute roots; later capture additionally records its own __file__. Assembler verifies the full composer SHA and loads inert helper definitions under reviewed_final_composer, so the composer main guard is false during import.",
+  "commands": [
+    {
+      "role": "initial_capture",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-directory-alias-correction/candidates/capture-finished-scope.py",
+        "--execute-reviewed-capture",
+        "--writers-quiescent"
+      ],
+      "caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-caller-attempt02",
+      "output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope",
+      "prerequisites": [
+        "Root full source review of this immutable package",
+        "All I/through285* and B writers quiescent",
+        "Exact active caller exists; four future deferred roots absent"
+      ]
+    },
+    {
+      "role": "initial_composition",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-directory-alias-correction/candidates/compose-final-inputs.py",
+        "--scope",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope/final-source-scope.json",
+        "--scope-sha256",
+        "ACTUAL_REVIEWED_INITIAL_SCOPE_SHA256",
+        "--output",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-bank-inventory",
+        "--execute-reviewed-composition"
+      ],
+      "caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-bank-inventory-caller",
+      "prerequisites": [
+        "Actual complete initial capture independently reviewed",
+        "Actual exact root release in through285-final-bank-inventory-root-release"
+      ]
+    },
+    {
+      "role": "supplement_capture",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-directory-alias-correction/candidates/capture-final285-supplement-scope-root.py",
+        "--execute-reviewed-capture",
+        "--writers-quiescent"
+      ],
+      "caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-supplement-scope-caller",
+      "output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-supplement-scope",
+      "prerequisites": [
+        "All six initial deferred roots complete and immutable",
+        "All writers quiescent; prior scope roots unchanged"
+      ]
+    },
+    {
+      "role": "supplement_assembly",
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-directory-alias-correction/candidates/assemble-final-supplement.py",
+        "--composer",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-directory-alias-correction/candidates/compose-final-inputs.py",
+        "--composer-sha256",
+        "763891e076c36284fb1d8c46612d7e5d7b0a354886b6b4a59481240fab98b2eb",
+        "--scope",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-supplement-scope/supplement-scope.json",
+        "--scope-sha256",
+        "ACTUAL_REVIEWED_SUPPLEMENT_SCOPE_SHA256",
+        "--output",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-bank-inventory-complete",
+        "--execute-reviewed-supplement"
+      ],
+      "caller": null,
+      "prerequisites": [
+        "Actual complete later capture independently reviewed and root released",
+        "Bind future outer assembly caller explicitly outside its input snapshot"
+      ]
+    }
+  ],
+  "six_deferred_roots": [
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-caller-attempt02",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-bank-inventory",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-bank-inventory-caller",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-bank-inventory-root-release",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-bank-inventory-root-release-caller"
+  ],
+  "banker_source": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/bank_root_proofs_through285_final.py",
+    "bytes": 20978,
+    "sha256": "2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f"
+  },
+  "stage_verifier_source": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-binding-path-correction/verify_staged_through285.py",
+    "bytes": 57112,
+    "sha256": "d77253e906657f58962211d0aaa584df9272af4e2055faeb1bc62fccd7f1b0be"
+  },
+  "all_new_through285_roots_captured": false,
+  "mandatory_outside_prefix_helper": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/prepare-through285-whitespace-acceptance-source.py",
+    "bytes": 3373,
+    "sha256": "80634d9160f29af258157c1410da1752a3799cca1888c96631752c5e256697fb"
+  },
+  "unknowns": {
+    "initial_scope_sha256": null,
+    "initial_scope_populations": null,
+    "initial_source_release": null,
+    "supplement_scope_sha256": null,
+    "supplement_scope_populations": null,
+    "supplement_root_release": null,
+    "assembly_caller": null,
+    "final_bank_population": null,
+    "final_staged_population": null
+  },
+  "late_boundary": "Scope/caller, literal reviews/releases, supplement output/caller, final bank/caller and later stage/DATA/DOCS/root outputs remain explicit complete external evidence after their own input snapshots; no recursive self-banking.",
+  "future_capture_requires_all_new_through285_roots": true,
+  "failed_capture_caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-caller",
+  "directory_alias_registry": "directory-alias-registry.json",
+  "directory_alias_contract": "Both scopes retain actual directory_aliases records. Both capture methods and composer paths use identical strict source readers. Assembler consumes composer paths plus both scope inventories; it does not invent an initial success or substitute the failed caller."
+}

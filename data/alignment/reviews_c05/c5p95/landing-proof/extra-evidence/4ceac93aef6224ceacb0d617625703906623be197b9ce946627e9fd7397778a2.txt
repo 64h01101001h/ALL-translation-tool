@@ -1,0 +1,228 @@
+from pathlib import Path
+import ast,hashlib,json,difflib,os,datetime
+assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+P=Path(__file__).resolve().parent;ROOT=P.parents[2];A=ROOT/'campaign-artifacts';B=A/'C05-283-285';V=B/'semantic-review';I=A/'integration'
+assert P.name=='through285-semantic-schema-helper-preparation'
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(n,b):
+ p=P/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb')as f:f.write(b)
+def save(n,x):write(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+copies=[]
+def copy(p,n):
+ b=p.read_bytes();write(n,b);assert p.read_bytes()==b;copies.append({'original':str(p),'resolved_original':str(p.resolve()),'copy':n,**bp(b)})
+sources={'verify-semantic-acceptance285.py':A/'verify_semantic_acceptance.py','register-reviewed-page-and-index.py':I/'through285-registration-helper-preparation/register-reviewed-page-and-index.py','land-reviewed-page285.py':A/'land_reviewed_page_v2.py','verify-review-copy-and-register285.py':A/'verify_review_copy_and_register.py'}
+for n,p in sources.items():copy(p,'prior/'+n)
+for p in [A/'semantic-review-protocol.md',A/'lossless-review-archive-protocol.md',A/'proposal-protocol.md',A/'verify_landed_batch.py',A/'verify_landed_batch_with_heading_migrations.py',I/'through285-registration-helper-preparation/conditional-execution-requirements.json',I/'through285-registration-helper-root-source-review/proof.json']:
+ copy(p,'context/'+p.name)
+for n in ['review.json','review.md','freeze.json','original-copy-manifest.json','additional-original-copy-manifest.json','resolved-spans.json']:
+ copy(V/n,'current-review/'+n)
+for seq in [283,284,285]:
+ for n in ['spec.json','body.html']:
+  copy(V/'reviewed-final'/str(seq)/n,f'current-review/reviewed-final/{seq}/{n}')
+M=I/'through285-root-reconciliation-verification-attempt01'
+for n in ['execution-proof.json','resolved-spans.json','283.head-allowance-check.json','284.head-allowance-check.json','285.head-allowance-check.json']:copy(M/n,'mechanical/'+n)
+copy(I/'through285-root-independent-review-verification/proof.json','mechanical/root-independent-review-proof.json')
+for seq in [283,284,285]:
+ for n in ['proposed-head-allowances.json','final-tuples.json','spec.json','body.html']:copy(B/'reconciled'/str(seq)/n,f'head-source/{seq}/{n}')
+freeze=V/'freeze.json';assert bp(freeze.read_bytes())=={'bytes':445105,'sha256':'8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445'}
+f=json.loads(freeze.read_bytes());assert len(f['files'])==f['file_count']==2386
+assert set(f['files'])=={str(p.relative_to(V))for p in V.rglob('*')if p.is_file()and p!=freeze}
+meta=json.loads((V/'review.json').read_bytes())
+assert meta['verdict']=='APPROVE'and meta['open_findings']==[]and meta['sequences']==[283,284,285]
+assert [(r['seq'],r['spans'],r['nulls'],r['d5_nonnull'])for r in meta['segments']]==[(283,16,0,14),(284,29,0,24),(285,31,0,23)]
+all_maps=[]
+for name,count in [('original-copy-manifest.json',1276),('additional-original-copy-manifest.json',2)]:
+ rows=json.loads((V/name).read_bytes());assert len(rows)==count
+ for index,r in enumerate(rows):
+  assert set(r)=={'original_path','copy_path','content_addressed_copy','bytes','sha256'}
+  original=Path(r['original_path']);cp=Path(r['copy_path']);obj=Path(r['content_addressed_copy'])
+  assert original.is_absolute()and cp.is_absolute()and obj.is_absolute()
+  for p in [cp,obj]:
+   assert p.resolve().is_relative_to(V.resolve())
+   rel=str(p.relative_to(V));assert f['files'][rel]=={k:r[k]for k in ['bytes','sha256']}
+  a=original.read_bytes();assert a==cp.read_bytes()==obj.read_bytes()and bp(a)=={k:r[k]for k in ['bytes','sha256']}
+  all_maps.append({'source_manifest':name,'index':index,'record':r,'original_resolved':str(original.resolve()),'copy_resolved':str(cp.resolve()),'object_resolved':str(obj.resolve()),'full_bytes_equal':True,'retention':'Complete originals and both physical copy aliases remain external in their frozen locations.'})
+save('actual-copy-schema-evidence.json',all_maps)
+
+pin_reader='''def review_segment_pin(row, name, review):
+    assert name in ('spec', 'body') and type(row['seq']) is int
+    flat = (name + '_bytes', name + '_sha256')
+    if name in row:
+        assert not any(k in row for k in flat), 'Ambiguous nested and flat pin fields'
+        r = row[name]
+        assert isinstance(r, dict) and set(r) == {'path', 'bytes', 'sha256'}
+        expected = review / 'reviewed-final' / str(row['seq']) / ('spec.json' if name == 'spec' else 'body.html')
+        assert Path(r['path']).is_absolute() and Path(r['path']) == expected
+        result = {k: r[k] for k in ('bytes', 'sha256')}
+    else:
+        result = {'bytes': row[flat[0]], 'sha256': row[flat[1]]}
+    assert type(result['bytes']) is int and result['bytes'] >= 0
+    assert isinstance(result['sha256'], str) and len(result['sha256']) == 64
+    assert all(c in '0123456789abcdef' for c in result['sha256'])
+    return result
+
+'''
+count_readers='''def review_segment_counts(row):
+    legacy = ('span_count', 'null_count', 'word_pair_count')
+    current = ('spans', 'nulls', 'd5_nonnull')
+    if any(k in row for k in current):
+        assert not any(k in row for k in legacy), 'Ambiguous current and legacy counts'
+        source = [row[k] for k in current]
+    else:
+        source = [row[k] for k in legacy]
+    assert all(type(n) is int for n in source)
+    spans, nulls, pairs = source
+    assert spans > 0 and 0 <= nulls <= spans and 0 <= pairs <= spans - nulls
+    return dict(spans=spans, nulls=nulls, word_pairs=pairs)
+
+def review_total(meta, name):
+    names = {'spans': 'spans', 'nulls': 'nulls', 'word_pairs': 'd5_nonnull'}
+    if 'totals' in meta:
+        assert not any('total_' + k in meta for k in names), 'Ambiguous totals'
+        assert isinstance(meta['totals'], dict)
+        value = meta['totals'][names[name]]
+    else:
+        value = meta['total_' + name]
+    assert type(value) is int and value >= 0
+    return value
+
+def review_copy_manifest(review):
+    legacy = review / 'original-to-copy-manifest.json'
+    current_names = ('original-copy-manifest.json', 'additional-original-copy-manifest.json')
+    if legacy.exists():
+        assert not any((review / n).exists() for n in current_names), 'Ambiguous copy-map schemas'
+        records = json.loads(legacy.read_bytes())
+        return records, [str(legacy)]
+    records = []
+    for name in current_names:
+        original_records = json.loads((review / name).read_bytes())
+        assert isinstance(original_records, list) and original_records
+        for index, r in enumerate(original_records):
+            assert isinstance(r, dict) and set(r) == {'original_path', 'copy_path', 'content_addressed_copy', 'bytes', 'sha256'}
+            original, copied, obj = (Path(r[k]) for k in ('original_path', 'copy_path', 'content_addressed_copy'))
+            assert all(p.is_absolute() for p in (original, copied, obj))
+            assert copied.resolve().is_relative_to(review.resolve()) and obj.resolve().is_relative_to(review.resolve())
+            assert type(r['bytes']) is int and r['bytes'] >= 0
+            records.append({'original': str(original), 'copy': str(copied.relative_to(review)),
+                            'content_addressed_copy': str(obj.relative_to(review)),
+                            'bytes': r['bytes'], 'sha256': r['sha256'],
+                            'source_manifest': name, 'source_index': index, 'original_record': r})
+    return records, [str(review / n) for n in current_names]
+
+'''
+freeze_reader='''def frozen_review_files(review):
+    freeze = review / 'freeze.json'
+    frozen_raw = freeze.read_bytes()
+    assert len(frozen_raw) == 445105 and hashlib.sha256(frozen_raw).hexdigest() == '8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445'
+    frozen = json.loads(frozen_raw)
+    assert Path(frozen['root']) == review and frozen['baseline_commit'] == 'fb9182dc6fca2230be3bc5169ba1288a22430280'
+    assert frozen['verdict'] == 'APPROVE' and frozen['open_findings'] == []
+    assert isinstance(frozen['files'], dict) and len(frozen['files']) == frozen['file_count'] == 2386
+    assert set(frozen['files']) == {str(p.relative_to(review)) for p in review.rglob('*') if p.is_file() and p != freeze}
+    for name, r in frozen['files'].items():
+        path = Path(name)
+        assert name not in ('', '.', '..') and not path.is_absolute() and '..' not in path.parts
+        assert (review / path).resolve().is_relative_to(review.resolve())
+        raw = (review / path).read_bytes()
+        assert len(raw) == r['bytes'] and hashlib.sha256(raw).hexdigest() == r['sha256'], name
+    return list(frozen['files']) + ['freeze.json']
+
+'''
+changes={};candidates={}
+def adapt(name,replacements):
+ old=sources[name].read_text();new=old;rows=[]
+ for before,after,reason in replacements:
+  assert new.count(before)==1,(name,reason,new.count(before))
+  new=new.replace(before,after,1);rows.append({'before':before,'after':after,'occurrences':1,'reason':reason})
+ ast.parse(new);back=new
+ for r in reversed(rows):assert back.count(r['after'])==1;back=back.replace(r['after'],r['before'],1)
+ assert back==old
+ write('candidates/'+name,new.encode())
+ for suffix,a,b,af,bf in [('forward',old,new,'prior/'+name,'candidates/'+name),('inverse',new,old,'candidates/'+name,'prior/'+name)]:write(name+'.'+suffix+'.diff',''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile=af,tofile=bf)).encode())
+ changes[name]=rows;candidates[name]=bp(new.encode())
+
+adapt('verify-semantic-acceptance285.py',[
+ ("art = Path(__file__).resolve().parent", "helper = Path(__file__).resolve()\nlocal_batch = helper.parent.parent\nassert local_batch.name == 'C05-283-285' and helper == local_batch / 'landing-helper-preparation/verify-semantic-acceptance285.py'\nart = local_batch.parent",'Use exact batch-local candidate location; keep shared original unchanged.'),
+ ("page, first = map(int, sys.argv[1:3])", "page, first = map(int, sys.argv[1:3])\nassert page == 95 and first == 283\nif not __debug__: raise RuntimeError('Assertions must remain enabled')",'Current batch guard and assertion requirement.'),
+ ("meta = json.loads((review / 'review.json').read_text())",pin_reader+count_readers+freeze_reader+"frozen_files = frozen_review_files(review)\nmeta = json.loads((review / 'review.json').read_text())",'Add pure compatible readers and full frozen-review preflight.'),
+ ("        assert len(raw) == row[name + '_bytes'], path\n        assert hashlib.sha256(raw).hexdigest() == row[name + '_sha256'], path", "        declared_pin = review_segment_pin(row, name, review)\n        assert len(raw) == declared_pin['bytes'], path\n        assert hashlib.sha256(raw).hexdigest() == declared_pin['sha256'], path",'Retain exact byte/hash checks through actual nested or legacy pin reader.'),
+ ("    assert counts == dict(spans=row['span_count'], nulls=row['null_count'], word_pairs=row['word_pair_count'])", "    assert counts == review_segment_counts(row)",'Retain actual count equality through current/legacy key reader.'),
+ ("    assert meta['total_' + key] == value", "    assert review_total(meta, key) == value",'Retain total equality through nested/legacy reader.'),
+ ("assert resolved == json.loads((batch / 'root-reconciliation-verification/resolved-spans.json').read_text())", "mechanical = art / 'integration/through285-root-reconciliation-verification-attempt01'\nmechanical_proof = json.loads((mechanical / 'execution-proof.json').read_bytes())\nassert mechanical_proof['status'] == 'PASS mechanical source and identity verification'\nassert mechanical_proof['baseline'] == 'fb9182dc6fca2230be3bc5169ba1288a22430280'\nassert mechanical_proof['final_spans'] == totals['spans'] and mechanical_proof['nulls'] == totals['nulls']\nassert mechanical_proof['nonnull_d5'] == totals['word_pairs'] and mechanical_proof['original_identities'] == 145\nassert mechanical_proof['canonical_replays'] == 3 and mechanical_proof['semantic_approval'] is False\nassert resolved == json.loads((mechanical / 'resolved-spans.json').read_bytes())",'Bind root-confirmed actual mechanical runtime directory with explicit future PASS guard and retain exact ranges equality.'),
+ ("manifest = json.loads((review / 'original-to-copy-manifest.json').read_text())", "manifest, manifest_sources = review_copy_manifest(review)",'Read both actual complete current maps; preserve original records and source selectors.'),
+ ("    if landed:\n        assert (destination / record['copy']).read_bytes() == raw, record", "    if 'content_addressed_copy' in record:\n        object_copy = review / record['content_addressed_copy']\n        assert object_copy.resolve().is_relative_to(review.resolve()) and object_copy.read_bytes() == raw\n        if landed:\n            assert (destination / record['content_addressed_copy']).read_bytes() == raw, record\n    if landed:\n        assert (destination / record['copy']).read_bytes() == raw, record\nif landed:\n    for name in frozen_files:\n        assert (destination / name).read_bytes() == (review / name).read_bytes(), name\nassert frozen_files == frozen_review_files(review)",'Preserve all old original/copy/historical Git checks and verify actual object aliases plus every frozen landed file.'),
+ ("           manifest=manifest)", "           manifest=manifest, manifest_sources=manifest_sources, frozen_review_files=len(frozen_files),\n           mechanical_directory=str(mechanical), mechanical_proof_sha256=hashlib.sha256((mechanical / 'execution-proof.json').read_bytes()).hexdigest())",'Record derived-map provenance, full-copy count and actual mechanical proof identity.')])
+adapt('register-reviewed-page-and-index.py',[
+ ("def pin(raw):",pin_reader+"def pin(raw):",'Insert same pure current/legacy pin reader.'),
+ ("    assert pin(individual_spec) == {'bytes': row['spec_bytes'], 'sha256': row['spec_sha256']}\n    assert pin(individual_body) == {'bytes': row['body_bytes'], 'sha256': row['body_sha256']}", "    assert pin(individual_spec) == review_segment_pin(row, 'spec', B / 'semantic-review')\n    assert pin(individual_body) == review_segment_pin(row, 'body', B / 'semantic-review')",'Retain exact original/accepted/landed pin and byte comparisons using genuine nested review fields.')])
+adapt('land-reviewed-page285.py',[
+ ("art = Path(__file__).resolve().parent", "helper = Path(__file__).resolve()\nlocal_batch = helper.parent.parent\nassert local_batch.name == 'C05-283-285' and helper == local_batch / 'landing-helper-preparation/land-reviewed-page285.py'\nart = local_batch.parent",'Use a new exact batch-local location; preserve shared landing source.'),
+ ("page, *seqs = map(int, sys.argv[1:])", "page, *seqs = map(int, sys.argv[1:])\nassert page == 95 and seqs == [283, 284, 285]\nif not __debug__: raise RuntimeError('Assertions must remain enabled')",'Current page/sequence and assertions guards.'),
+ ("name = f\"c5p{page}\"",freeze_reader+"frozen_files = frozen_review_files(review)\nname = f\"c5p{page}\"",'Preflight complete exact frozen-review census and bytes before canonical or page mutations.'),
+ ("for file in review.rglob(\"*\"):\n    if file.is_file() and file.suffix.lower() in (\".json\", \".md\", \".html\", \".stderr\", \".stdout\", \".log\", \".txt\", \".bin\", \".exit\"):\n        target = review_dir / file.relative_to(review)\n        target.parent.mkdir(parents=True, exist_ok=True)\n        shutil.copy2(file, target)", "assert frozen_files == frozen_review_files(review)\nfor relative_name in frozen_files:\n    file = review / relative_name\n    target = review_dir / relative_name\n    target.parent.mkdir(parents=True, exist_ok=True)\n    shutil.copy2(file, target)\n    assert target.read_bytes() == file.read_bytes(), relative_name\nassert frozen_files == frozen_review_files(review)",'Replace suffix-based omissions with every2386 frozen member plus unchanged freeze; preserve complete rawbytes and all canonical/navigation/provisional gates.')])
+allowance_reader='''review = batch / 'semantic-review'
+assert (dest / 'review.json').read_bytes() == (review / 'review.json').read_bytes()
+meta = json.loads((review / 'review.json').read_bytes())
+assert meta['verdict'] == 'APPROVE' and meta['open_findings'] == []
+assert meta['page'] == 'c5p95' and meta['sequences'] == [283, 284, 285]
+assert not (dest / 'span-head-allow-needed.json').exists(), 'Do not fabricate a missing frozen reviewer field'
+mechanical = art / 'integration/through285-root-reconciliation-verification-attempt01'
+proof_raw = (mechanical / 'execution-proof.json').read_bytes()
+assert len(proof_raw) == 4107 and hashlib.sha256(proof_raw).hexdigest() == '9af274e2621d377cbab7ea24d0d57e4b79bad2b597e9ca0194469d2849914fa6'
+proof = json.loads(proof_raw)
+assert proof['status'] == 'PASS mechanical source and identity verification' and proof['baseline'] == base
+assert proof['final_spans'] == 76 and proof['nulls'] == 0 and proof['nonnull_d5'] == 61
+assert proof['original_identities'] == 145 and proof['canonical_replays'] == 3
+licenses = meta['head_licensors']
+assert isinstance(licenses, list) and len(licenses) == 2
+licensed = {r['key']: r for r in licenses}
+assert len(licensed) == 2 and set(licensed) == {'c5p95/s284w6', 'c5p95/s285w5'}
+wanted = {'pages_c05': {}}
+for seq in [283, 284, 285]:
+    final = batch / 'reconciled' / str(seq)
+    declared = json.loads((final / 'proposed-head-allowances.json').read_bytes())
+    actual = json.loads((mechanical / f'{seq}.head-allowance-check.json').read_bytes())
+    assert actual['page'] == 'c5p95' and actual['seq'] == seq and actual['semantic_approval'] is False
+    assert actual['predicate_source'] == declared['predicate_source']
+    predicate = wt / 'tools/test_no_supplied_span_head.py'
+    assert Path(actual['predicate_source']['path']) == predicate
+    predicate_raw = predicate.read_bytes()
+    assert len(predicate_raw) == actual['predicate_source']['bytes'] and hashlib.sha256(predicate_raw).hexdigest() == actual['predicate_source']['sha256']
+    assert actual['actual_gated_hits'] == declared['actual_gated_hits']
+    assert actual['allowances'] == declared['pages_c05']
+    assert set(actual['allowances']) == {h['allowance_key'] for h in actual['actual_gated_hits']}
+    tuples = {r['id']: r for r in json.loads((final / 'final-tuples.json').read_bytes())}
+    body = (final / 'body.html').read_text()
+    for hit in actual['actual_gated_hits']:
+        key = hit['allowance_key'];license = licensed[key];t = hit['final_tuple']
+        assert key == 'c5p95/' + hit['label'] == f"c5p95/s{seq}{t['id']}"
+        assert t == tuples[t['id']] and t['tib'] == hit['licensor'] == license['licensor']
+        assert license['seq'] == seq and license['id'] == t['id'] and license['verdict'] == 'LICENSED'
+        assert isinstance(license['reason'], str) and license['reason'].strip()
+        assert body[slice(*hit['body_range'])] == hit['match']
+        reason = actual['allowances'][key]
+        assert isinstance(reason, str) and reason.strip() and t['tib'] in reason and t['eng'] in reason
+        assert key not in wanted['pages_c05'];wanted['pages_c05'][key] = reason
+assert set(wanted['pages_c05']) == set(licensed)
+'''
+adapt('verify-review-copy-and-register285.py',[
+ ("art=Path(__file__).resolve().parent;wt=art.parent/'campaign-worktree'", "helper=Path(__file__).resolve();local_batch=helper.parent.parent\nassert local_batch.name=='C05-283-285' and helper==local_batch/'landing-helper-preparation/verify-review-copy-and-register285.py'\nart=local_batch.parent;wt=art.parent/'campaign-worktree'",'New exact batch-local source path.'),
+ ("base=json.loads((batch/'baseline.json').read_text())['commit']", "assert page==95 and first==283\nif not __debug__: raise RuntimeError('Assertions must remain enabled')\nbase=json.loads((batch/'baseline.json').read_text())['commit']\nassert base=='fb9182dc6fca2230be3bc5169ba1288a22430280'",'Bind current batch and unchanged baseline.'),
+ ("copied=[]\nfor p in (batch/'semantic-review').rglob('*'):\n    if p.is_file() and p.suffix.lower() in ('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'):\n        rel=p.relative_to(batch/'semantic-review');assert (dest/rel).read_bytes()==p.read_bytes(),str(rel)\n        copied.append({'path':str(rel),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})",freeze_reader+"copied=[]\nfor rel in frozen_review_files(batch/'semantic-review'):\n    p=batch/'semantic-review'/rel\n    assert (dest/rel).read_bytes()==p.read_bytes(),rel\n    copied.append({'path':rel,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})",'Check every2387 frozen review file, including objects and source files omitted by old suffix filter.'),
+ ("wanted=json.loads((dest/'span-head-allow-needed.json').read_text()) if (dest/'span-head-allow-needed.json').exists() else {}",allowance_reader.rstrip(),'Derive exact two source-bound full allowance reasons from frozen semantic licenses, actual mechanical hits and reconciled sidecars; no fabricated reviewer file.')])
+save('replacement-map.json',changes)
+save('source-copy-manifest.json',copies)
+save('schema-differences.json',{'current_review':bp((V/'review.json').read_bytes()),'review_freeze':bp(freeze.read_bytes()),'nested_pins':'segments[].spec/body use exact absolute reviewed-final path plus bytes/sha256; legacy fields were spec_bytes/spec_sha256/body_bytes/body_sha256','segment_counts':'spans/nulls/d5_nonnull versus span_count/null_count/word_pair_count','totals':'totals.spans/nulls/d5_nonnull versus total_spans/total_nulls/total_word_pairs','maps':{'files':['original-copy-manifest.json','additional-original-copy-manifest.json'],'counts':[1276,2],'fields':['original_path','copy_path','content_addressed_copy','bytes','sha256'],'old_file':'original-to-copy-manifest.json','old_fields':'original + relative copy; optional historical Git provenance preserved by legacy branch'},'copy_census':'2386 frozen members plus original freeze.json, including suffixless objects and .py source; old suffix filter omitted some of these','mechanical_directory':str(I/'through285-root-reconciliation-verification-attempt01'),'mechanical_PASS':'Future execution prerequisite; no status inferred from this source preparation','review_source_bytes_changed':False,'source_only':True})
+save('source-proof.json',{'status':'SOURCE_PREPARATION_COMPLETE_PENDING_ROOT_REVIEW_RELEASE','finished_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'candidates':candidates,'full_forward_inverse_verified':True,'AST_parse_only':True,'source_copy_records':len(copies),'current_copy_map_rows_fully_reopened':1278,'full_review_census_records':2386,'acceptance_registration_landing_executions':0,'constructor_or_reader_imports':0,'SQL_Git_builders_tests':0,'semantic_judgment':False,'producer':'Codex /root/c05_280_282_english; original English and config author context reused for transport preparation.'})
+write('report.md',b'''Prepared four batch-local source candidates; none was imported or executed. Complete original sources, frozen review JSON/maps, selected final spec/body copies, protocols and source-specific replacement maps/diff/inverse are retained. AST parsing only was used; no acceptance, registration, landing, SQL, Git, builder or test ran.
+
+Acceptance reads nested spec/body path+bytes+SHA pins, current segment count names and nested totals, retaining the legacy forms with ambiguity rejection. It preserves exact hashes, counts, reviewed-final bytes, seven-key resolved identities and source-copy equality. Its mechanical comparison now uses the root-confirmed integration/through285-root-reconciliation-verification-attempt01 path and fails closed unless its actual proof says PASS with the required baseline/count/replay identities. Both current copy maps are read:1276+2 rows. Their complete original records remain in derived proof metadata; all original/copy/object aliases are checked, including all2387 frozen files in landed mode. Current original review bytes are never rewritten.
+
+Registration changes only the spec/body pin reader. Every accepted/landed combined spec/body, baseline, history, page-navigation, registry and preimage gate remains. The landing candidate replaces only its suffix-filtered copy reader with the exact2386-member frozen census plus unchanged freeze.json; it includes suffixless evidence objects and Python sources, with raw-byte equality. All canonical, wrapper, navigation, provisional-credit and output preservation checks remain.
+
+The copy/register candidate also verifies all2387 frozen files. The missing span-head-allow-needed.json is never fabricated. Its two wanted allowance values are the complete exact strings in the current mechanical allowance checks, equal to reconciled pages_c05 values, gated by the matching frozen semantic LICENSED records and exact final tuple/body hit identities. It retains the original prior-register prefix checks and exact allowed-map comparison, so all earlier allowance values remain unchanged. Actual mechanical PASS proof is pinned; no predicate is reimplemented or invoked by this preparation.
+
+These source candidates must be materialized only after root review at B/landing-helper-preparation with their exact names. Acceptance/landing use new batch-local __file__ guards; registration retains its approved guard. Actual semantic acceptance and mechanical PASS are separate root release prerequisites. This preparation supplies no semantic judgment or runtime PASS. The producer reuses English-original and config-author context for transport/schema work only.
+''')
+print(json.dumps({'status':'SOURCE_CANDIDATES_READY_TO_FREEZE','candidates':candidates,'source_copy_records':len(copies),'target_executions':0}))

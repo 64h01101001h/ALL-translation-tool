@@ -1,0 +1,39 @@
+from pathlib import Path
+import json,hashlib,subprocess,os,datetime,sys
+D=Path(__file__).resolve().parent;B=D.parent;W=B.parents[1]/'campaign-worktree';BASE='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert sys.dont_write_bytecode and __debug__
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,o):
+ with (D/n).open('x') as f:json.dump(o,f,indent=2,ensure_ascii=False);f.write('\n')
+def run(a,label):
+ r=subprocess.run(a,cwd=W,input=b'',capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0',GIT_OPTIONAL_LOCKS='0'));p=D/'calls'/label;p.mkdir()
+ for n,b in [('stdin.bin',b''),('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(p/n).write_bytes(b)
+ (p/'command.json').write_text(json.dumps({'argv':a,'cwd':str(W),'exit':r.returncode,'stdout':pin(r.stdout),'stderr':pin(r.stderr)},indent=2)+'\n');assert r.returncode==0 and not r.stderr;return r.stdout
+maps=json.loads((D/'original-copy-manifest.json').read_bytes())
+for r in maps:
+ a=Path(r['original']).read_bytes();b=(D/r['copy']).read_bytes();assert a==b and pin(a)=={k:r[k] for k in ('bytes','sha256')}
+for r in json.loads((D/'original-aliases.json').read_bytes()):
+ p=Path(r['logical']);assert str(p.resolve())==r['resolved'] and (os.readlink(p) if p.is_symlink() else None)==r['symlink'];assert pin(p.read_bytes())=={k:r[k] for k in ('bytes','sha256')}
+base=json.loads((B/'baseline.json').read_bytes())
+for n,h in base['sha256'].items():assert pin((W/n).read_bytes())['sha256']==h
+p1=json.loads((D/'source-proof01.json').read_bytes());assert pin(Path(p1['database']['path']).read_bytes())=={k:p1['database'][k] for k in ['bytes','sha256']}
+context=json.loads((D/'context-rows-full.json').read_bytes());source=json.loads((D/'source-rows-full.json').read_bytes());assert [r['seq'] for r in context]==list(range(277,292)) and [r['seq'] for r in source]==[283,284,285]
+queries=[json.loads(p.read_bytes()) for p in sorted((D/'queries').glob('*.json'))];assert len(queries)==53
+for q in queries:assert q['sql'].lstrip().upper().startswith('SELECT ') and q['count']==len(q['rows'])
+seen={}
+for q in queries:
+ for r in q['rows']:
+  if 'course' in r and 'seq' in r:
+   key=(r['course'],r['seq']);assert seen.setdefault(key,r)==r
+comparison=[]
+for seq,par in [(283,428),(284,429),(285,430)]:
+ a=seen['C05',seq];b=seen['C15',par]
+ comparison.append({'source_citation':f'C05:{seq}','other_citation':f'C15:{par}','source_full_row':a,'other_full_row':b,'field_equalities':{k:a[k]==b[k] for k in ['acip','wylie','english']},'publication_independence':'UNESTABLISHED: field equality does not prove publication or ingestion provenance.'})
+save('parallel-field-comparisons.json',comparison)
+physical=json.loads((D/'physical-extents.json').read_bytes())
+for r in physical:
+ raw=Path(r['original']).read_bytes();assert pin(raw)==r['verified_full_source_pin'];part=raw[r['start']:r['end']];assert part==Path(r['excerpt']).read_bytes() and pin(part)=={k:r[k] for k in ['bytes','sha256']}
+ assert b' '.join(part.split())==r['source_field'].encode()
+head=run(['git','rev-parse','HEAD'],'head-after');status=run(['git','status','--short'],'status-after');assert head==(D/'calls/head-before/stdout.bin').read_bytes() and head.decode().strip()==BASE and status==(D/'calls/status-before/stdout.bin').read_bytes()
+save('completion-proof.json',{'status':'PASS_FROZEN_SOURCE_PREPARATION_ONLY','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'baseline':BASE,'full_context_rows':len(context),'current_rows':len(source),'SELECT_query_records':len(queries),'schema_queries':1,'context_queries':1,'hgm_queries':41,'corpus_queries':10,'full_query_rows_including_schema_context':sum(q['count'] for q in queries),'hgm_full_original_master_objects':41,'physical_extents':len(physical),'physical_originals':len({r['original'] for r in physical}),'original_copy_pairs':len(maps),'all_source_copies_full_byte_equal':True,'full_database_pin_unchanged':True,'nine_baseline_hashes_unchanged':True,'head_and_status_raw_bytes_unchanged':True,'current_C15_parallel_field_equalities':[r['field_equalities'] for r in comparison],'no_proposal_or_root_target_reads':True,'no_final_spans_specs_or_errata_rulings':True,'canonical_generation':0,'semantic_approval':False})
+print(json.dumps({'status':'PASS_FROZEN_SOURCE_PREPARATION_ONLY','queries':len(queries),'physical_extents':len(physical),'source_copy_pairs':len(maps),'full_rows':sum(q['count'] for q in queries),'head':BASE,'field_equalities':[r['field_equalities'] for r in comparison]}))

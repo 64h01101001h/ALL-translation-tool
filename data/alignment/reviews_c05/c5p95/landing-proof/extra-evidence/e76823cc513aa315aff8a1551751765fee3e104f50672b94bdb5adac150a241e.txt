@@ -1,0 +1,129 @@
+--- prior/register-reviewed-page-and-index.py
++++ candidate/register-reviewed-page-and-index.py
+@@ -1,4 +1,4 @@
+-"""Register approved page94 before builders; never supplies semantic approval.
++"""Register approved page95 before builders; never supplies semantic approval.
+ 
+ Prepared while reconciliation runs. Execution requires the separate completed
+ semantic approval, root acceptance proof and exact already-landed page body.
+@@ -16,9 +16,11 @@
+ 
+ B = Path(__file__).resolve().parent.parent
+ W = B.parents[1] / 'campaign-worktree'
+-PAGE, SEQS = 94, [280, 281, 282]
+-BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
+-REVIEW = W / 'data/alignment/reviews_c05/c5p94'
++assert B.name == 'C05-283-285'
++assert Path(__file__).resolve() == B / 'landing-helper-preparation/register-reviewed-page-and-index.py'
++PAGE, SEQS = 95, [283, 284, 285]
++BASE = 'fb9182dc6fca2230be3bc5169ba1288a22430280'
++REVIEW = W / 'data/alignment/reviews_c05/c5p95'
+ PAGES = W / 'data/alignment/pages_c05'
+ OUT = B / 'landing/course-registration-verification.json'
+ ENV = dict(os.environ, GIT_OPTIONAL_LOCKS='0', PYTHONDONTWRITEBYTECODE='1')
+@@ -45,12 +47,16 @@
+ 
+ assert not OUT.exists(), 'Preserve earlier execution and outputs before another run'
+ assert git('rev-parse', 'HEAD').decode().strip() == BASE
+-closed_raw = (B.parent / 'integration/through279-root-closure/proof.json').read_bytes()
+-assert pin(closed_raw) == {'bytes': 4959, 'sha256': 'a26675e3375b3bcb65e7cf871c904db0ed646deec8c2d4aed2749bf3cc940a9a'}
++closed_raw = (B.parent / 'integration/through282-root-closure/proof.json').read_bytes()
++assert pin(closed_raw) == {'bytes': 2267, 'sha256': '80d9ee5b45d2f69e42e699b62edbf1fdcde8b199c31529f35340ef8a42a66554'}
+ closed = json.loads(closed_raw)
+-assert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE
+-assert closed['course'] == 'C05' and closed['verified_segments'] == 279 and closed['course_segments'] == 511
+-assert closed['next_batch'] == SEQS and closed['next_batch_authorized_after_this_closure'] is True
++assert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH282_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE
++assert closed['verified_segments'] == 282 and closed['total_c05_segments'] == 511 and closed['remaining_c05'] == 229
++assert closed['next_batch'] == SEQS
++baseline_raw = (B / 'baseline.json').read_bytes()
++assert pin(baseline_raw) == {'bytes': 1456, 'sha256': '0a881939b7ac80f7f1b18ca00b836d0e3d56738b944b8e17d153f85e64a0ee6f'}
++baseline = json.loads(baseline_raw)
++assert baseline['commit'] == BASE and baseline['course_boundary'] == closed['verified_segments']
+ meta_raw = (B / 'semantic-review/review.json').read_bytes()
+ meta = json.loads(meta_raw)
+ assert meta['verdict'] == 'APPROVE' and meta['open_findings'] == []
+@@ -83,50 +89,52 @@
+     expected_spec['segments'].extend(part['segments'])
+     expected_bodies.append(individual_body)
+ expected_spec_bytes = (json.dumps(expected_spec, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
+-spec_bytes = (W / 'data/alignment/specs_c05/c5p94.json').read_bytes()
++spec_bytes = (W / 'data/alignment/specs_c05/c5p95.json').read_bytes()
+ assert spec_bytes == expected_spec_bytes
+ body = (B / 'landing/generator.stdout').read_bytes()
+ assert body == b''.join(expected_bodies)
+ assert (B / 'landing/generator.exit').read_text().strip() == '0'
+ assert not (B / 'landing/generator.stderr').read_bytes()
+ landing_meta = json.loads((REVIEW / 'landing.json').read_text())
+-assert landing_meta['course'] == 'C05' and landing_meta['page'] == 'c5p94' and landing_meta['segments'] == SEQS
++assert landing_meta['course'] == 'C05' and landing_meta['page'] == 'c5p95' and landing_meta['segments'] == SEQS
+ assert landing_meta['generator_exit'] == 0
+ assert landing_meta['spec_sha256'] == pin(spec_bytes)['sha256']
+ assert landing_meta['body_sha256'] == pin(body)['sha256']
+-assert body and body in (PAGES / 'c5p94.html').read_bytes()
++assert body and body in (PAGES / 'c5p95.html').read_bytes()
+ 
+ index = PAGES / 'index.html'
+ builder = W / 'tools/build_alignment_layer.py'
+ old_index, old_builder = index.read_bytes(), builder.read_bytes()
++assert pin(old_index) == {'bytes': 7003, 'sha256': '58f2527eddcefdd6a449821afd0e9417e77910de432b209cf490cda54e434bc7'}
++assert pin(old_builder) == {'bytes': 39640, 'sha256': 'f34db3d81708aa2143710d91ac4a1abcbf93dba4d33a0abfb00a51fe511975f1'}
+ assert old_index == git('show', BASE + ':data/alignment/pages_c05/index.html')
+ assert old_builder == git('show', BASE + ':tools/build_alignment_layer.py')
+ text = old_index.decode('utf-8')
+-old_coverage = 'Reviewed campaign coverage: 279 of 511 source segments.'
+-new_coverage = 'Reviewed campaign coverage: 282 of 511 source segments.'
+-old_link = '<li><a href="c5p93.html">Page 93 · segments 277–279</a></li>'
+-new_link = '<li><a href="c5p94.html">Page 94 · segments 280–282</a></li>'
++old_coverage = 'Reviewed campaign coverage: 282 of 511 source segments.'
++new_coverage = 'Reviewed campaign coverage: 285 of 511 source segments.'
++old_link = '<li><a href="c5p94.html">Page 94 · segments 280–282</a></li>'
++new_link = '<li><a href="c5p95.html">Page 95 · segments 283–285</a></li>'
+ assert text.count(old_coverage) == text.count(old_link) == 1 and new_link not in text
+-assert list(map(int, re.findall(r'href="c5p(\d+)\.html"', text))) == list(range(1, 94))
++assert list(map(int, re.findall(r'href="c5p(\d+)\.html"', text))) == list(range(1, 95))
+ new_text = text.replace(old_coverage, new_coverage).replace(old_link, old_link + '\n' + new_link)
+-assert list(map(int, re.findall(r'href="c5p(\d+)\.html"', new_text))) == list(range(1, 95))
++assert list(map(int, re.findall(r'href="c5p(\d+)\.html"', new_text))) == list(range(1, 96))
+ assert new_text.count(new_coverage) == 1 and old_coverage not in new_text
+-for page in range(1, 95):
++for page in range(1, 96):
+     assert (PAGES / f'c5p{page}.html').is_file()
+ new_index = new_text.encode('utf-8')
+ 
+-previous_line = b'    "c5p93": [277, 278, 279],\n'
+-added_line = b'    "c5p94": [280, 281, 282],\n'
++previous_line = b'    "c5p94": [280, 281, 282],\n'
++added_line = b'    "c5p95": [283, 284, 285],\n'
+ assert old_builder.count(previous_line) == 1 and added_line not in old_builder
+ new_builder = old_builder.replace(previous_line, previous_line + added_line)
+ before_registry = course_pages(old_builder)
+ after_registry = course_pages(new_builder)
+ expected_registry = copy.deepcopy(before_registry)
+-assert list(before_registry) == [f'c5p{p}' for p in range(1, 94)]
+-assert 'c5p94' not in expected_registry
+-expected_registry['c5p94'] = SEQS
++assert list(before_registry) == [f'c5p{p}' for p in range(1, 95)]
++assert 'c5p95' not in expected_registry
++expected_registry['c5p95'] = SEQS
+ assert after_registry == expected_registry
+-assert [n for seqs in after_registry.values() for n in seqs] == list(range(1, 283))
++assert [n for seqs in after_registry.values() for n in seqs] == list(range(1, 286))
+ compile(new_builder, str(builder), 'exec')  # Syntax only; no builder execution.
+ 
+ # Preserve both complete preimages before either authorized mutation.
+@@ -140,11 +148,11 @@
+ result = dict(
+     utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), status='PASS',
+     page=PAGE, segments=SEQS, reviewed_head=BASE,
+-    only_transformations=['279 to282 index coverage', 'append exact page94 index link',
+-                          'append exact c5p94 registry entry'],
++    only_transformations=['282 to285 index coverage', 'append exact page95 index link',
++                          'append exact c5p95 registry entry'],
+     index_before=pin(old_index), index_after=pin(new_index),
+     builder_before=pin(old_builder), builder_after=pin(new_builder),
+-    registry_added_bytes=len(added_line), page_count=94, covered_source_segments=282,
++    registry_added_bytes=len(added_line), page_count=95, covered_source_segments=285,
+     all_page_targets_exist=True, all_previous_registry_entries_exact=True,
+     accepted_page_body=pin(body), accepted_page_spec=pin(spec_bytes),
+     all_individual_approval_pins_match=True, exact_approved_spec_and_body_composition=True,

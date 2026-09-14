@@ -1,0 +1,41 @@
+{
+  "status": "PREPARED_PENDING_ROOT_REVIEW_AND_APPROVED_ALLOWANCE_RUNTIME",
+  "config": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciliation-verifier-config/config.json",
+    "bytes": 185674,
+    "sha256": "1a2c787e0b02b569fa0a836f465543dfae0b6737c8fddf66b0e45d747b0150bd"
+  },
+  "shared_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciled",
+  "wrapper": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciled/run-generator-ro.py.txt",
+    "bytes": 786,
+    "sha256": "f63adb7d634e4a45a36437169a768dc44f67a15464071cdbd394cdaf2a72cd2a"
+  },
+  "output_requirement": "Fresh external integration child, neither within nor ancestor of batch/worktree/shared/code/config directories; choose and pin exact output at release.",
+  "source_requirement": "Use the independently reviewed head-allowance-adapted runtime, with approved params-schema contract; old empty-allowance runtime is not executable for this data.",
+  "future_argv_template": [
+    "python3",
+    "-B",
+    "ABSOLUTE_APPROVED_RUNTIME/verify_reconciliation.py",
+    "--config",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/reconciliation-verifier-config/config.json",
+    "--config-sha256",
+    "1a2c787e0b02b569fa0a836f465543dfae0b6737c8fddf66b0e45d747b0150bd",
+    "--output",
+    "ABSOLUTE_FRESH_EXTERNAL_OUTPUT",
+    "--execute-reviewed-verification"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "prerequisites": [
+    "Root full derivation/config review, including explicit historical -C/cwd recipe projection",
+    "Reviewed allowance runtime and exact code pins",
+    "HEAD/status/source/freeze pins remain exact at actual release",
+    "Fresh external output chosen by root"
+  ],
+  "executed_full_runtime": false,
+  "semantics_approved": false
+}

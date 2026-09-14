@@ -1,0 +1,86 @@
+--- construct-current-config.py.txt
++++ prior-preparation/construct-current-config.py.txt
+@@ -8,7 +8,7 @@
+ P=Path(__file__).resolve().parent
+ ROOT=P.parents[2]
+ B=ROOT/'campaign-artifacts/C05-283-285'
+-R=B/'reconciled';D=R/'283';N=R/'root-runtime-inputs-v2';W=ROOT/'campaign-worktree'
++R=B/'reconciled';D=R/'283';N=R/'root-runtime-inputs';W=ROOT/'campaign-worktree'
+ SEQS=[283,284,285]
+ BASE='fb9182dc6fca2230be3bc5169ba1288a22430280'
+ ROLE='Codex c05_280_282_english prepared this mechanical config constructor, reusing original English author context. No independent semantic approval. Root separately releases construction and later verifier execution.'
+@@ -39,7 +39,7 @@
+  parser.add_argument('--preparation-freeze-sha256',required=True)
+  parser.add_argument('--execute-reviewed-construction',action='store_true')
+  args=parser.parse_args();assert args.execute_reviewed_construction
+- assert P.name=='through285-reconciliation-config-preparation-v2'and not N.exists()and not N.is_symlink()
++ assert P.name=='through285-reconciliation-config-preparation'and not N.exists()and not N.is_symlink()
+  pf=P/'freeze.json';assert bp(raw(pf))['sha256']==args.preparation_freeze_sha256
+  f=load(pf);assert isinstance(f['files'],list)
+  check_freeze(P,pf,((r['path'],r)for r in f['files']))
+@@ -66,14 +66,6 @@
+  before={str(p.relative_to(R)):bp(raw(p))for p in R.rglob('*')if p.is_file()}
+  extra_before=sorted(set(before)-set(boundary['files'])-{'completion-boundary-freeze.json'})
+  assert extra_before==plan['existing_outside_historical_boundary']
+- failed=R/'root-runtime-inputs';failed_rows=load(P/'failed-runtime-inputs-manifest.json')
+- assert len(failed_rows)==224 and load(failed/'construction-proof.json')['status']=='FAILED_CONSTRUCTION_ONLY'
+- expected_failed=set()
+- for row in failed_rows:
+-  original=Path(row['original']);assert original.is_relative_to(failed)
+-  name=str(original.relative_to(failed));assert name not in expected_failed;expected_failed.add(name)
+-  assert check(original,row)==check(P/relative(row['copy']),row)
+- assert expected_failed=={str(p.relative_to(failed))for p in failed.rglob('*')if p.is_file()}
+  base=load(B/'baseline.json');assert base['commit']==BASE and base['course_boundary']==282
+  status=D/'completion-state/status.stdout.bin';check(status,plan['status_capture'])
+  assert raw(status)==b'?? data/teaching/dcc_captions\n'
+@@ -108,32 +100,6 @@
+  for r in source_maps:
+   relative(r['copy']);a=check(r['original'],r);assert a==check(D/r['copy'],r)
+   maps.append({**r,'copy':'283/'+r['copy']})
+- # The eleven frozen reconciler-created descriptors are genuine originals,
+- # absent from the old623-record map. Preserve complete bytes in new v2 copies.
+- queryplans=load(P/'query-binding-plan.json')
+- existing={r['original']:r for r in maps};assert len(existing)==623
+- missing={r['descriptor']['path']for r in queryplans if r['descriptor']['path']not in existing}
+- expected_missing={str(D/'queries'/f'{i:03d}.json')for i in range(199,210)}
+- assert missing==expected_missing
+- for original in sorted(missing):
+-  p=Path(original);name='descriptor-copies/'+p.name;data=raw(p)
+-  assert bp(data)==plan['additional_descriptor_pins'][original]
+-  newref=emit(name,data)
+-  maps.append({'original':original,'copy':str((N/name).relative_to(R)),**bp(data),
+-   'disposition':'Complete frozen reconciler-created standalone descriptor copied unchanged into fresh v2 runtime inputs; absent from historical623-row source map.'})
+- assert len(maps)==len({r['original']for r in maps})==634
+- copied={r['original']:r for r in maps};coverage=[]
+- # Complete descriptor-to-map membership, pins and full copy bytes are checked
+- # for all210 operations, including the retained control, before N.mkdir().
+- for planned in queryplans:
+-  descriptor=planned['descriptor'];r=copied[descriptor['path']]
+-  assert {k:r[k]for k in ['bytes','sha256']}=={k:descriptor[k]for k in ['bytes','sha256']}
+-  data=check(descriptor['path'],descriptor);copy=R/relative(r['copy'])
+-  if copy.is_relative_to(N):assert data==payloads[str(copy.relative_to(N))]
+-  else:assert data==check(copy,r)
+-  coverage.append({'source_inventory_index':planned['index'],'descriptor':descriptor,'copy_mapping':r,'category':planned['kind'],'complete_bytes_equal':True})
+- assert len(coverage)==210 and sum(r['category']=='SELECT'for r in coverage)==209
+- emit('descriptor-coverage.json',coverage)
+  copy_ref=emit('copy-manifest.json',maps)
+  aliases=load(D/'original-aliases.json');assert len(aliases)==625
+  for r in aliases:
+@@ -178,7 +144,7 @@
+  config={'schema':'reconciliation-277-v1','course':'C05','batch':str(B),'worktree':str(W),'shared_directory':str(R),'sequences':SEQS,'baseline':ref(B/'baseline.json'),'status_capture':ref(status),'originals':original_rows,'reconciled':finals,'evidence':evidence,'context':{'sql':'SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq','parameters':['C05',277,291]},'query_directories':[str(N/'queries')],'queries':queries,'operator_role':ROLE}
+  emit('config.json',config)
+  emit('source-inputs.json',{'preparation_freeze':ref(pf),'source_manifest':ref(P/'input-source-manifest.json'),'full_source_records':inputs,'current_adapter':adapter,'superseded_adapter_source_rule':'Old copied adapter bytes remain historical; current adapter source identity is bound separately above.'})
+- emit('schema-derivations.json',{'copy_manifest':{'source':ref(D/'original-copy-manifest.json'),'projection':'Preserve old623 rows with copy prefix283/ only; append11 explicitly retained full descriptor copies in fresh root-runtime-inputs-v2','original_records':623,'additional_descriptor_records':11,'records':634},'aliases':{'source':ref(D/'original-aliases.json'),'projection':'Whole unchanged bytes','records':625},'physical':{'source':ref(D/'physical-extents.json'),'projection':'Prefix excerpt paths with 283/; preserve all12 full original extents','records':12},'governing':{'source':ref(D/'governing-current.json'),'projection':'Prefix copy and execution paths with 283/; argv/cwd/exit exactly actual recorded calls','records':10},'wrapper':{'source':ref(R/'run-generator-ro.py.txt'),'projection':'Existing immutable shared wrapper reused unchanged'},'queries':{'source':ref(D/'query-descriptors.json'),'projection':'209 SELECT records with exact original count-key presence; original PRAGMA descriptor separately retained as controls/075.json','SELECT':209,'controls':1},'final_counts_source':'Actual specs compared to unchanged direct top-level final proofs; no proof rewrite.','original_identities_source':ref(B/'proposal-verification/root-resolved-spans.json'),'semantic_approval':False})
++ emit('schema-derivations.json',{'copy_manifest':{'source':ref(D/'original-copy-manifest.json'),'projection':'Prefix each copy with 283/; all other fields preserved','records':623},'aliases':{'source':ref(D/'original-aliases.json'),'projection':'Whole unchanged bytes','records':625},'physical':{'source':ref(D/'physical-extents.json'),'projection':'Prefix excerpt paths with 283/; preserve all12 full original extents','records':12},'governing':{'source':ref(D/'governing-current.json'),'projection':'Prefix copy and execution paths with 283/; argv/cwd/exit exactly actual recorded calls','records':10},'wrapper':{'source':ref(R/'run-generator-ro.py.txt'),'projection':'Existing immutable shared wrapper reused unchanged'},'queries':{'source':ref(D/'query-descriptors.json'),'projection':'209 SELECT records with exact original count-key presence; original PRAGMA descriptor separately retained as controls/075.json','SELECT':209,'controls':1},'final_counts_source':'Actual specs compared to unchanged direct top-level final proofs; no proof rewrite.','original_identities_source':ref(B/'proposal-verification/root-resolved-spans.json'),'semantic_approval':False})
+  emit('historical-boundary-preservation.json',{'source':ref(boundary_path),'recorded_members':916,'all_recorded_members':boundary['files'],'recorded_total_bytes':boundary['total_bytes'],'existing_later_files_before':extra_before,'authorized_new_subtree':str(N),'boundary':'This916-file manifest is a historical completion snapshot. Later root-runtime-inputs additions are outside it. Exact current whole-directory census is not asserted to remain916. All nine segment freezes remain exact before/after.'})
+  emit('reviewed-sources/construct-current-config.py.txt',raw(__file__))
+  emit('reviewed-sources/config_contract.py',raw(contract));emit('reviewed-sources/verify_reconciliation.py',raw(runtime))
+@@ -200,7 +166,7 @@
+   for row in finals:
+    d=Path(row['directory']);fp=d/'freeze.json';check_freeze(d,fp,load(fp)['files'].items())
+   check(contract,adapter['contract']);check(runtime,adapter['runtime'])
+-  proof.update(status='PASS_CONFIG_CONSTRUCTION_AND_PURE_SCHEMA_VALIDATION',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),summary=summary,config=ref(N/'config.json'),historical_members_preserved=916,failed_runtime_members_preserved=224,source_copy_records=634,descriptor_coverage_operations=210,new_directory=str(N),SQL_Git_canonical_verifier_executions=0)
++  proof.update(status='PASS_CONFIG_CONSTRUCTION_AND_PURE_SCHEMA_VALIDATION',finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),summary=summary,config=ref(N/'config.json'),historical_members_preserved=916,new_directory=str(N),SQL_Git_canonical_verifier_executions=0)
+  except Exception:
+   proof.update(status='FAILED_CONSTRUCTION_ONLY',failure=traceback.format_exc());raise
+  finally:

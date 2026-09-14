@@ -1,0 +1,16 @@
+"""Freeze completed source preparation only; actual intake scopes do not exist here."""
+from pathlib import Path
+import datetime,hashlib,json
+O=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-scope-preparation')
+assert not (O/'freeze.json').exists()
+assert json.loads((O/'code-only-caller/result.json').read_bytes())['exit']==0
+assert not (O/'code-only-caller/stderr.txt').read_bytes()
+rows=[]
+for p in sorted(O.rglob('*')):
+ assert not p.is_symlink() and '__pycache__' not in p.parts and p.suffix!='.pyc'
+ if p.is_file():
+  b=p.read_bytes();rows.append(dict(path=str(p.relative_to(O)),bytes=len(b),sha256=hashlib.sha256(b).hexdigest()))
+value=dict(status='FROZEN_SOURCE_ONLY_NO_ACTUAL_SCOPE_CAPTURE_OR_RELEASE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),file_count=len(rows),total_bytes=sum(r['bytes'] for r in rows),files=rows,boundary='Every completed file in this preparation except this freeze, including full actual source-only caller streams. This freeze tool response is later external transport; no intake or supplement scope/caller is claimed to exist.')
+b=(json.dumps(value,indent=2,ensure_ascii=True,allow_nan=False)+'\n').encode()
+with (O/'freeze.json').open('xb') as f:f.write(b)
+print(json.dumps(dict(path=str(O/'freeze.json'),bytes=len(b),sha256=hashlib.sha256(b).hexdigest(),file_count=len(rows),total_bytes=value['total_bytes']),sort_keys=True))

@@ -1,0 +1,209 @@
+{
+  "status": "CHECKPOINT_ORDINARY_BANK_AND_INITIAL_STAGE_WHITESPACE_PENDING",
+  "utc": "2026-09-14T07:06:36.992770+00:00",
+  "head": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+  "committed_segments": 282,
+  "generated_segments": 285,
+  "staged_paths": 4852,
+  "untracked_paths": [
+    "data/teaching/dcc_captions"
+  ],
+  "tracked_unstaged_paths": 0,
+  "all_thirteen_payloads_unchanged": true,
+  "ordinary_manifest": {
+    "bytes": 9423149,
+    "sha256": "cd3f374127d342a654cf3ad481a733becdd0173dcf836937b2d3b11219d8d000"
+  },
+  "ordinary_records": 2447,
+  "ordinary_external_records": 12263,
+  "ordinary_writes": 2449,
+  "warning_count": 93740,
+  "warning_file_count": 112,
+  "whitespace_acceptance": false,
+  "raw_index": {
+    "path": "/Users/adamderickandrade/ALL-translation-tool/.git/worktrees/campaign-worktree/index",
+    "bytes": 6219364,
+    "sha256": "f52826a5fa7e2c9dff176500015244b7182ec2c8efbd75ec9baac6073de3cd48"
+  },
+  "git_streams": {
+    "head": {
+      "bytes": 41,
+      "sha256": "22bd79b0a4a4a91e2a30f317678d51cce33a4be9b82d076036f36e06760dd482"
+    },
+    "staged": {
+      "bytes": 557690,
+      "sha256": "13e93d5d5e16e3cbd615697e3c4a2bc085005246d5637b8a6cc6f97ffb337844"
+    },
+    "unstaged": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "index": {
+      "bytes": 5541846,
+      "sha256": "aa0651dffbb42b5ed13378481bc49389c96172627f4ae82e51c02a841af5a833"
+    },
+    "untracked": {
+      "bytes": 27,
+      "sha256": "cf1b5d8af66bb842339b98cd5568c684ef07354e5934b7bb5688681f46ecced8"
+    }
+  },
+  "native_runs": {
+    "ordinary_inventory": {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/ordinary-inventory-caller",
+      "execution": {
+        "bytes": 934,
+        "sha256": "74e31b16527ed49c31cf3b28b03b07ee5c3b1602fc98e611e29662e7eff3af43"
+      },
+      "exit": 0,
+      "stdout": {
+        "bytes": 3067,
+        "sha256": "3e79c36b393b143fd3df5360952a91c0aa441fe51670bdbc1fc2a820bb230313"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/compose-ordinary-bank-inventory-with-final-route-root.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment"
+    },
+    "ordinary_bank": {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/ordinary-bank-caller",
+      "execution": {
+        "bytes": 2128,
+        "sha256": "c11567ffdf74ca95caf0a482b441026424d0cd027e5425e8bf21eb61dfc5e531"
+      },
+      "exit": 0,
+      "stdout": {
+        "bytes": 390,
+        "sha256": "5b2e710b29deece9a968250f0332d3ba0f478380811429249e4959c4786f5924"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/bank_root_proofs_through285.py",
+        "--phase",
+        "ordinary",
+        "--batch",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285",
+        "--worktree",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+        "--run-output",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-bank-run",
+        "--payload-manifest",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/landing/staged-payload-manifest.json",
+        "--payload-source-proof",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/landing/staged-payload-source-proof.json",
+        "--untracked-capture-stem",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/landing/untracked-before-banking",
+        "--extra-inputs",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-bank-inventory/extra-inputs.json"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment"
+    },
+    "initial_pathspec": {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/initial-pathspec-caller",
+      "execution": {
+        "bytes": 923,
+        "sha256": "7a2454d09b3cfb4449e3b54ad416dd7196cc9a4dca9bce18e7d6768e4d6f2020"
+      },
+      "exit": 0,
+      "stdout": {
+        "bytes": 624,
+        "sha256": "e3dca9a01e8e28bd4fd160e59f86137f336ad9dac7e0622e5d455cb01a1eae99"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/prepare-explicit-stage-inputs.py",
+        "initial"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment"
+    },
+    "initial_stage": {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/initial-stage-caller",
+      "execution": {
+        "bytes": 1018,
+        "sha256": "0029eb86eab307e3a914c402b65315d61f79fe49ed45e57d01ebb9c95ec4933d"
+      },
+      "exit": 0,
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "argv": [
+        "git",
+        "--literal-pathspecs",
+        "add",
+        "--pathspec-from-file=/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-runs/initial-preparation/pathspec.bin",
+        "--pathspec-file-nul"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree"
+    },
+    "whitespace_diagnostic": {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-runs/initial-whitespace-caller",
+      "execution": {
+        "bytes": 807,
+        "sha256": "9b3ae7d00ffd9eee9046140e37d26bfb523781dd3a93443b9a3e2de482824610"
+      },
+      "exit": 2,
+      "stdout": {
+        "bytes": 32794535,
+        "sha256": "94799cb5a45a2b827d990f0ca2cda2a0d0e48debe747b5a89dd46625ced0ad10"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree"
+    }
+  },
+  "root_documents_before": {
+    "continuation": {
+      "bytes": 499115,
+      "sha256": "a3bbe5505cd5bba82dc64279690a6104e5fa831b6bc57e323492431692204ee1"
+    },
+    "status": {
+      "bytes": 1789,
+      "sha256": "1b01dba4d13cb72dfe9cc762452a348c168aecf5c14cfd2d59e670e7a8af3492"
+    }
+  },
+  "root_documents_after": {
+    "continuation": {
+      "bytes": 500388,
+      "sha256": "71ad4a5ee4399d1b3e5fe3d9e600243bd090aee93fe45ab8ed49b9deeb549c5d"
+    },
+    "status": {
+      "bytes": 1686,
+      "sha256": "9258d28eabbdb3d8ef53de319ad49f8175ce518c81dca1f30276434d85aaf422"
+    }
+  },
+  "next_actions": {
+    "bytes": 6261,
+    "sha256": "930dbb745790e951913b93ffe2f628a3a991ea26a7e6b62e8ff59b6310e1984b"
+  },
+  "active_source_only_agent": "/root/c05_280_282_english",
+  "active_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-source-preparation",
+  "deadline_utc": "2026-09-15T13:00:00Z"
+}

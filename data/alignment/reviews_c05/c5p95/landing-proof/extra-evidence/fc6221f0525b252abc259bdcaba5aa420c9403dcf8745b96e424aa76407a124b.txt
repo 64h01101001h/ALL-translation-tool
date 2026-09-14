@@ -1,0 +1,41 @@
+from pathlib import Path
+import os,sys,json,hashlib,importlib.util,subprocess,datetime
+sys.dont_write_bytecode=True;os.environ.update(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0')
+R=Path(__file__).resolve().parent;ROOT=R.parents[2];W=ROOT/'campaign-worktree';B=ROOT/'campaign-artifacts/C05-283-285';L=B/'landing';S=R/'workspace';HEAD='fb9182dc6fca2230be3bc5169ba1288a22430280';S.mkdir(exist_ok=False)
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+records=[]
+def cp(p,d,role):
+ raw=p.read_bytes();d.parent.mkdir(parents=True,exist_ok=True);assert not d.exists();d.write_bytes(raw);assert p.read_bytes()==d.read_bytes();records.append(dict(original=str(p),copy=str(d.relative_to(R)),role=role,**pin(d)))
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=W).decode().strip()==HEAD
+save(R/'live-before.json',dict(head=HEAD,status=subprocess.check_output(['git','status','--porcelain=v1','--untracked-files=no'],cwd=W).decode(),utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))
+manifest=json.loads((L/'staged-payload-manifest.json').read_bytes())
+source_proof=json.loads((L/'staged-payload-source-proof.json').read_bytes())
+assert source_proof['status']=='PASS' and source_proof['head']==manifest['head']==HEAD
+assert source_proof['manifest']==dict(path=str(L/'staged-payload-manifest.json'),**pin(L/'staged-payload-manifest.json'))
+assert len(manifest['files'])==source_proof['payload_count']==len(source_proof['files'])==13
+assert len({x['path'] for x in manifest['files']})==len(manifest['files'])
+for x in manifest['files']:
+ p=W/x['path'];f=L/'payload-freeze'/x['path'];assert p.read_bytes()==f.read_bytes() and pin(p)=={k:x[k] for k in ('bytes','sha256')};cp(f,R/'expected-payload'/x['path'],'root actual pre-stage frozen payload')
+for rel in ['tools/build_alignment_layer.py','tools/build_dictionary_view.py','tools/build_dictionary_exports.py','tools/gen_alignment_page.py','tools/dictionary_view_shell.html']+[str(x.relative_to(W)) for x in (W/'engines').glob('*.py')]:cp(W/rel,S/rel,'exact current code')
+sp=importlib.util.spec_from_file_location('snapshot_layer',S/'tools/build_alignment_layer.py');m=importlib.util.module_from_spec(sp);sp.loader.exec_module(m)
+registered=[]
+for course,cfg in sorted(m.COURSES.items()):
+ for page,seqs in sorted(cfg['pages'].items()):
+  dst=Path(cfg['dir'])/(page+'.html');rel=dst.relative_to(S);cp(W/rel,dst,'registered physical page consumed by layer');registered.append(dict(course=course,page=page,sequences=seqs,relative_path=str(rel)))
+for rel in ['data/alignment/pages_c05/index.html','data/alignment/specs_c05/c5p95.json','build/hgm_spine_v27_2.db','data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']:cp(W/rel,S/rel,'current registered spec/source/provenance')
+for p in sorted((W/'data/alignment/reviews_c05/c5p95').rglob('*')):
+ if p.is_file():cp(p,S/p.relative_to(W),'complete accepted semantic review plus histories; only top current review is approval')
+outputrels=['data/alignment/alignment_full_v1.json','data/alignment/alignment_evidence_v1.json']+['docs/geshe_michael_roach_dictionary'+s for s in ('.html','.csv','_reverse.csv','_by_course.csv','_changes.csv')]
+for rel in outputrels:
+ raw=subprocess.check_output(['git','show',HEAD+':'+rel],cwd=W);out=R/'previous-generated'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(raw);records.append(dict(original_git_commit=HEAD,repository_relative_path=rel,copy=str(out.relative_to(R)),role='immutable incoming generated baseline',**pin(out)))
+seed=L/'previous-main-csv-seed.bin';assert seed.read_bytes()==(R/'previous-generated/docs/geshe_michael_roach_dictionary.csv').read_bytes();cp(seed,R/'seed/previous-main-csv-seed.bin','actual root first-view seed');cp(seed,S/'docs/geshe_michael_roach_dictionary.csv','first isolated view seed; intentionally previous main CSV');records[-1].update(copy='seed/previous-main-csv-seed.bin',materialized_initial_path='workspace/docs/geshe_michael_roach_dictionary.csv',version_note='Immutable seed copy. materialized_initial_path is the initial workspace seed expected to be replaced by the sole view. Actual before-view bytes and resulting output are recorded separately by run-once.py.txt.')
+for p in sorted(L.iterdir()):
+ if p.is_file() and p!=seed:cp(p,R/'root-landing-evidence'/p.name,'root build/test/retention/failure history; no independent approval inferred')
+for name in ['run_reviewed_builders_once.py','run_tool_readonly_sqlite.py','verify_landed_batch.py','verify_course_csv.py']:cp(ROOT/'campaign-artifacts'/name,R/'root-helpers'/(name+'.txt'),'actual root command helper inspected')
+cp(ROOT/'campaign-artifacts/integration/continuation-through270-reproduce.py',R/'prior-method.py.txt','historical verification method reference, not executed')
+ev=json.loads((R/'expected-payload/data/alignment/alignment_evidence_v1.json').read_bytes())
+assert ev['meta']['date']=='2026-09-13' and ev['meta']['source_pages']=='banked pages, 5 course(s) (sha256 fc9cdbee115e7969)'
+assert len(registered)==549 and [n for x in registered if x['course']=='C05' for n in x['sequences']]==list(range(1,286))
+save(R/'input-manifest.json',records);save(R/'registered-pages.json',registered);save(R/'preparation-proof.json',dict(status='PASS',head=HEAD,files=len(records),registered_pages=len(registered),source_date=ev['meta']['date'],seed=pin(seed),seven_output_relpaths=outputrels,previous_main_seed_equals_immutable_git=True,root_frozen_payload_count=len(manifest['files']),root_frozen_payload_and_live_equal=True,isolated_workspace=str(S)))
+print(json.dumps(dict(status='PREPARED',files=len(records),registered_pages=len(registered),date=ev['meta']['date'],seed=pin(seed)),indent=2))

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-banking-preparation/prepare_ordinary_sources.py", line 21, in <module>
+    for d,n in [('through285-root-independent-review-verification','proof.json'),('through285-root-reconciliation-verification-attempt01','execution-proof.json'),('through285-root-current-config-release','proof.json')]:preserve(I/d/n,'current-integration/'+d+'/'+n)
+                                                                                                                                                                                                                           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-banking-preparation/prepare_ordinary_sources.py", line 13, in preserve
+    b=p.read_bytes();write(n,b);assert p.read_bytes()==b;copies.append({'original':str(p),'resolved_original':str(p.resolve()),'copy':n,**bp(b)})
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-root-current-config-release/proof.json'

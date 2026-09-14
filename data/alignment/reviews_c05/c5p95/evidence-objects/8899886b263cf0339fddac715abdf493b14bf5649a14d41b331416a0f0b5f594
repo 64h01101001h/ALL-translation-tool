@@ -1,0 +1,10 @@
+from pathlib import Path
+import json,hashlib,sys
+D=Path(__file__).resolve().parent
+assert sys.dont_write_bytecode
+pin=lambda b:dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+files={str(p.relative_to(D)):pin(p.read_bytes()) for p in sorted(D.rglob('*')) if p.is_file() and p!=D/'freeze.json'}
+with (D/'freeze.json').open('x') as f:f.write(json.dumps({'status':'FROZEN_SOURCE_PREPARATION_ONLY_WAITING_EXPLICIT_ORIGINAL_RELEASE','files':files,'file_count':len(files),'bytes_total':sum(r['bytes'] for r in files.values()),'semantic_approval':False,'original_proposal_reads':0},indent=2)+'\n')
+assert set(files)=={str(p.relative_to(D)) for p in D.rglob('*') if p.is_file() and p!=D/'freeze.json'}
+for n,r in files.items():assert pin((D/n).read_bytes())==r
+print(json.dumps({'freeze':pin((D/'freeze.json').read_bytes()),'file_count':len(files),'bytes_total':sum(r['bytes'] for r in files.values())}))

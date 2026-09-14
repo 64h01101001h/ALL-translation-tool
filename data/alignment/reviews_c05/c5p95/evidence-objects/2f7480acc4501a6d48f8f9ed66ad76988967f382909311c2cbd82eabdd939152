@@ -1,0 +1,56 @@
+{
+  "status": "TWO_INDEPENDENT_PROPOSAL_PASSES_DISPATCHED",
+  "recorded_utc": "2026-09-14T04:14:58.899343+00:00",
+  "dispatch_time_note": "Recorded after successful followup_task returns; exact model-scheduler start time is not exposed by that tool.",
+  "baseline_head": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+  "sequences": [
+    283,
+    284,
+    285
+  ],
+  "agents": [
+    {
+      "agent": "/root/c05_280_282_review_sources",
+      "role": "tibetan-first proposer",
+      "write_scope": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/tibetan"
+    },
+    {
+      "agent": "/root/c05_280_282_english",
+      "role": "english-first proposer",
+      "write_scope": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/english"
+    },
+    {
+      "agent": "/root/c05_253_255_reconcile",
+      "role": "source-only reusable verifier preparation; no proposal access",
+      "write_scope": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-preparation"
+    }
+  ],
+  "model": "Existing agent settings inherited; no model override in these dispatch tools",
+  "source": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/source.json",
+    "bytes": 2882,
+    "sha256": "7102e42eab0048452bc5ebe68c1e68b4abf28585bbc9ee43bdbeafb2bedc6c20"
+  },
+  "context": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/context.json",
+    "bytes": 22681,
+    "sha256": "d0d9fa89cddbb7a92d38c37aba46856fa8bc7b26aef85055e4f1c10453413b90"
+  },
+  "baseline": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/baseline.json",
+    "bytes": 1456,
+    "sha256": "0a881939b7ac80f7f1b18ca00b836d0e3d56738b944b8e17d153f85e64a0ee6f"
+  },
+  "proposal_protocol": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/proposal-protocol.md",
+    "bytes": 4770,
+    "sha256": "6cf88efbfe2b7a68ea4d3d7fb507043b595760f9d60fd05b44a47e3268c6f752"
+  },
+  "independence": "Each proposer can read its angle brief, original source/context/baseline and own outputs only within the batch. Root leads and other proposals withheld until both freeze.",
+  "usage_observation": {
+    "used_percent": 81,
+    "remaining_percent": 19,
+    "window_minutes": 10080,
+    "source": "get_usage_limits tool observation in this turn; no reset redeemed"
+  }
+}

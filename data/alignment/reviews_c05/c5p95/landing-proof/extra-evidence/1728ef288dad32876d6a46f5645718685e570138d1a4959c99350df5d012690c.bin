@@ -1,0 +1,39 @@
+{
+  "status": "ROOT_ENTRY_SOURCE_PREPARED_REQUIRES_REAL_ROOT_RECEIPT_ACCEPTANCE_PENDING_ACTUAL_RUNTIME",
+  "root_methods": [
+    {
+      "name": "approve-reproduction-method-root.py",
+      "prior": {
+        "bytes": 11605,
+        "sha256": "ed9774cde3796292ba624a2b25e0b6c200c12d3942cdb8a8728d7d0f3a0431b4"
+      },
+      "candidate": {
+        "bytes": 15181,
+        "sha256": "58695746f9777854cf5c84c275762bf250c7d95538022243a1d61ac98a97d964"
+      },
+      "whole_forward_inverse_AST_exact": true,
+      "old_assertions": 57,
+      "new_assertions": 84,
+      "candidate_executed": false,
+      "pending_actual_runtime": false
+    },
+    {
+      "name": "accept-independent-reproduction-root.py",
+      "prior": {
+        "bytes": 10268,
+        "sha256": "87f638191a9e5b6782725b20e75459532fc71844fbb7fd8a07e5f782a105f935"
+      },
+      "candidate": {
+        "bytes": 10532,
+        "sha256": "d573f8dd616f4ed6de9d3315db41656ea123653ad9bf9f0fdd5bbe500940d489"
+      },
+      "whole_forward_inverse_AST_exact": true,
+      "old_assertions": 57,
+      "new_assertions": 57,
+      "candidate_executed": false,
+      "pending_actual_runtime": true
+    }
+  ],
+  "mapped_pairs": 289,
+  "external_pins": 619
+}

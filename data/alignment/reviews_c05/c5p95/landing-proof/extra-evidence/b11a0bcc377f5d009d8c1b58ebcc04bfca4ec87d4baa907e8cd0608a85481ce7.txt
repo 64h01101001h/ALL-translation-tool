@@ -1,0 +1,41 @@
+"""Finalize source review only; no candidate execution."""
+from pathlib import Path
+import hashlib,json
+O=Path(__file__).resolve().parent;P=O/'inputs/preparation'
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,v):
+ with (O/n).open('x') as f:json.dump(v,f,ensure_ascii=False,indent=2);f.write('\n')
+callers=[]
+for n in ['source-input-caller01','actual-analysis-caller01','candidate-preparation-caller01']:
+ c=json.loads((P/n/'command.json').read_bytes());e=json.loads((P/n/'execution.json').read_bytes())
+ assert e['exit']==0 and (P/n/'exit.txt').read_bytes()==b'0\n'
+ assert not (P/n/'stdin.bin').read_bytes() and not (P/n/'stderr.txt').read_bytes()
+ for s in ['stdout','stderr']:assert pin(P/n/(s+'.txt'))==e['streams'][s]
+ assert pin(Path(c['source']['path']))=={k:c['source'][k] for k in ['bytes','sha256']}
+ assert c['argv'][-1]==c['source']['path'] and '-B' in c['argv']
+ callers.append(dict(path=n,command=pin(P/n/'command.json'),execution=pin(P/n/'execution.json'),exit=0))
+# Verify complete historical snapshot links without reopening mutable logical names.
+h=json.loads((P/'historical-runtime/additional-root-descriptors.json').read_bytes());values={}
+for e in h['evidence']:
+ p=P/'historical-runtime'/e['runtime_copy'];assert pin(p)=={k:e[k] for k in ['bytes','sha256']};values[e['path']]=p.read_bytes()
+for link in h['provenance_maps']:
+ assert link['record'] in json.loads(values[link['manifest']])
+ assert values[link['original']]==values[link['copy']]
+assert len(h['entries'])==37 and len(h['evidence'])==260 and len(h['provenance_maps'])==127
+save('caller-and-history-proof.json',dict(status='PASS_RETAINED_SOURCE_TRANSPORT_AND_HISTORICAL_SNAPSHOTS_ONLY',current_callers=callers,historical_entries=37,historical_snapshot_evidence=260,historical_links=127,historical_live_names_reopened=False,current_historical_allowances_adopted=False))
+save('review.json',dict(spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=[],candidate=pin(P/'whitespace282.py'),descriptor=pin(P/'additional-root-descriptors.json'),scope='Source preparation only; actual prepare/audit pending',source_freeze=pin(P/'freeze.json'),reviewer='/root/c05_253_255_reconcile',current_author='/root/c05_280_282_english',retained_context='Prior reconciliation and tooling authorship; not author of this current candidate',target_imported=False,target_executed=False,source_judgments=pin(O/'case-judgments.json'),static_proof=pin(O/'static-proof.json'),runtime_approved=False))
+for r in json.loads((O/'original-to-copy-manifest.json').read_bytes()):
+ assert Path(r['original']).read_bytes()==(O/r['copy']).read_bytes()
+ assert pin(O/r['copy'])=={k:r[k] for k in ['bytes','sha256']}
+for call,code in [('caller-static01',2),('caller-static02',0)]:
+ e=json.loads((O/call/'execution.json').read_bytes());assert e['exit']==code
+ for stream in ['stdin','stdout','stderr']:assert pin(O/call/(stream+'.bin'))==e[stream]
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file()};assert 'freeze.json' not in files
+save('freeze.json',dict(status='FROZEN_SOURCE_REVIEW',spec_verdict='APPROVE',quality_verdict='APPROVE',files=files,file_count=len(files),total_bytes=sum(r['bytes'] for r in files.values()),runtime_executed=False))
+for n,r in files.items():assert pin(O/n)==r
+result=dict(freeze=pin(O/'freeze.json'),files=len(files),total_bytes=sum(r['bytes'] for r in files.values()),review=pin(O/'review.json'))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555);print(json.dumps(result,indent=2))

@@ -1,0 +1,362 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-stage-preparation/verify_staged_through282.py
++++ verify_staged_through285.py
+@@ -1,4 +1,4 @@
+-"""PREPARED candidate: read-only through282 staging verification, no banking.
++"""PREPARED candidate: read-only through285 staging verification, no banking.
+ 
+ Requires actual final approvals/landing/builds/tests/banked proofs and an already
+ reviewed whitespace proof. Writes evidence only to a fresh external --output.
+@@ -17,8 +17,8 @@
+ import sys
+ import traceback
+ 
+-BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
+-PAGE, SEQS = 94, [280, 281, 282]
++BASE = 'fb9182dc6fca2230be3bc5169ba1288a22430280'
++PAGE, SEQS = 95, [283, 284, 285]
+ TESTS = {'constitution', 'gen_alignment_page', 'alignment_gate_coverage',
+          'alignment_builder', 'dictionary_exports', 'no_broken_words',
+          'no_split_syllables', 'no_phonetics_in_layer', 'no_degenerate_members',
+@@ -44,11 +44,12 @@
+ 
+ def freeze_entries(freeze):
+     # Actual current immutable freeze: distinct SPEC and QUALITY verdicts, DICT pins.
+-    assert freeze['status'] == 'FROZEN' and freeze['verdict'] == 'APPROVE' and freeze['page'] == 'c5p94'
++    assert freeze['status'] == 'FROZEN_INDEPENDENT_SEMANTIC_APPROVAL' and freeze['verdict'] == 'APPROVE'
++    assert freeze['baseline_commit'] == BASE and freeze['open_findings'] == []
+     rows = freeze['files']
+     assert isinstance(rows, dict) and rows
+     assert freeze['file_count'] == len(rows)
+-    assert sum(row['bytes'] for row in rows.values()) == 48827659 and len(rows) == 871
++    assert sum(row['bytes'] for row in rows.values()) == 602052638 and len(rows) == 2386
+     for name, row in rows.items():
+         relative(name)
+         assert isinstance(row['bytes'], int) and row['bytes'] >= 0
+@@ -111,9 +112,9 @@
+     assert raw.decode().strip() == BASE, 'HEAD changed during verification'
+ 
+ 
+-KNOWN_INPUT_PINS = {'prior_closure': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-root-closure/proof.json', 'bytes': 4959, 'sha256': 'a26675e3375b3bcb65e7cf871c904db0ed646deec8c2d4aed2749bf3cc940a9a'}, 'reproduction_acceptance': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction-root-acceptance/proof.json', 'bytes': 1330, 'sha256': '52f04b931d7d4af0e54f7291f36786178adb82818c3b104839c8912269dd23a0'}, 'semantic_freeze': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/semantic-review/freeze.json', 'bytes': 172281, 'sha256': '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'}, 'semantic_review': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/semantic-review/review.json', 'bytes': 1661, 'sha256': '264227814d36404865bac2bc1f6eb1ec7ffa7898462d42cb7beb6363b8b92ed3'}, 'payload_manifest': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/staged-payload-manifest.json', 'bytes': 2358, 'sha256': '9b0abba14e86da80708be4f5f17d8f3e9df6ffe6468dbd17db3a65b211abde01'}, 'payload_source_proof': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/staged-payload-source-proof.json', 'bytes': 13689, 'sha256': '5600ef16c28bdbd772f11668830a375d70340746cf7077d14824b01f6f27625a'}, 'untracked_before': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/untracked-before-banking.stdout', 'bytes': 96645, 'sha256': 'd1f73465c01830a624d7f5341a175f9d06aafb061eecbf231b734adf631ecb77'}}
+-EXPECTED_BINDING_KEYS = {'ordinary_bank_file_count','ordinary_external_count','final_bank_file_count','final_external_count','staged_count','warning_count','warning_file_count','diagnostic_exit','index_sha256','staged_path_stream_sha256','final_untracked_sha256'}
+-EXPECTED_INPUT_ROLES = set(KNOWN_INPUT_PINS) | {'ordinary_manifest','final_manifest','ordinary_result','final_result','whitespace_proof','whitespace_log'}
++KNOWN_INPUT_PINS = {'prior_closure': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-root-closure/proof.json', 'bytes': 2267, 'sha256': '80d9ee5b45d2f69e42e699b62edbf1fdcde8b199c31529f35340ef8a42a66554'}, 'semantic_freeze': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/freeze.json', 'bytes': 445105, 'sha256': '8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445'}, 'semantic_review': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/review.json', 'bytes': 7261, 'sha256': '2872732254445fc14145266e946ef0b842ed7b096a5722d577d0a4439c88e25d'}, 'payload_manifest': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/landing/staged-payload-manifest.json', 'bytes': 2357, 'sha256': '3272caf51c03883b5660bbf5b72292903411f61b9d217cbfb3193b2dc5587706'}, 'payload_source_proof': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/landing/staged-payload-source-proof.json', 'bytes': 16269, 'sha256': 'a375dd262be0872402888b3d51ee550b3c14a02db9a22721291aaa33e8b37c44'}, 'untracked_before': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/landing/untracked-before-banking.stdout', 'bytes': 237981, 'sha256': '997a5f6038cbecb61600a3913292439413f55c8f2555da6d17424e6c0f72f1cb'}, 'independent_review': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-root-independent-review-verification/proof.json', 'bytes': 1635, 'sha256': 'eb3ee19dd186e63dd830be05421245019cf6555684bf83ee9a967ff00c935a50'}}
++EXPECTED_BINDING_KEYS = {'ordinary_bank_file_count','ordinary_external_count','final_bank_file_count','final_external_count','staged_count','warning_count','warning_file_count','diagnostic_exit','index_sha256','staged_path_stream_sha256','final_untracked_sha256','reproduction_retention_checks'}
++EXPECTED_INPUT_ROLES = set(KNOWN_INPUT_PINS) | {'ordinary_manifest','final_manifest','ordinary_result','final_result','whitespace_proof','whitespace_log','reproduction_acceptance'}
+ 
+ 
+ def load_release_bindings(args):
+@@ -125,7 +126,7 @@
+     assert sha(raw) == args.bindings_sha256
+     binding = json.loads(raw)
+     assert set(binding) == {'schema','baseline','page','sequences','verifier_sha256','expected','input_pins'}
+-    assert binding['schema'] == 'through282-final-data-stage-bindings-v1'
++    assert binding['schema'] == 'through285-final-data-stage-bindings-v1'
+     assert binding['baseline'] == BASE and binding['page'] == PAGE and binding['sequences'] == SEQS
+     assert binding['verifier_sha256'] == sha(Path(__file__).read_bytes())
+     expected = binding['expected']
+@@ -138,11 +139,15 @@
+     pins = binding['input_pins']
+     assert isinstance(pins, dict) and set(pins) == EXPECTED_INPUT_ROLES
+     batch = Path(args.batch).resolve(strict=True); integration = batch.parent / 'integration'
+-    ordinary = integration / 'through282-banking-runs/ordinary'; final = integration / 'through282-banking-runs/final-whitespace'
++    ordinary = Path(pins['ordinary_result']['path']).parent; final = Path(pins['final_result']['path']).parent
++    for role in ('ordinary_result','final_result','reproduction_acceptance'):
++        path = Path(pins[role]['path'])
++        assert path.is_absolute() and path.resolve(strict=True).is_relative_to(integration.resolve(strict=True))
++    assert ordinary != final and pins['ordinary_result']['path'].endswith('/result.json') and pins['final_result']['path'].endswith('/result.json')
+     assert Path(args.banking_ordinary_run).resolve(strict=True) == ordinary.resolve(strict=True)
+     assert Path(args.banking_final_run).resolve(strict=True) == final.resolve(strict=True)
+     paths = {role: Path(record['path']) for role, record in KNOWN_INPUT_PINS.items()}
+-    paths.update(ordinary_manifest=batch/'landing/root-proof-copy-manifest-before-whitespace.json', final_manifest=batch/'landing/root-proof-copy-manifest.json', ordinary_result=ordinary/'result.json', final_result=final/'result.json', whitespace_proof=Path(args.whitespace_proof), whitespace_log=Path(args.whitespace_log))
++    paths.update(ordinary_manifest=batch/'landing/root-proof-copy-manifest-before-whitespace.json', final_manifest=batch/'landing/root-proof-copy-manifest.json', ordinary_result=ordinary/'result.json', final_result=final/'result.json', whitespace_proof=Path(args.whitespace_proof), whitespace_log=Path(args.whitespace_log), reproduction_acceptance=Path(pins['reproduction_acceptance']['path']))
+     for role, record in pins.items():
+         assert isinstance(record, dict) and set(record) == {'path','bytes','sha256'}
+         assert isinstance(record['path'], str) and Path(record['path']).is_absolute()
+@@ -158,14 +163,78 @@
+     return binding
+ 
+ 
++def review_segment_pin(row, name, review):
++    assert name in ('spec', 'body') and type(row['seq']) is int
++    flat = (name + '_bytes', name + '_sha256')
++    if name in row:
++        assert not any(k in row for k in flat), 'Ambiguous nested and flat pin fields'
++        r = row[name]
++        assert isinstance(r, dict) and set(r) == {'path', 'bytes', 'sha256'}
++        expected = review / 'reviewed-final' / str(row['seq']) / ('spec.json' if name == 'spec' else 'body.html')
++        assert Path(r['path']).is_absolute() and Path(r['path']) == expected
++        result = {k: r[k] for k in ('bytes', 'sha256')}
++    else:
++        result = {'bytes': row[flat[0]], 'sha256': row[flat[1]]}
++    assert type(result['bytes']) is int and result['bytes'] >= 0
++    assert isinstance(result['sha256'], str) and len(result['sha256']) == 64
++    assert all(c in '0123456789abcdef' for c in result['sha256'])
++    return result
++
++def review_segment_counts(row):
++    legacy = ('span_count', 'null_count', 'word_pair_count')
++    current = ('spans', 'nulls', 'd5_nonnull')
++    if any(k in row for k in current):
++        assert not any(k in row for k in legacy), 'Ambiguous current and legacy counts'
++        source = [row[k] for k in current]
++    else:
++        source = [row[k] for k in legacy]
++    assert all(type(n) is int for n in source)
++    spans, nulls, pairs = source
++    assert spans > 0 and 0 <= nulls <= spans and 0 <= pairs <= spans - nulls
++    return dict(spans=spans, nulls=nulls, word_pairs=pairs)
++
++def review_total(meta, name):
++    names = {'spans': 'spans', 'nulls': 'nulls', 'word_pairs': 'd5_nonnull'}
++    if 'totals' in meta:
++        assert not any('total_' + k in meta for k in names), 'Ambiguous totals'
++        assert isinstance(meta['totals'], dict)
++        value = meta['totals'][names[name]]
++    else:
++        value = meta['total_' + name]
++    assert type(value) is int and value >= 0
++    return value
++
++def review_copy_manifest(review, read):
++    legacy = review / 'original-to-copy-manifest.json'
++    current_names = ('original-copy-manifest.json', 'additional-original-copy-manifest.json')
++    if legacy.exists():
++        assert not any((review / n).exists() for n in current_names), 'Ambiguous copy-map schemas'
++        records = json.loads(read(legacy))
++        return records, [str(legacy)]
++    records = []
++    for name in current_names:
++        original_records = json.loads(read(review / name))
++        assert isinstance(original_records, list) and original_records
++        for index, r in enumerate(original_records):
++            assert isinstance(r, dict) and set(r) == {'original_path', 'copy_path', 'content_addressed_copy', 'bytes', 'sha256'}
++            original, copied, obj = (Path(r[k]) for k in ('original_path', 'copy_path', 'content_addressed_copy'))
++            assert all(p.is_absolute() for p in (original, copied, obj))
++            assert copied.resolve().is_relative_to(review.resolve()) and obj.resolve().is_relative_to(review.resolve())
++            assert type(r['bytes']) is int and r['bytes'] >= 0
++            records.append({'original': str(original), 'copy': str(copied.relative_to(review)),
++                            'content_addressed_copy': str(obj.relative_to(review)),
++                            'bytes': r['bytes'], 'sha256': r['sha256'],
++                            'source_manifest': name, 'source_index': index, 'original_record': r})
++    return records, [str(review / n) for n in current_names]
++
+ class Check:
+     def __init__(self, args):
+         self.w = Path(args.worktree).resolve(strict=True)
+         self.b = Path(args.batch).resolve(strict=True)
+-        assert self.b.name == 'C05-280-282'
++        assert self.b.name == 'C05-283-285'
+         self.l = self.b / 'landing'
+         self.review = self.b / 'semantic-review'
+-        self.bank_rel = Path('data/alignment/reviews_c05/c5p94')
++        self.bank_rel = Path('data/alignment/reviews_c05/c5p95')
+         self.bank = self.w / self.bank_rel
+         self.out = Path(args.output).absolute()
+         assert not self.out.resolve().is_relative_to(self.w)
+@@ -366,15 +435,19 @@
+         baseline = self.obj(self.b / 'baseline.json')
+         assert baseline['commit'] == BASE and baseline['course_boundary'] == SEQS[0] - 1
+         closed = self.obj(Path(KNOWN_INPUT_PINS['prior_closure']['path']))
+-        assert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE
+-        assert closed['verified_segments'] == 279 and closed['next_batch'] == SEQS
+-        reproduction = self.obj(Path(KNOWN_INPUT_PINS['reproduction_acceptance']['path']))
+-        assert reproduction['status'] == 'PASS' and reproduction['head'] == BASE and reproduction['retention_checks'] == 223847
++        assert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH282_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE
++        assert closed['verified_segments'] == 282 and closed['next_batch'] == SEQS
++        reproduction = self.obj(Path(self.release['input_pins']['reproduction_acceptance']['path']))
++        assert reproduction['status'] == 'PASS' and reproduction['head'] == BASE and reproduction['retention_checks'] == self.release['expected']['reproduction_retention_checks']
++        assert type(reproduction['retention_checks']) is int and reproduction['retention_checks'] > 0
++        assert reproduction['all_seven_reproduced_outputs_byte_exact'] is True
++        assert reproduction['all_thirteen_payload_files_byte_exact'] is True
++        assert reproduction['live_head_index_untracked_state_unchanged'] is True
+ 
+         # Exact semantic freeze and actual approval identities; no semantic judgment.
+         freeze_raw = self.raw(self.review / 'freeze.json')
+         freeze = json.loads(freeze_raw)
+-        assert sha(freeze_raw) == '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
++        assert sha(freeze_raw) == '8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445'
+         frozen = {}
+         for name, row in freeze_entries(freeze).items():
+             rel = str(relative(name))
+@@ -388,7 +461,15 @@
+         self.require(self.bank_rel / 'freeze.json', freeze_raw)
+         meta_raw = self.raw(self.review / 'review.json')
+         meta = json.loads(meta_raw)
+-        assert meta['verdict'] == 'APPROVE' and meta['spec_verdict'] == meta['quality_verdict'] == 'PASS'
++        assert meta['verdict'] == 'APPROVE' and meta['baseline'] == BASE and meta['page'] == 'c5p95'
++        fidelity = self.obj(self.review / 'audit-proof.json')
++        assert fidelity['status'] == 'ACTUAL_CANONICAL_AND_SOURCE_FIDELITY_PASS_ONLY' and fidelity['spans'] == 76
++        completion = self.obj(self.review / 'completion-proof.json')
++        assert completion['status'] == 'COMPLETE_INDEPENDENT_SEMANTIC_APPROVAL'
++        self.pincheck(meta_raw, completion['review'])
++        independent = self.obj(Path(KNOWN_INPUT_PINS['independent_review']['path']))
++        assert independent['status'] == 'PASS_ROOT_REVIEW_OF_INDEPENDENT_SEMANTIC_APPROVAL_AND_MECHANICAL_RESULT'
++        assert independent['baseline'] == BASE and independent['semantic_freeze'] == dict(bytes=len(freeze_raw), sha256=sha(freeze_raw))
+         assert meta['open_findings'] == []
+         assert [r['seq'] for r in meta['segments']] == SEQS
+         accepted = self.obj(self.l / 'root-semantic-acceptance-proof.json')
+@@ -407,7 +488,7 @@
+             raws = {}
+             for key, name in [('spec', 'spec.json'), ('body', 'body.html')]:
+                 raw = self.raw(self.b / 'reconciled' / str(seq) / name)
+-                self.pincheck(raw, dict(bytes=row[key + '_bytes'], sha256=row[key + '_sha256']))
++                self.pincheck(raw, review_segment_pin(row, key, self.review))
+                 assert raw == self.raw(self.review / 'reviewed-final' / str(seq) / name)
+                 raws[key] = raw
+             part = json.loads(raws['spec'])
+@@ -416,14 +497,15 @@
+             spans = part['segments'][0]['spans']
+             counts = dict(spans=len(spans), nulls=sum(x['eng'] is None for x in spans),
+                           word_pairs=sum(x['d'] == 5 and x['eng'] is not None for x in spans))
+-            assert counts == dict(spans=row['span_count'], nulls=row['null_count'], word_pairs=row['word_pair_count'])
++            assert counts == review_segment_counts(row)
+             for k in totals:
+                 totals[k] += counts[k]
+             tuples.extend((seq, x['id'], x['d'], x['tib'], x['eng']) for x in spans)
+             composed['segments'].extend(part['segments'])
+             bodies.append(raws['body'])
+             self.require(self.bank_rel / f'{seq}-reconciliation.md', self.raw(self.b / 'reconciled' / str(seq) / 'report.md'))
+-        assert all(meta['total_' + k] == v for k, v in totals.items())
++        assert all(review_total(meta, k) == v for k, v in totals.items())
++        assert totals == dict(spans=76, nulls=0, word_pairs=61)
+         assert accepted['totals'] == copied['totals'] == totals
+         resolved = self.obj(self.review / 'resolved-spans.json')
+         assert [(x['seq'], x['id'], x['d'], x['tib'], x['eng']) for x in resolved] == tuples
+@@ -432,16 +514,18 @@
+         assert self.raw(self.l / 'generator.stdout') == body and body
+         assert self.raw(self.l / 'generator.exit').strip() == b'0' and not self.raw(self.l / 'generator.stderr')
+         landed = self.obj(self.bank / 'landing.json')
+-        assert landed['course'] == 'C05' and landed['page'] == 'c5p94' and landed['segments'] == SEQS
++        assert landed['course'] == 'C05' and landed['page'] == 'c5p95' and landed['segments'] == SEQS
+         assert landed['generator_exit'] == 0 and landed['spec_sha256'] == sha(spec) and landed['body_sha256'] == sha(body)
+         self.require(self.bank_rel / 'landing.json', self.raw(self.bank / 'landing.json'))
+-        self.require('data/alignment/specs_c05/c5p94.json', spec)
+-        page = self.raw(self.w / 'data/alignment/pages_c05/c5p94.html')
++        self.require('data/alignment/specs_c05/c5p95.json', spec)
++        page = self.raw(self.w / 'data/alignment/pages_c05/c5p95.html')
+         assert body in page
+-        self.require('data/alignment/pages_c05/c5p94.html', page)
++        self.require('data/alignment/pages_c05/c5p95.html', page)
+ 
+         # Every source alias is reopened; historical originals use their exact commit.
+-        manifest = self.obj(self.review / 'original-to-copy-manifest.json')
++        manifest, manifest_sources = review_copy_manifest(self.review, self.raw)
++        assert manifest_sources == accepted['manifest_sources'] == copied['manifest_sources']
++        assert len(manifest) == 1278
+         assert manifest == accepted['manifest'] == copied['manifest']
+         for row in manifest:
+             raw = self.raw(self.review / relative(row['copy']))
+@@ -451,9 +535,19 @@
+                 assert re.fullmatch('[0-9a-f]{40}', commit)
+                 rel = str(relative(row['repository_relative_path']))
+                 original = self.git('show', commit + ':' + rel)[0]
++            elif Path(row['original']).resolve(strict=True) == (self.w / 'tools/build_alignment_layer.py').resolve(strict=True):
++                # Exact frozen pre-registration source; current builder is checked in full below.
++                assert row['copy'] == 'governing/build_alignment_layer.py'
++                assert row['bytes'] == 39640 and row['sha256'] == 'f34db3d81708aa2143710d91ac4a1abcbf93dba4d33a0abfb00a51fe511975f1'
++                original = self.old('tools/build_alignment_layer.py')
++                assert original == self.raw(self.l / 'registration-preimages/build_alignment_layer.py.txt')
+             else:
+                 original = self.raw(Path(row['original']))
+             assert original == raw
++            if 'content_addressed_copy' in row:
++                object_rel = str(relative(row['content_addressed_copy']))
++                assert object_rel in frozen and self.raw(self.review / object_rel) == raw
++                self.require(self.bank_rel / object_rel, raw)
+ 
+         # Exact registry/index/previous navigation transforms, full preimages.
+         registration = self.obj(self.l / 'course-registration-verification.json')
+@@ -468,20 +562,20 @@
+             new = self.raw(self.w / rel)
+             self.pincheck(old, registration[before_key]); self.pincheck(new, registration[after_key])
+             if rel.startswith('tools/'):
+-                needle = b'    "c5p93": [277, 278, 279],\n'
++                needle = b'    "c5p94": [280, 281, 282],\n'
+                 assert old.count(needle) == 1
+-                assert new == old.replace(needle, needle + b'    "c5p94": [280, 281, 282],\n')
++                assert new == old.replace(needle, needle + b'    "c5p95": [283, 284, 285],\n')
+             else:
+-                coverage = b'Reviewed campaign coverage: 279 of 511 source segments.'
+-                link = '<li><a href="c5p93.html">Page 93 · segments 277–279</a></li>'.encode()
++                coverage = b'Reviewed campaign coverage: 282 of 511 source segments.'
++                link = '<li><a href="c5p94.html">Page 94 · segments 280–282</a></li>'.encode()
+                 assert old.count(coverage) == old.count(link) == 1
+-                assert new == old.replace(coverage, b'Reviewed campaign coverage: 282 of 511 source segments.').replace(link, link + '\n<li><a href="c5p94.html">Page 94 · segments 280–282</a></li>'.encode())
++                assert new == old.replace(coverage, b'Reviewed campaign coverage: 285 of 511 source segments.').replace(link, link + '\n<li><a href="c5p95.html">Page 95 · segments 283–285</a></li>'.encode())
+             self.require(rel, new)
+-        previous = 'data/alignment/pages_c05/c5p93.html'
++        previous = 'data/alignment/pages_c05/c5p94.html'
+         old = self.old(previous)
+         nav = b'&larr; Previous</a></div>'
+         assert old.count(nav) == 2
+-        self.require(previous, old.replace(nav, b"&larr; Previous</a><a href='c5p94.html'>Next &rarr;</a></div>"))
++        self.require(previous, old.replace(nav, b"&larr; Previous</a><a href='c5p95.html'>Next &rarr;</a></div>"))
+ 
+         # Actual approved errata/allowance changes, never assumed present.
+         register = self.obj(self.l / 'review-copy-and-register-proof.json')
+@@ -504,8 +598,45 @@
+             assert self.raw(self.w / 'docs/ERRATA_REGISTER.md') == self.old('docs/ERRATA_REGISTER.md')
+         rel = 'data/alignment/span_head_allow.json'
+         old_raw = self.old(rel)
+-        needed_path = self.review / 'span-head-allow-needed.json'
+-        wanted = self.obj(needed_path) if needed_path.exists() else {}
++        assert not (self.review / 'span-head-allow-needed.json').exists()
++        mechanical = self.b.parent / 'integration/through285-root-reconciliation-verification-attempt01'
++        proof_raw = self.raw(mechanical / 'execution-proof.json')
++        assert len(proof_raw) == 4107 and sha(proof_raw) == '9af274e2621d377cbab7ea24d0d57e4b79bad2b597e9ca0194469d2849914fa6'
++        proof = json.loads(proof_raw)
++        assert proof['status'] == 'PASS mechanical source and identity verification' and proof['baseline'] == BASE
++        assert proof['final_spans'] == 76 and proof['nulls'] == 0 and proof['nonnull_d5'] == 61
++        assert proof['original_identities'] == 145 and proof['canonical_replays'] == 3
++        licenses = meta['head_licensors']
++        assert isinstance(licenses, list) and len(licenses) == 2
++        licensed = {r['key']: r for r in licenses}
++        assert len(licensed) == 2 and set(licensed) == {'c5p95/s284w6', 'c5p95/s285w5'}
++        wanted = {'pages_c05': {}}
++        for seq in [283, 284, 285]:
++            final = self.b / 'reconciled' / str(seq)
++            declared = self.obj(final / 'proposed-head-allowances.json')
++            actual = self.obj(mechanical / f'{seq}.head-allowance-check.json')
++            assert actual['page'] == 'c5p95' and actual['seq'] == seq and actual['semantic_approval'] is False
++            assert actual['predicate_source'] == declared['predicate_source']
++            predicate = self.w / 'tools/test_no_supplied_span_head.py'
++            assert Path(actual['predicate_source']['path']) == predicate
++            predicate_raw = self.raw(predicate)
++            assert len(predicate_raw) == actual['predicate_source']['bytes'] and sha(predicate_raw) == actual['predicate_source']['sha256']
++            assert actual['actual_gated_hits'] == declared['actual_gated_hits']
++            assert actual['allowances'] == declared['pages_c05']
++            assert set(actual['allowances']) == {h['allowance_key'] for h in actual['actual_gated_hits']}
++            tuples = {r['id']: r for r in self.obj(final / 'final-tuples.json')}
++            body = self.raw(final / 'body.html').decode()
++            for hit in actual['actual_gated_hits']:
++                key = hit['allowance_key'];license = licensed[key];t = hit['final_tuple']
++                assert key == 'c5p95/' + hit['label'] == f"c5p95/s{seq}{t['id']}"
++                assert t == tuples[t['id']] and t['tib'] == hit['licensor'] == license['licensor']
++                assert license['seq'] == seq and license['id'] == t['id'] and license['verdict'] == 'LICENSED'
++                assert isinstance(license['reason'], str) and license['reason'].strip()
++                assert body[slice(*hit['body_range'])] == hit['match']
++                reason = actual['allowances'][key]
++                assert isinstance(reason, str) and reason.strip() and t['tib'] in reason and t['eng'] in reason
++                assert key not in wanted['pages_c05'];wanted['pages_c05'][key] = reason
++        assert set(wanted['pages_c05']) == set(licensed)
+         new_raw = self.raw(self.w / rel)
+         wanted, has_allowance_additions = allowance_result(old_raw, new_raw, wanted, register['only_reviewed_allowances_added'])
+         if has_allowance_additions:
+@@ -533,7 +664,7 @@
+         assert not old_links - new_links
+         added = [json.loads(k) for k, n in (new_links - old_links).items() for _ in range(n)]
+         assert len(added) == totals['spans'] + len(SEQS)
+-        assert all(x['course'] == 'C05' and x['seg'] in SEQS and x['page'] == 'c5p94' for x in added)
++        assert all(x['course'] == 'C05' and x['seg'] in SEQS and x['page'] == 'c5p95' for x in added)
+         assert sum(x['eng'] is None for x in added) == totals['nulls']
+         norm = lambda value: ' '.join(value.split()) if value is not None else None
+         sentence_ids = {f's{seq}S' for seq in SEQS}
+@@ -556,7 +687,7 @@
+         for field in ('notes', 'trees'):
+             assert all(now[field].get(k) == v for k, v in before[field].items())
+         retention = self.obj(self.l / 'retention-source-check.json')
+-        assert retention['baseline_commit'] == BASE and retention['segments'] == SEQS and retention['page'] == 'c5p94'
++        assert retention['baseline_commit'] == BASE and retention['segments'] == SEQS and retention['page'] == 'c5p95'
+         assert retention['added_links'] == len(added) and retention['reviewed_analyst_spans'] == totals['spans']
+         assert retention['full_links'] == len(now['links']) and retention['null_exponents'] == sum(x['eng'] is None for x in now['links'])
+         for flag in ('prior_notes_trees_evidence_and_acip_retained', 'prior_csv_content_and_references_retained', 'source_hashes_unchanged', 'review_tuples_and_source_ranges_match', 'navigation_targets_exist'):

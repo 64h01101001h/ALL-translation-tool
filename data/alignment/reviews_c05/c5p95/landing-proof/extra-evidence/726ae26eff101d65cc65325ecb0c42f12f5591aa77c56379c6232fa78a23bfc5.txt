@@ -1,0 +1,31 @@
+--- actual-binding
++++ approved-pending
+@@ -3,10 +3,10 @@
+ import datetime, hashlib, importlib.util, json, os, subprocess, sys, traceback
+ sys.dont_write_bytecode=True
+ # Preparation only: root must bind these literal interfaces after both originals freeze.
+-EXPECTED_COMPLETION_FILE='originals-complete.json'
+-EXPECTED_COMPLETION_STATUS='BOTH_INDEPENDENT_ORIGINAL_ANGLES_FROZEN'
+-EXPECTED_TIBETAN_SPANS=75
+-EXPECTED_WRAPPER_RELATIVE_PATH='english/283/run_canonical_readonly.py'
++EXPECTED_COMPLETION_FILE=None
++EXPECTED_COMPLETION_STATUS=None
++EXPECTED_TIBETAN_SPANS=None
++EXPECTED_WRAPPER_RELATIVE_PATH=None
+ assert (isinstance(EXPECTED_COMPLETION_FILE,str) and EXPECTED_COMPLETION_FILE
+         and isinstance(EXPECTED_COMPLETION_STATUS,str) and EXPECTED_COMPLETION_STATUS
+         and type(EXPECTED_TIBETAN_SPANS) is int and EXPECTED_TIBETAN_SPANS>0
+@@ -20,11 +20,8 @@
+ def save(p,obj):
+     with p.open('x') as f:json.dump(obj,f,ensure_ascii=False,indent=2);f.write('\n')
+ def freeze(angle,seq):
+-    directory=batch/angle/str(seq);fp=directory/('freeze-manifest.json' if angle=='tibetan' else 'freeze.json');f=json.loads(fp.read_text())
+-    rows=f if angle=='tibetan' else f['files']
+-    assert isinstance(rows,list) and all(isinstance(r,dict) and isinstance(r.get('path'),str) for r in rows)
+-    assert len({r['path'] for r in rows})==len(rows), 'Duplicate original freeze paths'
+-    entries={r['path']:r for r in rows}
++    directory=batch/angle/str(seq);fp=directory/'freeze.json';f=json.loads(fp.read_text())
++    entries=f['files'] if isinstance(f['files'],dict) else {r.get('relative_path',r['path']):r for r in f['files']}
+     expected={}
+     for name,r in entries.items():
+         key=str(Path(name).relative_to(directory)) if Path(name).is_absolute() else name

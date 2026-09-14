@@ -1,0 +1,19 @@
+from pathlib import Path
+import hashlib,json
+O=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter')
+assert __debug__ and not (O/'freeze.json').exists()
+files=[];aliases=[]
+for p in sorted(O.rglob('*')):
+    assert '__pycache__' not in p.parts and p.suffix!='.pyc'
+    if p.is_symlink():
+        assert p.resolve().is_relative_to(O);aliases.append({'path':str(p.relative_to(O)),'target':str(p.readlink()),'resolved':str(p.resolve())})
+    if p.is_file():
+        b=p.read_bytes();files.append({'path':str(p.relative_to(O)),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+value={'status':'FROZEN_SOURCE_SCHEMA_PREPARATION_ONLY','files':files,'file_count':len(files),'total_bytes':sum(r['bytes'] for r in files),'symlinks':aliases,'boundary':'Every existing file except this manifest; intentional negative-fixture symlinks are declared separately, with all targets inside this package.'};b=(json.dumps(value,indent=2)+'\n').encode()
+with (O/'freeze.json').open('xb') as f:f.write(b)
+assert {str(p.relative_to(O)) for p in O.rglob('*') if p.is_file()}=={r['path'] for r in files}|{'freeze.json'}
+for row in files:
+    raw=(O/row['path']).read_bytes();assert len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256']
+for row in aliases:
+    p=O/row['path'];assert p.is_symlink() and str(p.readlink())==row['target'] and str(p.resolve())==row['resolved']
+print(json.dumps({'status':'FROZEN','path':str(O/'freeze.json'),'files':len(files),'member_bytes':value['total_bytes'],'symlinks':len(aliases),'freeze_bytes':len(b),'freeze_sha256':hashlib.sha256(b).hexdigest()}))

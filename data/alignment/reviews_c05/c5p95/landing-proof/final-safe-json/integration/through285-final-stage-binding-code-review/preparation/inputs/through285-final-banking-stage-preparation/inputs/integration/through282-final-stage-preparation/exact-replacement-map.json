@@ -1,0 +1,119 @@
+[
+  {
+    "before": "# PREPARATION ONLY: actual ordinary bank, ledgers and staged diagnostics are pending.\nPENDING_BINDINGS = {'ordinary_bank_manifest': None, 'ordinary_bank_file_count': None, 'ordinary_bank_external_count': None, 'ordinary_bank_write_run': None, 'final_bank_manifest': None, 'final_bank_write_run': None, 'final_bank_file_count': None, 'three_ledger_paths_and_approved_before_after_bytes': None, 'three_ledger_staging_contract_review': None, 'raw_untracked_before_banking_full_stream_and_caller': None, 'actual_index_and_unstaged_boundary': None, 'actual_raw_diagnostic_full_stream_and_caller': None, 'actual_staged_path_set_and_count': None, 'physical_source_descriptors_and_original_aliases': None, 'additional_warning_descriptor_contract': None, 'prior_closure_proof_relative': None, 'prior_closure_expected_status': None, 'whitespace_preparation_freeze_sha256': None, 'whitespace_preparation_file_count': None, 'whitespace_review_freeze_sha256': None, 'whitespace_review_file_count': None, 'additional_descriptor_entry_count': None, 'additional_descriptor_evidence_count': None, 'additional_descriptor_provenance_count': None, 'verified_frozen_file_count': None, 'original_copy_pair_count': None, 'warning_count': None, 'warning_file_count': None, 'raw_diagnostic_exit': None, 'independent_code_review_and_actual_runtime_release': None}\nif any(value is None for value in PENDING_BINDINGS.values()):\n    raise RuntimeError('Unbound through282 preparation; no staging, bank, Git, whitespace or verification runtime is released')\n\n",
+    "after": "",
+    "occurrences": 1,
+    "after_offsets": [
+      318
+    ],
+    "reason": "Remove the blanket preparation guard, including both mistaken ledger-DATA requirements. Replace it with the narrowly validated explicit final-release file below."
+  },
+  {
+    "before": "class Check:\n",
+    "after": "KNOWN_INPUT_PINS = {'prior_closure': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-root-closure/proof.json', 'bytes': 4959, 'sha256': 'a26675e3375b3bcb65e7cf871c904db0ed646deec8c2d4aed2749bf3cc940a9a'}, 'reproduction_acceptance': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-generated-reproduction-root-acceptance/proof.json', 'bytes': 1330, 'sha256': '52f04b931d7d4af0e54f7291f36786178adb82818c3b104839c8912269dd23a0'}, 'semantic_freeze': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/semantic-review/freeze.json', 'bytes': 172281, 'sha256': '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'}, 'semantic_review': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/semantic-review/review.json', 'bytes': 1661, 'sha256': '264227814d36404865bac2bc1f6eb1ec7ffa7898462d42cb7beb6363b8b92ed3'}, 'payload_manifest': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/staged-payload-manifest.json', 'bytes': 2358, 'sha256': '9b0abba14e86da80708be4f5f17d8f3e9df6ffe6468dbd17db3a65b211abde01'}, 'payload_source_proof': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/staged-payload-source-proof.json', 'bytes': 13689, 'sha256': '5600ef16c28bdbd772f11668830a375d70340746cf7077d14824b01f6f27625a'}, 'untracked_before': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/untracked-before-banking.stdout', 'bytes': 96645, 'sha256': 'd1f73465c01830a624d7f5341a175f9d06aafb061eecbf231b734adf631ecb77'}}\nEXPECTED_BINDING_KEYS = {'ordinary_bank_file_count','ordinary_external_count','final_bank_file_count','final_external_count','staged_count','warning_count','warning_file_count','diagnostic_exit','index_sha256','staged_path_stream_sha256','final_untracked_sha256'}\nEXPECTED_INPUT_ROLES = set(KNOWN_INPUT_PINS) | {'ordinary_manifest','final_manifest','ordinary_result','final_result','whitespace_proof','whitespace_log'}\n\n\ndef load_release_bindings(args):\n    if not args.execute_reviewed_verification:\n        raise RuntimeError('Explicit reviewed final-stage runtime release is required')\n    path = Path(args.bindings)\n    assert path.is_absolute() and path.is_file() and re.fullmatch('[0-9a-f]{64}', args.bindings_sha256)\n    raw = path.read_bytes()\n    assert sha(raw) == args.bindings_sha256\n    binding = json.loads(raw)\n    assert set(binding) == {'schema','baseline','page','sequences','verifier_sha256','expected','input_pins'}\n    assert binding['schema'] == 'through282-final-data-stage-bindings-v1'\n    assert binding['baseline'] == BASE and binding['page'] == PAGE and binding['sequences'] == SEQS\n    assert binding['verifier_sha256'] == sha(Path(__file__).read_bytes())\n    expected = binding['expected']\n    assert isinstance(expected, dict) and set(expected) == EXPECTED_BINDING_KEYS\n    assert all(value is not None for value in expected.values()), 'Unbound measured final bank/stage/whitespace facts'\n    for key, value in expected.items():\n        if key.endswith('_sha256'): assert isinstance(value, str) and re.fullmatch('[0-9a-f]{64}', value)\n        else: assert type(value) is int and value >= 0\n    assert expected['staged_count'] > 13 and expected['diagnostic_exit'] in (0, 2)\n    pins = binding['input_pins']\n    assert isinstance(pins, dict) and set(pins) == EXPECTED_INPUT_ROLES\n    batch = Path(args.batch).resolve(strict=True); integration = batch.parent / 'integration'\n    ordinary = integration / 'through282-banking-runs/ordinary'; final = integration / 'through282-banking-runs/final-whitespace'\n    assert Path(args.banking_ordinary_run).resolve(strict=True) == ordinary.resolve(strict=True)\n    assert Path(args.banking_final_run).resolve(strict=True) == final.resolve(strict=True)\n    paths = {role: Path(record['path']) for role, record in KNOWN_INPUT_PINS.items()}\n    paths.update(ordinary_manifest=batch/'landing/root-proof-copy-manifest-before-whitespace.json', final_manifest=batch/'landing/root-proof-copy-manifest.json', ordinary_result=ordinary/'result.json', final_result=final/'result.json', whitespace_proof=Path(args.whitespace_proof), whitespace_log=Path(args.whitespace_log))\n    for role, record in pins.items():\n        assert isinstance(record, dict) and set(record) == {'path','bytes','sha256'}\n        assert isinstance(record['path'], str) and Path(record['path']).is_absolute()\n        assert type(record['bytes']) is int and record['bytes'] >= 0\n        assert isinstance(record['sha256'], str) and re.fullmatch('[0-9a-f]{64}', record['sha256'])\n        source = Path(record['path']); assert source.resolve(strict=True) == paths[role].resolve(strict=True)\n        value = source.read_bytes(); assert len(value) == record['bytes'] and sha(value) == record['sha256']\n        if role in KNOWN_INPUT_PINS: assert record == KNOWN_INPUT_PINS[role]\n    for role, supplied in [('untracked_before',args.untracked_before),('payload_manifest',args.payload_manifest),('payload_source_proof',args.payload_source_proof)]:\n        assert Path(supplied).resolve(strict=True) == paths[role].resolve(strict=True)\n    assert path.read_bytes() == raw\n    args.bound_release = binding; args.bound_release_raw = raw\n    return binding\n\n\nclass Check:\n",
+    "occurrences": 1,
+    "after_offsets": [
+      4775
+    ],
+    "reason": "New explicit reviewed/hash-bound release input gate; no caller/file read can substitute a guessed population."
+  },
+  {
+    "before": "        self.args = args\n",
+    "after": "        self.args = args\n        self.release = args.bound_release\n        assert self.raw(Path(args.bindings)) == args.bound_release_raw\n        for record in self.release['input_pins'].values():\n            self.pincheck(self.raw(Path(record['path'])), record)\n",
+    "occurrences": 1,
+    "after_offsets": [
+      11232
+    ],
+    "reason": "Retain all final binding inputs in existing full-byte reread gate."
+  },
+  {
+    "before": "        index_before = self.git('ls-files', '--stage', '-z')[0]\n",
+    "after": "        index_before = self.git('ls-files', '--stage', '-z')[0]\n        assert sha(index_before) == self.release['expected']['index_sha256']\n",
+    "occurrences": 1,
+    "after_offsets": [
+      21190
+    ],
+    "reason": "Bind the actual complete index snapshot, retaining all final index equality checks."
+  },
+  {
+    "before": "        staged = self.git('diff', '--cached', '--name-only', '-z')[0].decode().split('\\0')[:-1]\n",
+    "after": "        staged_raw = self.git('diff', '--cached', '--name-only', '-z')[0]\n        staged = staged_raw.decode().split('\\0')[:-1]\n        assert sha(staged_raw) == self.release['expected']['staged_path_stream_sha256']\n        assert len(staged) == self.release['expected']['staged_count']\n",
+    "occurrences": 1,
+    "after_offsets": [
+      21419
+    ],
+    "reason": "Bind the exact observed staged stream and measured count without changing required-set membership."
+  },
+  {
+    "before": "        current_untracked = self.git('ls-files', '--others', '--exclude-standard', '-z')[0]\n",
+    "after": "        current_untracked = self.git('ls-files', '--others', '--exclude-standard', '-z')[0]\n        assert sha(current_untracked) == self.release['expected']['final_untracked_sha256']\n",
+    "occurrences": 1,
+    "after_offsets": [
+      21835
+    ],
+    "reason": "Bind actual final raw untracked state; preserve original before/after transition."
+  },
+  {
+    "before": "        closed = self.obj(self.b.parent / PENDING_BINDINGS['prior_closure_proof_relative'])\n        assert closed['status'] == PENDING_BINDINGS['prior_closure_expected_status'] and closed['final_head'] == BASE\n",
+    "after": "        closed = self.obj(Path(KNOWN_INPUT_PINS['prior_closure']['path']))\n        assert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE\n        assert closed['verified_segments'] == 279 and closed['next_batch'] == SEQS\n        reproduction = self.obj(Path(KNOWN_INPUT_PINS['reproduction_acceptance']['path']))\n        assert reproduction['status'] == 'PASS' and reproduction['head'] == BASE and reproduction['retention_checks'] == 223847\n",
+    "occurrences": 1,
+    "after_offsets": [
+      22162
+    ],
+    "reason": "Actual prior closure schema and actual accepted current reproduction are pinned; no invented nested path/status."
+  },
+  {
+    "before": "        assert root_manifest['semantic_review_unchanged'] is True and root_manifest['phase'] == 'final-whitespace'\n",
+    "after": "        assert root_manifest['semantic_review_unchanged'] is True and root_manifest['phase'] == 'final-whitespace'\n        assert len(root_manifest['files']) == self.release['expected']['final_bank_file_count']\n        assert len(root_manifest['external_actual_bytes_retained']) == self.release['expected']['final_external_count']\n",
+    "occurrences": 1,
+    "after_offsets": [
+      39321
+    ],
+    "reason": "Bind measured final bank populations, preserving full source/byte checks."
+  },
+  {
+    "before": "        assert previous['phase'] == 'ordinary' and previous['semantic_review_unchanged'] is True\n",
+    "after": "        assert previous['phase'] == 'ordinary' and previous['semantic_review_unchanged'] is True\n        assert len(previous['files']) == self.release['expected']['ordinary_bank_file_count']\n        assert len(previous['external_actual_bytes_retained']) == self.release['expected']['ordinary_external_count']\n",
+    "occurrences": 1,
+    "after_offsets": [
+      40508
+    ],
+    "reason": "Bind measured ordinary bank populations; no previous-batch count reused."
+  },
+  {
+    "before": "        assert whitespace['all_warnings_accounted_for'] is True\n",
+    "after": "        assert whitespace['all_warnings_accounted_for'] is True\n        assert whitespace['warning_count'] == self.release['expected']['warning_count']\n        assert len(whitespace['files']) == self.release['expected']['warning_file_count']\n        assert whitespace['git_diff_check_exit'] == self.release['expected']['diagnostic_exit']\n",
+    "occurrences": 1,
+    "after_offsets": [
+      41923
+    ],
+    "reason": "Exact actual final whitespace quantities; existing reproduced diagnostic remains mandatory."
+  },
+  {
+    "before": "                    staged_count=len(staged_files), files=staged_files, source_hashes_unchanged=True,\n",
+    "after": "                    staged_count=len(staged_files), files=staged_files, source_hashes_unchanged=True,\n                    reviewed_binding_sha256=sha(self.args.bound_release_raw), reviewed_binding_expected=self.release['expected'],\n",
+    "occurrences": 1,
+    "after_offsets": [
+      45721
+    ],
+    "reason": "Report the precise released input identity."
+  },
+  {
+    "before": "    args = parser.parse_args()\n",
+    "after": "    parser.add_argument('--bindings', required=True)\n    parser.add_argument('--bindings-sha256', required=True)\n    parser.add_argument('--execute-reviewed-verification', action='store_true')\n    args = parser.parse_args()\n",
+    "occurrences": 1,
+    "after_offsets": [
+      46974
+    ],
+    "reason": "Explicit release inputs added to CLI."
+  },
+  {
+    "before": "    check = Check(args)\n",
+    "after": "    load_release_bindings(args)\n    check = Check(args)\n",
+    "occurrences": 1,
+    "after_offsets": [
+      47310
+    ],
+    "reason": "Reject incomplete/unreviewed inputs before output creation or Git calls."
+  }
+]

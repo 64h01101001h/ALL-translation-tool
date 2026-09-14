@@ -1,0 +1,50 @@
+from pathlib import Path
+import ast,difflib,hashlib,json
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');A=R/'campaign-artifacts';O=A/'integration/through285-reconciliation-verifier-query-shape-adapter';B=A/'C05-283-285';assert __debug__
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(p,b):
+    p.parent.mkdir(parents=True,exist_ok=True)
+    with p.open('xb') as f:f.write(b)
+def save(p,x):write(p,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+before=(O/'config_contract.py').read_text();assert pin(before.encode())=={'bytes':11457,'sha256':'1c906b06043ec9543afd9976ab297ab013f83764ee56588317a0ea7b0992072f'}
+write(O/'history/query-only-config_contract.py.txt',before.encode())
+mapping=[];proofshapes=[]
+paths=[(B/'reconciled'/str(s)/'proof.json',f'current-proof-{s}.json') for s in [283,284,285]]+[(A/'C05-280-282/reconciled/280/proof.json','prior-nested-proof-280.json'),(B/'reconciled/283/runtime-schema-handoff.json','current-runtime-schema-handoff.json')]
+for p,name in paths:
+    b=p.read_bytes();write(O/'inputs/proof-shapes'/name,b);assert p.read_bytes()==b
+    ref={'original':str(p),'resolved':str(p.resolve()),'copy':'inputs/proof-shapes/'+name,**pin(b)};mapping.append(ref)
+    if name!='current-runtime-schema-handoff.json':
+        v=json.loads(b);nested='counts' in v;src=v['counts'] if nested else v;assert type(v['seq'])is int and v['status']=='PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION'
+        values={k:src[k] for k in ['spans','nulls','d5_nonnull']};assert all(type(n)is int for n in values.values());proofshapes.append({'descriptor':ref,'seq':v['seq'],'status':v['status'],'top_keys':list(v),'nested':nested,'count_source_keys':list(src),'values':values})
+helper="""def proof_counts(report,seq):
+ assert isinstance(report,dict) and type(seq)is int and seq>0
+ assert type(report['seq'])is int and report['seq']==seq
+ keys=('spans','nulls','d5_nonnull')
+ if 'counts' in report:
+  assert isinstance(report['counts'],dict) and not any(k in report for k in keys)
+  source=report['counts']
+ else:
+  assert report['status']=='PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION'
+  source=report
+ counts={k:source[k] for k in keys}
+ assert all(type(n)is int for n in counts.values())
+ assert counts['spans']>0 and 0<=counts['nulls']<=counts['spans']
+ assert 0<=counts['d5_nonnull']<=counts['spans']-counts['nulls']
+ return counts
+
+"""
+changes=[{'old':'def original_freeze(row):\n','new':helper+'def original_freeze(row):\n','reason':'Explicit pure reader for prior nested counts and genuine direct-count proof with exact status; integer matching seq/counts and bounds, no fabricated wrapper and no ambiguous mixed source.'},{'old':"  report=json.loads(pinned(row['files']['proof']));assert row['counts']=={k:report['counts'][k]for k in totals}\n",'new':"  report=json.loads(pinned(row['files']['proof']));assert row['counts']==proof_counts(report,row['seq'])\n",'reason':'Read the genuine original proof shape while retaining the exact config-count comparison and all subsequent spec gates.'}]
+after=before
+for c in changes:assert after.count(c['old'])==1;after=after.replace(c['old'],c['new'])
+inverse=after
+for c in reversed(changes):assert inverse.count(c['new'])==1;inverse=inverse.replace(c['new'],c['old'])
+assert inverse==before and ast.dump(ast.parse(inverse))==ast.dump(ast.parse(before));compile(after,'config_contract.py','exec')
+def fn(src,name):return next(ast.get_source_segment(src,n) for n in ast.parse(src).body if isinstance(n,ast.FunctionDef) and n.name==name)
+assert fn(after,'bind_query')==fn(before,'bind_query');assert (O/'verify_reconciliation.py').read_bytes()==(O/'inputs/prior-verify_reconciliation.py').read_bytes()
+with (O/'config_contract.py').open('wb') as f:f.write(after.encode())
+save(O/'proof-shape-replacement-map.json',changes);save(O/'proof-shape-original-to-copy-manifest.json',mapping);save(O/'actual-proof-shapes.json',proofshapes)
+base=(O/'inputs/prior-config_contract.py').read_text()
+for name,a,b in [('proof-shape',before,after),('config_contract-complete',base,after)]:
+    write(O/(name+'.forward.diff'),''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='prior/'+name,tofile='current/'+name)).encode());write(O/(name+'.inverse.diff'),''.join(difflib.unified_diff(b.splitlines(True),a.splitlines(True),fromfile='current/'+name,tofile='prior/'+name)).encode())
+save(O/'proof-shape-source-proof.json',{'status':'SOURCE_EXTENSION_ONLY','request':'Root identified actual direct counts after query-only controls passed; preserve that earlier source/controls and add only this reader.','query_only_source':pin(before.encode()),'current_contract':pin(after.encode()),'bind_query_byte_identical_to_685_control_source':True,'runtime_byte_identical':True,'full_inverse_and_AST_exact':True,'syntax_only_no_evaluation':True,'authorized_current_reads':'Only runtime-schema-handoff.json and the three proof.json metadata files; no current final spec/body/decisions/correspondences or semantic review read.','semantic_acceptance':False,'candidate_executed':False})
+print(json.dumps({'status':'DIRECT_PROOF_SHAPE_SOURCE_ADDED','current_contract':pin(after.encode()),'query_binding_function_unchanged':True,'runtime_unchanged':True,'actual_proof_counts':[{'seq':r['seq'],**r['values']} for r in proofshapes]}))

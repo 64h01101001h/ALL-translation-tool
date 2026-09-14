@@ -1,0 +1,17 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,sys
+P=Path(__file__).resolve().parent
+label=sys.argv[1];source=P/sys.argv[2];out=P/label
+assert out.parent==P and source.parent==P and __debug__
+out.mkdir(exist_ok=False)
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+argv=['python3','-B',str(source)]
+env=dict(PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0')
+cmd=dict(argv=argv,cwd=str(P.parents[2]),environment_overrides=env,source=pin(source.read_bytes()),started_at=datetime.datetime.now(datetime.timezone.utc).isoformat())
+(out/'command.json').write_text(json.dumps(cmd,indent=2)+'\n');(out/'stdin.bin').write_bytes(b'')
+r=subprocess.run(argv,cwd=P.parents[2],env=dict(os.environ,**env),input=b'',capture_output=True)
+for n,b in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',f'{r.returncode}\n'.encode())]:(out/n).write_bytes(b)
+(out/'execution.json').write_text(json.dumps(dict(**cmd,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=r.returncode,stdout=pin(r.stdout),stderr=pin(r.stderr)),indent=2)+'\n')
+print(json.dumps(dict(caller=str(out),exit=r.returncode,stdout=pin(r.stdout),stderr=pin(r.stderr))))
+if r.returncode:print(r.stderr.decode(),end='')
+sys.exit(r.returncode)

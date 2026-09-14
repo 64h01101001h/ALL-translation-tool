@@ -1,0 +1,21 @@
+{
+  "actual_failed_caller": "source-preparation-caller",
+  "reason": "Inverse replacement used frozen(row), which also occurs in the new function definition. The inverse-count guard correctly failed before any candidate source was written. The v2 map binds both exact complete list-comprehension call sites. Existing copied inputs/censuses are reused only after exact byte equality; no original input changed.",
+  "prior_source_sha256": "7553f57ead0166b2e3981b8fbdb669179a049fcbdaf6880c80fed1c287a21210",
+  "current_source_sha256": "a62fe3afb3aed1cfa9b926b6446fa329a60cc1946630e8b889f2cf311c0416f8",
+  "exact_replacement_map": [
+    [
+      "def write(p,b):\n    with p.open('xb') as f:f.write(b)",
+      "def write(p,b):\n    if p.exists():assert p.read_bytes()==b;return\n    with p.open('xb') as f:f.write(b)"
+    ],
+    [
+      "inputs.mkdir(exist_ok=False)",
+      "inputs.mkdir(exist_ok=True)"
+    ],
+    [
+      "{'old':\"frozen(Path(row['directory']))\",'new':'frozen(row)'",
+      "{'old':\"[frozen(Path(row['directory'])) for row in freeze_rows]\",'new':'[frozen(row) for row in freeze_rows]'"
+    ]
+  ],
+  "candidate_execution_or_SQL_or_generator_calls": false
+}

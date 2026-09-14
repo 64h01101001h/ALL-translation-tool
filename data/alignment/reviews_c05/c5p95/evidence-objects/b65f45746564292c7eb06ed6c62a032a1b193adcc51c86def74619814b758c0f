@@ -1,0 +1,84 @@
+{
+  "status": "PASS_RECONCILIATION_CANONICAL_AND_RETENTION",
+  "finished_at": "2026-09-14T05:08:35.589442+00:00",
+  "baseline": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+  "counts": [
+    {
+      "seq": 283,
+      "spans": 16,
+      "nulls": 0,
+      "d5_nonnull": 14,
+      "original_dispositions": 31,
+      "dispositions": {
+        "retained": 31
+      },
+      "head_allowances": 0,
+      "spec": {
+        "bytes": 2736,
+        "sha256": "d63d5e9e946c22a8c570ad1681ef32c6ed51b6984548b555a528b62e07372426"
+      },
+      "body": {
+        "bytes": 2908,
+        "sha256": "857e22b0149a6bd19f92c9bfb43144526dec96dee68e4e8ae654c8be5af9863f"
+      }
+    },
+    {
+      "seq": 284,
+      "spans": 29,
+      "nulls": 0,
+      "d5_nonnull": 24,
+      "original_dispositions": 56,
+      "dispositions": {
+        "retained": 48,
+        "recast": 8
+      },
+      "head_allowances": 1,
+      "spec": {
+        "bytes": 4408,
+        "sha256": "ef7352cb1bcb8ac8bc810a1110b82a55856b0665e914e46f66612b158e7b763a"
+      },
+      "body": {
+        "bytes": 4445,
+        "sha256": "bf45b3d9f924e3284a9b2c6fa646729e8fc3d660f4ea3c04cb59a53f964fa8ba"
+      }
+    },
+    {
+      "seq": 285,
+      "spans": 31,
+      "nulls": 0,
+      "d5_nonnull": 23,
+      "original_dispositions": 58,
+      "dispositions": {
+        "retained": 50,
+        "recast": 8
+      },
+      "head_allowances": 1,
+      "spec": {
+        "bytes": 4681,
+        "sha256": "e6268382b4e521ad0b4df2502c075e86e9065c20438433d5323789ec875956d2"
+      },
+      "body": {
+        "bytes": 4874,
+        "sha256": "f9a2adf2cc80461bc8c21b6b29ef80a0c090e30d5062663273b33e9db2923c22"
+      }
+    }
+  ],
+  "original_dispositions": 145,
+  "dispositions": {
+    "retained": 129,
+    "recast": 16
+  },
+  "originals_canonical_exit0": 6,
+  "final_canonical_exit0": 3,
+  "queries": 210,
+  "SELECTs": 209,
+  "query_only_controls": 1,
+  "full_copy_records": 623,
+  "distinct_copy_payloads": 389,
+  "aliases": 625,
+  "physical_extents": 12,
+  "governing_Git_objects": 10,
+  "source_baseline_and_status_unchanged": true,
+  "helper_failure_attempts_preserved": 3,
+  "current_semantic_approval": false
+}

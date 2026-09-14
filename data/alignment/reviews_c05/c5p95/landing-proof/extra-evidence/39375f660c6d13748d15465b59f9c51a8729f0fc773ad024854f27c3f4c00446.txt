@@ -1,0 +1,200 @@
+from pathlib import Path
+import ast, collections, difflib, hashlib, json, os
+assert __debug__
+ROOT=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+A=ROOT/'campaign-artifacts';I=A/'integration';B=A/'C05-283-285';OLD=A/'C05-280-282';O=I/'through285-payload-freezer-preparation';V=B/'semantic-review';M=I/'through285-root-reconciliation-verification-attempt01'
+assert O==Path(__file__).resolve().parent and not (O/'proof.json').exists()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def raw(p):
+    p=Path(p);s=p.stat();b=p.read_bytes();t=p.stat();assert (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns);return b
+def j(p):return json.loads(raw(p))
+def put(rel,b):
+    p=O/rel;p.parent.mkdir(parents=True,exist_ok=True)
+    with p.open('xb') as f:f.write(b)
+def save(rel,x):put(rel,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+copies=[]
+def cp(p,rel,role):
+    b=raw(p);put(rel,b);assert raw(p)==(O/rel).read_bytes();copies.append(dict(original=str(p),copy=rel,role=role,**pin(b)));return b
+source=cp(OLD/'freeze-final-payload-before-staging.py','prior/freeze-final-payload-before-staging.py.txt','complete actual accepted prior payload freezer').decode()
+cp(OLD/'payload-freezer-preparation/report.md','inputs/prior-preparation-report.md','prior complete gate report')
+cp(OLD/'payload-freezer-preparation/freeze.json','inputs/prior-preparation-freeze.json','prior full preparation reference')
+cp(OLD/'landing/staged-payload-source-proof.json','inputs/prior-actual-source-proof.json','historical genuine result schema, not current measurements')
+cp(B/'baseline.json','inputs/current-baseline.json','actual incoming baseline')
+cp(I/'through285-registration-helper-preparation/register-reviewed-page-and-index.py','inputs/source-approved-registration.py.txt','complete source-approved registration base; current nested-schema adaptation separately pending')
+cp(I/'through285-registration-helper-preparation/freeze.json','inputs/registration-preparation-freeze.json','source registration package identity')
+cp(I/'through285-registration-helper-root-source-review/proof.json','inputs/registration-source-root-review.json','actual source approval, not executed registration')
+rootpath=I/'through285-root-independent-review-verification/proof.json'
+root=j(rootpath);cp(rootpath,'inputs/root-independent-review-verification.json','actual root acceptance of separate semantic and mechanical results')
+cp(M/'execution-proof.json','inputs/mechanical-execution-proof.json','actual independent mechanical result')
+for n in ['review.json','review.md','freeze.json','audit-proof.json','completion-proof.json','resolved-spans.json','head-licensor-review.json','actual-head-hits.json','bank-ready-errata.json']:
+    cp(V/n,'inputs/semantic/'+n,'actual frozen semantic schema/evidence; no new semantic judgment')
+for seq in [283,284,285]:
+    for n in ['spec.json','body.html']:cp(V/'reviewed-final'/str(seq)/n,f'inputs/semantic/reviewed-final/{seq}/{n}','actual nested per-segment approved descriptor target; structural use only')
+    cp(M/f'{seq}.head-allowance-check.json',f'inputs/mechanical/{seq}.head-allowance-check.json','actual measured predicate hit and full allowance prose')
+review=j(V/'review.json');freeze=j(V/'freeze.json');audit=j(V/'audit-proof.json');completion=j(V/'completion-proof.json');mechanical=j(M/'execution-proof.json')
+assert root['status']=='PASS_ROOT_REVIEW_OF_INDEPENDENT_SEMANTIC_APPROVAL_AND_MECHANICAL_RESULT'
+assert root['baseline']==review['baseline']==j(B/'baseline.json')['commit']=='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert root['review']==pin(raw(V/'review.json')) and root['semantic_freeze']==pin(raw(V/'freeze.json'))
+assert root['root_mechanical_proof']==pin(raw(M/'execution-proof.json')) and mechanical['status']=='PASS mechanical source and identity verification'
+assert root['semantic_frozen_members']==freeze['file_count']==len(freeze['files'])==2386
+assert freeze['total_bytes']==root['logical_member_bytes']==602052638
+assert {str(p.relative_to(V)) for p in V.rglob('*') if p.is_file()}==set(freeze['files'])|{'freeze.json'}
+for name,x in freeze['files'].items():
+    p=V/name;assert not Path(name).is_absolute() and '..' not in Path(name).parts and p.resolve().is_relative_to(V.resolve());assert pin(raw(p))==x,name
+assert sum(x['bytes'] for x in freeze['files'].values())==freeze['total_bytes']
+assert review['verdict']=='APPROVE' and review['open_findings']==[] and 'spec_verdict' not in review and 'quality_verdict' not in review
+assert audit['status']=='ACTUAL_CANONICAL_AND_SOURCE_FIDELITY_PASS_ONLY' and completion['status']=='COMPLETE_INDEPENDENT_SEMANTIC_APPROVAL'
+assert completion['review']==pin(raw(V/'review.json')) and completion['resolved_spans']==pin(raw(V/'resolved-spans.json'))
+assert review['sequences']==[r['seq'] for r in review['segments']]==[283,284,285]
+counts=[]
+for row in review['segments']:
+    seq=row['seq'];part=j(V/'reviewed-final'/str(seq)/'spec.json');spans=part['segments'][0]['spans']
+    for name in ['spec','body']:
+        p=V/'reviewed-final'/str(seq)/('spec.json' if name=='spec' else 'body.html')
+        assert row[name]==dict(path=str(p),**pin(raw(p)))
+    assert part['course']=='C05' and [x['seq'] for x in part['segments']]==[seq]
+    assert row['spans']==len(spans) and row['nulls']==sum(s['eng'] is None for s in spans) and row['d5_nonnull']==sum(s['d']==5 and s['eng'] is not None for s in spans)
+    counts.append({k:row[k] for k in ['seq','spans','nulls','d5_nonnull']})
+assert review['totals']['spans']==sum(x['spans'] for x in counts)==root['final_spans']==76
+assert review['totals']['nulls']==root['nulls']==0 and review['totals']['d5_nonnull']==root['nonnull_d5']==61
+needed={'pages_c05':{}};checks={}
+for seq in [283,284,285]:
+    path=M/f'{seq}.head-allowance-check.json';v=j(path);assert v['seq']==seq and v['page']=='c5p95'
+    assert set(v['allowances'])=={x['allowance_key'] for x in v['actual_gated_hits']}
+    assert not set(needed['pages_c05'])&set(v['allowances']);needed['pages_c05'].update(v['allowances']);checks[seq]=pin(raw(path))
+licenses=j(V/'head-licensor-review.json');assert licenses==review['head_licensors'] and all(x['verdict']=='LICENSED' and x['licensor']=='sogs' for x in licenses)
+assert sorted(needed['pages_c05'])==sorted(x['key'] for x in licenses)==sorted(root['head_licenses'])==['c5p95/s284w6','c5p95/s285w5']
+assert j(V/'bank-ready-errata.json')==[] and root['bank_ready_errata']==0
+save('actual-schema-and-allowance-bindings.json',dict(root=pin(raw(rootpath)),semantic_review=pin(raw(V/'review.json')),semantic_freeze=pin(raw(V/'freeze.json')),all_semantic_files_verified=2386,semantic_logical_bytes=602052638,mechanical=pin(raw(M/'execution-proof.json')),segments=counts,actual_needed_allowances=needed,mechanical_allowance_pins=checks,flat_spec_quality_fields_absent=True,replacement_SPEC_evidence=dict(path=str(V/'audit-proof.json'),status=audit['status'],**pin(raw(V/'audit-proof.json'))),replacement_QUALITY_evidence=dict(path=str(V/'review.json'),verdict=review['verdict'],completion_status=completion['status']),no_new_semantic_approval=True))
+
+changes=[];current=source
+def change(before,after,reason):
+    global current
+    positions=[];offset=0
+    while (offset:=current.find(before,offset))>=0:positions.append(offset);offset+=len(before)
+    assert positions,before
+    record=dict(before=before,after=after,before_offsets=positions,after_offsets=[],reason=reason);shift=0
+    for offset in positions:record['after_offsets'].append(offset+shift);shift+=len(after)-len(before)
+    for offset in reversed(positions):current=current[:offset]+after+current[offset+len(before):]
+    changes.append(record)
+change("from pathlib import Path\n","raise RuntimeError('SOURCE ONLY: actual post-builder measurements and final source release are pending; do not invoke or materialize')\nPENDING_PAYLOAD_COUNT = None\nPENDING_OUTPUT_SHA256 = None\nPENDING_SOURCE_DATE = None\nPENDING_TEST_SECONDS = None\nfrom pathlib import Path\n",'unconditional pre-import hold and explicit actual measurement slots')
+change("W = B.parents[1]/'campaign-worktree'","assert B.name == 'C05-283-285'\nassert Path(__file__).resolve() == B/'freeze-final-payload-before-staging.py'\nI = B.parent/'integration'\nW = B.parents[1]/'campaign-worktree'",'future exact batch-root placement; preparation must not execute')
+change('10968d16e701b698a0e1fbd845b353089d15ac39','fb9182dc6fca2230be3bc5169ba1288a22430280','actual closed incoming HEAD')
+change('c5p94','c5p95','current target page')
+change('c5p93','c5p94','previous page navigation preimage')
+change('COVERAGE C05: 282/511','COVERAGE C05: 285/511','target coverage gate')
+change('[280,281,282]','[283,284,285]','actual approved sequence list')
+change("base['full_links']==45275","base['full_links']==45402",'actual incoming baseline links')
+change("assert len(duration)==1","assert len(duration)==1 and float(duration[0])==PENDING_TEST_SECONDS",'bind actual future recorded test duration only after production')
+start=current.index('# Counts come from the actual approved interface')
+end=current.index("assert retention['added_links']==approved_spans+3",start)
+oldblock=current[start:end]
+newblock="""# Bind the genuine frozen review schema; no invented flat verdict/count fields.
+review_dir=B/'semantic-review'
+root_semantic_path=I/'through285-root-independent-review-verification/proof.json'
+mechanical_dir=I/'through285-root-reconciliation-verification-attempt01'
+assert pin(raw(root_semantic_path))==ROOT_SEMANTIC_PIN
+root_semantic=j(root_semantic_path)
+assert root_semantic['status']=='PASS_ROOT_REVIEW_OF_INDEPENDENT_SEMANTIC_APPROVAL_AND_MECHANICAL_RESULT'
+assert root_semantic['baseline']==base['commit']
+assert root_semantic['review']==REVIEW_PIN==pin(raw(review_dir/'review.json'))
+assert root_semantic['semantic_freeze']==SEMANTIC_FREEZE_PIN==pin(raw(review_dir/'freeze.json'))
+assert root_semantic['root_mechanical_path']==str(mechanical_dir)
+assert root_semantic['root_mechanical_proof']==MECHANICAL_PIN==pin(raw(mechanical_dir/'execution-proof.json'))
+mechanical=j(mechanical_dir/'execution-proof.json')
+assert mechanical['status']=='PASS mechanical source and identity verification'
+assert mechanical['baseline']==base['commit'] and mechanical['source_database_unchanged'] is True
+assert mechanical['canonical_replays']==3 and mechanical['queries']==209
+def verify_complete_review():
+    frozen=j(review_dir/'freeze.json')
+    assert frozen['file_count']==len(frozen['files'])==root_semantic['semantic_frozen_members']==2386
+    assert frozen['total_bytes']==sum(x['bytes'] for x in frozen['files'].values())==root_semantic['logical_member_bytes']==602052638
+    assert {str(p.relative_to(review_dir)) for p in review_dir.rglob('*') if p.is_file()}==set(frozen['files'])|{'freeze.json'}
+    for n,x in frozen['files'].items():
+        p=review_dir/n
+        assert not Path(n).is_absolute() and '..' not in Path(n).parts and p.resolve().is_relative_to(review_dir.resolve())
+        value=raw(p);assert pin(value)==x
+        assert value==raw(W/'data/alignment/reviews_c05/c5p95'/n)
+    assert raw(review_dir/'freeze.json')==raw(W/'data/alignment/reviews_c05/c5p95/freeze.json')
+verify_complete_review()
+approved_review=j(review_dir/'review.json')
+assert approved_review['verdict']=='APPROVE' and approved_review['open_findings']==[]
+assert approved_review['baseline']==base['commit'] and approved_review['course']=='C05' and approved_review['page']=='c5p95'
+audit=j(review_dir/'audit-proof.json');completion=j(review_dir/'completion-proof.json')
+assert audit['status']=='ACTUAL_CANONICAL_AND_SOURCE_FIDELITY_PASS_ONLY' and audit['baseline_nine_unchanged'] is True
+assert completion['status']=='COMPLETE_INDEPENDENT_SEMANTIC_APPROVAL' and completion['baseline_nine_unchanged'] is True
+assert completion['review']==pin(raw(review_dir/'review.json'))
+assert completion['resolved_spans']=={k:approved_review['resolved_spans'][k] for k in ('bytes','sha256')}==pin(raw(review_dir/'resolved-spans.json'))
+assert approved_review['sequences']==[row['seq'] for row in approved_review['segments']]==[283,284,285]
+approved_spans=0
+for row in approved_review['segments']:
+    seq=row['seq'];part_path=review_dir/'reviewed-final'/str(seq)/'spec.json';body_path=part_path.with_name('body.html')
+    assert type(row['spans']) is int and row['spans']>0
+    assert type(row['nulls']) is int and type(row['d5_nonnull']) is int
+    part_raw=raw(part_path);body_raw=raw(body_path)
+    assert row['spec']==dict(path=str(part_path),**pin(part_raw))
+    assert row['body']==dict(path=str(body_path),**pin(body_raw))
+    assert row['generator_exit']==0 and row['stderr_bytes']==0 and row['native_stdout_matches_body'] is True and row['full_source_anchors_match'] is True
+    part=json.loads(part_raw)
+    assert part['course']=='C05' and [s['seq'] for s in part['segments']]==[seq]
+    spans=part['segments'][0]['spans']
+    assert len(spans)==row['spans'] and sum(x['eng'] is None for x in spans)==row['nulls']
+    assert sum(x['d']==5 and x['eng'] is not None for x in spans)==row['d5_nonnull']
+    approved_spans+=row['spans']
+assert approved_review['totals']['spans']==approved_spans==root_semantic['final_spans']==76
+assert approved_review['totals']['nulls']==root_semantic['nulls']==0
+assert approved_review['totals']['d5_nonnull']==root_semantic['nonnull_d5']==61
+"""
+constants='ROOT_SEMANTIC_PIN = '+repr(pin(raw(rootpath)))+'\nREVIEW_PIN = '+repr(pin(raw(V/'review.json')))+'\nSEMANTIC_FREEZE_PIN = '+repr(pin(raw(V/'freeze.json')))+'\nMECHANICAL_PIN = '+repr(pin(raw(M/'execution-proof.json')))+'\nMECHANICAL_ALLOWANCE_PINS = '+repr(checks)+'\n'
+change(oldblock,constants+newblock,'actual nested descriptors plus full frozen semantic/landed census; explicit genuine SPEC fidelity and QUALITY approval evidence replaces absent flat fields')
+change("assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS' and meta['open_findings']==[]","assert meta['verdict']=='APPROVE' and meta['open_findings']==[]\nassert audit['status']=='ACTUAL_CANONICAL_AND_SOURCE_FIDELITY_PASS_ONLY' and completion['status']=='COMPLETE_INDEPENDENT_SEMANTIC_APPROVAL'",'same genuine independent SPEC and QUALITY evidence preserved at second gate')
+oldneeded="""needed=j(B/'semantic-review/span-head-allow-needed.json')
+assert set(needed)=={'pages_c05'} and set(needed['pages_c05'])=={'c5p95/s280w29','c5p95/s280w43'}
+"""
+newneeded="""licenses=j(review_dir/'head-licensor-review.json')
+assert licenses==approved_review['head_licensors']
+assert all(x['verdict']=='LICENSED' and x['licensor']=='sogs' for x in licenses)
+needed={'pages_c05':{}}
+for seq in [283,284,285]:
+    path=mechanical_dir/f'{seq}.head-allowance-check.json'
+    assert pin(raw(path))==MECHANICAL_ALLOWANCE_PINS[seq]
+    checked=j(path);assert checked['seq']==seq and checked['page']=='c5p95'
+    assert set(checked['allowances'])=={x['allowance_key'] for x in checked['actual_gated_hits']}
+    assert not set(needed['pages_c05'])&set(checked['allowances'])
+    needed['pages_c05'].update(checked['allowances'])
+assert set(needed)=={'pages_c05'} and set(needed['pages_c05'])=={'c5p95/s284w6','c5p95/s285w5'}
+assert sorted(needed['pages_c05'])==sorted(x['key'] for x in licenses)==sorted(root_semantic['head_licenses'])
+"""
+change(oldneeded,newneeded,'full actual measured allowance values with exact independently licensed keys; no absent needed-file or empty-allowance fiction')
+change("assert len(paths)==len(set(paths))==13","assert len(paths)==len(set(paths))==PENDING_PAYLOAD_COUNT",'bind real final changed-payload population only after root production')
+change("assert set(build['output_sha256'])==set(base['sha256']) and len(build['output_sha256'])==9","assert set(build['output_sha256'])==set(base['sha256']) and len(build['output_sha256'])==9\nassert build['output_sha256']==PENDING_OUTPUT_SHA256\nassert j(W/'data/alignment/alignment_evidence_v1.json')['meta']['date']==PENDING_SOURCE_DATE",'hold all current post-builder pins and actual producer-local source date pending final reviewed literals')
+oldproof="""proof_inputs=[dict(path=str(L/n),**pin(raw(L/n))) for n in ['canonical-builds-once.json','course-registration-verification.json','retention-source-check.json','course-csv-retention.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit','span-head-allow-before.json','span-head-allow-mutation.json']]+[dict(path=str(B/n),**pin(raw(B/n))) for n in ['root-final-semantic-review-verification-v3/proof.json','semantic-review/review.json','semantic-review/freeze.json','semantic-review/span-head-allow-needed.json']])"""
+newproof="""proof_inputs=[dict(path=str(L/n),**pin(raw(L/n))) for n in ['canonical-builds-once.json','course-registration-verification.json','retention-source-check.json','course-csv-retention.json','ctest-17.stdout','ctest-17.stderr','ctest-17.exit','span-head-allow-before.json','span-head-allow-mutation.json']]+[dict(path=str(p),**pin(raw(p))) for p in [root_semantic_path,mechanical_dir/'execution-proof.json',review_dir/'review.json',review_dir/'freeze.json',review_dir/'audit-proof.json',review_dir/'completion-proof.json',review_dir/'resolved-spans.json',review_dir/'head-licensor-review.json',review_dir/'bank-ready-errata.json']+[mechanical_dir/f'{seq}.head-allowance-check.json' for seq in [283,284,285]]])"""
+change(oldproof,newproof,'record exact actual current approval/evidence source paths and full pins')
+change("PROOF.write_text(json.dumps(proof,indent=2)+'\\n')","verify_complete_review()\nassert pin(raw(root_semantic_path))==ROOT_SEMANTIC_PIN and pin(raw(mechanical_dir/'execution-proof.json'))==MECHANICAL_PIN\nPROOF.write_text(json.dumps(proof,indent=2)+'\\n')",'recheck complete frozen semantic/landed identities before success proof')
+ast.parse(source);ast.parse(current);reverse=current
+for x in reversed(changes):
+    for off in reversed(x['after_offsets']):assert reverse[off:off+len(x['after'])]==x['after'];reverse=reverse[:off]+x['before']+reverse[off+len(x['after']):]
+assert reverse==source and ast.dump(ast.parse(reverse),include_attributes=False)==ast.dump(ast.parse(source),include_attributes=False)
+put('freeze-final-payload-before-staging.py',current.encode())
+for name,a,b in [('forward',source,current),('inverse',current,source)]:put(name+'.diff.txt',''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='prior' if name=='forward' else 'candidate',tofile='candidate' if name=='forward' else 'prior')).encode())
+save('replacement-map.json',changes)
+save('syntax-and-conservation.json',dict(candidate=pin(current.encode()),prior=pin(source.encode()),source_parsed_only=True,whole_forward_inverse_exact=True,whole_prior_AST_recovered=True,old_assertions=sum(isinstance(n,ast.Assert) for n in ast.walk(ast.parse(source))),new_assertions=sum(isinstance(n,ast.Assert) for n in ast.walk(ast.parse(current))),all_old_changes_explicit=True,candidate_imports=0,candidate_invocations=0))
+pending=dict(payload_count=None,output_sha256=None,source_date=None,actual_test_seconds=None,actual_output_counts=None,actual_retention_proof=None,actual_course_csv_proof=None,actual_registration_proof=None,actual_allowance_mutation_proof=None,actual_landed_complete_copy_identity=None,actual_seed_Git_verification=None,actual_final_source_release=None)
+save('pending-postbuilder-bindings.json',pending)
+save('command-contract.json',dict(status='SOURCE_ONLY_BLOCKED',future_candidate_location=str(B/'freeze-final-payload-before-staging.py'),future_cwd=str(ROOT/'campaign-worktree'),future_argv=['<actual approved Python>','-B',str(B/'freeze-final-payload-before-staging.py')],environment=dict(PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0',GIT_OPTIONAL_LOCKS='0'),ordering=['Root accepts actual independent current semantic and mechanical results (existing, pinned).','Root releases current-schema landing and registration; actual full copies/body/nav/registry/allowance proofs must exist.','Root completes actual canonical builders and required tests/retention/course proof, preserving full seed and native streams.','Prepare separately reviewed final exact literals for pending outputs/date/tests/population; preserve this guarded candidate and whole differences.','Only reviewed root release materializes the final candidate at the exact batch root and records one invocation in a fresh external caller.','Retain every actual failure and partial output; never automatic rerun or overwrite.'],expected_outputs=[str(B/'landing/payload-freeze'),str(B/'landing/staged-payload-manifest.json'),str(B/'landing/staged-payload-source-proof.json')],current_runtime_release=False))
+save('original-to-copy-manifest.json',copies)
+for x in copies:assert raw(x['original'])==(O/x['copy']).read_bytes() and pin(raw(x['original']))=={k:x[k] for k in ('bytes','sha256')}
+report="""Prepared the complete prior payload freezer for the genuine through285 semantic schema. The candidate is unconditionally blocked before imports and remains unmaterialized. This Tibetan-original/tooling author supplies no new semantic approval. Source parsing and exact forward/inverse conservation passed; no helper, freezer, builder, test, SQL, Git, landing, repository or WT write was executed.
+
+The actual independent review has nested spec/body descriptors, spans/nulls/d5_nonnull per segment and totals.spans. It has no flat spec_verdict/quality_verdict or span-head-allow-needed.json. The candidate preserves the corresponding evidence gates explicitly through the frozen canonical/source-fidelity audit, independent APPROVE/no-findings metadata and independent completion proof, all bound by the current root semantic-and-mechanical acceptance. It invents no approval wrapper. All 2,386 semantic members (602,052,638 logical bytes) were reopened against the complete freeze; the candidate requires that entire original tree and every landed copy, then rechecks them before its success proof.
+
+Current verified metadata is 76 spans, zero nulls and 61 non-null d5 spans. Both actual allowance keys, c5p95/s284w6 and c5p95/s285w5, are licensed in the independent review. The candidate merges the full actual per-segment mechanical allowance values, requires exact agreement with the independently licensed keys and root proof, and preserves the full prior sidecar object and actual before/after mutation proof. Existing errata files must still equal baseline; bank-ready errata is actually empty. No original semantic or mechanical file is rewritten.
+
+The original full producer stream/exit/seed checks, 17 named test checks, retention/source/course checks, full output/source hash loop, prior-page navigation replacement, registration pins, exact landed spec/body inclusion, Codex labels, unique payload paths, byte-identical copies and empty-index boundaries remain. HEAD is the actual closed fb9182dc6fca2230be3bc5169ba1288a22430280; prior links are 45,402 and target coverage is 285. Payload count, all actual output pins/counts, producer-local date, test duration and post-landing result proofs remain pending. Existing 76+3 retained-anchor logic is a future predicate; this package claims no generated total or completed production.
+
+The source-approved registration base is preserved in full and remains distinct from the other agent's current-schema landing/registration adaptation. Its result paths are retained as pending interfaces. The final candidate must be separately bound and reviewed after actual root production, then placed only at C05-283-285/freeze-final-payload-before-staging.py. Preserve all real future caller streams/failures and partial outputs; no automatic retry. Large frozen semantic evidence is retained once at its complete original tree and referenced by the full copied manifest, rather than duplicated here.
+"""
+put('report.md',report.encode())
+save('proof.json',dict(status='SOURCE_ONLY_CURRENT_SCHEMA_PAYLOAD_FREEZER_PENDING_PRODUCTION',candidate=pin(current.encode()),prior=pin(source.encode()),copy_records=len(copies),semantic_freeze=pin(raw(V/'freeze.json')),full_semantic_members_verified=2386,full_semantic_logical_bytes=602052638,actual_allowance_keys=sorted(needed['pages_c05']),head=j(B/'baseline.json')['commit'],old_predicates_conserved_by_explicit_mapping=True,whole_forward_inverse_exact=True,syntax_only=True,candidate_executed=False,semantic_approval=False,current_production_measurements=pending))
+print(json.dumps(dict(status='SOURCE_ONLY_CURRENT_SCHEMA_PAYLOAD_FREEZER_PENDING_PRODUCTION',candidate=pin(current.encode()),copy_records=len(copies),semantic_members=2386,actual_allowance_keys=sorted(needed['pages_c05']),candidate_executed=False),indent=2))

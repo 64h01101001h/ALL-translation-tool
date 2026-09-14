@@ -1,0 +1,98 @@
+{
+  "status": "SOURCE_PREPARATION_FROZEN_PENDING_INDEPENDENT_REVIEW_AND_ROOT_RUNTIME_RELEASE",
+  "producer": "Actual Codex agent /root/c05_280_282_english; current source author, prior English proposer and tooling author; not independent semantic reviewer",
+  "candidate": {
+    "bytes": 40043,
+    "sha256": "68b964b0ff20a8221981b3de84ffaada5db83a29bbd6501e3f0fecafcb712a0a"
+  },
+  "descriptor": {
+    "bytes": 98074,
+    "sha256": "41ba57b7d927cd2857a2b1b3c10a2be8197f5223b94fbaeb0cad82c137c4c7ce"
+  },
+  "physical_descriptors": {
+    "bytes": 6420,
+    "sha256": "905ff7420732b7d47c760fbc59f6df50db4440eba0c911fc41588188f1239a6d"
+  },
+  "raw_diagnostic": {
+    "bytes": 32794535,
+    "sha256": "94799cb5a45a2b827d990f0ca2cda2a0d0e48debe747b5a89dd46625ced0ad10"
+  },
+  "warning_count": 93740,
+  "warning_files": 112,
+  "additional_entries": 16,
+  "additional_entry_classes": {
+    "archived_closed282_continuation_line": 12,
+    "archived_current_canonical_csv_crlf": 1,
+    "archived_current_physical_context": 2,
+    "archived_prior_canonical_csv_crlf": 1
+  },
+  "additional_warning_classes": {
+    "archived_closed282_continuation_line": 12,
+    "archived_current_canonical_csv_crlf": 19,
+    "archived_current_physical_context": 392,
+    "archived_prior_canonical_csv_crlf": 38
+  },
+  "additional_evidence": 99,
+  "additional_unique_runtime_copies": 88,
+  "provenance_maps": 0,
+  "runtime_files": 94,
+  "physical_originals": 3,
+  "physical_extents": 12,
+  "semantic_rows": 1278,
+  "full_source_copy_records": 349,
+  "full_source_copy_map": "full-original-to-copy-manifest.json",
+  "source_copy_schema": "LIST: original/resolved_original/copy relative to this preparation root/bytes/sha256/symlink_components",
+  "unresolved_descriptors": [],
+  "source_analysis": "Only nine exact inert pure function definitions from the old source were extracted/evaluated for byte provenance. New candidate, Run/main/CLI and added current readers were not imported or executed.",
+  "source_preparation_failures": [
+    {
+      "caller": "caller-inputs01",
+      "execution": {
+        "bytes": 887,
+        "sha256": "8d32b9597e3c82f225457a9b3006c82f25bca53198b033276724586dad6d608d"
+      },
+      "stderr": {
+        "bytes": 292,
+        "sha256": "ecf3852f12abe5996cc71b58db4859818ffcc3b7c98a308d0eaa8b569e09b9f2"
+      },
+      "reason": "C16 has no direct reviewer original row; exact frozen English source-map bridge retained and checked.",
+      "scope": "source-provenance preparation failure, not target prepare/audit failure"
+    },
+    {
+      "caller": "caller-inputs02",
+      "execution": {
+        "bytes": 891,
+        "sha256": "901d94d0c36f98f24d1048b4f9041c56e54f4251ba6827a7014218e8af8b3c87"
+      },
+      "stderr": {
+        "bytes": 1438,
+        "sha256": "613146d6d40a66453b43f6e1d8fe1dc9f231440ed5dda22dd80267c023c09742"
+      },
+      "reason": "Recorded print appends LF; unchanged physical predicate correctly rejected raw stdout; exact command/context/native-output transport now bound.",
+      "scope": "source-provenance preparation failure, not target prepare/audit failure"
+    },
+    {
+      "caller": "caller-inputs03",
+      "execution": {
+        "bytes": 890,
+        "sha256": "ee240808f761bc5a17547a415b1d330a8ff932a7ff7438a9a2752508317d4d2d"
+      },
+      "stderr": {
+        "bytes": 310,
+        "sha256": "a0f6bb1ab8eb18ab73b19718dfe0fc5b077075d24b0f4ca7afcd502683b3c66a"
+      },
+      "reason": "All twelve current snapshots preserve the complete closure BEFORE image; the AFTER note was later rewritten at byte468603. Current source-specific case checks the exact BEFORE prefix and retains both historical images and the full actual closure event.",
+      "scope": "source-provenance preparation failure, not target prepare/audit failure"
+    }
+  ],
+  "target_imports": 0,
+  "target_prepare_audit_calls": 0,
+  "Git_SQL_build_test_bank_stage_commit_calls": 0,
+  "limitations": [
+    "This is source preparation and byte-provenance analysis; no actual current prepare/audit or whitespace acceptance is claimed.",
+    "Both current semantic original-copy manifests remain byte-identical. A lossless in-memory view retains each complete original row; C16 requires its exact frozen English original-copy map and complete physical/bridge/reviewer/object equality.",
+    "The complete closure BEFORE prefix is current. Closure AFTER is historical evidence and was later rewritten; no Git-blob or unchanged-live-ROOT claim is made.",
+    "No old warning identity, count, descriptor case or CMake/CTest exemption is active in current descriptors. The complete old additional predicate remains unchanged but the current wrapper delegates only its two current CSV branches.",
+    "Full native analysis, construction and history caller streams are retained. Freeze is a final direct filesystem-only tool invocation, whose native result is in conversation; no post-freeze caller file is fabricated."
+  ]
+}

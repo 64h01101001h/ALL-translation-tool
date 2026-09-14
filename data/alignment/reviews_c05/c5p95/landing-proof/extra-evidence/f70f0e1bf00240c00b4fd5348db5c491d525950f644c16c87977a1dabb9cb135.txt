@@ -1,0 +1,23 @@
+--- prepare-adapter.py.txt
++++ prepare-adapter-v2.py.txt
+@@ -4,9 +4,10 @@
+ assert __debug__
+ def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+ def write(p,b):
++    if p.exists():assert p.read_bytes()==b;return
+     with p.open('xb') as f:f.write(b)
+ def save(p,x):write(p,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+-inputs=O/'inputs';inputs.mkdir(exist_ok=False);maps=[]
++inputs=O/'inputs';inputs.mkdir(exist_ok=True);maps=[]
+ def copy(p,n):
+     b=p.read_bytes();write(inputs/n,b);assert p.read_bytes()==b
+     maps.append({'original':str(p),'resolved':str(p.resolve()),'copy':'inputs/'+n,**pin(b)});return b
+@@ -58,7 +59,7 @@
+  {'old':" def frozen(d):\n  f=read(d/'freeze.json')['files'];items=f.items() if isinstance(f,dict) else [(r['path'],r) for r in f];expected={}\n",'new':" def frozen(row):\n  d=Path(row['directory']);manifest=Path(row['freeze']['path'])\n  if 'angle' in row:f=original_freeze(row)\n  else:\n   assert manifest==d/'freeze.json'\n   f=json.loads(pinned(row['freeze']))['files'];assert isinstance(f,dict)\n  items=f.items();expected={}\n",'count':1,'reason':'Accept the complete explicit descriptor for both phases; genuine originals use the new reader, while reconciled freeze.json remains a files DICT.'},
+  {'old':"if p.is_file() and p!=d/'freeze.json'",'new':'if p.is_file() and p!=manifest','count':1,'reason':'Exclude exactly the pinned manifest from the otherwise unchanged complete census.'},
+  {'old':"return dict(path=str(d),freeze=pin(d/'freeze.json'),files=len(expected))",'new':'return dict(path=str(d),freeze=pin(manifest),files=len(expected))','count':1,'reason':'Return the genuine pinned manifest identity.'},
+- {'old':"frozen(Path(row['directory']))",'new':'frozen(row)','count':2,'reason':'Both initial and final conservation checks pass the unchanged full row, including its pinned freeze descriptor.'}]
++ {'old':"[frozen(Path(row['directory'])) for row in freeze_rows]",'new':'[frozen(row) for row in freeze_rows]','count':2,'reason':'Both initial and final conservation checks pass the unchanged full row, including its pinned freeze descriptor.'}]
+ proof=[]
+ for name,before,replacements in [('verify_reconciliation.py',old_runtime,runtime_map),('config_contract.py',old_contract,contract_map)]:
+     after=before

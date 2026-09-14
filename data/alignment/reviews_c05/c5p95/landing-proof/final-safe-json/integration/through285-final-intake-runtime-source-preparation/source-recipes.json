@@ -1,0 +1,130 @@
+[
+  {
+    "prior": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-preparation/candidates/capture-finished-scope.py",
+    "prior_copy": "prior-package/candidates/capture-finished-scope.py",
+    "prior_pin": {
+      "bytes": 11547,
+      "sha256": "684eb7aa9c055112ddbd5f198394a9f0de59da711b464b534530886fa45152b6"
+    },
+    "candidate": "candidates/capture-finished-scope.py",
+    "candidate_pin": {
+      "bytes": 12838,
+      "sha256": "14c1de8bfbab06bc18fa2f2db48d8f7614cbf409b92fe43b2bdc3db63825c5eb"
+    },
+    "changes": [
+      {
+        "start": 0,
+        "old": "raise RuntimeError('SOURCE ONLY: actual scope release, quiescent writers, exact caller/helper identities and whitespace pins remain pending')\n",
+        "new": "",
+        "reason": "Remove only the reviewed source-only top-level barrier; explicit execute/writers flags and every existing actual-input predicate remain."
+      },
+      {
+        "start": 0,
+        "old": "PENDING_ACTIVE_CALLER = None",
+        "new": "PENDING_ACTIVE_CALLER = '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-caller'",
+        "reason": "Bind the exact planned native caller; existence, directory, nonsymlink and exact path are still required by the candidate."
+      },
+      {
+        "start": 177,
+        "old": "PENDING_ADDITIONAL_HELPERS = None",
+        "new": "PENDING_ADDITIONAL_HELPERS = ['/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-release-source-preparation/release-whitespace285-actual-root.py', '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-acceptance-source-preparation/accept-whitespace285-actual-root.py']",
+        "reason": "Bind both full actual whitespace release and acceptance source paths; mandatory outside-prefix preparer remains in the unchanged expression."
+      },
+      {
+        "start": 615,
+        "old": "PENDING_WHITESPACE_PINS = None",
+        "new": "PENDING_WHITESPACE_PINS = {'audit_proof': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-audit/source-whitespace-proof.json', 'bytes': 1540290, 'sha256': '9fd340f52acbae0fc6f0af7f23641eb1d201175e6b0e262667a33dcd934b4ea2'}, 'root_acceptance': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-root-acceptance/proof.json', 'bytes': 1269, 'sha256': 'c41e54553ab7e7feaddabb5ac20cadbdcfac6dad102040e101cb39d2ebbf633e'}, 'runtime_freeze': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-runtime/freeze.json', 'bytes': 19701, 'sha256': 'eb95dcc7f07b6b2c336750d4781585580736ed024af8bedb74a4ec91bc5bef89'}}",
+        "reason": "Bind the actual three immutable audit/root-acceptance/runtime-freeze paths and full pins. The supplement retains this constant for interface consistency; its proof chain uses the initial scope."
+      }
+    ],
+    "whole_forward_inverse_exact": true,
+    "AST_conserved_except_explicit_barriers_and_three_literals": true
+  },
+  {
+    "prior": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-preparation/candidates/capture-final285-supplement-scope-root.py",
+    "prior_copy": "prior-package/candidates/capture-final285-supplement-scope-root.py",
+    "prior_pin": {
+      "bytes": 6658,
+      "sha256": "6af538aafdab5cbdaf8e568b6c25139953c89639a0fafcc33e8dade7d349d37c"
+    },
+    "candidate": "candidates/capture-final285-supplement-scope-root.py",
+    "candidate_pin": {
+      "bytes": 7953,
+      "sha256": "55c998300ce35f3654f2ab6448cce851e5b5b039769d1989a922bc9075799a43"
+    },
+    "changes": [
+      {
+        "start": 0,
+        "old": "raise RuntimeError('SOURCE ONLY: actual scope release, quiescent writers, exact caller/helper identities and whitespace pins remain pending')\n",
+        "new": "",
+        "reason": "Remove only the reviewed source-only top-level barrier; explicit execute/writers flags and every existing actual-input predicate remain."
+      },
+      {
+        "start": 0,
+        "old": "PENDING_ACTIVE_CALLER = None",
+        "new": "PENDING_ACTIVE_CALLER = '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-supplement-scope-caller'",
+        "reason": "Bind the exact planned native caller; existence, directory, nonsymlink and exact path are still required by the candidate."
+      },
+      {
+        "start": 181,
+        "old": "PENDING_ADDITIONAL_HELPERS = None",
+        "new": "PENDING_ADDITIONAL_HELPERS = ['/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-release-source-preparation/release-whitespace285-actual-root.py', '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-acceptance-source-preparation/accept-whitespace285-actual-root.py']",
+        "reason": "Bind both full actual whitespace release and acceptance source paths; mandatory outside-prefix preparer remains in the unchanged expression."
+      },
+      {
+        "start": 619,
+        "old": "PENDING_WHITESPACE_PINS = None",
+        "new": "PENDING_WHITESPACE_PINS = {'audit_proof': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-audit/source-whitespace-proof.json', 'bytes': 1540290, 'sha256': '9fd340f52acbae0fc6f0af7f23641eb1d201175e6b0e262667a33dcd934b4ea2'}, 'root_acceptance': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-root-acceptance/proof.json', 'bytes': 1269, 'sha256': 'c41e54553ab7e7feaddabb5ac20cadbdcfac6dad102040e101cb39d2ebbf633e'}, 'runtime_freeze': {'path': '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-runtime/freeze.json', 'bytes': 19701, 'sha256': 'eb95dcc7f07b6b2c336750d4781585580736ed024af8bedb74a4ec91bc5bef89'}}",
+        "reason": "Bind the actual three immutable audit/root-acceptance/runtime-freeze paths and full pins. The supplement retains this constant for interface consistency; its proof chain uses the initial scope."
+      }
+    ],
+    "whole_forward_inverse_exact": true,
+    "AST_conserved_except_explicit_barriers_and_three_literals": true
+  },
+  {
+    "prior": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-preparation/candidates/compose-final-inputs.py",
+    "prior_copy": "prior-package/candidates/compose-final-inputs.py",
+    "prior_pin": {
+      "bytes": 20558,
+      "sha256": "64eb4c419b1b1d056ea68034a867fb809dd63412abca9b3ac8def1dc3a3fcf9c"
+    },
+    "candidate": "candidates/compose-final-inputs.py",
+    "candidate_pin": {
+      "bytes": 20403,
+      "sha256": "38d155495c222d59ff6fd13f4a98ff42b8bd2c762b9ddd29498181d781896cb4"
+    },
+    "changes": [
+      {
+        "start": 3600,
+        "old": "    raise RuntimeError('SOURCE ONLY: actual reviewed scope and release bindings are pending; helper definitions remain inert for later reviewed assembly')\n",
+        "new": "",
+        "reason": "Remove only the reviewed main barrier; CLI hash gates, explicit execution flag and complete source/census/alias/bank/late-boundary predicates remain."
+      }
+    ],
+    "whole_forward_inverse_exact": true,
+    "AST_conserved_except_explicit_barriers_and_three_literals": true
+  },
+  {
+    "prior": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-intake-scope-preparation/candidates/assemble-final-supplement.py",
+    "prior_copy": "prior-package/candidates/assemble-final-supplement.py",
+    "prior_pin": {
+      "bytes": 10979,
+      "sha256": "d75d6697e4251cfdb2aaaa586078c468864785e68a98230ea15b05e166a7b181"
+    },
+    "candidate": "candidates/assemble-final-supplement.py",
+    "candidate_pin": {
+      "bytes": 10824,
+      "sha256": "2ff25fb6a5f4f7d5580dd58ce232b4c1d3aecfe497442071cceb9ef4dc3a09c5"
+    },
+    "changes": [
+      {
+        "start": 259,
+        "old": "    raise RuntimeError('SOURCE ONLY: actual reviewed scope and release bindings are pending; helper definitions remain inert for later reviewed assembly')\n",
+        "new": "",
+        "reason": "Remove only the reviewed main barrier; CLI hash gates, explicit execution flag and complete source/census/alias/bank/late-boundary predicates remain."
+      }
+    ],
+    "whole_forward_inverse_exact": true,
+    "AST_conserved_except_explicit_barriers_and_three_literals": true
+  }
+]

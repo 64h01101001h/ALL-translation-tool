@@ -1,0 +1,12 @@
+[
+  {
+    "before": "assert len(registered)==549 and [n for x in registered if x['course']=='C05' for n in x['sequences']]==list(range(1,286))",
+    "after": "assert len(registered)==549 and sorted(n for x in registered if x['course']=='C05' for n in x['sequences'])==list(range(1,286))",
+    "before_offsets": [
+      5154
+    ],
+    "after_offsets": [
+      5154
+    ]
+  }
+]

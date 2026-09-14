@@ -1,0 +1,76 @@
+"""Read-only descriptor analysis using retained pure predicates; never Run/main/Git."""
+from pathlib import Path
+import ast,collections,datetime,hashlib,json,re
+O=Path(__file__).resolve().parent;I=O.parent;A=I.parent;B=A/'C05-280-282';W=A.parent/'campaign-worktree';S=B/'semantic-review'
+bindings=[]
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(name,obj):
+ p=O/name;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(obj,f,indent=2,ensure_ascii=False);f.write('\n')
+def capture(path,name=None):
+ path=Path(path);target=path.resolve(strict=True);a=target.stat();raw=path.read_bytes();b=target.stat()
+ assert (a.st_dev,a.st_ino,a.st_size,a.st_mtime_ns,a.st_ctime_ns)==(b.st_dev,b.st_ino,b.st_size,b.st_mtime_ns,b.st_ctime_ns) and path.resolve(strict=True)==target
+ if name is None:name='actual-evidence/'+pin(raw)['sha256']+'.bin'
+ dest=O/name;dest.parent.mkdir(parents=True,exist_ok=True)
+ if dest.exists():assert dest.read_bytes()==raw
+ else:
+  with dest.open('xb') as f:f.write(raw)
+ assert dest.read_bytes()==path.read_bytes()==raw
+ bindings.append(dict(path=str(path),resolved_path=str(target),runtime_copy=name,**pin(raw)))
+ return raw
+for dirname,copydir in [(I/'through282-whitespace-runs/raw-diagnostic','actual-diagnostic'),(I/'through282-stage-runs/initial-preparation','actual-stage/initial-preparation'),(I/'through282-stage-runs/initial-preparation-caller','actual-stage/initial-preparation-caller'),(I/'through282-stage-runs/initial-stage','actual-stage/initial-stage')]:
+ for path in sorted(dirname.rglob('*')):
+  if path.is_file():capture(path,copydir+'/'+str(path.relative_to(dirname)))
+log=(O/'actual-diagnostic/stdout.bin').read_bytes();exe=json.loads((O/'actual-diagnostic/execution.json').read_bytes());command=json.loads((O/'actual-diagnostic/command.json').read_bytes())
+assert command['argv']==exe['argv']==['git','diff','--cached','--check'] and Path(command['cwd']).resolve()==W.resolve()
+assert exe['exit']==2 and (O/'actual-diagnostic/exit.txt').read_bytes()==b'2\n' and not (O/'actual-diagnostic/stderr.bin').read_bytes() and not (O/'actual-diagnostic/stdin.bin').read_bytes()
+assert len(log)==exe['stdout_bytes'] and pin(log)['sha256']==exe['stdout_sha256'] and exe['stderr_bytes']==0
+
+# Only these exact pure functions are evaluated, in an isolated analysis namespace.
+# The candidate module, Run and main are never imported or executed.
+source=(O/'guarded-base-preparation/whitespace282.py').read_text();tree=ast.parse(source)
+names=['digest','pin','check_pin','relative','parse_log','literal_warnings','diff_context_lines','ordinary_predicate','classify_physical']
+pieces=[ast.get_source_segment(source,next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name==name)) for name in names]
+pure='from pathlib import Path\nfrom collections import defaultdict\nimport hashlib,re\nWARNINGS = '+repr({'trailing whitespace.','space before tab in indent.','new blank line at EOF.'})+'\n\n'+'\n\n'.join(pieces)+'\n'
+(O/'pure-analysis-predicates.py.txt').write_text(pure)
+namespace={};exec(compile(pure,str(O/'pure-analysis-predicates.py.txt'),'exec'),namespace)
+issues=namespace['parse_log'](log)
+save('actual-warning-identities.json',issues)
+physical=json.loads((O/'physical-source-descriptors.json').read_bytes());physical=[(item,capture(item['path'])) for item in physical]
+freeze=json.loads((O/'current-inputs/semantic-review/freeze.json').read_bytes())
+root=json.loads((O/'ordinary-bank/root-proof-copy-manifest-before-whitespace.json').read_bytes());root_rows={r['copy']:r for r in root['files']};assert len(root_rows)==len(root['files'])
+build=json.loads((O/'current-inputs/canonical-builds-once.json').read_bytes());prefix='data/alignment/reviews_c05/c5p94/'
+csv_paths={'docs/geshe_michael_roach_dictionary'+x for x in ['.csv','_reverse.csv','_by_course.csv','_changes.csv']}
+records=[];pending=[]
+for path,grouped in issues.items():
+ raw=capture(W/path);namespace['literal_warnings'](raw,grouped)
+ row=dict(path=path,issues=grouped,**pin(raw),warning_count=sum(map(len,grouped.values())))
+ if path in csv_paths:
+  assert pin(raw)['sha256']==build['output_sha256'][path] and set(grouped)=={'trailing whitespace.'}
+  lines=raw.split(b'\n');assert all(lines[n-1].endswith(b'\r') for n in grouped['trailing whitespace.'])
+  row['base_kind']='canonical_csv_crlf'
+ else:
+  assert path.startswith(prefix);rel=path[len(prefix):]
+  if rel.startswith('landing-proof/'):
+   rec=root_rows[rel[len('landing-proof/'):]];assert pin(raw)=={k:rec[k] for k in ('bytes','sha256')} and capture(rec['original'])==raw
+   row['root_record']=rec
+   try:row['base_kind']=namespace['ordinary_predicate'](raw,grouped)
+   except AssertionError as exc:
+    row['base_failure']=repr(exc);row['base_kind']=None;pending.append(row)
+  else:
+   assert pin(raw)==freeze['files'][rel] and capture(S/rel)==raw
+   try:row['base_kind']=namespace['ordinary_predicate'](raw,grouped)
+   except AssertionError:
+    try:
+     result=namespace['classify_physical'](raw,grouped,physical);row['base_kind']=result['kind'];row['physical_result']=result
+    except AssertionError as exc:
+     row['base_failure']=repr(exc);row['base_kind']=None;pending.append(row)
+ records.append(row)
+save('actual-base-predicate-analysis.json',records)
+save('actual-additional-source-cases.json',pending)
+save('actual-evidence-bindings.json',bindings)
+counts=collections.Counter()
+for row in records:counts[row['base_kind'] or 'pending_source_extension']+=row['warning_count']
+summary=dict(status='ACTUAL_READ_ONLY_DESCRIPTOR_ANALYSIS_NOT_RUNTIME_APPROVAL',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),raw_log=pin(log),warning_count=sum(row['warning_count'] for row in records),warning_file_count=len(records),warnings_by_kind=dict(collections.Counter({kind:sum(len(row['issues'].get(kind,[])) for row in records) for kind in ['trailing whitespace.','space before tab in indent.','new blank line at EOF.']})),base_category_counts=dict(counts),pending_additional_files=len(pending),pure_functions_invoked=names,target_Run_main_or_Git_executions=0,WT_writes=0,limits='Read-only source descriptor investigation; Git index identity is supplied by actual root staging records and remains a required Run/audit gate, not newly read here.')
+save('actual-analysis-proof.json',summary)
+print(json.dumps(summary,indent=2));print(json.dumps([dict(path=r['path'],original=r.get('root_record',{}).get('original'),bytes=r['bytes'],sha256=r['sha256'],warnings=r['warning_count'],warning_types=list(r['issues'])) for r in pending],indent=2))

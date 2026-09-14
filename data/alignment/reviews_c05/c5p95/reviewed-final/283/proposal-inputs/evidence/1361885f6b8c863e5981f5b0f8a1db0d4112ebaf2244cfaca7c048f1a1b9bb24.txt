@@ -1,0 +1,11 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,sys
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');O=R/'campaign-artifacts/C05-283-285/tibetan/283';C=O/'evidence-caller';C.mkdir(exist_ok=False)
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,v):
+ with (C/n).open('xb') as f:f.write((json.dumps(v,indent=2)+'\n').encode())
+argv=[sys.executable,'-B',str(O/'gather-evidence.py.txt')];env=os.environ.copy();env.update(PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0');t=datetime.datetime.now(datetime.timezone.utc).isoformat();save('command.json',dict(argv=argv,cwd=str(R),started_utc=t,environment_overrides=dict(PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0')))
+r=subprocess.run(argv,cwd=R,env=env,input=b'',stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False)
+for n,b in [('stdin.bin',b''),('stdout.txt',r.stdout),('stderr.txt',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:
+ with (C/n).open('xb') as f:f.write(b)
+save('execution.json',dict(started_utc=t,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=r.returncode,stdout=pin(r.stdout),stderr=pin(r.stderr)));print(r.stdout.decode());print(r.stderr.decode());raise SystemExit(r.returncode)

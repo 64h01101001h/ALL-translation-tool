@@ -1,0 +1,17 @@
+[
+  {
+    "old": " elif kind in ('query_container_params','query_list_params'):\n",
+    "new": " elif kind=='query_container_parameters':\n  assert set(binding)=={'kind','index'} and isinstance(descriptor,dict)\n  assert set(descriptor) in ({'database','uri','query_only','queries'},\n   {'uri','query_only','queries','master_original','master_pin','full_master_records'})\n  assert descriptor['query_only'] is True and isinstance(descriptor['queries'],list)\n  i=binding['index'];assert type(i)is int and 0<=i<len(descriptor['queries'])\n  source=descriptor['queries'][i]\n  assert isinstance(source,dict) and set(source)=={'label','sql','parameters','row_count','rows'}\n  assert isinstance(source['label'],str)\n elif kind in ('query_container_params','query_list_params'):\n",
+    "reason": "One explicit indexed parameters-container binding for only the two fully observed Tibetan outer key sets and exact genuine record key set."
+  },
+  {
+    "old": "  if 'count'in original:source['count']=original['count']\n",
+    "new": "  for count_key in ('count','row_count'):\n   if count_key in original:source[count_key]=original[count_key]\n",
+    "reason": "Existing params bindings preserve either actual count key instead of dropping row_count during explicit parameter-name normalization."
+  },
+  {
+    "old": " assert ('count'in query)==('count'in source),'Count presence differs from the actual original descriptor'\n if 'count'in source:\n  assert type(source['count'])is int and type(query['count'])is int\n  assert query['count']==source['count']==len(query['rows'])\n",
+    "new": " for count_key in ('count','row_count'):\n  assert (count_key in query)==(count_key in source),'Count presence differs from the actual original descriptor: '+count_key\n  if count_key in source:\n   assert type(source[count_key])is int and type(query[count_key])is int\n   assert source[count_key]>=0 and query[count_key]>=0\n   assert query[count_key]==source[count_key]==len(query['rows'])\n",
+    "reason": "Validate presence, strict integer/nonnegative type and exact row length for both count spellings across every binding. Neither key is renamed, invented or discarded."
+  }
+]

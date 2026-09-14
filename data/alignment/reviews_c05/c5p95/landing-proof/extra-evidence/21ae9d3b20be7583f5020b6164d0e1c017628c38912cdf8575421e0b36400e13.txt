@@ -1,0 +1,63 @@
+def review_segment_pin(row, name, review):
+    assert name in ('spec', 'body') and type(row['seq']) is int
+    flat = (name + '_bytes', name + '_sha256')
+    if name in row:
+        assert not any(k in row for k in flat), 'Ambiguous nested and flat pin fields'
+        r = row[name]
+        assert isinstance(r, dict) and set(r) == {'path', 'bytes', 'sha256'}
+        expected = review / 'reviewed-final' / str(row['seq']) / ('spec.json' if name == 'spec' else 'body.html')
+        assert Path(r['path']).is_absolute() and Path(r['path']) == expected
+        result = {k: r[k] for k in ('bytes', 'sha256')}
+    else:
+        result = {'bytes': row[flat[0]], 'sha256': row[flat[1]]}
+    assert type(result['bytes']) is int and result['bytes'] >= 0
+    assert isinstance(result['sha256'], str) and len(result['sha256']) == 64
+    assert all(c in '0123456789abcdef' for c in result['sha256'])
+    return result
+
+def review_segment_counts(row):
+    legacy = ('span_count', 'null_count', 'word_pair_count')
+    current = ('spans', 'nulls', 'd5_nonnull')
+    if any(k in row for k in current):
+        assert not any(k in row for k in legacy), 'Ambiguous current and legacy counts'
+        source = [row[k] for k in current]
+    else:
+        source = [row[k] for k in legacy]
+    assert all(type(n) is int for n in source)
+    spans, nulls, pairs = source
+    assert spans > 0 and 0 <= nulls <= spans and 0 <= pairs <= spans - nulls
+    return dict(spans=spans, nulls=nulls, word_pairs=pairs)
+
+def review_total(meta, name):
+    names = {'spans': 'spans', 'nulls': 'nulls', 'word_pairs': 'd5_nonnull'}
+    if 'totals' in meta:
+        assert not any('total_' + k in meta for k in names), 'Ambiguous totals'
+        assert isinstance(meta['totals'], dict)
+        value = meta['totals'][names[name]]
+    else:
+        value = meta['total_' + name]
+    assert type(value) is int and value >= 0
+    return value
+
+def review_copy_manifest(review, read):
+    legacy = review / 'original-to-copy-manifest.json'
+    current_names = ('original-copy-manifest.json', 'additional-original-copy-manifest.json')
+    if legacy.exists():
+        assert not any((review / n).exists() for n in current_names), 'Ambiguous copy-map schemas'
+        records = json.loads(read(legacy))
+        return records, [str(legacy)]
+    records = []
+    for name in current_names:
+        original_records = json.loads(read(review / name))
+        assert isinstance(original_records, list) and original_records
+        for index, r in enumerate(original_records):
+            assert isinstance(r, dict) and set(r) == {'original_path', 'copy_path', 'content_addressed_copy', 'bytes', 'sha256'}
+            original, copied, obj = (Path(r[k]) for k in ('original_path', 'copy_path', 'content_addressed_copy'))
+            assert all(p.is_absolute() for p in (original, copied, obj))
+            assert copied.resolve().is_relative_to(review.resolve()) and obj.resolve().is_relative_to(review.resolve())
+            assert type(r['bytes']) is int and r['bytes'] >= 0
+            records.append({'original': str(original), 'copy': str(copied.relative_to(review)),
+                            'content_addressed_copy': str(obj.relative_to(review)),
+                            'bytes': r['bytes'], 'sha256': r['sha256'],
+                            'source_manifest': name, 'source_index': index, 'original_record': r})
+    return records, [str(review / n) for n in current_names]

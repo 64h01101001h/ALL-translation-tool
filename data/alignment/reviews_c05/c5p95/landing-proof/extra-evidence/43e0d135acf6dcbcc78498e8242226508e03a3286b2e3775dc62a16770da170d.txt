@@ -1,0 +1,11 @@
+from pathlib import Path
+import difflib,hashlib,json
+O=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter')
+assert __debug__
+p=O/'prepare-adapter.py.txt';before=p.read_text();after=before
+replacements=[("def write(p,b):\n    with p.open('xb') as f:f.write(b)","def write(p,b):\n    if p.exists():assert p.read_bytes()==b;return\n    with p.open('xb') as f:f.write(b)"),("inputs.mkdir(exist_ok=False)","inputs.mkdir(exist_ok=True)"),("{'old':\"frozen(Path(row['directory']))\",'new':'frozen(row)'","{'old':\"[frozen(Path(row['directory'])) for row in freeze_rows]\",'new':'[frozen(row) for row in freeze_rows]'")]
+for a,b in replacements:assert after.count(a)==1;after=after.replace(a,b)
+for n,s in [('prepare-adapter-v2.py.txt',after),('preparation-v1-v2.forward.diff',''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='prepare-adapter.py.txt',tofile='prepare-adapter-v2.py.txt'))),('preparation-v1-v2.inverse.diff',''.join(difflib.unified_diff(after.splitlines(True),before.splitlines(True),fromfile='prepare-adapter-v2.py.txt',tofile='prepare-adapter.py.txt')))]:
+    with (O/n).open('x') as f:f.write(s)
+with (O/'preparation-failure-history.json').open('x') as f:json.dump({'actual_failed_caller':'source-preparation-caller','reason':'Inverse replacement used frozen(row), which also occurs in the new function definition. The inverse-count guard correctly failed before any candidate source was written. The v2 map binds both exact complete list-comprehension call sites. Existing copied inputs/censuses are reused only after exact byte equality; no original input changed.','prior_source_sha256':hashlib.sha256(before.encode()).hexdigest(),'current_source_sha256':hashlib.sha256(after.encode()).hexdigest(),'exact_replacement_map':replacements,'candidate_execution_or_SQL_or_generator_calls':False},f,indent=2);f.write('\n')
+print(json.dumps({'status':'SOURCE_PREPARATION_TRANSPORT_CORRECTED','candidate_not_executed':True}))

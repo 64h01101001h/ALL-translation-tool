@@ -1,0 +1,2070 @@
+[
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/000.json",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      277,
+      291
+    ],
+    "count": 15,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/001.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? AND length(english)<500 ORDER BY course,seq",
+    "parameters": [
+      "%khas blangs pa%",
+      "%position%"
+    ],
+    "count": 13,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/002.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%snga ma%mtshungs%"
+    ],
+    "count": 8,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/003.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%tshad mas grub%"
+    ],
+    "count": 24,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/004.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%yan lag%skyes bu%"
+    ],
+    "count": 12,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/005.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%phan tshun%go sa%"
+    ],
+    "count": 9,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/006.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%cha shas%"
+    ],
+    "count": 171,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/007.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%cig car%blta%"
+    ],
+    "count": 46,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/008.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%kho na re%",
+      "%someone%"
+    ],
+    "count": 64,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/009.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%tshad grub%"
+    ],
+    "count": 12,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/010.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%brlan%gsher%"
+    ],
+    "count": 64,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/011.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "byas pa",
+      "byas pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/012.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "byas",
+      "byas"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/013.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "kho",
+      "kho"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/014.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "na re",
+      "na re"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/015.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "skyon",
+      "skyon"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/016.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "med",
+      "med"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/017.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "yan lag",
+      "yan lag"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/018.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "lnga",
+      "lnga"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/019.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "skyes bu",
+      "skyes bu"
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/020.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "cha shas",
+      "cha shas"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/021.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "yin",
+      "yin"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/022.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "bya ba",
+      "bya ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/023.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'jog",
+      "'jog"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/024.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "dgos",
+      "dgos"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/025.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "phyir",
+      "phyir"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/026.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "zer",
+      "zer"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/027.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snga ma",
+      "snga ma"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/028.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "mtshungs",
+      "mtshungs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/029.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "rnag",
+      "rnag"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/030.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "khrag",
+      "khrag"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/031.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "sogs",
+      "sogs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/032.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "sogs pa",
+      "sogs pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/033.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "dngos po",
+      "dngos po"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/034.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gsum",
+      "gsum"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/035.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "brlan",
+      "brlan"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/036.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gsher ba",
+      "gsher ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/037.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "phor pa",
+      "phor pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/038.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gang",
+      "gang"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/039.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "gang po",
+      "gang po"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/040.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snang ba",
+      "snang ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/041.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "steng",
+      "steng"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/042.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "steng du",
+      "steng du"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/043.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "snang tshul",
+      "snang tshul"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/044.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "mi 'dra ba",
+      "mi 'dra ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/045.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "kha cig",
+      "kha cig"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/046.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "phan tshun",
+      "phan tshun"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/047.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "go sa",
+      "go sa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/048.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'gog pa",
+      "'gog pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/049.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "las",
+      "las"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/050.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "las can",
+      "las can"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/051.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "'gro ba",
+      "'gro ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/052.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "chu",
+      "chu"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/053.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "cig car",
+      "cig car"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/054.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "bltas pa",
+      "bltas pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/055.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad",
+      "tshad"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/056.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad ma",
+      "tshad ma"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/057.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "grub pa",
+      "grub pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/058.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad grub",
+      "tshad grub"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/059.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad grub pa",
+      "tshad grub pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/060.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "srid",
+      "srid"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/061.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "srid pa",
+      "srid pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/062.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "khas blangs",
+      "khas blangs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/063.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "khas blangs pa",
+      "khas blangs pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/064.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "yang",
+      "yang"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/065.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "zhing",
+      "zhing"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/066.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "na",
+      "na"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/067.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "can",
+      "can"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/068.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "snang"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/069.json",
+    "sql": "SELECT * FROM meta ORDER BY key",
+    "parameters": [],
+    "count": 11,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/070.json",
+    "sql": "SELECT * FROM corpus_segments WHERE acip=? OR wylie=? OR english=? ORDER BY course,seq",
+    "parameters": [
+      "BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,",
+      "byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na",
+      "In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that, when the five are performing some actions, the person is performing some actions."
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/071.json",
+    "sql": "SELECT * FROM corpus_segments WHERE acip=? OR wylie=? OR english=? ORDER BY course,seq",
+    "parameters": [
+      "SNGA MA YANG DE DANG MTSUNGS TE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I CHA SHAS YIN PAS DE GSUM SNANG BA NA, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I STENG DU SNANG TSUL MI 'DRA BA GSUM SNANG BAR 'JOG PA'I PHYIR,",
+      "snga ma yang de dang mtshungs te, rnag khrag la sogs pa'i dngos po gsum po de, brlan zhing gsher ba phor pa gang po de'i cha shas yin pas de gsum snang ba na, brlan zhing gsher ba phor pa gang po de'i steng du snang tshul mi 'dra ba gsum snang bar 'jog pa'i phyir",
+      "Well the case above is exactly the same! The three things mentioned, the blood and pus and the other two, are all parts of the glass full of something wet and flowing. When the three appear then we can say that the glass full of a thing which is wet and flowing is acting as a basis, and that three different ways of appearing are being displayed upon it."
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/072.json",
+    "sql": "SELECT * FROM corpus_segments WHERE acip=? OR wylie=? OR english=? ORDER BY course,seq",
+    "parameters": [
+      "YANG KHA CIG NA RE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE PHAN TSUN GO SA 'GOG PA'I DNGOS PO MA YIN PAR THAL, LAS CAN GYI 'GRO BA GSUM GYI CHU PHOR PA GANG LA CIG CAR DU BLTAS PA DE'I TSE NA, DNGOS PO TSAD GRUB PA GSUM SRID PAR KHAS BLANGS PA LA,",
+      "yang kha cig na re, rnag khrag la sogs pa'i dngos po gsum po de phan tshun go sa 'gog pa'i dngos po ma yin par thal, las can gyi 'gro ba gsum gyi chu phor pa gang la cig car du bltas pa de'i tshe na, dngos po tshad grub pa gsum srid par khas blangs pa la",
+      "Someone else may come now and make yet another argument: Let's talk about these three things: the pus and blood, and the other two. Are you implying then that these are not types of objects which would block each other from entering the space that each one occupies? After all, you were talking about a situation where those three types of beings, each with their own karma, sit down together and look at a glass full of water. And you said that your position was that it was possible for there to be three different objects there, each one confirmed by a valid perception."
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/073.json",
+    "sql": "SELECT type,name,sql FROM sqlite_master WHERE name IN ('entries','entry_variants','corpus_segments','meta') ORDER BY name",
+    "parameters": [],
+    "count": 4,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/074.json",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      283,
+      285
+    ],
+    "count": 3,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/075.json",
+    "sql": "PRAGMA query_only",
+    "parameters": [],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/076.json",
+    "sql": "SELECT * FROM meta ORDER BY key",
+    "parameters": [],
+    "count": 11,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/077.json",
+    "sql": "SELECT name,sql FROM sqlite_master WHERE type='table' AND name IN ('corpus_segments','entries','entry_variants','meta') ORDER BY name",
+    "parameters": [],
+    "count": 4,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/078.json",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      283,
+      285
+    ],
+    "count": 3,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/079.json",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      277,
+      291
+    ],
+    "count": 15,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/080.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "byas pa",
+      "byas pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/081.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "kho",
+      "kho"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/082.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "na re",
+      "na re"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/083.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "skyon",
+      "skyon"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/084.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "med",
+      "med"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/085.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "yan lag",
+      "yan lag"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/086.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "lnga",
+      "lnga"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/087.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "skyes bu",
+      "skyes bu"
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/088.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "cha shas",
+      "cha shas"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/089.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "yin",
+      "yin"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/090.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "bya ba",
+      "bya ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/091.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "byas",
+      "byas"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/092.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "'jog",
+      "'jog"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/093.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "dgos",
+      "dgos"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/094.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "phyir",
+      "phyir"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/095.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "snga ma",
+      "snga ma"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/096.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "mtshungs",
+      "mtshungs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/097.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "rnag khrag",
+      "rnag khrag"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/098.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "rnag",
+      "rnag"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/099.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "khrag",
+      "khrag"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/100.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "sogs",
+      "sogs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/101.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "dngos po",
+      "dngos po"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/102.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "gsum",
+      "gsum"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/103.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "brlan",
+      "brlan"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/104.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "brlan zhing gsher ba",
+      "brlan zhing gsher ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/105.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "gsher ba",
+      "gsher ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/106.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "phor pa",
+      "phor pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/107.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "gang",
+      "gang"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/108.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "snang ba",
+      "snang ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/109.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "steng",
+      "steng"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/110.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "snang tshul",
+      "snang tshul"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/111.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "mi 'dra ba",
+      "mi 'dra ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/112.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "kha cig",
+      "kha cig"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/113.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "phan tshun",
+      "phan tshun"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/114.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "go sa",
+      "go sa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/115.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "'gog pa",
+      "'gog pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/116.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "las can",
+      "las can"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/117.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "las",
+      "las"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/118.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "'gro ba",
+      "'gro ba"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/119.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "chu",
+      "chu"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/120.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "cig car",
+      "cig car"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/121.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "cig car du",
+      "cig car du"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/122.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "bltas",
+      "bltas"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/123.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "tshad",
+      "tshad"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/124.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "tshad grub",
+      "tshad grub"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/125.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "tshad grub pa",
+      "tshad grub pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/126.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "grub",
+      "grub"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/127.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "srid",
+      "srid"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/128.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "khas blangs",
+      "khas blangs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/129.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie=? OR english=? ORDER BY course,seq",
+    "parameters": [
+      "byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na",
+      "In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that, when the five are performing some actions, the person is performing some actions."
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/130.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie=? OR english=? ORDER BY course,seq",
+    "parameters": [
+      "snga ma yang de dang mtshungs te, rnag khrag la sogs pa'i dngos po gsum po de, brlan zhing gsher ba phor pa gang po de'i cha shas yin pas de gsum snang ba na, brlan zhing gsher ba phor pa gang po de'i steng du snang tshul mi 'dra ba gsum snang bar 'jog pa'i phyir",
+      "Well the case above is exactly the same! The three things mentioned, the blood and pus and the other two, are all parts of the glass full of something wet and flowing. When the three appear then we can say that the glass full of a thing which is wet and flowing is acting as a basis, and that three different ways of appearing are being displayed upon it."
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/131.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie=? OR english=? ORDER BY course,seq",
+    "parameters": [
+      "yang kha cig na re, rnag khrag la sogs pa'i dngos po gsum po de phan tshun go sa 'gog pa'i dngos po ma yin par thal, las can gyi 'gro ba gsum gyi chu phor pa gang la cig car du bltas pa de'i tshe na, dngos po tshad grub pa gsum srid par khas blangs pa la",
+      "Someone else may come now and make yet another argument: Let's talk about these three things: the pus and blood, and the other two. Are you implying then that these are not types of objects which would block each other from entering the space that each one occupies? After all, you were talking about a situation where those three types of beings, each with their own karma, sit down together and look at a glass full of water. And you said that your position was that it was possible for there to be three different objects there, each one confirmed by a valid perception."
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/132.json",
+    "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq",
+    "parameters": [
+      "go sa 'gog"
+    ],
+    "count": 8,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/133.json",
+    "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq",
+    "parameters": [
+      "brlan zhing gsher ba"
+    ],
+    "count": 64,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/134.json",
+    "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq",
+    "parameters": [
+      "tshad grub"
+    ],
+    "count": 12,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/135.json",
+    "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq",
+    "parameters": [
+      "des bya ba byas"
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/136.json",
+    "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq",
+    "parameters": [
+      "yan lag lnga"
+    ],
+    "count": 15,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/137.json",
+    "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 ORDER BY course,seq",
+    "parameters": [
+      "'jog dgos"
+    ],
+    "count": 30,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/138.json",
+    "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND instr(english,?)>0 ORDER BY course,seq",
+    "parameters": [
+      "sogs",
+      "other two"
+    ],
+    "count": 26,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/139.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "can",
+      "can"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/140.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "snang",
+      "snang"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/141.json",
+    "sql": "SELECT name,sql FROM sqlite_master WHERE type='table' AND name IN ('entries','hgm_entries','dictionary_entries','corpus_segments') ORDER BY name",
+    "parameters": [],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/142.json",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      277,
+      291
+    ],
+    "count": 15,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/143.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "byas pa",
+      "byas pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/144.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "kho na re",
+      "kho na re "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/145.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "skyon med",
+      "skyon med "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/146.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "yan lag",
+      "yan lag "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/147.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "cha shas",
+      "cha shas "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/148.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "bya ba",
+      "bya ba "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/149.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "'jog pa",
+      "'jog pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/150.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "'jog",
+      "'jog "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/151.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "dgos pa",
+      "dgos pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/152.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "skyes bu",
+      "skyes bu "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/153.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "zer na",
+      "zer na "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/154.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "snga ma",
+      "snga ma "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/155.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "mtshungs pa",
+      "mtshungs pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/156.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "mtshungs",
+      "mtshungs "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/157.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "rnag khrag",
+      "rnag khrag "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/158.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "rnag",
+      "rnag "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/159.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "khrag",
+      "khrag "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/160.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "sogs pa",
+      "sogs pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/161.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "dngos po",
+      "dngos po "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/162.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "brlan pa",
+      "brlan pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/163.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "brlan",
+      "brlan "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/164.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "gsher ba",
+      "gsher ba "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/165.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "phor pa",
+      "phor pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/166.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "gang ba",
+      "gang ba "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/167.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "steng du",
+      "steng du "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/168.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "snang tshul",
+      "snang tshul "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/169.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "snang ba",
+      "snang ba "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/170.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "mi 'dra ba",
+      "mi 'dra ba "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/171.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "phan tshun",
+      "phan tshun "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/172.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "go sa",
+      "go sa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/173.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "'gog pa",
+      "'gog pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/174.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "las can",
+      "las can "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/175.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "'gro ba",
+      "'gro ba "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/176.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "cig car du",
+      "cig car du "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/177.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "blta ba",
+      "blta ba "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/178.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "tshad grub pa",
+      "tshad grub pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/179.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "srid pa",
+      "srid pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/180.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "khas len",
+      "khas len "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/181.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "khas blangs pa",
+      "khas blangs pa "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/182.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "ma yin",
+      "ma yin "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/183.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id",
+    "parameters": [
+      "thal",
+      "thal "
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/184.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%yan lag lnga po de skyes bu de'i cha shas%"
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/185.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%brlan zhing gsher ba phor pa gang po de'i cha shas%"
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/186.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%phan tshun go sa 'gog pa%"
+    ],
+    "count": 4,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/187.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%dngos po tshad grub pa gsum%"
+    ],
+    "count": 11,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/188.json",
+    "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%five protuberances are all parts%"
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/189.json",
+    "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%three different ways of appearing%"
+    ],
+    "count": 2,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/190.json",
+    "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%block each other from entering%"
+    ],
+    "count": 5,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/191.json",
+    "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%each one confirmed by a valid perception%"
+    ],
+    "count": 7,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/192.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%kho na re, skyon med de%"
+    ],
+    "count": 4,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/193.json",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%snang tshul mi 'dra ba gsum%"
+    ],
+    "count": 5,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/194.json",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq IN (?,?,?) ORDER BY seq",
+    "parameters": [
+      "C05",
+      270,
+      281,
+      313
+    ],
+    "count": 3,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/195.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "mtshungs",
+      "mtshungs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/196.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "sogs",
+      "sogs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/197.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "steng",
+      "steng"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/198.json",
+    "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+    "parameters": [
+      "tshad",
+      "tshad"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/199.json",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      277,
+      291
+    ],
+    "count": 15,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/200.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "khas blangs",
+      "khas blangs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/201.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "khas blangs pa",
+      "khas blangs pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/202.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "steng du",
+      "steng du"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/203.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "gang po",
+      "gang po"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/204.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "mtshungs",
+      "mtshungs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/205.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "sogs",
+      "sogs"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/206.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "las can",
+      "las can"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/207.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "tshad",
+      "tshad"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/208.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "tshad grub pa",
+      "tshad grub pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  },
+  {
+    "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/query-replays/209.json",
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "bltas pa",
+      "bltas pa"
+    ],
+    "count": 1,
+    "matches_frozen_full_rows": true
+  }
+]

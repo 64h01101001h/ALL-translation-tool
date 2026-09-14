@@ -1,0 +1,81 @@
+from pathlib import Path
+import ast,datetime,difflib,hashlib,json,os
+P=Path(__file__).resolve().parent;I=P.parent;A=I.parent;ROOT=A.parent;B=A/'C05-283-285';W=ROOT/'campaign-worktree'
+assert __debug__
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def put(n,b):
+ with (P/n).open('xb') as f:f.write(b)
+def js(n,v):put(n,(json.dumps(v,indent=2)+'\n').encode())
+maps=json.loads((P/'original-to-copy-manifest.json').read_bytes())
+for r in maps:
+ source=Path(r['original']);assert str(source.resolve(strict=True))==r['resolved_original']
+ raw=source.read_bytes();assert pin(raw)=={k:r[k] for k in ('bytes','sha256')} and raw==(P/r['copy']).read_bytes()
+ assert [dict(path=str(q),target=os.readlink(q)) for q in (*reversed(source.parents),source) if q.is_symlink()]==r['symlink_components']
+pins=json.loads((P/'candidate-pins-final.json').read_bytes());proof=json.loads((P/'static-source-proof-final.json').read_bytes())
+for n,r in pins.items():
+ raw=(P/'final-candidates'/n).read_bytes();assert pin(raw)==r;ast.parse(raw)
+ changes=json.loads((P/'final-changes'/f'{n}.json').read_bytes());s=raw.decode()
+ for change in reversed(changes):
+  for at in reversed(change['after_positions']):
+   assert s[at:at+len(change['new'])]==change['new'];s=s[:at]+change['old']+s[at+len(change['new']):]
+ assert pin(s.encode())==proof[n]['original']
+ # Full generated diff equals the saved artifact, without invoking patch/target.
+ expected=''.join(difflib.unified_diff(s.splitlines(True),raw.decode().splitlines(True),fromfile='complete-original',tofile=n)).encode()
+ assert expected==(P/'final-diffs'/f'{n}.forward.diff').read_bytes()
+ expected=''.join(difflib.unified_diff(raw.decode().splitlines(True),s.splitlines(True),fromfile=n,tofile='complete-original')).encode()
+ assert expected==(P/'final-diffs'/f'{n}.inverse.diff').read_bytes()
+assert 'tuples = {r' not in (P/'final-candidates/verify_staged_through285.py').read_text().replace('head_tuples = {r','')
+native=[]
+for d in sorted(P.glob('caller-*')):
+ if d.name=='caller-finalize01':continue
+ command=json.loads((d/'command.json').read_bytes());execution=json.loads((d/'execution.json').read_bytes())
+ assert command['argv']==execution['argv'] and command['cwd']==execution['cwd']
+ assert (d/'stdin.bin').read_bytes()==b'' and int((d/'exit.txt').read_bytes())==execution['exit']
+ for stem in ('stdout','stderr'):assert pin((d/(stem+'.bin')).read_bytes())==execution[stem]
+ native.append(dict(path=str(d),exit=execution['exit'],stdout=execution['stdout'],stderr=execution['stderr']))
+banker=P/'final-candidates/bank_root_proofs_through285_final.py'
+route=dict(original=str(banker),retention='bank',copy='root-helpers/bank_root_proofs_through285_final.py.txt',**pins[banker.name])
+js('ordinary-required-final-banker-route.json',dict(status='PENDING_ROOT_ORDINARY_INVENTORY_BINDING',required_explicit_input=route,
+ reason='Later final banker automatically preserves its own source at this basename. Accepted intake composer permits new automatic copies only for clean JSON; a new Python target is not licensed. Make this exact full-byte ordinary copy before the initial diagnostic, or independently review a narrow source/diagnostic-bound route adapter. Do not overwrite the ordinary banker or widen the old predicate.',
+ ordinary_inventory_executed_here=False,route_currently_banked=False))
+stage=P/'final-candidates/verify_staged_through285.py';pathspec=B/'prepare-explicit-stage-inputs.py'
+js('runtime-command-contract.json',dict(status='PLANNED_INTERFACES_ONLY_NO_RELEASE',environment_overrides={'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'},
+ order=[
+  'Actual complete reproduction closure and root acceptance; independently review these sources and bind the required final-banker ordinary route.',
+  'Actual reviewed ordinary inventory and ordinary banker; preserve all sources and old manifest.',
+  'Materialize exact pathspec candidate at B/prepare-explicit-stage-inputs.py plus root-stage-pathspec-release.json; initial pathspec derives complete13 payload +2386 semantic members +freeze +3 reconciliation reports +landing +actual bank set. Root stages exactly its NUL pathspec.',
+  'Capture actual full git diff --cached --check command/stdin/stdout/stderr/exit once; independently source-bind current physical and additional descriptors, review and release exact classifier. Execute prepare then audit; root accepts the full raw diagnostic reproduction. No old warning identities are current.',
+  'Reuse full accepted intake/scope/supplement algorithms with separately reviewed actual batch/path/source pins. Capture quiescent initial scope and one later finite supplement, all failures/callers/aliases. Stage-verifier control is approved source, never future verification results.',
+  'Root releases distinct final banker with actual immutable ordinary LIST plus complete final whitespace LIST and all required source/control pins. Execute once to fresh external run directory.',
+  'Pathspec final mode derives only newly created bank paths while proving initial stage/old bytes unchanged; root stages exactly this delta.',
+  'Derive and independently review actual final bindings from source-retained binder method: complete native bank/whitespace callers, current exact stage/index/untracked, all14 input roles and12 measured fields. Run final verifier once to fresh external output.',
+  'Only after final stage PASS: DATA commit, exactly three ledger appends, separate DOCS commit, complete fixed-baseline/tree closure. Commit methods and results are not prepared or asserted here.'
+ ],
+ pathspec_argv=['python3','-B',str(pathspec),'<initial|final>'],
+ pathspec_release=dict(path=str(B/'root-stage-pathspec-release.json'),required_fields={'status':'PASS_ROOT_RELEASE_OF_REVIEWED_STAGE_PATHSPEC_SOURCE','baseline':'fb9182dc6fca2230be3bc5169ba1288a22430280','source':pins[pathspec.name],'reproduction_acceptance':{'path':None,'bytes':None,'sha256':None}}),
+ final_banker_argv=['python3','-B',str(banker),'--phase','final-whitespace','--batch',str(B),'--worktree',str(W),'--run-output','<ACTUAL_FRESH_EXTERNAL_FINAL_RUN>','--payload-manifest',str(B/'landing/staged-payload-manifest.json'),'--payload-source-proof',str(B/'landing/staged-payload-source-proof.json'),'--untracked-capture-stem',str(B/'landing/untracked-before-banking'),'--extra-inputs','<ACTUAL_UNCHANGED_ORDINARY_LIST>','--whitespace-inputs','<ACTUAL_COMPLETE_FINAL_LIST>','--final-release','<ACTUAL_ROOT_FINAL_METHOD_RELEASE>','--final-release-sha256','<ACTUAL_RELEASE_SHA256>'],
+ final_banker_release=dict(status='PASS_ROOT_RELEASE_OF_REVIEWED_FINAL_BANK_METHOD',baseline='fb9182dc6fca2230be3bc5169ba1288a22430280',page=95,sequences=[283,284,285],banker=dict(path=str(banker),**pins[banker.name]),inputs={k:dict(path=None,bytes=None,sha256=None) for k in ['reproduction_acceptance','ordinary_manifest','ordinary_extra_inputs','final_whitespace_inputs','whitespace_root_acceptance']}),
+ final_verifier_argv=['python3','-B',str(stage),'--worktree',str(W),'--batch',str(B),'--output','<ACTUAL_FRESH_EXTERNAL_FINAL_VERIFICATION>','--untracked-before',str(B/'landing/untracked-before-banking.stdout'),'--whitespace-proof','<ACTUAL_ACCEPTED_PROOF>','--whitespace-log','<ACTUAL_FULL_RAW_STDOUT>','--payload-manifest',str(B/'landing/staged-payload-manifest.json'),'--payload-source-proof',str(B/'landing/staged-payload-source-proof.json'),'--banking-ordinary-run','<ACTUAL_ORDINARY_RUN>','--banking-final-run','<ACTUAL_FINAL_RUN>','--bindings','<ACTUAL_REVIEWED_BINDINGS>','--bindings-sha256','<ACTUAL_BINDINGS_SHA256>','--execute-reviewed-verification'],
+ final_verifier_template='final-bindings-template-final.json',
+ caller_contract='Fresh external native caller for each actual phase with full command/source pin/argv/cwd/environment/stdin/stdout/stderr/exit/timing and every failed attempt. No output/caller claims to bank itself; actual final bank, final stage and commit evidence remain later external boundaries.'))
+js('preparation-proof.json',dict(status='READY_FOR_INDEPENDENT_SOURCE_REVIEW_ONLY',producer='Codex /root/c05_280_282_english',current_role='tooling author; historical English and tooling context reused; no independent semantic verdict',candidates=pins,complete_original_copy_pairs=len(maps),full_pair_recheck=True,source_AST_and_inverse_only=True,native_preparation=native,preparation_failures=1,target_executions=0,warning_populations_bound=0,ordinary_final_counts_bound=False,Git_SQL_build_test_bank_stage_commit_calls=0,W_B_writes=0,finalize_caller='caller-finalize01/ completes before freeze',freeze_transport='freeze_sources.py source is retained; its final direct tool stdout is delivered externally after frozen boundary, not falsely self-captured'))
+report=f'''Prepared three finite SOURCE-ONLY candidates in `final-candidates/`; `candidate-pins-final.json` and `final-diffs/` are authoritative. Initial candidates, every source preparation attempt, complete ordered position-aware recipes, full forward/inverse diffs and ASTs remain preserved. No candidate was imported or invoked. All writes stayed in this preparation directory; no Git, SQL, tests, builders, banking, staging or commit commands ran.
+
+The final verifier is {pins[stage.name]['bytes']} bytes, SHA256 {pins[stage.name]['sha256']}. It retains18 of22 prior functions byte-for-byte, including native Git capture, complete index/untracked transitions, payload/source-archive/ordinary-final write proofs and all final reread gates. The four changed old functions bind the actual closed282 baseline, page95 schema and explicit future release facts. Added readers are source-extracted from already accepted page95 helpers. Exact current counts are76 spans,0nulls,61 nonnull depth5; semantic freeze2386 members/602052638 bytes; payload13 files/41185332 bytes and native17-test output are copied in full. This does not assert current reproduction/bank/stage/commit closure.
+
+The pathspec source is {pins[pathspec.name]['bytes']} bytes, SHA256 {pins[pathspec.name]['sha256']}. It retains all three prior functions, full required-tree equality, initial empty-index check and final unchanged-old/bank-delta-only gates. Before output creation it requires exact current materialization/source release and pinned actual reproduction PASS. It prepares an exact NUL pathspec and never stages.
+
+The final-only banker is {pins[banker.name]['bytes']} bytes, SHA256 {pins[banker.name]['sha256']}. Its eight original helper functions, whole ordinary manifest retention, full source/copy/external rereads, automatic landing/HISTORY collection, complete native build/CTest streams, payload/pre-banking capture and mutation-before-pin checks survive unchanged from the reviewed current ordinary source. The distinct filename avoids modifying or colliding with the ordinary producer. It requires an actual root release, full pinned ordinary/final LISTs, reproduction acceptance and accepted whitespace before output creation. Root must first satisfy `ordinary-required-final-banker-route.json`: copy this exact source to `root-helpers/bank_root_proofs_through285_final.py.txt` during ordinary banking, or separately review a narrow route adapter. The old clean-JSON-only new automatic target predicate has NOT been widened.
+
+Current review differences are explicit: nested pins/counts/totals; APPROVE plus full current canonical-fidelity/completion/root verification evidence; two immutable copy maps with1278 complete original/copy/object rows; two licensed heads tied to full current mechanical hit records and exact frozen reasons. Exactly one original path now has an approved different live version: `tools/build_alignment_layer.py`. Its unchanged39640-byte frozen original and object must equal the exact BASE Git blob and registration preimage; the live builder must separately equal the complete approved registration transform. No other source gets this historical route; the frozen map itself stays unchanged.
+
+Complete accepted through282 whitespace source, physical/additional descriptors, root release/acceptance, final intake/scope/supplement algorithms and final binding producer are retained as historical reference contracts. A new actual diagnostic is required before adapting any current source-specific warning descriptor. No prior43903 warnings/69 files,12 extra cases,130 warnings, old continuation line, or CRLF exception is asserted current. The raw stdout, CRLF, literal/diff/physical predicates, whole index-entry stream and alias boundaries must be preserved. The shared content-preservation helper is retained unchanged and needs no new wrapper. The reference helpers cannot be executed unchanged against page95; their specific old pins/counts are reference-only.
+
+`final-bindings-template-final.json` leaves all12 measured values and seven dynamic input pins pending. It retains seven actual fixed current pins. Actual ordinary/final paths, reproduction counts, warning populations, final index and commits are not guessed. The full final-stage binder source is retained for later actual binding, including native caller checks. `runtime-command-contract.json` gives the exact ordered interfaces and finite initial/supplement/external boundaries; stage-verifier control means approved source, avoiding a phase cycle. Ledger append remains AFTER DATA and before separate DOCS.
+
+One genuine file-only preparer failure (exit1,885-byte stderr) is retained under caller-prepare01: text-only inverse checking was ambiguous when the same freeze hash occurred in both a fixed pin and a gate. The corrected preparer records exact replacement positions; full inverse reconstruction passes. Source inspection then caught a newly extracted local tuple-map name shadowing the downstream full tuple LIST before any runtime; the correction is retained separately, along with current pathspec fidelity gates and an updated comment. Corrected source preparation/correction/finalization have complete native streams and no target execution. Some exploratory source displays were truncated; full actual originals are retained, and no display is claimed as complete raw process evidence.
+
+Actual role: Codex tooling author, using disclosed prior English-original and tooling context. This is proposed source preparation awaiting independent review and root release, not independent semantic approval or execution permission. No current batch accepted/committed or device/MAIN state is claimed. All{len(maps)} full original/copy/alias records were reopened and checked; the602MB semantic package remains readable in its immutable existing original/copy/object locations rather than being needlessly cloned here.
+'''
+put('report.md',report.encode())
+print(json.dumps(dict(status='SOURCE_PREPARATION_FINISHED_FREEZE_PENDING',source_pairs=len(maps),candidates=pins),indent=2))

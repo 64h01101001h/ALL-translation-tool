@@ -1,0 +1,161 @@
+"""Small read-only config/schema checks. No SQL, Git, output writes or imports of producers."""
+from pathlib import Path
+import hashlib,json,re
+
+def pinned(ref):
+ assert set(ref)=={'path','bytes','sha256'}
+ p=Path(ref['path']);assert p.is_absolute() and p.is_file()
+ assert type(ref['bytes'])is int and ref['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',ref['sha256'])
+ raw=p.read_bytes();assert len(raw)==ref['bytes'] and hashlib.sha256(raw).hexdigest()==ref['sha256']
+ assert p.read_bytes()==raw
+ return raw
+
+def batch_counts(sequences,records):
+ assert len(sequences)==3 and all(type(s)is int and s>0 for s in sequences)
+ assert sequences==list(range(sequences[0],sequences[0]+3))
+ assert [r['seq']for r in records]==sequences
+ totals=dict(spans=0,nulls=0,d5_nonnull=0)
+ for r in records:
+  c=r['counts'];assert set(c)==set(totals) and all(type(x)is int for x in c.values())
+  assert c['spans']>0 and 0<=c['nulls']<=c['spans'] and 0<=c['d5_nonnull']<=c['spans']-c['nulls']
+  for k in totals:totals[k]+=c[k]
+ return totals
+
+def original_inventory(spec_records,identity_records):
+ expected={}
+ for r in spec_records:
+  for sp in r['spans']:
+   key=(r['angle'],r['seq'],sp['id']);assert key not in expected;expected[key]=sp
+ keys=[(r['angle'],r['seq'],r['id'])for r in identity_records]
+ assert len(keys)==len(set(keys))==len(expected) and set(keys)==set(expected)
+ for r,key in zip(identity_records,keys):
+  sp=expected[key];assert r['original_span']==sp and r['original_field_presence']==list(sp)
+  assert all(r[k]==sp[k]for k in ['id','d','tib','eng'])
+ return len(expected)
+
+def bind_query(query,descriptor,binding):
+ kind=binding['kind']
+ if kind=='standalone':assert set(binding)=={'kind'};source=descriptor
+ elif kind=='query_list':
+  assert set(binding)=={'kind','index'} and isinstance(descriptor,list)
+  i=binding['index'];assert type(i)is int and 0<=i<len(descriptor);source=descriptor[i]
+ elif kind=='query_container_parameters':
+  assert set(binding)=={'kind','index'} and isinstance(descriptor,dict)
+  assert set(descriptor) in ({'database','uri','query_only','queries'},
+   {'uri','query_only','queries','master_original','master_pin','full_master_records'})
+  assert descriptor['query_only'] is True and isinstance(descriptor['queries'],list)
+  i=binding['index'];assert type(i)is int and 0<=i<len(descriptor['queries'])
+  source=descriptor['queries'][i]
+  assert isinstance(source,dict) and set(source)=={'label','sql','parameters','row_count','rows'}
+  assert isinstance(source['label'],str)
+ elif kind in ('query_container_params','query_list_params'):
+  assert set(binding)=={'kind','index'}
+  if kind=='query_container_params':
+   assert isinstance(descriptor,dict) and set(descriptor)=={'database','uri','queries'}
+   records=descriptor['queries']
+  else:records=descriptor
+  assert isinstance(records,list)
+  i=binding['index'];assert type(i)is int and 0<=i<len(records)
+  original=records[i];assert isinstance(original,dict) and 'parameters' not in original
+  assert isinstance(original['params'],list)
+  source={'sql':original['sql'],'parameters':original['params'],'rows':original['rows']}
+  for count_key in ('count','row_count'):
+   if count_key in original:source[count_key]=original[count_key]
+ elif kind=='hgm_results':
+  assert set(binding)=={'kind','term'} and isinstance(descriptor,dict)
+  assert descriptor['parameters_per_term']=='[term,term]'
+  term=binding['term'];assert isinstance(term,str)and term in descriptor['results']
+  source={'sql':descriptor['sql'],'parameters':[term,term],'rows':descriptor['results'][term]}
+ else:raise AssertionError('Unsupported genuine query descriptor schema')
+ assert isinstance(source,dict)
+ for key in ['sql','parameters','rows']:assert query[key]==source[key],key
+ assert isinstance(query['sql'],str) and query['sql'].lstrip().upper().startswith('SELECT ')
+ assert isinstance(query['parameters'],list)and isinstance(query['rows'],list)
+ for count_key in ('count','row_count'):
+  assert (count_key in query)==(count_key in source),'Count presence differs from the actual original descriptor: '+count_key
+  if count_key in source:
+   assert type(source[count_key])is int and type(query[count_key])is int
+   assert source[count_key]>=0 and query[count_key]>=0
+   assert query[count_key]==source[count_key]==len(query['rows'])
+ return len(query['rows'])
+
+def original_freeze(row):
+ """Read the explicitly pinned original manifest in its genuine angle schema."""
+ d=Path(row['directory']);names={'tibetan':'freeze-manifest.json','english':'freeze.json'}
+ assert d.is_absolute() and row['angle'] in names
+ manifest=d/names[row['angle']];assert Path(row['freeze']['path'])==manifest
+ value=json.loads(pinned(row['freeze']))
+ if row['angle']=='tibetan':assert isinstance(value,list);files=value
+ else:assert isinstance(value,dict) and isinstance(value['files'],list);files=value['files']
+ expected={}
+ for r in files:
+  assert isinstance(r,dict) and set(r)=={'path','bytes','sha256'} and isinstance(r['path'],str)
+  p=Path(r['path']);n=str(p.relative_to(d)) if p.is_absolute() else str(p)
+  assert n not in ('','.','..') and not Path(n).is_absolute() and '..' not in Path(n).parts and n not in expected
+  assert n!=manifest.name and (d/n).is_file() and (d/n).resolve().is_relative_to(d.resolve())
+  assert type(r['bytes'])is int and r['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',r['sha256'])
+  expected[n]=r
+ return expected
+
+def validate_config(c):
+ """Validate pinned settings and descriptor relationships only; never replay SQL/canonical/Git."""
+ assert set(c)=={'schema','course','batch','worktree','shared_directory','sequences','baseline','status_capture','originals','reconciled','evidence','context','query_directories','queries','operator_role'}
+ assert c['schema']=='reconciliation-277-v1' and isinstance(c['operator_role'],str)and c['operator_role']
+ assert re.fullmatch('C[0-9]{2}',c['course'])
+ totals=batch_counts(c['sequences'],c['reconciled']);seqs=c['sequences'];batch=Path(c['batch']);shared=Path(c['shared_directory'])
+ for p in [batch,shared,Path(c['worktree'])]:assert p.is_absolute()and p.is_dir()
+ assert batch.name==f"{c['course']}-{seqs[0]}-{seqs[-1]}" and shared.is_relative_to(batch/'reconciled')
+ base=json.loads(pinned(c['baseline']));assert re.fullmatch('[0-9a-f]{40}',base['commit'])and base['course_boundary']==seqs[0]-1
+ pinned(c['status_capture'])
+ evidence=c['evidence'];assert set(evidence)=={'reference_access','copy_manifest','aliases','governing','source_context','physical','original_identities','original_proof','source_snapshot','master','corpus','database','generator','wrapper'}
+ # Large raw archives/database are fully pinned by the unchanged runtime; this
+ # helper checks their descriptor shape without an extra whole-source reread.
+ for k,v in evidence.items():
+  assert set(v)=={'path','bytes','sha256'} and Path(v['path']).is_absolute()
+  assert type(v['bytes'])is int and v['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',v['sha256'])
+  if k not in ['master','corpus','database']:pinned(v)
+ assert Path(evidence['database']['path'])==Path(c['worktree'])/'build/hgm_spine_v27_2.db'
+ assert Path(evidence['generator']['path'])==Path(c['worktree'])/'tools/gen_alignment_page.py'
+ assert Path(evidence['master']['path'])==Path(c['worktree'])/'data/hgm_dictionary_v27_2.json.gz'
+ assert Path(evidence['corpus']['path'])==Path(c['worktree'])/'data/full_parallel_corpus_v32.json.gz'
+ assert Path(evidence['wrapper']['path']).parent==shared
+ assert set(c['context'])=={'sql','parameters'}
+ assert c['context']['sql']=='SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq'
+ params=c['context']['parameters'];assert len(params)==3 and params[0]==c['course']and all(type(x)is int for x in params[1:])and params[1]<=seqs[0]<=seqs[-1]<=params[2]
+ context=json.loads(pinned(evidence['source_context']));assert all(r['course']==c['course']for r in context)
+ assert [r['seq']for r in context]==list(range(params[1],params[2]+1))
+ roles={'spec':'spec.json','body':'body.html','tuples':'final-tuples.json','decisions':'final-decisions.json','omissions':'omissions.json','dispositions':'original-dispositions.json','errata_analysis':'errata-analysis.json','allowances':'proposed-head-allowances.json','errata':'errata.json','proof':'proof.json'}
+ for row in c['reconciled']:
+  assert set(row)=={'seq','directory','freeze','counts','files'};d=Path(row['directory']);assert d==batch/'reconciled'/str(row['seq'])
+  assert Path(row['freeze']['path'])==d/'freeze.json';f=json.loads(pinned(row['freeze']));assert isinstance(f['files'],dict)
+  assert set(row['files'])==set(roles)
+  for k,filename in roles.items():
+   r=row['files'][k];assert Path(r['path'])==d/filename;pinned(r);assert {j:r[j]for j in ['bytes','sha256']}==f['files'][filename]
+  report=json.loads(pinned(row['files']['proof']));assert row['counts']=={k:report['counts'][k]for k in totals}
+  spec=json.loads(pinned(row['files']['spec']));assert spec['course']==c['course']and len(spec['segments'])==1
+  part=spec['segments'][0];sp=part['spans'];assert part['seq']==row['seq']and len(sp)==len({x['id']for x in sp})==row['counts']['spans']
+  assert sum(x['eng']is None for x in sp)==row['counts']['nulls']and sum(x['d']==5 and x['eng']is not None for x in sp)==row['counts']['d5_nonnull']
+ assert [(r['angle'],r['seq'])for r in c['originals']]==[(a,s)for a in ['tibetan','english']for s in seqs]
+ original_specs=[];original_freezes=[]
+ for row in c['originals']:
+  assert set(row)=={'angle','seq','directory','freeze','spec','declarations'};d=Path(row['directory']);assert d==batch/row['angle']/str(row['seq'])
+  f=original_freeze(row)
+  for k,name in [('spec','spec.json'),('declarations','intended-spans.json')]:
+   r=row[k];assert Path(r['path'])==d/name;pinned(r);assert {j:r[j]for j in ['bytes','sha256']}=={j:f[name][j]for j in ['bytes','sha256']}
+  part=json.loads(pinned(row['spec']));assert part['course']==c['course']and len(part['segments'])==1 and part['segments'][0]['seq']==row['seq']
+  original_specs.append({'angle':row['angle'],'seq':row['seq'],'spans':part['segments'][0]['spans']});original_freezes.append((row['angle'],row['seq'],row['freeze']['sha256']))
+ records=json.loads(pinned(evidence['original_identities']));count=original_inventory(original_specs,records)
+ proof=json.loads(pinned(evidence['original_proof']));assert proof['status']=='PASS'
+ assert [(r['angle'],r['seq'],r['freeze_sha256'])for r in proof['freezes']]==original_freezes
+ # Explicit query inventory must be exact across all configured directories.
+ dirs=[Path(x)for x in c['query_directories']];assert dirs and len(set(dirs))==len(dirs)
+ for d in dirs:assert d.is_absolute()and d.is_dir()and d.is_relative_to(shared)
+ querypaths=[Path(r['file']['path'])for r in c['queries']];assert querypaths and len(querypaths)==len(set(querypaths))
+ assert set(querypaths)=={p for d in dirs for p in d.glob('*.json')}
+ maps=json.loads(pinned(evidence['copy_manifest']));copied={r['original']:r for r in maps};assert len(copied)==len(maps)
+ counts=[]
+ for r in c['queries']:
+  assert set(r)=={'file','descriptor','binding'};q=json.loads(pinned(r['file']));src=r['descriptor'];raw=pinned(src)
+  assert src['path']in copied and {k:src[k]for k in ['bytes','sha256']}=={k:copied[src['path']][k]for k in ['bytes','sha256']}
+  counts.append(bind_query(q,json.loads(raw),r['binding']))
+ return {'totals':totals,'original_count':count,'query_count':len(querypaths),'query_rows':counts,'baseline':base}

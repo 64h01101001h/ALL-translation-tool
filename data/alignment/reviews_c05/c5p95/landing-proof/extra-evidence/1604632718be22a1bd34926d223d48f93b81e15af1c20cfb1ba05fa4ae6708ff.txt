@@ -1,0 +1,79 @@
+--- prior/bank_root_proofs_through282.py
++++ candidates/bank_root_proofs_through285.py
+@@ -15,8 +15,8 @@
+ import subprocess
+ import traceback
+ 
+-BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
+-PAGE, SEQS = 94, [280, 281, 282]
++BASE = 'fb9182dc6fca2230be3bc5169ba1288a22430280'
++PAGE, SEQS = 95, [283, 284, 285]
+ LARGE_BYTES = 2_000_000
+ TESTS = {'constitution', 'gen_alignment_page', 'alignment_gate_coverage', 'alignment_builder',
+          'dictionary_exports', 'no_broken_words', 'no_split_syllables', 'no_phonetics_in_layer',
+@@ -27,16 +27,16 @@
+     'verify-complete-originals.py',
+     'proposal-verification/root-original-freeze-check.json',
+     'proposal-verification/execution-proof.json',
+-    'reconciliation-verifier-head-allowance-preparation/verify_reconciliation.py',
+-    'reconciliation-verifier-head-allowance-preparation/config_contract.py',
+-    'reconciliation-verifier-config/config.json',
+-    'release-root-reconciliation-runtime-v2.py',
+-    'root-reconciliation-runtime-release-v2/proof.json',
+-    'root-reconciliation-verification/execution-proof.json',
+-    'root-reconciliation-verification/report.json',
+-    'root-reconciliation-verification/resolved-spans.json',
+-    'verify-final-semantic-review-root.py',
+-    'root-final-semantic-review-verification/proof.json',
++    'proposal-verification/root-resolved-spans.json',
++    'reconciled/root-runtime-inputs-v2/config.json',
++    'reconciled/root-runtime-inputs-v2/construction-proof.json',
++    'reconciled/root-runtime-inputs-v2/reviewed-sources/config_contract.py',
++    'reconciled/root-runtime-inputs-v2/reviewed-sources/verify_reconciliation.py',
++    'landing-helper-preparation/verify-semantic-acceptance285.py',
++    'landing-helper-preparation/land-reviewed-page285.py',
++    'landing-helper-preparation/verify-review-copy-and-register285.py',
++    'landing-helper-preparation/register-reviewed-page-and-index.py',
++    'root-payload-result-acceptance.json',
+ )
+ 
+ 
+@@ -60,9 +60,14 @@
+     if not __debug__:
+         raise RuntimeError('Assertions must remain enabled')
+     b, wt = Path(args.batch).resolve(strict=True), Path(args.worktree).resolve(strict=True)
+-    assert b.name == 'C05-280-282'
++    assert b.name == 'C05-283-285'
++    assert args.phase == 'ordinary', 'Final-whitespace source bindings/review remain pending; prior final-phase code is preserved below'
++    release = json.loads((b / 'root-ordinary-bank-method-release/proof.json').read_bytes())
++    assert release['status'] == 'PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD'
++    assert release['banker']['copy'] == str(Path(__file__).resolve())
++    assert pin(Path(__file__).read_bytes()) == {k: release['banker'][k] for k in ('bytes', 'sha256')}
+     landing = b / 'landing'; review = b / 'semantic-review'
+-    dest = wt / 'data/alignment/reviews_c05/c5p94/landing-proof'
++    dest = wt / 'data/alignment/reviews_c05/c5p95/landing-proof'
+     output = Path(args.run_output).absolute()
+     assert not output.resolve().is_relative_to(wt) and not output.resolve().is_relative_to(b)
+     output.mkdir(parents=True, exist_ok=False)
+@@ -163,9 +168,9 @@
+                 match(read(record['path']), record); externals.append(record)
+ 
+         initial_review = semantic_tree()
+-        preservation = js(b / 'root-final-semantic-review-verification/proof.json')
+-        assert preservation['status'] == 'PASS' and preservation['head'] == BASE
+-        assert preservation['review_freeze'] == initial_review
++        preservation = js(b.parent / 'integration/through285-root-independent-review-verification/proof.json')
++        assert preservation['status'] == 'PASS_ROOT_REVIEW_OF_INDEPENDENT_SEMANTIC_APPROVAL_AND_MECHANICAL_RESULT' and preservation['baseline'] == BASE
++        assert preservation['semantic_freeze'] == initial_review
+         accepted = js(landing / 'root-semantic-acceptance-proof.json')
+         copied = js(landing / 'root-frozen-input-copy-check.json')
+         for proof in (accepted, copied):
+@@ -193,7 +198,7 @@
+                 measured_builds.append(dict(record=str(record_path), label=label, exit=run['exit']))
+         assert len(build['runs']) == 2 and all(run['exit'] == 0 for run in build['runs'])
+         coverage = re.findall(rb'^COVERAGE C05: (\d+)/511 segments scanned, (\d+) open \(([^)]+)\)$', read(landing / 'build-layer.stdout'), re.M)
+-        assert coverage == [(b'282', b'229', b'283-511')]
++        assert coverage == [(b'285', b'226', b'286-511')]
+         for path, expected in build['output_sha256'].items():
+             assert pin(read(wt / relpath(path)))['sha256'] == expected
+         stdout = read(landing / 'ctest-17.stdout')

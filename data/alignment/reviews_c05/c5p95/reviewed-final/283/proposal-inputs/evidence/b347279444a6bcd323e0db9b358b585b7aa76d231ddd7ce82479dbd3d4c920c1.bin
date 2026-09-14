@@ -1,0 +1,17 @@
+--- run-canonical-attempt.py.txt
++++ run-canonical-attempt-v2.py.txt
+@@ -2,12 +2,12 @@
+ import datetime,hashlib,json,os,subprocess,sys
+ R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');A=R/'campaign-artifacts/C05-283-285/tibetan';W=R/'campaign-worktree'
+ assert __debug__
+-seq=int(sys.argv[1]);assert seq in [283,284,285];O=A/str(seq);C=O/'canonical-attempt01';C.mkdir(exist_ok=False)
++seq=int(sys.argv[1]);assert seq in [283,284,285];O=A/str(seq);attempt=sys.argv[2];assert attempt in ['01','02'];C=O/('canonical-attempt'+attempt);C.mkdir(exist_ok=False)
+ def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+ def save(n,b):
+     with (C/n).open('xb') as f:f.write(b)
+ def j(n,x):save(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+-wrapper=A/'283/run-generator-ro.py.txt';spec=(O/'spec.json').read_bytes();argv=[sys.executable,'-B',str(wrapper),str(C/'runtime-audit.json')]
++wrapper=A/'283/run-generator-ro-v2.py.txt';spec=(O/'spec.json').read_bytes();argv=[sys.executable,'-B',str(wrapper),str(C/'runtime-audit.json')]
+ env=os.environ.copy();overrides={'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'};env.update(overrides);start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ j('command.json',{'argv':argv,'cwd':str(W),'stdin_source':str(O/'spec.json'),'stdin':pin(spec),'wrapper':pin(wrapper.read_bytes()),'environment_overrides':overrides,'started_utc':start})
+ save('stdin.bin',spec);r=subprocess.run(argv,input=spec,cwd=W,env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False);end=datetime.datetime.now(datetime.timezone.utc).isoformat()

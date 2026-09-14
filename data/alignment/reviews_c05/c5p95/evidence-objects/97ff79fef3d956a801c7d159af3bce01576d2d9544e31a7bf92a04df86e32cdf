@@ -1,0 +1,8 @@
+{
+  "exit": 1,
+  "kind": "source evidence preparation, not canonical generation",
+  "error": "AssertionError: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+  "cause": "Resume adaptation assumed last manifest row was the spine, but v1 had appended the predicate source. The in-memory predicate row was relabeled as spine and correctly failed its full-byte pin assertion before saving the manifest. No original source changed.",
+  "repair": "Find the explicit external-retention spine row by its schema instead of list position. Preserve full prior source and diff.",
+  "capture_provenance": "Transcription of actual exec_command result, not native stdout/stderr files."
+}

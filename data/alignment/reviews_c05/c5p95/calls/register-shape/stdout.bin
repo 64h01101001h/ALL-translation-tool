@@ -1,0 +1,13 @@
+<class 'list'> 192
+{
+  "item_id": "E-001",
+  "course": "C01",
+  "segment": "C01:86",
+  "kind": "TIBETAN_SPELLING",
+  "found": "ma math bslab pa gsum gyis thugs rgyud dul ba  (ACIP source: \"MA MATH BSLAB PA GSUM GYIS THUGS RGYUD DUL BA\")",
+  "expected": "ma mtha' bslab pa gsum gyis ...  (ACIP: MA MTHA')",
+  "evidence": "Hint verified: C01 seq 86 opens with exactly \"ma math\". The error is in the ACIP source field, not introduced by conversion. \"math\" is not a possible Tibetan syllable (no -th suffix), so it cannot be a variant. The parallel English opens \"At the very least, your lama must absolutely be a person who has controlled his mind by practicing the three trainings\" \u2014 \"at the very least\" is rendered by ma mtha' elsewhere in this same corpus (TCS03:504, TCS04Initiation:569/731/856, all \"ma mtha' ('ang)\"); \"ma mtha'\" occurs 38 times corpus-wide, \"ma math\" only here and in its duplicate.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "Minimal keying explanation is a transposition MTHA' -> MATH with loss of the apostrophe. The same passage is ingested twice: the identical error stands at C16:34, so a fix must be applied at both loci (or upstream in the shared source file). The log's second observation in this note (brten fronted to \"Take yourself\") is a translation-technique remark, not an erratum, and is verified accurate: brten is the last word of the Maitreya verse and the English opens with \"Take yourself to a spiritual guide\"."
+}

@@ -1,0 +1,130 @@
+--- prior.py
++++ current.py
+@@ -1,8 +1,8 @@
+ from pathlib import Path
+ import json,hashlib,datetime,ast,os,subprocess,difflib
+ B=Path(__file__).resolve().parent;I=B.parent/'integration';W=B.parents[1]/'campaign-worktree'
+-P=B/'payload-freezer-preparation';P2=B/'reproduction-retention-preparation';V=B/'reproduction-payload-code-review';Q=B/'reproduction-entry-preparation';R=I/'through282-generated-reproduction';O=B/'reproduction-root-entry'
+-HEAD='10968d16e701b698a0e1fbd845b353089d15ac39'
++P=I/'through279-generated-reproduction-concrete-preparation';V=I/'through279-generated-reproduction-review';R=I/'through279-generated-reproduction';O=B/'reproduction-root-entry'
++HEAD='f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
+ os.environ.update(PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0',GIT_OPTIONAL_LOCKS='0')
+ def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+ def j(p):return json.loads(p.read_bytes())
+@@ -27,75 +27,36 @@
+   if 'symlink' in x:assert (os.readlink(p) if p.is_symlink() else None)==x['symlink']
+  return len(rows)
+ assert git(['rev-parse','HEAD']).decode().strip()==HEAD
+-assert pin((Q/'bindings.json').read_bytes())['sha256']=='b8a21526fcd2a2ed1c69c8f15d5ad909bb807664065a32c13018c2e21966c768'
+-binding=j(Q/'bindings.json')
+-assert not R.exists()
+-for x in binding['packages']:freeze(Path(x['directory']),x['freeze']['sha256'],x['file_count'])
+-mapped=sum(pairs(Path(x['directory']),x['manifest']) for x in binding['pair_maps'])
+-assert mapped==binding['mapped_count']
+-for x in binding['inputs']:assert pin(Path(x['path']).read_bytes())=={k:x[k] for k in ('bytes','sha256')}
+-for x in binding['external']:
+- p=Path(x['path']);s=p.stat();raw=p.read_bytes();t=p.stat()
+- assert (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)
+- assert pin(raw)=={k:x[k] for k in ('bytes','sha256')}
+- assert str(p.resolve())==x['resolved'] and (os.readlink(p) if p.is_symlink() else None)==x['symlink']
+-assert len(binding['external'])==binding['external_count']
+-for d,source in [('payload01',P),('retention01',P2)]:
+- verdict=j(V/d/'review.json');assert verdict['verdict']=='APPROVE_SOURCE_PREPARATION_ONLY' and verdict['open_findings']==[]
+- assert verdict['source_directory']==str(source) and verdict['source_freeze']==pin((source/'freeze.json').read_bytes())
+-for x in binding['recipes']:
+- old=Path(x['old']).read_text();new=Path(x['current']).read_text();value=old
+- for c in x['changes']:
+-  if x['mode']=='replace':
+-   assert value.count(c['old'])==c['count'];value=value.replace(c['old'],c['new'])
+-  else:
+-   for pos in reversed(c['before_offsets']):
+-    assert value[pos:pos+len(c['before'])]==c['before'];value=value[:pos]+c['after']+value[pos+len(c['before']):]
++pf=freeze(P,'007e81a0435d0d41e12be4e841ebc795647b028d21f9df7da00bf8d8c9c61706',473)
++vf=freeze(V,'731af8d391ac64968ccf00a63ddef7994bf283233cb1fbeef2c6c144a795d5bb',727)
++mapped=sum(pairs(P,n) for n in ('phase01-original-to-copy-manifest.json','current-original-to-copy-manifest.json','history-supplement-map.json'))+pairs(V,'original-to-copy-manifest.json')
++assert mapped==1123
++external=j(P/'external-full-byte-bindings.json');external_pairs=external['payload']+external['semantic_review']+[external['seed']]
++for x in external_pairs:
++ raw=Path(x['original']).read_bytes();assert raw==Path(x['copy']).read_bytes() and pin(raw)=={k:x[k] for k in ('bytes','sha256')}
++assert len(external_pairs)==2084
++for x in external['baseline_sources']:assert pin(Path(x['path']).read_bytes())=={k:x[k] for k in ('bytes','sha256')}
++verdict=j(V/'review.json');assert verdict['baseline_commit']==HEAD and verdict['verdict']==verdict['spec_verdict']==verdict['quality_verdict']=='APPROVE' and verdict['open_findings']==[]
++ad=j(P/'adaptation-proof.json');assert ad['all_prior_gates_retained_by_exact_inverse'] and ad['no_dynamic_count_gates']
++for x in ad['files']:
++ old=(P/'prior-preparation'/x['file']).read_text();new=(P/x['file']).read_text();value=old
++ for change in x['changes']:
++  assert value.count(change['old'])==change['count'];value=value.replace(change['old'],change['new'])
+  assert value==new
+- for c in reversed(x['changes']):
+-  if x['mode']=='replace':
+-   assert value.count(c['new'])==c['count'];value=value.replace(c['new'],c['old'])
+-  else:
+-   for pos in reversed(c['after_offsets']):
+-    assert value[pos:pos+len(c['after'])]==c['after'];value=value[:pos]+c['before']+value[pos+len(c['after']):]
+- assert value==old;ast.parse(new)
+-measure=j(B/'actual-current-output-contract.json')
+-assert measure['status']=='PASS_ACTUAL_MEASUREMENTS' and list(measure['counts'].values())==[45402,11938,1618,11,7092,15546,22528,22188,24105,37]
+-assert measure['registered_pages']==548 and measure['source_date']=='2026-09-13'
+-for rel,x in measure['source_and_output_pins'].items():assert pin((W/rel).read_bytes())==x
+-review=B/'semantic-review';rf=freeze(review,'5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b',871)
+-external_pairs=[]
+-for n in list(rf['files'])+['freeze.json']:
+- original=review/n;copy=W/'data/alignment/reviews_c05/c5p94'/n
+- assert original.read_bytes()==copy.read_bytes();external_pairs.append(dict(original=str(original),copy=str(copy),**pin(original.read_bytes())))
+-meta=j(review/'review.json');assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS' and meta['open_findings']==[]
+-semantic_root=j(B/'root-final-semantic-review-verification-v3/proof.json')
+-assert semantic_root['status']=='PASS' and semantic_root['head']==HEAD and semantic_root['review_freeze']==pin((review/'freeze.json').read_bytes()) and semantic_root['review_metadata']==pin((review/'review.json').read_bytes())
+-tuples=j(review/'resolved-spans.json');assert len(tuples)==124 and sum(x['eng'] is None for x in tuples)==4 and sum(x['d']==5 and x['eng'] is not None for x in tuples)==102
+-spec=j(W/'data/alignment/specs_c05/c5p94.json');assert [dict(seq=s['seq'],id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng']) for s in spec['segments'] for x in s['spans']]==[{k:x[k] for k in ('seq','id','d','tib','eng')} for x in tuples]
+-L=B/'landing';payload=j(L/'staged-payload-source-proof.json');assert payload['status']=='PASS' and payload['actual_ctest_run_count']==1 and len(payload['actual_ctest_records'])==17 and payload['actual_ctest_total_seconds']==12.62 and payload['actual_build_invocations']==2
+-assert pin((L/'staged-payload-manifest.json').read_bytes())['sha256']=='9b0abba14e86da80708be4f5f17d8f3e9df6ffe6468dbd17db3a65b211abde01'
+-assert pin((L/'staged-payload-source-proof.json').read_bytes())['sha256']=='5600ef16c28bdbd772f11668830a375d70340746cf7077d14824b01f6f27625a'
+-accepted_payload=j(B/'root-payload-result-acceptance.json')
+-assert accepted_payload['status']=='PASS' and accepted_payload['head']==HEAD
+-assert accepted_payload['manifest']==pin((L/'staged-payload-manifest.json').read_bytes()) and accepted_payload['source_proof']==pin((L/'staged-payload-source-proof.json').read_bytes())
+-manifest=j(L/'staged-payload-manifest.json');assert manifest['head']==HEAD and len(manifest['files'])==len(payload['files'])==payload['payload_count']==accepted_payload['payload_files']==13
+-assert len({x['path'] for x in manifest['files']})==13
+-for x in manifest['files']:
+- original=W/x['path'];copy=L/'payload-freeze'/x['path'];raw=original.read_bytes()
+- assert pin(raw)=={k:x[k] for k in ('bytes','sha256')} and raw==copy.read_bytes()
+- external_pairs.append(dict(original=str(original),copy=str(copy),**pin(raw)))
+-for x in payload['files']:
+- assert Path(x['original']).read_bytes()==Path(x['copy']).read_bytes() and pin(Path(x['original']).read_bytes())=={k:x[k] for k in ('bytes','sha256')}
+-for x in payload['proof_inputs']:assert pin(Path(x['path']).read_bytes())=={k:x[k] for k in ('bytes','sha256')}
+-seed=measure['seed'];assert pin(Path(seed['path']).read_bytes())=={k:seed[k] for k in ('bytes','sha256')}
+-assert Path(seed['path']).read_bytes()==git(['show',HEAD+':docs/geshe_michael_roach_dictionary.csv'])
+-needed=j(review/'span-head-allow-needed.json');assert payload['approved_allowances']==needed and not payload['approved_allowances_empty'] and payload['prior_allowance_values_unchanged']
+-assert set(needed)=={'pages_c05'} and set(needed['pages_c05'])=={'c5p94/s280w29','c5p94/s280w43'}
+-prior_allow=git(['show',HEAD+':data/alignment/span_head_allow.json']);expected_allow=json.loads(prior_allow)
+-assert not(set(expected_allow.get('pages_c05',{})) & set(needed['pages_c05']))
+-expected_allow.setdefault('pages_c05',{}).update(needed['pages_c05']);assert j(W/'data/alignment/span_head_allow.json')==expected_allow
+-assert len(external_pairs)==885
++ for change in reversed(x['changes']):value=value.replace(change['new'],change['old'])
++ assert value==old
++ ast.parse(new)
++measure=j(P/'actual-measurements.json');assert list(measure['counts'].values())==[45275,11934,1615,11,7084,15517,22491,22151,24061,34] and measure['registered_pages']==547
++review=B/'semantic-review';rf=freeze(review,'d744bffe9a7635a7340aee88431bd192b2afe2e063f126f36896b105bc66578f',2070)
++for n in list(rf['files'])+['freeze.json']:assert (review/n).read_bytes()==(W/'data/alignment/reviews_c05/c5p93'/n).read_bytes()
++meta=j(review/'review.json');assert meta['baseline_commit']==HEAD and meta['verdict']==meta['spec_verdict']==meta['quality_verdict']=='APPROVE' and meta['open_findings']==[]
++tuples=j(review/'resolved-spans.json');assert len(tuples)==146 and sum(x['eng'] is None for x in tuples)==8 and sum(x['d']==5 and x['eng'] is not None for x in tuples)==94
++spec=j(W/'data/alignment/specs_c05/c5p93.json');assert [dict(seq=s['seq'],id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng']) for s in spec['segments'] for x in s['spans']]==[{k:x[k] for k in ('seq','id','d','tib','eng')} for x in tuples]
++L=B/'landing';payload=j(L/'staged-payload-source-proof.json');assert payload['status']=='PASS' and payload['actual_ctest_run_count']==1 and len(payload['actual_ctest_records'])==17 and payload['actual_ctest_total_seconds']==11.27 and payload['actual_build_invocations']==2
++assert pin((L/'staged-payload-manifest.json').read_bytes())['sha256']=='1337b1cb34a1f481fd4a7cb8e16c56aee050c454e8a0021f5b48567f9c6e0f35'
++assert pin((L/'staged-payload-source-proof.json').read_bytes())['sha256']=='93a3ae5d8545a3c8df7058d259b227cd26da715cd151dbf6214b346a1f369ecb'
++for x in j(L/'staged-payload-manifest.json')['files']:
++ raw=(W/x['path']).read_bytes();assert pin(raw)=={k:x[k] for k in ('bytes','sha256')} and raw==(L/'payload-freeze'/x['path']).read_bytes()
+ base=j(B/'baseline.json');assert base['commit']==HEAD and len(base['sha256'])==9
+ for rel,h in base['sha256'].items():
+  raw=(W/rel).read_bytes() if rel.endswith('.gz') else git(['show',HEAD+':'+rel]);assert pin(raw)['sha256']==h
+@@ -113,8 +74,8 @@
+ entry=dict(status='PASS_BEFORE_INDEPENDENT_RUNTIME',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=HEAD,files=files,baseline_hashes=base['sha256'],state=state,index_path=str(indexpath.resolve()),runtime_not_yet_started=True)
+ save(O/'proof.json',entry)
+ R.mkdir(exist_ok=False);mapping=[]
+-for x in binding['materialize_exact_code']:
++for x in j(P/'command-plan.json')['materialize_exact_code']:
+  p=Path(x['path']);raw=p.read_bytes();assert pin(raw)=={k:x[k] for k in ('bytes','sha256')};d=R/p.name;d.write_bytes(raw);assert d.read_bytes()==raw;mapping.append(dict(original=str(p),copy=str(d),**pin(raw)))
+-proof=dict(status='APPROVE_ONE_LOCAL_INDEPENDENT_REPRODUCTION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=HEAD,package_freezes=binding['packages'],frozen_files=sum(x['file_count'] for x in binding['packages']),full_source_copy_pairs=mapped,full_external_pairs=len(external_pairs),semantic_files=871,landed_semantic_copies=872,code_mapping=mapping,source_entry=str(O/'proof.json'),root_read_complete_four_codes_diffs_reports_contract=True,source_transport_limit=binding['transport_limit'],scope='One preparation, one isolated layer/view with immutable incoming seed, one retention run. Mandatory reviewed later original/seed/Git/state closure. No repeated root production or tests, no MAIN/native/staging approval.')
++proof=dict(status='APPROVE_ONE_LOCAL_INDEPENDENT_REPRODUCTION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=HEAD,preparation_freeze=pin((P/'freeze.json').read_bytes()),independent_review_freeze=pin((V/'freeze.json').read_bytes()),frozen_files=1200,full_source_copy_pairs=mapped,full_external_pairs=len(external_pairs),semantic_files=2070,landed_semantic_copies=2071,code_mapping=mapping,source_entry=str(O/'proof.json'),root_read_complete_four_codes_diffs_reports_contract=True,scope='One preparation, one isolated layer/view with immutable incoming seed, one retention run. Mandatory reviewed later original/seed/Git/state closure. No repeated root production or tests, no MAIN/native/staging approval.')
+ save(R/'root-runtime-release.json',proof);save(B/'reproduction-method-root-approval.json',proof)
+-print(json.dumps(dict(status=proof['status'],runtime=str(R),whole_frozen_files=proof['frozen_files'],source_pairs=mapped,external_pairs=len(external_pairs))))
++print(json.dumps(dict(status=proof['status'],runtime=str(R),whole_frozen_files=1200,source_pairs=mapped,external_pairs=len(external_pairs))))

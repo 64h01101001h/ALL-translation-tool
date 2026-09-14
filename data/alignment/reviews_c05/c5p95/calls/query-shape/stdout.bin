@@ -1,0 +1,21 @@
+[
+  {
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      277,
+      291
+    ],
+    "count": 15,
+    "rows": 15
+  },
+  {
+    "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+    "parameters": [
+      "bltas pa",
+      "bltas pa"
+    ],
+    "count": 1,
+    "rows": 1
+  }
+]

@@ -1,0 +1,31 @@
+import datetime
+import hashlib
+import json
+import os
+from pathlib import Path
+import sys
+
+assert __debug__ and sys.dont_write_bytecode
+P=Path(__file__).resolve().parent
+assert not (P/'freeze.json').exists()
+assert datetime.datetime.now(datetime.timezone.utc) < datetime.datetime(2026,9,15,13,tzinfo=datetime.timezone.utc)
+call=P/'calls/freeze-final'
+call.mkdir(parents=True,exist_ok=False)
+command={'argv':[sys.executable,'-B',str(P/'freeze.py')],'invoked_shell_command':'PYTHONDONTWRITEBYTECODE=1 python3 -B freeze.py','cwd':str(P),'environment_overrides':{'PYTHONDONTWRITEBYTECODE':'1'},'recorded_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'stream_recording':'This successful finalizer writes the exact stdout below, then emits those bytes after freeze creation. A failed finalizer must not be treated as a completed freeze.'}
+(call/'command.json').write_text(json.dumps(command,indent=2)+'\n')
+(call/'stdin.bin').write_bytes(b'')
+(call/'stderr.bin').write_bytes(b'')
+stdout=b'Source preparation frozen.\n'
+(call/'stdout.bin').write_bytes(stdout)
+(call/'exit.txt').write_text('0\n')
+files={}
+for path in sorted(P.rglob('*')):
+    if path.is_file():
+        raw=path.read_bytes()
+        files[str(path.relative_to(P))]={'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+obj={'status':'FROZEN_SOURCE_PREPARATION_ONLY_WAITING_FOR_FINAL_RELEASE','frozen_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'root':str(P),'baseline_commit':'fb9182dc6fca2230be3bc5169ba1288a22430280','member_count':len(files),'member_bytes':sum(x['bytes'] for x in files.values()),'excludes':['freeze.json (this manifest; its external SHA-256 pin is supplied at handoff)'],'files':files}
+(P/'freeze.json').write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+for rel,expected in files.items():
+    raw=(P/rel).read_bytes()
+    assert len(raw)==expected['bytes'] and hashlib.sha256(raw).hexdigest()==expected['sha256']
+sys.stdout.buffer.write(stdout)

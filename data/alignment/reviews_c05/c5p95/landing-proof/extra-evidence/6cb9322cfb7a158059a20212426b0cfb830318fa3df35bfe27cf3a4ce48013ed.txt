@@ -1,0 +1,12 @@
+--- before/compose-ordinary-bank-inventory-root.py
++++ candidates/compose-ordinary-bank-inventory-root.py
+@@ -51,7 +51,8 @@
+ # The currently active outer recorder is an explicit later boundary. Source
+ # preparation, failed attempts, checkpoints, and every other B file are included.
+ deferred = [Path(p) for p in method['deferred_active_callers']]
+-assert deferred and len(deferred) == len(set(deferred))
++assert len(deferred) == 1
++assert all(p.parent in (B, I) and 'ordinary' in p.name and 'inventory' in p.name and p.name.endswith('caller') for p in deferred)
+ assert all(p.is_absolute() and not p.is_relative_to(B / 'semantic-review') for p in deferred)
+ expected_integration = {p for p in I.iterdir() if p.name.startswith('through285') and p != O and p not in deferred}
+ assert set(integration_inputs) == expected_integration, 'Every current through285 integration item must be explicitly included or the exact active caller deferred'

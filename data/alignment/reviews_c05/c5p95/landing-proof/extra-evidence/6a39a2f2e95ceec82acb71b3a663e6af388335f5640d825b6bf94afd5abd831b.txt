@@ -1,0 +1,96 @@
+--- candidates/verify-review-copy-and-register285.py
++++ prior/verify-review-copy-and-register285.py
+@@ -1,36 +1,14 @@
+ """Check exact review evidence copies and only approved register/allowance deltas."""
+ from pathlib import Path
+ import hashlib,json,subprocess,sys
+-helper=Path(__file__).resolve();local_batch=helper.parent.parent
+-assert local_batch.name=='C05-283-285' and helper==local_batch/'landing-helper-preparation/verify-review-copy-and-register285.py'
+-art=local_batch.parent;wt=art.parent/'campaign-worktree'
++art=Path(__file__).resolve().parent;wt=art.parent/'campaign-worktree'
+ page,first=map(int,sys.argv[1:]);batch=art/f'C05-{first}-{first+2}';dest=wt/f'data/alignment/reviews_c05/c5p{page}'
+-assert page==95 and first==283
+-if not __debug__: raise RuntimeError('Assertions must remain enabled')
+ base=json.loads((batch/'baseline.json').read_text())['commit']
+-assert base=='fb9182dc6fca2230be3bc5169ba1288a22430280'
+-def frozen_review_files(review):
+-    freeze = review / 'freeze.json'
+-    frozen_raw = freeze.read_bytes()
+-    assert len(frozen_raw) == 445105 and hashlib.sha256(frozen_raw).hexdigest() == '8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445'
+-    frozen = json.loads(frozen_raw)
+-    assert Path(frozen['root']) == review and frozen['baseline_commit'] == 'fb9182dc6fca2230be3bc5169ba1288a22430280'
+-    assert frozen['verdict'] == 'APPROVE' and frozen['open_findings'] == []
+-    assert isinstance(frozen['files'], dict) and len(frozen['files']) == frozen['file_count'] == 2386
+-    assert set(frozen['files']) == {str(p.relative_to(review)) for p in review.rglob('*') if p.is_file() and p != freeze}
+-    for name, r in frozen['files'].items():
+-        path = Path(name)
+-        assert name not in ('', '.', '..') and not path.is_absolute() and '..' not in path.parts
+-        assert (review / path).resolve().is_relative_to(review.resolve())
+-        raw = (review / path).read_bytes()
+-        assert len(raw) == r['bytes'] and hashlib.sha256(raw).hexdigest() == r['sha256'], name
+-    return list(frozen['files']) + ['freeze.json']
+-
+ copied=[]
+-for rel in frozen_review_files(batch/'semantic-review'):
+-    p=batch/'semantic-review'/rel
+-    assert (dest/rel).read_bytes()==p.read_bytes(),rel
+-    copied.append({'path':rel,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})
++for p in (batch/'semantic-review').rglob('*'):
++    if p.is_file() and p.suffix.lower() in ('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'):
++        rel=p.relative_to(batch/'semantic-review');assert (dest/rel).read_bytes()==p.read_bytes(),str(rel)
++        copied.append({'path':str(rel),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})
+ for seq in range(first,first+3):assert (dest/f'{seq}-reconciliation.md').read_bytes()==(batch/f'reconciled/{seq}/report.md').read_bytes()
+ def old(name):return json.loads(subprocess.check_output(['git','show',base+':'+name],cwd=wt))
+ rp='docs/errata_register.json';before=old(rp);now=json.loads((wt/rp).read_text());assert now[:len(before)]==before
+@@ -39,50 +17,7 @@
+     assert a['segment']==f"C05:{e['seq']}" and a['course']=='C05'
+     for key in ('kind','found','expected','evidence','severity','confidence'):assert a[key]==e[key],key
+ ap='data/alignment/span_head_allow.json';ba=old(ap);na=json.loads((wt/ap).read_text())
+-review = batch / 'semantic-review'
+-assert (dest / 'review.json').read_bytes() == (review / 'review.json').read_bytes()
+-meta = json.loads((review / 'review.json').read_bytes())
+-assert meta['verdict'] == 'APPROVE' and meta['open_findings'] == []
+-assert meta['page'] == 'c5p95' and meta['sequences'] == [283, 284, 285]
+-assert not (dest / 'span-head-allow-needed.json').exists(), 'Do not fabricate a missing frozen reviewer field'
+-mechanical = art / 'integration/through285-root-reconciliation-verification-attempt01'
+-proof_raw = (mechanical / 'execution-proof.json').read_bytes()
+-assert len(proof_raw) == 4107 and hashlib.sha256(proof_raw).hexdigest() == '9af274e2621d377cbab7ea24d0d57e4b79bad2b597e9ca0194469d2849914fa6'
+-proof = json.loads(proof_raw)
+-assert proof['status'] == 'PASS mechanical source and identity verification' and proof['baseline'] == base
+-assert proof['final_spans'] == 76 and proof['nulls'] == 0 and proof['nonnull_d5'] == 61
+-assert proof['original_identities'] == 145 and proof['canonical_replays'] == 3
+-licenses = meta['head_licensors']
+-assert isinstance(licenses, list) and len(licenses) == 2
+-licensed = {r['key']: r for r in licenses}
+-assert len(licensed) == 2 and set(licensed) == {'c5p95/s284w6', 'c5p95/s285w5'}
+-wanted = {'pages_c05': {}}
+-for seq in [283, 284, 285]:
+-    final = batch / 'reconciled' / str(seq)
+-    declared = json.loads((final / 'proposed-head-allowances.json').read_bytes())
+-    actual = json.loads((mechanical / f'{seq}.head-allowance-check.json').read_bytes())
+-    assert actual['page'] == 'c5p95' and actual['seq'] == seq and actual['semantic_approval'] is False
+-    assert actual['predicate_source'] == declared['predicate_source']
+-    predicate = wt / 'tools/test_no_supplied_span_head.py'
+-    assert Path(actual['predicate_source']['path']) == predicate
+-    predicate_raw = predicate.read_bytes()
+-    assert len(predicate_raw) == actual['predicate_source']['bytes'] and hashlib.sha256(predicate_raw).hexdigest() == actual['predicate_source']['sha256']
+-    assert actual['actual_gated_hits'] == declared['actual_gated_hits']
+-    assert actual['allowances'] == declared['pages_c05']
+-    assert set(actual['allowances']) == {h['allowance_key'] for h in actual['actual_gated_hits']}
+-    tuples = {r['id']: r for r in json.loads((final / 'final-tuples.json').read_bytes())}
+-    body = (final / 'body.html').read_text()
+-    for hit in actual['actual_gated_hits']:
+-        key = hit['allowance_key'];license = licensed[key];t = hit['final_tuple']
+-        assert key == 'c5p95/' + hit['label'] == f"c5p95/s{seq}{t['id']}"
+-        assert t == tuples[t['id']] and t['tib'] == hit['licensor'] == license['licensor']
+-        assert license['seq'] == seq and license['id'] == t['id'] and license['verdict'] == 'LICENSED'
+-        assert isinstance(license['reason'], str) and license['reason'].strip()
+-        assert body[slice(*hit['body_range'])] == hit['match']
+-        reason = actual['allowances'][key]
+-        assert isinstance(reason, str) and reason.strip() and t['tib'] in reason and t['eng'] in reason
+-        assert key not in wanted['pages_c05'];wanted['pages_c05'][key] = reason
+-assert set(wanted['pages_c05']) == set(licensed)
++wanted=json.loads((dest/'span-head-allow-needed.json').read_text()) if (dest/'span-head-allow-needed.json').exists() else {}
+ if isinstance(wanted,list):
+     normalized={}
+     for item in wanted:

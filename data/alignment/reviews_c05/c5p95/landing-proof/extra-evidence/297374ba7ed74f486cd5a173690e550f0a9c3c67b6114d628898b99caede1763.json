@@ -1,0 +1,153 @@
+{
+  "status": "SOURCE_ONLY_ORDER_CORRECTION_READY_FOR_ROOT_REVIEW",
+  "semantic_approval": false,
+  "role": "Original Tibetan proposer and tooling author",
+  "one_runtime_line_changed": true,
+  "physical_page_traversal_unchanged": true,
+  "other_three_runtime_sources_byte_identical": true,
+  "full_forward_inverse_AST_conservation": true,
+  "prior_preparation_freeze": {
+    "bytes": 37645,
+    "sha256": "0277153eb4480ea551c29d7a56947722f1313662eb0755ba62aba9001dd67307"
+  },
+  "first_failure": {
+    "status": "FAILED_PREPARATION_ORDER_PREDICATE_WITH_UNCHANGED_DATA",
+    "utc": "2026-09-14T06:28:38.622837+00:00",
+    "runtime": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction",
+    "failed_source": {
+      "bytes": 5854,
+      "sha256": "fc6221f0525b252abc259bdcaba5aa420c9403dcf8745b96e424aa76407a124b"
+    },
+    "actual_caller": {
+      "directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction/caller-runs/prepare",
+      "exit": 1,
+      "stderr": {
+        "bytes": 496,
+        "sha256": "125c8c443c44bf2143ebc653bb69acd02381134d6a1061a896a340410b130891"
+      }
+    },
+    "registered_pages": 549,
+    "C05_sequence_population": 285,
+    "first_sequence_order": [
+      1,
+      2,
+      3,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      4,
+      5,
+      6,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75
+    ],
+    "first_mismatch": {
+      "index": 3,
+      "actual": 28,
+      "expected": 4
+    },
+    "sorted_sequences_equal_exact_complete_range": true,
+    "no_duplicate_sequences": true,
+    "diagnosis": "Registry is sorted by physical page filename, so c5p10 precedes c5p2. The new guard incorrectly requires traversal order to equal numerical course order. Exact sorted list comparison preserves full population and multiplicity.",
+    "failed_runtime_files": 3043,
+    "failed_runtime_bytes": 1005702355,
+    "failed_inventory": {
+      "bytes": 656879,
+      "sha256": "a104ce9cc24c4f19b57f56b52b6921d744fc35bacb7c326592c445b01c38029d"
+    },
+    "all_failed_runtime_bytes_retained": true,
+    "builders_started": 0,
+    "tests_repeated": 0,
+    "preparation_result_absent": true,
+    "worktree_state_equals_entry": true,
+    "raw_index_unchanged": true,
+    "all13payload_pins_unchanged": true,
+    "next": "Preserve this entire failed runtime; review narrow sorted-list predicate and fresh second-runtime/entry binding, then execute once. No source/semantic data change."
+  },
+  "new_runtime": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-attempt02",
+  "new_entry": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/approve-reproduction-method-root-attempt02.py",
+  "new_entry_output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/reproduction-root-entry-attempt02",
+  "new_approval_output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/reproduction-method-root-approval-attempt02.json",
+  "binding": {
+    "bytes": 611675,
+    "sha256": "3771433b02bf18bd72f8729dffe90301bb135e3d5afc2d13148eddfcfd0b91d8"
+  },
+  "runtime_sources": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-order-correction/runtime/prepare.py.txt",
+      "bytes": 5860,
+      "sha256": "e3d5ae3ac7316c8d4183ec973e7d5c159c66656e5bcd227a6ad25f0cb298e4d0"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-order-correction/runtime/run-once.py.txt",
+      "bytes": 2559,
+      "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-order-correction/runtime/run-isolated-readonly.py.txt",
+      "bytes": 1639,
+      "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-order-correction/runtime/verify-retention.py.txt",
+      "bytes": 11882,
+      "sha256": "c9b09d5b3c34632e1c225d9ba2ee4bcc895a087444e8cf071492050602cfee3c"
+    }
+  ],
+  "entry_source": {
+    "bytes": 16122,
+    "sha256": "95394a8b911ddef2ecaa24ad201d2c187b4d2a62517bd65417e1d8d2e5e55e22"
+  },
+  "original_copy_records": 20,
+  "all_bound_original_copy_records": 309,
+  "whole_source_recipes": 17,
+  "existing_external_pins": 619,
+  "closure_actual_counts_and_sources": "PENDING actual attempt02 runtime; old guarded sources unchanged",
+  "candidate_imports": 0,
+  "candidate_invocations": 0,
+  "SQL_Git_build_test_calls": 0,
+  "B_W_RT_writes": false
+}

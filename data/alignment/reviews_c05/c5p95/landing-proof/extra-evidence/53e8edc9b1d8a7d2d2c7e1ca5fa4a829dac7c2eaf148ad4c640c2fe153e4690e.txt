@@ -1,0 +1,13 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,sys
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');O=R/'campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter'
+assert __debug__
+caller=O/sys.argv[1];program=O/sys.argv[2];assert caller.parent==O and program.parent==O;caller.mkdir(exist_ok=False)
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(n,b):
+    with (caller/n).open('xb') as f:f.write(b)
+def save(n,x):write(n,(json.dumps(x,indent=2)+'\n').encode())
+argv=[sys.executable,'-B',str(program),*sys.argv[3:]];overrides={'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'};env=dict(os.environ,**overrides);start=datetime.datetime.now(datetime.timezone.utc).isoformat();save('command.json',{'argv':argv,'cwd':str(R),'environment_overrides':overrides,'started_utc':start,'program':pin(program.read_bytes())})
+r=subprocess.run(argv,cwd=R,env=env,input=b'',stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False)
+for n,b in [('stdin.bin',b''),('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:write(n,b)
+save('execution.json',{'started_utc':start,'finished_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':r.returncode,'stdout':pin(r.stdout),'stderr':pin(r.stderr)});sys.stdout.buffer.write(r.stdout);sys.stderr.buffer.write(r.stderr);raise SystemExit(r.returncode)

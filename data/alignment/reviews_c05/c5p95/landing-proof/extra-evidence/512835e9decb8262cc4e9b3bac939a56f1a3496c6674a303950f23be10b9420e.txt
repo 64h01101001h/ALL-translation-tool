@@ -1,0 +1,45 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-order-correction/prior/approve-reproduction-method-root.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-order-correction/approve-reproduction-method-root-attempt02.py
+@@ -1,7 +1,7 @@
+ from pathlib import Path
+ import json,hashlib,datetime,ast,os,subprocess,difflib,argparse
+ B=Path(__file__).resolve().parent;I=B.parent/'integration';W=B.parents[1]/'campaign-worktree'
+-P=I/'through285-payload-freezer-preparation';P2=I/'through285-generated-reproduction-preparation';Q=I/'through285-generated-reproduction-final-preparation';R=I/'through285-generated-reproduction';O=B/'reproduction-root-entry'
++P=I/'through285-payload-freezer-preparation';P2=I/'through285-generated-reproduction-preparation';Q=I/'through285-generated-reproduction-order-correction';R=I/'through285-generated-reproduction-attempt02';O=B/'reproduction-root-entry-attempt02'
+ HEAD='fb9182dc6fca2230be3bc5169ba1288a22430280'
+ os.environ.update(PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0',GIT_OPTIONAL_LOCKS='0')
+ def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+@@ -32,7 +32,7 @@
+    if k in x:assert str(p.resolve())==x[k]
+   if 'symlink' in x:assert (os.readlink(p) if p.is_symlink() else None)==x['symlink']
+  return len(rows)
+-assert B.name=='C05-283-285' and Path(__file__).resolve()==B/'approve-reproduction-method-root.py'
++assert B.name=='C05-283-285' and Path(__file__).resolve()==B/'approve-reproduction-method-root-attempt02.py'
+ assert not R.exists()
+ parser=argparse.ArgumentParser();parser.add_argument('--source-review-proof',required=True);parser.add_argument('--source-review-sha256',required=True);args=parser.parse_args()
+ review_path=Path(args.source_review_proof).resolve();assert review_path.is_relative_to(I.resolve()) and not review_path.is_relative_to(Q.resolve())
+@@ -45,8 +45,15 @@
+ freeze(Q,source_review['preparation_freeze']['sha256'],source_review['preparation_members'])
+ assert source_review['bindings']==pin((Q/'bindings.json').read_bytes())
+ assert git(['rev-parse','HEAD']).decode().strip()==HEAD
+-assert pin((Q/'bindings.json').read_bytes())['sha256']=='213b558dcc989f79e7eff26eab1e184e1dbf4dc8e8ea733b1e3226f02674877f'
++assert pin((Q/'bindings.json').read_bytes())['sha256']=='3771433b02bf18bd72f8729dffe90301bb135e3d5afc2d13148eddfcfd0b91d8'
+ binding=j(Q/'bindings.json')
++history=binding['prior_failed_runtime'];failed_root=Path(history['directory']);history_map=Path(history['inventory']['path'])
++assert pin(history_map.read_bytes())=={k:history['inventory'][k] for k in ('bytes','sha256')}
++history_rows=j(history_map);assert history_rows['root']==str(failed_root) and len(history_rows['files'])==history['files']==3043
++assert {str(p.relative_to(failed_root)) for p in failed_root.rglob('*') if p.is_file()}==set(history_rows['files'])
++for name,expected in history_rows['files'].items():assert pin((failed_root/name).read_bytes())==expected
++assert j(Path(history['root_proof']['path']))['status']=='FAILED_PREPARATION_ORDER_PREDICATE_WITH_UNCHANGED_DATA'
++assert not any((failed_root/name).exists() for name in ['executions','execution-proof.json','preparation-proof.json','input-manifest.json'])
+ assert not R.exists()
+ for x in binding['packages']:freeze(Path(x['directory']),x['freeze']['sha256'],x['file_count'])
+ mapped=sum(pairs(Path(x['directory']),x['manifest']) for x in binding['pair_maps'])
+@@ -157,5 +164,6 @@
+ for x in binding['materialize_exact_code']:
+  p=Path(x['path']);raw=p.read_bytes();assert pin(raw)=={k:x[k] for k in ('bytes','sha256')};d=R/p.name;d.write_bytes(raw);assert d.read_bytes()==raw;mapping.append(dict(original=str(p),copy=str(d),**pin(raw)))
+ proof=dict(status='APPROVE_ONE_LOCAL_INDEPENDENT_REPRODUCTION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),head=HEAD,package_freezes=binding['packages'],frozen_files=sum(x['file_count'] for x in binding['packages']),full_source_copy_pairs=mapped,full_external_pairs=len(external_pairs),semantic_files=2386,landed_semantic_copies=2387,code_mapping=mapping,source_entry=str(O/'proof.json'),root_read_complete_four_codes_diffs_reports_contract=True,source_transport_limit=binding['transport_limit'],scope='One preparation, one isolated layer/view with immutable incoming seed, one retention run. Mandatory reviewed later original/seed/Git/state closure. No repeated root production or tests, no MAIN/native/staging approval.')
+-save(R/'root-runtime-release.json',proof);save(B/'reproduction-method-root-approval.json',proof)
++proof.update(attempt=2,prior_failed_runtime=binding['prior_failed_runtime'])
++save(R/'root-runtime-release.json',proof);save(B/'reproduction-method-root-approval-attempt02.json',proof)
+ print(json.dumps(dict(status=proof['status'],runtime=str(R),whole_frozen_files=proof['frozen_files'],source_pairs=mapped,external_pairs=len(external_pairs))))

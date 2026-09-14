@@ -1,0 +1,22 @@
+{
+  "candidate_failures": [],
+  "preparation_failures": [],
+  "exploratory_tool_read_failures": [
+    {
+      "error": "unmatched closing parenthesis in a Python directory-listing command",
+      "retention": "Native tool history in earlier context; exact argv not reconstructed here",
+      "effects": "No target execution or filesystem mutation"
+    },
+    {
+      "error": "zsh unmatched glob for *root*.py source listing",
+      "retention": "Native tool history in earlier context; exact argv not reconstructed here",
+      "effects": "No target execution or filesystem mutation"
+    },
+    {
+      "error": "KeyError: 0 while indexing historical whitespace files mapping as a list",
+      "retention": "Native tool output in current conversation; corrected read uses next(iter(mapping.items()))",
+      "effects": "Read-only exploratory command, no mutation"
+    }
+  ],
+  "limits": "No fabricated native failure streams are substituted for these exploratory tool responses."
+}

@@ -1,0 +1,136 @@
+"""Prepare actual through282 bindings after reviewed final bank/stage; never stage or run verifier."""
+from pathlib import Path
+import argparse,copy,datetime,hashlib,json,os,subprocess,sys,traceback
+HERE=Path(__file__).resolve().parent
+I=HERE.parent;A=I.parent;ROOT=A.parent;B=A/'C05-280-282';W=ROOT/'campaign-worktree';L=B/'landing'
+P=I/'through282-final-stage-preparation';REVIEW=I/'through282-final-stage-code-review'
+BASE='10968d16e701b698a0e1fbd845b353089d15ac39'
+CODE_SHA='b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee'
+REVIEW_SHA='81af1a77b2c6285a91499c6d0a595816a079363628abc9bb367aa0116d907899'
+WS=I/'through282-whitespace-actual-audit/source-whitespace-proof.json'
+LOG=I/'through282-whitespace-runs/raw-diagnostic/stdout.bin'
+ACCEPT=I/'through282-whitespace-actual-root-acceptance/proof.json'
+INPUTS={}
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def read(p):
+ p=Path(p);assert p.is_absolute();raw=p.read_bytes();r=dict(path=str(p),resolved=str(p.resolve(strict=True)),**pin(raw))
+ if str(p) in INPUTS:assert INPUTS[str(p)]==r
+ INPUTS[str(p)]=r;return raw
+def obj(p):return json.loads(read(p))
+def check(raw,r):assert pin(raw)=={k:r[k] for k in ('bytes','sha256')}
+def relative(n):
+ p=Path(n);assert isinstance(n,str) and n and not p.is_absolute() and '..' not in p.parts and str(p)==n;return p
+def caller(d,exit_code=0):
+ d=Path(d);assert d.is_absolute() and d.resolve(strict=True).is_relative_to(I.resolve())
+ command=obj(d/'command.json');execution=obj(d/'execution.json')
+ assert command['argv']==execution['argv'] and command['cwd']==execution['cwd']
+ assert command['environment_overrides']['PYTHONDONTWRITEBYTECODE']=='1'
+ assert execution['exit']==exit_code and int(read(d/'exit.txt'))==exit_code and not read(d/'stdin.bin') and not read(d/'stderr.bin')
+ for stem in ('stdout','stderr'):
+  raw=read(d/(stem+'.bin'));assert len(raw)==execution[stem+'_bytes'] and pin(raw)['sha256']==execution[stem+'_sha256']
+ return command,execution
+
+def prerequisites(args):
+ """Read only: no mkdir, save, subprocess, candidate import or Git here."""
+ assert args.execute_reviewed_binding, 'Explicit root release required'
+ assert HERE==I/'through282-final-stage-binding-preparation', 'Use exact reviewed source location'
+ assert pin(read(P/'verify_staged_through282.py'))['sha256']==CODE_SHA
+ rf=read(REVIEW/'freeze.json');assert pin(rf)['sha256']==REVIEW_SHA
+ review_raw=read(REVIEW/'review.json');check(review_raw,json.loads(rf)['files']['review.json']);review=json.loads(review_raw)
+ assert review['spec_verdict']==review['quality_verdict']=='APPROVE' and not review['blocking_findings']
+ assert review['candidate']==pin(read(P/'verify_staged_through282.py'))
+ template=obj(P/'final-bindings-template.json')
+ prep_freeze=read(P/'freeze.json');assert pin(prep_freeze)['sha256']=='429154a6e1122ee96222a13353273a1df28b63300abebec9fb91d4b9f8e983b9'
+ pf=json.loads(prep_freeze);check(read(P/'final-bindings-template.json'),pf['files']['final-bindings-template.json'])
+ assert template['baseline']==BASE and template['page']==94 and template['sequences']==[280,281,282] and template['verifier_sha256']==CODE_SHA
+ assert len(template['expected'])==11 and all(v is None for v in template['expected'].values())
+ assert len(template['input_pins'])==13
+ for role,r in template['input_pins'].items():
+  if r['sha256'] is not None:check(read(Path(r['path'])),r)
+ payload=obj(L/'staged-payload-manifest.json');source=obj(L/'staged-payload-source-proof.json')
+ assert payload['head']==source['head']==BASE and source['status']=='PASS'
+ check(read(L/'staged-payload-manifest.json'),source['manifest'])
+ assert source['sources_unchanged'] is source['all_actual_canonical_output_pins_match'] is True
+ records={r['path']:r for r in payload['files']};assert len(records)==len(payload['files'])==len(source['files'])==13
+ assert 'data/alignment/span_head_allow.json' in records
+ seen=set()
+ for r in source['files']:
+  original=Path(r['original']);rel=str(original.relative_to(W));assert rel in records and rel not in seen;seen.add(rel)
+  raw=read(original);check(raw,r);check(raw,records[rel])
+  saved=L/'payload-freeze'/relative(rel);assert Path(r['copy']).resolve()==saved.resolve() and read(saved)==raw
+ assert seen==set(records)
+ banks={}
+ for phase,name,outer in [('ordinary','root-proof-copy-manifest-before-whitespace.json',I/'through282-banking-callers/ordinary'),('final-whitespace','root-proof-copy-manifest.json',Path(args.final_bank_caller))]:
+  directory=I/'through282-banking-runs'/phase;raw=read(L/name);manifest=json.loads(raw);result=obj(directory/'result.json')
+  assert result['status']=='PASS' and result['phase']==manifest['phase']==phase and manifest['semantic_review_unchanged'] is True
+  assert Path(result['manifest_path']).resolve()==(L/name).resolve();check(raw,result['manifest_pin'])
+  assert len({r['copy'] for r in manifest['files']})==len(manifest['files'])==result['source_records']
+  assert len(manifest['external_actual_bytes_retained'])==result['external_records']
+  assert result['writes']==obj(directory/'write-events.json')
+  c,e=caller(outer);argv=c['argv']
+  for flag,value in [('--phase',phase),('--batch',str(B)),('--worktree',str(W)),('--run-output',str(directory))]:
+   assert argv.count(flag)==1 and argv[argv.index(flag)+1]==value
+  assert '-B' in argv
+  banks[phase]=(manifest,result)
+ ordinary=banks['ordinary'][0];final=banks['final-whitespace'][0]
+ assert all(r in final['files'] for r in ordinary['files'])
+ assert all(r in final['external_actual_bytes_retained'] for r in ordinary['external_actual_bytes_retained'])
+ whitespace=obj(WS);accept=obj(ACCEPT)
+ assert accept['status']=='PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED' and accept['normalization'] is False and accept['semantic_approval'] is False
+ assert whitespace['mode']=='audit' and whitespace['status']=='PASS actual staged diagnostic reproduced and predicates verified'
+ assert whitespace['baseline_head']==BASE and whitespace['all_warnings_accounted_for'] is True
+ check(read(WS),accept['checks']['audit']['proof'])
+ assert accept['literal_warnings']==whitespace['warning_count'] and accept['warning_files']==len(whitespace['files'])
+ audit_caller=I/'through282-whitespace-actual-audit-caller';c,e=caller(audit_caller)
+ check(read(audit_caller/'execution.json'),accept['checks']['audit']['actual_caller'])
+ assert 'audit' in c['argv'] and c['argv'][c['argv'].index('--output')+1]==str(WS.parent)
+ caller(I/'through282-whitespace-actual-root-acceptance-caller')
+ raw=read(LOG);assert len(raw)==whitespace['raw_log_bytes'] and pin(raw)['sha256']==whitespace['raw_log_sha256']
+ c,e=caller(LOG.parent,whitespace['git_diff_check_exit']);assert c['argv']==['git','diff','--cached','--check'] and Path(c['cwd']).resolve()==W.resolve()
+ assert whitespace['review_freeze_sha256']==template['input_pins']['semantic_freeze']['sha256']
+ assert whitespace['warning_count']==sum(sum(len(ns) for ns in r['issues'].values()) for r in whitespace['files'].values())
+ # Immutable names/pins for all six dynamic input roles, measured only now.
+ dynamic={'ordinary_manifest':L/'root-proof-copy-manifest-before-whitespace.json','final_manifest':L/'root-proof-copy-manifest.json','ordinary_result':I/'through282-banking-runs/ordinary/result.json','final_result':I/'through282-banking-runs/final-whitespace/result.json','whitespace_proof':WS,'whitespace_log':LOG}
+ for role,p in dynamic.items():template['input_pins'][role]=dict(path=str(p),**pin(read(p)))
+ assert all(set(r)=={'path','bytes','sha256'} and r['sha256'] for r in template['input_pins'].values())
+ return template,ordinary,final,whitespace
+
+def main():
+ parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output',required=True);parser.add_argument('--final-bank-caller',required=True);parser.add_argument('--execute-reviewed-binding',action='store_true');args=parser.parse_args()
+ if not __debug__:raise RuntimeError('Assertions must be enabled')
+ template,ordinary,final,ws=prerequisites(args)
+ out=Path(args.output);assert out.is_absolute() and out.parent.resolve(strict=True)==I.resolve() and not out.exists() and not out.is_symlink()
+ assert out.name=='through282-final-stage-bindings', 'Fresh exact external boundary only'
+ out.mkdir(parents=False)
+ def save(n,v):
+  with (out/n).open('x') as f:json.dump(v,f,ensure_ascii=False,indent=2);f.write('\n')
+ counter=0
+ def git(argv):
+  nonlocal counter
+  counter+=1;d=out/f'command-{counter:02d}';d.mkdir();full=['git',*argv]
+  command=dict(argv=full,cwd=str(W),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'},started_at=datetime.datetime.now(datetime.timezone.utc).isoformat())
+  (d/'command.json').write_text(json.dumps(command,indent=2)+'\n');(d/'stdin.bin').write_bytes(b'')
+  p=subprocess.run(full,cwd=W,input=b'',capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'))
+  for n,v in [('stdout.bin',p.stdout),('stderr.bin',p.stderr),('exit.txt',f'{p.returncode}\n'.encode())]:(d/n).write_bytes(v)
+  (d/'execution.json').write_text(json.dumps(dict(**command,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=p.returncode,stdout=pin(p.stdout),stderr=pin(p.stderr)),indent=2)+'\n')
+  assert p.returncode==0 and not p.stderr;return p.stdout
+ try:
+  save('invocation.json',dict(argv=sys.argv,cwd=os.getcwd(),source=pin(Path(__file__).read_bytes()),target_verifier_executed=False))
+  commands=[['rev-parse','HEAD'],['ls-files','--stage','-z'],['diff','--cached','--name-only','-z'],['ls-files','--others','--exclude-standard','-z'],['diff','--name-only','-z']]
+  head,index,staged,untracked,unstaged=[git(a) for a in commands]
+  assert head==BASE.encode()+b'\n' and not unstaged
+  assert untracked==b'data/teaching/dcc_captions\0', 'Exact residual captions only'
+  assert staged.endswith(b'\0');paths=staged[:-1].split(b'\0');assert len(paths)==len(set(paths))>13
+  for path in paths:relative(os.fsdecode(path))
+  template['expected']=dict(ordinary_bank_file_count=len(ordinary['files']),ordinary_external_count=len(ordinary['external_actual_bytes_retained']),final_bank_file_count=len(final['files']),final_external_count=len(final['external_actual_bytes_retained']),staged_count=len(paths),warning_count=ws['warning_count'],warning_file_count=len(ws['files']),diagnostic_exit=ws['git_diff_check_exit'],index_sha256=pin(index)['sha256'],staged_path_stream_sha256=pin(staged)['sha256'],final_untracked_sha256=pin(untracked)['sha256'])
+  assert len(template['expected'])==11 and all(v is not None for v in template['expected'].values())
+  for p,r in INPUTS.items():assert str(Path(p).resolve(strict=True))==r['resolved'];check(Path(p).read_bytes(),r)
+  assert [git(a) for a in commands]==[head,index,staged,untracked,unstaged], 'State changed during binding'
+  save('bindings.json',template)
+  save('proof.json',dict(status='PASS_ACTUAL_BINDINGS_DERIVED_FINAL_VERIFIER_NOT_RUN',baseline=BASE,page=94,sequences=[280,281,282],bindings=dict(path=str(out/'bindings.json'),**pin((out/'bindings.json').read_bytes())),expected=template['expected'],source=pin(Path(__file__).read_bytes()),prerequisites_checked_before_output_and_Git=True,raw_git_commands=counter,all_consumed_inputs_rechecked=True,state_streams_identical=True,residual_dcc_only=True,no_staging_or_bank_writes=True,final_verifier_executed=False,later_external_boundary_not_self_banked=True))
+  save('verifier-command.json',dict(argv=['python3','-B',str(P/'verify_staged_through282.py'),'--worktree',str(W),'--batch',str(B),'--output',str(I/'through282-final-stage-verification'),'--untracked-before',template['input_pins']['untracked_before']['path'],'--whitespace-proof',str(WS),'--whitespace-log',str(LOG),'--payload-manifest',str(L/'staged-payload-manifest.json'),'--payload-source-proof',str(L/'staged-payload-source-proof.json'),'--banking-ordinary-run',str(I/'through282-banking-runs/ordinary'),'--banking-final-run',str(I/'through282-banking-runs/final-whitespace'),'--bindings',str(out/'bindings.json'),'--bindings-sha256',pin((out/'bindings.json').read_bytes())['sha256'],'--execute-reviewed-verification'],executed=False,requires_root_review_of_actual_bindings=True))
+ except BaseException:
+  save('failure.json',dict(traceback=traceback.format_exc(),disposition='Preserve this complete failed fresh output. Do not overwrite or reuse; separate source/output review required.'));raise
+ finally:save('consumed-inputs.json',INPUTS)
+ print(json.dumps(dict(status='PASS_ACTUAL_BINDINGS_DERIVED_FINAL_VERIFIER_NOT_RUN',bindings=str(out/'bindings.json'),pin=pin((out/'bindings.json').read_bytes())),indent=2))
+if __name__=='__main__':main()

@@ -1,0 +1,4 @@
+{
+  "source": "def proof_counts(report,seq):\n assert isinstance(report,dict) and type(seq)is int and seq>0\n assert type(report['seq'])is int and report['seq']==seq\n keys=('spans','nulls','d5_nonnull')\n if 'counts' in report:\n  assert isinstance(report['counts'],dict) and not any(k in report for k in keys)\n  source=report['counts']\n else:\n  assert report['status']=='PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION'\n  source=report\n counts={k:source[k] for k in keys}\n assert all(type(n)is int for n in counts.values())\n assert counts['spans']>0 and 0<=counts['nulls']<=counts['spans']\n assert 0<=counts['d5_nonnull']<=counts['spans']-counts['nulls']\n return counts\n",
+  "sha256": "023ffc02102b65d3788f72aa3b91bbe6e25c571c8d1b5116710f0adbdfae9507"
+}

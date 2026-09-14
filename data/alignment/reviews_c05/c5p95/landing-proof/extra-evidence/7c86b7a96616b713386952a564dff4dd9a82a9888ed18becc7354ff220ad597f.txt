@@ -1,0 +1,37 @@
+from pathlib import Path
+import ast,difflib,hashlib,json,os
+assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+P=Path(__file__).resolve().parent;ROOT=P.parents[2];B=ROOT/'campaign-artifacts/C05-283-285'
+assert P.name=='through285-ordinary-banking-preparation'and not(P/'freeze.json').exists()
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):
+ with (P/n).open('x')as f:json.dump(x,f,indent=2);f.write('\n')
+finals={}
+for current,prior in [('bank_root_proofs_through285.py','bank_root_proofs_through282.py'),('compose-ordinary-bank-inventory-root.py','compose-ordinary-bank-inventory-root.py'),('release-ordinary-bank-method-root.py','release-ordinary-bank-method-root.py')]:
+ a=(P/'prior'/prior).read_text();b=(P/'candidates'/current).read_text();ast.parse(b)
+ for suffix,x,y,xf,yf in [('forward',a,b,'prior/'+prior,'candidates/'+current),('inverse',b,a,'candidates/'+current,'prior/'+prior)]:
+  with (P/(current+'.complete-final.'+suffix+'.diff')).open('x')as f:f.write(''.join(difflib.unified_diff(x.splitlines(True),y.splitlines(True),fromfile=xf,tofile=yf)))
+ finals[current]=bp(b.encode())
+priorproof=(P/'source-proof.json').read_bytes()
+with (P/'candidate-history-before-caller-scope-guard/source-proof-before-closure-wording.json').open('xb')as f:f.write(priorproof)
+proof=json.loads(priorproof);proof.pop('root_reproduction_closed');proof['actual_reproduction_closure_consumed']=False
+(P/'source-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+save('final-source-chain.json',{'status':'FULL_CURRENT_SOURCE_DIFFS_AVAILABLE','candidate_pins':finals,'original_to_final_diffs':'Each candidate has complete-final.forward.diff and complete-final.inverse.diff from the complete original source. Earlier draft replacement maps/diffs and the caller-scope correction remain preserved.','active_caller':'Exactly one direct B or integration directory whose name identifies an ordinary inventory caller; no arbitrary source root or complete B may be excluded. Actual path is still pending.','closure_wording':'Only source preparation consumed evidence is asserted; no new reproduction closure was consumed. Frozen earlier payload acceptance false field is historical, not a present-time claim about concurrently running work.','copy_helper':'Unchanged full shared copy_evidence_once_v2.py retained; never imported or executed.'})
+save('command-contract.json',{
+ 'status':'PENDING_ACTUAL_REPRODUCTION_CLOSURE_SOURCE_REVIEW_AND_ROOT_BINDINGS',
+ 'candidate_materialization':{'composer':str(B/'compose-ordinary-bank-inventory-root.py'),'release':str(B/'release-ordinary-bank-method-root.py'),'banker':'Release helper alone copies exact pinned source to '+str(B/'bank_root_proofs_through285.py')},
+ 'future_release_argv':['python3','-B',str(B/'release-ordinary-bank-method-root.py'),'--bindings','ACTUAL_ROOT_BINDING_JSON','--bindings-sha256','ACTUAL_BINDING_SHA256'],
+ 'future_environment':{'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'},
+ 'binding_requirements':{'reproduction_directory':'Actual completed source root, not a guessed future path.','reproduction_acceptance':'Actual proof.json path/bytes/SHA; prior PASS/head/all-seven/all-thirteen/live-state gates retained. If actual producer schema differs, preserve and review a narrow reader correction first.','source_packages':'Measured full freeze/census/count/bytes records, including current source_preparation role and separate code_review role. No counts supplied before the actual source review exists.','integration_inputs':'Exact every-current-through285 immediate item excluding the future inventory output and one actual active inventory caller; includes reproduction and acceptance roots.','deferred_active_callers':'Exactly one direct B/I ordinary inventory caller directory, truthful actual boundary; no generic exemption.','root_review_statement':'Root authored statement of complete source/code review, bound by exact binding hash.'},
+ 'ordinary_invocation':'After reviewed release and actual complete inventory, invoke banker --phase ordinary with actual external run-output,13-file payload manifest/source proof, untracked capture stem and complete extra-inputs.json. Runtime-dependent paths/pins/counts remain pending.',
+ 'current_payload_sources':{'manifest':str(B/'landing/staged-payload-manifest.json'),'source_proof':str(B/'landing/staged-payload-source-proof.json'),'untracked_capture_stem':str(B/'landing/untracked-before-banking')},
+ 'final_phase':'Explicitly blocked by current ordinary-only guard. Final whitespace/staging source release, exact descriptors and later scope/caller bindings remain separate pending work.',
+ 'actions_executed':[]
+})
+save('capture-provenance.json',{'native_callers':['preparation-caller: actual file-only preparation failure due to wrong release proof filename','preparation-caller-v2: actual file-only source preparation success, not bank/release/composer/copy execution'],'failure_history':'preparation-failure-history.json and original unmodified source/caller retained. Genuine current release filename is release.json.','source_amendment':'Caller-exclusion scope narrowed in a conversation-issued file-only command after successful draft preparation; complete before/after sources and diff/inverse remain in candidate-history-before-caller-scope-guard. No native target caller is claimed for this source edit.','current_final_diffs':'Full original-to-current forward and inverse diffs supersede draft diff endpoints without deleting them.','outer_limit':'Native preparation child argv/streams are retained. Outer tool commands and final freeze completion remain conversation records; no fabricated separate native capture is claimed.','target_executions':0,'no_postfreeze_writes':True})
+rows=[]
+for p in sorted(P.rglob('*')):
+ if p.is_file():
+  b=p.read_bytes();rows.append({'path':str(p.relative_to(P)),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+save('freeze.json',{'status':'IMMUTABLE_ORDINARY_BANKING_SOURCE_PREPARATION_ONLY','schema':'object with files LIST; paths relative to source-preparation root; excludes only this freeze.json','files':rows})
+b=(P/'freeze.json').read_bytes();print(json.dumps({'status':'FROZEN_SOURCE_PREPARATION_ONLY','files':len(rows),'member_bytes':sum(r['bytes']for r in rows),'freeze_bytes':len(b),'freeze_sha256':hashlib.sha256(b).hexdigest(),'candidate_pins':finals,'target_executions':0}))

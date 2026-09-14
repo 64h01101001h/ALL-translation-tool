@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+"""Read-only source/schema measurements; never imports or invokes a reviewed target."""
+import ast, datetime, difflib, hashlib, json, os
+from pathlib import Path
+V=Path(__file__).resolve().parent
+I=V.parent
+R=I.parents[1]
+B=R/'campaign-artifacts/C05-283-285'
+WT=R/'campaign-worktree'
+P=I/'through285-original-verifier-preparation'
+C=I/'through285-original-verifier-actual-binding'
+assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(name,obj):
+    f=V/name;assert not f.exists(),f
+    f.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+mapping=[]
+def copy(source,relative):
+    dest=V/relative;dest.parent.mkdir(parents=True,exist_ok=True)
+    data=source.read_bytes();assert not dest.exists();dest.write_bytes(data);assert source.read_bytes()==dest.read_bytes()
+    mapping.append({'original':str(source),'resolved_original':str(source.resolve()),'copy':str(dest.relative_to(V)),**pin(source)})
+for folder,prefix in [(P,'prior-preparation'),(C,'actual-binding'),(I/'through285-original-verifier-actual-binding-caller','actual-binding-caller')]:
+    for f in sorted(folder.rglob('*')):
+        if f.is_file():copy(f,Path(prefix)/f.relative_to(folder))
+copy(I/'through285-original-verifier-root-source-review/proof.json','prior-root-source-review.json')
+for name in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py','engines/hgm_tools.py']:
+    copy(WT/name,Path('canonical-sources')/Path(name).name)
+for name in ['baseline.json','source.json']:
+    copy(B/name,Path('batch-bindings')/name)
+copy(B/'english/283/run_canonical_readonly.py','frozen-original-wrapper.py.txt')
+old=(P/'verify-complete-originals.py.txt').read_text()
+new=(C/'verify-complete-originals.py.txt').read_text()
+assert (C/'prior-verify-complete-originals.py.txt').read_bytes()==(P/'verify-complete-originals.py.txt').read_bytes()
+changes=json.loads((C/'literal-replacements.json').read_text());assert len(changes)==6
+forward=old
+for x in changes:
+    assert x['occurrences']==1 and forward.count(x['before'])==1
+    forward=forward.replace(x['before'],x['after'])
+assert forward==new
+inverse=new
+for x in reversed(changes):
+    assert inverse.count(x['after'])==1
+    inverse=inverse.replace(x['after'],x['before'])
+assert inverse==old
+expected_diff=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='approved-pending',tofile='actual-binding'))
+assert (C/'forward.diff').read_text()==expected_diff
+(V/'full-inverse.diff').write_text(''.join(difflib.unified_diff(new.splitlines(True),old.splitlines(True),fromfile='actual-binding',tofile='approved-pending')))
+oa,na=ast.parse(old),ast.parse(new)
+assert ast.dump(ast.parse(inverse))==ast.dump(oa)
+def function(module,name):return next(n for n in module.body if isinstance(n,ast.FunctionDef) and n.name==name)
+assert ast.dump(function(oa,'pin'))==ast.dump(function(na,'pin'))
+assert ast.dump(function(oa,'save'))==ast.dump(function(na,'save'))
+# The original gate-bearing suffix of freeze and the complete execution block are exact bytes.
+assert old[old.index('    expected={}'):]==new[new.index('    expected={}'):]
+literal_values={n.targets[0].id:ast.literal_eval(n.value) for n in na.body if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id.startswith('EXPECTED_')}
+assert literal_values=={'EXPECTED_COMPLETION_FILE':'originals-complete.json','EXPECTED_COMPLETION_STATUS':'BOTH_INDEPENDENT_ORIGINAL_ANGLES_FROZEN','EXPECTED_TIBETAN_SPANS':75,'EXPECTED_WRAPPER_RELATIVE_PATH':'english/283/run_canonical_readonly.py'}
+completion=json.loads((C/'originals-complete.json').read_text());assert completion['status']==literal_values['EXPECTED_COMPLETION_STATUS']
+assert [(x['angle'],x['seq']) for x in completion['counts']]==[('tibetan',s) for s in [283,284,285]]
+assert sum(x['spans'] for x in completion['counts'])==75
+freezes=[];original_rows=[];measured=[]
+for angle in ['tibetan','english']:
+    for seq in [283,284,285]:
+        D=B/angle/str(seq);F=D/('freeze-manifest.json' if angle=='tibetan' else 'freeze.json')
+        f=json.loads(F.read_text());entries=f if angle=='tibetan' else f['files']
+        assert isinstance(entries,list)
+        assert len({x['path'] for x in entries})==len(entries)
+        assert all(isinstance(x['path'],str) and type(x['bytes']) is int and isinstance(x['sha256'],str) and len(x['sha256'])==64 for x in entries)
+        assert {x['path'] for x in entries}=={str(p.relative_to(D)) for p in D.rglob('*') if p.is_file() and p!=F}
+        for x in entries:
+            assert not Path(x['path']).is_absolute() and '..' not in Path(x['path']).parts
+            original=D/x['path'];assert pin(original)=={k:x[k] for k in ['bytes','sha256']}
+            original_rows.append({'original':str(original),'resolved_original':str(original.resolve()),'retention':'external','angle':angle,'seq':seq,**pin(original)})
+        s=json.loads((D/'spec.json').read_text());assert s['course']=='C05' and len(s['segments'])==1 and s['segments'][0]['seq']==seq
+        spans=s['segments'][0]['spans'];dec=json.loads((D/'intended-spans.json').read_text())
+        assert isinstance(dec,list) and [x['id'] for x in dec]==[x['id'] for x in spans]
+        assert len({x['id'] for x in spans})==len(spans)
+        for span,d in zip(spans,dec):
+            for side in ['tib','eng']:
+                v=d[side+'_range']
+                if side=='eng' and span['eng'] is None:assert v is None
+                else:assert isinstance(v,list) and len(v)==2 and all(type(x) is int for x in v) and 0<=v[0]<v[1]
+        record={'angle':angle,'seq':seq,'spans':len(spans),'nulls':sum(x['eng'] is None for x in spans),'d5_nonnull':sum(x['d']==5 and x['eng'] is not None for x in spans),'spec':{'path':str(D/'spec.json'),**pin(D/'spec.json')},'body':{'path':str(D/'body.html'),**pin(D/'body.html')}}
+        assert record==next(x for x in completion['all_counts'] if x['angle']==angle and x['seq']==seq)
+        measured.append(record)
+        fr={'angle':angle,'seq':seq,'files':len(entries),'member_bytes':sum(x['bytes'] for x in entries),'freeze':{'path':str(F),**pin(F)}}
+        assert fr==next(x for x in completion['freezes'] if x['angle']==angle and x['seq']==seq)
+        freezes.append(fr)
+assert sum(x['spans'] for x in measured)==145 and sum(x['files'] for x in freezes)==344
+copychecks=[]
+for row in json.loads((C/'original-to-copy-manifest.json').read_text()):
+    original=Path(row['original']);saved=C/row['copy'];assert not Path(row['copy']).is_absolute() and '..' not in Path(row['copy']).parts
+    assert original.read_bytes()==saved.read_bytes()
+    assert pin(original)=={k:row[k] for k in ['bytes','sha256']}
+    copychecks.append(row)
+assert len(copychecks)==24
+wrapper=B/literal_values['EXPECTED_WRAPPER_RELATIVE_PATH']
+assert wrapper.read_bytes()==(C/'run_canonical_readonly.py.txt').read_bytes()
+assert pin(wrapper)=={'bytes':1019,'sha256':'e699f35d66b2c7ca878fd90c2b1be4fbdd45ce1abc674954744647a73a2d8c61'}
+assert wrapper.parent.parents[3]==R
+contract=json.loads((P/'command-contract.json').read_text());materialized=B/'verify-complete-originals.py'
+assert contract['future_materialized_path']==str(materialized)
+assert materialized.parent.parents[1]/'campaign-worktree'==WT
+assert contract['future_output']==str(B/'proposal-verification')
+assert contract['future_environment']=={'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'}
+source_record=json.loads((C/'source-original-rows.json').read_text());snapshot=json.loads((B/'source.json').read_text())
+assert len(snapshot)==len(source_record['rows'])==3
+assert all(all(row[k]==stored[k] for k in ['id','course','seq','acip','wylie','english']) for row,stored in zip(snapshot,source_record['rows']))
+assert source_record['uri_read_only'] is True and source_record['query_only'] is True
+assert (C/'head.stdout').read_text().strip()=='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert (C/'head.exit').read_text()=='0\n' and (C/'head.stderr').read_bytes()==b''
+assert (C/'status.stdout').read_bytes()==b'?? data/teaching/dcc_captions\n'
+assert (C/'status.exit').read_text()=='0\n' and (C/'status.stderr').read_bytes()==b''
+caller=I/'through285-original-verifier-actual-binding-caller';run=json.loads((caller/'execution.json').read_text())
+assert run['exit']==0 and pin(caller/'stdout.bin')=={'bytes':run['stdout_bytes'],'sha256':run['stdout_sha256']}
+assert pin(caller/'stderr.bin')=={'bytes':run['stderr_bytes'],'sha256':run['stderr_sha256']} and run['stderr_bytes']==0
+save('source-copy-manifest.json',mapping)
+save('full-original-member-pins-external.json',original_rows)
+save('measured-bindings.json',{'actual_completion':pin(C/'originals-complete.json'),'literals':literal_values,'counts':measured,'freezes':freezes,'original_copy_pairs':copychecks,'candidate':pin(C/'verify-complete-originals.py.txt'),'prior':pin(P/'verify-complete-originals.py.txt'),'wrapper':pin(wrapper),'forward_groups':len(changes),'exact_forward':True,'exact_inverse':True,'complete_gate_suffix_and_runtime_bytes_unchanged':True,'assert_counts':{'prior':sum(isinstance(n,ast.Assert) for n in ast.walk(oa)),'current':sum(isinstance(n,ast.Assert) for n in ast.walk(na))},'materialization':{'helper':str(materialized),'completion':str(B/'originals-complete.json'),'output':str(B/'proposal-verification'),'environment':contract['future_environment']},'head_source_record_only':True,'source_rows_compared_to_recorded_root_query_only':True,'target_imports':0,'target_executions':0,'canonical_or_resolver_invocations':0,'test_Git_SQL_API_invocations':0})
+print(json.dumps({'source_review_measurements':'PASS','candidate':pin(C/'verify-complete-originals.py.txt'),'freeze_members':344,'original_spans':145,'tibetan_spans':75,'source_copy_files':len(mapping),'candidate_execution':False}))

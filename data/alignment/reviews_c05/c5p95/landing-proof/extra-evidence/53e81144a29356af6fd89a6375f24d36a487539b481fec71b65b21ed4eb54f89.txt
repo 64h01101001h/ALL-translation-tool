@@ -1,0 +1,136 @@
+from pathlib import Path
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+
+assert __debug__
+assert os.environ.get('PYTHONDONTWRITEBYTECODE') == '1'
+V = Path(__file__).resolve().parent
+assert V.name == 'through285-original-verifier-actual-binding-review'
+M = json.loads((V / 'measured-bindings.json').read_text())
+
+def save(name, data):
+    with (V / name).open('x', encoding='utf-8') as stream:
+        stream.write(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+
+review = {
+    'status': 'APPROVE_CODE_AND_SCHEMA_ONLY',
+    'spec_verdict': 'APPROVE',
+    'quality_verdict': 'APPROVE',
+    'open_findings': [],
+    'reviewed_at_utc': datetime.now(timezone.utc).isoformat(),
+    'producer': 'Codex agent /root/c05_280_282_english',
+    'role': 'Independent review of root-authored actual-binding code and transport; English original and read-only wrapper author, with prior original-author context reused. This is not independent semantic review.',
+    'candidate': M['candidate'],
+    'prior': M['prior'],
+    'wrapper': M['wrapper'],
+    'completion': M['actual_completion'],
+    'literals': M['literals'],
+    'source_comparison': {
+        'literal_bindings': 4,
+        'freeze_reader_changes': 2,
+        'total_exact_replacement_groups': 6,
+        'full_forward_and_inverse_byte_identity': True,
+        'entire_original_suffix_from_freeze_expected_map_through_end_unchanged': True,
+        'canonical_and_resolver_source_unchanged': True,
+        'old_assert_nodes': 18,
+        'current_assert_nodes': 20,
+    },
+    'actual_original_schema': {
+        'tibetan_freeze': 'freeze-manifest.json; top-level LIST',
+        'english_freeze': 'freeze.json; object with files LIST',
+        'required_member_fields': ['path', 'bytes', 'sha256'],
+        'duplicate_path_and_normalized_path_rejection': True,
+        'exact_directory_census_and_full_member_hash_checks': True,
+        'freeze_count': 6,
+        'fully_reopened_member_count': 344,
+        'tibetan_member_counts': [111, 24, 24],
+        'english_member_counts': [147, 19, 19],
+        'tibetan_span_counts': [16, 29, 30],
+        'english_span_counts': [15, 27, 28],
+        'total_span_count': 145,
+        'total_null_count': 0,
+        'intended_declarations': 'All six are LISTs in exact spec ID order with actual integer half-open range shapes. No canonical resolution was executed by this reviewer.',
+        'optional_fields': 'Complete original fields and presence lists remain retained by unchanged runtime. Current specs use id/d/tib/eng; Tibetan declarations supply parent, and English declarations additionally preserve occurrence and reasoning fields.',
+    },
+    'wrapper_review': {
+        'canonical_sha_check': '7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e',
+        'sqlite_mode': 'URI mode=ro, PRAGMA query_only=ON, exact resolved spine, no alternate connect arguments',
+        'canonical_execution_method': 'Unchanged canonical generator via runpy.run_path with original stdin/stdout and sys.argv reset',
+        'matching_substitute': False,
+        'reviewer_execution': False,
+    },
+    'materialization_contract': M['materialization'],
+    'retained_gates': [
+        'Fresh exclusive output directory and exclusive output files',
+        'Baseline pin before and after runtime',
+        'All six exact freeze censuses, member bytes and hashes before and after runtime',
+        'Completion status and Tibetan total 75',
+        'Single course and segment, ordered unique IDs and exact saved canonical body',
+        'Full canonical stdout/stderr/exit capture; exit zero and empty stderr required',
+        'Real canonical resolver and with_members, exact declared occurrence ranges and optional parent checks',
+        'Complete original span and occurrence records, original field presence, six-result counts',
+        'Full failure traceback retention and re-raise',
+    ],
+    'evidence': {
+        'source_copy_manifest': 'source-copy-manifest.json',
+        'source_copy_manifest_schema': 'LIST; copy paths relative to this top review root',
+        'copied_source_files': 117,
+        'candidate_original_to_copy_pairs_checked': 24,
+        'full_original_member_pins': 'full-original-member-pins-external.json',
+        'full_original_retention': 'All 344 full original members retained in their frozen source directories, independently reopened and pinned; no duplicate large evidence tree created here.',
+        'structured_measurements': 'measured-bindings.json',
+        'full_forward_diff': 'actual-binding/forward.diff',
+        'full_inverse_diff': 'full-inverse.diff',
+        'full_preparation_and_history': 'prior-preparation/',
+        'actual_binding_and_caller': ['actual-binding/', 'actual-binding-caller/'],
+    },
+    'limits': {
+        'semantic_verdict': False,
+        'candidate_imports': 0,
+        'candidate_executions': 0,
+        'canonical_or_resolver_invocations': 0,
+        'tests_Git_SQL_API_invocations_by_reviewer': 0,
+        'fresh_HEAD_or_SQL_attestation': False,
+        'HEAD_and_six_source_fields': 'Reviewed recorded root caller outputs and compared recorded source rows to batch snapshot. No fresh Git or SQLite query by this reviewer.',
+        'runtime_acceptance': False,
+        'execution_release': 'Root must separately release and materialize the exact source and completion bytes in the batch directory, retaining the approved PYTHONOPTIMIZE=0 / bytecode-disabled caller contract. Runtime output must be new.',
+        'current_original_meaning': 'Counts and declaration schemas were checked mechanically; source fidelity and semantic correctness remain outside this review.',
+    },
+}
+save('review.json', review)
+report = '''APPROVE for code and schema only; no open findings. The candidate is 7,870 bytes, SHA-256 `28d5c6e267db08f9e9e80d24ada3da46a9fbd39186cbf8df730483708e408254`. Full forward and inverse comparison establishes exactly four completion/wrapper literals and two freeze-reader edits. The entire prior source from the freeze expected-map gate through the end is byte-identical. The new readers accept the actual Tibetan top-level LIST and English `files` LIST while preserving required bytes/hash fields, duplicate and normalized-path rejection, full census, and every runtime gate.
+
+All six current freezes were reopened: 344 members, 75 Tibetan spans (16/29/30) and 70 English spans (15/27/28), total 145. All 24 candidate original/copy bindings match full bytes. The completion status and wrapper literal match the frozen declarations. The unchanged wrapper pins and invokes the real generator, restricts SQLite to the resolved spine in URI read-only/query-only mode, and preserves original streams. Its full source and canonical imports are retained. Materialization must be in `C05-283-285/verify-complete-originals.py`, with the exact completion JSON beside it; the approved caller must disable optimization and bytecode. The candidate derives batch paths from its own location and requires a fresh `proposal-verification` directory.
+
+This reviewer is Codex agent `/root/c05_280_282_english`, author of the English originals and read-only wrapper. Original-author context was reused; this is not independent semantic review. No candidate, generator, resolver, test, Git, SQL, or API execution occurred during this review. Recorded root HEAD/source-query evidence was reviewed, not freshly regenerated. Canonical replay and runtime acceptance remain pending root release. Full prior preparation, correction history, current source, actual root preparation caller, all measured pins and a relative-path source-copy map are retained here.
+'''
+with (V / 'report.md').open('x', encoding='utf-8') as stream:
+    stream.write(report)
+save('review-capture-provenance.json', {
+    'actual_root_preparation_caller': 'Preserved whole native files under actual-binding-caller; its source preparation executed successfully, not the candidate runtime.',
+    'review_measurement_command': "PYTHONDONTWRITEBYTECODE=1 PYTHONOPTIMIZE=0 python3 -B 'campaign-artifacts/integration/through285-original-verifier-actual-binding-review/review_source_bindings.py'",
+    'review_measurement_tool_result': {
+        'retention_kind': 'Truthful conversation tool-result transcription; no native separated streams were captured for this reviewer measurement command.',
+        'exit_code': 0,
+        'combined_output': '{"source_review_measurements": "PASS", "candidate": {"bytes": 7870, "sha256": "28d5c6e267db08f9e9e80d24ada3da46a9fbd39186cbf8df730483708e408254"}, "freeze_members": 344, "original_spans": 145, "tibetan_spans": 75, "source_copy_files": 117, "candidate_execution": false}\n',
+    },
+    'review_failures': [],
+    'inherited_failure_history': 'Retained whole in the copied prior preparation. Historical missing-file lookup is not a current candidate execution failure.',
+    'candidate_runtime_attempts': 0,
+    'finalizer': 'This source creates the review report and immutable manifest only; its outer tool completion occurs after the manifest and is a later conversation record.',
+})
+files = []
+for p in sorted(V.rglob('*')):
+    if p.is_file():
+        assert p.name != 'freeze.json' or p.parent != V
+        b = p.read_bytes()
+        files.append({'path': str(p.relative_to(V)), 'bytes': len(b), 'sha256': hashlib.sha256(b).hexdigest()})
+save('freeze.json', {
+    'status': 'IMMUTABLE_CODE_SCHEMA_REVIEW_COMPLETE',
+    'schema': 'object with files LIST; every per-file path relative to top review root, excludes only this freeze.json',
+    'files': files,
+})
+fb = (V / 'freeze.json').read_bytes()
+print(json.dumps({'status': review['status'], 'files': len(files), 'member_bytes': sum(r['bytes'] for r in files), 'freeze_bytes': len(fb), 'freeze_sha256': hashlib.sha256(fb).hexdigest(), 'candidate_sha256': M['candidate']['sha256'], 'open_findings': 0}))

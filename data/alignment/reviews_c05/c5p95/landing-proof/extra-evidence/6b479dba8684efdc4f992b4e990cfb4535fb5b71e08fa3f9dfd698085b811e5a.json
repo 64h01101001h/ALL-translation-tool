@@ -1,0 +1,250 @@
+[
+  {
+    "before": "import json,hashlib,datetime,ast,os,subprocess,difflib",
+    "after": "import json,hashlib,datetime,ast,os,subprocess,difflib,argparse",
+    "before_offsets": [
+      25
+    ],
+    "after_offsets": [
+      25
+    ],
+    "reason": "mandatory explicit source-review receipt interface"
+  },
+  {
+    "before": "P=B/'payload-freezer-preparation';P2=B/'reproduction-retention-preparation';V=B/'reproduction-payload-code-review';Q=B/'reproduction-entry-preparation';R=I/'through282-generated-reproduction';O=B/'reproduction-root-entry'",
+    "after": "P=I/'through285-payload-freezer-preparation';P2=I/'through285-generated-reproduction-preparation';Q=I/'through285-generated-reproduction-final-preparation';R=I/'through285-generated-reproduction';O=B/'reproduction-root-entry'",
+    "before_offsets": [
+      183
+    ],
+    "after_offsets": [
+      183
+    ],
+    "reason": "actual current immutable source locations; actual runtime remains fresh"
+  },
+  {
+    "before": "10968d16e701b698a0e1fbd845b353089d15ac39",
+    "after": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+    "before_offsets": [
+      415
+    ],
+    "after_offsets": [
+      415
+    ],
+    "reason": "actual incoming HEAD"
+  },
+  {
+    "before": " f=j(base/'freeze.json');assert len(f['files'])==count and isinstance(f['files'],dict)",
+    "after": " f=j(base/'freeze.json')\n if base==I/'through285-semantic-schema-helper-preparation':\n  rows=f['files'];assert isinstance(rows,list)\n  assert all(set(x)=={'path','bytes','sha256'} and isinstance(x['path'],str) and not Path(x['path']).is_absolute() and '..' not in Path(x['path']).parts and type(x['bytes']) is int and x['bytes']>=0 for x in rows)\n  assert len({x['path'] for x in rows})==len(rows)\n  f=dict(f,files={x['path']:{k:x[k] for k in ('bytes','sha256')} for x in rows})\n assert len(f['files'])==count and isinstance(f['files'],dict)",
+    "before_offsets": [
+      1686
+    ],
+    "after_offsets": [
+      1686
+    ],
+    "reason": "strict actual English LIST freeze adapter, old DICT contract unchanged for other packages"
+  },
+  {
+    "before": "assert git(['rev-parse','HEAD']).decode().strip()==HEAD",
+    "after": "assert B.name=='C05-283-285' and Path(__file__).resolve()==B/'approve-reproduction-method-root.py'\nassert not R.exists()\nparser=argparse.ArgumentParser();parser.add_argument('--source-review-proof',required=True);parser.add_argument('--source-review-sha256',required=True);args=parser.parse_args()\nreview_path=Path(args.source_review_proof).resolve();assert review_path.is_relative_to(I.resolve()) and not review_path.is_relative_to(Q.resolve())\nassert len(args.source_review_sha256)==64 and all(x in '0123456789abcdef' for x in args.source_review_sha256)\nassert pin(review_path.read_bytes())['sha256']==args.source_review_sha256\nsource_review=j(review_path)\nassert source_review['status']=='PASS_ROOT_SOURCE_REVIEW_APPROVED_FOR_ONE_INDEPENDENT_REPRODUCTION'\nassert source_review['preparation_directory']==str(Q) and source_review['entry_source']==pin(Path(__file__).read_bytes())\nassert source_review['preparation_freeze']==pin((Q/'freeze.json').read_bytes())\nfreeze(Q,source_review['preparation_freeze']['sha256'],source_review['preparation_members'])\nassert source_review['bindings']==pin((Q/'bindings.json').read_bytes())\nassert git(['rev-parse','HEAD']).decode().strip()==HEAD",
+    "before_offsets": [
+      2810
+    ],
+    "after_offsets": [
+      2810
+    ],
+    "reason": "require actual future root approval of this exact frozen preparation before any reproduction materialization"
+  },
+  {
+    "before": "b8a21526fcd2a2ed1c69c8f15d5ad909bb807664065a32c13018c2e21966c768",
+    "after": "213b558dcc989f79e7eff26eab1e184e1dbf4dc8e8ea733b1e3226f02674877f",
+    "before_offsets": [
+      4049
+    ],
+    "after_offsets": [
+      4049
+    ],
+    "reason": "actual complete new input binding bytes"
+  },
+  {
+    "before": "for d,source in [('payload01',P),('retention01',P2)]:\n verdict=j(V/d/'review.json');assert verdict['verdict']=='APPROVE_SOURCE_PREPARATION_ONLY' and verdict['open_findings']==[]\n assert verdict['source_directory']==str(source) and verdict['source_freeze']==pin((source/'freeze.json').read_bytes())\n",
+    "after": "# Source approval is a new actual root receipt, never invented prior review fields.\nassert source_review['initial_runtime_sources']==binding['materialize_exact_code']\nassert source_review['complete_sources_diffs_and_contract_read'] is True\nassert source_review['open_findings']==[]\npayload_method=j(I/'through285-payload-freezer-root-source-binding/proof.json')\nassert payload_method['status']=='ROOT_APPROVED_FINAL_PAYLOAD_FREEZER_SOURCE_AND_BINDINGS'\nassert payload_method['preparation_freeze']==pin((P/'freeze.json').read_bytes())\nassert payload_method['final_source']==pin((B/'freeze-final-payload-before-staging.py').read_bytes())\n",
+    "before_offsets": [
+      4923
+    ],
+    "after_offsets": [
+      4923
+    ],
+    "reason": "current reviewed source-provenance contract; no borrowed historical review schemas"
+  },
+  {
+    "before": "measure=j(B/'actual-current-output-contract.json')\nassert measure['status']=='PASS_ACTUAL_MEASUREMENTS' and list(measure['counts'].values())==[45402,11938,1618,11,7092,15546,22528,22188,24105,37]\nassert measure['registered_pages']==548 and measure['source_date']=='2026-09-13'\nfor rel,x in measure['source_and_output_pins'].items():assert pin((W/rel).read_bytes())==x\n",
+    "after": "measure=j(I/'through285-root-produced-measurements-attempt02/proof.json')\nassert measure['status']=='PASS_ROOT_MEASURED_ACTUAL_PRODUCTION_AND_FIDELITY_RESULTS' and list(measure['counts'].values())==[45481,11938,1621,11,7093,15557,22546,22206,24126,18]\nassert measure['baseline']==HEAD and measure['producer_local_date']=='2026-09-13'\nassert len(binding['registered_pages'])==549\npagehash=hashlib.sha256()\nfor row in binding['registered_pages']:\n assert pin((W/row['relative_path']).read_bytes())=={k:row[k] for k in ('bytes','sha256')}\n pagehash.update((W/row['relative_path']).read_text().encode())\nassert pagehash.hexdigest()[:16]=='fc9cdbee115e7969' and measure['source_pages']=='banked pages, 5 course(s) (sha256 fc9cdbee115e7969)'\nfor rel,h in measure['output_sha256'].items():assert pin((W/rel).read_bytes())['sha256']==h\n",
+    "before_offsets": [
+      6327
+    ],
+    "after_offsets": [
+      6327
+    ],
+    "reason": "actual measurement schema and complete independently inspected549 registered pages"
+  },
+  {
+    "before": "'5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b',871",
+    "after": "'8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445',2386",
+    "before_offsets": [
+      7199
+    ],
+    "after_offsets": [
+      7199
+    ],
+    "reason": "actual complete frozen independent semantic review"
+  },
+  {
+    "before": "c5p94",
+    "after": "c5p95",
+    "before_offsets": [
+      7388,
+      8203,
+      10543,
+      10559
+    ],
+    "after_offsets": [
+      7388,
+      8203,
+      10543,
+      10559
+    ],
+    "reason": "actual landed page"
+  },
+  {
+    "before": "meta=j(review/'review.json');assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS' and meta['open_findings']==[]\nsemantic_root=j(B/'root-final-semantic-review-verification-v3/proof.json')\nassert semantic_root['status']=='PASS' and semantic_root['head']==HEAD and semantic_root['review_freeze']==pin((review/'freeze.json').read_bytes()) and semantic_root['review_metadata']==pin((review/'review.json').read_bytes())\n",
+    "after": "meta=j(review/'review.json');assert meta['verdict']=='APPROVE' and meta['open_findings']==[] and meta['baseline']==HEAD\nassert j(review/'audit-proof.json')['status']=='ACTUAL_CANONICAL_AND_SOURCE_FIDELITY_PASS_ONLY'\ncompletion=j(review/'completion-proof.json');assert completion['status']=='COMPLETE_INDEPENDENT_SEMANTIC_APPROVAL'\nassert completion['review']==pin((review/'review.json').read_bytes()) and completion['resolved_spans']==pin((review/'resolved-spans.json').read_bytes())\nsemantic_root=j(I/'through285-root-independent-review-verification/proof.json')\nassert semantic_root['status']=='PASS_ROOT_REVIEW_OF_INDEPENDENT_SEMANTIC_APPROVAL_AND_MECHANICAL_RESULT' and semantic_root['baseline']==HEAD\nassert semantic_root['semantic_freeze']==pin((review/'freeze.json').read_bytes()) and semantic_root['review']==pin((review/'review.json').read_bytes())\nlanded=j(B/'landing/root-frozen-input-copy-check.json');assert landed['landed_bytes_checked'] is True and landed['exact_final_hashes_counts_and_ranges'] is True\nassert landed['head']==HEAD and landed['review_json_sha256']==pin((review/'review.json').read_bytes())['sha256'] and landed['frozen_review_files']==2387\n",
+    "before_offsets": [
+      7542
+    ],
+    "after_offsets": [
+      7542
+    ],
+    "reason": "genuine separate SPEC audit/QUALITY approval/root acceptance instead of absent flat fields"
+  },
+  {
+    "before": "len(tuples)==124",
+    "after": "len(tuples)==76",
+    "before_offsets": [
+      8760
+    ],
+    "after_offsets": [
+      8760
+    ],
+    "reason": "actual resolved interface"
+  },
+  {
+    "before": "sum(x['eng'] is None for x in tuples)==4",
+    "after": "sum(x['eng'] is None for x in tuples)==0",
+    "before_offsets": [
+      8780
+    ],
+    "after_offsets": [
+      8780
+    ],
+    "reason": "actual null population"
+  },
+  {
+    "before": "sum(x['d']==5 and x['eng'] is not None for x in tuples)==102",
+    "after": "sum(x['d']==5 and x['eng'] is not None for x in tuples)==61",
+    "before_offsets": [
+      8825
+    ],
+    "after_offsets": [
+      8825
+    ],
+    "reason": "actual d5 population"
+  },
+  {
+    "before": "payload['actual_ctest_total_seconds']==12.62",
+    "after": "payload['actual_ctest_total_seconds']==11.25",
+    "before_offsets": [
+      9304
+    ],
+    "after_offsets": [
+      9304
+    ],
+    "reason": "actual existing17tests duration, no rerun"
+  },
+  {
+    "before": "9b0abba14e86da80708be4f5f17d8f3e9df6ffe6468dbd17db3a65b211abde01",
+    "after": "3272caf51c03883b5660bbf5b72292903411f61b9d217cbfb3193b2dc5587706",
+    "before_offsets": [
+      9464
+    ],
+    "after_offsets": [
+      9464
+    ],
+    "reason": "actual payload manifest"
+  },
+  {
+    "before": "5600ef16c28bdbd772f11668830a375d70340746cf7077d14824b01f6f27625a",
+    "after": "a375dd262be0872402888b3d51ee550b3c14a02db9a22721291aaa33e8b37c44",
+    "before_offsets": [
+      9606
+    ],
+    "after_offsets": [
+      9606
+    ],
+    "reason": "actual source proof"
+  },
+  {
+    "before": "seed=measure['seed']",
+    "after": "seed=measure['previous_main_csv_seed']",
+    "before_offsets": [
+      10800
+    ],
+    "after_offsets": [
+      10800
+    ],
+    "reason": "genuine actual producer seed descriptor"
+  },
+  {
+    "before": "needed=j(review/'span-head-allow-needed.json');assert payload['approved_allowances']==needed and not payload['approved_allowances_empty'] and payload['prior_allowance_values_unchanged']",
+    "after": "needed={'pages_c05':{}}\nfor seq in [283,284,285]:\n checked=j(I/'through285-root-reconciliation-verification-attempt01'/f'{seq}.head-allowance-check.json')\n assert checked['page']=='c5p95' and checked['seq']==seq and not set(needed['pages_c05'])&set(checked['allowances'])\n needed['pages_c05'].update(checked['allowances'])\nassert needed==binding['approved_allowances'] and sorted(needed['pages_c05'])==sorted(x['key'] for x in j(review/'head-licensor-review.json') if x['verdict']=='LICENSED')\nassert payload['approved_allowances']==needed and not payload['approved_allowances_empty'] and payload['prior_allowance_values_unchanged']",
+    "before_offsets": [
+      11026
+    ],
+    "after_offsets": [
+      11026
+    ],
+    "reason": "actual full measured allowances and independently licensed keys"
+  },
+  {
+    "before": "{'c5p95/s280w29','c5p95/s280w43'}",
+    "after": "{'c5p95/s284w6','c5p95/s285w5'}",
+    "before_offsets": [
+      11723
+    ],
+    "after_offsets": [
+      11723
+    ],
+    "reason": "actualtwo licenses"
+  },
+  {
+    "before": "len(external_pairs)==885",
+    "after": "len(external_pairs)==2400",
+    "before_offsets": [
+      12086
+    ],
+    "after_offsets": [
+      12086
+    ],
+    "reason": "2387 complete landed semantic copies plus13 actual payload pairs"
+  },
+  {
+    "before": "semantic_files=871,landed_semantic_copies=872",
+    "after": "semantic_files=2386,landed_semantic_copies=2387",
+    "before_offsets": [
+      14487
+    ],
+    "after_offsets": [
+      14487
+    ],
+    "reason": "actual full semantic population"
+  }
+]

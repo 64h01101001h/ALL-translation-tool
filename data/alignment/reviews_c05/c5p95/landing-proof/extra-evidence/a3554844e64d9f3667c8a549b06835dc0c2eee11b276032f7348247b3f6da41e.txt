@@ -1,0 +1,29 @@
+--- prior
++++ candidate
+@@ -164,7 +164,7 @@
+    allow=read(d/'proposed-head-allowances.json')
+    predicate=W/'tools/test_no_supplied_span_head.py';check(predicate,allow['predicate_source'])
+    if 'path' in allow['predicate_source']:assert Path(allow['predicate_source']['path'])==predicate
+-   assert COURSE=='C05' and SEQS==[280,281,282], 'This reviewed adaptation is batch-local'
++   assert COURSE=='C05' and SEQS==[283,284,285], 'This reviewed adaptation is batch-local'
+    category='pages_'+COURSE.lower();allowances=allow[category]
+    assert isinstance(allowances,dict) and {k for k in allow if k.startswith('pages_')}=={category}
+    assert isinstance(allow['actual_gated_hits'],list)
+@@ -179,7 +179,7 @@
+     span_id=labels[label];span=byid[span_id];depth=int(match.group(1))
+     assert span['d']==depth and depth in (5,7) and isinstance(span['eng'],str) and span['eng']
+     assert isinstance(span['tib'],str) and span['tib']
+-    key='c5p94/'+label;assert key in allowances
++    key='c5p95/'+label;assert key in allowances
+     reason=allowances[key];assert isinstance(reason,str) and reason.strip()
+     assert span['tib'] in reason and span['eng'] in reason, 'Name the exact Tibetan licensor and its English realization'
+     actual_hits.append(dict(label=label,depth=depth,match=match.group(0),body_range=list(match.span()),
+@@ -187,7 +187,7 @@
+    assert set(allowances)=={r['allowance_key'] for r in actual_hits}, 'Only actual source-bound gated keys may be proposed'
+    assert allow['actual_gated_hits']==actual_hits, 'Declared hits must equal the canonical predicate and final tuples exactly'
+    save(f'{seq}.head-allowance-check.json',dict(predicate_source=allow['predicate_source'],
+-    page='c5p94',seq=seq,actual_gated_hits=actual_hits,allowances=allowances,semantic_approval=False))
++    page='c5p95',seq=seq,actual_gated_hits=actual_hits,allowances=allowances,semantic_approval=False))
+    assert read(d/'errata.json')==[]
+    assert sum(s['eng'] is None for s in spans)==nulls and sum(s['d']==5 and s['eng'] is not None for s in spans)==d5
+    finals+=local;results.append(dict(seq=seq,exit=0,spans=count,nulls=nulls,word_pairs=d5,spec_bytes=pin(d/'spec.json')['bytes'],spec_sha256=pin(d/'spec.json')['sha256'],body_bytes=len(raw),body_sha256=bp(raw)['sha256'],saved_body_identical=True,source_anchors_verbatim=True))

@@ -1,0 +1,78 @@
+{
+  "provenance": "Transcriptions from actual conversation exec_command results. These are not represented as native separated streams; native complete streams were captured for every canonical generator run. Preliminary exploratory commands did not write native caller files. All source/helper failures and superseded authored files are preserved.",
+  "records": [
+    {
+      "step": "initial interpreter discovery",
+      "command": "python -B - <<'PY' (source/schema reconnaissance shown in conversation tool input)",
+      "exit": 127,
+      "combined_output": "zsh:1: command not found: python\n",
+      "resolution": "Used python3 -B with bytecode disabled thereafter."
+    },
+    {
+      "step": "initial schema assumption",
+      "sql": "SELECT * FROM corpus WHERE course=? AND seq BETWEEN ? AND ?",
+      "parameters": [
+        "C05",
+        283,
+        285
+      ],
+      "exit": 1,
+      "error": "sqlite3.OperationalError: no such table: corpus",
+      "resolution": "Read sqlite_master in full for relevant tables; queried actual corpus_segments. Complete successful schema and query results are retained."
+    },
+    {
+      "step": "course documentation discovery",
+      "command": "rg --files campaign-worktree/docs | rg 'C05|course_shape|COURSE_SHAPE'",
+      "exit": 1,
+      "combined_output": "",
+      "resolution": "Read required course shape at data/alignment/C05_CAMPAIGN.md."
+    },
+    {
+      "step": "physical HTG file discovery",
+      "command": "rg --files '/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP' | rg -i 'hypertext|glossary'",
+      "exit": 1,
+      "combined_output": "",
+      "resolution": "Original HTG physical file not found by this named-file search. Current master/spine full glossary records with HTG2016 provenance were inspected and pinned; do not claim direct inspection of the missing HTG publication. Original GMR course text supplies actual segment attestation."
+    },
+    {
+      "step": "collect_evidence.py",
+      "exit": 0,
+      "combined_output": "{\"context_rows\": 15, \"corpus_families\": 7, \"lexical_queries\": 57, \"snapshot_six_fields\": \"PASS\", \"target_rows\": 3}\n"
+    },
+    {
+      "step": "additional read-only queries from tool stdin",
+      "exit": 0,
+      "combined_output": "corpus-expanded-valid 24\ncorpus-speaking-formula 64\ncorpus-assertion-position 13\nlexical-snang 1\n",
+      "queries": "Exact SQL and parameters retained in each full query result and query-catalog.json."
+    },
+    {
+      "step": "author_specs.py v1 then v2",
+      "exit": 0,
+      "combined_output": "283 15 {'3': 1, '5': 14, '6': 0, '7': 0}\n284 27 {'3': 0, '5': 24, '6': 3, '7': 0}\n285 28 {'3': 0, '5': 24, '6': 4, '7': 0}\n",
+      "history": "authoring-source-history; per-segment authoring-attempt00. Corrected conjunction indices before canonical execution."
+    },
+    {
+      "step": "generate_and_check.py",
+      "exit": 0,
+      "combined_output": "283 EXIT=0 body_bytes=2572 spans=15 null=0 sha256=aa50ba66e645738000d74d6d1dd000b064f30f84ffeb17c490bf02ebeff5ca3d\n284 EXIT=0 body_bytes=4033 spans=27 null=0 sha256=aff785d7008c5a34337dc116af6939de33f4b6c68334c50212efa53fc412914e\n285 EXIT=0 body_bytes=4357 spans=28 null=0 sha256=5eee1054949e0c77d7eaf03b5abe3407e1511a7215ca868e995fa37e477a1a34\n",
+      "native_raw_streams": "Each segment generator-attempt01 includes exact native stdin/stdout/stderr/exit and command/execution metadata."
+    },
+    {
+      "step": "finish_source_bindings.py v1",
+      "exit": 1,
+      "history": "source-binding-attempt01",
+      "error": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xaf in position 376197: invalid start byte"
+    },
+    {
+      "step": "finish_source_bindings.py v2",
+      "exit": 1,
+      "history": "source-binding-attempt02",
+      "error": "AssertionError from mistakenly relabeled final manifest row in memory, not a source change."
+    },
+    {
+      "step": "finish_source_bindings.py v3",
+      "exit": 0,
+      "combined_output": "{\"original_files\": 23, \"unique_dictionary_rows\": 59, \"unique_corpus_rows\": 344, \"physical_target_blocks\": 6, \"all_original_bindings\": \"PASS\"}\n"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport hashlib,json,datetime\nR=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment\");B=R/'campaign-artifacts/C05-283-285';W=R/'campaign-worktree';P=B/'proposal-verification'\ndef pin(p):\n b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\nproof=json.loads((P/'execution-proof.json').read_text());report=json.loads((P/'report.json').read_text());records=json.loads((P/'root-resolved-spans.json').read_text())\nassert proof['status']=='PASS' and proof['canonical_replays']==6 and proof['original_identities']==145 and proof['source_hashes_unchanged']\nassert len(report)==6 and len(records)==145\nassert [(r['angle'],r['seq']) for r in report]==[(a,s) for a in ('tibetan','english') for s in (283,284,285)]\nassert [r['spans'] for r in report]==[16,29,30,15,27,28]\nsource={r['seq']:r for r in json.loads((B/'source.json').read_text())}\ncomplete=json.loads((B/'originals-complete.json').read_text())\nassert [(r['angle'],r['seq'],r['freeze_sha256']) for r in proof['freezes']]==[(r['angle'],r['seq'],r['freeze']['sha256']) for r in complete['freezes']]\ncursor=0;calls=[]\nfor result in report:\n a,s=result['angle'],result['seq'];d=B/a/str(s);label=f'{a}-{s}'\n spec=json.loads((d/'spec.json').read_text());spans=spec['segments'][0]['spans'];decl=json.loads((d/'intended-spans.json').read_text())\n assert pin(d/'spec.json')['sha256']==result['spec_sha256'] and pin(d/'body.html')==dict(bytes=result['body_bytes'],sha256=result['body_sha256'])\n assert (P/(label+'.stdout')).read_bytes()==(d/'body.html').read_bytes()\n assert (P/(label+'.stderr')).read_bytes()==b'' and (P/(label+'.exit')).read_bytes()==b'0\\n'\n cmd=json.loads((P/(label+'.command.json')).read_text());assert cmd['exit']==0 and cmd['argv'][1:]==['-B',str(B/'english/283/run_canonical_readonly.py')] and cmd['cwd']==str(W)\n assert {k:cmd['stdin'][k] for k in ('bytes','sha256')}==pin(d/'spec.json')\n assert {k:cmd['wrapper'][k] for k in ('bytes','sha256')}==pin(B/'english/283/run_canonical_readonly.py')\n assert {k:cmd['canonical_generator'][k] for k in ('bytes','sha256')}==pin(W/'tools/gen_alignment_page.py')\n for span,declaration in zip(spans,decl):\n  r=records[cursor];cursor+=1\n  assert (r['angle'],r['seq'],r['id'])==(a,s,span['id'])\n  assert r['original_span']==span and r['original_field_presence']==list(span) and r['original_occurrence_declaration']==declaration\n  assert (r['d'],r['tib'],r['eng'])==(span['d'],span['tib'],span['eng'])\n  assert source[s]['wylie'][slice(*r['tib_range'])]==r['tib'] and r['tib_range']==declaration['tib_range']\n  assert r['eng_range']==declaration['eng_range']\n  if r['eng'] is None:assert r['eng_range'] is None\n  else:assert source[s]['english'][slice(*r['eng_range'])]==r['eng']\n calls.append(dict(angle=a,seq=s,command=pin(P/(label+'.command.json')),stdout=pin(P/(label+'.stdout')),stderr=pin(P/(label+'.stderr'))))\nassert cursor==145\ntarget=P/'root-result-acceptance.json';assert not target.exists()\nout=dict(status='PASS_ROOT_ORIGINAL_CANONICAL_REPLAY_ACCEPTANCE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),execution_proof=pin(P/'execution-proof.json'),report=pin(P/'report.json'),original_identities=pin(P/'root-resolved-spans.json'),canonical_replays=6,original_span_count=145,original_file_count=344,source_anchors_and_intended_ranges_exact=True,optional_fields_and_original_identity_preserved=True,root_was_original_author=False,source_schema_reviewer_was_english_original_author=True,semantic_acceptance=False,calls=calls)\ntarget.write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(dict(status=out['status'],originals=145,canonical_replays=6,proof=pin(target)),indent=2))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-14T04:45:49.621927+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-14T04:45:49.667007+00:00",
+  "wall_seconds": 0.04449712531641126,
+  "exit": 0,
+  "stdout_bytes": 229,
+  "stderr_bytes": 0,
+  "stdout_sha256": "2dfe212c293ea6452f575846ab13203fa6b6fee6e3aa4c0143e907db4bcd7475",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

@@ -1,0 +1,68 @@
+{
+  "status": "READY_FOR_INDEPENDENT_SOURCE_REVIEW_ONLY",
+  "producer": "Codex /root/c05_280_282_english",
+  "current_role": "tooling author; historical English and tooling context reused; no independent semantic verdict",
+  "candidates": {
+    "verify_staged_through285.py": {
+      "bytes": 57097,
+      "sha256": "d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c"
+    },
+    "prepare-explicit-stage-inputs.py": {
+      "bytes": 5826,
+      "sha256": "b40fb94ca8019c2c552747dba56467c17dd0a23b2f980807de6d758ec32762b8"
+    },
+    "bank_root_proofs_through285_final.py": {
+      "bytes": 20978,
+      "sha256": "2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f"
+    }
+  },
+  "complete_original_copy_pairs": 278,
+  "full_pair_recheck": true,
+  "source_AST_and_inverse_only": true,
+  "native_preparation": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/caller-correction01",
+      "exit": 0,
+      "stdout": {
+        "bytes": 578,
+        "sha256": "b4b5bf905f9e5d39c45ced34d16090bd02f46787008bbfe3bc6164e0cc1887f2"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/caller-prepare01",
+      "exit": 1,
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 885,
+        "sha256": "6914b06bf500d82cb356e4bc281886343c59797becc3bdccef315394381f6450"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/caller-prepare02",
+      "exit": 0,
+      "stdout": {
+        "bytes": 578,
+        "sha256": "a72189b5b56e5dca4f274b5b2ac9fe7cf675b534dc1e24f65bc41dace79246e9"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "preparation_failures": 1,
+  "target_executions": 0,
+  "warning_populations_bound": 0,
+  "ordinary_final_counts_bound": false,
+  "Git_SQL_build_test_bank_stage_commit_calls": 0,
+  "W_B_writes": 0,
+  "finalize_caller": "caller-finalize01/ completes before freeze",
+  "freeze_transport": "freeze_sources.py source is retained; its final direct tool stdout is delivered externally after frozen boundary, not falsely self-captured"
+}

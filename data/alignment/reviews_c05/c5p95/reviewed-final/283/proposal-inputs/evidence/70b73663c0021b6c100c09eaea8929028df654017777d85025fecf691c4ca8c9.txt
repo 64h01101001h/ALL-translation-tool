@@ -1,0 +1,35 @@
+from pathlib import Path
+import gzip,hashlib,json,sqlite3
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+W=R/'campaign-worktree'; O=R/'campaign-artifacts/C05-283-285/tibetan/283/evidence'
+assert __debug__
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):
+    with (O/n).open('xb') as f:f.write((json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+dbpath=(W/'build/hgm_spine_v27_2.db').resolve(); uri=dbpath.as_uri()+'?mode=ro'
+con=sqlite3.connect(uri,uri=True);con.row_factory=sqlite3.Row;con.execute('PRAGMA query_only=ON')
+assert con.execute('PRAGMA query_only').fetchone()[0]==1
+qs=[]
+for term in ['can','snang']:
+    sql='SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS(SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id'
+    params=[term,term]; rows=[dict(r) for r in con.execute(sql,params)]
+    qs.append({'label':'HGM-and-full-entry:'+term,'sql':sql,'parameters':params,'row_count':len(rows),'rows':rows})
+con.close()
+masterpath=(W/'data/hgm_dictionary_v27_2.json.gz').resolve();raw=masterpath.read_bytes();master=json.loads(gzip.decompress(raw))
+matched=[]
+for q in qs:
+    for row in q['rows']:
+        entry=master['unified_entries'][row['id']-1]; assert entry==json.loads(row['raw'])
+        matched.append({'entry_id':row['id'],'source_array':'unified_entries','zero_based_index':row['id']-1,'full_original_entry':entry,'exact_to_spine_raw':True})
+save('supplement-lexical-queries.json',{'uri':uri,'query_only':True,'queries':qs,'master_original':str(masterpath),'master_pin':pin(raw),'full_master_records':matched})
+physical=O/'physical/C15ReadingASCII.txt'; b=physical.read_bytes()
+start=b.index(b'SNGA MA YANG DE DANG MTSUNGS TE, RNAG KHRAG LA SOGS')
+end=b.index(b'\r\n\r\n',start);block=b[start:end]; marker=b'Well the case above'
+acip,english=block.split(marker,1);english=marker+english
+source=json.loads((O/'snapshots/source.json').read_text())
+rows=source if isinstance(source,list) else source['segments']
+target=next(r for r in rows if r['seq']==284)
+ac=' '.join(acip.decode().split());en=' '.join(english.decode().split())
+assert ac==target['acip'] and en==target['english']
+save('C15-429-physical-supplement.json',{'reason':'Earlier exact-byte search omitted the physical C15:429 extent because its ACIP is split across two CRLF lines. This supplement reads the complete retained original file and explicitly collapses line wrapping only for comparison. No source defect is asserted.','source_original':'/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C15ReadingASCII.txt','copy':str(physical),'source_pin':pin(b),'physical_block_byte_range':[start,end],'start_line':b[:start].count(b'\n')+1,'full_raw_block':block.decode(),'line_wrap_collapsed_acip':ac,'line_wrap_collapsed_english':en,'acip_equal_C05_284':True,'english_equal_C05_284':True,'publication_or_ingestion_lineage_proven':False})
+print(json.dumps({'status':'PASS','queries':len(qs),'full_master_records':len(matched),'C15_429_complete_physical_extent':True}))

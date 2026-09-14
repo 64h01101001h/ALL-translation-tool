@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+  "parameters": [
+    "tshad grub",
+    "tshad grub"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 15285,
+      "wylie": "tshad grub",
+      "tibetan": "ཚད་གྲུབ",
+      "tibetan_source": null,
+      "acip": "TSAD GRUB",
+      "pronunciation": "tsedrup",
+      "pronunciation_source": null,
+      "sanskrit": "*pramāṇasiddha",
+      "hopkins_english": "valid establishment",
+      "hgm_gloss": "[\"confirmed by a valid\"]",
+      "tier": "auto-aligned",
+      "hgm_source": null,
+      "status": "hgm-auto (mined)",
+      "tenses": "'grub 'grub 'grubs/grub grubs",
+      "flags": null,
+      "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"P7\"]",
+      "corpus_n_segments": 12,
+      "raw": "{\"tibetan\": \"ཚད་གྲུབ\", \"wylie\": \"tshad grub\", \"wylie_variants\": [\"tshad grub\"], \"tenses\": \"'grub 'grub 'grubs/grub grubs\", \"sanskrit\": \"*pramāṇasiddha\", \"hopkins_english\": \"valid establishment\", \"hgm_gloss\": [\"confirmed by a valid\"], \"hgm_evidence\": {\"tier\": \"auto-aligned\", \"method\": \"intersection\", \"confidence\": \"medium\", \"n_attestations\": 6}, \"status\": \"hgm-auto (mined)\", \"pronunciation\": \"tsedrup\", \"acip\": \"TSAD GRUB\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"P7\"], \"n_segments\": 12}, \"hopkins_realigned\": \"uma-v26\"}"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+  "parameters": [
+    "gsher ba",
+    "gsher ba"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 20149,
+      "wylie": "gsher ba",
+      "tibetan": "གཤེར་བ",
+      "tibetan_source": null,
+      "acip": "GSHER BA",
+      "pronunciation": "sherwa",
+      "pronunciation_source": null,
+      "sanskrit": "{LC}ārdra; {LC}drava; {LC}dravatva; {LC}pariṣyanda; {LC}sneha; {LC}pariṣyanda, samunna, sārdra, sneha",
+      "hopkins_english": "moistening",
+      "hgm_gloss": "[\"flowing\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"DTE\", \"P7\", \"P9\", \"TCS10\"]",
+      "corpus_n_segments": 66,
+      "raw": "{\"tibetan\": \"གཤེར་བ\", \"wylie\": \"gsher ba\", \"wylie_variants\": [\"gsher ba\"], \"tenses\": null, \"sanskrit\": \"{LC}ārdra; {LC}drava; {LC}dravatva; {LC}pariṣyanda; {LC}sneha; {LC}pariṣyanda, samunna, sārdra, sneha\", \"hopkins_english\": \"moistening\", \"hgm_gloss\": [\"flowing\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"sherwa\", \"acip\": \"GSHER BA\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"DTE\", \"P7\", \"P9\", \"TCS10\"], \"n_segments\": 66}, \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

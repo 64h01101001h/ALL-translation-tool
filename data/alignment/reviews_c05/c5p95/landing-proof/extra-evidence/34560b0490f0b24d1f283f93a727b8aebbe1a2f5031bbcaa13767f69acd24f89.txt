@@ -1,0 +1,44 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-277-279/prepare-explicit-stage-inputs.py
++++ prepare-explicit-stage-inputs.py
+@@ -1,23 +1,26 @@
+ """Derive exact reviewed file pathspec after an actual bank phase; no Git mutation."""
+ from pathlib import Path
+ import json,hashlib,sys,os,subprocess,datetime
+-B=Path(__file__).resolve().parent;I=B.parent/'integration';W=B.parents[1]/'campaign-worktree';L=B/'landing';D=B/'semantic-review';REL=Path('data/alignment/reviews_c05/c5p93');BANK=REL/'landing-proof'
+-mode=sys.argv[1];assert mode in ('initial','final');O=I/'through279-stage-runs'/(mode+'-preparation');O.mkdir(parents=True,exist_ok=False)
++B=Path(__file__).resolve().parent;I=B.parent/'integration';W=B.parents[1]/'campaign-worktree';L=B/'landing';D=B/'semantic-review';REL=Path('data/alignment/reviews_c05/c5p94');BANK=REL/'landing-proof'
++mode=sys.argv[1];assert mode in ('initial','final');O=I/'through282-stage-runs'/(mode+'-preparation');O.mkdir(parents=True,exist_ok=False)
+ def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+ def js(p):return json.loads(p.read_bytes())
+-assert js(I/'through279-generated-reproduction-root-acceptance/proof.json')['status']=='PASS'
++assert js(I/'through282-generated-reproduction-root-acceptance/proof.json')['status']=='PASS'
+ required={}
+ def add(rel,raw):
+  name=str(rel);assert not Path(name).is_absolute() and '..' not in Path(name).parts
+  assert (W/name).read_bytes()==raw
+  row=dict(path=name,**pin(raw));assert name not in required or required[name]==row;required[name]=row
+-for r in js(L/'staged-payload-manifest.json')['files']:
++payload=js(L/'staged-payload-manifest.json');assert len(payload['files'])==13 and len({r['path'] for r in payload['files']})==13
++for r in payload['files']:
+  raw=(L/'payload-freeze'/r['path']).read_bytes();assert pin(raw)=={k:r[k] for k in ('bytes','sha256')};add(r['path'],raw)
+-f=js(D/'freeze.json');assert f['spec_verdict']==f['quality_verdict']=='APPROVE' and f['file_count']==2070
++f=js(D/'freeze.json');assert f['status']=='FROZEN' and f['verdict']=='APPROVE' and f['file_count']==871
++assert pin((D/'freeze.json').read_bytes())['sha256']=='5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
++meta=js(D/'review.json');assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS'
+ for n,r in f['files'].items():
+  raw=(D/n).read_bytes();assert pin(raw)==r;add(REL/n,raw)
+ add(REL/'freeze.json',(D/'freeze.json').read_bytes())
+-for seq in (277,278,279):add(REL/(str(seq)+'-reconciliation.md'),(B/f'reconciled/{seq}/report.md').read_bytes())
++for seq in (280,281,282):add(REL/(str(seq)+'-reconciliation.md'),(B/f'reconciled/{seq}/report.md').read_bytes())
+ add(REL/'landing.json',(W/REL/'landing.json').read_bytes())
+ for phase,name in [('ordinary','root-proof-copy-manifest-before-whitespace.json')]+([('final-whitespace','root-proof-copy-manifest.json')] if mode=='final' else []):
+  raw=(L/name).read_bytes();m=json.loads(raw);assert m['phase']==phase and m['semantic_review_unchanged'] and m['semantic_review_freeze']==pin((D/'freeze.json').read_bytes())
+@@ -32,7 +35,7 @@
+ if mode=='initial':
+  assert r.stdout==b'';names=sorted(required)
+ else:
+- initial=js(I/'through279-stage-runs/initial-preparation/proof.json');old={x['path']:x for x in initial['files']}
++ initial=js(I/'through282-stage-runs/initial-preparation/proof.json');old={x['path']:x for x in initial['files']}
+  assert set(r.stdout.decode().split('\0')[:-1])==set(old) and all(required[n]==v for n,v in old.items())
+  names=sorted(set(required)-set(old));assert names and all(Path(n).is_relative_to(BANK) for n in names)
+ raw=b''.join(os.fsencode(n)+b'\0' for n in names);(O/'pathspec.bin').write_bytes(raw)

@@ -1,0 +1,32 @@
+[
+  {
+    "old": "sys.dont_write_bytecode=True\n",
+    "new": "sys.dont_write_bytecode=True\n# Preparation only: root must bind these literal interfaces after both originals freeze.\nEXPECTED_COMPLETION_FILE=None\nEXPECTED_COMPLETION_STATUS=None\nEXPECTED_TIBETAN_SPANS=None\nEXPECTED_WRAPPER_RELATIVE_PATH=None\nassert (isinstance(EXPECTED_COMPLETION_FILE,str) and EXPECTED_COMPLETION_FILE\n        and isinstance(EXPECTED_COMPLETION_STATUS,str) and EXPECTED_COMPLETION_STATUS\n        and type(EXPECTED_TIBETAN_SPANS) is int and EXPECTED_TIBETAN_SPANS>0\n        and isinstance(EXPECTED_WRAPPER_RELATIVE_PATH,str) and EXPECTED_WRAPPER_RELATIVE_PATH), 'PENDING: frozen original interfaces/count/wrapper must be bound and reviewed before execution'\n",
+    "occurrences": 1
+  },
+  {
+    "old": "Root authored Tibetan; this is mechanical verification only, not independent semantic approval.",
+    "new": "Fresh independent original authors c05_280_282_tibetan and c05_280_282_english; root is not an original author. This is mechanical verification only, not independent semantic approval.",
+    "occurrences": 1
+  },
+  {
+    "old": "[277,278,279]",
+    "new": "[280,281,282]",
+    "occurrences": 3
+  },
+  {
+    "old": "batch/'primary-tibetan-original-complete.json'",
+    "new": "batch/EXPECTED_COMPLETION_FILE",
+    "occurrences": 1
+  },
+  {
+    "old": "own['status']=='ALL_THREE_ORIGINALS_FROZEN_BEFORE_CURRENT_ENGLISH_READ' and sum(r['spans'] for r in own['counts'])==146",
+    "new": "own['status']==EXPECTED_COMPLETION_STATUS and sum(r['spans'] for r in own['counts'])==EXPECTED_TIBETAN_SPANS",
+    "occurrences": 1
+  },
+  {
+    "old": "batch/'tibetan/277/run-canonical-readonly.py'",
+    "new": "batch/EXPECTED_WRAPPER_RELATIVE_PATH",
+    "occurrences": 1
+  }
+]

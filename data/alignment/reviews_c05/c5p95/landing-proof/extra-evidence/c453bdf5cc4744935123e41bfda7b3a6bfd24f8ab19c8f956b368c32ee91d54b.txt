@@ -1,0 +1,37 @@
+"""Final source/package identity checks and freeze only; no target execution."""
+from pathlib import Path
+import ast,datetime,hashlib,json,os
+P=Path(__file__).resolve().parent;I=P.parent
+assert __debug__ and not (P/'freeze.json').exists()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def put(n,v):
+ raw=(json.dumps(v,indent=2)+'\n').encode()
+ with (P/n).open('xb') as f:f.write(raw)
+ return pin(raw)
+maps=json.loads((P/'original-to-copy-manifest.json').read_bytes())
+src=I/'through285-final-banking-stage-preparation/record_preparation.py'
+raw=src.read_bytes();assert (P/'record_preparation.py').read_bytes()==raw
+maps.append(dict(original=str(src),resolved_original=str(src.resolve(strict=True)),copy='record_preparation.py',symlink_components=[dict(path=str(q),target=os.readlink(q)) for q in (*reversed(src.parents),src) if q.is_symlink()],**pin(raw)))
+for row in maps:
+ src=Path(row['original']);raw=src.read_bytes()
+ assert str(src.resolve(strict=True))==row['resolved_original']
+ assert pin(raw)=={k:row[k] for k in ('bytes','sha256')} and (P/row['copy']).read_bytes()==raw
+ assert row['symlink_components']==[dict(path=str(q),target=os.readlink(q)) for q in (*reversed(src.parents),src) if q.is_symlink()]
+put('complete-original-to-copy-manifest.json',maps)
+pins=json.loads((P/'candidate-pins.json').read_bytes());proof=json.loads((P/'static-source-proof.json').read_bytes())
+for name,r in pins.items():
+ raw=(P/'candidates'/name).read_bytes();assert pin(raw)==r;ast.parse(raw)
+ text=raw.decode()
+ for record in reversed(json.loads((P/'changes'/f'{name}.json').read_bytes())):
+  at=record['after_positions'][0];assert text[at:at+len(record['new'])]==record['new'];text=text[:at]+record['old']+text[at+len(record['new']):]
+ assert pin(text.encode())==proof[name]['original']
+caller=P/'caller-prepare01';ex=json.loads((caller/'execution.json').read_bytes());cmd=json.loads((caller/'command.json').read_bytes())
+assert ex['argv']==cmd['argv'] and ex['exit']==int((caller/'exit.txt').read_bytes())==0
+assert not (caller/'stdin.bin').read_bytes() and not (caller/'stderr.bin').read_bytes()
+for stem in ('stdout','stderr'):assert pin((caller/(stem+'.bin')).read_bytes())==ex[stem]
+put('preparation-boundary.json',dict(status='FROZEN_SOURCE_PREPARATION_ONLY',complete_source_pairs=len(maps),core_preparer_source_pairs=len(maps)-1,recorder_source_additional_pair=True,candidate_pins=pins,full_source_pairs_and_aliases_rechecked=True,AST_and_inverse_only=True,native_preparer_exit=0,native_preparer_failure_count=0,actual_inventory_executed=False,actual_bank_executed=False,code_review_and_actual_release_bindings_pending=True,full_original_copy_map='complete-original-to-copy-manifest.json',map_copy_paths_relative_to='this preparation root',later_transport='Direct final freeze tool stdout remains later external; not falsely self-banked or included in its own freeze.'))
+rows={str(p.relative_to(P)):pin(p.read_bytes()) for p in sorted(P.rglob('*')) if p.is_file()}
+f=dict(status='FROZEN_SOURCE_PREPARATION_ONLY',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),producer='Codex /root/c05_280_282_english',file_count=len(rows),total_bytes=sum(r['bytes']for r in rows.values()),files=rows,excludes=['freeze.json itself'])
+fp=put('freeze.json',f)
+assert {str(p.relative_to(P))for p in P.rglob('*')if p.is_file()}==set(rows)|{'freeze.json'}
+print(json.dumps(dict(freeze=str(P/'freeze.json'),**fp,file_count=len(rows),total_bytes=f['total_bytes'],complete_source_pairs=len(maps),candidate_pins=pins),indent=2))

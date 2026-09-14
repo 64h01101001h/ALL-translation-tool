@@ -1,0 +1,45 @@
+--- errata-analysis-initial.json
++++ errata-analysis.json
+@@ -54,5 +54,42 @@
+         "result": "All counts recomputed from full reopened rows; no extrapolated publication count."
+       }
+     }
++  },
++  {
++    "seq": 283,
++    "candidate_id": "C05-283-SCREEN-02",
++    "found": "that, when",
++    "expected": "that--when",
++    "origin": "Observed C05/C15 punctuation difference, not an original erratum.",
++    "refuted": true,
++    "retained": false,
++    "decisive_ground": "d",
++    "reason": "Both punctuation choices are defensible parenthetical presentation; no source corruption or independent publication lineage is established.",
++    "five_grounds": {
++      "a": {
++        "checked": true,
++        "result": "The found and expected strings are present respectively in C05:283 and C15:428 English; complete ACIP/Wylie/English are retained in SCREEN-01."
++      },
++      "b": {
++        "checked": true,
++        "result": "Both Tibetan fields equal. Exactly two comma-space to double-hyphen substitutions recover the complete C15 English. This alone proves no independent publication or ingestion lineage."
++      },
++      "c": {
++        "checked": true,
++        "result": "No registered converter/footnote/caption/glued-heading class accounts for this ordinary punctuation choice; the full fixed register is retained."
++      },
++      "d": {
++        "checked": true,
++        "result": "The current comma-delimited when clause is grammatical; replacing punctuation is not a justified correction."
++      },
++      "e": {
++        "checked": true,
++        "counts_rechecked": {
++          "found_occurrences": 1,
++          "full_English_replacements": 2
++        },
++        "result": "Both substitutions and complete resulting string equality were checked, not inferred from snippets."
++      }
++    }
+   }
+ ]

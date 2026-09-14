@@ -1,0 +1,133 @@
+from pathlib import Path
+from collections import defaultdict
+import hashlib,re
+WARNINGS = {'trailing whitespace.', 'new blank line at EOF.', 'space before tab in indent.'}
+
+def digest(raw): return hashlib.sha256(raw).hexdigest()
+
+def pin(raw): return dict(bytes=len(raw), sha256=digest(raw))
+
+def check_pin(raw, record):
+    assert type(record['bytes']) is int and record['bytes'] >= 0
+    assert re.fullmatch('[0-9a-f]{64}', record['sha256'])
+    assert pin(raw) == {k: record[k] for k in ('bytes', 'sha256')}
+
+def relative(value):
+    assert isinstance(value, str) and value
+    p = Path(value)
+    assert not p.is_absolute() and '..' not in p.parts and str(p) == value and value != '.'
+    return p
+
+def parse_log(raw):
+    issues = defaultdict(lambda: defaultdict(list))
+    header = re.compile(rb'^([^+\n]+):([0-9]+): (.+)$')
+    for line in raw.split(b'\n'):
+        match = header.fullmatch(line)
+        if match:
+            path, number, warning = match.groups()
+            path = path.decode('utf-8'); relative(path)
+            number = int(number); warning = warning.decode('ascii')
+            assert number > 0 and warning in WARNINGS
+            assert number not in issues[path][warning], 'Duplicate warning identity'
+            issues[path][warning].append(number)
+        else:
+            assert not line.strip() or line.startswith(b'+'), ('Unknown diagnostic framing', line)
+    return {path: dict(groups) for path, groups in issues.items()}
+
+def literal_warnings(raw, grouped):
+    """Common literal checks; EOF ownership is category-specific below."""
+    lines = raw.split(b'\n')
+    assert grouped and set(grouped) <= WARNINGS
+    for kind, numbers in grouped.items():
+        assert numbers and len(numbers) == len(set(numbers))
+        for number in numbers:
+            assert type(number) is int and 1 <= number <= len(lines)
+            line = lines[number-1]
+            if kind == 'trailing whitespace.': assert line.endswith((b' ', b'\t', b'\r'))
+            elif kind == 'space before tab in indent.':
+                indent = re.match(rb'^[ \t]*', line).group(); assert b' \t' in indent
+            # EOF names/numbers are checked here; content belongs to its predicate.
+    return lines
+
+def diff_context_lines(raw):
+    """Validate complete unified-diff framing/counts; return blank context lines.
+
+No acceptance from merely finding ---/+++/@@ markers somewhere in payload.
+    """
+    lines = raw.split(b'\n'); lines = lines[:-1] if lines and lines[-1] == b'' else lines
+    hunk = re.compile(rb'^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@(?:.*)$')
+    context = set(); old_left = new_left = 0; pair = False; pair_hunk = False; saw_hunk = False; i = 0
+    while i < len(lines):
+        line = lines[i]
+        if old_left or new_left:
+            assert line and line[:1] in (b' ', b'+', b'-')
+            if line[:1] in (b' ', b'-'): old_left -= 1
+            if line[:1] in (b' ', b'+'): new_left -= 1
+            assert old_left >= 0 and new_left >= 0
+            if line == b' ': context.add(i+1)
+            i += 1
+            if i < len(lines) and lines[i] == b'\\ No newline at end of file': i += 1
+            continue
+        if line.startswith(b'--- '):
+            assert not pair or pair_hunk, 'File header pair has no complete hunk'
+            assert len(line) > 4 and i+1 < len(lines) and lines[i+1].startswith(b'+++ ') and len(lines[i+1]) > 4
+            pair = True; pair_hunk = False; i += 2; continue
+        match = hunk.fullmatch(line)
+        assert pair and match, ('Unrecognized or ambiguous diff framing', i+1, line)
+        old_left = int(match.group(2) or b'1'); new_left = int(match.group(4) or b'1')
+        assert old_left or new_left
+        saw_hunk = True; pair_hunk = True; i += 1
+    assert saw_hunk and pair_hunk and not old_left and not new_left
+    return context
+
+def ordinary_predicate(raw, grouped):
+    lines = literal_warnings(raw, grouped)
+    if set(grouped) == {'new blank line at EOF.'} and all(
+            all(x == b'' for x in lines[n-1:]) for n in grouped['new blank line at EOF.']):
+        return 'blank_eof'
+    assert set(grouped) <= {'trailing whitespace.', 'new blank line at EOF.'}
+    contexts = diff_context_lines(raw)
+    for number in grouped.get('trailing whitespace.', []):
+        assert number in contexts and lines[number-1] == b' '
+    for number in grouped.get('new blank line at EOF.', []):
+        # A terminal unified-diff context marker owns one ASCII space. Every
+        # remaining content line must also be a parsed blank context marker.
+        assert lines[-1] == b'' and number < len(lines)
+        assert all(lines[i] == b' ' and i+1 in contexts for i in range(number-1, len(lines)-1))
+    return 'diff_context'
+
+def classify_physical(raw, grouped, physical):
+    literal_warnings(raw, grouped)
+    matches = []
+    for item, witness in physical:
+        if raw and raw in witness:
+            start = 0
+            while True:
+                lo = witness.find(raw, start)
+                if lo < 0: break
+                matches.append(dict(witness=item, byte_range=[lo, lo+len(raw)])); start = lo+1
+    if matches:
+        if 'new blank line at EOF.' in grouped:
+            # Preserve the original strict empty-LF rule. The added CRLF
+            # exception exists only after whole-range ownership, never in
+            # the report-line fallback; no fabricated all-blank CRLF fragment.
+            lines = raw.split(b'\n')
+            for number in grouped['new blank line at EOF.']:
+                tail = lines[number-1:]
+                if all(value == b'' for value in tail): continue
+                assert raw.strip() and len(tail) >= 2 and tail[-1] == b''
+                assert all(value == b'\r' for value in tail[:-1]), 'Not exact empty CRLF source tail'
+        return dict(kind='physical_bytes', full_range_witnesses=matches)
+    assert set(grouped) == {'trailing whitespace.'}
+    lines = raw.split(b'\n'); witnesses = {}
+    for number in grouped['trailing whitespace.']:
+        value = lines[number-1]; assert value and value.strip(), 'Empty physical-line promotion refused'
+        matches = []
+        for item, source in physical:
+            for match in re.finditer(re.escape(value), source):
+                lo, hi = match.span()
+                if (lo == 0 or source[lo-1:lo] == b'\n') and source[hi:hi+1] in (b'\r', b'\n'):
+                    matches.append(dict(witness=item, byte_range=[lo, hi]))
+        assert matches, ('No complete original physical line', number)
+        witnesses[str(number)] = matches
+    return dict(kind='physical_source_lines', line_witnesses=witnesses)

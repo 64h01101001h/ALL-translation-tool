@@ -1,0 +1,72 @@
+from pathlib import Path
+import ast,difflib,hashlib,json
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');I=R/'campaign-artifacts/integration';P=I/'through285-reconciliation-verifier-preparation';O=I/'through285-reconciliation-verifier-original-freeze-adapter';B=R/'campaign-artifacts/C05-283-285'
+assert __debug__
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(p,b):
+    with p.open('xb') as f:f.write(b)
+def save(p,x):write(p,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+inputs=O/'inputs';inputs.mkdir(exist_ok=False);maps=[]
+def copy(p,n):
+    b=p.read_bytes();write(inputs/n,b);assert p.read_bytes()==b
+    maps.append({'original':str(p),'resolved':str(p.resolve()),'copy':'inputs/'+n,**pin(b)});return b
+old_runtime=copy(P/'verify_reconciliation.py','prior-verify_reconciliation.py').decode()
+old_contract=copy(P/'config_contract.py','prior-config_contract.py').decode()
+copy(P/'freeze.json','prior-preparation-freeze.json');copy(P/'report.md','prior-preparation-report.md');copy(P/'original-copy-manifest.json','prior-original-copy-manifest.json')
+allcensus=[];schemas=[]
+for angle,filename in [('tibetan','freeze-manifest.json'),('english','freeze.json')]:
+    for seq in [283,284,285]:
+        d=B/angle/str(seq);manifest=d/filename;raw=copy(manifest,f'{angle}-{seq}-{filename}');v=json.loads(raw)
+        assert isinstance(v,list) if angle=='tibetan' else isinstance(v,dict) and isinstance(v['files'],list)
+        rows=v if angle=='tibetan' else v['files'];expected={}
+        for row in rows:
+            assert set(row)=={'path','bytes','sha256'} and row['path'] not in expected
+            p=Path(row['path']);assert not p.is_absolute() and '..' not in p.parts
+            expected[row['path']]={k:row[k] for k in ['bytes','sha256']}
+        files=[]
+        for p in sorted(d.rglob('*')):
+            assert not p.is_symlink(),str(p)
+            if p.is_file():
+                rel=str(p.relative_to(d));b=p.read_bytes();files.append({'path':rel,**pin(b)});assert p.read_bytes()==b
+        actual={r['path']:{k:r[k] for k in ['bytes','sha256']} for r in files if r['path']!=filename};assert actual==expected
+        schema={'angle':angle,'seq':seq,'directory':str(d),'freeze':{'path':str(manifest),**pin(raw)},'top_type':type(v).__name__,'top_keys':list(v) if isinstance(v,dict) else None,'files_type':type(rows).__name__,'members':len(rows),'record_keys':['bytes','path','sha256']}
+        schemas.append(schema);allcensus.append({'angle':angle,'seq':seq,'directory':str(d),'files':files})
+save(O/'original-freeze-schemas.json',schemas);save(O/'original-census-before.json',allcensus)
+helper='''def original_freeze(row):
+ """Read the explicitly pinned original manifest in its genuine angle schema."""
+ d=Path(row['directory']);names={'tibetan':'freeze-manifest.json','english':'freeze.json'}
+ assert d.is_absolute() and row['angle'] in names
+ manifest=d/names[row['angle']];assert Path(row['freeze']['path'])==manifest
+ value=json.loads(pinned(row['freeze']))
+ if row['angle']=='tibetan':assert isinstance(value,list);files=value
+ else:assert isinstance(value,dict) and isinstance(value['files'],list);files=value['files']
+ expected={}
+ for r in files:
+  assert isinstance(r,dict) and set(r)=={'path','bytes','sha256'} and isinstance(r['path'],str)
+  p=Path(r['path']);n=str(p.relative_to(d)) if p.is_absolute() else str(p)
+  assert n not in ('','.','..') and not Path(n).is_absolute() and '..' not in Path(n).parts and n not in expected
+  assert n!=manifest.name and (d/n).is_file() and (d/n).resolve().is_relative_to(d.resolve())
+  assert type(r['bytes'])is int and r['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',r['sha256'])
+  expected[n]=r
+ return expected
+
+'''
+oldline="  assert Path(row['freeze']['path'])==d/'freeze.json';f=json.loads(pinned(row['freeze']))['files'];f={r['path']:r for r in f}if isinstance(f,list)else f\n"
+contract_map=[{'old':'def validate_config(c):\n','new':helper+'def validate_config(c):\n','count':1,'reason':'Add a shared original-only reader with exact per-angle filename/schema, strict descriptors, normalized duplicate/escape checks and path containment.'},{'old':oldline,'new':'  f=original_freeze(row)\n','count':1,'reason':'Use the explicit pinned genuine original manifest; all spec/declaration/identity checks following this line remain byte-identical.'}]
+runtime_map=[
+ {'old':'from config_contract import pinned,validate_config,bind_query\n','new':'from config_contract import pinned,validate_config,bind_query,original_freeze\n','count':1,'reason':'Import the original-only schema reader.'},
+ {'old':" def frozen(d):\n  f=read(d/'freeze.json')['files'];items=f.items() if isinstance(f,dict) else [(r['path'],r) for r in f];expected={}\n",'new':" def frozen(row):\n  d=Path(row['directory']);manifest=Path(row['freeze']['path'])\n  if 'angle' in row:f=original_freeze(row)\n  else:\n   assert manifest==d/'freeze.json'\n   f=json.loads(pinned(row['freeze']))['files'];assert isinstance(f,dict)\n  items=f.items();expected={}\n",'count':1,'reason':'Accept the complete explicit descriptor for both phases; genuine originals use the new reader, while reconciled freeze.json remains a files DICT.'},
+ {'old':"if p.is_file() and p!=d/'freeze.json'",'new':'if p.is_file() and p!=manifest','count':1,'reason':'Exclude exactly the pinned manifest from the otherwise unchanged complete census.'},
+ {'old':"return dict(path=str(d),freeze=pin(d/'freeze.json'),files=len(expected))",'new':'return dict(path=str(d),freeze=pin(manifest),files=len(expected))','count':1,'reason':'Return the genuine pinned manifest identity.'},
+ {'old':"frozen(Path(row['directory']))",'new':'frozen(row)','count':2,'reason':'Both initial and final conservation checks pass the unchanged full row, including its pinned freeze descriptor.'}]
+proof=[]
+for name,before,replacements in [('verify_reconciliation.py',old_runtime,runtime_map),('config_contract.py',old_contract,contract_map)]:
+    after=before
+    for r in replacements:assert after.count(r['old'])==r['count'];after=after.replace(r['old'],r['new'])
+    inverse=after
+    for r in reversed(replacements):assert inverse.count(r['new'])==r['count'];inverse=inverse.replace(r['new'],r['old'])
+    assert inverse==before and ast.dump(ast.parse(inverse))==ast.dump(ast.parse(before));compile(after,name,'exec')
+    write(O/name,after.encode());write(O/(name+'.forward.diff'),''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='prior/'+name,tofile='candidate/'+name)).encode());write(O/(name+'.inverse.diff'),''.join(difflib.unified_diff(after.splitlines(True),before.splitlines(True),fromfile='candidate/'+name,tofile='prior/'+name)).encode())
+    proof.append({'file':name,'prior':pin(before.encode()),'candidate':pin(after.encode()),'replacement_map':replacements,'whole_source_inverse_exact':True,'inverse_AST_exact':True,'syntax_compiles_without_execution':True})
+save(O/'replacement-map.json',proof);save(O/'original-to-copy-manifest.json',maps)
+print(json.dumps({'status':'SOURCE_ADAPTED_ONLY','sources':[{k:r[k] for k in ['file','prior','candidate']} for r in proof],'actual_original_manifests':len(schemas),'actual_original_members':sum(r['members'] for r in schemas),'actual_originals_unchanged_before_controls':True}))

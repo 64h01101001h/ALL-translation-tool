@@ -1,0 +1,76 @@
+[
+  {
+    "file": "verify_reconciliation.py",
+    "prior": {
+      "bytes": 16371,
+      "sha256": "d476e9041b1e4aecbcb975daef0f6c71784381ac44927b66b25bfc9cbdc45601"
+    },
+    "candidate": {
+      "bytes": 16475,
+      "sha256": "945086f1b2f93b40f9fa8f59535f0c9fc29972f6d1c01beea3d6fddaf23ea4ac"
+    },
+    "replacement_map": [
+      {
+        "old": "from config_contract import pinned,validate_config,bind_query\n",
+        "new": "from config_contract import pinned,validate_config,bind_query,original_freeze\n",
+        "count": 1,
+        "reason": "Import the original-only schema reader."
+      },
+      {
+        "old": " def frozen(d):\n  f=read(d/'freeze.json')['files'];items=f.items() if isinstance(f,dict) else [(r['path'],r) for r in f];expected={}\n",
+        "new": " def frozen(row):\n  d=Path(row['directory']);manifest=Path(row['freeze']['path'])\n  if 'angle' in row:f=original_freeze(row)\n  else:\n   assert manifest==d/'freeze.json'\n   f=json.loads(pinned(row['freeze']))['files'];assert isinstance(f,dict)\n  items=f.items();expected={}\n",
+        "count": 1,
+        "reason": "Accept the complete explicit descriptor for both phases; genuine originals use the new reader, while reconciled freeze.json remains a files DICT."
+      },
+      {
+        "old": "if p.is_file() and p!=d/'freeze.json'",
+        "new": "if p.is_file() and p!=manifest",
+        "count": 1,
+        "reason": "Exclude exactly the pinned manifest from the otherwise unchanged complete census."
+      },
+      {
+        "old": "return dict(path=str(d),freeze=pin(d/'freeze.json'),files=len(expected))",
+        "new": "return dict(path=str(d),freeze=pin(manifest),files=len(expected))",
+        "count": 1,
+        "reason": "Return the genuine pinned manifest identity."
+      },
+      {
+        "old": "[frozen(Path(row['directory'])) for row in freeze_rows]",
+        "new": "[frozen(row) for row in freeze_rows]",
+        "count": 2,
+        "reason": "Both initial and final conservation checks pass the unchanged full row, including its pinned freeze descriptor."
+      }
+    ],
+    "whole_source_inverse_exact": true,
+    "inverse_AST_exact": true,
+    "syntax_compiles_without_execution": true
+  },
+  {
+    "file": "config_contract.py",
+    "prior": {
+      "bytes": 9729,
+      "sha256": "432017fe3d3a6fbe30df42028d4cdc4342fd491b303d25a39c3027d8ed794b5d"
+    },
+    "candidate": {
+      "bytes": 10668,
+      "sha256": "caff81a7c2b1da46e7630428d4b1ff0ac64cc0e82e9716f59ae3563d68519561"
+    },
+    "replacement_map": [
+      {
+        "old": "def validate_config(c):\n",
+        "new": "def original_freeze(row):\n \"\"\"Read the explicitly pinned original manifest in its genuine angle schema.\"\"\"\n d=Path(row['directory']);names={'tibetan':'freeze-manifest.json','english':'freeze.json'}\n assert d.is_absolute() and row['angle'] in names\n manifest=d/names[row['angle']];assert Path(row['freeze']['path'])==manifest\n value=json.loads(pinned(row['freeze']))\n if row['angle']=='tibetan':assert isinstance(value,list);files=value\n else:assert isinstance(value,dict) and isinstance(value['files'],list);files=value['files']\n expected={}\n for r in files:\n  assert isinstance(r,dict) and set(r)=={'path','bytes','sha256'} and isinstance(r['path'],str)\n  p=Path(r['path']);n=str(p.relative_to(d)) if p.is_absolute() else str(p)\n  assert n not in ('','.','..') and not Path(n).is_absolute() and '..' not in Path(n).parts and n not in expected\n  assert n!=manifest.name and (d/n).is_file() and (d/n).resolve().is_relative_to(d.resolve())\n  assert type(r['bytes'])is int and r['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',r['sha256'])\n  expected[n]=r\n return expected\n\ndef validate_config(c):\n",
+        "count": 1,
+        "reason": "Add a shared original-only reader with exact per-angle filename/schema, strict descriptors, normalized duplicate/escape checks and path containment."
+      },
+      {
+        "old": "  assert Path(row['freeze']['path'])==d/'freeze.json';f=json.loads(pinned(row['freeze']))['files'];f={r['path']:r for r in f}if isinstance(f,list)else f\n",
+        "new": "  f=original_freeze(row)\n",
+        "count": 1,
+        "reason": "Use the explicit pinned genuine original manifest; all spec/declaration/identity checks following this line remain byte-identical."
+      }
+    ],
+    "whole_source_inverse_exact": true,
+    "inverse_AST_exact": true,
+    "syntax_compiles_without_execution": true
+  }
+]

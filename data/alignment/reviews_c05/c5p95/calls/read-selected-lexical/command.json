@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "import json; a=json.load(open(\"selected-lexical-reading.json\")); wanted=[4128,4169,6941,7117,15282,17092,19208,19364,20149,22118,24799,2046,1139,24483]; print(json.dumps([x for x in a if x[\"id\"] in wanted],ensure_ascii=False,indent=2))"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0"
+  },
+  "started_at": "2026-09-14T05:23:18.989482+00:00"
+}

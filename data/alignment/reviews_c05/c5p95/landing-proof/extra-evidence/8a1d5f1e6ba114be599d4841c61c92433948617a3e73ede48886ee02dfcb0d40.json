@@ -1,0 +1,51 @@
+{
+  "status": "REQUIRED_FUTURE_ACTUAL_ROOT_RECEIPT_INTERFACE_NOT_AN_APPROVAL",
+  "required_receipt_status": "PASS_ROOT_SOURCE_REVIEW_APPROVED_FOR_ONE_INDEPENDENT_REPRODUCTION",
+  "preparation_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation",
+  "required_fields": [
+    "status",
+    "preparation_directory",
+    "preparation_freeze",
+    "preparation_members",
+    "entry_source",
+    "bindings",
+    "initial_runtime_sources",
+    "complete_sources_diffs_and_contract_read",
+    "open_findings"
+  ],
+  "field_meaning": "Root fills actual final preparation freeze and complete source pins only after reading the final sources/diffs/contract. Receipt must be outside this immutable preparation and inside integration. This file is a schema, never a passing receipt.",
+  "initial_runtime_sources": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/prepare.py.txt",
+      "bytes": 5854,
+      "sha256": "fc6221f0525b252abc259bdcaba5aa420c9403dcf8745b96e424aa76407a124b"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/run-once.py.txt",
+      "bytes": 2559,
+      "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/run-isolated-readonly.py.txt",
+      "bytes": 1639,
+      "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/verify-retention.py.txt",
+      "bytes": 11882,
+      "sha256": "c9b09d5b3c34632e1c225d9ba2ee4bcc895a087444e8cf071492050602cfee3c"
+    }
+  ],
+  "bindings": {
+    "bytes": 601658,
+    "sha256": "213b558dcc989f79e7eff26eab1e184e1dbf4dc8e8ea733b1e3226f02674877f"
+  },
+  "entry_candidate": {
+    "bytes": 15181,
+    "sha256": "58695746f9777854cf5c84c275762bf250c7d95538022243a1d61ac98a97d964"
+  },
+  "invocation_flags": [
+    "--source-review-proof <actual external root receipt path>",
+    "--source-review-sha256 <actual receipt sha256>"
+  ]
+}

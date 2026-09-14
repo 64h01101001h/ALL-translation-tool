@@ -1,0 +1,10 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-order-correction/prior/runtime/prepare.py.txt
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-order-correction/runtime/prepare.py.txt
+@@ -36,6 +36,6 @@
+ cp(ROOT/'campaign-artifacts/integration/continuation-through270-reproduce.py',R/'prior-method.py.txt','historical verification method reference, not executed')
+ ev=json.loads((R/'expected-payload/data/alignment/alignment_evidence_v1.json').read_bytes())
+ assert ev['meta']['date']=='2026-09-13' and ev['meta']['source_pages']=='banked pages, 5 course(s) (sha256 fc9cdbee115e7969)'
+-assert len(registered)==549 and [n for x in registered if x['course']=='C05' for n in x['sequences']]==list(range(1,286))
++assert len(registered)==549 and sorted(n for x in registered if x['course']=='C05' for n in x['sequences'])==list(range(1,286))
+ save(R/'input-manifest.json',records);save(R/'registered-pages.json',registered);save(R/'preparation-proof.json',dict(status='PASS',head=HEAD,files=len(records),registered_pages=len(registered),source_date=ev['meta']['date'],seed=pin(seed),seven_output_relpaths=outputrels,previous_main_seed_equals_immutable_git=True,root_frozen_payload_count=len(manifest['files']),root_frozen_payload_and_live_equal=True,isolated_workspace=str(S)))
+ print(json.dumps(dict(status='PREPARED',files=len(records),registered_pages=len(registered),date=ev['meta']['date'],seed=pin(seed)),indent=2))

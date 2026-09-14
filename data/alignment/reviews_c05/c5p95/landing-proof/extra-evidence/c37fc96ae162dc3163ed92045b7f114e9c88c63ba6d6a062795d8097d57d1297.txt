@@ -1,0 +1,16 @@
+from pathlib import Path
+import hashlib,json
+assert __debug__
+O=Path(__file__).resolve().parent
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+assert not (O/'freeze.json').exists()
+files={}
+for p in sorted(O.rglob('*')):
+    assert not p.is_symlink(),p
+    assert p.name!='__pycache__' and p.suffix!='.pyc'
+    if p.is_file():files[str(p.relative_to(O))]=pin(p)
+proof=dict(status='FROZEN_SOURCE_ONLY_PREPARATION',file_count=len(files),total_bytes=sum(x['bytes'] for x in files.values()),files=files,excludes=['freeze.json'])
+with (O/'freeze.json').open('x') as f:f.write(json.dumps(proof,indent=2)+'\n')
+assert {str(p.relative_to(O)) for p in O.rglob('*') if p.is_file()}==set(files)|{'freeze.json'}
+for n,x in files.items():assert pin(O/n)==x
+print(json.dumps(dict(status='FROZEN',path=str(O/'freeze.json'),files=len(files),member_bytes=proof['total_bytes'],freeze=pin(O/'freeze.json'))))

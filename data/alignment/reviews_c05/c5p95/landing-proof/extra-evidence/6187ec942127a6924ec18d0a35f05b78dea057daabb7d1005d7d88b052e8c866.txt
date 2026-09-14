@@ -1,0 +1,19 @@
+from pathlib import Path
+import json,hashlib,datetime
+R=Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment");B=R/'campaign-artifacts/C05-283-285';I=B.parent/'integration'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+s=I/'through285-final-banking-stage-preparation/final-candidates/prepare-explicit-stage-inputs.py';raw=s.read_bytes()
+assert __debug__ and pin(raw)==dict(bytes=5826,sha256='b40fb94ca8019c2c552747dba56467c17dd0a23b2f980807de6d758ec32762b8')
+v=I/'through285-final-stage-independent-code-review/review.json';vr=v.read_bytes()
+assert pin(vr)==dict(bytes=4632,sha256='4fb076a2697aeb5f475eaabeae0185995fd80110ea95c6de9ab774e1d28ca4af')
+assert j(v)['source_verdicts'][s.name]=='APPROVE_SOURCE_ONLY_PENDING_ACTUAL_ROOT_RELEASE'
+a=I/'through285-generated-reproduction-root-acceptance/proof.json';ar=a.read_bytes()
+assert pin(ar)==dict(bytes=1331,sha256='fe377d7d9b00a251b5e7c361b8e36cac5a4af450e176ce9a6e87dc17bcd4b642') and j(a)['status']=='PASS'
+target=B/s.name;release=B/'root-stage-pathspec-release.json'
+assert not target.exists() and not release.exists()
+proof=dict(status='PASS_ROOT_RELEASE_OF_REVIEWED_STAGE_PATHSPEC_SOURCE',baseline='fb9182dc6fca2230be3bc5169ba1288a22430280',source=pin(raw),reproduction_acceptance=dict(path=str(a),**pin(ar)),utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_original=str(s),source_copy=str(target),independent_code_review=dict(path=str(v),**pin(vr)),root_full_source_read=True,runtime_executed=False,scope='Materialize reviewed exact pathspec constructor only; source approval precedes runtime exact-path derivation, staging and final verification.')
+with target.open('xb')as f:f.write(raw)
+assert target.read_bytes()==s.read_bytes()==raw
+with release.open('x')as f:f.write(json.dumps(proof,indent=2)+'\n')
+print(json.dumps(proof,indent=2))

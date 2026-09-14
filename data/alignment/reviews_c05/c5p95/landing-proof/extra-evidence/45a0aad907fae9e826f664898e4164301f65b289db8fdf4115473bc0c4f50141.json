@@ -1,0 +1,35 @@
+{
+  "original_query_file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-source-preparation/queries/36-entry.json",
+  "original_query": {
+    "bytes": 1842,
+    "sha256": "fadd68c5b97b6a3b7cc00d67e167babf70ddf3fdf1ee323346edcc938e0c2a00"
+  },
+  "sql": "SELECT * FROM entries WHERE wylie = ? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie = ?) ORDER BY id",
+  "parameters": [
+    "tshad grub",
+    "tshad grub"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 15285,
+      "wylie": "tshad grub",
+      "tibetan": "ཚད་གྲུབ",
+      "tibetan_source": null,
+      "acip": "TSAD GRUB",
+      "pronunciation": "tsedrup",
+      "pronunciation_source": null,
+      "sanskrit": "*pramāṇasiddha",
+      "hopkins_english": "valid establishment",
+      "hgm_gloss": "[\"confirmed by a valid\"]",
+      "tier": "auto-aligned",
+      "hgm_source": null,
+      "status": "hgm-auto (mined)",
+      "tenses": "'grub 'grub 'grubs/grub grubs",
+      "flags": null,
+      "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"P7\"]",
+      "corpus_n_segments": 12,
+      "raw": "{\"tibetan\": \"ཚད་གྲུབ\", \"wylie\": \"tshad grub\", \"wylie_variants\": [\"tshad grub\"], \"tenses\": \"'grub 'grub 'grubs/grub grubs\", \"sanskrit\": \"*pramāṇasiddha\", \"hopkins_english\": \"valid establishment\", \"hgm_gloss\": [\"confirmed by a valid\"], \"hgm_evidence\": {\"tier\": \"auto-aligned\", \"method\": \"intersection\", \"confidence\": \"medium\", \"n_attestations\": 6}, \"status\": \"hgm-auto (mined)\", \"pronunciation\": \"tsedrup\", \"acip\": \"TSAD GRUB\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"DDA\", \"P7\"], \"n_segments\": 12}, \"hopkins_realigned\": \"uma-v26\"}"
+    }
+  ]
+}

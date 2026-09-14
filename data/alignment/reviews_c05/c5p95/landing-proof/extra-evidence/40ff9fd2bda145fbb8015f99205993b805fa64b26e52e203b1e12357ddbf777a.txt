@@ -1,0 +1,23 @@
+--- prepare_ordinary_sources.py
++++ prepare_ordinary_sources_v2.py
+@@ -10,7 +10,10 @@
+ def save(n,x):write(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+ copies=[]
+ def preserve(p,n):
+- b=p.read_bytes();write(n,b);assert p.read_bytes()==b;copies.append({'original':str(p),'resolved_original':str(p.resolve()),'copy':n,**bp(b)})
++ b=p.read_bytes()
++ if (P/n).exists():assert (P/n).read_bytes()==b
++ else:write(n,b)
++ assert p.read_bytes()==b;copies.append({'original':str(p),'resolved_original':str(p.resolve()),'copy':n,**bp(b)})
+ names=['compose-ordinary-bank-inventory-root.py','release-ordinary-bank-method-root.py','bank_root_proofs_through282.py']
+ for name in names:preserve(OLD/name,'prior/'+name)
+ preserve(A/'copy_evidence_once_v2.py','unchanged/copy_evidence_once_v2.py')
+@@ -18,7 +21,7 @@
+  preserve(A/n,'contracts/'+n)
+ for n in ['baseline.json','root-payload-result-acceptance.json','landing/staged-payload-manifest.json','landing/staged-payload-source-proof.json','landing/root-semantic-acceptance-proof.json','landing/root-frozen-input-copy-check.json','landing/course-registration-verification.json','landing/review-copy-and-register-proof.json','landing/canonical-builds-once.json','landing/build-layer.stdout','landing/build-layer.stderr','landing/build-layer.exit','landing/build-layer.command.json','landing/build-view.stdout','landing/build-view.stderr','landing/build-view.exit','landing/build-view.command.json','landing/ctest-17.stdout','landing/ctest-17.stderr','landing/ctest-17.exit','landing/ctest-17.execution.json','landing/untracked-before-banking.command.json','landing/untracked-before-banking.execution.json','landing/untracked-before-banking.exit','landing/untracked-before-banking.stderr','landing/untracked-before-banking-native-provenance.json','semantic-review/review.json','semantic-review/freeze.json']:
+  preserve(B/n,'current/'+n)
+-for d,n in [('through285-root-independent-review-verification','proof.json'),('through285-root-reconciliation-verification-attempt01','execution-proof.json'),('through285-root-current-config-release','proof.json')]:preserve(I/d/n,'current-integration/'+d+'/'+n)
++for d,n in [('through285-root-independent-review-verification','proof.json'),('through285-root-reconciliation-verification-attempt01','execution-proof.json'),('through285-root-current-config-release','release.json')]:preserve(I/d/n,'current-integration/'+d+'/'+n)
+ assert json.loads((B/'root-payload-result-acceptance.json').read_bytes())['independent_reproduction_completed']is False
+ assert re.findall(rb'^COVERAGE C05: (\d+)/511 segments scanned, (\d+) open \(([^)]+)\)$',(B/'landing/build-layer.stdout').read_bytes(),re.M)==[(b'285',b'226',b'286-511')]
+ assert b'100% tests passed out of 17' in (B/'landing/ctest-17.stdout').read_bytes()

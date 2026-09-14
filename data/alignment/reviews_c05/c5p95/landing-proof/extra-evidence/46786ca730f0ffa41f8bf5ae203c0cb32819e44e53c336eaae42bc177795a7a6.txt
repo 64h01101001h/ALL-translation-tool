@@ -1,0 +1,119 @@
+import datetime
+import gzip
+import hashlib
+import json
+import os
+from pathlib import Path
+import sqlite3
+import subprocess
+import sys
+
+assert __debug__ and sys.dont_write_bytecode
+P = Path(__file__).resolve().parent
+B = P.parent
+R = B.parent.parent
+W = R / 'campaign-worktree'
+D = Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP')
+assert datetime.datetime.now(datetime.timezone.utc) < datetime.datetime(2026,9,15,13,tzinfo=datetime.timezone.utc)
+def dump(name, value):
+    path=P/name
+    path.parent.mkdir(parents=True,exist_ok=True)
+    assert not path.exists(), path
+    path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+def pin(path):
+    path=Path(path)
+    b=path.read_bytes()
+    return {'path':str(path),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+copies=[]
+def copy(path):
+    path=Path(path)
+    raw=path.read_bytes()
+    h=hashlib.sha256(raw).hexdigest()
+    dest=P/'original-evidence'/h
+    dest.parent.mkdir(exist_ok=True)
+    if not dest.exists(): dest.write_bytes(raw)
+    assert dest.read_bytes()==raw
+    entry={'original_path':str(path),'resolved_original_path':str(path.resolve()),'copy_path':str(dest),'bytes':len(raw),'sha256':h}
+    copies.append(entry)
+    return entry
+references=[D,Path('/Users/adamderickandrade/ACIP Software Developmeent/Gofer Developmetn Files'),Path('/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil\'s Development Folder/Mac_OSX/ACIPHypercontext Tool'),Path('/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil\'s Development Folder/Mac_OSX/LokeshChandraDictionary'),Path('/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil\'s Development Folder/Mac_OSX/CreateLokeshChandraDIctionary'),Path('/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil\'s Development Folder/Mac_OSX/FixLokeshChandra'),Path('/Users/adamderickandrade/ACIP Software Developmeent/tibetan-spellchecker'),Path('/Users/adamderickandrade/Tibetan Translation Tool')]
+access=[{'path':str(p),'exists':p.exists(),'readable':os.access(p,os.R_OK),'searchable':os.access(p,os.X_OK)} for p in references]
+dump('reference-access.json',access)
+assert all(x['exists'] and x['readable'] and x['searchable'] for x in access)
+base=json.loads((B/'baseline.json').read_text())
+assert base['commit']=='fb9182dc6fca2230be3bc5169ba1288a22430280' and base['course_boundary']==282
+checks=[]
+for rel, expected in base['sha256'].items():
+    got=pin(W/rel)
+    got.update(expected_sha256=expected,match=got['sha256']==expected)
+    checks.append(got)
+dump('baseline-nine-check.json',checks)
+assert len(checks)==9 and all(x['match'] for x in checks)
+head=subprocess.run(['git','-C',str(W),'rev-parse','HEAD'],capture_output=True)
+dump('head-command.json',{'argv':['git','-C',str(W),'rev-parse','HEAD'],'stdout':head.stdout.decode(),'stderr':head.stderr.decode(),'exit':head.returncode})
+assert head.returncode==0 and head.stdout.decode().strip()==base['commit']
+governing=[W/'AGENTS.md',W/'docs/ALIGNMENT_LAYER_SPEC.md',W/'docs/NEVER_BANK_A_FALSEHOOD.md',W/'docs/alignment_briefs/RECONCILE_BRIEF.md',W/'docs/alignment_briefs/REFUTE_BRIEF.md',R/'campaign-artifacts/semantic-review-protocol.md',R/'campaign-artifacts/THROUGHPUT_REFINEMENT.md']
+for path in governing: copy(path)
+for name in ['baseline.json','source.json','context.json','preparation-freeze.json']:
+    copy(B/name)
+freeze=json.loads((B/'preparation-freeze.json').read_text())['files']
+snapshot_pins=[]
+for name in ['source.json','context.json']:
+    got=pin(B/name)
+    assert got['sha256']==freeze[name]['sha256'] and got['bytes']==freeze[name]['bytes']
+    snapshot_pins.append(got)
+db=W/'build/hgm_spine_v27_2.db'
+db_pin=pin(db)
+c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True)
+c.row_factory=sqlite3.Row
+c.execute('PRAGMA query_only=ON')
+assert c.execute('PRAGMA query_only').fetchone()[0]==1
+queries=[]
+def query(name,sql,params):
+    rows=[dict(row) for row in c.execute(sql,params).fetchall()]
+    result={'name':name,'database':str(db),'uri':db.resolve().as_uri()+'?mode=ro','connection_initialization_sql':'PRAGMA query_only=ON','sql':sql,'parameters':params,'count':len(rows),'rows':rows}
+    dump('queries/'+name+'.json',result)
+    queries.append({'name':name,'count':len(rows),'path':str(P/'queries'/f'{name}.json')})
+    return rows
+query('00-schema','SELECT name, sql FROM sqlite_master WHERE type = ? ORDER BY name',['table'])
+query('01-meta','SELECT * FROM meta ORDER BY key',[])
+rows=query('02-context','SELECT * FROM corpus_segments WHERE course = ? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',277,291])
+assert len(rows)==15 and [r['seq'] for r in rows]==list(range(277,292))
+source=[r for r in rows if 283<=r['seq']<=285]
+fields=['id','course','seq','acip','wylie','english']
+snapshot_checks=[]
+for name,expected in [('source.json',source),('context.json',rows)]:
+    snapshot=json.loads((B/name).read_text())
+    if isinstance(snapshot,dict):
+        key=next(k for k in ['segments','rows','source','context'] if k in snapshot)
+        snapshot=snapshot[key]
+    assert len(snapshot)==len(expected),(name,len(snapshot),len(expected))
+    for orig, actual in zip(snapshot,expected):
+        assert all(orig[k]==actual[k] for k in fields),(name,orig['seq'])
+    snapshot_checks.append({'snapshot':name,'count':len(snapshot),'fields':fields,'all_match':True})
+dump('snapshot-checks.json',snapshot_checks)
+archives=[W/'data/hgm_dictionary_v27_2.json.gz',W/'data/full_parallel_corpus_v32.json.gz',D/'Handoff/release/hgm_dictionary_v27_2.json.gz',D/'Handoff/data/full_parallel_corpus_v32.json.gz']
+archive_info=[]
+for path in archives:
+    if path.is_file():
+        copy(path)
+        data=json.loads(gzip.decompress(path.read_bytes()))
+        if isinstance(data,dict):
+            info={'type':'dict','keys':list(data.keys()),'field_types':{k:type(v).__name__ for k,v in data.items()},'list_counts':{k:len(v) for k,v in data.items() if isinstance(v,list)}}
+        else: info={'type':'list','count':len(data),'first_record_keys':list(data[0])}
+        archive_info.append({'path':str(path),'resolved':str(path.resolve()),'shape':info})
+physical=D/'To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt'
+physical_info=copy(physical)
+txt=physical.read_bytes().decode('utf-8')
+physical_context=[]
+for row in source:
+    for field in ['acip','english']:
+        target=row[field]
+        start=txt.find(target)
+        physical_context.append({'seq':row['seq'],'field':field,'exact_whole_match_count':txt.count(target),'first_exact_char_offset':start,'source_chars':len(target),'prefix_80':target[:80]})
+dump('physical-match-initial.json',physical_context)
+dump('query-index01.json',queries)
+dump('archive-shapes.json',archive_info)
+dump('original-copy-manifest01.json',copies)
+dump('source-proof01.json',{'status':'SOURCE_PREPARATION_ONLY','recorded_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer_role':'fresh Codex independent semantic reviewer; source preparation only','producer_model':'GPT-6 family per inherited developer identity; exact runtime model identifier not exposed','baseline':base['commit'],'baseline_nine_match':True,'source_snapshots':snapshot_pins,'database':db_pin,'database_query_only':True,'scope_exposure':'Initial metadata read of originals-complete.json exposed original author output span/null counts and path/hash pins only; author and reconciler specs/reports, root-review-targets and comparison/review judgments have not been read. No semantic verdict or final spec created.','physical':physical_info})
+print(json.dumps({'context_rows':rows,'archive_shapes':archive_info,'physical_initial':physical_context},ensure_ascii=False,indent=2))

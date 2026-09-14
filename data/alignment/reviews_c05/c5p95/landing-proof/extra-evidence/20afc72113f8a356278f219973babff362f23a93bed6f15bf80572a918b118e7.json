@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport hashlib,json,datetime,subprocess\nR=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment\");I=R/'campaign-artifacts/integration';B=R/'campaign-artifacts/C05-283-285';W=R/'campaign-worktree'\nD=I/'through285-original-verifier-actual-binding';V=I/'through285-original-verifier-actual-binding-review'\nO=B/'original-verifier-release';assert not O.exists()\ndef pin(p):\n b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\nf=json.loads((V/'freeze.json').read_text());assert pin(V/'freeze.json')==dict(bytes=22528,sha256='1845ffb3214c678d75dd1bc1258d2c52b0c3603aa904c24bb3fcb4593e74e3bb')\nassert len(f['files'])==126 and len({r['path'] for r in f['files']})==126\nassert {r['path'] for r in f['files']}=={str(p.relative_to(V)) for p in V.rglob('*') if p.is_file() and p!=V/'freeze.json'}\nfor r in f['files']:assert pin(V/r['path'])=={k:r[k] for k in ('bytes','sha256')}\ncopies=json.loads((V/'source-copy-manifest.json').read_text());assert len(copies)==117\nfor r in copies:\n p=Path(r['original']);assert str(p.resolve())==r['resolved_original']\n assert p.read_bytes()==(V/r['copy']).read_bytes()\n assert pin(p)=={k:r[k] for k in ('bytes','sha256')}\nreview=json.loads((V/'review.json').read_text());assert review['status']=='APPROVE_CODE_AND_SCHEMA_ONLY' and review['open_findings']==[]\nsrc=D/'verify-complete-originals.py.txt';cp=D/'originals-complete.json';wrapper=B/'english/283/run_canonical_readonly.py'\nassert pin(src)==review['candidate'] and pin(cp)==review['completion'] and pin(wrapper)==review['wrapper']\nassert subprocess.check_output(['git','rev-parse','HEAD'],cwd=W).decode().strip()=='fb9182dc6fca2230be3bc5169ba1288a22430280'\nassert subprocess.check_output(['git','status','--short'],cwd=W)==b'?? data/teaching/dcc_captions\\n'\nassert not (B/'proposal-verification').exists()\nfor name in ('verify-complete-originals.py','originals-complete.json'):assert not (B/name).exists()\nO.mkdir()\n(B/'verify-complete-originals.py').write_bytes(src.read_bytes());(B/'originals-complete.json').write_bytes(cp.read_bytes())\nassert pin(B/'verify-complete-originals.py')==review['candidate'] and pin(B/'originals-complete.json')==review['completion']\nproof=dict(status='RELEASE_ACTUAL_SIX_ORIGINAL_CANONICAL_REPLAYS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),review_freeze=pin(V/'freeze.json'),review=pin(V/'review.json'),review_frozen_members=126,review_source_copy_pairs=117,candidate=pin(src),materialized=pin(B/'verify-complete-originals.py'),completion=pin(cp),wrapper=pin(wrapper),source_full_read=True,source_schema_review_only=True,reviewer_was_english_original_author=True,semantic_acceptance=False,canonical_replays=0)\n(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\\n');print(json.dumps(proof,indent=2))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-14T04:44:25.344329+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-14T04:44:25.840571+00:00",
+  "wall_seconds": 0.4957842091098428,
+  "exit": 0,
+  "stdout_bytes": 1083,
+  "stderr_bytes": 0,
+  "stdout_sha256": "8c6aee22c24c5cd1f96b1d89edb6909b2d3587813854136aeb5ce0b3c9aa2991",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

@@ -1,0 +1,66 @@
+from pathlib import Path
+import ast,difflib,hashlib,json
+assert __debug__
+O=Path(__file__).resolve().parent;ROOT=O.parents[2];I=O.parent;B=ROOT/'campaign-artifacts/C05-283-285';M=json.loads((O/'actual-measurements.json').read_bytes())
+assert not (I/'through285-generated-reproduction').exists()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def put(n,b):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+ if p.exists():assert p.read_bytes()==b
+ else:
+  with p.open('xb') as f:f.write(b)
+def save(n,x):put(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+recipes=[];proofs=[]
+def make(n,changes,prefix=''):
+ old=(O/'prior'/n).read_text();s=old;records=[]
+ for a,b,reason in changes:
+  offsets=[];at=0
+  while (at:=s.find(a,at))>=0:offsets.append(at);at+=len(a)
+  assert offsets,(n,a);after=[];shift=0
+  for at in offsets:after.append(at+shift);shift+=len(b)-len(a)
+  for at in reversed(offsets):s=s[:at]+b+s[at+len(a):]
+  records.append(dict(before=a,after=b,before_offsets=offsets,after_offsets=after,reason=reason))
+ if prefix:
+  records.append(dict(before='',after=prefix,before_offsets=[0],after_offsets=[0],reason='Future runtime outcomes must be bound after real execution; unconditional source-only stop.'));s=prefix+s
+ reverse=s
+ for c in reversed(records):
+  for at in reversed(c['after_offsets']):assert reverse[at:at+len(c['after'])]==c['after'];reverse=reverse[:at]+c['before']+reverse[at+len(c['after']):]
+ assert reverse==old;ast.parse(s);assert ast.dump(ast.parse(reverse),include_attributes=False)==ast.dump(ast.parse(old),include_attributes=False)
+ put('runtime/'+n,s.encode())
+ for d,a,b in [('forward',old,s),('inverse',s,old)]:put('diffs/'+n+'.'+d+'.diff.txt',''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='prior/'+n if d=='forward' else 'runtime/'+n,tofile='runtime/'+n if d=='forward' else 'prior/'+n)).encode())
+ early=(O/'guarded-early'/n).read_text()
+ put('diffs/'+n+'.guarded-to-final.diff.txt',''.join(difflib.unified_diff(early.splitlines(True),s.splitlines(True),fromfile='guarded-early/'+n,tofile='runtime/'+n)).encode())
+ recipes.append(dict(mode='offsets',old=str(O/'prior'/n),current=str(O/'runtime'/n),changes=records))
+ proofs.append(dict(name=n,prior=pin(old.encode()),candidate=pin(s.encode()),byte_identical=old==s,whole_inverse_and_AST_exact=True,parsed_only=True,execution=False,pending_actual_runtime=bool(prefix)))
+common=[('C05-280-282','C05-283-285','actual batch'),('c5p94','c5p95','actual current page')]
+make('prepare.py.txt',common+[
+ ('10968d16e701b698a0e1fbd845b353089d15ac39','fb9182dc6fca2230be3bc5169ba1288a22430280','actual closed incoming HEAD'),
+ ("ev=json.loads((R/'expected-payload/data/alignment/alignment_evidence_v1.json').read_bytes())","ev=json.loads((R/'expected-payload/data/alignment/alignment_evidence_v1.json').read_bytes())\nassert ev['meta']['date']=='2026-09-13' and ev['meta']['source_pages']=='banked pages, 5 course(s) (sha256 fc9cdbee115e7969)'\nassert len(registered)==549 and [n for x in registered if x['course']=='C05' for n in x['sequences']]==list(range(1,286))",'bind independently inspected actual producer-local date and full549 registry without executing it here')
+])
+make('run-once.py.txt',[]);make('run-isolated-readonly.py.txt',[])
+make('verify-retention.py.txt',common+[
+ ("len(old['links'])==45275","len(old['links'])==45402",'actual prior complete links'),
+ ('127 new links confined to280–282','79 new links confined to283–285','actual root/full-bank addition count and scope'),
+ ('len(added)==127','len(added)==79','actual full-bank multiset measurement'),
+ ('(280,281,282)','(283,284,285)','actual source segments'),
+ ('{280:55,281:47,282:25}','{283:17,284:30,285:32}','actual full-bank group counts'),
+ ('Entire37-row change export','Entire18-row change export','actual incoming-seed change rows'),
+ ('len(delta)==37','len(delta)==18','actual18 complete change records'),
+ ('7089/7092','7090/7093','actual ACIP population'),
+ ("len(ev['pairs'])==7092 and len(ev['acip_index'])==7089","len(ev['pairs'])==7093 and len(ev['acip_index'])==7090",'actual full evidence/index count'),
+ ('headwords=7092,proven=7089','headwords=7093,proven=7090','actual complete ACIP disclosure'),
+ ('C05 exact282coverage','C05 exact285coverage','actual target coverage'),
+ ('list(range(1,283))','list(range(1,286))','actual contiguous285 coverage'),
+ ('Accepted current124tuple interface','Accepted current76tuple interface','actual independent reviewed interface'),
+ ('len(tuples)==124','len(tuples)==76','actual ordered reviewed tuples'),
+ ("sum(x['eng'] is None for x in tuples)==4","sum(x['eng'] is None for x in tuples)==0",'actual zero nulls'),
+ ("sum(x['d']==5 and x['eng'] is not None for x in tuples)==102","sum(x['d']==5 and x['eng'] is not None for x in tuples)==61",'actual nonnull d5'),
+ ('[45402,11938,1618,11,7092,15546,22528,22188,24105,37]','[45481,11938,1621,11,7093,15557,22546,22206,24126,18]','literal measured current output vector, never self-derived expected values')
+])
+hold="raise RuntimeError('SOURCE ONLY: actual independent retention totals, alias population and failure history must be bound after the released run')\nPENDING_CHECKS_TOTAL = None\nPENDING_INPUT_ALIASES = None\nPENDING_RUNTIME_FAILURE_ATTEMPTS = None\n"
+make('close-evidence.py.txt',[
+ ('C05-280-282','C05-283-285','actual batch'),('==223847','==PENDING_CHECKS_TOTAL','future actual complete runtime retention record count'),('==1513','==PENDING_INPUT_ALIASES','future actual preparation alias count'),('failure_attempts=0','failure_attempts=PENDING_RUNTIME_FAILURE_ATTEMPTS','future actual independent runtime history; preparation reader failures remain separate')
+],hold)
+save('runtime-source-recipes.json',recipes);save('runtime-source-proof.json',proofs)
+save('future-runtime-bindings.json',dict(status='PENDING_REAL_INDEPENDENT_RUNTIME',checks_total=None,input_aliases=None,runtime_failure_attempts=None,complete_runtime_freeze=None,actual_close_source=None,release_scope='Only prepare, run-once (one layer and one seeded view) and verify-retention are initial release candidates. Close and root acceptance remain conditional until real run results exist.'))
+print(json.dumps(dict(status='FOUR_INITIAL_RUNTIME_SOURCES_LITERAL_BOUND_CLOSURE_PENDING_REAL_RUN',sources=proofs),indent=2))

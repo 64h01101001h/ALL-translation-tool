@@ -1,0 +1,1450 @@
+Module(
+  body=[
+    ImportFrom(
+      module='pathlib',
+      names=[
+        alias(name='Path')],
+      level=0),
+    Import(
+      names=[
+        alias(name='argparse'),
+        alias(name='datetime'),
+        alias(name='hashlib'),
+        alias(name='json')]),
+    Assign(
+      targets=[
+        Name(id='B', ctx=Store())],
+      value=Attribute(
+        value=Call(
+          func=Attribute(
+            value=Call(
+              func=Name(id='Path', ctx=Load()),
+              args=[
+                Name(id='__file__', ctx=Load())]),
+            attr='resolve',
+            ctx=Load())),
+        attr='parent',
+        ctx=Load())),
+    Assign(
+      targets=[
+        Name(id='I', ctx=Store())],
+      value=BinOp(
+        left=Attribute(
+          value=Name(id='B', ctx=Load()),
+          attr='parent',
+          ctx=Load()),
+        op=Div(),
+        right=Constant(value='integration'))),
+    Assign(
+      targets=[
+        Name(id='O', ctx=Store())],
+      value=BinOp(
+        left=Name(id='B', ctx=Load()),
+        op=Div(),
+        right=Constant(value='root-ordinary-bank-method-release'))),
+    Assert(
+      test=Compare(
+        left=Attribute(
+          value=Name(id='B', ctx=Load()),
+          attr='name',
+          ctx=Load()),
+        ops=[
+          Eq()],
+        comparators=[
+          Constant(value='C05-283-285')])),
+    FunctionDef(
+      name='pin',
+      args=arguments(
+        args=[
+          arg(arg='b')]),
+      body=[
+        Return(
+          value=Call(
+            func=Name(id='dict', ctx=Load()),
+            keywords=[
+              keyword(
+                arg='bytes',
+                value=Call(
+                  func=Name(id='len', ctx=Load()),
+                  args=[
+                    Name(id='b', ctx=Load())])),
+              keyword(
+                arg='sha256',
+                value=Call(
+                  func=Attribute(
+                    value=Call(
+                      func=Attribute(
+                        value=Name(id='hashlib', ctx=Load()),
+                        attr='sha256',
+                        ctx=Load()),
+                      args=[
+                        Name(id='b', ctx=Load())]),
+                    attr='hexdigest',
+                    ctx=Load())))]))]),
+    FunctionDef(
+      name='j',
+      args=arguments(
+        args=[
+          arg(arg='p')]),
+      body=[
+        Return(
+          value=Call(
+            func=Attribute(
+              value=Name(id='json', ctx=Load()),
+              attr='loads',
+              ctx=Load()),
+            args=[
+              Call(
+                func=Attribute(
+                  value=Name(id='p', ctx=Load()),
+                  attr='read_bytes',
+                  ctx=Load()))]))]),
+    Assert(
+      test=BoolOp(
+        op=And(),
+        values=[
+          Name(id='__debug__', ctx=Load()),
+          UnaryOp(
+            op=Not(),
+            operand=Call(
+              func=Attribute(
+                value=Name(id='O', ctx=Load()),
+                attr='exists',
+                ctx=Load())))])),
+    Assign(
+      targets=[
+        Name(id='parser', ctx=Store())],
+      value=Call(
+        func=Attribute(
+          value=Name(id='argparse', ctx=Load()),
+          attr='ArgumentParser',
+          ctx=Load()),
+        keywords=[
+          keyword(
+            arg='description',
+            value=Constant(value='Bind actual reproduction closure and independently reviewed ordinary banking sources; no bank execution.'))])),
+    Expr(
+      value=Call(
+        func=Attribute(
+          value=Name(id='parser', ctx=Load()),
+          attr='add_argument',
+          ctx=Load()),
+        args=[
+          Constant(value='--bindings')],
+        keywords=[
+          keyword(
+            arg='required',
+            value=Constant(value=True))])),
+    Expr(
+      value=Call(
+        func=Attribute(
+          value=Name(id='parser', ctx=Load()),
+          attr='add_argument',
+          ctx=Load()),
+        args=[
+          Constant(value='--bindings-sha256')],
+        keywords=[
+          keyword(
+            arg='required',
+            value=Constant(value=True))])),
+    Assign(
+      targets=[
+        Name(id='args', ctx=Store())],
+      value=Call(
+        func=Attribute(
+          value=Name(id='parser', ctx=Load()),
+          attr='parse_args',
+          ctx=Load()))),
+    Assign(
+      targets=[
+        Name(id='binding_path', ctx=Store())],
+      value=Call(
+        func=Name(id='Path', ctx=Load()),
+        args=[
+          Attribute(
+            value=Name(id='args', ctx=Load()),
+            attr='bindings',
+            ctx=Load())])),
+    Assert(
+      test=Call(
+        func=Attribute(
+          value=Name(id='binding_path', ctx=Load()),
+          attr='is_absolute',
+          ctx=Load()))),
+    Assign(
+      targets=[
+        Name(id='raw', ctx=Store())],
+      value=Call(
+        func=Attribute(
+          value=Name(id='binding_path', ctx=Load()),
+          attr='read_bytes',
+          ctx=Load()))),
+    Assert(
+      test=Compare(
+        left=Subscript(
+          value=Call(
+            func=Name(id='pin', ctx=Load()),
+            args=[
+              Name(id='raw', ctx=Load())]),
+          slice=Constant(value='sha256'),
+          ctx=Load()),
+        ops=[
+          Eq()],
+        comparators=[
+          Attribute(
+            value=Name(id='args', ctx=Load()),
+            attr='bindings_sha256',
+            ctx=Load())])),
+    Assign(
+      targets=[
+        Name(id='binding', ctx=Store())],
+      value=Call(
+        func=Attribute(
+          value=Name(id='json', ctx=Load()),
+          attr='loads',
+          ctx=Load()),
+        args=[
+          Name(id='raw', ctx=Load())])),
+    Assert(
+      test=Compare(
+        left=Call(
+          func=Name(id='set', ctx=Load()),
+          args=[
+            Name(id='binding', ctx=Load())]),
+        ops=[
+          Eq()],
+        comparators=[
+          Set(
+            elts=[
+              Constant(value='reproduction_directory'),
+              Constant(value='reproduction_acceptance'),
+              Constant(value='source_packages'),
+              Constant(value='integration_inputs'),
+              Constant(value='deferred_active_callers'),
+              Constant(value='root_review_statement')])])),
+    Assign(
+      targets=[
+        Name(id='accept', ctx=Store())],
+      value=Call(
+        func=Name(id='Path', ctx=Load()),
+        args=[
+          Subscript(
+            value=Subscript(
+              value=Name(id='binding', ctx=Load()),
+              slice=Constant(value='reproduction_acceptance'),
+              ctx=Load()),
+            slice=Constant(value='path'),
+            ctx=Load())])),
+    Assert(
+      test=BoolOp(
+        op=And(),
+        values=[
+          Call(
+            func=Attribute(
+              value=Name(id='accept', ctx=Load()),
+              attr='is_absolute',
+              ctx=Load())),
+          Compare(
+            left=Attribute(
+              value=Name(id='accept', ctx=Load()),
+              attr='name',
+              ctx=Load()),
+            ops=[
+              Eq()],
+            comparators=[
+              Constant(value='proof.json')])])),
+    Assert(
+      test=Compare(
+        left=Call(
+          func=Name(id='pin', ctx=Load()),
+          args=[
+            Call(
+              func=Attribute(
+                value=Name(id='accept', ctx=Load()),
+                attr='read_bytes',
+                ctx=Load()))]),
+        ops=[
+          Eq()],
+        comparators=[
+          DictComp(
+            key=Name(id='k', ctx=Load()),
+            value=Subscript(
+              value=Subscript(
+                value=Name(id='binding', ctx=Load()),
+                slice=Constant(value='reproduction_acceptance'),
+                ctx=Load()),
+              slice=Name(id='k', ctx=Load()),
+              ctx=Load()),
+            generators=[
+              comprehension(
+                target=Name(id='k', ctx=Store()),
+                iter=Tuple(
+                  elts=[
+                    Constant(value='bytes'),
+                    Constant(value='sha256')],
+                  ctx=Load()),
+                is_async=0)])])),
+    Assign(
+      targets=[
+        Name(id='a', ctx=Store())],
+      value=Call(
+        func=Name(id='j', ctx=Load()),
+        args=[
+          Name(id='accept', ctx=Load())])),
+    Assert(
+      test=BoolOp(
+        op=And(),
+        values=[
+          Compare(
+            left=Subscript(
+              value=Name(id='a', ctx=Load()),
+              slice=Constant(value='status'),
+              ctx=Load()),
+            ops=[
+              Eq()],
+            comparators=[
+              Constant(value='PASS')]),
+          Compare(
+            left=Subscript(
+              value=Name(id='a', ctx=Load()),
+              slice=Constant(value='head'),
+              ctx=Load()),
+            ops=[
+              Eq()],
+            comparators=[
+              Constant(value='fb9182dc6fca2230be3bc5169ba1288a22430280')])])),
+    Assert(
+      test=BoolOp(
+        op=And(),
+        values=[
+          Subscript(
+            value=Name(id='a', ctx=Load()),
+            slice=Constant(value='all_seven_reproduced_outputs_byte_exact'),
+            ctx=Load()),
+          Subscript(
+            value=Name(id='a', ctx=Load()),
+            slice=Constant(value='all_thirteen_payload_files_byte_exact'),
+            ctx=Load()),
+          Subscript(
+            value=Name(id='a', ctx=Load()),
+            slice=Constant(value='live_head_index_untracked_state_unchanged'),
+            ctx=Load())])),
+    Assign(
+      targets=[
+        Name(id='reproduction', ctx=Store())],
+      value=Call(
+        func=Name(id='Path', ctx=Load()),
+        args=[
+          Subscript(
+            value=Name(id='binding', ctx=Load()),
+            slice=Constant(value='reproduction_directory'),
+            ctx=Load())])),
+    Assert(
+      test=BoolOp(
+        op=And(),
+        values=[
+          Call(
+            func=Attribute(
+              value=Name(id='reproduction', ctx=Load()),
+              attr='is_absolute',
+              ctx=Load())),
+          Call(
+            func=Attribute(
+              value=Name(id='reproduction', ctx=Load()),
+              attr='is_dir',
+              ctx=Load()))])),
+    Assign(
+      targets=[
+        Name(id='packages', ctx=Store())],
+      value=Subscript(
+        value=Name(id='binding', ctx=Load()),
+        slice=Constant(value='source_packages'),
+        ctx=Load())),
+    Assert(
+      test=BoolOp(
+        op=And(),
+        values=[
+          Call(
+            func=Name(id='isinstance', ctx=Load()),
+            args=[
+              Name(id='packages', ctx=Load()),
+              Name(id='list', ctx=Load())]),
+          Name(id='packages', ctx=Load())])),
+    Assert(
+      test=Call(
+        func=Name(id='any', ctx=Load()),
+        args=[
+          GeneratorExp(
+            elt=BoolOp(
+              op=And(),
+              values=[
+                Compare(
+                  left=Call(
+                    func=Attribute(
+                      value=Name(id='rec', ctx=Load()),
+                      attr='get',
+                      ctx=Load()),
+                    args=[
+                      Constant(value='role')]),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    Constant(value='source_preparation')]),
+                Compare(
+                  left=Call(
+                    func=Name(id='Path', ctx=Load()),
+                    args=[
+                      Subscript(
+                        value=Name(id='rec', ctx=Load()),
+                        slice=Constant(value='directory'),
+                        ctx=Load())]),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    BinOp(
+                      left=Name(id='I', ctx=Load()),
+                      op=Div(),
+                      right=Constant(value='through285-ordinary-banking-preparation'))])]),
+            generators=[
+              comprehension(
+                target=Name(id='rec', ctx=Store()),
+                iter=Name(id='packages', ctx=Load()),
+                is_async=0)])])),
+    Assert(
+      test=Call(
+        func=Name(id='any', ctx=Load()),
+        args=[
+          GeneratorExp(
+            elt=BoolOp(
+              op=And(),
+              values=[
+                Compare(
+                  left=Call(
+                    func=Attribute(
+                      value=Name(id='rec', ctx=Load()),
+                      attr='get',
+                      ctx=Load()),
+                    args=[
+                      Constant(value='role')]),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    Constant(value='code_review')]),
+                Compare(
+                  left=Call(
+                    func=Name(id='Path', ctx=Load()),
+                    args=[
+                      Subscript(
+                        value=Name(id='rec', ctx=Load()),
+                        slice=Constant(value='directory'),
+                        ctx=Load())]),
+                  ops=[
+                    NotEq()],
+                  comparators=[
+                    BinOp(
+                      left=Name(id='I', ctx=Load()),
+                      op=Div(),
+                      right=Constant(value='through285-ordinary-banking-preparation'))])]),
+            generators=[
+              comprehension(
+                target=Name(id='rec', ctx=Store()),
+                iter=Name(id='packages', ctx=Load()),
+                is_async=0)])])),
+    Assign(
+      targets=[
+        Name(id='route_preparation', ctx=Store())],
+      value=BinOp(
+        left=Name(id='I', ctx=Load()),
+        op=Div(),
+        right=Constant(value='through285-ordinary-final-banker-route-preparation'))),
+    Assert(
+      test=Call(
+        func=Name(id='any', ctx=Load()),
+        args=[
+          GeneratorExp(
+            elt=BoolOp(
+              op=And(),
+              values=[
+                Compare(
+                  left=Call(
+                    func=Attribute(
+                      value=Name(id='rec', ctx=Load()),
+                      attr='get',
+                      ctx=Load()),
+                    args=[
+                      Constant(value='role')]),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    Constant(value='source_preparation')]),
+                Compare(
+                  left=Call(
+                    func=Name(id='Path', ctx=Load()),
+                    args=[
+                      Subscript(
+                        value=Name(id='rec', ctx=Load()),
+                        slice=Constant(value='directory'),
+                        ctx=Load())]),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    Name(id='route_preparation', ctx=Load())])]),
+            generators=[
+              comprehension(
+                target=Name(id='rec', ctx=Store()),
+                iter=Name(id='packages', ctx=Load()),
+                is_async=0)])])),
+    Assert(
+      test=Call(
+        func=Name(id='any', ctx=Load()),
+        args=[
+          GeneratorExp(
+            elt=BoolOp(
+              op=And(),
+              values=[
+                Compare(
+                  left=Call(
+                    func=Attribute(
+                      value=Name(id='rec', ctx=Load()),
+                      attr='get',
+                      ctx=Load()),
+                    args=[
+                      Constant(value='role')]),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    Constant(value='source_preparation')]),
+                Compare(
+                  left=Call(
+                    func=Name(id='Path', ctx=Load()),
+                    args=[
+                      Subscript(
+                        value=Name(id='rec', ctx=Load()),
+                        slice=Constant(value='directory'),
+                        ctx=Load())]),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    BinOp(
+                      left=Name(id='I', ctx=Load()),
+                      op=Div(),
+                      right=Constant(value='through285-final-banking-stage-preparation'))])]),
+            generators=[
+              comprehension(
+                target=Name(id='rec', ctx=Store()),
+                iter=Name(id='packages', ctx=Load()),
+                is_async=0)])])),
+    Assert(
+      test=Call(
+        func=Name(id='any', ctx=Load()),
+        args=[
+          GeneratorExp(
+            elt=BoolOp(
+              op=And(),
+              values=[
+                Compare(
+                  left=Call(
+                    func=Attribute(
+                      value=Name(id='rec', ctx=Load()),
+                      attr='get',
+                      ctx=Load()),
+                    args=[
+                      Constant(value='role')]),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    Constant(value='code_review')]),
+                Compare(
+                  left=Call(
+                    func=Attribute(
+                      value=Name(id='rec', ctx=Load()),
+                      attr='get',
+                      ctx=Load()),
+                    args=[
+                      Constant(value='reviews_source_preparation')]),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    Call(
+                      func=Name(id='str', ctx=Load()),
+                      args=[
+                        Name(id='route_preparation', ctx=Load())])]),
+                Compare(
+                  left=Call(
+                    func=Name(id='Path', ctx=Load()),
+                    args=[
+                      Subscript(
+                        value=Name(id='rec', ctx=Load()),
+                        slice=Constant(value='directory'),
+                        ctx=Load())]),
+                  ops=[
+                    NotIn()],
+                  comparators=[
+                    Tuple(
+                      elts=[
+                        Name(id='route_preparation', ctx=Load()),
+                        BinOp(
+                          left=Name(id='I', ctx=Load()),
+                          op=Div(),
+                          right=Constant(value='through285-ordinary-banking-preparation')),
+                        BinOp(
+                          left=Name(id='I', ctx=Load()),
+                          op=Div(),
+                          right=Constant(value='through285-final-banking-stage-preparation'))],
+                      ctx=Load())])]),
+            generators=[
+              comprehension(
+                target=Name(id='rec', ctx=Store()),
+                iter=Name(id='packages', ctx=Load()),
+                is_async=0)])])),
+    For(
+      target=Name(id='rec', ctx=Store()),
+      iter=Name(id='packages', ctx=Load()),
+      body=[
+        Assign(
+          targets=[
+            Name(id='p', ctx=Store())],
+          value=Call(
+            func=Name(id='Path', ctx=Load()),
+            args=[
+              Subscript(
+                value=Name(id='rec', ctx=Load()),
+                slice=Constant(value='directory'),
+                ctx=Load())])),
+        Assign(
+          targets=[
+            Name(id='fraw', ctx=Store())],
+          value=Call(
+            func=Attribute(
+              value=BinOp(
+                left=Name(id='p', ctx=Load()),
+                op=Div(),
+                right=Constant(value='freeze.json')),
+              attr='read_bytes',
+              ctx=Load()))),
+        Assert(
+          test=Compare(
+            left=Call(
+              func=Name(id='pin', ctx=Load()),
+              args=[
+                Name(id='fraw', ctx=Load())]),
+            ops=[
+              Eq()],
+            comparators=[
+              Subscript(
+                value=Name(id='rec', ctx=Load()),
+                slice=Constant(value='freeze'),
+                ctx=Load())])),
+        Assign(
+          targets=[
+            Name(id='f', ctx=Store())],
+          value=Call(
+            func=Attribute(
+              value=Name(id='json', ctx=Load()),
+              attr='loads',
+              ctx=Load()),
+            args=[
+              Name(id='fraw', ctx=Load())])),
+        Assign(
+          targets=[
+            Name(id='entries', ctx=Store())],
+          value=Subscript(
+            value=Name(id='f', ctx=Load()),
+            slice=Constant(value='files'),
+            ctx=Load())),
+        If(
+          test=Call(
+            func=Name(id='isinstance', ctx=Load()),
+            args=[
+              Name(id='entries', ctx=Load()),
+              Name(id='list', ctx=Load())]),
+          body=[
+            Assign(
+              targets=[
+                Name(id='names', ctx=Store())],
+              value=ListComp(
+                elt=Subscript(
+                  value=Name(id='r', ctx=Load()),
+                  slice=Constant(value='path'),
+                  ctx=Load()),
+                generators=[
+                  comprehension(
+                    target=Name(id='r', ctx=Store()),
+                    iter=Name(id='entries', ctx=Load()),
+                    is_async=0)])),
+            Assert(
+              test=Compare(
+                left=Call(
+                  func=Name(id='len', ctx=Load()),
+                  args=[
+                    Name(id='names', ctx=Load())]),
+                ops=[
+                  Eq()],
+                comparators=[
+                  Call(
+                    func=Name(id='len', ctx=Load()),
+                    args=[
+                      Call(
+                        func=Name(id='set', ctx=Load()),
+                        args=[
+                          Name(id='names', ctx=Load())])])])),
+            Assign(
+              targets=[
+                Name(id='entries', ctx=Store())],
+              value=DictComp(
+                key=Subscript(
+                  value=Name(id='r', ctx=Load()),
+                  slice=Constant(value='path'),
+                  ctx=Load()),
+                value=DictComp(
+                  key=Name(id='k', ctx=Load()),
+                  value=Subscript(
+                    value=Name(id='r', ctx=Load()),
+                    slice=Name(id='k', ctx=Load()),
+                    ctx=Load()),
+                  generators=[
+                    comprehension(
+                      target=Name(id='k', ctx=Store()),
+                      iter=Tuple(
+                        elts=[
+                          Constant(value='bytes'),
+                          Constant(value='sha256')],
+                        ctx=Load()),
+                      is_async=0)]),
+                generators=[
+                  comprehension(
+                    target=Name(id='r', ctx=Store()),
+                    iter=Name(id='entries', ctx=Load()),
+                    is_async=0)]))]),
+        Assert(
+          test=BoolOp(
+            op=And(),
+            values=[
+              Call(
+                func=Name(id='isinstance', ctx=Load()),
+                args=[
+                  Name(id='entries', ctx=Load()),
+                  Name(id='dict', ctx=Load())]),
+              Compare(
+                left=Call(
+                  func=Name(id='len', ctx=Load()),
+                  args=[
+                    Name(id='entries', ctx=Load())]),
+                ops=[
+                  Eq()],
+                comparators=[
+                  Subscript(
+                    value=Name(id='rec', ctx=Load()),
+                    slice=Constant(value='files'),
+                    ctx=Load())]),
+              Compare(
+                left=Call(
+                  func=Name(id='sum', ctx=Load()),
+                  args=[
+                    GeneratorExp(
+                      elt=Subscript(
+                        value=Name(id='x', ctx=Load()),
+                        slice=Constant(value='bytes'),
+                        ctx=Load()),
+                      generators=[
+                        comprehension(
+                          target=Name(id='x', ctx=Store()),
+                          iter=Call(
+                            func=Attribute(
+                              value=Name(id='entries', ctx=Load()),
+                              attr='values',
+                              ctx=Load())),
+                          is_async=0)])]),
+                ops=[
+                  Eq()],
+                comparators=[
+                  Subscript(
+                    value=Name(id='rec', ctx=Load()),
+                    slice=Constant(value='bytes'),
+                    ctx=Load())])])),
+        Assert(
+          test=Compare(
+            left=SetComp(
+              elt=Call(
+                func=Name(id='str', ctx=Load()),
+                args=[
+                  Call(
+                    func=Attribute(
+                      value=Name(id='x', ctx=Load()),
+                      attr='relative_to',
+                      ctx=Load()),
+                    args=[
+                      Name(id='p', ctx=Load())])]),
+              generators=[
+                comprehension(
+                  target=Name(id='x', ctx=Store()),
+                  iter=Call(
+                    func=Attribute(
+                      value=Name(id='p', ctx=Load()),
+                      attr='rglob',
+                      ctx=Load()),
+                    args=[
+                      Constant(value='*')]),
+                  ifs=[
+                    Call(
+                      func=Attribute(
+                        value=Name(id='x', ctx=Load()),
+                        attr='is_file',
+                        ctx=Load()))],
+                  is_async=0)]),
+            ops=[
+              Eq()],
+            comparators=[
+              BinOp(
+                left=Call(
+                  func=Name(id='set', ctx=Load()),
+                  args=[
+                    Name(id='entries', ctx=Load())]),
+                op=BitOr(),
+                right=Set(
+                  elts=[
+                    Constant(value='freeze.json')]))])),
+        For(
+          target=Tuple(
+            elts=[
+              Name(id='name', ctx=Store()),
+              Name(id='expected', ctx=Store())],
+            ctx=Store()),
+          iter=Call(
+            func=Attribute(
+              value=Name(id='entries', ctx=Load()),
+              attr='items',
+              ctx=Load())),
+          body=[
+            Assign(
+              targets=[
+                Name(id='n', ctx=Store())],
+              value=Call(
+                func=Name(id='Path', ctx=Load()),
+                args=[
+                  Name(id='name', ctx=Load())])),
+            Assert(
+              test=BoolOp(
+                op=And(),
+                values=[
+                  Name(id='name', ctx=Load()),
+                  UnaryOp(
+                    op=Not(),
+                    operand=Call(
+                      func=Attribute(
+                        value=Name(id='n', ctx=Load()),
+                        attr='is_absolute',
+                        ctx=Load()))),
+                  Compare(
+                    left=Constant(value='..'),
+                    ops=[
+                      NotIn()],
+                    comparators=[
+                      Attribute(
+                        value=Name(id='n', ctx=Load()),
+                        attr='parts',
+                        ctx=Load())])])),
+            Assert(
+              test=Compare(
+                left=Call(
+                  func=Name(id='pin', ctx=Load()),
+                  args=[
+                    Call(
+                      func=Attribute(
+                        value=BinOp(
+                          left=Name(id='p', ctx=Load()),
+                          op=Div(),
+                          right=Name(id='n', ctx=Load())),
+                        attr='read_bytes',
+                        ctx=Load()))]),
+                ops=[
+                  Eq()],
+                comparators=[
+                  Name(id='expected', ctx=Load())]))])]),
+    Assign(
+      targets=[
+        Name(id='composer', ctx=Store())],
+      value=BinOp(
+        left=Name(id='B', ctx=Load()),
+        op=Div(),
+        right=Constant(value='compose-ordinary-bank-inventory-with-final-route-root.py'))),
+    Assign(
+      targets=[
+        Name(id='banker', ctx=Store())],
+      value=BinOp(
+        left=Name(id='I', ctx=Load()),
+        op=Div(),
+        right=Constant(value='through285-ordinary-banking-preparation/candidates/bank_root_proofs_through285.py'))),
+    Assign(
+      targets=[
+        Name(id='target', ctx=Store())],
+      value=BinOp(
+        left=Name(id='B', ctx=Load()),
+        op=Div(),
+        right=Constant(value='bank_root_proofs_through285.py'))),
+    Assert(
+      test=Compare(
+        left=Call(
+          func=Name(id='pin', ctx=Load()),
+          args=[
+            Call(
+              func=Attribute(
+                value=Name(id='composer', ctx=Load()),
+                attr='read_bytes',
+                ctx=Load()))]),
+        ops=[
+          Eq()],
+        comparators=[
+          Dict(
+            keys=[
+              Constant(value='bytes'),
+              Constant(value='sha256')],
+            values=[
+              Constant(value=11816),
+              Constant(value='406154d3c40bf31ffa10ce19c66c551170fb99b9d0ee0b3f2d14b318cb928cb3')])])),
+    Assert(
+      test=Compare(
+        left=Call(
+          func=Name(id='pin', ctx=Load()),
+          args=[
+            Call(
+              func=Attribute(
+                value=Name(id='banker', ctx=Load()),
+                attr='read_bytes',
+                ctx=Load()))]),
+        ops=[
+          Eq()],
+        comparators=[
+          Dict(
+            keys=[
+              Constant(value='bytes'),
+              Constant(value='sha256')],
+            values=[
+              Constant(value=18802),
+              Constant(value='6db5614639288cbbc38b0ea768ffbec766c5dc060078a609801ca5fba2db41ec')])])),
+    Assert(
+      test=UnaryOp(
+        op=Not(),
+        operand=Call(
+          func=Attribute(
+            value=Name(id='target', ctx=Load()),
+            attr='exists',
+            ctx=Load())))),
+    Assert(
+      test=UnaryOp(
+        op=Not(),
+        operand=Call(
+          func=Attribute(
+            value=BinOp(
+              left=Attribute(
+                value=Attribute(
+                  value=Name(id='B', ctx=Load()),
+                  attr='parent',
+                  ctx=Load()),
+                attr='parent',
+                ctx=Load()),
+              op=Div(),
+              right=Constant(value='campaign-worktree/data/alignment/reviews_c05/c5p95/landing-proof')),
+            attr='exists',
+            ctx=Load())))),
+    Assert(
+      test=BoolOp(
+        op=And(),
+        values=[
+          Call(
+            func=Name(id='isinstance', ctx=Load()),
+            args=[
+              Subscript(
+                value=Name(id='binding', ctx=Load()),
+                slice=Constant(value='root_review_statement'),
+                ctx=Load()),
+              Name(id='str', ctx=Load())]),
+          Call(
+            func=Attribute(
+              value=Subscript(
+                value=Name(id='binding', ctx=Load()),
+                slice=Constant(value='root_review_statement'),
+                ctx=Load()),
+              attr='strip',
+              ctx=Load()))])),
+    Assign(
+      targets=[
+        Name(id='paths', ctx=Store())],
+      value=ListComp(
+        elt=Call(
+          func=Name(id='Path', ctx=Load()),
+          args=[
+            Name(id='x', ctx=Load())]),
+        generators=[
+          comprehension(
+            target=Name(id='x', ctx=Store()),
+            iter=Subscript(
+              value=Name(id='binding', ctx=Load()),
+              slice=Constant(value='integration_inputs'),
+              ctx=Load()),
+            is_async=0)])),
+    Assign(
+      targets=[
+        Name(id='deferred', ctx=Store())],
+      value=ListComp(
+        elt=Call(
+          func=Name(id='Path', ctx=Load()),
+          args=[
+            Name(id='x', ctx=Load())]),
+        generators=[
+          comprehension(
+            target=Name(id='x', ctx=Store()),
+            iter=Subscript(
+              value=Name(id='binding', ctx=Load()),
+              slice=Constant(value='deferred_active_callers'),
+              ctx=Load()),
+            is_async=0)])),
+    Assert(
+      test=BoolOp(
+        op=And(),
+        values=[
+          Name(id='paths', ctx=Load()),
+          Compare(
+            left=Call(
+              func=Name(id='len', ctx=Load()),
+              args=[
+                Name(id='paths', ctx=Load())]),
+            ops=[
+              Eq()],
+            comparators=[
+              Call(
+                func=Name(id='len', ctx=Load()),
+                args=[
+                  Call(
+                    func=Name(id='set', ctx=Load()),
+                    args=[
+                      Name(id='paths', ctx=Load())])])]),
+          Compare(
+            left=Name(id='reproduction', ctx=Load()),
+            ops=[
+              In()],
+            comparators=[
+              Name(id='paths', ctx=Load())]),
+          Compare(
+            left=Attribute(
+              value=Name(id='accept', ctx=Load()),
+              attr='parent',
+              ctx=Load()),
+            ops=[
+              In()],
+            comparators=[
+              Name(id='paths', ctx=Load())])])),
+    Assert(
+      test=Call(
+        func=Name(id='all', ctx=Load()),
+        args=[
+          GeneratorExp(
+            elt=BoolOp(
+              op=And(),
+              values=[
+                Compare(
+                  left=Attribute(
+                    value=Name(id='p', ctx=Load()),
+                    attr='parent',
+                    ctx=Load()),
+                  ops=[
+                    Eq()],
+                  comparators=[
+                    Name(id='I', ctx=Load())]),
+                Call(
+                  func=Attribute(
+                    value=Attribute(
+                      value=Name(id='p', ctx=Load()),
+                      attr='name',
+                      ctx=Load()),
+                    attr='startswith',
+                    ctx=Load()),
+                  args=[
+                    Constant(value='through285')])]),
+            generators=[
+              comprehension(
+                target=Name(id='p', ctx=Store()),
+                iter=Name(id='paths', ctx=Load()),
+                is_async=0)])])),
+    Assert(
+      test=BoolOp(
+        op=And(),
+        values=[
+          Compare(
+            left=Call(
+              func=Name(id='len', ctx=Load()),
+              args=[
+                Name(id='deferred', ctx=Load())]),
+            ops=[
+              Eq()],
+            comparators=[
+              Constant(value=1)]),
+          Call(
+            func=Name(id='all', ctx=Load()),
+            args=[
+              GeneratorExp(
+                elt=Call(
+                  func=Attribute(
+                    value=Name(id='p', ctx=Load()),
+                    attr='is_absolute',
+                    ctx=Load())),
+                generators=[
+                  comprehension(
+                    target=Name(id='p', ctx=Store()),
+                    iter=Name(id='deferred', ctx=Load()),
+                    is_async=0)])])])),
+    Assert(
+      test=Call(
+        func=Name(id='all', ctx=Load()),
+        args=[
+          GeneratorExp(
+            elt=BoolOp(
+              op=And(),
+              values=[
+                Compare(
+                  left=Attribute(
+                    value=Name(id='p', ctx=Load()),
+                    attr='parent',
+                    ctx=Load()),
+                  ops=[
+                    In()],
+                  comparators=[
+                    Tuple(
+                      elts=[
+                        Name(id='B', ctx=Load()),
+                        Name(id='I', ctx=Load())],
+                      ctx=Load())]),
+                Compare(
+                  left=Constant(value='ordinary'),
+                  ops=[
+                    In()],
+                  comparators=[
+                    Attribute(
+                      value=Name(id='p', ctx=Load()),
+                      attr='name',
+                      ctx=Load())]),
+                Compare(
+                  left=Constant(value='inventory'),
+                  ops=[
+                    In()],
+                  comparators=[
+                    Attribute(
+                      value=Name(id='p', ctx=Load()),
+                      attr='name',
+                      ctx=Load())]),
+                Call(
+                  func=Attribute(
+                    value=Attribute(
+                      value=Name(id='p', ctx=Load()),
+                      attr='name',
+                      ctx=Load()),
+                    attr='endswith',
+                    ctx=Load()),
+                  args=[
+                    Constant(value='caller')])]),
+            generators=[
+              comprehension(
+                target=Name(id='p', ctx=Store()),
+                iter=Name(id='deferred', ctx=Load()),
+                is_async=0)])])),
+    Assert(
+      test=Compare(
+        left=Call(
+          func=Name(id='set', ctx=Load()),
+          args=[
+            Name(id='paths', ctx=Load())]),
+        ops=[
+          Eq()],
+        comparators=[
+          SetComp(
+            elt=Name(id='p', ctx=Load()),
+            generators=[
+              comprehension(
+                target=Name(id='p', ctx=Store()),
+                iter=Call(
+                  func=Attribute(
+                    value=Name(id='I', ctx=Load()),
+                    attr='iterdir',
+                    ctx=Load())),
+                ifs=[
+                  BoolOp(
+                    op=And(),
+                    values=[
+                      Call(
+                        func=Attribute(
+                          value=Attribute(
+                            value=Name(id='p', ctx=Load()),
+                            attr='name',
+                            ctx=Load()),
+                          attr='startswith',
+                          ctx=Load()),
+                        args=[
+                          Constant(value='through285')]),
+                      Compare(
+                        left=Name(id='p', ctx=Load()),
+                        ops=[
+                          NotEq()],
+                        comparators=[
+                          BinOp(
+                            left=Name(id='I', ctx=Load()),
+                            op=Div(),
+                            right=Constant(value='through285-ordinary-bank-inventory'))]),
+                      Compare(
+                        left=Name(id='p', ctx=Load()),
+                        ops=[
+                          NotIn()],
+                        comparators=[
+                          Name(id='deferred', ctx=Load())])])],
+                is_async=0)])])),
+    Expr(
+      value=Call(
+        func=Attribute(
+          value=Name(id='O', ctx=Load()),
+          attr='mkdir',
+          ctx=Load()))),
+    With(
+      items=[
+        withitem(
+          context_expr=Call(
+            func=Attribute(
+              value=BinOp(
+                left=Name(id='O', ctx=Load()),
+                op=Div(),
+                right=Constant(value='bindings.json')),
+              attr='open',
+              ctx=Load()),
+            args=[
+              Constant(value='xb')]),
+          optional_vars=Name(id='out', ctx=Store()))],
+      body=[
+        Expr(
+          value=Call(
+            func=Attribute(
+              value=Name(id='out', ctx=Load()),
+              attr='write',
+              ctx=Load()),
+            args=[
+              Name(id='raw', ctx=Load())]))]),
+    With(
+      items=[
+        withitem(
+          context_expr=Call(
+            func=Attribute(
+              value=Name(id='target', ctx=Load()),
+              attr='open',
+              ctx=Load()),
+            args=[
+              Constant(value='xb')]),
+          optional_vars=Name(id='out', ctx=Store()))],
+      body=[
+        Expr(
+          value=Call(
+            func=Attribute(
+              value=Name(id='out', ctx=Load()),
+              attr='write',
+              ctx=Load()),
+            args=[
+              Call(
+                func=Attribute(
+                  value=Name(id='banker', ctx=Load()),
+                  attr='read_bytes',
+                  ctx=Load()))]))]),
+    Assert(
+      test=Compare(
+        left=Call(
+          func=Attribute(
+            value=Name(id='target', ctx=Load()),
+            attr='read_bytes',
+            ctx=Load())),
+        ops=[
+          Eq()],
+        comparators=[
+          Call(
+            func=Attribute(
+              value=Name(id='banker', ctx=Load()),
+              attr='read_bytes',
+              ctx=Load()))])),
+    Assign(
+      targets=[
+        Name(id='proof', ctx=Store())],
+      value=Call(
+        func=Name(id='dict', ctx=Load()),
+        keywords=[
+          keyword(
+            arg='status',
+            value=Constant(value='PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD')),
+          keyword(
+            arg='utc',
+            value=Call(
+              func=Attribute(
+                value=Call(
+                  func=Attribute(
+                    value=Attribute(
+                      value=Name(id='datetime', ctx=Load()),
+                      attr='datetime',
+                      ctx=Load()),
+                    attr='now',
+                    ctx=Load()),
+                  args=[
+                    Attribute(
+                      value=Attribute(
+                        value=Name(id='datetime', ctx=Load()),
+                        attr='timezone',
+                        ctx=Load()),
+                      attr='utc',
+                      ctx=Load())]),
+                attr='isoformat',
+                ctx=Load()))),
+          keyword(
+            arg='required_reproduction_acceptance',
+            value=Call(
+              func=Name(id='pin', ctx=Load()),
+              args=[
+                Call(
+                  func=Attribute(
+                    value=Name(id='accept', ctx=Load()),
+                    attr='read_bytes',
+                    ctx=Load()))])),
+          keyword(
+            arg='reproduction_directory',
+            value=Call(
+              func=Name(id='str', ctx=Load()),
+              args=[
+                Name(id='reproduction', ctx=Load())])),
+          keyword(
+            arg='reproduction_acceptance_directory',
+            value=Call(
+              func=Name(id='str', ctx=Load()),
+              args=[
+                Attribute(
+                  value=Name(id='accept', ctx=Load()),
+                  attr='parent',
+                  ctx=Load())])),
+          keyword(
+            arg='integration_inputs',
+            value=Subscript(
+              value=Name(id='binding', ctx=Load()),
+              slice=Constant(value='integration_inputs'),
+              ctx=Load())),
+          keyword(
+            arg='deferred_active_callers',
+            value=Subscript(
+              value=Name(id='binding', ctx=Load()),
+              slice=Constant(value='deferred_active_callers'),
+              ctx=Load())),
+          keyword(
+            arg='composer',
+            value=Call(
+              func=Name(id='dict', ctx=Load()),
+              keywords=[
+                keyword(
+                  arg='path',
+                  value=Call(
+                    func=Name(id='str', ctx=Load()),
+                    args=[
+                      Name(id='composer', ctx=Load())])),
+                keyword(
+                  value=Call(
+                    func=Name(id='pin', ctx=Load()),
+                    args=[
+                      Call(
+                        func=Attribute(
+                          value=Name(id='composer', ctx=Load()),
+                          attr='read_bytes',
+                          ctx=Load()))]))])),
+          keyword(
+            arg='banker',
+            value=Call(
+              func=Name(id='dict', ctx=Load()),
+              keywords=[
+                keyword(
+                  arg='original',
+                  value=Call(
+                    func=Name(id='str', ctx=Load()),
+                    args=[
+                      Name(id='banker', ctx=Load())])),
+                keyword(
+                  arg='copy',
+                  value=Call(
+                    func=Name(id='str', ctx=Load()),
+                    args=[
+                      Name(id='target', ctx=Load())])),
+                keyword(
+                  value=Call(
+                    func=Name(id='pin', ctx=Load()),
+                    args=[
+                      Call(
+                        func=Attribute(
+                          value=Name(id='target', ctx=Load()),
+                          attr='read_bytes',
+                          ctx=Load()))]))])),
+          keyword(
+            arg='packages',
+            value=Name(id='packages', ctx=Load())),
+          keyword(
+            arg='review',
+            value=Subscript(
+              value=Name(id='binding', ctx=Load()),
+              slice=Constant(value='root_review_statement'),
+              ctx=Load())),
+          keyword(
+            arg='bindings_source',
+            value=Call(
+              func=Name(id='dict', ctx=Load()),
+              keywords=[
+                keyword(
+                  arg='path',
+                  value=Call(
+                    func=Name(id='str', ctx=Load()),
+                    args=[
+                      Name(id='binding_path', ctx=Load())])),
+                keyword(
+                  value=Call(
+                    func=Name(id='pin', ctx=Load()),
+                    args=[
+                      Name(id='raw', ctx=Load())]))])),
+          keyword(
+            arg='runtime_executed',
+            value=Constant(value=False)),
+          keyword(
+            arg='scope',
+            value=Constant(value='Ordinary inventory and exact evidence-copy phase only; final-whitespace/final-staging/ledger/commit bindings remain pending, no MAIN or device approval.'))])),
+    Expr(
+      value=Call(
+        func=Attribute(
+          value=BinOp(
+            left=Name(id='O', ctx=Load()),
+            op=Div(),
+            right=Constant(value='proof.json')),
+          attr='write_text',
+          ctx=Load()),
+        args=[
+          BinOp(
+            left=Call(
+              func=Attribute(
+                value=Name(id='json', ctx=Load()),
+                attr='dumps',
+                ctx=Load()),
+              args=[
+                Name(id='proof', ctx=Load())],
+              keywords=[
+                keyword(
+                  arg='indent',
+                  value=Constant(value=2))]),
+            op=Add(),
+            right=Constant(value='\n'))])),
+    Expr(
+      value=Call(
+        func=Name(id='print', ctx=Load()),
+        args=[
+          Call(
+            func=Attribute(
+              value=Name(id='json', ctx=Load()),
+              attr='dumps',
+              ctx=Load()),
+            args=[
+              Name(id='proof', ctx=Load())],
+            keywords=[
+              keyword(
+                arg='indent',
+                value=Constant(value=2))])]))])

@@ -1,0 +1,116 @@
+{
+  "verdict": "REQUEST_CHANGES",
+  "scope": "Independent CODE review of final staging verifier and pathspec only; no semantic review or runtime release",
+  "author_role": "Independent of these two implementation sources; prior Tibetan proposer and reproduction tooling author, disclosed",
+  "open_findings": [
+    {
+      "id": "STAGE-001",
+      "priority": "P1",
+      "file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/verify_staged_through285.py",
+      "line": 144,
+      "end_line": 145,
+      "title": "Preserve the binding path across the new role loop",
+      "body": "The new role loop reuses path, which originally identifies the binding JSON. After its last iteration path points to reproduction_acceptance, so the retained final assert path.read_bytes()==raw compares reproduction proof bytes with binding JSON and rejects a valid release before staging verification. Rename this new loop variable to role_path and retain the exact final reread.",
+      "candidate_sha256": "d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c",
+      "evidence": "binding-path-def-use-evidence.json"
+    }
+  ],
+  "source_verdicts": {
+    "verify_staged_through285.py": "REQUEST_CHANGES",
+    "prepare-explicit-stage-inputs.py": "APPROVE_SOURCE_ONLY_PENDING_ACTUAL_ROOT_RELEASE"
+  },
+  "reviewed_sources": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/verify_staged_through285.py",
+      "bytes": 57097,
+      "sha256": "d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/final-candidates/prepare-explicit-stage-inputs.py",
+      "bytes": 5826,
+      "sha256": "b40fb94ca8019c2c552747dba56467c17dd0a23b2f980807de6d758ec32762b8"
+    }
+  ],
+  "author_freeze": {
+    "bytes": 66976,
+    "sha256": "7cb4ec0831e41bae1aea258181d43f1a0c48ed8148df8a3104e7c6e754c273fa"
+  },
+  "author_members_verified": 353,
+  "author_original_copy_pairs_verified": 278,
+  "source_conservation": [
+    {
+      "name": "verify_staged_through285.py",
+      "prior": {
+        "bytes": 48055,
+        "sha256": "b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee"
+      },
+      "candidate": {
+        "bytes": 57097,
+        "sha256": "d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c"
+      },
+      "whole_forward_inverse_exact": true,
+      "AST_inverse_exact": true,
+      "old_functions": 22,
+      "unchanged_functions": [
+        "sha",
+        "signature",
+        "relative",
+        "allowance_result",
+        "nul_paths",
+        "untracked_transition",
+        "check_final_head",
+        "main",
+        "raw",
+        "obj",
+        "git",
+        "old",
+        "require",
+        "pincheck",
+        "verify_source_archive",
+        "verify_payload_source",
+        "verify_untracked_capture",
+        "verify_banking_writes"
+      ],
+      "changed_functions": [
+        "freeze_entries",
+        "load_release_bindings",
+        "__init__",
+        "run"
+      ],
+      "assertions_before": 232,
+      "assertions_after": 291
+    },
+    {
+      "name": "prepare-explicit-stage-inputs.py",
+      "prior": {
+        "bytes": 4007,
+        "sha256": "48254cced0fb240ddd32d6cc2ca2f8798e170d4358d12c1b00f634a768d47d5f"
+      },
+      "candidate": {
+        "bytes": 5826,
+        "sha256": "b40fb94ca8019c2c552747dba56467c17dd0a23b2f980807de6d758ec32762b8"
+      },
+      "whole_forward_inverse_exact": true,
+      "AST_inverse_exact": true,
+      "old_functions": 3,
+      "unchanged_functions": [
+        "pin",
+        "js",
+        "add"
+      ],
+      "changed_functions": [],
+      "assertions_before": 18,
+      "assertions_after": 29
+    }
+  ],
+  "actual_reproduction_acceptance": {
+    "bytes": 1331,
+    "sha256": "fe377d7d9b00a251b5e7c361b8e36cac5a4af450e176ce9a6e87dc17bcd4b642"
+  },
+  "actual_retention_checks": 225597,
+  "pending": "Actual ordinary/final bank, diagnostic/classifier/whitespace, final staged/index/untracked stream measurements and fresh reviewed binding; DATA precedes exactly three ledger appends and DOCS. No legacy warning populations or future counts assumed.",
+  "tests_or_target_execution": 0,
+  "candidate_imports": 0,
+  "Git_SQL_bank_stage_calls": 0,
+  "author_B_W_changes": false
+}

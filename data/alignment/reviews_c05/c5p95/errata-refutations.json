@@ -1,0 +1,324 @@
+[
+  {
+    "seq": 283,
+    "candidate_id": "C05-283-SCREEN-01",
+    "found": "five protuberances",
+    "expected": "replace five with four",
+    "refuted": true,
+    "retained_erratum": false,
+    "reason": "The source explicitly counts five, and the immediately preceding four limbs plus head explains those five. Replacing five with four would create a numeral error.",
+    "five_grounds": {
+      "a": {
+        "checked": true,
+        "found_in_english": true,
+        "all_three_full_source_fields": {
+          "id": 1665,
+          "course": "C05",
+          "seq": 283,
+          "acip": "BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,",
+          "wylie": "byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na",
+          "english": "In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that, when the five are performing some actions, the person is performing some actions.",
+          "raw": "{\"course\": \"C05\", \"acip\": \"BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,\", \"wylie\": \"byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na\", \"english\": \"In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that, when the five are performing some actions, the person is performing some actions.\"}"
+        }
+      },
+      "b": {
+        "checked": true,
+        "full_digital_witness": {
+          "id": 5979,
+          "course": "C15",
+          "seq": 428,
+          "acip": "BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,",
+          "wylie": "byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na",
+          "english": "In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that--when the five are performing some actions--the person is performing some actions.",
+          "raw": "{\"course\": \"C15\", \"acip\": \"BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,\", \"wylie\": \"byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na\", \"english\": \"In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that--when the five are performing some actions--the person is performing some actions.\"}"
+        },
+        "comparison": {
+          "seq": 283,
+          "witness": "C15:428",
+          "acip_equal": true,
+          "wylie_equal": true,
+          "english_equal": false,
+          "non_equal_operations": [
+            {
+              "operation": "replace",
+              "c05_range": [
+                169,
+                171
+              ],
+              "c15_range": [
+                169,
+                171
+              ],
+              "c05_text": ", ",
+              "c15_text": "--"
+            },
+            {
+              "operation": "replace",
+              "c05_range": [
+                212,
+                214
+              ],
+              "c15_range": [
+                212,
+                214
+              ],
+              "c05_text": ", ",
+              "c15_text": "--"
+            }
+          ],
+          "independent_publication_proven": false
+        },
+        "result": "No independently published witness established. Digital equality or punctuation variation is not used as the decisive refutation."
+      },
+      "c": {
+        "checked": true,
+        "full_register_check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/errata-register-check.json",
+        "result": "No target duplicate; no converter, running-head, truncation, footnote or row-boundary class establishes this proposed error."
+      },
+      "d": {
+        "checked": true,
+        "result": "The source explicitly counts five, and the immediately preceding four limbs plus head explains those five. Replacing five with four would create a numeral error."
+      },
+      "e": {
+        "checked": true,
+        "counts_rechecked": {
+          "exact_found_occurrences": 1,
+          "exact_C15_counterpart_rows": 1,
+          "target_source_rows": 3,
+          "english_punctuation_replacements_to_C15": 2
+        },
+        "all_original_numerical_claims_equal": true
+      }
+    },
+    "suggested_severity": null,
+    "suggested_confidence": null
+  },
+  {
+    "seq": 283,
+    "candidate_id": "C05-283-SCREEN-02",
+    "found": "that, when",
+    "expected": "that--when",
+    "refuted": true,
+    "retained_erratum": false,
+    "reason": "Commas can delimit this embedded when-clause just as double hyphens can. The current complete sentence is grammatical; the digital punctuation variant supplies no error proof.",
+    "five_grounds": {
+      "a": {
+        "checked": true,
+        "found_in_english": true,
+        "all_three_full_source_fields": {
+          "id": 1665,
+          "course": "C05",
+          "seq": 283,
+          "acip": "BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,",
+          "wylie": "byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na",
+          "english": "In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that, when the five are performing some actions, the person is performing some actions.",
+          "raw": "{\"course\": \"C05\", \"acip\": \"BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,\", \"wylie\": \"byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na\", \"english\": \"In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that, when the five are performing some actions, the person is performing some actions.\"}"
+        }
+      },
+      "b": {
+        "checked": true,
+        "full_digital_witness": {
+          "id": 5979,
+          "course": "C15",
+          "seq": 428,
+          "acip": "BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,",
+          "wylie": "byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na",
+          "english": "In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that--when the five are performing some actions--the person is performing some actions.",
+          "raw": "{\"course\": \"C15\", \"acip\": \"BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,\", \"wylie\": \"byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na\", \"english\": \"In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that--when the five are performing some actions--the person is performing some actions.\"}"
+        },
+        "comparison": {
+          "seq": 283,
+          "witness": "C15:428",
+          "acip_equal": true,
+          "wylie_equal": true,
+          "english_equal": false,
+          "non_equal_operations": [
+            {
+              "operation": "replace",
+              "c05_range": [
+                169,
+                171
+              ],
+              "c15_range": [
+                169,
+                171
+              ],
+              "c05_text": ", ",
+              "c15_text": "--"
+            },
+            {
+              "operation": "replace",
+              "c05_range": [
+                212,
+                214
+              ],
+              "c15_range": [
+                212,
+                214
+              ],
+              "c05_text": ", ",
+              "c15_text": "--"
+            }
+          ],
+          "independent_publication_proven": false
+        },
+        "result": "No independently published witness established. Digital equality or punctuation variation is not used as the decisive refutation."
+      },
+      "c": {
+        "checked": true,
+        "full_register_check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/errata-register-check.json",
+        "result": "No target duplicate; no converter, running-head, truncation, footnote or row-boundary class establishes this proposed error."
+      },
+      "d": {
+        "checked": true,
+        "result": "Commas can delimit this embedded when-clause just as double hyphens can. The current complete sentence is grammatical; the digital punctuation variant supplies no error proof."
+      },
+      "e": {
+        "checked": true,
+        "counts_rechecked": {
+          "exact_found_occurrences": 1,
+          "exact_C15_counterpart_rows": 1,
+          "target_source_rows": 3,
+          "english_punctuation_replacements_to_C15": 2
+        },
+        "all_original_numerical_claims_equal": true
+      }
+    },
+    "suggested_severity": null,
+    "suggested_confidence": null
+  },
+  {
+    "seq": 284,
+    "candidate_id": "C05-284-SCREEN-01",
+    "found": "and the other two",
+    "expected": "remove two because there is no separate Tibetan gnyis",
+    "refuted": true,
+    "retained_erratum": false,
+    "reason": "The three appearances are three kinds; pus and blood together name one kind in this argument. The other two are the remaining kinds. The English explanatory numeral is defensible while remaining outside sogs.",
+    "five_grounds": {
+      "a": {
+        "checked": true,
+        "found_in_english": true,
+        "all_three_full_source_fields": {
+          "id": 1666,
+          "course": "C05",
+          "seq": 284,
+          "acip": "SNGA MA YANG DE DANG MTSUNGS TE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I CHA SHAS YIN PAS DE GSUM SNANG BA NA, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I STENG DU SNANG TSUL MI 'DRA BA GSUM SNANG BAR 'JOG PA'I PHYIR,",
+          "wylie": "snga ma yang de dang mtshungs te, rnag khrag la sogs pa'i dngos po gsum po de, brlan zhing gsher ba phor pa gang po de'i cha shas yin pas de gsum snang ba na, brlan zhing gsher ba phor pa gang po de'i steng du snang tshul mi 'dra ba gsum snang bar 'jog pa'i phyir",
+          "english": "Well the case above is exactly the same! The three things mentioned, the blood and pus and the other two, are all parts of the glass full of something wet and flowing. When the three appear then we can say that the glass full of a thing which is wet and flowing is acting as a basis, and that three different ways of appearing are being displayed upon it.",
+          "raw": "{\"course\": \"C05\", \"acip\": \"SNGA MA YANG DE DANG MTSUNGS TE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I CHA SHAS YIN PAS DE GSUM SNANG BA NA, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I STENG DU SNANG TSUL MI 'DRA BA GSUM SNANG BAR 'JOG PA'I PHYIR,\", \"wylie\": \"snga ma yang de dang mtshungs te, rnag khrag la sogs pa'i dngos po gsum po de, brlan zhing gsher ba phor pa gang po de'i cha shas yin pas de gsum snang ba na, brlan zhing gsher ba phor pa gang po de'i steng du snang tshul mi 'dra ba gsum snang bar 'jog pa'i phyir\", \"english\": \"Well the case above is exactly the same! The three things mentioned, the blood and pus and the other two, are all parts of the glass full of something wet and flowing. When the three appear then we can say that the glass full of a thing which is wet and flowing is acting as a basis, and that three different ways of appearing are being displayed upon it.\"}"
+        }
+      },
+      "b": {
+        "checked": true,
+        "full_digital_witness": {
+          "id": 5980,
+          "course": "C15",
+          "seq": 429,
+          "acip": "SNGA MA YANG DE DANG MTSUNGS TE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I CHA SHAS YIN PAS DE GSUM SNANG BA NA, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I STENG DU SNANG TSUL MI 'DRA BA GSUM SNANG BAR 'JOG PA'I PHYIR,",
+          "wylie": "snga ma yang de dang mtshungs te, rnag khrag la sogs pa'i dngos po gsum po de, brlan zhing gsher ba phor pa gang po de'i cha shas yin pas de gsum snang ba na, brlan zhing gsher ba phor pa gang po de'i steng du snang tshul mi 'dra ba gsum snang bar 'jog pa'i phyir",
+          "english": "Well the case above is exactly the same! The three things mentioned, the blood and pus and the other two, are all parts of the glass full of something wet and flowing. When the three appear then we can say that the glass full of a thing which is wet and flowing is acting as a basis, and that three different ways of appearing are being displayed upon it.",
+          "raw": "{\"course\": \"C15\", \"acip\": \"SNGA MA YANG DE DANG MTSUNGS TE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I CHA SHAS YIN PAS DE GSUM SNANG BA NA, BRLAN ZHING GSHER BA PHOR PA GANG PO DE'I STENG DU SNANG TSUL MI 'DRA BA GSUM SNANG BAR 'JOG PA'I PHYIR,\", \"wylie\": \"snga ma yang de dang mtshungs te, rnag khrag la sogs pa'i dngos po gsum po de, brlan zhing gsher ba phor pa gang po de'i cha shas yin pas de gsum snang ba na, brlan zhing gsher ba phor pa gang po de'i steng du snang tshul mi 'dra ba gsum snang bar 'jog pa'i phyir\", \"english\": \"Well the case above is exactly the same! The three things mentioned, the blood and pus and the other two, are all parts of the glass full of something wet and flowing. When the three appear then we can say that the glass full of a thing which is wet and flowing is acting as a basis, and that three different ways of appearing are being displayed upon it.\"}"
+        },
+        "comparison": {
+          "seq": 284,
+          "witness": "C15:429",
+          "acip_equal": true,
+          "wylie_equal": true,
+          "english_equal": true,
+          "non_equal_operations": [],
+          "independent_publication_proven": false
+        },
+        "result": "No independently published witness established. Digital equality or punctuation variation is not used as the decisive refutation."
+      },
+      "c": {
+        "checked": true,
+        "full_register_check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/errata-register-check.json",
+        "result": "No target duplicate; no converter, running-head, truncation, footnote or row-boundary class establishes this proposed error."
+      },
+      "d": {
+        "checked": true,
+        "result": "The three appearances are three kinds; pus and blood together name one kind in this argument. The other two are the remaining kinds. The English explanatory numeral is defensible while remaining outside sogs."
+      },
+      "e": {
+        "checked": true,
+        "counts_rechecked": {
+          "exact_found_occurrences": 1,
+          "exact_C15_counterpart_rows": 1,
+          "target_source_rows": 3,
+          "english_punctuation_replacements_to_C15": 0
+        },
+        "all_original_numerical_claims_equal": true
+      }
+    },
+    "suggested_severity": null,
+    "suggested_confidence": null
+  },
+  {
+    "seq": 285,
+    "candidate_id": "C05-285-SCREEN-01",
+    "found": "Are you implying then that these are not types of objects",
+    "expected": "replace the negative question with an affirmative assertion",
+    "refuted": true,
+    "retained_erratum": false,
+    "reason": "ma yin explicitly negates the object classification and par thal raises its consequence as an objection. The negative question preserves this scope; an affirmative assertion would change it.",
+    "five_grounds": {
+      "a": {
+        "checked": true,
+        "found_in_english": true,
+        "all_three_full_source_fields": {
+          "id": 1667,
+          "course": "C05",
+          "seq": 285,
+          "acip": "YANG KHA CIG NA RE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE PHAN TSUN GO SA 'GOG PA'I DNGOS PO MA YIN PAR THAL, LAS CAN GYI 'GRO BA GSUM GYI CHU PHOR PA GANG LA CIG CAR DU BLTAS PA DE'I TSE NA, DNGOS PO TSAD GRUB PA GSUM SRID PAR KHAS BLANGS PA LA,",
+          "wylie": "yang kha cig na re, rnag khrag la sogs pa'i dngos po gsum po de phan tshun go sa 'gog pa'i dngos po ma yin par thal, las can gyi 'gro ba gsum gyi chu phor pa gang la cig car du bltas pa de'i tshe na, dngos po tshad grub pa gsum srid par khas blangs pa la",
+          "english": "Someone else may come now and make yet another argument: Let's talk about these three things: the pus and blood, and the other two. Are you implying then that these are not types of objects which would block each other from entering the space that each one occupies? After all, you were talking about a situation where those three types of beings, each with their own karma, sit down together and look at a glass full of water. And you said that your position was that it was possible for there to be three different objects there, each one confirmed by a valid perception.",
+          "raw": "{\"course\": \"C05\", \"acip\": \"YANG KHA CIG NA RE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE PHAN TSUN GO SA 'GOG PA'I DNGOS PO MA YIN PAR THAL, LAS CAN GYI 'GRO BA GSUM GYI CHU PHOR PA GANG LA CIG CAR DU BLTAS PA DE'I TSE NA, DNGOS PO TSAD GRUB PA GSUM SRID PAR KHAS BLANGS PA LA,\", \"wylie\": \"yang kha cig na re, rnag khrag la sogs pa'i dngos po gsum po de phan tshun go sa 'gog pa'i dngos po ma yin par thal, las can gyi 'gro ba gsum gyi chu phor pa gang la cig car du bltas pa de'i tshe na, dngos po tshad grub pa gsum srid par khas blangs pa la\", \"english\": \"Someone else may come now and make yet another argument: Let's talk about these three things: the pus and blood, and the other two. Are you implying then that these are not types of objects which would block each other from entering the space that each one occupies? After all, you were talking about a situation where those three types of beings, each with their own karma, sit down together and look at a glass full of water. And you said that your position was that it was possible for there to be three different objects there, each one confirmed by a valid perception.\"}"
+        }
+      },
+      "b": {
+        "checked": true,
+        "full_digital_witness": {
+          "id": 5981,
+          "course": "C15",
+          "seq": 430,
+          "acip": "YANG KHA CIG NA RE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE PHAN TSUN GO SA 'GOG PA'I DNGOS PO MA YIN PAR THAL, LAS CAN GYI 'GRO BA GSUM GYI CHU PHOR PA GANG LA CIG CAR DU BLTAS PA DE'I TSE NA, DNGOS PO TSAD GRUB PA GSUM SRID PAR KHAS BLANGS PA LA,",
+          "wylie": "yang kha cig na re, rnag khrag la sogs pa'i dngos po gsum po de phan tshun go sa 'gog pa'i dngos po ma yin par thal, las can gyi 'gro ba gsum gyi chu phor pa gang la cig car du bltas pa de'i tshe na, dngos po tshad grub pa gsum srid par khas blangs pa la",
+          "english": "Someone else may come now and make yet another argument: Let's talk about these three things: the pus and blood, and the other two. Are you implying then that these are not types of objects which would block each other from entering the space that each one occupies? After all, you were talking about a situation where those three types of beings, each with their own karma, sit down together and look at a glass full of water. And you said that your position was that it was possible for there to be three different objects there, each one confirmed by a valid perception.",
+          "raw": "{\"course\": \"C15\", \"acip\": \"YANG KHA CIG NA RE, RNAG KHRAG LA SOGS PA'I DNGOS PO GSUM PO DE PHAN TSUN GO SA 'GOG PA'I DNGOS PO MA YIN PAR THAL, LAS CAN GYI 'GRO BA GSUM GYI CHU PHOR PA GANG LA CIG CAR DU BLTAS PA DE'I TSE NA, DNGOS PO TSAD GRUB PA GSUM SRID PAR KHAS BLANGS PA LA,\", \"wylie\": \"yang kha cig na re, rnag khrag la sogs pa'i dngos po gsum po de phan tshun go sa 'gog pa'i dngos po ma yin par thal, las can gyi 'gro ba gsum gyi chu phor pa gang la cig car du bltas pa de'i tshe na, dngos po tshad grub pa gsum srid par khas blangs pa la\", \"english\": \"Someone else may come now and make yet another argument: Let's talk about these three things: the pus and blood, and the other two. Are you implying then that these are not types of objects which would block each other from entering the space that each one occupies? After all, you were talking about a situation where those three types of beings, each with their own karma, sit down together and look at a glass full of water. And you said that your position was that it was possible for there to be three different objects there, each one confirmed by a valid perception.\"}"
+        },
+        "comparison": {
+          "seq": 285,
+          "witness": "C15:430",
+          "acip_equal": true,
+          "wylie_equal": true,
+          "english_equal": true,
+          "non_equal_operations": [],
+          "independent_publication_proven": false
+        },
+        "result": "No independently published witness established. Digital equality or punctuation variation is not used as the decisive refutation."
+      },
+      "c": {
+        "checked": true,
+        "full_register_check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review/errata-register-check.json",
+        "result": "No target duplicate; no converter, running-head, truncation, footnote or row-boundary class establishes this proposed error."
+      },
+      "d": {
+        "checked": true,
+        "result": "ma yin explicitly negates the object classification and par thal raises its consequence as an objection. The negative question preserves this scope; an affirmative assertion would change it."
+      },
+      "e": {
+        "checked": true,
+        "counts_rechecked": {
+          "exact_found_occurrences": 1,
+          "exact_C15_counterpart_rows": 1,
+          "target_source_rows": 3,
+          "english_punctuation_replacements_to_C15": 0
+        },
+        "all_original_numerical_claims_equal": true
+      }
+    },
+    "suggested_severity": null,
+    "suggested_confidence": null
+  }
+]

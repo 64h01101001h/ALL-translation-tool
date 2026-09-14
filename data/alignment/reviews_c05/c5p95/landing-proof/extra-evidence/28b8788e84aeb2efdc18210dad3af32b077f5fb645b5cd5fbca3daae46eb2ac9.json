@@ -1,0 +1,12 @@
+{
+  "provenance": "Conversation tool-result transcription; not separately captured original raw stdout/stderr",
+  "command": "rg --files integration/through285-reconciliation-verifier-preparation",
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "tool_reported_exit": 2,
+  "tool_combined_output": "rg: integration/through285-reconciliation-verifier-preparation: IO error for operation on integration/through285-reconciliation-verifier-preparation: No such file or directory (os error 2)\n",
+  "raw_stdout": null,
+  "raw_stderr": null,
+  "raw_byte_counts": null,
+  "timestamp": null,
+  "resolution": "The actual integration directory is campaign-artifacts/integration. Subsequent reads and all writes used that exact path. This failed locator did not execute a candidate or write any file."
+}

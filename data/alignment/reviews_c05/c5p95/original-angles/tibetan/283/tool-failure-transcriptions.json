@@ -1,0 +1,30 @@
+{
+  "status": "FAITHFUL_CONVERSATION_TOOL_RESULT_TRANSCRIPTIONS_NOT_RAW_PROCESS_STREAMS",
+  "scope": "Two preparatory command failures visible in the current conversation. These are distinct from the fully captured actual 283 canonical-attempt01 wrapper failure. No canonical source was entered by either preparatory command below.",
+  "events": [
+    {
+      "command": "python -B - <<'PY'\nfrom pathlib import Path\nimport json\np=Path('campaign-artifacts/C05-283-285/tibetan/283/evidence')\nfor n in ['physical-source-extents.json','sqlite-query-results.json']:\n x=json.loads((p/n).read_text()); print(n, type(x).__name__)\n if n.startswith('physical'): print(json.dumps(x,ensure_ascii=False,indent=2))\n else:\n  print(str(x)[:1000])\nPY",
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+      "tool_reported_exit": 127,
+      "tool_combined_output": "zsh:1: command not found: python\n",
+      "original_raw_stdout": null,
+      "original_raw_stderr": null,
+      "raw_byte_counts": null,
+      "started_utc": null,
+      "finished_utc": null,
+      "resolution": "Subsequent source reading used the available python3 executable with -B. No evidence or target output was created by this failed command."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONOPTIMIZE=0 python3 -B campaign-artifacts/C05-283-285/tibetan/283/record-command.py.txt campaign-artifacts/C05-283-285/tibetan/283/supplement-evidence-caller campaign-artifacts/C05-283-285/tibetan/283/supplement-evidence.py.txt",
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+      "tool_reported_exit": 1,
+      "tool_combined_output": "Traceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/tibetan/283/record-command.py.txt\", line 7, in <module>\n    assert any(caller.is_relative_to(ANGLE/str(s)) for s in [283,284,285])\n           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+      "original_raw_stdout": null,
+      "original_raw_stderr": null,
+      "raw_byte_counts": null,
+      "started_utc": null,
+      "finished_utc": null,
+      "resolution": "The recorder correctly rejected a relative caller path before mkdir or child execution. It was invoked unchanged with absolute paths; the subsequent actual supplement child invocation, exit and raw streams are retained in supplement-evidence-caller."
+    }
+  ]
+}

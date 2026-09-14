@@ -1,0 +1,47 @@
+from pathlib import Path
+import ast,hashlib,json
+O=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-registration-helper-preparation')
+assert __debug__
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):
+    with (O/n).open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+proof=json.loads((O/'source-proof.json').read_text());assert proof['status']=='SOURCE_PREPARATION_ONLY'
+assert (O/'source-preparation-caller/exit.txt').read_bytes()==b'0\n' and (O/'source-preparation-caller/stderr.bin').read_bytes()==b''
+mapping=json.loads((O/'original-to-copy-manifest.json').read_text())
+for row in mapping:
+    assert pin(Path(row['original']))==pin(O/row['copy'])=={k:row[k] for k in ['bytes','sha256']}
+old=(O/'inputs/prior-register-reviewed-page-and-index.py.txt').read_text();new=(O/'register-reviewed-page-and-index.py').read_text()
+def function(src,name):return next(ast.get_source_segment(src,n) for n in ast.parse(src).body if isinstance(n,ast.FunctionDef) and n.name==name)
+for name in ['pin','git','course_pages']:assert function(old,name)==function(new,name)
+start="meta_raw = (B / 'semantic-review/review.json').read_bytes()";stop="index = PAGES / 'index.html'"
+assert old[old.index(start):old.index(stop)].replace('c5p94','c5p95')==new[new.index(start):new.index(stop)]
+start='# Preserve both complete preimages before either authorized mutation.';stop='result = dict('
+assert old[old.index(start):old.index(stop)]==new[new.index(start):new.index(stop)]
+assert "assert old_index == git('show', BASE + ':data/alignment/pages_c05/index.html')" in new
+assert "assert old_builder == git('show', BASE + ':tools/build_alignment_layer.py')" in new
+save('gate-conservation.json',{'status':'PASS_SOURCE_COMPARISON_ONLY','unchanged_full_functions':['pin','git','course_pages'],'complete_semantic_landing_spec_body_gate_block_unchanged_except_page_identifier':True,'complete_preimage_preservation_and_two_write_block_unchanged':True,'both_old_byte_git_show_gates_preserved':True,'source_pins':{'prior':pin(O/'inputs/prior-register-reviewed-page-and-index.py.txt'),'candidate':pin(O/'register-reviewed-page-and-index.py')},'full_source_inverse_and_AST_conservation':proof['whole_source_inverse_exact'] and proof['inverse_AST_exact'],'candidate_invoked':False})
+future=proof['future_materialization'];batch=str(Path(future).parent.parent)
+contract={'status':'CONDITIONAL_EXECUTION_REQUIREMENTS_NOT_APPROVAL','reviewed_candidate':{'path':str(O/'register-reviewed-page-and-index.py'),**pin(O/'register-reviewed-page-and-index.py')},'required_future_copy':future,'copy_performed':False,'current_fixed_inputs':{'head':'fb9182dc6fca2230be3bc5169ba1288a22430280','closed_segments':282,'current_pages':94,'target_segments':[283,284,285],'target_page':95},'ordered_requirements':[
+ 'Root reviews the complete candidate and exact source changes, then authorizes the later registration step.',
+ 'A genuinely independent completed semantic-review/review.json must say APPROVE with no open findings; its complete original bytes must already equal the landed reviews_c05/c5p95/review.json. This preparation supplies neither approval nor placeholder review values.',
+ 'The actual landing/root-semantic-acceptance-proof.json must bind page95, segments283–285, exact final counts/hashes/ranges and the full review JSON SHA256.',
+ 'Every actual current reconciled individual spec/body must match its approved byte counts and SHA256 values and equal both semantic-review/reviewed-final and landed reviewed-final copies. Each source spec must be one C05 segment in the required order, with actual generator exit0.',
+ 'The landed combined c5p95 spec must equal the exact approved JSON serialization, and landing/generator.stdout must equal the ordered concatenation of the approved individual bodies. Actual generator exit0/empty stderr, landing metadata hashes and inclusion of the intact body in c5p95.html are required.',
+ 'Materialize only the reviewed candidate bytes at the exact required_future_copy path. Its unchanged __file__-relative B/W calculation plus new location guards refuse execution from this integration preparation directory.',
+ 'At actual execution, HEAD must still equal the fixed closed282 head; the exact closure and baseline pins must hold. Current index and builder must equal both their pinned full snapshots and git show of that fixed head. All 95 page targets must exist, and the old coverage/link/registry anchors must occur exactly once.',
+ 'The helper retains complete preimages before its two writes, appends only page95 and coverage285, verifies exact output bytes and registry conservation, and records landing/course-registration-verification.json. It does not execute builders or generate approvals.'
+ ],'future_command_argv':['python3','-B',future],'future_environment':{'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'},'future_command_executed':False,'future_output':batch+'/landing/course-registration-verification.json','unknown_current_final_approvals_counts_and_hashes':'Not inspected or supplied; helper fails closed unless actual final artifacts satisfy its preserved schema and gates.'}
+save('conditional-execution-requirements.json',contract)
+report='''Prepared only the C05:283–285/page95 registration helper, using the complete accepted through282 helper. Codex authored the Tibetan originals and performs this code preparation without semantic acceptance. The actual candidate is 9009 bytes, SHA256 c3a9bae32022a714bef0f3a547ecad32eeba9707c94ca4f0fcb5a7e15e51f9ea. Full prior source, exact simultaneous replacement map/positions and forward/inverse diffs are retained.
+
+The actual incoming closure is 2267 bytes, SHA256 80d9ee5b45d2f69e42e699b62edbf1fdcde8b199c31529f35340ef8a42a66554, with final_head fb9182dc6fca2230be3bc5169ba1288a22430280, verified_segments282, total_c05_segments511, remaining_c05229 and next_batch283–285. It contains no course, course_segments or next_batch_authorized_after_this_closure fields. The candidate binds its genuine fields and exact full pin, the fixed C05 batch/path, and the exact current baseline pin; it does not invent historical authorization fields. Actual later execution remains subject to root release and all approval gates.
+
+The full current index (7003 bytes, SHA256 58f2527eddcefdd6a449821afd0e9417e77910de432b209cf490cda54e434bc7) and builder (39640 bytes, SHA256 f34db3d81708aa2143710d91ac4a1abcbf93dba4d33a0abfb00a51fe511975f1) are retained. Their read-only index/AST checks show exactly pages1–94 and segments1–282. Conditional previews change only index coverage282→285, append the exact page95 link, and append c5p95:[283,284,285] to the registry. Those previews are source artifacts, not landed files or executed builder output.
+
+The complete semantic/landing/spec/body gate block is byte-identical after the page identifier substitution. Complete pin/git/course_pages functions, both fixed-head Git preimage comparisons and the preimage-preservation/two-write block are unchanged. Added literal preimage pins and an exact future-location guard strengthen those boundaries. Full inverse text and AST conservation, syntax compilation without evaluation, and explicit gate-block comparisons pass. Every copied original remains byte-identical; all changes stay in this fresh preparation directory.
+
+The future location must be C05-283-285/landing-helper-preparation/register-reviewed-page-and-index.py, so __file__ resolves B and W correctly. No copy was materialized there. conditional-execution-requirements.json records the exact pending independent APPROVE, root range/hash acceptance, landed individual copies, approved body, old-byte invariants and future command. No current reconciliation or semantic outputs were inspected; no candidate import/invocation, Git, SQL, generator, builder, test, repository mutation, API or delegation occurred. The actual source-preparation caller exited0 with empty stderr; no failed preparation attempt exists. This preparation pins closure/baseline evidence and leaves the actual live-HEAD Git check to the conditional helper.
+'''
+with (O/'report.md').open('x') as f:f.write(report)
+print(json.dumps({'status':'SOURCE_GATE_CONSERVATION_AND_CONDITIONAL_REQUIREMENTS_COMPLETE','candidate':pin(O/'register-reviewed-page-and-index.py'),'actual_original_copies_unchanged':len(mapping),'future_copy':future,'candidate_executed':False}))

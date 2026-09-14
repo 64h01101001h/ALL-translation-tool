@@ -1,0 +1,30 @@
+{
+  "sql": "SELECT e.* FROM entries e WHERE e.wylie=? OR EXISTS (SELECT 1 FROM entry_variants v WHERE v.entry_id=e.id AND v.wylie=?) ORDER BY e.id",
+  "parameters": [
+    "brlan zhing gsher ba",
+    "brlan zhing gsher ba"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 25337,
+      "wylie": "brlan zhing gsher ba",
+      "tibetan": "བརླན་ཞིང་གཤེར་བ",
+      "tibetan_source": null,
+      "acip": "BRLAN ZHING GSHER BA",
+      "pronunciation": "len shing sherwa",
+      "pronunciation_source": "GMR card (C04 Language Study Guide)",
+      "sanskrit": null,
+      "hopkins_english": null,
+      "hgm_gloss": "[\"wet and flowing\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested (not in Great Dictionary)",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C05\", \"C15\", \"C16\", \"C18\", \"P7\", \"P9\"]",
+      "corpus_n_segments": 64,
+      "raw": "{\"tibetan\": \"བརླན་ཞིང་གཤེར་བ\", \"wylie\": \"brlan zhing gsher ba\", \"wylie_variants\": [\"brlan zhing gsher ba\"], \"tenses\": null, \"sanskrit\": null, \"hopkins_english\": null, \"hgm_gloss\": [\"wet and flowing\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"len shing sherwa\", \"acip\": \"BRLAN ZHING GSHER BA\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C15\", \"C16\", \"C18\", \"P7\", \"P9\"], \"n_segments\": 64}, \"pronunciation_source\": \"GMR card (C04 Language Study Guide)\"}"
+    }
+  ]
+}

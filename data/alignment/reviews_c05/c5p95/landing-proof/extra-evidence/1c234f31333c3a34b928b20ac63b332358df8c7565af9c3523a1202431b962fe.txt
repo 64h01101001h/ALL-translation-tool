@@ -1,0 +1,69 @@
+--- candidates/release-ordinary-bank-method-root.py
++++ prior/release-ordinary-bank-method-root.py
+@@ -1,51 +1,26 @@
+ from pathlib import Path
+-import argparse,datetime,hashlib,json
++import datetime,hashlib,json
+ B=Path(__file__).resolve().parent;I=B.parent/'integration';O=B/'root-ordinary-bank-method-release'
+-assert B.name=='C05-283-285'
+ def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+ def j(p):return json.loads(p.read_bytes())
+ assert __debug__ and not O.exists()
+-parser=argparse.ArgumentParser(description='Bind actual reproduction closure and independently reviewed ordinary banking sources; no bank execution.')
+-parser.add_argument('--bindings',required=True);parser.add_argument('--bindings-sha256',required=True)
+-args=parser.parse_args();binding_path=Path(args.bindings);assert binding_path.is_absolute()
+-raw=binding_path.read_bytes();assert pin(raw)['sha256']==args.bindings_sha256
+-binding=json.loads(raw)
+-assert set(binding)=={'reproduction_directory','reproduction_acceptance','source_packages','integration_inputs','deferred_active_callers','root_review_statement'}
+-accept=Path(binding['reproduction_acceptance']['path']);assert accept.is_absolute() and accept.name=='proof.json'
+-assert pin(accept.read_bytes())=={k:binding['reproduction_acceptance'][k]for k in ('bytes','sha256')}
+-a=j(accept);assert a['status']=='PASS' and a['head']=='fb9182dc6fca2230be3bc5169ba1288a22430280'
++accept=I/'through282-generated-reproduction-root-acceptance/proof.json';a=j(accept)
++assert a['status']=='PASS' and a['head']=='10968d16e701b698a0e1fbd845b353089d15ac39'
+ assert a['all_seven_reproduced_outputs_byte_exact'] and a['all_thirteen_payload_files_byte_exact'] and a['live_head_index_untracked_state_unchanged']
+-reproduction=Path(binding['reproduction_directory']);assert reproduction.is_absolute() and reproduction.is_dir()
+-packages=binding['source_packages'];assert isinstance(packages,list) and packages
+-assert any(rec.get('role')=='source_preparation' and Path(rec['directory'])==I/'through285-ordinary-banking-preparation' for rec in packages)
+-assert any(rec.get('role')=='code_review' and Path(rec['directory'])!=I/'through285-ordinary-banking-preparation' for rec in packages)
++packages=j(B/'root-postlanding-correction-acceptance.json')['sources']
++packages.append(dict(directory=str(B/'ordinary-inventory-code-review'),freeze=dict(bytes=5757,sha256='5fdd33fd5177f55cb7dd03ec59aec8b7d7d25241d22e7783e966a407c3b09040'),files=36,bytes=329953))
+ for rec in packages:
+- p=Path(rec['directory']);fraw=(p/'freeze.json').read_bytes();assert pin(fraw)==rec['freeze'];f=json.loads(fraw)
+- entries=f['files']
+- if isinstance(entries,list):
+-  names=[r['path']for r in entries];assert len(names)==len(set(names))
+-  entries={r['path']:{k:r[k]for k in ('bytes','sha256')}for r in entries}
+- assert isinstance(entries,dict) and len(entries)==rec['files'] and sum(x['bytes']for x in entries.values())==rec['bytes']
+- assert {str(x.relative_to(p))for x in p.rglob('*')if x.is_file()}==set(entries)|{'freeze.json'}
+- for name,expected in entries.items():
+-  n=Path(name);assert name and not n.is_absolute() and '..'not in n.parts
+-  assert pin((p/n).read_bytes())==expected
+-composer=B/'compose-ordinary-bank-inventory-root.py'
+-banker=I/'through285-ordinary-banking-preparation/candidates/bank_root_proofs_through285.py'
+-target=B/'bank_root_proofs_through285.py'
+-assert pin(composer.read_bytes())=={'bytes': 9014, 'sha256': '6a38645ecc0b4d94b7fb0b177353004c1daf2b5d02910bca8a4fe01126dcc9be'}
+-assert pin(banker.read_bytes())=={'bytes': 18802, 'sha256': '6db5614639288cbbc38b0ea768ffbec766c5dc060078a609801ca5fba2db41ec'}
++ p=Path(rec['directory']);raw=(p/'freeze.json').read_bytes();assert pin(raw)==rec['freeze'];f=json.loads(raw)
++ assert len(f['files'])==rec['files'] and sum(x['bytes'] for x in f['files'].values())==rec['bytes']
++ assert {str(x.relative_to(p)) for x in p.rglob('*') if x.is_file()}==set(f['files'])|{'freeze.json'}
++ for name,expected in f['files'].items():assert pin((p/name).read_bytes())==expected
++composer=B/'compose-ordinary-bank-inventory-root.py';banker=B/'postlanding-verification-correction01/bank_root_proofs_through282.py.txt';target=B/'bank_root_proofs_through282.py'
++assert pin(composer.read_bytes())==dict(bytes=7547,sha256='5ce6d0ed3f24150f13be1afb844bc346557978d92d9f5572660a78caa3807e37')
++assert pin(banker.read_bytes())==dict(bytes=18169,sha256='e39621efcf4e650b9c2da4f145197f082a230236c47532e54f0398fc57b05375')
+ assert not target.exists()
+-assert not (B.parent.parent/'campaign-worktree/data/alignment/reviews_c05/c5p95/landing-proof').exists()
+-assert isinstance(binding['root_review_statement'],str) and binding['root_review_statement'].strip()
+-paths=[Path(x)for x in binding['integration_inputs']];deferred=[Path(x)for x in binding['deferred_active_callers']]
+-assert paths and len(paths)==len(set(paths)) and reproduction in paths and accept.parent in paths
+-assert all(p.parent==I and p.name.startswith('through285')for p in paths)
+-assert deferred and all(p.is_absolute()for p in deferred)
+-assert set(paths)=={p for p in I.iterdir()if p.name.startswith('through285') and p!=I/'through285-ordinary-bank-inventory' and p not in deferred}
++assert not (B.parent.parent/'campaign-worktree/data/alignment/reviews_c05/c5p94/landing-proof').exists()
+ O.mkdir()
+-with (O/'bindings.json').open('xb')as out:out.write(raw)
+-with target.open('xb')as out:out.write(banker.read_bytes())
++with target.open('xb') as out:out.write(banker.read_bytes())
+ assert target.read_bytes()==banker.read_bytes()
+-proof=dict(status='PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),required_reproduction_acceptance=pin(accept.read_bytes()),reproduction_directory=str(reproduction),reproduction_acceptance_directory=str(accept.parent),integration_inputs=binding['integration_inputs'],deferred_active_callers=binding['deferred_active_callers'],composer=dict(path=str(composer),**pin(composer.read_bytes())),banker=dict(original=str(banker),copy=str(target),**pin(target.read_bytes())),packages=packages,review=binding['root_review_statement'],bindings_source=dict(path=str(binding_path),**pin(raw)),runtime_executed=False,scope='Ordinary inventory and exact evidence-copy phase only; final-whitespace/final-staging/ledger/commit bindings remain pending, no MAIN or device approval.')
++proof=dict(status='PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),required_reproduction_acceptance=pin(accept.read_bytes()),composer=dict(path=str(composer),**pin(composer.read_bytes())),banker=dict(original=str(banker),copy=str(target),**pin(target.read_bytes())),packages=packages,review='Root read the complete corrected banker and composer v2 plus independent reviews. Correct destination, actual semantic PASS/PASS interface, complete current source/test/seed/payload checks and evidence boundaries retained. Inventory requires quiescent inputs; the later phase must retain inventory/caller/bank outputs and new evidence added after its boundary.',runtime_executed=False,scope='Ordinary inventory and exact evidence-copy phase only; no staging, ledger, private commit, MAIN or device approval.')
+ (O/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof,indent=2))

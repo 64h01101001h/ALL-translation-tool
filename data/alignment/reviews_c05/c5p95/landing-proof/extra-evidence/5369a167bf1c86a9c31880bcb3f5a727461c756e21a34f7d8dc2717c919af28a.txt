@@ -1,0 +1,93 @@
+"""Read and preserve source/provenance inputs only; no target/Git/SQL/WT operation."""
+from pathlib import Path
+import ast, collections, datetime, difflib, hashlib, json
+
+O=Path(__file__).resolve().parent; I=O.parent; A=I.parent; B=A/'C05-280-282'; S=B/'semantic-review'; H=I/'through279-whitespace-actual-runtime'; P=B/'staging-whitespace-preparation'
+bindings=[]
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(name,value):
+ path=O/name;path.parent.mkdir(parents=True,exist_ok=True)
+ with path.open('x') as f:json.dump(value,f,indent=2,ensure_ascii=False);f.write('\n')
+def capture(path,name):
+ path=Path(path);resolved=path.resolve(strict=True);before=resolved.stat();raw=path.read_bytes();after=resolved.stat()
+ fields=lambda s:(s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
+ assert fields(before)==fields(after) and path.resolve(strict=True)==resolved
+ copy=O/name;copy.parent.mkdir(parents=True,exist_ok=True)
+ with copy.open('xb') as f:f.write(raw)
+ assert raw==copy.read_bytes()==path.read_bytes()
+ bindings.append(dict(original=str(path),resolved=str(resolved),copy=name,**pin(raw)))
+ return raw
+def capture_freeze(root,copyroot):
+ frozen=capture(root/'freeze.json',copyroot+'/freeze.json');obj=json.loads(frozen)
+ tree=obj['files'];assert isinstance(tree,dict)
+ assert {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()}==set(tree)|{'freeze.json'}
+ for name,value in tree.items():assert pin(capture(root/name,copyroot+'/'+name))=={k:value[k] for k in ('bytes','sha256')}
+ return frozen,obj
+
+hraw,hfreeze=capture_freeze(H,'historical-runtime')
+praw,pfreeze=capture_freeze(P,'guarded-base-preparation')
+current=(O/'guarded-base-preparation/whitespace282.py').read_bytes();prior=(O/'historical-runtime/whitespace279.py').read_bytes()
+ctree=ast.parse(current);ptree=ast.parse(prior)
+common=['digest','pin','check_pin','relative','parse_log','literal_warnings','diff_context_lines','ordinary_predicate','classify_physical']
+def top(tree,name):return next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name==name)
+for name in common:assert ast.dump(top(ctree,name),include_attributes=False)==ast.dump(top(ptree,name),include_attributes=False)
+pending=next(n for n in ctree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='PENDING_BINDINGS' for t in n.targets))
+assert all(x is None for x in ast.literal_eval(pending.value).values())
+assert b'if any(value is None for value in PENDING_BINDINGS.values()):' in current
+for name,left,right,lf,rf in [('historical-to-guarded-base.diff.txt',prior,current,'historical/whitespace279.py','guarded/whitespace282.py'),('guarded-base-to-historical.inverse.diff.txt',current,prior,'guarded/whitespace282.py','historical/whitespace279.py')]:
+ (O/name).write_text(''.join(difflib.unified_diff(left.decode().splitlines(True),right.decode().splitlines(True),fromfile=lf,tofile=rf)))
+
+# Inspect all old descriptor rows through immutable historical snapshots, not live old filenames.
+old=json.loads((O/'historical-runtime/additional-root-descriptors.json').read_bytes());values={};old_evidence=[]
+for row in old['evidence']:
+ copy=Path(row['runtime_copy']);assert not copy.is_absolute() and '..' not in copy.parts
+ raw=(O/'historical-runtime'/copy).read_bytes();assert pin(raw)=={k:row[k] for k in ('bytes','sha256')}
+ assert row['path'] not in values;values[row['path']]=raw
+ old_evidence.append(dict(path=row['path'],recorded_resolved_path=row['resolved_path'],historical_runtime_copy=str(copy),**pin(raw),scope='Historical snapshot only; live original identity is not asserted current'))
+old_links=[]
+for link in old['provenance_maps']:
+ rows=json.loads(values[link['manifest']]);rec=link['record'];assert isinstance(rows,list) and rec in rows
+ assert rec.get('original',rec.get('path'))==link['original']
+ assert str(Path(link['manifest']).parent/rec['copy'])==link['copy']
+ assert values[link['original']]==values[link['copy']] and pin(values[link['original']])=={k:rec[k] for k in ('bytes','sha256')}
+ old_links.append(link)
+save('historical-descriptor-inspection.json',dict(scope='Method/source retention only; no historical warning identity or cardinality is a current exemption',head=old['head'],entries=old['entries'],evidence=old_evidence,provenance_maps=old_links,kind_counts=dict(collections.Counter(e['kind'] for e in old['entries'])),current_entries=None,current_warning_count=None,current_raw_diagnostic=None))
+
+freeze_raw=capture(S/'freeze.json','current-inputs/semantic-review/freeze.json');frozen=json.loads(freeze_raw)
+assert pin(freeze_raw)['sha256']=='5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'
+manifest_raw=capture(S/'original-to-copy-manifest.json','current-inputs/semantic-review/original-to-copy-manifest.json');manifest=json.loads(manifest_raw)
+assert isinstance(manifest,list) and len(manifest)==1450
+physical_raw=capture(S/'physical-reopen-proof.json','current-inputs/semantic-review/physical-reopen-proof.json');physical=json.loads(physical_raw)
+assert pin(manifest_raw)==frozen['files']['original-to-copy-manifest.json'] and pin(physical_raw)==frozen['files']['physical-reopen-proof.json']
+names=sorted({r['original'] for r in physical});descriptors=[];ranges=[]
+for name in names:
+ proofrows=[r for r in physical if r['original']==name];expected=proofrows[0]['source_pin']
+ assert all(r['source_pin']==expected and r['exact'] is True for r in proofrows)
+ raw=capture(Path(name),'complete-physical-originals/'+expected['sha256']+'.bin');assert pin(raw)==expected
+ matches=[r for r in manifest if r['original']==name and all(r[k]==expected[k] for k in ('bytes','sha256'))];assert matches
+ for row in matches:
+  assert frozen['files'][row['copy']]==expected
+  assert capture(S/row['copy'],'physical-semantic-copies/'+row['copy'])==raw
+ for row in proofrows:
+  lo,hi=row['byte_range'];assert type(lo) is type(hi) is int and 0<=lo<hi<=len(raw)
+  assert pin(raw[lo:hi])==row['excerpt_pin'];ranges.append(row)
+ descriptors.append(dict(kind='complete_original_physical_text',path=name,**expected,manifest_records=matches))
+save('physical-source-descriptors.json',descriptors)
+save('current-physical-bindings.json',dict(scope='Complete current original physical files and exact current semantic manifest aliases; no warning identities or exemption claims',descriptors=descriptors,exact_extents=ranges,source_manifest=pin(manifest_raw),source_freeze=pin(freeze_raw)))
+
+root_raw=capture(B/'landing/root-proof-copy-manifest-before-whitespace.json','ordinary-bank/root-proof-copy-manifest-before-whitespace.json')
+assert pin(root_raw)==dict(bytes=3435912,sha256='e8accebefa7e3e38edcd14107ecb64fcb5660ff907a35bb717f5c3549cfe13a7')
+root=json.loads(root_raw);assert root['phase']=='ordinary' and root['semantic_review_unchanged'] is True
+assert len({r['copy'] for r in root['files']})==len(root['files'])
+for dirname,copydir in [(I/'through282-banking-runs/ordinary','ordinary-bank/run'),(I/'through282-banking-callers/ordinary','ordinary-bank/caller')]:
+ for path in sorted(dirname.rglob('*')):
+  if path.is_file():capture(path,copydir+'/'+str(path.relative_to(dirname)))
+caller=json.loads((O/'ordinary-bank/caller/execution.json').read_bytes())
+assert caller['exit']==0 and (O/'ordinary-bank/caller/exit.txt').read_bytes()==b'0\n' and not (O/'ordinary-bank/caller/stderr.bin').read_bytes()
+for stem in ['stdout','stderr']:
+ raw=(O/'ordinary-bank/caller'/f'{stem}.bin').read_bytes();assert len(raw)==caller[stem+'_bytes'] and pin(raw)['sha256']==caller[stem+'_sha256']
+result=json.loads((O/'ordinary-bank/run/result.json').read_bytes());assert result['status']=='PASS'
+capture(B/'landing/canonical-builds-once.json','current-inputs/canonical-builds-once.json')
+save('source-bindings.json',bindings)
+save('source-preparation-proof.json',dict(status='SOURCE_PHYSICAL_BINDINGS_PREPARED_NO_CLASSIFICATION',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),guarded_base=pin(current),guarded_base_freeze=pin(praw),historical_source=pin(prior),historical_freeze=pin(hraw),common_predicates_AST_identical=common,current_physical_originals=len(descriptors),current_exact_extents=len(ranges),current_manifest_records=len(manifest),ordinary_manifest=pin(root_raw),ordinary_source_records=len(root['files']),ordinary_external_records=len(root['external_actual_bytes_retained']),historical_evidence_rows_verified=len(old_evidence),historical_provenance_links_verified=len(old_links),raw_diagnostic=None,warning_identities=None,warning_count=None,additional_descriptor_entries=None,runtime_candidate=None,target_executions=0,Git_SQL_build_test_calls=0,WT_mutations=0))
+print(json.dumps(dict(status='SOURCE_PHYSICAL_BINDINGS_PREPARED_NO_CLASSIFICATION',source_snapshots=len(bindings),current_physical_originals=len(descriptors),current_exact_extents=len(ranges),historical_provenance_links=len(old_links),target_executions=0)))

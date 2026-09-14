@@ -1,0 +1,68 @@
+{
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "ledger_factual_verdict": "APPROVE",
+  "open_findings": [],
+  "scope": "Independent bounded CODE and ledger factual review; source-only, no semantic reapproval or runtime/commit approval",
+  "reviewer": "Codex /root/c05_283_285_semantic; inherited GPT-6 identity, exact runtime model unavailable. Prior semantic reviewer and separate binder source author; independent of this root-authored commit closure source and entry.",
+  "utc": "2026-09-14T07:49:57.611615+00:00",
+  "candidate": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-commit-closure-preparation/commit_closure285.py",
+    "bytes": 6445,
+    "sha256": "962039190486f0b395ae7a1f8ff1612f33f98bd1281fa5d27b6ff50accb4d59d"
+  },
+  "prior": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/commit-closure-preparation/commit_closure282.py",
+    "bytes": 6446,
+    "sha256": "8c53dabbec62e433513fb5f890364820feb8c63f5410a8227188c2f213ecafa2"
+  },
+  "ledger_entry": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-commit-closure-preparation/ledger-entry.txt",
+    "bytes": 3445,
+    "sha256": "46a6a137d994c53e148e45668d240b72c71653a644a34f3072b506e5cc2b9d2f"
+  },
+  "author_freeze": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-commit-closure-preparation/freeze.json",
+    "bytes": 1454,
+    "sha256": "e9ae0070344d6400b29fe62f45df1dc76eab1b047c846758af21deccadd66617"
+  },
+  "author_members_verified": 10,
+  "author_original_copy_pairs_verified": 3,
+  "full_evidence_original_copy_pairs": 128,
+  "distinct_full_copies": 87,
+  "exact_constant_changes": 6,
+  "full_forward_inverse_exact": true,
+  "inverse_AST_exact": true,
+  "unchanged_helper_functions": [
+    "pin",
+    "pincheck",
+    "git",
+    "paths"
+  ],
+  "assertions_before": 33,
+  "assertions_after": 33,
+  "reviewed_controls": [
+    "Exact six constant updates only; full forward/inverse source and AST conservation",
+    "All four helper function ASTs unchanged; every prior assertion retained",
+    "Future accepted stage must be PASS at baseline fb9182 with sequences283–285,coverage285,added79",
+    "DATA direct parent must be baseline; DATA changed paths equal accepted stage files",
+    "At least two identical complete accepted index streams; every full DATA tree mode/object equals that index",
+    "All accepted stage working-file byte pins rechecked; clean staged and unstaged entry",
+    "Append only exactly three unchanged ledger preimages plus the same reviewed entry; reject duplicate entry",
+    "Bind DOCS parent and HEAD; exact three-file DOCS changes; every old/new/worktree ledger equals preimage plus entry",
+    "Exact residual dcc_captions path; retained open MAIN/native/phone limits",
+    "Native Git command/stdin/stdout/stderr/exit records retained by inherited method; no commit or index mutation commands"
+  ],
+  "ledger_claims_conditional_on_future_actual_final_stage_and_DATA": true,
+  "current_commits_claimed": false,
+  "candidate_imports": 0,
+  "candidate_executions": 0,
+  "Git_SQL_build_test_calls": 0,
+  "B_W_index_commit_edits": 0,
+  "limits": [
+    "Source/factual approval only. Actual final-stage verification and DATA must precede the append; actual DOCS and fixed closure follow it.",
+    "Prior semantic approval is retained evidence, not reissued here. Existing production/test/reproduction/whitespace results were read and pinned, not rerun.",
+    "No present DATA/DOCS commit, runtime closure, MAIN/native/device acceptance or release is claimed."
+  ]
+}

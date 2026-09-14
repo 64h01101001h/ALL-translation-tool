@@ -1,0 +1,14 @@
+[
+  {
+    "start": 3137,
+    "old": "        initial_scope = c.strict_json(controls['initial_scope'])\n",
+    "new": "        initial_scope = c.strict_json(controls['initial_scope'])\n        c.require(scope['directory_aliases'] == initial_scope['directory_aliases'] == c.directory_alias_descriptors(), 'complete initial/later directory alias identities')\n",
+    "reason": "Assembler uses the exact pinned composer walker and requires both actual scope directory inventories to agree."
+  },
+  {
+    "start": 9750,
+    "old": "        c.require(c.read(args.scope) == scope_raw and Path(args.composer).read_bytes() == raw_composer, 'scope/helper changed')\n",
+    "new": "        c.require(c.read(args.scope) == scope_raw and Path(args.composer).read_bytes() == raw_composer, 'scope/helper changed')\n        c.require(scope['directory_aliases'] == initial_scope['directory_aliases'] == c.directory_alias_descriptors(), 'directory aliases changed during assembly')\n",
+    "reason": "Retain final alias reread alongside complete scope/helper equality."
+  }
+]

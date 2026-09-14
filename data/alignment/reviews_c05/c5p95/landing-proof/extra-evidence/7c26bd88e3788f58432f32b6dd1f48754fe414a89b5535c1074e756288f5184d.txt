@@ -1,0 +1,42 @@
+from pathlib import Path
+import hashlib,json
+O=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter')
+assert __debug__
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(n,x):
+    with (O/n).open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+controls=json.loads((O/'focused-controls-proof.json').read_text());assert controls['status']=='PASS_FOCUSED_SOURCE_AND_FIXTURE_CONTROLS_ONLY'
+for caller in ['source-preparation-caller02','focused-controls-caller','correction-caller']:
+    assert (O/caller/'exit.txt').read_bytes()==b'0\n' and (O/caller/'stderr.bin').read_bytes()==b''
+assert (O/'source-preparation-caller/exit.txt').read_bytes()==b'1\n'
+maps=json.loads((O/'original-to-copy-manifest.json').read_text())
+for row in maps:
+    assert pin(Path(row['original']))==pin(O/row['copy'])=={k:row[k] for k in ['bytes','sha256']}
+before=json.loads((O/'original-census-before.json').read_text());after=json.loads((O/'original-census-after.json').read_text());assert before==after
+for row in before:
+    d=Path(row['directory']);assert {str(p.relative_to(d)) for p in d.rglob('*') if p.is_file()}=={r['path'] for r in row['files']}
+    for r in row['files']:assert pin(d/r['path'])=={k:r[k] for k in ['bytes','sha256']}
+aliases=[]
+for p in sorted((O/'fixtures').rglob('*')):
+    if p.is_symlink():
+        assert p.resolve().is_relative_to(O)
+        aliases.append({'path':str(p.relative_to(O)),'target':str(p.readlink()),'resolved':str(p.resolve()),'target_kind':'directory' if p.is_dir() else 'file','reason':'Intentional negative fixture: escapes its individual fixture directory, while remaining entirely inside this new preparation package.'})
+save('fixture-symlink-aliases.json',aliases)
+sourcepins={n:pin(O/n) for n in ['verify_reconciliation.py','config_contract.py']}
+proof={'status':'SOURCE_SCHEMA_ADAPTER_PREPARED_FOR_ROOT_REVIEW','producer':'Codex','role':'Code/schema preparation; author of Tibetan originals, not an independent semantic reviewer','sources':sourcepins,'actual_original_schema_file':'original-freeze-schemas.json','actual_originals':6,'actual_original_members':344,'actual_original_files_including_manifests':350,'original_censuses_before_after_exact':True,'original_copies':len(maps),'focused_controls':controls,'actual_candidate_execution':False,'SQL_Git_generator_full_tests':False,'current_reconciliation_or_final_specs_read':False,'semantic_approval':False,'source_preparation_failure_retained':'source-preparation-caller, prepare-adapter.py.txt, preparation-failure-history.json, full v1/v2 sources and diffs','fixture_symlinks':len(aliases),'future_release':'Root must review these exact sources, bind the actual descriptors and separately authorize mechanical verification. Existing semantic review remains separate.'}
+save('proof.json',proof)
+text='''This is a code/schema preparation by Codex, who authored the Tibetan originals; it grants no independent semantic acceptance. The two candidate sources are full adaptations of the approved through285 preparation, retained alongside complete prior source, exact forward/inverse diffs and every changed literal.
+
+The genuine Tibetan originals use freeze-manifest.json with a top-level LIST (111/24/24 members); the English originals use freeze.json with a files LIST (147/19/19). All six complete original manifests and exact pins are retained in inputs/ and original-freeze-schemas.json. Complete before/after censuses verify all 344 members plus six manifest files unchanged. No original was renamed, rewritten or relabeled; actual final reconciliation files were not accessed.
+
+The contract adds original_freeze(row), which checks the explicit row.freeze pin, the angle-specific filename and actual list shape, record keys/pin syntax, normalized duplicate paths, missing files and directory containment. Its original-spec loop then retains every existing spec/declaration/full-identity gate. Runtime frozen(row) uses that reader for originals and requires freeze.json with files DICT for reconciled rows. It still compares the complete file set, hashes every member and repeats conservation afterward, excluding only the exact pinned manifest. Final config schema, canonical calls, baseline checks, query/evidence bindings, dispositions and semantic_approval=false remain unchanged.
+
+All 74 focused controls passed: four expected acceptances and 70 expected rejections, including the prior Tibetan mismatch, both current original schemas, final DICT acceptance/LIST rejection, missing/duplicate/escaped paths, symlink escapes, wrong descriptor/member pins, extra unlisted files and changes between the first/second checks. Only exact AST-extracted helper functions ran on synthetic fixtures; no candidate module was imported, no real validate_config/verify call ran, and no SQL, Git, generator or full suite ran. Whole-source inverse and AST identity prove conservation outside the explicit edits. The four intentional fixture symlinks remain inside this package and are fully recorded in fixture-symlink-aliases.json.
+
+One source-preparation inverse-count assertion failed before a candidate file was written: the short new call string also matched the function definition. Full actual caller streams and v1 source survive; separate v2 binds both complete list-comprehension call sites and reuses copied inputs only on byte equality. The corrected preparation and focused-control callers exited 0 with empty stderr. A preliminary missing relative integration path is separately transcribed from its tool result, without inventing raw streams.
+
+Runtime: 16475 bytes, SHA256 945086f1b2f93b40f9fa8f59535f0c9fc29972f6d1c01beea3d6fddaf23ea4ac. Contract: 10668 bytes, SHA256 caff81a7c2b1da46e7630428d4b1ff0ac64cc0e82e9716f59ae3563d68519561. Root review and explicit runtime release remain required. This bounded adapter does not settle other future descriptor/schema issues or any semantic correspondence.
+'''
+with (O/'report.md').open('x') as f:f.write(text)
+print(json.dumps({'status':proof['status'],'sources':sourcepins,'original_files_unchanged':350,'focused_controls':74,'fixture_symlinks':len(aliases)}))

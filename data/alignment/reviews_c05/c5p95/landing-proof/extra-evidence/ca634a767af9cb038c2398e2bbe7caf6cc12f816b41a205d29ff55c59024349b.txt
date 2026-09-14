@@ -1,0 +1,123 @@
+"""Exact file-only source preparation. Never imports or executes candidates."""
+from pathlib import Path
+import ast,datetime,difflib,hashlib,json,os
+P=Path(__file__).resolve().parent;I=P.parent;A=I.parent;ROOT=A.parent;B=A/'C05-283-285'
+OLD=I/'through285-ordinary-banking-preparation';FINAL=I/'through285-final-banking-stage-preparation'
+assert __debug__ and P==I/'through285-ordinary-final-banker-route-preparation'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def put(n,b):
+ p=P/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb') as f:f.write(b)
+ assert p.read_bytes()==b
+def js(n,v):put(n,(json.dumps(v,indent=2)+'\n').encode())
+rows=[]
+def copy(p):
+ raw=p.read_bytes();n='originals/'+str(p.relative_to(A));put(n,raw)
+ aliases=[dict(path=str(q),target=os.readlink(q)) for q in (*reversed(p.parents),p) if q.is_symlink()]
+ rows.append(dict(original=str(p),resolved_original=str(p.resolve(strict=True)),copy=n,symlink_components=aliases,**pin(raw)))
+ return raw
+sourcepaths={'composer':OLD/'candidates/compose-ordinary-bank-inventory-root.py','release':OLD/'candidates/release-ordinary-bank-method-root.py'}
+original={k:copy(v).decode() for k,v in sourcepaths.items()}
+for p in [OLD/'candidates/bank_root_proofs_through285.py',OLD/'freeze.json',OLD/'report.md',OLD/'pending-release-bindings.json',OLD/'inventory-plan.json',
+ I/'through285-ordinary-bank-root-source-review/proof.json',I/'through285-ordinary-bank-root-source-review/freeze.json',
+ FINAL/'final-candidates/bank_root_proofs_through285_final.py',FINAL/'ordinary-required-final-banker-route.json',FINAL/'freeze.json',FINAL/'report.md',
+ I/'through285-generated-reproduction-root-acceptance/proof.json',I/'through285-generated-reproduction-attempt02/freeze.json']:
+ copy(p)
+required=json.loads((FINAL/'ordinary-required-final-banker-route.json').read_bytes())['required_explicit_input']
+assert required==dict(original=str(FINAL/'final-candidates/bank_root_proofs_through285_final.py'),retention='bank',copy='root-helpers/bank_root_proofs_through285_final.py.txt',bytes=20978,sha256='2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f')
+assert pin(Path(required['original']).read_bytes())=={k:required[k] for k in ('bytes','sha256')}
+finalfreeze=json.loads((FINAL/'freeze.json').read_bytes())
+assert finalfreeze['files']['final-candidates/bank_root_proofs_through285_final.py']=={k:required[k] for k in ('bytes','sha256')}
+assert finalfreeze['files']['ordinary-required-final-banker-route.json']==pin((FINAL/'ordinary-required-final-banker-route.json').read_bytes())
+changes={};newpins={};proofs={}
+def replace(role,s,a,b):
+ assert s.count(a)==1,(role,a)
+ at=s.index(a);changes[role].append(dict(old=a,new=b,count=1,after_positions=[at]));return s.replace(a,b)
+def finish(role,name,s):
+ inv=s
+ for r in reversed(changes[role]):
+  at=r['after_positions'][0];assert inv[at:at+len(r['new'])]==r['new'];inv=inv[:at]+r['old']+inv[at+len(r['new']):]
+ assert inv==original[role]
+ prior=ast.parse(inv);current=ast.parse(s)
+ oldfunc={n.name:ast.get_source_segment(inv,n) for n in ast.walk(prior) if isinstance(n,ast.FunctionDef)}
+ newfunc={n.name:ast.get_source_segment(s,n) for n in ast.walk(current) if isinstance(n,ast.FunctionDef)}
+ assert oldfunc==newfunc,'Every old function must remain byte-identical'
+ put('candidates/'+name,s.encode());js('changes/'+name+'.json',changes[role])
+ for tag,left,right in [('forward',inv,s),('inverse',s,inv)]:
+  put('diffs/'+name+'.'+tag+'.diff',''.join(difflib.unified_diff(left.splitlines(True),right.splitlines(True),fromfile=str(sourcepaths[role]) if tag=='forward' else name,tofile=name if tag=='forward' else str(sourcepaths[role]))).encode())
+ put('ast/'+name+'.txt',ast.dump(current,indent=2).encode())
+ newpins[name]=pin(s.encode());proofs[name]=dict(original=pin(inv.encode()),candidate=pin(s.encode()),full_inverse_byte_exact=True,AST_only=True,all_prior_functions_byte_identical=sorted(oldfunc),assertions_before=sum(isinstance(n,ast.Assert)for n in ast.walk(prior)),assertions_after=sum(isinstance(n,ast.Assert)for n in ast.walk(current)))
+
+role='composer';changes[role]=[];s=original[role]
+block='''# This one additional full copy preserves the existing generic record/alias.
+# Its future automatic final-banker target must pre-exist the raw diagnostic.
+route_source = I / 'through285-final-banking-stage-preparation/ordinary-required-final-banker-route.json'
+route_raw = read(route_source)
+assert pin(route_raw) == {'bytes': 1010, 'sha256': '72b5750f5977273d7dbf148c61249bc6cf750360334f3ca5b63265991622529e'}
+required_route = json.loads(route_raw)['required_explicit_input']
+assert required_route == dict(original=str(I / 'through285-final-banking-stage-preparation/final-candidates/bank_root_proofs_through285_final.py'), retention='bank', copy='root-helpers/bank_root_proofs_through285_final.py.txt', bytes=20978, sha256='2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f')
+required_source = Path(required_route['original'])
+assert required_source in paths and route_source in paths
+required_raw = read(required_source)
+assert pin(required_raw) == {k: required_route[k] for k in ('bytes', 'sha256')}
+source_coverage = [row for row in coverage if row['original'] == str(required_source)]
+assert len(source_coverage) == 1 and {k: source_coverage[0][k] for k in ('bytes', 'sha256')} == pin(required_raw)
+assert str(required_source.resolve()) == source_coverage[0]['resolved']
+assert (os.readlink(required_source) if required_source.is_symlink() else None) == source_coverage[0]['symlink']
+generic_record_count = len(records)
+generic_bank_targets = [row['copy'] for row in records if row['retention'] == 'bank']
+assert len(generic_bank_targets) == len(set(generic_bank_targets)) == len(new_content)
+assert required_route['copy'] not in generic_bank_targets
+assert not (landed / 'landing-proof' / required_route['copy']).exists()
+required_extra_copies = [dict(required_route)]
+records.extend(required_extra_copies)
+bank_targets = [row['copy'] for row in records if row['retention'] == 'bank']
+assert len(bank_targets) == len(set(bank_targets)) == len(new_content) + len(required_extra_copies)
+assert records[-1] == required_route and len(records) == generic_record_count + 1
+assert read(required_source) == required_raw and read(route_source) == route_raw
+assert paths == census(), 'Evidence tree changed during required extra-copy preparation'
+'''
+s=replace(role,s,'O.mkdir()\n',block+'O.mkdir()\n')
+s=replace(role,s,'             distinct_new_full_copies=len(new_content), manifest=pin(read(O / \'extra-inputs.json\')),',"             distinct_new_full_copies=len(new_content) + len(required_extra_copies),\n             generic_distinct_new_full_copies=len(new_content), generic_records_before_required_route=generic_record_count,\n             required_additional_full_copies=len(required_extra_copies), required_extra_copy_records=required_extra_copies,\n             required_extra_copy_source_coverage=source_coverage,\n             required_extra_copy_proof=dict(path=str(route_source), **pin(route_raw)),\n             manifest=pin(read(O / 'extra-inputs.json')),")
+finish(role,'compose-ordinary-bank-inventory-with-final-route-root.py',s)
+# Every complete generic census/classification/dedup/alias loop remains unchanged.
+generic=original[role][original[role].index('records, coverage, new_content'):original[role].index('O.mkdir()')]
+assert generic in s
+js('generic-prefix-fidelity.json',dict(full_generic_census_and_record_construction_exact=True,bytes=len(generic.encode()),sha256=pin(generic.encode())['sha256'],generic_records_or_aliases_repointed=False,exact_extra_records=1,unique_additional_target=required['copy']))
+
+role='release';changes[role]=[];s=original[role]
+s=replace(role,s,"composer=B/'compose-ordinary-bank-inventory-root.py'", "composer=B/'compose-ordinary-bank-inventory-with-final-route-root.py'")
+s=replace(role,s,"{'bytes': 9114, 'sha256': '5473a64d05f490092eb375a25ee26ec3bebd04f65930aa8088dc94c6ab89ae18'}",repr(newpins['compose-ordinary-bank-inventory-with-final-route-root.py']))
+anchor="assert any(rec.get('role')=='code_review' and Path(rec['directory'])!=I/'through285-ordinary-banking-preparation' for rec in packages)\n"
+s=replace(role,s,anchor,anchor+"route_preparation=I/'through285-ordinary-final-banker-route-preparation'\nassert any(rec.get('role')=='source_preparation' and Path(rec['directory'])==route_preparation for rec in packages)\nassert any(rec.get('role')=='source_preparation' and Path(rec['directory'])==I/'through285-final-banking-stage-preparation' for rec in packages)\nassert any(rec.get('role')=='code_review' and rec.get('reviews_source_preparation')==str(route_preparation) and Path(rec['directory']) not in (route_preparation,I/'through285-ordinary-banking-preparation',I/'through285-final-banking-stage-preparation') for rec in packages)\n")
+finish(role,'release-ordinary-bank-with-final-route-root.py',s)
+# The complete banker bytes are retained, never transformed/materialized/executed.
+js('unchanged-banker.json',dict(original=str(OLD/'candidates/bank_root_proofs_through285.py'),**pin((OLD/'candidates/bank_root_proofs_through285.py').read_bytes()),changed=False,executed=False))
+js('candidate-pins.json',newpins);js('static-source-proof.json',proofs)
+js('required-route.json',required)
+js('pending-binding-contract.json',dict(status='SOURCE_ONLY_ROOT_BINDINGS_PENDING',
+ source_package_required_roles=[dict(role='source_preparation',directory=str(OLD)),dict(role='source_preparation',directory=str(FINAL)),dict(role='source_preparation',directory=str(P)),dict(role='code_review',directory=None,reviews_source_preparation=str(P))],
+ per_package_actual_fields=['directory','role','freeze {bytes,sha256}','files','bytes','reviews_source_preparation (required for new route code review)'],
+ unchanged_top_level_release_fields=['reproduction_directory','reproduction_acceptance','source_packages','integration_inputs','deferred_active_callers','root_review_statement'],
+ actual_reproduction_observation=dict(path=str(I/'through285-generated-reproduction-root-acceptance/proof.json'),**pin((I/'through285-generated-reproduction-root-acceptance/proof.json').read_bytes()),status='PASS',retention_checks=225597,bound_into_release_here=False),
+ future_materialization=dict(composer=str(B/'compose-ordinary-bank-inventory-with-final-route-root.py'),release=str(B/'release-ordinary-bank-with-final-route-root.py'),old_sources_unchanged=True,banker=str(B/'bank_root_proofs_through285.py')),
+ exact_integration_scope=None,exact_one_active_inventory_caller=None,actual_source_review_package=None,actual_release_bindings=None,
+ ordinary_inventory_output=str(I/'through285-ordinary-bank-inventory'),
+ execution_boundary='Root must materialize the exact new sources and supply full actual package freezes/current integration census/one active caller and reproduction pins; this preparation is not inventory, bank, stage, commit or semantic acceptance. Final source-specific whitespace and final bank bindings remain separate.'))
+for r in rows:
+ source=Path(r['original']);raw=source.read_bytes()
+ assert str(source.resolve(strict=True))==r['resolved_original']
+ assert pin(raw)=={k:r[k] for k in ('bytes','sha256')} and (P/r['copy']).read_bytes()==raw
+js('original-to-copy-manifest.json',rows)
+js('proof.json',dict(status='READY_FOR_INDEPENDENT_SOURCE_REVIEW_ONLY',producer='Codex /root/c05_280_282_english',role='Tooling author; prior original-English and source-preparation context reused, not independent semantic review',source_pairs=len(rows),candidates=newpins,all_full_inverse_exact=True,all_old_functions_unchanged=True,full_generic_census_record_and_alias_body_unchanged=True,additional_bank_records=1,actual_inventory_population=None,native_failures=0,banker_unchanged=True,target_imports_and_executions=0,Git_SQL_test_stage_bank_calls=0,W_B_writes=0))
+report='''Two source-only candidates add exactly one complete final-banker copy to ordinary inventory. The existing generic records, content-dedup targets, source coverage and alias rows remain unchanged; the extra record is appended after the complete census/pin/alias reread and has a distinct target. The source must occur exactly once in coverage with the expected full-byte pin, its fixed requirement document is pinned, every bank target must be unique, and source/requirement/census are rechecked before output creation. Proof reports both the original generic counts and the additional full copy. Source count and coverage population are not inflated to pretend this is a new original.
+
+The required target is root-helpers/bank_root_proofs_through285_final.py.txt; exact20978-byte source SHA2562890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f. The same original may retain its existing generic target and this second complete target. This ensures the accepted later final intake's new-automatic-copy restriction need not be widened to Python. Neither banker changed, and neither was imported or invoked.
+
+The release changes only its actual composer filename/pin and adds requirements for the new route preparation, retained final-stage preparation and a separate code-review package explicitly identifying this route source. The old ordinary preparation/code-review requirements remain. Every old complete freeze-list/dict/census/path/hash check, reproduction identity, exact current integration census and single deferred active caller predicate survives. Root supplies all actual package pins and populations through unchanged top-level CLI bindings; the new review directory/pin is pending. All original sources remain immutable; use the two new batch filenames at future materialization.
+
+Complete source originals, the fixed route requirement and its freeze, existing root ordinary review, current actual reproduction acceptance and complete reproduction freeze are copied with explicit original/copy/alias records. Reproduction is actually PASS with225597 checks; this source preparation does not rerun it or release any bank. Full forward/inverse diffs and exact positional inverse reconstruction are retained. Every old function is byte-identical and the full old generic record/census block is identical. Verification is AST and source comparison only, with complete native preparation transport. The final freeze excludes only itself; its later direct tool result is external.
+
+Current role is Codex tooling author with disclosed prior English-original/tooling context. No independent semantic verdict, actual inventory/bank/test/stage/commit, B/W mutation, dynamic census or copy-count result is claimed. Root owns actual review, integration scope, materialization, release and execution.
+'''
+put('report.md',report.encode());print(json.dumps(dict(status='SOURCE_PREPARATION_FINISHED',candidates=newpins,full_source_pairs=len(rows),target_executions=0),indent=2))

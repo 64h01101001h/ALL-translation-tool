@@ -1,0 +1,131 @@
+"""Source/byte/data review only; never import or execute candidate/pure predicates."""
+from pathlib import Path
+import ast,collections,csv,datetime,difflib,hashlib,io,json,re
+O=Path(__file__).resolve().parent;P=O.parent/'through282-whitespace-source-preparation'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,v):
+ with (O/n).open('x') as f:json.dump(v,f,ensure_ascii=False,indent=2);f.write('\n')
+def expect(b,r):assert pin(b)=={k:r[k] for k in ('bytes','sha256')}
+raws={str(p.relative_to(P)):p.read_bytes() for p in sorted(P.rglob('*')) if p.is_file()}
+f=json.loads(raws['freeze.json']);assert pin(raws['freeze.json'])['sha256']=='a200bda571b180338997a1ce31a6ee6b3775a50cad5cb1334cb6bca102eba2dd'
+assert set(raws)==set(f['files'])|{'freeze.json'} and len(f['files'])==316
+for n,r in f['files'].items():expect(raws[n],r)
+initial=json.loads(raws['source-input-freeze01.json']);assert len(initial['files'])==149
+for n,r in initial['files'].items():expect(raws[n],r)
+maps=[]
+for n,b in raws.items():
+ cp=O/'inputs/preparation'/n;cp.parent.mkdir(parents=True,exist_ok=True)
+ with cp.open('xb') as out:out.write(b)
+ assert cp.read_bytes()==b
+ maps.append(dict(original=str(P/n),copy=str(cp.relative_to(O)),**pin(b)))
+rows=json.loads(raws['complete-original-copy-manifest.json']);assert len(rows)==360
+for r in rows:
+ p=Path(r['original']);assert p.name not in ('CAMPAIGN_STATUS.md','CAMPAIGN_CONTINUATION.md'), 'Do not reopen mutable ROOT status'
+ if 'resolved_original' in r:assert p.resolve(strict=True)==Path(r['resolved_original'])
+ b=p.read_bytes();assert b==raws[r['copy']];expect(b,r)
+ maps.append(dict(original=str(p),copy='inputs/preparation/'+r['copy'],**pin(b),source_record=r))
+old=raws['guarded-base-preparation/whitespace282.py'].decode();new=raws['whitespace282.py'].decode();changes=json.loads(raws['actual-candidate-replacements.json'])
+assert len(changes)==6
+s=old
+for r in changes:
+ assert s.count(r['old'])==1 and s.index(r['old'])==r['offset'];s=s.replace(r['old'],r['new'])
+assert s==new
+for r in reversed(changes):assert s.count(r['new'])==1;s=s.replace(r['new'],r['old'])
+assert s==old
+for n,a,b,af,bf in [('actual-candidate.diff.txt',old,new,'guarded-base/whitespace282.py','whitespace282.py'),('actual-candidate.inverse.diff.txt',new,old,'whitespace282.py','guarded-base/whitespace282.py')]:
+ assert raws[n].decode()==''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile=af,tofile=bf))
+a,b=ast.parse(old),ast.parse(new)
+asserts=lambda t:collections.Counter(ast.dump(n,include_attributes=False) for n in ast.walk(t) if isinstance(n,ast.Assert))
+assert sum(asserts(a).values())==75 and not asserts(a)-asserts(b)
+def funcs(tree,text):return {n.name:ast.get_source_segment(text,n) for n in ast.walk(tree) if isinstance(n,ast.FunctionDef)}
+af,bf=funcs(a,old),funcs(b,new);pure=['digest','pin','check_pin','relative','parse_log','literal_warnings','diff_context_lines','ordinary_predicate','classify_physical']
+assert all(af[n]==bf[n] for n in pure)
+assert {n for n in af if af[n]!=bf[n]}=={'run','main'}
+main=next(n for n in b.body if isinstance(n,ast.FunctionDef) and n.name=='main')
+calls=[(n.lineno,ast.unparse(n.func)) for n in ast.walk(main) if isinstance(n,ast.Call)]
+assert next(ln for ln,n in calls if n=='require_runtime_release')<next(ln for ln,n in calls if n=='Run')
+guard=next(n for n in b.body if isinstance(n,ast.FunctionDef) and n.name=='require_runtime_release')
+assert not any(any(x in ast.unparse(n.func) for x in ('mkdir','write','subprocess','Run','git')) for n in ast.walk(guard) if isinstance(n,ast.Call))
+d=json.loads(raws['additional-root-descriptors.json']);expect(raws['additional-root-descriptors.json'],dict(bytes=69418,sha256='7fed8e2eabd5a2766a04d8823dfacb16d333961b4349dc258fe4bd4631e3906d'))
+assert len(d['entries'])==12 and len(d['evidence'])==65 and len(d['provenance_maps'])==4
+values={}
+for r in d['evidence']:
+ p=Path(r['path']);assert p.resolve(strict=True)==Path(r['resolved_path']);raw=p.read_bytes();expect(raw,r)
+ assert raw==raws[r['runtime_copy']];values[r['path']]=raw
+for link in d['provenance_maps']:
+ rec=link['record'];assert rec in json.loads(values[link['manifest']])
+ assert rec.get('original',rec.get('path'))==link['original']
+ assert str(Path(link['manifest']).parent/rec['copy'])==link['copy']
+ assert values[link['original']]==values[link['copy']];expect(values[link['copy']],rec)
+ expect(values[link['copy']],json.loads(values[link['freeze']])['files'][rec['copy']])
+capture=d['raw_capture'];log=values[capture['stdout']['path']];expect(log,d['raw_log'])
+issues={}
+for line in log.split(b'\n'):
+ m=re.fullmatch(rb'([^+\n]+):([0-9]+): (trailing whitespace\.|new blank line at EOF\.|space before tab in indent\.)',line)
+ if m:
+  p,n,k=m.groups();p=p.decode();k=k.decode();n=int(n);group=issues.setdefault(p,{}).setdefault(k,[]);assert n not in group;group.append(n)
+ else:assert not line.strip() or line.startswith(b'+')
+assert len(issues)==69 and sum(len(ns) for groups in issues.values() for ns in groups.values())==43903
+execution=json.loads(values[capture['execution']['path']]);command=json.loads(values[capture['command']['path']])
+assert command['argv']==execution['argv']==['git','diff','--cached','--check'] and execution['exit']==2
+assert execution['stdout_bytes']==len(log) and execution['stdout_sha256']==pin(log)['sha256']
+assert values[capture['exit']['path']]==b'2\n' and not values[capture['stdin']['path']] and not values[capture['stderr']['path']]
+# Data-only review of all exact descriptor paths/source rows/literals.
+root=json.loads(next(v for p,v in values.items() if p.endswith('/landing/root-proof-copy-manifest-before-whitespace.json')))
+assert len(root['files'])==1343 and len(root['external_actual_bytes_retained'])==4312
+judgments=[];counts=collections.Counter();hist=d['continuation_history'];before=values[hist['before']];after=values[hist['after']];hp=json.loads(values[hist['proof']])
+expect(before,next(r for r in hp['before'] if r['path']==hist['before']))
+expect(after,next(r for r in hp['after'] if r['path'].endswith('/CAMPAIGN_CONTINUATION.md')))
+assert len(before)==416459 and len(after)==420738 and after.startswith(before)
+assert hp['next_batch_started'] is False and hp['continuation_prior_bytes_preserved_as_prefix'] is True
+assert hp['recorded_at']=='2026-09-14T00:08:02.004479+00:00'
+expect(values[hist['closure']],hp['closure'])
+assert json.loads(values[hist['closure']])['final_head']==d['head']
+for e in d['entries']:
+ raw=values[e['root_record']['original']];expect(raw,e);assert e['root_record'] in root['files']
+ assert e['path']=='data/alignment/reviews_c05/c5p94/landing-proof/'+e['root_record']['copy'] and e['issues']==issues[e['path']]
+ lines=raw.split(b'\n');nums=e['issues']['trailing whitespace.'];assert set(e['issues'])=={'trailing whitespace.'}
+ assert all(lines[n-1].endswith((b' ',b'\r',b'\t')) for n in nums)
+ k=e['kind'];counts[k]+=len(nums)
+ if 'canonical_csv' in k:
+  assert raw==values[e['csv_source']] and nums==list(range(1,len(lines)))
+  assert raw.startswith(b'\xef\xbb\xbf') and all(l.endswith(b'\r') for l in lines[:-1]) and lines[-1]==b''
+  cells=list(csv.reader(io.StringIO(raw.decode('utf-8-sig'),newline='')));assert all(len(r)==10 for r in cells)
+  assert cells[0]==['change','wylie','acip','tibetan_generated','english','kind','depth','occurrences','courses','refs']
+  out=io.StringIO(newline='');csv.writer(out).writerows(cells);assert out.getvalue().encode('utf-8-sig')==raw
+  if 'prior' in k:
+   base=json.loads(values[d['prior_baseline']]);assert base['commit']==d['head'] and base['sha256']['docs/geshe_michael_roach_dictionary_changes.csv']==pin(raw)['sha256']
+   q=d['prior_command_directory'];c=json.loads(values[q+'/command.json']);x=json.loads(values[q+'/execution.json'])
+   assert c['argv']==x['argv']==['git','show',d['head']+':docs/geshe_michael_roach_dictionary_changes.csv'] and x['exit']==0
+   assert values[q+'/stdout.bin']==raw and values[q+'/exit.txt']==b'0\n' and not values[q+'/stderr.bin'] and not values[q+'/stdin.bin'];expect(raw,x['stdout'])
+  else:assert json.loads(values[d['current_build_proof']])['output_sha256']['docs/geshe_michael_roach_dictionary_changes.csv']==pin(raw)['sha256']
+ elif k=='archived_cmake_generated_header':
+  assert nums==[1,4,5] and raw==values[e['generated_original']]
+  assert lines[:6]==[b'# CMake generated Testfile for ',('# Source directory: '+e['source_directory']).encode(),('# Build directory: '+e['build_directory']).encode(),b'# ',b'# This file includes the relevant testing commands required for ',b'# testing this directory and lists subdirectories to be tested as well.']
+  links=[d['provenance_maps'][i] for i in e['provenance_link_indexes']];assert len(links)==2
+  assert links[0]['original']==e['generated_original'] and links[0]['copy']==links[1]['original'] and links[1]['copy']==e['root_record']['original']
+ elif k=='recorded_ctest_json_formatter':
+  q=e['event_directory'];c=json.loads(values[q+'/command.json']);x=json.loads(values[q+'/execution.json'])
+  assert c['argv']==x['argv']==e['argv'] and c['cwd']==x['cwd']==e['cwd'] and c['argv'][-1]=='--show-only=json-v1'
+  assert x['exit']==0 and values[q+'/exit.txt']==b'0\n' and not values[q+'/stdin.bin'] and not values[q+'/stderr.bin'] and values[q+'/stdout.bin']==raw
+  assert x['stdout_bytes']==len(raw) and x['stdout_sha256']==pin(raw)['sha256']
+  obj=json.loads(raw);assert obj['kind']=='ctestInfo' and obj['version']=={'major':1,'minor':0}
+  assert [t['name'] for t in obj['tests']]==e['test_names'] and len(e['test_names'])==17
+  assert nums==[i+1 for i,l in enumerate(lines) if re.fullmatch(rb' *"[A-Za-z][A-Za-z0-9]*" : ',l)]
+  assert all(lines[n].strip() in (b'{',b'[') for n in nums)
+ else:
+  assert k=='archived_prebatch_continuation_line' and nums==[2357] and raw.startswith(after)
+  lo,hi=e['historical_line_range'];assert [lo,hi]==[278102,278501]
+  assert raw[lo:hi]==before[lo:hi]==lines[2356] and pin(raw[lo:hi])['sha256']==hist['line_sha256']
+  assert lines[2356].endswith(b' ') and not lines[2356].endswith(b'  ')
+ judgments.append(dict(path=e['path'],kind=k,warnings=len(nums),pin=pin(raw),disposition='SOURCE_AND_LITERAL_OWNERSHIP_SUPPORTED; actual staged prepare/audit remains pending'))
+assert sum(counts.values())==130
+physical=json.loads(raws['current-physical-bindings.json']);assert len(physical['descriptors'])==3 and len(physical['exact_extents'])==16
+for e in physical['exact_extents']:
+ raw=Path(e['original']).read_bytes();expect(raw,e['source_pin']);lo,hi=e['byte_range'];expect(raw[lo:hi],e['excerpt_pin'])
+for r in maps:assert Path(r['original']).read_bytes()==(O/r['copy']).read_bytes()
+assert set(raws)=={str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()}
+for n,b in raws.items():assert (P/n).read_bytes()==b
+save('original-to-copy-manifest.json',maps);save('case-judgments.json',judgments)
+save('static-proof.json',dict(status='PASS_SOURCE_DATA_REVIEW_ONLY',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),frozen_preparation_files=316,complete_preserved_files=317,initial_frozen_members=149,full_original_pairs=360,review_copy_alias_records=len(maps),candidate=pin(raws['whitespace282.py']),descriptor=pin(raws['additional-root-descriptors.json']),source_freeze=pin(raws['freeze.json']),exact_six_changes_inverse_diffs=True,retained_assertions=75,nine_predicates_byte_exact=True,release_before_Run=True,release_has_no_output_Git_calls=True,source_evidence=65,provenance_links=4,actual_warnings=43903,actual_warning_files=69,additional_files=12,additional_warnings=130,additional_classes=dict(counts),complete_physical_originals=3,exact_physical_extents=16,target_imports=0,target_executions=0,Git_SQL_tests_calls=0,WT_B_writes=0))
+print(json.dumps(dict(status='PASS_SOURCE_DATA_REVIEW_ONLY',files=317,aliases=len(maps),extensions=12,warnings=130),indent=2))

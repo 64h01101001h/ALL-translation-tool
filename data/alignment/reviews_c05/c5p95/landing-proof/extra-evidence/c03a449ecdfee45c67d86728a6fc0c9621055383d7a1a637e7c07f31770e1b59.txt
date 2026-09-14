@@ -1,0 +1,10 @@
+from pathlib import Path
+import subprocess,sys,os,json,hashlib,datetime
+D=Path(__file__).resolve().parent;O=D/'preparation-caller';O.mkdir()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+a=[sys.executable,'-B',str(D/'prepare.py')];c={'argv':a,'cwd':str(D),'environment_overrides':{'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0'},'source':pin((D/'prepare.py').read_bytes())}
+(O/'command.json').write_text(json.dumps(c,indent=2)+'\n');(O/'stdin.bin').write_bytes(b'');start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+r=subprocess.run(a,cwd=D,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0'),input=b'',capture_output=True)
+for n,b in [('stdout.bin',r.stdout),('stderr.bin',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(O/n).write_bytes(b)
+(O/'execution.json').write_text(json.dumps({**c,'started':start,'finished':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':r.returncode,'stdout':pin(r.stdout),'stderr':pin(r.stderr)},indent=2)+'\n')
+sys.stdout.buffer.write(r.stdout);sys.stderr.buffer.write(r.stderr);raise SystemExit(r.returncode)

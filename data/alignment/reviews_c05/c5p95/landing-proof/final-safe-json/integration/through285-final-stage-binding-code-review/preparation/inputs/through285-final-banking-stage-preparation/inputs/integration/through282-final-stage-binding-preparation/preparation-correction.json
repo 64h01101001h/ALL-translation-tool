@@ -1,0 +1,6 @@
+{
+  "status": "PRESERVED_STATIC_REVIEW_HELPER_FAILURE",
+  "candidate_changed": false,
+  "failure": "The static AST check searched call strings for substring save and rejected saved.resolve, a read-only path resolution.",
+  "correction": "Check exact function/attribute operation names. Preserve existing copies by equality before reuse. No candidate function, Git or binding executed."
+}

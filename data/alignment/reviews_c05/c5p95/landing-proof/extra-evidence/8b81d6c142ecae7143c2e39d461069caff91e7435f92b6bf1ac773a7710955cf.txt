@@ -1,0 +1,50 @@
+--- compose-ordinary-bank-inventory-with-final-route-root.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-ordinary-banking-preparation/candidates/compose-ordinary-bank-inventory-root.py
+@@ -133,33 +133,6 @@
+     assert pin(read(source)) == {k: row[k] for k in ['bytes', 'sha256']}
+     assert str(source.resolve()) == row['resolved']
+     assert (os.readlink(source) if source.is_symlink() else None) == row['symlink']
+-# This one additional full copy preserves the existing generic record/alias.
+-# Its future automatic final-banker target must pre-exist the raw diagnostic.
+-route_source = I / 'through285-final-banking-stage-preparation/ordinary-required-final-banker-route.json'
+-route_raw = read(route_source)
+-assert pin(route_raw) == {'bytes': 1010, 'sha256': '72b5750f5977273d7dbf148c61249bc6cf750360334f3ca5b63265991622529e'}
+-required_route = json.loads(route_raw)['required_explicit_input']
+-assert required_route == dict(original=str(I / 'through285-final-banking-stage-preparation/final-candidates/bank_root_proofs_through285_final.py'), retention='bank', copy='root-helpers/bank_root_proofs_through285_final.py.txt', bytes=20978, sha256='2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f')
+-required_source = Path(required_route['original'])
+-assert required_source in paths and route_source in paths
+-required_raw = read(required_source)
+-assert pin(required_raw) == {k: required_route[k] for k in ('bytes', 'sha256')}
+-source_coverage = [row for row in coverage if row['original'] == str(required_source)]
+-assert len(source_coverage) == 1 and {k: source_coverage[0][k] for k in ('bytes', 'sha256')} == pin(required_raw)
+-assert str(required_source.resolve()) == source_coverage[0]['resolved']
+-assert (os.readlink(required_source) if required_source.is_symlink() else None) == source_coverage[0]['symlink']
+-generic_record_count = len(records)
+-generic_bank_targets = [row['copy'] for row in records if row['retention'] == 'bank']
+-assert len(generic_bank_targets) == len(set(generic_bank_targets)) == len(new_content)
+-assert required_route['copy'] not in generic_bank_targets
+-assert not (landed / 'landing-proof' / required_route['copy']).exists()
+-required_extra_copies = [dict(required_route)]
+-records.extend(required_extra_copies)
+-bank_targets = [row['copy'] for row in records if row['retention'] == 'bank']
+-assert len(bank_targets) == len(set(bank_targets)) == len(new_content) + len(required_extra_copies)
+-assert records[-1] == required_route and len(records) == generic_record_count + 1
+-assert read(required_source) == required_raw and read(route_source) == route_raw
+-assert paths == census(), 'Evidence tree changed during required extra-copy preparation'
+ O.mkdir()
+ for name, value in [
+     ('extra-inputs.json', records), ('coverage-and-exclusion-map.json', coverage),
+@@ -173,12 +146,7 @@
+     counts[row['coverage']] = counts.get(row['coverage'], 0) + 1
+ proof = dict(status='PASS_COMPLETE_ACTUAL_PRE_ORDINARY_INVENTORY', utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              head=BASE, sources=len(coverage), counts=counts, records=len(records),
+-             distinct_new_full_copies=len(new_content) + len(required_extra_copies),
+-             generic_distinct_new_full_copies=len(new_content), generic_records_before_required_route=generic_record_count,
+-             required_additional_full_copies=len(required_extra_copies), required_extra_copy_records=required_extra_copies,
+-             required_extra_copy_source_coverage=source_coverage,
+-             required_extra_copy_proof=dict(path=str(route_source), **pin(route_raw)),
+-             manifest=pin(read(O / 'extra-inputs.json')),
++             distinct_new_full_copies=len(new_content), manifest=pin(read(O / 'extra-inputs.json')),
+              required_reproduction_acceptance=pin(read(ACCEPT / 'proof.json')),
+              boundary='Every current B file and explicitly declared current through285 integration item plus eleven complete helper sources; only exact active caller directories are deferred. Full identical content may share a copy after complete-byte comparison. This is source inventory, not bank/stage/semantic/consumer acceptance.')
+ (O / 'proof.json').write_text(json.dumps(proof, indent=2) + '\n')

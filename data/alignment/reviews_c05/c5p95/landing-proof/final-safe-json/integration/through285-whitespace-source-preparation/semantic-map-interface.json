@@ -1,0 +1,25 @@
+{
+  "input_manifests": [
+    "original-copy-manifest.json",
+    "additional-original-copy-manifest.json"
+  ],
+  "input_row_counts": [
+    1276,
+    2
+  ],
+  "normalized_count": 1278,
+  "lossless": true,
+  "materialized_normalized_map": false,
+  "normalized_keys": [
+    "original",
+    "copy",
+    "content_addressed_copy",
+    "bytes",
+    "sha256",
+    "source_manifest",
+    "source_index",
+    "original_record"
+  ],
+  "copy_base": "actual --review directory",
+  "C16_bridge": "physical-source-descriptors.json[2].original_copy_link; runtime checks full frozen English source-map membership, original/resolved identity and complete bridge/object bytes"
+}

@@ -1,0 +1,13 @@
+--- prior/close-evidence.py.txt
++++ candidates/close-evidence.py.txt
+@@ -1,7 +1,6 @@
+-raise RuntimeError('SOURCE ONLY: actual independent retention totals, alias population and failure history must be bound after the released run')
+-PENDING_CHECKS_TOTAL = None
+-PENDING_INPUT_ALIASES = None
+-PENDING_RUNTIME_FAILURE_ATTEMPTS = None
++PENDING_CHECKS_TOTAL = 225597
++PENDING_INPUT_ALIASES = 3031
++PENDING_RUNTIME_FAILURE_ATTEMPTS = 1
+ from pathlib import Path
+ import collections,hashlib,json
+ R=Path(__file__).resolve().parent;A=R.parents[1];B=A/'C05-283-285';W=A.parent/'campaign-worktree'

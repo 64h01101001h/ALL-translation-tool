@@ -1,0 +1,52 @@
+{
+  "status": "FROZEN_SOURCE_ADAPTER_READY_FOR_ROOT_REVIEW",
+  "producer": "Codex",
+  "role": "Code/schema preparation; author of Tibetan originals, not semantic acceptance",
+  "runtime": {
+    "bytes": 16475,
+    "sha256": "945086f1b2f93b40f9fa8f59535f0c9fc29972f6d1c01beea3d6fddaf23ea4ac"
+  },
+  "contract": {
+    "bytes": 12106,
+    "sha256": "a292150ee05ef7d042c309cba5e82aa076487619f3ba223e3212e24aaaa4076a"
+  },
+  "runtime_byte_identical": true,
+  "query_controls": {
+    "status": "PASS_SOURCE_EXTRACTED_DESCRIPTOR_CONTROLS",
+    "controls": 685,
+    "expected_passes": 240,
+    "expected_rejections": 445,
+    "candidate_genuine_original_SELECT_acceptances": 140,
+    "actual_PRAGMA_rejections": 1,
+    "input_mutation": false,
+    "runtime_byte_identical": true,
+    "whole_source_inverse_and_AST_exact": true,
+    "all_original_and_base_source_copies_unchanged": true,
+    "candidate_module_imported": false,
+    "actual_config_validation_or_SQL_Git_generator_builder_suite_calls": false,
+    "scope": "Only the exact AST-extracted bind_query functions evaluated immutable original descriptor objects and synthetic fixtures. No SQL statements were executed."
+  },
+  "proof_count_controls": {
+    "status": "PASS_PROOF_SHAPE_SOURCE_EXTRACTED_CONTROLS",
+    "controls": 88,
+    "expected_passes": 6,
+    "expected_rejections": 82,
+    "full_current_proofs_checked_as_data": 3,
+    "full_historical_nested_proof_checked_as_data": 1,
+    "query_function_identical_to_prior_685_controls": true,
+    "full_chained_inverse_and_AST_exact_to_root_approved_base": true,
+    "real_validate_config_or_verifier_executed": false,
+    "candidate_module_imported": false,
+    "SQL_Git_generator_builder_suite_calls": false,
+    "semantic_acceptance": false
+  },
+  "total_controls": 773,
+  "original_copy_records_verified_unchanged": 96,
+  "complete_current_diff": "config_contract-complete.forward.diff",
+  "complete_inverse_diff": "config_contract-complete.inverse.diff",
+  "source_history": "Initial query-only contract is retained at history/query-only-config_contract.py.txt; its source proof, diffs, complete functions and 685 controls remain. The later root-requested direct-proof addition has separate full sources/maps/diffs/88 controls. No failed or discarded runtime exists.",
+  "actual_target_or_config_execution": false,
+  "SQL_Git_generators_builders_suite_calls": false,
+  "candidate_materialized": false,
+  "semantic_approval": false
+}

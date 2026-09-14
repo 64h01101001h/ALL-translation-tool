@@ -1,0 +1,230 @@
+"""Source-only adaptation and evidence packaging. Does not import or invoke the composer."""
+from pathlib import Path
+import ast
+import datetime
+import difflib
+import hashlib
+import json
+import os
+
+ROOT = Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+ART = ROOT / 'campaign-artifacts'
+I = ART / 'integration'
+B = ART / 'C05-280-282'
+OUT = I / 'through282-final-bank-inventory-preparation'
+PRIOR = I / 'through279-final-bank-inventory-preparation/compose-final-inputs.py'
+BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
+
+
+def require(ok, detail):
+    if not ok:
+        raise ValueError(detail)
+
+
+def pin(raw):
+    return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+
+def capture(path):
+    p = Path(path)
+    resolved = p.resolve(strict=True)
+    before = resolved.stat()
+    raw = resolved.read_bytes()
+    after = resolved.stat()
+    attrs = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+    require(resolved.is_file() and all(getattr(before, k) == getattr(after, k) for k in attrs), ('unstable input', str(p)))
+    require(len(raw) == after.st_size, ('short read', str(p)))
+    aliases = [{'path': str(q), 'target': os.readlink(q)} for q in (*reversed(p.parents), p) if q.is_symlink()]
+    return raw, {'original': str(p), 'resolved': str(resolved), 'symlinks': aliases, **pin(raw)}
+
+
+def write(name, raw):
+    p = OUT / name
+    require(p.is_relative_to(OUT), 'output escape')
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open('xb') as f:
+        f.write(raw)
+    return {'path': str(p), **pin(raw)}
+
+
+def save(name, value):
+    return write(name, (json.dumps(value, indent=2, ensure_ascii=True, allow_nan=False) + '\n').encode())
+
+
+def main():
+    require(os.environ.get('PYTHONDONTWRITEBYTECODE') == '1', 'bytecode must be disabled')
+    original, original_desc = capture(PRIOR)
+    old = original.decode('utf-8')
+    substitutions = [
+        ('through279', 'through282', 6),
+        ('through282-banking-ordinary', 'through282-banking-runs/ordinary', 1),
+        ('C05-277-279', 'C05-280-282', 1),
+        ('c5p93', 'c5p94', 1),
+        ('f114fcb7a5a899b939ffc948ae9fdbbb746541fa', BASE, 1),
+    ]
+    text = old
+    changes = []
+    for before, after, count in substitutions:
+        require(text.count(before) == count and after not in text, ('replacement cardinality/collision', before))
+        offsets = [n for n in range(len(text)) if text.startswith(before, n)]
+        text = text.replace(before, after)
+        changes.append({'before': before, 'after': after, 'occurrences': count, 'input_character_offsets': offsets})
+    reconstructed = text
+    for before, after, count in reversed(substitutions):
+        require(reconstructed.count(after) == count, ('inverse cardinality', after))
+        reconstructed = reconstructed.replace(after, before)
+    require(reconstructed.encode('utf-8') == original, 'inverse byte identity')
+    old_ast = ast.parse(old, filename=str(PRIOR))
+    new_ast = ast.parse(text, filename=str(OUT / 'compose-final-inputs.py'))
+    require(ast.dump(ast.parse(reconstructed), include_attributes=True) == ast.dump(old_ast, include_attributes=True), 'inverse AST identity')
+    old_functions = {n.name: ast.get_source_segment(old, n) for n in old_ast.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
+    new_functions = {n.name: ast.get_source_segment(text, n) for n in new_ast.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
+    require(list(old_functions) == list(new_functions), 'function set/order changed')
+    unchanged = [name for name in old_functions if old_functions[name] == new_functions[name]]
+    require(set(old_functions) - set(unchanged) == {'main'}, 'unexpected changed helper')
+    require_count = lambda tree: sum(isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == 'require' for n in ast.walk(tree))
+    require(require_count(old_ast) == require_count(new_ast), 'require population changed')
+    write('originals/compose-final-inputs.through279.py.txt', original)
+    candidate = write('compose-final-inputs.py', text.encode('utf-8'))
+    save('replacement-map.json', {'ordered_replacements': changes, 'inverse_order': 'reverse the recorded replacements', 'inverse_full_bytes_equal': True})
+    write('forward.diff', ''.join(difflib.unified_diff(old.splitlines(True), text.splitlines(True), fromfile=str(PRIOR), tofile=candidate['path'])).encode())
+    write('inverse.diff', ''.join(difflib.unified_diff(text.splitlines(True), old.splitlines(True), fromfile=candidate['path'], tofile=str(PRIOR))).encode())
+    fidelity = {'status': 'PASS_SOURCE_COMPARISON_ONLY', 'source_parse_only': True,
+                'candidate_imports': 0, 'candidate_invocations': 0, 'runtime_tests': 0,
+                'old_ast_nodes': sum(1 for _ in ast.walk(old_ast)), 'new_ast_nodes': sum(1 for _ in ast.walk(new_ast)),
+                'old_require_calls': require_count(old_ast), 'new_require_calls': require_count(new_ast),
+                'unchanged_full_function_sources': unchanged, 'changed_functions': ['main'],
+                'inverse_reconstructs_complete_original_bytes_and_AST': True,
+                'changes_are_only_recorded_literal_path_schema_and_baseline_replacements': True}
+    save('ast-fidelity.json', fidelity)
+
+    input_paths = {
+        'prior_composer': PRIOR,
+        'prior_scope': I / 'through279-final-bank-inventory-preparation/final-source-scope.json',
+        'ordinary_inventory_proof': I / 'through282-ordinary-bank-inventory/proof.json',
+        'ordinary_coverage': I / 'through282-ordinary-bank-inventory/coverage-and-exclusion-map.json',
+        'ordinary_extra_inputs': I / 'through282-ordinary-bank-inventory/extra-inputs.json',
+        'ordinary_result': I / 'through282-banking-runs/ordinary/result.json',
+        'ordinary_manifest': B / 'landing/root-proof-copy-manifest-before-whitespace.json',
+        'banker': B / 'bank_root_proofs_through282.py',
+    }
+    inputs = {}
+    bodies = {}
+    for name, path in input_paths.items():
+        bodies[name], inputs[name] = capture(path)
+    require(inputs['prior_composer'] == original_desc, 'prior changed during adaptation')
+    prior_scope = json.loads(bodies['prior_scope'])
+    inventory = json.loads(bodies['ordinary_inventory_proof'])
+    result = json.loads(bodies['ordinary_result'])
+    manifest = json.loads(bodies['ordinary_manifest'])
+    require(inventory['status'] == 'PASS_COMPLETE_ACTUAL_PRE_ORDINARY_INVENTORY' and inventory['head'] == BASE, 'actual inventory identity')
+    require(result['status'] == 'PASS' and result['phase'] == 'ordinary' and manifest['phase'] == 'ordinary', 'actual ordinary status')
+    require(result['manifest_pin'] == pin(bodies['ordinary_manifest']), 'actual manifest pin')
+    require(result['source_records'] == len(manifest['files']) and result['external_records'] == len(manifest['external_actual_bytes_retained']), 'actual ordinary counts')
+    require(inventory['sources'] == len(json.loads(bodies['ordinary_coverage'])) and inventory['records'] == len(json.loads(bodies['ordinary_extra_inputs'])), 'actual inventory counts')
+    save('measured-ordinary-context.json', {
+        'status': 'EXISTING_PROOF_COUNTS_AND_IDENTITIES_READ_ONLY_NOT_ORDINARY_REACCEPTANCE',
+        'coverage': inventory['sources'], 'input_records': inventory['records'],
+        'bank_records': result['source_records'], 'external_records': result['external_records'],
+        'bank_write_events_reported': len(result['writes']),
+        'evidence': {name: inputs[name] for name in ('ordinary_inventory_proof', 'ordinary_coverage', 'ordinary_extra_inputs', 'ordinary_result', 'ordinary_manifest')},
+        'composer_runtime_counts_remain_measured': True, 'full_ordinary_source_and_copy_revalidation_performed_here': False,
+    })
+    write('originals/ordinary-inventory-proof.json', bodies['ordinary_inventory_proof'])
+    write('originals/bank_root_proofs_through282.py.txt', bodies['banker'])
+    save('prior-scope-boundary-extract.json', {
+        'kind': 'FAITHFUL_SELECTED_FIELDS_FROM_EXTERNAL_FULL_PRIOR_SCOPE_NOT_A_CURRENT_SCOPE',
+        'source': inputs['prior_scope'],
+        'selected_fields': {name: prior_scope[name] for name in ('schema', 'baseline', 'controls', 'deferred_before_final_bank', 'later_external_after_final_bank')},
+        'root_names': [group['root'] for group in prior_scope['roots']],
+    })
+    controls = {
+        'ordinary_manifest': {'current_source': inputs['ordinary_manifest'], 'gate': 'phase ordinary; semantic_review_unchanged true; exact DEST before-whitespace manifest; every full ordinary source/copy and external original rechecked twice'},
+        'ordinary_coverage': {'current_source': inputs['ordinary_coverage'], 'gate': 'complete LIST; each unique logical path, full byte pin, resolved identity, link target and all named copies rechecked twice'},
+        'ordinary_extra_inputs': {'current_source': inputs['ordinary_extra_inputs'], 'gate': 'LIST at exact through282-ordinary-bank-inventory/extra-inputs.json; original full bytes stay unchanged'},
+        'audit_proof': {'current_source': None, 'gate': 'status PASS actual staged diagnostic reproduced and predicates verified; mode audit; baseline current HEAD; all_warnings_accounted_for true; git_diff_check_exit 2; semantic_approval false'},
+        'root_acceptance': {'current_source': None, 'gate': 'status PASS_ROOT_ACTUAL_PREPARE_AND_AUDIT_ACCEPTED; literal_warnings equals actual audit.warning_count; normalization false'},
+        'raw_diagnostic': {'current_source': None, 'gate': 'full exact bytes/hash equal audit raw_log_bytes/raw_log_sha256; exact original path equals raw_log_kept_external; retain full original externally'},
+        'raw_diagnostic_exit': {'current_source': None, 'gate': 'actual complete exit stream parses to audit.git_diff_check_exit, which remains 2'},
+        'runtime_freeze': {'current_source': None, 'gate': 'full actual current runtime freeze; verified descriptor before and after as in prior scope; composer does not interpret its internal schema'},
+        'banker': {'current_source': inputs['banker'], 'gate': 'full exact source; parse AST HISTORY literal; reproduce all unavoidable automatic source/target routes; do not import or execute source'},
+        'stage_verifier': {'current_source': None, 'gate': 'final reviewed and actually bound current source; verified full descriptor before and after as in prior scope; composer does not execute it or interpret its runtime bindings'},
+    }
+    require(set(controls) == set(prior_scope['controls']), 'prior full control contract changed')
+    observed_i_names = [str(p) for p in sorted(I.iterdir()) if p.name.startswith('through282')]
+    contract = {
+        'status': 'SOURCE_ONLY_CONTRACT_NOT_AN_EXECUTABLE_SCOPE_OR_RUNTIME_RELEASE',
+        'candidate_schema': 'through282-final-intake-v1', 'baseline': BASE,
+        'candidate_output': str(I / 'through282-final-bank-inventory'),
+        'descriptor_schema': {'exact_keys': ['original', 'resolved', 'symlinks', 'bytes', 'sha256'], 'symlinks': 'every symlink component in parent-to-leaf order, each exact path and os.readlink target; stable full bytes and before/after stat identity'},
+        'controls': controls,
+        'semantic_control_reads': ['ordinary_manifest', 'ordinary_coverage', 'ordinary_extra_inputs', 'audit_proof', 'root_acceptance', 'raw_diagnostic', 'raw_diagnostic_exit', 'banker'],
+        'additional_prior_controls_retained_and_verified': ['runtime_freeze', 'stage_verifier'],
+        'required_scope_keys': list(prior_scope),
+        'runtime_scope': None, 'runtime_scope_sha256': None,
+        'roots': None, 'individual_files': None, 'late_batch_files': None, 'automatic_inputs': None, 'landing_file_paths': None,
+        'source_census_requirements': [
+            'Freeze and enumerate every actual full current root selected for the scope; files in each root must be sorted exactly by absolute logical path, with every file descriptor. Do not infer current paths by renaming old scope paths.',
+            'Include the complete actual through282-banking-runs/ordinary root and its completed outer caller; complete actual through282-ordinary-bank-inventory and its completed caller wherever each exists.',
+            'Include all current through282 I evidence created after the ordinary initial census: initial stage and explicit pathspec preparations, reviews, releases, callers, stage/checkpoint outputs, complete diagnostic streams and command records, current whitespace preparation/review/runtime/prepare/audit/root release/root acceptance with their complete callers, final stage preparation/review/bindings/releases and full source helpers.',
+            'The observed I names are a discovery aid only. At the actual capture boundary perform a fresh complete through282 I census and explicitly assign every actual path to covered roots/individual files, retained prior coverage, deferred-before-final-bank, or later-external-after-final-bank. Preserve failed attempts and histories. Do not silently omit an unrecognized new path.',
+            'Reopen every ordinary coverage path and full original/copy; previously covered B nonlanding files remain byte-identical. Enumerate all current B minus landing. late_batch_files must be exactly sorted(current B nonlanding paths minus ordinary coverage paths): new paths only, no disappearance or in-place replacement of old B originals.',
+            'Capture the complete landing file-path enumeration and the banker automatic inputs in its exact order. Automatic routes include every landing file except the two root manifest files, complete HISTORY sources and both helper sources. Existing targets must be full-byte identical; a new automatic copied source must satisfy the unchanged clean-JSON predicate.',
+            'All logical aliases remain recorded. A duplicate resolved original may share a retention record only with exact full-byte identity. New copies are unaliased clean JSON smaller than 2000000 bytes; everything else retains full original bytes externally. No shortening, normalization, omitted source bodies or fabricated aliases.',
+            'Whole ordinary original/copy and alias checks, whole current B and landing checks, all controls and complete source-root enumerations run again before output. Current final populations remain actual measurements, never prior counts or current count constants.',
+        ],
+        'observed_current_i_names_only_not_a_frozen_census': observed_i_names,
+        'boundary_contract': {
+            'deferred_before_final_bank': 'At actual scope capture list exact then-existing paths requiring later root supplement: this preparation and its completed caller/freeze, its independent review/release, actual composer output and completed external caller, and any later root supplement inputs outside that initial snapshot. Existing paths included initially must not also be falsely claimed deferred. The current executable scope remains absent.',
+            'later_external_after_final_bank': 'Truthfully identify complete supplement invocation output and outer caller after its input snapshot, final banker internal outputs and full outer caller, final staged verifier/append/commit/root checkpoint outputs. They are not claimed captured before they exist. Anything newly banked after the final phase needs a separately reviewed supplemental boundary and fresh applicable stage verification.',
+            'self_banking': False,
+            'supplement_required_after_initial_composition': True,
+            'final_diagnostic_equality_still_required': True,
+            'data_then_docs': 'Final bank, stage PASS, DATA commit with 13 payload paths plus review/bank; then append and stage exactly the three ledgers, DOCS commit, and closure bind. No ledger paths in the DATA required set.',
+        },
+        'current_warning_count': None, 'current_warning_file_count': None, 'current_final_bank_count': None,
+        'candidate_execution_authorized_here': False,
+    }
+    save('scope-contract.json', contract)
+    command = {
+        'status': 'PLAN_ONLY_NOT_EXECUTED_OR_RELEASED',
+        'argv_template': ['python3', '-B', str(OUT / 'compose-final-inputs.py'), '--scope', '<ACTUAL_REVIEWED_SCOPE_ABSOLUTE_PATH>', '--scope-sha256', '<ACTUAL_SCOPE_SHA256>', '--output', str(I / 'through282-final-bank-inventory'), '--execute-reviewed-composition'],
+        'cwd': str(ROOT), 'environment_overrides': {'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONOPTIMIZE': '0'},
+        'prerequisites': ['independent full source/diff review', 'actual matching audit PASS and root acceptance with exact literal warning counts and raw exit 2', 'complete frozen current source scope with all 10 controls, exact aliases, ordinary copies, current B/landing and automatic routes', 'truthful deferred and later external boundaries', 'explicit root release'],
+        'caller': 'Actual outer caller path is not yet assigned; it must be external to the composer output and preserve exact argv/cwd/environment, stdout, stderr, exit, timing and all failed attempts. The caller is a truthful late boundary until complete.',
+        'after_composition': ['root checks full produced inputs and coverage, preserving actual streams', 'reviewed root supplement captures completed preparation/review/composer output/caller and other pre-final-bank additions', 'final banker captures exactly reviewed complete final inputs', 'actual final stage verifier establishes PASS before DATA commit', 'append three ledgers after DATA, DOCS commit, closure bind'],
+        'target_imports_or_invocations_in_this_preparation': 0,
+    }
+    save('command-plan.json', command)
+    write('scope-contract.md', ('''The current composer preserves the full prior implementation. Its only edits are the five recorded replacement classes: the through number, ordinary run directory, batch, page and baseline. The special ordinary path is replaced after the general through-number substitution; the inverse uses the reverse order. The complete inverse restores the original bytes and AST; every helper outside main is byte-identical.
+
+This package is source preparation, not an executable scope or permission to compose. The actual matching whitespace audit and root acceptance are pending, including the exact warning count and full raw diagnostic/exit evidence. The audit still requires exit 2. Runtime freeze and final stage verifier remain full pinned controls, as in the prior scope, even though the composer only verifies their identities. No null placeholder is offered as a valid runtime descriptor.
+
+The current ordinary proof and manifest/result were reopened and their reported populations checked against the complete parsed lists: 5,633 coverage paths, 5,575 explicit inputs, 1,343 bank records and 4,312 external records. This is contextual evidence, not a rerun or independent acceptance of the ordinary bank. These populations do not become expected constants in the composer. The exact external original paths and pins are retained without duplicating their large catalogs.
+
+Before composition, root must capture the complete actual current through282 evidence scope after all selected preparations, reviews, releases, diagnostic/audit runs and callers finish. scope-contract.json lists all ten controls and the whole-source, alias, automatic-route, B-minus-landing and repeated-boundary obligations. The observed current I names are discovery information only; they are not a complete frozen population. Old B files remain immutable and late B files must be new paths. Every failed attempt and full command transport remains in the census.
+
+The composition output and its active caller cannot claim to contain themselves. The initial scope must truthfully defer their completed evidence and the later root supplement boundary. Complete final banker/stage/commit outputs created after the final bank remain explicitly external at that boundary. A separately reviewed supplement captures all completed material needed before the final bank; anything banked later requires a fresh applicable boundary check. The ordered workflow remains final bank, stage PASS, DATA, three-ledger append, DOCS and closure bind. The DATA required set does not include the three ledgers.
+
+The candidate was parsed and compared only. No candidate import, target execution, Git, SQL, bank, stage, test, commit, B edit or worktree mutation occurred. Independent review and root release are still required.
+''').encode())
+    for name, desc in inputs.items():
+        _, current = capture(input_paths[name])
+        require(current == desc, ('input changed during source preparation', name))
+    save('source-pins.json', inputs)
+    proof = {'status': 'PASS_SOURCE_ONLY_PREPARATION_RUNTIME_SCOPE_AND_RELEASE_PENDING',
+             'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             'full_prior_source': original_desc, 'candidate': candidate,
+             'replacement_classes': len(changes), 'replacement_occurrences': sum(r['occurrences'] for r in changes),
+             'inverse_complete_byte_identity': True, 'syntax_parse_only': True,
+             'unchanged_helper_sources': unchanged, 'require_calls_preserved': require_count(old_ast),
+             'all_prior_scope_controls_preserved': list(controls),
+             'candidate_imports': 0, 'candidate_invocations': 0, 'git_sql_bank_stage_test_commit_invocations': 0,
+             'writes_only': str(OUT), 'runtime_scope': None,
+             'independent_review_required': True, 'actual_matching_whitespace_acceptance_required': True}
+    save('proof.json', proof)
+    print(json.dumps(proof, sort_keys=True))
+
+
+if __name__ == '__main__':
+    main()

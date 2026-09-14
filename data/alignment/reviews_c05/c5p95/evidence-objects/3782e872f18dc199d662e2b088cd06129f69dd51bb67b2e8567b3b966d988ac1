@@ -1,0 +1,97 @@
+[
+  {
+    "seq": 283,
+    "candidate_id": "C05-283-SCREEN-01",
+    "found": "five protuberances",
+    "expected": "replace five with four",
+    "origin": "Source-comparison screening question; neither original proposed a retained erratum.",
+    "refuted": true,
+    "retained": false,
+    "decisive_ground": "d",
+    "reason": "The five are the four limbs plus head in the preceding analogy. lnga literally supplies five; no missing or extra part is established.",
+    "five_grounds": {
+      "a": {
+        "checked": true,
+        "found_verbatim_in": "english",
+        "source_acip": "BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,",
+        "source_wylie": "byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na",
+        "source_english": "In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that, when the five are performing some actions, the person is performing some actions.",
+        "result": "The questioned English wording is present; ground(a) alone does not refute the screening question."
+      },
+      "b": {
+        "checked": true,
+        "witness": {
+          "course": "C15",
+          "seq": 428,
+          "acip": "BYAS PA LA KHO NA RE, SKYON MED DE, YAN LAG LNGA PO DE SKYES BU DE'I CHA SHAS YIN PAS, DES BYA BA BYAS PAS SKYES BU DES BYA BA BYAS PAR 'JOG DGOS PA'I PHYIR, ZER NA,",
+          "wylie": "byas pa la kho na re, skyon med de, yan lag lnga po de skyes bu de'i cha shas yin pas, des bya ba byas pas skyes bu des bya ba byas par 'jog dgos pa'i phyir, zer na",
+          "english": "In response to this line of reasoning, someone responds: No, there's no such problem here. The five protuberances are all parts of the one person, so we have to say that--when the five are performing some actions--the person is performing some actions."
+        },
+        "result": "Both Tibetan fields equal. English is equal for284/285;283 has the two preserved comma-space/double-hyphen differences. Digital comparison does not establish independent publication or ingestion lineage. Complete broader corpus queries are retained; no independent-publication claim is made."
+      },
+      "c": {
+        "checked": true,
+        "register": {
+          "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/docs/errata_register.json",
+          "bytes": 262017,
+          "sha256": "dc851e07fe913a904dc8b57f173f0bcbc4f13a884e65136f6560688576dc6c6c"
+        },
+        "result": "Reviewed registered converter/drop, footnote/caption/folio and glued-heading classes and segment references. These numeral/scope questions are not established instances of those classes and no duplicate is asserted."
+      },
+      "d": {
+        "checked": true,
+        "result": "The five are the four limbs plus head in the preceding analogy. lnga literally supplies five; no missing or extra part is established.",
+        "evidence": "Exact current context277–291, positive HGM lexical full objects and original C05 physical fields; no source or hgm_gloss correction."
+      },
+      "e": {
+        "checked": true,
+        "counts_rechecked": {
+          "exact_found_occurrences": 1,
+          "exact_C15_counterpart_rows": 1,
+          "target_source_rows": 3,
+          "english_punctuation_replacements_to_C15": 2
+        },
+        "result": "All counts recomputed from full reopened rows; no extrapolated publication count."
+      }
+    },
+    "retained_erratum": false
+  },
+  {
+    "seq": 283,
+    "candidate_id": "C05-283-SCREEN-02",
+    "found": "that, when",
+    "expected": "that--when",
+    "origin": "Observed C05/C15 punctuation difference, not an original erratum.",
+    "refuted": true,
+    "retained": false,
+    "decisive_ground": "d",
+    "reason": "Both punctuation choices are defensible parenthetical presentation; no source corruption or independent publication lineage is established.",
+    "five_grounds": {
+      "a": {
+        "checked": true,
+        "result": "The found and expected strings are present respectively in C05:283 and C15:428 English; complete ACIP/Wylie/English are retained in SCREEN-01."
+      },
+      "b": {
+        "checked": true,
+        "result": "Both Tibetan fields equal. Exactly two comma-space to double-hyphen substitutions recover the complete C15 English. This alone proves no independent publication or ingestion lineage."
+      },
+      "c": {
+        "checked": true,
+        "result": "No registered converter/footnote/caption/glued-heading class accounts for this ordinary punctuation choice; the full fixed register is retained."
+      },
+      "d": {
+        "checked": true,
+        "result": "The current comma-delimited when clause is grammatical; replacing punctuation is not a justified correction."
+      },
+      "e": {
+        "checked": true,
+        "counts_rechecked": {
+          "found_occurrences": 1,
+          "full_English_replacements": 2
+        },
+        "result": "Both substitutions and complete resulting string equality were checked, not inferred from snippets."
+      }
+    },
+    "retained_erratum": false
+  }
+]

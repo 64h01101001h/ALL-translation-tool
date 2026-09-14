@@ -1,0 +1,32 @@
+{
+  "source_query": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/reconciled/283/queries/065.json",
+  "uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "sql": "SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?) ORDER BY id",
+  "parameters": [
+    "zhing",
+    "zhing"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 16199,
+      "wylie": "zhing",
+      "tibetan": "ཞིང",
+      "tibetan_source": null,
+      "acip": "ZHING",
+      "pronunciation": "shing",
+      "pronunciation_source": null,
+      "sanskrit": "{LCh,L,MSA,MV}kṣetra; ca; vā; {LC}ātmā; {LC}mṛdvīkākṣetra; {LC}jinakṣetra; {LC}ikṣukṣetra; {LC}buddhakṣetra; {LC}sattvakṣetra; {LC}tīkṣṇā mahāntaśca; {LC}maṇḍala; {LC}kedāra; {LC}kṣiti; {LC}vistāra",
+      "hopkins_english": "(1) present and past participle; (2) field; ground; province; sphere; (3) connective particle; sometimes accompanying particle: and; or; {PH}field",
+      "hgm_gloss": "[\"paradise\", \"world (in rnam dag zhing: the Pure World)\"]",
+      "tier": "curated",
+      "hgm_source": null,
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 2838,
+      "raw": "{\"tibetan\": \"ཞིང\", \"wylie\": \"zhing\", \"wylie_variants\": [\"zhing\"], \"tenses\": null, \"sanskrit\": \"{LCh,L,MSA,MV}kṣetra; ca; vā; {LC}ātmā; {LC}mṛdvīkākṣetra; {LC}jinakṣetra; {LC}ikṣukṣetra; {LC}buddhakṣetra; {LC}sattvakṣetra; {LC}tīkṣṇā mahāntaśca; {LC}maṇḍala; {LC}kedāra; {LC}kṣiti; {LC}vistāra\", \"hopkins_english\": \"(1) present and past participle; (2) field; ground; province; sphere; (3) connective particle; sometimes accompanying particle: and; or; {PH}field\", \"hgm_gloss\": [\"paradise\", \"world (in rnam dag zhing: the Pure World)\"], \"hgm_evidence\": {\"tier\": \"curated\", \"id\": \"0032\", \"status\": \"verified\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"shing\", \"acip\": \"ZHING\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 2838}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

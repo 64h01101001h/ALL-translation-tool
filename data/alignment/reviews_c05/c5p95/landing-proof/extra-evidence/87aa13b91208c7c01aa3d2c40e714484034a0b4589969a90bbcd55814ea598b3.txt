@@ -1,0 +1,42 @@
+from pathlib import Path
+import json,hashlib,sys
+D=Path(__file__).resolve().parent;I=D.parent;A=I.parent;ROOT=A.parent;B=A/'C05-283-285';W=ROOT/'campaign-worktree'
+pin=lambda b:dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def ref(p):return {'path':str(p),**pin(p.read_bytes())}
+def save(n,obj):
+ with (D/n).open('x') as f:f.write(json.dumps(obj,indent=2)+'\n')
+roles={'spec':'spec.json','body':'body.html','tuples':'final-tuples.json','decisions':'final-decisions.json','omissions':'omissions.json','dispositions':'original-dispositions.json','errata_analysis':'errata-analysis.json','allowances':'proposed-head-allowances.json','errata':'errata.json','proof':'proof.json'}
+plan={'status':'PLAN_ONLY_NOT_VALID_RUNTIME_CONFIG','candidate_sources':{n:ref(D/n) for n in ['verify_reconciliation.py','config_contract.py']},'known_settings':{'schema':'reconciliation-277-v1','course':'C05','batch':str(B),'worktree':str(W),'sequences':[283,284,285],'baseline':ref(B/'baseline.json'),'baseline_commit':'fb9182dc6fca2230be3bc5169ba1288a22430280','page':'c5p95'},'proposed_shared_directory':str(B/'reconciled'),'current_source_snapshot':ref(B/'source.json'),'current_projected_context':ref(B/'context.json'),'source_resumption_proof':ref(I/'through285-source-resumption-check/proof.json'),'future_configuration_exact_keys':['schema','course','batch','worktree','shared_directory','sequences','baseline','status_capture','originals','reconciled','evidence','context','query_directories','queries','operator_role'],'pending_fields':{
+ 'status_capture':'Full actual recorded Git status --short bytes at the closed baseline; no old status stream relabeled.',
+ 'originals':'Six rows in Tibetan283/284/285 then English283/284/285 order. Pin each actual directory/freeze/spec/intended-spans.json after both completions; unknown counts remain absent.',
+ 'reconciled':{'rows':[{'seq':s,'directory':str(B/'reconciled'/str(s)),'freeze':'PENDING_FROZEN_RECONCILIATION','counts':'PENDING_MEASURED_spans_nulls_d5_nonnull','files':roles} for s in [283,284,285]],'counts_derivation':'Full final spec counts equal actual per-segment proof counts; no desired totals.'},
+ 'evidence':{
+  'reference_access':'Actual pinned complete reference access records.',
+  'copy_manifest':'Complete unique original records; copy paths relative to the shared directory, full original/copy bytes and all versions retained.',
+  'aliases':'Actual logical/resolved/symlink/full-pin records, no inferred author or role.',
+  'governing':'commit equals current baseline; actual_runs retain exact git show <baseline>:path argv,cwd,exit and complete copy bytes.',
+  'source_context':'Actual full SELECT * corpus rows, including raw; projected context.json is not a substitute.',
+  'physical':'All actual extents with original, verified_full_source_pin,start,end,bytes,sha256; complete matching copied excerpt and original full source.',
+  'original_identities':'Complete current original ID, full original_span/field_presence/parent/declared-occurrence/ranges from the actual six-original proof. Count derived from complete frozen originals.',
+  'original_proof':'Actual PASS six-original proof and six matching freeze pins; never copy the old execution as a current run.',
+  'source_snapshot':'Current exact source.json after frozen-current source equality is verified.',
+  'master':str(W/'data/hgm_dictionary_v27_2.json.gz'),
+  'corpus':str(W/'data/full_parallel_corpus_v32.json.gz'),
+  'database':str(W/'build/hgm_spine_v27_2.db'),
+  'generator':str(W/'tools/gen_alignment_page.py'),
+  'wrapper':'Actual reviewed read-only wrapper directly inside shared_directory; path and full pin pending.'},
+ 'context':{'sql':'SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq','suggested_parameters_from_current_projected_context':['C05',277,291],'full_rows_descriptor':'PENDING_ACTUAL_FROZEN_FULL_ROWS'},
+ 'query_directories':'Explicit exact inventory of genuine replay files under shared_directory; no directory assumption or count yet.',
+ 'queries':'Every genuine complete descriptor pinned and represented in copy_manifest; explicit file/descriptor/binding rows preserve SQL, parameters, rows and count presence.',
+ 'operator_role':'Actual future operator/producer provenance and reused context; no human inspection or semantic acceptance claim.',
+ 'head_allowances':'Pending real final canonical PAT hits and page95 tuple-bound licensor records; zero/nonzero not predetermined.',
+ 'errata':'Pending real five-ground outcomes; unchanged runtime supports only all refuted/empty retained list.'},
+ 'accepted_query_binding_kinds':['standalone','query_list','query_container_params','query_list_params','hgm_results'],
+ 'descriptor_constraints':{'query_container_params':'Top-level exact database,uri,queries; per-query params list; preserve count presence.', 'query_list_params':'Per-query params list; no invented parameters field in originals.', 'hgm_results':'parameters_per_term exactly [term,term]; matching SQL/results term; no invented count.'},
+ 'no_new_proposals_read':True,'no_config_validation_or_target_execution':True}
+save('configuration-source-plan.json',plan)
+contract={'status':'PENDING_ACTUAL_FROZEN_INPUTS_AND_ROOT_SOURCE_RELEASE','source':ref(D/'verify_reconciliation.py'),'contract':ref(D/'config_contract.py'),'future_config_path':str(I/'through285-reconciliation-verifier-config/config.json'),'future_config_sha256':'PENDING_ACTUAL_CONFIG_BYTES','future_output':str(I/'through285-root-reconciliation-verification-attempt01'),'argv_template':[sys.executable,'-B',str(D/'verify_reconciliation.py'),'--config',str(I/'through285-reconciliation-verifier-config/config.json'),'--config-sha256','PENDING_ACTUAL_CONFIG_SHA256','--output',str(I/'through285-root-reconciliation-verification-attempt01'),'--execute-reviewed-verification'],'environment_overrides':{'PYTHONDONTWRITEBYTECODE':'1','PYTHONOPTIMIZE':'0','GIT_OPTIONAL_LOCKS':'0'},'cwd':str(ROOT),'phase_order':['both original angles freeze; independently verify complete original identities/declarations and all six canonical inputs','independent reconciliation completes actual full evidence/decisions/generator proofs and freezes','derive actual config and any explicit schema projections with full source mapping; no changing original/final frozen bytes','review exact candidate, runtime contract and filled config; call only approved pure validate_config after actual inputs exist','separate root release pins config/source and fresh output; preserve full outer actual command streams','actual unchanged mechanical runtime runs once with full source/query/Git/final-canonical gates','root verifies actual outputs; separate semantic review and acceptance remain mandatory'],'output_containment':'Exact fresh absolute output with existing parent, disjoint from batch/worktree/shared/code-parent/config-parent; runtime itself enforces containment. No runtime files created now.','no_execution':True}
+save('executable-phase-contract.json',contract)
+files={str(p.relative_to(D)):pin(p.read_bytes()) for p in sorted(D.rglob('*')) if p.is_file() and p!=D/'freeze.json'}
+save('freeze.json',{'status':'FROZEN_SOURCE_AND_CONFIGURATION_PLAN_ONLY','files':files,'file_count':len(files),'bytes_total':sum(x['bytes'] for x in files.values()),'candidate_executions':0})
+print(json.dumps({'freeze':ref(D/'freeze.json'),'file_count':len(files),'bytes_total':sum(x['bytes'] for x in files.values())}))

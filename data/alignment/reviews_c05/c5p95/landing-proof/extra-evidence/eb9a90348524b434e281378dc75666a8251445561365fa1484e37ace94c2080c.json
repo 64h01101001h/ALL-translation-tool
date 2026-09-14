@@ -1,0 +1,67 @@
+[
+  {
+    "before": "through279",
+    "after": "through282",
+    "occurrences": 6
+  },
+  {
+    "before": "C05-277-279",
+    "after": "C05-280-282",
+    "occurrences": 1
+  },
+  {
+    "before": "whitespace279.py",
+    "after": "whitespace282.py",
+    "occurrences": 2
+  },
+  {
+    "before": "P=I/'through282-whitespace-actual-preparation'",
+    "after": "P=I/'through282-whitespace-source-preparation'",
+    "occurrences": 1
+  },
+  {
+    "before": "V=I/'through282-whitespace-actual-review'",
+    "after": "V=I/'through282-whitespace-code-review'",
+    "occurrences": 1
+  },
+  {
+    "before": "OLD=I/'through282-finalization-runtime'",
+    "after": "OLD=P",
+    "occurrences": 1
+  },
+  {
+    "before": "2c86e7c418204955b071ed972de598df60fa72cdfd0f3b473e1507d34557c1f9",
+    "after": "a200bda571b180338997a1ce31a6ee6b3775a50cad5cb1334cb6bca102eba2dd",
+    "occurrences": 1
+  },
+  {
+    "before": ",400,'complete-original-copy-manifest.json'",
+    "after": ",316,'complete-original-copy-manifest.json'",
+    "occurrences": 1
+  },
+  {
+    "before": "b4c493ae0f5a0f10e3a1d9f46d13c6effab71429c4452fdd0d9b4347c499538c",
+    "after": "028a4abc5a20b1f1e239d5c4b4bc6c516a3ae5b152ae1d8e076f2fd1bfb4a944",
+    "occurrences": 1
+  },
+  {
+    "before": ",419,'original-to-copy-manifest.json'",
+    "after": ",343,'original-to-copy-manifest.json'",
+    "occurrences": 1
+  },
+  {
+    "before": "assert str(src.resolve(strict=True))==row['resolved_original']",
+    "after": "assert src.is_absolute() and str(src.resolve(strict=True))==row.get('resolved_original',str(src.resolve(strict=True)))",
+    "occurrences": 1
+  },
+  {
+    "before": "==37 and len(d['evidence'])==260 and len(d['provenance_maps'])==127",
+    "after": "==12 and len(d['evidence'])==65 and len(d['provenance_maps'])==4",
+    "occurrences": 1
+  },
+  {
+    "before": "'verified_frozen_files':819,'original_copy_pairs':1675,'additional_evidence':260",
+    "after": "'verified_frozen_files':659,'original_copy_pairs':1037,'additional_evidence':65",
+    "occurrences": 1
+  }
+]

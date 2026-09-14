@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/prepare_sources.py", line 153, in <module>
+    finish('stage','verify_staged_through285.py',s)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-banking-stage-preparation/prepare_sources.py", line 85, in finish
+    assert inverse.count(r['new'])==r['count'],(key,'inverse ambiguity',r)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('stage', 'inverse ambiguity', {'old': '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b', 'new': '8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445', 'count': 1})

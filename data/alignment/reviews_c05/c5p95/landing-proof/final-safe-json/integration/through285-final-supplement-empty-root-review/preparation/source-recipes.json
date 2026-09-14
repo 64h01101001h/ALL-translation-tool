@@ -1,0 +1,38 @@
+[
+  {
+    "start": 0,
+    "old": "PENDING_ACTIVE_CALLER = '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-supplement-scope-caller'",
+    "new": "PENDING_ACTIVE_CALLER = '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-supplement-scope-caller-attempt02'",
+    "reason": "Retain failed original caller; use fresh actual retry."
+  },
+  {
+    "start": 8607,
+    "old": "assert active_caller==I/'through285-final-supplement-scope-caller'",
+    "new": "assert active_caller==I/'through285-final-supplement-scope-caller-attempt02'",
+    "reason": "Bind the actual fresh retry exclusion."
+  },
+  {
+    "start": 10311,
+    "old": "groups=[]\n",
+    "new": "EMPTY_ROOT_REGISTRY = {'/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-config-v2-root-source-review': {'device': 16777230, 'inode': 261219531, 'entries': []}, '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-root-produced-measurements': {'device': 16777230, 'inode': 261238387, 'entries': []}}\ndef verify_empty_root(root):\n root=Path(root);assert str(root) in EMPTY_ROOT_REGISTRY\n r=EMPTY_ROOT_REGISTRY[str(root)]\n assert root.is_dir() and not root.is_symlink() and list(root.iterdir())==[]\n st=root.stat();assert dict(device=st.st_dev,inode=st.st_ino,entries=[])==r\n return dict(root=str(root),**r)\n\ngroups=[]\n",
+    "reason": "Only two observed, completely empty existing directories are permitted."
+  },
+  {
+    "start": 11144,
+    "old": " paths=strict_intake_paths(root); assert paths\n",
+    "new": " paths=strict_intake_paths(root)\n if not paths:verify_empty_root(root)\n",
+    "reason": "Keep empty roots explicitly represented by files=[], with exact identity check."
+  },
+  {
+    "start": 12540,
+    "old": "scope=dict(directory_aliases=directory_alias_descriptors(),schema=",
+    "new": "assert {g['root'] for g in groups if not g['files']}==set(EMPTY_ROOT_REGISTRY)\nempty_roots=[verify_empty_root(p) for p in sorted(EMPTY_ROOT_REGISTRY)]\nscope=dict(empty_roots=empty_roots,directory_aliases=directory_alias_descriptors(),schema=",
+    "reason": "Capture exact empty-root identities separately; omit no root."
+  },
+  {
+    "start": 14061,
+    "old": "O.mkdir();raw=(json.dumps(scope,indent=2)+'\\n').encode();",
+    "new": "assert [verify_empty_root(p) for p in sorted(EMPTY_ROOT_REGISTRY)]==scope['empty_roots']\nO.mkdir();raw=(json.dumps(scope,indent=2)+'\\n').encode();",
+    "reason": "Recheck both empty identities and entries immediately before snapshot write."
+  }
+]

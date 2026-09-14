@@ -1,0 +1,34 @@
+{
+  "name": "33-entry",
+  "database": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+  "uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "connection_initialization_sql": "PRAGMA query_only=ON",
+  "sql": "SELECT * FROM entries WHERE wylie = ? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie = ?) ORDER BY id",
+  "parameters": [
+    "chu",
+    "chu"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 4459,
+      "wylie": "chu",
+      "tibetan": "ཆུ",
+      "tibetan_source": null,
+      "acip": "CHU",
+      "pronunciation": "chu",
+      "pronunciation_source": "GMR card (C04 Language Study Guide)",
+      "sanskrit": "{LCh,C,L,MSA}ap; {LCh,C,MSA}udaka; {C} daka (=udaka); {MSA}uda; {MSA}jala; {MSA} toya; {MSA}nadī; {MSA}vāri; {C}pānīya; āp; {LC}abdhātu; {LC}ambu; {LC}ambhas; {LC}udakārṇava; {LC}gandhodaka; {LC}candra; {LC}lavaṇajala; {LC}payaḥ; {LC}pravāha; {LC}mūtra; {LC}sarit; {LC}salila; {LC}salilodaka; {LC}abda; {LC}aindramambu; {LC}amṛta, arṇa, uda; {LC}nārikelodaka; {LC}śuci haṃsodakaṃ; {LC}sukhodaka; {LC}ogha; {LC}kilāla, kṣīra; {LC}go; {LC}drava; {LC}dhārā; {LC}nimnagā; {LC}nīra; {LC}payas; {LC}pāthas; {LC}rasa; {LC}varuṇa; {LC}khapura; {LC}gāṅga; {LC}sāmudra; {LC}mastu",
+      "hopkins_english": "water; {PH}water; {C}moisture; streams of cold water",
+      "hgm_gloss": "[\"water\", \"waters\", \"water ... water\", \"pool\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 713,
+      "raw": "{\"tibetan\": \"ཆུ\", \"wylie\": \"chu\", \"wylie_variants\": [\"chu\"], \"tenses\": null, \"sanskrit\": \"{LCh,C,L,MSA}ap; {LCh,C,MSA}udaka; {C} daka (=udaka); {MSA}uda; {MSA}jala; {MSA} toya; {MSA}nadī; {MSA}vāri; {C}pānīya; āp; {LC}abdhātu; {LC}ambu; {LC}ambhas; {LC}udakārṇava; {LC}gandhodaka; {LC}candra; {LC}lavaṇajala; {LC}payaḥ; {LC}pravāha; {LC}mūtra; {LC}sarit; {LC}salila; {LC}salilodaka; {LC}abda; {LC}aindramambu; {LC}amṛta, arṇa, uda; {LC}nārikelodaka; {LC}śuci haṃsodakaṃ; {LC}sukhodaka; {LC}ogha; {LC}kilāla, kṣīra; {LC}go; {LC}drava; {LC}dhārā; {LC}nimnagā; {LC}nīra; {LC}payas; {LC}pāthas; {LC}rasa; {LC}varuṇa; {LC}khapura; {LC}gāṅga; {LC}sāmudra; {LC}mastu\", \"hopkins_english\": \"water; {PH}water; {C}moisture; streams of cold water\", \"hgm_gloss\": [\"water\", \"waters\", \"water ... water\", \"pool\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"chu\", \"acip\": \"CHU\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 713}, \"pronunciation_source\": \"GMR card (C04 Language Study Guide)\", \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

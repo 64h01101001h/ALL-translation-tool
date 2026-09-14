@@ -1,0 +1,224 @@
+--- guarded-base/whitespace282.py
++++ whitespace282.py
+@@ -5,10 +5,7 @@
+ Neither mode stages, banks, normalizes source, or supplies semantic approval.
+ """
+ 
+-# PREPARATION ONLY: actual ordinary bank, ledgers and staged diagnostics are pending.
+-PENDING_BINDINGS = {'ordinary_bank_manifest': None, 'ordinary_bank_file_count': None, 'ordinary_bank_external_count': None, 'ordinary_bank_write_run': None, 'final_bank_manifest': None, 'final_bank_write_run': None, 'final_bank_file_count': None, 'three_ledger_paths_and_approved_before_after_bytes': None, 'three_ledger_staging_contract_review': None, 'raw_untracked_before_banking_full_stream_and_caller': None, 'actual_index_and_unstaged_boundary': None, 'actual_raw_diagnostic_full_stream_and_caller': None, 'actual_staged_path_set_and_count': None, 'physical_source_descriptors_and_original_aliases': None, 'additional_warning_descriptor_contract': None, 'prior_closure_proof_relative': None, 'prior_closure_expected_status': None, 'whitespace_preparation_freeze_sha256': None, 'whitespace_preparation_file_count': None, 'whitespace_review_freeze_sha256': None, 'whitespace_review_file_count': None, 'additional_descriptor_entry_count': None, 'additional_descriptor_evidence_count': None, 'additional_descriptor_provenance_count': None, 'verified_frozen_file_count': None, 'original_copy_pair_count': None, 'warning_count': None, 'warning_file_count': None, 'raw_diagnostic_exit': None, 'independent_code_review_and_actual_runtime_release': None}
+-if any(value is None for value in PENDING_BINDINGS.values()):
+-    raise RuntimeError('Unbound through282 preparation; no staging, bank, Git, whitespace or verification runtime is released')
++# Runtime requires exact independently reviewed source release before Run.
+ 
+ from pathlib import Path
+ from collections import defaultdict, Counter
+@@ -145,6 +142,169 @@
+         assert matches, ('No complete original physical line', number)
+         witnesses[str(number)] = matches
+     return dict(kind='physical_source_lines', line_witnesses=witnesses)
++
++ADDITIONAL_DESCRIPTOR_PIN = {'bytes': 69418, 'sha256': '7fed8e2eabd5a2766a04d8823dfacb16d333961b4349dc258fe4bd4631e3906d'}
++
++def require_runtime_release(args):
++    """Require the reviewed ordinary-bank/raw-diagnostic phase, before Run writes."""
++    release = json.loads((HERE/'root-release.json').read_bytes())
++    assert release['status'] == 'PASS_ROOT_CODE_PROVENANCE_RELEASE_ACTUAL_PREPARE_AUDIT_PENDING'
++    assert Path(release['materialized_runtime']).resolve(strict=True) == HERE.resolve()
++    assert release['worktree_or_index_mutated'] is False and release['source_normalization'] is False
++    assert release['production_calls'] == release['prepare_audit_calls'] == 0
++    required = ['whitespace282.py', 'additional-root-descriptors.json', 'physical-source-descriptors.json',
++                'current-inputs/semantic-review/freeze.json', 'current-inputs/semantic-review/original-to-copy-manifest.json']
++    for name in required:
++        rows = [row for row in release['files'] if row['copy'] == name]
++        assert len(rows) == 1
++        raw = (HERE/relative(name)).read_bytes(); check_pin(raw, rows[0])
++        assert Path(rows[0]['original']).read_bytes() == raw
++    reviews = []
++    for dirname, record in release['inputs'].items():
++        directory = Path(dirname); check_pin((directory/'freeze.json').read_bytes(), record['freeze'])
++        path = directory/'review.json'
++        if path.is_file() and pin(path.read_bytes()) == release['approved_review']:
++            reviews.append(json.loads(path.read_bytes()))
++    assert len(reviews) == 1 and reviews[0]['spec_verdict'] == reviews[0]['quality_verdict'] == 'APPROVE'
++    assert reviews[0]['open_findings'] == []
++    check_pin((HERE/'whitespace282.py').read_bytes(), reviews[0]['candidate'])
++    check_pin((HERE/'additional-root-descriptors.json').read_bytes(), reviews[0]['descriptor'])
++    descriptor_raw = (HERE/'additional-root-descriptors.json').read_bytes()
++    check_pin(descriptor_raw, ADDITIONAL_DESCRIPTOR_PIN)
++    data = json.loads(descriptor_raw); assert data['head'] == HEAD
++    check_pin(Path(args.root_manifest).read_bytes(), data['root_manifest'])
++    check_pin(Path(args.physical_descriptors).read_bytes(), data['physical_descriptors'])
++    for argument, role in [('raw_log','stdout'),('raw_stderr','stderr'),('raw_exit','exit'),('raw_command','command')]:
++        path = Path(getattr(args, argument)); item = data['raw_capture'][role]
++        assert path.resolve(strict=True) == Path(item['path']).resolve(strict=True)
++        check_pin(path.read_bytes(), item)
++
++
++def load_additional_root(read, descriptor_raw, root_raw, log):
++    check_pin(descriptor_raw, ADDITIONAL_DESCRIPTOR_PIN)
++    data = json.loads(descriptor_raw)
++    assert data['head'] == HEAD
++    check_pin(root_raw, data['root_manifest']); check_pin(log, data['raw_log'])
++    assert len(data['entries']) == 12 and len({e['path'] for e in data['entries']}) == 12
++    actual = parse_log(log)
++    assert all(entry['path'] in actual and entry['issues'] == actual[entry['path']] for entry in data['entries'])
++    values = {}
++    for item in data['evidence']:
++        path = Path(item['path']); assert path.is_absolute() and path.resolve(strict=True) == Path(item['resolved_path'])
++        raw = read(path); check_pin(raw, item)
++        copy = HERE / relative(item['runtime_copy'])
++        assert copy.resolve().is_relative_to(HERE.resolve())
++        assert read(copy) == raw
++        assert item['path'] not in values; values[item['path']] = raw
++    for link in data['provenance_maps']:
++        rows = json.loads(values[link['manifest']]); rec = link['record']
++        assert isinstance(rows, list) and rec in rows
++        assert rec.get('original',rec.get('path')) == link['original']
++        assert str(Path(link['manifest']).parent / relative(rec['copy'])) == link['copy']
++        assert values[link['original']] == values[link['copy']]
++        check_pin(values[link['original']], rec)
++        if 'freeze' in link:
++            frozen = json.loads(values[link['freeze']])
++            check_pin(values[link['copy']], frozen['files'][rec['copy']])
++    capture = data['raw_capture']
++    command = json.loads(values[capture['command']['path']]); execution = json.loads(values[capture['execution']['path']])
++    assert command['argv'] == execution['argv'] == ['git','diff','--cached','--check']
++    assert command['cwd'] == execution['cwd'] and Path(command['cwd']).is_absolute()
++    assert execution['exit'] == 2 and values[capture['exit']['path']] == b'2\n'
++    assert not values[capture['stdin']['path']] and not values[capture['stderr']['path']]
++    assert values[capture['stdout']['path']] == log
++    assert execution['stdout_bytes'] == len(log) and execution['stdout_sha256'] == digest(log)
++    assert execution['stderr_bytes'] == 0 and execution['stderr_sha256'] == digest(b'')
++    return data, values
++
++
++def additional_root_predicate(raw, grouped, path, rec, data, values, build, physical):
++    """Only the twelve actual files, with exact source/event and literal ownership."""
++    entries = [e for e in data['entries'] if e['path'] == path]
++    assert len(entries) == 1
++    entry = entries[0]
++    assert rec == entry['root_record'] and grouped == entry['issues']
++    check_pin(raw, entry); literal_warnings(raw, grouped)
++    assert raw == values[rec['original']]
++    kind = entry['kind']; lines = raw.split(b'\n')
++    if kind in ('archived_prior_canonical_csv_crlf', 'archived_current_canonical_csv_crlf'):
++        csv_path = 'docs/geshe_michael_roach_dictionary_changes.csv'
++        assert raw == values[entry['csv_source']]
++        if kind == 'archived_prior_canonical_csv_crlf':
++            baseline = json.loads(values[data['prior_baseline']]); assert baseline['commit'] == HEAD
++            assert digest(raw) == baseline['sha256'][csv_path]
++            directory = Path(data['prior_command_directory'])
++            command = json.loads(values[str(directory/'command.json')]); execution = json.loads(values[str(directory/'execution.json')])
++            assert command['argv'] == execution['argv'] == ['git','show',HEAD+':'+csv_path]
++            assert command['cwd'] == execution['cwd'] and Path(command['cwd']).is_absolute()
++            assert execution['exit'] == 0 and values[str(directory/'exit.txt')] == b'0\n'
++            assert values[str(directory/'stdin.bin')] == values[str(directory/'stderr.bin')] == b''
++            assert values[str(directory/'stdout.bin')] == raw
++            check_pin(raw, execution['stdout']); check_pin(b'', execution['stderr'])
++        else:
++            assert build == json.loads(values[data['current_build_proof']])
++            assert digest(raw) == build['output_sha256'][csv_path]
++        assert raw.startswith(b'\xef\xbb\xbf') and raw.endswith(b'\r\n')
++        assert grouped == {'trailing whitespace.': list(range(1,len(lines)))}
++        assert all(line.endswith(b'\r') for line in lines[:-1]) and lines[-1] == b''
++        import csv, io
++        rows = list(csv.reader(io.StringIO(raw.decode('utf-8-sig'),newline='')))
++        assert rows[0] == ['change','wylie','acip','tibetan_generated','english','kind','depth','occurrences','courses','refs']
++        assert all(len(row) == 10 for row in rows)
++        output = io.StringIO(newline=''); csv.writer(output,quoting=csv.QUOTE_MINIMAL).writerows(rows)
++        assert csv.excel.lineterminator == '\r\n' and output.getvalue().encode('utf-8-sig') == raw
++        return dict(kind=kind,canonical_source=entry['csv_source'],logical_csv_path=csv_path,complete_csv_roundtrip=True)
++    if kind == 'archived_cmake_generated_header':
++        assert raw == values[entry['generated_original']]
++        assert grouped == {'trailing whitespace.':[1,4,5]}
++        header = [b'# CMake generated Testfile for ', ('# Source directory: '+entry['source_directory']).encode(),
++                  ('# Build directory: '+entry['build_directory']).encode(), b'# ',
++                  b'# This file includes the relevant testing commands required for ',
++                  b'# testing this directory and lists subdirectories to be tested as well.']
++        assert lines[:6] == header and Path(entry['source_directory']).is_absolute() and Path(entry['build_directory']).is_absolute()
++        assert Path(entry['generated_original']) == Path(entry['build_directory'])/'CTestTestfile.cmake'
++        assert all(line and line.endswith(b' ') and not line.endswith(b'  ') for line in (lines[0],lines[3],lines[4]))
++        assert entry['provenance_link_indexes'] and all(data['provenance_maps'][n]['record']['sha256'] == digest(raw) for n in entry['provenance_link_indexes'])
++        return dict(kind=kind,generated_original=entry['generated_original'],source_directory=entry['source_directory'],build_directory=entry['build_directory'],literal_header_lines=[1,4,5],provenance_links=entry['provenance_link_indexes'])
++    if kind == 'recorded_ctest_json_formatter':
++        directory = Path(entry['event_directory'])
++        command = json.loads(values[str(directory/'command.json')]); execution = json.loads(values[str(directory/'execution.json')])
++        assert command['argv'] == execution['argv'] == entry['argv']
++        assert command['cwd'] == execution['cwd'] == entry['cwd']
++        assert command['argv'][0] == 'ctest' and command['argv'][-1] == '--show-only=json-v1'
++        assert execution['exit'] == 0 and values[str(directory/'exit.txt')] == b'0\n'
++        assert values[str(directory/'stdout.bin')] == raw and not values[str(directory/'stderr.bin')] and not values[str(directory/'stdin.bin')]
++        assert execution['stdout_bytes'] == len(raw) and execution['stdout_sha256'] == digest(raw)
++        assert execution['stderr_bytes'] == 0 and execution['stderr_sha256'] == digest(b'')
++        document = json.loads(raw); assert document['kind'] == 'ctestInfo' and document['version'] == {'major':1,'minor':0}
++        assert len(document['tests']) == 17 and {test['name'] for test in document['tests']} == set(entry['test_names'])
++        assert set(grouped) == {'trailing whitespace.'}
++        for number in grouped['trailing whitespace.']:
++            assert re.fullmatch(rb' *"[A-Za-z][A-Za-z0-9]*" : ',lines[number-1])
++            assert number < len(lines) and lines[number].strip() in (b'{',b'[')
++        all_separators = [i+1 for i,line in enumerate(lines) if re.fullmatch(rb' *"[A-Za-z][A-Za-z0-9]*" : ',line)]
++        assert grouped['trailing whitespace.'] == all_separators
++        return dict(kind=kind,event_directory=str(directory),stdout=pin(raw),execution=pin(values[str(directory/'execution.json')]),formatter_separator_lines=all_separators,ctest_reexecuted=False)
++    assert kind == 'archived_prebatch_continuation_line'
++    history = data['continuation_history']; before = values[history['before']]; after = values[history['after']]
++    proof = json.loads(values[history['proof']]); closure = json.loads(values[history['closure']])
++    assert proof['status'] == 'PASS_CLOSED279_AND_ONE_MINUTE_STATUS_CHECKPOINT'
++    assert proof['next_batch_started'] is False and proof['continuation_prior_bytes_preserved_as_prefix'] is True
++    assert proof['recorded_at'] == '2026-09-14T00:08:02.004479+00:00'
++    assert closure['final_head'] == HEAD and closure['verified_segments'] == 279
++    check_pin(values[history['closure']],proof['closure'])
++    before_record = [r for r in proof['before'] if r['path'] == history['before']]; assert len(before_record) == 1
++    after_record = [r for r in proof['after'] if r['path'].endswith('/CAMPAIGN_CONTINUATION.md')]; assert len(after_record) == 1
++    check_pin(before,before_record[0]); check_pin(after,after_record[0])
++    assert after.startswith(before) and raw.startswith(after)
++    assert grouped == {'trailing whitespace.':[2357]}
++    source_lines = before.split(b'\n'); number = 2357; payload = source_lines[number-1]
++    assert payload == lines[number-1] and payload.endswith(b' ') and not payload.endswith(b'  ')
++    lo = sum(len(line)+1 for line in source_lines[:number-1]); hi = lo+len(payload)
++    assert [lo,hi] == entry['historical_line_range'] and before[lo:hi] == raw[lo:hi] == payload
++    assert digest(payload) == history['line_sha256']
++    return dict(kind=kind,historical_preimage=history['before'],historical_checkpoint=history['proof'],line=number,byte_range=[lo,hi],exact_prebatch_prefix=True,boundary='Recorded pre-batch external checkpoint; not asserted to be a Git blob or semantic source')
++
+ 
+ class Run:
+     def __init__(self, args):
+@@ -236,6 +396,8 @@
+             assert prepared['head'] == HEAD and prepared['raw_log'] == pin(log) and prepared['review_freeze'] == pin(freeze_raw) and prepared['root_manifest'] == pin(root_raw)
+         else: assert not self.a.prepared
+         build = self.obj(self.a.build_proof); assert build['status'] == 'PASS' and build['baseline_commit'] == HEAD and build['page'] == 94 and build['first_segment'] == 280
++        additional, additional_values = load_additional_root(self.read, self.read(HERE/'additional-root-descriptors.json'), root_raw, log)
++        additional_paths_used = set()
+         for path, grouped in issues.items():
+             raw = self.staged(path); lines = literal_warnings(raw,grouped); witness = {}
+             if path in CSV:
+@@ -247,8 +409,12 @@
+                 if rel.startswith('landing-proof/'):
+                     key = rel[len('landing-proof/'):]; assert key in root_rows
+                     rec = root_rows[key]; check_pin(raw,rec); original = self.read(rec['original']); assert original == raw
+-                    # Only old ordinary literal categories; no guessed future root log/print exception.
+-                    witness = dict(kind=ordinary_predicate(raw,grouped),root_original_record=rec)
++                    try: kind = ordinary_predicate(raw,grouped)
++                    except AssertionError:
++                        witness = additional_root_predicate(raw,grouped,path,rec,additional,additional_values,build,physical)
++                        witness['root_original_record'] = rec
++                        additional_paths_used.add(path)
++                    else: witness = dict(kind=kind,root_original_record=rec)
+                 else:
+                     assert raw == frozen_read(rel)
+                     try: kind = ordinary_predicate(raw,grouped)
+@@ -258,6 +424,7 @@
+             record = dict(**pin(raw),issues=grouped,witness=witness)
+             if self.a.mode == 'audit': assert record == prepared['files'][path]
+             self.checks[path] = record; self.save('partial-classification.json',self.checks)
++        assert additional_paths_used == {entry['path'] for entry in additional['entries']}
+         if self.a.mode == 'audit': assert set(self.checks) == set(prepared['files'])
+         assert self.git('ls-files','--stage','-z')[0] == index
+         assert self.git('rev-parse','HEAD')[0].decode().strip() == head
+@@ -280,6 +447,7 @@
+     parser.add_argument('--prepared')
+     args = parser.parse_args()
+     assert __debug__, 'Optimized Python forbidden'
++    require_runtime_release(args)
+     run = Run(args)
+     try: result = run.run()
+     except BaseException:

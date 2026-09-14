@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-14T06:03:18.399952+00:00",
+  "head": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+  "manifest": {
+    "bytes": 2357,
+    "sha256": "3272caf51c03883b5660bbf5b72292903411f61b9d217cbfb3193b2dc5587706"
+  },
+  "source_proof": {
+    "bytes": 16269,
+    "sha256": "a375dd262be0872402888b3d51ee550b3c14a02db9a22721291aaa33e8b37c44"
+  },
+  "payload_files": 13,
+  "payload_bytes": 41185332,
+  "full_frozen_current_payload_pairs_verified": true,
+  "all_proof_inputs_pinned": true,
+  "actual_tests": 17,
+  "actual_test_seconds": 11.25,
+  "only_expected_tracked_payload_paths": true,
+  "tracked_changed_paths": 11,
+  "actual_untracked_paths": 2394,
+  "untracked_snapshot": {
+    "bytes": 237981,
+    "sha256": "997a5f6038cbecb61600a3913292439413f55c8f2555da6d17424e6c0f72f1cb"
+  },
+  "commands": [
+    {
+      "label": "head",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "exit": 0
+    },
+    {
+      "label": "tracked_names",
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "-z"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "exit": 0
+    },
+    {
+      "label": "cached_names",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-only",
+        "-z"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "exit": 0
+    }
+  ],
+  "index_empty": true,
+  "independent_reproduction_completed": false
+}

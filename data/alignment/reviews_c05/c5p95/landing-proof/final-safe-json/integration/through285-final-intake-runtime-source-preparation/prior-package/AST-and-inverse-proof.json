@@ -1,0 +1,92 @@
+[
+  {
+    "name": "capture-finished-scope.py",
+    "prior": {
+      "bytes": 8554,
+      "sha256": "d8493062801bcd76620971bd5351e8e4925c9d60ae1efa92be624f0bc324a9e7"
+    },
+    "candidate": {
+      "bytes": 11547,
+      "sha256": "684eb7aa9c055112ddbd5f198394a9f0de59da711b464b534530886fa45152b6"
+    },
+    "old_functions": 4,
+    "unchanged_functions": [
+      "pin",
+      "desc",
+      "tree"
+    ],
+    "changed_functions": [
+      "current_i"
+    ],
+    "full_forward_inverse_and_AST_exact": true,
+    "target_execution": false
+  },
+  {
+    "name": "assemble-final-supplement.py",
+    "prior": {
+      "bytes": 10824,
+      "sha256": "d7fdc1259c7ee59d067c984995f7c0ec34bec2ce52efeb446bd978c760c75ddb"
+    },
+    "candidate": {
+      "bytes": 10979,
+      "sha256": "d75d6697e4251cfdb2aaaa586078c468864785e68a98230ea15b05e166a7b181"
+    },
+    "old_functions": 1,
+    "unchanged_functions": [],
+    "changed_functions": [
+      "main"
+    ],
+    "full_forward_inverse_and_AST_exact": true,
+    "target_execution": false
+  },
+  {
+    "name": "capture-final285-supplement-scope-root.py",
+    "prior": {
+      "bytes": 6353,
+      "sha256": "b6db9b677715dde17e722493bd6efd26869f14d7651600bb1301b67d584e1032"
+    },
+    "candidate": {
+      "bytes": 6658,
+      "sha256": "6af538aafdab5cbdaf8e568b6c25139953c89639a0fafcc33e8dade7d349d37c"
+    },
+    "old_functions": 2,
+    "unchanged_functions": [
+      "pin",
+      "desc"
+    ],
+    "changed_functions": [],
+    "full_forward_inverse_and_AST_exact": true,
+    "target_execution": false
+  },
+  {
+    "name": "compose-final-inputs.py",
+    "prior": {
+      "bytes": 17928,
+      "sha256": "1401fb175809ad7b82465797f70c81e36f1df1e4f458ca5e9e294c22332e03da"
+    },
+    "candidate": {
+      "bytes": 20558,
+      "sha256": "64eb4c419b1b1d056ea68034a867fb809dd63412abca9b3ac8def1dc3a3fcf9c"
+    },
+    "old_functions": 13,
+    "unchanged_functions": [
+      "require",
+      "pin",
+      "expected",
+      "read",
+      "descriptor",
+      "verified",
+      "paths",
+      "strict_json",
+      "clean_json",
+      "relative",
+      "save",
+      "no_constant"
+    ],
+    "changed_functions": [
+      "main"
+    ],
+    "full_forward_inverse_and_AST_exact": true,
+    "target_execution": false
+  }
+]

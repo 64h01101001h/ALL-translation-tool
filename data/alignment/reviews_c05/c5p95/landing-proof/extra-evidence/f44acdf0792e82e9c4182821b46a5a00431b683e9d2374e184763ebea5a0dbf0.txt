@@ -1,0 +1,36 @@
+--- prior/config_contract.py
++++ candidate/config_contract.py
+@@ -67,6 +67,24 @@
+   assert query['count']==source['count']==len(query['rows'])
+  return len(query['rows'])
+ 
++def original_freeze(row):
++ """Read the explicitly pinned original manifest in its genuine angle schema."""
++ d=Path(row['directory']);names={'tibetan':'freeze-manifest.json','english':'freeze.json'}
++ assert d.is_absolute() and row['angle'] in names
++ manifest=d/names[row['angle']];assert Path(row['freeze']['path'])==manifest
++ value=json.loads(pinned(row['freeze']))
++ if row['angle']=='tibetan':assert isinstance(value,list);files=value
++ else:assert isinstance(value,dict) and isinstance(value['files'],list);files=value['files']
++ expected={}
++ for r in files:
++  assert isinstance(r,dict) and set(r)=={'path','bytes','sha256'} and isinstance(r['path'],str)
++  p=Path(r['path']);n=str(p.relative_to(d)) if p.is_absolute() else str(p)
++  assert n not in ('','.','..') and not Path(n).is_absolute() and '..' not in Path(n).parts and n not in expected
++  assert n!=manifest.name and (d/n).is_file() and (d/n).resolve().is_relative_to(d.resolve())
++  assert type(r['bytes'])is int and r['bytes']>=0 and re.fullmatch('[0-9a-f]{64}',r['sha256'])
++  expected[n]=r
++ return expected
++
+ def validate_config(c):
+  """Validate pinned settings and descriptor relationships only; never replay SQL/canonical/Git."""
+  assert set(c)=={'schema','course','batch','worktree','shared_directory','sequences','baseline','status_capture','originals','reconciled','evidence','context','query_directories','queries','operator_role'}
+@@ -109,7 +127,7 @@
+  original_specs=[];original_freezes=[]
+  for row in c['originals']:
+   assert set(row)=={'angle','seq','directory','freeze','spec','declarations'};d=Path(row['directory']);assert d==batch/row['angle']/str(row['seq'])
+-  assert Path(row['freeze']['path'])==d/'freeze.json';f=json.loads(pinned(row['freeze']))['files'];f={r['path']:r for r in f}if isinstance(f,list)else f
++  f=original_freeze(row)
+   for k,name in [('spec','spec.json'),('declarations','intended-spans.json')]:
+    r=row[k];assert Path(r['path'])==d/name;pinned(r);assert {j:r[j]for j in ['bytes','sha256']}=={j:f[name][j]for j in ['bytes','sha256']}
+   part=json.loads(pinned(row['spec']));assert part['course']==c['course']and len(part['segments'])==1 and part['segments'][0]['seq']==row['seq']

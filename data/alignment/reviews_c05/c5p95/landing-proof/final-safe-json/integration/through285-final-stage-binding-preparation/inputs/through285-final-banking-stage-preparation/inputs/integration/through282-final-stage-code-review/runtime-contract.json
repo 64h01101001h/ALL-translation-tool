@@ -1,0 +1,87 @@
+{
+  "status": "SOURCE_APPROVED_ACTUAL_BINDINGS_AND_ROOT_RELEASE_REQUIRED",
+  "source_original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-stage-preparation/verify_staged_through282.py",
+  "source_pin": {
+    "bytes": 48055,
+    "sha256": "b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee"
+  },
+  "command_plan": {
+    "bytes": 2540,
+    "sha256": "2582d0b6cbdd7a0b63234e6f96cb48684ba345bc5a152958027cf17d0d7905f4"
+  },
+  "template_pin": {
+    "bytes": 4022,
+    "sha256": "9528defd1592c6faba614cafda61fedcef4bdda636e9c62fb79f6a21cae9138b"
+  },
+  "argv_template": [
+    "python3",
+    "-B",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-stage-preparation/verify_staged_through282.py",
+    "--worktree",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "--batch",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282",
+    "--output",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-stage-verification",
+    "--untracked-before",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/untracked-before-banking.stdout",
+    "--whitespace-proof",
+    null,
+    "--whitespace-log",
+    null,
+    "--payload-manifest",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/staged-payload-manifest.json",
+    "--payload-source-proof",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-280-282/landing/staged-payload-source-proof.json",
+    "--banking-ordinary-run",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-banking-runs/ordinary",
+    "--banking-final-run",
+    "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-banking-runs/final-whitespace",
+    "--bindings",
+    null,
+    "--bindings-sha256",
+    null,
+    "--execute-reviewed-verification"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "assertions_enabled": true,
+  "expected_hash_definitions": {
+    "index_sha256": [
+      "git",
+      "ls-files",
+      "--stage",
+      "-z"
+    ],
+    "staged_path_stream_sha256": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only",
+      "-z"
+    ],
+    "final_untracked_sha256": [
+      "git",
+      "ls-files",
+      "--others",
+      "--exclude-standard",
+      "-z"
+    ]
+  },
+  "future_roles": [
+    "final_manifest",
+    "final_result",
+    "ordinary_manifest",
+    "ordinary_result",
+    "whitespace_log",
+    "whitespace_proof"
+  ],
+  "future_values": 11,
+  "template_not_runnable": true,
+  "binding_file_must_be_reviewed_and_hash_pinned": true,
+  "whitespace_classifier_approval_separate": true,
+  "actual_verifier_result_pending": true,
+  "output_must_be_fresh_external": true
+}

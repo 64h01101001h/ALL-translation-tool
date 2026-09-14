@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport subprocess,sys,os,json,hashlib\nB=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285\");A=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts\");W=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree\");I=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration\")\nassert __debug__ and sys.dont_write_bytecode\napproval=json.loads((I/'through285-semantic-schema-root-source-review/proof.json').read_bytes())\nassert approval['status']=='PASS_ROOT_SOURCE_REVIEW_APPROVED_FOR_EXACT_MATERIALIZATION_AND_ORDERED_EXECUTION'\nfor label,name,args in [\n('semantic-acceptance','verify-semantic-acceptance285.py',['95','283']),\n('materialize','land-reviewed-page285.py',['95','283','284','285']),\n('landed-copy','verify-semantic-acceptance285.py',['95','283','--landed'])]:\n script=B/'landing-helper-preparation'/name;raw=script.read_bytes()\n assert dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())==approval['candidates'][name]\n argv=[sys.executable,'-B',str(A/'record_external_step.py'),str(B/('landing-caller-'+label)),str(W),sys.executable,'-B',str(script),*args]\n subprocess.run(argv,env=dict(os.environ,PYTHONOPTIMIZE='0',PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'),check=True)\n print('COMPLETED',label,flush=True)\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-14T05:53:53.964589+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+}

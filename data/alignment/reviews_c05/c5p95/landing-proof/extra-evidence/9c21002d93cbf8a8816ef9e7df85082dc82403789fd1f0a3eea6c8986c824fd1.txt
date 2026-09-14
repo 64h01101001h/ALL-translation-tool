@@ -1,0 +1,26 @@
+from pathlib import Path
+import json,hashlib,difflib,ast
+O=Path(__file__).resolve().parent
+pin=lambda b:dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+old=(O/'verify-complete-originals.py.txt').read_text();s=old;changes=[]
+def sub(a,b):
+ global s
+ assert s.count(a)==1,(a,s.count(a));s=s.replace(a,b);changes.append({'old':a,'new':b,'occurrences':1})
+sub("directory/('intended-spans.json' if angle=='tibetan' else 'occurrence-declarations.json')","directory/'intended-spans.json'")
+sub("declarations={x['id']:x for x in (declared if angle=='tibetan' else declared['declarations'])}","assert isinstance(declared,list) and [x['id'] for x in declared]==[x['id'] for x in spans]\n            declarations={x['id']:x for x in declared}")
+sub("declaration['tib_range'] if angle=='tibetan' else [declaration['tib']['start'],declaration['tib']['end']]","declaration['tib_range']")
+sub("declaration['eng_range'] if angle=='tibetan' else [declaration['eng']['start'],declaration['eng']['end']]","declaration['eng_range']")
+sub("if angle=='english':assert declaration['parent']==(parent if span['d']==7 else None)","if 'parent' in declaration:assert declaration['parent']==(parent if span['d']==7 else None)")
+new=s.encode();compile(new,str(O/'verify-complete-originals-v2.py.txt'),'exec')
+# Exact reverse substitutions and unchanged named functions; no candidate execution/import.
+rev=s
+for row in reversed(changes):assert rev.count(row['new'])==1;rev=rev.replace(row['new'],row['old'])
+assert rev==old
+for name in ['pin','save','freeze']:
+ get=lambda t:next(ast.dump(n,include_attributes=False) for n in ast.parse(t).body if isinstance(n,ast.FunctionDef) and n.name==name)
+ assert get(old)==get(s)
+(O/'verify-complete-originals-v2.py.txt').write_bytes(new)
+for name,a,b in [('v1-v2.diff',old,s),('v2-v1.inverse.diff',s,old),('complete-prior-v2.diff',(O/'prior-verify-complete-originals.py.txt').read_text(),s),('complete-v2-prior.inverse.diff',s,(O/'prior-verify-complete-originals.py.txt').read_text())]:
+ (O/name).write_text(''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='before',tofile='after')))
+(O/'interface-update-proof.json').write_text(json.dumps({'status':'PASS_PURE_SYNTAX_INTERFACE_ADAPTATION_ONLY','candidate':pin(new),'previous_candidate':pin(old.encode()),'changes':changes,'exact_reverse':True,'all_named_functions_AST_unchanged':True,'common_list_spec_order_required':True,'optional_parent_checked_when_present_in_either_angle':True,'source_of_new_contract':'Root message: both active original readers instructed to provide intended-spans.json LIST in spec order with id/tib_range/eng_range (null for null exponent); additional reasoning fields optional. Neither current original directory inspected.','pending':'Frozen completion filename/status/Tibetan total/actual reader-owned RO wrapper and all runtime pins remain unbound.','candidate_execution':False},indent=2)+'\n')
+print(json.dumps({'status':'PASS','candidate':pin(new),'pure_compile_only':True}))

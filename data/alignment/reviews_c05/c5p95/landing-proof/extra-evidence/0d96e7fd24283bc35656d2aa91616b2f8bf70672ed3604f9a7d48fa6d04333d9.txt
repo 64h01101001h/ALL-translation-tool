@@ -1,0 +1,94 @@
+from pathlib import Path
+import ast,difflib,hashlib,json,re
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');A=R/'campaign-artifacts';I=A/'integration';B=A/'C05-283-285';W=R/'campaign-worktree';O=I/'through285-registration-helper-preparation'
+assert __debug__
+def pin(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(p,b):
+    with p.open('xb') as f:f.write(b)
+def save(p,x):write(p,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+inputs=O/'inputs';inputs.mkdir(exist_ok=False);mapping=[]
+def take(p,name):
+    b=p.read_bytes();write(inputs/name,b);assert p.read_bytes()==b
+    symlinks=[]
+    for q in [*p.parents,p]:
+        if q.is_symlink():symlinks.append({'path':str(q),'target':str(q.readlink())})
+    mapping.append({'original':str(p),'resolved':str(p.resolve()),'symlinks':symlinks,'copy':'inputs/'+name,**pin(b)});return b
+prior=take(A/'C05-280-282/landing-helper-preparation/register-reviewed-page-and-index.py','prior-register-reviewed-page-and-index.py.txt')
+take(A/'C05-280-282/landing-helper-preparation/report.md','prior-preparation-report.md')
+closedraw=take(I/'through282-root-closure/proof.json','through282-root-closure-proof.json');baseraw=take(B/'baseline.json','current-baseline.json')
+indexraw=take(W/'data/alignment/pages_c05/index.html','current-index.html');builderraw=take(W/'tools/build_alignment_layer.py','current-build_alignment_layer.py.txt')
+assert pin(prior)=={'bytes':8383,'sha256':'327e7899981bbfe2cfb5b9c70345c8424670500164c87cedb0fa70c26314d9eb'}
+assert pin(closedraw)=={'bytes':2267,'sha256':'80d9ee5b45d2f69e42e699b62edbf1fdcde8b199c31529f35340ef8a42a66554'}
+assert pin(baseraw)=={'bytes':1456,'sha256':'0a881939b7ac80f7f1b18ca00b836d0e3d56738b944b8e17d153f85e64a0ee6f'}
+closed=json.loads(closedraw);base=json.loads(baseraw);head='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert closed['status']=='CLOSED_FIXED_CHECKPOINT_THROUGH282_WITH_OPEN_INTEGRATION' and closed['final_head']==base['commit']==head
+assert closed['verified_segments']==base['course_boundary']==282 and closed['total_c05_segments']==511 and closed['remaining_c05']==229 and closed['next_batch']==[283,284,285]
+assert 'course' not in closed and 'course_segments' not in closed and 'next_batch_authorized_after_this_closure' not in closed
+old=prior.decode();closure_old="""closed_raw = (B.parent / 'integration/through279-root-closure/proof.json').read_bytes()
+assert pin(closed_raw) == {'bytes': 4959, 'sha256': 'a26675e3375b3bcb65e7cf871c904db0ed646deec8c2d4aed2749bf3cc940a9a'}
+closed = json.loads(closed_raw)
+assert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE
+assert closed['course'] == 'C05' and closed['verified_segments'] == 279 and closed['course_segments'] == 511
+assert closed['next_batch'] == SEQS and closed['next_batch_authorized_after_this_closure'] is True
+"""
+closure_new="""closed_raw = (B.parent / 'integration/through282-root-closure/proof.json').read_bytes()
+assert pin(closed_raw) == {'bytes': 2267, 'sha256': '80d9ee5b45d2f69e42e699b62edbf1fdcde8b199c31529f35340ef8a42a66554'}
+closed = json.loads(closed_raw)
+assert closed['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH282_WITH_OPEN_INTEGRATION' and closed['final_head'] == BASE
+assert closed['verified_segments'] == 282 and closed['total_c05_segments'] == 511 and closed['remaining_c05'] == 229
+assert closed['next_batch'] == SEQS
+baseline_raw = (B / 'baseline.json').read_bytes()
+assert pin(baseline_raw) == {'bytes': 1456, 'sha256': '0a881939b7ac80f7f1b18ca00b836d0e3d56738b944b8e17d153f85e64a0ee6f'}
+baseline = json.loads(baseline_raw)
+assert baseline['commit'] == BASE and baseline['course_boundary'] == closed['verified_segments']
+"""
+replacements=[
+ ('page94','page95','Current page label in helper documentation and emitted operation description.'),
+ ('PAGE, SEQS = 94, [280, 281, 282]','PAGE, SEQS = 95, [283, 284, 285]','Concrete destination page and contiguous next segment batch.'),
+ ("BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'","BASE = 'fb9182dc6fca2230be3bc5169ba1288a22430280'",'Actual fixed closed282 head.'),
+ ("W = B.parents[1] / 'campaign-worktree'\n","W = B.parents[1] / 'campaign-worktree'\nassert B.name == 'C05-283-285'\nassert Path(__file__).resolve() == B / 'landing-helper-preparation/register-reviewed-page-and-index.py'\n",'Preserve __file__-relative B/W and fail before Git or mutation from the preparation directory or another materialization path.'),
+ (closure_old,closure_new,'Adapt the exact actual closure schema and full pin; course identity is the fixed C05 batch/path, total_c05_segments replaces old course_segments, and the absent historical authorization Boolean is not invented. Bind actual current baseline bytes/head/boundary.'),
+ ('c5p94','c5p95','Destination review/spec/page/landing metadata/registry paths and labels.'),
+ ('c5p93','c5p94','Existing last index page and registry anchor.'),
+ ('Page 93 · segments 277–279','Page 94 · segments 280–282','Exact existing index anchor label.'),
+ ('Page 94 · segments 280–282','Page 95 · segments 283–285','Exact new index label.'),
+ ('Reviewed campaign coverage: 279 of 511 source segments.','Reviewed campaign coverage: 282 of 511 source segments.','Actual incoming index coverage.'),
+ ('Reviewed campaign coverage: 282 of 511 source segments.','Reviewed campaign coverage: 285 of 511 source segments.','Only proposed post-registration coverage.'),
+ ('range(1, 94)','range(1, 95)','Incoming page index/registry range 1–94.'),
+ ('range(1, 95)','range(1, 96)','Proposed page index/target range 1–95.'),
+ ('[277, 278, 279]','[280, 281, 282]','Existing c5p94 registry values.'),
+ ('[280, 281, 282],\\n','[283, 284, 285],\\n','Proposed c5p95 registry values.'),
+ ('range(1, 283)','range(1, 286)','Exact complete post-registration segment coverage 1–285.'),
+ ('279 to282 index coverage','282 to285 index coverage','Truthful emitted operation description.'),
+ ('page_count=94, covered_source_segments=282','page_count=95, covered_source_segments=285','Truthful emitted page/coverage metadata.'),
+ ("old_index, old_builder = index.read_bytes(), builder.read_bytes()\n","old_index, old_builder = index.read_bytes(), builder.read_bytes()\nassert pin(old_index) == {'bytes': 7003, 'sha256': '58f2527eddcefdd6a449821afd0e9417e77910de432b209cf490cda54e434bc7'}\nassert pin(old_builder) == {'bytes': 39640, 'sha256': 'f34db3d81708aa2143710d91ac4a1abcbf93dba4d33a0abfb00a51fe511975f1'}\n",'Bind the exact current full preimages in addition to the preserved runtime git-show BASE comparisons.')]
+# Simultaneous source-position replacements prevent page94/new-page95 or
+# incoming/outgoing coverage substitutions from accidentally cascading.
+splices=[];literal_map=[]
+for oldpiece,newpiece,reason in replacements:
+    hits=[m.start() for m in re.finditer(re.escape(oldpiece),old)];assert hits,oldpiece
+    item={'old':oldpiece,'new':newpiece,'count':len(hits),'reason':reason,'input_character_ranges':[[p,p+len(oldpiece)] for p in hits]};literal_map.append(item)
+    for start in hits:splices.append({'start':start,'end':start+len(oldpiece),'old':oldpiece,'new':newpiece,'reason':reason})
+splices.sort(key=lambda r:r['start']);assert all(a['end']<=b['start'] for a,b in zip(splices,splices[1:])), 'Replacement contexts must not overlap'
+pieces=[];cursor=0;newcursor=0
+for row in splices:
+    gap=old[cursor:row['start']];pieces.extend([gap,row['new']]);newcursor+=len(gap);row['output_character_range']=[newcursor,newcursor+len(row['new'])];newcursor+=len(row['new']);cursor=row['end']
+pieces.append(old[cursor:]);candidate=''.join(pieces);restored=candidate
+for row in reversed(splices):
+    lo,hi=row['output_character_range'];assert restored[lo:hi]==row['new'];restored=restored[:lo]+row['old']+restored[hi:]
+assert restored==old and ast.dump(ast.parse(restored))==ast.dump(ast.parse(old));compile(candidate,'register-reviewed-page-and-index.py','exec')
+write(O/'register-reviewed-page-and-index.py',candidate.encode());save(O/'replacement-map.json',literal_map);save(O/'exact-character-splices.json',splices)
+write(O/'forward.diff',''.join(difflib.unified_diff(old.splitlines(True),candidate.splitlines(True),fromfile='prior/register-reviewed-page-and-index.py',tofile='candidate/register-reviewed-page-and-index.py')).encode());write(O/'inverse.diff',''.join(difflib.unified_diff(candidate.splitlines(True),old.splitlines(True),fromfile='candidate/register-reviewed-page-and-index.py',tofile='prior/register-reviewed-page-and-index.py')).encode())
+def registry(raw):
+    tree=ast.parse(raw);assignment=next(n for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COURSES' for t in n.targets));c05=next(v for k,v in zip(assignment.value.keys,assignment.value.values) if isinstance(k,ast.Constant) and k.value=='C05');entries=next(v for k,v in zip(c05.keys,c05.values) if isinstance(k,ast.Constant) and k.value=='pages');return ast.literal_eval(entries)
+before_registry=registry(builderraw);assert list(before_registry)==[f'c5p{p}' for p in range(1,95)];assert [s for seqs in before_registry.values() for s in seqs]==list(range(1,283))
+text=indexraw.decode();assert list(map(int,re.findall(r'href="c5p(\d+)\.html"',text)))==list(range(1,95));oldcoverage='Reviewed campaign coverage: 282 of 511 source segments.';newcoverage='Reviewed campaign coverage: 285 of 511 source segments.';oldlink='<li><a href="c5p94.html">Page 94 · segments 280–282</a></li>';newlink='<li><a href="c5p95.html">Page 95 · segments 283–285</a></li>'
+assert text.count(oldcoverage)==text.count(oldlink)==1 and newlink not in text
+preview_index=text.replace(oldcoverage,newcoverage).replace(oldlink,oldlink+'\n'+newlink).encode();previous=b'    "c5p94": [280, 281, 282],\n';added=b'    "c5p95": [283, 284, 285],\n';assert builderraw.count(previous)==1 and added not in builderraw;preview_builder=builderraw.replace(previous,previous+added);compile(preview_builder,'PREVIEW_ONLY-build_alignment_layer.py','exec');expected=dict(before_registry);expected['c5p95']=[283,284,285];assert registry(preview_builder)==expected
+assert list(map(int,re.findall(r'href="c5p(\d+)\.html"',preview_index.decode())))==list(range(1,96)) and [s for seqs in expected.values() for s in seqs]==list(range(1,286))
+write(O/'conditional-index-preview.html',preview_index);write(O/'conditional-builder-preview.py.txt',preview_builder)
+for name,before,after in [('index',indexraw,preview_index),('builder',builderraw,preview_builder)]:write(O/(name+'-preview.diff'),''.join(difflib.unified_diff(before.decode().splitlines(True),after.decode().splitlines(True),fromfile='actual-current-'+name,tofile='conditional-preview-'+name)).encode())
+future=B/'landing-helper-preparation/register-reviewed-page-and-index.py';assert future.parent.parent==B and future.parent.parent.parents[1]/'campaign-worktree'==W
+save(O/'original-to-copy-manifest.json',mapping)
+proof={'status':'SOURCE_PREPARATION_ONLY','producer':'Codex','role':'Code preparation; author of Tibetan originals, not semantic acceptance','prior_source':pin(prior),'candidate_source':pin(candidate.encode()),'input_pins':mapping,'syntax_compiles_without_evaluation':True,'whole_source_inverse_exact':True,'inverse_AST_exact':True,'complete_current_index_and_registry_contiguous':{'pages':94,'segments':282},'conditional_preview_only':{'index':pin(preview_index),'builder':pin(preview_builder),'pages':95,'segments':285},'missing_old_closure_fields_not_invented':['course','course_segments','next_batch_authorized_after_this_closure'],'actual_closure_fields_bound':['status','final_head','verified_segments','total_c05_segments','remaining_c05','next_batch'],'future_materialization':str(future),'future_path_derivation_exact':True,'candidate_imported_or_invoked':False,'Git_SQL_generator_build_tests':False,'current_reconciliation_or_semantic_outputs_read':False,'semantic_approval':False}
+save(O/'source-proof.json',proof);print(json.dumps({'status':proof['status'],'candidate':proof['candidate_source'],'closure':pin(closedraw),'baseline':pin(baseraw),'incoming_pages':94,'incoming_segments':282,'proposed_pages':95,'proposed_segments':285,'future_materialization':str(future)}))

@@ -1,0 +1,35 @@
+{
+  "original_query_file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-source-preparation/queries/17-entry.json",
+  "original_query": {
+    "bytes": 6516,
+    "sha256": "69b24d0460ed03141272a2cc01d02f9c7d3114e10e3a39834114c0598f157aac"
+  },
+  "sql": "SELECT * FROM entries WHERE wylie = ? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie = ?) ORDER BY id",
+  "parameters": [
+    "sogs",
+    "sogs"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 20919,
+      "wylie": "sogs",
+      "tibetan": "སོགས",
+      "tibetan_source": null,
+      "acip": "SOGS",
+      "pronunciation": "sok",
+      "pronunciation_source": null,
+      "sanskrit": "{LCh}ādi; {LCh}ādika; {LC}!!ādi; {LC}evamādīni; {LC}!!ādika; {LC}!!ādya; {LC}gaṇa; {LC}indriyagaṇa; {LC}prabhṛti; {LC}!!pramukha; {LC}samantabhadra-pramukha; {LC}ādya; {LC}ityādi; {LC}caya; {LC}cita; {LC}śāriputrapradhāna; {LC}pramukha; {LC}!!mukha; {LC}mukhya; {LC}annasaṅghāta; {LC}saṃcaya",
+      "hopkins_english": "etc; and so forth; {PH}etc.; and so forth",
+      "hgm_gloss": "[\"or any such thing\", \"and so on\", \"and such\", \"or something similar\", \"or any such\", \"things like\", \"or anything of the like\", \"such as\", \"and the rest\", \"anything of the like\", \"like\", \"and on and on\", \"or any other\", \"whatever\", \"or the like\", \"on up\", \"or whatever\", \"or something of the like\", \"and then each of the rest\", \"and all the rest\", \"the rest\", \"and so forth\", \"starting with\", \"all\", \"and the others\", \"include\", \"and other needs\", \"and other kinds\", \"including\", \"as well as other objects\", \"and other types\", \"or someone similar\", \"or ... any such\", \"such\", \"and the like\", \"or anything of the kind\", \"for example\", \"in any way\", \"or the rest\", \"something like\", \"or such\", \"...\", \"or anything of the sort\", \"and anything of the like\", \"or other such\", \"and other such\", \"such as the following\", \"includes\", \"and ... other\", \"around\", \"and elsewhere\", \"and\", \"beginning with\", \"or anything else\", \"and ... the other\", \"or one of the others\", \"and other\", \"or something like that\", \"that begin with\", \"and similar\", \"begin with\", \"and the other\", \"these and others\", \"and other such miraculous abilities\", \"and all other\", \"and other such things\", \"other such\", \"or any similar\", \"and \\\"such\\\"\", \"which include\", \"and others\", \"or any of the other examples\", \"and others as well\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+      "corpus_n_segments": 5131,
+      "raw": "{\"tibetan\": \"སོགས\", \"wylie\": \"sogs\", \"wylie_variants\": [\"sogs\"], \"tenses\": null, \"sanskrit\": \"{LCh}ādi; {LCh}ādika; {LC}!!ādi; {LC}evamādīni; {LC}!!ādika; {LC}!!ādya; {LC}gaṇa; {LC}indriyagaṇa; {LC}prabhṛti; {LC}!!pramukha; {LC}samantabhadra-pramukha; {LC}ādya; {LC}ityādi; {LC}caya; {LC}cita; {LC}śāriputrapradhāna; {LC}pramukha; {LC}!!mukha; {LC}mukhya; {LC}annasaṅghāta; {LC}saṃcaya\", \"hopkins_english\": \"etc; and so forth; {PH}etc.; and so forth\", \"hgm_gloss\": [\"or any such thing\", \"and so on\", \"and such\", \"or something similar\", \"or any such\", \"things like\", \"or anything of the like\", \"such as\", \"and the rest\", \"anything of the like\", \"like\", \"and on and on\", \"or any other\", \"whatever\", \"or the like\", \"on up\", \"or whatever\", \"or something of the like\", \"and then each of the rest\", \"and all the rest\", \"the rest\", \"and so forth\", \"starting with\", \"all\", \"and the others\", \"include\", \"and other needs\", \"and other kinds\", \"including\", \"as well as other objects\", \"and other types\", \"or someone similar\", \"or ... any such\", \"such\", \"and the like\", \"or anything of the kind\", \"for example\", \"in any way\", \"or the rest\", \"something like\", \"or such\", \"...\", \"or anything of the sort\", \"and anything of the like\", \"or other such\", \"and other such\", \"such as the following\", \"includes\", \"and ... other\", \"around\", \"and elsewhere\", \"and\", \"beginning with\", \"or anything else\", \"and ... the other\", \"or one of the others\", \"and other\", \"or something like that\", \"that begin with\", \"and similar\", \"begin with\", \"and the other\", \"these and others\", \"and other such miraculous abilities\", \"and all other\", \"and other such things\", \"other such\", \"or any similar\", \"and \\\"such\\\"\", \"which include\", \"and others\", \"or any of the other examples\", \"and others as well\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"sok\", \"acip\": \"SOGS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 5131}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

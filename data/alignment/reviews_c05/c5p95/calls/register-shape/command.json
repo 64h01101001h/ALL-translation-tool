@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "import json; r=json.load(open(\"governing/errata_register.json\")); print(type(r),list(r)[:15] if isinstance(r,dict) else len(r)); print(json.dumps(r[0] if isinstance(r,list) else {k:type(v).__name__ for k,v in r.items()},indent=2))"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0"
+  },
+  "started_at": "2026-09-14T05:23:18.960072+00:00"
+}

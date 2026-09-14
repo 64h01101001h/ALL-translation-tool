@@ -1,0 +1,30 @@
+{
+  "status": "PASS_ROOT_SOURCE_REVIEW_CONDITIONAL_ON_FROZEN_ACTUAL_CONFIG",
+  "utc": "2026-09-14T04:22:44.611738+00:00",
+  "freeze": {
+    "bytes": 7273,
+    "sha256": "d7d694097245b28f34c7b8a9eb56daf7173531cf263d6f10743969211165bb7c"
+  },
+  "frozen_members": 48,
+  "frozen_bytes": 511865,
+  "full_original_copy_pairs": 27,
+  "changed_literals": 3,
+  "assertions": 76,
+  "runtime": {
+    "bytes": 16371,
+    "sha256": "d476e9041b1e4aecbcb975daef0f6c71784381ac44927b66b25bfc9cbdc45601"
+  },
+  "contract": {
+    "bytes": 9729,
+    "sha256": "432017fe3d3a6fbe30df42028d4cdc4342fd491b303d25a39c3027d8ed794b5d"
+  },
+  "root_full_source_read": true,
+  "candidate_executions": 0,
+  "semantic_approval": false,
+  "conditions": [
+    "Both independent original passes must freeze and receive complete canonical replay before reconciliation.",
+    "Use actual final input pins and counts; do not reuse old config or invoke until source-bound config is reviewed.",
+    "Mechanical source verification does not accept correspondences; independent semantic review remains required.",
+    "If any actual erratum survives, retain it and review the schema rather than falsely refuting it."
+  ]
+}

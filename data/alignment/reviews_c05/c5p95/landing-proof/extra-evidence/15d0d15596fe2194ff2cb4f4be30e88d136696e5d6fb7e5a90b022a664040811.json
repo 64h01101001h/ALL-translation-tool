@@ -1,0 +1,980 @@
+[
+  {
+    "label": "prior fails genuine Tibetan top-level LIST/name",
+    "angle": "tibetan",
+    "version": "prior",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "FileNotFoundError",
+      "message": "[Errno 2] No such file or directory: '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/001-tibetan/freeze.json'"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/001-tibetan"
+  },
+  {
+    "label": "prior accepts English files LIST",
+    "angle": "english",
+    "version": "prior",
+    "expected": "pass",
+    "actual": "pass",
+    "exception": null,
+    "result": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/002-english",
+      "freeze": {
+        "bytes": 201,
+        "sha256": "d82458f2628a004384133369b89517aa872a16e3b2046c40990c559cb05f4bf2"
+      },
+      "files": 1
+    },
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/002-english"
+  },
+  {
+    "label": "candidate accepts genuine Tibetan schema",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "pass",
+    "actual": "pass",
+    "exception": null,
+    "result": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/003-tibetan",
+      "freeze": {
+        "bytes": 137,
+        "sha256": "40028418b8c84fd92d74f5d78fe793b09fab62f203415b5c3c685aca14056f25"
+      },
+      "files": 1
+    },
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/003-tibetan"
+  },
+  {
+    "label": "candidate accepts genuine English schema",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "pass",
+    "actual": "pass",
+    "exception": null,
+    "result": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/004-english",
+      "freeze": {
+        "bytes": 201,
+        "sha256": "d82458f2628a004384133369b89517aa872a16e3b2046c40990c559cb05f4bf2"
+      },
+      "files": 1
+    },
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/004-english"
+  },
+  {
+    "label": "candidate preserves final freeze.json files DICT",
+    "angle": "reconciled",
+    "version": "candidate",
+    "expected": "pass",
+    "actual": "pass",
+    "exception": null,
+    "result": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/005-reconciled",
+      "freeze": {
+        "bytes": 150,
+        "sha256": "db27fdf4db0f321885a64766b99d4614c2c50eb3de313033ebbbc5e42604570c"
+      },
+      "files": 1
+    },
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/005-reconciled"
+  },
+  {
+    "label": "missing member file",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/006-tibetan"
+  },
+  {
+    "label": "duplicate member path",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/007-tibetan"
+  },
+  {
+    "label": "normalized duplicate path",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/008-tibetan"
+  },
+  {
+    "label": "absolute in-directory alias duplicates relative member",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/009-tibetan"
+  },
+  {
+    "label": "parent-directory escape",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/010-tibetan"
+  },
+  {
+    "label": "nested parent traversal",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/011-tibetan"
+  },
+  {
+    "label": "absolute outside-directory escape",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "ValueError",
+      "message": "'/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/outside.txt' is not in the subpath of '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/012-tibetan'"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/012-tibetan"
+  },
+  {
+    "label": "empty member path",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/013-tibetan"
+  },
+  {
+    "label": "missing member path field",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/014-tibetan"
+  },
+  {
+    "label": "missing member sha field",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/015-tibetan"
+  },
+  {
+    "label": "unexpected member field",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/016-tibetan"
+  },
+  {
+    "label": "wrong member byte count",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/017-tibetan/payload.txt"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/017-tibetan"
+  },
+  {
+    "label": "wrong member sha256",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/018-tibetan/payload.txt"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/018-tibetan"
+  },
+  {
+    "label": "boolean member byte count",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/019-tibetan"
+  },
+  {
+    "label": "negative member byte count",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/020-tibetan"
+  },
+  {
+    "label": "invalid member hash format",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/021-tibetan"
+  },
+  {
+    "label": "unlisted extra file remains in full census",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/022-tibetan"
+  },
+  {
+    "label": "manifest cannot be a payload member",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/023-tibetan"
+  },
+  {
+    "label": "descriptor wrong bytes",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/024-tibetan"
+  },
+  {
+    "label": "descriptor wrong sha256",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/025-tibetan"
+  },
+  {
+    "label": "descriptor missing path",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "KeyError",
+      "message": "'path'"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/026-tibetan"
+  },
+  {
+    "label": "descriptor missing sha",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/027-tibetan"
+  },
+  {
+    "label": "descriptor unexpected field",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/028-tibetan"
+  },
+  {
+    "label": "descriptor wrong angle filename",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/029-tibetan"
+  },
+  {
+    "label": "descriptor outside original directory",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/030-tibetan"
+  },
+  {
+    "label": "unknown angle",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/031-tibetan"
+  },
+  {
+    "label": "opposite valid angle cannot relabel the filename",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/032-tibetan"
+  },
+  {
+    "label": "symlink file escape",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/033-tibetan"
+  },
+  {
+    "label": "symlink directory escape",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/034-tibetan"
+  },
+  {
+    "label": "second census/hash pass rejects changed member",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/035-tibetan/payload.txt"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/035-tibetan"
+  },
+  {
+    "label": "second explicit descriptor pin rejects changed manifest",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/036-tibetan"
+  },
+  {
+    "label": "missing explicitly named manifest",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/037-tibetan"
+  },
+  {
+    "label": "missing member file",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/038-english"
+  },
+  {
+    "label": "duplicate member path",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/039-english"
+  },
+  {
+    "label": "normalized duplicate path",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/040-english"
+  },
+  {
+    "label": "absolute in-directory alias duplicates relative member",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/041-english"
+  },
+  {
+    "label": "parent-directory escape",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/042-english"
+  },
+  {
+    "label": "nested parent traversal",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/043-english"
+  },
+  {
+    "label": "absolute outside-directory escape",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "ValueError",
+      "message": "'/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/outside.txt' is not in the subpath of '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/044-english'"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/044-english"
+  },
+  {
+    "label": "empty member path",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/045-english"
+  },
+  {
+    "label": "missing member path field",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/046-english"
+  },
+  {
+    "label": "missing member sha field",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/047-english"
+  },
+  {
+    "label": "unexpected member field",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/048-english"
+  },
+  {
+    "label": "wrong member byte count",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/049-english/payload.txt"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/049-english"
+  },
+  {
+    "label": "wrong member sha256",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/050-english/payload.txt"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/050-english"
+  },
+  {
+    "label": "boolean member byte count",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/051-english"
+  },
+  {
+    "label": "negative member byte count",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/052-english"
+  },
+  {
+    "label": "invalid member hash format",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/053-english"
+  },
+  {
+    "label": "unlisted extra file remains in full census",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/054-english"
+  },
+  {
+    "label": "manifest cannot be a payload member",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/055-english"
+  },
+  {
+    "label": "descriptor wrong bytes",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/056-english"
+  },
+  {
+    "label": "descriptor wrong sha256",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/057-english"
+  },
+  {
+    "label": "descriptor missing path",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "KeyError",
+      "message": "'path'"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/058-english"
+  },
+  {
+    "label": "descriptor missing sha",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/059-english"
+  },
+  {
+    "label": "descriptor unexpected field",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/060-english"
+  },
+  {
+    "label": "descriptor wrong angle filename",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/061-english"
+  },
+  {
+    "label": "descriptor outside original directory",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/062-english"
+  },
+  {
+    "label": "unknown angle",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/063-english"
+  },
+  {
+    "label": "opposite valid angle cannot relabel the filename",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/064-english"
+  },
+  {
+    "label": "symlink file escape",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/065-english"
+  },
+  {
+    "label": "symlink directory escape",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/066-english"
+  },
+  {
+    "label": "second census/hash pass rejects changed member",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/067-english/payload.txt"
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/067-english"
+  },
+  {
+    "label": "second explicit descriptor pin rejects changed manifest",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/068-english"
+  },
+  {
+    "label": "missing explicitly named manifest",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/069-english"
+  },
+  {
+    "label": "English files must be LIST",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/070-english"
+  },
+  {
+    "label": "final files LIST remains rejected",
+    "angle": "reconciled",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/071-reconciled"
+  },
+  {
+    "label": "final filename cannot become Tibetan filename",
+    "angle": "reconciled",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/072-reconciled"
+  },
+  {
+    "label": "top-level opposite schema rejected",
+    "angle": "tibetan",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/073-tibetan"
+  },
+  {
+    "label": "top-level opposite schema rejected",
+    "angle": "english",
+    "version": "candidate",
+    "expected": "reject",
+    "actual": "reject",
+    "exception": {
+      "type": "AssertionError",
+      "message": ""
+    },
+    "result": null,
+    "fixture_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter/fixtures/074-english"
+  }
+]

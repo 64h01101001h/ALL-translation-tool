@@ -1,0 +1,35 @@
+{
+  "original_query_file": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-source-preparation/queries/35-entry.json",
+  "original_query": {
+    "bytes": 3136,
+    "sha256": "c6daf2b7ee88ca6a46bf9b0cc2cda0eabe5c422cd84adc1afca7832cbbd42a52"
+  },
+  "sql": "SELECT * FROM entries WHERE wylie = ? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie = ?) ORDER BY id",
+  "parameters": [
+    "bltas",
+    "bltas"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 7116,
+      "wylie": "bltas",
+      "tibetan": "བལྟས",
+      "tibetan_source": null,
+      "acip": "BLTAS",
+      "pronunciation": "te",
+      "pronunciation_source": null,
+      "sanskrit": "blta/ lta/ bltas/ ltos/; {C}avalokayati; {LC}āluloke; {LC}aikṣata; {LC}dadarśa; {LC}dadṛśuḥ; {LC}darśita; {LC}dṛṣṭa; {LC}paśyataḥ; {LC}pradṛṣṭa; {LC}prekṣante sma; {LC}vīkṣita; {LC}vyalokayat; {LC}samullokita",
+      "hopkins_english": "verb: to view; to look7 noun: view; false view; {C}surveys; see; cast back (a look)",
+      "hgm_gloss": "[\"look\", \"gazed\", \"facing\", \"realize\", \"watching\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": "blta/ lta/ bltas/ ltos",
+      "flags": null,
+      "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS17\", \"TCS18Commentary\"]",
+      "corpus_n_segments": 222,
+      "raw": "{\"tibetan\": \"བལྟས\", \"wylie\": \"bltas\", \"wylie_variants\": [\"bltas\"], \"tenses\": \"blta/ lta/ bltas/ ltos\", \"sanskrit\": \"blta/ lta/ bltas/ ltos/; {C}avalokayati; {LC}āluloke; {LC}aikṣata; {LC}dadarśa; {LC}dadṛśuḥ; {LC}darśita; {LC}dṛṣṭa; {LC}paśyataḥ; {LC}pradṛṣṭa; {LC}prekṣante sma; {LC}vīkṣita; {LC}vyalokayat; {LC}samullokita\", \"hopkins_english\": \"verb: to view; to look7 noun: view; false view; {C}surveys; see; cast back (a look)\", \"hgm_gloss\": [\"look\", \"gazed\", \"facing\", \"realize\", \"watching\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"te\", \"acip\": \"BLTAS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"SOS\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 222}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

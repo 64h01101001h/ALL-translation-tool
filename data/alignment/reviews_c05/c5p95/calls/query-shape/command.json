@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "import json; from pathlib import Path; p=Path(\"reviewed-final/283/queries\"); print(json.dumps([{k:(len(v) if k==\"rows\" else v) for k,v in json.loads(x.read_text()).items()} for x in [p/\"000.json\",p/\"209.json\"]],indent=2))"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/semantic-review",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0"
+  },
+  "started_at": "2026-09-14T05:20:20.107506+00:00"
+}

@@ -1,0 +1,121 @@
+{
+  "status": "PASS_INDEPENDENT_SOURCE_IDENTITY_SCHEMA_REVIEW_NO_TARGET_EXECUTION",
+  "author_freeze": {
+    "bytes": 180181,
+    "sha256": "8c53157cc347567c615e2627dc1dc9cefe5b119c4646c96704a263f83e9ce6a8"
+  },
+  "author_members": 840,
+  "author_pairs": {
+    "original-to-copy-manifest.json": 459,
+    "supplemental-original-to-copy-manifest.json": 3
+  },
+  "review_full_pairs": 1535,
+  "candidate": {
+    "bytes": 17500,
+    "sha256": "07f7f5401ab701b62673ffccd00a92c416da6539bb54e1ace2f9ff8f29352584"
+  },
+  "old": {
+    "bytes": 12659,
+    "sha256": "6e5a8a0722ba01da5fbb3375ea2235df816988ee0ad8bbc35a8297f50ebbf321"
+  },
+  "replacement_classes": 36,
+  "byte_edit_blocks": 132,
+  "complete_forward_inverse_exact": true,
+  "expected_fields": {
+    "ordinary_bank_file_count": "len(ordinary['files'])",
+    "ordinary_external_count": "len(ordinary['external_actual_bytes_retained'])",
+    "final_bank_file_count": "len(final['files'])",
+    "final_external_count": "len(final['external_actual_bytes_retained'])",
+    "staged_count": "len(paths)",
+    "warning_count": "ws['warning_count']",
+    "warning_file_count": "len(ws['files'])",
+    "diagnostic_exit": "ws['git_diff_check_exit']",
+    "index_sha256": "pin(index)['sha256']",
+    "staged_path_stream_sha256": "pin(staged)['sha256']",
+    "final_untracked_sha256": "pin(untracked)['sha256']",
+    "reproduction_retention_checks": "reproduction['retention_checks']"
+  },
+  "static_roles": [
+    "prior_closure",
+    "semantic_freeze",
+    "semantic_review",
+    "payload_manifest",
+    "payload_source_proof",
+    "untracked_before",
+    "independent_review"
+  ],
+  "dynamic_roles": [
+    "ordinary_manifest",
+    "final_manifest",
+    "ordinary_result",
+    "final_result",
+    "whitespace_proof",
+    "whitespace_log",
+    "reproduction_acceptance"
+  ],
+  "current_native_callers": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/ordinary-bank-caller",
+      "exit": 0,
+      "execution": {
+        "bytes": 2128,
+        "sha256": "c11567ffdf74ca95caf0a482b441026424d0cd027e5425e8bf21eb61dfc5e531"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-audit-caller",
+      "exit": 0,
+      "execution": {
+        "bytes": 3100,
+        "sha256": "cd2be053ea2266fe2c1df93946b6cad1310dfd9fe4f3c116fdb244d361af101b"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-root-acceptance-caller",
+      "exit": 0,
+      "execution": {
+        "bytes": 882,
+        "sha256": "e4fd7d78b6ae3fa36218c0801d1e78550df3406395c79978339f941400a1a31a"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-runtime-caller",
+      "exit": 0,
+      "execution": {
+        "bytes": 1014,
+        "sha256": "7b4b2f9be5ac84546fa18d133e12d8cb1d1b6c5dd4e3a0f47656a21242c85858"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-whitespace-actual-prepare-caller",
+      "exit": 0,
+      "execution": {
+        "bytes": 2928,
+        "sha256": "bb13d5ffc73e57a096ef518fafc214977f2c1623d1fe2a4fbc1a1e2fb64eae66"
+      }
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-stage-runs/initial-whitespace-caller",
+      "exit": 2,
+      "execution": {
+        "bytes": 807,
+        "sha256": "9b3ae7d00ffd9eee9046140e37d26bfb523781dd3a93443b9a3e2de482824610"
+      }
+    }
+  ],
+  "planned_native_callers": 7,
+  "final_bank_caller": "PENDING /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-final-bank-caller",
+  "current_whitespace_counts": [
+    93740,
+    112
+  ],
+  "reproduction_checks": 225597,
+  "corrected_verifier": {
+    "bytes": 57112,
+    "sha256": "d77253e906657f58962211d0aaa584df9272af4e2055faeb1bc62fccd7f1b0be"
+  },
+  "candidate_imports": 0,
+  "candidate_executions": 0,
+  "Git_SQL_build_test_bank_stage_calls": 0,
+  "semantic_review": false
+}

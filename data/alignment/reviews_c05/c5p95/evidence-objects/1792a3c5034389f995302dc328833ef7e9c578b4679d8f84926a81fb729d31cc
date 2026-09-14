@@ -1,0 +1,7 @@
+{
+  "capture_provenance": "Full combined output transcribed from the actual exec_command response, not represented as native separated streams.",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONOPTIMIZE=0 python3 -B 'campaign-artifacts/C05-283-285/english/283/finish_source_bindings.py'",
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "exit_code": 1,
+  "combined_output": "Traceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/english/283/finish_source_bindings.py\", line 58, in <module>\n    f=base/'To DO/Formal Courses/ACI Readings In Roman ASCII/C16ReadingASCII.txt';norm=' '.join(f.read_text().split())\n                                                                                                ~~~~~~~~~~~^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py\", line 788, in read_text\n    return f.read()\n           ~~~~~~^^\n  File \"<frozen codecs>\", line 325, in decode\nUnicodeDecodeError: 'utf-8' codec can't decode byte 0xaf in position 376197: invalid start byte\n"
+}

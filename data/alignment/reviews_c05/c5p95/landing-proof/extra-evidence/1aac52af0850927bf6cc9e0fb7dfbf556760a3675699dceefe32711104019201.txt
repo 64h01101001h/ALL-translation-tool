@@ -1,0 +1,22 @@
+from pathlib import Path
+import hashlib,json
+O=Path(__file__).resolve().parent
+
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+for r in json.loads((O/'original-to-copy-manifest.json').read_bytes()):
+ assert pin(Path(r['original']))=={k:r[k] for k in ('bytes','sha256')}
+ if 'copy' in r:assert Path(r['original']).read_bytes()==(O/r['copy']).read_bytes()
+for n,code in [('caller-prepare01',1),('caller-prepare02',0)]:
+ e=json.loads((O/n/'execution.json').read_bytes());assert e['exit']==code
+ for stream in ['stdout','stderr']:assert pin(O/n/(stream+'.bin'))==e[stream]
+assert not (O/'caller-prepare02/stderr.bin').read_bytes()
+assert not (O/'bindings.json').exists()
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file()};assert 'freeze.json' not in files
+with (O/'freeze.json').open('x') as f:json.dump(dict(status='FROZEN_SOURCE_ONLY_PREPARATION_RUNTIME_PENDING',files=files,file_count=len(files),total_bytes=sum(r['bytes'] for r in files.values()),candidate_executed=False),f,indent=2);f.write('\n')
+for n,r in files.items():assert pin(O/n)==r
+result=dict(freeze=pin(O/'freeze.json'),candidate=pin(O/'bind_final_stage.py'),files=len(files),bytes=sum(r['bytes'] for r in files.values()))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555);print(json.dumps(result,indent=2))

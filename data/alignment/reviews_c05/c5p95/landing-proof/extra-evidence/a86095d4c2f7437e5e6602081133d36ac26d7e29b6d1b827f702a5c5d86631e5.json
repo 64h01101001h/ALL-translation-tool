@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport datetime,hashlib,json\nR=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment\");I=R/'campaign-artifacts/integration';B=R/'campaign-artifacts/C05-283-285';N=B/'reconciled/root-runtime-inputs'\nO=I/'through285-config-construction-failure-diagnosis';O.mkdir(exist_ok=False)\ndef pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\ndef save(n,x):(O/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\\n')\nc=json.loads((N/'config.json').read_text());rows=json.loads((N/'copy-manifest.json').read_text());m={r['original']:r for r in rows}\nmissing={};mismatches=[]\nfor r in c['queries']:\n s=r['descriptor']\n if s['path'] not in m:missing[s['path']]=s\n elif {k:s[k]for k in ['bytes','sha256']}!={k:m[s['path']][k]for k in ['bytes','sha256']}:mismatches.append(s)\nassert len(rows)==len(m)==623 and len(c['queries'])==209 and len(missing)==11 and not mismatches\nassert {Path(p).name for p in missing}=={str(i)+'.json' for i in range(199,210)}\nfor p,s in missing.items():assert pin(Path(p).read_bytes())=={k:s[k]for k in ['bytes','sha256']}\nfiles={str(p.relative_to(N)):pin(p.read_bytes()) for p in N.rglob('*') if p.is_file()};assert len(files)==224\nsave('failed-output-snapshot.json',dict(root=str(N),files=files,file_count=len(files),boundary='Historical failed construction output snapshot; no file inside this output was altered by the diagnosis.'))\nsave('missing-descriptor-copies.json',list(missing.values()))\ncaller=I/'through285-current-config-construction-caller'\nassert (caller/'exit.txt').read_text().strip()=='1'\nfor name in ['command.json','execution.json','stdin.bin','stdout.bin','stderr.bin','exit.txt']:(O/('caller-'+name)).write_bytes((caller/name).read_bytes())\nassert json.loads((N/'construction-proof.json').read_text())['status']=='FAILED_CONSTRUCTION_ONLY'\nproof=dict(status='DIAGNOSED_DESCRIPTOR_COPY_MEMBERSHIP_FAILURE_SOURCE_DATA_UNCHANGED',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),failed_output=str(N),output_files_preserved=224,existing_copy_records=623,SELECT_queries=209,missing_complete_descriptor_copy_records=11,wrong_existing_pins=0,missing_descriptors_frozen_originals_present=True,required_corrected_copy_records=634,failed_before_SQL_Git_canonical_verifier=True,adapter_unchanged=True,correction_preparation='integration/through285-reconciliation-config-preparation-v2',future_output='C05-283-285/reconciled/root-runtime-inputs-v2',semantic_review_continues_independently=True,accepted_new_page=False)\nsave('proof.json',proof);print(json.dumps(proof))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-14T05:26:53.158949+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+}

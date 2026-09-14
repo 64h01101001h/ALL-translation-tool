@@ -1,0 +1,12 @@
+"""Record only the independent static review helper, never the target."""
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,sys
+O=Path(__file__).resolve().parent;D=O/'caller-static02';D.mkdir()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,v):(D/n).write_text(json.dumps(v,indent=2)+'\n')
+argv=[sys.executable,'-B',str(O/'audit-static.py')];cmd=dict(argv=argv,cwd=str(O),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'})
+save('command.json',cmd);(D/'stdin.bin').write_bytes(b'');start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+p=subprocess.run(argv,cwd=O,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),input=b'',capture_output=True)
+for n,b in [('stdout.bin',p.stdout),('stderr.bin',p.stderr),('exit.txt',f'{p.returncode}\n'.encode())]:(D/n).write_bytes(b)
+save('execution.json',dict(**cmd,started_at=start,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),exit=p.returncode,stdin=pin(b''),stdout=pin(p.stdout),stderr=pin(p.stderr)))
+print(p.stdout.decode(),end='');print(p.stderr.decode(),end='',file=sys.stderr);sys.exit(p.returncode)

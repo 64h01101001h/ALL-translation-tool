@@ -1,0 +1,1 @@
+Pre-canonical source declarations retained. Segment 284 conjunction occurrence indices were miscounted as 4/5, corrected to actual 3/4 before any canonical execution. Other segment spec bytes are preserved and unchanged in the replacement. No failed canonical body existed at this stage.

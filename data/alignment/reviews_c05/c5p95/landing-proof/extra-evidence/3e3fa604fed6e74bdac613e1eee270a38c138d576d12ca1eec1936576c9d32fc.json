@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json,hashlib,ast,difflib,datetime\nP=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-original-verifier-preparation\")\nO=Path(\"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-original-verifier-root-source-review\")\nassert not O.exists()\ndef pin(p):\n b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\nf=json.loads((P/'freeze.json').read_text())\nassert pin(P/'freeze.json')['sha256']=='19c27f7f4a1ac066e5cd306d17a9361cc067e8496f9b35dddc7c08d54c272204'\nassert set(f['files'])=={str(p.relative_to(P)) for p in P.rglob('*') if p.is_file() and p!=P/'freeze.json'}\nfor rel,v in f['files'].items():assert pin(P/rel)==v,rel\nassert len(f['files'])==62 and sum(v['bytes'] for v in f['files'].values())==300738\ncopies=json.loads((P/'original-copy-manifest.json').read_text())\nassert len(copies)==43 and len({r['original'] for r in copies})==43\nfor r in copies:\n src=Path(r['original']);dst=P/r['copy']\n assert src.resolve()==Path(r['resolved']) and src.read_bytes()==dst.read_bytes()\n assert pin(src)=={k:r[k] for k in ('bytes','sha256')}\nold=(P/'prior-verify-complete-originals.py').read_text();new=(P/'verify-complete-originals.py.txt').read_text()\nchanges=json.loads((P/'literal-replacement-map.json').read_text())\ncandidate=old\nfor c in changes:\n assert candidate.count(c['before'])==c['occurrences']\n candidate=candidate.replace(c['before'],c['after'])\nassert candidate==new\nassert ''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='prior',tofile='candidate'))==(P/'forward.diff').read_text()\noldast=ast.parse(old);newast=ast.parse(new)\nfor name in ('pin','save','freeze'):\n assert ast.dump(next(n for n in oldast.body if isinstance(n,ast.FunctionDef) and n.name==name))==ast.dump(next(n for n in newast.body if isinstance(n,ast.FunctionDef) and n.name==name))\nguards=[n for n in newast.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id.startswith('EXPECTED_') for t in n.targets)]\nassert len(guards)==4 and all(isinstance(n.value,ast.Constant) and n.value.value is None for n in guards)\nout=dict(status='PASS_ROOT_SOURCE_REVIEW_PENDING_ACTUAL_ORIGINAL_FREEZES',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),freeze=pin(P/'freeze.json'),candidate=pin(P/'verify-complete-originals.py.txt'),full_original_copy_pairs=43,frozen_members=62,bytes_total=300738,literal_changes=sum(c['occurrences'] for c in changes),pending_release_bindings=4,root_full_source_read=True,candidate_executions=0,semantic_approval=False,conditions=['Bind actual six frozen outputs, counts, completion identities and read-only wrapper after all originals finish.','Check actual HEAD, baseline and original source snapshot separately; runtime checks baseline hashes but does not query HEAD.','Materialize only in C05-283-285; preserve prior source and full binding diff.','No relative_path-only LIST freeze rows without separate narrow source correction.','Retain all raw canonical replay outputs and ordered complete original identities; passing is not semantic approval.'],read_discovery_note='A read-only cat attempted replacement-map.json, which does not exist here; the actual literal-replacement-map.json was subsequently read in full. No files were changed by that failed read.')\nO.mkdir();(O/'proof.json').write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps(out,indent=2))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-14T04:28:25.936993+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-14T04:28:25.993748+00:00",
+  "wall_seconds": 0.05617320770397782,
+  "exit": 0,
+  "stdout_bytes": 1379,
+  "stderr_bytes": 0,
+  "stdout_sha256": "f880156f6fe00dd8824378abdf1b0667e44c288223441c3b25699e2d5c2e4645",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

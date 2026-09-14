@@ -1,0 +1,43 @@
+from pathlib import Path
+import hashlib,json,datetime
+R=Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment");B=R/'campaign-artifacts/C05-283-285';I=B.parent/'integration'
+O=B/'ordinary-release-inputs'
+assert __debug__ and not O.exists()
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def dump(p,obj):p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+review=I/'through285-stage-binding-path-correction-review'
+assert (review/'freeze.json').is_file(), 'Independent correction review must be complete and quiescent before inventory binding'
+directories=[
+('through285-ordinary-banking-preparation','source_preparation',None),
+('through285-ordinary-bank-root-source-review','code_review',None),
+('through285-final-banking-stage-preparation','source_preparation',None),
+('through285-ordinary-final-banker-route-preparation','source_preparation',None),
+('through285-ordinary-final-route-root-source-review','code_review','through285-ordinary-final-banker-route-preparation'),
+('through285-final-stage-independent-code-review','historical_code_review_request_changes',None),
+('through285-stage-binding-path-correction','source_preparation',None),
+('through285-stage-binding-path-correction-review','code_review','through285-stage-binding-path-correction')]
+packages=[]
+for name,role,reviews in directories:
+ p=I/name;fraw=(p/'freeze.json').read_bytes();f=json.loads(fraw);entries=f['files']
+ if isinstance(entries,list):
+  rows=entries;entries={r['path']:{k:r[k]for k in ('bytes','sha256')}for r in rows};assert len(rows)==len(entries)
+ assert isinstance(entries,dict)
+ assert {str(x.relative_to(p))for x in p.rglob('*')if x.is_file()}==set(entries)|{'freeze.json'}
+ for rel,expected in entries.items():
+  n=Path(rel);assert rel and not n.is_absolute() and '..'not in n.parts
+  assert pin((p/n).read_bytes())==expected
+ rec=dict(directory=str(p),role=role,freeze=pin(fraw),files=len(entries),bytes=sum(x['bytes']for x in entries.values()))
+ if reviews:rec['reviews_source_preparation']=str(I/reviews)
+ packages.append(rec)
+accept=I/'through285-generated-reproduction-root-acceptance/proof.json'
+assert pin(accept.read_bytes())=={'bytes':1331,'sha256':'fe377d7d9b00a251b5e7c361b8e36cac5a4af450e176ce9a6e87dc17bcd4b642'}
+assert j(accept)['status']=='PASS'
+integration=sorted(str(p)for p in I.iterdir()if p.name.startswith('through285') and p!=I/'through285-ordinary-bank-inventory')
+deferred=B/'ordinary-inventory-caller'
+assert not deferred.exists()
+binding=dict(reproduction_directory=str(I/'through285-generated-reproduction-attempt02'),reproduction_acceptance=dict(path=str(accept),**pin(accept.read_bytes())),source_packages=packages,integration_inputs=integration,deferred_active_callers=[str(deferred)],root_review_statement='Root read the complete ordinary banker, composer, release, exact final-banker route and full forward/inverse deltas. Full source packages and root source-review freezes are pinned here. The original final-stage REQUEST_CHANGES and exact role_path source correction are preserved with a separate independent follow-up review; source review does not assert runtime stage acceptance. Release only the unchanged ordinary banker and exact inventory route after actual accepted independent reproduction. The final-only banker will execute from its authoritative final-candidates path, matching the required additional ordinary copy. No semantic, whitespace, final-stage, commit, MAIN or device approval is supplied by this ordinary method release.')
+O.mkdir();dump(O/'bindings.json',binding)
+assert integration==sorted(str(p)for p in I.iterdir()if p.name.startswith('through285') and p!=I/'through285-ordinary-bank-inventory')
+dump(O/'construction-proof.json',dict(status='ACTUAL_ORDINARY_RELEASE_INPUTS_BOUND',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),packages=len(packages),integration_items=len(integration),binding=dict(path=str(O/'bindings.json'),**pin((O/'bindings.json').read_bytes())),runtime_executed=False))
+print(json.dumps(dict(binding_path=str(O/'bindings.json'),**pin((O/'bindings.json').read_bytes()),packages=len(packages),integration_items=len(integration)),indent=2))

@@ -1,0 +1,49 @@
+from pathlib import Path
+import sqlite3,json,hashlib,re,gzip,sys,bisect
+D=Path(__file__).resolve().parent;B=D.parent;W=B.parents[1]/'campaign-worktree'
+assert sys.dont_write_bytecode and __debug__
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def save(n,o):
+ p=D/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x') as f:json.dump(o,f,indent=2,ensure_ascii=False);f.write('\n')
+source=json.loads((D/'source-rows-full.json').read_bytes())
+p=Path(json.loads((D/'source-proof01.json').read_bytes())['physical_original']['path']);raw=p.read_bytes();matches=list(re.finditer(rb'\S+',raw));norm=b' '.join(m.group() for m in matches);starts=[];pos=0
+for m in matches:starts.append(pos);pos+=len(m.group())+1
+physical=[]
+for row in source:
+ for field in ['acip','english']:
+  needle=b' '.join(row[field].encode().split());found=[m.start() for m in re.finditer(re.escape(needle),norm)];assert len(found)==1,(row['seq'],field,found)
+  x=found[0];z=x+len(needle);i=bisect.bisect_right(starts,x)-1;j=bisect.bisect_right(starts,z-1)-1
+  a=matches[i].start()+(x-starts[i]);b=matches[j].start()+(z-starts[j]);assert b' '.join(raw[a:b].split())==needle
+  # Retain complete physical lines around the source field, including exact CRLF framing.
+  start=raw.rfind(b'\n',0,a)+1;nl=raw.find(b'\n',b);end=len(raw) if nl<0 else nl+1
+  excerpt=raw[start:end];assert b' '.join(excerpt.split())==needle,(row['seq'],field,'line contains additional text')
+  f=D/'physical'/f'C05-{row["seq"]}-{field}.txt';f.parent.mkdir(exist_ok=True);f.write_bytes(excerpt)
+  physical.append({'seq':row['seq'],'field':field,'original':str(p),'verified_full_source_pin':pin(raw),'start':start,'end':end,'exact_field_range':[a,b],'lines_1based_inclusive':[raw[:start].count(b'\n')+1,raw[:end].count(b'\n')],'excerpt':str(f),'bytes':len(excerpt),'sha256':pin(excerpt)['sha256'],'comparison':'ASCII whitespace collapse for comparison only; all retained source and excerpt bytes unchanged','source_field':row[field],'source_field_pin':pin(row[field].encode()),'complete_line_whitespace_join_equals_source':True})
+save('physical-extents.json',physical)
+terms=['byas pa','kho na re','skyon med','yan lag','cha shas','bya ba',"'jog pa","'jog",'dgos pa','skyes bu','zer na','snga ma','mtshungs pa','mtshungs','rnag khrag','rnag','khrag','sogs pa','dngos po','brlan pa','brlan','gsher ba','phor pa','gang ba','steng du','snang tshul','snang ba',"mi 'dra ba",'phan tshun','go sa',"'gog pa",'las can',"'gro ba",'cig car du','blta ba','tshad grub pa','srid pa','khas len','khas blangs pa','ma yin','thal']
+save('independent-query-design.json',{'origin':'Reconciler source-only reading of exact C05:283–285 rows; no proposal/root lexical/target input. Lexical candidates for investigation, not selected alignments.','hgm_exact_terms':terms,'no_hgm_gloss_composition':True})
+dbp=W/'build/hgm_spine_v27_2.db';before=pin(dbp.read_bytes());uri=dbp.resolve().as_uri()+'?mode=ro';db=sqlite3.connect(uri,uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON');assert db.execute('PRAGMA query_only').fetchone()[0]==1;db.execute('BEGIN')
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries'];corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));bycourse={}
+for r in corpus:bycourse.setdefault(r['course'],[]).append(r)
+queries=[];entries={};summary=[]
+def query(label,sql,params):
+ rows=[dict(r) for r in db.execute(sql,params)];q={'label':label,'sql':sql,'parameters':params,'count':len(rows),'rows':rows};queries.append(q);save('queries/'+label+'.json',q)
+ for r in rows:
+  if 'raw' in r:
+   obj=json.loads(r['raw'])
+   if 'seq' in r:assert obj==bycourse[r['course']][r['seq']-1]
+   else:assert obj==master[r['id']-1];entries[r['id']]=obj
+ return rows
+for n,t in enumerate(terms):
+ rows=query(f'{n+2:02d}-hgm','SELECT * FROM entries WHERE wylie=? OR wylie=? ORDER BY id',[t,t+' '])
+ summary.append({'term':t,'count':len(rows),'entries':[{'id':r['id'],'wylie':r['wylie'],'hgm_gloss':r['hgm_gloss'],'hgm_source':r['hgm_source'],'tier':r['tier']} for r in rows]})
+patterns=[('wylie',"yan lag lnga po de skyes bu de'i cha shas"),('wylie',"brlan zhing gsher ba phor pa gang po de'i cha shas"),('wylie',"phan tshun go sa 'gog pa"),('wylie','dngos po tshad grub pa gsum'),('english','five protuberances are all parts'),('english','three different ways of appearing'),('english','block each other from entering'),('english','each one confirmed by a valid perception'),('wylie','kho na re, skyon med de'),('wylie','snang tshul mi \'dra ba gsum')]
+parallels=[]
+for n,(field,t) in enumerate(patterns):
+ rows=query(f'{n+43:02d}-corpus','SELECT * FROM corpus_segments WHERE '+field+' LIKE ? ORDER BY course,seq',['%'+t+'%'])
+ parallels.append({'field':field,'phrase':t,'count':len(rows),'citations':[f'{r["course"]}:{r["seq"]}' for r in rows]})
+save('hgm-summary.json',summary);save('corpus-summary.json',parallels);save('master-full-objects.json',[{'id':i,'raw_object':v} for i,v in sorted(entries.items())]);save('query-descriptors.json',queries)
+db.rollback();db.close();assert pin(dbp.read_bytes())==before and p.read_bytes()==raw
+save('evidence-proof02.json',{'status':'PASS_SOURCE_ONLY_LEXICAL_CORPUS_PHYSICAL_EVIDENCE','database':{'path':str(dbp),'uri':uri,**before},'query_only':True,'hgm_queries':len(terms),'corpus_queries':len(patterns),'hgm_full_objects':len(entries),'query_rows':sum(q['count'] for q in queries),'physical_extents':len(physical),'physical_full_original_unchanged':True,'all_raw_rows_equal_complete_master_or_corpus_objects':True,'no_proposals_or_root_leads_read':True,'semantic_or_span_decisions':False})
+print(json.dumps({'status':'PASS_SOURCE_ONLY_LEXICAL_CORPUS_PHYSICAL_EVIDENCE','hgm_queries':len(terms),'corpus_queries':len(patterns),'full_master_objects':len(entries),'rows':sum(q['count'] for q in queries),'physical':[{k:r[k] for k in ['seq','field','start','end','lines_1based_inclusive']} for r in physical],'corpus':parallels},indent=2))

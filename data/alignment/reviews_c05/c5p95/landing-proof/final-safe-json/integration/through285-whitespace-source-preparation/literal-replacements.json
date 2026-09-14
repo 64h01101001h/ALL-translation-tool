@@ -1,0 +1,72 @@
+[
+  {
+    "old": "C05:280–282",
+    "new": "C05:283–285",
+    "count": 1
+  },
+  {
+    "old": "HEAD = '10968d16e701b698a0e1fbd845b353089d15ac39'",
+    "new": "HEAD = 'fb9182dc6fca2230be3bc5169ba1288a22430280'",
+    "count": 1
+  },
+  {
+    "old": "PREFIX = 'data/alignment/reviews_c05/c5p94/'",
+    "new": "PREFIX = 'data/alignment/reviews_c05/c5p95/'",
+    "count": 1
+  },
+  {
+    "old": "ADDITIONAL_DESCRIPTOR_PIN = {'bytes': 69418, 'sha256': '7fed8e2eabd5a2766a04d8823dfacb16d333961b4349dc258fe4bd4631e3906d'}",
+    "new": "ADDITIONAL_DESCRIPTOR_PIN = {'bytes': 98074, 'sha256': '41ba57b7d927cd2857a2b1b3c10a2be8197f5223b94fbaeb0cad82c137c4c7ce'}",
+    "count": 1
+  },
+  {
+    "old": "'whitespace282.py'",
+    "new": "'whitespace285.py'",
+    "count": 2
+  },
+  {
+    "old": "'current-inputs/semantic-review/freeze.json', 'current-inputs/semantic-review/original-to-copy-manifest.json']",
+    "new": "'current-inputs/semantic-review/freeze.json', 'current-inputs/semantic-review/original-copy-manifest.json',\n                'current-inputs/semantic-review/additional-original-copy-manifest.json']",
+    "count": 1
+  },
+  {
+    "old": "assert len(data['entries']) == 12 and len({e['path'] for e in data['entries']}) == 12",
+    "new": "assert len(data['entries']) == 16 and len({e['path'] for e in data['entries']}) == 16\n    assert data['schema'] == 'through285-current-source-specific-whitespace-v1' and data['old_additional_cases_imported'] is False\n    assert {e['kind'] for e in data['entries']} == {'archived_prior_canonical_csv_crlf','archived_current_canonical_csv_crlf','archived_closed282_continuation_line','archived_current_physical_context'}",
+    "count": 1
+  },
+  {
+    "old": "self.review.parent.name == 'C05-280-282'",
+    "new": "self.review.parent.name == 'C05-283-285'",
+    "count": 1
+  },
+  {
+    "old": "freeze['status'] == 'FROZEN' and freeze['verdict'] == 'APPROVE' and digest(freeze_raw) == '5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b'",
+    "new": "freeze['status'] == 'FROZEN_INDEPENDENT_SEMANTIC_APPROVAL' and freeze['verdict'] == 'APPROVE' and freeze['open_findings'] == [] and freeze['baseline_commit'] == HEAD and freeze['file_count'] == 2386 and len(freeze['files']) == 2386 and digest(freeze_raw) == '8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445'",
+    "count": 1
+  },
+  {
+    "old": "        manifest_raw = self.read(self.review/'original-to-copy-manifest.json'); assert manifest_raw == self.read(HERE/'current-inputs/semantic-review/original-to-copy-manifest.json')\n        manifest = json.loads(manifest_raw); assert isinstance(manifest,list)",
+    "new": "        manifest = current_semantic_manifest(self.read,self.review,frozen)",
+    "count": 1
+  },
+  {
+    "old": "            matches = [r for r in manifest if r['original'] == item['path'] and all(r[k] == item[k] for k in ('bytes','sha256'))]\n            assert matches == item['manifest_records'] and matches\n            for rec in matches: assert frozen_read(rec['copy']) == raw",
+    "new": "            matched_original = item['path']\n            if 'original_copy_link' in item:\n                link = item['original_copy_link']; record = link['record']\n                source_map_raw = self.read(link['manifest_path'])\n                assert source_map_raw == frozen_read(link['frozen_manifest'])\n                source_map = json.loads(source_map_raw)\n                assert isinstance(source_map,list) and source_map.count(record) == 1\n                assert record['original'] == item['path'] and Path(record['resolved_original']) == Path(item['path']).resolve(strict=True)\n                check_pin(raw,record)\n                bridge = Path(link['manifest_path']).parent/relative(record['copy'])\n                assert str(bridge) == link['bridge_original'] and self.read(bridge) == raw\n                matched_original = link['bridge_original']\n            matches = [r for r in manifest if r['original'] == matched_original and all(r[k] == item[k] for k in ('bytes','sha256'))]\n            assert matches == item['manifest_records'] and matches\n            for rec in matches: assert frozen_read(rec['copy']) == frozen_read(rec['content_addressed_copy']) == raw",
+    "count": 1
+  },
+  {
+    "old": "build['page'] == 94 and build['first_segment'] == 280",
+    "new": "build['page'] == 95 and build['first_segment'] == 283",
+    "count": 1
+  },
+  {
+    "old": "witness = additional_root_predicate(raw,grouped,path,rec,additional,additional_values,build,physical)",
+    "new": "witness = current_additional_root_predicate(raw,grouped,path,rec,additional,additional_values,build,physical)",
+    "count": 1
+  },
+  {
+    "old": "\n\nclass Run:",
+    "new": "\n\ndef current_semantic_manifest(read, review, frozen):\n    \"\"\"Lossless current two-manifest view, retaining every original record.\"\"\"\n    rows = []\n    for name, expected_count in [('original-copy-manifest.json',1276),('additional-original-copy-manifest.json',2)]:\n        raw = read(review/name)\n        assert raw == read(HERE/'current-inputs/semantic-review'/name)\n        check_pin(raw,frozen[name])\n        source = json.loads(raw); assert isinstance(source,list) and len(source) == expected_count\n        for index, rec in enumerate(source):\n            assert set(rec) == {'original_path','copy_path','content_addressed_copy','bytes','sha256'}\n            assert Path(rec['original_path']).is_absolute()\n            paths = [Path(rec[k]) for k in ('copy_path','content_addressed_copy')]\n            assert all(p.is_absolute() and p.resolve(strict=True).is_relative_to(review.resolve()) for p in paths)\n            rels = [str(p.relative_to(review)) for p in paths]\n            for rel in rels:\n                relative(rel); assert rel in frozen\n                assert {k:rec[k] for k in ('bytes','sha256')} == {k:frozen[rel][k] for k in ('bytes','sha256')}\n            rows.append(dict(original=rec['original_path'],copy=rels[0],content_addressed_copy=rels[1],bytes=rec['bytes'],sha256=rec['sha256'],source_manifest=name,source_index=index,original_record=rec))\n    assert len(rows) == 1278\n    return rows\n\n\ndef current_additional_root_predicate(raw, grouped, path, rec, data, values, build, physical):\n    \"\"\"Current exact source cases; unchanged old predicates remain the delegate.\"\"\"\n    entries = [entry for entry in data['entries'] if entry['path'] == path]\n    assert len(entries) == 1; entry = entries[0]\n    assert rec == entry['root_record'] and grouped == entry['issues']\n    check_pin(raw,entry); literal_warnings(raw,grouped)\n    assert raw == values[rec['original']]\n    kind = entry['kind']\n    if kind in ('archived_prior_canonical_csv_crlf','archived_current_canonical_csv_crlf'):\n        return additional_root_predicate(raw,grouped,path,rec,data,values,build,physical)\n    if kind == 'archived_closed282_continuation_line':\n        history = data['continuation_history']; before = values[history['before']]; after = values[history['after']]\n        proof = json.loads(values[history['proof']])\n        assert proof['status'] == 'CLOSED_FIXED_CHECKPOINT_THROUGH282_WITH_OPEN_INTEGRATION'\n        assert proof['final_head'] == HEAD and proof['verified_segments'] == 282 and proof['next_batch'] == [283,284,285]\n        check_pin(before,proof['checkpoint_documents']['CAMPAIGN_CONTINUATION.md']['before'])\n        check_pin(after,proof['checkpoint_documents']['CAMPAIGN_CONTINUATION.md']['after'])\n        assert after.startswith(before) and raw.startswith(before)\n        number = entry['historical_line_number']; assert type(number) is int and number > 0\n        assert grouped == {'trailing whitespace.':[number]}\n        source_lines = before.split(b'\\n'); payload = source_lines[number-1]\n        assert payload == raw.split(b'\\n')[number-1] and payload.endswith(b' ') and not payload.endswith(b'  ')\n        lo = sum(len(line)+1 for line in source_lines[:number-1]); hi = lo+len(payload)\n        assert [lo,hi] == entry['historical_line_range'] and before[lo:hi] == raw[lo:hi] == payload\n        assert digest(payload) == entry['historical_line_sha256']\n        directory = Path(history['proof']).parent.parent/'through282-root-closure-caller'\n        command = json.loads(values[str(directory/'command.json')]); execution = json.loads(values[str(directory/'execution.json')])\n        assert command['argv'] == execution['argv'] and command['cwd'] == execution['cwd']\n        assert command['argv'][:3] == ['python3','-B','-c'] and len(command['argv']) == 7\n        assert command['argv'][5:] == [proof['data_head'],HEAD]\n        assert Path(command['argv'][4]).is_absolute() and command['argv'][4] == command['cwd']\n        assert execution['exit'] == 0 and values[str(directory/'exit.txt')] == b'0\\n'\n        assert not values[str(directory/'stdin.bin')] and not values[str(directory/'stderr.bin')]\n        assert values[str(directory/'stdout.bin')] == values[history['proof']]\n        assert execution['stdout_bytes'] == len(values[history['proof']]) and execution['stdout_sha256'] == digest(values[history['proof']])\n        assert execution['stderr_bytes'] == 0 and execution['stderr_sha256'] == digest(b'')\n        return dict(kind=kind,historical_preimage=history['before'],historical_checkpoint=history['proof'],line=number,byte_range=[lo,hi],exact_prebatch_prefix=True,boundary=history['recorded_boundary'])\n    assert kind == 'archived_current_physical_context'\n    context = values[entry['context_original']]\n    assert type(entry['is_print_stdout']) is bool\n    if entry['is_print_stdout']:\n        directory = Path(entry['event_directory'])\n        command = json.loads(values[str(directory/'command.json')]); execution = json.loads(values[str(directory/'execution.json')])\n        expected = ['python3','-B','-c','from pathlib import Path; print(Path(\"physical-context277-291.bin\").read_bytes().decode(\"latin-1\"))']\n        assert command['argv'] == expected and Path(command['cwd']) == Path(entry['context_original']).parent\n        assert Path(entry['context_original']).name == 'physical-context277-291.bin'\n        assert command['environment_overrides']['PYTHONDONTWRITEBYTECODE'] == '1'\n        assert command['started_at'] == execution['started_at']\n        assert execution['exit'] == 0 and values[str(directory/'exit.txt')] == b'0\\n'\n        assert not values[str(directory/'stdin.bin')] and not values[str(directory/'stderr.bin')]\n        assert values[str(directory/'stdout.bin')] == raw\n        assert execution['stdout_bytes'] == len(raw) and execution['stdout_sha256'] == digest(raw)\n        assert execution['stderr_bytes'] == 0 and execution['stderr_sha256'] == digest(b'')\n        assert raw == context.decode('latin-1').encode('utf-8') + b'\\n'\n        for numbers in grouped.values():\n            for number in numbers:\n                assert 1 <= number <= len(context.split(b'\\n'))\n                assert raw.split(b'\\n')[number-1] == context.split(b'\\n')[number-1]\n    else:\n        assert raw == context\n    # No blank-line fallback is broadened: whole context owns every warned line.\n    witness = classify_physical(context,grouped,physical)\n    assert witness == entry['physical_witness'] and witness['kind'] == 'physical_bytes'\n    return dict(kind=kind,context_original=entry['context_original'],physical_witness=witness,is_print_stdout=entry['is_print_stdout'],native_event=entry['event_directory'] if entry['is_print_stdout'] else None,exact_warned_line_transport=True)\n\n\nclass Run:",
+    "count": 1
+  }
+]

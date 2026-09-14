@@ -1,0 +1,96 @@
+from pathlib import Path
+from collections import Counter
+import hashlib,json,os
+assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+P=Path(__file__).resolve().parent
+ROOT=P.parents[2];B=ROOT/'campaign-artifacts/C05-283-285';R=B/'reconciled';D=R/'283';W=ROOT/'campaign-worktree'
+AD=ROOT/'campaign-artifacts/integration/through285-reconciliation-verifier-query-shape-adapter'
+OLD=ROOT/'campaign-artifacts/integration/through285-reconciliation-verifier-original-freeze-adapter'
+assert P.name=='through285-reconciliation-config-preparation'
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def load(p):return json.loads(p.read_bytes())
+def save(n,o):
+ with (P/n).open('x')as f:json.dump(o,f,ensure_ascii=False,indent=2);f.write('\n')
+(P/'inputs').mkdir()
+records={}
+def consume(p,copy=True):
+ p=Path(p);s=str(p);raw=p.read_bytes();h=bp(raw)
+ if s in records:
+  assert records[s]['sha256']==h['sha256']
+  if not copy or 'copy'in records[s]or len(raw)>=2_000_000:return raw
+ row={'original':s,'resolved_original':str(p.resolve()),'symlink':os.readlink(p)if p.is_symlink()else None,**h}
+ if copy and len(raw)<2_000_000:
+  c=P/'inputs'/(h['sha256']+'.bin')
+  if c.exists():assert c.read_bytes()==raw
+  else:
+   with c.open('xb')as f:f.write(raw)
+  row['copy']=str(c.relative_to(P))
+ else:row['retention']='external-full-original'
+ assert p.read_bytes()==raw
+ records[s]=row;return raw
+for p in [D/'runtime-schema-handoff.json',D/'completion-proof.json',D/'evidence-proof.json',D/'original-copy-manifest.json',D/'original-aliases.json',D/'governing.json',D/'governing-current.json',D/'physical-extents.json',D/'query-descriptors.json',D/'source-rows-full.json',D/'context-rows-full.json',R/'completion-boundary-freeze.json',R/'run-generator-ro.py.txt',B/'baseline.json',B/'source.json',B/'proposal-verification/root-resolved-spans.json',B/'proposal-verification/execution-proof.json',B/'proposal-verification/root-result-acceptance.json',B/'english/283/required-reference-access.json']:
+ consume(p)
+for d in [D/'completion-state',R/'freeze-caller01']:
+ for p in d.rglob('*'):
+  if p.is_file():consume(p)
+for d in [OLD,AD]:
+ for n in ['verify_reconciliation.py','config_contract.py']:
+  consume(d/n)
+for n in ['prepare.py.txt','prepare-v2.py.txt','v1-v2.diff','report.md','derivation-proof.json','command-contract.json','freeze.json','input-manifest.json','syntax01.command.json','syntax01.stdout','syntax01.stderr','syntax01.exit','syntax02.command.json','syntax02.stdout','syntax02.stderr','syntax02.exit','prepare02.command.json','prepare02.stdout','prepare02.stderr','prepare02.exit']:
+ consume(ROOT/'campaign-artifacts/C05-280-282/reconciliation-verifier-config'/n)
+for name in ['data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz','build/hgm_spine_v27_2.db','tools/gen_alignment_page.py']:
+ consume(W/name,False)
+boundary=load(R/'completion-boundary-freeze.json');assert boundary['file_count']==len(boundary['files'])==916
+for n,h in boundary['files'].items():
+ p=R/n;assert not Path(n).is_absolute() and '..'not in Path(n).parts
+ assert bp(consume(p,False))==h,n
+maps=load(D/'original-copy-manifest.json');assert len(maps)==len({r['original']for r in maps})==623
+for r in maps:
+ p=Path(r['original']);q=D/r['copy'];assert q.resolve().is_relative_to(D.resolve())
+ a=consume(p,False);b=consume(q,False);assert a==b and bp(a)=={k:r[k]for k in ['bytes','sha256']}
+aliases=load(D/'original-aliases.json');assert len(aliases)==625
+for r in aliases:
+ p=Path(r['logical']);assert str(p.resolve())==r['resolved'];assert (os.readlink(p)if p.is_symlink()else None)==r['symlink'];assert bp(consume(p,False))=={k:r[k]for k in ['bytes','sha256']}
+physical=load(D/'physical-extents.json');assert len(physical)==12
+for r in physical:
+ raw=consume(Path(r['original']));part=consume(D/r['excerpt']);assert bp(raw)==r['verified_full_source_pin']and raw[r['start']:r['end']]==part and bp(part)=={k:r[k]for k in ['bytes','sha256']};assert r['sha256']in {m['sha256']for m in maps}
+governing=load(D/'governing-current.json');assert len(governing['actual_runs'])==10
+for r in governing['actual_runs']:
+ call=D/r['execution'];ex=load(call);assert ex['argv']==r['argv']and ex['cwd']==r['cwd']and ex['exit']==r['exit']==0
+ for p in call.parent.iterdir():
+  if p.is_file():consume(p)
+ assert consume(D/r['copy'])==(call.parent/'stdout.bin').read_bytes()
+queryplans=[];shapes=Counter();selects=controls=0
+for index,r in enumerate(load(D/'query-descriptors.json')):
+ p=Path(r['original_descriptor']);raw=consume(p);desc=json.loads(raw);source=desc
+ for k in r['selector']:source=source[k]
+ if 'original_descriptor_pin'in r:assert bp(raw)==r['original_descriptor_pin']
+ assert r['parameter_key']=='parameters';present=[k for k in ['count','row_count']if k in source];assert present==r['count_keys_present']
+ for k in present:assert type(source[k])is int and source[k]==len(source['rows'])
+ q=load(D/r['path']);assert q['sql']==source['sql']and q['parameters']==source['parameters']and q['rows']==source['rows']and q['count']==len(source['rows'])==r['count']
+ if source['sql'].lstrip().upper().startswith('SELECT '):
+  kind='SELECT';selects+=1;future='queries/'+Path(r['path']).name
+ else:
+  assert source['sql']=='PRAGMA query_only'and source['parameters']==[]and source['rows']==[{'query_only':1}]and r['path']=='queries/075.json';kind='CONTROL';controls+=1;future='controls/075.json'
+ binding={'kind':'standalone'}if not r['selector']else {'kind':'query_container_parameters','index':r['selector'][1]}
+ assert not r['selector']or (r['selector'][0]=='queries'and len(r['selector'])==2)
+ shapes[(kind,binding['kind'],tuple(present))]+=1
+ queryplans.append({'index':index,'descriptor':{'path':str(p),**bp(raw)},'source_selector':r['selector'],'source_count_keys':present,'binding':binding,'kind':kind,'future_relative_path':future,'retained_normalized_path':str(D/r['path']),'record':r})
+assert (selects,controls)==(209,1)
+counts=[];original_count=0;freeze_members=0
+for angle in ['tibetan','english']:
+ for seq in [283,284,285]:
+  d=B/angle/str(seq);fp=d/('freeze-manifest.json'if angle=='tibetan'else'freeze.json');f=json.loads(consume(fp));rows=f if angle=='tibetan'else f['files'];names=set()
+  for r in rows:
+   n=r['path'];assert n not in names;names.add(n);assert bp(consume(d/n,False))=={k:r[k]for k in ['bytes','sha256']}
+  assert names=={str(p.relative_to(d))for p in d.rglob('*')if p.is_file()and p!=fp};freeze_members+=len(names)
+  for n in ['spec.json','intended-spans.json']:consume(d/n)
+  original_count+=len(load(d/'spec.json')['segments'][0]['spans'])
+for seq in [283,284,285]:
+ d=R/str(seq);sp=load(d/'spec.json')['segments'][0]['spans'];counts.append({'seq':seq,'spans':len(sp),'nulls':sum(s['eng']is None for s in sp),'d5_nonnull':sum(s['d']==5 and s['eng']is not None for s in sp)})
+assert original_count==145 and freeze_members==344
+assert {k:sum(r[k]for r in counts)for k in ['spans','nulls','d5_nonnull']}=={'spans':76,'nulls':0,'d5_nonnull':61}
+save('input-source-manifest.json',list(records.values()))
+save('query-binding-plan.json',queryplans)
+save('measured-source-evidence.json',{'counts':counts,'original_spans':original_count,'original_freeze_members':freeze_members,'SELECTs':selects,'controls':controls,'query_shapes':[{'shape':list(k),'count':v}for k,v in shapes.items()],'source_copy_records':len(maps),'aliases':len(aliases),'physical_extents':len(physical),'governing_fixed_objects':len(governing['actual_runs']),'historical_completion_members':len(boundary['files']),'historical_completion_bytes':boundary['total_bytes'],'outside_historical_boundary_now':sorted(set(str(p.relative_to(R))for p in R.rglob('*')if p.is_file())-set(boundary['files'])-{'completion-boundary-freeze.json'}),'target_executions':0,'SQL_Git_canonical_tests':0})
+print(json.dumps({'source_inspection':'PASS','records':len(records),'full_copies':sum('copy'in r for r in records.values()),'SELECTs':selects,'controls':controls,'totals':[76,0,61],'originals':145,'target_executed':False}))

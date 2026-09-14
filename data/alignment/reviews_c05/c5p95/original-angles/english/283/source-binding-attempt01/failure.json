@@ -1,0 +1,9 @@
+{
+  "exit": 1,
+  "kind": "source evidence preparation, not canonical generation",
+  "error": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xaf in position 376197: invalid start byte",
+  "cause": "The full C16 physical source is not valid UTF-8. Target ASCII evidence windows read previously were unaffected.",
+  "repair": "Compare full-file exact target ACIP presence in normalized byte strings, leaving every original byte unchanged. Retain prior output proofs and full prior source/diff.",
+  "source_changes": false,
+  "capture_provenance": "This record transcribes the actual exec_command result; raw native stdout/stderr files were not captured for this preparatory command."
+}

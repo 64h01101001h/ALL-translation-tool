@@ -1,0 +1,191 @@
+from pathlib import Path
+import ast, collections, datetime, difflib, hashlib, json, os
+
+assert __debug__
+ROOT=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+A=ROOT/'campaign-artifacts'; I=A/'integration'; O=I/'through285-generated-reproduction-preparation'
+OLD=I/'through282-generated-reproduction'; BOLD=A/'C05-280-282'; B=A/'C05-283-285'
+assert O==Path(__file__).resolve().parent and not (O/'proof.json').exists()
+def pin(raw): return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def stable(p):
+    p=Path(p);s=p.stat();raw=p.read_bytes();t=p.stat()
+    assert (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)
+    return raw
+def put(rel,raw):
+    p=O/rel;p.parent.mkdir(parents=True,exist_ok=True)
+    with p.open('xb') as f:f.write(raw)
+def save(rel,x):put(rel,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+copies=[]
+def cp(p,rel,role):
+    raw=stable(p);put(rel,raw);assert stable(p)==(O/rel).read_bytes()
+    copies.append(dict(original=str(p),copy=rel,role=role,**pin(raw)));return raw
+def js(p):return json.loads(stable(p))
+
+# Full historical runtime census. This is file inspection, never replay.
+f=js(OLD/'freeze.json');accept=js(I/'through282-generated-reproduction-root-acceptance/proof.json')
+assert accept['status']=='PASS' and accept['complete_runtime_freeze']==pin(stable(OLD/'freeze.json'))
+assert set(f['files'])=={str(p.relative_to(OLD)) for p in OLD.rglob('*') if p.is_file() and p.name!='freeze.json'} | {n for n in f['files'] if n.endswith('/freeze.json')}
+assert len(f['files'])==f['file_count']==accept['frozen_files']==1581
+for n,x in f['files'].items():assert pin(stable(OLD/n))==x,n
+assert sum(x['bytes'] for x in f['files'].values())==f['total_bytes']==accept['frozen_bytes']
+checks=js(OLD/'retention-checks.json');ret=js(OLD/'retention-proof.json');manifest=js(OLD/'input-manifest.json')
+assert len(checks)==ret['checks_total']==accept['retention_checks']==223847 and all(x['pass_'] is True for x in checks)
+assert len(manifest)==1513 and len(js(OLD/'post-run-original-copy-checks.json'))==1513
+for x in manifest:assert pin(stable(OLD/x['copy']))=={k:x[k] for k in ('bytes','sha256')}
+save('prior-complete-inspection.json',dict(runtime=str(OLD),freeze=pin(stable(OLD/'freeze.json')),files=len(f['files']),bytes=f['total_bytes'],input_aliases=len(manifest),retention_records=len(checks),retention_categories=dict(collections.Counter(x['check'] for x in checks)),full_frozen_files_reopened=True,full_manifest_copies_reopened=True,full_retention_records_parsed=True,execution=False,limit='Historical originals pointing to WT are interpreted through their immutable frozen copies; no claim that old live WT paths still have historical bytes.'))
+
+base=json.loads(cp(B/'baseline.json','inputs/current-baseline.json','actual incoming baseline'))
+closure=json.loads(cp(I/'through282-root-closure/proof.json','inputs/incoming-root-closure.json','actual closed incoming checkpoint schema'))
+assert base['commit']==closure['final_head']=='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert base['course_boundary']==closure['verified_segments']==282 and closure['next_batch']==[283,284,285]
+assert base['full_links']==ret['counts']['links']==45402
+cp(ROOT/'campaign-worktree/AGENTS.md','inputs/AGENTS.md','governing original')
+for name in ['freeze.json','preparation-proof.json','execution-proof.json','retention-proof.json','final-proof.json','root-runtime-release.json','input-manifest.json','registered-pages.json','acip-incomplete-evidence.json']:
+    cp(OLD/name,'inputs/prior-runtime/'+name,'complete accepted prior runtime evidence')
+cp(I/'through282-generated-reproduction-root-acceptance/proof.json','inputs/prior-root-acceptance.json','actual prior reproduction acceptance')
+
+runtime=['prepare.py.txt','run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt','close-evidence.py.txt']
+old_sources={n:cp(OLD/n,'prior/'+n,'actual accepted prior runtime source').decode() for n in runtime}
+cp(OLD/'prior-method.py.txt','prior/historical-in-memory-method.py.txt','complete deeper historical reference; never invoked')
+for sub,names in {
+    'payload-freezer-preparation':['freeze-final-payload-before-staging.py','prepare.py.txt','report.md','freeze.json','command-contract.json'],
+    'reproduction-entry-preparation':['approve-reproduction-method-root.py','bindings.json','replacement-map.json','complete.diff','complete.inverse.diff','report.md','proof.json','freeze.json','command-contract.json'],
+    'reproduction-retention-preparation':['verify-retention.py.txt','replacement-map.json','forward.diff.txt','inverse.diff.txt','report.md','preparation-proof.json','freeze.json'],
+    'reproduction-closure-preparation':['accept-independent-reproduction-root.py','close-evidence.py.txt','actual-bindings.json','adaptation-proof.json','report.md','freeze.json','command-contract.json']
+}.items():
+    for n in names:cp(BOLD/sub/n,'inputs/prior-preparations/'+sub+'/'+(n if Path(n).suffix in ('.txt','.json','.md','.py') else n+'.txt'),'complete prior preparation source/contract/history binding')
+for directory in ['caller-runs','executions']:
+    for p in sorted((OLD/directory).rglob('*')):
+        if p.is_file():
+            rel=p.relative_to(OLD).as_posix();suffix='' if p.suffix in ('.json','.txt','.bin') else '.bin'
+            cp(p,'inputs/prior-runtime/'+rel+suffix,'actual historical native caller stream/control; byte-exact, never reconstructed')
+for p in sorted((OLD/'root-helpers').iterdir()):
+    if p.is_file():cp(p,'inputs/prior-runtime/root-helpers/'+p.name,'complete actual prior root producer/source helper')
+
+external=[]
+def ext(p,role,**extra):
+    p=Path(p);raw=stable(p);x=dict(path=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,role=role,**pin(raw),**extra);external.append(x);return raw
+outputs=js(OLD/'execution-proof.json')['outputs'];assert len(outputs)==7
+for row in outputs:
+    rel=row['path'];raw=ext(OLD/'reproduced-outputs'/rel,'full immutable incoming generated file retained once in accepted prior runtime',incoming_git_commit=base['commit'],repository_relative_path=rel,git_verification='Future root release must compare actual object; no Git invoked in source preparation.')
+    assert pin(raw)=={k:row[k] for k in ('bytes','sha256')} and pin(raw)['sha256']==base['sha256'][rel]
+for rel in ['data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz','build/hgm_spine_v27_2.db']:
+    old=ext(OLD/'workspace'/rel,'full immutable prior source copy')
+    live=ext(ROOT/'campaign-worktree'/rel,'current raw source/master alias read only')
+    assert old==live
+    if rel in base['sha256']:assert pin(live)['sha256']==base['sha256'][rel]
+seed=next(x for x in external if x.get('repository_relative_path')=='docs/geshe_michael_roach_dictionary.csv')
+assert seed['bytes']==16233284 and seed['sha256']=='be62409f50e09c88fc6c1c2d38716f693ab14bdc48af45cb49563d44be602b98'
+for n in ['retention-checks.json','post-run-original-copy-checks.json']:
+    ext(OLD/n,'complete large historical evidence retained externally under verified runtime freeze')
+save('external-full-evidence.json',external)
+save('known-baseline-bindings.json',dict(head=base['commit'],course='C05',prior_boundary=282,target_boundary=285,target_page='c5p95',target_segments=[283,284,285],prior_counts=ret['counts'],baseline_sha256=base['sha256'],incoming_seed=seed,source_date=None,current_output_counts=None,current_output_pins=None,current_landing=None,current_semantic_acceptance=None,prior_date_is_historical_only=js(OLD/'preparation-proof.json')['source_date'],provenance='Tibetan-original author and tooling author; no new semantic verdict.'))
+
+guard="raise RuntimeError('SOURCE PREPARATION ONLY: post-build bindings and source review are pending; do not execute or materialize this candidate')\n"
+maps={};proofs={}
+def candidate(name,changes,pending):
+    old=old_sources[name];new=old;records=[]
+    for before,after,reason in changes:
+        offsets=[];at=0
+        while (at:=new.find(before,at))>=0:offsets.append(at);at+=len(before)
+        assert offsets,(name,before)
+        records.append(dict(before=before,after=after,before_offsets=offsets,reason=reason))
+        for at in reversed(offsets):new=new[:at]+after+new[at+len(before):]
+        shift=0;records[-1]['after_offsets']=[]
+        for at in offsets:records[-1]['after_offsets'].append(at+shift);shift+=len(after)-len(before)
+    prefix=guard+''.join(f'{key} = None  # {description}\n' for key,description in pending.items())
+    current=prefix+new;ast.parse(old);ast.parse(current)
+    reverse=current[len(prefix):]
+    for r in reversed(records):
+        for at in reversed(r['after_offsets']):
+            assert reverse[at:at+len(r['after'])]==r['after'];reverse=reverse[:at]+r['before']+reverse[at+len(r['after']):]
+    assert reverse==old
+    put('candidate/'+name,current.encode());maps[name]=dict(prefix=prefix,changes=records,pending=pending)
+    for label,a,b in [('forward',old,current),('inverse',current,old)]:put('diffs/'+name+'.'+label+'.diff.txt',''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile='prior/'+name if label=='forward' else 'candidate/'+name,tofile='candidate/'+name if label=='forward' else 'prior/'+name)).encode())
+    # Entire old AST is recovered, rather than merely counting assertions.
+    assert ast.dump(ast.parse(reverse),include_attributes=False)==ast.dump(ast.parse(old),include_attributes=False)
+    proofs[name]=dict(prior=pin(old.encode()),candidate=pin(current.encode()),exact_inverse=True,full_original_ast_recovered=True,original_assertions=sum(isinstance(n,ast.Assert) for n in ast.walk(ast.parse(old))),current_assertions=sum(isinstance(n,ast.Assert) for n in ast.walk(ast.parse(current))),unconditionally_blocked_before_imports=True)
+
+common=[('C05-280-282','C05-283-285','known batch path'),('c5p94','c5p95','known new page')]
+candidate('prepare.py.txt',common+[
+    ('10968d16e701b698a0e1fbd845b353089d15ac39',base['commit'],'actual incoming closed HEAD'),
+    ("==13","==PENDING_PAYLOAD_COUNT","actual post-build payload count, including actual allowance decision; no prior13 assumption")
+],dict(PENDING_PAYLOAD_COUNT='Actual immutable payload/source proof population after landing and builders.'))
+candidate('verify-retention.py.txt',common+[
+    ("len(old['links'])==45275","len(old['links'])==45402","actual incoming prior full links"),
+    ("'127 new links confined to280–282'","'Measured new links confined to283–285'","current segment scope; addition count unbound"),
+    ('len(added)==127','len(added)==PENDING_ADDED_LINKS','literal measured additions pending'),
+    ('(280,281,282)','(283,284,285)','known new segment set'),
+    ('{280:55,281:47,282:25}','PENDING_ADDED_BY_SEGMENT','literal measured group counts pending'),
+    ("'Entire37-row change export independently derived from actual incoming seed'","'Complete measured change export independently derived from actual incoming seed'","change row population pending"),
+    ('len(delta)==37','len(delta)==PENDING_CHANGE_ROWS','actual change rows pending'),
+    ("'ACIP evidence population five source-linked spans'","'Measured ACIP source-linked and historical populations'","current ACIP evidence pending"),
+    ('len(missspans)==5 and len(excluded)==1','len(missspans)==PENDING_MISSING_SPANS and len(excluded)==PENDING_EXCLUDED_ROWS','all ACIP populations pending'),
+    ("'ACIP head population7089/7092'","'Measured ACIP head population'","current ACIP heads pending"),
+    ("len(ev['pairs'])==7092 and len(ev['acip_index'])==7089 and len(missing)==3","len(ev['pairs'])==PENDING_HEADS and len(ev['acip_index'])==PENDING_PROVEN_ACIP and len(missing)==PENDING_MISSING_HEADS","actual population literals pending"),
+    ("'All six missing-ACIP full-bank rows are unchanged historical links'","'All missing-ACIP full-bank rows are unchanged historical links'","retains strict no-new-unproven-row gate"),
+    ('headwords=7092,proven=7089,missing=3,percentage=100*7089/7092','headwords=PENDING_HEADS,proven=PENDING_PROVEN_ACIP,missing=PENDING_MISSING_HEADS,percentage=100*PENDING_PROVEN_ACIP/PENDING_HEADS','actual ACIP disclosure numbers pending'),
+    ("printed_rounded_percent='100.0%'","printed_rounded_percent=PENDING_PRINTED_ACIP_PERCENT","literal actual producer stream value pending"),
+    ('unproven_source_linked_span_count=5,full_bank_d5_english_unproven_count=6','unproven_source_linked_span_count=PENDING_MISSING_SPANS,full_bank_d5_english_unproven_count=PENDING_FULL_MISSING_ROWS','full missing population pending'),
+    ("Existing95%floor permits three missing heads; rounded100.0%is not full coverage.","The existing95%floor does not establish full coverage; actual missing populations and printed percentage must be reported.","remove obsolete actual population claim without changing threshold"),
+    ("'C05 exact282coverage'","'C05 exact285coverage'","known coverage target"),
+    ('list(range(1,283))','list(range(1,286))','known exact contiguous target'),
+    ("'Accepted current124tuple interface'","'Accepted current measured tuple interface'","semantic interface count pending"),
+    ('len(tuples)==124','len(tuples)==PENDING_REVIEW_TUPLES','independent accepted tuple count pending'),
+    ("sum(x['eng'] is None for x in tuples)==4","sum(x['eng'] is None for x in tuples)==PENDING_REVIEW_NULLS","accepted null count pending"),
+    ("sum(x['d']==5 and x['eng'] is not None for x in tuples)==102","sum(x['d']==5 and x['eng'] is not None for x in tuples)==PENDING_REVIEW_D5_NONNULL","accepted d5 count pending"),
+    ("'Actual live frozen13 payload remains equal'","'Actual live frozen payload remains equal'","full per-file gate retained; actual population checked at release"),
+    ('[45402,11938,1618,11,7092,15546,22528,22188,24105,37]','PENDING_COUNT_VECTOR','all ten current output literals pending; never derive expected vector from same outputs')
+],{k:'Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.' for k in ['PENDING_ADDED_LINKS','PENDING_ADDED_BY_SEGMENT','PENDING_CHANGE_ROWS','PENDING_MISSING_SPANS','PENDING_EXCLUDED_ROWS','PENDING_HEADS','PENDING_PROVEN_ACIP','PENDING_MISSING_HEADS','PENDING_PRINTED_ACIP_PERCENT','PENDING_FULL_MISSING_ROWS','PENDING_REVIEW_TUPLES','PENDING_REVIEW_NULLS','PENDING_REVIEW_D5_NONNULL','PENDING_COUNT_VECTOR']})
+candidate('close-evidence.py.txt',[
+    ('C05-280-282','C05-283-285','known batch'),
+    ('==223847','==PENDING_CHECKS_TOTAL','actual successful retention population pending'),
+    ('==1513','==PENDING_INPUT_ALIASES','actual full input alias population pending'),
+    ("'2026-09-13'",'PENDING_SOURCE_DATE','actual root builder local date pending, never current UTC date'),
+    ('failure_attempts=0','failure_attempts=PENDING_RUNTIME_FAILURE_ATTEMPTS','actual runtime history pending; preserve every real failure')
+],dict(PENDING_CHECKS_TOTAL='Actual complete retention records and successful proof.',PENDING_INPUT_ALIASES='Actual prepare manifest population.',PENDING_SOURCE_DATE='Actual root output evidence meta.date, bound before replay.',PENDING_RUNTIME_FAILURE_ATTEMPTS='Actual current runtime caller history; no prior zero assumed.'))
+for n in ['run-once.py.txt','run-isolated-readonly.py.txt']:
+    raw=old_sources[n].encode();put('candidate/'+n,raw);ast.parse(raw)
+    for direction in ['forward','inverse']:put('diffs/'+n+'.'+direction+'.diff.txt',b'')
+    maps[n]=dict(changes=[],pending={},byte_identical=True)
+    proofs[n]=dict(prior=pin(raw),candidate=pin(raw),byte_identical=True,parsed_only=True,execution=False)
+save('replacement-map.json',maps);save('source-conservation.json',proofs)
+
+pending=[
+    dict(id='semantic',status='PENDING',requires='Actual independent APPROVE with separate SPEC/QUALITY PASS, no open findings, full current freeze, exact root-accepted tuple/spec/body/range pins and complete landed review copies. This author supplies no semantic approval.'),
+    dict(id='landed_payload',status='PENDING',requires='Actual page95, spec, prior-page94 navigation, index, registry builder and complete root payload manifest/source proof; actual full allowance sidecar decision and any errata disposition. Do not assume prior13, two allowances, or empty errata.'),
+    dict(id='canonical_production',status='PENDING',requires='Actual root one layer/one view and required tests/retention proof with native full command/stdin/stdout/stderr/exit/execution records, full seven outputs and source/master unchanged pins. Preserve informational stderr. Reuse actual tests; do not rerun for reproduction bookkeeping.'),
+    dict(id='date',status='PENDING',requires='Actual produced alignment_evidence_v1.json meta.date and matching main layer_date, tied to root producer records. Never use preparation UTC/local current date or historicalSep13 by assumption.'),
+    dict(id='fixed_output_literals',status='PENDING',requires='Actual ten output counts (links,nulls,notes,trees,heads,pairs,csv_main,csv_reverse,csv_course,csv_changes), additions per283/284/285, review tuple/null/d5 counts, all ACIP populations/rows and printed percentage. Bind literal measurements in a newly reviewed final source; never derive expected values from the same candidate outputs.'),
+    dict(id='entry',status='PENDING',requires='Fresh root source release adapted from complete prior entry helper, with actual preparation/review freezes, source maps/inverses, full source/output alias stat records, nine baseline pins, HEADfb9182, raw tracked/untracked/stage/cached/index bytes and empty index. Complete seed equals actual Git object atfb9182 and retained incoming seed bytes. Runtime absent.'),
+    dict(id='workspace_population',status='PENDING',requires='Exact post-landing registered pages, complete semantic tree/copy population, all original/copy alias paths and proof/source manifests. Historical1513/548/871 populations are not current facts.'),
+    dict(id='post_runtime_closure',status='PENDING',requires='After actual prepare/run/retention only: measured checks_total/input aliases, all actual caller histories, root actual Git-object rereads, complete before/after raw state equality, runtime full freeze after closure caller completes and independent root acceptance. No zero failure count or runtime freeze pin assumed.')
+]
+save('pending-bindings.json',pending)
+stages=[
+    dict(order=1,action='Root completes independent semantic acceptance and exact page95 landing, canonical builders and required checks.',mutation='Existing root-authorized workflow only; not released by this package.'),
+    dict(order=2,action='Freeze root actual complete payload and incoming CSV seed; capture full actual outputs, producer date, source pins and raw states.',mutation='Future root workflow, not this preparation.'),
+    dict(order=3,action='Prepare final literal-bound runtime sources and adapt full old root entry/acceptance methods to actual schemas. Preserve this unbound source package and exact new differences; independent/root source review required.',mutation='Future source-only binding first.'),
+    dict(order=4,action='Reviewed root entry verifies full originals/maps/freezes/source/master/Git/raw state and then materializes exact four released initial runtime sources only into fresh integration/through285-generated-reproduction.',mutation='No current release. Runtime must be absent.'),
+    dict(order=5,action='Record one actual prepare.py.txt invocation, then one run-once.py.txt invoking isolated layer and view once, then one verify-retention.py.txt invocation.',cwd='integration/through285-generated-reproduction',argv_prefix=['<actual approved Python interpreter>','-B'],environment=dict(PYTHONDONTWRITEBYTECODE='1',PYTHONOPTIMIZE='0',GIT_OPTIONAL_LOCKS='0'),callers='runtime/caller-runs/{prepare,run-once,retention}; full command/stdin.bin/stdout.bin/stderr.bin/exit.txt/execution.json, no fabricated captures.'),
+    dict(order=6,action='Bind actual retention and caller populations into reviewed close-evidence.py.txt, materialize exact bytes and record actual close-evidence invocation; preserve all failures and partial outputs without automatic retry.',cwd='integration/through285-generated-reproduction'),
+    dict(order=7,action='Freeze complete runtime after all internal callers close. Execute separately reviewed root acceptance from its required batch-root location with caller external to frozen runtime; recheck every original/copy, seven Git baseline objects, all seven outputs, source aliases, immutable seed transition and before/after raw state.',output='integration/through285-generated-reproduction-root-acceptance',status='Future exact acceptance helper is not prepared/released here.')
+]
+save('ordered-command-plan.json',stages)
+save('original-to-copy-manifest.json',copies)
+for x in copies:assert stable(x['original'])==(O/x['copy']).read_bytes() and pin(stable(x['original']))=={k:x[k] for k in ('bytes','sha256')}
+report="""Prepared the through285 reproduction method from the complete accepted through282 runtime. This author prepared the Tibetan original alignment and tooling; this package supplies no independent semantic verdict. No helper, builder, SQL, Git, test, native application or reproduction was executed. All writes are confined to this preparation.
+
+The actual prior method comprises prepare, run-once, the isolated read-only wrapper, retention, and close-evidence, plus separate root entry/acceptance methods. The entire prior runtime freeze was reopened:1581 files,539477646 bytes; all1513 input-copy aliases and223847 recorded retention outcomes were inspected. Complete source files, small proofs, original preparation maps and real caller/producer streams are copied. Large immutable evidence remains fully retained at explicitly pinned prior paths. Historical live WT aliases are not asserted to retain historical bytes.
+
+Known current inputs are closed HEADfb9182dc6fca2230be3bc5169ba1288a22430280, prior45402 links, target C05:283–285/page95, and the nine incoming baseline hashes. The seven prior reproduced files exactly match the current baseline pins. The full immutable incoming main CSV is16233284 bytes, SHA256be62409f50e09c88fc6c1c2d38716f693ab14bdc48af45cb49563d44be602b98. Its old physical copy is retained once; future root entry must compare the complete actual Git object and copy those bytes as the isolated first-view seed. Current master/corpus/spine bytes were read without SQL and equal the immutable prior source copies.
+
+Three complete candidates contain an unconditional pre-import source-only stop and explicitNone pending literals. They preserve prior full predicates and only adapt known paths/boundary/prior-link count or replace obsolete current measurements with named pending values. Every replacement reverses exactly to the whole prior source and AST. Both execution wrappers are byte-identical. Nothing is materialized at the future runtime. Removing the guard and binding values requires a separately reviewed final source after actual inputs exist. The old full root entry, payload freezer and root acceptance methods are references, not adapted or released executable methods.
+
+All retention gates remain: complete old links/notes/trees and evidence/ACIP references; main/reverse/course rows and metadata; changes derived from the actual incoming seed; complete CSV BOM/CRLF and HTML tuples; exact coverage and source-page digest; accepted tuples and read-only source ranges; complete immutable input/payload bytes; fixed expected count vector; honest tentative labels and incomplete-ACIP disclosure. Existing no-new-unproven-ACIP and no-ACIP-enrichment restrictions remain; any actual contrary result needs a separately justified source change, never relaxed expectations. Payload/allowance/errata populations are deliberately unbound.
+
+The pending-binding and ordered-command plans preserve actual independent semantic acceptance, complete landed copies, producer-local meta.date, all seven root and reproduced outputs, source/master/alias invariants, native byte streams including informational stderr, assertion/bytecode/SQLite/write-scope controls, fresh entry raw-state capture, and full post-run original/Git/raw-state closure. Current output counts, seed-transition result, date, registered pages, aliases, test duration, review/freeze populations, failures and checks_total remain pending. Historical successful counts and dates are evidence of the prior method only. Root must release actual post-build inputs before final binding and reproduction.
+"""
+put('report.md',report.encode())
+save('proof.json',dict(status='SOURCE_ONLY_UNBOUND_REPRODUCTION_PREPARATION',head=base['commit'],whole_prior_runtime_verified=True,prior_frozen_files=len(f['files']),prior_frozen_bytes=f['total_bytes'],source_copy_records=len(copies),candidate_sources=proofs,seed=seed,source_only_ast_checks=True,candidate_imports=0,candidate_invocations=0,sql_calls=0,git_calls=0,builder_invocations=0,test_invocations=0,semantic_approval=False,current_output_measurements=None,pending_bindings=[x['id'] for x in pending]))
+print(json.dumps(dict(status='SOURCE_ONLY_UNBOUND_REPRODUCTION_PREPARATION',original_copy_records=len(copies),prior_frozen_files=len(f['files']),candidate_sources=len(proofs),unconditional_blocked_candidates=3,unchanged_wrappers=2,candidate_execution=False),indent=2))

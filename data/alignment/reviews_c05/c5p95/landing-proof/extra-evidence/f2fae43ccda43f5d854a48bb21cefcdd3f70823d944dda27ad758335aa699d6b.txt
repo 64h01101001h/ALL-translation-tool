@@ -1,0 +1,63 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through279-final-bank-inventory-preparation/compose-final-inputs.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-preparation/compose-final-inputs.py
+@@ -1,4 +1,4 @@
+-"""Read-only, review-gated actual through279 final-whitespace intake composer.
++"""Read-only, review-gated actual through282 final-whitespace intake composer.
+ No banker, Git, diagnostic, source execution, source normalization or self-banking.
+ """
+ from pathlib import Path
+@@ -14,10 +14,10 @@
+ ROOT = Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+ ART = ROOT / 'campaign-artifacts'
+ I = ART / 'integration'
+-B = ART / 'C05-277-279'
++B = ART / 'C05-280-282'
+ L = B / 'landing'
+-DEST = ROOT / 'campaign-worktree/data/alignment/reviews_c05/c5p93/landing-proof'
+-BASE = 'f114fcb7a5a899b939ffc948ae9fdbbb746541fa'
++DEST = ROOT / 'campaign-worktree/data/alignment/reviews_c05/c5p94/landing-proof'
++BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
+ LIMIT = 2_000_000
+ 
+ 
+@@ -123,11 +123,11 @@
+             'Require bytecode disabled and optimization off')
+     output = Path(args.output)
+     require(output.is_absolute() and output.parent.resolve(strict=True) == I.resolve() and
+-            output.name == 'through279-final-bank-inventory' and not output.exists(), 'fresh exact output required')
++            output.name == 'through282-final-bank-inventory' and not output.exists(), 'fresh exact output required')
+     scope_raw = read(args.scope)
+     require(pin(scope_raw)['sha256'] == args.scope_sha256, 'scope pin mismatch')
+     scope = strict_json(scope_raw)
+-    require(scope['schema'] == 'through279-final-intake-v1' and scope['baseline'] == BASE, 'scope schema/baseline')
++    require(scope['schema'] == 'through282-final-intake-v1' and scope['baseline'] == BASE, 'scope schema/baseline')
+     require(scope['deferred_before_final_bank'] and scope['later_external_after_final_bank'], 'missing truthful boundaries')
+     output.mkdir(exist_ok=False)
+     save(output / 'invocation.json', {'argv': sys.argv, 'cwd': os.getcwd(),
+@@ -165,7 +165,7 @@
+                 require(read(DEST / relative(row['copy'])) == raw, ('prior explicit copy', str(p)))
+         require(isinstance(strict_json(controls['ordinary_extra_inputs']), list), 'ordinary LIST schema')
+         require(scope['controls']['ordinary_extra_inputs']['original'] ==
+-                str(I / 'through279-ordinary-bank-inventory/extra-inputs.json'), 'old extra LIST path')
++                str(I / 'through282-ordinary-bank-inventory/extra-inputs.json'), 'old extra LIST path')
+         audit = strict_json(controls['audit_proof'])
+         acceptance = strict_json(controls['root_acceptance'])
+         require(audit['status'] == 'PASS actual staged diagnostic reproduced and predicates verified' and
+@@ -208,7 +208,7 @@
+         automatic.extend((B / name, 'root-review-history/' + name + ('.txt' if Path(name).suffix == '.py' else ''))
+                          for name in history[0])
+         automatic.extend([(B / 'freeze-final-payload-before-staging.py', 'root-helpers/freeze-final-payload-before-staging.py.txt'),
+-                          (Path(scope['controls']['banker']['original']), 'root-helpers/bank_root_proofs_through279.py.txt')])
++                          (Path(scope['controls']['banker']['original']), 'root-helpers/bank_root_proofs_through282.py.txt')])
+         require([(str(p), c) for p, c in automatic] == [(r['source']['original'], r['copy']) for r in scope['automatic_inputs']],
+                 'automatic source routing changed')
+         automatic_proof = []
+@@ -253,7 +253,7 @@
+         require(rows, 'empty final intake')
+         retained_after = set(retained) | {r['original'] for r in rows}
+         for group in scope['roots']:
+-            if group['root'] == str(I / 'through279-banking-ordinary'):
++            if group['root'] == str(I / 'through282-banking-runs/ordinary'):
+                 require({r['resolved'] for r in group['files']} <= retained_after, 'ordinary internal file omitted')
+         require({scope['controls'][n]['resolved'] for n in ('audit_proof', 'raw_diagnostic')} <= retained_after,
+                 'stage-required whitespace original omitted')

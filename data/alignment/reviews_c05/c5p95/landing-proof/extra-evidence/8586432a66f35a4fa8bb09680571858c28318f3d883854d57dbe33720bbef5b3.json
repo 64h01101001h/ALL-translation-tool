@@ -1,0 +1,234 @@
+{
+  "status": "COMPLETE_SOURCE_ONLY_LITERAL_BOUND_PREPARATION_PENDING_ROOT_REVIEW",
+  "role": "Tibetan original proposer and tooling author; no independent semantic acceptance",
+  "baseline": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+  "sequences": [
+    283,
+    284,
+    285
+  ],
+  "page": 95,
+  "current_measurements": {
+    "counts": {
+      "links": 45481,
+      "nulls": 11938,
+      "notes": 1621,
+      "trees": 11,
+      "heads": 7093,
+      "pairs": 15557,
+      "csv_main": 22546,
+      "csv_reverse": 22206,
+      "csv_course": 24126,
+      "csv_changes": 18
+    },
+    "added_links": 79,
+    "added_by_segment": {
+      "283": 17,
+      "284": 30,
+      "285": 32
+    },
+    "prior_links": 45402,
+    "source_date": "2026-09-13",
+    "source_pages": "banked pages, 5 course(s) (sha256 fc9cdbee115e7969)",
+    "registered_pages": 549,
+    "review_counts": {
+      "spans": 76,
+      "nulls": 0,
+      "d5_nonnull": 61
+    },
+    "acip": {
+      "heads": 7093,
+      "proven": 7090,
+      "missing_heads": 3,
+      "missing_spans": 5,
+      "excluded_rows": 1,
+      "full_missing_rows": 6
+    },
+    "payload_count": 13,
+    "payload_bytes": 41185332,
+    "seed": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-283-285/landing/previous-main-csv-seed.bin",
+      "bytes": 16233284,
+      "sha256": "be62409f50e09c88fc6c1c2d38716f693ab14bdc48af45cb49563d44be602b98"
+    },
+    "semantic_freeze": {
+      "bytes": 445105,
+      "sha256": "8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445"
+    },
+    "semantic_members": 2386,
+    "landed_semantic_members": 2387,
+    "source_only": true,
+    "actual_tests_reused": 17,
+    "new_tests": 0,
+    "registry_method": "Full AST literal pages and exact os.path.join(OUTDIR, constant) directories; no module import."
+  },
+  "initial_runtime_sources": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/prepare.py.txt",
+      "bytes": 5854,
+      "sha256": "fc6221f0525b252abc259bdcaba5aa420c9403dcf8745b96e424aa76407a124b"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/run-once.py.txt",
+      "bytes": 2559,
+      "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/run-isolated-readonly.py.txt",
+      "bytes": 1639,
+      "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/verify-retention.py.txt",
+      "bytes": 11882,
+      "sha256": "c9b09d5b3c34632e1c225d9ba2ee4bcc895a087444e8cf071492050602cfee3c"
+    }
+  ],
+  "root_methods": [
+    {
+      "name": "approve-reproduction-method-root.py",
+      "prior": {
+        "bytes": 11605,
+        "sha256": "ed9774cde3796292ba624a2b25e0b6c200c12d3942cdb8a8728d7d0f3a0431b4"
+      },
+      "candidate": {
+        "bytes": 15181,
+        "sha256": "58695746f9777854cf5c84c275762bf250c7d95538022243a1d61ac98a97d964"
+      },
+      "whole_forward_inverse_AST_exact": true,
+      "old_assertions": 57,
+      "new_assertions": 84,
+      "candidate_executed": false,
+      "pending_actual_runtime": false
+    },
+    {
+      "name": "accept-independent-reproduction-root.py",
+      "prior": {
+        "bytes": 10268,
+        "sha256": "87f638191a9e5b6782725b20e75459532fc71844fbb7fd8a07e5f782a105f935"
+      },
+      "candidate": {
+        "bytes": 10532,
+        "sha256": "d573f8dd616f4ed6de9d3315db41656ea123653ad9bf9f0fdd5bbe500940d489"
+      },
+      "whole_forward_inverse_AST_exact": true,
+      "old_assertions": 57,
+      "new_assertions": 57,
+      "candidate_executed": false,
+      "pending_actual_runtime": true
+    }
+  ],
+  "runtime_source_conservation": [
+    {
+      "name": "prepare.py.txt",
+      "prior": {
+        "bytes": 5606,
+        "sha256": "43e817bca44c3cda9a6c30010324efed61abbf25ce414cf3c1dde41f07a6d405"
+      },
+      "candidate": {
+        "bytes": 5854,
+        "sha256": "fc6221f0525b252abc259bdcaba5aa420c9403dcf8745b96e424aa76407a124b"
+      },
+      "byte_identical": false,
+      "whole_inverse_and_AST_exact": true,
+      "parsed_only": true,
+      "execution": false,
+      "pending_actual_runtime": false
+    },
+    {
+      "name": "run-once.py.txt",
+      "prior": {
+        "bytes": 2559,
+        "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+      },
+      "candidate": {
+        "bytes": 2559,
+        "sha256": "531f3d2ba124b1359ce06e570dea99c563db7fdac023584cbacdaae1c0674da0"
+      },
+      "byte_identical": true,
+      "whole_inverse_and_AST_exact": true,
+      "parsed_only": true,
+      "execution": false,
+      "pending_actual_runtime": false
+    },
+    {
+      "name": "run-isolated-readonly.py.txt",
+      "prior": {
+        "bytes": 1639,
+        "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+      },
+      "candidate": {
+        "bytes": 1639,
+        "sha256": "1ab3966da658a6af028132875c0dfdb25c53b4c77fdfe37c3264c83a81cf54ca"
+      },
+      "byte_identical": true,
+      "whole_inverse_and_AST_exact": true,
+      "parsed_only": true,
+      "execution": false,
+      "pending_actual_runtime": false
+    },
+    {
+      "name": "verify-retention.py.txt",
+      "prior": {
+        "bytes": 11887,
+        "sha256": "ab52c8f142d19dee8e860b6d57dd2df761c3e285b1a8f062fa5c6da67a5a3d77"
+      },
+      "candidate": {
+        "bytes": 11882,
+        "sha256": "c9b09d5b3c34632e1c225d9ba2ee4bcc895a087444e8cf071492050602cfee3c"
+      },
+      "byte_identical": false,
+      "whole_inverse_and_AST_exact": true,
+      "parsed_only": true,
+      "execution": false,
+      "pending_actual_runtime": false
+    },
+    {
+      "name": "close-evidence.py.txt",
+      "prior": {
+        "bytes": 4935,
+        "sha256": "3395a15d3fb07ae6dbf9cad582fd72e00ac7658a204917b44530f4587e5b83e3"
+      },
+      "candidate": {
+        "bytes": 5240,
+        "sha256": "4ead6327e880cdf3c7b2fb226a77ae652d66ad6d4bc9dff340f68434614cdce4"
+      },
+      "byte_identical": false,
+      "whole_inverse_and_AST_exact": true,
+      "parsed_only": true,
+      "execution": false,
+      "pending_actual_runtime": true
+    }
+  ],
+  "ancestral_package_members": 242,
+  "ancestral_packages": 3,
+  "original_copy_checks": 289,
+  "new_full_source_copy_records": 129,
+  "external_source_pins": 619,
+  "whole_source_recipes": 16,
+  "future_recorder_copy": "future-runtime-recorder-original-copy-map.json",
+  "pending_actual_runtime": {
+    "status": "PENDING_REAL_INDEPENDENT_RUNTIME",
+    "checks_total": null,
+    "input_aliases": null,
+    "runtime_failure_attempts": null,
+    "complete_runtime_freeze": null,
+    "actual_close_source": null,
+    "release_scope": "Only prepare, run-once (one layer and one seeded view) and verify-retention are initial release candidates. Close and root acceptance remain conditional until real run results exist."
+  },
+  "actual_source_preparation_failures": [
+    "source-collection-caller: explicit ancestor freeze LIST schema rejected by initial DICT-only reader; complete failed source and native streams retained; narrow source-collection-v2 succeeded",
+    "runtime-source-caller: redundant literal replacement assertion after an earlier replacement already covered the same expression; complete failed source and native streams retained; narrow runtime-source-v2 succeeded"
+  ],
+  "read_only_discovery_limitation": "history/initial-provenance-path-read.json faithfully transcribes the known tool-result-only filename discovery failure; unavailable raw streams, byte counts and timestamps are null, not reconstructed.",
+  "production_reader_history": "Both actual root measurement attempts and reader-correction are retained in full. First reader counted page groups instead of note/tree blocks; production data and the actual builders/tests were not rerun.",
+  "candidate_invocations": 0,
+  "candidate_imports": 0,
+  "sql_calls": 0,
+  "git_calls": 0,
+  "new_builders": 0,
+  "new_tests": 0,
+  "runtime_directory_absent": true,
+  "B_or_worktree_writes": false,
+  "freeze": "freeze.json, written last; its actual member count and pin are reported by the freeze helper, not invented here"
+}

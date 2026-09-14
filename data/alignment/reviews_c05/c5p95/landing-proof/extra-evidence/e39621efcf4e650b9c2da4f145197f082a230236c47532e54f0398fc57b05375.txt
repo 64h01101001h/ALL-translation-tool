@@ -1,0 +1,315 @@
+"""PREPARED: explicit ordinary/final-whitespace root-proof banking phases.
+
+No generation, tests, Git staging, semantic changes or whitespace normalization.
+A phase covers its pre-existing input inventory, never its later caller logs.
+Run only after independent tooling review and explicit root invocation.
+"""
+from pathlib import Path
+import argparse
+import datetime
+import hashlib
+import json
+import os
+import re
+import sys
+import subprocess
+import traceback
+
+BASE = '10968d16e701b698a0e1fbd845b353089d15ac39'
+PAGE, SEQS = 94, [280, 281, 282]
+LARGE_BYTES = 2_000_000
+TESTS = {'constitution', 'gen_alignment_page', 'alignment_gate_coverage', 'alignment_builder',
+         'dictionary_exports', 'no_broken_words', 'no_split_syllables', 'no_phonetics_in_layer',
+         'no_degenerate_members', 'no_supplied_span_head', 'layer_matches_spine', 'evidence_matches_spine',
+         'errata_quotes_hold', 'view_matches_layer', 'generated_docs_in_sync', 'builder_sees_every_span',
+         'errata_name_their_witnesses'}
+HISTORY = (
+    'verify-complete-originals.py',
+    'proposal-verification/root-original-freeze-check.json',
+    'proposal-verification/execution-proof.json',
+    'reconciliation-verifier-head-allowance-preparation/verify_reconciliation.py',
+    'reconciliation-verifier-head-allowance-preparation/config_contract.py',
+    'reconciliation-verifier-config/config.json',
+    'release-root-reconciliation-runtime-v2.py',
+    'root-reconciliation-runtime-release-v2/proof.json',
+    'root-reconciliation-verification/execution-proof.json',
+    'root-reconciliation-verification/report.json',
+    'root-reconciliation-verification/resolved-spans.json',
+    'verify-final-semantic-review-root.py',
+    'root-final-semantic-review-verification/proof.json',
+)
+
+
+def pin(raw):
+    return dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+
+def relpath(value):
+    path = Path(value)
+    assert value and not path.is_absolute() and '..' not in path.parts
+    return path
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--phase', choices=['ordinary', 'final-whitespace'], required=True)
+    for name in ('batch', 'worktree', 'run-output', 'payload-manifest', 'payload-source-proof', 'untracked-capture-stem', 'extra-inputs'):
+        parser.add_argument('--' + name, required=True)
+    parser.add_argument('--whitespace-inputs')
+    args = parser.parse_args()
+    if not __debug__:
+        raise RuntimeError('Assertions must remain enabled')
+    b, wt = Path(args.batch).resolve(strict=True), Path(args.worktree).resolve(strict=True)
+    assert b.name == 'C05-280-282'
+    landing = b / 'landing'; review = b / 'semantic-review'
+    dest = wt / 'data/alignment/reviews_c05/c5p94/landing-proof'
+    output = Path(args.run_output).absolute()
+    assert not output.resolve().is_relative_to(wt) and not output.resolve().is_relative_to(b)
+    output.mkdir(parents=True, exist_ok=False)
+    (output / 'invocation.json').write_text(json.dumps(dict(argv=sys.argv, cwd=os.getcwd()), indent=2) + '\n')
+    inputs = {}; planned = []; records = []; externals = []
+    writes = []
+
+    def read(path):
+        path = Path(path)
+        raw = path.read_bytes(); key = str(path.resolve(strict=True)); value = pin(raw)
+        if key in inputs:
+            assert inputs[key] == value, ('changed original', path)
+        inputs[key] = value
+        return raw
+
+    def js(path):
+        return json.loads(read(path))
+
+    def match(raw, record):
+        assert pin(raw) == {k: record[k] for k in ('bytes', 'sha256')}
+
+    def semantic_tree():
+        frozen = js(review / 'freeze.json')
+        tree = frozen['files']
+        if isinstance(tree, list):
+            mapped = {r['path']: {k: r[k] for k in ('bytes', 'sha256')} for r in tree}
+            assert len(mapped) == len(tree)
+            tree = mapped
+        assert isinstance(tree, dict)
+        assert {str(p.relative_to(review)) for p in review.rglob('*') if p.is_file()} == set(tree) | {'freeze.json'}
+        for name, expected in tree.items():
+            match(read(review / relpath(name)), expected)
+        return pin(read(review / 'freeze.json'))
+
+    def add(source, copy=None, disposition=None, expected=None):
+        source = Path(source).resolve(strict=True)
+        assert source.is_file() and not source.is_relative_to(dest.resolve()) and not source.is_relative_to(output.resolve())
+        raw = read(source)
+        if expected:
+            match(raw, expected)
+        if copy is None:
+            assert disposition
+            record = dict(path=str(source), **pin(raw), disposition=disposition)
+            if record not in externals:
+                externals.append(record)
+        else:
+            relative = str(relpath(str(copy)))
+            target = dest / relative
+            assert target.resolve().is_relative_to(dest.resolve())
+            for old in records:
+                if old['copy'] == relative:
+                    assert {k: old[k] for k in ('bytes', 'sha256')} == pin(raw), ('conflicting copy pins', relative)
+            record = dict(original=str(source), copy=relative, **pin(raw))
+            if record not in records:
+                records.append(record)
+            planned.append((source, target, pin(raw)))
+
+    def explicit_inputs(path):
+        config = js(path)
+        assert isinstance(config, list)
+        for record in config:
+            assert isinstance(record['original'], str)
+            source = Path(record['original'])
+            if record['retention'] == 'bank':
+                add(source, copy=record['copy'], expected=record)
+            else:
+                assert record['retention'] == 'external'
+                add(source, disposition=record['disposition'], expected=record)
+        add(Path(path), copy='banking-config/' + Path(path).name)
+
+    try:
+        argv = ['git', 'rev-parse', 'HEAD']
+        (output / 'head-command.json').write_text(json.dumps(dict(argv=argv, cwd=str(wt), environment_overrides={'GIT_OPTIONAL_LOCKS':'0','PYTHONDONTWRITEBYTECODE':'1'}), indent=2) + '\n')
+        result = subprocess.run(argv, cwd=wt, env=dict(os.environ, GIT_OPTIONAL_LOCKS='0', PYTHONDONTWRITEBYTECODE='1'), input=b'', capture_output=True)
+        (output / 'head-stdin.bin').write_bytes(b'')
+        (output / 'head-stdout.txt').write_bytes(result.stdout)
+        (output / 'head-stderr.txt').write_bytes(result.stderr)
+        (output / 'head-exit.txt').write_text(str(result.returncode) + '\n')
+        assert result.returncode == 0 and not result.stderr and result.stdout.decode().strip() == BASE
+        ordinary = landing / 'root-proof-copy-manifest-before-whitespace.json'
+        final = landing / 'root-proof-copy-manifest.json'
+        target_manifest = ordinary if args.phase == 'ordinary' else final
+        assert not target_manifest.exists()
+        assert not (dest / target_manifest.name).exists()
+        if args.phase == 'ordinary':
+            assert not dest.exists() and not final.exists() and args.whitespace_inputs is None
+        else:
+            assert dest.is_dir() and ordinary.is_file() and args.whitespace_inputs
+            old_raw = read(ordinary)
+            assert read(dest / ordinary.name) == old_raw
+            old = json.loads(old_raw)
+            assert old['phase'] == 'ordinary' and old['semantic_review_unchanged'] is True
+            for record in old['files']:
+                raw = read(record['original']); match(raw, record)
+                assert read(dest / relpath(record['copy'])) == raw
+                records.append(record)
+            for record in old['external_actual_bytes_retained']:
+                match(read(record['path']), record); externals.append(record)
+
+        initial_review = semantic_tree()
+        preservation = js(b / 'root-final-semantic-review-verification/proof.json')
+        assert preservation['status'] == 'PASS' and preservation['head'] == BASE
+        assert preservation['review_freeze'] == initial_review
+        accepted = js(landing / 'root-semantic-acceptance-proof.json')
+        copied = js(landing / 'root-frozen-input-copy-check.json')
+        for proof in (accepted, copied):
+            assert proof['head'] == BASE and proof['page'] == PAGE and proof['segments'] == SEQS
+            assert proof['exact_final_hashes_counts_and_ranges'] is True
+            assert proof['review_json_sha256'] == pin(read(review / 'review.json'))['sha256']
+        assert copied['landed_bytes_checked'] is True
+        registration = js(landing / 'course-registration-verification.json')
+        assert registration['status'] == 'PASS' and registration['page'] == PAGE and registration['segments'] == SEQS
+        build = js(landing / 'canonical-builds-once.json')
+        assert build['status'] == 'PASS' and build['baseline_commit'] == BASE and build['page'] == PAGE
+        measured_builds = []
+        for record_path in sorted(landing.rglob('canonical-builds-once.json')):
+            record = js(record_path)
+            assert record['page'] == PAGE and record['first_segment'] == SEQS[0]
+            for i, run in enumerate(record['runs']):
+                assert i < 2
+                label = ('build-layer', 'build-view')[i]
+                command = js(record_path.parent / (label + '.command.json'))
+                assert command['argv'] == run['argv'] and command['cwd'] == run['cwd']
+                for ext in ('stdout', 'stderr'):
+                    raw = read(record_path.parent / (label + '.' + ext))
+                    assert len(raw) == run[ext + '_bytes'] and pin(raw)['sha256'] == run[ext + '_sha256']
+                assert int(read(record_path.parent / (label + '.exit'))) == run['exit']
+                measured_builds.append(dict(record=str(record_path), label=label, exit=run['exit']))
+        assert len(build['runs']) == 2 and all(run['exit'] == 0 for run in build['runs'])
+        coverage = re.findall(rb'^COVERAGE C05: (\d+)/511 segments scanned, (\d+) open \(([^)]+)\)$', read(landing / 'build-layer.stdout'), re.M)
+        assert coverage == [(b'282', b'229', b'283-511')]
+        for path, expected in build['output_sha256'].items():
+            assert pin(read(wt / relpath(path)))['sha256'] == expected
+        stdout = read(landing / 'ctest-17.stdout')
+        assert int(read(landing / 'ctest-17.exit')) == 0 and not read(landing / 'ctest-17.stderr')
+        test_execution = js(landing / 'ctest-17.execution.json')
+        assert test_execution['exit'] == 0 and test_execution['stdout_bytes'] == len(stdout) and test_execution['stderr_bytes'] == 0
+        passed = re.findall(r'^\s*(\d+)/(\d+) Test\s+#(\d+): ([a-z_]+) .* Passed\s+([0-9.]+) sec$', stdout.decode(), re.M)
+        duration = re.findall(r'^Total Test time \(real\) =\s*([0-9.]+) sec$', stdout.decode(), re.M)
+        assert len(passed) == len(TESTS) and {x[3] for x in passed} == TESTS and len(duration) == 1
+        assert [int(x[0]) for x in passed] == list(range(1, len(TESTS) + 1)) and all(int(x[1]) == len(TESTS) for x in passed)
+        assert f'100% tests passed out of {len(TESTS)}' in stdout.decode()
+
+        payload_raw = read(Path(args.payload_manifest))
+        payload = json.loads(payload_raw); assert payload['head'] == BASE and payload['files']
+        assert len({r['path'] for r in payload['files']}) == len(payload['files'])
+        for record in payload['files']:
+            match(read(wt / relpath(record['path'])), record)
+        source_proof = js(Path(args.payload_source_proof))
+        assert source_proof['status'] == 'PASS' and source_proof['head'] == BASE
+        match(payload_raw, source_proof['manifest'])
+        expected_payload = {(wt / relpath(r['path'])).resolve(): r for r in payload['files']}
+        assert len(source_proof['files']) == len(expected_payload)
+        seen_payload = set()
+        for record in source_proof['files']:
+            original = Path(record['original']).resolve(strict=True)
+            assert original in expected_payload and original not in seen_payload
+            seen_payload.add(original)
+            raw = read(original); match(raw, record); match(raw, expected_payload[original])
+            preserved = Path(record['copy']).resolve(strict=True)
+            assert preserved.is_relative_to((landing / 'payload-freeze').resolve())
+            assert read(preserved) == raw
+        assert seen_payload == set(expected_payload)
+        for record in source_proof['proof_inputs']:
+            match(read(record['path']), record)
+        for source in (Path(args.payload_manifest), Path(args.payload_source_proof)):
+            add(source, copy='payload-proof/' + source.name)
+        stem = Path(args.untracked_capture_stem)
+        for ext in ('command.json', 'stdout', 'stderr', 'exit'):
+            add(Path(str(stem) + '.' + ext), copy='untracked-before/' + stem.name + '.' + ext)
+        assert int(read(Path(str(stem) + '.exit'))) == 0 and not read(Path(str(stem) + '.stderr'))
+        command = js(Path(str(stem) + '.command.json'))
+        assert command['argv'][-4:] == ['ls-files', '--others', '--exclude-standard', '-z']
+
+        # Snapshot exactly the current landing file set; no suffix selection.
+        landing_files = sorted(p for p in landing.rglob('*') if p.is_file() and p not in (ordinary, final))
+        for source in landing_files:
+            relative = source.relative_to(landing)
+            if source.name == 'previous-main-csv-seed.bin' or 'payload-freeze' in relative.parts or source.stat().st_size >= LARGE_BYTES:
+                add(source, disposition='Complete original bytes retained externally at this exact pinned path; no shortening or normalization')
+            else:
+                add(source, copy=relative)
+        for name in HISTORY:
+            source = b / name
+            add(source, copy='root-review-history/' + name + ('.txt' if source.suffix == '.py' else ''))
+        for name in ('freeze-final-payload-before-staging.py',):
+            add(b / name, copy='root-helpers/' + name + '.txt')
+        # Code and explicit configuration are evidence; no execution of sources.
+        add(Path(__file__), copy='root-helpers/' + Path(__file__).name + '.txt')
+        # Root must supply full actual caller/source/resolver streams and every
+        # actual finding/correction history; HISTORY above is only universal interfaces.
+        explicit_inputs(Path(args.extra_inputs))
+        if args.phase == 'final-whitespace':
+            assert js(Path(args.whitespace_inputs)), 'Final phase requires explicit actual whitespace evidence inputs'
+            explicit_inputs(Path(args.whitespace_inputs))
+            add(ordinary, copy=ordinary.name)
+
+        # All pins/old targets are checked before first bank mutation.
+        target_pins = {}
+        for source, target, expected in planned:
+            raw = read(source); match(raw, expected)
+            if target.exists():
+                assert read(target) == raw
+            key = str(target)
+            assert key not in target_pins or target_pins[key] == expected
+            target_pins[key] = expected
+        retained = {r['original'] for r in records} | {r['path'] for r in externals}
+        assert {str(p.resolve()) for p in landing_files} <= retained
+        if args.phase == 'ordinary':
+            dest.mkdir(parents=True, exist_ok=False)
+        for source, target, expected in planned:
+            raw = read(source); match(raw, expected)
+            if not target.exists():
+                target.parent.mkdir(parents=True, exist_ok=True)
+                with target.open('xb') as f:
+                    f.write(raw)
+                writes.append(str(target))
+            assert target.read_bytes() == raw
+        for record in records:
+            raw = read(record['original']); match(raw, record)
+            assert (dest / relpath(record['copy'])).read_bytes() == raw
+        for record in externals:
+            match(read(record['path']), record)
+        assert semantic_tree() == initial_review
+        assert sorted(p for p in landing.rglob('*') if p.is_file() and p not in (ordinary, final)) == landing_files
+        manifest = dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(), phase=args.phase,
+                        semantic_review_unchanged=True, semantic_review_freeze=initial_review,
+                        files=records, external_actual_bytes_retained=externals,
+                        measured_tests=[dict(ordinal=int(i), total=int(n), ctest_id=int(k), name=name, seconds=float(seconds)) for i, n, k, name, seconds in passed],
+                        measured_test_total_seconds=float(duration[0]), measured_build_invocations=measured_builds,
+                        measured_coverage=int(coverage[0][0]),
+                        boundary='Exactly pre-existing input files enumerated by this invocation; this manifest and later caller command streams are not claimed as covered source records. Final phase must capture all ordinary-phase outputs; anything added after final phase requires a separately reviewed supplemental boundary.',
+                        before_whitespace_manifest_unchanged=args.phase == 'final-whitespace')
+        raw = (json.dumps(manifest, indent=2) + '\n').encode()
+        for target in (target_manifest, dest / target_manifest.name):
+            with target.open('xb') as f:
+                f.write(raw)
+            writes.append(str(target)); assert target.read_bytes() == raw
+        (output / 'result.json').write_text(json.dumps(dict(status='PASS', phase=args.phase, manifest_path=str(target_manifest), manifest_pin=pin(raw), source_records=len(records), external_records=len(externals), writes=writes), indent=2) + '\n')
+        print(json.dumps(dict(status='PASS', phase=args.phase, manifest=str(target_manifest), manifest_pin=pin(raw), source_records=len(records), external_records=len(externals))))
+    except Exception:
+        (output / 'failure.txt').write_text(traceback.format_exc())
+        raise
+    finally:
+        (output / 'input-pins.json').write_text(json.dumps(inputs, indent=2) + '\n')
+        (output / 'write-events.json').write_text(json.dumps(writes, indent=2) + '\n')
+
+
+if __name__ == '__main__':
+    main()

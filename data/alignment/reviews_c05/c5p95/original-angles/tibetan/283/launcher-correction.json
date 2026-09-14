@@ -1,0 +1,33 @@
+{
+  "reason": "First 283 invocation failed in the wrapper dependency pin guard before runpy or any SQLite connection. Canonical build_alignment_layer.py imports engines/hgm_tools.py, already present in the original-to-copy map. The wrapper v2 corrects only that path. The new attempt recorder accepts an explicit attempt number and points to the v2 wrapper; originals and actual failed streams remain unchanged. No spec, generator or source correction.",
+  "changes": [
+    {
+      "old": "run-generator-ro.py.txt",
+      "new": "run-generator-ro-v2.py.txt",
+      "replacement_map": [
+        [
+          "W/'tools/hgm_tools.py'",
+          "W/'engines/hgm_tools.py'"
+        ]
+      ],
+      "old_sha256": "caa7eb053ee24d59278b63f008a6082a7aff1ca37c1d602adf32aef27a2aaaa0",
+      "new_sha256": "9e29d66f40ec272a4fa01bc685d06ba850dca981780740c227d625c000adb0da"
+    },
+    {
+      "old": "run-canonical-attempt.py.txt",
+      "new": "run-canonical-attempt-v2.py.txt",
+      "replacement_map": [
+        [
+          "C=O/'canonical-attempt01'",
+          "attempt=sys.argv[2];assert attempt in ['01','02'];C=O/('canonical-attempt'+attempt)"
+        ],
+        [
+          "283/run-generator-ro.py.txt",
+          "283/run-generator-ro-v2.py.txt"
+        ]
+      ],
+      "old_sha256": "da0a90eb30fa380bfbb4c46267a3fc55296273555e864d87422bcbd91534f01f",
+      "new_sha256": "307e2467213472f49c537cdd76eff7fe83bbf17e38257f67bb8bb53b40d9c49b"
+    }
+  ]
+}

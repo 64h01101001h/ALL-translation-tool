@@ -1,0 +1,44 @@
+{
+  "status": "SOURCE_ONLY_NO_CAPTURE_RELEASE",
+  "initial_capture": {
+    "argv": [
+      "python3",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-scope-preparation/capture-finished-scope.py",
+      "--execute-reviewed-capture",
+      "--writers-quiescent"
+    ],
+    "optional_extra_file": "Repeat --extra-file with each actual completed non-through282-prefixed I helper not already listed. Two whitespace root helper paths are mandatory.",
+    "output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-scope",
+    "caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-scope-caller"
+  },
+  "initial_composer": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-preparation/compose-final-inputs.py",
+    "scope": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-scope/final-source-scope.json",
+    "status": "Not invoked by this package; actual literal scope review/root release first"
+  },
+  "supplement_capture": {
+    "argv": [
+      "python3",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-scope-preparation/capture-final282-supplement-scope-root.py",
+      "--execute-reviewed-capture",
+      "--writers-quiescent"
+    ],
+    "output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-supplement-scope",
+    "caller": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-supplement-scope-caller"
+  },
+  "assembler": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-intake-scope-preparation/assemble-final-supplement.py",
+    "composer": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-preparation/compose-final-inputs.py",
+    "output": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through282-final-bank-inventory-complete",
+    "status": "Exact actual composer SHA, supplement scope SHA, separate literal scope review and root release required; helper imports only reviewed inert composer at actual later execution, never during this preparation"
+  },
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONOPTIMIZE": "0"
+  },
+  "caller_contract": "Fresh actual external caller captures exact argv/cwd/environment/stdin/full stdout/full stderr/exit/timing; preserve every failure and partial output. Do not retry into existing fixed output. Capture outputs and active callers are deferred until actually complete. Later supplement/release/bank/stage/commit callers remain explicit full external evidence, no recursive self-banking.",
+  "root_writer_quiescence_not_yet_released": true,
+  "scope_capture_invocations": 0
+}

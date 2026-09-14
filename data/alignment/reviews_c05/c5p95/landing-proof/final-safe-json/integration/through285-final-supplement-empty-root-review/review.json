@@ -1,0 +1,45 @@
+{
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "scope": "Independent source/code/schema review only; no later literal scope or semantic approval and no capture retry",
+  "reviewer": "Actual Codex /root/c05_280_282_english",
+  "author": "Root-authored correction",
+  "reused_context": "Prior original/tooling/code-review roles; did not author this correction.",
+  "candidate": {
+    "bytes": 14705,
+    "sha256": "77ba1c4a640ee1c85d3b53e8821ccc3a36d1716c467b1ead17ada13cf2791f65"
+  },
+  "source_freeze": {
+    "bytes": 1603,
+    "sha256": "f6957430e350fd5e8d9c7314fc2ce6b412921e0cd415c5a102df1b0d384ff03d"
+  },
+  "source_members": 11,
+  "full_source_copy_pairs": 28,
+  "exact_splices": 6,
+  "whole_inverse_exact": true,
+  "all_original_functions_byte_identical": true,
+  "empty_root_count": 2,
+  "empty_root_observations": "independent-empty-root-observations.json",
+  "assembler_accepts_explicit_empty_groups": true,
+  "assembler_boundary": "It rechecks c.paths(root)==[] and preserves groups in the pinned input scope; it does not interpret empty_roots device/inode metadata. Actual literal review/root release must verify those metadata and retain full scope. No synthetic file or retention row is needed for an empty directory.",
+  "retry_caller": "through285-final-supplement-scope-caller-attempt02",
+  "failed_first_caller_exit": 1,
+  "failed_first_caller_stderr_bytes": 400,
+  "full_failed_caller_retained": true,
+  "copy_map": "full-original-to-copy-manifest.json",
+  "copy_map_schema": "LIST; original/resolved_original absolute, copy relative to top review root, bytes and SHA256",
+  "proof": {
+    "bytes": 1933,
+    "sha256": "19e94eafbf2f965d95737f8c2b9557979db15fb2e4aa6b810fb83d60f7b61fde"
+  },
+  "native_review_execution": {
+    "bytes": 890,
+    "sha256": "06cdd14e8ef35cb020e346fa50549733953ab8142395f470827fcc6bc54f4a59"
+  },
+  "candidate_imports": 0,
+  "capture_composer_assembler_calls": 0,
+  "Git_SQL_test_bank_stage_calls": 0,
+  "review_failures": [],
+  "pending": "Root source release and actual retry; later literal scope review/root release must verify exact empty_roots metadata. Other completion gates remain separate."
+}

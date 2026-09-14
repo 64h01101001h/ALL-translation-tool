@@ -1,0 +1,123 @@
+from pathlib import Path
+import ast,collections,csv,hashlib,io,json,os,re
+assert __debug__
+ROOT=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');A=ROOT/'campaign-artifacts';I=A/'integration';B=A/'C05-283-285';W=ROOT/'campaign-worktree';L=B/'landing';O=I/'through285-generated-reproduction-final-preparation';EARLY=I/'through285-generated-reproduction-preparation'
+assert O==Path(__file__).resolve().parent and not (I/'through285-generated-reproduction').exists()
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def raw(p):
+ p=Path(p);s=p.stat();b=p.read_bytes();t=p.stat();assert (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns);return b
+def j(p):return json.loads(raw(p))
+def put(n,b):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+ if p.exists():assert p.read_bytes()==b
+ else:
+  with p.open('xb') as f:f.write(b)
+def save(n,x):put(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+copies=[];external={};packages=[];maps=[]
+def cp(p,n,role):
+ b=raw(p);put(n,b);assert raw(p)==(O/n).read_bytes();copies.append(dict(original=str(p),copy=n,role=role,**pin(b)));return b
+def ext(p,role):
+ p=Path(p);b=raw(p);r=dict(path=str(p),resolved=str(p.resolve()),symlink=os.readlink(p) if p.is_symlink() else None,role=role,**pin(b));external[str(p)]=r;return b
+for rel,mapnames in [('through285-generated-reproduction-preparation',['original-to-copy-manifest.json']),('through285-payload-freezer-preparation',['original-to-copy-manifest.json','transport-helper-original-copy-map.json']),('through285-semantic-schema-helper-preparation',['source-copy-manifest.json'])]:
+ d=I/rel;f=j(d/'freeze.json');entries=f['files']
+ if rel=='through285-semantic-schema-helper-preparation':
+  assert isinstance(entries,list) and all(set(x)=={'path','bytes','sha256'} for x in entries)
+  assert len({x['path'] for x in entries})==len(entries)
+  entries={x['path']:{k:x[k] for k in ('bytes','sha256')} for x in entries}
+ else:assert isinstance(entries,dict)
+ assert {str(p.relative_to(d)) for p in d.rglob('*') if p.is_file()}==set(entries)|{'freeze.json'}
+ for n,x in entries.items():assert pin(raw(d/n))==x
+ packages.append(dict(directory=str(d),freeze=pin(raw(d/'freeze.json')),file_count=len(f['files'])))
+ cp(d/'freeze.json','inputs/packages/'+rel+'/freeze.json','whole immutable source preparation reference')
+ for n in mapnames:
+  rows=j(d/n)
+  for x in rows:assert raw(x['original'])==raw(d/x['copy']) and pin(raw(d/x['copy']))=={k:x[k] for k in ('bytes','sha256')}
+  maps.append(dict(directory=str(d),manifest=n,count=len(rows)));cp(d/n,'inputs/packages/'+rel+'/'+n,'complete original-copy map')
+for n in ['prepare.py.txt','run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt','close-evidence.py.txt']:
+ cp(EARLY/'prior'/n,'prior/'+n,'complete actual accepted through282 runtime source')
+ cp(EARLY/'candidate'/n,'guarded-early/'+n,'complete frozen through285 unbound predecessor')
+for name,rel in [('approve-reproduction-method-root.py','reproduction-entry-preparation/approve-reproduction-method-root.py'),('accept-independent-reproduction-root.py','reproduction-closure-preparation/accept-independent-reproduction-root.py')]:
+ cp(EARLY/'inputs/prior-preparations'/rel,'prior/'+name,'complete actual accepted root method')
+measurepath=I/'through285-root-produced-measurements-attempt02/proof.json';measure=j(measurepath)
+assert measure['status']=='PASS_ROOT_MEASURED_ACTUAL_PRODUCTION_AND_FIDELITY_RESULTS'
+assert list(measure['counts'].values())==[45481,11938,1621,11,7093,15557,22546,22206,24126,18]
+base=j(B/'baseline.json');payload=j(L/'staged-payload-source-proof.json');manifest=j(L/'staged-payload-manifest.json');accepted=j(B/'root-payload-result-acceptance.json')
+assert measure['baseline']==base['commit']==payload['head']==manifest['head']==accepted['head']=='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert payload['status']==accepted['status']=='PASS' and payload['payload_count']==accepted['payload_files']==len(manifest['files'])==13
+assert accepted['manifest']==pin(raw(L/'staged-payload-manifest.json')) and accepted['source_proof']==pin(raw(L/'staged-payload-source-proof.json'))
+assert payload['manifest']==dict(path=str(L/'staged-payload-manifest.json'),**pin(raw(L/'staged-payload-manifest.json')))
+assert sum(x['bytes'] for x in manifest['files'])==accepted['payload_bytes']==41185332
+for x in manifest['files']:
+ b=ext(W/x['path'],'current produced/landed payload');assert b==ext(L/'payload-freeze'/x['path'],'complete immutable root payload') and pin(b)=={k:x[k] for k in ('bytes','sha256')}
+for x in payload['proof_inputs']:assert pin(ext(x['path'],'actual root payload proof dependency'))=={k:x[k] for k in ('bytes','sha256')}
+for p,x in measure['source_proofs'].items():assert pin(raw(p))==x
+for rel,h in measure['output_sha256'].items():assert pin(ext(W/rel,'current source/output alias'))['sha256']==h
+spine=ext(W/'build/hgm_spine_v27_2.db','raw read-only source alias; no SQLite calls');assert pin(spine)['sha256']=='5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc'
+for rel in ['data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']:assert measure['output_sha256'][rel]==base['sha256'][rel]
+oldR=I/'through282-generated-reproduction'
+for rel in [x for x in base['sha256'] if not x.endswith('.gz')]:assert pin(ext(oldR/'reproduced-outputs'/rel,'full immutable incoming baseline; future root must recheck actual Git object at fb9182'))['sha256']==base['sha256'][rel]
+seed=raw(L/'previous-main-csv-seed.bin');assert seed==raw(oldR/'reproduced-outputs/docs/geshe_michael_roach_dictionary.csv')
+assert pin(seed)=={k:measure['previous_main_csv_seed'][k] for k in ('bytes','sha256')}=={k:payload['actual_build_seed'][k] for k in ('bytes','sha256')}
+ext(L/'previous-main-csv-seed.bin','full immutable incoming main CSV seed')
+full=j(L/'payload-freeze/data/alignment/alignment_full_v1.json');ev=j(L/'payload-freeze/data/alignment/alignment_evidence_v1.json');old=j(oldR/'reproduced-outputs/data/alignment/alignment_full_v1.json')
+csvrows={s:list(csv.DictReader(io.StringIO(raw(L/'payload-freeze'/('docs/geshe_michael_roach_dictionary'+s)).decode('utf-8-sig'),newline=''))) for s in ['.csv','_reverse.csv','_by_course.csv','_changes.csv']}
+counts=dict(links=len(full['links']),nulls=sum(x['eng'] is None for x in full['links']),notes=sum(map(len,full['notes'].values())),trees=sum(map(len,full['trees'].values())),heads=len(ev['pairs']),pairs=sum(map(len,ev['pairs'].values())),csv_main=len(csvrows['.csv']),csv_reverse=len(csvrows['_reverse.csv']),csv_course=len(csvrows['_by_course.csv']),csv_changes=len(csvrows['_changes.csv']))
+assert counts==measure['counts']
+assert ev['meta']['date']==measure['producer_local_date']=='2026-09-13' and ev['meta']['source_pages']==measure['source_pages']
+assert all(x['layer_date']==ev['meta']['date'] and x['source_pages']==ev['meta']['source_pages'] for x in csvrows['.csv'])
+sig=lambda x:json.dumps(x,ensure_ascii=False,sort_keys=True);before=collections.Counter(map(sig,old['links']));after=collections.Counter(map(sig,full['links']));assert not(before-after)
+added=[json.loads(k) for k,n in (after-before).items() for _ in range(n)];groups=dict(collections.Counter(x['seg'] for x in added));assert len(added)==79 and groups=={283:17,284:30,285:32} and all(x['course']=='C05' for x in added)
+missing=[dict(tib=t,pairs=p) for t,p in ev['pairs'].items() if all(x['acip'] is None for x in p)];allmiss=[x for x in full['links'] if x['d']==5 and x['eng'] and not x['tib_acip']];spans=[x for x in allmiss if x['seg'] is not None];excluded=[x for x in allmiss if x['seg'] is None]
+assert len(ev['acip_index'])==measure['proven_acip_index_keys']==7090 and len(missing)==3 and len(spans)==5 and len(excluded)==1 and excluded[0]['id']=='xseg2829ldog'
+assert all(x in old['links'] for x in allmiss)
+save('actual-acip-evidence.json',dict(headwords=7093,proven=7090,missing=missing,unproven_source_linked_spans=spans,excluded_no_segment_bank_rows=excluded,all_missing_full_rows=allmiss,percentage=100*7090/7093,printed_rounded_percent='100.0%',source='Actual full frozen produced bank/evidence; existing historical incomplete rows unchanged.'))
+tree=ast.parse(raw(W/'tools/build_alignment_layer.py'));assign=[x for x in tree.body if isinstance(x,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COURSES' for t in x.targets)];assert len(assign)==1
+courses=assign[0].value;assert isinstance(courses,ast.Dict);registry=[]
+for key,cfg in sorted(zip(courses.keys,courses.values),key=lambda p:ast.literal_eval(p[0])):
+ course=ast.literal_eval(key);parts={ast.literal_eval(k):v for k,v in zip(cfg.keys,cfg.values)};pages=ast.literal_eval(parts['pages']);directory=parts['dir'];assert isinstance(directory,ast.Call) and ast.unparse(directory.func)=='os.path.join' and len(directory.args)==2 and isinstance(directory.args[0],ast.Name) and directory.args[0].id=='OUTDIR'
+ dirname=ast.literal_eval(directory.args[1]);assert isinstance(dirname,str) and '/' not in dirname
+ for page,seqs in sorted(pages.items()):
+  rel='data/alignment/'+dirname+'/'+page+'.html';b=ext(W/rel,'complete registered physical page from static full COURSES AST');registry.append(dict(course=course,page=page,sequences=seqs,relative_path=rel,**pin(b)))
+ if course=='C05':assert list(pages)==[f'c5p{p}' for p in range(1,96)] and [n for v in pages.values() for n in v]==list(range(1,286))
+assert len(registry)==549
+digest=hashlib.sha256()
+for x in registry:digest.update((W/x['relative_path']).read_text().encode())
+assert digest.hexdigest()[:16]=='fc9cdbee115e7969' and digest.hexdigest()[:16] in ev['meta']['source_pages']
+save('registered-pages-measured.json',registry)
+review=B/'semantic-review';rv=j(review/'review.json');rf=j(review/'freeze.json');assert len(rf['files'])==2386
+assert {str(p.relative_to(review)) for p in review.rglob('*') if p.is_file()}==set(rf['files'])|{'freeze.json'}
+for n in [*rf['files'],'freeze.json']:
+ original=raw(review/n);assert original==raw(W/'data/alignment/reviews_c05/c5p95'/n)
+ if n!='freeze.json':assert pin(original)==rf['files'][n]
+tuples=j(review/'resolved-spans.json');spec=j(W/'data/alignment/specs_c05/c5p95.json');assert len(tuples)==rv['totals']['spans']==76 and sum(x['eng'] is None for x in tuples)==0 and sum(x['d']==5 and x['eng'] is not None for x in tuples)==61
+assert [dict(seq=s['seq'],id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng']) for s in spec['segments'] for x in s['spans']]==[{k:x[k] for k in ['seq','id','d','tib','eng']} for x in tuples]
+licenses=j(review/'head-licensor-review.json');needed={'pages_c05':{}}
+for seq in [283,284,285]:needed['pages_c05'].update(j(I/'through285-root-reconciliation-verification-attempt01'/f'{seq}.head-allowance-check.json')['allowances'])
+assert sorted(needed['pages_c05'])==sorted(x['key'] for x in licenses if x['verdict']=='LICENSED')==['c5p95/s284w6','c5p95/s285w5'] and payload['approved_allowances']==needed
+allow=j(L/'span-head-allow-before.json');assert not set(allow.get('pages_c05',{}))&set(needed['pages_c05']);allow.setdefault('pages_c05',{}).update(needed['pages_c05']);assert j(W/'data/alignment/span_head_allow.json')==allow
+build=j(L/'canonical-builds-once.json');assert build['status']=='PASS' and len(build['runs'])==2
+for label,run in zip(['build-layer','build-view'],build['runs']):
+ assert run['exit']==0 and raw(L/(label+'.exit'))==b'0\n'
+ for s in ['stdout','stderr']:assert pin(raw(L/(label+'.'+s)))==dict(bytes=run[s+'_bytes'],sha256=run[s+'_sha256'])
+log=raw(L/'ctest-17.stdout').decode();tests=re.findall(r'^\s*(\d+)/17 Test\s+#(\d+): ([a-z_]+) .* Passed\s+([0-9.]+) sec$',log,re.M)
+assert len(tests)==17 and [int(x[0]) for x in tests]==list(range(1,18)) and '100% tests passed out of 17' in log
+assert re.findall(r'Total Test time \(real\) =\s+([0-9.]+) sec',log)==['11.25'] and raw(L/'ctest-17.exit')==b'0\n' and raw(L/'ctest-17.stderr')==b''
+assert payload['actual_ctest_total_seconds']==measure['actual_test_seconds']==11.25 and payload['actual_ctest_run_count']==measure['actual_test_runs']==1
+assert raw(L/'untracked-before-banking.stdout')==raw(B/'untracked-before-banking-caller/stdout.bin')
+assert pin(raw(L/'untracked-before-banking.stdout'))==accepted['untracked_snapshot'] and accepted['index_empty'] is True
+assert raw(B/'untracked-before-banking-caller/exit.txt')==b'0\n' and raw(B/'untracked-before-banking-caller/stderr.bin')==b''
+for p in sorted(L.iterdir()):
+ if p.is_file() and p.name!='previous-main-csv-seed.bin':cp(p,'inputs/landing/'+p.name+('' if p.suffix in ['.json','.txt','.bin','.html'] else '.bin'),'actual root landing/native producer/test/payload proof')
+for rel in ['through285-root-produced-measurements','through285-root-produced-measurements-caller','through285-root-produced-measurements-attempt02','through285-root-produced-measurements-attempt02-caller','through285-payload-freezer-root-source-binding','through285-payload-freezer-root-source-binding-caller','through285-root-payload-result-verification','through285-root-independent-review-verification']:
+ d=I/rel
+ for p in sorted(d.rglob('*')):
+  if p.is_file():cp(p,'inputs/root/'+rel+'/'+str(p.relative_to(d))+('' if p.suffix in ['.json','.txt','.bin','.html','.py'] else '.txt'),'complete actual root source/result/caller history; original failed measurement reader retained')
+for p in [B/'baseline.json',B/'root-payload-result-acceptance.json',B/'freeze-final-payload-before-staging.py',review/'review.json',review/'freeze.json',review/'audit-proof.json',review/'completion-proof.json',review/'resolved-spans.json',review/'head-licensor-review.json']:
+ cp(p,'inputs/current/'+str(p.relative_to(B)),'complete actual current proof/source')
+code_rels=['tools/build_alignment_layer.py','tools/build_dictionary_view.py','tools/build_dictionary_exports.py','tools/gen_alignment_page.py','tools/dictionary_view_shell.html']+[str(p.relative_to(W)) for p in (W/'engines').glob('*.py')]
+for rel in code_rels:cp(W/rel,'inputs/producer-sources/'+rel,'complete current canonical producer/source dependency, never imported');ext(W/rel,'actual immutable producer input')
+for name in ['run_reviewed_builders_once.py','run_tool_readonly_sqlite.py','verify_landed_batch.py','verify_course_csv.py']:cp(A/name,'inputs/root-helpers/'+name+'.txt','complete actual shared root helper source')
+save('actual-measurements.json',dict(counts=counts,added_links=79,added_by_segment=groups,prior_links=45402,source_date=ev['meta']['date'],source_pages=ev['meta']['source_pages'],registered_pages=549,review_counts=dict(spans=76,nulls=0,d5_nonnull=61),acip=dict(heads=7093,proven=7090,missing_heads=3,missing_spans=5,excluded_rows=1,full_missing_rows=6),payload_count=13,payload_bytes=41185332,seed=dict(path=str(L/'previous-main-csv-seed.bin'),**pin(seed)),semantic_freeze=pin(raw(review/'freeze.json')),semantic_members=2386,landed_semantic_members=2387,source_only=True,actual_tests_reused=17,new_tests=0,registry_method='Full AST literal pages and exact os.path.join(OUTDIR, constant) directories; no module import.'))
+save('source-input-copies.json',copies);save('external-input-pins.json',list(external.values()));save('ancestor-packages-and-maps.json',dict(packages=packages,pair_maps=maps,mapped_count=sum(x['count'] for x in maps)))
+save('collection-proof.json',dict(status='ACTUAL_PRODUCED_INPUTS_READ_AND_PINNED_SOURCE_ONLY',copies=len(copies),external_pins=len(external),registry_pages=549,payload_files=13,actual_counts=counts,all_three_sources_unchanged=True,all_semantic_landed_copies_exact=2387,runtime_absent=True,sql_calls=0,git_calls=0,candidate_imports=0,tests_or_builders=0))
+print(json.dumps(dict(status='ACTUAL_PRODUCED_INPUTS_READ_AND_PINNED_SOURCE_ONLY',copies=len(copies),external_pins=len(external),registry_pages=549,actual_counts=counts,runtime_absent=True),indent=2))

@@ -1,0 +1,92 @@
+from pathlib import Path
+import ast,collections,difflib,hashlib,json
+assert __debug__
+O=Path(__file__).resolve().parent;I=O.parent;A=I.parent;B=A/'C05-283-285';Q=I/'through285-generated-reproduction-final-preparation';RT=I/'through285-generated-reproduction';RT2=I/'through285-generated-reproduction-attempt02';F=I/'through285-root-reproduction-preparation-failure'
+assert not RT2.exists() and not (O/'freeze.json').exists()
+def pin(p):b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+def write(n,b):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb') as f:f.write(b)
+def save(n,x):write(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+copies=[]
+def cp(p,n):
+ raw=p.read_bytes();write(n,raw);assert (O/n).read_bytes()==p.read_bytes();copies.append(dict(original=str(p),copy=n,**pin(p)))
+def adapt(oldpath,name,replacements):
+ old=oldpath.read_text();new=old;changes=[]
+ for before,after in replacements:
+  assert new.count(before)==1,(name,before)
+  at=new.index(before);new=new[:at]+after+new[at+len(before):];changes.append(dict(before=before,after=after,before_offsets=[at],after_offsets=[at]))
+ value=new
+ for c in reversed(changes):
+  for at in reversed(c['after_offsets']):assert value[at:at+len(c['after'])]==c['after'];value=value[:at]+c['before']+value[at+len(c['after']):]
+ assert value==old and ast.dump(ast.parse(value))==ast.dump(ast.parse(old));ast.parse(new)
+ write(name,new.encode());save(name+'.replacement-map.json',changes)
+ write(name+'.forward.diff.txt',''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile=str(oldpath),tofile=str(O/name))).encode())
+ write(name+'.inverse.diff.txt',''.join(difflib.unified_diff(new.splitlines(True),old.splitlines(True),fromfile=str(O/name),tofile=str(oldpath))).encode())
+ return dict(old=str(oldpath),current=str(O/name),mode='offset',changes=changes)
+assert pin(Q/'freeze.json')==dict(bytes=37645,sha256='0277153eb4480ea551c29d7a56947722f1313662eb0755ba62aba9001dd67307')
+for name in ['freeze.json','bindings.json','registered-pages-measured.json','root-source-review-receipt-contract.json']:
+ cp(Q/name,'prior/'+name)
+cp(B/'approve-reproduction-method-root.py','prior/approve-reproduction-method-root.py')
+assert (B/'approve-reproduction-method-root.py').read_bytes()==(Q/'approve-reproduction-method-root.py').read_bytes()
+for name in ['prepare.py.txt','run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt']:
+ cp(RT/name,'prior/runtime/'+name);assert (RT/name).read_bytes()==(Q/'runtime'/name).read_bytes()
+for p in sorted((RT/'caller-runs/prepare').iterdir()):
+ assert p.is_file() and not p.is_symlink();cp(p,'first-prepare-caller/'+p.name)
+cp(RT/'root-runtime-release.json','first-runtime-release.json');cp(F/'proof.json','root-failure-proof.json')
+failed=j(F/'proof.json');inventory=j(F/'failed-runtime-files.json')
+assert failed['status']=='FAILED_PREPARATION_ORDER_PREDICATE_WITH_UNCHANGED_DATA' and failed['builders_started']==0 and failed['worktree_state_equals_entry'] and failed['raw_index_unchanged'] and failed['all13payload_pins_unchanged']
+assert pin(F/'failed-runtime-files.json')==failed['failed_inventory'] and len(inventory['files'])==failed['failed_runtime_files']==3043 and inventory['root']==str(RT)
+assert sum(x['bytes'] for x in inventory['files'].values())==failed['failed_runtime_bytes']==1005702355
+e=j(RT/'caller-runs/prepare/execution.json');assert e['exit']==1 and e['stdout_bytes']==0 and e['stderr_bytes']==496 and e['stderr_sha256']=='125c8c443c44bf2143ebc653bb69acd02381134d6a1061a896a340410b130891'
+assert pin(RT/'caller-runs/prepare/stderr.bin')==dict(bytes=e['stderr_bytes'],sha256=e['stderr_sha256'])
+assert not any((RT/n).exists() for n in ['executions','execution-proof.json','preparation-proof.json','input-manifest.json'])
+rows=j(Q/'registered-pages-measured.json');c05=[x for x in rows if x['course']=='C05'];flat=[n for x in c05 for n in x['sequences']]
+assert len(rows)==549 and len(c05)==95 and len(flat)==285 and flat!=list(range(1,286)) and sorted(flat)==list(range(1,286))
+assert [x['page'] for x in c05]==sorted(x['page'] for x in c05)
+save('registry-order-evidence.json',dict(original=str(Q/'registered-pages-measured.json'),original_pin=pin(Q/'registered-pages-measured.json'),all_pages=len(rows),C05_pages=[dict(page=x['page'],sequences=x['sequences']) for x in c05],flattened=flat,sorted_flattened=sorted(flat),first_mismatch=dict(index=3,actual=flat[3],expected=4),multiplicities=dict(collections.Counter(flat)),explanation='Lexicographic page traversal c5p1,c5p10,... is intentional. Sorting the complete sequence list preserves every duplicate and cardinality; equality to range rejects missing, duplicate and out-of-range members without changing the physical-page traversal or source digest.'))
+before="assert len(registered)==549 and [n for x in registered if x['course']=='C05' for n in x['sequences']]==list(range(1,286))"
+after="assert len(registered)==549 and sorted(n for x in registered if x['course']=='C05' for n in x['sequences'])==list(range(1,286))"
+recipe=adapt(O/'prior/runtime/prepare.py.txt','runtime/prepare.py.txt',[(before,after)])
+for name in ['run-once.py.txt','run-isolated-readonly.py.txt','verify-retention.py.txt']:cp(RT/name,'runtime/'+name)
+save('original-to-copy-manifest.json',copies)
+binding=j(Q/'bindings.json');binding['packages'].append(dict(directory=str(Q),freeze=pin(Q/'freeze.json'),file_count=225))
+binding['pair_maps'].append(dict(directory=str(O),manifest='original-to-copy-manifest.json',count=len(copies)));binding['mapped_count']+=len(copies)
+binding['recipes'].append(recipe)
+binding['inputs'] += [dict(path=str(O/x['copy']),bytes=x['bytes'],sha256=x['sha256']) for x in copies]
+binding['inputs'] += [dict(path=str(F/n),**pin(F/n)) for n in ['proof.json','failed-runtime-files.json']]
+binding['materialize_exact_code']=[dict(path=str(O/'runtime'/x['path'].split('/')[-1]),**pin(O/'runtime'/x['path'].split('/')[-1])) for x in binding['materialize_exact_code']]
+binding['prior_failed_runtime']=dict(directory=str(RT),inventory=dict(path=str(F/'failed-runtime-files.json'),**pin(F/'failed-runtime-files.json')),root_proof=dict(path=str(F/'proof.json'),**pin(F/'proof.json')),files=3043,bytes=1005702355,prepare_exit=1,builders_started=0)
+binding['transport_limit']+=' Actual first current prepare failed only on a sequence traversal-order assertion before builders. Its complete 3043-file runtime and native caller remain unchanged in place; the second attempt uses a fresh directory and corrected order-independent sequence predicate.'
+save('bindings.json',binding)
+oldentry=O/'prior/approve-reproduction-method-root.py'
+history="""binding=j(Q/'bindings.json')
+history=binding['prior_failed_runtime'];failed_root=Path(history['directory']);history_map=Path(history['inventory']['path'])
+assert pin(history_map.read_bytes())=={k:history['inventory'][k] for k in ('bytes','sha256')}
+history_rows=j(history_map);assert history_rows['root']==str(failed_root) and len(history_rows['files'])==history['files']==3043
+assert {str(p.relative_to(failed_root)) for p in failed_root.rglob('*') if p.is_file()}==set(history_rows['files'])
+for name,expected in history_rows['files'].items():assert pin((failed_root/name).read_bytes())==expected
+assert j(Path(history['root_proof']['path']))['status']=='FAILED_PREPARATION_ORDER_PREDICATE_WITH_UNCHANGED_DATA'
+assert not any((failed_root/name).exists() for name in ['executions','execution-proof.json','preparation-proof.json','input-manifest.json'])"""
+entry_recipe=adapt(oldentry,'approve-reproduction-method-root-attempt02.py',[
+ ("Q=I/'through285-generated-reproduction-final-preparation';R=I/'through285-generated-reproduction';O=B/'reproduction-root-entry'","Q=I/'through285-generated-reproduction-order-correction';R=I/'through285-generated-reproduction-attempt02';O=B/'reproduction-root-entry-attempt02'"),
+ ("Path(__file__).resolve()==B/'approve-reproduction-method-root.py'","Path(__file__).resolve()==B/'approve-reproduction-method-root-attempt02.py'"),
+ ("'213b558dcc989f79e7eff26eab1e184e1dbf4dc8e8ea733b1e3226f02674877f'",repr(pin(O/'bindings.json')['sha256'])),
+ ("binding=j(Q/'bindings.json')",history),
+ ("save(R/'root-runtime-release.json',proof);save(B/'reproduction-method-root-approval.json',proof)","proof.update(attempt=2,prior_failed_runtime=binding['prior_failed_runtime'])\nsave(R/'root-runtime-release.json',proof);save(B/'reproduction-method-root-approval-attempt02.json',proof)")])
+save('source-recipes.json',[recipe,entry_recipe])
+write('bindings.forward.diff.txt',''.join(difflib.unified_diff((Q/'bindings.json').read_text().splitlines(True),(O/'bindings.json').read_text().splitlines(True),fromfile=str(Q/'bindings.json'),tofile=str(O/'bindings.json'))).encode())
+write('bindings.inverse.diff.txt',''.join(difflib.unified_diff((O/'bindings.json').read_text().splitlines(True),(Q/'bindings.json').read_text().splitlines(True),fromfile=str(O/'bindings.json'),tofile=str(Q/'bindings.json'))).encode())
+receipt=j(Q/'root-source-review-receipt-contract.json');receipt.update(preparation_directory=str(O),initial_runtime_sources=binding['materialize_exact_code'],bindings=pin(O/'bindings.json'),entry_candidate=pin(O/'approve-reproduction-method-root-attempt02.py'))
+save('root-source-review-receipt-contract.json',receipt)
+save('proof.json',dict(status='SOURCE_ONLY_ORDER_CORRECTION_READY_FOR_ROOT_REVIEW',semantic_approval=False,role='Original Tibetan proposer and tooling author',one_runtime_line_changed=True,physical_page_traversal_unchanged=True,other_three_runtime_sources_byte_identical=True,full_forward_inverse_AST_conservation=True,prior_preparation_freeze=pin(Q/'freeze.json'),first_failure=failed,new_runtime=str(RT2),new_entry=str(B/'approve-reproduction-method-root-attempt02.py'),new_entry_output=str(B/'reproduction-root-entry-attempt02'),new_approval_output=str(B/'reproduction-method-root-approval-attempt02.json'),binding=pin(O/'bindings.json'),runtime_sources=binding['materialize_exact_code'],entry_source=pin(O/'approve-reproduction-method-root-attempt02.py'),original_copy_records=len(copies),all_bound_original_copy_records=binding['mapped_count'],whole_source_recipes=len(binding['recipes']),existing_external_pins=binding['external_count'],closure_actual_counts_and_sources='PENDING actual attempt02 runtime; old guarded sources unchanged',candidate_imports=0,candidate_invocations=0,SQL_Git_build_test_calls=0,B_W_RT_writes=False))
+write('report.md',b'''The failed assertion incorrectly compared lexicographically traversed page sequences with numeric sequence order. The frozen registry contains exactly 549 pages and 95 C05 pages; its 285 C05 sequence values start 1,2,3,28,29,30. Sorting the full sequence list equals 1 through 285. The one-line correction preserves multiplicity and exact cardinality, so duplicates, missing values and out-of-range values still fail. Physical page traversal and source digest remain unchanged.
+
+The complete prepare source, both exact diffs and inverse AST conservation are retained. The other three runtime methods are byte-identical. No candidate was imported or executed. The first prepare's original native caller is copied in full. Root's existing full inventory binds all 3,043 failed runtime files (1,005,702,355 bytes) in place, and its actual root proof confirms unchanged worktree/index/payload and zero builders. This package references that inventory without duplicating the failed workspace.
+
+After reviewing and freezing this correction, root supplies a fresh actual external receipt under the unchanged receipt schema. Materialize the exact entry candidate at B/approve-reproduction-method-root-attempt02.py; invoke through a fresh external native caller with the receipt path and SHA. Its complete prior source/seed/output/Git/raw-state/semantic/payload gates remain, with an added full failed-runtime conservation check. It creates only fresh RT2=integration/through285-generated-reproduction-attempt02 and B/reproduction-root-entry-attempt02, and writes the new suffixed approval file. The original Q, RT, entry source/output and approval remain untouched. Q and bindings now identify this correction, all original package and source mappings remain, and the original 225-member preparation is an additional frozen ancestor.
+
+Only after successful root entry, use the unchanged native recorder for RT2/caller-runs/prepare, run-once and retention in order, each with cwd RT2 and Python -B, bytecode disabled and assertions enabled. This is a new preparation after an actual failure, followed by the first builder pair if preparation passes; no prior builder is repeated. Retain all new callers. Closure and root acceptance stay pending actual run populations, failure history and separately reviewed RT2/entry bindings. This source task grants no semantic or runtime acceptance and writes nothing to B, W or either runtime.
+''')
+print(json.dumps(dict(status='SOURCE_ONLY_CORRECTION_PREPARED',source=pin(O/'runtime/prepare.py.txt'),entry=pin(O/'approve-reproduction-method-root-attempt02.py'),copies=len(copies),bindings=pin(O/'bindings.json'),new_runtime_absent=not RT2.exists())))

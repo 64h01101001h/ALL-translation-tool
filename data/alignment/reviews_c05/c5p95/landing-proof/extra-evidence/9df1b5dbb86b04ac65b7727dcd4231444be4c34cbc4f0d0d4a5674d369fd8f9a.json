@@ -1,0 +1,353 @@
+[
+  {
+    "mode": "offsets",
+    "old": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/prior/prepare.py.txt",
+    "current": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/prepare.py.txt",
+    "changes": [
+      {
+        "before": "C05-280-282",
+        "after": "C05-283-285",
+        "before_offsets": [
+          292
+        ],
+        "after_offsets": [
+          292
+        ],
+        "reason": "actual batch"
+      },
+      {
+        "before": "c5p94",
+        "after": "c5p95",
+        "before_offsets": [
+          2752,
+          2975
+        ],
+        "after_offsets": [
+          2752,
+          2975
+        ],
+        "reason": "actual current page"
+      },
+      {
+        "before": "10968d16e701b698a0e1fbd845b353089d15ac39",
+        "after": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+        "before_offsets": [
+          341
+        ],
+        "after_offsets": [
+          341
+        ],
+        "reason": "actual closed incoming HEAD"
+      },
+      {
+        "before": "ev=json.loads((R/'expected-payload/data/alignment/alignment_evidence_v1.json').read_bytes())",
+        "after": "ev=json.loads((R/'expected-payload/data/alignment/alignment_evidence_v1.json').read_bytes())\nassert ev['meta']['date']=='2026-09-13' and ev['meta']['source_pages']=='banked pages, 5 course(s) (sha256 fc9cdbee115e7969)'\nassert len(registered)==549 and [n for x in registered if x['course']=='C05' for n in x['sequences']]==list(range(1,286))",
+        "before_offsets": [
+          4935
+        ],
+        "after_offsets": [
+          4935
+        ],
+        "reason": "bind independently inspected actual producer-local date and full549 registry without executing it here"
+      }
+    ]
+  },
+  {
+    "mode": "offsets",
+    "old": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/prior/run-once.py.txt",
+    "current": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/run-once.py.txt",
+    "changes": []
+  },
+  {
+    "mode": "offsets",
+    "old": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/prior/run-isolated-readonly.py.txt",
+    "current": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/run-isolated-readonly.py.txt",
+    "changes": []
+  },
+  {
+    "mode": "offsets",
+    "old": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/prior/verify-retention.py.txt",
+    "current": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/verify-retention.py.txt",
+    "changes": [
+      {
+        "before": "C05-280-282",
+        "after": "C05-283-285",
+        "before_offsets": [
+          323
+        ],
+        "after_offsets": [
+          323
+        ],
+        "reason": "actual batch"
+      },
+      {
+        "before": "c5p94",
+        "after": "c5p95",
+        "before_offsets": [
+          9107,
+          9183
+        ],
+        "after_offsets": [
+          9107,
+          9183
+        ],
+        "reason": "actual current page"
+      },
+      {
+        "before": "len(old['links'])==45275",
+        "after": "len(old['links'])==45402",
+        "before_offsets": [
+          1721
+        ],
+        "after_offsets": [
+          1721
+        ],
+        "reason": "actual prior complete links"
+      },
+      {
+        "before": "127 new links confined to280–282",
+        "after": "79 new links confined to283–285",
+        "before_offsets": [
+          1846
+        ],
+        "after_offsets": [
+          1846
+        ],
+        "reason": "actual root/full-bank addition count and scope"
+      },
+      {
+        "before": "len(added)==127",
+        "after": "len(added)==79",
+        "before_offsets": [
+          1879
+        ],
+        "after_offsets": [
+          1879
+        ],
+        "reason": "actual full-bank multiset measurement"
+      },
+      {
+        "before": "(280,281,282)",
+        "after": "(283,284,285)",
+        "before_offsets": [
+          1937,
+          2753,
+          3498
+        ],
+        "after_offsets": [
+          1937,
+          2753,
+          3498
+        ],
+        "reason": "actual source segments"
+      },
+      {
+        "before": "{280:55,281:47,282:25}",
+        "after": "{283:17,284:30,285:32}",
+        "before_offsets": [
+          2023
+        ],
+        "after_offsets": [
+          2023
+        ],
+        "reason": "actual full-bank group counts"
+      },
+      {
+        "before": "Entire37-row change export",
+        "after": "Entire18-row change export",
+        "before_offsets": [
+          6174
+        ],
+        "after_offsets": [
+          6174
+        ],
+        "reason": "actual incoming-seed change rows"
+      },
+      {
+        "before": "len(delta)==37",
+        "after": "len(delta)==18",
+        "before_offsets": [
+          6270
+        ],
+        "after_offsets": [
+          6270
+        ],
+        "reason": "actual18 complete change records"
+      },
+      {
+        "before": "7089/7092",
+        "after": "7090/7093",
+        "before_offsets": [
+          7467,
+          7768
+        ],
+        "after_offsets": [
+          7467,
+          7768
+        ],
+        "reason": "actual ACIP population"
+      },
+      {
+        "before": "len(ev['pairs'])==7092 and len(ev['acip_index'])==7089",
+        "after": "len(ev['pairs'])==7093 and len(ev['acip_index'])==7090",
+        "before_offsets": [
+          7478
+        ],
+        "after_offsets": [
+          7478
+        ],
+        "reason": "actual full evidence/index count"
+      },
+      {
+        "before": "headwords=7092,proven=7089",
+        "after": "headwords=7093,proven=7090",
+        "before_offsets": [
+          7716
+        ],
+        "after_offsets": [
+          7716
+        ],
+        "reason": "actual complete ACIP disclosure"
+      },
+      {
+        "before": "C05 exact282coverage",
+        "after": "C05 exact285coverage",
+        "before_offsets": [
+          8236
+        ],
+        "after_offsets": [
+          8236
+        ],
+        "reason": "actual target coverage"
+      },
+      {
+        "before": "list(range(1,283))",
+        "after": "list(range(1,286))",
+        "before_offsets": [
+          8323
+        ],
+        "after_offsets": [
+          8323
+        ],
+        "reason": "actual contiguous285 coverage"
+      },
+      {
+        "before": "Accepted current124tuple interface",
+        "after": "Accepted current76tuple interface",
+        "before_offsets": [
+          9243
+        ],
+        "after_offsets": [
+          9243
+        ],
+        "reason": "actual independent reviewed interface"
+      },
+      {
+        "before": "len(tuples)==124",
+        "after": "len(tuples)==76",
+        "before_offsets": [
+          9343
+        ],
+        "after_offsets": [
+          9343
+        ],
+        "reason": "actual ordered reviewed tuples"
+      },
+      {
+        "before": "sum(x['eng'] is None for x in tuples)==4",
+        "after": "sum(x['eng'] is None for x in tuples)==0",
+        "before_offsets": [
+          9363
+        ],
+        "after_offsets": [
+          9363
+        ],
+        "reason": "actual zero nulls"
+      },
+      {
+        "before": "sum(x['d']==5 and x['eng'] is not None for x in tuples)==102",
+        "after": "sum(x['d']==5 and x['eng'] is not None for x in tuples)==61",
+        "before_offsets": [
+          9408
+        ],
+        "after_offsets": [
+          9408
+        ],
+        "reason": "actual nonnull d5"
+      },
+      {
+        "before": "[45402,11938,1618,11,7092,15546,22528,22188,24105,37]",
+        "after": "[45481,11938,1621,11,7093,15557,22546,22206,24126,18]",
+        "before_offsets": [
+          10785
+        ],
+        "after_offsets": [
+          10785
+        ],
+        "reason": "literal measured current output vector, never self-derived expected values"
+      }
+    ]
+  },
+  {
+    "mode": "offsets",
+    "old": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/prior/close-evidence.py.txt",
+    "current": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-generated-reproduction-final-preparation/runtime/close-evidence.py.txt",
+    "changes": [
+      {
+        "before": "C05-280-282",
+        "after": "C05-283-285",
+        "before_offsets": [
+          111
+        ],
+        "after_offsets": [
+          111
+        ],
+        "reason": "actual batch"
+      },
+      {
+        "before": "==223847",
+        "after": "==PENDING_CHECKS_TOTAL",
+        "before_offsets": [
+          464
+        ],
+        "after_offsets": [
+          464
+        ],
+        "reason": "future actual complete runtime retention record count"
+      },
+      {
+        "before": "==1513",
+        "after": "==PENDING_INPUT_ALIASES",
+        "before_offsets": [
+          1081
+        ],
+        "after_offsets": [
+          1081
+        ],
+        "reason": "future actual preparation alias count"
+      },
+      {
+        "before": "failure_attempts=0",
+        "after": "failure_attempts=PENDING_RUNTIME_FAILURE_ATTEMPTS",
+        "before_offsets": [
+          4606
+        ],
+        "after_offsets": [
+          4606
+        ],
+        "reason": "future actual independent runtime history; preparation reader failures remain separate"
+      },
+      {
+        "before": "",
+        "after": "raise RuntimeError('SOURCE ONLY: actual independent retention totals, alias population and failure history must be bound after the released run')\nPENDING_CHECKS_TOTAL = None\nPENDING_INPUT_ALIASES = None\nPENDING_RUNTIME_FAILURE_ATTEMPTS = None\n",
+        "before_offsets": [
+          0
+        ],
+        "after_offsets": [
+          0
+        ],
+        "reason": "Future runtime outcomes must be bound after real execution; unconditional source-only stop."
+      }
+    ]
+  }
+]

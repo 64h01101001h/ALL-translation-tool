@@ -1,0 +1,105 @@
+"""Independent read/copy/AST audit only. Never import or execute reviewed sources."""
+from pathlib import Path
+import ast, datetime, difflib, hashlib, json
+O=Path(__file__).resolve().parent
+P=O.parent/'through282-final-stage-preparation'
+def pin(b): return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(n,b):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb') as f:f.write(b)
+def save(n,v):write(n,(json.dumps(v,ensure_ascii=False,indent=2)+'\n').encode())
+raws={str(p.relative_to(P)):p.read_bytes() for p in sorted(P.rglob('*')) if p.is_file()}
+f=json.loads(raws['freeze.json'])
+assert pin(raws['freeze.json'])['sha256']=='429154a6e1122ee96222a13353273a1df28b63300abebec9fb91d4b9f8e983b9'
+assert set(raws)==set(f['files'])|{'freeze.json'} and len(f['files'])==f['file_count']==32
+assert all(pin(raws[n])==r for n,r in f['files'].items())
+maps=[]
+for n,b in raws.items():
+ copy='inputs/preparation/'+n;write(copy,b)
+ assert (O/copy).read_bytes()==(P/n).read_bytes()==b
+ maps.append(dict(original=str(P/n),copy=copy,**pin(b)))
+originals=json.loads(raws['original-to-copy-manifest.json'])
+for r in originals:
+ b=Path(r['original']).read_bytes();c=raws[r['copy']]
+ assert b==c and pin(b)=={k:r[k] for k in ['bytes','sha256']}
+ maps.append(dict(original=r['original'],copy='inputs/preparation/'+r['copy'],**pin(b),role='Complete actual alias reopened; same retained bytes, no redundant payload copy'))
+old=raws['prior-verify_staged_through282.py.txt'].decode();new=raws['verify_staged_through282.py'].decode()
+assert pin(new.encode())==dict(bytes=48055,sha256='b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee')
+changes=json.loads(raws['exact-replacement-map.json']);value=old
+for r in changes:
+ assert value.count(r['before'])==r['occurrences']
+ value=value.replace(r['before'],r['after'])
+assert value==new
+for r in reversed(changes):
+ for at in reversed(r['after_offsets']):
+  assert value[at:at+len(r['after'])]==r['after']
+  value=value[:at]+r['before']+value[at+len(r['after']):]
+assert value==old
+for fn,a,b,fa,fb in [('forward.diff.txt',old,new,'before','after'),('inverse.diff.txt',new,old,'after','before')]:
+ assert raws[fn].decode()==''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile=fa,tofile=fb))
+a,b=ast.parse(old),ast.parse(new)
+assert raws['prior.ast.txt'].decode()==ast.dump(a,include_attributes=False,indent=2)+'\n'
+assert raws['current.ast.txt'].decode()==ast.dump(b,include_attributes=False,indent=2)+'\n'
+def funcs(tree,text):
+ lines=text.splitlines(True)
+ return {n.name:(''.join(lines[n.lineno-1:n.end_lineno]),n) for n in ast.walk(tree) if isinstance(n,ast.FunctionDef)}
+afs,bfs=funcs(a,old),funcs(b,new)
+critical=['freeze_entries','allowance_result','nul_paths','untracked_transition','check_final_head','raw','obj','git','old','require','pincheck','verify_source_archive','verify_payload_source','verify_untracked_capture','verify_banking_writes']
+assert set(afs)<=set(bfs) and set(bfs)-set(afs)=={'load_release_bindings'}
+critical_records=[]
+for name in critical:
+ assert afs[name][0]==bfs[name][0]
+ critical_records.append(dict(name=name,full_lines_pin=pin(bfs[name][0].encode()),prior_line=afs[name][1].lineno,current_line=bfs[name][1].lineno))
+assert {n for n in afs if afs[n][0]!=bfs[n][0]}=={'__init__','run','main'}
+# Verify exact new startup dependency order structurally, without calling anything.
+main=bfs['main'][1]
+call_names=[(n.lineno,ast.unparse(n.func)) for n in ast.walk(main) if isinstance(n,ast.Call)]
+gate=min(ln for ln,name in call_names if name=='load_release_bindings')
+constructor=min(ln for ln,name in call_names if name=='Check')
+assert gate<constructor<min(ln for ln,name in call_names if name.endswith('.write_text'))
+loader=bfs['load_release_bindings'][1]
+loader_calls={ast.unparse(n.func) for n in ast.walk(loader) if isinstance(n,ast.Call)}
+assert not any(any(x in name for x in ['subprocess','mkdir','write','open','Check','git']) for name in loader_calls)
+assert isinstance(loader.body[0],ast.If) and 'execute_reviewed_verification' in ast.unparse(loader.body[0].test)
+assert any(isinstance(n,ast.Raise) for n in ast.walk(loader.body[0]))
+loader_text=bfs['load_release_bindings'][0]
+for needle in ["all(value is not None for value in expected.values())", "set(expected) == EXPECTED_BINDING_KEYS", "set(pins) == EXPECTED_INPUT_ROLES", "type(record['bytes']) is int", "set(record) == {'path','bytes','sha256'}", "binding['verifier_sha256'] == sha(Path(__file__).read_bytes())", "assert path.read_bytes() == raw"]:assert needle in loader_text
+known=next(ast.literal_eval(n.value) for n in b.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='KNOWN_INPUT_PINS' for t in n.targets))
+keys=next(ast.literal_eval(n.value) for n in b.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='EXPECTED_BINDING_KEYS' for t in n.targets))
+template=json.loads(raws['final-bindings-template.json'])
+assert template['verifier_sha256']==pin(new.encode())['sha256']
+assert template['expected']==dict.fromkeys(keys) and len(keys)==11
+assert len(known)==7 and len(template['input_pins'])==13
+for role,r in known.items():
+ assert template['input_pins'][role]==r
+ actual=Path(r['path']).read_bytes();assert pin(actual)=={k:r[k] for k in ['bytes','sha256']}
+ assert any(m['original']==r['path'] and (O/m['copy']).read_bytes()==actual for m in maps)
+future=set(template['input_pins'])-set(known)
+assert future=={'ordinary_manifest','final_manifest','ordinary_result','final_result','whitespace_proof','whitespace_log'}
+assert all(template['input_pins'][r]['bytes'] is None and template['input_pins'][r]['sha256'] is None for r in future)
+meta=json.loads(raws['source-inputs/semantic_review.json']);sf=json.loads(raws['source-inputs/semantic_freeze.json'])
+assert meta['verdict']=='APPROVE' and meta['spec_verdict']==meta['quality_verdict']=='PASS' and meta['open_findings']==[]
+assert sf['verdict']=='APPROVE' and sf['page']=='c5p94' and len(sf['files'])==sf['file_count']==871
+assert sum(r['bytes'] for r in sf['files'].values())==48827659
+payload=json.loads(raws['source-inputs/payload_manifest.json'])
+assert len(payload['files'])==13 and len({r['path'] for r in payload['files']})==13
+assert 'data/alignment/span_head_allow.json' in {r['path'] for r in payload['files']}
+closed=json.loads(raws['source-inputs/prior_closure.json']);repro=json.loads(raws['source-inputs/reproduction_acceptance.json'])
+assert closed['status']=='CLOSED_FIXED_CHECKPOINT_THROUGH279_WITH_OPEN_INTEGRATION' and closed['final_head']==template['baseline'] and closed['verified_segments']==279 and closed['next_batch']==[280,281,282]
+assert repro['status']=='PASS' and repro['head']==template['baseline'] and repro['retention_checks']==223847
+assert 'PENDING_BINDINGS' not in new and 'three_ledger' not in new
+cmd=json.loads(raws['command-plan.json']);assert cmd['executed'] is False and cmd['template_is_not_release'] is True and None in cmd['argv']
+assert cmd['argv'][2]==str(P/'verify_staged_through282.py') and cmd['argv'][-1]=='--execute-reviewed-verification'
+execution=json.loads(raws['caller-prepare01/execution.json']);command=json.loads(raws['caller-prepare01/command.json'])
+assert execution['exit']==0 and raws['caller-prepare01/exit.txt']==b'0\n' and not raws['caller-prepare01/stderr.bin']
+assert all(execution[k]==v for k,v in command.items())
+for stream in ['stdin','stdout','stderr']:assert execution[stream]==pin(raws['caller-prepare01/'+stream+'.bin'])
+assert command['argv'][-1]==str(P/'prepare_source.py.txt') and '-B' in command['argv'] and command['environment_overrides']['PYTHONDONTWRITEBYTECODE']=='1'
+assert json.loads(raws['caller-prepare01/stdout.bin'])['candidate']==pin(new.encode())
+# Reread original input and copied bytes after all inspection; no target runtime calls.
+assert {str(p.relative_to(P)) for p in P.rglob('*') if p.is_file()}==set(raws)
+assert all((P/n).read_bytes()==v for n,v in raws.items())
+for r in maps:assert Path(r['original']).read_bytes()==(O/r['copy']).read_bytes() and pin((O/r['copy']).read_bytes())=={k:r[k] for k in ['bytes','sha256']}
+save('original-to-copy-manifest.json',maps)
+save('static-proof.json',dict(status='PASS_STATIC_SOURCE_REVIEW',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),candidate=pin(new.encode()),preparation_freeze=pin(raws['freeze.json']),preparation_frozen_files=32,complete_preparation_files_with_freeze=33,full_original_copy_alias_records=len(maps),preparation_original_pairs=len(originals),exact_forward_inverse=True,exact_unified_diffs=True,exact_AST_dumps=True,changed_old_functions=['__init__','run','main'],critical_complete_functions=critical_records,known_full_pins=7,future_input_pin_roles=sorted(future),unbound_expected_values=11,gate_before_constructor_and_output=True,gate_has_no_Git_subprocess_or_output_calls=True,gate_order_assessment='Static AST/source proof only; no candidate function was executed',semantic_files=871,semantic_bytes=48827659,payload_files=13,source_code_hash_cycle=False,actual_source_preparation_exit=0,target_imported=False,target_executed=False,Git_SQL_tests_stage_bank_WT_writes=False))
+print(json.dumps(dict(status='PASS_STATIC_SOURCE_REVIEW',copied_files=33,full_alias_records=len(maps),critical_functions=len(critical),future_pins=len(future),expected_unbound=len(keys)),indent=2))

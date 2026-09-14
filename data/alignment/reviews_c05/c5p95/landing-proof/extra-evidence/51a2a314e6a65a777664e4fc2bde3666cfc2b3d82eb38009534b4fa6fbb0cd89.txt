@@ -1,0 +1,60 @@
+import pathlib,json,hashlib,datetime,shutil
+R=pathlib.Path("/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment")
+I=R/'campaign-artifacts/integration'
+P=I/'through279-whitespace-actual-preparation'
+V=I/'through279-whitespace-actual-review'
+OLD=I/'through279-finalization-runtime'
+OUT=I/'through279-whitespace-actual-root-release'
+NEW=I/'through279-whitespace-actual-runtime'
+def pin(b): return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def check(b,p): assert pin(b)=={k:p[k] for k in ('bytes','sha256')}
+assert __debug__ and not OUT.exists() and not NEW.exists()
+counts={}
+for base,sha,expected,mname in [(P,'2c86e7c418204955b071ed972de598df60fa72cdfd0f3b473e1507d34557c1f9',400,'complete-original-copy-manifest.json'),(V,'b4c493ae0f5a0f10e3a1d9f46d13c6effab71429c4452fdd0d9b4347c499538c',419,'original-to-copy-manifest.json')]:
+ b=(base/'freeze.json').read_bytes(); assert pin(b)['sha256']==sha
+ j=json.loads(b); files=j['files']; assert len(files)==expected
+ assert {str(p.relative_to(base)) for p in base.rglob('*') if p.is_file()}==set(files)|{'freeze.json'}
+ for n,p in files.items(): check((base/n).read_bytes(),p)
+ rows=json.loads((base/mname).read_bytes())
+ for row in rows:
+  src=pathlib.Path(row['original']); cp=base/row['copy']; raw=src.read_bytes()
+  assert str(src.resolve(strict=True))==row['resolved_original']
+  check(raw,row); assert cp.read_bytes()==raw
+ counts[str(base)]={'freeze':pin(b),'files':len(files),'full_original_copy_pairs':len(rows)}
+v=json.loads((V/'review.json').read_bytes())
+assert v['spec_verdict']==v['quality_verdict']=='APPROVE' and v['open_findings']==[]
+for name,key in [('whitespace279.py','candidate'),('additional-root-descriptors.json','descriptor')]: check((P/name).read_bytes(),v[key])
+d=json.loads((P/'additional-root-descriptors.json').read_bytes())
+assert len(d['entries'])==37 and len(d['evidence'])==260 and len(d['provenance_maps'])==127
+values={}
+for rec in d['evidence']:
+ src=pathlib.Path(rec['path']); raw=src.read_bytes()
+ assert str(src.resolve(strict=True))==rec['resolved_path']
+ check(raw,rec); assert (P/rec['runtime_copy']).read_bytes()==raw
+ values[rec['path']]=raw
+for link in d['provenance_maps']:
+ assert link['record'] in json.loads(values[link['manifest']])
+ assert values[link['original']]==values[link['copy']]
+ check(values[link['original']],link['record'])
+root=R/'campaign-artifacts/C05-277-279/landing/root-proof-copy-manifest-before-whitespace.json'
+check(root.read_bytes(),d['root_manifest'])
+rootrows=json.loads(root.read_bytes())['files']
+for e in d['entries']:
+ assert e['root_record'] in rootrows
+ raw=(R/'campaign-worktree'/e['path']).read_bytes()
+ check(raw,e); assert raw==pathlib.Path(e['root_record']['original']).read_bytes()
+check((I/'through279-whitespace-runs/raw-diagnostic/stdout.bin').read_bytes(),d['raw_log'])
+OUT.mkdir(); NEW.mkdir()
+pairs=[]
+todo=[(P/n,n) for n in ['whitespace279.py','additional-root-descriptors.json']]
+todo += [(p,str(p.relative_to(P))) for p in sorted((P/'additional-evidence').rglob('*')) if p.is_file()]
+todo += [(OLD/n,n) for n in ['physical-source-descriptors.json','current-inputs/semantic-review/freeze.json','current-inputs/semantic-review/original-to-copy-manifest.json']]
+for src,n in todo:
+ raw=src.read_bytes(); dest=NEW/n; dest.parent.mkdir(parents=True,exist_ok=True); dest.write_bytes(raw)
+ assert dest.read_bytes()==src.read_bytes()
+ pairs.append(dict(original=str(src),resolved_original=str(src.resolve()),copy=n,**pin(raw)))
+proof=dict(status='PASS_ROOT_CODE_PROVENANCE_RELEASE_ACTUAL_PREPARE_AUDIT_PENDING',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),inputs=counts,approved_review=pin((V/'review.json').read_bytes()),materialized_runtime=str(NEW),files=pairs,worktree_or_index_mutated=False,source_normalization=False,production_calls=0,prepare_audit_calls=0)
+raw=(json.dumps(proof,indent=2,ensure_ascii=False)+'\n').encode()
+(OUT/'proof.json').write_bytes(raw); (NEW/'root-release.json').write_bytes(raw)
+print(json.dumps({'status':proof['status'],'runtime_files':len(pairs),'verified_frozen_files':819,'original_copy_pairs':1675,'additional_evidence':260}))
+

@@ -1,0 +1,22 @@
+"""Freeze source-only preparation after its actual caller completed."""
+import hashlib,json
+from pathlib import Path
+O=Path(__file__).resolve().parent;ROOT=O.parents[2];B=ROOT/'campaign-artifacts/C05-280-282';I=ROOT/'campaign-artifacts/integration'
+def pin(p):
+ raw=p.read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(n,v):(O/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+template=json.loads((O/'final-bindings-template.json').read_bytes());assert all(x is None for x in template['expected'].values())
+save('command-plan.json',dict(status='PLAN_ONLY_FINAL_BANK_AND_REVIEW_REQUIRED',argv=['python3','-B',str(O/'verify_staged_through282.py'),'--worktree',str(ROOT/'campaign-worktree'),'--batch',str(B),'--output',str(I/'through282-final-stage-verification'),'--untracked-before',str(B/'landing/untracked-before-banking.stdout'),'--whitespace-proof',None,'--whitespace-log',None,'--payload-manifest',str(B/'landing/staged-payload-manifest.json'),'--payload-source-proof',str(B/'landing/staged-payload-source-proof.json'),'--banking-ordinary-run',str(I/'through282-banking-runs/ordinary'),'--banking-final-run',str(I/'through282-banking-runs/final-whitespace'),'--bindings',None,'--bindings-sha256',None,'--execute-reviewed-verification'],template=str(O/'final-bindings-template.json'),template_is_not_release=True,staged_population=None,ordinary_bank_population=None,final_bank_population=None,whitespace_population=None,conditions=['Actual ordinary/final bank write records and complete manifests exist','Exact final stage/index/untracked/diagnostic inputs measured externally','Source and complete binding file independently reviewed and root released','Source copied/materialized unchanged; verifier_sha256 must match'],executed=False))
+manifest=json.loads((O/'original-to-copy-manifest.json').read_bytes())
+for r in manifest:assert pin(Path(r['original']))=={k:r[k] for k in ['bytes','sha256']}==pin(O/r['copy'])
+call=json.loads((O/'caller-prepare01/execution.json').read_bytes());assert call['exit']==0
+for name in ['stdin','stdout','stderr']:assert pin(O/f'caller-prepare01/{name}.bin')==call[name]
+assert not (O/'caller-prepare01/stderr.bin').read_bytes()
+files={str(p.relative_to(O)):pin(p) for p in sorted(O.rglob('*')) if p.is_file()};assert 'freeze.json' not in files
+save('freeze.json',dict(status='FROZEN_SOURCE_PREPARATION_PENDING_ACTUAL_FINAL_BINDINGS',files=files,file_count=len(files)))
+for n,r in files.items():assert pin(O/n)==r
+result=dict(files=len(files),freeze=pin(O/'freeze.json'),candidate=pin(O/'verify_staged_through282.py'),template=pin(O/'final-bindings-template.json'))
+for p in O.rglob('*'):
+ if p.is_file():p.chmod(0o444)
+for p in sorted([p for p in O.rglob('*') if p.is_dir()],key=lambda p:len(p.parts),reverse=True):p.chmod(0o555)
+O.chmod(0o555);print(json.dumps(result,indent=2))

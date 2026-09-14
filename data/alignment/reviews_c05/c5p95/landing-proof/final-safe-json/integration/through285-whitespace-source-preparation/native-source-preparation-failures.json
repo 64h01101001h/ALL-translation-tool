@@ -1,0 +1,41 @@
+[
+  {
+    "caller": "caller-inputs01",
+    "execution": {
+      "bytes": 887,
+      "sha256": "8d32b9597e3c82f225457a9b3006c82f25bca53198b033276724586dad6d608d"
+    },
+    "stderr": {
+      "bytes": 292,
+      "sha256": "ecf3852f12abe5996cc71b58db4859818ffcc3b7c98a308d0eaa8b569e09b9f2"
+    },
+    "reason": "C16 has no direct reviewer original row; exact frozen English source-map bridge retained and checked.",
+    "scope": "source-provenance preparation failure, not target prepare/audit failure"
+  },
+  {
+    "caller": "caller-inputs02",
+    "execution": {
+      "bytes": 891,
+      "sha256": "901d94d0c36f98f24d1048b4f9041c56e54f4251ba6827a7014218e8af8b3c87"
+    },
+    "stderr": {
+      "bytes": 1438,
+      "sha256": "613146d6d40a66453b43f6e1d8fe1dc9f231440ed5dda22dd80267c023c09742"
+    },
+    "reason": "Recorded print appends LF; unchanged physical predicate correctly rejected raw stdout; exact command/context/native-output transport now bound.",
+    "scope": "source-provenance preparation failure, not target prepare/audit failure"
+  },
+  {
+    "caller": "caller-inputs03",
+    "execution": {
+      "bytes": 890,
+      "sha256": "ee240808f761bc5a17547a415b1d330a8ff932a7ff7438a9a2752508317d4d2d"
+    },
+    "stderr": {
+      "bytes": 310,
+      "sha256": "a0f6bb1ab8eb18ab73b19718dfe0fc5b077075d24b0f4ca7afcd502683b3c66a"
+    },
+    "reason": "All twelve current snapshots preserve the complete closure BEFORE image; the AFTER note was later rewritten at byte468603. Current source-specific case checks the exact BEFORE prefix and retains both historical images and the full actual closure event.",
+    "scope": "source-provenance preparation failure, not target prepare/audit failure"
+  }
+]

@@ -1,0 +1,92 @@
+{
+  "verify_staged_through285.py": {
+    "original": {
+      "bytes": 48055,
+      "sha256": "b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee"
+    },
+    "candidate": {
+      "bytes": 57083,
+      "sha256": "1bbee20c0ecaa0f25081ee8251a7ad85907f00f7a9f0b7d62e19751a1195bc43"
+    },
+    "inverse_full_bytes": true,
+    "ast_parsed_only": true,
+    "old_functions": 22,
+    "unchanged_functions": [
+      "sha",
+      "signature",
+      "relative",
+      "allowance_result",
+      "nul_paths",
+      "untracked_transition",
+      "check_final_head",
+      "main",
+      "raw",
+      "obj",
+      "git",
+      "old",
+      "require",
+      "pincheck",
+      "verify_source_archive",
+      "verify_payload_source",
+      "verify_untracked_capture",
+      "verify_banking_writes"
+    ],
+    "changed_functions": [
+      "freeze_entries",
+      "load_release_bindings",
+      "__init__",
+      "run"
+    ],
+    "assertions_before": 232,
+    "assertions_after": 291
+  },
+  "prepare-explicit-stage-inputs.py": {
+    "original": {
+      "bytes": 4007,
+      "sha256": "48254cced0fb240ddd32d6cc2ca2f8798e170d4358d12c1b00f634a768d47d5f"
+    },
+    "candidate": {
+      "bytes": 5053,
+      "sha256": "b981eac4406888723d98d3f85df0a43fcaee5ca3ac81202be6d53a8874cd0e48"
+    },
+    "inverse_full_bytes": true,
+    "ast_parsed_only": true,
+    "old_functions": 3,
+    "unchanged_functions": [
+      "pin",
+      "js",
+      "add"
+    ],
+    "changed_functions": [],
+    "assertions_before": 18,
+    "assertions_after": 25
+  },
+  "bank_root_proofs_through285_final.py": {
+    "original": {
+      "bytes": 18802,
+      "sha256": "6db5614639288cbbc38b0ea768ffbec766c5dc060078a609801ca5fba2db41ec"
+    },
+    "candidate": {
+      "bytes": 20978,
+      "sha256": "2890f6e29393635e30a26e4ce5b849cfbd9a009f9b6d4f80ccc9b1cc9f86029f"
+    },
+    "inverse_full_bytes": true,
+    "ast_parsed_only": true,
+    "old_functions": 9,
+    "unchanged_functions": [
+      "pin",
+      "relpath",
+      "read",
+      "js",
+      "match",
+      "semantic_tree",
+      "add",
+      "explicit_inputs"
+    ],
+    "changed_functions": [
+      "main"
+    ],
+    "assertions_before": 67,
+    "assertions_after": 81
+  }
+}

@@ -1,0 +1,447 @@
+{
+  "prepare.py.txt": {
+    "prefix": "raise RuntimeError('SOURCE PREPARATION ONLY: post-build bindings and source review are pending; do not execute or materialize this candidate')\nPENDING_PAYLOAD_COUNT = None  # Actual immutable payload/source proof population after landing and builders.\n",
+    "changes": [
+      {
+        "before": "C05-280-282",
+        "after": "C05-283-285",
+        "before_offsets": [
+          292
+        ],
+        "reason": "known batch path",
+        "after_offsets": [
+          292
+        ]
+      },
+      {
+        "before": "c5p94",
+        "after": "c5p95",
+        "before_offsets": [
+          2752,
+          2975
+        ],
+        "reason": "known new page",
+        "after_offsets": [
+          2752,
+          2975
+        ]
+      },
+      {
+        "before": "10968d16e701b698a0e1fbd845b353089d15ac39",
+        "after": "fb9182dc6fca2230be3bc5169ba1288a22430280",
+        "before_offsets": [
+          341
+        ],
+        "reason": "actual incoming closed HEAD",
+        "after_offsets": [
+          341
+        ]
+      },
+      {
+        "before": "==13",
+        "after": "==PENDING_PAYLOAD_COUNT",
+        "before_offsets": [
+          1610
+        ],
+        "reason": "actual post-build payload count, including actual allowance decision; no prior13 assumption",
+        "after_offsets": [
+          1610
+        ]
+      }
+    ],
+    "pending": {
+      "PENDING_PAYLOAD_COUNT": "Actual immutable payload/source proof population after landing and builders."
+    }
+  },
+  "verify-retention.py.txt": {
+    "prefix": "raise RuntimeError('SOURCE PREPARATION ONLY: post-build bindings and source review are pending; do not execute or materialize this candidate')\nPENDING_ADDED_LINKS = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_ADDED_BY_SEGMENT = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_CHANGE_ROWS = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_MISSING_SPANS = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_EXCLUDED_ROWS = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_HEADS = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_PROVEN_ACIP = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_MISSING_HEADS = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_PRINTED_ACIP_PERCENT = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_FULL_MISSING_ROWS = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_REVIEW_TUPLES = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_REVIEW_NULLS = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_REVIEW_D5_NONNULL = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\nPENDING_COUNT_VECTOR = None  # Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.\n",
+    "changes": [
+      {
+        "before": "C05-280-282",
+        "after": "C05-283-285",
+        "before_offsets": [
+          323
+        ],
+        "reason": "known batch path",
+        "after_offsets": [
+          323
+        ]
+      },
+      {
+        "before": "c5p94",
+        "after": "c5p95",
+        "before_offsets": [
+          9107,
+          9183
+        ],
+        "reason": "known new page",
+        "after_offsets": [
+          9107,
+          9183
+        ]
+      },
+      {
+        "before": "len(old['links'])==45275",
+        "after": "len(old['links'])==45402",
+        "before_offsets": [
+          1721
+        ],
+        "reason": "actual incoming prior full links",
+        "after_offsets": [
+          1721
+        ]
+      },
+      {
+        "before": "'127 new links confined to280–282'",
+        "after": "'Measured new links confined to283–285'",
+        "before_offsets": [
+          1845
+        ],
+        "reason": "current segment scope; addition count unbound",
+        "after_offsets": [
+          1845
+        ]
+      },
+      {
+        "before": "len(added)==127",
+        "after": "len(added)==PENDING_ADDED_LINKS",
+        "before_offsets": [
+          1885
+        ],
+        "reason": "literal measured additions pending",
+        "after_offsets": [
+          1885
+        ]
+      },
+      {
+        "before": "(280,281,282)",
+        "after": "(283,284,285)",
+        "before_offsets": [
+          1960,
+          2776,
+          3521
+        ],
+        "reason": "known new segment set",
+        "after_offsets": [
+          1960,
+          2776,
+          3521
+        ]
+      },
+      {
+        "before": "{280:55,281:47,282:25}",
+        "after": "PENDING_ADDED_BY_SEGMENT",
+        "before_offsets": [
+          2046
+        ],
+        "reason": "literal measured group counts pending",
+        "after_offsets": [
+          2046
+        ]
+      },
+      {
+        "before": "'Entire37-row change export independently derived from actual incoming seed'",
+        "after": "'Complete measured change export independently derived from actual incoming seed'",
+        "before_offsets": [
+          6198
+        ],
+        "reason": "change row population pending",
+        "after_offsets": [
+          6198
+        ]
+      },
+      {
+        "before": "len(delta)==37",
+        "after": "len(delta)==PENDING_CHANGE_ROWS",
+        "before_offsets": [
+          6300
+        ],
+        "reason": "actual change rows pending",
+        "after_offsets": [
+          6300
+        ]
+      },
+      {
+        "before": "'ACIP evidence population five source-linked spans'",
+        "after": "'Measured ACIP source-linked and historical populations'",
+        "before_offsets": [
+          7357
+        ],
+        "reason": "current ACIP evidence pending",
+        "after_offsets": [
+          7357
+        ]
+      },
+      {
+        "before": "len(missspans)==5 and len(excluded)==1",
+        "after": "len(missspans)==PENDING_MISSING_SPANS and len(excluded)==PENDING_EXCLUDED_ROWS",
+        "before_offsets": [
+          7414
+        ],
+        "reason": "all ACIP populations pending",
+        "after_offsets": [
+          7414
+        ]
+      },
+      {
+        "before": "'ACIP head population7089/7092'",
+        "after": "'Measured ACIP head population'",
+        "before_offsets": [
+          7538
+        ],
+        "reason": "current ACIP heads pending",
+        "after_offsets": [
+          7538
+        ]
+      },
+      {
+        "before": "len(ev['pairs'])==7092 and len(ev['acip_index'])==7089 and len(missing)==3",
+        "after": "len(ev['pairs'])==PENDING_HEADS and len(ev['acip_index'])==PENDING_PROVEN_ACIP and len(missing)==PENDING_MISSING_HEADS",
+        "before_offsets": [
+          7570
+        ],
+        "reason": "actual population literals pending",
+        "after_offsets": [
+          7570
+        ]
+      },
+      {
+        "before": "'All six missing-ACIP full-bank rows are unchanged historical links'",
+        "after": "'All missing-ACIP full-bank rows are unchanged historical links'",
+        "before_offsets": [
+          7697
+        ],
+        "reason": "retains strict no-new-unproven-row gate",
+        "after_offsets": [
+          7697
+        ]
+      },
+      {
+        "before": "headwords=7092,proven=7089,missing=3,percentage=100*7089/7092",
+        "after": "headwords=PENDING_HEADS,proven=PENDING_PROVEN_ACIP,missing=PENDING_MISSING_HEADS,percentage=100*PENDING_PROVEN_ACIP/PENDING_HEADS",
+        "before_offsets": [
+          7848
+        ],
+        "reason": "actual ACIP disclosure numbers pending",
+        "after_offsets": [
+          7848
+        ]
+      },
+      {
+        "before": "printed_rounded_percent='100.0%'",
+        "after": "printed_rounded_percent=PENDING_PRINTED_ACIP_PERCENT",
+        "before_offsets": [
+          7978
+        ],
+        "reason": "literal actual producer stream value pending",
+        "after_offsets": [
+          7978
+        ]
+      },
+      {
+        "before": "unproven_source_linked_span_count=5,full_bank_d5_english_unproven_count=6",
+        "after": "unproven_source_linked_span_count=PENDING_MISSING_SPANS,full_bank_d5_english_unproven_count=PENDING_FULL_MISSING_ROWS",
+        "before_offsets": [
+          8070
+        ],
+        "reason": "full missing population pending",
+        "after_offsets": [
+          8070
+        ]
+      },
+      {
+        "before": "Existing95%floor permits three missing heads; rounded100.0%is not full coverage.",
+        "after": "The existing95%floor does not establish full coverage; actual missing populations and printed percentage must be reported.",
+        "before_offsets": [
+          8369
+        ],
+        "reason": "remove obsolete actual population claim without changing threshold",
+        "after_offsets": [
+          8369
+        ]
+      },
+      {
+        "before": "'C05 exact282coverage'",
+        "after": "'C05 exact285coverage'",
+        "before_offsets": [
+          8541
+        ],
+        "reason": "known coverage target",
+        "after_offsets": [
+          8541
+        ]
+      },
+      {
+        "before": "list(range(1,283))",
+        "after": "list(range(1,286))",
+        "before_offsets": [
+          8629
+        ],
+        "reason": "known exact contiguous target",
+        "after_offsets": [
+          8629
+        ]
+      },
+      {
+        "before": "'Accepted current124tuple interface'",
+        "after": "'Accepted current measured tuple interface'",
+        "before_offsets": [
+          9548
+        ],
+        "reason": "semantic interface count pending",
+        "after_offsets": [
+          9548
+        ]
+      },
+      {
+        "before": "len(tuples)==124",
+        "after": "len(tuples)==PENDING_REVIEW_TUPLES",
+        "before_offsets": [
+          9657
+        ],
+        "reason": "independent accepted tuple count pending",
+        "after_offsets": [
+          9657
+        ]
+      },
+      {
+        "before": "sum(x['eng'] is None for x in tuples)==4",
+        "after": "sum(x['eng'] is None for x in tuples)==PENDING_REVIEW_NULLS",
+        "before_offsets": [
+          9696
+        ],
+        "reason": "accepted null count pending",
+        "after_offsets": [
+          9696
+        ]
+      },
+      {
+        "before": "sum(x['d']==5 and x['eng'] is not None for x in tuples)==102",
+        "after": "sum(x['d']==5 and x['eng'] is not None for x in tuples)==PENDING_REVIEW_D5_NONNULL",
+        "before_offsets": [
+          9760
+        ],
+        "reason": "accepted d5 count pending",
+        "after_offsets": [
+          9760
+        ]
+      },
+      {
+        "before": "'Actual live frozen13 payload remains equal'",
+        "after": "'Actual live frozen payload remains equal'",
+        "before_offsets": [
+          10569
+        ],
+        "reason": "full per-file gate retained; actual population checked at release",
+        "after_offsets": [
+          10569
+        ]
+      },
+      {
+        "before": "[45402,11938,1618,11,7092,15546,22528,22188,24105,37]",
+        "after": "PENDING_COUNT_VECTOR",
+        "before_offsets": [
+          11158
+        ],
+        "reason": "all ten current output literals pending; never derive expected vector from same outputs",
+        "after_offsets": [
+          11158
+        ]
+      }
+    ],
+    "pending": {
+      "PENDING_ADDED_LINKS": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_ADDED_BY_SEGMENT": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_CHANGE_ROWS": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_MISSING_SPANS": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_EXCLUDED_ROWS": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_HEADS": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_PROVEN_ACIP": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_MISSING_HEADS": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_PRINTED_ACIP_PERCENT": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_FULL_MISSING_ROWS": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_REVIEW_TUPLES": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_REVIEW_NULLS": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_REVIEW_D5_NONNULL": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals.",
+      "PENDING_COUNT_VECTOR": "Bind from actual root accepted output/source proof and retain the full exact source evidence; then separately review final literals."
+    }
+  },
+  "close-evidence.py.txt": {
+    "prefix": "raise RuntimeError('SOURCE PREPARATION ONLY: post-build bindings and source review are pending; do not execute or materialize this candidate')\nPENDING_CHECKS_TOTAL = None  # Actual complete retention records and successful proof.\nPENDING_INPUT_ALIASES = None  # Actual prepare manifest population.\nPENDING_SOURCE_DATE = None  # Actual root output evidence meta.date, bound before replay.\nPENDING_RUNTIME_FAILURE_ATTEMPTS = None  # Actual current runtime caller history; no prior zero assumed.\n",
+    "changes": [
+      {
+        "before": "C05-280-282",
+        "after": "C05-283-285",
+        "before_offsets": [
+          111
+        ],
+        "reason": "known batch",
+        "after_offsets": [
+          111
+        ]
+      },
+      {
+        "before": "==223847",
+        "after": "==PENDING_CHECKS_TOTAL",
+        "before_offsets": [
+          464
+        ],
+        "reason": "actual successful retention population pending",
+        "after_offsets": [
+          464
+        ]
+      },
+      {
+        "before": "==1513",
+        "after": "==PENDING_INPUT_ALIASES",
+        "before_offsets": [
+          1081
+        ],
+        "reason": "actual full input alias population pending",
+        "after_offsets": [
+          1081
+        ]
+      },
+      {
+        "before": "'2026-09-13'",
+        "after": "PENDING_SOURCE_DATE",
+        "before_offsets": [
+          3284,
+          4433
+        ],
+        "reason": "actual root builder local date pending, never current UTC date",
+        "after_offsets": [
+          3284,
+          4440
+        ]
+      },
+      {
+        "before": "failure_attempts=0",
+        "after": "failure_attempts=PENDING_RUNTIME_FAILURE_ATTEMPTS",
+        "before_offsets": [
+          4620
+        ],
+        "reason": "actual runtime history pending; preserve every real failure",
+        "after_offsets": [
+          4620
+        ]
+      }
+    ],
+    "pending": {
+      "PENDING_CHECKS_TOTAL": "Actual complete retention records and successful proof.",
+      "PENDING_INPUT_ALIASES": "Actual prepare manifest population.",
+      "PENDING_SOURCE_DATE": "Actual root output evidence meta.date, bound before replay.",
+      "PENDING_RUNTIME_FAILURE_ATTEMPTS": "Actual current runtime caller history; no prior zero assumed."
+    }
+  },
+  "run-once.py.txt": {
+    "changes": [],
+    "pending": {},
+    "byte_identical": true
+  },
+  "run-isolated-readonly.py.txt": {
+    "changes": [],
+    "pending": {},
+    "byte_identical": true
+  }
+}

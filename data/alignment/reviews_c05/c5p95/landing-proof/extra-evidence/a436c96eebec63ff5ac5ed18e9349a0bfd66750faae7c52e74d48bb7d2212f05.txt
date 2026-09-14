@@ -1,0 +1,118 @@
+"""Build exact source-bound descriptors and a guarded candidate; never run candidate."""
+from pathlib import Path
+import ast,collections,datetime,difflib,hashlib,json,re
+O=Path(__file__).resolve().parent;I=O.parent;A=I.parent;B=A/'C05-280-282';W=A.parent/'campaign-worktree'
+def pin(raw):return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(name,value):
+ with (O/name).open('x') as f:json.dump(value,f,indent=2,ensure_ascii=False);f.write('\n')
+evidence={};values={};links=[]
+def capture(path):
+ path=Path(path);key=str(path);resolved=path.resolve(strict=True);before=resolved.stat();raw=path.read_bytes();after=resolved.stat()
+ assert (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns)
+ assert path.resolve(strict=True)==resolved
+ record=dict(path=key,resolved_path=str(resolved),runtime_copy='additional-evidence/'+pin(raw)['sha256']+'.bin',**pin(raw))
+ dest=O/record['runtime_copy'];dest.parent.mkdir(exist_ok=True)
+ if dest.exists():assert dest.read_bytes()==raw
+ else:
+  with dest.open('xb') as f:f.write(raw)
+ assert dest.read_bytes()==path.read_bytes()==raw
+ if key in evidence:assert evidence[key]==record and values[key]==raw
+ evidence[key]=record;values[key]=raw
+ return raw
+def add_link(manifest_path,record,freeze_path=None):
+ manifest_path=Path(manifest_path);rows=json.loads(capture(manifest_path));assert record in rows
+ original=record.get('original',record.get('path'));copy=str(manifest_path.parent/record['copy'])
+ assert capture(original)==capture(copy) and pin(values[original])=={k:record[k] for k in ('bytes','sha256')}
+ link=dict(manifest=str(manifest_path),record=record,original=original,copy=copy)
+ if freeze_path:
+  frozen=json.loads(capture(freeze_path));assert pin(values[copy])==frozen['files'][record['copy']];link['freeze']=str(freeze_path)
+ links.append(link);return len(links)-1
+
+pending=json.loads((O/'actual-additional-source-cases.json').read_bytes());assert len(pending)==12
+root_path=B/'landing/root-proof-copy-manifest-before-whitespace.json';root_raw=capture(root_path);root=json.loads(root_raw)
+rawdir=I/'through282-whitespace-runs/raw-diagnostic';raw_capture={}
+for role,name in [('command','command.json'),('execution','execution.json'),('stdin','stdin.bin'),('stdout','stdout.bin'),('stderr','stderr.bin'),('exit','exit.txt')]:
+ capture(rawdir/name);raw_capture[role]=evidence[str(rawdir/name)]
+manifest=json.loads(capture(B/'postlanding-verification-preparation/supplemental-original-to-copy-manifest.json'))
+corr_manifest=json.loads(capture(B/'postlanding-verification-correction01/original-to-copy-manifest.json'))
+prior_baseline=B/'baseline.json';capture(prior_baseline)
+prior_command=B/'reproduction-root-entry/commands/10'
+for name in ['command.json','execution.json','stdin.bin','stdout.bin','stderr.bin','exit.txt']:capture(prior_command/name)
+build_path=B/'landing/canonical-builds-once.json';build=json.loads(capture(build_path))
+current_csv=W/'docs/geshe_michael_roach_dictionary_changes.csv';capture(current_csv)
+ctest_dir=B/'ctest-config-inspection-caller'
+for name in ['command.json','execution.json','stdin.bin','stdout.bin','stderr.bin','exit.txt']:capture(ctest_dir/name)
+ctest_cmd=json.loads(values[str(ctest_dir/'command.json')]);ctest_doc=json.loads(values[str(ctest_dir/'stdout.bin')])
+history_dir=I/'through279-one-minute-scheduler-checkpoint'
+for name in ['before-CAMPAIGN_CONTINUATION.md','after-CAMPAIGN_CONTINUATION.md','status-checkpoint-proof.json','record-status.py','status-caller-result.json','CAMPAIGN_CONTINUATION.md.diff','automation-proof.json']:
+ capture(history_dir/name)
+closure=I/'through279-root-closure/proof.json';capture(closure)
+before=values[str(history_dir/'before-CAMPAIGN_CONTINUATION.md')];after=values[str(history_dir/'after-CAMPAIGN_CONTINUATION.md')]
+assert pin(before)==dict(bytes=416459,sha256='da4c9b13aa38f77c5e3b58fce3cb30b06eb02795d6d3fd44f913ae28cd3063e5')
+assert pin(after)==dict(bytes=420738,sha256='53a976e0db973f974e53a78a48ca414c0f66e2766c72b16d87a56dd838b5b107') and after.startswith(before)
+source_lines=before.split(b'\n');line=source_lines[2356];lo=sum(len(x)+1 for x in source_lines[:2356]);hi=lo+len(line)
+assert line.endswith(b' ') and not line.endswith(b'  ')
+history=dict(before=str(history_dir/'before-CAMPAIGN_CONTINUATION.md'),after=str(history_dir/'after-CAMPAIGN_CONTINUATION.md'),proof=str(history_dir/'status-checkpoint-proof.json'),closure=str(closure),line_sha256=pin(line)['sha256'],caller_provenance='Preserved available status-caller-result.json and record-status.py; no new raw stream provenance is claimed')
+entries=[]
+for row in pending:
+ rec=row['root_record'];assert rec in root['files'];raw=capture(rec['original'])
+ assert pin(raw)=={k:row[k] for k in ('bytes','sha256')} and capture(W/row['path'])==raw
+ entry={k:row[k] for k in ['path','issues','root_record','bytes','sha256']}
+ if row['sha256']=='705fdf41db5d427cc11ae2098e260ca47741bda6786bb1216fc68e53ecf4dd43':
+  entry.update(kind='archived_prior_canonical_csv_crlf',csv_source=str(prior_command/'stdout.bin'))
+  assert raw==values[entry['csv_source']]
+ elif row['sha256']==build['output_sha256']['docs/geshe_michael_roach_dictionary_changes.csv']:
+  entry.update(kind='archived_current_canonical_csv_crlf',csv_source=str(current_csv));assert raw==values[str(current_csv)]
+ elif row['sha256'] in ['39f722d90da464e77c1075e76755b98d8c111fabec7f2b2a7370be8b2ed96308','e0e9873f70e1682126e08ad37db9f3c59ac800b1841a80cc1abaa4eb90f99fb0']:
+  first=[r for r in manifest if r['sha256']==row['sha256']];second=[r for r in corr_manifest if r['sha256']==row['sha256'] and 'supplemental-inputs/' in r['copy']]
+  assert len(first)==len(second)==1
+  indexes=[add_link(B/'postlanding-verification-preparation/supplemental-original-to-copy-manifest.json',first[0],B/'postlanding-verification-preparation/freeze.json'),add_link(B/'postlanding-verification-correction01/original-to-copy-manifest.json',second[0],B/'postlanding-verification-correction01/freeze.json')]
+  assert links[indexes[0]]['copy']==links[indexes[1]]['original'] and links[indexes[1]]['copy']==rec['original']
+  lines=raw.split(b'\n');source_dir=lines[1].decode().removeprefix('# Source directory: ');build_dir=lines[2].decode().removeprefix('# Build directory: ')
+  entry.update(kind='archived_cmake_generated_header',generated_original=first[0]['original'],source_directory=source_dir,build_directory=build_dir,provenance_link_indexes=indexes)
+  assert values[first[0]['original']]==raw and row['issues']=={'trailing whitespace.':[1,4,5]}
+ elif rec['original']==str(ctest_dir/'stdout.bin'):
+  entry.update(kind='recorded_ctest_json_formatter',event_directory=str(ctest_dir),argv=ctest_cmd['argv'],cwd=ctest_cmd['cwd'],test_names=[t['name'] for t in ctest_doc['tests']])
+  assert len(ctest_doc['tests'])==17 and ctest_doc['kind']=='ctestInfo'
+  lines=raw.split(b'\n');numbers=[i+1 for i,x in enumerate(lines) if re.fullmatch(rb' *"[A-Za-z][A-Za-z0-9]*" : ',x)]
+  assert row['issues']=={'trailing whitespace.':numbers} and all(lines[n].strip() in (b'{',b'[') for n in numbers)
+ else:
+  assert row['path'].endswith('.md') and raw.startswith(after) and row['issues']=={'trailing whitespace.':[2357]} and raw[lo:hi]==line
+  entry.update(kind='archived_prebatch_continuation_line',historical_line_range=[lo,hi])
+  directory=Path(rec['original']).parent
+  proof=directory/('checkpoint.json' if directory.name=='checkpoint-page94-build-verified' else 'proof.json');capture(proof)
+  entry['current_checkpoint_proof']=str(proof)
+ entries.append(entry)
+physical_path=O/'physical-source-descriptors.json';physical=physical_path.read_bytes()
+data=dict(head='10968d16e701b698a0e1fbd845b353089d15ac39',raw_log=pin(values[str(rawdir/'stdout.bin')]),root_manifest=pin(root_raw),physical_descriptors=pin(physical),entries=entries,evidence=list(evidence.values()),provenance_maps=links,raw_capture=raw_capture,prior_baseline=str(prior_baseline),prior_command_directory=str(prior_command),current_build_proof=str(build_path),continuation_history=history,boundary='Twelve actual source/event-bound files only; no historical warning identity or arbitrary archived-prose exemption')
+save('additional-root-descriptors.json',data)
+
+base=(O/'guarded-base-preparation/whitespace282.py').read_text();candidate=base;replacements=[]
+def replace(old,new):
+ global candidate
+ assert candidate.count(old)==1
+ replacements.append(dict(old=old,new=new,offset=candidate.index(old)));candidate=candidate.replace(old,new)
+start=base.index('# PREPARATION ONLY:');end=base.index('from pathlib import Path\n')
+replace(base[start:end],"# Runtime requires exact independently reviewed source release before Run.\n\n")
+methods=(O/'additional_predicates_source.txt').read_text();desc_raw=(O/'additional-root-descriptors.json').read_bytes()
+replace('\nclass Run:\n','\nADDITIONAL_DESCRIPTOR_PIN = '+repr(pin(desc_raw))+'\n\n'+methods+'\n\nclass Run:\n')
+old="        for path, grouped in issues.items():\n"
+replace(old,"        additional, additional_values = load_additional_root(self.read, self.read(HERE/'additional-root-descriptors.json'), root_raw, log)\n        additional_paths_used = set()\n"+old)
+replace("                    # Only old ordinary literal categories; no guessed future root log/print exception.\n                    witness = dict(kind=ordinary_predicate(raw,grouped),root_original_record=rec)\n","                    try: kind = ordinary_predicate(raw,grouped)\n                    except AssertionError:\n                        witness = additional_root_predicate(raw,grouped,path,rec,additional,additional_values,build,physical)\n                        witness['root_original_record'] = rec\n                        additional_paths_used.add(path)\n                    else: witness = dict(kind=kind,root_original_record=rec)\n")
+replace("        if self.a.mode == 'audit': assert set(self.checks) == set(prepared['files'])\n","        assert additional_paths_used == {entry['path'] for entry in additional['entries']}\n        if self.a.mode == 'audit': assert set(self.checks) == set(prepared['files'])\n")
+replace("    run = Run(args)\n","    require_runtime_release(args)\n    run = Run(args)\n")
+inverse=candidate
+for row in reversed(replacements):assert inverse.count(row['new'])==1;inverse=inverse.replace(row['new'],row['old'])
+assert inverse==base
+btree=ast.parse(base);ctree=ast.parse(candidate)
+bassert=collections.Counter(ast.dump(n,include_attributes=False) for n in ast.walk(btree) if isinstance(n,ast.Assert));cassert=collections.Counter(ast.dump(n,include_attributes=False) for n in ast.walk(ctree) if isinstance(n,ast.Assert))
+assert not (bassert-cassert)
+for name in ['digest','pin','check_pin','relative','parse_log','literal_warnings','diff_context_lines','ordinary_predicate','classify_physical']:
+ f=lambda tree:next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name==name)
+ assert ast.dump(f(btree),include_attributes=False)==ast.dump(f(ctree),include_attributes=False)
+(O/'whitespace282.py').write_text(candidate)
+save('actual-candidate-replacements.json',replacements)
+for name,left,right,lf,rf in [('actual-candidate.diff.txt',base,candidate,'guarded-base/whitespace282.py','whitespace282.py'),('actual-candidate.inverse.diff.txt',candidate,base,'whitespace282.py','guarded-base/whitespace282.py')]:
+ (O/name).write_text(''.join(difflib.unified_diff(left.splitlines(True),right.splitlines(True),fromfile=lf,tofile=rf)))
+save('candidate-source-proof.json',dict(status='SOURCE_CANDIDATE_AND_DESCRIPTOR_PREPARED_REVIEW_AND_RUNTIME_PENDING',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),candidate=pin(candidate.encode()),descriptor=pin(desc_raw),replacements=len(replacements),exact_inverse=True,all_prior_assertion_occurrences_retained=sum(bassert.values()),all_nine_pure_predicates_AST_unchanged=True,actual_entries=len(entries),source_evidence_records=len(evidence),full_provenance_links=len(links),additional_warning_counts=dict(collections.Counter({kind:sum(sum(map(len,e['issues'].values())) for e in entries if e['kind']==kind) for kind in sorted({e['kind'] for e in entries})})),candidate_compiled_AST_only=True,candidate_imported_or_executed=False,root_release_present=False,Git_SQL_test_build_calls=0,WT_mutations=0))
+print(json.dumps(dict(status='SOURCE_CANDIDATE_AND_DESCRIPTOR_PREPARED_REVIEW_AND_RUNTIME_PENDING',candidate=pin(candidate.encode()),descriptor=pin(desc_raw),entries=len(entries),evidence=len(evidence),provenance_links=len(links),prior_assertions=sum(bassert.values()),candidate_executions=0),indent=2))

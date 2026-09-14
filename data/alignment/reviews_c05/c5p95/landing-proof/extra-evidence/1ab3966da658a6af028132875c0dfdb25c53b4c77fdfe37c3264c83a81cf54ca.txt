@@ -1,0 +1,28 @@
+from pathlib import Path
+import sys,os,sqlite3,datetime,runpy,json
+sys.dont_write_bytecode=True
+R=Path(__file__).resolve().parent;S=R/'workspace';tool,fixed_date,record_path=sys.argv[1:];target=S/tool;assert target.is_relative_to(S) and target.is_file();calls=[]
+real_connect=sqlite3.connect
+
+def readonly(database,*a,**kw):
+ assert not a
+ path=Path(database).resolve();assert path.is_relative_to(S) and path.is_file();kw['uri']=True
+ uri=path.as_uri()+'?mode=ro';c=real_connect(uri,**kw);c.execute('PRAGMA query_only=ON');assert c.execute('PRAGMA query_only').fetchone()[0]==1;calls.append(dict(database=str(path),uri=uri,query_only=1));return c
+sqlite3.connect=readonly
+RealDate=datetime.date
+class FixedDate(RealDate):
+ @classmethod
+ def today(cls):return cls.fromisoformat(fixed_date)
+datetime.date=FixedDate
+
+def audit(event,args):
+ if event=='open' and isinstance(args[0],(str,bytes)):
+  flags=args[2]
+  if isinstance(flags,int) and flags & (os.O_WRONLY|os.O_RDWR|os.O_CREAT|os.O_TRUNC|os.O_APPEND):assert Path(os.fsdecode(args[0])).resolve().is_relative_to(R),('external write',args[0])
+ if event in ('os.rename','os.remove','os.mkdir','os.rmdir','os.truncate'):
+  paths=args[:2] if event=='os.rename' else args[:1]
+  for p in paths:
+   if isinstance(p,(str,bytes)):assert Path(os.fsdecode(p)).resolve().is_relative_to(R),('external mutation',event,p)
+sys.addaudithook(audit);sys.argv=[str(target)]
+try:runpy.run_path(str(target),run_name='__main__')
+finally:Path(record_path).write_text(json.dumps(dict(sqlite_connections=calls,date_override=fixed_date,write_scope=str(R),bytecode_disabled=sys.dont_write_bytecode),indent=2)+'\n')

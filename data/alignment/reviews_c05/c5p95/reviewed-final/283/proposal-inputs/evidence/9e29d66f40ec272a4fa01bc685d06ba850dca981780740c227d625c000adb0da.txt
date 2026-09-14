@@ -1,0 +1,27 @@
+from pathlib import Path
+import hashlib,json,os,runpy,sqlite3,sys
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment');W=R/'campaign-worktree';A=R/'campaign-artifacts/C05-283-285/tibetan'
+assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1' and os.environ.get('PYTHONOPTIMIZE')=='0'
+auditpath=Path(sys.argv[1]);assert any(auditpath.is_relative_to(A/str(s)) for s in [283,284,285]);assert not auditpath.exists()
+generator=W/'tools/gen_alignment_page.py';spine=(W/'build/hgm_spine_v27_2.db').resolve();uri=spine.as_uri()+'?mode=ro'
+sources=[generator,W/'tools/build_alignment_layer.py',W/'engines/hgm_tools.py']
+def pin(p):
+    b=p.read_bytes();return {'original':str(p),'resolved':str(p.resolve()),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+before=[pin(p) for p in sources];db_before=pin(spine);connect_original=sqlite3.connect;old_profile=sys.getprofile();connections=[];queries=[];resolutions=[]
+def connect_ro(database,*args,**kwargs):
+    assert Path(database).resolve()==spine and not args and not kwargs
+    con=connect_original(uri,uri=True);con.execute('PRAGMA query_only=ON');q=con.execute('PRAGMA query_only').fetchone()[0];assert q==1
+    connections.append({'canonical_requested_database':str(database),'actual_uri':uri,'uri':True,'query_only':q})
+    con.set_trace_callback(queries.append)
+    return con
+def profile(frame,event,arg):
+    if event=='return' and frame.f_code.co_filename==str(generator) and frame.f_code.co_name=='resolve':
+        resolutions.append({'seq':frame.f_locals['seq'],'side':frame.f_locals['side'],'ranges':arg})
+sqlite3.connect=connect_ro;sys.setprofile(profile)
+try:
+    runpy.run_path(str(generator),run_name='__main__')
+finally:
+    sys.setprofile(old_profile);sqlite3.connect=connect_original
+    after=[pin(p) for p in sources];db_after=pin(spine);assert before==after and db_before==db_after
+    record={'method':'Actual unchanged canonical source executed by runpy as __main__; only sqlite3.connect is constrained to the expected spine via URI mode=ro and query_only. A profile callback records actual return values of canonical resolve without replacing or editing it.','canonical_sources_before':before,'canonical_sources_after':after,'sources_unchanged':True,'spine_before':db_before,'spine_after':db_after,'spine_unchanged':True,'connections':connections,'actual_sql_trace':queries,'canonical_resolve_returns':resolutions,'bytecode_disabled':True,'assertions_enabled':True}
+    with auditpath.open('xb') as f:f.write((json.dumps(record,ensure_ascii=False,indent=2)+'\n').encode())

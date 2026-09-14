@@ -1,0 +1,55 @@
+from pathlib import Path
+import ast,copy,hashlib,json
+O=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/integration/through285-reconciliation-verifier-query-shape-adapter');assert __debug__
+def save(n,x):
+    with (O/n).open('x') as f:json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+src=(O/'config_contract.py').read_text();node=next(n for n in ast.parse(src).body if isinstance(n,ast.FunctionDef) and n.name=='proof_counts');text=ast.get_source_segment(src,node)+'\n';env={};exec(compile(text,'EXTRACTED_PURE_PROOF_COUNTS_FIXTURE','exec'),env);fn=env['proof_counts'];save('exact-extracted-proof-counts.json',{'source':text,'sha256':hashlib.sha256(text.encode()).hexdigest()})
+results=[]
+def run(label,report,seq,expected='reject',config_counts=None):
+    before=copy.deepcopy(report);value=None;error=None
+    try:
+        value=fn(report,seq)
+        if config_counts is not None:assert value==config_counts,'Configured counts differ from actual proof'
+    except Exception as e:error={'type':type(e).__name__,'message':str(e)}
+    actual='reject' if error else 'pass';assert actual==expected,(label,actual,error);assert report==before
+    results.append({'label':label,'expected':expected,'actual':actual,'report':report,'seq':seq,'configured_counts':config_counts,'returned':value,'exception':error,'input_unchanged':True})
+shapes=json.loads((O/'actual-proof-shapes.json').read_text())
+for row in shapes:
+    r=json.loads((O/row['descriptor']['copy']).read_text());run('actual complete frozen proof '+str(row['seq']),r,row['seq'],'pass',row['values'])
+for nested in [False,True]:
+    base={'status':'PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION','seq':283}
+    counts={'spans':16,'nulls':0,'d5_nonnull':14}
+    if nested:base['counts']={**counts,'depths':{'5':14},'historical_metadata':'retained'}
+    else:base.update(counts)
+    label='nested' if nested else 'direct'
+    for key in counts:
+        r=copy.deepcopy(base);target=r['counts'] if nested else r;target.pop(key);run(label+': missing '+key,r,283)
+        for bad in [True,-1,1.0,'1',None]:
+            r=copy.deepcopy(base);target=r['counts'] if nested else r;target[key]=bad;run(label+': invalid '+key+' '+repr(bad),r,283)
+    for changes in [{'spans':0},{'nulls':17},{'d5_nonnull':17},{'nulls':3,'d5_nonnull':14}]:
+        r=copy.deepcopy(base);(r['counts'] if nested else r).update(changes);run(label+': inconsistent bounds '+str(changes),r,283)
+    for value in [True,284,'283',283.0,None]:
+        r=copy.deepcopy(base);r['seq']=value;run(label+': wrong proof seq '+repr(value),r,283)
+    r=copy.deepcopy(base);r.pop('seq');run(label+': missing proof seq',r,283)
+    for value in [True,0,-1,'283',None]:run(label+': invalid configured seq '+repr(value),copy.deepcopy(base),value)
+    run(label+': configured counts disagree',copy.deepcopy(base),283,config_counts={**counts,'spans':17})
+    r=copy.deepcopy(base)
+    if nested:r.update(counts)
+    else:r['counts']=dict(counts)
+    run(label+': ambiguous mixed count shapes',r,283)
+    run(label+': exact counts retained',copy.deepcopy(base),283,'pass',counts)
+for bad in ['PASS','FAILED',None]:
+    run('unknown direct-proof status '+repr(bad),{'status':bad,'seq':283,'spans':16,'nulls':0,'d5_nonnull':14},283)
+run('missing direct-proof status',{'seq':283,'spans':16,'nulls':0,'d5_nonnull':14},283)
+for bad in [None,[],1,'counts']:run('nested count container invalid '+repr(bad),{'seq':283,'counts':bad},283)
+for report in [None,[],1,'report']:run('proof must be object',report,283)
+save('proof-shape-control-results.json',results)
+old=(O/'history/query-only-config_contract.py.txt').read_text();current=src
+for row in reversed(json.loads((O/'proof-shape-replacement-map.json').read_text())):assert current.count(row['new'])==1;current=current.replace(row['new'],row['old'])
+assert current==old
+for row in reversed(json.loads((O/'replacement-map.json').read_text())):assert current.count(row['new'])==1;current=current.replace(row['new'],row['old'])
+assert current==(O/'inputs/prior-config_contract.py').read_text() and ast.dump(ast.parse(current))==ast.dump(ast.parse((O/'inputs/prior-config_contract.py').read_text()))
+def fun(s,n):return next(ast.get_source_segment(s,node) for node in ast.parse(s).body if isinstance(node,ast.FunctionDef) and node.name==n)
+assert fun(src,'bind_query')==fun(old,'bind_query')
+for name in ['pinned','batch_counts','original_inventory','original_freeze']:assert fun(src,name)==fun((O/'inputs/prior-config_contract.py').read_text(),name)
+proof={'status':'PASS_PROOF_SHAPE_SOURCE_EXTRACTED_CONTROLS','controls':len(results),'expected_passes':sum(r['actual']=='pass' for r in results),'expected_rejections':sum(r['actual']=='reject' for r in results),'full_current_proofs_checked_as_data':3,'full_historical_nested_proof_checked_as_data':1,'query_function_identical_to_prior_685_controls':True,'full_chained_inverse_and_AST_exact_to_root_approved_base':True,'real_validate_config_or_verifier_executed':False,'candidate_module_imported':False,'SQL_Git_generator_builder_suite_calls':False,'semantic_acceptance':False};save('proof-shape-controls-proof.json',proof);print(json.dumps(proof))

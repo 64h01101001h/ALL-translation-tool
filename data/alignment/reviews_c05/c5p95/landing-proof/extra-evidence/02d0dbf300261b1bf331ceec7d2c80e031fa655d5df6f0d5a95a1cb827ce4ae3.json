@@ -1,0 +1,39 @@
+{
+  "status": "PASS_ROOT_SOURCE_REVIEW_APPROVED_FOR_EXACT_MATERIALIZATION_AND_ORDERED_EXECUTION",
+  "utc": "2026-09-14T05:53:22.627728+00:00",
+  "freeze": {
+    "bytes": 12066,
+    "sha256": "7f9ed18e571b84a496c60d5a4f4c6f58ba6d5b865858e9409e3ad2256642618d"
+  },
+  "frozen_members": 70,
+  "member_bytes": 3925168,
+  "full_source_copy_pairs_verified": 41,
+  "full_four_candidates_and_forward_diffs_read": true,
+  "all_replacements_forward_inverse_and_AST_verified": true,
+  "candidates": {
+    "verify-semantic-acceptance285.py": {
+      "bytes": 10456,
+      "sha256": "f0e4f7af55d5bf3cbbd38e894f73d127b1de3858cba2e794600d417b42c079c7"
+    },
+    "register-reviewed-page-and-index.py": {
+      "bytes": 9910,
+      "sha256": "d1af869ca1d38ca6115a0b5195aa362b31cc6bf360cc764d73f5edfaee42b893"
+    },
+    "land-reviewed-page285.py": {
+      "bytes": 7678,
+      "sha256": "c450bdc81f51d753bb1bfe2736944d57bacfe4a2ea5eb2370a9f271e1521ca66"
+    },
+    "verify-review-copy-and-register285.py": {
+      "bytes": 7176,
+      "sha256": "afb619e553553713685756efbd85eec67738dfc000461b4c1ba9014278349dd6"
+    }
+  },
+  "root_independent_review_proof": {
+    "bytes": 1635,
+    "sha256": "eb3ee19dd186e63dd830be05421245019cf6555684bf83ee9a967ff00c935a50"
+  },
+  "ordering": "acceptance, materialization, --landed before registration, exact2allowances, copy/register, registration, builders once",
+  "original_frozen_review_unchanged": true,
+  "candidates_executed": false,
+  "landing_mutations_do_not_overlap_source_map_originals": true
+}

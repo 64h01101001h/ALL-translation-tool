@@ -1,0 +1,61 @@
+{
+  "status": "REVIEW_REQUIRED_SOURCE_INTERFACE_ONLY",
+  "binding": {
+    "kind": "query_container_parameters",
+    "index": "strict integer, nonnegative, below queries length"
+  },
+  "exact_outer_key_sets": [
+    [
+      "database",
+      "uri",
+      "query_only",
+      "queries"
+    ],
+    [
+      "uri",
+      "query_only",
+      "queries",
+      "master_original",
+      "master_pin",
+      "full_master_records"
+    ]
+  ],
+  "query_only": "must be literal true; does not authorize PRAGMA as a SELECT",
+  "exact_selected_record_keys": [
+    "label",
+    "sql",
+    "parameters",
+    "row_count",
+    "rows"
+  ],
+  "count_key_policy": "For every binding, count and row_count each retain actual source presence, strict integer type, nonnegative value and equality to the full preserved row length. A params-to-parameters binding copies both count spellings without renaming either.",
+  "English_binding": {
+    "kind": "standalone"
+  },
+  "legacy_bindings_retained": [
+    "standalone",
+    "query_list",
+    "query_container_params",
+    "query_list_params",
+    "hgm_results"
+  ],
+  "SELECT_only": "Both bind_query and the unchanged verifier retain the existing SELECT prefix requirement. PRAGMA query_only stays in separate-control-evidence.json and its complete copied original descriptor.",
+  "projection_requirement": "The frozen reconciled normalized count-only replays must not be edited. Create separately pinned projection files with exactly the original source count-key presence, identical SQL/parameters/full rows, and explicit original-descriptor/index plus normalized-replay/full-pin provenance. For these Tibetan/English originals use row_count and omit count. A count-only normalized replay directly bound to a row_count descriptor is refused.",
+  "proof_reader": {
+    "name": "proof_counts(report,seq)",
+    "current": "Direct spans/nulls/d5_nonnull with exact PASS_ACTUAL_CANONICAL_AND_FULL_SOURCE_REPRODUCTION status and integer matching seq.",
+    "prior": "Nested counts DICT may retain its extra metadata; seq remains strictly typed and equal.",
+    "shared": "Reject missing, Boolean, noninteger, negative, impossible bounds and mixed direct/nested count sources; compare to the unchanged configured count row before the existing spec checks."
+  },
+  "authorized_handoff_scope": "The root-authorized runtime-schema-handoff.json reports 209 SELECT +1 PRAGMA overall. This preparation directly binds/controls the 140 original SELECT descriptors; the additional reconciler SELECT descriptors remain for the separate config-construction/validation phase. No statement that all 209 have been validated here.",
+  "runtime": {
+    "bytes": 16475,
+    "sha256": "945086f1b2f93b40f9fa8f59535f0c9fc29972f6d1c01beea3d6fddaf23ea4ac"
+  },
+  "contract": {
+    "bytes": 12106,
+    "sha256": "a292150ee05ef7d042c309cba5e82aa076487619f3ba223e3212e24aaaa4076a"
+  },
+  "config_validation_or_runtime_execution": false,
+  "semantic_approval": false
+}

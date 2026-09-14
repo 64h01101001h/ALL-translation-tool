@@ -1,0 +1,66 @@
+[
+  {
+    "name": "verify_staged_through285.py",
+    "prior": {
+      "bytes": 48055,
+      "sha256": "b4d5e17d3464220ed545031dbd8438011387e3bcf4e68a6b6b18c70f248756ee"
+    },
+    "candidate": {
+      "bytes": 57097,
+      "sha256": "d11a2774e397e40c3c778f8f4ecc5c6a5a31ed44277d9ab9afc5da2cc2d5267c"
+    },
+    "whole_forward_inverse_exact": true,
+    "AST_inverse_exact": true,
+    "old_functions": 22,
+    "unchanged_functions": [
+      "sha",
+      "signature",
+      "relative",
+      "allowance_result",
+      "nul_paths",
+      "untracked_transition",
+      "check_final_head",
+      "main",
+      "raw",
+      "obj",
+      "git",
+      "old",
+      "require",
+      "pincheck",
+      "verify_source_archive",
+      "verify_payload_source",
+      "verify_untracked_capture",
+      "verify_banking_writes"
+    ],
+    "changed_functions": [
+      "freeze_entries",
+      "load_release_bindings",
+      "__init__",
+      "run"
+    ],
+    "assertions_before": 232,
+    "assertions_after": 291
+  },
+  {
+    "name": "prepare-explicit-stage-inputs.py",
+    "prior": {
+      "bytes": 4007,
+      "sha256": "48254cced0fb240ddd32d6cc2ca2f8798e170d4358d12c1b00f634a768d47d5f"
+    },
+    "candidate": {
+      "bytes": 5826,
+      "sha256": "b40fb94ca8019c2c552747dba56467c17dd0a23b2f980807de6d758ec32762b8"
+    },
+    "whole_forward_inverse_exact": true,
+    "AST_inverse_exact": true,
+    "old_functions": 3,
+    "unchanged_functions": [
+      "pin",
+      "js",
+      "add"
+    ],
+    "changed_functions": [],
+    "assertions_before": 18,
+    "assertions_after": 29
+  }
+]

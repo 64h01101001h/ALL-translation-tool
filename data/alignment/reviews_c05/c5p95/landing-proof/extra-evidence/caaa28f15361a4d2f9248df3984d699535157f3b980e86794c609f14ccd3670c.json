@@ -1,0 +1,34 @@
+{
+  "name": "30-entry",
+  "database": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+  "uri": "file:///Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db?mode=ro",
+  "connection_initialization_sql": "PRAGMA query_only=ON",
+  "sql": "SELECT * FROM entries WHERE wylie = ? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie = ?) ORDER BY id",
+  "parameters": [
+    "'gog pa",
+    "'gog pa"
+  ],
+  "count": 1,
+  "rows": [
+    {
+      "id": 2580,
+      "wylie": "'gog pa",
+      "tibetan": "འགོག་པ",
+      "tibetan_source": null,
+      "acip": "'GOG PA",
+      "pronunciation": "gokpa",
+      "pronunciation_source": null,
+      "sanskrit": "{L,MSA,MV}nirodha; {C}nirodhi; {C}nirodhika; {C}niṣedha; lam ‘gog pa = {MSA} paripantha; {LC}ityasya ca loṭ; {LC}avarodha; {LC}upanidhi; {LC}nikṣepa; {LC}nyāsa; {LC}pratibandha; {LC}pratiṣedha; {LC}pratiṣedhaka; {LC}pratyādeśa; {LC}pravāraṇa; {LC}nivāraka; {LC}saṃrodha; {LC}saṃjñānirodha; {LC}ākṣipta; {LC}ākṣepa; {LC}pratiṣidhyate; {LC}yati; {LC}ruddha; {LC}vyāvṛtti; {LC}saṃrundhe",
+      "hopkins_english": "cessation; stopping; {C}which stops; inadmissible; refrain; repudiation",
+      "hgm_gloss": "[\"stop\", \"put an end\", \"eliminate\", \"refutation\", \"disprove\", \"deny\", \"disproving\", \"denying\", \"denies\", \"deny the possibility that\", \"block\", \"cessation\", \"denial\", \"end\", \"end ... end\", \"denying the existence\", \"refute\", \"which we use for denying\", \"denying that things\", \"process of eliminating\", \"cessations\", \"no\"]",
+      "tier": "glossary",
+      "hgm_source": "HTG2016",
+      "status": "hgm-attested",
+      "tenses": null,
+      "flags": null,
+      "corpus_courses": "[\"C01\", \"C02\", \"C05\", \"C08\", \"C10\", \"C11\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P3\", \"P5\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS04Mantras\", \"TCS05\", \"TCS07\", \"TCS13\", \"TCS15\", \"TCS17\"]",
+      "corpus_n_segments": 178,
+      "raw": "{\"tibetan\": \"འགོག་པ\", \"wylie\": \"'gog pa\", \"wylie_variants\": [\"'gog pa\"], \"tenses\": null, \"sanskrit\": \"{L,MSA,MV}nirodha; {C}nirodhi; {C}nirodhika; {C}niṣedha; lam ‘gog pa = {MSA} paripantha; {LC}ityasya ca loṭ; {LC}avarodha; {LC}upanidhi; {LC}nikṣepa; {LC}nyāsa; {LC}pratibandha; {LC}pratiṣedha; {LC}pratiṣedhaka; {LC}pratyādeśa; {LC}pravāraṇa; {LC}nivāraka; {LC}saṃrodha; {LC}saṃjñānirodha; {LC}ākṣipta; {LC}ākṣepa; {LC}pratiṣidhyate; {LC}yati; {LC}ruddha; {LC}vyāvṛtti; {LC}saṃrundhe\", \"hopkins_english\": \"cessation; stopping; {C}which stops; inadmissible; refrain; repudiation\", \"hgm_gloss\": [\"stop\", \"put an end\", \"eliminate\", \"refutation\", \"disprove\", \"deny\", \"disproving\", \"denying\", \"denies\", \"deny the possibility that\", \"block\", \"cessation\", \"denial\", \"end\", \"end ... end\", \"denying the existence\", \"refute\", \"which we use for denying\", \"denying that things\", \"process of eliminating\", \"cessations\", \"no\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"gokpa\", \"acip\": \"'GOG PA\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C02\", \"C05\", \"C08\", \"C10\", \"C11\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P3\", \"P5\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS04Mantras\", \"TCS05\", \"TCS07\", \"TCS13\", \"TCS15\", \"TCS17\"], \"n_segments\": 178}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+    }
+  ]
+}

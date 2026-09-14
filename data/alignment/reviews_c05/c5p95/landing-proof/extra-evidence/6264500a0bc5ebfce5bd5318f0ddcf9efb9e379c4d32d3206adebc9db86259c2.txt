@@ -1,0 +1,156 @@
+from pathlib import Path
+import ast,datetime,difflib,hashlib,json,os,re
+assert __debug__ and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+P=Path(__file__).resolve().parent;ROOT=P.parents[2];A=ROOT/'campaign-artifacts';I=A/'integration';OLD=A/'C05-280-282';B=A/'C05-283-285'
+assert P.name=='through285-ordinary-banking-preparation'
+def bp(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(n,b):
+ p=P/n;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb')as f:f.write(b)
+def save(n,x):write(n,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+copies=[]
+def preserve(p,n):
+ b=p.read_bytes()
+ if (P/n).exists():assert (P/n).read_bytes()==b
+ else:write(n,b)
+ assert p.read_bytes()==b;copies.append({'original':str(p),'resolved_original':str(p.resolve()),'copy':n,**bp(b)})
+names=['compose-ordinary-bank-inventory-root.py','release-ordinary-bank-method-root.py','bank_root_proofs_through282.py']
+for name in names:preserve(OLD/name,'prior/'+name)
+preserve(A/'copy_evidence_once_v2.py','unchanged/copy_evidence_once_v2.py')
+for n in ['semantic-review-protocol.md','lossless-review-archive-protocol.md']:
+ preserve(A/n,'contracts/'+n)
+for n in ['baseline.json','root-payload-result-acceptance.json','landing/staged-payload-manifest.json','landing/staged-payload-source-proof.json','landing/root-semantic-acceptance-proof.json','landing/root-frozen-input-copy-check.json','landing/course-registration-verification.json','landing/review-copy-and-register-proof.json','landing/canonical-builds-once.json','landing/build-layer.stdout','landing/build-layer.stderr','landing/build-layer.exit','landing/build-layer.command.json','landing/build-view.stdout','landing/build-view.stderr','landing/build-view.exit','landing/build-view.command.json','landing/ctest-17.stdout','landing/ctest-17.stderr','landing/ctest-17.exit','landing/ctest-17.execution.json','landing/untracked-before-banking.command.json','landing/untracked-before-banking.execution.json','landing/untracked-before-banking.exit','landing/untracked-before-banking.stderr','landing/untracked-before-banking-native-provenance.json','semantic-review/review.json','semantic-review/freeze.json']:
+ preserve(B/n,'current/'+n)
+for d,n in [('through285-root-independent-review-verification','proof.json'),('through285-root-reconciliation-verification-attempt01','execution-proof.json'),('through285-root-current-config-release','release.json')]:preserve(I/d/n,'current-integration/'+d+'/'+n)
+assert json.loads((B/'root-payload-result-acceptance.json').read_bytes())['independent_reproduction_completed']is False
+assert re.findall(rb'^COVERAGE C05: (\d+)/511 segments scanned, (\d+) open \(([^)]+)\)$',(B/'landing/build-layer.stdout').read_bytes(),re.M)==[(b'285',b'226',b'286-511')]
+assert b'100% tests passed out of 17' in (B/'landing/ctest-17.stdout').read_bytes()
+
+changes={};pins={}
+def adapt(oldname,newname,recipe):
+ before=(OLD/oldname).read_text();after=before;rows=[]
+ for old,new,reason in recipe:
+  count=after.count(old);assert count>=1,(oldname,reason)
+  rows.append({'before':old,'after':new,'occurrences':count,'reason':reason});after=after.replace(old,new)
+ back=after
+ for r in reversed(rows):assert back.count(r['after'])==r['occurrences'];back=back.replace(r['after'],r['before'])
+ assert back==before;ast.parse(after)
+ write('candidates/'+newname,after.encode());pins[newname]=bp(after.encode());changes[newname]=rows
+ for suffix,a,b,af,bf in [('forward',before,after,'prior/'+oldname,'candidates/'+newname),('inverse',after,before,'candidates/'+newname,'prior/'+oldname)]:write(newname+'.'+suffix+'.diff',''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile=af,tofile=bf)).encode())
+ return after
+
+oldhistory="""HISTORY = (
+    'verify-complete-originals.py',
+    'proposal-verification/root-original-freeze-check.json',
+    'proposal-verification/execution-proof.json',
+    'reconciliation-verifier-head-allowance-preparation/verify_reconciliation.py',
+    'reconciliation-verifier-head-allowance-preparation/config_contract.py',
+    'reconciliation-verifier-config/config.json',
+    'release-root-reconciliation-runtime-v2.py',
+    'root-reconciliation-runtime-release-v2/proof.json',
+    'root-reconciliation-verification/execution-proof.json',
+    'root-reconciliation-verification/report.json',
+    'root-reconciliation-verification/resolved-spans.json',
+    'verify-final-semantic-review-root.py',
+    'root-final-semantic-review-verification/proof.json',
+)"""
+history=['verify-complete-originals.py','proposal-verification/root-original-freeze-check.json','proposal-verification/execution-proof.json','proposal-verification/root-resolved-spans.json','reconciled/root-runtime-inputs-v2/config.json','reconciled/root-runtime-inputs-v2/construction-proof.json','reconciled/root-runtime-inputs-v2/reviewed-sources/config_contract.py','reconciled/root-runtime-inputs-v2/reviewed-sources/verify_reconciliation.py','landing-helper-preparation/verify-semantic-acceptance285.py','landing-helper-preparation/land-reviewed-page285.py','landing-helper-preparation/verify-review-copy-and-register285.py','landing-helper-preparation/register-reviewed-page-and-index.py','root-payload-result-acceptance.json']
+assert all((B/n).is_file()for n in history)
+newhistory='HISTORY = (\n'+''.join('    '+repr(n)+',\n'for n in history)+')'
+bank=adapt('bank_root_proofs_through282.py','bank_root_proofs_through285.py',[
+ ("10968d16e701b698a0e1fbd845b353089d15ac39","fb9182dc6fca2230be3bc5169ba1288a22430280",'Current closed282 baseline.'),
+ ('PAGE, SEQS = 94, [280, 281, 282]','PAGE, SEQS = 95, [283, 284, 285]','Current page/segment bindings.'),
+ ('C05-280-282','C05-283-285','Current batch guard.'),
+ ('reviews_c05/c5p94/landing-proof','reviews_c05/c5p95/landing-proof','Current proof destination.'),
+ (oldhistory,newhistory,'Actual current universal B history paths. Full integration histories are included by explicit inventory, not omitted.'),
+ ("    assert b.name == 'C05-283-285'", "    assert b.name == 'C05-283-285'\n    assert args.phase == 'ordinary', 'Final-whitespace source bindings/review remain pending; prior final-phase code is preserved below'\n    release = json.loads((b / 'root-ordinary-bank-method-release/proof.json').read_bytes())\n    assert release['status'] == 'PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD'\n    assert release['banker']['copy'] == str(Path(__file__).resolve())\n    assert pin(Path(__file__).read_bytes()) == {k: release['banker'][k] for k in ('bytes', 'sha256')}", 'Current ordinary-only release guard before output creation; final phase remains explicitly unreleased.'),
+ ("preservation = js(b / 'root-final-semantic-review-verification/proof.json')\n        assert preservation['status'] == 'PASS' and preservation['head'] == BASE\n        assert preservation['review_freeze'] == initial_review", "preservation = js(b.parent / 'integration/through285-root-independent-review-verification/proof.json')\n        assert preservation['status'] == 'PASS_ROOT_REVIEW_OF_INDEPENDENT_SEMANTIC_APPROVAL_AND_MECHANICAL_RESULT' and preservation['baseline'] == BASE\n        assert preservation['semantic_freeze'] == initial_review",'Genuine current root independent review schema and source; same exact freeze/baseline identity gate.'),
+ ("coverage == [(b'282', b'229', b'283-511')]","coverage == [(b'285', b'226', b'286-511')]",'Actual current complete builder coverage line; no fabricated source output.')])
+
+compose=adapt('compose-ordinary-bank-inventory-root.py','compose-ordinary-bank-inventory-root.py',[
+ ("through282-ordinary-bank-inventory","through285-ordinary-bank-inventory",'Current fresh external inventory destination.'),
+ ("10968d16e701b698a0e1fbd845b353089d15ac39","fb9182dc6fca2230be3bc5169ba1288a22430280",'Current baseline.'),
+ ("R = I / 'through282-generated-reproduction'\nACCEPT = I / 'through282-generated-reproduction-root-acceptance'", "assert B.name == 'C05-283-285'\nmethod = json.loads((B / 'root-ordinary-bank-method-release/proof.json').read_bytes())\nassert method['status'] == 'PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD'\nassert method['composer']['path'] == str(Path(__file__).resolve())\nassert hashlib.sha256(Path(__file__).read_bytes()).hexdigest() == method['composer']['sha256']\nR = Path(method['reproduction_directory'])\nACCEPT = Path(method['reproduction_acceptance_directory'])",'Only actual reviewed release record supplies future reproduction paths; no provisional path guessed.'),
+ ("roots = [B, R, ACCEPT, I / 'through282-root-reconciliation-verification-attempt01']\nassert all(p.is_dir() and not O.is_relative_to(p) for p in roots)", "assert pin(read(ACCEPT / 'proof.json')) == method['required_reproduction_acceptance']\nassert accepted['all_seven_reproduced_outputs_byte_exact'] and accepted['all_thirteen_payload_files_byte_exact'] and accepted['live_head_index_untracked_state_unchanged']\nintegration_inputs = [Path(p) for p in method['integration_inputs']]\nassert len(integration_inputs) == len(set(integration_inputs)) and R in integration_inputs and ACCEPT in integration_inputs\nassert I / 'through285-root-reconciliation-verification-attempt01' in integration_inputs\nassert all(p.parent == I and p.name.startswith('through285') for p in integration_inputs)\nroots = [B] + integration_inputs\nassert all((p.is_dir() or p.is_file()) and not O.is_relative_to(p) for p in roots)",'Explicit source-specific current integration scope supplied only after actual closure; retain reproduction and full mechanical roots.'),
+ ("deferred = [B / 'ordinary-inventory-caller']", "deferred = [Path(p) for p in method['deferred_active_callers']]\nassert deferred and len(deferred) == len(set(deferred))\nassert all(p.is_absolute() and not p.is_relative_to(B / 'semantic-review') for p in deferred)\nexpected_integration = {p for p in I.iterdir() if p.name.startswith('through285') and p != O and p not in deferred}\nassert set(integration_inputs) == expected_integration, 'Every current through285 integration item must be explicitly included or the exact active caller deferred'",'Quiescent complete current-prefix census; only explicit actual active callers are deferred and documented.'),
+ ("return {p for root in roots for p in root.rglob('*')\n            if p.is_file() and not any(p.is_relative_to(d) for d in deferred)} | set(helpers)", "return {p for root in roots for p in ([root] if root.is_file() else root.rglob('*'))\n            if p.is_file() and not any(p.is_relative_to(d) for d in deferred)} | set(helpers)",'Include actual top-level JSON/helper files as well as entire directories.'),
+ ("reviews_c05/c5p94","reviews_c05/c5p95",'Current landed semantic copy destination.'),
+ ("5e1f84b175a739d2c06ec6f5f15db1159a85fd1d613fd14728025e051de2710b","8e398649b1152bd1604df1e5c3cc962c44742501484049fbe93c7015e23bf445",'Exact actual current semantic freeze.'),
+ ("Every current file under the four listed roots plus eleven complete helper sources; only the named active caller is deferred.","Every current B file and explicitly declared current through285 integration item plus eleven complete helper sources; only exact active caller directories are deferred.",'Truthful current full inventory scope; no runtime totals filled in advance.')])
+
+# Current release source uses an explicit future binding file in place of the
+# old hardcoded runtime paths and source-package counts/pins. These fields stay
+# pending until root can bind actual reproduction closure and source reviews.
+release='''from pathlib import Path
+import argparse,datetime,hashlib,json
+B=Path(__file__).resolve().parent;I=B.parent/'integration';O=B/'root-ordinary-bank-method-release'
+assert B.name=='C05-283-285'
+def pin(b):return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def j(p):return json.loads(p.read_bytes())
+assert __debug__ and not O.exists()
+parser=argparse.ArgumentParser(description='Bind actual reproduction closure and independently reviewed ordinary banking sources; no bank execution.')
+parser.add_argument('--bindings',required=True);parser.add_argument('--bindings-sha256',required=True)
+args=parser.parse_args();binding_path=Path(args.bindings);assert binding_path.is_absolute()
+raw=binding_path.read_bytes();assert pin(raw)['sha256']==args.bindings_sha256
+binding=json.loads(raw)
+assert set(binding)=={'reproduction_directory','reproduction_acceptance','source_packages','integration_inputs','deferred_active_callers','root_review_statement'}
+accept=Path(binding['reproduction_acceptance']['path']);assert accept.is_absolute() and accept.name=='proof.json'
+assert pin(accept.read_bytes())=={k:binding['reproduction_acceptance'][k]for k in ('bytes','sha256')}
+a=j(accept);assert a['status']=='PASS' and a['head']=='fb9182dc6fca2230be3bc5169ba1288a22430280'
+assert a['all_seven_reproduced_outputs_byte_exact'] and a['all_thirteen_payload_files_byte_exact'] and a['live_head_index_untracked_state_unchanged']
+reproduction=Path(binding['reproduction_directory']);assert reproduction.is_absolute() and reproduction.is_dir()
+packages=binding['source_packages'];assert isinstance(packages,list) and packages
+assert any(rec.get('role')=='source_preparation' and Path(rec['directory'])==I/'through285-ordinary-banking-preparation' for rec in packages)
+assert any(rec.get('role')=='code_review' and Path(rec['directory'])!=I/'through285-ordinary-banking-preparation' for rec in packages)
+for rec in packages:
+ p=Path(rec['directory']);fraw=(p/'freeze.json').read_bytes();assert pin(fraw)==rec['freeze'];f=json.loads(fraw)
+ entries=f['files']
+ if isinstance(entries,list):
+  names=[r['path']for r in entries];assert len(names)==len(set(names))
+  entries={r['path']:{k:r[k]for k in ('bytes','sha256')}for r in entries}
+ assert isinstance(entries,dict) and len(entries)==rec['files'] and sum(x['bytes']for x in entries.values())==rec['bytes']
+ assert {str(x.relative_to(p))for x in p.rglob('*')if x.is_file()}==set(entries)|{'freeze.json'}
+ for name,expected in entries.items():
+  n=Path(name);assert name and not n.is_absolute() and '..'not in n.parts
+  assert pin((p/n).read_bytes())==expected
+composer=B/'compose-ordinary-bank-inventory-root.py'
+banker=I/'through285-ordinary-banking-preparation/candidates/bank_root_proofs_through285.py'
+target=B/'bank_root_proofs_through285.py'
+assert pin(composer.read_bytes())==COMPOSER_PIN
+assert pin(banker.read_bytes())==BANKER_PIN
+assert not target.exists()
+assert not (B.parent.parent/'campaign-worktree/data/alignment/reviews_c05/c5p95/landing-proof').exists()
+assert isinstance(binding['root_review_statement'],str) and binding['root_review_statement'].strip()
+paths=[Path(x)for x in binding['integration_inputs']];deferred=[Path(x)for x in binding['deferred_active_callers']]
+assert paths and len(paths)==len(set(paths)) and reproduction in paths and accept.parent in paths
+assert all(p.parent==I and p.name.startswith('through285')for p in paths)
+assert deferred and all(p.is_absolute()for p in deferred)
+assert set(paths)=={p for p in I.iterdir()if p.name.startswith('through285') and p!=I/'through285-ordinary-bank-inventory' and p not in deferred}
+O.mkdir()
+with (O/'bindings.json').open('xb')as out:out.write(raw)
+with target.open('xb')as out:out.write(banker.read_bytes())
+assert target.read_bytes()==banker.read_bytes()
+proof=dict(status='PASS_ROOT_RELEASE_OF_REVIEWED_ORDINARY_METHOD',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),required_reproduction_acceptance=pin(accept.read_bytes()),reproduction_directory=str(reproduction),reproduction_acceptance_directory=str(accept.parent),integration_inputs=binding['integration_inputs'],deferred_active_callers=binding['deferred_active_callers'],composer=dict(path=str(composer),**pin(composer.read_bytes())),banker=dict(original=str(banker),copy=str(target),**pin(target.read_bytes())),packages=packages,review=binding['root_review_statement'],bindings_source=dict(path=str(binding_path),**pin(raw)),runtime_executed=False,scope='Ordinary inventory and exact evidence-copy phase only; final-whitespace/final-staging/ledger/commit bindings remain pending, no MAIN or device approval.')
+(O/'proof.json').write_text(json.dumps(proof,indent=2)+'\\n');print(json.dumps(proof,indent=2))
+'''
+release=release.replace('COMPOSER_PIN',repr(bp(compose.encode()))).replace('BANKER_PIN',repr(bp(bank.encode())))
+ast.parse(release);write('candidates/release-ordinary-bank-method-root.py',release.encode());pins['release-ordinary-bank-method-root.py']=bp(release.encode())
+prior=(OLD/'release-ordinary-bank-method-root.py').read_text()
+changes['release-ordinary-bank-method-root.py']=[{'before':prior,'after':release,'occurrences':1,'reason':'Replace obsolete hardcoded through282 runtime/package facts with explicit pending actual root binding file; preserve every prior reproduction, source-freeze/census, no-existing-target and exact-copy gate; accept current LIST freeze schema with duplicate/path checks.'}]
+for suffix,a,b,af,bf in [('forward',prior,release,'prior/release-ordinary-bank-method-root.py','candidates/release-ordinary-bank-method-root.py'),('inverse',release,prior,'candidates/release-ordinary-bank-method-root.py','prior/release-ordinary-bank-method-root.py')]:write('release-ordinary-bank-method-root.py.'+suffix+'.diff',''.join(difflib.unified_diff(a.splitlines(True),b.splitlines(True),fromfile=af,tofile=bf)).encode())
+assert changes['release-ordinary-bank-method-root.py'][0]['after'].replace(release,prior)==prior
+save('replacement-map.json',changes);save('source-copy-manifest.json',copies)
+save('pending-release-bindings.json',{'status':'NOT_RUNTIME_INPUT_PENDING_ACTUAL_REPRODUCTION_CLOSURE_AND_SOURCE_REVIEWS','reproduction_directory':None,'reproduction_acceptance':None,'source_packages':None,'integration_inputs':None,'deferred_active_callers':None,'root_review_statement':None,'limits':'This document is a pending-field description, not a binding file accepted by the release helper. Root must separately create actual complete values with measured pins after reproduction closes. No future staging/final-phase approval is supplied.'})
+save('inventory-plan.json',{'status':'SOURCE_PLAN_ONLY_NO_ACTUAL_INVENTORY_COUNTS','batch_root':str(B),'current_integration_items_observed':sorted(str(p)for p in I.iterdir()if p.name.startswith('through285')),'observation_limit':'Names observed during active preparation; not final execution bindings or freeze/census approval. Root must include every actual through285 immediate item at release, with only exact active caller directories deferred. Both singleton files and complete directories are included.','mandatory_retention':['Every B file: original sources/specs/bodies/generator streams, both failed and successful config preparations/runtime inputs, semantic review and object aliases, landing/build/test/payload results and all native failure histories','Every declared current through285 integration item, including complete reproduction sources/results and its actual root acceptance once available','Eleven unchanged generic helper source files named by composer','All aliases/resolved paths/full bytes and full census stability across reads','Automatic complete landing inventory; no suffix exclusions','Existing full semantic bank copy reuse only after full byte equality','Large >=2MB sources retained complete at exact pinned external originals','One bank row per new target; later identical-content aliases retained explicitly with first-copy pointer after full comparison'],'future_ordinary_output':str(I/'through285-ordinary-bank-inventory'),'late_boundary':'Inventory/caller/ordinary-bank outputs and later whitespace/staging/ledger/commit evidence must be separately captured at actual later boundaries. No final boundary is declared now.','runtime_counts':None,'final_phase_source_release':None})
+save('source-proof.json',{'status':'SOURCE_PREPARATION_ONLY_PENDING_REVIEW_ACTUAL_BINDINGS_RELEASE','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'candidates':pins,'full_forward_inverse_sources_retained':True,'shared_copy_helper_unchanged':bp((A/'copy_evidence_once_v2.py').read_bytes()),'known_current_payload_files':13,'known_current_payload_bytes':41185332,'known_current_CTest_records':17,'known_current_CTest_seconds':11.25,'root_reproduction_closed':False,'bank_copy_helper_imports_or_executions':0,'SQL_Git_builders_tests':0,'only_AST_syntax_checked':True,'current_batch_accepted_or_committed':False,'producer':'Codex /root/c05_280_282_english, reused English-original and tooling context; no independent semantic judgment.'})
+write('report.md',b'''Prepared three current ordinary-banking source candidates and a finite inventory plan only. No bank, copy, release, inventory, SQL, Git, builder, test or staging helper was imported or executed. Full prior sources, the unchanged copy_evidence_once_v2 source, current proof/build/test/payload records, complete diff/inverse and source mappings are retained.
+
+The banker binds closed282 HEAD and page95, actual285/511 coverage (226 open,286-511), genuine root independent-review proof fields and actual current B history paths. All original copy/hash/retention/alias/old-target/build/test/payload/source gates remain. The actual17-test stdout already has the existing required summary format, so that predicate is unchanged. Current sources report13 frozen payload files/41,185,332 bytes; these are existing measurements, not reproduction or final-banking acceptance.
+
+Composer retains the exact full-byte deduplication policy, unique new destination rows, complete external large-source retention, complete landed semantic copies and before/after alias/census checks. Its finite release scope must explicitly list every current through285 integration item plus all B evidence and eleven generic helpers. Complete actual reproduction and its root acceptance must be present. Source-spec/generator/reviewer/config failures and every native stream remain in this scope; nothing is omitted by suffix. Existing readable immutable full copies can be referenced after actual byte equality.
+
+The release source replaces old batch-specific invented-for-current facts with a separate pending actual binding file. Reproduction path/proof pin, source-review package counts/pins, exact final integration scope, active caller boundaries and root review statement are deliberately unbound. No actual runtime-dependent inventory counts or reproduction paths are finalized. Root must supply concrete reviewed values after reproduction closure. Final-whitespace execution is explicitly blocked while all historical final-phase code is retained for later review; final staging, ledgers and commits remain pending.
+
+Producer: Codex c05_280_282_english, reusing original English and tooling context. This is source preparation, not independent semantic review, bank acceptance or a claim that the current batch is accepted/committed. Existing source/review objects remain complete and readable; no B or worktree file was changed.
+''')
+print(json.dumps({'status':'SOURCE_PREPARATION_READY_TO_FREEZE','candidates':pins,'source_copies':len(copies),'target_executions':0}))
