@@ -77,3 +77,60 @@ and the honest description is that it is what its label says — provisional.
 
 Neither is detectable from inside this app, which is why they are written down
 here rather than gated.
+
+---
+
+## 3. Where it came from: the corpus's English column
+
+Chasing the fix above turned up the source. `rab rdzogs` is glossed "sadang
+lamgyi yunten rabdzok" in the spine, and that string is not invented — it is a
+line of the corpus. **702 of the 42,013 segments carrying an English field
+(1.67%) hold something that was never a translation**, and the auto-aligner
+learned from them.
+
+Two kinds:
+
+**The chanted prayers.** Course materials print the opening verses in
+transliteration so a student can chant along. `[C01:2] "sashi pukyi jukshing
+metok tram,"` is the *sound* of its own Tibetan, sitting in the English column.
+Detectable precisely: it is ≥60% inside the pronunciation the engine computes
+from that same segment's ACIP. 234 segments.
+
+**The mantras.** `[TCS12:365] "Om argham praticha sva ha."` — Sanskrit carried
+over in transliteration, untranslated on purpose. No pronunciation test finds
+these, because their sound is not the Tibetan's; what finds them is that four
+or more words go by without one English function word.
+
+`isDrillable` already refused mantras whose *Tibetan* will not convert
+(2026-09-10, Adam, on a Kali Wang text). This is the mirror case: the Tibetan
+converts perfectly and only the English side is wrong, which that test cannot
+see.
+
+### What it was costing
+
+Every surface showing one of these labels it "Geshe Michael Roach's English for
+this segment". **64 drills in the shipped phone pack did exactly that**, and 23
+of the reading-order cards did it under a badge reading ATTESTED.
+
+`allcore::englishIsNotEnglish` now unions both tests; `isDrillable` and the
+reading-order builder both consult it. The pack is at **0 of 7,700**.
+
+The cost of a false positive is one drill not built, and there is a measured
+one: an outline heading, "b2. Mistaken deceptive reality", has no function word
+either. That is the right side to err on.
+
+### For the data project
+
+These 702 are not defects in the *source* — the transliteration genuinely
+belongs in the course booklet next to the Tibetan, and the mantras genuinely
+are not translated. The defect is that the ingest put them in the column
+labelled English, and then the aligner treated that column as ground truth.
+
+Two suggestions, both upstream of this repo:
+
+- mark these segments at ingest rather than having each consumer re-detect
+  them: a `not_a_translation` flag would be exact where every downstream test
+  is a heuristic
+- and re-run the auto-alignment with them excluded. The tier's worst entries
+  are drawn from this population, so a fair part of the 4.2% in §2 should
+  simply disappear

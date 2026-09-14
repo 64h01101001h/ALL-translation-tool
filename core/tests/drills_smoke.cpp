@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <random>
 
+#include "allcore/chantline.h"
 #include "allcore/drills.h"
 #include "allcore/progress.h"
 
@@ -289,6 +290,36 @@ int main(int argc, char** argv) {
         auto empty = allcore::placeBlank("", chunks, "X");
         CHECK(!empty.ok && !empty.why.empty(),
               "blank: an empty segment is refused with a reason");
+    }
+
+    {   // An English field that was never English. 702 of the corpus's
+        // 42,013 segments carry a chant transliteration or an untranslated
+        // Sanskrit mantra where the translation should be, and every drill
+        // that showed one printed it as "his English for this segment".
+        // 64 were in the shipped pack when this was found.
+        CHECK(allcore::soundsLikeItsOwnTibetan(
+                  "sashi pukyi jukshing metok tram,",
+                  "SA GZHI SPOS KYIS BYUGS SHING ME TOG BKRAM,"),
+              "chantline: a chanted line is caught by matching the segment's "
+              "own computed pronunciation");
+        CHECK(allcore::carriesNoEnglishFunctionWord("Om argham praticha sva ha."),
+              "chantline: an untranslated Sanskrit mantra is caught by having "
+              "no English function word at all");
+        CHECK(!allcore::englishIsNotEnglish(
+                  "The definition of an apparent refuge is this.", ""),
+              "chantline: ordinary English is NOT caught");
+        CHECK(!allcore::englishIsNotEnglish("Buddha, Dharma, Sangha.", ""),
+              "chantline: a short list of his terms is not caught either - "
+              "the four-word floor is what keeps it off them");
+        allcore::CorpusSegment chant;
+        chant.id = 1;
+        chant.course = "C01";
+        chant.seq = 2;
+        chant.acip = "SA GZHI SPOS KYIS BYUGS SHING ME TOG BKRAM,";
+        chant.english = "sashi pukyi jukshing metok tram,";
+        CHECK(!allcore::DrillFactory::isDrillable(chant),
+              "drills: a segment whose English is its own pronunciation is "
+              "not drillable - no drill may print it as his rendering");
     }
 
     std::printf("%s (%d failures)\n",

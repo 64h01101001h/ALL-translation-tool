@@ -69,6 +69,24 @@ def main():
                     f"use a raw string R\"(...)\" (incident: the "
                     f"broken 84000 entity link)")
 
+    # R1b — the ⟨wylie⟩ flag marker must be the real U+27E8/U+27E9.
+    # Incident (2026-09-13): wylieToUnicode's exception path returned the
+    # brackets DOUBLE-ENCODED — their UTF-8 bytes read back as Latin-1 and
+    # re-encoded — so a conversion that failed came out as mojibake rather
+    # than as the marker. Every "refuse rather than fabricate" guard in this
+    # tree greps for U+27E8, so every one of them was blind to it, and rule 3
+    # is only worth what its marker is worth.
+    mangled = "\u00c3\u00a2\u00c2\u009f\u00c2\u00a8"
+    for name, src in everything.items():
+        if mangled in src or src.count("\u00e2\u009f\u00a8"):
+            line = 1
+            probe = mangled if mangled in src else "\u00e2\u009f\u00a8"
+            line = src[:src.find(probe)].count("\n") + 1
+            fails.append(
+                f"R1b {name}:{line}: the ⟨wylie⟩ marker is double-encoded — "
+                f"write the real U+27E8/U+27E9, or every rule-3 guard that "
+                f"greps for them goes blind")
+
     # R2 — the harness flag list is defined exactly once.
     # Incident: findDataRoot re-parsed its own list; the two lists
     # diverged within one commit pair (--survey hang).

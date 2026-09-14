@@ -1,5 +1,7 @@
 #include "allcore/drills.h"
 
+#include "allcore/chantline.h"
+
 #include "allcore/tibdisplay.h"
 
 #include <algorithm>
@@ -162,6 +164,18 @@ bool DrillFactory::isDrillable(const CorpusSegment& seg) {
         const std::string t = acipToTibetanPlain(acipStripMarkup(seg.acip));
         if (t.find("\u27e8") != std::string::npos) return false;
     }
+    //  2c. AND THE MIRROR OF THAT: the Tibetan converts perfectly, but the
+    //      ENGLISH was never English. 702 of the 42,013 segments carrying an
+    //      English field hold a chant transliteration ("sashi pukyi jukshing
+    //      metok tram," is the SOUND of its own Tibetan) or a Sanskrit mantra
+    //      carried over untranslated ("Om argham praticha sva ha."). Every
+    //      drill that shows one of these prints it as "Geshe Michael Roach's
+    //      English for this segment", which is a false claim -- 64 of them
+    //      were in the shipped pack when this was found, 2026-09-13.
+    //
+    //      2b caught the mantras whose TIBETAN will not convert. This catches
+    //      the ones where only the English side is wrong, which 2b cannot see.
+    if (englishIsNotEnglish(seg.english, seg.acip)) return false;
     //  3. ENGLISH WILDLY OUT OF PROPORTION TO THE TIBETAN. Some segments carry
     //     a whole explanatory passage against a line or two of Tibetan — one
     //     pairs 5,180 English words with 5 ACIP words. As a drill that is

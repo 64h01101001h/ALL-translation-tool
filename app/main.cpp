@@ -27216,6 +27216,40 @@ public:
         if (!clauses_.empty()) showAnchors((int)clauses_.size() - 1);
         check(anchors_->toPlainText().contains("scaffold"),
               "Evidence Ribbon scaffold renders for a clause");
+        {   // Rule 1 on the oversight surface: a longer AUTO-ALIGNED span
+            // must not stand in for a curated one, in the scaffold chip the
+            // translator completes or in the anchors beneath it. Both pickers
+            // ranked by extent alone, so SANGS RGYAS CHOS put the machine's
+            // "sangye chudang tsokyi choknam" -- a pronunciation line -- where
+            // `sangs rgyas` sat underneath reading "Buddha".
+            demo("/sangs rgyas chos/");
+            if (!clauses_.empty()) showAnchors(0);
+            const QString a = anchors_->toPlainText();
+            check(a.contains("Buddha"),
+                  "Evidence Ribbon lists his curated gloss for sangs rgyas — "
+                  "the longer auto-aligned span no longer deletes it");
+            // The anchor LIST may carry the provisional term too, labelled;
+            // that is the honest thing. The SCAFFOLD may not, because the
+            // scaffold is the line the translator completes, so a machine
+            // phrase there becomes a machine phrase in the draft.
+            // The scaffold's CHIPS are the line after its heading. Slicing a
+            // fixed window instead pulled in the corpus-parallel section
+            // below it, which legitimately quotes segment C01:8 -- whose
+            // English field in the corpus is itself a pronunciation line, and
+            // is very likely where this auto-aligned gloss was learned.
+            const QStringList lines = a.split('\n');
+            int hi = -1;
+            for (int i = 0; i < lines.size(); ++i)
+                if (lines[i].startsWith("scaffold")) { hi = i; break; }
+            const QString chips =
+                (hi >= 0 && hi + 1 < lines.size()) ? lines[hi + 1] : QString();
+            check(!chips.isEmpty() && chips.contains("Buddha"),
+                  "the scaffold chip carries his curated gloss for sangs "
+                  "rgyas, not the longer auto-aligned span around it");
+            check(!chips.contains("sangye chudang"),
+                  "and never a pronunciation line on the line the translator "
+                  "completes (rule 1: he is binding, the machine matches)");
+        }
         source_->setPlainText("sems can thams cad");
         QTextCursor c(source_->document());
         c.select(QTextCursor::Document);
@@ -27496,11 +27530,16 @@ private:
                     if (c >= 'a' && c <= 'z') c = (char)(c - 'a' + 'A');
                 if (allcore::classifyParticle(up)) continue;
             }
+            // Maximality never crosses tiers — the same rule the core's
+            // checkTerminology needed. A longer AUTO-ALIGNED span must not
+            // delete a curated anchor inside it: the anchor is his own
+            // English and this pane exists to check the draft against it.
             bool contained = false;
             for (const auto& t : doc_.spans) {
-                if (&t == &s ||
-                    doc_.entries[t.entry_ix].hgm_gloss.empty())
-                    continue;
+                if (&t == &s) continue;
+                const auto& te = doc_.entries[t.entry_ix];
+                if (te.hgm_gloss.empty()) continue;
+                if (te.provisional() && !e.provisional()) continue;
                 if (t.beg <= s.beg && s.end <= t.end &&
                     (t.end - t.beg) > (s.end - s.beg))
                     contained = true;
@@ -27603,14 +27642,24 @@ private:
             std::map<int, int> orderOf;
             for (const auto& p : plan) orderOf[p.chunk] = p.order;
             auto chipFor = [&](const allcore::Chunk& ch) -> QString {
+                // His tier first, extent only as the tiebreak. Ranking by
+                // extent alone put a longer auto-aligned gloss on the chip
+                // where a curated one sat inside it — and this chip is the
+                // scaffold the translator completes, so a machine phrase here
+                // is a machine phrase in the draft.
                 int best = -1, bw = 0;
+                bool bestProv = true;
                 for (size_t s = 0; s < doc_.spans.size(); ++s) {
                     const auto& sp = doc_.spans[s];
                     if (sp.beg >= ch.beg && sp.end <= ch.end) {
                         const auto& e = doc_.entries[sp.entry_ix];
-                        if (!e.hgm_gloss.empty() &&
-                            sp.end - sp.beg > bw) {
-                            bw = sp.end - sp.beg;
+                        if (e.hgm_gloss.empty()) continue;
+                        const bool prov = e.provisional();
+                        const int w = sp.end - sp.beg;
+                        if (best < 0 || (!prov && bestProv) ||
+                            (prov == bestProv && w > bw)) {
+                            bw = w;
+                            bestProv = prov;
                             best = (int)s;
                         }
                     }

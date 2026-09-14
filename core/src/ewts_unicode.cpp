@@ -322,7 +322,14 @@ std::pair<std::string, bool> wylieToUnicode(const std::string& wylie) {
     try {
         return wylieToUnicodeInner(wylie);
     } catch (const std::exception&) {
-        return {"â¨" + wylie + "â©", false};
+        // These must be the REAL markers, U+27E8/U+27E9. They were
+        // double-encoded here (the brackets' UTF-8 bytes read back as
+        // Latin-1 and re-encoded), so this path emitted mojibake where
+        // the line below emits the marker properly. Every "refuse
+        // rather than fabricate" guard in the tree greps for U+27E8,
+        // so every one of them was blind to a failure arriving by the
+        // exception path -- which is the path rule 3 exists for.
+        return {"⟨" + wylie + "⟩", false};
     }
 }
 
