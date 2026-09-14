@@ -210,21 +210,14 @@ inline QString slice(const allcore::OverlayDoc& doc, int beg, int end) {
 // provisional one — still labelled, because it is still the best available.
 // Splitting a term into two of his words beats keeping it whole with a guess.
 inline int bestGlossSpan(const allcore::OverlayDoc& doc, int t, int limit) {
-    int best = -1, bestLen = 0;
-    int fallback = -1, fallbackLen = 0;
+    std::vector<int> here;
     for (int si : doc.spansAt(t)) {
         const auto& sp = doc.spans[si];
         if (sp.beg != t || sp.end > limit || sp.entry_ix < 0) continue;
-        const auto& e = doc.entries[sp.entry_ix];
-        if (e.hgm_gloss.empty()) continue;
-        const int len = sp.end - sp.beg;
-        if (e.provisional()) {
-            if (len > fallbackLen) { fallbackLen = len; fallback = si; }
-        } else if (len > bestLen) {
-            bestLen = len; best = si;
-        }
+        if (doc.entries[sp.entry_ix].hgm_gloss.empty()) continue;
+        here.push_back(si);
     }
-    return best >= 0 ? best : fallback;
+    return doc.bestSpan(here);
 }
 
 }  // namespace walk
