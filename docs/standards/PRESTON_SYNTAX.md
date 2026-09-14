@@ -283,10 +283,38 @@ form**. They end in:
     ni x6 · shog x2 · mi · kyis · ya · che
 
 That answers the question the first version left open, and answers it against
-the hypothesis I preferred. These are not implied-verb constructions. Six end
-in the topic particle *ni*, which means they are openings or fragments rather
-than whole sentences. Two end in *shog*, the optative — **a real verb form the
-Wilson tables do not have**, and a concrete gap worth closing.
+the hypothesis I preferred. These are not implied-verb constructions. Two end
+in *shog*, the optative — **a real verb form the Wilson tables do not have**,
+and a concrete gap worth closing.
+
+#### Corrected against the whole corpus, 2026-09-13
+
+Twelve segments is not a sample, and the shape of those twelve was misleading.
+Measured over all 42,087 segments:
+
+| | |
+|---|---|
+| segments with no confident verb anywhere | 8,016 (19.0%) |
+| segments ending in the topic particle *ni* | 764 (1.8%) |
+| …of those, verbless | **489 (64.0%)** |
+
+So the *reading* holds and holds strongly: a segment ending in *ni* is verbless
+64% of the time against a 19% base rate — three and a half times over. It
+really is an opening rather than a whole sentence.
+
+What does NOT hold is the prominence the twelve implied. Across the corpus *ni*
+is only **6.1%** of verbless segments, and it is not even the commonest ending:
+
+    dang 12.6% · ni 6.1% · la 6.0% · lan 3.4% · pa 3.4% · ) 3.1% · h'a 2.9%
+
+*dang* is the conjunctive — a segment ending in it is a continuation for the
+same reason *ni* is, and it is twice as common. And two of the top ten, *h'a*
+and *phat*, are mantra syllables: 375 verbless segments between them, which is
+not a grammar problem at all.
+
+The lesson is the one this file keeps learning. Six of twelve reads like a
+pattern; it was 6.1% of the real population, and the actual leader was never in
+the sample.
 
 Preston's frequency claim is about a tenets text. This corpus is Geshe
 Michael's courses, a different genre, and the implied-verb shapes he documents
