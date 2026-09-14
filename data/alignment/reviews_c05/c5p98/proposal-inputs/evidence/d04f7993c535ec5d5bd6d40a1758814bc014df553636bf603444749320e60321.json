@@ -1,0 +1,898 @@
+{
+  "resolver": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+  "resolver_sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e",
+  "native_tibetan_ranges": {
+    "w1": [
+      0,
+      10
+    ],
+    "w2": [
+      11,
+      20
+    ],
+    "w3": [
+      22,
+      31
+    ],
+    "w4": [
+      22,
+      27
+    ],
+    "w5": [
+      28,
+      31
+    ],
+    "w6": [
+      36,
+      48
+    ],
+    "w7": [
+      36,
+      44
+    ],
+    "w8": [
+      45,
+      48
+    ],
+    "w9": [
+      49,
+      51
+    ],
+    "w10": [
+      52,
+      59
+    ],
+    "w11": [
+      62,
+      67
+    ],
+    "w12": [
+      68,
+      72
+    ],
+    "w13": [
+      73,
+      83
+    ],
+    "w14": [
+      92,
+      99
+    ],
+    "w15": [
+      102,
+      105
+    ],
+    "w16": [
+      106,
+      115
+    ],
+    "w17": [
+      116,
+      129
+    ],
+    "w18": [
+      139,
+      142
+    ],
+    "w19": [
+      167,
+      171
+    ],
+    "w20": [
+      172,
+      179
+    ],
+    "w21": [
+      182,
+      185
+    ],
+    "w22": [
+      191,
+      199
+    ],
+    "w23": [
+      204,
+      216
+    ],
+    "w24": [
+      204,
+      212
+    ],
+    "w25": [
+      213,
+      216
+    ],
+    "w26": [
+      217,
+      219
+    ],
+    "w27": [
+      220,
+      227
+    ],
+    "w28": [
+      230,
+      240
+    ],
+    "w29": [
+      230,
+      234
+    ],
+    "w30": [
+      235,
+      240
+    ],
+    "w31": [
+      241,
+      243
+    ],
+    "w32": [
+      244,
+      252
+    ],
+    "w33": [
+      258,
+      262
+    ],
+    "w34": [
+      263,
+      266
+    ]
+  },
+  "native_english_ranges": {
+    "w1": [
+      0,
+      19
+    ],
+    "w2": [
+      20,
+      39
+    ],
+    "w3": [
+      49,
+      59
+    ],
+    "w5": [
+      49,
+      51
+    ],
+    "w4": [
+      52,
+      59
+    ],
+    "w18": [
+      65,
+      70
+    ],
+    "w15": [
+      104,
+      110
+    ],
+    "w14": [
+      117,
+      124
+    ],
+    "w11": [
+      125,
+      129
+    ],
+    "w12": [
+      134,
+      141
+    ],
+    "w13": [
+      142,
+      161
+    ],
+    "w9": [
+      162,
+      164
+    ],
+    "w10": [
+      174,
+      182
+    ],
+    "w26": [
+      183,
+      185
+    ],
+    "w6": [
+      186,
+      199
+    ],
+    "w7": [
+      186,
+      191
+    ],
+    "w8": [
+      192,
+      199
+    ],
+    "w16": [
+      216,
+      228
+    ],
+    "w17": [
+      234,
+      285
+    ],
+    "w21": [
+      302,
+      309
+    ],
+    "w31": [
+      310,
+      312
+    ],
+    "w20": [
+      317,
+      325
+    ],
+    "w19": [
+      326,
+      335
+    ],
+    "w22": [
+      353,
+      357
+    ],
+    "w34": [
+      389,
+      398
+    ],
+    "w33": [
+      399,
+      403
+    ],
+    "w32": [
+      406,
+      410
+    ],
+    "w28": [
+      414,
+      427
+    ],
+    "w29": [
+      414,
+      417
+    ],
+    "w30": [
+      422,
+      427
+    ],
+    "w27": [
+      434,
+      440
+    ],
+    "w23": [
+      447,
+      459
+    ],
+    "w24": [
+      447,
+      452
+    ],
+    "w25": [
+      453,
+      459
+    ]
+  },
+  "planned_vs_native": [
+    {
+      "id": "w1",
+      "english": "In response to this",
+      "all_literal_starts": [
+        0
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 0,
+      "reason": "Whole response connective.",
+      "native_start": 0,
+      "native_end": 19,
+      "native_exact_match": true
+    },
+    {
+      "id": "w2",
+      "english": "someone might claim",
+      "all_literal_starts": [
+        20
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 20,
+      "reason": "Whole debate speaker introduction.",
+      "native_start": 20,
+      "native_end": 39,
+      "native_exact_match": true
+    },
+    {
+      "id": "w3",
+      "english": "no problem",
+      "all_literal_starts": [
+        49
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 49,
+      "reason": "Established no-problem compound; existential frame excluded.",
+      "native_start": 49,
+      "native_end": 59,
+      "native_exact_match": true
+    },
+    {
+      "id": "w6",
+      "english": "outer objects",
+      "all_literal_starts": [
+        186
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 186,
+      "reason": "Outer-object compound.",
+      "native_start": 186,
+      "native_end": 199,
+      "native_exact_match": true
+    },
+    {
+      "id": "w9",
+      "english": "as",
+      "all_literal_starts": [
+        108,
+        162,
+        183,
+        441
+      ],
+      "chosen_occurrence": 2,
+      "chosen_start": 162,
+      "reason": "Outer objects predicative as; earlier as precedes actually existing.",
+      "native_start": 162,
+      "native_end": 164,
+      "native_exact_match": true
+    },
+    {
+      "id": "w10",
+      "english": "existing",
+      "all_literal_starts": [
+        174
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 174,
+      "reason": "Positive establishment/existence in object predicate.",
+      "native_start": 174,
+      "native_end": 182,
+      "native_exact_match": true
+    },
+    {
+      "id": "w11",
+      "english": "form",
+      "all_literal_starts": [
+        125
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 125,
+      "reason": "Form door of perception.",
+      "native_start": 125,
+      "native_end": 129,
+      "native_exact_match": true
+    },
+    {
+      "id": "w12",
+      "english": "similar",
+      "all_literal_starts": [
+        134
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 134,
+      "reason": "Generalization; no supplied doors noun captured.",
+      "native_start": 134,
+      "native_end": 141,
+      "native_exact_match": true
+    },
+    {
+      "id": "w13",
+      "english": "doors of perception",
+      "all_literal_starts": [
+        142
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 142,
+      "reason": "Established compound.",
+      "native_start": 142,
+      "native_end": 161,
+      "native_exact_match": true
+    },
+    {
+      "id": "w14",
+      "english": "explain",
+      "all_literal_starts": [
+        117
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 117,
+      "reason": "Teaching verb sense.",
+      "native_start": 117,
+      "native_end": 124,
+      "native_exact_match": true
+    },
+    {
+      "id": "w15",
+      "english": "sutras",
+      "all_literal_starts": [
+        104
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 104,
+      "reason": "Sutras under interpretation.",
+      "native_start": 104,
+      "native_end": 110,
+      "native_exact_match": true
+    },
+    {
+      "id": "w16",
+      "english": "figuratively",
+      "all_literal_starts": [
+        216
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 216,
+      "reason": "Exact HGM figurative-register equivalent.",
+      "native_start": 216,
+      "native_end": 228,
+      "native_exact_match": true
+    },
+    {
+      "id": "w17",
+      "english": "must be interpreted to establish their true meaning",
+      "all_literal_starts": [
+        234
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 234,
+      "reason": "Complete established HGM locution.",
+      "native_start": 234,
+      "native_end": 285,
+      "native_exact_match": true
+    },
+    {
+      "id": "w18",
+      "english": "point",
+      "all_literal_starts": [
+        65
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 65,
+      "reason": "First independent don after interpretive compound; introductory point of statement.",
+      "native_start": 65,
+      "native_end": 70,
+      "native_exact_match": true
+    },
+    {
+      "id": "w19",
+      "english": "statement",
+      "all_literal_starts": [
+        79,
+        326
+      ],
+      "chosen_occurrence": 2,
+      "chosen_start": 326,
+      "reason": "Earlier statement: anchored after original; first statement belongs to introductory expansion.",
+      "native_start": 326,
+      "native_end": 335,
+      "native_exact_match": true
+    },
+    {
+      "id": "w20",
+      "english": "original",
+      "all_literal_starts": [
+        317
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 317,
+      "reason": "Earlier/original statement.",
+      "native_start": 317,
+      "native_end": 325,
+      "native_exact_match": true
+    },
+    {
+      "id": "w21",
+      "english": "meaning",
+      "all_literal_starts": [
+        278,
+        302
+      ],
+      "chosen_occurrence": 2,
+      "chosen_start": 302,
+      "reason": "Independent don following snga ma: meaning of original statement; first meaning is inside interpretive compound.",
+      "native_start": 302,
+      "native_end": 309,
+      "native_exact_match": true
+    },
+    {
+      "id": "w22",
+      "english": "same",
+      "all_literal_starts": [
+        353
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 353,
+      "reason": "Comparison predicate.",
+      "native_start": 353,
+      "native_end": 357,
+      "native_exact_match": true
+    },
+    {
+      "id": "w23",
+      "english": "outer object",
+      "all_literal_starts": [
+        186,
+        447
+      ],
+      "chosen_occurrence": 2,
+      "chosen_start": 447,
+      "reason": "Second compound; literal outer object also prefixes plural outer objects, hence occurrence2.",
+      "native_start": 447,
+      "native_end": 459,
+      "native_exact_match": true
+    },
+    {
+      "id": "w26",
+      "english": "as",
+      "all_literal_starts": [
+        108,
+        162,
+        183,
+        441
+      ],
+      "chosen_occurrence": 3,
+      "chosen_start": 183,
+      "reason": "Final outer-object predicate.",
+      "native_start": 183,
+      "native_end": 185,
+      "native_exact_match": true
+    },
+    {
+      "id": "w27",
+      "english": "exists",
+      "all_literal_starts": [
+        434
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 434,
+      "reason": "Positive exists inside relative clause.",
+      "native_start": 434,
+      "native_end": 440,
+      "native_exact_match": true
+    },
+    {
+      "id": "w28",
+      "english": "pus and blood",
+      "all_literal_starts": [
+        414
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 414,
+      "reason": "Pair compound.",
+      "native_start": 414,
+      "native_end": 427,
+      "native_exact_match": true
+    },
+    {
+      "id": "w31",
+      "english": "of",
+      "all_literal_starts": [
+        71,
+        148,
+        310,
+        411
+      ],
+      "chosen_occurrence": 3,
+      "chosen_start": 310,
+      "reason": "Drop of pus: after earlier point of and meaning of.",
+      "native_start": 310,
+      "native_end": 312,
+      "native_exact_match": true
+    },
+    {
+      "id": "w32",
+      "english": "drop",
+      "all_literal_starts": [
+        406
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 406,
+      "reason": "Singular drop.",
+      "native_start": 406,
+      "native_end": 410,
+      "native_exact_match": true
+    },
+    {
+      "id": "w33",
+      "english": "even",
+      "all_literal_starts": [
+        399
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 399,
+      "reason": "Scalar particle in negative indefinite phrase.",
+      "native_start": 399,
+      "native_end": 403,
+      "native_exact_match": true
+    },
+    {
+      "id": "w34",
+      "english": "not exist",
+      "all_literal_starts": [
+        389
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 389,
+      "reason": "Negative existential, excluding supplied auxiliary does.",
+      "native_start": 389,
+      "native_end": 398,
+      "native_exact_match": true
+    }
+  ],
+  "all_unwrapped_ranges": {
+    "tib": [
+      {
+        "start": 10,
+        "end": 11,
+        "text": " "
+      },
+      {
+        "start": 20,
+        "end": 22,
+        "text": ", "
+      },
+      {
+        "start": 31,
+        "end": 36,
+        "text": " de, "
+      },
+      {
+        "start": 48,
+        "end": 49,
+        "text": " "
+      },
+      {
+        "start": 51,
+        "end": 52,
+        "text": " "
+      },
+      {
+        "start": 59,
+        "end": 62,
+        "text": "'i "
+      },
+      {
+        "start": 67,
+        "end": 68,
+        "text": " "
+      },
+      {
+        "start": 72,
+        "end": 73,
+        "text": " "
+      },
+      {
+        "start": 83,
+        "end": 92,
+        "text": " yod par "
+      },
+      {
+        "start": 99,
+        "end": 102,
+        "text": "'i "
+      },
+      {
+        "start": 105,
+        "end": 106,
+        "text": " "
+      },
+      {
+        "start": 115,
+        "end": 116,
+        "text": " "
+      },
+      {
+        "start": 129,
+        "end": 139,
+        "text": " yin pa'i "
+      },
+      {
+        "start": 142,
+        "end": 167,
+        "text": " yin pa'i phyir, zer na, "
+      },
+      {
+        "start": 171,
+        "end": 172,
+        "text": " "
+      },
+      {
+        "start": 179,
+        "end": 182,
+        "text": "'i "
+      },
+      {
+        "start": 185,
+        "end": 191,
+        "text": " yang "
+      },
+      {
+        "start": 199,
+        "end": 204,
+        "text": " te, "
+      },
+      {
+        "start": 216,
+        "end": 217,
+        "text": " "
+      },
+      {
+        "start": 219,
+        "end": 220,
+        "text": " "
+      },
+      {
+        "start": 227,
+        "end": 230,
+        "text": "'i "
+      },
+      {
+        "start": 240,
+        "end": 241,
+        "text": " "
+      },
+      {
+        "start": 243,
+        "end": 244,
+        "text": " "
+      },
+      {
+        "start": 252,
+        "end": 258,
+        "text": " 'ga' "
+      },
+      {
+        "start": 262,
+        "end": 263,
+        "text": " "
+      },
+      {
+        "start": 266,
+        "end": 294,
+        "text": " ces pa'i don yin pa'i phyir"
+      }
+    ],
+    "eng": [
+      {
+        "start": 19,
+        "end": 20,
+        "text": " "
+      },
+      {
+        "start": 39,
+        "end": 49,
+        "text": ": There's "
+      },
+      {
+        "start": 59,
+        "end": 65,
+        "text": "; the "
+      },
+      {
+        "start": 70,
+        "end": 104,
+        "text": " of this statement is to say that "
+      },
+      {
+        "start": 110,
+        "end": 117,
+        "text": " which "
+      },
+      {
+        "start": 124,
+        "end": 125,
+        "text": " "
+      },
+      {
+        "start": 129,
+        "end": 134,
+        "text": " and "
+      },
+      {
+        "start": 141,
+        "end": 142,
+        "text": " "
+      },
+      {
+        "start": 161,
+        "end": 162,
+        "text": " "
+      },
+      {
+        "start": 164,
+        "end": 174,
+        "text": " actually "
+      },
+      {
+        "start": 182,
+        "end": 183,
+        "text": " "
+      },
+      {
+        "start": 185,
+        "end": 186,
+        "text": " "
+      },
+      {
+        "start": 199,
+        "end": 216,
+        "text": " are only spoken "
+      },
+      {
+        "start": 228,
+        "end": 234,
+        "text": ", and "
+      },
+      {
+        "start": 285,
+        "end": 302,
+        "text": ". Well then, the "
+      },
+      {
+        "start": 309,
+        "end": 310,
+        "text": " "
+      },
+      {
+        "start": 312,
+        "end": 317,
+        "text": " the "
+      },
+      {
+        "start": 325,
+        "end": 326,
+        "text": " "
+      },
+      {
+        "start": 335,
+        "end": 353,
+        "text": " then is just the "
+      },
+      {
+        "start": 357,
+        "end": 389,
+        "text": ": it is saying that \"there does "
+      },
+      {
+        "start": 398,
+        "end": 399,
+        "text": " "
+      },
+      {
+        "start": 403,
+        "end": 406,
+        "text": " a "
+      },
+      {
+        "start": 410,
+        "end": 414,
+        "text": " of "
+      },
+      {
+        "start": 427,
+        "end": 434,
+        "text": " which "
+      },
+      {
+        "start": 440,
+        "end": 447,
+        "text": " as an "
+      },
+      {
+        "start": 459,
+        "end": 461,
+        "text": ".\""
+      }
+    ]
+  }
+}

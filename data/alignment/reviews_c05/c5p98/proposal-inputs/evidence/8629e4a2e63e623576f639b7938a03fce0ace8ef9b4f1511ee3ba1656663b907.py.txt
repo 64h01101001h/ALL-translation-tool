@@ -1,0 +1,17 @@
+from pathlib import Path
+import json,re,subprocess,os,shutil
+R=Path.cwd();W=R/'campaign-worktree';E=R/'campaign-artifacts/C05-292-294/english';A=R/'campaign-artifacts'
+for seq in [292,293,294]:
+ d=E/str(seq);a=d/'superseded/01-before-final-position-audit';a.mkdir(parents=True,exist_ok=True)
+ for name in ['spec.json','body.html','report.md','proof.json','analysis.json','occurrence-proof.json','planned-occurrences.json']:
+  shutil.copyfile(d/name,a/name)
+p=E/'293/planned-occurrences.json';occ=json.loads(p.read_text());row=next(x for x in json.loads((E/'evidence/source-context-original-rows.json').read_text())['rows'] if x['seq']==293)
+updates={'w9':('as outer objects',3,'Predicative du at the first outer objects; as actually existing is not this particle.'),'w26':('as an outer object',4,'Second predicative du in the final singular outer-object clause.'),'w31':('of pus and blood',4,'Genitive gi linking drop to pus and blood; other of tokens are unrelated.')}
+for o in occ:
+ if o['id'] in updates:
+  prefix,which,reason=updates[o['id']];at=row['english'].index(prefix);assert at==o['all_literal_starts'][which-1];o.update(chosen_occurrence=which,chosen_start=at,reason=reason)
+p.write_text(json.dumps(occ,indent=2)+'\n');p=E/'293/spec.json';s=json.loads(p.read_text());s['segments'][0]['eng_order']=[o['id'] for o in sorted(occ,key=lambda o:o['chosen_start'])];p.write_text(json.dumps(s,ensure_ascii=False,indent=2)+'\n')
+a=E/'293/attempts/02';a.mkdir(parents=True,exist_ok=True);raw=p.read_bytes();(a/'stdin.json').write_bytes(raw);cmd=['python3',str(A/'run_generator_readonly.py')];r=subprocess.run(cmd,input=raw,capture_output=True,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+(a/'stdout.html').write_bytes(r.stdout);(a/'stderr.txt').write_bytes(r.stderr);(a/'exit.txt').write_text(str(r.returncode)+'\n');(a/'command.json').write_text(json.dumps({'argv':cmd,'cwd':str(W),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'},'reason':'Semantic occurrence audit corrected two du/as placements and gi/of. Initial literal-occurrence counting included substrings inside sutras and the compound doors of perception.'},indent=2)+'\n');assert r.returncode==0 and not r.stderr;(E/'293/body.html').write_bytes(r.stdout)
+p=E/'finalize_proposals.py';(E/'finalize_proposals.attempt1.py').write_bytes(p.read_bytes());s=p.read_text();start=s.index('# Supplemental full glossary');stop=s.index('# Read the actual unchanged canonical resolver');s=s[:start]+s[stop:];s=s.replace("'02' if seq==294 else '01'","'02' if seq in [293,294] else '01'");s=s.replace('C05 physical lines 2877–2879 reproduce this row.','C05 physical lines 2877–2879 reproduce these differing clauses; lines 2877–2889 preserve the full passage.');s=s.replace('All actual canonical generator calls exited0 with empty stderr.','A final semantic position audit corrected three initially misassigned particles in 293; the superseded native passing body and proof are preserved. All actual canonical generator calls exited0 with empty stderr.');p.write_text(s)
+print('293 corrected generator EXIT',r.returncode,'body_bytes',len(r.stdout))

@@ -1,0 +1,44 @@
+{
+  "producer": "Codex, independent Tibetan-first angle; all alignment output PROVISIONAL",
+  "proposal_source_commit": "129e86afae8431aacfb1ee1cee65d8635dd265b8",
+  "proposal_course_boundary": 285,
+  "not_landing_baseline": true,
+  "source_authority": {
+    "original_spine": "Full corpus rows with id/course/seq/acip/wylie/english/raw independently fetched using SQLite mode=ro. Complete selected and neighboring rows in original-spine-context-full.json. Snapshots were compared field-for-field to original rows.",
+    "master": "Full original entry fields and raw spine entries, plus curated and glossary archive layers, in lexicon-spine-full.json, lexicon-master-full.json, additional-lexicon-full.json and additional-master-full.json. hgm_gloss retained unchanged; comparative fields remain comparative.",
+    "corpus": "corpus-queries-full.json stores exact SQL, parameters, counts and complete rows. corpus-archive-original-context.json independently checks full archive text fields.",
+    "physical": "C05ReadingASCII.txt is the original unmodified complete byte file. physical-row-verification.json gives exact line ranges and full selected original lines. English equals the spine after joining physical lines with spaces.",
+    "governing": "governing-snapshot-metadata.json records exact Git commit/path/bytes/SHA for every governing snapshot. C05 course-shape ingestion-lineage wording is metadata only.",
+    "canonical_execution": "Unchanged campaign-artifacts/run_generator_readonly.py wrapper forces SQLite URI mode=ro and executes actual W/tools/gen_alignment_page.py. Exact input/stdout/stderr/exit/command retained per attempt. Runtime builder is separately hashed, not compared to the historical mutable reference."
+  },
+  "parallel_text_evidence": [
+    {
+      "seq": 292,
+      "parallel": "C15:437",
+      "ACIP_equal": true,
+      "Wylie_equal": true,
+      "English_equal": false,
+      "differences": [
+        "C05 do not even exist; C15 did not even exist",
+        "C05 state that they exist; C15 state that they do exist"
+      ]
+    },
+    {
+      "seq": 293,
+      "parallel": "C15:438",
+      "ACIP_equal": true,
+      "Wylie_equal": true,
+      "English_equal": true
+    },
+    {
+      "seq": 294,
+      "parallel": "C15:439",
+      "ACIP_equal": true,
+      "Wylie_equal": true,
+      "English_equal": true
+    }
+  ],
+  "provenance_limit": "Textual equality proves only equality of compared text fields. Different id/course/seq remain distinct. No claim of independent publication or ingestion lineage is made.",
+  "errors_and_supersessions": "Canonical attempts are all preserved in per-segment native-attempts.293 first passing native body is superseded because independent occurrence validation caught meaning at the wrong earlier occurrence. Helper failures and preflight versions remain in attempts/ and293/superseded/.",
+  "access_and_scope": "Eight reference directories were checked readable; no browsing, API spending, source edits, hgm_gloss edits, W mutations, commits, or delegation."
+}

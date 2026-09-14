@@ -1,0 +1,67 @@
+from pathlib import Path
+import json,hashlib,sqlite3,subprocess,gzip,datetime
+O=Path(__file__).resolve().parent;B=O.parent;R=B.parent.parent;W=R/'campaign-worktree'
+def h(b):return hashlib.sha256(b).hexdigest()
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+base=json.loads((B/'proposal-baseline.json').read_text()); pins=[]
+for role,v in base['source_pins'].items():
+ p=Path(v['path']);raw=p.read_bytes();assert len(raw)==v['bytes'] and h(raw)==v['sha256'];pins.append(dict(role=role,**v))
+git=[]
+for rel,v in base['governing_git_pins'].items():
+ raw=subprocess.check_output(['git','show',v['original_git_commit']+':'+rel],cwd=W);assert len(raw)==v['bytes'] and h(raw)==v['sha256']
+ p=O/'evidence/governing'/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw);git.append(v)
+for rel in ('docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md'):
+ raw=subprocess.check_output(['git','show',base['commit']+':'+rel],cwd=W);p=O/'evidence/governing'/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw);git.append({'original_git_commit':base['commit'],'repository_relative_path':rel,'bytes':len(raw),'sha256':h(raw)})
+originals=[]
+for a,f,digest in [('tibetan','manifest.json','d6fc1446e75e35d043fe64e436235b637504fdd219116fdcf50f0fb57d1a37c8'),('english','freeze.json','65a242f81e027da691222fe189d8d7dc6ac2520839928e7b222a579f474fe01f')]:
+ p=B/a/f;raw=p.read_bytes();assert h(raw)==digest
+ for v in json.loads(raw)['files']:
+  p=B/a/v['path'];r=p.read_bytes();assert h(r)==v['sha256'] and len(r)==v['bytes'],p
+ originals.append({'angle':a,'manifest_path':str(B/a/f),'sha256':digest,'files_verified':len(json.loads(raw)['files'])})
+replays=json.loads((B/'proposal-verification/report.json').read_text())
+for q in replays:
+ a,s=q['angle'],q['seq']; prefix=B/'proposal-verification'/f'{a}-{s}'
+ assert int(prefix.with_suffix('.exit').read_text())==0 and prefix.with_suffix('.stderr').read_bytes()==b''
+ assert prefix.with_suffix('.stdout').read_bytes()==(B/a/str(s)/'body.html').read_bytes()
+ assert h((B/a/str(s)/'spec.json').read_bytes())==q['spec_sha256'] and h(prefix.with_suffix('.stdout').read_bytes())==q['body_sha256']
+qrecords=[];seen={};conn=sqlite3.connect(Path(base['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);conn.row_factory=sqlite3.Row
+for a in ('tibetan','english'):
+ for p in sorted((B/a/'evidence').glob('*.json')):
+  def walk(x):
+   if isinstance(x,dict):
+    query=x.get('sql',x.get('query'));params=x.get('parameters')
+    rows=x.get('full_rows',x.get('spine_rows',x.get('rows')))
+    if isinstance(query,str) and query.lstrip().lower().startswith('select') and isinstance(params,list) and isinstance(rows,list):
+     key=(query,json.dumps(params,ensure_ascii=False));actual=seen.setdefault(key,[dict(r) for r in conn.execute(query,params)])
+     assert actual==rows,(str(p),query,params)
+     if 'count' in x:assert x['count']==len(actual)
+     qrecords.append({'original_file':str(p),'query':query,'parameters':params,'count':len(actual),'complete_rows_equal':True})
+    for v in x.values():walk(v)
+   elif isinstance(x,list):
+    for v in x:walk(v)
+  walk(json.loads(p.read_text()))
+source=[]
+for p in ('source.json','context.json'):
+ x=json.loads((B/p).read_text())
+ for row in x:
+  actual=dict(conn.execute('select * from corpus_segments where course=? and seq=?',(row['course'],row['seq'])).fetchone());assert all(actual[k]==v for k,v in row.items())
+  source.append(actual)
+save(O/'evidence/source-context-reopened.json',source)
+save(O/'evidence/queries-reopened-full.json',[dict(query=k[0],parameters=json.loads(k[1]),count=len(v),rows=v) for k,v in seen.items()])
+master=json.loads(gzip.decompress(Path(base['source_pins']['master']['path']).read_bytes())); entries=master['entries'] if isinstance(master,dict) else master
+raw_entries=[]
+for v in seen.values():
+ for row in v:
+  if 'hgm_gloss' in row and row['id'] not in [r['spine_id'] for r in raw_entries]:
+   raw=json.loads(row['raw']); matches=[e for e in entries if e==raw];assert len(matches)>=1
+   raw_entries.append({'spine_id':row['id'],'wylie':row['wylie'],'archive_record':matches[0]})
+save(O/'evidence/master-records-reopened-full.json',raw_entries)
+phys=Path(base['source_pins']['physical']['path']).read_bytes();lines=phys.decode('latin-1').splitlines();excerpts=[]
+for s,lo,hi in [(292,2876,2889),(293,2891,2900),(294,2902,2915)]:
+ row=next(r for r in source if r['course']=='C05' and r['seq']==s);text=' '.join(lines[lo-1:hi]);normal=lambda z:' '.join(z.split())
+ assert normal(row['acip']) in normal(text) and normal(row['english']) in normal(text)
+ excerpts.append({'seq':s,'start_line':lo,'end_line':hi,'lines':lines[lo-1:hi],'acip_and_english_whitespace_fold_equal':True})
+(O/'evidence/C05ReadingASCII.txt').write_bytes(phys);save(O/'evidence/physical-excerpts.json',excerpts)
+refs=json.loads((B/'english/evidence/access-checks.json').read_text());save(O/'evidence/reference-access-original.json',refs)
+save(O/'evidence/input-verification.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS','pins':pins,'governing_git_objects':git,'original_freezes':originals,'six_root_native_original_replays_hash_and_complete_bytes_verified':replays,'original_query_references':len(qrecords),'unique_queries':len(seen),'master_records':len(raw_entries),'live_builder_hash_record_only':h((W/'tools/build_alignment_layer.py').read_bytes()),'query_references':qrecords,'no_landing_baseline_claim':True})
+print('PASS',len(qrecords),'query references',len(seen),'unique queries',len(raw_entries),'master records',sum(x['files_verified'] for x in originals),'frozen original files')

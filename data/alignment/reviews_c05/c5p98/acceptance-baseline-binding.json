@@ -1,0 +1,55 @@
+{
+  "status": "PASS",
+  "acceptance_baseline_commit": "c107f1ecd9cfb68968245870ad81ba5d9a070721",
+  "course_boundary": 291,
+  "source_origin_commit": "129e86afae8431aacfb1ee1cee65d8635dd265b8",
+  "governing_git_commit": "c107f1ecd9cfb68968245870ad81ba5d9a070721",
+  "baseline_hashes_verified": [
+    {
+      "path": "data/hgm_dictionary_v27_2.json.gz",
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+      "method": "external immutable source bytes; not tracked in Git"
+    },
+    {
+      "path": "data/full_parallel_corpus_v32.json.gz",
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8",
+      "method": "external immutable source bytes; not tracked in Git"
+    },
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "sha256": "552febf9e32d42b29f5d4c8f09795329a3a4e4aaaa2f2bdd184a2bbe0a2c73a7",
+      "method": "immutable Git object"
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "sha256": "e6dc946bce66a16da7e87f929afe6016d1baf05d0d5e7c460ec09907566ba25f",
+      "method": "immutable Git object"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "sha256": "97755c4e8a88588805ad457f5ff26e9b6ce16aeafe2f247b57064f991fa963e2",
+      "method": "immutable Git object"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "sha256": "407cd6ef3d6cc0464a0dbfc978123711f860b51cf536e1c53306f1c7c804d990",
+      "method": "immutable Git object"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "sha256": "08e65991152222c2d1ae6d4798deae13a57e99e4d8a9c5300761116dd146fa3f",
+      "method": "immutable Git object"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "sha256": "2a55fd82ec7bd7e1d48638b77990450d876ff611fc99cb2f07bd9665a72d4127",
+      "method": "immutable Git object"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "sha256": "e0a05a2b521b9b4c86239322a85e41b33ab3a3866fa5753c4547167b4f1f8718",
+      "method": "immutable Git object"
+    }
+  ],
+  "prior_check_failure": "Initial supplement incorrectly assumed every baseline path was Git-tracked. It stopped on the untracked master after package, five-ground, disposition and source-fidelity checks passed. Only the baseline/storage checks resume here; no data or verdict was changed. Original script and native failure retained under history/supplement-attempt01."
+}

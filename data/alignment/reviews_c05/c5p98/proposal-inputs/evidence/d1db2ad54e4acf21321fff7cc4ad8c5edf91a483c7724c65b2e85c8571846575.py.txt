@@ -1,0 +1,33 @@
+import pathlib,json,hashlib,importlib.util,html,re,collections,sqlite3,datetime
+O=pathlib.Path(__file__).resolve().parent;R=O.parents[2];W=R/'campaign-worktree';E=O/'evidence';base=json.loads((E/'proposal-baseline.json').read_text())
+def writej(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def h(b):return hashlib.sha256(b).hexdigest()
+specmod=importlib.util.spec_from_file_location('canonical_generator',W/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(specmod);specmod.loader.exec_module(G)
+rows={r['seq']:r for r in json.loads((E/'source.json').read_text())}
+for seq in [292,293,294]:
+ D=O/str(seq);sp=json.loads((D/'spec.json').read_text())['segments'][0];ds=json.loads((D/'decisions.json').read_text());by={s['id']:s for s in sp['spans']};decs={s['id']:s for s in ds['spans']};row=rows[seq];tr=G.resolve(row['wylie'],sp['spans'],'tib',seq);es=G.with_members(sp['spans'],[by[sid] for sid in sp['eng_order']],row['english']);er=G.resolve(row['english'],es,'eng',seq);actual=[];checks=[]
+ for s in sp['spans']:
+  sid=s['id'];t=tr[sid];e=er.get(sid);assert row['wylie'][t[0]:t[1]]==s['tib'];
+  if e:assert row['english'][e[0]:e[1]]==s['eng']
+  if sid in ds['intended_flat_english_ranges_0based_half_open']:assert list(e)==ds['intended_flat_english_ranges_0based_half_open'][sid],(seq,sid,e,ds['intended_flat_english_ranges_0based_half_open'][sid])
+  def allhits(txt,p,member):
+   hits=[];start=0
+   while 1:
+    i=txt.find(p,start) if member else G.find_word(txt,p,start)
+    if i<0:return hits
+    hits.append([i,i+len(p)]);start=i+1
+  th=allhits(row['wylie'],s['tib'],s['d']==7);eh=allhits(row['english'],s['eng'],s['d']==7) if s['eng'] else []
+  a={'id':sid,'depth':s['d'],'tibetan':s['tib'],'english':s['eng'],'tibetan_range':list(t),'english_range':list(e) if e else None,'tibetan_all_candidate_ranges':th,'english_all_candidate_ranges':eh,'tibetan_actual_global_occurrence_1based':th.index(list(t))+1,'english_actual_global_occurrence_1based':eh.index(list(e))+1 if e else None,'decision':decs[sid]['decision']};actual.append(a)
+  if s['d']!=7 and a['tibetan_actual_global_occurrence_1based']!=decs[sid]['intended_tib_occurrence_1based']:checks.append({'id':sid,'declared':decs[sid]['intended_tib_occurrence_1based'],'actual':a['tibetan_actual_global_occurrence_1based'],'tib':s['tib']})
+ body=(D/'body.html').read_text();bb=(D/'body.html').read_bytes();final=json.loads((D/'native-final.json').read_text());A=D/final['attempt'];assert bb==(A/'stdout').read_bytes() and (D/'spec.json').read_bytes()==(A/'input.json').read_bytes();assert (A/'stderr').read_bytes()==b'' and (A/'exit').read_text()=='0\n';assert h(bb)==final['body_sha256']
+ for side,expected in [('tib',row['wylie']),('eng',row['english'])]:
+  section=body.split('<div class="'+side+'">',1)[1].split('\n</div>',1)[0]
+  section=re.sub(r'<div class="lab">.*?</div>','',section,flags=re.S)
+  section=re.sub(r'<span class="nul">.*?</span>','',section,flags=re.S)
+  plain=html.unescape(re.sub('<[^>]+>','',section)).strip();assert plain==expected,(seq,side,repr(plain),repr(expected))
+  sids=re.findall('data-l="s'+str(seq)+'([^\"]+)"',section);expectedids={s['id'] for s in sp['spans'] if side=='tib' or s['eng'] is not None}|({'S'} if True else set());assert expectedids<=set(sids)
+ writej(D/'actual-ranges.json',{'ranges_convention':'0-based half-open Python character offsets in exact source fields','canonical_resolver':str(W/'tools/gen_alignment_page.py'),'canonical_sha256':h((W/'tools/gen_alignment_page.py').read_bytes()),'source_id':row['id'],'mappings':actual})
+ counts={'spans':len(sp['spans']),'nulls':sum(s['eng'] is None for s in sp['spans']),'d5':sum(s['d']==5 for s in sp['spans']),'d7':sum(s['d']==7 for s in sp['spans']),'d3':sum(s['d']==3 for s in sp['spans']),'d6':sum(s['d']==6 for s in sp['spans']),'errata':len(json.loads((D/'errata.json').read_text()))}
+ writej(D/'verification.json',{'status':'mechanical proof only; all alignments PROVISIONAL','exact_spec_matches_native_input':True,'exact_body_matches_native_stdout':True,'native_exit':0,'native_stderr_bytes':0,'both_plaintext_columns_equal_exact_spine_fields':True,'all_intended_flat_english_ranges_equal_actual_canonical_ranges':True,'source_ids_emitted_without_missing_spans':True,'counts':counts,'declared_tibetan_occurrence_metadata_discrepancies':checks,'spec_sha256':h((D/'spec.json').read_bytes()),'body_bytes':len(bb),'body_sha256':h(bb)})
+ print(seq,counts,'metadata discrepancies',checks)
+ for a in actual:print(a['id'],a['tibetan_range'],a['tibetan'],'=>',a['english_range'],a['english'])

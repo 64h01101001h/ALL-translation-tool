@@ -1,0 +1,130 @@
+from pathlib import Path
+import json,subprocess,os,hashlib,datetime,re
+R=Path.cwd();W=R/'campaign-worktree';E=R/'campaign-artifacts/C05-292-294/english';A=R/'campaign-artifacts'
+rows={x['seq']:x for x in json.loads((E/'evidence/source-context-original-rows.json').read_text())['rows']}
+def build(seq,title,items,note):
+ spans=[];positions={};occ=[]
+ for i,(d,tib,eng,which,why) in enumerate(items,1):
+  s={'id':'w'+str(i),'d':d,'tib':tib,'eng':eng}
+  if eng is None:s.update(cls='grammar',nul=why)
+  spans.append(s)
+  if eng is not None and d!=7:
+   hits=[m.start() for m in re.finditer(re.escape(eng),rows[seq]['english'])];at=hits[which-1];positions[s['id']]=at;occ.append({'id':s['id'],'english':eng,'all_literal_starts':hits,'chosen_occurrence':which,'chosen_start':at,'reason':why})
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':sorted(positions,key=positions.get),'note':note}]}
+ dest=E/str(seq);dest.mkdir(exist_ok=True)
+ (dest/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(dest/'errata.json').write_text('[]\n');(dest/'planned-occurrences.json').write_text(json.dumps(occ,indent=2)+'\n')
+ return spec
+# d, Tibetan, verbatim English, intended literal occurrence (one based), rationale.
+build(292,'interpretive sutras and doors of perception',[
+ (3,'de ltar ma yin na','If this were not the case',1,'Whole conditional recast; no atom assigned to the supplied case frame.'),
+ (5,'gzugs','form',1,'First doorway argument.'),
+ (5,'la sogs pa','other such',1,'Closing generalization only; supplied doorways belongs to skye mched.'),
+ (5,'skye mched','doorways through which perceptions grow',1,'Full established HGM glossary compound.'),
+ (6,'rnams',None,0,'Plural contribution fused into English doorways; no separate exponent.'),
+ (5,'yod','exist',2,'Positive yod after state that they; first exist belongs to omitted negative existential med.'),
+ (5,'ston pa','state',1,'Verb state, not curated homographic Teacher; all glossary senses inspected.'),
+ (5,'mdo','sutras',1,'First source mdo.'),
+ (5,'drang don','do not mean what they say',1,'Established figurative/interpretive compound; exact glossary attestation.'),
+ (5,'dgongs pa can','have to interpret',1,'Exact HGM glossary locution; interpretive obligation is part of this rendering.'),
+ (5,'mdo','sutras',2,'Second Tibetan mdo; third English sutras expands the same classification and stays unwrapped.'),
+ (6,'phyir','Because',1,'Reason particle rendered at beginning of explanatory sentence.'),
+ (3,'der thal','this too is certainly the case',1,'Consequence confirmation; supplied And excluded.'),
+ (5,'nyi shu pa','Twenty Verses',1,'Named text; title retained whole.'),
+ (5,"rang 'grel",'autocommentary',1,'Established title-role compound.'),
+ (3,'de bzhin du','In the same way',1,'Complete comparative phrase.'),
+ (5,"bcom ldan 'das",'victorious Buddha',1,'Standing epithet kept whole without speculative morphemes.'),
+ (5,'gzugs','form',2,'Second occurrence inside quoted autocommentary.'),
+ (5,'la sogs pa','other such',2,'Closing generalization inside quotation.'),
+ (5,'skye mched','doors of perception',1,'Same HGM compound rendered differently inside quotation.'),
+ (5,'yod','exist',3,'Positive existential within quoted statement.'),
+ (5,'gsungs pa','says',1,'Quoted Buddha statement; final gsungs belongs to citation frame.'),
+ (3,"de ston pas 'dul ba'i skye bo",'disciples who might require such explanations',1,'Whole recipient clause: people trained by this teaching, recast as disciples requiring explanations.'),
+ (3,'ched du','for the benefit of',1,'Purpose phrase kept as grammatical phrase.'),
+ (5,"bka'",'word',1,'Buddha word, excluding supplied His.'),
+ (6,'ni',None,0,'Topic marker; no separately rendered English word.'),
+ (5,'dgongs pa can','must be interpreted to establish their real meaning',1,'Complete attested HGM interpretive locution; no internal token claims.'),
+ (3,'zhes gsungs pa','states that',1,'Closing citation marker rendered before the quotation.')
+],"PROVISIONAL machine alignment by Codex (English-first independent proposal); GMR English remains verbatim and nothing is promoted to hgm_gloss. The opening conditional and the recipient clause are retained as phrases. skye mched uses two attested renderings; drang don and dgongs pa can remain established interpretive compounds. The first dgongs pa can owns only have to interpret; to understand their true meaning remains an explanatory continuation. The third English sutras and the final figurative restatement are expansions, not extra Tibetan occurrences. med is omitted because its negative existential is distributed across do not even exist at all; it is not marked absent. rnams is null only for plural grammar fused into doorways, and ni has no separate exponent. Citation and recipient material cross in English, as recorded in eng_order. Mechanical generation proves fidelity, not semantic approval.")
+build(293,'the same interpretation applies',[
+ (3,'byas pa la','In response to this',1,'Whole response connective.'),
+ (3,'kho na re','someone might claim',1,'Whole debate speaker introduction.'),
+ (5,'skyon med','no problem',1,'Established no-problem compound; existential frame excluded.'),
+ (7,'skyon','problem',1,'Unique lexical member of skyon med.'),
+ (7,'med','no',1,'Unique negative member of skyon med.'),
+ (5,'phyi rol don','outer objects',1,'Outer-object compound.'),
+ (7,'phyi rol','outer',1,'Strictly tighter compound member.'),
+ (7,'don','objects',1,'Object member, distinct from later meaning/point senses.'),
+ (6,'du','as',2,'Outer objects predicative as; earlier as precedes actually existing.'),
+ (5,'grub pa','existing',1,'Positive establishment/existence in object predicate.'),
+ (5,'gzugs','form',1,'Form door of perception.'),
+ (5,'sogs','similar',1,'Generalization; no supplied doors noun captured.'),
+ (5,'skye mched','doors of perception',1,'Established compound.'),
+ (5,'ston pa','explain',1,'Teaching verb sense.'),
+ (5,'mdo','sutras',1,'Sutras under interpretation.'),
+ (5,'drang don','figuratively',1,'Exact HGM figurative-register equivalent.'),
+ (5,'dgongs pa can','must be interpreted to establish their true meaning',1,'Complete established HGM locution.'),
+ (5,'don','point',1,'First independent don after interpretive compound; introductory point of statement.'),
+ (5,'lung','statement',2,'Earlier statement: anchored after original; first statement belongs to introductory expansion.'),
+ (5,'snga ma','original',1,'Earlier/original statement.'),
+ (5,'don','meaning',2,'Independent don following snga ma: meaning of original statement; first meaning is inside interpretive compound.'),
+ (5,'mtshungs','same',1,'Comparison predicate.'),
+ (5,'phyi rol don','outer object',2,'Second compound; literal outer object also prefixes plural outer objects, hence occurrence2.'),
+ (7,'phyi rol','outer',1,'Strictly tighter within second parent.'),
+ (7,'don','object',1,'Strictly tighter within singular parent.'),
+ (6,'du','as',3,'Final outer-object predicate.'),
+ (5,'grub pa','exists',1,'Positive exists inside relative clause.'),
+ (5,'rnag khrag','pus and blood',1,'Pair compound.'),
+ (7,'rnag','pus',1,'Strictly tighter member.'),
+ (7,'khrag','blood',1,'Strictly tighter member.'),
+ (6,'gi','of',3,'Drop of pus: after earlier point of and meaning of.'),
+ (5,'thigs pa','drop',1,'Singular drop.'),
+ (6,'yang','even',1,'Scalar particle in negative indefinite phrase.'),
+ (5,'med','not exist',1,'Negative existential, excluding supplied auxiliary does.')
+],"PROVISIONAL machine alignment by Codex (English-first independent proposal); GMR English remains verbatim and hgm_gloss is unchanged. Interpretation is retained at the established compound level, including the full dgongs pa can locution. yod is omitted because existence is distributed through the existing-as-outer-objects construction already represented by grub pa; this is not an absence claim. The three independent don occurrences mean point, meaning, and a final recast saying-frame; only the first two have separate matches here. skyon med, phyi rol don, and rnag khrag carry strictly tighter members. eng_order anchors the original statement after original and distinguishes plural outer objects from singular outer object. Supplied auxiliaries and connective expansions remain unwrapped. Mechanical generation proves fidelity, not semantic approval.")
+build(294,'visual consciousness and craving spirits',[
+ (6,'yang','Yet again',1,'Repeated-objection connective.'),
+ (5,'yi dvags','craving spirits',1,'Initial example subject.'),
+ (6,'kyis',None,0,'Agent case in active English looks; no separate case word.'),
+ (5,'chu klung','river of water',1,'Established river compound in expansive English rendering.'),
+ (7,'chu','water',1,'Water member.'),
+ (7,'klung','river',1,'River member.'),
+ (6,'la','at',3,'First looks at; literal at also occurs inside that, requiring boundary-aware resolution.'),
+ (5,'bltas pa','looks',1,'First river example.'),
+ (5,'chu klung','riverbed',1,'Second river compound, English describes dry riverbed.'),
+ (5,'bskams pa','dry',1,'Dried-up predicate.'),
+ (3,'tshad mar song ba','genuinely so',1,'Validity-result construction as whole phrase.'),
+ (5,'mig shes','visual consciousness',1,'First two Tibetan mig shes are jointly rendered by visual consciousness of both; bank aggregate once at first occurrence.'),
+ (6,'dang','Or',1,'Coordination recast as alternative example.'),
+ (5,"'bras bu can",'loaded with fruit',1,'Fruit-bearing compound; possession can contributes with.'),
+ (7,"'bras bu",'fruit',1,'Fruit member.'),
+ (7,'can','with',1,'Possession member, excluding loaded from separate member claim.'),
+ (5,'ljon pa','tree',1,'Tree.'),
+ (6,'la','at',6,'Second looks at; native boundary resolution validates intended whole word.'),
+ (5,'bltas pa','looks',2,'Second tree example.'),
+ (3,'tshad mar song ba','genuinely so',2,'Second validity-result construction.'),
+ (5,'tshad ma','valid perception',1,'First explicit noun predicate.'),
+ (5,"'gro ba",'beings',2,'Three different beings after remembered glass example, not prior aggregate beings.'),
+ (5,'gsum','three',1,'Three beings.'),
+ (6,'gyis',None,0,'Agent case in active English looking; no separate case word.'),
+ (5,'brlan','wet',1,'Wet substance.'),
+ (6,'zhing','and',3,'Wet and flowing; first two and precede sees in first example and blood in later phrase? native proof checks boundary.'),
+ (5,'gsher ba','flowing',1,'Flowing substance.'),
+ (5,'phor pa','glass',1,'Vessel.'),
+ (5,'gang','full',1,'Fullness predicate.'),
+ (6,'la','at',7,'Looking at a glass.'),
+ (5,'bltas pa','looking',1,'Remembered three-being example.'),
+ (5,'rnag khrag','pus and blood',1,'Single Tibetan pair assigned once, at first English copy; second English copy expands actual identity.'),
+ (7,'rnag','pus',1,'Pus member.'),
+ (7,'khrag','blood',1,'Blood member.'),
+ (5,'dngos gnas pa','actual',1,'Actuality applies to repeated English pus and blood; source pair remains banked once.'),
+ (3,'tshad mar song ba','genuine',3,'Third validity-result predicate: genuine after spirit, not genuinely so in earlier examples.'),
+ (5,'yi dvags','craving spirit',2,'Second source spirit; first literal singular prefix lies inside craving spirits.'),
+ (5,'mig shes','visual consciousness',2,'Final spirit visual consciousness.'),
+ (5,'tshad ma','valid perception',2,'Final validity noun.')
+],"PROVISIONAL machine alignment by Codex (English-first independent proposal); GMR English remains verbatim and hgm_gloss is unchanged. The first two mig shes are compressed into visual consciousness of both; that aggregate is banked once at the first Tibetan occurrence, while the second is omitted with a shared-rendering reason. tshad mar song ba remains a whole validity-result phrase, separate from the two lexical tshad ma predicates. 'bras bu med pa is omitted: nothing but bare limbs recasts fruitlessness and supplies limbs, so no false fruit-to-limbs atom or absence null is made. The single rnag khrag is banked at the first of the two English pus and blood copies; the second copy elaborates actual identity. kyis/gyis are null only for active-voice agent case with no separate exponent. The tree compound 'bras bu can retains fruit and possession members. Mechanical generation proves fidelity, not semantic approval.")
+for seq in [292,293,294]:
+ d=E/str(seq);attempt=d/'attempts/01';attempt.mkdir(parents=True,exist_ok=True);stdin=(d/'spec.json').read_bytes();(attempt/'stdin.json').write_bytes(stdin)
+ cmd=['python3',str(A/'run_generator_readonly.py')];env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1');p=subprocess.run(cmd,input=stdin,capture_output=True,cwd=W,env=env)
+ (attempt/'stdout.html').write_bytes(p.stdout);(attempt/'stderr.txt').write_bytes(p.stderr);(attempt/'exit.txt').write_text(str(p.returncode)+'\n');(attempt/'command.json').write_text(json.dumps({'argv':cmd,'cwd':str(W),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':p.returncode},indent=2)+'\n')
+ if not p.returncode:(d/'body.html').write_bytes(p.stdout)
+ print(seq,'EXIT='+str(p.returncode),'body_bytes='+str(len(p.stdout)),p.stderr.decode())

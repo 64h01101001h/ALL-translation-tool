@@ -1,0 +1,60 @@
+from pathlib import Path
+import json,sqlite3,gzip,hashlib,subprocess,os
+R=Path.cwd();W=R/'campaign-worktree';B=R/'campaign-artifacts/C05-292-294';E=B/'english';O=E/'evidence';O.mkdir(exist_ok=True)
+def save(name,obj): (O/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+b=json.loads((B/'proposal-baseline.json').read_text());checks=[]
+for label,p in b['source_pins'].items():
+ q=Path(p['path']);raw=q.read_bytes();h=hashlib.sha256(raw).hexdigest();assert h==p['sha256'];checks.append(dict(label=label,**p,verified_sha256=h))
+for label in ['tools/gen_alignment_page.py']:
+ p=b['governing_git_pins'][label];h=hashlib.sha256((W/label).read_bytes()).hexdigest();assert h==p['sha256'];checks.append(dict(label=label,**p,verified_sha256=h))
+save('initial-hashes.json',checks)
+refs=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+save('access-checks.json',[{'path':str(Path.home()/x),'readable':os.access(Path.home()/x,os.R_OK)} for x in refs])
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro');c.row_factory=sqlite3.Row
+q='select * from corpus_segments where course=? and seq between ? and ? order by seq'; params=['C05',282,300]; rows=[dict(x) for x in c.execute(q,params)]
+save('source-context-original-rows.json',{'query':q,'parameters':params,'count':len(rows),'rows':rows})
+checks=[]
+for fname in ['source.json','context.json']:
+ snap=json.loads((B/fname).read_text());snap=snap if isinstance(snap,list) else snap.get('rows',snap.get('segments'))
+ for row in snap:
+  orig=dict(c.execute('select * from corpus_segments where course=? and seq=?',(row['course'],row['seq'])).fetchone())
+  eq={k:orig[k]==row[k] for k in ['id','course','seq','acip','wylie','english']};assert all(eq.values());checks.append({'snapshot':fname,'course':row['course'],'seq':row['seq'],'equal_fields':eq})
+save('snapshot-verification.json',checks)
+terms=['de ltar','ma yin','gzugs','la sogs pa','skye mched','rnams','med','yod','ston pa','mdo','drang don','dgongs pa can','nyi shu pa',"rang 'grel",'bcom ldan \'das',"'dul ba",'skye bo','ched du','bka\'','kho na re','skyon med','phyi rol don','grub pa','don','lung','snga ma','mtshungs','rnag khrag','rnag','khrag','thigs pa',"'ga' yang",'yang','kha cig','yi dvags','chu klung','bltas pa',"de'i tshe",'bskams pa','tshad mar song ba','tshad ma','mig shes',"'bras bu can","'bras bu",'ljon pa',"'gro ba",'gsum','brlan','gsher ba','phor pa','gang','dngos gnas pa']
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes())); evidence=[]
+for term in terms:
+ sql='select * from entries where wylie=?'; found=[dict(x) for x in c.execute(sql,(term,))]
+ archives={key:[x for x in master[key] if x.get('wylie')==term or term in x.get('wylie_variants',[])] for key in ['unified_entries','curated_entries','glossary_entries']}
+ evidence.append({'term':term,'query':sql,'parameters':[term],'count':len(found),'spine_rows':found,'archive_records':archives})
+save('lexical-full.json',evidence)
+queries=[('english','doorways through which perceptions grow'),('english','doors of perception'),('english','only spoken figuratively'),('wylie','drang don dgongs pa can'),('english','autocommentary to the Twenty Verses'),('english','bare limbs'),('english','dry riverbed'),('wylie','tshad mar song'),('wylie','chu klung bskams'),('wylie','dngos gnas pa'),('english','loaded with fruit')]
+qe=[]
+for field,term in queries:
+ sql=f'select * from corpus_segments where {field} like ? order by course,seq';params=['%'+term+'%'];rr=[dict(x) for x in c.execute(sql,params)];qe.append({'query':sql,'parameters':params,'count':len(rr),'rows':rr})
+for seq in [292,293,294]:
+ row=next(x for x in rows if x['seq']==seq)
+ for field in ['acip','wylie','english']:
+  sql=f'select * from corpus_segments where {field}=? order by course,seq';params=[row[field]];rr=[dict(x) for x in c.execute(sql,params)];qe.append({'source_seq':seq,'query':sql,'parameters':params,'count':len(rr),'rows':rr})
+save('parallel-queries-full.json',qe)
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));counts={};cr=[]
+for i,r in enumerate(corpus):
+ counts[r['course']]=counts.get(r['course'],0)+1
+ s=counts[r['course']]
+ if (r['course']=='C05' and 282<=s<=300) or any(r['acip']==x['acip'] for x in rows if x['seq'] in [292,293,294]):
+  cr.append({'archive_index':i,'derived_course_seq':s,'record':r})
+save('raw-corpus-original-records.json',cr)
+physical=Path(b['source_pins']['physical']['path']);raw=physical.read_bytes();(O/'C05ReadingASCII.txt').write_bytes(raw)
+text=raw.decode('utf-8');lines=text.splitlines(); hits=[]
+for needle in ['DE LTAR MA YIN NA GZUGS','If this were not the case','BYAS PA LA KHO NA RE','In response to this someone might claim','YANG KHA CIG, YI DVAGS','Yet again, another argument might be made']:
+ found=[i for i,l in enumerate(lines) if needle.lower() in l.lower()]
+ hits.append({'needle':needle,'matches':[{'line_1based':i+1,'start_line':max(0,i-8)+1,'end_line':min(len(lines),i+75),'lines':lines[max(0,i-8):i+75]} for i in found]})
+save('physical-evidence-windows.json',hits)
+for rel in ['DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/NEVER_BANK_A_FALSEHOOD.md']:
+ raw=subprocess.check_output(['git','show',b['commit']+':'+rel],cwd=W);dest=E/'governing'/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
+for rel in ['Handoff/HANDOFF.md','Handoff/README.md']:
+ p=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP'/rel;(O/p.name).write_bytes(p.read_bytes())
+print('Collected original evidence. Lexical records:',len(evidence),'parallel queries:',len(qe),'raw corpus records:',len(cr))
+for ev in evidence:
+ print(ev['term'],[(r['hgm_gloss'],r['tier']) for r in ev['spine_rows']], 'glossary=',[r.get('hgm_glosses') for r in ev['archive_records']['glossary_entries']])
+print('PARALLELS',[(x.get('source_seq'),x['parameters'][0][:60],x['count']) for x in qe])
+print('PHYSICAL',[(x['needle'],[r['line_1based'] for r in x['matches']]) for x in hits])

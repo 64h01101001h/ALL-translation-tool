@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-292-294/reconciled/verify_inputs.py", line 51, in <module>
+    master=json.loads(gzip.decompress(Path(base['source_pins']['master']['path']).read_bytes())); entries=master['entries'] if isinstance(master,dict) else master
+                                                                                                          ~~~~~~^^^^^^^^^^^
+KeyError: 'entries'

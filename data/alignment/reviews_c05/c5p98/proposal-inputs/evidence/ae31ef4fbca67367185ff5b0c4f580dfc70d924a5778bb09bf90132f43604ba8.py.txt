@@ -1,0 +1,51 @@
+import pathlib,json,sqlite3,gzip,hashlib,os,re
+R=pathlib.Path(__file__).resolve().parents[3];O=pathlib.Path(__file__).resolve().parent;W=R/'campaign-worktree';E=O/'evidence';p=json.loads((E/'proposal-baseline.json').read_text())
+def save(n,x): (E/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro');db.row_factory=sqlite3.Row
+ctx=json.loads((E/'context.json').read_text()); rows=[]
+for s in ctx:
+ a=dict(db.execute('select * from corpus_segments where id=?',(s['id'],)).fetchone());assert all(a[k]==v for k,v in s.items()); rows.append(a)
+save('original-spine-context-full.json',rows)
+terms=['de ltar','ma yin','gzugs','la sogs pa','skye mched','med','thal','yod','ston pa','ston','mdo','drang don','dgongs pa can','nyi shu pa',"rang 'grel",'de bzhin du',"bcom ldan 'das",'gsungs pa',"'dul ba",'skye bo','ched du',"bka'",'byas pa','kho','na re','skyon','med','phyi rol don','phyi rol','don','grub pa','gzugs','sogs','zer','lung','snga ma','mtshungs','rnag khrag','rnag','khrag','thigs pa',"'ga'",'yang','kha cig','yi dvags','chu klung','chu','klung','bltas pa','de','tshe','bskams pa','bskams','tshad ma','tshad mar song ba',"mig shes",'mig','shes',"'bras bu can","'bras bu",'ljon pa',"'gro ba",'gsum','brlan','gsher ba','phor pa','gang','dngos gnas pa','dngos','gnas pa','phyir','ste','ni','zhes','las','kyis','gyi','la','dang']
+terms=list(dict.fromkeys(terms)); ents=[]
+for term in terms:
+ q="select distinct e.* from entries e left join entry_variants v on v.entry_id=e.id where e.wylie=? or v.wylie=? order by e.id"
+ rr=[dict(x) for x in db.execute(q,(term,term))];ents.append({'term':term,'sql':q,'parameters':[term,term],'count':len(rr),'full_rows':rr})
+save('lexicon-spine-full.json',ents)
+with gzip.open(p['source_pins']['master']['path'],'rt') as f:master=json.load(f)
+master_results={}
+for group in ['unified_entries','curated_entries','glossary_entries']:
+ result=[]
+ for i,e in enumerate(master[group]):
+  matched=[t for t in terms if e.get('wylie')==t or t in e.get('wylie_variants',[])]
+  if matched:result.append({'zero_based_archive_index':i,'matched_terms':matched,'full_entry':e})
+ master_results[group]=result
+save('lexicon-master-full.json',{'query':'exact wylie or exact wylie_variants membership; no gloss truncation','terms':terms,'results':master_results})
+queries=[]
+for s in json.loads((E/'source.json').read_text()):
+ for field in ['acip','wylie','english']:
+  q=f'select * from corpus_segments where {field}=? order by course,seq';par=[s[field]];rr=[dict(x) for x in db.execute(q,par)];queries.append({'label':f'{s["seq"]} exact {field}','sql':q,'parameters':par,'count':len(rr),'full_rows':rr})
+for field,piece in [('wylie','drang don dgongs pa can'),('wylie','tshad mar song'),('english','dry riverbed'),('english','bare limbs'),('english','only spoken figuratively'),('wylie','nyi shu pa'),('wylie','bskams')]:
+ q=f'select * from corpus_segments where {field} like ? order by course,seq';par=['%'+piece+'%'];rr=[dict(x) for x in db.execute(q,par)];queries.append({'label':f'{field} contains {piece}','sql':q,'parameters':par,'count':len(rr),'full_rows':rr})
+save('corpus-queries-full.json',queries)
+with gzip.open(p['source_pins']['corpus']['path'],'rt') as f:corp=json.load(f)
+archive=[]
+for i,e in enumerate(corp):
+ if any(e.get('course')==s['course'] and all(e.get(k)==s[k] for k in ['acip','wylie','english']) for s in rows):archive.append({'zero_based_archive_index':i,'full_row':e})
+save('corpus-archive-original-context.json',{'query':'course, acip, wylie, english exact equality against original context rows','count':len(archive),'rows':archive})
+physical=pathlib.Path(p['source_pins']['physical']['path']);data=physical.read_bytes();(E/'C05ReadingASCII.txt').write_bytes(data);lines=data.decode('utf-8-sig').splitlines();hits=[]
+for term in ['DE LTAR MA YIN NA','BYAS PA LA KHO NA RE','YANG KHA CIG, YI DVAGS','If this were not the case','In response to this someone','Yet again, another argument','bare limbs']:
+ at=[i for i,line in enumerate(lines) if term in line]; blocks=[]
+ for i in at:
+  lo=max(0,i-6);hi=min(len(lines),i+30);blocks.append({'line_start_1based':lo+1,'line_end_1based':hi,'lines':lines[lo:hi]})
+ hits.append({'literal_query':term,'count':len(at),'line_numbers_1based':[i+1 for i in at],'blocks':blocks})
+save('physical-excerpts.json',{'original_path':str(physical),'sha256':hashlib.sha256(data).hexdigest(),'queries':hits})
+roots=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+save('reference-access.json',[{'path':str(pathlib.Path.home()/x),'readable':os.access(pathlib.Path.home()/x,os.R_OK)} for x in roots])
+(E/'run_generator_readonly.py').write_bytes((R/'campaign-artifacts/run_generator_readonly.py').read_bytes())
+print('LEXICON')
+for x in ents:
+ print(x['term'],[(r['id'],r['wylie'],r['hgm_gloss'],r['tier']) for r in x['full_rows']])
+print('CORPUS QUERIES',[(x['label'],x['count']) for x in queries]);print('PHYSICAL',[(x['literal_query'],x['line_numbers_1based']) for x in hits]);print('CONTEXT FOLLOWING')
+for x in rows:
+ if x['seq']>294:print(x['seq'],x['wylie'],x['english'])

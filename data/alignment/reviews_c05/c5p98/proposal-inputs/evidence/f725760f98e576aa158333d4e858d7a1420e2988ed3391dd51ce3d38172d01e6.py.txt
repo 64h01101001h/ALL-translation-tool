@@ -1,0 +1,32 @@
+from pathlib import Path
+import json,hashlib,datetime,shutil,sqlite3
+R=Path.cwd();W=R/'campaign-worktree';B=R/'campaign-artifacts/C05-292-294';E=B/'english';O=E/'evidence'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def write(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+inputs=E/'inputs';inputs.mkdir(exist_ok=True)
+for name in ['english-brief.md','source.json','context.json','proposal-baseline.json']:shutil.copyfile(B/name,inputs/name)
+shutil.copyfile(R/'campaign-artifacts/proposal-protocol.md',inputs/'proposal-protocol.md')
+shutil.copyfile(R/'campaign-artifacts/run_generator_readonly.py',inputs/'run_generator_readonly.py')
+pins=json.loads((E/'governing-proof.json').read_text())
+for rel in ['DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/NEVER_BANK_A_FALSEHOOD.md']:
+ p=E/'governing'/rel;pins.append({'original_git_commit':'129e86afae8431aacfb1ee1cee65d8635dd265b8','repository_relative_path':rel,'bytes':p.stat().st_size,'sha256':sha(p),'saved_path':str(p)})
+write(E/'governing-proof.json',pins)
+write(O/'external-history-source-paths.json',[{'original_path':str(Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff'/name),'saved_path':str(O/name),'bytes':(O/name).stat().st_size,'sha256':sha(O/name)} for name in ['HANDOFF.md','README.md']])
+rows={r['seq']:r for r in json.loads((O/'source-context-original-rows.json').read_text())['rows']};raw=json.loads((O/'raw-corpus-original-records.json').read_text());lines=(O/'C05ReadingASCII.txt').read_bytes().decode('latin-1').splitlines();proof=[]
+for seq in [292,293,294]:
+ r=rows[seq];archive=next(x for x in raw if x['record']['course']=='C05' and x['derived_course_seq']==seq);fields={k:archive['record'][k]==r[k] for k in ['acip','wylie','english']};assert all(fields.values())
+ ids=[i for i,line in enumerate(lines) if line.strip()==r['acip']];assert len(ids)==1;start=ids[0];i=start+1;eng=[]
+ while i<len(lines) and lines[i].strip():eng.append(lines[i]);i+=1
+ folded=' '.join(line.strip() for line in eng);assert folded==r['english'],seq
+ proof.append({'seq':seq,'archive_index':archive['archive_index'],'raw_archive_equal_to_sql_fields':fields,'physical_source_path':json.loads((B/'proposal-baseline.json').read_text())['source_pins']['physical']['path'],'physical_decode':'latin-1 is used as a lossless byte-to-codepoint view; cited segment bytes are ASCII','physical_acip_line':start+1,'physical_english_lines':[start+2,i],'physical_acip':lines[start],'physical_english_original_lines':eng,'physical_english_whitespace_folded':folded,'physical_english_equals_spine_after_line_join':True})
+write(O/'physical-and-raw-selected-verification.json',proof)
+# Independent final proof boundary includes every file currently beneath this angle, including all superseded failures.
+manifest=[]
+for p in sorted(E.rglob('*')):
+ if p.is_file() and p.name not in ['freeze.json','freeze.sha256']:
+  manifest.append({'path':str(p.relative_to(E)),'bytes':p.stat().st_size,'sha256':sha(p)})
+f={'status':'FROZEN independent English-first original proposal; no semantic or landing approval','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'Codex','scope':['C05:292','C05:293','C05:294'],'governing_commit':'129e86afae8431aacfb1ee1cee65d8635dd265b8','landing_baseline':False,'files':manifest,'file_count':len(manifest),'total_bytes':sum(x['bytes'] for x in manifest),'manifest_exclusions':['freeze.json (self)','freeze.sha256 (hash of manifest)'],'native_generator_results':[{'seq':seq,**{k:v for k,v in json.loads((E/str(seq)/'proof.json').read_text()).items() if k in ['canonical_exit','canonical_stderr_bytes','body_bytes','body_sha256','spec_sha256','counts']}} for seq in [292,293,294]]}
+write(E/'freeze.json',f);(E/'freeze.sha256').write_text(sha(E/'freeze.json')+'  freeze.json\n')
+for m in manifest:
+ p=E/m['path'];assert p.stat().st_size==m['bytes'] and sha(p)==m['sha256']
+print('FROZEN',len(manifest),'files',f['total_bytes'],'bytes');print((E/'freeze.sha256').read_text());print(json.dumps(f['native_generator_results'],indent=2))

@@ -1,0 +1,20 @@
+from pathlib import Path
+import json,gzip,sqlite3,hashlib
+R=Path.cwd();W=R/'campaign-worktree';E=R/'campaign-artifacts/C05-292-294/english';O=E/'evidence'
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro');c.row_factory=sqlite3.Row
+known={x['term'] for x in json.loads((O/'lexical-full.json').read_text())}
+terms=sorted({s['tib'] for seq in [292,293,294] for s in json.loads((E/str(seq)/'spec.json').read_text())['segments'][0]['spans']}-known)
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));data=[]
+for term in terms:
+ sql='select * from entries where wylie=?';rr=[dict(x) for x in c.execute(sql,(term,))];ar={key:[x for x in master[key] if x.get('wylie')==term or term in x.get('wylie_variants',[])] for key in ['unified_entries','curated_entries','glossary_entries']};data.append({'term':term,'query':sql,'parameters':[term],'count':len(rr),'spine_rows':rr,'archive_records':ar})
+(O/'lexical-supplement-full.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+for x in data:
+ if x['term'] in ['can','chu','klung','skyon','sogs','phyi rol']:
+  print(x['term'],[r['hgm_gloss'] for r in x['spine_rows']],'GLOSSARY',[r.get('hgm_glosses') for r in x['archive_records']['glossary_entries']])
+reg=json.loads((E/'governing/docs/errata_register.json').read_text());filtered=[r for r in reg if any(k in json.dumps(r).lower() for k in ['e-071','e-107','heading','footnote','292','293','294','tshad','bskams','drang don'])];(O/'registered-classes-inspected.json').write_text(json.dumps(filtered,ensure_ascii=False,indent=2)+'\n');print('REGISTER',[(x.get('id'),x.get('kind'),x.get('found')) for x in filtered])
+# Preserve raw archive records for every result of the original query battery, not reconstructed SQL columns.
+keys={(r['course'],r['seq']) for q in json.loads((O/'parallel-queries-full.json').read_text()) for r in q['rows']};counts={};rr=[]
+for i,r in enumerate(json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()))):
+ counts[r['course']]=counts.get(r['course'],0)+1;s=counts[r['course']]
+ if (r['course'],s) in keys:rr.append({'archive_index':i,'derived_course_seq':s,'record':r})
+(O/'raw-corpus-query-records.json').write_text(json.dumps(rr,ensure_ascii=False,indent=2)+'\n');print('RAW_QUERY_RECORDS',len(rr))

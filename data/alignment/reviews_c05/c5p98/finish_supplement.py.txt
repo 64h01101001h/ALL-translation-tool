@@ -1,0 +1,24 @@
+from pathlib import Path
+import json,subprocess,hashlib,importlib.util,os
+S=Path(__file__).resolve().parent;B=S.parent;A=B.parent;W=A.parent/'campaign-worktree'
+def read(p):return json.loads(p.read_text())
+def save(n,o):(S/n).write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+base=read(B/'baseline.json');records=[]
+for rel,digest in base['sha256'].items():
+ exists=subprocess.run(['git','cat-file','-e',base['commit']+':'+rel],cwd=W,capture_output=True)
+ if exists.returncode==0:
+  raw=subprocess.check_output(['git','show',base['commit']+':'+rel],cwd=W);method='immutable Git object'
+ else:
+  assert rel in ['data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz','build/hgm_spine_v27_2.db'];raw=(W/rel).read_bytes();method='external immutable source bytes; not tracked in Git'
+ assert sha(raw)==digest;records.append(dict(path=rel,sha256=digest,method=method))
+save('acceptance-baseline-binding.json',dict(status='PASS',acceptance_baseline_commit=base['commit'],course_boundary=base['course_boundary'],source_origin_commit=read(B/'proposal-baseline.json')['commit'],governing_git_commit=base['commit'],baseline_hashes_verified=records,prior_check_failure='Initial supplement incorrectly assumed every baseline path was Git-tracked. It stopped on the untracked master after package, five-ground, disposition and source-fidelity checks passed. Only the baseline/storage checks resume here; no data or verdict was changed. Original script and native failure retained under history/supplement-attempt01.'))
+phys=Path(read(B/'proposal-baseline.json')['source_pins']['physical']['path']);c15=phys.with_name('C15ReadingASCII.txt')
+cs=importlib.util.spec_from_file_location('copy_once',A/'copy_evidence_once.py');cm=importlib.util.module_from_spec(cs);cs.loader.exec_module(cm);cm.preserve(S,S/'original-to-copy-manifest.json',[c15,A/'land_reviewed_page_v2.py',A/'prepare_semantic_package_v2.py'])
+access=[]
+paths=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+for relative in paths:
+ p=Path('/Users/adamderickandrade')/relative;assert p.is_dir() and os.access(p,os.R_OK);next(p.iterdir(),None);access.append(dict(path=str(p),directory_readable=True))
+save('reference-access-check.json',access)
+save('supplement-completion.json',dict(status='PASS',package_sections=len(read(S/'package-reading-proof.json')['sections']),five_ground_checks=len(read(S/'source-suspicion-independent-review.json')),original_dispositions=sum(r['count'] for r in read(S/'original-disposition-independent-check.json')),full_source_columns=len(read(S/'plain-source-fidelity.json')),acceptance_baseline=base['commit'],resumed_only_after_preserved_baseline_storage_assumption_failure=True))
+print(json.dumps(read(S/'supplement-completion.json'),indent=2))

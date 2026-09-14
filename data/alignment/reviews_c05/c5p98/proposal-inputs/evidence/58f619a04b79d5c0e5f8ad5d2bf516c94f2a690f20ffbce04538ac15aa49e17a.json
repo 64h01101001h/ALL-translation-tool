@@ -1,0 +1,855 @@
+{
+  "resolver": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+  "resolver_sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e",
+  "native_tibetan_ranges": {
+    "w1": [
+      0,
+      17
+    ],
+    "w2": [
+      18,
+      23
+    ],
+    "w3": [
+      24,
+      34
+    ],
+    "w4": [
+      37,
+      47
+    ],
+    "w5": [
+      48,
+      53
+    ],
+    "w6": [
+      71,
+      74
+    ],
+    "w7": [
+      79,
+      86
+    ],
+    "w8": [
+      89,
+      92
+    ],
+    "w9": [
+      93,
+      102
+    ],
+    "w10": [
+      103,
+      116
+    ],
+    "w11": [
+      121,
+      124
+    ],
+    "w12": [
+      134,
+      139
+    ],
+    "w13": [
+      141,
+      149
+    ],
+    "w14": [
+      151,
+      161
+    ],
+    "w15": [
+      164,
+      174
+    ],
+    "w16": [
+      180,
+      191
+    ],
+    "w17": [
+      192,
+      206
+    ],
+    "w18": [
+      211,
+      216
+    ],
+    "w19": [
+      217,
+      227
+    ],
+    "w20": [
+      230,
+      240
+    ],
+    "w21": [
+      241,
+      244
+    ],
+    "w22": [
+      249,
+      258
+    ],
+    "w23": [
+      264,
+      293
+    ],
+    "w24": [
+      296,
+      303
+    ],
+    "w25": [
+      308,
+      312
+    ],
+    "w26": [
+      316,
+      318
+    ],
+    "w27": [
+      319,
+      332
+    ],
+    "w28": [
+      339,
+      353
+    ]
+  },
+  "native_english_ranges": {
+    "w1": [
+      0,
+      25
+    ],
+    "w2": [
+      59,
+      63
+    ],
+    "w3": [
+      68,
+      78
+    ],
+    "w4": [
+      79,
+      118
+    ],
+    "w12": [
+      150,
+      157
+    ],
+    "w8": [
+      191,
+      197
+    ],
+    "w7": [
+      204,
+      209
+    ],
+    "w6": [
+      220,
+      225
+    ],
+    "w11": [
+      230,
+      236
+    ],
+    "w9": [
+      243,
+      268
+    ],
+    "w10": [
+      287,
+      304
+    ],
+    "w13": [
+      343,
+      373
+    ],
+    "w15": [
+      383,
+      397
+    ],
+    "w14": [
+      405,
+      418
+    ],
+    "w28": [
+      419,
+      430
+    ],
+    "w16": [
+      432,
+      447
+    ],
+    "w17": [
+      467,
+      484
+    ],
+    "w22": [
+      494,
+      498
+    ],
+    "w18": [
+      504,
+      508
+    ],
+    "w19": [
+      513,
+      523
+    ],
+    "w20": [
+      524,
+      543
+    ],
+    "w21": [
+      547,
+      552
+    ],
+    "w25": [
+      578,
+      582
+    ],
+    "w27": [
+      588,
+      639
+    ],
+    "w24": [
+      687,
+      705
+    ],
+    "w23": [
+      706,
+      751
+    ]
+  },
+  "planned_vs_native": [
+    {
+      "id": "w1",
+      "english": "If this were not the case",
+      "all_literal_starts": [
+        0
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 0,
+      "reason": "Whole conditional recast; no atom assigned to the supplied case frame.",
+      "native_start": 0,
+      "native_end": 25,
+      "native_exact_match": true
+    },
+    {
+      "id": "w2",
+      "english": "form",
+      "all_literal_starts": [
+        59,
+        504
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 59,
+      "reason": "First doorway argument.",
+      "native_start": 59,
+      "native_end": 63,
+      "native_exact_match": true
+    },
+    {
+      "id": "w3",
+      "english": "other such",
+      "all_literal_starts": [
+        68,
+        513
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 68,
+      "reason": "Closing generalization only; supplied doorways belongs to skye mched.",
+      "native_start": 68,
+      "native_end": 78,
+      "native_exact_match": true
+    },
+    {
+      "id": "w4",
+      "english": "doorways through which perceptions grow",
+      "all_literal_starts": [
+        79
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 79,
+      "reason": "Full established HGM glossary compound.",
+      "native_start": 79,
+      "native_end": 118,
+      "native_exact_match": true
+    },
+    {
+      "id": "w6",
+      "english": "exist",
+      "all_literal_starts": [
+        131,
+        220,
+        547
+      ],
+      "chosen_occurrence": 2,
+      "chosen_start": 220,
+      "reason": "Positive yod after state that they; first exist belongs to omitted negative existential med.",
+      "native_start": 220,
+      "native_end": 225,
+      "native_exact_match": true
+    },
+    {
+      "id": "w7",
+      "english": "state",
+      "all_literal_starts": [
+        204,
+        419,
+        449,
+        641
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 204,
+      "reason": "Verb state, not curated homographic Teacher; all glossary senses inspected.",
+      "native_start": 204,
+      "native_end": 209,
+      "native_exact_match": true
+    },
+    {
+      "id": "w8",
+      "english": "sutras",
+      "all_literal_starts": [
+        191,
+        230,
+        270
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 191,
+      "reason": "First source mdo.",
+      "native_start": 191,
+      "native_end": 197,
+      "native_exact_match": true
+    },
+    {
+      "id": "w9",
+      "english": "do not mean what they say",
+      "all_literal_starts": [
+        243
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 243,
+      "reason": "Established figurative/interpretive compound; exact glossary attestation.",
+      "native_start": 243,
+      "native_end": 268,
+      "native_exact_match": true
+    },
+    {
+      "id": "w10",
+      "english": "have to interpret",
+      "all_literal_starts": [
+        287
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 287,
+      "reason": "Exact HGM glossary locution; interpretive obligation is part of this rendering.",
+      "native_start": 287,
+      "native_end": 304,
+      "native_exact_match": true
+    },
+    {
+      "id": "w11",
+      "english": "sutras",
+      "all_literal_starts": [
+        191,
+        230,
+        270
+      ],
+      "chosen_occurrence": 2,
+      "chosen_start": 230,
+      "reason": "Second Tibetan mdo; third English sutras expands the same classification and stays unwrapped.",
+      "native_start": 230,
+      "native_end": 236,
+      "native_exact_match": true
+    },
+    {
+      "id": "w12",
+      "english": "Because",
+      "all_literal_starts": [
+        150
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 150,
+      "reason": "Reason particle rendered at beginning of explanatory sentence.",
+      "native_start": 150,
+      "native_end": 157,
+      "native_exact_match": true
+    },
+    {
+      "id": "w13",
+      "english": "this too is certainly the case",
+      "all_literal_starts": [
+        343
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 343,
+      "reason": "Consequence confirmation; supplied And excluded.",
+      "native_start": 343,
+      "native_end": 373,
+      "native_exact_match": true
+    },
+    {
+      "id": "w14",
+      "english": "Twenty Verses",
+      "all_literal_starts": [
+        405
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 405,
+      "reason": "Named text; title retained whole.",
+      "native_start": 405,
+      "native_end": 418,
+      "native_exact_match": true
+    },
+    {
+      "id": "w15",
+      "english": "autocommentary",
+      "all_literal_starts": [
+        383
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 383,
+      "reason": "Established title-role compound.",
+      "native_start": 383,
+      "native_end": 397,
+      "native_exact_match": true
+    },
+    {
+      "id": "w16",
+      "english": "In the same way",
+      "all_literal_starts": [
+        432
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 432,
+      "reason": "Complete comparative phrase.",
+      "native_start": 432,
+      "native_end": 447,
+      "native_exact_match": true
+    },
+    {
+      "id": "w17",
+      "english": "victorious Buddha",
+      "all_literal_starts": [
+        467
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 467,
+      "reason": "Standing epithet kept whole without speculative morphemes.",
+      "native_start": 467,
+      "native_end": 484,
+      "native_exact_match": true
+    },
+    {
+      "id": "w18",
+      "english": "form",
+      "all_literal_starts": [
+        59,
+        504
+      ],
+      "chosen_occurrence": 2,
+      "chosen_start": 504,
+      "reason": "Second occurrence inside quoted autocommentary.",
+      "native_start": 504,
+      "native_end": 508,
+      "native_exact_match": true
+    },
+    {
+      "id": "w19",
+      "english": "other such",
+      "all_literal_starts": [
+        68,
+        513
+      ],
+      "chosen_occurrence": 2,
+      "chosen_start": 513,
+      "reason": "Closing generalization inside quotation.",
+      "native_start": 513,
+      "native_end": 523,
+      "native_exact_match": true
+    },
+    {
+      "id": "w20",
+      "english": "doors of perception",
+      "all_literal_starts": [
+        524
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 524,
+      "reason": "Same HGM compound rendered differently inside quotation.",
+      "native_start": 524,
+      "native_end": 543,
+      "native_exact_match": true
+    },
+    {
+      "id": "w21",
+      "english": "exist",
+      "all_literal_starts": [
+        131,
+        220,
+        547
+      ],
+      "chosen_occurrence": 3,
+      "chosen_start": 547,
+      "reason": "Positive existential within quoted statement.",
+      "native_start": 547,
+      "native_end": 552,
+      "native_exact_match": true
+    },
+    {
+      "id": "w22",
+      "english": "says",
+      "all_literal_starts": [
+        494
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 494,
+      "reason": "Quoted Buddha statement; final gsungs belongs to citation frame.",
+      "native_start": 494,
+      "native_end": 498,
+      "native_exact_match": true
+    },
+    {
+      "id": "w23",
+      "english": "disciples who might require such explanations",
+      "all_literal_starts": [
+        706
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 706,
+      "reason": "Whole recipient clause: people trained by this teaching, recast as disciples requiring explanations.",
+      "native_start": 706,
+      "native_end": 751,
+      "native_exact_match": true
+    },
+    {
+      "id": "w24",
+      "english": "for the benefit of",
+      "all_literal_starts": [
+        687
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 687,
+      "reason": "Purpose phrase kept as grammatical phrase.",
+      "native_start": 687,
+      "native_end": 705,
+      "native_exact_match": true
+    },
+    {
+      "id": "w25",
+      "english": "word",
+      "all_literal_starts": [
+        578
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 578,
+      "reason": "Buddha word, excluding supplied His.",
+      "native_start": 578,
+      "native_end": 582,
+      "native_exact_match": true
+    },
+    {
+      "id": "w27",
+      "english": "must be interpreted to establish their real meaning",
+      "all_literal_starts": [
+        588
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 588,
+      "reason": "Complete attested HGM interpretive locution; no internal token claims.",
+      "native_start": 588,
+      "native_end": 639,
+      "native_exact_match": true
+    },
+    {
+      "id": "w28",
+      "english": "states that",
+      "all_literal_starts": [
+        419
+      ],
+      "chosen_occurrence": 1,
+      "chosen_start": 419,
+      "reason": "Closing citation marker rendered before the quotation.",
+      "native_start": 419,
+      "native_end": 430,
+      "native_exact_match": true
+    }
+  ],
+  "all_unwrapped_ranges": {
+    "tib": [
+      {
+        "start": 17,
+        "end": 18,
+        "text": " "
+      },
+      {
+        "start": 23,
+        "end": 24,
+        "text": " "
+      },
+      {
+        "start": 34,
+        "end": 37,
+        "text": "'i "
+      },
+      {
+        "start": 47,
+        "end": 48,
+        "text": " "
+      },
+      {
+        "start": 53,
+        "end": 71,
+        "text": " med par thal, de "
+      },
+      {
+        "start": 74,
+        "end": 79,
+        "text": " par "
+      },
+      {
+        "start": 86,
+        "end": 89,
+        "text": "'i "
+      },
+      {
+        "start": 92,
+        "end": 93,
+        "text": " "
+      },
+      {
+        "start": 102,
+        "end": 103,
+        "text": " "
+      },
+      {
+        "start": 116,
+        "end": 121,
+        "text": " gyi "
+      },
+      {
+        "start": 124,
+        "end": 134,
+        "text": " yin pa'i "
+      },
+      {
+        "start": 139,
+        "end": 141,
+        "text": ", "
+      },
+      {
+        "start": 149,
+        "end": 151,
+        "text": ", "
+      },
+      {
+        "start": 161,
+        "end": 164,
+        "text": "'i "
+      },
+      {
+        "start": 174,
+        "end": 180,
+        "text": " las, "
+      },
+      {
+        "start": 191,
+        "end": 192,
+        "text": " "
+      },
+      {
+        "start": 206,
+        "end": 211,
+        "text": " kyi "
+      },
+      {
+        "start": 216,
+        "end": 217,
+        "text": " "
+      },
+      {
+        "start": 227,
+        "end": 230,
+        "text": "'i "
+      },
+      {
+        "start": 240,
+        "end": 241,
+        "text": " "
+      },
+      {
+        "start": 244,
+        "end": 249,
+        "text": " par "
+      },
+      {
+        "start": 258,
+        "end": 264,
+        "text": " yang "
+      },
+      {
+        "start": 293,
+        "end": 296,
+        "text": "'i "
+      },
+      {
+        "start": 303,
+        "end": 308,
+        "text": " ste "
+      },
+      {
+        "start": 312,
+        "end": 316,
+        "text": " de "
+      },
+      {
+        "start": 318,
+        "end": 319,
+        "text": " "
+      },
+      {
+        "start": 332,
+        "end": 339,
+        "text": " no, , "
+      },
+      {
+        "start": 353,
+        "end": 361,
+        "text": "'i phyir"
+      }
+    ],
+    "eng": [
+      {
+        "start": 25,
+        "end": 59,
+        "text": ", then one would have to say that "
+      },
+      {
+        "start": 63,
+        "end": 68,
+        "text": " and "
+      },
+      {
+        "start": 78,
+        "end": 79,
+        "text": " "
+      },
+      {
+        "start": 118,
+        "end": 150,
+        "text": " do not even exist at all. Why? "
+      },
+      {
+        "start": 157,
+        "end": 191,
+        "text": " you would be saying that all the "
+      },
+      {
+        "start": 197,
+        "end": 204,
+        "text": " which "
+      },
+      {
+        "start": 209,
+        "end": 220,
+        "text": " that they "
+      },
+      {
+        "start": 225,
+        "end": 230,
+        "text": " are "
+      },
+      {
+        "start": 236,
+        "end": 243,
+        "text": " which "
+      },
+      {
+        "start": 268,
+        "end": 287,
+        "text": "; sutras which you "
+      },
+      {
+        "start": 304,
+        "end": 343,
+        "text": " to understand their true meaning. And "
+      },
+      {
+        "start": 373,
+        "end": 383,
+        "text": ", for the "
+      },
+      {
+        "start": 397,
+        "end": 405,
+        "text": " to the "
+      },
+      {
+        "start": 418,
+        "end": 419,
+        "text": " "
+      },
+      {
+        "start": 430,
+        "end": 432,
+        "text": ": "
+      },
+      {
+        "start": 447,
+        "end": 467,
+        "text": ", statements by the "
+      },
+      {
+        "start": 484,
+        "end": 494,
+        "text": " where He "
+      },
+      {
+        "start": 498,
+        "end": 504,
+        "text": " that "
+      },
+      {
+        "start": 508,
+        "end": 513,
+        "text": " and "
+      },
+      {
+        "start": 523,
+        "end": 524,
+        "text": " "
+      },
+      {
+        "start": 543,
+        "end": 547,
+        "text": " do "
+      },
+      {
+        "start": 552,
+        "end": 578,
+        "text": " would be examples of His "
+      },
+      {
+        "start": 582,
+        "end": 588,
+        "text": " that "
+      },
+      {
+        "start": 639,
+        "end": 687,
+        "text": "; statements that are only spoken figuratively, "
+      },
+      {
+        "start": 705,
+        "end": 706,
+        "text": " "
+      },
+      {
+        "start": 751,
+        "end": 752,
+        "text": "."
+      }
+    ]
+  }
+}

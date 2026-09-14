@@ -1,0 +1,14 @@
+fatal: path 'data/hgm_dictionary_v27_2.json.gz' exists on disk, but not in 'c107f1ecd9cfb68968245870ad81ba5d9a070721'
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-292-294/semantic-review/supplement_check.py.txt", line 64, in <module>
+    for rel,digest in base['sha256'].items():assert sha(subprocess.check_output(['git','show',base['commit']+':'+rel],cwd=W))==digest
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 473, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['git', 'show', 'c107f1ecd9cfb68968245870ad81ba5d9a070721:data/hgm_dictionary_v27_2.json.gz']' returned non-zero exit status 128.

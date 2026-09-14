@@ -1,0 +1,16 @@
+{
+  "observed": "Final canonical 293 generation exited 0; intended-position validator failed for final w21 don/meaning.",
+  "actual_canonical_range": [
+    302,
+    309
+  ],
+  "incorrect_intended_range": [
+    278,
+    285
+  ],
+  "cause": "Harness searched 30 characters backward even for unchanged English and selected the prior true meaning.",
+  "change": "Unchanged English retains exact original intended occurrence. Changed boundaries alone use expansion search.",
+  "spec_or_body_change": false,
+  "native_generation_evidence": "../../293/native-attempts/01/",
+  "scope": "This finding describes the terminal-observed validator failure; it is not a reconstructed native stderr file."
+}

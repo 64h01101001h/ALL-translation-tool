@@ -1,0 +1,16 @@
+import pathlib,json,subprocess,hashlib,datetime,os
+O=pathlib.Path(__file__).resolve().parent;R=O.parents[2];W=R/'campaign-worktree';E=O/'evidence';base=json.loads((E/'proposal-baseline.json').read_text())
+def h(b):return hashlib.sha256(b).hexdigest()
+def writej(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+for k in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ data=(W/k).read_bytes();v=base['governing_git_pins'][k];assert len(data)==v['bytes'] and h(data)==v['sha256']
+wrapper=R/'campaign-artifacts/run_generator_readonly.py';assert wrapper.read_bytes()==(E/'run_generator_readonly.py').read_bytes()
+for seq in [292,293,294]:
+ D=O/str(seq);attempts=D/'native-attempts';attempts.mkdir(exist_ok=True);n=1
+ while (attempts/f'{n:02d}').exists():n+=1
+ A=attempts/f'{n:02d}';A.mkdir();data=(D/'spec.json').read_bytes();(A/'input.json').write_bytes(data)
+ argv=['python3',str(wrapper)];start=datetime.datetime.now(datetime.timezone.utc).isoformat();res=subprocess.run(argv,input=data,capture_output=True,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'));end=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ (A/'stdout').write_bytes(res.stdout);(A/'stderr').write_bytes(res.stderr);(A/'exit').write_text(str(res.returncode)+'\n');writej(A/'command.json',{'argv':argv,'cwd':str(W),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'},'start_utc':start,'end_utc':end,'stdin_path':str(A/'input.json'),'stdin_bytes':len(data),'stdin_sha256':h(data),'canonical_path':str(W/'tools/gen_alignment_page.py'),'canonical_sha256':h((W/'tools/gen_alignment_page.py').read_bytes()),'wrapper_path':str(wrapper),'wrapper_sha256':h(wrapper.read_bytes()),'sqlite_access':'unchanged wrapper forces mode=ro','exit':res.returncode,'stdout_bytes':len(res.stdout),'stdout_sha256':h(res.stdout),'stderr_bytes':len(res.stderr),'stderr_sha256':h(res.stderr)})
+ print(seq,'attempt',n,'EXIT='+str(res.returncode),'body_bytes='+str(len(res.stdout)),'stderr='+res.stderr.decode())
+ if res.returncode==0 and not res.stderr:
+  (D/'body.html').write_bytes(res.stdout);writej(D/'native-final.json',{'attempt':f'native-attempts/{n:02d}','spec_sha256':h(data),'body_bytes':len(res.stdout),'body_sha256':h(res.stdout),'stderr_bytes':0,'exit':0})

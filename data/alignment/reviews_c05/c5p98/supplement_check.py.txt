@@ -1,0 +1,75 @@
+from pathlib import Path
+import json,sqlite3,hashlib,difflib,subprocess,importlib.util,re,sys,datetime,html
+S=Path(__file__).resolve().parent;B=S.parent;A=B.parent;W=A.parent/'campaign-worktree'
+def read(p):return json.loads(p.read_text())
+def save(n,o):p=S/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+package=(B/'semantic-input-review-package.txt').read_text();chunks=re.split(r'\n===== (.+?) =====\n',package);proof=[]
+for i in range(1,len(chunks),2):
+ name,body=chunks[i],chunks[i+1]
+ if name.startswith('COMPLETE '):
+  m=re.fullmatch(r'COMPLETE (tibetan|english) TO RECONCILED DIFF (\d+)',name);angle,seq=m.groups();old=B/angle/seq/'spec.json';new=B/'reconciled'/seq/'spec.json';expected=''.join(difflib.unified_diff(old.read_text().splitlines(True),new.read_text().splitlines(True),fromfile=str(old.relative_to(B)),tofile=str(new.relative_to(B)),n=10));assert body==expected
+  proof.append(dict(section=name,status='EXACT_COMPLETE_DIFF',bytes=len(body.encode()),sha256=sha(body.encode())))
+ elif name=='PACKAGE INPUT HASHES':
+  for p in json.loads(body):raw=(B/p['path']).read_bytes();assert len(raw)==p['bytes'] and sha(raw)==p['sha256']
+  proof.append(dict(section=name,status='ALL_INPUT_HASHES_EXACT',records=len(json.loads(body))))
+ else:
+  raw=(B/name).read_bytes();assert body.encode()==raw;proof.append(dict(section=name,status='EXACT_SOURCE_FILE',bytes=len(raw),sha256=sha(raw)))
+save('package-reading-proof.json',dict(status='PASS',package_bytes=len(package.encode()),package_sha256=sha(package.encode()),sections=proof,reading_method='Complete package decomposed into exact source sections and complete diffs. Repeated tuples/reasons read once with explicit references; all distinct source/spec/report/decision/disposition content reviewed. Structural JSON whitespace and duplicate hashes do not constitute additional semantic assertions.'))
+register=read(S/'governing/docs/errata_register.json');register=register if isinstance(register,list) else register['items'];selected=[e for e in register if e['item_id'] in ['E-044','E-071','E-076','E-107','E-111','E-121']];dups=[e for e in register if e.get('segment') in ['C05:292','C05:293','C05:294']];assert len(register)==192 and len(selected)==6 and not dups
+save('evidence/registered-class-review.json',dict(records=len(register),classes=selected,target_duplicates=dups,screen='No heading, converter escape, footnote, cap or row-spill defect in the three complete target passages. Historical class corpus census numbers are reference history, not current target claims.'))
+rows={(r['course'],r['seq']):r for r in read(S/'evidence/source-rows.json')}
+reasons=[
+ 'The present tense hypothetical do not is defensible English and is exactly printed in C05. The C15 tense/emphasis variant provides no license to correct it.',
+ 'The long rendering is an exact HTG2016 dgongs pa can equivalent in HGM2403, and the clause contrasts figurative and interpreted meaning. Its length is not source corruption.',
+ 'The two mdo nouns are expanded into three parallel English class-noun phrases explaining the same sutra classification. C05 physical text prints all three. Repetition is not duplicated Tibetan data.',
+ 'The interlocutor reinterprets one quotation and the rebuttal applies that same interpretation to the original statement. Separate point, true meaning, and later meaning have coherent local source functions.',
+ "The tree is without fruit; bare is explicitly in HGM13452 for 'bras bu med pa. Limbs is illustrative English imagery, so it stays unwrapped and provides no reason to correct source wording.",
+ 'Two local mig shes nouns are verbalized as sees and collectively summarized as visual consciousness of both. The final visual consciousness is another case. This coherent recasting is supported by HGM14365 sees; noun/verb counts need not match.',
+ 'The complete C05 physical source contains valid perception and its final Tibetan tshad ma. The shorter P7 corpus row does not invalidate C05 or establish why P7 stops earlier.'
+]
+checks=[]
+for candidate,reason in zip(read(B/'reconciled/source-suspicion-five-ground-checks.json'),reasons):
+ seq=candidate['seq'];row=rows[('C05',seq)];quote=candidate['found'];positions={f:[m.start() for m in re.finditer('(?='+re.escape(quote)+')',row[f])] for f in ['acip','wylie','english']};assert positions==candidate['grounds']['a']['actual_positions']
+ measures=dict(english_length=len(row['english']),quoted_occurrences=len(positions['english']),mdo_occurrences=len(re.findall(r'(?<![a-z])mdo(?![a-z])',row['wylie'])),sutras_occurrences=row['english'].count('sutras'),mig_shes_occurrences=row['wylie'].count('mig shes'),visual_consciousness_occurrences=row['english'].count('visual consciousness'))
+ for k,v in measures.items():assert v==candidate['grounds']['e'][k]
+ witness=dict(db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',['C15',seq+145]).fetchone());diffs={f:[dict(op=op,source_range=[a,b],witness_range=[c,d],source=row[f][a:b],witness=witness[f][c:d]) for op,a,b,c,d in difflib.SequenceMatcher(None,row[f],witness[f],autojunk=False).get_opcodes() if op!='equal'] for f in ['acip','wylie','english']}
+ targeted="SELECT * FROM corpus_segments WHERE (course='C16' OR course='P1' OR course LIKE 'TCS%') AND (instr(english,?)>0 OR instr(wylie,?)>0) ORDER BY course,seq";rr=[dict(r) for r in db.execute(targeted,[quote,row['wylie']])]
+ equalities={f:[dict(r) for r in db.execute('SELECT * FROM corpus_segments WHERE '+f+'=? ORDER BY course,seq',[row[f]])] for f in ['acip','wylie','english']}
+ p7=None
+ if seq==294:
+  p=dict(db.execute("SELECT * FROM corpus_segments WHERE course='P7' AND seq=35").fetchone());assert len(p['english'])==624 and row['english'].startswith(p['english']);p7=dict(row=p,prefix_characters=624,C05_characters=642,C05_suffix=row['english'][624:])
+ checks.append(dict(seq=seq,found=quote,refuted=True,decisive_ground='d',a_quote_positions=positions,b_C15_row=witness,b_exact_field_differences=diffs,b_P7=p7,b_C16_P1_TCS=dict(sql=targeted,params=[quote,row['wylie']],count=len(rr),rows=rr),b_limit='Digital field comparisons do not demonstrate independent publication or reingestion lineage.',c_register_count=192,c_target_duplicates=0,c_defect_screen='No current registered-class instance demonstrated; see complete physical C05 passages.',d_independent_reason=reason,e_measured_counts=measures,e_complete_field_equality_queries={f:dict(sql='SELECT * FROM corpus_segments WHERE '+f+'=? ORDER BY course,seq',params=[row[f]],count=len(rs),rows=rs) for f,rs in equalities.items()},erratum_retained=False))
+save('source-suspicion-independent-review.json',checks);save('bank-ready-errata.json',[])
+sys.path.insert(0,str(W/'tools'));gs=importlib.util.spec_from_file_location('generator',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(gs);gs.loader.exec_module(g)
+originalproof=[]
+for seq in [292,293,294]:
+ d=read(B/'reconciled'/str(seq)/'original-dispositions.json');row=rows[('C05',seq)]
+ for angle in ['tibetan','english']:
+  spec=read(B/angle/str(seq)/'spec.json')['segments'][0];spans=spec['spans'];t=g.resolve(row['wylie'],spans,'tib',seq);ids={s['id']:s for s in spans};e=g.resolve(row['english'],g.with_members(spans,[ids[id] for id in spec['eng_order']],row['english']),'eng',seq)
+  actual=[dict(angle=angle,seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(t[s['id']]),eng_range=None if s['eng'] is None else list(e[s['id']])) for s in spans]
+  ds=[x for x in d if x['original']['angle']==angle];assert [x['original'] for x in ds]==actual
+  for s,x in zip(spans,ds):assert s==x['original_span'] and x['reason'] and x['source_role']
+  originalproof.append(dict(seq=seq,angle=angle,count=len(spans),tuple_range_and_span_identity=True,decisions_have_reason_and_source_role=True,original_reason_none=sum(x['original_reason'] is None for x in ds)))
+save('original-disposition-independent-check.json',originalproof)
+fidelity=[]
+for seq in [292,293,294]:
+ text=(S/'generator'/str(seq)/'stdout.html').read_text();row=rows[('C05',seq)]
+ for side,field in [('tib','wylie'),('eng','english')]:
+  match=re.search(r'<div class="'+side+r'"><div class="lab">.*?</div>\n(.*?)\n</div>',text,re.S);assert match;fragment=match.group(1);fragment=re.sub(r'<span class="nul">.*?</span>','',fragment,flags=re.S);plain=html.unescape(re.sub(r'<[^>]*>','',fragment));assert plain==row[field]
+  fidelity.append(dict(seq=seq,side=side,characters=len(plain),utf8_bytes=len(plain.encode()),sha256=sha(plain.encode()),complete_source_exact=True))
+save('plain-source-fidelity.json',fidelity)
+base=read(B/'baseline.json')
+for rel,digest in base['sha256'].items():assert sha(subprocess.check_output(['git','show',base['commit']+':'+rel],cwd=W))==digest
+save('acceptance-baseline-binding.json',dict(status='PASS',acceptance_baseline_commit=base['commit'],course_boundary=base['course_boundary'],source_origin_commit=read(B/'proposal-baseline.json')['commit'],governing_git_commit=base['commit'],immutable_baseline_output_hashes_verified=base['sha256']))
+phys=Path(read(B/'proposal-baseline.json')['source_pins']['physical']['path']);c15=phys.with_name('C15ReadingASCII.txt')
+cs=importlib.util.spec_from_file_location('copy_once',A/'copy_evidence_once.py');cm=importlib.util.module_from_spec(cs);cs.loader.exec_module(cm)
+# The shared copy helper validates existing records including extra immutable Git fields.
+# No already-preserved original is resubmitted; historical Git pins stay attached.
+cm.preserve(S,S/'original-to-copy-manifest.json',[c15,A/'land_reviewed_page_v2.py',A/'prepare_semantic_package_v2.py'])
+access=[]
+for p in [Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP'),Path('/Users/adamderickandrade/ACIP Software Developmeent/Gofer Developmetn Files'),Path('/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil\'s Development Folder/Mac_OSX/ACIPHypercontext Tool'),Path('/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil\'s Development Folder/Mac_OSX/LokeshChandraDictionary'),Path('/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil\'s Development Folder/Mac_OSX/CreateLokeshChandraDIctionary'),Path('/Users/adamderickandrade/ACIP Software Developmeent/Ven. Phil\'s Development Folder/Mac_OSX/FixLokeshChandra'),Path('/Users/adamderickandrade/ACIP Software Developmeent/tibetan-spellchecker'),Path('/Users/adamderickandrade/Tibetan Translation Tool')]:
+ assert p.is_dir();next(p.iterdir(),None);access.append(dict(path=str(p),directory_readable=True))
+save('reference-access-check.json',access)
+print(json.dumps(dict(status='PASS',package_sections=len(proof),five_ground_checks=len(checks),original_dispositions=sum(r['count'] for r in originalproof),full_source_columns=len(fidelity),acceptance_baseline=base['commit']),indent=2))

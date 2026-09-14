@@ -1,0 +1,64 @@
+from pathlib import Path
+import json,hashlib,subprocess,sys,os,datetime,importlib.util
+O=Path(__file__).resolve().parent; B=O.parent;R=B.parent.parent;W=R/'campaign-worktree'
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def h(x):return hashlib.sha256(x).hexdigest()
+source={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+originals=json.loads((B/'proposal-verification/root-resolved-spans.json').read_text())
+def base(angle,seq):return json.loads((B/angle/str(seq)/'spec.json').read_text())['segments'][0]
+segments={292:base('tibetan',292),293:base('english',293),294:base('tibetan',294)}
+# Full established compounds retain dictionary depth; grammatical recasts use phrase depth.
+s=segments[292]
+for z in s['spans']:
+ if z['id']=='q12':z['d']=5
+ if z['id']=='w10':z['tib']='ston pa'
+ if z['id']=='w13':z['eng']='have to interpret'
+ if z['id']=='q26':z['d']=5
+ if z['id']=='w30':z['eng']='must be interpreted to establish their real meaning'
+ if z['id']=='w32':z.update(d=3,tib='zhes gsungs pa',eng='states that')
+s['spans']=[z for z in s['spans'] if z['id']!='p31']
+s['note']="PROVISIONAL machine alignment by Codex. GMR's wording is preserved verbatim; no hgm_gloss promotion. The negative existential is a complete phrase, while drang don and dgongs pa can are established interpretive compounds. The latter owns have to interpret and must be interpreted to establish their real meaning, once each; additional explanatory wording stays unwrapped. Both skye mched renderings are established whole technical expressions. Two Tibetan mdo own the first two English sutras; the third is GMR's repeated formulation. Inner gsungs pa owns says, while zhes gsungs pa owns states that before the quotation. The tight established 'dul ba'i skye bo owns disciples; who might require such explanations is distributed recipient/teaching content, omitted without an absence claim. rnams is null only for plurality fused into doorways; ni has no separately alignable topic exponent. la sogs pa includes the list-continuation and, with its exact licensor recorded."
+s['title']='figurative sutras and perception'
+s=segments[293]
+for z in s['spans']:
+ if z['id']=='w12':z['eng']='and similar'
+s['note']="PROVISIONAL machine alignment by Codex. GMR's wording is preserved verbatim; no hgm_gloss promotion. The full must be interpreted to establish their true meaning is an established dgongs pa can rendering at dictionary depth. skyon med, both phyi rol don compounds and rnag khrag retain strictly tighter members. The first grub pa owns existing, the second exists; their du particles own the as immediately before the corresponding outer-object phrase. yod contributes to the distributed first existential and is omitted without claiming absence. don owns point and the meaning of the original statement, distinct from the true meaning already contained in dgongs pa can. The final meaning/saying frame and negative indefinite 'ga' remain unbanked because their separate allocation is uncertain. med owns not exist and leaves the supplied auxiliary does unwrapped. sogs owns the whole closing gesture and similar, with its exact head licensor recorded."
+s['title']='interpreting the same statement'
+s=segments[294]
+for z in s['spans']:
+ if z['id']=='q20':z.update(d=5,eng='bare')
+ if z['id'] in ('w11','w21'):z.update(d=3,tib='tshad mar song ba',eng='genuinely so')
+ if z['id']=='w39':z.update(d=3,tib='tshad mar song ba',eng='genuine')
+s['note']="PROVISIONAL machine alignment by Codex. GMR's wording is preserved verbatim; no hgm_gloss promotion. 'bras bu med pa owns the tight attested bare; supplied limbs and the wider nothing but imagery remain unwrapped, with no fruit-to-limbs member. The first two mig shes own the first two sees, an attested verbal rendering in the separate river and tree clauses. The collective visual consciousness of both is a translated reprise and is not double-banked; final mig shes owns the later visual consciousness after his. Three tshad mar song ba validity-result constructions are whole phrases, distinct from the two lexical tshad ma valid perception conclusions. The positive song ba/so comparison supports the complete genuinely so phrase without forcing an isolated member. One rnag khrag owns the first pus and blood; its English predicate repetition stays unwrapped. dngos gnas pa owns actual, not genuine. thal owns must and final phyir owns Why. Temporal case frames are distributed and omitted; kyis/gyis nulls denote active-subject case fusion only."
+s['title']='river and fruit tree perceptions'
+# Semantically intended English locations derive from the selected original occurrence plan,
+# adjusted for changed boundaries. The final canonical resolver must independently agree.
+allfinal=[];proofs=[]
+sys.path.insert(0,str(W/'tools'));sp=importlib.util.spec_from_file_location('canon',W/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(sp);sp.loader.exec_module(G)
+for seq,seg in segments.items():
+ p=O/str(seq);p.mkdir(exist_ok=True);angle='english' if seq==293 else 'tibetan';orig={x['id']:x for x in originals if x['seq']==seq and x['angle']==angle};planned={}
+ for z in seg['spans']:
+  if z['eng'] is None:continue
+  old=orig[z['id']]['eng_range'];eng=source[seq]['english'];candidate=eng.find(z['eng'],max(0,old[0]-30))
+  assert candidate>=0 and candidate<=old[1],(seq,z,candidate,old)
+  planned[z['id']]=[candidate,candidate+len(z['eng'])]
+ seg['eng_order']=sorted([z['id'] for z in seg['spans'] if z['eng'] is not None and z['d']!=7],key=lambda i:planned[i][0])
+ # Renumber after all choices to expose one simple final sequence; origins are retained below.
+ remap={z['id']:'w'+str(i) for i,z in enumerate(seg['spans'],1)};oldids={v:k for k,v in remap.items()}
+ for z in seg['spans']:z['id']=remap[z['id']]
+ seg['eng_order']=[remap[i] for i in seg['eng_order']];planned={remap[k]:v for k,v in planned.items()}
+ save(p/'spec.json',{'course':'C05','segments':[seg]});save(p/'errata.json',[]);save(p/'planned-occurrences.json',{'english':planned,'selected_original_angle':angle,'original_to_final_ids':remap})
+ raw=(p/'spec.json').read_bytes();at=p/'native-attempts/01';at.mkdir(parents=True,exist_ok=False)
+ argv=[sys.executable,'-B',str(R/'campaign-artifacts/run_generator_readonly.py')];env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'};start=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(argv,input=raw,capture_output=True,cwd=W,env=env)
+ save(at/'command.json',{'argv':argv,'cwd':str(W),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'},'start_utc':start,'end_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'canonical_generator_sha256':h((W/'tools/gen_alignment_page.py').read_bytes()),'wrapper_sha256':h((R/'campaign-artifacts/run_generator_readonly.py').read_bytes())});(at/'stdin.json').write_bytes(raw);(at/'stdout.html').write_bytes(r.stdout);(at/'stderr.bin').write_bytes(r.stderr);(at/'exit.txt').write_text(str(r.returncode)+'\n')
+ assert r.returncode==0,r.stderr.decode();(p/'body.html').write_bytes(r.stdout)
+ tr=G.resolve(source[seq]['wylie'],seg['spans'],'tib',seq);byid={z['id']:z for z in seg['spans']};er=G.resolve(source[seq]['english'],G.with_members(seg['spans'],[byid[i] for i in seg['eng_order']],source[seq]['english']),'eng',seq)
+ tuples=[]
+ for z in seg['spans']:
+  e=list(er[z['id']]) if z['eng'] is not None else None
+  if e is not None:assert e==planned[z['id']],(seq,z,e,planned[z['id']])
+  tuples.append({'id':z['id'],'d':z['d'],'tib':z['tib'],'eng':z['eng'],'tib_range':list(tr[z['id']]),'eng_range':e})
+ save(p/'resolved-spans.json',tuples);allfinal.extend({'seq':seq,**z} for z in tuples)
+ counts={'spans':len(tuples),'d5':sum(z['d']==5 for z in tuples),'nonnull_d5':sum(z['d']==5 and z['eng'] is not None for z in tuples),'d7':sum(z['d']==7 for z in tuples),'d3':sum(z['d']==3 for z in tuples),'d6':sum(z['d']==6 for z in tuples),'nulls':sum(z['eng'] is None for z in tuples),'errata':0}
+ proof={'seq':seq,'exit':r.returncode,'stderr_bytes':len(r.stderr),'spec_bytes':len(raw),'spec_sha256':h(raw),'body_bytes':len(r.stdout),'body_sha256':h(r.stdout),'counts':counts,'all_intended_english_ranges_equal_actual_canonical_ranges':True,'native_directory':'native-attempts/01'};save(p/'generator-proof.json',proof);proofs.append(proof);print(seq,counts,proof['body_sha256'])
+save(O/'final-ordered-tuples.json',allfinal);save(O/'verification-summary.json',proofs)
