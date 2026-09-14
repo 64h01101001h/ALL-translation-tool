@@ -1,0 +1,9 @@
+# Evidence navigation
+
+review.md and review.json state the independent verdict and its limits. resolved-spans.json is the exact ordered seven-key interface for all110 spans. all-span-decisions.json, all-original-disposition-decisions.json, all-omission-decisions.json and errata-five-grounds.json contain the complete decisions.
+
+Readable original core files are under proposal-inputs/tibetan and proposal-inputs/english. Current and historical reconciliation core files are under reviewed-final. Identical auxiliary evidence may share an exact content-addressed copy under proposal-inputs/evidence. original-to-copy-manifest.json resolves each absolute original path to its exact supported-extension copy, hash and size. Paths inside unchanged original records retain their original relative context; use that manifest to locate the archived target. Embedded original_HGM_fields in fresh decisions deliberately preserve the original attribution and reference strings; full_master_records points to the fresh complete-record collection.
+
+independent-full-master-records.json contains190 distinct full original master objects; independent-unique-corpus-rows.json contains289 complete original corpus rows. The corresponding independent query/proof files document exact searches, complete original fields and actual counts. The full input archives and physical source file are preserved through the manifest. The source spine itself is verified by full file hash and the complete read-only query outputs rather than duplicated as a249MB database.
+
+Every helper is preserved byte-for-byte as helpers/*.py.txt for landing. The operational *.py files are the only excluded on-disk files besides the self-referential freeze.json. Their exact mirrors and hashes are recorded in the freeze. No evidence is omitted because of an unsupported filename extension.

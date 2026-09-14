@@ -1,0 +1,44 @@
+import gzip, hashlib, json, pathlib, re, sqlite3
+R = pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+W = R / 'campaign-worktree'
+A = R / 'campaign-artifacts/C05-310-312/tibetan'
+E = A / 'evidence'
+def dump(name, obj): (E / name).write_text(json.dumps(obj, ensure_ascii=False, indent=2)+'\n')
+terms = ['dge ba', 'mi dge', 'bcu', 'spyod pa', 'skyes bu dam pa', 'skyes bu', 'dam pa', 'mtho ris', 'skyes', 'bde ba', 'myong ba', 'sems can', 'dman pa', 'ngan song', 'sdug bsngal', "'khrul snang", 'bzang ngan', 'lus', 'bde sdug', 'khyad par', 'rigs pa', "'thad pa", "'dod", "'dod pa", 'las can', 'las', "'gro ba", 'brlan', 'gsher ba', 'phor pa', 'cig car', 'tshad', 'tshad ma', 'mtshungs', 'nges par', 'dgos pa', 'gnas', 'blo', 'tha mal', 'mig shes', 'mi bzod', 'bzod', 'srog chags', 'phra mo', 'rgya mtsho', 'nang', 'lha ma yin', 'mtshon cha', 'phor', 'gang', 'snang', 'skyon']
+master = json.load(gzip.open(W / 'data/hgm_dictionary_v27_2.json.gz', 'rt'))
+lex = {'query':'exact wylie or member of wylie_variants in each master list; complete original records, all tiers preserved', 'terms':terms, 'results':{}}
+for term in terms:
+    result = {}
+    for section in ['unified_entries', 'curated_entries', 'glossary_entries']:
+        entries = master[section]
+        if isinstance(entries, dict): entries = list(entries.values())
+        result[section] = [dict(index=i, record=e) for i,e in enumerate(entries) if isinstance(e,dict) and (e.get('wylie') == term or term in (e.get('wylie_variants') or []))]
+    lex['results'][term] = result
+dump('master-lexical-evidence.json',lex)
+db = sqlite3.connect((W / 'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True)
+db.row_factory=sqlite3.Row
+source=json.loads((E / 'source.json').read_text())
+queries=[]
+for row in source:
+    for field in ['acip','wylie','english']:
+        sql='select * from corpus_segments where '+field+'=? order by course, seq'
+        hits=[dict(r) for r in db.execute(sql,(row[field],))]
+        queries.append({'key':str(row['seq'])+'-'+field+'-exact','sql':sql,'parameters':[row[field]],'count':len(hits),'rows':hits})
+for field,needle in [('wylie','mi bzod'),('wylie','mtshon cha phor gang'),('wylie','las can gyi'),('wylie','tshad mtshungs'),('wylie','skyes bu dam pa'),('english','microscopic organisms'),('english','glasses of water'),('wylie',"'khrul snang bzang ngan")]:
+    sql='select * from corpus_segments where '+field+' like ? order by course, seq'
+    hits=[dict(r) for r in db.execute(sql,('%'+needle+'%',))]
+    queries.append({'key':field+':'+needle,'sql':sql,'parameters':['%'+needle+'%'],'count':len(hits),'rows':hits})
+dump('corpus-query-evidence.json',{'database':'original spine URI mode=ro','queries':queries})
+corpus=json.load(gzip.open(W / 'data/full_parallel_corpus_v32.json.gz','rt'))
+queries=[]
+for row in source:
+    hits=[{'index':i,'record':r,'equal_fields':[f for f in ['acip','wylie','english'] if r.get(f)==row[f]]} for i,r in enumerate(corpus) if any(r.get(f)==row[f] for f in ['acip','wylie','english'])]
+    queries.append({'seq':row['seq'],'query':'any exact equality across acip,wylie,english; original complete records and zero-based indices','count':len(hits),'rows':hits})
+dump('external-corpus-evidence.json',{'file':'data/full_parallel_corpus_v32.json.gz','queries':queries})
+physical=(E / 'C05ReadingASCII.txt').read_bytes()
+lines=physical.splitlines(keepends=True)
+lo=sum(map(len,lines[:3071])); hi=sum(map(len,lines[:3151]))
+extent=physical[lo:hi]
+(E / 'physical-local-argument.latin1.txt').write_text(extent.decode('latin1'),encoding='utf8')
+dump('physical-extents.json',{'source':'C05ReadingASCII.txt','byte_range':[lo,hi],'line_range_inclusive':[3072,3151],'bytes':len(extent),'sha256':hashlib.sha256(extent).hexdigest(),'view':'physical-local-argument.latin1.txt','view_encoding':'utf8 reversible Latin-1 view of preserved source bytes; source newlines retained'})
+print(json.dumps({'terms':len(terms),'queries':len(queries),'physical_byte_range':[lo,hi]}))

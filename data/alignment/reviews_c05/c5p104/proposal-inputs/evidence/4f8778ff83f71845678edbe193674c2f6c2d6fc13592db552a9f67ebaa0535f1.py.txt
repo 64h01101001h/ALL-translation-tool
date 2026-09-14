@@ -1,0 +1,61 @@
+"""Save original canonical process I/O, then measure with original canonical resolver/builder."""
+import collections,hashlib,html,json,os,pathlib,re,subprocess,sys
+A=pathlib.Path(__file__).resolve().parent;P=A/'evidence/pinned'
+sys.path[:0]=[str(P/'tools'),str(P/'engines')]
+import gen_alignment_page as G
+import build_alignment_layer as B
+rows={r['seq']:r for r in json.loads((A/'evidence/source.json').read_text())}
+def meta(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+for seq in [310,311,312]:
+    D=A/str(seq);T=D/'attempts/native-001';T.mkdir(parents=True)
+    stdin=(D/'spec.json').read_bytes();(T/'stdin.json').write_bytes(stdin)
+    command=[sys.executable,'-B',str(A/'native_generator.py')]
+    env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+    p=subprocess.run(command,input=stdin,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env,cwd=A.parents[2]/'campaign-worktree')
+    (T/'stdout.html').write_bytes(p.stdout);(T/'stderr.txt').write_bytes(p.stderr);(T/'exit.txt').write_text(str(p.returncode)+'\n')
+    dump(T/'execution.json',{'schema':'canonical-native-execution-v1','command':command,'cwd':str(A.parents[2]/'campaign-worktree'),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'actual_generator':str(A.parents[2]/'campaign-worktree/tools/gen_alignment_page.py'),'sqlite_uri':(A.parents[2]/'campaign-worktree/build/hgm_spine_v27_2.db').as_uri()+'?mode=ro','stdin':meta(stdin),'stdout':meta(p.stdout),'stderr':meta(p.stderr),'exit':p.returncode,'dependency_origin':'51d73c889a3f175b90e4c466f3dc4b1f7af3bca5','instrumentation':'Exact pinned builder/engine imports, original W generator via runpy, read-only SQLite URI; no canonical logic reconstructed or changed.'})
+    assert p.returncode==0 and p.stderr==b'',(seq,p.returncode,p.stderr)
+    (D/'body.html').write_bytes(p.stdout)
+    spec=json.loads(stdin)['segments'][0];spans=spec['spans'];byid={sp['id']:sp for sp in spans}
+    tib=G.resolve(rows[seq]['wylie'],spans,'tib',seq)
+    es=G.with_members(spans,[byid[i] for i in spec['eng_order']],rows[seq]['english'])
+    eng=G.resolve(rows[seq]['english'],es,'eng',seq)
+    authored={i['id']:i for i in json.loads((D/'source-specific-rationale.json').read_text())['decisions']}
+    resolved=[];parent=None
+    parsed={side:{label:(d,t) for d,label,t in B.spans_of(p.stdout.decode(),side)} for side in ['tib','eng']}
+    for sp in spans:
+        ident=sp['id'];label='s'+str(seq)+ident
+        if sp['d']!=7:parent=sp
+        assert parsed['tib'][label]==(sp['d'],' '.join(sp['tib'].split()))
+        assert parsed['eng'][label]==(sp['d'],' '.join((sp['eng'] or '').split()))
+        assert list(tib[ident])==authored[ident]['tib_range']
+        if sp['eng'] is not None: assert list(eng[ident])==authored[ident]['eng_range']
+        if sp['d']==7:
+            assert parent['d']==5
+            for side,ranges in [('tib',tib),('eng',eng)]:
+                if sp[side] is None:continue
+                plo,phi=ranges[parent['id']];lo,hi=ranges[ident]
+                assert plo<=lo<hi<=phi and (lo,hi)!=(plo,phi)
+                assert parent[side].count(sp[side])==1
+        if sp['eng'] is not None and sp['d'] in [5,7]:
+            assert not re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',sp['eng'],re.I),(seq,sp)
+        ac=B.acip_span(rows[seq]['acip'],rows[seq]['wylie'],sp['tib'])
+        assert ac is not None,(seq,ident)
+        resolved.append(dict(sp,tib_range=list(tib[ident]),eng_range=list(eng[ident]) if ident in eng else None,tib_acip=ac,parent=parent['id'] if sp['d']==7 else None,rationale=authored[ident]['rationale']))
+    source_proofs={}
+    doc=p.stdout.decode()
+    for side,field in [('tib','wylie'),('eng','english')]:
+        block=doc.split('<div class="'+side+'">',1)[1]
+        start='<span class="u" data-d="1" data-l="s'+str(seq)+'S">'
+        interior=block.split(start,1)[1].split('\n</div>',1)[0]
+        assert interior.endswith('</span>');interior=interior[:-7]
+        interior=re.sub(r'<span class="nul">.*?</span>','',interior,flags=re.S)
+        plain=B.strip_tags(interior)
+        assert plain==rows[seq][field],(seq,side)
+        source_proofs[side]=meta(plain.encode())
+    counts={'spans':len(spans),'nulls':sum(s['eng'] is None for s in spans),'depth_counts':dict(sorted(collections.Counter(s['d'] for s in spans).items())),'d5_total':sum(s['d']==5 for s in spans),'d5_nonnull_word_pairs':sum(s['d']==5 and s['eng'] is not None for s in spans),'d7_members':sum(s['d']==7 for s in spans),'errata':len(json.loads((D/'errata.json').read_text()))}
+    dump(D/'resolved-ranges.json',{'schema':'canonical-resolved-spans-v1','range_units':'zero-based Unicode character [start,end); original fields are ASCII here','seq':seq,'ranges':resolved})
+    proof={'schema':'proposal-mechanical-proof-v1','seq':seq,'counts':counts,'native_attempt':'attempts/native-001','body_equals_original_stdout':(D/'body.html').read_bytes()==p.stdout,'stdin_equals_final_spec':(D/'spec.json').read_bytes()==stdin,'exit':p.returncode,'stderr_bytes':len(p.stderr),'artifacts':{f:meta((D/f).read_bytes()) for f in ['spec.json','body.html','errata.json','resolved-ranges.json','source-specific-rationale.json']},'exact_original_source_recovery':source_proofs,'canonical_builder_parsed_all_spans':True,'canonical_acip_roundtrip_all_spans':True,'members_unique_strictly_tighter_with_correct_parent':True,'no_supplied_d5_d7_heads':True,'no_semantic_approval':True,'scope':'Affected standalone proposal checks only. Full repository landing and independent semantic review remain later stages.'}
+    dump(D/'mechanical-proof.json',proof)
+    print(json.dumps({'seq':seq,'exit':p.returncode,'stderr_bytes':len(p.stderr),'body':meta(p.stdout),'counts':counts}))

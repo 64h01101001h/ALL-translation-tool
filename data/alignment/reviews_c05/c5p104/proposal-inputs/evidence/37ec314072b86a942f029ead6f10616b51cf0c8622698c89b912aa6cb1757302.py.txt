@@ -1,0 +1,16 @@
+import json
+from pathlib import Path
+E=Path(__file__).resolve().parent/'evidence'
+rows=json.loads((E/'original-local-rows.json').read_text())
+for r in rows:
+ if r['seq']<304:print(r['course'],r['seq'],r['wylie'],'\n',r['english'])
+qs=json.loads((E/'corpus-queries-original.json').read_text())['queries'];seen=set()
+for q in qs:
+ for r in q['rows']:
+  key=r['course'],r['seq']
+  if key in [('C15',455),('C16',848),('C05',250),('C05',262),('C05',286),('EM',165),('C14',247),('ILL',2331)] and key not in seen:
+   seen.add(key);print('PARALLEL',*key,r['acip'],'\n',r['wylie'],'\n',r['english'])
+raw=(E/'C05ReadingASCII.original.bin').read_bytes();print('PHYSICAL BYTES [214680,218450)',raw[214680:218450].decode('latin1'))
+register=json.loads((E/'pinned/docs/errata_register.json').read_text())
+for r in register:
+ if any(x in json.dumps(r).lower() for x in ['following section','following heading','heading glued','e-071','e-107','e-044','e-076','e-121','e-111']): print('REGISTER',json.dumps(r,ensure_ascii=False))

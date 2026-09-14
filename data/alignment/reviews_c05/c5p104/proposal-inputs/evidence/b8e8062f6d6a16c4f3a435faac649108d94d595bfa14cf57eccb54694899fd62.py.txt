@@ -1,0 +1,45 @@
+import json,sys,re,hashlib
+from pathlib import Path
+A=Path(__file__).resolve().parent;E=A/'evidence';sys.path.insert(0,str(E/'pinned/tools'));import build_alignment_layer as B
+rows={r['seq']:r for r in json.loads((E/'source.json').read_text())};raw=(E/'C05ReadingASCII.original.bin').read_bytes();original_queries=json.loads((E/'corpus-queries-original.json').read_text())['queries'];P=json.loads((E/'proposal-baseline.json').read_text())
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def dump(p,data):p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+physical=[]
+for seq,row in rows.items():
+ D=A/str(seq);spec=json.loads((D/'spec.json').read_text());seg=spec['segments'][0];body=(D/'body.html').read_text();proof=json.loads((D/'resolved-ranges.json').read_text())['segments'][0];expected={s['id']:s for s in seg['spans']}
+ assert (D/'body.html').read_bytes()==(D/'generator.stdout').read_bytes()==(D/'attempts/generate-01/stdout').read_bytes()
+ assert (D/'spec.json').read_bytes()==(D/'generator.stdin.json').read_bytes()==(D/'attempts/generate-01/stdin.json').read_bytes()
+ assert (D/'generator.stderr').read_bytes()==b'' and (D/'generator.exit').read_text()=='0\n'
+ parsed={side:{label:(d,text) for d,label,text in B.spans_of(body,side)} for side in ['tib','eng']}
+ for side,field,lab in [('tib','wylie','TIBETAN (WYLIE)'),('eng','english',"GESHE MICHAEL'S ENGLISH (VERBATIM)")]:
+  block=body.split('<div class="'+side+'"><div class="lab">'+lab+'</div>\n',1)[1].split('\n</div>',1)[0]
+  clean=re.sub(r'<span class="nul">.*?</span>','',block,flags=re.S)
+  exact=B.strip_tags(clean);assert exact==row[field],(seq,field,'verbatim body mismatch')
+  assert set(parsed[side])=={f's{seq}S'}|{f's{seq}'+x for x in expected}
+  for id,s in expected.items():
+   d,text=parsed[side][f's{seq}'+id];want=s['tib'] if side=='tib' else (s['eng'] or '')
+   assert d==s['d'] and text==want,(seq,id,side,text,want)
+ head_errors=[]
+ for s in seg['spans']:
+  if s['d'] in [5,7] and s['eng'] and re.match(r'(?i)^(the|a|an|and|or|his|our|your|I|you)\b',s['eng']):head_errors.append(s['id'])
+ assert not head_errors
+ ph=[]
+ for field in ['acip','english']:
+  pattern=rb'\s+'.join(re.escape(x.encode('ascii')) for x in row[field].split());hits=list(re.finditer(pattern,raw));assert hits,(seq,field)
+  ext=[{'start':m.start(),'end':m.end(),'sha256':hashlib.sha256(raw[m.start():m.end()]).hexdigest(),'latin1_reversible':raw[m.start():m.end()].decode('latin1')} for m in hits]
+  ph.append({'field':field,'whitespace_normalized_exact':True,'count':len(hits),'extents':ext})
+ physical.append({'seq':seq,'source_path':P['source_pins']['physical']['path'],'original_sha256':P['source_pins']['physical']['sha256'],'matches':ph})
+ exactqs=[q for q in original_queries if q.get('seq')==seq]
+ candidates={310:[{'field':'wylie','quote':'lus kyis bde sdug myong mi myong gi khyad par med par thal','assessment':'Bodily qualification has no separate English exponent; rhetorical reversal is an alignment limitation, not a proved source error.'}],311:[{'field':'wylie','quote':'sdug bsngal med par thal','assessment':'Shared negated existential is doubled in English; grammatical expansion does not establish an erratum.'}],312:[{'field':'wylie','quote':"tha mal gyi mig shes kyis mi bzod pa'i srog chags phra mo'i mig shes",'assessment':'mi bzod contrasts with contextual imperceptible; literal lexical uncertainty remains and no uniquely warranted source correction is established.'},{'field':'wylie','quote':"lha ma yin 'ga' zhig la, mtshon cha phor gang snang dgos pa",'assessment':'The cupful/appearance relation requires further semantic review. This proposal banks separate near-gods/weapons/glasses/see vocabulary and does not certify the expanded as glasses of water relationship.'}]}[seq]
+ for c in candidates:assert c['quote'] in row[c['field']];c['range']=[row[c['field']].index(c['quote']),row[c['field']].index(c['quote'])+len(c['quote'])]
+ grounds={
+  '1_exact_row_and_source_distinction':{'row':row,'examined_candidates':candidates,'proposed_correction':None,'errata':[]},
+  '2_registered_classes':{'source':'../evidence/pinned/docs/errata_register.json','sha256':sha(E/'pinned/docs/errata_register.json'),'checked':['E-044 converter escapes','E-071 running heads','E-076/E-121 footnote fusions','E-107 1500-character cap','E-111 row-boundary spills','registered following-heading class in PROPOSE_BRIEF and C05 course shape'],'english_characters':len(row['english']),'local_class_instance':'No target-row heading, footnote fusion, running head, converter escape or 1500-character cap found. C16:848 has a following heading, outside C05:311; C05:314 is adjacent heading apparatus.'},
+  '3_corpus_parallels':{'evidence':'../evidence/corpus-queries-original.json','sha256':sha(E/'corpus-queries-original.json'),'exact_queries':exactqs,'provenance_limit':'Field equality proves textual agreement only. Row identifiers/course/seq differ. Course-shape re-ingested labels are metadata claims, not independently established ingestion or publication history.'},
+  '4_hgm_lexical_and_context':{'references':[{'file':'../evidence/hgm-lexical-original.json','sha256':sha(E/'hgm-lexical-original.json')},{'file':'../evidence/additional-hgm-original.json','sha256':sha(E/'additional-hgm-original.json')},{'file':'../evidence/source-role-queries.json','sha256':sha(E/'source-role-queries.json')}],'assessment':{310:'HGM supports holy people, misperception and pleasure or pain; body/physically for lus gives no separate local English token.',311:'HGM pleasures and sufferings support the concepts, but the exact row pains is retained. Negative existence is not reduced to a positive lexical link.',312:'HGM tshad includes both valid perceptions and extent readings; phor carries glasses, snang see, while mi bzod carries unable to bear. These attestations aid judgment but do not license new English or prove the full source relation.'}[seq]},
+  '5_physical_original_and_uncertainty':{'source':P['source_pins']['physical'],'matches':ph,'encoding':'Original full bytes in ../evidence/C05ReadingASCII.original.bin; extents shown through reversible Latin-1 only. Whitespace normalization is solely a comparison operation; originals are unchanged.','outcome':'No separately fileable error established; no correction, no semantic approval. Any later suspected error needs independent review.'}
+ }
+ dump(D/'errata-five-grounds.json',grounds)
+ result={'seq':seq,'checks':{'canonical_stdout_equals_body':True,'canonical_stdin_equals_final_spec':True,'canonical_exit_0_empty_stderr':True,'source_fields_exact_after_unwrap':True,'historical_builder_sees_every_span':True,'supplied_d5_d7_heads_zero':True,'physical_full_fields_match_after_whitespace_normalization':True},'counts':proof['counts'],'files':{f:{'bytes':(D/f).stat().st_size,'sha256':sha(D/f)} for f in ['spec.json','body.html','generator.stdin.json','generator.stdout','generator.stderr','generator.exit','resolved-ranges.json','errata.json']},'limit':'Proposal-local fidelity checks only; no landing rebuild or semantic approval claimed.'}
+ dump(D/'mechanical-proof.json',result);print(f"C05:{seq} fidelity PASS; {len(seg['spans'])} spans; source text exact; original builder sees every span.")
+dump(E/'physical-row-comparisons.json',physical)

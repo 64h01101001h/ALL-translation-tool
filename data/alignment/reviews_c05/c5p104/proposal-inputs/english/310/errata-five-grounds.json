@@ -1,0 +1,202 @@
+{
+  "1_exact_row_and_source_distinction": {
+    "row": {
+      "id": 1692,
+      "course": "C05",
+      "seq": 310,
+      "acip": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,",
+      "wylie": "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir",
+      "english": "If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct."
+    },
+    "examined_candidates": [
+      {
+        "field": "wylie",
+        "quote": "lus kyis bde sdug myong mi myong gi khyad par med par thal",
+        "assessment": "Bodily qualification has no separate English exponent; rhetorical reversal is an alignment limitation, not a proved source error.",
+        "range": [
+          249,
+          307
+        ]
+      }
+    ],
+    "proposed_correction": null,
+    "errata": []
+  },
+  "2_registered_classes": {
+    "source": "../evidence/pinned/docs/errata_register.json",
+    "sha256": "a7573cd73f59bff9a41ddeecff5b3d1f3056f4fa7b3ce7a600eff378f27e87a6",
+    "checked": [
+      "E-044 converter escapes",
+      "E-071 running heads",
+      "E-076/E-121 footnote fusions",
+      "E-107 1500-character cap",
+      "E-111 row-boundary spills",
+      "registered following-heading class in PROPOSE_BRIEF and C05 course shape"
+    ],
+    "english_characters": 613,
+    "local_class_instance": "No target-row heading, footnote fusion, running head, converter escape or 1500-character cap found. C16:848 has a following heading, outside C05:311; C05:314 is adjacent heading apparatus."
+  },
+  "3_corpus_parallels": {
+    "evidence": "../evidence/corpus-queries-original.json",
+    "sha256": "8253a5cde9ffc76e74942824d47eb593e935c042bd573f414b0d81f0aaee43d2",
+    "exact_queries": [
+      {
+        "seq": 310,
+        "sql": "select * from corpus_segments where acip=? order by course,seq",
+        "params": [
+          "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,"
+        ],
+        "count": 3,
+        "rows": [
+          {
+            "id": 1692,
+            "course": "C05",
+            "seq": 310,
+            "acip": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,",
+            "wylie": "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir",
+            "english": "If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.",
+            "raw": "{\"course\": \"C05\", \"acip\": \"DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,\", \"wylie\": \"de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir\", \"english\": \"If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.\"}"
+          },
+          {
+            "id": 6006,
+            "course": "C15",
+            "seq": 455,
+            "acip": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,",
+            "wylie": "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir",
+            "english": "Suppose this were not the case; consider then those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.",
+            "raw": "{\"course\": \"C15\", \"acip\": \"DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,\", \"wylie\": \"de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir\", \"english\": \"Suppose this were not the case; consider then those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.\"}"
+          },
+          {
+            "id": 6865,
+            "course": "C16",
+            "seq": 847,
+            "acip": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,",
+            "wylie": "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir",
+            "english": "If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.",
+            "raw": "{\"course\": \"C16\", \"acip\": \"DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,\", \"wylie\": \"de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir\", \"english\": \"If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.\"}"
+          }
+        ]
+      },
+      {
+        "seq": 310,
+        "sql": "select * from corpus_segments where wylie=? order by course,seq",
+        "params": [
+          "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir"
+        ],
+        "count": 3,
+        "rows": [
+          {
+            "id": 1692,
+            "course": "C05",
+            "seq": 310,
+            "acip": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,",
+            "wylie": "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir",
+            "english": "If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.",
+            "raw": "{\"course\": \"C05\", \"acip\": \"DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,\", \"wylie\": \"de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir\", \"english\": \"If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.\"}"
+          },
+          {
+            "id": 6006,
+            "course": "C15",
+            "seq": 455,
+            "acip": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,",
+            "wylie": "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir",
+            "english": "Suppose this were not the case; consider then those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.",
+            "raw": "{\"course\": \"C15\", \"acip\": \"DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,\", \"wylie\": \"de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir\", \"english\": \"Suppose this were not the case; consider then those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.\"}"
+          },
+          {
+            "id": 6865,
+            "course": "C16",
+            "seq": 847,
+            "acip": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,",
+            "wylie": "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir",
+            "english": "If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.",
+            "raw": "{\"course\": \"C16\", \"acip\": \"DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,\", \"wylie\": \"de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir\", \"english\": \"If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.\"}"
+          }
+        ]
+      },
+      {
+        "seq": 310,
+        "sql": "select * from corpus_segments where english=? order by course,seq",
+        "params": [
+          "If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct."
+        ],
+        "count": 2,
+        "rows": [
+          {
+            "id": 1692,
+            "course": "C05",
+            "seq": 310,
+            "acip": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,",
+            "wylie": "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir",
+            "english": "If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.",
+            "raw": "{\"course\": \"C05\", \"acip\": \"DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,\", \"wylie\": \"de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir\", \"english\": \"If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.\"}"
+          },
+          {
+            "id": 6865,
+            "course": "C16",
+            "seq": 847,
+            "acip": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,",
+            "wylie": "de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir",
+            "english": "If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.",
+            "raw": "{\"course\": \"C16\", \"acip\": \"DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,\", \"wylie\": \"de ltar ma yin na, dge ba bcu la spyod pa'i skyes bu dam pa mtho ris su skyes nas de'i bde ba myong ba dang , mi dge bcu la spyod pa'i sems can dman pa ngan song du skyes nas de'i sdug bsngal myong ba gnyis la, 'khrul snang bzang ngan tsam ma gtogs lus kyis bde sdug myong mi myong gi khyad par med par thal, khyod kyi rigs pa de 'thad pa'i phyir\", \"english\": \"If this were not the case, then consider those holy people who lead their lives following the ten virtues, and who are then born into the higher realms, and then experience the pleasures of these realms. And consider too those miserable people who lead their lives following the ten non-virtues, and who are then born into the lower realms, and then experience the sufferings of these realms. Is the difference between them just that they are having some better or worse kind of misperception, and not whether they are experiencing pleasure or pain? This would have to be the case, if your reasoning were correct.\"}"
+          }
+        ]
+      }
+    ],
+    "provenance_limit": "Field equality proves textual agreement only. Row identifiers/course/seq differ. Course-shape re-ingested labels are metadata claims, not independently established ingestion or publication history."
+  },
+  "4_hgm_lexical_and_context": {
+    "references": [
+      {
+        "file": "../evidence/hgm-lexical-original.json",
+        "sha256": "482ac76769995385a1fcd0c43504993d0b202934f5895fed9e9769de215634a2"
+      },
+      {
+        "file": "../evidence/additional-hgm-original.json",
+        "sha256": "b1d939bf88c692cd915f43948a0c96fcc89caa2f62cf57f4a173a80c67d2e88d"
+      },
+      {
+        "file": "../evidence/source-role-queries.json",
+        "sha256": "99096dc118364d9695b92e2c05a3010a2edb760e6a0faf89e61bb5a76287448b"
+      }
+    ],
+    "assessment": "HGM supports holy people, misperception and pleasure or pain; body/physically for lus gives no separate local English token."
+  },
+  "5_physical_original_and_uncertainty": {
+    "source": {
+      "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "matches": [
+      {
+        "field": "acip",
+        "whitespace_normalized_exact": true,
+        "count": 1,
+        "extents": [
+          {
+            "start": 215071,
+            "end": 215418,
+            "sha256": "0de4bf463a860df35739448a87da96d89e6c48df18cb38c74bf9cc2766b97fc4",
+            "latin1_reversible": "DE LTAR MA YIN NA, DGE BA BCU LA SPYOD PA'I SKYES BU DAM PA MTHO RIS SU SKYES NAS DE'I BDE BA MYONG BA DANG , MI DGE BCU LA SPYOD PA'I SEMS CAN DMAN PA NGAN SONG DU SKYES NAS DE'I SDUG BSNGAL MYONG BA GNYIS LA, 'KHRUL SNANG BZANG NGAN TZAM MA GTOGS LUS KYIS BDE SDUG MYONG MI MYONG GI KHYAD PAR MED PAR THAL, KHYOD KYI RIGS PA DE 'THAD PA'I PHYIR,"
+          }
+        ]
+      },
+      {
+        "field": "english",
+        "whitespace_normalized_exact": true,
+        "count": 1,
+        "extents": [
+          {
+            "start": 215420,
+            "end": 216041,
+            "sha256": "e660421eda292f24ee25a239a57dd1a3b6b38a80fa1c903856a7e19d925b7eb3",
+            "latin1_reversible": "If this were not the case, then consider those holy people who lead their lives\r\nfollowing the ten virtues, and who are then born into the higher realms, and\r\nthen experience the pleasures of these realms. And consider too those\r\nmiserable people who lead their lives following the ten non-virtues, and who\r\nare then born into the lower realms, and then experience the sufferings of these\r\nrealms. Is the difference between them just that they are having some better\r\nor worse kind of misperception, and not whether they are experiencing\r\npleasure or pain? This would have to be the case, if your reasoning were\r\ncorrect."
+          }
+        ]
+      }
+    ],
+    "encoding": "Original full bytes in ../evidence/C05ReadingASCII.original.bin; extents shown through reversible Latin-1 only. Whitespace normalization is solely a comparison operation; originals are unchanged.",
+    "outcome": "No separately fileable error established; no correction, no semantic approval. Any later suspected error needs independent review."
+  }
+}

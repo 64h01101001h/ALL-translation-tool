@@ -1,0 +1,95 @@
+import json,pathlib,gzip,sqlite3,hashlib,re,difflib,collections
+R=pathlib.Path(__file__).resolve().parents[1];A=R.parent;E=A/'reconciled/evidence';W=A.parents[1]/'campaign-worktree'
+def load(p):return json.loads(p.read_text())
+def dump(name,x):(R/name).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def occ(s,p):return [[m.start(),m.start()+len(p)] for m in re.finditer('(?='+re.escape(p)+')',s)]
+def sha(b):return hashlib.sha256(b).hexdigest()
+rows={x['seq']:x for x in load(R/'independent-source-rows.json')};db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+queries=[];unique={}
+for i,q in enumerate(load(E/'independent-corpus-queries.json')):
+ assert q['sql'].lower().startswith('select ')
+ got=[dict(x) for x in db.execute(q['sql'],q['parameters'])];assert got==q['rows'] and len(got)==q['count'],i
+ for row in got:
+  raw=json.loads(row['raw']);assert all(raw[f]==row[f] for f in ['course','acip','wylie','english']);unique[(row['course'],row['seq'])]=row
+ queries.append({'index':i,'sql':q['sql'],'parameters':q['parameters'],'count':len(got),'rows':got,'complete_result_exact':True})
+dump('independent-corpus-queries.json',queries)
+master=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt'));corpus=json.load(gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt'))
+term_checks=[];full={}
+for q in load(E/'independent-master-records.json'):
+ measured={}
+ for section,saved in q['sections'].items():
+  got=[{'index':i,'record':r} for i,r in enumerate(master[section]) if r.get('wylie')==q['term'] or q['term'] in (r.get('wylie_variants')or[])];assert got==saved and len(got)==q['counts'][section]
+  measured[section]=got
+  for x in got:full[(section,x['index'])]={'section':section,**x}
+ term_checks.append({'term':q['term'],'sections':measured,'counts':{k:len(v)for k,v in measured.items()},'complete_original_records_exact':True})
+original_master=[]
+for q in load(E/'original-master-requeries.json'):
+ got=[(i,r)for i,r in enumerate(master[q['section']]) if r.get('wylie')==q['term']or q['term'] in (r.get('wylie_variants')or[])];assert len(got)==q['count']
+ for (i,r),x in zip(got,q['full_records']):assert x['index']==i and r==x.get('record',x.get('entry'));full[(q['section'],i)]={'section':q['section'],'index':i,'record':r}
+ original_master.append({'origin':q['origin'],'term':q['term'],'section':q['section'],'count':len(got),'all_complete_original_records_exact':True})
+dump('independent-master-term-results.json',term_checks);dump('independent-full-master-records.json',list(full.values()));dump('original-master-requery-proof.json',original_master)
+cp=[]
+for q in load(E/'independent-original-corpus-records.json'):
+ s=rows[q['seq']];got=[{'index':i,'record':r,'equal_fields':[f for f in ['acip','wylie','english']if r.get(f)==s[f]]}for i,r in enumerate(corpus)if any(r.get(f)==s[f]for f in ['acip','wylie','english'])];assert got==q['rows']and len(got)==q['count'];cp.append({'seq':q['seq'],'count':len(got),'rows':got,'complete_original_archive_records_exact':True})
+ # Verify both original archive-query interfaces separately.
+ for angle,fn,key in [('tibetan','external-corpus-evidence.json','rows'),('english','corpus-gzip-original.json','results')]:
+  o=next(z for z in load(A/angle/'evidence'/fn)['queries']if z['seq']==q['seq']);assert o['count']==len(got)
+  for x,y in zip(o[key],got):assert x.get('index',x.get('zero_based_index'))==y['index']and x.get('record',x.get('row'))==y['record']and x['equal_fields']==y['equal_fields']
+dump('independent-original-corpus-records.json',cp)
+# Every full SQL raw record is also checked against the immutable original corpus object.
+archive_index={json.dumps(r,sort_keys=True,ensure_ascii=False):i for i,r in enumerate(corpus)}
+for row in unique.values():assert json.dumps(json.loads(row['raw']),sort_keys=True,ensure_ascii=False)in archive_index
+dump('independent-unique-corpus-rows.json',list(unique.values()))
+local_checks=[];dispositions=[];counters=collections.Counter()
+resolved={(x['seq'],x['id']):x for x in load(R/'resolved-spans.json')}
+for q in [310,311,312]:
+ D=A/'reconciled'/str(q);s=rows[q];ranges=load(D/'resolved-ranges.json')['ranges'];planned=load(D/'planned-decisions.json');tuples=load(D/'final-ordered-tuples.json')['tuples'];sp=load(D/'spec.json')['segments'][0]['spans']
+ assert len(sp)==len(ranges)==len(planned)==len(tuples)
+ for x,y,z,ps in zip(ranges,planned,tuples,sp):
+  rr=resolved[(q,ps['id'])]
+  for k in ['id','d','tib','eng','tib_range','eng_range']:assert x[k]==y[k]==z[k]==rr[k],(q,ps['id'],k)
+  assert x['independent_judgment']==y['independent_judgment']==z['independent_judgment']
+  a,b=z['source_clause_range'];assert s['wylie'][a:b]==z['source_clause']
+  assert z['all_tibetan_literal_occurrences']==occ(s['wylie'],z['tib'])
+  assert z['all_english_literal_occurrences']==(occ(s['english'],z['eng'])if z['eng']else[])
+  for f in z['HGM_original_fields']:
+   r=master[f['section']][f['original_index']];assert r.get('wylie')==f['wylie'];assert {k:r[k]for k in f['exact_HGM_fields']}==f['exact_HGM_fields']
+  local_checks.append({'seq':q,'id':ps['id'],'all_interfaces_and_ranges_exact':True,'HGM_field_attribution_exact':True})
+ for x in load(D/'original-dispositions.json')['dispositions']:
+  os=load(pathlib.Path(x['original_spec_path']))['segments'][0]['spans'];assert os[x['original_index']]==x['original_span_object']
+  replay=load(A/'reconciled/native'/f"{x['angle']}-{q}-resolve"/'stdout')['segments'][0]['resolved'];orig=replay[x['original_index']]
+  assert x['original_seven_key_tuple']=={k:orig[k]for k in ['id','d','tib','eng','tib_range','eng_range','parent']}
+  for y in x['final_seven_key_tuples']:
+   rr=next(r for r in ranges if r['id']==y['id']);assert all(rr[k]==v for k,v in y.items())
+  exact=any(all(orig[k]==resolved[(q,fid)][k] for k in ['d','tib','eng','tib_range','eng_range'])for fid in x['final_ids'])
+  assert exact==(x['status']=='RETAIN_EXACT_CORRESPONDENCE')
+  dispositions.append({'seq':q,'angle':x['angle'],'original_id':orig['id'],'status':x['status'],'final_ids':x['final_ids'],'tuple_identity_verified':True});counters[x['status']]+=1
+ for o in load(D/'material-omissions.json')['omissions']:
+  for v in o['exact_original_evidence']:assert occ(s[v['field']],v['quote'])==v['occurrences']and len(v['occurrences'])==v['count']
+ for field,gaps in load(D/'material-omissions.json')['all_unwrapped_gaps'].items():
+  for g in gaps:a,b=g['range'];assert s[field][a:b]==g['text']
+dump('all-interface-identity-proof.json',local_checks);dump('original-disposition-identity-proof.json',dispositions)
+screens=[];register=load(E/'pinned/docs/errata_register.json')
+for q in [310,311,312]:
+ s=rows[q]
+ for x in load(A/'reconciled'/str(q)/'errata-five-grounds.json')['screens']:
+  a=x['ground_a_exact_original_quotes'];assert a['original_full_source_row']==s
+  for v in a['quotes']:assert v['occurrences']==occ(s[v['field']],v['quote'])and v['count']==len(v['occurrences'])
+  b=x['ground_b_parallel_publication'];assert b['same_acip_count']==db.execute('select count(*) from corpus_segments where acip=?',(s['acip'],)).fetchone()[0]
+  for w in b['witnesses']:
+   actual=dict(db.execute('select * from corpus_segments where course=? and seq=?',(w['course'],w['seq'])).fetchone())
+   for f,v in w['comparison'].items():
+    assert v['equal']==(s[f]==actual[f])and v['source_length']==len(s[f])and v['witness_length']==len(actual[f])
+    for d in v['differences']:
+     aa,bb=d['source_range'];cc,dd=d['witness_range'];assert s[f][aa:bb]==d['source_quote']and actual[f][cc:dd]==d['witness_quote']
+  c=x['ground_c_registered_classes'];assert c['historical_register_entries']==len(register)and c['register_sha256']==sha((E/'pinned/docs/errata_register.json').read_bytes());assert c['english_characters']==len(s['english'])and c['cap1500']==(len(s['english'])==1500)
+  assert not [r for r in register if r.get('segment')=='C05:'+str(q)]
+  for r in c['full_reviewed_class_records']:assert r in register
+  for v in x['ground_e_counts_and_evidence']['original_local_quote_counts']:
+   hits=occ(s[v['field']],v['quote'])
+   if 'measured_count'in v:assert len(hits)==v['measured_count']==v['reported_count']
+   else:assert hits==v['measured_occurrences']and v['reported_range']in hits
+  screens.append({'seq':q,'id':x['id'],'quote_counts_exact':True,'parallel_counts_and_full_comparison_ranges_exact':True,'register_count_and_original_class_records_exact':True,'original_local_claimed_counts_exact':True})
+dump('six-screen-evidence-proof.json',screens)
+summary={'SQL_queries_rerun':len(queries),'distinct_complete_SQL_rows':len(unique),'original_master_queries_reexecuted':len(original_master),'reconciler_term_queries_reexecuted':len(term_checks),'distinct_full_master_records_reopened':len(full),'original_dispositions_verified':len(dispositions),'original_dispositions':dict(counters),'final_interfaces_verified':len(local_checks),'screens_verified':len(screens),'corpus_archive_records':len(corpus),'all_source_corpus_objects_exact':True,'note':'Dictionary corpus_occurrences and historical class metadata preserved as metadata, not independently reasserted linguistic results.'}
+dump('evidence-recheck-summary.json',summary);print(json.dumps(summary,indent=2))

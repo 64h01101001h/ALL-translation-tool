@@ -1,0 +1,76 @@
+{
+  "schema": "five-ground-errata-assessment-v1",
+  "seq": 310,
+  "producer": "Codex Tibetan-first",
+  "errata_proposed": 0,
+  "ground_1_exact_this_row": {
+    "quotes": {
+      "acip": "LUS KYIS BDE SDUG MYONG MI MYONG",
+      "english": "whether they are experiencing pleasure or pain"
+    },
+    "counts": {
+      "acip": 1,
+      "english": 1
+    },
+    "source": "../evidence/spine-full-original-rows.json; complete raw row retained; physical-source-proof.json gives complete exact source extents"
+  },
+  "ground_2_parallel_witness": {
+    "same_acip_query_count": 3,
+    "witnesses": [
+      {
+        "course": "C15",
+        "seq": 455,
+        "compared_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": false
+        },
+        "full_record_reference": "../evidence/corpus-query-evidence.json#/queries/0/rows/1",
+        "independent_publication": "not established"
+      },
+      {
+        "course": "C16",
+        "seq": 847,
+        "compared_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": true
+        },
+        "full_record_reference": "../evidence/corpus-query-evidence.json#/queries/0/rows/2",
+        "independent_publication": "not established"
+      }
+    ],
+    "broad_queries": "../evidence/corpus-query-evidence.json includes full rows for mi bzod, mtshon cha phor gang, las can gyi, tshad mtshungs, skyes bu dam pa, microscopic organisms, glasses of water and khrul snang bzang ngan. No independent publication is established; course-shape lineage wording is metadata only.",
+    "specific_limit": "C15:455 changes the opening wording; C16:847 equals all three text fields. P7:47 differs in Tibetan punctuation and English is a prefix ending reasoning were; its unquoted continuation cannot be inferred."
+  },
+  "ground_3_registered_classes": {
+    "historical_register_entries": 194,
+    "same_segment_records": [],
+    "candidate_term_records": [],
+    "register": "../evidence/pinned/docs/errata_register.json",
+    "classes_reviewed": [
+      "E-044 converter escapes",
+      "E-071 English running heads",
+      "E-076 period-fused footnotes",
+      "E-121 word-fused footnotes",
+      "E-111 row spill",
+      "E-107 1500-character cap",
+      "course-shape following-heading and folio classes"
+    ],
+    "english_characters": 613,
+    "cap_applies": false,
+    "disposition": "No new instance of a registered apparatus class in this C05 row. The C16:848 heading is a different row and is not newly filed."
+  },
+  "ground_4_local_sense_and_HGM": {
+    "evidence": "../evidence/master-lexical-evidence.json retains complete original records with hgm_gloss, tier, source and comparative fields distinguished. Full original master bytes retained.",
+    "assessment": "HGM lus includes body/physically; this English leaves physical modality implicit while myong directly owns experience. Absence of a separate body exponent does not prove a textual defect. The null asserts only no separate exponent, not absent experiential meaning."
+  },
+  "ground_5_proof_integrity": {
+    "source_baseline": "../evidence/source-pin-proof.json",
+    "full_external_originals": "../evidence/external-original-copies.json",
+    "native_generator": "attempts/native-001/execution.json",
+    "query_counts": "All stored query counts are checked against complete retained result arrays; source pin proof compares all six selected fields against original read-only spine rows.",
+    "physical": "physical-source-proof.json verifies selected complete original physical blocks against spine fields after whitespace joining.",
+    "status": "No source correction, no independent manuscript/publication authority, no hgm_gloss promotion, no semantic approval."
+  }
+}

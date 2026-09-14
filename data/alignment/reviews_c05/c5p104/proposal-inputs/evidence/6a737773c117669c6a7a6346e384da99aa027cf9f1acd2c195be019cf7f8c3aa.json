@@ -1,0 +1,138 @@
+{
+  "schema": "c05-independent-reconciliation-completion-v1",
+  "producer": "Codex independent reconciler",
+  "status": "RECONCILIATION_COMPLETE_PENDING_FRESH_SKEPTICAL_REVIEW_AND_ROOT_ACCEPTANCE",
+  "source_origin": "51d73c889a3f175b90e4c466f3dc4b1f7af3bca5",
+  "source_boundary": 306,
+  "actual_later_supplied_predecessor": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+  "actual_predecessor_boundary": 309,
+  "segments": [
+    {
+      "seq": 310,
+      "counts": {
+        "spans": 40,
+        "nulls": 1,
+        "d5_total": 26,
+        "nonnull_d5": 25,
+        "d7": 8,
+        "depths": {
+          "2": 1,
+          "5": 26,
+          "7": 8,
+          "6": 4,
+          "3": 1
+        },
+        "errata": 0
+      },
+      "spec": {
+        "bytes": 6321,
+        "sha256": "a3d8eba9a4ea308eb31b90bcd8fe1647c9d69ed801bcbb4a4846808c1da69170"
+      },
+      "body": {
+        "bytes": 6412,
+        "sha256": "ee51e1b7bda1068877eea5d823c7d2ed8c64c779113d1da7d7508a9684c986a5"
+      },
+      "report": "310/report.md",
+      "native_generator": "native/final-310-generate-01"
+    },
+    {
+      "seq": 311,
+      "counts": {
+        "spans": 13,
+        "nulls": 0,
+        "d5_total": 7,
+        "nonnull_d5": 7,
+        "d7": 2,
+        "depths": {
+          "5": 7,
+          "6": 4,
+          "7": 2
+        },
+        "errata": 0
+      },
+      "spec": {
+        "bytes": 2512,
+        "sha256": "c2eaa3103b9f8e62714c64fc6510839461e8b0fa648b6e01cc8464ad4fc9ba6c"
+      },
+      "body": {
+        "bytes": 2738,
+        "sha256": "dcc8f6381f6ddae87aa0cba7654b1a0d016660ec18a34c9371ff034eb28300db"
+      },
+      "report": "311/report.md",
+      "native_generator": "native/final-311-generate-01"
+    },
+    {
+      "seq": 312,
+      "counts": {
+        "spans": 57,
+        "nulls": 0,
+        "d5_total": 41,
+        "nonnull_d5": 41,
+        "d7": 6,
+        "depths": {
+          "3": 3,
+          "5": 41,
+          "6": 7,
+          "7": 6
+        },
+        "errata": 0
+      },
+      "spec": {
+        "bytes": 8677,
+        "sha256": "8077286dce8acdc014f6ad7a617755ceda604619420a38d6ee04a5eee25256cc"
+      },
+      "body": {
+        "bytes": 8851,
+        "sha256": "36e928379f9febb2d3b7e82e6ec0191f0bd4ff575940258c196a17e657e25c16"
+      },
+      "report": "312/report.md",
+      "native_generator": "native/final-312-generate-02"
+    }
+  ],
+  "summary": {
+    "original_dispositions": 195,
+    "original_counts": {
+      "tibetan": 103,
+      "english": 92
+    },
+    "disposition_counts": {
+      "RECAST_OR_TIGHTEN": 15,
+      "RETAIN_EXACT_CORRESPONDENCE": 180
+    },
+    "final_spans": 110,
+    "final_nulls": 1,
+    "final_d5_total": 74,
+    "final_nonnull_d5": 73,
+    "final_d7": 16,
+    "material_omissions": {
+      "310": 6,
+      "311": 4,
+      "312": 10
+    },
+    "all_five_ground_screens": 6,
+    "retained_errata": 0
+  },
+  "original_freezes": [
+    {
+      "angle": "tibetan",
+      "manifest": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-310-312/tibetan/freeze-manifest.json",
+      "sha256": "c7631740582c0b98e79f396e9af4890660ac58b8708cc5877c8f7a076683d9f3",
+      "files_dictionary": 88,
+      "final_recheck": true
+    },
+    {
+      "angle": "english",
+      "manifest": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-310-312/english/freeze.json",
+      "sha256": "ba3a7180dc87ad0adf7a4e9738f77936b655f135afaa26915cad01f3b2a61f22",
+      "files_dictionary": 111,
+      "final_recheck": true
+    }
+  ],
+  "limits": [
+    "All alignments provisional; GMR wording unchanged.",
+    "Six all-five-ground screens refute filing under defensible reading/uncertainty; no independent publication established.",
+    "First312 extent draft superseded with whole attested entire extent; only changed312 regenerated.",
+    "No repository/source/device/account actions, commits, paid API calls or subagents.",
+    "Fresh independent skeptical semantic review and root acceptance remain outstanding."
+  ]
+}

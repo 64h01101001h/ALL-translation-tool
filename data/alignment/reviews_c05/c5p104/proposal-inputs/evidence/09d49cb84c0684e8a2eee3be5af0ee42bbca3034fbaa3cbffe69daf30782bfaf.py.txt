@@ -1,0 +1,49 @@
+import json,pathlib,gzip,hashlib,sqlite3,difflib
+A=pathlib.Path(__file__).resolve().parents[1];B=A.parent;E=A/'evidence';pin=json.loads((B/'proposal-baseline.json').read_text());master=json.load(gzip.open(pin['source_pins']['master']['path'],'rt'))
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def meta(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+checks=[]
+for angle,files in [('tibetan',['master-lexical-evidence.json']),('english',['hgm-lexical-original.json','additional-hgm-original.json'])]:
+ for fn in files:
+  p=B/angle/'evidence'/fn;x=json.loads(p.read_text())
+  if angle=='tibetan':
+   for term,results in x['results'].items():
+    for section,records in results.items():
+     values=master[section];values=list(values.values()) if isinstance(values,dict) else values
+     got=[{'index':i,'record':r} for i,r in enumerate(values) if isinstance(r,dict) and (r.get('wylie')==term or term in (r.get('wylie_variants') or []))];assert got==records
+     checks.append({'origin':str(p),'term':term,'section':section,'full_records':got,'count':len(got),'exact_original_records':True})
+  else:
+   for q in x['queries']:
+    term=q['query'].get('equals',q['query'].get('exact_wylie_or_variant'));got=[{'index':i,'entry':r} for i,r in enumerate(master['unified_entries']) if r.get('wylie')==term or term in (r.get('wylie_variants') or [])];assert got==q['results'] and len(got)==q['count']
+    checks.append({'origin':str(p),'term':term,'section':'unified_entries','full_records':got,'count':len(got),'exact_original_records':True})
+dump(E/'original-master-requeries.json',checks)
+# Read original corpus bytes and compare all saved archive query rows, including metadata beyond the three text fields.
+corpus=json.load(gzip.open(pin['source_pins']['corpus']['path'],'rt'));src=json.loads((B/'source.json').read_text());cp=[]
+for angle,fn in [('tibetan','external-corpus-evidence.json'),('english','corpus-gzip-original.json')]:
+ x=json.loads((B/angle/'evidence'/fn).read_text())
+ for q in x['queries']:
+  s=next(r for r in src if r['seq']==q['seq']);h=[(i,r,[k for k in ['acip','wylie','english'] if r.get(k)==s[k]]) for i,r in enumerate(corpus) if any(r.get(k)==s[k] for k in ['acip','wylie','english'])]
+  old=q['rows'] if angle=='tibetan' else q['results'];assert len(h)==q['count']==len(old)
+  for (i,r,fields),v in zip(h,old):assert i==v.get('index',v.get('zero_based_index')) and r==v.get('record',v.get('row')) and fields==v['equal_fields']
+  cp.append({'original':str(B/angle/'evidence'/fn),'seq':q['seq'],'count':len(h),'all_full_original_rows_exact':True})
+dump(E/'original-corpus-requery-proof.json',cp)
+# Map separately supplied future acceptance boundary without relabeling the historical proposals.
+p=B/'baseline.json';raw=p.read_bytes();(E/'acceptance-baseline-through309.json').write_bytes(raw);baseline=json.loads(raw);assert baseline['course_boundary']==309 and baseline['commit']=='8575edf1e0de695677194c1fde60f1d9e2c2f204'
+dump(E/'acceptance-baseline-binding.json',{'origin':str(p),'copy':'evidence/acceptance-baseline-through309.json',**meta(raw),'source_governance_origin':pin['commit'],'source_governance_boundary':306,'actual_acceptance_predecessor':baseline['commit'],'actual_acceptance_boundary':309,'supplied_by':'Root after this reconciliation began; original proposal authors did not use this future acceptance baseline.'})
+# Full source comparisons and exact differing fragments for cited parallel witnesses.
+queries=json.loads((E/'independent-corpus-queries.json').read_text());rows={r['seq']:r for r in json.loads((E/'original-local-rows.json').read_text())};out=[]
+for seq in [310,311,312]:
+ s=rows[seq];same=[q for q in queries if q.get('parameters')==[s['acip']]][0]['rows'];related={ (r['course'],r['seq']):r for r in same}
+ if seq==310:
+  for q in queries:
+   if q['parameters']==["%'khrul snang bzang ngan%"]:
+    related.update({(r['course'],r['seq']):r for r in q['rows']})
+ items=[]
+ for key,r in related.items():
+  diffs={}
+  for f in ['acip','wylie','english']:
+   opcodes=difflib.SequenceMatcher(a=s[f],b=r[f],autojunk=False).get_opcodes();diffs[f]={'equal':s[f]==r[f],'source_length':len(s[f]),'witness_length':len(r[f]),'differences':[{'operation':tag,'source_range':[i,j],'source_quote':s[f][i:j],'witness_range':[k,l],'witness_quote':r[f][k:l]} for tag,i,j,k,l in opcodes if tag!='equal']}
+  items.append({'original_full_row':r,'field_comparisons':diffs,'independent_publication':'not established','ingestion_lineage':'not established by digital equality or difference'})
+ out.append({'seq':seq,'same_acip_count':len(same),'witnesses':items})
+dump(E/'parallel-full-comparisons.json',out)
+print(json.dumps({'original_master_queries':len(checks),'full_master_records':sum(q['count'] for q in checks),'corpus_query_verifications':len(cp),'acceptance_baseline':baseline['commit'],'parallel_sets':len(out)}))

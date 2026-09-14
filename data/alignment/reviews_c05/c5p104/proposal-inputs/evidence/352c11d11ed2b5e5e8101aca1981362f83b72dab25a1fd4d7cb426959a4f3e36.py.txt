@@ -1,0 +1,13 @@
+import hashlib,json,pathlib
+A=pathlib.Path(__file__).resolve().parent
+pins=json.loads((A/'evidence/proposal-baseline.json').read_text())['source_pins']
+proof={}
+for name in ['master','corpus']:
+    pin=pins[name]; data=pathlib.Path(pin['path']).read_bytes()
+    assert hashlib.sha256(data).hexdigest()==pin['sha256'] and len(data)==pin['bytes']
+    dest=A/'evidence'/pathlib.Path(pin['path']).name
+    assert not dest.exists()
+    dest.write_bytes(data)
+    proof[name]=dict(pin,stored=str(dest.relative_to(A)),complete_original_bytes=True)
+(A/'evidence/external-original-copies.json').write_text(json.dumps(proof,indent=2)+'\n')
+print('Preserved complete original master and corpus bytes; original verified hashes retained.')

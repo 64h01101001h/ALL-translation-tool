@@ -1,0 +1,168 @@
+import pathlib,json,hashlib,collections
+R=pathlib.Path(__file__).resolve().parents[1];A=R.parent
+def load(p):return json.loads(p.read_text())
+def dump(name,x):(R/name).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+reasons={310:{
+'w1':'The counterfactual antecedent contains de ltar, the negative copula ma yin, and na. This is a complete conditional clause, so d2 and its complete English antecedent are appropriate; it does not claim a lexical compound.',
+'w2':'dge ba is the positive conduct noun in the first tenfold set. It selects virtues at 98, excluding the substring in non-virtues; the original glossary field attests virtues although the curated unified field uses goodness.',
+'w3':'bcu counts the first set of virtues, hence the first ten at 94.',
+'w4':'spyod pa predicates conduct with respect to virtues. following at 80 preserves that overt act without assigning the English relative subject and lead their lives to a dictionary word.',
+'w5':'skyes bu dam pa is the attested holy-being compound, realized as holy people. Both meaningful members survive; the demonstrative those lies outside.',
+'w6':'skyes bu is the people member inside the holy compound, at 52, not the second group of people. The English reversal against dam pa is local to its parent.',
+'w7':'dam pa contributes holy within the same established compound. It is tighter than the parent on both sides and does not include those.',
+'w8':'mtho ris is the lexical higher-rebirth destination of the virtuous people. The whole higher realms is supported; its two members describe height and domain.',
+'w9':'mtho contributes higher only inside the first higher-realms parent; it does not independently claim an anaphoric realm elsewhere.',
+'w10':'ris denotes the domain/category member and has HGM realms attestation. Its occurrence is the realms at 145 inside higher realms, not the later these realms.',
+'w11':'su is the independent destination particle after mtho ris, rendered into at 129. Its d6 follows its Tibetan grammatical role.',
+'w12':'This skyes follows the first destination particle and predicates birth of the holy people. It selects born at 124 rather than the later lower-realm birth or skyes inside skyes bu.',
+'w13':'bde ba denotes the pleasures experienced in the higher realms; the article and anaphoric of these realms are not included.',
+'w14':'myong ba takes the higher-realm pleasures as object, so the first experience at 162 is the correct occurrence.',
+'w15':'dang joins the two contrasting experiential cases. The capitalized And at 204 begins the second case; the earlier English and phrases are connective expansion.',
+'w16':'mi dge is the whole negative-virtue compound. non-virtues preserves its lexical negation; no unsupported non fragment or positive virtue token is extracted.',
+'w17':'The second bcu counts the non-virtues and selects ten at 279.',
+'w18':'The second spyod pa describes the second group following non-virtues; it selects following at 265 and excludes the first group.',
+'w19':'sems can is the sentient-being noun rendered people in miserable people. The first people belongs to skyes bu and cannot be reused.',
+'w20':'dman pa qualifies the second group as lowly/miserable; HGM explicitly includes miserable, and the word is not the lower-realm destination.',
+'w21':'ngan song is the whole bad-rebirth compound, rendered lower realms. There is no false member linking song to realms.',
+'w22':'du is the destination particle for the second birth; into at 318 belongs to that lower-realm clause.',
+'w23':'The second independent skyes predicates birth in the lower realms. born at 313 belongs to that case.',
+'w24':'sdug bsngal denotes the lower-realm sufferings at 365, distinct from the later pleasure/pain alternatives.',
+'w25':'The second myong ba takes those sufferings as object and selects experience at 350.',
+'w26':'The error/appearance compound is locally a misperception. The single English misperception supports the whole word, with no fabricated internal English members.',
+'w27':'bzang ngan is a conventional juxtaposed pair of qualities, and the HGM glossary explicitly includes better or worse. The conjunction expresses their alternatives; it is not an unrelated supplied hinge. d5 with two d7 quality members is sound.',
+'w28':'bzang contributes the favorable member better at 455 inside better or worse.',
+'w29':'ngan contributes the unfavorable member worse at 465 inside that pair. It cannot attach to ngan in the preceding ngan song compound.',
+'w30':'tsam restricts the contrast to merely misperception and has just as its overt restrictive exponent. The further ma gtogs exclusion remains separately unresolved.',
+'w31':'lus explicitly names the bodily mode. Full English has no body, bodily, physically, or separate corresponding phrase; experiencing is licensed by myong. This is positive evidence for no separate exponent, not a null used for uncertain mapping.',
+'w32':'bde sdug is the established pleasure/pain pair in the concluding distinction. Its complete pleasure or pain is attested and licenses two unique contained members.',
+'w33':'bde is pleasure at 532 within bde sdug, not the earlier plural pleasures.',
+'w34':'sdug is pain at 544 within the final alternative pair, not the sufferings at 365.',
+'w35':'The positive myong at 267 precedes mi myong and supplies experiencing at 519. Banking this experience word does not turn the omitted negative alternative or absence of difference into a positive assertion.',
+'w36':'khyad par is the nominal distinction in the challenge, reordered to difference at 400. The surrounding negation and rhetorical question are outside the selected noun.',
+'nThal':'thal is the lexical consequence predicate of the challenge. have to at 561 expresses its inferential necessity; would is counterfactual framing and be supplies the English copula. HGM thal contains have to and must. d5 follows this source predicate, not an automatic classification of English modals.',
+'nYour':'khyod kyi combines the explicit opponent pronoun and genitive. The whole possessive your is therefore a source-licensed d3 relation; this is not a gated d5 head allowance.',
+'w37':'rigs pa is the opponent reasoning in the final reason. reasoning at 590 is its noun, without your or were.',
+'w38':'The validity predicate thad pa qualifies that reasoning and is rendered correct at 605. Its apostrophe is preserved in the actual tuple; were and the causal-to-conditional frame are outside.'},311:{
+'w1':'The initial dod is the acceptance predicate in the premise, selecting agree at 12. It is distinct from the final acceptance verb.',
+'w2':'na supplies the supposition condition. Suppose at 0 is its local rendering; the addressed you is not captured.',
+'w3':'mtho ris is the higher-rebirth compound whose pleasures are questioned. It retains the entire higher realms plus its two meaningful members.',
+'w4':'mtho contributes higher within this one parent; strict containment preserves the source and English domain.',
+'w5':'ris contributes realms inside higher realms at 131. The corresponding HGM domain sense and parent relation support the member.',
+'w6':'kyi connects the higher realms to their pleasures. of at 117 is the correct genitive, distinct from the lower-realm of.',
+'w7':'bde ba is the first coordinated experiential noun, pleasures at 107. The shared existential negation is not falsely assigned to this word.',
+'w8':'dang coordinates the two experiential nouns and maps the and at 156 between the two English questions.',
+'w9':'ngan song is the lower-rebirth compound in the second coordinate. lower realms at 182 is its complete lexical rendering.',
+'w10':'gi connects lower realms with pains and selects the second of at 175, not the first genitive.',
+'w11':'sdug bsngal is rendered pains here. This exact source English is supported by the original glossary pains reading; it is not replaced by the curated sufferings wording.',
+'nThal':'thal states the inferential consequence. must at 217 carries that necessity in You must be; You and elliptical be add English rhetoric. d5 is justified by the Tibetan consequence predicate independently of the English modal form.',
+'w12':'The later dod pa is the reason-premise acceptance, selecting agree at 233 in if you agree this way. It does not reuse the opening agree.'},312:{
+'w1':'des na closes the preceding line of reasoning. In conclusion is a complete discourse phrase at d3; now and let us consider again are outside.',
+'w2':'las is the karma of the observers, not the homographic ablative particle. The glossary karma field and las can construction support the noun; the curated deeds field is kept distinct.',
+'w3':'gro ba names the opening three beings. beings at 62 is its first mention; later repeated three beings are explanatory anaphora.',
+'w4':'gsum counts the opening observer group and selects three at 47, not either later repetition.',
+'w5':'brlan describes the observed contents as wet. It is neither the perceivers nor the act of looking.',
+'w6':'zhing joins wet and flowing. Its grammatical conjunction function licenses and at 171 even though the same-spelling curated dictionary entry concerns paradise/world; that homograph is not used as lexical evidence for this particle.',
+'w7':'gsher ba is the second material quality, flowing at 175. The exact HGM field confirms this local rendering.',
+'w8':'The opening phor pa names the glass at 143. It does not select the later anaphoric glass.',
+'w9':'gang modifies vessel quantity/fullness, yielding full. It is not the relative-pronoun homograph and contains no of something.',
+'w10':'cig car is the simultaneity adverb. together at 120 describes simultaneous observation; the source does not independently express sitting down. The shorter lexical adverb supports d5 while du remains outside.',
+'w11':'bltas pa is the opening look at 133. Later looking and see repetitions are separate English expansions and do not displace this occurrence.',
+'w12':'In tshad mtshungs, tshad abbreviates valid cognition, as supported by the surrounding discussion and original HGM valid perceptions field. It is not the sea-measure noun later in this row.',
+'w13':'mtshungs is the equality of the observers valid perceptions and is realized as identical at 262.',
+'w14':'nges par supplies certainty/necessity qualification. necessarily at 193 is the narrow adverb; true is the English copular framing.',
+'w15':'The first dgos pa is the necessity predicate in the opening thesis. must at 220 is its source-licensed modal exponent.',
+'w16':'ma negates the opening necessity claim. It maps separate not at 189 without absorbing true or the near-god lexical negation later in the row.',
+'w17':'This na follows dgos in the conditional premise. If at 273 is its exponent; the anaphoric they did does not justify a dgos/did link.',
+'w18':'The second phor pa recalls the glass in the hypothetical counterexample and selects glass at 323. Fullness, water, and looking are not assigned to it.',
+'nLoc':'nang du gives the location inside that vessel. The recast realizes this as in at 425 after creature living; the earlier in the way is a comparison frame, and the later in the water repeats the same explanation. The whole source locative relation is a defensible d3 phrase.',
+'w19':'The first gnas is nominal in gnas kyi blos and names the dwelling place. place at 376 is its safe noun exponent; the explanatory to live is not a second source residence verb.',
+'w20':'blos is the complete inflected cognition noun within gnas kyi blos, locally recast as think. The exact blos dictionary record gives intent, while the blo record gives think; the full C05:250 phrase explicitly supplies thinks of this same water as a place to stay. The shared cognitive relation supports this occurrence without splitting agentive s or claiming the entire expanded participant frame.',
+'w21':'The second gnas is the dwelling predicate in gnas shing, realized first as living at 418 in the creature example. living at 537 is a repeated explanation of the glass organisms, and living at 721 belongs to the separate ocean predicate. This is a source-occurrence decision, not a first-substring assumption.',
+'w22':'tha mal qualifies the normal visual faculty that cannot discern the tiny creatures. normal at 589 is that qualifier.',
+'w23':'The first mig shes is the normal observer faculty at 596, distinguished by tha mal gyi. It is not the organisms own visual consciousness.',
+'w24':'mig contributes visual within the normal visual-consciousness parent. Its full HGM record has visual as well as eye.',
+'w25':'shes contributes consciousness within that first parent, with a separate unique English occurrence inside it.',
+'w26':'The first srog chags names the cup organisms, realized as organisms at 527. little beings repeats this referent and is not an additional source noun.',
+'w27':'phra mo is the smallness of the cup organisms, rendered microscopic at 515. The HGM microscopic and microscopic ... little readings support this first rendering and explain the later repetition.',
+'w28':'The second mig shes belongs to the cup organisms, and selects their own visual consciousness at 640. The normal faculty and ocean faculty are separate.',
+'w29':'mig is visual within the cup organisms own faculty, not the preceding normal faculty.',
+'w30':'shes is consciousness within the second mig shes parent. Multiple consecutive d7 children are legitimate and each is tighter and unique.',
+'nAlso':'The first kyang adds the cup-organism consequence, rendered as well at 458. The later too belongs to the ocean consequence.',
+'nNeed':'The dgos pa following the first tshad mar gro expresses the necessity of the cup-organism comparison. It selects have to at 472 in would have to see, excluding would and the earlier would have to think expansion. The unresolved validity wording remains omitted independently.',
+'w31':'The first rgya mtsho is the habitat of the second organisms and selects ocean at 749. Removing the genitive i avoids assigning possession to the noun.',
+'w32':'nang is the ocean interior, realized as depths. The HGM nang record explicitly attests depths, and the following na supplies in separately; calling depths wholly supplied would lose an overt source noun.',
+'w33':'The locative na after ocean-interior nang maps in at 728. It is distinct from the earlier conditional na and from the cup locative du.',
+'w34':'gnas pa predicates the ocean organisms residence and selects living at 721. Its attached genitive i is left out; the cup restatement at 537 is not reused.',
+'w35':'The second srog chags names ocean organisms at 711. It remains associated with the ocean faculty despite English possessive reordering.',
+'w36':'The second phra mo qualifies the ocean organisms as microscopic at 699, distinct from the cup organisms at 515.',
+'w37':'The third mig shes is the ocean organisms visual consciousness at 675, placed before its possessor in English. It cannot attach to either earlier faculty.',
+'w38':'mig contributes visual within the third, ocean visual-consciousness parent only.',
+'w39':'shes contributes consciousness inside that same ocean parent, with independent tight containment.',
+'w40':'The second kyang adds the ocean consequence as too at 667 in Then too. It does not map the later near-gods too or the prior as well.',
+'w41':'The second rgya mtsho is the sea whose extent is to be known, selecting sea at 824. The genitive i is outside the noun span.',
+'w42':'This tshad is the sea measure, not valid cognition. The full original HGM field explicitly includes entire extent, and the source asks for a valid perception of the sea extent as a whole. Entire is integral to this attested measure rendering; the present complete span is sound. The earlier extent-only draft and its actual successful process proof remain preserved.',
+'w43':'la marks the object with respect to which the cognition would be valid and is rendered towards at 791. It is not a near-god locative occurrence.',
+'w44':'The later tshad mar names valid perception at 774 in the ocean clause. The inflected result form remains a lexical unit; exact tshad mar has validity and the lemma tshad ma has valid perception. The first occurrence is not allowed to jump to this English phrase.',
+'nBe':'The later gro in tshad mar gro is constitutive: to count/serve as a valid perception. be at 769 is thus supported by the source predicate, unlike an English-only auxiliary. The complete SVN:1167 construction renders tshad mar gro dgos as must constitute an accurate perception and confirms only this shared function.',
+'w45':'The ocean dgos pa supplies have to at 761, leaving hypothetical would outside and allowing the separately licensed constitutive be.',
+'w46':'lha ma yin is the established asura term near-gods. It remains whole, without a false god/not or negative-affix analysis.',
+'w47':'ga zhig selects an indefinite subset of the near-gods and is realized as certain at 833. The actual apostrophes remain in the tuple; kinds of stays outside.',
+'w48':'mtshon cha is the overt weapons noun at 882. This lexical match does not endorse the unresolved direction of the full weapons/cupful appearance relation.',
+'w49':'phor is the overt vessel noun in phor gang, realized as glasses at 893. Neither of water nor gang is hidden inside that word pair.',
+'w50':'snang is the appearance predicate in the near-god example and is recast as see at 878. It does not select the earlier cup comparison seeing verbs.',
+'w51':'The final dgos pa supplies have to at 870 in the near-god consequence. Its modal occurrence is separate from the cup and ocean necessities; would is outside.',
+'w52':'la sogs pa is the closing enumeration phrase, rendered and on and on at 911. d3 captures that complete phrase while excluding the attached genitive and the noun problems.',
+'w53':'skyon names the problematic consequences. problems at 930 is lexical; yod does not license many and the closing English finite frame stays outside.'}}
+resolved=load(R/'resolved-spans.json');allspan=[]
+for q in [310,311,312]:
+ tuples=load(A/'reconciled'/str(q)/'final-ordered-tuples.json')['tuples'];assert set(reasons[q])=={x['id']for x in tuples}
+ for x in tuples:
+  rr=next(y for y in resolved if y['seq']==q and y['id']==x['id']);allspan.append({**rr,'decision':'SOUND_PROVISIONAL','source_specific_reason':reasons[q][x['id']],'parent':x['parent'],'source_clause':x['source_clause'],'source_clause_range':x['source_clause_range'],'original_HGM_fields':x['HGM_original_fields'],'full_master_records':'independent-full-master-records.json','fidelity_proof':'all-interface-identity-proof.json'})
+dump('all-span-decisions.json',allspan)
+originals=[]
+for q in [310,311,312]:
+ for x in load(A/'reconciled'/str(q)/'original-dispositions.json')['dispositions']:
+  originals.append({**x,'fresh_review':'CONCUR_WITH_RECONCILED_DISPOSITION','fresh_source_specific_reasons':{fid:reasons[q][fid]for fid in x['final_ids']},'identity_proof':'original-disposition-identity-proof.json'})
+dump('all-original-disposition-decisions.json',originals)
+omission_reasons={310:[
+'de i encodes the realm anaphor/possessive, but the English noun realms is restated. Existing realm members must not be moved to these anaphors. The conservative omission preserves uncertain boundaries rather than denying the anaphoric meaning.',
+'gnyis la designates the two contrasted experiences, recast as between them. A numerical two/them atom would confuse anaphora with lexical numerosity; omission is preferable to a null or invented relation.',
+'The Tibetan excepting construction and experience/nonexperience contrast jointly feed the English rhetorical not whether clause. A single negative English token cannot safely distinguish these source exponents, so omit the unresolved distribution.',
+'med par denies difference under the disputed premise; the English questions what the difference consists in. Retain the separate difference noun and inferential thal, but no positive exist or guessed negative atom.',
+'phyir reasons from the opponents valid inference while English uses a conditional if. The complete causal-to-conditional relation is a recast; a isolated if for phyir is not established.',
+'The source permits narrow conduct and inferential necessity links. The added relative subject, consider wording, finite copula, and hypothetical would do not warrant wider d5 spans.'
+],311:[
+'One med par scopes both coordinated experiential nouns. English repeats do-supported negative existence with even. Omission avoids falsely asserting either a positive exist mapping or absence of meaning; a broad phrase would swallow already useful word links without resolving the uncertain negative boundary.',
+'The opening acceptance refers back to the preceding thesis. The detailed better/worse-misperception English explanation supplies no new Tibetan lexical content in 311.',
+'The closing deictic reason is rephrased as if you agree this way. Only the second admission verb has a safe local word exponent; the deictic and causal contribution stays unbanked.',
+'The rhetorical question and final elliptical sentence restate the consequence. Bank thal once as must, leaving the supplied addressed person and elliptical be outside.'
+],312:[
+'The lexical karma, beings, simultaneity, and looking are banked. Possession, timing, and the English different/sit-down frame are distributed; this does not license fresh participant or sitting verbs.',
+'The conditional dgos na is anaphoric to the opening necessity. na/If is clear, whereas did cannot independently mean dgos. The copular true frame is not a separate content word match.',
+'The second full-glass reference becomes glass of water in English. phor pa/glass is clear, while fullness and reference do not separately correspond to water or looking.',
+'There are two verbal residence occurrences, for the cup and ocean cases. The earlier infinitive elaborates the nominal place and the middle living repeats the cup explanation. Keeping living at 418 and 721 avoids fabricating a third source residence verb.',
+'Normal-eye inability to bear/sustain may contextualize imperceptibility, but original HGM mi bzod does not establish a separate imperceptible equivalence. Neither an uncertain null nor a broader phrase can resolve this. The surrounding clear nouns remain useful.',
+'The first validity relation becomes a same-way perception comparison. Its modal dgos and additive kyang survive independently, but first tshad mar gro cannot be linked to the later ocean valid perception or to an invented predicate.',
+'English repeats the observers, organisms, water, and seeing to explain the argument. No additional Tibetan tokens exist for those repeated mentions; the selected source occurrences are retained once.',
+'The two ocean nouns are narrowed off their genitives. The current entire extent and depths links are retained because they are HGM-attested local renderings; this omission record concerns residual genitives, not a rejection of those words.',
+'The source contains weapons, vessel/cupful, appearance, and necessity. Their clear words are banked, but the quantity and full weapons-as-water-glasses relation remain uncertain. No phrase is widened to disguise that uncertainty.',
+'The existence/reason conclusion does not independently license many. Retain skyon/problems, leaving the English finite conclusion and distributed source yod pai phyir unbanked.'
+]}
+om=[]
+for q in [310,311,312]:
+ old=load(A/'reconciled'/str(q)/'material-omissions.json')['omissions'];assert len(old)==len(omission_reasons[q])
+ for x,why in zip(old,omission_reasons[q]):om.append({'seq':q,**x,'fresh_review':'ACCEPT_OMISSION_WITHOUT_NULL','fresh_source_specific_reason':why})
+dump('all-omission-decisions.json',om)
+screen_reasons={
+'body-omission':'The bodily mode can remain implicit in the English experience description. Missing a separate body word does not establish an editorial error; no uniquely warranted insertion is proven.',
+'negative-recast':'The denial of a difference under the challenged premise becomes a rhetorical question about what differs. The entire argument permits this discourse recast; lack of a one-token negative alignment is insufficient for filing.',
+'repeated-negative-existence':'A shared negated existential over two coordinated objects can defensibly be repeated in English. The source is not missing a second negative predicate merely because the translation writes one twice.',
+'mi-bzod-imperceptibility':'The HGM unable-to-bear reading and the normal-eye context leave interpretation open. The context may concern what ordinary visual capacity cannot sustain, but it does not prove an imperceptible dictionary atom or a unique replacement. Refute filing under uncertainty.',
+'first-validity-recast':'The English explains the cup validity requirement through a same-way perception comparison. No distinct first valid-perception phrase survives, yet that expansion does not establish a textual defect or justify correcting the translation.',
+'weapons-cupful-relation':'The full direction and quantity of the weapons/cupful appearance remain unresolved. Repeated digital text does not prove authorial correctness or any unique correction. Clear lexical nouns can survive while this complete relation remains omitted.'}
+screens=[]
+for q in [310,311,312]:
+ for x in load(A/'reconciled'/str(q)/'errata-five-grounds.json')['screens']:
+  screens.append({'seq':q,'id':x['id'],'refuted':True,'found':x['ground_a_exact_original_quotes']['quotes'],'ground_a':{'verdict':'QUOTES_HOLD','evidence':x['ground_a_exact_original_quotes'],'independent_proof':'six-screen-evidence-proof.json'},'ground_b':{'verdict':'NO_PUBLICATION_INDEPENDENCE_ESTABLISHED','evidence':x['ground_b_parallel_publication'],'independent_proof':'independent-corpus-queries.json','judgment':'Exact full source comparisons support only their actual shared extents. Digital identity and course labels do not establish publication or ingestion independence.'},'ground_c':{'verdict':'NO_TARGET_DUPLICATE_OR_REGISTERED_CLASS_INSTANCE','evidence':x['ground_c_registered_classes'],'independent_proof':'six-screen-evidence-proof.json','judgment':'Original 194-entry register checked as a historical Git object; apparatus in C16:848 or C05:314 cannot be filed as this target row.'},'ground_d':{'verdict':'DEFENSIBLE_OR_UNRESOLVED_NO_WARRANTED_CORRECTION','judgment':screen_reasons[x['id']],'full_master_records':'independent-full-master-records.json','HGM_terms':x['ground_d_defensible_reading_and_dictionary']['terms']},'ground_e':{'verdict':'CLAIMED_LOCAL_AND_QUERY_COUNTS_RECHECKED','independent_proof':['six-screen-evidence-proof.json','independent-corpus-queries.json','original-master-requery-proof.json','independent-original-corpus-records.json','independent-physical-extents.json'],'judgment':'All 41 SQL results/counts, 210 original master queries and 92 reconciliation term queries were reexecuted. Complete rows/records were checked against immutable original archives. Historical dictionary/class counts remain labeled source metadata.'},'proposed_correction':None,'suggested_severity':None,'suggested_confidence':'UNCERTAIN_CORRECTION_NOT_FILED'})
+dump('errata-five-grounds.json',screens);dump('bank-ready-errata.json',[]);dump('span-head-allow-needed.json',{'pages_c05':{}})
+summary={'final_spans':len(allspan),'original_dispositions':len(originals),'omissions':len(om),'five_ground_screens':len(screens),'errata':0,'open_findings':[]};dump('semantic-decision-summary.json',summary);print(json.dumps(summary,indent=2))

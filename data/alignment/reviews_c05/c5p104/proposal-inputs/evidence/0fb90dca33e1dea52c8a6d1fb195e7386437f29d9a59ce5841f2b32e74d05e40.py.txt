@@ -1,0 +1,33 @@
+"""Pre-generation local-clause review corrected two occurrence choices, preserving prior artifacts."""
+import importlib.util,json,pathlib,shutil,sys
+A=pathlib.Path(__file__).resolve().parent
+P=A/'evidence/pinned';sys.path[:0]=[str(P/'tools'),str(P/'engines')]
+import gen_alignment_page as G
+rows={r['seq']:r for r in json.loads((A/'evidence/source.json').read_text())}
+for seq,changes in {311:{'w6':2,'w10':3},312:{'w6':2}}.items():
+    D=A/str(seq); backup=D/'superseded/pre-local-clause-review';backup.mkdir(parents=True)
+    for file in ['spec.json','source-specific-rationale.json']:shutil.copy2(D/file,backup/file)
+    r=json.loads((D/'source-specific-rationale.json').read_text());s=json.loads((D/'spec.json').read_text())
+    for item in r['decisions']:
+        if item['id'] not in changes:continue
+        occ=changes[item['id']];lo=item['all_candidate_starts'][occ-1]
+        item['english_occurrence']=occ;item['eng_range']=[lo,lo+len(item['eng'])]
+    s['segments'][0]['eng_order']=[i['id'] for i in sorted([x for x in r['decisions'] if x['eng'] is not None and x['d']!=7],key=lambda x:x['eng_range'][0])]
+    r['pre_generation_correction']='Checked full English clauses: 311 of #1 belongs to supplied matter of, so realm genitives are #2/#3; 312 and #1 joins sit down/look, so zhing owns #2 between wet/flowing. Earlier author input preserved.'
+    for file,o in [('spec.json',s),('source-specific-rationale.json',r)]: (D/file).write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+for seq in [310,311,312]:
+    D=A/str(seq);s=json.loads((D/'spec.json').read_text())['segments'][0]
+    r=json.loads((D/'source-specific-rationale.json').read_text())
+    tib=G.resolve(rows[seq]['wylie'],s['spans'],'tib',seq)
+    byid={sp['id']:sp for sp in s['spans']}
+    es=G.with_members(s['spans'],[byid[i] for i in s['eng_order']],rows[seq]['english'])
+    eng=G.resolve(rows[seq]['english'],es,'eng',seq)
+    for item in r['decisions']:
+        if item['eng'] is not None: assert list(eng[item['id']])==item['eng_range'],(seq,item['id'],eng[item['id']],item['eng_range'])
+        item['tib_range']=list(tib[item['id']])
+        lo,hi=item['tib_range'];item['tib_local_context']=rows[seq]['wylie'][max(0,lo-55):hi+65]
+        if item['eng'] is not None:
+            lo,hi=item['eng_range'];item['eng_local_context']=rows[seq]['english'][max(0,lo-55):hi+65]
+    r['occurrence_preflight']='Every intended English range equals the unchanged historical canonical resolve result; full original rows and local contexts retained for semantic checking before native generation.'
+    (D/'source-specific-rationale.json').write_text(json.dumps(r,ensure_ascii=False,indent=2)+'\n')
+    print(seq,'canonical range preflight matched',len(s['spans']),'authored spans')

@@ -1,0 +1,35 @@
+import json,gzip,sqlite3,hashlib,re
+from pathlib import Path
+A=Path(__file__).resolve().parent;E=A/'evidence';P=json.loads((E/'proposal-baseline.json').read_text())
+def save(name,x): (E/name).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+with gzip.open(P['source_pins']['master']['path'],'rt') as f: master=json.load(f)
+terms=['de ltar','dge ba','bcu','spyod pa','skyes bu dam pa','mtho ris','skyes','bde ba','myong ba','mi dge','sems can','dman pa','ngan song','sdug bsngal',"'khrul snang",'bzang','ngan','tsam','ma gtogs','lus','bde sdug','khyad par','rigs pa',"'thad pa","'dod",'las can',"'gro ba",'brlan','gsher ba','phor pa','cig car du','tshad mtshungs','tshad ma','nges par','dgos pa','gnas','tha mal','mig shes','mi bzod','srog chags','phra mo','rgya mtsho','lha ma yin','mtshon cha','phor gang','skyon']
+lex=[]
+for term in terms:
+ matches=[{'index':i,'entry':x} for i,x in enumerate(master['unified_entries']) if term==x.get('wylie') or term in x.get('wylie_variants',[])]
+ lex.append({'query':{'field':'wylie or wylie_variants','equals':term},'count':len(matches),'results':matches})
+ print(term,'=>',[(x['entry'].get('hgm_gloss'),x['entry'].get('hgm_evidence')) for x in matches])
+save('hgm-lexical-original.json',{'source':P['source_pins']['master'],'queries':lex})
+db=sqlite3.connect(Path(P['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+qs=[]
+for s in json.loads((E/'source.json').read_text()):
+ for field in ['acip','wylie','english']:
+  sql='select * from corpus_segments where '+field+'=? order by course,seq';params=[s[field]]; rows=[dict(r) for r in db.execute(sql,params)];qs.append({'seq':s['seq'],'sql':sql,'params':params,'count':len(rows),'rows':rows});print('EXACT',s['seq'],field,[(r['course'],r['seq']) for r in rows])
+for term in ["'khrul snang",'las can', 'tshad mtshungs','gnas kyi blos','mi bzod', 'phor gang', 'microscopic organisms', 'pleasures of the higher realms']:
+ field='english' if term in ['microscopic organisms','pleasures of the higher realms'] else 'wylie';sql='select * from corpus_segments where '+field+' like ? order by course,seq';params=['%'+term+'%'];rows=[dict(r) for r in db.execute(sql,params)];qs.append({'sql':sql,'params':params,'count':len(rows),'rows':rows});print('CORPUS',term,len(rows),[(r['course'],r['seq']) for r in rows][:25])
+save('corpus-queries-original.json',{'source':P['source_pins']['spine'],'queries':qs})
+with gzip.open(P['source_pins']['corpus']['path'],'rt') as f: corpus=json.load(f)
+selected=json.loads((E/'source.json').read_text());cp=[]
+for s in selected:
+ matches=[{'zero_based_index':i,'row':r,'equal_fields':[k for k in ['acip','wylie','english'] if r.get(k)==s[k]]} for i,r in enumerate(corpus) if any(r.get(k)==s[k] for k in ['acip','wylie','english'])];cp.append({'seq':s['seq'],'count':len(matches),'results':matches})
+save('corpus-gzip-original.json',{'source':P['source_pins']['corpus'],'queries':cp})
+raw=(E/'C05ReadingASCII.original.bin').read_bytes();needles=[b'DE LTAR MA YIN NA',b'If this were not the case',b"'DOD NA, MTHO RIS",b'Suppose you agree',b'DES NA, LAS CAN',b'In conclusion now']
+physical=[]
+for needle in needles:
+ hits=[m.start() for m in re.finditer(re.escape(needle),raw)]
+ for i in hits:
+  lo=max(0,i-180);hi=min(len(raw),i+4500);part=raw[lo:hi]
+  physical.append({'needle_ascii':needle.decode('ascii'),'hit':i,'start':lo,'end':hi,'sha256':hashlib.sha256(part).hexdigest(),'latin1_reversible':part.decode('latin1')})
+ print('PHYSICAL',needle,hits)
+save('physical-extents.json',{'source':P['source_pins']['physical'],'encoding':'bytes preserved; Latin-1 reversible view','extents':physical})
+register=json.loads((E/'pinned/docs/errata_register.json').read_text()); print('REGISTER',type(register).__name__,list(register)[:10] if isinstance(register,dict) else len(register))

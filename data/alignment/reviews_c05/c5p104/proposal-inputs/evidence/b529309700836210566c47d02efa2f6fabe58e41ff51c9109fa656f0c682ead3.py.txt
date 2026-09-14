@@ -1,0 +1,152 @@
+"""Tibetan-first authored judgments; desired occurrences are author input, never resolver substitutes."""
+import hashlib, importlib.util, json, pathlib, sys
+A=pathlib.Path(__file__).resolve().parent
+P=A/'evidence/pinned'
+sys.path[:0]=[str(P/'tools'),str(P/'engines')]
+import gen_alignment_page as G
+rows={r['seq']:r for r in json.loads((A/'evidence/source.json').read_text())}
+def dump(p,o): p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+
+tables={310:[
+('de ltar ma yin na','If this were not the case',3,1,'Opening counterfactual refers to the denial of causal efficacy in 309; the whole conditional is a phrase.'),
+('dge ba','virtues',5,1,'Virtuous actions in the first, higher-realm case.'),
+('bcu','ten',5,1,'Ten virtues, not the later ten non-virtues.'),
+('spyod pa','following',5,1,'Conduct with respect to virtues; lead their lives is explanatory English.'),
+('skyes bu dam pa','holy people',5,1,'Established holy-being compound; entire parent is HGM attested.'),
+('skyes bu','people',7,1,'Human/being member within holy people; does not select miserable people.'),
+('dam pa','holy',7,1,'Qualifying holy member, English reordered inside the parent.'),
+('mtho ris','higher realms',5,1,'Rebirth destination of the virtuous people.'),
+('mtho','higher',7,1,'High member of the higher-realm compound.'),
+('ris','realms',7,1,'Domain member inside higher realms, not the subsequent these realms.'),
+('su','into',6,1,'Destination particle of the first rebirth.'),
+('skyes','born',5,1,'Birth of holy people in higher realms.'),
+('bde ba','pleasures',5,1,'Pleasures of higher realms.'),
+('myong ba','experience',5,1,'First experience predicate, taking pleasures as object.'),
+('dang','And',6,1,'Conjoins the two contrasted cases at the opening of the second English sentence.'),
+('mi dge','non-virtues',5,1,'Negative virtue compound retained whole; no invented negative subword.'),
+('bcu','ten',5,2,'Ten non-virtues in the lower-realm case.'),
+('spyod pa','following',5,2,'Conduct with respect to non-virtues in the second case.'),
+('sems can','people',5,2,'Sentient beings rendered people in miserable people.'),
+('dman pa','miserable',5,1,'Inferior/miserable qualifier of the second group.'),
+('ngan song','lower realms',5,1,'Bad rebirth destination retained as the lexical compound.'),
+('du','into',6,2,'Destination particle of the second rebirth.'),
+('skyes','born',5,2,'Birth of the miserable people in lower realms.'),
+('sdug bsngal','sufferings',5,1,'Suffering in lower realms, not the later abstract pleasure/pain pair.'),
+('myong ba','experience',5,2,'Second experience predicate, taking sufferings as object.'),
+("'khrul snang",'misperception',5,1,'Erroneous appearance contrasted with actual experience.'),
+('bzang ngan','better or worse',5,1,'Paired qualities of misperception; both members are retained.'),
+('bzang','better',7,1,'Positive-quality member inside better or worse.'),
+('ngan','worse',7,1,'Negative-quality member inside better or worse.'),
+('tsam','just',6,1,'Restrictive particle; ma gtogs is distributed and omitted separately.'),
+('lus',None,5,0,'The noun body in lus kyis has no separately expressed body or bodily English; experience is aligned on myong.'),
+('bde sdug','pleasure or pain',5,1,'Coordinated happiness/suffering compound in the distinction question.'),
+('bde','pleasure',7,1,'Pleasure member of the final pleasure/pain parent.'),
+('sdug','pain',7,1,'Pain member of the final pleasure/pain parent.'),
+('myong','experiencing',5,1,'Positive myong immediately after bde sdug, before mi myong; experience-or-not alternative is recast through whether.'),
+('khyad par','difference',5,1,'Nominal distinction raised by the question.'),
+('rigs pa','reasoning',5,1,'Opponent’s reason in the final conditional.'),
+("'thad pa",'correct',5,1,'Correctness of that reasoning; no supplied were.'),
+],311:[
+("'dod",'agree',5,1,'Initial admission predicate; selects agree in Suppose you agree.'),
+('na','Suppose',6,1,'Conditional particle licenses the English supposition frame, with you left unwrapped.'),
+('mtho ris','higher realms',5,1,'First of the two realms, associated with pleasures.'),
+('mtho','higher',7,1,'Higher member of higher realms.'),
+('ris','realms',7,1,'Realm member inside the higher-realm parent.'),
+('kyi','of',6,1,'Genitive relation in pleasures of the higher realms.'),
+('bde ba','pleasures',5,1,'Pleasure noun in the first negative-existence question.'),
+('dang','and',6,1,'Conjunction introducing the pains/lower-realms case.'),
+('ngan song','lower realms',5,1,'Lower-rebirth compound in the second negative-existence question.'),
+('gi','of',6,2,'Genitive relation in pains of the lower realms.'),
+('sdug bsngal','pains',5,1,'Suffering noun in the second case; actual GMR pains retained.'),
+("'dod pa",'agree',5,2,'Final admission predicate in if you agree this way, not the opening agree.'),
+],312:[
+('des na','In conclusion',3,1,'Inferential connective concluding this glass-of-water argument.'),
+('las','karma',5,1,'Karma in the opening qualification of the three beings; can possessive frame left unbanked.'),
+("'gro ba",'beings',5,1,'Opening three kinds of beings, before GMR’s later repeated participants.'),
+('gsum','three',5,1,'Three in the opening named group.'),
+('brlan','wet',5,1,'Moist material in the first glass, not an appearance predicate.'),
+('zhing','and',6,1,'Conjunction between wet and flowing.'),
+('gsher ba','flowing',5,1,'Second quality of the material, attested HGM flowing.'),
+('phor pa','glass',5,1,'First glass in the opening observation scenario.'),
+('gang','full',5,1,'Filling/quantity adjective in phor pa gang; not the relative pronoun homograph.'),
+('cig car','together',5,1,'Simultaneous looking, rendered together with sit down.'),
+('bltas pa','look',5,1,'Opening act of looking; supplied sit down stays unwrapped.'),
+('tshad','valid perceptions',5,1,'Abbreviated tshad ma in the claim about equivalent valid cognition.'),
+('mtshungs','identical',5,1,'Equality predicate of those valid perceptions.'),
+('nges par','necessarily',5,1,'Lexical certainty adverb; the copular true is not captured.'),
+('dgos pa','must',5,1,'Necessity predicate in the opening thesis.'),
+('ma','not',6,1,'Standalone Tibetan negative particle, even though English not is also a separate word.'),
+('na','If',6,1,'Conditional after the second dgos; GMR’s they did is not independently banked.'),
+('phor pa','glass',5,2,'Glass in the hypothetical counterexample after If they did.'),
+('gnas','place',5,1,'First gnas is nominal: gnas kyi blos, a conception of the water as a dwelling place.'),
+('blos','think',5,1,'Instrumental mind/consideration in gnas kyi blos, recast as think of the water as a place; -s is not split.'),
+('gnas','living',5,1,'Second gnas is verbal: creature living in water after in the way that; the earlier infinitive to live expands nominal place.'),
+('tha mal','normal',5,1,'Ordinary eye consciousness, the first of three mig shes in Tibetan.'),
+('mig shes','visual consciousness',5,1,'Normal visual consciousness in imperceptible to normal visual consciousness.'),
+('mig','visual',7,1,'Eye/visual member within normal visual consciousness.'),
+('shes','consciousness',7,1,'Consciousness member inside that first parent.'),
+('srog chags','organisms',5,1,'First Tibetan organisms, rendered first microscopic organisms; later little beings is GMR’s second rendering and stays unwrapped.'),
+('phra mo','microscopic',5,1,'First smallness qualifier; later little is the same qualifier repeated by GMR.'),
+('mig shes','visual consciousness',5,2,'Microscopic organisms’ own visual consciousness after see it with their own, not normal consciousness or the ocean clause.'),
+('mig','visual',7,1,'Eye/visual member inside the organisms’ own consciousness parent.'),
+('shes','consciousness',7,1,'Consciousness member inside the second parent.'),
+("rgya mtsho'i",'ocean',5,1,'Ocean in the location of the next organisms, before the later sea; bound genitive is retained as part of the inflected word.'),
+('nang','depths',5,1,'Interior-location noun rendered depths, with in supplied by the locative na.'),
+('na','in',6,5,'Locative of the ocean interior; intended in the depths, explicitly measured before final generation.'),
+('gnas pa','living',5,3,'Living in the depths of the ocean; skips creature living and the extra organisms living in the water in the prior English expansion.'),
+('srog chags','organisms',5,2,'Second Tibetan organisms, those living in the ocean.'),
+('phra mo','microscopic',5,2,'Smallness qualifier of the ocean organisms.'),
+('mig shes','visual consciousness',5,3,'Ocean organisms’ eye consciousness, following Then too; English places this before its Tibetan possessors.'),
+('mig','visual',7,1,'Eye/visual member of ocean organisms’ consciousness.'),
+('shes','consciousness',7,1,'Consciousness member inside the ocean parent.'),
+('kyang','too',6,1,'Even/also applying to the ocean organisms’ consciousness, rendered Then too.'),
+("rgya mtsho'i",'sea',5,1,'Later ocean noun used as object whose entire extent is measured; GMR varies ocean/sea.'),
+('tshad','entire extent',5,1,'Measure/extent noun of the sea, distinct from neighboring valid-cognition tshad mar.'),
+('la','towards',6,1,'Object relation of validity towards the sea’s extent.'),
+('tshad mar','valid perception',5,1,'Second tshad mar, governing the ocean extent; earlier tshad mar in the cup-organism clause is deliberately omitted.'),
+('dgos pa','have to',5,3,'Necessity predicate in ocean would have to be; GMR’s would and be stay unwrapped.'),
+('lha ma yin','near-gods',5,1,'Asura compound retained whole, with no false literal god/not member.'),
+("'ga' zhig",'certain',5,1,'Indefinite selection of near-gods; supplied kinds of stays unwrapped.'),
+('mtshon cha','weapons',5,1,'Weapon lexical noun alone; no judgment that weapons as glasses of water mirrors the full Tibetan relation.'),
+('phor','glasses',5,1,'Vessel noun alone; no source chu under the following of water.'),
+('snang','see',5,3,'Appearance predicate in the final near-god clause; English see after would have to, not earlier see the water/see it.'),
+('dgos pa','have to',5,4,'Final necessity predicate of the near-gods; supplied would remains unwrapped.'),
+('la sogs pa','and on and on',3,1,'Closing enumeration phrase, not a lexical conjunction or a supplied problem noun.'),
+('skyon','problems',5,1,'Consequences/problems ending the argument; many is not banked on yod.'),
+]}
+notes={
+310:'Codex Tibetan-first provisional machine alignment; GMR English remains verbatim. The two births and experience predicates follow the virtues/non-virtues contrast. skyes bu dam pa, bzang ngan and bde sdug retain independently meaningful members. lus has no separate body/bodily exponent here (null); myong owns experiencing, while mi myong and ma gtogs remain omitted because their alternative/exclusion force is distributed across the question. gnyis la, de\'i references, the med par thal consequence and the final causal/conditional recast remain unbanked where no separate atom is defensible. No hgm_gloss promotion or semantic acceptance is claimed.',
+311:'Codex Tibetan-first provisional machine alignment; GMR English remains verbatim. The opening and closing agree attach to the two distinct \'dod predicates. One Tibetan shared negative-existence consequence med par thal is expanded as two don\'t even exist questions and You must be; it is omitted rather than falsely nulled or assigned an auxiliary-rich word pair. The explanation of better or worse misperceptions is supplied from the preceding argument. de\'i phyir is a distributed causal-to-conditional recast and remains unbanked. No hgm_gloss promotion or semantic acceptance is claimed.',
+312:'Codex Tibetan-first provisional machine alignment; GMR English remains verbatim. gnas is nominal in gnas kyi blos and verbal at gnas shing; blos is retained whole. Three mig shes occurrences attach respectively to normal vision, the cup organisms\' own vision, and ocean organisms\' vision, each with two tighter members. Only the later tshad mar is matched to valid perception; the earlier cup-organism validity clause is distributed in GMR\'s recast and omitted. mi bzod is also omitted: the HGM lexical evidence for unable to bear does not by itself establish imperceptible. Repeated explanatory beings/water/organisms and the extra little wording stay unwrapped. The near-god clause keeps only certain, near-gods, weapons, glasses, see and necessity; phor gang is not assigned glasses of water, and no full relation or correction is asserted. Possessive can, the first additional necessity premise, gang quantity at the close, and yod pa\'i phyir remain unbanked where the English is expanded or distributed. No hgm_gloss promotion or semantic acceptance is claimed.'}
+
+for seq,table in tables.items():
+    if seq in (310,311): continue  # unchanged completed authoring outputs retained from author-001
+    D=A/str(seq); D.mkdir(exist_ok=True)
+    spans=[]; intended=[]; parent=None
+    for n,(t,e,d,occ,why) in enumerate(table,1):
+        sp={'id':'w'+str(n),'d':d,'tib':t,'eng':e}
+        if e is None: sp['nul']=why
+        spans.append(sp)
+        if d!=7: parent=sp['id']
+        item={'id':sp['id'],'tib':t,'eng':e,'d':d,'english_occurrence':occ,'rationale':why,'parent':parent if d==7 else None}
+        if e is not None:
+            text=rows[seq]['english'] if d!=7 else next(v['eng'] for v in spans if v['id']==parent)
+            hits=[]; cur=0
+            while True:
+                at=G.find_word(text,e,cur) if d!=7 else text.find(e,cur)
+                if at<0: break
+                hits.append(at); cur=at+1
+            assert len(hits)>=occ,(seq,t,e,occ,hits)
+            lo=hits[occ-1]
+            if d==7:
+                par=next(v for v in intended if v['id']==parent)
+                lo+=par['eng_range'][0]
+            item['eng_range']=[lo,lo+len(e)]
+            item['all_candidate_starts']=hits
+        intended.append(item)
+    order=[i['id'] for i in sorted([x for x in intended if x['eng'] is not None and x['d']!=7],key=lambda x:x['eng_range'][0])]
+    obj={'course':'C05','segments':[{'seq':seq,'title':{310:'contrasting lives and experiences',311:'the consequence of denial',312:'limits of identical perceptions'}[seq],'spans':spans,'eng_order':order,'note':notes[seq]}]}
+    dump(D/'spec.json',obj)
+    dump(D/'source-specific-rationale.json',{'status':'authored before first final native generation','seq':seq,'decisions':intended})
+    dump(D/'errata.json',[])
+    print(seq,len(spans),'authored spans')

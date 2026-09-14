@@ -1,0 +1,11 @@
+import pathlib,json,hashlib,subprocess,os,sys,datetime
+A=pathlib.Path(__file__).resolve().parents[1];B=A.parent;W=B.parents[1]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def run(name,cmd,inp):
+ d=A/'native'/name;
+ if d.exists():
+  assert (d/'stdin.json').read_bytes()==inp
+  old=json.loads((d/'invocation.json').read_text());assert old['argv']==cmd
+  return subprocess.CompletedProcess(cmd,int((d/'exit.txt').read_text()),(d/'stdout').read_bytes(),(d/'stderr').read_bytes()),d
+ d.mkdir(parents=True,exist_ok=False);(d/'stdin.json').write_bytes(inp);save(d/'invocation.json',{'argv':cmd,'cwd':str(W),'env_additions':{'PYTHONDONTWRITEBYTECODE':'1'},'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()});p=subprocess.run(cmd,cwd=W,input=inp,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});(d/'stdout').write_bytes(p.stdout);(d/'stderr').write_bytes(p.stderr);(d/'exit.txt').write_text(str(p.returncode)+'\n');save(d/'execution.json',{'exit':p.returncode,'stdout_bytes':len(p.stdout),'stdout_sha256':sha(p.stdout),'stderr_bytes':len(p.stderr),'stderr_sha256':sha(p.stderr),'stdin_sha256':sha(inp)});return p,d

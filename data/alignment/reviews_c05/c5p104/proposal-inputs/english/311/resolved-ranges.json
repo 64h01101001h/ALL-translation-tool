@@ -1,0 +1,370 @@
+{
+  "canonical_generator": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+  "generator_sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e",
+  "builder_origin_commit": "51d73c889a3f175b90e4c466f3dc4b1f7af3bca5",
+  "builder_sha256": "d1168a59f27b18b0ff6401a14005bb42ded951b24a1c9b795de933e7de426674",
+  "connections": [
+    {
+      "uri": "file:///Users/adamderickandrade/Documents/ChatGPT/Geshe%20Michael%20Roach%20Tib%20_%20Eng%20Alignment/campaign-worktree/build/hgm_spine_v27_2.db?mode=ro",
+      "uri_flag": true
+    }
+  ],
+  "segments": [
+    {
+      "seq": 311,
+      "source_row": {
+        "id": 1693,
+        "course": "C05",
+        "seq": 311,
+        "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+        "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+        "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,\", \"wylie\": \"'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir\", \"english\": \"Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.\"}"
+      },
+      "ranges_are": "zero-based half-open character offsets in original fields",
+      "resolved": [
+        {
+          "id": "w1",
+          "d": 5,
+          "tib": "'dod",
+          "eng": "agree",
+          "tib_range": [
+            0,
+            4
+          ],
+          "eng_range": [
+            12,
+            17
+          ],
+          "parent": null,
+          "tib_quote": "'dod",
+          "eng_quote": "agree",
+          "tib_clause_range": [
+            0,
+            8
+          ],
+          "tib_clause": "'dod na,",
+          "english_sentence_range": [
+            0,
+            77
+          ],
+          "english_sentence": "Suppose you agree that it is only a matter of better or worse misperceptions.",
+          "intended_english_occurrence_zero_based": 0,
+          "all_substring_starts": [
+            12,
+            233
+          ],
+          "expected_english_range": [
+            12,
+            17
+          ],
+          "rationale": "First agree introduces acceptance of the preceding better-or-worse-misperception thesis."
+        },
+        {
+          "id": "p1",
+          "d": 6,
+          "tib": "na",
+          "eng": "Suppose",
+          "tib_range": [
+            5,
+            7
+          ],
+          "eng_range": [
+            0,
+            7
+          ],
+          "parent": null,
+          "tib_quote": "na",
+          "eng_quote": "Suppose",
+          "tib_clause_range": [
+            0,
+            8
+          ],
+          "tib_clause": "'dod na,",
+          "english_sentence_range": [
+            0,
+            77
+          ],
+          "english_sentence": "Suppose you agree that it is only a matter of better or worse misperceptions.",
+          "intended_english_occurrence_zero_based": 0,
+          "all_substring_starts": [
+            0
+          ],
+          "expected_english_range": [
+            0,
+            7
+          ],
+          "rationale": "Conditional particle rendered as opening Suppose."
+        },
+        {
+          "id": "w2",
+          "d": 5,
+          "tib": "mtho ris",
+          "eng": "higher realms",
+          "tib_range": [
+            9,
+            17
+          ],
+          "eng_range": [
+            124,
+            137
+          ],
+          "parent": null,
+          "tib_quote": "mtho ris",
+          "eng_quote": "higher realms",
+          "tib_clause_range": [
+            8,
+            35
+          ],
+          "tib_clause": " mtho ris kyi bde ba dang ,",
+          "english_sentence_range": [
+            77,
+            212
+          ],
+          "english_sentence": " Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist?",
+          "intended_english_occurrence_zero_based": 0,
+          "all_substring_starts": [
+            124
+          ],
+          "expected_english_range": [
+            124,
+            137
+          ],
+          "rationale": "Higher realms owns the object of pleasures in the first half of the question."
+        },
+        {
+          "id": "w3",
+          "d": 5,
+          "tib": "bde ba",
+          "eng": "pleasures",
+          "tib_range": [
+            22,
+            28
+          ],
+          "eng_range": [
+            107,
+            116
+          ],
+          "parent": null,
+          "tib_quote": "bde ba",
+          "eng_quote": "pleasures",
+          "tib_clause_range": [
+            8,
+            35
+          ],
+          "tib_clause": " mtho ris kyi bde ba dang ,",
+          "english_sentence_range": [
+            77,
+            212
+          ],
+          "english_sentence": " Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist?",
+          "intended_english_occurrence_zero_based": 0,
+          "all_substring_starts": [
+            107
+          ],
+          "expected_english_range": [
+            107,
+            116
+          ],
+          "rationale": "Pleasures in the higher realms; articles remain outside."
+        },
+        {
+          "id": "p2",
+          "d": 6,
+          "tib": "dang",
+          "eng": "and",
+          "tib_range": [
+            29,
+            33
+          ],
+          "eng_range": [
+            156,
+            159
+          ],
+          "parent": null,
+          "tib_quote": "dang",
+          "eng_quote": "and",
+          "tib_clause_range": [
+            8,
+            35
+          ],
+          "tib_clause": " mtho ris kyi bde ba dang ,",
+          "english_sentence_range": [
+            77,
+            212
+          ],
+          "english_sentence": " Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist?",
+          "intended_english_occurrence_zero_based": 0,
+          "all_substring_starts": [
+            156
+          ],
+          "expected_english_range": [
+            156,
+            159
+          ],
+          "rationale": "Joins the two objects of the shared negative existential predicate."
+        },
+        {
+          "id": "w4",
+          "d": 5,
+          "tib": "ngan song",
+          "eng": "lower realms",
+          "tib_range": [
+            36,
+            45
+          ],
+          "eng_range": [
+            182,
+            194
+          ],
+          "parent": null,
+          "tib_quote": "ngan song",
+          "eng_quote": "lower realms",
+          "tib_clause_range": [
+            35,
+            74
+          ],
+          "tib_clause": " ngan song gi sdug bsngal med par thal,",
+          "english_sentence_range": [
+            77,
+            212
+          ],
+          "english_sentence": " Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist?",
+          "intended_english_occurrence_zero_based": 0,
+          "all_substring_starts": [
+            182
+          ],
+          "expected_english_range": [
+            182,
+            194
+          ],
+          "rationale": "Lower realms in the second half of the question."
+        },
+        {
+          "id": "w5",
+          "d": 5,
+          "tib": "sdug bsngal",
+          "eng": "pains",
+          "tib_range": [
+            49,
+            60
+          ],
+          "eng_range": [
+            169,
+            174
+          ],
+          "parent": null,
+          "tib_quote": "sdug bsngal",
+          "eng_quote": "pains",
+          "tib_clause_range": [
+            35,
+            74
+          ],
+          "tib_clause": " ngan song gi sdug bsngal med par thal,",
+          "english_sentence_range": [
+            77,
+            212
+          ],
+          "english_sentence": " Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist?",
+          "intended_english_occurrence_zero_based": 0,
+          "all_substring_starts": [
+            169
+          ],
+          "expected_english_range": [
+            169,
+            174
+          ],
+          "rationale": "Pains in the lower realms; exact row wording, not substituted sufferings."
+        },
+        {
+          "id": "p3",
+          "d": 6,
+          "tib": "thal",
+          "eng": "must be",
+          "tib_range": [
+            69,
+            73
+          ],
+          "eng_range": [
+            217,
+            224
+          ],
+          "parent": null,
+          "tib_quote": "thal",
+          "eng_quote": "must be",
+          "tib_clause_range": [
+            35,
+            74
+          ],
+          "tib_clause": " ngan song gi sdug bsngal med par thal,",
+          "english_sentence_range": [
+            212,
+            248
+          ],
+          "english_sentence": " You must be, if you agree this way.",
+          "intended_english_occurrence_zero_based": 0,
+          "all_substring_starts": [
+            217
+          ],
+          "expected_english_range": [
+            217,
+            224
+          ],
+          "rationale": "Inferential consequence has the narrow must be exponent in You must be, with supplied You outside."
+        },
+        {
+          "id": "w6",
+          "d": 5,
+          "tib": "'dod pa",
+          "eng": "agree",
+          "tib_range": [
+            75,
+            82
+          ],
+          "eng_range": [
+            233,
+            238
+          ],
+          "parent": null,
+          "tib_quote": "'dod pa",
+          "eng_quote": "agree",
+          "tib_clause_range": [
+            74,
+            93
+          ],
+          "tib_clause": " 'dod pa de'i phyir",
+          "english_sentence_range": [
+            212,
+            248
+          ],
+          "english_sentence": " You must be, if you agree this way.",
+          "intended_english_occurrence_zero_based": 1,
+          "all_substring_starts": [
+            12,
+            233
+          ],
+          "expected_english_range": [
+            233,
+            238
+          ],
+          "rationale": "Second agree belongs to the closing reason, if you agree this way."
+        }
+      ],
+      "counts": {
+        "spans": 9,
+        "nulls": 0,
+        "d5_total": 6,
+        "nonnull_d5_word_pairs": 6,
+        "depths": {
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 6,
+          "6": 3,
+          "7": 0
+        }
+      }
+    }
+  ]
+}

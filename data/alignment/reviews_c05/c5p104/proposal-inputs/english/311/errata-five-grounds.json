@@ -1,0 +1,202 @@
+{
+  "1_exact_row_and_source_distinction": {
+    "row": {
+      "id": 1693,
+      "course": "C05",
+      "seq": 311,
+      "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+      "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+      "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way."
+    },
+    "examined_candidates": [
+      {
+        "field": "wylie",
+        "quote": "sdug bsngal med par thal",
+        "assessment": "Shared negated existential is doubled in English; grammatical expansion does not establish an erratum.",
+        "range": [
+          49,
+          73
+        ]
+      }
+    ],
+    "proposed_correction": null,
+    "errata": []
+  },
+  "2_registered_classes": {
+    "source": "../evidence/pinned/docs/errata_register.json",
+    "sha256": "a7573cd73f59bff9a41ddeecff5b3d1f3056f4fa7b3ce7a600eff378f27e87a6",
+    "checked": [
+      "E-044 converter escapes",
+      "E-071 running heads",
+      "E-076/E-121 footnote fusions",
+      "E-107 1500-character cap",
+      "E-111 row-boundary spills",
+      "registered following-heading class in PROPOSE_BRIEF and C05 course shape"
+    ],
+    "english_characters": 248,
+    "local_class_instance": "No target-row heading, footnote fusion, running head, converter escape or 1500-character cap found. C16:848 has a following heading, outside C05:311; C05:314 is adjacent heading apparatus."
+  },
+  "3_corpus_parallels": {
+    "evidence": "../evidence/corpus-queries-original.json",
+    "sha256": "8253a5cde9ffc76e74942824d47eb593e935c042bd573f414b0d81f0aaee43d2",
+    "exact_queries": [
+      {
+        "seq": 311,
+        "sql": "select * from corpus_segments where acip=? order by course,seq",
+        "params": [
+          "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,"
+        ],
+        "count": 3,
+        "rows": [
+          {
+            "id": 1693,
+            "course": "C05",
+            "seq": 311,
+            "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+            "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+            "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.",
+            "raw": "{\"course\": \"C05\", \"acip\": \"'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,\", \"wylie\": \"'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir\", \"english\": \"Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.\"}"
+          },
+          {
+            "id": 6007,
+            "course": "C15",
+            "seq": 456,
+            "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+            "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+            "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.",
+            "raw": "{\"course\": \"C15\", \"acip\": \"'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,\", \"wylie\": \"'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir\", \"english\": \"Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.\"}"
+          },
+          {
+            "id": 6866,
+            "course": "C16",
+            "seq": 848,
+            "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+            "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+            "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way. 34 Concluding Remarks on the Glass of Water",
+            "raw": "{\"course\": \"C16\", \"acip\": \"'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,\", \"wylie\": \"'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir\", \"english\": \"Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way. 34 Concluding Remarks on the Glass of Water\"}"
+          }
+        ]
+      },
+      {
+        "seq": 311,
+        "sql": "select * from corpus_segments where wylie=? order by course,seq",
+        "params": [
+          "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir"
+        ],
+        "count": 3,
+        "rows": [
+          {
+            "id": 1693,
+            "course": "C05",
+            "seq": 311,
+            "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+            "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+            "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.",
+            "raw": "{\"course\": \"C05\", \"acip\": \"'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,\", \"wylie\": \"'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir\", \"english\": \"Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.\"}"
+          },
+          {
+            "id": 6007,
+            "course": "C15",
+            "seq": 456,
+            "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+            "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+            "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.",
+            "raw": "{\"course\": \"C15\", \"acip\": \"'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,\", \"wylie\": \"'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir\", \"english\": \"Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.\"}"
+          },
+          {
+            "id": 6866,
+            "course": "C16",
+            "seq": 848,
+            "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+            "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+            "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way. 34 Concluding Remarks on the Glass of Water",
+            "raw": "{\"course\": \"C16\", \"acip\": \"'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,\", \"wylie\": \"'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir\", \"english\": \"Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way. 34 Concluding Remarks on the Glass of Water\"}"
+          }
+        ]
+      },
+      {
+        "seq": 311,
+        "sql": "select * from corpus_segments where english=? order by course,seq",
+        "params": [
+          "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way."
+        ],
+        "count": 2,
+        "rows": [
+          {
+            "id": 1693,
+            "course": "C05",
+            "seq": 311,
+            "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+            "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+            "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.",
+            "raw": "{\"course\": \"C05\", \"acip\": \"'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,\", \"wylie\": \"'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir\", \"english\": \"Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.\"}"
+          },
+          {
+            "id": 6007,
+            "course": "C15",
+            "seq": 456,
+            "acip": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,",
+            "wylie": "'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir",
+            "english": "Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.",
+            "raw": "{\"course\": \"C15\", \"acip\": \"'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,\", \"wylie\": \"'dod na, mtho ris kyi bde ba dang , ngan song gi sdug bsngal med par thal, 'dod pa de'i phyir\", \"english\": \"Suppose you agree that it is only a matter of better or worse misperceptions. Are you saying then that the pleasures of the higher realms don't even exist, and that the pains of the lower realms don't even exist? You must be, if you agree this way.\"}"
+          }
+        ]
+      }
+    ],
+    "provenance_limit": "Field equality proves textual agreement only. Row identifiers/course/seq differ. Course-shape re-ingested labels are metadata claims, not independently established ingestion or publication history."
+  },
+  "4_hgm_lexical_and_context": {
+    "references": [
+      {
+        "file": "../evidence/hgm-lexical-original.json",
+        "sha256": "482ac76769995385a1fcd0c43504993d0b202934f5895fed9e9769de215634a2"
+      },
+      {
+        "file": "../evidence/additional-hgm-original.json",
+        "sha256": "b1d939bf88c692cd915f43948a0c96fcc89caa2f62cf57f4a173a80c67d2e88d"
+      },
+      {
+        "file": "../evidence/source-role-queries.json",
+        "sha256": "99096dc118364d9695b92e2c05a3010a2edb760e6a0faf89e61bb5a76287448b"
+      }
+    ],
+    "assessment": "HGM pleasures and sufferings support the concepts, but the exact row pains is retained. Negative existence is not reduced to a positive lexical link."
+  },
+  "5_physical_original_and_uncertainty": {
+    "source": {
+      "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    "matches": [
+      {
+        "field": "acip",
+        "whitespace_normalized_exact": true,
+        "count": 1,
+        "extents": [
+          {
+            "start": 216045,
+            "end": 216139,
+            "sha256": "435d7e831316c465035a14970ecc01ad770628de8dcac2347d700f08d29895fc",
+            "latin1_reversible": "'DOD NA, MTHO RIS KYI BDE BA DANG , NGAN SONG GI SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR,"
+          }
+        ]
+      },
+      {
+        "field": "english",
+        "whitespace_normalized_exact": true,
+        "count": 1,
+        "extents": [
+          {
+            "start": 216141,
+            "end": 216392,
+            "sha256": "87b3a5359e16f967f6db86b617dafb5ef5005496b9f53c2e46e19eec3e5f5e9e",
+            "latin1_reversible": "Suppose you agree that it is only a matter of better or worse misperceptions.\r\nAre you saying then that the pleasures of the higher realms don't even exist,\r\nand that the pains of the lower realms don't even exist? You must be, if you\r\nagree this way."
+          }
+        ]
+      }
+    ],
+    "encoding": "Original full bytes in ../evidence/C05ReadingASCII.original.bin; extents shown through reversible Latin-1 only. Whitespace normalization is solely a comparison operation; originals are unchanged.",
+    "outcome": "No separately fileable error established; no correction, no semantic approval. Any later suspected error needs independent review."
+  }
+}

@@ -1,0 +1,76 @@
+import pathlib,json,hashlib,subprocess,sqlite3,gzip,re,os,datetime
+A=pathlib.Path(__file__).resolve().parents[1]; B=A.parent; W=B.parents[1]/'campaign-worktree'; E=A/'evidence'; pins=json.loads((B/'proposal-baseline.json').read_text()); C=pins['commit']
+def sha(b):return hashlib.sha256(b).hexdigest()
+def dump(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+mappings=[]
+def bank(data,role,origin):
+ h=sha(data);p=E/'blobs'/h;p.parent.mkdir(exist_ok=True)
+ if not p.exists():p.write_bytes(data)
+ assert p.read_bytes()==data
+ item={'role':role,'original':origin,'copy':str(p.relative_to(A)),'bytes':len(data),'sha256':h};mappings.append(item);return item
+freezes=[]
+for angle,name,expected,n in [('tibetan','freeze-manifest.json','c7631740582c0b98e79f396e9af4890660ac58b8708cc5877c8f7a076683d9f3',88),('english','freeze.json','ba3a7180dc87ad0adf7a4e9738f77936b655f135afaa26915cad01f3b2a61f22',111)]:
+ p=B/angle/name;b=p.read_bytes();assert sha(b)==expected;x=json.loads(b);assert len(x['files'])==n;bank(b,'frozen-manifest',str(p))
+ for rel,pin in x['files'].items():
+  f=B/angle/rel;data=f.read_bytes();assert sha(data)==pin['sha256'] and len(data)==pin['bytes'],str(f);bank(data,angle+'-frozen-original',str(f))
+ freezes.append({'angle':angle,'path':str(p),'sha256':expected,'schema':x['schema'],'files_dictionary':n,'verified':True})
+for name,pin in pins['source_pins'].items():
+ p=pathlib.Path(pin['path']);data=p.read_bytes();assert sha(data)==pin['sha256'] and len(data)==pin['bytes']
+ if name!='spine':bank(data,'original-'+name,str(p))
+ else:mappings.append({'role':'original-spine-complete-hash-read','original':str(p),'bytes':len(data),'sha256':sha(data),'copy':None,'reason':'Full original selected rows and queries saved; immutable full spine is hash verified, no redundant 249MB database copy.'})
+for rel in list(pins['governing_git_pins'])+['engines/hgm_tools.py','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ p=subprocess.run(['git','show',C+':'+rel],cwd=W,capture_output=True);assert p.returncode==0,p.stderr
+ if rel in pins['governing_git_pins']:assert sha(p.stdout)==pins['governing_git_pins'][rel]['sha256']
+ bank(p.stdout,'historical-governance',{'git_commit':C,'repository':str(W),'path':rel})
+ target=E/'pinned'/rel;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(p.stdout)
+for rel in ['proposal-baseline.json','source.json','context.json','reconciliation-brief.md']:
+ bank((B/rel).read_bytes(),'actual-reconciliation-input',str(B/rel))
+paths=["Desktop/HGM DICTIONARY - TRANSLATION APP","ACIP Software Developmeent/Gofer Developmetn Files","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra","ACIP Software Developmeent/tibetan-spellchecker","Tibetan Translation Tool"]
+access=[{'path':str(pathlib.Path.home()/p),'readable':os.access(pathlib.Path.home()/p,os.R_OK)} for p in paths];assert all(x['readable'] for x in access);dump(E/'access.json',access)
+db=sqlite3.connect(pathlib.Path(pins['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+rows=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',298,318))];dump(E/'original-local-rows.json',rows)
+for fn in ['source.json','context.json']:
+ for row in json.loads((B/fn).read_text()):assert all(next(r for r in rows if r['seq']==row['seq'])[k]==v for k,v in row.items())
+dump(E/'sqlite-schema.json',[dict(r) for r in db.execute("select name,sql from sqlite_master where type='table'")])
+# Re-execute every SQL source query in both original packets, retain exact results and count comparisons.
+queries=[]
+for angle,files in [('tibetan',['corpus-query-evidence.json']),('english',['corpus-queries-original.json','source-role-queries.json'])]:
+ for fn in files:
+  obj=json.loads((B/angle/'evidence'/fn).read_text())
+  for i,q in enumerate(obj['queries']):
+   params=q.get('parameters',q.get('params')); got=[dict(r) for r in db.execute(q['sql'],params)];assert got==q['rows'] and len(got)==q['count']
+   queries.append({'origin':str(B/angle/'evidence'/fn),'index':i,'sql':q['sql'],'parameters':params,'count':len(got),'rows':got,'reported_count_verified':True})
+# Additional licensor checks use original rows, all courses including C16/P1/TCS.
+for needle in ['med par thal','gnas kyi blos','mi bzod',"tshad mar 'gro",'mtshon cha phor gang']:
+ sql='select * from corpus_segments where wylie like ? order by course,seq';params=['%'+needle+'%'];got=[dict(r) for r in db.execute(sql,params)];queries.append({'sql':sql,'parameters':params,'count':len(got),'rows':got})
+dump(E/'independent-corpus-queries.json',queries)
+with gzip.open(pins['source_pins']['master']['path'],'rt') as f:master=json.load(f)
+terms=set()
+for angle in ['tibetan','english']:
+ for seq in [310,311,312]:
+  for s in json.loads((B/angle/str(seq)/'spec.json').read_text())['segments'][0]['spans']:terms.add(s['tib'])
+terms.update(['mtho','ris','mig','shes','blo','mi bzod','bzod','bzod pa','tshad ma','sogs','thal','ngan','bzang','ma gtogs'])
+lex=[]
+for term in sorted(terms):
+ sections={}
+ for section in ['unified_entries','curated_entries','glossary_entries']:
+  entries=master[section];entries=list(entries.values()) if isinstance(entries,dict) else entries
+  sections[section]=[{'index':i,'record':r} for i,r in enumerate(entries) if isinstance(r,dict) and (r.get('wylie')==term or term in (r.get('wylie_variants') or []))]
+ lex.append({'term':term,'sections':sections,'counts':{k:len(v) for k,v in sections.items()}})
+dump(E/'independent-master-records.json',lex)
+with gzip.open(pins['source_pins']['corpus']['path'],'rt') as f:corpus=json.load(f)
+corpus_results=[]
+for seq in [310,311,312]:
+ s=next(r for r in rows if r['seq']==seq);hits=[{'index':i,'record':r,'equal_fields':[k for k in ['acip','wylie','english'] if r.get(k)==s[k]]} for i,r in enumerate(corpus) if any(r.get(k)==s[k] for k in ['acip','wylie','english'])];corpus_results.append({'seq':seq,'count':len(hits),'rows':hits})
+dump(E/'independent-original-corpus-records.json',corpus_results)
+raw=pathlib.Path(pins['source_pins']['physical']['path']).read_bytes();phys=[]
+for seq in [310,311,312]:
+ row=next(r for r in rows if r['seq']==seq)
+ for field in ['acip','english']:
+  pattern=rb'\s+'.join(re.escape(w.encode('ascii')) for w in row[field].split());hits=list(re.finditer(pattern,raw));assert len(hits)==1
+  for m in hits:
+   phys.append({'seq':seq,'field':field,'range':[m.start(),m.end()],'line_range':[raw[:m.start()].count(b'\n')+1,raw[:m.end()].count(b'\n')+1],'bytes':len(m[0]),'sha256':sha(m[0]),'latin1_reversible':m[0].decode('latin1'),'whitespace_comparison_only':True})
+dump(E/'independent-physical-extents.json',phys)
+dump(E/'original-copy-map.json',mappings);dump(E/'freeze-verification.json',freezes)
+dump(E/'initial-command-failure.json',{'command':"git show 51d73c889a3f175b90e4c466f3dc4b1f7af3bca5:docs/alignment_briefs/RECONCILE_BRIEF.md && git show 51d73c889a3f175b90e4c466f3dc4b1f7af3bca5:docs/alignment_briefs/REFUTE_BRIEF.md && rg --files campaign-worktree | rg -i 'c05.*shape|shape.*c05|course_shape'",'cwd':str(W.parent),'actual_exit':128,'combined_tool_output':"fatal: path 'docs/alignment_briefs/RECONCILE_BRIEF.md' does not exist in '51d73c889a3f175b90e4c466f3dc4b1f7af3bca5'\n",'limitation':'Initial exec tool returned combined output; no separate streams were captured. Corrected cwd read succeeded; do not count this as governance read.'})
+print(json.dumps({'freezes':freezes,'copy_records':len(mappings),'terms':len(lex),'queries':len(queries),'physical_extents':len(phys)}))

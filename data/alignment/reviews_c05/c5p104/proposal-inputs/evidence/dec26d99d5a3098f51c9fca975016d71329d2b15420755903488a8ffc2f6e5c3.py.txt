@@ -1,0 +1,46 @@
+"""Finalize compact reports and freeze exact artifact bytes; no unchanged generator rerun."""
+import hashlib,json,pathlib,stat
+A=pathlib.Path(__file__).resolve().parent
+def meta(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+# This evidence-only wording correction needs no new generation: spec/body unchanged.
+p=A/'311/errata-five-grounds.json';data=json.loads(p.read_text())
+data['ground_4_local_sense_and_HGM']['assessment']='The row’s med par thal negative-existence consequence is distributed into a repeated negative predicate and rhetorical consequence. This is an expanded translation, not evidence of a misspelling. The unaligned shared predicate remains omitted, never a false null. HGM lexical records for the retained realm, pleasure, suffering and admission words are preserved in the shared master extract.'
+prior=A/'311/superseded/pre-report-wording';prior.mkdir(parents=True)
+(prior/'errata-five-grounds.json').write_bytes(p.read_bytes());dump(p,data)
+index=A/'evidence/evidence-index.json';index_meta=meta(index.read_bytes())
+focus={
+310:'First challenge: lus→null affirms only that body/bodily has no separate exponent; myong still owns experiencing. The two experience/birth sequences and all three coordinated compounds were checked in their own clauses.',
+311:'First challenge: omitted med par thal is a shared negative-existence consequence expanded twice and as You must be. No auxiliary-rich d5 pair or false null is proposed; the two agree occurrences and realm genitives are distinct.',
+312:'First challenge: gnas→living [201,205) maps [418,424), while gnas pa→living [352,359) maps [721,727); the intermediate living is English expansion. Three mig shes parents each retain visual/consciousness members; only the later tshad mar owns valid perception.'}
+limits={
+310:'Omissions: ma gtogs, mi myong, gnyis la, de\'i references, med par thal and the final causal/conditional relation remain distributed or insufficiently separate; supplied participants and auxiliaries stay unwrapped.',
+311:'Omissions: the supplied misperception explanation, shared med par thal and de\'i phyir recast. C15:456 matches three text fields; C16:848 adds a heading. Neither establishes independent publication.',
+312:'Omissions: mi bzod, the first cup-organism tshad mar clause, distributed possessive/necessity framing, duplicated explanatory words, closing gang and the complete weapons/glasses-of-water relation. Digital repeats in C15:457/C16:849/C18:1133 do not settle those meanings.'}
+segments=[]
+for seq in [310,311,312]:
+    D=A/str(seq);proof=json.loads((D/'mechanical-proof.json').read_text());c=proof['counts']
+    text='\n'.join([
+      f'C05:{seq} — Tibetan-first — Codex provisional machine proposal.',
+      focus[seq],
+      limits[seq],
+      'Source/evidence: ../evidence/spine-full-original-rows.json; complete original master/corpus/physical bytes and exact references in ../evidence/evidence-index.json (SHA256 '+index_meta['sha256']+'). Historical origin 51d73c889a3f175b90e4c466f3dc4b1f7af3bca5 through306; no future acceptance baseline is claimed.',
+      'Local source/English ranges and occurrence-specific reasoning: source-specific-rationale.json and resolved-ranges.json. Physical ACIP/English extents and original-byte hashes: physical-source-proof.json.',
+      'Errata: [] (0). errata-five-grounds.json records exact-row quotes, parallel limits, registered classes, local/HGM grounds and evidence integrity; no source correction is proposed.',
+      f'Native process: EXIT=0; BODY_BYTES={proof["artifacts"]["body.html"]["bytes"]}; STDERR_BYTES=0. Actual original stdin/stdout/stderr/exit are attempts/native-001/stdin.json, stdout.html, stderr.txt and exit.txt; command/environment/dependency pins are in execution.json.',
+      f'Measured spans={c["spans"]}; nulls={c["nulls"]}; total d5={c["d5_total"]}; non-null d5 word pairs={c["d5_nonnull_word_pairs"]}; d7 members={c["d7_members"]}. Depth counts and affected checks: mechanical-proof.json.',
+      'Spec SHA256 '+proof['artifacts']['spec.json']['sha256']+'; body SHA256 '+proof['artifacts']['body.html']['sha256']+'; errata SHA256 '+proof['artifacts']['errata.json']['sha256']+'.',
+      'Verification: unchanged canonical generator succeeded once; exact stdout equals body, both source sides recover byte-exact text, original canonical builder parses every span and recovers ACIP, and all authored ranges match canonical resolution. Source-specific occurrence corrections and the failed author helper are preserved; unchanged passing generation was not repeated.',
+      'Frozen by ../freeze-manifest.json, schema independent-tibetan-proposal-freeze-v1. GMR remains verbatim and provisional; no hgm_gloss promotion, semantic approval or landing approval. Independent reconciliation and fresh review remain later stages.',
+    ])+'\n'
+    (D/'report.md').write_text(text)
+    segments.append({'seq':seq,'directory':str(seq),'counts':c,'native_exit':0,'stderr_bytes':0,'final_files':[str((D/f).relative_to(A)) for f in ['spec.json','body.html','errata.json','report.md','resolved-ranges.json','mechanical-proof.json','source-specific-rationale.json','physical-source-proof.json','errata-five-grounds.json']]})
+files={str(p.relative_to(A)):meta(p.read_bytes()) for p in sorted(A.rglob('*')) if p.is_file() and p.name not in ['freeze-manifest.json','freeze-receipt.json']}
+freeze={'schema':'independent-tibetan-proposal-freeze-v1','producer':'Codex Tibetan-first','origin_commit':'51d73c889a3f175b90e4c466f3dc4b1f7af3bca5','origin_boundary':306,'freeze_status':'FINAL INDEPENDENT PROPOSALS; NOT SEMANTICALLY APPROVED','segments':segments,'files':files,'counts':{'spans':103,'nulls':1,'d5_total':70,'d5_nonnull_word_pairs':69,'d7_members':16,'errata':0},'preservation':'Complete original master/corpus/physical and historical governance/dependencies kept once under evidence; final native process I/O retained per segment; all failed/superseded authoring inputs preserved. Future correction must supersede this boundary explicitly.'}
+manifest=A/'freeze-manifest.json';assert not manifest.exists();dump(manifest,freeze)
+receipt={'schema':'proposal-freeze-receipt-v1','filename':'freeze-manifest.json','manifest_schema':freeze['schema'],**meta(manifest.read_bytes()),'counts':freeze['counts'],'file_count':len(files),'all_recorded_hashes_match':all(meta((A/path).read_bytes())==m for path,m in files.items())}
+assert receipt['all_recorded_hashes_match']
+dump(A/'freeze-receipt.json',receipt)
+for p in A.rglob('*'):
+    if p.is_file():p.chmod(stat.S_IRUSR|stat.S_IRGRP|stat.S_IROTH)
+print(json.dumps(receipt,ensure_ascii=False))

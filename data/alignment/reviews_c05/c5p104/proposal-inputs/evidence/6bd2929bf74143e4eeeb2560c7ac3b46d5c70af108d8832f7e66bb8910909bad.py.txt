@@ -1,0 +1,29 @@
+import json,pathlib,sys,re,hashlib,collections
+from native_capture import run
+A=pathlib.Path(__file__).resolve().parents[1];P=A/'evidence/pinned';sys.path[:0]=[str(P/'tools'),str(P/'engines')];import build_alignment_layer as B
+rows={x['seq']:x for x in json.loads((A/'evidence/original-local-rows.json').read_text())}
+def meta(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+proofs=[]
+for seq in [312]:
+ D=A/str(seq);inp=(D/'spec.json').read_bytes();p,pd=run('final-'+str(seq)+'-generate-02',[sys.executable,'-B',str(A/'helpers/canonical.py'),'generate'],inp);assert p.returncode==0 and not p.stderr
+ (D/'body.html').write_bytes(p.stdout)
+ q,qd=run('final-'+str(seq)+'-resolve-02',[sys.executable,'-B',str(A/'helpers/canonical.py'),'resolve'],inp);assert q.returncode==0 and not q.stderr
+ resolved=json.loads(q.stdout)['segments'][0]['resolved'];s=json.loads(inp)['segments'][0];planned={x['id']:x for x in json.loads((D/'planned-decisions.json').read_text())};parents={x['id']:x for x in resolved};parsed={side:{label:(d,t) for d,label,t in B.spans_of(p.stdout.decode(),side)} for side in ['tib','eng']};sourceproof={}
+ for x in resolved:
+  for k in ['id','d','tib','eng','tib_range','eng_range','parent']:assert x[k]==planned[x['id']][k],(seq,x,k,planned[x['id']])
+  for side in ['tib','eng']:assert parsed[side]['s'+str(seq)+x['id']]==(x['d'],' '.join((x[side] or '').split()))
+  if x['d']==7:
+   pa=parents[x['parent']];assert pa['d']==5
+   for side,rkey in [('tib','tib_range'),('eng','eng_range')]:
+    if x[side] is None:continue
+    lo,hi=x[rkey];plo,phi=pa[rkey];assert plo<=lo<hi<=phi and (lo,hi)!=(plo,phi) and pa[side].count(x[side])==1
+  x['tib_acip']=B.acip_span(rows[seq]['acip'],rows[seq]['wylie'],x['tib']);assert x['tib_acip'] is not None
+  x['independent_judgment']=planned[x['id']]['independent_judgment']
+ for side,field in [('tib','wylie'),('eng','english')]:
+  block=p.stdout.decode().split('<div class="'+side+'">',1)[1];interior=block.split('<span class="u" data-d="1" data-l="s'+str(seq)+'S">',1)[1].split('\n</div>',1)[0];assert interior.endswith('</span>');interior=interior[:-7];interior=re.sub(r'<span class="nul">.*?</span>','',interior,flags=re.S);plain=B.strip_tags(interior);assert plain==rows[seq][field];sourceproof[field]=meta(plain.encode())
+ gated=[x for x in resolved if x['d'] in [5,7] and x['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',x['eng'],re.I)];assert not gated
+ counts={'spans':len(resolved),'nulls':sum(x['eng'] is None for x in resolved),'d5_total':sum(x['d']==5 for x in resolved),'nonnull_d5':sum(x['d']==5 and x['eng'] is not None for x in resolved),'d7':sum(x['d']==7 for x in resolved),'depths':dict(collections.Counter(x['d'] for x in resolved)),'errata':0}
+ dump(D/'resolved-ranges.json',{'schema':'reconciliation-resolved-spans-v1','seq':seq,'units':'zero-based half-open character ranges of original source fields','eng_order':s['eng_order'],'ranges':resolved})
+ proof={'seq':seq,'counts':counts,'native_exit':p.returncode,'stderr_bytes':len(p.stderr),'generator_proof':str(pd.relative_to(A)),'resolver_proof':str(qd.relative_to(A)),'body_equals_stdout':True,'spec_equals_stdin':True,'canonical_builder_parses_every_span':True,'acip_all_recovered':True,'unique_tighter_contiguous_members':True,'no_gated_d5_d7_heads':True,'proposed_allowances':[],'source_recovery':sourceproof,'files':{f:meta((D/f).read_bytes()) for f in ['spec.json','body.html','errata.json','resolved-ranges.json']},'scope':'Standalone changed-segment proof. Independent skeptical semantic review and root landing gates remain outstanding.'};dump(D/'mechanical-proof.json',proof);proofs.append(proof);print(json.dumps({'seq':seq,'exit':0,'counts':counts,'body':meta(p.stdout)}))
+dump(A/'evidence/final-native-312-v2-proof.json',proofs)

@@ -1,0 +1,41 @@
+import hashlib,json,pathlib,re
+A=pathlib.Path(__file__).resolve().parent;E=A/'evidence'
+def meta(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+rows={r['seq']:r for r in json.loads((E/'spine-full-original-rows.json').read_text())['rows']}
+queries=json.loads((E/'corpus-query-evidence.json').read_text())['queries']
+reg=json.loads((E/'pinned/docs/errata_register.json').read_text())
+physical=(E/'C05ReadingASCII.txt').read_bytes()
+for seq in [310,311,312]:
+    D=A/str(seq);row=rows[seq]
+    a=physical.index(row['acip'][:70].encode('ascii'))
+    b=physical.index(row['english'][:50].encode('ascii'),a)
+    c=physical.index(rows[seq+1]['acip'][:70].encode('ascii'),b)
+    original_acip=physical[a:b];original_eng=physical[b:c]
+    assert ' '.join(original_acip.decode('latin1').split())==row['acip']
+    assert ' '.join(original_eng.decode('latin1').split())==row['english']
+    physical_proof={'source':'../evidence/C05ReadingASCII.txt','source_sha256':meta(physical)['sha256'],'range_units':'zero-based original byte [start,end)','acip_range':[a,b],'english_range':[b,c],'acip_original_bytes':meta(original_acip),'english_original_bytes':meta(original_eng),'acip_reversible_latin1':original_acip.decode('latin1'),'english_reversible_latin1':original_eng.decode('latin1'),'comparison':'Whitespace-joined complete selected physical ACIP and English blocks equal the original spine fields; no source correction or silent replacement.'}
+    dump(D/'physical-source-proof.json',physical_proof)
+    parallel=[]
+    q=next(q for q in queries if q['key']==str(seq)+'-acip-exact')
+    assert len(q['rows'])==q['count']
+    for witness in q['rows']:
+        if witness['course']=='C05':continue
+        parallel.append({'course':witness['course'],'seq':witness['seq'],'compared_fields':{f:witness[f]==row[f] for f in ['acip','wylie','english']},'full_record_reference':'../evidence/corpus-query-evidence.json#/queries/'+str(queries.index(q))+'/rows/'+str(q['rows'].index(witness)),'independent_publication':'not established'})
+    same_segment=[r for r in reg if 'C05:'+str(seq) in str(r.get('segment',''))]
+    concerning=[r for r in reg if any(term.lower() in json.dumps(r,ensure_ascii=False).lower() for term in (['lus kyis'] if seq==310 else ['better or worse misperceptions'] if seq==311 else ['mi bzod','phor gang','weapons as glasses']))]
+    quote={310:{'acip':'LUS KYIS BDE SDUG MYONG MI MYONG','english':'whether they are experiencing pleasure or pain'},311:{'acip':'SDUG BSNGAL MED PAR THAL','english':"don't even exist"},312:{'acip':"THA MAL GYI MIG SHES KYIS MI BZOD PA'I",'english':'imperceptible to normal visual consciousness','acip2':'MTSON CHA PHOR GANG SNANG DGOS PA','english2':'see weapons as glasses of water'}}[seq]
+    for key,value in quote.items():assert value in row['acip' if key.startswith('acip') else 'english']
+    five={
+      'schema':'five-ground-errata-assessment-v1','seq':seq,'producer':'Codex Tibetan-first','errata_proposed':0,
+      'ground_1_exact_this_row':{'quotes':quote,'counts':{k:row['acip' if k.startswith('acip') else 'english'].count(v) for k,v in quote.items()},'source':'../evidence/spine-full-original-rows.json; complete raw row retained; physical-source-proof.json gives complete exact source extents'},
+      'ground_2_parallel_witness':{'same_acip_query_count':q['count'],'witnesses':parallel,'broad_queries':'../evidence/corpus-query-evidence.json includes full rows for mi bzod, mtshon cha phor gang, las can gyi, tshad mtshungs, skyes bu dam pa, microscopic organisms, glasses of water and khrul snang bzang ngan. No independent publication is established; course-shape lineage wording is metadata only.','specific_limit':{310:'C15:455 changes the opening wording; C16:847 equals all three text fields. P7:47 differs in Tibetan punctuation and English is a prefix ending reasoning were; its unquoted continuation cannot be inferred.',311:'C15:456 equals all three text fields. C16:848 equals ACIP/Wylie but adds 34 Concluding Remarks on the Glass of Water to the English; its heading is apparatus, not another translation exponent.',312:'C15:457, C16:849 and C18:1133 equal ACIP/Wylie/English. Identity is digital-text agreement, not publication independence or proof of authorial correctness.'}[seq]},
+      'ground_3_registered_classes':{'historical_register_entries':len(reg),'same_segment_records':same_segment,'candidate_term_records':concerning,'register':'../evidence/pinned/docs/errata_register.json','classes_reviewed':['E-044 converter escapes','E-071 English running heads','E-076 period-fused footnotes','E-121 word-fused footnotes','E-111 row spill','E-107 1500-character cap','course-shape following-heading and folio classes'],'english_characters':len(row['english']),'cap_applies':len(row['english'])==1500,'disposition':'No new instance of a registered apparatus class in this C05 row. The C16:848 heading is a different row and is not newly filed.'},
+      'ground_4_local_sense_and_HGM':{'evidence':'../evidence/master-lexical-evidence.json retains complete original records with hgm_gloss, tier, source and comparative fields distinguished. Full original master bytes retained.','assessment':{310:'HGM lus includes body/physically; this English leaves physical modality implicit while myong directly owns experience. Absence of a separate body exponent does not prove a textual defect. The null asserts only no separate exponent, not absent experiential meaning.',311:'HGM med-related negative-existence is distributed into a repeated negative predicate and rhetorical consequence. This is an expanded translation, not evidence of a misspelling. The unaligned shared predicate remains omitted, never a false null.',312:'HGM mi bzod gives unable to bear; comparanda mention unendurable. Neither by itself proves that the contextual imperceptible is erroneous or licenses that lexical equivalence. The normal-consciousness frame may express exceeding ordinary visual capacity; omit mi bzod pending interpretation. mtshon cha=weapons, phor=glasses and gang=full support individual nouns/quantity, but do not establish the full weapons-as-glasses-of-water relation or a unique correction. Omit that relation and gang, retain only defensible atoms; no factual-error claim is filed.'}[seq]},
+      'ground_5_proof_integrity':{'source_baseline':'../evidence/source-pin-proof.json','full_external_originals':'../evidence/external-original-copies.json','native_generator':'attempts/native-001/execution.json','query_counts':'All stored query counts are checked against complete retained result arrays; source pin proof compares all six selected fields against original read-only spine rows.','physical':'physical-source-proof.json verifies selected complete original physical blocks against spine fields after whitespace joining.','status':'No source correction, no independent manuscript/publication authority, no hgm_gloss promotion, no semantic approval.'}
+    }
+    assert all(q['count']==len(q['rows']) for q in queries)
+    dump(D/'errata-five-grounds.json',five)
+    print(seq,'physical extents and five errata grounds saved')
+manifest={'schema':'shared-original-evidence-index-v1','origin_commit':'51d73c889a3f175b90e4c466f3dc4b1f7af3bca5','through':306,'files':{str(p.relative_to(A)):meta(p.read_bytes()) for p in sorted(E.rglob('*')) if p.is_file()},'evidence_reused':'Already successful unchanged bootstrap source hashes, original corpus queries and lexical extracts are reused; no source queries or generation repeated solely for packaging.'}
+dump(E/'evidence-index.json',manifest)

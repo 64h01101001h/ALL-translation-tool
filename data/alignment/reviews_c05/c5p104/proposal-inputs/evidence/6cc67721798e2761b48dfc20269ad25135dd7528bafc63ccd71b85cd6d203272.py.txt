@@ -1,0 +1,39 @@
+import hashlib,json,sqlite3,subprocess,gzip,shutil
+from pathlib import Path
+R=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment'); W=R/'campaign-worktree'; B=R/'campaign-artifacts/C05-310-312'; A=B/'english'; E=A/'evidence'; E.mkdir(exist_ok=True)
+pins=json.loads((B/'proposal-baseline.json').read_text()); commit=pins['commit']
+def sha(b): return hashlib.sha256(b).hexdigest()
+def save(name,x): (E/name).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+checks=[]
+for rel,pin in pins['governing_git_pins'].items():
+ p=subprocess.run(['git','show',commit+':'+rel],cwd=W,capture_output=True); assert p.returncode==0
+ out=E/'pinned'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(p.stdout)
+ assert len(p.stdout)==pin['bytes'] and sha(p.stdout)==pin['sha256'];checks.append({'path':rel,'origin':commit,'sha256':sha(p.stdout),'bytes':len(p.stdout)})
+for rel in ['engines/hgm_tools.py']:
+ p=subprocess.run(['git','show',commit+':'+rel],cwd=W,capture_output=True);assert p.returncode==0
+ out=E/'pinned'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(p.stdout)
+ checks.append({'path':rel,'origin':commit,'sha256':sha(p.stdout),'bytes':len(p.stdout)})
+for name,pin in pins['source_pins'].items():
+ data=Path(pin['path']).read_bytes(); assert len(data)==pin['bytes'] and sha(data)==pin['sha256'],name
+ checks.append({'name':name,**pin,'verified':True})
+ if name=='physical':(E/'C05ReadingASCII.original.bin').write_bytes(data)
+for f in ['proposal-baseline.json','source.json','context.json','english-brief.md']:(E/f).write_bytes((B/f).read_bytes())
+(E/'proposal-protocol.md').write_bytes((B.parent/'proposal-protocol.md').read_bytes())
+db=sqlite3.connect(Path(pins['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+save('sqlite-schema.json',[dict(r) for r in db.execute("select name,sql from sqlite_master where type='table'")])
+rows=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',298,318))];save('original-local-rows.json',rows)
+ver=[]
+for file in ['source.json','context.json']:
+ for row in json.loads((B/file).read_text()):
+  original=next(x for x in rows if x['seq']==row['seq']);assert all(original[k]==v for k,v in row.items())
+  ver.append({'snapshot':file,'id':row['id'],'seq':row['seq'],'fields':list(row),'exact':True})
+save('snapshot-verification.json',ver);save('source-pin-verification.json',checks)
+for name in ['master','corpus']:
+ with gzip.open(pins['source_pins'][name]['path'],'rt') as f: obj=json.load(f)
+ print(name,type(obj).__name__,list(obj)[:20] if isinstance(obj,dict) else len(obj))
+ if isinstance(obj,dict):
+  for k,v in obj.items():
+   print(' ',k,type(v).__name__,len(v) if hasattr(v,'__len__') else '')
+   if isinstance(v,list) and v:print('sample',json.dumps(v[0],ensure_ascii=False)[:2400]);break
+ elif obj:print('sample',json.dumps(obj[0],ensure_ascii=False)[:2400])
+print('source checks',len(checks),'snapshot comparisons',len(ver),'original rows',len(rows))

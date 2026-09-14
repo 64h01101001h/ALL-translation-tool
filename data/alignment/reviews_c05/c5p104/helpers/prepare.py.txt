@@ -1,0 +1,73 @@
+import pathlib,json,hashlib,subprocess,sqlite3,os,gzip
+R=pathlib.Path(__file__).resolve().parents[1]; A=R.parent; W=A.parents[1]/'campaign-worktree'
+ORIGIN='51d73c889a3f175b90e4c466f3dc4b1f7af3bca5'
+def meta(b):return {'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}
+def dump(p,x):
+ p=R/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest=[]; originals={}; contents={}
+def copy(p,target=None,gitpath=None):
+ p=pathlib.Path(p).absolute(); raw=(subprocess.run(['git','show',ORIGIN+':'+gitpath],cwd=W,capture_output=True,check=True).stdout if gitpath else p.read_bytes())
+ m=meta(raw)
+ if str(p) in originals:
+  assert originals[str(p)]['sha256']==m['sha256'];return originals[str(p)]
+ suffix=p.suffix.lower()
+ if suffix not in ('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'):
+  suffix=suffix+'.txt' if suffix in ('.py','.sql','.sh') else '.bin'
+ target=target or contents.get(m['sha256']) or ('proposal-inputs/evidence/'+m['sha256']+suffix)
+ out=R/target;out.parent.mkdir(parents=True,exist_ok=True)
+ if out.exists():assert out.read_bytes()==raw
+ else:out.write_bytes(raw)
+ rec={'original':str(p),'copy':target,**m}
+ if gitpath:rec.update(original_git_commit=ORIGIN,repository_relative_path=gitpath)
+ manifest.append(rec);originals[str(p)]=rec;contents.setdefault(m['sha256'],target);return rec
+freezes=[]
+for angle,name,expected in [('tibetan','freeze-manifest.json','c7631740582c0b98e79f396e9af4890660ac58b8708cc5877c8f7a076683d9f3'),('english','freeze.json','ba3a7180dc87ad0adf7a4e9738f77936b655f135afaa26915cad01f3b2a61f22'),('reconciled','freeze.json','bb799b6c6c307429b266d98efb096f58f25bd6553b17e20d64d1069319456d6c')]:
+ p=A/angle/name;assert meta(p.read_bytes())['sha256']==expected
+ j=json.loads(p.read_text());checks=[]
+ for f,m in j['files'].items():
+  actual=meta((A/angle/f).read_bytes());assert actual==m,(angle,f,actual,m);checks.append({'path':f,**actual})
+ freezes.append({'angle':angle,'schema':j['schema'],'freeze':str(p),**meta(p.read_bytes()),'file_count':len(checks),'all_files_exact':True})
+ for p in sorted((A/angle).rglob('*')):
+  if not p.is_file() or '__pycache__' in p.parts:continue
+  rel=p.relative_to(A/angle)
+  if rel.parts[0] in ('310','311','312'):
+   prefix='reviewed-final' if angle=='reconciled' else 'proposal-inputs/'+angle
+   target=prefix+'/'+str(rel)
+   if p.suffix.lower() not in ('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'):target+='.txt' if p.suffix in ('.py','.sql','.sh') else '.bin'
+   copy(p,target)
+  else:copy(p)
+for name in ['source.json','context.json','baseline.json','proposal-baseline.json','semantic-review-brief-v2.md','root-current-semantic-brief.md','semantic-input-review-package.txt','reconciliation-brief.md','tibetan-brief.md','english-brief.md','root-three-critical-master-records.json']:
+ copy(A/name,'proposal-inputs/batch/'+name)
+for name in ['semantic-review-protocol.md','proposal-protocol.md','copy_evidence_once.py','land_reviewed_page.py']:
+ p=A.parent/name
+ if p.exists():copy(p,'proposal-inputs/governance/'+name+('.txt' if p.suffix=='.py' else ''))
+pins=[]
+for p in sorted((A/'reconciled/evidence/pinned').rglob('*')):
+ if not p.is_file():continue
+ rel=p.relative_to(A/'reconciled/evidence/pinned').as_posix();b=subprocess.run(['git','show',ORIGIN+':'+rel],cwd=W,capture_output=True,check=True).stdout
+ assert b==p.read_bytes(),rel
+ target='proposal-inputs/pinned/'+rel+('.txt' if p.suffix=='.py' else '')
+ rec=copy(W/rel,target,rel);pins.append(rec)
+ # Every preserved package snapshot of governing code is also pinned explicitly.
+ for rec in manifest:
+  if '/pinned/'+rel in rec['original'] and rec['sha256']==meta(b)['sha256']:rec.update(original_git_commit=ORIGIN,repository_relative_path=rel)
+dbpath=W/'build/hgm_spine_v27_2.db';sourcepins=json.loads((A/'proposal-baseline.json').read_text())['source_pins']
+for k,m in sourcepins.items():
+ p=pathlib.Path(m['path']);actual=meta(p.read_bytes());assert actual=={kk:m[kk] for kk in ('sha256','bytes')},k
+ if k!='spine':copy(p)
+db=sqlite3.connect(dbpath.as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+rows=[dict(x) for x in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',304,318))]
+for f in ['source.json','context.json']:
+ for x in json.loads((A/f).read_text()):
+  own=next(y for y in rows if y['seq']==x['seq']);assert all(own[k]==v for k,v in x.items())
+dump('independent-source-rows.json',rows)
+access=[{'path':x['path'],'readable':os.access(x['path'],os.R_OK)} for x in json.loads((A/'reconciled/evidence/access.json').read_text())];assert all(x['readable'] for x in access)
+physical=pathlib.Path(sourcepins['physical']['path']).read_bytes();ext=[]
+for x in json.loads((A/'reconciled/evidence/independent-physical-extents.json').read_text()):
+ lo,hi=x['range'];b=physical[lo:hi];assert b.decode('latin1')==x['latin1_reversible'];assert meta(b)=={k:x[k] for k in ('sha256','bytes')}
+ row=next(y for y in rows if y['seq']==x['seq']);assert ' '.join(b.decode('latin1').split())==row[x['field']]
+ ext.append({**x,'independently_verified':True})
+dump('independent-physical-extents.json',ext)
+dump('original-to-copy-manifest.json',manifest)
+dump('input-verification.json',{'producer':'Codex fresh independent skeptical reviewer','source_origin':ORIGIN,'source_origin_boundary':306,'later_acceptance_baseline':'8575edf1e0de695677194c1fde60f1d9e2c2f204','later_acceptance_boundary':309,'freezes':freezes,'git_pins':pins,'source_pins':sourcepins,'source_snapshot_all_fields_exact':True,'spine_uri':dbpath.as_uri()+'?mode=ro','required_access':access,'original_count':len(manifest),'distinct_copies':len({x['copy'] for x in manifest})})
+print(json.dumps({'verified_freezes':freezes,'copied_originals':len(manifest),'distinct_copies':len({x['copy'] for x in manifest}),'source_rows':len(rows),'physical_extents':len(ext)},indent=2))

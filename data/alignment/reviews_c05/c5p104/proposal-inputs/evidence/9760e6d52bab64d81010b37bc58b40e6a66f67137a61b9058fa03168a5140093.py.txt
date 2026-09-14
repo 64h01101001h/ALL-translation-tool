@@ -1,0 +1,37 @@
+import sys,os,json,sqlite3,hashlib,runpy,importlib.util
+from pathlib import Path
+A=Path(__file__).resolve().parent;E=A/'evidence';pins=json.loads((E/'proposal-baseline.json').read_text());W=Path(pins['source_pins']['spine']['path']).parents[1]
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+original=W/'tools/gen_alignment_page.py';assert sha(original)==pins['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+for name,p in pins['governing_git_pins'].items():assert sha(E/'pinned'/name)==p['sha256']
+sys.path.insert(0,str(E/'pinned/tools'));import build_alignment_layer as B
+assert Path(B.__file__).resolve()==E/'pinned/tools/build_alignment_layer.py'
+B.SPINE=str(Path(pins['source_pins']['spine']['path']))
+_connect=sqlite3.connect
+connections=[]
+def connect(database,*args,**kwargs):
+ assert str(database)==B.SPINE,('Unexpected SQLite path',str(database))
+ assert not args and not kwargs
+ uri=Path(B.SPINE).as_uri()+'?mode=ro';connections.append({'uri':uri,'uri_flag':True})
+ return _connect(uri,uri=True)
+sqlite3.connect=connect
+if sys.argv[1]=='generate':runpy.run_path(str(original),run_name='__main__')
+else:
+ G=runpy.run_path(str(original));spec=json.load(sys.stdin);out=[]
+ db=connect(B.SPINE);db.row_factory=sqlite3.Row
+ for seg in spec['segments']:
+  row=dict(db.execute('select * from corpus_segments where course=? and seq=?',(spec['course'],seg['seq'])).fetchone());spans=seg['spans'];byid={s['id']:s for s in spans}
+  tib=G['resolve'](row['wylie'],spans,'tib',seg['seq']);es=G['with_members'](spans,[byid[k] for k in seg['eng_order']],row['english']);eng=G['resolve'](row['english'],es,'eng',seg['seq'])
+  decisions=json.loads((A/str(seg['seq'])/'author-decisions.json').read_text());planned={x['id']:x for x in decisions['planned_spans']};measured=[];parent=None
+  for s in spans:
+   if s['d']!=7:parent=s['id'] if s['d']==5 else None
+   tr=tib[s['id']];er=eng.get(s['id']);assert (list(er) if er else None)==planned[s['id']]['expected_english_range'],(s['id'],er,planned[s['id']])
+   tlo=row['wylie'].rfind(',',0,tr[0])+1;thi=row['wylie'].find(',',tr[1]);thi=len(row['wylie']) if thi<0 else thi+1
+   if er:
+    elo=max(row['english'].rfind('.',0,er[0]),row['english'].rfind('?',0,er[0]))+1
+    ends=[x for x in [row['english'].find('.',er[1]),row['english'].find('?',er[1])] if x>=0];ehi=min(ends)+1 if ends else len(row['english'])
+   else:elo=ehi=None
+   measured.append({**s,'tib_range':list(tr),'eng_range':list(er) if er else None,'parent':parent if s['d']==7 else None,'tib_quote':row['wylie'][slice(*tr)],'eng_quote':row['english'][slice(*er)] if er else None,'tib_clause_range':[tlo,thi],'tib_clause':row['wylie'][tlo:thi],'english_sentence_range':[elo,ehi] if er else None,'english_sentence':row['english'][elo:ehi] if er else None,**planned[s['id']]})
+  counts={'spans':len(spans),'nulls':sum(s['eng'] is None for s in spans),'d5_total':sum(s['d']==5 for s in spans),'nonnull_d5_word_pairs':sum(s['d']==5 and s['eng'] is not None for s in spans),'depths':{str(d):sum(s['d']==d for s in spans) for d in range(1,8)}}
+  out.append({'seq':seg['seq'],'source_row':row,'ranges_are':'zero-based half-open character offsets in original fields','resolved':measured,'counts':counts})
+ print(json.dumps({'canonical_generator':str(original),'generator_sha256':sha(original),'builder_origin_commit':pins['commit'],'builder_sha256':sha(Path(B.__file__)),'connections':connections,'segments':out},ensure_ascii=False,indent=2))

@@ -1,0 +1,60 @@
+import pathlib,json,copy
+A=pathlib.Path(__file__).resolve().parents[1];B=A.parent
+notes={310:"Codex reconciliation; PROVISIONAL machine alignment. GMR English remains verbatim; no hgm_gloss promotion. Conduct, birth and experience occurrences stay in their respective higher- and lower-realm cases. skyes bu dam pa, mtho ris, bzang ngan and bde sdug keep two distinct members each. lus has no separately expressed body/bodily exponent and is null; this does not deny the bodily sense of the experience. myong retains experiencing, while mi myong, ma gtogs and med par remain unbanked because their negative and exclusion force is distributed through the rhetorical question. thal is the lexical consequence predicate, matched narrowly to have to; supplied would and be remain outside. khyod kyi licenses the whole possessive your. Anaphoric realm references and the final reason/conditional recast are not separately atomized.",311:"Codex reconciliation; PROVISIONAL machine alignment. GMR English remains verbatim; no hgm_gloss promotion. The opening and closing agree correspond to distinct admission predicates. The higher-realm members and the two genitives retain their own occurrences. One shared med par scopes both the pleasures of the higher realms and the pains of the lower realms; English repeats don't even exist. That distributed negative relation remains unbanked, not null. thal is a lexical consequence predicate, retained at word depth as must in You must be; You and be are outside. The supplied misperception premise and the de'i phyir causal-to-conditional wording are not separate lexical matches.",312:"Codex reconciliation; PROVISIONAL machine alignment. GMR English remains verbatim; no hgm_gloss promotion. Opening tshad abbreviates valid perception, whereas the ocean's tshad denotes extent. Nominal gnas maps place; the residence verbs map living at English offsets 418 and 721, with the repeated living at 537 left outside. blos retains its complete instrumental form and maps think in the conception of a dwelling place. The three mig shes parents distinguish normal vision, the glass organisms' own vision, and ocean organisms' vision; each has two independently meaningful members. First tshad mar 'gro and mi bzod remain omitted as distributed or unresolved, not null. Only the ocean clause retains valid perception and its constitutive predicate be. Necessity uses the narrower have to without would. The near-god clause keeps the clear words certain, near-gods, weapons, glasses, see and have to, without claiming the complete phor gang or as glasses of water relation. Quantity, repeated participants/water and closing existence/reason wording remain unbanked."}
+# Independently authored local judgments; full exact original proposals remain preserved separately.
+reason_extra={
+(310,'w1'):"A complete antecedent with demonstrative de ltar, negative copula ma yin and conditional na; d2 records this finite conditional clause, not a dictionary compound.",
+(310,'w27'):"bzang ngan is an established paired-quality compound (HGM 'better or worse'); its juxtaposition licenses the alternatives together and each quality has a contained member.",
+(310,'nThal'):"thal predicates a consequence of accepting the opponent's reasoning. English have to carries that inferential necessity in This would have to be the case; would marks hypothetical framing and be supplies the English copula. d5 follows the Tibetan lexical predicate, not the English modal part of speech.",
+(310,'nYour'):"khyod kyi explicitly combines the opponent pronoun with its genitive and licenses your in your reasoning; the full possessive relation is retained at d3.",
+(311,'nThal'):"The consequence predicate thal contributes necessity in You must be after the doubled negative-existence question. must is its narrow exponent; be is English ellipsis and You is supplied. The Tibetan predicate is lexical, therefore d5; med par remains distinct and distributed.",
+(312,'w10'):"cig car expresses simultaneity of the opening observation; together is the temporal adverbial exponent. Retain the shorter lexical adverb rather than absorb du into a new phrase. HGM cig car and cig car du records distinguish the related forms.",
+(312,'nLoc'):"nang du marks location inside the recalled glass. In the recast it is the in immediately after the first living, in water, not in the way or the later repeated living in the water; the complete locative phrase is d3.",
+(312,'w20'):"gnas kyi blos describes conceiving the contents as a residence; blos is the inflected mind/conception noun and locally becomes think. HGM blo supports think, while exact blos has intent; C05:250 repeats gnas kyi blos and says thinks of this same water as a place to stay. Do not split agentive -s or treat the latter passage as proof beyond the shared cognitive relation.",
+(312,'w21'):"gnas shing is the residence verb of the creature occupying the glass. GMR first says a creature living in water at E[418:424]; the infinitive to live expands nominal place, and the middle living at E[537:543] repeats the glass explanation. Only this first verbal residence occurrence is selected.",
+(312,'nAlso'):"First kyang introduces the extra cup-organism consequence, realized by as well in The three beings as well. The later kyang instead introduces Then too and must keep its separate occurrence.",
+(312,'nNeed'):"The first consequent dgos pa after de'i tshad mar 'gro contributes necessity to the cup-organism comparison, realized by have to at E[472:479]. Earlier would have to think is an expansion of the residence premise; that earlier modal is not silently substituted.",
+(312,'w31'):"The first rgya mtsho names the habitat of the second organisms and selects ocean at E[749:754]. Take the narrower nominal stem from the English proposal; the attached genitive is not asserted to mean ocean.",
+(312,'w32'):"nang denotes the ocean interior, locally rendered depths. HGM nang explicitly attests depths and the source's following na licenses in separately. The English proposal's claim that depths is merely supplied is rejected on this source relation and HGM field.",
+(312,'w33'):"na is the locative particle following ocean-interior nang and selects in at E[728:730], after the ocean organisms' living. It is distinct from the conditional na at W[154:156] and the cup's du.",
+(312,'w34'):"gnas pa is the ocean organisms' residence predicate at W[352:359], rendered living at E[721:727]. Remove the English proposal's attached genitive 'i; the middle living belongs to the cup restatement and is skipped.",
+(312,'w41'):"The second rgya mtsho names the object whose extent would be known, rendered sea at E[824:827]. Tighten off the genitive 'i while preserving this second source occurrence.",
+(312,'w42'):"This tshad measures the sea as a whole. HGM explicitly includes entire extent, and the local rgya mtsho'i tshad concerns that whole measure; retain GMR's complete attested phrase. Separate English-word status does not make entire supplied.",
+(312,'nBe'):"In the later tshad mar 'gro, 'gro is constitutive (count as/serve as), realized by be at E[769:771] in be a valid perception. It is a source lexical predicate, not an English-only auxiliary. HGM 'gro records would ... be; SVN:1167 explicitly renders the same tshad mar 'gro dgos construction must constitute an accurate perception, supporting this local function only.",
+(312,'w44'):"The second tshad mar is the ocean-consciousness validity predicate and maps valid perception at E[774:790]. The first tshad mar has a distributed same-way recast and must not jump to this later explicit occurrence. The bound -r remains with the inflected lexical unit.",
+(312,'w45'):"Second consequent dgos pa concerns the ocean consciousness and owns have to at E[761:768]. would is hypothetical English framing, and the following be is separately licensed by 'gro.",
+(312,'w48'):"mtshon cha is the weapons noun in the near-god consequence. Retaining weapons asserts this clear noun correspondence, not the disputed direction of the entire weapons/cupful appearance relation.",
+(312,'w49'):"phor is the vessel noun in phor gang, attested by HGM as glasses and explicitly present at E[893:900]. No member or parent claims gang means of water; the full relation remains unresolved.",
+(312,'w50'):"snang is the appearance/perception predicate in the near-god clause and GMR realizes it as see at E[878:881]. Earlier see occurrences belong to the cup-organism expansion and are not this predicate.",
+(312,'w51'):"Final dgos pa expresses the near-god consequence's necessity, realized by have to at E[870:877]. It cannot resolve to either earlier cup or ocean modal, and supplied would is excluded.",
+(312,'w52'):"la sogs pa is the closing enumeration phrase, rendered and on and on. Keep the tighter Tibetan boundary without the following genitive 'i and no supplied problem noun; d3 records the full closing phrase rather than invent a lexical noun compound."
+}
+for seq in [310,311,312]:
+ t=json.loads((B/'tibetan'/str(seq)/'spec.json').read_text());seg=t['segments'][0];r=json.loads((A/'native'/('tibetan-'+str(seq)+'-resolve')/'stdout').read_text())['segments'][0]['resolved'];planned={s['id']:s for s in r}
+ original={s['id']:s['rationale'] for s in json.loads((B/'tibetan'/str(seq)/'source-specific-rationale.json').read_text())['decisions']}
+ def add(after,span,tr,er):
+  ix=next(i for i,s in enumerate(seg['spans']) if s['id']==after)+1;seg['spans'].insert(ix,span);planned[span['id']]={**span,'tib_range':tr,'eng_range':er,'parent':None}
+ if seq==310:
+  seg['spans'][0]['d']=2
+  add('w36',{'id':'nThal','d':5,'tib':'thal','eng':'have to'},[303,307],[561,568])
+  add('nThal',{'id':'nYour','d':3,'tib':'khyod kyi','eng':'your'},[309,318],[585,589])
+ if seq==311:add('w11',{'id':'nThal','d':5,'tib':'thal','eng':'must'},[69,73],[217,221])
+ if seq==312:
+  add('w18',{'id':'nLoc','d':3,'tib':'nang du','eng':'in'},[179,186],[425,427])
+  add('w30',{'id':'nAlso','d':6,'tib':'kyang','eng':'as well'},[288,293],[458,465])
+  add('nAlso',{'id':'nNeed','d':5,'tib':'dgos pa','eng':'have to'},[316,323],[472,479])
+  add('w44',{'id':'nBe','d':5,'tib':"'gro",'eng':'be'},[437,441],[769,771])
+  for s in seg['spans']:
+   if s['id'] in ['w31','w41']:s['tib']='rgya mtsho';planned[s['id']]['tib_range'][1]-=2
+   if s['id']=='w42':s['eng']='entire extent';planned[s['id']]['eng_range'][0]=803
+ seg['note']=notes[seq]
+ for s in seg['spans']:planned[s['id']].update(s)
+ seg['eng_order']=[s['id'] for s in sorted((planned[x['id']] for x in seg['spans'] if x['d']!=7 and x['eng'] is not None),key=lambda s:s['eng_range'][0])]
+ out=A/str(seq);out.mkdir(exist_ok=True);(out/'spec.json').write_text(json.dumps(t,ensure_ascii=False,indent=2)+'\n');(out/'errata.json').write_text('[]\n')
+ judgments=[]
+ for s in seg['spans']:
+  why=reason_extra.get((seq,s['id']),original.get(s['id']))
+  assert why is not None,s
+  judgments.append({**planned[s['id']],'independent_judgment':why,'status':'RETAIN_PROVISIONAL','source_specific_basis':'Full original C05:'+str(seq)+' and local argument; original HGM fields cross-checked in ../evidence/independent-master-records.json.'})
+ (out/'planned-decisions.json').write_text(json.dumps(judgments,ensure_ascii=False,indent=2)+'\n')
+print('Authored three provisional specs; native resolution must verify the independently intended ranges.')

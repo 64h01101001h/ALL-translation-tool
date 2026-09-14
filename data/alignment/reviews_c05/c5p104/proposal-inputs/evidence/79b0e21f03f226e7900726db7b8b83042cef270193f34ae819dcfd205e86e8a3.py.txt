@@ -1,0 +1,23 @@
+import pathlib,json,hashlib,subprocess,os,sys,datetime
+A=pathlib.Path(__file__).resolve().parents[1];B=A.parent;W=B.parents[1]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def run(name,cmd,inp):
+ d=A/'native'/name;
+ if d.exists():
+  assert (d/'stdin.json').read_bytes()==inp
+  old=json.loads((d/'invocation.json').read_text());assert old['argv']==cmd
+  return subprocess.CompletedProcess(cmd,int((d/'exit.txt').read_text()),(d/'stdout').read_bytes(),(d/'stderr').read_bytes()),d
+ d.mkdir(parents=True,exist_ok=False);(d/'stdin.json').write_bytes(inp);save(d/'invocation.json',{'argv':cmd,'cwd':str(W),'env_additions':{'PYTHONDONTWRITEBYTECODE':'1'},'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()});p=subprocess.run(cmd,cwd=W,input=inp,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});(d/'stdout').write_bytes(p.stdout);(d/'stderr').write_bytes(p.stderr);(d/'exit.txt').write_text(str(p.returncode)+'\n');save(d/'execution.json',{'exit':p.returncode,'stdout_bytes':len(p.stdout),'stdout_sha256':sha(p.stdout),'stderr_bytes':len(p.stderr),'stderr_sha256':sha(p.stderr),'stdin_sha256':sha(inp)});return p,d
+out=[]
+for angle in ['tibetan','english']:
+ for seq in [310,311,312]:
+  source=B/angle/str(seq);inp=(source/'spec.json').read_bytes();helper=B/angle/('native_generator.py' if angle=='tibetan' else 'canonical_runner.py');cmd=[sys.executable,'-B',str(helper)]+(['generate'] if angle=='english' else []);p,d=run(angle+'-'+str(seq)+'-generate-once',cmd,inp);assert p.returncode==0 and not p.stderr and p.stdout==(source/'body.html').read_bytes()
+  q,qd=run(angle+'-'+str(seq)+'-resolve',[sys.executable,'-B',str(A/'helpers/canonical.py'),'resolve'],inp);assert q.returncode==0 and not q.stderr
+  x=json.loads(q.stdout)['segments'][0];saved=json.loads((source/'resolved-ranges.json').read_text());orig=saved['segments'][0]['resolved'] if angle=='english' else saved['ranges']
+  if isinstance(orig,dict):print('unhandled-original',list(orig));raise RuntimeError('original range shape')
+  assert len(orig)==len(x['resolved'])
+  for measured,old in zip(x['resolved'],orig):
+   for k in ['id','d','tib','eng','tib_range','eng_range']:assert measured[k]==old.get(k),(angle,seq,k,measured,old)
+  out.append({'angle':angle,'seq':seq,'native_exit':p.returncode,'stderr_bytes':len(p.stderr),'body_bytes':len(p.stdout),'body_sha256':sha(p.stdout),'saved_body_exact':True,'original_ranges_exact':True,'spans':len(x['resolved']),'proof':str(d.relative_to(A)),'resolver':str(qd.relative_to(A))})
+save(A/'evidence/original-replay-proof.json',out);print(json.dumps(out))

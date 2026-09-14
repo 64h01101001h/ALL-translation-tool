@@ -1,0 +1,18 @@
+import json,sqlite3,gzip,hashlib
+from pathlib import Path
+A=Path(__file__).resolve().parent;E=A/'evidence';P=json.loads((E/'proposal-baseline.json').read_text())
+db=sqlite3.connect(Path(P['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+qs=[]
+for sql,params in [('select * from corpus_segments where wylie like ? and (english like ? or course=?) order by course,seq',['%mtshon cha%','%near-god%','C05']),('select * from corpus_segments where course=? and seq in (274,285) order by seq',['C05'])]:
+ rows=[dict(r) for r in db.execute(sql,params)];qs.append({'sql':sql,'params':params,'count':len(rows),'rows':rows})
+ for r in rows:print(r['course'],r['seq'],r['wylie'],'\n',r['english'])
+(E/'source-role-queries.json').write_text(json.dumps({'source':P['source_pins']['spine'],'queries':qs},indent=2,ensure_ascii=False)+'\n')
+with gzip.open(P['source_pins']['master']['path'],'rt') as f:master=json.load(f)
+qs=[]
+for term in ['tshad','mtshungs','phor',"'ga' zhig",'snang','blos','bzod','bzod pa']:
+ matches=[{'index':i,'entry':x} for i,x in enumerate(master['unified_entries']) if term==x.get('wylie') or term in x.get('wylie_variants',[])];qs.append({'query':{'exact_wylie_or_variant':term},'count':len(matches),'results':matches});print('LEX',term,[r['entry'].get('hgm_gloss') for r in matches])
+(E/'additional-hgm-original.json').write_text(json.dumps({'source':P['source_pins']['master'],'queries':qs},indent=2,ensure_ascii=False)+'\n')
+for seq in [310,311,312]:
+ data=json.loads((A/str(seq)/'resolved-ranges.json').read_text())['segments'][0]
+ print('RESOLVED',seq,data['counts'])
+ for s in data['resolved']:print(s['id'],s['d'],s['tib_range'],s['tib_quote'],'=>',s['eng_range'],repr(s['eng_quote']))

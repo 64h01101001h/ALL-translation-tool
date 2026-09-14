@@ -1,0 +1,17 @@
+import os,sys,json,subprocess,hashlib
+from pathlib import Path
+A=Path(__file__).resolve().parent
+mode=sys.argv[1]; seqs=[int(x) for x in sys.argv[2:]]
+for seq in seqs:
+ D=A/str(seq);attempts=D/'attempts';attempts.mkdir(exist_ok=True)
+ n=1
+ while (attempts/f'{mode}-{n:02}').exists():n+=1
+ dest=attempts/f'{mode}-{n:02}';dest.mkdir();data=(D/'spec.json').read_bytes();(dest/'stdin.json').write_bytes(data)
+ env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1');cmd=['python3','-B',str(A/'canonical_runner.py'),mode]
+ result=subprocess.run(cmd,input=data,capture_output=True,env=env,cwd=A)
+ (dest/'stdout').write_bytes(result.stdout);(dest/'stderr').write_bytes(result.stderr);(dest/'exit.txt').write_text(str(result.returncode)+'\n');(dest/'invocation.json').write_text(json.dumps({'argv':cmd,'cwd':str(A),'stdin_sha256':hashlib.sha256(data).hexdigest(),'exit_code':result.returncode,'stdout_bytes':len(result.stdout),'stderr_bytes':len(result.stderr)},indent=2)+'\n')
+ print(seq,mode,n,'EXIT='+str(result.returncode),'stdout_bytes='+str(len(result.stdout)),'stderr_bytes='+str(len(result.stderr)))
+ if result.returncode:print(result.stderr.decode());continue
+ assert not result.stderr
+ if mode=='probe':(D/'resolved-ranges.json').write_bytes(result.stdout)
+ elif mode=='generate':(D/'body.html').write_bytes(result.stdout);(D/'generator.stdout').write_bytes(result.stdout);(D/'generator.stderr').write_bytes(result.stderr);(D/'generator.exit').write_text(str(result.returncode)+'\n');(D/'generator.stdin.json').write_bytes(data)

@@ -1,0 +1,51 @@
+import pathlib,subprocess,sys,os,json,hashlib,collections,importlib.util,re
+R=pathlib.Path(__file__).resolve().parents[1];A=R.parent;P=A/'reconciled/evidence/pinned';W=A.parents[1]/'campaign-worktree'
+def meta(b):return {'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}
+def dump(p,x):
+ p=R/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def run(name,mode,inp):
+ d=R/'native'/name;d.mkdir(parents=True,exist_ok=False);cmd=[sys.executable,'-B',str(R/'helpers/canonical_runner.py'),mode]
+ dump(d/'invocation.json',{'command':cmd,'cwd':str(W),'PYTHONDONTWRITEBYTECODE':'1','spine_uri':(W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro','pinned_origin':'51d73c889a3f175b90e4c466f3dc4b1f7af3bca5'})
+ (d/'stdin.json').write_bytes(inp);p=subprocess.run(cmd,input=inp,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},capture_output=True)
+ (d/'stdout.txt').write_bytes(p.stdout);(d/'stderr.txt').write_bytes(p.stderr);(d/'exit.txt').write_text(str(p.returncode)+'\n')
+ assert p.returncode==0 and not p.stderr,(name,p.returncode,p.stderr)
+ return p,d
+replays=[]
+for angle in ['tibetan','english']:
+ for q in [310,311,312]:
+  orig=A/angle/str(q);native=A/'reconciled/native'/f'{angle}-{q}-generate-once';resolution=A/'reconciled/native'/f'{angle}-{q}-resolve'
+  inp=(orig/'spec.json').read_bytes();body=(orig/'body.html').read_bytes()
+  assert (native/'stdin.json').read_bytes()==inp and (native/'stdout').read_bytes()==body and (native/'stderr').read_bytes()==b'' and (native/'exit.txt').read_bytes()==b'0\n'
+  assert (resolution/'stdin.json').read_bytes()==inp and (resolution/'stderr').read_bytes()==b'' and (resolution/'exit.txt').read_bytes()==b'0\n'
+  if angle=='tibetan':od=orig/'attempts/native-001';onames=('stdin.json','stdout.html','stderr.txt','exit.txt')
+  else:od=orig;onames=('generator.stdin.json','generator.stdout','generator.stderr','generator.exit')
+  for of,expected in zip(onames,[inp,body,b'',b'0\n']):assert (od/of).read_bytes()==expected
+  replays.append({'angle':angle,'seq':q,'spec':meta(inp),'body':meta(body),'reconciler_replay':str(native),'reconciler_resolver':str(resolution),'original_and_replay_stdin_body_stdout_exact':True,'exit':0,'stderr_bytes':0,'reused_without_rerun':True})
+dump('original-replay-identity-proof.json',replays)
+resolved=[];proof=[]
+rows={x['seq']:x for x in json.loads((R/'independent-source-rows.json').read_text())}
+sys.path[:0]=[str(P/'engines'),str(P/'tools')];import build_alignment_layer as B
+for q in [310,311,312]:
+ D=A/'reconciled'/str(q);inp=(D/'spec.json').read_bytes();s=json.loads(inp)['segments'][0]
+ p,d=run(f'final-{q}-generate-01','generate',inp);assert p.stdout==(D/'body.html').read_bytes()
+ r,rd=run(f'final-{q}-resolve-01','resolve',inp);rr=json.loads(r.stdout);assert len(rr)==len(s['spans'])
+ expected=json.loads((D/'resolved-ranges.json').read_text())['ranges'];assert all(all(x[k]==y[k] for k in x if k!='seq') for x,y in zip(rr,expected))
+ parsed={side:{label:(dep,t) for dep,label,t in B.spans_of(p.stdout.decode(),side)} for side in ['tib','eng']};members=[];parent=None
+ for x in rr:
+  for side in ['tib','eng']:assert parsed[side]['s'+str(q)+x['id']]==(x['d'],' '.join((x[side] or '').split()))
+  if x['d']==7:
+   assert parent and parent['d']==5
+   for side in ['tib','eng']:
+    if x[side] is not None:
+     lo,hi=x[side+'_range'];a,b=parent[side+'_range'];assert a<=lo<hi<=b and (lo,hi)!=(a,b) and parent[side].count(x[side])==1
+   members.append({'id':x['id'],'parent':parent['id'],'strict_tighter_unique':True})
+  else:parent=x if x['d']==5 else None
+  assert B.acip_span(rows[q]['acip'],rows[q]['wylie'],x['tib']) is not None
+ for side,field in [('tib','wylie'),('eng','english')]:
+  block=p.stdout.decode().split('<div class="'+side+'">',1)[1].split('<span class="u" data-d="1" data-l="s'+str(q)+'S">',1)[1].split('\n</div>',1)[0]
+  assert block.endswith('</span>');plain=B.strip_tags(re.sub(r'<span class="nul">.*?</span>','',block[:-7],flags=re.S));assert plain==rows[q][field]
+ gated=[x for x in rr if x['d'] in [5,7] and x['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',x['eng'],re.I)];assert gated==[]
+ proof.append({'seq':q,'span_count':len(rr),'null_count':sum(x['eng'] is None for x in rr),'word_pair_count':sum(x['d']==5 and x['eng'] is not None for x in rr),'d5_total':sum(x['d']==5 for x in rr),'d7_count':len(members),'depth_counts':dict(collections.Counter(x['d'] for x in rr)),'spec_sha256':meta(inp)['sha256'],'spec_bytes':len(inp),'body_sha256':meta(p.stdout)['sha256'],'body_bytes':len(p.stdout),'generator_exit':p.returncode,'stderr_bytes':len(p.stderr),'generator_proof':str(d.relative_to(R)),'resolver_proof':str(rd.relative_to(R)),'body_exact':True,'resolved_ranges_exact':True,'source_recovery_exact':True,'canonical_builder_parses_every_span':True,'acip_all_recovered':True,'members':members,'gated_heads':[]})
+ resolved.extend(rr)
+dump('resolved-spans.json',resolved);dump('independent-mechanical-proof.json',proof)
+print(json.dumps({'segments':proof,'spans':len(resolved),'original_replays_reused':len(replays)},indent=2))

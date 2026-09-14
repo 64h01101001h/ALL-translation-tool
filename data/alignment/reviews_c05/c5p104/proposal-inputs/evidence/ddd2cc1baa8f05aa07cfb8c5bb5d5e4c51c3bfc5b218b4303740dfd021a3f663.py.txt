@@ -1,0 +1,21 @@
+"""Invoke unchanged actual canonical W generator with historical imports and read-only SQLite.
+Only source selection / SQLite read mode is instrumented; canonical alignment logic is untouched.
+stdin/stdout/stderr are inherited verbatim by the subprocess caller.
+"""
+import hashlib, importlib.util, pathlib, runpy, sqlite3, sys
+A=pathlib.Path(__file__).resolve().parent
+W=A.parents[2]/'campaign-worktree'
+P=A/'evidence/pinned'
+generator=W/'tools/gen_alignment_page.py'
+assert hashlib.sha256(generator.read_bytes()).hexdigest()=='7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e'
+sys.path.insert(0,str(P/'engines'))
+spec=importlib.util.spec_from_file_location('build_alignment_layer',P/'tools/build_alignment_layer.py')
+B=importlib.util.module_from_spec(spec); sys.modules[spec.name]=B; spec.loader.exec_module(B)
+B.SPINE=(W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro'
+original_connect=sqlite3.connect
+def readonly_connect(database,*args,**kwargs):
+    assert database==B.SPINE, database
+    kwargs['uri']=True
+    return original_connect(database,*args,**kwargs)
+sqlite3.connect=readonly_connect
+runpy.run_path(str(generator),run_name='__main__')

@@ -1,0 +1,104 @@
+{
+  "schema": "five-ground-errata-assessment-v1",
+  "seq": 312,
+  "producer": "Codex Tibetan-first",
+  "errata_proposed": 0,
+  "ground_1_exact_this_row": {
+    "quotes": {
+      "acip": "THA MAL GYI MIG SHES KYIS MI BZOD PA'I",
+      "english": "imperceptible to normal visual consciousness",
+      "acip2": "MTSON CHA PHOR GANG SNANG DGOS PA",
+      "english2": "see weapons as glasses of water"
+    },
+    "counts": {
+      "acip": 1,
+      "english": 1,
+      "acip2": 1,
+      "english2": 1
+    },
+    "source": "../evidence/spine-full-original-rows.json; complete raw row retained; physical-source-proof.json gives complete exact source extents"
+  },
+  "ground_2_parallel_witness": {
+    "same_acip_query_count": 4,
+    "witnesses": [
+      {
+        "course": "C15",
+        "seq": 457,
+        "compared_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": true
+        },
+        "full_record_reference": "../evidence/corpus-query-evidence.json#/queries/6/rows/1",
+        "independent_publication": "not established"
+      },
+      {
+        "course": "C16",
+        "seq": 849,
+        "compared_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": true
+        },
+        "full_record_reference": "../evidence/corpus-query-evidence.json#/queries/6/rows/2",
+        "independent_publication": "not established"
+      },
+      {
+        "course": "C18",
+        "seq": 1133,
+        "compared_fields": {
+          "acip": true,
+          "wylie": true,
+          "english": true
+        },
+        "full_record_reference": "../evidence/corpus-query-evidence.json#/queries/6/rows/3",
+        "independent_publication": "not established"
+      }
+    ],
+    "broad_queries": "../evidence/corpus-query-evidence.json includes full rows for mi bzod, mtshon cha phor gang, las can gyi, tshad mtshungs, skyes bu dam pa, microscopic organisms, glasses of water and khrul snang bzang ngan. No independent publication is established; course-shape lineage wording is metadata only.",
+    "specific_limit": "C15:457, C16:849 and C18:1133 equal ACIP/Wylie/English. Identity is digital-text agreement, not publication independence or proof of authorial correctness."
+  },
+  "ground_3_registered_classes": {
+    "historical_register_entries": 194,
+    "same_segment_records": [],
+    "candidate_term_records": [
+      {
+        "item_id": "E-077",
+        "course": "C03",
+        "segment": "C03:322",
+        "kind": "TIBETAN_SPELLING",
+        "found": "drin ji ltar gze snyam na",
+        "expected": "drin ji ltar gzo snyam na",
+        "evidence": "The head verb of the question is written gze, but the answering clause ten words later in this same segment writes the same lexeme correctly: \"drin gzo'i mchog tu gyur pa ni\", and the ACIP column carries the identical GZE/GZO'I split, so this is a source-keying reading, not a wylie-conversion artefact. Corpus-wide, a standalone \"gze\" token occurs in exactly 4 segments: C03:322, C16:404 and P1:15 are the same sentence repeated verbatim (byte-identical wylie and English across all three), and the fourth, C11:469 (\"...mi bzod pa'i gze re can du 'gyur ba...\"), is the unrelated word \"gze re can\" — i.e. \"gze\" never functions as a verb of repaying kindness anywhere in the corpus except this one recurring sentence. \"drin gzo\" (the correct spelling) occurs in 28 other segments. Checked directly against the entries table: the headword \"gze\" exists with hgm_gloss = [] (empty — it entered the lexicon from this corpus reading alone and defines nothing), while \"gzo\" glosses as [\"to wish to repay\",\"repay\",\"repaying\"] and \"drin gzo\" as [\"to wish to repay that kindness\",\"repaying their kindness\",\"repay kindness\",\"wish to repay that kindness\"]. No standard form of gzo ba has an e vowel. The English (\"pay this kindness back\") is unaffected and correct; only the Wylie/ACIP is defective, so the span for this word is left unkeyed rather than banking \"gze = pay\" as a lexeme.",
+        "severity": "MEDIUM",
+        "confidence": "PROBABLE",
+        "note": "filed from the alignment batch, spine-verified on merge"
+      }
+    ],
+    "register": "../evidence/pinned/docs/errata_register.json",
+    "classes_reviewed": [
+      "E-044 converter escapes",
+      "E-071 English running heads",
+      "E-076 period-fused footnotes",
+      "E-121 word-fused footnotes",
+      "E-111 row spill",
+      "E-107 1500-character cap",
+      "course-shape following-heading and folio classes"
+    ],
+    "english_characters": 960,
+    "cap_applies": false,
+    "disposition": "No new instance of a registered apparatus class in this C05 row. The C16:848 heading is a different row and is not newly filed."
+  },
+  "ground_4_local_sense_and_HGM": {
+    "evidence": "../evidence/master-lexical-evidence.json retains complete original records with hgm_gloss, tier, source and comparative fields distinguished. Full original master bytes retained.",
+    "assessment": "HGM mi bzod gives unable to bear; comparanda mention unendurable. Neither by itself proves that the contextual imperceptible is erroneous or licenses that lexical equivalence. The normal-consciousness frame may express exceeding ordinary visual capacity; omit mi bzod pending interpretation. mtshon cha=weapons, phor=glasses and gang=full support individual nouns/quantity, but do not establish the full weapons-as-glasses-of-water relation or a unique correction. Omit that relation and gang, retain only defensible atoms; no factual-error claim is filed."
+  },
+  "ground_5_proof_integrity": {
+    "source_baseline": "../evidence/source-pin-proof.json",
+    "full_external_originals": "../evidence/external-original-copies.json",
+    "native_generator": "attempts/native-001/execution.json",
+    "query_counts": "All stored query counts are checked against complete retained result arrays; source pin proof compares all six selected fields against original read-only spine rows.",
+    "physical": "physical-source-proof.json verifies selected complete original physical blocks against spine fields after whitespace joining.",
+    "status": "No source correction, no independent manuscript/publication authority, no hgm_gloss promotion, no semantic approval."
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "proposal-mechanical-proof-v1",
+  "seq": 310,
+  "counts": {
+    "spans": 38,
+    "nulls": 1,
+    "depth_counts": {
+      "3": 1,
+      "5": 25,
+      "6": 4,
+      "7": 8
+    },
+    "d5_total": 25,
+    "d5_nonnull_word_pairs": 24,
+    "d7_members": 8,
+    "errata": 0
+  },
+  "native_attempt": "attempts/native-001",
+  "body_equals_original_stdout": true,
+  "stdin_equals_final_spec": true,
+  "exit": 0,
+  "stderr_bytes": 0,
+  "artifacts": {
+    "spec.json": {
+      "bytes": 5873,
+      "sha256": "802c48022d607882573fed2a1f655f0cad803b428f5c7b6c74c61883295d147c"
+    },
+    "body.html": {
+      "bytes": 6020,
+      "sha256": "8c91ef966be3216d93c509edf191a42c9a5b12228e30de4dee10163bb6381193"
+    },
+    "errata.json": {
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "resolved-ranges.json": {
+      "bytes": 12963,
+      "sha256": "605c99eb7b4f9ac5a5933b480275fa53ea8a0a6903929ae58f22feb60476eaac"
+    },
+    "source-specific-rationale.json": {
+      "bytes": 26549,
+      "sha256": "720b5a374248c123701ee75a547fc792ba6685a21ad3374833f7ccbb984c7f7c"
+    }
+  },
+  "exact_original_source_recovery": {
+    "tib": {
+      "bytes": 346,
+      "sha256": "1d3f9157ab99d18f84b333dc4c1482ea317c8e8000fd10040c9442383245f650"
+    },
+    "eng": {
+      "bytes": 613,
+      "sha256": "85256e870989e5e22e8b175633ceede49fa890b712ed2fa279996fe5ddab3d88"
+    }
+  },
+  "canonical_builder_parsed_all_spans": true,
+  "canonical_acip_roundtrip_all_spans": true,
+  "members_unique_strictly_tighter_with_correct_parent": true,
+  "no_supplied_d5_d7_heads": true,
+  "no_semantic_approval": true,
+  "scope": "Affected standalone proposal checks only. Full repository landing and independent semantic review remain later stages."
+}

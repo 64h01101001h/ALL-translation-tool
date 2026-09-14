@@ -1,0 +1,77 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,sys
+R=Path(__file__).resolve().parents[1];A=R.parent;W=A.parents[1]/'campaign-worktree'
+ALLOWED={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def meta(b):return {'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}
+def dump(p,x):
+ (R/p).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not (R/'freeze.json').exists(),'Do not overwrite a freeze.'
+manifest=json.loads((R/'original-to-copy-manifest.json').read_text());excluded=[]
+for p in sorted((R/'helpers').glob('*.py')):
+ target=p.with_suffix('.py.txt');target.write_bytes(p.read_bytes())
+ manifest.append({'original':str(p),'copy':str(target.relative_to(R)),**meta(p.read_bytes())})
+ excluded.append({'path':str(p.relative_to(R)),'reason':'Operational Python helper; exact readable .py.txt copy included in frozen deliverables.','exact_frozen_copy':str(target.relative_to(R)),**meta(p.read_bytes())})
+dump('original-to-copy-manifest.json',manifest)
+assert len({x['original'] for x in manifest})==len(manifest)
+checks=[];gitcache={}
+for x in manifest:
+ assert Path(x['original']).is_absolute()
+ cp=R/x['copy'];assert cp.is_file() and cp.suffix in ALLOWED and cp.resolve().is_relative_to(R)
+ m={k:x[k] for k in ['sha256','bytes']};assert meta(cp.read_bytes())==m,cp
+ if 'original_git_commit' in x:
+  key=(x['original_git_commit'],x['repository_relative_path'])
+  if key not in gitcache:gitcache[key]=subprocess.run(['git','show',key[0]+':'+key[1]],cwd=W,capture_output=True,check=True).stdout
+  raw=gitcache[key];method='historical_git_object'
+ else:raw=Path(x['original']).read_bytes();method='original_file_bytes'
+ assert meta(raw)==m and raw==cp.read_bytes(),x['original']
+ checks.append({'original':x['original'],'copy':x['copy'],'identity':True,'original_check':method})
+inputs=json.loads((R/'input-verification.json').read_text())
+for f in inputs['freezes']:
+ p=Path(f['freeze']);assert meta(p.read_bytes())=={k:f[k] for k in ['sha256','bytes']}
+ j=json.loads(p.read_text());assert len(j['files'])==f['file_count']
+ for name,m in j['files'].items():assert meta((p.parent/name).read_bytes())==m,(p,name)
+for key,m in inputs['source_pins'].items():assert meta(Path(m['path']).read_bytes())=={k:m[k] for k in ['sha256','bytes']},key
+spans=json.loads((R/'resolved-spans.json').read_text());keys=['seq','id','d','tib','eng','tib_range','eng_range']
+assert len(spans)==110 and all(list(x)==keys for x in spans)
+assert len({(x['seq'],x['id']) for x in spans})==110
+dec=json.loads((R/'all-span-decisions.json').read_text());assert [{k:x[k] for k in keys} for x in dec]==spans
+assert len(json.loads((R/'all-original-disposition-decisions.json').read_text()))==195
+assert len(json.loads((R/'all-omission-decisions.json').read_text()))==20
+screens=json.loads((R/'errata-five-grounds.json').read_text());assert len(screens)==6 and all(x['refuted'] for x in screens)
+assert json.loads((R/'bank-ready-errata.json').read_text())==[]
+assert json.loads((R/'span-head-allow-needed.json').read_text())=={'pages_c05':{}}
+review=json.loads((R/'review.json').read_text());assert review['verdict']=='APPROVE' and review['open_findings']==[]
+for st in review['segments']:
+ seq=st['seq'];own=[x for x in spans if x['seq']==seq]
+ assert (len(own),sum(x['eng'] is None for x in own),sum(x['d']==5 and x['eng'] is not None for x in own))==(st['span_count'],st['null_count'],st['word_pair_count'])
+ for name in ['spec','body']:
+  p=R/'reviewed-final'/str(seq)/(name+('.json' if name=='spec' else '.html'))
+  assert meta(p.read_bytes())=={'sha256':st[name+'_sha256'],'bytes':st[name+'_bytes']}
+ assert (R/st['generator_proof']/'stdout.txt').read_bytes()==(R/'reviewed-final'/str(seq)/'body.html').read_bytes()
+ assert (R/st['generator_proof']/'stderr.txt').read_bytes()==b'' and (R/st['generator_proof']/'exit.txt').read_text().strip()=='0'
+ assert len(list((R/'native').glob(f'final-{seq}-generate-*')))==1
+assert (sum(x['span_count'] for x in review['segments']),sum(x['null_count'] for x in review['segments']),sum(x['word_pair_count'] for x in review['segments']))==(110,1,73)
+dump('copy-and-identity-preflight.json',{'schema':'c05-semantic-review-copy-preflight-v1','verdict':'PASS','original_records':len(manifest),'distinct_copy_targets':len({x['copy'] for x in manifest}),'original_and_copy_checks':checks,'all_copy_targets_supported':True,'immutable_git_objects_checked':len(gitcache),'incoming_inventories_still_exact':[x['file_count'] for x in inputs['freezes']],'source_pins_still_exact':True,'all_110_ordered_tuple_decisions_exact':True,'all_final_spec_body_and_fresh_stdout_bytes_exact':True,'all_required_decisions_complete':True,'bank_ready_schema_exact':True,'open_findings':[]})
+(R/'evidence-navigation.md').write_text('''# Evidence navigation
+
+review.md and review.json state the independent verdict and its limits. resolved-spans.json is the exact ordered seven-key interface for all110 spans. all-span-decisions.json, all-original-disposition-decisions.json, all-omission-decisions.json and errata-five-grounds.json contain the complete decisions.
+
+Readable original core files are under proposal-inputs/tibetan and proposal-inputs/english. Current and historical reconciliation core files are under reviewed-final. Identical auxiliary evidence may share an exact content-addressed copy under proposal-inputs/evidence. original-to-copy-manifest.json resolves each absolute original path to its exact supported-extension copy, hash and size. Paths inside unchanged original records retain their original relative context; use that manifest to locate the archived target. Embedded original_HGM_fields in fresh decisions deliberately preserve the original attribution and reference strings; full_master_records points to the fresh complete-record collection.
+
+independent-full-master-records.json contains190 distinct full original master objects; independent-unique-corpus-rows.json contains289 complete original corpus rows. The corresponding independent query/proof files document exact searches, complete original fields and actual counts. The full input archives and physical source file are preserved through the manifest. The source spine itself is verified by full file hash and the complete read-only query outputs rather than duplicated as a249MB database.
+
+Every helper is preserved byte-for-byte as helpers/*.py.txt for landing. The operational *.py files are the only excluded on-disk files besides the self-referential freeze.json. Their exact mirrors and hashes are recorded in the freeze. No evidence is omitted because of an unsupported filename extension.
+''')
+dump('freeze-invocation.json',{'argv':[sys.executable,'-B',str(Path(__file__).resolve())],'cwd':str(Path.cwd()),'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'environment_requirement':'PYTHONDONTWRITEBYTECODE=1','policy':'No source writes; no generator reruns; stdout proof returned to parent via tool result.'})
+files={}
+for p in sorted(R.rglob('*')):
+ if not p.is_file():continue
+ rel=str(p.relative_to(R))
+ if rel=='freeze.json' or rel in {x['path'] for x in excluded}:continue
+ assert p.suffix in ALLOWED,rel
+ files[rel]=meta(p.read_bytes())
+freeze={'schema':'c05-independent-semantic-review-freeze-v1','producer':'Codex independent skeptical semantic reviewer','verdict':'APPROVE','spec_verdict':'APPROVE','quality_verdict':'APPROVE','alignment_status':'PROVISIONAL','source_origin_git_commit':review['source_origin_git_commit'],'later_supplied_acceptance_baseline':review['later_supplied_acceptance_baseline'],'reconciliation_freeze_sha256':inputs['freezes'][2]['sha256'],'total_spans':110,'total_nulls':1,'total_word_pairs':73,'total_d7':16,'original_dispositions':195,'material_omissions':20,'five_ground_screens':6,'retained_errata':0,'open_findings':[],'file_count':len(files),'files':files,'operational_helpers_with_exact_frozen_mirrors':excluded,'excluded_self':'freeze.json'}
+dump('freeze.json',freeze)
+for name,m in files.items():assert meta((R/name).read_bytes())==m,name
+assert len(files)==len(json.loads((R/'freeze.json').read_text())['files'])
+print(json.dumps({'verdict':'APPROVE','freeze':str(R/'freeze.json'),'schema':freeze['schema'],**meta((R/'freeze.json').read_bytes()),'file_count':len(files),'manifest_records':len(manifest),'distinct_copies':len({x['copy'] for x in manifest}),'counts':{'spans':110,'nulls':1,'word_pairs':73,'d7':16,'original_dispositions':195,'omissions':20,'five_ground_screens':6,'errata':0},'all_frozen_files_hash_verified':True,'open_findings':[]},indent=2))

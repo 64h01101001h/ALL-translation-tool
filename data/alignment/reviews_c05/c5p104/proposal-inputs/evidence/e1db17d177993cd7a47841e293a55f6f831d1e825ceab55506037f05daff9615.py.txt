@@ -1,0 +1,63 @@
+import hashlib, json, os, pathlib, sqlite3, subprocess
+
+R = pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+W = R / 'campaign-worktree'
+B = R / 'campaign-artifacts/C05-310-312'
+A = B / 'tibetan'
+E = A / 'evidence'
+baseline = json.loads((B / 'proposal-baseline.json').read_text())
+
+def dump(path, value):
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+def meta(data):
+    return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+
+proof = {'schema': 'independent-source-pin-proof-v1', 'producer': 'Codex', 'origin_commit': baseline['commit'], 'through': 306, 'pins': {}}
+for name, pin in baseline['source_pins'].items():
+    data = pathlib.Path(pin['path']).read_bytes()
+    actual = meta(data)
+    assert actual == {k: pin[k] for k in actual}, (name, actual)
+    proof['pins'][name] = dict(pin, verified=True)
+    if name in ('source', 'context'):
+        (E / (name + '.json')).write_bytes(data)
+    if name == 'physical':
+        (E / 'C05ReadingASCII.txt').write_bytes(data)
+for rel, pin in baseline['governing_git_pins'].items():
+    p = subprocess.run(['git', 'show', baseline['commit'] + ':' + rel], cwd=W, capture_output=True)
+    assert p.returncode == 0 and not p.stderr
+    actual = meta(p.stdout)
+    assert actual == {k: pin[k] for k in actual}, (rel, actual)
+    dest = E / 'pinned' / rel
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(p.stdout)
+    proof['pins'][rel] = dict(pin, verified=True, stored=str(dest.relative_to(A)))
+for rel in ['engines/hgm_tools.py']:
+    p = subprocess.run(['git', 'show', baseline['commit'] + ':' + rel], cwd=W, capture_output=True)
+    assert p.returncode == 0 and not p.stderr
+    dest = E / 'pinned' / rel
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(p.stdout)
+    proof['pins'][rel] = dict(meta(p.stdout), original_git_commit=baseline['commit'], repository_relative_path=rel, stored=str(dest.relative_to(A)))
+for rel in ['tibetan-brief.md', 'proposal-baseline.json']:
+    data = (B / rel).read_bytes()
+    (E / rel).write_bytes(data)
+    proof['pins'][rel] = meta(data)
+data = (B.parent / 'proposal-protocol.md').read_bytes()
+(E / 'proposal-protocol.md').write_bytes(data)
+proof['pins']['proposal-protocol.md'] = meta(data)
+db = sqlite3.connect(pathlib.Path(baseline['source_pins']['spine']['path']).as_uri() + '?mode=ro', uri=True)
+db.row_factory = sqlite3.Row
+rows = [dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq', ('C05', 304, 318))]
+source = json.loads((B / 'source.json').read_text())
+context = json.loads((B / 'context.json').read_text())
+by_seq = {r['seq']:r for r in rows}
+for snapshot in source + context:
+    for field in ('id', 'course', 'seq', 'acip', 'wylie', 'english'):
+        assert snapshot[field] == by_seq[snapshot['seq']][field], (snapshot['seq'], field)
+dump(E / 'spine-full-original-rows.json', {'query':'select * from corpus_segments where course=? and seq between ? and ? order by seq', 'parameters':['C05',304,318], 'count':len(rows), 'rows':rows})
+proof['source_snapshot_field_comparisons'] = 18 * 6
+proof['source_snapshot_fields'] = ['id','course','seq','acip','wylie','english']
+proof['database_readonly'] = True
+dump(E / 'source-pin-proof.json', proof)
+print(json.dumps({'verified_pins':len(proof['pins']), 'full_original_rows':len(rows), 'snapshot_fields_checked':proof['source_snapshot_field_comparisons']}))

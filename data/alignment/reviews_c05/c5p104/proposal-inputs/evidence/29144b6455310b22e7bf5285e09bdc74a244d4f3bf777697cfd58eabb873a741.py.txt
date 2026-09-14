@@ -1,0 +1,137 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parent; rows={x['seq']:x for x in json.loads((A/'evidence/source.json').read_text())}
+def write(seq,title,items,note,omissions):
+ spans=[]; plans=[]
+ for id,d,tib,eng,occ,why in items:
+  sp={'id':id,'d':d,'tib':tib,'eng':eng}
+  if eng is None:sp['nul']=why
+  spans.append(sp)
+  positions=[]
+  if eng is not None:
+   start=0
+   while True:
+    i=rows[seq]['english'].find(eng,start)
+    if i<0:break
+    positions.append(i);start=i+1
+   assert len(positions)>occ,(id,eng,positions,occ)
+   expected=[positions[occ],positions[occ]+len(eng)]
+  else:expected=None
+  plans.append({'id':id,'intended_english_occurrence_zero_based':occ if eng else None,'all_substring_starts':positions,'expected_english_range':expected,'rationale':why})
+ order=[p['id'] for p in sorted([p for p,s in zip(plans,spans) if s['d']!=7 and s['eng'] is not None],key=lambda p:p['expected_english_range'][0])]
+ out={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':'Provisional machine alignment by Codex (English-first); GMR English remains verbatim and no hgm_gloss is changed. '+note}]}
+ (A/str(seq)/'spec.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+ (A/str(seq)/'author-decisions.json').write_text(json.dumps({'seq':seq,'source':'../evidence/source.json','planned_spans':plans,'omissions':omissions},ensure_ascii=False,indent=2)+'\n')
+ (A/str(seq)/'errata.json').write_text('[]\n')
+write(310,'pleasure and pain remain consequential',[
+ ('c1',2,'de ltar ma yin na','If this were not the case',0,'Complete opening conditional; it refers to the preceding claim that karmic effects are actual.'),
+ ('w1',5,'dge ba','virtues',0,'The positive ten virtues in the holy-people clause; not the virtues substring inside non-virtues.'),
+ ('w2',5,'bcu','ten',0,'First ten, qualifying virtues.'),
+ ('w3',5,'spyod pa','following',0,'First following describes the conduct of holy people; supplied lead their lives stays outside.'),
+ ('w4',5,'skyes bu dam pa','holy people',0,'Attested honorific compound for the people following virtues.'),
+ ('m1',7,'skyes bu','people',0,'People inside holy people, not the later miserable people.'),
+ ('m2',7,'dam pa','holy',0,'Honorific member inside holy people; English member order reverses Tibetan.'),
+ ('w5',5,'mtho ris','higher realms',0,'Destination of the holy people.'),
+ ('w6',5,'skyes','born',0,'First birth, into higher realms.'),
+ ('w7',5,'bde ba','pleasures',0,'Pleasures of the higher realms in the first scenario.'),
+ ('w8',5,'myong ba','experience',0,'First experience, with pleasures as its object.'),
+ ('p1',6,'dang','And',0,'Conjunction joins the two rebirth scenarios; uppercase And starts the second scenario.'),
+ ('w9',5,'mi dge','non-virtues',0,'Whole negative lexical compound; no unsupported non subword split.'),
+ ('w10',5,'bcu','ten',1,'Second ten, qualifying non-virtues.'),
+ ('w11',5,'spyod pa','following',1,'Second following describes the conduct of miserable people.'),
+ ('w12',5,'sems can','people',1,'People in miserable people; first people is already owned by the holy-people compound.'),
+ ('w13',5,'dman pa','miserable',0,'Modifier of the beings who practice the non-virtues, distinct from the lower realms destination.'),
+ ('w14',5,'ngan song','lower realms',0,'Destination of miserable people.'),
+ ('w15',5,'skyes','born',1,'Second birth, into lower realms.'),
+ ('w16',5,'sdug bsngal','sufferings',0,'Sufferings of the lower realms in the second scenario.'),
+ ('w17',5,'myong ba','experience',1,'Second experience, with sufferings as its object.'),
+ ('w18',5,"'khrul snang",'misperception',0,'Perceptual-error compound, modified by better or worse; no separate error/appearance split in English.'),
+ ('w19',5,'bzang','better',0,'Positive quality of the misperception in the contrast question.'),
+ ('w20',5,'ngan','worse',0,'Negative quality of the misperception; not ngan inside the earlier lower-realms compound.'),
+ ('p2',6,'tsam','just',0,'Restrictive standalone particle in the contrast question.'),
+ ('w21',5,'lus',None,0,'The explicit bodily qualifier has no separate English exponent; experiencing is assigned only to myong. This null does not say experience lacks bodily meaning.'),
+ ('w22',5,'bde sdug','pleasure or pain',0,'Established paired compound naming the alternatives in the final question.'),
+ ('m3',7,'bde','pleasure',1,'Pleasure inside the pleasure-or-pain parent; earlier pleasures is outside the parent.'),
+ ('m4',7,'sdug','pain',0,'Pain inside the pleasure-or-pain parent, not the sufferings of the earlier rebirth scenario.'),
+ ('w23',5,'myong','experiencing',0,'Positive myong immediately after bde sdug supplies the experience predicate in whether they are experiencing pleasure or pain.'),
+ ('w24',5,'khyad par','difference',0,'Difference between the two rebirth cases, placed earlier in the English question.'),
+ ('p3',6,'thal','would have to be',0,'Inferential consequence particle, voiced in the separate conclusion sentence.'),
+ ('c2',3,'khyod kyi','your',0,'Genitive phrase; the source explicitly addresses the opponent and licenses your.'),
+ ('w25',5,'rigs pa','reasoning',0,'Reasoning in the final conditional.'),
+ ('w26',5,"'thad pa",'correct',0,'Correctness predicate of the opponent reasoning; no supplied were included.')
+],"The repeated conduct, birth, and experience words are paired with their own higher- or lower-realm clauses. skyes bu dam pa and bde sdug retain two strictly tighter members apiece. lus has no separate bodily exponent. The negative half of myong mi myong and the rhetorical negation around med par remain unbanked because their English contribution is distributed.",[
+ {'tib':'ma gtogs; mi myong; med par','reason':'The English contrasts just misperception with not whether experience differs, turning the Tibetan denial of a difference into a question. No isolated negative atom is asserted.'},
+ {'tib':"de'i (both); gnyis la; de; phyir and other omitted particles",'reason':'Anaphoric, case and inferential contributions are expanded or distributed through the prose; no glossary equivalent is substituted.'},
+ {'english':'then consider; who lead their lives; supplied articles and auxiliaries','reason':'These are connective or explanatory additions, outside the narrow lexical spans.'}
+])
+write(311,'agreement denies both realms experiences',[
+ ('w1',5,"'dod",'agree',0,'First agree introduces acceptance of the preceding better-or-worse-misperception thesis.'),
+ ('p1',6,'na','Suppose',0,'Conditional particle rendered as opening Suppose.'),
+ ('w2',5,'mtho ris','higher realms',0,'Higher realms owns the object of pleasures in the first half of the question.'),
+ ('w3',5,'bde ba','pleasures',0,'Pleasures in the higher realms; articles remain outside.'),
+ ('p2',6,'dang','and',0,'Joins the two objects of the shared negative existential predicate.'),
+ ('w4',5,'ngan song','lower realms',0,'Lower realms in the second half of the question.'),
+ ('w5',5,'sdug bsngal','pains',0,'Pains in the lower realms; exact row wording, not substituted sufferings.'),
+ ('p3',6,'thal','must be',0,'Inferential consequence has the narrow must be exponent in You must be, with supplied You outside.'),
+ ('w6',5,"'dod pa",'agree',1,'Second agree belongs to the closing reason, if you agree this way.')
+],"The two agree occurrences are resolved to the opening assumption and closing reason. The shared med par is expressed twice as don't even exist; no isolated positive exist or guessed negative substring is banked. GMR expands the premise with the previous row's misperception language, which has no fresh lexical source here.",[
+ {'tib':'med par','english':"don't even exist (twice)",'reason':'One shared negative existential is repeated in English with do-support and supplied even. Omitted as distributed; no null and no positive exist pairing.'},
+ {'tib':"de'i phyir",'reason':'The closing agreement construction becomes if you agree this way; the causal/genitive contribution lacks a defensible isolated atom.'},
+ {'english':'that it is only a matter of better or worse misperceptions','reason':'Expansion of the accepted premise; no separate Tibetan lexical words in this row.'}
+])
+write(312,'the limits of identical valid perceptions',[
+ ('c1',3,'des na','In conclusion',0,'Discourse conclusion introducing the return to the glass example; now stays outside.'),
+ ('w1',5,'las','karma',0,'Karma of the three beings; the possessive and differentiating prose is distributed over las can gyi.'),
+ ('w2',5,"'gro ba",'beings',0,'First beings, the three karmically differentiated observers in the opening sentence.'),
+ ('w3',5,'gsum','three',0,'First three, identifying the observers; the later repeated three beings is explanatory anaphora.'),
+ ('w4',5,'brlan','wet',0,'Wet quality of the glass contents, not a perceiver.'),
+ ('p1',6,'zhing','and',1,'And joining wet and flowing; the earlier and joins sit down together and look and is not this zhing.'),
+ ('w5',5,'gsher ba','flowing',0,'Flowing quality coordinated with wet.'),
+ ('w6',5,'phor pa','glass',0,'First glass, in the opening glass full of something wet and flowing.'),
+ ('w7',5,'gang','full',0,'Full modifies the opening glass.'),
+ ('c2',3,'cig car du','together',0,'Temporal adverbial construction describing simultaneous looking; supplied sit down stays outside.'),
+ ('w8',5,'bltas pa','look',0,'Opening act of looking; not looking in the later expanded explanation.'),
+ ('w9',5,'tshad','valid perceptions',0,'Tshad abbreviates tshad ma in the tshad mtshungs discussion (C05:262/286/313); this is not the later tshad meaning extent.'),
+ ('w10',5,'mtshungs','identical',0,'Predicate that the valid perceptions are identical.'),
+ ('w11',5,'nges par','necessarily',0,'Adverb of certainty, narrowed to necessarily; true stays outside.'),
+ ('w12',5,'dgos pa','must',0,'Necessary modal verb in the general claim that all must have identical valid perceptions.'),
+ ('p2',6,'ma','not',0,'Negation of the general necessity claim; not the ma inside the later near-gods term.'),
+ ('p3',6,'na','If',0,'Conditional after dgos, opening If they did; did is anaphoric and not banked as need.'),
+ ('w13',5,'phor pa','glass',1,'Second glass, in the expanded explanation looking at the glass of water; Tibetan now refers back to that full glass.'),
+ ('c3',3,'nang du','in',10,'Locative inside the glass, rendered by in in a creature living in water, not the earlier in the way.'),
+ ('w14',5,'gnas','place',0,'First gnas is the noun residence in gnas kyi blos, hence place in a place to live.'),
+ ('w15',5,'gnas','living',0,'Second gnas is the verb residing inside the glass, rendered by first living in a creature living in water.'),
+ ('w16',5,'tha mal','normal',0,'Normal qualifies the visual consciousness unable to discern microscopic organisms.'),
+ ('w17',5,'mig shes','visual consciousness',0,'First visual consciousness is normal vision, not the organisms own vision or the later ocean clause.'),
+ ('w18',5,'srog chags','organisms',0,'Organisms in the glass clause, where English also restates them as little beings; only first organisms is banked.'),
+ ('w19',5,'phra mo','microscopic',0,'Microscopic in the glass clause; little is an explanatory restatement left outside.'),
+ ('w20',5,'mig shes','visual consciousness',1,'Second visual consciousness is the organisms own visual faculty, after see it with their own.'),
+ ('p4',6,'kyang','as well',0,'The glass-organism consequence is added with The three beings as well; this is not the later ocean too.'),
+ ('w21',5,'dgos pa','would have to',1,'Obligation in The three beings as well would have to see, not the preceding would have to think expansion.'),
+ ('w22',5,'rgya mtsho','ocean',0,'First ocean term names the habitat of the second group of microscopic organisms.'),
+ ('c4',3,'nang na','in',17,'Locative in the ocean-organism clause, after its living; depths remains supplied descriptive content.'),
+ ('w23',5,"gnas pa'i",'living',2,'Ocean organisms living in the depths; the middle English living in the water belongs to the glass restatement and is skipped.'),
+ ('w24',5,'srog chags','organisms',1,'Second organisms, the ocean inhabitants.'),
+ ('w25',5,'phra mo','microscopic',1,'Second microscopic, the ocean inhabitants.'),
+ ('w26',5,'mig shes','visual consciousness',2,'Third visual consciousness is the subject of the ocean-validity consequence.'),
+ ('p5',6,'kyang','too',0,'Too in Then too introduces the distinct ocean consequence.'),
+ ('w27',5,'rgya mtsho','sea',0,'Second ocean term is rendered sea, the object measured by the valid perception.'),
+ ('w28',5,'tshad','extent',0,'Measure/extent of the sea, distinct from abbreviated tshad = valid perceptions in the opening claim.'),
+ ('w29',5,'tshad mar','valid perception',1,'Ocean clause explicit tshad mar, rendered singular valid perception; the first valid perceptions is earlier and plural.'),
+ ('w30',5,"'gro",'be',4,'Predicative become/serve-as in the ocean-validity construction; be in would have to be a valid perception.'),
+ ('w31',5,'dgos pa','would have to',2,'Obligation in the ocean clause, before be a valid perception.'),
+ ('w32',5,'lha ma yin','near-gods',0,'Whole established lexical term; its internal ma yin is not a separate sentential negation.'),
+ ('w33',5,"'ga' zhig",'certain',0,'Indefinite pronoun qualifying which near-gods; kinds of remains outside.'),
+ ('w34',5,'mtshon cha','weapons',0,'Weapons are the objects seen by near-gods; they are not the glasses themselves.'),
+ ('w35',5,'phor','glasses',0,'Shortened vessel noun in phor gang, rendered glasses in the near-gods consequence.'),
+ ('w36',5,'snang','see',2,'Perceptual appearance rendered as the near-gods see; all earlier see occurrences belong to the organism comparison.'),
+ ('w37',5,'dgos pa','would have to',3,'Obligation of the near-gods consequence.'),
+ ('c5',3,"la sogs pa'i",'and on and on',0,'Closing enumeration phrase; no noun is included.'),
+ ('w38',5,'skyon','problems',0,'Problems introduced by requiring identical valid perceptions in all these cases.')
+],"The three visual-consciousness occurrences distinguish normal vision, the glass organisms' own vision, and ocean organisms' vision. Opening tshad abbreviates valid perception; the later tshad means the sea's extent. The first tshad mar 'gro construction is distributed through GMR's expanded same-way comparison and remains unbanked; the ocean occurrence has the explicit valid perception exponent. mi bzod pa'i is also left unbanked: the local imperceptible rendering is contextually understandable but no separate lexical match is asserted. Repeated English participants, look/see predicates, water, and little are retained verbatim outside the selected spans.",[
+ {'tib':"can gyi; de'i tshe; yin te; dgos (conditional); gang po de'i; kyi blos",'reason':'Possessive, temporal, copular, conditional and cognitive material is distributed through explanatory English; no isolated auxiliary or participant pairing.'},
+ {'tib':"mi bzod pa'i",'english':'imperceptible','reason':'Normal visual consciousness cannot sustain/discern these microscopic creatures in context, but HGM mi bzod is unable to bear; no reliable narrower lexical equivalence or correction established.'},
+ {'tib':"de'i tshad mar 'gro (first)",'reason':'The glass-organism case is recast as seeing the water in the same way; no jump to the explicit valid perception in the later ocean clause.'},
+ {'tib':"gang (near-gods); yod pa'i phyir; remaining particles",'reason':'Fullness/quantity, existence/reason and connectives lack safe isolated counterparts in the recast; omitted rather than falsely nulled.'},
+ {'english':'supplied repeats of three beings, little beings, water, and seeing; true; depths; many','reason':'No extra lexical links are manufactured from expansions or repeated explanations.'}
+])

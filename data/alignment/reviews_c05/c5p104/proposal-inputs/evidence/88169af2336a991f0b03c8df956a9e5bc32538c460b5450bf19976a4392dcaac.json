@@ -1,0 +1,7 @@
+{
+  "command": "git show 51d73c889a3f175b90e4c466f3dc4b1f7af3bca5:docs/alignment_briefs/RECONCILE_BRIEF.md && git show 51d73c889a3f175b90e4c466f3dc4b1f7af3bca5:docs/alignment_briefs/REFUTE_BRIEF.md && rg --files campaign-worktree | rg -i 'c05.*shape|shape.*c05|course_shape'",
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "actual_exit": 128,
+  "combined_tool_output": "fatal: path 'docs/alignment_briefs/RECONCILE_BRIEF.md' does not exist in '51d73c889a3f175b90e4c466f3dc4b1f7af3bca5'\n",
+  "limitation": "Initial exec tool returned combined output; no separate streams were captured. Corrected cwd read succeeded; do not count this as governance read."
+}
