@@ -122,6 +122,23 @@ struct SecondThought: Codable {
 }
 struct Rendering: Codable { let eng: String; let n: Int }
 
+
+/// One span of his, cut into the layer just below it, with the order HIS
+/// English takes those pieces. The key is ATTESTED: it is where each piece's
+/// English actually sits inside the parent's English in the alignment bank —
+/// his own rendering of this very span — and never the engine's ruling about
+/// what order the pieces ought to be read in.
+struct ReadOrderItem: Codable {
+    let ref: String
+    let parent: String
+    let parentEng: String
+    /// In the order they are WRITTEN.
+    let kids: [String]
+    let kidsEng: [String]
+    /// Indices into `kids`, in the order his English takes them.
+    let answer: [Int]
+}
+
 /// One segment with its punctuation stripped: where do the clauses end?
 struct BoundaryItem: Codable {
     let tokens: [String]
@@ -194,6 +211,7 @@ struct Pack: Codable {
     let peel: [PeelSpan]?
     let boundary: [BoundaryItem]?
     let vocab: [VocabItem]?
+    let readorder: [ReadOrderItem]?
 }
 
 enum PackLoader {
@@ -344,18 +362,30 @@ struct WeakSpotsSheet: View {
 ///                         one.
 ///   Translate & compare — needs the whole 105,634-entry dictionary run
 ///                         against a draft as you type it. Not bakeable.
+// The names here are the picker's whole vocabulary, so they are kept to a
+// couple of words. They used to carry the drill's question too — "Boundary
+// hunt — where do the clauses end?" — and the menu style renders the selected
+// name in full: at an accessibility text size one name ran to five lines and
+// left the drill beneath it a two-line strip. Every view states its own
+// question on entry, so nothing is lost by keeping the label bare.
 enum DrillKind: String, CaseIterable, Identifiable {
     case cloze = "Fill the blank"
     case order = "Chunk order"
     case particle = "Particle choice"
-    case script = "Script — his own cards"
-    case debate = "Debate — what does the reply attack?"
-    case silent = "Silent particle — did he render it?"
+    case script = "Script cards"
+    case debate = "Debate"
+    case silent = "Silent particle"
     case second = "His second thought"
-    case peel = "Peel — how many pieces?"
-    case boundary = "Boundary hunt — where do the clauses end?"
+    case peel = "Peel"
+    case boundary = "Boundary hunt"
     case vocab = "Known here / known anywhere"
-    case mixed = "Mixed set — the category is not given away"
+    // Short on purpose. The desktop names this drill in full because a combo
+    // box has room; the phone renders the whole label in the picker, and at an
+    // accessibility text size the full sentence ran to five lines and left the
+    // drill itself a two-line strip that would not scroll. The question is put
+    // in the instruction line directly beneath it instead.
+    case readorder = "Reading order"
+    case mixed = "Mixed set"
     var id: String { rawValue }
 }
 
@@ -886,6 +916,130 @@ struct BoundaryView: View {
                 .background(marks.isEmpty && !checked ? c.muted : c.act)
                 .cornerRadius(9)
                 .disabled(marks.isEmpty && !checked)
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
+    }
+}
+
+/// Reading order. The chunks are shown in the order they are WRITTEN; tap them
+/// in the order his English takes them. This is the drill for the difficulty
+/// Adam named before any of the others: not what the words mean, but what
+/// order to read them in, and which way round.
+///
+/// The parent's English is withheld until the reveal for a reason — it
+/// contains every child's English, in his order. Showing it would not be a
+/// hint, it would be the answer.
+struct ReadOrderView: View {
+    let item: ReadOrderItem
+    @ObservedObject var deck: Deck
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var picked: [Int] = []
+    @State private var checked = false
+
+    private var correct: Bool { picked == item.answer }
+    private var placed: Bool { picked.count == item.kids.count }
+    private func mine(_ i: Int) -> Int? {
+        guard let at = picked.firstIndex(of: i) else { return nil }
+        return at + 1
+    }
+    private func his(_ i: Int) -> Int { (item.answer.firstIndex(of: i) ?? 0) + 1 }
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("These chunks are shown in the order they are written. Tap them in the order his English takes them.")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                Text("ATTESTED — the key is his own English for this very span, not the engine's ruling.")
+                    .font(.system(size: 12)).foregroundColor(c.act)
+                Text("[\(item.ref)]")
+                    .font(.system(size: 11)).foregroundColor(c.muted)
+                Divider()
+                ForEach(Array(item.kids.enumerated()), id: \.offset) { i, k in
+                    Button {
+                        guard !checked else { return }
+                        if let at = picked.firstIndex(of: i) { picked.remove(at: at) }
+                        else { picked.append(i) }
+                    } label: {
+                        HStack(alignment: .top, spacing: 12) {
+                            Text("\(i + 1)")
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(c.muted)
+                                .frame(width: 18, alignment: .trailing)
+                                .padding(.top, 8)
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(k).font(.system(size: 26))
+                                    .foregroundColor(c.ink)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                if checked {
+                                    Text(item.kidsEng[i])
+                                        .font(.system(size: 13, design: .serif)).italic()
+                                        .foregroundColor(c.muted)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            }
+                            Spacer(minLength: 8)
+                            if checked {
+                                Text("his \(his(i))")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor(mine(i) == his(i) ? c.act : c.machine)
+                                    .padding(.top, 8)
+                            } else if let m = mine(i) {
+                                Text("\(m)")
+                                    .font(.system(size: 15, weight: .bold))
+                                    .foregroundColor(c.act)
+                                    .frame(width: 27, height: 27)
+                                    .background(Circle().fill(c.act.opacity(0.15)))
+                                    .padding(.top, 4)
+                            }
+                        }
+                        .padding(.vertical, 5)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    Divider().opacity(0.35)
+                }
+                if checked {
+                    Text(correct
+                         ? "That is his order."
+                         : "His order is \(item.answer.map { String($0 + 1) }.joined(separator: " ")) — yours was \(picked.map { String($0 + 1) }.joined(separator: " ")).")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(correct ? c.act : c.machine)
+                    EnglishHint(text: item.parentEng, ink: c)
+                    Text("Clause order is almost never inverted — 5% of 972 measured pairs. Inside a clause it is a different story, which is what this drills.")
+                        .font(.system(size: 11)).foregroundColor(c.muted)
+                } else {
+                    Text(picked.isEmpty
+                         ? "Tap the chunk his English takes first."
+                         : "So far: \(picked.map { String($0 + 1) }.joined(separator: " "))")
+                        .font(.system(size: 13))
+                        .foregroundColor(picked.isEmpty ? c.muted : c.ink)
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 14) {
+                Button(checked ? "Next span" : "Check") {
+                    if checked {
+                        next(); picked = []; checked = false
+                    } else {
+                        checked = true; deck.record(correct: correct)
+                    }
+                }
+                .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                .padding(.horizontal, 20).padding(.vertical, 11)
+                .background(!placed && !checked ? c.muted : c.act)
+                .cornerRadius(9)
+                .disabled(!placed && !checked)
+                if !checked && !picked.isEmpty {
+                    Button("Start over") { picked = [] }
+                        .font(.system(size: 15)).foregroundColor(c.muted)
+                }
                 Spacer()
             }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
         }.background(c.paper)
@@ -1553,6 +1707,7 @@ struct RootView: View {
     @State private var seAt = 0
     @State private var plAt = 0
     @State private var bdAt = 0
+    @State private var roAt = 0
     @State private var vcAt = 0
     /// The mixed set's queue of kinds, and where we are in it. The picker
     /// keeps saying "Mixed set" — naming the kind is exactly the leak the
@@ -1574,6 +1729,7 @@ struct RootView: View {
             (.order, !(pack.order ?? []).isEmpty),
             (.particle, !(pack.particle ?? []).isEmpty),
             (.boundary, !(pack.boundary ?? []).isEmpty),
+            (.readorder, !(pack.readorder ?? []).isEmpty),
         ]
         for (k, have) in grammar where have { pool[k] = 3 }
         guard pool.count >= 2 else { return pool.keys.map { $0 } }
@@ -1637,6 +1793,10 @@ struct RootView: View {
         case .vocab:
             if let a = pack.vocab, !a.isEmpty {
                 VocabView(item: a[vcAt % a.count], deck: deck) { vcAt = (vcAt + 1) % a.count; advance() }
+            }
+        case .readorder:
+            if let a = pack.readorder, !a.isEmpty {
+                ReadOrderView(item: a[roAt % a.count], deck: deck) { roAt = (roAt + 1) % a.count; advance() }
             }
         default:
             if !pack.cloze.isEmpty, dAt < dOrder.count {
@@ -1704,6 +1864,23 @@ struct RootView: View {
                             }
                         }
                         .pickerStyle(.menu)
+                        // Every other piece of type in this app is set at a
+                        // fixed point size and so ignores the system text
+                        // setting. This picker is the exception: its collapsed
+                        // label uses the scalable body font, so at a large
+                        // accessibility size it alone balloons. With the old
+                        // names — "Boundary hunt — where do the clauses end?"
+                        // — the label ran to five lines and left the drill
+                        // beneath it a two-line strip.
+                        //
+                        // Shortening the names is what fixed it; the worst
+                        // case is now two lines. Both .font() and .lineLimit()
+                        // were tried here first and NEITHER has any effect on
+                        // a .menu picker's collapsed label, so they are not
+                        // left sitting here looking like they work. Making the
+                        // picker itself scale properly means replacing the
+                        // menu style; that is on the backlog, with the rest of
+                        // the app's fixed-size type.
                         .padding(.horizontal, 20)
                         switch kind {
                         case .cloze:
@@ -1767,6 +1944,12 @@ struct RootView: View {
                                     vcAt = (vcAt + 1) % a.count
                                 }
                             } else { missing("twice-attested words", c) }
+                        case .readorder:
+                            if let a = pack.readorder, !a.isEmpty {
+                                ReadOrderView(item: a[roAt % a.count], deck: deck) {
+                                    roAt = (roAt + 1) % a.count
+                                }
+                            } else { missing("aligned spans with his reading order", c) }
                         case .mixed:
                             mixedBody(pack, c)
                         }

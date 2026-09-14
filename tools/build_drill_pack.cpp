@@ -54,6 +54,97 @@ void field(std::string& o, const char* k, const std::string& v, bool comma = tru
 std::string tib(const std::string& acip) {
     return allcore::acipToTibetanPlain(allcore::acipStripMarkup(acip));
 }
+// ---------------------------------------------------------------------------
+// A small but CORRECT JSON reader, used only by the reading-order section.
+// The other sections scan for a literal "key":" and stop at the next quote.
+// That is safe for ACIP, which has no quotes and no escapes. It is NOT safe
+// for his English: the prose carries apostrophes, quotation marks and \u
+// escapes, and this is the one drill whose key is labelled ATTESTED — his own
+// rendering of that very span. A key that is silently truncated at an
+// apostrophe would be a false claim of attestation, which is worse than no
+// drill at all.
+namespace bj {
+
+inline void ws(const std::string& j, size_t& i) {
+    while (i < j.size() &&
+           (j[i] == ' ' || j[i] == '\t' || j[i] == '\n' || j[i] == '\r'))
+        ++i;
+}
+inline void utf8(std::string& o, unsigned cp) {
+    if (cp < 0x80) { o += (char)cp; }
+    else if (cp < 0x800) {
+        o += (char)(0xC0 | (cp >> 6)); o += (char)(0x80 | (cp & 0x3F));
+    } else if (cp < 0x10000) {
+        o += (char)(0xE0 | (cp >> 12));
+        o += (char)(0x80 | ((cp >> 6) & 0x3F));
+        o += (char)(0x80 | (cp & 0x3F));
+    } else {
+        o += (char)(0xF0 | (cp >> 18));
+        o += (char)(0x80 | ((cp >> 12) & 0x3F));
+        o += (char)(0x80 | ((cp >> 6) & 0x3F));
+        o += (char)(0x80 | (cp & 0x3F));
+    }
+}
+inline bool str(const std::string& j, size_t& i, std::string& out) {
+    ws(j, i);
+    if (i >= j.size() || j[i] != '"') return false;
+    ++i; out.clear();
+    while (i < j.size()) {
+        const char c = j[i++];
+        if (c == '"') return true;
+        if (c != '\\') { out += c; continue; }
+        if (i >= j.size()) return false;
+        const char e = j[i++];
+        switch (e) {
+            case 'n': out += '\n'; break;
+            case 't': out += '\t'; break;
+            case 'r': out += '\r'; break;
+            case 'b': out += '\b'; break;
+            case 'f': out += '\f'; break;
+            case 'u': {
+                if (i + 4 > j.size()) return false;
+                unsigned cp = (unsigned)std::strtoul(
+                    j.substr(i, 4).c_str(), nullptr, 16);
+                i += 4;
+                // surrogate pair, or the astral character comes out mangled
+                if (cp >= 0xD800 && cp <= 0xDBFF && i + 6 <= j.size() &&
+                    j[i] == '\\' && j[i + 1] == 'u') {
+                    const unsigned lo = (unsigned)std::strtoul(
+                        j.substr(i + 2, 4).c_str(), nullptr, 16);
+                    if (lo >= 0xDC00 && lo <= 0xDFFF) {
+                        cp = 0x10000 + ((cp - 0xD800) << 10) + (lo - 0xDC00);
+                        i += 6;
+                    }
+                }
+                utf8(out, cp);
+                break;
+            }
+            default: out += e;   // \" \\ \/ and anything else, verbatim
+        }
+    }
+    return false;
+}
+inline void skipValue(const std::string& j, size_t& i) {
+    ws(j, i);
+    if (i >= j.size()) return;
+    if (j[i] == '"') { std::string t; str(j, i, t); return; }
+    if (j[i] == '{' || j[i] == '[') {
+        const char open = j[i], close = open == '{' ? '}' : ']';
+        ++i;
+        int depth = 1;
+        while (i < j.size() && depth) {
+            if (j[i] == '"') { std::string t; str(j, i, t); continue; }
+            if (j[i] == open) ++depth;
+            else if (j[i] == close) --depth;
+            ++i;
+        }
+        return;
+    }
+    while (i < j.size() && j[i] != ',' && j[i] != '}' && j[i] != ']') ++i;
+}
+
+}  // namespace bj
+
 // A title line still gets badged on the phone, for the rare one that is a
 // legitimate heading rather than catalogue.
 bool isTitle(const std::string& course) {
@@ -643,6 +734,187 @@ int main(int argc, char** argv) {
                 "  or the give-up rule regressed. Measure the population "
                 "before raising a target.\n",
                 nbd_pool[0], nbd_pool[1]);
+            return 1;
+        }
+
+        // Reading order — which chunk does his English take first? The
+        // fourteenth drill, and the one that answers the difficulty Adam
+        // actually named: not what the words mean, but what order to take
+        // them in. It landed on the desktop on 13 September against a pack
+        // that had no such kind at all, so the phone was a drill behind from
+        // the moment the desktop gained it.
+        //
+        // The key here is ATTESTED and must stay that way: it is where each
+        // child's English actually sits inside the parent's English in the
+        // bank — his rendering of that very span — and never the engine's
+        // ruling about what order the chunks ought to be read in.
+        out += "\"readorder\":[";
+        int nro = 0, nro_reorder = 0, nro_identity = 0;
+        {
+            std::ifstream rf("data/alignment/alignment_full_v1.json");
+            std::string j((std::istreambuf_iterator<char>(rf)),
+                          std::istreambuf_iterator<char>());
+            struct BL {
+                std::string course, eng, tib, acip;
+                int d = 0, seg = 0;
+            };
+            std::map<std::string, std::vector<BL>> byRef;
+            size_t i = j.find("\"links\"");
+            if (i != std::string::npos) i = j.find('[', i);
+            if (i != std::string::npos) {
+                ++i;
+                while (i < j.size()) {
+                    bj::ws(j, i);
+                    if (i >= j.size() || j[i] == ']') break;
+                    if (j[i] == ',') { ++i; continue; }
+                    if (j[i] != '{') break;
+                    ++i;
+                    BL b;
+                    while (i < j.size()) {
+                        bj::ws(j, i);
+                        if (j[i] == '}') { ++i; break; }
+                        if (j[i] == ',') { ++i; continue; }
+                        std::string key;
+                        if (!bj::str(j, i, key)) { i = j.size(); break; }
+                        bj::ws(j, i);
+                        if (i < j.size() && j[i] == ':') ++i;
+                        bj::ws(j, i);
+                        const bool isStr = i < j.size() && j[i] == '"';
+                        if (key == "course" && isStr) bj::str(j, i, b.course);
+                        else if (key == "eng" && isStr) bj::str(j, i, b.eng);
+                        // tib is WYLIE and is what the bank nests by; tib_acip
+                        // is what renders. Both are needed and they are not
+                        // interchangeable — see the peel section's note.
+                        else if (key == "tib" && isStr) bj::str(j, i, b.tib);
+                        else if (key == "tib_acip" && isStr) bj::str(j, i, b.acip);
+                        else if (key == "d" || key == "seg") {
+                            const size_t st = i;
+                            bj::skipValue(j, i);
+                            const int val =
+                                std::atoi(j.substr(st, i - st).c_str());
+                            (key == "d" ? b.d : b.seg) = val;
+                        } else {
+                            bj::skipValue(j, i);
+                        }
+                    }
+                    if (!b.course.empty())
+                        byRef[b.course + ":" + std::to_string(b.seg)]
+                            .push_back(b);
+                }
+            }
+            std::mt19937 rrng(4413);
+            // Draw across the whole bank, not the front of it. std::map walks
+            // its keys in order, so taking the first 300 took C01 230 times,
+            // C02 46 and C03 24 — the phone's newest drill would have been
+            // course one wearing the whole bank's name, and course one is the
+            // simplest material, which also skewed how often the answer
+            // reorders at all. Shuffled with its own fixed seed so the pack
+            // stays reproducible.
+            std::vector<const std::pair<const std::string,
+                                        std::vector<BL>>*> refs;
+            refs.reserve(byRef.size());
+            for (const auto& kv : byRef) refs.push_back(&kv);
+            {
+                std::mt19937 srng(7717);
+                std::shuffle(refs.begin(), refs.end(), srng);
+            }
+            for (const auto* kvp : refs) {
+                if (nro >= 300) break;
+                const auto& kv = *kvp;
+                const auto& v = kv.second;
+                if (v.size() < 3) continue;
+                for (const BL& p : v) {
+                    if (p.tib.empty() || p.eng.empty() || p.acip.empty())
+                        continue;
+                    // the SHALLOWEST layer strictly under this span
+                    std::vector<const BL*> kids;
+                    int kidDepth = 99;
+                    for (const BL& c : v) {
+                        if (c.d <= p.d || c.tib == p.tib) continue;
+                        if (c.eng.empty() || c.tib.empty()) continue;
+                        if (p.tib.find(c.tib) == std::string::npos) continue;
+                        if (c.d < kidDepth) { kidDepth = c.d; kids.clear(); }
+                        if (c.d == kidDepth) kids.push_back(&c);
+                    }
+                    if (kids.size() < 2 || kids.size() > 5) continue;
+                    // shown in the order they are WRITTEN
+                    std::sort(kids.begin(), kids.end(),
+                              [&](const BL* a, const BL* b2) {
+                                  return p.tib.find(a->tib) <
+                                         p.tib.find(b2->tib);
+                              });
+                    // and where his English puts each of them. Positions must
+                    // be distinct or the question has no single answer.
+                    std::vector<size_t> pos;
+                    bool ok = true;
+                    for (const BL* k : kids) {
+                        const size_t at = p.eng.find(k->eng);
+                        if (at == std::string::npos) { ok = false; break; }
+                        for (size_t q : pos) if (q == at) ok = false;
+                        pos.push_back(at);
+                    }
+                    if (!ok) continue;
+                    // Every piece must have Tibetan to tap. The bank holds
+                    // one-sided records — his English for a span with no
+                    // Tibetan exponent of its own — and 44 of the first 300
+                    // cards shipped with a numbered row and nothing beside it.
+                    // A chunk with no Tibetan cannot be put in reading order.
+                    for (const BL* k : kids) {
+                        const std::string t = tib(k->acip);
+                        if (t.empty() || t.find("⟨") != std::string::npos)
+                            ok = false;
+                    }
+                    const std::string pt = tib(p.acip);
+                    if (!ok || pt.empty() || pt.find("⟨") != std::string::npos)
+                        continue;
+                    std::vector<int> rank(pos.size());
+                    for (size_t z = 0; z < pos.size(); ++z) rank[z] = (int)z;
+                    std::sort(rank.begin(), rank.end(),
+                              [&](int a, int b2) { return pos[a] < pos[b2]; });
+                    bool identity = true;
+                    for (size_t z = 0; z < rank.size(); ++z)
+                        if (rank[z] != (int)z) identity = false;
+                    // A card whose answer is 1 2 3 teaches typing 1 2 3. Some
+                    // are kept so the learner cannot assume every card
+                    // reorders, but the pool is the spans that actually do.
+                    if (identity && (rrng() % 4)) continue;
+                    if (nro) out += ",";
+                    out += "{";
+                    field(out, "ref", kv.first);
+                    field(out, "parent", tib(p.acip));
+                    field(out, "parentEng", p.eng);
+                    out += "\"kids\":[";
+                    for (size_t z = 0; z < kids.size(); ++z) {
+                        if (z) out += ",";
+                        out += "\""; esc(out, tib(kids[z]->acip)); out += "\"";
+                    }
+                    out += "],\"kidsEng\":[";
+                    for (size_t z = 0; z < kids.size(); ++z) {
+                        if (z) out += ",";
+                        out += "\""; esc(out, kids[z]->eng); out += "\"";
+                    }
+                    out += "],\"answer\":[";
+                    for (size_t z = 0; z < rank.size(); ++z) {
+                        if (z) out += ",";
+                        out += std::to_string(rank[z]);
+                    }
+                    out += "]}";
+                    ++nro;
+                    if (identity) ++nro_identity; else ++nro_reorder;
+                    break;
+                }
+            }
+        }
+        out += "],";
+        std::printf("  readorder %d  (his English reorders in %d, runs "
+                    "straight through in %d)\n",
+                    nro, nro_reorder, nro_identity);
+        if (nro < 200) {
+            std::fprintf(stderr,
+                "REFUSED: reading-order pool short — %d of a wanted 300.\n"
+                "  The pool is the alignment bank, not the corpus: it grows "
+                "as courses are aligned.\n"
+                "  If the bank shrank, find out why before lowering this.\n", nro);
             return 1;
         }
 
