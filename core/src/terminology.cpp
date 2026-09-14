@@ -102,10 +102,32 @@ TermReport checkTerminology(const Spine& spine, const HeadwordIndex& index,
                 if (c >= 'a' && c <= 'z') c = (char)(c - 'a' + 'A');
             if (classifyParticle(up)) continue;
         }
+        // Maximality ranks by extent — but never across tiers. A longer
+        // AUTO-ALIGNED span must not delete a curated or glossary term inside
+        // it, because that term is his own English and this report exists to
+        // check his terminology. Deleting it is worse than mislabelling it:
+        // the row is never built, so no downstream label can rescue it, and
+        // the verdict then reads as an unrendered term for a draft that used
+        // his equivalent verbatim.
+        //
+        // Measured repro: source SANGS RGYAS CHOS, draft "the Buddha's
+        // Dharma". Before this, the report held exactly one term —
+        // `sangs rgyas chos`, auto-aligned, glossed "sangye chudang tsokyi
+        // choknam", which is a pronunciation line — and neither `sangs rgyas`
+        // ("Buddha", curated) nor `chos` ("Dharma (the teaching)", curated).
+        //
+        // Same defect as walk::bestGlossSpan, and the same fix: extent is the
+        // tiebreak, tier is the requirement. Note the honorific advisory
+        // already works around this by re-tokenising the source itself —
+        // "the register keys on the honorific stem, which a longer matched
+        // dictionary term can hide" — which was this bug, seen once and
+        // routed around rather than fixed.
         bool containedInGlossed = false;
         for (const auto& t : doc.spans) {
             if (&t == &s) continue;
-            if (doc.entries[t.entry_ix].hgm_gloss.empty()) continue;
+            const auto& te = doc.entries[t.entry_ix];
+            if (te.hgm_gloss.empty()) continue;
+            if (te.provisional() && !e.provisional()) continue;
             if (t.beg <= s.beg && s.end <= t.end &&
                 (t.end - t.beg) > (s.end - s.beg)) {
                 containedInGlossed = true;
