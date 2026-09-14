@@ -195,8 +195,21 @@ bool verbEvidenceAt(const allcore::OverlayDoc& doc, int tok) {
         if (!e.tenses.empty()) return true;
         if (isCopula(e.wylie)) return true;
         if (classifyVerbWithTenses(e.wylie, e.tenses)) return true;
+        // The same narrowing spotVerb got on 2026-09-13, which this function
+        // did not: a gloss beginning "to " is the weakest evidence there is,
+        // and `la` carries 108 glosses, one of which starts that way. Without
+        // this, the commonest particle in the language counts as evidence of a
+        // verb — here, in the test that decides whether an ambiguous `na`
+        // splits a clause. A word already in the tenses, the copula list or
+        // the Wilson tables has returned above; this narrows only the guess.
+        std::string upper = e.wylie;
+        for (auto& ch : upper)
+            if (ch >= 'a' && ch <= 'z') ch = (char)(ch - 'a' + 'A');
+        if (classifyParticle(upper) != nullptr) continue;
         for (const auto& gl : e.hgm_gloss)
-            if (gl.rfind("to ", 0) == 0) return true;
+            if (gl.rfind("to ", 0) == 0 && gl.size() > 3 &&
+                std::isalpha((unsigned char)gl[3]))
+                return true;
     }
     // no span (word missing from the dictionary): the token itself may still
     // be a copula — these forms map to wylie by lowercasing
