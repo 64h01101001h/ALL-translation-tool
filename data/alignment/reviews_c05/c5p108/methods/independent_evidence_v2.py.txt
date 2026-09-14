@@ -1,0 +1,159 @@
+"""Independent read-only source and evidence audit; exact-byte input preservation."""
+import pathlib, json, hashlib, gzip, sqlite3, subprocess, os, re, difflib, importlib.util
+R=pathlib.Path(__file__).resolve().parents[1]; B=R.parent; W=B.parents[1]/'campaign-worktree'
+ORIGIN='af139c573f85aaf33278cd079719947ee9af8cdd'
+def get(p): return json.loads(p.read_text())
+def ident(b): return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def save(p,x):
+ p=R/p; p.parent.mkdir(parents=True,exist_ok=True); raw=(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode()
+ if p.exists(): assert p.read_bytes()==raw,str(p)
+ else: p.write_bytes(raw)
+def git(rel): return subprocess.check_output(['git','show',ORIGIN+':'+rel],cwd=W)
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def supported(p): return str(p) if p.suffix.lower() in allowed else str(p)+('.txt' if p.suffix in ('.py','.sql','.sh') else '.bin')
+records=[]; by_digest={}; pins=[]
+def preserve(p,target=None,pin=None):
+ p=p.resolve();raw=p.read_bytes();d=ident(raw)
+ key=(d['sha256'],d['bytes'])
+ if target is None: target=by_digest.get(key,'proposal-inputs/evidence/'+d['sha256']+(p.suffix if p.suffix.lower() in allowed else '.bin'))
+ target=pathlib.Path(supported(pathlib.Path(target))); q=R/target;q.parent.mkdir(parents=True,exist_ok=True)
+ if q.exists(): assert q.read_bytes()==raw
+ else:q.write_bytes(raw)
+ assert q.suffix.lower() in allowed
+ by_digest.setdefault(key,str(target))
+ rec={'original':str(p),'copy':str(target),'sha256':d['sha256'],'bytes':d['bytes']}
+ if pin:
+  assert git(pin)==raw,(p,pin)
+  rec.update(original_git_commit=ORIGIN,repository_relative_path=pin);pins.append(rec)
+ records.append(rec)
+ return str(target)
+audit={}
+for a,sha in [('tibetan','80941db89cbfa75aa8b89fdd0d8549d346e7dcb3f0290e59e3c618a254ce362b'),('english','bcacc2c033feac6ef2600fd110f427ce49ae390c16ebf3fedabb4def5a4b69a5'),('reconciled','0543e5fd5807a2b74e88a8e818e80295ccff9aefebe190a9996c816c36fece09')]:
+ p=B/a;f=get(p/'freeze.json');assert ident((p/'freeze.json').read_bytes())['sha256']==sha
+ for rel,d in f['files'].items():assert ident((p/rel).read_bytes())==d,(a,rel)
+ audit[a]={'freeze':ident((p/'freeze.json').read_bytes()),'files_verified':len(f['files'])}
+for p in sorted(B.rglob('*')):
+ if not p.is_file() or p.is_relative_to(R):continue
+ assert '__pycache__' not in p.parts
+ rel=p.relative_to(B);parts=rel.parts; pin=None;target=None
+ if 'pinned' in parts: pin='/'.join(parts[parts.index('pinned')+1:])
+ if parts[0] in ('tibetan','english') and len(parts)>2 and parts[1] in ('322','323','324'):
+  target='proposal-inputs/'+str(rel)
+ elif parts[0]=='reconciled' and len(parts)>2 and parts[1] in ('322','323','324'):
+  target='reviewed-final/'+'/'.join(parts[1:])
+ elif parts[0] in ('tibetan','english') and ('helpers' in parts or 'failures' in parts or 'native' in parts):
+  target='proposal-inputs/'+str(rel)
+ elif parts[0]=='reconciled' and parts[1]=='helpers':target='proposal-inputs/'+str(rel)
+ elif len(parts)==1:target='proposal-inputs/batch/'+parts[0]
+ preserve(p,target,pin)
+for rel in ['semantic-review-protocol.md','proposal-protocol.md','copy_evidence_once.py','land_reviewed_page.py']:
+ preserve(B.parent/rel,'governing/'+supported(pathlib.Path(rel)))
+for rel in ['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ p=W/rel;assert p.read_bytes()==git(rel);preserve(p,'governing/'+pathlib.Path(rel).name,rel)
+access=get(B/'english/evidence/required-access.json')
+for x in access:x['readable']=os.access(x['path'],os.R_OK)
+assert all(x['readable']for x in access);save('evidence/required-access.json',access)
+sources=get(B/'reconciled/evidence/source-identities.json')['files']
+for k,x in sources.items():assert ident(pathlib.Path(x['path']).read_bytes())=={a:x[a]for a in ('bytes','sha256')},k
+preserve(pathlib.Path(sources['physical']['path']),'evidence/C05ReadingASCII.txt.bin')
+save('evidence/source-identities.json',{'source_origin_git_commit':ORIGIN,'files':sources,'no_full_spine_copy':True,'indexed_complete_records_preserved':True})
+db=sqlite3.connect('file:'+sources['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+schema={r['name']:[dict(x)for x in db.execute('pragma table_info('+r['name']+')')]for r in db.execute("select name from sqlite_master where type='table' and name in ('corpus_segments','entries')")}
+master=json.load(gzip.open(sources['master']['path'],'rt'));corpus=json.load(gzip.open(sources['corpus']['path'],'rt'))
+fullrows={};queryaudit=[]
+def bank(rows):
+ for r in rows:
+  key=f"{r['course']}:{r['seq']}";assert key not in fullrows or fullrows[key]==r;fullrows[key]=r
+ return [f"{r['course']}:{r['seq']}"for r in rows]
+for x in get(B/'context.json'):
+ r=dict(db.execute('select * from corpus_segments where course=? and seq=?',(x['course'],x['seq'])).fetchone());assert all(r[k]==v for k,v in x.items());bank([r])
+reconrows=get(B/'reconciled/evidence/corpus-records.json')
+for q in get(B/'reconciled/evidence/corpus-query-index.json'):
+ actual=[dict(r)for r in db.execute(q['sql'],q['params'])];assert len(actual)==q['count'];assert actual==[reconrows[k]for k in q['row_refs']]
+ queryaudit.append({**q,'fresh_count':len(actual),'fresh_row_refs':bank(actual),'complete_rows_equal':True})
+# Independently recheck every original query, including external-corpus fields.
+originalqueries=[];externalrows={};externalchecks=[]
+for a,files in [('tibetan',['corpus-query-evidence.json','supplemental-corpus-queries.json']),('english',['corpus-queries.json','followup-corpus-queries.json','errata-focused-global-queries.json'])]:
+ for fn in files:
+  for i,q in enumerate(get(B/a/'evidence'/fn)):
+   rows=[dict(r)for r in db.execute(q['sql'],q['params'])];assert rows==q['rows'] and len(rows)==q['count']
+   originalqueries.append({'original':f'{a}/evidence/{fn}#{i}','sql':q['sql'],'params':q['params'],'count':len(rows),'row_refs':bank(rows)})
+   if 'corpus_records' in q:
+    exact=f"{q['field']}=?"in q['sql'];needle=q['params'][0];field=q['field'];course=q.get('course')
+    rs=[{'corpus_index':j,'record':r}for j,r in enumerate(corpus)if (not course or r.get('course')==course)and ((r.get(field)==needle)if exact else needle in r.get(field,''))]
+    assert rs==q['corpus_records'] and len(rs)==q['corpus_count'];externalchecks.append({'original':f'{a}/evidence/{fn}#{i}','field':field,'needle':needle,'course':course,'exact':exact,'count':len(rs),'indices':[r['corpus_index']for r in rs]})
+    for r in rs:externalrows[str(r['corpus_index'])]=r['record']
+for i,q in enumerate(get(B/'tibetan/evidence/external-corpus-evidence.json')):
+ rs=[{'corpus_index':j,'record':r}for j,r in enumerate(corpus)if (r.get(q['field'])==q['value']if q['operation']=='equals'else q['value'] in r.get(q['field'],''))]
+ assert rs==q['records'] and len(rs)==q['count'];externalchecks.append({k:v for k,v in q.items()if k!='records'}|{'original':f'tibetan/evidence/external-corpus-evidence.json#{i}','indices':[r['corpus_index']for r in rs]})
+ for r in rs:externalrows[str(r['corpus_index'])]=r['record']
+for k,r in get(B/'reconciled/evidence/external-corpus-records.json').items():assert corpus[int(k)]==r;externalrows[k]=r
+lexical=[];masterrows={}
+for a,files in [('tibetan',['full-lexical-evidence.json']),('english',['lexical-evidence.json','supplemental-lexical-evidence.json'])]:
+ for fn in files:
+  for i,q in enumerate(get(B/a/'evidence'/fn)):
+   rows=[{'collection':c,'index':j,'entry':r}for c in ('unified_entries','curated_entries','glossary_entries')for j,r in enumerate(master[c])if r.get('wylie')==q['term']]
+   assert rows==q['master_records'] and len(rows)==q['count']
+   for r in rows:masterrows[f"{r['collection']}:{r['index']}"]=r['entry']
+   lexical.append({'original':f'{a}/evidence/{fn}#{i}','term':q['term'],'count':len(rows),'record_refs':[f"{r['collection']}:{r['index']}"for r in rows],'spine_rows':[dict(r)for r in db.execute('select * from entries where wylie=?',(q['term'],))]})
+for q in get(B/'reconciled/evidence/lexical-query-index.json'):
+ rs={f'{c}:{j}':r for c in ('unified_entries','curated_entries','glossary_entries')for j,r in enumerate(master[c])if r.get('wylie')==q['term']}
+ assert list(rs)==q['record_refs'] and len(rs)==q['count'];assert [dict(r)for r in db.execute('select * from entries where wylie=?',(q['term'],))]==q['spine_entry_rows']
+for k,r in get(B/'reconciled/evidence/master-records.json').items():assert master[k.split(':')[0]][int(k.split(':')[1])]==r;masterrows[k]=r
+raw=pathlib.Path(sources['physical']['path']).read_bytes();txt=raw.decode('latin1');tokens=list(re.finditer(r'\S+',txt));fold=' '.join(t.group()for t in tokens);position=[]
+for t in tokens:
+ if position:position.append(None)
+ position.extend(range(t.start(),t.end()))
+physical=[]
+for s in (322,323,324):
+ row=fullrows[f'C05:{s}']
+ for field in ('acip','english'):
+  val=row[field];assert fold.count(val)==1;lo=fold.index(val);hi=lo+len(val);a,b=position[lo],position[hi-1]+1
+  assert ' '.join(txt[a:b].split())==val
+  physical.append({'seq':s,'field':field,'complete_source_value':val,'raw_byte_range':[a,b],'raw_excerpt_latin1':txt[a:b],'raw_excerpt_identity':ident(raw[a:b]),'unique_fold_match':True,'fold_range':[lo,hi],'method':'Latin-1 decode; whitespace-folded derived index with reversible byte map; raw bytes unchanged'})
+register=get(B/'english/evidence/pinned/docs/errata_register.json');assert len(register)==194
+direct=[r for r in register if r.get('segment')in ('C05:322','C05:323','C05:324')];assert not direct
+screens=[]
+def occurrences(text,piece):return [[m.start(),m.start()+len(piece)]for m in re.finditer('(?='+re.escape(piece)+')',text)]
+for s in (322,323,324):
+ for x in get(B/'reconciled'/str(s)/'five-ground-screens.json'):
+  row=fullrows[f'C05:{s}'];actual={field:occurrences(row[field],x['found'])for field in ('acip','wylie','english')}
+  assert actual==x['five_refutation_grounds']['a_quote']['verbatim_occurrences']
+  fp,ix=x['original_record_ref'].rsplit('#',1);origin=get(pathlib.Path(fp))[int(ix)]
+  screens.append({'seq':s,'angle':x['angle'],'original_index':int(ix),'kind':x['kind'],'found':x['found'],'fresh_quote_ranges':actual,'original_screen':origin,'reconciler_screen':x})
+reuse=[]
+for a in ('tibetan','english'):
+ for s in (322,323,324):
+  d=B/a/str(s);p=d/'generator-v1'if a=='tibetan'else B/a/'native'/f'{s}-generator-v1';ex=get(p/'execution.json')
+  assert ex['exit']==0 and (p/'exit.txt').read_bytes()==b'0\n'
+  for name in ('stdin','stdout','stderr'):assert ident((p/(name+'.bin')).read_bytes())==ex['streams'][name]
+  assert (p/'stdin.bin').read_bytes()==(d/'spec.json').read_bytes();assert (p/'stdout.bin').read_bytes()==(d/'body.html').read_bytes();assert not (p/'stderr.bin').read_bytes()
+  adapter=pathlib.Path(ex['argv'][-1]);assert adapter.is_file()
+  reuse.append({'angle':a,'seq':s,'native_directory':str(p),'execution_record':ex,'adapter_identity':ident(adapter.read_bytes()),'spec_stdin_identical':True,'body_stdout_identical':True,'empty_stderr':True,'exit_zero':True,'complete_freeze_verified':audit[a],'immutable_code_verified':True,'complete_source_identity_verified':True,'decision':'REUSE successful unchanged native generation; no duplicate generator execution'})
+# Parse the entire package and establish complete file and full diff identity.
+pkg=(B/'semantic-input-review-package.txt').read_text();chunks=re.split(r'^===== (.*?) =====\n',pkg,flags=re.M);package=[]
+assert not chunks[0].strip()
+for i in range(1,len(chunks),2):
+ name=chunks[i];body=chunks[i+1]
+ if name.startswith('COMPLETE '):
+  m=re.fullmatch(r'COMPLETE (tibetan|english) TO RECONCILED DIFF (\d+)',name);a,s=m.groups()
+  # Diff headers are presentation names; compare every actual changed/context line.
+  lines=body.strip('\n').splitlines();expected=list(difflib.unified_diff((B/a/s/'spec.json').read_text().splitlines(),(B/'reconciled'/s/'spec.json').read_text().splitlines(),n=10,lineterm=''))
+  assert lines[2:]==expected[2:],name
+  package.append({'section':name,'type':'complete-diff','lines_verified':len(lines)})
+ elif name=='PACKAGE INPUT HASHES':package.append({'section':name,'type':'hash-index','text':body})
+ else:
+  p=B/name;assert p.is_file();assert body.rstrip('\n')==p.read_text().rstrip('\n'),name
+  package.append({'section':name,'type':'complete-file',**ident(p.read_bytes())})
+save('evidence/package-complete-read-audit.json',{'package_identity':ident((B/'semantic-input-review-package.txt').read_bytes()),'sections':package,'method':'Every section parsed, full referenced file and complete unified diff checked; source/spec/decision semantics read separately from exact preserved originals.'})
+save('evidence/immutable-inputs-audit.json',{'freezes':audit,'git_object_pins_verified':pins})
+save('evidence/corpus-query-index.json',queryaudit);save('evidence/original-query-rechecks.json',originalqueries)
+save('evidence/corpus-records.json',fullrows);save('evidence/external-corpus-records.json',externalrows);save('evidence/external-query-rechecks.json',externalchecks)
+save('evidence/master-records.json',masterrows);save('evidence/lexical-query-rechecks.json',lexical)
+save('evidence/physical-complete-field-proof.json',physical);save('evidence/original-generator-reuse.json',reuse)
+save('evidence/all-original-screens.json',screens)
+save('evidence/register-origin-audit.json',{'origin':ORIGIN,'count':len(register),'direct_batch_records':direct,'selected_classes':[r for r in register if r.get('item_id')in ('E-044','E-071','E-076','E-107','E-111','E-121','E-157')]})
+save('evidence/actual-source-schemas.json',{'sqlite':schema,'master_collections':{k:len(v)for k,v in master.items()if isinstance(v,list)},'external_corpus_root':'LIST','external_corpus_count':len(corpus),'indexed_spine_root':'DICT course:seq','indexed_master_root':'DICT collection:zero-based index','external_rows_root':'DICT original zero-based index'})
+save('original-to-copy-manifest.json',records)
+save('evidence/evidence-summary.json',{'original_files':len(records),'distinct_preserved_copies':len({x['copy']for x in records}),'sql_queries':len(queryaudit),'original_query_records_rechecked':len(originalqueries),'external_query_records_rechecked':len(externalchecks),'original_lexical_queries_rechecked':len(lexical),'unique_master_records':len(masterrows),'unique_spine_rows':len(fullrows),'unique_external_records':len(externalrows),'original_screens':len(screens),'successful_original_generations_reused':len(reuse),'canonical_generations_here':0})
+print(json.dumps(get(R/'evidence/evidence-summary.json')))

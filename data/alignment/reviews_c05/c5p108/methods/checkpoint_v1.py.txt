@@ -1,0 +1,29 @@
+"""Close a pending checkpoint only; never issue final approval or freeze.json."""
+import pathlib,json,hashlib,subprocess,datetime
+R=pathlib.Path(__file__).resolve().parents[1];B=R.parent;W=B.parents[1]/'campaign-worktree'
+def get(p):return json.loads(p.read_text())
+def ident(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(n,x):p=R/n;assert not p.exists();p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+manifest=get(R/'original-to-copy-manifest.json');assert len({x['original']for x in manifest})==len(manifest)
+for x in manifest:
+ p=R/x['copy'];assert p.is_file()and p.suffix in allowed
+ raw=p.read_bytes();assert ident(raw)=={k:x[k]for k in ('bytes','sha256')}
+ if 'original_git_commit'in x:expected=subprocess.check_output(['git','show',x['original_git_commit']+':'+x['repository_relative_path']],cwd=W)
+ else:expected=pathlib.Path(x['original']).read_bytes()
+ assert raw==expected,x['original']
+for x in get(R/'correspondence-review.json')['original_correspondences']:
+ if x['reconciler_status']=='unchanged':
+  final=next(r for r in get(R/'resolved-spans.json')if r['seq']==x['seq']and r['id']==x['final_ids'][0])
+  for k in ('d','tib','eng','tib_range','eng_range'):assert x['original'][k]==final[k]
+assert not (R/'freeze.json').exists()
+segments=get(R/'segment-measurements.json');result={'schema':'c05-independent-semantic-review-v1','producer':'Codex independent skeptical semantic reviewer','verdict':'READY_PENDING_ACTUAL_BASELINE','status':'CHECKPOINT_NOT_FINAL_ACCEPTANCE','spec_verdict':'PASS','quality_verdict':'COMPLETE_NO_REQUIRED_CORRECTION','source_origin_git_commit':'af139c573f85aaf33278cd079719947ee9af8cdd','source_origin_course_boundary':315,'actual_through321_baseline_receipt':None,'segments':segments,'total_spans':sum(x['span_count']for x in segments),'total_nulls':sum(x['null_count']for x in segments),'total_word_pairs':sum(x['word_pair_count']for x in segments),'total_d7':sum(x['d7_count']for x in segments),'original_correspondences_reviewed':141,'original_omission_records_reviewed':22,'original_five_ground_screens_reviewed':30,'open_findings':[],'bank_ready_errata_count':2,'errata_severity':'LOW','errata_confidence':'PROBABLE','reconciliation_freeze_sha256':'0543e5fd5807a2b74e88a8e818e80295ccff9aefebe190a9996c816c36fece09','human_acceptance':False,'remaining_requirement':'Receive, preserve and verify the actual through321 baseline; inspect governing changes and recheck current duplicates, then final evidence preflight. Reuse unchanged source/native proof.','root_checkpoint_instruction':'Finish READY_PENDING_ACTUAL_BASELINE and return to release slot; do not emit final approval or a final freeze.'}
+put('review.json',result)
+put('checkpoint-preservation-audit.json',{'status':'READY_PENDING_ACTUAL_BASELINE','original_records':len(manifest),'distinct_copy_paths':len({x['copy']for x in manifest}),'all_targets_exist':True,'all_targets_supported':True,'all_hashes_sizes_bytes_match':True,'historical_copies_verified_against_immutable_git_objects':sum('original_git_commit'in x for x in manifest),'unchanged_original_tuple_identities_verified':True,'final_freeze_present':False,'canonical_generators_rerun_for_checkpoint':0})
+files={}
+for p in sorted(R.rglob('*')):
+ if p.is_file():
+  assert p.suffix in allowed and '__pycache__'not in p.parts
+  files[str(p.relative_to(R))]=ident(p.read_bytes())
+put('checkpoint-inventory.json',{'schema':'c05-independent-semantic-review-pending-checkpoint-v1','status':'READY_PENDING_ACTUAL_BASELINE','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'landing_authorized':False,'files':files,'excludes':['checkpoint-inventory.json'],'resume_requirement':result['remaining_requirement']})
+print(json.dumps({'verdict':result['verdict'],'spans':result['total_spans'],'nulls':result['total_nulls'],'word_pairs':result['total_word_pairs'],'open_findings':0,'errata':2,'checkpoint_files':len(files),'review':ident((R/'review.json').read_bytes()),'checkpoint':ident((R/'checkpoint-inventory.json').read_bytes())}))

@@ -1,0 +1,43 @@
+"""Preserve one actual preparation-verifier invocation; never run page generation."""
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+
+D = Path(__file__).resolve().parent
+if len(sys.argv) != 2 or not re.fullmatch(r'[0-9]{2}', sys.argv[1]):
+    raise SystemExit('usage: python3 -B run_candidate_once.py NN')
+n = sys.argv[1]
+attempt = D / 'attempts' / ('root-inputs-' + n)
+attempt.mkdir(exist_ok=False)
+method = D / 'verify_root_inputs_q_v1.py'
+argv = [sys.executable, '-B', str(method), 'preparation-' + n]
+env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
+raw = method.read_bytes()
+(attempt / 'method.py.txt').write_bytes(raw)
+(attempt / 'caller.py.txt').write_bytes(Path(__file__).read_bytes())
+(attempt / 'stdin.bin').write_bytes(b'')
+start = time.monotonic()
+utc = datetime.datetime.now(datetime.timezone.utc).isoformat()
+with (attempt / 'stdout.bin').open('wb') as stdout, (attempt / 'stderr.bin').open('wb') as stderr:
+    result = subprocess.run(argv, cwd=D, env=env, input=b'', stdout=stdout, stderr=stderr)
+(attempt / 'exit.txt').write_text(str(result.returncode) + '\n')
+def pin(p):
+    raw = p.read_bytes()
+    return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+record = {'argv': argv, 'cwd': str(D), 'utc': utc,
+          'elapsed_seconds': time.monotonic() - start, 'exit': result.returncode,
+          'environment_override': {'PYTHONDONTWRITEBYTECODE': '1'},
+          'method': pin(attempt / 'method.py.txt'), 'caller': pin(attempt / 'caller.py.txt'),
+          'streams': {k: pin(attempt / (k + '.bin')) for k in ('stdin', 'stdout', 'stderr')},
+          'page_generator_runs': 0, 'acceptance_authorized': False}
+(attempt / 'execution.json').write_text(json.dumps(record, indent=2) + '\n')
+print(json.dumps(record, indent=2))
+if result.returncode:
+    sys.stderr.write((attempt / 'stderr.bin').read_text())
+sys.exit(result.returncode)

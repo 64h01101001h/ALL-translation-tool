@@ -1,0 +1,28 @@
+import pathlib,json,gzip,sqlite3,hashlib,re
+P=pathlib.Path(__file__).resolve().parents[1];b=json.loads((P/'evidence/proposal-baseline.json').read_text());read=lambda n:json.loads((P/'evidence'/n).read_text())
+def put(n,x):(P/'evidence'/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+m=json.load(gzip.open(b['source_pins']['master']['path'],'rt'));c=json.load(gzip.open(b['source_pins']['corpus']['path'],'rt'));db=sqlite3.connect('file:'+b['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+terms=['zad par byed','zad par byed pa','tshul','chos bzod pa','chos bzod','bzod pa','zhi','bzhi',"'dod chags",'bral ba','bar chad med lam',"bar chad med pa'i lam",'bar chad med','lam','brgyad','sems pa','gang yin pa','rnam pa','bcu gnyis','nag po','las',"'dod nyon", "'dod",'nyon','spong','byed','phyir','dgu pa','dkar gnag','dkar','gnag',"'dod pa",'dge ba',"'dun pa",'sgo nas','nyon mongs','thob pa','chad pa',"tshul gyis",'bsam gtan','bzhi pa','skyes pa','tha ma','dkar po','gzugs','gzugs med']
+index={}
+for collection,entries in m.items():
+ if isinstance(entries,list):
+  for i,e in enumerate(entries):
+   if isinstance(e,dict):index.setdefault(e.get('wylie'),[]).append({'collection':collection,'index':i,'entry':e})
+lex=[{'term':t,'query':{'field':'wylie','equals':t},'count':len(index.get(t,[])),'master_records':index.get(t,[])} for t in terms];put('full-lexical-evidence.json',lex)
+qs=[]
+def query(label,sql,params):
+ rows=[dict(x) for x in db.execute(sql,params)];qs.append({'label':label,'sql':sql,'params':params,'count':len(rows),'rows':rows});return rows
+for s in read('source.json'):
+ for field in ['acip','wylie','english']:query(f"{s['seq']}-{field}-exact",f'select * from corpus_segments where {field}=? order by id',[s[field]])
+for label,field,term in [('zhi-enumeration','acip','CHOS BZOD PA ZHI'),('bzhi-enumeration','acip','CHOS BZOD PA BZHI'),('gzugs-virtue','acip',"GZUGS KYI DGE BA LA 'DUN PA"),('formless-virtue','english','virtue of the formless realm'),('parallel322','english','twelve types of mental movement had with'),('parallel323','english','stops the hold which retains them'),('parallel324','english','final instant in the arising')]:query(label,f'select * from corpus_segments where instr({field},?)>0 order by id',[term])
+put('corpus-query-evidence.json',qs)
+external=[]
+for q in qs:
+ field=next(x for x in ['acip','wylie','english'] if x in q['sql']);value=q['params'][0];exact='where '+field+'=?' in q['sql']; rows=[{'corpus_index':i,'record':r} for i,r in enumerate(c) if (r.get(field)==value if exact else value in r.get(field,''))];external.append({'label':q['label'],'field':field,'operation':'equals' if exact else 'contains','value':value,'count':len(rows),'records':rows})
+put('external-corpus-evidence.json',external)
+raw=pathlib.Path(b['source_pins']['physical']['path']).read_bytes();(P/'evidence/C05ReadingASCII.txt.bin').write_bytes(raw);fold=' '.join(raw.decode('latin1').split());phys=[]
+for s in read('source.json'):
+ a=s['acip'].encode('ascii');aa=raw.find(a);e=' '.join(s['english'].split());ee=fold.find(e);phys.append({'seq':s['seq'],'raw_acip_range':[aa,aa+len(a)],'folded_latin1_english_range':[ee,ee+len(e)],'acip_exact':aa>=0,'english_exact_after_linefold':ee>=0,'linefold_operation':"' '.join(raw.decode('latin1').split())"});assert aa>=0 and ee>=0
+put('physical-source-proof.json',phys)
+reg=read('pinned/docs/errata_register.json');relevant=[r for r in reg if any(x in json.dumps(r).lower() for x in ['c05:322','c05:323','c05:324','heading','formless','zhi','black and white'])];put('registered-complete-records.json',{'register_count':len(reg),'selection':'records containing c05:322/c05:323/c05:324/heading/formless/zhi/black and white','records':relevant})
+print('LEXICAL',[(x['term'],x['count']) for x in lex]);print('CORPUS',[(x['label'],x['count']) for x in qs]);print('EXTERNAL',[(x['label'],x['count']) for x in external]);print('REGISTER',len(reg),len(relevant));print('PHYSICAL',phys)

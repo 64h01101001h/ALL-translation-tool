@@ -1,0 +1,67 @@
+{
+  "status": "PASS_EXPLICIT_CHECKPOINT_TO_FINAL_DELTA",
+  "original_checkpoint_inventory": {
+    "bytes": 79537,
+    "sha256": "6e538cd57aa5d40465f58e2133b011fefd80d1b52cae2b46903509a235fe88d6"
+  },
+  "original_files": 454,
+  "checkpoint_resolution": "checkpoint-history/ready-through315/checkpoint-resolution.json",
+  "changed_metadata": {
+    "review.json": {
+      "before": {
+        "bytes": 2678,
+        "sha256": "64d21bfadb8aad238eaf03b17b583b6960de567c0a4acf7a6f0ff56752831843"
+      },
+      "after": {
+        "bytes": 3973,
+        "sha256": "ea912ceaba304bff3afa48f6c1f5c1a26c9445636d0efe69d339362f8ac99009"
+      },
+      "history": "checkpoint-history/ready-through315/review.json"
+    },
+    "review.md": {
+      "before": {
+        "bytes": 3806,
+        "sha256": "01c68582865488fe1a7223ba0d28acfff90ebf013d5113009e3e8f5e5580ac8a"
+      },
+      "after": {
+        "bytes": 4769,
+        "sha256": "0156c4a0ac7aa21554571a477d17d422270fe442e339d8f2c14af9c44ed89491"
+      },
+      "history": "checkpoint-history/ready-through315/review.md"
+    },
+    "interface-schema-note.md": {
+      "before": {
+        "bytes": 4649,
+        "sha256": "506d8a47253bf1f4c60653b852b4d40c0e4cbbb1f0663b628c685fb75381b889"
+      },
+      "after": {
+        "bytes": 6434,
+        "sha256": "82d9d5ca003d78a9213ce0d14a59deabf0dfad1934ec38e1dc6de81c45780267"
+      },
+      "history": "checkpoint-history/ready-through315/interface-schema-note.md"
+    },
+    "original-to-copy-manifest.json": {
+      "before": {
+        "bytes": 138074,
+        "sha256": "50e4687fbe12b5b017eaddedef6d2fcc15e1f09367620f54ea329e2abb29a5e4"
+      },
+      "after": {
+        "bytes": 149699,
+        "sha256": "ff9a4932dd690090c19b35ea5afa7041c74015221c984a37a4d9acf5c9b951c8"
+      },
+      "history": "checkpoint-history/ready-through315/original-to-copy-manifest.json"
+    }
+  },
+  "original_copy_records_retained_unchanged": 379,
+  "current_copy_records": 408,
+  "semantic_source_spec_body_rationale_errata_native_changes": 0,
+  "baseline_delta_proof": "finalization/baseline-delta-proof.json",
+  "preparation_proof_reused_unchanged": {
+    "bytes": 5516,
+    "sha256": "5ba59b9fed70b025d607865dc519fb31bf434d5a834575624963ca0c86c5ff86"
+  },
+  "original_preparation_contract": "PASS_PREPARATION_INPUTS_ONLY remains a historical pending-checkpoint proof; finalization does not rewrite it.",
+  "finalization_role": "Scoped finalizer verified only actual baseline, current governing/register delta and unchanged checkpoint evidence. Earlier independent reviewer performed the full linguistic review; root separately recorded full source-specific reading. No claim of personally repeating those readings.",
+  "generator_reruns": 0,
+  "resolver_reruns": 0
+}

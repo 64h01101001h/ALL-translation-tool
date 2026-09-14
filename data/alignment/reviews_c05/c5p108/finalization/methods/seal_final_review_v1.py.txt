@@ -1,0 +1,89 @@
+"""Seal actual completed scoped-finalization files; no source/native reruns."""
+from pathlib import Path
+import hashlib, json, datetime
+S=Path(__file__).resolve().parents[2];B=S.parent
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+ b=p.read_bytes();return dict(bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def check(x,msg):
+ if not x:raise ValueError(msg)
+def save(p,x):
+ check(not p.exists(),'no overwrite '+str(p));p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+check(not (S/'freeze.json').exists(),'final freeze must be new')
+m=read(S/'review.json');d=read(S/'checkpoint-to-final-delta.json');p=read(S/'finalization/baseline-delta-proof.json')
+check(m['verdict']=='APPROVE' and m['open_findings']==[] and m['spec_verdict']=='PASS' and
+      m['quality_verdict']=='COMPLETE_NO_REQUIRED_CORRECTION','final scoped judgment')
+check(p['status']=='PASS_SCOPED_BASELINE_GOVERNING_REGISTER_DELTA' and
+      m['actual_through321_baseline_receipt']==p['actual_through321_baseline_receipt'],'actual scoped proof')
+r=m['actual_through321_baseline_receipt']
+check(set(r)=={'commit','course_boundary','bytes','sha256','copy','verification_proof'},'exact six-key actual receipt')
+check(r['commit']=='36a978597787f0599357ff99ea8bd3f07895229a' and r['course_boundary']==321 and
+      pin(B/'baseline.json')==pin(S/r['copy'])=={k:r[k]for k in ('bytes','sha256')},'actual receipt bytes')
+history=read(S/'checkpoint-history/ready-through315/checkpoint-resolution.json')
+check(len(history['files'])==454 and history['unchanged_files_retained_in_place']==450,'complete checkpoint history resolution')
+for rel,x in history['files'].items():
+ check(pin(S/x['preserved_path'])=={k:x[k]for k in ('bytes','sha256')},'exact checkpoint historical byte '+rel)
+for rel,x in d['changed_metadata'].items():check(pin(S/rel)==x['after'] and pin(S/x['history'])==x['before'],'explicit metadata delta '+rel)
+check(len(d['changed_metadata'])==4 and d['semantic_source_spec_body_rationale_errata_native_changes']==0,'metadata-only finalization')
+for row in m['segments']:
+ for name,suffix in [('spec','.json'),('body','.html')]:
+  actual=pin(B/'reconciled'/str(row['seq'])/(name+suffix))
+  check(actual=={'bytes':row[name+'_bytes'],'sha256':row[name+'_sha256']},'unchanged final '+name)
+  check(actual==pin(S/'reviewed-final'/str(row['seq'])/(name+suffix)),'reviewed final identity')
+ check(row['generator_exit']==row['resolver_exit']==0,'measured successful original final records')
+check([r['seq']for r in m['segments']]==[322,323,324],'typed segment list')
+check({k:m[k]for k in ('total_spans','total_nulls','total_word_pairs','total_d7')}==
+      dict(total_spans=73,total_nulls=0,total_word_pairs=50,total_d7=14),'retained measured totals')
+executions=[]
+for attempt,code in [('attempt01',1),('attempt02',0)]:
+ root=S/'finalization'/attempt;ex=read(root/'execution.json')
+ check(ex['exit']==code and (root/'exit.txt').read_text()==str(code)+'\n','actual failed/passing exits')
+ for k in ('stdin','stdout','stderr'):check(pin(root/(k+'.bin'))==ex['streams'][k],'actual invocation streams')
+ check(pin(root/'method.py.txt')==ex['method'] and pin(root/'caller.py.txt')==ex['caller'],'actual invocation methods')
+ executions.append(dict(attempt=attempt,execution=pin(root/'execution.json'),exit=code))
+check((S/'finalization/attempt02/stderr.bin').read_bytes()==b'','successful scoped finalizer stderr')
+result=read(S/'finalization/attempt02/stdout.bin')
+check(result['review']==pin(S/'review.json') and result['delta']==pin(S/'checkpoint-to-final-delta.json') and
+      result['baseline_delta']==pin(S/'finalization/baseline-delta-proof.json'),'completed actual proof bindings')
+manifest=read(S/'original-to-copy-manifest.json')
+old=read(S/'checkpoint-history/ready-through315/original-to-copy-manifest.json')
+check(manifest[:379]==old and len(manifest)==d['current_copy_records'],'old mappings retained without reinterpretation')
+for rec in manifest:
+ check(pin(Path(rec['original']))==pin(S/rec['copy'])=={k:rec[k]for k in ('bytes','sha256')},'original/copy bytes')
+native_commands=[]
+for path in sorted((S/'finalization').glob('commands*/[0-9][0-9][0-9]/execution.json')):
+ ex=read(path)
+ for stream,identity in ex['streams'].items():check(pin(path.parent/(stream+'.bin'))==identity,'preserved Git command stream')
+ check((path.parent/'exit.txt').read_text()==str(ex['exit'])+'\n','preserved Git exit')
+ native_commands.append(str(path.relative_to(S)))
+save(S/'finalization/final-preflight.json',dict(status='PASS_FINAL_TYPED_REVIEW_PREFLIGHT',
+    utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),checkpoint_files_verified=454,
+    changed_metadata_files=4,unchanged_checkpoint_files=450,copy_mappings=len(manifest),
+    actual_attempts=executions,all_preserved_git_command_records=native_commands,
+    preparation_proof_reused=pin(S/'finalization/inputs/preparation-proof.json'),
+    baseline_delta_proof=pin(S/'finalization/baseline-delta-proof.json'),
+    checkpoint_delta=pin(S/'checkpoint-to-final-delta.json'),generator_runs=0,resolver_runs=0,
+    finalizer_role=m['finalization']['role'],unresolved_findings=[]))
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+files={}
+for path in sorted(S.rglob('*')):
+ if path.is_file():
+  check(path.suffix.lower() in allowed,'unsupported final evidence suffix '+str(path))
+  files[str(path.relative_to(S))]=pin(path)
+freeze=dict(schema='c05-independent-semantic-review-freeze-v1',verdict='APPROVE',
+    utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    producer='Codex scoped baseline/governing/register finalizer; original independent linguistic judgment retained',
+    source_origin_git_commit=m['source_origin_git_commit'],source_origin_course_boundary=m['source_origin_course_boundary'],
+    actual_through321_baseline_receipt=r,open_findings=[],file_count=len(files),
+    reconciliation_freeze_sha256=m['reconciliation_freeze_sha256'],
+    total_spans=m['total_spans'],total_nulls=m['total_nulls'],total_word_pairs=m['total_word_pairs'],total_d7=m['total_d7'],
+    review_json_sha256=pin(S/'review.json')['sha256'],review_md_sha256=pin(S/'review.md')['sha256'],
+    excludes=['freeze.json'],files=files)
+save(S/'freeze.json',freeze)
+check({str(p.relative_to(S))for p in S.rglob('*')if p.is_file()}==set(files)|{'freeze.json'},'complete final frozen set')
+for rel,rec in files.items():check(pin(S/rel)==rec,'final frozen bytes '+rel)
+print(json.dumps(dict(verdict='APPROVE',file_count=len(files),freeze=pin(S/'freeze.json'),review=pin(S/'review.json'),
+    interface=pin(S/'interface-schema-note.md'),delta=pin(S/'checkpoint-to-final-delta.json'),
+    baseline_delta=pin(S/'finalization/baseline-delta-proof.json'),copy_mappings=len(manifest),
+    original_checkpoint_files=454,total_spans=73,total_nulls=0,word_pairs=50,d7=14,errata=2,
+    generator_reruns=0,resolver_reruns=0,unresolved_findings=[]),indent=2))

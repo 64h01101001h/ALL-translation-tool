@@ -1,0 +1,9 @@
+import sys,json,sqlite3
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];P=A/'evidence/pinned';W=A.parents[2]/'campaign-worktree'
+sys.path.insert(0,str(P/'tools'));sys.path.insert(0,str(P/'engines'));import gen_alignment_page as G
+s=json.load(sys.stdin);db=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);out=[]
+for seg in s['segments']:
+ w,e=db.execute('select wylie,english from corpus_segments where course=? and seq=?',(s['course'],seg['seq'])).fetchone();sp=seg['spans'];tr=G.resolve(w,sp,'tib',seg['seq']);byid={x['id']:x for x in sp};es=G.with_members(sp,[byid[i]for i in seg['eng_order']],e);er=G.resolve(e,es,'eng',seg['seq'])
+ out.extend([{**x,'seq':seg['seq'],'tib_range':tr[x['id']],'eng_range':er.get(x['id'])}for x in sp])
+print(json.dumps(out,ensure_ascii=False,indent=2))

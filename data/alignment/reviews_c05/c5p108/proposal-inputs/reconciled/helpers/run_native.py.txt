@@ -1,0 +1,26 @@
+import json,sys,pathlib,os,subprocess,datetime,hashlib,time
+R=pathlib.Path(__file__).resolve().parents[1];B=R.parent
+def ident(v):return {'bytes':len(v),'sha256':hashlib.sha256(v).hexdigest()}
+def write(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+keys=['id','d','tib','eng','seq','tib_range','eng_range']
+jobs=[]
+for angle in ['tibetan','english']:
+ for seq in [322,323,324]:jobs.append((seq,angle,'resolver',B/angle/str(seq)/'spec.json'))
+for seq in [322,323,324]:
+ for mode in ['resolver','generator']:jobs.append((seq,'final',mode,R/str(seq)/'spec.json'))
+for seq,angle,mode,spec in jobs:
+ p=R/str(seq)/'native'/f'{angle}-{mode}-v1';p.mkdir(parents=True,exist_ok=False)
+ stdin=spec.read_bytes();argv=[sys.executable,'-B',str(R/'helpers/native_adapter.py'),mode]
+ start=datetime.datetime.now(datetime.timezone.utc).isoformat();t=time.monotonic()
+ c=subprocess.run(argv,cwd=R,input=stdin,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for name,v in [('stdin',stdin),('stdout',c.stdout),('stderr',c.stderr)]:(p/(name+'.bin')).write_bytes(v)
+ (p/'exit.txt').write_text(str(c.returncode)+'\n')
+ write(p/'execution.json',{'argv':argv,'cwd':str(R),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'utc':start,'elapsed_seconds':time.monotonic()-t,'exit':c.returncode,'streams':{k:ident(v)for k,v in [('stdin',stdin),('stdout',c.stdout),('stderr',c.stderr)]},'adapter_identity':ident((R/'helpers/native_adapter.py').read_bytes()),'canonical_code_identity_index':'../../../evidence/pinned-origin-code-and-governance.json','source_identity_index':'../../../evidence/source-identities.json'})
+ print(seq,angle,mode,'EXIT='+str(c.returncode),'stdout='+str(len(c.stdout)),'stderr='+str(len(c.stderr)))
+ assert c.returncode==0 and not c.stderr,c.stderr.decode()
+ if mode=='resolver':
+  actual=json.loads(c.stdout)
+  expected=json.loads((R/str(seq)/'intended-ranges.json').read_text())if angle=='final'else json.loads((B/angle/str(seq)/'decisions.json').read_text())['spans']
+  assert actual==[{k:x[k]for k in keys}for x in expected],(seq,angle,'range disagreement')
+  if angle=='final':(R/str(seq)/'final-ordered-tuples.json').write_bytes(c.stdout)
+ else:(R/str(seq)/'body.html').write_bytes(c.stdout)

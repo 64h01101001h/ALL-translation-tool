@@ -1,0 +1,27 @@
+import json,hashlib,subprocess,sqlite3,gzip,os,re
+from pathlib import Path
+A=Path(__file__).resolve().parents[1]; B=A.parent; W=B.parent.parent/'campaign-worktree'
+def put(p,obj):
+ p=A/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+baseline=json.loads((B/'proposal-baseline.json').read_text()); put(Path('evidence/proposal-baseline.json'),baseline)
+pins=[]
+for name,rec in baseline['governing_git_pins'].items():
+ data=subprocess.check_output(['git','show',baseline['commit']+':'+name],cwd=W);assert len(data)==rec['bytes'] and sha(data)==rec['sha256'];p=A/'evidence/pinned'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data);pins.append({'git_object':baseline['commit']+':'+name,'path':str(p.relative_to(A)),'bytes':len(data),'sha256':sha(data)})
+# Pin direct builder engine imports without copying the database.
+for name in ['engines/hgm_tools.py','engines/ewts_unicode.py','engines/pron_engine.py','docs/NEVER_BANK_A_FALSEHOOD.md']:
+ data=subprocess.check_output(['git','show',baseline['commit']+':'+name],cwd=W);p=A/'evidence/pinned'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data);pins.append({'git_object':baseline['commit']+':'+name,'path':str(p.relative_to(A)),'bytes':len(data),'sha256':sha(data)})
+put(Path('evidence/git-pins.json'),pins)
+for key,rec in baseline['source_pins'].items():
+ data=Path(rec['path']).read_bytes();assert len(data)==rec['bytes'] and sha(data)==rec['sha256']
+ if key in ['source','context','physical']:(A/'evidence'/Path(rec['path']).name).write_bytes(data)
+put(Path('evidence/source-identities.json'),baseline['source_pins'])
+conn=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);conn.row_factory=sqlite3.Row
+for name in ['source','context']:
+ rows=json.loads((B/(name+'.json')).read_text()); actual=[dict(conn.execute('select id,course,seq,acip,wylie,english from corpus_segments where course=? and seq=?',(x['course'],x['seq'])).fetchone()) for x in rows];assert actual==rows
+put(Path('evidence/source-query-verification.json'),{'status':'PASS','query':'select id,course,seq,acip,wylie,english from corpus_segments where course=? and seq=?','source_rows':3,'context_rows':15,'sqlite_uri_mode':'ro'})
+master=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt'));corpus=json.load(gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt'))
+print('MASTER TYPE',type(master).__name__,'KEYS',list(master)[:15]);print('CORPUS TYPE',type(corpus).__name__,'KEYS',list(corpus)[:5] if isinstance(corpus,dict) else list(corpus[0]))
+for k,v in master.items():
+ if isinstance(v,list) and v: print('COLLECTION',k,'LEN',len(v),'FIRST',json.dumps(v[0],ensure_ascii=False)[:1500])
+print('TABLES',list(conn.execute("select name from sqlite_master where type='table'")))

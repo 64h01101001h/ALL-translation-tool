@@ -1,0 +1,540 @@
+"""Q322–324 preparation intake only. No generator, baseline acceptance or W writes.
+
+Run with Python -B and one unused output directory name, e.g. preparation-01.
+The original P verifier's frozen-byte, Git-module and canonical-range mechanics
+are retained. Q's actual list/dictionary/query schemas are checked explicitly.
+"""
+from pathlib import Path
+from collections import Counter, defaultdict
+import datetime
+import gzip
+import hashlib
+import json
+import os
+import re
+import sqlite3
+import subprocess
+import sys
+import types
+
+D = Path(__file__).resolve().parent
+B = D.parent
+W = B.parents[1] / 'campaign-worktree'
+R = B / 'reconciled'
+S = B / 'semantic-review'
+ORIGIN = 'af139c573f85aaf33278cd079719947ee9af8cdd'
+SEQS = (322, 323, 324)
+KEYS = ('seq', 'id', 'd', 'tib', 'eng', 'tib_range', 'eng_range')
+COLLECTIONS = ('unified_entries', 'curated_entries', 'glossary_entries')
+FREEZES = (
+    ('tibetan', 'freeze.json', 99, '80941db89cbfa75aa8b89fdd0d8549d346e7dcb3f0290e59e3c618a254ce362b'),
+    ('english', 'freeze.json', 99, 'bcacc2c033feac6ef2600fd110f427ce49ae390c16ebf3fedabb4def5a4b69a5'),
+    ('reconciled', 'freeze.json', 140, '0543e5fd5807a2b74e88a8e818e80295ccff9aefebe190a9996c816c36fece09'),
+    ('semantic-review', 'checkpoint-inventory.json', 454, '6e538cd57aa5d40465f58e2133b011fefd80d1b52cae2b46903509a235fe88d6'),
+)
+
+
+def check(condition, label):
+    if not condition:
+        raise ValueError(label)
+
+
+def read(path):
+    return json.loads(path.read_bytes())
+
+
+def pin(raw):
+    return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+
+def expected(record):
+    return {k: record[k] for k in ('bytes', 'sha256')}
+
+
+def filepin(path):
+    digest = hashlib.sha256()
+    size = 0
+    with path.open('rb') as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+            size += len(chunk)
+            digest.update(chunk)
+    return {'bytes': size, 'sha256': digest.hexdigest()}
+
+
+def objectpin(obj):
+    """Derived deterministic JSON identity; never presented as source file bytes."""
+    return pin(json.dumps(obj, ensure_ascii=False, sort_keys=True,
+                          separators=(',', ':')).encode('utf-8'))
+
+
+def inside(root, rel):
+    check(isinstance(rel, str) and not Path(rel).is_absolute(), 'relative path required')
+    p = root / rel
+    check('..' not in Path(rel).parts and p.resolve().is_relative_to(root.resolve()),
+          'path escapes declared evidence root: ' + rel)
+    return p
+
+
+def git(rel):
+    return subprocess.check_output(['git', 'show', ORIGIN + ':' + rel], cwd=W)
+
+
+def inventories():
+    checked = {}
+    for directory, name, count, digest in FREEZES:
+        root = B / directory
+        raw = (root / name).read_bytes()
+        check(pin(raw)['sha256'] == digest, directory + ' inventory identity')
+        obj = json.loads(raw)
+        files = obj['files']
+        check(type(files) is dict and len(files) == count, directory + ' files DICT/count')
+        actual = {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()}
+        check(actual == set(files) | {name}, directory + ' complete file set')
+        for rel, rec in files.items():
+            check(filepin(inside(root, rel)) == expected(rec), directory + '/' + rel)
+        if directory == 'semantic-review':
+            check(obj['status'] == 'READY_PENDING_ACTUAL_BASELINE' and
+                  obj['landing_authorized'] is False and obj['excludes'] == [name],
+                  'pending checkpoint must not authorize acceptance')
+        checked[directory] = {'inventory_file': name, **pin(raw), 'files_verified': count}
+    return checked
+
+
+def rowrefs(rows):
+    return [f"{r['course']}:{r['seq']}" for r in rows]
+
+
+def querykey(q):
+    check(type(q['params']) is list, 'SQL params LIST')
+    return q['sql'], tuple(q['params'])
+
+
+def single_field_predicate(sql):
+    """Parse only the actual original single-field SQL, without broadening it."""
+    m = re.fullmatch(
+        r"select \* from corpus_segments where (course='C05' and )?"
+        r"(?:(acip|wylie|english)=\?|instr\((acip|wylie|english),\?\)>0) order by id", sql)
+    check(m is not None, 'unrecognized external-linked SQL predicate: ' + sql)
+    return m.group(2) or m.group(3), m.group(2) is not None, 'C05' if m.group(1) else None
+
+
+def native(directory, specpath, *, bodypath=None, rows=None):
+    ex = read(directory / 'execution.json')
+    check(ex['exit'] == 0 and (directory / 'exit.txt').read_bytes() == b'0\n',
+          str(directory) + ' native exit')
+    check(set(ex['streams']) == {'stdin', 'stdout', 'stderr'}, 'native stream set')
+    for name in ('stdin', 'stdout', 'stderr'):
+        check(filepin(directory / (name + '.bin')) == expected(ex['streams'][name]),
+              str(directory) + ' ' + name + ' stream identity')
+    check((directory / 'stdin.bin').read_bytes() == specpath.read_bytes(), 'native exact spec stdin')
+    check((directory / 'stderr.bin').read_bytes() == b'', 'native stderr empty')
+    if bodypath is not None:
+        check((directory / 'stdout.bin').read_bytes() == bodypath.read_bytes(), 'native exact body stdout')
+    if rows is not None:
+        check(read(directory / 'stdout.bin') == rows, 'native canonical range equality')
+    return {'directory': str(directory), 'execution': filepin(directory / 'execution.json'),
+            'streams': ex['streams'], 'exit': 0, 'generation_reexecuted': False}
+
+
+def main():
+    check(sys.dont_write_bytecode, 'invoke Python with -B; no imported bytecode writes')
+    check(len(sys.argv) == 2 and re.fullmatch(r'preparation-[0-9]{2}', sys.argv[1]),
+          'supply an unused preparation-NN output name')
+    output = D / sys.argv[1]
+    check(not output.exists(), 'refuse to overwrite any prior attempt output')
+    method = filepin(Path(__file__))
+    frozen = inventories()
+    origin = read(B / 'proposal-baseline.json')
+    check(origin['commit'] == ORIGIN and origin['course_boundary'] == 315,
+          'immutable preparation origin through315')
+    review = read(S / 'review.json')
+    check(review['status'] == 'CHECKPOINT_NOT_FINAL_ACCEPTANCE' and
+          review['verdict'] == 'READY_PENDING_ACTUAL_BASELINE' and
+          review['actual_through321_baseline_receipt'] is None and
+          review['source_origin_git_commit'] == ORIGIN and
+          review['source_origin_course_boundary'] == 315 and
+          type(review['segments']) is list and type(review['open_findings']) is list,
+          'exact pending review interface')
+    # Deliberately do not read baseline.json or infer an acceptance receipt from HEAD.
+    access = read(B / 'english/evidence/required-access.json')
+    check(all(os.access(x['path'], os.R_OK) for x in access), 'required source access')
+    sourceids = read(S / 'evidence/source-identities.json')
+    check(sourceids['source_origin_git_commit'] == ORIGIN and
+          sourceids['files'] == origin['source_pins'], 'source identity schema/provenance')
+    sourcepins = {}
+    for name, rec in origin['source_pins'].items():
+        sourcepins[name] = filepin(Path(rec['path']))
+        check(sourcepins[name] == expected(rec), 'actual source identity: ' + name)
+    governing = {}
+    for rel, rec in origin['governing_git_pins'].items():
+        check(rec['original_git_commit'] == ORIGIN and rec['repository_relative_path'] == rel,
+              'governing original Git provenance')
+        governing[rel] = pin(git(rel))
+        check(governing[rel] == expected(rec), 'immutable Git object: ' + rel)
+
+    mappings = read(S / 'original-to-copy-manifest.json')
+    check(type(mappings) is list and len(mappings) == 379, 'actual copy manifest LIST/count')
+    for rec in mappings:
+        original = Path(rec['original'])
+        check(original.is_absolute(), 'copy mapping original absolute')
+        copied = inside(S, rec['copy'])
+        check(filepin(original) == filepin(copied) == expected(rec), 'original/copy exact bytes')
+        if 'original_git_commit' in rec:
+            check(rec['original_git_commit'] == ORIGIN and
+                  pin(git(rec['repository_relative_path'])) == expected(rec), 'historical copy Git object')
+
+    canonical = {}
+    for name, rel in (
+            ('hgm_tools', 'engines/hgm_tools.py'),
+            ('build_alignment_layer', 'tools/build_alignment_layer.py'),
+            ('gen_alignment_page', 'tools/gen_alignment_page.py')):
+        raw = git(rel)
+        check(raw == (B / 'english/evidence/pinned' / rel).read_bytes(), 'canonical original bytes: ' + rel)
+        canonical[rel] = pin(raw)
+        module = types.ModuleType(name)
+        module.__file__ = str(W / rel)
+        sys.modules[name] = module
+        exec(compile(raw, module.__file__, 'exec'), module.__dict__)
+    G = sys.modules['gen_alignment_page']
+    db = sqlite3.connect(Path(origin['source_pins']['spine']['path']).as_uri() + '?mode=ro', uri=True)
+    db.row_factory = sqlite3.Row
+    db.execute('PRAGMA query_only=ON')
+    schemas = read(S / 'evidence/actual-source-schemas.json')
+    for table in ('entries', 'corpus_segments'):
+        actual = [dict(x) for x in db.execute('pragma table_info(' + table + ')')]
+        check(actual == schemas['sqlite'][table], table + ' full SQLite schema')
+    context = [dict(x) for x in db.execute(
+        'select * from corpus_segments where course=? and seq between ? and ? order by seq', ('C05', 316, 330))]
+    byseq = {r['seq']: r for r in context}
+    check(len(byseq) == 15, 'complete 316–330 context')
+    for name, seqs in [('source.json', list(SEQS)), ('context.json', list(range(316, 331)))]:
+        rows = read(B / name)
+        check([r['seq'] for r in rows] == seqs, name + ' full sequence set')
+        for r in rows:
+            check(set(r) == {'id', 'course', 'seq', 'acip', 'wylie', 'english'}, name + ' six source fields')
+            check(all(byseq[r['seq']][k] == v for k, v in r.items()), name + ' complete source fields')
+
+    resolved, original_decisions, native_proof = {}, {}, []
+    for angle in ('tibetan', 'english', 'final'):
+        for seq in SEQS:
+            root = R / str(seq) if angle == 'final' else B / angle / str(seq)
+            spec = read(root / 'spec.json')
+            check(spec['course'] == 'C05' and len(spec['segments']) == 1, 'single C05 spec')
+            seg = spec['segments'][0]
+            check(seg['seq'] == seq, 'spec sequence')
+            spans = seg['spans']
+            ids = {r['id']: r for r in spans}
+            check(len(ids) == len(spans), 'unique span IDs')
+            tib = G.resolve(byseq[seq]['wylie'], spans, 'tib', seq)
+            eng = G.resolve(byseq[seq]['english'], G.with_members(
+                spans, [ids[k] for k in seg['eng_order']], byseq[seq]['english']), 'eng', seq)
+            rows = [dict(seq=seq, id=r['id'], d=r['d'], tib=r['tib'], eng=r['eng'],
+                         tib_range=list(tib[r['id']]),
+                         eng_range=list(eng[r['id']]) if r['eng'] is not None else None) for r in spans]
+            resolved[(angle, seq)] = rows
+            native_dir = S / 'native' / f'{angle}-{seq}-resolver-v1'
+            native_proof.append(native(native_dir, root / 'spec.json', rows=rows))
+            if angle == 'final':
+                for name in ('intended-ranges.json', 'final-ordered-tuples.json'):
+                    declared = read(root / name)
+                    check(type(declared) is list and all(set(r) == set(KEYS) for r in declared), name + ' seven-key LIST')
+                    check(declared == rows, name + ' canonical equality')
+                rationales = read(root / 'final-rationales.json')
+                check(type(rationales) is list and [r['id'] for r in rationales] == list(ids) and
+                      all(set(r) == {'id', 'rationale'} and r['rationale'] for r in rationales), 'final rationale ID coverage')
+                rs = next(r for r in review['segments'] if r['seq'] == seq)
+                for name in ('spec', 'body'):
+                    rec = filepin(root / (name + ('.json' if name == 'spec' else '.html')))
+                    check(rec == {'bytes': rs[name + '_bytes'], 'sha256': rs[name + '_sha256']}, 'pending review current ' + name)
+                check(rs['span_count'] == len(rows) and rs['word_pair_count'] == sum(r['d'] == 5 and r['eng'] is not None for r in rows), 'review measured counts')
+                native_proof.append(native(S / 'native' / f'final-{seq}-generator-v1',
+                                           root / 'spec.json', bodypath=root / 'body.html'))
+            else:
+                decisions = read(root / 'decisions.json')
+                check(decisions['source_origin_git_commit'] == ORIGIN and
+                      decisions['eng_order'] == seg['eng_order'], 'original decisions origin/order')
+                check([{k: r[k] for k in KEYS} for r in decisions['spans']] == rows, 'original full decisions/ranges')
+                original_decisions[(angle, seq)] = decisions
+    final = [r for seq in SEQS for r in resolved[('final', seq)]]
+    check(read(S / 'resolved-spans.json') == final and
+          all(set(r) == set(KEYS) for r in read(S / 'resolved-spans.json')), 'review exact seven-key resolved spans')
+    reuse = read(S / 'evidence/original-generator-reuse.json')
+    check(len(reuse) == 6 and {(r['angle'], r['seq']) for r in reuse} == set(original_decisions), 'six original generator records')
+    for rec in reuse:
+        angle, seq = rec['angle'], rec['seq']
+        directory = B / 'tibetan' / str(seq) / 'generator-v1' if angle == 'tibetan' else B / 'english/native' / f'{seq}-generator-v1'
+        check(str(directory) == rec['native_directory'], 'actual original native directory')
+        ex = read(directory / 'execution.json')
+        check(ex == rec['execution_record'], 'original full execution record equality')
+        check(filepin(Path(ex['argv'][-1])) == rec['adapter_identity'], 'original adapter identity')
+        native_proof.append(native(directory, B / angle / str(seq) / 'spec.json',
+                                   bodypath=B / angle / str(seq) / 'body.html'))
+
+    correspondence = read(S / 'correspondence-review.json')
+    orig_review = correspondence['original_correspondences']
+    dispositions, changes, omission_rows = Counter(), [], []
+    seen_all = set()
+    for seq in SEQS:
+        current = {r['id']: r for r in resolved[('final', seq)]}
+        declared = read(R / str(seq) / 'original-dispositions.json')
+        check(type(declared) is list, 'Q original-dispositions LIST')
+        for rec in declared:
+            angle, oid = rec['angle'], rec['original']['id']
+            key = (angle, seq, oid)
+            check(key not in seen_all and rec['seq'] == seq, 'original disposition unique/full sequence')
+            seen_all.add(key)
+            original = next(r for r in original_decisions[(angle, seq)]['spans'] if r['id'] == oid)
+            check(rec['original'] == original, 'FULL original decision equality, not a seven-key alias')
+            check(rec['final_ids'] and all(i in current for i in rec['final_ids']), 'disposition final refs')
+            check(rec['status'] in ('unchanged', 'recast'), 'actual lowercase disposition status')
+            if rec['status'] == 'unchanged':
+                check(len(rec['final_ids']) == 1 and all(original[k] == current[rec['final_ids'][0]][k]
+                      for k in KEYS if k != 'id'), 'unchanged original full tuple/depth/range')
+            else:
+                changes.append(rec)
+            matches = [r for r in orig_review if (r['angle'], r['seq'], r['original_id']) == key]
+            check(len(matches) == 1 and matches[0]['original'] == original and
+                  matches[0]['reconciler_status'] == rec['status'] and
+                  matches[0]['final_ids'] == rec['final_ids'], 'review original correspondence binding')
+            dispositions[rec['status']] += 1
+        omissions = read(R / str(seq) / 'original-omissions.json')
+        check(type(omissions) is list, 'Q original-omissions LIST')
+        seen_om = set()
+        for rec in omissions:
+            angle, i = rec['angle'], rec['original_index']
+            check((angle, i) not in seen_om, 'unique original omission'); seen_om.add((angle, i))
+            field = 'material_omissions' if angle == 'tibetan' else 'omissions'
+            check(rec['original'] == original_decisions[(angle, seq)][field][i], 'actual original omission field/index')
+            omission_rows.append({'seq': seq, **rec})
+        required_om = {(a, i) for a in ('tibetan', 'english')
+                       for i, _ in enumerate(original_decisions[(a, seq)][
+                           'material_omissions' if a == 'tibetan' else 'omissions'])}
+        check(seen_om == required_om, 'all original omissions accounted for')
+    all_originals = {(a, n, r['id']) for (a, n), rows in resolved.items() if a != 'final' for r in rows}
+    check(seen_all == all_originals and len(orig_review) == 141, 'all 141 originals accounted for')
+    check([{k: r[k] for k in KEYS} for r in correspondence['final_correspondences']] == final,
+          'all 73 final correspondence tuples')
+    check([{k: r[k] for k in ('seq', 'angle', 'original_index', 'original', 'reconciled_disposition')}
+           for r in correspondence['original_omissions']] == omission_rows, '22 original omission bindings')
+
+    master = json.load(gzip.open(origin['source_pins']['master']['path'], 'rt'))
+    corpus = json.load(gzip.open(origin['source_pins']['corpus']['path'], 'rt'))
+    check(type(master) is dict and type(corpus) is list and len(corpus) == 42199, 'actual archive roots/count')
+    check({k: len(master[k]) for k in COLLECTIONS} ==
+          {'unified_entries': 105634, 'curated_entries': 115, 'glossary_entries': 8028}, 'three complete master collection counts')
+    index = defaultdict(list)
+    for collection in COLLECTIONS:
+        check(type(master[collection]) is list, 'master collection LIST')
+        for i, entry in enumerate(master[collection]):
+            index[entry.get('wylie')].append({'collection': collection, 'index': i, 'entry': entry})
+    complete = {}
+    for name, count in [('master-records.json', 105), ('corpus-records.json', 39), ('external-corpus-records.json', 16)]:
+        obj = read(S / 'evidence' / name)
+        check(type(obj) is dict and len(obj) == count and read(R / 'evidence' / name) == obj,
+              name + ' complete DICT identity/count')
+        complete[name] = obj
+    for key, entry in complete['master-records.json'].items():
+        collection, i = key.split(':')
+        check(collection in COLLECTIONS and str(int(i)) == i and master[collection][int(i)] == entry,
+              'full master object ' + key)
+    for key, entry in complete['external-corpus-records.json'].items():
+        check(str(int(key)) == key and 0 <= int(key) < len(corpus) and corpus[int(key)] == entry,
+              'complete original external archive index ' + key)
+    for key, row in complete['corpus-records.json'].items():
+        actual = dict(db.execute('select * from corpus_segments where id=?', (row['id'],)).fetchone())
+        check(key == f"{row['course']}:{row['seq']}" and actual == row, 'complete spine row ' + key)
+    check(all(complete['corpus-records.json'][f'C05:{r["seq"]}'] == r for r in context), 'full context row identity')
+
+    lexical, lexical_sources, lexical_byterm, sql_lexical = [], {}, defaultdict(list), {}
+    for rel in ('tibetan/evidence/full-lexical-evidence.json', 'english/evidence/lexical-evidence.json',
+                'english/evidence/supplemental-lexical-evidence.json'):
+        for i, q in enumerate(read(B / rel)):
+            check(q['query'] == {'field': 'wylie', 'equals': q['term']}, 'exact original wylie predicate')
+            matches = index[q['term']]
+            check(q['master_records'] == matches and q['count'] == len(matches), 'full exact master query ' + rel)
+            refs = [f"{r['collection']}:{r['index']}" for r in matches]
+            check([complete['master-records.json'][k] for k in refs] == [r['entry'] for r in matches], 'full selected master records')
+            if q['term'] not in sql_lexical:
+                sql_lexical[q['term']] = [dict(r) for r in db.execute('select * from entries where wylie=?', (q['term'],))]
+            rec = {'original': f'{rel}#{i}', 'term': q['term'], 'count': len(matches),
+                   'record_refs': refs, 'spine_rows': sql_lexical[q['term']]}
+            lexical.append(rec)
+            lexical_sources[rec['original']] = rec
+            lexical_byterm[q['term']].append(rec['original'])
+    check(lexical == read(S / 'evidence/lexical-query-rechecks.json') and len(lexical) == 100,
+          'all 100 original lexical queries, full dictionary rows included')
+    recon_lex = read(R / 'evidence/lexical-query-index.json')
+    check(len(recon_lex) == 56 and {q['term'] for q in recon_lex} == set(lexical_byterm), '56 unique lexical terms')
+    for q in recon_lex:
+        check(q['field'] == 'wylie' and q['operation'] == 'equals', 'reconciled exact-wylie predicate')
+        refs = [f"{r['collection']}:{r['index']}" for r in index[q['term']]]
+        check(q['record_refs'] == refs and q['count'] == len(refs) and
+              q['spine_entry_rows'] == sql_lexical[q['term']] and
+              q['original_rechecks'] == lexical_byterm[q['term']], 'reconciled lexical index complete identity')
+
+    sql_index = read(R / 'evidence/corpus-query-index.json')
+    fresh_index = read(S / 'evidence/corpus-query-index.json')
+    check(len(sql_index) == len(fresh_index) == 40, '40 distinct SQL queries')
+    sql_cache, sql_ids, sql_proof = {}, {}, []
+    for i, (q, fresh) in enumerate(zip(sql_index, fresh_index)):
+        check(q['id'] == f'q{i:03d}' and querykey(q) not in sql_cache, 'ordered unique SQL query identities')
+        check(fresh == {**q, 'fresh_count': q['count'], 'fresh_row_refs': q['row_refs'],
+                        'complete_rows_equal': True}, 'full semantic SQL record exact declaration')
+        # Actual SQL must be SELECT-only from corpus_segments. SQLite query_only
+        # and mode=ro also prevent mutation; no dynamic table/field aliases.
+        check(q['sql'].startswith('select * from corpus_segments where ') and q['sql'].endswith(' order by id')
+              and ';' not in q['sql'], 'bounded full-row SQL query')
+        rows = [dict(r) for r in db.execute(q['sql'], q['params'])]
+        check(len(rows) == q['count'] and rowrefs(rows) == q['row_refs'] and
+              rows == [complete['corpus-records.json'][k] for k in q['row_refs']], 'actual complete SQL results ' + q['id'])
+        sql_cache[querykey(q)] = rows
+        sql_ids[querykey(q)] = q['id']
+        sql_proof.append({**q, 'actual_complete_rows_identity': objectpin(rows), 'complete_rows_equal': True})
+
+    external_cache = {}
+
+    def external(field, needle, exact, course):
+        check(field in ('acip', 'wylie', 'english') and type(needle) is str and
+              type(exact) is bool and course in (None, 'C05'), 'explicit external predicate types')
+        key = (field, needle, exact, course)
+        if key not in external_cache:
+            external_cache[key] = [{'corpus_index': i, 'record': r} for i, r in enumerate(corpus)
+                                   if (course is None or r.get('course') == course) and
+                                   ((r.get(field) == needle) if exact else needle in r.get(field, ''))]
+        return external_cache[key]
+
+    original_queries, external_queries, original_sql_refs = [], [], defaultdict(list)
+    query_files = (
+        'tibetan/evidence/corpus-query-evidence.json', 'tibetan/evidence/supplemental-corpus-queries.json',
+        'english/evidence/corpus-queries.json', 'english/evidence/followup-corpus-queries.json',
+        'english/evidence/errata-focused-global-queries.json',
+    )
+    for rel in query_files:
+        for i, q in enumerate(read(B / rel)):
+            ref = f'{rel}#{i}'
+            key = querykey(q)
+            check(key in sql_cache, 'original query has exact declared SQL/params in index')
+            rows = sql_cache[key]
+            check(rows == q['rows'] and len(rows) == q['count'], 'original full SQL rows: ' + ref)
+            original_sql_refs[key].append(ref)
+            original_queries.append({'original': ref, 'sql': q['sql'], 'params': q['params'],
+                                     'count': len(rows), 'row_refs': rowrefs(rows)})
+            if rel.startswith('english/'):
+                field, exact, course = single_field_predicate(q['sql'])
+                check(q['field'] == field and q.get('course') == course and len(q['params']) == 1,
+                      'English archive declaration agrees with exact SQL predicate')
+                matches = external(field, q['params'][0], exact, course)
+                check(matches == q['corpus_records'] and len(matches) == q['corpus_count'], 'English full external objects')
+                external_queries.append({'original': ref, 'field': field, 'needle': q['params'][0],
+                                         'course': course, 'exact': exact, 'count': len(matches),
+                                         'indices': [r['corpus_index'] for r in matches]})
+    check(len(original_queries) == 47 and original_queries == read(S / 'evidence/original-query-rechecks.json'),
+          'all 47 original SQL rechecks')
+    for q in sql_index:
+        check(q['original_rechecks'] == original_sql_refs[querykey(q)], 'SQL original-reference completeness')
+    external_declarations = 0
+    for q in sql_index:
+        check(('external_count' in q) == ('external_refs' in q), 'paired optional external declaration')
+        if 'external_count' in q:
+            field, exact, course = single_field_predicate(q['sql'])
+            check(len(q['params']) == 1, 'single-field external-linked parameter count')
+            matches = external(field, q['params'][0], exact, course)
+            check(q['external_count'] == len(matches) and q['external_refs'] == [r['corpus_index'] for r in matches],
+                  'declared reconciled external results')
+            external_declarations += 1
+    tib_external = read(B / 'tibetan/evidence/external-corpus-evidence.json')
+    ext_index = read(R / 'evidence/external-query-index.json')
+    check(len(tib_external) == len(ext_index) == 16, '16 Tibetan external predicates')
+    for i, (q, declared) in enumerate(zip(tib_external, ext_index)):
+        check(q['operation'] in ('equals', 'contains'), 'Tibetan external operation')
+        matches = external(q['field'], q['value'], q['operation'] == 'equals', None)
+        check(q['records'] == matches and q['count'] == len(matches), 'Tibetan complete external results')
+        fields = {k: q[k] for k in ('label', 'field', 'operation', 'value', 'count')}
+        indices = [r['corpus_index'] for r in matches]
+        check(declared == {**fields, 'external_refs': indices, 'original_index': i}, 'Tibetan external index exact schema')
+        external_queries.append({**fields, 'original': f'tibetan/evidence/external-corpus-evidence.json#{i}', 'indices': indices})
+    check(len(external_queries) == 41 and external_declarations == 25 and
+          external_queries == read(S / 'evidence/external-query-rechecks.json'), 'all 41 external rechecks with both actual schemas')
+    for matches in external_cache.values():
+        for r in matches:
+            check(complete['external-corpus-records.json'][str(r['corpus_index'])] == r['record'], 'full external object reference')
+    db.close()
+
+    physical = Path(origin['source_pins']['physical']['path']).read_bytes()
+    folded = ' '.join(physical.decode('latin1').split())
+    physical_proof = read(S / 'evidence/physical-complete-field-proof.json')
+    check(len(physical_proof) == 6 and {(r['seq'], r['field']) for r in physical_proof} ==
+          {(s, f) for s in SEQS for f in ('acip', 'english')}, 'six complete physical field extents')
+    for r in physical_proof:
+        raw = physical[slice(*r['raw_byte_range'])]
+        value = byseq[r['seq']][r['field']]
+        check(r['complete_source_value'] == value and raw.decode('latin1') == r['raw_excerpt_latin1'] and
+              pin(raw) == r['raw_excerpt_identity'] and ' '.join(raw.decode('latin1').split()) == value and
+              folded[slice(*r['fold_range'])] == value and folded.count(value) == 1 and
+              r['unique_fold_match'] is True, 'physical raw extent/full source equality')
+    check(len(final) == 73 and sum(r['d'] == 5 and r['eng'] is not None for r in final) == 50 and
+          sum(r['d'] == 7 for r in final) == 14 and all(r['eng'] is not None for r in final), 'final measured totals')
+    check(dispositions == {'unchanged': 129, 'recast': 12} and len(omission_rows) == 22,
+          'original disposition/omission totals')
+    # Preserve the existence and identity of the two editorial questions; their
+    # semantic merits and future banking remain outside this preparation tool.
+    errata = read(S / 'bank-ready-errata.json')
+    screens = read(S / 'five-ground-screen-review.json')
+    check(type(errata) is list and len(errata) == 2 and type(screens) is list and len(screens) == 30,
+          'preserved question/screen counts; no all-refuted assumption')
+    check(inventories() == frozen and filepin(Path(__file__)) == method, 'inputs/method unchanged through intake')
+    for name, rec in origin['source_pins'].items():
+        check(filepin(Path(rec['path'])) == sourcepins[name], 'source bytes unchanged through intake')
+    outputs = {
+        'resolved-spans.json': final,
+        'original-resolved-spans.json': [{'angle': a, 'seq': n, 'spans': resolved[(a, n)]}
+                                         for a in ('tibetan', 'english') for n in SEQS],
+        'changed-original-dispositions.json': changes,
+        'canonical-native-identity.json': {'canonical_git_code': canonical, 'existing_native_records': native_proof,
+                                           'fresh_canonical_resolver_specs': 9, 'fresh_generator_runs': 0},
+        'query-proof.json': {
+            'master_collection_scope': list(COLLECTIONS), 'master_predicate': 'entry.wylie == term',
+            'lexical_queries': [{k: v for k, v in r.items() if k != 'spine_rows'} |
+                                {'actual_full_spine_entry_rows_identity': objectpin(r['spine_rows'])} for r in lexical],
+            'distinct_sql_queries': sql_proof, 'original_sql_queries': original_queries,
+            'external_queries': external_queries, 'optional_sql_external_declarations': external_declarations,
+            'complete_records': {name: {'file': str(S / 'evidence' / name), **filepin(S / 'evidence' / name), 'count': len(obj)}
+                                 for name, obj in complete.items()},
+            'identity_encoding': 'Derived object identities use UTF-8 JSON, sorted keys, separators comma/colon; source file pins are separate.',
+        },
+    }
+    proof = {
+        'status': 'PASS_PREPARATION_INPUTS_ONLY',
+        'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'method': {'path': str(Path(__file__)), **method},
+        'source_origin': ORIGIN, 'source_origin_course_boundary': 315,
+        'actual_acceptance_baseline': None, 'actual_acceptance_baseline_consumed': False,
+        'pending_acceptance_course_boundary': 321, 'acceptance_authorized': False,
+        'semantic_acceptance_verdict': None, 'production_mutations': 0, 'fresh_generator_runs': 0,
+        'frozen_inputs': frozen, 'source_identities': sourcepins, 'governing_git_pins': governing,
+        'copy_mappings_verified': len(mappings),
+        'canonical_original_spans': len(all_originals), 'canonical_final_spans': len(final),
+        'final_nonnull_d5': 50, 'final_d7': 14, 'final_nulls': 0,
+        'original_dispositions': dict(dispositions), 'original_omissions': len(omission_rows),
+        'original_lexical_queries': len(lexical), 'unique_exact_master_terms': len(recon_lex),
+        'distinct_sql_queries': len(sql_index), 'original_sql_queries': len(original_queries),
+        'external_query_records': len(external_queries), 'sql_external_declarations': external_declarations,
+        'complete_master_objects': 105, 'complete_spine_rows': 39, 'complete_external_archive_objects': 16,
+        'complete_physical_fields': 6, 'preserved_original_screens': len(screens),
+        'preserved_editorial_questions': len(errata),
+        'limits': ['Structural/source preparation only; root reads linguistic decisions independently.',
+                   'The pending checkpoint is not final semantic approval or a final review freeze.',
+                   'Receive and verify actual through321 baseline and current gates before any acceptance.',
+                   'Existing native streams are checked; no page generator was invoked.',
+                   'Original and reconciled evidence, failed attempts, source bytes and W remain unchanged.'],
+    }
+    output.mkdir()
+    for name, obj in outputs.items():
+        (output / name).write_text(json.dumps(obj, ensure_ascii=False, indent=2) + '\n')
+    proof['outputs'] = {name: filepin(output / name) for name in outputs}
+    (output / 'proof.json').write_text(json.dumps(proof, ensure_ascii=False, indent=2) + '\n')
+    print(json.dumps(proof, ensure_ascii=False, indent=2))
+
+
+if __name__ == '__main__':
+    main()

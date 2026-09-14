@@ -1,0 +1,31 @@
+import json,hashlib,gzip,datetime,sqlite3
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];W=A.parents[2]/'campaign-worktree'
+def load(p):return json.loads(p.read_text())
+def sha(b):return hashlib.sha256(b).hexdigest()
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+pins=load(A/'evidence/source-identities.json')
+for name,x in pins.items():
+ b=Path(x['path']).read_bytes();assert len(b)==x['bytes'] and sha(b)==x['sha256'],name
+master=json.load(gzip.open(pins['master']['path'],'rt'));corpus=json.load(gzip.open(pins['corpus']['path'],'rt'));lexical_record_claims=0;lexical_unique=set()
+for f in ['lexical-evidence.json','supplemental-lexical-evidence.json']:
+ for q in load(A/'evidence'/f):
+  true=[(coll,i,e)for coll in ['unified_entries','curated_entries','glossary_entries']for i,e in enumerate(master[coll])if e.get('wylie')==q['term']];assert q['count']==len(q['master_records'])==len(true)
+  for (coll,i,e),r in zip(true,q['master_records']):assert (coll,i,e)==(r['collection'],r['index'],r['entry']);lexical_record_claims+=1;lexical_unique.add((coll,i))
+db=sqlite3.connect('file:'+pins['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;corpus_records=set();query_count=0
+for name in ['corpus-queries.json','followup-corpus-queries.json','errata-focused-global-queries.json']:
+ for q in load(A/'evidence'/name):
+  got=[dict(r)for r in db.execute(q['sql'],q['params'])];assert got==q['rows'] and len(got)==q['count']
+  field=q['field'];piece=q['params'][0]
+  expected=[(i,r)for i,r in enumerate(corpus)if (not q.get('course') or r['course']==q['course'])and ((piece in r.get(field,''))if 'instr('in q['sql']else r.get(field)==piece)]
+  assert len(expected)==q['corpus_count']==len(q['corpus_records'])
+  for (i,r),actual in zip(expected,q['corpus_records']):assert actual=={'corpus_index':i,'record':r};corpus_records.add(i)
+  for r in got:assert json.loads(r['raw'])==corpus[r['id']-1]
+  query_count+=1
+proof={'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_pins_exact':list(pins),'master_full_record_claims_verified':lexical_record_claims,'unique_complete_master_records':len(lexical_unique),'corpus_queries_rechecked':query_count,'unique_complete_external_corpus_records':len(corpus_records),'native_generators':3,'native_resolvers':3,'native_failure_count':0,'native_streams':'Every generator and resolver retains exact stdin/stdout/stderr/exit/execution files.','collection_failure':'failures/material-followup-v1/failure.json preserves one physical-contiguity assumption failure; collection tool stream limitations are disclosed.','source_fields':'Three selected full six-field rows and fifteen context rows independently equal SQLite source; source query records additionally retain raw corpus metadata.'}
+put(A/'evidence/final-evidence-verification.json',proof)
+reading={'producer':'Codex independent English-first','full_source_and_context_read':[322,323,324,list(range(316,331))],'full_material_lexical_terms_read':['bar chad med lam',"bar chad med pa'i lam",'bar chad med','sems pa','rnam pa','bcu gnyis',"'dod nyon",'nyon','spong','chos bzod pa','zhi','bzhi','thob pa','gzugs','gzugs med','byed','zad',"'dod chags dang bral ba",'zad par byed','zad par byed pa','bral ba','chad pa','sgo nas','bsam gtan','bzhi pa'],'full_material_contextual_records_read':['C05:51','C05:56','C05:62','C05:152','C05:154','C05:381','C05:382','C16:898','GIE:665','SVN:298','GIE:1232'],'reading_limits':'Large combined displays of lexical summaries and selected registers were truncated. Material full records and relevant register records were reread in bounded displays; complete underlying objects remain preserved. No claim is made that every incidental full metadata string from every stored query was individually reread.','span_reading':'All73 planned occurrence/range pairs were inspected before final native generation. Exact canonical resolution later agreed for every range.','isolation':'No other-angle, reconciliation, root-target or semantic files were read. Only this angle and whitelisted immutable sources/governance/external master/corpus were accessed.','future_acceptance_baseline_consumed':False}
+put(A/'evidence/reading-and-scope.json',reading)
+files={str(p.relative_to(A)):{'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())}for p in sorted(A.rglob('*'))if p.is_file()and p.name!='freeze.json'}
+freeze={'schema':'c05-independent-proposal-freeze-v1','producer':'Codex independent English-first proposal','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin_git_commit':'af139c573f85aaf33278cd079719947ee9af8cdd','source_course_boundary':315,'segments':[322,323,324],'acceptance_baseline_consumed':None,'semantic_status':'PROPOSAL_ONLY; independent reconciliation and review required','files':files,'file_count':len(files),'counts':load(A/'summary.json')['total'],'original_external_sources':pins,'complete_evidence_strategy':'Full selected master/corpus records retain collection/index and original metadata. Original master/corpus/spine whole-file hashes are pinned; no redundant249MB spine copy. Full physical ReadingASCII bytes retained once.'}
+put(A/'freeze.json',freeze);print(json.dumps({'file':'freeze.json','schema':freeze['schema'],'files':len(files),'sha256':sha((A/'freeze.json').read_bytes()),'counts':freeze['counts'],'evidence':proof},indent=2))

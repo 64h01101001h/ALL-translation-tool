@@ -1,0 +1,19 @@
+import json,gzip,sqlite3,re,hashlib
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];W=A.parents[2]/'campaign-worktree'
+def put(n,o):(A/'evidence'/n).write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+m=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt')); c=json.load(gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt'));s=json.loads((A/'evidence/source.json').read_text());db=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+terms=['zad par byed','zad par byed pa','tshul','chos bzod pa','chos bzod','chos','bzod pa','zhi','bzhi',"'dod chags",'bral ba','bar chad med lam',"bar chad med pa'i lam",'bar chad med','lam','brgyad','sems pa','rnam pa','bcu gnyis','nag po','dkar','gnag','dkar po','las',"'dod nyon",'nyon',"'dod pa",'nyon mongs','spong','spong bar byed pa','phyir','dgu pa','dge ba',"'dun pa",'sgo nas','thob pa','chad pa','tshul gyis','bsam gtan','bzhi pa','skyes pa','tha mas','tha ma','gzugs','gzugs med']
+idx={}
+for coll in ['unified_entries','curated_entries','glossary_entries']:
+ for i,e in enumerate(m[coll]):idx.setdefault(e.get('wylie'),[]).append({'collection':coll,'index':i,'entry':e})
+lex=[{'term':t,'query':{'field':'wylie','equals':t},'count':len(idx.get(t,[])),'master_records':idx.get(t,[])}for t in terms];put('lexical-evidence.json',lex)
+queries=[]
+for r in s:
+ for field in ['acip','wylie','english']:
+  sql=f'select * from corpus_segments where {field}=? order by id';rows=[dict(x)for x in db.execute(sql,(r[field],))];cr=[{'corpus_index':i,'record':x}for i,x in enumerate(c)if x.get(field)==r[field]];queries.append({'origin_seq':r['seq'],'field':field,'sql':sql,'params':[r[field]],'count':len(rows),'rows':rows,'corpus_count':len(cr),'corpus_records':cr})
+for seq,field,piece in [(322,'wylie','chos bzod pa zhi'),(322,'wylie','chos bzod pa bzhi'),(322,'english','the twelve types of mental movement'),(323,'wylie','thob pa chad'),(324,'english','virtue of the formless realm'),(324,'wylie',"gzugs kyi dge ba la 'dun pa"),(324,'wylie',"gzugs med kyi dge ba la 'dun pa")]:
+ sql=f'select * from corpus_segments where instr({field},?)>0 order by id';rows=[dict(x)for x in db.execute(sql,(piece,))];cr=[{'corpus_index':i,'record':x}for i,x in enumerate(c)if piece in x.get(field,'')];queries.append({'origin_seq':seq,'field':field,'sql':sql,'params':[piece],'count':len(rows),'rows':rows,'corpus_count':len(cr),'corpus_records':cr})
+put('corpus-queries.json',queries)
+reg=json.loads((A/'evidence/pinned/docs/errata_register.json').read_text());put('register-shape.json',{'type':type(reg).__name__,'keys':list(reg)if isinstance(reg,dict)else None})
+print('LEXICAL SUMMARY');print(json.dumps([{'term':x['term'],'count':x['count'],'hgm':[a['entry'].get('hgm_gloss',a['entry'].get('hgm_glosses'))for a in x['master_records']]}for x in lex],ensure_ascii=False,indent=2));print('QUERIES',json.dumps([{'seq':x['origin_seq'],'field':x['field'],'count':x['count'],'external_count':x['corpus_count'],'refs':[[r['course'],r['seq']]for r in x['rows']]}for x in queries]));print('REGISTER TYPE',type(reg).__name__,list(reg)if isinstance(reg,dict)else len(reg))

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-322-324/semantic-review/finalization/methods/finalize_pending_v1.py.txt", line 106, in <module>
+    check(git('rev-parse',BASE+'^{tree}').decode().strip()==cp['tree'], 'previous closure final tree')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-322-324/semantic-review/finalization/methods/finalize_pending_v1.py.txt", line 15, in check
+    if not test: raise ValueError(message)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: previous closure final tree

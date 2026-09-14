@@ -1,0 +1,8 @@
+import pathlib,json,gzip,sqlite3
+P=pathlib.Path(__file__).resolve().parents[1];b=json.loads((P/'evidence/proposal-baseline.json').read_text());db=sqlite3.connect('file:'+b['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;out=[]
+for field,term in [('acip','CHOS BZOD'),('acip','BZOD PA BZHI'),('acip','GZUGS KYI DGE BA'),('english','virtue of the form realm'),('english','four instants'),('english','hold which retains')]:
+ sql=f'select * from corpus_segments where instr({field},?)>0 order by id';rows=[dict(r) for r in db.execute(sql,[term])];out.append({'sql':sql,'params':[term],'count':len(rows),'rows':rows})
+(P/'evidence/supplemental-corpus-queries.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+for q in out:
+ print(q['params'],q['count'])
+ for r in q['rows']:print(r['course'],r['seq'],r['wylie'],r['english'])

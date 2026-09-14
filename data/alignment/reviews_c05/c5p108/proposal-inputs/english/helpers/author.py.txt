@@ -1,0 +1,120 @@
+import sys,json,re,importlib.util
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];P=A/'evidence/pinned';sys.path.insert(0,str(P/'tools'));sys.path.insert(0,str(P/'engines'));import gen_alignment_page as G
+sources={r['seq']:r for r in json.loads((A/'evidence/source.json').read_text())}
+# Each selected occurrence below was chosen from this row's complete argument, not by counts alone.
+plans={322:[
+(5,'zad par byed','brought to an end',0,0,'Complete causative at the introductory explanation; excludes the supplied subject and auxiliary.', ['zad par byed']),
+(7,'zad','end',0,0,'Tighter exhaustion/end member inside the introductory causative.', ['zad']),
+(7,'byed','brought',0,0,'Tighter causative member inside the introductory causative.', ['byed']),
+(5,'tshul','how',0,0,'Manner of ending the deeds, directly expressed by how.', ['tshul']),
+(5,'chos bzod pa','mastery of phenomena',0,0,'Established technical compound; supplied leading article and known-as frame excluded.', ['chos bzod pa']),
+(7,'chos','phenomena',0,0,'Phenomena member of this mastery compound.', ['chos']),
+(7,'bzod pa','mastery',0,0,'Mastery member of the same compound; English members reverse Tibetan order.', ['bzod pa']),
+(6,'dang','as well as',0,0,'First dang coordinates the four masteries and eight path instants; not the later separation complement.', ['dang']),
+(5,"'dod chags",'desire',0,0,'Desire from which this uninterrupted path is free, not the later desire realm.', ["'dod chags"]),
+(5,'bral ba','free of',0,0,'Freedom from desire; HGM explicitly attests free of. The neighboring dang is not separately claimed.', ['bral ba']),
+(5,'bar chad med lam','uninterrupted path',0,0,'Established path term; the bracketed path-of-seeing explanation remains unwrapped.', ['bar chad med lam']),
+(7,'bar chad med','uninterrupted',0,0,'Unique interruption-free modifier within the path compound.', ['bar chad med']),
+(7,'lam','path',0,0,'Unique path member inside the compound, not either path inside the supplied bracket.', ['lam']),
+(5,'brgyad','eight',0,0,'Eight uninterrupted-path instants; supplied instants excluded.', ['brgyad']),
+(5,'sems pa','mental movement',0,0,'The mental factor had with these twelve instants; no separate sems/pa split.', ['sems pa']),
+(5,'rnam pa','types',0,0,'Types of mental movement; numeral is separately rendered.', ['rnam pa']),
+(5,'bcu gnyis','twelve',0,0,'Complete Tibetan twelve; no false separate ten/two English members.', ['bcu gnyis']),
+(5,'de','These',0,0,'Demonstrative resumes the twelve mental movements in the following sentence.', ['de']),
+(5,'nag po','black',0,0,'Black object-deeds brought to an end; the repeated supplied noun deeds is not owned by nag po.', ['nag po']),
+(5,'zad','end',1,1,'Second zad is the exhaustion result at the end of act-to-bring ... to-an-end, not the already wrapped introductory end.', ['zad']),
+(5,'byed','act',1,0,'Second byed is the action/causative in act to bring; bring is a distributed causative expansion and left unwrapped.', ['byed']),
+(5,'las','deeds',0,1,'Agent deeds that act to end the black deeds; English occurrence1 is introductory supplied deeds, occurrence3 repeats the object.', ['las']),
+(5,"'dod",'desire realm',1,0,'Abbreviated desire-realm qualifier before nyon; not the earlier desire in the path modifier.', ["'dod"]),
+(5,'nyon','mental afflictions',0,0,'Abbreviated affliction noun, locally expanded by GMR; excludes all the and the relative connective.', ['nyon']),
+(5,'spong','eliminate',0,0,'Elimination predicate of the desire-realm afflictions.', ['spong']),
+(5,'byed','function',2,0,'Final byed is the function in function to eliminate, distinct from the earlier bring-to-an-end causatives.', ['byed']),
+(6,'phyir','for',0,0,'Causal close explains why these deeds end the black deeds; owns for, not they.', ['phyir'])
+],323:[
+(5,"bar chad med pa'i lam",'uninterrupted path',0,0,'Established full technical term including its genitive form; article excluded.', ["bar chad med pa'i lam"]),
+(7,'bar chad med','uninterrupted',0,0,'Unique uninterrupted member within this path compound.', ['bar chad med']),
+(7,'lam','path',0,0,'Unique path member within the same compound.', ['lam']),
+(5,'dgu pa','ninth',0,0,'Ninth uninterrupted-path instant; supplied instant excluded.', ['dgu pa']),
+(5,'sems pa','mental movement',0,0,'Mental movement at the ninth instant.', ['sems pa']),
+(5,'de','This',0,0,'Demonstrative resumes that ninth mental movement as the deed which ends both colors.', ['de']),
+(5,'dkar','white',0,0,'First color within the combined white-and-black object.', ['dkar']),
+(5,'gnag','black',0,0,'Second color within that combined object; supplied and remains unwrapped.', ['gnag']),
+(5,'zad','end',0,0,'Ending result in acts to end, with byed separately owning acts.', ['zad']),
+(5,'byed','acts',0,0,'Causative/action component of acts to end.', ['byed']),
+(5,'las','deed',0,0,'The singular deed that ends white and black; supplied a excluded.', ['las']),
+(5,"'dod pa",'desire-realm',0,0,'The first realm qualifier modifies virtue; retains exact published hyphen.', ["'dod pa"]),
+(5,'dge ba','virtue',0,0,'Virtue eliminated in the first causal explanation.', ['dge ba']),
+(6,'la','for',0,0,'Object of aspiration/desire is the previously named virtue, rendered for it; only for is the case exponent.', []),
+(5,"'dun pa",'aspiration',0,0,'Aspiration for virtue, glossed again as desire; excludes article.', ["'dun pa"]),
+(5,"'dod chags",'desire',0,1,'Desire in the explanatory apposition to aspiration; first bare-string occurrence lies inside desire-realm and is already covered.', ["'dod chags"]),
+(5,'bral ba','eliminating',0,0,'Becoming free of the aspiration/desire is recast as eliminating it in the means phrase; does not own the separate spong predicates.', ['bral ba',"'dod chags dang bral ba"]),
+(5,'sgo nas','by means of',0,0,'Established means idiom, kept whole with its case ending.', ['sgo nas']),
+(5,'spong','eliminates',0,0,'First spong eliminates desire-realm virtue through loss of aspiration; not the second affliction clause.', ['spong']),
+(5,"'dod pa",'desire realm',1,0,'Second realm qualifier modifies the mental afflictions.', ["'dod pa"]),
+(5,'nyon mongs','mental afflictions',0,0,'Afflictions in the second causal explanation; excludes all the.', ['nyon mongs']),
+(5,'thob pa','hold',0,0,'The technical retaining/possession factor stopped; the following retains them elaborates the same notion and is left unwrapped.', ['thob pa']),
+(5,'chad pa','stops',0,0,'Stopping the retaining hold, not a third elimination of an independently named item.', ['chad pa']),
+(5,'tshul','process',0,0,'Manner/process of this cessation; supplied here being that left unwrapped.', ['tshul']),
+(5,'spong ba','eliminates',0,1,'Second spong predicate eliminates the desire-realm afflictions by stopping their hold.', ['spong']),
+(6,'phyir','because',0,0,'One final causal close governs the two explanations; English supplies first-of-all and Secondly organization.', ['phyir'])
+],324:[
+(5,'bsam gtan','level of concentration',0,0,'Established concentration-level term; the separately stated ordinal is not included.', ['bsam gtan']),
+(5,'bzhi pa','fourth',0,0,'Fourth concentration level in this exact clause; no third is stated here.', ['bzhi pa','bzhi']),
+(6,'la','for',0,0,'Desire is directed toward the fourth concentration level; first for is this complement.', []),
+(5,"'dod chags",'desire',0,0,'First desire qualifies the uninterrupted path as free of desire for concentration.', ["'dod chags"]),
+(5,'bral ba','free of',0,0,'First freedom predicate qualifies the path; not the later distributed elimination phrase.', ['bral ba']),
+(5,'bar chad med lam','uninterrupted path',0,0,'Complete technical path compound.', ['bar chad med lam']),
+(7,'bar chad med','uninterrupted',0,0,'Modifier member within this path compound.', ['bar chad med']),
+(7,'lam','path',0,0,'Path member within this compound.', ['lam']),
+(5,'skyes pa','arising',0,0,'Arising of the uninterrupted path, nominal in this context.', ['skyes pa']),
+(5,'tha mas','final',0,0,'Inflected final/last instant; final excludes supplied instant and keeps Tibetan agentive-s inseparable.', ['tha ma']),
+(5,'dkar po','white',0,0,'White deeds being brought to an end; deeds supplied from the surrounding discourse stays unwrapped.', ['dkar po']),
+(5,'zad par byed pa','brought to an end',0,0,'Full established ending causative, here contiguous in both source and English.', ['zad par byed pa']),
+(7,'zad','end',0,0,'Tighter ending member within the complete causative.', ['zad']),
+(7,'byed','brought',0,0,'Tighter causing member within the complete causative.', ['byed']),
+(5,'dge ba','virtue',0,0,'Virtue is defensible even though the neighboring realm label is disputed and unbanked.', ['dge ba']),
+(6,'la','for',1,2,'Second la marks virtue as the object of aspiration/desire; third English for follows the second desire, after the causal for.', []),
+(5,"'dun pa",'aspiration',0,0,'Aspiration in the causal explanation, with desire as apposition.', ["'dun pa"]),
+(5,"'dod chags",'desire',1,1,'Second desire is the appositional desire eliminated, not the earlier path modifier.', ["'dod chags"]),
+(5,'spong ba','eliminates',0,0,'Main elimination predicate; the intervening freedom/manner construction is distributed and not separately nulled.', ['spong']),
+(6,'phyir','for',0,1,'Causal for explains why the final path instant ends white deeds; it is between the two complement-for occurrences.', ['phyir'])
+]}
+omissions={322:[
+{'tib':'zhi','eng':'four','reason':'Potential ZHI/BZHI source spelling discrepancy; zhi is not banked as four and is not a null. Proposed PROBABLE editorial review; source remains exact.'},
+{'tib':'ni; kyi; gang yin pa; po; nominalizing/genitive endings; yin te','eng':None,'reason':'Topic, relative and predicative grammar is recast across the English framing; no unsupported separate exponents or nulls assigned.'},
+{'tib':'dang (separation complement); par; bar','eng':None,'reason':'Relational/resultative contributions are integrated with the selected free-of and causative frames; left unbanked, with no separate exponent claim.'},
+{'tib':'zad par byed pa','eng':'to bring ... to an','reason':'Second causative is discontinuous around the black-deeds object. Only defensible zad/end and byed/act atoms are selected; the remaining causative frame remains unwrapped.'},
+{'tib':None,'eng':'Here is; these deeds are; First let\'s take; instants known as; [part of the path of seeing, the direct perception of selflessness]; they; all the; that relate to the','reason':'Explanatory participants, articles, bracketed expansion and frame have no independent local Tibetan word licensed; preserved verbatim outside spans.'}
+],323:[
+{'tib':'gang yin pa; ni; yin te; genitive and nominal endings','eng':None,'reason':'Relative, topic and explanatory grammar is distributed through the expanded English frame; not proved absent and not nulled.'},
+{'tib':'dang; sgo nas; gyis','eng':None,'reason':'Dang contributes to freedom/elimination, sgo nas is retained whole as by means of, while the final instrumental on tshul is distributed in the process paraphrase. No duplicated atom is added.'},
+{'tib':'thob pa','eng':'which retains them','reason':'One Tibetan retaining-factor expression appears as hold plus a defining relative. Bank hold once; do not force a second Tibetan exponent.'},
+{'tib':None,'eng':'Next let\'s take that type which is; instant; first of all; or the; it; Secondly; all the; the process here being that one','reason':'GMR\'s framing, supplied participants and repeated explanatory context remain verbatim; process itself is retained on tshul.'}
+],324:[
+{'tib':'gzugs','eng':'formless realm','reason':'Unbanked disputed correspondence, not null. Same-course GMR contrasts gzugs/form with gzugs med/formless (C05:152,154,381); exact HGM master also lists formless realm for gzugs, so contradictory existing evidence is disclosed rather than silently changed. PROBABLE editorial question requires independent skepticism.'},
+{'tib':"dang bral ba'i tshul gyis (second occurrence)",'eng':'eliminates aspiration, that is desire','reason':'The second freedom/manner construction contributes across the main spong elimination and its objects; no defensible separate atom is established. It is omitted, not null.'},
+{'tib':'dang (first); bound -s in tha mas; yin te; kyi; nominal/genitive endings','eng':None,'reason':'Integrated relation, instrumental and predicative grammar remains without a separate speculative mapping; tha mas is kept whole.'},
+{'tib':None,'eng':"Finally, let's consider; instant in the; It is by this that; deeds are; here one; that is; 65 Other Views on the Black and White",'reason':'Explanatory framing and following-heading apparatus preserved verbatim and unwrapped; heading is a registered class, not a new erratum.'}
+]}
+notes={322:"PROVISIONAL machine alignment by Codex, independent English-first proposal; no hgm_gloss promotion. The published ZHI/four discrepancy is left unbanked for independent editorial review. Complete source words and GMR English remain verbatim. The second ending causative is discontinuous; its defensible end/act atoms are retained without inventing an English compound. Supplied bracketed path explanation and unassigned grammar remain unwrapped; omission is not an asserted null.",323:"PROVISIONAL machine alignment by Codex, independent English-first proposal; no hgm_gloss promotion. The two eliminates occurrences retain their separate virtue and affliction objects. The retaining factor is banked once as hold; its English defining relative remains unwrapped. Freedom from aspiration/desire is recast as eliminating in the means phrase and requires semantic review. Uncertain/distributed grammar is omitted, not nulled; GMR English remains verbatim.",324:"PROVISIONAL machine alignment by Codex, independent English-first proposal; no hgm_gloss promotion. GZUGS opposite formless realm is a disputed correspondence left unbanked; the master itself also lists that English, while same-course contrasts distinguish form and formless. This is a PROBABLE editorial question, not a source correction or a null. The second freedom/manner construction is distributed through eliminates and is omitted. The following 65 Other Views on the Black and White heading remains original apparatus, unwrapped under the registered class."}
+def hits(text,piece):
+ out=[];cur=0
+ while True:
+  i=G.find_word(text,piece,cur)
+  if i<0:return out
+  out.append([i,i+len(piece)]);cur=i+1
+for seq,rows in plans.items():
+ src=sources[seq];out=[];dec=[];parent=None;counter=0
+ for d,t,e,ti,ei,why,terms in rows:
+  counter+=1;sid='w'+str(counter);sp={'id':sid,'d':d,'tib':t,'eng':e};out.append(sp)
+  if d==7:
+   assert parent is not None;tr=[parent['tib_range'][0]+src['wylie'][slice(*parent['tib_range'])].index(t),0];tr[1]=tr[0]+len(t);er=[parent['eng_range'][0]+src['english'][slice(*parent['eng_range'])].index(e),0];er[1]=er[0]+len(e)
+  else:tr=hits(src['wylie'],t)[ti];er=hits(src['english'],e)[ei]
+  record={**sp,'seq':seq,'tib_range':tr,'eng_range':er,'source_function':why,'rationale':why,'lexical_evidence_terms':terms,'literal_tibetan_occurrences':hits(src['wylie'],t),'literal_english_occurrences':hits(src['english'],e),'parent':parent['id']if d==7 else None};dec.append(record)
+  if d!=7:parent=record if d==5 else None
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7],key=lambda x:x['eng_range'][0])]
+ spec={'course':'C05','segments':[{'seq':seq,'title':{322:'ending black deeds',323:'ending white and black deeds',324:'ending white deeds'}[seq],'spans':out,'eng_order':order,'note':notes[seq]}]}
+ p=A/str(seq);(p/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(p/'decisions.json').write_text(json.dumps({'producer':'Codex independent English-first proposal','seq':seq,'source_origin_git_commit':'af139c573f85aaf33278cd079719947ee9af8cdd','spans':dec,'eng_order':order,'omissions':omissions[seq]},ensure_ascii=False,indent=2)+'\n')
+ print(seq)
+ for x in dec:print(x['id'],x['d'],repr(x['tib']),x['tib_range'],'=>',repr(x['eng']),x['eng_range'])

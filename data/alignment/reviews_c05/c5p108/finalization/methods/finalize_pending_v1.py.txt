@@ -1,0 +1,240 @@
+"""Scoped Q finalization: actual baseline and unchanged checkpoint; no generation."""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess, sys
+
+S = Path(__file__).resolve().parents[2]
+B = S.parent
+W = B.parents[1] / 'campaign-worktree'
+F = S / 'finalization'
+H = S / 'checkpoint-history/ready-through315'
+ORIGIN = 'af139c573f85aaf33278cd079719947ee9af8cdd'
+BASE = '36a978597787f0599357ff99ea8bd3f07895229a'
+CHECKPOINT = '6e538cd57aa5d40465f58e2133b011fefd80d1b52cae2b46903509a235fe88d6'
+
+def check(test, message):
+    if not test: raise ValueError(message)
+
+def read(p): return json.loads(p.read_bytes())
+def pin(p):
+    h = hashlib.sha256(); n = 0
+    with p.open('rb') as stream:
+        for data in iter(lambda: stream.read(1048576), b''): n += len(data); h.update(data)
+    return dict(bytes=n, sha256=h.hexdigest())
+def exp(x): return {k:x[k] for k in ('bytes','sha256')}
+def save(p, x):
+    check(not p.exists(), 'refuse overwrite: ' + str(p))
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(x, ensure_ascii=False, indent=2)+'\n')
+def write_new(p, raw):
+    check(not p.exists(), 'refuse overwrite: ' + str(p))
+    p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(raw)
+
+commands = []
+def git(*args):
+    argv = ['git', '-C', str(W), *args]
+    p = subprocess.run(argv, input=b'', stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                       env=dict(os.environ, GIT_OPTIONAL_LOCKS='0'))
+    d = F/'commands'/f'{len(commands):03d}'; d.mkdir(parents=True)
+    for name, raw in [('stdin',b''),('stdout',p.stdout),('stderr',p.stderr)]: (d/(name+'.bin')).write_bytes(raw)
+    (d/'exit.txt').write_text(str(p.returncode)+'\n')
+    record = dict(argv=argv,cwd=str(S),exit=p.returncode,
+                  streams={k:pin(d/(k+'.bin')) for k in ('stdin','stdout','stderr')})
+    save(d/'execution.json',record); commands.append(str(d.relative_to(S)))
+    check(p.returncode == 0, 'Git command failed; full streams preserved')
+    return p.stdout
+
+check(sys.dont_write_bytecode, 'Python -B required')
+check(not (S/'freeze.json').exists() and not H.exists(), 'fresh scoped finalization only')
+checkpoint = read(S/'checkpoint-inventory.json')
+check(pin(S/'checkpoint-inventory.json')['sha256'] == CHECKPOINT and
+      type(checkpoint['files']) is dict and len(checkpoint['files']) == 454 and
+      checkpoint['status'] == 'READY_PENDING_ACTUAL_BASELINE' and checkpoint['landing_authorized'] is False,
+      'exact pending checkpoint')
+for rel, rec in checkpoint['files'].items(): check(pin(S/rel) == exp(rec), 'checkpoint input '+rel)
+old_review = read(S/'review.json'); old_manifest = read(S/'original-to-copy-manifest.json')
+check(old_review['verdict'] == 'READY_PENDING_ACTUAL_BASELINE' and
+      old_review['actual_through321_baseline_receipt'] is None and len(old_manifest) == 379,
+      'pending review metadata')
+# Save only metadata that will change and the original inventory. Every other
+# checkpoint file is retained in place and later mapped explicitly to its bytes.
+changed = ['review.json','review.md','interface-schema-note.md','original-to-copy-manifest.json']
+for rel in changed + ['checkpoint-inventory.json']: write_new(H/rel,(S/rel).read_bytes())
+baseline = read(B/'baseline.json'); origin = read(B/'proposal-baseline.json')
+check(baseline['commit'] == BASE and baseline['course_boundary'] == 321 and
+      origin['commit'] == ORIGIN and origin['course_boundary'] == 315, 'separate actual/original baselines')
+check(git('rev-parse','HEAD').decode().strip() == BASE and
+      git('status','--porcelain','--untracked-files=no') == b'', 'actual clean through321 HEAD')
+baseline_files = {}
+for rel, digest in baseline['sha256'].items():
+    actual = pin(W/rel); check(actual['sha256'] == digest, 'actual baseline bytes '+rel)
+    baseline_files[rel] = actual
+    if not rel.endswith('.json.gz'):
+        check(git('hash-object',str(W/rel)).strip() == git('rev-parse',BASE+':'+rel).strip(), 'actual committed baseline blob '+rel)
+full = read(W/'data/alignment/alignment_full_v1.json')
+evidence = read(W/'data/alignment/alignment_evidence_v1.json')
+coverage = sorted({r['seg'] for r in full['links'] if r['course']=='C05'})
+measured = dict(full_links=len(full['links']), null_exponents=sum(r['eng'] is None for r in full['links']),
+                evidence_headwords=len(evidence['pairs']), evidence_pairs=sum(map(len,evidence['pairs'].values())))
+check(coverage == list(range(1,322)) and all(baseline[k] == v for k,v in measured.items()), 'actual321 coverage/counts')
+sourcepins = {}
+for name, rec in origin['source_pins'].items():
+    sourcepins[name] = pin(Path(rec['path'])); check(sourcepins[name] == exp(rec), 'unchanged actual source '+name)
+access = read(B/'english/evidence/required-access.json')
+check(len(access)==8 and all(os.access(r['path'],os.R_OK) for r in access), 'required references readable')
+for name,digest,count in [('tibetan','80941db89cbfa75aa8b89fdd0d8549d346e7dcb3f0290e59e3c618a254ce362b',99),
+                          ('english','bcacc2c033feac6ef2600fd110f427ce49ae390c16ebf3fedabb4def5a4b69a5',99),
+                          ('reconciled','0543e5fd5807a2b74e88a8e818e80295ccff9aefebe190a9996c816c36fece09',140)]:
+    root=B/name; inv=read(root/'freeze.json')
+    check(pin(root/'freeze.json')['sha256']==digest and len(inv['files'])==count, name+' freeze')
+    check({str(p.relative_to(root))for p in root.rglob('*')if p.is_file()}==set(inv['files'])|{'freeze.json'}, name+' complete file set')
+    for rel,rec in inv['files'].items(): check(pin(root/rel)==exp(rec),name+'/'+rel)
+prep = B/'root-input-candidate'; approval=read(B/'root-preparation-method-review.json')
+for field,path in [('method',prep/'verify_root_inputs_q_v1.py'),('candidate',prep/'candidate.json'),
+                   ('proof',prep/'preparation-01/proof.json'),('native_execution',prep/'attempts/root-inputs-01/execution.json')]:
+    check(pin(path)==approval[field], 'root approved exact preparation '+field)
+check(approval['verdict']=='APPROVE_ROOT_PREPARATION_METHOD_AND_REUSE', 'root preparation method approval')
+pp=read(prep/'preparation-01/proof.json'); check(pp['status']=='PASS_PREPARATION_INPUTS_ONLY' and
+    pp['actual_acceptance_baseline_consumed'] is False and pp['canonical_original_spans']==141 and
+    pp['canonical_final_spans']==73 and pp['frozen_inputs']['semantic-review']['sha256']==CHECKPOINT, 'reuse honest pending preparation proof')
+for rel,rec in read(prep/'candidate.json')['files'].items():check(pin(prep/rel)==rec,'preparation file unchanged '+rel)
+for rel,rec in pp['outputs'].items():check(pin(prep/'preparation-01'/rel)==rec,'preparation output unchanged '+rel)
+check(read(prep/'attempts/root-inputs-01/execution.json')['exit']==0 and
+      (prep/'attempts/root-inputs-01/stdout.bin').read_bytes()==(prep/'preparation-01/proof.json').read_bytes(), 'original PASS stream')
+closure = B.parent/'C05-319-321/compact-closure-attempt02/proof.json'; cp=read(closure)
+check(cp['status']=='PASS_REUSABLE_PRIVATE_CHECKPOINT' and cp['final']==BASE and
+      cp['tracked_clean'] is True and cp['segments']==[319,320,321], 'previous closure exact actual baseline')
+check(git('rev-parse',BASE+'^{tree}').decode().strip()==cp['tree'], 'previous closure final tree')
+
+manifest = list(old_manifest)
+def preserve(path, target, git_rel=None):
+    raw = path.read_bytes(); dst=S/target
+    write_new(dst,raw); identity=pin(dst)
+    rec=dict(original=str(path.resolve()),copy=target,**identity)
+    if git_rel:rec.update(original_git_commit=BASE,repository_relative_path=git_rel)
+    manifest.append(rec); return target
+
+baseline_copy=preserve(B/'baseline.json','finalization/inputs/baseline-through321.json')
+for p in sorted((B/'baseline-through321-caller').iterdir()):
+    if p.is_file():preserve(p,'finalization/inputs/baseline-caller/'+p.name)
+bx=read(B/'baseline-through321-caller/execution.json')
+check(bx['exit']==0 and bx['stdout_sha256']==pin(B/'baseline.json')['sha256'] and
+      (B/'baseline-through321-caller/stdout.bin').read_bytes()==(B/'baseline.json').read_bytes() and
+      (B/'baseline-through321-caller/exit.txt').read_bytes()==b'0\n' and
+      (B/'baseline-through321-caller/stderr.bin').read_bytes()==b'', 'baseline original capture streams')
+for path,target in [(B/'root-preparation-method-review.json','root-preparation-method-review.json'),
+                    (B/'root-semantic-reading-preparation.json','root-semantic-reading-preparation.json'),
+                    (prep/'preparation-01/proof.json','preparation-proof.json'),
+                    (prep/'verify_root_inputs_q_v1.py','preparation-method.py.txt'),
+                    (prep/'run_candidate_once.py','preparation-caller.py.txt'),
+                    (closure,'previous-through321-closure-proof.json')]:
+    preserve(path,'finalization/inputs/'+target)
+for name in ('execution.json','stdin.bin','stdout.bin','stderr.bin','exit.txt'):
+    preserve(prep/'attempts/root-inputs-01'/name,'finalization/inputs/preparation-execution/'+name)
+governing_rels=list(origin['governing_git_pins'])+['engines/hgm_tools.py','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']
+governing=[]
+for rel in governing_rels:
+    before=git('rev-parse',ORIGIN+':'+rel).decode().strip(); after=git('rev-parse',BASE+':'+rel).decode().strip()
+    check(git('hash-object',str(W/rel)).decode().strip()==after,'actual governing Git bytes '+rel)
+    actual=pin(W/rel)
+    if before==after:
+        matches=[r for r in old_manifest if r.get('repository_relative_path')==rel and exp(r)==actual]
+        check(matches,'preserved original governing bytes '+rel); target=matches[0]['copy']
+        manifest.append(dict(original=str(W/rel),copy=target,**actual,original_git_commit=BASE,repository_relative_path=rel))
+    else:
+        check(rel=='tools/build_alignment_layer.py','unexpected governing change '+rel)
+        old=next(r for r in old_manifest if r.get('repository_relative_path')==rel)
+        oldbytes=(S/old['copy']).read_bytes(); anchor=b'    "c5p105": [313, 314, 315],\n'
+        added=b'    "c5p106": [316, 317, 318],\n    "c5p107": [319, 320, 321],\n'
+        check(oldbytes.count(anchor)==1 and oldbytes.replace(anchor,anchor+added)==(W/rel).read_bytes(), 'only expected prior page registrations changed')
+        target=preserve(W/rel,'finalization/current-governing/build_alignment_layer.py.txt',rel)
+    governing.append(dict(repository_relative_path=rel,origin_blob=before,actual_baseline_blob=after,
+                          changed=before!=after,copy=target,**actual))
+diff=git('diff','--no-ext-diff',ORIGIN,BASE,'--',*governing_rels)
+write_new(F/'governing-delta.diff.txt',diff)
+register=read(W/'docs/errata_register.json'); oldregister=read(B/'english/evidence/pinned/docs/errata_register.json')
+check(register==oldregister and len(register)==194,'complete current register unchanged')
+errata=read(S/'bank-ready-errata.json'); check(len(errata)==2 and all(r['severity']=='LOW' and r['confidence']=='PROBABLE' for r in errata),'retained two limited questions')
+direct=[r for r in register if r.get('segment') in ('C05:322','C05:323','C05:324')]
+exact_found={str(r['seq']):[x for x in register if x.get('found')==r['found']]for r in errata}
+check(not direct and all(not v for v in exact_found.values()),'no direct or exact-found current duplicates')
+register_proof=dict(origin=ORIGIN,actual_baseline=BASE,origin_count=len(oldregister),current_count=len(register),
+                    complete_register_unchanged=True,direct_batch_records=direct,exact_found_records=exact_found,
+                    source='finalization/current-governing mapping in baseline-delta-proof.json',
+                    interpretation='No register changes introduce a new class or duplicate; original class-level refutation remains applicable. Two LOW/PROBABLE questions and full counterevidence stay byte-identical.')
+save(F/'current-register-check.json',register_proof)
+native=[]
+for row in old_review['segments']:
+    seq=row['seq']
+    for mode in ('generator','resolver'):
+        d=S/'native'/f'final-{seq}-{mode}-v1'; ex=read(d/'execution.json')
+        check(ex['exit']==0 and (d/'exit.txt').read_bytes()==b'0\n','existing native exit')
+        for stream in ('stdin','stdout','stderr'):check(pin(d/(stream+'.bin'))==ex['streams'][stream], 'existing native stream')
+        check((d/'stdin.bin').read_bytes()==(B/'reconciled'/str(seq)/'spec.json').read_bytes() and
+              (d/'stderr.bin').read_bytes()==b'', 'unchanged native spec/empty stderr')
+        if mode=='generator':check((d/'stdout.bin').read_bytes()==(B/'reconciled'/str(seq)/'body.html').read_bytes(),'existing generated body')
+        else:check(read(d/'stdout.bin')==[r for r in read(S/'resolved-spans.json')if r['seq']==seq],'existing resolver full tuple stream')
+        native.append(dict(seq=seq,mode=mode,directory=str(d.relative_to(S)),execution=pin(d/'execution.json'),exit=ex['exit']))
+    row['resolver_exit']=0
+    row['fresh_native_directory']=f'native/final-{seq}-generator-v1'
+    row['fresh_resolver_directory']=f'native/final-{seq}-resolver-v1'
+check(len(read(S/'evidence/original-generator-reuse.json'))==6,'six original reuse records retained')
+receipt=dict(commit=BASE,course_boundary=321,**pin(B/'baseline.json'),copy=baseline_copy,
+             verification_proof='finalization/baseline-delta-proof.json')
+proof=dict(status='PASS_SCOPED_BASELINE_GOVERNING_REGISTER_DELTA',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+           source_origin_git_commit=ORIGIN,source_origin_course_boundary=315,actual_through321_baseline_receipt=receipt,
+           baseline_files=baseline_files,actual_baseline_counts=measured,actual_course_coverage=[1,321],tracked_clean=True,
+           original_source_identities_unchanged=sourcepins,governing=governing,register_check='finalization/current-register-check.json',
+           checkpoint_inventory=pin(S/'checkpoint-inventory.json'),checkpoint_files_verified=454,
+           preparation_proof=pin(prep/'preparation-01/proof.json'),root_preparation_method_review=pin(B/'root-preparation-method-review.json'),
+           previous_closure_proof=pin(closure),existing_final_native=native,original_generator_reuse_records=6,
+           generator_runs_during_finalization=0,resolver_runs_during_finalization=0,corpus_or_master_query_reruns=0,
+           semantic_role='Scoped finalizer verified only actual baseline, current governing/register delta and unchanged checkpoint evidence. Earlier independent reviewer performed the full linguistic review; root separately recorded full source-specific reading. No claim of personally repeating those readings.',
+           command_records=commands)
+save(F/'baseline-delta-proof.json',proof)
+old_review.update(verdict='APPROVE',status='FINAL_AFTER_SCOPED_BASELINE_FINALIZATION',
+                  actual_through321_baseline_receipt=receipt,
+                  remaining_requirement='No unresolved semantic prerequisite. Root acceptance and landing remain separate; human editorial acceptance is not asserted.',
+                  root_checkpoint_instruction='Historical pending instruction is preserved in checkpoint-history/ready-through315/review.json.',
+                  finalization=dict(role=proof['semantic_role'],proof=receipt['verification_proof'],checkpoint_history='checkpoint-history/ready-through315',
+                                    original_linguistic_judgment_retained=True,linguistic_correspondence_or_source_edits=0,
+                                    generator_runs=0,resolver_runs=0))
+check(old_review['spec_verdict']=='PASS' and old_review['quality_verdict']=='COMPLETE_NO_REQUIRED_CORRECTION' and
+      old_review['open_findings']==[],'retained original independent semantic judgment')
+(S/'review.json').write_text(json.dumps(old_review,ensure_ascii=False,indent=2)+'\n')
+oldtext=(H/'review.md').read_text(); paragraphs=oldtext.split('\n\n')
+paragraphs[0]='APPROVE — C05:322–324 (c5p108).'
+paragraphs.insert(1,'Finalization role: this resumed agent verified the actual through-321 baseline, the governing/register delta, and byte identity of the completed checkpoint. The original independent reviewer performed the full linguistic work described below; root separately recorded its own complete source-specific reading. This finalizer did not repeat that whole reading or rerun generators, resolvers or corpus/master queries. The retained original SPEC PASS and QUALITY COMPLETE judgment has no unresolved findings after the scoped checks.')
+paragraphs[-1]='Source/proposal/reconciliation origin remains af139c573f85aaf33278cd079719947ee9af8cdd, through 315. Actual acceptance baseline 36a978597787f0599357ff99ea8bd3f07895229a, through 321, is separately preserved and verified. Current register bytes are identical to the origin register (194 entries), with no batch or exact-found duplicates. The only governing delta adds prior pages 316–318 and 319–321 to the builder; semantic rules and canonical methods are unchanged. The exact 454-file pending checkpoint resolves through checkpoint-history/ready-through315/checkpoint-resolution.json, retaining old changed metadata and the unchanged evidence in place. Preparation PASS is reused unchanged through finalization/baseline-delta-proof.json and checkpoint-to-final-delta.json. Both LOW/PROBABLE editorial questions, all counterevidence and original failed attempts remain byte-identical. Machine approval is not human editorial acceptance. Root acceptance/landing are separate actions. See interface-schema-note.md for the final typed contract.\n'
+(S/'review.md').write_text('\n\n'.join(paragraphs))
+note=(H/'interface-schema-note.md').read_text()
+first=note.index('\n\n')
+note='This is the final APPROVE review after scoped baseline/governing/register finalization. Its exact earlier READY_PENDING_ACTUAL_BASELINE checkpoint remains historical evidence, with all 454 original file identities preserved through checkpoint-history/ready-through315/checkpoint-resolution.json. Actual through-321 baseline is separately recorded; source origin remains through 315. Existing semantic/source/native work was reused unchanged.\n\n'+note[first+2:]
+note=note.replace('Its checkpoint verdict is READY_PENDING_ACTUAL_BASELINE. It must not be treated as final approval.', 'Its final verdict is APPROVE. spec_verdict PASS and quality_verdict COMPLETE_NO_REQUIRED_CORRECTION retain the original linguistic judgment; finalization records the current agent’s scoped role.')
+note+='\nFinal scoped interface additions: actual_through321_baseline_receipt is a DICT with exactly commit, course_boundary, bytes, sha256, copy, verification_proof. It names commit 36a978597787f0599357ff99ea8bd3f07895229a and boundary 321; copy and verification_proof are review-relative paths. The source_origin_git_commit/source_origin_course_boundary remain af139c573f85aaf33278cd079719947ee9af8cdd/315. No legacy baseline aliases were introduced. Each segment retains current reviewed-final/SEQ and adds resolver_exit=0, fresh_native_directory=native/final-SEQ-generator-v1, fresh_resolver_directory=native/final-SEQ-resolver-v1. These are measured existing execution references, not new runs.\n\nThe final freeze.json uses schema c05-independent-semantic-review-freeze-v1, verdict APPROVE, files DICT of every actual review-relative file except itself, source origin fields, the same actual baseline receipt, measured total_spans/total_nulls/total_word_pairs/total_d7, review_json_sha256 and review_md_sha256. The old checkpoint-inventory.json remains unchanged and historical; its original paths are resolved by the compact history map. checkpoint-to-final-delta.json binds changed metadata and original evidence identity. Finalization baseline-delta-proof.json is a DICT with status PASS_SCOPED_BASELINE_GOVERNING_REGISTER_DELTA, actual baseline files/counts/coverage, governing LIST, register-check reference, checkpoint/preparation proof identities, existing native records and explicit zero reruns.\n'
+(S/'interface-schema-note.md').write_text(note)
+# New evidence mappings append to the original 379, never reinterpret old records.
+(S/'original-to-copy-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+resolution={}
+for rel,rec in checkpoint['files'].items():
+    target=str((H/rel).relative_to(S)) if rel in changed else rel
+    check(pin(S/target)==exp(rec),'original checkpoint exact resolved bytes '+rel)
+    resolution[rel]=dict(**exp(rec),preserved_path=target,changed_current_metadata=rel in changed)
+save(H/'checkpoint-resolution.json',dict(checkpoint_inventory=pin(H/'checkpoint-inventory.json'),files=resolution,
+                                       original_file_count=454,metadata_files_archived=changed,
+                                       unchanged_files_retained_in_place=450,full_historical_tree_copied=False))
+save(S/'checkpoint-to-final-delta.json',dict(status='PASS_EXPLICIT_CHECKPOINT_TO_FINAL_DELTA',
+    original_checkpoint_inventory=pin(H/'checkpoint-inventory.json'),original_files=454,
+    checkpoint_resolution='checkpoint-history/ready-through315/checkpoint-resolution.json',
+    changed_metadata={rel:dict(before=pin(H/rel),after=pin(S/rel),history=str((H/rel).relative_to(S)))for rel in changed},
+    original_copy_records_retained_unchanged=379,current_copy_records=len(manifest),
+    semantic_source_spec_body_rationale_errata_native_changes=0,
+    baseline_delta_proof='finalization/baseline-delta-proof.json',
+    preparation_proof_reused_unchanged=pin(prep/'preparation-01/proof.json'),
+    original_preparation_contract='PASS_PREPARATION_INPUTS_ONLY remains a historical pending-checkpoint proof; finalization does not rewrite it.',
+    finalization_role=proof['semantic_role'],generator_reruns=0,resolver_reruns=0))
+for rec in manifest:
+    check(pin(Path(rec['original']))==exp(rec) and pin(S/rec['copy'])==exp(rec),'final original/copy exact bytes')
+check(git('rev-parse','HEAD').decode().strip()==BASE and git('status','--porcelain','--untracked-files=no')==b'', 'final baseline still clean/current')
+print(json.dumps(dict(status='PASS_SCOPED_FINALIZATION_METADATA',review=pin(S/'review.json'),
+    delta=pin(S/'checkpoint-to-final-delta.json'),baseline_delta=pin(F/'baseline-delta-proof.json'),
+    copy_mappings=len(manifest),checkpoint_files=454,generator_runs=0,resolver_runs=0),indent=2))

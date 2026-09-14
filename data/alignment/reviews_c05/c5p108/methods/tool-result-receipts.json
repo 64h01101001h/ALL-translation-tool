@@ -1,0 +1,42 @@
+{
+  "provenance": "Transcribed exact relevant returned tool output strings; raw native generator/resolver files are separately retained and authoritative. These receipts do not claim an additional execution.",
+  "executions": [
+    {
+      "method": "methods/independent_evidence_v1.py.txt",
+      "tool": "exec_command then write_stdin",
+      "session_id": 64993,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr_from_returned_tool_output": "Traceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-322-324/semantic-review/methods/independent_evidence_v1.py.txt\", line 141, in <module>\n    assert lines[2:]==expected[2:],name\n           ^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: COMPLETE tibetan TO RECONCILED DIFF 322\n"
+    },
+    {
+      "method": "methods/independent_evidence_v2.py.txt",
+      "tool": "exec_command then write_stdin",
+      "session_id": 21445,
+      "exit_code": 0,
+      "stdout": "{\"original_files\": 379, \"distinct_preserved_copies\": 351, \"sql_queries\": 40, \"original_query_records_rechecked\": 47, \"external_query_records_rechecked\": 41, \"original_lexical_queries_rechecked\": 100, \"unique_master_records\": 105, \"unique_spine_rows\": 39, \"unique_external_records\": 16, \"original_screens\": 30, \"successful_original_generations_reused\": 6, \"canonical_generations_here\": 0}\n",
+      "stderr": ""
+    },
+    {
+      "method": "methods/run_canonical_v1.py.txt",
+      "tool": "exec_command",
+      "exit_code": 0,
+      "stdout": "tibetan 322 resolver EXIT=0 stdout=4782 stderr=0\ntibetan 323 resolver EXIT=0 stdout=5157 stderr=0\ntibetan 324 resolver EXIT=0 stdout=3073 stderr=0\nenglish 322 resolver EXIT=0 stdout=5126 stderr=0\nenglish 323 resolver EXIT=0 stdout=4944 stderr=0\nenglish 324 resolver EXIT=0 stdout=3803 stderr=0\nfinal 322 resolver EXIT=0 stdout=5126 stderr=0\nfinal 323 resolver EXIT=0 stdout=5002 stderr=0\nfinal 324 resolver EXIT=0 stdout=3803 stderr=0\nfinal 322 generator EXIT=0 stdout=4429 stderr=0\nfinal 323 generator EXIT=0 stdout=4381 stderr=0\nfinal 324 generator EXIT=0 stdout=3656 stderr=0\n",
+      "stderr": ""
+    },
+    {
+      "method": "methods/semantic_decisions_v1.py.txt",
+      "tool": "exec_command",
+      "exit_code": 0,
+      "stdout": "{\"original\": 141, \"final\": 73, \"omissions\": 22, \"word_pairs\": 50}\n",
+      "stderr": ""
+    },
+    {
+      "method": "methods/errata_refutation_v1.py.txt",
+      "tool": "exec_command",
+      "exit_code": 0,
+      "stdout": "{\"screens\": 30, \"retained_distinct_questions\": 2, \"severity\": \"LOW\", \"confidence\": \"PROBABLE\", \"source_mutations\": 0}\n",
+      "stderr": ""
+    }
+  ]
+}

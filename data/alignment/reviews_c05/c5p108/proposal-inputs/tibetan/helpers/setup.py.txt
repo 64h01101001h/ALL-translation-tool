@@ -1,0 +1,20 @@
+import json, pathlib, subprocess, hashlib, sqlite3, gzip, os
+P=pathlib.Path(__file__).resolve().parents[1]; Q=P.parent; W=Q.parent.parent/'campaign-worktree'
+def put(p,x):
+ p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+b=json.loads((Q/'proposal-baseline.json').read_text()); records=[]
+for name,rec in b['governing_git_pins'].items():
+ raw=subprocess.check_output(['git','show',b['commit']+':'+name],cwd=W);assert len(raw)==rec['bytes'] and sha(raw)==rec['sha256']; dest=P/'evidence/pinned'/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw);records.append({'path':str(dest.relative_to(P)),**rec})
+put(P/'evidence/git-pins.json',records)
+for k,rec in b['source_pins'].items():
+ raw=pathlib.Path(rec['path']).read_bytes(); assert len(raw)==rec['bytes'] and sha(raw)==rec['sha256']
+put(P/'evidence/source-pins.json',b['source_pins'])
+for name in ['source.json','context.json','proposal-baseline.json','tibetan-brief.md']:(P/'evidence'/name).write_bytes((Q/name).read_bytes())
+(P/'evidence/proposal-protocol.md').write_bytes((Q.parent/'proposal-protocol.md').read_bytes())
+paths=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+a=[{'path':str(pathlib.Path.home()/p),'readable':os.access(pathlib.Path.home()/p,os.R_OK)} for p in paths]; assert all(x['readable'] for x in a);put(P/'evidence/required-access.json',a)
+db=sqlite3.connect('file:'+b['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+rows=[dict(x) for x in db.execute('select * from corpus_segments where course=? and seq between ? and ?',('C05',316,330))]; put(P/'evidence/full-source-context-rows.json',rows); rows=[{k:r[k] for k in ['id','course','seq','acip','wylie','english']} for r in rows]; selected=[r for r in rows if r['seq'] in [322,323,324]]; assert selected==json.loads((Q/'source.json').read_text());assert rows==json.loads((Q/'context.json').read_text());put(P/'evidence/source-verification.json',{'sql':'select * from corpus_segments where course=? and seq between ? and ?','params':['C05',316,330],'count':len(rows),'exact_snapshot_equal':True})
+master=json.load(gzip.open(b['source_pins']['master']['path'],'rt'));corpus=json.load(gzip.open(b['source_pins']['corpus']['path'],'rt'))
+print('MASTER',[(k,type(v).__name__,len(v) if hasattr(v,'__len__') else '') for k,v in master.items()]);print('CORPUS',type(corpus).__name__);print('TABLES',db.execute("select name from sqlite_master where type='table'").fetchall());print('REGISTER',type(json.loads((P/'evidence/pinned/docs/errata_register.json').read_text())).__name__)

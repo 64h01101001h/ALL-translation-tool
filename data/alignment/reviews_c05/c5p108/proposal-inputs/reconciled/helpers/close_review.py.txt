@@ -1,0 +1,42 @@
+"""Final immutable-input audit and explicit material-hypothesis review, no generation."""
+import pathlib,json,hashlib,subprocess,datetime,re
+R=pathlib.Path(__file__).resolve().parents[1];B=R.parent;W=B.parents[1]/'campaign-worktree';ORIGIN='af139c573f85aaf33278cd079719947ee9af8cdd'
+def read(p):return json.loads(p.read_text())
+def ident(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+sources=read(R/'evidence/corpus-records.json');heads={}
+for rel in ['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ b=subprocess.check_output(['git','show',ORIGIN+':'+rel],cwd=W);assert b==(W/rel).read_bytes();out=R/'evidence'/pathlib.Path(rel).name;out.write_bytes(b);heads[rel]={'git_object':ORIGIN+':'+rel,**ident(b),'evidence_file':out.name}
+put(R/'evidence/reconciliation-governance.json',heads)
+challenges=[]
+for seq in [322,324]:
+ screens=read(R/str(seq)/'five-ground-screens.json');x=next(x for x in screens if not x['refuted']);challenges.append({'seq':seq,'hypothesis':'ZHI is an intended numeral BZHI'if seq==322 else'English formless realm is a probable local realm-label error','finding':'LOW/PROBABLE editorial question; disputed pair stays unbanked','five_refutation_grounds':x['five_refutation_grounds']})
+s=sources['C05:323'];t="'dun pa 'dod chags dang bral ba";e='eliminating the aspiration, or the desire';other=sources['ILL:3838'];master=read(R/'evidence/master-records.json')
+challenges.insert(1,{'seq':323,'hypothesis':'The isolated bral ba/eliminating d5 atom is sufficiently licensed','finding':'Withhold the isolated d5 atom and retain the complete object-and-release relation at d3. This is an alignment-depth ruling, not a source erratum.','five_refutation_grounds':{
+ 'a_quote':{'tibetan_quote':t,'tibetan_range':[s['wylie'].index(t),s['wylie'].index(t)+len(t)],'english_quote':e,'english_range':[s['english'].index(e),s['english'].index(e)+len(e)],'own_acip_quote':"'DUN PA 'DOD CHAGS DANG BRAL BA",'own_complete_row':'../evidence/corpus-records.json#C05:323','finding':'The full relation and both original isolated strings are verbatim; this alone does not decide atom ownership.'},
+ 'b_parallel':{'query_ref':'q037','query_count':15,'query_predicate':'instr(wylie, bral ba)>0 AND instr(english, eliminat)>0; substring co-occurrence, not pairing','actual_support_ref':'../evidence/corpus-records.json#ILL:3838','support_tibetan_quote':"rtag chad sogs kyi mtha' dang bral ba'i dbus",'support_english_quote':'once they have eliminated the two extremes of the mind either lasting forever or simply discontinuing','finding':'ILL:3838 supports active elimination as a rendering of a complete freedom-from-extremes relation. It is a different passage and not an independent same-passage witness to 323. Many other hits render spong/spangs as eliminate and bral ba as free/lack; they cannot all be counted as bral/eliminate pair attestations.'},
+ 'c_registered':{'register_ref':'../evidence/register-review.json','count':194,'direct_batch_records':0,'finding':'No current source defect is asserted or filed. None of the registered converter/cap/heading/footnote/folio classes changes this alignment-depth decision.'},
+ 'd_defensibility':{'master_refs':[k for k,v in master.items()if v.get('wylie')in ['bral ba',"'dod chags dang bral ba","'dun pa","'dod chags",'spong']],'finding':'HGM bral ba includes overcome as well as free/free of; the longer dod chags dang bral ba includes eliminates. These support the complete active recast but do not compel the isolated bral ba dictionary atom. GMR eliminates the desire-realm virtue by a distinct means predicate, becoming free of aspiration/attachment. Capture that full relation at d3, with no d7 children under it; retain both independent finite spong/eliminates atoms. This favors precise scope at the cost of two final dictionary pairs, without inventing English or discarding the whole relation.'},
+ 'e_counts':{'cooccurrence_rows_reexecuted':15,'finite_eliminates_in_323':len(re.findall(r'\beliminates\b',s['english'])),'means_eliminating_in_323':len(re.findall(r'\beliminating\b',s['english'])),'spong_token_in_323':len(re.findall(r'\bspong\b',s['wylie'])),'bral_ba_literal_in_323':s['wylie'].count('bral ba'),'all_original_spans_reconciled':53,'source_record_store':'../evidence/corpus-records.json'}}})
+for quote in [challenges[1]['five_refutation_grounds']['b_parallel']['support_tibetan_quote'],challenges[1]['five_refutation_grounds']['b_parallel']['support_english_quote']]:assert quote in other['wylie'] or quote in other['english']
+put(R/'evidence/material-hypothesis-screens.json',challenges)
+original_count=0
+for angle in ['tibetan','english']:
+ f=read(B/angle/'freeze.json')
+ for name,x in f['files'].items():assert ident((B/angle/name).read_bytes())==x;original_count+=1
+for name,x in read(R/'evidence/source-identities.json')['files'].items():assert ident(pathlib.Path(x['path']).read_bytes())=={k:x[k]for k in ['bytes','sha256']}
+for seq in [322,323,324]:
+ p=R/str(seq);spec=read(p/'spec.json')['segments'][0];tuples=read(p/'final-ordered-tuples.json');originals=read(p/'original-dispositions.json')
+ assert all(set(t)==set(['id','d','tib','eng','seq','tib_range','eng_range'])for t in tuples)
+ assert len({(x['angle'],x['original']['id'])for x in originals})==len(originals)
+ assert all(x['final_ids']for x in originals)
+ for d in (p/'native').iterdir():
+  ex=read(d/'execution.json');assert ex['exit']==0 and (d/'exit.txt').read_text()=='0\n'
+  for n in ['stdin','stdout','stderr']:assert ident((d/(n+'.bin')).read_bytes())==ex['streams'][n]
+ assert (p/'native/final-generator-v1/stdin.bin').read_bytes()==(p/'spec.json').read_bytes()
+ assert (p/'native/final-generator-v1/stdout.bin').read_bytes()==(p/'body.html').read_bytes()
+ assert not re.search('pending.?review|requires semantic review',spec['note'],re.I)
+put(R/'evidence/final-close-audit.json',{'original_freeze_files_rechecked':original_count,'all_original_sources_master_corpus_physical_hashes_unchanged':True,'all_native_streams_and_zero_exit_records_rechecked':True,'all_final_spec_generator_stdin_and_body_stdout_identical':True,'seven_key_tuple_schema_verified':True,'original_ids_uniquely_disposed':141,'canonical_notes_have_no_stale_pending_review_statement':True,'source_origin_git_commit':ORIGIN,'source_boundary':315,'later_acceptance_baseline':None,'accepted_pages':0,'scope':'Independent reconciliation only; fresh skeptical reviewer and root landing remain separate.'})
+# Refresh manifest after rationale-only additions; no native inputs changed.
+f=read(R/'freeze.json');f['utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();f['files']={str(p.relative_to(R)):ident(p.read_bytes())for p in sorted(R.rglob('*'))if p.is_file()and p.name!='freeze.json'};put(R/'freeze.json',f)
+print(json.dumps({'freeze':ident((R/'freeze.json').read_bytes()),'files':len(f['files']),'original_files_rechecked':original_count}))

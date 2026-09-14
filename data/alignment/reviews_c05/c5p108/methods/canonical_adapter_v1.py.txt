@@ -1,0 +1,19 @@
+"""Invoke preserved canonical functions; no replacement resolver or generator."""
+import sys, pathlib, sqlite3, json
+R=pathlib.Path(__file__).resolve().parents[1];B=R.parent;W=B.parents[1]/'campaign-worktree';P=B/'english/evidence/pinned'
+sys.path.insert(0,str(P/'tools'));sys.path.insert(0,str(P/'engines'))
+import gen_alignment_page as G
+G.B.SPINE=str(W/'build/hgm_spine_v27_2.db');original_connect=sqlite3.connect
+def ro(path,*args,**kwargs):
+ assert str(path)==G.B.SPINE
+ return original_connect('file:'+str(path)+'?mode=ro',uri=True)
+sqlite3.connect=ro
+if sys.argv[1]=='generator':G.main()
+else:
+ spec=json.load(sys.stdin);db=ro(G.B.SPINE);rows=[]
+ for seg in spec['segments']:
+  w,e=db.execute('select wylie,english from corpus_segments where course=? and seq=?',(spec['course'],seg['seq'])).fetchone()
+  spans=seg['spans'];t=G.resolve(w,spans,'tib',seg['seq']);ids={x['id']:x for x in spans}
+  order=G.with_members(spans,[ids[x]for x in seg['eng_order']],e);eng=G.resolve(e,order,'eng',seg['seq'])
+  for x in spans:rows.append({'seq':seg['seq'],'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x['eng'],'tib_range':t[x['id']],'eng_range':eng.get(x['id'])})
+ sys.stdout.write(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')

@@ -1,0 +1,16 @@
+import sys,pathlib,json,subprocess,os,hashlib,datetime
+P=pathlib.Path(__file__).resolve().parents[1]
+def sha(x):return hashlib.sha256(x).hexdigest()
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+for seq in [322,323,324]:
+ d=P/str(seq);raw=(d/'spec.json').read_bytes();dec=json.loads((d/'decisions.json').read_text());native={}
+ for label,script in [('resolver','resolve.py'),('generator','canonical_adapter.py')]:
+  n=d/(label+'-v1');n.mkdir();argv=[sys.executable,'-B',str(P/'helpers'/script)];env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1');start=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(argv,input=raw,cwd=P,env=env,capture_output=True);streams={'stdin':raw,'stdout':r.stdout,'stderr':r.stderr}
+  for k,v in streams.items():(n/(k+'.bin')).write_bytes(v)
+  (n/'exit.txt').write_text(str(r.returncode)+'\n');rec={'argv':argv,'cwd':str(P),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'utc':start,'exit':r.returncode,'streams':{k:{'bytes':len(v),'sha256':sha(v)} for k,v in streams.items()}};put(n/'execution.json',rec);native[label]=rec
+  assert r.returncode==0 and not r.stderr,(seq,label,r.returncode,r.stderr)
+  if label=='resolver':
+   resolved=json.loads(r.stdout);put(d/'resolved-ranges.json',resolved)
+   for a,b in zip(dec['spans'],resolved):assert a['id']==b['id'] and a['tib_range']==b['tib_range'] and a['eng_range']==b['eng_range'],(seq,a,b)
+  else:(d/'body.html').write_bytes(r.stdout)
+ spans=json.loads(raw)['segments'][0]['spans'];counts={'spans':len(spans),'d5_total':sum(s['d']==5 for s in spans),'nonnull_d5':sum(s['d']==5 and s['eng'] is not None for s in spans),'d7':sum(s['d']==7 for s in spans),'nulls':sum(s['eng'] is None for s in spans)};put(d/'verification.json',{'seq':seq,'counts':counts,'spec_bytes':len(raw),'spec_sha256':sha(raw),'body_bytes':len((d/'body.html').read_bytes()),'body_sha256':sha((d/'body.html').read_bytes()),'body_equals_native_stdout':True,'generator_exit':0,'stderr_bytes':0,'canonical_range_match_to_independent_intent':True,'native':native});print(seq,counts,len((d/'body.html').read_bytes()))

@@ -1,0 +1,7 @@
+import json,sys
+from canonical_adapter import G,P
+spec=json.load(sys.stdin);rows={r['seq']:r for r in json.loads((P/'evidence/source.json').read_text())};out=[]
+for seg in spec['segments']:
+ s=rows[seg['seq']];spans=seg['spans'];by={x['id']:x for x in spans};tr=G.resolve(s['wylie'],spans,'tib',s['seq']);es=G.with_members(spans,[by[i] for i in seg['eng_order']],s['english']);er=G.resolve(s['english'],es,'eng',s['seq'])
+ for x in spans:out.append({**x,'seq':s['seq'],'tib_range':tr[x['id']],'eng_range':er.get(x['id'])})
+print(json.dumps(out,ensure_ascii=False,indent=2))

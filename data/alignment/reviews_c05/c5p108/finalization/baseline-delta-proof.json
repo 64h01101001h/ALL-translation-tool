@@ -1,0 +1,331 @@
+{
+  "status": "PASS_SCOPED_BASELINE_GOVERNING_REGISTER_DELTA",
+  "utc": "2026-09-14T21:36:15.461781+00:00",
+  "source_origin_git_commit": "af139c573f85aaf33278cd079719947ee9af8cdd",
+  "source_origin_course_boundary": 315,
+  "actual_through321_baseline_receipt": {
+    "commit": "36a978597787f0599357ff99ea8bd3f07895229a",
+    "course_boundary": 321,
+    "bytes": 1456,
+    "sha256": "3ca40be74a22905d9fbe298d750b959a338e874360ef00410f8a0f6bdc0ba995",
+    "copy": "finalization/inputs/baseline-through321.json",
+    "verification_proof": "finalization/baseline-delta-proof.json"
+  },
+  "baseline_files": {
+    "data/hgm_dictionary_v27_2.json.gz": {
+      "bytes": 13393560,
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253"
+    },
+    "data/full_parallel_corpus_v32.json.gz": {
+      "bytes": 8965675,
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+    },
+    "data/alignment/alignment_full_v1.json": {
+      "bytes": 10248661,
+      "sha256": "e98e11a26105b600ac3bba20667b2dea701422f791a0c45540512a8967472338"
+    },
+    "data/alignment/alignment_evidence_v1.json": {
+      "bytes": 2244007,
+      "sha256": "e47f362f3014014a1692d3667f9127f453d925bef70465ba2cad00ccc19b6794"
+    },
+    "docs/geshe_michael_roach_dictionary.html": {
+      "bytes": 2254831,
+      "sha256": "eabdad04d7d599505d2318001f0d27bd67e83a5745621600a9c90f2488b6158a"
+    },
+    "docs/geshe_michael_roach_dictionary.csv": {
+      "bytes": 16572835,
+      "sha256": "8c71a9f8035a19b336a36944eefcebe3d4982031c28a291291cd81cdff084458"
+    },
+    "docs/geshe_michael_roach_dictionary_reverse.csv": {
+      "bytes": 5355295,
+      "sha256": "3889795584f9bb149b8d9b1c29f4f4d5ba0cc9cc4f0306d589ab8cd3508f1735"
+    },
+    "docs/geshe_michael_roach_dictionary_by_course.csv": {
+      "bytes": 5280943,
+      "sha256": "dc4adba6c00e744f1b61b5e1d5af81e1b1ee70d6b4b3b4685e8bb2f8aaa735d5"
+    },
+    "docs/geshe_michael_roach_dictionary_changes.csv": {
+      "bytes": 5892,
+      "sha256": "21627b9c74bff54bb0846704d718c65825fd0f7fe4fd1f2bbbe0756ba2e95a1c"
+    }
+  },
+  "actual_baseline_counts": {
+    "full_links": 46839,
+    "null_exponents": 11979,
+    "evidence_headwords": 7156,
+    "evidence_pairs": 15814
+  },
+  "actual_course_coverage": [
+    1,
+    321
+  ],
+  "tracked_clean": true,
+  "original_source_identities_unchanged": {
+    "spine": {
+      "bytes": 249167872,
+      "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc"
+    },
+    "master": {
+      "bytes": 13393560,
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253"
+    },
+    "corpus": {
+      "bytes": 8965675,
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+    },
+    "source": {
+      "bytes": 2848,
+      "sha256": "cd90a470a6942e3489389ee52d43b87605a4c1101b9043bde1c0048a2348c3b7"
+    },
+    "context": {
+      "bytes": 13178,
+      "sha256": "d3266293289371a9db6603d80ceeb44f522964dbeb665ce930ac39c92dce97cd"
+    },
+    "physical": {
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    }
+  },
+  "governing": [
+    {
+      "repository_relative_path": "AGENTS.md",
+      "origin_blob": "92f28f7b01615134a086f39f2c0c6fce6c76ddec",
+      "actual_baseline_blob": "92f28f7b01615134a086f39f2c0c6fce6c76ddec",
+      "changed": false,
+      "copy": "proposal-inputs/evidence/f2ca43b37638c8b86c7b6c47fe3811382239549e1aad721d152493f035907bca.md",
+      "bytes": 11061,
+      "sha256": "f2ca43b37638c8b86c7b6c47fe3811382239549e1aad721d152493f035907bca"
+    },
+    {
+      "repository_relative_path": "docs/ALIGNMENT_LAYER_SPEC.md",
+      "origin_blob": "bc52bc13097523d207b00caf8558cf2a5e2a9367",
+      "actual_baseline_blob": "bc52bc13097523d207b00caf8558cf2a5e2a9367",
+      "changed": false,
+      "copy": "proposal-inputs/evidence/9beb77df0d3e4243a727bacf13682e8429d07721d57457252d15286acfe78cc4.md",
+      "bytes": 12007,
+      "sha256": "9beb77df0d3e4243a727bacf13682e8429d07721d57457252d15286acfe78cc4"
+    },
+    {
+      "repository_relative_path": "docs/alignment_briefs/PROPOSE_BRIEF.md",
+      "origin_blob": "b47879f38348ae138256573c66e0cbcc32d83b0b",
+      "actual_baseline_blob": "b47879f38348ae138256573c66e0cbcc32d83b0b",
+      "changed": false,
+      "copy": "proposal-inputs/evidence/7879afa8f549f91d13133d18fb45f84d916abef215d010dd85c801bd2b0319b7.md",
+      "bytes": 8093,
+      "sha256": "7879afa8f549f91d13133d18fb45f84d916abef215d010dd85c801bd2b0319b7"
+    },
+    {
+      "repository_relative_path": "data/alignment/C05_CAMPAIGN.md",
+      "origin_blob": "bd6a05bdbfba216e6e1427e84894dd18e0e223f2",
+      "actual_baseline_blob": "58290da5cab790332090c6d89d1ec93e89354549",
+      "changed": true,
+      "copy": "finalization/current-governing/C05_CAMPAIGN.md",
+      "bytes": 229342,
+      "sha256": "7780fb6c2908e6d727ccf0f1a5be5c7d08aa781308fc18f559ad0ec4187056c7"
+    },
+    {
+      "repository_relative_path": "tools/gen_alignment_page.py",
+      "origin_blob": "bdce7309d536e42e12caa44324ee728ab0aaa024",
+      "actual_baseline_blob": "bdce7309d536e42e12caa44324ee728ab0aaa024",
+      "changed": false,
+      "copy": "proposal-inputs/evidence/7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e.bin",
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    },
+    {
+      "repository_relative_path": "tools/build_alignment_layer.py",
+      "origin_blob": "90fb527093873909dd829e66e9d3f9bba0a5a990",
+      "actual_baseline_blob": "e240409f6133de2f5ad5056f04db1a5957e2d572",
+      "changed": true,
+      "copy": "finalization/current-governing/build_alignment_layer.py.txt",
+      "bytes": 40038,
+      "sha256": "d6d3f722d27d2d7b8d18c3212964452b1f18ce4fe363dbfccdf52bb567e76cd0"
+    },
+    {
+      "repository_relative_path": "docs/errata_register.json",
+      "origin_blob": "4bc9808c40d59ed43ed9df14055dbd00cb677b84",
+      "actual_baseline_blob": "4bc9808c40d59ed43ed9df14055dbd00cb677b84",
+      "changed": false,
+      "copy": "proposal-inputs/evidence/a7573cd73f59bff9a41ddeecff5b3d1f3056f4fa7b3ce7a600eff378f27e87a6.json",
+      "bytes": 265849,
+      "sha256": "a7573cd73f59bff9a41ddeecff5b3d1f3056f4fa7b3ce7a600eff378f27e87a6"
+    },
+    {
+      "repository_relative_path": "data/alignment/span_head_allow.json",
+      "origin_blob": "9e48021f202f81e33e53d492b0169ebf1e119b95",
+      "actual_baseline_blob": "9e48021f202f81e33e53d492b0169ebf1e119b95",
+      "changed": false,
+      "copy": "proposal-inputs/evidence/38d9750d98bc3bc8add12b188675abec31502fd7b498572e5450ac8c050a94e9.json",
+      "bytes": 14558,
+      "sha256": "38d9750d98bc3bc8add12b188675abec31502fd7b498572e5450ac8c050a94e9"
+    },
+    {
+      "repository_relative_path": "engines/hgm_tools.py",
+      "origin_blob": "49eb86cdd1b6c6ba1eb192d6a4cd0248ff996958",
+      "actual_baseline_blob": "49eb86cdd1b6c6ba1eb192d6a4cd0248ff996958",
+      "changed": false,
+      "copy": "proposal-inputs/evidence/11788e9fc3dc98e76ae9e1c3081e380696b3b75f65fbbeca148efaca274b77c6.bin",
+      "bytes": 2632,
+      "sha256": "11788e9fc3dc98e76ae9e1c3081e380696b3b75f65fbbeca148efaca274b77c6"
+    },
+    {
+      "repository_relative_path": "docs/alignment_briefs/RECONCILE_BRIEF.md",
+      "origin_blob": "1ab2e259bb1d084786c164577f92f64803e5af82",
+      "actual_baseline_blob": "1ab2e259bb1d084786c164577f92f64803e5af82",
+      "changed": false,
+      "copy": "governing/RECONCILE_BRIEF.md",
+      "bytes": 9261,
+      "sha256": "cde68b89f533d219aa829e3a86f8e662079696608619588d19e4fc4a35697a2d"
+    },
+    {
+      "repository_relative_path": "docs/alignment_briefs/REFUTE_BRIEF.md",
+      "origin_blob": "6024a19dab8c2e0ce9f064dd802109621855f483",
+      "actual_baseline_blob": "6024a19dab8c2e0ce9f064dd802109621855f483",
+      "changed": false,
+      "copy": "governing/REFUTE_BRIEF.md",
+      "bytes": 3546,
+      "sha256": "23b2d5212fe428440085c7b2234f709994b770e2b95c6a111a1113e4db774674"
+    }
+  ],
+  "register_check": "finalization/current-register-check.json",
+  "checkpoint_inventory": {
+    "bytes": 79537,
+    "sha256": "6e538cd57aa5d40465f58e2133b011fefd80d1b52cae2b46903509a235fe88d6"
+  },
+  "checkpoint_files_verified": 454,
+  "preparation_proof": {
+    "bytes": 5516,
+    "sha256": "5ba59b9fed70b025d607865dc519fb31bf434d5a834575624963ca0c86c5ff86"
+  },
+  "root_preparation_method_review": {
+    "bytes": 1685,
+    "sha256": "cce2bc4178171c49397ef91d41fb927103251f8aa33d12ca2266f9c10a2e39ac"
+  },
+  "previous_closure_proof": {
+    "bytes": 999,
+    "sha256": "c745df610956a6b7a34ca3212c8ff29f542511e54eb345b64cd45a22bbca3241"
+  },
+  "existing_final_native": [
+    {
+      "seq": 322,
+      "mode": "generator",
+      "directory": "native/final-322-generator-v1",
+      "execution": {
+        "bytes": 1269,
+        "sha256": "a91e1da53aded1e2695a48c42a17ea962f28d7061f0fde0813824ebb4d0b6a5d"
+      },
+      "exit": 0
+    },
+    {
+      "seq": 322,
+      "mode": "resolver",
+      "directory": "native/final-322-resolver-v1",
+      "execution": {
+        "bytes": 1267,
+        "sha256": "49ff231d517d3d6d9ab11a6daf3904895c288f3873d8761ebd318392df641a42"
+      },
+      "exit": 0
+    },
+    {
+      "seq": 323,
+      "mode": "generator",
+      "directory": "native/final-323-generator-v1",
+      "execution": {
+        "bytes": 1270,
+        "sha256": "5220aabbe4b7dfe4f1c88fe06618c971fcfb799993efb9d943d3c343eb79c165"
+      },
+      "exit": 0
+    },
+    {
+      "seq": 323,
+      "mode": "resolver",
+      "directory": "native/final-323-resolver-v1",
+      "execution": {
+        "bytes": 1267,
+        "sha256": "25d99a65acc933f396fbd00f1e96b37ecc7f707d7297092717a677d8abce72e3"
+      },
+      "exit": 0
+    },
+    {
+      "seq": 324,
+      "mode": "generator",
+      "directory": "native/final-324-generator-v1",
+      "execution": {
+        "bytes": 1270,
+        "sha256": "5d932d305a6edd392f35911c2db2aa3f819e02606c4106d8eac3105e32ae3bd3"
+      },
+      "exit": 0
+    },
+    {
+      "seq": 324,
+      "mode": "resolver",
+      "directory": "native/final-324-resolver-v1",
+      "execution": {
+        "bytes": 1268,
+        "sha256": "c1c70c7c6d8d5b51a5e3a70ff37df28b631c4a61bbb8fc871286b3d020b0a4fb"
+      },
+      "exit": 0
+    }
+  ],
+  "original_generator_reuse_records": 6,
+  "generator_runs_during_finalization": 0,
+  "resolver_runs_during_finalization": 0,
+  "corpus_or_master_query_reruns": 0,
+  "semantic_role": "Scoped finalizer verified only actual baseline, current governing/register delta and unchanged checkpoint evidence. Earlier independent reviewer performed the full linguistic review; root separately recorded full source-specific reading. No claim of personally repeating those readings.",
+  "command_records": [
+    "finalization/commands-attempt02/000",
+    "finalization/commands-attempt02/001",
+    "finalization/commands-attempt02/002",
+    "finalization/commands-attempt02/003",
+    "finalization/commands-attempt02/004",
+    "finalization/commands-attempt02/005",
+    "finalization/commands-attempt02/006",
+    "finalization/commands-attempt02/007",
+    "finalization/commands-attempt02/008",
+    "finalization/commands-attempt02/009",
+    "finalization/commands-attempt02/010",
+    "finalization/commands-attempt02/011",
+    "finalization/commands-attempt02/012",
+    "finalization/commands-attempt02/013",
+    "finalization/commands-attempt02/014",
+    "finalization/commands-attempt02/015",
+    "finalization/commands-attempt02/016",
+    "finalization/commands-attempt02/017",
+    "finalization/commands-attempt02/018",
+    "finalization/commands-attempt02/019",
+    "finalization/commands-attempt02/020",
+    "finalization/commands-attempt02/021",
+    "finalization/commands-attempt02/022",
+    "finalization/commands-attempt02/023",
+    "finalization/commands-attempt02/024",
+    "finalization/commands-attempt02/025",
+    "finalization/commands-attempt02/026",
+    "finalization/commands-attempt02/027",
+    "finalization/commands-attempt02/028",
+    "finalization/commands-attempt02/029",
+    "finalization/commands-attempt02/030",
+    "finalization/commands-attempt02/031",
+    "finalization/commands-attempt02/032",
+    "finalization/commands-attempt02/033",
+    "finalization/commands-attempt02/034",
+    "finalization/commands-attempt02/035",
+    "finalization/commands-attempt02/036",
+    "finalization/commands-attempt02/037",
+    "finalization/commands-attempt02/038",
+    "finalization/commands-attempt02/039",
+    "finalization/commands-attempt02/040",
+    "finalization/commands-attempt02/041",
+    "finalization/commands-attempt02/042",
+    "finalization/commands-attempt02/043",
+    "finalization/commands-attempt02/044",
+    "finalization/commands-attempt02/045",
+    "finalization/commands-attempt02/046",
+    "finalization/commands-attempt02/047",
+    "finalization/commands-attempt02/048",
+    "finalization/commands-attempt02/049",
+    "finalization/commands-attempt02/050",
+    "finalization/commands-attempt02/051"
+  ],
+  "prior_failed_attempt": "finalization/attempt01/execution.json",
+  "failure_disposition": "Attempt01 compared the closure data-tree field to the later DOCS tree. Attempt02 verifies the actual data tree and its DOCS child; current HEAD/baseline hashes remain separately checked. No original semantic metadata changed before the failure."
+}

@@ -1,0 +1,16 @@
+import pathlib,json,re
+P=pathlib.Path(__file__).resolve().parents[1];r=(P/'evidence/C05ReadingASCII.txt.bin').read_bytes();text=r.decode('latin1');tokens=list(re.finditer(r'\S+',text));fold=' '.join(m.group() for m in tokens);map_=[]
+for n,m in enumerate(tokens):
+ if n:map_.append(None)
+ map_.extend(range(m.start(),m.end()))
+proof=[]
+for s in json.loads((P/'evidence/source.json').read_text()):
+ fields={}
+ for field in ['acip','english']:
+  v=' '.join(s[field].split());i=fold.find(v);assert i>=0;lo,hi=map_[i],map_[i+len(v)-1]+1;assert ' '.join(text[lo:hi].split())==v;fields[field]={'fold_range':[i,i+len(v)],'raw_byte_range':[lo,hi],'whole_field_linefold_exact':True,'raw_extent':text[lo:hi],'source_field':s[field]}
+ proof.append({'seq':s['seq'],'fields':fields,'linefold':"' '.join(raw.decode('latin1').split())",'physical_path':'evidence/C05ReadingASCII.txt.bin'})
+(P/'evidence/physical-source-proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+reg=json.loads((P/'evidence/pinned/docs/errata_register.json').read_text());relevant=[r for r in reg if any(x in json.dumps(r).lower() for x in ['c05:322','c05:323','c05:324','heading','formless','zhi','black and white'])];(P/'evidence/registered-complete-records.json').write_text(json.dumps({'register_count':len(reg),'selection':'records containing c05:322/c05:323/c05:324/heading/formless/zhi/black and white','records':relevant},ensure_ascii=False,indent=2)+'\n')
+for n in ['full-lexical-evidence.json','corpus-query-evidence.json','external-corpus-evidence.json']:
+ a=json.loads((P/'evidence'/n).read_text());print(n,[(x.get('term',x.get('label')),x['count']) for x in a])
+print('REGISTER',len(reg),len(relevant))

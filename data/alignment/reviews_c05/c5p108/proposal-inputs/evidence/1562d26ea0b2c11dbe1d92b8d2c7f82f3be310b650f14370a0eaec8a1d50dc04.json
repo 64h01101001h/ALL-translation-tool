@@ -1,0 +1,71 @@
+{
+  "schema": "c05-independent-reconciliation-record-schemas-v1",
+  "final-ordered-tuples.json": {
+    "root": "list",
+    "required_exact_keys": [
+      "id",
+      "d",
+      "tib",
+      "eng",
+      "seq",
+      "tib_range",
+      "eng_range"
+    ],
+    "ranges": "zero-based half-open Unicode character offsets in original spine fields",
+    "order": "Tibetan spec order, with d7 member groups immediately after parent; eng_order supplies independent English flat order"
+  },
+  "original-dispositions.json": {
+    "root": "list",
+    "keys": [
+      "angle",
+      "seq",
+      "original",
+      "status",
+      "final_ids",
+      "reason"
+    ],
+    "original": "complete original decision object including id, depth, wording, selected occurrence ranges and original rationale",
+    "status_enum": [
+      "unchanged",
+      "recast",
+      "rejected"
+    ]
+  },
+  "five-ground-screens.json": {
+    "root": "list",
+    "grounds": [
+      "a_quote",
+      "b_parallel",
+      "c_registered",
+      "d_defensibility",
+      "e_counts"
+    ],
+    "record_identity": [
+      "angle",
+      "original_index",
+      "seq",
+      "kind"
+    ],
+    "original_record_ref": "exact frozen complete original screen, indexed by zero-based item"
+  },
+  "freeze.json": {
+    "schema": "c05-independent-reconciliation-freeze-v1",
+    "files": "DICT keyed by reconciliation-relative file path, each value {bytes,sha256}; excludes freeze itself"
+  },
+  "evidence/master-records.json": {
+    "root": "DICT",
+    "key": "original collection:index",
+    "value": "complete exact parsed master entry including all provenance/reference fields"
+  },
+  "evidence/corpus-records.json": {
+    "root": "DICT",
+    "key": "course:seq",
+    "value": "complete original spine row including raw"
+  },
+  "evidence/external-corpus-records.json": {
+    "root": "DICT",
+    "key": "original zero-based external corpus index",
+    "value": "complete exact external corpus object"
+  },
+  "proof_policy": "Exact original proof directories stay in place and are indexed, never recursively copied; all fresh native streams/stdin/stderr/exits are retained."
+}

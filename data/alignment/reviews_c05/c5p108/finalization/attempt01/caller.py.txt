@@ -1,0 +1,24 @@
+"""Retain the scoped metadata finalizer's actual complete native streams."""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess, sys, time
+S=Path(__file__).resolve().parents[2]
+D=S/'finalization/attempt01';D.mkdir(parents=True,exist_ok=False)
+method=Path(__file__).with_name('finalize_pending_v1.py.txt')
+argv=[sys.executable,'-B',str(method)]
+(D/'method.py.txt').write_bytes(method.read_bytes())
+(D/'caller.py.txt').write_bytes(Path(__file__).read_bytes())
+(D/'stdin.bin').write_bytes(b'')
+utc=datetime.datetime.now(datetime.timezone.utc).isoformat();start=time.monotonic()
+with (D/'stdout.bin').open('wb')as out,(D/'stderr.bin').open('wb')as err:
+ p=subprocess.run(argv,cwd=S,input=b'',stdout=out,stderr=err,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'))
+(D/'exit.txt').write_text(str(p.returncode)+'\n')
+def pin(path):
+ raw=path.read_bytes();return dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+record=dict(argv=argv,cwd=str(S),utc=utc,elapsed_seconds=time.monotonic()-start,exit=p.returncode,
+ environment_override=dict(PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'),
+ method=pin(D/'method.py.txt'),caller=pin(D/'caller.py.txt'),
+ streams={k:pin(D/(k+'.bin'))for k in ('stdin','stdout','stderr')},generator_runs=0,resolver_runs=0)
+(D/'execution.json').write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(record,indent=2))
+if p.returncode:sys.stderr.write((D/'stderr.bin').read_text())
+sys.exit(p.returncode)

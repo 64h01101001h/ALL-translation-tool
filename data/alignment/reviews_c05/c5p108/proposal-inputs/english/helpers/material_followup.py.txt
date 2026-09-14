@@ -1,0 +1,22 @@
+import json,gzip,sqlite3,re,hashlib,os
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];W=A.parents[2]/'campaign-worktree'
+def put(n,o):(A/'evidence'/n).write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+db=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;c=json.load(gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt'));m=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt'))
+qs=[]
+for field,piece in [('wylie','chos bzod'),('wylie','gzugs med'),('english','mastery of phenomena'),('english','virtue of the form'),('english','four instants')]:
+ sql=f"select * from corpus_segments where course='C05' and instr({field},?)>0 order by id";rows=[dict(r)for r in db.execute(sql,(piece,))];cr=[{'corpus_index':i,'record':r}for i,r in enumerate(c)if r.get('course')=='C05' and piece in r.get(field,'')];qs.append({'sql':sql,'params':[piece],'field':field,'course':'C05','count':len(rows),'rows':rows,'corpus_count':len(cr),'corpus_records':cr})
+put('followup-corpus-queries.json',qs)
+terms=["'dod",'dang','de','ni','te','byed',"'dod chags dang bral ba",'zad','brought']
+lex=[]
+for t in terms:
+ rec=[{'collection':coll,'index':i,'entry':e}for coll in ['unified_entries','curated_entries','glossary_entries']for i,e in enumerate(m[coll])if e.get('wylie')==t];lex.append({'term':t,'query':{'field':'wylie','equals':t},'count':len(rec),'master_records':rec})
+put('supplemental-lexical-evidence.json',lex)
+raw=(A/'evidence/C05ReadingASCII.txt').read_bytes();fold=' '.join(raw.decode('latin1').split());proof=[]
+for r in json.loads((A/'evidence/source.json').read_text()):
+ ac=raw.find(r['acip'].encode());af=fold.find(r['acip']);en=fold.find(r['english']);assert af>=0 and en>=0;proof.append({'seq':r['seq'],'acip_range_bytes':[ac,ac+len(r['acip'].encode())] if ac>=0 else None,'acip_range_latin1_whitespace_fold':[af,af+len(r['acip'])],'english_range_latin1_whitespace_fold':[en,en+len(r['english'])],'acip_exact_after_whitespace_fold':True,'english_complete_exact_after_whitespace_fold':True,'raw_sha256':hashlib.sha256(raw).hexdigest(),'original_path':json.loads((A/'evidence/source-identities.json').read_text())['physical']['path'],'operation':"' '.join(raw.decode('latin1').split())"})
+put('physical-complete-row-proof.json',proof)
+paths=["Desktop/HGM DICTIONARY - TRANSLATION APP","ACIP Software Developmeent/Gofer Developmetn Files","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra","ACIP Software Developmeent/tibetan-spellchecker","Tibetan Translation Tool"]
+access=[{'path':'/Users/adamderickandrade/'+p,'readable':os.access('/Users/adamderickandrade/'+p,os.R_OK)}for p in paths];assert all(p['readable']for p in access);put('required-access.json',access)
+reg=json.loads((A/'evidence/pinned/docs/errata_register.json').read_text());put('register-evidence.json',{'count':len(reg),'direct_batch_records':[r for r in reg if r.get('segment') in ['C05:322','C05:323','C05:324']],'found_quote_records':[r for r in reg if any(t in r.get('found','')for t in ['CHOS BZOD PA ZHI','virtue of the formless realm'])],'registered_classes':[r for r in reg if r.get('item_id')in ['E-044','E-071','E-076','E-107','E-111','E-121']],'following_heading_authority':'pinned/docs/alignment_briefs/PROPOSE_BRIEF.md ERRATA DUTY; pinned/docs/ALIGNMENT_LAYER_SPEC.md section4'})
+print(json.dumps([{'query':q['params'][0],'count':q['count'],'external_count':q['corpus_count'],'refs':[[r['course'],r['seq']]for r in q['rows']]}for q in qs]));print('physical',json.dumps(proof));print('supplement',json.dumps([{'term':q['term'],'count':q['count']}for q in lex]))

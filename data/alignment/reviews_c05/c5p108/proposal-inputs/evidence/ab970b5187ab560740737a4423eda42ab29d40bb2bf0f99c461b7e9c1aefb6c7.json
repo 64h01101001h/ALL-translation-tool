@@ -1,0 +1,13 @@
+{
+  "reconciliation_incidents": [
+    {
+      "kind": "read-only search shell glob failure",
+      "failed_expression": "campaign-worktree/tests/*supplied*",
+      "message": "zsh: no matches found: campaign-worktree/tests/*supplied*",
+      "effect": "No source or output mutation. Resolved via rg --files, then exact tools/test_no_supplied_span_head.py read."
+    }
+  ],
+  "original_failures": "All original failed helper versions and incidents remain byte-exact under the two indexed original freeze dictionaries; no originals were overwritten.",
+  "native_failures": [],
+  "native_generation_policy": "Six successful original generations reused; six originals independently resolved; each final resolved and generated once; rationale-only packaging does not rerun native generation."
+}

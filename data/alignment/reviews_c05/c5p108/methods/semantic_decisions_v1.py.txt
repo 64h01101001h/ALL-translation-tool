@@ -1,0 +1,127 @@
+"""Independent correspondence decisions following complete source review."""
+import pathlib,json,re,hashlib,html
+R=pathlib.Path(__file__).resolve().parents[1];B=R.parent
+def get(p):return json.loads(p.read_text())
+def put(name,x):
+ p=R/name;p.parent.mkdir(parents=True,exist_ok=True);assert not p.exists();p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def ident(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+reasons={
+322:[
+'Introductory ending causative is a complete established predicate. The passive auxiliary and explanatory subject are outside its English span.',
+'Exhaustion/result member zad uniquely corresponds to end inside the introductory causative, not the later result.',
+'Causative byed uniquely supplies brought inside that same parent. It does not claim the passive auxiliary.',
+'Manner tshul has the overt interrogative manner exponent how in this introduction.',
+'Chos bzod pa is the doctrinal mastery-of-phenomena unit. GMR supplies the leading the; its exclusion is sound.',
+'Chos is the phenomena member of that particular compound, strictly inside the parent on both sides.',
+'Bzod pa is the mastery member; English member order reverses Tibetan order and the resolver keeps the same parent.',
+'The first dang joins the two enumerated groups and owns as well as. The later dang is a separation complement.',
+'The first desire is attachment from which the path is free; the realm qualifier at the end is another occurrence.',
+'Bral ba expresses freedom from the immediately preceding desire. Free of is complete enough as a relational predicate; which is is supplied grammar.',
+'The established uninterrupted-path unit belongs to the eight instants. The bracketed path of seeing does not supply its path occurrence.',
+'Bar chad med is the unique interruption-free modifier within this path; med scopes interruption and is not a separate English negative atom.',
+'Lam owns the path within the compound at 211–215, not the explanatory bracket at 229–233.',
+'Brgyad counts eight. The English counting noun instants is explanatory and excluded.',
+'Sems pa is the mental movement associated with the twelve types; its morphology does not justify separate mental or movement members.',
+'Rnam pa distinguishes the types of those mental movements and matches types.',
+'Bcu gnyis is twelve as one numeral; no ten or two is separately present in English.',
+'De resumes the previously enumerated twelve types as These in the next sentence.',
+'Nag po qualifies the black deeds being ended. It does not own the supplied object noun deeds.',
+'The second zad supplies end after black deeds. The resultative frame to an is excluded from the narrower lexical atom.',
+'The second byed supplies act in the causative clause. To bring is a distributed expansion, so the narrower atom is preferable.',
+'Las denotes the acting deeds at 323–328; the opening explanatory deeds and later black-deeds object are distinct and unclaimed.',
+"The contracted 'dod in 'dod nyon denotes the desire realm. The clause itself supplies the contextual realm sense; this is not the earlier attachment noun.",
+'Nyon is the contracted affliction noun in that realm expression. Mental afflictions is its local exponent; all the and the relative frame remain outside.',
+'Spong is elimination of those desire-realm afflictions, at the only eliminate occurrence.',
+'Final byed is function in function to eliminate; the earlier act and brought occurrences belong to other causatives.',
+'Final phyir marks the reason for the whole preceding classification and owns causal for, excluding they.'
+],
+323:[
+'The complete inflected uninterrupted-path expression retains its internal genitive; the term as a whole is locally and lexically established.',
+'Bar chad med owns uninterrupted within the same parent; negation applies to interruption.',
+'Lam owns only path within that same technical parent.',
+'Dgu pa is the ordinal ninth; supplied instant is not included.',
+'Sems pa is the mental movement identified by the opening relative construction.',
+'Gang yin pa is a relative identifying construction with a copula, corresponding to which is. D3 reflects that source phrase; it is not an isolated lexical pronoun or a d7 parent.',
+'De resumes the identified mental movement as This at the next sentence start.',
+'Dkar gnag is the established dual-color unit and locally means white and black. Its internal conjunction needs no fabricated standalone dang.',
+'Dkar uniquely supplies white within the compound.',
+'Gnag uniquely supplies black within the compound; NAG elsewhere is not grounds to alter this spelling.',
+'Zad supplies end as the result of the act. The narrower lexical atom avoids assigning the distributed resultative par.',
+'Byed supplies acts. The main deed predicate is distinct from the subsequent elimination mechanisms.',
+'Las owns deed; the preceding a and copula remain outside.',
+"The first 'dod pa qualifies virtue and owns the hyphenated desire-realm, not either later bare desire expression.",
+'Dge ba is the virtue eliminated by relinquishing aspiration. Its prose occurrence is locally attested without changing the curated master goodness gloss.',
+'La marks virtue as the object of aspiration/desire. For at 267–270 is that relation; it is a supplied anaphor and excluded.',
+"Complete 'dun pa 'dod chags dang bral ba states release from aspiration/desire. The active English eliminating the aspiration, or the desire preserves that whole relation; internal articles and apposition serve it. This is not a bare bral ba/eliminating lexical equivalence, and does not borrow either finite spong predicate. Local objects, release direction, and the means attachment support D3 independently of the glossary or corpus substring totals.",
+'Sgo nas is an established lexical means idiom, used here to introduce the preceding release relation as the means of abandoning virtue. D5 is defensible; neither sgo nor nas receives an invented member.',
+'First spong owns first finite eliminates at 181–191, whose object is desire-realm virtue; it does not own the intervening eliminating.',
+"Second 'dod pa qualifies the mental afflictions and takes desire realm in the Secondly clause.",
+'Nyon mongs denotes the afflictions eliminated in the second mechanism. All the is excluded.',
+'Thob pa is the retaining factor rendered hold. Which retains them explains that single factor and cannot create a second occurrence.',
+'Chad pa states cessation of the retaining hold; stops is its overt local predicate, excluding the supplied agent one.',
+'Tshul is the manner/process of that cessation. Here being that is explanatory English and not part of the lexical atom.',
+'Second spong ba owns finite eliminates at 288–298, with the afflictions as object. Both finite English predicates have distinct Tibetan predicates.',
+'Final phyir supplies because introducing both reasons. First of all and Secondly organize the English and stay unwrapped.'
+],
+324:[
+'Bsam gtan denotes a concentration level in this numbered context; the complete level of concentration is locally attested and is a glossary expression.',
+'Bzhi pa is fourth in this source. No third is stated here, despite a noisy mined master suggestion.',
+'First la marks the fourth concentration as the object of desire and owns first English for at 107–110.',
+'First desire is attachment toward that fourth concentration, within the path modifier.',
+'First bral ba corresponds directly to free of. The later freedom/manner relation is compressed elsewhere and is not this occurrence.',
+'The uninterrupted-path compound is complete and the subject of the arising expression.',
+'The modifier bar chad med is unique within the technical parent and keeps negation on interruption.',
+'Lam owns path within that same parent.',
+'Skyes pa is nominal arising of the path; the final instant modifies that arising.',
+'Tha mas is the instrumentally inflected last/final expression. Final is local lexical content; its source -s stays attached and the wider It is by this frame remains unwrapped.',
+'Dkar po owns white; deeds is supplied from the discussion and there is no local las to duplicate.',
+'The complete end-causing predicate corresponds to the contiguous brought to an end. Are is excluded.',
+'Zad uniquely owns end within this causative parent.',
+'Byed uniquely owns brought within this same parent.',
+'Dge ba remains virtue independently of the disputed realm label. Keeping it does not assert gzugs/formless realm.',
+'Second la marks virtue as the object of aspiration/desire; it owns third English for at 252–255, beyond the causal for.',
+"'Dun pa owns aspiration in the compressed final explanation; no separate phrase claims the same English.",
+"Second 'dod chags owns the appositional desire, after aspiration, not the earlier path-modifier desire.",
+'Spong ba is the only main elimination predicate, with the English eliminates. The intervening freedom/manner construction contributes distributively and receives neither a duplicate exponent nor a false null.',
+'Phyir is the causal for at 200–203; the first and third for are the two la complements.'
+]}
+resolved=get(R/'resolved-spans.json');source=get(R/'evidence/corpus-records.json');final=[];original=[];omissions=[];extentproof=[];segments=[]
+for s in (322,323,324):
+ p=B/'reconciled'/str(s);spec=get(p/'spec.json')['segments'][0];spans=spec['spans'];rs=[x for x in resolved if x['seq']==s];assert len(rs)==len(reasons[s])==len(spans)
+ rr={x['id']:x for x in rs};parent=None
+ for x,note in zip(spans,reasons[s]):
+  r=rr[x['id']];assert {k:x[k]for k in ('id','d','tib','eng')}=={k:r[k]for k in ('id','d','tib','eng')}
+  if x['d']==7:
+   assert parent and parent['d']==5
+   for side in ('tib','eng'):
+    a,b=r[side+'_range'];lo,hi=parent[side+'_range'];assert lo<=a<b<=hi and (a,b)!=(lo,hi)
+  else:parent=r
+  final.append({**r,'verdict':'SOUND','reviewer_rationale':note,'depth_checked':True,'selected_occurrence_checked':True,'gated_head':False})
+ assert not any(re.match(r'(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) ',x['eng'] or '')for x in spans if x['d']in (5,7))
+ for side,field in [('tib','wylie'),('eng','english')]:
+  text=source[f'C05:{s}'][field];used=sorted(r[side+'_range']for r in rs if r['d']!=7 and r[side+'_range']is not None);cur=0;gaps=[]
+  for lo,hi in used:
+   assert cur<=lo<hi<=len(text)
+   if cur<lo:gaps.append({'range':[cur,lo],'text':text[cur:lo]})
+   cur=hi
+  if cur<len(text):gaps.append({'range':[cur,len(text)],'text':text[cur:]})
+  assert gaps==get(p/'complete-unwrapped-extents.json')[side]
+  extentproof.append({'seq':s,'side':side,'complete_gaps':gaps,'all_gaps_reviewed':True,'no_null_assertions':True})
+ dispositions=get(p/'original-dispositions.json')
+ for a in ('tibetan','english'):
+  dec=get(B/a/str(s)/'decisions.json');old=get(B/a/str(s)/'spec.json')['segments'][0]['spans'];items=[x for x in dispositions if x['angle']==a]
+  assert [x['original']for x in items]==dec['spans'];assert len(items)==len(old)
+  for x,sp in zip(items,old):
+   assert all(x['original'][k]==v for k,v in sp.items())
+   fr=[rr[i]for i in x['final_ids']];assert fr
+   original.append({'seq':s,'angle':a,'original_id':sp['id'],'original':x['original'],'reconciler_status':x['status'],'final_ids':x['final_ids'],'verdict':'DISPOSITION_SOUND','reviewer_rationale':x['reason']if x['status']!='unchanged'else 'Exact content, depth and occurrence retained; the independent source-specific rationale is recorded for the identified final span.','independent_final_review_refs':[f'{s}:{i}'for i in x['final_ids']]})
+ for x in get(p/'original-omissions.json'):
+  omissions.append({**x,'seq':s,'verdict':'DISPOSITION_SOUND','reviewer_rationale':'Compared this complete original omission with both original and final spans and the complete unwrapped extents. '+x['reconciled_disposition']})
+ ib=ident((p/'spec.json').read_bytes());ob=ident((p/'body.html').read_bytes());proof=get(R/'native'/f'final-{s}-generator-v1/execution.json');assert proof['exit']==0 and proof['streams']['stdout']==ob
+ segments.append({'seq':s,'span_count':len(spans),'null_count':sum(x['eng']is None for x in spans),'word_pair_count':sum(x['d']==5 and x['eng']is not None for x in spans),'spec_sha256':ib['sha256'],'spec_bytes':ib['bytes'],'body_sha256':ob['sha256'],'body_bytes':ob['bytes'],'generator_exit':0,'d7_count':sum(x['d']==7 for x in spans),'d3_count':sum(x['d']==3 for x in spans),'d6_count':sum(x['d']==6 for x in spans),'fresh_body_equal':True})
+assert len(original)==141 and len(final)==73 and len(omissions)==22
+put('correspondence-review.json',{'producer':'Codex independent skeptical semantic reviewer','original_correspondences':original,'final_correspondences':final,'original_omissions':omissions})
+put('complete-omission-review.json',extentproof);put('segment-measurements.json',segments)
+put('span-head-allow-needed.json',{})
+put('depth-negation-review.json',{'all_final_spans_checked':73,'all_original_spans_checked':141,'d7_final':14,'d3_final':2,'d6_final':7,'nulls':0,'bound_agentive_s_separated':False,'phonetic_members':0,'extra_negative_affixes':0,'negation_scope':'Every med belongs to the bar chad med interruption-free modifier. No missing MED is invented for GZUGS. No source spelling is normalized.','phrase_rulings':{'323:w6':'Relative identifier gang yin pa is a source phrase with a copula, correctly kept at d3.','323:w17':'Complete release relation with its aspiration/desire object, d3; not an isolated lexical bral ba/eliminating claim.'}})
+print(json.dumps({'original':len(original),'final':len(final),'omissions':len(omissions),'word_pairs':sum(x['word_pair_count']for x in segments)}))

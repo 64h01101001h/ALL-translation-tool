@@ -1,0 +1,59 @@
+import json,pathlib,copy
+R=pathlib.Path(__file__).resolve().parents[1];B=R.parent
+def read(p):return json.loads(p.read_text())
+def write(p,d):p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+source={x['seq']:x for x in read(B/'source.json')}; originals={}
+for a in ['tibetan','english']:
+ for seq in [322,323,324]:originals[a,seq]=read(B/a/str(seq)/'decisions.json')['spans']
+notes={
+322:'PROVISIONAL machine alignment by Codex, independent reconciliation. ZHI/zhi is not aligned with four; the probable numeral-spelling question remains an editorial query, and no source correction is applied. The second ending causative is discontinuous, so zad/end and byed/act retain only the tighter lexical atoms. The introductory causative keeps its unique end and brought members. Repeated deeds, desire and causatives select their stated source occurrences. Supplied participants, brackets and distributed grammar remain unwrapped; omission is not a null. No hgm_gloss promotion.',
+323:'PROVISIONAL machine alignment by Codex, independent reconciliation. The complete release-of-aspiration/desire construction is retained at phrase depth as eliminating the aspiration, or the desire; the active English recast is not banked as an isolated bral ba/eliminating dictionary pair. Both finite eliminates occurrences remain on their own spong predicates and objects. The established dkar gnag and sgo nas units are retained; the relative identifying construction stays at phrase depth. The object-marking la owns for, while supplied it remains unwrapped. Hold is banked once; which retains them explains the same factor. No hgm_gloss promotion.',
+324:'PROVISIONAL machine alignment by Codex, independent reconciliation. GZUGS/gzugs opposite formless realm stays unbanked as a disputed correspondence, never a null. The complete HGM gzugs record itself lists formless realm, alongside form realm and realm of form; local white-deed context favors form, so the retained editorial query is only PROBABLE and applies no correction. The first and third English for belong to their two la complements; the middle for is causal phyir. The second release/manner construction is distributed in the elimination clause and is omitted. Whole tha mas retains inseparable -s. The original following heading is preserved unaligned under the registered class. No hgm_gloss promotion.'}
+for seq in [322,323,324]:
+ draft=copy.deepcopy(originals['tibetan'if seq==323 else'english',seq])
+ if seq==323:
+  out=[]
+  for x in draft:
+   if x['id']=='w11': x['tib']='zad';x['tib_range']=[67,70]
+   if x['id']=='w16':
+    out.append(copy.deepcopy(originals['english',323][13]))
+    out.append({'id':'recast','d':3,'tib':"'dun pa 'dod chags dang bral ba",'eng':'eliminating the aspiration, or the desire','seq':323,'tib_range':[117,148],'eng_range':[224,265],'rationale':'Complete release of aspiration/attachment is rendered as active elimination in the means clause. The full object-predicate relation licenses the whole recast, including the English object articles/apposition; it does not establish isolated bral ba as a lexical equivalent of eliminating. No supplied participant is captured.'})
+   elif x['id']in ['w17','w18']:continue
+   else:
+    if x['id']=='w19':x['d']=5;x['rationale']='sgo nas is an established means idiom, explicitly attested in the complete HTG2016 glossary with by means of. Retain this lexical unit whole; neither sgo nor nas receives a false member.'
+    out.append(x)
+  draft=out
+ # Author intent preserves exact source occurrence coordinates, independently checked by native resolver.
+ for n,x in enumerate(draft,1):x['id']='w'+str(n)
+ for x in draft:
+  for fld,ran,col in [('tib','tib_range','wylie'),('eng','eng_range','english')]:assert source[seq][col][slice(*x[ran])]==x[fld],(seq,x)
+ specs=[{k:x[k]for k in ['id','d','tib','eng']}for x in draft]
+ order=[x['id']for x in sorted([x for x in draft if x['d']!=7],key=lambda x:x['eng_range'][0])]
+ title={322:'twelve instants ending black deeds',323:'ninth instant ending white and black',324:'ending white deeds'}[seq]
+ write(R/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':specs,'eng_order':order,'note':notes[seq]}]})
+ tuples=[{k:x[k]for k in ['id','d','tib','eng','seq','tib_range','eng_range']}for x in draft];write(R/str(seq)/'intended-ranges.json',tuples)
+ write(R/str(seq)/'final-rationales.json',[{'id':x['id'],'rationale':x['rationale']}for x in draft])
+ # Every original span retains full original words, depth, identity, coordinates and rationale.
+ dispositions=[]
+ for angle in ['tibetan','english']:
+  for x in originals[angle,seq]:
+   same=[f for f in tuples if all(x[k]==f[k]for k in ['d','tib','eng','tib_range','eng_range'])]
+   if same:status='unchanged';final=[f['id']for f in same];why='The full local source relation, depth and selected occurrence are retained after independent source and canonical-range checks.'
+   else:
+    overlap=[f for f in tuples if max(x['tib_range'][0],f['tib_range'][0])<min(x['tib_range'][1],f['tib_range'][1])]
+    final=[f['id']for f in overlap];status='recast'if overlap else'rejected'
+    if seq==322 and x['tib']=='zad par':why='Tighten second resultative zad par/to an end to lexical zad/end. Omit the English result frame; source occurrence remains the second zad.'
+    elif seq==322 and x['tib']=='byed':why='Tighten act to bring to act; byed supplies the action component, while bring participates in the discontinuous causative expansion.'
+    elif seq==323 and x['tib']in ["'dun pa","'dod chags",'bral ba']:why='Replace the isolated atoms with the complete release-of-aspiration/desire relation at d3. This retains the full attested active recast while withholding bral ba/eliminating from the lexical bank; a d7 cannot hang from this phrase.'
+    elif seq==323 and x['tib']in ['dkar','gnag']:why='Retain the established glossary dkar gnag/white and black compound with these unique tighter color members at d7; no extra English conjunction particle is invented.'
+    elif seq==323 and x['tib']=='sgo nas':why='Reclassify the established means idiom at d5, supported by its complete glossary record. Its inflection is preserved whole and no false member is added.'
+    elif seq==323 and x['tib']=='zad par':why='Tighten to zad/end, retaining the lexical result while leaving resultative par unbanked.'
+    else:why='Reconciled source/depth boundary differs; final overlap references identify the complete retained replacement.'
+   dispositions.append({'angle':angle,'seq':seq,'original':x,'status':status,'final_ids':final,'reason':why})
+ write(R/str(seq)/'original-dispositions.json',dispositions)
+ original_omissions=[]
+ for angle in ['tibetan','english']:
+  d=read(B/angle/str(seq)/'decisions.json')
+  for i,x in enumerate(d.get('material_omissions',d.get('omissions',[]))):original_omissions.append({'angle':angle,'original_index':i,'original':x,'reconciled_disposition':'See complete final unwrapped extents and material rulings. Where a named token is now retained (la, sgo nas, gang yin pa), the final tuple is authoritative; supplied/distributed remnants remain omissions, not nulls.'})
+ write(R/str(seq)/'original-omissions.json',original_omissions)
+ print(seq,len(tuples),'original dispositions',len(dispositions))

@@ -1,0 +1,23 @@
+import json,pathlib,sys,os,subprocess,datetime,time,hashlib
+R=pathlib.Path(__file__).resolve().parents[1];B=R.parent
+def ident(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def get(p):return json.loads(p.read_text())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+jobs=[(a,s,'resolver')for a in ('tibetan','english','final')for s in (322,323,324)]+[('final',s,'generator')for s in (322,323,324)]
+proofs=[];ranges=[]
+for a,s,mode in jobs:
+ source=B/'reconciled'/str(s)if a=='final'else B/a/str(s);spec=source/'spec.json';p=R/'native'/f'{a}-{s}-{mode}-v1';p.mkdir(parents=True,exist_ok=False)
+ argv=[sys.executable,'-B',str(R/'methods/canonical_adapter_v1.py.txt'),mode];data=spec.read_bytes();start=datetime.datetime.now(datetime.timezone.utc).isoformat();t=time.monotonic()
+ c=subprocess.run(argv,input=data,capture_output=True,cwd=R,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for name,v in [('stdin',data),('stdout',c.stdout),('stderr',c.stderr)]:(p/(name+'.bin')).write_bytes(v)
+ (p/'exit.txt').write_text(str(c.returncode)+'\n')
+ proof={'angle':a,'seq':s,'mode':mode,'argv':argv,'cwd':str(R),'utc':start,'elapsed_seconds':time.monotonic()-t,'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':c.returncode,'streams':{n:ident(v)for n,v in [('stdin',data),('stdout',c.stdout),('stderr',c.stderr)]},'adapter':ident((R/'methods/canonical_adapter_v1.py.txt').read_bytes()),'code_and_source_identity':'../../evidence/immutable-inputs-audit.json; ../../evidence/source-identities.json'}
+ put(p/'execution.json',proof);proofs.append(proof)
+ assert c.returncode==0 and not c.stderr,(a,s,mode,c.stderr.decode())
+ if mode=='generator':assert c.stdout==(source/'body.html').read_bytes(),s
+ else:
+  actual=get(p/'stdout.bin');expected=get(source/'intended-ranges.json')if a=='final'else get(source/'decisions.json')['spans']
+  assert actual==[{k:x[k]for k in ('seq','id','d','tib','eng','tib_range','eng_range')}for x in expected]
+  if a=='final':ranges.extend(actual)
+ print(a,s,mode,'EXIT='+str(c.returncode),'stdout='+str(len(c.stdout)),'stderr='+str(len(c.stderr)))
+put(R/'resolved-spans.json',ranges);put(R/'evidence/native-verification.json',proofs)

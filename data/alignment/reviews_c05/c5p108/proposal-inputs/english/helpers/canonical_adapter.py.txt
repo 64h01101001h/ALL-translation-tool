@@ -1,0 +1,13 @@
+import sys,sqlite3
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];P=A/'evidence/pinned';W=A.parents[2]/'campaign-worktree'
+sys.path.insert(0,str(P/'tools'));sys.path.insert(0,str(P/'engines'))
+import gen_alignment_page as G
+G.B.SPINE=str(W/'build/hgm_spine_v27_2.db')
+original_connect=sqlite3.connect
+def readonly_connect(path,*args,**kwargs):
+ if str(path)==G.B.SPINE:
+  kwargs['uri']=True;return original_connect('file:'+str(path)+'?mode=ro',*args,**kwargs)
+ return original_connect(path,*args,**kwargs)
+sqlite3.connect=readonly_connect
+G.main()
