@@ -373,6 +373,20 @@ int main(int argc, char** argv) {
               "merged locative na becomes a chunk marker (in the forest)");
     }
     {
+        // a PARTICLE before na is not evidence of a verb. `du` carries a
+        // gloss beginning "to " — as do la, phyir, su and tu — and until
+        // 2026-09-13 verbEvidenceAt took that at face value, exactly the
+        // defect spotVerb had fixed that morning and this function had not.
+        // So DE NYID DU NA, "in suchness itself", was cut in two. Real line,
+        // C12:265 and C18:358.
+        auto [doc, cls] = analyze("DE NYID DU NA STONG PA NYID SGOM PA");
+        CHECK(cls.size() == 2, "raw split still cuts at the du-na");
+        auto ref = allcore::refineClauses(doc, cls);
+        CHECK(ref.size() == 1,
+              "na after the particle du merges back \u2014 a particle's "
+              "\"to \" gloss is not evidence of a verb");
+    }
+    {
         // debate formula: 'dod na = "if you assert" — conditional, kept
         auto [doc, cls] = analyze("GANG ZAG BDEN GRUB 'DOD NA SKYON YOD");
         auto ref = allcore::refineClauses(doc, cls);
