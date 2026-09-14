@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "<string>", line 20, in <module>
+    assert corpus[m['corpus_index']]==m['record']==json.loads(r['raw']);assert all(r[k]==m['record'][k] for k in ['course','acip','wylie','english']);cc+=1;unique_corpus.add(m['corpus_index'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

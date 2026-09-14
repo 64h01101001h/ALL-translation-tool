@@ -4,7 +4,7 @@
   "tier": "TENTATIVE (machine-matched, unreviewed)",
   "generator": "build_alignment_layer.py; source analyses credited on pages and in campaign ledgers",
   "date": "2026-09-14",
-  "source_pages": "banked pages, 5 course(s) (sha256 a9342ffe660e0be9)",
+  "source_pages": "banked pages, 5 course(s) (sha256 5d16064c1fe9eee0)",
   "source_corpus": "hgm_spine_v27_2 corpus_segments C01+C02+C03+C04+C05",
   "rule": "English is HGM's corpus text verbatim, machine-MATCHED never composed; never enters hgm_gloss",
   "transliteration": "ACIP is the source of record and the join key (acip / acip_index); wylie is the derived display form, proven equal to acip_to_ewts(acip) on 8961/8961 segments of C01-C18 (Adam 2026-08-28)",
@@ -4088,9 +4088,10 @@
      "C05:280",
      "C05:321",
      "C05:322",
-     "C05:324"
+     "C05:324",
+     "C05:330"
     ],
-    "n": 14,
+    "n": 15,
     "acip": "'DOD CHAGS"
    },
    {
@@ -4105,6 +4106,14 @@
     "eng": "Desire",
     "refs": [
      "C03:259"
+    ],
+    "n": 1,
+    "acip": "'DOD CHAGS"
+   },
+   {
+    "eng": "desiring",
+    "refs": [
+     "C05:328"
     ],
     "n": 1,
     "acip": "'DOD CHAGS"
@@ -13861,21 +13870,22 @@
   ],
   "bcu": [
    {
+    "eng": "ten",
+    "refs": [
+     "C01:85",
+     "C01:170",
+     "C05:310",
+     "C05:330"
+    ],
+    "n": 4,
+    "acip": "BCU"
+   },
+   {
     "eng": "Ten",
     "refs": [
      "C01:170",
      "C01:190",
      "C03:258"
-    ],
-    "n": 3,
-    "acip": "BCU"
-   },
-   {
-    "eng": "ten",
-    "refs": [
-     "C01:85",
-     "C01:170",
-     "C05:310"
     ],
     "n": 3,
     "acip": "BCU"
@@ -18229,9 +18239,10 @@
    {
     "eng": "intent",
     "refs": [
-     "C05:180"
+     "C05:180",
+     "C05:330"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "BLOS"
    },
    {
@@ -25472,20 +25483,21 @@
     "acip": "BSOD NAMS"
    },
    {
+    "eng": "meritorious",
+    "refs": [
+     "C05:180",
+     "C05:330"
+    ],
+    "n": 2,
+    "acip": "BSOD NAMS"
+   },
+   {
     "eng": "the merit",
     "refs": [
      "C01:271",
      "C01:339"
     ],
     "n": 2,
-    "acip": "BSOD NAMS"
-   },
-   {
-    "eng": "meritorious",
-    "refs": [
-     "C05:180"
-    ],
-    "n": 1,
     "acip": "BSOD NAMS"
    },
    {
@@ -45302,9 +45314,10 @@
    {
     "eng": "enemy",
     "refs": [
-     "C03:210"
+     "C03:210",
+     "C05:330"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "DGRA BO"
    }
   ],
@@ -59543,6 +59556,14 @@
     ],
     "n": 1,
     "acip": "GSOD PA"
+   },
+   {
+    "eng": "kill",
+    "refs": [
+     "C05:330"
+    ],
+    "n": 1,
+    "acip": "GSOD PA"
    }
   ],
   "gsod pa'i": [
@@ -59925,9 +59946,12 @@
      "C05:308",
      "C05:312",
      "C05:313",
-     "C05:327"
+     "C05:327",
+     "C05:328",
+     "C05:329",
+     "C05:330"
     ],
-    "n": 105,
+    "n": 108,
     "acip": "GSUM"
    },
    {
@@ -60676,9 +60700,10 @@
      "C05:192",
      "C05:193",
      "C05:231",
-     "C05:272"
+     "C05:272",
+     "C05:328"
     ],
-    "n": 10,
+    "n": 11,
     "acip": "GSUNGS"
    },
    {
@@ -61085,6 +61110,16 @@
     "acip": "GSUNGS PA"
    },
    {
+    "eng": "statement",
+    "refs": [
+     "C05:228",
+     "C05:287",
+     "C05:329"
+    ],
+    "n": 3,
+    "acip": "GSUNGS PA"
+   },
+   {
     "eng": "describe",
     "refs": [
      "C03:458",
@@ -61143,15 +61178,6 @@
     "refs": [
      "C01:79",
      "C03:387"
-    ],
-    "n": 2,
-    "acip": "GSUNGS PA"
-   },
-   {
-    "eng": "statement",
-    "refs": [
-     "C05:228",
-     "C05:287"
     ],
     "n": 2,
     "acip": "GSUNGS PA"
@@ -62002,6 +62028,15 @@
      "C05:327"
     ],
     "n": 3,
+    "acip": "GTI MUG"
+   },
+   {
+    "eng": "ignorant",
+    "refs": [
+     "C05:328",
+     "C05:330"
+    ],
+    "n": 2,
     "acip": "GTI MUG"
    },
    {
@@ -71854,9 +71889,10 @@
    {
     "eng": "paths of action",
     "refs": [
-     "C05:123"
+     "C05:123",
+     "C05:328"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "LAS LAM"
    },
    {
@@ -75408,6 +75444,15 @@
     "acip": "LTA BU"
    },
    {
+    "eng": "such as",
+    "refs": [
+     "C05:122",
+     "C05:329"
+    ],
+    "n": 2,
+    "acip": "LTA BU"
+   },
+   {
     "eng": "\"Like",
     "refs": [
      "C01:381"
@@ -75432,9 +75477,33 @@
     "acip": "LTA BU"
    },
    {
+    "eng": "case",
+    "refs": [
+     "C05:330"
+    ],
+    "n": 1,
+    "acip": "LTA BU"
+   },
+   {
+    "eng": "for example",
+    "refs": [
+     "C05:330"
+    ],
+    "n": 1,
+    "acip": "LTA BU"
+   },
+   {
     "eng": "In a sense",
     "refs": [
      "C03:584"
+    ],
+    "n": 1,
+    "acip": "LTA BU"
+   },
+   {
+    "eng": "instance",
+    "refs": [
+     "C05:330"
     ],
     "n": 1,
     "acip": "LTA BU"
@@ -75499,14 +75568,6 @@
     "eng": "something like",
     "refs": [
      "C02:38"
-    ],
-    "n": 1,
-    "acip": "LTA BU"
-   },
-   {
-    "eng": "such as",
-    "refs": [
-     "C05:122"
     ],
     "n": 1,
     "acip": "LTA BU"
@@ -79782,9 +79843,11 @@
      "C05:95",
      "C05:101",
      "C05:137",
-     "C05:142"
+     "C05:142",
+     "C05:328",
+     "C05:329"
     ],
-    "n": 12,
+    "n": 14,
     "acip": "MDO"
    },
    {
@@ -83169,19 +83232,20 @@
     "acip": "MI DGE BA"
    },
    {
+    "eng": "non-virtues",
+    "refs": [
+     "C03:424",
+     "C05:130",
+     "C05:330"
+    ],
+    "n": 3,
+    "acip": "MI DGE BA"
+   },
+   {
     "eng": "bad deeds",
     "refs": [
      "C01:237",
      "C03:441"
-    ],
-    "n": 2,
-    "acip": "MI DGE BA"
-   },
-   {
-    "eng": "non-virtues",
-    "refs": [
-     "C03:424",
-     "C05:130"
     ],
     "n": 2,
     "acip": "MI DGE BA"
@@ -84929,6 +84993,14 @@
      "C04:147"
     ],
     "n": 2,
+    "acip": "MIN"
+   },
+   {
+    "eng": "are not",
+    "refs": [
+     "C05:329"
+    ],
+    "n": 1,
     "acip": "MIN"
    },
    {
@@ -95888,6 +95960,16 @@
     ],
     "n": 2,
     "acip": "PHAL PA"
+   }
+  ],
+  "pham": [
+   {
+    "eng": "father or mother",
+    "refs": [
+     "C05:330"
+    ],
+    "n": 1,
+    "acip": "PHAM"
    }
   ],
   "pham pa": [
@@ -112457,9 +112539,22 @@
      "C04:183",
      "C05:130",
      "C05:218",
-     "C05:327"
+     "C05:327",
+     "C05:329"
     ],
-    "n": 15,
+    "n": 16,
+    "acip": "RTZA BA"
+   },
+   {
+    "eng": "roots",
+    "refs": [
+     "C05:124",
+     "C05:126",
+     "C05:203",
+     "C05:328",
+     "C05:330"
+    ],
+    "n": 5,
     "acip": "RTZA BA"
    },
    {
@@ -112468,16 +112563,6 @@
      "C04:43",
      "C04:100",
      "C04:136"
-    ],
-    "n": 3,
-    "acip": "RTZA BA"
-   },
-   {
-    "eng": "roots",
-    "refs": [
-     "C05:124",
-     "C05:126",
-     "C05:203"
     ],
     "n": 3,
     "acip": "RTZA BA"
@@ -115034,6 +115119,23 @@
    }
   ],
   "sbyor ba": [
+   {
+    "eng": "\"undertaking\" stages",
+    "refs": [
+     "C05:329",
+     "C05:330"
+    ],
+    "n": 2,
+    "acip": "SBYOR BA"
+   },
+   {
+    "eng": "\"undertaking\" stage",
+    "refs": [
+     "C05:330"
+    ],
+    "n": 1,
+    "acip": "SBYOR BA"
+   },
    {
     "eng": "action",
     "refs": [
@@ -119434,6 +119536,14 @@
    }
   ],
   "sha": [
+   {
+    "eng": "flesh",
+    "refs": [
+     "C05:330"
+    ],
+    "n": 1,
+    "acip": "SHA"
+   },
    {
     "eng": "her body's",
     "refs": [
@@ -124145,7 +124255,19 @@
     "refs": [
      "C04:150",
      "C05:151",
-     "C05:326"
+     "C05:326",
+     "C05:329",
+     "C05:330"
+    ],
+    "n": 5,
+    "acip": "SKYES PA"
+   },
+   {
+    "eng": "comes",
+    "refs": [
+     "C03:208",
+     "C05:328",
+     "C05:330"
     ],
     "n": 3,
     "acip": "SKYES PA"
@@ -124213,14 +124335,6 @@
     "eng": "come about",
     "refs": [
      "C05:144"
-    ],
-    "n": 1,
-    "acip": "SKYES PA"
-   },
-   {
-    "eng": "comes",
-    "refs": [
-     "C03:208"
     ],
     "n": 1,
     "acip": "SKYES PA"
@@ -124388,6 +124502,14 @@
    }
   ],
   "skyes pas": [
+   {
+    "eng": "comes",
+    "refs": [
+     "C05:328"
+    ],
+    "n": 1,
+    "acip": "SKYES PAS"
+   },
    {
     "eng": "to come to you",
     "refs": [
@@ -131623,7 +131745,34 @@
     "acip": "SROG GCOD"
    }
   ],
+  "srog gcod ba": [
+   {
+    "eng": "killing",
+    "refs": [
+     "C05:328"
+    ],
+    "n": 1,
+    "acip": "SROG GCOD BA"
+   }
+  ],
   "srog gcod pa": [
+   {
+    "eng": "killing",
+    "refs": [
+     "C05:329",
+     "C05:330"
+    ],
+    "n": 2,
+    "acip": "SROG GCOD PA"
+   },
+   {
+    "eng": "take the life",
+    "refs": [
+     "C05:330"
+    ],
+    "n": 1,
+    "acip": "SROG GCOD PA"
+   },
    {
     "eng": "taking the life",
     "refs": [
@@ -146360,6 +146509,14 @@
     "acip": "ZHE SDANG"
    },
    {
+    "eng": "disliking",
+    "refs": [
+     "C05:328"
+    ],
+    "n": 1,
+    "acip": "ZHE SDANG"
+   },
+   {
     "eng": "emotion of disliking",
     "refs": [
      "C05:246"
@@ -152922,6 +153079,7 @@
   "PHAL CHE BAR": "phal che bar",
   "PHAL CHER": "phal cher",
   "PHAL PA": "phal pa",
+  "PHAM": "pham",
   "PHAM PA": "pham pa",
   "PHAN": "phan",
   "PHAN 'DOD": "phan 'dod",
@@ -154627,6 +154785,7 @@
   "SROG BCAD PA": "srog bcad pa",
   "SROG CHAGS": "srog chags",
   "SROG GCOD": "srog gcod",
+  "SROG GCOD BA": "srog gcod ba",
   "SROG GCOD PA": "srog gcod pa",
   "SROG RTZA": "srog rtsa",
   "SROG SHING": "srog shing",

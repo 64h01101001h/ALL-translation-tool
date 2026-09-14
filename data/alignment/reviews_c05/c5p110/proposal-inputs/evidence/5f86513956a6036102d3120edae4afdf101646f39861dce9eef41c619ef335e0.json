@@ -1,0 +1,51 @@
+{
+  "actual_baseline": {
+    "commit": "662a74015519ea5f0616fa50700f873b96429675",
+    "course_boundary": 327,
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-328-330/baseline.json",
+    "bytes": 1456,
+    "sha256": "53bc22d048e0d791b075386d0592a1afb910759106c9bd7606891eb342d8c217"
+  },
+  "source_origin": "daad5db6ea6207085dc820101b3a2e9aaf942417",
+  "register_old": 196,
+  "register_actual": 198,
+  "added_records": [
+    {
+      "item_id": "E-197",
+      "course": "C05",
+      "segment": "C05:325",
+      "kind": "TIBETAN_SPELLING",
+      "found": "'DOD PA LAS SKYES GZHAN DKAR",
+      "expected": "For human review: check whether the final verse line is incomplete after DKAR, possibly lacking GNAG. This is an editorial question, not replacement source wording.",
+      "evidence": "Original physical ASCII bytes and spine ACIP/Wylie agree on the six-syllable tail; English says 'White and black'. The adjacent commentary has 'DKAR GNAG GNYIS KA'I LAS'. All three other verse lines have seven syllables. Grounds checked: (a) source/ingestion: literal DKAR ending already occurs in the original ASCII, so no inferred converter loss; (b) lexical: complete master dkar=white, gnag=black, dkar gnag=white and black distinguish the missing complement; (c) grammar/verse compression: elliptical verse is possible, so the seven-syllable comparison supports a question, not a certified restoration; (d) parallel/context: exact verse Wylie and English each return only C05:325, and dmyal ba myong query gives C05:325/326 plus unrelated AK:292; no independent publication witness has been verified; (e) prior register/apparatus: all196 records screened for gng/gzhan dkar/C05:325/C05:326 with no matching item, bracketed verse references and following headings are separate known classes. Digital agreement is not publication independence. No original/master change and no invented black pair; dkar aligns only to White. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-198",
+      "course": "C05",
+      "segment": "C05:326",
+      "kind": "TIBETAN_SPELLING",
+      "found": "GNGSDE PA GZHAN NI",
+      "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+      "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    }
+  ],
+  "local_matches": [],
+  "read_delta": "actual-governance-delta.diff",
+  "assessment": "Only added325–327 course registration in builder and E-197/E-198 in register. Generator, alignment spec, brief and AGENTS unchanged. Current canonical implementation is used for the final native calls.",
+  "canonical_files": {
+    "tools/gen_alignment_page.py": {
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    },
+    "tools/build_alignment_layer.py": {
+      "bytes": 40100,
+      "sha256": "ae9a83ccd295d9c866ee91de8dc105802e4c39eb3de963e99a527f5c5964fefc"
+    }
+  }
+}

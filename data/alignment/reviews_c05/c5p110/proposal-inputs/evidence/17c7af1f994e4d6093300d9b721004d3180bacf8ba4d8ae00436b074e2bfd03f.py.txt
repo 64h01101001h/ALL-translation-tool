@@ -1,0 +1,165 @@
+"""Bounded C05:328–330 authoring; original dispositions use exact keys only."""
+import json, copy, hashlib
+from pathlib import Path
+A=Path(__file__).resolve().parents[1]; B=A.parent
+def load(p): return json.loads(p.read_text())
+def put(p,x): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p): b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+K=['seq','id','d','tib','eng','tib_range','eng_range']
+source={r['seq']:r for r in load(B/'source.json')}
+
+reason={
+ 'ordinal':'Full HGM gnyis pa entry5998 includes here next and next. Local Now may carry this outline transition. The missing overt numeral does not prove no English exponent; leave the uncertain relation unbanked, without a null.',
+ 'dang1':'The first dang coordinates the desire item with the next item in this exact three-item list. English expresses this first linkage through its comma after something at96, while the second linkage has and141–144. The null asserts no separate English word for the first conjunction, with its coordination fused into list punctuation; full HGM dang entry8107 expressly includes comma. This is affirmative punctuation recasting, not unresolved occurrence allocation.',
+ 'dang2':'The second dang closes the dislike item and opens the third, ignorance item, exactly as and141–144 does. It cannot take the comma belonging to the first item.',
+ 'gyis':'Whole gyis marks the three roots as instruments/agents of completion and corresponds exactly to by277–279. Full HTG2016 entry1934 includes by. Brief rule9 forbids splitting an attached final s, not this complete standalone particle; no standing approval question applies.',
+ 'polar':'yin nam min forms one positive-or-negative alternative about completion, recast by whether210–217. At d3 it expresses the polar construction as a whole; it does not assert separate yin/is or min/not atoms or borrow the auxiliary are from the passive completion clause. Full nam10166 supports whether, while yin17582 and min14426 establish the opposed copulas.',
+ 'ask':'zhe na is the quotative question formula, with ask as its tight English questioning predicate. One, may and then/next are rhetorical framing left unbanked. The full entry16271 has an unrelated medium-confidence auto-mined correct perception string; that is not promoted as authority. The exact question syntax here and C05:121 support the provisional d3 recast.',
+ 'min':'min is the negative copula answering the preceding completion question. Full HTG2016 entry14426 explicitly includes are not; are supplies its copular predication and is not a borrowed auxiliary from another verb. The answer subject and The answer is that remain outside. The tighter not-only proposal would discard part of this lexical predicate.',
+ 'lta':'Bare lta bu is the tight comparative/example unit; full HTG2016 entry6857 attests such as, for example and instance. The genitive or final copular ending belongs to surrounding grammar and does not expand this English exemplar word. Its exact local clause selects the occurrence; the final case in330 is436–440, not249–253.',
+ 'reference':'la dgongs is the governed intentional-reference construction, recast idiomatically as with reference to72–89. Full HTG2016 entry2394 includes given only with reference to and referring to. Here with is part of the English reference predicate, rather than an independent supplied participant. Retain the complete construction at d3; bare dgongs/reference and la/to would give separate lexical ownership to components of this recast. Only, was made and the fact that remain unbanked. No new glossary definition is asserted.',
+ 'question330':'The proposed ji lta bu zhe na / ask for a description of the process overcaptures explanatory English description/process. Full ji lta bu5086 supports how/what, but no unique separate atom in this expanded wording. Retain only zhe na / ask67–73/13–16 at d3, and omit the remaining how/process recast with a reason.',
+ 'gcod':'gcod/take is omitted. Full HTG2016 entry4260 attests sever/cut/loss, not independent take. In take the life the taking verb acquires the killing sense from the complete idiom; positional uniqueness inside the parent does not establish honest morpheme ownership. The full srog gcod pa / take the life and the transparent srog/life member remain.',
+ 'sogs':'sogs gives the enumerative closing gesture, realized as like537–541 before father or mother. Full HTG2016 entry20919 explicitly includes like and such as. Someone and your supply the participant and possessive, and are excluded. This is a defensible standalone d6 particle in this local exemplar, not an invented noun or a null.',
+ 'kyi':'kyi links merit with intent; English meritorious intent expresses that dependency through adjectival premodification. No separate of occurs for this genitive, so the null records this proven grammatical fusion. The out of phrase concerns the instrument/causal force of whole blos and is not borrowed for kyi.',
+ 'spelling':'ZHE SNGANG stays exact and unbanked. Local parallel roots and the enemy example favor ZHE SDANG, but the physical ASCII and identical C16:855 retain SNGANG and no independent corrected witness is established. Retain one LOW/PROBABLE Tibetan-spelling observation, not a source correction.',
+}
+
+# Final inventory starts from the frozen English proposal, then only the exact
+# listed IDs are replaced or added. There is no semantic keyword matching.
+final={}; original={}; decisions={}
+for s in [328,329,330]:
+ final[s]=copy.deepcopy(load(B/'english'/str(s)/'decisions.json')['spans'])
+ for a in ['tibetan','english']:
+  original[s,a]=load(B/a/str(s)/'spec.json')['segments'][0]
+  decisions[s,a]=load(B/a/str(s)/('original-decisions.json' if a=='tibetan' else 'decisions.json'))
+def edit(s,i,**kw): next(x for x in final[s] if x['id']==i).update(kw)
+def add(s,i,d,t,e,tr,er,r,**kw): final[s].append(dict(seq=s,id=i,d=d,tib=t,eng=e,tib_range=tr,eng_range=er,rationale=r,**kw))
+edit(328,'f21',eng='ask',eng_range=[201,204],rationale=reason['ask'])
+add(328,'p22',6,'dang',None,[80,84],None,reason['dang1'],cls='conj',nul=reason['dang1'])
+add(328,'p23',6,'dang','and',[110,114],[141,144],reason['dang2'])
+add(328,'f24',3,'yin nam min','whether',[215,226],[210,217],reason['polar'])
+edit(328,'p19',rationale=reason['gyis'])
+edit(329,'w1',rationale=reason['min'])
+edit(329,'w6',tib='lta bu',tib_range=[42,48],rationale=reason['lta'])
+edit(329,'f12',rationale=reason['reference'])
+final[330]=[x for x in final[330] if x['id']!='m17']
+add(330,'f34',3,'zhe na','ask',[67,73],[13,16],reason['question330']+' '+reason['ask'])
+for i,tr in [('w18',[155,161]),('w23',[210,216]),('w33',[283,289])]:edit(330,i,tib='lta bu',tib_range=tr,rationale=reason['lta'])
+edit(330,'p31',rationale=reason['sogs'])
+edit(330,'p28',rationale=reason['kyi'],nul=reason['kyi'])
+
+# Complete, literal Tibetan-original-ID to final-ID mapping, including omissions.
+tmap={
+328:{'w1':None,'w2':'w2','w3':'w3','w4':'w4','w5':'w5','p1':'p6','w6':'w7','p2':'p22','w7':'w8','p3':'p9','w8':'w10','p4':'p23','w9':'w11','p5':'p12','w10':'w13','w11':'w14','w12':'w15','m1':'m16','m2':'m17','w13':'w18','f1':'f20','f2':'f24','f3':'f21'},
+329:{'w1':'w1','w2':'w2','p1':'p3','w3':'w4','w4':'w5','w5':'w6','w6':'w7','w7':'w8','w8':'w9','p2':'p10','w9':'w11','p3':'f12','w10':'f12'},
+330:{'w1':'w1','w2':'w2','w3':'w3','w4':'w4','w5':'w5','p1':'p6','w6':'w7','f1':'f34','w7':'w8','w8':'w9','w9':'w10','p2':'p11','w10':'w12','w11':'w13','p3':'p14','w12':'w15','m1':'m16','w13':'w18','p4':'p19','w14':'w20','w15':'w21','w16':'w22','w17':'w23','w18':'w24','p5':'p25','w19':'w26','w20':'w27','p6':'p28','w21':'w29','w22':'w30','w23':'w32','w24':'w33'}}
+
+omission_rulings={
+(328,'tibetan',0):('ACCEPT','Citation apparatus remains outside all spans.'),
+(328,'tibetan',1):('ACCEPT','The named topic/source/enumeration/conditional particles have no independently asserted word allocation; they remain omitted without false nulls.'),
+(328,'tibetan',2):('ACCEPT','thams cad scopes paths, while all in all non-virtue scopes the roots explanation. Various/each recast its scope; leave uncertain distribution unbanked.'),
+(328,'tibetan',3):('ACCEPT','The reduplicated gsum gsum distributes over each and three, separated in English. A guessed half-to-word allocation would misstate the construction.'),
+(328,'tibetan',4):('CHANGE',reason['gyis']),
+(328,'tibetan',5):('CHANGE','Retain every listed omission except by, which is now claimed by whole gyis. Now remains uncertain; various/each/three remain distributed; the supplied participants and non-virtue explanation stay outside.'),
+(328,'english',0):('ACCEPT','Retain the unresolved totality/distributive omission; no all is borrowed from the non-virtue explanation.'),
+(328,'english',1):('CHANGE',reason['polar']),
+(328,'english',2):('CHANGE','Retain unclaimed source/topic/enumeration/conditional grammar, but resolve the two dang separately: first list linkage is punctuation fusion; second is and141–144. This grouped mdo las note concerns unclaimed citation grammar and does not remove the explicitly aligned mdo/sutra.'),
+(328,'english',3):('ACCEPT','The listed supplied participants, being and of things, and explanation remain unbanked.'),
+(328,'english',4):('ACCEPT',reason['ordinal']),
+(329,'tibetan',0):('ACCEPT','Retain omitted te/ni/so and the genitive ending outside tight lta bu. These particles are not assigned guessed English words.'),
+(329,'tibetan',1):('CHANGE','Retain the listed frame words except are, now part of min/are not, and with, now part of the complete la dgongs/with reference to phrase. Only and the fact that remain unbanked.'),
+(329,'english',0):('ACCEPT','The named discourse/topic/closing particles remain omitted.'),
+(329,'english',1):('ACCEPT','All listed frame words remain unbanked, including only and the fact that; this note does not list are or with.'),
+(330,'tibetan',0):('ACCEPT','The listed introductory and inflectional grammar remains unbanked, including final o endings outside tight lta bu. No extra fragment is manufactured.'),
+(330,'tibetan',1):('ACCEPT',reason['spelling']),
+(330,'tibetan',2):('CHANGE',reason['sogs']),
+(330,'tibetan',3):('ACCEPT','blos stays whole as intent. Its attached s is not split to bank out of; that relation remains unbanked.'),
+(330,'tibetan',4):('CHANGE','Retain the listed explanatory and participant omissions except like, now the enumerative sogs gesture. The question is also tightened: only ask is banked, with description/process wording left unbanked.'),
+(330,'english',0):('CHANGE',reason['question330']),
+(330,'english',1):('ACCEPT',reason['spelling']),
+(330,'english',2):('CHANGE','Retain omitted ni and genitive endings; exclude final o from all three lta bu spans rather than retain it inside the comparative word.'),
+(330,'english',3):('ACCEPT','Every specifically listed explanatory/repeated/participant item stays unbanked. blos remains whole; no instrumental fragment is added.'),
+}
+notes={
+328:'PROVISIONAL machine reconciliation by Codex. The three comes/from clauses retain their exact desire, dislike and ignorance occurrences. gnyis pa is omitted because Now may express its transition. First dang has no separate English word: its coordination is expressed by the list comma; second dang owns and. Whole gyis/by is a d6 instrumental, not a split final s. yin nam min/whether and zhe na/ask are d3 question constructions. thams cad and gsum gsum remain distributed and unbanked. No source correction or hgm_gloss promotion.',
+329:'PROVISIONAL machine reconciliation by Codex. min owns the negative copula are not. Bare lta bu owns such as, with its genitive ending unbanked. The full la dgongs construction owns with reference to at d3; only and the fact that remain outside. The two from occurrences belong to statement-from-sutra and undertakings-from-roots respectively. The technical undertaking-stage label stays whole. No source correction or hgm_gloss promotion.',
+330:'PROVISIONAL machine reconciliation by Codex. Tight zhe na/ask replaces the expanded question phrase; ji lta bu and description/process framing remain unbanked. srog gcod pa/take the life retains only srog/life as a member; gcod/take is not separately banked. The three bare lta bu expressions belong to their own flesh, enemy and parent examples. sogs owns only like, excluding supplied someone and your. The kyi null records adjectival fusion in meritorious intent. Exact pham is retained whole; raw zhe sngang remains unbanked with one LOW/PROBABLE spelling question. No source correction or hgm_gloss promotion.'}
+
+term_evidence={q['term']:[{'collection':r['collection'],'index':r['index']}for r in q['master_records']]for p in [B/'english/evidence/lexical.json',B/'english/evidence/supplemental-lexical.json',A/'evidence/supplemental-lexical.json']for q in load(p)}
+aliases={'skyes pas':'skyes pa','yin nam min':'nam','mthar phyin par byed pa':'mthar phyin','la dgongs':'dgongs'}
+summary=[]
+for s in [328,329,330]:
+ fs=final[s];fs.sort(key=lambda x:(x['tib_range'][0],-x['tib_range'][1]));byid={x['id']:x for x in fs}
+ for x in fs:
+  assert source[s]['wylie'][slice(*x['tib_range'])]==x['tib']
+  if x['eng'] is not None:assert source[s]['english'][slice(*x['eng_range'])]==x['eng']
+  x['evidence']={'full_master_records':term_evidence.get(aliases.get(x['tib'],x['tib']),[]),'source':'../../source.json, exact C05:'+str(s),'scope':'HGM attestation and full local syntax support provisional occurrence only; reference comparanda are not promoted.'}
+ specsp=[{k:x[k]for k in ['id','d','tib','eng','cls','nul','subword']if k in x}for x in fs]
+ eo=[x['id']for x in sorted(fs,key=lambda x:x['eng_range'][0]if x['eng_range']else-1)if x['eng']is not None and x['d']!=7]
+ spec={'course':'C05','segments':[{'seq':s,'title':original[s,'english']['title'],'spans':specsp,'eng_order':eo,'note':notes[s]}]}
+ put(A/str(s)/'spec.json',spec);put(A/str(s)/'intended-ranges.json',[{k:x[k]for k in K}for x in fs]);put(A/str(s)/'final-rationales.json',fs)
+ dispositions=[];other=[]
+ for angle in ['tibetan','english']:
+  d=decisions[s,angle]; osp=original[s,angle]['spans']; ranges=load(B/angle/str(s)/('resolved-spans.json'if angle=='tibetan'else'resolved-ranges.json'))
+  assert {x['id']for x in osp}=={x['id']for x in ranges}
+  if angle=='tibetan':assert set(tmap[s])=={x['id']for x in osp}
+  for x in osp:
+   i=x['id'];o=next(z for z in ranges if z['id']==i);f=tmap[s][i]if angle=='tibetan'else(None if(s,i)==(330,'m17')else i)
+   if angle=='tibetan':idx=next(j for j,z in enumerate(d['decisions'])if i in z['ids']);od={'field':'decisions','index':idx,'rationale':d['decisions'][idx]['rationale']}
+   else:idx=next(j for j,z in enumerate(d['spans'])if z['id']==i);od=d['spans'][idx]
+   if f is None:disp='OMIT';why=reason['ordinal']if(s,angle,i)==(328,'tibetan','w1')else reason['gcod']
+   else:
+    same=all(o[k]==byid[f][k]for k in ['d','tib','eng','tib_range','eng_range']);disp='ACCEPT'if same else'CHANGE';why=byid[f]['rationale']
+   dispositions.append({'key':{'seq':s,'angle':angle,'id':i},'original_spec':x,'original_range':o,'original_decision':od,'disposition':disp,'final_ids':[]if f is None else[f],'reason':why})
+  if angle=='tibetan':
+   for j,g in enumerate(d['decisions']):
+    ds=[z for z in dispositions if z['key']['angle']==angle and z['key']['id']in g['ids']];actions={z['disposition']for z in ds};disp='ACCEPT'if actions=={'ACCEPT'}else'OMIT'if actions=={'OMIT'}else'CHANGE'
+    why=' '.join(dict.fromkeys(z['reason']for z in ds))
+    other.append({'key':{'seq':s,'angle':angle,'field':'decisions','index':j},'original':g,'disposition':disp,'reason':why,'individual_dispositions':[z['key']for z in ds]})
+  for j,o in enumerate(d['omissions']):
+   disp,why=omission_rulings[s,angle,j];other.append({'key':{'seq':s,'angle':angle,'field':'omissions','index':j},'original':o,'disposition':disp,'reason':why})
+  for field in ['title','note']:
+   o=original[s,angle][field];new=spec['segments'][0][field];other.append({'key':{'seq':s,'angle':angle,'field':'spec.segments[0].'+field,'index':0},'original':o,'disposition':'ACCEPT'if o==new else'CHANGE','reason':'Title identifies the same local subject.'if field=='title'else'Replace the original note with the exact reconciled decisions in spec.json; provisional status, source preservation and glossary restraint are retained. '+notes[s]})
+  er=load(B/angle/str(s)/'errata.json');other.append({'key':{'seq':s,'angle':angle,'field':'errata','index':0},'original':er,'disposition':'ACCEPT','reason':reason['spelling']if s==330 else'No new source defect is established for this segment after the five-ground review; preserve the empty errata proposal.'})
+ put(A/str(s)/'original-dispositions.json',dispositions);put(A/str(s)/'original-other-dispositions.json',other)
+ errata=load(B/'english'/str(s)/'errata.json')
+ for e in errata:
+  e['evidence']=e['evidence'].replace('See evidence/lexical.json, evidence/corpus-queries.json, evidence/source-context.json and evidence/C05ReadingASCII.txt.','See ../../english/evidence/lexical.json, ../../english/evidence/corpus-queries.json, ../../english/evidence/source-context.json and ../../english/evidence/C05ReadingASCII.txt. The original196-entry register and the actual through327 register with198 entries contain no matching330/SNGANG item; ../evidence/actual-baseline-check.json records the exact delta.')
+ put(A/str(s)/'errata.json',errata)
+ summary.append({'seq':s,'spans':len(fs),'nulls':sum(x['eng']is None for x in fs),'word_pairs':sum(x['d']==5 and x['eng']is not None for x in fs),'d7':sum(x['d']==7 for x in fs),'original_spans':len(dispositions),'original_other_records':len(other)})
+put(A/'summary.json',{'status':'PROVISIONAL RECONCILIATION','segments':summary,'total_spans':sum(x['spans']for x in summary),'total_nulls':sum(x['nulls']for x in summary),'total_word_pairs':sum(x['word_pairs']for x in summary),'total_d7':sum(x['d7']for x in summary),'original_spans':sum(x['original_spans']for x in summary),'original_other_records':sum(x['original_other_records']for x in summary),'errata':1})
+omissions={
+328:[{'tib':'gnyis pa','english':'Now','reason':reason['ordinal']},{'tib':'thams cad; gsum gsum','english':'various; each; three','reason':'Totality and reduplicated distributivity are recast across separated English words. No unique split is established; all in all non-virtue has a different scope.'},{'tib':'[iv.272-6]; ni; citation las; ste; conditional na','reason':'Apparatus and recast topic/source/enumeration/conditional grammar have no independently asserted word allocation. No uncertainty null is added.'},{'english':'that there are; types of; that which; something; being; of things; One may; then; the; are each; these three; of all non-virtue','reason':'Unclaimed sentence scaffolding, participants and explanatory or distributed wording remain exact in the body. Whether, ask, and and by are banked at their actual locations.'}],
+329:[{'tib':"te; ni; genitive 'i in lta bu'i; so",'reason':'Surrounding discourse and inflection remain outside the tight lexical/comparative spans; no independent exponent is claimed.'},{'english':'The answer is that they; The; was made only; the fact that the; of deeds; the','reason':'These frame words and supplied explanation remain unbanked. Are not is the complete min copula; with reference to is the complete la dgongs recast.'},{'tib':'dgongs; la','english':'reference; to','reason':reason['reference'],'scope':'Omit the independent atomized candidates, retaining their complete parent construction.'}],
+330:[{'tib':'ji lta bu','english':'for a description of the process','reason':reason['question330']},{'tib':'gcod','english':'take','reason':reason['gcod'],'scope':'Only the d7 atom is omitted; the complete killing compound remains banked.'},{'tib':'zhe sngang','english':'dislike','reason':reason['spelling']},{'tib':"'o na; genitives in bcu'i, pa'i and sha'i; ni; final 'o",'reason':'Introductory discourse and inflection are recast in English framing or unexpressed; no separate fragment is asserted. Bare lta bu is banked at each local example.'},{'tib':'instrumental component of blos','english':'out of','reason':'The attached final s cannot be independently split. Whole blos/intent remains banked; no invented instrumental word is added.'},{'english':"One may next; by which the; of the; of non-virtue; Let's start with the act of; The; of this type of act; in a case where; you; of another being; get its; to eat; An; where this stage; would be where you; your; And a; where the undertaking stage; being; of things; someone; out of some",'reason':'Supplied framing, repeated implicit stages and participants remain unwrapped. The enumerative like alone belongs to sogs; the exact final case belongs to the parent example.'}]
+}
+for s in [328,329,330]:
+ fs=final[s];uncovered={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  text=source[s][field];covered=[False]*len(text)
+  for x in fs:
+   r=x[side+'_range']
+   if r:
+    for i in range(*r):covered[i]=True
+  gaps=[];start=None
+  for i,c in enumerate(covered+[True]):
+   if not c and start is None:start=i
+   if c and start is not None:
+    if text[start:i].strip():gaps.append({'range':[start,i],'text':text[start:i]})
+    start=None
+  uncovered[side]=gaps
+ put(A/str(s)/'omissions.json',{'decisions':omissions[s],'all_unwrapped_source_ranges':uncovered,'scope':'Unwrapped ranges are an exhaustive mechanical inventory, not additional nulls or additional semantic findings.'})
+ common={'a_source':{'complete_source':source[s],'physical_fields':'../../english/evidence/physical-fields.json','finding':'Full physical ACIP/English fields match via documented nonempty-line joining; derived Wylie is unchanged.'},'b_parallel':{'exact_full_field_count_each':2,'citations':['C05:'+str(s),'C16:'+str(s+525)],'independent_corrected_publication_witness':False,'finding':'Identical digital full fields corroborate transmitted wording but prove neither publication independence nor an ingestion lineage.'},'c_register':{'original_count':196,'actual_through327_count':198,'matches':[],'evidence':'../evidence/actual-baseline-check.json','finding':'No matching local spelling observation; E-197/E-198 concern325/326. Converter escapes, 1500 cap, folio/footnote, row boundaries and headings do not explain these exact complete fields.'},'d_defensibility':('Raw SROG GCOD BA is directly attested as killing in full25722. Outline gnyis pa may be recast as Now; no English numbering defect or secure absence is established.'if s==328 else'The negative answer distinguishes completion from undertaking and the reference phrase is a defensible translation recast. No factual, lexical or formatting defect is established.'if s==329 else reason['spelling']+' Exact PHAM is directly HTG2016-attested father or mother; full C05:180 also confirms that purported meritorious intent does not make the act virtuous. No PHAM correction or English factual-error candidate is warranted.'),'e_counts':{'source_field_lengths':{k:len(source[s][k])for k in ['acip','wylie','english']},'new_errata':1 if s==330 else 0,'queries':'../../english/evidence/corpus-queries.json; counts replayed in ../evidence/reused-original-verification.json'}}
+ if s==330:common['e_counts'].update({'zhe_sngang_corpus':2,'zhe_sngang_lexical':0,'zhe_sdang_lexical':1,'pham_lexical':1,'zhe_sdang_hgm_tier':'auto-aligned intersection, medium, support3 of6; not correction authority'})
+ screen_dispositions=[]
+ for a,name in [('tibetan','five-ground-screens.json'),('english','errata-review.json')]:
+  screens=load(B/a/str(s)/name);screens=screens if a=='tibetan'else screens['checks']
+  for j,screen in enumerate(screens):
+   changed=(s,a,j)==(328,'tibetan',1)
+   screen_dispositions.append({'key':{'seq':s,'angle':a,'field':name,'index':j},'original':screen,'disposition':'CHANGE'if changed else'ACCEPT','reason':('Retain no-erratum conclusion but reject the asserted secure ordinal absence. '+reason['ordinal'])if changed else'Preserve this screen conclusion with the reconciled five grounds and actual198-entry register check. '+common['d_defensibility']})
+ put(A/str(s)/'errata-review.json',{'status':'RECONCILER FIVE-GROUND REVIEW','five_grounds':common,'categories':{'TIBETAN_SPELLING':'LOW/PROBABLE ZHE SNGANG only'if s==330 else'NO_NEW_ERRATUM','ENGLISH_TYPO':'NO_NEW_ERRATUM','ENGLISH_FACTUAL_ERROR':'NO_NEW_ERRATUM','INGEST_ARTEFACT':'NO_NEW_ERRATUM','FORMATTING':'NO_NEW_ERRATUM'},'original_screens':[{'path':str(B/a/str(s)/name),**pin(B/a/str(s)/name)}for a,name in [('tibetan','five-ground-screens.json'),('english','errata-review.json')]],'original_screen_dispositions':screen_dispositions,'source_correction':False})
+# The successful superseded English328 v1 ordinal decision remains inspectable.
+v1=load(B/'english/native/328-generator-v1/stdin.bin')['segments'][0]
+put(A/'328/superseded-original-disposition.json',{'key':{'seq':328,'angle':'english','revision':'native-v1','id':'w1'},'original_spec':next(x for x in v1['spans']if x['id']=='w1'),'disposition':'OMIT','reason':reason['ordinal'],'original_revision_note':load(B/'english/328/revision.json'),'revision_note_disposition':'ACCEPT','native_v1_path':str(B/'english/native/328-generator-v1'),'native_v1_input':pin(B/'english/native/328-generator-v1/stdin.bin'),'scope':'133 original-span dispositions count the two final frozen inventories. This separately preserves the successful earlier ordinal-null decision and v2 omission history; unchanged v1 spans remain in the exact frozen native input.'})
+print(json.dumps(summary))

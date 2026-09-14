@@ -1,0 +1,7 @@
+{
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B campaign-artifacts/C05-328-330/english/helpers/package.py",
+  "exit": 1,
+  "output_capture": "exec_command combined output; stderr was not separately redirected for this packaging command",
+  "output": "Traceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-328-330/english/helpers/package.py\", line 13, in <module>\n    lines=(A/'evidence/C05ReadingASCII.txt').read_text().splitlines();physical=[]\n          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/pathlib/__init__.py\", line 788, in read_text\n    return f.read()\n           ~~~~~~^^\n  File \"<frozen codecs>\", line 325, in decode\nUnicodeDecodeError: 'utf-8' codec can't decode byte 0xb8 in position 32644: invalid start byte\n",
+  "resolution": "Read the legacy physical file bytes with Latin-1, preserving every byte. All compared328–330 line extents are ASCII; complete original physical bytes and whole-file SHA256 stay unchanged."
+}

@@ -1,0 +1,25 @@
+{
+  "retained_read_failures": [
+    {
+      "operation": "cat source.json baseline.json proposal-baseline.json",
+      "exit": 1,
+      "reason": "baseline.json absent; correct proposal-baseline.json read."
+    },
+    {
+      "operation": "read tibetan/328/decisions.json",
+      "exit": 1,
+      "reason": "Correct filename original-decisions.json read."
+    },
+    {
+      "operation": "physical source read_text UTF-8 in original-reuse check",
+      "exit": 1,
+      "reason": "UnicodeDecodeError byte0xb8 at32644; original capture uses Latin-1. Corrected check passed without source conversion."
+    },
+    {
+      "operation": "physical field check retaining empty source lines",
+      "exit": 1,
+      "reason": "Assertion failed on330 English: blank line introduced duplicate space between in and order. Repeated with documented join of stripped NONEMPTY lines; all six fields match. No source edit."
+    }
+  ],
+  "truncation": "Some long combined display calls truncated. Material full entries were displayed separately; no unviewed material is claimed read."
+}

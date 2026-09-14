@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-14T22:35:47.421026+00:00",
+  "original_source_pins_verified": [
+    "spine",
+    "master",
+    "corpus",
+    "source",
+    "context",
+    "physical"
+  ],
+  "complete_unique_master_records_verified": 79,
+  "complete_unique_corpus_records_verified": 32,
+  "recorded_sql_queries_rechecked": 60,
+  "source_and_context_rows_verified": 15,
+  "generator_successes": 4,
+  "resolver_successes": 4,
+  "generator_or_resolver_failures": 0,
+  "final_versions": {
+    "328": 2,
+    "329": 1,
+    "330": 1
+  },
+  "packaging_failure": "One legacy-source UTF-8 decode failure preserved in failures/package-v1/failure.json with its exact combined tool output and original script; Latin-1 byte-preserving physical read resolved it.",
+  "native_evidence": "Every actual generator/resolver version retains exact stdin, stdout, stderr, exit and execution records. Only changed328 was regenerated.",
+  "limits": "Fidelity proof establishes byte identity and resolved ranges, not semantic acceptance."
+}

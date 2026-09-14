@@ -1,0 +1,388 @@
+{
+  "status": "RECONCILER FIVE-GROUND REVIEW",
+  "five_grounds": {
+    "a_source": {
+      "complete_source": {
+        "id": 1711,
+        "course": "C05",
+        "seq": 329,
+        "acip": "MIN TE, MDO LAS GSUNGS PA NI SROG GCOD PA LTA BU'I SBYOR BA RTZA BA GSUM LAS SKYES PA LA DGONGS SO,",
+        "wylie": "min te, mdo las gsungs pa ni srog gcod pa lta bu'i sbyor ba rtsa ba gsum las skyes pa la dgongs so",
+        "english": "The answer is that they are not. The statement from sutra was made only with reference to the fact that the \"undertaking\" stages of deeds such as killing come from the root three."
+      },
+      "physical_fields": "../../english/evidence/physical-fields.json",
+      "finding": "Full physical ACIP/English fields match via documented nonempty-line joining; derived Wylie is unchanged."
+    },
+    "b_parallel": {
+      "exact_full_field_count_each": 2,
+      "citations": [
+        "C05:329",
+        "C16:854"
+      ],
+      "independent_corrected_publication_witness": false,
+      "finding": "Identical digital full fields corroborate transmitted wording but prove neither publication independence nor an ingestion lineage."
+    },
+    "c_register": {
+      "original_count": 196,
+      "actual_through327_count": 198,
+      "matches": [],
+      "evidence": "../evidence/actual-baseline-check.json",
+      "finding": "No matching local spelling observation; E-197/E-198 concern325/326. Converter escapes, 1500 cap, folio/footnote, row boundaries and headings do not explain these exact complete fields."
+    },
+    "d_defensibility": "The negative answer distinguishes completion from undertaking and the reference phrase is a defensible translation recast. No factual, lexical or formatting defect is established.",
+    "e_counts": {
+      "source_field_lengths": {
+        "acip": 99,
+        "wylie": 98,
+        "english": 179
+      },
+      "new_errata": 0,
+      "queries": "../../english/evidence/corpus-queries.json; counts replayed in ../evidence/reused-original-verification.json"
+    }
+  },
+  "categories": {
+    "TIBETAN_SPELLING": "NO_NEW_ERRATUM",
+    "ENGLISH_TYPO": "NO_NEW_ERRATUM",
+    "ENGLISH_FACTUAL_ERROR": "NO_NEW_ERRATUM",
+    "INGEST_ARTEFACT": "NO_NEW_ERRATUM",
+    "FORMATTING": "NO_NEW_ERRATUM"
+  },
+  "original_screens": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-328-330/tibetan/329/five-ground-screens.json",
+      "bytes": 737,
+      "sha256": "c2a9d5ca68cc6156da19304f812804e15c9d67efbc3b3cc2c69f57a7f86d4974"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-328-330/english/329/errata-review.json",
+      "bytes": 10149,
+      "sha256": "b7e2ae8156eddfebbc10d595b140dfdb03033b66ee8406e40a9ce9c844120df0"
+    }
+  ],
+  "original_screen_dispositions": [
+    {
+      "key": {
+        "seq": 329,
+        "angle": "tibetan",
+        "field": "five-ground-screens.json",
+        "index": 0
+      },
+      "original": {
+        "seq": 329,
+        "found": null,
+        "suggested_expected": null,
+        "disposition": "NO ERRATUM IDENTIFIED",
+        "grounds": {
+          "a": "Complete ACIP, Wylie, English and physical extents read without silently correcting them.",
+          "b": "C16:854 repeats all three fields; no independent publication proved.",
+          "c": "No C05:329 duplicate in the196-entry register; no registered cap/header/converter pattern applies.",
+          "d": "The negation and undertaking-only qualification follow the local question coherently. English nominal reference is a defensible recast of dgongs.",
+          "e": "All three exact full-field queries return2 rows and were replayed; full lexical entries and raw source objects agree."
+        }
+      },
+      "disposition": "ACCEPT",
+      "reason": "Preserve this screen conclusion with the reconciled five grounds and actual198-entry register check. The negative answer distinguishes completion from undertaking and the reference phrase is a defensible translation recast. No factual, lexical or formatting defect is established."
+    },
+    {
+      "key": {
+        "seq": 329,
+        "angle": "english",
+        "field": "errata-review.json",
+        "index": 0
+      },
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "disposition": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "quote": {
+            "found": "The answer is that they are not. The statement from sutra was made only with reference to the fact that the \"undertaking\" stages of deeds such as killing come from the root three.",
+            "source_matches": [
+              "english"
+            ]
+          },
+          "parallel": {
+            "exact_full_field_results": "C05:329 and C16:854; acip,wylie,english are equal, not IDs or course/seq.",
+            "query_index": "../evidence/query-index.json",
+            "independent_publication_or_ingestion_history_proved": false
+          },
+          "registered": {
+            "register_count": 196,
+            "original_commit": "daad5db6ea6207085dc820101b3a2e9aaf942417",
+            "complete_register": "evidence/governance/docs/errata_register.json",
+            "search_terms": [
+              "zhe sngang",
+              "ZHE SNGANG",
+              "C05:328",
+              "C05:329",
+              "C05:330"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "E-044 converter escapes",
+              "E-071 running heads",
+              "E-107 1500-character cap",
+              "E-111 row boundary",
+              "following-heading",
+              "footnote/folio fusion"
+            ],
+            "assessment": "No matching newly proposed defect; no source row ends at1500 or contains the cited apparatus classes beyond the preserved IV verse label. ZHE SNGANG occurs in physical ACIP, so no converter loss is established."
+          },
+          "defensibility": "The answer denies universal completion by all three roots while distinguishing undertaking; no source defect is established.",
+          "counts": {
+            "source_field_lengths": {
+              "acip": 99,
+              "wylie": 98,
+              "english": 179
+            },
+            "exact_parallel_count_each_field": 2,
+            "new_errata": 0,
+            "register_count": 196
+          }
+        }
+      },
+      "disposition": "ACCEPT",
+      "reason": "Preserve this screen conclusion with the reconciled five grounds and actual198-entry register check. The negative answer distinguishes completion from undertaking and the reference phrase is a defensible translation recast. No factual, lexical or formatting defect is established."
+    },
+    {
+      "key": {
+        "seq": 329,
+        "angle": "english",
+        "field": "errata-review.json",
+        "index": 1
+      },
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "disposition": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "quote": {
+            "found": "The answer is that they are not. The statement from sutra was made only with reference to the fact that the \"undertaking\" stages of deeds such as killing come from the root three.",
+            "source_matches": [
+              "english"
+            ]
+          },
+          "parallel": {
+            "exact_full_field_results": "C05:329 and C16:854; acip,wylie,english are equal, not IDs or course/seq.",
+            "query_index": "../evidence/query-index.json",
+            "independent_publication_or_ingestion_history_proved": false
+          },
+          "registered": {
+            "register_count": 196,
+            "original_commit": "daad5db6ea6207085dc820101b3a2e9aaf942417",
+            "complete_register": "evidence/governance/docs/errata_register.json",
+            "search_terms": [
+              "zhe sngang",
+              "ZHE SNGANG",
+              "C05:328",
+              "C05:329",
+              "C05:330"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "E-044 converter escapes",
+              "E-071 running heads",
+              "E-107 1500-character cap",
+              "E-111 row boundary",
+              "following-heading",
+              "footnote/folio fusion"
+            ],
+            "assessment": "No matching newly proposed defect; no source row ends at1500 or contains the cited apparatus classes beyond the preserved IV verse label. ZHE SNGANG occurs in physical ACIP, so no converter loss is established."
+          },
+          "defensibility": "The answer denies universal completion by all three roots while distinguishing undertaking; no source defect is established.",
+          "counts": {
+            "source_field_lengths": {
+              "acip": 99,
+              "wylie": 98,
+              "english": 179
+            },
+            "exact_parallel_count_each_field": 2,
+            "new_errata": 0,
+            "register_count": 196
+          }
+        }
+      },
+      "disposition": "ACCEPT",
+      "reason": "Preserve this screen conclusion with the reconciled five grounds and actual198-entry register check. The negative answer distinguishes completion from undertaking and the reference phrase is a defensible translation recast. No factual, lexical or formatting defect is established."
+    },
+    {
+      "key": {
+        "seq": 329,
+        "angle": "english",
+        "field": "errata-review.json",
+        "index": 2
+      },
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "disposition": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "quote": {
+            "found": "The answer is that they are not. The statement from sutra was made only with reference to the fact that the \"undertaking\" stages of deeds such as killing come from the root three.",
+            "source_matches": [
+              "english"
+            ]
+          },
+          "parallel": {
+            "exact_full_field_results": "C05:329 and C16:854; acip,wylie,english are equal, not IDs or course/seq.",
+            "query_index": "../evidence/query-index.json",
+            "independent_publication_or_ingestion_history_proved": false
+          },
+          "registered": {
+            "register_count": 196,
+            "original_commit": "daad5db6ea6207085dc820101b3a2e9aaf942417",
+            "complete_register": "evidence/governance/docs/errata_register.json",
+            "search_terms": [
+              "zhe sngang",
+              "ZHE SNGANG",
+              "C05:328",
+              "C05:329",
+              "C05:330"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "E-044 converter escapes",
+              "E-071 running heads",
+              "E-107 1500-character cap",
+              "E-111 row boundary",
+              "following-heading",
+              "footnote/folio fusion"
+            ],
+            "assessment": "No matching newly proposed defect; no source row ends at1500 or contains the cited apparatus classes beyond the preserved IV verse label. ZHE SNGANG occurs in physical ACIP, so no converter loss is established."
+          },
+          "defensibility": "The answer denies universal completion by all three roots while distinguishing undertaking; no source defect is established.",
+          "counts": {
+            "source_field_lengths": {
+              "acip": 99,
+              "wylie": 98,
+              "english": 179
+            },
+            "exact_parallel_count_each_field": 2,
+            "new_errata": 0,
+            "register_count": 196
+          }
+        }
+      },
+      "disposition": "ACCEPT",
+      "reason": "Preserve this screen conclusion with the reconciled five grounds and actual198-entry register check. The negative answer distinguishes completion from undertaking and the reference phrase is a defensible translation recast. No factual, lexical or formatting defect is established."
+    },
+    {
+      "key": {
+        "seq": 329,
+        "angle": "english",
+        "field": "errata-review.json",
+        "index": 3
+      },
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "disposition": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "quote": {
+            "found": "The answer is that they are not. The statement from sutra was made only with reference to the fact that the \"undertaking\" stages of deeds such as killing come from the root three.",
+            "source_matches": [
+              "english"
+            ]
+          },
+          "parallel": {
+            "exact_full_field_results": "C05:329 and C16:854; acip,wylie,english are equal, not IDs or course/seq.",
+            "query_index": "../evidence/query-index.json",
+            "independent_publication_or_ingestion_history_proved": false
+          },
+          "registered": {
+            "register_count": 196,
+            "original_commit": "daad5db6ea6207085dc820101b3a2e9aaf942417",
+            "complete_register": "evidence/governance/docs/errata_register.json",
+            "search_terms": [
+              "zhe sngang",
+              "ZHE SNGANG",
+              "C05:328",
+              "C05:329",
+              "C05:330"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "E-044 converter escapes",
+              "E-071 running heads",
+              "E-107 1500-character cap",
+              "E-111 row boundary",
+              "following-heading",
+              "footnote/folio fusion"
+            ],
+            "assessment": "No matching newly proposed defect; no source row ends at1500 or contains the cited apparatus classes beyond the preserved IV verse label. ZHE SNGANG occurs in physical ACIP, so no converter loss is established."
+          },
+          "defensibility": "The answer denies universal completion by all three roots while distinguishing undertaking; no source defect is established.",
+          "counts": {
+            "source_field_lengths": {
+              "acip": 99,
+              "wylie": 98,
+              "english": 179
+            },
+            "exact_parallel_count_each_field": 2,
+            "new_errata": 0,
+            "register_count": 196
+          }
+        }
+      },
+      "disposition": "ACCEPT",
+      "reason": "Preserve this screen conclusion with the reconciled five grounds and actual198-entry register check. The negative answer distinguishes completion from undertaking and the reference phrase is a defensible translation recast. No factual, lexical or formatting defect is established."
+    },
+    {
+      "key": {
+        "seq": 329,
+        "angle": "english",
+        "field": "errata-review.json",
+        "index": 4
+      },
+      "original": {
+        "kind": "FORMATTING",
+        "disposition": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "quote": {
+            "found": "The answer is that they are not. The statement from sutra was made only with reference to the fact that the \"undertaking\" stages of deeds such as killing come from the root three.",
+            "source_matches": [
+              "english"
+            ]
+          },
+          "parallel": {
+            "exact_full_field_results": "C05:329 and C16:854; acip,wylie,english are equal, not IDs or course/seq.",
+            "query_index": "../evidence/query-index.json",
+            "independent_publication_or_ingestion_history_proved": false
+          },
+          "registered": {
+            "register_count": 196,
+            "original_commit": "daad5db6ea6207085dc820101b3a2e9aaf942417",
+            "complete_register": "evidence/governance/docs/errata_register.json",
+            "search_terms": [
+              "zhe sngang",
+              "ZHE SNGANG",
+              "C05:328",
+              "C05:329",
+              "C05:330"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "E-044 converter escapes",
+              "E-071 running heads",
+              "E-107 1500-character cap",
+              "E-111 row boundary",
+              "following-heading",
+              "footnote/folio fusion"
+            ],
+            "assessment": "No matching newly proposed defect; no source row ends at1500 or contains the cited apparatus classes beyond the preserved IV verse label. ZHE SNGANG occurs in physical ACIP, so no converter loss is established."
+          },
+          "defensibility": "The answer denies universal completion by all three roots while distinguishing undertaking; no source defect is established.",
+          "counts": {
+            "source_field_lengths": {
+              "acip": 99,
+              "wylie": 98,
+              "english": 179
+            },
+            "exact_parallel_count_each_field": 2,
+            "new_errata": 0,
+            "register_count": 196
+          }
+        }
+      },
+      "disposition": "ACCEPT",
+      "reason": "Preserve this screen conclusion with the reconciled five grounds and actual198-entry register check. The negative answer distinguishes completion from undertaking and the reference phrase is a defensible translation recast. No factual, lexical or formatting defect is established."
+    }
+  ],
+  "source_correction": false
+}

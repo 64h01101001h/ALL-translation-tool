@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport sys,json,hashlib\nR=Path.cwd();A=R/'campaign-artifacts';F=A/'C05-328-330';S=F/'semantic-review';Q=F/'reconciled';sys.path.insert(0,str(A));from copy_evidence_once_v2 import preserve\nmanifest=S/'original-to-copy-manifest.json';records=json.loads(manifest.read_text());seen={x['original'] for x in records};direct=[]\nfor seq in [328,329,330]:\n for name in ['spec.json','body.html','report.md','errata.json']:direct.append((Q/str(seq)/name,S/'reviewed-final'/str(seq)/name))\nfor p in sorted((Q/'native').rglob('*')):\n if p.is_file():direct.append((p,S/'native/reconciled'/p.relative_to(Q/'native')))\nfor orig,copy in direct:\n raw=orig.read_bytes();copy.parent.mkdir(parents=True,exist_ok=True);assert not copy.exists();copy.write_bytes(raw)\n assert str(orig) not in seen;seen.add(str(orig));records.append(dict(original=str(orig),copy=str(copy.relative_to(S)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))\nmanifest.write_text(json.dumps(records,ensure_ascii=False,indent=2)+'\\n')\nrest=[p for p in sorted(Q.rglob('*')) if p.is_file() and str(p) not in seen];out=preserve(S,manifest,rest)\nassert all(not x['copy'].endswith('.py') for x in json.loads(manifest.read_text()))\nprint(json.dumps(out,indent=2))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-14T23:26:45.577780+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-14T23:26:45.655807+00:00",
+  "wall_seconds": 0.07762516662478447,
+  "exit": 0,
+  "stdout_bytes": 76,
+  "stderr_bytes": 0,
+  "stdout_sha256": "e842d74bb7b99f61301283e8afa147310a33b0702c6bfc18a8195f9ab2a769e2",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
