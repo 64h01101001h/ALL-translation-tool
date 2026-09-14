@@ -34,14 +34,24 @@
 // clause pairs puts it at 5% backwards -- so reordering clauses can only break
 // what was already right.
 //
-// This pane's step 4 operates at clause -> phrases: the level where the
-// engine scores 40% and doing nothing scores 60%. Shipping that ruling as
-// advice, unqualified, would be banking a falsehood (Rule 10). So step 4
-// shows BOTH orders -- the engine's and the written one -- names the
-// measurement for the level, and says outright which one the evidence
-// favours. When the pane's own engine is the weaker of the two, the pane
-// says so. Fixing planReading is on the punchlist; misreporting it while it
-// is unfixed is not an option.
+// This pane's step 4 operates at clause -> phrases, and the figures for that
+// level are the ones in `namespace walk` below -- kClauseEngine 51 against
+// kClausePlain 59, over kClauseSpans 112, with kClauseDiscordant 21 spans
+// carrying the whole difference and p = 0.078. NOT established, either way.
+//
+// This paragraph used to say 40% and 60%. Those were the FIRST pass's
+// figures, from a probe that walked only the first clause of each segment and
+// silently dropped 523 of 730 spans; they were retracted the same day and the
+// constants were corrected, but the prose above them was not. Quoting a
+// retracted number in the file that explains the pane is Rule 10 exactly --
+// never bank a falsehood, and a stale one is still one.
+//
+// It also used to say the pane "says outright which one the evidence
+// favours". The shipped pane says the opposite, and a gate holds it to that:
+// neither column is established at this level, and the written order is
+// offered only as the simpler bet. Fixing planReading needs about 200 aligned
+// spans at this depth against today's 112; misreporting it meanwhile is not
+// an option, and neither is misreporting what the pane does.
 //
 // Nothing here composes English. Step 6 assembles HGM's own glosses in the
 // engine's order and says so; step 7 shows his actual translation when the
@@ -330,6 +340,12 @@ public:
             // green strip, which now carries the figures a reader can act on.
             // The FACT asserted is unchanged: the pane must still show what
             // the clause-level measurement was, not merely assert it.
+            check(t.contains(QString::number(walk::kClauseSpans)) &&
+                      t.contains(QString::number(walk::kClauseDiscordant)),
+                  "step 4 quotes the SAMPLE SIZE and the discordant count, not "
+                  "just the two percentages \u2014 a reader cannot weigh "
+                  "\"the gap does not hold up\" without them, and until now "
+                  "both constants were referenced by nothing at all");
             check(t.contains(QString::number(walk::kClauseBackPct) + "%") &&
                       t.contains(QString::number(walk::kClausePairs)),
                   "the clause-level evidence is still on the page \u2014 the "
@@ -1151,7 +1167,11 @@ private:
              "neither column is established at this level \u2014 the engine "
              "matched him " + QString::number(walk::kClauseEngine) +
              "% and the written order " + QString::number(walk::kClausePlain) +
-             "%, and the gap does not hold up. Try the right-hand column "
+             "% of " + QString::number(walk::kClauseSpans) +
+             " aligned spans, and with only " +
+             QString::number(walk::kClauseDiscordant) +
+             " of those separating the two, the gap does not hold up. Try the "
+             "right-hand column "
              "first because it is simpler.</div>";
         // Both orders, side by side. Showing only the engine's would be
         // presenting the weaker of two measured options as the answer.
