@@ -23796,13 +23796,30 @@ private:
                         // his English order: where each child's English sits
                         // inside the parent's. Distinct positions or the
                         // question has no single answer and is dropped.
+                        // indexOf is unanchored, so a piece whose English
+                        // occurs inside another piece's is found in the WRONG
+                        // place and the order taken from it is not his:
+                        // `refuge` lands at 30, inside `apparent refuge` at 21.
+                        // Distinct positions do not catch that — those two
+                        // positions differ. The pieces must occupy DISJOINT
+                        // stretches of his sentence, or the card is dropped
+                        // rather than keyed on a guess.
                         std::vector<int> pos;
                         bool ok = true;
-                        for (const GLink& k2 : kids) {
-                            const int at = p2.eng.indexOf(k2.eng);
-                            if (at < 0) { ok = false; break; }
-                            for (int q : pos) if (q == at) ok = false;
-                            pos.push_back(at);
+                        {
+                            QVector<QPair<int, int>> at;
+                            for (const GLink& k2 : kids) {
+                                const int b = p2.eng.indexOf(k2.eng);
+                                if (b < 0) { ok = false; break; }
+                                at.push_back({b, b + k2.eng.size()});
+                            }
+                            for (int a = 0; ok && a < at.size(); ++a)
+                                for (int b2 = a + 1; b2 < at.size(); ++b2)
+                                    if (at[a].first < at[b2].second &&
+                                        at[b2].first < at[a].second) {
+                                        ok = false; break;
+                                    }
+                            if (ok) for (const auto& r : at) pos.push_back(r.first);
                         }
                         if (!ok) continue;
                         // and it must render as script, like every other card
