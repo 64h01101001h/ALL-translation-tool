@@ -551,6 +551,25 @@ public:
             check(!out_->toPlainText().contains("topic particle"),
                   "a clause with an attested verb gets no fragment note");
         }
+        {   // The footer summarises the page's honesty, so it must not
+            // claim more than the page has. It used to say "Every English word
+            // above is Geshe Michael's ... the engine supplied only the
+            // order", on a page that carries auto-aligned glosses, engine
+            // prose, and engine chunking.
+            src_->setPlainText("rgyal ba'i yon tan ma lus");
+            walk();
+            const QString f = out_->toPlainText();
+            check(!f.contains("Every English word above is"),
+                  "the footer does not claim every English word on the page "
+                  "is his \u2014 the page carries PROVISIONAL glosses, which "
+                  "are the machine's match, and engine prose besides");
+            check(!f.contains("supplied only the order"),
+                  "nor that the engine supplied only the order \u2014 it "
+                  "supplies the chunking, the cases and the verb too");
+            check(f.contains("No translation here was composed"),
+                  "it still makes the claim that IS true: no translation was "
+                  "composed");
+        }
         {   // Rule 1: his own English outranks the machine's match, even
             // when the machine's match covers more of the line. Adam caught
             // this on the page: RGYAL BA'I YON TAN glossed "farthest shore"
@@ -711,10 +730,30 @@ private:
         h += header(det, (int)doc.tokens.size(), clauses, merged_na);
         for (size_t i = 0; i < clauses.size(); ++i)
             h += oneClause(doc, clauses[i], (int)i + 1, (int)clauses.size());
+        // This footer used to read: "Nothing on this page was composed.
+        // Every English word above is Geshe Michael's, taken from his glossary
+        // or his translation; the engine supplied only the order, and said
+        // where it did."
+        //
+        // Three parts of that were untrue on the page it was printed at the
+        // bottom of. The page carries auto-aligned glosses, which are the
+        // MACHINE's match to his English and not his own word -- they are
+        // labelled PROVISIONAL a few lines above, and the footer then said
+        // every word was his. It carries a great deal of engine-authored
+        // English besides: the case readings, the Wilson class notes, step
+        // 4's verdict, this pane's own cautions. And the engine supplies far
+        // more than the order -- the chunking, the clause splits, the verb.
+        //
+        // A footer claiming more honesty than the page has is worse than no
+        // footer, because it is the line a reader would trust if they trusted
+        // anything. Rule 10, on my own summary of my own work.
         h += "<hr><div style='color:#666;font-size:11px;padding:6px 0'>"
-             "Nothing on this page was composed. Every English word above is "
-             "Geshe Michael's, taken from his glossary or his translation; the "
-             "engine supplied only the order, and said where it did.</div>";
+             "No translation here was composed. The Tibetan is his and the "
+             "glosses come from his glossary, each carrying its tier \u2014 and "
+             "where one reads PROVISIONAL it is the machine's match to his "
+             "English, not his own word for this. Everything else above \u2014 "
+             "the chunking, the case readings, the verb, the order \u2014 is the "
+             "engine's, and each of them says so where it stands.</div>";
         out_->setHtml(h);
     }
 
