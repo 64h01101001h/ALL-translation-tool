@@ -1,0 +1,11 @@
+{
+  "status": "PASS_ROOT_SCOPED_FORMAT_CORRECTION",
+  "reason": "Actual native CTest prints 100% tests passed out of17 without zero-failed phrase. Validate all17 named actual Passed records, unique indices and summary instead of requiring one historical summary format.",
+  "actual_native_stdout_sha256": "ddd01fa777673c30d7d1c5f30c8cb5a238125569501ca96b91937c2ae0b1a774",
+  "actual17pass_accepted": true,
+  "single_failed_suite_rejected": true,
+  "wrong_suite_rejected": true,
+  "after_sha256": "feb7c34763b3269256b91d1f20b4440743aad0a47d5d0c2ad72f6083d0f49e19",
+  "prior_probe_failure": "First wrong-name mutation changed only the Start line, leaving its actual Passed result unchanged; validator correctly still accepted. Corrected probe changes the actual suite result too. No bank invocation or W mutation occurred.",
+  "independent_review_limit": "Prior helper independently reviewed at515bcf7d; this narrow actual-format correction reviewed/tested by root before first bank execution."
+}

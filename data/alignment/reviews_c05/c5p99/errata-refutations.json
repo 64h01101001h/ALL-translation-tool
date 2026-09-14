@@ -1,0 +1,2058 @@
+[
+  {
+    "index": 0,
+    "seq": 295,
+    "candidate": "yi dvags versus yi dwags",
+    "verdict": "REFUTED",
+    "retained_erratum": false,
+    "grounds": {
+      "a_exact_quote": {
+        "quote": "YI DVAGS",
+        "source_record": "corpus_segments:1677",
+        "field_counts": {
+          "wylie": 0,
+          "english": 0,
+          "acip": 1
+        },
+        "physical_proof": "physical-source-checks.json: complete C05 and C15 ACIP/English fields each occur exactly once after whitespace normalization; raw full files preserved"
+      },
+      "b_parallel_independence": {
+        "C15": {
+          "record_ref": "corpus_segments:5991",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "C05_length": 477,
+              "witness_length": 477,
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "C05_length": 476,
+              "witness_length": 476,
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 767,
+              "witness_length": 767,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        },
+        "P7": {
+          "record_ref": "corpus_segments:34925",
+          "fields": {
+            "acip": {
+              "equal": false,
+              "C05_length": 477,
+              "witness_length": 469,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    19,
+                    20
+                  ],
+                  "witness_range": [
+                    19,
+                    19
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    34,
+                    35
+                  ],
+                  "witness_range": [
+                    33,
+                    34
+                  ],
+                  "C05": "V",
+                  "witness": "W"
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    83,
+                    83
+                  ],
+                  "witness_range": [
+                    82,
+                    83
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    94,
+                    95
+                  ],
+                  "witness_range": [
+                    94,
+                    94
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    147,
+                    149
+                  ],
+                  "witness_range": [
+                    146,
+                    146
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    168,
+                    168
+                  ],
+                  "witness_range": [
+                    165,
+                    166
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    233,
+                    235
+                  ],
+                  "witness_range": [
+                    231,
+                    231
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    252,
+                    252
+                  ],
+                  "witness_range": [
+                    248,
+                    249
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    284,
+                    286
+                  ],
+                  "witness_range": [
+                    281,
+                    281
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    420,
+                    422
+                  ],
+                  "witness_range": [
+                    415,
+                    415
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    476,
+                    477
+                  ],
+                  "witness_range": [
+                    469,
+                    469
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                }
+              ]
+            },
+            "wylie": {
+              "equal": false,
+              "C05_length": 476,
+              "witness_length": 469,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    19,
+                    20
+                  ],
+                  "witness_range": [
+                    19,
+                    19
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    34,
+                    35
+                  ],
+                  "witness_range": [
+                    33,
+                    34
+                  ],
+                  "C05": "v",
+                  "witness": "w"
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    83,
+                    83
+                  ],
+                  "witness_range": [
+                    82,
+                    83
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    94,
+                    95
+                  ],
+                  "witness_range": [
+                    94,
+                    94
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    147,
+                    149
+                  ],
+                  "witness_range": [
+                    146,
+                    146
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    168,
+                    168
+                  ],
+                  "witness_range": [
+                    165,
+                    166
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    233,
+                    235
+                  ],
+                  "witness_range": [
+                    231,
+                    231
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    252,
+                    252
+                  ],
+                  "witness_range": [
+                    248,
+                    249
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    284,
+                    286
+                  ],
+                  "witness_range": [
+                    281,
+                    281
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    420,
+                    422
+                  ],
+                  "witness_range": [
+                    415,
+                    415
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                }
+              ]
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 767,
+              "witness_length": 767,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        }
+      },
+      "c_registered_class_or_duplicate": {
+        "source_origin": "ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e",
+        "current_baseline": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+        "source_origin_records": 192,
+        "current_records": 192,
+        "duplicate_segment_ids": [],
+        "classes": [
+          "E-044 converter braces",
+          "E-071 apparatus",
+          "E-076/E-121 footnote fusion",
+          "folio splice",
+          "following-heading glue",
+          "E-111 row boundary",
+          "E-107 English cap"
+        ],
+        "signature_present": false,
+        "judgment": "Full local prose and neighboring boundaries show no heading, folio, escaped Sanskrit, fused note, or stranded continuation. Physical source contains the complete same fields."
+      },
+      "d_defensible_reading_or_wrong_correction": {
+        "refuted": true,
+        "reason": "The local YI DVAGS is an attested HGM head for craving spirit; P7 DWAGS is a different spelling, not evidence requiring correction of this ACIP original."
+      },
+      "e_counts_and_references": {
+        "quote_counts": {
+          "wylie": 0,
+          "english": 0,
+          "acip": 1
+        },
+        "equality_query_counts": {
+          "wylie": 2,
+          "english": 3,
+          "acip": 2
+        },
+        "local_counts": {
+          "mthong": 7,
+          "dang por": 3
+        },
+        "query_proof": "query-replay.json: 180 distinct replayed sets; 178 original query occurrences plus 13 supplements, 167 deduplicated original sets",
+        "count_scope": "digital records and literal occurrences, not publications",
+        "archive_proof": "archive-identity-check.json",
+        "retained_errata": 0
+      }
+    }
+  },
+  {
+    "index": 1,
+    "seq": 296,
+    "candidate": "yi dvags versus yi dwags",
+    "verdict": "REFUTED",
+    "retained_erratum": false,
+    "grounds": {
+      "a_exact_quote": {
+        "quote": "YI DVAGS",
+        "source_record": "corpus_segments:1678",
+        "field_counts": {
+          "wylie": 0,
+          "english": 0,
+          "acip": 1
+        },
+        "physical_proof": "physical-source-checks.json: complete C05 and C15 ACIP/English fields each occur exactly once after whitespace normalization; raw full files preserved"
+      },
+      "b_parallel_independence": {
+        "C15": {
+          "record_ref": "corpus_segments:5992",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "C05_length": 238,
+              "witness_length": 238,
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "C05_length": 238,
+              "witness_length": 238,
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 369,
+              "witness_length": 369,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        },
+        "P7": {
+          "record_ref": "corpus_segments:34926",
+          "fields": {
+            "acip": {
+              "equal": false,
+              "C05_length": 238,
+              "witness_length": 234,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    11,
+                    12
+                  ],
+                  "witness_range": [
+                    11,
+                    11
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    17,
+                    18
+                  ],
+                  "witness_range": [
+                    16,
+                    17
+                  ],
+                  "C05": "V",
+                  "witness": "W"
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    78,
+                    79
+                  ],
+                  "witness_range": [
+                    77,
+                    77
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    83,
+                    83
+                  ],
+                  "witness_range": [
+                    81,
+                    82
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    115,
+                    116
+                  ],
+                  "witness_range": [
+                    114,
+                    114
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    180,
+                    181
+                  ],
+                  "witness_range": [
+                    178,
+                    178
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    237,
+                    238
+                  ],
+                  "witness_range": [
+                    234,
+                    234
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                }
+              ]
+            },
+            "wylie": {
+              "equal": false,
+              "C05_length": 238,
+              "witness_length": 235,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    12,
+                    13
+                  ],
+                  "witness_range": [
+                    12,
+                    12
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    18,
+                    19
+                  ],
+                  "witness_range": [
+                    17,
+                    18
+                  ],
+                  "C05": "v",
+                  "witness": "w"
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    79,
+                    80
+                  ],
+                  "witness_range": [
+                    78,
+                    78
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    84,
+                    84
+                  ],
+                  "witness_range": [
+                    82,
+                    83
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    116,
+                    117
+                  ],
+                  "witness_range": [
+                    115,
+                    115
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    181,
+                    182
+                  ],
+                  "witness_range": [
+                    179,
+                    179
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                }
+              ]
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 369,
+              "witness_length": 369,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        }
+      },
+      "c_registered_class_or_duplicate": {
+        "source_origin": "ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e",
+        "current_baseline": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+        "source_origin_records": 192,
+        "current_records": 192,
+        "duplicate_segment_ids": [],
+        "classes": [
+          "E-044 converter braces",
+          "E-071 apparatus",
+          "E-076/E-121 footnote fusion",
+          "folio splice",
+          "following-heading glue",
+          "E-111 row boundary",
+          "E-107 English cap"
+        ],
+        "signature_present": false,
+        "judgment": "Full local prose and neighboring boundaries show no heading, folio, escaped Sanskrit, fused note, or stranded continuation. Physical source contains the complete same fields."
+      },
+      "d_defensible_reading_or_wrong_correction": {
+        "refuted": true,
+        "reason": "The local YI DVAGS is an attested HGM head for craving spirit; P7 DWAGS is a different spelling, not evidence requiring correction of this ACIP original."
+      },
+      "e_counts_and_references": {
+        "quote_counts": {
+          "wylie": 0,
+          "english": 0,
+          "acip": 1
+        },
+        "equality_query_counts": {
+          "wylie": 2,
+          "english": 3,
+          "acip": 2
+        },
+        "local_counts": {
+          "ma mthong": 2
+        },
+        "query_proof": "query-replay.json: 180 distinct replayed sets; 178 original query occurrences plus 13 supplements, 167 deduplicated original sets",
+        "count_scope": "digital records and literal occurrences, not publications",
+        "archive_proof": "archive-identity-check.json",
+        "retained_errata": 0
+      }
+    }
+  },
+  {
+    "index": 2,
+    "seq": 297,
+    "candidate": "yi dvags versus yi dwags",
+    "verdict": "REFUTED",
+    "retained_erratum": false,
+    "grounds": {
+      "a_exact_quote": {
+        "quote": "YI DVAGS",
+        "source_record": "corpus_segments:1679",
+        "field_counts": {
+          "wylie": 0,
+          "english": 0,
+          "acip": 1
+        },
+        "physical_proof": "physical-source-checks.json: complete C05 and C15 ACIP/English fields each occur exactly once after whitespace normalization; raw full files preserved"
+      },
+      "b_parallel_independence": {
+        "C15": {
+          "record_ref": "corpus_segments:5993",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "C05_length": 372,
+              "witness_length": 372,
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "C05_length": 373,
+              "witness_length": 373,
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 534,
+              "witness_length": 534,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        },
+        "P7": {
+          "record_ref": "corpus_segments:34927",
+          "fields": {
+            "acip": {
+              "equal": false,
+              "C05_length": 372,
+              "witness_length": 367,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    18,
+                    19
+                  ],
+                  "witness_range": [
+                    18,
+                    18
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    24,
+                    25
+                  ],
+                  "witness_range": [
+                    23,
+                    24
+                  ],
+                  "C05": "V",
+                  "witness": "W"
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    80,
+                    80
+                  ],
+                  "witness_range": [
+                    79,
+                    80
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    86,
+                    88
+                  ],
+                  "witness_range": [
+                    86,
+                    86
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    131,
+                    133
+                  ],
+                  "witness_range": [
+                    129,
+                    129
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    187,
+                    188
+                  ],
+                  "witness_range": [
+                    183,
+                    183
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    247,
+                    247
+                  ],
+                  "witness_range": [
+                    242,
+                    243
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    275,
+                    276
+                  ],
+                  "witness_range": [
+                    271,
+                    271
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    327,
+                    327
+                  ],
+                  "witness_range": [
+                    322,
+                    323
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    371,
+                    372
+                  ],
+                  "witness_range": [
+                    367,
+                    367
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                }
+              ]
+            },
+            "wylie": {
+              "equal": false,
+              "C05_length": 373,
+              "witness_length": 369,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    18,
+                    19
+                  ],
+                  "witness_range": [
+                    18,
+                    18
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    24,
+                    25
+                  ],
+                  "witness_range": [
+                    23,
+                    24
+                  ],
+                  "C05": "v",
+                  "witness": "w"
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    81,
+                    81
+                  ],
+                  "witness_range": [
+                    80,
+                    81
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    87,
+                    89
+                  ],
+                  "witness_range": [
+                    87,
+                    87
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    132,
+                    134
+                  ],
+                  "witness_range": [
+                    130,
+                    130
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    188,
+                    189
+                  ],
+                  "witness_range": [
+                    184,
+                    184
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    248,
+                    248
+                  ],
+                  "witness_range": [
+                    243,
+                    244
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    277,
+                    278
+                  ],
+                  "witness_range": [
+                    273,
+                    273
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    329,
+                    329
+                  ],
+                  "witness_range": [
+                    324,
+                    325
+                  ],
+                  "C05": "",
+                  "witness": ","
+                }
+              ]
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 534,
+              "witness_length": 534,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        }
+      },
+      "c_registered_class_or_duplicate": {
+        "source_origin": "ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e",
+        "current_baseline": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+        "source_origin_records": 192,
+        "current_records": 192,
+        "duplicate_segment_ids": [],
+        "classes": [
+          "E-044 converter braces",
+          "E-071 apparatus",
+          "E-076/E-121 footnote fusion",
+          "folio splice",
+          "following-heading glue",
+          "E-111 row boundary",
+          "E-107 English cap"
+        ],
+        "signature_present": false,
+        "judgment": "Full local prose and neighboring boundaries show no heading, folio, escaped Sanskrit, fused note, or stranded continuation. Physical source contains the complete same fields."
+      },
+      "d_defensible_reading_or_wrong_correction": {
+        "refuted": true,
+        "reason": "The local YI DVAGS is an attested HGM head for craving spirit; P7 DWAGS is a different spelling, not evidence requiring correction of this ACIP original."
+      },
+      "e_counts_and_references": {
+        "quote_counts": {
+          "wylie": 0,
+          "english": 0,
+          "acip": 1
+        },
+        "equality_query_counts": {
+          "wylie": 2,
+          "english": 3,
+          "acip": 2
+        },
+        "local_counts": {
+          "chu klung": 3,
+          "river words": 4,
+          "river of water": 3
+        },
+        "query_proof": "query-replay.json: 180 distinct replayed sets; 178 original query occurrences plus 13 supplements, 167 deduplicated original sets",
+        "count_scope": "digital records and literal occurrences, not publications",
+        "archive_proof": "archive-identity-check.json",
+        "retained_errata": 0
+      }
+    }
+  },
+  {
+    "index": 3,
+    "seq": 295,
+    "candidate": "seeing first, then not seeing; impression versus drying",
+    "verdict": "REFUTED",
+    "retained_erratum": false,
+    "grounds": {
+      "a_exact_quote": {
+        "quote": "stop seeing water",
+        "source_record": "corpus_segments:1677",
+        "field_counts": {
+          "wylie": 0,
+          "english": 1,
+          "acip": 0
+        },
+        "physical_proof": "physical-source-checks.json: complete C05 and C15 ACIP/English fields each occur exactly once after whitespace normalization; raw full files preserved"
+      },
+      "b_parallel_independence": {
+        "C15": {
+          "record_ref": "corpus_segments:5991",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "C05_length": 477,
+              "witness_length": 477,
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "C05_length": 476,
+              "witness_length": 476,
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 767,
+              "witness_length": 767,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        },
+        "P7": {
+          "record_ref": "corpus_segments:34925",
+          "fields": {
+            "acip": {
+              "equal": false,
+              "C05_length": 477,
+              "witness_length": 469,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    19,
+                    20
+                  ],
+                  "witness_range": [
+                    19,
+                    19
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    34,
+                    35
+                  ],
+                  "witness_range": [
+                    33,
+                    34
+                  ],
+                  "C05": "V",
+                  "witness": "W"
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    83,
+                    83
+                  ],
+                  "witness_range": [
+                    82,
+                    83
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    94,
+                    95
+                  ],
+                  "witness_range": [
+                    94,
+                    94
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    147,
+                    149
+                  ],
+                  "witness_range": [
+                    146,
+                    146
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    168,
+                    168
+                  ],
+                  "witness_range": [
+                    165,
+                    166
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    233,
+                    235
+                  ],
+                  "witness_range": [
+                    231,
+                    231
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    252,
+                    252
+                  ],
+                  "witness_range": [
+                    248,
+                    249
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    284,
+                    286
+                  ],
+                  "witness_range": [
+                    281,
+                    281
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    420,
+                    422
+                  ],
+                  "witness_range": [
+                    415,
+                    415
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    476,
+                    477
+                  ],
+                  "witness_range": [
+                    469,
+                    469
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                }
+              ]
+            },
+            "wylie": {
+              "equal": false,
+              "C05_length": 476,
+              "witness_length": 469,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    19,
+                    20
+                  ],
+                  "witness_range": [
+                    19,
+                    19
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    34,
+                    35
+                  ],
+                  "witness_range": [
+                    33,
+                    34
+                  ],
+                  "C05": "v",
+                  "witness": "w"
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    83,
+                    83
+                  ],
+                  "witness_range": [
+                    82,
+                    83
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    94,
+                    95
+                  ],
+                  "witness_range": [
+                    94,
+                    94
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    147,
+                    149
+                  ],
+                  "witness_range": [
+                    146,
+                    146
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    168,
+                    168
+                  ],
+                  "witness_range": [
+                    165,
+                    166
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    233,
+                    235
+                  ],
+                  "witness_range": [
+                    231,
+                    231
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    252,
+                    252
+                  ],
+                  "witness_range": [
+                    248,
+                    249
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    284,
+                    286
+                  ],
+                  "witness_range": [
+                    281,
+                    281
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    420,
+                    422
+                  ],
+                  "witness_range": [
+                    415,
+                    415
+                  ],
+                  "C05": ", ",
+                  "witness": ""
+                }
+              ]
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 767,
+              "witness_length": 767,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        }
+      },
+      "c_registered_class_or_duplicate": {
+        "source_origin": "ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e",
+        "current_baseline": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+        "source_origin_records": 192,
+        "current_records": 192,
+        "duplicate_segment_ids": [],
+        "classes": [
+          "E-044 converter braces",
+          "E-071 apparatus",
+          "E-076/E-121 footnote fusion",
+          "folio splice",
+          "following-heading glue",
+          "E-111 row boundary",
+          "E-107 English cap"
+        ],
+        "signature_present": false,
+        "judgment": "Full local prose and neighboring boundaries show no heading, folio, escaped Sanskrit, fused note, or stranded continuation. Physical source contains the complete same fields."
+      },
+      "d_defensible_reading_or_wrong_correction": {
+        "refuted": true,
+        "reason": "The conditional initial absence, actual earlier sight, karmically caused later nonseeing, and subsequent judgment are distinct stages. The argument from 294 through 298 supports the sequence. No contradictory source assertion requires repair."
+      },
+      "e_counts_and_references": {
+        "quote_counts": {
+          "wylie": 0,
+          "english": 1,
+          "acip": 0
+        },
+        "equality_query_counts": {
+          "wylie": 2,
+          "english": 3,
+          "acip": 2
+        },
+        "local_counts": {
+          "mthong": 7,
+          "dang por": 3
+        },
+        "query_proof": "query-replay.json: 180 distinct replayed sets; 178 original query occurrences plus 13 supplements, 167 deduplicated original sets",
+        "count_scope": "digital records and literal occurrences, not publications",
+        "archive_proof": "archive-identity-check.json",
+        "retained_errata": 0
+      }
+    }
+  },
+  {
+    "index": 4,
+    "seq": 296,
+    "candidate": "negative seeing recast as prevention",
+    "verdict": "REFUTED",
+    "retained_erratum": false,
+    "grounds": {
+      "a_exact_quote": {
+        "quote": "MA MTHONG",
+        "source_record": "corpus_segments:1678",
+        "field_counts": {
+          "wylie": 0,
+          "english": 0,
+          "acip": 2
+        },
+        "physical_proof": "physical-source-checks.json: complete C05 and C15 ACIP/English fields each occur exactly once after whitespace normalization; raw full files preserved"
+      },
+      "b_parallel_independence": {
+        "C15": {
+          "record_ref": "corpus_segments:5992",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "C05_length": 238,
+              "witness_length": 238,
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "C05_length": 238,
+              "witness_length": 238,
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 369,
+              "witness_length": 369,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        },
+        "P7": {
+          "record_ref": "corpus_segments:34926",
+          "fields": {
+            "acip": {
+              "equal": false,
+              "C05_length": 238,
+              "witness_length": 234,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    11,
+                    12
+                  ],
+                  "witness_range": [
+                    11,
+                    11
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    17,
+                    18
+                  ],
+                  "witness_range": [
+                    16,
+                    17
+                  ],
+                  "C05": "V",
+                  "witness": "W"
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    78,
+                    79
+                  ],
+                  "witness_range": [
+                    77,
+                    77
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    83,
+                    83
+                  ],
+                  "witness_range": [
+                    81,
+                    82
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    115,
+                    116
+                  ],
+                  "witness_range": [
+                    114,
+                    114
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    180,
+                    181
+                  ],
+                  "witness_range": [
+                    178,
+                    178
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    237,
+                    238
+                  ],
+                  "witness_range": [
+                    234,
+                    234
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                }
+              ]
+            },
+            "wylie": {
+              "equal": false,
+              "C05_length": 238,
+              "witness_length": 235,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    12,
+                    13
+                  ],
+                  "witness_range": [
+                    12,
+                    12
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    18,
+                    19
+                  ],
+                  "witness_range": [
+                    17,
+                    18
+                  ],
+                  "C05": "v",
+                  "witness": "w"
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    79,
+                    80
+                  ],
+                  "witness_range": [
+                    78,
+                    78
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    84,
+                    84
+                  ],
+                  "witness_range": [
+                    82,
+                    83
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    116,
+                    117
+                  ],
+                  "witness_range": [
+                    115,
+                    115
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    181,
+                    182
+                  ],
+                  "witness_range": [
+                    179,
+                    179
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                }
+              ]
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 369,
+              "witness_length": 369,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        }
+      },
+      "c_registered_class_or_duplicate": {
+        "source_origin": "ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e",
+        "current_baseline": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+        "source_origin_records": 192,
+        "current_records": 192,
+        "duplicate_segment_ids": [],
+        "classes": [
+          "E-044 converter braces",
+          "E-071 apparatus",
+          "E-076/E-121 footnote fusion",
+          "folio splice",
+          "following-heading glue",
+          "E-111 row boundary",
+          "E-107 English cap"
+        ],
+        "signature_present": false,
+        "judgment": "Full local prose and neighboring boundaries show no heading, folio, escaped Sanskrit, fused note, or stranded continuation. Physical source contains the complete same fields."
+      },
+      "d_defensible_reading_or_wrong_correction": {
+        "refuted": true,
+        "reason": "An obstacle causing nonseeing is naturally expressed as preventing someone from seeing. Both complete MA MTHONG constructions and their English are present. The alignment's conservative omission of distributed grammar supplies no translation-omission claim."
+      },
+      "e_counts_and_references": {
+        "quote_counts": {
+          "wylie": 0,
+          "english": 0,
+          "acip": 2
+        },
+        "equality_query_counts": {
+          "wylie": 2,
+          "english": 3,
+          "acip": 2
+        },
+        "local_counts": {
+          "ma mthong": 2
+        },
+        "query_proof": "query-replay.json: 180 distinct replayed sets; 178 original query occurrences plus 13 supplements, 167 deduplicated original sets",
+        "count_scope": "digital records and literal occurrences, not publications",
+        "archive_proof": "archive-identity-check.json",
+        "retained_errata": 0
+      }
+    }
+  },
+  {
+    "index": 5,
+    "seq": 297,
+    "candidate": "extra river, sitting and closing numeral",
+    "verdict": "REFUTED",
+    "retained_erratum": false,
+    "grounds": {
+      "a_exact_quote": {
+        "quote": "and the other two",
+        "source_record": "corpus_segments:1679",
+        "field_counts": {
+          "wylie": 0,
+          "english": 1,
+          "acip": 0
+        },
+        "physical_proof": "physical-source-checks.json: complete C05 and C15 ACIP/English fields each occur exactly once after whitespace normalization; raw full files preserved"
+      },
+      "b_parallel_independence": {
+        "C15": {
+          "record_ref": "corpus_segments:5993",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "C05_length": 372,
+              "witness_length": 372,
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "C05_length": 373,
+              "witness_length": 373,
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 534,
+              "witness_length": 534,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        },
+        "P7": {
+          "record_ref": "corpus_segments:34927",
+          "fields": {
+            "acip": {
+              "equal": false,
+              "C05_length": 372,
+              "witness_length": 367,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    18,
+                    19
+                  ],
+                  "witness_range": [
+                    18,
+                    18
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    24,
+                    25
+                  ],
+                  "witness_range": [
+                    23,
+                    24
+                  ],
+                  "C05": "V",
+                  "witness": "W"
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    80,
+                    80
+                  ],
+                  "witness_range": [
+                    79,
+                    80
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    86,
+                    88
+                  ],
+                  "witness_range": [
+                    86,
+                    86
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    131,
+                    133
+                  ],
+                  "witness_range": [
+                    129,
+                    129
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    187,
+                    188
+                  ],
+                  "witness_range": [
+                    183,
+                    183
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    247,
+                    247
+                  ],
+                  "witness_range": [
+                    242,
+                    243
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    275,
+                    276
+                  ],
+                  "witness_range": [
+                    271,
+                    271
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    327,
+                    327
+                  ],
+                  "witness_range": [
+                    322,
+                    323
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    371,
+                    372
+                  ],
+                  "witness_range": [
+                    367,
+                    367
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                }
+              ]
+            },
+            "wylie": {
+              "equal": false,
+              "C05_length": 373,
+              "witness_length": 369,
+              "differences": [
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    18,
+                    19
+                  ],
+                  "witness_range": [
+                    18,
+                    18
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "replace",
+                  "C05_range": [
+                    24,
+                    25
+                  ],
+                  "witness_range": [
+                    23,
+                    24
+                  ],
+                  "C05": "v",
+                  "witness": "w"
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    81,
+                    81
+                  ],
+                  "witness_range": [
+                    80,
+                    81
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    87,
+                    89
+                  ],
+                  "witness_range": [
+                    87,
+                    87
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    132,
+                    134
+                  ],
+                  "witness_range": [
+                    130,
+                    130
+                  ],
+                  "C05": " ,",
+                  "witness": ""
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    188,
+                    189
+                  ],
+                  "witness_range": [
+                    184,
+                    184
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    248,
+                    248
+                  ],
+                  "witness_range": [
+                    243,
+                    244
+                  ],
+                  "C05": "",
+                  "witness": ","
+                },
+                {
+                  "op": "delete",
+                  "C05_range": [
+                    277,
+                    278
+                  ],
+                  "witness_range": [
+                    273,
+                    273
+                  ],
+                  "C05": ",",
+                  "witness": ""
+                },
+                {
+                  "op": "insert",
+                  "C05_range": [
+                    329,
+                    329
+                  ],
+                  "witness_range": [
+                    324,
+                    325
+                  ],
+                  "C05": "",
+                  "witness": ","
+                }
+              ]
+            },
+            "english": {
+              "equal": true,
+              "C05_length": 534,
+              "witness_length": 534,
+              "differences": []
+            }
+          },
+          "independent_publication": "NOT_ESTABLISHED"
+        }
+      },
+      "c_registered_class_or_duplicate": {
+        "source_origin": "ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e",
+        "current_baseline": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+        "source_origin_records": 192,
+        "current_records": 192,
+        "duplicate_segment_ids": [],
+        "classes": [
+          "E-044 converter braces",
+          "E-071 apparatus",
+          "E-076/E-121 footnote fusion",
+          "folio splice",
+          "following-heading glue",
+          "E-111 row boundary",
+          "E-107 English cap"
+        ],
+        "signature_present": false,
+        "judgment": "Full local prose and neighboring boundaries show no heading, folio, escaped Sanskrit, fused note, or stranded continuation. Physical source contains the complete same fields."
+      },
+      "d_defensible_reading_or_wrong_correction": {
+        "refuted": true,
+        "reason": "The fourth English river is an explanatory recap; sit down expands the scene of together-looking; two names the remainder after one of three objects. The Tibetan closing sogs supports and the other, not a new numeral atom. These are defensible GMR expansions."
+      },
+      "e_counts_and_references": {
+        "quote_counts": {
+          "wylie": 0,
+          "english": 1,
+          "acip": 0
+        },
+        "equality_query_counts": {
+          "wylie": 2,
+          "english": 3,
+          "acip": 2
+        },
+        "local_counts": {
+          "chu klung": 3,
+          "river words": 4,
+          "river of water": 3
+        },
+        "query_proof": "query-replay.json: 180 distinct replayed sets; 178 original query occurrences plus 13 supplements, 167 deduplicated original sets",
+        "count_scope": "digital records and literal occurrences, not publications",
+        "archive_proof": "archive-identity-check.json",
+        "retained_errata": 0
+      }
+    }
+  }
+]

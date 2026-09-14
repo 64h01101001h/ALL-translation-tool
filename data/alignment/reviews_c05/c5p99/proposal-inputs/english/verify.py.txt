@@ -1,0 +1,34 @@
+import pathlib,subprocess,sys,json,hashlib,os,datetime,importlib.util,html.parser,sqlite3
+D=pathlib.Path(__file__).parent;B=D.parent;W=B.parent.parent/'campaign-worktree';base=json.loads((B/'proposal-baseline.json').read_text());rows={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+def sha(b):return hashlib.sha256(b).hexdigest()
+def pin(p):b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':sha(b)}
+for k in ['spine','master','corpus','source','context','physical']:
+ p=base['source_pins'][k];assert pin(pathlib.Path(p['path']))==p
+g=W/'tools/gen_alignment_page.py';assert sha(g.read_bytes())==base['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+sys.path.insert(0,str(W/'tools'));m=importlib.util.spec_from_file_location('canonical',g);G=importlib.util.module_from_spec(m);m.loader.exec_module(G)
+summary=[]
+for seq in (295,296,297):
+ p=D/str(seq);spec=p/'spec.json';attempt=p/'canonical-attempt01';attempt.mkdir();stdin=spec.read_bytes();(attempt/'stdin.json').write_bytes(stdin)
+ cmd=[sys.executable,'-B',str(D/'run-canonical.py')];start=datetime.datetime.now(datetime.timezone.utc).isoformat();run=subprocess.run(cmd,input=stdin,capture_output=True,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'));end=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ for n,b in [('stdout.bin',run.stdout),('stderr.bin',run.stderr),('exit.txt',(str(run.returncode)+'\n').encode())]:(attempt/n).write_bytes(b)
+ ex={'argv':cmd,'cwd':str(W),'utc_start':start,'utc_end':end,'exit':run.returncode,'stdin':pin(attempt/'stdin.json'),'stdout':pin(attempt/'stdout.bin'),'stderr':pin(attempt/'stderr.bin'),'generator':pin(g),'runtime_builder':pin(W/'tools/build_alignment_layer.py'),'source_origin_commit':base['commit'],'source_origin_boundary':288,'sqlite':'mode=ro via saved wrapper; actual canonical generator file unchanged','bytecode_disabled':True};(attempt/'execution.json').write_text(json.dumps(ex,indent=2)+'\n')
+ assert run.returncode==0 and run.stderr==b'',(seq,run.returncode,run.stderr.decode())
+ (p/'body.html').write_bytes(run.stdout);s=json.loads(stdin)['segments'][0];sp=s['spans'];intended=json.loads((p/'intended-ranges.json').read_text());by={x['id']:x for x in sp};tr=G.resolve(rows[seq]['wylie'],sp,'tib',seq);er=G.resolve(rows[seq]['english'],G.with_members(sp,[by[i] for i in s['eng_order']],rows[seq]['english']),'eng',seq)
+ actual=[{'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x['eng'],'tib_range':list(tr[x['id']]),'eng_range':list(er[x['id']]),'parent':intended[i]['parent']} for i,x in enumerate(sp)]
+ (p/'canonical-resolved-ranges.json').write_text(json.dumps(actual,indent=2)+'\n')
+ for i,a in zip(intended,actual):assert {k:i[k] for k in a}==a,(seq,i,a)
+ class Parser(html.parser.HTMLParser):
+  def __init__(self):super().__init__();self.depth=0;self.side=0;self.text=['','']
+  def handle_starttag(self,t,attrs):
+   at=dict(attrs)
+   if t=='span' and at.get('data-l')=='s'+str(seq)+'S':self.depth=1
+   elif self.depth and t=='span':self.depth+=1
+  def handle_endtag(self,t):
+   if self.depth and t=='span':
+    self.depth-=1
+    if self.depth==0:self.side+=1
+  def handle_data(self,t):
+   if self.depth:self.text[self.side]+=t
+ parser=Parser();parser.feed(run.stdout.decode());assert parser.text==[rows[seq]['wylie'],rows[seq]['english']]
+ stats={'seq':seq,'status':'CANONICAL_PASS_NOT_SEMANTIC_APPROVAL','spans':len(sp),'nulls':sum(x['eng'] is None for x in sp),'d5':sum(x['d']==5 for x in sp),'d7':sum(x['d']==7 for x in sp),'errata':0,'spec':pin(spec),'body':pin(p/'body.html'),'exact_intended_ranges':True,'full_source_columns_verbatim':True,'generator_exit':run.returncode,'stderr_bytes':len(run.stderr)};(p/'verification.json').write_text(json.dumps(stats,indent=2)+'\n');summary.append(stats)
+(D/'verification-summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary,indent=2))

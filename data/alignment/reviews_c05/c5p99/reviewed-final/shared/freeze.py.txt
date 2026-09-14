@@ -1,0 +1,31 @@
+import pathlib,json,hashlib,datetime,re
+R=pathlib.Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree'
+def read(p):return json.loads(p.read_text())
+def pinfo(p):b=p.read_bytes();return {'path':str(p.relative_to(R)),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+base=read(B/'proposal-baseline.json');d=read(R/'reconciliation-decisions.json');stats=read(R/'verification-summary.json');assert len(d['original_decisions'])==259 and len(d['final_ordered_tuples'])==134
+native=read(B/'proposal-verification/root-resolved-spans.json')
+for o in d['original_decisions']:
+ n=next(x for x in native if x['angle']==o['angle'] and x['seq']==o['seq'] and x['id']==o['id']);assert all(o[k]==v for k,v in n.items());assert o['original_reason'] is not None and o['reason'] and o['disposition']
+for st in stats:
+ for key,name in [('spec','spec.json'),('body','body.html')]:
+  got=pinfo(R/str(st['seq'])/name);assert got['sha256']==st[key]['sha256'] and got['bytes']==st[key]['bytes']
+ actual=read(R/str(st['seq'])/'canonical-resolved-ranges.json');fs=[f for f in d['final_ordered_tuples'] if f['seq']==st['seq']];assert len(actual)==len(fs)
+ for x,y in zip(actual,fs):assert all(x[k]==y[k] for k in ['id','d','tib','eng','tib_range','eng_range','nullable_classification'])
+ assert read(R/str(st['seq'])/'errata.json')==[]
+source_checks=[]
+for key,v in base['source_pins'].items():
+ p=pathlib.Path(v['path']);b=p.read_bytes();sha=hashlib.sha256(b).hexdigest();assert sha==v['sha256'] and len(b)==v['bytes'];source_checks.append({'kind':key,'path':str(p),'bytes':len(b),'sha256':sha})
+g=W/'tools/gen_alignment_page.py';assert hashlib.sha256(g.read_bytes()).hexdigest()==base['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+# Validate source counts used by screens and exact gate allowance.
+rows={r['seq']:r for r in read(R/'evidence/source-context.json')}
+for s in read(R/'errata-screen.json'):
+ seq=s['seq'];r=rows[seq];a=s['grounds']['a_exact_quote'];assert a['field_occurrences']=={f:r[f].count(s['found']) for f in ['acip','wylie','english']};assert s['refuted']
+allow=read(R/'proposed-head-allowances.json')['allowances'];assert len(allow)==1
+f=next(x for x in d['final_ordered_tuples'] if x['seq']==297 and 's297'+x['id']==allow[0]['span_id']);assert f['tib']=='sogs' and f['eng']=='and the other' and f['d']==5
+assert rows[297]['english'][f['eng_range'][1]:].startswith(' two.')
+# No final spec or canonical note has changed since the actual generator calls.
+proof={'status':'PASS_RECONCILIATION_PACKET_INTEGRITY_NOT_SEMANTIC_ACCEPTANCE','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'original_decisions':259,'final_tuples':134,'counts':{'spans':134,'nulls':2,'d5':82,'d7':16,'errata':0,'original_retained':238,'original_recast_or_tightened':20,'original_omitted_uncertain':1},'final_generator_calls':3,'all_generator_exits':0,'all_intended_ranges_verified':True,'all_source_columns_verbatim':True,'source_checks':source_checks,'source_origin_commit':base['commit'],'source_origin_boundary':288,'actual_acceptance_baseline':d['future_acceptance_baseline'],'worktree_mutation_hold':False,'source_or_worktree_writes':False,'head_allowance_count':1,'complete_original_files_verified':209,'original_canonical_outputs_reused':6,'original_queries_replayed':178,'unique_original_queries':167,'supplementary_queries':13,'master_records':len(read(R/'evidence/master-records.json')),'unique_sql_records':len(read(R/'evidence/sql-records.json')),'failed_collection_attempts_preserved':2,'publication_independence_established':False}
+(R/'final-integrity.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+manifest={'status':'FROZEN_RECONCILIATION_FOR_FRESH_INDEPENDENT_REVIEW; NOT_PRODUCTION_ACCEPTANCE','producer':'Codex independent reconciler','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin_commit':base['commit'],'source_origin_boundary':288,'actual_acceptance_baseline':d['future_acceptance_baseline'],'specs_and_bodies':[{'seq':st['seq'],'spec':pinfo(R/str(st['seq'])/'spec.json'),'body':pinfo(R/str(st['seq'])/'body.html'),'spans':st['spans'],'nulls':st['nulls'],'d5':st['d5'],'d7':st['d7'],'generator_exit':0} for st in stats],'files':[pinfo(p) for p in sorted(R.rglob('*')) if p.is_file() and p.name!='freeze.json'],'self_note':'The manifest excludes itself. Its exact hash is returned to root; all local evidence and failed attempts are listed above.'}
+# This script writes no log file under R after this enumeration, to keep the freeze closed.
+(R/'freeze.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n');print(json.dumps({'files':len(manifest['files']),'freeze':pinfo(R/'freeze.json'),'integrity':pinfo(R/'final-integrity.json'),'summary':proof['counts']}))

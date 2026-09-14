@@ -1,0 +1,32 @@
+from pathlib import Path
+import json,hashlib,datetime
+O=Path(__file__).resolve().parent
+def read(n):return json.loads((O/n).read_text())
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+review=read('review.json');spans=read('resolved-spans.json');manifest=read('original-to-copy-manifest.json');proof=read('all-copy-validation.json')
+assert review['verdict']=='APPROVE' and review['open_findings']==[]
+assert isinstance(review['segments'],list) and len(review['segments'])==3
+assert len(spans)==review['total_spans']==134
+assert sum(s['eng'] is None for s in spans)==review['total_nulls']==2
+assert sum(s['d']==5 and s['eng'] is not None for s in spans)==review['total_word_pairs']==82
+assert all(set(s)=={'seq','id','d','tib','eng','tib_range','eng_range'} for s in spans)
+assert proof['verdict']=='PASS' and proof['manifest_records']==len(manifest)==459
+for m in manifest:
+ p=O/m['copy'];raw=p.read_bytes();assert p.suffix.lower() in allowed and len(raw)==m['bytes'] and sha(raw)==m['sha256']
+for s in review['segments']:
+ for name in ['spec','body']:
+  p=O/f'reviewed-final/{s["seq"]}/{name}.{ "json" if name=="spec" else "html" }';raw=p.read_bytes()
+  assert len(raw)==s[name+'_bytes'] and sha(raw)==s[name+'_sha256']
+assert read('bank-ready-errata.json')==[]
+assert read('span-head-allow-needed.json')['pages_c05'].keys()=={'c5p99/s297w43'}
+files=[]
+for p in sorted(O.rglob('*')):
+ if not p.is_file() or p.name=='review-freeze.json':continue
+ assert p.suffix.lower() in allowed,p
+ raw=p.read_bytes();files.append(dict(path=str(p.relative_to(O)),sha256=sha(raw),bytes=len(raw)))
+freeze=dict(status='FROZEN_INDEPENDENT_SEMANTIC_REVIEW; PROVISIONAL_MACHINE_APPROVAL; NOT_PRODUCTION_ACCEPTANCE',reviewer='Codex independent semantic reviewer /root/c05_295_297_semantic',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_origin_commit='ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e',source_origin_boundary=288,actual_acceptance_baseline='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4',actual_acceptance_boundary=294,verdict='APPROVE',open_findings=[],total_spans=134,total_nulls=2,total_word_pairs=82,files=files,self_note='This file is the only excluded self-referential manifest. All intended review files have a supported landing extension.')
+p=O/'review-freeze.json';assert not p.exists();p.write_text(json.dumps(freeze,ensure_ascii=False,indent=2)+'\n')
+for f in files:
+ raw=(O/f['path']).read_bytes();assert len(raw)==f['bytes'] and sha(raw)==f['sha256']
+print(json.dumps(dict(verdict='APPROVE',frozen_files=len(files),sha256=sha(p.read_bytes()),bytes=p.stat().st_size,path=str(p),manifest_records=len(manifest)),indent=2))

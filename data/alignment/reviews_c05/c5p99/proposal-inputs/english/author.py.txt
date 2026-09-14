@@ -1,0 +1,171 @@
+import json,pathlib,re
+D=pathlib.Path(__file__).parent;B=D.parent;rows={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+def write(seq,title,note,items,omissions):
+ row=rows[seq];spans=[];intended=[];cursor=0;parent=None
+ for item in items:
+  t,e,d,context,reason,*flags=item;sid='w'+str(len(spans)+1);sp={'id':sid,'d':d,'tib':t,'eng':e}
+  if flags:sp.update(flags[0])
+  if d==7:
+   lo,hi=parent['tib_range'];ts=row['wylie'].index(t,lo,hi);assert row['wylie'][lo:hi].count(t)==1
+   lo,hi=parent['eng_range'];es=row['english'].index(e,lo,hi)
+  else:
+   ts=row['wylie'].index(t,cursor);cursor=ts+len(t)
+   hits=[m.start() for m in re.finditer(re.escape(context or e),row['english'])];assert len(hits)==1,(seq,t,e,context,hits)
+   es=hits[0]+(context or e).index(e)
+  rec={'id':sid,'d':d,'tib':t,'eng':e,'tib_range':[ts,ts+len(t)],'eng_range':[es,es+len(e)],'parent':parent['id'] if d==7 else None,'reason':reason}
+  if d==5:parent=rec
+  spans.append(sp);intended.append(rec)
+ order=[x['id'] for x in sorted(intended,key=lambda x:x['eng_range'][0]) if x['d']!=7]
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':'PROVISIONAL machine alignment by Codex, English-first original proposal. GMR wording is preserved verbatim; no human semantic approval or hgm_gloss promotion is implied. '+note}]}
+ p=D/str(seq);p.mkdir(exist_ok=True)
+ for name,data in [('spec.json',spec),('intended-ranges.json',intended),('errata.json',[]),('omissions.json',omissions)]: (p/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+
+write(295,'seeing water and fruit before the change',
+ 'The two stages of seeing water and fruit have separate occurrence bindings. The initial denial of entailment and the sense-making predicate remain phrases. rtog is the impression and zhen is the subsequent thought; glossary variants and the full local argument support that distinction. Repeated supplied water, fruit-tree and spirit explanations remain unwrapped. The final restriction tsam owns bare, while branches remains the lexical noun. Unresolved case and discourse contributions are omitted, not asserted absent.',[
+ ('zer na','Just because we said that',3,None,'Complete response frame; HTG zer na attests this wording; omitted about the other case is an explanatory reference.'),
+ ('ma khyab',"doesn't mean that it's true in every case",3,None,'Negative entailment predicate retained as a phrase despite positive whole glossary wording; no false atomic division.'),
+ ('dang por','in the first place',5,None,'Established temporal adverb; first hypothetical stage.'),
+ ('yi dvags','craving spirit',5,'If the craving spirit','The one explicit Tibetan craving spirit owns the hypothetical subject, not later supplied repetitions.'),
+ ('chu','water',5,"hadn't seen any water",'Water seen in the initial hypothetical.'),
+ ('ma',"n't",6,"hadn't",'Negative affix of the first hypothetical; allowed negative subword.',{'subword':True}),
+ ('mthong','seen',5,"hadn't seen",'First seeing predicate.'),
+ ('na','If',6,'If the craving spirit','Conditional particle, fronted in English.'),
+ ('phyogs der','in that direction',3,None,'Complete deictic locative, preserving direction and that without splitting the fused der.'),
+ ('longs spyod','enjoy',5,None,'Verb stem of longs spyod pa, whose positive HGM glossary includes enjoy; try and supplied water are separate.'),
+ ("'gro ba",'go',5,'to go over','Here a motion verb, supported by the local purpose construction; not the noun being sense.'),
+ ("mi 'thad","wouldn't have made any sense",3,None,'Whole negative feasibility recast, not a dictionary equation of thad with sense.'),
+ ('pas','Therefore',6,'Therefore what happened','Causal particle closes the preceding impossible conditional and introduces the positive consequence.'),
+ ('dang por','at first',5,'that, at first, he saw','Second temporal occurrence, following Therefore.'),
+ ('chu','water',5,'he saw some water','Actual initial water, after the explanatory enjoy-water addition.'),
+ ('mthong','saw',5,'he saw some water','Actual initial seeing.'),
+ ('phyis','Later on',5,None,'Later contrary experience.'),
+ ('las','karma',5,'by his karma','Full master glossary contains karma; curated deeds remains preserved as another source field.'),
+ ('dbang','forced',5,None,'Force expressed in the passive; exact positive HGM gloss.'),
+ ('gis','by',6,'forced by his karma','Causal instrumental of the force of karma; does not own his.'),
+ ('chu','water',5,'stop seeing water','Later unseen water.'),
+ ('ma','stop',6,'to stop seeing water','Negative seeing at the later time is expressed as stop seeing, with the prior temporal premise supplied explicitly.'),
+ ('mthong','seeing',5,'stop seeing water','Later negative seeing predicate.'),
+ ("'og gzhi",'earth',5,None,'Under-base noun, positive HGM earth/riverbed; modifiers kept separate.'),
+ ('gram','bare',5,'only bare, parched earth','First earth adjective; positive HGM bare, dry and parched alternatives considered.'),
+ ('sreg','parched',5,'bare, parched earth','Scorched/parched adjective, supported by HGM and physical text.'),
+ ('tsam','only',6,None,'Restrictive particle excludes other visible objects.'),
+ ('mthong','saw',5,'and saw only','Seeing the bare earth, distinct from initial water seeing.'),
+ ("de'i rjes su",'Then',5,'Then he had an impression','Established subsequent-time adverb; first impression.'),
+ ('rtog','impression',5,'had an impression','Conceptual impression: full master rnam rtog variant rtog pa explicitly includes impression.'),
+ ('chu','water',5,'the water had dried up','Water in the conceptual judgment.'),
+ ('bskams','dried up',5,'water had dried up','Drying verb, positive HGM attestation.'),
+ ('zhen pa','thought',5,'he thought the water','Adherence/judgment verb in rtog pas ... zhen pa; not rtog impression. Curated craving and mined give up do not fit this local complement.'),
+ ('de bzhin du','is the same',5,None,'Established equivalence expression; exact HGM gloss.'),
+ ('dang por','at first',5,'Although at first','Third temporal expression, fruit case.'),
+ ('ljon shing','tree',5,'a tree loaded with fruit','Owns tree in the actual seeing clause; earlier fruit tree is supplied explanatory setup.'),
+ ("'bras bu",'fruit',5,'loaded with fruit','Fruit is lexical head; loaded with is the possessive-to-adjective recast, despite a larger positive glossary phrase.'),
+ ('mthong','sees',5,'spirit sees a tree','Seeing fruit in the initial fruit case.'),
+ ('yang','Although',6,None,'Concessive marker, fronted in English.'),
+ ('phyis','later on',5,'later on his karma','Later fruit case.'),
+ ('las','karma',5,'his karma forces','Karma in the fruit example.'),
+ ('dbang','forces',5,None,'Force expressed actively, excluding supplied him.'),
+ ("'bras bu",'fruit',5,'stop seeing fruit','Fruit no longer seen.'),
+ ('ma','stop',6,'to stop seeing fruit','Later-state negative recast, parallel to the water clause.'),
+ ('mthong','seeing',5,'stop seeing fruit','Second cessation of seeing.'),
+ ('yal ga','branches',5,None,'Branch noun alone, despite positive bare branches glossary; restriction belongs to tsam.'),
+ ('tsam','bare',6,'bare branches','Restriction to branches with no fruit; positive HGM bare. Distributed all he sees is is left unwrapped.'),
+ ('mthong','sees',5,'all he sees is','Seeing only branches; separate from first fruit seeing.'),
+ ("de'i rjes su",'Then',5,'Then he has an impression','Second subsequent-time expression.'),
+ ('rtog','impression',5,'has an impression','Second conceptual impression, same local construction.'),
+ ("'bras bu",'fruit',5,'no fruit any more','Fruit in the final conceptual judgment.'),
+ ('med','no',5,'has no fruit','Negative existential; no is an overt exponent, while has/any more are distributed.'),
+ ('zhen','thinks',5,'he thinks that','The judgment of no fruit, excluding explanatory tree and participant he.'),
+ ],[
+ {'tib':'kyis, pa\'i phyir, yang after initial mthong, bar, zhig, zhing, pas after rtog, dang, gi, gis in the active fruit clause, final phyir','reason':'Omitted grammatical/discourse contributions may be fused or distributed; none is classified null.'},
+ {'english':'about the other case; in that area; some of the water; The case with the fruit tree; craving spirit (fruit clause); loaded with; all he sees is; the tree; any more','reason':'Explanatory repeats, possessive recasts or distributed context; do not extend lexical spans to absorb them.'},
+ {'tib':'rtog pas ... zhen pa / rtog pas ... zhen pa\'i','reason':'Both content heads retained separately after checking positive rtog pa/think alternatives and rnam rtog variant/impression. The agentive pas and complementizer are omitted rather than invented.'}
+ ])
+
+write(296,'obstacles in visual consciousness',
+ 'Both obstacle/river/riverbed examples are separately bound. ma in each obstacle construction contributes to the distributed prevents/prevent ... from syntax; it remains unbanked rather than being labelled absent or being equated with a whole causative verb. mig shes is one established compound. The temporal opening is a phrase. The comparison lta bu owns same, fronted in English.',[
+ ("de'i tshe na",'When all this is happening',3,None,'Full temporal circumstance phrase, including its demonstrative expansion.'),
+ ('yi dvags','craving spirit',5,None,'Explicit possessor of visual consciousness.'),
+ ('kyi','of',6,'of the craving spirit','Genitive link between consciousness and craving spirit.'),
+ ('mig shes','visual consciousness',5,'visual consciousness of the craving spirit','Established eye consciousness compound.'),
+ ('sgrib byed','obstacle',5,'the obstacle in','Named obstructor, not the following causative predicate.'),
+ ('chu klung','river of water',5,'seeing the river of water, and so','Established river compound in first negative clause.'),
+ ('chu','water',7,None,'Unique water member contained in the river compound.'),
+ ('klung','river',7,None,'Unique river member; English members reverse Tibetan order.'),
+ ('mthong','seeing',5,'him from seeing the river of water, and so','First seeing predicate; ma remains a documented distributed omission.'),
+ ('bas','and so',6,None,'Causal connective, closes failure to see water and introduces the riverbed consequence.'),
+ ("'og gzhi",'riverbed',5,'dry, parched riverbed. The same','Foundation under the water; HGM riverbed attestation.'),
+ ('gram','dry',5,'a dry, parched riverbed. The same','First dryness adjective.'),
+ ('sreg','parched',5,'a dry, parched riverbed. The same','First scorched adjective.'),
+ ('mthong ba','sees',5,'he sees a dry','First positive seeing of riverbed.'),
+ ("mi'i",'human',5,None,'Inflected human noun; its relational effect is represented by of a, omitted from dictionary head.'),
+ ('mig shes','visual consciousness',5,'visual consciousness of a human','Second compound, human consciousness.'),
+ ('sgrib byed','obstacle',5,'if the obstacle were there','Second obstructor, within the conditional.'),
+ ('chu klung','river of water',5,'seeing the river of water, and then','Second river compound.'),
+ ('chu','water',7,None,'Water member within second compound.'),
+ ('klung','river',7,None,'River member within second compound.'),
+ ('mthong','seeing',5,'him from seeing the river of water, and then','Second seeing predicate.'),
+ ('na','if',6,'human: if the obstacle','Conditional fronted before the obstacle.'),
+ ("'og gzhi",'riverbed',5,'to see a dry, parched riverbed.','Second riverbed; occurrence refined by surrounding final see below.'),
+ ('gram','dry',5,'to see a dry, parched riverbed','Second dryness adjective.'),
+ ('sreg','parched',5,'to see a dry, parched riverbed','Second parched adjective.'),
+ ('mthong','see',5,'to see a dry','Second positive seeing.'),
+ ('dgos pa','have to',5,'would have to see','Necessity, excluding conditional auxiliary would.'),
+ ('lta bu','same',5,'The same is true','Comparison to the human case; lexical like/same attestation.'),
+ ],[
+ {'tib':'ma twice, sgrib byed kyis relational/causal syntax','reason':'Negative causative construction is overt in prevents/prevent ... from. Isolating ma as a whole causative verb is uncertain; it is not null. Obstacle and seeing remain precise lexical matches.'},
+ {'tib':'kyi after first mig shes; kyis and kyang after second mig shes; yin te; yin pa\'i phyir','reason':'Relations and assertion/comparison are distributed over in, for, same is true and explanatory clause ordering; omitted, not asserted absent.'},
+ {'english':'him, he, a/the, it would, and then','reason':'Supplied participants, determiners and explanatory conditional/transition syntax excluded from lexical nouns and verbs.'}
+ ])
+
+write(297,'different rivers and simultaneous objects',
+ 'Three Tibetan chu klung occurrences own the three English river of water compounds; the extra river in the explanatory there is a river clause remains unwrapped. cig car du owns together and at the same time, leaving sit down supplied. longs spyod owns drink in this local use, without claiming from or the modal frame. sogs owns only and the other, leaving the supplied count two outside the span. rang and the final existential reinforcement remain unbanked as distributed recasts.',[
+ ('rnam pa','point of view',5,None,'Lexical aspect/view sense attested in full HGM glossary.'),
+ ('gcig','one',5,'From one point','Single aspect; excludes From.'),
+ ('yi dvags','craving spirit',5,None,'Explicit perceiver.'),
+ ('chu klung','river of water',5,"the river of water hasn't",'Initial river before the viewpoint restriction.'),
+ ('chu','water',7,None,'Contained water member.'),
+ ('klung','river',7,None,'Contained river member.'),
+ ('bltas pa','looks',5,None,'Initial act of looking, not the later group look.'),
+ ("de'i tshe na",'when',3,'dried up when the craving','Temporal phrase framing the spirit looking.'),
+ ('ma',"n't",6,"hasn't",'Explicit initial negation; allowed negative subword.',{'subword':True}),
+ ('bskams','dried up',5,"hasn't dried up",'Initial negative drying predicate.'),
+ ('kyang','but',6,'it; but there','Concessive/adversative hinge.'),
+ ("blta byar gyur pa'i",'can see',3,None,'Object-for-seeing recast as relative ability predicate; no dictionary equation of gyur with can.'),
+ ('chu klung','river of water',5,'a river of water that the spirit can see','River restricted to what this spirit can see.'),
+ ('chu','water',7,None,'Contained water member.'),
+ ('klung','river',7,None,'Contained river member.'),
+ ('dang','or',6,'see, or a river','Conjunction presents the second functional description.'),
+ ('longs spyod','drink',5,None,'In this local water-use clause enjoy/use is specifically rendered drink. Positive eat or drink under longs spyod pa and corpus C05:302 corroborate the verb sense.'),
+ ('chu klung','river of water',5,'a river of water that the spirit can drink','River restricted to water available for consumption.'),
+ ('chu','water',7,None,'Contained water member.'),
+ ('klung','river',7,None,'Contained river member.'),
+ ('bskams pa','dried up',5,'which has dried up','Positive drying predicate, fronted in the explanatory existential.'),
+ ('yod','there is',5,None,'Explicit existential river assertion.'),
+ ("'gro ba",'beings',5,None,'Being noun sense, distinguished from 295 motion verb.'),
+ ('gsum','three',5,'the three different types','First numeral; different types supplied as classification expansion.'),
+ ('brlan','wet',5,None,'Wet adjective; full wet-and-flowing compound glossary also considered.'),
+ ('zhing','and',6,'wet and flowing','Link between the wet and flowing qualities.'),
+ ('gsher ba','flowing',5,None,'Second adjective, positive HGM equivalent.'),
+ ('phor pa','glass',5,None,'Vessel noun.'),
+ ('gang','full',5,'glass full of','Container fullness, excludes of something.'),
+ ('cig car du','together',5,None,'Simultaneity adverb; despite positive sit down together glossary, sitting is not separately present in Tibetan.'),
+ ('bltas pa','look',5,'and look at a glass','Group looking, excluding at.'),
+ ("de'i tshe na",'when',3,'because when the three','Temporal circumstance of the three beings looking.'),
+ ('las','karma',5,None,'Karma noun, full glossary checked alongside curated deeds.'),
+ ('dbang','force',5,None,'Force of karma.'),
+ ('gis','due to',6,None,'Causal instrumental; excludes the supplied definite article.'),
+ ('rnag khrag','pus and blood',5,None,'Established paired substance compound.'),
+ ('rnag','pus',7,None,'Pus member, exact contained occurrence.'),
+ ('khrag','blood',7,None,'Blood member, exact contained occurrence.'),
+ ('sogs','and the other',5,None,'Lexical list closure, attested whole gesture; the inferred two is outside the span. Requires explicit function-head allowance if accepted.'),
+ ('dngos po','objects',5,None,'Functional objects noun.'),
+ ('rnam pa','different kinds',5,None,'Second aspect/types use, full HGM attestation.'),
+ ('gsum','three',5,'three different kinds','Second numeral, belongs to objects not beings.'),
+ ('cig car du','at the same time',5,None,'Second simultaneity adverb.'),
+ ('grub pa','exist',5,'objects exist there','Establishment/existence of the three objects.'),
+ ('phyir','because',6,'This follows because','Reason marker closing the passage, fronted in English.'),
+ ],[
+ {'tib':'tu na, la, de, rang gi, byar gyur pa\'i after longs spyod, final zhig yod pa\'i','reason':'Aspect marker, deictic references, subjective-object and existential reinforcement are distributed across From, it, spirit, can/from, it is true that and there. They remain omitted with no absence claim.'},
+ {'english':'river in there is a river; sit down; different types (first three); two; supplied participants/articles','reason':'Do not duplicate three Tibetan river compounds over four English river mentions; sitting is absent as a lexical verb, and the closing count two is explanatory.'},
+ {'tib':'sogs','eng':'and the other','depth':5,'requires_allowance':True,'reason':'Do not lower lexical depth to bypass gate. HTG2016 explicitly records and the other; other two count belongs only to GMR explanation.'}
+ ])

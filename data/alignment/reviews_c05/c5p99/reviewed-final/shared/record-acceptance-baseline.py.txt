@@ -1,0 +1,17 @@
+import pathlib,json,hashlib,subprocess,datetime
+R=pathlib.Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';E=R/'evidence';H=R/'history/baseline-arrival';H.mkdir(parents=True,exist_ok=True)
+base=json.loads((B/'baseline.json').read_text());commit=base['commit'];checks=[]
+for rel,expected in base['sha256'].items():
+ if rel.startswith('data/hgm_') or rel.startswith('data/full_parallel'):
+  b=(W/rel).read_bytes();method='live immutable source file'
+ else:b=subprocess.check_output(['git','show',commit+':'+rel],cwd=W);method='immutable Git object at actual through294 baseline'
+ got=hashlib.sha256(b).hexdigest();assert got==expected,(rel,got,expected);checks.append({'path':rel,'sha256':got,'bytes':len(b),'method':method})
+(E/'actual-through294-baseline.json').write_bytes((B/'baseline.json').read_bytes())
+actual={'commit':commit,'course_boundary':294,'data_commit':'ed8335e83520a81758b7d2b4a61848e4deaf1d71','manifest':'evidence/actual-through294-baseline.json','manifest_sha256':hashlib.sha256((B/'baseline.json').read_bytes()).hexdigest(),'status':'ACCEPTANCE_BASELINE_ONLY; does not accept this reconciliation'}
+for filename in ['reconciliation-decisions.json','review-interface.json']:
+ p=R/filename;(H/filename).write_bytes(p.read_bytes());x=json.loads(p.read_text());x['future_acceptance_baseline']=actual;x['baseline_note']='Original proposal source origin remains ba35c1bd through288. The separately captured actual landing baseline is through294 at ce646d0c. Historical executions retain the knowledge recorded at execution time.';p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+for seq in [295,296,297]:
+ p=R/str(seq)/'report.md';(H/f'{seq}-report.md').write_bytes(p.read_bytes());p.write_text(p.read_text().replace('future through294 acceptance baseline is separate and uncaptured.',f'actual through294 acceptance baseline is separately captured at {commit}.'))
+p=E/'README.md';(H/'evidence-README.md').write_bytes(p.read_bytes());p.write_text(p.read_text()+f'\nThe actual through294 baseline arrived after reconciliation generation: {commit}. Its exact snapshot and independent seven-output Git-object/source checks are in actual-through294-baseline.json and actual-baseline-verification.json. This separate boundary does not replace proposal provenance or accept this batch.\n')
+(E/'actual-baseline-verification.json').write_text(json.dumps({'recorded_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'actual_baseline':actual,'checks':checks,'all_match':True,'generated_output_count':7,'source_file_count':2,'canonical_specs_or_notes_changed':False},ensure_ascii=False,indent=2)+'\n')
+print(json.dumps(actual))

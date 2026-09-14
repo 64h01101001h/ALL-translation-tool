@@ -1,0 +1,189 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-14T15:17:49.968707+00:00",
+  "page": 99,
+  "segments": [
+    295,
+    296,
+    297
+  ],
+  "semantic_review": {
+    "verdict": "APPROVE",
+    "open_findings": [],
+    "segments": [
+      {
+        "seq": 295,
+        "span_count": 52,
+        "null_count": 1,
+        "word_pair_count": 35,
+        "spec_sha256": "30b534fa2770fada330c5dcbd8440da17d88fc8abb74c8123a1b8659cccebd5b",
+        "spec_bytes": 7827,
+        "body_sha256": "4f7d5f643db679dfb3d4aef0576d9162051cc337e14f8271f8618072bcf54dc4",
+        "body_bytes": 7753,
+        "generator_exit": 0
+      },
+      {
+        "seq": 296,
+        "span_count": 33,
+        "null_count": 0,
+        "word_pair_count": 20,
+        "spec_sha256": "bee3694ccb89f75318226a1c2319c04002cfcf0bf2af0066d4f23d0a84454788",
+        "spec_bytes": 4894,
+        "body_sha256": "464d67f5e7ad7da4f820e6be5b08b86e9f8fdc8bfe8ca3b513a2fe6f567f1ea4",
+        "body_bytes": 4854,
+        "generator_exit": 0
+      },
+      {
+        "seq": 297,
+        "span_count": 49,
+        "null_count": 1,
+        "word_pair_count": 27,
+        "spec_sha256": "f7056869900379ef0fe1771cf89dcea37b22399db9167ad5d1034fe84a5884b6",
+        "spec_bytes": 7270,
+        "body_sha256": "8880d9f207f6b6832533eb5da92e551cebf19264a1b78fc180ffe69f116e8247",
+        "body_bytes": 7062,
+        "generator_exit": 0
+      }
+    ],
+    "total_spans": 134,
+    "total_nulls": 2,
+    "total_word_pairs": 82
+  },
+  "fidelity_tests": {
+    "passed": 17,
+    "failed": 0,
+    "execution": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "../campaign-artifacts/integration/course-csv-depth-fix/cmake-build",
+        "-R",
+        "^(constitution|gen_alignment_page|alignment_gate_coverage|alignment_builder|dictionary_exports|no_broken_words|no_split_syllables|no_phonetics_in_layer|no_degenerate_members|no_supplied_span_head|layer_matches_spine|evidence_matches_spine|errata_quotes_hold|view_matches_layer|generated_docs_in_sync|builder_sees_every_span|errata_name_their_witnesses)$",
+        "--output-on-failure"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "started_at": "2026-09-14T15:16:35.528092+00:00",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "GIT_OPTIONAL_LOCKS": "0"
+      },
+      "inherited_environment": true,
+      "stdin_bytes": 0,
+      "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+      "finished_at": "2026-09-14T15:16:47.356305+00:00",
+      "wall_seconds": 11.827721666544676,
+      "exit": 0,
+      "stdout_bytes": 2166,
+      "stderr_bytes": 0,
+      "stdout_sha256": "60b3eeefe092cb79589c84434904b39d68df15dab2701d2eeca40385122cea72",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "retention": {
+    "baseline_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+    "page": "c5p99",
+    "segments": [
+      295,
+      296,
+      297
+    ],
+    "prior_links_retained": 45847,
+    "added_links": 137,
+    "added_by_segment": {
+      "295": 53,
+      "296": 34,
+      "297": 50
+    },
+    "reviewed_analyst_spans": 134,
+    "full_links": 45984,
+    "null_exponents": 11951,
+    "evidence_headwords": 7115,
+    "evidence_pairs": 15655,
+    "prior_notes_trees_evidence_and_acip_retained": true,
+    "prior_csv_rows_retained": 22675,
+    "current_csv_rows": 22715,
+    "prior_csv_content_and_references_retained": true,
+    "csv_acip_enrichments_from_newly_banked_source": [
+      {
+        "key": [
+          "translation",
+          "7",
+          "sreg",
+          "red-hot"
+        ],
+        "acip": "SREG",
+        "new_source_refs": [
+          "C05:295",
+          "C05:296",
+          "C05:296"
+        ]
+      }
+    ],
+    "source_hashes_unchanged": true,
+    "review_tuples_and_source_ranges_match": true,
+    "navigation_targets_exist": true,
+    "rendering_verified": false
+  },
+  "course_csv": {
+    "baseline_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+    "prior_course_depth_groups_retained": 24267,
+    "current_course_depth_groups": 24314,
+    "all_depths_counts_and_metadata_match_main_csv_refs": true,
+    "encoding": "UTF-8 BOM, CRLF",
+    "course_csv_sha256": "be78f62dc5cc283e4cee82bfb3e26e4cceb0988b67fa6ba435f2dc6591c5f8fe"
+  },
+  "reproduction_outputs": [
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "bytes": 10089057,
+      "sha256": "9c44e0c3a0e2df83b5bb775fbf3b5f501a07cd8b8fd5a36a85966b7a10e0bb1e",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "bytes": 2220537,
+      "sha256": "5d5e24f08dc847fba7beedd9bf894a778b9af9b4f878981533d7ba479d40f475",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "bytes": 2221348,
+      "sha256": "a76d87589654894dcf13e756d3d2ef2453119f37f45f22ca2e8bb6d6e548bc05",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "bytes": 16372232,
+      "sha256": "d2ccfd2d5c9695c6211e88103560539b516f14e4dcb46129ac6d04d904028807",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "bytes": 5285860,
+      "sha256": "57188d39fb4db7573d4b65093c37fa470c0862f2df0b7830aa90dfcd9100dced",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "bytes": 5213688,
+      "sha256": "be78f62dc5cc283e4cee82bfb3e26e4cceb0988b67fa6ba435f2dc6591c5f8fe",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "bytes": 6350,
+      "sha256": "b4a2df0458ebea7c146387b2b94d2222bbae6a1ab47374c0613b86a92bd3377a",
+      "complete_bytes_equal": true
+    }
+  ],
+  "archive": {
+    "file": "native-evidence.tar.gz",
+    "members": 176,
+    "bytes": 218748,
+    "sha256": "d00c65b78202dca69ad2a3238b65f44533867daa17a0d199b0938547c5dcffc8"
+  },
+  "external_reproduction_inputs": "/Volumes/Oct2024(8TB)/Codex-ACI-Alignment-20260915-01a09398/compact-reproduction-through297",
+  "seed_retention": "Actual incoming CSV seed is retained externally and byte-bound to baseline Git CSV; not redundantly copied into this archive.",
+  "integration_limits": "Isolated desktop-consumable outputs only. MAIN remains OPEN_NO_APPLICATION. Private phone pack FAILED_UNACCEPTED for four inherited C01 mappings; no install. Installed through171 unchanged. External evidence drive required.",
+  "later_proofs": "Staging/whitespace/commit/checkpoint evidence follows separately; it is not claimed to be an input to its own earlier archive."
+}

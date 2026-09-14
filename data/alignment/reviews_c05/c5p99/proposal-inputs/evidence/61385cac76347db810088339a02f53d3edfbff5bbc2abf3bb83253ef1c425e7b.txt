@@ -1,0 +1,243 @@
+"""Register one approved C05 page and append only its frozen head allowances.
+
+Usage: python3 -B register_reviewed_page_v2.py PAGE FIRST
+Run after fresh semantic acceptance and landed-copy verification. New errata
+remain unsupported. This binds approved bytes; it supplies no semantic judgment.
+"""
+from pathlib import Path
+import ast
+import datetime
+import difflib
+import hashlib
+import json
+import re
+import subprocess
+import sys
+import traceback
+
+
+def unique_object(pairs):
+    result = {}
+    for key, value in pairs:
+        assert key not in result, ('duplicate JSON key', key)
+        result[key] = value
+    return result
+
+
+def decode(raw):
+    return json.loads(raw, object_pairs_hook=unique_object)
+
+
+def pin(raw):
+    return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+
+def normalize_allowances(value):
+    # The two existing list forms are those accepted by the downstream verifier.
+    if isinstance(value, list):
+        result = {}
+        for item in value:
+            if 'key' in item:
+                category, key = item['key'].split('/', 1)
+            else:
+                category, key = item['pages_directory'], item['allowlist_key']
+            assert key not in result.setdefault(category, {}), ('duplicate allowance', key)
+            result[category][key] = item['licensor']
+        value = result
+    assert isinstance(value, dict)
+    assert not value or set(value) == {'pages_c05'}, 'Only the current C05 class may be extended'
+    assert all(isinstance(entries, dict) for entries in value.values())
+    return value
+
+
+def main():
+    artifacts = Path(__file__).resolve().parent
+    worktree = artifacts.parent / 'campaign-worktree'
+    page, first = map(int, sys.argv[1:])
+    sequences = list(range(first, first + 3))
+    assert page * 3 == sequences[-1]
+    batch = artifacts / f'C05-{first}-{first+2}'
+    review = batch / 'semantic-review'
+    landing = batch / 'landing'
+    banked = worktree / f'data/alignment/reviews_c05/c5p{page}'
+    captured = {}
+
+    def capture(path):
+        raw = path.read_bytes()
+        if path in captured:
+            assert captured[path] == raw, path
+        captured[path] = raw
+        return raw
+
+    def read(path):
+        return decode(capture(path))
+
+    def git(*args):
+        return subprocess.check_output(['git', *args], cwd=worktree)
+
+    baseline = read(batch / 'baseline.json')
+    head = git('rev-parse', 'HEAD').decode().strip()
+    assert head == baseline['commit'] and baseline['course_boundary'] == first - 1
+    proofs = [read(landing / name) for name in
+              ('root-semantic-acceptance-proof.json', 'root-frozen-input-copy-check.json')]
+    for checked in proofs:
+        assert checked['head'] == head and checked['page'] == page and checked['segments'] == sequences
+        assert checked['exact_final_hashes_counts_and_ranges'] and checked['original_review_bytes_identical']
+        for name, field in [('review.md', 'review_sha256'), ('review.json', 'review_json_sha256')]:
+            assert pin(capture(review / name))['sha256'] == checked[field]
+    assert proofs[1]['landed_bytes_checked'] is True
+    meta = read(review / 'review.json')
+    assert meta['verdict'] == 'APPROVE' and meta['open_findings'] == []
+    assert [item['seq'] for item in meta['segments']] == sequences
+    freeze = read(review / 'review-freeze.json')
+    assert freeze['verdict'] == 'APPROVE' and freeze['open_findings'] == []
+    governing = freeze['governing_git_commit']
+    assert isinstance(governing, str) and re.fullmatch(r'(?:[0-9a-f]{40}|[0-9a-f]{64})', governing)
+    if governing != head:
+        proposal_baseline = read(batch / 'proposal-baseline.json')
+        assert governing == proposal_baseline['commit'], 'Unrecognized historical governing origin'
+    git('merge-base', '--is-ancestor', governing, head)
+    assert capture(banked / 'review-freeze.json') == capture(review / 'review-freeze.json')
+    frozen = {}
+    for record in freeze['files']:
+        path = Path(record['path'])
+        relative = path.relative_to(review) if path.is_absolute() else path
+        assert (review / relative).resolve().is_relative_to(review.resolve())
+        assert str(relative) not in frozen
+        frozen[str(relative)] = record
+
+    def reviewed(relative):
+        raw = capture(review / relative)
+        assert pin(raw) == {key: frozen[relative][key] for key in ('bytes', 'sha256')}, relative
+        assert capture(banked / relative) == raw, relative
+        return decode(raw) if relative.endswith('.json') else raw
+
+    reviewed('review.md')
+    assert reviewed('review.json') == meta
+    assert reviewed('bank-ready-errata.json') == [], 'New errata require their separate registration path'
+    requested = reviewed('span-head-allow-needed.json')
+    wanted = normalize_allowances(requested)
+    errata_path = 'docs/errata_register.json'
+    assert capture(worktree / errata_path) == git('show', head + ':' + errata_path)
+    allow_path = 'data/alignment/span_head_allow.json'
+    old_allow_raw = capture(worktree / allow_path)
+    assert old_allow_raw == git('show', head + ':' + allow_path), 'Unexpected existing allowance delta'
+    old_allow = decode(old_allow_raw)
+    assert isinstance(old_allow['pages_c05'], dict)
+
+    spec_path = worktree / f'data/alignment/specs_c05/c5p{page}.json'
+    spec = read(spec_path)
+    landed = read(banked / 'landing.json')
+    assert landed['course'] == 'C05' and landed['page'] == f'c5p{page}' and landed['segments'] == sequences
+    assert landed['generator_exit'] == 0 and landed['spec_sha256'] == pin(capture(spec_path))['sha256']
+    assert (worktree / f'data/alignment/pages_c05/c5p{page}.html').is_file()
+    expected_segments = []
+    spans = {}
+    for row in meta['segments']:
+        seq = row['seq']
+        relative = f'reviewed-final/{seq}/spec.json'
+        part = reviewed(relative)
+        raw = capture(review / relative)
+        assert pin(raw) == {'bytes': row['spec_bytes'], 'sha256': row['spec_sha256']}
+        assert capture(batch / f'reconciled/{seq}/spec.json') == raw
+        assert part['course'] == 'C05' and [s['seq'] for s in part['segments']] == [seq]
+        segment = part['segments'][0]
+        expected_segments.append(segment)
+        for span in segment['spans']:
+            assert re.fullmatch(r'[A-Za-z0-9_]+', span['id'])
+            key = f'c5p{page}/s{seq}{span["id"]}'
+            assert key not in spans, ('duplicate current span', key)
+            spans[key] = dict(seq=seq, **span)
+    assert spec == {'course': 'C05', 'segments': expected_segments}, 'Landed spec differs from approved current spans'
+    bindings = []
+    additions = wanted.get('pages_c05', {})
+    for key, value in additions.items():
+        assert key in spans, ('Allowance is not a span on the current approved page', key)
+        assert key not in old_allow['pages_c05'], ('Existing allowance must not be replaced', key)
+        assert isinstance(value, str) and value.strip(), ('Missing approved licensor', key)
+        span = spans[key]
+        assert span['d'] in (5, 7) and isinstance(span['eng'], str) and span['eng'], key
+        bindings.append({'class': 'pages_c05', 'key': key, 'licensor': value, 'span': span})
+
+    registry = 'tools/build_alignment_layer.py'
+    index = 'data/alignment/pages_c05/index.html'
+    before = {relative: capture(worktree / relative) for relative in (registry, index)}
+    old_line = f'    "c5p{page-1}": {list(range(first-3, first))},\n'
+    new_line = f'    "c5p{page}": {sequences},\n'
+    source = before[registry].decode()
+    assert source.count(old_line) == 1 and f'"c5p{page}"' not in source
+    after = {registry: source.replace(old_line, old_line + new_line).encode()}
+    ast.parse(after[registry])
+    assert after[registry].replace(new_line.encode(), b'', 1) == before[registry]
+    old_coverage = f'Reviewed campaign coverage: {first-1} of 511 source segments.'
+    new_coverage = f'Reviewed campaign coverage: {first+2} of 511 source segments.'
+    old_entry = f'<li><a href="c5p{page-1}.html">Page {page-1} · segments {first-3}–{first-1}</a></li>'
+    new_entry = f'<li><a href="c5p{page}.html">Page {page} · segments {first}–{first+2}</a></li>'
+    source = before[index].decode()
+    assert source.count(old_coverage) == source.count(old_entry) == 1 and f'c5p{page}.html' not in source
+    after[index] = source.replace(old_coverage, new_coverage).replace(old_entry, old_entry + '\n' + new_entry).encode()
+    assert after[index].replace(new_coverage.encode(), old_coverage.encode(), 1).replace(('\n' + new_entry).encode(), b'', 1) == before[index]
+    if additions:
+        # Existing file format ends with pages_c05. Insert bytes only; never
+        # reserialize existing explanations, classes, entries or their ordering.
+        ending = b'\n  }\n}\n'
+        assert old_allow_raw.endswith(ending) and old_allow_raw.count(b'  "pages_c05": {') == 1
+        position = len(old_allow_raw) - len(ending)
+        added_lines = ['    ' + json.dumps(key, ensure_ascii=False) + ': ' + json.dumps(value, ensure_ascii=False)
+                       for key, value in additions.items()]
+        insertion = ((',' if old_allow['pages_c05'] else '') + '\n' + ',\n'.join(added_lines)).encode()
+        candidate = old_allow_raw[:position] + insertion + old_allow_raw[position:]
+        expected_allow = decode(old_allow_raw)
+        expected_allow['pages_c05'].update(additions)
+        assert decode(candidate) == expected_allow
+        assert candidate[:position] + candidate[position + len(insertion):] == old_allow_raw
+        before[allow_path], after[allow_path] = old_allow_raw, candidate
+
+    destination = landing / 'registration'
+    destination.mkdir(exist_ok=False)
+    records, patches = [], []
+    for relative in before:
+        for label, content in [('before', before[relative]), ('after', after[relative])]:
+            target = destination / label / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(content)
+            assert target.read_bytes() == content
+        patches.extend(difflib.unified_diff(before[relative].decode().splitlines(True), after[relative].decode().splitlines(True),
+                                           fromfile='a/' + relative, tofile='b/' + relative))
+        records.append({'path': relative, 'before_sha256': pin(before[relative])['sha256'],
+                        'after_sha256': pin(after[relative])['sha256']})
+    (destination / 'exact-change.diff').write_text(''.join(patches))
+    method = Path(__file__).read_bytes()
+    (destination / 'method.py.txt').write_bytes(method)
+    proof = {'status': 'PREPARED', 'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             'page': page, 'segments': sequences, 'baseline_commit': head, 'governing_source_commit': governing, 'files': records,
+             'method': pin(method), 'inputs': [{'path': str(path), **pin(raw)} for path, raw in captured.items()],
+             'errata': [], 'head_allowances': wanted, 'requested_allowances': requested,
+             'allowance_span_bindings': bindings, 'written_files': [],
+             'scope': 'Exact registry/index update and only frozen approved allowance additions; no semantic judgment or generated-output change.'}
+
+    def save_proof():
+        (destination / 'proof.json').write_text(json.dumps(proof, ensure_ascii=False, indent=2) + '\n')
+
+    save_proof()  # Candidates, preimages, diff and PREPARED proof precede W writes.
+    try:
+        assert git('rev-parse', 'HEAD').decode().strip() == head
+        for path, raw in captured.items():
+            assert path.read_bytes() == raw, ('Input changed after preparation', path)
+        for relative in before:
+            assert (worktree / relative).read_bytes() == before[relative], relative
+            (worktree / relative).write_bytes(after[relative])
+            assert (worktree / relative).read_bytes() == after[relative]
+            proof['written_files'].append(relative)
+            save_proof()
+        proof['status'] = 'PASS'
+    except BaseException:
+        proof.update(status='FAILED', failure=traceback.format_exc())
+        raise
+    finally:
+        save_proof()
+    print(json.dumps(proof, ensure_ascii=False, indent=2))
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,45 @@
+import pathlib,json,sqlite3,gzip,hashlib,difflib,re
+R=pathlib.Path(__file__).resolve().parent;E=R/'evidence';W=R.parent.parent.parent/'campaign-worktree';B=R.parent
+con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+master=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt'))
+def write(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+records=json.loads((E/'sql-records.json').read_text());matches=json.loads((E/'master-records.json').read_text());maps=json.loads((E/'original-archive-mappings.json').read_text());queries=[];terms=['ma mthong',"mi 'thad pa","'bras bu med pa",'ma bskams','gram sreg','las kyi dbang',"mi'i"]
+for t in terms:
+ sql='SELECT * FROM entries WHERE wylie=? ORDER BY id';rows=[dict(x) for x in con.execute(sql,(t,))];refs=[]
+ for row in rows:
+  ref='entries:'+str(row['id']);records[ref]=row;assert master['unified_entries'][row['id']-1]==json.loads(row['raw']);maps[ref]={'section':'unified_entries','ordinal_zero_based':row['id']-1};refs.append(ref)
+ queries.append({'sql':sql,'parameters':[t],'count':len(rows),'row_refs':refs})
+known={(m['section'],m['ordinal_zero_based']) for m in matches}
+for section,ls in master.items():
+ if isinstance(ls,list):
+  for i,r in enumerate(ls):
+   if isinstance(r,dict) and r.get('wylie') in terms and (section,i) not in known:matches.append({'section':section,'ordinal_zero_based':i,'record':r})
+# Whole-query searches include all courses; separately disclose requested C16/P1/TCS scope.
+for field,phrase in [('english','bare, parched earth'),('english','dry, parched riverbed'),('english','can drink from'),('wylie','gram sreg'),('wylie','longs spyod byar'),('wylie','rtog pas chu bskams')]:
+ sql=f'SELECT * FROM corpus_segments WHERE {field} LIKE ? ORDER BY course,seq';par='%'+phrase+'%';rows=[dict(r) for r in con.execute(sql,(par,))];refs=[]
+ for row in rows:
+  ref='corpus_segments:'+str(row['id']);records[ref]=row;refs.append(ref)
+ queries.append({'sql':sql,'parameters':[par],'count':len(rows),'row_refs':refs,'C16_P1_TCS_matches':[[r['course'],r['seq']] for r in rows if r['course'] in ['C16','P1'] or r['course'].startswith('TCS')]})
+comparisons=[];physical=[]
+for seq in (295,296,297):
+ source=records['corpus_segments:'+str(seq+1382)]
+ for course,other in [('C15',seq+145),('P7',seq-259)]:
+  row=dict(con.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(course,other)).fetchone());ref='corpus_segments:'+str(row['id']);records[ref]=row
+  fields={}
+  for f in ['acip','wylie','english']:
+   a=source[f];b=row[f];fields[f]={'equal':a==b,'C05_length':len(a),'witness_length':len(b),'differences':[{'op':op,'C05_range':[i,j],'witness_range':[k,l],'C05':a[i:j],'witness':b[k:l]} for op,i,j,k,l in difflib.SequenceMatcher(None,a,b,autojunk=False).get_opcodes() if op!='equal']}
+  comparisons.append({'seq':seq,'witness':[course,other],'record_ref':ref,'fields':fields,'independent_publication':'NOT_ESTABLISHED'})
+ for course in ['C05','C15']:
+  p=E/f'{course}ReadingASCII.txt';text=p.read_text();normalized=' '.join(text.split())
+  for f in ['acip','english']:
+   needle=' '.join(source[f].split());starts=[m.start() for m in re.finditer(re.escape(needle),normalized)]
+   assert len(starts)==1,(seq,course,f,len(starts));physical.append({'seq':seq,'course':course,'field':f,'comparison':'whitespace-normalized complete exact field','normalized_range':[starts[0],starts[0]+len(needle)],'count':1,'source_path':str(p),'source_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'complete_field':source[f]})
+# Complete contextual zhen examples selected for similar cognitive apprehension, without declaring new curated gloss.
+contextual=[]
+for ref,row in records.items():
+ if ref.startswith('corpus_segments:') and 'zhen pa' in row['wylie'] and any(x in row['english'].lower() for x in ['thinks','thought','believ','imagin','take them to','taken to mean']):
+  contextual.append({'ref':ref,'course':row['course'],'seq':row['seq'],'scope':'contextual corpus rendering; full row is in sql-records.json; not a curated zhen gloss'})
+write(E/'sql-records.json',records);write(E/'master-records.json',matches);write(E/'original-archive-mappings.json',maps);write(E/'supplementary-queries.json',queries);write(E/'parallel-comparisons.json',comparisons);write(E/'physical-source-extents.json',physical);write(E/'contextual-zhen-index.json',contextual)
+print(json.dumps({'supplementary_queries':len(queries),'master_records':len(matches),'unique_sql_records':len(records),'contextual_zhen_candidates':len(contextual),'physical_extents':len(physical)}))
+for m in matches:
+ if m['record'].get('wylie') in terms:print(json.dumps(m,ensure_ascii=False))

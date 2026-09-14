@@ -1,0 +1,26 @@
+from pathlib import Path
+import json,sqlite3,gzip,hashlib,re,datetime
+O=Path(__file__).resolve().parent;E=O/'evidence';W=O.parents[2]/'campaign-worktree';base=json.loads((E/'proposal-baseline.json').read_text());c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+sql='SELECT * FROM entries WHERE wylie LIKE ? ORDER BY id';rr=[dict(x) for x in c.execute(sql,['%zhen%'])];positive=[x for x in rr if x['hgm_gloss'] not in [None,'[]','']];(E/'zhen-positive-variants.json').write_text(json.dumps({'sql':sql,'params':['%zhen%'],'all_count':len(rr),'positive_count':len(positive),'all_rows':rr},ensure_ascii=False,indent=2)+'\n')
+for x in positive: print('ZHEN',x['id'],x['wylie'],x['hgm_gloss'])
+source=json.loads((E/'source.json').read_text());archive=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));counts={};orig=[];witnesses=[]
+for index,x in enumerate(archive):
+ course=x.get('course');counts[course]=counts.get(course,0)+1;seq=counts[course]
+ if (course=='C05' and seq in [295,296,297]) or (course=='C15' and seq in [440,441,442]) or (course=='P7' and seq in [36,37,38]):
+  db=dict(c.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',[course,seq]).fetchone());assert json.loads(db['raw'])==x
+  orig.append({'archive_index_zero_based':index,'course_counted_seq':seq,'record':x,'spine_raw_json_equal':True,'spine_row':db})
+for s in source:
+ for co,seq in [('C15',s['seq']+145),('P7',s['seq']-259)]:
+  db=dict(c.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',[co,seq]).fetchone());witnesses.append({'current':f'C05:{s["seq"]}','witness':f'{co}:{seq}','field_equal':{k:s[k]==db[k] for k in ['acip','wylie','english']},'witness_fields':db,'role':'Textual parallel only; no independent-publication or ingestion-lineage conclusion.'})
+(E/'archive-source-records.json').write_text(json.dumps({'archive_pin':base['source_pins']['corpus'],'method':'Course-local order counted in original full corpus archive, then full record JSON compared with spine raw field.','matches':orig},ensure_ascii=False,indent=2)+'\n');(E/'parallel-comparisons.json').write_text(json.dumps(witnesses,ensure_ascii=False,indent=2)+'\n')
+physical=Path(base['source_pins']['physical']['path']).with_name('C15ReadingASCII.txt');data=physical.read_bytes();(E/physical.name).write_bytes(data);flat=[];positions=[];raw=data.decode('latin1')
+for m in re.finditer(r'\S+',raw):
+ if flat:flat.append(' ');positions.append(m.start())
+ flat.extend(m.group());positions.extend(range(m.start(),m.end()))
+flat=''.join(flat);pp=[]
+for s in source:
+ for field in ['acip','english']:
+  n=' '.join(s[field].split());pos=flat.find(n);assert pos>=0;lo=positions[pos];hi=positions[pos+len(n)-1]+1;out=E/f'physical-C15-{s["seq"]+145}-{field}.txt';out.write_bytes(data[lo:hi]);assert ' '.join(out.read_bytes().decode('latin1').split())==n;pp.append({'course':'C15','seq':s['seq']+145,'field':field,'byte_range':[lo,hi],'chunk_path':str(out),'bytes':hi-lo,'sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'normalized_equal':True})
+(E/'physical-C15-extents.json').write_text(json.dumps({'source_path':str(physical),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'decoding':'Latin1 reversible byte view, selected ASCII field extents. No source transcoding.','extents':pp},indent=2)+'\n')
+reg=json.loads((E/'governing/docs/errata_register.json').read_text());print('REGISTER TYPE',type(reg));print('PARALLELS',[(x['current'],x['witness'],x['field_equal']) for x in witnesses]);print('ARCHIVE',len(orig),'PHYSICAL C15',len(pp))
+(E/'source-roles.json').write_text(json.dumps({'binding':'GMR English in exact C05 source rows, preserved verbatim; dictionary hgm_gloss informs lexical alternatives without creating English.','reference':'Hopkins/other dictionary fields retained in full original records are comparative only.','parallel':'C15:440–442 have all three text fields identical to current rows; P7:36–38 identical English but Tibetan variants as comparison records show. These are textual comparisons, not demonstrated independent publications.','physical':'C05 and C15 raw files and byte-identical extents preserved; only whitespace normalization is used for cross-format comparison.','independence':'Tibetan-first original; no other-angle or root semantic findings read.','origin':'Immutable governing refs from actual ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e through288; source origin only, not a future through294 landing baseline.'},indent=2)+'\n')

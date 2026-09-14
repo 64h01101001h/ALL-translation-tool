@@ -1,0 +1,67 @@
+import json,pathlib,hashlib,sqlite3,gzip,subprocess,datetime,sys
+R=pathlib.Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';E=R/'evidence';E.mkdir(exist_ok=True)
+def write(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def pin(p):b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+base=json.loads((B/'proposal-baseline.json').read_text()); proofs={}
+proofs['source_pins']=[]
+for v in base['source_pins'].values():
+ a=pin(pathlib.Path(v['path']));assert a==v;proofs['source_pins'].append(a)
+proofs['governing_pins']=[]
+for rel,v in base['governing_git_pins'].items():
+ data=subprocess.check_output(['git','show',base['commit']+':'+rel],cwd=W);assert len(data)==v['bytes'] and hashlib.sha256(data).hexdigest()==v['sha256']
+ p=E/'governing'/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data);proofs['governing_pins'].append({**v,'local':str(p)})
+for rel in ['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ data=subprocess.check_output(['git','show',base['commit']+':'+rel],cwd=W);p=E/'governing'/rel;p.write_bytes(data);proofs['governing_pins'].append({'original_git_commit':base['commit'],'path':rel,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'local':str(p)})
+proofs['original_freezes']=[]
+for angle,f in [('tibetan','freeze.json'),('english','freeze-manifest.json')]:
+ manifest=json.loads((B/angle/f).read_text());ls=[]
+ for x in manifest['files']:
+  p=B/angle/x['path'];a=pin(p);assert a['bytes']==x['bytes'] and a['sha256']==x['sha256'];ls.append(a)
+ proofs['original_freezes'].append({'angle':angle,'manifest':pin(B/angle/f),'files':ls})
+proofs['reused_root_native_originals']=[]
+for row in json.loads((B/'proposal-verification/report.json').read_text()):
+ p=B/row['angle']/str(row['seq']);assert pin(p/'spec.json')['sha256']==row['spec_sha256'];assert pin(p/'body.html')['sha256']==row['body_sha256']
+ stem=f"{row['angle']}-{row['seq']}";assert (B/'proposal-verification'/f'{stem}.stdout').read_bytes()==(p/'body.html').read_bytes();assert (B/'proposal-verification'/f'{stem}.exit').read_text().strip()=='0'
+ proofs['reused_root_native_originals'].append({**row,'native_files':[pin(B/'proposal-verification'/f'{stem}.{ext}') for ext in ['stdout','stderr','exit']]})
+for sub in ['root-proposal-generator-caller','root-proposal-ranges-caller']:
+ proofs[sub]=[pin(p) for p in sorted((B/sub).iterdir()) if p.is_file()]
+con=sqlite3.connect(pathlib.Path(base['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+master=json.load(gzip.open(base['source_pins']['master']['path'],'rt'));corpus=json.load(gzip.open(base['source_pins']['corpus']['path'],'rt'))
+bycourse={}
+for r in corpus:bycourse.setdefault(r['course'],[]).append(r)
+queries=[];sqlrecords={};rawmaps={};seen={}
+files=['tibetan/evidence/queries.json','tibetan/evidence/extra-queries.json','english/evidence/queries.json','english/evidence/additional-lexical-queries.json']
+for fname in files:
+ for i,q in enumerate(json.loads((B/fname).read_text())):
+  sql=q['sql'];params=q.get('params',q.get('parameters'));key=json.dumps([sql,params])
+  if key not in seen:
+   rows=[dict(x) for x in con.execute(sql,params)];refs=[]
+   for row in rows:
+    table='corpus_segments' if 'corpus_segments' in sql else 'entries';ref=f"{table}:{row['id']}";sqlrecords[ref]=row;refs.append(ref)
+    if 'raw' in row:
+     raw=json.loads(row['raw'])
+     if table=='entries':
+      index=row['id']-1;assert master['unified_entries'][index]==raw;rawmaps[ref]={'section':'unified_entries','ordinal_zero_based':index}
+     else:
+      rawrow=bycourse[row['course']][row['seq']-1];assert rawrow==raw;rawmaps[ref]={'course':row['course'],'array_index':row['seq']-1,'seq':row['seq']}
+   seen[key]={'sql':sql,'parameters':params,'count':len(rows),'row_refs':refs,'originals':[]};queries.append(seen[key])
+  got=seen[key];actual=[sqlrecords[r] for r in got['row_refs']];assert actual==q['rows'] and len(actual)==q['count'],(fname,i)
+  got['originals'].append({'path':str(B/fname),'index':i})
+# Complete positive zhen variants, including all original raw rows.
+z=json.loads((B/'tibetan/evidence/zhen-positive-variants.json').read_text());zr=[dict(r) for r in con.execute(z['sql'],z['params'])];assert zr==z['all_rows'];proofs['zhen_query']={'sql':z['sql'],'parameters':z['params'],'all_count':len(zr),'positive_count':sum(bool(x['hgm_gloss']) for x in zr)}
+for row in zr:
+ ref=f"entries:{row['id']}";sqlrecords[ref]=row;raw=json.loads(row['raw']);assert master['unified_entries'][row['id']-1]==raw;rawmaps[ref]={'section':'unified_entries','ordinal_zero_based':row['id']-1}
+# Save full original master sections and variants once; roots and positive whole-unit competitors.
+terms=set(r['wylie'] for k,r in sqlrecords.items() if k.startswith('entries:'))
+matches=[]
+for section,records in master.items():
+ if isinstance(records,list):
+  for i,r in enumerate(records):
+   if isinstance(r,dict) and (r.get('wylie') in terms or any(v in terms for v in r.get('wylie_variants',[]))):matches.append({'section':section,'ordinal_zero_based':i,'record':r})
+source=[dict(r) for r in con.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',289,303))]
+for row in source:
+ if row['seq'] in [295,296,297]:assert {k:row[k] for k in ['id','course','seq','acip','wylie','english']}==next(r for r in json.loads((B/'source.json').read_text()) if r['seq']==row['seq'])
+write(E/'queries.json',queries);write(E/'sql-records.json',sqlrecords);write(E/'original-archive-mappings.json',rawmaps);write(E/'master-records.json',matches);write(E/'source-context.json',source)
+for f in ['C05ReadingASCII.txt','C15ReadingASCII.txt']:
+ data=(B/'tibetan/evidence'/f).read_bytes();(E/f).write_bytes(data)
+proofs['utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();proofs['counts']={'frozen_files':sum(len(x['files']) for x in proofs['original_freezes']),'unique_queries':len(queries),'original_query_sets':sum(len(x['originals']) for x in queries),'unique_sql_records':len(sqlrecords),'master_records':len(matches),'original_ranges':len(json.loads((B/'proposal-verification/root-resolved-spans.json').read_text()))};proofs['acceptance']=False;write(E/'intake-verification.json',proofs);print(json.dumps(proofs['counts']))

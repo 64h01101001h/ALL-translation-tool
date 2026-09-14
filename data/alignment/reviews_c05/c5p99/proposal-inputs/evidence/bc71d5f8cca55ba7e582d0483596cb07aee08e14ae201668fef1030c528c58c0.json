@@ -1,0 +1,89 @@
+{
+  "verdict": "APPROVE",
+  "open_findings": [],
+  "scope": "Compact independent seven-output reproduction helpers only, for their documented guarded invocation with unchanged canonical builders; does not approve semantics, actual production retention, MAIN, UI, native or device behavior.",
+  "reviewed_helpers": {
+    "reproduce_generated_outputs.py": {
+      "bytes": 8170,
+      "sha256": "f8b56afad204b9774e40a20378842980d5463ca3b3a9b7a91ab19be5767a8321"
+    },
+    "run_reproduction_readonly.py": {
+      "bytes": 2167,
+      "sha256": "7917fb3c6e3a78377c4ae82d091c9e1ae1b765db723a8f1e286c7d9b55be8da7"
+    }
+  },
+  "canonical_dependencies_at_review": {
+    "tools/build_alignment_layer.py": {
+      "bytes": 39670,
+      "sha256": "d04f3a37bb878dde9007ed11ef907b3fdd59c4b88a4ba608e3aa40430825d5c1"
+    },
+    "tools/build_dictionary_view.py": {
+      "bytes": 11170,
+      "sha256": "dee3188a3b490cf4aa1845a04b7dee0ccdd517470aff313f9a0d507454a1ebca"
+    },
+    "tools/build_dictionary_exports.py": {
+      "bytes": 12142,
+      "sha256": "8d2577ca8118333d75c78823fa38e2d3886db245c86e009d5e9459cf620e519b"
+    },
+    "tools/dictionary_view_shell.html": {
+      "bytes": 13746,
+      "sha256": "3b0a2034daddf0b009896040b7df9c555a1d959eb92ed309395111e77838fb15"
+    },
+    "engines/hgm_tools.py": {
+      "bytes": 2632,
+      "sha256": "11788e9fc3dc98e76ae9e1c3081e380696b3b75f65fbbeca148efaca274b77c6"
+    },
+    "engines/pron_engine.py": {
+      "bytes": 8548,
+      "sha256": "d8a00ad5b896a425cc64d2e22367a38b066ccbcc5f4e101ac8e32be1acc9000e"
+    },
+    "engines/ewts_unicode.py": {
+      "bytes": 7664,
+      "sha256": "8f1b113f1990fb539dc1e61b29849a74820b301a1613cf5594b472d2aee034c6"
+    }
+  },
+  "checks": [
+    {
+      "topic": "minimal dependencies",
+      "result": "PASS",
+      "evidence": "Layer reads the complete copied spine and registered HTML pages; view reads both newly built JSON files, its HTML shell, and pronunciation engine; exports reads the incoming main CSV plus pronunciation/Unicode engines. All are copied; unused recursive review histories, raw gzip sources and page generator are unnecessary."
+    },
+    {
+      "topic": "execution count and order",
+      "result": "PASS",
+      "evidence": "Registry import uses a non-main module name, then exactly one subprocess runs layer and exactly one runs view; view imports exports and invokes write_exports once. No separate exports invocation."
+    },
+    {
+      "topic": "registry consumption order",
+      "result": "PASS",
+      "evidence": "Both reproduction and canonical layer use sorted(COURSES.items()) and sorted(pages.items()), preserving lexical page order and the page-stream digest. C05 sequence list must equal 1..LAST."
+    },
+    {
+      "topic": "incoming CSV and producer date",
+      "result": "PASS",
+      "evidence": "Archived actual incoming seed must byte-equal baseline HEAD CSV. It is materialized before the layer and rechecked immediately before the sole view. Date comes from frozen production evidence meta.date and is installed before canonical from datetime import date."
+    },
+    {
+      "topic": "source and write isolation",
+      "result": "PASS",
+      "evidence": "Fresh resolved destination must be outside W. Builders use copied __file__ roots; copied source spine is opened with mode=ro and PRAGMA query_only=ON. Guard restricts current builder write operations to destination, disables bytecode; all copied inputs and original W files are compared to their input hashes at successful exit."
+    },
+    {
+      "topic": "failure retention",
+      "result": "PASS",
+      "evidence": "No destination reuse or cleanup; handled preparation/build/comparison failures retain FAILED traceback. Builder stdout, stderr, exit and execution records are saved before nonzero exit assertion. Guard finally retains guard evidence after the negative probe failure."
+    },
+    {
+      "topic": "seven output byte comparison",
+      "result": "PASS",
+      "evidence": "Each frozen expected output first matches actual-production output_sha256. Successful reproduction requires complete generated == frozen expected == live W bytes for the two JSON outputs, HTML and four CSVs."
+    }
+  ],
+  "validation": {
+    "negative_guard_probe": "evidence/guard-failure-probe/result.json",
+    "canonical_builders_executed": 0,
+    "worktree_edits": 0,
+    "whole_data_builds": 0
+  },
+  "limitations": "This approves the helper implementation. The seven-output reproduction itself remains unexecuted and must succeed on the accepted landed batch. Actual production retention stays with verify_landed_batch.py and verify_course_csv.py."
+}

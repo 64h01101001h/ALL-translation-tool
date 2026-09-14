@@ -1,0 +1,13 @@
+from pathlib import Path
+import sqlite3,json,gzip,hashlib
+O=Path(__file__).resolve().parent;W=O.parents[2]/'campaign-worktree';E=O/'evidence';c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+terms=['longs spyod pa','rtog pas','zhen','zhen par','ma','bltas pa','bskams pa','yod','de\'i rjes su','de\'i tshe na','las kyi dbang','rnam pa gcig tu na'];q=[];m=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));mh=[]
+for t in terms:
+ sql='SELECT * FROM entries WHERE wylie=? ORDER BY id';rr=[dict(x) for x in c.execute(sql,[t])];q.append({'sql':sql,'params':[t],'count':len(rr),'rows':rr});hits=[]
+ for sec in ['unified_entries','curated_entries','glossary_entries']:
+  for i,x in enumerate(m[sec]):
+   if x.get('wylie')==t or t in (x.get('wylie_variants') or []):hits.append({'section':sec,'ordinal_zero_based':i,'record':x})
+ mh.append({'term':t,'master_matches':hits})
+ print(t,[(h['section'],h['ordinal_zero_based'],h['record'].get('hgm_gloss',h['record'].get('hgm_glosses'))) for h in hits])
+(E/'extra-queries.json').write_text(json.dumps(q,ensure_ascii=False,indent=2)+'\n');(E/'extra-master-matches.json').write_text(json.dumps(mh,ensure_ascii=False,indent=2)+'\n')
+archive=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));print('CORPUS STRUCTURE',type(archive),list(archive)[:5] if isinstance(archive,dict) else str(archive[:1])[:700])

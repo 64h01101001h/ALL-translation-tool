@@ -1,0 +1,38 @@
+import pathlib,sqlite3,json,gzip,hashlib,re,datetime
+R=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment'); W=R/'campaign-worktree';B=R/'campaign-artifacts/C05-295-297';D=B/'english/evidence'
+def save(n,x): (D/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+queries=[]
+def query(q,p):
+ r=[dict(x) for x in c.execute(q,p)];queries.append({'sql':q,'parameters':p,'count':len(r),'rows':r});return r
+rows=query('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',289,303]);selected=[r for r in rows if r['seq'] in (295,296,297)]
+for file,actual in [('source.json',selected),('context.json',rows)]:
+ snap=json.loads((B/file).read_text());assert [{k:r[k] for k in s} for r,s in zip(actual,snap)]==snap and len(actual)==len(snap)
+save('full-source-and-context.json',rows)
+terms=['zer','zer na','ma khyab','dang por','yi dvags','yi dwags','chu','mthong','mthong ba','phyogs','der','longs spyod','longs spyod pa',"'gro ba","mi 'thad","'thad",'phyis','las','dbang','ma','mi',"'og gzhi",'gram sreg','gram','sreg','tsam zhig','tsam',"de'i rjes su",'rtog pa','rtog','bskams','bskams pa','zhen pa','zhen','de bzhin du','ljon shing',"'bras bu",'yal ga',"med pa","de'i tshe na",'mig shes','sgrib byed','chu klung','klung','mi','dgos pa','lta bu','rnam pa gcig tu','rnam pa','gcig','bltas pa','blta bya','longs spyod bya','brlan','brlan zhing gsher ba','gsher ba','phor pa','gang','cig car du','rnag khrag','rnag','khrag','sogs','dngos po','gsum','grub pa','yod','rang']
+entries=[]
+for term in terms: entries.extend(query('SELECT * FROM entries WHERE wylie=?',[term]))
+master=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt'));sections={}
+for name in ['unified_entries','curated_entries','glossary_entries']:
+ section=master[name]; it=section.values() if isinstance(section,dict) else section
+ matches=[]
+ for i,e in enumerate(it):
+  variants=e.get('wylie_variants') or [];hits=sorted(set(terms)&({e.get('wylie')}|set(variants)))
+  if hits: matches.append({'ordinal':i,'matched_terms':hits,'record':e})
+ sections[name]=matches
+save('master-matches.json',sections)
+for row in selected:
+ for field in ['wylie','acip','english']:
+  query('SELECT * FROM corpus_segments WHERE '+field+'=? ORDER BY course,seq',[row[field]])
+for term,eng in [("'og gzhi gram sreg",'%parched%'),('sgrib byed','%obstacle%'),('longs spyod','%drink%'),('bskams','%dried%'),('zhen','%think%'),('brlan zhing gsher ba','%wet%'),('sogs','%other two%'),('rnam pa gcig tu','%point of view%')]:
+ query('SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq',['%'+term+'%',eng])
+save('queries.json',queries)
+physical=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt');raw=physical.read_bytes();(D/'C05ReadingASCII.txt').write_bytes(raw);txt=raw.decode('latin-1');flat=' '.join(txt.split());checks=[]
+for row in selected:
+ for field in ['acip','english']:
+  needle=' '.join(row[field].split());positions=[m.start() for m in re.finditer(re.escape(needle),flat)];checks.append({'seq':row['seq'],'field':field,'normalized_needle':needle,'count':len(positions),'positions':positions,'extents':[flat[max(0,p-250):p+len(needle)+250] for p in positions]})
+save('physical-checks.json',{'source_path':str(physical),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'method':'Latin-1 reversible byte mapping, original encoding not inferred. Whitespace collapsed for location only; complete original bytes preserved independently. Same physical reading is not an independent publication.','checks':checks})
+save('collection-summary.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'query_count':len(queries),'terms':terms,'source_snapshot_equality':True,'master_match_counts':{k:len(v) for k,v in sections.items()},'physical_counts':[(x['seq'],x['field'],x['count']) for x in checks]})
+for term in terms:
+ found=[x for x in entries if x['wylie']==term];print(term,[(x['id'],x['hgm_gloss'],x['tier'],x['hgm_source'],x['hopkins_english']) for x in found])
+print('PARALLELS',[(q['parameters'][:1],[str(x['course'])+':'+str(x['seq']) for x in q['rows']]) for q in queries if 'corpus_segments' in q['sql'] and 'BETWEEN' not in q['sql']]);print('PHYSICAL',checks)

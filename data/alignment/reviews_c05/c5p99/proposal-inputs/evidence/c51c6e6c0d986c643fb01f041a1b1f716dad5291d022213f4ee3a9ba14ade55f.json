@@ -1,0 +1,412 @@
+{
+  "status": "PASS",
+  "helper": {
+    "bytes": 12296,
+    "sha256": "61385cac76347db810088339a02f53d3edfbff5bbc2abf3bb83253ef1c425e7b"
+  },
+  "fixture_only": true,
+  "provisional_allowance_not_semantically_endorsed": true,
+  "production_registration_runs": 0,
+  "real_worktree_or_index_changes": 0,
+  "cases": [
+    {
+      "case": "zero_allowances",
+      "exit": 0,
+      "outcome": "PASS: exact approved delta; prewrite proof guard observed",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/zero_allowances"
+      ],
+      "stdout": {
+        "bytes": 11702,
+        "sha256": "28ad81f5bdb0e776bf333afc24372e2fa4d6ef84b0b1a61a86e2164dd8591180"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "approved_dict",
+      "exit": 0,
+      "outcome": "PASS: exact approved delta; prewrite proof guard observed",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/approved_dict"
+      ],
+      "stdout": {
+        "bytes": 13008,
+        "sha256": "af9b353fe0b580d06fe4b0b063e08f29365335c9d3c361e8aca05343951d2ff5"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "approved_key_list",
+      "exit": 0,
+      "outcome": "PASS: exact approved delta; prewrite proof guard observed",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/approved_key_list"
+      ],
+      "stdout": {
+        "bytes": 13142,
+        "sha256": "7080bb8160de376275912e7e8e3d4ab7bd849225fbeb32524e99768358ac039e"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "approved_explicit_list",
+      "exit": 0,
+      "outcome": "PASS: exact approved delta; prewrite proof guard observed",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/approved_explicit_list"
+      ],
+      "stdout": {
+        "bytes": 13320,
+        "sha256": "c83520f75377f57bac2bfe13c5250b25bef87b2c2859824de15f1f3b576d84e1"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "duplicate_json_key",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/duplicate_json_key"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 2868,
+        "sha256": "66a5994b8ffd531741ef2090a417685b0348a04cfd8e45ce5ddc06b8548f2605"
+      }
+    },
+    {
+      "case": "duplicate_list_key",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/duplicate_list_key"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1519,
+        "sha256": "1e66b495c3efa4192307d6439160afff959cfbb83b15883f0d1754c5c46f53b9"
+      }
+    },
+    {
+      "case": "existing_key",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/existing_key"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1215,
+        "sha256": "7fabe2661d088806a4c0573d18ce37b7087fb6ef7ade5321ecd66c727aa55811"
+      }
+    },
+    {
+      "case": "wrong_course",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/wrong_course"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1515,
+        "sha256": "c044ed466ff9a44b9ce156ba1a4526ecbb7dca6157cbc929e27d44cee8e7bafa"
+      }
+    },
+    {
+      "case": "wrong_page",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/wrong_page"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1195,
+        "sha256": "fea83e2d5737a3a12838bd358eecb670f6767b7eaa55cb929336ae983c85f6ec"
+      }
+    },
+    {
+      "case": "unknown_span",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/unknown_span"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1200,
+        "sha256": "a1da7b7fbbbd9937d246fb16b3a268650c10a038992b11bea757833cf0c34bc0"
+      }
+    },
+    {
+      "case": "wrong_depth",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/wrong_depth"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1190,
+        "sha256": "eacc02713dc14d6b353553d655fd7150de4898af4e670bd155880c040aa24541"
+      }
+    },
+    {
+      "case": "empty_licensor",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/empty_licensor"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1205,
+        "sha256": "21cdb8b9197575fb90fe9018e75535c4011d75feefea2f8e063ab0f8c8ce8da4"
+      }
+    },
+    {
+      "case": "stale_allowance_freeze",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/stale_allowance_freeze"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1556,
+        "sha256": "a327f43a404a23a525f5d17f5b5d8b8c7e985a65636d15eba8b54789bbeb0abe"
+      }
+    },
+    {
+      "case": "stale_approval",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/stale_approval"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1150,
+        "sha256": "eeb53f423b7da92259c56b7966765e74111070ee100098eaecdd6667864c9df5"
+      }
+    },
+    {
+      "case": "altered_landed_spec",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/altered_landed_spec"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1263,
+        "sha256": "282c791bf573d3b0144f4036b9336a1ef8339c63fcc4e6aa9fa03ceab78e72be"
+      }
+    },
+    {
+      "case": "unexpected_allowance_delta",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/unexpected_allowance_delta"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1247,
+        "sha256": "dd1e0761ea5983ffd64a0d635d8ccc7d25fb03943ac2293ab84dd9ecc8d87118"
+      }
+    },
+    {
+      "case": "nonempty_errata",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/nonempty_errata"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1231,
+        "sha256": "fcaffc21ac4ff0a4908b5ee3f9ebd5e5057baf7c1d2783c1d73a3f7269b7a6ea"
+      }
+    },
+    {
+      "case": "second_write_failure",
+      "exit": 1,
+      "outcome": "PASS: injected failure retained exact preimages/candidates and FAILED record",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/second_write_failure"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1917,
+        "sha256": "4a3d1d0a1567dbab67bc7af3c242e07258e7243d4e9fd8d46ad3c03c1c74a468"
+      }
+    },
+    {
+      "case": "historical_source_origin",
+      "exit": 0,
+      "outcome": "PASS: exact approved delta; prewrite proof guard observed",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/historical_source_origin"
+      ],
+      "stdout": {
+        "bytes": 13687,
+        "sha256": "3cb087553ab698a9a2998e80d5e02bf2ec16a64d28815a62cc8495351c08e014"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "case": "unrelated_governing_commit",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/unrelated_governing_commit"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 2319,
+        "sha256": "66149ac05853fdc1bade165eb7dd490a245bbba3597da381250a900fffeaa587"
+      }
+    },
+    {
+      "case": "unlisted_ancestor",
+      "exit": 1,
+      "outcome": "PASS: rejected before any registration mutation",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixture_wrapper.py",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-289-291/registration-preparation/fixtures-origin-fix/unlisted_ancestor"
+      ],
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 1212,
+        "sha256": "30c29f3a21d5744a5b6e83a77d54fd0d9a621a01d5b4b51415cd3247b2c697dc"
+      }
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+import pathlib,json,gzip,hashlib,datetime,sqlite3
+D=pathlib.Path(__file__).parent;B=D.parent;W=B.parent.parent/'campaign-worktree';E=D/'evidence';base=json.loads((B/'proposal-baseline.json').read_text());qs=json.loads((E/'queries.json').read_text());rows={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+corpus=json.load(gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt'));checks=[]
+for seq,row in rows.items():
+ matches=[{'ordinal':i,'record':r} for i,r in enumerate(corpus) if all(r.get(k)==row[k] for k in ['course','acip','wylie','english'])];assert len(matches)==1;checks.append({'seq':seq,'status':'EXACT_FOUR_FIELD_MATCH','matches':matches})
+save(E/'corpus-archive-check.json',{'source':base['source_pins']['corpus'],'checks':checks})
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+extra=[]
+for term in ['med','rnam rtog','blta','mig','shes']:
+ q='SELECT * FROM entries WHERE wylie=?';rs=[dict(x) for x in c.execute(q,[term])];extra.append({'sql':q,'parameters':[term],'count':len(rs),'rows':rs})
+save(E/'additional-lexical-queries.json',extra)
+for x in extra:
+ print(x['parameters'],[(r['id'],r['hgm_gloss']) for r in x['rows']])
+parallels=[]
+for seq,row in rows.items():
+ unique={}
+ for q in qs:
+  for r in q['rows']:
+   if r.get('english')==row['english'] and 'course' in r:unique[(r['course'],r['seq'])]=r
+ parallels.append({'seq':seq,'matches':[{'course':r['course'],'seq':r['seq'],'field_equality':{k:r[k]==row[k] for k in ['acip','wylie','english']},'raw_record':r} for r in unique.values()],'independence':'Text-field equality does not prove independent publication or ingestion history. Physical C05 is the original source corroboration, not independent attestation.'})
+save(E/'parallel-field-comparisons.json',parallels)
+suspicions=[
+ {'seq':[295,296,297],'candidate':'yi dvags vs yi dwags','found':'YI DVAGS','decision':'NO_ERRATUM','reason':'ACIP DVAGS is carried faithfully in C05 Wylie; HGM yi dvags is an attested glossary head. P7 uses DWAGS with additional punctuation differences. No grounds to silently normalize spelling.'},
+ {'seq':295,'candidate':'seeing water first, then not seeing it; impression versus external drying','decision':'NO_ERRATUM','reason':'The preceding objection and following distinction of viewpoint explain the contrast. Full English/ACIP occur in physical C05 and C15 fields; no factual contradiction established.'},
+ {'seq':296,'candidate':'negative seeing rendered prevents ... from','found':'MA MTHONG','decision':'NO_ERRATUM','reason':'The causal obstacle construction explains the English recast. ma remains unbanked as a distributed correspondence; this is not missing English or a source defect.'},
+ {'seq':297,'candidate':'additional river, sit down, closing two','decision':'NO_ERRATUM','reason':'GMR expands the viewpoint distinction and the three-object count. These words are preserved but do not license extra source atoms. Whole C15 three fields and P7 English confirm the observed readings, not independent publication.'}
+]
+save(E/'source-suspicion-decisions.json',{'errata':0,'source_cap_flags':{str(s):len(r['english'])==1500 for s,r in rows.items()},'following_heading_present':False,'registered_classes_reference':'governing-docs__errata_register.json.txt','decisions':suspicions})
+save(E/'collection-execution.json',{'successful_argv':['python3','-B',str(D/'collect.py')],'exit':0,'stdout':pin(E/'collection.stdout'),'stderr':pin(E/'collection.stderr'),'failed_attempt':'collection-attempt01/','note':'Actual shell calls and exit codes recorded in this task. First collector UTF-8 assumption failed; unchanged original bytes are retained and successful reversible latin-1 view asserts no original encoding. Authoring context ambiguity was reproduced with native output in author-attempt01.'})
+for seq,row in rows.items():
+ p=D/str(seq);rr=json.loads((p/'canonical-resolved-ranges.json').read_text());om=json.loads((p/'omissions.json').read_text());intervals={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  coverage=[False]*len(row[field])
+  for x in rr:
+   lo,hi=x[side+'_range'];coverage[lo:hi]=[True]*(hi-lo)
+  gaps=[];i=0
+  while i<len(coverage):
+   if coverage[i]:i+=1;continue
+   lo=i
+   while i<len(coverage) and not coverage[i]:i+=1
+   gaps.append({'range':[lo,i],'text':row[field][lo:i]})
+  intervals[side]=gaps
+ save(p/'material-omissions.json',{'decisions':om,'all_unwrapped_intervals':intervals,'policy':'Unwrapped material is preserved verbatim; omission is not a null/no-exponent judgment.'})
+save(D/'proposed-span-head-allow.json',{'pages_c05':{'c5p99/s297w39':"sogs (C05:297 English-first Codex proposal: explicit HTG2016 'and the other' closes the three-object list; the supplied count 'two' is excluded. Provisional proposal requiring independent reconciliation/review.)"}})
+stats=json.loads((D/'verification-summary.json').read_text())
+descriptions={295:["Challenge rtog/impression versus zhen/thought first: complete positive master variants and local complement structure are preserved, including contrary curated/mined senses.","Each water/fruit stage has an exact intended occurrence; gram/bare, sreg/parched and final tsam/bare are distinguished. ma/stop expresses the later negative seeing; no nulls."],296:["Challenge the unbanked ma in both obstacle clauses: prevents/prevent ... from is distributed; a lexical match or genuine null is not asserted.","The two river/riverbed constructions, genitive kyi/of, causal bas/and so and fronted comparison lta bu/same have explicit range bindings."],297:["Challenge longs spyod/drink and blta byar gyur pa'i/can see first: lexical consumption is distinguished from the complete relative ability recast.","Three chu klung compounds own three river-of-water occurrences; extra river and sit down are unwrapped. sogs/and the other needs the proposed head allowance; supplied two is excluded."]}
+for s in stats:
+ seq=s['seq'];p=D/str(seq);lines=[f'# C05:{seq} — English-first original proposal by Codex',*descriptions[seq],f"{s['spans']} spans; {s['nulls']} nulls; {s['d5']} d5; {s['d7']} d7; zero proposed errata.","Full source/context equality, master original records/variants and parameterized SQL are in ../evidence/. C15 has exact ACIP/Wylie/English; P7 has exact English with Tibetan spelling/punctuation differences. No publication-independence claim.","The full physical C05 bytes and whitespace-location extents corroborate both source columns; original bytes and GMR wording are unchanged.","Every span's reason and intended occurrence is in intended-ranges.json; canonical-resolved-ranges.json proves those exact ranges. material-omissions.json records all unwrapped intervals and contentious decisions.",f"Final canonical generator: EXIT={s['generator_exit']}; body={s['body']['bytes']} bytes; stderr={s['stderr_bytes']} bytes. Actual stdin/stdout/stderr/exit/command are in canonical-attempt01/.",f"spec SHA-256 {s['spec']['sha256']}; body SHA-256 {s['body']['sha256']}.","Source origin is ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e through288, not a future landing baseline. Mutable governing references use immutable Git objects; live source/generator identities remained unchanged.","Mechanical pass proves source fidelity and intended placement only. This is a provisional proposal, with no independent semantic approval or hgm_gloss promotion."]
+ (p/'report.md').write_text('\n'.join(lines)+'\n')
+save(D/'source-copy-manifest.json',{'historical_git_objects':json.loads((E/'pin-verification.json').read_text())['governing'],'copied_originals':[{'original':base['source_pins']['physical'],'copy':pin(E/'C05ReadingASCII.txt')}],'derived_evidence':'Other evidence files retain complete original rows/records and exact query/ordinal/source-pin information; they are labeled derivations, not byte copies of whole source archives.'})
+for key,p in base['source_pins'].items():assert pin(pathlib.Path(p['path']))==p
+assert pin(W/'tools/gen_alignment_page.py')['sha256']==base['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+save(D/'final-source-identity.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'UNCHANGED_ORIGINAL_SOURCES_AND_GENERATOR','source_pins':base['source_pins'],'generator':pin(W/'tools/gen_alignment_page.py'),'source_origin_commit':base['commit'],'source_origin_boundary':288,'live_builder':pin(W/'tools/build_alignment_layer.py'),'note':'No live registration/ledger/allowance identity requirement; immutable governing snapshots remain the proposal source origin.'})

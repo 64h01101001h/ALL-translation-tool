@@ -1,0 +1,37 @@
+{
+  "recorded_at": "2026-09-12T22:49:12.481275+00:00",
+  "initial_capture": {
+    "argv": [
+      "python3",
+      "-B",
+      "campaign-artifacts/capture_future_source_batch.py",
+      "295",
+      "297",
+      "campaign-artifacts/C05-295-297/preparation-terms.json"
+    ],
+    "observed_tool_exit": 0,
+    "observed_wall_time_seconds": 9.618236167,
+    "note": "Actual observed tool result retained in prior pending record; no separate raw stdout file. Exact helper copied now and checked against original proof hash.",
+    "helper": {
+      "bytes": 5511,
+      "sha256": "259ede33ba954bd0133e9765af48eb03da4f448bac68acdd7a00188c0ee9d285"
+    }
+  },
+  "supplement": {
+    "argv": [
+      "python3",
+      "-B",
+      "campaign-artifacts/C05-295-297/complete-preparation-evidence.py"
+    ],
+    "env": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "observed_tool_exit": 0,
+    "exec_session_id": 19599,
+    "note": "Actual command and complete tool output observed. No separate raw stdout file; exact helper and full structured query output retained.",
+    "helper": {
+      "bytes": 3941,
+      "sha256": "3f5663aaa83b8033de2c7eca829f65ab7a40ea72895bcea48bf32d6d5069087b"
+    }
+  }
+}

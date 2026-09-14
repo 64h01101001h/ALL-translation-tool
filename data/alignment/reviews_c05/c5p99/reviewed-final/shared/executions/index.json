@@ -1,0 +1,52 @@
+{
+  "recorded_utc": "2026-09-14T14:50:30.256420+00:00",
+  "runs": [
+    {
+      "script": "collect.py",
+      "attempt": 1,
+      "exit": 1,
+      "script_snapshot": "collect-attempt01.py",
+      "stdout": "collect.stdout",
+      "stderr": "collect.stderr",
+      "reason": "Incorrect direct indexing of global corpus list; corrected to ordered per-course arrays."
+    },
+    {
+      "script": "collect.py",
+      "attempt": 2,
+      "exit": 0,
+      "stdout": "collect-attempt02.stdout",
+      "stderr": "collect-attempt02.stderr"
+    },
+    {
+      "script": "supplement.py",
+      "attempt": 1,
+      "exit": 1,
+      "script_snapshot": "supplement-attempt01.py",
+      "stdout": "supplement.stdout",
+      "stderr": "supplement.stderr",
+      "reason": "Raw C15 source is not wholly UTF-8. Preserved bytes and used reversible Latin-1 for exact ASCII-field searching; no source change."
+    },
+    {
+      "script": "supplement.py",
+      "attempt": 2,
+      "exit": 0,
+      "stdout": "supplement-attempt02.stdout",
+      "stderr": "supplement-attempt02.stderr"
+    },
+    {
+      "script": "author.py",
+      "attempt": 1,
+      "exit": 0,
+      "stdout": "author.stdout",
+      "stderr": "author.stderr"
+    },
+    {
+      "script": "verify.py",
+      "attempt": 1,
+      "exit": 0,
+      "stdout": "verify-attempt01.stdout",
+      "stderr": "verify-attempt01.stderr",
+      "canonical_calls": 3
+    }
+  ]
+}

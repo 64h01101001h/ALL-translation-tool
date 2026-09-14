@@ -1,0 +1,50 @@
+from pathlib import Path
+import json,sqlite3,gzip,hashlib,re,datetime
+R=Path(__file__).resolve().parents[3];W=R/'campaign-worktree';B=Path(__file__).resolve().parent.parent;O=B/'tibetan';E=O/'evidence';E.mkdir(exist_ok=True)
+def save(p,x): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p): d=p.read_bytes();return {'path':str(p),'bytes':len(d),'sha256':hashlib.sha256(d).hexdigest()}
+base=json.loads((B/'proposal-baseline.json').read_text());pins=[]
+for key,p in base['source_pins'].items():
+ a=pin(Path(p['path']));assert all(a[k]==p[k] for k in ('bytes','sha256'));pins.append({'kind':key,**a})
+for fn in ('source.json','context.json','proposal-baseline.json'): (E/fn).write_bytes((B/fn).read_bytes())
+g=base['governing_git_pins']['tools/gen_alignment_page.py'];assert pin(W/'tools/gen_alignment_page.py')['sha256']==g['sha256']
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;qs=[]
+def query(sql,args):
+ rows=[dict(x) for x in c.execute(sql,args)];qs.append({'sql':sql,'params':args,'count':len(rows),'rows':rows});return rows
+sources=query('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',295,297]);context=query('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',289,303]);
+for ss,rr in [(json.loads((B/'source.json').read_text()),sources),(json.loads((B/'context.json').read_text()),context)]:
+ assert len(ss)==len(rr)
+ for s,r in zip(ss,rr):assert all(r[k]==v for k,v in s.items())
+for s in sources:
+ for field in ('wylie','english','acip'):query(f'SELECT * FROM corpus_segments WHERE {field}=? ORDER BY course,seq',[s[field]])
+terms=['ma khyab','khyab','dang por','yi dvags','chu','mthong','phyogs','longs spyod',"'gro ba","mi 'thad","'thad",'phyis','las','dbang','gram sreg',"'og gzhi",'gram','sreg','tsam','rjes su','rtog pa','rtog','bskams','zhen pa','de bzhin du','ljon shing',"'bras bu",'yal ga','med','mig shes','mig','shes','sgrib byed','sgrib','byed','chu klung','klung','mi','dgos','lta bu','rnam pa','rnam pa gcig','blta bya','longs spyod bya','brlan','gsher ba','phor pa','gang','cig car','rnag khrag','rnag','khrag','sogs','dngos po','grub pa','gsum']
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));records=[]
+for term in terms:
+ db=query('SELECT * FROM entries WHERE wylie=? ORDER BY id',[term]);hits=[]
+ for kind in ('unified_entries','curated_entries','glossary_entries'):
+  for i,rec in enumerate(master[kind]):
+   if rec.get('wylie')==term or term in (rec.get('wylie_variants') or []):hits.append({'section':kind,'ordinal_zero_based':i,'record':rec})
+ records.append({'term':term,'entries_ids':[x['id'] for x in db],'master_matches':hits})
+for term in ['gram sreg',"'og gzhi",'zhen pa','sgrib byed','blta byar','longs spyod byar','ljon shing','yal ga']:
+ query('SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq',['%'+term+'%'])
+save(E/'queries.json',qs);save(E/'master-matches.json',records);save(E/'source-pins.json',pins)
+physical=Path(base['source_pins']['physical']['path']); original=physical.read_bytes();(E/physical.name).write_bytes(original)
+# Preserve raw physical source once; exact field whitespace normalization locates original extents.
+raw=original.decode('utf-8'); flat=[]; positions=[]
+for m in re.finditer(r'\S+',raw):
+ if flat:flat.append(' ');positions.append(m.start())
+ flat.extend(m.group());positions.extend(range(m.start(),m.end()))
+flat=''.join(flat);extents=[]
+for s in sources:
+ for field in ('acip','english'):
+  value=' '.join(s[field].split());needle=value;pos=flat.find(needle)
+  # Spine strips the final Tibetan comma only from Wylie; ACIP should be verbatim modulo whitespace.
+  if pos<0: extents.append({'seq':s['seq'],'field':field,'exact_normalized_match':False,'reason':'No exact full-field whitespace-normalized match; original raw source preserved for direct inspection.'});continue
+  lo=positions[pos];hi=positions[pos+len(needle)-1]+1; chunk=raw[lo:hi]; fp=E/f'physical-{s["seq"]}-{field}.txt';fp.write_text(chunk);extents.append({'seq':s['seq'],'field':field,'exact_normalized_match':True,'source_path':str(physical),'char_range':[lo,hi],'chunk':str(fp),'sha256':hashlib.sha256(fp.read_bytes()).hexdigest(),'normalized_equal': ' '.join(chunk.split())==value})
+save(E/'physical-extents.json',extents)
+print('SOURCES VERIFIED',len(sources),'context',len(context),'source pins',len(pins));print('PARALLELS')
+for q in qs[2:11]:print(q['sql'],[(x['course'],x['seq']) for x in q['rows']])
+print('LEXICAL')
+for rr in records:
+ print(rr['term'],[(x['section'],x['ordinal_zero_based'],x['record'].get('hgm_gloss',x['record'].get('hgm_glosses'))) for x in rr['master_matches']])
+print('PHYSICAL',extents)

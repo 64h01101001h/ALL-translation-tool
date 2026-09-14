@@ -1,0 +1,128 @@
+from pathlib import Path
+import json,hashlib,subprocess,re,difflib,datetime
+O=Path(__file__).resolve().parent; B=O.parent; W=B.parent.parent/'campaign-worktree'
+def read(p): return json.loads(Path(p).read_text())
+def save(n,v):
+ p=O/n;p.parent.mkdir(parents=True,exist_ok=True);assert not p.exists(),p
+ p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def digest(x):return hashlib.sha256(x).hexdigest()
+def git(commit,rel):return subprocess.run(['git','show',commit+':'+rel],cwd=W,capture_output=True,check=True).stdout
+origin=read(B/'proposal-baseline.json')['commit'];base=read(B/'baseline.json')['commit']
+records=read(B/'reconciled/evidence/sql-records.json');queries=read(O/'query-replay.json');screens=read(B/'reconciled/errata-screen.json')
+oldreg=json.loads(git(origin,'docs/errata_register.json'));regbytes=git(base,'docs/errata_register.json');reg=json.loads(regbytes)
+assert len(oldreg)==len(reg)==192
+source={r['seq']:r for r in read(O/'source-context-original-rows.json')}
+screenchecks=[]
+for i,s in enumerate(screens):
+ row=source[s['seq']];g=s['grounds'];quote=g['a_exact_quote']['quoted_found']
+ counts={f:row[f].count(quote) for f in ['wylie','english','acip']}
+ assert counts==g['a_exact_quote']['field_occurrences']==g['e_counts_and_references']['source_quote_counts_rechecked']
+ parallels={}
+ for name in ['C15','P7']:
+  p=g['b_parallel_independence'][name];wr=records[p['record_ref']];fields={}
+  for f,claim in p['fields'].items():
+   a,z=row[f],wr[f];ops=[dict(op=op,C05_range=[x,y],witness_range=[j,k],C05=a[x:y],witness=z[j:k]) for op,x,y,j,k in difflib.SequenceMatcher(None,a,z,autojunk=False).get_opcodes() if op!='equal']
+   assert claim==dict(equal=a==z,C05_length=len(a),witness_length=len(z),differences=ops)
+   fields[f]=claim
+  parallels[name]=dict(record_ref=p['record_ref'],fields=fields,independent_publication='NOT_ESTABLISHED')
+ eqcounts={}
+ for f in ['wylie','english','acip']:
+  candidates=[q for q in queries if q['parameters']==[row[f]] and re.search(r'WHERE\s+'+f+r'\s*=\s*\?',q['sql'],re.I)]
+  assert candidates,(s['seq'],f)
+  assert all(q['exact_full_rows'] for q in candidates)
+  assert len(set(q['count'] for q in candidates))==1
+  eqcounts[f]=candidates[0]['count']
+ assert eqcounts==g['e_counts_and_references']['spine_equality_query_counts']
+ dup=[r['item_id'] for r in reg if r.get('segment')=='C05:'+str(s['seq'])]
+ assert dup==[];assert g['c_registered_class_or_duplicate']['english_length']==len(row['english'])
+ assert not any(x in row['acip'] for x in '{}');assert len(row['english'])!=1500
+ assert not re.search(r'[.!?]\d{1,3}(?: |$)|[a-zA-Z]\d+\b',row['english'])
+ lexical_counts=({"mthong":row['wylie'].count('mthong'),"dang por":row['wylie'].count('dang por')} if s['seq']==295 else {"ma mthong":row['wylie'].count('ma mthong')} if s['seq']==296 else {"chu klung":row['wylie'].count('chu klung'),"river words":len(re.findall(r'\briver\b',row['english'])),"river of water":row['english'].count('river of water')})
+ assert lexical_counts==({"mthong":7,"dang por":3} if s['seq']==295 else {"ma mthong":2} if s['seq']==296 else {"chu klung":3,"river words":4,"river of water":3})
+ rationale=("The local YI DVAGS is an attested HGM head for craving spirit; P7 DWAGS is a different spelling, not evidence requiring correction of this ACIP original." if i<3 else
+  "The conditional initial absence, actual earlier sight, karmically caused later nonseeing, and subsequent judgment are distinct stages. The argument from 294 through 298 supports the sequence. No contradictory source assertion requires repair." if i==3 else
+  "An obstacle causing nonseeing is naturally expressed as preventing someone from seeing. Both complete MA MTHONG constructions and their English are present. The alignment's conservative omission of distributed grammar supplies no translation-omission claim." if i==4 else
+  "The fourth English river is an explanatory recap; sit down expands the scene of together-looking; two names the remainder after one of three objects. The Tibetan closing sogs supports and the other, not a new numeral atom. These are defensible GMR expansions.")
+ screenchecks.append(dict(index=i,seq=s['seq'],candidate=s['candidate'],verdict='REFUTED',retained_erratum=False,grounds={
+  'a_exact_quote':dict(quote=quote,source_record=g['a_exact_quote']['source_record_ref'],field_counts=counts,physical_proof='physical-source-checks.json: complete C05 and C15 ACIP/English fields each occur exactly once after whitespace normalization; raw full files preserved'),
+  'b_parallel_independence':parallels,
+  'c_registered_class_or_duplicate':dict(source_origin=origin,current_baseline=base,source_origin_records=len(oldreg),current_records=len(reg),duplicate_segment_ids=dup,classes=['E-044 converter braces','E-071 apparatus','E-076/E-121 footnote fusion','folio splice','following-heading glue','E-111 row boundary','E-107 English cap'],signature_present=False,judgment='Full local prose and neighboring boundaries show no heading, folio, escaped Sanskrit, fused note, or stranded continuation. Physical source contains the complete same fields.'),
+  'd_defensible_reading_or_wrong_correction':dict(refuted=True,reason=rationale),
+  'e_counts_and_references':dict(quote_counts=counts,equality_query_counts=eqcounts,local_counts=lexical_counts,query_proof='query-replay.json: 180 distinct replayed sets; 178 original query occurrences plus 13 supplements, 167 deduplicated original sets',count_scope='digital records and literal occurrences, not publications',archive_proof='archive-identity-check.json',retained_errata=0)}))
+save('errata-refutations.json',screenchecks)
+save('register-check.json',dict(source_origin=origin,current_baseline=base,source_origin_count=len(oldreg),current_count=len(reg),current_sha256=digest(regbytes),register_bytes_equal_across_origins=git(origin,'docs/errata_register.json')==regbytes,examined_classes=[r for r in reg if r['item_id'] in ['E-044','E-071','E-076','E-121','E-111','E-107']],batch_duplicate_entries=[]))
+# Validate each proposal's and the reconciler's immutable final boundary.
+inputfreezes=[]
+for role,name in [('tibetan','freeze.json'),('english','freeze-manifest.json'),('reconciled','freeze.json')]:
+ frozen=read(B/role/name)
+ for f in frozen['files']:
+  raw=(B/role/f['path']).read_bytes();assert len(raw)==f['bytes'] and digest(raw)==f['sha256'],(role,f['path'])
+ inputfreezes.append(dict(role=role,path=str(B/role/name),files_verified=len(frozen['files']),sha256=digest((B/role/name).read_bytes())))
+save('input-freeze-validation.json',inputfreezes)
+# Byte-identical core history and full semantic history diffs are explicit reuse references.
+reuse=[];diffs=[]
+for seq in [295,296,297]:
+ for p in (B/f'tibetan/{seq}/attempts').rglob('spec.json'):
+  q=B/f'tibetan/{seq}/spec.json';assert p.read_bytes()==q.read_bytes();reuse.append(dict(original=str(p),read_once_reference=str(q),sha256=digest(p.read_bytes())))
+for p in (B/'reconciled/history/baseline-arrival').iterdir():
+ q=B/'reconciled'/('evidence/README.md' if p.name=='evidence-README.md' else p.name[:3]+'/report.md' if p.name.endswith('-report.md') else p.name)
+ diffs.append(''.join(difflib.unified_diff(p.read_text().splitlines(True),q.read_text().splitlines(True),fromfile=str(p),tofile=str(q))))
+(O/'historical-final-differences.txt').write_text('\n'.join(diffs))
+save('verified-reading-reuse.json',reuse)
+# Preserve every batch original, including failed attempts and histories. Only source/evidence duplicates are content-addressed.
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+helper=(B.parent/'land_reviewed_page.py').read_text()
+assert all('"'+e+'"' in helper for e in allowed)
+pins={}
+for pin in read(B/'tibetan/evidence/governing-pins.json')+read(B/'english/source-copy-manifest.json')['historical_git_objects']:
+ pins[str(Path(pin['copy']).resolve())]=(pin['original_git_commit'],pin['repository_relative_path'])
+for p in (B/'reconciled/evidence/governing').rglob('*'):
+ if p.is_file(): pins[str(p.resolve())]=(origin,str(p.relative_to(B/'reconciled/evidence/governing')))
+manifest=[];seen={}
+def copy(p,target=None,pin=None):
+ p=Path(p).resolve();raw=p.read_bytes();h=digest(raw)
+ if pin:assert raw==git(*pin),(p,pin)
+ if target is None:
+  ext=p.suffix.lower() if p.suffix.lower() in allowed else '.txt';target=Path('proposal-inputs/evidence')/(h+ext)
+ if target.suffix.lower() not in allowed:target=Path(str(target)+'.txt')
+ dest=O/target;dest.parent.mkdir(parents=True,exist_ok=True)
+ if dest.exists():assert dest.read_bytes()==raw,dest
+ else:dest.write_bytes(raw)
+ rec=dict(original=str(p),copy=str(target),sha256=h,bytes=len(raw))
+ if pin:rec.update(original_git_commit=pin[0],repository_relative_path=pin[1])
+ manifest.append(rec)
+for p in sorted(B.rglob('*')):
+ if not p.is_file() or O in p.parents or '__pycache__' in p.parts:continue
+ rel=p.relative_to(B);parts=rel.parts;target=None
+ if parts[0] in ['english','tibetan'] and 'evidence' not in parts:
+  target=Path('proposal-inputs')/rel
+ elif parts[0]=='reconciled' and parts[1] in ['295','296','297']:
+  target=Path('reviewed-final')/Path(*parts[1:])
+ elif parts[0]=='reconciled' and 'evidence' not in parts:
+  target=Path('reviewed-final/shared')/Path(*parts[1:])
+ elif len(parts)==1 or parts[0].startswith('root') or parts[0].endswith('caller') or parts[0]=='origin-reporting-correction':
+  target=Path('proposal-inputs/root')/rel
+ copy(p,target,pins.get(str(p.resolve())))
+for name in ['semantic-review-protocol.md','proposal-protocol.md','lossless-review-archive-protocol.md','land_reviewed_page.py','copy_evidence_once.py']:
+ copy(B.parent/name,Path('protocols')/name)
+for pin in read(B/'tibetan/evidence/governing-pins.json'):
+ rel=pin['repository_relative_path'];raw=git(base,rel);target=Path('governing-current')/rel
+ if target.suffix.lower() not in allowed:target=Path(str(target)+'.txt')
+ (O/target).parent.mkdir(parents=True,exist_ok=True);(O/target).write_bytes(raw)
+ manifest.append(dict(original=str((W/rel).resolve()),copy=str(target),sha256=digest(raw),bytes=len(raw),original_git_commit=base,repository_relative_path=rel))
+for rel in ['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ raw=git(base,rel);target=Path('governing-current')/rel;(O/target).parent.mkdir(parents=True,exist_ok=True);(O/target).write_bytes(raw)
+ manifest.append(dict(original=str((W/rel).resolve()),copy=str(target),sha256=digest(raw),bytes=len(raw),original_git_commit=base,repository_relative_path=rel))
+for path in sorted(set(p['source_path'] for p in read(O/'physical-source-checks.json'))):copy(path)
+save('original-to-copy-manifest.json',manifest)
+copyproof=[]
+for m in manifest:
+ raw=(O/m['copy']).read_bytes();expected=git(m['original_git_commit'],m['repository_relative_path']) if 'original_git_commit' in m else Path(m['original']).read_bytes()
+ assert raw==expected and len(raw)==m['bytes'] and digest(raw)==m['sha256'] and (O/m['copy']).suffix.lower() in allowed,m
+ copyproof.append(dict(original=m['original'],copy=m['copy'],verified=True,identity='immutable Git object' if 'original_git_commit' in m else 'original bytes'))
+save('all-copy-validation.json',dict(verdict='PASS',manifest_records=len(manifest),distinct_copy_paths=len(set(m['copy'] for m in manifest)),allowed_extensions=sorted(allowed),unsupported_manifest_targets=[],checks=copyproof))
+segments=read(O/'segment-verification.json')
+save('review.json',dict(verdict='APPROVE',open_findings=[],segments=segments,total_spans=sum(s['span_count'] for s in segments),total_nulls=sum(s['null_count'] for s in segments),total_word_pairs=sum(s['word_pair_count'] for s in segments)))
+save('bank-ready-errata.json',[])
+save('span-head-allow-needed.json',{'pages_c05':{'c5p99/s297w43':'sogs at C05:297 Wylie [308,312) is the Tibetan enumerative closing gesture. HTG2016 sogs explicitly attests "and the other"; here it closes the three-object list after rnag khrag. English [516,529) "and the other" is licensed at lexical d5; the explanatory numeral "two" [530,533) is excluded.'}})
+print(json.dumps(dict(status='PACKAGED',manifest_records=len(manifest),distinct_copies=len(set(m['copy'] for m in manifest)),input_freezes=inputfreezes,review=read(O/'review.json')),indent=2))

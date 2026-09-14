@@ -1,0 +1,37 @@
+from pathlib import Path
+import subprocess,json,hashlib,datetime,sys,sqlite3,importlib.util,html
+from html.parser import HTMLParser
+O=Path(__file__).resolve().parent;W=O.parents[2]/'campaign-worktree';seqs=[int(x) for x in sys.argv[1:]] or [295,296,297]
+base=json.loads((O/'evidence/proposal-baseline.json').read_text());gen=W/'tools/gen_alignment_page.py';assert hashlib.sha256(gen.read_bytes()).hexdigest()==base['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+specmod=importlib.util.spec_from_file_location('canonical_gen_for_range_verification',gen);M=importlib.util.module_from_spec(specmod);specmod.loader.exec_module(M)
+class Plain(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.parts={'tib':[],'eng':[]};self.side=None;self.divdepth=0;self.lab=False
+ def handle_starttag(self,t,attrs):
+  a=dict(attrs)
+  if t=='div':
+   if a.get('class') in ['tib','eng']:self.side=a['class'];self.divdepth=1
+   elif self.side:self.divdepth+=1
+   if a.get('class')=='lab':self.lab=True
+ def handle_endtag(self,t):
+  if t=='div' and self.side:
+   self.divdepth-=1
+   if self.lab:self.lab=False
+   if self.divdepth==0:self.side=None
+ def handle_data(self,data):
+  if self.side and not self.lab:self.parts[self.side].append(data)
+results=[]
+for seq in seqs:
+ D=O/str(seq);attempts=D/'attempts';attempts.mkdir(exist_ok=True);i=len(list(attempts.iterdir()));A=attempts/f'{i:03}';A.mkdir();inp=(D/'spec.json').read_bytes();(A/'spec.json').write_bytes(inp);start=datetime.datetime.now(datetime.timezone.utc).isoformat();argv=['python3','-B',str(O/'run_canonical_readonly.py')]
+ r=subprocess.run(argv,input=inp,capture_output=True,cwd=W);(A/'stdout.bin').write_bytes(r.stdout);(A/'stderr.bin').write_bytes(r.stderr);(A/'exit.txt').write_text(str(r.returncode)+'\n');meta={'argv':argv,'canonical_generator':str(gen),'cwd':str(W),'input_sha256':hashlib.sha256(inp).hexdigest(),'start_utc':start,'end_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':r.returncode,'stdout_bytes':len(r.stdout),'stdout_sha256':hashlib.sha256(r.stdout).hexdigest(),'stderr_bytes':len(r.stderr),'readonly_sqlite':True,'bytecode_disabled':True,'generator_sha256':hashlib.sha256(gen.read_bytes()).hexdigest()};(A/'execution.json').write_text(json.dumps(meta,indent=2)+'\n')
+ print(seq,'EXIT',r.returncode,'bytes',len(r.stdout),'stderr',r.stderr.decode())
+ if r.returncode!=0 or r.stderr:continue
+ (D/'body.html').write_bytes(r.stdout);j=json.loads(inp);s=j['segments'][0];src=next(x for x in json.loads((O/'evidence/source.json').read_text()) if x['seq']==seq);sp=s['spans'];tr=M.resolve(src['wylie'],sp,'tib',seq);by={x['id']:x for x in sp};es=M.with_members(sp,[by[x] for x in s['eng_order']],src['english']);er=M.resolve(src['english'],es,'eng',seq);intended=json.loads((D/'intended-ranges.json').read_text());actual=[]
+ for x in intended:
+  tid=x['id'];assert list(tr[tid])==x['tib_range'];assert (list(er[tid]) if tid in er else None)==x['eng_range'],(seq,tid,er.get(tid),x['eng_range']);actual.append({k:x[k] for k in ['id','d','tib','eng','tib_range','eng_range']})
+ # Strip null marker payloads before independently recovering source text.
+ import re
+ cleaned=re.sub(r'<span class="nul">[^<]*</span>','',r.stdout.decode());p=Plain();p.feed(cleaned)
+ for side,field in [('tib','wylie'),('eng','english')]:assert ''.join(p.parts[side]).strip('\n')==src[field],(seq,side,''.join(p.parts[side]),src[field])
+ proof={**meta,'status':'PASS: native canonical exit0/empty stderr; every intended range equals canonical resolution; full unwrapped source fields exact','span_count':len(sp),'nulls':sum(x['eng'] is None for x in sp),'d5':sum(x['d']==5 for x in sp),'nonnull_d5':sum(x['d']==5 and x['eng'] is not None for x in sp),'d7':sum(x['d']==7 for x in sp),'spec_bytes':len(inp),'spec_sha256':hashlib.sha256(inp).hexdigest(),'body_bytes':len(r.stdout),'body_sha256':hashlib.sha256(r.stdout).hexdigest(),'attempt':str(A),'resolved_spans':actual}
+ (D/'verification.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n');results.append({k:v for k,v in proof.items() if k!='resolved_spans'})
+(O/'verification-summary.json').write_text(json.dumps(results,ensure_ascii=False,indent=2)+'\n');assert len(results)==len(seqs)

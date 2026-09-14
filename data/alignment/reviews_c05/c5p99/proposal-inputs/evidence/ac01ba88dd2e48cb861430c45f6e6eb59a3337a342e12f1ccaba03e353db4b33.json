@@ -1,0 +1,71 @@
+{
+  "recorded_utc": "2026-09-14T14:51:37.395080+00:00",
+  "actual_baseline": {
+    "commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+    "course_boundary": 294,
+    "data_commit": "ed8335e83520a81758b7d2b4a61848e4deaf1d71",
+    "manifest": "evidence/actual-through294-baseline.json",
+    "manifest_sha256": "a1fe11ea736d45b52ac91222fd8fbd07dceed05633b0a415d4302f9b3beacd24",
+    "status": "ACCEPTANCE_BASELINE_ONLY; does not accept this reconciliation"
+  },
+  "checks": [
+    {
+      "path": "data/hgm_dictionary_v27_2.json.gz",
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+      "bytes": 13393560,
+      "method": "live immutable source file"
+    },
+    {
+      "path": "data/full_parallel_corpus_v32.json.gz",
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8",
+      "bytes": 8965675,
+      "method": "live immutable source file"
+    },
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "sha256": "ba33da062fbc432f98574e9eaf1111ea8cfa8b42b34bfc27ab7e2ec98d5eb50e",
+      "bytes": 10066032,
+      "method": "immutable Git object at actual through294 baseline"
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "sha256": "3b3e4f02413b02fb886f4ccbe7e009bb4b77d2ef7cd0ba97183175d5c5b6b35b",
+      "bytes": 2217317,
+      "method": "immutable Git object at actual through294 baseline"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "sha256": "e43b8c8b460a8a0a05e8a69e8274e87cdc04a3c085ab3cb18acd1f1f3d5795a3",
+      "bytes": 2216628,
+      "method": "immutable Git object at actual through294 baseline"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "sha256": "555b4de7c470b843fa4b7d30b54cd413b86046482ebb05fcd324377dc8452156",
+      "bytes": 16344258,
+      "method": "immutable Git object at actual through294 baseline"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "sha256": "c35231ee733914035388c2e58e900492154ca56f574d44e557364e2c484b5212",
+      "bytes": 5277318,
+      "method": "immutable Git object at actual through294 baseline"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "sha256": "565ad2e99ee8b38e40fa4728bcfce42152ce4c8fd01ff232acfd8d8d121e4410",
+      "bytes": 5205391,
+      "method": "immutable Git object at actual through294 baseline"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "sha256": "67893455cdaaaf357a6b2449cd3af76d2dde1a877bf2cd88ddfe81163fde3df3",
+      "bytes": 8937,
+      "method": "immutable Git object at actual through294 baseline"
+    }
+  ],
+  "all_match": true,
+  "generated_output_count": 7,
+  "source_file_count": 2,
+  "canonical_specs_or_notes_changed": false
+}

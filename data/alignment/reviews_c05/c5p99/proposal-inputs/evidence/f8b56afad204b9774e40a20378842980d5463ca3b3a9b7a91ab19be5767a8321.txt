@@ -1,0 +1,136 @@
+"""Reproduce all seven outputs once from minimal exact inputs; never mutate W.
+
+Usage: python3 -B reproduce_generated_outputs.py FIRST LAST FRESH_DESTINATION
+Semantic approval and production builders must already have completed. Existing
+retention checks remain separate. Preserve this destination, including failures.
+"""
+from pathlib import Path
+import datetime
+import hashlib
+import importlib.util
+import json
+import os
+import shutil
+import subprocess
+import sys
+import traceback
+
+sys.dont_write_bytecode = True
+os.environ.update(PYTHONDONTWRITEBYTECODE='1', GIT_OPTIONAL_LOCKS='0')
+artifacts = Path(__file__).resolve().parent
+worktree = artifacts.parent / 'campaign-worktree'
+first, last = map(int, sys.argv[1:3])
+assert last == first + 2
+batch = artifacts / f'C05-{first}-{last}'
+destination = Path(sys.argv[3]).resolve()
+assert not destination.is_relative_to(worktree) and not destination.exists()
+destination.mkdir(parents=True)
+workspace = destination / 'workspace'
+workspace.mkdir()
+inputs = []
+proof = {'status': 'RUNNING', 'segments': list(range(first, last + 1)), 'runs': []}
+
+
+def pin(path):
+    raw = path.read_bytes()
+    return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+
+def save(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+
+def copy(source, relative, role):
+    target = destination / relative
+    assert not target.exists()
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, target)
+    assert source.read_bytes() == target.read_bytes()
+    inputs.append({'original': str(source), 'copy': str(relative), 'role': role, **pin(target)})
+    return target
+
+
+try:
+    baseline = json.loads((batch / 'baseline.json').read_bytes())
+    head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=worktree).decode().strip()
+    assert head == baseline['commit']
+    # Acceptance is required; hashes are rechecked by the landing verification.
+    review = json.loads((batch / 'semantic-review/review.json').read_bytes())
+    assert review['verdict'] == 'APPROVE' and review['open_findings'] == []
+    builds = batch / 'landing/canonical-builds-once.json'
+    assert builds.is_file()
+    build_record = json.loads(builds.read_bytes())
+    assert build_record['status'] == 'PASS' and len(build_record['runs']) == 2
+    assert all(run['exit'] == 0 for run in build_record['runs'])
+    assert build_record['baseline_commit'] == head
+    copy(builds, Path('evidence/canonical-builds-once.json'), 'actual production execution proof')
+    copy(batch / 'landing/retention-source-check.json', Path('evidence/retention-source-check.json'), 'actual production retention proof')
+    for filename in ('reproduce_generated_outputs.py', 'run_reproduction_readonly.py'):
+        copy(artifacts / filename, Path('method') / (filename + '.txt'), 'executed verification method')
+    for relative in ['tools/build_alignment_layer.py', 'tools/build_dictionary_view.py',
+                     'tools/build_dictionary_exports.py', 'tools/dictionary_view_shell.html'] + [str(p.relative_to(worktree)) for p in sorted((worktree / 'engines').glob('*.py'))]:
+        copy(worktree / relative, Path('workspace') / relative, 'unchanged canonical source')
+    module_spec = importlib.util.spec_from_file_location('reproduction_layer', workspace / 'tools/build_alignment_layer.py')
+    layer = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(layer)
+    registered = []
+    for course, config in sorted(layer.COURSES.items()):
+        for page, sequences in sorted(config['pages'].items()):
+            relative = (Path(config['dir']) / (page + '.html')).relative_to(workspace)
+            copy(worktree / relative, Path('workspace') / relative, 'registered page consumed by layer')
+            registered.append({'course': course, 'page': page, 'sequences': sequences, 'path': str(relative)})
+    assert sorted(n for p in registered if p['course'] == 'C05' for n in p['sequences']) == list(range(1, last + 1))
+    copy(worktree / 'build/hgm_spine_v27_2.db', Path('workspace/build/hgm_spine_v27_2.db'), 'complete source spine')
+    output_paths = ['data/alignment/alignment_full_v1.json', 'data/alignment/alignment_evidence_v1.json'] + [
+        'docs/geshe_michael_roach_dictionary' + suffix for suffix in ('.html', '.csv', '_reverse.csv', '_by_course.csv', '_changes.csv')]
+    for relative in output_paths:
+        assert pin(worktree / relative)['sha256'] == build_record['output_sha256'][relative]
+        copy(worktree / relative, Path('expected') / relative, 'complete frozen production output')
+    seed = copy(batch / 'landing/previous-main-csv-seed.bin', Path('seed/previous-main-csv-seed.bin'), 'actual incoming production seed')
+    previous = subprocess.check_output(['git', 'show', head + ':docs/geshe_michael_roach_dictionary.csv'], cwd=worktree)
+    assert seed.read_bytes() == previous
+    csv_target = workspace / 'docs/geshe_michael_roach_dictionary.csv'
+    csv_target.parent.mkdir(parents=True)
+    shutil.copyfile(seed, csv_target)
+    producer_date = json.loads((destination / 'expected/data/alignment/alignment_evidence_v1.json').read_bytes())['meta']['date']
+    datetime.date.fromisoformat(producer_date)
+    save(destination / 'input-manifest.json', inputs)
+    save(destination / 'registered-pages.json', registered)
+    proof.update(baseline_commit=head, source_date=producer_date, registered_pages=len(registered), seed=pin(seed))
+    guard = destination / 'method/run_reproduction_readonly.py.txt'
+    for name, tool in [('layer', 'tools/build_alignment_layer.py'), ('view', 'tools/build_dictionary_view.py')]:
+        run = destination / 'executions' / name
+        run.mkdir(parents=True)
+        if name == 'view':
+            assert csv_target.read_bytes() == seed.read_bytes()
+        argv = [sys.executable, '-B', str(guard), str(workspace), tool, producer_date, str(run / 'guards.json')]
+        record = {'argv': argv, 'cwd': str(workspace), 'start': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                  'environment_overrides': {'PYTHONDONTWRITEBYTECODE': '1', 'GIT_OPTIONAL_LOCKS': '0'}, 'stdin_bytes': 0}
+        save(run / 'command.json', record)
+        (run / 'stdin.bin').write_bytes(b'')
+        result = subprocess.run(argv, cwd=workspace, input=b'', capture_output=True, env=os.environ.copy())
+        (run / 'stdout.bin').write_bytes(result.stdout)
+        (run / 'stderr.bin').write_bytes(result.stderr)
+        (run / 'exit.txt').write_text(str(result.returncode) + '\n')
+        record.update(exit=result.returncode, end=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                      stdout=pin(run / 'stdout.bin'), stderr=pin(run / 'stderr.bin'))
+        save(run / 'execution.json', record)
+        proof['runs'].append(record)
+        assert result.returncode == 0, (name, result.stderr.decode(errors='replace'))
+        print(name, 'EXIT', result.returncode, flush=True)
+    outputs = []
+    for relative in output_paths:
+        assert (workspace / relative).read_bytes() == (destination / 'expected' / relative).read_bytes() == (worktree / relative).read_bytes(), relative
+        outputs.append({'path': relative, **pin(workspace / relative), 'complete_bytes_equal': True})
+    for item in inputs:
+        assert pin(destination / item['copy']) == pin(Path(item['original'])) == {key: item[key] for key in ('bytes', 'sha256')}, item
+    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=worktree).decode().strip() == head
+    proof.update(status='PASS', outputs=outputs, all_original_inputs_unchanged=True, layer_invocations=1, view_invocations=1,
+                 scope='Independent exact seven-output reproduction from minimal copied inputs. No semantic, MAIN, native or device approval inferred.')
+except BaseException:
+    proof.update(status='FAILED', failure=traceback.format_exc())
+    raise
+finally:
+    save(destination / 'proof.json', proof)
+print(json.dumps({'status': proof['status'], 'outputs': len(proof.get('outputs', [])), 'proof': str(destination / 'proof.json')}, indent=2))

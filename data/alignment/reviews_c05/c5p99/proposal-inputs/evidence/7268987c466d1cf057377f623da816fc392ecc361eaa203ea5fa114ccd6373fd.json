@@ -1,0 +1,150 @@
+[
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "ma mthong"
+    ],
+    "count": 1,
+    "row_refs": [
+      "entries:13780"
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "mi 'thad pa"
+    ],
+    "count": 1,
+    "row_refs": [
+      "entries:24556"
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "'bras bu med pa"
+    ],
+    "count": 1,
+    "row_refs": [
+      "entries:13452"
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "ma bskams"
+    ],
+    "count": 1,
+    "row_refs": [
+      "entries:24403"
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "gram sreg"
+    ],
+    "count": 0,
+    "row_refs": []
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "las kyi dbang"
+    ],
+    "count": 1,
+    "row_refs": [
+      "entries:62537"
+    ]
+  },
+  {
+    "sql": "SELECT * FROM entries WHERE wylie=? ORDER BY id",
+    "parameters": [
+      "mi'i"
+    ],
+    "count": 1,
+    "row_refs": [
+      "entries:24635"
+    ]
+  },
+  {
+    "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%bare, parched earth%"
+    ],
+    "count": 3,
+    "row_refs": [
+      "corpus_segments:1677",
+      "corpus_segments:5991",
+      "corpus_segments:34925"
+    ],
+    "C16_P1_TCS_matches": []
+  },
+  {
+    "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%dry, parched riverbed%"
+    ],
+    "count": 3,
+    "row_refs": [
+      "corpus_segments:1678",
+      "corpus_segments:5992",
+      "corpus_segments:34926"
+    ],
+    "C16_P1_TCS_matches": []
+  },
+  {
+    "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%can drink from%"
+    ],
+    "count": 3,
+    "row_refs": [
+      "corpus_segments:1679",
+      "corpus_segments:5993",
+      "corpus_segments:34927"
+    ],
+    "C16_P1_TCS_matches": []
+  },
+  {
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%gram sreg%"
+    ],
+    "count": 6,
+    "row_refs": [
+      "corpus_segments:1677",
+      "corpus_segments:1678",
+      "corpus_segments:5991",
+      "corpus_segments:5992",
+      "corpus_segments:34925",
+      "corpus_segments:34926"
+    ],
+    "C16_P1_TCS_matches": []
+  },
+  {
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%longs spyod byar%"
+    ],
+    "count": 3,
+    "row_refs": [
+      "corpus_segments:1679",
+      "corpus_segments:5993",
+      "corpus_segments:34927"
+    ],
+    "C16_P1_TCS_matches": []
+  },
+  {
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%rtog pas chu bskams%"
+    ],
+    "count": 2,
+    "row_refs": [
+      "corpus_segments:1677",
+      "corpus_segments:5991"
+    ],
+    "C16_P1_TCS_matches": []
+  }
+]

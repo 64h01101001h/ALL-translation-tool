@@ -1,0 +1,38 @@
+import pathlib,json,os,subprocess,sys,hashlib,datetime,importlib.util,html.parser
+R=pathlib.Path(__file__).resolve().parent;B=R.parent;W=B.parent.parent/'campaign-worktree';E=R/'evidence';base=json.loads((B/'proposal-baseline.json').read_text());rows={r['seq']:r for r in json.loads((E/'source-context.json').read_text())}
+def pin(p):b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(p,o):p.write_text(json.dumps(o,indent=2,ensure_ascii=False)+'\n')
+g=W/'tools/gen_alignment_page.py';assert pin(g)['sha256']==base['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+sys.path.insert(0,str(W/'tools'));m=importlib.util.spec_from_file_location('canonical_reconcile',g);G=importlib.util.module_from_spec(m);m.loader.exec_module(G)
+summary=[]
+for seq in [295,296,297]:
+ p=R/str(seq);d=p/'executions';d.mkdir(exist_ok=True);n=1
+ while (d/f'canonical-{n:02d}').exists():n+=1
+ a=d/f'canonical-{n:02d}';a.mkdir();stdin=(p/'spec.json').read_bytes();(a/'stdin.json').write_bytes(stdin);before={'generator':pin(g),'runtime_builder':pin(W/'tools/build_alignment_layer.py'),'spine':pin(pathlib.Path(base['source_pins']['spine']['path']))}
+ cmd=[sys.executable,'-B',str(R/'run-canonical.py')];started=datetime.datetime.now(datetime.timezone.utc).isoformat();run=subprocess.run(cmd,input=stdin,capture_output=True,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'));ended=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ for name,b in [('stdout.bin',run.stdout),('stderr.bin',run.stderr),('exit.txt',(str(run.returncode)+'\n').encode())]:(a/name).write_bytes(b)
+ after={'generator':pin(g),'runtime_builder':pin(W/'tools/build_alignment_layer.py'),'spine':pin(pathlib.Path(base['source_pins']['spine']['path']))};write(a/'execution.json',{'argv':cmd,'cwd':str(W),'utc_start':started,'utc_end':ended,'exit':run.returncode,'stdin':pin(a/'stdin.json'),'stdout':pin(a/'stdout.bin'),'stderr':pin(a/'stderr.bin'),'before':before,'after':after,'runtime_unchanged_during_call':before==after,'runtime_builder_role':'canonical generator imports this file for SPINE only; current bytes recorded independently of historical governing object','sqlite':'mode=ro','bytecode_disabled':True,'source_origin_commit':base['commit'],'future_acceptance_baseline':None})
+ assert run.returncode==0 and run.stderr==b'',(seq,run.returncode,run.stderr.decode());assert before==after
+ (p/'body.html').write_bytes(run.stdout);s=json.loads(stdin)['segments'][0];sp=s['spans'];ints=json.loads((p/'intended-ranges.json').read_text());by={x['id']:x for x in sp};tr=G.resolve(rows[seq]['wylie'],sp,'tib',seq);er=G.resolve(rows[seq]['english'],G.with_members(sp,[by[i] for i in s['eng_order']],rows[seq]['english']),'eng',seq)
+ actual=[]
+ for i,x in zip(ints,sp):
+  f={**x,'tib_range':list(tr[x['id']]),'eng_range':list(er[x['id']]) if x['eng'] is not None else None,'nullable_classification':i['nullable_classification']};assert all(f[k]==i[k] for k in ['id','d','tib','eng','tib_range','eng_range','nullable_classification']),(seq,i,f);actual.append(f)
+ write(p/'canonical-resolved-ranges.json',actual)
+ class P(html.parser.HTMLParser):
+  def __init__(self):super().__init__();self.depth=0;self.side=0;self.text=['',''];self.null=0
+  def handle_starttag(self,t,attrs):
+   at=dict(attrs)
+   if t=='span' and at.get('data-l')=='s'+str(seq)+'S':self.depth=1
+   elif self.depth and t=='span':
+    self.depth+=1
+    if 'nul' in at.get('class','').split():self.null=self.depth
+  def handle_endtag(self,t):
+   if self.depth and t=='span':
+    if self.null==self.depth:self.null=0
+    self.depth-=1
+    if self.depth==0:self.side+=1
+  def handle_data(self,t):
+   if self.depth and not self.null:self.text[self.side]+=t
+ parser=P();parser.feed(run.stdout.decode());assert parser.text==[rows[seq]['wylie'],rows[seq]['english']],(seq,parser.text)
+ stats={'seq':seq,'status':'CANONICAL_FIDELITY_PASS_NOT_SEMANTIC_APPROVAL','generator_exit':run.returncode,'stderr_bytes':len(run.stderr),'spans':len(sp),'nulls':sum(x['eng'] is None for x in sp),'d5':sum(x['d']==5 for x in sp),'d7':sum(x['d']==7 for x in sp),'errata':0,'spec':pin(p/'spec.json'),'body':pin(p/'body.html'),'all_intended_ranges_verified':True,'complete_source_columns_verbatim':True,'native_execution':str(a/'execution.json')};write(p/'verification.json',stats);summary.append(stats)
+write(R/'verification-summary.json',summary);print(json.dumps(summary,indent=2))

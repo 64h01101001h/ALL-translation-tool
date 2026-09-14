@@ -1,0 +1,80 @@
+{
+  "status": "PASS_RECONCILIATION_PACKET_INTEGRITY_NOT_SEMANTIC_ACCEPTANCE",
+  "utc": "2026-09-14T14:52:38.820662+00:00",
+  "original_decisions": 259,
+  "final_tuples": 134,
+  "counts": {
+    "spans": 134,
+    "nulls": 2,
+    "d5": 82,
+    "d7": 16,
+    "errata": 0,
+    "original_retained": 238,
+    "original_recast_or_tightened": 20,
+    "original_omitted_uncertain": 1
+  },
+  "final_generator_calls": 3,
+  "all_generator_exits": 0,
+  "all_intended_ranges_verified": true,
+  "all_source_columns_verbatim": true,
+  "source_checks": [
+    {
+      "kind": "spine",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+      "bytes": 249167872,
+      "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc"
+    },
+    {
+      "kind": "master",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/hgm_dictionary_v27_2.json.gz",
+      "bytes": 13393560,
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253"
+    },
+    {
+      "kind": "corpus",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/full_parallel_corpus_v32.json.gz",
+      "bytes": 8965675,
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+    },
+    {
+      "kind": "source",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-295-297/source.json",
+      "bytes": 4186,
+      "sha256": "422ebcbbb165c4c4147141c257db4de72dfb63f02cf1caade19655a6f9e44fc6"
+    },
+    {
+      "kind": "context",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-295-297/context.json",
+      "bytes": 21827,
+      "sha256": "6ee9e36c4d39464929fc16174763f4c195ca6459ad1278290909bcbb2abe9e78"
+    },
+    {
+      "kind": "physical",
+      "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    }
+  ],
+  "source_origin_commit": "ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e",
+  "source_origin_boundary": 288,
+  "actual_acceptance_baseline": {
+    "commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+    "course_boundary": 294,
+    "data_commit": "ed8335e83520a81758b7d2b4a61848e4deaf1d71",
+    "manifest": "evidence/actual-through294-baseline.json",
+    "manifest_sha256": "a1fe11ea736d45b52ac91222fd8fbd07dceed05633b0a415d4302f9b3beacd24",
+    "status": "ACCEPTANCE_BASELINE_ONLY; does not accept this reconciliation"
+  },
+  "worktree_mutation_hold": false,
+  "source_or_worktree_writes": false,
+  "head_allowance_count": 1,
+  "complete_original_files_verified": 209,
+  "original_canonical_outputs_reused": 6,
+  "original_queries_replayed": 178,
+  "unique_original_queries": 167,
+  "supplementary_queries": 13,
+  "master_records": 312,
+  "unique_sql_records": 757,
+  "failed_collection_attempts_preserved": 2,
+  "publication_independence_established": false
+}

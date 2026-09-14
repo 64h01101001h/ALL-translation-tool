@@ -1,0 +1,72 @@
+from pathlib import Path
+import json,hashlib,datetime,re
+O=Path(__file__).resolve().parent;E=O/'evidence';source={x['seq']:x for x in json.loads((E/'source.json').read_text())};base=json.loads((E/'proposal-baseline.json').read_text())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+omissions={295:[
+ {'tib':'zer na / ste','english':'Just because we said that about the other case','reason':'Expanded reply attribution and conditional framing do not divide into defensible small matches; ma khyab owns only its complete established denial. No false null.'},
+ {'tib':'der','english':'in that area / in that direction','reason':'GMR repeats the locale. phyogs is banked once at direction; no certain separate de+r span is assigned to both demonstrative and locative material.'},
+ {'tib':"pa'i phyir / yang / pas",'english':'to try to / Therefore what happened was that','reason':'Purpose, emphasis and causal structuring are distributed across the recast. The first enjoy-water repetition is supplied anaphora, not another chu source occurrence.'},
+ {'tib':'first post-initial-sight yang','english':'initial water sight followed by later cessation','reason':'The concession is conveyed by narrative contrast without a reliable separate English atom; do not steal the later tree-stage Although.'},
+ {'tib':'rtog pas agentive ending','english':'he had an impression / he has an impression','reason':'Whole case-bearing rtog pas is kept with impression as contextual nominal recast; the supplied English subject/auxiliaries remain outside. No separation of agentive -s.'},
+ {'tib':'zhen pa ×2','english':'thought / thinks','reason':'Kept as cognitive apprehension in rtog pas…zhen pa constructions. Positive master zhen pa desire gloss is register-specific; mngon par zhen pa belief/imagine/interpreted and sgra ji bzhin par zhen pa taken-to-mean comparanda were considered. Actual English still comes solely from this source.'},
+ {'tib':'ljon shing / bras bu duplicated English recap','english':'The case with the fruit tree','reason':'Comparative recap adds the first English tree/fruit pair; actual source nouns are banked at later tree loaded with fruit, each only once.'},
+ {'tib':'second dbang gis','english':'karma forces him','reason':'dbang owns forces; agentive relation is fused into active causation, with no independent by. Omitted gis is not a substitute for uncertainty null.'},
+ {'tib':'yal ga / tsam zhig','english':'all he sees is bare branches','reason':'yal ga is tightened to branches despite broader HGM bare branches. tsam owns restrictive all, supported by HGM; bare and is are distributed restrictive/copular material and left unbanked. zhig is not arbitrarily equated with bare.'},
+ {'tib':'final phyir / connective particles','english':'any more / supporting explanation','reason':'Final reason marker contributes the entire explanation; no reliably separate final English because. any more is a temporal extension of the absence recast, not a guessed phyir equivalent.'}],
+296:[
+ {'tib':'ma ×2 and causal kyis after sgrib byed ×2','english':'prevents him from / prevent him from','reason':'Positive HGM ma prevent and byed prevent variants were explicitly considered. Locally the obstacle’s causal instrumental plus negative perception jointly license prevention, while him is supplied. A bare ma/prevents link would assert sole lexical ownership of a distributed causative, and a whole phrase would over-capture him. Leave the contested relation unbanked, never null.'},
+ {'tib':'sgrib byed internal byed ×2','english':'obstacle / prevents','reason':'Obstacle is an established compound. Its byed cannot own prevents outside its parent, and sgrib/obstacle would have English equal to the parent rather than a strictly tighter member. No d7 guess.'},
+ {'tib':"mi'i genitive remainder / mig shes kyis kyang",'english':'visual consciousness of a human / The same is true','reason':'Human and visual consciousness are clear atoms. Remaining syntactic comparison and relations are omitted rather than forcing all English function words onto particles.'},
+ {'tib':'ma mthong na conditional scope','english':'if the obstacle were there, it would prevent him from seeing','reason':'na/if is retained as conditional force despite changed subordinate-clause framing; supplied subject/pronoun and were-there expansion remain unbanked.'},
+ {'tib':"ba yin te / yin pa'i phyir",'english':'The same is true for / causal explanation','reason':'Copular and explanatory frames are distributed. lta bu owns same only, not the supplied truth assertion or determiner. No false particle nulls.'}],
+297:[
+ {'tib':'rnam pa gcig tu na','english':'From one point of view','reason':'Positive full HGM phrase considered; rnam pa/point of view and gcig/one kept as lexical units; tu na/From records case/topic framing, not a dictionary definition of from.'},
+ {'tib':'de after first temporal phrase','english':'river … looks at it','reason':'The main/relative clause recast redistributes the river reference. Avoid arbitrarily assigning this demonstrative to a pronoun with a different syntactic role; not a null.'},
+ {'tib':'rang gi','english':'the spirit can see / the spirit can drink from','reason':'Own/personal availability is conveyed across both English clauses and expanded named subjects. Never define rang as spirit.'},
+ {'tib':'blta byar gyur pa’i / longs spyod byar gyur pa’i','english':'can see / can drink from','reason':'Whole potential-object constructions retained at phrase depth, excluding supplied participants. longs spyod pa positive eat or drink/enjoy variants support the contextual consumption reading; no invented English.'},
+ {'tib':'repeated chu klung','english':'there is a river which has dried up','reason':'The extra short river in the fronted recap has no additional Tibetan noun occurrence; all three chu klung parents are assigned to the three full river of water strings. bskams pa/yod own drying/existence in the recap.'},
+ {'tib':'gsum / gro ba first case','english':'three different types of beings sit down together','reason':'Three and beings retained. Different types and sit down are explanatory expansions without separate local Tibetan content words; cig car du owns together only.'},
+ {'tib':'sogs','english':'and the other two','reason':'Positive HGM and the other closes the list; bank only and the other and explicitly request a licensor allowance. The numeral two is inferred from three minus the named object, not literally supplied by sogs.'},
+ {'tib':"zhig yod pa'i",'english':'it is true that / exist there','reason':'Existential framing is distributed around grub pa/exist. No guessed separate zhig/true or yod/there atom.'}]
+}
+reg=json.loads((E/'governing/docs/errata_register.json').read_text());findings=[];summaries=[]
+for seq in [295,296,297]:
+ D=O/str(seq);ranges=json.loads((D/'intended-ranges.json').read_text());intervals={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  used=sorted([x[side+'_range'] for x in ranges if x['d']!=7 and x[side+'_range'] is not None]);cur=0;un=[]
+  for a,b in used:
+   assert a>=cur,(seq,side,a,cur)
+   if a>cur:un.append({'range':[cur,a],'text':source[seq][field][cur:a]})
+   cur=b
+  if cur<len(source[seq][field]):un.append({'range':[cur,len(source[seq][field])],'text':source[seq][field][cur:]})
+  intervals[side]=un
+ save(D/'omissions.json',{'decisions':omissions[seq],'all_unwrapped_intervals':intervals,'rule':'Unwrapped does not mean unattested or absent. Material recasts and uncertain correspondences are intentionally unbanked; residual spaces, punctuation, articles, pronouns and auxiliaries remain verbatim.'})
+ current=source[seq];f={'seq':seq,'decision':'No new erratum proposed','five_grounds':{
+  'a_exact_source':'Full original spine row, archive record and physical C05 ACIP/English extents preserved; no source correction.',
+  'b_registered_classes':{'english_length':len(current['english']),'wylie_length':len(current['wylie']),'cap1500':len(current['english'])==1500,'heading_marker':False,'conversion_escape':any(x in current['wylie'] for x in ['{SHl}','{lv}','{NGg}']),'registered_record_count':len(reg),'matching_found_quotes':[x for x in reg if isinstance(x.get('found'),str) and len(x['found'])>10 and any(x['found'] in current[k] for k in ['acip','wylie','english'])]},
+  'c_positive_lexical':'All exact and variant HGM results retained in master-matches, extra-master-matches and zhen-positive-variants. Registered reference-only meanings are not used to compose GMR text.',
+  'd_parallel_and_physical':f'C15:{seq+145} is ACIP/Wylie/English equal; P7:{seq-259} English equal but ACIP/Wylie differ. C05 and C15 physical extents match all selected fields after whitespace normalization. These do not prove independent publication or ingestion lineage.',
+  'e_result':'Differences in argument framing, cognitive/perceptual predicates, English noun repetition and supplied pronouns are translation recasts or scope uncertainty, not demonstrated source corruption. No correction asserted.'}}
+ save(D/'source-check.json',f);findings.append(f)
+ proof=json.loads((D/'verification.json').read_text());summary={k:proof[k] for k in ['span_count','nulls','d5','nonnull_d5','d7','spec_bytes','spec_sha256','body_bytes','body_sha256']};summary['seq']=seq;summary['errata']=0;summaries.append(summary)
+ challenge={295:'Challenge first the two zhen pa → thought/thinks contextual cognitive readings and tsam → all restrictive scope; complete positive HGM alternatives and the full argument are banked.',296:'Challenge first the deliberately unbanked ma/causal-kyis prevention recasts; positive ma/prevent and byed/prevent glosses do not alone decide local ownership.',297:'Challenge first the potential-object phrases → can see / can drink from, the case/topic tu na → From, and sogs → and the other with two left unbanked.'}[seq]
+ lines=[f'# C05:{seq} — Tibetan-first original by Codex',challenge,
+ 'Source origin: ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e through288; original source/proposal boundary only, not a claim of through294 landing.',
+ f'Full original spine row and context289–303 verified; C15:{seq+145} matches all three text fields, P7:{seq-259} matches English only. No independent-publication or ingestion claim.',
+ 'Shared original evidence: ../evidence/queries.json, master-matches.json, extra-master-matches.json, zhen-positive-variants.json, archive-source-records.json, physical extents and raw C05/C15 files; ../evidence/source-roles.json states authority limits.',
+ 'intended-ranges.json gives every span’s exact occurrences and decision; omissions.json names material unbanked correspondences and preserves every unwrapped interval. Uncertainty is not nulled.',
+ f'FINAL native generator: EXIT=0; stderr=0 bytes; body={proof["body_bytes"]} bytes. Exact canonical ranges and both complete unwrapped source columns passed; verification.json names the actual attempt.',
+ f'Spans={proof["span_count"]}; nulls={proof["nulls"]}; d5={proof["d5"]} (nonnull={proof["nonnull_d5"]}); d7={proof["d7"]}; errata=0.',
+ f'spec.json SHA256 {proof["spec_sha256"]}; body.html SHA256 {proof["body_sha256"]}.',
+ 'Failed native guard attempts and all superseded authoring inputs are preserved in attempts/ and ../attempts/; final generator and source files are unchanged.',
+ 'Provisional proposal only: canonical fidelity proves literal ranges, not independent semantic acceptance. No hgm_gloss changes or production landing.'
+ ]
+ (D/'report.md').write_text('\n'.join(lines)+'\n')
+allow={'pages_c05':{'c5p99/s297w44':'sogs (C05:297 Codex Tibetan-first original): the lexical list-continuation word owns and the other, an explicit HGM HTG2016 variant; the inferential numeral two is excluded. This is a proposed allowance requiring independent semantic review, not a live registration.'}}
+save(O/'span-head-allowance-proposal.json',allow);save(O/'source-check-summary.json',findings);save(O/'summary.json',{'status':'FROZEN ORIGINAL PROPOSALS; not semantic approval or landing','producer':'Codex','angle':'Tibetan-first','segments':summaries,'total_spans':sum(x['span_count'] for x in summaries),'total_nulls':sum(x['nulls'] for x in summaries),'total_nonnull_d5':sum(x['nonnull_d5'] for x in summaries),'total_d7':sum(x['d7'] for x in summaries),'new_errata':0,'proposed_allowances':1})
+checks=[]
+for name,pin in base['source_pins'].items():
+ p=Path(pin['path']);data=p.read_bytes();assert len(data)==pin['bytes'] and hashlib.sha256(data).hexdigest()==pin['sha256'];checks.append({'kind':name,**pin,'verified_unchanged':True})
+gen=O.parents[2]/'campaign-worktree/tools/gen_alignment_page.py';assert hashlib.sha256(gen.read_bytes()).hexdigest()==base['governing_git_pins']['tools/gen_alignment_page.py']['sha256'];save(E/'final-original-identity-check.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_pins':checks,'generator_unchanged':True,'live_builder_not_compared_to_old_registration':'Mutable builder registry is allowed to advance; the historical pinned builder copy is preserved as source-origin evidence only.'})
+(O/'README.md').write_text('# C05 295–297 Tibetan-first original proposal\n\nCore deliverables are in 295/, 296/ and 297/. Shared original evidence and immutable governing Git objects are retained once in evidence/. Read summary.json and each report.md, then intended-ranges.json, omissions.json and source-check.json.\n\n133 spans, two grammatical nulls, 16 compound members; native final canonical generation exited0 for each. All intended occurrences and both original source columns match exactly. No semantic approval or production landing is claimed. Proposed sogs head allowance is explicit.\n\nAll failed native attempts and superseded authoring/range decisions are preserved. The initial collector UTF-8 assumption failed on a legacy non-UTF8 byte; its unsaved native exit is recorded unavailable, with the observed traceback and exact failed script retained. Reversible Latin1 views locate source byte ranges without transcoding the originals. First canonical attempts failed the readonly symlink-path guard before opening the spine; comparing both canonical paths resolved fixed this guard, without generator or source changes.\n')
+print(json.dumps(summaries,indent=2))

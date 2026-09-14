@@ -1,0 +1,9 @@
+import sqlite3,pathlib,runpy
+original=sqlite3.connect
+def readonly(p,*a,**k):
+ if not str(p).startswith('file:'): p=pathlib.Path(p).resolve().as_uri()+'?mode=ro'
+ elif 'mode=ro' not in str(p): raise RuntimeError('read-only required')
+ k['uri']=True
+ return original(p,*a,**k)
+sqlite3.connect=readonly
+runpy.run_path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py',run_name='__main__')

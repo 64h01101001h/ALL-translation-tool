@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-295-297/tibetan/run_canonical_readonly.py", line 9, in <module>
+    runpy.run_path(str(W/'tools/gen_alignment_page.py'),run_name='__main__')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 294, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py", line 449, in <module>
+    main()
+    ~~~~^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py", line 314, in main
+    db = sqlite3.connect(B.SPINE)
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-295-297/tibetan/run_canonical_readonly.py", line 6, in ro_connect
+    p=Path(database).resolve();assert p==W/'build/hgm_spine_v27_2.db',p
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: /Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db

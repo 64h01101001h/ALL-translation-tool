@@ -1,0 +1,30 @@
+{
+  "verdict": "APPROVE",
+  "open_findings": [],
+  "reviewed_helper": {
+    "path": "campaign-artifacts/bank_compact_verification.py",
+    "bytes": 8087,
+    "sha256": "515bcf7dde92639da8c30277fc393ba698e62d62238139886f9bb53ee75598c4"
+  },
+  "scope": "Compact actual-evidence banking only, after the required upstream accepted executions; no semantic, production-output, MAIN, phone or future staging approval is independently supplied.",
+  "initial_findings": "banking-review-initial.json",
+  "correction_record": "banking-review-correction.json",
+  "checks": [
+    "Non-APPROVE semantic review, non-PASS build/reproduction, failed CTest or false retention/course predicates are refused.",
+    "All seven unique current outputs and both external seeds are bound as described in the correction record.",
+    "Only explicitly enumerated current-batch landing/caller/method-review and reproduction record/execution/method inputs are archived. Prior recursive review/reproduction source trees are not selected.",
+    "The running bank recorder has no execution.json until its subprocess returns; completed callers are included and the active caller is excluded.",
+    "Selected files must be regular non-symlink files with unique archive member names. Archive member order/names, complete extracted bytes and byte counts/hashes are verified against selected originals before readable manifest and PASS summary are written.",
+    "Seed is deliberately retained outside the archive, with external reproduction path and archived source/pin records. Core semantic/spec records remain ordinary banked files.",
+    "Summary states the existing MAIN/private-phone limits and explicitly leaves staging/commit/checkpoint evidence for later; it does not claim the future caller completion as an archive input."
+  ],
+  "validation": {
+    "full_corrected_source_review": "PASS",
+    "ast_parse": "PASS",
+    "field_interface_review": "PASS",
+    "archive_runs": 0,
+    "worktree_edits": 0,
+    "upstream_builds_run": 0
+  },
+  "limitations": "This is implementation approval. The actual archive creation and byte verification remain unexecuted. One interrupted synthetic preflight harness attempt is preserved and explicitly not counted as a passing test."
+}

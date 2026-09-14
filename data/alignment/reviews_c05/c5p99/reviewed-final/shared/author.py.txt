@@ -1,0 +1,85 @@
+import pathlib,json,copy,re
+R=pathlib.Path(__file__).resolve().parent;B=R.parent;E=R/'evidence'
+def read(p):return json.loads(p.read_text())
+def write(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+rows={r['seq']:r for r in read(E/'source-context.json')};ranges=read(B/'proposal-verification/root-resolved-spans.json');originals=[]
+for angle in ['tibetan','english']:
+ for seq in [295,296,297]:
+  intended=read(B/angle/str(seq)/'intended-ranges.json');spec=read(B/angle/str(seq)/'spec.json')['segments'][0]
+  for span in spec['spans']:
+   ir=next(i for i in intended if i['id']==span['id']);canonical=next(x for x in ranges if x['angle']==angle and x['seq']==seq and x['id']==span['id'])
+   for k in ['d','tib','eng','tib_range','eng_range']:assert ir[k]==canonical[k]
+   originals.append({**canonical,'original_span':span,'original_reason':ir.get('reason'),'original_reason_source':{'path':str(B/angle/str(seq)/'intended-ranges.json'),'id':span['id']},'original_report':str(B/angle/str(seq)/'report.md')})
+def get(angle,seq,i):
+ o=copy.deepcopy(next(x for x in originals if x['angle']==angle and x['seq']==seq and x['id']=='w'+str(i)))
+ return {'span':copy.deepcopy(o['original_span']),'tib_range':o['tib_range'],'eng_range':o['eng_range'],'origin':[angle,seq,o['id']],'reason':o['original_reason']}
+def change(o,**kwargs):
+ o['span'].update({k:v for k,v in kwargs.items() if k not in ['reason','tib_range','eng_range']})
+ for k in ['reason','tib_range','eng_range']:
+  if k in kwargs:o[k]=kwargs[k]
+ return o
+chosen={295:[],296:[],297:[]}
+for i in range(1,54):
+ if i in [23,45]:continue
+ o=get('english',295,i)
+ if i in [22,44]:
+  o=change(o,d=3,tib='ma mthong',eng='stop seeing',tib_range=[o['tib_range'][0],o['tib_range'][0]+9],eng_range=[o['eng_range'][0],o['eng_range'][0]+11],reason='Retain the complete negative seeing predicate as a contextual cessation phrase: prior sight plus later negated perception licenses stop seeing. Positive ma/stop and mthong/seeing alternatives were confronted, but do not settle independent lexical ownership of cessation. The wider ma mthong glossary also has prevent him from seeing and had not seen variants; participants and water/fruit remain outside.')
+ if i==1:o['reason']='zer na is the reply/conditional frame to the preceding objection. Its full HGM glossary includes just because we said that (lowercase). Retain the sentence-initial corpus casing and complete recast at d3; the explanatory about the other case stays outside. This is contextual quotation, not a definition of zer as we.'
+ if i==2:o['reason']='The negative entailment predicate ma khyab is a grammatical phrase at d3. Full glossary entry13702 positively records the exact denial, but that attestation does not make a predication a d5 dictionary atom.'
+ if i==9:o['reason']='The complete deictic locative phyogs der licenses in that direction at phrase depth. der carries deictic/locative content; the earlier in that area repeats this reference and stays unbanked. The lexical direction alternative is sound but the intact phrase retains the explicit deictic relation without a guessed suffix split.'
+ if i==11:o['reason']='Here gro ba is physical going in the purpose clause. Curated being is a different use; the complete glossary_link and glossary record positively have both go and go over. Keep tighter go; over adds deictic movement already expressed in the surrounding directional recast.'
+ if i==12:o['reason']='Complete negative feasibility predicate mi thad is retained at d3. Full mi thad pa entry24556 has would not have made any sense variants; the counterfactual context licenses GMR wording. The supplied it stays outside.'
+ if i==13:o['reason']='Causal pas concludes the impossibility argument and licenses the next inference Therefore; no preceding fragment or participant is included. This is the source causal relation, fronted as a new sentence in English.'
+ if i in [29,49]:o=change(o,d=3,reason='The anaphoric temporal de-i rjes su construction is a phrase meaning following that; Then is the local whole rendering (glossary then differs only in casing). Match this occurrence after its own visual episode, not the other Then.')
+ if i in [30,50]:o['reason']='Retain rtog/impression as a contextual nominal matching in this row. Original master6686 has thoughts/think among its alternatives; rnam rtog10497 explicitly lists rtog pa as a variant and impression as a glossary rendering. The local rtog pas ... zhen pa syntax distinguishes the conceptual impression from what it takes the object to be. Leave pas unbanked rather than claim it means impression.'
+ if i in [33,53]:
+  o=change(o,tib='zhen pa',tib_range=[o['tib_range'][0],o['tib_range'][0]+7],reason='Contextual corpus match only: in rtog pas [water dried / fruit absent] par zhen pa, zhen predicates what the impression takes to be the case, locally thought/thinks. Curated zhen pa16275 is craving/desire in its verse context; bare zhen16273 is only mined give up with a renunciation candidate. Full mngon par zhen pa3913 belief/imagine/interpreted and sgra ji bzhin par zhen pa3118 taken-to-mean are comparanda, not replacements or exact curated thought glosses. Full C05:295 and C15:440/P7:36 sustain the local reading; no hgm_gloss promotion.')
+ if i==34:o=change(o,d=3,eng='same',eng_range=[529,533],reason='de bzhin du expresses the similarity relation. Choose the tighter same within the fronted fruit-tree recap, at phrase depth; is the and the resumed fruit/tree nouns are the English copular expansion. Positive wider is the same is retained as a considered glossary alternative, not treated as absent evidence.')
+ if i==47:o['reason']='Choose tsam/bare at d6 as the restrictive particle modifying branches in this local recast. Full tsam14946 includes only/all/bare; full yal ga17373 includes branches/bare branches. Keep the noun as branches and the restrictive adjective as bare, once each. The fronted all he sees is also expresses restriction, but mapping tsam to all alone would leave competing bare ownership unresolved; do not claim both.'
+ if i==52:o['reason']='med is the negative existential in fruit-absent. Keep the tighter no inside has no fruit, despite the positive whole has no variant; supplied tree and English possession frame remain outside. The earlier bare fruitlessness is a separate occurrence and not borrowed here.'
+ chosen[295].append(o)
+ if i==4:
+  n=get('tibetan',295,4);n['reason']='The explicit agentive kyis marks the active subject craving spirit; English subject position has no separately alignable case exponent. This is a genuine grammatical null, not uncertainty about a distributed predicate.';chosen[295].append(n)
+for i in range(1,34):
+ o=get('tibetan',296,i)
+ if i==7:o['reason']='The genitive kyi links obstacle with visual consciousness; GMR expresses that relation as obstacle in the visual consciousness. Keep the exact relational in at d6. This does not redefine kyi as a locative generally.'
+ if i in [5,6,20,21]:o['reason']='Retain this strictly narrower, unique member of mig shes: full HGM mig/visual and shes/consciousness alternatives support the compositional visual-consciousness noun. Its English is inside its own immediately preceding d5 parent; no external seeing verb is borrowed.'
+ if i in [10,11,24,25]:o['reason']='Retain the lexical member of this chu klung/river of water parent. chu/water and klung/river are distinct, unique, strictly narrower members with contained English, bound to this obstacle episode.'
+ if i==18:o['reason']='mi in mi-i is the human noun contrasted with the craving spirit, not the negative particle. Keep tighter mi/human; the attached genitive is left unwrapped because the specification offers no honest separate flat suffix mapping here. Full mi-i24635/human is a positive wider alternative.'
+ if i==33:o['reason']='Keep lta bu/same, fronted at The same is true for. Considered the whole lta bu yin pa-i phyir/The same is true for recast: the source includes causal force and the English for also links the shifted human example, so sole ownership of the entire frame is not established. The lexical similarity is certain; remaining copular/explanatory content is omitted, not nulled.'
+ chosen[296].append(o)
+for i in range(1,51):
+ if i==3:continue
+ o=get('tibetan',297,i)
+ if i in [1,2]:o['reason']='Retain the explicit lexical viewpoint/one components of rnam pa gcig tu na. The full glossary23911/from one point of view confirms the whole expression, but the separate tu na/From attribution remains a grammatical-scope uncertainty and is omitted without a null.'
+ if i in [9,33]:o['reason']='The overt object/case la licenses at in the corresponding looks at/look at construction. Keep the first at with the craving-spirit view and the second with the simultaneous look at the glass; it is not the at inside at the same time.'
+ if i in [6,16,21]:o['reason']='This chu klung owns the corresponding full river of water phrase: initial river, personally visible river, or usable river respectively. Three source compounds align to three full English compounds. The fourth bare river at the fronted existence recap is a repeated anaphoric expansion, not a fourth source noun.'
+ if i==15:o['reason']='blta byar gyur pa-i is the whole object-of-sight/potential relation, locally can see. Both blta7103 and blta bya7111 have see/look, but gyur plus object construction licenses the modal recast only as a phrase. The spirit participant is supplied/resumed and excluded.'
+ if i==20:o['reason']='Keep the complete longs spyod byar gyur pa-i/can drink from relation at d3. Full longs spyod pa19723 has eat or drink/enjoy; longs spyod bya19727 has experiencing/something. Drink is the contextual use of this river; the potential-object construction and river complement jointly license can drink from. The complete relation has no invented participant. A standalone drink root match is defensible but omits this overt potential relation; no d5 equation of the whole recast is asserted.'
+ if i==44:o['reason']='sogs explicitly closes the enumeration, and full HTG2016 entry20919 includes and the other. Retain exactly and the other at d5, with a named source licensor allowance request. Two is the explanatory remainder of the three-object count and is outside the span; do not lower depth to escape the gate.'
+ if i in [34,48]:o['reason']='cig car du expresses simultaneity. Retain together in the shared-looking clause and at the same time in the three-object existence clause. Full entry4169 includes sit down together and narrower together; no sitting verb is present locally, so sit down remains supplied.'
+ chosen[297].append(o)
+notes={295:"PROVISIONAL machine alignment reconciled by Codex. GMR's wording remains verbatim. ma khyab and the two later ma mthong predicates are phrases; the initial negative is the n’t of hadn’t. All three dang por and all seven mthong occurrences retain their own stages. rtog/impression and zhen pa/thought or thinks are contextual corpus matches, not newly curated equivalents. The final tsam/bare and yal ga/branches divide restrictive modifier and noun; the additional all frame stays unwrapped. Agentive kyis has no separate English exponent. Supplied repeats and unresolved distributed relations remain unbanked; no hgm_gloss promotion.",296:"PROVISIONAL machine alignment reconciled by Codex. GMR's wording remains verbatim. Both visual-consciousness and river compounds retain their own lexical members and occurrences. The obstacle, causal instrumental and ma jointly contribute prevents/prevent him from; that distributed content is omitted, not labelled absent. lta bu owns the fronted same; ownership of the whole The same is true for frame is not established. Omitted syntax is not a null, and no hgm_gloss promotion is implied.",297:"PROVISIONAL machine alignment reconciled by Codex. GMR's wording remains verbatim. Three chu klung compounds own three river of water phrases; the extra river recap stays unwrapped. The full potential-object relations own can see and can drink from, excluding supplied spirit participants. Separate tu na/From ownership remains unbanked; both object-case la/at relations retain their own clauses. sogs owns exactly and the other, with two excluded. Agentive kyis has no separate English exponent. Supplied sitting, repeated references and unresolved existential framing remain unbanked; no hgm_gloss promotion."}
+final=[]
+for seq,ls in chosen.items():
+ p=R/str(seq);p.mkdir(exist_ok=True);spans=[];intended=[]
+ for i,o in enumerate(ls,1):
+  sp=o['span'];sp['id']='w'+str(i);spans.append(sp);it={**sp,'seq':seq,'tib_range':o['tib_range'],'eng_range':o['eng_range'],'nullable_classification':('no_separate_grammatical_exponent' if sp['eng'] is None else None),'reason':o['reason'],'selected_from':o['origin']};intended.append(it);final.append(it)
+  assert rows[seq]['wylie'][it['tib_range'][0]:it['tib_range'][1]]==it['tib']
+  if it['eng'] is not None:assert rows[seq]['english'][it['eng_range'][0]:it['eng_range'][1]]==it['eng']
+ order=[i['id'] for i in sorted([x for x in intended if x['eng'] is not None and x['d']!=7],key=lambda x:x['eng_range'][0])]
+ spec={'course':'C05','segments':[{'seq':seq,'title':{295:'seeing water and fruit before the change',296:'obstacles in visual consciousness',297:'the perceived river and simultaneous objects'}[seq],'spans':spans,'eng_order':order,'note':notes[seq]}]}
+ write(p/'spec.json',spec);write(p/'intended-ranges.json',intended);write(p/'errata.json',[])
+# Every original member is explicitly dispositioned with immutable original wording/ranges/reason.
+for o in originals:
+ same=[f for f in final if f['seq']==o['seq'] and all(f[k]==o[k] for k in ['d','tib','eng','tib_range','eng_range'])]
+ overlaps=[f for f in final if f['seq']==o['seq'] and max(f['tib_range'][0],o['tib_range'][0])<min(f['tib_range'][1],o['tib_range'][1]) and (f['d']==7)==(o['d']==7)]
+ if same:
+  o['disposition']='retained';o['final_ids']=[x['id'] for x in same];o['reason']=same[0]['reason']
+ elif overlaps:
+  o['disposition']='recast_or_tightened';o['final_ids']=[x['id'] for x in overlaps];o['reason']='Original tuple is not retained as written. '+ ' '.join(dict.fromkeys(x['reason'] for x in overlaps))
+ else:
+  o['disposition']='omitted_uncertain';o['final_ids']=[];o['reason']='The whole rnam pa gcig tu na/from one point of view is positively attested, but separate tu na/From ownership combines case and conditional framing. Keep the explicit one and viewpoint lexical atoms; leave this unresolved atom unbanked rather than assert absence.'
+write(R/'reconciliation-decisions.json',{'producer':'Codex independent reconciler','status':'PROVISIONAL_RECONCILIATION_NOT_ACCEPTANCE','source_origin_commit':'ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e','source_origin_boundary':288,'future_acceptance_baseline':None,'original_count':len(originals),'original_decisions':originals,'final_count':len(final),'final_ordered_tuples':final})
+a=next(x for x in final if x['seq']==297 and x['tib']=='sogs');write(R/'proposed-head-allowances.json',{'status':'PROPOSED_ONLY_NO_GATE_OR_ALLOWANCE_EDIT','source_origin_commit':'ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e','allowances':[{'course_directory':'pages_c05','seq':297,'page':'c5p99.html','span_id':'s297'+a['id'],'d':5,'tib':'sogs','eng':'and the other','tib_range':a['tib_range'],'eng_range':a['eng_range'],'licensor':'sogs','reason':'Enumerative sogs supplies the closing and the other; HTG2016 full entry20919 records the exact wording. Supplied two is excluded. This request does not modify or relax the gate.'}]})
+print(json.dumps({seq:{'spans':len(ls),'nulls':sum(o['span']['eng'] is None for o in ls),'d5':sum(o['span']['d']==5 for o in ls),'d7':sum(o['span']['d']==7 for o in ls)} for seq,ls in chosen.items()}))

@@ -1,0 +1,82 @@
+from pathlib import Path
+import os,sys,json,hashlib,gzip,sqlite3,subprocess,importlib.util,re,difflib
+O=Path(__file__).resolve().parent; B=O.parent; W=B.parent.parent/'campaign-worktree'
+def read(p):return json.loads(Path(p).read_text())
+def save(name,v):
+ p=O/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+baseline=read(B/'baseline.json'); origin=read(B/'proposal-baseline.json'); checks={}
+# External source archives are checked directly, never via git show.
+for rel,digest in baseline['sha256'].items():
+ if rel.endswith('.gz'):
+  actual=sha(W/rel);assert actual==digest;checks[rel]={'sha256':actual,'source':'direct external file'}
+ else:
+  p=subprocess.run(['git','show',baseline['commit']+':'+rel],cwd=W,capture_output=True,check=True);actual=hashlib.sha256(p.stdout).hexdigest();assert actual==digest;checks[rel]={'sha256':actual,'source':'immutable Git object','commit':baseline['commit']}
+for key in ['spine','master','corpus','source','context','physical']:
+ p=origin['source_pins'][key];assert sha(p['path'])==p['sha256'];assert Path(p['path']).stat().st_size==p['bytes']
+save('source-baseline-check.json',{'source_origin':origin['commit'],'source_origin_boundary':288,'acceptance_baseline':baseline['commit'],'acceptance_baseline_boundary':294,'checks':checks,'original_source_pins_match':True})
+con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+source=[dict(r) for r in con.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',289,303))]
+assert source==read(B/'reconciled/evidence/source-context.json');save('source-context-original-rows.json',source)
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+print('MASTER KEYS',list(master),'CORPUS KEYS',list(corpus)[:10],flush=True)
+records=read(B/'reconciled/evidence/sql-records.json'); mappings=read(B/'reconciled/evidence/original-archive-mappings.json');masterrecords=read(B/'reconciled/evidence/master-records.json')
+for r in masterrecords: assert master[r['section']][r['ordinal_zero_based']]==r['record']
+queryproof=[]
+for q in read(B/'reconciled/evidence/queries.json')+read(B/'reconciled/evidence/supplementary-queries.json'):
+ actual=[dict(r) for r in con.execute(q['sql'],q['parameters'])]; expected=[records[k] for k in q['row_refs']];assert actual==expected,(q['sql'],q['parameters']);assert len(actual)==q['count'];queryproof.append({**q,'exact_full_rows':True})
+save('query-replay.json',queryproof)
+for key,r in records.items():
+ m=mappings[key];raw=json.loads(r['raw'])
+ if key.startswith('corpus_segments:'):
+  actual=corpus[m['course']][m['array_index']]
+ else: actual=master[m['section']][m['ordinal_zero_based']]
+ assert actual==raw,(key,m)
+save('archive-identity-check.json',{'full_SQL_records_verified':len(records),'master_records_verified':len(masterrecords),'query_sets_verified':len(queryproof),'original_query_occurrences':sum(len(q.get('originals',[])) for q in queryproof),'external_archives':checks})
+# Actual canonical engine, read-only SQLite wrapper and no local Python caches.
+engine_spec=importlib.util.spec_from_file_location('semantic_canonical',W/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(engine_spec);engine_spec.loader.exec_module(G)
+wrapper=O/'run-canonical.py.txt';wrapper.write_text("import sqlite3,pathlib,runpy\noriginal=sqlite3.connect\ndef readonly(p,*a,**k):\n if not str(p).startswith('file:'): p=pathlib.Path(p).resolve().as_uri()+'?mode=ro'\n elif 'mode=ro' not in str(p): raise RuntimeError('read-only required')\n k['uri']=True\n return original(p,*a,**k)\nsqlite3.connect=readonly\nrunpy.run_path("+repr(str(W/'tools/gen_alignment_page.py'))+",run_name='__main__')\n")
+resolved=[];segmentproof=[];originals=[];dec=read(B/'reconciled/reconciliation-decisions.json')
+for seq in [295,296,297]:
+ row=next(r for r in source if r['seq']==seq)
+ for role in ['tibetan','english','reconciled']:
+  p=B/role/str(seq)/'spec.json';spec=read(p);seg=spec['segments'][0];spans=seg['spans'];t=G.resolve(row['wylie'],spans,'tib',seq);byid={s['id']:s for s in spans};ordered=G.with_members(spans,[byid[x] for x in seg['eng_order']],row['english']);e=G.resolve(row['english'],ordered,'eng',seq)
+  tuples=[dict(seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(t[s['id']]),eng_range=list(e[s['id']]) if s['eng'] is not None else None) for s in spans]
+  intended=read(B/role/str(seq)/'intended-ranges.json');assert len(intended)==len(tuples)
+  for r,z in zip(tuples,intended):
+   for k,v in r.items():
+    if k!='seq':assert z[k]==v,(role,seq,r['id'],k)
+   if role!='reconciled':
+    d=next(a for a in dec['original_decisions'] if a['angle']==role and a['seq']==seq and a['id']==r['id']);assert d['original_reason']==z.get('reason');assert d['original_span']==byid[r['id']]
+    for k,v in r.items():assert d[k]==v
+  if role!='reconciled': originals.extend([dict(angle=role,**r) for r in tuples]);continue
+  for r,z in zip(tuples,[z for z in dec['final_ordered_tuples'] if z['seq']==seq]):
+   for k,v in r.items():assert z[k]==v
+  resolved.extend(tuples)
+  attempt=O/f'executions/{seq}-canonical-01';attempt.mkdir(parents=True,exist_ok=True);raw=p.read_bytes();(attempt/'stdin.json').write_bytes(raw)
+  argv=[sys.executable,str(wrapper)];result=subprocess.run(argv,cwd=W,input=raw,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+  (attempt/'stdout.bin').write_bytes(result.stdout);(attempt/'stderr.bin').write_bytes(result.stderr);(attempt/'exit.txt').write_text(str(result.returncode)+'\n')
+  save(f'executions/{seq}-canonical-01/execution.json',{'argv':argv,'cwd':str(W),'stdin':str(p),'generator_sha256':sha(W/'tools/gen_alignment_page.py'),'source_sqlite_mode':'ro','PYTHONDONTWRITEBYTECODE':'1','exit':result.returncode,'stdout_sha256':hashlib.sha256(result.stdout).hexdigest(),'stdout_bytes':len(result.stdout),'stderr_bytes':len(result.stderr)})
+  assert result.returncode==0 and not result.stderr and result.stdout==(B/role/str(seq)/'body.html').read_bytes()
+  segmentproof.append(dict(seq=seq,span_count=len(spans),null_count=sum(s['eng'] is None for s in spans),word_pair_count=sum(s['d']==5 and s['eng'] is not None for s in spans),spec_sha256=sha(p),spec_bytes=p.stat().st_size,body_sha256=sha(B/role/str(seq)/'body.html'),body_bytes=len(result.stdout),generator_exit=result.returncode))
+save('resolved-spans.json',resolved);save('original-resolved-spans.json',originals);save('segment-verification.json',segmentproof)
+physical=[]
+for p in read(B/'reconciled/evidence/physical-source-extents.json'):
+ text=' '.join(Path(p['source_path']).read_bytes().decode('latin-1').split());needle=' '.join(p['complete_field'].split());lo,hi=p['normalized_range'];assert text[lo:hi]==needle;assert text.count(needle)==p['count']==1;physical.append({**p,'independent_recheck':True})
+save('physical-source-checks.json',physical)
+# Every repeated and omitted interval is validated as source text; machine checks do not decide meaning.
+for role in ['tibetan','english','reconciled']:
+ for seq in [295,296,297]:
+  p=B/role/str(seq)/('material-omissions.json' if role=='english' else 'omissions.json');d=read(p); row=next(r for r in source if r['seq']==seq)
+  data=d.get('all_unwrapped_intervals',d.get('unwrapped',{}))
+  for side,ints in data.items():
+   for r in ints: assert row['wylie' if side=='tib' else 'english'][slice(*r['range'])]==r['text']
+# Preserve full master material; reading view removes no HGM provenance/variants, only reference fields.
+lines=[]
+for i,r in enumerate(masterrecords):
+ z=r['record'];positive=bool(z.get('hgm_gloss') or z.get('hgm_glosses') or z.get('glossary_link'))
+ if positive:
+  keep={k:v for k,v in z.items() if k not in ['tibetan','pronunciation','phonetics_legacy','pronunciation_source','sanskrit','hopkins_english','hopkins_ref','hopkins_realigned','lc_merged']}
+  lines.append(json.dumps({'master_record_index':i,'section':r['section'],'ordinal_zero_based':r['ordinal_zero_based'],'record':keep},ensure_ascii=False))
+(O/'positive-HGM-reading.txt').write_text('\n'.join(lines)+'\n')
+print('COMPLETE',len(originals),len(resolved),len(queryproof),len(records),len(masterrecords),'POSITIVE HGM',len(lines),flush=True)

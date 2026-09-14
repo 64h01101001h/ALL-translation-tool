@@ -1,0 +1,42 @@
+"""Pin immutable source/governance for independent proposals ahead of landing.
+Usage: python3 -B capture_proposal_origin.py FIRST (three consecutive segments).
+This is explicitly not an acceptance baseline. No repository writes.
+"""
+from pathlib import Path
+import datetime, hashlib, json, sqlite3, subprocess, sys
+A=Path(__file__).resolve().parent
+W=A.parent/'campaign-worktree'
+first=int(sys.argv[1]);sequences=list(range(first,first+3))
+B=A/f'C05-{first}-{first+2}';target=B/'proposal-baseline.json'
+assert not target.exists()
+template=json.loads((A/'C05-292-294/proposal-baseline.json').read_bytes())
+def git(*args):return subprocess.check_output(['git',*args],cwd=W)
+def pin(path):
+    raw=path.read_bytes()
+    return dict(path=str(path),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+head=git('rev-parse','HEAD').decode().strip()
+assert not git('status','--porcelain','--untracked-files=no')
+full=json.loads((W/'data/alignment/alignment_full_v1.json').read_bytes())
+done=sorted({x['seg'] for x in full['links'] if x['course']=='C05'})
+assert done==list(range(1,max(done)+1)) and max(done)<first
+source_pins={k:pin(B/(k+'.json') if k in ('source','context') else Path(v['path'])) for k,v in template['source_pins'].items()}
+for key in ('spine','master','corpus','physical'):
+    assert source_pins[key]==template['source_pins'][key]
+con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+for name in ('source','context'):
+    rows=json.loads((B/(name+'.json')).read_bytes())
+    if name=='source':assert [r['seq'] for r in rows]==sequences
+    for row in rows:
+        assert set(row)=={'id','course','seq','acip','wylie','english'}
+        actual=dict(con.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(row['course'],row['seq'])).fetchone())
+        assert all(actual[k]==v for k,v in row.items())
+con.close()
+governing={}
+for relative in template['governing_git_pins']:
+    raw=git('show',head+':'+relative)
+    assert (W/relative).read_bytes()==raw
+    governing[relative]=dict(original_git_commit=head,repository_relative_path=relative,bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+assert git('rev-parse','HEAD').decode().strip()==head
+out=dict(status=f'PROPOSAL_SOURCE_BASELINE_ONLY; actual landing baseline waits for verified{first-1}',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),commit=head,course_boundary=max(done),proposal_segments=sequences,source_pins=source_pins,governing_git_pins=governing,note='No W mutation hold. Read mutable governing refs from these exact immutable Git objects. Generator and original sources must remain unchanged; registration/ledger/allowance revisions may advance while proposals run. Preserve actual origin, never claim future acceptance.')
+target.write_text(json.dumps(out,indent=2)+'\n')
+print(json.dumps(dict(path=str(target),**pin(target),commit=head,course_boundary=max(done),selected_segments=sequences)))
