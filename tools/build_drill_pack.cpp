@@ -843,17 +843,34 @@ int main(int argc, char** argv) {
                                   return p.tib.find(a->tib) <
                                          p.tib.find(b2->tib);
                               });
-                    // and where his English puts each of them. Positions must
-                    // be distinct or the question has no single answer.
-                    std::vector<size_t> pos;
+                    // and where his English puts each of them. `find` is an
+                    // unanchored substring probe, so when one piece's English
+                    // occurs inside another's it is located in the WRONG place
+                    // and the order derived from it is not his: "The definition
+                    // of an apparent refuge is" put `refuge` at 30, which is
+                    // inside `apparent refuge` at 21. Three cards in 300
+                    // shipped such a key under a badge reading ATTESTED.
+                    //
+                    // Distinct positions were not enough — the two positions
+                    // there differ. The pieces must occupy DISJOINT stretches
+                    // of his sentence, and a card that cannot show that is
+                    // refused rather than guessed at (rule 3).
+                    std::vector<std::pair<size_t, size_t>> at;
                     bool ok = true;
                     for (const BL* k : kids) {
-                        const size_t at = p.eng.find(k->eng);
-                        if (at == std::string::npos) { ok = false; break; }
-                        for (size_t q : pos) if (q == at) ok = false;
-                        pos.push_back(at);
+                        const size_t b = p.eng.find(k->eng);
+                        if (b == std::string::npos) { ok = false; break; }
+                        at.emplace_back(b, b + k->eng.size());
                     }
+                    if (ok)
+                        for (size_t a = 0; a < at.size() && ok; ++a)
+                            for (size_t b2 = a + 1; b2 < at.size(); ++b2)
+                                if (at[a].first < at[b2].second &&
+                                    at[b2].first < at[a].second) { ok = false; break; }
                     if (!ok) continue;
+                    std::vector<size_t> pos;
+                    pos.reserve(at.size());
+                    for (const auto& r : at) pos.push_back(r.first);
                     // Every piece must have Tibetan to tap. The bank holds
                     // one-sided records — his English for a span with no
                     // Tibetan exponent of its own — and 44 of the first 300
