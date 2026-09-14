@@ -1,0 +1,93 @@
+from pathlib import Path
+import json,hashlib,subprocess,os,gzip,sqlite3,sys,runpy,difflib
+B=Path('campaign-artifacts/C05-298-300').resolve(); O=B/'semantic-review'; R=B.parents[1]/'campaign-worktree'; A=B.parent
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+sha=lambda b:hashlib.sha256(b).hexdigest()
+def put(p,obj):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+base=json.loads((B/'baseline.json').read_text());origin=json.loads((B/'proposal-baseline.json').read_text());pins=json.loads((B/'reconciled/evidence/manifest.json').read_text())['git_pins']; manifest=[]; cache={}; gitcache={}
+def blob(commit,rel):
+ k=(commit,rel)
+ if k not in gitcache:gitcache[k]=subprocess.check_output(['git','show',commit+':'+rel],cwd=R)
+ return gitcache[k]
+def cp(p,dest=None,pin=None):
+ data=p.read_bytes();h=sha(data);ext=p.suffix.lower();ext=ext if ext in allowed else '.bin' if ext in ['.gz','.db'] else '.txt'
+ if dest is None:dest=Path('proposal-inputs/evidence')/(h+ext)
+ elif dest.suffix.lower() not in allowed:dest=Path(str(dest)+ext)
+ target=O/dest;target.parent.mkdir(parents=True,exist_ok=True)
+ if target.exists():assert target.read_bytes()==data
+ else:target.write_bytes(data)
+ row={'original':str(p),'copy':dest.as_posix(),'sha256':h,'bytes':len(data)}
+ if pin:
+  commit,rel=pin;assert blob(commit,rel)==data,(p,commit,rel);row.update(original_git_commit=commit,repository_relative_path=rel)
+ manifest.append(row);return row
+for angle in ['tibetan','english','reconciled']:
+ for p in sorted((B/angle).rglob('*')):
+  if not p.is_file() or '__pycache__' in p.parts:continue
+  rel=p.relative_to(B/angle);dest=None;pin=None
+  if rel.parts[0] in ['298','299','300']:dest=Path('reviewed-final' if angle=='reconciled' else 'proposal-inputs/'+angle)/rel
+  elif 'evidence' not in rel.parts:dest=Path('reconciliation-inputs' if angle=='reconciled' else 'proposal-inputs/'+angle)/rel
+  for repo_rel in pins:
+   if str(rel).endswith('governance/'+repo_rel) or (angle=='tibetan' and str(rel)=='evidence/git-'+repo_rel.replace('/','__')):pin=(origin['commit'],repo_rel)
+  cp(p,dest,pin)
+for p in sorted(B.iterdir()):
+ if p.is_file():cp(p,Path('batch-inputs')/p.name)
+for folder in ['proposal-verification','root-reconciliation-verification','root-proposal-generator-caller','root-final-semantic-intake']:
+ if (B/folder).is_dir():
+  for p in sorted((B/folder).rglob('*')):
+   if p.is_file():cp(p,Path('root-intake-inputs')/folder/p.relative_to(B/folder))
+for name in ['semantic-review-protocol.md','proposal-protocol.md','land_reviewed_page.py']:
+ p=A/name
+ if p.is_file():cp(p,Path('governing-current')/name)
+for rel in list(pins)+['engines/hgm_tools.py']:
+ p=R/rel;cp(p,Path('governing-current')/rel,(base['commit'],rel))
+sourceproof=[]
+for name,v in origin['source_pins'].items():
+ p=Path(v['path']);d=p.read_bytes();assert sha(d)==v['sha256'] and len(d)==v['bytes'];sourceproof.append(dict(v,source=name,verified=True))
+ if name!='spine':cp(p,Path('original-source')/(p.name+('.bin' if p.suffix=='.gz' else '')))
+put(O/'original-to-copy-manifest.json',manifest)
+put(O/'source-identities.json',{'proposal_origin':origin['commit'],'proposal_boundary':291,'acceptance_baseline':base['commit'],'acceptance_boundary':297,'sources':sourceproof,'historical_git_objects_verified':len(gitcache)})
+access=json.loads((B/'reconciled/evidence/required-access-proof.json').read_text())
+for x in access:x['readable']=os.access(x['path'],os.R_OK);assert x['readable']
+put(O/'required-access-proof.json',access)
+db=sqlite3.connect('file:'+str(R/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('pragma query_only=ON')
+sources=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',298,300))];put(O/'independent-source-full-rows.json',sources)
+snapshot=json.loads((B/'source.json').read_text())
+assert all(all(s[k]==snap[k] for k in snap) for s,snap in zip(sources,snapshot))
+master=json.loads(gzip.decompress((R/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));corpus=json.loads(gzip.decompress((R/'data/full_parallel_corpus_v32.json.gz').read_bytes()));corpus=corpus if isinstance(corpus,list) else corpus['segments']
+records=json.loads((B/'reconciled/evidence/records.json').read_text());recordchecks=[]
+for ref,v in records.items():
+ rec=v['record']
+ for loc in v['locations']:
+  if v['kind']=='master':actual=master[loc['section']][loc['index']]
+  elif v['kind']=='corpus_original':actual=corpus[loc['index']]
+  elif v['kind']=='spine':actual=dict(db.execute('select * from corpus_segments where id=?',(loc['id'],)).fetchone())
+  else:raise ValueError(v['kind'])
+  assert actual==rec,ref
+ recordchecks.append({'ref':ref,'locations':v['locations'],'equal_complete_record':True})
+put(O/'independent-record-identity.json',recordchecks)
+querychecks=[]
+for i,q in enumerate(json.loads((B/'reconciled/evidence/queries.json').read_text())):
+ expected=[records[k]['record'] for k in q['records']]
+ if 'sql' in q:actual=[dict(x) for x in db.execute(q['sql'],q.get('parameters',[]))]
+ else:
+  term=q['term'];actual=[e for section in q['sections'] for e in master[section] if e.get('wylie')==term or term in (e.get('wylie_variants') or [])]
+ assert actual==expected and len(actual)==q['count'],(i,q.get('name'),q.get('term'))
+ querychecks.append({'index':i,'name':q['name'],'term':q.get('term'),'count':len(actual),'complete_records_exact':True})
+put(O/'independent-query-replay.json',querychecks)
+# Canonical code imported from the actual worktree; every SQLite connection forced read-only.
+runner=O/'canonical-runner.py.txt';runner.write_text('''import runpy,sqlite3,sys\nfrom pathlib import Path\nR=Path(sys.argv[1]);c=sqlite3.connect\ndef ro(database,*args,**kwargs):\n kwargs['uri']=True\n d=c('file:'+str(database)+'?mode=ro',*args,**kwargs);d.execute('pragma query_only=ON');return d\nsqlite3.connect=ro\nrunpy.run_path(str(R/'tools/gen_alignment_page.py'),run_name='__main__')\n''')
+proof=[]
+for seq in [298,299,300]:
+ d=O/f'independent-generator/{seq}';d.mkdir(parents=True,exist_ok=True);spec=(B/f'reconciled/{seq}/spec.json').read_bytes();argv=[sys.executable,str(runner),str(R)]
+ p=subprocess.run(argv,input=spec,capture_output=True,cwd=R,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});(d/'stdout.html').write_bytes(p.stdout);(d/'stderr.txt').write_bytes(p.stderr);(d/'exit.txt').write_text(str(p.returncode)+'\n');(d/'input.json').write_bytes(spec);put(d/'command.json',{'argv':argv,'cwd':str(R),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':'input.json'})
+ assert p.returncode==0 and p.stdout==(B/f'reconciled/{seq}/body.html').read_bytes()
+ s=json.loads(spec)['segments'][0];proof.append({'seq':seq,'span_count':len(s['spans']),'null_count':sum(x['eng'] is None for x in s['spans']),'word_pair_count':sum(x['d']==5 and x['eng'] is not None for x in s['spans']),'spec_sha256':sha(spec),'spec_bytes':len(spec),'body_sha256':sha(p.stdout),'body_bytes':len(p.stdout),'generator_exit':p.returncode})
+put(O/'independent-generator-proof.json',proof)
+sys.path.insert(0,str(R/'tools'));import gen_alignment_page as G
+resolved=[]
+for src in sources:
+ seq=src['seq'];s=json.loads((B/f'reconciled/{seq}/spec.json').read_text())['segments'][0];sp=s['spans'];by={x['id']:x for x in sp};tr=G.resolve(src['wylie'],sp,'tib',seq);es=G.with_members(sp,[by[x] for x in s['eng_order']],src['english']);er=G.resolve(src['english'],es,'eng',seq)
+ out=[{'seq':seq,'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x['eng'],'tib_range':list(tr[x['id']]),'eng_range':list(er[x['id']]) if x['eng'] is not None else None} for x in sp]
+ intended=json.loads((B/f'reconciled/{seq}/intended-ranges.json').read_text());assert out==[{k:x[k] for k in out[0]} for x in intended];resolved+=out
+put(O/'resolved-spans.json',resolved)
+print(json.dumps({'manifest_records':len(manifest),'source_records_verified':len(recordchecks),'queries_replayed':len(querychecks),'generator_results':proof,'resolved_spans':len(resolved)},indent=2))

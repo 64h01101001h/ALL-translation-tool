@@ -1,0 +1,32 @@
+import datetime,hashlib,json
+from pathlib import Path
+H=Path(__file__).resolve().parent
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+baseline=json.loads((H/'evidence/proposal-baseline.json').read_text())
+for n,pin in baseline['source_pins'].items():
+    p=Path(pin['path']);assert p.stat().st_size==pin['bytes'] and sha(p)==pin['sha256'],n
+gen=baseline['governing_git_pins']['tools/gen_alignment_page.py'];root=H.parent.parent.parent/'campaign-worktree'
+assert sha(root/'tools/gen_alignment_page.py')==gen['sha256']
+summary={}
+for seq in [298,299,300]:
+    d=H/str(seq)
+    for n in ['spec.json','body.html','generator.stdout.html','generator.stderr.txt','generator.exit.txt','generator-proof.json','range-proof.json','counts.json','report.md','errata.json','omissions.json','coverage-gaps.json','intended-ranges.json']:assert(d/n).is_file(),(seq,n)
+    assert(d/'body.html').read_bytes()==(d/'generator.stdout.html').read_bytes()
+    assert(d/'generator.stderr.txt').read_bytes()==b'' and (d/'generator.exit.txt').read_text()=='0\n'
+    proof=json.loads((d/'range-proof.json').read_text())
+    assert proof['all_ranges_match'] and all(proof['verbatim'].values())
+    assert proof['spec_sha256']==sha(d/'spec.json') and proof['body_sha256']==sha(d/'body.html')
+    note=json.loads((d/'spec.json').read_text())['segments'][0]['note'];assert 'PROVISIONAL' in note and 'Codex' in note and 'pending' not in note.lower()
+    summary[str(seq)]=dict(counts=json.loads((d/'counts.json').read_text()),spec_sha256=sha(d/'spec.json'),body_sha256=sha(d/'body.html'),range_proof_sha256=sha(d/'range-proof.json'))
+excluded=['freeze-manifest.json','freeze-manifest.sha256','freeze-verification.json']
+assert not any((H/p).exists() for p in excluded),'Existing frozen proof boundary must never be overwritten.'
+files=[dict(path=str(p.relative_to(H)),bytes=p.stat().st_size,sha256=sha(p)) for p in sorted(H.rglob('*')) if p.is_file() and str(p.relative_to(H)) not in excluded]
+manifest=dict(status='FROZEN ORIGINAL TIBETAN-FIRST PROPOSAL',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),angle='Tibetan-first',producer='Codex (gpt-6-astra)',actual_source_origin=baseline['commit'],source_course_boundary=291,segments=[298,299,300],mechanical_result='All three canonical generator exits 0; empty stderr; exact stdout/body bytes; full verbatim text and intended ranges match.',semantic_status='PROVISIONAL, not semantic approval; no hgm_gloss promotion',failed_attempts='Both initial UTF-8 view failures retained: initial combined tool receipt and native reproduction with exact helper/stdout/stderr/exit. No failed generator attempts.',exclusions=dict(files=excluded,reason='Manifest cannot hash itself; detached manifest hash and verification receipt are the outer proof envelope. Every other file in this angle is enumerated exactly.'),segment_summary=summary,files=files)
+mp=H/'freeze-manifest.json';mp.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n');mh=sha(mp)
+(H/'freeze-manifest.sha256').write_text(mh+'  freeze-manifest.json\n')
+actual={str(p.relative_to(H)) for p in H.rglob('*') if p.is_file() and str(p.relative_to(H)) not in excluded};assert actual=={x['path'] for x in files}
+for x in files:
+    p=H/x['path'];assert p.stat().st_size==x['bytes'] and sha(p)==x['sha256']
+vp=dict(manifest_sha256=mh,file_count=len(files),all_listed_file_hashes_match=True,exact_tree_membership_match=True,source_and_generator_pins_match=True,excluded_outer_envelope=excluded)
+(H/'freeze-verification.json').write_text(json.dumps(vp,indent=2)+'\n')
+print(json.dumps(dict(freeze=vp,segments=summary),indent=2))

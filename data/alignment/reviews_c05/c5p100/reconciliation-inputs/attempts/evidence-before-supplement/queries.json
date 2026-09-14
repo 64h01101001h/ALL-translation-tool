@@ -1,0 +1,1608 @@
+[
+  {
+    "name": "full_local_argument",
+    "sql": "select * from corpus_segments where course=? and seq between ? and ? order by seq",
+    "parameters": [
+      "C05",
+      280,
+      314
+    ],
+    "count": 35,
+    "records": [
+      "spine:5cbefc4040751bee603fcb016a477abcee740712ac96a7f4a7e52e5417e0cb56",
+      "spine:0372b646150f4e9a321f05bdddc7af96248bbb52f808e1f5e1ead9dee3a54f53",
+      "spine:72d84fb4f6eb42387baf17ba0eadbba1ff9c815a2662c45299f0c428232aabd1",
+      "spine:71a5f5d1b75ea618da8c915355942cf59d299772dc8bef6e24f067815024f2bc",
+      "spine:e16a72e5be5ebd90899e087074245dcafe38c55211b5064947918ffe01fea652",
+      "spine:84ce3ac4a2a03e7589718ac1510c287d5fa4fa8db59e1e81a2c83e5d98acaeed",
+      "spine:796e4d160259f7e4d753e02a5f31015905f3793f121157a9934b7d277335d9d4",
+      "spine:cf418244abe9ec638aa3aaf3585f8c455977039698eefcf4d2f5e34f0d4f84d8",
+      "spine:04bc2fa0f020a1a71a72f11fe1172254269dccadcd4806ca447167f1c33180ff",
+      "spine:6b9c4356d16e3ef257ab1b6547657a9f653027e8cd06870093046fe0f65d4410",
+      "spine:d02741aac7d67898f1a9468aee5ca39441a352d28c407886992c8a444a4f2c3e",
+      "spine:fde3a310102087bd162d11b293fb20d946f55833e22b6c32f7a2ee6a31052fc4",
+      "spine:28c9024e37e225e781db62b83981cf7ae08925fc971520f4049ab28243fef74b",
+      "spine:0f5813475e7b9cc54e2116e68fd046ec7a73843af44faf0519166bc42a7e5c3f",
+      "spine:8e20321c2dfeaa3afb746aff8fc7d06f14b669aaebf6681b7e5c5c3bc17787f7",
+      "spine:784791e9806cfa8509e2242def15b8f604e8620317432ae2776f121712f076be",
+      "spine:35653b6b526657e99980e1e712b963a19ed02cb164c771902fc9b134899c8eee",
+      "spine:88b368a843b34502deea60498d37a96b9d0218942a927df940479f08a1b04257",
+      "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+      "spine:33f07e57b315a22d9487eb594a46a0654174b065ec0a2e075d8b322a666d106e",
+      "spine:8491e913f3ff6c30c39607f841337aec022ec8b3600e82ff3603cb08c02015cd",
+      "spine:aa51d228d1ba8f8bf313f025fa12c07512e5139150e078260d8327dccd980332",
+      "spine:8a299644f028da18a879bf2e384e5a5ed31afebe4b20d50135f60bc91a2fcf09",
+      "spine:6c8abafa1810483f027a002ca15bdfa410ff96c35d9945754661cc2de4da0bc7",
+      "spine:3610c043bf21f48aaa369813bb0b97ee94ea813df1b56ea0a48299dbf50594b3",
+      "spine:1f2c39463633ffb171216b34f92565eec10f1e26197f1f3093cc76d0a6fdf709",
+      "spine:f36b19ee60708f77bf673132831f953e8b2657db45c9f3d52ae3929370d06cac",
+      "spine:b4505f06f1ea17e539538b0a0ae6304e914a3678d7247ad44043c76688fefc1f",
+      "spine:ad2486dc0f4fb3293f883b66d0be807154573bea10fa38bbe4f6c81ebdd6d23b",
+      "spine:d73a96ebd7239102d9d65bc1ce5c818b03e8d632f1fa4f8bef3d557d94acfbeb",
+      "spine:3b774d81991973322ae56a45467806289491296c1d6e26afe209f456921b5148",
+      "spine:07335e9c98801024e20057611e97840f86ac5ca5d756ab15409d1967d54ebe0d",
+      "spine:951d99100f76327099bbbb61576b7fa5c0ce3fe70e4d2dc4ea3eae47dab9d597",
+      "spine:831f433c1b9e7be6b68a2cf291bf83f5327a5ffff4b161d6b28056983afa0abb",
+      "spine:f048bc87102a219046ce5dd3b653a6d7f6874619c856ccdf4286547f11b39a56"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "zas skom",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:3a872adcc949a985ce49721bcd11792775e9902108e7d6520896c67fb9e60213",
+      "master:d280a41c1b1352afb0653bb539651dc38dd905b0f60822fd70bf8e267713b39d"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "nyid",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:012ffc511ac3f003f3629ed03372f1da1435d69266746db6bdc4f0f8f446341d",
+      "master:1fa881d39bd6aa2ff9d0fae7143cdc3d4e8f4c731f4a71cc09ebc5dbe64c90c0"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "sgrib pa can",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:4041c254360025fc19c02a20fc20af973a33d951b1a6b1effa85bbd7ca64b467",
+      "master:5952019427d1c249f14c5d9b3fc5d790e3d647f95a9e8e8477b41b2cd6ece99d"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "sgrib pa",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:af535504e2b0f7aa1eb8567e20834945018b4988c2cba43ce60c0b980a29748a",
+      "master:fa3ac91bf391d393da94db041b3e3a15f29a39c543acf4d876816db4ea3501e4"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "yi dvags",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:e06210440c4637625307feb75821b85fbadebf8aec91f8f75b19862dfdf2e5d6",
+      "master:4f0da239b1d386bd27d7dd217cc65480da4e981ee28997c063c02808950a0cb5"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "longs spyod pa",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:d7c7a3e57f55d330661d51136ba00acdbb79b17a31dc8a19ee0a19ab1aa4fa05",
+      "master:819010952e56251fcb1e156a6055dd65f343f5de4652dfa7d38b2f600d5ccfdf"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "longs spyod",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:75a1c38a943fc513d0f4f5570b32df07f55543c2dce9af0c7540c123a4ef6000",
+      "master:2609fbd33da1f4f1ea4e01ea9ae6c6ac9c0a257ccd4294b9306a94edf9ba26e5"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "brtsams",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:d8eda3d347bea9cf725f6820cfb809cf542cbc61a0087a2ba4080a23126ec7d0",
+      "master:db454fb77f7ae002388a62e2d809f97adf42ab98cb4bc6a1954926e4b630b44b"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "bza' btung",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:bbbe381a573f07fb2ed1ef98cc7f2f2cd24116a0b64127e1c924d19e455c4e42",
+      "master:60e3ec337f27c825fd5ec170ac2a94248661d028c5c4fd1d775b1e829c5cb194"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "dngos",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:0820ee9b7083189cf4d22324495f46f2d47b357c612aeda078c0104796be5734",
+      "master:7f81f2d9d63a9585858aa452adda911b45880424846a19ce8fbe9404f6202ecd"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "rigs 'dra",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:151947ee33421fb5caa2ffcb1a43d9f34ad443daa4c078e137abcbfd0f66d1e5",
+      "master:b2c80c909bcca7defc8d44e95b77a4d3cd02e609a7ab7991a0bc5bb0a278005e"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "phyi ma",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:0fb9ba6e860de0efd14022bb158b729eb81d67e7404b41c31006021ee0d5664b",
+      "master:5858c2c434ae27b3afc8e924b4c095209c50de4133b084fd4aece1077704ab0f"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "skye ba",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:0cf3a143270df56580e7888a566b70e97b243b51b7870a3ea4d399bddfb1924d",
+      "master:b845cf83d36a07780ba518b33db97a3c391fc8662f05d4ec18fd921b24392766"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "snang ba",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 3,
+    "records": [
+      "master:9cd19f72bfb10d23dfde5470f5bdcee655687605affaf558aa04cc9a787f1421",
+      "master:a84fafb51cb3604fe4bdb5b467466a65571cb5d934b6895c4222f5cbfb2440f4",
+      "master:d35e6cb7f1ee1ea74514c4faa0eef14f17a8619ffae29353f43356d0ee6d7c41"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "tsam",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:32fbe7790f009e18cb40c2fc294d892682169ebcb602315656ec5af37e6c9d2a",
+      "master:abe7820f1efb03938d700aa48113fcc0ab5da0bee189f40798d0517f7cd07ea4"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "bya ba",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:a851040966dce4b6ac16f6d70ba0750bfd46e06156de632ea379173dd6d493cc",
+      "master:5e96a5e82dfb3b25209a272ebce9dd5cf8f2705640aab53b8dde352afd2b0fbf"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "skur ba",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:3c5cfab31db43629df58200dd34ce125683f76781f8fcf3cec4bdf8d37469f32",
+      "master:f6be989ed3d557cb51d052f2adfcdf00c09bff0093b2e3fd39ec8109e6600d3c"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "skur ba 'debs pa",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:81a637c0decb265596759d9bbe466ed6b0da4f530abaca1428c547ca7d4e6f58",
+      "master:0536a7efde40744386d2d75dbbdc398ab0d9dd29199e171f7dffd45e4d584d78"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "las 'bras",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 3,
+    "records": [
+      "master:da0b53696518f41813042f4b446d026050b6bc50df1189ff17d8d43904cff17d",
+      "master:273b57410da9feca90ed86eb1f8e441f85ef3fd96fd84daf1d801f913f1f6de2",
+      "master:7b9dbfdb65a14d03b6a7bd3e3fea99de5e522fe019253088e18958c5328d2791"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "skur 'debs",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:c9d3a63cfc06f9ea21991ecdec88ba072537ed7e677e499959423fe756464f3f",
+      "master:02ce6bdb5a9797eab547f9a4512e1c3a32aa9294953f3296fcdd38a17f552836"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "gzhan yang",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 1,
+    "records": [
+      "master:a4485e297ef63e7a4b02804a7059eb890856b34db6eccb80ffd68d84de30248f"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "snang gzhi",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 0,
+    "records": [],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "rab rib",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:840b1c55eb37df58ec5a97bc4fb3a4075eb14dc0ff17843e7dd64518304d95e6",
+      "master:be9c9f4e98da68de2eb3b0054025ed38e384dd4ceeaa74234fa8dcd0235ed642"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "bse ru",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:ae7b7f227686cd9042af41b9d451aaf9d7f9451947631be35e25807ea336902a",
+      "master:72ddbd43ef79f5b631b503c1499b14367ed129f5918fd602fc1b93a653728a6b"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "skra shad",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:43bb48b2251767ace7f1737bde94c83e31d640511b4de3c7d52c54ec8f32807f",
+      "master:f898b304e632b87e0d844030f8cc4f0aaf9d623b6da3032689b373b617238906"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "'ching ba",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:2cf3c0f89335ade0dd4e0b53356312b7e89c96b56109307896d84a8978f3a2f3",
+      "master:a49dec255d209e0a1b62f8daf7d9b237a6e4b1e2218e1bb8029759dae56106de"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "sbrang bu",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:533ad12844f7cdc3b8492276d4be8f2ad50dc9cf8e83b1ab6bebbed8102acebd",
+      "master:ebb4f90084512b83910bca107cf59182062c76a97543034488420101c6d2f5dc"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "lus",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 3,
+    "records": [
+      "master:6f7a9df01457e89ee5892ed866d6e503300f6e90d17efd69cc938283561eabd1",
+      "master:7ddee07cc95371360bf5f5ddd71fa1abff22e510fa1a922460f09a053c2d1883",
+      "master:3a34986dde2024e155327d3e58c0678131244f1d4361d02a0c6c31233a012d74"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "za ba",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:fa89b8d164b04df641e4739861c88282abdae2db7fcd8926ce7b59320f64b234",
+      "master:0b381941baec27167dad1e95bd4f25fdac0e280561d517021ef35a16c8097e82"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "smig rgyu",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:7132c7e209a91086fe318a42b71ef21b177dc745b79e61117e98f5fa3b5d100b",
+      "master:6f1274d731696e015552b5703595e26300541b25d9e8903942d5aaeb6648d04b"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "chu",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:b8740f70533e995f2ba292809aea7e8c43021336c84b41a1f4705f4b13c55347",
+      "master:a7a12207f46fb00d8da6a05476dc231e8be25a18582465b1b4bc6ca396aec948"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "nus pa",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:3684df200fa51dfc7f0295e2d84817688e8806b26137fdd1eb6b46c5d254e8c0",
+      "master:9befb563d2e489b25520611a26323957e54850a5165b04b9bbaa337537fc3efb"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "sogs",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:b53c6a3bea5aae4e97db0bf002cdee24b9c2c896277a384f4841fdfc0e471c22",
+      "master:3a2b197acaeba2c7ae7ccf18898154f5c81abfb11376f13e60835caecdb5d20b"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "brlan",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:2ca0c386a4045d40572828a68883e6a68fe32f9c5bf32aac1c6ad1d333c49cae",
+      "master:a7a2daa257fbb12e11ad1ab404595026cd94b9b54951d9aa6a42235c5ee3ba5a"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "gsher ba",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:a650fc48d503f3a20e0ab22053853f6efbaddeef717ec2215ab25ac63c20897a",
+      "master:f68017f131b1fe4e97e1c1b82e2579f43668a9ae4e894cf06fe114aeca1beb30"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "phor pa",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:a26dc93cb369f0fb1a995251e4190a66cb363ba830f0574d11a61ccd2c2668af",
+      "master:86d351eff13ca367e9eda7f24c873829e7430aa0b14ee5cb816756560a867359"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "gang",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:28655bc67b40d885081da032ed50e3ff0935f20be7fd6dea21d21d4d711cd8fc",
+      "master:f95dc13555383824142cbb70d4ec8f54de3b44859eb4b9c730a29a20f4004198"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "lha",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:f20f67ea52591cbc7409aff6a8b4f3b853c691e2532e463080e60758b95ea3d7",
+      "master:faa3190de4c7f9531484c4b929e9a121fda0f42e46ae24d3425b052ba61fde3f"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "mi",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:f3cf493e91dbd5abcd78dd37aa17f2917ac365f25dde903a25e46d8da20dbfb4",
+      "master:f936a13dea3b010d1bc5fd3566f693fdaf44e48239d0bc7f7be90f1d37c8be99"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "dud 'gro",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:98e49a30d46148ca634420aa5b52d1ed0146a6b37bcf2983fa59d2144108b3f9",
+      "master:2401e84a43971a2cb3c5f0c7da7695cc90c3fe9ec8cf5e009bab06afc74f9944"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "cig car du",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:140b63e77b8b48d30814ba783f49ca1fab9eda1c2dd43e81cb5bc27736535de3",
+      "master:68096111bb3c00ff1698eb9ec3c963f283b1666360f355fdc4db4208c5a9ca75"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "tshad ma",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:2b015252bdb178e457ed8bc5890068e8ac31326e4337e610af066bcb56d2e880",
+      "master:558608c66b1535cdf4dc643d04b2ed3e74fb95424f158212bc60866b714fe391"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "bdud rtsi",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:eadd458471900a996b3c29971248cd7525601f9d87eeffe56d4bf2a8dd56adda",
+      "master:4f01655615985f10447e3036ef6cc7b69118c9227a63c6a94c69ca8825ac5959"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "sems can dmyal ba",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:c0299ded2f538a3d8d0b6f0954d30fe12213727f4f657cd394da17fe6247694c",
+      "master:c1b83b3f88c9bda32aaf9bdd3f08a6ec00c866d2531c0a6a1e9d13162b8a8848"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "mig shes",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:13582d858cbf40d301a60e9a6f106835a9735631e832b7c2030e05aba0b91e9f",
+      "master:c9df4e6067d62391e50089df1c1fc598f8a15b426896e0d2d6d90d2ce8d8f488"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "dmyal ba",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:f0a68dff80be2ac28f68882601ec4e497fb6f3e475a4dc5255d714c00224b395",
+      "master:e86179e0e4075f2293bdbbd68d6f43bf861a0f64edab6460b89c9f9b48d50f6a"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "lcags sreg",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:064e91ea7c81609edafc5993709099d2ea97c0b69110a2c6ba4be9a9c46bfbfd",
+      "master:de382b873b9bc1a4d49588d7a3803d15d00eab7def40fbba486c75bc4112d133"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "ral gri",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:020e72e8794120849db4a7d7b7a8d85612c017c2db915601ec3836811ee59c04",
+      "master:5af3d89b6c09f9089c7885917e0756d4815f16da8b4f2e3126e4df9b047c7fca"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "nags tshal",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:bc5002cf02cdf7aa9f398d1cc77421acc5f97d214355e834eef550c136e80d38",
+      "master:2b0ec478413f94ee396210b93cf1412373cbcaae8d7b413619578331e98c09d0"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "me",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:90d029e7348251a753193bf93da5b8c09558434cff9f265ff2b9260f939aed86",
+      "master:6d4628d27424e052a2e41f6912921b27c0a67c2caaed1d44e1145d1de9293370"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "tshogs",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:97c33f18ade6aebf11fe472372afb3e3f26d89ce6fe24fdee10590b04968fbdf",
+      "master:cf9053eafc6c9b9b7dac663d9f8e13e0392122d9b99e6525de420f839df25fc6"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "dngos gnas pa",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:ce7549f85abec445c5c5936c0a0f2fc3b594d208010b6692467ee2c0635d5138",
+      "master:4bc7844fb4ebc26c31ebd9862ce89ce8a26a0dfe595c5da95c5c271db2bc7e86"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "dam bca'",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:985afb5545b5cad16856a963fa8b834b9b603fa6d138f987b159ac1733e59c2b",
+      "master:23e70b7a6686c1019e4bce37e67b85dc534423a38015ba4e12025505ade1b603"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "rgyu mtshan",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:2fa8afaf917876787bce5d290e7c08988cf14cd66282f22d735ac1c8bc82b7df",
+      "master:f9adfdf29f93c62dbd90ced5415dff7e9f391820ea14ccfe43f385e91c628fd1"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "lexical_exact_with_variants",
+    "term": "mtshungs pa",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "predicate": "wylie == term OR term in wylie_variants",
+    "count": 2,
+    "records": [
+      "master:0cf8688873811e5d28ab086fb2bf8aaf7d7f3941c8e8b2ac06289326fc94bfb9",
+      "master:5c5e3e7751326a914559f71354bde2d351a06d83139f2f6cde947383412d7b7a"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "corpus_context_less that what they really are",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%less that what they really are%"
+    ],
+    "count": 2,
+    "records": [
+      "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+      "spine:b53e378a60730c8bf9d43c2d9704739427cca2034a88d849ff8dd5575e6f4a17"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "corpus_context_porcelain sink",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%porcelain sink%"
+    ],
+    "count": 4,
+    "records": [
+      "spine:33f07e57b315a22d9487eb594a46a0654174b065ec0a2e075d8b322a666d106e",
+      "spine:fcb783db16d519795e3af353075b083ed20b06dd7aed1db1ee82e44863e0390d",
+      "spine:5d09b84461228373830edb293db73452090ba0fe01b19bfdb652329d9f5b342b",
+      "spine:e258fbc272d3e6c2a0d163b74733dd4bf01f586149f17fbd71275be5877ecdfb"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "corpus_context_continuum of the food",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%continuum of the food%"
+    ],
+    "count": 3,
+    "records": [
+      "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+      "spine:f70d662385887cb531d89e83c5d612e669d35e0cf366e0377816ad3b97e3edec",
+      "spine:b53e378a60730c8bf9d43c2d9704739427cca2034a88d849ff8dd5575e6f4a17"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "corpus_context_forest of swords",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%forest of swords%"
+    ],
+    "count": 7,
+    "records": [
+      "spine:8491e913f3ff6c30c39607f841337aec022ec8b3600e82ff3603cb08c02015cd",
+      "spine:bf8dca60a3ea662aab08ad364253c9fb88eb8e6cd365a93f6fb2384e2e6f7792",
+      "spine:f0953e9e8feb5670cd5e4adc140766b585b5672ea228a5d292d5b6f63baaac39",
+      "spine:ec1daa824013b779e707b3252f7485e060ea6f3dacad4b21a7b71afb44644065",
+      "spine:f4fc250727b2124c715e87499d443f7f7cae4e4a2ffba40d4c49ca9ef6c7a629",
+      "spine:a643afca8b6a4f9c32e83323b469bd25eb8567bd12843dc8ac7d357555170c53",
+      "spine:fe3b95ccdbe38aeb9c8ca336a506f9deb5f2a14ac0e14913e8d836aba390211e"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "corpus_context_snang gzhir gyur",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%snang gzhir gyur%"
+    ],
+    "count": 5,
+    "records": [
+      "spine:33f07e57b315a22d9487eb594a46a0654174b065ec0a2e075d8b322a666d106e",
+      "spine:8491e913f3ff6c30c39607f841337aec022ec8b3600e82ff3603cb08c02015cd",
+      "spine:fcb783db16d519795e3af353075b083ed20b06dd7aed1db1ee82e44863e0390d",
+      "spine:ec1daa824013b779e707b3252f7485e060ea6f3dacad4b21a7b71afb44644065",
+      "spine:fe3b95ccdbe38aeb9c8ca336a506f9deb5f2a14ac0e14913e8d836aba390211e"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "corpus_context_skra shad snang bas 'ching",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%skra shad snang bas 'ching%"
+    ],
+    "count": 2,
+    "records": [
+      "spine:33f07e57b315a22d9487eb594a46a0654174b065ec0a2e075d8b322a666d106e",
+      "spine:fcb783db16d519795e3af353075b083ed20b06dd7aed1db1ee82e44863e0390d"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "corpus_context_rigs 'dra phyi ma",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%rigs 'dra phyi ma%"
+    ],
+    "count": 24,
+    "records": [
+      "spine:30712fce092f80ccae127b1c482617010fdcb72c300d526b431855b7afcacf0b",
+      "spine:6e8e1a1736665a2968149fa81e9e77cda1b64cddd2c870fad8ab7a6673169ac9",
+      "spine:c61e41ed961b3b9a62c93b5b9744ca2c82df939fe7cfea9fb1f5c6fbc7a35f5d",
+      "spine:279271618fefeb5047b517c20fba45eae8079377a9bed750c66cca29efd2c903",
+      "spine:3e9e74568d700965900720629b77c445f0dcf7c4766de4b3bee4a4d7e972c63e",
+      "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+      "spine:0b338f4c693d0ae7df52b4e824608f6267b5fe9e5e8754a7096d113877e58699",
+      "spine:2e45036c11301ed00043f5d630feeb47d3d9d432c0bef156919345f634be54b8",
+      "spine:6aceabb69452b17365c1fbc884ca0b73e85cc5d74ea0b7b0ca104c2242dd18bd",
+      "spine:8eaee456db5d3d3bd64d4743bee07beb08e68b99e74ab6a2f8ceb057b9ed5623",
+      "spine:f70d662385887cb531d89e83c5d612e669d35e0cf366e0377816ad3b97e3edec",
+      "spine:a2447ed833bf3f1fa1f5f3f31e0ca91fb98a41b1c71e038f76e64528615fcf40",
+      "spine:5e6e99e0c2e40580e4ec0c4203bb8cb69edb07770e8ab6c619f0aceced44e93e",
+      "spine:88e42f7b540bb5b1ec366fb1efe414f1ab2a696981016fc9b09fe5f03f5127eb",
+      "spine:7cb292bd9f63efcb3cedba93e703e81c63e0a4ce0789018de5f4a5b102c3c114",
+      "spine:a6d63c19da6c5c288a509686ce8f33e233237cb91955f5dab6fa4897487267f6",
+      "spine:a636f790f1245201648fcaa27582c92e49f08b1d2170fe44d958dc93c1bd0505",
+      "spine:43bf4b919a5947d70e2d98f1cb0b113a1db249b37afe23c0b9b163f5d795a70f",
+      "spine:67a226b31c977c641419dda7247f6f6fa5aa5eeba40df175c137a771acb2e6ef",
+      "spine:9d502945b67ddca1df3b3615db500d8e4e13055e056052cd370aa6df7a117c0f",
+      "spine:cdaca356d6f7dbc461ec428f1d576ecc87c0f3f0ade676fc91a78411238e56b6",
+      "spine:ed9327fe9a4c8c22aacfec4c6e51547248e6c5fc523e39efc5fd70823d04cb5f",
+      "spine:bda618ab5b20a8191496036eb81382ee028eddbe0fe0cc70bda19473a20d09dc",
+      "spine:b53e378a60730c8bf9d43c2d9704739427cca2034a88d849ff8dd5575e6f4a17"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "corpus_context_skur ba btab",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%skur ba btab%"
+    ],
+    "count": 11,
+    "records": [
+      "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+      "spine:949d9adc1c4c3c7bda8479d7e14c4c57188cc73dbbc0810501d0a53c0942b64f",
+      "spine:47989045553b14bfc892daf66a4d3696a8041b00d776bef9b6b601e0056cb603",
+      "spine:f70d662385887cb531d89e83c5d612e669d35e0cf366e0377816ad3b97e3edec",
+      "spine:f1329f46dbf2826d99ad76894597aa8c80d44e3a93ea5ce8cb46592835ac2f13",
+      "spine:c6a65d7c6a976f6fa6f93a36e4fcf09f4b2eec2d3d1fd231ff90e7d33a5a7ce3",
+      "spine:af6c331bae79b685be79cff3ca4bfdba5306581a1de63128e3cd62ba8332db00",
+      "spine:b53e378a60730c8bf9d43c2d9704739427cca2034a88d849ff8dd5575e6f4a17",
+      "spine:936c7e35e0dcd57f2570ebd064c6bbf664f539c8a578f7251c430fad1e6a094d",
+      "spine:cf9198a8fabde2a2f20ea00dce16c67447d5e6743e4e1142fcf65185525b7fc9",
+      "spine:78eab16f5b25d843b86680a206da8bef31187b668a9beb6e1a8e5902d557aaa8"
+    ],
+    "fresh_replay": true
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "de ltar byas na",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:633a7ebb6d18df9923f2512fb81f045613d1a22f020cbab30bcad0a8db3a07bf",
+      "master:eb353bcfc820d5f3005a9fb37ba45e513d6167bc9174459e2dfc55493568569b"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "can",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:5814269a0724252a14f3b89cdf85423f23bc185b1cd7c4fea416bababfdbbd0b",
+      "master:0a9ccd4533e803039ade1de253eeab79dd008bed1292a85300363516b27a2867"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "bar du",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:f266b40d8ed81aa92b3d00b2dce124f6b215b6f1f11d627c5811c9b327390e19",
+      "master:29c4bc1be4700d3a4e9e0ba3d5c8a0a73a9b4c5d7df6ee4ab436a5a90fae1e3c"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "rigs 'dra phyi ma",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:b12fe64ed7aebe1105766abeea7c5cf9281fab15f78b8b9dfce9de63dcd47d3c",
+      "master:5638c0180dc22150d51a8eeb1de2915ba0d1e993c0003e4bf3b990534109cced"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "snang ba tsam",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:722484a8e3867a0e124c67a460313adb90c8698ec68de3e8213bff3d2335afe2",
+      "master:17eeaf79f2faa7e39a719a6ec77652a83c454274f2f3dbd58f4863fe3e845b8f"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "byed pa",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:b2d7988ec2057e152afe4a53740f54903a2e5dd7dacf24b4df615af198693b64",
+      "master:68742dd454b80be00db10709b50c4db3fda3a74e3b23c6d97c0e96ea75c2f1ac"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "las",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 3,
+    "records": [
+      "master:500bfa71e09c95c6857dfcc21533af8cb31b90aa4d11b0ec84ca287a7124d861",
+      "master:e029003631f890dd6478e6e82cf53d8c428a3a5f59277e90ffad2e72f162ea0f",
+      "master:7fb22c9d748b7097f532b29eb0977f233947bde7fa36dad068d9f2f79d3fa070"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "'bras",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:220e5d0066cdcdc4bd3763aa6d279cac897074cb1b3c7ba6e65648443330a42e",
+      "master:137b94b4d85f4f334e135d87f5f8759c63121e8a49780f3cc9696e9e75d59f0b"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "rab rib can",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:00c50c967bb7e88d32543b525e448aeb6233c274c23cc8b3f2a0b913498a5cf5",
+      "master:4b4407b89cf0f5e20e687156e2cd8487a1f437fa34c9f7ffefd02ec131f1866d"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "nang du",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:6172b4c9adb07316fc453a5a59134e9f3bd8427bd296f0d8cfce77d08941fe72",
+      "master:e3926b44fb12d89f7c82f4c8c4b7d8a58fa55b81a374e8c3e475ded9867be4af"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "skra",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:411f4bc664f9dca637fbcc961766929523f995b3f29fd9fca2954a84e8ffb376",
+      "master:0e73c8f2ceea8aeab694eb294685935ac4cf6351178fdcae97db391d0df1714d"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "shad",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:84e52f898b3214298186401eac455bdc7f8e8a3f763cfdc969e114a9ecd9dd73",
+      "master:7147a0dfa68a358578766f90cb42825be9ec65d635c307fb9ff476152c3b52f0"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "'ching",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:e324f6ce85218c3147ffe964ca3bbe8013444773d6afcb3ef69064e69e236635",
+      "master:3aca2ac75bfc4e6c9cc401bc4a737ff8ad838648fcbc96e4ce5b5d027cd5c427"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "lcags",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:b99c92772568aa5dfef2de0445bf49525d304f384f394076ad492d9cdaa087d8",
+      "master:9f03709c82ad24df0b25838d217384a911461d9d08073941a65f8f85990c06f8"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "sreg",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:b073ea5b51ef95ed6eba56116856fac1e3390a341fea120b707f1516c1a6edeb",
+      "master:467d0a1a413b7e2d365e8625c7efe8888ba6412fd11f4afd108531a75156ad59"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "me tshogs",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:bddad35677caa3ac37a70bb75f00ee9bd9d8917607fce46647e8f3b984122be9",
+      "master:c5456bfc4c15ce728a5d4c5fe57045e7420d8cef5c77838c0be849bf47c27ccf"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "'thad pa",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:43ed115905e947206e5ef485d307216386e3abbd0936ed72aa3b29207bdcf2a2",
+      "master:7bc031d2c1d512d33879be19cbbcbb6d86423512179926bbaaa99d56b2cd7b95"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "tshad mar",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:0ea6f6f7fbe68a5cb3b8dc01f2a190197fe9502c23ba68256ac19787bcb22add",
+      "master:5ece0192688d4e98547a60f03dbfcdaa7c350a82269728f5fc7cc01b3747b1f8"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "song ba",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:5d96a0740ccaafbb268e784e6e511c40ac536b2d2e6f5d92b597897c94b11980",
+      "master:c4033581df86f5d0d22147b56b1d55982629fda0507aa034cedece7ecce7f327"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "des",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:be732402190462013d68d8426d04a080f452dace979cb894cbd6a8cbe224480e",
+      "master:e5ac7bdf09e79e86129d432b18946373d776f4b355355cd59ad9f73c07e45d7b"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "de la",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:a0d3f7615babfde397f1b449d8d41ef697b9a6b5e6da1a93f325f9eb5c2de09c",
+      "master:9a4cd7cceeca5d49d90f5fd09f3088f023c0ae7ac80408d4d253ec815b683989"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "sems can",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:265f6509051842ad96a2812aadf9d74d11bc09db608ef9975a398e3c158fb092",
+      "master:fcdbcf19eb13bb3c7242a739372f5f296ed290ce832ca9c0768baf5dadca0643"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "mig",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:98632ad6001cf94614055a303d2a2014aa825818f56f572d29781555d0c838c3",
+      "master:bf799febe76d4c22b6d6fc6c8af38332b8986361b28a1d61ad91c7ab43fe3763"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "shes",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:9e0664ed9065ff89974a1823375822f8ec4b68cd738832ae9f5012f478adf1ff",
+      "master:80c9bf9a8512a844f41716ae485267277b533a017b86dcb67d1681ed4fb11eaa"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "bza'",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:664e323710f42565d6a91c31befc99c21c6f6e4dca34b0cec78bcc127d5254c5",
+      "master:992e215d9ab11e42038844bd0b26c10d2f65378a425eac126a7662480f0dfd0b"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "btung",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:1166bb4592ae715e372662303f2e1c8ed61a90576371cadc13de47e187415ec0",
+      "master:70accc62fdf1923fb6366d80291ecafd5c7acfb6d9f6781eda72f169a75bedf3"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "rnag",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:50e079761d44c3136983e1fe0a12c6ff7b1e51457978f577c80f039ec4593571",
+      "master:01ba43ab50e90318d54cdf8e3621a0d3c9b81e1f5da429132c562f68ead5b6e9"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "khrag",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:33ac73c252060bf1b2b7e20b9c1aaa90108e58d0c798bb422e399dfe84d5ff84",
+      "master:aef782d1fd6a71ba16124f5e3fc350f286497dbfed5f591c91f58bb4f5398429"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "med",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:f771b760b7fa99cbe82eb5d1e9ef850649037cbd26c1a6ade96e4ee83fffeecc",
+      "master:3c0fe903c1d6d3165af95142ba7a1c73c4dcf0f1deee6751fddbcf16901b1c5b"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "phyi ma",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:0fb9ba6e860de0efd14022bb158b729eb81d67e7404b41c31006021ee0d5664b",
+      "master:5858c2c434ae27b3afc8e924b4c095209c50de4133b084fd4aece1077704ab0f"
+    ]
+  },
+  {
+    "name": "fresh_lexical_exact_with_variants",
+    "term": "rigs 'dra",
+    "predicate": "wylie == term OR term in wylie_variants",
+    "sections": [
+      "unified_entries",
+      "curated_entries",
+      "glossary_entries"
+    ],
+    "count": 2,
+    "records": [
+      "master:151947ee33421fb5caa2ffcb1a43d9f34ad443daa4c078e137abcbfd0f66d1e5",
+      "master:b2c80c909bcca7defc8d44e95b77a4d3cd02e609a7ab7991a0bc5bb0a278005e"
+    ]
+  },
+  {
+    "name": "fresh_errata_witness_search",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%less than what they really are%"
+    ],
+    "count": 1,
+    "records": [
+      "spine:f70d662385887cb531d89e83c5d612e669d35e0cf366e0377816ad3b97e3edec"
+    ]
+  },
+  {
+    "name": "fresh_errata_witness_search",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%less that what they really are%"
+    ],
+    "count": 2,
+    "records": [
+      "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+      "spine:b53e378a60730c8bf9d43c2d9704739427cca2034a88d849ff8dd5575e6f4a17"
+    ]
+  },
+  {
+    "name": "fresh_errata_witness_search",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%continuum of the food%"
+    ],
+    "count": 3,
+    "records": [
+      "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+      "spine:f70d662385887cb531d89e83c5d612e669d35e0cf366e0377816ad3b97e3edec",
+      "spine:b53e378a60730c8bf9d43c2d9704739427cca2034a88d849ff8dd5575e6f4a17"
+    ]
+  },
+  {
+    "name": "fresh_errata_witness_search",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%porcelain sink%"
+    ],
+    "count": 4,
+    "records": [
+      "spine:33f07e57b315a22d9487eb594a46a0654174b065ec0a2e075d8b322a666d106e",
+      "spine:fcb783db16d519795e3af353075b083ed20b06dd7aed1db1ee82e44863e0390d",
+      "spine:5d09b84461228373830edb293db73452090ba0fe01b19bfdb652329d9f5b342b",
+      "spine:e258fbc272d3e6c2a0d163b74733dd4bf01f586149f17fbd71275be5877ecdfb"
+    ]
+  },
+  {
+    "name": "fresh_errata_witness_search",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%forest of swords%"
+    ],
+    "count": 7,
+    "records": [
+      "spine:8491e913f3ff6c30c39607f841337aec022ec8b3600e82ff3603cb08c02015cd",
+      "spine:bf8dca60a3ea662aab08ad364253c9fb88eb8e6cd365a93f6fb2384e2e6f7792",
+      "spine:f0953e9e8feb5670cd5e4adc140766b585b5672ea228a5d292d5b6f63baaac39",
+      "spine:ec1daa824013b779e707b3252f7485e060ea6f3dacad4b21a7b71afb44644065",
+      "spine:f4fc250727b2124c715e87499d443f7f7cae4e4a2ffba40d4c49ca9ef6c7a629",
+      "spine:a643afca8b6a4f9c32e83323b469bd25eb8567bd12843dc8ac7d357555170c53",
+      "spine:fe3b95ccdbe38aeb9c8ca336a506f9deb5f2a14ac0e14913e8d836aba390211e"
+    ]
+  }
+]

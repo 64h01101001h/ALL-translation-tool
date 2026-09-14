@@ -1,0 +1,29 @@
+{
+  "status": "PASS_EXACT_ORIGINAL_AND_FINAL_TUPLES",
+  "utc": "2026-09-14T15:35:34.817330+00:00",
+  "original_count": 269,
+  "final_count": 154,
+  "retained_exact": 240,
+  "dispositions": {
+    "retained": 240,
+    "recast_or_depth_changed": 29
+  },
+  "freeze_files": 100,
+  "freeze_sha256": "ea50236de52418889b1312e9a7195f5df55c4231d35b95263237ba8b7f189f22",
+  "actual_canonical_replays": 3,
+  "all_current_final_bodies_match": true,
+  "source_origin": "c107f1ecd9cfb68968245870ad81ba5d9a070721",
+  "acceptance_baseline": "079507630dbfff60fc32278d8780ce56509cbd2a",
+  "root_full_read": {
+    "all_final_rationales": 154,
+    "material_omissions": 15,
+    "altered_original_reasons": 29,
+    "all_final_specs_reports_errata": true,
+    "complete_errata_screens": 3
+  },
+  "read_lookup_failures": [
+    "First metadata lookup assumed resolved file at batch root: FileNotFoundError before writes. Correct path is proposal-verification/root-resolved-spans.json.",
+    "First mechanical tuple check read spec spans at top level: KeyError before writes. Actual schema segments[0].spans inspected and corrected. No generators repeated."
+  ],
+  "semantic_acceptance": false
+}

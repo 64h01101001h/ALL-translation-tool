@@ -1,0 +1,45 @@
+import gzip, hashlib, json, sqlite3
+from pathlib import Path
+H=Path(__file__).resolve().parent; E=H/'evidence'; R=H.parent.parent.parent/'campaign-worktree'
+def save(n,x): (E/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+db=sqlite3.connect('file:'+str(R/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+terms=['zas skom','nyid','sgrib pa','yi dvags','longs spyod','brtsams','bza\' btung','dngos','rigs \'dra','phyi ma','rnag khrag','skye ba','snang gzhi','snang ba','tsam','bya ba','byed pa','las \'bras','skur ba','skur \'debs','gzhan yang','rab rib','rab rib can','bse ru','skra shad',"'ching ba",'sbrang bu','lus','za ba','smig rgyu','chu','byed nus','brlan','gsher ba','phor pa','gang','lha','mi',"dud 'gro",'cig car','bltas','bdud rtsi','tshad ma','tshad mar song ba','sems can','dmyal ba','mig shes','lcags sreg','ral gri','nags tshal','me tshogs',"dngos gnas pa","dam bca'","rgyu mtshan",'mtshungs']
+master=json.load(gzip.open(R/'data/hgm_dictionary_v27_2.json.gz'))
+lex=[]
+for t in terms:
+    sql='SELECT * FROM entries WHERE wylie=? ORDER BY id';rows=[dict(x) for x in db.execute(sql,(t,))]
+    matches=[]
+    for layer in ['unified_entries','curated_entries','glossary_entries']:
+        matches.extend(dict(layer=layer,array_index=i,original=x) for i,x in enumerate(master[layer]) if x.get('wylie')==t or t in x.get('wylie_variants',[]))
+    lex.append(dict(term=t,sql=sql,params=[t],count=len(rows),rows=rows,master_exact_or_variant_count=len(matches),master_originals=matches))
+save('lexical-full-query-results.json',lex)
+queries=[]
+for t in ['Given all this, consider craving spirits','Suppose moreover that there were no pus and blood','And consider again this case','less that what','less than what','use a comb','porcelain sink']:
+    sql='SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq';p=['%'+t+'%'];rows=[dict(x) for x in db.execute(sql,p)]
+    queries.append(dict(label='english:'+t,sql=sql,params=p,count=len(rows),rows=rows))
+for t in ['skur ba btab',"bse ru",'skra shad',"rigs 'dra phyi ma",'lha yi bdud rtsi',"snang gzhir gyur pa'i"]:
+    sql='SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq';p=['%'+t+'%'];rows=[dict(x) for x in db.execute(sql,p)]
+    queries.append(dict(label='wylie:'+t,sql=sql,params=p,count=len(rows),rows=rows))
+save('corpus-parallels-full-query-results.json',queries)
+regs=json.loads((E/'git-docs__errata_register.json').read_text())
+needles=['less that','comb','bse ru','skra shad','following','heading','1,500','1500','skur','lha yi']
+reg=[]
+for t in needles:
+    rows=[x for x in regs if t.lower() in json.dumps(x,ensure_ascii=False).lower()]
+    reg.append(dict(search=t,method='case insensitive substring over each complete original JSON record',count=len(rows),records=rows))
+save('errata-class-checks.json',reg)
+q='SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq';rows=[dict(x) for x in db.execute(q,('C05',311,314))]
+save('argument-continuation-full-rows.json',dict(sql=q,params=['C05',311,314],count=len(rows),rows=rows))
+physical=(E/'original-physical.txt').read_bytes(); text=physical.decode('utf-8')
+lines=text.splitlines(keepends=True); offsets=[];pos=0
+for line in lines: offsets.append(pos);pos+=len(line.encode())
+windows=[]
+for needle in ['Given all this','Suppose moreover','And consider again','DE LTAR BYAS NA','BRLAN ZHING GSHER BA PHOR PA']:
+    hits=[i for i,x in enumerate(lines) if needle in x]
+    for i in hits:
+        lo=max(0,i-8);hi=min(len(lines),i+100)
+        windows.append(dict(needle=needle,match_line=i+1,start_line=lo+1,end_line=hi,byte_start=offsets[lo],byte_end=offsets[hi] if hi<len(lines) else len(physical),text=''.join(lines[lo:hi])))
+save('physical-source-windows.json',dict(source='original-physical.txt',encoding='utf-8',line_number_base=1,count=len(windows),windows=windows))
+for x in lex:
+    print(x['term'],[(r['id'],r['hgm_gloss'],r['tier']) for r in x['rows']])
+print('CORPUS',[(x['label'],x['count']) for x in queries]);print('ERRATA',[(x['search'],x['count']) for x in reg]);print('PHYSICAL',len(windows))

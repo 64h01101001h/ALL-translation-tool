@@ -1,0 +1,67 @@
+import pathlib,json,hashlib,gzip,sqlite3,subprocess,datetime,os
+H=pathlib.Path(__file__).resolve().parent; B=H.parent; R=B.parent.parent/'campaign-worktree'; E=H/'evidence'; E.mkdir(exist_ok=True)
+sha=lambda b:hashlib.sha256(b).hexdigest()
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+base=json.loads((B/'proposal-baseline.json').read_text()); manifest={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'origin':base['commit'],'acceptance_baseline':'not captured; through297 required by root','source_pins':{},'git_pins':{},'original_freezes':[]}
+for angle in ['tibetan','english']:
+ f=B/angle/'freeze-manifest.json'; d=json.loads(f.read_text())
+ for row in d['files']:
+  b=(f.parent/row['path']).read_bytes(); assert len(b)==row['bytes'] and sha(b)==row['sha256'],(angle,row['path'])
+ manifest['original_freezes'].append({'angle':angle,'path':str(f),'sha256':sha(f.read_bytes()),'verified_files':len(d['files'])})
+for name,pin in base['source_pins'].items():
+ b=pathlib.Path(pin['path']).read_bytes(); assert sha(b)==pin['sha256'] and len(b)==pin['bytes'];manifest['source_pins'][name]={**pin,'verified':True}
+for rel,pin in base['governing_git_pins'].items():
+ r=subprocess.run(['git','show',pin['original_git_commit']+':'+rel],cwd=R,capture_output=True); assert r.returncode==0 and sha(r.stdout)==pin['sha256']
+ p=E/'governance'/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(r.stdout);manifest['git_pins'][rel]={**pin,'saved':str(p.relative_to(H)),'exit':r.returncode,'stderr':r.stderr.decode()}
+for rel in ['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ r=subprocess.run(['git','show',base['commit']+':'+rel],cwd=R,capture_output=True);assert r.returncode==0
+ p=E/'governance'/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(r.stdout);manifest['git_pins'][rel]={'original_git_commit':base['commit'],'sha256':sha(r.stdout),'bytes':len(r.stdout),'saved':str(p.relative_to(H))}
+c=sqlite3.connect('file:'+base['source_pins']['spine']['path']+'?mode=ro',uri=True);c.execute('PRAGMA query_only=ON');c.row_factory=sqlite3.Row
+master=json.load(gzip.open(base['source_pins']['master']['path'],'rt')); corpus=json.load(gzip.open(base['source_pins']['corpus']['path'],'rt'))
+records=json.loads((B/'english/evidence/records.json').read_text())
+for key,v in records.items():
+ for loc in v['locations']:
+  if v['kind']=='master': actual=master[loc['section']][loc['index']]
+  elif v['kind']=='corpus_original':actual=corpus[loc['index']]
+  else:actual=dict(c.execute('select * from corpus_segments where id=?',[loc['id']]).fetchone())
+  assert actual==v['record'],key
+manifest['reopened_original_records']=len(records)
+queries=json.loads((B/'english/evidence/queries.json').read_text())
+def put(kind,obj,loc):
+ key=kind+':'+sha(json.dumps(obj,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode())
+ records.setdefault(key,{'kind':kind,'record':obj,'locations':[]})
+ if loc not in records[key]['locations']:records[key]['locations'].append(loc)
+ return key
+for q in queries:
+ if 'sql' in q: actual=[dict(r) for r in c.execute(q['sql'],q['parameters'])]
+ else:actual=[r for sec in q['sections'] for r in master[sec] if r.get('wylie')==q['term'] or q['term'] in r.get('wylie_variants',[])]
+ assert actual==[records[k]['record'] for k in q['records']]
+ q['fresh_replay']=True
+extra=['de ltar byas na','can','bar du',"rigs 'dra phyi ma",'snang ba tsam','byed pa',"las", "'bras",'rab rib can','nang du','skra','shad',"'ching",'lcags','sreg','me tshogs',"'thad pa",'tshad mar','song ba','des','de la','sems can','mig','shes','bza\'','btung','rnag','khrag','med','phyi ma','rigs \'dra']
+for term in extra:
+ refs=[]
+ for sec in ['unified_entries','curated_entries','glossary_entries']:
+  for i,r in enumerate(master[sec]):
+   if r.get('wylie')==term or term in r.get('wylie_variants',[]):refs.append(put('master',r,{'file':'hgm_dictionary_v27_2.json.gz','section':sec,'index':i}))
+ queries.append({'name':'fresh_lexical_exact_with_variants','term':term,'predicate':'wylie == term OR term in wylie_variants','sections':['unified_entries','curated_entries','glossary_entries'],'count':len(refs),'records':refs})
+for term,field in [('less than what they really are','english'),('less that what they really are','english'),('continuum of the food','english'),('porcelain sink','english'),('forest of swords','english')]:
+ sql='select * from corpus_segments where '+field+' like ? order by course,seq';params=['%'+term+'%'];rows=[dict(r) for r in c.execute(sql,params)]
+ refs=[put('spine',r,{'table':'corpus_segments','id':r['id']}) for r in rows]
+ queries.append({'name':'fresh_errata_witness_search','sql':sql,'parameters':params,'count':len(refs),'records':refs})
+# Reopen exact original corpus objects for every spine witness, preserving original array index.
+target={(v['record']['course'],v['record']['seq']):k for k,v in records.items() if v['kind']=='spine'};seqs={};mapping=[]
+for i,r in enumerate(corpus):
+ course=r['course'];seqs[course]=seqs.get(course,0)+1;k=target.get((course,seqs[course]))
+ if k:
+  assert json.loads(records[k]['record']['raw'])==r
+  cr=put('corpus_original',r,{'file':'full_parallel_corpus_v32.json.gz','index':i,'course':course,'derived_seq':seqs[course]});mapping.append({'spine_ref':k,'corpus_ref':cr,'raw_equal':True})
+physical=pathlib.Path(base['source_pins']['physical']['path']).read_bytes();lines=physical.splitlines(keepends=True);extents=[]
+for seq in [298,299,300]:
+ source=next(r for r in json.loads((B/'source.json').read_text()) if r['seq']==seq);eng=source['english'].encode();start=physical.find(eng);assert start>=0 and physical.find(eng,start+1)<0
+ lineno=physical[:start].count(b'\n')+1;whole=lines[lineno-1];p=E/('physical-line-'+str(lineno)+'.bin');p.write_bytes(whole)
+ extents.append({'seq':seq,'line':lineno,'english_byte_range':[start,start+len(eng)],'full_line_file':str(p.relative_to(H)),'full_line_sha256':sha(whole),'source_ref':target[('C05',seq)]})
+root_files=['root-original-intake.json','proposal-verification/report.json','proposal-verification/root-resolved-spans.json']
+root_files += [str(p.relative_to(B)) for folder in ['root-proposal-generator-caller','root-proposal-ranges-caller'] for p in (B/folder).iterdir() if p.is_file()]
+manifest['reused_root_execution_evidence']=[{'path':str(B/f),'bytes':len((B/f).read_bytes()),'sha256':sha((B/f).read_bytes())} for f in root_files]
+dump(E/'records.json',records);dump(E/'queries.json',queries);dump(E/'corpus-map.json',mapping);dump(E/'physical-extents.json',extents);dump(E/'manifest.json',manifest)
+print(json.dumps({'verified_freeze_files':sum(x['verified_files'] for x in manifest['original_freezes']),'full_records':len(records),'fresh_queries':len(queries),'physical_lines':[x['line'] for x in extents],'source_pins':len(manifest['source_pins']),'git_pins':len(manifest['git_pins'])}))

@@ -1,0 +1,42 @@
+import pathlib,json,hashlib,collections,datetime
+H=pathlib.Path(__file__).resolve().parent;B=H.parent;sha=lambda b:hashlib.sha256(b).hexdigest();dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not (H/'freeze.json').exists(),'A frozen packet may not be silently overwritten.'
+dec=json.loads((H/'reconciliation-decisions.json').read_text());rs=json.loads((H/'evidence/records.json').read_text());native=json.loads((H/'validation-summary.json').read_text());root=json.loads((B/'proposal-verification/root-resolved-spans.json').read_text());fs=dec['final_ordered_tuples'];orig=dec['original_decisions'];checks=[]
+assert len(root)==len(orig)==269
+assert len({(r['angle'],r['seq'],r['id']) for r in orig})==269
+for a,b in zip(root,orig):
+ for k in ['angle','seq','id','d','tib','eng','tib_range','eng_range']:assert a[k]==b[k],(k,a,b)
+ spec=json.loads((B/b['angle']/str(b['seq'])/'spec.json').read_text())['segments'][0]
+ assert b['original_span_object']==next(s for s in spec['spans'] if s['id']==b['id'])
+ if b['original_reason'] is not None:
+  ctx=json.loads((B/'english'/str(b['seq'])/'decisions.json').read_text())['contentious'];assert any(c['reason']==b['original_reason'] and c['span']==b['original_reason_scope'] for c in ctx)
+ for index in b['final_tuple_indices']:assert fs[index]['seq']==b['seq'] and fs[index]['id'] in b['final_ids']
+ assert all(k in rs for k in b['evidence_refs'])
+checks.append({'check':'all269_original_identity_fields_and_scoped_reasons','pass':True})
+for s in native:
+ seq=s['seq'];d=H/str(seq);spec=json.loads((d/'spec.json').read_text())['segments'][0];f=[x for x in fs if x['seq']==seq]
+ assert len(f)==len(spec['spans'])==s['counts']['spans'];assert sha((d/'spec.json').read_bytes())==s['spec_sha256'];assert sha((d/'body.html').read_bytes())==s['body_sha256'];assert (d/'canonical.stdout').read_bytes()==(d/'body.html').read_bytes();assert (d/'canonical.exit').read_text()=='0\n' and not (d/'canonical.stderr').read_bytes()
+ v=json.loads((d/'validation.json').read_text());proof={p['id']:p for p in v['range_proof']}
+ for x,y in zip(f,spec['spans']):
+  for k in ['id','d','tib','eng']:assert x[k]==y[k]
+  assert all(x.get(k)==y.get(k) for k in ['cls','nul','subword'])
+  for k in ['tib_range','eng_range']:assert x[k]==proof[x['id']]['actual'][k]
+  assert all(k in rs for k in [x['evidence_refs']['source'],x['evidence_refs']['parallel'],x['evidence_refs']['corpus_original']]+x['evidence_refs']['master'])
+  assert x['eng'] is not None or x['nul']
+ checks.append({'check':f'{seq}_spec_body_native_streams_ranges_fidelity_refs','pass':True,'spans':len(f)})
+ eh=json.loads((d/'evidence-references.json').read_text());assert eh['records_sha256']==sha((H/'evidence/records.json').read_bytes())
+for angle in ['tibetan','english']:
+ fm=json.loads((B/angle/'freeze-manifest.json').read_text())
+ for r in fm['files']:
+  b=(B/angle/r['path']).read_bytes();assert len(b)==r['bytes'] and sha(b)==r['sha256']
+ checks.append({'check':angle+'_frozen_original_files_unchanged','pass':True,'files':len(fm['files'])})
+ref=json.loads((H/'errata-refutations.json').read_text());assert all(len(r['five_grounds'])==5 for r in ref);assert [r['refuted'] for r in ref]==[False,True,True];assert sum(len(json.loads((H/str(s)/'errata.json').read_text())) for s in [298,299,300])==1
+checks.append({'check':'all_five_grounds_each_suspicion_and_bank_ready_errata_shape','pass':True,'suspicions':3,'errata':1})
+assert len(json.loads((H/'proposed-head-allowances.json').read_text()))==3
+dump(H/'packet-consistency-proof.json',{'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'checks':checks,'semantic_limit':'This is consistency and source evidence, not independent skeptical acceptance.'})
+files=[]
+for p in sorted(H.rglob('*')):
+ if p.is_file() and p.name not in ['freeze.json','freeze.sha256']:b=p.read_bytes();files.append({'path':str(p.relative_to(H)),'bytes':len(b),'sha256':sha(b)})
+meta=json.loads((H/'packet-metadata.json').read_text());freeze={'status':'FROZEN_RECONCILIATION_FOR_FRESH_INDEPENDENT_SKEPTICAL_REVIEW','producer':meta['producer'],'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin':meta['source_origin'],'separate_acceptance_baseline':meta['acceptance_baseline'],'original_decisions':269,'final_spans':154,'segments':[{k:v for k,v in x.items() if k not in ['native_attempt']} for x in native],'errata':1,'head_allowances':3,'full_records':len(rs),'queries':len(json.loads((H/'evidence/queries.json').read_text())),'file_count':len(files),'total_bytes':sum(f['bytes'] for f in files),'files':files,'self_exclusions':['freeze.json (self-referential hash impossible)','freeze.sha256 (hash of this manifest)'],'semantic_acceptance':False}
+dump(H/'freeze.json',freeze);digest=sha((H/'freeze.json').read_bytes());(H/'freeze.sha256').write_text(digest+'  freeze.json\n')
+print(json.dumps({'freeze_sha256':digest,'file_count':len(files),'total_bytes':sum(f['bytes'] for f in files),'decision_sha256':sha((H/'reconciliation-decisions.json').read_bytes()),'segments':[{k:x[k] for k in ['seq','counts','spec_sha256','body_sha256','body_bytes']} for x in native]},indent=2))

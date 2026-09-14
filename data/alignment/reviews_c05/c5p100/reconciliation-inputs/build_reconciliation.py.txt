@@ -1,0 +1,143 @@
+import json,pathlib,hashlib,copy,re
+H=pathlib.Path(__file__).resolve().parent;B=H.parent
+dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+source={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+original=json.loads((B/'proposal-verification/root-resolved-spans.json').read_text())
+idx={(r['angle'],r['seq'],r['id']):r for r in original}
+records=json.loads((H/'evidence/records.json').read_text());queries=json.loads((H/'evidence/queries.json').read_text())
+lookup={q['term']:q['records'] for q in queries if 'term' in q}
+src={r['record']['seq']:k for k,r in records.items() if r['kind']=='spine' and r['record']['course']=='C05'}
+parallel={r['record']['seq']:k for k,r in records.items() if r['kind']=='spine' and r['record']['course']=='C15'}
+def original_span(seq,n,angle='english'):
+ r=copy.deepcopy(idx[(angle,seq,'w'+str(n))]);r.pop('angle');r['origin']=[angle,'w'+str(n)];return r
+def bounds(seq,side,piece,n=1):
+ text=source[seq]['wylie' if side=='tib' else 'english'];hits=[m.start() for m in re.finditer(re.escape(piece),text)]
+ assert len(hits)>=n,(seq,side,piece,n,hits);start=hits[n-1];return [start,start+len(piece)]
+def new(seq,tib,eng,d,tn=1,en=1,**kw):
+ return {'seq':seq,'tib':tib,'eng':eng,'d':d,'tib_range':bounds(seq,'tib',tib,tn),'eng_range':bounds(seq,'eng',eng,en) if eng is not None else None,**kw}
+def member(parent,tib,eng):
+ return {'seq':parent['seq'],'tib':tib,'eng':eng,'d':7,'tib_range':[parent['tib_range'][0]+parent['tib'].index(tib),parent['tib_range'][0]+parent['tib'].index(tib)+len(tib)],'eng_range':[parent['eng_range'][0]+parent['eng'].index(eng),parent['eng_range'][0]+parent['eng'].index(eng)+len(eng)],'parent_authoring_origin':parent.get('origin')}
+allfinal=[];allomissions=[]
+notes={
+298:"PROVISIONAL machine alignment reconciled by Codex (gpt-6-astra) from two independently frozen originals; no human approval or hgm_gloss promotion. GMR English is verbatim, including less that what they really are. Nyid is an emphatic particle. The initial ma has no separate English negative: its not-yet contribution is fused into the until construction; the later ma owns not. Bza' btung names the predicate food and drink after really is, not the supplied repeated subject. Des explicitly licenses he in the complete When he does try to do so recast. Zas owns food; rigs 'dra and phyi ma own continuum and next moment, with the latter's supplied English prepositional framing left outside. The second snang ba with tsam owns simple appearance; the preceding appearance-as relation and the first skur ba comparative remain distributed and unbanked. The final skur ba owns failure in this local recast; no new definition is asserted. The probable comparative typo is preserved for editorial ruling. Mechanical validation alone is not semantic approval.",
+299:"PROVISIONAL machine alignment reconciled by Codex (gpt-6-astra) from two independently frozen originals; no human approval or hgm_gloss promotion. GMR English remains verbatim. Snang gzhir gyur pa'i is a complete phrase relation out there to appear as; the source noun is banked once and its English repetition is left outside. Der in der snang ba'i reprises the named pus and blood, licensing the complete looking-like recast without supplied something. Rab rib can is the attested person-with-cataracts compound; its members own cataracts and with. Nang du owns on at the sink. Skra shad owns hair; the binding/comb recast remains unbanked, as do the distributed body/recipient and first ability contributions. De la is the whole anaphoric recipient relation to the same person. Agentive -s is never split. Sogs owns only and so on. C15:444's added to exist does not establish a C05 error.",
+300:"PROVISIONAL machine alignment reconciled by Codex (gpt-6-astra) from two independently frozen originals; no human approval or hgm_gloss promotion. GMR English is verbatim. Cig car du is an adverbial phrase for together; sit down is supplied. All four tshad mar song ba constructions are phrase-level validity predicates, distinct from the lexical head tshad ma. Paired snang ba constructions own looked like and appeared/appearing; the single final collective construction is banked once at burning steel, leaving the forest/fire repetitions unwrapped. The two earlier English just tokens have no separate tsam there. Med owns only n't in couldn't and later not; neither reverses the validity predicate's scope. The attested being-in-the-hells, visual-consciousness, burning-steel and mass-of-fire compounds retain tight members. Sogs licenses only closing gestures; its unrendered middle occurrence remains omitted. Actual objects, idea, correct, logic and identical retain their own source licensors; to your own remains supplied. Mechanical checks do not establish semantic approval."
+}
+for seq in [298,299,300]:
+ out=[]
+ for n in range(1,{298:38,299:44,300:58}[seq]+1):
+  r=original_span(seq,n)
+  if seq==298:
+   if n==9:r=original_span(seq,8,'tibetan')
+   if n==12:out.append(original_span(seq,11,'tibetan'))
+   if n==22:r=original_span(seq,22,'tibetan')
+   if n==23:continue
+  if seq==299:
+   if n==12:r=original_span(seq,11,'tibetan')
+   if n==13:continue
+   if n==19:out.append(original_span(seq,15,'tibetan'))
+  if seq==300:
+   if n==11:r['d']=3
+   for en,ti in [(17,17),(24,24),(48,44),(51,47)]:
+    if n==en:r=original_span(seq,ti,'tibetan')
+   if n==42:r=original_span(seq,37,'tibetan')
+   if n==43:continue
+  if seq==298 and n==8:
+   out.append(new(seq,'ma',None,6,tn=1,cls='neg',nul='Negative not-yet force fused into until; no separately alignable English negative.'))
+  out.append(r)
+  if seq==299 and n==12:
+   out.extend([member(r,'rab rib','cataracts'),member(r,'can','with')])
+  if r['tib']=="bza' btung":
+   if r['eng']=='food and drink':a,b='food','drink'
+   else:a,b='eat','drink'
+   out.extend([member(r,"bza'",a),member(r,'btung',b)])
+  if seq==300 and n==32:out.extend([member(r,'sems can','being'),member(r,'dmyal ba','hells')])
+  if seq==300 and n==42:out.extend([member(r,'me','fire'),member(r,'tshogs','mass')])
+ # Explicit range intent is recorded before canonical resolution. No guessed occurrence settings are passed to the generator.
+ for i,r in enumerate(out,1):r['id']='w'+str(i)
+ spans=[{k:v for k,v in r.items() if k in ['id','tib','eng','d','cls','nul','subword']} for r in out]
+ # Original resolved rows omit subword metadata; restore the established negative-affix declaration.
+ for r,s in zip(out,spans):
+  if r['eng']=="n't":s['subword']=True;r['subword']=True
+ order=[r['id'] for r in sorted([r for r in out if r['d']!=7 and r['eng'] is not None],key=lambda x:x['eng_range'][0])]
+ spec={'course':'C05','segments':[{'seq':seq,'title':{298:'food changes when the spirit partakes',299:'apparent objects and their functions',300:'valid perceptions and actual objects'}[seq],'spans':spans,'eng_order':order,'note':notes[seq]}]}
+ d=H/str(seq);d.mkdir(exist_ok=True);dump(d/'spec.json',spec);dump(d/'intended-ranges.json',out);allfinal.extend(out)
+# Decisions are produced after all ranges have been independently authored above.
+def terms_for(r):
+ t=r['tib'];terms=[t]
+ aliases={'kyi bar du':['bar du'],"snang gzhir gyur pa'i":['snang gzhi','snang ba'],"der snang ba'i":['snang ba','de la'],"des longs spyod par brtsams pa na":['des','longs spyod pa','brtsams'],"sbrang bus":['sbrang bu'],"snang bas":['snang ba'],"chu'i":['chu'],"chus":['chu'],"tshad mar song ba":['tshad ma','tshad mar','song ba'],"bya ba byed pa":['bya ba','byed pa'],"bya ba byed":['bya ba','byed pa'],"byed":['byed pa'],"la sogs pa":['sogs'],"dmyal ba'i":['dmyal ba'],"ral gri'i":['ral gri'],"de lta bu":['de la'],"phyi ma":['phyi ma',"rigs 'dra phyi ma"],"rigs 'dra":["rigs 'dra","rigs 'dra phyi ma"]}
+ terms+=aliases.get(t,[]);return list(dict.fromkeys(terms))
+def rationale(r):
+ t,e,d=r['tib'],r['eng'],r['d']
+ special={
+ 'nyid':'Emphatic standalone nyid supplies itself modifying the food/drink; it is d6, not a content noun.',
+ 'can':'Possessive can supplies have in the obstacle-bearing spirit relation, or with as the narrower member of rab rib can; no extra participant is assigned.',
+ 'ma':'The first ma is the negative boundary in ma brtsams kyi bar du, fused into English until; later ma supplies the explicit not denying function.',
+ 'kyi bar du':'The whole temporal linker owns until such time as. Its negative boundary is jointly expressed by the preceding ma and does not imply a separately spoken English not.',
+ "des longs spyod par brtsams pa na":'Complete temporal recast: na licenses When, des is the agentive anaphor to the previously named spirit and licenses he, and longs spyod par brtsams pa reprises starting to consume as does try to do so. The phrase does not bank the English auxiliaries as lexical equivalents.',
+ "rigs 'dra":'The glossary separately attests continuum for rigs \'dra; here it is the continuation of zas (food). The longer rigs \'dra phyi ma is also attested, but does not prohibit the independently meaningful continuum and later-moment constituents. Food is owned only by zas.',
+ 'phyi ma':'The glossary attests into the next moment, and the later-stage modifier locally supplies next moment. Tighten to this content phrase and leave into the prepositional frame unwrapped; do not give food to this modifier.',
+ 'snang ba tsam':'Select the second snang ba plus restrictive tsam as the complete simple-appearance phrase. The preceding tu snang ba\'i is distributed through of something as, and is not counted as a second appearance noun.',
+ "snang gzhir gyur pa'i":'The source relation says serving as the basis of appearance. GMR recasts this relation as out there to appear as; the phrase owns that whole relation while rnag khrag names its basis once. The later English naming of the basis is repeated exposition.',
+ "der snang ba'i":'Der means appearing as that, whose explicit antecedent is pus and blood. The complete adnominal relation licenses looking like pus and blood at d3. The English existential head something is left outside, and this does not create another rnag khrag lexical occurrence.',
+ 'rab rib can':'Attested nominal compound person with cataracts. The -can bearer construction licenses person with; cataracts and with have separate narrower members, whose English stays within the parent.',
+ 'nang du':'The local sink-location phrase is rendered on, which the complete glossary entry explicitly attests alongside in; no correction to in is invented.',
+ 'skra shad':'The local apparent strand/hair is skra shad, positively attested as hair. Its alternative comb gloss cannot own both the apparent hair and GMR\'s separate comb action. Binding/comb remains unbanked.',
+ 'de la':'Full anaphoric recipient phrase: la licenses to, de reprises the previously identified person with cataracts and licenses the same person. This is an occurrence-specific d3 recast, not a lexical definition of de as person.',
+ 'za ba':'The horsefly action is rendered bite; the glossary also has give ... bite. Keep the tight bite exponent and leave give him a distributed paraphrase; lus is not falsely equated to him.',
+ 'tshad mar song ba':'The full resultative validity predicate supplies genuine or valid perception(s) at its particular occurrence. It is d3; bare tshad mar is a case-inflected component, and song ba is not independently assigned English so or dropped to pretend a whole predicate is a dictionary word.',
+ 'cig car du':'Adverbial simultaneity phrase supplies together. The full glossary contains all sit down together, but this source has no sitting predicate, so keep the tighter together at d3.',
+ 'sems can dmyal ba':'The attested compound names being in the hells; its sems can and dmyal ba members own only being and hells, respectively. The article before being is excluded.',
+ 'mig shes':'The eye-cognition compound directly supplies visual consciousness, with mig/visual and shes/consciousness as tight, unique members.',
+ 'lcags sreg':'The attested compound owns burning steel, with lcags/steel and sreg/burning unique narrower members; the following hells belongs to its own source occurrence.',
+ 'me tshogs':'The attested compound owns mass of fire. Both English fire and mass are retained as unique members under me and tshogs, preserving the compound and its compositional evidence.',
+ 'sogs':'The enumerative sogs owns only its local closing gesture, and so on or or the like; no supplied listed noun belongs to it.',
+ 'la sogs pa':'The enumerative la sogs pa owns only and so on, including its conventional connective head, with no supplied object noun.',
+ 'med':'The first med negates actual pus-and-blood existence and owns only the allowed n\'t of couldn\'t. The final med owns not before valid perceptions, preserving the scope over perceptions of actual objects.',
+ 'skur ba':'At the final occurrence, GMR nominalizes the denial/depreciation consequence as failure. This precise contextual noun is in the glossary; laws of, auxiliaries and the first expanded comparative are not included.',
+ "las 'bras":'This complete compound owns the local corpus wording karma and its consequences, with las/karma and \'bras/consequences members. Its curated hgm_gloss remains deeds and their fruits; contextual attestation does not replace it.',
+ 'dngos gnas pa':'The complete attested expression owns actual objects at the final actual-existence contrast; no extra demonstrative is absorbed.',
+ 'mtshungs pa':'The comparison adjective owns identical. The source khyod kyi earlier owns your beside idea; the later to your own is supplied elaboration and remains outside.',
+ 'snang ba':'The selected nominal or verbal appearance occurrence owns its measured appearance, looked-like, or appeared/appearing exponent. Earlier/later repeated instances are separately anchored; the final collective predicate is counted only once in the steel clause.'}
+ if d==7:return f"Unique tighter compound member {t!r} owns {e!r} within both parent ranges; its own gloss and the full parent/source relation support the decomposition."
+ return special.get(t,f"At this occurrence, {t!r} supplies the exact {e!r} content at d{d}; the full local source and linked original lexical records support this unit without absorbing surrounding supplied English.")
+decisions=[]
+for r in original:
+ finals=[f for f in allfinal if f['seq']==r['seq'] and f['tib_range'][0]<r['tib_range'][1] and f['tib_range'][1]>r['tib_range'][0]]
+ # Preserve only semantic relationships, not incidental overlap with a newly nested member.
+ exact=[f for f in finals if all(f[k]==r[k] for k in ['d','tib','eng','tib_range','eng_range'])]
+ if exact:finals=exact;disp='retained'
+ else:
+  if r['seq']==298 and r['eng']=='appearance':finals=[f for f in finals if f['tib']=='snang ba tsam']
+  if r['seq']==298 and r['eng']=='simple':finals=[f for f in finals if f['tib']=='snang ba tsam']
+  if r['seq']==299 and r['tib']=='rab rib':finals=[f for f in finals if f['tib']=='rab rib' and f['d']==7]
+  if r['seq']==299 and r['tib']=='can':finals=[f for f in finals if f['tib']=='can' and f['d']==7]
+  if r['seq']==300 and r['tib'] in ['sems can',"dmyal ba'i"] and r['tib_range'][0]<320:finals=[f for f in finals if f['d']==7]
+  disp='recast_or_depth_changed' if finals else 'omitted'
+ specific=None
+ if r['angle']=='english':
+  od=json.loads((B/'english'/str(r['seq'])/'decisions.json').read_text())
+  specific=next((x['reason'] for x in od.get('contentious',[]) if x.get('span')==r['id']),None)
+ decisions.append({**r,'original_reason':specific,'original_reason_source':str(B/'english'/str(r['seq'])/'decisions.json') if specific else None,'original_context_refs':[str(B/r['angle']/str(r['seq'])/'report.md'),str(B/r['angle']/str(r['seq'])/'spec.json')],'disposition':disp,'final_ids':[f['id'] for f in finals],'rationale':' '.join(dict.fromkeys(rationale(f) for f in finals)) if finals else 'No defensible separate correspondence retained; see the explicit material omission record.'})
+for f in allfinal:
+ f['cls']=f.get('cls');f['nul']=f.get('nul');f['rationale']=rationale(f);f['lexical_terms']=terms_for(f)
+ f['evidence_refs']={'source':src[f['seq']],'parallel':parallel[f['seq']+145],'master':list(dict.fromkeys(k for term in f['lexical_terms'] for k in lookup.get(term,[])))}
+material={
+298:[("la yod pa'i",'The relation to the food is distributed across that relate to their. Can separately licenses have; no new word-equivalent is assigned to the residual location/genitive relation.'),('yin kyang','The copular/concessive relation is spread through the assertion; the English food/drink subject reprise is supplied, while the later predicate is banked.'),("de'i",'The demonstrative-genitive ties the continuum to that food; food is separately banked at zas. Of the and into the remain outside tight lexical constituents.'),("tu snang ba'i",'The first appearing-as relation is distributed across of something as before pus and blood; the second snang ba tsam owns simple appearance.'),("skur ba btab par 'gyur ba'i phyir",'The first depreciation/consequence predicate becomes would have to be less that what they really are, with a full comparative standard and participants supplied in English. The minimal noun or partial verb does not own that entire comparison; no d5 or false null is banked.'),("btab par 'gyur ba'i",'In the final occurrence the noun skur ba owns failure; the remaining predication is distributed across ever existed and would represent. Neither btab nor \'gyur owns a separately reliable English atom.')],
+299:[("'ching ba",'The binding action is recast as use a comb on the hair. Skra shad owns the apparent hair; its alternative comb gloss does not justify a second noun claim or shad/comb member. No continuous minimal matching source predicate is asserted.'),('lus','The body affected by the bite is recast through give him a bite. Him refers to the person, and lus alone does not own that recipient pronoun; this is distributed, not an absent-meaning null.'),('nus pa','The first ability follows the coordinated binding/bite/water examples and is distributed over English be able and would have to. The final nus pa owns can in the repeated assertion; the earlier one stays unbanked.'),('repeated English pus and blood after appear as','Each snang-gzhi assertion has one rnag khrag basis noun; later English naming of that same basis is expanded exposition. The der recast has its own anaphoric source licence.')],
+300:[('sogs','The middle sogs after the second rnag khrag has no independent English closing gesture. Keep it omitted with an explicit unrendered-occurrence reason; do not move its alignment to the final and so on.'),("de'i tshe na",'The time-of-looking frame is expanded/reordered into the opening case description; no supplied participant or repeated case framing is separately claimed.'),('repeated English just/looked like for forest and fire','Only one final collective appearance construction and one tsam occur after the objects. Count its realization once at the first steel clause, leaving two further explanatory English repetitions unwrapped.'),('earlier English just before ambrosia and pus/blood','The two earlier snang constructions contain no distinct tsam; the English just is explanatory and receives no later source occurrence.'),('to your own','Khyod kyi belongs to your idea earlier. The final comparison complement is supplied; mtshungs pa retains only identical.')]
+}
+for seq,items in material.items():
+ for tib,reason in items:allomissions.append({'seq':seq,'tib_or_english':tib,'disposition':'unbanked; not a null assertion','reason':reason,'source_ref':src[seq],'lexical_refs':list(dict.fromkeys(k for term in [tib] for k in lookup.get(term,[])))})
+result={'status':'PROVISIONAL reconciliation; independent skeptical review required outside this role','producer':'Codex (gpt-6-astra), fresh reconciliation role','source_origin':'c107f1ecd9cfb68968245870ad81ba5d9a070721','original_count':len(original),'original_decisions':decisions,'final_ordered_tuples':allfinal,'material_omissions':allomissions,'source_roles':'Exact curated hgm_gloss fields remain binding and unchanged. Glossary variants and local corpus renderings are contextual evidence only; no promotion. Full records are deduplicated in evidence/records.json and their original locations are recorded.'}
+assert len(decisions)==269
+dump(H/'reconciliation-decisions.json',result)
+allow=[]
+for f in allfinal:
+ if f['d'] in [5,7] and f['eng'] and f['eng'].split()[0].lower() in ['the','a','an','and','or','his','our','your','i','you']:
+  assert f['tib'] in ['sogs','la sogs pa']
+  allow.append({'directory':'pages_c05','span_id':'s'+str(f['seq'])+f['id'],'seq':f['seq'],'depth':f['d'],'tib':f['tib'],'eng':f['eng'],'licensor':f['tib'],'reason':'Only the conventional enumeration closure is captured; source sogs licenses its connective head. No supplied noun is included.','evidence_refs':f['evidence_refs']})
+dump(H/'proposed-head-allowances.json',allow)
+for seq in [298,299,300]:
+ f=[x for x in allfinal if x['seq']==seq];dump(H/str(seq)/'evidence-references.json',{'shared_records':'../evidence/records.json','records_sha256':hashlib.sha256((H/'evidence/records.json').read_bytes()).hexdigest(),'span_refs':[{k:x[k] for k in ['id','lexical_terms','evidence_refs','rationale']} for x in f],'omissions':[x for x in allomissions if x['seq']==seq]})
+print(json.dumps({'original_decisions':len(decisions),'final_counts':{s:sum(f['seq']==s for f in allfinal) for s in [298,299,300]},'allowances':len(allow)}))

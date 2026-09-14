@@ -1,0 +1,27 @@
+import pathlib,json,hashlib,runpy,types,sys,re,html.parser
+A=pathlib.Path(__file__).resolve().parent;W=A.parents[2]/'campaign-worktree';E=A/'evidence';pin=json.loads((E/'originals/proposal-baseline.json').read_text());b=(E/'originals/governance/tools/build_alignment_layer.py').read_bytes();module=types.ModuleType('build_alignment_layer');module.__file__=str(W/'tools/build_alignment_layer.py');exec(compile(b,module.__file__,'exec'),module.__dict__);sys.modules['build_alignment_layer']=module
+G=runpy.run_path(str(W/'tools/gen_alignment_page.py'));rows={r['seq']:r for r in json.loads((E/'originals/source.json').read_text())}
+class Plain(html.parser.HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.capture=0;self.out={'tib':[],'eng':[]}
+ def handle_starttag(self,t,a):
+  a=dict(a)
+  if t=='div' and a.get('class') in ['tib','eng']:self.side=a['class']
+  if t=='span' and (a.get('data-d')=='1' or self.capture):self.capture+=1
+ def handle_endtag(self,t):
+  if t=='span' and self.capture:self.capture-=1
+ def handle_data(self,s):
+  if self.capture:self.out[self.side].append(s)
+fail=[]
+for seq in [298,299,300]:
+ d=A/str(seq);spec=json.loads((d/'spec.json').read_text());seg=spec['segments'][0];sp=seg['spans'];row=rows[seq];by={s['id']:s for s in sp};tr=G['resolve'](row['wylie'],sp,'tib',seq);es=G['with_members'](sp,[by[i] for i in seg['eng_order']],row['english']);er=G['resolve'](row['english'],es,'eng',seq);intent=json.loads((d/'occurrence-intent.json').read_text());proof=[]
+ for s in intent:
+  actual={'tib':list(tr[s['id']]),'eng':list(er[s['id']])};match=actual==s['intended_ranges'];proof.append({**s,'canonical_ranges':actual,'matches_intent':match,'context':{side:row[field][max(0,lo-32):hi+32] for side,field in [('tib','wylie'),('eng','english')] for lo,hi in [actual[side]]}})
+  if not match:fail.append({'seq':seq,'id':s['id'],'tib':s['tib'],'eng':s['eng'],'expected':s['intended_ranges'],'actual':actual})
+ p=Plain();p.feed((d/'body.html').read_text());fidelity={side:''.join(p.out[side])==row[field] for side,field in [('tib','wylie'),('eng','english')]};assert all(fidelity.values()),(seq,fidelity)
+ # A new proof attempt never overwrites an earlier occurrence/fidelity result.
+ n=1
+ while (d/f'verification-{n:03d}.json').exists():n+=1
+ result={'seq':seq,'source_fidelity':fidelity,'occurrences':proof,'intent_match':all(x['matches_intent'] for x in proof),'counts':{'spans':len(sp),'nulls':sum(s.get('eng') is None for s in sp),'by_depth':{str(k):sum(s['d']==k for s in sp) for k in range(1,8)}}};(d/f'verification-{n:03d}.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+ print(seq,'fidelity',fidelity,'intent',result['intent_match'])
+for f in fail:print(json.dumps(f))
+sys.exit(1 if fail else 0)

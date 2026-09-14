@@ -1,0 +1,55 @@
+import hashlib,importlib.util,json,os,runpy,subprocess,sys
+from html.parser import HTMLParser
+from pathlib import Path
+H=Path(__file__).resolve().parent;R=H.parent.parent.parent/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+class Reader(HTMLParser):
+    def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.capture=0;self.depth=0;self.txt={'tib':'','eng':''}
+    def handle_starttag(self,tag,attrs):
+        a=dict(attrs)
+        if tag=='div' and a.get('class') in self.txt:self.side=a['class']
+        if tag=='span':
+            self.depth+=1
+            if a.get('data-d')=='1':self.capture=self.depth
+    def handle_endtag(self,tag):
+        if tag=='span':
+            if self.depth==self.capture:self.capture=0
+            self.depth-=1
+    def handle_data(self,s):
+        if self.capture:self.txt[self.side]+=s
+all_ok=True
+for seq in [298,299,300]:
+    d=H/str(seq);spec=(d/'spec.json').read_bytes();attempt=d/'attempts';attempt.mkdir(exist_ok=True)
+    n=1
+    while (attempt/str(n)).exists():n+=1
+    a=attempt/str(n);a.mkdir();(a/'spec.json').write_bytes(spec)
+    command=[sys.executable,str(H/'run_generator_ro.py')]
+    r=subprocess.run(command,input=spec,cwd=R,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),capture_output=True)
+    (a/'stdout.html').write_bytes(r.stdout);(a/'stderr.txt').write_bytes(r.stderr);(a/'exit.txt').write_text(str(r.returncode)+'\n')
+    proof=dict(argv=command,cwd=str(R),env={'PYTHONDONTWRITEBYTECODE':'1'},stdin_sha256=sha(spec),exit=r.returncode,stdout_bytes=len(r.stdout),stdout_sha256=sha(r.stdout),stderr_bytes=len(r.stderr),stderr_sha256=sha(r.stderr),attempt=str(a.relative_to(H)),generator_sha256=sha((R/'tools/gen_alignment_page.py').read_bytes()),builder_origin='c107f1ecd9cfb68968245870ad81ba5d9a070721',sqlite='URI mode=ro; PRAGMA query_only=ON')
+    save(a/'command.json',proof)
+    print(seq,'EXIT='+str(r.returncode),'BODY_BYTES='+str(len(r.stdout)),'STDERR_BYTES='+str(len(r.stderr)))
+    if r.returncode or r.stderr:
+        print(r.stderr.decode());all_ok=False;continue
+    (d/'body.html').write_bytes(r.stdout);(d/'generator.stdout.html').write_bytes(r.stdout);(d/'generator.stderr.txt').write_bytes(r.stderr);(d/'generator.exit.txt').write_text(str(r.returncode)+'\n');save(d/'generator-proof.json',proof)
+if not all_ok:raise SystemExit(1)
+sp=importlib.util.spec_from_file_location('read_only_bootstrap',H/'run_generator_ro.py');bootstrap=importlib.util.module_from_spec(sp);sp.loader.exec_module(bootstrap)
+g=runpy.run_path(str(bootstrap.prepare()),run_name='range_proof_import')
+sources={x['seq']:x for x in json.loads((H/'evidence/original-source.json').read_text())}
+for seq in [298,299,300]:
+    d=H/str(seq);seg=json.loads((d/'spec.json').read_text())['segments'][0];row=sources[seq]
+    spans=seg['spans'];by_id={s['id']:s for s in spans}
+    engsp=g['with_members'](spans,[by_id[x] for x in seg['eng_order']],row['english'])
+    tr=g['resolve'](row['wylie'],spans,'tib',seq);er=g['resolve'](row['english'],engsp,'eng',seq)
+    expected=json.loads((d/'intended-ranges.json').read_text());checks=[]
+    for x in expected:
+        checks.append(dict(**x,actual_tib_range=list(tr[x['id']]),actual_eng_range=list(er[x['id']]),tib_matches_expected=list(tr[x['id']])==x['tib_range'],eng_matches_expected=list(er[x['id']])==x['eng_range']))
+    reader=Reader();reader.feed((d/'body.html').read_text());verbatim={side:reader.txt[side]==row[field] for side,field in [('tib','wylie'),('eng','english')]}
+    proof=dict(seq=seq,range_convention='zero-based Python Unicode code-point half-open intervals',canonical_resolver_sha256=sha((R/'tools/gen_alignment_page.py').read_bytes()),body_sha256=sha((d/'body.html').read_bytes()),spec_sha256=sha((d/'spec.json').read_bytes()),all_ranges_match=all(x['tib_matches_expected'] and x['eng_matches_expected'] for x in checks),verbatim=verbatim,spans=checks)
+    save(d/'range-proof.json',proof)
+    for x in checks:
+        if not(x['tib_matches_expected'] and x['eng_matches_expected']):print('MISMATCH',seq,x)
+    assert proof['all_ranges_match'] and all(verbatim.values()),seq
+    counts=dict(total=len(spans),null=sum(x['eng'] is None for x in spans),d5=sum(x['d']==5 for x in spans),d6=sum(x['d']==6 for x in spans),d7=sum(x['d']==7 for x in spans),d3=sum(x['d']==3 for x in spans))
+    save(d/'counts.json',counts);print(seq,'VERBATIM_AND_RANGES_PASS',json.dumps(counts))

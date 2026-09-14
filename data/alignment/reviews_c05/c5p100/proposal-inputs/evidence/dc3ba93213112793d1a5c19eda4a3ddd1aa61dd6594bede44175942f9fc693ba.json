@@ -1,0 +1,7 @@
+{
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 campaign-artifacts/C05-298-300/tibetan/query_evidence.py",
+  "exit_code": 1,
+  "tool_chunk_id": "4dc418",
+  "combined_tool_output": "Traceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-298-300/tibetan/query_evidence.py\", line 33, in <module>\n    physical=(E/'original-physical.txt').read_bytes(); text=physical.decode('utf-8')\n                                                            ~~~~~~~~~~~~~~~^^^^^^^^^\nUnicodeDecodeError: 'utf-8' codec can't decode byte 0xb8 in position 32644: invalid start byte\n",
+  "note": "Initial combined tool output retained. The same original failed program was immediately rerun with separately captured native stdout/stderr/exit in native-commands/queries/1 before applying the Latin-1 byte-view fix."
+}

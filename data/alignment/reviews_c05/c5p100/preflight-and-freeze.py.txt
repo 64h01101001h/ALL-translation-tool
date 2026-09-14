@@ -1,0 +1,55 @@
+from pathlib import Path
+import ast,json,hashlib,subprocess,datetime,collections
+O=Path('campaign-artifacts/C05-298-300/semantic-review').resolve();B=O.parent;R=B.parents[1]/'campaign-worktree'
+def read(p):return json.loads((O/p).read_text())
+def put(p,x):(O/p).write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+def sha(x):return hashlib.sha256(x).hexdigest()
+helper=B.parent/'land_reviewed_page.py';tree=ast.parse(helper.read_text());sets=[]
+for node in ast.walk(tree):
+ if isinstance(node,ast.Compare):
+  for right in node.comparators:
+   if isinstance(right,ast.Tuple):
+    try:v=ast.literal_eval(right)
+    except (ValueError,TypeError):continue
+    if '.stderr' in v and '.html' in v:sets.append(set(v))
+assert len(sets)==1;allowed=sets[0]
+manifest=read('original-to-copy-manifest.json');assert isinstance(manifest,list);git={};checks=[];originals=set()
+for i,row in enumerate(manifest):
+ assert set(row) in [set(['original','copy','sha256','bytes']),set(['original','copy','sha256','bytes','original_git_commit','repository_relative_path'])]
+ assert Path(row['original']).is_absolute() and row['original'] not in originals;originals.add(row['original'])
+ target=O/row['copy'];assert target.is_file() and target.is_relative_to(O) and target.suffix.lower() in allowed
+ data=target.read_bytes();assert len(data)==row['bytes'] and sha(data)==row['sha256']
+ if 'original_git_commit' in row:
+  key=(row['original_git_commit'],row['repository_relative_path'])
+  if key not in git:git[key]=subprocess.check_output(['git','show',key[0]+':'+key[1]],cwd=R)
+  actual=git[key];method='immutable Git object'
+ else:actual=Path(row['original']).read_bytes();method='original exact bytes'
+ assert data==actual,(i,row['original']);checks.append({'index':i,'copy':row['copy'],'method':method,'bytes':len(data),'sha256':sha(data),'match':True,'supported_extension':True})
+for angle in ['tibetan','english','reconciled']:
+ for p in (B/angle).rglob('*'):
+  if p.is_file() and '__pycache__' not in p.parts:assert str(p) in originals,('missing original',p)
+all_files=sorted(p for p in O.rglob('*') if p.is_file());unsupported=[str(p.relative_to(O)) for p in all_files if p.suffix.lower() not in allowed];assert not unsupported
+review=read('review.json');rows=read('resolved-spans.json');proof=read('independent-generator-proof.json');assert review['segments']==proof
+assert review['verdict']==review['spec_verdict']==review['quality_verdict']=='APPROVE' and review['open_findings']==[]
+assert review['total_spans']==len(rows)==154 and review['total_nulls']==sum(x['eng'] is None for x in rows)==1 and review['total_word_pairs']==sum(x['d']==5 and x['eng'] is not None for x in rows)==78
+for x in review['segments']:
+ for name,prefix in [('spec.json','spec'),('body.html','body')]:
+  data=(B/f"reconciled/{x['seq']}/{name}").read_bytes();assert data==(O/f"reviewed-final/{x['seq']}/{name}").read_bytes();assert sha(data)==x[prefix+'_sha256'] and len(data)==x[prefix+'_bytes']
+ assert x['generator_exit']==0 and (O/f"independent-generator/{x['seq']}/stderr.txt").stat().st_size==0
+for x in rows:assert list(x)==['seq','id','d','tib','eng','tib_range','eng_range']
+assert list(read('span-head-allow-needed.json'))==['pages_c05']
+assert set(read('span-head-allow-needed.json')['pages_c05'])=={'c5p100/s299w32','c5p100/s300w10','c5p100/s300w47'}
+assert len(read('bank-ready-errata.json'))==1
+for x in read('errata-refutations.json'):assert set(x)=={'seq','found','refuted','reason','parallel_witness','counts_rechecked','suggested_severity','suggested_confidence'}
+physical=O/'original-source/C05ReadingASCII.txt';assert physical.is_file() and sha(physical.read_bytes())=='5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb'
+sources={x['seq']:x for x in read('independent-source-full-rows.json')}
+put('independent-candidate-field-counts.json',[{'seq':seq,'found':found,'literal_field_counts':{field:sources[seq][field].count(found) for field in ['acip','wylie','english']},'acip_uppercase_equivalent_count':sources[seq]['acip'].count(found.upper()) if seq==300 else None} for seq,found in [(298,'less that what they really are'),(299,'appears on a porcelain sink'),(300,'lha yi')]])
+put('evidence-preflight.json',{'verdict':'PASS','whitelist_source':str(helper),'whitelist_sha256':sha(helper.read_bytes()),'supported_extensions':sorted(allowed),'manifest_records':len(manifest),'unique_original_paths':len(originals),'immutable_git_objects_checked':len(git),'all_original_proposal_reconciliation_files_mapped':True,'all_manifest_original_copy_identities_exact':True,'unsupported_files':unsupported,'review_output_schema_and_final_identity_checks':'PASS','checks':checks})
+freeze={'status':'FROZEN_INDEPENDENT_SEMANTIC_REVIEW; PROVISIONAL_MACHINE_APPROVAL; NOT_PRODUCTION_ACCEPTANCE','reviewer':review['reviewer'],'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin_commit':review['source_origin_commit'],'source_origin_boundary':291,'actual_acceptance_baseline':review['actual_acceptance_baseline'],'actual_acceptance_boundary':297,'verdict':'APPROVE','open_findings':[],'total_spans':154,'total_nulls':1,'total_word_pairs':78,'files':[],'self_note':'This file is the only excluded self-referential manifest. All intended review files have a supported landing extension. Identity and extension preflight passed before freezing.'}
+for p in sorted(O.rglob('*')):
+ if p.is_file() and p.name!='review-freeze.json':
+  assert p.suffix.lower() in allowed;d=p.read_bytes();freeze['files'].append({'path':p.relative_to(O).as_posix(),'sha256':sha(d),'bytes':len(d)})
+put('review-freeze.json',freeze)
+for x in freeze['files']:
+ d=(O/x['path']).read_bytes();assert len(d)==x['bytes'] and sha(d)==x['sha256']
+print(json.dumps({'verdict':'APPROVE','files':len(freeze['files']),'manifest_records':len(manifest),'immutable_git_objects_checked':len(git),'freeze_sha256':sha((O/'review-freeze.json').read_bytes())},indent=2))

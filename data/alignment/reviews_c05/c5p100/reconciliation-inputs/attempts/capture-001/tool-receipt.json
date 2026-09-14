@@ -1,0 +1,10 @@
+{
+  "type": "observed exec_command receipt; combined output, not reconstructed separate native streams",
+  "command": "python3 -B campaign-artifacts/C05-298-300/reconciled/capture_evidence.py",
+  "exit_code": 1,
+  "chunk_id": "65a76c",
+  "actual_failure": "AssertionError at line60: physical.find(full English field) failed because the original ASCII paragraph is line-wrapped. Exact source line extents and whitespace-normalized comparison replaced the attempted contiguous search.",
+  "failed_script": "capture_evidence.py",
+  "superseded_by": "../capture-002",
+  "semantic_effect": "none; failure preceded source-evidence output finalization and any final generator execution"
+}

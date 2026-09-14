@@ -1,0 +1,54 @@
+import gzip,hashlib,json,os,sqlite3
+from pathlib import Path
+H=Path(__file__).resolve().parent;E=H/'evidence';R=H.parent.parent.parent/'campaign-worktree'
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+db=sqlite3.connect('file:'+str(R/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+q='SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq'
+before=[dict(x) for x in db.execute(q,('C05',280,291))]
+save(E/'earlier-argument-full-rows.json',dict(sql=q,params=['C05',280,291],count=len(before),rows=before))
+corpus=json.load(gzip.open(E/'original-corpus.gz'));counts={};index={}
+for i,x in enumerate(corpus):
+    c=x['course'];counts[c]=counts.get(c,0)+1;index[c,counts[c]]=(i,x)
+queries=json.loads((E/'corpus-parallels-full-query-results.json').read_text())
+proof=[]
+for result in queries:
+    for x in result['rows']:
+        i,original=index[x['course'],x['seq']]
+        eq={k:x[k]==original[k] for k in ['course','acip','wylie','english']}
+        assert all(eq.values())
+        proof.append(dict(query=result['label'],course=x['course'],seq=x['seq'],spine_id=x['id'],original_corpus_array_index=i,equalities=eq,original=original))
+save(E/'parallel-original-corpus-proof.json',dict(index_method='Enumerate original corpus array in order, increment one-based seq separately for each course.',count=len(proof),rows=proof))
+master=json.load(gzip.open(E/'original-master.gz'));lex=json.loads((E/'lexical-full-query-results.json').read_text());mp=[]
+for query in lex:
+    for x in query['rows']:
+        original=master['unified_entries'][x['id']-1]
+        match=json.loads(x['raw'])==original
+        assert match
+        mp.append(dict(term=query['term'],spine_id=x['id'],master_unified_array_index=x['id']-1,spine_raw_equals_master_original=match))
+save(E/'master-original-identity-proof.json',mp)
+source=json.loads((E/'original-source.json').read_text());compare=[]
+for x in source:
+    for c,s in [('C15',x['seq']+145),('P7',39 if x['seq']==298 else 40)]:
+        if c=='P7' and x['seq']==299:continue
+        y=dict(db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(c,s)).fetchone())
+        prefix=0
+        for a,b in zip(x['english'],y['english']):
+            if a!=b:break
+            prefix+=1
+        compare.append(dict(source={'course':'C05','seq':x['seq']},parallel={'course':c,'seq':s},equal_fields={k:x[k]==y[k] for k in ['id','course','seq','acip','wylie','english']},english_lengths=[len(x['english']),len(y['english'])],english_shared_prefix_characters=prefix,source_tail_after_prefix=x['english'][prefix:],parallel_tail_after_prefix=y['english'][prefix:]))
+save(E/'parallel-field-comparisons.json',compare)
+paths=[Path('/Users/adamderickandrade')/x for x in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra", 'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']]
+access=[dict(path=str(p),exists=p.exists(),readable=os.access(p,os.R_OK)) for p in paths]
+assert all(x['exists'] and x['readable'] for x in access);save(E/'required-access-proof.json',access)
+extra=R/'engines/hgm_tools.py';b=extra.read_bytes();(E/'original-engines__hgm_tools.py').write_bytes(b);save(E/'generator-dependency-pin.json',dict(path=str(extra),bytes=len(b),sha256=hashlib.sha256(b).hexdigest(),note='Read-only canonical engine imported by the pinned builder; no engine operation or modification was performed.'))
+lines=(E/'original-physical.txt').read_bytes().splitlines(keepends=True)
+sections=[]
+for seq,start,end in [(298,2948,2958),(299,2960,2972),(300,2974,2990)]:
+    b=b''.join(lines[start-1:end]);p=E/f'physical-{seq}-bytes.txt';p.write_bytes(b)
+    acip_lines={298:1,299:2,300:1}[seq];l=b.decode('latin1').splitlines();acip=' '.join(' '.join(l[:acip_lines]).split());eng=' '.join(' '.join(l[acip_lines:]).split());row=next(x for x in source if x['seq']==seq)
+    eq=dict(acip=acip==row['acip'],english=eng==row['english'])
+    assert all(eq.values()),(seq,eq)
+    sections.append(dict(seq=seq,original_source='original-physical.txt',source_lines=[start,end],byte_start=sum(map(len,lines[:start-1])),byte_end=sum(map(len,lines[:end])),extracted_file=p.name,bytes=len(b),sha256=hashlib.sha256(b).hexdigest(),comparison_method='Separate source ACIP header lines and English body, normalize whitespace only for comparison; saved physical bytes remain exact.',normalized_fields=dict(acip=acip,english=eng),normalized_field_equalities=eq))
+save(E/'physical-source-exact-proof.json',sections)
+save(E/'initial-unrecorded-query-failure-tool-receipt.json',dict(command='PYTHONDONTWRITEBYTECODE=1 python3 campaign-artifacts/C05-298-300/tibetan/query_evidence.py',exit_code=1,tool_chunk_id='3cf55f',correction='Tool chunk identifier for the failed invocation is 4dc418; 3cf55f was the earlier successful schema inspection.',combined_tool_output='Traceback (most recent call last):\n  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-298-300/tibetan/query_evidence.py", line 33, in <module>\n    physical=(E/\'original-physical.txt\').read_bytes(); text=physical.decode(\'utf-8\')\n                                                            ~~~~~~~~~~~~~~~^^^^^^^^^\nUnicodeDecodeError: \'utf-8\' codec can\'t decode byte 0xb8 in position 32644: invalid start byte\n',note='Initial combined tool output retained. The same original failed program was immediately rerun with separately captured native stdout/stderr/exit in native-commands/queries/1 before applying the Latin-1 byte-view fix.'))
+print(json.dumps(dict(parallel_original_rows=len(proof),master_identity_checks=len(mp),field_comparisons=compare,physical_equalities=[dict(seq=x['seq'],equalities=x['normalized_field_equalities']) for x in sections]),ensure_ascii=False,indent=2))

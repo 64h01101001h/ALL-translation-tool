@@ -1,0 +1,94 @@
+import hashlib,json,re
+from pathlib import Path
+H=Path(__file__).resolve().parent;E=H/'evidence'
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+omissions={
+298:[
+ {"tib":"yod pa'i", "reason":"Presence/relating construction expanded across 'that have obstacles that relate to'; no independent word atom is proposed."},
+ {"tib":"can gyi", "reason":"Possessor and linking grammar spans several English relative-clause words; omitted without an absence claim."},
+ {"tib":"ma", "occurrence":1,"reason":"The negative onset construction becomes 'until such time as ... starts'; no separately alignable negative English token is proposed. The later ma is separately mapped to not."},
+ {"tib":"yin kyang", "reason":"Copular/concessive structure is distributed through the assertion; the English subject repetition remains unwrapped."},
+ {"tib":"de'i", "reason":"Anaphoric/genitive contribution is distributed through 'of the food'; no isolated demonstrative counterpart is claimed."},
+ {"tib":"tu snang ba'i", "reason":"Appearing-as relation appears as 'of something as' around the separately selected pus-and-blood and appearance phrases; it is not an independent lexical equivalent."},
+ {"tib":"skur ba btab par 'gyur ba'i phyir", "occurrence":1,"reason":"The whole depreciation/consequence predicate is recast as rules becoming 'less that what they really are'; no isolated atom is justified despite related HGM glossary phrases. Unresolved/distributed, not null."},
+ {"tib":"btab par 'gyur ba'i phyir", "occurrence":2,"reason":"The nominal failure is selected in the last recast, but the surrounding construction is spread over 'ever existed it would represent' and the reason linkage; not atomized."},
+ {"english":"rules of", "reason":"Relational expansion around the minimal las 'bras equivalent; left unwrapped."},
+ {"english":"laws of", "reason":"Relational expansion around the minimal las 'bras equivalent; left unwrapped."}
+],
+299:[
+ {"tib":"na", "reason":"Conditional force appears in the opening suppose frame and subsequent necessity; no single flat particle pairing is asserted."},
+ {"tib":"nang du", "reason":"The source's interior location is rendered with on in the porcelain-sink recast; correspondence is not atomized or corrected."},
+ {"tib":"'ching ba", "english":"use a comb", "reason":"Binding/combing action is unresolved at word level. HGM glossary 'ching ba includes hair and skra shad includes comb, but those listings do not justify reversing the locally apparent noun/action roles. skra shad is proposed only for hair; the action remains unbanked."},
+ {"tib":"lus", "reason":"Body-object contribution is rendered through give him a bite; him is a participant recast, not a safe dictionary equivalent of lus."},
+ {"tib":"nus pa", "occurrence":1,"reason":"Ability of the mirage water is spread through 'would have to provide'; no isolated auxiliary equivalent is proposed. The later nus has overt can."},
+ {"tib":"yin par thal", "reason":"Consequence/necessity is distributed across all three examples and the rhetorical question; no one token claims it."},
+ {"english":"pus and blood", "occurrences":[2,5],"reason":"English repeats the object name within the basis description; the corresponding Tibetan noun is banked once in each clause. The deictic third naming belongs to a complete der snang ba'i phrase, not to a fabricated rnag khrag token."}
+],
+300:[
+ {"tib":"de'i tshe na", "reason":"Temporal condition is recast into the opening case/where frame; no isolated lexical match is proposed."},
+ {"tib":"yi", "reason":"Lha yi is retained exactly. GMR renders the being as recipient; the genitive/recipient relation is not separately paired and no Tibetan correction is proposed."},
+ {"tib":"sogs", "occurrence":2,"reason":"After the basis object's rnag khrag, the closing range is implicit in GMR's example; no separate equivalent is proposed and no null is used."},
+ {"tib":"des", "reason":"Source demonstrative/agentive continuation becomes English subject scaffolding; no independent dictionary equivalent is proposed."},
+ {"tib":"yod kyang", "reason":"Existence/concession contributes to the whole evaluative contrast, not a single safely isolated word match."},
+ {"tib":"yod kyi", "reason":"Existence and contrast are distributed through the two valid-perception claims; omitted without a null claim."},
+ {"tib":"par thal", "reason":"Necessity and consequence appear across the sentence and following why question; no standalone token is assigned."},
+ {"tib":"gang zhig", "reason":"Conditional premise connective is distributed through 'If ... were correct'; no independent particle span is proposed."},
+ {"tib":"phyir", "reason":"Reason connective occurs in the full final predicate; left outside selected lexical logic/identical terms."},
+ {"english":"pus and blood", "occurrence":3,"reason":"Repeated naming inside the appearance-basis description; source noun already banked at occurrence 2."},
+ {"english":"something that just looked like", "reason":"Repeated descriptors for the forest and fire expand one source appearance/limitation construction. Only the first hell-object looked-like/appearing/just roles receive the corresponding source tokens."},
+ {"english":"to your own", "reason":"Repeated comparison participant is supplied in GMR's recast; the one khyod kyi is banked at your idea only."}
+]}
+erratum={"seq":298,"kind":"ENGLISH_TYPO","found":"less that what they really are","expected":"less than what they really are","evidence":"C05:298 English has the quoted 'less that' wording in the spine and original corpus. The physical C05ReadingASCII.txt has the same wording at source line 2956 (exact preserved bytes and offsets: ../evidence/physical-source-exact-proof.json, C05:298). C15:443 has identical ACIP and Wylie fields but English 'less than what they really are'; this is a differing text parallel, not evidence of independent publication or ingestion history. P7:39 preserves 'less that' in the shared first 704 characters of C05:298 English and then ends before its final 14-character continuation; it supports only that shared extent. The pinned through291 errata register has no 'less that' record; this is not a registered heading or cap class. Original master skur ba (unified index 628, spine id 629) lists both 'less than what they really are' and 'less that what they really', supporting the observed wording variation but not authorizing a source edit. Comparative syntax requires than after comparative less; a probable typographical substitution is proposed for independent skeptical review and GMR's ruling. Publication independence and authorial intent are not proved.","severity":"LOW","confidence":"PROBABLE"}
+save(H/'298/errata.json',[erratum]);save(H/'299/errata.json',[]);save(H/'300/errata.json',[])
+save(H/'298/errata-support.json',dict(status='PROPOSED ONLY, not registered or approved',grounds=[dict(ground='Exact same-row quotation',finding='found occurs verbatim; normalized physical English independently matches source field, with raw bytes preserved.'),dict(ground='Parallel reading',finding='C15:443 differs only at English that/than; ACIP and Wylie equal. P7:39 shares only the initial 704 English characters, with ACIP/Wylie differences.'),dict(ground='Lexical and syntactic case',finding='Comparative less selects than; master skur ba carries both versions, and is evidence of recorded forms rather than authority to repair GMR.'),dict(ground='Registered class and provenance',finding='No less-that register hit in the pinned origin; neither heading glue nor 1500-character cap. Physical source carries wording, but independence or ingestion lineage is not established.'),dict(ground='Alternative and uncertainty',finding='An intentional nonstandard wording cannot be categorically excluded; confidence PROBABLE, severity LOW, no correction applied.')]))
+allow=[]
+sources={x['seq']:x for x in json.loads((E/'original-source.json').read_text())}
+concerns={298:"Challenge first: skur ba → failure in the final recast; retain only if the noun correspondence survives independent review.",299:"Challenge first: der snang ba'i → something looking like pus and blood is a complete deictic phrase, not an extra pus/blood lexical token; the comb action stays omitted.",300:"Challenge first: the looked-like versus appeared/appearing allocation across the paired snang ba constructions; only the first final repeated descriptor is claimed."}
+for seq in [298,299,300]:
+    d=H/str(seq);save(d/'omissions.json',dict(status='Unbanked decisions, not null judgments',specific=omissions[seq],remaining_grammar='Unselected inflections, case links, auxiliaries and connective frames remain in the verbatim source. Omission does not assert absence; no null spans are proposed.'))
+    proof=json.loads((d/'range-proof.json').read_text());sp=proof['spans'];gaps={}
+    for field,range_key in [('wylie','actual_tib_range'),('english','actual_eng_range')]:
+        merged=[]
+        for lo,hi in sorted(x[range_key] for x in sp):
+            if merged and lo<=merged[-1][1]:merged[-1][1]=max(merged[-1][1],hi)
+            else:merged.append([lo,hi])
+        pos=0;un=[]
+        for lo,hi in merged+[[len(sources[seq][field]),len(sources[seq][field])]]:
+            if lo>pos:un.append(dict(range=[pos,lo],text=sources[seq][field][pos:lo],class_='punctuation/spacing' if not re.search('[A-Za-z]',sources[seq][field][pos:lo]) else 'unbanked; see omissions.json and original context'))
+            pos=hi
+        gaps[field]=un
+    save(d/'coverage-gaps.json',dict(range_convention='zero-based Unicode code-point half-open intervals',source_sha256=sha(E/'original-source.json'),gaps=gaps))
+    for x in sp:
+        if x['d'] in [5,7] and x['eng'].split()[0].lower() in ['the','a','an','and','or','his','our','your','i','you']:
+            allow.append(dict(seq=seq,label='s'+str(seq)+x['id'],tib=x['tib'],eng=x['eng'],licensor='sogs closing gesture',status='Proposed requirement only; no repository allowance change made.'))
+    counts=json.loads((d/'counts.json').read_text());counts['errata']=len(json.loads((d/'errata.json').read_text()));save(d/'counts.json',counts)
+    gen=json.loads((d/'generator-proof.json').read_text())
+    report=[f'C05:{seq} — independent Tibetan-first original proposal by Codex (gpt-6-astra); PROVISIONAL, no semantic approval or hgm_gloss promotion.',
+      concerns[seq],
+      'Specific omissions and complete mechanical gaps are preserved in omissions.json and coverage-gaps.json; unresolved/distributed material is omitted, not falsely nulled.',
+      'Original source/master/corpus and physical bytes, full raw queries, exact native streams, source roles and identity checks are preserved once in ../evidence and ../native-commands; consult ../evidence-index.md.',
+      f'Source snapshot SHA256 {sha(E/"original-source.json")}; independently verified all six selected fields against full original SQLite rows, URI mode=ro.',
+      f'Counts: {counts["total"]} spans, {counts["d5"]} d5, {counts["d6"]} d6, {counts["d7"]} d7, {counts["d3"]} d3, {counts["null"]} null; errata proposed {counts["errata"]}.',
+      f'Actual canonical generator: EXIT={gen["exit"]}; BODY_BYTES={gen["stdout_bytes"]}; STDERR_BYTES={gen["stderr_bytes"]}. generator.stdout.html equals body.html byte-for-byte.',
+      f'Spec SHA256 {sha(d/"spec.json")}; body/stdout SHA256 {sha(d/"body.html")}.',
+      f'Range proof SHA256 {sha(d/"range-proof.json")}: all intended and actual ranges match, both complete unwrapped texts equal their source fields.',
+      ('Errata: probable less-that/less-than typo, exact physical line 2956; C15:443 differs, P7:39 supports only the 704-character shared extent. See errata-support.json.' if seq==298 else 'Errata: empty. Physical original matches; registered classes and the pertinent original master/corpus parallels were checked. No independent publication/ingestion claim is made.'),
+      'Actual origin is c107f1ecd9cfb68968245870ad81ba5d9a070721 through291; mutable governance uses exact Git blobs. Source/generator pins remain fixed while unrelated worktree governance may advance.',
+      'Final proof boundary: ../freeze-manifest.json and its SHA256 sidecar. Any later correction must preserve and explicitly supersede that boundary.']
+    (d/'report.md').write_text('\n'.join(report)+'\n')
+save(H/'proposed-head-allowances.json',allow)
+idx=['Independent Tibetan-first evidence index — C05:298–300',
+ 'Actual producer: Codex (gpt-6-astra). All work is provisional. The proposal source boundary is the actual c107f1ecd9cfb68968245870ad81ba5d9a070721 commit through291, not a future landing boundary.',
+ 'No source/master/corpus/repository edits, source corrections, commits, account messages, paid APIs, web, native/device actions, other-angle/root-review reads or subagents were used.',
+ 'Source preservation: original-master.gz, original-corpus.gz and original-physical.txt are exact original file bytes; source/context snapshots are exact copied bytes. The spine remains read-only and is identified by full-file size/hash. All six fields of both supplied snapshots were verified against original full rows including raw JSON.',
+ 'Evidence roles: unified/curated/glossary master objects and hgm_gloss are lexical evidence; other dictionary fields are comparanda and never supply GMR English. Corpus and physical source establish actual GMR wording. Full master and original corpus query objects are preserved alongside spine query rows.',
+ 'Read context: original C05:280–314 was inspected, including the complete 298–300 argument and its continuation through The Stream conclusion. Following Reading Seven apparatus occurs in 314, outside this proposal; it is retained as registered apparatus, not refiled.',
+ 'C15:443 and :444 match C05 ACIP/Wylie but differ in English; :445 matches all three text fields. P7:39 has a 704-character shared English prefix only, while :40 shares the full English but differs in Tibetan fields. Identifier/course/seq differences are explicit. Text equality does not establish independent publication or ingestion lineage.',
+ 'Mechanical proof: run_generator_ro.py executes the unchanged canonical tools/gen_alignment_page.py. It injects only the pinned original builder import and a mode=ro/query_only SQLite connection; no matching/refusal/emission logic is changed. Each segment stores actual stdout/stderr/exit, exact input and native command records. The canonical resolver provides ranges, and independent HTML parsing proves full source text equality.',
+ 'Failure preservation: initial UTF-8 physical-source view failed at byte 32644; the initial combined receipt and a separately captured native reproduction with the original helper are retained. The successful helper uses a reversible Latin-1 byte view without claiming the physical file encoding. No generator attempt failed. All attempts and executed helper originals are retained under native-commands and segment attempts.',
+ 'The three proposed function-head allowances are only proposed requirements if surviving spans land; no allowance file is edited. Semantic decisions remain reviewable in intended-ranges.json, omissions.json and errata support.']
+for p in sorted(E.iterdir()):
+    if p.is_file():idx.append(f'{p.name} — {p.stat().st_size} bytes — SHA256 {sha(p)}')
+(H/'evidence-index.md').write_text('\n\n'.join(idx)+'\n')
+print(json.dumps({seq:json.loads((H/str(seq)/'counts.json').read_text()) for seq in [298,299,300]},indent=2));print('PROPOSED_HEAD_ALLOWANCES',len(allow))

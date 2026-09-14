@@ -1,0 +1,20 @@
+import os,runpy,sqlite3,pathlib,hashlib,json,sys,types
+A=pathlib.Path(__file__).resolve().parent;W=A.parents[2]/'campaign-worktree';pin=json.loads((A/'evidence/originals/proposal-baseline.json').read_text())
+for path in ['tools/gen_alignment_page.py']:
+ b=(W/path).read_bytes();assert hashlib.sha256(b).hexdigest()==pin['governing_git_pins'][path]['sha256'],path
+# Mutable builder governance comes from the exact recorded historical Git object.
+builder=A/'evidence/originals/governance/tools/build_alignment_layer.py'
+b=builder.read_bytes();assert hashlib.sha256(b).hexdigest()==pin['governing_git_pins']['tools/build_alignment_layer.py']['sha256']
+module=types.ModuleType('build_alignment_layer');module.__file__=str(W/'tools/build_alignment_layer.py')
+exec(compile(b,module.__file__,'exec'),module.__dict__)
+sys.modules['build_alignment_layer']=module
+original_connect=sqlite3.connect
+def read_only(database,*args,**kwargs):
+ p=str(database)
+ if not p.startswith('file:'):p='file:'+str(pathlib.Path(p).resolve())+'?mode=ro'
+ elif 'mode=ro' not in p:p+=('&' if '?' in p else '?')+'mode=ro'
+ kwargs['uri']=True
+ return original_connect(p,*args,**kwargs)
+sqlite3.connect=read_only
+# Execute the actual unmodified pinned worktree generator; only connection open mode is tightened.
+runpy.run_path(str(W/'tools/gen_alignment_page.py'),run_name='__main__')

@@ -1,0 +1,36 @@
+{
+  "recorded_at": "2026-09-12T22:56:08.533268+00:00",
+  "initial_capture": {
+    "argv": [
+      "python3",
+      "-B",
+      "campaign-artifacts/capture_future_source_batch.py",
+      "298",
+      "300",
+      "campaign-artifacts/C05-298-300/preparation-terms.json"
+    ],
+    "observed_tool_exit": 0,
+    "exec_session_id": 3253,
+    "helper": {
+      "bytes": 5511,
+      "sha256": "259ede33ba954bd0133e9765af48eb03da4f448bac68acdd7a00188c0ee9d285"
+    }
+  },
+  "supplement": {
+    "argv": [
+      "python3",
+      "-B",
+      "campaign-artifacts/C05-298-300/complete-preparation-evidence.py"
+    ],
+    "observed_tool_exit": 0,
+    "exec_session_id": 50445,
+    "helper": {
+      "bytes": 4217,
+      "sha256": "9eef227e7fada30cccb6cdb135380f8bc1c0cf4e70a58b6fffb81c17df11bb94"
+    }
+  },
+  "env": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "note": "Actual tools returned EXIT0; separate raw stdout capture was not requested. Exact helper code and complete structured output preserved. Session yielding does not establish total execution time, so no total duration is asserted."
+}

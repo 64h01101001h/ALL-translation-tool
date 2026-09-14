@@ -1,0 +1,28 @@
+"""Run the unchanged canonical generator with a read-only SQLite connection.
+
+Only the mutable builder import is supplied from its pinned original Git blob.
+No resolver, emission, refusal, or source data is altered.
+"""
+import hashlib,json,runpy,sqlite3,sys,types
+from pathlib import Path
+H=Path(__file__).resolve().parent;R=H.parent.parent.parent/'campaign-worktree'
+def prepare():
+    p=json.loads((H/'evidence/proposal-baseline.json').read_text())
+    gen=R/'tools/gen_alignment_page.py'
+    assert hashlib.sha256(gen.read_bytes()).hexdigest()==p['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+    b=(H/'evidence/git-tools__build_alignment_layer.py').read_bytes()
+    assert hashlib.sha256(b).hexdigest()==p['governing_git_pins']['tools/build_alignment_layer.py']['sha256']
+    sys.path.insert(0,str(R/'engines'))
+    mod=types.ModuleType('build_alignment_layer');mod.__file__=str(R/'tools/build_alignment_layer.py')
+    exec(compile(b,mod.__file__,'exec'),mod.__dict__)
+    sys.modules['build_alignment_layer']=mod
+    connect=sqlite3.connect
+    def ro_connect(database,*args,**kwargs):
+        assert str(database)==str(R/'build/hgm_spine_v27_2.db'),database
+        kwargs['uri']=True
+        con=connect('file:'+str(database)+'?mode=ro',*args,**kwargs)
+        con.execute('PRAGMA query_only=ON')
+        return con
+    sqlite3.connect=ro_connect
+    return gen
+if __name__=='__main__':runpy.run_path(str(prepare()),run_name='__main__')

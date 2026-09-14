@@ -1,0 +1,37 @@
+from pathlib import Path
+import json,re,hashlib,difflib
+b=Path('campaign-artifacts/C05-298-300');o=b/'semantic-review'; (o/'reading').mkdir(exist_ok=True)
+parts=re.split(r'\n===== (.+?) =====\n',(b/'semantic-input-review-package.txt').read_text()); counts=[]
+for seq in [298,299,300]:
+ out=[]
+ for name,body in zip(parts[1::2],parts[2::2]):
+  if f'/{seq}/' not in name and not name.endswith(str(seq)): continue
+  if name.startswith('COMPLETE'):
+   angle=name.split()[1]; expected=''.join(difflib.unified_diff((b/f'{angle}/{seq}/spec.json').read_text().splitlines(True),(b/f'reconciled/{seq}/spec.json').read_text().splitlines(True),fromfile=f'{angle}/{seq}/spec.json',tofile=f'reconciled/{seq}/spec.json',n=8))
+   assert body.rstrip()==expected.rstrip(),name
+   counts.append({'name':name,'bytes':len(body.encode()),'exact_full_diff':True}); continue
+  try:
+   data=json.loads(body)
+   if name.endswith('spec.json'):
+    s=data['segments'][0];body='\n'.join(json.dumps(x,ensure_ascii=False) for x in s['spans'])+'\n'+json.dumps({k:v for k,v in s.items() if k!='spans'},ensure_ascii=False)
+   else:body=json.dumps(data,ensure_ascii=False)
+  except json.JSONDecodeError:pass
+  out.append(name+'\n'+body)
+ (o/f'reading/package-{seq}.txt').write_text('\n\n'.join(out))
+(o/'reading/package-diffs-verification.json').write_text(json.dumps(counts,indent=2)+'\n')
+d=json.loads((b/'reconciled/reconciliation-decisions.json').read_text())
+for seq in [298,299,300]:
+ out=[]
+ for x in d['final_ordered_tuples']:
+  if x['seq']==seq:out.append(json.dumps({k:v for k,v in x.items() if k not in ['evidence_refs']},ensure_ascii=False))
+ out.append('ORIGINAL DECISIONS GROUPED ONLY BY EXACT REASONS; ALL IDS/VALUES RETAINED')
+ groups={}
+ for x in d['original_decisions']:
+  if x['seq']==seq:
+   key=json.dumps({k:x[k] for k in ['original_reason','original_reason_scope','rationale']},sort_keys=True,ensure_ascii=False)
+   groups.setdefault(key,[]).append({k:x[k] for k in ['angle','id','d','tib','eng','disposition','final_ids','tib_range','eng_range']})
+ for k,v in groups.items():out.append(k+'\n'+json.dumps(v,ensure_ascii=False))
+ out.append('OMISSIONS\n'+json.dumps([x for x in d['material_omissions'] if x['seq']==seq],ensure_ascii=False))
+ (o/f'reading/decisions-{seq}.txt').write_text('\n'.join(out))
+print('Prepared compact full-value package and decision views; full six diffs verified exactly.')
+for p in sorted((o/'reading').iterdir()):print(p.name,p.stat().st_size)

@@ -1,0 +1,8 @@
+import runpy,sqlite3,sys
+from pathlib import Path
+R=Path(sys.argv[1]);c=sqlite3.connect
+def ro(database,*args,**kwargs):
+ kwargs['uri']=True
+ d=c('file:'+str(database)+'?mode=ro',*args,**kwargs);d.execute('pragma query_only=ON');return d
+sqlite3.connect=ro
+runpy.run_path(str(R/'tools/gen_alignment_page.py'),run_name='__main__')

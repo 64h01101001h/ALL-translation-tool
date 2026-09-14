@@ -1,0 +1,69 @@
+from pathlib import Path
+import datetime, difflib, gzip, hashlib, json, sqlite3
+
+b = Path(__file__).resolve().parent
+wt = b.parent.parent / 'campaign-worktree'
+db = sqlite3.connect((wt / 'build/hgm_spine_v27_2.db').as_uri() + '?mode=ro', uri=True)
+db.row_factory = sqlite3.Row
+db.execute('PRAGMA query_only=ON')
+master = json.loads(gzip.decompress((wt / 'data/hgm_dictionary_v27_2.json.gz').read_bytes()))['unified_entries']
+corpus = json.loads(gzip.decompress((wt / 'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+courses = {}
+for row in corpus:
+    courses.setdefault(row['course'], []).append(row)
+
+def write(name, data):
+    p = b / name
+    assert not p.exists(), ('preserve prior evidence', name)
+    p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+
+lex = []
+sql = 'SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'
+for term in ["skur ba 'debs", "skur ba", "btab", "snang gzhir gyur pa", "'ching", "skra shad snang bas 'ching ba", "gzhan", "yang", "snang", "can", "las", "'bras", "bza'", "btung", "la yod pa'i"]:
+    rows = [dict(r) for r in db.execute(sql, (term, term))]
+    entries = []
+    for r in rows:
+        raw = json.loads(r['raw'])
+        assert raw == master[r['id'] - 1]
+        entries.append(dict(entry_id=r['id'], master_index=r['id']-1, entry=raw))
+    lex.append(dict(term=term, sql=sql, parameters=[term, term], count=len(rows), rows=rows, full_master_entries=entries))
+write('root-additional-lexical-preparation.json', lex)
+
+parallel = []
+for course, seq in [('P7',39), ('P7',40), ('C15',443), ('C15',444), ('C15',445)]:
+    sql = 'SELECT * FROM corpus_segments WHERE course=? AND seq=?'
+    rows = [dict(r) for r in db.execute(sql, (course, seq))]
+    assert len(rows) == 1
+    parallel.append(dict(sql=sql, parameters=[course,seq], count=len(rows), rows=rows))
+write('root-additional-parallel-preparation.json', parallel)
+
+replays = []
+for name in ['root-lexical-preparation.json', 'root-parallel-preparation.json', 'root-additional-lexical-preparation.json', 'root-additional-parallel-preparation.json']:
+    for i,q in enumerate(json.loads((b/name).read_bytes())):
+        actual = [dict(r) for r in db.execute(q['sql'], q['parameters'])]
+        assert actual == q['rows'] and len(actual) == q['count']
+        for r in actual:
+            raw = json.loads(r['raw'])
+            if 'entry' in q['sql']:
+                assert raw == master[r['id']-1]
+            else:
+                assert raw == courses[r['course']][r['seq']-1]
+        replays.append(dict(file=name, query_index=i, count=len(actual), all_full_SQL_and_original_archive_objects_equal=True))
+
+sources = json.loads((b/'source.json').read_bytes())
+comparisons = []
+for q in parallel:
+    p = q['rows'][0]
+    if p['course'] == 'P7' and p['seq'] == 39:
+        continue  # Preserve/read the whole row; do not invent a one-row correspondence.
+    source_seq = p['seq'] + (260 if p['course']=='P7' else -145)
+    s = next(x for x in sources if x['seq']==source_seq)
+    fields = {}
+    for field in ['wylie','acip','english']:
+        a,z = s[field],p[field]
+        diffs = [dict(operation=op,C05_range=[a0,a1],parallel_range=[b0,b1],C05_text=a[a0:a1],parallel_text=z[b0:b1]) for op,a0,a1,b0,b1 in difflib.SequenceMatcher(None,a,z,autojunk=False).get_opcodes() if op!='equal']
+        fields[field] = dict(C05_length=len(a), parallel_length=len(z), equal=a==z, differences=diffs)
+    comparisons.append(dict(C05_seq=source_seq,parallel_course=p['course'],parallel_seq=p['seq'],fields=fields))
+db.close()
+write('root-complete-query-replay.json',dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='PASS complete original query reopens',queries=replays,total_queries=len(replays),parallel_comparisons=comparisons,limit='Preparation only. Exact full corpus/master objects and physical source proof are retained; no semantic approval or publication-independence claim. Model inspection of new results follows separately.'))
+print(json.dumps(dict(total_queries=len(replays),additional_lexical=[dict(term=q['term'],count=q['count']) for q in lex],parallel_comparisons=comparisons),ensure_ascii=False))

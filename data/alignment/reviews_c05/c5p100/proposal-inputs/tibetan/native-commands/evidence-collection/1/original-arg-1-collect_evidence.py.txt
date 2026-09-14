@@ -1,0 +1,58 @@
+import gzip, hashlib, json, os, shutil, sqlite3, subprocess
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+BATCH = HERE.parent
+ROOT = BATCH.parent.parent / 'campaign-worktree'
+E = HERE / 'evidence'
+E.mkdir(exist_ok=True)
+def save(name, value):
+    (E/name).write_text(json.dumps(value, ensure_ascii=False, indent=2)+'\n')
+def sha(b): return hashlib.sha256(b).hexdigest()
+baseline = json.loads((BATCH/'proposal-baseline.json').read_text())
+shutil.copy2(BATCH/'proposal-baseline.json', E/'proposal-baseline.json')
+pins=[]
+for name, pin in baseline['source_pins'].items():
+    p=Path(pin['path']); b=p.read_bytes()
+    assert len(b)==pin['bytes'] and sha(b)==pin['sha256'], name
+    dst=None
+    if name!='spine':
+        dst=E/('original-'+name+p.suffix)
+        dst.write_bytes(b)
+    pins.append(dict(name=name, original_path=str(p), preserved_path=str(dst) if dst else None, bytes=len(b), sha256=sha(b)))
+save('source-pins-verified.json',pins)
+git=[]
+for name,pin in baseline['governing_git_pins'].items():
+    command=['git','show',pin['original_git_commit']+':'+name]
+    r=subprocess.run(command,cwd=ROOT,capture_output=True)
+    assert r.returncode==0 and not r.stderr and sha(r.stdout)==pin['sha256']
+    stem='git-'+name.replace('/','__')
+    (E/stem).write_bytes(r.stdout)
+    (E/(stem+'.stderr')).write_bytes(r.stderr)
+    git.append(dict(command=command,cwd=str(ROOT),exit=r.returncode,stdout=stem,stderr=stem+'.stderr',bytes=len(r.stdout),sha256=sha(r.stdout)))
+save('governing-native-command-proof.json',git)
+db=sqlite3.connect('file:'+str(ROOT/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True)
+db.row_factory=sqlite3.Row
+q='SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq'
+rows=[dict(x) for x in db.execute(q,('C05',292,310))]
+save('spine-source-context-full-rows.json',dict(sql=q,params=['C05',292,310],count=len(rows),rows=rows))
+verification=[]
+for name in ['source','context']:
+    snap=json.loads((BATCH/(name+'.json')).read_text())
+    for a in snap:
+        row=dict(db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(a['course'],a['seq'])).fetchone())
+        checks={k:a[k]==row[k] for k in ['id','course','seq','acip','wylie','english']}
+        assert all(checks.values())
+        verification.append(dict(snapshot=name,seq=a['seq'],checks=checks))
+save('snapshot-six-field-proof.json',verification)
+corpus=json.load(gzip.open(ROOT/'data/full_parallel_corpus_v32.json.gz'))
+counts={}; indexed=[]
+for n,row in enumerate(corpus):
+    c=row['course']; counts[c]=counts.get(c,0)+1
+    indexed.append(dict(source_array_index=n,derived_course_seq=counts[c],original=row))
+targets=[x for x in indexed if x['original']['course']=='C05' and 292<=x['derived_course_seq']<=310]
+save('corpus-original-source-context.json',dict(source=str(ROOT/'data/full_parallel_corpus_v32.json.gz'),count=len(targets),rows=targets))
+for x in targets:
+    r=next(y for y in rows if y['seq']==x['derived_course_seq'])
+    assert all(r[k]==x['original'][k] for k in ['course','acip','wylie','english'])
+print(json.dumps({'pins':len(pins),'governing':len(git),'source_context_rows':len(rows),'snapshot_verifications':len(verification),'corpus_original_rows':len(targets)},indent=2))

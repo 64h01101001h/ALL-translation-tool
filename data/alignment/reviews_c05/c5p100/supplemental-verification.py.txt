@@ -1,0 +1,59 @@
+from pathlib import Path
+import os,sys,json,gzip,sqlite3,difflib,subprocess,hashlib
+B=Path('campaign-artifacts/C05-298-300').resolve();O=B/'semantic-review';R=B.parents[1]/'campaign-worktree';sha=lambda d:hashlib.sha256(d).hexdigest()
+def put(name,x):(O/name).write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+db=sqlite3.connect('file:'+str(R/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('pragma query_only=ON')
+master=json.loads(gzip.decompress((R/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));r=json.loads((B/'reconciled/evidence/records.json').read_text());known={json.dumps(v['record'],sort_keys=True) for v in r.values()};extra=[];qs=[]
+for i,q in enumerate(json.loads((B/'tibetan/evidence/lexical-full-query-results.json').read_text())):
+ rows=[dict(x) for x in db.execute(q['sql'],q['params'])];assert rows==q['rows'] and len(rows)==q['count']
+ original=[{'layer':s,'array_index':i,'original':x} for s in ['unified_entries','curated_entries','glossary_entries'] for i,x in enumerate(master[s]) if x.get('wylie')==q['term'] or q['term'] in (x.get('wylie_variants') or [])]
+ assert original==q['master_originals'] and len(original)==q['master_exact_or_variant_count']
+ qs.append({'query':i,'term':q['term'],'entries_count':len(rows),'master_count':len(original),'full_records_match':True})
+ for x in original:
+  if json.dumps(x['original'],sort_keys=True) not in known:extra.append(x)
+put('independent-tibetan-lexical-extra-records.json',extra);put('independent-tibetan-lexical-replays.json',qs)
+qproof=[];unexpected=[]
+for name in ['corpus-parallels-full-query-results.json','earlier-argument-full-rows.json','argument-continuation-full-rows.json']:
+ x=json.loads((B/'tibetan/evidence'/name).read_text());queries=x if isinstance(x,list) else [x]
+ for i,q in enumerate(queries):
+  rows=[dict(x) for x in db.execute(q['sql'],q['params'])];assert rows==q['rows'] and len(rows)==q['count']
+  qproof.append({'file':name,'query':i,'count':len(rows),'all_rows_match':True})
+  for row in rows:
+   if json.dumps(row,sort_keys=True) not in known:unexpected.append(row)
+put('independent-tibetan-corpus-replays.json',qproof);put('independent-additional-corpus-records.json',unexpected)
+# Original tuple and disposition correspondence, excluding actual generator reruns for already proven originals.
+sys.path.insert(0,str(R/'tools'));import gen_alignment_page as G
+originals={}
+for angle in ['tibetan','english']:
+ for seq in [298,299,300]:
+  src=dict(db.execute('select * from corpus_segments where course=? and seq=?',('C05',seq)).fetchone());s=json.loads((B/f'{angle}/{seq}/spec.json').read_text())['segments'][0];sp=s['spans'];by={x['id']:x for x in sp};t=G.resolve(src['wylie'],sp,'tib',seq);es=G.with_members(sp,[by[i] for i in s['eng_order']],src['english']);e=G.resolve(src['english'],es,'eng',seq)
+  for x in sp:originals[(angle,seq,x['id'])]={**x,'tib_range':list(t[x['id']]),'eng_range':list(e[x['id']]) if x['eng'] is not None else None}
+dec=json.loads((B/'reconciled/reconciliation-decisions.json').read_text());final=json.loads((O/'resolved-spans.json').read_text());retained=0;changed=[]
+for x in dec['original_decisions']:
+ y=originals[(x['angle'],x['seq'],x['id'])];assert all(x[k]==y[k] for k in ['d','tib','eng','tib_range','eng_range'])
+ if x['disposition']=='retained':
+  assert any(all(f[k]==x[k] for k in ['seq','d','tib','eng','tib_range','eng_range']) for f in final);retained+=1
+ else:changed.append(x)
+put('original-dispositions-inspected.json',{'originals':len(originals),'decision_records':len(dec['original_decisions']),'retained_exact':retained,'changed':len(changed),'all_original_ranges_and_claimed_retentions_exact':True,'changed_original_decisions':changed})
+# Independent five-ground source and witness measurements.
+found='less that what they really are';expected='less than what they really are';s={i:dict(db.execute('select * from corpus_segments where course=? and seq=?',('C05',i)).fetchone()) for i in [298,299,300]};witness={f'{c}:{i}':dict(db.execute('select * from corpus_segments where course=? and seq=?',(c,i)).fetchone()) for c,i in [('C15',443),('C15',444),('C15',445),('P7',39),('P7',40)]}
+queries=[]
+for field,term in [('english',found),('english',expected),('english','the continuum of the food'),('wylie',"des longs spyod par brtsams pa na"),('english','appears on a porcelain sink'),('english','appears to exist on a porcelain sink')]:
+ sql=f'select * from corpus_segments where {field} like ? order by course,seq';rows=[dict(x) for x in db.execute(sql,('%'+term+'%',))];queries.append({'sql':sql,'params':['%'+term+'%'],'count':len(rows),'rows':rows})
+put('independent-errata-query-results.json',queries);put('independent-errata-witnesses-full.json',witness)
+comparisons=[]
+for a,ident in [(298,'C15:443'),(298,'P7:39'),(299,'C15:444'),(300,'C15:445'),(300,'P7:40')]:
+ for field in ['acip','wylie','english']:
+  first=s[a][field];other=witness[ident][field];ops=[{'tag':tag,'source_range':[i,j],'witness_range':[k,l],'source':first[i:j],'witness':other[k:l]} for tag,i,j,k,l in difflib.SequenceMatcher(None,first,other,autojunk=False).get_opcodes() if tag!='equal'];comparisons.append({'source':f'C05:{a}','witness':ident,'field':field,'source_characters':len(first),'witness_characters':len(other),'differences':ops})
+put('independent-parallel-field-differences.json',comparisons)
+physical=Path(json.loads((B/'proposal-baseline.json').read_text())['source_pins']['physical']['path']).read_bytes();pp=[]
+for x in json.loads((B/'reconciled/evidence/physical-extents.json').read_text()):
+ a,z=x['byte_range'];data=physical[a:z];assert data==(B/'reconciled'/x['full_extent_file']).read_bytes();lines=physical.splitlines(keepends=True);assert b''.join(lines[x['source_lines'][0]-1:x['source_lines'][1]])==data;pp.append(dict(x,independent_exact_bytes=True))
+assert physical.splitlines(keepends=True)[2955]==(B/'reconciled/evidence/physical-line-2956.bin').read_bytes()
+put('independent-physical-extent-proof.json',pp)
+counts={'quoted_found_fields':{k:s[298][k].count(found) for k in ['acip','wylie','english']},'less_that_rows':len(queries[0]['rows']),'less_than_rows':len(queries[1]['rows']),'less_that_segments':[f"{x['course']}:{x['seq']}" for x in queries[0]['rows']],'less_than_segments':[f"{x['course']}:{x['seq']}" for x in queries[1]['rows']],'english_characters':{str(i):len(s[i]['english']) for i in s},'physical_line_2956_found_count':physical.splitlines()[2955].count(found.encode()),'p7_39_shared_prefix':len(witness['P7:39']['english']),'p7_39_exact_prefix':s[298]['english'].startswith(witness['P7:39']['english']),'p7_39_missing_suffix':s[298]['english'][len(witness['P7:39']['english']):],'p7_39_missing_suffix_bytes':len(s[298]['english'].encode())-len(witness['P7:39']['english'].encode()),'C16_P1_TCS_shared_passage_hits':sorted({f"{x['course']}:{x['seq']}" for q in queries[:4] for x in q['rows'] if x['course'] in ['C16','P1'] or x['course'].startswith('TCS')}),'299_C05_found':s[299]['english'].count('appears on a porcelain sink'),'299_C15_expected':witness['C15:444']['english'].count('appears to exist on a porcelain sink'),'299_added_characters':len(witness['C15:444']['english'])-len(s[299]['english']),'lha_yi':{name:x['wylie'].count('lha yi') for name,x in [('C05:300',s[300]),('C15:445',witness['C15:445']),('P7:40',witness['P7:40'])]}}
+regchecks=[]
+for commit in [json.loads((B/'proposal-baseline.json').read_text())['commit'],json.loads((B/'baseline.json').read_text())['commit']]:
+ reg=json.loads(subprocess.check_output(['git','show',commit+':docs/errata_register.json'],cwd=R));entries=reg if isinstance(reg,list) else reg['entries'];hits=[x for x in entries if 'less that' in json.dumps(x).lower()];seqhits=[x for x in entries if x.get('course')=='C05' and x.get('seq') in [298,299,300]];regchecks.append({'commit':commit,'count':len(entries),'less_that_matches':hits,'batch_segment_matches':seqhits})
+counts['registers']=regchecks;put('independent-errata-counts.json',counts)
+print(json.dumps({'tibetan_lexical_queries':len(qs),'additional_master_records':len(extra),'tibetan_corpus_queries':len(qproof),'additional_corpus_records':len(unexpected),'originals':len(originals),'retained':retained,'changed':len(changed),'errata_counts':counts},indent=2))

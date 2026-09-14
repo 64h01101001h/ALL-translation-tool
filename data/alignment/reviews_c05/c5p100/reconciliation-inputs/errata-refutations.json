@@ -1,0 +1,225 @@
+[
+  {
+    "suspicion_id": "298-comparative-that-than",
+    "seq": 298,
+    "kind": "ENGLISH_TYPO",
+    "found": "less that what they really are",
+    "expected": "less than what they really are",
+    "original_proposals": [
+      "tibetan/298/errata.json#/0",
+      "english/298/errata.json#/0"
+    ],
+    "refuted": false,
+    "suggested_severity": "LOW",
+    "suggested_confidence": "PROBABLE",
+    "five_grounds": {
+      "a_verbatim": {
+        "refutes": false,
+        "field_counts": {
+          "acip": 0,
+          "wylie": 0,
+          "english": 1
+        },
+        "reason": "The exact found string occurs once in this English field and once on original physical line2956. ACIP/Wylie were checked and the English quote does not purport to be Tibetan.",
+        "source_ref": "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+        "physical_ref": "physical-line-2956.bin"
+      },
+      "b_independent_parallel": {
+        "refutes": false,
+        "reason": "C15:443 differs only by the final letter of that/than in English, with identical Tibetan fields. P7:39 has that in exactly the first704 of718 English characters, omitting only the final14 characters, consequences with preceding space and final period. The Tibetan also differs in punctuation and dvags/dwags. Neither digital equality nor difference establishes independent publication or ingestion lineage. No independent same-reading publication was found; lack of established independence limits confidence and does not prove lineage.",
+        "witness_refs": [
+          "spine:f70d662385887cb531d89e83c5d612e669d35e0cf366e0377816ad3b97e3edec",
+          "spine:b53e378a60730c8bf9d43c2d9704739427cca2034a88d849ff8dd5575e6f4a17"
+        ],
+        "searches": {
+          "less that what they really are": {
+            "rows": 2,
+            "segments": [
+              "C05:298",
+              "P7:39"
+            ],
+            "refs": [
+              "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+              "spine:b53e378a60730c8bf9d43c2d9704739427cca2034a88d849ff8dd5575e6f4a17"
+            ]
+          },
+          "less than what they really are": {
+            "rows": 1,
+            "segments": [
+              "C15:443"
+            ],
+            "refs": [
+              "spine:f70d662385887cb531d89e83c5d612e669d35e0cf366e0377816ad3b97e3edec"
+            ]
+          },
+          "source_english_characters": {
+            "298": 718,
+            "299": 777,
+            "300": 1103
+          },
+          "physical_line_2956_found_count": 1,
+          "P7_shared_english_bytes": 704,
+          "C05_298_english_bytes": 718,
+          "P7_excluded_suffix_bytes": 14
+        },
+        "C16_P1_TCS_shared_passage_hits": []
+      },
+      "c_registered_class_duplicate": {
+        "refutes": false,
+        "reason": "The pinned192-record register has no less-that entry and no C05:298 duplicate. This comparative letter substitution is not the converter, footnote, folio, heading, running-head, spill or1500-character cap class.",
+        "evidence": "register-checks.json"
+      },
+      "d_expected_or_defensible": {
+        "refutes": false,
+        "reason": "In less ... what they really are, than marks the comparative standard; that is not a defensible conjunction for this construction. The original skur ba glossary contains both less than what they really are and less that what they really, plus failure. Repetition in the glossary does not establish authorial intention or a grammatical defence. Expected changes only that to than; no Tibetan correction or source edit follows.",
+        "master_refs": [
+          "master:3c5cfab31db43629df58200dd34ce125683f76781f8fcf3cec4bdf8d37469f32",
+          "master:f6be989ed3d557cb51d052f2adfcdf00c09bff0093b2e3fd39ec8109e6600d3c"
+        ]
+      },
+      "e_rechecked_counts": {
+        "refutes": false,
+        "reason": "Every count used here was rerun on the pinned source records or original physical bytes; complete search results and exact field differences are retained.",
+        "counts_rechecked": {
+          "less that what they really are": {
+            "rows": 2,
+            "segments": [
+              "C05:298",
+              "P7:39"
+            ],
+            "refs": [
+              "spine:9218a5ff97dcd5a74f6ed76cd8af5739df00933b932cad59083abda00ee6c089",
+              "spine:b53e378a60730c8bf9d43c2d9704739427cca2034a88d849ff8dd5575e6f4a17"
+            ]
+          },
+          "less than what they really are": {
+            "rows": 1,
+            "segments": [
+              "C15:443"
+            ],
+            "refs": [
+              "spine:f70d662385887cb531d89e83c5d612e669d35e0cf366e0377816ad3b97e3edec"
+            ]
+          },
+          "source_english_characters": {
+            "298": 718,
+            "299": 777,
+            "300": 1103
+          },
+          "physical_line_2956_found_count": 1,
+          "P7_shared_english_bytes": 704,
+          "C05_298_english_bytes": 718,
+          "P7_excluded_suffix_bytes": 14
+        }
+      }
+    },
+    "reason": "Survives these five grounds as a LOW/PROBABLE typographical substitution for editorial consideration; source wording remains unchanged, publication independence and authorial intent are unproved."
+  },
+  {
+    "suspicion_id": "299-appears-to-exist-variant",
+    "seq": 299,
+    "kind": "ENGLISH_TYPO",
+    "found": "appears on a porcelain sink",
+    "expected": "appears to exist on a porcelain sink",
+    "original_proposals": [],
+    "refuted": true,
+    "suggested_severity": null,
+    "suggested_confidence": null,
+    "five_grounds": {
+      "a_verbatim": {
+        "refutes": false,
+        "field_counts": {
+          "acip": 0,
+          "wylie": 0,
+          "english": 1
+        },
+        "source_ref": "spine:33f07e57b315a22d9487eb594a46a0654174b065ec0a2e075d8b322a666d106e"
+      },
+      "b_independent_parallel": {
+        "refutes": false,
+        "reason": "C15:444 inserts to exist after appears; its ACIP/Wylie match. This digital variant has no established publication or ingestion independence. P7:39 and40 address298 and300, and are not witnesses for299.",
+        "witness_refs": [
+          "spine:fcb783db16d519795e3af353075b083ed20b06dd7aed1db1ee82e44863e0390d"
+        ],
+        "comparison_ref": "parallel-comparisons.json"
+      },
+      "c_registered_class_duplicate": {
+        "refutes": false,
+        "reason": "No C05:299 duplicate in the pinned register; no registered conversion/heading/cap class applies.",
+        "evidence": "register-checks.json"
+      },
+      "d_expected_or_defensible": {
+        "refutes": true,
+        "reason": "Appears on a porcelain sink is defensible English, and snang bas expresses appearing without requiring the words to exist. The complete original snang ba entries attest appears and appearance; the longer C15 English does not require a C05 correction.",
+        "master_refs": [
+          "master:9cd19f72bfb10d23dfde5470f5bdcee655687605affaf558aa04cc9a787f1421",
+          "master:a84fafb51cb3604fe4bdb5b467466a65571cb5d934b6895c4222f5cbfb2440f4",
+          "master:d35e6cb7f1ee1ea74514c4faa0eef14f17a8619ffae29353f43356d0ee6d7c41"
+        ]
+      },
+      "e_rechecked_counts": {
+        "refutes": false,
+        "counts_rechecked": {
+          "C05_found_count": 1,
+          "C15_expected_count": 1,
+          "added_characters": 9
+        },
+        "reason": "Exact field comparison records the single nine-character insertion to exist with its adjacent space."
+      }
+    },
+    "reason": "Refuted by ground d: a defensible shorter English rendering, not a proved omission."
+  },
+  {
+    "suspicion_id": "300-lha-yi-recipient-recast",
+    "seq": 300,
+    "kind": "TIBETAN_SPELLING",
+    "found": "lha yi",
+    "expected": "lha la",
+    "original_proposals": [],
+    "refuted": true,
+    "suggested_severity": null,
+    "suggested_confidence": null,
+    "five_grounds": {
+      "a_verbatim": {
+        "refutes": false,
+        "field_counts": {
+          "acip": 1,
+          "wylie": 1,
+          "english": 0
+        },
+        "source_ref": "spine:8491e913f3ff6c30c39607f841337aec022ec8b3600e82ff3603cb08c02015cd"
+      },
+      "b_independent_parallel": {
+        "refutes": false,
+        "reason": "C15:445 and P7:40 retain lha yi; no independent publication is established. Their English shares the local recipient recast. Full original records and differences are retained.",
+        "witness_refs": [
+          "spine:ec1daa824013b779e707b3252f7485e060ea6f3dacad4b21a7b71afb44644065",
+          "spine:fe3b95ccdbe38aeb9c8ca336a506f9deb5f2a14ac0e14913e8d836aba390211e"
+        ]
+      },
+      "c_registered_class_duplicate": {
+        "refutes": false,
+        "reason": "No C05:300 duplicate or applicable registered formatting/ingestion class in the pinned register.",
+        "evidence": "register-checks.json"
+      },
+      "d_expected_or_defensible": {
+        "refutes": true,
+        "reason": "The grammatical shift into an English recipient does not prove that the source genitive yi is wrong; no source authority supports changing it to la. The alignment retains lha/pleasure being and leaves the case recast unasserted. Default refutation applies where a correction cannot be established.",
+        "master_refs": [
+          "master:f20f67ea52591cbc7409aff6a8b4f3b853c691e2532e463080e60758b95ea3d7",
+          "master:faa3190de4c7f9531484c4b929e9a121fda0f42e46ae24d3425b052ba61fde3f"
+        ]
+      },
+      "e_rechecked_counts": {
+        "refutes": false,
+        "counts_rechecked": {
+          "C05_lha_yi": 1,
+          "C15_lha_yi": 1,
+          "P7_lha_yi": 1
+        },
+        "reason": "All three local source counts were recomputed; no larger frequency claim is made."
+      }
+    },
+    "reason": "Refuted by ground d: no demonstrated source error or supported correction."
+  }
+]

@@ -1,0 +1,17 @@
+import pathlib,json,hashlib,gzip,os
+H=pathlib.Path(__file__).resolve().parent;E=H/'evidence';a=H/'attempts/evidence-before-supplement';a.mkdir(parents=True,exist_ok=True)
+for n in ['records.json','queries.json','manifest.json']:(a/n).write_bytes((E/n).read_bytes())
+sha=lambda b:hashlib.sha256(b).hexdigest();dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+m=json.loads((E/'manifest.json').read_text());pin=m['source_pins']['master'];assert sha(pathlib.Path(pin['path']).read_bytes())==pin['sha256'];master=json.load(gzip.open(pin['path'],'rt'));rs=json.loads((E/'records.json').read_text());qs=json.loads((E/'queries.json').read_text())
+for term in ['zas','rnag khrag','yang',"skur ba 'debs",'btab','brtsams pa','snang gzhir gyur pa','tshad mar song ba',"ral gri'i nags tshal"]:
+ refs=[]
+ for sec in ['unified_entries','curated_entries','glossary_entries']:
+  for i,r in enumerate(master[sec]):
+   if r.get('wylie')==term or term in r.get('wylie_variants',[]):
+    key='master:'+sha(json.dumps(r,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode());loc={'file':'hgm_dictionary_v27_2.json.gz','section':sec,'index':i};rs.setdefault(key,{'kind':'master','record':r,'locations':[]})
+    if loc not in rs[key]['locations']:rs[key]['locations'].append(loc)
+    refs.append(key)
+ qs.append({'name':'fresh_supplement_exact_with_variants','term':term,'sections':['unified_entries','curated_entries','glossary_entries'],'predicate':'wylie == term OR term in wylie_variants','count':len(refs),'records':refs})
+home=pathlib.Path('/Users/adamderickandrade');paths=[home/'Desktop/HGM DICTIONARY - TRANSLATION APP',home/'ACIP Software Developmeent/Gofer Developmetn Files',home/"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool",home/"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary",home/"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary",home/"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",home/'ACIP Software Developmeent/tibetan-spellchecker',home/'Tibetan Translation Tool']
+access=[{'path':str(p),'readable':p.is_dir() and os.access(p,os.R_OK|os.X_OK)} for p in paths];assert all(x['readable'] for x in access)
+dump(E/'required-access-proof.json',access);dump(E/'records.json',rs);dump(E/'queries.json',qs);print(json.dumps({'full_records':len(rs),'complete_queries':len(qs),'required_reference_directories_readable':len(access)}))

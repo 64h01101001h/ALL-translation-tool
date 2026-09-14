@@ -1,0 +1,28 @@
+{
+  "status": "PREPARED_NO_SOURCE_OR_REGISTER_CHANGE",
+  "utc": "2026-09-14T15:14:10.461019+00:00",
+  "current_candidate": "Both original angles propose LOW/PROBABLE ENGLISH_TYPO at C05:298 less that what they really are; reconciliation and fresh independent semantic decision still required.",
+  "canonical_tools_read": [
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/merge_errata.py",
+      "sha256": "780387e0a83d26387f3658395af8476f1c41453a0c80408a93e02bee68d0f0e1"
+    },
+    {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/build_errata_register.py",
+      "sha256": "7e7c2dacf57426f2dc9e6bb13e137831b87f763f36b696d11b04d943c0ca39ac"
+    }
+  ],
+  "current_helper_limit": "register_reviewed_page_v3.py deliberately requires empty bank-ready errata and unchanged register. If a fresh semantic reviewer retains this candidate, do not run v3 unchanged. Prepare a narrowly reviewed registration path that preserves all approved records, exact stable IDs, prior entries and source bytes; then run actual canonical merge/prose generation once and existing errata gates.",
+  "native_merge_behaviour": "Canonical merge supports dry run; verifies found text against original spine; assigns next stable E-ID; does not itself enforce complete-batch rejection when one candidate is refused. Wrapper must validate all incoming entries, count and full delta before accepting. Use mode=ro SQLite wrapper and preserve every stdout/stderr/exit.",
+  "required_future_proofs": [
+    "Frozen independent APPROVE and exact bank-ready errata bytes",
+    "Exact expected added records and full old192-entry prefix retained",
+    "No duplicated incoming signature or existing duplicate treated as a new record",
+    "Original spine quote unchanged",
+    "Canonical generated prose equals sidecar; inherited stale historical coverage sentence remains a documented limitation unless separately corrected",
+    "Only current approved allowance/registry/index plus known errata sidecar/prose deltas",
+    "Current errata fidelity and witness suites pass",
+    "Exact fixed-index/closure whitelist extended for actual errata files only"
+  ],
+  "not_done": "No registration implementation change, new erratum acceptance, source correction, production command, extra test run or main/device action."
+}

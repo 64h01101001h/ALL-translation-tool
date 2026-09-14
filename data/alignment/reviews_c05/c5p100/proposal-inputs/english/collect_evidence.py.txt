@@ -1,0 +1,55 @@
+import pathlib,json,hashlib,gzip,sqlite3,subprocess,shutil,datetime
+ROOT=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment'); W=ROOT/'campaign-worktree'; A=ROOT/'campaign-artifacts/C05-298-300/english'; E=A/'evidence'; O=E/'originals'
+base=json.loads((A.parent/'proposal-baseline.json').read_text()); sha=lambda b:hashlib.sha256(b).hexdigest(); dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest={'source_origin':base['commit'],'course_boundary':base['course_boundary'],'source_files':{},'governance':{},'producer':'Codex English-first independent proposal','created':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+for label,pin in base['source_pins'].items():
+ p=pathlib.Path(pin['path']); b=p.read_bytes(); assert len(b)==pin['bytes'] and sha(b)==pin['sha256'],label
+ if label!='spine':
+  dest=O/p.name; dest.write_bytes(b)
+ else: dest=None
+ manifest['source_files'][label]={**pin,'preserved':str(dest.relative_to(A)) if dest else 'queried original records preserved in evidence/records.json; full spine remains pinned read-only original'}
+for rel,pin in base['governing_git_pins'].items():
+ args=['git','show',pin['original_git_commit']+':'+rel]; r=subprocess.run(args,cwd=W,capture_output=True); assert r.returncode==0
+ assert len(r.stdout)==pin['bytes'] and sha(r.stdout)==pin['sha256'],rel
+ out=O/'governance'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(r.stdout)
+ manifest['governance'][rel]={**pin,'preserved':str(out.relative_to(A)),'command':args,'exit':r.returncode,'stderr':r.stderr.decode()}
+for n in ['english-brief.md','proposal-baseline.json']:(O/n).write_bytes((A.parent/n).read_bytes())
+(O/'proposal-protocol.md').write_bytes((A.parent.parent/'proposal-protocol.md').read_bytes())
+c=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+records={}; queries=[]
+def put(kind,obj,location):
+ b=json.dumps(obj,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode();key=kind+':'+sha(b)
+ if key not in records:records[key]={'kind':kind,'record':obj,'locations':[]}
+ if location not in records[key]['locations']:records[key]['locations'].append(location)
+ return key
+
+def sql(name,q,params):
+ rows=[dict(r) for r in c.execute(q,params)]; refs=[put('spine',r,{'table':'corpus_segments','id':r['id']}) for r in rows];queries.append({'name':name,'sql':q,'parameters':params,'count':len(rows),'records':refs});return rows
+context=sql('full_local_argument','select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',280,314])
+checks=[]
+for name in ['source','context']:
+ snap=json.loads((A.parent/(name+'.json')).read_text())
+ for r in snap:
+  row=next(x for x in context if x['seq']==r['seq']); eq={k:row[k]==r[k] for k in ['id','course','seq','acip','wylie','english']}; assert all(eq.values()); checks.append({'snapshot':name,'seq':r['seq'],'equal':eq,'spine_ref':put('spine',row,{'table':'corpus_segments','id':row['id']})})
+terms=['zas skom','nyid','sgrib pa can','sgrib pa','yi dvags','longs spyod pa','longs spyod','brtsams',"bza' btung",'dngos',"rigs 'dra",'phyi ma','skye ba','snang ba','tsam','bya ba','skur ba',"skur ba 'debs pa","las 'bras","skur 'debs",'gzhan yang','snang gzhi','rab rib','bse ru','skra shad',"'ching ba",'sbrang bu','lus','za ba','smig rgyu','chu','nus pa','sogs','brlan','gsher ba','phor pa','gang','lha','mi',"dud 'gro",'cig car du','tshad ma','bdud rtsi','sems can dmyal ba','mig shes','dmyal ba','lcags sreg','ral gri','nags tshal','me','tshogs','dngos gnas pa','dam bca\'','rgyu mtshan','mtshungs pa']
+master=json.load(gzip.open(O/'hgm_dictionary_v27_2.json.gz','rt'))
+for term in terms:
+ refs=[]
+ for section in ['unified_entries','curated_entries','glossary_entries']:
+  for i,r in enumerate(master[section]):
+   variants=r.get('wylie_variants',[])
+   if r.get('wylie')==term or term in variants:
+    refs.append(put('master',r,{'file':'hgm_dictionary_v27_2.json.gz','section':section,'index':i}))
+ queries.append({'name':'lexical_exact_with_variants','term':term,'sections':['unified_entries','curated_entries','glossary_entries'],'predicate':'wylie == term OR term in wylie_variants','count':len(refs),'records':refs})
+for term in ['less that what they really are','porcelain sink','continuum of the food','forest of swords','snang gzhir gyur',"skra shad snang bas 'ching", "rigs 'dra phyi ma",'skur ba btab']:
+ field='wylie' if term in ['snang gzhir gyur',"skra shad snang bas 'ching", "rigs 'dra phyi ma",'skur ba btab'] else 'english'
+ sql('corpus_context_'+term,'select * from corpus_segments where '+field+' like ? order by course,seq',['%'+term+'%'])
+corpus=json.load(gzip.open(O/'full_parallel_corpus_v32.json.gz','rt'));seqs={};source_map=[]
+for i,r in enumerate(corpus):
+ course=r['course'];seqs[course]=seqs.get(course,0)+1
+ selected=[key for key,v in records.items() if v['kind']=='spine' and v['record']['course']==course and v['record']['seq']==seqs[course]]
+ if selected:
+  key=put('corpus_original',r,{'file':'full_parallel_corpus_v32.json.gz','index':i,'course':course,'derived_seq':seqs[course]})
+  spine=records[selected[0]]['record'];raw=json.loads(spine['raw']); assert r==raw,(i,course,seqs[course]);source_map.append({'spine_ref':selected[0],'corpus_ref':key,'raw_equal':True,'six_field_note':'Original corpus lacks spine id/seq; seq is counted within course in original array order.'})
+dump(E/'records.json',records);dump(E/'queries.json',queries);dump(E/'snapshot-verification.json',checks);dump(E/'corpus-spine-mapping.json',source_map);dump(E/'source-manifest.json',manifest)
+print(json.dumps({'source_pins_verified':len(manifest['source_files']),'governance_pins_verified':len(manifest['governance']),'snapshot_rows_verified':len(checks),'unique_records':len(records),'queries':len(queries),'corpus_spine_mappings':len(source_map)},indent=2))

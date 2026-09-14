@@ -1,0 +1,21 @@
+import pathlib,json,hashlib,sqlite3,gzip,subprocess,os
+A=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-298-300/english');E=A/'evidence';R=json.loads((E/'records.json').read_text());Q=json.loads((E/'queries.json').read_text());sha=lambda x:hashlib.sha256(x).hexdigest();dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+# Exact failed exploratory decoder, preserved as a replay of first unredirected attempt.
+p=E/'exploratory-failure-001';p.mkdir(exist_ok=True);args=['python3','-c',"import pathlib; pathlib.Path("+repr(str(E/'originals/C05ReadingASCII.txt'))+").read_bytes().decode('utf-8')"]
+f=subprocess.run(args,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});(p/'stdout').write_bytes(f.stdout);(p/'stderr').write_bytes(f.stderr);(p/'exit').write_text(str(f.returncode)+'\n');dump(p/'command.json',{'argv':args,'disclosure':'Replay preserves the same invalid UTF-8 byte error encountered in the initial unredirected contextual read; initial tool invocation additionally printed context/query results before failing. No canonical input had yet been produced.'})
+b=(E/'originals/C05ReadingASCII.txt').read_bytes(); lines=b.splitlines(keepends=True);offsets=[];pos=0
+for x in lines:offsets.append(pos);pos+=len(x)
+ex=[]
+for seq,lo,hi in [(298,2948,2959),(299,2961,2972),(300,2974,2994)]:
+ start=offsets[lo-1];end=offsets[hi] if hi<len(offsets) else len(b);x=b[start:end];(E/f'physical-C05-{seq}.bin').write_bytes(x);ex.append({'seq':seq,'source':'originals/C05ReadingASCII.txt','line_start':lo,'line_end':hi,'byte_start':start,'byte_end':end,'sha256':sha(x),'decode':'cp1252 display only; original bytes retained','text':x.decode('cp1252')})
+dump(E/'physical-excerpts.json',ex)
+reg=json.loads((E/'originals/governance/docs/errata_register.json').read_text());terms=['less that','porcelain sink',"skra shad", "bse ru",'use a comb'];hits=[]
+for term in terms:
+ rs=[r for r in reg if term.lower() in json.dumps(r,ensure_ascii=False).lower()];hits.append({'term':term,'count':len(rs),'records':rs})
+classes=['E-044','E-071','E-076','E-107','E-111','E-120','E-121'];dump(E/'register-searches.json',{'records_total':len(reg),'searches':hits,'registered_classes':[r for r in reg if r['item_id'] in classes],'result':'No new heading, converter, folio, footnote or cap candidate in target rows.'})
+# Exact C05-versus-parallel field comparison; identity is limited to measured fields.
+rows=[v['record'] for v in R.values() if v['kind']=='spine'];cmp=[]
+for seq,c,other in [(298,'C15',443),(298,'P7',39),(299,'C15',444),(300,'C15',445),(300,'P7',40)]:
+ x=next(r for r in rows if r['course']=='C05' and r['seq']==seq);y=next(r for r in rows if r['course']==c and r['seq']==other);cmp.append({'source':['C05',seq],'parallel':[c,other],'field_equal':{k:x[k]==y[k] for k in ['acip','wylie','english']},'claim_limit':'No ingestion lineage or independent publication inferred from identity/difference.'})
+dump(E/'parallel-comparisons.json',cmp)
+print(json.dumps({'physical_excerpts':len(ex),'register_search_hits':[(x['term'],x['count']) for x in hits],'parallel_comparisons':cmp},indent=2))

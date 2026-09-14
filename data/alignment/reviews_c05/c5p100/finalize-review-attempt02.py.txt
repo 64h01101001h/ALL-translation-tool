@@ -1,0 +1,113 @@
+from pathlib import Path
+import json, hashlib, gzip, subprocess, datetime, collections
+from html.parser import HTMLParser
+
+O=Path('campaign-artifacts/C05-298-300/semantic-review').resolve(); B=O.parent; R=B.parents[1]/'campaign-worktree'
+def put(name,x):
+ p=O/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n')
+def read(name):return json.loads((O/name).read_text())
+def sha(b):return hashlib.sha256(b).hexdigest()
+origin=read('batch-inputs/proposal-baseline.json')['commit'];base=read('batch-inputs/baseline.json')['commit']
+counts=read('independent-errata-counts.json')
+rawchecks=read('independent-additional-original-corpus-identity.json')
+# Scoped continuation after a parser setup assertion; successful source checks are not rerun.
+class Payload(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.stack=[];self.payload={};self.part=None;self.depth=0
+ def handle_starttag(self,tag,attrs):
+  attrs=dict(attrs);self.stack.append((tag,attrs))
+  if tag=='span' and attrs.get('data-d')=='1':
+   self.part='tib' if any(x.get('class')=='tib' for t,x in self.stack) else 'eng';self.depth=len(self.stack);self.payload[self.part]=[]
+ def handle_endtag(self,tag):
+  assert self.stack[-1][0]==tag,(tag,self.stack[-1])
+  if self.part and len(self.stack)==self.depth:self.part=None
+  self.stack.pop()
+ def handle_data(self,data):
+  if self.part and not any('nul' in x.get('class','').split() for t,x in self.stack):self.payload[self.part].append(data)
+sources={x['seq']:x for x in read('independent-source-full-rows.json')};resolved=read('resolved-spans.json');structure=[]
+for seq in [298,299,300]:
+ spec=read(f'reviewed-final/{seq}/spec.json')['segments'][0];spans=spec['spans'];rows=[x for x in resolved if x['seq']==seq];assert len(rows)==len(spans)
+ p=Payload();p.feed((O/f'reviewed-final/{seq}/body.html').read_text());assert not p.stack
+ assert ''.join(p.payload['tib'])==sources[seq]['wylie'] and ''.join(p.payload['eng'])==sources[seq]['english']
+ parent=None;members=[];seen=set()
+ for span,row in zip(spans,rows):
+  assert list(row)==['seq','id','d','tib','eng','tib_range','eng_range']
+  a,z=row['tib_range'];assert sources[seq]['wylie'][a:z]==row['tib']
+  if row['eng'] is not None:
+   a,z=row['eng_range'];assert sources[seq]['english'][a:z]==row['eng']
+  if row['d']!=7:
+   parent=row if row['d']==5 else None;seen=set()
+  else:
+   assert parent is not None
+   for key in ['tib_range','eng_range']:
+    a,z=row[key];pa,pz=parent[key];assert pa<=a<z<=pz and (a,z)!=(pa,pz)
+   identity=(tuple(row['tib_range']),tuple(row['eng_range']));assert identity not in seen;seen.add(identity)
+   members.append({'id':row['id'],'parent':parent['id'],'strictly_tighter_both_sides':True,'unique':True})
+ structure.append({'seq':seq,'unwrapped_tibetan_and_english_exact':True,'all_range_slices_exact':True,'members':members,'grammatical_nulls':[x for x in spans if x['eng'] is None]})
+put('independent-body-and-member-validation.json',structure)
+
+segments=read('independent-generator-proof.json')
+put('review.json',{'verdict':'APPROVE','spec_verdict':'APPROVE','quality_verdict':'APPROVE','open_findings':[],'segments':segments,'total_spans':sum(x['span_count'] for x in segments),'total_nulls':sum(x['null_count'] for x in segments),'total_word_pairs':sum(x['word_pair_count'] for x in segments),'reviewer':'Codex independent semantic reviewer /root/c05_298_300_semantic','status':'PROVISIONAL_MACHINE_APPROVAL; NOT_HUMAN_ACCEPTANCE','source_origin_commit':origin,'source_origin_boundary':291,'actual_acceptance_baseline':base,'actual_acceptance_boundary':297})
+decisions=read('reconciliation-inputs/reconciliation-decisions.json')
+put('material-omissions-reviewed.json',[dict(x,independent_disposition='ACCEPT_OMISSION; no null asserted; full positive evidence and source context reviewed',review_discussion='review.md') for x in decisions['material_omissions']])
+allow={}
+for seq,ident,reason in [(299,'w32','sogs follows nus pa after the coordinated hair, bite and mirage-water examples and closes that list. The English and so on is the same closing gesture, not an unlicensed new nominal head.'),(300,'w10',"The initial sogs follows dud 'gro and closes the pleasure being/human/craving spirit/animal enumeration. Its English or the like is the local list extension, distinct from both later source occurrences."),(300,'w47',"la sogs pa follows me tshogs and closes the burning-steel/sword-forest/fire enumeration. It licenses the final English and so on; the earlier sogs following rnag khrag is omitted and is not reused here.")]:
+ row=next(x for x in resolved if x['seq']==seq and x['id']==ident);allow[f'c5p100/s{seq}{ident}']=f"Tibetan {row['tib']!r} at {row['tib_range']}; English {row['eng']!r} at {row['eng_range']}. {reason}"
+put('span-head-allow-needed.json',{'pages_c05':allow})
+
+ev='Independent Codex five-ground review; see errata-five-grounds.json, errata-refutations.json, independent-errata-counts.json, independent-errata-query-results.json, independent-parallel-field-differences.json, independent-source-full-rows.json and independent-errata-witnesses-full.json. Complete original physical source: original-source/C05ReadingASCII.txt, SHA256 5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb; found once on line 2956 and once in C05:298 English. Complete original corpus: proposal-inputs/evidence/1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8.bin; complete original master: proposal-inputs/evidence/3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253.bin. Corpus has found in C05:298 and P7:39 (2 rows), expected in C15:443 (1 row). C15:443 has identical ACIP/Wylie and only that/than different in English; P7:39 shares the first 704 of 718 English characters, lacking final 14 characters, consequences with preceding space and final period. Tibetan punctuation and dvags/dwags also differ. No C16/P1/TCS same-passage witness found in the retained searches; digital similarity or difference establishes neither publication independence nor ingestion lineage. Both actual pinned 192-entry registers have no matching phrase or batch duplicate; registered converter/footnote/folio/heading/running-head/row-spill/cap classes do not apply. Full skur ba HGM glossary evidence contains the correct comparative, the that-form and failure, but repetition does not make less that what grammatically defensible or prove authorial intent. Narrow comparative correction that to than is LOW/PROBABLE for editorial consideration. Source wording stays unchanged; no independent publication or manuscript authority is asserted.'
+put('bank-ready-errata.json',[{'seq':298,'kind':'ENGLISH_TYPO','found':'less that what they really are','expected':'less than what they really are','evidence':ev,'severity':'LOW','confidence':'PROBABLE'}])
+five=[
+ {'seq':298,'kind':'ENGLISH_TYPO','found':'less that what they really are','expected':'less than what they really are','refuted':False,'suggested_severity':'LOW','suggested_confidence':'PROBABLE','grounds':{
+  'a':{'refutes':False,'reason':'Exact found text is in this English once and original physical line 2956 once; ACIP and Wylie counts are zero because this is an English quote. Complete fields and physical bytes were reopened.'},
+  'b':{'refutes':False,'reason':'No demonstrated independent same-reading publication was found. C15:443 changes only that/than in English and preserves the Tibetan. P7:39 has that in the exact first 704 of 718 English characters and omits the final 14-character suffix; its Tibetan punctuation and dvags/dwags differ. The saved full-query results have no corresponding C16/P1/TCS passage. No publication or ingestion independence is inferred from these digital relations.'},
+  'c':{'refutes':False,'reason':'Actual original and current 192-entry registers checked with their real segment schema: no phrase or C05:298–300 duplicate. Full relevant class records inspected. Comparative conjunction substitution is outside converter, footnote, folio, heading, running-head, row-spill and 1500-character cap classes.'},
+  'd':{'refutes':False,'reason':'Considered the complete positive skur ba glossary, including both comparative readings and failure. The construction less ... what they really are requires comparative than; that supplies no defensible standard-of-comparison linkage. Repeated glossary wording is not grammatical or authorial validation. C15 supplies the minimally corrected reading; this supports only a LOW/PROBABLE editorial candidate.'},
+  'e':{'refutes':False,'reason':'Fresh complete SQL results, source field differences, physical line/extents, register and HGM records independently verify every quantitative claim. All measured counts are in counts_rechecked; digital rows are not publications.'}},'counts_rechecked':counts},
+ {'seq':299,'kind':'ENGLISH_TYPO','found':'appears on a porcelain sink','expected':'appears to exist on a porcelain sink','refuted':True,'suggested_severity':None,'suggested_confidence':None,'grounds':{
+  'a':{'refutes':False,'reason':'Found occurs once in the actual C05:299 English, and is not a Wylie or ACIP quote.'},
+  'b':{'refutes':False,'reason':'C15:444 is the full digital parallel with unchanged ACIP/Wylie and a nine-character English insertion, to exist with adjacent space. Publication independence is unproved. P7:39/40 witness adjacent segments, not this passage; no C16/P1/TCS parallel established.'},
+  'c':{'refutes':False,'reason':'No actual C05:299 register duplicate or applicable registered class.'},
+  'd':{'refutes':True,'reason':'Appears on a porcelain sink is defensible English, and snang bas does not require to exist. Full original snang ba evidence supports appearing. A longer digital parallel does not prove the shorter source wrong.'},
+  'e':{'refutes':False,'reason':'C05 found count 1, C15 expected count 1 and nine added characters independently measured, with full field differences preserved.'}},'counts_rechecked':{'C05_found_count':1,'C15_expected_count':1,'added_characters':9}},
+ {'seq':300,'kind':'TIBETAN_SPELLING','found':'lha yi','expected':'lha la','refuted':True,'suggested_severity':None,'suggested_confidence':None,'grounds':{
+  'a':{'refutes':False,'reason':'The Wylie quote occurs once in C05:300; ACIP has the uppercase equivalent once, English has no literal lha yi.'},
+  'b':{'refutes':False,'reason':'C15:445 and P7:40 retain lha yi and the English recipient recast. C15 matches the source fields exactly; P7 English matches but Tibetan punctuation/dvags differs. No independent publication is established.'},
+  'c':{'refutes':False,'reason':'No actual C05:300 duplicate or applicable registered conversion/formatting class.'},
+  'd':{'refutes':True,'reason':'An English recipient construction does not prove the source genitive yi erroneous. No source authority supports changing it to la; default refutation applies. Only lha/pleasure being is aligned and the case recast remains unasserted.'},
+  'e':{'refutes':False,'reason':'Each of the three local Wylie records has lha yi exactly once; these local counts were independently measured and imply no corpus-wide count.'}},'counts_rechecked':counts['lha_yi']}]
+put('errata-five-grounds.json',five)
+refutations=[]
+for x in five:
+ refutations.append({'seq':x['seq'],'found':x['found'][:80],'refuted':x['refuted'],'reason':x['grounds']['d']['reason']+' All five grounds are independently recorded in errata-five-grounds.json.','parallel_witness':'No corresponding C16/P1/TCS passage found in saved searches. '+x['grounds']['b']['reason'],'counts_rechecked':x['counts_rechecked'],'suggested_severity':x['suggested_severity'],'suggested_confidence':x['suggested_confidence']})
+put('errata-refutations.json',refutations)
+
+put('setup-failures.json',{'record_type':'Retrospective truthful log of observed setup/read issues; not reconstructed raw tool transcripts','semantic_or_final_generator_failures':[],'issues':[
+ {'issue':'Initial independent body parser included canonical class=nul explanatory apparatus in the English payload, so the unwrapped-source assertion failed.', 'resolution':'Actual body and generator were unchanged. Scoped continuation excludes only the nul apparatus, as the canonical builder does. Successful source and generator work was not rerun; initial helper/stdout/stderr remain preserved.'},
+ {'issue':'Initial assumed alignment spec/brief paths under docs/alignment and worktree tools/land_reviewed_page.py were absent.','resolution':'Found and read actual docs/ALIGNMENT_LAYER_SPEC.md, docs/alignment_briefs and campaign-artifacts/land_reviewed_page.py. No source changes.'},
+ {'issue':'Root brief names reconciled/errata-screen.json; actual interface is reconciled/errata-refutations.json.','resolution':'Read and preserved actual full interface and embedded screens; notified root, without changing original brief.'},
+ {'issue':'Compact package preparation initially used incorrect unified-diff context n=3; then n=10000 and n=8 did not reproduce all full supplied diffs.','resolution':'Correct n=10 independently reproduces all six. Earlier saved helper attempts are retained. These were package-view assertions, not failed semantic or generator checks.'},
+ {'issue':'Some broad output reads were truncated.','resolution':'Complete distinct material was reread in bounded views, including all distinct reasons, remaining source witnesses and complete relevant register classes; original full records remain copied.'},
+ {'issue':'Review looked for reviewed-final/298/omissions.json, which is not a separate input file, and initially addressed reconciliation-decisions key omissions.','resolution':'Read actual material_omissions array in reconciliation-decisions and the per-segment evidence-references/intent interfaces; all 15 full omission records preserved and reviewed.'},
+ {'issue':'Initial review register segment check used a seq field, while the actual register uses segment.','resolution':'Initial counts file preserved under setup-history. Independently checked actual segment strings and both phrase forms at each immutable commit; zero duplicates verified using the real schema.'}],
+ 'inherited_failures_preserved':[
+ {'files':'proposal-inputs/english/{298,299,300}/attempts/001/stderr.txt','failure':'AssertionError: tools/build_alignment_layer.py from historical governing pin mismatch before canonical invocation.','disposition':'Full commands, input, failure output and later attempts remain preserved; no failed attempt represented as current success.'},
+ {'files':'proposal-inputs/tibetan/native-commands/queries/1/stderr.txt','failure':'UnicodeDecodeError decoding original physical bytes as UTF-8, byte 0xb8 at position 32644.','disposition':'Full failed attempt and corrected original-reader evidence preserved. Physical source handled byte-exact in this review.'}]})
+
+# Consolidate identical shared immutable archives and duplicate manifest rows;
+# core proposal/history files remain readable, with no original file deleted.
+manifest=read('original-to-copy-manifest.json')
+dedup=[]
+for name in ['full_parallel_corpus_v32.json.gz.bin','hgm_dictionary_v27_2.json.gz.bin']:
+ old=Path('original-source')/name;data=(O/old).read_bytes();new=Path('proposal-inputs/evidence')/(sha(data)+'.bin');assert (O/new).read_bytes()==data
+ for row in manifest:
+  if row['copy']==old.as_posix():row['copy']=new.as_posix()
+ dedup.append({'removed_redundant_review_copy':old.as_posix(),'identical_retained_copy':new.as_posix(),'sha256':sha(data),'bytes':len(data)})
+ # Only a newly generated duplicate review copy is removed; all original-path mappings survive.
+ (O/old).unlink()
+by_original={}
+for row in manifest:
+ if row['original'] in by_original:
+  old=by_original[row['original']];assert all(old[k]==row[k] for k in ['sha256','bytes']);dedup.append({'duplicate_original_mapping':row['original'],'retained_copy':old['copy'],'alternate_readable_copy':row['copy']})
+ else:by_original[row['original']]=row
+manifest=list(by_original.values());put('original-to-copy-manifest.json',manifest);put('evidence-deduplication.json',dedup)
+print(json.dumps({'verdict':'APPROVE','spans':154,'nulls':1,'word_pairs':78,'manifest_records':len(manifest),'additional_original_rows_verified':len(rawchecks),'body_structure_checks':len(structure),'retained_errata':1,'refuted_suspicions':2},indent=2))

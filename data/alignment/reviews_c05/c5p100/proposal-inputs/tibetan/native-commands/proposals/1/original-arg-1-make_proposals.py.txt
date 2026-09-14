@@ -1,0 +1,173 @@
+import json, shutil, re
+from pathlib import Path
+H=Path(__file__).resolve().parent
+sources={x['seq']:x for x in json.loads((H/'evidence/original-source.json').read_text())}
+data={}
+def build(seq,title,note):
+    data[seq]=dict(seq=seq,title=title,spans=[],intended=[],note=note)
+def add(seq,tib,eng,d=5,eo=1,to=None,subword=False,why='Direct contextual lexical correspondence.'):
+    a=data[seq]; row=sources[seq]; i=len(a['spans'])+1; sid='w'+str(i)
+    sp=dict(id=sid,d=d,tib=tib,eng=eng)
+    if subword:sp['subword']=True
+    def nth(text,piece,n):
+        at=-1
+        for k in range(n):
+            while True:
+                at=text.find(piece,at+1)
+                if at<0: break
+                end=at+len(piece)
+                word=lambda c: bool(re.match(r'[A-Za-z0-9\u0F00-\u0FFF]',c))
+                if d==7 or subword or ((not word(piece[0]) or at==0 or not word(text[at-1])) and (not word(piece[-1]) or end==len(text) or not word(text[end]))): break
+        assert at>=0,(seq,piece,n)
+        return [at,at+len(piece)]
+    if to is None:
+        if d==7:
+            parent=next(x for x in reversed(a['intended']) if x['d']==5)
+            at=row['wylie'].find(tib,parent['tib_range'][0],parent['tib_range'][1]); tr=[at,at+len(tib)]
+        else:
+            cur=max([x['tib_range'][1] for x in a['intended'] if x['d']!=7] or [0])
+            at=row['wylie'].find(tib,cur);assert at>=0,(seq,tib,cur);tr=[at,at+len(tib)]
+    else:tr=nth(row['wylie'],tib,to)
+    er=nth(row['english'],eng,eo)
+    a['spans'].append(sp);a['intended'].append(dict(id=sid,d=d,tib=tib,eng=eng,tib_range=tr,eng_range=er,reason=why))
+    return sid
+def blood(seq,eo):
+    add(seq,'rnag khrag','pus and blood',eo=eo)
+    add(seq,'rnag','pus',7,eo=eo)
+    add(seq,'khrag','blood',7,eo=eo)
+
+build(298,'food changes when the spirit consumes it',
+ 'PROVISIONAL machine alignment by Codex (gpt-6-astra), independent Tibetan-first proposal. GMR English is verbatim; nothing is promoted into hgm_gloss. The one bza\' btung in the first assertion owns its predicate occurrence after “really”; GMR\'s repeated English subject stays unwrapped. The comparative skur ba recast containing “less that what they really are” is omitted as distributed, while the final noun “failure” is proposed provisionally. The source typo “less that” is preserved; a probable English erratum is proposed with C15:443 and physical-source evidence. No mechanical result constitutes semantic approval.')
+add(298,'de ltar byas na','Given all this',3)
+add(298,'zas skom','food and drink')
+add(298,'nyid','itself')
+add(298,'sgrib pa','obstacles')
+add(298,'yi dvags','craving spirits')
+add(298,'longs spyod pa','eat or drink',why='Contextual consumption, first prospective clause; auxiliary trying to remains unwrapped.')
+add(298,'brtsams','starts')
+add(298,'kyi bar du','until such time as',3)
+add(298,"bza' btung",'food and drink',eo=3,why='Predicate occurrence after really; the duplicated English subject is not a second Tibetan token.')
+add(298,'dngos','really')
+add(298,'des longs spyod par brtsams pa na','When he does try to do so',3,why='Complete clause recast including the source demonstrative subject, consumption, onset and condition; no internal lexical attribution.')
+add(298,'zas','food',eo=4)
+add(298,"rigs 'dra",'continuum')
+add(298,'phyi ma','into the next moment',why='Temporal successor term; exact HGM glossary attestation and the local continuum clause.')
+blood(298,1)
+add(298,'skye ba','starts becoming')
+blood(298,2)
+add(298,'snang ba tsam','simple appearance',3,why='Complete nominal phrase: appearance plus limiting tsam. The preceding adjectival snang ba\'i is omitted, not falsely nulled.')
+add(298,"bza' btung",'eat or drink',eo=2)
+add(298,'bya ba byed pa','function',3,why='Noun-plus-verb predicate translated as a single English verb.')
+add(298,'ma','not',6)
+add(298,'de yin na','If this were the case',3)
+add(298,"las 'bras",'karma and its consequences')
+add(298,'las','karma',7)
+add(298,"'bras",'consequences',7)
+add(298,'der thal','And this is true',3)
+add(298,'de lta bu\'i','like this',3)
+add(298,'yi dvags','craving spirit',eo=1)
+add(298,"las 'bras",'karma and its consequences',eo=2)
+add(298,'las','karma',7,eo=2)
+add(298,"'bras",'consequences',7,eo=2)
+add(298,'skur ba','failure',why='Provisional contextual nominal equivalent in GMR\'s final recast; supported by HGM glossary, while the associated btab/par/\'gyur construction stays unbanked.')
+
+build(299,'mere appearances cannot perform object functions',
+ 'PROVISIONAL machine alignment by Codex (gpt-6-astra), independent Tibetan-first proposal. English remains GMR\'s exact source text; no hgm_gloss change. The snang-gzhi phrases describe the object serving as an appearance basis; their repeated English naming remains partly unwrapped. skra shad owns “hair” in the cataract example. The comb action and \'ching ba are left unbanked because the local binding/combing recast cannot safely be atomized; glossary listings alone cannot settle it. Horsefly agentive -s is retained within sbrang bus. Repeated occurrences are anchored and measured; no mechanical result is semantic approval.')
+add(299,'gzhan yang','moreover',3)
+add(299,"snang gzhir gyur pa'i",'out there to appear as',3)
+blood(299,1)
+add(299,'med','no')
+add(299,"der snang ba'i",'something looking like pus and blood',3,why='Complete deictic appearance phrase: der resumes the prior pus-and-blood object. This claims no separate rnag khrag token.')
+add(299,'snang ba tsam','mere appearance',3)
+add(299,"bza' btung",'eat or drink')
+add(299,'bya ba byed','function',3)
+add(299,'rab rib can','person with cataracts')
+add(299,'bse ru','porcelain sink',why='HGM\'s attested local equivalent, despite different comparative dictionary senses; no comparative gloss is used as GMR English.')
+add(299,'skra shad','hair')
+add(299,'snang bas','appears',why='Whole agentive form retained; no separable final s.')
+add(299,'de la','to the same person',3)
+add(299,'snang ba','appeared')
+add(299,'sbrang bus','horsefly',why='Whole inflected noun: agentive -s remains attached.')
+add(299,'za ba','bite')
+add(299,'smig rgyu','mirage')
+add(299,'chus','water',eo=1)
+add(299,"chu'i",'water',eo=2)
+add(299,'bya ba','functions',eo=1)
+add(299,'byed','provide',eo=1)
+add(299,'sogs','and so on',why='Closing gesture licensed by sogs; propose the named allowance if this d5 survives reconciliation.')
+add(299,"snang gzhir gyur pa'i",'out there to appear as',3,eo=2)
+blood(299,4)
+add(299,'med','no',eo=2)
+blood(299,6)
+add(299,'snang ba','looking like',eo=2)
+add(299,'snang ba','appearance',eo=2)
+add(299,'tsam','mere',eo=2)
+add(299,"bza' btung",'eat and drink')
+add(299,'bya ba','functions',eo=2)
+add(299,'byed','provide',eo=2)
+add(299,'nus','can')
+add(299,'phyir','because',6)
+
+build(300,'the same reasoning would erase real hell objects',
+ 'PROVISIONAL machine alignment by Codex (gpt-6-astra), independent Tibetan-first proposal; no hgm_gloss promotion. GMR English is preserved verbatim. The tshad mar song ba constructions are aligned as evaluative phrases, not artificial lexical song ba equivalents. The two source appearances in each relevant construction supply looked-like and appeared/appearing roles; the single final tsam attaches to the first hell-object clause, while GMR\'s repeated descriptive expansions remain unwrapped. The snang-gzhi clause retains its actual-object role. Med supplies the negative of couldn\'t by the established n\'t convention. Lha yi is retained without a source correction; its local English recipient recast is recorded only at lha. Mechanical fidelity is not semantic approval.')
+add(300,'brlan','wet')
+add(300,'zhing','and',6,eo=5)
+add(300,'gsher ba','flowing')
+add(300,'phor pa','glass')
+add(300,'gang','full')
+add(300,'lha','pleasure being')
+add(300,'mi','human')
+add(300,'yi dvags','craving spirit')
+add(300,"dud 'gro",'animal')
+add(300,'sogs','or the like',why='Closing gesture; named sogs licensor required if retained at landing.')
+add(300,'cig car du','together',3)
+add(300,'bltas pa','look')
+add(300,'lha','pleasure being',eo=2,why='The local English recipient is a recast of the lha yi construction; no mapping or correction of yi is claimed.')
+add(300,'bdud rtsi','ambrosia')
+add(300,'snang ba','looked like',eo=1)
+add(300,'snang ba','appeared',eo=1)
+add(300,'tshad mar song ba','genuine',3,eo=1)
+add(300,'yi dvags','craving spirit',eo=2)
+blood(300,1)
+add(300,'snang ba','looked like',eo=2)
+add(300,'snang ba','appeared',eo=2)
+add(300,'tshad mar song ba','genuine',3,eo=2)
+add(300,"snang gzhir gyur pa'i",'out there to appear as',3)
+blood(300,2)
+add(300,'med',"n't",subword=True,why='Negative existential contribution in couldn\'t; established n\'t subword convention, no auxiliary could is claimed.')
+add(300,'sems can','being',eo=3)
+add(300,"dmyal ba'i",'hells',eo=1)
+add(300,'mig shes','visual consciousness')
+add(300,"dmyal ba'i",'hells',eo=2)
+add(300,'lcags sreg','burning steel')
+add(300,"ral gri'i",'swords')
+add(300,'nags tshal','forest')
+add(300,'me tshogs','mass of fire')
+add(300,'me','fire',7)
+add(300,'tshogs','mass',7)
+add(300,'la sogs pa','and so on',why='Established closing phrase owns only the closing gesture; named licensor required if retained.')
+add(300,'snang ba','looked like',eo=3)
+add(300,'snang ba','appearing')
+add(300,'tsam','just',eo=3)
+add(300,'tshad mar song ba','valid perception',3)
+add(300,'de dag','these things')
+add(300,'dngos gnas pa','actual objects')
+add(300,'tshad mar song ba','valid perceptions',3)
+add(300,'med','not')
+add(300,'khyod kyi','your',3,eo=1)
+add(300,"dam bca'",'idea')
+add(300,"'thad pa",'correct')
+add(300,'rgyu mtshan','logic')
+add(300,'mtshungs pa','identical')
+
+for seq,a in data.items():
+    d=H/str(seq);d.mkdir(exist_ok=True)
+    if (d/'spec.json').exists():
+        i=1
+        while (d/f'superseded-draft-{i}.json').exists():i+=1
+        shutil.copy2(d/'spec.json',d/f'superseded-draft-{i}.json')
+    order=[x['id'] for x in sorted(a['intended'],key=lambda x:x['eng_range'][0]) if x['d']!=7]
+    seg={k:a[k] for k in ['seq','title','spans','note']};seg['eng_order']=order
+    (d/'spec.json').write_text(json.dumps(dict(course='C05',segments=[seg]),ensure_ascii=False,indent=2)+'\n')
+    (d/'intended-ranges.json').write_text(json.dumps(a['intended'],ensure_ascii=False,indent=2)+'\n')
+    print(seq,len(a['spans']),len(order))

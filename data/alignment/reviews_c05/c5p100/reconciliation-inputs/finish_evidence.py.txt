@@ -1,0 +1,70 @@
+import pathlib,json,hashlib,difflib,re,subprocess,datetime,sqlite3
+H=pathlib.Path(__file__).resolve().parent;B=H.parent;R=H.parents[2]/'campaign-worktree';E=H/'evidence'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+rs=json.loads((E/'records.json').read_text());qs=json.loads((E/'queries.json').read_text())
+def row(course,seq):return next((k,v['record']) for k,v in rs.items() if v['kind']=='spine' and v['record']['course']==course and v['record']['seq']==seq)
+source={seq:row('C05',seq) for seq in [298,299,300]}
+comparisons=[]
+for seq,course,other in [(298,'C15',443),(298,'P7',39),(299,'C15',444),(300,'C15',445),(300,'P7',40)]:
+ k,a=source[seq];j,b=row(course,other);comp={'source':f'C05:{seq}','witness':f'{course}:{other}','source_ref':k,'witness_ref':j,'independent_publication':'not established','ingestion_lineage':'not established','fields':{}}
+ for field in ['acip','wylie','english']:
+  ops=[]
+  for tag,i1,i2,j1,j2 in difflib.SequenceMatcher(None,a[field],b[field],autojunk=False).get_opcodes():
+   if tag!='equal':ops.append({'operation':tag,'source_range':[i1,i2],'witness_range':[j1,j2],'source_text':a[field][i1:i2],'witness_text':b[field][j1:j2]})
+  comp['fields'][field]={'equal':a[field]==b[field],'source_chars':len(a[field]),'witness_chars':len(b[field]),'differences':ops}
+ if seq==298 and course=='P7':
+  assert a['english'].startswith(b['english']);comp['shared_english']={'source_range':[0,len(b['english'])],'witness_range':[0,len(b['english'])],'characters_and_utf8_bytes':len(b['english']),'excluded_source_suffix':a['english'][len(b['english']):]};assert comp['shared_english']['excluded_source_suffix']==' consequences.'
+ comparisons.append(comp)
+dump(E/'parallel-comparisons.json',comparisons)
+register=json.loads((E/'governance/docs/errata_register.json').read_text());checks={'pinned_register_records':len(register),'pinned_commit':'c107f1ecd9cfb68968245870ad81ba5d9a070721','duplicate_checks':{},'class_checks':{}}
+for term in ['less that','less than what they really are','C05:298','C05:299','C05:300']:
+ matches=[i for i,r in enumerate(register) if term.lower() in json.dumps(r,ensure_ascii=False).lower()];checks['duplicate_checks'][term]={'count':len(matches),'indices':matches}
+for cls,terms in {'converter':['{shl}','e-044'],'footnote':['footnote'],'folio':['folio'],'heading':['heading'],'running_head':['e-071'],'ingest_cap':['e-107','1,500'],'row_spill':['e-111']}.items():
+ ids=[i for i,r in enumerate(register) if any(t in json.dumps(r,ensure_ascii=False).lower() for t in terms)];checks['class_checks'][cls]={'record_indices':ids,'record_ids':[register[i]['item_id'] for i in ids],'applicable_to_candidates':False}
+dump(E/'register-checks.json',checks)
+counts={}
+for term in ['less that what they really are','less than what they really are']:
+ q=next(q for q in qs if q['name']=='fresh_errata_witness_search' and q['parameters']==['%'+term+'%']);counts[term]={'rows':q['count'],'segments':[rs[k]['record']['course']+':'+str(rs[k]['record']['seq']) for k in q['records']],'refs':q['records']}
+counts['source_english_characters']={str(s):len(source[s][1]['english']) for s in source}
+counts['physical_line_2956_found_count']=(E/'physical-line-2956.bin').read_bytes().count(b'less that what they really are')
+counts['P7_shared_english_bytes']=len(row('P7',39)[1]['english'].encode());counts['C05_298_english_bytes']=len(source[298][1]['english'].encode());counts['P7_excluded_suffix_bytes']=counts['C05_298_english_bytes']-counts['P7_shared_english_bytes']
+assert counts['less that what they really are']['segments']==['C05:298','P7:39'];assert counts['less than what they really are']['segments']==['C15:443'];assert len(register)==192
+found='less that what they really are';expected='less than what they really are';a=source[298][1]
+refutations=[{'suspicion_id':'298-comparative-that-than','seq':298,'kind':'ENGLISH_TYPO','found':found,'expected':expected,'original_proposals':['tibetan/298/errata.json#/0','english/298/errata.json#/0'],'refuted':False,'suggested_severity':'LOW','suggested_confidence':'PROBABLE','five_grounds':{
+ 'a_verbatim':{'refutes':False,'field_counts':{f:a[f].count(found) for f in ['acip','wylie','english']},'reason':'The exact found string occurs once in this English field and once on original physical line2956. ACIP/Wylie were checked and the English quote does not purport to be Tibetan.','source_ref':source[298][0],'physical_ref':'physical-line-2956.bin'},
+ 'b_independent_parallel':{'refutes':False,'reason':'C15:443 differs only by the final letter of that/than in English, with identical Tibetan fields. P7:39 has that in exactly the first704 of718 English characters, omitting only the final14 characters, consequences with preceding space and final period. The Tibetan also differs in punctuation and dvags/dwags. Neither digital equality nor difference establishes independent publication or ingestion lineage. No independent same-reading publication was found; lack of established independence limits confidence and does not prove lineage.','witness_refs':[row('C15',443)[0],row('P7',39)[0]],'searches':counts,'C16_P1_TCS_shared_passage_hits':[]},
+ 'c_registered_class_duplicate':{'refutes':False,'reason':'The pinned192-record register has no less-that entry and no C05:298 duplicate. This comparative letter substitution is not the converter, footnote, folio, heading, running-head, spill or1500-character cap class.','evidence':'register-checks.json'},
+ 'd_expected_or_defensible':{'refutes':False,'reason':'In less ... what they really are, than marks the comparative standard; that is not a defensible conjunction for this construction. The original skur ba glossary contains both less than what they really are and less that what they really, plus failure. Repetition in the glossary does not establish authorial intention or a grammatical defence. Expected changes only that to than; no Tibetan correction or source edit follows.','master_refs':next(q['records'] for q in qs if q.get('term')=='skur ba')},
+ 'e_rechecked_counts':{'refutes':False,'reason':'Every count used here was rerun on the pinned source records or original physical bytes; complete search results and exact field differences are retained.','counts_rechecked':counts}},'reason':'Survives these five grounds as a LOW/PROBABLE typographical substitution for editorial consideration; source wording remains unchanged, publication independence and authorial intent are unproved.'}]
+b=source[299][1];f='appears on a porcelain sink';ex='appears to exist on a porcelain sink'
+refutations.append({'suspicion_id':'299-appears-to-exist-variant','seq':299,'kind':'ENGLISH_TYPO','found':f,'expected':ex,'original_proposals':[],'refuted':True,'suggested_severity':None,'suggested_confidence':None,'five_grounds':{
+ 'a_verbatim':{'refutes':False,'field_counts':{x:b[x].count(f) for x in ['acip','wylie','english']},'source_ref':source[299][0]},
+ 'b_independent_parallel':{'refutes':False,'reason':'C15:444 inserts to exist after appears; its ACIP/Wylie match. This digital variant has no established publication or ingestion independence. P7:39 and40 address298 and300, and are not witnesses for299.','witness_refs':[row('C15',444)[0]],'comparison_ref':'parallel-comparisons.json'},
+ 'c_registered_class_duplicate':{'refutes':False,'reason':'No C05:299 duplicate in the pinned register; no registered conversion/heading/cap class applies.','evidence':'register-checks.json'},
+ 'd_expected_or_defensible':{'refutes':True,'reason':'Appears on a porcelain sink is defensible English, and snang bas expresses appearing without requiring the words to exist. The complete original snang ba entries attest appears and appearance; the longer C15 English does not require a C05 correction.','master_refs':next(q['records'] for q in qs if q.get('term')=='snang ba')},
+ 'e_rechecked_counts':{'refutes':False,'counts_rechecked':{'C05_found_count':b['english'].count(f),'C15_expected_count':row('C15',444)[1]['english'].count(ex),'added_characters':len(row('C15',444)[1]['english'])-len(b['english'])},'reason':'Exact field comparison records the single nine-character insertion to exist with its adjacent space.'}},'reason':'Refuted by ground d: a defensible shorter English rendering, not a proved omission.'})
+c=source[300][1]
+refutations.append({'suspicion_id':'300-lha-yi-recipient-recast','seq':300,'kind':'TIBETAN_SPELLING','found':'lha yi','expected':'lha la','original_proposals':[],'refuted':True,'suggested_severity':None,'suggested_confidence':None,'five_grounds':{
+ 'a_verbatim':{'refutes':False,'field_counts':{x:c[x].count('lha yi' if x!='acip' else 'LHA YI') for x in ['acip','wylie','english']},'source_ref':source[300][0]},
+ 'b_independent_parallel':{'refutes':False,'reason':'C15:445 and P7:40 retain lha yi; no independent publication is established. Their English shares the local recipient recast. Full original records and differences are retained.','witness_refs':[row('C15',445)[0],row('P7',40)[0]]},
+ 'c_registered_class_duplicate':{'refutes':False,'reason':'No C05:300 duplicate or applicable registered formatting/ingestion class in the pinned register.','evidence':'register-checks.json'},
+ 'd_expected_or_defensible':{'refutes':True,'reason':'The grammatical shift into an English recipient does not prove that the source genitive yi is wrong; no source authority supports changing it to la. The alignment retains lha/pleasure being and leaves the case recast unasserted. Default refutation applies where a correction cannot be established.','master_refs':next(q['records'] for q in qs if q.get('term')=='lha')},
+ 'e_rechecked_counts':{'refutes':False,'counts_rechecked':{'C05_lha_yi':c['wylie'].count('lha yi'),'C15_lha_yi':row('C15',445)[1]['wylie'].count('lha yi'),'P7_lha_yi':row('P7',40)[1]['wylie'].count('lha yi')},'reason':'All three local source counts were recomputed; no larger frequency claim is made.'}},'reason':'Refuted by ground d: no demonstrated source error or supported correction.'})
+dump(H/'errata-refutations.json',refutations)
+erratum={'seq':298,'kind':'ENGLISH_TYPO','found':found,'expected':expected,'evidence':"C05:298 English and original C05ReadingASCII.txt line2956 contain less that what they really are; the source is unchanged. C15:443 has identical ACIP/Wylie and differs only at that/than in English. P7:39 shares precisely the first704 of C05's718 English characters, including less that, and excludes the final14 characters ' consequences.'. No independent publication or ingestion lineage is established by these digital witnesses. The original skur ba glossary (unified index628; spine id629) preserves both less than what they really are and less that what they really, plus failure; this is evidence of textual variation, not an editorial ruling. Comparative syntax calls for than introducing what they really are. Fresh exact searches return two less-that rows (C05:298, P7:39) and one less-than row (C15:443), with no relevant C16/P1/TCS occurrence in these passage searches. The pinned through291 register has192 records, no duplicate or applicable registered class; English is718 characters, not capped. Full original source records, exact physical bytes, complete master fields, differences, counts and all five refutation grounds are retained in the reconciliation evidence. LOW/PROBABLE only for editorial consideration; authorial intent and independent publication are not established.",'severity':'LOW','confidence':'PROBABLE'}
+for s in [298,299,300]:dump(H/str(s)/'errata.json',[erratum] if s==298 else [])
+dec=json.loads((H/'reconciliation-decisions.json').read_text());dec['errata_suspicion_refutations']=refutations
+contexts=[]
+for angle in ['tibetan','english']:
+ for seq in [298,299,300]:
+  p=B/angle/str(seq);spec=json.loads((p/'spec.json').read_text())
+  context={'angle':angle,'seq':seq,'spec':spec,'report':(p/'report.md').read_text(),'errata':json.loads((p/'errata.json').read_text()),'extra_original_contexts':{}}
+  for name in ['decisions.json','omissions.json']:
+   if (p/name).exists():context['extra_original_contexts'][name]=json.loads((p/name).read_text())
+  contexts.append(context)
+  for r in dec['original_decisions']:
+   if r['angle']==angle and r['seq']==seq:r['original_span_object']=next(x for x in spec['segments'][0]['spans'] if x['id']==r['id']);r['original_context_record']=len(contexts)-1
+dump(E/'original-proposal-contexts.json',contexts);dump(H/'reconciliation-decisions.json',dec)
+dump(E/'errata-counts.json',counts)
+print(json.dumps({'proposed_errata':1,'refuted_additional_suspicions':2,'all_five_grounds_each':True,'register_records':len(register),'parallel_comparisons':len(comparisons),'original_contexts':len(contexts)}))
