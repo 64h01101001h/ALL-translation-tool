@@ -154,10 +154,19 @@ on.
 ## What was done about it
 
 The Walkthrough pane (`app/walkthrough_pane.inc`) does not present step 4 as an
-answer. It shows **both** orders side by side, quotes the figures for its own
-level, and says which one the evidence favours — currently the written order.
+answer. It shows **both** orders side by side and quotes the figures for its own
+level — 51% against 59% over 112 aligned spans, with only 21 of those separating
+the two — and says **neither column is established**, offering the written order
+as the simpler bet rather than the better one.
+
+*(Corrected 2026-09-13: this paragraph used to say the pane "says which one the
+evidence favours — currently the written order". It does not, and a gate holds
+it to not doing so. Overstating in the direction of humility is still
+overstating, and describing the pane as doing that was a third thing again.)*
+
 Gates in the pane's `selfTest` fail if a later edit reduces step 4 to the
-engine's ruling alone, or lets the quoted figures drift from the constants.
+engine's ruling alone, lets the quoted figures drift from the constants, or
+drops the sample size.
 
 ## The drill that came out of it
 
@@ -178,7 +187,10 @@ and says nothing about the mapping into English, which is the difficulty Adam
 actually named. Both are worth having; only one of them was there.
 
 **The engine itself was deliberately NOT changed.** Retuning `planReading` to
-fit 57 spans would be overfitting. The correction waits for alignment data that
+fit 112 spans would be overfitting. *(Corrected 2026-09-13: this said 57, which
+was the first pass's count — the probe that walked only the first clause of each
+segment and dropped 523 of 730 spans. The corrected figure is 112, and it is
+`kClauseSpans`.)* The correction waits for alignment data that
 can carry it; labelling it honestly does not wait. (Adam's ruling, 2026-09-12:
 "do the development right now, but the refinement later after we've got the
 entire corpus aligned.")
@@ -187,9 +199,17 @@ entire corpus aligned.")
 
 1. Re-run the two measurements — `tools/reading_order/`, one command each, and
    check the `unmappable` count before believing the rest.
-2. Update the constants in `namespace walk` — `kOrderSpans`, `kOrderAgree`,
-   `kOrderPlain`, `kClauseSpans`, `kClauseEngine`, `kClausePlain`,
-   `kClausePairs`, `kClauseBackPct`. The pane's prose reads from them.
+2. Update the constants in `namespace walk`. **Four of them are load-bearing**
+   — the pane's prose quotes `kClauseEngine`, `kClausePlain`, `kClausePairs`
+   and `kClauseBackPct`, and gates pin all four, so a stale one fails the
+   build. `kClauseSpans` and `kClauseDiscordant` joined them on 2026-09-13,
+   when step 4 started printing its sample size.
+   **The rest are a record, not a mechanism**: `kOrderSpans`, `kOrderAgree`,
+   `kOrderPlain`, `kWordEngine` and `kWordPlain` are referenced by nothing at
+   all. Updating them changes no output and breaks no gate — which is worth
+   knowing before trusting this step. Seven of eleven were in that state when
+   it was checked, and that is exactly how the pane's own header came to be
+   quoting a retracted 40%/60% months after the correction.
 3. Re-run the app selftest. The gates quote the constants, so stale text in the
    UI fails rather than shipping.
 4. When the middle level carries enough spans, revisit `planReading` itself —
