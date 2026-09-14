@@ -72,7 +72,17 @@ struct Passage: Codable {
     let clause_share: Int?
 }
 
-struct PackMeta: Codable { let built_by: String; let source: String; let tier: String }
+/// The pack's own account of itself. `built_from` is the commit and moment the
+/// Mac built it: WITHOUT it a stale pack is indistinguishable from a fresh one,
+/// which is the whole reason the builder stamps it. It was stamped and then
+/// never decoded here, so the phone could not have told you either way.
+/// Optional, so a pack built before the stamp still decodes.
+struct PackMeta: Codable {
+    let built_by: String
+    let source: String
+    let tier: String
+    let built_from: String?
+}
 /// One chunk-order drill, pre-built on the Mac.
 struct OrderDrill: Codable {
     let english: String
@@ -402,6 +412,20 @@ struct OrderView: View {
             VStack(alignment: .leading, spacing: 14) {
                 Text("These chunks are out of order. Read them, decide the order they were written in, then reveal.")
                     .font(.system(size: 15)).foregroundColor(c.muted)
+                // The desktop carries this warning and gates it; the phone
+                // shipped the English hint without it. The two orders are
+                // different questions -- this drill asks for the TIBETAN one --
+                // and a learner shown his English first will reach for the
+                // English order, which is what the Reading order drill is for.
+                Text("The answer is the order he WROTE them in, not the order "
+                     + "his English takes them. Those are different questions; "
+                     + "the second one is the Reading order drill.")
+                    .font(.system(size: 12)).foregroundColor(c.machine)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("ATTESTED · the key is his Tibetan for [\(drill.course):\(drill.seq)]")
+                    .font(.system(size: 11)).foregroundColor(c.act)
+                Text("his English for the whole segment, for sense — not the key:")
+                    .font(.system(size: 11)).foregroundColor(c.muted)
                 EnglishHint(text: drill.english, ink: c)
                 ForEach(Array(drill.presented.enumerated()), id: \.offset) { i, ix in
                     HStack(alignment: .top, spacing: 10) {
@@ -1043,6 +1067,65 @@ struct ReadOrderView: View {
                 Spacer()
             }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
         }.background(c.paper)
+    }
+}
+
+/// Where this pack came from. The pack has always carried its own provenance --
+/// who built it, from which corpus, on what terms, and from which commit -- and
+/// the phone decoded it and showed none of it. Provenance you cannot see is not
+/// provenance, and the build stamp in particular is the only way to tell a
+/// stale pack from a fresh one.
+struct ProvenanceSheet: View {
+    let meta: PackMeta?
+    let ink: Ink
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    if let m = meta {
+                        row("Built by", m.built_by)
+                        row("From", m.source)
+                        row("Built from", m.built_from ?? "unstamped — this pack cannot say which build it came from")
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Terms").font(.system(size: 12, weight: .semibold))
+                                .foregroundColor(ink.muted)
+                            Text(m.tier)
+                                .font(.system(size: 15, design: .serif))
+                                .foregroundColor(ink.ink)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    } else {
+                        Text("No pack is loaded, so there is nothing to account for.")
+                            .font(.system(size: 15)).foregroundColor(ink.muted)
+                    }
+                    Text("The phone generates nothing. Every exercise here was "
+                         + "built on the Mac from his corpus, and anything the "
+                         + "engine ruled rather than he wrote says so on the card.")
+                        .font(.system(size: 12)).foregroundColor(ink.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }.padding(20)
+            }
+            .background(ink.paper.ignoresSafeArea())
+            .navigationTitle("This pack")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+
+    private func row(_ k: String, _ v: String) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(k).font(.system(size: 12, weight: .semibold))
+                .foregroundColor(ink.muted)
+            Text(v).font(.system(size: 15, design: .monospaced))
+                .foregroundColor(ink.ink)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }
 
@@ -1753,7 +1836,7 @@ struct RootView: View {
     }
 
     @ViewBuilder private func mixedBody(_ pack: Pack, _ c: Ink) -> some View {
-        let q = mixQueue.isEmpty ? RootView.buildMix(pack) : mixQueue
+        let q = mixQueue
         if q.isEmpty {
             missing("drills to mix", c)
         } else {
@@ -1765,9 +1848,11 @@ struct RootView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 20).padding(.top, 6)
                 mixedItem(k, pack, c) {
-                    if mixQueue.isEmpty { mixQueue = q }
                     mixAt += 1
-                    if mixAt >= q.count { mixQueue = RootView.buildMix(pack); mixAt = 0 }
+                    if mixAt >= q.count {
+                        mixQueue = RootView.buildMix(pack)
+                        mixAt = 0
+                    }
                 }
             }
         }
@@ -1828,6 +1913,7 @@ struct RootView: View {
             + "an ordinary one and is NOT counted as training it. The pack "
             + "is rebuilt on the Mac; a later one may hold some."
     }
+    @State private var showProvenance = false
     @State private var tOrder: [Int] = []
     @State private var dAt = 0
     @State private var tAt = 0
@@ -1953,7 +2039,16 @@ struct RootView: View {
                         case .mixed:
                             mixedBody(pack, c)
                         }
-                    } else { Spacer() }
+                    } else {
+                        // The Trainer is the tab the app opens on. With no
+                        // trainer passages this fell through to a bare Spacer
+                        // -- a blank screen, no message, nothing to act on,
+                        // and no way to tell a broken build from an empty one.
+                        // Every other empty pool in this app says what is
+                        // missing; this one said nothing.
+                        missing("reading passages", c)
+                        Spacer()
+                    }
                 } else {
                     VStack(spacing: 10) {
                         Text("The pack is missing from this build.")
@@ -1965,12 +2060,21 @@ struct RootView: View {
                 }
             }
             .background(c.paper.ignoresSafeArea())
+            .sheet(isPresented: $showProvenance) {
+                ProvenanceSheet(meta: pack?.meta, ink: c)
+            }
             .navigationTitle("Tibetan Translation Trainer")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // In the bottom bar this floated OVER the action row and
                 // crowded Skip. It belongs beside the title, where it is
                 // always visible and never on top of a control.
+                ToolbarItem(placement: .topBarLeading) {
+                    Button { showProvenance = true } label: {
+                        Image(systemName: "info.circle")
+                    }
+                    .accessibilityLabel("Where this pack came from")
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Text("\(deck.done)/\(deck.right)")
                         .font(.system(size: 12)).foregroundColor(c.muted)
@@ -1984,6 +2088,13 @@ struct RootView: View {
             guard let p = pack else { return }
             if dOrder.isEmpty { dOrder = Array(0..<p.cloze.count).shuffled() }
             if tOrder.isEmpty { tOrder = Array(0..<p.trainer.count).shuffled() }
+            // The mixed queue belongs here with the others. It used to be
+            // built inside the view body whenever it was empty, and buildMix
+            // is random, so EVERY re-render dealt a different queue: the kind
+            // on screen changed under the learner's fingers, and pressing
+            // Check could score an answer against a drill that had just been
+            // swapped out. Rendering must not roll dice.
+            if mixQueue.isEmpty { mixQueue = RootView.buildMix(p) }
         }
         // Aiming filters the pre-tagged pack rather than generating, because
         // the phone generates nothing. If the pack holds no drill for that
