@@ -1,0 +1,980 @@
+{
+  "seq": 314,
+  "producer": "Codex independent reconciler",
+  "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+  "all_original_source_suspicions": [
+    {
+      "original_claim_origin": "english/314/errata-audit.json",
+      "original_index": 0,
+      "original_kind": "TIBETAN_SPELLING",
+      "found": "LCAGS SNGAGS",
+      "original_claim_complete": {
+        "kind": "TIBETAN_SPELLING",
+        "field": "acip",
+        "found_verbatim": "LCAGS SNGAGS",
+        "source_character_range": [
+          374,
+          386
+        ],
+        "decision": "Seven corpus records contain this exact ACIP phrase; full lcags senses include steel and iron, sngags includes mantra. Physical original has LCAGS SNGAGS. No new spelling correction supported.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            218764,
+            219290
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [
+              374
+            ],
+            "wylie": [],
+            "english": []
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 459,
+              "shared_english_prefix_chars": 1095,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 851,
+              "shared_english_prefix_chars": 1031,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 49,
+              "shared_english_prefix_chars": 55,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "LCAGS SNGAGS is printed in the physical source and has the constituent steel/mantra senses. Seven corpus records attest the phrase, without establishing publication independence or proving every spelling correct.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 4,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 5,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 6,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] 128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 12,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "LCAGS SNGAGS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 17,
+              "claimed": 8,
+              "remeasured": 8,
+              "params": [
+                "go sa 'gog"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 18,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "lcags sngags"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 21,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "The Stream."
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 526,
+            "wylie": 531,
+            "english": 1249
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "LCAGS SNGAGS is printed in the physical source and has the constituent steel/mantra senses. Seven corpus records attest the phrase, without establishing publication independence or proving every spelling correct.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/314/errata-audit.json",
+      "original_index": 1,
+      "original_kind": "ENGLISH_TYPO",
+      "found": "The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat.",
+      "original_claim_complete": {
+        "kind": "ENGLISH_TYPO",
+        "field": "english",
+        "found_verbatim": "The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat.",
+        "source_character_range": [
+          917,
+          1030
+        ],
+        "decision": "Awkward non-heat phrasing is the source wording and the shared C15:459/C16:851 passage; no demonstrated typographic correction.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            218764,
+            219290
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              917
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 459,
+              "shared_english_prefix_chars": 1095,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 851,
+              "shared_english_prefix_chars": 1031,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 49,
+              "shared_english_prefix_chars": 55,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "Something not heat is awkward but defensible as the explicit non-heat classification in the source. The local philosophical contrast supplies no evidence of a typographic slip.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 4,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 5,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 6,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] 128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 12,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "LCAGS SNGAGS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 17,
+              "claimed": 8,
+              "remeasured": 8,
+              "params": [
+                "go sa 'gog"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 18,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "lcags sngags"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 21,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "The Stream."
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 526,
+            "wylie": 531,
+            "english": 1249
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "Something not heat is awkward but defensible as the explicit non-heat classification in the source. The local philosophical contrast supplies no evidence of a typographic slip.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/314/errata-audit.json",
+      "original_index": 2,
+      "original_kind": "ENGLISH_FACTUAL_ERROR",
+      "found": "both these things to occupy the space taken up by a single central mountain of the world",
+      "original_claim_complete": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "field": "english",
+        "found_verbatim": "both these things to occupy the space taken up by a single central mountain of the world",
+        "source_character_range": [
+          676,
+          764
+        ],
+        "decision": "Square/round coexistence and mantra-conditioned non-heat are this text’s philosophical examples, with all local qualifications retained. Full HGM shape and tactile senses checked; no factual correction to the cited argument justified.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            218764,
+            219290
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              676
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 459,
+              "shared_english_prefix_chars": 1095,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 851,
+              "shared_english_prefix_chars": 1031,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 49,
+              "shared_english_prefix_chars": 55,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "The mountain and heat statements are presented under general/situational and mantra-conditioned qualifications. The source is reporting this philosophical example; no editorial correction is justified by an alignment judgment about occupy.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 4,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 5,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 6,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] 128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 12,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "LCAGS SNGAGS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 17,
+              "claimed": 8,
+              "remeasured": 8,
+              "params": [
+                "go sa 'gog"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 18,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "lcags sngags"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 21,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "The Stream."
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 526,
+            "wylie": 531,
+            "english": 1249
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "The mountain and heat statements are presented under general/situational and mantra-conditioned qualifications. The source is reporting this philosophical example; no editorial correction is justified by an alignment judgment about occupy.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/314/errata-audit.json",
+      "original_index": 3,
+      "original_kind": "INGEST_ARTEFACT",
+      "found": "128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues",
+      "original_claim_complete": {
+        "kind": "INGEST_ARTEFACT",
+        "field": "english",
+        "found_verbatim": "128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues",
+        "source_character_range": [
+          1095,
+          1249
+        ],
+        "decision": "Confirmed original heading/layout appendix under registered following-heading class, explicitly naming C05:314 in pinned course shape. Do not re-file. Not E-071 (real Tibetan) and not E-107 (length is below cap). C15:459/C16:851 share the translation but have different appended apparatus, so no full-English identity claim.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            218764,
+            219290
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              1095
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 459,
+              "shared_english_prefix_chars": 1095,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 851,
+              "shared_english_prefix_chars": 1031,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 49,
+              "shared_english_prefix_chars": 55,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": true,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "The physical source visibly sequences the closing notice, page number and following reading heading. The following-heading class explicitly covers C05:314 in the pinned course shape; do not re-file it.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 4,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 5,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 6,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] 128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 12,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "LCAGS SNGAGS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 17,
+              "claimed": 8,
+              "remeasured": 8,
+              "params": [
+                "go sa 'gog"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 18,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "lcags sngags"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 21,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "The Stream."
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 526,
+            "wylie": 531,
+            "english": 1249
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "The physical source visibly sequences the closing notice, page number and following reading heading. The following-heading class explicitly covers C05:314 in the pinned course shape; do not re-file it.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/314/errata-audit.json",
+      "original_index": 4,
+      "original_kind": "FORMATTING",
+      "found": "[This concludes the section of the text entitled \"The Stream.\"]",
+      "original_claim_complete": {
+        "kind": "FORMATTING",
+        "field": "english",
+        "found_verbatim": "[This concludes the section of the text entitled \"The Stream.\"]",
+        "source_character_range": [
+          1031,
+          1094
+        ],
+        "decision": "Physical original explicitly prints the bracketed close, blank lines, 128 and next reading heading. Preserve all, no new formatting erratum. Full body is intact despite line folding.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            218764,
+            219290
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              1031
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 459,
+              "shared_english_prefix_chars": 1095,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 851,
+              "shared_english_prefix_chars": 1031,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 49,
+              "shared_english_prefix_chars": 55,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": true,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "The bracketed Stream close is an original editorial notice and the heading layout is physically present. Preserve it as apparatus without inventing a Tibetan translation correspondence.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 4,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 5,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 6,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] 128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 12,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "LCAGS SNGAGS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 17,
+              "claimed": 8,
+              "remeasured": 8,
+              "params": [
+                "go sa 'gog"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 18,
+              "claimed": 7,
+              "remeasured": 7,
+              "params": [
+                "lcags sngags"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 21,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "The Stream."
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 526,
+            "wylie": 531,
+            "english": 1249
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "The bracketed Stream close is an original editorial notice and the heading layout is physically present. Preserve it as apparatus without inventing a Tibetan translation correspondence.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    }
+  ],
+  "tibetan_angle_complete_original_screen": {
+    "seq": 314,
+    "source_full_row": {
+      "id": 1696,
+      "course": "C05",
+      "seq": 314,
+      "acip": "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,",
+      "wylie": "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir",
+      "english": "Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] 128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues"
+    },
+    "field_lengths": {
+      "acip": 526,
+      "wylie": 531,
+      "english": 1249
+    },
+    "has_1500_cap": false,
+    "five_grounds": {
+      "a_exact_source_quote": {
+        "result": "All source fields independently reopened and six-field snapshots verified; no proposed correction.",
+        "quotes": {
+          "acip": "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,",
+          "wylie": "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir",
+          "english": "Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] 128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues"
+        }
+      },
+      "b_parallel_witness": {
+        "result": "Comparisons are digital field relations only. No independent publication or ingestion lineage established. A shared prefix supports only that exact extent. P7 differs in punctuation and/or ending.",
+        "comparisons": [
+          {
+            "course": "C15",
+            "seq": 459,
+            "equal_acip": true,
+            "equal_wylie": true,
+            "equal_english": false,
+            "english_common_prefix_chars": 1095,
+            "source_english_chars": 1249,
+            "parallel_english_chars": 1500,
+            "source_unshared_tail": "128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues",
+            "parallel_unshared_tail": "************ When the text of the Essence of Eloquence was taught by Geshe Tupten Rinchen, he took great pains to point out that it is not correct--as some Western scholars have stated--that Je Tsongkapa himself adhered to the tenets of the Mind-Only School. The following selection to show that he follows, of course, the beliefs of the Consequence group is taken the concluding pages of our root text [A",
+            "full_original_row": {
+              "id": 6010,
+              "course": "C15",
+              "seq": 459,
+              "acip": "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,",
+              "wylie": "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir",
+              "english": "Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] ************ When the text of the Essence of Eloquence was taught by Geshe Tupten Rinchen, he took great pains to point out that it is not correct--as some Western scholars have stated--that Je Tsongkapa himself adhered to the tenets of the Mind-Only School. The following selection to show that he follows, of course, the beliefs of the Consequence group is taken the concluding pages of our root text [A",
+              "raw": "{\"course\": \"C15\", \"acip\": \"RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,\", \"wylie\": \"rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir\", \"english\": \"Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \\\"The Stream.\\\"] ************ When the text of the Essence of Eloquence was taught by Geshe Tupten Rinchen, he took great pains to point out that it is not correct--as some Western scholars have stated--that Je Tsongkapa himself adhered to the tenets of the Mind-Only School. The following selection to show that he follows, of course, the beliefs of the Consequence group is taken the concluding pages of our root text [A\"}"
+            }
+          },
+          {
+            "course": "C16",
+            "seq": 851,
+            "equal_acip": true,
+            "equal_wylie": true,
+            "equal_english": false,
+            "english_common_prefix_chars": 1031,
+            "source_english_chars": 1249,
+            "parallel_english_chars": 1068,
+            "source_unshared_tail": "[This concludes the section of the text entitled \"The Stream.\"] 128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues",
+            "parallel_unshared_tail": "35 Three Types of Each Path of Action",
+            "full_original_row": {
+              "id": 6869,
+              "course": "C16",
+              "seq": 851,
+              "acip": "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,",
+              "wylie": "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir",
+              "english": "Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. 35 Three Types of Each Path of Action",
+              "raw": "{\"course\": \"C16\", \"acip\": \"RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE, RI RAB GRU BZHI DANG , ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG , RI RAB GCIG GI GO SA NA, DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR, LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG , LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE, DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE, TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR,\", \"wylie\": \"rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin kyang , de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te, ri rab gru bzhi dang , zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang , ri rab gcig gi go sa na, de gnyis ka yod pa srid pa lta bu yin pa'i phyir, lcags gong dmar 'bar ba tsha ba yin kyang , lcags sngags btab pa'i lag pas reg pa'i tshe, de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te, tsha ba ma yin pa'i reg bya yin pa'i phyir\", \"english\": \"Generally speaking, each of the three objects mentioned--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. 35 Three Types of Each Path of Action\"}"
+            }
+          },
+          {
+            "course": "P7",
+            "seq": 49,
+            "equal_acip": false,
+            "equal_wylie": false,
+            "equal_english": false,
+            "english_common_prefix_chars": 55,
+            "source_english_chars": 1249,
+            "parallel_english_chars": 1476,
+            "source_unshared_tail": "--the pus and the other two--are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] 128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues",
+            "parallel_unshared_tail": "—the pus and the other two—are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] The Asian Classics Institute Reading Three: Emptiness and Paradise; Emptiness and Purification The root text is An Exalted Sutra of the Greater Way on the Perfection of Wisdom, entitled The Diamond Cutter, and is found in bold in the translation and is marked with an ornament in the Tibetan. The commentary is by Choney Lama Drakpa Shedrup (1675-1748) of Sera Mey Tibetan Monastery.",
+            "full_original_row": {
+              "id": 34938,
+              "course": "P7",
+              "seq": 49,
+              "acip": "RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN, KYANG DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE RI RAB GRU BZHI DANG ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG RI RAB GCIG GI GO SA NA DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR",
+              "wylie": "rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin, kyang de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te ri rab gru bzhi dang zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang ri rab gcig gi go sa na de gnyis ka yod pa srid pa lta bu yin pa'i phyir lcags gong dmar 'bar ba tsha ba yin kyang lcags sngags btab pa'i lag pas reg pa'i tshe de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te tsha ba ma yin pa'i reg bya yin pa'i phyir",
+              "english": "Generally speaking, each of the three objects mentioned—the pus and the other two—are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \"The Stream.\"] The Asian Classics Institute Reading Three: Emptiness and Paradise; Emptiness and Purification The root text is An Exalted Sutra of the Greater Way on the Perfection of Wisdom, entitled The Diamond Cutter, and is found in bold in the translation and is marked with an ornament in the Tibetan. The commentary is by Choney Lama Drakpa Shedrup (1675-1748) of Sera Mey Tibetan Monastery.",
+              "raw": "{\"course\": \"P7\", \"acip\": \"RNAG LA SOGS PA'I DNGOS PO GSUM PO DE SPYIR GO SA 'GOG NUS KYI DNGOS PO YIN, KYANG DE LTAR BLTAS PA DE'I TSE NA GO SA 'GOG BYED KYI DNGOS PO MA YIN PA MI 'GAL TE RI RAB GRU BZHI DANG ZLUM PO LA SOGS PA PHAN TSUN GO SA 'GOG NUS KYI DNGOS PO YIN KYANG RI RAB GCIG GI GO SA NA DE GNYIS KA YOD PA SRID PA LTA BU YIN PA'I PHYIR LCAGS GONG DMAR 'BAR BA TSA BA YIN KYANG LCAGS SNGAGS BTAB PA'I LAG PAS REG PA'I TSE DE'I MYONG BYAR GYUR PA'I REG BYA DE TSA BA'I REG BYA MA YIN TE TSA BA MA YIN PA'I REG BYA YIN PA'I PHYIR\", \"wylie\": \"rnag la sogs pa'i dngos po gsum po de spyir go sa 'gog nus kyi dngos po yin, kyang de ltar bltas pa de'i tshe na go sa 'gog byed kyi dngos po ma yin pa mi 'gal te ri rab gru bzhi dang zlum po la sogs pa phan tshun go sa 'gog nus kyi dngos po yin kyang ri rab gcig gi go sa na de gnyis ka yod pa srid pa lta bu yin pa'i phyir lcags gong dmar 'bar ba tsha ba yin kyang lcags sngags btab pa'i lag pas reg pa'i tshe de'i myong byar gyur pa'i reg bya de tsha ba'i reg bya ma yin te tsha ba ma yin pa'i reg bya yin pa'i phyir\", \"english\": \"Generally speaking, each of the three objects mentioned—the pus and the other two—are things of the type that block other objects from entering into the space which they themselves occupy. It is no contradiction though to say that, in this situation where the beings are looking this way, they are not objects such that they block other things from entering into the space they occupy. This is true for the following reason. A central mountain of the world which is square in shape, and a central mountain of the world which is round in shape, and the like, are objects such that they block other things from entering the space they occupy. Nevertheless, it is possible for both these things to occupy the space taken up by a single central mountain of the world. A red-hot ball of steel is something that's hot, but consider what happens when a person touches it after he has used the mantra of steel on his hand. The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat. [This concludes the section of the text entitled \\\"The Stream.\\\"] The Asian Classics Institute Reading Three: Emptiness and Paradise; Emptiness and Purification The root text is An Exalted Sutra of the Greater Way on the Perfection of Wisdom, entitled The Diamond Cutter, and is found in bold in the translation and is marked with an ornament in the Tibetan. The commentary is by Choney Lama Drakpa Shedrup (1675-1748) of Sera Mey Tibetan Monastery.\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+            }
+          }
+        ],
+        "source_record_search_file": "full-corpus-query-records.json",
+        "no_other_batch_proposals_read": true
+      },
+      "c_registered_classes": {
+        "result": "Following-heading apparatus on rows 314 and 315 is registered and not newly filed. Converter, running-head, footnote, row-spill and cap classes were considered.",
+        "original_register_sha256": "a7573cd73f59bff9a41ddeecff5b3d1f3056f4fa7b3ce7a600eff378f27e87a6",
+        "register_count": 194,
+        "duplicate_batch_records": [],
+        "full_class_records_file": "registered-class-records.json"
+      },
+      "d_lexical_source_interpretation": {
+        "result": "General spatial exclusion and situational coexistence are contrasted, followed by mantra-conditioned tactile sensation. Source spelling and GMR prose are preserved. Full HGM compound meanings have been examined; excluded participants remain outside wrappers. Metaphysical claims are reported as this text, not asserted as empirical facts.",
+        "master_files": [
+          "full-master-records.json",
+          "supplemental-full-master-records.json"
+        ]
+      },
+      "e_measured_evidence_and_limits": {
+        "result": "All query counts are lengths of preserved full result lists. All original hash comparisons pass. Exact selected ranges and repeated occurrences are in decisions.json; no generation or mechanical pass is claimed to establish correspondence.",
+        "evidence_files": [
+          "source-pins.json",
+          "snapshot-verification.json",
+          "full-parallel-equality.json",
+          "physical-extents.json",
+          "parallel-physical-originals.json"
+        ],
+        "physical_file": "C05ReadingASCII.txt",
+        "physical_sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+      }
+    },
+    "five_category_dispositions": {
+      "TIBETAN_SPELLING": "No defensible new spelling defect established; original ACIP and derived Wylie retained.",
+      "ENGLISH_TYPO": "No defensible new typo established in the translated prose.",
+      "ENGLISH_FACTUAL_ERROR": "No independently established new factual correction; interpretive/lexical uncertainty is not promoted into an erratum.",
+      "INGEST_ARTEFACT": "Registered heading apparatus preserved on 314/315; none of these three English fields is exactly 1500 characters. No new class filed.",
+      "FORMATTING": "Reading/selection headings and numbering remain verbatim. No new formatting erratum proposed."
+    },
+    "errata_proposed": []
+  },
+  "tibetan_screen_disposition": "Original five-ground screen is independently revisited above by source-spelling, English-typo/factual, ingestion and formatting suspicion; every original parallel, quoted source, register count and complete master record was reopened. No new defect established.",
+  "new_errata": []
+}

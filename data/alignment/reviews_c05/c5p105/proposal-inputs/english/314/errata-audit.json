@@ -1,0 +1,146 @@
+{
+  "seq": 314,
+  "source_english_characters": 1249,
+  "source_wylie_characters": 531,
+  "five_grounds": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "field": "acip",
+      "found_verbatim": "LCAGS SNGAGS",
+      "source_character_range": [
+        374,
+        386
+      ],
+      "decision": "Seven corpus records contain this exact ACIP phrase; full lcags senses include steel and iron, sngags includes mantra. Physical original has LCAGS SNGAGS. No new spelling correction supported.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          218764,
+          219290
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "field": "english",
+      "found_verbatim": "The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat.",
+      "source_character_range": [
+        917,
+        1030
+      ],
+      "decision": "Awkward non-heat phrasing is the source wording and the shared C15:459/C16:851 passage; no demonstrated typographic correction.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          218764,
+          219290
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "field": "english",
+      "found_verbatim": "both these things to occupy the space taken up by a single central mountain of the world",
+      "source_character_range": [
+        676,
+        764
+      ],
+      "decision": "Square/round coexistence and mantra-conditioned non-heat are this text’s philosophical examples, with all local qualifications retained. Full HGM shape and tactile senses checked; no factual correction to the cited argument justified.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          218764,
+          219290
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "field": "english",
+      "found_verbatim": "128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the \"Path of Action,\" and the Root and Branch Non-Virtues",
+      "source_character_range": [
+        1095,
+        1249
+      ],
+      "decision": "Confirmed original heading/layout appendix under registered following-heading class, explicitly naming C05:314 in pinned course shape. Do not re-file. Not E-071 (real Tibetan) and not E-107 (length is below cap). C15:459/C16:851 share the translation but have different appended apparatus, so no full-English identity claim.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          218764,
+          219290
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    },
+    {
+      "kind": "FORMATTING",
+      "field": "english",
+      "found_verbatim": "[This concludes the section of the text entitled \"The Stream.\"]",
+      "source_character_range": [
+        1031,
+        1094
+      ],
+      "decision": "Physical original explicitly prints the bracketed close, blank lines, 128 and next reading heading. Preserve all, no new formatting erratum. Full body is intact despite line folding.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          218764,
+          219290
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    }
+  ],
+  "exact_parallel_counts": [
+    {
+      "field": "acip",
+      "spine_or_tuple_count": 3,
+      "external_corpus_count": 3
+    },
+    {
+      "field": "wylie",
+      "spine_or_tuple_count": 3,
+      "external_corpus_count": 3
+    },
+    {
+      "field": "english",
+      "spine_or_tuple_count": 1,
+      "external_corpus_count": 1
+    },
+    {
+      "field": "exact ACIP/Wylie/English tuple; course/id/seq not asserted identical",
+      "spine_or_tuple_count": 1,
+      "external_corpus_count": 1
+    }
+  ],
+  "registered_class_authorities": [
+    "../evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md (ERRATA DUTY)",
+    "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md (Markers and apparatus)",
+    "../evidence/pinned/data/alignment/C05_CAMPAIGN.md (Course shape)",
+    "../evidence/pinned/docs/errata_register.json (E-071, E-106 discussion of registered following-heading class, E-107)"
+  ],
+  "new_errata_count": 0
+}

@@ -1,0 +1,54 @@
+import datetime,hashlib,json,pathlib
+OWN=pathlib.Path(__file__).resolve().parents[1]
+E=OWN/'evidence'
+def digest(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def js(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+for source,name in [(OWN.parent/'tibetan-brief.md','consumed-tibetan-brief.md'),(OWN.parent.parent/'proposal-protocol.md','consumed-proposal-protocol.md'),(OWN.parent/'proposal-baseline.json','consumed-proposal-baseline.json')]:
+    (E/name).write_bytes(source.read_bytes())
+src=json.loads((E/'source.json').read_bytes())
+physical=(E/'C05ReadingASCII.txt').read_bytes()
+physical_check=[]
+for r in src:
+    needle=r['acip'].encode('ascii')
+    starts=[];i=0
+    while True:
+        i=physical.find(needle,i)
+        if i<0:break
+        starts.append(i);i+=1
+    physical_check.append({'seq':r['seq'],'full_acip_quote':r['acip'],'complete_literal_occurrences':len(starts),'byte_ranges':[[x,x+len(needle)] for x in starts]})
+    assert starts
+js(E/'original-full-acip-byte-check.json',physical_check)
+special={
+313:'Challenge first: skye ba → “start to exist” is an arising paraphrase; yod par contributes nearby existential/modality structure and remains omitted. Exact final ranges are Wylie 244:251, English 535:549.',
+314:'Challenge first: yod pa → “occupy” uses locative existence at the single mountain site (Wylie 295:301, English 697:703). It is a local recast, not a generalized lexical definition.',
+315:'Challenge first: the full author epithet is retained as one established named identity (Wylie 0:22, English 116:169), supported by the complete HGM record. brtsoms pa is omitted, never falsely matched to selections.'}
+proofs=[]
+for seq in [313,314,315]:
+    folder=OWN/str(seq);proof=json.loads((folder/'native-proof.json').read_bytes());proofs.append(proof)
+    counts=proof['counts'];spec=proof['hashes']['spec.json'];body=proof['hashes']['body.html']
+    report=[f'C05:{seq} — Tibetan-first provisional proposal by Codex; source origin 8575edf1e0de695677194c1fde60f1d9e2c2f204 through309, distinct from future through312 acceptance.',special[seq],f'Spans {counts["spans"]}; non-null d5 word pairs {counts["non_null_d5_word_pairs"]}; total d5 {counts["total_d5"]}; d7 {counts["d7"]}; nulls 0; proposed errata 0.',
+    'Every pairing, source function, occurrence, parent/member range and complete unwrapped range is in decisions.json. Distributed content is omitted with reasons, without null claims.',
+    'Complete original source and physical bytes, full master records, full corpus results and all five errata grounds are under ../evidence/; see five-ground-errata-review.json and all-pins.json. Digital equality proves neither publication independence nor ingestion lineage.',
+    f'Canonical generator actual EXIT=0; stderr is empty (0 bytes); stdout and body.html are identical ({body["bytes"]} bytes). Exact stdin/stdout/stderr/exit and command metadata are in native/.',
+    f'spec.json SHA256 {spec["sha256"]}; body.html SHA256 {body["sha256"]}.',
+    'native-proof.json proves both complete source strings and every span recovered verbatim, original-builder parsing of every span, and ACIP round trips. Three unchanged pinned gates pass: broken words, split syllables, degenerate members.',
+    'The gates count 89 leaf spans across three pages; specs contain 93 total spans including four compound parents. These mechanical results do not establish semantic acceptance.',
+    'Registered following-heading apparatus is preserved where present. Row 314 requires the two documented la sogs pa supplied-head licensors at integration; see ../evidence/proposal-licensors.json.',
+    'The failed preparation count assumption is retained in ../evidence/prepare-attempt1.* and attempt-history.json; every native generation passed on its first invocation.',
+    'Final integrity boundary: ../FINAL-FREEZE.manifest.json, schema codex-independent-proposal-freeze-v1; its digest is in ../FINAL-FREEZE.manifest.sha256. No source, repository, glossary or register changes were made.']
+    (folder/'report.md').write_text('\n'.join(report)+'\n')
+js(E/'evidence-index.json',{'producer':'Codex','angle':'Tibetan-first','segments':[313,314,315],'source_origin':'8575edf1e0de695677194c1fde60f1d9e2c2f204','source_boundary':309,'future_through312_not_used_as_origin':True,'complete_original_bytes_reopened':['spine','master','corpus','C05ReadingASCII.txt','C15ReadingASCII.txt','C16ReadingASCII.txt','C18ReadingASCII.txt','Practice7Reading.pdf'],'snapshot_fields_verified':['id','course','seq','acip','wylie','english'],'original_evidence_storage':['full-spine-context.json','full-master-records.json','supplemental-full-master-records.json','full-corpus-query-records.json','full-parallel-equality.json','C05ReadingASCII.txt','C15ReadingASCII.txt','C16ReadingASCII.txt','C18ReadingASCII.txt','Practice7Reading.pdf'],'lexical_and_source_limits':'Full corpus/master bytes were independently read and hashed; complete material records are retained, not new HGM definitions. P7 PDF is preserved as binary only; textual claims are from original corpus records. Course-shape re-ingestion language is metadata, not lineage proof.','native_generation_count':3,'native_generation_failures':0,'preparation_failures':1,'all_five_errata_grounds':'five-ground-errata-review.json','native_proof':'per-segment native-proof.json and native/ streams; native-gates/ exact canonical scripts/streams','no_other_angle_or_reconciliation_or_semantic_material_read':True,'new_supplied_head_licensors':'proposal-licensors.json','preliminary_read_note':'Early read-only live governance inspection was superseded by complete reads of the exact historical governance objects preserved in governance/. Canonical generator live bytes matched the pinned digest. The required course shape was read from the historical Git object.'})
+excluded=['FINAL-FREEZE.manifest.json','FINAL-FREEZE.manifest.sha256','freeze-receipt.json']
+files=[]
+for path in sorted(OWN.rglob('*')):
+    if path.is_file() and path.relative_to(OWN).as_posix() not in excluded:
+        files.append({'path':path.relative_to(OWN).as_posix(),**digest(path.read_bytes())})
+counts={'segments':3,'spans':sum(p['counts']['spans'] for p in proofs),'non_null_d5_word_pairs':sum(p['counts']['non_null_d5_word_pairs'] for p in proofs),'total_d5':sum(p['counts']['total_d5'] for p in proofs),'d7':sum(p['counts']['d7'] for p in proofs),'nulls':0,'errata':0,'native_exit_zero':3,'native_failures':0,'frozen_files':len(files)}
+manifest={'schema':'codex-independent-proposal-freeze-v1','status':'FINAL FROZEN PROVISIONAL; mechanical pass is not semantic acceptance','created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'Codex','angle':'Tibetan-first','source_origin':'8575edf1e0de695677194c1fde60f1d9e2c2f204','source_boundary':309,'directory':str(OWN),'manifest_filename':'FINAL-FREEZE.manifest.json','self_and_receipt_exclusions':excluded,'counts':counts,'segments':[{'seq':p['seq'],'counts':p['counts'],'files':p['hashes']} for p in proofs],'files':files,'supersession_policy':'Any later change must preserve this manifest and its files as a prior proof boundary, then create an explicitly superseding freeze.'}
+mf=OWN/'FINAL-FREEZE.manifest.json';js(mf,manifest)
+hash_=hashlib.sha256(mf.read_bytes()).hexdigest()
+(OWN/'FINAL-FREEZE.manifest.sha256').write_text(hash_+'  FINAL-FREEZE.manifest.json\n')
+for f in files:assert digest((OWN/f['path']).read_bytes())=={k:f[k] for k in ['bytes','sha256']}
+receipt={'manifest':str(mf),'schema':manifest['schema'],'sha256':hash_,'verified_frozen_file_count':len(files),'counts':counts}
+js(OWN/'freeze-receipt.json',receipt)
+print(json.dumps(receipt,ensure_ascii=False))

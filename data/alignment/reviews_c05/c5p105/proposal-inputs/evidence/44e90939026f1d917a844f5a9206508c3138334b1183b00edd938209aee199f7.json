@@ -1,0 +1,29 @@
+{
+  "preparation_attempts": [
+    {
+      "attempt": 1,
+      "status": "failed before native generation",
+      "stdout": "prepare-attempt1.stdout",
+      "stderr": "prepare-attempt1.stderr",
+      "exit": "prepare-attempt1.exit",
+      "helper": "prepare-attempt1.py",
+      "cause": "Requested fifth occupy occurrence; actual complete English contains four. Corrected the intended coexistence-clause selection to fourth after inspecting all ranges."
+    },
+    {
+      "attempt": 2,
+      "status": "passed source/English ranges via unchanged imported canonical resolver",
+      "stdout": "prepare-attempt2.stdout",
+      "stderr": "prepare-attempt2.stderr",
+      "exit": "prepare-attempt2.exit",
+      "helper": "../helpers/prepare.py"
+    }
+  ],
+  "native_generation_attempts_at_this_boundary": 0,
+  "preserved_exploratory_search_failure": {
+    "command": "rg --files '/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO' | rg '(C15ReadingASCII|C16ReadingASCII|C18ReadingASCII|P7[^/]*ASCII|P7[^/]*\\.txt)$'",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "",
+    "reason": "The pattern omitted .txt suffixes for C15/C16/C18; corrected discovery found all three. No source absence claim was based on this failure."
+  }
+}

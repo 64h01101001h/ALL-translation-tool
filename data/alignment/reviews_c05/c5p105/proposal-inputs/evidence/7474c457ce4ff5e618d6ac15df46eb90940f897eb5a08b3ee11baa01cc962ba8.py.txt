@@ -1,0 +1,14 @@
+"""Infrastructure only. Import byte-identical historical canonical code; all database connections forced read-only."""
+from pathlib import Path
+import json,hashlib,sqlite3,sys
+O=Path(__file__).resolve().parents[1];BASE=json.loads((O/'evidence/proposal-baseline.json').read_bytes());PIN=O/'evidence/pinned'
+for rel in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ assert hashlib.sha256((PIN/rel).read_bytes()).hexdigest()==BASE['governing_git_pins'][rel]['sha256']
+sys.path.insert(0,str(PIN/'engines'));sys.path.insert(0,str(PIN/'tools'))
+import gen_alignment_page as G
+G.B.SPINE=BASE['source_pins']['spine']['path'];connect=sqlite3.connect
+def readonly(database,*a,**kw):
+ assert not a and database==G.B.SPINE
+ return connect(Path(database).as_uri()+'?mode=ro',uri=True,**kw)
+sqlite3.connect=readonly
+if __name__=='__main__':G.main()

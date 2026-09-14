@@ -1,0 +1,54 @@
+import gzip, hashlib, json, pathlib, sqlite3, re
+OWN=pathlib.Path(__file__).resolve().parents[1]
+E=OWN/'evidence'
+base=json.loads((OWN.parent/'proposal-baseline.json').read_bytes())
+def write(name,data):
+    (E/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+master=json.loads(gzip.decompress(pathlib.Path(base['source_pins']['master']['path']).read_bytes()))
+entries=master['unified_entries']
+print('master entries',type(entries).__name__,len(entries))
+print('entry schema',str(entries[0])[:1500] if isinstance(entries,list) else str(next(iter(entries.items())))[:1500])
+if isinstance(entries,dict): entries=list(entries.values())
+terms=['tshad','mtshungs','tshad mtshungs','nges par','dgos','gsum','yod pa','srid pa','las','dbang','dngos po','tshad grub','tshad grub pa','bskyed','bskyed nus','nus','sngar','rigs pa',"'grub",'snod','skye ba','rnag','la sogs pa','spyir','go sa',"'gog", "'gog nus", "'gog byed",'bltas pa',"'gal",'ri rab','gru bzhi','zlum po','phan tshun','gcig','gnyis ka','lcags gong',"dmar 'bar ba",'tsha ba','lcags sngags','sngags','btab pa','lag pa','reg pa','myong ba','reg bya',"rgyal ba dge 'dun grub",'rgyal ba',"dge 'dun grub",'brtsoms pa','brtsom pa','mdzod','mdzod Tik','Tik','thar lam gsal byed','thar lam','thar','lam','gsal byed','rtsa ba','dang bcas pa']
+results=[]
+for term in terms:
+    found=[x for x in entries if x.get('wylie')==term]
+    results.append({'query':{'field':'wylie','equals':term},'count':len(found),'records':found})
+write('full-master-records.json',results)
+for x in results:
+    print(x['query']['equals'],x['count'],json.dumps([{'hgm_gloss':r.get('hgm_gloss'),'id':r.get('id')} for r in x['records']],ensure_ascii=False))
+db=sqlite3.connect(pathlib.Path(base['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True)
+db.row_factory=sqlite3.Row
+queries=[('wylie',"las kyi dbang gis"),('wylie',"tshad grub"),('wylie',"go sa 'gog"),('wylie',"lcags sngags"),('wylie',"brtsoms pa'i mdzod"),('english','Illumination of the Path to Freedom'),('english','Again consider this same situation.'),('english','Generally speaking, each of the three objects mentioned'),('english','Black, White, and Other Deeds Defined')]
+corpus=json.loads(gzip.decompress(pathlib.Path(base['source_pins']['corpus']['path']).read_bytes()))
+seqs={}
+for x in corpus:
+    seqs[x['course']]=seqs.get(x['course'],0)+1
+    x['_derived_seq']=seqs[x['course']]
+    x['_corpus_index_zero_based']=sum(seqs.values())-1
+out=[]
+for field,term in queries:
+    q='SELECT * FROM corpus_segments WHERE '+field+' LIKE ? ORDER BY course,seq'
+    rows=[dict(x) for x in db.execute(q,('%'+term+'%',))]
+    originals=[x for x in corpus if term.lower() in x.get(field,'').lower()]
+    out.append({'sql':q,'parameters':['%'+term+'%'],'count':len(rows),'complete_rows':rows,'original_corpus_matches':originals,'original_count':len(originals)})
+    print('query',field,term,len(rows),[(x['course'],x['seq']) for x in rows])
+write('full-corpus-query-records.json',out)
+src=json.loads((E/'source.json').read_bytes())
+ident=[]
+for row in src:
+    q='SELECT * FROM corpus_segments WHERE acip=? OR wylie=? OR english=? ORDER BY course,seq'
+    ps=[row[x] for x in ('acip','wylie','english')]
+    matches=[dict(x) for x in db.execute(q,ps)]
+    ident.append({'seq':row['seq'],'sql':q,'parameters':ps,'count':len(matches),'records':[{'equal_fields':[f for f in ('acip','wylie','english') if x[f]==row[f]],'row':x} for x in matches]})
+    print('exact rows',row['seq'],[(x['course'],x['seq']) for x in matches])
+write('full-parallel-equality.json',ident)
+physical=(E/'C05ReadingASCII.txt').read_bytes()
+physical_queries=[]
+for needle in [b"DE'I TSE NA,",b"RNAG LA SOGS PA'I DNGOS PO",b"RGYAL BA DGE 'DUN GRUB KYIS BRTZOMS",b'Again consider this same situation.',b'Generally speaking, each',b'Illumination of the Path to Freedom']:
+    offsets=[m.start() for m in re.finditer(re.escape(needle),physical)]
+    physical_queries.append({'needle_latin1':needle.decode('latin1'),'offsets':offsets,'extents':[{'lo':max(0,p-500),'hi':min(len(physical),p+6500),'latin1':physical[max(0,p-500):p+6500].decode('latin1')} for p in offsets]})
+write('physical-extents.json',physical_queries)
+register=json.loads((E/'governance/docs/errata_register.json').read_bytes())
+print('register schema',type(register).__name__, list(register)[:8] if isinstance(register,dict) else len(register))
+print('master absence check field names',list(entries[0]))

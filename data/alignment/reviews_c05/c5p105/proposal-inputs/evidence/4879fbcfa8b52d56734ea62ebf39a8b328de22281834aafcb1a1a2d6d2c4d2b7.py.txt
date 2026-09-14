@@ -1,0 +1,15 @@
+from capture import O,run
+import json,sys,hashlib
+from canonical_adapter import G
+out=[];rows={r['seq']:r for r in json.loads((O/'evidence/original-source.json').read_bytes())}
+for seq in [313,314,315]:
+ p=O/str(seq);raw=(p/'spec.json').read_bytes();d=json.loads(raw);seg=d['segments'][0]
+ r=run('final-'+str(seq)+'-resolver-v1',[sys.executable,'-B',str(O/'helpers/resolve.py')],raw);assert r.returncode==0 and r.stderr==b''
+ (p/'resolved-ranges.json').write_bytes(r.stdout)
+ r=run('final-'+str(seq)+'-generator-v1',[sys.executable,'-B',str(O/'helpers/canonical_adapter.py')],raw);assert r.returncode==0 and r.stderr==b''
+ (p/'body.html').write_bytes(r.stdout);td={l:(dep,t) for dep,l,t in G.B.spans_of(r.stdout.decode(),'tib')};ed={l:(dep,t) for dep,l,t in G.B.spans_of(r.stdout.decode(),'eng')};assert td['s'+str(seq)+'S'][1]==rows[seq]['wylie'];assert ed['s'+str(seq)+'S'][1]==rows[seq]['english'];assert len(td)==len(ed)==len(seg['spans'])+1
+ for s in seg['spans']:
+  assert td['s'+str(seq)+s['id']]==(s['d'],s['tib']);assert ed['s'+str(seq)+s['id']]==(s['d'],s['eng'] or '')
+ v={'seq':seq,'generator_exit':r.returncode,'stderr_bytes':len(r.stderr),'spec_bytes':len(raw),'spec_sha256':hashlib.sha256(raw).hexdigest(),'body_bytes':len(r.stdout),'body_sha256':hashlib.sha256(r.stdout).hexdigest(),'body_equals_stdout':True,'canonical_builder_all_spans_and_full_original_source_exact':True,'native_generator_path':'native/final-'+str(seq)+'-generator-v1','native_resolver_path':'native/final-'+str(seq)+'-resolver-v1','counts':{'spans':len(seg['spans']),'d5_total':sum(x['d']==5 for x in seg['spans']),'nonnull_d5':sum(x['d']==5 and x['eng'] is not None for x in seg['spans']),'d7':sum(x['d']==7 for x in seg['spans']),'nulls':sum(x['eng'] is None for x in seg['spans']),'errata':len(json.loads((p/'errata.json').read_bytes()))}}
+ (p/'verification.json').write_text(json.dumps(v,indent=2)+'\n');out.append(v)
+(O/'evidence/final-generation-summary.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))

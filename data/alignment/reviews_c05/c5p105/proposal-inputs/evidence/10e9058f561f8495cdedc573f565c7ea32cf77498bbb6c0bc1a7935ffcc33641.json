@@ -1,0 +1,18 @@
+{
+  "spine_total": 42199,
+  "corpus_total": 42199,
+  "master_lists": {
+    "unified_entries": 105634,
+    "curated_entries": 115,
+    "glossary_entries": 8028
+  },
+  "context_query": {
+    "sql": "select * from corpus_segments where course=? and seq between ? and ? order by seq",
+    "params": [
+      "C05",
+      307,
+      321
+    ]
+  },
+  "six_field_snapshot_comparison": true
+}

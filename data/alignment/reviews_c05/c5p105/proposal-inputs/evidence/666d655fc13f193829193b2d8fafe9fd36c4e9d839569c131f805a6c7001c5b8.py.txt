@@ -1,0 +1,64 @@
+import gzip,hashlib,json,pathlib,re
+OWN=pathlib.Path(__file__).resolve().parents[1]
+E=OWN/'evidence'
+BASE=json.loads((OWN.parent/'proposal-baseline.json').read_bytes())
+def write(name,x):
+    p=E/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def digest(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+master=json.loads(gzip.decompress(pathlib.Path(BASE['source_pins']['master']['path']).read_bytes()))
+supp=[]
+for term in ['lcags','gong','myong','kyang','mi','ma','las','de','de ltar','gnyis ka','nges par mi dgos','skye ba yod par']:
+    rows=[x for x in master['unified_entries'] if x.get('wylie')==term]
+    supp.append({'query':{'field':'wylie','equals':term},'count':len(rows),'records':rows})
+    print('supplemental hgm',term,[x.get('hgm_gloss') for x in rows])
+write('supplemental-full-master-records.json',supp)
+root=pathlib.Path(BASE['source_pins']['physical']['path']).parent
+physical=[]
+for name in ['C15ReadingASCII.txt','C16ReadingASCII.txt','C18ReadingASCII.txt']:
+    source=root/name;b=source.read_bytes();(E/name).write_bytes(b)
+    needles=[b'Again consider this same situation.',b"RNAG LA SOGS PA'I DNGOS PO",b"RGYAL BA DGE 'DUN GRUB KYIS BRTZOMS"]
+    record={'source':str(source),'stored':name,**digest(b),'complete_bytes_reopened':True,'queries':[]}
+    for needle in needles:
+        offsets=[m.start() for m in re.finditer(re.escape(needle),b)]
+        record['queries'].append({'needle_latin1':needle.decode('latin1'),'offsets':offsets,'extents':[{'lo':max(0,p-300),'hi':min(len(b),p+2300),'latin1':b[max(0,p-300):p+2300].decode('latin1')} for p in offsets]})
+    physical.append(record)
+p7=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Daily Practices/Practice7Reading.pdf')
+b=p7.read_bytes();(E/'Practice7Reading.pdf').write_bytes(b)
+physical.append({'source':str(p7),'stored':'Practice7Reading.pdf',**digest(b),'complete_bytes_reopened':True,'interpretation':'Binary source preservation only; P7 textual claims below are based on complete original corpus records, not a PDF visual inspection.'})
+write('parallel-physical-originals.json',physical)
+src=json.loads((E/'source.json').read_bytes())
+queries=json.loads((E/'full-corpus-query-records.json').read_bytes())
+register=json.loads((E/'governance/docs/errata_register.json').read_bytes())
+classes=[x for x in register if x['item_id'] in ['E-044','E-071','E-076','E-107','E-111','E-121'] or 'following' in str(x).lower() and 'heading' in str(x).lower()]
+write('registered-class-records.json',{'total_register_records':len(register),'selection_rule':'item_id in E-044 E-071 E-076 E-107 E-111 E-121 OR complete record contains following and heading, case-insensitively','count':len(classes),'complete_records':classes})
+checks=[]
+for row in src:
+    seq=row['seq']
+    comparisons=[]
+    candidates=[x for q in queries for x in q['complete_rows'] if x['course']!='C05' and ((seq==313 and 'Again consider this same situation.' in x['english']) or (seq==314 and 'Generally speaking, each of the three objects mentioned' in x['english']))]
+    seen=set()
+    for x in candidates:
+        key=(x['course'],x['seq'])
+        if key in seen:continue
+        seen.add(key)
+        prefix=0
+        for a,b in zip(row['english'],x['english']):
+            if a!=b:break
+            prefix+=1
+        comparisons.append({'course':x['course'],'seq':x['seq'],'equal_acip':row['acip']==x['acip'],'equal_wylie':row['wylie']==x['wylie'],'equal_english':row['english']==x['english'],'english_common_prefix_chars':prefix,'source_english_chars':len(row['english']),'parallel_english_chars':len(x['english']),'source_unshared_tail':row['english'][prefix:],'parallel_unshared_tail':x['english'][prefix:],'full_original_row':x})
+    checks.append({'seq':seq,'source_full_row':row,'field_lengths':{k:len(row[k]) for k in ['acip','wylie','english']},'has_1500_cap':len(row['english'])==1500,'five_grounds':{
+       'a_exact_source_quote':{'result':'All source fields independently reopened and six-field snapshots verified; no proposed correction.','quotes':{'acip':row['acip'],'wylie':row['wylie'],'english':row['english']}},
+       'b_parallel_witness':{'result':'Comparisons are digital field relations only. No independent publication or ingestion lineage established. A shared prefix supports only that exact extent. P7 differs in punctuation and/or ending.','comparisons':comparisons,'source_record_search_file':'full-corpus-query-records.json','no_other_batch_proposals_read':True},
+       'c_registered_classes':{'result':'Following-heading apparatus on rows 314 and 315 is registered and not newly filed. Converter, running-head, footnote, row-spill and cap classes were considered.','original_register_sha256':BASE['governing_git_pins']['docs/errata_register.json']['sha256'],'register_count':len(register),'duplicate_batch_records':[x for x in register if x.get('segment')=='C05:'+str(seq)],'full_class_records_file':'registered-class-records.json'},
+       'd_lexical_source_interpretation':{'result':{313:'Valid-perception identity is possible but not necessary. The tshad-grub compound and causative bskyed are supported by full HGM meanings; no need to correct source. Modal/anaphoric distribution is omitted without null claims.',314:'General spatial exclusion and situational coexistence are contrasted, followed by mantra-conditioned tactile sensation. Source spelling and GMR prose are preserved. Full HGM compound meanings have been examined; excluded participants remain outside wrappers. Metaphysical claims are reported as this text, not asserted as empirical facts.',315:'brtsoms pa has compose/written/composed as well as selections in HGM, but the source verb authorship is expressed by the English by-construction, so selections is not banked. Full author title and work title are attested. Missing explicit root-text phrasing is not enough evidence for a source correction.'}[seq],'master_files':['full-master-records.json','supplemental-full-master-records.json']},
+       'e_measured_evidence_and_limits':{'result':'All query counts are lengths of preserved full result lists. All original hash comparisons pass. Exact selected ranges and repeated occurrences are in decisions.json; no generation or mechanical pass is claimed to establish correspondence.','evidence_files':['source-pins.json','snapshot-verification.json','full-parallel-equality.json','physical-extents.json','parallel-physical-originals.json'],'physical_file':'C05ReadingASCII.txt','physical_sha256':BASE['source_pins']['physical']['sha256']}
+      },'five_category_dispositions':{
+       'TIBETAN_SPELLING':'No defensible new spelling defect established; original ACIP and derived Wylie retained.',
+       'ENGLISH_TYPO':'No defensible new typo established in the translated prose.',
+       'ENGLISH_FACTUAL_ERROR':'No independently established new factual correction; interpretive/lexical uncertainty is not promoted into an erratum.',
+       'INGEST_ARTEFACT':'Registered heading apparatus preserved on 314/315; none of these three English fields is exactly 1500 characters. No new class filed.',
+       'FORMATTING':'Reading/selection headings and numbering remain verbatim. No new formatting erratum proposed.'},'errata_proposed':[]})
+write('five-ground-errata-review.json',checks)
+write('proposal-licensors.json',{'required_at_integration_if_retained':[{'seq':314,'id':'w2','english':'and the other','licensor':'la sogs pa','reason':'attested closing gesture; does not include supplied two'},{'seq':314,'id':'w22','english':'and the like','licensor':'la sogs pa','reason':'attested etcetera compound'}],'no_allowance_files_modified':True})
+write('attempt-history.json',{'preparation_attempts':[{'attempt':1,'status':'failed before native generation','stdout':'prepare-attempt1.stdout','stderr':'prepare-attempt1.stderr','exit':'prepare-attempt1.exit','helper':'prepare-attempt1.py','cause':'Requested fifth occupy occurrence; actual complete English contains four. Corrected the intended coexistence-clause selection to fourth after inspecting all ranges.'},{'attempt':2,'status':'passed source/English ranges via unchanged imported canonical resolver','stdout':'prepare-attempt2.stdout','stderr':'prepare-attempt2.stderr','exit':'prepare-attempt2.exit','helper':'../helpers/prepare.py'}],'native_generation_attempts_at_this_boundary':0,'preserved_exploratory_search_failure':{'command':"rg --files '/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO' | rg '(C15ReadingASCII|C16ReadingASCII|C18ReadingASCII|P7[^/]*ASCII|P7[^/]*\\.txt)$'",'exit':1,'stdout':'','stderr':'','reason':'The pattern omitted .txt suffixes for C15/C16/C18; corrected discovery found all three. No source absence claim was based on this failure.'}})
+for row in checks:print('five grounds complete',row['seq'],row['field_lengths'],'errata',0)

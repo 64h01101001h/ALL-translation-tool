@@ -1,0 +1,157 @@
+import hashlib, importlib.util, json, pathlib, re
+from native_adapter import load_original, OWN
+path=load_original()
+module_spec=importlib.util.spec_from_file_location('canonical_generator',path)
+G=importlib.util.module_from_spec(module_spec)
+module_spec.loader.exec_module(G)
+sources={x['seq']:x for x in json.loads((OWN/'evidence/source.json').read_bytes())}
+data={}
+def add(seq,d,tib,eng,why,n=1):
+    data.setdefault(seq,[]).append((d,tib,eng,why,n))
+
+# Tibetan-first lexical and grammatical judgments; n selects the actual English occurrence.
+add(313,5,'tshad','valid perceptions','Abbreviated valid cognition noun; first necessity claim, not the later existence or vessel claims.',1)
+add(313,5,'mtshungs','identical','Equivalence predicate of the first perceptions.',1)
+add(313,5,'nges par','necessarily','Certainty adverb; full HGM meanings include necessarily true, but true is left with the recast modal predicate.')
+add(313,6,'mi','not','Standalone negation of the necessity assertion.')
+add(313,6,'kyang','Even though','Concessive particle links necessity denial to possible equivalence.')
+add(313,5,'tshad','valid perceptions','Second cognition noun under possible threefold equivalence.',2)
+add(313,5,'mtshungs','identical','Second equivalence predicate, the possible rather than necessary identity.',2)
+add(313,5,'gsum','three','Cardinal number of possible equivalent perceptions.',1)
+add(313,5,'srid pa','possible','Possibility predicate for three perceptions; not cyclic existence.',1)
+add(313,5,'las','karma','Karmic cause noun, not ablative particle; exact GMR row licenses karma despite curated HGM deeds.')
+add(313,5,'dbang','force','Power noun in first karmic causal construction.',1)
+add(313,5,'dngos po','objects','Functional objects produced by karma; different and each one remain outside this noun.')
+add(313,5,'tshad grub pa','confirmed by a valid perception','Established lexical compound in the full HGM record; describes each produced object, preserving complete attested meaning.')
+add(313,7,'tshad','valid perception','Unique cognition member inside confirmed-by-cognition compound, not an independent later perception.')
+add(313,7,'grub pa','confirmed','Unique establishment member inside the same compound; English order crosses its cognition member.')
+add(313,5,'gsum','three','Number of karmically produced objects, not the preceding cognition count.',2)
+add(313,5,'bskyed','start to exist','Causative production verb rendered by GMR as starting to exist; full HGM gloss attests this periphrasis.',1)
+add(313,5,'nus','can','Ability predicate for production; bare can excludes the existential auxiliary be.')
+add(313,5,'sngar','already','Prior establishment adverb in as we have already established.')
+add(313,5,'rigs pas','logically','Inflected reasoning noun with inseparable instrumental -s; source noun remains d5 despite English adverb.')
+add(313,5,"'grub",'established','Main establishment verb; separate from grub pa inside the earlier compound.')
+add(313,5,'nus','possible','Ability of that production is resumed by this is possible; de bskyed has anaphoric/distributed expression and is omitted.',2)
+add(313,6,'na','since','Conditional particle in de bskyed nus na; the earlier temporal na is skipped because the Tibetan cursor is already here.')
+add(313,5,'las','karma','Second karmic cause, in the vessel-perception conclusion.',2)
+add(313,5,'dbang','force','Second causal power noun, specifically the vessel-perception conclusion.',2)
+add(313,5,'snod','vessel','Object of the final perceptions; singular vessel is explicit.')
+add(313,5,'tshad','valid perceptions','Final cognition noun for the vessel, not the earlier confirmed-by clause.',3)
+add(313,5,'mtshungs','equivalent','Final equality modifier for the three vessel perceptions.')
+add(313,5,'gsum','three','Final count of vessel perceptions.',3)
+add(313,5,'skye ba','start to exist','Arising verb; the complete birth/existence paraphrase is semantically coextensive here; could remains outside.',2)
+add(313,6,'yang','as well','Additive particle for the final possible arising.')
+add(313,5,'mtshungs','equally','Final equivalence predicate operates on possibility, distinct from the prior equivalent modifier.')
+
+add(314,5,'rnag','pus','First object in the three-object argument.')
+add(314,5,'la sogs pa','and the other','Established etcetera compound owns the closing gesture; two is an English contextual elaboration and stays unwrapped.')
+add(314,5,'dngos po','objects','First noun: the three objects mentioned, not other objects excluded from their space.',1)
+add(314,5,'gsum po','three','Inflected cardinal quantifies that initial object noun.')
+add(314,5,'spyir','Generally speaking','Lexical adverb, full HGM meaning; speaking is conventional adverbial expression rather than an invented speech act.')
+add(314,5,'go sa','space','First location compound. HGM also quotes the full relative clause, but they themselves is explanatory participant wording and remains unwrapped.',1)
+add(314,5,"'gog",'block','First blocking predicate; other objects and entering are explanatory expansions.',1)
+add(314,5,'dngos po','things','First classificatory predicate: are things of the type; does not take objects as excluded participants.',1)
+add(314,6,'kyang','though','First concession connects the general blocking nature to the absence of contradiction in this situation.')
+add(314,3,'de ltar','this way','Demonstrative manner phrase; this is licensed by de and way by ltar.')
+add(314,5,'bltas pa','looking','Viewing verb; the beings are explanatory participants and remain unwrapped.')
+add(314,3,"de'i tshe na",'in this situation','Complete demonstrative temporal-locative phrase, recast as situation.')
+add(314,5,'go sa','space','Second space belongs to objects while the beings look this way; not the earlier general claim or the mountain example.',2)
+add(314,5,"'gog byed",'block','Established blocking compound for this-situation objects; no supplied other things included.',2)
+add(314,5,'dngos po','objects','Second classificatory noun, in they are not objects; the preceding other objects has no separate Tibetan noun and is skipped.',3)
+add(314,6,'ma','not','Negates the this-situation blocking classification.',1)
+add(314,6,'mi','no','Standalone negation of contradiction; not the later heat negations.')
+add(314,5,"'gal",'contradiction','Conflict predicate rendered as a noun; source lexical function justifies d5.')
+add(314,5,'ri rab','central mountain of the world','First explicit mountain name, square-shaped; GMR supplies a second occurrence before round in shape.')
+add(314,5,'gru bzhi','square in shape','Four-cornered shape compound; preserves full HGM meaning instead of arbitrarily shortening to square.')
+add(314,5,'zlum po','round in shape','Round shape adjective, complete HGM meaning; the repeated mountain noun before it is English expansion.')
+add(314,5,'la sogs pa','and the like','Second etcetera compound closes the mountain shapes; full licensed conjunction, not a supplied noun.')
+add(314,5,'go sa','space','Third location compound is the general blocking space of mountain shapes.',3)
+add(314,5,"'gog",'block','Third blocking predicate, now for mountains; do not attach to the earlier object examples.',3)
+add(314,5,'dngos po','objects','Classificatory noun of mountain shapes, fourth English objects occurrence.',4)
+add(314,6,'kyang','Nevertheless','Second concession introduces coexistence at one mountain site.')
+add(314,5,'ri rab','central mountain of the world','Second explicit Tibetan mountain, rendered by the third English mountain occurrence, the single site.',3)
+add(314,5,'gcig','single','Cardinal for the mountain whose space is occupied.')
+add(314,5,'go sa','space taken up','Fourth location compound has the complete HGM spatial-occupancy meaning; no added participant is inside this phrase.')
+add(314,5,'de','these','Demonstrative resumes square and round mountains; things is left outside the demonstrative.')
+add(314,5,'gnyis ka','both','Both-ness compound quantifies those two shapes.')
+add(314,5,'yod pa','occupy','Existence at the stated spatial site is rendered as occupy in GMR; localized locative-existential recast, not a general dictionary definition.',5)
+add(314,5,'srid pa','possible','Possibility of both occupying one mountain site.')
+add(314,5,'lcags gong','ball of steel','Material-object compound, steel ball; no article included.')
+add(314,7,'lcags','steel','Unique material member of the steel-ball parent, not the later mantra compound.')
+add(314,7,'gong','ball','Unique object member of the steel-ball parent; English ordering crosses steel.')
+add(314,5,"dmar 'bar ba",'red-hot','Established red-blazing compound in full HGM meanings; no speculative morpheme split.')
+add(314,5,'tsha ba','hot','First temperature predicate, after red-hot; its separate hot occurrence is required.',2)
+add(314,6,'kyang','but','Third concession: hot steel contrasted with touch under mantra.')
+add(314,5,'lcags sngags','mantra of steel','Material-associated mantra nominal compound; complete expression contains no supplied participant.')
+add(314,7,'lcags','steel','Unique steel member inside the mantra compound, independent of the steel-ball parent.')
+add(314,7,'sngags','mantra','Unique mantra member inside that parent.')
+add(314,5,'btab pa','used','Applied/used mantra verb; has is left outside rather than overcaptured.')
+add(314,5,'lag pas','hand','Inflected hand noun; inseparable instrumental -s remains attached. His is supplied and stays outside.')
+add(314,5,"reg pa'i",'touches','Inflected touching verb, with genitive modifier ending intact; a person and it stay unwrapped.')
+add(314,5,'myong','feels','Experiential verb reduced from myong byar gyur; he is an English participant and stays unwrapped.')
+add(314,5,'reg bya','sensation','First tactile-object compound, the sensation he feels.',1)
+add(314,5,"tsha ba'i",'heat','Inflected heat noun modifying the negated sensation.',1)
+add(314,5,'reg bya','sensation','Second tactile-object compound: not a sensation of heat.',2)
+add(314,6,'ma','not','Second ma negates the sensation-of-heat claim.',2)
+add(314,5,'tsha ba','heat','Final heat noun in the positive sensation-of-something-not-heat statement.',2)
+add(314,6,'ma','not','Third ma negates heat within the final sensation description.',3)
+add(314,5,'reg bya','sensation','Third tactile-object compound: sensation of something not heat.',3)
+
+add(315,5,"rgyal ba dge 'dun grub",'Gyalwa Gendun Drup, His Holiness the First Dalai Lama','Named author with standing published epithet; full HGM author-name record licenses the title as one identity, not phonetic dictionary members.')
+add(315,5,'mdzod','Abhidharmakosha','Abbreviated work title noun; HGM has the Sanskrit work name as a meaning.')
+add(315,5,'Tik','commentary','Commentary noun; a and to stay outside.')
+add(315,5,'thar lam gsal byed','Illumination of the Path to Freedom','Full proper work title, explicitly attested by HGM; retain it whole.')
+add(315,7,'thar','Freedom','Unique freedom member inside the title; does not include to.')
+add(315,7,'lam','Path','Unique path member inside the same title; article the is retained only within the full established title.')
+add(315,7,'gsal byed','Illumination','Unique illuminating member inside the title; all three members are contiguous after the same d5 parent and strictly tighter.')
+add(315,6,'las','from','Standalone ablative marks the source of selections; this las is not the karma noun of row 313.')
+
+notes={
+313:'PROVISIONAL machine alignment by Codex (Tibetan-first). Full original GMR English is retained verbatim. Repeated perceptions, three, karma, force, and arising expressions are resolved by their local arguments. tshad grub pa is a lexical compound with two unique tighter members. Necessity/existence constructions and anaphoric de bskyed are partly distributed and remain omitted; omission is not a null judgment. No hgm_gloss is changed. Mechanical fidelity does not establish semantic acceptance.',
+314:'PROVISIONAL machine alignment by Codex (Tibetan-first). Full original GMR English is retained verbatim. Four spatial expressions, three blocking predicates, and three sensations retain their distinct clause roles. Full HGM square/round shape meanings are preserved; explanatory excluded objects, beings, pronouns and auxiliaries stay unwrapped. ri rab is explicit twice; GMR repeats it for the round mountain. Steel-ball and steel-mantra compounds each have two unique tighter members. The concluding editorial notice and following Reading Seven heading are preserved as registered following-heading apparatus, not lexical translation. Mechanical fidelity does not establish semantic acceptance.',
+315:'PROVISIONAL machine alignment by Codex (Tibetan-first). Full original GMR English is retained verbatim. The author name includes its standing published epithet; the complete work title has three unique tighter semantic members. brtsoms pa is not falsely aligned to selections: authorship is distributed in the English by-construction. The root-text/comitative wording has no explicit separate rendering here and is omitted. las is ablative from. The following section number and heading are preserved as registered following-heading apparatus. No hgm_gloss is changed. Mechanical fidelity does not establish semantic acceptance.'}
+
+omissions={
+313:[("de'i tshe na",'Temporal setup is recast as Again consider this same situation; no separate direct lexical assignment proposed.'),('dgos','Modal necessity combines with nges par in not necessarily true; do not invent an atom or claim absent meaning.'),('yod pa','Existence occurs inside possible for there to be; not separately harvested.'),('de bskyed','Anaphoric this and possible summarize producing the objects; distributed expression omitted.'),('yod par','Existential possibility is expressed with equally possible/could around arising; no isolated yod atom proposed.'),('kyi/gis/gyi/te/phyir','Grammatical relations and causal discourse structure are omitted, without null claims; all source characters remain visible.')],
+314:[('de','First demonstrative in gsum po de is recast as mentioned, not treated as a word equivalence.'),('nus','Capacity is dispersed in things of the type and the blocking description, with no independent can/able exponent.'),('phan tshun','Reciprocal exclusion is expanded with other things; no standalone each other occurs, so the unresolved distribution stays omitted.'),('yin/pa/te/kyi/gi/dang/na/lta bu/phyir','Copulas, nominalizers, case, coordination and analogy/causal construction mostly stay unaligned; no affirmative nulls asserted.'),("de'i/myong byar gyur pa'i",'Experiencer reference and passive/resultative construction are reorganized as he feels; only lexical myong is harvested.'),('English participants','other objects, other things, they, themselves, beings, a person, it, he and his are excluded from noun/verb wrappers. The shape expansion repeats central mountain of the world once without a second corresponding Tibetan noun.'),('apparatus','Entire English tail from [This concludes through Non-Virtues remains source apparatus, no lexical spans.')],
+315:[("kyis brtsoms pa'i",'Authorship is rendered through by plus author name, without written/composed. HGM selections is not a sound local meaning for composing; uncertain/distributed authorship is omitted, not nulled.'),('rtsa ba dang bcas pa','Root text together with commentary is not separately named in this English frame; omit rather than infer a composed English phrase.'),('English framing','The following selections are taken, a, and to remain outside the lexical spans.'),('apparatus','63 Black, White, and Other Deeds Defined is the next section heading, preserved verbatim and unaligned.')]}
+
+def hits(text,piece,member=False):
+    out=[]; i=0
+    while True:
+        i=text.find(piece,i) if member else G.find_word(text,piece,i)
+        if i<0:return out
+        out.append([i,i+len(piece)]);i+=1
+def main():
+    for seq,items in data.items():
+        src=sources[seq]; spans=[]; decisions=[]; parents={}; expected={}; parent=None
+        for i,(d,tib,eng,why,n) in enumerate(items,1):
+            ident=('m' if d==7 else 'p' if d==6 else 'f' if d<5 else 'w')+str(i)
+            sp={'id':ident,'d':d,'tib':tib,'eng':eng};spans.append(sp)
+            if d!=7: parent=ident
+            else:parents[ident]=parent
+            eh=hits(src['english'],eng)
+            if d!=7:
+                assert len(eh)>=n,(seq,eng,n,eh)
+                expected[ident]=eh[n-1]
+            decisions.append({'id':ident,'d':d,'tib':tib,'eng':eng,'source_function_and_rationale':why,'all_english_word_occurrences':eh,'selected_english_occurrence_one_based':n if d!=7 else 'inside specified parent','parent':parents.get(ident)})
+        en_order=sorted(expected,key=lambda ident:expected[ident][0])
+        tr=G.resolve(src['wylie'],spans,'tib',seq)
+        byid={x['id']:x for x in spans}
+        en_spans=G.with_members(spans,[byid[x] for x in en_order],src['english'])
+        er=G.resolve(src['english'],en_spans,'eng',seq)
+        assert all(tuple(rng)==er[i] for i,rng in expected.items()),(seq,expected,er)
+        for dec in decisions:
+            i=dec['id'];dec['tib_range']=tr[i];dec['eng_range']=er[i]
+            dec['tib_clause_context']=src['wylie'][max(0,tr[i][0]-90):min(len(src['wylie']),tr[i][1]+90)]
+            dec['english_clause_context']=src['english'][max(0,er[i][0]-110):min(len(src['english']),er[i][1]+110)]
+            dec['all_tibetan_occurrences']=hits(src['wylie'],dec['tib'],dec['d']==7)
+            if dec['d']==7:
+                p=dec['parent'];dec['member_proof']={'parent_tib_range':tr[p],'parent_eng_range':er[p],'unique_tib_in_parent':src['wylie'][slice(*tr[p])].count(dec['tib'])==1,'unique_eng_in_parent':src['english'][slice(*er[p])].count(dec['eng'])==1,'strictly_tighter_both':tr[i]!=tr[p] and er[i]!=er[p]}
+        seg={'seq':seq,'title':{313:'possible equivalent perceptions',314:'space and the sensation of heat',315:'illumination of the path to freedom'}[seq],'spans':spans,'eng_order':en_order,'note':notes[seq]}
+        target=OWN/str(seq)
+        for file,value in [('spec.json',{'course':'C05','segments':[seg]}),('decisions.json',{'schema':'codex-tibetan-first-decisions-v1','seq':seq,'source_origin':base_origin,'all_ranges':'zero-based half-open Unicode code-point offsets in original spine fields','source_reference':'../evidence/full-spine-context.json','decisions':decisions,'omissions':[{'source_or_scope':x,'reason':y} for x,y in omissions[seq]],'null_count':0,'null_policy':'No nulls are asserted; unresolved/distributed items are omissions.'}),('errata.json',[])]:
+            (target/file).write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+        print(seq,'spans',len(spans),'d5',sum(x['d']==5 for x in spans),'nulls',0,'d7',sum(x['d']==7 for x in spans))
+base_origin='8575edf1e0de695677194c1fde60f1d9e2c2f204'
+if __name__=='__main__':main()

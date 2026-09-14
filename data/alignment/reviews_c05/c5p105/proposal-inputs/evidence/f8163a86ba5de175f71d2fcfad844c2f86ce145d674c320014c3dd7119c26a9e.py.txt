@@ -1,0 +1,30 @@
+from pathlib import Path
+import json,shutil,gzip,sqlite3,hashlib
+OWN=Path(__file__).resolve().parents[1]
+hist=OWN/'314/history/pre-generation-v1'
+hist.mkdir(parents=True,exist_ok=False)
+for name in ['spec.json','decisions.json']:
+    shutil.copyfile(OWN/'314'/name,hist/name)
+shutil.copyfile(OWN/'helpers/author_specs.py',hist/'author_specs.py')
+spec=json.loads((OWN/'314/spec.json').read_text())
+sp=next(s for s in spec['segments'][0]['spans'] if s['id']=='w20')
+assert sp['eng']=='the like';sp['eng']='like'
+(OWN/'314/spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+d=json.loads((OWN/'314/decisions.json').read_text())
+s=next(s for s in d['spans'] if s['id']=='w20')
+s['eng']='like';s['eng_range']=[554,558]
+s['reason']='Closing likeness gesture only. All HGM senses, including like and the like, were inspected; the supplied article the and coordinator and remain outside. First la sogs pa expands to context-supplied other two and is omitted.'
+d['pre_generation_refinement']='w20 tightened from the like to like to exclude supplied article; old exact spec/decisions and old canonical range probe are preserved. No generated body or freeze existed at that boundary.'
+(OWN/'314/decisions.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+b=json.loads((OWN/'evidence/proposal-baseline.json').read_text())
+master=json.loads(gzip.decompress(Path(b['source_pins']['master']['path']).read_bytes()))
+terms=['gong','bltas pa','myong byar','gsum po','rigs pas','lag pas']
+out=[]
+for term in terms:
+    found=[]
+    for name in ['unified_entries','curated_entries','glossary_entries']:
+        for i,e in enumerate(master[name]):
+            if e.get('wylie')==term or term in (e.get('wylie_variants') or []):found.append({'collection':name,'index':i,'entry':e})
+    out.append({'term':term,'master_records':found})
+(OWN/'evidence/supplemental-lexical-evidence.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'refinement':d['pre_generation_refinement'],'supplemental_full_hgm_senses':[{ 'term':r['term'],'records':[{'hgm_gloss':x['entry'].get('hgm_gloss'),'hgm_glosses':x['entry'].get('hgm_glosses')} for x in r['master_records']]} for r in out]},ensure_ascii=False))

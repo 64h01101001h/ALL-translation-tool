@@ -1,0 +1,46 @@
+"""Independent immutable input capture; no semantic approval is implied."""
+from pathlib import Path
+import datetime, hashlib, importlib.util, json, os, sqlite3, subprocess, sys
+S=Path(__file__).resolve().parents[1]; B=S.parent; W=B.parents[1]/'campaign-worktree'; A=B.parent
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(p,d):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+base=json.loads((B/'proposal-baseline.json').read_bytes()); origin=base['commit']; assert origin=='8575edf1e0de695677194c1fde60f1d9e2c2f204'
+checks=[]; originals=[]
+for role,fn,digest in [('tibetan','FINAL-FREEZE.manifest.json','3dc43622702361a9c504165dcce0fd6335eb7d29aeb0e084a42013d711181e4e'),('english','freeze-manifest.json','250ecf94bf4056ec4046c3c73ac626dd3c6e63e7b4c6097bff0d627783baf609'),('reconciled','FINAL-FREEZE.manifest.json','9f833498613874c621c456101ae1604cf5430e66f77fc851f5e1a695e94ac76a')]:
+ p=B/role/fn; raw=p.read_bytes(); assert sha(raw)==digest; d=json.loads(raw); rows=d['files']; entries=[{'path':k,**v} for k,v in rows.items()] if isinstance(rows,dict) else rows
+ for x in entries:
+  q=B/role/x['path']; z=q.read_bytes(); assert len(z)==x['bytes'] and sha(z)==x['sha256'],str(q)
+ originals.extend(q for q in sorted((B/role).rglob('*')) if q.is_file() and '__pycache__' not in q.parts)
+ checks.append({'role':role,'manifest':str(p),'sha256':digest,'schema':d['schema'],'verified_files':len(entries)})
+for key,pin in base['source_pins'].items():
+ p=Path(pin['path']);raw=p.read_bytes();assert len(raw)==pin['bytes'] and sha(raw)==pin['sha256'];originals.append(p)
+access=[]
+for q in json.loads((B/'reconciled/evidence/required-access.json').read_bytes()):
+ ok=os.access(q['path'],os.R_OK);assert ok;access.append({'path':q['path'],'readable':ok})
+save(S/'evidence/required-access.json',access)
+manifest=[]
+def copy(p,rel,extra=None):
+ p=Path(p).resolve();raw=p.read_bytes();q=S/rel;q.parent.mkdir(parents=True,exist_ok=True)
+ if q.exists():assert q.read_bytes()==raw
+ else:q.write_bytes(raw)
+ manifest.append({'original':str(p),'copy':str(rel),'sha256':sha(raw),'bytes':len(raw),**(extra or {})})
+for role in ['tibetan','english','reconciled']:
+ for seq in [313,314,315]:
+  for p in sorted((B/role/str(seq)).iterdir()):
+   if p.is_file():copy(p,Path('reviewed-final' if role=='reconciled' else 'proposal-inputs/'+role)/str(seq)/p.name)
+for pin in json.loads((B/'reconciled/evidence/git-pins.json').read_bytes()):
+ commit,rel=pin['git_object'].split(':',1);raw=subprocess.run(['git','show',pin['git_object']],cwd=W,capture_output=True,check=True).stdout;p=B/'reconciled'/pin['path'];assert p.read_bytes()==raw and sha(raw)==pin['sha256']
+ copy(p,Path('governing')/rel if Path(rel).suffix in ['.json','.md'] else Path('governing')/(rel+'.txt'))
+ # Historical live-repository identity explicitly pins the source object.
+ manifest.append({'original':str(W/rel),'copy':manifest[-1]['copy'],'sha256':sha(raw),'bytes':len(raw),'original_git_commit':commit,'repository_relative_path':rel})
+originals.extend([B/'source.json',B/'context.json',B/'proposal-baseline.json',B/'semantic-review-brief-v2.md',B/'root-current-semantic-brief.md',B/'semantic-input-review-package.txt',A/'semantic-review-protocol.md',A/'copy_evidence_once.py',A/'land_reviewed_page.py'])
+save(S/'original-to-copy-manifest.json',manifest)
+spec=importlib.util.spec_from_file_location('copier',A/'copy_evidence_once.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+existing={x['original'] for x in manifest}; result=m.preserve(S,S/'original-to-copy-manifest.json',[p for p in originals if str(p.resolve()) not in existing])
+db=sqlite3.connect(Path(base['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+source=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',313,315))]
+context=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',307,321))]
+assert source==json.loads((B/'reconciled/evidence/original-source.json').read_bytes());assert context==json.loads((B/'reconciled/evidence/original-context.json').read_bytes())
+save(S/'evidence/independent-source.json',source);save(S/'evidence/independent-context.json',context)
+save(S/'evidence/input-checks.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin_git_commit':origin,'actual_acceptance_baseline_consumed':False,'freezes':checks,'capture':result,'source_rows':len(source),'context_rows':len(context),'source_pins':base['source_pins'],'semantic_verdict':'PENDING'})
+print(json.dumps({'freezes':checks,'capture':result,'source_rows':len(source),'context_rows':len(context)}))

@@ -1,0 +1,20 @@
+{
+  "original_failures_preserved": "All complete original trees, including Tibetan prepare-attempt1, exploratory discovery failure record, English preflight/history and scope-incident, are immutable evidence/originals copies mapped by copy-identities.json. English initial discovery native stdout was tool-truncated and is unavailable; no absolute filename-isolation claim is made.",
+  "reconciler_incidents": [
+    {
+      "tool_chunk": "98f676",
+      "exit": 1,
+      "command_scope": "read only: cat of the two known English canonical helpers and guessed Tibetan helpers/canonical_adapter.py",
+      "finding": "The Tibetan helper is actually native_adapter.py; the attempted filename did not exist. Subsequent read used the observed native_adapter.py. No source or proposal defect was inferred."
+    },
+    {
+      "tool_chunk": "b9c203",
+      "exit": 1,
+      "file": "history/prepare-v1/prepare.py",
+      "finding": "Preparation compared SELECT * (including raw) with the six-column root source snapshot. The extra raw column caused the assertion. The corrected six-column comparison passes; complete original rows including raw are preserved. Initial tool displayed the full traceback but separate native streams were not captured, and are not claimed."
+    },
+    {
+      "finding": "Initial capture display wrapper printed an extra newline for empty stderr in console summaries. The actual child stdout.bin/stderr.bin files were always captured separately and are unchanged. Future wrapper display uses exact stream writes; old helper is preserved in history/capture-display-wrapper-v1. No successful generator was rerun for this display correction."
+    }
+  ]
+}

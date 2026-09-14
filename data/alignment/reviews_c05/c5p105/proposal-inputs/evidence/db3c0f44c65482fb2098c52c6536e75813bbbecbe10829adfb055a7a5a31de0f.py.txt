@@ -1,0 +1,22 @@
+from pathlib import Path
+from capture import O,run
+from canonical_adapter import G
+import json,sys,hashlib,shutil
+E=O/'evidence';root=O/'gate-snapshot';pages=root/'data/alignment/pages_c05';pages.mkdir(parents=True,exist_ok=True);(root/'tools').mkdir(exist_ok=True)
+raw=b''.join((O/str(seq)/'body.html').read_bytes() for seq in [313,314,315]);(pages/'c5p105.html').write_bytes(raw)
+allow=E/'pinned/data/alignment/span_head_allow.json';(root/'data/alignment/span_head_allow.json').write_bytes(allow.read_bytes())
+results=[]
+for tool in ['test_no_broken_words.py','test_no_split_syllables.py','test_no_degenerate_members.py','test_no_supplied_span_head.py']:
+ path=root/'tools'/tool;path.write_bytes((E/'pinned/tools'/tool).read_bytes());r=run('gate-'+tool[:-3]+'-v1',[sys.executable,'-B',str(path)])
+ expected=1 if tool=='test_no_supplied_span_head.py' else 0
+ assert r.returncode==expected and r.stderr==b'',(tool,r.returncode,r.stderr)
+ if expected:
+  assert b'c5p105 s314w2 d=5' in r.stdout and b'c5p105 s314w22 d=5' in r.stdout and b': 2 spans' in r.stdout
+ results.append({'tool':tool,'pinned_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'exit':r.returncode,'stdout':r.stdout.decode(),'stderr_bytes':len(r.stderr),'scope':'exact three final bodies concatenated as c5p105; original historical allowance copied byte-identically','interpretation':'two exact la sogs pa licences proposed for root integration; unchanged gate correctly refuses missing entries; no allowance edited or gate relaxed' if expected else 'passed local page-fidelity gate'})
+ac=[];rows={x['seq']:x for x in json.loads((E/'original-source.json').read_bytes())}
+for seq in [313,314,315]:
+ for s in json.loads((O/str(seq)/'spec.json').read_bytes())['segments'][0]['spans']:
+  a=G.B.acip_span(rows[seq]['acip'],rows[seq]['wylie'],s['tib']);assert a
+  ac.append({'seq':seq,'id':s['id'],'wylie':s['tib'],'canonical_acip':a,'note':'canonical acip_span internally proves the round trip; repeated occurrence identity is separately proven by the canonical resolved ranges'})
+(E/'native-gate-results.json').write_text(json.dumps(results,indent=2)+'\n');(E/'canonical-acip-roundtrips.json').write_text(json.dumps(ac,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'gates':results,'canonical_acip_roundtrips':len(ac)}))

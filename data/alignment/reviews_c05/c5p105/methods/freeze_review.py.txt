@@ -1,0 +1,46 @@
+"""Supported-extension copies, exact input preflight and immutable review freeze."""
+from pathlib import Path
+import datetime,hashlib,json,subprocess
+S=Path(__file__).resolve().parents[1];B=S.parent;W=B.parents[1]/'campaign-worktree';A=B.parent
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def sha(x):return hashlib.sha256(x).hexdigest()
+def save(p,d):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+manifest=json.loads((S/'original-to-copy-manifest.json').read_bytes());known={x['original'] for x in manifest}
+for p in [*sorted((S/'helpers').glob('*.py')),B/'baseline.json',A/'record_external_step.py']:
+ p=p.resolve();raw=p.read_bytes();rel=Path('methods')/(p.name+'.txt') if p.suffix=='.py' else Path('evidence')/'later-acceptance-baseline.json';q=S/rel;q.parent.mkdir(parents=True,exist_ok=True)
+ if q.exists():assert q.read_bytes()==raw
+ else:q.write_bytes(raw)
+ if str(p) not in known:manifest.append({'original':str(p),'copy':str(rel),'sha256':sha(raw),'bytes':len(raw)});known.add(str(p))
+save(S/'original-to-copy-manifest.json',manifest)
+cache={};gitcache={};total=0
+for record in manifest:
+ p=S/record['copy'];assert p.suffix.lower() in allowed and p.is_relative_to(S)
+ if record['copy'] not in cache:cache[record['copy']]=p.read_bytes()
+ raw=cache[record['copy']];assert len(raw)==record['bytes'] and sha(raw)==record['sha256']
+ if 'original_git_commit' in record:
+  obj=record['original_git_commit']+':'+record['repository_relative_path']
+  if obj not in gitcache:gitcache[obj]=subprocess.run(['git','show',obj],cwd=W,capture_output=True,check=True).stdout
+  original=gitcache[obj]
+ else:original=Path(record['original']).read_bytes()
+ assert raw==original,record['original'];total+=len(raw)
+for seq in [313,314,315]:
+ for name in ['spec.json','body.html','report.md','errata.json','original-dispositions.json','final-decisions.json','final-ordered-tuples.json','resolved-ranges.json','errata-audit.json','verification.json']:
+  assert (S/'reviewed-final'/str(seq)/name).read_bytes()==(B/'reconciled'/str(seq)/name).read_bytes()
+review=json.loads((S/'review.json').read_bytes());assert review['verdict']==review['spec_verdict']==review['quality_verdict']=='APPROVE' and review['open_findings']==[]
+assert json.loads((S/'bank-ready-errata.json').read_bytes())==[]
+assert set(json.loads((S/'span-head-allow-needed.json').read_bytes())['pages_c05'])=={'c5p105/s314w2','c5p105/s314w22'}
+for key in ['independent-evidence-proof.json','interface-checks.json']:
+ d=json.loads((S/'evidence'/key).read_bytes());assert d['status'].startswith('PASS')
+save(S/'evidence/copy-preflight.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS','manifest_records':len(manifest),'distinct_copies':len(cache),'logical_bytes_checked':total,'all_originals_or_historical_git_objects_exact':True,'supported_extensions':sorted(allowed),'current_reviewed_final_interfaces_exact':30,'runtime_helpers_have_exact_supported_copies':True,'native_generator_reruns':0})
+exclude={'freeze.json','freeze-receipt.json'};files={};unsupported=[]
+for p in sorted(S.rglob('*')):
+ if not p.is_file():continue
+ rel=str(p.relative_to(S))
+ if rel in exclude or rel.startswith('native/freeze-caller-v1/'):continue
+ if p.suffix.lower() not in allowed:
+  assert p.parent==S/'helpers' and p.suffix=='.py' and (S/'methods'/(p.name+'.txt')).read_bytes()==p.read_bytes();unsupported.append(rel);continue
+ raw=p.read_bytes();files[rel]={'bytes':len(raw),'sha256':sha(raw)}
+freeze={'schema':'c05-independent-semantic-review-freeze-v1','producer':'Codex fresh independent skeptical semantic reviewer','created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'verdict':review['verdict'],'spec_verdict':review['spec_verdict'],'quality_verdict':review['quality_verdict'],'open_findings':[],'file_count':len(files),'files':files,**{k:review[k] for k in ['total_spans','total_nulls','total_word_pairs','total_d7','source_origin_git_commit','later_supplied_acceptance_baseline','later_baseline_accepted_through','reconciliation_freeze_sha256']},'exclusions':{'self_and_receipt':sorted(exclude),'active_capture_directory':'native/freeze-caller-v1 (completes after freeze)','unsupported_runtime_helpers_preserved_exactly_under_methods':unsupported},'status':'FROZEN PROVISIONAL machine semantic approval; root integration and human acceptance are separate'}
+assert not (S/'freeze.json').exists();save(S/'freeze.json',freeze)
+for rel,pin in files.items():raw=(S/rel).read_bytes();assert len(raw)==pin['bytes'] and sha(raw)==pin['sha256']
+receipt={'status':'PASS_FROZEN_REVIEW','freeze_sha256':sha((S/'freeze.json').read_bytes()),'file_count':len(files),'manifest_records':len(manifest),'supported_copy_preflight':'PASS','counts':[95,1,67,11]};save(S/'freeze-receipt.json',receipt);print(json.dumps(receipt))

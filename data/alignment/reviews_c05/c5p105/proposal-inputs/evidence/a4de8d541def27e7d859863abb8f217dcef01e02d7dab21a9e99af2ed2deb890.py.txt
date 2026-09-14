@@ -1,0 +1,59 @@
+from canonical_adapter import G,OWN
+from pathlib import Path
+import json,re,hashlib,sqlite3
+E=OWN/'evidence'
+source={r['seq']:r for r in json.loads((E/'original-spine-context.json').read_text())}
+queries=json.loads((E/'corpus-queries.json').read_text())
+physical=(E/'C05ReadingASCII.original.bin').read_bytes()
+proof=[]
+for seq in [313,314,315]:
+    spec=json.loads((OWN/str(seq)/'spec.json').read_text())
+    seg=spec['segments'][0];row=source[seq];ss=seg['spans'];byid={s['id']:s for s in ss}
+    tr=G.resolve(row['wylie'],ss,'tib',seq)
+    es=G.with_members(ss,[byid[i] for i in seg['eng_order']],row['english'])
+    er=G.resolve(row['english'],es,'eng',seq)
+    decisions=json.loads((OWN/str(seq)/'decisions.json').read_text())
+    for d in decisions['spans']:
+        assert list(tr[d['id']])==d['tib_range'],d
+        assert (list(er[d['id']]) if d['id'] in er else None)==d['eng_range'],d
+        if d['d'] in [5,7] and d['eng']:
+            assert not re.match(r'(?i)^(the|a|an|and|or|his|our|your|I|you)\b',d['eng']),d
+    acip=[]
+    for s in ss:
+        a=G.B.acip_span(row['acip'],row['wylie'],s['tib'])
+        assert a is not None,s
+        acip.append({'id':s['id'],'acip':a,'roundtrip':G.B.acip_to_ewts(a),'wylie':s['tib']})
+    record={'seq':seq,'canonical_intended_ranges_equal':True,'observed_ranges':[{'id':s['id'],'tib':s['tib'],'eng':s['eng'],'tib_range':tr[s['id']],'eng_range':er.get(s['id'])} for s in ss],'canonical_acip_roundtrips':acip,'supplied_head_candidates':0,'semantic_acceptance':False}
+    (OWN/str(seq)/'preflight.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
+    pairs=[q for q in queries if q.get('origin_seq')==seq]
+    physical_start=physical.find(row['acip'].encode('ascii'))
+    assert physical_start>=0
+    entries=[]
+    shared={'exact_source_row':'../evidence/original-spine-context.json','full_master_records':'../evidence/lexical-evidence.json','parallel_query_results':'../evidence/corpus-queries.json','physical_original':'../evidence/C05ReadingASCII.original.bin','physical_acip_byte_range':[physical_start,physical_start+len(row['acip'].encode('ascii'))],'independent_publication_or_ingestion_lineage_proven':False}
+    grounds={
+      313:[
+       ('TIBETAN_SPELLING','acip',"TSAD MTSUNGS NGES PAR MI DGOS",'No source spelling defect demonstrated. Full ACIP and Wylie have four exact corpus occurrences each; selected tshad/mtshungs/nges par readings are attested in full HGM senses.'),
+       ('ENGLISH_TYPO','english','three different objects, each one confirmed by a valid perception','No demonstrated typo. C15:458 and C16:850 share the entire ACIP/Wylie/English text fields; recurrence alone does not establish correctness or publication independence.'),
+       ('ENGLISH_FACTUAL_ERROR','english','Even though it is not necessarily true that the valid perceptions are identical','The local argument distinguishes necessity from possibility, not a contradiction. Complete original context 307–321 was read; no factual correction supported.'),
+       ('INGEST_ARTEFACT','english','start to exist as well.','Complete local physical paragraph reaches this same end. C18:1134 has the same Tibetan and shared English prefix, plus a different appended continuation; full English identity is not claimed for C18. E-107 cap and E-071 marker class checked; neither applies.'),
+       ('FORMATTING','acip',"MTSUNGS PA'I PHYIR,",'Comma/shad punctuation remains exact. Physical paragraph wraps are formatting, with no new formatting defect demonstrated.')],
+      314:[
+       ('TIBETAN_SPELLING','acip','LCAGS SNGAGS','Seven corpus records contain this exact ACIP phrase; full lcags senses include steel and iron, sngags includes mantra. Physical original has LCAGS SNGAGS. No new spelling correction supported.'),
+       ('ENGLISH_TYPO','english','The sensation that he feels is not a sensation of heat; on the contrary, it is a sensation of something not heat.','Awkward non-heat phrasing is the source wording and the shared C15:459/C16:851 passage; no demonstrated typographic correction.'),
+       ('ENGLISH_FACTUAL_ERROR','english','both these things to occupy the space taken up by a single central mountain of the world','Square/round coexistence and mantra-conditioned non-heat are this text’s philosophical examples, with all local qualifications retained. Full HGM shape and tactile senses checked; no factual correction to the cited argument justified.'),
+       ('INGEST_ARTEFACT','english','128 The Asian Classics Institute Course V: How Karma Works Reading Seven: Black and White Deeds, the "Path of Action," and the Root and Branch Non-Virtues','Confirmed original heading/layout appendix under registered following-heading class, explicitly naming C05:314 in pinned course shape. Do not re-file. Not E-071 (real Tibetan) and not E-107 (length is below cap). C15:459/C16:851 share the translation but have different appended apparatus, so no full-English identity claim.'),
+       ('FORMATTING','english','[This concludes the section of the text entitled "The Stream."]','Physical original explicitly prints the bracketed close, blank lines, 128 and next reading heading. Preserve all, no new formatting erratum. Full body is intact despite line folding.')],
+      315:[
+       ('TIBETAN_SPELLING','acip','BRTZOMS',"Fourteen corpus rows contain BRTZOMS/brtsoms, including C05:28,146,315. Physical original here has BRTZOMS. Full master exact brtsoms/brtsom searches return no HGM senses; brtsams senses do not independently prove an emendation. Possible tense/spelling concern stays uncertain and unfiled, with no proposed correction."),
+       ('ENGLISH_TYPO','english','Gyalwa Gendun Drup, His Holiness the First Dalai Lama','The name and standing epithet recur in C05:28; full HGM name gloss supports the identifying epithet. No typo demonstrated; exact six-field row is preserved.'),
+       ('ENGLISH_FACTUAL_ERROR','english','Illumination of the Path to Freedom, a commentary to the Abhidharmakosha','Title/type agree with the original MDZOD tIK THAR LAM GSAL BYED attribution and complete HGM title, mdzod and Tik senses. No independently demonstrated factual correction.'),
+       ('INGEST_ARTEFACT','english','63 Black, White, and Other Deeds Defined','Physical source prints 63 and following topic title between the introduction and next root verse. Registered following-heading class; preserved and not re-filed. English length below E-107 cap; real Tibetan excludes E-071.'),
+       ('FORMATTING','acip','MDZOD tIK','Lowercase t is original ACIP Sanskrit coding and canonical conversion yields Tik; not a case typo. The physical number/heading layout is retained as apparatus.')]
+    }
+    for kind,field,quote,decision in grounds[seq]:
+        assert quote in row[field]
+        entries.append({'kind':kind,'field':field,'found_verbatim':quote,'source_character_range':[row[field].index(quote),row[field].index(quote)+len(quote)],'decision':decision,'disposition':'no new erratum filed','evidence':shared})
+    audit={'seq':seq,'source_english_characters':len(row['english']),'source_wylie_characters':len(row['wylie']),'five_grounds':entries,'exact_parallel_counts':[{'field':q.get('field',q.get('comparison')),'spine_or_tuple_count':q['count'],'external_corpus_count':q.get('corpus_count',q['count'])} for q in pairs],'registered_class_authorities':['../evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md (ERRATA DUTY)','../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md (Markers and apparatus)','../evidence/pinned/data/alignment/C05_CAMPAIGN.md (Course shape)','../evidence/pinned/docs/errata_register.json (E-071, E-106 discussion of registered following-heading class, E-107)'],'new_errata_count':0}
+    (OWN/str(seq)/'errata-audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n')
+    proof.append({'seq':seq,'spans':len(ss),'word_pairs_nonnull_d5':sum(s['d']==5 and s['eng'] is not None for s in ss),'d5_total':sum(s['d']==5 for s in ss),'nulls':sum(s['eng'] is None for s in ss),'d7':sum(s['d']==7 for s in ss),'range_match':True,'source_characters':len(row['english']),'errata':0})
+print(json.dumps(proof,ensure_ascii=False))

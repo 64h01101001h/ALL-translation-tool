@@ -1,0 +1,14 @@
+from capture import O,run
+import sys,json,hashlib
+out=[]
+for angle in ['tibetan','english']:
+ for seq in [313,314,315]:
+  p=O/'evidence/originals'/angle/str(seq);raw=(p/'spec.json').read_bytes()
+  r=run('original-'+angle+'-'+str(seq)+'-generator-v1',[sys.executable,'-B',str(O/'helpers/canonical_adapter.py')],raw)
+  assert r.returncode==0 and r.stderr==b''
+  equal=r.stdout==(p/'body.html').read_bytes();assert equal
+  r2=run('original-'+angle+'-'+str(seq)+'-resolver-v1',[sys.executable,'-B',str(O/'helpers/resolve.py')],raw);assert r2.returncode==0 and r2.stderr==b''
+  (p:=O/'evidence/original-ranges').mkdir(exist_ok=True);(p/(angle+'-'+str(seq)+'.json')).write_bytes(r2.stdout)
+  out.append({'angle':angle,'seq':seq,'exit':r.returncode,'stderr_bytes':len(r.stderr),'body_equals_original':equal,'body_bytes':len(r.stdout),'body_sha256':hashlib.sha256(r.stdout).hexdigest(),'spec_sha256':hashlib.sha256(raw).hexdigest(),'resolver_exit':r2.returncode,'ranges':json.loads(r2.stdout)})
+(O/'evidence/original-native-replay.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps([{k:v for k,v in x.items() if k!='ranges'} for x in out]))

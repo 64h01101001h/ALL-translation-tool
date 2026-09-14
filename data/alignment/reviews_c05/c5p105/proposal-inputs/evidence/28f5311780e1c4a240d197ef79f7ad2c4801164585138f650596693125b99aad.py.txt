@@ -1,0 +1,31 @@
+"""Infrastructure only: pinned original imports and forced read-only spine.
+No canonical alignment algorithm is copied or rewritten here.
+"""
+import hashlib, importlib.util, json, pathlib, runpy, sqlite3, sys
+OWN=pathlib.Path(__file__).resolve().parents[1]
+PIN=OWN/'evidence/governance'
+BASE=json.loads((OWN.parent/'proposal-baseline.json').read_bytes())
+W=OWN.parent.parents[1]/'campaign-worktree'
+def load_original():
+    for name in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+        expected=BASE['governing_git_pins'][name]['sha256']
+        assert hashlib.sha256((PIN/name).read_bytes()).hexdigest()==expected
+    live=W/'tools/gen_alignment_page.py'
+    assert hashlib.sha256(live.read_bytes()).hexdigest()==BASE['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+    sys.path.insert(0,str(PIN/'engines'))
+    spec=importlib.util.spec_from_file_location('build_alignment_layer',PIN/'tools/build_alignment_layer.py')
+    builder=importlib.util.module_from_spec(spec)
+    sys.modules['build_alignment_layer']=builder
+    spec.loader.exec_module(builder)
+    db_path=pathlib.Path(BASE['source_pins']['spine']['path'])
+    readonly=db_path.as_uri()+'?mode=ro'
+    builder.SPINE=readonly
+    connect=sqlite3.connect
+    def readonly_connect(database,*args,**kwargs):
+        assert database==readonly, 'Unexpected database request'
+        kwargs['uri']=True
+        return connect(database,*args,**kwargs)
+    sqlite3.connect=readonly_connect
+    return live
+if __name__=='__main__':
+    runpy.run_path(str(load_original()),run_name='__main__')

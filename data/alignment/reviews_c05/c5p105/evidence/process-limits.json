@@ -1,0 +1,19 @@
+{
+  "source_or_alignment_corrections": [],
+  "own_native_failures": [
+    {"path":"native/evidence-rechecks-v1", "cause":"External-corpus adapter treated SQL instr as equality; exact original SQL/source unchanged. Fixed in v2. Historical helper preserved in history/evidence-rechecks-v1."},
+    {"path":"native/interface-checks-v1", "cause":"Original Tibetan unwrapped objects contain extra reason/context metadata; initial exact-object comparison wrongly assumed only range/text. Full metadata preserved and verified in the corrected interface check."},
+    {"path":"native/interface-checks-v2", "cause":"Explicit root-text null correctly has null English context; initial containment check required a string. Corrected null-aware check passes in v3. No native generator rerun."}
+  ],
+  "read_only_discovery_incidents": [
+    "An initial stat used project-root ALIGNMENT_LAYER_SPEC.md; actual observed file is docs/ALIGNMENT_LAYER_SPEC.md and was read fully.",
+    "An initial native-proof display requested command.json; actual reconciler metadata filename is execution.json and it was subsequently read fully.",
+    "Brief shorthand suggested a per-segment Tibetan five-ground file; actual file is tibetan/evidence/five-ground-errata-review.json, containing all three screens. It and the complete embedded reconciler versions were read.",
+    "A display assumed final-ordered-tuples.json was a list; actual keyed source_order/english order schema was subsequently inspected and fully verified.",
+    "Some combined source/evidence displays exceeded the tool display cap. Material judgment text was recovered using bounded projections; original complete files are preserved and checked. No complete native capture of those exploratory tool displays is claimed."
+  ],
+  "evidence_reading_scope": "All original/final semantic span reasons, complete source/context, full reports/spec diffs, omission decisions and five-ground judgment text were read. Fifteen critical terms' full original master records and all93 terms' HGM sense/provenance summaries were read;162 complete master objects and99 complete corpus rows were programmatically reopened and compared byte/content-exact to source. Repeated identical embedded objects are not claimed as independent evidence or as separate fresh readings.",
+  "unchanged_original_limit": "English analyst initially exposed other-angle filenames during discovery; no other-angle file contents were reported read. The original tool-truncated discovery stdout is unrecoverable. Absolute filename isolation and complete discovery capture are not claimed.",
+  "pdf_scope": "Original Practice7 PDF bytes and identity only; no fresh visual/textual inspection or publication lineage inference.",
+  "side_effect_scope": "This reviewer wrote only semantic-review, executed local canonical generation/read-only checks, and did not mutate source/master/repository, delegate, commit, spend, invoke paid APIs, message accounts, operate devices or publish."
+}

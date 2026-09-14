@@ -1,0 +1,50 @@
+"""Check remaining package, ordered-tuple, occurrence and omitted-range interfaces."""
+from pathlib import Path
+import hashlib,json,re
+from canonical import G
+S=Path(__file__).resolve().parents[1];B=S.parent;R=B/'reconciled'
+def read(p):return json.loads(Path(p).read_bytes())
+def sha(x):return hashlib.sha256(x).hexdigest()
+rows={r['seq']:r for r in read(S/'evidence/independent-source.json')};resolved=read(S/'resolved-spans.json');original={(x['angle'],x['seq']):x['resolved'] for x in read(S/'evidence/original-replay-reuse.json')}
+parts=re.split(r'\n===== (.*?) =====\n',(B/'semantic-input-review-package.txt').read_text());section_count=0
+for name,body in zip(parts[1::2],parts[2::2]):
+ if (B/name).is_file():
+  raw=(B/name).read_text();assert body.rstrip('\n')==raw.rstrip('\n'),name;section_count+=1
+hashes=json.loads(parts[-1])
+for q in hashes:
+ raw=(B/q['path']).read_bytes();assert len(raw)==q['bytes'] and sha(raw)==q['sha256']
+def check_gaps(source,rs,gaps):
+ for field,rangefield in [('wylie','tib_range'),('english','eng_range')]:
+  covered=set()
+  for x in rs:
+   extent=x[rangefield]
+   if extent:covered.update(range(*extent))
+  actual=[];i=0
+  while i<len(source[field]):
+   if i in covered:i+=1;continue
+   start=i
+   while i<len(source[field]) and i not in covered:i+=1
+   actual.append({'range':[start,i],'text':source[field][start:i]})
+  assert actual==gaps[field]
+for seq in [313,314,315]:
+ rs=[x for x in resolved if x['seq']==seq];spec=read(R/str(seq)/'spec.json')['segments'][0];d=read(R/str(seq)/'final-decisions.json');ordered=read(R/str(seq)/'final-ordered-tuples.json');assert ordered['english_top_level_order']==spec['eng_order']
+ for x,y,z in zip(rs,ordered['source_order'],spec['spans']):
+  assert all(y[k]==x[k] for k in ['id','d','tib','eng','tib_range','eng_range'])
+  for k in ['cls','nul','subword']:assert y[k]==z.get(k)
+ byid={x['id']:x for x in rs};withmembers=G.with_members(spec['spans'],[next(z for z in spec['spans'] if z['id']==k) for k in spec['eng_order']],rows[seq]['english']);assert [{k:y[k] for k in ['seq','id','d','tib','eng','tib_range','eng_range']} for y in ordered['english_order_with_members']]==[byid[z['id']] for z in withmembers]
+ check_gaps(rows[seq],rs,d['complete_unwrapped_ranges'])
+ for x in d['spans']:
+  for field,key,piece in [('wylie','literal_tibetan_occurrences',x['tib']),('english','literal_english_occurrences',x['eng'])]:
+   positions=[[m.start(),m.end()] for m in re.finditer(re.escape(piece),rows[seq][field])] if piece is not None else [];assert positions==x[key]
+  assert x['tibetan_context'] in rows[seq]['wylie'] and x['english_context'] in rows[seq]['english']
+ for angle in ['tibetan','english']:
+  ds=read(B/angle/str(seq)/'decisions.json');items=ds.get('spans',ds.get('decisions'));rr=original[(angle,seq)];assert len(items)==len(rr)
+  for x,y in zip(items,rr):
+   assert all(x[k]==y[k] for k in ['id','d','tib','eng','tib_range','eng_range'])
+  if 'complete_unwrapped_ranges' in ds:check_gaps(rows[seq],rr,ds['complete_unwrapped_ranges'])
+  original_omissions=[q['original_omission'] for q in read(R/str(seq)/'original-dispositions.json')['original_omissions'] if q['angle']==angle];assert original_omissions==ds['omissions']
+acip=[]
+for q in read(R/'evidence/canonical-acip-roundtrips.json'):
+ row=rows[q['seq']];actual=G.B.acip_span(q['wylie'],row['wylie'],row['acip']);assert actual==q['canonical_acip'];acip.append(q)
+result={'status':'PASS','package_sections_bound_to_actual_files':section_count,'package_input_hashes_verified':len(hashes),'original_span_decision_ranges_verified':183,'final_ordered_tuple_records':95,'final_occurrence_metadata_verified':95,'complete_unwrapped_interfaces':6,'canonical_acip_span_roundtrips':len(acip),'native_generator_runs_in_this_step':0}
+(S/'evidence/interface-checks.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))

@@ -1,0 +1,46 @@
+from pathlib import Path
+import json,hashlib,datetime,os
+O=Path(__file__).resolve().parents[1];E=O/'evidence'
+def read(p):return json.loads(p.read_bytes())
+def sha(b):return hashlib.sha256(b).hexdigest()
+base=read(E/'proposal-baseline.json');checks=[]
+for role,pin in base['source_pins'].items():
+ raw=Path(pin['path']).read_bytes();assert len(raw)==pin['bytes'] and sha(raw)==pin['sha256'];checks.append({'role':role,'path':pin['path'],'bytes':len(raw),'sha256':sha(raw),'unchanged_since_source_origin':True})
+for x in read(E/'copy-identities.json'):
+ raw=Path(x['original_path']).read_bytes();assert sha(raw)==x['sha256'] and len(raw)==x['bytes'];assert (O/x['object']).read_bytes()==raw
+ if 'logical_copy' in x:assert (O/x['logical_copy']).read_bytes()==raw
+for x in read(E/'git-pins.json'):assert sha((O/x['path']).read_bytes())==x['sha256']
+assert not read(E/'registered-class-records.json')['direct_batch_records']
+summary=[];count_orig=0;counts={k:0 for k in ['spans','d5_total','nonnull_d5','d7','nulls','errata']}
+for seq in [313,314,315]:
+ p=O/str(seq);spraw=(p/'spec.json').read_bytes();body=(p/'body.html').read_bytes();seg=read(p/'spec.json')['segments'][0];v=read(p/'verification.json');disp=read(p/'original-dispositions.json');dec=read(p/'final-decisions.json');tuples=read(p/'final-ordered-tuples.json');ranges=read(p/'resolved-ranges.json')
+ assert len(read(p/'errata-audit.json')['all_original_source_suspicions'])==5
+ assert all(set(x['five_refutation_grounds'])=={'a_quote','b_parallel','c_registered','d_defensibility','e_counts'} and x['refuted'] for x in read(p/'errata-audit.json')['all_original_source_suspicions'])
+ assert read(p/'errata.json')==[]
+ assert sha(spraw)==v['spec_sha256'] and sha(body)==v['body_sha256'];assert (O/v['native_generator_path']/'stdin.bin').read_bytes()==spraw;assert (O/v['native_generator_path']/'stdout.bin').read_bytes()==body;assert (O/v['native_generator_path']/'stderr.bin').read_bytes()==b'';assert (O/v['native_generator_path']/'exit.txt').read_text()=='0\n'
+ assert (O/v['native_resolver_path']/'stdout.bin').read_bytes()==(p/'resolved-ranges.json').read_bytes()
+ assert len(seg['spans'])==len(dec['spans'])==len(tuples['source_order'])==v['counts']['spans']
+ assert len({(d['angle'],d['original']['id']) for d in disp['spans']})==len(disp['spans'])
+ for angle in ['tibetan','english']:
+  orig=read(E/'original-ranges'/(angle+'-'+str(seq)+'.json'));assert [x['original'] for x in disp['spans'] if x['angle']==angle]==orig
+ for x in ranges:
+  assert next(y for y in dec['spans'] if y['id']==x['id'])['rationale']
+  for k in ['id','d','tib','eng','tib_range','eng_range']:assert next(y for y in dec['spans'] if y['id']==x['id'])[k]==x[k];assert next(y for y in tuples['source_order'] if y['id']==x['id'])[k]==x[k]
+  assert next(y for y in seg['spans'] if y['id']==x['id'])['tib']==x['tib']
+ for k in counts:counts[k]+=v['counts'][k]
+ count_orig+=len(disp['spans']);assert 'PROVISIONAL' in seg['note'] and 'pending' not in seg['note'].lower();report=(p/'report.md').read_text();assert v['spec_sha256'] in report and v['body_sha256'] in report and str(v['body_bytes']) in report and 'EXIT=0' in report
+ summary.append(v)
+assert count_orig==183 and counts['spans']==95
+# Do not repeat generators for documentation or the freeze itself.
+receipt={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin':base['commit'],'source_boundary':309,'acceptance_baseline_received_or_consumed':False,'native_inputs_unchanged':True,'native_proof_reused':'Exact final-generator-v1 and resolver-v1 streams; no documentation-only regeneration.','original_span_dispositions':count_orig,'counts':counts,'source_pins_rechecked':checks,'original_copy_identities_verified':len(read(E/'copy-identities.json')),'fidelity_scope':'Three actual final body pages only; three local fidelity gates pass. Supplied-head gate unchanged returns1 for two exact proposed root-integration licences. Full integration/gates and fresh skeptic remain root responsibilities.'}
+(E/'final-integrity-check.json').write_text(json.dumps(receipt,indent=2)+'\n')
+files=[]
+for p in sorted(O.rglob('*')):
+ if not p.is_file() or p.name in ['FINAL-FREEZE.manifest.json','FINAL-FREEZE.manifest.sha256','freeze-receipt.json']:continue
+ b=p.read_bytes();files.append({'path':str(p.relative_to(O)),'bytes':len(b),'sha256':sha(b)})
+manifest={'schema':'codex-independent-reconciliation-freeze-v1','producer':'Codex independent reconciliation','created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'FROZEN PROVISIONAL reconciliation; fresh skeptic and root acceptance/integration required','source_origin':base['commit'],'source_boundary':309,'actual_acceptance_baseline_consumed':False,'acceptance_provenance_note':'Through312 acceptance was not received/consumed at this freeze; any later receipt must name its actual time/commit separately.','counts':counts,'original_spans_disposed':count_orig,'original_freezes':read(E/'independent-original-freeze-verification.json'),'source_pin_checks':checks,'segment_results':summary,'gate_status':read(E/'native-gate-results.json'),'files':files,'self_and_receipt_exclusions':['FINAL-FREEZE.manifest.json','FINAL-FREEZE.manifest.sha256','freeze-receipt.json'],'native_process_limit':'No original unavailable discovery stdout reconstructed; exact preserved limits remain in original scope incident and process-incidents.json.'}
+raw=(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n').encode();(O/'FINAL-FREEZE.manifest.json').write_bytes(raw);digest=sha(raw);(O/'FINAL-FREEZE.manifest.sha256').write_text(digest+'  FINAL-FREEZE.manifest.json\n')
+for f in files:
+ p=O/f['path'];b=p.read_bytes();assert len(b)==f['bytes'] and sha(b)==f['sha256']
+(O/'freeze-receipt.json').write_text(json.dumps({'manifest_sha256':digest,'verified_files':len(files),'counts':counts,'native_generator_exits':[0,0,0],'native_generator_proof_reused':True,'acceptance_baseline_consumed':False},indent=2)+'\n')
+print(json.dumps({'manifest_sha256':digest,'files':len(files),'counts':counts,'reports':[str(O/str(x)/'report.md') for x in [313,314,315]]}))

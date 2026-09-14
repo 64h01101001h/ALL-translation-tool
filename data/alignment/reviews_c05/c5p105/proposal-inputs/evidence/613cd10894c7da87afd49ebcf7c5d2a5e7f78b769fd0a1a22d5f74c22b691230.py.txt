@@ -1,0 +1,75 @@
+from pathlib import Path
+import json,gzip,sqlite3,hashlib,re,os
+O=Path(__file__).resolve().parents[1];E=O/'evidence';B=O.parent;base=json.loads((E/'proposal-baseline.json').read_bytes())
+def save(n,x):(E/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def read(n):return json.loads((E/'originals'/n).read_bytes())
+db=sqlite3.connect(Path(base['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+corpus=json.loads(gzip.decompress(Path(base['source_pins']['corpus']['path']).read_bytes()));master=json.loads(gzip.decompress(Path(base['source_pins']['master']['path']).read_bytes()));source=json.loads((E/'original-source.json').read_bytes())
+queries=[];seen={}
+for fn in ['english/evidence/corpus-queries.json','tibetan/evidence/full-corpus-query-records.json','tibetan/evidence/full-parallel-equality.json']:
+ for idx,q in enumerate(read(fn)):
+  if 'sql' not in q:continue
+  sql=q['sql'];params=q.get('params',q.get('parameters'));key=json.dumps([sql.lower(),params]);rows=[dict(r) for r in db.execute(sql,params)]
+  previous=q.get('rows',q.get('complete_rows'));eq=rows==previous if previous is not None else None
+  if previous is not None:assert eq,(fn,idx)
+  assert len(rows)==q['count'],(fn,idx,len(rows),q['count'])
+  queries.append({'origin':fn,'index':idx,'sql':sql,'params':params,'original_count':q['count'],'rechecked_count':len(rows),'complete_rows_equal_original':eq,'complete_rows':rows})
+save('original-query-rechecks.json',queries)
+terms=set()
+for fn in ['english/evidence/lexical-evidence.json','english/evidence/supplemental-lexical-evidence.json','tibetan/evidence/full-master-records.json','tibetan/evidence/supplemental-full-master-records.json']:
+ for item in read(fn):terms.add(item.get('term') or item['query']['equals'])
+terms.update(['yod pa','yod','de',"de'i tshe na",'tshad grub pa','rigs pas','go sa',"'gog byed",'myong byar',"rgyal ba dge 'dun grub",'nges par','phyir','te','kyang','na',"'bar ba",'brtsams','brtsom','brtsoms','bcas pa','byed'])
+lex=[]
+for term in sorted(terms):
+ records=[]
+ for collection in ['unified_entries','curated_entries','glossary_entries']:
+  for i,r in enumerate(master[collection]):
+   if r.get('wylie')==term or term in (r.get('wylie_variants') or []):records.append({'collection':collection,'index':i,'entry':r})
+ lex.append({'term':term,'query':'exact wylie or exact variant over original master unified/curated/glossary collections','count':len(records),'master_records':records,'spine_entries':[dict(x) for x in db.execute('select * from entries where wylie=? order by id',(term,))]})
+save('full-lexical-evidence.json',lex)
+# Independently verify all supplied complete lexical records, including all comparanda and provenance fields.
+lexcheck=[]
+for fn in ['english/evidence/lexical-evidence.json','english/evidence/supplemental-lexical-evidence.json']:
+ for item in read(fn):
+  for r in item['master_records']:
+   assert master[r['collection']][r['index']]==r['entry'];lexcheck.append({'origin':fn,'term':item['term'],'collection':r['collection'],'index':r['index'],'complete_record_exact':True})
+for fn in ['tibetan/evidence/full-master-records.json','tibetan/evidence/supplemental-full-master-records.json']:
+ for item in read(fn):
+  term=item['query']['equals'];actual=[r for r in master['unified_entries'] if r.get('wylie')==term];assert actual==item['records'];assert len(actual)==item['count'];lexcheck.append({'origin':fn,'term':term,'count':len(actual),'complete_records_exact':True})
+save('original-master-rechecks.json',lexcheck)
+comparisons=[]
+for row in source:
+ same=[]
+ for field in ['acip','wylie','english']:
+  matches=[{'corpus_index':i,'record':r} for i,r in enumerate(corpus) if r.get(field)==row[field]];rows=[dict(x) for x in db.execute('select * from corpus_segments where '+field+'=? order by course,seq',(row[field],))];same.append({'field':field,'spine_count':len(rows),'external_corpus_count':len(matches),'spine_rows':rows,'corpus_records':matches})
+ other=[dict(x) for x in db.execute('select * from corpus_segments where acip=? or wylie=? or english=? order by course,seq',(row['acip'],row['wylie'],row['english']))]
+ for r in other:
+  n=0
+  for a,b in zip(row['english'],r['english']):
+   if a!=b:break
+   n+=1
+  r['comparison']={'same_fields':[f for f in ['acip','wylie','english'] if r[f]==row[f]],'shared_english_prefix_chars':n,'source_tail':row['english'][n:],'parallel_tail':r['english'][n:]}
+ comparisons.append({'seq':row['seq'],'exact_field_counts':same,'exact_tuple_corpus_count':sum(all(x.get(k)==row[k] for k in ['acip','wylie','english']) for x in corpus),'parallels':other,'independent_publication_or_ingestion_lineage_proved':False})
+save('full-source-comparisons.json',comparisons)
+physical=[];copy=json.loads((E/'copy-identities.json').read_bytes())
+for pin in read('tibetan/evidence/parallel-physical-originals.json'):
+ p=Path(pin['source']);raw=p.read_bytes();sha=hashlib.sha256(raw).hexdigest();assert sha==pin['sha256'] and len(raw)==pin['bytes'];obj=E/'objects'/sha
+ if not obj.exists():obj.write_bytes(raw)
+ checked=[]
+ for q in pin.get('queries',[]):
+  needle=q['needle_latin1'].encode('latin1');hits=[m.start() for m in re.finditer(re.escape(needle),raw)];assert hits==q['offsets']
+  for ex in q.get('extents',[]):assert raw[ex['lo']:ex['hi']].decode('latin1')==ex['latin1']
+  checked.append({'needle_latin1':q['needle_latin1'],'offsets':hits,'all_extents_exact':True})
+ physical.append({'path':str(p),'object':str(obj.relative_to(O)),'sha256':sha,'bytes':len(raw),'rechecked':checked,'pdf_limit':'raw bytes and hash only; no claim of independent publication lineage' if p.suffix=='.pdf' else None})
+raw=Path(base['source_pins']['physical']['path']).read_bytes();assert hashlib.sha256(raw).hexdigest()==base['source_pins']['physical']['sha256'];windows=[]
+for needle in [b"DE'I TSE NA, TSAD MTSUNGS",b"RNAG LA SOGS PA'I DNGOS PO",b'Black, White, and Other Deeds Defined',b'The following selections are taken from Illumination']:
+ hits=[m.start() for m in re.finditer(re.escape(needle),raw)];windows.append({'needle_latin1':needle.decode('latin1'),'count':len(hits),'extents':[{'start':max(0,i-250),'end':min(len(raw),i+4000),'latin1':raw[max(0,i-250):min(len(raw),i+4000)].decode('latin1')} for i in hits]})
+save('physical-source-rechecks.json',physical);save('physical-windows.json',windows)
+sourcequote=[]
+for seq in [313,314,315]:
+ row=next(x for x in source if x['seq']==seq)
+ for idx,claim in enumerate(read('english/'+str(seq)+'/errata-audit.json')['five_grounds']):
+  text=claim['found_verbatim'];field=claim['field'];start=row[field].index(text);assert [start,start+len(text)]==claim['source_character_range'];sourcequote.append({'seq':seq,'original_index':idx,'kind':claim['kind'],'field':field,'quote':text,'range':[start,start+len(text)],'exact':True})
+save('original-errata-quote-rechecks.json',sourcequote)
+save('data-schema.json',{'spine_rows':db.execute('select count(*) from corpus_segments').fetchone()[0],'corpus_rows':len(corpus),'master_collections':{k:len(v) for k,v in master.items() if isinstance(v,list)},'queries_rechecked':len(queries),'lexical_terms':len(lex),'full_original_master_claims':len(lexcheck),'physical_archives':len(physical)})
+print(json.dumps({'queries':len(queries),'lexical_terms':len(lex),'full_original_master_claims':len(lexcheck),'physical_archives':len(physical),'source_quotes':len(sourcequote)}))

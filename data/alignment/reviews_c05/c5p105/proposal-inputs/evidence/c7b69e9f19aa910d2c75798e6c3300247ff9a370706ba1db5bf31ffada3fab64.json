@@ -1,0 +1,18 @@
+{
+  "kind": "read-scope discovery mistake; filename-only exposure",
+  "command": "pwd && rg --files -g 'AGENTS.md' -g 'campaignAGENTS.md' -g 'proposal-protocol.md' -g 'english-brief.md' -g '!**/.git/**'",
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "tool_output_reference": "functions.exec exec_command chunk_id 306338; first tool call of this subagent turn",
+  "tool_output_metadata": {
+    "exit_code": 0,
+    "wall_time_seconds": 0.922042709,
+    "original_token_count": 7673,
+    "max_output_tokens_requested": 3000,
+    "reported_total_lines": 334
+  },
+  "exact_visible_output_prefix": "Warning: truncated output (original token count: 7673)\nTotal output lines: 334\n\n/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment\n",
+  "exposure": "Returned AGENTS/brief/protocol filenames across the workspace, including other-angle and review paths. No files named in that discovery output were opened based on that output. Subsequent reads used explicit permitted sources and own English paths.",
+  "preservation_limit": "The tool itself truncated the discovery stdout, so complete native stdout was not retained and is not claimed preserved. The exact command and returned tool metadata are recorded here; no replay was made because replay would repeat the scope violation. The conversation retains the displayed truncated result.",
+  "notification": "Immediately disclosed to parent /root, which instructed continuation on explicit permitted paths with this provenance disclosure.",
+  "independence_claim": "English judgments were made from original source/governance/lexical evidence, without reading other-angle/root/reconciliation/semantic contents. Absolute filename isolation is not claimed."
+}

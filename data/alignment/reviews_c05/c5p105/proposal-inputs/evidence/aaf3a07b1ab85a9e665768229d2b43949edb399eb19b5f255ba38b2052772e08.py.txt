@@ -1,0 +1,19 @@
+from pathlib import Path
+import subprocess,sys,os,json,hashlib
+own=Path(__file__).resolve().parents[1]
+name=sys.argv[1]
+dest=own/'native'/name
+dest.mkdir(parents=True,exist_ok=False)
+stdin=b''
+args=sys.argv[2:]
+if args[0]=='--stdin':
+    stdin=Path(args[1]).read_bytes();args=args[2:]
+(dest/'stdin.bin').write_bytes(stdin)
+r=subprocess.run(args,input=stdin,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+(dest/'stdout.bin').write_bytes(r.stdout)
+(dest/'stderr.bin').write_bytes(r.stderr)
+(dest/'exit.txt').write_text(str(r.returncode)+'\n')
+(dest/'execution.json').write_text(json.dumps({'argv':args,'cwd':str(Path.cwd()),'stdin_bytes':len(stdin),'stdout_bytes':len(r.stdout),'stderr_bytes':len(r.stderr),'exit':r.returncode,'sha256':{k:hashlib.sha256(v).hexdigest() for k,v in [('stdin',stdin),('stdout',r.stdout),('stderr',r.stderr)]}},indent=2)+'\n')
+sys.stdout.buffer.write(r.stdout)
+sys.stderr.buffer.write(r.stderr)
+raise SystemExit(r.returncode)

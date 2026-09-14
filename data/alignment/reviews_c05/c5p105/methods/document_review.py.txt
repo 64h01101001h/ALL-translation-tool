@@ -1,0 +1,140 @@
+"""Bank the fresh skeptic's manually decided correspondences and refutations."""
+from pathlib import Path
+import collections,datetime,hashlib,json,re
+S=Path(__file__).resolve().parents[1];B=S.parent;R=B/'reconciled'
+def read(p):return json.loads(Path(p).read_bytes())
+def save(p,d):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+reasons={
+313:'''w1|The temporal demonstrative refers to the immediately preceding viewing situation; the English nominal recast preserves that reference, with Again consider excluded.
+w2|The first abbreviated cognition noun belongs to the denial of necessary identity, so the first plural valid perceptions is its object.
+w3|This equality predicate concerns the initial cognitions, before the possibility claim; first identical is correct.
+w4|nges par and dgos jointly predicate necessity/certainty under mi. The complete not necessarily true is a defensible d3 predicate recast; true is not separately assigned to dgos.
+w5|kyang concedes the initial denial while introducing the possible case; Even though is the complete concessive expression.
+w6|The second cognition noun occurs in the assertion of possible identity, selecting the second plural English perception group.
+w7|The second mtshungs is possible identity, selecting identical at the end of that sentence, not the preceding denied necessity.
+w8|The first gsum counts the possible perceptions. It does not count the later produced objects.
+w9|srid pa is possibility here, not the homographic cyclic-existence sense; the first possible is the matching predicate.
+w10|las is the karmic cause of producing the objects; the explicit karma is local GMR usage, with curated deeds unmodified.
+w11|dbang expresses causal force; supplied by the is outside the noun.
+w12|The produced dngos po are objects. Different and each one are explanatory additions outside this lexical extent.
+w13|The whole tshad grub pa is the glossary-attested validly-established compound. Its relational confirmed by a valid perception is retained intact, with two semantic members.
+m13a|This tshad is the validating cognition within the compound, singular valid perception; both ranges are strictly internal to w13.
+m13b|grub pa is the establishment member, confirmed, before its validating complement in English. It is internal to w13, not the later proof verb.
+w15|The second gsum counts produced objects, matching the second three.
+w16|bskyed is causative origination. GMR describes the resulting objects as start to exist; the whole verbal periphrasis is attested, excluding can and supplied participants.
+w17|nus contributes ability, can, in the object-production assertion. Existential be is not included.
+w18|sngar points back to the earlier proof and selects already.
+w19|The instrumental reasoning noun rigs pas is rendered logically; its inseparable final s remains intact.
+w20|'grub concludes the earlier logical proof and selects established, independently of the prior compound's confirmed.
+w21|de bskyed nus na resumes the production just established and conditions the next analogy. The whole since this is possible preserves the anaphor and condition; And stays outside.
+w22|The second karmic noun belongs to the vessel-cognition conclusion, selecting its own karma occurrence.
+w23|The second causal force belongs to that same conclusion, not the earlier object production.
+w24|snod names the vessel perceived; the article a is excluded.
+w25|The fourth Tibetan cognition item is the third plural English perception phrase, in the vessel conclusion; the singular compound member is separate.
+w26|This mtshungs modifies the vessel perceptions as equivalent, not the final adverb equally.
+w27|The third gsum counts the final equivalent perceptions and matches the third three.
+w28|Final skye ba denotes arising of those perceptions. The second start to exist preserves the verbal meaning; could and distributed possibility remain outside.
+w29|yang adds the analogous possibility and is explicitly rendered as well at the end.
+w30|The last equality predicate compares the two possibilities, selecting equally rather than the earlier equivalent modifier.
+w31|The opening A yin te and final phyir enclose one explanation, with established object-production followed by its conditional vessel analogy. The sole because introduces that complete reason. te receives no duplicate causal allocation.''',
+314:'''w1|rnag names pus in the opening three-object list; the is outside.
+w2|la sogs pa continues the named pus example with the other alternatives. And the other is the exact established closing formula; the inferred numeral two is excluded. Its own enumerative function licenses the initial and.
+w3|This dngos po is the opening three objects, not the extra objects excluded from their space.
+w4|gsum po counts those initial objects as three; each of the is outside.
+w5|spyir is the generality adverb; Generally speaking is a conventional whole adverbial rendering, not an added act of speech.
+w6|The first go sa names the general spatial locus. The following which they themselves occupy explains it with supplied participants; space is a separately attested complete lexical sense.
+w7|The first 'gog is the general blocking predicate. It does not own the explanatory objects or entering frame.
+w8|The second dngos po classifies the three objects as things of a type; the lexical things is correctly selected.
+p9|The first kyang contrasts general blocking with the noncontradiction in the viewing circumstance. The explicit though following contradiction supplies its concession.
+f10|de ltar supplies demonstrative manner, this way, as a phrase. This is licensed by de, not supplied.
+w11|bltas pa is the viewing action, looking, with beings and auxiliary are outside.
+f12|de'i tshe na is the full situational locative phrase; in this situation preserves that relation.
+w13|The second spatial noun belongs to the current-viewing clause and selects the second space; they occupy remains explanatory framing.
+w14|'gog contributes blocking within 'gog byed. The tighter lexical block is sound; byed's predicating contribution is recorded as fused/distributed, not denied or given another atom.
+w15|The third dngos po is the object classification denied in this circumstance. It skips the English excluded participants.
+p16|The first ma negates that classification and takes the first not.
+p17|mi negates 'gal and is a standalone particle, matching no. The flat source-function analysis retains the negation without inventing a compound member requirement.
+w18|'gal is the contradiction predicate, rendered by the noun contradiction; separate d5 is appropriate for this lexical item.
+w19|The first ri rab licenses the full world-mountain name before square. The extra repeated English name before round remains unbanked.
+w20|gru bzhi is the established four-cornered shape compound. Square in shape preserves its attested complete meaning; no arbitrary square-only trim is needed.
+w21|zlum po denotes the contrasted round shape; round in shape is the full attested sense, without the supplied repeated mountain.
+w22|The second la sogs pa closes the shape enumeration as and the like. Its enumeration licenses the full formula; bare like would obscure this local closing role.
+w23|The third go sa is the mountain-shapes' general locus, selecting the third space. The relative-clause participants are outside.
+w24|The third 'gog is the mountain blocking predicate and selects the third block.
+w25|The fourth dngos po classifies the mountain forms as objects, excluding the additional other things.
+p26|The second kyang introduces the possibility of a shared locus despite exclusion, rendered Nevertheless.
+w27|The second explicit ri rab names the single shared mountain locus, selecting English occurrence three. Occurrence two is the earlier elliptical repetition.
+w28|gcig quantifies that shared mountain as single.
+w29|The final go sa denotes an occupied locus; space taken up is itself a full HGM sense. The by a single mountain relation is outside this noun.
+w30|de resumes the two shapes as these; things is explanatory and excluded.
+w31|gnyis ka explicitly says both of those forms and selects both.
+w33|srid pa asserts possibility of their sharing a locus. Occupy remains distributed over locative na and yod pa, with no separate false atom.
+w34|lcags gong is the material-object noun compound, ball of steel; both lexical constituents are present and the article is excluded.
+m35|lcags is steel within the ball compound, not the later steel-mantra occurrence; strictly tighter on both sides.
+m36|gong is ball within that compound; the inversion of constituent order is correctly resolved inside its parent.
+w37|dmar 'bar ba is the attested red-hot compound. Both color and blazing-heat meanings have unique tighter English members.
+m37a|dmar supplies red before the hyphen inside w37, with no separate color claim outside the compound.
+m37b|'bar ba supplies the hot component of red-hot; this is the first hot and is distinct from tsha ba's later temperature predicate.
+w38|tsha ba is the independent hot predicate after the steel ball. The earlier hot remains inside the red-hot parent.
+p39|The third kyang contrasts ordinary heat with the mantra-conditioned contact and selects but.
+w40|lcags sngags forms the local named steel-mantra noun. Mantra of steel contains exactly its two nouns and their relation; no participant is captured.
+m41|The second lcags selects steel within the mantra parent, distinct from the ball material.
+m42|sngags selects mantra within the same compound; both ranges are uniquely internal.
+w43|btab pa is applying/using the mantra, rendered used. He has is outside the lexical verb.
+w44|lag pas is the inflected hand noun. The final instrumental s stays attached; supplied his and on are excluded from the lexical English.
+w45|reg pa is touching and owns touches. The genitive ending links the act to tshe and is outside the tighter verb span.
+w46|myong is the experience predicate recast as feels. byar gyur pa and the experiencer's reference remain distributed; this selected root does not falsely take the entire resultative construction.
+w47|The first reg bya is the tactile object experienced, the first sensation.
+w48|This tsha ba is the heat quality in the denied sensation-of-heat classification; the genitive marker is outside the lexical noun.
+w49|The second reg bya is the classification being denied and selects the second sensation.
+p50|The second ma negates the sensation-of-heat identification and takes the middle not.
+w51|The last tsha ba is the heat quality negated within the final tactile classification, selecting the last heat.
+p52|The third ma negates that heat quality and selects the final not, not the preceding copular denial.
+w53|The last reg bya names the positively asserted sensation of non-heat and selects the third sensation.''',
+315:'''w1|The complete local author name is one identity. Its exact full HGM entry includes this standing identifying epithet; retaining the whole name is licensed by the campaign's established-epithet convention, without phonetic members.
+w2|mdzod is the abbreviated work title rendered Abhidharmakosha. It already accounts for this title and does not provide a separate rtsa ba exponent.
+w3|Tik is the commentary noun; the article and preposition to are outside.
+w4|The conventional work title is the exact named Illumination of the Path to Freedom. Its internal title relations license the full extent and its three semantic members.
+w5|thar is the Freedom member inside the title, excluding to; it is strictly tighter than the parent.
+w6|lam is the Path member inside the same title, excluding the article; it is strictly tighter than the parent.
+w7|gsal byed contributes Illumination as a whole member. All three contiguous children resolve inside w4 despite English inversion.
+w8|rtsa ba names the accompanying root text, with no separately alignable root-text wording in this complete English field. Abhidharmakosha belongs to mdzod. Null records only the absent separate exponent, without denying contextual reference to a root work.
+w9|Final las is an ablative source particle, matching from before the work title; it is distinct from the karmic noun in313.'''
+}
+manual={seq:dict(line.split('|',1) for line in text.splitlines()) for seq,text in reasons.items()};resolved=read(S/'resolved-spans.json');judgments=[];original_dispositions=[];omissions=[];proof=[]
+orig={(x['angle'],x['seq']):x['resolved'] for x in read(S/'evidence/original-replay-reuse.json')}
+for seq in [313,314,315]:
+ rows=[x for x in resolved if x['seq']==seq];assert set(manual[seq])=={x['id'] for x in rows};d=read(R/str(seq)/'final-decisions.json');byid={x['id']:x for x in d['spans']};assert len(byid)==len(rows)
+ for x in rows:
+  q=byid[x['id']];assert all(q[k]==v for k,v in x.items());judgments.append({**x,'verdict':'SOUND_PROVISIONAL','fresh_independent_reason':manual[seq][x['id']],'parent':q['parent'],'all_tibetan_occurrences':q['literal_tibetan_occurrences'],'all_english_occurrences':q['literal_english_occurrences']})
+ od=read(R/str(seq)/'original-dispositions.json');seen=[]
+ for x in od['spans']:
+  angle=x['angle'];original=x['original'];key=(angle,original['id']);assert key not in seen;seen.append(key);actual=next(y for y in orig[(angle,seq)] if y['id']==original['id']);assert all(original[k]==v for k,v in actual.items())
+  for fid,reason in x['final_rationales'].items():assert byid[fid]['rationale']==reason
+  if x['decision']=='retained':
+   assert len(x['final_ids'])==1;final=byid[x['final_ids'][0]];assert all(original[k]==final[k] for k in ['d','tib','eng','tib_range','eng_range']);assert x['reason']=='Same selected source/English extent independently supported; source-function depth retained.'
+  original_dispositions.append({'seq':seq,'angle':angle,'original_id':original['id'],'original_decision':x['decision'],'final_ids':x['final_ids'],'fresh_verdict':'ACCEPT_RECONCILIATION_DISPOSITION','fresh_reasons':[manual[seq][fid] for fid in x['final_ids']] or ['The omitted yod pa/occupy atom depends on locative na and the space relation; no isolated lexical mapping is established. This is not a null or source erratum.']})
+ assert len(seen)==sum(len(orig[(a,seq)]) for a in ['tibetan','english'])
+ for item in d['material_omissions']:omissions.append({'seq':seq,**item,'fresh_verdict':'KEEP_UNBANKED','fresh_review_note':'Rechecked against the complete source and selected spans; the stated distributed/supplied/apparatus content does not justify an additional separate atom or null.'})
+ proof.append({'seq':seq,'original_decisions':len(seen),'final_decisions':len(rows),'material_omissions':len(d['material_omissions']),'complete_unwrapped_ranges_preserved':True})
+save(S/'span-decisions.json',judgments);save(S/'original-disposition-review.json',original_dispositions);save(S/'omission-decisions.json',omissions);save(S/'evidence/decision-coverage.json',proof)
+# Every source-suspicion gets five independent grounds. Rechecked originals remain alongside.
+rows={x['seq']:x for x in read(S/'evidence/independent-source.json')};parallel=read(S/'evidence/independent-parallel-comparisons.json');qproof=read(S/'evidence/independent-query-rechecks.json');refutations=[]
+fresh_defenses={
+313:['No anomalous spelling is demonstrated by the modal construction tshad mtshungs nges par mi dgos. Its certainty/necessity roles are coherent; no replacement is established.','The produced objects are separately confirmed by valid perception. Repetition follows distinct arguments, and the quoted English supplies no identifiable typo.','Not necessary and possible are logically compatible. The distinction is already developed in312, so this is not a contradiction to correct.','The complete original physical paragraph ends here. C18 appends a different section; a shared prefix does not establish a missing C05 continuation.','Final comma/shad and paragraph line breaks are the original presentation; no demonstrated formatting emendation follows.'],
+314:['LCAGS SNGAGS is the original steel-mantra phrase and both constituents have the required lexical senses. Seven digital attestations do not establish a typo or independent publication.','The non-heat phrasing is awkward but intelligible, preserving the explicit negative qualification of the tactile object. No typographic replacement is demonstrated.','The source deliberately contrasts general exclusion with this viewing situation and mantra-conditioned sensation. The lexical review does not justify rewriting its philosophical example.','The course shape explicitly names314 in the following-heading class. The physical file contains the close, page number and next reading heading, so this is preserved apparatus.','The bracketed Stream notice is an original editorial close. It remains visible outside lexical spans, with no new formatting defect.'],
+315:['BRTZOMS appears in the physical file and fourteen corpus rows; exact brtsoms pa has compose/written/composed HGM senses. These attest the reading but establish no correct replacement. The concern stays unfiled.','The whole locally printed author identity and epithet match the exact full HGM name entry; no name typo is established.','The title and commentary type agree with mdzod Tik thar lam gsal byed. Missing separate accompanying-root wording supports the explicit exponent null, not an authorial factual correction.','The physical source places63 and the next section title between introduction and root verse. This is the existing following-heading class, not a new defect.','The mixed-case ACIP tIK is source coding for the converted Tik; canonical conversion, not case normalization, governs it.']}
+for seq in [313,314,315]:
+ for i,c in enumerate(read(R/str(seq)/'errata-audit.json')['all_original_source_suspicions']):
+  g=c['five_refutation_grounds'];assert g['e_counts']['field_lengths']=={f:len(rows[seq][f]) for f in ['acip','wylie','english']};assert g['e_counts']['register_count_rechecked']==194;counts=[]
+  for q in g['e_counts']['relevant_counts']:
+   actual=next(z for z in qproof if z['origin']==q['original_file'] and z['index']==q['original_index']);assert actual['count']==q['claimed']==q['remeasured'] and actual['params']==q['params'];counts.append({'origin':q['original_file'],'index':q['original_index'],'measured':actual['count']})
+  witnesses=[x for x in parallel if x['seq']==seq]
+  assert g['b_parallel']['witnesses']==[{'course':x['parallel_full_row']['course'],'seq':x['parallel_full_row']['seq'],'shared_english_prefix_chars':x['english_common_prefix_chars'],'equal_fields':x['equal_fields']} for x in witnesses]
+  refutations.append({'seq':seq,'original_index':i,'kind':c['original_kind'],'found':c['found'],'refuted':True,'reason':fresh_defenses[seq][i],'five_grounds':{'a_quote':g['a_quote']['occurrences_in_each_source_field'],'b_parallel':{'full_comparisons':'evidence/independent-parallel-comparisons.json','witnesses':g['b_parallel']['witnesses'],'independence_proved':False,'finding':'These are exact digital/shared extents only; neither source correctness nor separate publication is inferred.'},'c_registered':{'register_origin':'8575edf1e0de695677194c1fde60f1d9e2c2f204','direct_duplicates':[],'existing_following_heading_class_applies':g['c_registered']['applicable_following_heading_class'],'full_records_preserved':True},'d_defensibility':fresh_defenses[seq][i],'e_counts':counts},'suggested_severity':None,'suggested_confidence':None,'new_erratum':False})
+save(S/'five-ground-refutations.json',refutations);save(S/'bank-ready-errata.json',[])
+allow={'pages_c05':{'c5p105/s314w2':'C05:314 la sogs pa at Wylie[5:15] is the explicit enumerative continuation after rnag. It licenses the complete HGM closing formula and the other at English[65:78]; contextual two is excluded.','c5p105/s314w22':'C05:314 la sogs pa at Wylie[196:206] explicitly closes the square/round list and licenses the full HGM formula and the like at English[546:558]. Both and and the belong to that conventional enumerative expression.'}}
+save(S/'span-head-allow-needed.json',allow)
+segments=read(S/'evidence/fresh-native-proof.json');receipt=read(S/'evidence/later-acceptance-receipt.json');review={'schema':'c05-independent-semantic-review-v1','producer':'Codex fresh independent skeptical semantic reviewer','verdict':'APPROVE','spec_verdict':'APPROVE','quality_verdict':'APPROVE','status':'PROVISIONAL machine review; root integration and human editorial acceptance are separate','open_findings':[],'segments':segments,'total_spans':len(judgments),'total_nulls':sum(x['eng'] is None for x in judgments),'total_word_pairs':sum(x['d']==5 and x['eng'] is not None for x in judgments),'total_d7':sum(x['d']==7 for x in judgments),'source_origin_git_commit':receipt['source_origin_git_commit'],'later_supplied_acceptance_baseline':receipt['later_supplied_acceptance_baseline'],'later_baseline_accepted_through':312,'original_reconciler_consumed_later_baseline':False,'reconciliation_freeze_sha256':hashlib.sha256((R/'FINAL-FREEZE.manifest.json').read_bytes()).hexdigest(),'integration_requirements':['Register the two independently licensed supplied-head entries exactly; the original unchanged head gate refusal is preserved.','Run the required landing/registration/build/fidelity/retention/coverage checks before accepting the page.'],'limits':['All alignments remain provisional, with no hgm_gloss promotion.','Digital witnesses establish only measured shared text, not independent publication or ingestion.','Original English filename-discovery incident exposed other-angle paths; no other-angle contents were reported read, but full discovery output was tool-truncated and cannot be reconstructed.','Original/own failed and superseded attempts are preserved.','Practice7 PDF bytes are preserved; no fresh visual/textual PDF inspection or publication lineage is claimed.','No MAIN application, desktop runtime or device acceptance follows from this semantic review.']}
+assert (review['total_spans'],review['total_nulls'],review['total_word_pairs'],review['total_d7'])==(95,1,67,11)
+save(S/'review.json',review);print(json.dumps({'verdict':review['verdict'],'counts':[95,1,67,11],'original_dispositions':len(original_dispositions),'material_omissions':len(omissions),'five_ground_screens':len(refutations)}))

@@ -1,0 +1,921 @@
+{
+  "seq": 313,
+  "producer": "Codex independent reconciler",
+  "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+  "all_original_source_suspicions": [
+    {
+      "original_claim_origin": "english/313/errata-audit.json",
+      "original_index": 0,
+      "original_kind": "TIBETAN_SPELLING",
+      "found": "TSAD MTSUNGS NGES PAR MI DGOS",
+      "original_claim_complete": {
+        "kind": "TIBETAN_SPELLING",
+        "field": "acip",
+        "found_verbatim": "TSAD MTSUNGS NGES PAR MI DGOS",
+        "source_character_range": [
+          13,
+          42
+        ],
+        "decision": "No source spelling defect demonstrated. Full ACIP and Wylie have four exact corpus occurrences each; selected tshad/mtshungs/nges par readings are attested in full HGM senses.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            217917,
+            218193
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [
+              13
+            ],
+            "wylie": [],
+            "english": []
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 458,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 850,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C18",
+              "seq": 1134,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 48,
+              "shared_english_prefix_chars": 552,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "The local modal/causal prose is readable Tibetan; no anomalous correction is identified. Compare the complete original ACIP, Wylie and context. Exact digital parallels support attestation only.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 0,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 1,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 2,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well."
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 16,
+              "claimed": 15,
+              "remeasured": 15,
+              "params": [
+                "tshad mtshungs"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 276,
+            "wylie": 284,
+            "english": 558
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "The local modal/causal prose is readable Tibetan; no anomalous correction is identified. Compare the complete original ACIP, Wylie and context. Exact digital parallels support attestation only.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/313/errata-audit.json",
+      "original_index": 1,
+      "original_kind": "ENGLISH_TYPO",
+      "found": "three different objects, each one confirmed by a valid perception",
+      "original_claim_complete": {
+        "kind": "ENGLISH_TYPO",
+        "field": "english",
+        "found_verbatim": "three different objects, each one confirmed by a valid perception",
+        "source_character_range": [
+          314,
+          379
+        ],
+        "decision": "No demonstrated typo. C15:458 and C16:850 share the entire ACIP/Wylie/English text fields; recurrence alone does not establish correctness or publication independence.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            217917,
+            218193
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              314
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 458,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 850,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C18",
+              "seq": 1134,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 48,
+              "shared_english_prefix_chars": 552,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "The repeated valid-perception language is defensible explanatory English. The printed text is complete in the physical ASCII reading and its repeated nouns have distinct arguments.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 0,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 1,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 2,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well."
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 16,
+              "claimed": 15,
+              "remeasured": 15,
+              "params": [
+                "tshad mtshungs"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 276,
+            "wylie": 284,
+            "english": 558
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "The repeated valid-perception language is defensible explanatory English. The printed text is complete in the physical ASCII reading and its repeated nouns have distinct arguments.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/313/errata-audit.json",
+      "original_index": 2,
+      "original_kind": "ENGLISH_FACTUAL_ERROR",
+      "found": "Even though it is not necessarily true that the valid perceptions are identical",
+      "original_claim_complete": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "field": "english",
+        "found_verbatim": "Even though it is not necessarily true that the valid perceptions are identical",
+        "source_character_range": [
+          36,
+          115
+        ],
+        "decision": "The local argument distinguishes necessity from possibility, not a contradiction. Complete original context 307–321 was read; no factual correction supported.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            217917,
+            218193
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              36
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 458,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 850,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C18",
+              "seq": 1134,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 48,
+              "shared_english_prefix_chars": 552,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "The text denies necessity while asserting possibility. These are different modal claims, so their juxtaposition does not establish a factual contradiction.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 0,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 1,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 2,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well."
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 16,
+              "claimed": 15,
+              "remeasured": 15,
+              "params": [
+                "tshad mtshungs"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 276,
+            "wylie": 284,
+            "english": 558
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "The text denies necessity while asserting possibility. These are different modal claims, so their juxtaposition does not establish a factual contradiction.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/313/errata-audit.json",
+      "original_index": 3,
+      "original_kind": "INGEST_ARTEFACT",
+      "found": "start to exist as well.",
+      "original_claim_complete": {
+        "kind": "INGEST_ARTEFACT",
+        "field": "english",
+        "found_verbatim": "start to exist as well.",
+        "source_character_range": [
+          535,
+          558
+        ],
+        "decision": "Complete local physical paragraph reaches this same end. C18:1134 has the same Tibetan and shared English prefix, plus a different appended continuation; full English identity is not claimed for C18. E-107 cap and E-071 marker class checked; neither applies.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            217917,
+            218193
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              535
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 458,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 850,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C18",
+              "seq": 1134,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 48,
+              "shared_english_prefix_chars": 552,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "The complete local paragraph reaches start to exist as well. C18 has additional appended material; that does not show a missing tail in C05. Length is below the cap and real Tibetan excludes the running-head class.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 0,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 1,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 2,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well."
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 16,
+              "claimed": 15,
+              "remeasured": 15,
+              "params": [
+                "tshad mtshungs"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 276,
+            "wylie": 284,
+            "english": 558
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "The complete local paragraph reaches start to exist as well. C18 has additional appended material; that does not show a missing tail in C05. Length is below the cap and real Tibetan excludes the running-head class.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/313/errata-audit.json",
+      "original_index": 4,
+      "original_kind": "FORMATTING",
+      "found": "MTSUNGS PA'I PHYIR,",
+      "original_claim_complete": {
+        "kind": "FORMATTING",
+        "field": "acip",
+        "found_verbatim": "MTSUNGS PA'I PHYIR,",
+        "source_character_range": [
+          257,
+          276
+        ],
+        "decision": "Comma/shad punctuation remains exact. Physical paragraph wraps are formatting, with no new formatting defect demonstrated.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            217917,
+            218193
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [
+              257
+            ],
+            "wylie": [],
+            "english": []
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [
+            {
+              "course": "C15",
+              "seq": 458,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C16",
+              "seq": 850,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie",
+                "english"
+              ]
+            },
+            {
+              "course": "C18",
+              "seq": 1134,
+              "shared_english_prefix_chars": 558,
+              "equal_fields": [
+                "acip",
+                "wylie"
+              ]
+            },
+            {
+              "course": "P7",
+              "seq": 48,
+              "shared_english_prefix_chars": 552,
+              "equal_fields": []
+            }
+          ],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "Comma/shad punctuation and line folding are original presentation; no new formatting correction is demonstrated.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 0,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 1,
+              "claimed": 4,
+              "remeasured": 4,
+              "params": [
+                "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 2,
+              "claimed": 3,
+              "remeasured": 3,
+              "params": [
+                "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well."
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 16,
+              "claimed": 15,
+              "remeasured": 15,
+              "params": [
+                "tshad mtshungs"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 276,
+            "wylie": 284,
+            "english": 558
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "Comma/shad punctuation and line folding are original presentation; no new formatting correction is demonstrated.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    }
+  ],
+  "tibetan_angle_complete_original_screen": {
+    "seq": 313,
+    "source_full_row": {
+      "id": 1695,
+      "course": "C05",
+      "seq": 313,
+      "acip": "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,",
+      "wylie": "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir",
+      "english": "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well."
+    },
+    "field_lengths": {
+      "acip": 276,
+      "wylie": 284,
+      "english": 558
+    },
+    "has_1500_cap": false,
+    "five_grounds": {
+      "a_exact_source_quote": {
+        "result": "All source fields independently reopened and six-field snapshots verified; no proposed correction.",
+        "quotes": {
+          "acip": "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,",
+          "wylie": "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir",
+          "english": "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well."
+        }
+      },
+      "b_parallel_witness": {
+        "result": "Comparisons are digital field relations only. No independent publication or ingestion lineage established. A shared prefix supports only that exact extent. P7 differs in punctuation and/or ending.",
+        "comparisons": [
+          {
+            "course": "C15",
+            "seq": 458,
+            "equal_acip": true,
+            "equal_wylie": true,
+            "equal_english": true,
+            "english_common_prefix_chars": 558,
+            "source_english_chars": 558,
+            "parallel_english_chars": 558,
+            "source_unshared_tail": "",
+            "parallel_unshared_tail": "",
+            "full_original_row": {
+              "id": 6009,
+              "course": "C15",
+              "seq": 458,
+              "acip": "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,",
+              "wylie": "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir",
+              "english": "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well.",
+              "raw": "{\"course\": \"C15\", \"acip\": \"DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,\", \"wylie\": \"de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir\", \"english\": \"Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well.\"}"
+            }
+          },
+          {
+            "course": "C16",
+            "seq": 850,
+            "equal_acip": true,
+            "equal_wylie": true,
+            "equal_english": true,
+            "english_common_prefix_chars": 558,
+            "source_english_chars": 558,
+            "parallel_english_chars": 558,
+            "source_unshared_tail": "",
+            "parallel_unshared_tail": "",
+            "full_original_row": {
+              "id": 6868,
+              "course": "C16",
+              "seq": 850,
+              "acip": "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,",
+              "wylie": "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir",
+              "english": "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well.",
+              "raw": "{\"course\": \"C16\", \"acip\": \"DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,\", \"wylie\": \"de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir\", \"english\": \"Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well.\"}"
+            }
+          },
+          {
+            "course": "C18",
+            "seq": 1134,
+            "equal_acip": true,
+            "equal_wylie": true,
+            "equal_english": false,
+            "english_common_prefix_chars": 558,
+            "source_english_chars": 558,
+            "parallel_english_chars": 1006,
+            "source_unshared_tail": "",
+            "parallel_unshared_tail": " ************ When the text of the Essence of Eloquence was taught by Geshe Tupten Rinchen, he took great pains to point out that it is not correct--as some Western scholars have stated--that Je Tsongkapa himself adhered to the tenets of the Mind-Only School. The following selection to show that he follows, of course, the beliefs of the Consequence group is taken the concluding pages of our root text [ACIP electronic text S5396, ff. 112a-112b].",
+            "full_original_row": {
+              "id": 8929,
+              "course": "C18",
+              "seq": 1134,
+              "acip": "DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,",
+              "wylie": "de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir",
+              "english": "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well. ************ When the text of the Essence of Eloquence was taught by Geshe Tupten Rinchen, he took great pains to point out that it is not correct--as some Western scholars have stated--that Je Tsongkapa himself adhered to the tenets of the Mind-Only School. The following selection to show that he follows, of course, the beliefs of the Consequence group is taken the concluding pages of our root text [ACIP electronic text S5396, ff. 112a-112b].",
+              "raw": "{\"course\": \"C18\", \"acip\": \"DE'I TSE NA, TSAD MTSUNGS NGES PAR MI DGOS KYANG , TSAD MTSUNGS GSUM YOD PA SRID PA YIN TE, LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB, DE BSKYED NUS NA, LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR,\", \"wylie\": \"de'i tshe na, tshad mtshungs nges par mi dgos kyang , tshad mtshungs gsum yod pa srid pa yin te, las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub, de bskyed nus na, las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir\", \"english\": \"Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as well. ************ When the text of the Essence of Eloquence was taught by Geshe Tupten Rinchen, he took great pains to point out that it is not correct--as some Western scholars have stated--that Je Tsongkapa himself adhered to the tenets of the Mind-Only School. The following selection to show that he follows, of course, the beliefs of the Consequence group is taken the concluding pages of our root text [ACIP electronic text S5396, ff. 112a-112b].\"}"
+            }
+          },
+          {
+            "course": "P7",
+            "seq": 48,
+            "equal_acip": false,
+            "equal_wylie": false,
+            "equal_english": false,
+            "english_common_prefix_chars": 552,
+            "source_english_chars": 558,
+            "parallel_english_chars": 552,
+            "source_unshared_tail": " well.",
+            "parallel_unshared_tail": "",
+            "full_original_row": {
+              "id": 34937,
+              "course": "P7",
+              "seq": 48,
+              "acip": "DE'I TSE NA TSAD MTSUNGS NGES PAR MI DGOS KYANG TSAD MTSUNGS GSUM YOD PA, SRID PA YIN TE LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB DE BSKYED NUS NA LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR",
+              "wylie": "de'i tshe na tshad mtshungs nges par mi dgos kyang tshad mtshungs gsum yod pa, srid pa yin te las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub de bskyed nus na las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir",
+              "english": "Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as",
+              "raw": "{\"course\": \"P7\", \"acip\": \"DE'I TSE NA TSAD MTSUNGS NGES PAR MI DGOS KYANG TSAD MTSUNGS GSUM YOD PA, SRID PA YIN TE LAS KYI DBANG GIS DNGOS PO TSAD GRUB PA GSUM BSKYED NUS PA SNGAR GYI RIGS PAS 'GRUB DE BSKYED NUS NA LAS KYI DBANG GIS SNOD TSAD MTSUNGS GSUM SKYE BA YOD PAR YANG MTSUNGS PA'I PHYIR\", \"wylie\": \"de'i tshe na tshad mtshungs nges par mi dgos kyang tshad mtshungs gsum yod pa, srid pa yin te las kyi dbang gis dngos po tshad grub pa gsum bskyed nus pa sngar gyi rigs pas 'grub de bskyed nus na las kyi dbang gis snod tshad mtshungs gsum skye ba yod par yang mtshungs pa'i phyir\", \"english\": \"Again consider this same situation. Even though it is not necessarily true that the valid perceptions are identical, it is possible for there to be three valid perceptions here which happen to be identical. This is because, as we have already established logically, there can be a case where by the force of karma three different objects, each one confirmed by a valid perception, start to exist. And since this is possible, then it is equally possible that, by the force of karma, three equivalent valid perceptions of a vessel could start to exist as\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+            }
+          }
+        ],
+        "source_record_search_file": "full-corpus-query-records.json",
+        "no_other_batch_proposals_read": true
+      },
+      "c_registered_classes": {
+        "result": "Following-heading apparatus on rows 314 and 315 is registered and not newly filed. Converter, running-head, footnote, row-spill and cap classes were considered.",
+        "original_register_sha256": "a7573cd73f59bff9a41ddeecff5b3d1f3056f4fa7b3ce7a600eff378f27e87a6",
+        "register_count": 194,
+        "duplicate_batch_records": [],
+        "full_class_records_file": "registered-class-records.json"
+      },
+      "d_lexical_source_interpretation": {
+        "result": "Valid-perception identity is possible but not necessary. The tshad-grub compound and causative bskyed are supported by full HGM meanings; no need to correct source. Modal/anaphoric distribution is omitted without null claims.",
+        "master_files": [
+          "full-master-records.json",
+          "supplemental-full-master-records.json"
+        ]
+      },
+      "e_measured_evidence_and_limits": {
+        "result": "All query counts are lengths of preserved full result lists. All original hash comparisons pass. Exact selected ranges and repeated occurrences are in decisions.json; no generation or mechanical pass is claimed to establish correspondence.",
+        "evidence_files": [
+          "source-pins.json",
+          "snapshot-verification.json",
+          "full-parallel-equality.json",
+          "physical-extents.json",
+          "parallel-physical-originals.json"
+        ],
+        "physical_file": "C05ReadingASCII.txt",
+        "physical_sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+      }
+    },
+    "five_category_dispositions": {
+      "TIBETAN_SPELLING": "No defensible new spelling defect established; original ACIP and derived Wylie retained.",
+      "ENGLISH_TYPO": "No defensible new typo established in the translated prose.",
+      "ENGLISH_FACTUAL_ERROR": "No independently established new factual correction; interpretive/lexical uncertainty is not promoted into an erratum.",
+      "INGEST_ARTEFACT": "Registered heading apparatus preserved on 314/315; none of these three English fields is exactly 1500 characters. No new class filed.",
+      "FORMATTING": "Reading/selection headings and numbering remain verbatim. No new formatting erratum proposed."
+    },
+    "errata_proposed": []
+  },
+  "tibetan_screen_disposition": "Original five-ground screen is independently revisited above by source-spelling, English-typo/factual, ingestion and formatting suspicion; every original parallel, quoted source, register count and complete master record was reopened. No new defect established.",
+  "new_errata": []
+}

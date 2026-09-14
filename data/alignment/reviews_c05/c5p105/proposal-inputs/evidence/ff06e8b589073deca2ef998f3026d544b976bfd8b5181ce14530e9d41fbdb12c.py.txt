@@ -1,0 +1,74 @@
+from pathlib import Path
+import json,gzip,sqlite3,hashlib,re
+O=Path(__file__).resolve().parents[1];E=O/'evidence'
+def read(p):return json.loads(p.read_bytes())
+def save(p,d):p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+base=read(E/'proposal-baseline.json');source={r['seq']:r for r in read(E/'original-source.json')};db=sqlite3.connect(Path(base['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+corpus=json.loads(gzip.decompress(Path(base['source_pins']['corpus']['path']).read_bytes()));register=read(E/'pinned/docs/errata_register.json');assert len(register)==194
+classes=[r for r in register if r['item_id'] in ['E-044','E-071','E-076','E-106','E-107','E-111','E-121']];save(E/'registered-class-records.json',{'historical_register_origin':base['commit'],'register_count':len(register),'purpose':'Full original class entries as historical registration evidence; embedded historical unrelated counts are not asserted remeasured.','records':classes,'direct_batch_records':[r for r in register if any('C05:'+str(s) in str(r.get('segment','')) for s in [313,314,315])]})
+extra=[]
+for i,q in enumerate(read(E/'originals/english/evidence/corpus-queries.json')):
+ records=q.get('corpus_records',q.get('records',[]))
+ if not records:continue
+ for r in records:assert corpus[r['corpus_index']]==r['record']
+ if 'comparison' in q:
+  row=source[q['origin_seq']];actual=[{'corpus_index':j,'record':r} for j,r in enumerate(corpus) if all(r.get(k)==row[k] for k in ['acip','wylie','english'])];expect=q['count']
+ elif 'origin_seq' in q:
+  row=source[q['origin_seq']];actual=[{'corpus_index':j,'record':r} for j,r in enumerate(corpus) if r.get(q['field'])==row[q['field']]];expect=q['corpus_count']
+ else:
+  term=q['params'][0];actual=[{'corpus_index':j,'record':r} for j,r in enumerate(corpus) if term in r.get(q['field'],'')];expect=q['corpus_count']
+ assert actual==records and len(actual)==expect
+ extra.append({'original_query_index':i,'claimed_count':expect,'rechecked_count':len(actual),'every_complete_original_corpus_record_exact':True})
+save(E/'external-corpus-count-rechecks.json',extra)
+# Reopen all listed parallels in both spine and corpus; measure exact shared extents, including P7.
+parallels={}
+for t in read(E/'originals/tibetan/evidence/five-ground-errata-review.json'):
+ seq=t['seq'];row=source[seq];out=[]
+ for old in t['five_grounds']['b_parallel_witness']['comparisons']:
+  other=dict(db.execute('select * from corpus_segments where course=? and seq=?',(old['course'],old['seq'])).fetchone());assert other==old['full_original_row']
+  n=0
+  for a,b in zip(row['english'],other['english']):
+   if a!=b:break
+   n+=1
+  assert n==old['english_common_prefix_chars']
+  for field in ['acip','wylie','english']:assert (row[field]==other[field])==old['equal_'+field]
+  corpus_matches=[{'index':i,'record':r} for i,r in enumerate(corpus) if r.get('course')==other['course'] and all(r.get(f)==other[f] for f in ['acip','wylie','english'])]
+  out.append({'source_seq':seq,'parallel_full_row':other,'equal_fields':[f for f in ['acip','wylie','english'] if row[f]==other[f]],'shared_english_prefix_chars':n,'source_unshared_tail':row['english'][n:],'parallel_unshared_tail':other['english'][n:],'corpus_matches':corpus_matches,'independent_publication_or_ingestion_lineage_established':False})
+ parallels[seq]=out
+save(E/'independent-parallel-extents.json',parallels)
+physical=Path(base['source_pins']['physical']['path']).read_bytes();flat=' '.join(physical.decode('latin1').split());phys=[]
+for seq,row in source.items():
+ ac=physical.find(row['acip'].encode('ascii'));en=flat.find(row['english']);assert ac>=0 and en>=0
+ phys.append({'seq':seq,'original_physical_path':base['source_pins']['physical']['path'],'sha256':hashlib.sha256(physical).hexdigest(),'acip_exact_raw_byte_range':[ac,ac+len(row['acip'])],'english_full_source_exact_after_whitespace_linefold':True,'english_range_in_linefolded_latin1':[en,en+len(row['english'])],'linefold_operation':"' '.join(raw.decode('latin1').split()); original bytes retained; no source edit"})
+save(E/'physical-complete-row-proof.json',phys)
+D={
+(313,'TIBETAN_SPELLING'):'The local modal/causal prose is readable Tibetan; no anomalous correction is identified. Compare the complete original ACIP, Wylie and context. Exact digital parallels support attestation only.',
+(313,'ENGLISH_TYPO'):'The repeated valid-perception language is defensible explanatory English. The printed text is complete in the physical ASCII reading and its repeated nouns have distinct arguments.',
+(313,'ENGLISH_FACTUAL_ERROR'):'The text denies necessity while asserting possibility. These are different modal claims, so their juxtaposition does not establish a factual contradiction.',
+(313,'INGEST_ARTEFACT'):'The complete local paragraph reaches start to exist as well. C18 has additional appended material; that does not show a missing tail in C05. Length is below the cap and real Tibetan excludes the running-head class.',
+(313,'FORMATTING'):'Comma/shad punctuation and line folding are original presentation; no new formatting correction is demonstrated.',
+(314,'TIBETAN_SPELLING'):'LCAGS SNGAGS is printed in the physical source and has the constituent steel/mantra senses. Seven corpus records attest the phrase, without establishing publication independence or proving every spelling correct.',
+(314,'ENGLISH_TYPO'):'Something not heat is awkward but defensible as the explicit non-heat classification in the source. The local philosophical contrast supplies no evidence of a typographic slip.',
+(314,'ENGLISH_FACTUAL_ERROR'):'The mountain and heat statements are presented under general/situational and mantra-conditioned qualifications. The source is reporting this philosophical example; no editorial correction is justified by an alignment judgment about occupy.',
+(314,'INGEST_ARTEFACT'):'The physical source visibly sequences the closing notice, page number and following reading heading. The following-heading class explicitly covers C05:314 in the pinned course shape; do not re-file it.',
+(314,'FORMATTING'):'The bracketed Stream close is an original editorial notice and the heading layout is physically present. Preserve it as apparatus without inventing a Tibetan translation correspondence.',
+(315,'TIBETAN_SPELLING'):'BRTZOMS is original. Beyond the authors’ exact brtsoms/brtsom searches, the full local brtsoms pa record has HGM compose/written/composed as well as selections. This establishes lexical attestation, not a required spelling emendation; no correct expected replacement is demonstrated.',
+(315,'ENGLISH_TYPO'):'The exact full rgyal ba dge dun grub HGM record includes the standing identifying epithet. This is the locally named author, not an inserted second identity; no typo shown.',
+(315,'ENGLISH_FACTUAL_ERROR'):'mdzod Tik and the complete HGM thar lam gsal byed title agree with the commentary attribution. Unexpressed accompanying-root wording is an omission in this rendering, not sufficient evidence for an authorial factual correction.',
+(315,'INGEST_ARTEFACT'):'The physical source prints 63 and the following title before the next verse. This is registered following-heading apparatus, preserved unchanged and not re-filed.',
+(315,'FORMATTING'):'Lowercase t in MDZOD tIK is original ACIP Sanskrit coding; the pinned canonical conversion yields Tik. It is not a capitalization typo.'}
+queries=read(E/'original-query-rechecks.json')
+for seq in [313,314,315]:
+ row=source[seq];original=read(E/'originals/english'/str(seq)/'errata-audit.json');audit=[]
+ for i,claim in enumerate(original['five_grounds']):
+  found=claim['found_verbatim'];found_fields={f:[m.start() for m in re.finditer(re.escape(found),row[f])] for f in ['acip','wylie','english']};assert any(found_fields.values())
+  clas=seq in [314,315] and claim['kind'] in ['INGEST_ARTEFACT','FORMATTING'] and not(seq==315 and claim['kind']=='FORMATTING')
+  relevant=[x for x in queries if (x['origin']=='english/evidence/corpus-queries.json' and ((seq==313 and x['index'] in [0,1,2,16]) or (seq==314 and x['index'] in [4,5,6,12,17,18,21]) or (seq==315 and x['index'] in [8,9,10,13,14,15,19,20])))]
+  audit.append({'original_claim_origin':'english/'+str(seq)+'/errata-audit.json','original_index':i,'original_kind':claim['kind'],'found':found,'original_claim_complete':claim,'expected':None,'decision':'refuted / no new erratum','refuted':True,'five_refutation_grounds':{
+  'a_quote':{'occurrences_in_each_source_field':found_fields,'quote_present':True,'source_full_row':'../evidence/original-source.json'},
+  'b_parallel':{'complete_verified_comparisons':'../evidence/independent-parallel-extents.json','witnesses':[{ 'course':x['parallel_full_row']['course'],'seq':x['parallel_full_row']['seq'],'shared_english_prefix_chars':x['shared_english_prefix_chars'],'equal_fields':x['equal_fields']} for x in parallels[seq]],'C16_P1_TCS_search_scope':'The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.','independent_publication_or_ingestion_lineage_established':False,'finding':'Shared text supports only its measured extent. No claim of independent publication is used to refute a defect.'},
+  'c_registered':{'source_origin':base['commit'],'direct_batch_duplicate_records':[],'applicable_following_heading_class':clas,'authority':'Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.','full_class_records':'../evidence/registered-class-records.json'},
+  'd_defensibility':{'finding':D[(seq,claim['kind'])],'full_master_records':'../evidence/full-lexical-evidence.json','physical_full_row_proof':'../evidence/physical-complete-row-proof.json','expected_correction_established':False},
+  'e_counts':{'all_original_sql_queries':'../evidence/original-query-rechecks.json','all_external_corpus_counts':'../evidence/external-corpus-count-rechecks.json','relevant_counts':[{'original_file':x['origin'],'original_index':x['index'],'claimed':x['original_count'],'remeasured':x['rechecked_count'],'params':x['params']} for x in relevant],'field_lengths':{f:len(row[f]) for f in ['acip','wylie','english']},'register_count_rechecked':len(register),'original_frozen_counts_and_generator_replays':'../evidence/independent-original-freeze-verification.json and original-native-replay.json'}},'decisive_reason':D[(seq,claim['kind'])],'confidence_of_new_defect':'not established; default refuted','new_erratum':False})
+ save(O/str(seq)/'errata-audit.json',{'seq':seq,'producer':'Codex independent reconciler','source_origin':base['commit'],'all_original_source_suspicions':audit,'tibetan_angle_complete_original_screen':next(x for x in read(E/'originals/tibetan/evidence/five-ground-errata-review.json') if x['seq']==seq),'tibetan_screen_disposition':'Original five-ground screen is independently revisited above by source-spelling, English-typo/factual, ingestion and formatting suspicion; every original parallel, quoted source, register count and complete master record was reopened. No new defect established.','new_errata':[]})
+print(json.dumps({'complete_five_ground_screens':15,'source_rows_physically_exact_after_documented_linefold':3,'external_corpus_count_claims_rechecked':len(extra),'registered_entries':len(register)}))

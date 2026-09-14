@@ -1,0 +1,8 @@
+from canonical_adapter import G
+import sys,json,sqlite3
+spec=json.load(sys.stdin);out=[];db=sqlite3.connect(G.B.SPINE)
+for seg in spec['segments']:
+ w,e=db.execute('select wylie,english from corpus_segments where course=? and seq=?',(spec['course'],seg['seq'])).fetchone();spans=seg['spans'];byid={s['id']:s for s in spans}
+ tr=G.resolve(w,spans,'tib',seg['seq']);er=G.resolve(e,G.with_members(spans,[byid[x] for x in seg['eng_order']],e),'eng',seg['seq'])
+ for s in spans:out.append({**s,'seq':seg['seq'],'tib_range':tr[s['id']],'eng_range':er.get(s['id'])})
+print(json.dumps(out,ensure_ascii=False,indent=2))

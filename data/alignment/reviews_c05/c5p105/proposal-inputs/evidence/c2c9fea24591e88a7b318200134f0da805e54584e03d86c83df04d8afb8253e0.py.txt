@@ -1,0 +1,138 @@
+from pathlib import Path
+import json,re
+OWN=Path(__file__).resolve().parents[1]
+rows={r['seq']:r for r in json.loads((OWN/'evidence/source.json').read_text())}
+def matches(text,piece):
+    return [m.start() for m in re.finditer(re.escape(piece),text) if (not piece[0].isalnum() or m.start()==0 or not text[m.start()-1].isalnum()) and (not piece[-1].isalnum() or m.end()==len(text) or not text[m.end()].isalnum())]
+def write(seq,title,plans,note,omissions):
+    target=OWN/str(seq);target.mkdir(exist_ok=True)
+    row=rows[seq];spans=[];decisions=[];expected={};parent=None
+    for n,plan in enumerate(plans,1):
+        d,t,e,ti,ei,why=plan
+        sp={'id':'w'+str(n),'d':d,'tib':t,'eng':e}
+        if e is None:sp['nul']=why
+        spans.append(sp)
+        if d==7:
+            assert parent is not None
+            tp=row['wylie'][slice(*parent['tib_range'])]
+            ep=row['english'][slice(*parent['eng_range'])]
+            assert tp.count(t)==1 and ep.count(e)==1
+            a=parent['tib_range'][0]+tp.index(t);b=parent['eng_range'][0]+ep.index(e)
+        else:
+            th=matches(row['wylie'],t);assert len(th)>=ti,(seq,t,th,ti);a=th[ti-1]
+            if e is not None:
+                eh=matches(row['english'],e);assert len(eh)>=ei,(seq,e,eh,ei);b=eh[ei-1]
+        record={'id':sp['id'],'d':d,'tib':t,'eng':e,'tib_range':[a,a+len(t)],'eng_range':[b,b+len(e)] if e is not None else None,'source_occurrence':ti,'english_occurrence':ei,'reason':why}
+        if d!=7:parent=record if d==5 else None
+        decisions.append(record)
+    order=[r['id'] for r in sorted([r for r in decisions if r['eng'] is not None and r['d']!=7],key=lambda r:r['eng_range'][0])]
+    spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':note}]}
+    (target/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+    (target/'decisions.json').write_text(json.dumps({'producer':'Codex, English-first independent provisional proposal','source_origin':'8575edf1e0de695677194c1fde60f1d9e2c2f204 through309; not future through312 acceptance','spans':decisions,'omissions':omissions},ensure_ascii=False,indent=2)+'\n')
+    (target/'errata.json').write_text('[]\n')
+
+write(313,'equivalent valid perceptions',[
+(3,"de'i tshe na",'this same situation',1,1,'The situational phrase refers back to the three beings viewing a vessel; Again consider is supplied discourse scaffolding.'),
+(5,'tshad','valid perceptions',1,1,'First tshad is the perceptions whose necessary identity is denied.'),
+(5,'mtshungs','identical',1,1,'First identity predicate, within the concessive denial.'),
+(3,'nges par mi dgos','not necessarily true',1,1,'Necessity and certainty are jointly recast; the whole contiguous predicate avoids assigning necessarily to either contributing item alone.'),
+(6,'kyang','Even though',1,1,'Standalone concessive particle governs the first necessity denial.'),
+(5,'tshad','valid perceptions',2,2,'Second tshad belongs to the possible three identical perceptions.'),
+(5,'mtshungs','identical',2,2,'Second identity predicate describes what may happen, not what must happen.'),
+(5,'gsum','three',1,1,'Three possible equivalent perceptions, first English numeral.'),
+(5,'srid pa','possible',1,1,'Lexical possibility predicate before the proof; source function is a predicate, d5.'),
+(5,'las','karma',1,1,'Karmic force producing the three objects; attestation leaves curated deeds gloss unchanged.'),
+(5,'dbang','force',1,1,'First force, in the production of objects.'),
+(5,'dngos po','objects',1,1,'Objects here are the three things each validated; different and each one are outside.'),
+(5,'tshad','valid perception',3,1,'Third tshad is singular in each object confirmed by a valid perception, not either plural perception group.'),
+(5,'grub pa','confirmed',1,1,'The participial predicate confirmed is separate from the validating tshad; by a stays outside.'),
+(5,'gsum','three',2,2,'Second source numeral selects three different objects.'),
+(5,'bskyed','start to exist',1,1,'Causative production is recast as the objects starting to exist; complete HGM bskyed senses include this exact lexical rendering.'),
+(5,'nus','can',1,1,'Lexical ability nus contributes can in there can be a case, not the supplied have of the preceding proof.'),
+(5,'sngar','already',1,1,'Earlier reasoning is English already; first/only already in the local proof clause.'),
+(5,'rigs pas','logically',1,1,'Instrumental reasoning noun is the lexical adverb logically; retain pas whole and do not detach agentive s.'),
+(5,"'grub",'established',1,1,'The proof predicate established, distinct from earlier grub pa confirmed.'),
+(3,'de bskyed nus na','since this is possible',1,1,'Conditional/anaphoric production clause is wholly recast; this refers to producing the three validated objects.'),
+(5,'las','karma',2,2,'Second karmic force concerns the equivalent vessel perceptions.'),
+(5,'dbang','force',2,2,'Second force, explicitly delimited by the final possibility clause.'),
+(5,'snod','vessel',1,1,'Object of the final valid perceptions, not a new supplied container.'),
+(5,'tshad','valid perceptions',4,3,'Fourth tshad / third plural English instance, after equivalent and before of a vessel.'),
+(5,'mtshungs','equivalent',3,1,'Third identity item qualifies the final perceptions and is rendered equivalent.'),
+(5,'gsum','three',3,3,'Third source/English numeral, the equivalent vessel perceptions.'),
+(5,'skye ba','start to exist',1,2,'Final arising verb selects the second start to exist, whose subject is the three perceptions.'),
+(6,'yang','as well',1,1,'Additive particle corresponds to the final as well.'),
+(5,'mtshungs','equally',4,1,'Final equivalence predicate compares the possibility of both cases, rendered equally.'),
+(6,'phyir','because',1,1,'Final causal marker licenses the explanatory because introducing the two-part proof; this is the only because.'),
+],
+'PROVISIONAL machine alignment by Codex (English-first). GMR English is verbatim; no HGM glossary promotion or semantic acceptance is claimed. Repeated perceptions are resolved by their local subjects: initial necessity denial, possible identical perceptions, objects individually confirmed, and final vessel perceptions. The complete necessity predicate and anaphoric conditional are d3 recasts. Causative bskyed and final skye ba each own their respective start to exist; supplied participants and auxiliary frames remain outside. No new erratum is proposed.',
+['yod pa/yod par and copular scaffolding are distributed through possibility frames; omitted rather than falsely nulled.','The final English possible and could are distributed across yod par, mtshungs, and the recast analogy; no separate unsupported atom is asserted.','Case/connective material not selected remains outside; Again consider, here, which happen to be, different, each one, we have, and by a are supplied or distributed.'])
+
+write(314,'space and sensations',[
+(5,'rnag','pus',1,1,'First named object is pus; the other two are contextually supplied.'),
+(5,'dngos po','objects',1,1,'The three objects in the first noun phrase; not the later other objects blocked.'),
+(5,'gsum po','three',1,1,'Numeral with nominal suffix refers to the three objects; each of the is supplied.'),
+(5,'spyir','Generally speaking',1,1,'Complete attested lexical discourse adverb.'),
+(5,'go sa','space',1,1,'First occupied spatial locus. All HGM senses include the longer relative clause, but its explicit they themselves participants are supplied; keep the lexical space.'),
+(5,"'gog",'block',1,1,'First active blocking predicate; the ability nus is distributed into type.'),
+(5,'dngos po','things',2,1,'The first predicate things of the type; not other objects after block.'),
+(5,'bltas pa','looking',1,1,'Visual act in the second situational clause. The beings are is supplied context, not part of the lexical verb.'),
+(3,"de'i tshe na",'in this situation',1,1,'Situational time phrase in the actual viewing circumstance.'),
+(5,'go sa','space',2,2,'Second spatial locus, within the denial of blocking in the actual situation.'),
+(5,"'gog",'block',2,2,'Second blocking predicate lies under the objects are not denial.'),
+(5,'dngos po','objects',3,3,'Objects in they are not objects, following the situational clause; skips first objects and first block other objects.'),
+(6,'ma','not',1,1,'Negates the object predicate; first not in they are not objects.'),
+(5,"mi 'gal",'no contradiction',1,1,'Established negative consistency predicate; GMR no contradiction is complete.'),
+(7,'mi','no',1,1,'Unique tighter negative member of mi gal / no contradiction.'),
+(7,"'gal",'contradiction',1,1,'Unique tighter predicate member of the same parent.'),
+(5,'ri rab','central mountain of the world',1,1,'Only one ri rab licenses the initial mountain name; the second English mountain is supplied under ellipsis and remains outside.'),
+(5,'gru bzhi','square in shape',1,1,'Complete HGM lexical shape rendering; no arbitrary shortening to square.'),
+(5,'zlum po','round in shape',1,1,'Complete HGM lexical shape rendering for the contrasted world mountain.'),
+(5,'la sogs pa','the like',2,1,'Closing likeness gesture only; preceding and stays outside. First la sogs pa expands to context-supplied other two and is omitted.'),
+(5,'go sa','space',3,3,'Third occupied-space term, the general mountain blocking statement.'),
+(5,"'gog",'block',3,3,'Third blocking predicate, general mountain example.'),
+(5,'dngos po','objects',4,4,'Predicate objects of the mountain example, fourth literal objects in English.'),
+(6,'kyang','Nevertheless',2,1,'Second yin kyang closes the mountain contrast; nevertheless is its separate connective rendering.'),
+(5,'ri rab','central mountain of the world',2,3,'Second source ri rab selects the third English mountain, after single; second English occurrence was supplied under ellipsis.'),
+(5,'gcig','single',1,1,'Numeral of the one shared mountain locus.'),
+(5,'go sa','space taken up',4,1,'Fourth go sa is the occupied space taken up by a single mountain; complete attested lexical extent has no supplied participant inside.'),
+(5,'gnyis ka','both',1,1,'Both square and round examples; these things outside the numeral.'),
+(5,'srid pa','possible',1,1,'Possibility of coexistence in one locus; lexical predicate.'),
+(5,'lcags gong','ball of steel',1,1,'Nominal material compound steel-ball; complete noun extent, article excluded.'),
+(7,'lcags','steel',1,1,'Unique material member inside ball of steel.'),
+(7,'gong','ball',1,1,'Unique object-form member inside ball of steel.'),
+(5,"dmar 'bar ba",'red-hot',1,1,'Established compound attested as red-hot.'),
+(7,'dmar','red',1,1,'Unique color member before the hyphen.'),
+(7,"'bar ba",'hot',1,1,'Unique burning member of red-hot, not the subsequent predicate hot.'),
+(5,'tsha ba','hot',1,2,'First tsha ba is the independent predicate in something that is hot; first English hot is already inside red-hot.'),
+(6,'kyang','but',3,1,'Third kyang contrasts ordinary heat with the mantra-conditioned touch.'),
+(5,'lcags','steel',2,2,'Second lcags belongs to the mantra, not the ball material.'),
+(5,'sngags','mantra',1,1,'Mantra noun; the of construction remains outside.'),
+(5,'btab pa','used',1,1,'Use/application verb; he has is supplied auxiliary and participant, excluded despite longer HGM senses.'),
+(5,'lag pas','hand',1,1,'Instrumental noun retained whole; his and on are outside.'),
+(5,'reg pa','touches',1,1,'Physical contact predicate after mantra use; person and it supplied.'),
+(5,'myong byar','feels',1,1,'Experiential content paraphrased as feels; that he is supplied, nominal relational scaffolding is omitted.'),
+(5,'reg bya','sensation',1,1,'First tactile-object noun: The sensation that he feels.'),
+(5,'tsha ba','heat',2,1,'Heat in the sensation-of-heat denial; independent from both hot instances.'),
+(5,'reg bya','sensation',2,2,'Second tactile-object noun, the denied sensation of heat.'),
+(6,'ma','not',2,2,'Second ma negates the copular identification is not a sensation of heat.'),
+(5,'tsha ba','heat',3,2,'Final heat is the quality negated inside sensation of something not heat.'),
+(6,'ma','not',3,3,'Third ma is the internal non-heat qualification, not the previous copular not.'),
+(5,'reg bya','sensation',3,3,'Third tactile noun, the positive classification as non-heat sensation.'),
+],
+'PROVISIONAL machine alignment by Codex (English-first); GMR English remains verbatim and unpromoted. Four spatial occurrences, three blocking predicates, and the two source/three English mountain names were checked in their own clauses. The second English mountain is supplied under ellipsis. Complete attested square in shape and round in shape are retained; the spatial relative clauses supply participants and stay outside space. The steel-ball and red-hot compounds carry distinct tighter members. Three tactile-object occurrences and three negations retain their local scopes. The Stream closing note, 128, institute/course/Reading Seven heading remain unaligned original apparatus under the registered following-heading class. No new erratum is proposed.',
+['First la sogs pa is rendered and the other two: the numeral two and participants are contextually supplied; the closing gesture is distributed, so omitted.','First kyang is distributed over the following no-contradiction and though frame; omitted, not nulled.','de ltar / de and phan tshun are distributed through this way and reciprocal other-things wording; no isolated participant atom is claimed.','nus/byed contributions to block/type and lta bu/phyir explanation frames are distributed; omitted rather than nulled.','The source second ri rab aligns the third English mountain; English second mountain is an explicit expansion of the elided round example.','Nominal/copular and experiential framing outside the selected lexical heads remains omitted; no semantic correction to hot/non-heat is proposed.','The complete bracketed Stream close and following reading title/number are original apparatus, retained verbatim.'])
+
+write(315,'illumination of the path to freedom',[
+(5,"rgyal ba dge 'dun grub",'Gyalwa Gendun Drup, His Holiness the First Dalai Lama',1,1,'Whole proper author-name plus standing identifying epithet: full HGM dge dun grub gloss expressly includes His Holiness the First Dalai Lama. No phonetic name members are made.'),
+(5,'mdzod','Abhidharmakosha',1,1,'Conventional abbreviated root-title; definite article excluded.'),
+(5,'Tik','commentary',1,1,'Standalone commentary noun, separate from root-title and following named commentary title.'),
+(5,'thar lam gsal byed','Illumination of the Path to Freedom',1,1,'Conventional proper title kept whole at d5; full title is expressly attested in HGM senses.'),
+(7,'thar','Freedom',1,1,'Unique tighter freedom member in the named title.'),
+(7,'lam','Path',1,1,'Unique tighter path member, contiguous with the other d7 children under one d5 parent.'),
+(7,'gsal byed','Illumination',1,1,'Unique tighter illuminating member; canonical English member ordering handles the title reversal.'),
+(5,'rtsa ba',None,1,None,'Root text is mentioned explicitly in rtsa ba dang bcas pa, but no separate root-text exponent occurs in GMR English; title Abhidharmakosha is already licensed by mdzod.'),
+(6,'las','from',1,1,'Final standalone ablative source particle licenses from in the introductory selection frame; it is not the karma noun of 313.'),
+],
+'PROVISIONAL machine alignment by Codex (English-first); GMR English remains verbatim, with no HGM glossary promotion or semantic acceptance. The proper author-name retains the standing identifying epithet supported by the full HGM name gloss. The conventional commentary title has three unique, strictly tighter d7 members under its d5 parent. Root text (rtsa ba) has no separately alignable English exponent and is explicitly null; authorship and accompanying-root framing are otherwise omitted where distributed. BRTZOMS/brtsoms is quoted unchanged: corpus recurrence establishes attestation, not correctness or ingestion lineage. The following 63 and Black, White, and Other Deeds Defined heading are retained unaligned under the registered following-heading class. No new erratum is proposed.',
+['kyis brtsoms pai expresses authorship, distributed into commentary ... by; the open agentive-by issue is not decided by inventing a composition word or false null.','dang bcas pa accompanying-root construction is not separately rendered; omitted, with the explicit root-text noun alone nulled.','The following selections are taken and article frames remain outside the final las/from particle.','63 Black, White, and Other Deeds Defined is the following section heading, physically verified, preserved outside all lexical spans.'])
+print(json.dumps({'authored':[313,314,315],'stage':'pre-generation source decisions and canonical notes complete'}))

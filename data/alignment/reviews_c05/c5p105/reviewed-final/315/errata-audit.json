@@ -1,0 +1,836 @@
+{
+  "seq": 315,
+  "producer": "Codex independent reconciler",
+  "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+  "all_original_source_suspicions": [
+    {
+      "original_claim_origin": "english/315/errata-audit.json",
+      "original_index": 0,
+      "original_kind": "TIBETAN_SPELLING",
+      "found": "BRTZOMS",
+      "original_claim_complete": {
+        "kind": "TIBETAN_SPELLING",
+        "field": "acip",
+        "found_verbatim": "BRTZOMS",
+        "source_character_range": [
+          28,
+          35
+        ],
+        "decision": "Fourteen corpus rows contain BRTZOMS/brtsoms, including C05:28,146,315. Physical original here has BRTZOMS. Full master exact brtsoms/brtsom searches return no HGM senses; brtsams senses do not independently prove an emendation. Possible tense/spelling concern stays uncertain and unfiled, with no proposed correction.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            220566,
+            220661
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [
+              28
+            ],
+            "wylie": [],
+            "english": []
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "BRTZOMS is original. Beyond the authors’ exact brtsoms/brtsom searches, the full local brtsoms pa record has HGM compose/written/composed as well as selections. This establishes lexical attestation, not a required spelling emendation; no correct expected replacement is demonstrated.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 8,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "RGYAL BA DGE 'DUN GRUB KYIS BRTZOMS PA'I MDZOD tIK THAR LAM GSAL BYED RTZA BA DANG BCAS PA LAS,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 9,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "rgyal ba dge 'dun grub kyis brtsoms pa'i mdzod Tik thar lam gsal byed rtsa ba dang bcas pa las"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 10,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "The following selections are taken from Illumination of the Path to Freedom, a commentary to the Abhidharmakosha by Gyalwa Gendun Drup, His Holiness the First Dalai Lama. 63 Black, White, and Other Deeds Defined"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 13,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "BRTZOMS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 14,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "brtsoms"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 15,
+              "claimed": 19,
+              "remeasured": 19,
+              "params": [
+                "brtsom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 19,
+              "claimed": 22,
+              "remeasured": 22,
+              "params": [
+                "Illumination of the Path to Freedom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 20,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Black, White, and Other Deeds Defined"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 95,
+            "wylie": 94,
+            "english": 211
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "BRTZOMS is original. Beyond the authors’ exact brtsoms/brtsom searches, the full local brtsoms pa record has HGM compose/written/composed as well as selections. This establishes lexical attestation, not a required spelling emendation; no correct expected replacement is demonstrated.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/315/errata-audit.json",
+      "original_index": 1,
+      "original_kind": "ENGLISH_TYPO",
+      "found": "Gyalwa Gendun Drup, His Holiness the First Dalai Lama",
+      "original_claim_complete": {
+        "kind": "ENGLISH_TYPO",
+        "field": "english",
+        "found_verbatim": "Gyalwa Gendun Drup, His Holiness the First Dalai Lama",
+        "source_character_range": [
+          116,
+          169
+        ],
+        "decision": "The name and standing epithet recur in C05:28; full HGM name gloss supports the identifying epithet. No typo demonstrated; exact six-field row is preserved.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            220566,
+            220661
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              116
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "The exact full rgyal ba dge dun grub HGM record includes the standing identifying epithet. This is the locally named author, not an inserted second identity; no typo shown.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 8,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "RGYAL BA DGE 'DUN GRUB KYIS BRTZOMS PA'I MDZOD tIK THAR LAM GSAL BYED RTZA BA DANG BCAS PA LAS,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 9,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "rgyal ba dge 'dun grub kyis brtsoms pa'i mdzod Tik thar lam gsal byed rtsa ba dang bcas pa las"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 10,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "The following selections are taken from Illumination of the Path to Freedom, a commentary to the Abhidharmakosha by Gyalwa Gendun Drup, His Holiness the First Dalai Lama. 63 Black, White, and Other Deeds Defined"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 13,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "BRTZOMS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 14,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "brtsoms"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 15,
+              "claimed": 19,
+              "remeasured": 19,
+              "params": [
+                "brtsom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 19,
+              "claimed": 22,
+              "remeasured": 22,
+              "params": [
+                "Illumination of the Path to Freedom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 20,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Black, White, and Other Deeds Defined"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 95,
+            "wylie": 94,
+            "english": 211
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "The exact full rgyal ba dge dun grub HGM record includes the standing identifying epithet. This is the locally named author, not an inserted second identity; no typo shown.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/315/errata-audit.json",
+      "original_index": 2,
+      "original_kind": "ENGLISH_FACTUAL_ERROR",
+      "found": "Illumination of the Path to Freedom, a commentary to the Abhidharmakosha",
+      "original_claim_complete": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "field": "english",
+        "found_verbatim": "Illumination of the Path to Freedom, a commentary to the Abhidharmakosha",
+        "source_character_range": [
+          40,
+          112
+        ],
+        "decision": "Title/type agree with the original MDZOD tIK THAR LAM GSAL BYED attribution and complete HGM title, mdzod and Tik senses. No independently demonstrated factual correction.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            220566,
+            220661
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              40
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "mdzod Tik and the complete HGM thar lam gsal byed title agree with the commentary attribution. Unexpressed accompanying-root wording is an omission in this rendering, not sufficient evidence for an authorial factual correction.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 8,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "RGYAL BA DGE 'DUN GRUB KYIS BRTZOMS PA'I MDZOD tIK THAR LAM GSAL BYED RTZA BA DANG BCAS PA LAS,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 9,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "rgyal ba dge 'dun grub kyis brtsoms pa'i mdzod Tik thar lam gsal byed rtsa ba dang bcas pa las"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 10,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "The following selections are taken from Illumination of the Path to Freedom, a commentary to the Abhidharmakosha by Gyalwa Gendun Drup, His Holiness the First Dalai Lama. 63 Black, White, and Other Deeds Defined"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 13,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "BRTZOMS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 14,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "brtsoms"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 15,
+              "claimed": 19,
+              "remeasured": 19,
+              "params": [
+                "brtsom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 19,
+              "claimed": 22,
+              "remeasured": 22,
+              "params": [
+                "Illumination of the Path to Freedom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 20,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Black, White, and Other Deeds Defined"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 95,
+            "wylie": 94,
+            "english": 211
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "mdzod Tik and the complete HGM thar lam gsal byed title agree with the commentary attribution. Unexpressed accompanying-root wording is an omission in this rendering, not sufficient evidence for an authorial factual correction.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/315/errata-audit.json",
+      "original_index": 3,
+      "original_kind": "INGEST_ARTEFACT",
+      "found": "63 Black, White, and Other Deeds Defined",
+      "original_claim_complete": {
+        "kind": "INGEST_ARTEFACT",
+        "field": "english",
+        "found_verbatim": "63 Black, White, and Other Deeds Defined",
+        "source_character_range": [
+          171,
+          211
+        ],
+        "decision": "Physical source prints 63 and following topic title between the introduction and next root verse. Registered following-heading class; preserved and not re-filed. English length below E-107 cap; real Tibetan excludes E-071.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            220566,
+            220661
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              171
+            ]
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": true,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "The physical source prints 63 and the following title before the next verse. This is registered following-heading apparatus, preserved unchanged and not re-filed.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 8,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "RGYAL BA DGE 'DUN GRUB KYIS BRTZOMS PA'I MDZOD tIK THAR LAM GSAL BYED RTZA BA DANG BCAS PA LAS,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 9,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "rgyal ba dge 'dun grub kyis brtsoms pa'i mdzod Tik thar lam gsal byed rtsa ba dang bcas pa las"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 10,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "The following selections are taken from Illumination of the Path to Freedom, a commentary to the Abhidharmakosha by Gyalwa Gendun Drup, His Holiness the First Dalai Lama. 63 Black, White, and Other Deeds Defined"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 13,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "BRTZOMS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 14,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "brtsoms"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 15,
+              "claimed": 19,
+              "remeasured": 19,
+              "params": [
+                "brtsom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 19,
+              "claimed": 22,
+              "remeasured": 22,
+              "params": [
+                "Illumination of the Path to Freedom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 20,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Black, White, and Other Deeds Defined"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 95,
+            "wylie": 94,
+            "english": 211
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "The physical source prints 63 and the following title before the next verse. This is registered following-heading apparatus, preserved unchanged and not re-filed.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    },
+    {
+      "original_claim_origin": "english/315/errata-audit.json",
+      "original_index": 4,
+      "original_kind": "FORMATTING",
+      "found": "MDZOD tIK",
+      "original_claim_complete": {
+        "kind": "FORMATTING",
+        "field": "acip",
+        "found_verbatim": "MDZOD tIK",
+        "source_character_range": [
+          41,
+          50
+        ],
+        "decision": "Lowercase t is original ACIP Sanskrit coding and canonical conversion yields Tik; not a case typo. The physical number/heading layout is retained as apparatus.",
+        "disposition": "no new erratum filed",
+        "evidence": {
+          "exact_source_row": "../evidence/original-spine-context.json",
+          "full_master_records": "../evidence/lexical-evidence.json",
+          "parallel_query_results": "../evidence/corpus-queries.json",
+          "physical_original": "../evidence/C05ReadingASCII.original.bin",
+          "physical_acip_byte_range": [
+            220566,
+            220661
+          ],
+          "independent_publication_or_ingestion_lineage_proven": false
+        }
+      },
+      "expected": null,
+      "decision": "refuted / no new erratum",
+      "refuted": true,
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [
+              41
+            ],
+            "wylie": [],
+            "english": []
+          },
+          "quote_present": true,
+          "source_full_row": "../evidence/original-source.json"
+        },
+        "b_parallel": {
+          "complete_verified_comparisons": "../evidence/independent-parallel-extents.json",
+          "witnesses": [],
+          "C16_P1_TCS_search_scope": "The original broad corpus SQL queries were rerun without course filtering, covering C16, P1 and every TCS course; complete hits including nonmatches-by-absence are preserved.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "Shared text supports only its measured extent. No claim of independent publication is used to refute a defect."
+        },
+        "c_registered": {
+          "source_origin": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+          "direct_batch_duplicate_records": [],
+          "applicable_following_heading_class": false,
+          "authority": "Pinned ALIGNMENT_LAYER_SPEC markers/apparatus and PROPOSE/RECONCILE briefs; C05 course shape names 314. Full E-106 entry distinguishes heading-only from attached note-body class.",
+          "full_class_records": "../evidence/registered-class-records.json"
+        },
+        "d_defensibility": {
+          "finding": "Lowercase t in MDZOD tIK is original ACIP Sanskrit coding; the pinned canonical conversion yields Tik. It is not a capitalization typo.",
+          "full_master_records": "../evidence/full-lexical-evidence.json",
+          "physical_full_row_proof": "../evidence/physical-complete-row-proof.json",
+          "expected_correction_established": false
+        },
+        "e_counts": {
+          "all_original_sql_queries": "../evidence/original-query-rechecks.json",
+          "all_external_corpus_counts": "../evidence/external-corpus-count-rechecks.json",
+          "relevant_counts": [
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 8,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "RGYAL BA DGE 'DUN GRUB KYIS BRTZOMS PA'I MDZOD tIK THAR LAM GSAL BYED RTZA BA DANG BCAS PA LAS,"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 9,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "rgyal ba dge 'dun grub kyis brtsoms pa'i mdzod Tik thar lam gsal byed rtsa ba dang bcas pa las"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 10,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "The following selections are taken from Illumination of the Path to Freedom, a commentary to the Abhidharmakosha by Gyalwa Gendun Drup, His Holiness the First Dalai Lama. 63 Black, White, and Other Deeds Defined"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 13,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "BRTZOMS"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 14,
+              "claimed": 14,
+              "remeasured": 14,
+              "params": [
+                "brtsoms"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 15,
+              "claimed": 19,
+              "remeasured": 19,
+              "params": [
+                "brtsom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 19,
+              "claimed": 22,
+              "remeasured": 22,
+              "params": [
+                "Illumination of the Path to Freedom"
+              ]
+            },
+            {
+              "original_file": "english/evidence/corpus-queries.json",
+              "original_index": 20,
+              "claimed": 1,
+              "remeasured": 1,
+              "params": [
+                "Black, White, and Other Deeds Defined"
+              ]
+            }
+          ],
+          "field_lengths": {
+            "acip": 95,
+            "wylie": 94,
+            "english": 211
+          },
+          "register_count_rechecked": 194,
+          "original_frozen_counts_and_generator_replays": "../evidence/independent-original-freeze-verification.json and original-native-replay.json"
+        }
+      },
+      "decisive_reason": "Lowercase t in MDZOD tIK is original ACIP Sanskrit coding; the pinned canonical conversion yields Tik. It is not a capitalization typo.",
+      "confidence_of_new_defect": "not established; default refuted",
+      "new_erratum": false
+    }
+  ],
+  "tibetan_angle_complete_original_screen": {
+    "seq": 315,
+    "source_full_row": {
+      "id": 1697,
+      "course": "C05",
+      "seq": 315,
+      "acip": "RGYAL BA DGE 'DUN GRUB KYIS BRTZOMS PA'I MDZOD tIK THAR LAM GSAL BYED RTZA BA DANG BCAS PA LAS,",
+      "wylie": "rgyal ba dge 'dun grub kyis brtsoms pa'i mdzod Tik thar lam gsal byed rtsa ba dang bcas pa las",
+      "english": "The following selections are taken from Illumination of the Path to Freedom, a commentary to the Abhidharmakosha by Gyalwa Gendun Drup, His Holiness the First Dalai Lama. 63 Black, White, and Other Deeds Defined"
+    },
+    "field_lengths": {
+      "acip": 95,
+      "wylie": 94,
+      "english": 211
+    },
+    "has_1500_cap": false,
+    "five_grounds": {
+      "a_exact_source_quote": {
+        "result": "All source fields independently reopened and six-field snapshots verified; no proposed correction.",
+        "quotes": {
+          "acip": "RGYAL BA DGE 'DUN GRUB KYIS BRTZOMS PA'I MDZOD tIK THAR LAM GSAL BYED RTZA BA DANG BCAS PA LAS,",
+          "wylie": "rgyal ba dge 'dun grub kyis brtsoms pa'i mdzod Tik thar lam gsal byed rtsa ba dang bcas pa las",
+          "english": "The following selections are taken from Illumination of the Path to Freedom, a commentary to the Abhidharmakosha by Gyalwa Gendun Drup, His Holiness the First Dalai Lama. 63 Black, White, and Other Deeds Defined"
+        }
+      },
+      "b_parallel_witness": {
+        "result": "Comparisons are digital field relations only. No independent publication or ingestion lineage established. A shared prefix supports only that exact extent. P7 differs in punctuation and/or ending.",
+        "comparisons": [],
+        "source_record_search_file": "full-corpus-query-records.json",
+        "no_other_batch_proposals_read": true
+      },
+      "c_registered_classes": {
+        "result": "Following-heading apparatus on rows 314 and 315 is registered and not newly filed. Converter, running-head, footnote, row-spill and cap classes were considered.",
+        "original_register_sha256": "a7573cd73f59bff9a41ddeecff5b3d1f3056f4fa7b3ce7a600eff378f27e87a6",
+        "register_count": 194,
+        "duplicate_batch_records": [],
+        "full_class_records_file": "registered-class-records.json"
+      },
+      "d_lexical_source_interpretation": {
+        "result": "brtsoms pa has compose/written/composed as well as selections in HGM, but the source verb authorship is expressed by the English by-construction, so selections is not banked. Full author title and work title are attested. Missing explicit root-text phrasing is not enough evidence for a source correction.",
+        "master_files": [
+          "full-master-records.json",
+          "supplemental-full-master-records.json"
+        ]
+      },
+      "e_measured_evidence_and_limits": {
+        "result": "All query counts are lengths of preserved full result lists. All original hash comparisons pass. Exact selected ranges and repeated occurrences are in decisions.json; no generation or mechanical pass is claimed to establish correspondence.",
+        "evidence_files": [
+          "source-pins.json",
+          "snapshot-verification.json",
+          "full-parallel-equality.json",
+          "physical-extents.json",
+          "parallel-physical-originals.json"
+        ],
+        "physical_file": "C05ReadingASCII.txt",
+        "physical_sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+      }
+    },
+    "five_category_dispositions": {
+      "TIBETAN_SPELLING": "No defensible new spelling defect established; original ACIP and derived Wylie retained.",
+      "ENGLISH_TYPO": "No defensible new typo established in the translated prose.",
+      "ENGLISH_FACTUAL_ERROR": "No independently established new factual correction; interpretive/lexical uncertainty is not promoted into an erratum.",
+      "INGEST_ARTEFACT": "Registered heading apparatus preserved on 314/315; none of these three English fields is exactly 1500 characters. No new class filed.",
+      "FORMATTING": "Reading/selection headings and numbering remain verbatim. No new formatting erratum proposed."
+    },
+    "errata_proposed": []
+  },
+  "tibetan_screen_disposition": "Original five-ground screen is independently revisited above by source-spelling, English-typo/factual, ingestion and formatting suspicion; every original parallel, quoted source, register count and complete master record was reopened. No new defect established.",
+  "new_errata": []
+}

@@ -1,0 +1,41 @@
+"""Once-only fresh generation, independent canonical ranges, exact original replay reuse."""
+from pathlib import Path
+import datetime,hashlib,json,os,sqlite3,subprocess,sys
+from canonical import G
+S=Path(__file__).resolve().parents[1];B=S.parent;R=B/'reconciled'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def save(p,d):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+rows={r['seq']:r for r in json.loads((S/'evidence/independent-source.json').read_bytes())};resolved=[];originals=[];proof=[]
+def resolve(spec):
+ out=[]
+ for seg in spec['segments']:
+  row=rows[seg['seq']];spans=seg['spans'];byid={x['id']:x for x in spans}
+  tr=G.resolve(row['wylie'],spans,'tib',seg['seq']);er=G.resolve(row['english'],G.with_members(spans,[byid[k] for k in seg['eng_order']],row['english']),'eng',seg['seq'])
+  for x in spans:out.append({'seq':seg['seq'],**{k:x[k] for k in ['id','d','tib','eng']},'tib_range':list(tr[x['id']]),'eng_range':list(er[x['id']]) if x['eng'] is not None else None})
+ return out
+def check_streams(p,spec,body):
+ ex=json.loads((p/'execution.json').read_bytes());assert ex['exit']==0 and (p/'exit.txt').read_text()=='0\n';actual={}
+ for kind in ['stdin','stdout','stderr']:
+  raw=(p/(kind+'.bin')).read_bytes();a={'bytes':len(raw),'sha256':sha(raw)};assert a==ex['streams'][kind];actual[kind]=a
+ assert (p/'stdin.bin').read_bytes()==spec and (p/'stdout.bin').read_bytes()==body and (p/'stderr.bin').read_bytes()==b''
+ return {'native_directory':str(p),'exit':0,'streams':actual}
+for angle in ['tibetan','english']:
+ for seq in [313,314,315]:
+  p=B/angle/str(seq);raw=(p/'spec.json').read_bytes();body=(p/'body.html').read_bytes();d=resolve(json.loads(raw));native=R/'native'/f'original-{angle}-{seq}-generator-v1';pr=check_streams(native,raw,body)
+  rp=R/'native'/f'original-{angle}-{seq}-resolver-v1';rr=json.loads((rp/'stdout.bin').read_bytes());assert d==[{k:x[k] for k in ['seq','id','d','tib','eng','tib_range','eng_range']} for x in rr]
+  re=json.loads((rp/'execution.json').read_bytes());assert re['exit']==0 and (rp/'stdin.bin').read_bytes()==raw and not (rp/'stderr.bin').read_bytes()
+  for kind in ['stdin','stdout','stderr']:
+   z=(rp/(kind+'.bin')).read_bytes();assert re['streams'][kind]=={'bytes':len(z),'sha256':sha(z)}
+  originals.append({'angle':angle,'seq':seq,'resolved':d,'reused_verified_generator':pr,'independent_canonical_resolutions':len(d),'new_generator_runs':0})
+for seq in [313,314,315]:
+ p=R/str(seq);raw=(p/'spec.json').read_bytes();body=(p/'body.html').read_bytes();spec=json.loads(raw);d=resolve(spec);expected=json.loads((p/'resolved-ranges.json').read_bytes());assert d==[{k:x[k] for k in ['seq','id','d','tib','eng','tib_range','eng_range']} for x in expected];resolved.extend(d)
+ out=S/'native'/f'fresh-final-{seq}-v1';out.mkdir(parents=True,exist_ok=False);argv=[sys.executable,'-B',str(S/'helpers/canonical.py')];(out/'stdin.bin').write_bytes(raw)
+ run=subprocess.run(argv,cwd=S,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),input=raw,capture_output=True)
+ (out/'stdout.bin').write_bytes(run.stdout);(out/'stderr.bin').write_bytes(run.stderr);(out/'exit.txt').write_text(str(run.returncode)+'\n')
+ save(out/'execution.json',{'argv':argv,'cwd':str(S),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':run.returncode,'streams':{k:{'bytes':len(v),'sha256':sha(v)} for k,v in [('stdin',raw),('stdout',run.stdout),('stderr',run.stderr)]}})
+ assert run.returncode==0 and not run.stderr and run.stdout==body
+ td={l:(dep,t) for dep,l,t in G.B.spans_of(body.decode(),'tib')};ed={l:(dep,t) for dep,l,t in G.B.spans_of(body.decode(),'eng')};assert td['s'+str(seq)+'S'][1]==rows[seq]['wylie'] and ed['s'+str(seq)+'S'][1]==rows[seq]['english'];assert len(td)==len(ed)==len(d)+1
+ for x in d:assert td['s'+str(seq)+x['id']]==(x['d'],x['tib']) and ed['s'+str(seq)+x['id']]==(x['d'],x['eng'] or '')
+ proof.append({'seq':seq,'span_count':len(d),'null_count':sum(x['eng'] is None for x in d),'word_pair_count':sum(x['d']==5 and x['eng'] is not None for x in d),'d7_count':sum(x['d']==7 for x in d),'spec_bytes':len(raw),'spec_sha256':sha(raw),'body_bytes':len(body),'body_sha256':sha(body),'generator_exit':run.returncode,'stderr_bytes':len(run.stderr),'body_equals_fresh_stdout':True,'fresh_native_directory':str(out.relative_to(S))})
+save(S/'resolved-spans.json',resolved);save(S/'evidence/original-replay-reuse.json',originals);save(S/'evidence/fresh-native-proof.json',proof)
+print(json.dumps({'fresh_generator_runs':3,'reused_original_generator_runs':6,'original_resolutions':sum(len(x['resolved']) for x in originals),'final_resolutions':len(resolved),'segments':proof}))

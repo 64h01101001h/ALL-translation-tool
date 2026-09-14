@@ -1,0 +1,1 @@
+The own interface verifier reached the explicit315 root-text null, whose English context is correctly null. Its containment check incorrectly required a string. The corrected check preserves and explicitly requires null English context for null spans. No source/spec/native generator change. Actual failure: native/interface-checks-v2/stderr.bin.

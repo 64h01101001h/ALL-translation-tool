@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-313-315/semantic-review/helpers/recheck_evidence.py", line 34, in <module>
+    expected=q['corpus_records']; normalized=[{'index':x.get('index',x.get('corpus_index')),'record':x.get('record',x.get('entry'))} for x in expected];assert actual==normalized and len(actual)==q['corpus_count'];external.append({'index':i,'count':len(actual),'complete_records':actual})
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

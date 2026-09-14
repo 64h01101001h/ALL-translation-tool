@@ -1,0 +1,49 @@
+from pathlib import Path
+import json, hashlib, subprocess, sqlite3, gzip, os, sys, datetime
+O=Path(__file__).resolve().parents[1];B=O.parent;W=B.parents[1]/'campaign-worktree';E=O/'evidence';E.mkdir(exist_ok=True)
+def write(p,d):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+def cas(data):
+ p=E/'objects'/sha(data);p.parent.mkdir(exist_ok=True)
+ if not p.exists():p.write_bytes(data)
+ assert p.read_bytes()==data
+ return str(p.relative_to(O))
+baseline=json.loads((B/'proposal-baseline.json').read_bytes());origin=baseline['commit'];ident=[]
+for role in ['tibetan','english']:
+ for p in sorted((B/role).rglob('*')):
+  if not p.is_file():continue
+  raw=p.read_bytes();q=E/'originals'/p.relative_to(B);q.parent.mkdir(parents=True,exist_ok=True);obj=O/cas(raw)
+  if not q.exists():os.link(obj,q)
+  ident.append({'role':role,'original_path':str(p),'logical_copy':str(q.relative_to(O)),'object':str(obj.relative_to(O)),'sha256':sha(raw),'bytes':len(raw)})
+for name in ['proposal-baseline.json','source.json','context.json','reconciliation-brief.md','root-original-freeze-verification.json']:
+ p=B/name;raw=p.read_bytes();q=E/name;q.write_bytes(raw);ident.append({'role':'root-input','original_path':str(p),'logical_copy':str(q.relative_to(O)),'object':cas(raw),'sha256':sha(raw),'bytes':len(raw)})
+pins=[]
+rels=list(baseline['governing_git_pins'])+['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','engines/hgm_tools.py','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/NEVER_BANK_A_FALSEHOOD.md','tools/test_no_broken_words.py','tools/test_no_split_syllables.py','tools/test_no_degenerate_members.py','tools/test_no_supplied_span_head.py']
+for rel in rels:
+ r=subprocess.run(['git','show',origin+':'+rel],cwd=W,capture_output=True);p=E/'pinned'/rel;p.parent.mkdir(parents=True,exist_ok=True)
+ (Path(str(p)+'.git-stderr')).write_bytes(r.stderr);(Path(str(p)+'.git-exit')).write_text(str(r.returncode)+'\n');assert r.returncode==0,(rel,r.stderr)
+ expected=baseline['governing_git_pins'].get(rel)
+ if expected:assert sha(r.stdout)==expected['sha256']
+ obj=O/cas(r.stdout)
+ if not p.exists():os.link(obj,p)
+ pins.append({'git_object':origin+':'+rel,'path':str(p.relative_to(O)),'sha256':sha(r.stdout),'bytes':len(r.stdout)})
+write(E/'git-pins.json',pins)
+for role,pin in baseline['source_pins'].items():
+ p=Path(pin['path']);raw=p.read_bytes();assert sha(raw)==pin['sha256'] and len(raw)==pin['bytes'],role
+ ident.append({'role':'source-'+role,'original_path':str(p),'object':cas(raw),'sha256':sha(raw),'bytes':len(raw)})
+required=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+access=[{'path':str(Path('/Users/adamderickandrade')/r),'readable':os.access(Path('/Users/adamderickandrade')/r,os.R_OK)} for r in required];assert all(r['readable'] for r in access);write(E/'required-access.json',access)
+write(E/'copy-identities.json',ident)
+freezes=[]
+for role,file,expected in [('tibetan','FINAL-FREEZE.manifest.json','3dc43622702361a9c504165dcce0fd6335eb7d29aeb0e084a42013d711181e4e'),('english','freeze-manifest.json','250ecf94bf4056ec4046c3c73ac626dd3c6e63e7b4c6097bff0d627783baf609')]:
+ p=B/role/file;raw=p.read_bytes();assert sha(raw)==expected;d=json.loads(raw);rows=d['files']
+ for x in rows:
+  f=B/role/x['path'];b=f.read_bytes();assert sha(b)==x['sha256'] and len(b)==x['bytes'],str(f)
+ freezes.append({'role':role,'manifest':str(p),'sha256':sha(raw),'schema':d['schema'],'verified_files':len(rows),'actual_counts':{str(s):{'spans':len((sp:=json.loads((B/role/str(s)/'spec.json').read_bytes())['segments'][0]['spans'])),'nulls':sum(x['eng'] is None for x in sp),'d5':sum(x['d']==5 for x in sp),'d7':sum(x['d']==7 for x in sp)} for s in [313,314,315]}})
+write(E/'independent-original-freeze-verification.json',freezes)
+db=sqlite3.connect(Path(baseline['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+source=[dict(x) for x in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',313,315))]
+context=[dict(x) for x in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',307,321))]
+assert [{k:v for k,v in x.items() if k!='raw'} for x in source]==json.loads((B/'source.json').read_bytes());assert [{k:v for k,v in x.items() if k!='raw'} for x in context]==json.loads((B/'context.json').read_bytes());write(E/'original-source.json',source);write(E/'original-context.json',context)
+write(E/'capture-receipt.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin':origin,'source_boundary':309,'acceptance_baseline':'not received/consumed','copy_files':len(ident),'original_freezes_verified':freezes})
+print(json.dumps({'capture':'complete','copies':len(ident),'freezes':freezes}))

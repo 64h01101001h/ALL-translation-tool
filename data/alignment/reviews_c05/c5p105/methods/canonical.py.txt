@@ -1,0 +1,16 @@
+"""Run immutable canonical code; only path and SQLite read-only plumbing changes."""
+from pathlib import Path
+import hashlib,json,sqlite3,sys
+S=Path(__file__).resolve().parents[1];B=S.parent;P=B/'reconciled/evidence/pinned'
+base=json.loads((B/'proposal-baseline.json').read_bytes())
+for pin in json.loads((B/'reconciled/evidence/git-pins.json').read_bytes()):
+ if pin['path'].endswith(('gen_alignment_page.py','build_alignment_layer.py','hgm_tools.py')):
+  raw=(B/'reconciled'/pin['path']).read_bytes();assert len(raw)==pin['bytes'] and hashlib.sha256(raw).hexdigest()==pin['sha256']
+sys.path.insert(0,str(P/'engines'));sys.path.insert(0,str(P/'tools'))
+import gen_alignment_page as G
+G.B.SPINE=base['source_pins']['spine']['path'];original_connect=sqlite3.connect
+def readonly(database,*args,**kwargs):
+ assert not args and database==G.B.SPINE
+ return original_connect(Path(database).as_uri()+'?mode=ro',uri=True,**kwargs)
+sqlite3.connect=readonly
+if __name__=='__main__':G.main()

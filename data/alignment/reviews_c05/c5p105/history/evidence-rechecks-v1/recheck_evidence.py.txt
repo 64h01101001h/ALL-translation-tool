@@ -1,0 +1,79 @@
+"""Independently reopen every material query/record and quote/count proof."""
+from pathlib import Path
+import collections,datetime,gzip,hashlib,json,re,sqlite3,subprocess
+S=Path(__file__).resolve().parents[1];B=S.parent;R=B/'reconciled';E=R/'evidence';W=B.parents[1]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def read(p):return json.loads(Path(p).read_bytes())
+def save(p,d):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+base=read(B/'proposal-baseline.json');db=sqlite3.connect(Path(base['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+master=json.loads(gzip.decompress(Path(base['source_pins']['master']['path']).read_bytes()));corpus=json.loads(gzip.decompress(Path(base['source_pins']['corpus']['path']).read_bytes()));sources={x['seq']:x for x in read(S/'evidence/independent-source.json')}
+queryproof=[];seenrows={};seenmaster={}
+for q in read(E/'original-query-rechecks.json'):
+ rows=[dict(x) for x in db.execute(q['sql'],q['params'])];assert rows==q['complete_rows'] and len(rows)==q['original_count']==q['rechecked_count']
+ for row in rows:seenrows[(row['course'],row['seq'])]=row
+ queryproof.append({'origin':q['origin'],'index':q['index'],'sql':q['sql'],'params':q['params'],'count':len(rows),'complete_rows':rows})
+lex=[]
+for q in read(E/'full-lexical-evidence.json'):
+ term=q['term'];actual=[]
+ for collection in ['unified_entries','curated_entries','glossary_entries']:
+  for i,r in enumerate(master[collection]):
+   if r.get('wylie')==term or term in (r.get('wylie_variants') or []):actual.append({'collection':collection,'index':i,'entry':r});seenmaster[(collection,i)]=r
+ assert actual==q['master_records'] and len(actual)==q['count'];entries=[dict(x) for x in db.execute('select * from entries where wylie=? order by id',(term,))];assert entries==q['spine_entries'];lex.append({'term':term,'count':len(actual),'full_original_records':actual,'spine_entries':entries})
+original_master_claims=0
+for fn in ['english/evidence/lexical-evidence.json','english/evidence/supplemental-lexical-evidence.json']:
+ for q in read(B/fn):
+  for x in q['master_records']:assert master[x['collection']][x['index']]==x['entry'];original_master_claims+=1
+for fn in ['tibetan/evidence/full-master-records.json','tibetan/evidence/supplemental-full-master-records.json']:
+ for q in read(B/fn):
+  actual=[x for x in master['unified_entries'] if x.get('wylie')==q['query']['equals']];assert actual==q['records'] and len(actual)==q['count'];original_master_claims+=1
+assert original_master_claims==196
+external=[]
+for i,q in enumerate(read(B/'english/evidence/corpus-queries.json')):
+ if 'sql' in q:
+  field=q['field'];needle=q['params'][0];like=' like ' in q['sql'].lower();actual=[{'index':j,'record':r} for j,r in enumerate(corpus) if (needle.strip('%') in r.get(field,'')) if like] if like else [{'index':j,'record':r} for j,r in enumerate(corpus) if r.get(field)==needle]
+  expected=q['corpus_records']; normalized=[{'index':x.get('index',x.get('corpus_index')),'record':x.get('record',x.get('entry'))} for x in expected];assert actual==normalized and len(actual)==q['corpus_count'];external.append({'index':i,'count':len(actual),'complete_records':actual})
+ else:
+  row=sources[q['origin_seq']];actual=[{'index':j,'record':r} for j,r in enumerate(corpus) if all(r.get(f)==row[f] for f in ['acip','wylie','english'])];normalized=[{'index':x.get('index',x.get('corpus_index')),'record':x.get('record',x.get('entry'))} for x in q['records']];assert actual==normalized and len(actual)==q['count'];external.append({'index':i,'count':len(actual),'complete_records':actual})
+# Reopen every digital witness object, preserving all raw metadata.
+counter=collections.Counter();lookup={}
+for r in corpus:counter[r['course']]+=1;lookup[(r['course'],counter[r['course']])]=r
+for row in seenrows.values():
+ raw=json.loads(row['raw']);assert lookup[(row['course'],row['seq'])]==raw
+ for k in ['course','acip','wylie','english']:assert raw[k]==row[k]
+parallels=[]
+for seq,items in read(E/'independent-parallel-extents.json').items():
+ for item in items:
+  row=item['parallel_full_row'];actual=dict(db.execute('select * from corpus_segments where course=? and seq=?',(row['course'],row['seq'])).fetchone());assert actual==row;seenrows[(row['course'],row['seq'])]=row
+  src=sources[int(seq)];n=0
+  for a,b in zip(src['english'],row['english']):
+   if a!=b:break
+   n+=1
+  parallels.append({'seq':int(seq),'parallel_full_row':row,'english_common_prefix_chars':n,'equal_fields':[f for f in ['acip','wylie','english'] if src[f]==row[f]],'source_tail':src['english'][n:],'parallel_tail':row['english'][n:]})
+physical=[]
+for pin in read(B/'tibetan/evidence/parallel-physical-originals.json'):
+ raw=Path(pin['source']).read_bytes();assert sha(raw)==pin['sha256'] and len(raw)==pin['bytes']
+ for q in pin.get('queries',[]):
+  hits=[x.start() for x in re.finditer(re.escape(q['needle_latin1'].encode('latin1')),raw)];assert hits==q['offsets']
+  for ex in q.get('extents',[]):assert raw[ex['lo']:ex['hi']].decode('latin1')==ex['latin1']
+ physical.append({'path':pin['source'],'sha256':sha(raw),'bytes':len(raw),'query_count':len(pin.get('queries',[])),'original_extents_exact':True})
+for q in read(E/'physical-complete-row-proof.json'):
+ raw=Path(q['original_physical_path']).read_bytes();assert sha(raw)==q['sha256'];a,b=q['acip_exact_raw_byte_range'];assert raw[a:b].decode('latin1')==sources[q['seq']]['acip'];a,b=q['english_range_in_linefolded_latin1'];assert ' '.join(raw.decode('latin1').split())[a:b]==sources[q['seq']]['english']
+register=read(E/'pinned/docs/errata_register.json');reg=read(E/'registered-class-records.json');assert len(register)==reg['register_count']==194
+for r in reg['records']:assert r in register
+screens=[]
+for seq in [313,314,315]:
+ d=read(R/str(seq)/'errata-audit.json');row=sources[seq]
+ for c in d['all_original_source_suspicions']:
+  claim=c['original_claim_complete'];q=c['found'];assert q==claim['found_verbatim'];a,b=claim['source_character_range'];assert row[claim['field']][a:b]==q
+  locations={f:[m.start() for m in re.finditer(re.escape(q),row[f])] for f in ['acip','wylie','english']};assert locations==c['five_refutation_grounds']['a_quote']['occurrences_in_each_source_field']
+  screens.append({'seq':seq,'kind':c['original_kind'],'found':q,'locations':locations,'all_five_ground_keys':list(c['five_refutation_grounds']),'original_refuted':c['refuted']})
+accept=read(B/'baseline.json');assert accept['commit']=='49b66f3af9cbb47599bb40286637fc9e683b7cdf' and accept['course_boundary']==312
+for rel,digest in accept['sha256'].items():
+ if rel.startswith('data/hgm_') or rel.startswith('data/full_parallel_'):raw=(W/rel).read_bytes()
+ else:raw=subprocess.run(['git','show',accept['commit']+':'+rel],cwd=W,capture_output=True,check=True).stdout
+ assert sha(raw)==digest,rel
+save(S/'evidence/later-acceptance-baseline.json',accept)
+save(S/'evidence/later-acceptance-receipt.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin_git_commit':base['commit'],'later_supplied_acceptance_baseline':accept['commit'],'later_baseline_accepted_through':312,'original_reconciler_consumed_later_baseline':False,'baseline_sha256':sha((B/'baseline.json').read_bytes()),'all_recorded_baseline_hashes_checked':True})
+save(S/'evidence/independent-query-rechecks.json',queryproof);save(S/'evidence/independent-lexical-rechecks.json',lex);save(S/'evidence/independent-external-corpus-rechecks.json',external);save(S/'evidence/independent-parallel-comparisons.json',parallels);save(S/'evidence/independent-physical-rechecks.json',physical);save(S/'evidence/independent-quote-rechecks.json',screens)
+save(S/'evidence/independent-evidence-proof.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS_IDENTITIES_QUERIES_QUOTES_COUNTS; semantic decisions recorded separately','sql_queries':len(queryproof),'lexical_terms':len(lex),'unique_full_master_records':len(seenmaster),'original_master_claims':original_master_claims,'external_corpus_queries':len(external),'unique_full_corpus_rows':len(seenrows),'physical_archives':len(physical),'whole_physical_source_fields':6,'original_source_screens':len(screens),'register_count':len(register),'spine_rows':db.execute('select count(*) from corpus_segments').fetchone()[0],'corpus_rows':len(corpus),'later_acceptance_baseline':accept['commit']})
+print((S/'evidence/independent-evidence-proof.json').read_text())

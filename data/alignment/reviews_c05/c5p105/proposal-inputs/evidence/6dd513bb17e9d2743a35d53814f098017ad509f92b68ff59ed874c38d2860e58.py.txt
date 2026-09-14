@@ -1,0 +1,18 @@
+"""Infrastructure-only adapter: unmodified pinned canonical code, original read-only spine."""
+from pathlib import Path
+import hashlib, importlib, sys, sqlite3, json
+OWN=Path(__file__).resolve().parents[1]
+BLINE=json.loads((OWN/'evidence/proposal-baseline.json').read_text())
+for rel in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+    p=OWN/'evidence/pinned'/rel
+    assert hashlib.sha256(p.read_bytes()).hexdigest()==BLINE['governing_git_pins'][rel]['sha256']
+sys.path.insert(0,str(OWN/'evidence/pinned/tools'))
+import gen_alignment_page as G
+G.B.SPINE=BLINE['source_pins']['spine']['path']
+_connect=sqlite3.connect
+def readonly_connect(database,*args,**kwargs):
+    assert not args and database==G.B.SPINE
+    return _connect(Path(database).as_uri()+'?mode=ro',uri=True,**kwargs)
+sqlite3.connect=readonly_connect
+if __name__=='__main__':
+    G.main()

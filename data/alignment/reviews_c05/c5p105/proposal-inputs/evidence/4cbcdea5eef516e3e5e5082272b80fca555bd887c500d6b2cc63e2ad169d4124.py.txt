@@ -1,0 +1,64 @@
+from pathlib import Path
+import json, gzip, sqlite3, hashlib, sys, re
+
+OWN=Path(__file__).resolve().parents[1]
+BASE=OWN.parent
+B=json.loads((OWN/'evidence/proposal-baseline.json').read_text())
+E=OWN/'evidence'
+def save(name,obj):
+    (E/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+proof={}
+for key,pin in B['source_pins'].items():
+    raw=Path(pin['path']).read_bytes()
+    measured={'path':pin['path'],'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+    assert measured['sha256']==pin['sha256'] and measured['bytes']==pin['bytes'],(key,measured)
+    proof[key]=measured
+    if key=='physical':
+        (E/'C05ReadingASCII.original.bin').write_bytes(raw)
+        (E/'C05ReadingASCII.latin1.txt').write_text(raw.decode('latin1'))
+save('original-file-proof.json',proof)
+db=sqlite3.connect(Path(B['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True)
+db.row_factory=sqlite3.Row
+original=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',307,321))]
+save('original-spine-context.json',original)
+snapshot=json.loads((E/'context.json').read_text())
+assert [{k:r[k] for k in ['id','course','seq','acip','wylie','english']} for r in original]==snapshot
+source=json.loads((E/'source.json').read_text())
+assert [r for r in snapshot if 313<=r['seq']<=315]==source
+corpus=json.loads(gzip.decompress(Path(B['source_pins']['corpus']['path']).read_bytes()))
+master=json.loads(gzip.decompress(Path(B['source_pins']['master']['path']).read_bytes()))
+save('data-schema-proof.json',{'spine_total':db.execute('select count(*) from corpus_segments').fetchone()[0],'corpus_total':len(corpus),'master_lists':{k:len(v) for k,v in master.items() if isinstance(v,list)},'context_query':{'sql':'select * from corpus_segments where course=? and seq between ? and ? order by seq','params':['C05',307,321]},'six_field_snapshot_comparison':True})
+queries=[]
+for row in source:
+    for field in ['acip','wylie','english']:
+        q='select * from corpus_segments where '+field+'=? order by course,seq'
+        rows=[dict(r) for r in db.execute(q,(row[field],))]
+        matches=[{'corpus_index':i,'record':r} for i,r in enumerate(corpus) if r.get(field)==row[field]]
+        queries.append({'origin_seq':row['seq'],'field':field,'sql':q,'params':[row[field]],'count':len(rows),'rows':rows,'corpus_count':len(matches),'corpus_records':matches})
+    matches=[{'corpus_index':i,'record':r} for i,r in enumerate(corpus) if all(r.get(k)==row[k] for k in ['acip','wylie','english'])]
+    queries.append({'origin_seq':row['seq'],'comparison':'exact ACIP/Wylie/English tuple; course/id/seq not asserted identical','count':len(matches),'records':matches})
+for field,piece in [('acip','LCAGS SNGAGS'),('acip','BRTZOMS'),('wylie','brtsoms'),('wylie','brtsom'),('wylie','tshad mtshungs'),('wylie',"go sa 'gog"),('wylie','lcags sngags'),('english','Illumination of the Path to Freedom'),('english','Black, White, and Other Deeds Defined'),('english','The Stream.')]:
+    q='select * from corpus_segments where instr('+field+',?)>0 order by course,seq'
+    rows=[dict(r) for r in db.execute(q,(piece,))]
+    matches=[{'corpus_index':i,'record':r} for i,r in enumerate(corpus) if piece in r.get(field,'')]
+    queries.append({'field':field,'sql':q,'params':[piece],'count':len(rows),'rows':rows,'corpus_count':len(matches),'corpus_records':matches})
+save('corpus-queries.json',queries)
+terms=['tshad','tshad ma','mtshungs','nges par','dgos','gsum','srid pa','las','dbang','dngos po','tshad grub','grub pa','bskyed','bskyed nus','nus','sngar','rigs pa',"'grub",'snod','skye ba','rnag','la sogs pa','spyir','go sa',"'gog",'bltas',"mi 'gal",'ri rab','gru bzhi','zlum po','phan tshun','gcig','gnyis ka','lta bu','lcags','lcags gong',"dmar 'bar ba",'dmar',"'bar ba",'tsha ba','sngags','lcags sngags','btab pa','lag pa','reg pa','myong bya','myong','reg bya','rgyal ba',"dge 'dun grub",'brtsoms','brtsom','brtsams','mdzod','Tik','mdzod Tik','thar lam gsal byed','thar lam','thar','lam','gsal byed','rtsa ba','bcas pa']
+lex=[]
+for term in terms:
+    records=[]
+    for collection in ['unified_entries','curated_entries','glossary_entries']:
+        for i,r in enumerate(master[collection]):
+            if r.get('wylie')==term or term in (r.get('wylie_variants') or []):records.append({'collection':collection,'index':i,'entry':r})
+    spine=[dict(r) for r in db.execute('select * from entries where wylie=? order by id',(term,))]
+    lex.append({'term':term,'match':'exact wylie or exact variant; complete original records, all HGM senses preserved','count':len(records),'master_records':records,'spine_entries':spine})
+save('lexical-evidence.json',lex)
+register=json.loads((E/'pinned/docs/errata_register.json').read_text())
+save('registered-class-structure.json',{'type':type(register).__name__,'keys':list(register) if isinstance(register,dict) else None})
+physical=(E/'C05ReadingASCII.original.bin').read_bytes()
+windows=[]
+for needle in [b"DE'I TSE NA, TSAD MTSUNGS",b"RNAG LA SOGS PA'I DNGOS PO",b'RGYAL BA DGE',b'Again consider this same situation',b'Generally speaking, each',b'Black, White, and Other Deeds Defined',b'The following selections are taken from Illumination']:
+    hits=[m.start() for m in re.finditer(re.escape(needle),physical)]
+    windows.append({'needle_ascii':needle.decode('ascii'),'count':len(hits),'hits':hits,'windows':[{'start_byte':max(0,h-500),'end_byte':min(len(physical),h+4500),'text_latin1':physical[max(0,h-500):min(len(physical),h+4500)].decode('latin1')} for h in hits]})
+save('physical-windows.json',windows)
+print(json.dumps({'verified_files':proof,'source_rows':len(original),'queries':len(queries),'terms':len(lex),'physical_hits':[(x['needle_ascii'],x['count']) for x in windows]},ensure_ascii=False))

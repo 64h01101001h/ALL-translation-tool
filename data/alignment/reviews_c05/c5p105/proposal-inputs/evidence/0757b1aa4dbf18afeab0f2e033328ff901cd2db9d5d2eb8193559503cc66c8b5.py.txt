@@ -1,0 +1,35 @@
+from canonical_adapter import G,OWN
+from pathlib import Path
+import subprocess,sys,json,hashlib,os
+rows={r['seq']:r for r in json.loads((OWN/'evidence/original-spine-context.json').read_text())}
+summaries=[]
+for seq in [313,314,315]:
+    target=OWN/str(seq)
+    run=OWN/'native'/('generation-'+str(seq)+'-v1');run.mkdir(parents=True,exist_ok=False)
+    raw=(target/'spec.json').read_bytes()
+    (run/'stdin.bin').write_bytes(raw)
+    argv=[sys.executable,'-B',str(OWN/'helpers/canonical_adapter.py')]
+    p=subprocess.run(argv,input=raw,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+    (run/'stdout.bin').write_bytes(p.stdout);(run/'stderr.bin').write_bytes(p.stderr);(run/'exit.txt').write_text(str(p.returncode)+'\n')
+    record={'argv':argv,'cwd':str(Path.cwd()),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'adapter':'infrastructure-only: pinned unmodified canonical generator and builder, original spine forced SQLite URI mode=ro','exit':p.returncode,'stdin_bytes':len(raw),'stdout_bytes':len(p.stdout),'stderr_bytes':len(p.stderr),'sha256':{k:hashlib.sha256(v).hexdigest() for k,v in [('stdin',raw),('stdout',p.stdout),('stderr',p.stderr)]}}
+    (run/'execution.json').write_text(json.dumps(record,indent=2)+'\n')
+    assert p.returncode==0 and p.stderr==b'',record
+    (target/'body.html').write_bytes(p.stdout)
+    assert (target/'body.html').read_bytes()==(run/'stdout.bin').read_bytes()
+    seg=json.loads(raw)['segments'][0];expected={s['id']:s for s in seg['spans']}
+    text=p.stdout.decode('utf-8');ti=G.B.spans_of(text,'tib');en=G.B.spans_of(text,'eng')
+    td={lab:(depth,txt) for depth,lab,txt in ti};ed={lab:(depth,txt) for depth,lab,txt in en}
+    assert len(td)==len(ti)==len(expected)+1
+    assert len(ed)==len(en)==len(expected)+1
+    assert td['s'+str(seq)+'S']==(1,rows[seq]['wylie'])
+    assert ed['s'+str(seq)+'S']==(1,rows[seq]['english'])
+    for key,s in expected.items():
+        label='s'+str(seq)+key
+        assert td[label]==(s['d'],s['tib']),(label,td[label])
+        assert ed[label]==(s['d'],s['eng'] or ''),(label,ed[label])
+    counts={'spans':len(expected),'nulls':sum(s['eng'] is None for s in expected.values()),'d5_total':sum(s['d']==5 for s in expected.values()),'word_pairs_nonnull_d5':sum(s['d']==5 and s['eng'] is not None for s in expected.values()),'d7':sum(s['d']==7 for s in expected.values()),'new_errata':len(json.loads((target/'errata.json').read_text()))}
+    verification={'seq':seq,'generator_exit':p.returncode,'stderr_bytes':len(p.stderr),'body_bytes':len(p.stdout),'body_sha256':hashlib.sha256(p.stdout).hexdigest(),'spec_sha256':hashlib.sha256(raw).hexdigest(),'body_equals_canonical_stdout':True,'canonical_builder_source_sentence_exact':True,'canonical_builder_every_span_seen':True,'counts':counts,'native_proof_path':str(run.relative_to(OWN)),'canonical_generator_sha256':hashlib.sha256((OWN/'evidence/pinned/tools/gen_alignment_page.py').read_bytes()).hexdigest(),'canonical_builder_sha256':hashlib.sha256((OWN/'evidence/pinned/tools/build_alignment_layer.py').read_bytes()).hexdigest(),'semantic_acceptance':False}
+    (target/'verification.json').write_text(json.dumps(verification,indent=2)+'\n')
+    summaries.append(verification)
+(OWN/'generation-summary.json').write_text(json.dumps(summaries,indent=2)+'\n')
+print(json.dumps(summaries))

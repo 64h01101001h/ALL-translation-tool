@@ -1,0 +1,66 @@
+import gzip, hashlib, json, os, pathlib, sqlite3, subprocess
+
+OWN = pathlib.Path(__file__).resolve().parents[1]
+BATCH = OWN.parent
+W = BATCH.parents[1] / 'campaign-worktree'
+E = OWN / 'evidence'
+BASE = json.loads((BATCH / 'proposal-baseline.json').read_bytes())
+
+def write(name, obj):
+    p = E / name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(obj, ensure_ascii=False, indent=2)+'\n')
+
+def digest(b):
+    return {'bytes':len(b), 'sha256':hashlib.sha256(b).hexdigest()}
+
+pins = {}
+for name, pin in BASE['source_pins'].items():
+    b = pathlib.Path(pin['path']).read_bytes()
+    got = digest(b)
+    assert all(got[k] == pin[k] for k in got), (name, got)
+    pins[name] = {'original_path':pin['path'], **got, 'complete_original_bytes_reopened':True}
+    if name in ('source','context'):
+        (E / (name+'.json')).write_bytes(b)
+    elif name == 'physical':
+        (E / 'C05ReadingASCII.txt').write_bytes(b)
+    elif name in ('master','corpus'):
+        obj = json.loads(gzip.decompress(b))
+        print(name, type(obj).__name__, list(obj)[:12] if isinstance(obj,dict) else len(obj))
+        print('first', str(next(iter(obj.values())) if isinstance(obj,dict) else obj[0])[:1600])
+write('source-pins.json',pins)
+
+for name, pin in BASE['governing_git_pins'].items():
+    r = subprocess.run(['git','show',BASE['commit']+':'+name], cwd=W, capture_output=True)
+    p = E / 'governance' / name
+    p.parent.mkdir(parents=True,exist_ok=True)
+    p.write_bytes(r.stdout)
+    p.with_name(p.name+'.stderr').write_bytes(r.stderr)
+    p.with_name(p.name+'.exit').write_text(str(r.returncode)+'\n')
+    assert r.returncode == 0 and r.stderr == b''
+    assert all(digest(r.stdout)[k] == pin[k] for k in ('bytes','sha256'))
+    pins[name] = {'git_origin':BASE['commit'],**digest(r.stdout)}
+for name in ['engines/hgm_tools.py']:
+    r = subprocess.run(['git','show',BASE['commit']+':'+name],cwd=W,capture_output=True)
+    p = E / 'governance' / name
+    p.parent.mkdir(parents=True,exist_ok=True)
+    p.write_bytes(r.stdout)
+    p.with_name(p.name+'.stderr').write_bytes(r.stderr)
+    p.with_name(p.name+'.exit').write_text(str(r.returncode)+'\n')
+    assert r.returncode == 0 and r.stderr == b''
+    pins[name] = {'git_origin':BASE['commit'],**digest(r.stdout)}
+write('all-pins.json',pins)
+db = sqlite3.connect(pathlib.Path(BASE['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True)
+db.row_factory = sqlite3.Row
+rows = [dict(x) for x in db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',307,321))]
+write('full-spine-context.json',{'query':'SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq','parameters':['C05',307,321],'count':len(rows),'rows':rows})
+for name in ('source','context'):
+    snap = json.loads((E / (name+'.json')).read_bytes())
+    for row in snap:
+        original = next(x for x in rows if x['seq']==row['seq'])
+        assert len(row)==6 and all(original[k]==v for k,v in row.items())
+write('snapshot-verification.json',{'source':{'count':3,'fields':['id','course','seq','acip','wylie','english'],'all_equal':True},'context':{'count':15,'all_equal':True}})
+print('spine columns',list(rows[0]))
+access = [os.path.expanduser(p) for p in ['~/Desktop/HGM DICTIONARY - TRANSLATION APP','~/ACIP Software Developmeent/Gofer Developmetn Files',"~/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","~/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","~/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","~/ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'~/ACIP Software Developmeent/tibetan-spellchecker','~/Tibetan Translation Tool']]
+write('required-access.json',[{'path':p,'readable':os.access(p,os.R_OK)} for p in access])
+assert all(os.access(p,os.R_OK) for p in access)

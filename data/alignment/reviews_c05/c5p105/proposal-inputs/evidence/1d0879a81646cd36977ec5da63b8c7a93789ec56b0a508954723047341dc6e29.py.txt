@@ -1,0 +1,25 @@
+import hashlib,json,os,pathlib,subprocess,sys
+OWN=pathlib.Path(__file__).resolve().parents[1]
+BASE=json.loads((OWN.parent/'proposal-baseline.json').read_bytes())
+W=OWN.parent.parents[1]/'campaign-worktree'
+G=OWN/'native-gates'
+(G/'tools').mkdir(parents=True,exist_ok=True)
+pages=G/'data/alignment/pages_c05';pages.mkdir(parents=True,exist_ok=True)
+for seq in (313,314,315):(pages/(str(seq)+'.html')).write_bytes((OWN/str(seq)/'body.html').read_bytes())
+results=[]
+for tool in ['test_no_broken_words.py','test_no_split_syllables.py','test_no_degenerate_members.py']:
+    pin=subprocess.run(['git','show',BASE['commit']+':tools/'+tool],cwd=W,capture_output=True)
+    (G/'tools'/tool).write_bytes(pin.stdout)
+    (G/(tool+'.git.stderr')).write_bytes(pin.stderr)
+    (G/(tool+'.git.exit')).write_text(str(pin.returncode)+'\n')
+    assert pin.returncode==0 and not pin.stderr
+    env=os.environ.copy();env['PYTHONDONTWRITEBYTECODE']='1'
+    argv=[sys.executable,'-B',str(G/'tools'/tool)]
+    r=subprocess.run(argv,capture_output=True,cwd=W,env=env)
+    (G/(tool+'.stdout')).write_bytes(r.stdout)
+    (G/(tool+'.stderr')).write_bytes(r.stderr)
+    (G/(tool+'.exit')).write_text(str(r.returncode)+'\n')
+    results.append({'tool':tool,'git_origin':BASE['commit'],'original_sha256':hashlib.sha256(pin.stdout).hexdigest(),'argv':argv,'cwd':str(W),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':None,'exit':r.returncode,'stdout_file':tool+'.stdout','stderr_file':tool+'.stderr','scope':'exact three final body copies under isolated original gate layout','gate_code_unmodified':True})
+    print(r.stdout.decode(),end='');print(r.stderr.decode(),end='')
+    assert r.returncode==0 and not r.stderr
+(G/'execution-manifest.json').write_text(json.dumps(results,indent=2)+'\n')

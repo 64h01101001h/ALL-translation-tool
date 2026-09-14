@@ -1,0 +1,29 @@
+from pathlib import Path
+import json,copy
+O=Path(__file__).resolve().parents[1];E=O/'evidence'
+def original(a,s):return json.loads((E/'originals'/a/str(s)/'spec.json').read_bytes())
+def save(s,spec):
+ p=O/str(s);p.mkdir(exist_ok=True);(p/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(p/'errata.json').write_text('[]\n')
+s=original('english',313);seg=s['segments'][0];out=[]
+for x in seg['spans']:
+ if x['id']=='w13':out.extend([{'id':'w13','d':5,'tib':'tshad grub pa','eng':'confirmed by a valid perception'},{'id':'m13a','d':7,'tib':'tshad','eng':'valid perception'},{'id':'m13b','d':7,'tib':'grub pa','eng':'confirmed'}])
+ elif x['id']!='w14':out.append(x)
+seg['spans']=out;seg['eng_order'].remove('w14')
+seg['note']="PROVISIONAL machine alignment by Codex (independent reconciliation). GMR English is preserved verbatim; no hgm_gloss promotion. The situational setup, joint necessity predicate, and anaphoric conditional are complete d3 recasts. The attested tshad grub pa compound contains two unique tighter semantic members. Final phyir closes the two-part explanation introduced by the sole because; te supplies no additional causal atom. Repeated cognition, number, karmic-force and arising expressions retain their own subjects and occurrences. Existence/modality in yod pa and yod par is distributed through the possibility frames and remains omitted, without null claims; supplied participants and auxiliaries stay outside."
+save(313,s)
+s=original('tibetan',314);seg=s['segments'][0];out=[]
+for x in seg['spans']:
+ if x['id']=='w32':continue
+ x=copy.deepcopy(x)
+ if x['id']=='w14':x['tib']="'gog"
+ if x['id']=='w45':x['tib']='reg pa'
+ if x['id']=='w48':x['tib']='tsha ba'
+ out.append(x)
+ if x['id']=='w37':out.extend([{'id':'m37a','d':7,'tib':'dmar','eng':'red'},{'id':'m37b','d':7,'tib':"'bar ba",'eng':'hot'}])
+seg['spans']=out;seg['eng_order'].remove('w32')
+seg['note']="PROVISIONAL machine alignment by Codex (independent reconciliation). GMR English is preserved verbatim; no hgm_gloss promotion. Both la sogs pa occurrences license only their enumerative closing gestures, “and the other” and “and the like”; the supplied two is unwrapped. Four spatial loci, three blocking predicates and three sensations preserve their distinct occurrences. The first three go sa spans exclude explanatory participants; the fourth retains the attested space taken up. Occupy is a distributed recast of locative na with existential yod pa, so neither receives a separate atom or a false null. The source names ri rab twice; the repeated English mountain before round in shape is unwrapped. Steel-ball, red-hot and steel-mantra compounds have unique tighter semantic members. Negation mi and lexical 'gal remain flat at their source functions. Causal/analogy and experiential scaffolding has distributed expression and stays omitted. The complete Stream closing notice and following Reading Seven apparatus remain visible and unaligned."
+save(314,s)
+s=original('english',315);seg=s['segments'][0]
+seg['note']="PROVISIONAL machine alignment by Codex (independent reconciliation). GMR English is preserved verbatim; no hgm_gloss promotion. The complete local author name and standing identifying epithet are supported by the exact full HGM rgyal ba dge 'dun grub record and are banked once, without phonetic members or extra author-name mappings. The attested commentary title has three unique tighter semantic members. Root text rtsa ba has no separately alignable English exponent and is explicitly null; Abhidharmakosha is already the rendering of mdzod. Authorship kyis brtsoms pa'i and the accompanying-root frame are omitted where distributed; brtsoms pa is not falsely assigned selections. Original BRTZOMS/brtsoms is unchanged. Final las is the ablative from. The following 63 and Black, White, and Other Deeds Defined heading remain unaligned apparatus."
+save(315,s)
+print('Wrote 313,314,315 specs; native preflight follows.')

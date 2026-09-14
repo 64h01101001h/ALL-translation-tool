@@ -1,0 +1,12 @@
+from pathlib import Path
+import subprocess,sys,os,json,hashlib,datetime
+O=Path(__file__).resolve().parents[1]
+def run(name,argv,raw=b'',cwd=None):
+ p=O/'native'/name;p.mkdir(parents=True,exist_ok=False);(p/'stdin.bin').write_bytes(raw)
+ proc=subprocess.run(argv,input=raw,capture_output=True,cwd=cwd or O,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for n,b in [('stdout',proc.stdout),('stderr',proc.stderr)]: (p/(n+'.bin')).write_bytes(b)
+ (p/'exit.txt').write_text(str(proc.returncode)+'\n')
+ record={'argv':argv,'cwd':str(cwd or O),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':proc.returncode,'streams':{k:{'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()} for k,b in [('stdin',raw),('stdout',proc.stdout),('stderr',proc.stderr)]}}
+ (p/'execution.json').write_text(json.dumps(record,indent=2)+'\n');return proc
+if __name__=='__main__':
+ result=run(sys.argv[1],sys.argv[2:]);print('EXIT='+str(result.returncode));print(result.stdout.decode());print(result.stderr.decode())

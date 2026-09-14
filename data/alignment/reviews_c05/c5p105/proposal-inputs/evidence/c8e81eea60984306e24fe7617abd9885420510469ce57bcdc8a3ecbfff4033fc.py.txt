@@ -1,0 +1,70 @@
+import hashlib,html.parser,importlib.util,json,os,pathlib,subprocess,sys
+from native_adapter import OWN,BASE,W,load_original
+def digest(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def js(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+source={r['seq']:r for r in json.loads((OWN/'evidence/source.json').read_bytes())}
+
+class Observed(html.parser.HTMLParser):
+    def __init__(self):super().__init__(convert_charrefs=True);self.stack=[];self.records=[]
+    def handle_starttag(self,t,attrs):
+        if t=='span':self.stack.append({'attrs':dict(attrs),'text':''})
+    def handle_endtag(self,t):
+        if t=='span':self.records.append(self.stack.pop())
+    def handle_data(self,data):
+        for sp in self.stack:sp['text']+=data
+
+def finish_ranges(seq):
+    p=OWN/str(seq)/'decisions.json';d=json.loads(p.read_bytes());row=source[seq]
+    gaps={}
+    for field,key in [('wylie','tib_range'),('english','eng_range')]:
+        ranges=sorted(x[key] for x in d['decisions'] if x['d']!=7);cur=0;items=[]
+        for a,b in ranges+[[len(row[field]),len(row[field])]]:
+            if a>cur:
+                quote=row[field][cur:a]
+                why='Punctuation, whitespace or omitted grammatical/distributed material; see source-specific omission reasons in this file. No null judgment is asserted.'
+                if field=='english':why='Original English outside lexical wrappers: supplied framing/participants/auxiliaries, unharvested distributed translation or punctuation. Retained verbatim.'
+                if seq==314 and field=='english' and '[This concludes' in quote:why='Original concluding editorial notice, page number and following Reading Seven heading: registered following-heading apparatus, not a translation pair.'
+                if seq==315 and field=='english' and '63 Black' in quote:why='Original section number and following heading: registered following-heading apparatus, not a translation pair.'
+                items.append({'range':[cur,a],'text':quote,'reason':why,'context':row[field][max(0,cur-50):min(len(row[field]),a+50)]})
+            cur=b
+        gaps[field]=items
+    d['complete_unwrapped_ranges']=gaps
+    js(p,d)
+
+def main():
+    # Complete source/decision evidence before any final native generation.
+    for seq in (313,314,315):finish_ranges(seq)
+    checks=json.loads((OWN/'evidence/five-ground-errata-review.json').read_bytes())
+    assert len(checks)==3 and all(len(c['five_grounds'])==5 for c in checks)
+    load_original()
+    B=sys.modules['build_alignment_layer']
+    for seq in (313,314,315):
+        folder=OWN/str(seq);native=folder/'native';native.mkdir()
+        b=(folder/'spec.json').read_bytes();(native/'stdin.json').write_bytes(b)
+        env=os.environ.copy();env['PYTHONDONTWRITEBYTECODE']='1'
+        argv=[sys.executable,'-B',str(OWN/'helpers/native_adapter.py')]
+        result=subprocess.run(argv,input=b,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=W,env=env)
+        (native/'stdout.html').write_bytes(result.stdout)
+        (native/'stderr.txt').write_bytes(result.stderr)
+        (native/'exit.txt').write_text(str(result.returncode)+'\n')
+        js(native/'execution.json',{'argv':argv,'cwd':str(W),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':digest(b),'stdout':digest(result.stdout),'stderr':digest(result.stderr),'exit':result.returncode,'original_generator_path':str(W/'tools/gen_alignment_page.py'),'original_generator_sha256':BASE['governing_git_pins']['tools/gen_alignment_page.py']['sha256'],'pinned_builder_git_origin':BASE['commit'],'sqlite':'original spine file URI mode=ro, uri=True','adapter_scope':'Only pinned dependency import and read-only database path; original generator executes unmodified.'})
+        assert result.returncode==0 and result.stderr==b'',seq
+        (folder/'body.html').write_bytes(result.stdout)
+        obs=Observed();obs.feed(result.stdout.decode('utf8'));assert not obs.stack
+        seg=json.loads(b)['segments'][0];spans=seg['spans']
+        records={}
+        for x in obs.records:records.setdefault(x['attrs'].get('data-l'),[]).append(x)
+        assert [x['text'] for x in records['s'+str(seq)+'S']]==[source[seq]['wylie'],source[seq]['english']]
+        exact=[]
+        for sp in spans:
+            xs=records['s'+str(seq)+sp['id']]
+            assert len(xs)==2 and [x['text'] for x in xs]==[sp['tib'],sp['eng']]
+            exact.append({'id':sp['id'],'d':sp['d'],'observed_tib':xs[0]['text'],'observed_eng':xs[1]['text'],'both_exact':True})
+        parsed={side:B.spans_of(result.stdout.decode('utf8'),side) for side in ['tib','eng']}
+        assert all(len(xs)==len(spans)+1 for xs in parsed.values())
+        acip=[{'id':sp['id'],'tib':sp['tib'],'acip':B.acip_span(source[seq]['acip'],source[seq]['wylie'],sp['tib'])} for sp in spans]
+        assert all(x['acip'] for x in acip)
+        proof={'schema':'codex-proposal-native-proof-v1','seq':seq,'exit':result.returncode,'stdout_is_body':(folder/'body.html').read_bytes()==result.stdout,'stderr_empty':not result.stderr,'hashes':{'spec.json':digest(b),'body.html':digest(result.stdout),'errata.json':digest((folder/'errata.json').read_bytes())},'counts':{'spans':len(spans),'non_null_d5_word_pairs':sum(x['d']==5 and x['eng'] is not None for x in spans),'total_d5':sum(x['d']==5 for x in spans),'nulls':sum(x['eng'] is None for x in spans),'d7':sum(x['d']==7 for x in spans),'errata':0,'observed_spans_each_side_including_d1':len(spans)+1},'exact_complete_source_text_both_sides':True,'original_builder_spans_of':parsed,'exact_observed_lexical_fragments':exact,'original_builder_acip_roundtrips':acip,'semantic_acceptance':False}
+        js(folder/'native-proof.json',proof)
+        print(json.dumps({'seq':seq,'exit':0,'body':digest(result.stdout),'counts':proof['counts']},ensure_ascii=False))
+if __name__=='__main__':main()

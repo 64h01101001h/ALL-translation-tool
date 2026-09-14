@@ -1,0 +1,146 @@
+{
+  "seq": 313,
+  "source_english_characters": 558,
+  "source_wylie_characters": 284,
+  "five_grounds": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "field": "acip",
+      "found_verbatim": "TSAD MTSUNGS NGES PAR MI DGOS",
+      "source_character_range": [
+        13,
+        42
+      ],
+      "decision": "No source spelling defect demonstrated. Full ACIP and Wylie have four exact corpus occurrences each; selected tshad/mtshungs/nges par readings are attested in full HGM senses.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          217917,
+          218193
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "field": "english",
+      "found_verbatim": "three different objects, each one confirmed by a valid perception",
+      "source_character_range": [
+        314,
+        379
+      ],
+      "decision": "No demonstrated typo. C15:458 and C16:850 share the entire ACIP/Wylie/English text fields; recurrence alone does not establish correctness or publication independence.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          217917,
+          218193
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "field": "english",
+      "found_verbatim": "Even though it is not necessarily true that the valid perceptions are identical",
+      "source_character_range": [
+        36,
+        115
+      ],
+      "decision": "The local argument distinguishes necessity from possibility, not a contradiction. Complete original context 307–321 was read; no factual correction supported.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          217917,
+          218193
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "field": "english",
+      "found_verbatim": "start to exist as well.",
+      "source_character_range": [
+        535,
+        558
+      ],
+      "decision": "Complete local physical paragraph reaches this same end. C18:1134 has the same Tibetan and shared English prefix, plus a different appended continuation; full English identity is not claimed for C18. E-107 cap and E-071 marker class checked; neither applies.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          217917,
+          218193
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    },
+    {
+      "kind": "FORMATTING",
+      "field": "acip",
+      "found_verbatim": "MTSUNGS PA'I PHYIR,",
+      "source_character_range": [
+        257,
+        276
+      ],
+      "decision": "Comma/shad punctuation remains exact. Physical paragraph wraps are formatting, with no new formatting defect demonstrated.",
+      "disposition": "no new erratum filed",
+      "evidence": {
+        "exact_source_row": "../evidence/original-spine-context.json",
+        "full_master_records": "../evidence/lexical-evidence.json",
+        "parallel_query_results": "../evidence/corpus-queries.json",
+        "physical_original": "../evidence/C05ReadingASCII.original.bin",
+        "physical_acip_byte_range": [
+          217917,
+          218193
+        ],
+        "independent_publication_or_ingestion_lineage_proven": false
+      }
+    }
+  ],
+  "exact_parallel_counts": [
+    {
+      "field": "acip",
+      "spine_or_tuple_count": 4,
+      "external_corpus_count": 4
+    },
+    {
+      "field": "wylie",
+      "spine_or_tuple_count": 4,
+      "external_corpus_count": 4
+    },
+    {
+      "field": "english",
+      "spine_or_tuple_count": 3,
+      "external_corpus_count": 3
+    },
+    {
+      "field": "exact ACIP/Wylie/English tuple; course/id/seq not asserted identical",
+      "spine_or_tuple_count": 3,
+      "external_corpus_count": 3
+    }
+  ],
+  "registered_class_authorities": [
+    "../evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md (ERRATA DUTY)",
+    "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md (Markers and apparatus)",
+    "../evidence/pinned/data/alignment/C05_CAMPAIGN.md (Course shape)",
+    "../evidence/pinned/docs/errata_register.json (E-071, E-106 discussion of registered following-heading class, E-107)"
+  ],
+  "new_errata_count": 0
+}
