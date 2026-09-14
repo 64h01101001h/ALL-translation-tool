@@ -1,0 +1,202 @@
+{
+  "producer": "Codex / English-first independent proposal",
+  "source_origin_git_commit": "49b66f3af9cbb47599bb40286637fc9e683b7cdf",
+  "source": {
+    "id": 1702,
+    "course": "C05",
+    "seq": 320,
+    "acip": "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,",
+    "wylie": "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no",
+    "english": "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+  },
+  "range_convention": "zero-based half-open Unicode character offsets",
+  "spans": [
+    {
+      "id": "w1",
+      "d": 5,
+      "tib": "zag med",
+      "eng": "unstained",
+      "seq": 320,
+      "tib_range": [
+        0,
+        7
+      ],
+      "eng_range": [
+        16,
+        25
+      ],
+      "rationale": "Established unstained compound; no unsafe negative-affix member is fabricated.",
+      "parent_id": null,
+      "english_whole_word_occurrence": 1
+    },
+    {
+      "id": "w2",
+      "d": 5,
+      "tib": "las",
+      "eng": "Deeds",
+      "seq": 320,
+      "tib_range": [
+        12,
+        15
+      ],
+      "eng_range": [
+        0,
+        5
+      ],
+      "rationale": "Initial plural deeds is the topic, not the explanatory kind of deed or heading Deeds.",
+      "parent_id": null,
+      "english_whole_word_occurrence": 1
+    },
+    {
+      "id": "w3",
+      "d": 5,
+      "tib": "dkar",
+      "eng": "white",
+      "seq": 320,
+      "tib_range": [
+        22,
+        26
+      ],
+      "eng_range": [
+        59,
+        64
+      ],
+      "rationale": "White category inside the scope of the source negatives; color noun only, not a positive assertion about unstained deeds.",
+      "parent_id": null,
+      "english_whole_word_occurrence": 1
+    },
+    {
+      "id": "w4",
+      "d": 5,
+      "tib": "gnag",
+      "eng": "black",
+      "seq": 320,
+      "tib_range": [
+        30,
+        34
+      ],
+      "eng_range": [
+        68,
+        73
+      ],
+      "rationale": "Black category in the first sentence under never/either-or scope.",
+      "parent_id": null,
+      "english_whole_word_occurrence": 1
+    },
+    {
+      "id": "w5",
+      "d": 3,
+      "tib": "rnam par mi smin",
+      "eng": "never ripen",
+      "seq": 320,
+      "tib_range": [
+        35,
+        51
+      ],
+      "eng_range": [
+        26,
+        37
+      ],
+      "rationale": "Complete negative ripening construction preserves overt negation; individual mi outside this phrase also share the wider coordinated scope.",
+      "parent_id": null,
+      "english_whole_word_occurrence": 1
+    },
+    {
+      "id": "w6",
+      "d": 5,
+      "tib": "nag po",
+      "eng": "black",
+      "seq": 320,
+      "tib_range": [
+        56,
+        62
+      ],
+      "eng_range": [
+        128,
+        133
+      ],
+      "rationale": "Second black is in GMR explanatory apposition identifying the object that is ended, not the first negative classification or heading.",
+      "parent_id": null,
+      "english_whole_word_occurrence": 2
+    },
+    {
+      "id": "w7",
+      "d": 5,
+      "tib": "de",
+      "eng": "it",
+      "seq": 320,
+      "tib_range": [
+        63,
+        65
+      ],
+      "eng_range": [
+        110,
+        112
+      ],
+      "rationale": "Demonstrative refers to the black deed and is rendered by quoted it; quote marks stay outside.",
+      "parent_id": null,
+      "english_whole_word_occurrence": 1
+    },
+    {
+      "id": "w8",
+      "d": 5,
+      "tib": "zad",
+      "eng": "end",
+      "seq": 320,
+      "tib_range": [
+        66,
+        69
+      ],
+      "eng_range": [
+        154,
+        157
+      ],
+      "rationale": "Exhaustion root corresponds to the nominal end in the causative brings...to an end construction; intervening object excludes a contiguous whole-causative span.",
+      "parent_id": null,
+      "english_whole_word_occurrence": 1
+    },
+    {
+      "id": "w9",
+      "d": 5,
+      "tib": "byed pa",
+      "eng": "brings",
+      "seq": 320,
+      "tib_range": [
+        74,
+        81
+      ],
+      "eng_range": [
+        102,
+        108
+      ],
+      "rationale": "Causative doing verb provides brings; argument and to an remain unwrapped.",
+      "parent_id": null,
+      "english_whole_word_occurrence": 1
+    }
+  ],
+  "omissions": [
+    {
+      "tib": "mi before dkar; mi before gnag",
+      "reason": "The first two negatives are expressed through the shared never...either...or construction, not through two separately assignable English negators; uncertain atomization remains omitted rather than null."
+    },
+    {
+      "tib": "kyi / ni / la / par / yin no",
+      "reason": "Attributive/topic/connecting/resultative/copular functions are recast in the English clauses; no extra lexical atom is proposed."
+    },
+    {
+      "english": "64 Bringing Black and White Deeds to an End",
+      "reason": "Following selection heading, preserved as original apparatus, outside translation mappings."
+    }
+  ],
+  "eng_order": [
+    "w2",
+    "w1",
+    "w5",
+    "w3",
+    "w4",
+    "w9",
+    "w7",
+    "w6",
+    "w8"
+  ]
+}

@@ -1,0 +1,7 @@
+import json,sys
+from canonical_adapter import G
+s=json.load(sys.stdin);db=G.sqlite3.connect(G.B.SPINE);out=[]
+for seg in s['segments']:
+ row=db.execute('select wylie,english from corpus_segments where course=? and seq=?',(s['course'],seg['seq'])).fetchone();sp=seg['spans'];t=G.resolve(row[0],sp,'tib',seg['seq']);by={x['id']:x for x in sp};es=G.with_members(sp,[by[k] for k in seg['eng_order']],row[1]);e=G.resolve(row[1],es,'eng',seg['seq'])
+ for x in sp:out.append(dict(x,seq=seg['seq'],tib_range=list(t[x['id']]),eng_range=list(e[x['id']]) if x['id'] in e else None))
+print(json.dumps(out,ensure_ascii=False,indent=2))

@@ -1,0 +1,110 @@
+from pathlib import Path
+import json
+S=Path(__file__).resolve().parents[1];B=S.parent
+load=lambda p:json.loads(p.read_text())
+def write(p,x):p=S/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+notes={319:{
+1:"The opening 'dod names desire, the realm contrasted with form in 318. The narrow desire word is secure; par relates it to inclusion and need not absorb realm of.",
+2:"gtogs pa is the inclusion predicate. Taken in is its phrasal English verb; by the realm of belongs to the argument frame.",
+3:"dge ba is the subject virtue whose classification follows.",
+4:"First dkar gnag names the deed's mixed white/black category. HGM records the complete established compound; both is left outside.",
+5:"First dkar is the white constituent of that first category, strictly inside w4 on both sides.",
+6:"First gnag is the black constituent of that same first category, strictly inside w4 on both sides.",
+7:"This la joins deed color to ripening color. It owns the and AFTER the first black and comma, not the and internal to white and black.",
+8:"The first full rnam par smin pa predicates the initial ripening, so its ripens is the first occurrence at English 111.",
+9:"yang adds ripening to the deed classification. Its also precedes that first ripens; later explanatory also instances are unclaimed.",
+10:"The second dkar gnag classifies what the deed ripens into, distinct from the deed's own color at w4.",
+11:"The second dkar is the white member of the ripening-category compound w10.",
+12:"The second gnag is the black member of the same ripening-category compound w10.",
+13:"las is the deed noun in the opening definition; a type of is an explanatory frame outside this atom.",
+14:"yin is the opening definition's copula, rendered represents. No later is is borrowed and ni is not misidentified as this predicate.",
+15:"rang gi is the complete reflexive possessive modifying nature, rendered its. Phrase depth preserves the possessive relation without a rang-only pronoun claim.",
+16:"ngo bo is the essence/basic nature term. The HGM glossary explicitly attests basic nature, so basic is not unexplained padding here.",
+17:"nyon mongs can min negates being afflicted. Free of affliction is the whole recast predicate, not an independent free gloss on min or a separate possessor under can.",
+18:"The first pas makes non-affliction the reason for whiteness. It belongs to sentence-initial Since at 155, within that complete reason.",
+19:"This dkar concludes the non-afflicted-nature reason; it owns the third white, after free of affliction.",
+20:"First rgyud is the mental continuum in which virtue is mixed with afflicted things. It owns mental stream at 239, not the later suffering stream.",
+21:"First gcig restricts that continuum to one, rendered single. The supplied article a remains outside.",
+22:"First locative la belongs to the single continuum and owns within at 223.",
+23:"nyon mongs pa names the afflictions that are mixed in the continuum. Afflicted things is a substantival rendering of that content, not a supplied independent actor. Complete HGM records include mentally afflicted things; local grammar corroborates the noun use.",
+24:"dang supplies the comitative relation between mixing and afflicted things; first with at 270.",
+25:"First 'dres is the mixing with afflictions. Mixed at 264 expresses that same predicate.",
+26:"This pas makes that affliction mixture the reason for blackness. It owns the first lowercase since after but--.",
+27:"This gnag concludes the affliction-mixture explanation; third black at 299.",
+28:"'bras bu names the result which is pleasant and given forth, not the explanatory something of a different clause.",
+29:"yid du 'ong ba is the established pleasant/desirable modifier of this result. No compositional mind/come fragments are invented.",
+30:"'byin is the producing predicate here; gives forth is its complete English verb. Exact bare-head HGM devastate/rip does not support this sense, but the complete 'byin pa glossary and this local result argument do. No comparative gloss is substituted for GMR English.",
+31:"This pas makes production of a pleasant result the reason for white ripening. It owns the unique because at 345.",
+32:"This rnam smin is the second ripening predicate, fronted in English before its pleasant-result reason. It owns ripens at 317.",
+33:"This dkar is the fourth white, the positive quality of the pleasant ripened result.",
+34:"Second rgyud identifies the continuum where the result is mixed with suffering; mental stream at 419 is correct.",
+35:"Second gcig picks out that particular continuum. The exact HGM glossary explicitly includes particular; it is not a forced reuse of single.",
+36:"Second locative la owns within at 397 in the suffering-mixture reason.",
+37:"sdug bsngal is the suffering mixed with the result. It does not denote the earlier afflicted things.",
+38:"Second dang owns with at 452, the comitative of suffering.",
+39:"Second 'dres is the suffering mixture, so mixed at 446 is the local occurrence.",
+40:"Final pas introduces the suffering-mixture reason and owns the second lowercase since at 391.",
+41:"Final rnam smin owns the final ripens at 487 after the explanatory we can also say it; the extra frame is not captured.",
+42:"gnag pa is the final black result predicate, with inflected pa retained and following genitive/phyir outside. The final black at 509 is its occurrence."
+},320:{
+1:"zag med is the established unstained compound applied to Deeds in the first sentence, before the heading.",
+2:"zag is the stain member of unstained, represented by stained after the negative prefix. It is a nested positive member, not a free-standing adjective outside the compound.",
+3:"med supplies the negative un prefix within unstained. This is an explicitly permitted negative member and subword is declared.",
+4:"las names the initial plural Deeds. The later explanatory deed and title Deeds are not the subject occurrence.",
+5:"dkar is the white category under the shared negative construction. It owns lowercase white at 59, not the heading White.",
+6:"gnag is the first black category under never/either/or, not the second sentence's anaphoric black.",
+7:"rnam par mi smin is the complete negative-ripening phrase. Never ripen preserves its negation; the two earlier color negatives have distributed scope and are not falsely given separate never atoms or nulls.",
+8:"nag po identifies the black deed being ended; the appositional black at 128 carries that referent. Kind of deed is translator exposition outside it.",
+9:"de is the demonstrative rendered quoted it at 110. The quotes and that is remain outside the atom; it and black refer to the same object.",
+10:"zad par supplies the result-state/terminative complement to an end. d3 is justified by the whole source construction. The English object interrupts brings ... to an end, preventing one continuous full causative.",
+11:"byed pa supplies the causative brings at 102; it does not own the intervening pronoun, apposition or heading Bringing."
+},321:{
+1:"chos bzod is the technical compound explained as mastery of phenomena in 322 and attested by full chos bzod pa. The actual verse's Phenomena, mastery is preserved, comma included. The conflicting auto-mined master gloss is neither altered nor treated as support.",
+2:"chos has the unique Phenomena exponent inside that technical parent, matching its literal member rather than types or mental movement.",
+3:"bzod has the unique mastery exponent within w1; its HGM glossary contains mastery independently of the mined compound error.",
+4:"First 'dod chags is desire from which the first path is free; English desire at 105 is the correct occurrence.",
+5:"First bral ba owns free of before the first desire. The preposition is part of the attested freedom predicate and its governed argument stays separate.",
+6:"The first bar chad med lam is the established Uninterrupted path compound. The two overt members are meaningful and tighter on both sides.",
+7:"bar chad med owns Uninterrupted only within the first whole path compound.",
+8:"lam owns the overt path inside w6, not the later arising.",
+9:"brgyad is eight of those path instants, distinct from the twelve total and the later ninth.",
+10:"First sems pa is mental movement in the initial set of twelve types, English 16–31.",
+11:"rnam pa is the types noun that classifies the twelve movements. Of remains outside.",
+12:"bcu gnyis is the numeral Twelve; English does not provide separate ten and two members.",
+13:"First nag po is the black deed category ended by those twelve movements. Its black at 144 is distinct from the later paired color.",
+14:"zad par is the complete result complement to an end of the first act to bring construction. The definite object intervenes, so no discontinuous whole span is claimed.",
+15:"byed pa contributes the causative act to bring, a complete HGM-attested rendering, excluding the supplied relative that and the object the black.",
+16:"las is deeds in the first conclusion. Are and that are outside the lexical noun.",
+17:"dgu pa is the ordinal Ninth, whose capital reflects the verse line. No ninth from elsewhere is supplied.",
+18:"Second sems pa is the mental movement of that ninth instant, English 179–194.",
+19:"gang yin pa is the nominal relative predicate That which is introducing the ninth movement. The complete phrase supports its English frame; it is not an invented article on a word span.",
+20:"dkar nag is the established white-and-black category ended by the ninth movement, with exactly its own two members.",
+21:"dkar is white within w20 and not the following capitalized White.",
+22:"nag is black within w20 and not the earlier first-sentence black.",
+23:"Second zad owns the second end, the verb in acts to end. The earlier nominal end belongs to w14.",
+24:"byed owns acts in the ninth-movement conclusion. It is the agentive/causative action predicate, with infinitive to left outside.",
+25:"dkar po owns final capitalized White, elliptical for the white deeds ended in this final verse clause.",
+26:"bsam gtan is concentration, the object of the final desire relation, confirmed by the fuller commentary 324. For the stays outside.",
+27:"chags bral ba is an established free-of-desire compound with exact HGM glossary support. It applies to the final path/concentration clause and keeps Free of desire together.",
+28:"chags is desire inside final w27, English 291–297; it does not take the earlier desire.",
+29:"bral ba is Free of inside final w27. Its English precedes the desire member, so canonical with_members ordering is necessary and proved.",
+30:"Second bar chad med lam is the same technical path unit, elliptically rendered uninterrupted before arising. Its complete HGM entry attests uninterrupted as a whole-unit rendering and 324 makes the path/arising distinction explicit. A duplicate bar chad med member or a lam-to-arising/null claim would be unjustified.",
+31:"skyes owns arising of the final uninterrupted path, English 274–281. It is not the missing overt path noun.",
+32:"tha mas is the indivisible instrumental-inflected final term. Final is its lexical contribution; by scopes the larger path-arising phrase and no standalone -s is split."
+}}
+final=load(S/'resolved-spans.json');reviews=[]
+for r in final:
+ n=int(r['id'][1:]);assert n in notes[r['seq']];reviews.append({**r,'verdict':'SOUND','independent_reason':notes[r['seq']][n],'source_checked':'evidence/independent-complete-source-context.json','canonical_native_resolver':'native/final-'+str(r['seq'])+'-resolver-v1','source_and_english_occurrences_checked_in_full_clause':True})
+assert len(reviews)==sum(len(v) for v in notes.values())==85
+write(Path('span-review.json'),reviews)
+original=[];omissions=[]
+for seq in [319,320,321]:
+ d=load(B/'reconciled'/str(seq)/'original-dispositions.json')
+ for r in d['spans']:
+  finalids=r['final_ids'];rationale=' '.join(notes[seq][int(i[1:])] for i in finalids)
+  original.append({'seq':seq,'angle':r['angle'],'original':r['original'],'original_decision_reviewed':r['original_complete_decision'],'reconciler_disposition':r['decision'],'final_ids':finalids,'independent_verdict':'DISPOSITION_SUPPORTED','independent_reason':rationale})
+ for r in d['original_omissions']:
+  omissions.append({'seq':seq,**r,'independent_verdict':'DISPOSITION_SUPPORTED','independent_reason':('The opening yin/represents and la/and each have a local exponent and are recovered where omitted; the four pas exhaust the distinct causal words. Remaining topic/genitive/expository wording has no separately secure atom.' if seq==319 else 'The negative scope is distributed across the coordinated colors and ripening; no false null is justified. The terminative result phrase is recovered with zad par; the numbered heading remains apparatus.' if seq==320 else 'The first terminative result phrase and whole second path compound are recovered where justified. Remaining verse frame and final instrumental scope are distributed; no path-to-arising, spurious null, or invented omitted predicate is allowed.')})
+write(Path('original-decision-review.json'),original);write(Path('original-omission-review.json'),omissions)
+write(Path('semantic-coverage.json'),{'original_spans':len(original),'final_spans':len(reviews),'original_omissions':len(omissions),'final_material_omissions':sum(len(load(B/'reconciled'/str(s)/'final-decisions.json')['material_omissions']) for s in [319,320,321]),'all_original_dispositions_independently_reviewed':True,'all_final_semantic_atoms_independently_reviewed':True,'unresolved_semantic_findings':[]})
+print(json.dumps({'final_reviews':len(reviews),'original_reviews':len(original),'original_omission_reviews':len(omissions)}))

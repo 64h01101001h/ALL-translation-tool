@@ -1,0 +1,12 @@
+from pathlib import Path
+import sys,sqlite3,json
+Q=Path(__file__).resolve().parents[1];P=Q/'evidence/pinned'
+sys.path.insert(0,str(P/'engines'));sys.path.insert(0,str(P/'tools'))
+import gen_alignment_page as G
+G.B.SPINE=next(x['path'] for x in json.loads((Q/'evidence/source-pins.json').read_text()) if x['role']=='spine')
+connect=sqlite3.connect
+def readonly(path,*args,**kwargs):
+ assert str(path)==G.B.SPINE
+ return connect('file:'+str(path)+'?mode=ro',uri=True)
+G.sqlite3.connect=readonly
+if __name__=='__main__':G.main()

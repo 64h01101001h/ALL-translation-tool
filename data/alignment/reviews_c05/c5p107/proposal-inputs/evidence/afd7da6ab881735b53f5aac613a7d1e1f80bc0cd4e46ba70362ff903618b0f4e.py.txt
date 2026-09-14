@@ -1,0 +1,10 @@
+import pathlib,sys,sqlite3,json
+O=pathlib.Path(__file__).resolve().parents[1];P=O/'evidence/pinned';sys.path.insert(0,str(P/'engines'));sys.path.insert(0,str(P/'tools'))
+import gen_alignment_page as G
+bl=json.loads((O/'evidence/original/proposal-baseline.json').read_text());G.B.SPINE=bl['source_pins']['spine']['path']
+connect=sqlite3.connect
+def ro(path,*args,**kwargs):
+ assert str(path)==G.B.SPINE
+ return connect('file:'+str(path)+'?mode=ro',uri=True)
+G.sqlite3.connect=ro
+if __name__=='__main__':G.main()

@@ -1,0 +1,68 @@
+from pathlib import Path
+import json,hashlib,subprocess,os,re
+S=Path(__file__).resolve().parents[1]; B=S.parent; W=B.parents[1]/'campaign-worktree'
+def info(b): return {'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}
+def write(p,x): p=S/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest=[]; content={}
+def copy(src,dst=None,pin=None):
+ src=Path(src).absolute(); b=src.read_bytes(); i=info(b)
+ if dst is None:
+  key=(i['sha256'],i['bytes']); dst=content.get(key)
+  if dst is None:
+   ext=src.suffix.lower(); ext=ext if ext in ('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit') else (ext+'.txt' if ext in ('.py','.sql','.sh') else '.bin')
+   dst='proposal-inputs/evidence/'+i['sha256']+ext;content[key]=dst
+ t=S/dst;t.parent.mkdir(parents=True,exist_ok=True)
+ if t.exists(): assert t.read_bytes()==b
+ else: t.write_bytes(b)
+ r={'original':str(src),'copy':str(dst),**i}
+ if pin:
+  commit,rel=pin;assert subprocess.check_output(['git','show',commit+':'+rel],cwd=W)==b
+  r.update(original_git_commit=commit,repository_relative_path=rel)
+ manifest.append(r)
+ return dst
+f=B/'reconciled/freeze.json';assert info(f.read_bytes())['sha256']=='6beabe2726cbdd404577bfa91a22442cf100ee01ee9ed49920cb7d37bec2bf8c'
+freeze=json.loads(f.read_text());assert isinstance(freeze['files'],dict) and len(freeze['files'])==355
+for rel,i in freeze['files'].items():assert info((B/'reconciled'/rel).read_bytes())==i
+for angle in ['tibetan','english','reconciled']:
+ root=B/angle
+ for p in sorted(root.rglob('*')):
+  if not p.is_file() or '__pycache__' in p.parts or p.suffix=='.pyc':continue
+  rel=p.relative_to(root); dst=None
+  if rel.parts[0] in ['319','320','321']:
+   base=('reviewed-final' if angle=='reconciled' else 'proposal-inputs/'+angle)
+   dst=base+'/'+str(rel)
+   if p.suffix not in ('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'):dst+=('.txt' if p.suffix in ['.py','.sql','.sh'] else '.bin')
+  copy(p,dst)
+for p in sorted(B.iterdir()):
+ if p.is_file():copy(p,'proposal-inputs/batch/'+p.name if p.suffix in ['.json','.md','.txt'] else None)
+for p in [B.parent/'semantic-review-protocol.md',B.parent/'copy_evidence_once.py',B.parent/'land_reviewed_page.py']:
+ copy(p,'helpers/'+p.name+'.txt' if p.suffix=='.py' else 'governing/'+p.name)
+origin='49b66f3af9cbb47599bb40286637fc9e683b7cdf'
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/errata_register.json','data/alignment/span_head_allow.json','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','engines/hgm_tools.py']:
+ src=B/'reconciled/evidence/pinned'/rel
+ b=src.read_bytes();assert b==subprocess.check_output(['git','show',origin+':'+rel],cwd=W)
+ dst='governing/source-origin/'+rel+('.txt' if src.suffix=='.py' else '')
+ copy(src,dst)
+ # A mapped immutable repository object, even if the live counterpart has since changed.
+ manifest.append({'original':str((W/rel).absolute()),'copy':dst,**info(b),'original_git_commit':origin,'repository_relative_path':rel})
+write(Path('original-to-copy-manifest.json'),manifest)
+access=json.loads((B/'english/evidence/required-access.json').read_text())
+for r in access:assert os.access(r['path'],os.R_OK)
+write(Path('required-access.json'),access)
+write(Path('intake.json'),{'source_origin_git_commit':origin,'source_origin_course_boundary':312,'actual_through318_baseline_receipt':None,'reconciliation_freeze':info(f.read_bytes()),'frozen_files_verified':355,'manifest_records':len(manifest),'distinct_copies':len({r['copy'] for r in manifest})})
+# Lossless semantic-package reformat: every JSON field is retained, pretty whitespace only removed.
+s=(B/'semantic-input-review-package.txt').read_text();chunks=re.split(r'(?m)^===== (.*?) =====\n',s); sections=[]
+for i in range(1,len(chunks),2):
+ name,txt=chunks[i],chunks[i+1]
+ try:
+  obj=json.loads(txt);txt=json.dumps(obj,ensure_ascii=False,separators=(',',':'))+'\n'
+ except json.JSONDecodeError:pass
+ sections.append((name,txt))
+for seq in [319,320,321]:
+ out=''
+ for name,txt in sections:
+  if '/'+str(seq)+'/' in name or name.endswith('DIFF '+str(seq)):
+   out+='\n===== '+name+' =====\n'+txt
+ (S/('package-'+str(seq)+'-compact.txt')).write_text(out)
+write(Path('package-reading-index.json'),{'source':info(s.encode()),'sections':[{'name':n,'content_bytes':len(t.encode())} for n,t in sections],'method':'Lossless JSON whitespace compaction only; non-JSON reports and full diffs preserved verbatim.'})
+print(json.dumps({'freeze_files':355,'manifest_records':len(manifest),'distinct_copies':len({r['copy'] for r in manifest}),'package_sections':len(sections)}))

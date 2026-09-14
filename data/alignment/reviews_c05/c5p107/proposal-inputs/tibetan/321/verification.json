@@ -1,0 +1,35 @@
+{
+  "seq": 321,
+  "spans": 32,
+  "nulls": 0,
+  "d5_total": 22,
+  "nonnull_d5": 22,
+  "d7": 8,
+  "errata": 0,
+  "status": "PASS",
+  "canonical_native": [
+    {
+      "mode": "generator",
+      "path": "321/native/generator-v1",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "stdout_sha256": "94e4a9e4cf7202e0fa360afa5da0578ecfdbb023c0f8d7824f80dc46d4219b4f"
+    },
+    {
+      "mode": "resolver",
+      "path": "321/native/resolver-v1",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "stdout_sha256": "1d4eb440fd1eeabd245033512e5074351e2775e7565881e327a66095be8da3b2"
+    }
+  ],
+  "body_bytes": 4751,
+  "body_sha256": "94e4a9e4cf7202e0fa360afa5da0578ecfdbb023c0f8d7824f80dc46d4219b4f",
+  "spec_sha256": "70f43e127bc7ccdf320f53d822f48bb65e2d3ab300c32fee2dd233d9f3c953cd",
+  "body_equals_generator_stdout": true,
+  "canonical_ranges_equal_independently_intended_ranges": true,
+  "rendered_tibetan_and_english_exact": true,
+  "source_origin_git_commit": "49b66f3af9cbb47599bb40286637fc9e683b7cdf",
+  "actual_landing_baseline_consumed": false,
+  "semantic_acceptance": "independent original proposal only"
+}

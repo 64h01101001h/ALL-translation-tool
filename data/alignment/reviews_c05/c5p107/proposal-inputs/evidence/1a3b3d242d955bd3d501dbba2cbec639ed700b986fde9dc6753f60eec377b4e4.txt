@@ -1,0 +1,76 @@
+from pathlib import Path
+import json,copy
+Q=Path(__file__).resolve().parents[1];P=Q.parent
+ORIGIN='49b66f3af9cbb47599bb40286637fc9e683b7cdf'
+def read(p):return json.loads(p.read_text())
+def write(p,x):
+ p=Q/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def key(x):return {k:x[k] for k in ['id','d','tib','eng','seq','tib_range','eng_range']}
+T={s:read(P/'tibetan'/str(s)/'decisions.json') for s in [319,320,321]};E={s:read(P/'english'/str(s)/'decisions.json') for s in [319,320,321]}
+finals={}
+# Adjudicated choices: source-specific words and exact lexical compounds, not mechanical agreement.
+F=[]
+for r in T[319]['spans']:
+ i=r['id']
+ if i=='w1':
+  x=copy.deepcopy(E[319]['spans'][0]);x['rationale']="Retain the narrower desire lexeme 'dod. The desire-realm referent is clear from 318–319, but par is relational and no separate khams licenses realm of here. Leave realm of and par unbanked, not null.";F.append(x)
+ elif i in ['w4','w9']:
+  ids=['w4','m5','m6'] if i=='w4' else ['w9','m10','m11']
+  F.extend(copy.deepcopy([s for s in E[319]['spans'] if s['id'] in ids]))
+ elif i in ['w5','w10']:continue
+ else:F.append(copy.deepcopy(r))
+finals[319]=F
+finals[320]=copy.deepcopy(T[320]['spans']);finals[321]=copy.deepcopy(T[321]['spans'])
+# Explicit negative-affix declaration records intent even though d7 is already member-aware.
+next(s for s in finals[320] if s['tib']=='med')['subword']=True
+notes={
+319:"PROVISIONAL machine alignment reconciled independently by Codex. GMR wording is verbatim; no hgm_gloss promotion. The two introductory white-and-black compounds have unique color members. Four local pas clauses own their own Since/since/because/since occurrences; the outer te/phyir reason architecture remains unbanked. The whole negative-affliction predicate is kept as a phrase. Nyon mongs pa owns the complete substantival afflicted things here. The two gcig occurrences are single and particular respectively. Realm of and other supplied expansions remain unwrapped; uncertainty is never represented as null.",
+320:"PROVISIONAL machine alignment reconciled independently by Codex. GMR wording is verbatim; no hgm_gloss promotion. The three source negatives share one English never...either...or construction: the negative-ripening phrase is retained, while the two color negatives remain unbanked with their distributed scope recorded. Zag med has unique stain and negative members within unstained. The causative is discontinuous in English: byed pa owns brings and the complete terminative zad par phrase owns to an end. Quoted it and the explanatory black refer to the same black deed. The following numbered selection heading remains unchanged apparatus.",
+321:"PROVISIONAL machine alignment reconciled independently by Codex. GMR wording and verse punctuation are verbatim; no hgm_gloss promotion. Chos bzod owns the technical expression Phenomena, mastery, with two exact members, supported by commentary 322. The original auto-mined master gloss types of mental movement conflicts with this source; it is preserved unchanged and is not semantic support for the mapping. Both bar chad med lam occurrences are kept as established path compounds; the second is elliptically rendered uninterrupted, a complete HGM glossary sense, without a lam-to-arising mapping or degenerate member. Chags bral ba retains its full Free of desire rendering and two members. The final clause is elliptical; no omitted predicate is invented. Complete CRLF-wrapped physical ACIP is preserved with explicit whitespace-fold evidence."
+}
+material={
+319:[{'tib':"par after 'dod",'english':'realm of','reason':'Realm is contextually understood, but the narrower desire lexeme is sufficient and its relational par does not separately name realm. Omit rather than assert absence.'},{'tib':'te / phyir','reason':'The four local causal pas endings already own four explicit English causal connectives. Outer reason architecture is distributed across those clauses; no exclusive further atom.'},{'tib':'ni and unspanned genitive endings','reason':'Topic and genitive framing is distributed in English syntax; no isolated equivalent or null.'},{'english':'both / but / later also / as well / we can also say / a type of / articles and supplied pronouns','reason':'No additional distinct Tibetan occurrence licenses these expansions. Preserve the original text unwrapped; only initial yang owns initial also.'}],
+320:[{'tib':'mi before dkar; mi before gnag','reason':'Shared coordinated negative scope with rnam par mi smin appears in the single never...either...or English construction. Neither negative has a uniquely separable additional exponent; both omitted, not null.'},{'tib':'kyi / ni / la / yin no','reason':'Attributive, topic, connective and copular contribution is distributed through the English expository frame; no separately claimed atoms.'},{'english':'Their nature is to be what / that is / kind of deed / either / or / supplied articles','reason':'Exposition and shared-scope syntax are not independently assigned to a Tibetan content word.'},{'english':'64 Bringing Black and White Deeds to an End','reason':'Complete original following-selection heading, covered by registered apparatus policy. It is excluded from every correspondence and is not a new erratum.'}],
+321:[{'tib':'yi / kyi / first gang / first de / de ni / yin and remaining genitives','reason':'Poetic relative, genitive, resumptive and copular framing is distributed. Do not fabricate a separate equivalent.'},{'tib':'second bar chad med lam members','reason':'The whole established compound has the attested elliptical uninterrupted rendering. Bar chad med would duplicate its whole English parent, while no separate path noun licenses a lam member; no false lam-to-arising or null is added.'},{'tib':'instrumental ending on tha mas','reason':'Whole instrumental inflection is indivisible. Its by relation is distributed through the full arising construction; no detached -s span.'},{'english':'had with / conjunctions / Are / supplied articles / in the / for the / elliptical final predicate','reason':'Preserve verse syntax verbatim without banking supplied participants or inventing an unstated final end predicate.'},{'tib':'chos bzod','english':'types of mental movement (original mined master gloss)','reason':'This historical dictionary claim conflicts with the full source and commentary 322. Record the conflict; do not use it to override source-specific evidence and do not alter hgm_gloss.'}]
+}
+for seq,spans in finals.items():
+ for i,s in enumerate(spans,1):
+  s['selected_from']={'angle':'tibetan' if any(s==v for v in T[seq]['spans']) else 'reconciled','original_id':s['id']}
+  s['id']='w'+str(i);s.pop('parent',None);s.pop('parent_id',None)
+  if s['d']!=7:parent=s['id']
+  s['parent_id']=parent if s['d']==7 else None
+  s['source_function']='unique tighter member of established d5 compound' if s['d']==7 else ('complete source phrase and its full recast' if s['d']<5 else 'independent particle in the local construction' if s['d']==6 else 'word or established compound in this source occurrence')
+ top=[s for s in spans if s['d']!=7 and s['eng'] is not None];eng_order=[s['id'] for s in sorted(top,key=lambda x:x['eng_range'][0])]
+ spec_spans=[{k:s[k] for k in ['id','d','tib','eng','cls','nul','subword'] if k in s} for s in spans]
+ spec={'course':'C05','segments':[{'seq':seq,'title':read(P/'tibetan'/str(seq)/'spec.json')['segments'][0]['title'],'spans':spec_spans,'eng_order':eng_order,'note':notes[seq]}]}
+ write(Path(str(seq))/'spec.json',spec);write(Path(str(seq))/'errata.json',[])
+ write(Path(str(seq))/'final-decisions.json',{'producer':'Codex independent reconciliation','source_origin_git_commit':ORIGIN,'range_convention':'zero-based half-open Unicode character offsets in complete original source fields','spans':spans,'eng_order':eng_order,'material_omissions':material[seq]})
+ english=[]
+ for s in sorted(top,key=lambda x:x['eng_range'][0]):
+  english.append(s['id']);english.extend(x['id'] for x in sorted([x for x in spans if x['parent_id']==s['id']],key=lambda x:x['eng_range'][0]))
+ write(Path(str(seq))/'final-ordered-tuples.json',{'seq':seq,'source_order':[key(s) for s in spans],'english_top_level_order':eng_order,'english_order_with_members':english})
+ original=[];omis=[]
+ for angle,old in [('tibetan',T[seq]),('english',E[seq])]:
+  for s in old['spans']:
+   same=[x for x in spans if all(x[k]==s[k] for k in ['d','tib','eng','tib_range','eng_range'])]
+   overlapping=[x for x in spans if min(x['tib_range'][1],s['tib_range'][1])>max(x['tib_range'][0],s['tib_range'][0])]
+   chosen=same or overlapping
+   if same:decision='RETAIN';reason='The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.'
+   else:
+    decision='RECAST'
+    if seq==319 and s['tib']=="'dod par":reason='Tighten to the desire lexeme and its exact English noun; realm of is not separately secured by relational par.'
+    elif seq==319 and s['tib'] in ['dkar','gnag']:reason='Keep this color as a unique d7 member under the established dkar gnag compound; exact own color exponent and occurrence retained.'
+    elif seq in [320,321] and s['tib']=='zad':reason='Retain the complete terminative zad par phrase at d3 with to an end, alongside the independently placed causative verb. This preserves its full result relation without treating an as a separate Tibetan word.'
+    elif seq==321 and s['tib'] in ['chags','bral ba'] and s['tib_range'][0]>=211:reason='Retain the original lexical contribution as a unique member of attested chags bral ba → Free of desire; preserve full compound and own English inside it.'
+    elif seq==321 and s['tib']=='bar chad med':reason='Restore the established full technical bar chad med lam compound at the second occurrence. Whole uninterrupted is an exact HGM glossary sense; lam has no separate member, and arising stays with skyes.'
+    else:raise AssertionError((seq,angle,s,chosen))
+   assert chosen
+   original.append({'angle':angle,'original':key(s),'original_complete_decision':s,'decision':decision,'final_ids':[x['id'] for x in chosen],'reason':reason,'final_rationales':{x['id']:x['rationale'] for x in chosen}})
+  for i,o in enumerate(old.get('omissions',old.get('material_omissions',[]))):
+   reason='Retained with the final material-omission decisions; grammatical distribution is never relabeled as absent.'
+   if seq==319 and angle=='english' and 'yin te' in o.get('tib',''):reason='PARTIAL: retain yin → represents as this definition copula and la → and as the explicit junction of deed and ripening predicates. Other genitives, te and ni remain distributed/unbanked.'
+   if seq==320 and angle=='english' and '/ par /' in o.get('tib',''):reason='PARTIAL: the terminative par is retained with zad in the complete d3 result phrase to an end. Other listed grammar remains distributed/unbanked.'
+   if seq==321 and angle=='english' and o.get('tib')=='final lam':reason='SUPERSEDED: retain the complete established second bar chad med lam → uninterrupted; exact full-compound HGM glossary and parallel technical construction support the ellipsis. No independent lam member or lam-to-arising pair.'
+   omis.append({'angle':angle,'index':i,'original':o,'disposition':reason})
+ write(Path(str(seq))/'original-dispositions.json',{'seq':seq,'spans':original,'original_omissions':omis,'coverage':{'original_spans':len(original),'covered':len(original)}})
+ print(seq,len(spans),'d5',sum(s['d']==5 for s in spans),'d7',sum(s['d']==7 for s in spans),'null',sum(s['eng'] is None for s in spans),'original',len(original))

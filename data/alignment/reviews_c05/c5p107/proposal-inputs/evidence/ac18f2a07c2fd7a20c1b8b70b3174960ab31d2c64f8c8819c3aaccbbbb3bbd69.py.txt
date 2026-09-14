@@ -1,0 +1,26 @@
+from pathlib import Path
+import subprocess,sys,json,hashlib,datetime,os
+Q=Path(__file__).resolve().parents[1];P=Q.parent
+
+def info(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def run(label,spec,helper):
+ d=Q/'native'/label;d.mkdir(parents=True,exist_ok=False);b=spec.read_bytes();argv=[sys.executable,'-B',str(Q/'helpers'/helper)];start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ r=subprocess.run(argv,input=b,cwd=Q,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),capture_output=True)
+ for name,data in [('stdin',b),('stdout',r.stdout),('stderr',r.stderr)]: (d/(name+'.bin')).write_bytes(data)
+ (d/'exit.txt').write_text(str(r.returncode)+'\n');ex={'argv':argv,'cwd':str(Q),'utc':start,'finished_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':r.returncode,'streams':{'stdin':info(b),'stdout':info(r.stdout),'stderr':info(r.stderr)}};(d/'execution.json').write_text(json.dumps(ex,indent=2)+'\n')
+ assert r.returncode==0 and not r.stderr,(label,r.returncode,r.stderr.decode())
+ return r.stdout,ex
+results=[]
+for a in ['tibetan','english']:
+ for seq in [319,320,321]:
+  d=P/a/str(seq);b,ex=run(f'original-{a}-{seq}-resolver-v1',d/'spec.json','resolve.py');actual=json.loads(b);expected=json.loads((d/'resolved-ranges.json').read_text());assert actual==expected,(a,seq)
+  decisions=json.loads((d/'decisions.json').read_text())['spans'];seven=['id','d','tib','eng','seq','tib_range','eng_range'];assert [{k:r[k] for k in seven} for r in actual]==[{k:r[k] for k in seven} for r in decisions]
+  results.append({'kind':'original-resolver','angle':a,'seq':seq,'native_path':f'native/original-{a}-{seq}-resolver-v1','execution':ex,'spans':len(actual),'exact_original_ranges':True})
+for seq in [319,320,321]:
+ for kind,helper in [('generator','canonical_adapter.py'),('resolver','resolve.py')]:
+  d=Q/str(seq);b,ex=run(f'final-{seq}-{kind}-v1',d/'spec.json',helper)
+  if kind=='generator':(d/'body.html').write_bytes(b)
+  else:
+   (d/'resolved-ranges.json').write_bytes(b);seven=['id','d','tib','eng','seq','tib_range','eng_range'];actual=json.loads(b);expected=json.loads((d/'final-decisions.json').read_text())['spans'];assert [{k:r[k] for k in seven} for r in actual]==[{k:r[k] for k in seven} for r in expected]
+  results.append({'kind':'final-'+kind,'seq':seq,'native_path':f'native/final-{seq}-{kind}-v1','execution':ex})
+(Q/'native-results.json').write_text(json.dumps(results,ensure_ascii=False,indent=2)+'\n');print(json.dumps({'status':'PASS','original_resolvers':6,'final_generators':3,'final_resolvers':3,'all_exit_zero':True,'all_stderr_empty':True,'exact_original_and_final_ranges':True}))

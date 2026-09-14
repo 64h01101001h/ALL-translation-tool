@@ -1,0 +1,50 @@
+[
+  {
+    "item_id": "E-040",
+    "course": "C01",
+    "segment": "C01:484",
+    "kind": "NOT_AN_ERRATUM",
+    "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+    "expected": "",
+    "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+    "severity": "LOW",
+    "confidence": "CONFIRMED",
+    "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+  },
+  {
+    "item_id": "E-071",
+    "course": "C03",
+    "segment": "C03:303",
+    "kind": "INGEST_ARTEFACT",
+    "found": "the preliminaries",
+    "expected": "",
+    "evidence": "Verified in build/hgm_spine_v27_2.db, row id=867. C03:303 stores wylie='the preliminaries' (17 chars, confirmed with length(wylie)) and english='I. Why the Steps?' (17 chars); the acip column holds 'THE PRELIMINARIES' — English sitting in the transliteration column — and raw carries the same. The wylie is not Wylie: 'preliminaries' has no legal syllable analysis ('prel' is not a possible stack, 'aries' has no root-letter reading). Three courses carry the IDENTICAL wylie against unrelated English, which proves the string is a repeated editorial running head rather than any segment's text: C01:43 'the preliminaries' / 'I. The Lama and the Word'; C09:171 'the preliminaries' / 'The preliminary division of my text has two parts of its own: the offering of praise, and an identification of that which is to be to be explained.'; C03:303 / 'I. Why the Steps?'. The mechanism is visible where the same header stream was concatenated in front of real Tibetan instead of being stranded alone: C03:298 wylie = \"how the teaching was given ,de la 'dir khyab bdag 'khor lo'i mgon po rdo rje 'chang...\" and C09:54 wylie = \"i. the preliminaries de la 'dir rje btsun chos kyi rgyal po shar tsong kha pa chen po blo...\". Sibling header rows of the same class in this course: C03:22 'the asian classics institute'; C03:294 'foreword'; C03:295 'about the authors'; C03:401 'steps shared with those of lesser capacity'; C03:430 'steps shared with those of medium capacity'; C03:476 'open steps for those of greater capacity'; C03:513 'secret steps for those of greater capacity'; C03:558 'the conclusion'. Class boundary, to prevent over-broad remediation: C03:263 wylie='the tshom' / english='Destructive Doubts vi.' IS genuine Wylie (the tshom = doubt) and is NOT part of this class. Effect: the segment carries no Tibetan, so it cannot be aligned, and wylie-side FTS or concordance queries return English strings as though they were Tibetan. No textual correction is possible — the remedy is reclassification as an editorial section header rather than a Tibetan-English parallel segment.",
+    "severity": "MEDIUM",
+    "confidence": "CONFIRMED",
+    "note": "filed from the alignment batch, spine-verified on merge"
+  },
+  {
+    "item_id": "E-107",
+    "course": "corpus-wide",
+    "segment": "class entry (186 segments end at exactly 1,500 characters)",
+    "kind": "INGEST_ARTEFACT",
+    "found": "' '.join(eng)[:1500] in engines/hgm_tools.py - the spine ingest silently caps every segment's English at 1,500 characters",
+    "expected": "the whole English of the segment; a segment whose translation runs past 1,500 characters loses its tail with no marker, no count and no log line",
+    "evidence": "Found by the skeptic pass on C03:429 (E-106), which asked why that field ends mid-sentence at 'there are five ' and measured length(english) = 1500 exactly. Census 2026-09-01 on build/hgm_spine_v27_2.db: 186 segments have length(english) = 1500 (DDA 28, C18 15, C12 14, C13 12, C11 11, Sunlight 11, C17 10, C03 9 - including C03:376, 429, 620, the Reading Eight/Nine/Ten note blocks - MB2 8, C16 7, and 25 further courses); 34 segments EXCEED 1,500, so at least one ingest path does not apply the cap and its reach is not uniform. What is lost is not always apparatus: wherever the cap falls inside a translation, the corpus has no English for the rest of the Tibetan and nothing can align it. The 186 are a floor for the affected rows (a row cut at exactly the cap is certain; a row that happened to be shorter is unaffected).",
+    "severity": "HIGH",
+    "confidence": "CONFIRMED",
+    "note": "OURS, NOT FIXED. The cap lives in the canonical ingest (engines/hgm_tools.py), so removing it changes the spine itself and must be re-proved against the full batteries (inviolable rule 2) before any layer is rebuilt on it; the C03:376/429/620 note blocks and any truncated translation would need re-scanning afterwards. Opened in TODO.md 2026-09-01 for Adam's ruling and the data project. No document edit is asked of ALL for this entry - it is a pipeline defect on our side."
+  },
+  {
+    "item_id": "E-177",
+    "course": "C05",
+    "segment": "C05:142",
+    "kind": "FORMATTING",
+    "found": "MNYAM PAR BZHAG,GLANG CHEN MNAL",
+    "expected": "MNYAM PAR BZHAG, GLANG CHEN MNAL",
+    "evidence": "ACIP (source of record) omits the space after the shad-comma between the second and third verse lines; the wylie inherits it as 'bzhag,glang'. Every other line break in the same verse has ', '. No parallel witness: the verse (wylie like '%glang chen gshegs na%', english like '%Even as he stays, the elephant%') occurs only at C05:142 in all 42,199 rows; C16 does not carry this row. Not in any registered class ({SHl} drop, fused footnote, folio splice, glued heading). SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in ACIP and wylie; only occurrence (no witness); comma-without-space is not the general convention (271 vs 29,996 spaced rows) and the verse's other breaks are spaced; same class as E-037/E-038 (per-segment INGEST_ARTEFACT); cross-reference class fix.",
+    "severity": "LOW",
+    "confidence": "CONFIRMED",
+    "note": "filed from the alignment batch, spine-verified on merge"
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "issue": "Read-only local extraction used id instead of actual item_id and emitted an empty class list. Detected by inspecting the real register schema before review.",
+  "preserved_result": "independent-register-classes.json",
+  "correction": "Re-extracted six complete records by item_id, exact equality to immutable source register. No source/spec/body or generator was changed or rerun.",
+  "corrected_result": "../../evidence/independent-register-classes.json"
+}

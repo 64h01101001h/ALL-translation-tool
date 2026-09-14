@@ -1,0 +1,122 @@
+from pathlib import Path
+import json,sys
+A=Path(__file__).resolve().parent;B=A.parent
+sys.path.insert(0,str(A/'evidence/pinned/tools'));import gen_alignment_page as G
+source={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+def dump(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,omissions,note):
+ s=source[seq];spans=[];decisions=[];targets={};parent=None;cur=0
+ for i,item in enumerate(items,1):
+  tib,eng,d,n,why=item;sp={'id':'w'+str(i),'d':d,'tib':tib,'eng':eng};spans.append(sp)
+  if d!=7:
+   t=G.find_word(s['wylie'],tib,cur);assert t>=0,(seq,tib);cur=t+len(tib);parent=sp if d==5 else None
+   hits=[];p=0
+   while True:
+    p=G.find_word(s['english'],eng,p)
+    if p<0:break
+    hits.append(p);p+=1
+   assert len(hits)>=n,(seq,eng,n,hits);e=hits[n-1];targets[sp['id']]=e
+  else:
+   assert parent
+   pd=next(x for x in decisions if x['id']==parent['id']);t=s['wylie'].find(tib,*pd['tib_range']);e=s['english'].find(eng,*pd['eng_range']);assert t>=0 and e>=0
+  decisions.append({**sp,'seq':seq,'tib_range':[t,t+len(tib)],'eng_range':[e,e+len(eng)],'rationale':why,'parent':parent['id'] if d==7 else None,'source_function':{3:'complete phrase',5:'word or established compound, including inflected forms',6:'standalone grammatical particle',7:'strictly tighter compound member'}[d]})
+ order=sorted(targets,key=targets.get)
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':'PROVISIONAL machine alignment proposed independently by Codex, Tibetan-first. GMR English is preserved verbatim; no dictionary promotion. '+note}]}
+ dump(A/str(seq)/'spec.json',spec);dump(A/str(seq)/'decisions.json',{'producer':'Codex Tibetan-first independent proposal','source_origin_git_commit':'49b66f3af9cbb47599bb40286637fc9e683b7cdf','range_convention':'zero-based Unicode character half-open','spans':decisions,'eng_order':order,'material_omissions':omissions,'source_evidence':'../evidence/full-original-spine-context.json','lexical_evidence':'../evidence/full-lexical-evidence.json'})
+ dump(A/str(seq)/'errata.json',[])
+
+build(319,'virtue in desire: white and black',[
+("'dod par",'realm of desire',5,1,'Inflected desire-realm expression; its realm designation is explicit in this opening comparison with the form realm in 318.'),
+('gtogs pa','taken in',5,1,'Inclusion verb; the passive by construction remains outside this lexical verb.'),
+('dge ba','Virtue',5,1,'Subject virtue taken in by the desire realm; capitalization preserved.'),
+('dkar','white',5,1,'First color predicates the deed itself, before the later ripening and reasons.'),
+('gnag','black',5,1,'First black coordinates the deed classification with white.'),
+('la','and',6,2,'Conjoins deed classification and its ripening; English second and begins and which also, not the color-internal first and.'),
+('rnam par smin pa','ripens',5,1,'Complete ripening expression in the initial definition, not either later reason clause.'),
+('yang','also',6,1,'Additive explicitly modifies that initial ripening.'),
+('dkar','white',5,2,'Second white describes the initially stated ripened object.'),
+('gnag','black',5,2,'Second black is the other color of that initial ripened object.'),
+('las','deed',5,1,'Karmic deed, excluding supplied a type of.'),
+('yin','represents',5,1,'Definition copula recast as represents; not a lexical claim that the topic marker means represents.'),
+('rang gi','its',3,1,'Complete reflexive possessive phrase owns the possessive pronoun referring to this virtue.'),
+('ngo bo','basic nature',5,1,'Established basic-nature term; not the broader entire proposition.'),
+('nyon mongs can min','free of affliction',3,1,'Whole negative predication recast as free of affliction; avoids assigning free alone to min or claiming can has a separate English possessive.'),
+('pas','Since',6,1,'First standalone causal pas after the negative predication opens the capitalized Since clause.'),
+('dkar','white',5,3,'White in the first explanatory nature clause; not the initial two classifications.'),
+('rgyud','mental stream',5,1,'The first single mental stream that contains afflicted things.'),
+('gcig','single',5,1,'Numeral qualifies the first stream; the supplied article is excluded.'),
+('la','within',6,1,'Locative of the first stream.'),
+('nyon mongs pa','afflicted things',5,1,'Afflictions rendered as the complete substantival afflicted things in this mixing construction; this noun denotes the mixed contents, not an independently supplied experiencer.'),
+('dang','with',6,1,'Comitative counterpart of mixed with those afflicted things.'),
+("'dres",'mixed',5,1,'First mixing, of afflictions into the first stream.'),
+('pas','since',6,1,'Causal pas of that first mixing; lowercase since after but--.'),
+('gnag','black',5,3,'Third black concludes the first mixing explanation.'),
+("'bras bu",'result',5,1,'Pleasant result which the deed gives forth; not a supplied object from another clause.'),
+("yid du 'ong ba",'pleasant',5,1,'Established desirable/pleasant compound modifies result.'),
+("'byin",'gives forth',5,1,'Produces the pleasant result in this clause. Full local source establishes this sense; the exact master head only attests devastate/rip and is not misquoted as supporting this English.'),
+('pas','because',6,1,'The causal ending after gives-forth introduces the reason it ripens white.'),
+('rnam smin','ripens',5,2,'Second ripening, whose white result precedes the because clause in English.'),
+('dkar','white',5,4,'Fourth white, the result of giving forth a pleasant result.'),
+('rgyud','mental stream',5,2,'Second stream phrase, now the particular stream mixed with suffering.'),
+('gcig','particular',5,1,'One specified stream, rendered particular here; exact master includes particular and does not justify copying single from the previous clause.'),
+('la','within',6,2,'Locative of the second, particular stream.'),
+('sdug bsngal','suffering',5,1,'The contents mixed with this result in the second stream.'),
+('dang','with',6,2,'Comitative of the suffering mixture; second with.'),
+("'dres",'mixed',5,2,'Second mixing, now with suffering rather than afflicted things.'),
+('pas','since',6,2,'The lowercase since introducing the second mixing explanation.'),
+('rnam smin','ripens',5,3,'Final ripening in we can also say it ripens into something black.'),
+('gnag pa','black',5,4,'Final inflected black predicate, describing the ripened result rather than the deed itself.')
+],[{'tib':'te / phyir','reason':'The reason architecture is recast across several English since/because clauses, already paired to the four local pas. No defensible additional atom for the outer hinge is claimed.'},{'tib':'ni and unspanned genitive endings','reason':'Topic and relational grammar are distributed in English syntax; omitted rather than labelled absent.'},{'english':'both / but / also (later additions) / as well / we can also say','reason':'No uniquely separable extra Tibetan occurrence owns these expansions; supplied connective and explanatory text remains verbatim and unwrapped.'}],
+'The negative nature statement is kept whole as a phrase. Every repeated color, stream, mixture and ripening is tied to its own clause. Outer causal hinges and supplied explanatory additions are unbanked; no uncertain span is nulled.')
+
+build(320,'unstained deeds end the black',[
+('zag med','unstained',5,1,'Established unstained compound describing the deeds; do not attach to the next heading.'),
+('zag','stained',7,1,'Unique positive member within unstained and the Tibetan compound; this is a member, not a free-standing stained word.'),
+('med','un',7,1,'Unique negative member inside the parent unstained, licensed by the actual negative compound.'),
+('las','Deeds',5,1,'Initial subject; avoids the later explanatory deed and heading Deeds.'),
+('dkar','white',5,1,'First-clause color under the shared English negative; capitalized heading White is not used.'),
+('gnag','black',5,1,'First-clause black under that same English negative, not the referential black in the second sentence.'),
+('rnam par mi smin','never ripen',3,1,'Complete negative ripening phrase; the first two mi are left as distributed scope rather than assigned duplicate never atoms.'),
+('nag po','black',5,2,'Second-sentence explanation of quoted it, excluding the translator-supplied kind of deed.'),
+('de','it',5,1,'Quoted anaphoric it refers to that black class; quotation marks remain outside the pronoun.'),
+('zad par','to an end',3,1,'Complete terminative result phrase of the causative, separated from brings because the intervening object and explanatory apposition make the whole English causative discontinuous.'),
+('byed pa','brings',5,1,'Causative brings in the second sentence, paired with its own to an end complement; not heading Bringing.')
+],[{'tib':'first mi; second mi','reason':'The two color negatives and ripening negative are recast into one never...either...or construction. Their scope is present but separate English atoms cannot be established; neither is nulled.'},{'tib':'kyi / ni / la / yin no','reason':'Relational, topic, connective and copular contributions are distributed through the English sentence frames. No additional isolated equivalents are claimed.'},{'english':'Their nature is to be what / that is, the ... kind of deed','reason':'Expository frame and referential expansion are preserved unwrapped; nag po owns only its actual second black.'},{'english':'64 Bringing Black and White Deeds to an End','reason':'Following selection heading is original apparatus under the registered heading class, not a new translation correspondence or new erratum.'}],
+'Three source negatives share one English negative construction; the two color negatives remain omitted with their scope recorded, not nulled. The discontinuous causative is aligned in two supported pieces. The final numbered heading is unchanged apparatus.')
+
+build(321,'mental movements that end colored deeds',[
+('chos bzod','Phenomena, mastery',5,1,'Complete established technical compound, poetically rendered with inverted noun order and comma. Commentary 322 explicitly names mastery of phenomena; the mined master gloss types of mental movement is not used as semantic evidence for this pair.'),
+('chos','Phenomena',7,1,'Unique phenomena member within this technical parent, retaining capitalization.'),
+('bzod','mastery',7,1,'Unique mastery member inside the same parent; direct glossary support and commentary agree.'),
+("'dod chags",'desire',5,1,'Desire from which the first uninterrupted path is free.'),
+('bral ba','free of',5,1,'First freedom predicate; with its governed desire separate and exact.'),
+('bar chad med lam','Uninterrupted path',5,1,'Whole first path compound, with two strictly tighter meaningful members.'),
+('bar chad med','Uninterrupted',7,1,'Unique uninterrupted member of the first path compound.'),
+('lam','path',7,1,'Unique path member inside the same parent.'),
+('brgyad','eight',5,1,'Eight instants of the uninterrupted path, not the twelve mental movements counted later in Tibetan.'),
+('sems pa','mental movement',5,1,'First mental movement, the subject whose twelve types are being enumerated.'),
+('rnam pa','types',5,1,'Types of mental movement, excluding supplied of.'),
+('bcu gnyis','Twelve',5,1,'Complete twelve compound; no ten/two members because twelve does not expose them separately.'),
+('nag po','black',5,1,'Black ended by the twelve movements in the first verse sentence.'),
+('zad par','to an end',3,1,'Result complement of act to bring; no discontinuous whole causal phrase fabricated.'),
+('byed pa','act to bring',5,1,'Complete verbal causal expression, excluding the relative that and the object the black.'),
+('las','deeds',5,1,'Deeds predicate of those twelve movements, excluding supplied Are and that.'),
+('dgu pa','Ninth',5,1,'Ordinal ninth, capitalized because of verse lineation.'),
+('sems pa','mental movement',5,2,'Second mental movement, specifically that of the ninth instant.'),
+('gang yin pa','That which is',3,1,'Complete nominal relative clause supplies the English opening of this second sentence.'),
+('dkar nag','white and black',5,1,'Coordinated technical color classification as an established compound; both color members remain local to this parent.'),
+('dkar','white',7,1,'White member inside the combined color classification, not final White.'),
+('nag','black',7,1,'Black member inside the same classification, not first-sentence black.'),
+('zad','end',5,2,'End verb of the ninth movement in acts to end; first end belongs to to an end in the previous sentence.'),
+('byed','acts',5,1,'Causative act of the ninth movement, separate from end and excluding the intervening infinitive to.'),
+('dkar po','White',5,1,'Third-sentence white classification, capitalized and elliptical for white deeds.'),
+('bsam gtan','concentration',5,1,'Concentration object of desire in the final clause, excluding supplied the.'),
+('chags bral ba','Free of desire',5,1,'Established desire-free compound, with exact whole glossary support; final capital Free is distinct from earlier free.'),
+('chags','desire',7,1,'Unique desire member inside the final parent; not earlier desire.'),
+('bral ba','Free of',7,1,'Unique freedom member inside the final parent; English member order crosses Tibetan and is handled canonically.'),
+('bar chad med lam','uninterrupted',5,1,'Second whole path compound rendered elliptically as uninterrupted before arising. Exact full-compound HGM glossary includes uninterrupted; no degenerate member or invented path atom is added.'),
+('skyes','arising',5,1,'Arising of this final uninterrupted path, not a free participant born.'),
+('tha mas','final',5,1,'Complete inflected final term, preserving the inseparable instrumental ending. Its by construction spans the larger arising expression; by is not claimed as a separate -s atom.')
+],[{'tib':'yi / kyi / gang (first) / de (first) / de ni / yin and remaining genitives','reason':'Grammatical linking and resumptive reference are compressed into the poetic English arrangement; no forced atom or uncertain null is assigned.'},{'tib':'second bar chad med lam members','reason':'Whole established compound owns elliptical uninterrupted; an additional lam null would falsely suggest a separate scope absent from the parent, and a bar chad med member would repeat the whole English parent.'},{'tib':'instrumental ending on tha mas','reason':'Never split agentive -s. Whole inflected term is retained at final while the wider by...arising construction remains distributed.'},{'english':'had with / and / Are / that / in the / for the and supplied articles','reason':'English syntax and expansions remain original and unwrapped unless the complete source phrase licenses an explicit span.'}],
+'Technical compounds and their defensible members remain whole, including the published comma in Phenomena, mastery. Commentary 322 clarifies this name but supplies no replacement English. The second uninterrupted path is an elliptical whole-compound rendering; no false path null or degenerate member is created. Causatives and repeated colors have separately checked occurrences.')
+print('Wrote independent semantic drafts for 319–321; canonical native generation still required.')

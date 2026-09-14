@@ -1,0 +1,55 @@
+from pathlib import Path
+import datetime,gzip,hashlib,json,os,shutil,sqlite3,subprocess
+B=Path(__file__).resolve().parent.parent; A=B/'tibetan'; E=A/'evidence'
+def dump(p,x): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(x): return hashlib.sha256(x).hexdigest()
+base=json.loads((B/'proposal-baseline.json').read_text()); pins=[]
+for name,v in base['source_pins'].items():
+ p=Path(v['path']);raw=p.read_bytes(); assert len(raw)==v['bytes'] and sha(raw)==v['sha256']; pins.append({'role':name,**v})
+ if name!='spine':
+  dest=E/'originals'/p.name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
+dump(E/'source-pins.json',pins)
+for name in ['proposal-baseline.json','tibetan-brief.md']:
+ (E/name).write_bytes((B/name).read_bytes())
+(E/'proposal-protocol.md').write_bytes((B.parent/'proposal-protocol.md').read_bytes())
+db=sqlite3.connect('file:'+base['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+src=json.loads((B/'source.json').read_text());context=json.loads((B/'context.json').read_text());corpus=json.loads(gzip.open(base['source_pins']['corpus']['path'],'rt').read())
+rows=[]
+for s in context:
+ r=dict(db.execute('select * from corpus_segments where course=? and seq=?',(s['course'],s['seq'])).fetchone());assert all(r[k]==v for k,v in s.items());assert json.loads(r['raw'])==corpus[r['id']-1];rows.append(r)
+dump(E/'full-original-spine-context.json',rows)
+physical=Path(base['source_pins']['physical']['path']).read_bytes(); folded=' '.join(physical.decode('latin1').split()); proofs=[]
+for s in src:
+ a=s['acip'].encode('ascii'); start=physical.find(a); en=' '.join(s['english'].split()); off=folded.find(en); assert start>=0 and off>=0
+ proofs.append({'seq':s['seq'],'acip_exact_raw_byte_range':[start,start+len(a)],'english_full_source_exact_after_whitespace_linefold':True,'english_range_in_linefolded_latin1':[off,off+len(en)],'linefold_operation':"' '.join(raw.decode('latin1').split())",'physical_sha256':sha(physical)})
+dump(E/'physical-complete-row-proof.json',proofs)
+terms=["'dod pa","'dod par","gtogs pa","dge ba","dkar","gnag","rnam par smin pa","rnam smin","las","rang","ngo bo","nyon mongs can","min","rgyud","gcig","nyon mongs pa","'dres","'bras bu","yid du 'ong ba","'byin","sdug bsngal","phyir","zag med","mi dkar mi gnag","nag po","zad par byed pa","zad par","byed pa","chos bzod","chos","bzod","'dod chags","bral ba","bar chad med lam","bar chad med","lam","brgyad","sems pa","rnam pa","bcu gnyis","dgu pa","dkar nag","bsam gtan","chags bral ba","skyes","tha ma","tha mas"]
+master=json.loads(gzip.open(base['source_pins']['master']['path'],'rt').read());idx={}
+for collection in ['unified_entries','curated_entries','glossary_entries']:
+ for i,r in enumerate(master[collection]):idx.setdefault(r.get('wylie'),[]).append({'collection':collection,'index':i,'entry':r})
+lex=[]
+for term in terms:
+ rs=[dict(r) for r in db.execute('select * from entries where wylie=?',(term,))]
+ lex.append({'term':term,'query':{'field':'wylie','equals':term},'master_records':idx.get(term,[]),'spine_entries':rs,'count':len(idx.get(term,[]))})
+dump(E/'full-lexical-evidence.json',lex)
+queries=[]
+for s in src:
+ for field in ['acip','wylie','english']:
+  sql=f'select * from corpus_segments where {field}=? order by id'; params=[s[field]];rs=[dict(r) for r in db.execute(sql,params)]
+  queries.append({'origin_seq':s['seq'],'purpose':'complete-field parallel','sql':sql,'params':params,'count':len(rs),'rows':rs})
+for term in ['mi dkar mi gnag','chos bzod',"bar chad med lam",'nyon mongs can min',"zad par byed pa",'brgyad kyi sems pa']:
+ sql='select * from corpus_segments where instr(wylie,?)>0 order by id';params=[term];rs=[dict(r) for r in db.execute(sql,params)];queries.append({'purpose':'contested lexical and clause context','sql':sql,'params':params,'count':len(rs),'rows':rs})
+for q in queries:
+ for r in q['rows']:assert json.loads(r['raw'])==corpus[r['id']-1]
+dump(E/'corpus-queries.json',queries)
+external=[]
+for q in queries:
+ if 'origin_seq' in q:field=q['sql'].split(' where ')[1].split('=')[0];wanted=lambda r:r.get(field)==q['params'][0]
+ else:wanted=lambda r:q['params'][0] in r.get('wylie','')
+ matches=[{'corpus_index':i,'record':r} for i,r in enumerate(corpus) if wanted(r)]
+ assert len(matches)==q['count'];external.append({'sql_query_index':queries.index(q),'count':len(matches),'records':matches})
+dump(E/'external-corpus-rechecks.json',external)
+refs=[Path('/Users/adamderickandrade')/p for p in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']]
+assert all(os.access(p,os.R_OK) for p in refs);dump(E/'required-access.json',[{'path':str(p),'readable':os.access(p,os.R_OK)} for p in refs])
+dump(E/'intake-proof.json',{'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin':base['commit'],'baseline_kind':'proposal only; no through318 claim','verified_context_rows':len(rows),'selected_six_fields':len(src)*6,'queries':len(queries),'query_rows':sum(q['count'] for q in queries),'lexical_terms':len(lex),'physical_fields':len(proofs)*2})
+print(json.dumps({'queries':[(q.get('origin_seq'),q['params'][0][:45],q['count']) for q in queries], 'lexical':[(q['term'],[(r['collection'],r['entry'].get('hgm_gloss')) for r in q['master_records']]) for q in lex]},ensure_ascii=False,indent=2))

@@ -1,0 +1,94 @@
+from pathlib import Path
+import json,hashlib,shutil,subprocess,sqlite3,copy,difflib
+S=Path(__file__).resolve().parents[1];B=S.parent;R=B/'reconciled';A=B/'reconciliation-history/v1';H=B/'semantic-review-history/v1';W=B.parents[1]/'campaign-worktree'
+def load(p):return json.loads(p.read_text())
+def info(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(n,x):p=S/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+old=load(H/'freeze.json');assert len(old['files'])==457
+assert info(H/'freeze.json')['sha256']=='0ffb996a488d9e86396b89173f6f1ce12fad0ff7600d15f7b11c6104b3cb0f97'
+assert all(info(H/p)==v for p,v in old['files'].items())
+assert len([p for p in H.rglob('*') if p.is_file()])==458
+write('scoped-v2/review-v1-archive-proof.json',{'archive':str(H),'frozen_files':457,'total_files':458,'all_frozen_file_bytes_verified':True,'freeze':info(H/'freeze.json'),'archived_before_current_review_mutation':True})
+# Preserve the mutable top-level review records inside the landing tree too.
+for p in H.iterdir():
+ if p.is_file() and p.suffix in ['.json','.md']:
+  dest=S/'history/v1'/p.name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,dest)
+v1=load(A/'freeze.json');v2=load(R/'freeze.json')
+assert info(A/'freeze.json')['sha256']=='6beabe2726cbdd404577bfa91a22442cf100ee01ee9ed49920cb7d37bec2bf8c'
+assert info(R/'freeze.json')['sha256']=='bd0d058547e2c6265e1e5b9326191130897bb906484d5960a5ee73ccfa2ea140'
+assert len(v1['files'])==355 and len(v2['files'])==392
+for root,freeze in [(A,v1),(R,v2)]:
+ assert {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()}==set(freeze['files'])|{'freeze.json'}
+ assert all(info(root/p)==v for p,v in freeze['files'].items())
+sm=load(R/'correction-v2/supersession-map.json');archive_proof=load(R/'correction-v2/archive-proof.json')
+prior={**v1['files'],'freeze.json':info(A/'freeze.json')};assert archive_proof['all_original_paths']==prior
+changed=[p for p in prior if info(R/p)!=prior[p]];assert set(changed)=={r['relative_path'] for r in sm['changed_original_paths']} and len(changed)==12
+assert set(sm['unchanged_original_paths'])==set(prior)-set(changed)
+for r in sm['changed_original_paths']:
+ assert r['old_identity']==info(Path(r['archived_path']))==prior[r['relative_path']]
+ if isinstance(r['current_identity'],dict):assert r['current_identity']==info(Path(r['old_path']))
+spec1=load(A/'319/spec.json');spec2=load(R/'319/spec.json');expected=copy.deepcopy(spec1)
+x=next(x for x in expected['segments'][0]['spans'] if x['id']=='w15');assert x=={'id':'w15','d':3,'tib':'rang gi','eng':'its'};x['d']=5;assert expected==spec2
+oldbody=(A/'319/body.html').read_text();newbody=(R/'319/body.html').read_text();changes=[]
+for tag,i,j,k,l in difflib.SequenceMatcher(None,oldbody,newbody).get_opcodes():
+ if tag!='equal':changes.append({'tag':tag,'old_range':[i,j],'new_range':[k,l],'old':oldbody[i:j],'new':newbody[k:l],'context':newbody[max(0,k-60):l+60]})
+assert len(changes)==2 and all(r['old']=='3' and r['new']=='5' for r in changes)
+for p in prior:
+ if p.startswith(('320/','321/','native/final-320-','native/final-321-','originals/')):assert info(R/p)==prior[p]
+rebase=[]
+for p,v in prior.items():rebase.append({'historical_original':str(R/p),'archived_original':str(A/p),'old_identity':v,'current_original':str(R/p),'current_identity':info(R/p),'changed':p in changed})
+write('scoped-v2/reconciliation-reference-supersession.json',rebase)
+manifest=load(H/'original-to-copy-manifest.json');historic=[]
+for name in ['original-to-copy-manifest.json','attempts/duplicate-original-manifest/manifest-before-deduplication.json']:
+ records=load(H/name);proof=[]
+ for index,r in enumerate(records):
+  original=Path(r['original']);historical=A/original.relative_to(R) if original.is_relative_to(R) else original
+  assert info(H/r['copy'])=={k:r[k] for k in ['bytes','sha256']}
+  if 'original_git_commit' in r:
+   b=subprocess.check_output(['git','show',r['original_git_commit']+':'+r['repository_relative_path']],cwd=W);assert b==(H/r['copy']).read_bytes()
+  else:assert historical.read_bytes()==(H/r['copy']).read_bytes()
+  proof.append({'record_index':index,'historical_original':str(original),'verified_original':str(historical),'copy':r['copy'],'identity':{k:r[k] for k in ['bytes','sha256']}})
+ historic.append({'manifest':str(H/name),'identity':info(H/name),'records':proof})
+write('scoped-v2/historical-manifest-rebase-proof.json',historic)
+for r in manifest:
+ p=Path(r['original'])
+ if p.is_relative_to(R):r['original']=str(A/p.relative_to(R))
+byhash={(r['sha256'],r['bytes']):r['copy'] for r in manifest}
+def preserve(original,dest=None):
+ v=info(original);key=(v['sha256'],v['bytes'])
+ if dest is None:dest=byhash.get(key)
+ if dest is None:
+  ext=original.suffix.lower();ext=ext if ext in ['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'] else ('.py.txt' if ext=='.py' else '.bin');dest='scoped-v2/inputs/'+v['sha256']+ext
+ target=S/dest;target.parent.mkdir(parents=True,exist_ok=True)
+ if target.exists():assert target.read_bytes()==original.read_bytes()
+ else:shutil.copyfile(original,target)
+ byhash[key]=dest;manifest.append({'original':str(original),'copy':dest,**v});return dest
+for p in sorted(R.rglob('*')):
+ if p.is_file():preserve(p,('reviewed-final-v2/319/'+p.name) if p.parent==R/'319' else None)
+preserve(B/'baseline.json','scoped-v2/actual-through318-baseline.json')
+assert len({r['original'] for r in manifest})==len(manifest)
+write('original-to-copy-manifest.json',manifest)
+write('scoped-v2/intake-proof.json',{'status':'PASS','review_v1_archive_files':458,'reconciliation_v1_archive_files':356,'reconciliation_v2_frozen_files':392,'changed_prior_paths':changed,'new_paths':sorted(set(v2['files'])-set(v1['files'])),'only_alignment_change':{'seq':319,'id':'w15','field':'d','from':3,'to':5},'body_changes':changes,'unchanged320321_and_originals_exact':True,'historic_manifest_counts':[len(r['records']) for r in historic],'current_manifest_records':len(manifest),'all_v1_copy_paths_preserved':True,'reconciliation_v2_freeze':info(R/'freeze.json')})
+baseline=load(B/'baseline.json');assert baseline['commit']=='91d2c245ddd410894f12653cf3acf0302d488520' and baseline['course_boundary']==318
+assert (R/'correction-v2/acceptance-baseline.json').read_bytes()==(B/'baseline.json').read_bytes()
+head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=W,text=True).strip();assert head==baseline['commit']
+checks=[]
+for rel,sha in baseline['sha256'].items():
+ p=W/rel;v=info(p);assert v['sha256']==sha
+ if rel.startswith('data/hgm_dictionary') or rel.startswith('data/full_parallel'):
+  kind='untracked canonical source';assert subprocess.run(['git','ls-files','--error-unmatch',rel],cwd=W,capture_output=True).returncode!=0
+ else:
+  kind='tracked baseline Git object';b=subprocess.check_output(['git','show',baseline['commit']+':'+rel],cwd=W);assert b==p.read_bytes()
+ checks.append({'path':str(p),'kind':kind,**v})
+sourcepins=load(R/'evidence/source-pins.json')
+for p in sourcepins:assert info(Path(p['path']))=={k:p[k] for k in ['bytes','sha256']}
+ev=load(R/'correction-v2/evidence.json');own=load(S/'evidence/master-term-index.json')['rang gi'];objects=load(S/'evidence/master-complete-objects.json')
+assert ev['complete_master_lookup']['master_records']==[objects[k] for k in own['master_keys']]
+assert ev['complete_master_lookup']['spine_entries']==own['spine_rows']
+source=next(r for r in load(S/'evidence/independent-complete-source-context.json') if r['seq']==319);assert ev['complete_source_row']==source
+dbpath=next(p['path'] for p in sourcepins if p['role']=='spine');db=sqlite3.connect('file:'+dbpath+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+actual=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',313,327))];assert actual==load(S/'evidence/independent-complete-source-context.json')
+actual_dictionary=[dict(r) for r in db.execute('select * from entries where wylie=? order by id',('rang gi',))];assert actual_dictionary==own['spine_rows']
+prior_spec=subprocess.check_output(['git','show',baseline['commit']+':data/alignment/specs_c05/c5p106.json'],cwd=W);assert prior_spec==(R/'correction-v2/through318-c5p106-original.json').read_bytes()
+write('scoped-v2/actual-baseline-receipt.json',{'status':'VERIFIED','baseline_path':str(B/'baseline.json'),'baseline_identity':info(B/'baseline.json'),'actual_git_head':head,'accepted_through':318,'source_origin_git_commit':'49b66f3af9cbb47599bb40286637fc9e683b7cdf','source_origin_boundary':312,'initial_review_v1_baseline_receipt':None,'received_for_review_version':2,'baseline_file_pins':checks,'source_pins_rechecked':sourcepins,'complete_source_rows_rechecked':15,'rang_gi_complete_master_objects_identical':True,'rang_gi_actual_spine_entries_rechecked':True,'prior_accepted_spec_git_object':baseline['commit']+':data/alignment/specs_c05/c5p106.json'})
+print(json.dumps({'status':'PASS','v2_files':392,'changed_paths':changed,'body_changes':changes,'historical_manifest_counts':[len(r['records']) for r in historic],'current_manifest_records':len(manifest),'baseline':head},indent=2))

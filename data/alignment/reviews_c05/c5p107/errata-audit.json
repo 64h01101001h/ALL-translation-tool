@@ -1,0 +1,3843 @@
+[
+  {
+    "seq": 319,
+    "angle": "tibetan",
+    "original_screen_index": 0,
+    "kind": "TIBETAN_SPELLING",
+    "found": "DKAR GNAG",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "GNAG occurs four times in the original ACIP. gnag and gnag pa are independently recorded HGM black forms; the paired dkar gnag also has its own glossary entry. NAG elsewhere is no basis for emending this spelling.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [
+            30,
+            65
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "GNAG occurs four times in the original ACIP. gnag and gnag pa are independently recorded HGM black forms; the paired dkar gnag also has its own glossary entry. NAG elsewhere is no basis for emending this spelling.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 28,
+          "d5_total": 28,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 319,
+    "angle": "tibetan",
+    "original_screen_index": 1,
+    "kind": "ENGLISH_TYPO",
+    "found": "free of affliction",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Both double-hyphen causal parentheses and the non-afflicted-nature wording make sense in the complete sentence. The physical source carries them; no replacement is established.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            181
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Both double-hyphen causal parentheses and the non-afflicted-nature wording make sense in the complete sentence. The physical source carries them; no replacement is established.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 28,
+          "d5_total": 28,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 319,
+    "angle": "tibetan",
+    "original_screen_index": 2,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "particular mental stream",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "White/black apply first to the deed and its result, then separately to nature, afflicted mixture, pleasant result, and suffering mixture. The second gcig singles out the relevant stream and is rendered particular, an explicit HGM sense. There is no demonstrated contradiction.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            408
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "White/black apply first to the deed and its result, then separately to nature, afflicted mixture, pleasant result, and suffering mixture. The second gcig singles out the relevant stream and is rendered particular, an explicit HGM sense. There is no demonstrated contradiction.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 28,
+          "d5_total": 28,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 319,
+    "angle": "tibetan",
+    "original_screen_index": 3,
+    "kind": "INGEST_ARTEFACT",
+    "found": "we can also say it ripens into something black.",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "The complete 515-character English ending and complete ACIP occur in the original physical file after stated whitespace folding. There is neither a missing translation tail nor an appended heading here.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            468
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "The complete 515-character English ending and complete ACIP occur in the original physical file after stated whitespace folding. There is neither a missing translation tail nor an appended heading here.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 28,
+          "d5_total": 28,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 319,
+    "angle": "tibetan",
+    "original_screen_index": 4,
+    "kind": "FORMATTING",
+    "found": "white but--since",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "The complete physical source preserves the double-hyphen parentheses and the later ripening sentence. Layout folding supplies no evidence of a new typo or semantic alteration.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            206
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents "
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "The complete physical source preserves the double-hyphen parentheses and the later ripening sentence. Layout folding supplies no evidence of a new typo or semantic alteration.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 28,
+          "d5_total": 28,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 319,
+    "angle": "english",
+    "original_screen_index": 0,
+    "kind": "TIBETAN_SPELLING",
+    "found": "GNAG",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "GNAG occurs four times in the original ACIP. gnag and gnag pa are independently recorded HGM black forms; the paired dkar gnag also has its own glossary entry. NAG elsewhere is no basis for emending this spelling.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [
+            35,
+            70,
+            179,
+            286
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 9,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "rgyud gcig la nyon mongs pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1700,
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 13,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "nyon mongs can min pas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "GNAG occurs four times in the original ACIP. gnag and gnag pa are independently recorded HGM black forms; the paired dkar gnag also has its own glossary entry. NAG elsewhere is no basis for emending this spelling.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 25,
+          "d5_total": 25,
+          "d7": 4
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 319,
+    "angle": "english",
+    "original_screen_index": 1,
+    "kind": "ENGLISH_TYPO",
+    "found": "but--since",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Both double-hyphen causal parentheses and the non-afflicted-nature wording make sense in the complete sentence. The physical source carries them; no replacement is established.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            212,
+            386
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 9,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "rgyud gcig la nyon mongs pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1700,
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 13,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "nyon mongs can min pas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Both double-hyphen causal parentheses and the non-afflicted-nature wording make sense in the complete sentence. The physical source carries them; no replacement is established.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 25,
+          "d5_total": 25,
+          "d7": 4
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 319,
+    "angle": "english",
+    "original_screen_index": 2,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "both white and black",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "White/black apply first to the deed and its result, then separately to nature, afflicted mixture, pleasant result, and suffering mixture. The second gcig singles out the relevant stream and is rendered particular, an explicit HGM sense. There is no demonstrated contradiction.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            74,
+            133
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 9,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "rgyud gcig la nyon mongs pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1700,
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 13,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "nyon mongs can min pas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "White/black apply first to the deed and its result, then separately to nature, afflicted mixture, pleasant result, and suffering mixture. The second gcig singles out the relevant stream and is rendered particular, an explicit HGM sense. There is no demonstrated contradiction.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 25,
+          "d5_total": 25,
+          "d7": 4
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 319,
+    "angle": "english",
+    "original_screen_index": 3,
+    "kind": "INGEST_ARTEFACT",
+    "found": "we can also say it ripens into something black.",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "The complete 515-character English ending and complete ACIP occur in the original physical file after stated whitespace folding. There is neither a missing translation tail nor an appended heading here.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            468
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 9,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "rgyud gcig la nyon mongs pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1700,
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 13,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "nyon mongs can min pas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "The complete 515-character English ending and complete ACIP occur in the original physical file after stated whitespace folding. There is neither a missing translation tail nor an appended heading here.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 25,
+          "d5_total": 25,
+          "d7": 4
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 319,
+    "angle": "english",
+    "original_screen_index": 4,
+    "kind": "FORMATTING",
+    "found": "It ripens into something white",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "The complete physical source preserves the double-hyphen parentheses and the later ripening sentence. Layout folding supplies no evidence of a new typo or semantic alteration.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            314
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 0,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "'DOD PAR GTOGS PA'I DGE BA NI DKAR GNAG LA RNAM PAR SMIN PA YANG DKAR GNAG PA'I LAS YIN TE, RANG GI NGO BO NYON MONGS CAN MIN PAS DKAR, RGYUD GCIG LA NYON MONGS PA DANG 'DRES PAS GNAG, 'BRAS BU YID DU 'ONG BA 'BYIN PAS RNAM SMIN DKAR, RGYUD GCIG LA SDUG BSNGAL DANG 'DRES PAS RNAM SMIN GNAG PA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 1,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 9,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "rgyud gcig la nyon mongs pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1700,
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 13,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "nyon mongs can min pas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1701
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "The complete physical source preserves the double-hyphen parentheses and the later ripening sentence. Layout folding supplies no evidence of a new typo or semantic alteration.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 302,
+          "wylie": 301,
+          "english": 515
+        },
+        "original_span_counts": {
+          "spans": 40,
+          "nulls": 0,
+          "nonnull_d5": 25,
+          "d5_total": 25,
+          "d7": 4
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "tibetan",
+    "original_screen_index": 0,
+    "kind": "TIBETAN_SPELLING",
+    "found": "MI DKAR MI GNAG RNAM PAR MI SMIN",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "All three mi occur in grammatical negative constructions: neither white, nor black, nor ripening. Neither their repetition nor the gnag/nag alternation is a demonstrated spelling defect.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [
+            19
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam "
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anythin"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "All three mi occur in grammatical negative constructions: neither white, nor black, nor ripening. Neither their repetition nor the gnag/nag alternation is a demonstrated spelling defect.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 11,
+          "nulls": 0,
+          "nonnull_d5": 7,
+          "d5_total": 7,
+          "d7": 2
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "tibetan",
+    "original_screen_index": 1,
+    "kind": "ENGLISH_TYPO",
+    "found": "\"it\"--that is, the black kind of deed",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Quoted it and the black-kind apposition identify the same object of brings ... to an end. Their double hyphens are meaningful punctuation reproduced in the original.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            109
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam "
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anythin"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Quoted it and the black-kind apposition identify the same object of brings ... to an end. Their double hyphens are meaningful punctuation reproduced in the original.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 11,
+          "nulls": 0,
+          "nonnull_d5": 7,
+          "d5_total": 7,
+          "d7": 2
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "tibetan",
+    "original_screen_index": 2,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "never ripen into anything either white or black",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "English condenses the three source negatives into never ... either ... or. This licenses the whole negative-ripening phrase and caution about separately assigning the color negatives. It does not establish an unambiguous source correction.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            26
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam "
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anythin"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "English condenses the three source negatives into never ... either ... or. This licenses the whole negative-ripening phrase and caution about separately assigning the color negatives. It does not establish an unambiguous source correction.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 11,
+          "nulls": 0,
+          "nonnull_d5": 7,
+          "d5_total": 7,
+          "d7": 2
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "tibetan",
+    "original_screen_index": 3,
+    "kind": "INGEST_ARTEFACT",
+    "found": "64 Bringing Black and White Deeds to an End",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "The numbered text 64 Bringing Black and White Deeds to an End is the following selection heading in the physical source. Existing governing registered-class policy excludes it from lexical alignment and forbids filing it again.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            159
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam "
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anythin"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "The numbered text 64 Bringing Black and White Deeds to an End is the following selection heading in the physical source. Existing governing registered-class policy excludes it from lexical alignment and forbids filing it again.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 11,
+          "nulls": 0,
+          "nonnull_d5": 7,
+          "d5_total": 7,
+          "d7": 2
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "tibetan",
+    "original_screen_index": 4,
+    "kind": "FORMATTING",
+    "found": "Their nature is to be what brings",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Both the expository sentence frame and heading are present in the original. The following title is apparatus, already governed by the heading policy; no replacement or new source defect is supported.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            75
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 2,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam "
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anythin"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Both the expository sentence frame and heading are present in the original. The following title is apparatus, already governed by the heading policy; no replacement or new source defect is supported.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 11,
+          "nulls": 0,
+          "nonnull_d5": 7,
+          "d5_total": 7,
+          "d7": 2
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "english",
+    "original_screen_index": 0,
+    "kind": "TIBETAN_SPELLING",
+    "found": "MI DKAR MI GNAG",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "All three mi occur in grammatical negative constructions: neither white, nor black, nor ripening. Neither their repetition nor the gnag/nag alternation is a demonstrated spelling defect.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [
+            19
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 10,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "All three mi occur in grammatical negative constructions: neither white, nor black, nor ripening. Neither their repetition nor the gnag/nag alternation is a demonstrated spelling defect.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 9,
+          "nulls": 0,
+          "nonnull_d5": 8,
+          "d5_total": 8,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "english",
+    "original_screen_index": 1,
+    "kind": "ENGLISH_TYPO",
+    "found": "\"it\"--that is, the black kind of deed--",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Quoted it and the black-kind apposition identify the same object of brings ... to an end. Their double hyphens are meaningful punctuation reproduced in the original.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            109
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 10,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Quoted it and the black-kind apposition identify the same object of brings ... to an end. Their double hyphens are meaningful punctuation reproduced in the original.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 9,
+          "nulls": 0,
+          "nonnull_d5": 8,
+          "d5_total": 8,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "english",
+    "original_screen_index": 2,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "never ripen into anything either white or black",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "English condenses the three source negatives into never ... either ... or. This licenses the whole negative-ripening phrase and caution about separately assigning the color negatives. It does not establish an unambiguous source correction.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            26
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 10,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "English condenses the three source negatives into never ... either ... or. This licenses the whole negative-ripening phrase and caution about separately assigning the color negatives. It does not establish an unambiguous source correction.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 9,
+          "nulls": 0,
+          "nonnull_d5": 8,
+          "d5_total": 8,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "english",
+    "original_screen_index": 3,
+    "kind": "INGEST_ARTEFACT",
+    "found": "64 Bringing Black and White Deeds to an End",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "The numbered text 64 Bringing Black and White Deeds to an End is the following selection heading in the physical source. Existing governing registered-class policy excludes it from lexical alignment and forbids filing it again.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            159
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 10,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "The numbered text 64 Bringing Black and White Deeds to an End is the following selection heading in the physical source. Existing governing registered-class policy excludes it from lexical alignment and forbids filing it again.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 9,
+          "nulls": 0,
+          "nonnull_d5": 8,
+          "d5_total": 8,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 320,
+    "angle": "english",
+    "original_screen_index": 4,
+    "kind": "FORMATTING",
+    "found": "64 Bringing Black and White Deeds to an End",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Both the expository sentence frame and heading are present in the original. The following title is apparatus, already governed by the heading policy; no replacement or new source defect is supported.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            159
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 3,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              "ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 10,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Deeds which are unstained"
+            ],
+            "count": 1,
+            "row_ids": [
+              1702
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": true,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Both the expository sentence frame and heading are present in the original. The following title is apparatus, already governed by the heading policy; no replacement or new source defect is supported.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 89,
+          "wylie": 88,
+          "english": 202
+        },
+        "original_span_counts": {
+          "spans": 9,
+          "nulls": 0,
+          "nonnull_d5": 8,
+          "d5_total": 8,
+          "d7": 0
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "tibetan",
+    "original_screen_index": 0,
+    "kind": "TIBETAN_SPELLING",
+    "found": "CHOS BZOD",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "CHOS BZOD is the abbreviated technical compound expanded as chos bzod pa in 322. The expanded HGM glossary entry and bzod/mastery support the lexical reading. The old auto-mined types of mental movement gloss is conflicting metadata, not grounds to alter this source.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [
+            1
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar ch"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "CHOS BZOD is the abbreviated technical compound expanded as chos bzod pa in 322. The expanded HGM glossary entry and bzod/mastery support the lexical reading. The old auto-mined types of mental movement gloss is conflicting metadata, not grounds to alter this source.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 32,
+          "nulls": 0,
+          "nonnull_d5": 22,
+          "d5_total": 22,
+          "d7": 8
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "tibetan",
+    "original_screen_index": 1,
+    "kind": "ENGLISH_TYPO",
+    "found": "Phenomena, mastery",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Phenomena, mastery is unusual poetic syntax, but each member corresponds to chos/bzod, and 322 explicitly explains mastery of phenomena. The original comma is preserved; no independent publication proves an editorial correction.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            41
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar ch"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Phenomena, mastery is unusual poetic syntax, but each member corresponds to chos/bzod, and 322 explicitly explains mastery of phenomena. The original comma is preserved; no independent publication proves an editorial correction.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 32,
+          "nulls": 0,
+          "nonnull_d5": 22,
+          "d5_total": 22,
+          "d7": 8
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "tibetan",
+    "original_screen_index": 2,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "Twelve types of mental movement",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "bcu gnyis is Twelve, brgyad is eight and dgu pa is Ninth at their own positions. Commentary 322 supplies four mastery instants plus eight path instants. The verse need not restate four to be internally coherent.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            0
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar ch"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "bcu gnyis is Twelve, brgyad is eight and dgu pa is Ninth at their own positions. Commentary 322 supplies four mastery instants plus eight path instants. The verse need not restate four to be internally coherent.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 32,
+          "nulls": 0,
+          "nonnull_d5": 22,
+          "d5_total": 22,
+          "d7": 8
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "tibetan",
+    "original_screen_index": 3,
+    "kind": "INGEST_ARTEFACT",
+    "found": ",CHOS BZOD 'DOD CHAGS BRAL BA YI,",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "The complete eight-line CRLF ACIP extent and whole 320-character English are present in the original file. The final White clause is elliptical in both the verse context and its source layout; 324 explains the arising. There is no proved ingest truncation.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [
+            0
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar ch"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "The complete eight-line CRLF ACIP extent and whole 320-character English are present in the original file. The final White clause is elliptical in both the verse context and its source layout; 324 explains the arising. There is no proved ingest truncation.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 32,
+          "nulls": 0,
+          "nonnull_d5": 22,
+          "d5_total": 22,
+          "d7": 8
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "tibetan",
+    "original_screen_index": 4,
+    "kind": "FORMATTING",
+    "found": "Uninterrupted path",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Capitals mark successive English verse lines. They do not turn the translation into an inserted heading. Original line breaks and commas are preserved in the physical witness; no new formatting erratum is established.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            78
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 4,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar ch"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/tibetan/evidence/partial-parallel-queries.json",
+            "index": 5,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Capitals mark successive English verse lines. They do not turn the translation into an inserted heading. Original line breaks and commas are preserved in the physical witness; no new formatting erratum is established.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 32,
+          "nulls": 0,
+          "nonnull_d5": 22,
+          "d5_total": 22,
+          "d7": 8
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "english",
+    "original_screen_index": 0,
+    "kind": "TIBETAN_SPELLING",
+    "found": "CHOS BZOD",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "CHOS BZOD is the abbreviated technical compound expanded as chos bzod pa in 322. The expanded HGM glossary entry and bzod/mastery support the lexical reading. The old auto-mined types of mental movement gloss is conflicting metadata, not grounds to alter this source.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [
+            1
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 11,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod"
+            ],
+            "count": 4,
+            "row_ids": [
+              1703,
+              1704,
+              24177,
+              36758
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 12,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "mastery of phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1704
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 14,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "bar chad med lam skyes"
+            ],
+            "count": 2,
+            "row_ids": [
+              1703,
+              1706
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "CHOS BZOD is the abbreviated technical compound expanded as chos bzod pa in 322. The expanded HGM glossary entry and bzod/mastery support the lexical reading. The old auto-mined types of mental movement gloss is conflicting metadata, not grounds to alter this source.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 31,
+          "nulls": 0,
+          "nonnull_d5": 24,
+          "d5_total": 24,
+          "d7": 6
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "english",
+    "original_screen_index": 1,
+    "kind": "ENGLISH_TYPO",
+    "found": "Phenomena, mastery,",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Phenomena, mastery is unusual poetic syntax, but each member corresponds to chos/bzod, and 322 explicitly explains mastery of phenomena. The original comma is preserved; no independent publication proves an editorial correction.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            41
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 11,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod"
+            ],
+            "count": 4,
+            "row_ids": [
+              1703,
+              1704,
+              24177,
+              36758
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 12,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "mastery of phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1704
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 14,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "bar chad med lam skyes"
+            ],
+            "count": 2,
+            "row_ids": [
+              1703,
+              1706
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Phenomena, mastery is unusual poetic syntax, but each member corresponds to chos/bzod, and 322 explicitly explains mastery of phenomena. The original comma is preserved; no independent publication proves an editorial correction.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 31,
+          "nulls": 0,
+          "nonnull_d5": 24,
+          "d5_total": 24,
+          "d7": 6
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "english",
+    "original_screen_index": 2,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "Twelve types of mental movement",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "bcu gnyis is Twelve, brgyad is eight and dgu pa is Ninth at their own positions. Commentary 322 supplies four mastery instants plus eight path instants. The verse need not restate four to be internally coherent.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            0
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 11,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod"
+            ],
+            "count": 4,
+            "row_ids": [
+              1703,
+              1704,
+              24177,
+              36758
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 12,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "mastery of phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1704
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 14,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "bar chad med lam skyes"
+            ],
+            "count": 2,
+            "row_ids": [
+              1703,
+              1706
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "bcu gnyis is Twelve, brgyad is eight and dgu pa is Ninth at their own positions. Commentary 322 supplies four mastery instants plus eight path instants. The verse need not restate four to be internally coherent.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 31,
+          "nulls": 0,
+          "nonnull_d5": 24,
+          "d5_total": 24,
+          "d7": 6
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "english",
+    "original_screen_index": 3,
+    "kind": "INGEST_ARTEFACT",
+    "found": "White by the final uninterrupted arising,",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "The complete eight-line CRLF ACIP extent and whole 320-character English are present in the original file. The final White clause is elliptical in both the verse context and its source layout; 324 explains the arising. There is no proved ingest truncation.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            241
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 11,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod"
+            ],
+            "count": 4,
+            "row_ids": [
+              1703,
+              1704,
+              24177,
+              36758
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 12,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "mastery of phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1704
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 14,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "bar chad med lam skyes"
+            ],
+            "count": 2,
+            "row_ids": [
+              1703,
+              1706
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "The complete eight-line CRLF ACIP extent and whole 320-character English are present in the original file. The final White clause is elliptical in both the verse context and its source layout; 324 explains the arising. There is no proved ingest truncation.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 31,
+          "nulls": 0,
+          "nonnull_d5": 24,
+          "d5_total": 24,
+          "d7": 6
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  },
+  {
+    "seq": 321,
+    "angle": "english",
+    "original_screen_index": 4,
+    "kind": "FORMATTING",
+    "found": "Free of desire for the concentration.",
+    "expected": null,
+    "refuted": true,
+    "decision": "NO_NEW_ERRATUM",
+    "reason": "Capitals mark successive English verse lines. They do not turn the translation into an inserted heading. Original line breaks and commas are preserved in the physical witness; no new formatting erratum is established.",
+    "five_refutation_grounds": {
+      "a": {
+        "quote_present": true,
+        "actual_occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            283
+          ]
+        },
+        "full_source_ref": "evidence/independent-complete-source-context.json"
+      },
+      "b": {
+        "actual_query_proofs": [
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 6,
+            "sql": "select * from corpus_segments where acip=? order by id",
+            "params": [
+              ",CHOS BZOD 'DOD CHAGS BRAL BA YI, ,BAR CHAD MED LAM BRGYAD KYI GANG , ,SEMS PA RNAM PA BCU GNYIS DE, ,NAG PO ZAD PAR BYED PA'I LAS, ,DGU PA'I SEMS PA GANG YIN PA, ,DE NI DKAR NAG ZAD BYED YIN, ,DKAR PO BSAM GTAN CHAGS BRAL BA'I, ,BAR CHAD MED LAM SKYES THA MAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 7,
+            "sql": "select * from corpus_segments where wylie=? order by id",
+            "params": [
+              "chos bzod 'dod chags bral ba yi, ,bar chad med lam brgyad kyi gang , ,sems pa rnam pa bcu gnyis de, ,nag po zad par byed pa'i las, ,dgu pa'i sems pa gang yin pa, ,de ni dkar nag zad byed yin, ,dkar po bsam gtan chags bral ba'i, ,bar chad med lam skyes tha mas"
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 8,
+            "sql": "select * from corpus_segments where english=? order by id",
+            "params": [
+              "Twelve types of mental movement had with Phenomena, mastery, and eight of the Uninterrupted path free of desire Are deeds that act to bring the black to an end. That which is the mental movement in the Ninth acts to end the white and black. White by the final uninterrupted arising, Free of desire for the concentration."
+            ],
+            "count": 1,
+            "row_ids": [
+              1703
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 11,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "chos bzod"
+            ],
+            "count": 4,
+            "row_ids": [
+              1703,
+              1704,
+              24177,
+              36758
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 12,
+            "sql": "select * from corpus_segments where instr(english,?)>0 order by id",
+            "params": [
+              "mastery of phenomena"
+            ],
+            "count": 1,
+            "row_ids": [
+              1704
+            ],
+            "C16_P1_TCS_row_ids": []
+          },
+          {
+            "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/english/evidence/corpus-queries.json",
+            "index": 14,
+            "sql": "select * from corpus_segments where instr(wylie,?)>0 order by id",
+            "params": [
+              "bar chad med lam skyes"
+            ],
+            "count": 2,
+            "row_ids": [
+              1703,
+              1706
+            ],
+            "C16_P1_TCS_row_ids": []
+          }
+        ],
+        "full_result_ref": "evidence/corpus-complete-objects.json",
+        "conclusion": "No independent publication witness established. Exact field/leading-phrase matches are the selected row only; lexical parallels are not evidence of independent editions or ingestion lineage."
+      },
+      "c": {
+        "register_count": 194,
+        "direct_segment_records": [],
+        "following_heading_policy_applies": false,
+        "complete_compared_class_records": "evidence/independent-register-classes.json",
+        "authority": "governing/source-origin/docs/ALIGNMENT_LAYER_SPEC.md section 4 and RECONCILE_BRIEF ERRATA; historical class counts are preserved, not current census claims"
+      },
+      "d": {
+        "judgment": "Capitals mark successive English verse lines. They do not turn the translation into an inserted heading. Original line breaks and commas are preserved in the physical witness; no new formatting erratum is established.",
+        "full_master_records": "evidence/master-complete-objects.json",
+        "master_index": "evidence/master-term-index.json",
+        "full_physical_file_identity": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb",
+        "correction_established": false
+      },
+      "e": {
+        "field_lengths": {
+          "acip": 261,
+          "wylie": 259,
+          "english": 320
+        },
+        "original_span_counts": {
+          "spans": 31,
+          "nulls": 0,
+          "nonnull_d5": 24,
+          "d5_total": 24,
+          "d7": 6
+        },
+        "original_query_and_master_count_claims_rechecked": true,
+        "query_evidence": "evidence/independent-query-proofs.json",
+        "lexical_evidence": "evidence/original-lexical-checks.json",
+        "register_count": 194
+      }
+    }
+  }
+]

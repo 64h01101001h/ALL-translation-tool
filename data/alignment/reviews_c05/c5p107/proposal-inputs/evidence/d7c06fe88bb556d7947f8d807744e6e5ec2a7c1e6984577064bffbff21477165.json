@@ -1,0 +1,236 @@
+{
+  "producer": "Codex Tibetan-first independent proposal",
+  "source_origin_git_commit": "49b66f3af9cbb47599bb40286637fc9e683b7cdf",
+  "range_convention": "zero-based Unicode character half-open",
+  "spans": [
+    {
+      "id": "w1",
+      "d": 5,
+      "tib": "zag med",
+      "eng": "unstained",
+      "seq": 320,
+      "tib_range": [
+        0,
+        7
+      ],
+      "eng_range": [
+        16,
+        25
+      ],
+      "rationale": "Established unstained compound describing the deeds; do not attach to the next heading.",
+      "parent": null,
+      "source_function": "word or established compound, including inflected forms"
+    },
+    {
+      "id": "w2",
+      "d": 7,
+      "tib": "zag",
+      "eng": "stained",
+      "seq": 320,
+      "tib_range": [
+        0,
+        3
+      ],
+      "eng_range": [
+        18,
+        25
+      ],
+      "rationale": "Unique positive member within unstained and the Tibetan compound; this is a member, not a free-standing stained word.",
+      "parent": "w1",
+      "source_function": "strictly tighter compound member"
+    },
+    {
+      "id": "w3",
+      "d": 7,
+      "tib": "med",
+      "eng": "un",
+      "seq": 320,
+      "tib_range": [
+        4,
+        7
+      ],
+      "eng_range": [
+        16,
+        18
+      ],
+      "rationale": "Unique negative member inside the parent unstained, licensed by the actual negative compound.",
+      "parent": "w1",
+      "source_function": "strictly tighter compound member"
+    },
+    {
+      "id": "w4",
+      "d": 5,
+      "tib": "las",
+      "eng": "Deeds",
+      "seq": 320,
+      "tib_range": [
+        12,
+        15
+      ],
+      "eng_range": [
+        0,
+        5
+      ],
+      "rationale": "Initial subject; avoids the later explanatory deed and heading Deeds.",
+      "parent": null,
+      "source_function": "word or established compound, including inflected forms"
+    },
+    {
+      "id": "w5",
+      "d": 5,
+      "tib": "dkar",
+      "eng": "white",
+      "seq": 320,
+      "tib_range": [
+        22,
+        26
+      ],
+      "eng_range": [
+        59,
+        64
+      ],
+      "rationale": "First-clause color under the shared English negative; capitalized heading White is not used.",
+      "parent": null,
+      "source_function": "word or established compound, including inflected forms"
+    },
+    {
+      "id": "w6",
+      "d": 5,
+      "tib": "gnag",
+      "eng": "black",
+      "seq": 320,
+      "tib_range": [
+        30,
+        34
+      ],
+      "eng_range": [
+        68,
+        73
+      ],
+      "rationale": "First-clause black under that same English negative, not the referential black in the second sentence.",
+      "parent": null,
+      "source_function": "word or established compound, including inflected forms"
+    },
+    {
+      "id": "w7",
+      "d": 3,
+      "tib": "rnam par mi smin",
+      "eng": "never ripen",
+      "seq": 320,
+      "tib_range": [
+        35,
+        51
+      ],
+      "eng_range": [
+        26,
+        37
+      ],
+      "rationale": "Complete negative ripening phrase; the first two mi are left as distributed scope rather than assigned duplicate never atoms.",
+      "parent": null,
+      "source_function": "complete phrase"
+    },
+    {
+      "id": "w8",
+      "d": 5,
+      "tib": "nag po",
+      "eng": "black",
+      "seq": 320,
+      "tib_range": [
+        56,
+        62
+      ],
+      "eng_range": [
+        128,
+        133
+      ],
+      "rationale": "Second-sentence explanation of quoted it, excluding the translator-supplied kind of deed.",
+      "parent": null,
+      "source_function": "word or established compound, including inflected forms"
+    },
+    {
+      "id": "w9",
+      "d": 5,
+      "tib": "de",
+      "eng": "it",
+      "seq": 320,
+      "tib_range": [
+        63,
+        65
+      ],
+      "eng_range": [
+        110,
+        112
+      ],
+      "rationale": "Quoted anaphoric it refers to that black class; quotation marks remain outside the pronoun.",
+      "parent": null,
+      "source_function": "word or established compound, including inflected forms"
+    },
+    {
+      "id": "w10",
+      "d": 3,
+      "tib": "zad par",
+      "eng": "to an end",
+      "seq": 320,
+      "tib_range": [
+        66,
+        73
+      ],
+      "eng_range": [
+        148,
+        157
+      ],
+      "rationale": "Complete terminative result phrase of the causative, separated from brings because the intervening object and explanatory apposition make the whole English causative discontinuous.",
+      "parent": null,
+      "source_function": "complete phrase"
+    },
+    {
+      "id": "w11",
+      "d": 5,
+      "tib": "byed pa",
+      "eng": "brings",
+      "seq": 320,
+      "tib_range": [
+        74,
+        81
+      ],
+      "eng_range": [
+        102,
+        108
+      ],
+      "rationale": "Causative brings in the second sentence, paired with its own to an end complement; not heading Bringing.",
+      "parent": null,
+      "source_function": "word or established compound, including inflected forms"
+    }
+  ],
+  "eng_order": [
+    "w4",
+    "w1",
+    "w7",
+    "w5",
+    "w6",
+    "w11",
+    "w9",
+    "w8",
+    "w10"
+  ],
+  "material_omissions": [
+    {
+      "tib": "first mi; second mi",
+      "reason": "The two color negatives and ripening negative are recast into one never...either...or construction. Their scope is present but separate English atoms cannot be established; neither is nulled."
+    },
+    {
+      "tib": "kyi / ni / la / yin no",
+      "reason": "Relational, topic, connective and copular contributions are distributed through the English sentence frames. No additional isolated equivalents are claimed."
+    },
+    {
+      "english": "Their nature is to be what / that is, the ... kind of deed",
+      "reason": "Expository frame and referential expansion are preserved unwrapped; nag po owns only its actual second black."
+    },
+    {
+      "english": "64 Bringing Black and White Deeds to an End",
+      "reason": "Following selection heading is original apparatus under the registered heading class, not a new translation correspondence or new erratum."
+    }
+  ],
+  "source_evidence": "../evidence/full-original-spine-context.json",
+  "lexical_evidence": "../evidence/full-lexical-evidence.json"
+}

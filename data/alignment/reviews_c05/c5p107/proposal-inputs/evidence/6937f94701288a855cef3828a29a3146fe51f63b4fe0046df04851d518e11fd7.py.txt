@@ -1,0 +1,46 @@
+import pathlib,json,gzip,sqlite3,hashlib,subprocess,re,os
+B=pathlib.Path(__file__).resolve().parent.parent;O=B/'english';E=O/'evidence'; W=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree');bl=json.loads((B/'proposal-baseline.json').read_text())
+def save(p,x):p.parent.mkdir(exist_ok=True,parents=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+pins=[]
+for name,m in bl['source_pins'].items():
+ p=pathlib.Path(m['path']);raw=p.read_bytes();assert len(raw)==m['bytes'] and sha(raw)==m['sha256'];rec=dict(m,verified=True)
+ if name not in ['spine','master','corpus']:
+  d=E/'original'/p.name;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(raw);rec['exact_copy']=str(d.relative_to(O))
+ pins.append(dict(role=name,**rec))
+save(E/'source-pins.json',pins)
+for f in ['english-brief.md','proposal-baseline.json']:(E/'original'/f).write_bytes((B/f).read_bytes())
+(E/'original/proposal-protocol.md').write_bytes((B.parent/'proposal-protocol.md').read_bytes())
+eng='engines/hgm_tools.py';raw=subprocess.check_output(['git','show',bl['commit']+':'+eng],cwd=W);p=E/'pinned'/eng;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw);gp=json.loads((E/'git-pins.json').read_text());gp=[r for r in gp if r['git_object']!=bl['commit']+':'+eng];gp.append(dict(git_object=bl['commit']+':'+eng,path=str(p.relative_to(O)),bytes=len(raw),sha256=sha(raw)));save(E/'git-pins.json',gp)
+required=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool'];access=[dict(path=str(pathlib.Path.home()/p),readable=os.access(pathlib.Path.home()/p,os.R_OK)) for p in required];assert all(r['readable'] for r in access);save(E/'required-access.json',access)
+db=sqlite3.connect('file:'+bl['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+sources=json.loads((B/'source.json').read_text());context=json.loads((B/'context.json').read_text());full=[]
+for s in context:
+ row=dict(db.execute('select * from corpus_segments where course=? and seq=?',(s['course'],s['seq'])).fetchone());assert all(row[k]==v for k,v in s.items());full.append(row)
+save(E/'full-source-context-rows.json',full)
+physical=pathlib.Path(bl['source_pins']['physical']['path']).read_bytes();fold=re.sub(r'\s+',' ',physical.decode('latin-1'));physicalproof=[]
+for s in sources:
+ a=physical.find(s['acip'].encode());af=fold.find(s['acip']);e=fold.find(s['english']);assert af>=0 and e>=0
+ physicalproof.append(dict(seq=s['seq'],acip_exact_raw_byte_range=[a,a+len(s['acip'].encode())] if a>=0 else None,acip_exact_linefolded_latin1_range=[af,af+len(s['acip'])],english_exact_linefolded_latin1_range=[e,e+len(s['english'])],linefold_operation="re.sub(r'\\s+', ' ', raw.decode('latin-1'))",physical_sha256=sha(physical)))
+save(E/'physical-full-field-proof.json',physicalproof)
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));idx={}
+for col in ['unified_entries','curated_entries','glossary_entries']:
+ for i,entry in enumerate(master[col]):idx.setdefault(entry.get('wylie'),[]).append(dict(collection=col,index=i,entry=entry))
+terms="'dod|gtogs pa|'dod par gtogs pa|dge ba|dkar|gnag|dkar gnag|rnam par smin pa|rnam smin|yang|las|ngo bo|rang|nyon mongs can|nyon mongs pa|min|min pas|rgyud|gcig|la|dang|'dres pa|'dres pas|'bras bu|yid du 'ong ba|'byin|'byin pa|sdug bsngal|phyir|zag med|mi|nag po|de|zad par byed pa|zad byed|zad pa|byed pa|chos bzod|chos|bzod|'dod chags|bral ba|bar chad med lam|bar chad med|lam|brgyad|sems pa|rnam pa|bcu gnyis|dgu pa|dkar nag|bsam gtan|chags|skyes|tha ma|tha mas".split('|')
+lex=[]
+for t in terms:
+ entries=[dict(r) for r in db.execute('select * from entries where wylie=?',(t,))];lex.append(dict(term=t,query='exact wylie across unified_entries, curated_entries, glossary_entries and spine entries',master_records=idx.get(t,[]),count=len(idx.get(t,[])),spine_entries=entries))
+save(E/'lexical-evidence.json',lex)
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));queries=[]
+def query(label,sql,params):
+ rows=[dict(r) for r in db.execute(sql,params)];crecs=[]
+ for row in rows:
+  assert json.loads(row['raw'])==corpus[row['id']-1];crecs.append(dict(corpus_index=row['id']-1,record=corpus[row['id']-1]))
+ queries.append(dict(label=label,sql=sql,params=params,count=len(rows),rows=rows,corpus_records=crecs))
+for s in sources:
+ for field in ['acip','wylie','english']:query(str(s['seq'])+' exact '+field,'select * from corpus_segments where '+field+'=? order by id',[s[field]])
+for label,field,term in [('319 mixed mental','wylie','rgyud gcig la nyon mongs pa'),('320 unstained','english','Deeds which are unstained'),('321 verse','wylie','chos bzod'),('321 mastery','english','mastery of phenomena'),('319 min pas','wylie','nyon mongs can min pas'),('321 final arising','wylie','bar chad med lam skyes')]:
+ query(label,'select * from corpus_segments where instr('+field+',?)>0 order by id',[term])
+save(E/'corpus-queries.json',queries)
+reg=json.loads((E/'pinned/docs/errata_register.json').read_text());save(E/'register-inspection-shape.json',dict(type=type(reg).__name__,keys=list(reg) if isinstance(reg,dict) else None))
+print(json.dumps(dict(source_rows=len(full),lexical_terms=len(lex),master_records=sum(x['count'] for x in lex),queries=[dict(label=q['label'],count=q['count']) for q in queries],register_type=type(reg).__name__,register_keys=list(reg) if isinstance(reg,dict) else None),indent=2))

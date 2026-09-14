@@ -1,0 +1,12 @@
+import pathlib,json,hashlib,datetime
+O=pathlib.Path(__file__).resolve().parent
+assert not (O/'freeze.json').exists()
+def sha(b):return hashlib.sha256(b).hexdigest()
+proof=json.loads((O/'verification-summary.json').read_text());files={}
+for p in sorted(O.rglob('*')):
+ if p.is_file():
+  assert not p.is_symlink();b=p.read_bytes();files[str(p.relative_to(O))]=dict(bytes=len(b),sha256=sha(b))
+f=dict(schema='c05-independent-proposal-freeze-v1',producer='Codex / English-first independent proposal',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),course='C05',segments=[319,320,321],source_origin_git_commit='49b66f3af9cbb47599bb40286637fc9e683b7cdf',source_origin_course_boundary=312,later_acceptance_baseline_consumed=False,status='FROZEN_PROPOSAL; independent reconciliation and semantic review required',counts=proof['totals'],new_errata=0,files=files,source_pins='evidence/source-pins.json',governing_git_pins='evidence/git-pins.json',evidence_notes='evidence/reading-and-limits.json')
+b=(json.dumps(f,ensure_ascii=False,indent=2)+'\n').encode();(O/'freeze.json').write_bytes(b)
+for n,r in files.items():bb=(O/n).read_bytes();assert len(bb)==r['bytes'] and sha(bb)==r['sha256']
+print(json.dumps(dict(freeze_path=str(O/'freeze.json'),schema=f['schema'],files=len(files),bytes=len(b),sha256=sha(b),counts=f['counts'],new_errata=0),indent=2))

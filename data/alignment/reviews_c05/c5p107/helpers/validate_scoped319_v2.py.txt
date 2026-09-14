@@ -1,0 +1,63 @@
+from pathlib import Path
+import json,hashlib,subprocess,os,sys,datetime,re,html,copy,types
+S=Path(__file__).resolve().parents[1];B=S.parent;R=B/'reconciled';H=B/'semantic-review-history/v1';W=B.parents[1]/'campaign-worktree';keys=['seq','id','d','tib','eng','tib_range','eng_range']
+def load(p):return json.loads(p.read_text())
+def info(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(n,x):p=S/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+source={r['seq']:r for r in load(S/'evidence/independent-complete-source-context.json')}
+canonical=[]
+for rel in ['engines/hgm_tools.py','tools/build_alignment_layer.py','tools/gen_alignment_page.py']:
+ b=(S/'governing/source-origin'/(rel+'.txt')).read_bytes();assert b==(R/'evidence/pinned'/rel).read_bytes()==subprocess.check_output(['git','show','49b66f3af9cbb47599bb40286637fc9e683b7cdf:'+rel],cwd=W);canonical.append({'git_object':'49b66f3af9cbb47599bb40286637fc9e683b7cdf:'+rel,**info(b)})
+corrected_native=[]
+for kind in ['generator','resolver']:
+ n=R/'native'/('final-319-'+kind+'-v2');e=load(n/'execution.json');assert e['exit']==0 and (n/'exit.txt').read_text()=='0\n'
+ assert (n/'stdin.bin').read_bytes()==(R/'319/spec.json').read_bytes() and not (n/'stderr.bin').read_bytes()
+ for stream in ['stdin','stdout','stderr']:assert info((n/(stream+'.bin')).read_bytes())==e['streams'][stream]
+ output=(R/'319'/('body.html' if kind=='generator' else 'resolved-ranges.json')).read_bytes();assert (n/'stdout.bin').read_bytes()==output
+ assert Path(e['argv'][2]).read_bytes()==(B/'reconciliation-history/v1/helpers'/Path(e['argv'][2]).name).read_bytes()
+ corrected_native.append({'kind':kind,'directory':str(n),'execution':e,'actual_streams_and_helper_identity_verified':True,'canonical_dependencies':canonical})
+write('scoped-v2/corrected-reconciler-native-identity.json',corrected_native)
+def run(kind,mode):
+ n=S/'native'/('scoped-final-319-'+kind+'-v2');n.mkdir(parents=True,exist_ok=False);b=(S/'reviewed-final-v2/319/spec.json').read_bytes();argv=[sys.executable,'-B',str(S/'helpers/canonical.py.txt'),mode];start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ r=subprocess.run(argv,input=b,cwd=S,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),capture_output=True)
+ for name,raw in [('stdin',b),('stdout',r.stdout),('stderr',r.stderr)]:(n/(name+'.bin')).write_bytes(raw)
+ (n/'exit.txt').write_text(str(r.returncode)+'\n');e={'argv':argv,'cwd':str(S),'utc':start,'finished_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':r.returncode,'streams':{'stdin':info(b),'stdout':info(r.stdout),'stderr':info(r.stderr)}};(n/'execution.json').write_text(json.dumps(e,indent=2)+'\n');assert r.returncode==0 and not r.stderr
+ return r.stdout,e
+body,gen=run('generator','generate');assert body==(S/'reviewed-final-v2/319/body.html').read_bytes()
+for side,field in [('tib','wylie'),('eng','english')]:
+ m=re.search('<div class="'+side+'"><div class="lab">.*?</div>\n(.*?)\n</div>',body.decode(),re.S);assert m and html.unescape(re.sub('<[^>]*>','',m[1]))==source[319][field]
+raw,resolver=run('resolver','resolve');rows=json.loads(raw);assert len(rows)==42
+assert rows==[{k:r[k] for k in keys} for r in load(R/'319/resolved-ranges.json')]
+assert rows==[{k:r[k] for k in keys} for r in load(R/'319/final-decisions.json')['spans']]
+assert rows==load(R/'319/final-ordered-tuples.json')['source_order']
+previous=load(H/'resolved-spans.json');expected=copy.deepcopy(previous)
+next(r for r in expected if r['seq']==319 and r['id']=='w15')['d']=5
+final=rows+[r for r in previous if r['seq']!=319];assert final==expected
+write('resolved-spans.json',final)
+spec=load(R/'319/spec.json')['segments'][0];code=S/'governing/source-origin/tools/gen_alignment_page.py.txt';dummy=types.ModuleType('build_alignment_layer');sys.modules['build_alignment_layer']=dummy;G=types.ModuleType('canonical_member_check');G.__file__=str(code);exec(compile(code.read_bytes(),str(code),'exec'),G.__dict__)
+by={r['id']:r for r in spec['spans']};members=G.with_members(spec['spans'],[by[k] for k in spec['eng_order']],source[319]['english']);assert [r['id'] for r in members]==load(R/'319/final-ordered-tuples.json')['english_order_with_members']
+parent=None
+for r in rows:
+ assert set(r)==set(keys)
+ for side,field in [('tib','wylie'),('eng','english')]:
+  if r[side] is None:assert r[side+'_range'] is None;continue
+  lo,hi=r[side+'_range'];assert source[319][field][lo:hi]==r[side]
+  if r['d']==7:
+   assert parent and parent['d']==5;pl,ph=parent[side+'_range'];assert pl<=lo<hi<=ph and hi-lo<ph-pl and parent[side].count(r[side])==1
+ if r['d']!=7:parent=r
+actualbaseline=load(S/'scoped-v2/actual-through318-baseline.json');full=load(W/'data/alignment/alignment_full_v1.json');evidence=load(W/'data/alignment/alignment_evidence_v1.json')
+# Counts are independently measured below; field names are read from the actual bank schema.
+write('scoped-v2/baseline-count-shapes.json',{'full_link_sample_keys':list(full['links'][0]),'pair_record_sample':next(iter(evidence['pairs'].values())),'full_link_count':len(full['links']),'evidence_headword_count':len(evidence['pairs'])})
+assert len(full['links'])==actualbaseline['full_links'] and len(evidence['pairs'])==actualbaseline['evidence_headwords']
+proof={'status':'PASS','scope':'319 w15 depth only','fresh_generator_runs':1,'fresh_resolver_runs':1,'current319_count':len(rows),'all85_tuples_equal_v1_except_w15_depth':True,'all42_current319_ranges_and_decisions_exact':True,'current319_english_member_order_exact':True,'current319_all_d7_unique_strict_immediate_parent':True,'complete_body_exact':True,'both_complete_rendered_source_fields_exact':True,'canonical_dependencies':canonical,'generator':gen,'resolver':resolver,'no_original_or320321_generator_or_resolver_repeated':True}
+write('scoped-v2/fresh319-validation-proof.json',proof)
+results=load(H/'native-results.json')
+for r in results:
+ if r.get('seq')==319 and r['kind']=='final-generator':r.update(execution=gen,previous_execution_ref='history/v1/native-results.json',current_native_directory='native/scoped-final-319-generator-v2')
+ if r.get('seq')==319 and r['kind']=='final-resolver':r.update(execution=resolver,previous_execution_ref='history/v1/native-results.json',current_native_directory='native/scoped-final-319-resolver-v2')
+write('native-results.json',results)
+measured=load(H/'measured-segments.json')
+for r in measured:
+ if r['seq']==319:r.update(word_pair_count=27,spec_sha256=info((R/'319/spec.json').read_bytes())['sha256'],spec_bytes=(R/'319/spec.json').stat().st_size,body_sha256=info(body)['sha256'],body_bytes=len(body),generator_exit=0)
+write('measured-segments.json',measured)
+print(json.dumps({'status':'PASS','fresh_generator_runs':1,'fresh_resolver_runs':1,'total_spans':len(final),'word_pairs':sum(r['d']==5 and r['eng'] is not None for r in final),'spec':info((R/'319/spec.json').read_bytes()),'body':info(body),'baseline_count_shape_file':'scoped-v2/baseline-count-shapes.json'},indent=2))

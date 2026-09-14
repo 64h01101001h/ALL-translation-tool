@@ -1,0 +1,411 @@
+{
+  "producer": "Codex independent reconciliation",
+  "source_origin_git_commit": "49b66f3af9cbb47599bb40286637fc9e683b7cdf",
+  "range_convention": "zero-based half-open Unicode character offsets in complete original source fields",
+  "spans": [
+    {
+      "id": "w1",
+      "d": 5,
+      "tib": "zag med",
+      "eng": "unstained",
+      "seq": 320,
+      "tib_range": [
+        0,
+        7
+      ],
+      "eng_range": [
+        16,
+        25
+      ],
+      "rationale": "Established unstained compound describing the deeds; do not attach to the next heading.",
+      "source_function": "word or established compound in this source occurrence",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w1"
+      },
+      "parent_id": null
+    },
+    {
+      "id": "w2",
+      "d": 7,
+      "tib": "zag",
+      "eng": "stained",
+      "seq": 320,
+      "tib_range": [
+        0,
+        3
+      ],
+      "eng_range": [
+        18,
+        25
+      ],
+      "rationale": "Unique positive member within unstained and the Tibetan compound; this is a member, not a free-standing stained word.",
+      "source_function": "unique tighter member of established d5 compound",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w2"
+      },
+      "parent_id": "w1"
+    },
+    {
+      "id": "w3",
+      "d": 7,
+      "tib": "med",
+      "eng": "un",
+      "seq": 320,
+      "tib_range": [
+        4,
+        7
+      ],
+      "eng_range": [
+        16,
+        18
+      ],
+      "rationale": "Unique negative member inside the parent unstained, licensed by the actual negative compound.",
+      "source_function": "unique tighter member of established d5 compound",
+      "subword": true,
+      "selected_from": {
+        "angle": "reconciled",
+        "original_id": "w3"
+      },
+      "parent_id": "w1"
+    },
+    {
+      "id": "w4",
+      "d": 5,
+      "tib": "las",
+      "eng": "Deeds",
+      "seq": 320,
+      "tib_range": [
+        12,
+        15
+      ],
+      "eng_range": [
+        0,
+        5
+      ],
+      "rationale": "Initial subject; avoids the later explanatory deed and heading Deeds.",
+      "source_function": "word or established compound in this source occurrence",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w4"
+      },
+      "parent_id": null
+    },
+    {
+      "id": "w5",
+      "d": 5,
+      "tib": "dkar",
+      "eng": "white",
+      "seq": 320,
+      "tib_range": [
+        22,
+        26
+      ],
+      "eng_range": [
+        59,
+        64
+      ],
+      "rationale": "First-clause color under the shared English negative; capitalized heading White is not used.",
+      "source_function": "word or established compound in this source occurrence",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w5"
+      },
+      "parent_id": null
+    },
+    {
+      "id": "w6",
+      "d": 5,
+      "tib": "gnag",
+      "eng": "black",
+      "seq": 320,
+      "tib_range": [
+        30,
+        34
+      ],
+      "eng_range": [
+        68,
+        73
+      ],
+      "rationale": "First-clause black under that same English negative, not the referential black in the second sentence.",
+      "source_function": "word or established compound in this source occurrence",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w6"
+      },
+      "parent_id": null
+    },
+    {
+      "id": "w7",
+      "d": 3,
+      "tib": "rnam par mi smin",
+      "eng": "never ripen",
+      "seq": 320,
+      "tib_range": [
+        35,
+        51
+      ],
+      "eng_range": [
+        26,
+        37
+      ],
+      "rationale": "Complete negative ripening phrase; the first two mi are left as distributed scope rather than assigned duplicate never atoms.",
+      "source_function": "complete source phrase and its full recast",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w7"
+      },
+      "parent_id": null
+    },
+    {
+      "id": "w8",
+      "d": 5,
+      "tib": "nag po",
+      "eng": "black",
+      "seq": 320,
+      "tib_range": [
+        56,
+        62
+      ],
+      "eng_range": [
+        128,
+        133
+      ],
+      "rationale": "Second-sentence explanation of quoted it, excluding the translator-supplied kind of deed.",
+      "source_function": "word or established compound in this source occurrence",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w8"
+      },
+      "parent_id": null
+    },
+    {
+      "id": "w9",
+      "d": 5,
+      "tib": "de",
+      "eng": "it",
+      "seq": 320,
+      "tib_range": [
+        63,
+        65
+      ],
+      "eng_range": [
+        110,
+        112
+      ],
+      "rationale": "Quoted anaphoric it refers to that black class; quotation marks remain outside the pronoun.",
+      "source_function": "word or established compound in this source occurrence",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w9"
+      },
+      "parent_id": null
+    },
+    {
+      "id": "w10",
+      "d": 3,
+      "tib": "zad par",
+      "eng": "to an end",
+      "seq": 320,
+      "tib_range": [
+        66,
+        73
+      ],
+      "eng_range": [
+        148,
+        157
+      ],
+      "rationale": "Complete terminative result phrase of the causative, separated from brings because the intervening object and explanatory apposition make the whole English causative discontinuous.",
+      "source_function": "complete source phrase and its full recast",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w10"
+      },
+      "parent_id": null
+    },
+    {
+      "id": "w11",
+      "d": 5,
+      "tib": "byed pa",
+      "eng": "brings",
+      "seq": 320,
+      "tib_range": [
+        74,
+        81
+      ],
+      "eng_range": [
+        102,
+        108
+      ],
+      "rationale": "Causative brings in the second sentence, paired with its own to an end complement; not heading Bringing.",
+      "source_function": "word or established compound in this source occurrence",
+      "selected_from": {
+        "angle": "tibetan",
+        "original_id": "w11"
+      },
+      "parent_id": null
+    }
+  ],
+  "eng_order": [
+    "w4",
+    "w1",
+    "w7",
+    "w5",
+    "w6",
+    "w11",
+    "w9",
+    "w8",
+    "w10"
+  ],
+  "material_omissions": [
+    {
+      "tib": "mi before dkar; mi before gnag",
+      "reason": "Shared coordinated negative scope with rnam par mi smin appears in the single never...either...or English construction. Neither negative has a uniquely separable additional exponent; both omitted, not null."
+    },
+    {
+      "tib": "kyi / ni / la / yin no",
+      "reason": "Attributive, topic, connective and copular contribution is distributed through the English expository frame; no separately claimed atoms."
+    },
+    {
+      "english": "Their nature is to be what / that is / kind of deed / either / or / supplied articles",
+      "reason": "Exposition and shared-scope syntax are not independently assigned to a Tibetan content word."
+    },
+    {
+      "english": "64 Bringing Black and White Deeds to an End",
+      "reason": "Complete original following-selection heading, covered by registered apparatus policy. It is excluded from every correspondence and is not a new erratum."
+    }
+  ],
+  "complete_unwrapped_ranges": {
+    "wylie": [
+      {
+        "range": [
+          7,
+          12
+        ],
+        "text": " kyi "
+      },
+      {
+        "range": [
+          15,
+          22
+        ],
+        "text": " ni mi "
+      },
+      {
+        "range": [
+          26,
+          30
+        ],
+        "text": " mi "
+      },
+      {
+        "range": [
+          34,
+          35
+        ],
+        "text": " "
+      },
+      {
+        "range": [
+          51,
+          56
+        ],
+        "text": " la, "
+      },
+      {
+        "range": [
+          62,
+          63
+        ],
+        "text": " "
+      },
+      {
+        "range": [
+          65,
+          66
+        ],
+        "text": " "
+      },
+      {
+        "range": [
+          73,
+          74
+        ],
+        "text": " "
+      },
+      {
+        "range": [
+          81,
+          88
+        ],
+        "text": " yin no"
+      }
+    ],
+    "english": [
+      {
+        "range": [
+          5,
+          16
+        ],
+        "text": " which are "
+      },
+      {
+        "range": [
+          25,
+          26
+        ],
+        "text": " "
+      },
+      {
+        "range": [
+          37,
+          59
+        ],
+        "text": " into anything either "
+      },
+      {
+        "range": [
+          64,
+          68
+        ],
+        "text": " or "
+      },
+      {
+        "range": [
+          73,
+          102
+        ],
+        "text": ". Their nature is to be what "
+      },
+      {
+        "range": [
+          108,
+          110
+        ],
+        "text": " \""
+      },
+      {
+        "range": [
+          112,
+          128
+        ],
+        "text": "\"--that is, the "
+      },
+      {
+        "range": [
+          133,
+          148
+        ],
+        "text": " kind of deed--"
+      },
+      {
+        "range": [
+          157,
+          202
+        ],
+        "text": ". 64 Bringing Black and White Deeds to an End"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+from pathlib import Path
+import sys,json,sqlite3,types
+S=Path(__file__).resolve().parents[1];P=S/'governing/source-origin'
+for name,rel in [('hgm_tools','engines/hgm_tools.py.txt'),('build_alignment_layer','tools/build_alignment_layer.py.txt'),('gen_alignment_page','tools/gen_alignment_page.py.txt')]:
+ p=P/rel;m=types.ModuleType(name);m.__file__=str(p);sys.modules[name]=m;exec(compile(p.read_bytes(),str(p),'exec'),m.__dict__)
+G=sys.modules['gen_alignment_page'];spine=next(x['path'] for x in json.loads((S.parent/'reconciled/evidence/source-pins.json').read_text()) if x['role']=='spine');G.B.SPINE=spine
+connect=sqlite3.connect
+def ro(path,*args,**kwargs):
+ assert str(path)==spine
+ return connect('file:'+spine+'?mode=ro',uri=True)
+G.sqlite3.connect=ro
+if sys.argv[1]=='generate':G.main()
+elif sys.argv[1]=='resolve':
+ spec=json.load(sys.stdin); db=ro(spine);out=[]
+ for s in spec['segments']:
+  w,e=db.execute('select wylie,english from corpus_segments where course=? and seq=?',(spec['course'],s['seq'])).fetchone();sp=s['spans'];t=G.resolve(w,sp,'tib',s['seq']);by={r['id']:r for r in sp};es=G.with_members(sp,[by[k] for k in s['eng_order']],e);en=G.resolve(e,es,'eng',s['seq'])
+  for x in sp:out.append({'seq':s['seq'],'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x['eng'],'tib_range':list(t[x['id']]),'eng_range':list(en[x['id']]) if x['id'] in en else None})
+ print(json.dumps(out,ensure_ascii=False,indent=2))
+else:raise ValueError(sys.argv)

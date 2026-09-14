@@ -1,0 +1,32 @@
+from pathlib import Path
+import json,hashlib,datetime
+S=Path(__file__).resolve().parents[1];B=S.parent;R=B/'reconciled';H=B/'semantic-review-history/v1'
+def load(p):return json.loads(p.read_text())
+def info(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(n,x):(S/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+review=load(S/'review.json');assert review['schema']=='c05-independent-semantic-review-v1' and review['verdict']==review['spec_verdict']==review['quality_verdict']=='APPROVE'
+assert review['open_findings']==[] and len(review['closed_findings'])==1
+assert isinstance(review['segments'],list) and [r['seq'] for r in review['segments']]==[319,320,321]
+for count,total in [('span_count','total_spans'),('null_count','total_nulls'),('word_pair_count','total_word_pairs'),('d7_count','total_d7')]:assert sum(r[count] for r in review['segments'])==review[total]
+assert [review[k] for k in ['total_spans','total_nulls','total_word_pairs','total_d7']]==[85,0,56,14]
+assert len(load(S/'original-decision-review.json'))==163 and len(load(S/'resolved-spans.json'))==85
+assert len(load(S/'original-omission-review.json'))==22 and len(load(S/'errata-audit.json'))==30 and load(S/'bank-ready-errata.json')==[]
+rows=load(S/'resolved-spans.json');assert all(set(r)=={'seq','id','d','tib','eng','tib_range','eng_range'} for r in rows)
+assert all(r['verdict']=='SOUND' for r in load(S/'span-review.json'))
+for r in review['segments']:
+ current=R/str(r['seq']);assert info(current/'spec.json')=={'bytes':r['spec_bytes'],'sha256':r['spec_sha256']} and info(current/'body.html')=={'bytes':r['body_bytes'],'sha256':r['body_sha256']}
+ assert [x for x in rows if x['seq']==r['seq']]==load(current/'final-ordered-tuples.json')['source_order']
+ assert (S/r['fresh_native_directory']/'stdout.bin').read_bytes()==(current/'body.html').read_bytes()
+ assert (S/r['reviewed_input_directory']/'spec.json').read_bytes()==(current/'spec.json').read_bytes()
+prior=load(H/'freeze.json');assert len(prior['files'])==457 and all(info(H/p)==v for p,v in prior['files'].items())
+assert info(H/'freeze.json')['sha256']==review['previous_review_freeze_sha256']
+current=load(R/'freeze.json');assert len(current['files'])==392 and all(info(R/p)==v for p,v in current['files'].items())
+assert info(R/'freeze.json')['sha256']==review['reconciliation_freeze_sha256']=='bd0d058547e2c6265e1e5b9326191130897bb906484d5960a5ee73ccfa2ea140'
+pre=load(S/'manifest-preflight.json');assert pre['status']=='PASS' and pre['manifest_records']==987 and pre['all_original_and_copy_bytes_checked'] and pre['all_targets_supported']
+receipt=load(S/'scoped-v2/actual-baseline-receipt.json');assert receipt['actual_git_head']==review['later_supplied_acceptance_baseline']=='91d2c245ddd410894f12653cf3acf0302d488520' and receipt['accepted_through']==318 and receipt['initial_review_v1_baseline_receipt'] is None
+files={str(p.relative_to(S)):info(p) for p in sorted(S.rglob('*')) if p.is_file() and p!=S/'freeze.json'}
+assert all((S/p).suffix.lower() in {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'} for p in files)
+freeze={'schema':'c05-independent-semantic-review-freeze-v1','producer':'Codex independent skeptical semantic reviewer','created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'review_version':2,'verdict':'APPROVE','spec_verdict':'APPROVE','quality_verdict':'APPROVE','open_findings':[],'closed_findings':['C05-319-w15-depth'],'file_count':len(files),'total_spans':85,'total_nulls':0,'total_word_pairs':56,'total_d7':14,'source_origin_git_commit':review['source_origin_git_commit'],'source_origin_course_boundary':312,'later_supplied_acceptance_baseline':review['later_supplied_acceptance_baseline'],'later_baseline_accepted_through':318,'initial_review_v1_baseline_receipt':None,'previous_review_freeze_sha256':review['previous_review_freeze_sha256'],'reconciliation_freeze_sha256':review['reconciliation_freeze_sha256'],'status':'FROZEN PROVISIONAL machine semantic approval; root integration and human acceptance are separate','files':files}
+write('freeze.json',freeze)
+assert isinstance(load(S/'freeze.json')['files'],dict) and all(info(S/p)==v for p,v in files.items())
+print(json.dumps({'verdict':'APPROVE','open_findings':0,'closed_findings':1,'frozen_files':len(files),'freeze':info(S/'freeze.json'),'review_json':info(S/'review.json'),'review_md':info(S/'review.md'),'total_spans':85,'total_nulls':0,'total_word_pairs':56,'total_d7':14,'current_manifest_records':987,'distinct_mapped_copies':pre['distinct_mapped_copies']},indent=2))

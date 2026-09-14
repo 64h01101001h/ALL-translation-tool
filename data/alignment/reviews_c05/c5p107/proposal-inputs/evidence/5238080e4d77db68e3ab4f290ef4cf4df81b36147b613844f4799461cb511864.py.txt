@@ -1,0 +1,20 @@
+from pathlib import Path
+import json,sqlite3,sys
+A=Path(__file__).resolve().parent
+sys.path.insert(0,str(A/'evidence/pinned/tools'))
+import gen_alignment_page as G
+original=json.loads((A/'evidence/proposal-baseline.json').read_text())['source_pins']['spine']['path']
+G.B.SPINE=original
+connect=sqlite3.connect
+def readonly(path,*args,**kwargs):
+ assert str(path)==original
+ return connect('file:'+original+'?mode=ro',uri=True)
+G.sqlite3.connect=readonly
+if len(sys.argv)==1:G.main()
+elif sys.argv[1]=='resolve':
+ spec=json.load(sys.stdin);db=readonly(original);out=[]
+ for seg in spec['segments']:
+  seq=seg['seq'];w,e=db.execute('select wylie,english from corpus_segments where course=? and seq=?',(spec['course'],seq)).fetchone();spans=seg['spans'];tr=G.resolve(w,spans,'tib',seq);by={s['id']:s for s in spans};es=G.with_members(spans,[by[i] for i in seg['eng_order']],e);er=G.resolve(e,es,'eng',seq)
+  out.extend({**s,'seq':seq,'tib_range':list(tr[s['id']]),'eng_range':list(er[s['id']]) if s['id'] in er else None} for s in spans)
+ print(json.dumps(out,ensure_ascii=False,indent=2))
+else:raise ValueError(sys.argv)

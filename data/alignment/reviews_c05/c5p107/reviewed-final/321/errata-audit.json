@@ -1,0 +1,1708 @@
+{
+  "seq": 321,
+  "producer": "Codex independent reconciliation/refutation",
+  "source_origin_git_commit": "49b66f3af9cbb47599bb40286637fc9e683b7cdf",
+  "all_original_source_suspicions": [
+    {
+      "angle": "tibetan",
+      "original_index": 0,
+      "kind": "TIBETAN_SPELLING",
+      "found": "CHOS BZOD",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "TIBETAN_SPELLING",
+        "found": "CHOS BZOD",
+        "field": "acip",
+        "expected": null,
+        "decision": "NO_NEW_ERRATUM",
+        "confidence_of_defect": "NOT_ESTABLISHED",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "../evidence/originals/source.json",
+            "seq": 321,
+            "field": "acip",
+            "range": [
+              1,
+              10
+            ]
+          },
+          "b_parallel": {
+            "exact_query_indices": [
+              6,
+              7,
+              8
+            ],
+            "complete_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "partial_query_indices": [
+              4,
+              5
+            ],
+            "C16_P1_TCS_matches": [],
+            "claim": "Only the selected row matches these complete fields and leading phrases; contextual lexical parallels are separately retained. Digital identity never establishes independent publication or ingestion lineage."
+          },
+          "c_registered": {
+            "register_count": 194,
+            "direct_segment_records": [],
+            "complete_compared_class_records": "../evidence/complete-compared-register-records.json",
+            "following_heading_class_applies": false,
+            "authority": "../evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md; ../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+          },
+          "d_defensibility": {
+            "judgment": "Abbreviated technical chos bzod is supported by full chos bzod pa at commentary 322. The source spelling is coherent; mined master types of mental movement is not a correction to the Tibetan or a licensed alignment here.",
+            "full_lexical_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "physical_evidence": "../evidence/physical-complete-row-proof.json",
+            "full_context": "../evidence/full-original-spine-context.json",
+            "independent_expected_correction_established": false
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "complete_field_counts_remeasured_in_spine_and_external_corpus": true,
+            "corpus_queries_ref": "../evidence/corpus-queries.json",
+            "external_rechecks_ref": "../evidence/external-corpus-rechecks.json",
+            "partial_queries_ref": "../evidence/partial-parallel-queries.json"
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "CHOS BZOD is the abbreviated technical term expanded as chos bzod pa in commentary 322, with a full HGM glossary entry for the expanded term. The conflicting auto-mined types of mental movement claim is retained as dictionary history and is not a source correction.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [
+              1
+            ],
+            "wylie": [],
+            "english": []
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "CHOS BZOD is the abbreviated technical term expanded as chos bzod pa in commentary 322, with a full HGM glossary entry for the expanded term. The conflicting auto-mined types of mental movement claim is retained as dictionary history and is not a source correction.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    },
+    {
+      "angle": "tibetan",
+      "original_index": 1,
+      "kind": "ENGLISH_TYPO",
+      "found": "Phenomena, mastery",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "ENGLISH_TYPO",
+        "found": "Phenomena, mastery",
+        "field": "english",
+        "expected": null,
+        "decision": "NO_NEW_ERRATUM",
+        "confidence_of_defect": "UNCERTAIN",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "../evidence/originals/source.json",
+            "seq": 321,
+            "field": "english",
+            "range": [
+              41,
+              59
+            ]
+          },
+          "b_parallel": {
+            "exact_query_indices": [
+              6,
+              7,
+              8
+            ],
+            "complete_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "partial_query_indices": [
+              4,
+              5
+            ],
+            "C16_P1_TCS_matches": [],
+            "claim": "Only the selected row matches these complete fields and leading phrases; contextual lexical parallels are separately retained. Digital identity never establishes independent publication or ingestion lineage."
+          },
+          "c_registered": {
+            "register_count": 194,
+            "direct_segment_records": [],
+            "complete_compared_class_records": "../evidence/complete-compared-register-records.json",
+            "following_heading_class_applies": false,
+            "authority": "../evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md; ../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+          },
+          "d_defensibility": {
+            "judgment": "The unusual comma is kept verbatim and treated as a possible poetic inversion, not a confirmed typo. Commentary 322 clarifies the technical name, but no independent edition proves a punctuation correction.",
+            "full_lexical_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "physical_evidence": "../evidence/physical-complete-row-proof.json",
+            "full_context": "../evidence/full-original-spine-context.json",
+            "independent_expected_correction_established": false
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "complete_field_counts_remeasured_in_spine_and_external_corpus": true,
+            "corpus_queries_ref": "../evidence/corpus-queries.json",
+            "external_rechecks_ref": "../evidence/external-corpus-rechecks.json",
+            "partial_queries_ref": "../evidence/partial-parallel-queries.json"
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "Phenomena, mastery is a compressed technical expression in the verse, clarified as the mastery of phenomena in commentary 322. The comma is verbatim and no independent edition proves that punctuation must be corrected.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              41
+            ]
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "Phenomena, mastery is a compressed technical expression in the verse, clarified as the mastery of phenomena in commentary 322. The comma is verbatim and no independent edition proves that punctuation must be corrected.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    },
+    {
+      "angle": "tibetan",
+      "original_index": 2,
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "found": "Twelve types of mental movement",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "Twelve types of mental movement",
+        "field": "english",
+        "expected": null,
+        "decision": "NO_NEW_ERRATUM",
+        "confidence_of_defect": "NOT_ESTABLISHED",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "../evidence/originals/source.json",
+            "seq": 321,
+            "field": "english",
+            "range": [
+              0,
+              31
+            ]
+          },
+          "b_parallel": {
+            "exact_query_indices": [
+              6,
+              7,
+              8
+            ],
+            "complete_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "partial_query_indices": [
+              4,
+              5
+            ],
+            "C16_P1_TCS_matches": [],
+            "claim": "Only the selected row matches these complete fields and leading phrases; contextual lexical parallels are separately retained. Digital identity never establishes independent publication or ingestion lineage."
+          },
+          "c_registered": {
+            "register_count": 194,
+            "direct_segment_records": [],
+            "complete_compared_class_records": "../evidence/complete-compared-register-records.json",
+            "following_heading_class_applies": false,
+            "authority": "../evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md; ../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+          },
+          "d_defensibility": {
+            "judgment": "Twelve agrees with bcu gnyis, eight with brgyad, and Ninth with dgu pa. Commentary 322 explains four mastery instants plus eight uninterrupted-path instants. Final White is elliptical, not grounds to invent a missing predicate.",
+            "full_lexical_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "physical_evidence": "../evidence/physical-complete-row-proof.json",
+            "full_context": "../evidence/full-original-spine-context.json",
+            "independent_expected_correction_established": false
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "complete_field_counts_remeasured_in_spine_and_external_corpus": true,
+            "corpus_queries_ref": "../evidence/corpus-queries.json",
+            "external_rechecks_ref": "../evidence/external-corpus-rechecks.json",
+            "partial_queries_ref": "../evidence/partial-parallel-queries.json"
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "Twelve matches bcu gnyis, eight matches brgyad, and Ninth matches dgu pa. Commentary 322 expands four mastery instants plus eight uninterrupted-path instants. Final White is elliptical; no missing predicate is invented. The mined-master conflict is not a demonstrated source factual error.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              0
+            ]
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "Twelve matches bcu gnyis, eight matches brgyad, and Ninth matches dgu pa. Commentary 322 expands four mastery instants plus eight uninterrupted-path instants. Final White is elliptical; no missing predicate is invented. The mined-master conflict is not a demonstrated source factual error.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    },
+    {
+      "angle": "tibetan",
+      "original_index": 3,
+      "kind": "INGEST_ARTEFACT",
+      "found": ",CHOS BZOD 'DOD CHAGS BRAL BA YI,",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "INGEST_ARTEFACT",
+        "found": ",CHOS BZOD 'DOD CHAGS BRAL BA YI,",
+        "field": "acip",
+        "expected": null,
+        "decision": "NO_NEW_ERRATUM",
+        "confidence_of_defect": "NOT_ESTABLISHED",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "../evidence/originals/source.json",
+            "seq": 321,
+            "field": "acip",
+            "range": [
+              0,
+              33
+            ]
+          },
+          "b_parallel": {
+            "exact_query_indices": [
+              6,
+              7,
+              8
+            ],
+            "complete_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "partial_query_indices": [
+              4,
+              5
+            ],
+            "C16_P1_TCS_matches": [],
+            "claim": "Only the selected row matches these complete fields and leading phrases; contextual lexical parallels are separately retained. Digital identity never establishes independent publication or ingestion lineage."
+          },
+          "c_registered": {
+            "register_count": 194,
+            "direct_segment_records": [],
+            "complete_compared_class_records": "../evidence/complete-compared-register-records.json",
+            "following_heading_class_applies": false,
+            "authority": "../evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md; ../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+          },
+          "d_defensibility": {
+            "judgment": "Complete physical ACIP verse extent uses CRLF line boundaries; only explicit whitespace folding matches the stored single-line ACIP. The first failed raw-contiguity assumption is preserved. Both whole English and whole ACIP are present; no truncation is alleged.",
+            "full_lexical_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "physical_evidence": "../evidence/physical-complete-row-proof.json",
+            "full_context": "../evidence/full-original-spine-context.json",
+            "independent_expected_correction_established": false
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "complete_field_counts_remeasured_in_spine_and_external_corpus": true,
+            "corpus_queries_ref": "../evidence/corpus-queries.json",
+            "external_rechecks_ref": "../evidence/external-corpus-rechecks.json",
+            "partial_queries_ref": "../evidence/partial-parallel-queries.json"
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "The whole ACIP verse is present over a complete CRLF-wrapped physical byte extent, and the whole English is present. A raw-contiguity search correctly fails for this verse; explicit reversible Latin-1 whitespace folding establishes its complete extent. Original failed assumptions are preserved, not hidden.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [
+              0
+            ],
+            "wylie": [],
+            "english": []
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "The whole ACIP verse is present over a complete CRLF-wrapped physical byte extent, and the whole English is present. A raw-contiguity search correctly fails for this verse; explicit reversible Latin-1 whitespace folding establishes its complete extent. Original failed assumptions are preserved, not hidden.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    },
+    {
+      "angle": "tibetan",
+      "original_index": 4,
+      "kind": "FORMATTING",
+      "found": "Uninterrupted path",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "FORMATTING",
+        "found": "Uninterrupted path",
+        "field": "english",
+        "expected": null,
+        "decision": "NO_NEW_ERRATUM",
+        "confidence_of_defect": "NOT_ESTABLISHED",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "../evidence/originals/source.json",
+            "seq": 321,
+            "field": "english",
+            "range": [
+              78,
+              96
+            ]
+          },
+          "b_parallel": {
+            "exact_query_indices": [
+              6,
+              7,
+              8
+            ],
+            "complete_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "partial_query_indices": [
+              4,
+              5
+            ],
+            "C16_P1_TCS_matches": [],
+            "claim": "Only the selected row matches these complete fields and leading phrases; contextual lexical parallels are separately retained. Digital identity never establishes independent publication or ingestion lineage."
+          },
+          "c_registered": {
+            "register_count": 194,
+            "direct_segment_records": [],
+            "complete_compared_class_records": "../evidence/complete-compared-register-records.json",
+            "following_heading_class_applies": false,
+            "authority": "../evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md; ../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+          },
+          "d_defensibility": {
+            "judgment": "Internal capitals follow verse lineation. Physical verse lines and punctuation are preserved, and no title/heading is inferred from these capitals.",
+            "full_lexical_evidence": [
+              "../evidence/full-lexical-evidence.json",
+              "../evidence/supplemental-full-lexical-evidence.json"
+            ],
+            "physical_evidence": "../evidence/physical-complete-row-proof.json",
+            "full_context": "../evidence/full-original-spine-context.json",
+            "independent_expected_correction_established": false
+          },
+          "e_counts": {
+            "field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "complete_field_counts_remeasured_in_spine_and_external_corpus": true,
+            "corpus_queries_ref": "../evidence/corpus-queries.json",
+            "external_rechecks_ref": "../evidence/external-corpus-rechecks.json",
+            "partial_queries_ref": "../evidence/partial-parallel-queries.json"
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "Mid-sentence capitals, commas and final ellipsis are verse lineation rather than a running heading. Both original physical CRLF bytes and the derived corpus fields are retained verbatim; no new formatting emendation is warranted.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              78
+            ]
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "Mid-sentence capitals, commas and final ellipsis are verse lineation rather than a running heading. Both original physical CRLF bytes and the derived corpus fields are retained verbatim; no new formatting emendation is warranted.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    },
+    {
+      "angle": "english",
+      "original_index": 0,
+      "kind": "TIBETAN_SPELLING",
+      "found": "CHOS BZOD",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "TIBETAN_SPELLING",
+        "found": "CHOS BZOD",
+        "expected": null,
+        "new_erratum": false,
+        "decision": "Abbreviated technical dharmaksanti term is supported by full master entry and C05:322 expanded chos bzod pa. No correction of the source spelling is established.",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "evidence/original/source.json",
+            "source_seq": 321,
+            "occurrences": {
+              "acip": [
+                1
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel_witness": {
+            "query_refs": [
+              "evidence/corpus-queries.json#/6",
+              "evidence/corpus-queries.json#/7",
+              "evidence/corpus-queries.json#/8",
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "exact_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "broader_query_refs": [
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "independent_publication_or_ingestion_lineage_proved": false,
+            "scope": "All 42199 spine rows searched for each recorded exact field and material substring, including C16, P1 and TCS; no separate archival/blockprint witness was inspected."
+          },
+          "c_registered_class": {
+            "register_ref": "evidence/pinned/docs/errata_register.json",
+            "register_count": 194,
+            "direct_batch_records": [],
+            "following_heading_class_applies": false,
+            "authority_refs": [
+              "evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md",
+              "evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+            ],
+            "other_class_records": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121"
+            ]
+          },
+          "d_defensibility": {
+            "finding": "Abbreviated technical dharmaksanti term is supported by full master entry and C05:322 expanded chos bzod pa. No correction of the source spelling is established.",
+            "full_lexical_terms": [
+              "chos bzod",
+              "bzod",
+              "bar chad med lam",
+              "byed pa",
+              "zad",
+              "skyes",
+              "tha ma"
+            ],
+            "full_lexical_files": [
+              "evidence/lexical-evidence.json",
+              "evidence/supplemental-lexical-evidence.json"
+            ],
+            "physical_evidence": "evidence/physical-full-field-proof.json",
+            "physical_321_raw_extent": "evidence/physical-321-complete-raw-extent.json",
+            "correction_established": false
+          },
+          "e_measured_counts": {
+            "source_field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "source_spine_row_id": 1703,
+            "register_count": 194,
+            "queries": [
+              {
+                "index": 6,
+                "label": "321 exact acip",
+                "count": 1
+              },
+              {
+                "index": 7,
+                "label": "321 exact wylie",
+                "count": 1
+              },
+              {
+                "index": 8,
+                "label": "321 exact english",
+                "count": 1
+              },
+              {
+                "index": 11,
+                "label": "321 verse",
+                "count": 4
+              },
+              {
+                "index": 12,
+                "label": "321 mastery",
+                "count": 1
+              },
+              {
+                "index": 14,
+                "label": "321 final arising",
+                "count": 2
+              }
+            ],
+            "span_counts": {
+              "spans": 31,
+              "nulls": 0,
+              "nonnull_d5": 24,
+              "d5_total": 24,
+              "d7": 6
+            }
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "CHOS BZOD is the abbreviated technical term expanded as chos bzod pa in commentary 322, with a full HGM glossary entry for the expanded term. The conflicting auto-mined types of mental movement claim is retained as dictionary history and is not a source correction.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [
+              1
+            ],
+            "wylie": [],
+            "english": []
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "CHOS BZOD is the abbreviated technical term expanded as chos bzod pa in commentary 322, with a full HGM glossary entry for the expanded term. The conflicting auto-mined types of mental movement claim is retained as dictionary history and is not a source correction.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    },
+    {
+      "angle": "english",
+      "original_index": 1,
+      "kind": "ENGLISH_TYPO",
+      "found": "Phenomena, mastery,",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "ENGLISH_TYPO",
+        "found": "Phenomena, mastery,",
+        "expected": null,
+        "new_erratum": false,
+        "decision": "The compressed verse prints these two words in Tibetan order with a comma. C05:322 prose explains mastery of phenomena. That supports the intended technical compound but does not prove the comma an error requiring emendation.",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "evidence/original/source.json",
+            "source_seq": 321,
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                41
+              ]
+            }
+          },
+          "b_parallel_witness": {
+            "query_refs": [
+              "evidence/corpus-queries.json#/6",
+              "evidence/corpus-queries.json#/7",
+              "evidence/corpus-queries.json#/8",
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "exact_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "broader_query_refs": [
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "independent_publication_or_ingestion_lineage_proved": false,
+            "scope": "All 42199 spine rows searched for each recorded exact field and material substring, including C16, P1 and TCS; no separate archival/blockprint witness was inspected."
+          },
+          "c_registered_class": {
+            "register_ref": "evidence/pinned/docs/errata_register.json",
+            "register_count": 194,
+            "direct_batch_records": [],
+            "following_heading_class_applies": false,
+            "authority_refs": [
+              "evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md",
+              "evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+            ],
+            "other_class_records": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121"
+            ]
+          },
+          "d_defensibility": {
+            "finding": "The compressed verse prints these two words in Tibetan order with a comma. C05:322 prose explains mastery of phenomena. That supports the intended technical compound but does not prove the comma an error requiring emendation.",
+            "full_lexical_terms": [
+              "chos bzod",
+              "bzod",
+              "bar chad med lam",
+              "byed pa",
+              "zad",
+              "skyes",
+              "tha ma"
+            ],
+            "full_lexical_files": [
+              "evidence/lexical-evidence.json",
+              "evidence/supplemental-lexical-evidence.json"
+            ],
+            "physical_evidence": "evidence/physical-full-field-proof.json",
+            "physical_321_raw_extent": "evidence/physical-321-complete-raw-extent.json",
+            "correction_established": false
+          },
+          "e_measured_counts": {
+            "source_field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "source_spine_row_id": 1703,
+            "register_count": 194,
+            "queries": [
+              {
+                "index": 6,
+                "label": "321 exact acip",
+                "count": 1
+              },
+              {
+                "index": 7,
+                "label": "321 exact wylie",
+                "count": 1
+              },
+              {
+                "index": 8,
+                "label": "321 exact english",
+                "count": 1
+              },
+              {
+                "index": 11,
+                "label": "321 verse",
+                "count": 4
+              },
+              {
+                "index": 12,
+                "label": "321 mastery",
+                "count": 1
+              },
+              {
+                "index": 14,
+                "label": "321 final arising",
+                "count": 2
+              }
+            ],
+            "span_counts": {
+              "spans": 31,
+              "nulls": 0,
+              "nonnull_d5": 24,
+              "d5_total": 24,
+              "d7": 6
+            }
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "Phenomena, mastery is a compressed technical expression in the verse, clarified as the mastery of phenomena in commentary 322. The comma is verbatim and no independent edition proves that punctuation must be corrected.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              41
+            ]
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "Phenomena, mastery is a compressed technical expression in the verse, clarified as the mastery of phenomena in commentary 322. The comma is verbatim and no independent edition proves that punctuation must be corrected.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    },
+    {
+      "angle": "english",
+      "original_index": 2,
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "found": "Twelve types of mental movement",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "Twelve types of mental movement",
+        "expected": null,
+        "new_erratum": false,
+        "decision": "C05:322 expands the four mastery instants plus eight uninterrupted-path instants to twelve. The verse abbreviation does not supply a contradictory numeral, and the mined master mismatch is not a source erratum.",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "evidence/original/source.json",
+            "source_seq": 321,
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                0
+              ]
+            }
+          },
+          "b_parallel_witness": {
+            "query_refs": [
+              "evidence/corpus-queries.json#/6",
+              "evidence/corpus-queries.json#/7",
+              "evidence/corpus-queries.json#/8",
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "exact_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "broader_query_refs": [
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "independent_publication_or_ingestion_lineage_proved": false,
+            "scope": "All 42199 spine rows searched for each recorded exact field and material substring, including C16, P1 and TCS; no separate archival/blockprint witness was inspected."
+          },
+          "c_registered_class": {
+            "register_ref": "evidence/pinned/docs/errata_register.json",
+            "register_count": 194,
+            "direct_batch_records": [],
+            "following_heading_class_applies": false,
+            "authority_refs": [
+              "evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md",
+              "evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+            ],
+            "other_class_records": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121"
+            ]
+          },
+          "d_defensibility": {
+            "finding": "C05:322 expands the four mastery instants plus eight uninterrupted-path instants to twelve. The verse abbreviation does not supply a contradictory numeral, and the mined master mismatch is not a source erratum.",
+            "full_lexical_terms": [
+              "chos bzod",
+              "bzod",
+              "bar chad med lam",
+              "byed pa",
+              "zad",
+              "skyes",
+              "tha ma"
+            ],
+            "full_lexical_files": [
+              "evidence/lexical-evidence.json",
+              "evidence/supplemental-lexical-evidence.json"
+            ],
+            "physical_evidence": "evidence/physical-full-field-proof.json",
+            "physical_321_raw_extent": "evidence/physical-321-complete-raw-extent.json",
+            "correction_established": false
+          },
+          "e_measured_counts": {
+            "source_field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "source_spine_row_id": 1703,
+            "register_count": 194,
+            "queries": [
+              {
+                "index": 6,
+                "label": "321 exact acip",
+                "count": 1
+              },
+              {
+                "index": 7,
+                "label": "321 exact wylie",
+                "count": 1
+              },
+              {
+                "index": 8,
+                "label": "321 exact english",
+                "count": 1
+              },
+              {
+                "index": 11,
+                "label": "321 verse",
+                "count": 4
+              },
+              {
+                "index": 12,
+                "label": "321 mastery",
+                "count": 1
+              },
+              {
+                "index": 14,
+                "label": "321 final arising",
+                "count": 2
+              }
+            ],
+            "span_counts": {
+              "spans": 31,
+              "nulls": 0,
+              "nonnull_d5": 24,
+              "d5_total": 24,
+              "d7": 6
+            }
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "Twelve matches bcu gnyis, eight matches brgyad, and Ninth matches dgu pa. Commentary 322 expands four mastery instants plus eight uninterrupted-path instants. Final White is elliptical; no missing predicate is invented. The mined-master conflict is not a demonstrated source factual error.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              0
+            ]
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "Twelve matches bcu gnyis, eight matches brgyad, and Ninth matches dgu pa. Commentary 322 expands four mastery instants plus eight uninterrupted-path instants. Final White is elliptical; no missing predicate is invented. The mined-master conflict is not a demonstrated source factual error.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    },
+    {
+      "angle": "english",
+      "original_index": 3,
+      "kind": "INGEST_ARTEFACT",
+      "found": "White by the final uninterrupted arising,",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "INGEST_ARTEFACT",
+        "found": "White by the final uninterrupted arising,",
+        "expected": null,
+        "new_erratum": false,
+        "decision": "Final verse clause is elliptical but its complete physical ACIP and English extents are retained. C05:324 clarifies the final arising; there is no demonstrated missing tail or 1500 cap in this row.",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "evidence/original/source.json",
+            "source_seq": 321,
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                241
+              ]
+            }
+          },
+          "b_parallel_witness": {
+            "query_refs": [
+              "evidence/corpus-queries.json#/6",
+              "evidence/corpus-queries.json#/7",
+              "evidence/corpus-queries.json#/8",
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "exact_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "broader_query_refs": [
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "independent_publication_or_ingestion_lineage_proved": false,
+            "scope": "All 42199 spine rows searched for each recorded exact field and material substring, including C16, P1 and TCS; no separate archival/blockprint witness was inspected."
+          },
+          "c_registered_class": {
+            "register_ref": "evidence/pinned/docs/errata_register.json",
+            "register_count": 194,
+            "direct_batch_records": [],
+            "following_heading_class_applies": false,
+            "authority_refs": [
+              "evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md",
+              "evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+            ],
+            "other_class_records": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121"
+            ]
+          },
+          "d_defensibility": {
+            "finding": "Final verse clause is elliptical but its complete physical ACIP and English extents are retained. C05:324 clarifies the final arising; there is no demonstrated missing tail or 1500 cap in this row.",
+            "full_lexical_terms": [
+              "chos bzod",
+              "bzod",
+              "bar chad med lam",
+              "byed pa",
+              "zad",
+              "skyes",
+              "tha ma"
+            ],
+            "full_lexical_files": [
+              "evidence/lexical-evidence.json",
+              "evidence/supplemental-lexical-evidence.json"
+            ],
+            "physical_evidence": "evidence/physical-full-field-proof.json",
+            "physical_321_raw_extent": "evidence/physical-321-complete-raw-extent.json",
+            "correction_established": false
+          },
+          "e_measured_counts": {
+            "source_field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "source_spine_row_id": 1703,
+            "register_count": 194,
+            "queries": [
+              {
+                "index": 6,
+                "label": "321 exact acip",
+                "count": 1
+              },
+              {
+                "index": 7,
+                "label": "321 exact wylie",
+                "count": 1
+              },
+              {
+                "index": 8,
+                "label": "321 exact english",
+                "count": 1
+              },
+              {
+                "index": 11,
+                "label": "321 verse",
+                "count": 4
+              },
+              {
+                "index": 12,
+                "label": "321 mastery",
+                "count": 1
+              },
+              {
+                "index": 14,
+                "label": "321 final arising",
+                "count": 2
+              }
+            ],
+            "span_counts": {
+              "spans": 31,
+              "nulls": 0,
+              "nonnull_d5": 24,
+              "d5_total": 24,
+              "d7": 6
+            }
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "The whole ACIP verse is present over a complete CRLF-wrapped physical byte extent, and the whole English is present. A raw-contiguity search correctly fails for this verse; explicit reversible Latin-1 whitespace folding establishes its complete extent. Original failed assumptions are preserved, not hidden.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              241
+            ]
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "The whole ACIP verse is present over a complete CRLF-wrapped physical byte extent, and the whole English is present. A raw-contiguity search correctly fails for this verse; explicit reversible Latin-1 whitespace folding establishes its complete extent. Original failed assumptions are preserved, not hidden.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    },
+    {
+      "angle": "english",
+      "original_index": 4,
+      "kind": "FORMATTING",
+      "found": "Free of desire for the concentration.",
+      "expected": null,
+      "original_claim_complete": {
+        "kind": "FORMATTING",
+        "found": "Free of desire for the concentration.",
+        "expected": null,
+        "new_erratum": false,
+        "decision": "Mid-sentence capitals and comma/lineation follow the verse format. Full CRLF ACIP extent is preserved separately; source layout folding is not a new textual correction.",
+        "five_refutation_grounds": {
+          "a_exact_quote": {
+            "source_ref": "evidence/original/source.json",
+            "source_seq": 321,
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                283
+              ]
+            }
+          },
+          "b_parallel_witness": {
+            "query_refs": [
+              "evidence/corpus-queries.json#/6",
+              "evidence/corpus-queries.json#/7",
+              "evidence/corpus-queries.json#/8",
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "exact_field_counts": {
+              "acip": 1,
+              "wylie": 1,
+              "english": 1
+            },
+            "broader_query_refs": [
+              "evidence/corpus-queries.json#/11",
+              "evidence/corpus-queries.json#/12",
+              "evidence/corpus-queries.json#/14"
+            ],
+            "independent_publication_or_ingestion_lineage_proved": false,
+            "scope": "All 42199 spine rows searched for each recorded exact field and material substring, including C16, P1 and TCS; no separate archival/blockprint witness was inspected."
+          },
+          "c_registered_class": {
+            "register_ref": "evidence/pinned/docs/errata_register.json",
+            "register_count": 194,
+            "direct_batch_records": [],
+            "following_heading_class_applies": false,
+            "authority_refs": [
+              "evidence/pinned/docs/alignment_briefs/PROPOSE_BRIEF.md",
+              "evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md"
+            ],
+            "other_class_records": [
+              "E-044",
+              "E-071",
+              "E-076",
+              "E-107",
+              "E-111",
+              "E-121"
+            ]
+          },
+          "d_defensibility": {
+            "finding": "Mid-sentence capitals and comma/lineation follow the verse format. Full CRLF ACIP extent is preserved separately; source layout folding is not a new textual correction.",
+            "full_lexical_terms": [
+              "chos bzod",
+              "bzod",
+              "bar chad med lam",
+              "byed pa",
+              "zad",
+              "skyes",
+              "tha ma"
+            ],
+            "full_lexical_files": [
+              "evidence/lexical-evidence.json",
+              "evidence/supplemental-lexical-evidence.json"
+            ],
+            "physical_evidence": "evidence/physical-full-field-proof.json",
+            "physical_321_raw_extent": "evidence/physical-321-complete-raw-extent.json",
+            "correction_established": false
+          },
+          "e_measured_counts": {
+            "source_field_lengths": {
+              "acip": 261,
+              "wylie": 259,
+              "english": 320
+            },
+            "source_spine_row_id": 1703,
+            "register_count": 194,
+            "queries": [
+              {
+                "index": 6,
+                "label": "321 exact acip",
+                "count": 1
+              },
+              {
+                "index": 7,
+                "label": "321 exact wylie",
+                "count": 1
+              },
+              {
+                "index": 8,
+                "label": "321 exact english",
+                "count": 1
+              },
+              {
+                "index": 11,
+                "label": "321 verse",
+                "count": 4
+              },
+              {
+                "index": 12,
+                "label": "321 mastery",
+                "count": 1
+              },
+              {
+                "index": 14,
+                "label": "321 final arising",
+                "count": 2
+              }
+            ],
+            "span_counts": {
+              "spans": 31,
+              "nulls": 0,
+              "nonnull_d5": 24,
+              "d5_total": 24,
+              "d7": 6
+            }
+          }
+        }
+      },
+      "refuted": true,
+      "decision": "NO_NEW_ERRATUM",
+      "new_erratum": false,
+      "decisive_reason": "Mid-sentence capitals, commas and final ellipsis are verse lineation rather than a running heading. Both original physical CRLF bytes and the derived corpus fields are retained verbatim; no new formatting emendation is warranted.",
+      "five_refutation_grounds": {
+        "a_quote": {
+          "occurrences_in_each_source_field": {
+            "acip": [],
+            "wylie": [],
+            "english": [
+              283
+            ]
+          },
+          "quote_present": true,
+          "full_source_ref": "../evidence/full-source-rows.json (seq 321)"
+        },
+        "b_parallel": {
+          "exact_field_queries": [
+            {
+              "field": "acip",
+              "count": 1,
+              "query_index": 6
+            },
+            {
+              "field": "wylie",
+              "count": 1,
+              "query_index": 7
+            },
+            {
+              "field": "english",
+              "count": 1,
+              "query_index": 8
+            }
+          ],
+          "all_original_sql_and_external_queries": "../evidence/original-query-rechecks.json",
+          "full_context_ref": "../evidence/full-context-rows.json",
+          "scope": "All 42199 original corpus/spine rows searched, including C16, P1 and TCS, for all recorded exact fields and partial phrases. Each complete-field and Tibetan-proposal leading-phrase match is this row only. Contextual lexical matches are not equal text or independent editions.",
+          "independent_publication_or_ingestion_lineage_established": false,
+          "finding": "No independent publication witness identified; digital equality is not proof of independence."
+        },
+        "c_registered": {
+          "register_count": 194,
+          "direct_batch_duplicate_records": [],
+          "full_compared_class_records_ref": "../evidence/complete-compared-register-records.json",
+          "following_heading_class_applies": false,
+          "authority": "../evidence/pinned/docs/ALIGNMENT_LAYER_SPEC.md section 4; ../evidence/pinned/docs/alignment_briefs/RECONCILE_BRIEF.md ERRATA",
+          "historical_class_counts_status": "Unchanged original register history, not newly re-measured campaign claims."
+        },
+        "d_defensibility": {
+          "finding": "Mid-sentence capitals, commas and final ellipsis are verse lineation rather than a running heading. Both original physical CRLF bytes and the derived corpus fields are retained verbatim; no new formatting emendation is warranted.",
+          "expected_correction_established": false,
+          "full_master_records_ref": "../evidence/full-lexical-evidence.json",
+          "physical_full_fields_ref": "../evidence/physical-complete-row-proof.json"
+        },
+        "e_counts": {
+          "all_original_query_counts_rechecked": true,
+          "query_evidence_ref": "../evidence/original-query-rechecks.json",
+          "all_original_lexical_counts_and_complete_records_rechecked": true,
+          "lexical_evidence_ref": "../evidence/original-lexical-rechecks.json",
+          "field_lengths": {
+            "acip": 261,
+            "wylie": 259,
+            "english": 320
+          },
+          "register_count_rechecked": 194
+        }
+      }
+    }
+  ],
+  "new_errata": []
+}

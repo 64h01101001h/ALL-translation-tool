@@ -1,0 +1,58 @@
+from pathlib import Path
+import json,gzip,sqlite3,re,hashlib,subprocess
+S=Path(__file__).resolve().parents[1];B=S.parent;W=B.parents[1]/'campaign-worktree'
+def load(p):return json.loads(p.read_text())
+def write(p,x):p=S/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def info(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+pins=load(B/'reconciled/evidence/source-pins.json');paths={x['role']:Path(x['path']) for x in pins}
+db=sqlite3.connect('file:'+str(paths['spine'])+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+master=json.load(gzip.open(paths['master'],'rt'));corpus=json.load(gzip.open(paths['corpus'],'rt'))
+assert db.execute('select count(*) from corpus_segments').fetchone()[0]==len(corpus)==42199
+source=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',313,327))]
+assert [{k:r[k] for k in ['id','course','seq','acip','wylie','english']} for r in source]==load(B/'context.json')
+for r in source:assert json.loads(r['raw'])==corpus[r['id']-1]
+write(Path('evidence/independent-complete-source-context.json'),source)
+ix={}
+for c in ['unified_entries','curated_entries','glossary_entries']:
+ for i,e in enumerate(master[c]):ix.setdefault(e.get('wylie'),[]).append({'collection':c,'index':i,'entry':e})
+terms=[];claims=[];objects={};entries={}
+for a,names in [('tibetan',['full-lexical-evidence.json','supplemental-full-lexical-evidence.json']),('english',['lexical-evidence.json','supplemental-lexical-evidence.json'])]:
+ for name in names:
+  for i,r in enumerate(load(B/a/'evidence'/name)):
+   actual=ix.get(r['term'],[]);assert actual==r['master_records'] and len(actual)==r['count']
+   rows=[dict(x) for x in db.execute('select * from entries where wylie=? order by id',(r['term'],))];assert rows==r['spine_entries']
+   claims.append({'original':str(B/a/'evidence'/name),'index':i,'term':r['term'],'count':len(actual),'spine_count':len(rows),'complete_master_and_spine_records_exact':True})
+   if r['term'] not in terms:
+    terms.append(r['term']);refs=[]
+    for m in actual:
+     key=m['collection']+'/'+str(m['index']);objects[key]=m;refs.append(key)
+    entries[r['term']]={'master_keys':refs,'spine_rows':rows}
+write(Path('evidence/master-complete-objects.json'),objects);write(Path('evidence/master-term-index.json'),entries);write(Path('evidence/original-lexical-checks.json'),claims)
+queries=[];rowix={r['id']:r for r in source}
+for a,names in [('tibetan',['corpus-queries.json','partial-parallel-queries.json']),('english',['corpus-queries.json'])]:
+ for name in names:
+  for i,r in enumerate(load(B/a/'evidence'/name)):
+   rows=[dict(x) for x in db.execute(r['sql'],r['params'])];assert rows==r['rows'] and len(rows)==r['count']
+   m=re.search(r'where (?:instr\()?([a-z]+)',r['sql']);field=m[1];needle=r['params'][0];exact='instr(' not in r['sql']
+   ext=[{'corpus_index':i,'record':x} for i,x in enumerate(corpus) if (x.get(field)==needle if exact else needle in x.get(field,''))];assert len(ext)==len(rows)
+   for x in rows:assert json.loads(x['raw'])==corpus[x['id']-1];rowix[x['id']]=x
+   if a=='tibetan' and name=='corpus-queries.json':
+    old=load(B/a/'evidence/external-corpus-rechecks.json')[i];assert old['records']==ext and old['count']==len(ext)
+   elif a=='tibetan':assert r['external_records']==ext and r['external_count']==len(ext)
+   else:assert r['corpus_records']==ext
+   queries.append({'original':str(B/a/'evidence'/name),'index':i,'sql':r['sql'],'params':r['params'],'count':len(rows),'row_ids':[x['id'] for x in rows],'external_corpus_indexes':[x['corpus_index'] for x in ext],'C16_P1_TCS_row_ids':[x['id'] for x in rows if x['course'] in ['C16','P1'] or x['course'].startswith('TCS')],'all_original_counts_and_full_rows_exact':True})
+write(Path('evidence/independent-query-proofs.json'),queries);write(Path('evidence/corpus-complete-objects.json'),{str(k):{'spine':v,'external_corpus_index':k-1,'external_corpus_record':corpus[k-1]} for k,v in rowix.items()})
+raw=paths['physical'].read_bytes();text=raw.decode('latin1');fold=' '.join(text.split());physical=[]
+for r in load(B/'tibetan/evidence/physical-complete-row-proof.json'):
+ s=next(x for x in source if x['seq']==r['seq']);l,h=r['acip_complete_physical_byte_range'];assert raw[l:h].decode('latin1')==r['acip_original_extent'];assert ' '.join(raw[l:h].decode('latin1').split())==s['acip'];el,eh=r['english_range_in_linefolded_latin1'];assert fold[el:eh]==s['english']
+ if r['acip_exact_raw_byte_range'] is None:assert s['acip'].encode() not in raw
+ else:
+  al,ah=r['acip_exact_raw_byte_range'];assert raw[al:ah]==s['acip'].encode()
+ physical.append(dict(r,physical_sha256=info(raw)['sha256'],independent_complete_field_check=True))
+write(Path('evidence/independent-physical-proof.json'),physical)
+register=load(B/'reconciled/evidence/pinned/docs/errata_register.json');print('REGISTER SHAPE',type(register).__name__,list(register)[:8] if isinstance(register,dict) else len(register))
+rows=register['entries'] if isinstance(register,dict) and 'entries' in register else register
+assert isinstance(rows,list) and len(rows)==194
+classes=[x for x in rows if x.get('id') in ['E-044','E-071','E-076','E-107','E-111','E-121']]
+write(Path('evidence/independent-register-classes.json'),classes)
+print(json.dumps({'source_context_rows':len(source),'original_lexical_checks':len(claims),'unique_terms':len(terms),'full_master_objects':len(objects),'queries':len(queries),'query_rows':sum(q['count'] for q in queries),'distinct_corpus_objects':len(rowix),'physical_full_fields':6,'register_count':len(rows)},indent=2))

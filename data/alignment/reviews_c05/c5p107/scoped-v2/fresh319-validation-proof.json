@@ -1,0 +1,89 @@
+{
+  "status": "PASS",
+  "scope": "319 w15 depth only",
+  "fresh_generator_runs": 1,
+  "fresh_resolver_runs": 1,
+  "current319_count": 42,
+  "all85_tuples_equal_v1_except_w15_depth": true,
+  "all42_current319_ranges_and_decisions_exact": true,
+  "current319_english_member_order_exact": true,
+  "current319_all_d7_unique_strict_immediate_parent": true,
+  "complete_body_exact": true,
+  "both_complete_rendered_source_fields_exact": true,
+  "canonical_dependencies": [
+    {
+      "git_object": "49b66f3af9cbb47599bb40286637fc9e683b7cdf:engines/hgm_tools.py",
+      "bytes": 2632,
+      "sha256": "11788e9fc3dc98e76ae9e1c3081e380696b3b75f65fbbeca148efaca274b77c6"
+    },
+    {
+      "git_object": "49b66f3af9cbb47599bb40286637fc9e683b7cdf:tools/build_alignment_layer.py",
+      "bytes": 39945,
+      "sha256": "34d63f0f8618da817a15f4f062839b40f3a68d29960180ce12cfe427a97630ee"
+    },
+    {
+      "git_object": "49b66f3af9cbb47599bb40286637fc9e683b7cdf:tools/gen_alignment_page.py",
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    }
+  ],
+  "generator": {
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/semantic-review/helpers/canonical.py.txt",
+      "generate"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/semantic-review",
+    "utc": "2026-09-14T20:20:54.515265+00:00",
+    "finished_utc": "2026-09-14T20:20:54.570785+00:00",
+    "environment_override": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit": 0,
+    "streams": {
+      "stdin": {
+        "bytes": 6246,
+        "sha256": "55e000fdbd29f73a6ada6fc7bbd1e6236c42ae744ff64ff0f2c205448f7ae18a"
+      },
+      "stdout": {
+        "bytes": 6122,
+        "sha256": "867987bb338f9c19b8e0060ff7040afd6cec9b9931a9fcdc0b4905d217fc8d3c"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "resolver": {
+    "argv": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/semantic-review/helpers/canonical.py.txt",
+      "resolve"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-319-321/semantic-review",
+    "utc": "2026-09-14T20:20:54.571719+00:00",
+    "finished_utc": "2026-09-14T20:20:54.623239+00:00",
+    "environment_override": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit": 0,
+    "streams": {
+      "stdin": {
+        "bytes": 6246,
+        "sha256": "55e000fdbd29f73a6ada6fc7bbd1e6236c42ae744ff64ff0f2c205448f7ae18a"
+      },
+      "stdout": {
+        "bytes": 7931,
+        "sha256": "5d01bf2875751123cc8f82668365f72cbe1237f12a5cca938167f35d8f30be59"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "no_original_or320321_generator_or_resolver_repeated": true
+}

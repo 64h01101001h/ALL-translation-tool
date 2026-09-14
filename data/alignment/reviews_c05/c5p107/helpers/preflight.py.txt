@@ -1,0 +1,55 @@
+from pathlib import Path
+import json,subprocess,hashlib,re,sys,types
+S=Path(__file__).resolve().parents[1];B=S.parent;W=B.parents[1]/'campaign-worktree'
+load=lambda p:json.loads(p.read_text())
+def info(b):return {'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}
+def write(p,x):p=S/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest=load(S/'original-to-copy-manifest.json');byoriginal={r['original']:r for r in manifest};assert len(byoriginal)==len(manifest)
+byhash={(r['sha256'],r['bytes']):r['copy'] for r in manifest}
+for pin in load(B/'reconciled/evidence/source-pins.json'):
+ if pin['role']=='spine':continue
+ p=Path(pin['path']);b=p.read_bytes();assert info(b)=={k:pin[k] for k in ['bytes','sha256']}
+ if str(p) not in byoriginal:
+  key=(pin['sha256'],pin['bytes']);assert key in byhash
+  r={'original':str(p),'copy':byhash[key],**info(b)};manifest.append(r);byoriginal[str(p)]=r
+# These role inputs are immutable snapshots; verify their historical Git objects too.
+git_proof=[]
+for a in ['tibetan','english']:
+ for pin in load(B/a/'evidence/git-pins.json'):
+  p=B/a/pin['path'];copy=S/byoriginal[str(p)]['copy'];actual=subprocess.check_output(['git','show',pin['git_object']],cwd=W);assert copy.read_bytes()==actual
+  git_proof.append({'original':str(p),'copy':str(copy.relative_to(S)),'git_object':pin['git_object'],**info(actual)})
+write(Path('evidence/original-governance-git-proof.json'),git_proof)
+write(Path('original-to-copy-manifest.json'),manifest)
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'};helper=(B.parent/'land_reviewed_page.py').read_text();assert '".json", ".md", ".html", ".stderr", ".stdout", ".log", ".txt", ".bin", ".exit"' in helper
+checked=[]
+for r in manifest:
+ assert set(r) in [set(['original','copy','sha256','bytes']),set(['original','copy','sha256','bytes','original_git_commit','repository_relative_path'])]
+ p=(S/r['copy']).resolve();assert p.is_relative_to(S) and p.is_file() and p.suffix.lower() in allowed
+ b=p.read_bytes();assert info(b)=={k:r[k] for k in ['sha256','bytes']}
+ if 'original_git_commit' in r:raw=subprocess.check_output(['git','show',r['original_git_commit']+':'+r['repository_relative_path']],cwd=W)
+ else:raw=Path(r['original']).read_bytes()
+ assert raw==b
+ checked.append({'copy':r['copy'],'source':r['original'],'checked_against':'immutable Git object' if 'original_git_commit' in r else 'actual source bytes','bytes':len(b),'sha256':info(b)['sha256'],'supported_extension':True})
+write(Path('manifest-preflight-records.json'),checked)
+# Verify every generated span against ordered interface, source substrings and immediate parent.
+rows=load(S/'resolved-spans.json');source={x['seq']:x for x in load(S/'evidence/independent-complete-source-context.json')}
+code=S/'governing/source-origin/tools/gen_alignment_page.py.txt';dummy=types.ModuleType('build_alignment_layer');sys.modules['build_alignment_layer']=dummy;G=types.ModuleType('semantic_preflight_canonical');G.__file__=str(code);exec(compile(code.read_bytes(),str(code),'exec'),G.__dict__)
+proof=[]
+for seq in [319,320,321]:
+ sp=load(B/'reconciled'/str(seq)/'spec.json')['segments'][0];ordered=load(B/'reconciled'/str(seq)/'final-ordered-tuples.json');actual=[r for r in rows if r['seq']==seq];assert ordered['source_order']==actual
+ assert ordered['english_top_level_order']==sp['eng_order'];by={r['id']:r for r in sp['spans']};ens=G.with_members(sp['spans'],[by[k] for k in sp['eng_order']],source[seq]['english']);assert ordered['english_order_with_members']==[r['id'] for r in ens]
+ parent=None
+ for r in actual:
+  assert set(r)=={'seq','id','d','tib','eng','tib_range','eng_range'}
+  for side,field in [('tib','wylie'),('eng','english')]:
+   if r[side] is not None:
+    a,b=r[side+'_range'];assert source[seq][field][a:b]==r[side]
+    if r['d']==7:
+     assert parent and parent['d']==5;lo,hi=parent[side+'_range'];assert lo<=a<b<=hi and (b-a)<(hi-lo);assert parent[side].count(r[side])==1
+  if r['d']!=7:parent=r
+  if r['d'] in [5,7] and r['eng'] is not None:assert not re.match(r'^(?:the|a|an|and|or|his|our|your|I|you)\b',r['eng'],re.I)
+ proof.append({'seq':seq,'source_order_exact':True,'english_flat_order_exact':True,'canonical_member_order_exact':True,'every_source_range_exact':True,'all_d7_unique_tighter_immediate_d5':True,'no_supplied_head_allowance_needed':True})
+write(Path('ordered-interface-proof.json'),proof)
+allfiles=[p for p in S.rglob('*') if p.is_file()];unsupported=[str(p.relative_to(S)) for p in allfiles if p.suffix.lower() not in allowed];assert not unsupported
+write(Path('manifest-preflight.json'),{'status':'PASS','manifest_records':len(manifest),'distinct_mapped_copies':len({r['copy'] for r in manifest}),'all_original_and_copy_bytes_checked':True,'all_targets_supported':True,'actual_landing_helper_sha256':info((B.parent/'land_reviewed_page.py').read_bytes())['sha256'],'unsupported_files':unsupported,'mapped_files':len(checked),'historical_git_pins_verified':len(git_proof)+sum('original_git_commit' in r for r in manifest)})
+print(json.dumps({'status':'PASS','manifest_records':len(manifest),'distinct_mapped_copies':len({r['copy'] for r in manifest}),'review_file_count':len(allfiles),'all_extensions_supported':True,'ordered_final_spans':len(rows)},indent=2))

@@ -1,0 +1,13 @@
+{
+  "stage": "Preparation before changing any spec or removing current v1 freeze",
+  "failure": "The first baseline pin check incorrectly attempted git show on an ignored canonical source asset. Source hash verification had not completed; no generator or resolver ran and no alignment field changed.",
+  "correction": "Canonical master/corpus are verified as untracked files against captured baseline hashes; seven tracked generated files are verified against the actual baseline git commit.",
+  "failed_invocation": "python3 -B reconciliation-correction-v2/correct.py prepare",
+  "actual_failure_streams": [
+    "prepare-v2.stdout",
+    "prepare-v2.stderr",
+    "prepare-v2.exit"
+  ],
+  "retry": "prepare-v2-attempt02",
+  "preserved_failed_method": "preparation-history/correct.v1-failed.py.txt"
+}

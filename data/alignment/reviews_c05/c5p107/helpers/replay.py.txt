@@ -1,0 +1,53 @@
+from pathlib import Path
+import sys,os,subprocess,json,hashlib,datetime,re,html
+S=Path(__file__).resolve().parents[1];B=S.parent;W=B.parents[1]/'campaign-worktree';ORIGIN='49b66f3af9cbb47599bb40286637fc9e683b7cdf'
+def info(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def load(p):return json.loads(p.read_text())
+def write(p,x):p=S/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+keys=['seq','id','d','tib','eng','tib_range','eng_range']
+# Full native reuse binding includes actual code and dependencies, specification, database and all streams.
+pins=load(B/'reconciled/evidence/source-pins.json')
+for p in pins:assert info(Path(p['path']).read_bytes())=={k:p[k] for k in ['bytes','sha256']}
+reuse=[]
+for a in ['tibetan','english']:
+ frozen=load(B/a/'freeze.json')['files']
+ for rel,i in frozen.items():assert info((B/a/rel).read_bytes())==i
+ code=[]
+ for p in load(B/a/'evidence/git-pins.json'):
+  raw=(B/a/p['path']).read_bytes();assert raw==subprocess.check_output(['git','show',p['git_object']],cwd=W)
+  assert info(raw)=={k:p[k] for k in ['bytes','sha256']};code.append(p)
+ for seq in [319,320,321]:
+  d=B/a/str(seq);n=d/('native/generator-v1' if a=='tibetan' else 'native-generator-v1');x=load(n/'execution.json')
+  assert x['exit']==0 and (n/'exit.txt').read_text()=='0\n' and not (n/'stderr.bin').read_bytes()
+  assert (n/'stdin.bin').read_bytes()==(d/'spec.json').read_bytes() and (n/'stdout.bin').read_bytes()==(d/'body.html').read_bytes()
+  for k in ['stdin','stdout','stderr']:assert info((n/(k+'.bin')).read_bytes())==x['streams'][k]
+  helper=Path(x['argv'][2]);assert info(helper.read_bytes())==frozen[str(helper.relative_to(B/a))]
+  reuse.append({'angle':a,'seq':seq,'execution':x,'native_directory':str(n),'helper_identity':info(helper.read_bytes()),'canonical_dependencies':code,'sources':pins,'proof':'Every frozen input byte, original helper and Git-pinned dependency, source database and complete stdin/stdout/stderr/exit rechecked. Original successful generation reused only after this complete identity proof.'})
+write(Path('original-generator-identity-reuse.json'),reuse)
+def run(label,spec,mode):
+ n=S/'native'/label;n.mkdir(parents=True,exist_ok=False);b=spec.read_bytes();argv=[sys.executable,'-B',str(S/'helpers/canonical.py.txt'),mode];start=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(argv,input=b,cwd=S,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),capture_output=True)
+ for name,raw in [('stdin',b),('stdout',r.stdout),('stderr',r.stderr)]: (n/(name+'.bin')).write_bytes(raw)
+ (n/'exit.txt').write_text(str(r.returncode)+'\n');x={'argv':argv,'cwd':str(S),'utc':start,'finished_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':r.returncode,'streams':{'stdin':info(b),'stdout':info(r.stdout),'stderr':info(r.stderr)}};(n/'execution.json').write_text(json.dumps(x,indent=2)+'\n')
+ assert r.returncode==0 and not r.stderr,(label,r.returncode,r.stderr)
+ return r.stdout,x
+original=[];final=[];results=[]
+for a in ['tibetan','english']:
+ for seq in [319,320,321]:
+  d=B/a/str(seq);raw,x=run(f'original-{a}-{seq}-resolver-v1',d/'spec.json','resolve');rows=json.loads(raw)
+  for name in ['resolved-ranges.json','decisions.json']:
+   saved=load(d/name);saved=saved['spans'] if isinstance(saved,dict) else saved
+   assert rows==[{k:r[k] for k in keys} for r in saved]
+  original.append({'angle':a,'seq':seq,'spans':rows});results.append({'kind':'original-resolver','angle':a,'seq':seq,'count':len(rows),'execution':x})
+source={r['seq']:r for r in load(B/'source.json')};segments=[]
+for seq in [319,320,321]:
+ d=S/'reviewed-final'/str(seq);raw,x=run(f'final-{seq}-generator-v1',d/'spec.json','generate');assert raw==(d/'body.html').read_bytes()
+ # Both complete fields, preserving all unwrapped contents, are tested against the source.
+ text=raw.decode();full={}
+ for side in ['tib','eng']:
+  m=re.search('<div class="'+side+'"><div class="lab">.*?</div>\n(.*?)\n</div>',text,re.S);assert m
+  full[side]=html.unescape(re.sub('<[^>]*>','',m[1]));assert full[side]==source[seq]['wylie' if side=='tib' else 'english']
+ sp=load(d/'spec.json')['segments'][0]['spans'];segments.append({'seq':seq,'span_count':len(sp),'null_count':sum(r['eng'] is None for r in sp),'word_pair_count':sum(r['d']==5 and r['eng'] is not None for r in sp),'spec_sha256':info((d/'spec.json').read_bytes())['sha256'],'spec_bytes':(d/'spec.json').stat().st_size,'body_sha256':info(raw)['sha256'],'body_bytes':len(raw),'generator_exit':x['exit']})
+ results.append({'kind':'final-generator','seq':seq,'complete_body_exact':True,'complete_fields_exact':True,'execution':x})
+ rr,rx=run(f'final-{seq}-resolver-v1',d/'spec.json','resolve');rows=json.loads(rr);expected=load(d/'final-decisions.json')['spans'];assert rows==[{k:r[k] for k in keys} for r in expected];assert rows==[{k:r[k] for k in keys} for r in load(d/'resolved-ranges.json')];final.extend(rows);results.append({'kind':'final-resolver','seq':seq,'count':len(rows),'execution':rx})
+write(Path('original-resolved-spans.json'),original);write(Path('resolved-spans.json'),final);write(Path('native-results.json'),results);write(Path('measured-segments.json'),segments)
+print(json.dumps({'status':'PASS','original_generations_reused':len(reuse),'original_spans_resolved':sum(len(x['spans']) for x in original),'final_generators_run':3,'final_spans_resolved':len(final),'segments':segments},indent=2))

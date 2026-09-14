@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,hashlib,datetime
+S=Path(__file__).resolve().parents[1]
+def load(n):return json.loads((S/n).read_text())
+def write(n,x):(S/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def info(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+review=load('review.json')
+review.update(schema='c05-independent-semantic-review-v1',spec_verdict='APPROVE',quality_verdict='NEEDS_CORRECTION',status='FROZEN_NEEDS_CORRECTION_CHECKPOINT',total_d7=14,later_supplied_acceptance_baseline=None,later_baseline_accepted_through=None,original_reconciler_consumed_later_baseline=False,reconciliation_freeze_sha256=review.pop('reconciled_freeze_sha256'),integration_requirements=['Apply only the source-supported C05:319 w15 d3-to-d5 correction and refresh all affected reconciliation metadata/native proof in a versioned package.','Obtain scoped independent re-review of corrected actual files and the actual through-318 acceptance baseline before approval.'],limits=['Mechanical/spec fidelity passes; dictionary-layer completeness still requires one correction.','Source origin through 312 is distinct from the still-pending actual through-318 baseline.','This checkpoint is not approval or human acceptance.'])
+for r in review['segments']:
+ r.update(d7_count=sum(x['seq']==r['seq'] and x['d']==7 for x in load('resolved-spans.json')),resolver_exit=0,stderr_bytes=0,body_equals_fresh_stdout=True,fresh_native_directory='native/final-'+str(r['seq'])+'-generator-v1')
+write('review.json',review)
+intake=load('intake.json');preflight=load('manifest-preflight.json');intake.update(manifest_records=preflight['manifest_records'],distinct_copies=preflight['distinct_mapped_copies'],checkpoint_verdict='NEEDS_CORRECTION',actual_through318_baseline_receipt=None);write('intake.json',intake)
+assert review['verdict']=='NEEDS_CORRECTION' and len(review['open_findings'])==1
+assert sum(x['span_count'] for x in review['segments'])==review['total_spans']==85
+assert sum(x['null_count'] for x in review['segments'])==review['total_nulls']==0
+assert sum(x['word_pair_count'] for x in review['segments'])==review['total_word_pairs']==55
+assert len(load('original-decision-review.json'))==163 and len(load('resolved-spans.json'))==85
+assert all(set(r)=={'seq','id','d','tib','eng','tib_range','eng_range'} for r in load('resolved-spans.json'))
+assert len(load('errata-audit.json'))==30 and load('bank-ready-errata.json')==[]
+assert all(p.suffix.lower() in {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'} for p in S.rglob('*') if p.is_file())
+files={str(p.relative_to(S)):info(p) for p in sorted(S.rglob('*')) if p.is_file() and p!=S/'freeze.json'}
+write('freeze.json',{'schema':'c05-independent-semantic-review-freeze-v1','producer':'Codex independent skeptical semantic reviewer','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'verdict':'NEEDS_CORRECTION','source_origin_git_commit':review['source_origin_git_commit'],'actual_through318_baseline_receipt':None,'reconciliation_freeze_sha256':review['reconciliation_freeze_sha256'],'segments':[319,320,321],'files':files})
+freeze=load('freeze.json');assert isinstance(freeze['files'],dict)
+assert all(info(S/p)==v for p,v in freeze['files'].items())
+print(json.dumps({'verdict':review['verdict'],'open_findings':len(review['open_findings']),'files':len(files),'freeze':info(S/'freeze.json'),'total_spans':85,'total_nulls':0,'total_word_pairs':55},indent=2))

@@ -1,0 +1,24 @@
+from pathlib import Path
+import json, shutil, hashlib
+S=Path(__file__).resolve().parents[1]
+def read(n): return json.loads((S/n).read_text())
+def write(n,x):
+ p=S/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+archive=S/'attempts/pre-depth-reassessment-v1';archive.mkdir(exist_ok=False)
+for name in ['span-review.json','original-decision-review.json','semantic-coverage.json','intake.json']:
+ shutil.copyfile(S/name,archive/name)
+finding={'id':'C05-319-w15-depth','seq':319,'span_id':'w15','status':'OPEN','category':'avoidable dictionary-layer undercapture','minimal_change':{'field':'d','from':3,'to':5},'tib':'rang gi','eng':'its','tib_range':[92,99],'eng_range':[161,164],'reason':'The complete inflected possessive rang gi is an explicit HGM-attested dictionary headword with its among the glosses. Here it is exactly that possessive modifying ngo bo. No larger recast phrase or distributed English motivates d3; d5 retains this useful attestation without splitting rang or gi or changing either boundary. Adjacent 317–318 exhibit the same source function, but their accepted depths are corroboration rather than the semantic premise.','master_records':['unified_entries/18258','glossary_entries/6758'],'master_evidence':'evidence/master-complete-objects.json','full_source_evidence':'evidence/independent-complete-source-context.json','previous_reason_limit':'The earlier d3 rationale showed that the complete possessive corresponds to its, but did not establish why this lexical unit should be excluded from the dictionary layer.'}
+write('correction-request.json',finding)
+spans=read('span-review.json')
+for r in spans:
+ if r['seq']==319 and r['id']=='w15':r['verdict']='NEEDS_CORRECTION';r['independent_reason']=finding['reason'];r['finding_id']=finding['id']
+write('span-review.json',spans)
+originals=read('original-decision-review.json')
+for r in originals:
+ if r['seq']==319 and r['original']['tib']=='rang gi':r['independent_verdict']='NEEDS_CORRECTION';r['independent_reason']=finding['reason'];r['finding_id']=finding['id']
+write('original-decision-review.json',originals)
+coverage=read('semantic-coverage.json');coverage['open_findings']=[finding];write('semantic-coverage.json',coverage)
+write('focused-source-rulings.json',[finding,{'seq':319,'span_id':'w23','status':'SOUND','tib':'nyon mongs pa','eng':'afflicted things','reason':'In nyon mongs pa dang \'dres the nominal expression supplies what is mixed with the stream. GMR renders that substantive as afflicted things; the full HGM entry explicitly includes mentally afflicted things. The noun head things belongs to that substantival rendering. C05:318 expands to afflicted types of things, where types of is an additional generic classification; its narrower accepted alignment does not establish that the directly substantival things in 319 is supplied. Keep the full 319 nominal alignment.','evidence':['evidence/independent-complete-source-context.json','evidence/master-term-index.json','evidence/master-complete-objects.json']}])
+write('attempts/pre-depth-reassessment-v1/disposition.json',{'status':'SUPERSEDED_UNFROZEN_ANALYSIS','reason':'Root challenged dictionary-depth rationale; independent focused source and full-master reassessment finds one minimal correction. These earlier analysis files are preserved verbatim. No earlier APPROVE review or freeze had been issued.','superseded_file_hashes':{p.name:{'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size} for p in archive.iterdir() if p.is_file()}})
+write('review.json',{'schema':'c05-semantic-review-v1','producer':'Codex independent skeptical semantic reviewer','verdict':'NEEDS_CORRECTION','source_origin_git_commit':'49b66f3af9cbb47599bb40286637fc9e683b7cdf','source_origin_course_boundary':312,'actual_through318_baseline_receipt':None,'reconciled_freeze_sha256':'6beabe2726cbdd404577bfa91a22442cf100ee01ee9ed49920cb7d37bec2bf8c','segments':read('measured-segments.json'),'total_spans':85,'total_nulls':0,'total_word_pairs':55,'open_findings':[finding],'bank_ready_errata_count':0,'human_acceptance':False})
+print(json.dumps({'verdict':'NEEDS_CORRECTION','open_findings':1,'original_spans_reviewed':len(originals),'final_spans_reviewed':len(spans),'native_generators_repeated':0}))

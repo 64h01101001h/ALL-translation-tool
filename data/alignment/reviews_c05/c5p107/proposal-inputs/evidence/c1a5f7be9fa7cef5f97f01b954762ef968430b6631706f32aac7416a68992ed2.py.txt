@@ -1,0 +1,15 @@
+import pathlib,subprocess,sys,os,json,hashlib,datetime
+O=pathlib.Path(__file__).resolve().parent;W=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+def sha(b):return hashlib.sha256(b).hexdigest()
+results=[]
+for seq in [319,320,321]:
+ s=(O/str(seq)/'spec.json').read_bytes()
+ for kind,helper in [('generator','canonical_adapter.py'),('resolver','resolve.py')]:
+  d=O/str(seq)/('native-'+kind+'-v1');d.mkdir();argv=[sys.executable,'-B',str(O/'helpers'/helper)];start=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(argv,input=s,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),capture_output=True)
+  for name,raw in [('stdin.bin',s),('stdout.bin',r.stdout),('stderr.bin',r.stderr)]: (d/name).write_bytes(raw)
+  (d/'exit.txt').write_text(str(r.returncode)+'\n');(d/'execution.json').write_text(json.dumps(dict(argv=argv,cwd=str(W),utc=start,exit=r.returncode,environment_override={'PYTHONDONTWRITEBYTECODE':'1'},streams={name:dict(bytes=len(raw),sha256=sha(raw)) for name,raw in [('stdin',s),('stdout',r.stdout),('stderr',r.stderr)]}),indent=2)+'\n')
+  assert r.returncode==0 and not r.stderr,(seq,kind,r.returncode,r.stderr)
+  if kind=='generator':(O/str(seq)/'body.html').write_bytes(r.stdout)
+  else:(O/str(seq)/'resolved-ranges.json').write_bytes(r.stdout)
+  results.append(dict(seq=seq,kind=kind,exit=r.returncode,stdout_bytes=len(r.stdout),stdout_sha256=sha(r.stdout),stderr_bytes=len(r.stderr)))
+(O/'native-results.json').write_text(json.dumps(results,indent=2)+'\n');print(json.dumps(results,indent=2))

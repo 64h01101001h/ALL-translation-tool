@@ -1,0 +1,69 @@
+{
+  "status": "SOUND",
+  "final_decision_changes": {
+    "rationale": {
+      "old": "Complete reflexive possessive phrase owns the possessive pronoun referring to this virtue.",
+      "new": "Inflected reflexive possessive rang gi owns its referring to this virtue's basic nature. Complete unified entry 18258 and glossary entry 6758 attest its; the local function is lexical possession, not a clause-level recast. Correct d3 undercapture to d5 without changing either string, either occurrence range, or either order."
+    },
+    "correction_v2": {
+      "old": null,
+      "new": "d3 undercapture corrected to d5; exact original mapping retained"
+    },
+    "source_function": {
+      "old": "complete source phrase and its full recast",
+      "new": "inflected possessive lexical unit"
+    },
+    "d": {
+      "old": 3,
+      "new": 5
+    }
+  },
+  "original_disposition_changes": [
+    {
+      "index": 12,
+      "angle": "tibetan",
+      "original": {
+        "id": "w13",
+        "d": 3,
+        "tib": "rang gi",
+        "eng": "its",
+        "seq": 319,
+        "tib_range": [
+          92,
+          99
+        ],
+        "eng_range": [
+          161,
+          164
+        ]
+      },
+      "current_disposition": "RECAST",
+      "rationale": "Minimal lexical undercapture correction: both originals placed the established inflected possessive rang gi → its at d3. Preserve their exact original decisions but retain the same words and ranges at d5, supported by full HGM unified 18258/glossary 6758 and this source function."
+    },
+    {
+      "index": 52,
+      "angle": "english",
+      "original": {
+        "id": "w13",
+        "d": 3,
+        "tib": "rang gi",
+        "eng": "its",
+        "seq": 319,
+        "tib_range": [
+          92,
+          99
+        ],
+        "eng_range": [
+          161,
+          164
+        ]
+      },
+      "current_disposition": "RECAST",
+      "rationale": "Minimal lexical undercapture correction: both originals placed the established inflected possessive rang gi → its at d3. Preserve their exact original decisions but retain the same words and ranges at d5, supported by full HGM unified 18258/glossary 6758 and this source function."
+    }
+  ],
+  "all80_original_decision_fields_identical": true,
+  "all_other319_final_decisions_omissions_and_unwrapped_ranges_identical": true,
+  "independent_judgment": "The complete attested inflected possessive rang gi is used as the possessive of ngo bo and has the actual English exponent its. The d5 correction captures this lexical unit without changing boundaries or splitting genitive morphology. The former d3 analysis was unnecessarily withheld from the dictionary layer.",
+  "correction_failure_review": "Preparation attempt01 failed at git show for an ignored canonical source asset. The preserved method/streams establish that alignment mutation and native invocation had not occurred. The retry correctly hashes the two ignored sources and Git-verifies seven tracked baseline files. No native error or rerun resulted."
+}

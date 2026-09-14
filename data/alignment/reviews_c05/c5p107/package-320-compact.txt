@@ -1,0 +1,238 @@
+
+===== tibetan/320/spec.json =====
+{"course":"C05","segments":[{"seq":320,"title":"unstained deeds end the black","spans":[{"id":"w1","d":5,"tib":"zag med","eng":"unstained"},{"id":"w2","d":7,"tib":"zag","eng":"stained"},{"id":"w3","d":7,"tib":"med","eng":"un"},{"id":"w4","d":5,"tib":"las","eng":"Deeds"},{"id":"w5","d":5,"tib":"dkar","eng":"white"},{"id":"w6","d":5,"tib":"gnag","eng":"black"},{"id":"w7","d":3,"tib":"rnam par mi smin","eng":"never ripen"},{"id":"w8","d":5,"tib":"nag po","eng":"black"},{"id":"w9","d":5,"tib":"de","eng":"it"},{"id":"w10","d":3,"tib":"zad par","eng":"to an end"},{"id":"w11","d":5,"tib":"byed pa","eng":"brings"}],"eng_order":["w4","w1","w7","w5","w6","w11","w9","w8","w10"],"note":"PROVISIONAL machine alignment proposed independently by Codex, Tibetan-first. GMR English is preserved verbatim; no dictionary promotion. Three source negatives share one English negative construction; the two color negatives remain omitted with their scope recorded, not nulled. The discontinuous causative is aligned in two supported pieces. The final numbered heading is unchanged apparatus."}]}
+
+===== tibetan/320/report.md =====
+# C05:320 — independent Tibetan-first proposal
+Producer: Codex. Source origin 49b66f3a (through 312); no future through-318 acceptance claimed.
+Challenge the division of shared negation first: the full negative-ripening phrase is proposed, and both color negatives remain distributed omissions. The two causative pieces are retained because their full English is discontinuous.
+Counts: 11 spans; 0 nulls; 7 non-null d5 word pairs (7 total d5); 2 d7 members.
+Canonical generator EXIT=0; stderr=0 bytes; body=2176 bytes. Exact native output is native/generator-v1/stdout.bin.
+Canonical resolver EXIT=0; every intended source/English occurrence range matches resolved-ranges.json. Both rendered full fields equal the original source.
+Spec SHA256 1251d32bd5d8c9e8ca42d72ec0acf6108c6f92db7c18a9662643e354a4a113d3; body SHA256 784770e6d152b28d01e27fad514119c46bf4e65e9635bc47dbdc85619923601a.
+Full source and physical evidence: ../evidence/full-original-spine-context.json and physical-complete-row-proof.json. Source bytes are unmodified.
+Full master objects and exact counts: ../evidence/full-lexical-evidence.json and supplemental-full-lexical-evidence.json. Comparanda remain reference only.
+Every complete-field and leading-phrase parallel query returns this row alone; all-course results and C16/P1/TCS scope are preserved in ../evidence/.
+Errata: 0. All five category screens with all five refutation grounds are recorded in errata-audit.json; uncertain suspicions are not filed.
+Material omissions and all occurrence-specific rationales are in decisions.json. No uncertain correspondence is represented as null.
+All alignments remain provisional machine proposals; mechanical passes do not assert final semantic approval.
+
+
+===== tibetan/320/decisions.json =====
+{"producer":"Codex Tibetan-first independent proposal","source_origin_git_commit":"49b66f3af9cbb47599bb40286637fc9e683b7cdf","range_convention":"zero-based Unicode character half-open","spans":[{"id":"w1","d":5,"tib":"zag med","eng":"unstained","seq":320,"tib_range":[0,7],"eng_range":[16,25],"rationale":"Established unstained compound describing the deeds; do not attach to the next heading.","parent":null,"source_function":"word or established compound, including inflected forms"},{"id":"w2","d":7,"tib":"zag","eng":"stained","seq":320,"tib_range":[0,3],"eng_range":[18,25],"rationale":"Unique positive member within unstained and the Tibetan compound; this is a member, not a free-standing stained word.","parent":"w1","source_function":"strictly tighter compound member"},{"id":"w3","d":7,"tib":"med","eng":"un","seq":320,"tib_range":[4,7],"eng_range":[16,18],"rationale":"Unique negative member inside the parent unstained, licensed by the actual negative compound.","parent":"w1","source_function":"strictly tighter compound member"},{"id":"w4","d":5,"tib":"las","eng":"Deeds","seq":320,"tib_range":[12,15],"eng_range":[0,5],"rationale":"Initial subject; avoids the later explanatory deed and heading Deeds.","parent":null,"source_function":"word or established compound, including inflected forms"},{"id":"w5","d":5,"tib":"dkar","eng":"white","seq":320,"tib_range":[22,26],"eng_range":[59,64],"rationale":"First-clause color under the shared English negative; capitalized heading White is not used.","parent":null,"source_function":"word or established compound, including inflected forms"},{"id":"w6","d":5,"tib":"gnag","eng":"black","seq":320,"tib_range":[30,34],"eng_range":[68,73],"rationale":"First-clause black under that same English negative, not the referential black in the second sentence.","parent":null,"source_function":"word or established compound, including inflected forms"},{"id":"w7","d":3,"tib":"rnam par mi smin","eng":"never ripen","seq":320,"tib_range":[35,51],"eng_range":[26,37],"rationale":"Complete negative ripening phrase; the first two mi are left as distributed scope rather than assigned duplicate never atoms.","parent":null,"source_function":"complete phrase"},{"id":"w8","d":5,"tib":"nag po","eng":"black","seq":320,"tib_range":[56,62],"eng_range":[128,133],"rationale":"Second-sentence explanation of quoted it, excluding the translator-supplied kind of deed.","parent":null,"source_function":"word or established compound, including inflected forms"},{"id":"w9","d":5,"tib":"de","eng":"it","seq":320,"tib_range":[63,65],"eng_range":[110,112],"rationale":"Quoted anaphoric it refers to that black class; quotation marks remain outside the pronoun.","parent":null,"source_function":"word or established compound, including inflected forms"},{"id":"w10","d":3,"tib":"zad par","eng":"to an end","seq":320,"tib_range":[66,73],"eng_range":[148,157],"rationale":"Complete terminative result phrase of the causative, separated from brings because the intervening object and explanatory apposition make the whole English causative discontinuous.","parent":null,"source_function":"complete phrase"},{"id":"w11","d":5,"tib":"byed pa","eng":"brings","seq":320,"tib_range":[74,81],"eng_range":[102,108],"rationale":"Causative brings in the second sentence, paired with its own to an end complement; not heading Bringing.","parent":null,"source_function":"word or established compound, including inflected forms"}],"eng_order":["w4","w1","w7","w5","w6","w11","w9","w8","w10"],"material_omissions":[{"tib":"first mi; second mi","reason":"The two color negatives and ripening negative are recast into one never...either...or construction. Their scope is present but separate English atoms cannot be established; neither is nulled."},{"tib":"kyi / ni / la / yin no","reason":"Relational, topic, connective and copular contributions are distributed through the English sentence frames. No additional isolated equivalents are claimed."},{"english":"Their nature is to be what / that is, the ... kind of deed","reason":"Expository frame and referential expansion are preserved unwrapped; nag po owns only its actual second black."},{"english":"64 Bringing Black and White Deeds to an End","reason":"Following selection heading is original apparatus under the registered heading class, not a new translation correspondence or new erratum."}],"source_evidence":"../evidence/full-original-spine-context.json","lexical_evidence":"../evidence/full-lexical-evidence.json"}
+
+===== tibetan/320/errata.json =====
+[]
+
+===== english/320/spec.json =====
+{"course":"C05","segments":[{"seq":320,"title":"unstained deeds end black deeds","spans":[{"id":"w1","d":5,"tib":"zag med","eng":"unstained"},{"id":"w2","d":5,"tib":"las","eng":"Deeds"},{"id":"w3","d":5,"tib":"dkar","eng":"white"},{"id":"w4","d":5,"tib":"gnag","eng":"black"},{"id":"w5","d":3,"tib":"rnam par mi smin","eng":"never ripen"},{"id":"w6","d":5,"tib":"nag po","eng":"black"},{"id":"w7","d":5,"tib":"de","eng":"it"},{"id":"w8","d":5,"tib":"zad","eng":"end"},{"id":"w9","d":5,"tib":"byed pa","eng":"brings"}],"eng_order":["w2","w1","w5","w3","w4","w9","w7","w6","w8"],"note":"PROVISIONAL machine alignment proposed independently by Codex. The first two mi negatives contribute to the coordinated scope of never and remain unbanked, not falsely nulled; rnam par mi smin is retained as a complete negative verbal phrase. The explanatory black and quoted it refer to the deed being ended. The appended heading beginning 64 remains original apparatus under the registered following-heading class. No source text or hgm_gloss is changed."}]}
+
+===== english/320/report.md =====
+# C05:320 — English-first proposal
+Producer: Codex. Source origin 49b66f3af9cbb47599bb40286637fc9e683b7cdf (through 312); future landing baseline was not supplied or claimed.
+Challenge consolidated negation first: the first two mi stay omitted rather than being assigned to either/or or falsely nulled; the negative ripening phrase owns never ripen.
+Quoted it and explanatory black are selected before the heading. The discontinuous causative is split into byed pa/brings and zad/end without claiming its intervening object.
+Coverage: 9 spans; 8 non-null d5; 8 total d5; 0 d7; 0 nulls; 0 new errata.
+All source-specific decisions, exact ranges and explicit omissions: decisions.json. Full source/context, material corpus/master objects and original physical bytes: ../evidence/.
+Five-ground category screens: errata-audit.json. Exact-field searches each return this row alone; broader context queries are recorded with full rows and original corpus objects. No publication independence is asserted.
+Canonical generator and resolver each ran once, both exit 0 and empty stderr. Full native streams, argv and hashes are under native-*-v1/.
+EXIT=0; body bytes=2036; body SHA256=636cae169612eaee8b5dbda11c0bef9b0cc836e0762716575811c77868056d8b.
+Spec SHA256=85ff3ec1d3ccc45acf96ad4bb0a53a0133900313cd021fe5693b177901af1101. Canonical ranges match all intended occurrences; rendered complete source strings equal the originals.
+Mechanical checks are not semantic approval. Machine matches remain provisional and are never promoted into hgm_gloss.
+One evidence-collection assumption failed before lexical queries: the verse ACIP is line-wrapped in its physical file. The failed method is preserved; corrected proof uses reversible Latin-1 whitespace folding and a complete raw extent.
+
+
+===== english/320/decisions.json =====
+{"producer":"Codex / English-first independent proposal","source_origin_git_commit":"49b66f3af9cbb47599bb40286637fc9e683b7cdf","source":{"id":1702,"course":"C05","seq":320,"acip":"ZAG MED KYI LAS NI MI DKAR MI GNAG RNAM PAR MI SMIN LA, NAG PO DE ZAD PAR BYED PA YIN NO,","wylie":"zag med kyi las ni mi dkar mi gnag rnam par mi smin la, nag po de zad par byed pa yin no","english":"Deeds which are unstained never ripen into anything either white or black. Their nature is to be what brings \"it\"--that is, the black kind of deed--to an end. 64 Bringing Black and White Deeds to an End"},"range_convention":"zero-based half-open Unicode character offsets","spans":[{"id":"w1","d":5,"tib":"zag med","eng":"unstained","seq":320,"tib_range":[0,7],"eng_range":[16,25],"rationale":"Established unstained compound; no unsafe negative-affix member is fabricated.","parent_id":null,"english_whole_word_occurrence":1},{"id":"w2","d":5,"tib":"las","eng":"Deeds","seq":320,"tib_range":[12,15],"eng_range":[0,5],"rationale":"Initial plural deeds is the topic, not the explanatory kind of deed or heading Deeds.","parent_id":null,"english_whole_word_occurrence":1},{"id":"w3","d":5,"tib":"dkar","eng":"white","seq":320,"tib_range":[22,26],"eng_range":[59,64],"rationale":"White category inside the scope of the source negatives; color noun only, not a positive assertion about unstained deeds.","parent_id":null,"english_whole_word_occurrence":1},{"id":"w4","d":5,"tib":"gnag","eng":"black","seq":320,"tib_range":[30,34],"eng_range":[68,73],"rationale":"Black category in the first sentence under never/either-or scope.","parent_id":null,"english_whole_word_occurrence":1},{"id":"w5","d":3,"tib":"rnam par mi smin","eng":"never ripen","seq":320,"tib_range":[35,51],"eng_range":[26,37],"rationale":"Complete negative ripening construction preserves overt negation; individual mi outside this phrase also share the wider coordinated scope.","parent_id":null,"english_whole_word_occurrence":1},{"id":"w6","d":5,"tib":"nag po","eng":"black","seq":320,"tib_range":[56,62],"eng_range":[128,133],"rationale":"Second black is in GMR explanatory apposition identifying the object that is ended, not the first negative classification or heading.","parent_id":null,"english_whole_word_occurrence":2},{"id":"w7","d":5,"tib":"de","eng":"it","seq":320,"tib_range":[63,65],"eng_range":[110,112],"rationale":"Demonstrative refers to the black deed and is rendered by quoted it; quote marks stay outside.","parent_id":null,"english_whole_word_occurrence":1},{"id":"w8","d":5,"tib":"zad","eng":"end","seq":320,"tib_range":[66,69],"eng_range":[154,157],"rationale":"Exhaustion root corresponds to the nominal end in the causative brings...to an end construction; intervening object excludes a contiguous whole-causative span.","parent_id":null,"english_whole_word_occurrence":1},{"id":"w9","d":5,"tib":"byed pa","eng":"brings","seq":320,"tib_range":[74,81],"eng_range":[102,108],"rationale":"Causative doing verb provides brings; argument and to an remain unwrapped.","parent_id":null,"english_whole_word_occurrence":1}],"omissions":[{"tib":"mi before dkar; mi before gnag","reason":"The first two negatives are expressed through the shared never...either...or construction, not through two separately assignable English negators; uncertain atomization remains omitted rather than null."},{"tib":"kyi / ni / la / par / yin no","reason":"Attributive/topic/connecting/resultative/copular functions are recast in the English clauses; no extra lexical atom is proposed."},{"english":"64 Bringing Black and White Deeds to an End","reason":"Following selection heading, preserved as original apparatus, outside translation mappings."}],"eng_order":["w2","w1","w5","w3","w4","w9","w7","w6","w8"]}
+
+===== english/320/errata.json =====
+[]
+
+===== reconciled/320/spec.json =====
+{"course":"C05","segments":[{"seq":320,"title":"unstained deeds end the black","spans":[{"id":"w1","d":5,"tib":"zag med","eng":"unstained"},{"id":"w2","d":7,"tib":"zag","eng":"stained"},{"id":"w3","d":7,"tib":"med","eng":"un","subword":true},{"id":"w4","d":5,"tib":"las","eng":"Deeds"},{"id":"w5","d":5,"tib":"dkar","eng":"white"},{"id":"w6","d":5,"tib":"gnag","eng":"black"},{"id":"w7","d":3,"tib":"rnam par mi smin","eng":"never ripen"},{"id":"w8","d":5,"tib":"nag po","eng":"black"},{"id":"w9","d":5,"tib":"de","eng":"it"},{"id":"w10","d":3,"tib":"zad par","eng":"to an end"},{"id":"w11","d":5,"tib":"byed pa","eng":"brings"}],"eng_order":["w4","w1","w7","w5","w6","w11","w9","w8","w10"],"note":"PROVISIONAL machine alignment reconciled independently by Codex. GMR wording is verbatim; no hgm_gloss promotion. The three source negatives share one English never...either...or construction: the negative-ripening phrase is retained, while the two color negatives remain unbanked with their distributed scope recorded. Zag med has unique stain and negative members within unstained. The causative is discontinuous in English: byed pa owns brings and the complete terminative zad par phrase owns to an end. Quoted it and the explanatory black refer to the same black deed. The following numbered selection heading remains unchanged apparatus."}]}
+
+===== reconciled/320/report.md =====
+# C05:320 — independent reconciliation
+Producer: Codex. Source/governance origin 49b66f3a through 312; a later through-318 acceptance baseline was not supplied or consumed.
+The whole negative-ripening phrase is preserved; two color mi remain distributed omissions, never nulls. Retain the two unique zag med members and the complete d3 zad par → to an end beside byed pa → brings.
+All original spans have explicit dispositions with their original IDs, depths, texts and ranges. Every original omission has a disposition. Full final rationales, selected occurrences and unwrapped ranges are in final-decisions.json.
+Counts: 11 spans; 7 non-null d5; 2 d7; 0 nulls; 0 errata. 20 original span dispositions; 4 final material omissions.
+Canonical final generator EXIT=0; stderr=0 bytes; body=2424 bytes. Exact actual native streams: ../native/final-320-generator-v1/.
+Spec SHA256 d3d0874c3907faecf41c28f77d5d2807d6e7bcc99dfd8d38ad4a913f32808865; 2241 bytes.
+Body SHA256 7088e2dad06863beba9fbfcea3623ba4186a81578f75a72b1b0a6fcabdac7584; 2424 bytes.
+The independent canonical resolver exits 0, empty stderr, and equals all intended ranges. Complete rendered Wylie and English equal the original spine fields.
+Six exact successful original generator executions were reused after all source, dependency, stdin, stdout/body, stderr and exit identities were checked; all six originals were independently resolved. Each reconciled final generator was executed once.
+Every original SQL/external-corpus count and full record was independently rechecked; indexed full master objects and spine entries are preserved, not promoted. Copy/pin proofs and complete material sources are in ../evidence/.
+Ten original category suspicions each received all five refutation grounds in errata-audit.json. No independent publication witness or new source correction is established; register remains 194.
+No d5/d7 supplied-head allowance is proposed. GMR wording remains verbatim and machine matches provisional.
+The 321 physical source spans CRLF lines; explicit complete-byte-extent whitespace folding is verified. Original failed contiguity assumptions remain frozen under ../originals/.
+Mechanical checks do not establish semantic truth; the independent skeptical pass and root acceptance remain required.
+
+
+===== reconciled/320/errata.json =====
+[]
+
+===== reconciled/320/original-dispositions.json =====
+{"seq":320,"spans":[{"angle":"tibetan","original":{"id":"w1","d":5,"tib":"zag med","eng":"unstained","seq":320,"tib_range":[0,7],"eng_range":[16,25]},"original_complete_decision":{"id":"w1","d":5,"tib":"zag med","eng":"unstained","seq":320,"tib_range":[0,7],"eng_range":[16,25],"rationale":"Established unstained compound describing the deeds; do not attach to the next heading.","parent":null,"source_function":"word or established compound, including inflected forms"},"decision":"RETAIN","final_ids":["w1"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w1":"Established unstained compound describing the deeds; do not attach to the next heading."}},{"angle":"tibetan","original":{"id":"w2","d":7,"tib":"zag","eng":"stained","seq":320,"tib_range":[0,3],"eng_range":[18,25]},"original_complete_decision":{"id":"w2","d":7,"tib":"zag","eng":"stained","seq":320,"tib_range":[0,3],"eng_range":[18,25],"rationale":"Unique positive member within unstained and the Tibetan compound; this is a member, not a free-standing stained word.","parent":"w1","source_function":"strictly tighter compound member"},"decision":"RETAIN","final_ids":["w2"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w2":"Unique positive member within unstained and the Tibetan compound; this is a member, not a free-standing stained word."}},{"angle":"tibetan","original":{"id":"w3","d":7,"tib":"med","eng":"un","seq":320,"tib_range":[4,7],"eng_range":[16,18]},"original_complete_decision":{"id":"w3","d":7,"tib":"med","eng":"un","seq":320,"tib_range":[4,7],"eng_range":[16,18],"rationale":"Unique negative member inside the parent unstained, licensed by the actual negative compound.","parent":"w1","source_function":"strictly tighter compound member"},"decision":"RETAIN","final_ids":["w3"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w3":"Unique negative member inside the parent unstained, licensed by the actual negative compound."}},{"angle":"tibetan","original":{"id":"w4","d":5,"tib":"las","eng":"Deeds","seq":320,"tib_range":[12,15],"eng_range":[0,5]},"original_complete_decision":{"id":"w4","d":5,"tib":"las","eng":"Deeds","seq":320,"tib_range":[12,15],"eng_range":[0,5],"rationale":"Initial subject; avoids the later explanatory deed and heading Deeds.","parent":null,"source_function":"word or established compound, including inflected forms"},"decision":"RETAIN","final_ids":["w4"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w4":"Initial subject; avoids the later explanatory deed and heading Deeds."}},{"angle":"tibetan","original":{"id":"w5","d":5,"tib":"dkar","eng":"white","seq":320,"tib_range":[22,26],"eng_range":[59,64]},"original_complete_decision":{"id":"w5","d":5,"tib":"dkar","eng":"white","seq":320,"tib_range":[22,26],"eng_range":[59,64],"rationale":"First-clause color under the shared English negative; capitalized heading White is not used.","parent":null,"source_function":"word or established compound, including inflected forms"},"decision":"RETAIN","final_ids":["w5"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w5":"First-clause color under the shared English negative; capitalized heading White is not used."}},{"angle":"tibetan","original":{"id":"w6","d":5,"tib":"gnag","eng":"black","seq":320,"tib_range":[30,34],"eng_range":[68,73]},"original_complete_decision":{"id":"w6","d":5,"tib":"gnag","eng":"black","seq":320,"tib_range":[30,34],"eng_range":[68,73],"rationale":"First-clause black under that same English negative, not the referential black in the second sentence.","parent":null,"source_function":"word or established compound, including inflected forms"},"decision":"RETAIN","final_ids":["w6"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w6":"First-clause black under that same English negative, not the referential black in the second sentence."}},{"angle":"tibetan","original":{"id":"w7","d":3,"tib":"rnam par mi smin","eng":"never ripen","seq":320,"tib_range":[35,51],"eng_range":[26,37]},"original_complete_decision":{"id":"w7","d":3,"tib":"rnam par mi smin","eng":"never ripen","seq":320,"tib_range":[35,51],"eng_range":[26,37],"rationale":"Complete negative ripening phrase; the first two mi are left as distributed scope rather than assigned duplicate never atoms.","parent":null,"source_function":"complete phrase"},"decision":"RETAIN","final_ids":["w7"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w7":"Complete negative ripening phrase; the first two mi are left as distributed scope rather than assigned duplicate never atoms."}},{"angle":"tibetan","original":{"id":"w8","d":5,"tib":"nag po","eng":"black","seq":320,"tib_range":[56,62],"eng_range":[128,133]},"original_complete_decision":{"id":"w8","d":5,"tib":"nag po","eng":"black","seq":320,"tib_range":[56,62],"eng_range":[128,133],"rationale":"Second-sentence explanation of quoted it, excluding the translator-supplied kind of deed.","parent":null,"source_function":"word or established compound, including inflected forms"},"decision":"RETAIN","final_ids":["w8"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w8":"Second-sentence explanation of quoted it, excluding the translator-supplied kind of deed."}},{"angle":"tibetan","original":{"id":"w9","d":5,"tib":"de","eng":"it","seq":320,"tib_range":[63,65],"eng_range":[110,112]},"original_complete_decision":{"id":"w9","d":5,"tib":"de","eng":"it","seq":320,"tib_range":[63,65],"eng_range":[110,112],"rationale":"Quoted anaphoric it refers to that black class; quotation marks remain outside the pronoun.","parent":null,"source_function":"word or established compound, including inflected forms"},"decision":"RETAIN","final_ids":["w9"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w9":"Quoted anaphoric it refers to that black class; quotation marks remain outside the pronoun."}},{"angle":"tibetan","original":{"id":"w10","d":3,"tib":"zad par","eng":"to an end","seq":320,"tib_range":[66,73],"eng_range":[148,157]},"original_complete_decision":{"id":"w10","d":3,"tib":"zad par","eng":"to an end","seq":320,"tib_range":[66,73],"eng_range":[148,157],"rationale":"Complete terminative result phrase of the causative, separated from brings because the intervening object and explanatory apposition make the whole English causative discontinuous.","parent":null,"source_function":"complete phrase"},"decision":"RETAIN","final_ids":["w10"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w10":"Complete terminative result phrase of the causative, separated from brings because the intervening object and explanatory apposition make the whole English causative discontinuous."}},{"angle":"tibetan","original":{"id":"w11","d":5,"tib":"byed pa","eng":"brings","seq":320,"tib_range":[74,81],"eng_range":[102,108]},"original_complete_decision":{"id":"w11","d":5,"tib":"byed pa","eng":"brings","seq":320,"tib_range":[74,81],"eng_range":[102,108],"rationale":"Causative brings in the second sentence, paired with its own to an end complement; not heading Bringing.","parent":null,"source_function":"word or established compound, including inflected forms"},"decision":"RETAIN","final_ids":["w11"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w11":"Causative brings in the second sentence, paired with its own to an end complement; not heading Bringing."}},{"angle":"english","original":{"id":"w1","d":5,"tib":"zag med","eng":"unstained","seq":320,"tib_range":[0,7],"eng_range":[16,25]},"original_complete_decision":{"id":"w1","d":5,"tib":"zag med","eng":"unstained","seq":320,"tib_range":[0,7],"eng_range":[16,25],"rationale":"Established unstained compound; no unsafe negative-affix member is fabricated.","parent_id":null,"english_whole_word_occurrence":1},"decision":"RETAIN","final_ids":["w1"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w1":"Established unstained compound describing the deeds; do not attach to the next heading."}},{"angle":"english","original":{"id":"w2","d":5,"tib":"las","eng":"Deeds","seq":320,"tib_range":[12,15],"eng_range":[0,5]},"original_complete_decision":{"id":"w2","d":5,"tib":"las","eng":"Deeds","seq":320,"tib_range":[12,15],"eng_range":[0,5],"rationale":"Initial plural deeds is the topic, not the explanatory kind of deed or heading Deeds.","parent_id":null,"english_whole_word_occurrence":1},"decision":"RETAIN","final_ids":["w4"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w4":"Initial subject; avoids the later explanatory deed and heading Deeds."}},{"angle":"english","original":{"id":"w3","d":5,"tib":"dkar","eng":"white","seq":320,"tib_range":[22,26],"eng_range":[59,64]},"original_complete_decision":{"id":"w3","d":5,"tib":"dkar","eng":"white","seq":320,"tib_range":[22,26],"eng_range":[59,64],"rationale":"White category inside the scope of the source negatives; color noun only, not a positive assertion about unstained deeds.","parent_id":null,"english_whole_word_occurrence":1},"decision":"RETAIN","final_ids":["w5"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w5":"First-clause color under the shared English negative; capitalized heading White is not used."}},{"angle":"english","original":{"id":"w4","d":5,"tib":"gnag","eng":"black","seq":320,"tib_range":[30,34],"eng_range":[68,73]},"original_complete_decision":{"id":"w4","d":5,"tib":"gnag","eng":"black","seq":320,"tib_range":[30,34],"eng_range":[68,73],"rationale":"Black category in the first sentence under never/either-or scope.","parent_id":null,"english_whole_word_occurrence":1},"decision":"RETAIN","final_ids":["w6"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w6":"First-clause black under that same English negative, not the referential black in the second sentence."}},{"angle":"english","original":{"id":"w5","d":3,"tib":"rnam par mi smin","eng":"never ripen","seq":320,"tib_range":[35,51],"eng_range":[26,37]},"original_complete_decision":{"id":"w5","d":3,"tib":"rnam par mi smin","eng":"never ripen","seq":320,"tib_range":[35,51],"eng_range":[26,37],"rationale":"Complete negative ripening construction preserves overt negation; individual mi outside this phrase also share the wider coordinated scope.","parent_id":null,"english_whole_word_occurrence":1},"decision":"RETAIN","final_ids":["w7"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w7":"Complete negative ripening phrase; the first two mi are left as distributed scope rather than assigned duplicate never atoms."}},{"angle":"english","original":{"id":"w6","d":5,"tib":"nag po","eng":"black","seq":320,"tib_range":[56,62],"eng_range":[128,133]},"original_complete_decision":{"id":"w6","d":5,"tib":"nag po","eng":"black","seq":320,"tib_range":[56,62],"eng_range":[128,133],"rationale":"Second black is in GMR explanatory apposition identifying the object that is ended, not the first negative classification or heading.","parent_id":null,"english_whole_word_occurrence":2},"decision":"RETAIN","final_ids":["w8"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w8":"Second-sentence explanation of quoted it, excluding the translator-supplied kind of deed."}},{"angle":"english","original":{"id":"w7","d":5,"tib":"de","eng":"it","seq":320,"tib_range":[63,65],"eng_range":[110,112]},"original_complete_decision":{"id":"w7","d":5,"tib":"de","eng":"it","seq":320,"tib_range":[63,65],"eng_range":[110,112],"rationale":"Demonstrative refers to the black deed and is rendered by quoted it; quote marks stay outside.","parent_id":null,"english_whole_word_occurrence":1},"decision":"RETAIN","final_ids":["w9"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w9":"Quoted anaphoric it refers to that black class; quotation marks remain outside the pronoun."}},{"angle":"english","original":{"id":"w8","d":5,"tib":"zad","eng":"end","seq":320,"tib_range":[66,69],"eng_range":[154,157]},"original_complete_decision":{"id":"w8","d":5,"tib":"zad","eng":"end","seq":320,"tib_range":[66,69],"eng_range":[154,157],"rationale":"Exhaustion root corresponds to the nominal end in the causative brings...to an end construction; intervening object excludes a contiguous whole-causative span.","parent_id":null,"english_whole_word_occurrence":1},"decision":"RECAST","final_ids":["w10"],"reason":"Retain the complete terminative zad par phrase at d3 with to an end, alongside the independently placed causative verb. This preserves its full result relation without treating an as a separate Tibetan word.","final_rationales":{"w10":"Complete terminative result phrase of the causative, separated from brings because the intervening object and explanatory apposition make the whole English causative discontinuous."}},{"angle":"english","original":{"id":"w9","d":5,"tib":"byed pa","eng":"brings","seq":320,"tib_range":[74,81],"eng_range":[102,108]},"original_complete_decision":{"id":"w9","d":5,"tib":"byed pa","eng":"brings","seq":320,"tib_range":[74,81],"eng_range":[102,108],"rationale":"Causative doing verb provides brings; argument and to an remain unwrapped.","parent_id":null,"english_whole_word_occurrence":1},"decision":"RETAIN","final_ids":["w11"],"reason":"The complete source occurrence and English exponent are defensible at the original depth and exact ranges. Final source-specific rationale below applies.","final_rationales":{"w11":"Causative brings in the second sentence, paired with its own to an end complement; not heading Bringing."}}],"original_omissions":[{"angle":"tibetan","index":0,"original":{"tib":"first mi; second mi","reason":"The two color negatives and ripening negative are recast into one never...either...or construction. Their scope is present but separate English atoms cannot be established; neither is nulled."},"disposition":"Retained with the final material-omission decisions; grammatical distribution is never relabeled as absent."},{"angle":"tibetan","index":1,"original":{"tib":"kyi / ni / la / yin no","reason":"Relational, topic, connective and copular contributions are distributed through the English sentence frames. No additional isolated equivalents are claimed."},"disposition":"Retained with the final material-omission decisions; grammatical distribution is never relabeled as absent."},{"angle":"tibetan","index":2,"original":{"english":"Their nature is to be what / that is, the ... kind of deed","reason":"Expository frame and referential expansion are preserved unwrapped; nag po owns only its actual second black."},"disposition":"Retained with the final material-omission decisions; grammatical distribution is never relabeled as absent."},{"angle":"tibetan","index":3,"original":{"english":"64 Bringing Black and White Deeds to an End","reason":"Following selection heading is original apparatus under the registered heading class, not a new translation correspondence or new erratum."},"disposition":"Retained with the final material-omission decisions; grammatical distribution is never relabeled as absent."},{"angle":"english","index":0,"original":{"tib":"mi before dkar; mi before gnag","reason":"The first two negatives are expressed through the shared never...either...or construction, not through two separately assignable English negators; uncertain atomization remains omitted rather than null."},"disposition":"Retained with the final material-omission decisions; grammatical distribution is never relabeled as absent."},{"angle":"english","index":1,"original":{"tib":"kyi / ni / la / par / yin no","reason":"Attributive/topic/connecting/resultative/copular functions are recast in the English clauses; no extra lexical atom is proposed."},"disposition":"PARTIAL: the terminative par is retained with zad in the complete d3 result phrase to an end. Other listed grammar remains distributed/unbanked."},{"angle":"english","index":2,"original":{"english":"64 Bringing Black and White Deeds to an End","reason":"Following selection heading, preserved as original apparatus, outside translation mappings."},"disposition":"Retained with the final material-omission decisions; grammatical distribution is never relabeled as absent."}],"coverage":{"original_spans":20,"covered":20}}
+
+===== reconciled/320/final-decisions.json =====
+{"producer":"Codex independent reconciliation","source_origin_git_commit":"49b66f3af9cbb47599bb40286637fc9e683b7cdf","range_convention":"zero-based half-open Unicode character offsets in complete original source fields","spans":[{"id":"w1","d":5,"tib":"zag med","eng":"unstained","seq":320,"tib_range":[0,7],"eng_range":[16,25],"rationale":"Established unstained compound describing the deeds; do not attach to the next heading.","source_function":"word or established compound in this source occurrence","selected_from":{"angle":"tibetan","original_id":"w1"},"parent_id":null},{"id":"w2","d":7,"tib":"zag","eng":"stained","seq":320,"tib_range":[0,3],"eng_range":[18,25],"rationale":"Unique positive member within unstained and the Tibetan compound; this is a member, not a free-standing stained word.","source_function":"unique tighter member of established d5 compound","selected_from":{"angle":"tibetan","original_id":"w2"},"parent_id":"w1"},{"id":"w3","d":7,"tib":"med","eng":"un","seq":320,"tib_range":[4,7],"eng_range":[16,18],"rationale":"Unique negative member inside the parent unstained, licensed by the actual negative compound.","source_function":"unique tighter member of established d5 compound","subword":true,"selected_from":{"angle":"reconciled","original_id":"w3"},"parent_id":"w1"},{"id":"w4","d":5,"tib":"las","eng":"Deeds","seq":320,"tib_range":[12,15],"eng_range":[0,5],"rationale":"Initial subject; avoids the later explanatory deed and heading Deeds.","source_function":"word or established compound in this source occurrence","selected_from":{"angle":"tibetan","original_id":"w4"},"parent_id":null},{"id":"w5","d":5,"tib":"dkar","eng":"white","seq":320,"tib_range":[22,26],"eng_range":[59,64],"rationale":"First-clause color under the shared English negative; capitalized heading White is not used.","source_function":"word or established compound in this source occurrence","selected_from":{"angle":"tibetan","original_id":"w5"},"parent_id":null},{"id":"w6","d":5,"tib":"gnag","eng":"black","seq":320,"tib_range":[30,34],"eng_range":[68,73],"rationale":"First-clause black under that same English negative, not the referential black in the second sentence.","source_function":"word or established compound in this source occurrence","selected_from":{"angle":"tibetan","original_id":"w6"},"parent_id":null},{"id":"w7","d":3,"tib":"rnam par mi smin","eng":"never ripen","seq":320,"tib_range":[35,51],"eng_range":[26,37],"rationale":"Complete negative ripening phrase; the first two mi are left as distributed scope rather than assigned duplicate never atoms.","source_function":"complete source phrase and its full recast","selected_from":{"angle":"tibetan","original_id":"w7"},"parent_id":null},{"id":"w8","d":5,"tib":"nag po","eng":"black","seq":320,"tib_range":[56,62],"eng_range":[128,133],"rationale":"Second-sentence explanation of quoted it, excluding the translator-supplied kind of deed.","source_function":"word or established compound in this source occurrence","selected_from":{"angle":"tibetan","original_id":"w8"},"parent_id":null},{"id":"w9","d":5,"tib":"de","eng":"it","seq":320,"tib_range":[63,65],"eng_range":[110,112],"rationale":"Quoted anaphoric it refers to that black class; quotation marks remain outside the pronoun.","source_function":"word or established compound in this source occurrence","selected_from":{"angle":"tibetan","original_id":"w9"},"parent_id":null},{"id":"w10","d":3,"tib":"zad par","eng":"to an end","seq":320,"tib_range":[66,73],"eng_range":[148,157],"rationale":"Complete terminative result phrase of the causative, separated from brings because the intervening object and explanatory apposition make the whole English causative discontinuous.","source_function":"complete source phrase and its full recast","selected_from":{"angle":"tibetan","original_id":"w10"},"parent_id":null},{"id":"w11","d":5,"tib":"byed pa","eng":"brings","seq":320,"tib_range":[74,81],"eng_range":[102,108],"rationale":"Causative brings in the second sentence, paired with its own to an end complement; not heading Bringing.","source_function":"word or established compound in this source occurrence","selected_from":{"angle":"tibetan","original_id":"w11"},"parent_id":null}],"eng_order":["w4","w1","w7","w5","w6","w11","w9","w8","w10"],"material_omissions":[{"tib":"mi before dkar; mi before gnag","reason":"Shared coordinated negative scope with rnam par mi smin appears in the single never...either...or English construction. Neither negative has a uniquely separable additional exponent; both omitted, not null."},{"tib":"kyi / ni / la / yin no","reason":"Attributive, topic, connective and copular contribution is distributed through the English expository frame; no separately claimed atoms."},{"english":"Their nature is to be what / that is / kind of deed / either / or / supplied articles","reason":"Exposition and shared-scope syntax are not independently assigned to a Tibetan content word."},{"english":"64 Bringing Black and White Deeds to an End","reason":"Complete original following-selection heading, covered by registered apparatus policy. It is excluded from every correspondence and is not a new erratum."}],"complete_unwrapped_ranges":{"wylie":[{"range":[7,12],"text":" kyi "},{"range":[15,22],"text":" ni mi "},{"range":[26,30],"text":" mi "},{"range":[34,35],"text":" "},{"range":[51,56],"text":" la, "},{"range":[62,63],"text":" "},{"range":[65,66],"text":" "},{"range":[73,74],"text":" "},{"range":[81,88],"text":" yin no"}],"english":[{"range":[5,16],"text":" which are "},{"range":[25,26],"text":" "},{"range":[37,59],"text":" into anything either "},{"range":[64,68],"text":" or "},{"range":[73,102],"text":". Their nature is to be what "},{"range":[108,110],"text":" \""},{"range":[112,128],"text":"\"--that is, the "},{"range":[133,148],"text":" kind of deed--"},{"range":[157,202],"text":". 64 Bringing Black and White Deeds to an End"}]}}
+
+===== COMPLETE tibetan TO RECONCILED DIFF 320 =====
+--- tibetan/320/spec.json
++++ reconciled/320/spec.json
+@@ -14,21 +14,22 @@
+         {
+           "id": "w2",
+           "d": 7,
+           "tib": "zag",
+           "eng": "stained"
+         },
+         {
+           "id": "w3",
+           "d": 7,
+           "tib": "med",
+-          "eng": "un"
++          "eng": "un",
++          "subword": true
+         },
+         {
+           "id": "w4",
+           "d": 5,
+           "tib": "las",
+           "eng": "Deeds"
+         },
+         {
+           "id": "w5",
+           "d": 5,
+@@ -76,14 +77,14 @@
+         "w4",
+         "w1",
+         "w7",
+         "w5",
+         "w6",
+         "w11",
+         "w9",
+         "w8",
+         "w10"
+       ],
+-      "note": "PROVISIONAL machine alignment proposed independently by Codex, Tibetan-first. GMR English is preserved verbatim; no dictionary promotion. Three source negatives share one English negative construction; the two color negatives remain omitted with their scope recorded, not nulled. The discontinuous causative is aligned in two supported pieces. The final numbered heading is unchanged apparatus."
++      "note": "PROVISIONAL machine alignment reconciled independently by Codex. GMR wording is verbatim; no hgm_gloss promotion. The three source negatives share one English never...either...or construction: the negative-ripening phrase is retained, while the two color negatives remain unbanked with their distributed scope recorded. Zag med has unique stain and negative members within unstained. The causative is discontinuous in English: byed pa owns brings and the complete terminative zad par phrase owns to an end. Quoted it and the explanatory black refer to the same black deed. The following numbered selection heading remains unchanged apparatus."
+     }
+   ]
+ }
+
+
+===== COMPLETE english TO RECONCILED DIFF 320 =====
+--- english/320/spec.json
++++ reconciled/320/spec.json
+@@ -1,77 +1,90 @@
+ {
+   "course": "C05",
+   "segments": [
+     {
+       "seq": 320,
+-      "title": "unstained deeds end black deeds",
++      "title": "unstained deeds end the black",
+       "spans": [
+         {
+           "id": "w1",
+           "d": 5,
+           "tib": "zag med",
+           "eng": "unstained"
+         },
+         {
+           "id": "w2",
++          "d": 7,
++          "tib": "zag",
++          "eng": "stained"
++        },
++        {
++          "id": "w3",
++          "d": 7,
++          "tib": "med",
++          "eng": "un",
++          "subword": true
++        },
++        {
++          "id": "w4",
+           "d": 5,
+           "tib": "las",
+           "eng": "Deeds"
+         },
+         {
+-          "id": "w3",
++          "id": "w5",
+           "d": 5,
+           "tib": "dkar",
+           "eng": "white"
+         },
+         {
+-          "id": "w4",
++          "id": "w6",
+           "d": 5,
+           "tib": "gnag",
+           "eng": "black"
+         },
+         {
+-          "id": "w5",
++          "id": "w7",
+           "d": 3,
+           "tib": "rnam par mi smin",
+           "eng": "never ripen"
+         },
+         {
+-          "id": "w6",
++          "id": "w8",
+           "d": 5,
+           "tib": "nag po",
+           "eng": "black"
+         },
+         {
+-          "id": "w7",
++          "id": "w9",
+           "d": 5,
+           "tib": "de",
+           "eng": "it"
+         },
+         {
+-          "id": "w8",
+-          "d": 5,
+-          "tib": "zad",
+-          "eng": "end"
++          "id": "w10",
++          "d": 3,
++          "tib": "zad par",
++          "eng": "to an end"
+         },
+         {
+-          "id": "w9",
++          "id": "w11",
+           "d": 5,
+           "tib": "byed pa",
+           "eng": "brings"
+         }
+       ],
+       "eng_order": [
+-        "w2",
++        "w4",
+         "w1",
++        "w7",
+         "w5",
+-        "w3",
+-        "w4",
++        "w6",
++        "w11",
+         "w9",
+-        "w7",
+-        "w6",
+-        "w8"
++        "w8",
++        "w10"
+       ],
+-      "note": "PROVISIONAL machine alignment proposed independently by Codex. The first two mi negatives contribute to the coordinated scope of never and remain unbanked, not falsely nulled; rnam par mi smin is retained as a complete negative verbal phrase. The explanatory black and quoted it refer to the deed being ended. The appended heading beginning 64 remains original apparatus under the registered following-heading class. No source text or hgm_gloss is changed."
++      "note": "PROVISIONAL machine alignment reconciled independently by Codex. GMR wording is verbatim; no hgm_gloss promotion. The three source negatives share one English never...either...or construction: the negative-ripening phrase is retained, while the two color negatives remain unbanked with their distributed scope recorded. Zag med has unique stain and negative members within unstained. The causative is discontinuous in English: byed pa owns brings and the complete terminative zad par phrase owns to an end. Quoted it and the explanatory black refer to the same black deed. The following numbered selection heading remains unchanged apparatus."
+     }
+   ]
+ }
+

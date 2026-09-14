@@ -1,0 +1,8 @@
+{
+  "stage": "Scoped review metadata finalization before script execution",
+  "failure": "SyntaxError: unmatched closing parenthesis on the enumerate(zip(...)) loop at line17. Python did not execute any statement.",
+  "observed_tool_exit": 1,
+  "correction": "Remove the extra parenthesis and run only metadata finalization. No generator, resolver, evidence query, source write or approval was executed by the failed invocation.",
+  "failed_method": "finish_scoped_review_v2.failed.py.txt",
+  "native_validation_already_completed_and_not_repeated": true
+}

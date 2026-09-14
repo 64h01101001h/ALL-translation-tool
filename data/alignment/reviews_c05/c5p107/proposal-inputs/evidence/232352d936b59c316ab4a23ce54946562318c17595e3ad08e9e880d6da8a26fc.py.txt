@@ -1,0 +1,18 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,sys
+A=Path(__file__).resolve().parent
+def sha(x):return hashlib.sha256(x).hexdigest()
+for seq in [319,320,321]:
+ p=A/str(seq);raw=(p/'spec.json').read_bytes()
+ for mode in ['generator','resolver']:
+  dest=p/'native'/f'{mode}-v1';dest.mkdir(parents=True,exist_ok=False);argv=[sys.executable,'-B',str(A/'canonical_entry.py')]+(['resolve'] if mode=='resolver' else []);started=datetime.datetime.now(datetime.timezone.utc).isoformat()
+  result=subprocess.run(argv,input=raw,capture_output=True,cwd=A,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+  for name,data in [('stdin',raw),('stdout',result.stdout),('stderr',result.stderr)]:(dest/(name+'.bin')).write_bytes(data)
+  (dest/'exit.txt').write_text(str(result.returncode)+'\n');(dest/'execution.json').write_text(json.dumps({'argv':argv,'cwd':str(A),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'started_utc':started,'finished_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':result.returncode,'streams':{name:{'bytes':len(data),'sha256':sha(data)} for name,data in [('stdin',raw),('stdout',result.stdout),('stderr',result.stderr)]}},indent=2)+'\n')
+  print(seq,mode,result.returncode,len(result.stdout),len(result.stderr))
+  if result.returncode or result.stderr:print(result.stderr.decode());raise SystemExit(1)
+  (p/('body.html' if mode=='generator' else 'resolved-ranges.json')).write_bytes(result.stdout)
+  if mode=='resolver':
+   expected=json.loads((p/'decisions.json').read_text())['spans'];observed=json.loads(result.stdout)
+   keys=['id','d','tib','eng','seq','tib_range','eng_range']
+   assert [{k:r[k] for k in keys} for r in observed]==[{k:r[k] for k in keys} for r in expected],(seq,'canonical versus intended occurrence mismatch')

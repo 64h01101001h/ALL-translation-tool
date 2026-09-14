@@ -1,0 +1,50 @@
+from pathlib import Path
+import json,hashlib,datetime,re,html.parser
+Q=Path(__file__).resolve().parents[1];P=Q.parent
+ORIGIN='49b66f3af9cbb47599bb40286637fc9e683b7cdf'
+def read(p):return json.loads(p.read_text())
+def info(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not (Q/'freeze.json').exists()
+# No generator or resolver is rerun for final packaging.
+source={x['seq']:x for x in read(Q/'evidence/full-source-rows.json')}
+class Fields(html.parser.HTMLParser):
+ def __init__(self):super().__init__();self.depth=0;self.fields=[];self.current=[]
+ def handle_starttag(self,t,a):
+  if self.depth:self.depth+=1
+  elif t=='span' and dict(a).get('data-d')=='1':self.depth=1;self.current=[]
+ def handle_endtag(self,t):
+  if self.depth:
+   self.depth-=1
+   if not self.depth:self.fields.append(''.join(self.current))
+ def handle_data(self,t):
+  if self.depth:self.current.append(t)
+checked=[]
+for a in ['tibetan','english']:
+ f=read(P/a/'freeze.json')
+ for name,expected in f['files'].items():assert info((P/a/name).read_bytes())==expected;assert (P/a/name).read_bytes()==(Q/'originals'/a/name).read_bytes()
+ for seq in [319,320,321]:
+  x=Fields();x.feed((P/a/str(seq)/'body.html').read_text());assert x.fields==[source[seq]['wylie'],source[seq]['english']];checked.append({'angle':a,'seq':seq,'complete_rendered_source_fields_exact':True})
+for pin in read(Q/'evidence/source-pins.json'):
+ assert info(Path(pin['path']).read_bytes())=={k:pin[k] for k in ['bytes','sha256']},pin['role']
+for cp in read(Q/'evidence/copy-identities.json'):
+ b=(Q/cp['copy']).read_bytes();assert info(b)=={k:cp[k] for k in ['bytes','sha256']}
+ if 'original_path' in cp:assert b==Path(cp['original_path']).read_bytes()
+for seq in [319,320,321]:
+ d=Q/str(seq);v=read(d/'verification.json');sp=(d/'spec.json').read_bytes();b=(d/'body.html').read_bytes();assert info(sp)=={'bytes':v['spec_bytes'],'sha256':v['spec_sha256']};assert info(b)=={'bytes':v['body_bytes'],'sha256':v['body_sha256']}
+ assert sp==(Q/f'native/final-{seq}-generator-v1/stdin.bin').read_bytes();assert b==(Q/f'native/final-{seq}-generator-v1/stdout.bin').read_bytes()
+ dispositions=read(d/'original-dispositions.json');assert len(dispositions['spans'])==v['original_dispositions']
+ for x in dispositions['spans']:assert x['decision'] in ['RETAIN','RECAST'] and x['final_ids'] and x['reason']
+ for x in read(d/'errata-audit.json')['all_original_source_suspicions']:assert x['refuted'] and len(x['five_refutation_grounds'])==5 and not x['new_erratum']
+for step in ['intake','author','native','finalize']:
+ assert (Q/(step+'-v1.exit')).read_text().strip()=='0';assert not (Q/(step+'-v1.stderr')).read_bytes()
+critical=['chos bzod','bzod','bar chad med lam','chags bral ba','nyon mongs pa','zag med','zag','med','zad par','byed pa','yin','gcig','dkar gnag',"'byin","'byin pa",'gnag','gnag pa','dkar nag','chos bzod pa','skyes','tha mas','sems pa','tha ma','nyon mongs can']
+lex=read(Q/'evidence/full-lexical-evidence.json');records=[x for z in lex if z['term'] in critical for x in z['master_records']]
+write(Q/'evidence/final-reading-and-integrity-proof.json',{'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'Codex independent reconciler','source_origin_git_commit':ORIGIN,'later_acceptance_baseline_consumed':None,'complete_original_proposal_spans_examined':163,'original_specs_titles_notes_orders_and_reports_examined':6,'original_omissions_examined':sum(len(read(Q/str(s)/'original-dispositions.json')['original_omissions']) for s in [319,320,321]),'final_source_specific_decisions_examined':85,'original_five_ground_source_screens_examined':30,'critical_full_master_terms_read':critical,'critical_full_master_records_read':len(records),'material_complete_external_chos_bzod_records_read':[1702,1703,24176,36757],'source_context_read':'Complete source fields for 319–321 and surrounding 313–327 context were read; immediate 318 and 322–324 commentary establishes clause/technical relations, not replacement wording.','complete_original_rendered_field_checks':checked,'all_original_freeze_and_copy_identities_rechecked':True,'all_source_pins_rechecked_unchanged':True,'reconciler_native_generator_runs':3,'independent_original_resolver_runs':6,'final_resolver_runs':3,'original_successful_generations_reused':6,'additional_native_runs_for_packaging':0,'rationale_only_correction':'history/rationale-01/disposition.json: 321 original par omission expressly marked partially superseded; native inputs unchanged.','limits':['Full record identity/count checks cover all 141 unique master objects and 96 external query records; direct semantic reading concentrated on the listed complete material records, not an assertion of close reading every repeated comparandum field.','Initial output truncations were recovered for material master/errata content with focused complete-record reads. One read-only guessed Tibetan helper path was absent and was replaced by reading the actual canonical_entry.py; no generator/input changed.','No independent publication witness or external edition was established. C05:320 consolidated negative scope stays cautious.','No tests of production integration or acceptance are claimed; root and fresh skeptical reviewer still must accept and land this batch.']})
+files={str(p.relative_to(Q)):info(p.read_bytes()) for p in sorted(Q.rglob('*')) if p.is_file() and p.name!='freeze.json'}
+# Nested original freeze.json files are essential immutable inputs and must be included.
+for p in (Q/'originals').rglob('freeze.json'):files[str(p.relative_to(Q))]=info(p.read_bytes())
+freeze={'schema':'c05-independent-reconciliation-freeze-v1','producer':'Codex independent reconciliation','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'course':'C05','segments':[319,320,321],'source_origin_git_commit':ORIGIN,'source_origin_course_boundary':312,'later_acceptance_baseline_consumed':None,'status':'FROZEN_RECONCILIATION; requires separate skeptical/root acceptance','counts':read(Q/'verification-summary.json')['totals'],'original_dispositions':163,'original_source_screens':30,'new_errata':[],'proposed_head_allowances':[],'original_freezes':{a:info((P/a/'freeze.json').read_bytes()) for a in ['tibetan','english']},'files':files}
+write(Q/'freeze.json',freeze)
+for name,identity in freeze['files'].items():assert info((Q/name).read_bytes())==identity
+print(json.dumps({'status':'FROZEN','manifest':str(Q/'freeze.json'),'manifest_identity':info((Q/'freeze.json').read_bytes()),'frozen_files':len(files),'counts':freeze['counts'],'critical_full_master_records_read':len(records)}))

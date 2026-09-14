@@ -1,0 +1,129 @@
+from pathlib import Path
+import json,hashlib,copy,datetime,subprocess,sys,os,gzip,sqlite3,re,html.parser
+C=Path(__file__).resolve().parent; B=C.parent;Q=B/'reconciled';H=B/'reconciliation-history/v1';W=B.parents[1]/'campaign-worktree'
+OLD='6beabe2726cbdd404577bfa91a22442cf100ee01ee9ed49920cb7d37bec2bf8c';ORIGIN='49b66f3af9cbb47599bb40286637fc9e683b7cdf';BASE='91d2c245ddd410894f12653cf3acf0302d488520'
+RATIONALE="Inflected reflexive possessive rang gi owns its referring to this virtue's basic nature. Complete unified entry 18258 and glossary entry 6758 attest its; the local function is lexical possession, not a clause-level recast. Correct d3 undercapture to d5 without changing either string, either occurrence range, or either order."
+def read(p):return json.loads(p.read_text())
+def info(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def write(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def archive_check():
+ ap=read(C/'archive-proof.json');assert info((H/'freeze.json').read_bytes())['sha256']==OLD
+ for n,i in ap['all_original_paths'].items():assert info((H/n).read_bytes())==i
+ return ap
+
+def prepare():
+ archive_check();assert (Q/'freeze.json').read_bytes()==(H/'freeze.json').read_bytes()
+ target=Q/'correction-v2';target.mkdir()
+ (target/'correction-method.py.txt').write_bytes(Path(__file__).read_bytes())
+ (target/'archive-proof.json').write_bytes((C/'archive-proof.json').read_bytes());(target/'authorization.md').write_bytes((C/'authorization.md').read_bytes())
+ bl=read(B/'baseline.json');assert bl['commit']==BASE and bl['course_boundary']==318
+ pins=[]
+ for n,sha in bl['sha256'].items():
+  raw=subprocess.check_output(['git','show',BASE+':'+n],cwd=W);assert info(raw)['sha256']==sha
+  pins.append({'git_object':BASE+':'+n,**info(raw)})
+ (target/'acceptance-baseline.json').write_bytes((B/'baseline.json').read_bytes())
+ sourcepins=read(Q/'evidence/source-pins.json');roles={x['role']:x for x in sourcepins}
+ for r in sourcepins:assert info(Path(r['path']).read_bytes())=={k:r[k] for k in ['bytes','sha256']}
+ master=json.load(gzip.open(roles['master']['path'],'rt'));lex=next(x for x in read(Q/'evidence/full-lexical-evidence.json') if x['term']=='rang gi')
+ assert [(x['collection'],x['index']) for x in lex['master_records']]==[('unified_entries',18258),('glossary_entries',6758)]
+ for x in lex['master_records']:assert x['entry']==master[x['collection']][x['index']];assert 'its' in x['entry'].get('hgm_gloss',x['entry'].get('hgm_glosses',[]))
+ db=sqlite3.connect('file:'+roles['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+ source=dict(db.execute('select * from corpus_segments where course=? and seq=?',('C05',319)).fetchone());assert source==next(x for x in read(Q/'evidence/full-source-rows.json') if x['seq']==319)
+ spine=[dict(x) for x in db.execute('select * from entries where wylie=? order by id',('rang gi',))];assert spine==lex['spine_entries'];db.close()
+ prevraw=subprocess.check_output(['git','show',BASE+':data/alignment/specs_c05/c5p106.json'],cwd=W);prev=json.loads(prevraw);previous=[{'seq':s['seq'],'span':x} for s in prev['segments'] for x in s['spans'] if s['seq'] in [317,318] and x['tib']=='rang gi'];assert len(previous)==2 and all(x['span']['d']==5 and x['span']['eng']=='its' for x in previous)
+ (target/'through318-c5p106-original.json').write_bytes(prevraw)
+ write(target/'evidence.json',{'source_origin_git_commit':ORIGIN,'actual_acceptance_baseline_received_only_for_v2':BASE,'original_v1_acceptance_baseline_consumed':None,'baseline_file_identity':info((B/'baseline.json').read_bytes()),'baseline_git_content_pins':pins,'source_pins_rechecked_unchanged':sourcepins,'complete_source_row':source,'complete_master_lookup':lex,'prior_accepted_lexical_depth':previous,'prior_accepted_spec_git_object':BASE+':data/alignment/specs_c05/c5p106.json','prior_accepted_spec_identity':info(prevraw),'semantic_decision':RATIONALE})
+ old=read(H/'319/spec.json');new=copy.deepcopy(old);span=next(x for x in new['segments'][0]['spans'] if x['id']=='w15');assert span=={'id':'w15','d':3,'tib':'rang gi','eng':'its'};span['d']=5
+ check=copy.deepcopy(new);next(x for x in check['segments'][0]['spans'] if x['id']=='w15')['d']=3;assert check==old
+ # The old current manifest is now represented only by the verified immutable archive.
+ (Q/'freeze.json').unlink();write(Q/'319/spec.json',new)
+ fd=read(H/'319/final-decisions.json');s=next(x for x in fd['spans'] if x['id']=='w15');assert s['tib_range']==[92,99] and s['eng_range']==[161,164];s['d']=5;s['rationale']=RATIONALE;s['source_function']='inflected possessive lexical unit';s['correction_v2']='d3 undercapture corrected to d5; exact original mapping retained'
+ write(Q/'319/final-decisions.json',fd)
+ ft=read(H/'319/final-ordered-tuples.json');next(x for x in ft['source_order'] if x['id']=='w15')['d']=5;write(Q/'319/final-ordered-tuples.json',ft)
+ od=read(H/'319/original-dispositions.json');n=0
+ for x in od['spans']:
+  if 'w15' in x['final_ids']:
+   assert x['original']['d']==3 and x['original_complete_decision']['d']==3
+   x['decision']='RECAST';x['reason']='Minimal lexical undercapture correction: both originals placed the established inflected possessive rang gi → its at d3. Preserve their exact original decisions but retain the same words and ranges at d5, supported by full HGM unified 18258/glossary 6758 and this source function.';x['final_rationales']['w15']=RATIONALE;x['correction_v2']={'original_depth':3,'v1_final_depth':3,'v2_final_depth':5,'strings_ranges_and_orders_unchanged':True};n+=1
+ assert n==2;write(Q/'319/original-dispositions.json',od)
+ write(target/'status.json',{'status':'CORRECTED_INPUT_AWAITS_NATIVE_V2','scope':'319 w15 d3→d5 only','archive':str(H.resolve()),'original_freeze_sha256':OLD,'actual_baseline_received':BASE})
+ print('Prepared one-depth correction; v1 archive verified; through318 baseline received only for v2.')
+
+def native():
+ for kind,helper in [('generator','canonical_adapter.py'),('resolver','resolve.py')]:
+  dest=Q/f'native/final-319-{kind}-v2';dest.mkdir(parents=True,exist_ok=False);spec=(Q/'319/spec.json').read_bytes();argv=[sys.executable,'-B',str(Q/'helpers'/helper)];start=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(argv,input=spec,cwd=Q,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),capture_output=True)
+  for name,data in [('stdin',spec),('stdout',r.stdout),('stderr',r.stderr)]: (dest/(name+'.bin')).write_bytes(data)
+  (dest/'exit.txt').write_text(str(r.returncode)+'\n');write(dest/'execution.json',{'argv':argv,'cwd':str(Q),'utc':start,'finished_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':r.returncode,'streams':{'stdin':info(spec),'stdout':info(r.stdout),'stderr':info(r.stderr)}})
+  assert r.returncode==0 and not r.stderr,(kind,r.returncode,r.stderr)
+  if kind=='generator':
+   old=(H/'319/body.html').read_bytes();oldtag=b'<span class="u" data-d="3" data-l="s319w15">';newtag=b'<span class="u" data-d="5" data-l="s319w15">';assert old.count(oldtag)==2;assert r.stdout==old.replace(oldtag,newtag)
+   (Q/'319/body.html').write_bytes(r.stdout)
+  else:
+   old=read(H/'319/resolved-ranges.json');expected=copy.deepcopy(old);next(x for x in expected if x['id']=='w15')['d']=5;assert json.loads(r.stdout)==expected
+   (Q/'319/resolved-ranges.json').write_bytes(r.stdout)
+ print('319 final generator v2 and resolver v2 each PASS once; body differs only at two w15 depth attributes; ranges unchanged.')
+
+def finalize():
+ ap=archive_check();target=Q/'correction-v2'
+ for seq in [320,321]:
+  for p in (H/str(seq)).rglob('*'):
+   if p.is_file():assert p.read_bytes()==(Q/p.relative_to(H)).read_bytes()
+  for n in [f'native/final-{seq}-generator-v1',f'native/final-{seq}-resolver-v1']:
+   for p in (H/n).rglob('*'):
+    if p.is_file():assert p.read_bytes()==(Q/p.relative_to(H)).read_bytes()
+ oldsp=read(H/'319/spec.json');newsp=read(Q/'319/spec.json');check=copy.deepcopy(newsp);next(x for x in check['segments'][0]['spans'] if x['id']=='w15')['d']=3;assert check==oldsp
+ for f in ['original','original_complete_decision']:
+  old=read(H/'319/original-dispositions.json')['spans'];new=read(Q/'319/original-dispositions.json')['spans'];assert [x[f] for x in old]==[x[f] for x in new]
+ sp=newsp['segments'][0]['spans'];counts={'spans':len(sp),'nulls':sum(x['eng'] is None for x in sp),'d5_total':sum(x['d']==5 for x in sp),'nonnull_d5':sum(x['d']==5 and x['eng'] is not None for x in sp),'d7':sum(x['d']==7 for x in sp),'errata':0};assert counts=={'spans':42,'nulls':0,'d5_total':27,'nonnull_d5':27,'d7':4,'errata':0}
+ v=read(H/'319/verification.json');v.update({'later_acceptance_baseline_consumed':BASE,'correction_version':2,'original_v1_baseline_consumed':None,'native_generator_path':'native/final-319-generator-v2','native_resolver_path':'native/final-319-resolver-v2','counts':counts,'spec_bytes':(Q/'319/spec.json').stat().st_size,'spec_sha256':info((Q/'319/spec.json').read_bytes())['sha256'],'body_bytes':(Q/'319/body.html').stat().st_size,'body_sha256':info((Q/'319/body.html').read_bytes())['sha256'],'scoped_change_only':{'id':'w15','old_d':3,'new_d':5,'strings_ranges_orders_unchanged':True,'body_changes_only_two_depth_attributes':True},'previous_version_ref':'../../reconciliation-history/v1/319/verification.json'})
+ for kind in ['generator','resolver']:
+  native=Q/f'native/final-319-{kind}-v2';assert (native/'exit.txt').read_text().strip()=='0' and not (native/'stderr.bin').read_bytes();assert (native/'stdin.bin').read_bytes()==(Q/'319/spec.json').read_bytes()
+ write(Q/'319/verification.json',v)
+ ns=read(H/'native-results.json')
+ for i,x in enumerate(ns):
+  if x['seq']==319 and x['kind'] in ['final-generator','final-resolver']:
+   kind=x['kind'].removeprefix('final-');path=f'native/final-319-{kind}-v2';ns[i]={'kind':x['kind'],'seq':319,'native_path':path,'execution':read(Q/path/'execution.json'),'version':2,'supersedes_native_path':x['native_path'],'superseded_exact_execution_preserved':True}
+ write(Q/'native-results.json',ns)
+ vs=read(H/'verification-summary.json');vs['segments']=[v if x['seq']==319 else x for x in vs['segments']];vs['totals']={k:sum(x['counts'][k] for x in vs['segments']) for k in ['spans','nonnull_d5','d5_total','d7','nulls','errata']};vs['later_acceptance_baseline_consumed']=BASE;vs['correction_version']=2;vs['original_v1_acceptance_baseline_consumed']=None;vs['native_reuse']={'319':'new generator/resolver v2 each once','320':'unchanged v1 inputs, outputs, reports and native proofs reused','321':'unchanged v1 inputs, outputs, reports and native proofs reused'};write(Q/'verification-summary.json',vs)
+ rp=(H/'319/report.md').read_text().splitlines();rp[1]='Producer: Codex. Source/governance origin 49b66f3a through 312. Actual through-318 baseline 91d2c245ddd410894f12653cf3acf0302d488520 was received only for this scoped v2 correction; v1 did not consume it.'
+ rp.insert(3,'Scoped v2 correction: w15 rang gi → its is an established inflected possessive at d5, supported by complete unified18258/glossary6758. Both original d3 proposals are preserved and marked RECAST for this depth undercapture. Strings, ranges, order and every other span are unchanged.')
+ rp=[line.replace('42 spans; 26 non-null d5','42 spans; 27 non-null d5').replace('../native/final-319-generator-v1/','../native/final-319-generator-v2/') for line in rp]
+ rp=[f'Spec SHA256 {v["spec_sha256"]}; {v["spec_bytes"]} bytes.' if line.startswith('Spec SHA256 ') else f'Body SHA256 {v["body_sha256"]}; {v["body_bytes"]} bytes.' if line.startswith('Body SHA256 ') else line for line in rp]
+ rp=[line.replace('Each reconciled final generator was executed once.','The changed 319 v2 generator and resolver each ran once after the final depth correction. Their v1 executions remain historical; unchanged 320/321 v1 executions are reused.') for line in rp]
+ rp.append('Complete v1 reconciliation archived byte-for-byte at ../../reconciliation-history/v1; all 355 frozen files and the original freeze remain verified. Exact superseded-path mappings are in ../correction-v2/supersession-map.json. This scoped result still requires a fresh skeptical/root review.')
+ (Q/'319/report.md').write_text('\n'.join(rp)+'\n')
+ reading=read(H/'evidence/final-reading-and-integrity-proof.json');reading['prior_v1_utc']=reading['utc'];reading['utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();reading['later_acceptance_baseline_consumed']=BASE;reading['original_v1_acceptance_baseline_consumed']=None;reading['critical_full_master_terms_read'].append('rang gi');reading['critical_full_master_records_read']+=2;reading['reconciler_native_generator_runs']=4;reading['final_resolver_runs']=4;reading['correction_version']=2;reading['scoped_correction']={'id':'s319w15','old_d':3,'new_d':5,'v1_review_proof_ref':'../../reconciliation-history/v1/evidence/final-reading-and-integrity-proof.json','original_native_outputs_unchanged':True,'new319_generator_and_resolver_runs':1,'current_final_generator_versions':{'319':2,'320':1,'321':1},'no_additional_original_resolver_runs':True};write(Q/'evidence/final-reading-and-integrity-proof.json',reading)
+ write(target/'status.json',{'status':'PASS_SCOPED_CORRECTION; requires fresh skeptical/root acceptance','version':2,'scope':'319 w15 d3→d5 only','archive':str(H.resolve()),'original_freeze_sha256':OLD,'actual_baseline_received':BASE})
+ # Stage the actual correction callers as evidence; finalize caller itself is copied during freeze after it closes.
+ for p in C.glob('*'):
+  if p.is_file() and p.name not in ['correct.py','archive-proof.json','authorization.md'] and not p.name.startswith('finalize-') and not p.name.startswith('freeze-'):
+   dst=target/'callers'/p.name;dst.parent.mkdir(exist_ok=True);dst.write_bytes(p.read_bytes())
+ proof={'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin_git_commit':ORIGIN,'later_acceptance_baseline_consumed':BASE,'original_v1_baseline_consumed':None,'changed_alignment':[{'seq':319,'id':'w15','old_d':3,'new_d':5,'tib':'rang gi','eng':'its','tib_range':[92,99],'eng_range':[161,164]}],'all_other_spec_values_identical':True,'only_two_body_depth_attributes_changed':True,'original_decision_fields_unchanged':True,'unchanged320321_all_segment_files_and_final_native_proofs':True,'old319_native_proofs_preserved':True,'archive_all356_files_verified':True,'archive_original355_frozen_files_verified':True,'current_counts':vs['totals'],'current319_counts':counts,'new319_generator':read(Q/'native/final-319-generator-v2/execution.json'),'new319_resolver':read(Q/'native/final-319-resolver-v2/execution.json'),'new_generator_runs':1,'new_resolver_runs':1,'errors_or_retries':0}
+ write(target/'proof.json',proof);write(C/'proof.json',proof);print(json.dumps({'status':'PASS','319':counts,'totals':vs['totals'],'spec_sha256':v['spec_sha256'],'body_sha256':v['body_sha256']}))
+
+def freeze():
+ ap=archive_check();target=Q/'correction-v2';assert not (Q/'freeze.json').exists()
+ for step in ['prepare','native','finalize']:
+  assert (C/(step+'-v2.exit')).read_text().strip()=='0';assert not (C/(step+'-v2.stderr')).read_bytes()
+  for suffix in ['stdout','stderr','exit']:
+   p=C/(step+'-v2.'+suffix);dst=target/'callers'/p.name;dst.parent.mkdir(exist_ok=True);dst.write_bytes(p.read_bytes())
+ oldfiles=ap['all_original_paths'];changed=[];unchanged=[]
+ for n,old in oldfiles.items():
+  p=Q/n
+  if n=='freeze.json':
+   changed.append({'old_path':str(p.resolve()),'relative_path':n,'archived_path':str((H/n).resolve()),'old_identity':old,'current_identity':'See the v2 freeze hash returned separately; embedding its own hash would be recursive.','reason':'v2 manifest supersedes verified v1 manifest'})
+  else:
+   assert p.exists(),n;new=info(p.read_bytes())
+   if new!=old:changed.append({'old_path':str(p.resolve()),'relative_path':n,'archived_path':str((H/n).resolve()),'old_identity':old,'current_identity':new})
+   else:unchanged.append(n)
+ allowed={'freeze.json','319/spec.json','319/body.html','319/final-decisions.json','319/final-ordered-tuples.json','319/original-dispositions.json','319/resolved-ranges.json','319/report.md','319/verification.json','native-results.json','verification-summary.json','evidence/final-reading-and-integrity-proof.json'}
+ assert {x['relative_path'] for x in changed}==allowed,changed
+ mapping={'schema':'c05-reconciliation-supersession-map-v1','version':2,'prior_freeze_sha256':OLD,'prior_frozen_files':355,'all_prior_files_archived':356,'archive_root':str(H.resolve()),'current_root':str(Q.resolve()),'changed_original_paths':changed,'unchanged_original_paths':unchanged,'all_prior_reference_rebase_rule':{'old_prefix':str(Q.resolve())+'/','archive_prefix':str(H.resolve())+'/','all356_previous_file_identities':'archive-proof.json#/all_original_paths'},'scope':'Only s319w15 depth correction plus dependent current result/provenance files. Original proposals, original native proofs, all 320/321 files, source/governance evidence and v1 operation methods remain exact. Retained v1 author/finalize/freeze helpers describe historical executions; correction-method.py.txt is the scoped v2 method.'}
+ write(target/'supersession-map.json',mapping);write(C/'supersession-map.json',mapping)
+ files={str(p.relative_to(Q)):info(p.read_bytes()) for p in sorted(Q.rglob('*')) if p.is_file() and p!=Q/'freeze.json'}
+ oldfreeze=read(H/'freeze.json');f={k:v for k,v in oldfreeze.items() if k not in ['files','utc','counts','status','later_acceptance_baseline_consumed']};f.update({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'version':2,'later_acceptance_baseline_consumed':BASE,'original_v1_later_acceptance_baseline_consumed':None,'status':'FROZEN_RECONCILIATION_V2; requires fresh scoped skeptical/root acceptance','counts':read(Q/'verification-summary.json')['totals'],'supersedes':{'version':1,'freeze_sha256':OLD,'archive':str(H.resolve()),'original_frozen_files':355,'complete_archived_files':356,'supersession_map':'correction-v2/supersession-map.json'},'current_native_results':'native-results.json','scoped_correction_proof':'correction-v2/proof.json','files':files})
+ write(Q/'freeze.json',f)
+ for n,i in files.items():assert info((Q/n).read_bytes())==i
+ result={'status':'FROZEN_V2','freeze_identity':info((Q/'freeze.json').read_bytes()),'frozen_files':len(files),'counts':f['counts'],'changed_old_paths':[x['relative_path'] for x in changed],'supersession_map':str((target/'supersession-map.json').resolve()),'source_origin_git_commit':ORIGIN,'later_acceptance_baseline_consumed':BASE}
+ write(C/'freeze-proof.json',result);print(json.dumps(result,ensure_ascii=False,indent=2))
+{'prepare':prepare,'native':native,'finalize':finalize,'freeze':freeze}[sys.argv[1]]()
