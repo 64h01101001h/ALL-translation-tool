@@ -261,8 +261,20 @@ std::vector<std::string> Spine::scriptCardCourses() const {
 std::vector<Entry> Spine::lookup(const std::string& headword) const {
     try {
     std::vector<Entry> out;
+    // ORDERED, and the order is the project's: his English first. Without it
+    // SQLite returned rows in rowid order, so `lookup(w).front()` -- which a
+    // great many callers take as "the entry for this word" -- was whichever
+    // row happened to be inserted first. `rnam pa thams cad mkhyen pa nyid`,
+    // omniscience, has its AUTO-ALIGNED entry at a lower id than its glossary
+    // one, so front() handed back the machine's guess for a core term. Two
+    // headwords are affected today; the point is that nothing was stopping it
+    // being two hundred after the next ingest.
+    static const char* kTierOrder =
+        " ORDER BY CASE tier WHEN 'curated' THEN 0 WHEN 'glossary' THEN 1 "
+        "WHEN 'auto-aligned' THEN 3 ELSE 2 END, id";
     auto collect = [&](const char* sql, const std::string& val) {
-        std::string q = std::string("SELECT ") + kEntryCols + " FROM entries " + sql;
+        std::string q = std::string("SELECT ") + kEntryCols + " FROM entries " +
+                        sql + kTierOrder;
         Stmt s(db_, q.c_str());
         sqlite3_bind_text(s.p, 1, val.c_str(), -1, SQLITE_TRANSIENT);
         while (sqlite3_step(s.p) == SQLITE_ROW)
@@ -272,7 +284,7 @@ std::vector<Entry> Spine::lookup(const std::string& headword) const {
     if (out.empty()) {
         std::string q = std::string("SELECT ") + kEntryCols +
             " FROM entries WHERE id IN "
-            "(SELECT entry_id FROM entry_variants WHERE wylie=?)";
+            "(SELECT entry_id FROM entry_variants WHERE wylie=?)" + kTierOrder;
         Stmt s(db_, q.c_str());
         sqlite3_bind_text(s.p, 1, headword.c_str(), -1, SQLITE_TRANSIENT);
         while (sqlite3_step(s.p) == SQLITE_ROW)

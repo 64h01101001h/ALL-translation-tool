@@ -108,6 +108,30 @@ int main(int argc, char** argv) {
               "an unknown address answers empty, not a fabrication");
     }
 
+    {   // lookup() is ORDERED, his English first. A great many callers take
+        // lookup(w).front() as "the entry for this word"; without an ORDER BY
+        // that was whichever row SQLite happened to yield, which is rowid
+        // order, which is ingest order. `rnam pa thams cad mkhyen pa nyid` --
+        // omniscience -- carries an auto-aligned entry at a LOWER id than its
+        // glossary one, so front() handed back the machine's guess for a core
+        // term of the tradition.
+        auto es = spine.lookup("rnam pa thams cad mkhyen pa nyid");
+        CHECK(es.size() > 1,
+              "lookup: the omniscience headword still has more than one entry "
+              "(if the spine changed, this gate needs a new fixture rather "
+              "than to quietly stop testing)");
+        CHECK(!es.empty() && !es.front().provisional(),
+              "lookup: front() is a GMR-tier entry, not the auto-aligned twin "
+              "that happens to sit at a lower rowid (rule 1)");
+        bool sawProvisional = false;
+        for (const auto& e : es)
+            if (e.provisional()) sawProvisional = true;
+        CHECK(sawProvisional,
+              "lookup: and the auto-aligned entry is still RETURNED, just not "
+              "first -- ordering is not filtering, and dropping it would hide "
+              "evidence rather than rank it");
+    }
+
     std::printf("%s (%d failure%s)\n", failures ? "SMOKE FAILED" : "SMOKE OK",
                 failures, failures == 1 ? "" : "s");
     return failures ? 1 : 0;

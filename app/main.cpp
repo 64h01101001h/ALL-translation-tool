@@ -23086,15 +23086,54 @@ public:
                 mixQueue_.assign(1, 4);
                 mixAt_ = 0;
                 newDrill();
-                if (!vocab_.empty()) {
-                    auto es3 = spine_.lookup(vocab_);
-                    const bool prov = !es3.empty() && es3.front().provisional();
-                    renderQuestion();
-                    const QString shown = question_->toPlainText();
-                    check(!prov || shown.contains("PROVISIONAL") ||
-                              result_->toPlainText().contains("PROVISIONAL"),
-                          "mixed set: a provisional vocabulary item still says "
-                          "PROVISIONAL inside the set");
+                // This was "the plan's REQUIRED gate" and it asserted nothing.
+                // It ran only `if (!vocab_.empty())` -- on a fresh deck
+                // dueVocab returns nothing, so the whole block was skipped --
+                // and its condition began `!prov ||`, so even when it did run
+                // it passed for free unless the card the SRS happened to draw
+                // was auto-aligned. A required gate that fires on a coin toss
+                // is not a gate.
+                //
+                // So: draw a provisional entry from the spine DELIBERATELY and
+                // put it in front of the renderer. Now the badge is tested
+                // every run, on an item we know is provisional.
+                {
+                    std::string provWylie;
+                    for (const auto& w :
+                         {"ma lus", "rab rdzogs", "rgyal ba'i yon tan"}) {
+                        auto es = spine_.lookup(w);
+                        if (!es.empty() && es.front().provisional() &&
+                            !es.front().hgm_gloss.empty()) {
+                            provWylie = w;
+                            break;
+                        }
+                    }
+                    check(!provWylie.empty(),
+                          "mixed set: the spine still HAS a provisional entry "
+                          "to test the badge with \u2014 without one this gate "
+                          "cannot run, and silently passing would be the old "
+                          "defect wearing a new coat");
+                    if (!provWylie.empty()) {
+                        vocab_ = provWylie;
+                        vocabItem_ = {};
+                        vocabItem_.wylie = provWylie;
+                        pickVocabContext();
+                        renderQuestion();
+                        // The QUESTION deliberately withholds the gloss --
+                        // it is a recall test, you grade yourself. The badge
+                        // belongs on the REVEAL, so the gate has to reveal.
+                        // Checking the question alone would have been a gate
+                        // that could never pass, which is the same disease as
+                        // one that can never fail.
+                        checkDrill();
+                        const QString shown = question_->toPlainText() + " " +
+                                              result_->toPlainText();
+                        check(shown.contains("PROVISIONAL"),
+                              "mixed set: a provisional vocabulary item still "
+                              "says PROVISIONAL inside the set \u2014 a learner "
+                              "three items deep cannot tell which item is "
+                              "binding, so the badge is per item");
+                    }
                 }
                 progress_ = nullptr;
             }
