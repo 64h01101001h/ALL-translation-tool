@@ -567,13 +567,26 @@ int main(int argc, char** argv) {
         // progress in the warm-up pool stand in for the real one.
         out += "\"boundary\":[";
         int nbd = 0;
+        int nbd_pool[2] = {0, 0};
         {
             std::mt19937 brng(9182);
             for (int pool = 0; pool < 2; ++pool) {
                 const int want = pool ? 120 : 80;
+                // makeBoundary rejection-samples: it draws random segments and
+                // gives up after 60 misses. The unpunctuated pool draws from
+                // 2,412 qualifying segments out of 42,199 — about one in
+                // eighteen — so a run of sixty misses comes up roughly 3% of
+                // the times it is called, on a pool nowhere near exhausted.
+                // Breaking on the first of those ended the pool on a coin
+                // flip: the 11 September pack shipped 64 of these and this one
+                // shipped 1, from engines measured at 22 and 21. Only a
+                // sustained run of misses is evidence a pool is really dry.
+                constexpr int kDryRuns = 12;   // ~1e-18 of a false exhaustion
+                int dry = 0;
                 for (int made = 0; made < want; ) {
                     auto d = f.makeBoundary(brng, pool == 1);
-                    if (!d) break;
+                    if (!d) { if (++dry >= kDryRuns) break; continue; }
+                    dry = 0;
                     // A piece that will not render is refused outright rather
                     // than shipped with ⟨ ⟩ sitting in the middle of a word
                     // the learner is being asked to count across.
@@ -610,12 +623,28 @@ int main(int argc, char** argv) {
                            (d->punctuated ? "false" : "true") + ",";
                     field(out, "english", d->segment.english, false);
                     out += "}";
-                    ++nbd; ++made;
+                    ++nbd; ++made; ++nbd_pool[pool];
                 }
             }
         }
         out += "],";
-        std::printf("  boundary %d\n", nbd);
+        std::printf("  boundary %d  (warm-up %d/80, unpunctuated %d/120)\n",
+                    nbd, nbd_pool[0], nbd_pool[1]);
+        // A short pool is not a smaller pack, it is a different exercise: the
+        // unpunctuated pool is the one that teaches finding a clause end with
+        // no scribal help, and it has come up short in every pack ever built
+        // without saying so. Refuse rather than ship a quiet degradation.
+        if (nbd_pool[0] < 80 || nbd_pool[1] < 120) {
+            std::fprintf(stderr,
+                "REFUSED: boundary pools came up short — warm-up %d/80, "
+                "unpunctuated %d/120.\n"
+                "  The generator rejection-samples; a short pool means either "
+                "the corpus really is exhausted\n"
+                "  or the give-up rule regressed. Measure the population "
+                "before raising a target.\n",
+                nbd_pool[0], nbd_pool[1]);
+            return 1;
+        }
 
         // Known here / known anywhere. A word is packed only when it has TWO
         // distinct attestations, because the whole exercise is the difference
