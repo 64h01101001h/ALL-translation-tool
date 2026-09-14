@@ -27825,7 +27825,7 @@ private:
                                  "]</small> " +
                                  abridged(QString::fromStdString(s.english),
                                           220) +
-                                 // 702 of the corpus's segments carry a chant
+                                 // 1,066 of the corpus's segments carry a chant
                                  // transliteration or an untranslated Sanskrit
                                  // mantra in the English column rather than a
                                  // rendering. This pane quoted one of those

@@ -524,6 +524,26 @@ public:
                   "that the agent is unstated — absence of an agent is not "
                   "evidence of an intransitive construction");
         }
+        {   // Step 7 is the strongest claim the pane makes: ATTESTED, over
+            // the words "His English". 1,066 corpus segments hold a chant
+            // transliteration or an untranslated mantra in the English column,
+            // so that badge was the worst place in the app for one of them.
+            src_->setPlainText("sa gzhi spos kyis byugs shing me tog bkram");
+            walk();
+            const QString t7 = out_->toPlainText();
+            check(t7.contains("NOT A TRANSLATION"),
+                  "step 7 badges a chant transliteration as what it is, not "
+                  "as his translation");
+            check(!t7.contains("His English. Compare its order"),
+                  "and the closing line agrees with the badge above it \u2014 "
+                  "there is no order in a chant line to compare step 4 with");
+            // and the ordinary case is untouched
+            src_->setPlainText("sangs rgyas kyis chos bstan");
+            walk();
+            const QString ord = out_->toPlainText();
+            check(!ord.contains("NOT A TRANSLATION"),
+                  "an ordinary corpus hit is not badged NOT A TRANSLATION");
+        }
         {   // A clause closing on `ni` or `dang` has not lost its verb, it
             // has not reached it. Measured corpus-wide, not sampled: 64% of
             // the 764 `ni`-final segments carry no verb, against 19% overall.
@@ -1472,17 +1492,55 @@ private:
                 "the ordinary case for new material, and the reason step 4 is "
                 "labelled the way it is.</div>");
         QString h;
+        int notEnglishHits = 0;
         for (const auto& s : hits) {
-            h += "<div style='padding:4px 0'>"
-                 "<span style='color:#3B7A3B'>ATTESTED</span> · " +
+            // 1,066 of the corpus's segments hold a chant transliteration or
+            // untranslated mantra in the English column rather than a
+            // rendering. This is the strongest badge in the app -- ATTESTED,
+            // over the words "His English" -- so it is the worst place to put
+            // one of them. The line still shows, because it is what the corpus
+            // holds, but it is not badged as his translation.
+            const bool notEnglish =
+                allcore::englishIsNotEnglish(s.english, s.acip);
+            if (notEnglish) ++notEnglishHits;
+            h += "<div style='padding:4px 0'>" +
+                 (notEnglish
+                      ? QString("<span style='color:#B4540A'>NOT A "
+                                "TRANSLATION</span> \u00b7 ")
+                      : QString("<span style='color:#3B7A3B'>ATTESTED</span> "
+                                "\u00b7 ")) +
                  QString::fromStdString(s.course).toHtmlEscaped() + " §" +
                  QString::number(s.seq) + "<br><i>" +
-                 QString::fromStdString(s.english).toHtmlEscaped() + "</i></div>";
+                 QString::fromStdString(s.english).toHtmlEscaped() + "</i>" +
+                 (notEnglish
+                      ? QString("<div style='color:#B4540A;font-size:11px'>"
+                                "This segment's English column holds the "
+                                "chanted transliteration, or a mantra carried "
+                                "over untranslated. It is what the corpus has "
+                                "here \u2014 it is not his English for these "
+                                "words, and step 4 has nothing to be checked "
+                                "against.</div>")
+                      : QString()) +
+                 "</div>";
         }
+        // And the closing line has to agree with the badges above it. When
+        // every hit is a chant line, "His English. Compare its order with
+        // step 4" is false twice over: it is not his English, and there is no
+        // order in it to compare against.
+        const bool allNotEnglish =
+            !hits.empty() && notEnglishHits == (int)hits.size();
         return "<div style='padding:2px 0 2px 12px'>" + h +
-               "<div style='color:#666;font-size:11px'>His English. Compare its "
-               "order with step 4 — where they differ, one of them is telling "
-               "you something.</div></div>";
+               (allNotEnglish
+                    ? QString("<div style='color:#B4540A;font-size:11px'>"
+                              "Every corpus match for this clause is one of "
+                              "those, so there is nothing here to check step 4 "
+                              "against — the same position as a clause the "
+                              "corpus does not have at all.</div>")
+                    : QString("<div style='color:#666;font-size:11px'>His "
+                              "English. Compare its order with step 4 — "
+                              "where they differ, one of them is telling you "
+                              "something.</div>")) +
+               "</div>";
     }
 
     allcore::Spine& spine_;

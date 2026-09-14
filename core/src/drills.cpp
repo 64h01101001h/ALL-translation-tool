@@ -165,7 +165,7 @@ bool DrillFactory::isDrillable(const CorpusSegment& seg) {
         if (t.find("\u27e8") != std::string::npos) return false;
     }
     //  2c. AND THE MIRROR OF THAT: the Tibetan converts perfectly, but the
-    //      ENGLISH was never English. 702 of the 42,013 segments carrying an
+    //      ENGLISH was never English. 1,066 of the 42,199 segments carrying an
     //      English field hold a chant transliteration ("sashi pukyi jukshing
     //      metok tram," is the SOUND of its own Tibetan) or a Sanskrit mantra
     //      carried over untranslated ("Om argham praticha sva ha."). Every

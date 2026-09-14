@@ -62,6 +62,20 @@ follow but"). It cannot catch the ones that are fluent and simply wrong —
 `chibs` → "crimson", `chag med` → "angel in her sindhura", `gsung ba` →
 "people who".
 
+A second cut of the same tier, added 2026-09-14 because the first understates
+it. Run `englishIsNotEnglish`'s function-word half over the auto-aligned
+glosses themselves: **328 of 3,912 (8.4%) contain no English function word at
+all**. Some are pronunciation lines (`kun tu rgyal` → "tserab kuntu gyalwa
+tsongkape"); most are mid-sentence English with the function words outside the
+span (`sku mdun` → "small table appeared before"; `rkyen dang phrad` →
+"encountering some other influences").
+
+Note these three counts measure three different things and should not be
+compared: **5** glosses carry unmistakable Tibetan phonetic markers, **165**
+dangle on a function word, and **328** contain none. The middle two overlap;
+the largest is the best single indicator of how much of this tier is a slice of
+a sentence rather than an equivalent.
+
 Plenty of the tier is sound: "distinction between", "flies", "consistent",
 "fine wisdom", "entire body". It is not junk. But it is not dependable either,
 and the honest description is that it is what its label says — provisional.
@@ -84,9 +98,16 @@ here rather than gated.
 
 Chasing the fix above turned up the source. `rab rdzogs` is glossed "sadang
 lamgyi yunten rabdzok" in the spine, and that string is not invented — it is a
-line of the corpus. **702 of the 42,013 segments carrying an English field
-(1.67%) hold something that was never a translation**, and the auto-aligner
+line of the corpus. **1,066 of the 42,199 segments carrying an English field
+(2.53%) hold something that was never a translation**, and the auto-aligner
 learned from them.
+
+*(This read 702 until 2026-09-14. That figure came from a probe that counted
+one-letter words — "a", "I" — as English function words; the shipped C++ does
+not, requiring two letters. The code was always flagging 1,066, so the number
+in this document described something the code does not do. Corrected, and the
+lesson is the session's own: a measurement and the implementation it describes
+have to be the same measurement.)*
 
 Two kinds:
 
@@ -101,6 +122,25 @@ over in transliteration, untranslated on purpose. No pronunciation test finds
 these, because their sound is not the Tibetan's; what finds them is that four
 or more words go by without one English function word.
 
+**How much each test is actually earning.** Measured, because "each catches
+what the other cannot" is the kind of claim that sounds true and is rarely
+checked:
+
+| | |
+|---|---|
+| no English function word | 1,065 |
+| sounds like its own Tibetan | 234 |
+| both | 233 |
+| **union — what `englishIsNotEnglish` flags** | **1,066** |
+
+The pronunciation test adds **one** segment the cruder test does not already
+catch. It is kept anyway, and the reasons are worth stating rather than
+assuming: it is the only *principled* half — it compares the English against
+the segment's own computed sound rather than against a hand-kept word list —
+and it is the half that would still work if a chant line happened to contain
+"the". But the honest summary is that the function-word test is doing almost
+all of the work.
+
 `isDrillable` already refused mantras whose *Tibetan* will not convert
 (2026-09-10, Adam, on a Kali Wang text). This is the mirror case: the Tibetan
 converts perfectly and only the English side is wrong, which that test cannot
@@ -112,12 +152,37 @@ Every surface showing one of these labels it "Geshe Michael Roach's English for
 this segment". **64 drills in the shipped phone pack did exactly that**, and 23
 of the reading-order cards did it under a badge reading ATTESTED.
 
+*(That 64 was counted with the same looser tokenizer as the old 702 — it treated
+"a" and "I" as function words, where the shipped rule requires two letters. The
+true figure under the rule that now ships is therefore **at least** 64. It
+cannot be recovered exactly, because the pack it describes has been rebuilt;
+the current pack is at 0 of 7,700 under the shipped rule, which is the number
+that matters.)*
+
 `allcore::englishIsNotEnglish` now unions both tests; `isDrillable` and the
 reading-order builder both consult it. The pack is at **0 of 7,700**.
 
-The cost of a false positive is one drill not built, and there is a measured
-one: an outline heading, "b2. Mistaken deceptive reality", has no function word
-either. That is the right side to err on.
+### The false-positive rate, measured
+
+The function-word test is crude by design, so its cost is worth a number rather
+than an anecdote. Of 42,199 corpus segments it flags **1,065**:
+
+| | |
+|---|---|
+| carrying an unmistakable mantra syllable (*om*, *hung*, *phat*, *svaha*…) | 649 (61%) |
+| chant transliteration, by eye and by the pronunciation test | 407 (38%) |
+| shaped like an outline heading | 9 (1%) |
+
+And of those last nine, **two are correctly flagged** — `(4) Api tu khalu
+punaḥ` is Sanskrit carried over untranslated, exactly what the test is for. The
+genuine false positives are the other **seven**, all short English headings:
+"II. Purifying Bad Deeds", "3) Your skin turns radiant.", "26) [Mental state
+#8:] Attaining single-pointedness".
+
+**Seven segments in 42,199 — 0.7% of what it flags, 0.017% of the corpus.** The
+cost of each is one drill not built. That is the right side to err on, and it
+is cheap enough not to be worth a cleverer test: the obvious discriminator, a
+leading enumerator, would also exclude `Api tu khalu punaḥ`, which belongs.
 
 ### For the data project
 
