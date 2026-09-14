@@ -1,0 +1,97 @@
+"""Apply exactly three F1 rationale corrections; preserve every existing package byte.
+No generator, parser, test suite, source mutation, or native replay is invoked.
+"""
+from pathlib import Path
+import copy,datetime,hashlib,json,sys,shutil,os
+R=Path(__file__).resolve().parents[1];A=R.parent;C=R/'correction-F1';H=R/'history/F1-before';review=A/'semantic-review'
+OLD='13cdeba610f4eb8dcc5ececd95722411660de9835ef750a0118a6947da1118a9'
+RV='ce740d16169172187470e3c8ff60871d73d50b74adb7bab08214d279577fbb08'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def js(p):return json.loads(p.read_text())
+def write(p,b):
+ p.parent.mkdir(parents=True,exist_ok=True)
+ if p.exists():p.chmod(0o644)
+ p.write_bytes(b)
+def save(p,x):write(p,(json.dumps(x,ensure_ascii=False,indent=2)+'\n').encode())
+def pin(p):
+ b=p.read_bytes();return {'bytes':len(b),'sha256':sha(b)}
+def utc():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+def diff(a,b,path=''):
+ if type(a)!=type(b):return [path]
+ if isinstance(a,dict):
+  assert set(a)==set(b),(path,'keys changed');return sum([diff(a[k],b[k],path+'/'+k) for k in a],[])
+ if isinstance(a,list):
+  assert len(a)==len(b),(path,'list length changed');return sum([diff(x,y,path+'/'+str(i)) for i,(x,y) in enumerate(zip(a,b))],[])
+ return [] if a==b else [path]
+if len(sys.argv)>1 and sys.argv[1]=='freeze':
+ assert js(C/'execution/exit.json')['exit']==0
+ proof=js(C/'correction-proof.json');mapping=js(C/'original-to-history-byte-map.json')['records']
+ for rec in mapping:
+  p=R/rec['history'];assert pin(p)=={'bytes':rec['bytes'],'sha256':rec['sha256']},rec
+ for item in proof['protected_current_files']:
+  assert pin(R/item['path'])=={'bytes':item['bytes'],'sha256':item['sha256']}
+ assert pin(review/'review-freeze.json')['sha256']==RV
+ files=[]
+ for p in sorted(R.rglob('*')):
+  if p.is_file() and p!=R/'freeze.json':files.append({'path':str(p.relative_to(R)),**pin(p)})
+ f={'schema':'c05-reconciliation-freeze-v2','created_utc':utc(),'producer':'Codex (gpt-6-astra)','source_origin_commit':'b5047596859f6537b71f259c1e7df2e70f867fb2','source_origin_course_boundary':300,'acceptance_baseline_after306':None,'status':'PROVISIONAL F1 rationale correction; scoped fresh skeptical review and root full current-boundary review remain outstanding','supersedes':{'sha256':OLD,'file_count':312,'preserved_freeze':'history/F1-before/freeze.json','original_to_history_byte_map':'correction-F1/original-to-history-byte-map.json'},'review_input':{'path':str(review/'review-freeze.json'),'sha256':RV,'file_count':608,'verdict':'NEEDS_CORRECTION','finding':'F1'},'correction_boundary':proof['changed_json_pointers'],'execution_reuse':proof['execution_reuse'],'segments':[307,308,309],'counts':js(R/'summary.json')['segments'],'files':files}
+ save(R/'freeze.json',f)
+ for p in R.rglob('*'):
+  if p.is_file():p.chmod(0o444)
+ print(json.dumps({'freeze':str(R/'freeze.json'),'sha256':pin(R/'freeze.json')['sha256'],'files':len(files),'preserved_pre_correction_files':len(mapping),'scope':'three reasons only; specs/bodies/ranges/counts unchanged; native results reused'}))
+ sys.exit(0)
+assert not H.exists(),'Refuse to overwrite preservation history'
+oldb=(R/'freeze.json').read_bytes();assert sha(oldb)==OLD
+old=json.loads(oldb);assert len(old['files'])==312
+for rec in old['files']:
+ assert pin(R/rec['path'])=={'bytes':rec['bytes'],'sha256':rec['sha256']}
+rv=js(review/'review-freeze.json');assert sha((review/'review-freeze.json').read_bytes())==RV and len(rv['files'])==608
+for rec in rv['files']:
+ assert pin(review/rec['path'])=={'bytes':rec['bytes'],'sha256':rec['sha256']}
+verdict=js(review/'review.json');assert verdict['verdict']=='NEEDS_CORRECTION';assert [x['id'] for x in verdict['open_findings']]==['F1']
+# Capture ALL actual prior files, including any unlisted closure receipts. The newly
+# saved correction helper is intentionally new evidence, not an old package role.
+oldpaths=[p for p in sorted(R.rglob('*')) if p.is_file() and C not in p.parents]
+assert len(oldpaths)>=313
+records=[]
+for p in oldpaths:
+ rel=p.relative_to(R);dst=H/rel;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,dst);v=pin(p);assert pin(dst)==v
+ records.append({'original':str(p),'original_relative':str(rel),'history':str(dst.relative_to(R)),**v,'listed_in_old_freeze':str(rel) in {x['path'] for x in old['files']},'role':'old-freeze' if rel==Path('freeze.json') else 'complete-pre-correction-package-file'})
+# Only after complete preservation is verified may current interfaces be changed.
+save(C/'original-to-history-byte-map.json',{'schema':'complete-pre-correction-byte-map-v1','captured_utc':utc(),'old_freeze_sha256':OLD,'old_frozen_file_count':312,'actual_prior_file_count':len(records),'new_helper_excluded_from_old_capture':str(Path(__file__).relative_to(R)),'unlisted_old_files':[x['original_relative'] for x in records if not x['listed_in_old_freeze']],'records':records})
+inputs=[]
+for p in [review/'review-freeze.json',review/'review.json',review/'review.md',review/'protocol-history.json',A.parent/'workflow-refinement-20260914/proposal-protocol.before.md',A.parent/'workflow-refinement-20260914/proof.json']:
+ dst=C/'inputs'/p.name;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,dst);inputs.append({'original':str(p),'copy':str(dst.relative_to(R)),**pin(p)})
+protocol=js(review/'protocol-history.json');before=A.parent/'workflow-refinement-20260914/proposal-protocol.before.md';assert pin(before)=={'bytes':4770,'sha256':'6cf88efbfe2b7a68ea4d3d7fb507043b595760f9d60fd05b44a47e3268c6f752'}
+save(C/'input-identities.json',{'inputs':inputs,'actual_review_filenames':'review-freeze.json and review.md; supplied freeze.json/report.md names resolved by actual discovery','protocol_history':protocol,'protocol_action':'Preserve exact historical before snapshot and mapping. No current appended protocol substituted for any original frozen input.','initial_read_discovery_failure':{'tool_chunk_id':'46f77b','exit':1,'action':'Read semantic-review/review.json, then attempted missing semantic-review/report.md','error':'FileNotFoundError: semantic-review/report.md','recovery':'Discovered and read actual semantic-review/review.md, whose hash is preserved here. No generator or test ran.'}})
+current_tuples=js(R/'308/final-ordered-tuples.json');current_decisions=js(R/'308/original-span-dispositions.json');before_tuples=copy.deepcopy(current_tuples);before_decisions=copy.deepcopy(current_decisions)
+t=current_tuples['tuples'][26];td=current_decisions['decisions'][26];ed=current_decisions['decisions'][79]
+assert t['span']=={'id':'w27','d':5,'tib':'snang','eng':'appears'} and t['tib_range']==[200,205] and t['eng_range']==[349,356]
+assert td['angle']=='tibetan' and td['original_span']['id']=='w27' and td['disposition']=='unchanged'
+assert ed['angle']=='english' and ed['original_span']=={'id':'w24','d':5,'tib':'snang ba','eng':'appears'} and ed['actual_original_tib_range']==[200,208] and ed['disposition']=='recast_or_rebounded'
+row=next(x for x in js(R/'evidence/source-context-full-rows.json') if x['seq']==308);assert row['wylie'][200:205]=='snang' and row['english'][349:356]=='appears'
+reason="In C05:308, burning steel and the like appear to a person born there. The source predicate snang at Wylie [200,205) licenses appears at English [349,356). The full original snang glossary includes appears. This is the opponent's premise about the appearance of the hell objects."
+english_reason="The English-first original snang ba at Wylie [200,208) is tightened to final snang [200,205); its nominalizing ba receives no separate lexical match. In C05:308, burning steel and the like appear to a person born there, so source snang licenses appears at English [349,356). The full original snang glossary includes appears."
+t['reason']=reason;td['reason']=reason;ed['reason']=english_reason
+expected={'308/final-ordered-tuples.json':['/tuples/26/reason'],'308/original-span-dispositions.json':['/decisions/26/reason','/decisions/79/reason']}
+assert diff(before_tuples,current_tuples)==expected['308/final-ordered-tuples.json'];assert diff(before_decisions,current_decisions)==expected['308/original-span-dispositions.json']
+changes=[]
+for rel,oldobj,newobj in [('308/final-ordered-tuples.json',before_tuples,current_tuples),('308/original-span-dispositions.json',before_decisions,current_decisions)]:
+ oldpin=pin(R/rel);save(R/rel,newobj);changes.append({'file':rel,'json_pointers':expected[rel],'before':oldpin,'after':pin(R/rel)})
+reuse={'generator_reexecutions':0,'test_reexecutions':0,'source_parser_reexecutions':0,'reason':'Only explanatory reason strings changed. All original/final specifications, bodies, native inputs/outputs/errors/exits, resolved ranges and counts remain byte-identical to the preserved pre-correction boundary. Existing native results apply without reexecution.','original_six_replays':'Reused actual saved six runs; no original generator replay.','final_native_results':[{**js(R/str(n)/'native-result.json'),'record':f'{n}/native-result.json'} for n in [307,308,309]],'independent_reviewer_native_results':'The prior semantic-review native results remain untouched and are recorded in its frozen review package; this correction does not rerun or replace them.'}
+# Update only current summary/provenance/report interfaces with the narrow status.
+correction={'finding':'F1','consumed_review_freeze_sha256':RV,'previous_reconciliation_freeze_sha256':OLD,'changes':expected,'execution_reuse':'correction-F1/correction-proof.json','status':'Rationale correction completed; scoped fresh reviewer verdict outstanding; root has not approved the current boundary.','source_origin':'b5047596859f6537b71f259c1e7df2e70f867fb2 through300','acceptance_baseline_after306':None}
+s=js(R/'summary.json');s['scoped_correction']=correction;save(R/'summary.json',s)
+p=js(R/'provenance.json');p['scoped_correction']=correction;save(R/'provenance.json',p)
+report=H/'308/report.md';write(R/'308/report.md',report.read_bytes()+b'\nF1 rationale correction: the three current w27/original w27/original w24 reasons now describe C05:308 burning steel appearing to a person born there. The English-original snang ba to final snang tightening is preserved. No spec, body, tuple identity, range or count changed; the existing native outputs apply without generator or test reexecution. Exact old package bytes and the prior 312-file freeze are preserved under ../history/F1-before, with a complete byte map under ../correction-F1. Scoped fresh skeptical review and root current-boundary review remain outstanding.\n')
+modified=set(expected)|{'summary.json','provenance.json','308/report.md'}
+protected=[]
+for rec in records:
+ rel=rec['original_relative']
+ if rel not in modified and rel!='freeze.json':
+  assert pin(R/rel)=={'bytes':rec['bytes'],'sha256':rec['sha256']};protected.append({'path':rel,'bytes':rec['bytes'],'sha256':rec['sha256']})
+assert js(R/'summary.json')['segments']==js(H/'summary.json')['segments']
+proof={'schema':'scoped-rationale-correction-proof-v1','finding':'F1','created_utc':utc(),'changed_json_pointers':changes,'reason_before':{'tuple':before_tuples['tuples'][26]['reason'],'tibetan':before_decisions['decisions'][26]['reason'],'english':before_decisions['decisions'][79]['reason']},'reason_after':{'tuple':reason,'tibetan':reason,'english':english_reason},'complete_current_source_row':row,'modified_current_files':sorted(modified),'protected_current_files':protected,'all_original_decision_complete_fields_unchanged':True,'all_129_tuple_identity_depth_words_ranges_unchanged':True,'all_237_disposition_identities_and_ranges_unchanged':True,'all_specs_bodies_counts_unchanged':True,'execution_reuse':reuse,'historical_package':'history/F1-before','historical_protocol_mapping':'correction-F1/input-identities.json','root_review_status':'Original237 read by root as reported; full current129/current report review outstanding. No root approval inferred.'}
+save(C/'correction-proof.json',proof)
+(C/'report.md').write_text('F1 corrected only the three designated C05:308 rationale strings. They now identify burning steel appearing to a person born there and preserve English-original snang ba to final snang tightening. Original nested decisions, spans, ranges, counts, specifications and bodies are unchanged. Complete prior current package bytes, including the old 312-file freeze and all actual unlisted files, are retained with original-to-history mapping. Existing original and final native streams are reused; no generator or test was reexecuted. The current summary, provenance and 308 report record only this narrow correction. Historical protocol bytes remain mapped to the exact before snapshot. Scoped fresh skeptical review and root full current-boundary review remain outstanding; source/governance origin is b504 through300 and acceptance after306 is unspecified.\n')
+print(json.dumps({'status':'F1_CORRECTION_APPLIED','old_freeze_sha256':OLD,'review_freeze_sha256':RV,'preserved_actual_files':len(records),'changed_rationale_fields':3,'changed_current_files':sorted(modified),'generator_reexecutions':0,'test_reexecutions':0,'fresh_scoped_review':'outstanding'}))

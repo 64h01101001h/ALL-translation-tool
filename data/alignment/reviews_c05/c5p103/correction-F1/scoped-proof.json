@@ -1,0 +1,105 @@
+{
+  "status": "PASS",
+  "review_scope": "Only F1 corrected explanations and accompanying narrow status metadata, full history and current byte identity; no generator/test/parser/query reexecution.",
+  "current_reconciliation_freeze_sha256": "0ebc1b362a42c3382549cc14ce7c5bdcb5a63794fbc9c42953ae6cb7d608e2d0",
+  "current_frozen_files": 641,
+  "prior_reconciliation_frozen_files": 312,
+  "prior_reconciliation_actual_files_preserved": 313,
+  "prior_review_frozen_files_preserved": 608,
+  "prior_review_freeze_preserved": true,
+  "changed_prior_files_including_freeze": [
+    "308/final-ordered-tuples.json",
+    "308/original-span-dispositions.json",
+    "308/report.md",
+    "freeze.json",
+    "provenance.json",
+    "summary.json"
+  ],
+  "exact_json_differences": {
+    "308/final-ordered-tuples.json": [
+      "/tuples/26/reason"
+    ],
+    "308/original-span-dispositions.json": [
+      "/decisions/26/reason",
+      "/decisions/79/reason"
+    ],
+    "provenance.json": [
+      "/scoped_correction"
+    ],
+    "summary.json": [
+      "/scoped_correction"
+    ]
+  },
+  "current_reasons": {
+    "tuple": "In C05:308, burning steel and the like appear to a person born there. The source predicate snang at Wylie [200,205) licenses appears at English [349,356). The full original snang glossary includes appears. This is the opponent's premise about the appearance of the hell objects.",
+    "tibetan": "In C05:308, burning steel and the like appear to a person born there. The source predicate snang at Wylie [200,205) licenses appears at English [349,356). The full original snang glossary includes appears. This is the opponent's premise about the appearance of the hell objects.",
+    "english": "The English-first original snang ba at Wylie [200,208) is tightened to final snang [200,205); its nominalizing ba receives no separate lexical match. In C05:308, burning steel and the like appear to a person born there, so source snang licenses appears at English [349,356). The full original snang glossary includes appears."
+  },
+  "original_decisions_all_237_unchanged": true,
+  "final_spans_all_129_unchanged": true,
+  "specs_bodies_ranges_counts_unchanged": true,
+  "source_gloss_evidence_reused_from_verified_originals": true,
+  "native_evidence": [
+    {
+      "seq": 307,
+      "status": "REUSED_UNCHANGED",
+      "command": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/semantic-review/history/NEEDS_CORRECTION-F1/commands/final-native-307/command.json",
+      "stdin": {
+        "sha256": "56b18989fe13c659aed71b52323558437b147d4b9e81d01282c6f59c6256471d",
+        "bytes": 7792
+      },
+      "stdout": {
+        "sha256": "2a25b1f3b5b3b908ad2d8d48120c7e507aa2387cb702eac2f46cb16d4d0d7d60",
+        "bytes": 7810
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "exit": 0,
+      "executed_in_this_scoped_review": false
+    },
+    {
+      "seq": 308,
+      "status": "REUSED_UNCHANGED",
+      "command": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/semantic-review/history/NEEDS_CORRECTION-F1/commands/final-native-308/command.json",
+      "stdin": {
+        "sha256": "5cb4639eb8ee6ee62c045771cde982ea8eccc753e177aaec4c1b5bc988b7469b",
+        "bytes": 9137
+      },
+      "stdout": {
+        "sha256": "c63b1a4251bc4a5118822cff7a7aeb7da439fdceb8d1024ae6f9c539921de8e8",
+        "bytes": 9330
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "exit": 0,
+      "executed_in_this_scoped_review": false
+    },
+    {
+      "seq": 309,
+      "status": "REUSED_UNCHANGED",
+      "command": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/semantic-review/history/NEEDS_CORRECTION-F1/commands/final-native-309/command.json",
+      "stdin": {
+        "sha256": "3640b48dd188301d1a8a77ab309a6d997a2b88a8d982601837f9a222c4c46a52",
+        "bytes": 4282
+      },
+      "stdout": {
+        "sha256": "32425f2f435d852dfbbb90859a6f849d4272171da0261744060c7048e35fab3a",
+        "bytes": 4447
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "exit": 0,
+      "executed_in_this_scoped_review": false
+    }
+  ],
+  "manifest_records": 1183,
+  "unique_copy_targets": 414,
+  "source_origin": "b5047596859f6537b71f259c1e7df2e70f867fb2 through300",
+  "acceptance_baseline_after306": null
+}

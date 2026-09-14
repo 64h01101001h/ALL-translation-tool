@@ -1,0 +1,53 @@
+from pathlib import Path
+import json, hashlib, gzip, sqlite3, re, shutil
+
+ANGLE = Path(__file__).resolve().parents[1]
+B = json.loads((ANGLE / 'evidence/proposal-baseline.json').read_text())
+E = ANGLE / 'evidence'
+def save(name, obj):
+    (E / name).write_text(json.dumps(obj, ensure_ascii=False, indent=2) + '\n')
+for key in ('master', 'corpus', 'physical'):
+    v = B['source_pins'][key]
+    data = Path(v['path']).read_bytes()
+    assert hashlib.sha256(data).hexdigest() == v['sha256']
+    dest = E / 'originals' / Path(v['path']).name
+    dest.parent.mkdir(exist_ok=True)
+    dest.write_bytes(data)
+master = json.loads(gzip.decompress(Path(B['source_pins']['master']['path']).read_bytes()))
+terms = ['skyon','med','dbu','dbu ma','sems','sems tsam','dbu sems','don','shes','yod','mtshungs','dpyod','skabs','yi dvags','mig shes','chu klung','rnag','khrag','rnag khrag','snang ba','de ltar','tshad ma','bltas pa','dngos gnas','dngos gnas pa',"mi 'gal ba",'yang','kha cig',"'gro ba",'gsum','brlan','brlan zhing gsher ba','gsher ba','phor pa','gang','cig car du','dmyal ba','lcags sreg','la sogs pa','skyes pa','sems can','snang ba tsam','grub pa','byed pa po',"spyod 'jug",'sa gzhi','me','me tshogs','tshogs','ci','byung','de dag','thams cad','sdig','sdig sems','thub pa','gsungs','dbang phyug','rtag pa','blo',"blo'i g-yo ba",'g-yo ba','sngon du','sngon du btang','byas pa','ma yin par','bstan pa']
+records = []
+for collection in ('unified_entries', 'curated_entries', 'glossary_entries'):
+    values = master[collection]
+    if isinstance(values, dict): values = list(values.values())
+    for i, r in enumerate(values):
+        if isinstance(r,dict) and (r.get('wylie') in terms or any(v in terms for v in r.get('wylie_variants',[]) or [])):
+            records.append({'collection':collection,'index':i,'record':r})
+save('lexical-full-records.json', {'queries':terms,'match':'exact wylie or wylie_variants across all three original master collections','count':len(records),'records':records})
+db = sqlite3.connect('file:'+B['source_pins']['spine']['path']+'?mode=ro', uri=True)
+db.row_factory=sqlite3.Row
+queries=[('english','the schools of the Middle Way'),('english','Someone again may come and claim'),('english','unchanging creator being'),('english','Who made the burning steel'),('wylie','lcags sreg sa gzhi su yis byas'),('wylie',"blo'i g-yo ba"),('wylie','brlan zhing gsher ba'),('wylie','sdig sems'),('wylie','dbu sems gnyis'),('wylie',"don shes yod med"),('english',"The mind of what's non-virtue"),('english','valid perception, and to say at the same time')]
+results=[]
+for field, phrase in queries:
+    sql=f'select * from corpus_segments where {field} like ? order by course,seq'
+    rows=[dict(r) for r in db.execute(sql,('%'+phrase+'%',))]
+    results.append({'sql':sql,'parameters':['%'+phrase+'%'],'count':len(rows),'rows':rows})
+save('corpus-query-full-rows.json',results)
+original=json.loads(gzip.decompress(Path(B['source_pins']['corpus']['path']).read_bytes()))
+original_matches=[]
+for q in results:
+    field=q['sql'].split(' where ')[1].split()[0];phrase=q['parameters'][0][1:-1]
+    rr=[{'index_zero_based':i,'record':r} for i,r in enumerate(original) if phrase.casefold() in r.get(field,'').casefold()]
+    original_matches.append({'field':field,'substring_casefold':phrase,'count':len(rr),'records':rr})
+save('original-corpus-records.json',original_matches)
+physical=Path(B['source_pins']['physical']['path']).read_bytes()
+start=physical.find(b'KHO NA RE, DE LTAR CIG CAR')
+end=physical.find(b'RGYAL BA DGE',start)
+assert start>=0 and end>start
+extent=physical[start:end]
+(E/'physical-selected-argument.bin').write_bytes(extent)
+(E/'physical-selected-argument.latin1.txt').write_text(extent.decode('latin-1'))
+save('physical-extents.json',{'original':B['source_pins']['physical'],'start_byte':start,'end_byte_exclusive':end,'sha256':hashlib.sha256(extent).hexdigest(),'view_encoding':'Latin-1 reversible view; .bin preserves original bytes','start_line_1based':physical[:start].count(b'\n')+1})
+reg=json.loads((E/'pinned/docs/errata_register.json').read_text())
+ids=['E-044','E-071','E-076','E-107','E-111','E-121','E-158']
+save('registered-class-full-records.json',{'register_entries':len(reg),'selected_ids':ids,'records':[r for r in reg if r['item_id'] in ids], 'current_selected_segment_records':[r for r in reg if r.get('segment') in ['C05:307','C05:308','C05:309']]})
+print(json.dumps({'lexical_records':len(records),'corpus_queries':[(q['parameters'],q['count']) for q in results],'physical_extent':[start,end]}))

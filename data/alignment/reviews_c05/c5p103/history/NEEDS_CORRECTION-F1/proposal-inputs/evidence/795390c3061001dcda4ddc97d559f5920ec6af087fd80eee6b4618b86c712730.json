@@ -1,0 +1,187 @@
+[
+  {
+    "name": "307-exact-wylie",
+    "sql": "select * from corpus_segments where wylie=? order by course,seq",
+    "parameters": [
+      "skyon med de, dbu sems gnyis don shes yod med mtshungs mi mtshungs dpyod pa'i skabs yin pa'i phyir dang , yi dvags kyi mig shes la chu klung rnag khrag tu snang ba'i tshe na, de ltar snang ba'i mig shes tshad ma ma yin pa dang , chu klung la bltas pa de'i tshe na, rnag khrag dngos gnas pa zhig yod pa mi 'gal ba'i phyir"
+    ],
+    "count": 2,
+    "witness_ids": [
+      1689,
+      6003
+    ]
+  },
+  {
+    "name": "307-exact-english",
+    "sql": "select * from corpus_segments where english=? order by course,seq",
+    "parameters": [
+      "And yet there is no such problem, for this quotation appears in the section where we are examining the question of whether, in the schools of the Middle Way and the Mind-Only, an object and the perception of it must be equivalent in either both existing or both not existing. Moreover, there is another fact about this situation, where the stream of water appears as pus and blood to the visual consciousness of the craving spirit. It is no inconsistency to say that the visual consciousness that sees things this way is not a valid perception, and to say at the same time that--when the craving spirit looks at the stream of water--there does exist there actual pus and blood."
+    ],
+    "count": 2,
+    "witness_ids": [
+      1689,
+      6003
+    ]
+  },
+  {
+    "name": "308-exact-wylie",
+    "sql": "select * from corpus_segments where wylie=? order by course,seq",
+    "parameters": [
+      "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na"
+    ],
+    "count": 3,
+    "witness_ids": [
+      1690,
+      6004,
+      6863
+    ]
+  },
+  {
+    "name": "308-exact-english",
+    "sql": "select * from corpus_segments where english=? order by course,seq",
+    "parameters": [
+      "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue."
+    ],
+    "count": 3,
+    "witness_ids": [
+      1690,
+      6004,
+      6863
+    ]
+  },
+  {
+    "name": "309-exact-wylie",
+    "sql": "select * from corpus_segments where wylie=? order by course,seq",
+    "parameters": [
+      "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir"
+    ],
+    "count": 3,
+    "witness_ids": [
+      1691,
+      6005,
+      6864
+    ]
+  },
+  {
+    "name": "309-exact-english",
+    "sql": "select * from corpus_segments where english=? order by course,seq",
+    "parameters": [
+      "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+    ],
+    "count": 3,
+    "witness_ids": [
+      1691,
+      6005,
+      6864
+    ]
+  },
+  {
+    "name": "acip-DBU SEMS GNYIS DON SHES",
+    "sql": "select * from corpus_segments where acip like ? order by course,seq",
+    "parameters": [
+      "%DBU SEMS GNYIS DON SHES%"
+    ],
+    "count": 3,
+    "witness_ids": [
+      1689,
+      6003,
+      34935
+    ]
+  },
+  {
+    "name": "acip-BRLAN ZHING GSHER BA PHOR PA GANG",
+    "sql": "select * from corpus_segments where acip like ? order by course,seq",
+    "parameters": [
+      "%BRLAN ZHING GSHER BA PHOR PA GANG%"
+    ],
+    "count": 42,
+    "witness_ids": [
+      1649,
+      1652,
+      1656,
+      1661,
+      1663,
+      1666,
+      1668,
+      1669,
+      1670,
+      1676,
+      1679,
+      1682,
+      1690,
+      1694,
+      5963,
+      5966,
+      5970,
+      5975,
+      5977,
+      5980,
+      5982,
+      5983,
+      5984,
+      5990,
+      5993,
+      5996,
+      6004,
+      6008,
+      6861,
+      6863,
+      6867,
+      8921,
+      8924,
+      8928,
+      34911,
+      34917,
+      34919,
+      34921,
+      34922,
+      34924,
+      34927,
+      34929
+    ]
+  },
+  {
+    "name": "acip-SDIG SEMS",
+    "sql": "select * from corpus_segments where acip like ? order by course,seq",
+    "parameters": [
+      "%SDIG SEMS%"
+    ],
+    "count": 6,
+    "witness_ids": [
+      1690,
+      1691,
+      6004,
+      6005,
+      6863,
+      6864
+    ]
+  },
+  {
+    "name": "acip-BLO'I G-YO BA SNGON DU BTANG NAS",
+    "sql": "select * from corpus_segments where acip like ? order by course,seq",
+    "parameters": [
+      "%BLO'I G-YO BA SNGON DU BTANG NAS%"
+    ],
+    "count": 5,
+    "witness_ids": [
+      1691,
+      6005,
+      6864,
+      23582,
+      23680
+    ]
+  },
+  {
+    "name": "acip-LCAGS SREG SA GZHI SU YIS BYAS",
+    "sql": "select * from corpus_segments where acip like ? order by course,seq",
+    "parameters": [
+      "%LCAGS SREG SA GZHI SU YIS BYAS%"
+    ],
+    "count": 3,
+    "witness_ids": [
+      1690,
+      6004,
+      6863
+    ]
+  }
+]

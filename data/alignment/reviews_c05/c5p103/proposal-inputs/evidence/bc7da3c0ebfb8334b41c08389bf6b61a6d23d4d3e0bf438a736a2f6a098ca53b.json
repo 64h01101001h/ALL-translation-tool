@@ -1,0 +1,107 @@
+[
+  {
+    "type": "table",
+    "name": "meta",
+    "sql": "CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT)"
+  },
+  {
+    "type": "table",
+    "name": "entries",
+    "sql": "CREATE TABLE entries (\n  id INTEGER PRIMARY KEY,            -- stable ordinal in release order\n  wylie TEXT NOT NULL,\n  tibetan TEXT,\n  tibetan_source TEXT,               -- NULL = source-attested; else generated-*\n  acip TEXT,\n  pronunciation TEXT,\n  pronunciation_source TEXT,\n  sanskrit TEXT,\n  hopkins_english TEXT,\n  hgm_gloss TEXT,                    -- JSON array; BINDING equivalents (rule 1)\n  tier TEXT,                         -- curated | glossary | auto-aligned | NULL\n  hgm_source TEXT,\n  status TEXT,\n  tenses TEXT,\n  flags TEXT,                        -- JSON array\n  corpus_courses TEXT,               -- JSON array\n  corpus_n_segments INTEGER,\n  raw TEXT NOT NULL                  -- complete source entry JSON, verbatim\n)"
+  },
+  {
+    "type": "table",
+    "name": "entry_variants",
+    "sql": "CREATE TABLE entry_variants (\n  entry_id INTEGER NOT NULL REFERENCES entries(id),\n  wylie TEXT NOT NULL\n)"
+  },
+  {
+    "type": "table",
+    "name": "entries_fts_data",
+    "sql": "CREATE TABLE 'entries_fts_data'(id INTEGER PRIMARY KEY, block BLOB)"
+  },
+  {
+    "type": "table",
+    "name": "entries_fts_idx",
+    "sql": "CREATE TABLE 'entries_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID"
+  },
+  {
+    "type": "table",
+    "name": "entries_fts_docsize",
+    "sql": "CREATE TABLE 'entries_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB)"
+  },
+  {
+    "type": "table",
+    "name": "entries_fts_config",
+    "sql": "CREATE TABLE 'entries_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID"
+  },
+  {
+    "type": "table",
+    "name": "english_fts_data",
+    "sql": "CREATE TABLE 'english_fts_data'(id INTEGER PRIMARY KEY, block BLOB)"
+  },
+  {
+    "type": "table",
+    "name": "english_fts_idx",
+    "sql": "CREATE TABLE 'english_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID"
+  },
+  {
+    "type": "table",
+    "name": "english_fts_docsize",
+    "sql": "CREATE TABLE 'english_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB)"
+  },
+  {
+    "type": "table",
+    "name": "english_fts_config",
+    "sql": "CREATE TABLE 'english_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID"
+  },
+  {
+    "type": "table",
+    "name": "corpus_segments",
+    "sql": "CREATE TABLE corpus_segments (\n  id INTEGER PRIMARY KEY,\n  course TEXT NOT NULL,\n  seq INTEGER NOT NULL,              -- position within course (line number for NEAR)\n  acip TEXT,\n  wylie TEXT,\n  english TEXT,\n  raw TEXT NOT NULL\n)"
+  },
+  {
+    "type": "table",
+    "name": "corpus_fts_data",
+    "sql": "CREATE TABLE 'corpus_fts_data'(id INTEGER PRIMARY KEY, block BLOB)"
+  },
+  {
+    "type": "table",
+    "name": "corpus_fts_idx",
+    "sql": "CREATE TABLE 'corpus_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID"
+  },
+  {
+    "type": "table",
+    "name": "corpus_fts_docsize",
+    "sql": "CREATE TABLE 'corpus_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB)"
+  },
+  {
+    "type": "table",
+    "name": "corpus_fts_config",
+    "sql": "CREATE TABLE 'corpus_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID"
+  },
+  {
+    "type": "table",
+    "name": "pron_index",
+    "sql": "CREATE TABLE pron_index (\n  fold TEXT NOT NULL,                -- pronunciation, lowercased, letters only\n  entry_id INTEGER NOT NULL\n)"
+  },
+  {
+    "type": "table",
+    "name": "reverse_index",
+    "sql": "CREATE TABLE reverse_index (\n  english TEXT NOT NULL,\n  wylie TEXT NOT NULL,\n  pronunciation TEXT,\n  tier TEXT\n)"
+  },
+  {
+    "type": "table",
+    "name": "entries_fts",
+    "sql": "CREATE VIRTUAL TABLE entries_fts USING fts5(\n  wylie, variants, tibetan, acip, pronunciation,\n  content='', tokenize=\"unicode61 tokenchars ''''\"\n)"
+  },
+  {
+    "type": "table",
+    "name": "english_fts",
+    "sql": "CREATE VIRTUAL TABLE english_fts USING fts5(\n  hgm_gloss, hopkins_english, sanskrit,\n  content='', tokenize='unicode61'\n)"
+  },
+  {
+    "type": "table",
+    "name": "corpus_fts",
+    "sql": "CREATE VIRTUAL TABLE corpus_fts USING fts5(\n  wylie, english, acip, wylie_norm,\n  content='', tokenize=\"unicode61 tokenchars ''''\"\n)"
+  }
+]

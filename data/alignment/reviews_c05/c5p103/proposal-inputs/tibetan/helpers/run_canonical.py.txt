@@ -1,0 +1,18 @@
+import hashlib,json,os,pathlib,subprocess,sys,time
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+WORK=ROOT.parents[2]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+for seq in [307,308,309]:
+    out=ROOT/str(seq);proof=out/'native/attempt01';proof.mkdir(parents=True,exist_ok=False)
+    stdin=(out/'spec.json').read_bytes();(proof/'stdin.json').write_bytes(stdin)
+    argv=[sys.executable,str(ROOT/'helpers/canonical_launcher.py')]
+    env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',ALIGNMENT_CONNECT_LOG=str(proof/'sqlite-connection.json'))
+    command={'argv':argv,'cwd':str(WORK),'env_overrides':{k:env[k] for k in ['PYTHONDONTWRITEBYTECODE','ALIGNMENT_CONNECT_LOG']},'stdin_file':str(proof/'stdin.json'),'actual_generator':str(WORK/'tools/gen_alignment_page.py'),'immutable_builder':str(ROOT/'evidence/governing/tools/build_alignment_layer.py'),'python_version':sys.version,'python_executable_resolved':str(pathlib.Path(sys.executable).resolve())}
+    (proof/'command.json').write_text(json.dumps(command,indent=2)+'\n')
+    start=time.monotonic();p=subprocess.run(argv,input=stdin,cwd=WORK,env=env,capture_output=True);elapsed=time.monotonic()-start
+    (proof/'stdout.html').write_bytes(p.stdout);(proof/'stderr.txt').write_bytes(p.stderr);(proof/'exit.txt').write_text(str(p.returncode)+'\n')
+    result={'seq':seq,'exit':p.returncode,'elapsed_seconds':elapsed,'stdin_bytes':len(stdin),'stdin_sha256':sha(stdin),'stdout_bytes':len(p.stdout),'stdout_sha256':sha(p.stdout),'stderr_bytes':len(p.stderr),'stderr_sha256':sha(p.stderr)}
+    (proof/'result.json').write_text(json.dumps(result,indent=2)+'\n')
+    print(json.dumps(result))
+    assert p.returncode==0 and p.stderr==b'',p.stderr.decode()
+    (out/'body.html').write_bytes(p.stdout)

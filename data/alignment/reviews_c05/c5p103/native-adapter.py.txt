@@ -1,0 +1,22 @@
+from pathlib import Path
+import types,sys,json,sqlite3,hashlib
+R=Path(__file__).resolve().parent;A=R.parent;W=A.parents[1]/'campaign-worktree';G=R/'governing'
+def mod(name,path,filename):
+ m=types.ModuleType(name);m.__file__=str(filename);sys.modules[name]=m
+ exec(compile(path.read_bytes(),str(filename),'exec'),m.__dict__);return m
+P=json.loads((A/'proposal-baseline.json').read_text())
+for rel in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ assert hashlib.sha256((G/(rel+'.bin')).read_bytes()).hexdigest()==P['governing_git_pins'][rel]['sha256']
+mod('hgm_tools',G/'engines/hgm_tools.py.bin',W/'engines/hgm_tools.py')
+B=mod('build_alignment_layer',G/'tools/build_alignment_layer.py.bin',W/'tools/build_alignment_layer.py');B.SPINE=str(W/'build/hgm_spine_v27_2.db')
+real=sqlite3.connect;connections=[]
+def ro(path,*args,**kwargs):
+ assert str(path)==B.SPINE and not args
+ uri=Path(path).as_uri()+'?mode=ro';connections.append({'database':uri,'uri':True});return real(uri,uri=True)
+sqlite3.connect=ro
+M=mod('canonical_generator',G/'tools/gen_alignment_page.py.bin',W/'tools/gen_alignment_page.py');resolve=M.resolve;ranges=[]
+def record(text,spans,side,seq):
+ r=resolve(text,spans,side,seq);ranges.append({'seq':seq,'side':side,'span_order':[s['id'] for s in spans],'ranges':r});return r
+M.resolve=record
+try:M.main()
+finally:Path(sys.argv[1]).write_text(json.dumps({'sqlite_connections':connections,'resolutions':ranges},indent=2)+'\n')

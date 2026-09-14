@@ -1,0 +1,11 @@
+from pathlib import Path
+import subprocess,json,sys,os
+R=Path(__file__).resolve().parent
+p=R/'commands'/sys.argv[1];p.mkdir(parents=True,exist_ok=False)
+argv=[sys.executable,str(R/'inspect.py.txt'),sys.argv[2]]
+(p/'inspect.py.txt').write_bytes((R/'inspect.py.txt').read_bytes())
+(p/'command.json').write_text(json.dumps({'argv':argv,'cwd':str(R),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'}},indent=2)+'\n')
+(p/'stdin.bin').write_bytes(b'')
+q=subprocess.run(argv,cwd=R,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},capture_output=True)
+(p/'stdout.bin').write_bytes(q.stdout);(p/'stderr.bin').write_bytes(q.stderr);(p/'exit.txt').write_text(str(q.returncode)+'\n')
+print(q.stdout.decode());print(q.stderr.decode());print('EXIT',q.returncode)

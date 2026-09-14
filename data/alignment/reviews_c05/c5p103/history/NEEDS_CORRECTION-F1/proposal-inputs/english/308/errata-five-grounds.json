@@ -1,0 +1,178 @@
+{
+  "schema": "c05-producer-errata-five-grounds-v1",
+  "seq": 308,
+  "errata_count": 0,
+  "status": "PROVISIONAL independent English-first producer assessment",
+  "grounds": [
+    {
+      "ground": 1,
+      "name": "Exact source quotation and source-of-record check",
+      "result": {
+        "found": "The mind of what's non-virtue.",
+        "field": "english",
+        "other_exact_quotes": [
+          "the burning steel and so on in the hells is only something that appears",
+          "SDIG SEMS"
+        ],
+        "finding": "No new erratum proposed. The verse uses a poetic expansion of sdig sems; the prose subject is burning steel and so on, with hells inside a locative phrase. Neither the awkward verse phrase nor the singular is proves a typo. They recur in the actual compared original fields, which does not establish publication independence."
+      },
+      "evidence": [
+        "full-original-rows.json",
+        "source.json",
+        "physical-row-equivalence.json",
+        "originals/C05ReadingASCII.txt"
+      ],
+      "physical_result": "Linebreak-joined original ACIP and English exactly equal this spine row; all bytes and exact extents are retained."
+    },
+    {
+      "ground": 2,
+      "name": "Available corpus parallels",
+      "query_indexes_zero_based": [
+        1,
+        3,
+        4,
+        7,
+        10
+      ],
+      "query_counts": [
+        3,
+        3,
+        3,
+        6,
+        3
+      ],
+      "comparisons": [
+        {
+          "source": "C05:308",
+          "parallel": "C15:453",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "c05_chars": 509,
+              "parallel_chars": 509,
+              "c05_sha256": "f2f2b901cfa4b7838fc4abe7eb9e787656ed05fac68626cf429dddc9506f30fd",
+              "parallel_sha256": "f2f2b901cfa4b7838fc4abe7eb9e787656ed05fac68626cf429dddc9506f30fd",
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "c05_chars": 510,
+              "parallel_chars": 510,
+              "c05_sha256": "7cfa7074f4519bc8875d9e473f49234e5aff5ae14cdfd4248a9b0e079063b9c5",
+              "parallel_sha256": "7cfa7074f4519bc8875d9e473f49234e5aff5ae14cdfd4248a9b0e079063b9c5",
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "c05_chars": 886,
+              "parallel_chars": 886,
+              "c05_sha256": "766b28942c838294da43655490e59b19c94f98051025b64e6499858a0b6253d1",
+              "parallel_sha256": "766b28942c838294da43655490e59b19c94f98051025b64e6499858a0b6253d1",
+              "differences": []
+            }
+          },
+          "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+        },
+        {
+          "source": "C05:308",
+          "parallel": "C16:845",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "c05_chars": 509,
+              "parallel_chars": 509,
+              "c05_sha256": "f2f2b901cfa4b7838fc4abe7eb9e787656ed05fac68626cf429dddc9506f30fd",
+              "parallel_sha256": "f2f2b901cfa4b7838fc4abe7eb9e787656ed05fac68626cf429dddc9506f30fd",
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "c05_chars": 510,
+              "parallel_chars": 510,
+              "c05_sha256": "7cfa7074f4519bc8875d9e473f49234e5aff5ae14cdfd4248a9b0e079063b9c5",
+              "parallel_sha256": "7cfa7074f4519bc8875d9e473f49234e5aff5ae14cdfd4248a9b0e079063b9c5",
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "c05_chars": 886,
+              "parallel_chars": 886,
+              "c05_sha256": "766b28942c838294da43655490e59b19c94f98051025b64e6499858a0b6253d1",
+              "parallel_sha256": "766b28942c838294da43655490e59b19c94f98051025b64e6499858a0b6253d1",
+              "differences": []
+            }
+          },
+          "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+        }
+      ],
+      "evidence": [
+        "corpus-query-full-rows.json",
+        "original-corpus-records.json",
+        "parallel-field-comparisons.json"
+      ],
+      "limits": "Full original records are retained. Text-field identity/difference establishes neither independent publication nor a specific ingestion history. C16 same-file wording in the course shape is metadata only."
+    },
+    {
+      "ground": 3,
+      "name": "Registered class and duplicate check",
+      "register_commit": "b5047596859f6537b71f259c1e7df2e70f867fb2",
+      "register_entries": 193,
+      "this_segment_registered_entries": [],
+      "english_length": 886,
+      "is_1500_cap": false,
+      "classes_checked": [
+        "E-044 converter escapes",
+        "E-071 running heads",
+        "E-076 period footnote fusion",
+        "E-121 word footnote fusion",
+        "E-111 row-boundary spill",
+        "E-107 ingest cap",
+        "E-158 replacement character",
+        "registered folio-caption fusion",
+        "registered following-selection heading glue"
+      ],
+      "result": "None of these classes occurs in the selected row. Neighbor C05:314 contains the original following Reading Seven heading and is contextual apparatus, not a new erratum in 307–309.",
+      "evidence": [
+        "registered-class-full-records.json",
+        "pinned/docs/errata_register.json",
+        "pinned/data/alignment/C05_CAMPAIGN.md",
+        "full-original-rows.json"
+      ]
+    },
+    {
+      "ground": 4,
+      "name": "Full applicable HGM lexical evidence",
+      "terms": [
+        "sdig sems",
+        "sdig",
+        "sems",
+        "thub pa",
+        "lcags sreg"
+      ],
+      "record_indexes_zero_based": [
+        16,
+        20,
+        49,
+        56,
+        66,
+        68,
+        83,
+        89,
+        93,
+        129
+      ],
+      "evidence": [
+        "lexical-full-records.json",
+        "lexical-supplement-full-records.json",
+        "originals/hgm_dictionary_v27_2.json.gz"
+      ],
+      "result": "Applicable full records, glossary lists, curated examples, notes, flags and attestation contexts checked. No comparator has been promoted into GMR English. sdig sems is awaiting-hgm-equivalent with no hgm_gloss; its two attestation contexts are truncated, so the full original row supplies the correspondence evidence. g-yo ba glossary over cannot license a word mapping on its own."
+    },
+    {
+      "ground": 5,
+      "name": "Alternative explanation and limits of proposed correction",
+      "result": "An empty errata list is warranted; no specific probable source correction survives the local syntax, physical-source comparison and lexical checks. Literary recast, grammatical number and doctrinal argument are preserved as original text. This producer assessment is not the subsequent independent skeptical review.",
+      "status": "No filed correction; source unchanged."
+    }
+  ]
+}

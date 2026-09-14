@@ -1,0 +1,86 @@
+from pathlib import Path
+from html.parser import HTMLParser
+import json,hashlib,re,difflib
+
+A=Path(__file__).resolve().parents[1]
+def digest(data):return hashlib.sha256(data).hexdigest()
+def fhash(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':digest(b)}
+class BodyParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True);self.side=None;self.divs=[];self.spans=[];self.text={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}};self.active=0;self.skip=0
+    def handle_starttag(self,tag,attrs):
+        a=dict(attrs)
+        if tag=='div':
+            self.divs.append(self.side)
+            if a.get('class') in ('tib','eng'):self.side=a['class']
+        if tag=='span':
+            label=a.get('data-l');nul=a.get('class')=='nul';root=label and label.endswith('S')
+            self.spans.append((label,nul,root,self.side,len(self.text[self.side]) if self.side else 0,a.get('data-d')))
+            if root:self.active+=1
+            if nul:self.skip+=1
+    def handle_data(self,data):
+        if self.active and not self.skip and self.side:self.text[self.side]+=data
+    def handle_endtag(self,tag):
+        if tag=='span':
+            label,nul,root,side,start,depth=self.spans.pop()
+            if label and side:self.ranges[side][label]={'range':[start,len(self.text[side])],'depth':int(depth)}
+            if nul:self.skip-=1
+            if root:self.active-=1
+        if tag=='div':self.side=self.divs.pop()
+
+sources={r['seq']:r for r in json.loads((A/'evidence/source.json').read_text())}
+counts=[]
+for seq in (307,308,309):
+    p=A/str(seq);spec=json.loads((p/'spec.json').read_text());ss=spec['segments'][0];body=(p/'body.html').read_bytes();native=p/'native-001'
+    assert (native/'stdin.json').read_bytes()==(p/'spec.json').read_bytes()
+    assert body==(native/'stdout.html').read_bytes()
+    assert (native/'stderr.txt').read_bytes()==b'' and (native/'exit.txt').read_bytes()==b'0\n'
+    parser=BodyParser();parser.feed(body.decode())
+    assert parser.text['tib']==sources[seq]['wylie']
+    assert parser.text['eng']==sources[seq]['english']
+    observed=json.loads((native/'observed-ranges.json').read_text())
+    actual={r['side']:r['ranges'] for r in observed['resolutions']}
+    ds=json.loads((p/'decisions.json').read_text())['spans'];proof=[]
+    for d in ds:
+        sid=d['id'];lab=f's{seq}{sid}'
+        for side in ('tib','eng'):
+            expected=d['expected_ranges'][side]
+            if expected is None:
+                assert sid not in actual[side]
+                rr=parser.ranges[side][lab]['range'];assert rr[0]==rr[1]
+                continue
+            assert actual[side][sid]==expected,(seq,sid,side,actual[side][sid],expected)
+            assert parser.ranges[side][lab]['range']==expected,(seq,sid,side,parser.ranges[side][lab],expected)
+            assert parser.ranges[side][lab]['depth']==d['depth']
+            text=parser.text[side];assert text[expected[0]:expected[1]]==d[side]
+        proof.append({'id':sid,'canonical_ranges_match_author_declared_occurrences':True,'body_ranges_match_canonical':True,'exact_fragments_match':True})
+    spans=ss['spans'];tot={'seq':seq,'spans':len(spans),'nulls':sum(s['eng'] is None for s in spans),'d5':sum(s['d']==5 for s in spans),'d5_nonnull':sum(s['d']==5 and s['eng'] is not None for s in spans),'depth_counts':{str(d):sum(s['d']==d for s in spans) for d in [3,5,6,7]},'errata':len(json.loads((p/'errata.json').read_text())),'body':fhash(p/'body.html'),'spec':fhash(p/'spec.json'),'native_exit':0,'native_stderr_bytes':0}
+    proof={'schema':'body-source-range-equivalence-v1','seq':seq,'canonical_runs':1,'body_is_exact_native_stdout':True,'spec_is_exact_native_stdin':True,'spine_source_full_text_equal':{'wylie':True,'english':True},'source_hashes':{s:digest(parser.text[k].encode()) for s,k in [('wylie','tib'),('english','eng')]},'per_span':proof,'counts':tot,'limitations':'Byte/range/depth fidelity proves no semantic correspondence.'}
+    (p/'verification.json').write_text(json.dumps(proof,indent=2)+'\n');counts.append(tot)
+
+query=json.loads((A/'evidence/corpus-query-full-rows.json').read_text());allrows={}
+for q in query:
+    for r in q['rows']:allrows[(r['course'],r['seq'])]=r
+comparisons=[]
+for seq,keys in [(307,[('C15',452),('P7',46)]),(308,[('C15',453),('C16',845)]),(309,[('C15',454),('C16',846)])]:
+    row=sources[seq]
+    for key in keys:
+        r=allrows[key];fields={}
+        for f in ('acip','wylie','english'):
+            a,b=row[f],r[f]
+            fields[f]={'equal':a==b,'c05_chars':len(a),'parallel_chars':len(b),'c05_sha256':digest(a.encode()),'parallel_sha256':digest(b.encode()),'differences':[{'op':op,'c05_range':[a0,a1],'parallel_range':[b0,b1],'c05':a[a0:a1],'parallel':b[b0:b1]} for op,a0,a1,b0,b1 in difflib.SequenceMatcher(None,a,b,autojunk=False).get_opcodes() if op!='equal']}
+        comparisons.append({'source':f'C05:{seq}','parallel':f'{key[0]}:{key[1]}','fields':fields,'provenance_limit':'These field comparisons establish textual similarity only, not independent publication or ingestion lineage.'})
+(A/'evidence/parallel-field-comparisons.json').write_text(json.dumps(comparisons,ensure_ascii=False,indent=2)+'\n')
+physical=(A/'evidence/physical-selected-argument.bin').read_bytes();view=physical.decode('latin-1');extent=json.loads((A/'evidence/physical-extents.json').read_text());checks=[]
+for seq in (307,308,309):
+    row=sources[seq];needle=row['acip'].split(' SDIG')[0] if seq==309 else row['acip'];begin=view.index(needle)
+    block=view[begin:].split('\r\n\r\n',1)[0]
+    lines=block.splitlines();i=0
+    while i<len(lines) and lines[i]==lines[i].upper():i+=1
+    acip=' '.join(' '.join(lines[:i]).split());eng=' '.join(' '.join(lines[i:]).split())
+    assert acip==row['acip'] and eng==row['english']
+    checks.append({'seq':seq,'physical_original_byte_start':extent['start_byte']+begin,'physical_original_byte_end_exclusive':extent['start_byte']+begin+len(block.encode('latin-1')),'normalized_acip':acip,'normalized_english':eng,'linebreak_joined_acip_equals_spine':True,'linebreak_joined_english_equals_spine':True})
+(A/'evidence/physical-row-equivalence.json').write_text(json.dumps(checks,ensure_ascii=False,indent=2)+'\n')
+(A/'counts.json').write_text(json.dumps({'schema':'c05-angle-counts-v1','segments':counts},indent=2)+'\n')
+print(json.dumps(counts,indent=2))

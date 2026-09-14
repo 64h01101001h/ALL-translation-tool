@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/english/helpers/author_specs.py", line 37, in <module>
+    write(307,'actual objects and mistaken perception',[
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     w('skyon','problem'),w('med','no'),
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<32 lines>...
+     {'english':'And yet; this quotation; question of whether; must; both; another fact; things; second craving spirit; does; there','reason':'Supplied or distributed explanatory wording has no separate claimed Tibetan atom.'}
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ])
+    ^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/english/helpers/author_specs.py", line 28, in write
+    for left,right in zip(order,order[1:]):assert expected[left]['eng'][1]<=expected[right]['eng'][0],(seq,left,right)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (307, 'w37', 'p31')

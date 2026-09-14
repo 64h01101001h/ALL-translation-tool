@@ -1,0 +1,412 @@
+[
+  {
+    "source": "C05:307",
+    "parallel": "C15:452",
+    "fields": {
+      "acip": {
+        "equal": true,
+        "c05_chars": 316,
+        "parallel_chars": 316,
+        "c05_sha256": "db5d031ddb18cd8936691dfed1681de13ca9c73996bf442d97c49cff360e336e",
+        "parallel_sha256": "db5d031ddb18cd8936691dfed1681de13ca9c73996bf442d97c49cff360e336e",
+        "differences": []
+      },
+      "wylie": {
+        "equal": true,
+        "c05_chars": 320,
+        "parallel_chars": 320,
+        "c05_sha256": "a44bde107463f152c95217bb5b8159a5b08df4cfd87d9f15f2d3ce9036e588fe",
+        "parallel_sha256": "a44bde107463f152c95217bb5b8159a5b08df4cfd87d9f15f2d3ce9036e588fe",
+        "differences": []
+      },
+      "english": {
+        "equal": true,
+        "c05_chars": 677,
+        "parallel_chars": 677,
+        "c05_sha256": "dab9429890fecfe413ec634d8b701c7b467653d08ab6c08f81fbc410fff2f050",
+        "parallel_sha256": "dab9429890fecfe413ec634d8b701c7b467653d08ab6c08f81fbc410fff2f050",
+        "differences": []
+      }
+    },
+    "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+  },
+  {
+    "source": "C05:307",
+    "parallel": "P7:46",
+    "fields": {
+      "acip": {
+        "equal": false,
+        "c05_chars": 316,
+        "parallel_chars": 309,
+        "c05_sha256": "db5d031ddb18cd8936691dfed1681de13ca9c73996bf442d97c49cff360e336e",
+        "parallel_sha256": "8f22efb30f1f20b84b98933cb30fd4ae10746386f7b87f5597553e1eae47778a",
+        "differences": [
+          {
+            "op": "delete",
+            "c05_range": [
+              12,
+              13
+            ],
+            "parallel_range": [
+              12,
+              12
+            ],
+            "c05": ",",
+            "parallel": ""
+          },
+          {
+            "op": "insert",
+            "c05_range": [
+              75,
+              75
+            ],
+            "parallel_range": [
+              74,
+              75
+            ],
+            "c05": "",
+            "parallel": ","
+          },
+          {
+            "op": "delete",
+            "c05_range": [
+              102,
+              104
+            ],
+            "parallel_range": [
+              102,
+              102
+            ],
+            "c05": ", ",
+            "parallel": ""
+          },
+          {
+            "op": "replace",
+            "c05_range": [
+              108,
+              109
+            ],
+            "parallel_range": [
+              106,
+              107
+            ],
+            "c05": "V",
+            "parallel": "W"
+          },
+          {
+            "op": "delete",
+            "c05_range": [
+              170,
+              171
+            ],
+            "parallel_range": [
+              168,
+              168
+            ],
+            "c05": ",",
+            "parallel": ""
+          },
+          {
+            "op": "delete",
+            "c05_range": [
+              223,
+              225
+            ],
+            "parallel_range": [
+              220,
+              220
+            ],
+            "c05": ", ",
+            "parallel": ""
+          },
+          {
+            "op": "delete",
+            "c05_range": [
+              258,
+              259
+            ],
+            "parallel_range": [
+              253,
+              253
+            ],
+            "c05": ",",
+            "parallel": ""
+          },
+          {
+            "op": "delete",
+            "c05_range": [
+              315,
+              316
+            ],
+            "parallel_range": [
+              309,
+              309
+            ],
+            "c05": ",",
+            "parallel": ""
+          }
+        ]
+      },
+      "wylie": {
+        "equal": false,
+        "c05_chars": 320,
+        "parallel_chars": 314,
+        "c05_sha256": "a44bde107463f152c95217bb5b8159a5b08df4cfd87d9f15f2d3ce9036e588fe",
+        "parallel_sha256": "77d364d88031c6f1fca9b8bf9594054ac5ef0b8d6b19b326f41a0e9eec77bbdb",
+        "differences": [
+          {
+            "op": "delete",
+            "c05_range": [
+              12,
+              13
+            ],
+            "parallel_range": [
+              12,
+              12
+            ],
+            "c05": ",",
+            "parallel": ""
+          },
+          {
+            "op": "insert",
+            "c05_range": [
+              77,
+              77
+            ],
+            "parallel_range": [
+              76,
+              77
+            ],
+            "c05": "",
+            "parallel": ","
+          },
+          {
+            "op": "delete",
+            "c05_range": [
+              104,
+              106
+            ],
+            "parallel_range": [
+              104,
+              104
+            ],
+            "c05": ", ",
+            "parallel": ""
+          },
+          {
+            "op": "replace",
+            "c05_range": [
+              110,
+              111
+            ],
+            "parallel_range": [
+              108,
+              109
+            ],
+            "c05": "v",
+            "parallel": "w"
+          },
+          {
+            "op": "delete",
+            "c05_range": [
+              173,
+              174
+            ],
+            "parallel_range": [
+              171,
+              171
+            ],
+            "c05": ",",
+            "parallel": ""
+          },
+          {
+            "op": "delete",
+            "c05_range": [
+              227,
+              229
+            ],
+            "parallel_range": [
+              224,
+              224
+            ],
+            "c05": ", ",
+            "parallel": ""
+          },
+          {
+            "op": "delete",
+            "c05_range": [
+              263,
+              264
+            ],
+            "parallel_range": [
+              258,
+              258
+            ],
+            "c05": ",",
+            "parallel": ""
+          }
+        ]
+      },
+      "english": {
+        "equal": false,
+        "c05_chars": 677,
+        "parallel_chars": 675,
+        "c05_sha256": "dab9429890fecfe413ec634d8b701c7b467653d08ab6c08f81fbc410fff2f050",
+        "parallel_sha256": "539cad9c393744ef0acd0431e16b14ebae6d02b2875a6eae6cb8169a7a1f6448",
+        "differences": [
+          {
+            "op": "replace",
+            "c05_range": [
+              577,
+              579
+            ],
+            "parallel_range": [
+              577,
+              578
+            ],
+            "c05": "--",
+            "parallel": "—"
+          },
+          {
+            "op": "replace",
+            "c05_range": [
+              631,
+              633
+            ],
+            "parallel_range": [
+              630,
+              631
+            ],
+            "c05": "--",
+            "parallel": "—"
+          }
+        ]
+      }
+    },
+    "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+  },
+  {
+    "source": "C05:308",
+    "parallel": "C15:453",
+    "fields": {
+      "acip": {
+        "equal": true,
+        "c05_chars": 509,
+        "parallel_chars": 509,
+        "c05_sha256": "f2f2b901cfa4b7838fc4abe7eb9e787656ed05fac68626cf429dddc9506f30fd",
+        "parallel_sha256": "f2f2b901cfa4b7838fc4abe7eb9e787656ed05fac68626cf429dddc9506f30fd",
+        "differences": []
+      },
+      "wylie": {
+        "equal": true,
+        "c05_chars": 510,
+        "parallel_chars": 510,
+        "c05_sha256": "7cfa7074f4519bc8875d9e473f49234e5aff5ae14cdfd4248a9b0e079063b9c5",
+        "parallel_sha256": "7cfa7074f4519bc8875d9e473f49234e5aff5ae14cdfd4248a9b0e079063b9c5",
+        "differences": []
+      },
+      "english": {
+        "equal": true,
+        "c05_chars": 886,
+        "parallel_chars": 886,
+        "c05_sha256": "766b28942c838294da43655490e59b19c94f98051025b64e6499858a0b6253d1",
+        "parallel_sha256": "766b28942c838294da43655490e59b19c94f98051025b64e6499858a0b6253d1",
+        "differences": []
+      }
+    },
+    "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+  },
+  {
+    "source": "C05:308",
+    "parallel": "C16:845",
+    "fields": {
+      "acip": {
+        "equal": true,
+        "c05_chars": 509,
+        "parallel_chars": 509,
+        "c05_sha256": "f2f2b901cfa4b7838fc4abe7eb9e787656ed05fac68626cf429dddc9506f30fd",
+        "parallel_sha256": "f2f2b901cfa4b7838fc4abe7eb9e787656ed05fac68626cf429dddc9506f30fd",
+        "differences": []
+      },
+      "wylie": {
+        "equal": true,
+        "c05_chars": 510,
+        "parallel_chars": 510,
+        "c05_sha256": "7cfa7074f4519bc8875d9e473f49234e5aff5ae14cdfd4248a9b0e079063b9c5",
+        "parallel_sha256": "7cfa7074f4519bc8875d9e473f49234e5aff5ae14cdfd4248a9b0e079063b9c5",
+        "differences": []
+      },
+      "english": {
+        "equal": true,
+        "c05_chars": 886,
+        "parallel_chars": 886,
+        "c05_sha256": "766b28942c838294da43655490e59b19c94f98051025b64e6499858a0b6253d1",
+        "parallel_sha256": "766b28942c838294da43655490e59b19c94f98051025b64e6499858a0b6253d1",
+        "differences": []
+      }
+    },
+    "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+  },
+  {
+    "source": "C05:309",
+    "parallel": "C15:454",
+    "fields": {
+      "acip": {
+        "equal": true,
+        "c05_chars": 198,
+        "parallel_chars": 198,
+        "c05_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+        "parallel_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+        "differences": []
+      },
+      "wylie": {
+        "equal": true,
+        "c05_chars": 197,
+        "parallel_chars": 197,
+        "c05_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+        "parallel_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+        "differences": []
+      },
+      "english": {
+        "equal": true,
+        "c05_chars": 405,
+        "parallel_chars": 405,
+        "c05_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+        "parallel_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+        "differences": []
+      }
+    },
+    "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+  },
+  {
+    "source": "C05:309",
+    "parallel": "C16:846",
+    "fields": {
+      "acip": {
+        "equal": true,
+        "c05_chars": 198,
+        "parallel_chars": 198,
+        "c05_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+        "parallel_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+        "differences": []
+      },
+      "wylie": {
+        "equal": true,
+        "c05_chars": 197,
+        "parallel_chars": 197,
+        "c05_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+        "parallel_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+        "differences": []
+      },
+      "english": {
+        "equal": true,
+        "c05_chars": 405,
+        "parallel_chars": 405,
+        "c05_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+        "parallel_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+        "differences": []
+      }
+    },
+    "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+  }
+]

@@ -1,0 +1,56 @@
+from pathlib import Path
+import json,gzip,hashlib,sqlite3,importlib.util,sys,difflib
+R=Path(__file__).resolve().parents[1];A=R.parent;E=R/'evidence';B=json.loads((A/'proposal-baseline.json').read_text())
+def save(name,x):(E/name).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+rows=json.loads((E/'source-context-full-rows.json').read_text());witness=json.loads((E/'reopened-full-witnesses.json').read_text());corp=json.loads(gzip.decompress(Path(B['source_pins']['corpus']['path']).read_bytes()));master=json.loads(gzip.decompress(Path(B['source_pins']['master']['path']).read_bytes()))
+archive=[]
+for x in witness:
+ raw=json.loads(x['raw']);assert raw==corp[x['id']-1];archive.append({'spine_id':x['id'],'source_index_zero_based':x['id']-1,'full_record':corp[x['id']-1],'all_fields_equal':True})
+save('reopened-archive-full-witness-records.json',archive)
+lex=json.loads((E/'reopened-master-full-records.json').read_text());terms=set(lex['terms']);terms.update(['blo','dbu ma','sems tsam','mig','shes','chu','klung','rnag','khrag','sdig','sems','sreg','lcags','sngon du btang nas'])
+lex['terms']=sorted(terms);lex['records']=[]
+for coll,rs in master.items():
+ if not isinstance(rs,list):continue
+ for i,r in enumerate(rs):
+  if isinstance(r,dict):
+   hits=terms.intersection(set([r.get('wylie')]+(r.get('wylie_variants') or [])))
+   if hits:lex['records'].append({'collection':coll,'index':i,'matched_terms':sorted(hits),'record':r})
+lex['count']=len(lex['records']);save('reopened-master-full-records.json',lex)
+entries=json.loads((E/'reopened-sqlite-full-entries.json').read_text());checks=[]
+for group in entries:
+ for r in group['rows']:
+  raw=json.loads(r['raw']);assert raw==master['unified_entries'][r['id']-1];checks.append({'term':group['term'],'spine_id':r['id'],'master_index_zero_based':r['id']-1,'full_raw_record_equal':True})
+save('master-spine-record-equivalence.json',checks)
+# Real original parser, unchanged pinned source; source read only.
+spec=importlib.util.spec_from_file_location('source_parser',E/'governing/engines/hgm_tools.py');H=importlib.util.module_from_spec(spec);spec.loader.exec_module(H)
+parsed=H.parse_aligned(B['source_pins']['physical']['path'],'C05');physical=[];b=Path(B['source_pins']['physical']['path']).read_bytes();lines=b.splitlines(keepends=True)
+for seq,(a,z) in {307:(3051,3060),308:(3062,3082),309:(3084,3092)}.items():
+ source=next(x for x in rows if x['seq']==seq);hits=[(i,x) for i,x in enumerate(parsed) if x['acip']==source['acip']];assert len(hits)==1;i,x=hits[0];eq={k:x[k]==source[k] for k in ['course','acip','wylie','english']};assert all(eq.values());start=sum(map(len,lines[:a-1]));end=sum(map(len,lines[:z]));extent=b[start:end];(E/('physical-'+str(seq)+'.bin')).write_bytes(extent);physical.append({'seq':seq,'parser_index_zero_based':i,'matching_full_acip_rows':len(hits),'full_parser_record':x,'fields_equal':eq,'original_line_range_1based_inclusive':[a,z],'original_byte_range_half_open':[start,end],'extent_sha256':sha(extent),'latin1_view':extent.decode('latin1')})
+save('physical-source-reopening.json',{'parser':'governing/engines/hgm_tools.py:parse_aligned','parser_total_rows':len(parsed),'records':physical,'limit':'Source equality does not establish independent publication or historic ingestion lineage.'})
+comparisons=[]
+for seq,targets in {307:[('C15',452),('P7',46)],308:[('C15',453),('C16',845)],309:[('C15',454),('C16',846)]}.items():
+ s=next(x for x in rows if x['seq']==seq)
+ for c,n in targets:
+  w=next(x for x in witness if x['course']==c and x['seq']==n);fields={}
+  for f in ['acip','wylie','english']:
+   fields[f]={'equal':s[f]==w[f],'source_chars':len(s[f]),'witness_chars':len(w[f]),'source_sha256':sha(s[f].encode()),'witness_sha256':sha(w[f].encode()),'differences':[{'op':t,'source_range':[i,j],'witness_range':[k,l],'source':s[f][i:j],'witness':w[f][k:l]} for t,i,j,k,l in difflib.SequenceMatcher(None,s[f],w[f],autojunk=False).get_opcodes() if t!='equal']}
+  comparisons.append({'source':f'C05:{seq}','witness':f'{c}:{n}','fields':fields,'independent_publication_or_ingestion_lineage':'not established by equality or difference'})
+save('parallel-full-field-comparisons.json',comparisons)
+# Verify every original explicit found quotation and its supplied occurrence range.
+quotes=[]
+for angle in ['tibetan','english']:
+ for seq in [307,308,309]:
+  src=next(x for x in rows if x['seq']==seq);fn='errata-screen.json' if angle=='tibetan' else 'errata-five-grounds.json';d=json.loads((A/angle/str(seq)/fn).read_text())
+  if angle=='tibetan':
+   for v in d['screens']:
+    q=v['source_quote'];field=q['field'];rr=q['range'];actual=[i for i in range(len(src[field])) if src[field].startswith(q['found'],i)];quotes.append({'angle':angle,'seq':seq,'file':fn,'label':v['label'],'original_quote':q,'present':bool(actual),'all_offsets':actual,'claimed_range_matches':src[field][rr[0]:rr[1]]==q['found']})
+  else:
+   q=d['grounds'][0]['result'];found=[q['found']]+q.get('other_exact_quotes',[])
+   for text in found:
+    offsets={f:[i for i in range(len(src[f])) if src[f].startswith(text,i)] for f in ['acip','wylie','english']};quotes.append({'angle':angle,'seq':seq,'file':fn,'found':text,'present':any(offsets.values()),'field_offsets':offsets})
+save('original-errata-quote-recheck.json',quotes)
+reg=json.loads((E/'governing/docs/errata_register.json').read_text());ids=['E-044','E-046','E-071','E-076','E-106','E-107','E-111','E-121','E-122','E-131','E-135','E-158','E-189'];save('registered-class-records.json',{'register_count':len(reg),'selected_records':[r for r in reg if r['item_id'] in ids],'duplicate_segment_records':[r for r in reg if r.get('segment') in ['C05:307','C05:308','C05:309']]})
+for fn in ['Handoff/HANDOFF.md','Handoff/README.md']:
+ q=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP'/fn;data=q.read_bytes();(E/Path(fn).name).write_bytes(data)
+print('source/archive/physical/master checks complete; quote discrepancies',json.dumps([q for q in quotes if not q['present'] or q.get('claimed_range_matches')==False]));print('BLO',[(x['collection'],x['index'],x['record'].get('hgm_gloss')) for x in lex['records'] if 'blo' in x['matched_terms']]);print('master records',lex['count'])

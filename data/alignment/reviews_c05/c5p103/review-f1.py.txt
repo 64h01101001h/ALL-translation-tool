@@ -1,0 +1,82 @@
+from pathlib import Path
+import json,hashlib,sys
+R=Path(__file__).resolve().parent;A=R.parent;C=A/'reconciled';P=R/'history/NEEDS_CORRECTION-F1'
+H=lambda b:hashlib.sha256(b).hexdigest()
+J=lambda p:json.loads(Path(p).read_text())
+def save(path,obj):
+ p=R/path;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def pin(path):
+ b=Path(path).read_bytes();return {'sha256':H(b),'bytes':len(b)}
+def verify(path,x):assert pin(path)=={k:x[k] for k in ['sha256','bytes']},str(path)
+def diffs(a,b,p=''):
+ if type(a)!=type(b):return [p]
+ if isinstance(a,dict):
+  return sum((diffs(a[k],b[k],p+'/'+k) if k in a and k in b else [p+'/'+k] for k in sorted(set(a)|set(b))),[])
+ if isinstance(a,list):
+  if len(a)!=len(b):return [p]
+  return sum((diffs(x,y,p+'/'+str(i)) for i,(x,y) in enumerate(zip(a,b))),[])
+ return [] if a==b else [p]
+supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+oldfreeze=J(P/'review-freeze.json');assert H((P/'review-freeze.json').read_bytes())=='ce740d16169172187470e3c8ff60871d73d50b74adb7bab08214d279577fbb08'
+for x in oldfreeze['files']:verify(P/x['path'],x)
+f=J(C/'freeze.json');assert len(f['files'])==641 and H((C/'freeze.json').read_bytes())=='0ebc1b362a42c3382549cc14ce7c5bdcb5a63794fbc9c42953ae6cb7d608e2d0'
+for x in f['files']:verify(C/x['path'],x)
+assert set(x['path'] for x in f['files'])=={str(p.relative_to(C)) for p in C.rglob('*') if p.is_file() and p!=C/'freeze.json'}
+mapping=J(C/'correction-F1/original-to-history-byte-map.json');old=J(C/'history/F1-before/freeze.json');assert H((C/'history/F1-before/freeze.json').read_bytes())=='13cdeba610f4eb8dcc5ececd95722411660de9835ef750a0118a6947da1118a9'
+assert len(mapping['records'])==313 and {x['original_relative'] for x in mapping['records']}=={x['path'] for x in old['files']}|{'freeze.json'}
+changes=[];original_history={}
+for x in mapping['records']:
+ rel=x['original_relative'];historical=C/x['history'];verify(historical,x);original_history[x['original']]=str(historical)
+ assert Path(x['original'])==C/rel
+ if rel!='freeze.json':verify(historical,next(y for y in old['files'] if y['path']==rel))
+ if (C/rel).read_bytes()!=historical.read_bytes():changes.append(rel)
+expected=['308/final-ordered-tuples.json','308/original-span-dispositions.json','308/report.md','freeze.json','provenance.json','summary.json'];assert sorted(changes)==expected
+jd={}
+for rel in ['308/final-ordered-tuples.json','308/original-span-dispositions.json','provenance.json','summary.json']:
+ jd[rel]=diffs(J(C/'history/F1-before'/rel),J(C/rel))
+assert jd['308/final-ordered-tuples.json']==['/tuples/26/reason']
+assert jd['308/original-span-dispositions.json']==['/decisions/26/reason','/decisions/79/reason']
+assert jd['provenance.json']==jd['summary.json']==['/scoped_correction']
+assert (C/'308/report.md').read_bytes().startswith((C/'history/F1-before/308/report.md').read_bytes())
+source=next(x for x in J(P/'independent/source-context-full-rows.json') if x['seq']==308)
+t=J(C/'308/final-ordered-tuples.json')['tuples'][26];ds=J(C/'308/original-span-dispositions.json')['decisions'];ed=ds[79]
+assert t['span']=={'id':'w27','d':5,'tib':'snang','eng':'appears'} and t['tib_range']==[200,205] and t['eng_range']==[349,356]
+assert source['wylie'][200:208]=='snang ba' and source['wylie'][200:205]=='snang' and source['english'][349:356]=='appears'
+assert ed['angle']=='english' and ed['original_span']['id']=='w24' and ed['actual_original_tib_range']==[200,208]
+lex=next(x['record'] for x in J(P/'independent/master-full-records.json') if x['collection']=='unified_entries' and x['index']==11009)
+assert 'appears' in lex['hgm_gloss']
+cp=J(C/'correction-F1/correction-proof.json');assert cp['complete_current_source_row']==source
+for x in cp['protected_current_files']:verify(C/x['path'],x)
+assert len(cp['protected_current_files'])==307
+for x in J(C/'correction-F1/input-identities.json')['inputs']:
+ origin=Path(x['original'])
+ if origin.is_relative_to(R):origin=P/origin.relative_to(R)
+ verify(origin,x);verify(C/x['copy'],x)
+native=[]
+for seq in [307,308,309]:
+ for rel in ['spec.json','body.html','native-result.json','verification.json','material-omissions.json','errata-five-grounds.json']:
+  assert (C/str(seq)/rel).read_bytes()==(P/'reviewed-final'/str(seq)/rel).read_bytes()
+ d=P/'commands'/f'final-native-{seq}';assert (d/'stdin.bin').read_bytes()==(C/str(seq)/'spec.json').read_bytes() and (d/'stdout.bin').read_bytes()==(C/str(seq)/'body.html').read_bytes()
+ assert (d/'stderr.bin').read_bytes()==b'' and (d/'exit.txt').read_text()=='0\n'
+ native.append({'seq':seq,'status':'REUSED_UNCHANGED','command':str(d/'command.json'),'stdin':pin(d/'stdin.bin'),'stdout':pin(d/'stdout.bin'),'stderr':pin(d/'stderr.bin'),'exit':0,'executed_in_this_scoped_review':False})
+manifest=J(P/'original-to-copy-manifest.json');remap=[]
+for x in manifest:
+ previous=x.copy();x['copy']=str(Path('history/NEEDS_CORRECTION-F1')/x['copy'])
+ if x['original'] in original_history:x['original']=original_history[x['original']]
+ verify(R/x['copy'],x);verify(x['original'],x)
+ remap.append({'before':previous,'after':x.copy(),'reason':'Preserve original consumed bytes and point historical reconciliation roles at the explicit F1-before originals; preserve exact prior review copies.'})
+by_hash={}
+for x in manifest:by_hash.setdefault(x['sha256'],x['copy'])
+for p in sorted(C.rglob('*')):
+ if not p.is_file():continue
+ rel=p.relative_to(C);b=p.read_bytes();sha=H(b)
+ core=rel.parts[0].isdigit() or rel.parts[0] in ['helpers','correction-F1'] or len(rel.parts)==1
+ dst=Path('reviewed-final')/rel if core else Path(by_hash.get(sha,'proposal-inputs/current-F1-evidence/'+sha+(p.suffix if p.suffix in supported else '.bin')))
+ if dst.suffix not in supported:dst=Path(str(dst)+('.txt' if p.suffix=='.py' else '.bin'))
+ out=R/dst;out.parent.mkdir(parents=True,exist_ok=True)
+ if not out.exists() or out.read_bytes()!=b:out.write_bytes(b)
+ by_hash.setdefault(sha,str(dst));manifest.append({'original':str(p),'copy':str(dst),'sha256':sha,'bytes':len(b)})
+save('original-to-copy-manifest.json',manifest)
+save('correction-F1/historical-provenance-remapping.json',{'prior_complete_boundary':'history/NEEDS_CORRECTION-F1','prior_freeze_sha256':'ce740d16169172187470e3c8ff60871d73d50b74adb7bab08214d279577fbb08','all_prior_records':remap,'reconciler_historical_byte_map':'reviewed-final/correction-F1/original-to-history-byte-map.json','root_protocol_history_preserved':True})
+save('correction-F1/scoped-proof.json',{'status':'PASS','review_scope':'Only F1 corrected explanations and accompanying narrow status metadata, full history and current byte identity; no generator/test/parser/query reexecution.','current_reconciliation_freeze_sha256':H((C/'freeze.json').read_bytes()),'current_frozen_files':641,'prior_reconciliation_frozen_files':312,'prior_reconciliation_actual_files_preserved':313,'prior_review_frozen_files_preserved':608,'prior_review_freeze_preserved':True,'changed_prior_files_including_freeze':changes,'exact_json_differences':jd,'current_reasons':{'tuple':t['reason'],'tibetan':ds[26]['reason'],'english':ed['reason']},'original_decisions_all_237_unchanged':True,'final_spans_all_129_unchanged':True,'specs_bodies_ranges_counts_unchanged':True,'source_gloss_evidence_reused_from_verified_originals':True,'native_evidence':native,'manifest_records':len(manifest),'unique_copy_targets':len({x['copy'] for x in manifest}),'source_origin':'b5047596859f6537b71f259c1e7df2e70f867fb2 through300','acceptance_baseline_after306':None})
+print(json.dumps({'status':'PASS','current_frozen_files':641,'prior_review_files_preserved':608,'prior_reconciliation_actual_files_preserved':313,'changed_json_fields':jd,'manifest_records':len(manifest),'native_runs_reexecuted':0},ensure_ascii=False))

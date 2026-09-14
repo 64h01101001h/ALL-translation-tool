@@ -1,0 +1,62 @@
+import gzip, hashlib, json, pathlib, sqlite3, subprocess
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+WORK = ROOT.parents[2] / 'campaign-worktree'
+E = ROOT / 'evidence'
+COMMIT = 'b5047596859f6537b71f259c1e7df2e70f867fb2'
+def save(name, data):
+    p=E/name; p.parent.mkdir(parents=True,exist_ok=True)
+    p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+def digest(b): return hashlib.sha256(b).hexdigest()
+db=sqlite3.connect((WORK/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro')
+db.row_factory=sqlite3.Row
+selected=json.loads((E/'originals/source.json').read_text())
+context=json.loads((E/'originals/context.json').read_text())
+rows=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',301,315))]
+originals={r['seq']:r for r in rows}
+comparisons=[]
+for kind, snapshots in [('selected',selected),('context',context)]:
+    for r in snapshots:
+        o=originals[r['seq']]
+        result={k:r[k]==o[k] for k in ['id','course','seq','acip','wylie','english']}
+        assert all(result.values())
+        comparisons.append({'snapshot':kind,'seq':r['seq'],'equal':result})
+save('source-context-verification.json',{'sql':'select * from corpus_segments where course=? and seq between ? and ? order by seq','parameters':['C05',301,315],'count':len(rows),'rows':rows,'comparisons':comparisons})
+queries=[]; witnesses={}
+for r in selected:
+    for field in ['wylie','english']:
+        sql='select * from corpus_segments where '+field+'=? order by course,seq'
+        matches=[dict(x) for x in db.execute(sql,(r[field],))]
+        queries.append({'name':str(r['seq'])+'-exact-'+field,'sql':sql,'parameters':[r[field]],'count':len(matches),'witness_ids':[x['id'] for x in matches]})
+        witnesses.update({x['id']:x for x in matches})
+for term in ['DBU SEMS GNYIS DON SHES','BRLAN ZHING GSHER BA PHOR PA GANG','SDIG SEMS','BLO\'I G-YO BA SNGON DU BTANG NAS','LCAGS SREG SA GZHI SU YIS BYAS']:
+    sql='select * from corpus_segments where acip like ? order by course,seq'
+    matches=[dict(x) for x in db.execute(sql,('%'+term+'%',))]
+    queries.append({'name':'acip-'+term,'sql':sql,'parameters':['%'+term+'%'],'count':len(matches),'witness_ids':[x['id'] for x in matches]})
+    witnesses.update({x['id']:x for x in matches})
+save('corpus-queries.json',queries)
+save('corpus-witnesses.json',list(witnesses.values()))
+terms=['skyon','med','dbu','sems','don','shes','yod','mtshungs','dpyod','skabs','yi dvags','mig shes','mig','chu klung','chu','klung','rnag khrag','rnag','khrag','snang','tshad ma','bltas','dngos gnas','dngos gnas pa',"'gal ba",'kha cig',"'gro ba",'gsum','brlan','gsher ba','phor pa','gang','cig car','dmyal ba','lcags sreg','lcags','sreg','la sogs pa','sogs','der','skyes','sems can','grub pa','byed pa po','spyod \'jug','sa gzhi','sa','gzhi','su','byas','me','tshogs','byung','thams cad','sdig sems','sdig','thub pa','gsungs','zer','dbang phyug','rtag pa','blo','g-yo ba','sngon du btang','bstan']
+gloss=[]
+for t in terms:
+    results=[dict(x) for x in db.execute('select * from entries where wylie=?',(t,))]
+    gloss.append({'query':'select * from entries where wylie=?','parameters':[t],'count':len(results),'records':results})
+save('glossary-records.json',gloss)
+print('GLOSSARY HGM FIELDS (full source records retained):')
+for g in gloss:
+    print(g['parameters'][0],json.dumps([{'id':r['id'],'hgm_gloss':json.loads(r['hgm_gloss']) if r['hgm_gloss'] else None,'tier':r['tier'],'status':r['status']} for r in g['records']],ensure_ascii=False))
+physical=(E/'originals/C05ReadingASCII.txt').read_bytes(); lines=physical.splitlines(keepends=True)
+starts=[];off=0
+for line in lines:starts.append(off);off+=len(line)
+extents={307:(3051,3060),308:(3062,3082),309:(3084,3092)}
+physical_records=[]
+for seq,(first,last) in extents.items():
+    b=b''.join(lines[first-1:last]); p=E/f'originals/C05-{seq}-physical.bin';p.write_bytes(b)
+    physical_records.append({'seq':seq,'source':'originals/C05ReadingASCII.txt','line_range_inclusive':[first,last],'byte_range_half_open':[starts[first-1],starts[last-1]+len(lines[last-1])],'retained_file':str(p.relative_to(E)),'bytes':len(b),'sha256':digest(b),'latin1_view':b.decode('latin1')})
+save('physical-extents.json',physical_records)
+for rel in ['engines/hgm_tools.py','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md']:
+    b=subprocess.check_output(['git','show',COMMIT+':'+rel],cwd=WORK)
+    p=E/'governing'/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b)
+    print('additional dependency',rel,len(b),digest(b))
+print('QUERY COUNTS',[(q['name'],q['count']) for q in queries])
+print('PHYSICAL SELECTED EXTENTS',json.dumps(physical_records,ensure_ascii=False,indent=2))

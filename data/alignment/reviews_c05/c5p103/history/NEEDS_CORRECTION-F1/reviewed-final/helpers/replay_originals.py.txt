@@ -1,0 +1,14 @@
+from pathlib import Path
+import json,subprocess,sys,os,hashlib
+R=Path(__file__).resolve().parents[1];A=R.parent
+runs=[]
+for angle in ['tibetan','english']:
+ for seq in [307,308,309]:
+  src=A/angle/str(seq);out=R/'native-original-replays'/angle/str(seq);out.mkdir(parents=True,exist_ok=False)
+  b=(src/'spec.json').read_bytes();(out/'stdin.bin').write_bytes(b)
+  cmd=[sys.executable,str(R/'helpers/native_adapter.py'),str(out/'observed-ranges.json')]
+  (out/'command.json').write_text(json.dumps({'argv':cmd,'cwd':str(R),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin_source':str(src/'spec.json'),'saved_body':str(src/'body.html')},indent=2)+'\n')
+  p=subprocess.run(cmd,cwd=R,input=b,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+  (out/'stdout.bin').write_bytes(p.stdout);(out/'stderr.bin').write_bytes(p.stderr);(out/'exit.txt').write_text(str(p.returncode)+'\n')
+  s=json.loads(b)['segments'][0]['spans'];v={'angle':angle,'seq':seq,'exit':p.returncode,'stderr_bytes':len(p.stderr),'stdout_bytes':len(p.stdout),'saved_body_equal':p.stdout==(src/'body.html').read_bytes(),'span_count':len(s),'null_count':sum(x['eng'] is None for x in s),'total_d5':sum(x['d']==5 for x in s),'nonnull_d5_word_pairs':sum(x['d']==5 and x['eng'] is not None for x in s),'stdin_sha256':hashlib.sha256(b).hexdigest(),'stdout_sha256':hashlib.sha256(p.stdout).hexdigest()};(out/'result.json').write_text(json.dumps(v,indent=2)+'\n');runs.append(v)
+(R/'evidence/original-native-replay-results.json').write_text(json.dumps(runs,indent=2)+'\n');print(json.dumps(runs,indent=2))

@@ -1,0 +1,22 @@
+"""Execute pinned canonical code unchanged, retaining original resolve returns only."""
+from pathlib import Path
+import sys,json,sqlite3,hashlib,types,importlib.util
+R=Path(__file__).resolve().parents[1];A=R.parent;P=json.loads((A/'proposal-baseline.json').read_text()); W=Path(P['source_pins']['spine']['path']).parents[1]; G=R/'evidence/governing'
+def mod(name,path,filename=None):
+ m=types.ModuleType(name);m.__file__=str(filename or path);sys.modules[name]=m;exec(compile(path.read_bytes(),m.__file__,'exec'),m.__dict__);return m
+for rel in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ b=(G/rel).read_bytes();assert hashlib.sha256(b).hexdigest()==P['governing_git_pins'][rel]['sha256']
+assert (W/'tools/gen_alignment_page.py').read_bytes()==(G/'tools/gen_alignment_page.py').read_bytes()
+mod('hgm_tools',G/'engines/hgm_tools.py',W/'engines/hgm_tools.py')
+B=mod('build_alignment_layer',G/'tools/build_alignment_layer.py',W/'tools/build_alignment_layer.py');B.SPINE=P['source_pins']['spine']['path']
+real=sqlite3.connect;connections=[]
+def ro(database,*args,**kwargs):
+ assert str(database)==P['source_pins']['spine']['path'];assert not args
+ uri=Path(database).as_uri()+'?mode=ro';connections.append({'requested':str(database),'effective':uri,'uri':True});return real(uri,uri=True)
+sqlite3.connect=ro
+M=mod('canonical_generator',G/'tools/gen_alignment_page.py',W/'tools/gen_alignment_page.py');orig=M.resolve;ranges=[]
+def record(text,spans,side,seq):
+ v=orig(text,spans,side,seq);ranges.append({'seq':seq,'side':side,'span_order':[s['id'] for s in spans],'ranges':v,'text_sha256':hashlib.sha256(text.encode()).hexdigest()});return v
+M.resolve=record
+try:M.main()
+finally:Path(sys.argv[1]).write_text(json.dumps({'sqlite_connections':connections,'resolutions':ranges,'generator':P['governing_git_pins']['tools/gen_alignment_page.py'],'builder':P['governing_git_pins']['tools/build_alignment_layer.py']},indent=2)+'\n')

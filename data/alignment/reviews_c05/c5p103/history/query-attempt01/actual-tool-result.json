@@ -1,0 +1,5 @@
+{
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 campaign-artifacts/C05-307-309/semantic-review/inspect.py.txt queries",
+  "exit_code": 1,
+  "output": "Traceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/semantic-review/inspect.py.txt\", line 93, in <module>\n    key=json.dumps([x['sql'],x['parameters']]);assert x['sql'].lower().startswith('select ')\n                    ~^^^^^^^\nKeyError: 'sql'\n"
+}

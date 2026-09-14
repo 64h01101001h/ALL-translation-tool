@@ -1,0 +1,45 @@
+from pathlib import Path
+import json,hashlib
+R=Path(__file__).resolve().parent;A=R.parent;P=R/'history/NEEDS_CORRECTION-F1'
+J=lambda p:json.loads(Path(p).read_text());H=lambda b:hashlib.sha256(b).hexdigest()
+supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+helper=(P/'governing-batch/land_reviewed_page.py.txt').read_text();assert all(repr(x) in helper or '"'+x+'"' in helper for x in supported)
+cache={}
+def pin(p):
+ p=Path(p)
+ if str(p) not in cache:
+  b=p.read_bytes();cache[str(p)]={'sha256':H(b),'bytes':len(b)}
+ return cache[str(p)]
+def verify(p,x):assert pin(p)=={k:x[k] for k in ['sha256','bytes']},str(p)
+manifest=J(R/'original-to-copy-manifest.json');assert len(manifest)==1183
+checked=[]
+for i,x in enumerate(manifest):
+ keys={'original','copy','sha256','bytes'}
+ if 'original_git_commit' in x:keys|={'original_git_commit','repository_relative_path'}
+ assert set(x)==keys
+ copy=R/x['copy'];assert not Path(x['copy']).is_absolute() and copy.resolve().is_relative_to(R) and copy.suffix in supported and Path(x['original']).is_absolute()
+ verify(copy,x);verify(x['original'],x)
+ if 'original_git_commit' in x:
+  rel=x['repository_relative_path'];d=P/'commands'/('git-'+rel.replace('/','__'));cmd=J(d/'command.json')
+  assert cmd['argv']==['git','show',x['original_git_commit']+':'+rel]
+  verify(d/'stdout.bin',x);assert (d/'stderr.bin').read_bytes()==b'' and (d/'exit.txt').read_text()=='0\n'
+ checked.append({'record':i,'copy':x['copy'],'original':x['original'],'sha256':x['sha256'],'bytes':x['bytes'],'exact_identity':True,'git_provenance':'REUSED_UNCHANGED_ACTUAL_GIT_SHOW' if 'original_git_commit' in x else None})
+for angle,freeze in [('tibetan','freeze-final-v1.json'),('english','freeze.json'),('reconciled','freeze.json')]:
+ base=A/angle;f=J(base/freeze);records=f['files'];records=records.items() if isinstance(records,dict) else ((x['path'],x) for x in records)
+ originals={x['original'] for x in manifest}
+ for rel,x in records:assert str(base/rel) in originals;verify(base/rel,x)
+old=J(P/'review-freeze.json');assert len(old['files'])==608
+for x in old['files']:verify(P/x['path'],x)
+assert H((P/'review-freeze.json').read_bytes())=='ce740d16169172187470e3c8ff60871d73d50b74adb7bab08214d279577fbb08'
+current=J(R/'reviewed-final/freeze.json');assert len(current['files'])==641 and H((R/'reviewed-final/freeze.json').read_bytes())=='0ebc1b362a42c3382549cc14ce7c5bdcb5a63794fbc9c42953ae6cb7d608e2d0'
+rv=J(R/'review.json');assert set(rv)=={'verdict','open_findings','segments','total_spans','total_nulls','total_word_pairs'} and rv['verdict']=='APPROVE' and rv['open_findings']==[]
+assert rv['segments']==J(P/'review.json')['segments'] and rv['total_spans']==129 and rv['total_nulls']==4 and rv['total_word_pairs']==75
+assert (R/'resolved-spans.json').read_bytes()==(P/'resolved-spans.json').read_bytes();assert all(set(x)=={'seq','id','d','tib','eng','tib_range','eng_range'} for x in J(R/'resolved-spans.json'))
+assert J(R/'bank-ready-errata.json')==[]
+assert set(J(R/'span-head-allow-needed.json')['pages_c05'])=={'c5p103/s308w23','c5p103/s309w8','c5p103/s309w11'}
+assert J(R/'correction-F1/scoped-proof.json')['status']=='PASS'
+for p in R.rglob('*'):
+ if p.is_file():assert p.suffix in supported,str(p)
+result={'status':'PASS','scope':'Current corrected boundary and every historical/original copy; initial native/source checks explicitly reused unchanged.','manifest_records':len(manifest),'unique_copy_targets':len({x['copy'] for x in manifest}),'checked_records':checked,'supported_extensions':sorted(supported),'unsupported_files':[],'full_original_and_current_freezes_rechecked':True,'required_consumer_schemas_pass':True,'prior_608_file_review_and_own_freeze_preserved':True,'current_reconciliation_frozen_files':641,'current_reconciliation_freeze_sha256':H((R/'reviewed-final/freeze.json').read_bytes()),'source_origin_commit':'b5047596859f6537b71f259c1e7df2e70f867fb2','acceptance_baseline_after306':None,'native_reexecutions':0,'query_parser_reexecutions':0}
+(R/'copy-extension-preflight.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({k:v for k,v in result.items() if k!='checked_records'}))

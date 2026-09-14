@@ -1,0 +1,1853 @@
+{
+  "schema": "reconciler-five-refutation-grounds-v1",
+  "producer": "Codex (gpt-6-astra)",
+  "seq": 309,
+  "new_errata": [],
+  "screens": [
+    {
+      "seq": 309,
+      "suspicion": "mental movement spelling and idiom",
+      "found": "BLO'I G-YO BA SNGON DU BTANG NAS",
+      "field": "acip",
+      "ranges": [
+        [
+          82,
+          114
+        ]
+      ],
+      "expected_correction": null,
+      "refuted_as_new_erratum": true,
+      "five_grounds": {
+        "a_exact_quote": {
+          "checked": true,
+          "present_verbatim": true,
+          "source_row": {
+            "id": 1691,
+            "course": "C05",
+            "seq": 309,
+            "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+            "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+            "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.",
+            "raw": "{\"course\": \"C05\", \"acip\": \"SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,\", \"wylie\": \"skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir\", \"english\": \"Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.\"}"
+          },
+          "physical_reopening": {
+            "seq": 309,
+            "parser_index_zero_based": 309,
+            "matching_full_acip_rows": 1,
+            "full_parser_record": {
+              "course": "C05",
+              "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+              "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+              "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+            },
+            "fields_equal": {
+              "course": true,
+              "acip": true,
+              "wylie": true,
+              "english": true
+            },
+            "original_line_range_1based_inclusive": [
+              3084,
+              3092
+            ],
+            "original_byte_range_half_open": [
+              214455,
+              215071
+            ],
+            "extent_sha256": "e19ea45fdb0d8fadfc2fcbdac6bfa3879e5a7e83678c47f62a2a16a822baf0b6",
+            "latin1_view": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG \r\nSEMS BYED PA POR BSTAN PA'I PHYIR,\r\nYet there is no such problem. The point of this quotation is to say that the\r\nburning steel and so on are not something that was created by some\r\nunchanging creator being or something like that; by someone who thought it\r\nover first and then created them. The lines are meant to show us that what\r\nreally made all these things is the non-virtuous states of mind had by the\r\nbeings who have to take birth there.\r\n\r\n"
+          },
+          "original_proposal_quote_rechecks": [
+            {
+              "angle": "tibetan",
+              "seq": 309,
+              "file": "errata-screen.json",
+              "label": "mental-movement expression and G-YO",
+              "original_quote": {
+                "course": "C05",
+                "seq": 309,
+                "field": "acip",
+                "found": "BLO'I G-YO BA SNGON DU BTANG NAS",
+                "range": [
+                  82,
+                  114
+                ]
+              },
+              "present": true,
+              "all_offsets": [
+                82
+              ],
+              "claimed_range_matches": true
+            },
+            {
+              "angle": "tibetan",
+              "seq": 309,
+              "file": "errata-screen.json",
+              "label": "repeated created and maker predication",
+              "original_quote": {
+                "course": "C05",
+                "seq": 309,
+                "field": "english",
+                "found": "created by some unchanging creator being or something like that; by someone who thought it over first and then created them",
+                "range": [
+                  128,
+                  251
+                ]
+              },
+              "present": true,
+              "all_offsets": [
+                128
+              ],
+              "claimed_range_matches": true
+            },
+            {
+              "angle": "english",
+              "seq": 309,
+              "file": "errata-five-grounds.json",
+              "found": "thought it over first and then created them.",
+              "present": true,
+              "field_offsets": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  208
+                ]
+              }
+            },
+            {
+              "angle": "english",
+              "seq": 309,
+              "file": "errata-five-grounds.json",
+              "found": "BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA",
+              "present": true,
+              "field_offsets": {
+                "acip": [
+                  82
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            {
+              "angle": "english",
+              "seq": 309,
+              "file": "errata-five-grounds.json",
+              "found": "non-virtuous states of mind",
+              "present": true,
+              "field_offsets": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  330
+                ]
+              }
+            }
+          ]
+        },
+        "b_parallel_publication": {
+          "checked": true,
+          "full_field_comparisons": [
+            {
+              "source": "C05:309",
+              "witness": "C15:454",
+              "fields": {
+                "acip": {
+                  "equal": true,
+                  "source_chars": 198,
+                  "witness_chars": 198,
+                  "source_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+                  "witness_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+                  "differences": []
+                },
+                "wylie": {
+                  "equal": true,
+                  "source_chars": 197,
+                  "witness_chars": 197,
+                  "source_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+                  "witness_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+                  "differences": []
+                },
+                "english": {
+                  "equal": true,
+                  "source_chars": 405,
+                  "witness_chars": 405,
+                  "source_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+                  "witness_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+                  "differences": []
+                }
+              },
+              "independent_publication_or_ingestion_lineage": "not established by equality or difference"
+            },
+            {
+              "source": "C05:309",
+              "witness": "C16:846",
+              "fields": {
+                "acip": {
+                  "equal": true,
+                  "source_chars": 198,
+                  "witness_chars": 198,
+                  "source_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+                  "witness_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+                  "differences": []
+                },
+                "wylie": {
+                  "equal": true,
+                  "source_chars": 197,
+                  "witness_chars": 197,
+                  "source_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+                  "witness_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+                  "differences": []
+                },
+                "english": {
+                  "equal": true,
+                  "source_chars": 405,
+                  "witness_chars": 405,
+                  "source_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+                  "witness_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+                  "differences": []
+                }
+              },
+              "independent_publication_or_ingestion_lineage": "not established by equality or difference"
+            }
+          ],
+          "full_witness_records": "../evidence/reopened-full-witnesses.json",
+          "independent_publication_evidence": "not established",
+          "finding": "Digital equality/difference confirms textual witnesses, not publication independence or ingestion lineage. GIE70/168 support only the shared mental-intention phrase when relevant."
+        },
+        "c_registered_classes_and_duplicates": {
+          "checked": true,
+          "origin_register_count": 193,
+          "duplicate_segment_records": [],
+          "full_registered_classes": "../evidence/registered-class-records.json",
+          "english_chars": 405,
+          "is_1500_cap": false,
+          "finding": "No selected-row cap, following-heading glue, converter escape, folio-caption or footnote fusion applies. Context314 has already classified following-heading apparatus, outside these rows."
+        },
+        "d_defensible_reading_and_expected_correction": {
+          "checked": true,
+          "reading": "The complete expression describes previous mental intention. GIE70/168 preserve that shared phrase extent; neither establishes a correction here. G-YO is the source spelling. An isolated g-yo ba/over gloss would be an alignment error, not proof of a source error.",
+          "complete_original_lexical_records": [
+            {
+              "collection": "unified_entries",
+              "index": 12985,
+              "matched_terms": [
+                "blo"
+              ],
+              "record": {
+                "tibetan": "བློ",
+                "wylie": "blo",
+                "wylie_variants": [
+                  "blo"
+                ],
+                "tenses": null,
+                "sanskrit": "{LCh,C,MSA,MV}buddhi; {MSA}mati; {GD:699} dhī; jñāna, buddhi; {LC}na medo&ntrāṇi nāpyaham; {LC}!!tva; {LC}ātmatva; {LC}prajñā; {LC}bālabuddhi; {LC}puruṣabuddhivat; {LC}manas; {LC}budha; {LC}manas, medhā; {LC}saṃpratyaya",
+                "hopkins_english": "intelligence; awareness; knowledge; mind; intellect; {C}intellectual act(s); thought; resolve to; consciousness; {GD:699} conceptual mind; cognition",
+                "hgm_gloss": [
+                  "to think",
+                  "minds",
+                  "intelligence",
+                  "an attitude",
+                  "mentally",
+                  "proper procedures",
+                  "intentions",
+                  "mind",
+                  "thinking",
+                  "idea",
+                  "thoughts",
+                  "opinion",
+                  "state of mind",
+                  "states of mind",
+                  "mental",
+                  "understanding",
+                  "mental ability",
+                  "intellect",
+                  "thinks",
+                  "think",
+                  "thought",
+                  "his own mind",
+                  "awareness",
+                  "consciousness",
+                  "sees",
+                  "intent",
+                  "attitude"
+                ],
+                "hgm_evidence": {
+                  "tier": "glossary",
+                  "source": "HTG2016"
+                },
+                "status": "hgm-attested",
+                "pronunciation": "lo",
+                "acip": "BLO",
+                "corpus_occurrences": {
+                  "courses": [
+                    "C01",
+                    "C02",
+                    "C03",
+                    "C04",
+                    "C05",
+                    "C06",
+                    "C07",
+                    "C08",
+                    "C09",
+                    "C10",
+                    "C11",
+                    "C12",
+                    "C13",
+                    "C14",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "DDA",
+                    "DTE",
+                    "EM",
+                    "GIE",
+                    "GK",
+                    "ILL",
+                    "MB2",
+                    "P1",
+                    "P10",
+                    "P3",
+                    "P4",
+                    "P5",
+                    "P6",
+                    "P7",
+                    "P8",
+                    "P9",
+                    "SOS",
+                    "SPF",
+                    "Sunlight",
+                    "TCS01",
+                    "TCS02",
+                    "TCS03",
+                    "TCS04Initiation",
+                    "TCS04Mantras",
+                    "TCS04PrayerBook",
+                    "TCS05",
+                    "TCS06",
+                    "TCS07",
+                    "TCS08KhenRinpocheLongLife",
+                    "TCS08PabongkaSadhana",
+                    "TCS08SourceOfAllMyGood",
+                    "TCS08ThousandAngels",
+                    "TCS09",
+                    "TCS10",
+                    "TCS11",
+                    "TCS13",
+                    "TCS14",
+                    "TCS15",
+                    "TCS16KaliWang",
+                    "TCS16Reading",
+                    "TCS17",
+                    "TCS18Commentary",
+                    "TCS18LamaChupa"
+                  ],
+                  "n_segments": 1261
+                },
+                "pronunciation_source": "GMR card (C04 Language Study Guide)",
+                "hopkins_realigned": "uma-v26",
+                "lc_merged": "lc-v27"
+              }
+            },
+            {
+              "collection": "unified_entries",
+              "index": 20027,
+              "matched_terms": [
+                "blo"
+              ],
+              "record": {
+                "tibetan": "ཤེས་པ། བློ",
+                "wylie": "shes pa",
+                "wylie_variants": [
+                  "shes pa",
+                  "blo"
+                ],
+                "tenses": null,
+                "sanskrit": "{MSA,MV}vijñāna; {C}vijñata; {C}jñatā; {MSA,MV}jñāna; {C} prajānāti; {C}prajñā; {C}parijānāti (=prajānāti); {C}prajānanatā; {C}vijñāta; {C}vijānāti; {C} anvagacchati; {C}medhā; {MSA}pratyavagama; {MV}pratipatti; {MSA}yang dag shes pa = saṃtīrita; {C}khyāyati; vijñāna; jñāna/vijñāna; jñāna, buddhi; {LC}na medo&ntrāṇi nāpyaham; {LC}!!tva; {LC}ātmatva; {LC}dhī; {LC}bālabuddhi; {LC}puruṣabuddhivat; {LC}mati; {LC}manas; {LC}budha; {LC}manas, medhā; {LC}saṃpratyaya; {LC}pratyabhijñāta; {LC}abhilakṣita; {LC}avasita; {LC}ājñā; {LC}upalabhbha; {LC}kaśalya; {LC}prajānate; {LC}avijānamāna; {LC}!!jña; {LC}abhijña; {LC}!!jñatā; {LC}abhijñatā; {LC}bhāvayet [tad] guṇajñatām; {LC}!!jñā; {LC}abhijñā; {LC}parijñāya; {LC}jñāyamāna; {LC}prajñāyate; {LC}pratīta; {LC}pratīti; {LC}pratīyate; {LC}vidyā; {LC}āvidu; {LC}kalita; {LC}kalitakuśala; {LC}jānati; {LC}jānāmi; {LC}jānīte; {LC}jānīyāt; {LC}jñapti; {LC}jñāyate; {LC}parijānati; {LC}lakṣita; {LC}vid; {LC}vinna, vedya; {LC}saṃstava",
+                "hopkins_english": "consciousness; cognition; {C}be aware of; cognized; known; discerned; mind; knower; knowledge; to know; realize; understand; cognize; {PH}knowledge; {C}wisely knows; knows, in his wisdom; comprehends wisdom; wise cognition; is aware; becomes aware of; be aware of; follow; sagacity; is declaredDefinition: clear and knowing Divisions: (1) sense cognition; (2) mental cognition",
+                "hgm_gloss": [
+                  "imagine",
+                  "recognizing",
+                  "knowledge",
+                  "sense",
+                  "understand",
+                  "educate yourself",
+                  "recognize",
+                  "cognizant",
+                  "realization",
+                  "state of mind",
+                  "mind",
+                  "consciousness",
+                  "perception",
+                  "awareness",
+                  "states of mind",
+                  "grasp",
+                  "understanding",
+                  "state ... of mind",
+                  "be aware is happening",
+                  "become aware is happening",
+                  "understood",
+                  "be aware",
+                  "came to an understanding",
+                  "perceived",
+                  "perceive",
+                  "idea"
+                ],
+                "hgm_evidence": {
+                  "tier": "glossary",
+                  "source": "HTG2016"
+                },
+                "status": "hgm-attested",
+                "pronunciation": "shepa",
+                "acip": "SHES PA",
+                "corpus_occurrences": {
+                  "courses": [
+                    "AK",
+                    "C01",
+                    "C03",
+                    "C04",
+                    "C05",
+                    "C06",
+                    "C07",
+                    "C08",
+                    "C09",
+                    "C10",
+                    "C11",
+                    "C12",
+                    "C13",
+                    "C14",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "DDA",
+                    "DTE",
+                    "EM",
+                    "GIE",
+                    "GK",
+                    "ILL",
+                    "MB2",
+                    "P1",
+                    "P3",
+                    "P7",
+                    "SOS",
+                    "SPF",
+                    "Sunlight",
+                    "TCS01",
+                    "TCS02",
+                    "TCS03",
+                    "TCS04Initiation",
+                    "TCS04Mantras",
+                    "TCS04PrayerBook",
+                    "TCS05",
+                    "TCS06",
+                    "TCS07",
+                    "TCS08NaropaTrials1_12",
+                    "TCS08PabongkaSadhana",
+                    "TCS09",
+                    "TCS10",
+                    "TCS11",
+                    "TCS12",
+                    "TCS13",
+                    "TCS14",
+                    "TCS15",
+                    "TCS16KaliWang",
+                    "TCS16Reading",
+                    "TCS17",
+                    "TCS18Commentary",
+                    "TCS18LamaChupa"
+                  ],
+                  "n_segments": 862
+                },
+                "hopkins_realigned": "uma-v26",
+                "lc_merged": "lc-v27"
+              }
+            },
+            {
+              "collection": "unified_entries",
+              "index": 22631,
+              "matched_terms": [
+                "sngon du"
+              ],
+              "record": {
+                "tibetan": "སྔོན་དུ",
+                "wylie": "sngon du",
+                "wylie_variants": [
+                  "sngon du"
+                ],
+                "tenses": null,
+                "sanskrit": "{LC}pūrva; {LC}pūrvaṃgamam; {LC}puraḥ; {LC}pūrvam; {LC}purā, prākkāla; {LC}sakāśam; {LC}samīpa",
+                "hopkins_english": null,
+                "hgm_gloss": [
+                  "first",
+                  "before",
+                  "preceded",
+                  "preliminary",
+                  "at the beginning"
+                ],
+                "hgm_evidence": {
+                  "tier": "glossary",
+                  "source": "HTG2016"
+                },
+                "status": "hgm-attested (not in Great Dictionary)",
+                "pronunciation": "ngun du",
+                "acip": "SNGON DU",
+                "corpus_occurrences": {
+                  "courses": [
+                    "AK",
+                    "C01",
+                    "C02",
+                    "C03",
+                    "C04",
+                    "C05",
+                    "C06",
+                    "C07",
+                    "C09",
+                    "C10",
+                    "C11",
+                    "C12",
+                    "C13",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "DDA",
+                    "EM",
+                    "GIE",
+                    "GK",
+                    "ILL",
+                    "P1",
+                    "P3",
+                    "P6",
+                    "SPF",
+                    "Sunlight",
+                    "TCS01",
+                    "TCS02",
+                    "TCS03",
+                    "TCS04Initiation",
+                    "TCS04PrayerBook",
+                    "TCS05",
+                    "TCS06",
+                    "TCS07",
+                    "TCS08NaropaSadhana",
+                    "TCS08PabongkaSadhana",
+                    "TCS09",
+                    "TCS10",
+                    "TCS11",
+                    "TCS12",
+                    "TCS13",
+                    "TCS14",
+                    "TCS15",
+                    "TCS16KaliWang",
+                    "TCS16Reading",
+                    "TCS17",
+                    "TCS18Commentary",
+                    "TCS18LamaChupa"
+                  ],
+                  "n_segments": 334
+                },
+                "lc_merged": "lc-v27"
+              }
+            },
+            {
+              "collection": "unified_entries",
+              "index": 25181,
+              "matched_terms": [
+                "g-yo ba"
+              ],
+              "record": {
+                "tibetan": "ག-ཡོ་བ",
+                "wylie": "g-yo ba",
+                "wylie_variants": [
+                  "g-yo ba"
+                ],
+                "tenses": null,
+                "sanskrit": "{LC}iñjanā; {LC}iñjita; {LC}iñjya; {LC}utsāha; {LC}unmiñj; {LC}kampante; {LC}kampita; {LC}aprakampin; {LC}kiraṇa; {LC}gati; {LC}cañcala; {LC}cala; {LC}acala; {LC}bhūmicala (!!cāla); {LC}calat; {LC}prakopa; {LC}avicālyayogena; {LC}vījyamāna; {LC}samudīraṇa; {LC}sphurati; {LC}añjita; {LC}avadhūta; {LC}ākṣāraṇā; {LC}ālola; {LC}ullāsa; {LC}citteñjanā; {LC}īha; {LC}kampana; {LC}kṣepa; {LC}caṭula; {LC}capala; {LC}calana; {LC}calita; {LC}cāpala; {LC}cālana; {LC}cikura; {LC}cyuta; {LC}jaṅgama; {LC}taraṅgita; {LC}tarala; {LC}taralita; {LC}dolā; {LC}prasara; {LC}bhaṅgura; {LC}bhramat; {LC}lola; {LC}valat; {LC}vidhūnana; {LC}vilola; {LC}vepathu; {LC}vyākula; {LC}vyālola; {LC}saṃkasuka; {LC}saṃcalat; {LC}saṃcārin; {LC}sphuraṇa; {LC}sphurita",
+                "hopkins_english": null,
+                "hgm_gloss": [
+                  "migrations",
+                  "over",
+                  "shifting",
+                  "affected"
+                ],
+                "hgm_evidence": {
+                  "tier": "glossary",
+                  "source": "HTG2016"
+                },
+                "status": "hgm-attested (not in Great Dictionary)",
+                "pronunciation": "yowa",
+                "acip": "G-YO BA",
+                "corpus_occurrences": {
+                  "courses": [
+                    "C03",
+                    "C05",
+                    "C08",
+                    "C11",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "DTE",
+                    "EM",
+                    "GIE",
+                    "ILL",
+                    "MB2",
+                    "TCS01",
+                    "TCS03",
+                    "TCS05",
+                    "TCS07",
+                    "TCS08SourceOfAllMyGood",
+                    "TCS12",
+                    "TCS13",
+                    "TCS14",
+                    "TCS18Commentary"
+                  ],
+                  "n_segments": 59
+                },
+                "pronunciation_source": "GMR card (C10 Language Study Guide)",
+                "lc_merged": "lc-v27"
+              }
+            },
+            {
+              "collection": "glossary_entries",
+              "index": 1680,
+              "matched_terms": [
+                "sngon du"
+              ],
+              "record": {
+                "acip": "SNGON DU",
+                "wylie": "sngon du",
+                "tibetan": "སྔོན་དུ",
+                "hgm_glosses": [
+                  "first",
+                  "before",
+                  "preceded",
+                  "preliminary",
+                  "at the beginning"
+                ],
+                "source": "Hypertext Glossary (2016-05-16)",
+                "status": "glossary-attested"
+              }
+            },
+            {
+              "collection": "glossary_entries",
+              "index": 5007,
+              "matched_terms": [
+                "blo"
+              ],
+              "record": {
+                "acip": "BLO",
+                "wylie": "blo",
+                "tibetan": "བློ",
+                "hgm_glosses": [
+                  "to think",
+                  "minds",
+                  "intelligence",
+                  "an attitude",
+                  "mentally",
+                  "proper procedures",
+                  "intentions",
+                  "mind",
+                  "thinking",
+                  "idea",
+                  "thoughts",
+                  "opinion",
+                  "state of mind",
+                  "states of mind",
+                  "mental",
+                  "understanding",
+                  "mental ability",
+                  "intellect",
+                  "thinks",
+                  "think",
+                  "thought",
+                  "his own mind",
+                  "awareness",
+                  "consciousness",
+                  "sees",
+                  "intent",
+                  "attitude"
+                ],
+                "source": "Hypertext Glossary (2016-05-16)",
+                "status": "glossary-attested"
+              }
+            },
+            {
+              "collection": "glossary_entries",
+              "index": 6740,
+              "matched_terms": [
+                "g-yo ba"
+              ],
+              "record": {
+                "acip": "G-YO BA",
+                "wylie": "g-yo ba",
+                "tibetan": "ག-ཡོ་བ",
+                "hgm_glosses": [
+                  "migrations",
+                  "over",
+                  "shifting",
+                  "affected"
+                ],
+                "source": "Hypertext Glossary (2016-05-16)",
+                "status": "glossary-attested",
+                "flags": [
+                  "ewts-warning"
+                ]
+              }
+            }
+          ],
+          "finding": "No necessary correction demonstrated. HGM fields support their attested scope; comparative fields and machine corpus matches are not promoted into hgm_gloss."
+        },
+        "e_all_claimed_counts_and_quotes": {
+          "checked": true,
+          "all_original_quote_checks_pass": true,
+          "original_query_checks": [
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where wylie=? order by course,seq",
+              "parameters": [
+                "skyon med de, dbu sems gnyis don shes yod med mtshungs mi mtshungs dpyod pa'i skabs yin pa'i phyir dang , yi dvags kyi mig shes la chu klung rnag khrag tu snang ba'i tshe na, de ltar snang ba'i mig shes tshad ma ma yin pa dang , chu klung la bltas pa de'i tshe na, rnag khrag dngos gnas pa zhig yod pa mi 'gal ba'i phyir"
+              ],
+              "claimed_count": 2,
+              "actual_count": 2,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where english=? order by course,seq",
+              "parameters": [
+                "And yet there is no such problem, for this quotation appears in the section where we are examining the question of whether, in the schools of the Middle Way and the Mind-Only, an object and the perception of it must be equivalent in either both existing or both not existing. Moreover, there is another fact about this situation, where the stream of water appears as pus and blood to the visual consciousness of the craving spirit. It is no inconsistency to say that the visual consciousness that sees things this way is not a valid perception, and to say at the same time that--when the craving spirit looks at the stream of water--there does exist there actual pus and blood."
+              ],
+              "claimed_count": 2,
+              "actual_count": 2,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where wylie=? order by course,seq",
+              "parameters": [
+                "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where english=? order by course,seq",
+              "parameters": [
+                "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue."
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where wylie=? order by course,seq",
+              "parameters": [
+                "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where english=? order by course,seq",
+              "parameters": [
+                "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%DBU SEMS GNYIS DON SHES%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%BRLAN ZHING GSHER BA PHOR PA GANG%"
+              ],
+              "claimed_count": 42,
+              "actual_count": 42,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%SDIG SEMS%"
+              ],
+              "claimed_count": 6,
+              "actual_count": 6,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%BLO'I G-YO BA SNGON DU BTANG NAS%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%LCAGS SREG SA GZHI SU YIS BYAS%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%the schools of the Middle Way%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%Someone again may come and claim%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%unchanging creator being%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%Who made the burning steel%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%lcags sreg sa gzhi su yis byas%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%blo'i g-yo ba%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%brlan zhing gsher ba%"
+              ],
+              "claimed_count": 64,
+              "actual_count": 64,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%sdig sems%"
+              ],
+              "claimed_count": 6,
+              "actual_count": 6,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%dbu sems gnyis%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%don shes yod med%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%The mind of what's non-virtue%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%valid perception, and to say at the same time%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            }
+          ],
+          "original_span_counts_replayed": "../evidence/original-native-replay-results.json",
+          "sdig_sems_query_actual_counts": [
+            6,
+            6
+          ],
+          "english_length_actual": 405,
+          "register_count_actual": 193,
+          "correction_to_original_handoff": "English81 is TOTAL d5; NONNULL original d5 is80. This metadata distinction is corrected, not filed as source errata."
+        }
+      },
+      "disposition": "No new erratum; original wording unchanged. Uncertain alignment matter omitted with reasons; this is not the separate skeptical approval."
+    },
+    {
+      "seq": 309,
+      "suspicion": "repeated created and maker role",
+      "found": "created by some unchanging creator being or something like that; by someone who thought it over first and then created them",
+      "field": "english",
+      "ranges": [
+        [
+          128,
+          251
+        ]
+      ],
+      "expected_correction": null,
+      "refuted_as_new_erratum": true,
+      "five_grounds": {
+        "a_exact_quote": {
+          "checked": true,
+          "present_verbatim": true,
+          "source_row": {
+            "id": 1691,
+            "course": "C05",
+            "seq": 309,
+            "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+            "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+            "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.",
+            "raw": "{\"course\": \"C05\", \"acip\": \"SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,\", \"wylie\": \"skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir\", \"english\": \"Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there.\"}"
+          },
+          "physical_reopening": {
+            "seq": 309,
+            "parser_index_zero_based": 309,
+            "matching_full_acip_rows": 1,
+            "full_parser_record": {
+              "course": "C05",
+              "acip": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG SEMS BYED PA POR BSTAN PA'I PHYIR,",
+              "wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+              "english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+            },
+            "fields_equal": {
+              "course": true,
+              "acip": true,
+              "wylie": true,
+              "english": true
+            },
+            "original_line_range_1based_inclusive": [
+              3084,
+              3092
+            ],
+            "original_byte_range_half_open": [
+              214455,
+              215071
+            ],
+            "extent_sha256": "e19ea45fdb0d8fadfc2fcbdac6bfa3879e5a7e83678c47f62a2a16a822baf0b6",
+            "latin1_view": "SKYON MED DE, DE'I DON LCAGS SREG LA SOGS PA DE DAG DBANG PHYUG RTAG PA SOGS KYIS BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA MA YIN PAR DER SKYES PA'I 'GRO BA'I SDIG \r\nSEMS BYED PA POR BSTAN PA'I PHYIR,\r\nYet there is no such problem. The point of this quotation is to say that the\r\nburning steel and so on are not something that was created by some\r\nunchanging creator being or something like that; by someone who thought it\r\nover first and then created them. The lines are meant to show us that what\r\nreally made all these things is the non-virtuous states of mind had by the\r\nbeings who have to take birth there.\r\n\r\n"
+          },
+          "original_proposal_quote_rechecks": [
+            {
+              "angle": "tibetan",
+              "seq": 309,
+              "file": "errata-screen.json",
+              "label": "mental-movement expression and G-YO",
+              "original_quote": {
+                "course": "C05",
+                "seq": 309,
+                "field": "acip",
+                "found": "BLO'I G-YO BA SNGON DU BTANG NAS",
+                "range": [
+                  82,
+                  114
+                ]
+              },
+              "present": true,
+              "all_offsets": [
+                82
+              ],
+              "claimed_range_matches": true
+            },
+            {
+              "angle": "tibetan",
+              "seq": 309,
+              "file": "errata-screen.json",
+              "label": "repeated created and maker predication",
+              "original_quote": {
+                "course": "C05",
+                "seq": 309,
+                "field": "english",
+                "found": "created by some unchanging creator being or something like that; by someone who thought it over first and then created them",
+                "range": [
+                  128,
+                  251
+                ]
+              },
+              "present": true,
+              "all_offsets": [
+                128
+              ],
+              "claimed_range_matches": true
+            },
+            {
+              "angle": "english",
+              "seq": 309,
+              "file": "errata-five-grounds.json",
+              "found": "thought it over first and then created them.",
+              "present": true,
+              "field_offsets": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  208
+                ]
+              }
+            },
+            {
+              "angle": "english",
+              "seq": 309,
+              "file": "errata-five-grounds.json",
+              "found": "BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA",
+              "present": true,
+              "field_offsets": {
+                "acip": [
+                  82
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            {
+              "angle": "english",
+              "seq": 309,
+              "file": "errata-five-grounds.json",
+              "found": "non-virtuous states of mind",
+              "present": true,
+              "field_offsets": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  330
+                ]
+              }
+            }
+          ]
+        },
+        "b_parallel_publication": {
+          "checked": true,
+          "full_field_comparisons": [
+            {
+              "source": "C05:309",
+              "witness": "C15:454",
+              "fields": {
+                "acip": {
+                  "equal": true,
+                  "source_chars": 198,
+                  "witness_chars": 198,
+                  "source_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+                  "witness_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+                  "differences": []
+                },
+                "wylie": {
+                  "equal": true,
+                  "source_chars": 197,
+                  "witness_chars": 197,
+                  "source_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+                  "witness_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+                  "differences": []
+                },
+                "english": {
+                  "equal": true,
+                  "source_chars": 405,
+                  "witness_chars": 405,
+                  "source_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+                  "witness_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+                  "differences": []
+                }
+              },
+              "independent_publication_or_ingestion_lineage": "not established by equality or difference"
+            },
+            {
+              "source": "C05:309",
+              "witness": "C16:846",
+              "fields": {
+                "acip": {
+                  "equal": true,
+                  "source_chars": 198,
+                  "witness_chars": 198,
+                  "source_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+                  "witness_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+                  "differences": []
+                },
+                "wylie": {
+                  "equal": true,
+                  "source_chars": 197,
+                  "witness_chars": 197,
+                  "source_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+                  "witness_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+                  "differences": []
+                },
+                "english": {
+                  "equal": true,
+                  "source_chars": 405,
+                  "witness_chars": 405,
+                  "source_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+                  "witness_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+                  "differences": []
+                }
+              },
+              "independent_publication_or_ingestion_lineage": "not established by equality or difference"
+            }
+          ],
+          "full_witness_records": "../evidence/reopened-full-witnesses.json",
+          "independent_publication_evidence": "not established",
+          "finding": "Digital equality/difference confirms textual witnesses, not publication independence or ingestion lineage. GIE70/168 support only the shared mental-intention phrase when relevant."
+        },
+        "c_registered_classes_and_duplicates": {
+          "checked": true,
+          "origin_register_count": 193,
+          "duplicate_segment_records": [],
+          "full_registered_classes": "../evidence/registered-class-records.json",
+          "english_chars": 405,
+          "is_1500_cap": false,
+          "finding": "No selected-row cap, following-heading glue, converter escape, folio-caption or footnote fusion applies. Context314 has already classified following-heading apparatus, outside these rows."
+        },
+        "d_defensible_reading_and_expected_correction": {
+          "checked": true,
+          "reading": "The source denial is expanded with a second explanatory created clause, then affirms non-virtuous minds as makers. This is defensible literary repetition. One byas pa is linked once; the distributed maker role remains unbanked.",
+          "complete_original_lexical_records": [
+            {
+              "collection": "unified_entries",
+              "index": 12731,
+              "matched_terms": [
+                "byas pa"
+              ],
+              "record": {
+                "tibetan": "བྱས་པ",
+                "wylie": "byas pa",
+                "wylie_variants": [
+                  "byas pa"
+                ],
+                "tenses": "bya/ byed/ byas/ byos",
+                "sanskrit": "bya/ byed/ byas/ byos/; {LCh,MSA}kṛta; {MSA}ākṛti; {MV} sgyu ma byas pa = māyā-kṛta; {MV}bshad pa ... byas pa = vyākhyām ... upanibadhya; {LC}abhyupeta; {LC}āhita; {LC}uttha; {LC}kalita; {LC}kalpita; {LC}kārikā; {LC}kāritābhūt; {LC}kṛtvā; {LC}cakāra, cakruḥ; {LC}cita; {LC}!!ja; {LC}datta; {LC}nivartita; {LC}yojita; {LC}viracita; {LC}vihita; {LC}sampādita",
+                "hopkins_english": "treated; product; produced thing{N}; do; act; perform; fabricate; performance; deed; action; produced phenomenon",
+                "hgm_gloss": [
+                  "committed",
+                  "has been",
+                  "has done",
+                  "to do",
+                  "acted",
+                  "following",
+                  "made",
+                  "to apply",
+                  "gains",
+                  "gave",
+                  "did",
+                  "do",
+                  "making",
+                  "make",
+                  "do something",
+                  "occurs",
+                  "performing",
+                  "illustration",
+                  "when",
+                  "something that was created",
+                  "perform",
+                  "something",
+                  "present",
+                  "to undertake",
+                  "respond",
+                  "brings",
+                  "result",
+                  "provides",
+                  "taking",
+                  "works",
+                  "exists",
+                  "complete",
+                  "done",
+                  "takes",
+                  "composed",
+                  "happens",
+                  "create",
+                  "brought",
+                  "deed",
+                  "commits",
+                  "went through",
+                  "action",
+                  "given",
+                  "performed",
+                  "committing",
+                  "act",
+                  "expressing"
+                ],
+                "hgm_evidence": {
+                  "tier": "glossary",
+                  "source": "HTG2016"
+                },
+                "status": "hgm-attested",
+                "pronunciation": "jepa",
+                "acip": "BYAS PA",
+                "corpus_occurrences": {
+                  "courses": [
+                    "AK",
+                    "C01",
+                    "C02",
+                    "C03",
+                    "C05",
+                    "C06",
+                    "C07",
+                    "C08",
+                    "C09",
+                    "C10",
+                    "C11",
+                    "C12",
+                    "C13",
+                    "C14",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "DDA",
+                    "DTE",
+                    "EM",
+                    "GIE",
+                    "GK",
+                    "ILL",
+                    "MB2",
+                    "P1",
+                    "P3",
+                    "P5",
+                    "P6",
+                    "P7",
+                    "SOS",
+                    "SPF",
+                    "Sunlight",
+                    "TCS01",
+                    "TCS02",
+                    "TCS03",
+                    "TCS04Initiation",
+                    "TCS04Mantras",
+                    "TCS04PrayerBook",
+                    "TCS05",
+                    "TCS06",
+                    "TCS07",
+                    "TCS08NaropaTrials1_12",
+                    "TCS09",
+                    "TCS10",
+                    "TCS11",
+                    "TCS12",
+                    "TCS13",
+                    "TCS14",
+                    "TCS15",
+                    "TCS16KaliWang",
+                    "TCS16Reading",
+                    "TCS17",
+                    "TCS18Commentary"
+                  ],
+                  "n_segments": 718
+                },
+                "pronunciation_source": "GMR card (C07 Language Study Guide)",
+                "hopkins_realigned": "uma-v26",
+                "lc_merged": "lc-v27"
+              }
+            },
+            {
+              "collection": "unified_entries",
+              "index": 12840,
+              "matched_terms": [
+                "byed pa po"
+              ],
+              "record": {
+                "tibetan": "བྱེད་པ་པོ",
+                "wylie": "byed pa po",
+                "wylie_variants": [
+                  "byed pa po"
+                ],
+                "tenses": null,
+                "sanskrit": "{C,MSA}kartṛ; {C,MSA} kāraka; {C}paśyaka; {LC}adhikārin; {LC}!!kara; {LC}vidhi",
+                "hopkins_english": "agent; doer; {C}maker; one who sees",
+                "hgm_gloss": [
+                  "someone",
+                  "person",
+                  "being who created",
+                  "creator",
+                  "maker",
+                  "prime creator",
+                  "person who committed",
+                  "one who made",
+                  "one who commits"
+                ],
+                "hgm_evidence": {
+                  "tier": "glossary",
+                  "source": "HTG2016"
+                },
+                "status": "hgm-attested",
+                "pronunciation": "jepapo",
+                "acip": "BYED PA PO",
+                "corpus_occurrences": {
+                  "courses": [
+                    "C04",
+                    "C05",
+                    "C07",
+                    "C09",
+                    "C12",
+                    "C13",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "GIE",
+                    "ILL",
+                    "P6",
+                    "P7",
+                    "TCS01",
+                    "TCS02",
+                    "TCS03",
+                    "TCS05",
+                    "TCS09",
+                    "TCS10"
+                  ],
+                  "n_segments": 114
+                },
+                "hopkins_realigned": "uma-v26",
+                "lc_merged": "lc-v27"
+              }
+            },
+            {
+              "collection": "unified_entries",
+              "index": 13151,
+              "matched_terms": [
+                "dbang phyug"
+              ],
+              "record": {
+                "tibetan": "དབང་ཕྱུག",
+                "wylie": "dbang phyug",
+                "wylie_variants": [
+                  "dbang phyug"
+                ],
+                "tenses": null,
+                "sanskrit": "{LCh,C,MSA}īśvara; {C} aiśvarya; {C}īśvaratā; {C}īśvarya; {LC}īśa; {LC}īśatā; {LC}lokeśvara; {LC}bhuvaneśvara; {LC}pūleśvara; {LC}rājyaiśvarya; {LC}girīśa, mahādeva; {LC}maheśvara; {LC}śiva; {LC}aiśvara; {LC}kapardina, garīśa; {LC}śarva; {LC}hara",
+                "hopkins_english": "Īśvara; god; ruler; lord; {C}sovereignty; dominion",
+                "hgm_gloss": [
+                  "creator being",
+                  "lord of power",
+                  "lord",
+                  "almighty",
+                  "powerful"
+                ],
+                "hgm_evidence": {
+                  "tier": "glossary",
+                  "source": "HTG2016"
+                },
+                "status": "hgm-attested",
+                "pronunciation": "wangchuk",
+                "acip": "DBANG PHYUG",
+                "corpus_occurrences": {
+                  "courses": [
+                    "C01",
+                    "C04",
+                    "C05",
+                    "C08",
+                    "C10",
+                    "C13",
+                    "C14",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "EM",
+                    "GIE",
+                    "GK",
+                    "ILL",
+                    "MB2",
+                    "MBL",
+                    "P8",
+                    "SOS",
+                    "TCS01",
+                    "TCS02",
+                    "TCS04Initiation",
+                    "TCS04PrayerBook",
+                    "TCS05",
+                    "TCS06",
+                    "TCS07",
+                    "TCS08PabongkaSadhana",
+                    "TCS09",
+                    "TCS10",
+                    "TCS11",
+                    "TCS12",
+                    "TCS13",
+                    "TCS14",
+                    "TCS16KaliWang",
+                    "TCS17"
+                  ],
+                  "n_segments": 212
+                },
+                "pronunciation_source": "GMR card (C05 Language Study Guide)",
+                "hopkins_realigned": "uma-v26",
+                "lc_merged": "lc-v27"
+              }
+            },
+            {
+              "collection": "unified_entries",
+              "index": 83525,
+              "matched_terms": [
+                "sdig sems"
+              ],
+              "record": {
+                "tibetan": "སྡིག་སེམས",
+                "wylie": "sdig sems",
+                "wylie_variants": [
+                  "sdig sems"
+                ],
+                "tenses": null,
+                "sanskrit": "{LC}enas; {LC}kalka",
+                "hopkins_english": null,
+                "hgm_gloss": null,
+                "hgm_evidence": null,
+                "status": "awaiting-hgm-equivalent",
+                "acip": "SDIG SEMS",
+                "lc_source": [
+                  "supplement-1992"
+                ],
+                "lc_refs": [
+                  "{sc3}ko.303.14",
+                  "{sc21}911"
+                ],
+                "pronunciation": "diksem",
+                "scaffold_added": "lc-v27",
+                "corpus_occurrences": {
+                  "courses": [
+                    "C05",
+                    "C15",
+                    "C16"
+                  ],
+                  "n_segments": 6
+                },
+                "attestation_contexts": [
+                  {
+                    "course": "C05",
+                    "tibetan_wylie": "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gy",
+                    "hgm_english": "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Be"
+                  },
+                  {
+                    "course": "C05",
+                    "tibetan_wylie": "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir",
+                    "hgm_english": "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lin"
+                  }
+                ],
+                "tibetan_source": "generated-ewts-v27-1"
+              }
+            },
+            {
+              "collection": "glossary_entries",
+              "index": 4912,
+              "matched_terms": [
+                "byas pa"
+              ],
+              "record": {
+                "acip": "BYAS PA",
+                "wylie": "byas pa",
+                "tibetan": "བྱས་པ",
+                "hgm_glosses": [
+                  "committed",
+                  "has been",
+                  "has done",
+                  "to do",
+                  "acted",
+                  "following",
+                  "made",
+                  "to apply",
+                  "gains",
+                  "gave",
+                  "did",
+                  "do",
+                  "making",
+                  "make",
+                  "do something",
+                  "occurs",
+                  "performing",
+                  "illustration",
+                  "when",
+                  "something that was created",
+                  "perform",
+                  "something",
+                  "present",
+                  "to undertake",
+                  "respond",
+                  "brings",
+                  "result",
+                  "provides",
+                  "taking",
+                  "works",
+                  "exists",
+                  "complete",
+                  "done",
+                  "takes",
+                  "composed",
+                  "happens",
+                  "create",
+                  "brought",
+                  "deed",
+                  "commits",
+                  "went through",
+                  "action",
+                  "given",
+                  "performed",
+                  "committing",
+                  "act",
+                  "expressing"
+                ],
+                "source": "Hypertext Glossary (2016-05-16)",
+                "status": "glossary-attested"
+              }
+            },
+            {
+              "collection": "glossary_entries",
+              "index": 4963,
+              "matched_terms": [
+                "byed pa po"
+              ],
+              "record": {
+                "acip": "BYED PA PO",
+                "wylie": "byed pa po",
+                "tibetan": "བྱེད་པ་པོ",
+                "hgm_glosses": [
+                  "someone",
+                  "person",
+                  "being who created",
+                  "creator",
+                  "maker",
+                  "prime creator",
+                  "person who committed",
+                  "one who made",
+                  "one who commits"
+                ],
+                "source": "Hypertext Glossary (2016-05-16)",
+                "status": "glossary-attested"
+              }
+            },
+            {
+              "collection": "glossary_entries",
+              "index": 5074,
+              "matched_terms": [
+                "dbang phyug"
+              ],
+              "record": {
+                "acip": "DBANG PHYUG",
+                "wylie": "dbang phyug",
+                "tibetan": "དབང་ཕྱུག",
+                "hgm_glosses": [
+                  "creator being",
+                  "lord of power",
+                  "lord",
+                  "almighty",
+                  "powerful"
+                ],
+                "source": "Hypertext Glossary (2016-05-16)",
+                "status": "glossary-attested"
+              }
+            }
+          ],
+          "finding": "No necessary correction demonstrated. HGM fields support their attested scope; comparative fields and machine corpus matches are not promoted into hgm_gloss."
+        },
+        "e_all_claimed_counts_and_quotes": {
+          "checked": true,
+          "all_original_quote_checks_pass": true,
+          "original_query_checks": [
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where wylie=? order by course,seq",
+              "parameters": [
+                "skyon med de, dbu sems gnyis don shes yod med mtshungs mi mtshungs dpyod pa'i skabs yin pa'i phyir dang , yi dvags kyi mig shes la chu klung rnag khrag tu snang ba'i tshe na, de ltar snang ba'i mig shes tshad ma ma yin pa dang , chu klung la bltas pa de'i tshe na, rnag khrag dngos gnas pa zhig yod pa mi 'gal ba'i phyir"
+              ],
+              "claimed_count": 2,
+              "actual_count": 2,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where english=? order by course,seq",
+              "parameters": [
+                "And yet there is no such problem, for this quotation appears in the section where we are examining the question of whether, in the schools of the Middle Way and the Mind-Only, an object and the perception of it must be equivalent in either both existing or both not existing. Moreover, there is another fact about this situation, where the stream of water appears as pus and blood to the visual consciousness of the craving spirit. It is no inconsistency to say that the visual consciousness that sees things this way is not a valid perception, and to say at the same time that--when the craving spirit looks at the stream of water--there does exist there actual pus and blood."
+              ],
+              "claimed_count": 2,
+              "actual_count": 2,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where wylie=? order by course,seq",
+              "parameters": [
+                "yang kha cig, 'gro ba gsum gyis brlan zhing gsher ba phor pa gang la cig car du bltas pa'i tshe na, rnag khrag dngos gnas pa med par thal, dmyal ba'i lcags sreg la sogs pa der skyes pa'i sems can gyi snang ba tsam yin gyi, dngos gnas su grub pa med pa'i phyir, der thal, de 'dra'i byed pa po su yang med pa'i phyir, der thal, spyod 'jug las, lcags sreg sa gzhi su yis byas, , me tshogs de dag ci las byung , , de 'dra de dag thams cad kyang , sdig sems yin par thub pas gsungs, , zhes gsungs pa'i phyir, zer na"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where english=? order by course,seq",
+              "parameters": [
+                "Someone again may come and claim the following: Let's consider once more this situation where three different types of beings sit down together and look at a glass full of something wet and flowing. Isn't it true that there is no actual pus and blood there? Because isn't it true that the burning steel and so on in the hells is only something that appears to a person who is born there, but that there is nothing there which actually is these objects? Because isn't it true that there is no one at all who went and made all these kinds of things? And isn't this a fact, because doesn't the text of The Bodhisattva's Way of Life say: Who made the burning steel that acts As the floor of the world of hell? Where did all the mass of flames You find there all come from? The Able Ones have spoken that Everything there like this Is nothing at all other than The mind of what's non-virtue."
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where wylie=? order by course,seq",
+              "parameters": [
+                "skyon med de, de'i don lcags sreg la sogs pa de dag dbang phyug rtag pa sogs kyis blo'i g-yo ba sngon du btang nas byas pa ma yin par der skyes pa'i 'gro ba'i sdig sems byed pa por bstan pa'i phyir"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where english=? order by course,seq",
+              "parameters": [
+                "Yet there is no such problem. The point of this quotation is to say that the burning steel and so on are not something that was created by some unchanging creator being or something like that; by someone who thought it over first and then created them. The lines are meant to show us that what really made all these things is the non-virtuous states of mind had by the beings who have to take birth there."
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%DBU SEMS GNYIS DON SHES%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%BRLAN ZHING GSHER BA PHOR PA GANG%"
+              ],
+              "claimed_count": 42,
+              "actual_count": 42,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%SDIG SEMS%"
+              ],
+              "claimed_count": 6,
+              "actual_count": 6,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%BLO'I G-YO BA SNGON DU BTANG NAS%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "tibetan",
+              "sql": "select * from corpus_segments where acip like ? order by course,seq",
+              "parameters": [
+                "%LCAGS SREG SA GZHI SU YIS BYAS%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%the schools of the Middle Way%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%Someone again may come and claim%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%unchanging creator being%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%Who made the burning steel%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%lcags sreg sa gzhi su yis byas%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%blo'i g-yo ba%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%brlan zhing gsher ba%"
+              ],
+              "claimed_count": 64,
+              "actual_count": 64,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%sdig sems%"
+              ],
+              "claimed_count": 6,
+              "actual_count": 6,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%dbu sems gnyis%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+              "parameters": [
+                "%don shes yod med%"
+              ],
+              "claimed_count": 5,
+              "actual_count": 5,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%The mind of what's non-virtue%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            },
+            {
+              "angle": "english",
+              "sql": "select * from corpus_segments where english like ? order by course,seq",
+              "parameters": [
+                "%valid perception, and to say at the same time%"
+              ],
+              "claimed_count": 3,
+              "actual_count": 3,
+              "equal": true
+            }
+          ],
+          "original_span_counts_replayed": "../evidence/original-native-replay-results.json",
+          "sdig_sems_query_actual_counts": [
+            6,
+            6
+          ],
+          "english_length_actual": 405,
+          "register_count_actual": 193,
+          "correction_to_original_handoff": "English81 is TOTAL d5; NONNULL original d5 is80. This metadata distinction is corrected, not filed as source errata."
+        }
+      },
+      "disposition": "No new erratum; original wording unchanged. Uncertain alignment matter omitted with reasons; this is not the separate skeptical approval."
+    }
+  ]
+}

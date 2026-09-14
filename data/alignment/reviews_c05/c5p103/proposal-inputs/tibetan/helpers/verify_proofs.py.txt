@@ -1,0 +1,64 @@
+import gzip,hashlib,importlib.util,json,pathlib,sys
+from html.parser import HTMLParser
+ROOT=pathlib.Path(__file__).resolve().parents[1];E=ROOT/'evidence'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def write(path,obj):path.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+class SourceParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True);self.stack=[];self.plain={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}}
+    def handle_starttag(self,tag,attrs):
+        a=dict(attrs);side=next((f['side'] for f in reversed(self.stack) if f['side']),None)
+        if tag=='div' and a.get('class') in ['tib','eng']:side=a['class']
+        lab=a.get('data-l');active=bool(lab and lab.endswith('S')) or any(f['source'] for f in self.stack)
+        self.stack.append({'tag':tag,'side':side,'source':active,'nul':a.get('class')=='nul','lab':lab,'start':len(self.plain[side]) if side else None})
+    def handle_data(self,data):
+        if self.stack and any(f['source'] for f in self.stack) and not any(f['nul'] for f in self.stack):
+            side=self.stack[-1]['side']
+            if side:self.plain[side]+=data
+    def handle_endtag(self,tag):
+        assert self.stack and self.stack[-1]['tag']==tag,(tag,self.stack[-1] if self.stack else None)
+        f=self.stack.pop()
+        if f['lab'] and f['side']:self.ranges[f['side']][f['lab']]=[f['start'],len(self.plain[f['side']])]
+
+source=json.loads((E/'source-context-verification.json').read_text())
+rows={r['seq']:r for r in source['rows']}
+summary=[]
+for seq in [307,308,309]:
+    d=ROOT/str(seq);body=(d/'body.html').read_bytes();specb=(d/'spec.json').read_bytes();spec=json.loads(specb)['segments'][0]
+    native=d/'native/attempt01';assert body==(native/'stdout.html').read_bytes();assert specb==(native/'stdin.json').read_bytes()
+    assert (native/'stderr.txt').read_bytes()==b'' and (native/'exit.txt').read_text()=='0\n'
+    p=SourceParser();p.feed(body.decode());assert not p.stack
+    assert p.plain['tib']==rows[seq]['wylie'];assert p.plain['eng']==rows[seq]['english']
+    decisions=json.loads((d/'decisions.json').read_text())['proposals'];ranges=[]
+    for item in decisions:
+        label='s'+str(seq)+item['id'];tr=p.ranges['tib'][label];assert tr==item['tib_range'],(seq,label,tr,item['tib_range'])
+        er=p.ranges['eng'][label]
+        if item['eng'] is not None:assert er==item['eng_range'],(seq,label,er,item['eng_range'])
+        else:assert er[0]==er[1],(seq,label,'null renders source text')
+        ranges.append({'label':label,'tib_range':tr,'eng_range':er if item['eng'] is not None else None,'tib_exact':rows[seq]['wylie'][tr[0]:tr[1]],'eng_exact':rows[seq]['english'][er[0]:er[1]] if item['eng'] is not None else None,'matches_intended_occurrence':True})
+    s={'schema':'canonical-source-range-equivalence-v1','seq':seq,'canonical_exit':0,'stderr_bytes':0,'body_equals_native_stdout':True,'spec_equals_native_stdin':True,'complete_wylie_equals_original':True,'complete_english_equals_original':True,'body_bytes':len(body),'body_sha256':sha(body),'spec_sha256':sha(specb),'spans':len(spec['spans']),'nulls':sum(s['eng'] is None for s in spec['spans']),'d5_nonnull':sum(s['d']==5 and s['eng'] is not None for s in spec['spans']),'d7':sum(s['d']==7 for s in spec['spans']),'ranges':ranges}
+    write(d/'mechanical-proof.json',s);summary.append({k:v for k,v in s.items() if k!='ranges'})
+
+# Compare complete raw records with the complete unmodified external corpus and master.
+corpus=json.load(gzip.open(E/'originals/full_parallel_corpus_v32.json.gz'))
+master=json.load(gzip.open(E/'originals/hgm_dictionary_v27_2.json.gz'))
+checks=[]
+for r in rows.values():
+    raw=json.loads(r['raw']);assert raw==corpus[r['id']-1],r['id']
+    checks.append({'kind':'corpus_original','spine_id':r['id'],'source_index_zero_based':r['id']-1,'full_raw_record_equal':True})
+for group in json.loads((E/'glossary-records.json').read_text()):
+    for r in group['records']:
+        raw=json.loads(r['raw']);assert raw==master['unified_entries'][r['id']-1],r['id']
+        checks.append({'kind':'master_original','spine_id':r['id'],'source_index_zero_based':r['id']-1,'full_raw_record_equal':True})
+
+# Execute the actual preserved canonical parser on the original complete byte file.
+# The original remains untouched, including legacy non-UTF-8 bytes. Only selected ASCII rows are compared.
+sp=importlib.util.spec_from_file_location('original_hgm_tools',E/'governing/engines/hgm_tools.py');H=importlib.util.module_from_spec(sp);sp.loader.exec_module(H)
+parsed=H.parse_aligned(str(E/'originals/C05ReadingASCII.txt'),'C05');physical=[]
+for seq in [307,308,309]:
+    r=rows[seq];matches=[(i,x) for i,x in enumerate(parsed) if x['acip']==r['acip']];assert len(matches)==1,(seq,len(matches))
+    i,x=matches[0];equals={k:x[k]==r[k] for k in ['course','acip','wylie','english']};assert all(equals.values()),(seq,equals)
+    physical.append({'seq':seq,'canonical_parser_index_zero_based':i,'matching_acip_rows':1,'full_fields_equal':equals,'parsed_full_record':x})
+write(E/'external-record-equivalence.json',{'schema':'original-record-equivalence-v1','external_records':checks,'physical_complete_file_parser':'governing/engines/hgm_tools.py:parse_aligned','physical_selected_rows':physical,'qualification':'Selected row equality does not assert any historical ingest lineage. Full raw legacy source bytes remain preserved.'})
+write(ROOT/'summary.json',{'schema':'independent-proposal-summary-v1','angle':'Tibetan-first','producer':'Codex (gpt-6-astra)','source_origin_commit':'b5047596859f6537b71f259c1e7df2e70f867fb2','origin_accepted_boundary':300,'provisional_only':True,'segments':summary})
+print(json.dumps(summary,indent=2))

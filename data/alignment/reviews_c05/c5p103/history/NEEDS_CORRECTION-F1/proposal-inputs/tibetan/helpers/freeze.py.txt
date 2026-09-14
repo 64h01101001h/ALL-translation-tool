@@ -1,0 +1,32 @@
+"""Freeze only this independent proposal tree; do not repeat canonical generation."""
+import datetime,hashlib,json,pathlib,stat
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+FREEZE=ROOT/'freeze-final-v1.json'
+assert not FREEZE.exists(),'A frozen boundary must be explicitly superseded, never overwritten.'
+def sha(b):return hashlib.sha256(b).hexdigest()
+summary=json.loads((ROOT/'summary.json').read_text())
+final={}
+for seq in [307,308,309]:
+    d=ROOT/str(seq);m=json.loads((d/'mechanical-proof.json').read_text())
+    assert sha((d/'spec.json').read_bytes())==m['spec_sha256']
+    assert sha((d/'body.html').read_bytes())==m['body_sha256']
+    assert (d/'body.html').read_bytes()==(d/'native/attempt01/stdout.html').read_bytes()
+    assert (d/'spec.json').read_bytes()==(d/'native/attempt01/stdin.json').read_bytes()
+    assert (d/'native/attempt01/stderr.txt').read_bytes()==b''
+    assert (d/'native/attempt01/exit.txt').read_text()=='0\n'
+    assert len((d/'report.md').read_text().splitlines())==12
+    assert json.loads((d/'errata.json').read_text())==[]
+    for r in json.loads((d/'evidence-references.json').read_text())['references']:
+        assert sha((d/r['path']).read_bytes())==r['sha256']
+    final[str(seq)]={'spans':m['spans'],'nulls':m['nulls'],'d5_nonnull':m['d5_nonnull'],'body_bytes':m['body_bytes'],'body_sha256':m['body_sha256'],'spec_sha256':m['spec_sha256'],'errata':0,'canonical_exit':0,'stderr_bytes':0}
+files=[]
+for p in sorted(ROOT.rglob('*')):
+    if p.is_file():
+        assert p!=FREEZE
+        p.chmod(0o444)
+        b=p.read_bytes();files.append({'path':str(p.relative_to(ROOT)),'bytes':len(b),'sha256':sha(b),'mode':'0444'})
+proof={'schema':'independent-proposal-freeze-v1','created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'angle_root':str(ROOT),'producer':'Codex (gpt-6-astra), independent Tibetan-first','source_origin_commit':'b5047596859f6537b71f259c1e7df2e70f867fb2','source_origin_course_boundary':300,'source_segments':[307,308,309],'scope':'PROVISIONAL independent proposal; no semantic approval or landing','files':files,'file_count':len(files),'file_bytes':sum(f['bytes'] for f in files),'segments':final,'self_exclusion':'This manifest is excluded from its own entries; exact manifest hash is supplied in the final handoff.','supersession_rule':'Any correction after this boundary must preserve this manifest and its frozen files, and explicitly supersede it.'}
+FREEZE.write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n');FREEZE.chmod(0o444)
+for f in files:
+    p=ROOT/f['path'];assert len(p.read_bytes())==f['bytes'] and sha(p.read_bytes())==f['sha256']
+print(json.dumps({'freeze_path':str(FREEZE),'schema':proof['schema'],'sha256':sha(FREEZE.read_bytes()),'file_count':len(files),'file_bytes':proof['file_bytes'],'segments':final},indent=2))

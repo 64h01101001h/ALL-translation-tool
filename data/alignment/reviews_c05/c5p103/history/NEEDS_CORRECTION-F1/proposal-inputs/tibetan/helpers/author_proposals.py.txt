@@ -1,0 +1,196 @@
+import json,pathlib,re
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+sources={r['seq']:r for r in json.loads((ROOT/'evidence/originals/source.json').read_text())}
+all_decisions={}
+
+def hits(text,piece):
+    return [m.start() for m in re.finditer(re.escape(piece),text) if (not piece[0].isalnum() or m.start()==0 or not text[m.start()-1].isalnum()) and (not piece[-1].isalnum() or m.end()==len(text) or not text[m.end()].isalnum())]
+def build(seq,title,items,omissions,note):
+    source=sources[seq];spans=[];decisions=[];cursor=0;parent=None
+    for n,item in enumerate(items,1):
+        d,tib,eng,reason,*extra=item;opts=extra[0] if extra else {};id='w'+str(n)
+        sp={'id':id,'d':d,'tib':tib,'eng':eng}
+        if eng is None: sp.update(cls='case',nul=reason)
+        if d==7:
+            lo,hi=parent['tib_range']; assert source['wylie'][lo:hi].count(tib)==1
+            tpos=source['wylie'].index(tib,lo,hi)
+        else:
+            choices=[i for i in hits(source['wylie'],tib) if i>=cursor]
+            assert choices,(seq,tib,cursor)
+            tpos=choices[0];cursor=tpos+len(tib)
+        epos=None
+        if eng is not None:
+            if d==7:
+                lo,hi=parent['eng_range'];assert source['english'][lo:hi].count(eng)==1
+                epos=source['english'].index(eng,lo,hi)
+            elif 'anchor' in opts:
+                anchor=opts['anchor']; assert source['english'].count(anchor)==1,(seq,anchor)
+                epos=source['english'].index(anchor)+anchor.index(eng)
+            else:
+                found=hits(source['english'],eng);occ=opts.get('occ',1)
+                assert len(found)>=occ,(seq,eng,found,occ)
+                if len(found)>1:assert 'occ' in opts,(seq,eng,found,'explicit occurrence required')
+                epos=found[occ-1]
+        decision={'id':id,'d':d,'tib':tib,'eng':eng,'status':'PROVISIONAL_TIBETAN_FIRST','reason':reason,'tib_range':[tpos,tpos+len(tib)],'eng_range':[epos,epos+len(eng)] if epos is not None else None,'all_exact_tib_occurrences':hits(source['wylie'],tib),'all_exact_eng_occurrences':hits(source['english'],eng) if eng else [],'selection':opts}
+        if d==5:parent=decision
+        elif d!=7:parent=None
+        spans.append(sp);decisions.append(decision)
+    order=[d['id'] for d in sorted([d for d in decisions if d['eng'] is not None and d['d']!=7],key=lambda x:x['eng_range'][0])]
+    s={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':note}]}
+    out=ROOT/str(seq)
+    (out/'spec.json').write_text(json.dumps(s,ensure_ascii=False,indent=2)+'\n')
+    (out/'errata.json').write_text('[]\n')
+    (out/'decisions.json').write_text(json.dumps({'schema':'tibetan-first-proposal-decisions-v1','producer':'Codex (gpt-6-astra), Tibetan-first independent proposal','seq':seq,'source':'../evidence/source-context-verification.json','proposals':decisions,'omissions':omissions},ensure_ascii=False,indent=2)+'\n')
+    print(seq,len(spans),'spans',sum(s['eng'] is None for s in spans),'nulls',sum(s['d']==5 and s['eng'] is not None for s in spans),'d5 pairs')
+
+build(307,'actual objects and visual perception',[
+(5,'skyon','problem','Lexical defect/problem; supplied such excluded.'),
+(5,'med','no','Absence in the opening skyon med, distinct from the later existence contrast.',{'occ':1}),
+(5,'dbu','Middle Way','Abbreviated school name dbu; HGM glossary explicitly includes middle way.'),
+(5,'sems','Mind-Only','Abbreviated school name sems; HGM glossary explicitly includes mind-only.'),
+(5,'don','object','Object term in don shes; excludes supplied article.'),
+(5,'shes','perception','The cognition contrasted with don, not the later visual-consciousness compound.',{'anchor':'the perception of it'}),
+(5,'yod','existing','Positive half of yod med; first existing only.',{'occ':1}),
+(5,'med','not existing','Negative existence word; HGM glossary includes not existing.'),
+(5,'mtshungs','equivalent','First mtshungs gives sameness; the following mi mtshungs is left unbanked as distributed whether-or-not scope.'),
+(5,'dpyod','examining','Lexical examining; excludes supplied we are and the question of whether.'),
+(5,'skabs','section','Context is the cited textual section, not a point in time.'),
+(6,'phyir','for','First phyir supplies the reason for rejecting the preceding objection.'),
+(6,'dang','Moreover','Clause conjunction introduces the additional reason in English.'),
+(5,'yi dvags','craving spirit','First visual scenario; English repeats the participant later without another yi dvags.',{'occ':1}),
+(5,'mig shes','visual consciousness','First visual cognition, the one to which the stream appears.',{'occ':1}),
+(7,'mig','visual','Unique eye/visual member of this mig shes parent.'),
+(7,'shes','consciousness','Unique cognition member of this mig shes parent.'),
+(5,'chu klung','stream of water','First stream compound; its two lexical members cross in English.',{'occ':1}),
+(7,'chu','water','Water member inside first stream compound.'),
+(7,'klung','stream','Stream member inside first stream compound.'),
+(5,'rnag khrag','pus and blood','First pus/blood compound, the stream appearance.',{'occ':1}),
+(7,'rnag','pus','Pus member of first rnag khrag; not the discrepant blood-only glossary alternatives.'),
+(7,'khrag','blood','Blood member of first rnag khrag.'),
+(6,'tu','as','Terminative appearance-as relation; no supplied nominal material captured.'),
+(5,'snang','appears','First snang is the appearance verb; the earlier English quotation appears belongs to yin/skabs framing.',{'anchor':'stream of water appears as'}),
+(3,'de ltar','this way','Manner phrase describing the second visual cognition.'),
+(5,'snang','sees','Second snang is recast from appearing to seeing in GMR; HGM snang includes sees. Supplied things excluded.'),
+(5,'mig shes','visual consciousness','Second occurrence is the subject of the invalid-perception assertion.',{'occ':2}),
+(7,'mig','visual','Visual member inside the second cognition compound.'),
+(7,'shes','consciousness','Consciousness member inside the second cognition compound.'),
+(5,'tshad ma','valid perception','Established epistemic compound; no splitting of ma inside it.'),
+(6,'ma','not','Negates yin after tshad ma; not the ma within tshad ma.',{'anchor':'is not a valid perception'}),
+(6,'dang','and','Conjoins the second compatible claim; and to say follows the invalid-perception assertion.',{'anchor':'perception, and to say'}),
+(5,'chu klung','stream of water','Second stream, object of the later look; not a second invented craving-spirit span.',{'occ':2}),
+(7,'chu','water','Water member inside the second stream compound.'),
+(7,'klung','stream','Stream member inside the second stream compound.'),
+(5,'bltas','looks','Actual looking verb in the later stream clause.'),
+(5,'rnag khrag','pus and blood','Second pus/blood compound asserts an actual existent.',{'occ':2}),
+(7,'rnag','pus','Pus member inside the second pus/blood compound.'),
+(7,'khrag','blood','Blood member inside the second pus/blood compound.'),
+(5,'dngos gnas pa','actual','Established actual/real compound qualifies pus and blood.'),
+(6,'zhig',None,'Indefinite zhig has no separate English exponent in actual pus and blood; English contains no a/some for this noun phrase.'),
+(5,'yod pa','exist','Existential assertion; supplied there does remains outside.'),
+(6,'mi','no','Negation of inconsistency, not the earlier mi mtshungs.',{'occ':2}),
+(5,"'gal ba",'inconsistency','Contradiction/incompatibility word, under the immediately preceding negation.')
+],[
+{'tib':'gnyis','reason':'Two schools are enumerated by name; no separately located two is recoverable. Leave omitted rather than assigning either both, which modifies existence.'},
+{'tib':'mi mtshungs','reason':'Whether equal or unequal is recast as the question whether they must be equivalent. The negative alternative is distributed in this interrogative scope; do not attach it to not existing or null it.'},
+{'tib':"yin pa'i",'reason':'The quotation appears in the section is a larger copular recast; no additional atom for this nominal/copular phrase is claimed.'},
+{'tib':"tshe na; de'i tshe na",'reason':'The time relations are distributed over this situation, where, at the same time, and when. No isolated temporal mapping is asserted.'},
+{'tib':'final phyir','reason':'Closing reason is recast across the It is no inconsistency explanation; no separate final because is present, but its argumentative contribution is not treated as absent.'},
+{'english':'second craving spirit; articles, auxiliaries and supplied things','reason':'English restates the participant once; Tibetan has only one yi dvags. Supplied framing stays unwrapped.'}
+],"PROVISIONAL machine alignment by Codex (gpt-6-astra), independent Tibetan-first proposal. The two schools are abbreviated as dbu and sems. The first mtshungs supplies equivalent; mi mtshungs remains omitted because whether-or-not scope is distributed. The second snang is GMR's sees, with things left unwrapped. Repeated stream, pus/blood and visual-consciousness occurrences are kept distinct. The repeated English craving spirit has only one Tibetan yi dvags and is linked once. Indefinite zhig has no separate exponent in actual pus and blood. Temporal and remaining causal framing are omitted where distributed. GMR English and Tibetan source text remain verbatim; mechanical fidelity is not semantic approval.")
+
+build(308,'the maker of burning steel',[
+(6,'yang','again','Additive reopening of an objection; English again after Someone.'),
+(5,'kha cig','Someone','Indefinite opponent; no supplied may come and material captured.'),
+(5,"'gro ba",'beings','Sentient beings; different types of remains explanatory material.'),
+(5,'gsum','three','Cardinal number, excluding different types of.'),
+(6,'gyis',None,'Agentive gyis is expressed by the active subject three types of beings; no separate by occurs in that clause.'),
+(5,'brlan','wet','HGM-attested wet, directly followed by flowing.'),
+(6,'zhing','and','Coordination between wet and flowing.',{'anchor':'wet and flowing'}),
+(5,'gsher ba','flowing','HGM-specific flowing; comparative moistening is not substituted.'),
+(5,'phor pa','glass','HGM glass is verbatim, regardless of comparative cup/bowl senses.'),
+(5,'gang','full','Filling extent after glass, not interrogative gang.'),
+(6,'la','at','Object relation after look.',{'anchor':'look at a glass'}),
+(5,'cig car','together','Established simultaneously/together adverb; sit down is supplied.'),
+(5,'bltas','look','Looking verb in the initial three-beings situation.'),
+(5,'rnag khrag','pus and blood','Pus/blood object denied by the opponent.'),
+(7,'rnag','pus','Pus member of the compound.'),
+(7,'khrag','blood','Blood member of the compound.'),
+(5,'dngos gnas pa','actual','First actual/real qualifier.'),
+(5,'med','no','First negative existential: no actual pus and blood.',{'anchor':'there is no actual'}),
+(5,'dmyal ba','hells','Location of burning steel; excludes supplied article and in.'),
+(5,'lcags sreg','burning steel','First burning-steel compound, in the opponent premise.',{'occ':1}),
+(7,'lcags','steel','Steel member within the first compound; English reverses member order.'),
+(7,'sreg','burning','Burning member within the first compound.'),
+(5,'la sogs pa','and so on','Established closing gesture; la sogs pa licenses the head and, with no supplied noun. Requires source-specific allowance at landing.'),
+(5,'der','there','The location of birth in the hell realm, not the earlier no-pus there.',{'anchor':'born there'}),
+(5,'skyes','born','Birth verb qualifying sems can.'),
+(5,'sems can','person','Sentient-being term in GMR singular person.'),
+(5,'snang','appears','Appearance verb in the opponent premise.'),
+(6,'tsam','only','Restrictive particle, not a claim of nonexistence.'),
+(6,'gyi','but','Adversative gyi after yin; not the earlier genitive after sems can.'),
+(5,'dngos gnas','actually','Actual/really adverbial use with su; no isolated dngos or gnas member claimed.'),
+(5,'med pa','nothing','Negative existence in the actual-objects premise.',{'anchor':'there is nothing there which actually'}),
+(6,'phyir','Because','First reason, the appearance-without-actual-existence premise.',{'occ':1}),
+(3,'su yang med pa','no one at all','Complete negative-indefinite phrase; who/no-one, unrestricted yang, and absence remain together.'),
+(6,'phyir','Because','Second reason, the absence-of-maker premise.',{'occ':2}),
+(5,"spyod 'jug","Bodhisattva's Way of Life",'Established work title; supplied The and text of remain outside.'),
+(5,'lcags sreg','burning steel','Second compound in the quoted verse, distinct from the prose instance.',{'occ':2}),
+(7,'lcags','steel','Steel member inside the verse compound.'),
+(7,'sreg','burning','Burning member inside the verse compound.'),
+(5,'sa gzhi','floor of the world','Established HGM compound. No artificial individual gzhi/floor gloss is harvested from the unrelated auto-aligned glossary entry.'),
+(5,'su','Who','Verse agent question; not the earlier su inside the negative-indefinite phrase.'),
+(6,'yis',None,'Agentive yis is fused into the active question Who made; no separate by appears in the verse.'),
+(5,'byas','made','The verse made after Who; the earlier prose made belongs to byed pa po and is left unbanked.',{'anchor':'Who made the burning steel'}),
+(5,'me','flames','Fire term in the verse.'),
+(5,'tshogs','mass','Collection/mass term; supplied all the excluded.'),
+(5,'byung','come','Origin/arising verb in the verse; the earlier come in the opponent introduction is supplied.',{'anchor':'all come from'}),
+(3,"de 'dra",'like this','Complete similative phrase in the final two verse clauses.'),
+(5,'thams cad','Everything','Universal quantifier; excludes the separate English there.'),
+(5,'sdig sems',"mind of what's non-virtue",'Attested Tibetan compound, currently without HGM master gloss. Local published English supplies this provisional pair; no promotion into hgm_gloss.'),
+(7,'sdig','non-virtue','Whole negative noun inside the compound; no unsupported non subword split.'),
+(7,'sems','mind','Mind member inside the compound, in reversed English member order.'),
+(6,'yin','Is','Copular assertion of the verse; amplified nothing at all other than stays unwrapped.'),
+(5,'thub pas','Able Ones','Established epithet thub pa with inseparable agentive -s. Keep full thub pas; do not split the suffix or pluralize Tibetan.'),
+(5,'gsungs','spoken','First gsungs is the Buddhas speech within the quoted verse.'),
+(5,'gsungs','say','Second gsungs introduces the quotation, positioned before Who in English.'),
+(6,'phyir','because','Final lowercase because supplies the citation reason.'),
+(5,'zer','claim','Closing report verb rendered at the opening Someone again may come and claim.')
+],[
+{'tib':"pa'i tshe na; thal; der thal (twice)",'reason':'Time/topic and consequence formulas are distributed over situation where and repeated is it true questions; no isolated atom is forced.'},
+{'tib':'grub pa','reason':'Established/exists is recast as which actually is these objects. Actually and nothing are separately licensed; the remaining existential/categorical contribution is not atomized or falsely nulled.'},
+{'tib':"de 'dra'i byed pa po",'reason':'Such a maker is recast as who went and made all these kinds of things. A flat maker-to-made link would discard agency; the longer English includes supplied went and participant material. Omitted with this reason.'},
+{'tib':'ci las','reason':'Source-interrogative what/from is distributed over Where ... from. Byung receives only come; neither ci nor las is falsely aligned to a standalone location or nulled.'},
+{'tib':'de dag (both verse occurrences); kyang','reason':'Anaphora and emphasis are distributed across all, You find there, Everything there and final assertion; no false no-exponent claim.'},
+{'tib':'las after title; zhes','reason':'Quotation apparatus and source framing remain outside lexical matches.'},
+{'english':'sit down; of hell in the verse; nothing at all other than; went; supplied articles and auxiliaries','reason':'Expansions remain verbatim and unwrapped; the verse has only sa gzhi, without a separate second dmyal ba.'}
+],"PROVISIONAL machine alignment by Codex (gpt-6-astra), independent Tibetan-first proposal. This is an opponent's argument quoting the Bodhisattva's Way of Life; 309 explains the quotation. The two burning-steel compounds and two gsungs are kept distinct. Agentive gyis and yis have no separate exponent in their active English clauses. The maker construction, source question ci las, consequence formulas and other distributed framing remain omitted. Sdig sems is provisionally matched to this row's mind of what's non-virtue; its master entry has no HGM gloss. Thub pas remains whole, including inseparable agentive -s, and GMR's plural Able Ones is preserved. La sogs pa licenses only and so on, requiring a source-specific head allowance at landing. GMR English and Tibetan remain verbatim; mechanical fidelity is not semantic approval.")
+
+build(309,'the quoted mind as maker',[
+(5,'skyon','problem','Lexical problem; supplied such excluded.'),
+(5,'med','no','Opening absence of a contradiction/problem.'),
+(3,"de'i",'of this quotation','Genitive demonstrative is expanded to the cited quotation; full genitive phrase, not a lexical quotation entry.'),
+(5,'don','point','Meaning/point of the cited verse.'),
+(5,'lcags sreg','burning steel','Established compound, with the original English material preserved.'),
+(7,'lcags','steel','Steel member inside the compound.'),
+(7,'sreg','burning','Burning member inside the compound.'),
+(5,'la sogs pa','and so on','Established closing gesture; la sogs pa licenses and. Requires source-specific allowance at landing.'),
+(5,'dbang phyug','creator being','HGM lexical equivalent; excludes supplied some.'),
+(5,'rtag pa','unchanging','Permanent/unchanging qualifier; un is not independently split.'),
+(5,'sogs','or something like that','HGM explicitly glosses sogs as this complete closing gesture. No specific supplied noun such as creator is swallowed. Requires source-specific head allowance.'),
+(3,"blo'i g-yo ba sngon du btang nas",'thought it over first','Complete prior mental-movement phrase recast as deliberating first. Do not make a dictionary entry g-yo ba/over or btang/thought; GIE:70/168 confirm the mental-intention context.'),
+(5,'byas pa','created','Single Tibetan creation verb is matched once, to the first created. The later created them is an explanatory repetition.',{'occ':1}),
+(6,'ma','not','Negation of an eternal creator having made the steel; excludes the supplied copular frame.'),
+(5,'der','there','Hell location at the end of the birth clause.',{'anchor':'take birth there'}),
+(5,'skyes','take birth','Birth verb; excludes the English obligation have to.'),
+(5,"'gro ba",'beings','Sentient beings born there, excluding the supplied article.'),
+(5,'sdig sems','non-virtuous states of mind','Attested Tibetan compound without HGM master gloss; matched to this exact row, provisional only.'),
+(7,'sdig','non-virtuous','Full negative adjective as a lexical compound member; no non subword claim.'),
+(7,'sems','states of mind','Mind member, HGM explicitly includes states of mind.'),
+(5,'bstan','show','Show/teach verb; us and meant to are supplied and remain unwrapped.')
+],[
+{'tib':'de dag','reason':'Anaphoric objects are distributed across the steel clause, repeated created them and all these things; no single placement is asserted.'},
+{'tib':'kyis','reason':'Agentive by remains a standing unresolved alignment-policy item. Omitted without claiming the agentive has no English exponent.'},
+{'tib':'byed pa por','reason':'As maker is recast into what really made. Agency and verbal predication are distributed; no flat maker-to-made atom or no-exponent null is asserted.'},
+{'tib':"yin par; pa'i phyir",'reason':'Copular contrast and the reason-for-no-problem are distributed across the explanatory English framing.'},
+{'english':'second created; some; by someone who; then; what really; had by; have to','reason':'Repeated creation verb and explanatory participants/auxiliaries remain verbatim but are not captured as independent lexical equivalents.'}
+],"PROVISIONAL machine alignment by Codex (gpt-6-astra), independent Tibetan-first proposal. The passage explains the preceding verse: an unchanging creator is rejected and the beings' non-virtuous minds are identified as makers. The complete prior-mental-movement phrase receives thought it over first at phrase depth; g-yo ba is not isolated as over. The single byas pa is linked to the first created only; the repeated created them remains unwrapped. Sdig sems is matched to this row's non-virtuous states of mind provisionally, without changing its master entry. The maker predicate and remaining distributed grammar are omitted, not falsely nulled. La sogs pa/and so on and sogs/or something like that require source-specific head allowances at landing. Source English and Tibetan remain verbatim; mechanical fidelity is not semantic approval.")

@@ -1,0 +1,89 @@
+{
+  "schema": "c05-independent-angle-handoff-v1",
+  "producer": "Codex English-first",
+  "status": "FROZEN PROVISIONAL PROPOSAL; reconciliation and independent skeptical review remain",
+  "origin": "b5047596859f6537b71f259c1e7df2e70f867fb2",
+  "origin_course_boundary": 300,
+  "segments": [
+    {
+      "seq": 307,
+      "spans": 43,
+      "nulls": 1,
+      "d5": 28,
+      "d5_nonnull": 27,
+      "depth_counts": {
+        "3": 0,
+        "5": 28,
+        "6": 5,
+        "7": 10
+      },
+      "errata": 0,
+      "body": {
+        "bytes": 6514,
+        "sha256": "b6e9dc7da91833c9bbca5a6ad96a5fb26db0b289b9bb19b572d962452a1a21a0"
+      },
+      "spec": {
+        "bytes": 6449,
+        "sha256": "f50367e119b21e4bd35199217edfda2bba987c2e89c48ecd31062c803eeef560"
+      },
+      "native_exit": 0,
+      "native_stderr_bytes": 0
+    },
+    {
+      "seq": 308,
+      "spans": 52,
+      "nulls": 0,
+      "d5": 36,
+      "d5_nonnull": 36,
+      "depth_counts": {
+        "3": 0,
+        "5": 36,
+        "6": 8,
+        "7": 8
+      },
+      "errata": 0,
+      "body": {
+        "bytes": 7845,
+        "sha256": "eacd9b578e5b04305a9e9a789c555d3fc007a6be3a79f68b011990ab0ec487ea"
+      },
+      "spec": {
+        "bytes": 7548,
+        "sha256": "9e500436165424db7b64bd072cca04a32ea0c4cdd26f6dc206ccdb0a0fbe0804"
+      },
+      "native_exit": 0,
+      "native_stderr_bytes": 0
+    },
+    {
+      "seq": 309,
+      "spans": 20,
+      "nulls": 0,
+      "d5": 17,
+      "d5_nonnull": 17,
+      "depth_counts": {
+        "3": 1,
+        "5": 17,
+        "6": 0,
+        "7": 2
+      },
+      "errata": 0,
+      "body": {
+        "bytes": 3709,
+        "sha256": "5b3db30448977c336fbe8050f004536148c2c10ec512cfb7d12b96bbc699ccfd"
+      },
+      "spec": {
+        "bytes": 3466,
+        "sha256": "914a822957b6c63600b0700b4e2ab5adeefd5339b18b47c4e80fe52704591147"
+      },
+      "native_exit": 0,
+      "native_stderr_bytes": 0
+    }
+  ],
+  "evidence_index": {
+    "path": "evidence/index.json",
+    "bytes": 2462,
+    "sha256": "be32347770e4b50c06c39c9d175fe827b52d6c34a8c5bcf10611ef03df237f7b"
+  },
+  "freeze": "freeze.json",
+  "freeze_schema": "c05-independent-angle-freeze-v1",
+  "native_checks": "Three actual unchanged canonical generator runs, one per segment, all exit0 and empty stderr. Exact body/source/range equivalence passed."
+}

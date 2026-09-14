@@ -1,0 +1,93 @@
+import datetime,gzip,hashlib,json,pathlib,subprocess,sys
+ROOT=pathlib.Path(__file__).resolve().parents[1];E=ROOT/'evidence';WORK=ROOT.parents[2]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def write(path,obj):path.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+source={r['seq']:r for r in json.loads((E/'originals/source.json').read_text())}
+witnesses=json.loads((E/'corpus-witnesses.json').read_text());queries=json.loads((E/'corpus-queries.json').read_text())
+corpus=json.load(gzip.open(E/'originals/full_parallel_corpus_v32.json.gz'))
+verified=[]
+for r in witnesses:
+    assert json.loads(r['raw'])==corpus[r['id']-1]
+    verified.append({'spine_id':r['id'],'course':r['course'],'seq':r['seq'],'original_corpus_index_zero_based':r['id']-1,'complete_raw_record_equal':True})
+write(E/'all-witness-original-equivalence.json',{'schema':'complete-witness-original-equivalence-v1','records':verified})
+material_ids=set(i for q in queries if q['count']<10 for i in q['witness_ids'])
+comparisons=[]
+for seq,r in source.items():
+    selected_ids=set(i for q in queries if q['name'].startswith(str(seq)+'-exact-') for i in q['witness_ids'])
+    for w in witnesses:
+        if w['id'] in selected_ids:
+            comparisons.append({'selected_seq':seq,'witness':w['course']+':'+str(w['seq']),'id':w['id'],'fields_equal':{k:w[k]==r[k] for k in ['acip','wylie','english']},'metadata_same':{k:w[k]==r[k] for k in ['id','course','seq']}})
+write(E/'source-roles-and-field-comparisons.json',{'schema':'source-roles-v1','full_material_read_witness_ids':sorted(material_ids),'field_comparisons':comparisons,'P7_46':'Read in full. Shares the complete argument and English wording with dash punctuation differences; ACIP/Wylie punctuation and yi dwags spelling differ. Not counted as an exact full-field duplicate.','GIE_70_and_168':'Read in full. Support only the shared prior-mental-movement phrase in a divine-creation context; different whole arguments and English. No unquoted continuation is attributed to them.','broad_wet_flowing_query':'All 42 original complete rows retained for reproducibility. Beyond the listed material witnesses and selected context, these broader hits supply no semantic judgment in this proposal.','lineage_limit':'Exact field equality does not establish independent publication, ingestion lineage, or identity of id/course/seq metadata. Course-shape re-ingestion assertions are metadata claims only.','context_apparatus':'C05:314 carries a following selection heading, the registered following-heading class. It remains original apparatus in the context record; none of selected 307–309 carries such a heading.'})
+register=json.loads((E/'governing/docs/errata_register.json').read_text())
+regrecords=json.loads((E/'errata-material-records.json').read_text())
+regids=[r['item_id'] for r in regrecords]
+screens={307:[],308:[],309:[]}
+def screen(seq,label,field,quote,lexical,context,parallel,disposition):
+    assert quote in source[seq][field]
+    screens[seq].append({'label':label,'disposition':'REFUTED_AS_NEW_ERRATUM','source_quote':{'course':'C05','seq':seq,'field':field,'found':quote,'range':[source[seq][field].index(quote),source[seq][field].index(quote)+len(quote)]},'proposed_correction':None,'five_grounds':{
+    '1_exact_row_and_original_source':{'checked':True,'finding':'Complete ACIP, Wylie, English and raw row agree with original corpus; complete physical C05 source parsed by the unchanged canonical parser reproduces all selected fields. Original legacy bytes and exact selected extents are retained.','evidence':['source-context-verification.json','external-record-equivalence.json','physical-extents.json']},
+    '2_registered_classes':{'checked':True,'finding':'No new spelling/converter, running-head, footnote, row-boundary or 1500-character truncation defect identified here. Selected English length is '+str(len(source[seq]['english']))+'. Following-heading apparatus occurs in context 314 and is already a registered class; no duplicate filed.','register_count':len(register),'full_material_records':regids,'evidence':['governing/docs/errata_register.json','errata-material-records.json']},
+    '3_parallel_witnesses':{'checked':True,'finding':parallel+' Text equality alone establishes neither independent publication nor ingestion lineage.','evidence':['corpus-queries.json','corpus-witnesses.json','source-roles-and-field-comparisons.json','all-witness-original-equivalence.json']},
+    '4_hgm_lexical_evidence':{'checked':True,'finding':lexical,'evidence':['glossary-records.json','originals/hgm_dictionary_v27_2.json.gz']},
+    '5_context_grammar_and_alternative_reading':{'checked':True,'finding':context,'evidence':['source-context-verification.json']}},'reason_not_filed':disposition,'limits':'This proposal is not editorial approval. GMR wording remains unchanged; no evidence establishes a necessary source correction.'})
+screen(307,'abbreviated schools and existence question','acip','DBU SEMS GNYIS DON SHES YOD MED MTSUNGS MI MTSUNGS',
+       'HGM dbu includes middle way, sems includes mind-only, don includes object, shes includes perception, med includes not existing, and mtshungs includes equivalent. No comparative gloss is promoted.',
+       'Dbu and sems abbreviate the two schools. Mtshungs mi mtshungs supplies the equal/not-equal inquiry; GMR expresses it as whether they must be equivalent. That distributed negative alternative must not be linked to not existing; it does not demonstrate an erroneous source assertion.',
+       'C15:452 equals the full ACIP/Wylie/English fields. P7:46 preserves the argument with punctuation and yi dwags differences; its English uses em dashes where C05 has doubled hyphens.',
+       'School abbreviations and question restructuring are intelligible in the full 306–307 reply; neither a typo nor a necessary doctrinal correction follows.')
+screen(307,'appearance versus valid perception','english','the visual consciousness that sees things this way is not a valid perception',
+       'HGM snang includes both appears and sees; mig shes includes visual consciousness and tshad ma includes valid perception.',
+       'The reply distinguishes the visual cognition being invalid from actual pus and blood existing. The cited resemblance of perceptual errors does not require that both objects be nonexistent. This is the explicit response to 306, not an unexplained polarity contradiction.',
+       'C15:452 repeats all three complete text fields; P7:46 repeats the English assertion within the same complete argument.',
+       'No factual error proven. Keep the lexical pairs and leave the distributed comparative question unbanked.')
+screen(308,'plural Able Ones and verse capitalization','english','The Able Ones have spoken',
+       'Curated thub pa glosses the Able and the Able One. The Tibetan thub pas contains inseparable agentive -s; it supplies the epithet, not an English plural suffix. GMR gsungs includes spoken.',
+       'Tibetan number need not be marked on the epithet, and GMR pluralization of a generic authority does not establish a source error. Mid-sentence capitals in the verse reflect lineation. The final statement is quoted as an objection and is explained in 309.',
+       'C15:453 and C16:845 repeat the complete ACIP/Wylie/English, including the plural and line-capitalized English.',
+       'No forced singular correction and no capitalization erratum. Thub pas remains an intact provisional epithet span.')
+screen(308,'mind of non-virtue and exclusivity wording','english',"Is nothing at all other than The mind of what's non-virtue.",
+       'HGM sdig includes non-virtue; sems includes mind. The complete sdig sems entry is present but its hgm_gloss is null and status is awaiting-hgm-equivalent. Local English alone supplies the provisional compound match.',
+       'The verse identifies these experiences with a non-virtuous mind; the emphatic English nothing at all other than can state the same identification without asserting that no physical effects exist. The point is clarified by the 309–310 response. The emphatic phrase remains outside the proposed lexical spans.',
+       'C15:453 and C16:845 preserve the same full fields. The six sdig sems corpus rows are precisely the three copies of the objection and three copies of its reply.',
+       'An idiomatic expansion of identity is insufficient evidence for a new factual/grammar erratum; no master gloss is added.')
+screen(309,'mental-movement expression and G-YO','acip',"BLO'I G-YO BA SNGON DU BTANG NAS", 
+       'HGM blo includes thought/mental, while g-yo ba includes several context-sensitive glosses including over. Isolating over from the English phrasal verb would not be justified merely by that glossary match. No exact sngon du btang dictionary record was returned.',
+       'The full phrase describes prior mental movement/intention. Thought it over first is a complete phrase recast. G-YO is retained as the original ACIP spelling; no converter loss or illegal inserted text is established.',
+       'C15:454 and C16:846 repeat the full fields. GIE:70 has previous conscious intention; GIE:168 has primal mental impulse, within their own complete creation discussions. They corroborate the shared phrase only.',
+       'No spelling or translation correction is demonstrated. Retain one phrase-depth link and decline g-yo ba/over as an isolated dictionary pair.')
+screen(309,'repeated created and maker predication','english','created by some unchanging creator being or something like that; by someone who thought it over first and then created them',
+       'HGM dbang phyug includes creator being and rtag pa includes unchanging; byed pa po includes maker and one who made. Sdig sems has no master HGM gloss, but sdig and sems support the local non-virtuous states of mind compound.',
+       'GMR repeats created in an explanatory restatement despite one Tibetan byas pa. The sentence then identifies the beings non-virtuous states of mind as the maker. The repetition is not a contradiction. The current proposal maps byas pa once and omits the distributed maker-to-predicate correspondence.',
+       'C15:454 and C16:846 preserve all three full text fields, including the repeated English creation verb.',
+       'No duplicate-source or factual erratum is proven from an English explanatory repetition. Preserve it verbatim and do not manufacture a second Tibetan occurrence.')
+
+requests=[]
+for seq in [307,308,309]:
+    d=ROOT/str(seq);write(d/'errata-screen.json',{'schema':'five-ground-proposal-errata-screen-v1','seq':seq,'new_errata':[],'screens':screens[seq]})
+    decisions=json.loads((d/'decisions.json').read_text())['proposals']
+    for item in decisions:
+        if item['d'] in [5,7] and item['eng'] and item['eng'].lower().split()[0] in ['the','a','an','and','or','his','our','your','i','you']:
+            requests.append({'seq':seq,'provisional_label':'s'+str(seq)+item['id'],'tib':item['tib'],'eng':item['eng'],'tib_range':item['tib_range'],'eng_range':item['eng_range'],'licensor':item['reason'],'status':'PROPOSED_ONLY; requires reconciliation and review before any allowance update'})
+write(ROOT/'head-allowance-requests.json',{'schema':'provisional-source-head-requests-v1','requests':requests,'existing_allowance_file_modified':False})
+
+baseline=json.loads((E/'proposal-baseline.json').read_text());pins=[]
+for name,p in baseline['source_pins'].items():
+    b=pathlib.Path(p['path']).read_bytes();equal=(len(b),sha(b))==(p['bytes'],p['sha256']);assert equal
+    pins.append({'name':name,'path':p['path'],'bytes':len(b),'sha256':sha(b),'matches_origin_pin':equal})
+for rel in ['tools/gen_alignment_page.py']:
+    b=(WORK/rel).read_bytes();assert sha(b)==baseline['governing_git_pins'][rel]['sha256']
+    pins.append({'name':'actual_generator','path':str(WORK/rel),'bytes':len(b),'sha256':sha(b),'matches_origin_pin':True})
+write(E/'final-source-pin-check.json',{'schema':'final-source-pins-v1','checks':pins,'mutable_governance':'Read only from immutable source commit b5047596859f6537b71f259c1e7df2e70f867fb2; no claim that advancing worktree ledgers retain origin bytes.'})
+write(ROOT/'provenance.json',{'schema':'independent-proposal-provenance-v1','actual_producer':'Codex (gpt-6-astra), Tibetan-first','source_origin':'b5047596859f6537b71f259c1e7df2e70f867fb2 through300','batch_scope':[307,308,309],'independence':'No other-angle, root-review-target, reconciliation or semantic content was read. Shared original sources and immutable governing documents were used.','filename_discovery_deviation':'Initial discovery ran rg --files at the repository root filtered for proposal-protocol.md after reading the brief in the same command. Historical other-angle/semantic directory names appeared as filenames only. An initial batch-path filename filter located tibetan-brief.md. No withheld contents or judgments were exposed or used; all subsequent reads were confined to allowed originals, pinned governance and own files.','setup_failure':'history/author-attempt01 preserves the unchanged helper and separate replay streams for the initial ambiguous English there assertion. Original native tool result chunk 407add had merged streams. The replay is labelled honestly and preceded the correction. history/author-attempt02 records success after anchoring there to take birth there.','canonical_work':'Three actual canonical generator commands, one per segment, all passing first attempt. No successful canonical run was repeated for packaging. The retained launcher only preloads immutable builder/engine bytes and supplies the original spine URI mode=ro without double encoding.','scope_limits':'No repository/source/master edits, commits, paid APIs, account messages, UI/device actions, publishing, or delegation. No semantic approval or landing is implied.'})
+
+report_focus={307:'Challenge w27 snang/sees first: a change of viewpoint in GMR, supported by HGM snang and the exact second cognition clause. Mi mtshungs stays omitted, and the sole yi dvags is linked only once.',308:'Challenge the sa gzhi/floor of the world compound and sdig sems parent first. The maker phrase and ci las remain explicitly omitted. Thub pas keeps inseparable agentive -s; verse and reporting gsungs are distinct.',309:'Challenge w12 thought it over first first: it is a complete phrase recast, supported only over the shared mental-intention extent by GIE:70/168. The maker predicate is omitted; byas pa owns the first created only.'}
+for seq in [307,308,309]:
+    d=ROOT/str(seq);m=json.loads((d/'mechanical-proof.json').read_text());refs=['source-context-verification.json','glossary-records.json','corpus-queries.json','corpus-witnesses.json','physical-extents.json','external-record-equivalence.json']
+    lines=[f'C05:{seq} — independent Tibetan-first proposal by Codex (gpt-6-astra); PROVISIONAL, not semantic approval.',report_focus[seq],f"Counts: {m['spans']} spans; {m['nulls']} justified nulls; {m['d5_nonnull']} non-null d5; {m['d7']} d7 members; zero new errata.",f"EXIT=0; body bytes={m['body_bytes']}; stderr bytes=0. Actual complete generator stdout is native/attempt01/stdout.html, byte-identical to body.html.",f"spec.json SHA256 {m['spec_sha256']}; body.html SHA256 {m['body_sha256']}.",f"errata.json SHA256 {sha((d/'errata.json').read_bytes())}; mechanical-proof.json SHA256 {sha((d/'mechanical-proof.json').read_bytes())}.",f"All proposed occurrence ranges, original reasons and material omissions: decisions.json SHA256 {sha((d/'decisions.json').read_bytes())}.",f"Two source suspicions checked across all five grounds: errata-screen.json SHA256 {sha((d/'errata-screen.json').read_bytes())}; no new correction supported.",f"Original source/governance pins: ../evidence/baseline-verification.json SHA256 {sha((E/'baseline-verification.json').read_bytes())}; source origin is through300, not future acceptance.",f"Complete original evidence is stored once in ../evidence; exact reference hashes follow in evidence-references.json SHA256 PLACEHOLDER.",'Full GMR English and Wylie reconstruct exactly; native source ranges equal the explicitly intended occurrences. Head-allowance proposals are in ../head-allowance-requests.json; no governance file was changed.','All passing native generation and fidelity work is retained once. The sole authoring setup failure is preserved under ../history/author-attempt01 and explained in ../provenance.json.']
+    refmap=[{'path':'../evidence/'+x,'bytes':(E/x).stat().st_size,'sha256':sha((E/x).read_bytes())} for x in refs]
+    for x in ['source-roles-and-field-comparisons.json','all-witness-original-equivalence.json','errata-material-records.json','final-source-pin-check.json']:
+        refmap.append({'path':'../evidence/'+x,'bytes':(E/x).stat().st_size,'sha256':sha((E/x).read_bytes())})
+    write(d/'evidence-references.json',{'schema':'shared-evidence-references-v1','references':refmap})
+    lines[9]=lines[9].replace('PLACEHOLDER',sha((d/'evidence-references.json').read_bytes()))
+    (d/'report.md').write_text('\n\n'.join(lines)+'\n')
+print(json.dumps({'new_errata':0,'screens':sum(map(len,screens.values())),'head_requests':requests,'final_source_pins_verified':len(pins)},indent=2))

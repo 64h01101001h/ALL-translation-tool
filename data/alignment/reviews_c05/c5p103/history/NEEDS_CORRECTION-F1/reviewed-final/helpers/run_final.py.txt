@@ -1,0 +1,12 @@
+from pathlib import Path
+import subprocess,json,hashlib,sys,os
+R=Path(__file__).resolve().parents[1]
+for seq in ([int(x) for x in sys.argv[1:]] or [307,308,309]):
+ p=R/str(seq);attempts=p/'native';attempts.mkdir(exist_ok=True);out=attempts/('attempt%02d'%(len(list(attempts.iterdir()))+1));out.mkdir()
+ b=(p/'spec.json').read_bytes();(out/'stdin.bin').write_bytes(b);cmd=[sys.executable,str(R/'helpers/native_adapter.py'),str(out/'observed-ranges.json')]
+ (out/'command.json').write_text(json.dumps({'argv':cmd,'cwd':str(R),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':str(p/'spec.json')},indent=2)+'\n')
+ q=subprocess.run(cmd,cwd=R,input=b,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});(out/'stdout.bin').write_bytes(q.stdout);(out/'stderr.bin').write_bytes(q.stderr);(out/'exit.txt').write_text(str(q.returncode)+'\n')
+ v={'seq':seq,'exit':q.returncode,'stdout_bytes':len(q.stdout),'stderr_bytes':len(q.stderr),'spec_bytes':len(b),'spec_sha256':hashlib.sha256(b).hexdigest(),'body_sha256':hashlib.sha256(q.stdout).hexdigest(),'native':str(out.relative_to(R))};(out/'result.json').write_text(json.dumps(v,indent=2)+'\n')
+ if q.returncode==0:(p/'body.html').write_bytes(q.stdout);(p/'native-result.json').write_text(json.dumps(v,indent=2)+'\n')
+ else:print(q.stderr.decode())
+ print(json.dumps(v))

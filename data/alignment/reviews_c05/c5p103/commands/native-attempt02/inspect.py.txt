@@ -1,0 +1,134 @@
+from pathlib import Path
+import json, hashlib, subprocess, os, sys, re, sqlite3
+import gzip,types,html
+R=Path(__file__).resolve().parent; A=R.parent; W=A.parents[1]/'campaign-worktree'
+H=lambda b:hashlib.sha256(b).hexdigest()
+def save(p,v):
+ p=R/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def capture(name,argv,stdin=b'',cwd=W):
+ p=R/'commands'/name;p.mkdir(parents=True,exist_ok=False)
+ save(p/'command.json',{'argv':argv,'cwd':str(cwd),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'}})
+ (p/'stdin.bin').write_bytes(stdin)
+ q=subprocess.run(argv,cwd=cwd,input=stdin,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (p/'stdout.bin').write_bytes(q.stdout);(p/'stderr.bin').write_bytes(q.stderr);(p/'exit.txt').write_text(str(q.returncode)+'\n')
+ return q
+if sys.argv[1]=='prepare':
+ refs=json.loads((A/'reconciled/evidence/reference-access.json').read_text())
+ for x in refs:x['readable']=os.access(x['path'],os.R_OK)
+ save('reference-access.json',refs);assert all(x['readable'] for x in refs)
+ manifest=[]; copies={}; proofs=[]; supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+ def copy(src,dst=None,git=None,rel=None):
+  src=Path(src);b=src.read_bytes();h=H(b)
+  if dst is None:
+   ext=src.suffix if src.suffix in supported else '.bin'
+   dst=copies.get(h,'proposal-inputs/evidence/'+h+ext)
+  dst=Path(dst)
+  if dst.suffix not in supported:dst=Path(str(dst)+('.txt' if src.suffix=='.py' else '.bin'))
+  out=R/dst;out.parent.mkdir(parents=True,exist_ok=True)
+  if out.exists():assert out.read_bytes()==b
+  else:out.write_bytes(b)
+  copies.setdefault(h,str(dst));rec={'original':str(src),'copy':str(dst),'sha256':h,'bytes':len(b)}
+  if git:rec.update(original_git_commit=git,repository_relative_path=rel)
+  manifest.append(rec)
+ for angle,freeze in [('tibetan','freeze-final-v1.json'),('english','freeze.json'),('reconciled','freeze.json')]:
+  base=A/angle;f=json.loads((base/freeze).read_text());entries=f['files'];entries=entries.items() if isinstance(entries,dict) else ((x['path'],x) for x in entries)
+  check=[]
+  for rel,desc in entries:
+   src=base/rel;b=src.read_bytes();assert H(b)==desc['sha256'] and len(b)==desc['bytes'],str(src)
+   check.append({'path':rel,'sha256':H(b),'bytes':len(b)})
+  proofs.append({'angle':angle,'freeze_sha256':H((base/freeze).read_bytes()),'file_count':len(check),'all_identical':True})
+  for src in sorted(base.rglob('*')):
+   if not src.is_file() or '__pycache__' in src.parts:continue
+   rel=src.relative_to(base);core=rel.parts[0].isdigit() or rel.parts[0] in ['helpers'] or len(rel.parts)==1
+   dst=('reviewed-final/' if angle=='reconciled' else 'proposal-inputs/'+angle+'/')+str(rel) if core else None
+   copy(src,dst)
+ # Originals whose only surviving role is an object are preserved by exact bytes above.
+ pins=json.loads((A/'reconciled/evidence/source-governance-pins.json').read_text())
+ for x in pins:
+  if 'origin_git_commit' in x:
+   rel=x['role'];q=capture('git-'+rel.replace('/','__'),['git','show',x['origin_git_commit']+':'+rel]);assert q.returncode==0 and H(q.stdout)==x['sha256']
+   src=A/'reconciled'/x['object'];assert src.read_bytes()==q.stdout
+   copy(src,'governing/'+rel,git=x['origin_git_commit'],rel=rel)
+  elif 'original_path' in x:
+   src=Path(x['original_path']);b=src.read_bytes();assert H(b)==x['sha256'] and len(b)==x['bytes'];copy(src)
+ for rel in ['source.json','context.json','proposal-baseline.json','root-current-semantic-brief.md','semantic-review-brief-v2.md','semantic-input-review-package.txt','reconciliation-brief.md','tibetan-brief.md','english-brief.md']:
+  copy(A/rel,'governing-batch/'+rel)
+ for rel in ['proposal-protocol.md','semantic-review-protocol.md','land_reviewed_page.py']:
+  copy(A.parent/rel,'governing-batch/'+rel)
+ save('original-to-copy-manifest.json',manifest);save('original-freeze-identity.json',proofs)
+ # Complete normalized package: JSON formatting only; no fields or string content discarded.
+ s=(A/'semantic-input-review-package.txt').read_text();parts=re.split(r'(?m)^===== (.+?) =====\n',s)
+ chunks=[]
+ for i in range(1,len(parts),2):
+  name,body=parts[i:i+2]
+  try:body=json.dumps(json.loads(body),ensure_ascii=False,separators=(',',':'))+'\n'
+  except json.JSONDecodeError:pass
+  chunks.append('===== '+name+' =====\n'+body)
+ (R/'complete-package-normalized.txt').write_text(''.join(chunks))
+ print(json.dumps({'freeze_checks':proofs,'manifest_records':len(manifest),'normalized_package_bytes':sum(len(x.encode()) for x in chunks)}))
+if sys.argv[1]=='queries':
+ db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+ rows=[dict(x) for x in db.execute("select * from corpus_segments where course='C05' and seq between 301 and 315 order by seq")]
+ save('independent/source-context-full-rows.json',rows)
+ for x in json.loads((A/'source.json').read_text()):assert all(next(y for y in rows if y['seq']==x['seq'])[k]==v for k,v in x.items())
+ corpus=json.load(gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt'));master=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt'))
+ terms=json.loads((A/'reconciled/evidence/reopened-master-full-records.json').read_text())['terms'];terms+=['sngon du btang','sngon du btang nas','zhig','de',"'i",'yin','med par thal']
+ found=[]
+ for coll,rs in master.items():
+  if not isinstance(rs,list):continue
+  for i,x in enumerate(rs):
+   if not isinstance(x,dict):continue
+   hits=set(terms)&set([x.get('wylie')]+(x.get('wylie_variants') or []))
+   if hits:found.append({'collection':coll,'index':i,'matched_terms':sorted(hits),'record':x})
+ save('independent/master-full-records.json',found)
+ sqlite_checks=[]
+ for x in found:
+  if x['collection']=='unified_entries':
+   entry=db.execute('select * from entries where id=?',(x['index']+1,)).fetchone()
+   assert entry and json.loads(entry['raw'])==x['record'];sqlite_checks.append(dict(entry))
+ save('independent/sqlite-full-entries.json',sqlite_checks)
+ queries=json.loads((A/'reconciled/evidence/original-claimed-query-count-recheck.json').read_text())+json.loads((A/'reconciled/evidence/reopened-corpus-queries.json').read_text())
+ results=[];seen={}
+ for x in queries:
+  x=x.get('original_query',x)
+  key=json.dumps([x['sql'],x['parameters']]);assert x['sql'].lower().startswith('select ')
+  if key not in seen:
+   rs=[dict(y) for y in db.execute(x['sql'],x['parameters'])]
+   for y in rs:assert json.loads(y['raw'])==corpus[y['id']-1]
+   seen[key]=len(results);results.append({'sql':x['sql'],'parameters':x['parameters'],'count':len(rs),'rows':rs})
+  assert results[seen[key]]['count']==x.get('claimed_count',x.get('count'))
+ save('independent/all-query-results.json',results)
+ # Exact full original parser reopening from the physical publication transcription.
+ Hm=types.ModuleType('independent_source_parser');exec(compile((R/'governing/engines/hgm_tools.py.bin').read_bytes(),'hgm_tools.py','exec'),Hm.__dict__)
+ physical=json.loads((A/'proposal-baseline.json').read_text())['source_pins']['physical']['path'];parsed=Hm.parse_aligned(physical,'C05');physical_check=[]
+ for seq in [307,308,309]:
+  source=next(x for x in rows if x['seq']==seq);hits=[(i,x) for i,x in enumerate(parsed) if x['acip']==source['acip']];assert len(hits)==1
+  i,p=hits[0];assert all(p[k]==source[k] for k in p);physical_check.append({'seq':seq,'index':i,'full_record':p,'fields_identical':True})
+ save('independent/physical-reopened.json',physical_check)
+ save('independent/query-proof.json',{'unique_queries':len(results),'original_count_claims_checked':len(queries),'all_counts_match':True,'master_records':len(found),'unified_master_sqlite_equivalence':len(sqlite_checks),'source_context_count':len(rows),'all_material_corpus_raw_records_equal_original_archive':True})
+ print(json.dumps({'queries':len(results),'records':len(found),'sqlite':len(sqlite_checks)}))
+if sys.argv[1]=='native':
+ allr=[];counts=[];originals=[]
+ for angle in ['tibetan','english']:
+  for seq in [307,308,309]:
+   d=A/'reconciled/native-original-replays'/angle/str(seq);src=A/angle/str(seq)
+   assert (d/'stdin.bin').read_bytes()==(src/'spec.json').read_bytes()
+   assert (d/'stdout.bin').read_bytes()==(src/'body.html').read_bytes()
+   assert (d/'stderr.bin').read_bytes()==b'' and (d/'exit.txt').read_text()=='0\n'
+   cmd=json.loads((d/'command.json').read_text());assert cmd['stdin_source']==str(src/'spec.json') and cmd['saved_body']==str(src/'body.html')
+   originals.append({'angle':angle,'seq':seq,'exact_input_output_exit_verified':True,'command':cmd})
+ save('original-native-stream-check.json',originals)
+ for seq in [307,308,309]:
+  s=R/'reviewed-final'/str(seq);b=(s/'spec.json').read_bytes();out=R/'commands'/('final-native-'+str(seq))
+  if out.exists():
+   assert (out/'stdin.bin').read_bytes()==b
+   q=types.SimpleNamespace(returncode=int((out/'exit.txt').read_text()),stdout=(out/'stdout.bin').read_bytes(),stderr=(out/'stderr.bin').read_bytes())
+  else:q=capture('final-native-'+str(seq),[sys.executable,str(R/'native-adapter.py.txt'),str(out/'observed-ranges.json')],b)
+  assert q.returncode==0 and q.stderr==b'' and q.stdout==(s/'body.html').read_bytes()
+  obs=json.loads((R/'commands'/('final-native-'+str(seq))/'observed-ranges.json').read_text())['resolutions'];rr={x['side']:x['ranges'] for x in obs}
+  spec=json.loads(b)['segments'][0];trs=[]
+  for sp in spec['spans']:
+   rec={k:v for k,v in [('seq',seq),('id',sp['id']),('d',sp['d']),('tib',sp['tib']),('eng',sp['eng']),('tib_range',rr['tib'][sp['id']]),('eng_range',rr['eng'].get(sp['id']))]};allr.append(rec);trs.append(rec)
+  final=json.loads((s/'final-ordered-tuples.json').read_text());expected=[{'seq':seq,**{k:x['span'][k] for k in ['id','d','tib','eng']},'tib_range':x['tib_range'],'eng_range':x['eng_range']} for x in final['tuples']];assert trs==expected
+  spans=spec['spans'];counts.append({'seq':seq,'span_count':len(spans),'null_count':sum(x['eng'] is None for x in spans),'word_pair_count':sum(x['d']==5 and x['eng'] is not None for x in spans),'spec_sha256':H(b),'spec_bytes':len(b),'body_sha256':H(q.stdout),'body_bytes':len(q.stdout),'generator_exit':q.returncode})
+ save('resolved-spans.json',allr);save('native-counts.json',counts);print(json.dumps(counts))

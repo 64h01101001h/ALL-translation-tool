@@ -1,0 +1,115 @@
+from pathlib import Path
+import json,hashlib,re,datetime
+from html.parser import HTMLParser
+R=Path(__file__).resolve().parents[1];A=R.parent;E=R/'evidence'
+def j(p):return json.loads(p.read_text())
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+rows={x['seq']:x for x in j(E/'source-context-full-rows.json')};lex=j(E/'reopened-master-full-records.json')['records']
+class Source(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.stack=[];self.text={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}}
+ def handle_starttag(self,t,aa):
+  a=dict(aa);side=next((x['side'] for x in reversed(self.stack) if x['side']),None)
+  if t=='div' and a.get('class') in self.text:side=a['class']
+  lab=a.get('data-l');active=bool(lab and lab.endswith('S')) or any(x['source'] for x in self.stack);self.stack.append({'tag':t,'side':side,'lab':lab,'source':active,'nul':a.get('class')=='nul','start':len(self.text[side]) if side else None})
+ def handle_data(self,s):
+  if self.stack and any(x['source'] for x in self.stack) and not any(x['nul'] for x in self.stack):
+   side=self.stack[-1]['side']
+   if side:self.text[side]+=s
+ def handle_endtag(self,t):
+  x=self.stack.pop();assert x['tag']==t
+  if x['lab'] and x['side']:self.ranges[x['side']][x['lab']]=[x['start'],len(self.text[x['side']])]
+def native_ranges(path):
+ d=j(path);return {x['side']:x['ranges'] for x in d['resolutions']}
+def overlap(a,b):return a is not None and b is not None and a[0]<b[1] and b[0]<a[1]
+def reason(seq,s):
+ t=s['tib'];d=s['d'];en=s['eng']
+ if en is None:return s['nul']
+ special={
+ 'dbu sems':'Established contracted compound names the Middle Way and Mind-Only schools; full HGM entry24317 has this complete expression. The inner articles and conjunction belong to the attested name expansion.',
+ "de'i":'Genitive-inflected demonstrative is a source word: de licenses this and bound genitive i licenses of. The English noun quotation is excluded.',
+ "'i":'Unique bound genitive member of dei; it owns of inside the same parent.',
+ 'de':'Unique demonstrative member of dei; it owns this inside the same parent.',
+ 'de ltar':'Established adverbial compound, explicitly attested this way; d5 follows its source lexical status.',
+ "de 'dra":'Established demonstrative adjective compound, attested like this; d5 follows its source lexical status.',
+ 'sdig sems':'Source compound is non-virtuous mind. The complete local verse/reply licenses this exact GMR wording; master entry83526 has no HGM gloss, so this is provisional corpus evidence only.',
+ 'snang':'Appearance is predicated of the stream in the first clause. In the second attributive cognition clause GMR recasts it as sees; supplied things stays outside. Both local relations and full snang glossary are checked.',
+ 'tshad ma':'Complete validity predicate is tshad ma ma yin pa. Tshad ma is the lexical valid-perception unit; the adjacent standalone negative ma owns not, while English copula and article are unwrapped.',
+ 'med':'Negative existence/absence predicate. Local context licenses no or not existing; source depth is lexical d5 rather than a generic negation particle.',
+ 'ma':'Standalone negation particle before yin, not the ma member of tshad ma; d6 follows source grammar.',
+ 'mi':'Standalone negation particle modifying gal ba; no is its separate English negative exponent.',
+ "blo'i g-yo ba":'Complete mental-movement nominal phrase is recast as the verbal idiom thought it over; d3 avoids the false independent g-yo ba/over dictionary mapping. GIE70/168 corroborate only shared mental intention.',
+ 'sngon du btang':'Complete relational predicate literally puts that mental movement beforehand. Its local exponent first expresses priority; retain d3 for the whole source relation, not d5 sngon du with unaccounted light verb btang.',
+ 'su yang med pa':'Indefinite negative phrase supplies no one at all; it does not claim the neighboring maker-relative-clause words.',
+ 'sa gzhi':'Established ground/floor compound with full HGM floor of the world attestation; the supplied trailing of hell is excluded.',
+ 'la sogs pa':'Established list-closing expression, with sogs licensing and in and so on. No supplied noun or participant is included.',
+ 'sogs':'Sogs licenses the full attested closing gesture or something like that, including or; no creator noun or new participant is swallowed.',
+ 'brlan':'Wet is explicitly HGM-attested; brlan and gsher ba describe the same phor pa gang object, not separate objects.',
+ 'gsher ba':'Flowing is explicitly HGM-attested here; retain GMR wording of the shared wet/flowing object, without replacing it with a comparator gloss.',
+ 'sems can':'Person is the being born in hell to whom the steel appears, not the creator. Keep the local experiencer role.',
+ 'byas pa':'One source creation verb is matched only to the first created. The second English created is an explanatory repetition and remains unbanked.',
+ 'thub pas':'Intact epithet with inseparable agentive s. Able Ones is the complete local plural epithet; no plural morpheme is invented for s.',
+ }
+ if t in special:return special[t]
+ if d==7:return 'Unique and strictly tighter compound member on both source and English sides; each member stays under its actual source d5 parent, including when the member order reverses in English.'
+ if d==6:return {'phyir':'Reason marker for this source clause; English order selects the matching for/Because/because occurrence, not a later or earlier reason.','dang':'Source conjunctive relation licenses the local and/Moreover connective.','tu':'Terminative particle marks the appearance as pus/blood and licenses as.','la':'Source object/locative particle immediately before the looking verb licenses at.','gyis':'Active agentive has no independent exponent.','zhing':'Source conjunction joins wet and flowing and licenses and.','tsam':'Restrictive particle licenses only.','gyi':'Adversative conjunctive gyi after yin licenses but; it is not the earlier genitive gyi.','yin':'Local verse copula licenses Is; the additional exclusivity nothing at all other than is left unwrapped.','yang':'Initial additive particle licenses again.'}.get(t,'Source grammatical particle has this separate local exponent; source-side d6 classification retained.')
+ return 'Source lexical word or established compound matches the selected local GMR wording; articles, supplied participants and auxiliaries remain outside. Full source row and applicable original master records are retained.'
+material={307:[('mi mtshungs','Whether equal or unequal is distributed through the question whether they must be equivalent; its mi cannot claim not existing, which belongs to med.'),("yin pa'i",'The earlier quotation appears is a copular/topic recast. First snang is later in the stream appearance clause and cannot own that earlier appears.'),('tshe na',"Temporal relations are distributed across this situation/where/at the same time/when, without a separate atom selected."),('phyir','The final causal relation is distributed through the explanation; the first phyir alone owns for.'),('English second craving spirit; things; must; either both; articles and auxiliaries','One Tibetan yi dvags is mapped once, to English [416,430); the second craving spirit [588,602) and supplied framing remain unwrapped.')],
+308:[('grub pa','Actuality/existence is recast as which actually is these objects. Dngos gnas/actually and med pa/nothing remain justified lexical pieces; the remainder is not separately atomized or nulled.'),('thal; der thal twice','Source consequence predicates form rhetorical existence questions. They are not automatically d6 modals. Distributed question framing stays unbanked.'),("de 'dra'i byed pa po",'Such a maker is expanded as who went and made all these kinds of things. Maker is an agent noun, not made; went and the participant frame cannot be captured by a flat lexical atom.'),('ci las','Source interrogative asks from what; GMR recasts Where ... from. Ci/Where on its own would claim a location equivalent for a source interrogative, while separating las would leave the interrogative relation distributed. Omit this frame, retain byung/come.'),('de dag; kyang; title las; zhes','Anaphora, emphasis and quotation apparatus are distributed in the full verse and reporting frame.'),('English different types; sit down; something; You find there; of hell; nothing at all other than; auxiliaries','These supplied/recast words stay unwrapped; the second steel/floor verse has no second dmyal ba to license of hell.')],
+309:[('nas','Sequential marker participates in GMR and then created them; the sole byas pa is linked to first created, while the repeated action/sequential expansion stays unwrapped.'),('byed pa por','Source as-maker predication is distributed over what really made all these things. No flat maker-to-made word pair and no no-exponent null are defensible.'),('de dag','Anaphoric objects are distributed through these things and them; no isolated occurrence claimed.'),('kyis','The passive by relation is present but its atomization is an unresolved campaign item. Omit without falsely asserting no English exponent.'),('yin par; final phyir; nominal/genitive framing','Copular contrast and explanatory causal relations are distributed across the complete reply.'),('English quotation; some; by someone who; second created; them; say; lines are meant to; us; had by; have to','Supplied/repeated wording remains verbatim and unwrapped; dei is tightened to of this and nothing here licenses quotation as a word.') ]}
+all_summary=[];all_counts=0;heads=[]
+for seq in [307,308,309]:
+ p=R/str(seq);spec=j(p/'spec.json')['segments'][0];nr=j(p/'native-result.json');nat=R/nr['native'];rs=native_ranges(nat/'observed-ranges.json');sour=rows[seq];parser=Source();parser.feed((p/'body.html').read_text());assert not parser.stack;assert parser.text=={'tib':sour['wylie'],'eng':sour['english']};assert (p/'spec.json').read_bytes()==(nat/'stdin.bin').read_bytes();assert (p/'body.html').read_bytes()==(nat/'stdout.bin').read_bytes();assert (nat/'exit.txt').read_text()=='0\n';assert not (nat/'stderr.bin').read_bytes()
+ final=[];parent=None
+ for i,s in enumerate(spec['spans']):
+  sid=s['id'];tr=rs['tib'][sid];er=rs['eng'].get(sid);assert sour['wylie'][tr[0]:tr[1]]==s['tib'];assert parser.ranges['tib']['s'+str(seq)+sid]==tr
+  if er:assert sour['english'][er[0]:er[1]]==s['eng'];assert parser.ranges['eng']['s'+str(seq)+sid]==er
+  else:assert s['eng'] is None
+  if s['d']!=7:parent=s if s['d']==5 else None
+  else:
+   assert parent;ptr=rs['tib'][parent['id']];per=rs['eng'].get(parent['id']);assert ptr[0]<=tr[0]<tr[1]<=ptr[1] and tr!=ptr;assert per[0]<=er[0]<er[1]<=per[1] and er!=per;assert parent['tib'].count(s['tib'])==1
+  lr=[{'collection':x['collection'],'index':x['index'],'wylie':x['record'].get('wylie'),'hgm_gloss':x['record'].get('hgm_gloss'),'status':x['record'].get('status')} for x in lex if s['tib'] in x['matched_terms']]
+  final.append({'ordinal_tibetan':i+1,'span':s,'tib_range':tr,'eng_range':er,'parent_id':parent['id'] if s['d']==7 else None,'ordinal_english_flat':spec['eng_order'].index(sid)+1 if sid in spec['eng_order'] else None,'reason':reason(seq,s),'full_original_master_record_refs':lr})
+  if s['d'] in [5,7] and s['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',s['eng'],re.I):
+   v={'seq':seq,'label':'s'+str(seq)+sid,'tib':s['tib'],'eng':s['eng'],'tib_range':tr,'eng_range':er,'actual_licensor':'sogs within '+s['tib'],'proposed_allowance_key':'c5p103/s'+str(seq)+sid,'proposed_allowance_value':f"sogs at C05:{seq} Wylie [{tr[0]},{tr[1]}) within {s['tib']} licenses the complete HGM-attested closing gesture {s['eng']!r}, including its initial {s['eng'].split()[0]}; no supplied noun or participant is captured. PROVISIONAL Codex reconciliation.", 'allowance_file_edited':False};heads.append(v)
+ save(p/'final-ordered-tuples.json',{'schema':'reconciled-final-ordered-tuples-v1','source':sour,'eng_order':spec['eng_order'],'tuples':final})
+ decisions=[];orig_om=[]
+ for angle in ['tibetan','english']:
+  original=j(A/angle/str(seq)/'spec.json')['segments'][0];od=j(A/angle/str(seq)/'decisions.json');ods={x['id']:x for x in od['proposals' if angle=='tibetan' else 'spans']};ors=native_ranges(R/'native-original-replays'/angle/str(seq)/'observed-ranges.json')
+  for os in original['spans']:
+   sid=os['id'];tr=ors['tib'][sid];er=ors['eng'].get(sid)
+   exact=[f for f in final if f['span']['tib']==os['tib'] and f['span']['eng']==os['eng'] and f['tib_range']==tr and f['eng_range']==er]
+   cand=exact or [f for f in final if overlap(tr,f['tib_range']) and (overlap(er,f['eng_range']) or (er is None and f['eng_range'] is None))]
+   if exact:status='unchanged' if exact[0]['span']['d']==os['d'] else 'reclassified_depth';why=reason(seq,exact[0]['span'])
+   elif cand:status='recast_or_rebounded';why='The original range is replaced by the listed final span(s). '+ ' '.join(dict.fromkeys(reason(seq,f['span']) for f in cand))
+   else:status='rejected';why='No independently defensible final atom for this original proposal; its contribution is distributed and left unbanked.'
+   if seq==307 and angle=='english' and sid=='w25':
+    cand=[f for f in final if f['span']['id']=='w25'];status='corrected_wrong_english_occurrence';why='Original native range [53,60) is quotation appears, belonging to the earlier skabs/yin pai recast. Source snang at [155,163) describes the stream. Final tighter snang [155,160) correctly selects stream appears [356,363). Mechanical passage did not prove this original correspondence.'
+   if seq==308 and angle=='english' and sid in ['w41','p42']:status='rejected_distributed_source_question';why='Ci las jointly asks the source from what and is recast Where ... from; neither isolated ci/Where nor this disconnected frame is banked. Byung/come survives separately.'
+   if seq==309 and angle=='tibetan' and sid=='w3':why='Tighten of this quotation to of this. Source dei is a genitive-inflected demonstrative, so final d5 with unique d7 de/this and i/of members preserves the licensable relation and excludes quotation.'
+   if seq==309 and angle=='tibetan' and sid=='w12':why='Split the complete mental-action and priority relations into bloi g-yo ba/thought it over and sngon du btang/first at d3. The source nas is outside first and has no separate final mapping to the repeated-action frame.'
+   if seq==309 and angle=='english' and sid=='w12':why='Widen source sngon du to complete relational predicate sngon du btang and classify d3. First expresses the placement-before relation; no unexplained d5 light-verb omission is needed.'
+   decisions.append({'angle':angle,'seq':seq,'original_span':os,'original_decision_complete':ods[sid],'original_eng_order':original['eng_order'],'actual_original_tib_range':tr,'actual_original_eng_range':er,'disposition':status,'final_ids':[f['span']['id'] for f in cand],'final_ranges':[{'id':f['span']['id'],'tib_range':f['tib_range'],'eng_range':f['eng_range']} for f in cand],'reason':why,'evidence':['../evidence/source-context-full-rows.json','../evidence/reopened-master-full-records.json','../evidence/physical-source-reopening.json','../evidence/parallel-full-field-comparisons.json']})
+  for item in od['omissions']:
+   extra='Remaining distributed matter is omitted with the final note; retained portions are distinguished in final-ordered-tuples.json.'
+   if seq==307 and 'gnyis' in item.get('tib',''):extra='Changed to a proven grammatical-fusion null: enumerating the two schools expresses the count without a separate numeral; neither later both belongs to gnyis.'
+   if seq==308 and "byed pa po" in item.get('tib',''):extra='Maker-role stays omitted. The tighter su yang med pa/no one at all phrase is retained separately; it does not own the relative creator predicate.'
+   if seq==309 and "de'i" in item.get('tib',''):extra='Recover the directly licensed dei/of this with genitive/pronoun members. The supplied noun quotation and distributed de dag remain unbanked.'
+   orig_om.append({'angle':angle,'original_omission_complete':item,'final_disposition':extra})
+ assert len(decisions)==sum(len(j(A/a/str(seq)/'spec.json')['segments'][0]['spans']) for a in ['tibetan','english']);all_counts+=len(decisions)
+ save(p/'original-span-dispositions.json',{'schema':'complete-original-span-dispositions-v1','original_span_count':len(decisions),'decisions':decisions})
+ gaps={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  flat=sorted([f[side+'_range'] for f in final if f['span']['d']!=7 and f[side+'_range'] is not None]);cur=0;gg=[]
+  for a,b in flat:
+   if a>cur:gg.append({'range':[cur,a],'text':sour[field][cur:a]})
+   cur=b
+  if cur<len(sour[field]):gg.append({'range':[cur,len(sour[field])],'text':sour[field][cur:]})
+  gaps[side]=gg
+ save(p/'material-omissions.json',{'material_decisions':[{'source_or_english':a,'reason':b} for a,b in material[seq]],'all_original_omission_dispositions':orig_om,'complete_unwrapped_ranges':gaps,'null_is_not_used_for_uncertainty':True})
+ summary={'seq':seq,'span_count':len(final),'null_count':sum(f['span']['eng'] is None for f in final),'total_d5':sum(f['span']['d']==5 for f in final),'nonnull_d5_word_pairs':sum(f['span']['d']==5 and f['span']['eng'] is not None for f in final),'d7_count':sum(f['span']['d']==7 for f in final),'original_dispositions':len(decisions),'errata_count':0,**nr}
+ save(p/'verification.json',{'summary':summary,'full_source_columns_reconstructed_exactly':True,'native_ranges_equal_rendered_ranges':True,'spec_equals_native_input':True,'body_equals_native_stdout':True,'d7_group_source_parents_checked':True,'range_units':'Unicode character offsets; half-open','all_final_tuples':'final-ordered-tuples.json','limitation':'Mechanical checks establish fidelity and structure, not semantic approval.'});all_summary.append(summary)
+assert all_counts==237
+save(R/'head-allowance-requests.json',{'schema':'reconciled-proposed-head-allowances-v1','requests':heads,'allowance_file_edited':False,'scope':'Exact proposed entries only; no gate relaxed. Root may apply only after independent skeptical review.'})
+save(R/'summary.json',{'schema':'c05-reconciliation-summary-v1','producer':'Codex (gpt-6-astra)','source_origin_commit':'b5047596859f6537b71f259c1e7df2e70f867fb2','source_origin_course_boundary':300,'future_acceptance_baseline':'Root captures separately after306; no W mutation hold','status':'PROVISIONAL reconciliation; separate skeptical review required before landing','segments':all_summary,'original_span_dispositions':all_counts,'original_angle_counts':j(E/'original-native-replay-results.json'),'original_count_correction':'English originals have81 total d5 but80 NONNULL d5 word pairs; gnyis is a null d5. Tibetan originals have74 nonnull d5.'})
+print(json.dumps(all_summary,indent=2));print('all_original_decisions',all_counts,'heads',len(heads))

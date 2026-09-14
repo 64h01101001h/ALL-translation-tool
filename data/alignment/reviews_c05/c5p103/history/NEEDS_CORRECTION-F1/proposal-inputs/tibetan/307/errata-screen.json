@@ -1,0 +1,161 @@
+{
+  "schema": "five-ground-proposal-errata-screen-v1",
+  "seq": 307,
+  "new_errata": [],
+  "screens": [
+    {
+      "label": "abbreviated schools and existence question",
+      "disposition": "REFUTED_AS_NEW_ERRATUM",
+      "source_quote": {
+        "course": "C05",
+        "seq": 307,
+        "field": "acip",
+        "found": "DBU SEMS GNYIS DON SHES YOD MED MTSUNGS MI MTSUNGS",
+        "range": [
+          14,
+          64
+        ]
+      },
+      "proposed_correction": null,
+      "five_grounds": {
+        "1_exact_row_and_original_source": {
+          "checked": true,
+          "finding": "Complete ACIP, Wylie, English and raw row agree with original corpus; complete physical C05 source parsed by the unchanged canonical parser reproduces all selected fields. Original legacy bytes and exact selected extents are retained.",
+          "evidence": [
+            "source-context-verification.json",
+            "external-record-equivalence.json",
+            "physical-extents.json"
+          ]
+        },
+        "2_registered_classes": {
+          "checked": true,
+          "finding": "No new spelling/converter, running-head, footnote, row-boundary or 1500-character truncation defect identified here. Selected English length is 677. Following-heading apparatus occurs in context 314 and is already a registered class; no duplicate filed.",
+          "register_count": 193,
+          "full_material_records": [
+            "E-044",
+            "E-046",
+            "E-071",
+            "E-076",
+            "E-106",
+            "E-107",
+            "E-111",
+            "E-121",
+            "E-122",
+            "E-131",
+            "E-135",
+            "E-158",
+            "E-189"
+          ],
+          "evidence": [
+            "governing/docs/errata_register.json",
+            "errata-material-records.json"
+          ]
+        },
+        "3_parallel_witnesses": {
+          "checked": true,
+          "finding": "C15:452 equals the full ACIP/Wylie/English fields. P7:46 preserves the argument with punctuation and yi dwags differences; its English uses em dashes where C05 has doubled hyphens. Text equality alone establishes neither independent publication nor ingestion lineage.",
+          "evidence": [
+            "corpus-queries.json",
+            "corpus-witnesses.json",
+            "source-roles-and-field-comparisons.json",
+            "all-witness-original-equivalence.json"
+          ]
+        },
+        "4_hgm_lexical_evidence": {
+          "checked": true,
+          "finding": "HGM dbu includes middle way, sems includes mind-only, don includes object, shes includes perception, med includes not existing, and mtshungs includes equivalent. No comparative gloss is promoted.",
+          "evidence": [
+            "glossary-records.json",
+            "originals/hgm_dictionary_v27_2.json.gz"
+          ]
+        },
+        "5_context_grammar_and_alternative_reading": {
+          "checked": true,
+          "finding": "Dbu and sems abbreviate the two schools. Mtshungs mi mtshungs supplies the equal/not-equal inquiry; GMR expresses it as whether they must be equivalent. That distributed negative alternative must not be linked to not existing; it does not demonstrate an erroneous source assertion.",
+          "evidence": [
+            "source-context-verification.json"
+          ]
+        }
+      },
+      "reason_not_filed": "School abbreviations and question restructuring are intelligible in the full 306–307 reply; neither a typo nor a necessary doctrinal correction follows.",
+      "limits": "This proposal is not editorial approval. GMR wording remains unchanged; no evidence establishes a necessary source correction."
+    },
+    {
+      "label": "appearance versus valid perception",
+      "disposition": "REFUTED_AS_NEW_ERRATUM",
+      "source_quote": {
+        "course": "C05",
+        "seq": 307,
+        "field": "english",
+        "found": "the visual consciousness that sees things this way is not a valid perception",
+        "range": [
+          467,
+          543
+        ]
+      },
+      "proposed_correction": null,
+      "five_grounds": {
+        "1_exact_row_and_original_source": {
+          "checked": true,
+          "finding": "Complete ACIP, Wylie, English and raw row agree with original corpus; complete physical C05 source parsed by the unchanged canonical parser reproduces all selected fields. Original legacy bytes and exact selected extents are retained.",
+          "evidence": [
+            "source-context-verification.json",
+            "external-record-equivalence.json",
+            "physical-extents.json"
+          ]
+        },
+        "2_registered_classes": {
+          "checked": true,
+          "finding": "No new spelling/converter, running-head, footnote, row-boundary or 1500-character truncation defect identified here. Selected English length is 677. Following-heading apparatus occurs in context 314 and is already a registered class; no duplicate filed.",
+          "register_count": 193,
+          "full_material_records": [
+            "E-044",
+            "E-046",
+            "E-071",
+            "E-076",
+            "E-106",
+            "E-107",
+            "E-111",
+            "E-121",
+            "E-122",
+            "E-131",
+            "E-135",
+            "E-158",
+            "E-189"
+          ],
+          "evidence": [
+            "governing/docs/errata_register.json",
+            "errata-material-records.json"
+          ]
+        },
+        "3_parallel_witnesses": {
+          "checked": true,
+          "finding": "C15:452 repeats all three complete text fields; P7:46 repeats the English assertion within the same complete argument. Text equality alone establishes neither independent publication nor ingestion lineage.",
+          "evidence": [
+            "corpus-queries.json",
+            "corpus-witnesses.json",
+            "source-roles-and-field-comparisons.json",
+            "all-witness-original-equivalence.json"
+          ]
+        },
+        "4_hgm_lexical_evidence": {
+          "checked": true,
+          "finding": "HGM snang includes both appears and sees; mig shes includes visual consciousness and tshad ma includes valid perception.",
+          "evidence": [
+            "glossary-records.json",
+            "originals/hgm_dictionary_v27_2.json.gz"
+          ]
+        },
+        "5_context_grammar_and_alternative_reading": {
+          "checked": true,
+          "finding": "The reply distinguishes the visual cognition being invalid from actual pus and blood existing. The cited resemblance of perceptual errors does not require that both objects be nonexistent. This is the explicit response to 306, not an unexplained polarity contradiction.",
+          "evidence": [
+            "source-context-verification.json"
+          ]
+        }
+      },
+      "reason_not_filed": "No factual error proven. Keep the lexical pairs and leave the distributed comparative question unbanked.",
+      "limits": "This proposal is not editorial approval. GMR wording remains unchanged; no evidence establishes a necessary source correction."
+    }
+  ]
+}

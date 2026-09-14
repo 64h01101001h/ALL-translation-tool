@@ -1,0 +1,49 @@
+from pathlib import Path
+import json,hashlib,subprocess,sys,os
+R=Path(__file__).resolve().parent;A=R.parent;W=A.parents[1]/'campaign-worktree'
+H=lambda b:hashlib.sha256(b).hexdigest()
+J=lambda p:json.loads(Path(p).read_text())
+supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+helper=(R/'governing-batch/land_reviewed_page.py.txt').read_text()
+assert all(repr(x) in helper or '"'+x+'"' in helper for x in supported)
+manifest=J(R/'original-to-copy-manifest.json');checked=[];cache={}
+def content(p):
+ p=Path(p)
+ if str(p) not in cache:
+  b=p.read_bytes();cache[str(p)]=(H(b),len(b))
+ return cache[str(p)]
+for i,x in enumerate(manifest):
+ expected={'original','copy','sha256','bytes'}
+ if 'original_git_commit' in x:expected|={'original_git_commit','repository_relative_path'}
+ assert set(x)==expected,(i,'schema')
+ original=Path(x['original']);copy=R/x['copy'];assert original.is_absolute() and not Path(x['copy']).is_absolute()
+ assert copy.resolve().is_relative_to(R) and copy.suffix in supported
+ assert content(copy)==content(original)==(x['sha256'],x['bytes']),(i,x['original'])
+ if 'original_git_commit' in x:
+  d=R/'commands'/'preflight-git'/sys.argv[1]/str(i);d.mkdir(parents=True,exist_ok=False)
+  argv=['git','show',x['original_git_commit']+':'+x['repository_relative_path']]
+  (d/'command.json').write_text(json.dumps({'argv':argv,'cwd':str(W),'env_override':{'PYTHONDONTWRITEBYTECODE':'1'}},indent=2)+'\n');(d/'stdin.bin').write_bytes(b'')
+  q=subprocess.run(argv,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},capture_output=True)
+  (d/'stdout.bin').write_bytes(q.stdout);(d/'stderr.bin').write_bytes(q.stderr);(d/'exit.txt').write_text(str(q.returncode)+'\n')
+  assert q.returncode==0 and q.stderr==b'' and (H(q.stdout),len(q.stdout))==content(copy)
+ checked.append({'record':i,'copy':x['copy'],'bytes':x['bytes'],'sha256':x['sha256'],'exact_original_identity':True,'git_object_identity':True if 'original_git_commit' in x else None})
+inventory=[]
+for p in sorted(R.rglob('*')):
+ if p.is_file():
+  assert p.suffix in supported,str(p)
+  inventory.append(str(p.relative_to(R)))
+for angle,freeze in [('tibetan','freeze-final-v1.json'),('english','freeze.json'),('reconciled','freeze.json')]:
+ base=A/angle;f=J(base/freeze);entries=f['files'];entries=entries.items() if isinstance(entries,dict) else ((x['path'],x) for x in entries)
+ originals={x['original'] for x in manifest}
+ for rel,desc in entries:
+  assert str(base/rel) in originals and content(base/rel)==(desc['sha256'],desc['bytes'])
+review=J(R/'review.json');resolved=J(R/'resolved-spans.json')
+assert set(review)=={'verdict','open_findings','segments','total_spans','total_nulls','total_word_pairs'}
+assert review['verdict']=='NEEDS_CORRECTION' and len(review['open_findings'])==1
+assert len(resolved)==129 and all(set(x)=={'seq','id','d','tib','eng','tib_range','eng_range'} for x in resolved)
+assert review['total_spans']==129 and review['total_nulls']==4 and review['total_word_pairs']==75
+assert J(R/'bank-ready-errata.json')==[]
+assert set(J(R/'span-head-allow-needed.json')['pages_c05'])=={'c5p103/s308w23','c5p103/s309w8','c5p103/s309w11'}
+result={'status':'PASS','manifest_records':len(manifest),'unique_copy_targets':len({x['copy'] for x in manifest}),'checked_records':checked,'supported_extensions':sorted(supported),'unsupported_files':[],'full_original_freezes_rechecked':True,'required_consumer_schemas_pass':True,'note':'Read-only originals and historical Git object checks; source origin is distinct from the uncaptured future acceptance baseline.'}
+(R/'copy-extension-preflight.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({k:v for k,v in result.items() if k!='checked_records'}))

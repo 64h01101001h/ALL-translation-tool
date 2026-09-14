@@ -1,0 +1,182 @@
+{
+  "schema": "c05-producer-errata-five-grounds-v1",
+  "seq": 309,
+  "errata_count": 0,
+  "status": "PROVISIONAL independent English-first producer assessment",
+  "grounds": [
+    {
+      "ground": 1,
+      "name": "Exact source quotation and source-of-record check",
+      "result": {
+        "found": "thought it over first and then created them.",
+        "field": "english",
+        "other_exact_quotes": [
+          "BLO'I G-YO BA SNGON DU BTANG NAS BYAS PA",
+          "non-virtuous states of mind"
+        ],
+        "finding": "No new erratum proposed. English expands the denial of a creator preceded by conscious intention. GIE:70 and GIE:168 contain fuller mental-action renderings supporting that reading, not a correction. The argument contrasts this hypothesized creator with the beings' non-virtuous minds; this is intentional explanatory content."
+      },
+      "evidence": [
+        "full-original-rows.json",
+        "source.json",
+        "physical-row-equivalence.json",
+        "originals/C05ReadingASCII.txt"
+      ],
+      "physical_result": "Linebreak-joined original ACIP and English exactly equal this spine row; all bytes and exact extents are retained."
+    },
+    {
+      "ground": 2,
+      "name": "Available corpus parallels",
+      "query_indexes_zero_based": [
+        2,
+        5,
+        7
+      ],
+      "query_counts": [
+        3,
+        5,
+        6
+      ],
+      "comparisons": [
+        {
+          "source": "C05:309",
+          "parallel": "C15:454",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "c05_chars": 198,
+              "parallel_chars": 198,
+              "c05_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+              "parallel_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "c05_chars": 197,
+              "parallel_chars": 197,
+              "c05_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+              "parallel_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "c05_chars": 405,
+              "parallel_chars": 405,
+              "c05_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+              "parallel_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+              "differences": []
+            }
+          },
+          "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+        },
+        {
+          "source": "C05:309",
+          "parallel": "C16:846",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "c05_chars": 198,
+              "parallel_chars": 198,
+              "c05_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+              "parallel_sha256": "07a8999709a0332bedd4a76e0cfaf54eee953f521df4bfbca3387f8c08d800b4",
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "c05_chars": 197,
+              "parallel_chars": 197,
+              "c05_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+              "parallel_sha256": "0cc0f9454380e6b30826b00d260e921c2c7ffa5170e6d797055df1e0b525ee89",
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "c05_chars": 405,
+              "parallel_chars": 405,
+              "c05_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+              "parallel_sha256": "99868b68660162a9cb95748eb72c32e8cd3d60cd092611557a0d494f3c066559",
+              "differences": []
+            }
+          },
+          "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+        }
+      ],
+      "evidence": [
+        "corpus-query-full-rows.json",
+        "original-corpus-records.json",
+        "parallel-field-comparisons.json"
+      ],
+      "limits": "Full original records are retained. Text-field identity/difference establishes neither independent publication nor a specific ingestion history. C16 same-file wording in the course shape is metadata only."
+    },
+    {
+      "ground": 3,
+      "name": "Registered class and duplicate check",
+      "register_commit": "b5047596859f6537b71f259c1e7df2e70f867fb2",
+      "register_entries": 193,
+      "this_segment_registered_entries": [],
+      "english_length": 405,
+      "is_1500_cap": false,
+      "classes_checked": [
+        "E-044 converter escapes",
+        "E-071 running heads",
+        "E-076 period footnote fusion",
+        "E-121 word footnote fusion",
+        "E-111 row-boundary spill",
+        "E-107 ingest cap",
+        "E-158 replacement character",
+        "registered folio-caption fusion",
+        "registered following-selection heading glue"
+      ],
+      "result": "None of these classes occurs in the selected row. Neighbor C05:314 contains the original following Reading Seven heading and is contextual apparatus, not a new erratum in 307–309.",
+      "evidence": [
+        "registered-class-full-records.json",
+        "pinned/docs/errata_register.json",
+        "pinned/data/alignment/C05_CAMPAIGN.md",
+        "full-original-rows.json"
+      ]
+    },
+    {
+      "ground": 4,
+      "name": "Full applicable HGM lexical evidence",
+      "terms": [
+        "sdig sems",
+        "sdig",
+        "sems",
+        "g-yo ba",
+        "blo",
+        "sngon du",
+        "byed pa po",
+        "dbang phyug"
+      ],
+      "record_indexes_zero_based": [
+        20,
+        27,
+        28,
+        29,
+        49,
+        55,
+        64,
+        66,
+        80,
+        93,
+        103,
+        104,
+        105,
+        122,
+        129
+      ],
+      "evidence": [
+        "lexical-full-records.json",
+        "lexical-supplement-full-records.json",
+        "originals/hgm_dictionary_v27_2.json.gz"
+      ],
+      "result": "Applicable full records, glossary lists, curated examples, notes, flags and attestation contexts checked. No comparator has been promoted into GMR English. sdig sems is awaiting-hgm-equivalent with no hgm_gloss; its two attestation contexts are truncated, so the full original row supplies the correspondence evidence. g-yo ba glossary over cannot license a word mapping on its own."
+    },
+    {
+      "ground": 5,
+      "name": "Alternative explanation and limits of proposed correction",
+      "result": "An empty errata list is warranted; no specific probable source correction survives the local syntax, physical-source comparison and lexical checks. Literary recast, grammatical number and doctrinal argument are preserved as original text. This producer assessment is not the subsequent independent skeptical review.",
+      "status": "No filed correction; source unchanged."
+    }
+  ]
+}

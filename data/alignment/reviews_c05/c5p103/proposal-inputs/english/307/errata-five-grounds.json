@@ -1,0 +1,400 @@
+{
+  "schema": "c05-producer-errata-five-grounds-v1",
+  "seq": 307,
+  "errata_count": 0,
+  "status": "PROVISIONAL independent English-first producer assessment",
+  "grounds": [
+    {
+      "ground": 1,
+      "name": "Exact source quotation and source-of-record check",
+      "result": {
+        "found": "YI DVAGS",
+        "field": "acip",
+        "other_exact_quotes": [
+          "there actual pus and blood.",
+          "is not a valid perception"
+        ],
+        "finding": "No new erratum proposed. DVAGS is the physical source spelling, while P7:46 has DWAGS; the variation alone does not establish a keyed-source defect. The apparent epistemic tension is the explicit argument answered in the source, not evidence of an English factual error."
+      },
+      "evidence": [
+        "full-original-rows.json",
+        "source.json",
+        "physical-row-equivalence.json",
+        "originals/C05ReadingASCII.txt"
+      ],
+      "physical_result": "Linebreak-joined original ACIP and English exactly equal this spine row; all bytes and exact extents are retained."
+    },
+    {
+      "ground": 2,
+      "name": "Available corpus parallels",
+      "query_indexes_zero_based": [
+        0,
+        8,
+        9,
+        11
+      ],
+      "query_counts": [
+        5,
+        5,
+        5,
+        3
+      ],
+      "comparisons": [
+        {
+          "source": "C05:307",
+          "parallel": "C15:452",
+          "fields": {
+            "acip": {
+              "equal": true,
+              "c05_chars": 316,
+              "parallel_chars": 316,
+              "c05_sha256": "db5d031ddb18cd8936691dfed1681de13ca9c73996bf442d97c49cff360e336e",
+              "parallel_sha256": "db5d031ddb18cd8936691dfed1681de13ca9c73996bf442d97c49cff360e336e",
+              "differences": []
+            },
+            "wylie": {
+              "equal": true,
+              "c05_chars": 320,
+              "parallel_chars": 320,
+              "c05_sha256": "a44bde107463f152c95217bb5b8159a5b08df4cfd87d9f15f2d3ce9036e588fe",
+              "parallel_sha256": "a44bde107463f152c95217bb5b8159a5b08df4cfd87d9f15f2d3ce9036e588fe",
+              "differences": []
+            },
+            "english": {
+              "equal": true,
+              "c05_chars": 677,
+              "parallel_chars": 677,
+              "c05_sha256": "dab9429890fecfe413ec634d8b701c7b467653d08ab6c08f81fbc410fff2f050",
+              "parallel_sha256": "dab9429890fecfe413ec634d8b701c7b467653d08ab6c08f81fbc410fff2f050",
+              "differences": []
+            }
+          },
+          "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+        },
+        {
+          "source": "C05:307",
+          "parallel": "P7:46",
+          "fields": {
+            "acip": {
+              "equal": false,
+              "c05_chars": 316,
+              "parallel_chars": 309,
+              "c05_sha256": "db5d031ddb18cd8936691dfed1681de13ca9c73996bf442d97c49cff360e336e",
+              "parallel_sha256": "8f22efb30f1f20b84b98933cb30fd4ae10746386f7b87f5597553e1eae47778a",
+              "differences": [
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    12,
+                    13
+                  ],
+                  "parallel_range": [
+                    12,
+                    12
+                  ],
+                  "c05": ",",
+                  "parallel": ""
+                },
+                {
+                  "op": "insert",
+                  "c05_range": [
+                    75,
+                    75
+                  ],
+                  "parallel_range": [
+                    74,
+                    75
+                  ],
+                  "c05": "",
+                  "parallel": ","
+                },
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    102,
+                    104
+                  ],
+                  "parallel_range": [
+                    102,
+                    102
+                  ],
+                  "c05": ", ",
+                  "parallel": ""
+                },
+                {
+                  "op": "replace",
+                  "c05_range": [
+                    108,
+                    109
+                  ],
+                  "parallel_range": [
+                    106,
+                    107
+                  ],
+                  "c05": "V",
+                  "parallel": "W"
+                },
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    170,
+                    171
+                  ],
+                  "parallel_range": [
+                    168,
+                    168
+                  ],
+                  "c05": ",",
+                  "parallel": ""
+                },
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    223,
+                    225
+                  ],
+                  "parallel_range": [
+                    220,
+                    220
+                  ],
+                  "c05": ", ",
+                  "parallel": ""
+                },
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    258,
+                    259
+                  ],
+                  "parallel_range": [
+                    253,
+                    253
+                  ],
+                  "c05": ",",
+                  "parallel": ""
+                },
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    315,
+                    316
+                  ],
+                  "parallel_range": [
+                    309,
+                    309
+                  ],
+                  "c05": ",",
+                  "parallel": ""
+                }
+              ]
+            },
+            "wylie": {
+              "equal": false,
+              "c05_chars": 320,
+              "parallel_chars": 314,
+              "c05_sha256": "a44bde107463f152c95217bb5b8159a5b08df4cfd87d9f15f2d3ce9036e588fe",
+              "parallel_sha256": "77d364d88031c6f1fca9b8bf9594054ac5ef0b8d6b19b326f41a0e9eec77bbdb",
+              "differences": [
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    12,
+                    13
+                  ],
+                  "parallel_range": [
+                    12,
+                    12
+                  ],
+                  "c05": ",",
+                  "parallel": ""
+                },
+                {
+                  "op": "insert",
+                  "c05_range": [
+                    77,
+                    77
+                  ],
+                  "parallel_range": [
+                    76,
+                    77
+                  ],
+                  "c05": "",
+                  "parallel": ","
+                },
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    104,
+                    106
+                  ],
+                  "parallel_range": [
+                    104,
+                    104
+                  ],
+                  "c05": ", ",
+                  "parallel": ""
+                },
+                {
+                  "op": "replace",
+                  "c05_range": [
+                    110,
+                    111
+                  ],
+                  "parallel_range": [
+                    108,
+                    109
+                  ],
+                  "c05": "v",
+                  "parallel": "w"
+                },
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    173,
+                    174
+                  ],
+                  "parallel_range": [
+                    171,
+                    171
+                  ],
+                  "c05": ",",
+                  "parallel": ""
+                },
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    227,
+                    229
+                  ],
+                  "parallel_range": [
+                    224,
+                    224
+                  ],
+                  "c05": ", ",
+                  "parallel": ""
+                },
+                {
+                  "op": "delete",
+                  "c05_range": [
+                    263,
+                    264
+                  ],
+                  "parallel_range": [
+                    258,
+                    258
+                  ],
+                  "c05": ",",
+                  "parallel": ""
+                }
+              ]
+            },
+            "english": {
+              "equal": false,
+              "c05_chars": 677,
+              "parallel_chars": 675,
+              "c05_sha256": "dab9429890fecfe413ec634d8b701c7b467653d08ab6c08f81fbc410fff2f050",
+              "parallel_sha256": "539cad9c393744ef0acd0431e16b14ebae6d02b2875a6eae6cb8169a7a1f6448",
+              "differences": [
+                {
+                  "op": "replace",
+                  "c05_range": [
+                    577,
+                    579
+                  ],
+                  "parallel_range": [
+                    577,
+                    578
+                  ],
+                  "c05": "--",
+                  "parallel": "—"
+                },
+                {
+                  "op": "replace",
+                  "c05_range": [
+                    631,
+                    633
+                  ],
+                  "parallel_range": [
+                    630,
+                    631
+                  ],
+                  "c05": "--",
+                  "parallel": "—"
+                }
+              ]
+            }
+          },
+          "provenance_limit": "These field comparisons establish textual similarity only, not independent publication or ingestion lineage."
+        }
+      ],
+      "evidence": [
+        "corpus-query-full-rows.json",
+        "original-corpus-records.json",
+        "parallel-field-comparisons.json"
+      ],
+      "limits": "Full original records are retained. Text-field identity/difference establishes neither independent publication nor a specific ingestion history. C16 same-file wording in the course shape is metadata only."
+    },
+    {
+      "ground": 3,
+      "name": "Registered class and duplicate check",
+      "register_commit": "b5047596859f6537b71f259c1e7df2e70f867fb2",
+      "register_entries": 193,
+      "this_segment_registered_entries": [],
+      "english_length": 677,
+      "is_1500_cap": false,
+      "classes_checked": [
+        "E-044 converter escapes",
+        "E-071 running heads",
+        "E-076 period footnote fusion",
+        "E-121 word footnote fusion",
+        "E-111 row-boundary spill",
+        "E-107 ingest cap",
+        "E-158 replacement character",
+        "registered folio-caption fusion",
+        "registered following-selection heading glue"
+      ],
+      "result": "None of these classes occurs in the selected row. Neighbor C05:314 contains the original following Reading Seven heading and is contextual apparatus, not a new erratum in 307–309.",
+      "evidence": [
+        "registered-class-full-records.json",
+        "pinned/docs/errata_register.json",
+        "pinned/data/alignment/C05_CAMPAIGN.md",
+        "full-original-rows.json"
+      ]
+    },
+    {
+      "ground": 4,
+      "name": "Full applicable HGM lexical evidence",
+      "terms": [
+        "yi dvags",
+        "mig shes",
+        "tshad ma",
+        "dbu sems",
+        "mi 'gal ba"
+      ],
+      "record_indexes_zero_based": [
+        32,
+        33,
+        37,
+        60,
+        63,
+        108,
+        110,
+        111,
+        116,
+        120
+      ],
+      "evidence": [
+        "lexical-full-records.json",
+        "lexical-supplement-full-records.json",
+        "originals/hgm_dictionary_v27_2.json.gz"
+      ],
+      "result": "Applicable full records, glossary lists, curated examples, notes, flags and attestation contexts checked. No comparator has been promoted into GMR English. sdig sems is awaiting-hgm-equivalent with no hgm_gloss; its two attestation contexts are truncated, so the full original row supplies the correspondence evidence. g-yo ba glossary over cannot license a word mapping on its own."
+    },
+    {
+      "ground": 5,
+      "name": "Alternative explanation and limits of proposed correction",
+      "result": "An empty errata list is warranted; no specific probable source correction survives the local syntax, physical-source comparison and lexical checks. Literary recast, grammatical number and doctrinal argument are preserved as original text. This producer assessment is not the subsequent independent skeptical review.",
+      "status": "No filed correction; source unchanged."
+    }
+  ]
+}

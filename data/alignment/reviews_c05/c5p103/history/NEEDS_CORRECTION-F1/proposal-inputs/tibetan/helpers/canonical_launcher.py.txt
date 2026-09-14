@@ -1,0 +1,26 @@
+"""Run the actual unchanged generator, binding its import and SQLite path read-only."""
+import hashlib, importlib.util, json, os, pathlib, runpy, sqlite3, sys
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+WORK=ROOT.parents[2]/'campaign-worktree'
+GOV=ROOT/'evidence/governing'
+SPINE=WORK/'build/hgm_spine_v27_2.db'
+URI=SPINE.as_uri()+'?mode=ro'
+PINS=json.loads((ROOT/'evidence/proposal-baseline.json').read_text())
+for rel in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+    assert hashlib.sha256((GOV/rel).read_bytes()).hexdigest()==PINS['governing_git_pins'][rel]['sha256']
+assert (WORK/'tools/gen_alignment_page.py').read_bytes()==(GOV/'tools/gen_alignment_page.py').read_bytes()
+def module(name,path):
+    spec=importlib.util.spec_from_file_location(name,path)
+    mod=importlib.util.module_from_spec(spec);sys.modules[name]=mod;spec.loader.exec_module(mod);return mod
+module('hgm_tools',GOV/'engines/hgm_tools.py')
+B=module('build_alignment_layer',GOV/'tools/build_alignment_layer.py')
+B.SPINE=URI
+original_connect=sqlite3.connect
+def readonly_connect(database,*args,**kwargs):
+    assert str(database)==URI,repr(database)
+    kwargs['uri']=True
+    log=pathlib.Path(os.environ['ALIGNMENT_CONNECT_LOG'])
+    log.write_text(json.dumps({'requested_database':str(database),'effective_database':URI,'uri':True,'mode':'ro','adapter':'passes already-formed URI unchanged; no second encoding','builder_SPINE_override':True},indent=2)+'\n')
+    return original_connect(database,*args,**kwargs)
+sqlite3.connect=readonly_connect
+runpy.run_path(str(WORK/'tools/gen_alignment_page.py'),run_name='__main__')

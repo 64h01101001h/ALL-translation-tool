@@ -1,0 +1,72 @@
+from pathlib import Path
+import json,hashlib,subprocess,sqlite3,gzip,os,shutil
+R=Path(__file__).resolve().parents[1]; A=R.parent;W=A.parents[1]/'campaign-worktree';E=R/'evidence'; E.mkdir(exist_ok=True)
+BASE=json.loads((A/'proposal-baseline.json').read_text()); C=BASE['commit']
+def save(path,data):
+ p=R/path;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+def obj(b):
+ h=sha(b);p=E/'objects'/h;p.parent.mkdir(exist_ok=True)
+ if not p.exists():p.write_bytes(b)
+ return {'sha256':h,'bytes':len(b),'object':str(p.relative_to(R))}
+roles=[];checks=[]
+for a,fn,h in [('tibetan','freeze-final-v1.json','63204cb888eb18983948cdd7c208c557cc33481c38433f7a523d412b906d3c60'),('english','freeze.json','b16de542d7780bfa0334123c8132b3826cdef3815f32ac0218618d8213ce27f8')]:
+ b=(A/a/fn).read_bytes();assert sha(b)==h;fr=json.loads(b);roles.append({'role':a+'/'+fn,**obj(b)})
+ fs=fr['files']; fs=fs if isinstance(fs,list) else [{'path':k,**v} for k,v in fs.items()]
+ for v in fs:
+  p=A/a/v['path'];b=p.read_bytes();assert len(b)==v['bytes'] and sha(b)==v['sha256'],str(p)
+  roles.append({'role':a+'/'+v['path'],'original_path':str(p),**obj(b)})
+ checks.append({'angle':a,'freeze':fn,'sha256':h,'schema':fr['schema'],'verified_files':len(fs)})
+save('evidence/original-role-map.json',roles);save('evidence/original-freeze-verification.json',checks)
+pins=[]
+for role,v in BASE['source_pins'].items():
+ b=Path(v['path']).read_bytes();assert sha(b)==v['sha256'] and len(b)==v['bytes'];pins.append({'role':role,'original_path':v['path'],**obj(b)})
+for rel in list(BASE['governing_git_pins'])+['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','engines/hgm_tools.py','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/NEVER_BANK_A_FALSEHOOD.md']:
+ b=subprocess.check_output(['git','show',C+':'+rel],cwd=W)
+ if rel in BASE['governing_git_pins']:
+  v=BASE['governing_git_pins'][rel];assert sha(b)==v['sha256'] and len(b)==v['bytes']
+ p=E/'governing'/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b);pins.append({'role':rel,'origin_git_commit':C,**obj(b)})
+save('evidence/source-governance-pins.json',pins)
+refs=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+access=[{'path':str(Path.home()/p),'readable':os.access(Path.home()/p,os.R_OK)} for p in refs];assert all(v['readable'] for v in access);save('evidence/reference-access.json',access)
+db=sqlite3.connect(Path(BASE['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+save('evidence/sqlite-schema.json',[dict(x) for x in db.execute("select type,name,sql from sqlite_master where type='table'")])
+rows=[dict(x) for x in db.execute("select * from corpus_segments where course='C05' and seq between 301 and 315 order by seq")];save('evidence/source-context-full-rows.json',rows)
+for fn in ['source.json','context.json']:
+ for s in json.loads((A/fn).read_text()):
+  row=next(r for r in rows if r['seq']==s['seq']);assert all(row[k]==v for k,v in s.items())
+queries=[];wr={r['id']:r for r in rows}
+for angle in ['tibetan','english']:
+ fn='corpus-queries.json' if angle=='tibetan' else 'corpus-query-full-rows.json'; d=json.loads((A/angle/'evidence'/fn).read_text());save('evidence/query-discovery-'+angle+'.json',d)
+ terms=['DBU SEMS GNYIS DON SHES','BRLAN ZHING GSHER BA PHOR PA GANG','SDIG SEMS',"BLO'I G-YO BA",'LCAGS SREG SA GZHI SU YIS BYAS'] if angle=='tibetan' else []
+ for term in terms:
+  sql='select * from corpus_segments where acip like ? order by course,seq';args=['%'+term+'%'];rr=[dict(x) for x in db.execute(sql,args)];queries.append({'sql':sql,'parameters':args,'count':len(rr),'rows':rr});wr.update({x['id']:x for x in rr})
+for seq in [307,308,309]:
+ r=next(x for x in rows if x['seq']==seq)
+ for field in ['wylie','english']:
+  sql='select * from corpus_segments where '+field+'=? order by course,seq';args=[r[field]];rr=[dict(x) for x in db.execute(sql,args)];queries.append({'sql':sql,'parameters':args,'count':len(rr),'rows':rr});wr.update({x['id']:x for x in rr})
+# Re-run every actual original query with the original parameters.
+for angle in ['tibetan','english']:
+ d=json.loads((R/'evidence'/('query-discovery-'+angle+'.json')).read_text());d=d.get('queries',[]) if isinstance(d,dict) else d
+ for q in d:
+  sql=q.get('sql') or q.get('query');args=q.get('parameters',q.get('params'))
+  if sql and args is not None:
+   rr=[dict(x) for x in db.execute(sql,args)];queries.append({'original_angle':angle,'original_query':q,'actual_count':len(rr),'original_count':q.get('count'),'count_equal':q.get('count',len(rr))==len(rr),'rows':rr});wr.update({x['id']:x for x in rr if 'id' in x})
+save('evidence/reopened-corpus-queries.json',queries);save('evidence/reopened-full-witnesses.json',list(wr.values()))
+terms=set()
+for angle in ['tibetan','english']:
+ for seq in [307,308,309]:
+  terms.update(x['tib'] for x in json.loads((A/angle/str(seq)/'spec.json').read_text())['segments'][0]['spans'])
+terms.update(['sdig sems','thub pa','g-yo ba','sngon du btang',"blo'i g-yo ba",'sngon du','byed pa po','grub pa','thal','dbu sems','brlan zhing gsher ba','me tshogs',"mi 'gal ba",'skyes pa','bstan pa','snang ba','bltas pa'])
+master=json.loads(gzip.decompress(Path(BASE['source_pins']['master']['path']).read_bytes()));lex=[]
+for coll,records in master.items():
+ if not isinstance(records,list):continue
+ for i,r in enumerate(records):
+  if isinstance(r,dict):
+   hits=terms.intersection(set([r.get('wylie')]+(r.get('wylie_variants') or [])))
+   if hits:lex.append({'collection':coll,'index':i,'matched_terms':sorted(hits),'record':r})
+save('evidence/reopened-master-full-records.json',{'terms':sorted(terms),'count':len(lex),'records':lex})
+save('evidence/reopened-sqlite-full-entries.json',[{'term':t,'rows':[dict(x) for x in db.execute('select * from entries where wylie=?',(t,))]} for t in sorted(terms)])
+# Preserve each selected/witness archive record by stable course/seq rather than assuming archive schema.
+corpus=json.loads(gzip.decompress(Path(BASE['source_pins']['corpus']['path']).read_bytes()));save('evidence/archive-schema.json',{'type':type(corpus).__name__,'keys':list(corpus) if isinstance(corpus,dict) else None})
+print('freezes',checks,'source pins',len(pins),'master_records',len(lex),'witnesses',len(wr),'queries',len(queries),'corpus type',type(corpus))

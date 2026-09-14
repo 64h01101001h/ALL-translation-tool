@@ -1,0 +1,86 @@
+from pathlib import Path
+import json,hashlib,gzip,sqlite3,sys
+R=Path(__file__).resolve().parent;A=R.parent;W=A.parents[1]/'campaign-worktree'
+J=lambda p:json.loads(Path(p).read_text())
+H=lambda b:hashlib.sha256(b).hexdigest()
+checks=[]
+def check(name,value):checks.append({'check':name,'pass':bool(value)})
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+master=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt'))
+corpus=json.load(gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt'))
+rows={x['seq']:x for x in J(R/'independent/source-context-full-rows.json')}
+resolved=J(R/'resolved-spans.json');counts=J(R/'native-counts.json')
+register=J(R/'governing/docs/errata_register.json')
+check('origin register count 193',len(register)==193)
+rc=J(A/'reconciled/evidence/registered-class-records.json')
+check('original registered classes identities',all(x in register for x in rc['selected_records']))
+check('no duplicate segment errata',not [x for x in register if x.get('segment') in ['C05:307','C05:308','C05:309']])
+for x in J(A/'reconciled/evidence/reopened-full-witnesses.json'):
+ live=dict(db.execute('select * from corpus_segments where id=?',(x['id'],)).fetchone())
+ check('witness full identity '+str(x['id']),x==live and json.loads(x['raw'])==corpus[x['id']-1])
+for seq in (307,308,309):
+ s=R/'reviewed-final'/str(seq);source=rows[seq];spec=J(s/'spec.json')['segments'][0]
+ final=J(s/'final-ordered-tuples.json');ds=J(s/'original-span-dispositions.json')['decisions'];om=J(s/'material-omissions.json')
+ own={x['id']:x for x in resolved if x['seq']==seq};fs={x['id']:x for x in spec['spans']}
+ check(f'{seq} full source interface',final['source']==source)
+ check(f'{seq} English order',final['eng_order']==spec['eng_order'])
+ for i,t in enumerate(final['tuples'],1):
+  sp=t['span'];sid=sp['id'];r=own[sid]
+  check(f'{seq}/{sid} span and ranges',sp==fs[sid] and all(t[k]==r[k] for k in ['tib_range','eng_range']) and t['ordinal_tibetan']==i)
+  for ref in t['full_original_master_record_refs']:
+   record=master[ref['collection']][ref['index']]
+   check(f'{seq}/{sid} original master ref {ref["collection"]}:{ref["index"]}',all(record.get(k)==v for k,v in ref.items() if k not in ['collection','index']))
+  for side,field in [('tib','wylie'),('eng','english')]:
+   rg=r[side+'_range'];check(f'{seq}/{sid} {side} exact slice',r[side] is None if rg is None else source[field][rg[0]:rg[1]]==r[side])
+  if sp['d']==7:
+   p=own[t['parent_id']];check(f'{seq}/{sid} d7 strict parent',p['d']==5 and all(p[k][0]<=r[k][0]<r[k][1]<=p[k][1] and p[k]!=r[k] for k in ['tib_range','eng_range']))
+ for angle in ['tibetan','english']:
+  ospec=J(A/angle/str(seq)/'spec.json')['segments'][0];od=J(A/angle/str(seq)/'decisions.json');proposals=od.get('proposals',od.get('spans'));odict={x['id']:x for x in proposals}
+  obs=J(A/'reconciled/native-original-replays'/angle/str(seq)/'observed-ranges.json')['resolutions'];orig_ranges={x['side']:x['ranges'] for x in obs}
+  selected=[x for x in ds if x['angle']==angle]
+  check(f'{seq}/{angle} all original spans once', [x['original_span'] for x in selected]==ospec['spans'])
+  for d in selected:
+   sid=d['original_span']['id'];check(f'{seq}/{angle}/{sid} exact decision/order',d['original_decision_complete']==odict[sid] and d['original_eng_order']==ospec['eng_order'])
+   check(f'{seq}/{angle}/{sid} native original ranges',d['actual_original_tib_range']==orig_ranges['tib'][sid] and d['actual_original_eng_range']==orig_ranges['eng'].get(sid))
+   check(f'{seq}/{angle}/{sid} final disposition ranges',d['final_ranges']==[{'id':fid,**{k:own[fid][k] for k in ['tib_range','eng_range']}} for fid in d['final_ids']])
+  check(f'{seq}/{angle} all original omissions complete',[x['original_omission_complete'] for x in om['all_original_omission_dispositions'] if x['angle']==angle]==od['omissions'])
+ for side,field in [('tib','wylie'),('eng','english')]:
+  covered=set()
+  for x in own.values():
+   if x[side+'_range'] is not None:covered.update(range(*x[side+'_range']))
+  actual=[];start=None
+  for i in range(len(source[field])+1):
+   if i<len(source[field]) and i not in covered:
+    if start is None:start=i
+   elif start is not None:actual.append({'range':[start,i],'text':source[field][start:i]});start=None
+  check(f'{seq}/{side} complete unwrapped intervals',actual==om['complete_unwrapped_ranges'][side])
+ n=J(s/'native-result.json');v=J(s/'verification.json');c=next(x for x in counts if x['seq']==seq)
+ check(f'{seq} native verification metadata',all(n[k]==c[k] for k in ['seq','spec_sha256','spec_bytes','body_sha256']) and n['exit']==c['generator_exit'] and n['stdout_bytes']==c['body_bytes'] and n['stderr_bytes']==0)
+ nd=R/'reviewed-final'/n['native'];check(f'{seq} reconciler saved final exact streams',(nd/'stdin.bin').read_bytes()==(s/'spec.json').read_bytes() and (nd/'stdout.bin').read_bytes()==(s/'body.html').read_bytes() and (nd/'stderr.bin').read_bytes()==b'' and (nd/'exit.txt').read_text()=='0\n')
+ check(f'{seq} verification summary',all(v['summary'][k]==c[k] for k in ['seq','span_count','null_count','spec_bytes','spec_sha256','body_sha256']) and v['summary']['nonnull_d5_word_pairs']==c['word_pair_count'] and v['summary']['original_dispositions']==len(ds))
+ for screen in J(s/'errata-five-grounds.json')['screens']:
+  label=f'{seq} screen {screen["suspicion"]}';g=screen['five_grounds']
+  check(label+' exact found',all(source[screen['field']][a:b]==screen['found'] for a,b in screen['ranges']))
+  a=g['a_exact_quote'];check(label+' full source',a['source_row']==source)
+  phys=next(x for x in J(R/'independent/physical-reopened.json') if x['seq']==seq)
+  check(label+' physical',a['physical_reopening']['full_parser_record']==phys['full_record'])
+  for rec in g['d_defensible_reading_and_expected_correction']['complete_original_lexical_records']:
+   check(label+' complete lexical original '+str(rec['index']),master[rec['collection']][rec['index']]==rec['record'])
+  for cmp in g['b_parallel_publication']['full_field_comparisons']:
+   course,num=cmp['witness'].split(':');wit=dict(db.execute('select * from corpus_segments where course=? and seq=?',(course,int(num))).fetchone())
+   for f,z in cmp['fields'].items():
+    actual={'equal':source[f]==wit[f],'source_chars':len(source[f]),'witness_chars':len(wit[f]),'source_sha256':H(source[f].encode()),'witness_sha256':H(wit[f].encode())}
+    check(label+' parallel '+cmp['witness']+'/'+f,all(z[k]==val for k,val in actual.items()))
+    reconstructed=source[f]
+    for diff in reversed(z['differences']):
+     a,b=diff['source_range'];c,d=diff['witness_range']
+     check(label+' quoted difference '+f+str([a,b]),source[f][a:b]==diff['source'] and wit[f][c:d]==diff['witness'])
+     reconstructed=reconstructed[:a]+diff['witness']+reconstructed[b:]
+    check(label+' complete difference reconstruction '+f,reconstructed==wit[f])
+  e=g['e_all_claimed_counts_and_quotes'];check(label+' measured length/register',e['english_length_actual']==len(source['english']) and e['register_count_actual']==len(register))
+  for q in e['original_query_checks']:
+   check(label+' original SQL count '+str(q['parameters']),len(db.execute(q['sql'],q['parameters']).fetchall())==q.get('claimed_count',q.get('count')))
+  check(label+' exact six sdig sems matches',e['sdig_sems_query_actual_counts']==[6,6])
+result={'checks':checks,'total_checks':len(checks),'failed':[x for x in checks if not x['pass']],'source_origin':'b5047596859f6537b71f259c1e7df2e70f867fb2','acceptance_baseline_after306':None}
+(R/'independent/interface-proof.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'checks':len(checks),'failed':result['failed']},ensure_ascii=False));sys.exit(bool(result['failed']))

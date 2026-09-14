@@ -1,0 +1,46 @@
+"""Run the unchanged canonical source with an immutable builder and RO SQLite.
+
+No matching, gates, or output logic is replaced. The resolve wrapper observes
+the canonical return value solely to retain its actual ranges as evidence.
+"""
+from pathlib import Path
+import sys, json, hashlib, sqlite3, types, importlib.util
+
+A=Path(__file__).resolve().parents[1]
+B=json.loads((A/'evidence/proposal-baseline.json').read_text())
+W=Path(B['source_pins']['spine']['path']).parents[1]
+def verify(data,pin):
+    assert len(data)==pin['bytes'] and hashlib.sha256(data).hexdigest()==pin['sha256']
+
+gp='tools/gen_alignment_page.py';bp='tools/build_alignment_layer.py'
+verify((W/gp).read_bytes(),B['governing_git_pins'][gp])
+builder_source=(A/'evidence/pinned'/bp).read_bytes()
+verify(builder_source,B['governing_git_pins'][bp])
+sys.path.insert(0,str(W/'tools'))
+builder=types.ModuleType('build_alignment_layer')
+builder.__file__=str(W/bp)
+exec(compile(builder_source,str(W/bp),'exec'),builder.__dict__)
+sys.modules['build_alignment_layer']=builder
+real_connect=sqlite3.connect
+connection_calls=[]
+def readonly_connect(database,*args,**kwargs):
+    assert str(database)==B['source_pins']['spine']['path']
+    assert not args
+    uri=Path(database).as_uri()+'?mode=ro'
+    connection_calls.append({'requested':str(database),'effective':uri,'uri':True})
+    return real_connect(uri,uri=True)
+sqlite3.connect=readonly_connect
+module_spec=importlib.util.spec_from_file_location('canonical_generator',W/gp)
+G=importlib.util.module_from_spec(module_spec)
+module_spec.loader.exec_module(G)
+native_resolve=G.resolve
+observed=[]
+def record_resolve(text,spans,side,seq):
+    ranges=native_resolve(text,spans,side,seq)
+    observed.append({'seq':seq,'side':side,'text_sha256':hashlib.sha256(text.encode()).hexdigest(),'ranges':ranges,'span_order':[s['id'] for s in spans]})
+    return ranges
+G.resolve=record_resolve
+try:
+    G.main()
+finally:
+    Path(sys.argv[1]).write_text(json.dumps({'schema':'canonical-observed-ranges-v1','generator':B['governing_git_pins'][gp],'builder':B['governing_git_pins'][bp],'sqlite_calls':connection_calls,'resolutions':observed},indent=2)+'\n')

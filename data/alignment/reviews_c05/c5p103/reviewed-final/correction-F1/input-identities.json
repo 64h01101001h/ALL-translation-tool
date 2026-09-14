@@ -1,0 +1,63 @@
+{
+  "inputs": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/semantic-review/review-freeze.json",
+      "copy": "correction-F1/inputs/review-freeze.json",
+      "bytes": 114622,
+      "sha256": "ce740d16169172187470e3c8ff60871d73d50b74adb7bab08214d279577fbb08"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/semantic-review/review.json",
+      "copy": "correction-F1/inputs/review.json",
+      "bytes": 2512,
+      "sha256": "998aa0eabacb4d15362327dee795a032cdf19e0150a2b5ad4aab0f015cbe8edc"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/semantic-review/review.md",
+      "copy": "correction-F1/inputs/review.md",
+      "bytes": 20041,
+      "sha256": "86adaea222564f2bdefdb7b5203cff48d2b7b495af099bacd0992636730fe1bd"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-307-309/semantic-review/protocol-history.json",
+      "copy": "correction-F1/inputs/protocol-history.json",
+      "bytes": 1060,
+      "sha256": "abf2166b6dcb930b7f5d8f2576234c2d11c67f73b4c6909297da4d8782a56eda"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/workflow-refinement-20260914/proposal-protocol.before.md",
+      "copy": "correction-F1/inputs/proposal-protocol.before.md",
+      "bytes": 4770,
+      "sha256": "6cf88efbfe2b7a68ea4d3d7fb507043b595760f9d60fd05b44a47e3268c6f752"
+    },
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/workflow-refinement-20260914/proof.json",
+      "copy": "correction-F1/inputs/proof.json",
+      "bytes": 768,
+      "sha256": "fde65fd928e787d0aefc3ebeefae45f3a46be8a4dbdacb268f0f69e56238f794"
+    }
+  ],
+  "actual_review_filenames": "review-freeze.json and review.md; supplied freeze.json/report.md names resolved by actual discovery",
+  "protocol_history": {
+    "intake_record": {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/proposal-protocol.md",
+      "copy": "governing-batch/proposal-protocol.md",
+      "sha256": "6cf88efbfe2b7a68ea4d3d7fb507043b595760f9d60fd05b44a47e3268c6f752",
+      "bytes": 4770
+    },
+    "superseded_manifest": "commands/preflight-attempt01/original-to-copy-manifest.json",
+    "historical_original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/workflow-refinement-20260914/proposal-protocol.before.md",
+    "current_manifest_record": 537,
+    "identical_intake_bytes": true,
+    "reason": "Root appended future-dispatch-only refinements to the mutable shared protocol after this review intake. The exact before snapshot independently matches the reviewed bytes. The new appendix explicitly applies only to new dispatches. No semantic input or governing rule consumed by this review was replaced.",
+    "proof_copy": "governing-batch/proposal-protocol-revision-proof.json"
+  },
+  "protocol_action": "Preserve exact historical before snapshot and mapping. No current appended protocol substituted for any original frozen input.",
+  "initial_read_discovery_failure": {
+    "tool_chunk_id": "46f77b",
+    "exit": 1,
+    "action": "Read semantic-review/review.json, then attempted missing semantic-review/report.md",
+    "error": "FileNotFoundError: semantic-review/report.md",
+    "recovery": "Discovered and read actual semantic-review/review.md, whose hash is preserved here. No generator or test ran."
+  }
+}

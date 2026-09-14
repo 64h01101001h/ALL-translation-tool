@@ -1,0 +1,27 @@
+from pathlib import Path
+import sys,os,json,hashlib,subprocess,shutil
+
+A=Path(__file__).resolve().parents[1]
+B=json.loads((A/'evidence/proposal-baseline.json').read_text())
+W=Path(B['source_pins']['spine']['path']).parents[1]
+def fhash(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+# The unchanged canonical builder imports this canonical dependency.
+dependency='engines/hgm_tools.py'
+original=subprocess.check_output(['git','show',B['commit']+':'+dependency],cwd=W)
+assert (W/dependency).read_bytes()==original
+(A/'evidence/pinned'/dependency).parent.mkdir(exist_ok=True)
+(A/'evidence/pinned'/dependency).write_bytes(original)
+(A/'evidence/engine-pin.json').write_text(json.dumps({'original_git_commit':B['commit'],'path':str(W/dependency),**fhash(W/dependency)},indent=2)+'\n')
+for seq in (307,308,309):
+    p=A/str(seq);d=p/'native-001';d.mkdir()
+    shutil.copyfile(p/'spec.json',d/'stdin.json')
+    command=[sys.executable,str(A/'helpers/native_adapter.py'),str(d/'observed-ranges.json')]
+    env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+    run=subprocess.run(command,cwd=W,env=env,input=(d/'stdin.json').read_bytes(),capture_output=True)
+    (d/'stdout.html').write_bytes(run.stdout);(d/'stderr.txt').write_bytes(run.stderr)
+    (d/'exit.txt').write_text(str(run.returncode)+'\n')
+    receipt={'schema':'native-command-proof-v1','argv':command,'cwd':str(W),'environment_overrides':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':'stdin.json','stdout':'stdout.html','stderr':'stderr.txt','exit_file':'exit.txt','exit_code':run.returncode,'files':{f:fhash(d/f) for f in ('stdin.json','stdout.html','stderr.txt','exit.txt','observed-ranges.json')}}
+    (d/'command.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    if run.returncode==0 and not run.stderr:shutil.copyfile(d/'stdout.html',p/'body.html')
+    print(json.dumps({'seq':seq,'exit':run.returncode,'stdout_bytes':len(run.stdout),'stderr':run.stderr.decode()}))
