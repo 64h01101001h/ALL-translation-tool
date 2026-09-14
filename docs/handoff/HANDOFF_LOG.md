@@ -1164,3 +1164,74 @@ correction occurred. C13 remains blocked upstream. Finish all C05 through511
 before C06, then proceed in order. Next regular outer checkpoint is291.
 The existing one-minute continuation ends September 15, 2026 at07:00
 America/Denver (13:00 UTC); safely checkpoint and pause at the deadline.
+
+### 2026-09-14 UTC — C05 segments 283–285 (page 95)
+
+Independent proposal, reconciliation and semantic review approved 76
+provisional correspondences, with no grammatical nulls and 61 nonnull
+depth-5 correspondences. All 145 original proposal dispositions survive:
+129 were retained and 16 recast. The review preserves 77 material omission
+reasons and four investigated/refuted suspicions. Exactly two source-specific
+sogs head licenses were added; no errata were added. Uncertain correspondences
+remain unbanked. GMR's wording and master sources are unchanged; none of this
+machine work enters hgm_gloss. Complete sources, specifications, proposals,
+review decisions and actual generator/test results are retained in
+reviews_c05/c5p95 and the external campaign evidence records.
+
+One root layer/view run and all 17 relevant fidelity suites passed; the suites
+took 11.25 seconds. The independent isolated reproduction matched all seven
+generated outputs byte for byte with the immutable incoming main CSV seed.
+It passed 225,597 retention checks with 3,031 input aliases. Full retention
+preserved 45,402 prior links and added 79, including three sentence anchors.
+Coverage is 285 of 511 C05 segments, with 226 remaining. The full bank has
+45,481 links, 11,938 nulls, 1,621 note blocks, 11 trees, 7,093 heads and
+15,557 evidence pairs. Proven ACIP covers 7,090 of 7,093 heads; three missing
+heads and five source-linked spans remain explicit limits. Main/reverse/course
+CSV rows are 22,546/22,206/24,126; changes has 18 rows. Producer metadata date
+is September 13 local time; execution records are September 14 UTC. No
+date-driven regeneration was performed.
+
+The 13-file payload includes the two-license sidecar and preserves all prior
+sidecar values. Actual whitespace prepare and audit account for all 93,740
+native warnings in 112 files through exact physical/source/CSV predicates;
+the original Git diagnostic and exit 2 are retained without normalization.
+Complete final bank and staging verification precede this append. Later bank,
+stage, commit and closure results remain external at their actual boundaries;
+they are not claimed inside their own earlier input manifests. All failed
+preparations, superseded sources and corrections are preserved, including the
+failed first reproduction preparation, three whitespace source-analysis
+failures, the root intake recipe-reader failure, and the independently reviewed
+STAGE-001 variable-shadowing correction. Native captures distinguish source
+preparation from actual execution. Fixed DATA and documentation commit
+identities are recorded by the subsequent root closure.
+
+Private JSON/HTML/CSV outputs are current through 285. MAIN remains
+OPEN_NO_APPLICATION; the September 13 23:40–23:42 UTC compatibility check
+passed all 13 chunks but applied nothing. The private phone pack remains
+FAILED_UNACCEPTED for four inherited C01 source-correspondence defects and
+must not be installed. The existing through171 phone resource is unchanged;
+no current native rendering, device installation or saved data-root acceptance
+is claimed. No release, paid API, spending, account message or source/gloss
+correction occurred. C13 remains blocked upstream. Finish all C05 through511
+before C06, then proceed in order. Next regular outer checkpoint is291.
+The existing one-minute continuation ends September 15, 2026 at07:00
+America/Denver (13:00 UTC); safely checkpoint and pause at the deadline.
+
+Final verification exposed a source-archive ownership lookup mismatch; a
+separately reviewed correction verifies both complete original-to-copy chains.
+Its two real archive checks and twenty rejection controls passed. A later full
+verification attempt then stopped on internal-disk exhaustion. Its partial
+captures remain unaccepted; unavailable target exit and outer streams were not
+reconstructed. A fresh complete final-stage run is required before this append.
+
+Five closed C05 campaign patch records, totaling 5,053,241,758 bytes, were copied
+to the attached Oct2024(8TB) drive and compared byte for byte. Their existing
+filenames now resolve to those verified copies through individual symlinks.
+The first temporary-link creation itself failed for lack of space; the first
+path was restored after an explicitly recorded brief gap, and the remaining
+four replacements were atomic. Original bytes and historical physical metadata
+are preserved. No worktree, MAIN, semantic, master-source or index file moved.
+Recovery evidence is under the external campaign archive's
+storage-recovery-20260914T1200Z directory. Keep that drive connected for evidence
+verification. These later storage and verifier records remain outside their own
+earlier input manifests, with both failures and successful recovery retained.
