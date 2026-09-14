@@ -255,3 +255,25 @@ Revisit when **either** (1) has been run — it is a day's work and may end the
 question — **or** the ladder has been shipped and toggled by real users for one
 course cycle. Do not revisit before one of those; there would be nothing new to
 reason about.
+
+## The phone ignores the system text size (found 2026-09-13)
+
+Every piece of type in `ios/DiamondDrills/DiamondDrills.swift` is set at a
+fixed point size — `.font(.system(size: 15))` and its neighbours — so none of
+it responds to the reader's Dynamic Type setting. The one exception is the
+drill picker, whose `.menu` style label uses the scalable body font, and at a
+large accessibility size that single control ran to five lines and pushed the
+drill off the screen.
+
+Shortening the drill names contained it (worst case is now two lines), but the
+underlying state is worth fixing properly:
+
+- the picker cannot be brought under control while it uses `.pickerStyle(.menu)`
+  — neither `.font()` nor `.lineLimit()` affects its collapsed label; it wants
+  a custom button plus a confirmation dialog, or `.navigationLink` style
+- and the rest of the app should move to relative sizes so a reader who needs
+  larger type gets it everywhere, rather than nowhere
+
+Not urgent — at the default text size the app looks right — but it is the
+difference between an app that merely ignores accessibility settings and one
+that breaks under them.
