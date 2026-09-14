@@ -73,6 +73,36 @@ int main(int argc, char** argv) {
               "each other (TEST-1 TERMINOLOGY-NESTING)");
     }
 
+    {   // Maximality never crosses tiers. A longer AUTO-ALIGNED span must
+        // not delete a curated term inside it: the row is never built, so no
+        // downstream label can rescue it, and the report then reads as an
+        // unrendered term for a draft that used his equivalent verbatim.
+        //
+        // SANGS RGYAS CHOS is the measured repro. Before the tier guard the
+        // report held exactly ONE term -- `sangs rgyas chos`, auto-aligned,
+        // glossed "sangye chudang tsokyi choknam", which is a pronunciation
+        // line rather than English -- and neither curated term at all. Over
+        // the corpus, 101,733 GMR-tier terms were being deleted this way, in
+        // 65.2% of segments.
+        auto rep = allcore::checkTerminology(
+            spine, index, "SANGS RGYAS CHOS", "the Buddha's Dharma");
+        const allcore::TermUse* sr = nullptr;
+        const allcore::TermUse* ch = nullptr;
+        for (const auto& t : rep.terms) {
+            if (t.wylie == "sangs rgyas") sr = &t;
+            if (t.wylie == "chos") ch = &t;
+        }
+        CHECK(sr && sr->tier == "curated",
+              "a curated term survives a longer auto-aligned container "
+              "(rule 1: his English outranks the machine's match)");
+        CHECK(ch && ch->tier == "curated",
+              "and so does the second one");
+        CHECK(sr && !sr->matched.empty() && ch && !ch->matched.empty(),
+              "and both are reported as RENDERED, because the draft uses "
+              "his equivalents verbatim -- the old report called this an "
+              "unmatched term");
+    }
+
     // a draft that uses none of them: unmatched terms sort first
     {
         auto rep = allcore::checkTerminology(
