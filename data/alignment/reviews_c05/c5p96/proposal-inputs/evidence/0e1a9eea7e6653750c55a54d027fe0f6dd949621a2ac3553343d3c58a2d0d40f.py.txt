@@ -1,0 +1,50 @@
+import json,pathlib,re
+E=pathlib.Path(__file__).parent
+A=E.parents[1]
+rows={r['seq']:r for r in json.loads((E/'original-context-full-rows.json').read_text())}
+def make(seq,title,pairs,note):
+    ss=[];choices=[]
+    for i,p in enumerate(pairs,1):
+        d,tib,eng,*opt=p;sp={'id':'w'+str(i),'d':d,'tib':tib,'eng':eng}
+        if eng is None:sp.update(cls='neg',nul=opt[0]);choices.append({'id':sp['id'],'null_reason':opt[0]})
+        else:
+            occ=opt[0] if opt else 0
+            hits=[m.start() for m in re.finditer(r'(?<![A-Za-z0-9])'+re.escape(eng)+r'(?![A-Za-z0-9])',rows[seq]['english'])]
+            assert len(hits)>occ,(seq,tib,eng,occ,hits)
+            choices.append({'id':sp['id'],'english':eng,'all_whole_word_offsets':hits,'chosen_occurrence_zero_based':occ,'chosen_offset':hits[occ]})
+        ss.append(sp)
+    order=[x['id'] for x in sorted([x for x in choices if 'chosen_offset' in x],key=lambda x:x['chosen_offset'])]
+    spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':ss,'eng_order':order,'note':'PROVISIONAL machine alignment. Actual producer: Codex (gpt-6-astra), independent English-first proposal; no human semantic approval and no hgm_gloss change. '+note}]}
+    target=A/str(seq)
+    (target/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+    (target/'occurrence-intent.json').write_text(json.dumps(choices,ensure_ascii=False,indent=2)+'\n')
+    (target/'errata.json').write_text('[]\n')
+    print(seq,len(ss),sum(s['d']==5 for s in ss),sum(s['eng'] is None for s in ss))
+make(286,'reasoning and the three objects',[
+ (5,'dngos po','objects'),(5,'gsum','three',0),(5,'phan tshun','each other'),(5,'go sa','space'),(5,"'gog pa",'block'),
+ (5,'ma yin par','not',0),(5,'thal ba','implying'),(5,'rigs pas','reasoning'),
+ (6,'mi',None,"Negation is fused in 'cannot'; no separately alignable negative exponent under the permitted subword forms. Its meaning is present, not absent."),
+ (5,'gnod','disprove'),(3,"de'i tshe na",'in this situation'),(5,'brlan','wet'),(6,'zhing','and'),(5,'gsher ba','flowing'),(5,'phor pa','glass'),(5,'gang po','full'),
+ (3,'dngos po gsum gyi gzhi mthun','one thing which is three different things'),(6,'ma','not',1),
+ (5,'tshad','valid perceptions'),(5,'mtshungs','identical'),(5,'nges par','definitely'),(5,'dgos','had to')
+],"The common-locus assertion is retained as the complete d3 phrase dngos po gsum gyi gzhi mthun; the dictionary's provisional gzhi mthun / wet and flowing is contradicted by this row's brlan zhing gsher ba and is not adopted. The second dngos po in the opening implication is omitted because GMR distributes its referent across 'kinds that block'; it is not independently 'kinds'. Both khas ... blangs assertions are recast as 'our belief' and 'Neither did we ever say'; the first ma owns the second 'not', while the admission predicates and final yang/ma remain omitted because no participant-free contiguous full counterpart is defensible. The first negative ma yin par owns the first 'not'. The causal closure and unpaired particles are omitted. 'mi' is a justified fusion null in 'cannot'. Complete source text is unchanged.")
+make(287,'vinitadeva and the river of pus',[
+ (5,'kha cig','Someone'),(5,'na re','claim'),(5,'nyi shu pa','Twenty Verses'),(5,"'grel bshad",'Commentary'),(5,'slob dpon','Master'),(5,'dul ba lhas','Vinitadeva'),(6,'las','In'),
+ (3,'de la','there',1),(5,'rnag','pus',0),(5,'thigs pa','drop'),(6,'med','not'),(6,'na','If'),(5,'rnag','pus',1),(5,'gang ba','whole'),(5,'klung','river'),
+ (5,'las','karma'),(5,'rnam par smin pa','ripening'),(5,'dbang','forced'),(5,'de dag','They'),(5,'de','it'),(5,'mthong','see'),
+ (5,'gsungs pa','statement',1),(5,'de','this',1),(5,"mi 'thad par",'mistaken'),(5,'thal','would have to be'),
+ (5,"'gro ba",'beings'),(5,'gsum','three'),(5,'brlan','wet'),(6,'zhing','and',2),(5,'gsher ba','flowing'),(5,'phor pa','glass'),(5,'gang','full'),(6,'la','at'),(5,'cig car du','together'),(5,'bltas','look'),
+ (3,"de'i tshe na",'when'),(5,'yi dvags','craving spirit'),(5,'mig shes','visual consciousness'),(5,'tshad mar','valid perception'),(5,'rnag','pus',2),(5,'dngos gnas pa','real'),(6,'phyir','because')
+],"The quotation is Vinitadeva's statement as translated by GMR, followed by an opponent's objection; all source roles remain intact. de la owns the locative 'there' after the first pus, not either existential 'there'. The last rnag owns the first pus in 'the pus is real pus'; GMR's repeated predicate noun remains unwrapped. gang ba / whole is the local full-river rendering, supported by the fuller reading in C05:290; it does not redefine fullness as totality generally. The second statement and its preceding 'this' belong to gsungs pa de; the earlier statement belongs to the author's introductory frame and stays unwrapped. mdzad pa, 'ga' yang, lta ga la yod, song ba and yod pa, the reporting closure, and other particles are omitted where authorship, emphasis, rhetorical modality or copular structure is distributed. 'sit down', supplied participants and auxiliaries outside licensed thal remain unwrapped. No null is used for those omissions.")
+make(288,'outer objects and mental seeds',[
+ (5,'skyon','problem'),(6,'med','no'),(3,"de lta bu'i",'of this kind'),(5,'brgal lan','arguments',0),(5,'ji snyed','how many'),(5,'byas pa','present'),(5,'thams cad','all',0),
+ (5,'phyi don','external objects'),(5,"'gog pa",'denying'),(3,'dbang du','from the point of view'),(5,'byas pa','made'),(5,'tshul','way'),
+ (5,'sngon po','color blue'),(5,'phyi rol don','external object'),(5,'grub','exist'),(6,'na','If'),(5,'tshur mthong','only sees this side'),(5,'rgyud','mental stream'),(5,"sngon 'dzin",'grasping blue'),(5,"dbang po'i mngon sum",'sense perception'),
+ (5,'snang ba','appeared'),(6,'na','when',0),(5,"sngon 'dzin",'perception of blue',0),(5,'snga ma','earlier instance'),(5,"'gags pa",'ends'),
+ (5,"sngon 'dzin",'perception of blue',1),(5,'phyi ma','later instance'),(5,'skye ba','grows'),(5,'bag chags','mental seed',0),(5,'bzhag pa','plants'),(5,'smin pa','ripens'),
+ (5,'snang ba','appearance',0),(5,'ma yin par','not'),(5,'sngon po','blue',5),(5,'phyi rol','outer'),(3,"rang 'dra'i rnam pa",'likeness of itself',0),(5,'gtad pa','transmitting',0),(5,'sgo nas','thereby'),(5,'snang ba','appearing',0),
+ (5,"'gro ba",'beings'),(5,'gsum','three',0),(5,'brlan','wet'),(6,'zhing','and',2),(5,'gsher ba','flowing'),(5,'phor pa','glass'),(5,'gang','full'),(6,'la','at'),(5,'cig car du','together'),(5,'bltas','look'),
+ (5,'dngos po','objects',1),(5,'gsum','three',1),(5,'snang ba','appearing',1),(3,"de'i tshe na",'when',2),
+ (5,'rang rang','each',1),(5,'las','karma'),(5,'bag chags','mental seed',1),(5,'bzhag pa','planted'),(5,'smin pa','ripened'),(3,'ma bltos par','independent'),
+ (5,'dngos po','objects',2),(3,"rang 'dra'i rnam pa",'likeness of itself',1),(5,'gtad pa','transmitting',1)
+],"The English is extensively reordered. The first sngon po owns 'color blue'; its following deictic reprise 'this color' is omitted. tshur mthong owns only the quoted established designation, with the bracketed explanation unwrapped. The direct sensory-perception term owns 'sense perception'; its directness is also expressed by 'directly', which remains unwrapped because the exponent is noncontiguous. Three sngon 'dzin occurrences resolve to 'grasping blue' then the two instances of 'perception of blue'. The one later sngon po owns the blue after 'where'; the supplied reprise in 'Suppose the blue' stays unwrapped. Each bzhag pa is seed-planting from this source argument, never the unrelated provisional dictionary gloss. The two likenesses are complete d3 rang 'dra'i rnam pa phrases. rang rang owns the 'each' in the karma clause, not 'each of the objects'. The first post-glass dngos po/gsum/snang ba owns the three objects appearing; the final dngos po owns the later 'objects' in 'each of the objects'. Final gsum and snang dgos are consolidated in that English predicate and left omitted rather than falsely assigned to the explanatory final appearance. The second phyi don 'gog pa, dependence transitions, temporal/copular closures, the final sgo nas and other particles are omitted where the English recasts or distributes them. All those are omissions, not null judgments; no hgm_gloss change or textual correction is proposed.")

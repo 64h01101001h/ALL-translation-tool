@@ -1,0 +1,43 @@
+import json,sys,os,subprocess,hashlib,shutil,importlib.util
+from pathlib import Path
+from html.parser import HTMLParser
+A=Path(__file__).parent;W=A.parents[2]/'campaign-worktree'
+# Explicit worktree path is fixed to the verified baseline.
+W=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+M=importlib.util.spec_from_file_location('canonical_generator',W/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(M);M.loader.exec_module(G)
+rows={r['seq']:r for r in json.loads((A/'evidence/source-originals.json').read_text())['rows']}
+class Plain(HTMLParser):
+ def __init__(self):super().__init__();self.stack=[];self.side=None;self.out={'tib':'','eng':''}
+ def handle_starttag(self,t,a):
+  d=dict(a);self.stack.append((t,d));
+  if t=='div' and d.get('class') in ['tib','eng']:self.side=d['class']
+ def handle_endtag(self,t):
+  if self.stack:
+   tt,d=self.stack.pop()
+   if tt=='div' and d.get('class') in ['tib','eng']:self.side=None
+ def handle_data(self,d):
+  if self.side and any(t=='span' and a.get('data-d')=='1' for t,a in self.stack) and not any(a.get('class')=='nul' for t,a in self.stack):self.out[self.side]+=d
+for seq in [int(s) for s in sys.argv[1:]]:
+ p=A/str(seq);attempts=p/'attempts';attempts.mkdir(exist_ok=True);n=len(list(attempts.iterdir()))+1;q=attempts/f'{n:02d}';q.mkdir()
+ for name in ['spec.json','intended-occurrences.json','decisions.json','errata.json']:shutil.copyfile(p/name,q/name)
+ shutil.copyfile(A/'author_specs.py',q/'author_specs.py');shutil.copyfile(A/'run_generator.py',q/'run_generator.py');shutil.copyfile(A/'guard/sitecustomize.py',q/'sitecustomize.py')
+ env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','PYTHONPATH':str(A/'guard'),'TIBETAN_SQLITE_GUARD_LOG':str(q/'guard-loaded.jsonl')}
+ argv=[sys.executable,str(W/'tools/gen_alignment_page.py')]
+ command={'argv':argv,'cwd':str(W),'env_overrides':{k:env[k] for k in ['PYTHONDONTWRITEBYTECODE','PYTHONPATH','TIBETAN_SQLITE_GUARD_LOG']},'stdin':str(q/'spec.json'),'stdout':str(q/'generator.stdout'),'stderr':str(q/'generator.stderr')}
+ (q/'command.json').write_text(json.dumps(command,indent=2)+'\n')
+ with (q/'spec.json').open('rb') as stdin,(q/'generator.stdout').open('wb') as stdout,(q/'generator.stderr').open('wb') as stderr:r=subprocess.run(argv,cwd=W,env=env,stdin=stdin,stdout=stdout,stderr=stderr)
+ (q/'generator.exit').write_text(str(r.returncode)+'\n')
+ proof={'seq':seq,'attempt':n,'exit':r.returncode,'stdout_bytes':(q/'generator.stdout').stat().st_size,'stderr_bytes':(q/'generator.stderr').stat().st_size,'generator_sha256':sha(W/'tools/gen_alignment_page.py'),'guard_sha256':sha(q/'sitecustomize.py'),'spec_sha256':sha(q/'spec.json'),'body_sha256':sha(q/'generator.stdout'),'guard_loaded':(q/'guard-loaded.jsonl').read_text() if (q/'guard-loaded.jsonl').exists() else None}
+ if r.returncode==0:
+  spec=json.loads((q/'spec.json').read_text());seg=spec['segments'][0];spans=seg['spans']; by={s['id']:s for s in spans};engsp=G.with_members(spans,[by[i] for i in seg['eng_order']],rows[seq]['english']);er=G.resolve(rows[seq]['english'],engsp,'eng',seq);tr=G.resolve(rows[seq]['wylie'],spans,'tib',seq);intend=json.loads((q/'intended-occurrences.json').read_text());bad=[{'id':x['id'],'expected':x['english_range'],'resolved':list(er[x['id']]),'eng':x['eng']} for x in intend if x['english_range']!=list(er[x['id']])];proof['intended_occurrence_mismatches']=bad
+  proof.update(spans=len(spans),d5=sum(s['d']==5 for s in spans),nulls=sum(s['eng'] is None for s in spans),depth_counts={d:sum(s['d']==d for s in spans) for d in range(1,8)})
+  P=Plain();P.feed((q/'generator.stdout').read_text());proof['full_source_fidelity']={side:P.out[side]==rows[seq][field] for side,field in [('tib','wylie'),('eng','english')]}
+  (q/'resolved-occurrences.json').write_text(json.dumps([{'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s['eng'],'tib_range':tr[s['id']],'eng_range':er.get(s['id'])} for s in spans],indent=2)+'\n')
+  if not bad and all(proof['full_source_fidelity'].values()):
+   for name in ['generator.stdout','generator.stderr','generator.exit','guard-loaded.jsonl','command.json','resolved-occurrences.json']:shutil.copyfile(q/name,p/name)
+   shutil.copyfile(q/'generator.stdout',p/'body.html')
+ (q/'proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+ if r.returncode==0 and not proof['intended_occurrence_mismatches'] and all(proof['full_source_fidelity'].values()):shutil.copyfile(q/'proof.json',p/'proof.json')
+ print(json.dumps(proof,indent=2))
+ if r.returncode:print((q/'generator.stderr').read_text())

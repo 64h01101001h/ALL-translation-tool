@@ -1,0 +1,18 @@
+import pathlib,json,hashlib
+E=pathlib.Path(__file__).parent
+rows=json.loads((E/'original-context-full-rows.json').read_text())
+out=[]
+for course in ['C05','C15','C16']:
+    p=pathlib.Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII'/f'{course}ReadingASCII.txt'
+    data=p.read_bytes();(E/p.name).write_bytes(data)
+    # latin-1 is a byte-preserving inspection decoder, not an encoding attribution.
+    txt=data.decode('latin-1');norm=' '.join(txt.split())
+    checks=[{'seq':r['seq'],'acip_in_whitespace_normalized_source':r['acip'] in norm,'english_in_whitespace_normalized_source':r['english'] in norm} for r in rows]
+    rec={'path':str(p),'copy':str(E/p.name),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'inspection_decoder':'latin-1 (byte preserving; no encoding attribution)','checks':checks}
+    # Exact raw byte excerpt encompassing first through last located source English.
+    a=data.find(rows[0]['acip'][:40].encode());z=data.find(rows[-1]['english'][-65:].encode())
+    if a>=0 and z>=0:
+        b=z+len(rows[-1]['english'][-65:].encode());(E/f'{course}-physical-context.bin').write_bytes(data[a:b]);rec['excerpt_start']=a;rec['excerpt_end']=b
+    out.append(rec)
+(E/'physical-source-verification.json').write_text(json.dumps(out,indent=2)+'\n')
+print(json.dumps(out,indent=2))

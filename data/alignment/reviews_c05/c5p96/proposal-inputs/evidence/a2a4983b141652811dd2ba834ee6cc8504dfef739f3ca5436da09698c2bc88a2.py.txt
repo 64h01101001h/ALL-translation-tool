@@ -1,0 +1,93 @@
+"""Compact review reports, material omissions, five-ground source checks, final freeze."""
+import json,pathlib,hashlib,datetime,re
+F=pathlib.Path(__file__).resolve().parent;B=F.parent
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+src={r['seq']:r for r in json.loads((F/'evidence/source-and-context.json').read_text())}
+omissions={
+286:[
+ {'tib':'dngos po (second opening occurrence)','source_range':[41,49],'reason':'The object-kind classification is condensed in kinds that block. Do not independently equate dngos po with kinds.'},
+ {'tib':'khas ... blangs (first)','reason':'Only ma/not is separately retained. The admission predicate is rendered in our belief, with supplied our and separated negative/copular framing. Positive HGM22009 was considered.'},
+ {'tib':'yang khas ma blangs (second)','reason':'Neither did we ever say distributes polarity and admission around supplied participants and auxiliaries. No participant-free full contiguous span is asserted.'},
+ {'tib':'remaining de, yang, phyir and inflection','reason':'Discourse, causal and predicative relations are expressed across the English sentences rather than isolated as independent atoms.'}],
+287:[
+ {'tib':'mdzad pa','reason':'Composition of the commentary is distributed into In his Commentary; makes this statement introduces the quotation. Those are different source roles; HGM15868 makes/statement/composed does not settle this local ownership.'},
+ {'tib':"'ga' yang",'reason':'The minimum quantity under negation is expressed as a single drop; single is not assigned to this complete emphatic any-at-all expression.'},
+ {'tib':"gang ba (in rnag gis gang ba'i klung)",'reason':'The positive HGM1680 whole was considered, but C05:290 separately says whole river full of pus. Fullness is distributed in river of pus here. Retain pus and river, omit uncertain fullness atom rather than null it.'},
+ {'tib':'lta; zhes; remaining reporting closure zer na','reason':'Rhetorical and quotation/reporting structure is distributed; ga la yod, na re, gsungs pa de and thal retain the demonstrable phrase/word correspondences.'},
+ {'tib':"song ba'i; yod pa'i",'reason':'Validity and existence are recast through English copular structure. No confident separate atom or claim of semantic absence is made.'},
+ {'eng':'sit down; single; whole; second final pus; supplied first-person/second-person frames','reason':'English verbal/quantifier expansion and duplicate final referent remain verbatim and unwrapped.'}],
+288:[
+ {'tib':"second phyi don 'gog pa",'reason':'The way these arguments go anaphorically condenses the repeated denial of external objects. No new independent external objects exponent is present there.'},
+ {'tib':'second sngon po before snang ba','reason':'GMR resumes blue as this color. The first color blue and later where blue retain the unambiguous lexical occurrences; the deictic reprise is left unwrapped.'},
+ {'tib':'distributed perception content of mngon sum','reason':'directly is positively retained at [337,345]; the additional perception component in sense perception is not separately banked on bare mngon sum or falsely included under dbang po.'},
+ {'eng':'bracket explaining tshur mthong; one of those who','reason':'The complete positive HGM15449 readings were considered. Retain the established quoted designation; leave framing and the explanatory bracket unwrapped. Its not has no relation to later ma yin par.'},
+ {'tib':'la brten nas','reason':'Positive dependence is recast across the mental-seed growth/ripening explanation; not falsely equated to a temporal when or the final negative independence phrase.'},
+ {'tib':'yin par after ma; yin na; other conditional/copular framing','reason':'The hypothetical frame is distributed across Suppose ... not ... but rather ...; ma itself retains the correct negative exponent. Omit unresolved remainder, never a null.'},
+ {'tib':'earlier dngos po gsum snang ba','reason':'This temporal setup is condensed in the when-clause. The final source requirement owns the three objects would be appearing result; the same English predicate is not double-owned.'},
+ {'eng':'each of the objects; final produced the appearance of the object; any process','reason':'These are expansions/reprises in the transmission and karma explanation. They do not license moving the final source snang dgos or sgo nas into the wrong clause.'},
+ {'tib':'other deictic, genitive and discourse inflections','reason':'Their distributed grammatical contribution is left unwrapped, not declared absent.'}]
+}
+dump(F/'omissions.json',omissions)
+for s,records in omissions.items():
+ for r in records:
+  if 'source_range' in r:assert src[s]['wylie'][slice(*r['source_range'])]==r['tib'].split(' (')[0]
+physical=json.loads((F/'evidence/physical-excerpts.json').read_text())
+for r in physical:
+ assert ' '.join(r['text'].split())==src[r['seq']][r['field']]
+queries=json.loads((F/'evidence/parallel-and-context-queries.json').read_text())
+exact=[q for q in queries if q['original_file']=='root-parallel-preparation.json']
+assert len(exact)==9 and all(q['count']==2 for q in exact)
+neg=src[288]['english'];notranges=[[m.start(),m.end()] for m in re.finditer(r'\bnot\b',neg)];assert notranges==[[526,529],[797,800]]
+suspicions=[
+ {'seq':288,'claim':'The bracket negation or later ma yin par requires a source correction.','found':'not yet perceived emptiness directly','refuted':True,
+  'grounds':{'a':{'verbatim_present':True,'field':'english','range':[526,562]},'b':{'result':'C15:433 has identical ACIP/Wylie/English. P7:33 shares this bracket but ends earlier than C05. These are textual comparisons, not established independent publication or ingestion lineage.'},'c':{'result':'No new source-correction claim for this selected segment; E-044/E-071/E-076/E-107/E-111/E-121 were consulted. The demonstrated defect is an original proposal mapping and is outside source errata.'},'d':{'result':'Both source clauses are defensible. The bracket explains tshur mthong; ma yin par negates the later appearance hypothesis. Correcting either source would be wrong; only the original span occurrence is rejected.'},'e':{'counts_rechecked':{'english_whole_word_not':len(notranges)},'canonical_ranges':notranges,'original_wrong_range':[526,529],'final_correct_range':[797,800]}},'evidence':['evidence/source-and-context.json','evidence/parallel-and-context-queries.json','material-decisions.json: 288-negation','../root-original-angle-findings.json']},
+ {'seq':287,'claim':'Quotation lineation or the punctuation after the verse is a new source defect.','found':'mthong ngo , , zhes gsungs pa','refuted':True,
+  'grounds':{'a':{'verbatim_present':True,'field':'wylie'},'b':{'result':'C15:432 matches all three selected fields. Physical C05 and C15 excerpts show the quotation structure. No independent-publication status is inferred from those matches.'},'c':{'result':'Course shape explicitly permits double-shad verse lineation; known converter, heading, footnote and boundary classes were checked, with no new selected-row defect established.'},'d':{'result':'Quotation closing morphology and verse lineation are defensible. The physical English places the quoted drop/river/ripening lines before the opponent\'s According to you inference; no punctuation correction is warranted.'},'e':{'counts_rechecked':{'source_english_characters':len(src[287]['english']),'source_quote_fragment_occurrences':src[287]['wylie'].count('mthong ngo , , zhes gsungs pa')},'result':'Selected quotes and physical whitespace-locator equality were rechecked; historical global register counts are not reasserted.'}},'evidence':['evidence/physical-excerpts.json','evidence/registered-classes.json','evidence/source-and-context.json']},
+ {'seq':288,'claim':'The long external-object paragraph has a missing English tail in this segment.','found':'ripened and produced the appearance of the object.','refuted':True,
+  'grounds':{'a':{'verbatim_present':True,'field':'english','tail':src[288]['english'][-49:]},'b':{'result':'C15:433 matches the complete fields and has the complete physical ending. P7:33 is 1417 English characters and lacks the final object.; its shorter extent cannot establish a missing tail in C05:288 or independent publication lineage.'},'c':{'result':'E-107 is the registered 1500-character cap class. C05:288 is below that cap and retains its physical ending; this selected row is not demonstrated to instantiate it.'},'d':{'result':'The complete English ending and source snang dgos are defensible. The English has a distributed causal explanation, not a required repair.'},'e':{'counts_rechecked':{'C05_288_english_characters':len(src[288]['english']),'C15_433_english_characters':1425,'P7_33_english_characters':1417,'exact_field_query_rows_per_query':2,'exact_field_queries':len(exact)},'result':'All nine full exact-field queries were reopened; C05/C15 physical excerpts match the entire selected fields after ASCII-whitespace location normalization only.'}},'evidence':['evidence/physical-excerpts.json','evidence/parallel-and-context-queries.json','evidence/registered-classes.json']}
+]
+assert src[288]['english'][526:562]=='not yet perceived emptiness directly'
+assert all(r['found'] in src[r['seq']]['english'] or r['found'] in src[r['seq']]['wylie'] or r['found'] in src[r['seq']]['acip'] for r in suspicions)
+dump(F/'source-suspicion-five-ground-checks.json',suspicions)
+summary=json.loads((F/'generator-summary.json').read_text())
+lines={
+286:[
+ 'Tighter go sa/space; ma yin par/are not remains a genuine d3 negative predicate.',
+ 'Useful gnod/disprove survives with mi as an explicit cannot fusion null; no unapproved subword negation.',
+ 'Complete common-instance phrase retains du and one thing which is three different things; unrelated auto-aligned wet and flowing rejected for this occurrence.',
+ 'tshad/valid perceptions and mtshungs/identical stay separate; nges par/definitely and dgos/had to remain.',
+ 'First khas ma blangs retains ma/not; the two admission predicates and second denial are distributed and omitted with reasons.',
+ 'Source roles and neighboring C05:262/279/285 plus C16:849/850 were read; glossary fields checked directly.' ],
+287:[
+ 'na re/claim retained; med/not corrected to lexical d5; ga la yod/how could there ever be retained as a whole d3 rhetorical phrase.',
+ 'mdzad pa composition is not reassigned to makes this statement; gsungs pa de owns the later this statement.',
+ 'gang ba/whole omitted despite positive HGM1680: C05:290 separately says whole river full of pus, so an isolated fullness mapping remains uncertain.',
+ 'dbang/forced and instrumental gis/through retained; mi \'thad par/mistaken is an established negative lexical unit at d5.',
+ 'Final rnag owns subject pus [543,546], leaving the predicate repetition unwrapped; ngo and active-subject gyis are the only nulls.',
+ 'Proper name remains dul ba lhas; no detached agentive s, supplied sit down, or invented source participant.' ],
+288:[
+ 'Reject original English288/w33 at bracket not [526,529]; final w36 is ma/not at [797,800] in the later hypothesis.',
+ 'Positive full sensory glossary confronted: dbang po/sense, mngon sum/directly and snang ba/appeared retain distinct owners; distributed perception and the explanatory bracket stay unwrapped.',
+ 'Both seed chains and all three sngon \'dzin occurrences retain their specific source/English positions; bzhag pa means planting locally.',
+ 'Two likeness of itself phrases stay complete at d3; transmitting/thereby/because retain their own clauses.',
+ 'Final required dngos po/gsum po/snang dgos owns objects/three/would be appearing; earlier temporal three-object setup is omitted as condensed.',
+ 'Positive la brten nas is distributed and omitted; final la ma bltos par/independent of retains the negative dependence. Only active-subject gyis/kyis are null.' ]}
+for r in summary:
+ s=r['seq'];n=r['span_count'];ds=', '.join(f'd{k}={v}' for k,v in r['depth_counts'].items())
+ report=[f'C05:{s} — reconciled by Codex (gpt-6-astra); PROVISIONAL; page c5p96.',f'Counts: {n} spans ({ds}); {r["null_count"]} nulls; 0 errata. Automatic d1 envelope excluded.',*lines[s],
+ 'All originals are frozen and referenced in ../evidence/original-identity-and-replay-references.json; all 258 complete original tuples have dispositions in ../dispositions.json.',
+ 'Material evidence appears once under ../evidence/; ../material-decisions.json and ../omissions.json map the source roles, exact lexical records and omitted content.',
+ f'Native canonical result: EXIT=0 BODY_BYTES={r["body"]["bytes"]} STDERR_BYTES=0; {r["native_attempt"].split("/",1)[1]}/command.json and generator.stdout/stderr/exit preserve the actual execution.',
+ f'Spec: {r["spec"]["bytes"]} bytes; SHA256 {r["spec"]["sha256"]}.',
+ f'Body: {r["body"]["bytes"]} bytes; SHA256 {r["body"]["sha256"]}.',
+ 'Canonical final ranges: final-ranges.json; full Wylie and English recover exactly; every label occurs on both sides. No supplied-head allowance proposed.',
+ 'Errata: complete physical sources, lexical readings, exact C15 parallels and registered classes checked. All five grounds for source suspicions are in ../source-suspicion-five-ground-checks.json; none survives.',
+ 'Text identity does not establish independent publication or ingestion lineage; P7:33 supports only its shorter shared extent.',
+ 'Mechanical fidelity is not semantic approval. Root semantic approval and a fresh independent semantic review are required before landing; source/master/repository were not edited.'
+ ]
+ (F/str(s)/'report.md').write_text('\n'.join(report)+'\n')
+dump(F/'evidence-map.json',{'shared_evidence_directory':'evidence','material_decision_evidence_paths':'Paths without ../ resolve within evidence; text after a colon identifies the term/row inside that complete file. Paths with ../ refer to the explicitly named parent-batch or final-package document as described in the decision.','originals':'Both complete frozen original trees remain at ../tibetan and ../english. Their manifests pin all originals, failed and superseded attempts. They are not recopied recursively.','original_span_index':'../proposal-verification/root-resolved-spans.json','original_disposition_index':'dispositions.json','final_range_index':'final-ordered-tuples.json','native_original_replays':'../proposal-verification plus evidence/original-identity-and-replay-references.json','native_final_executions':'{286,287,288}/attempts/01','source_and_lexical':'evidence/source-and-context.json, lexical-queries.json, parallel-and-context-queries.json, tshad-mtshungs-query.json','physical':'evidence/physical-excerpts.json retains complete relevant physical excerpts and original frozen-file hashes; whole-source pins are in evidence/input-references.json via the original verification records.','final_versions':'No failed canonical final attempts. history/decisions-01 preserves the superseded depth/anaphor rationale sidecars; final spec/body bytes never changed after the successful runs.'})
+files=[{'path':str(p.relative_to(F)),'bytes':p.stat().st_size,'sha256':sha(p)} for p in sorted(F.rglob('*')) if p.is_file() and p.name!='FROZEN-MANIFEST.json']
+dump(F/'FROZEN-MANIFEST.json',{'status':'FROZEN_RECONCILIATION_FOR_ROOT_AND_INDEPENDENT_SEMANTIC_REVIEW','producer':'Codex (gpt-6-astra)','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'baseline':'129e86afae8431aacfb1ee1cee65d8635dd265b8','original_manifests':json.loads((F/'evidence/original-identity-and-replay-references.json').read_text())['manifests'],'file_count':len(files),'files':files})
+print(json.dumps({'status':'FROZEN','files':len(files),'manifest_sha256':sha(F/'FROZEN-MANIFEST.json'),'source_suspicions_refuted':len(suspicions)}))

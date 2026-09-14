@@ -1,0 +1,52 @@
+import os,json,sqlite3,gzip,hashlib,subprocess,shutil
+from pathlib import Path
+W=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+B=W.parent/'campaign-artifacts/C05-286-288'; E=B/'tibetan/evidence'; E.mkdir(parents=True,exist_ok=True)
+def dump(n,v): (E/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def run(n,argv):
+ r=subprocess.run(argv,cwd=W,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (E/(n+'.stdout')).write_bytes(r.stdout);(E/(n+'.stderr')).write_bytes(r.stderr);dump(n+'.command.json',{'argv':argv,'cwd':str(W),'exit':r.returncode});return r.stdout
+base=json.loads((B/'baseline.json').read_text()); head=run('git-head',['git','rev-parse','HEAD']).decode().strip();assert head==base['commit']
+paths=[Path('/Users/adamderickandrade')/s for s in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']]
+dump('required-access.json',[{'path':str(p),'readable':os.access(p,os.R_OK)} for p in paths]);assert all(os.access(p,os.R_OK) for p in paths)
+G=E/'governing';G.mkdir(exist_ok=True);pins=[]
+for rel in ['AGENTS.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','docs/NEVER_BANK_A_FALSEHOOD.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']:
+ p=W/rel;t=G/rel.replace('/','__');shutil.copyfile(p,t); b=run('git-original-'+p.name,['git','show',head+':'+rel]);assert b==p.read_bytes(); pins.append({'source':str(p),'copy':str(t),'sha256':sha(p),'git_commit':head})
+for p in [B/'tibetan-brief.md',B/'source.json',B/'context.json',B/'baseline.json',B.parent/'proposal-protocol.md']:
+ t=G/p.name;shutil.copyfile(p,t);pins.append({'source':str(p),'copy':str(t),'sha256':sha(p)})
+for name in ['README.md','HANDOFF.md']:
+ p=paths[0]/'Handoff'/name;t=G/('Handoff-'+name);shutil.copyfile(p,t);pins.append({'source':str(p),'copy':str(t),'sha256':sha(p)})
+for rel,expected in base['sha256'].items():
+ actual=sha(W/rel);assert actual==expected;pins.append({'source':str(W/rel),'sha256':actual,'matches_baseline':True})
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+pins.append({'source':str(W/'build/hgm_spine_v27_2.db'),'sha256':sha(W/'build/hgm_spine_v27_2.db')})
+dump('source-pins.json',pins);dump('spine-meta.json',[dict(r) for r in c.execute('select * from meta')]);
+def query(n,sql,params):
+ rows=[dict(r) for r in c.execute(sql,params)];dump(n,{'sql':sql,'params':params,'count':len(rows),'rows':rows});return rows
+rows=query('source-originals.json','select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',286,288])
+ctx=query('context-originals.json','select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',280,294])
+for name,actual in [('source.json',rows),('context.json',ctx)]:
+ snap=json.loads((B/name).read_text()); assert len(snap)==len(actual)
+ for a,b in zip(snap,actual):
+  for k in ['id','course','seq','acip','wylie','english']:assert a[k]==b[k],(name,k)
+dump('snapshot-verification.json',{'head':head,'fields':['id','course','seq','acip','wylie','english'],'selected_rows':len(rows),'context_rows':len(ctx),'matches':True})
+query('extended-local-argument.json','select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',254,300])
+for r in rows:
+ query('parallel-'+str(r['seq'])+'.json','select * from corpus_segments where (acip=? or wylie=? or english=?) and id!=? order by course,seq',[r['acip'],r['wylie'],r['english'],r['id']])
+terms=['gzhi mthun','tshad mtshungs','go sa','phan tshun',"'gog pa",'thal ba','rigs pa','gnod','brlan','gsher ba','khas len','khas blangs','khas ma blangs',"'grel bshad",'nyi shu pa','dul ba lha','thigs pa','klung','rnam par smin pa','dbang','dngos gnas pa','brgal lan','phyi don','phyi rol don','tshur mthong','sngon po',"sngon 'dzin",'dbang po',"mngon sum",'bag chags','bzhag pa','smin pa',"rang 'dra",'rnam pa','gtad pa',"sgo nas",'ma bltos par','skye ba','rgyud','mig shes','yi dvags']
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes())); entries=master['unified_entries']; matched=[]
+for term in terms:
+ found=[]
+ for e in entries:
+  forms=[e.get('wylie','')]+e.get('wylie_variants',[])
+  if term in forms:found.append(e)
+ matched.append({'query':{'exact_wylie_or_variant':term},'count':len(found),'records':found})
+dump('dictionary-exact-and-variants.json',matched)
+for i,term in enumerate(['tshad mtshungs','gzhi mthun',"go sa 'gog",'dul ba lhas','rnag gi thigs pa',"phyi don 'gog",'tshur mthong gi rgyud',"rang 'dra'i rnam pa gtad",'bag chags bzhag pa sm in','bag chags bzhag pa smin','ma bltos par']):
+ query('lexical-corpus-'+str(i)+'.json','select * from corpus_segments where wylie like ? order by course,seq',['%'+term+'%'])
+P=E/'physical';P.mkdir(exist_ok=True);physical=[]
+for course in ['C05','C16']:
+ p=paths[0]/'To DO/Formal Courses/ACI Readings In Roman ASCII'/(course+'ReadingASCII.txt');t=P/p.name;shutil.copyfile(p,t);physical.append({'source':str(p),'copy':str(t),'sha256':sha(p),'bytes':p.stat().st_size})
+dump('physical-pins.json',physical)
+print(json.dumps({'head':head,'source_match':True,'source_rows':3,'context_rows':15,'dictionary_queries':len(matched),'dictionary_records':sum(x['count'] for x in matched),'physical':physical},indent=2))

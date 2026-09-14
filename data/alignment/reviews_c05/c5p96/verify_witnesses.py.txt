@@ -1,0 +1,33 @@
+from pathlib import Path
+import json,hashlib,re,sqlite3,sys
+sys.dont_write_bytecode=True
+S=Path(__file__).resolve().parent;B=S.parent;W=B.parent.parent/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def dump(name,x):(S/name).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+rows={r['seq']:dict(r) for r in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',286,288))}
+manifest=json.loads((S/'original-to-copy-manifest.json').read_text());proof=[]
+for rec in json.loads((B/'tibetan/evidence/physical-verification.json').read_text()):
+ p=Path(rec['source']);raw=p.read_bytes();assert sha(raw)==rec['sha256'] and len(raw)==rec['bytes']
+ existing=[m for m in manifest if m['sha256']==sha(raw) and m['bytes']==len(raw)];assert existing
+ if not any(m['original']==str(p) for m in manifest):manifest.append(dict(original=str(p),copy=existing[0]['copy'],sha256=sha(raw),bytes=len(raw)))
+ for q in rec['matches']:
+  source=rows[q['C05_seq']][q['field']];assert source==q['source_quoted']
+  matches=list(re.finditer(rb'\s+'.join(re.escape(t.encode('ascii')) for t in source.split()),raw));assert len(matches)==q['count']==1
+  m=matches[0];r=q['offsets'][0];assert (m.start(),m.end())==(r['start'],r['end'])
+  preserved=(B/'tibetan/evidence/physical'/r['excerpt']).read_bytes();assert raw[m.start():m.end()]==preserved and sha(preserved)==r['sha256']
+  proof.append(dict(source=str(p),seq=q['C05_seq'],field=q['field'],count=len(matches),start=m.start(),end=m.end(),exact_original_excerpt=True,sha256=sha(preserved),bytes=len(preserved)))
+ # Check saved wider context is the precise byte slice too.
+ lo,hi=rec['argument_context']['start'],rec['argument_context']['end'];assert raw[lo:hi]==(B/'tibetan/evidence/physical'/(p.name[:3]+'-argument-context.bin')).read_bytes()
+dump('original-to-copy-manifest.json',manifest);dump('evidence/independent-physical-proof.json',proof)
+others=[dict(r) for r in c.execute('select * from corpus_segments where (course=? and seq between ? and ?) or (course=? and seq=?) order by course,seq',('C15',431,433,'P7',33))]
+dump('evidence/independent-selected-parallels.json',others)
+for seq in rows:
+ other=next(r for r in others if r['course']=='C15' and r['seq']==seq+145)
+ assert all(rows[seq][f]==other[f] for f in ('acip','wylie','english'))
+english=rows[288]['english'];nots=[[m.start(),m.end()] for m in re.finditer(r'\bnot\b',english)];assert nots==[[526,529],[797,800]]
+numeric=dict(whole_word_not_ranges=nots,whole_word_not_count=len(nots),quote_fragment_count=rows[287]['wylie'].count('mthong ngo , , zhes gsungs pa'),C05_287_english_characters=len(rows[287]['english']),C05_288_english_characters=len(english),C15_433_english_characters=len(others[2]['english']),P7_33_english_characters=len(others[3]['english']),C05_288_tail=english[-48:],C15_433_tail=others[2]['english'][-48:],P7_33_tail=others[3]['english'][-48:])
+assert numeric['quote_fragment_count']==1 and numeric['C05_287_english_characters']==559
+assert numeric['C05_288_english_characters']==numeric['C15_433_english_characters']==1425 and numeric['P7_33_english_characters']==1417
+dump('evidence/independent-source-numerics.json',numeric)
+print(json.dumps(dict(physical_exact_slices=len(proof),whole_files=2,source_numerics=numeric),indent=2))

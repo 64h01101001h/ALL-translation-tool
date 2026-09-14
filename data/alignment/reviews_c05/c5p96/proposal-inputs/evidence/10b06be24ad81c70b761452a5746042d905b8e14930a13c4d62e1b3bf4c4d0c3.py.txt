@@ -1,0 +1,36 @@
+import json,hashlib,os,subprocess,datetime
+from pathlib import Path
+A=Path(__file__).parent;E=A/'evidence';W=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+rows={r['seq']:r for r in json.loads((E/'source-originals.json').read_text())['rows']}
+notes={286:('Challenge first: tshad mtshungs → identical valid perceptions at d5; no exact dictionary headword was found, but C05:262, C16:849/850 and C15:431 support the local expression.','The common-locus expression stays whole at d3; both khas ma blangs recasts and the elliptical second dngos po are omitted with reasons in decisions.json.','Attempt 1 passed; attempt 2 corrects the note’s context citations. Both native runs are preserved.'),287:('Challenge first: gsungs pa/de → statement/this in the later inference, while mdzad pa is omitted as distributed authorship/reporting.','The last Tibetan rnag owns final real pus; the preceding English pus is is an unwrapped reprise. gis → through has a separate exponent; only ngo and subject gyis are null.','Attempt 1 passed mechanically but incorrectly nulled instrumental gis; attempt 2 supersedes it with through and preserves both runs.'),288:('Challenge first: final dngos po/gsum po/snang dgos → objects/three/would be appearing; the earlier conditional occurrence is omitted as distributed across setup and result.','Two seed chains retain plants/ripens versus planted/ripened. mngon sum and second phyi don ’gog pa are omitted as distributed; likeness of itself stays whole at d3.','One native canonical run; no failed generator attempts for this segment.')}
+summary=[]
+for seq in [286,287,288]:
+ p=A/str(seq);proof=json.loads((p/'proof.json').read_text());assert sha(p/'spec.json')==proof['spec_sha256'];assert (p/'body.html').read_bytes()==(p/'generator.stdout').read_bytes();assert (p/'generator.stderr').read_bytes()==b'';assert (p/'generator.exit').read_text()=='0\n';assert sha(p/'body.html')==proof['body_sha256']
+ a,b,c=notes[seq];lens={k:len(rows[seq][k]) for k in ['acip','wylie','english']}
+ report='\n'.join([
+ f'C05:{seq} — independent Tibetan-first original proposal; actual producer: Codex; PROVISIONAL.',
+ a,b,
+ f'Measured: {proof["spans"]} proposal spans, {proof["d5"]} d5, {proof["nulls"]} nulls; the automatic d1 sentence envelope is excluded from these counts.',
+ f'Canonical result: EXIT=0; body={proof["stdout_bytes"]} bytes; stderr=0 bytes; saved body equals native stdout; both full source fields recover exactly; intended occurrence mismatches=0.',
+ f'Proof and native command/streams: proof.json, command.json, generator.stdout, generator.stderr, generator.exit, guard-loaded.jsonl, resolved-occurrences.json. Guard loading and exact spine mode=ro connection were observed in the child.',
+ f'Spec SHA256 {sha(p/"spec.json")}; body SHA256 {sha(p/"body.html")}.',
+ f'Sources: ../evidence/source-originals.json, context-originals.json, extended-local-argument.json, physical-verification.json, dictionary-exact-and-variants.json, parallel-{seq}.json; complete named query records and hashes are in ../FROZEN-MANIFEST.json.',
+ f'Baseline 129e86afae8431aacfb1ee1cee65d8635dd265b8 through285: six fields × 3 rows and 15 context rows independently matched; local/archive master and corpus hashes agree. Source character lengths: {json.dumps(lens)}.',
+ f'Errata: 0. Exact row wording, original C05/C15 ACIP and English, registered classes and available corpus/lexical parallels checked. None establishes a new source defect. Field identity does not establish independent publication or ingestion lineage. The shorter P7:33 record supports only its shared extent.',
+ c,
+ 'Mechanical fidelity is not semantic approval; source text and hgm_gloss remain unchanged.'
+ ])+'\n';(p/'report.md').write_text(report)
+ summary.append({'seq':seq,'directory':str(p),'spec':str(p/'spec.json'),'report':str(p/'report.md'),'spans':proof['spans'],'d5':proof['d5'],'nulls':proof['nulls'],'exit':0,'body_bytes':proof['stdout_bytes'],'spec_sha256':sha(p/'spec.json'),'body_sha256':sha(p/'body.html')})
+(E/'evidence-notes.md').write_text('''Source verification uses full original SQLite rows (including raw), exact six-field snapshot comparison, a 47-row local argument window, and original physical C05/C15 bytes with whitespace-flexible field-location matches. Byte excerpts and offsets are preserved; display-only Latin-1 decoding never rewrites the originals. The first UTF-8 display failed and is preserved as an explicitly named native replay. Material lexical queries preserve full records, including HGM tiers, variants and reference comparanda; full corpus query results are kept even where only selected relevant records informed the proposal. Broad gzhi mthun results include unrelated records; no independent judgment is claimed from uninspected or disputed C13 alignments. C05:286/287/288 respectively have exactly matching ACIP, Wylie and English fields at C15:431/432/433; course/id/seq differ. No ingestion-lineage or independent-publication inference follows from those identities. P7:33 has a shorter English record and is used only for the shared extent. The glossary’s provisional gzhi mthun / wet and flowing and bzhag pa / nothing but were observed; source context supplies the proposed local correspondences without modifying hgm_gloss. Original dictionary records are reference evidence, not semantic approval of any automatic match.
+''')
+# Native final baseline observation, without rerunning successful unchanged generation.
+r=subprocess.run(['git','rev-parse','HEAD'],cwd=W,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+(E/'final-git-head.stdout').write_bytes(r.stdout);(E/'final-git-head.stderr').write_bytes(r.stderr);(E/'final-git-head.command.json').write_text(json.dumps({'argv':['git','rev-parse','HEAD'],'cwd':str(W),'exit':r.returncode},indent=2)+'\n');assert r.stdout.decode().strip()=='129e86afae8431aacfb1ee1cee65d8635dd265b8'
+(A/'summary.json').write_text(json.dumps({'angle':'tibetan-first','producer':'Codex','status':'frozen original proposals; no semantic approval','segments':summary,'totals':{k:sum(x[k] for x in summary) for k in ['spans','d5','nulls']}},indent=2)+'\n')
+# One final exact-byte boundary. Only this angle is enumerated.
+files=[p for p in A.rglob('*') if p.is_file() and p.name not in ['FROZEN-MANIFEST.json','FROZEN-MANIFEST.sha256']]
+manifest={'status':'FROZEN original independent Tibetan-first proposals','baseline':'129e86afae8431aacfb1ee1cee65d8635dd265b8','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':[{'path':str(p.relative_to(A)),'bytes':p.stat().st_size,'sha256':sha(p)} for p in sorted(files)],'segments':summary}
+(A/'FROZEN-MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n');(A/'FROZEN-MANIFEST.sha256').write_text(sha(A/'FROZEN-MANIFEST.json')+'  FROZEN-MANIFEST.json\n')
+for p in files+[A/'FROZEN-MANIFEST.json',A/'FROZEN-MANIFEST.sha256']:p.chmod(0o444)
+print(json.dumps({'manifest':str(A/'FROZEN-MANIFEST.json'),'manifest_sha256':sha(A/'FROZEN-MANIFEST.json'),'file_count':len(files),'segments':summary},indent=2))

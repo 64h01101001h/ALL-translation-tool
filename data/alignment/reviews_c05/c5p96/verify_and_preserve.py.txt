@@ -1,0 +1,137 @@
+"""Independent read-only evidence replay, final generator proof, and preservation."""
+from pathlib import Path
+import os,sys,json,hashlib,subprocess,sqlite3,re,html,importlib.util,datetime
+S=Path(__file__).resolve().parent;B=S.parent;A=B.parent;W=A.parent/'campaign-worktree'
+os.environ['PYTHONDONTWRITEBYTECODE']='1';sys.dont_write_bytecode=True
+KEYS=('seq','id','d','tib','eng','tib_range','eng_range');HEAD='129e86afae8431aacfb1ee1cee65d8635dd265b8'
+ALLOWED=('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit')
+def sha(b):return hashlib.sha256(b).hexdigest()
+def pin(p):
+ b=Path(p).read_bytes();return {'sha256':sha(b),'bytes':len(b)}
+def dump(p,x):
+ p=S/p;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert subprocess.check_output(['git','-C',str(W),'rev-parse','HEAD'],text=True).strip()==HEAD
+manifest=[];by_digest={};origseen={};frozen=[]
+def copy(p,target=None,gitpath=None):
+ p=Path(p).absolute();raw=p.read_bytes();h=sha(raw)
+ if str(p) in origseen:return origseen[str(p)]
+ if target is None:
+  target=by_digest.get((h,len(raw)))
+  if target is None:
+   ext=p.suffix.lower();ext=ext if ext in ALLOWED else ext+'.txt' if ext in ('.py','.sql','.sh','.jsonl') else '.bin'
+   target='proposal-inputs/evidence/'+h+ext
+ out=S/target;assert out.is_relative_to(S) and out.suffix.lower() in ALLOWED
+ out.parent.mkdir(parents=True,exist_ok=True)
+ if out.exists():assert out.read_bytes()==raw
+ else:out.write_bytes(raw)
+ r={'original':str(p),'copy':target,'sha256':h,'bytes':len(raw)}
+ if gitpath:
+  gitbytes=subprocess.check_output(['git','-C',str(W),'show',HEAD+':'+gitpath]);assert gitbytes==raw
+  r.update(original_git_commit=HEAD,repository_relative_path=gitpath)
+ manifest.append(r);origseen[str(p)]=r;by_digest.setdefault((h,len(raw)),target);return r
+for angle,mp,h in [('tibetan',B/'tibetan/FROZEN-MANIFEST.json','8c05ce0c58d33d0202c5dc3cc873fb114510ebcdc12aeaee87862aadda8f3435'),('english',B/'english/286/freeze-manifest.json','09d4068b25ec51f33baf73c976661dae247bcf17cd49fad90828aac0aec237b2'),('reconciled',B/'reconciled/FROZEN-MANIFEST.json','623f8d94496836db9a11272a2a57e2c9ce2dc054978b465905b026861f9897cf')]:
+ assert sha(mp.read_bytes())==h
+ m=json.loads(mp.read_text())
+ for r in m['files']:
+  p=Path(r['path']);p=p if p.is_absolute() else B/angle/p
+  assert pin(p)=={k:r[k] for k in ['sha256','bytes']},p
+ frozen.append({'manifest':str(mp),**pin(mp),'checked_files':len(m['files'])})
+# Current governing files carry immutable Git pins; identical historical copies reuse them.
+governing=['AGENTS.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/alignment_briefs/PROPOSE_BRIEF.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','docs/errata_register.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py','data/alignment/span_head_allow.json']
+git_hashes={}
+for rel in governing:
+ p=W/rel;target='governing/'+rel+('.txt' if p.suffix=='.py' else '');r=copy(p,target,rel);git_hashes[r['sha256']]=rel
+# Keep all original interfaces, attempts and reconciliation decisions readable. All other
+# immutable evidence is deduplicated by exact bytes. No other batch is traversed.
+for angle in ['tibetan','english','reconciled']:
+ for p in sorted((B/angle).rglob('*')):
+  if not p.is_file() or '__pycache__' in p.parts or p.suffix=='.pyc':continue
+  rel=p.relative_to(B/angle);core=p.name in ('spec.json','body.html','report.md','errata.json','decisions.json','dispositions.json','material-decisions.json','omissions.json','source-suspicion-five-ground-checks.json','FROZEN-MANIFEST.json','freeze-manifest.json','superseded.txt')
+  target=None
+  if angle=='reconciled' and rel.parts[0] in ('286','287','288'):
+   target='reviewed-final/'+str(rel)
+  elif core:target='proposal-inputs/'+angle+'/'+str(rel)
+  if target and p.suffix.lower() not in ALLOWED:target+='.txt'
+  copy(p,target,git_hashes.get(sha(p.read_bytes())))
+for p in sorted(B.iterdir()):
+ if p.is_file():copy(p)
+for dirname in ['proposal-verification','root-reconciliation-verification','root-original-freeze-check','root-current-source-reopen','root-broader-context','root-start-preflight','root-start-preflight-attempt02','root-start-preflight-correction']:
+ for p in sorted((B/dirname).rglob('*')):
+  if p.is_file() and '__pycache__' not in p.parts:copy(p)
+for p in [A/'semantic-review-protocol.md',A/'proposal-protocol.md',A/'copy_evidence_once.py',A/'run_generator_readonly.py',A/'land_reviewed_page.py']:
+ copy(p,'governing-campaign/'+p.name+('.txt' if p.suffix=='.py' else ''))
+# Reopen full spine rows and every executable recorded SELECT query once.
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+rows=[dict(r) for r in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',280,294))]
+assert rows==json.loads((B/'reconciled/evidence/source-and-context.json').read_text())
+dump('evidence/source-and-context.json',rows);src={r['seq']:r for r in rows}
+queries={};queryproof=[];seenrefs=0
+for p in sorted(B.rglob('*.json')):
+ if not p.is_file() or S in p.parents or any(x in p.parts for x in ['root-active-checkpoint','workflow-refinement-checkpoint','root-start-preflight']):continue
+ try:d=json.loads(p.read_text())
+ except (UnicodeError,json.JSONDecodeError):continue
+ def walk(v):
+  global seenrefs
+  if isinstance(v,dict):
+   sql=v.get('sql',v.get('query'));params=v.get('parameters',v.get('params'))
+   if isinstance(sql,str) and sql.lstrip().lower().startswith('select') and isinstance(params,(list,tuple)) and 'rows' in v:
+    k=json.dumps([sql,params],ensure_ascii=False);seenrefs+=1
+    if k not in queries:
+     actual=[dict(x) for x in c.execute(sql,params)];queries[k]=actual
+    actual=queries[k];assert actual==v['rows'],('query rows differ',str(p),sql,params)
+    assert len(actual)==v.get('count',len(actual)),('count differs',p)
+    queryproof.append({'original':str(p),'sql':sql,'parameters':params,'count':len(actual),'exact_complete_rows':True,'rows_sha256':sha(json.dumps(actual,sort_keys=True,ensure_ascii=False).encode())})
+   for x in v.values():
+    if isinstance(x,(dict,list)):walk(x)
+  elif isinstance(v,list):
+   for x in v:walk(x)
+ walk(d)
+dump('evidence/query-replay.json',queryproof)
+# Directly compare original master-style dictionary records to the canonical raw field.
+masterproof=[]
+for p in [B/'tibetan/evidence/dictionary-exact-and-variants.json']:
+ for q in json.loads(p.read_text()):
+  term=q['query']['exact_wylie_or_variant'];sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'
+  rs=[dict(x) for x in c.execute(sql,(term,term))];actual=[json.loads(x['raw']) for x in rs]
+  assert actual==q['records'] and len(actual)==q['count'],term
+  masterproof.append({'term':term,'count':len(actual),'exact_raw_master_records':True})
+dump('evidence/master-record-replay.json',masterproof)
+# Reuse six already successful native originals only after byte and freeze verification.
+proof=json.loads((B/'proposal-verification/report.json').read_text())
+for p in proof:
+ d=B/p['angle']/str(p['seq']);native=B/'proposal-verification'/f"{p['angle']}-{p['seq']}.stdout"
+ assert sha((d/'spec.json').read_bytes())==p['spec_sha256'] and sha((d/'body.html').read_bytes())==p['body_sha256']
+ assert native.read_bytes()==(d/'body.html').read_bytes() and (native.with_suffix('.exit')).read_text().strip()=='0'
+dump('evidence/original-replay-identity.json',proof)
+# Independent final executions through the unchanged canonical generator.
+sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+resolved=[];segments=[]
+for seq in [286,287,288]:
+ d=B/'reconciled'/str(seq);spbytes=(d/'spec.json').read_bytes();spec=json.loads(spbytes);sg=spec['segments'][0];spans=sg['spans'];byid={x['id']:x for x in spans}
+ argv=[sys.executable,'-B',str(A/'run_generator_readonly.py')]
+ r=subprocess.run(argv,input=spbytes,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},capture_output=True)
+ out=S/'generator-proof'/str(seq);out.mkdir(parents=True,exist_ok=True)
+ for name,raw in [('stdout.html',r.stdout),('stderr.txt',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(out/name).write_bytes(raw)
+ assert r.returncode==0 and r.stdout==(d/'body.html').read_bytes()
+ tr=G.resolve(src[seq]['wylie'],spans,'tib',seq);es=G.with_members(spans,[byid[i] for i in sg['eng_order']],src[seq]['english']);er=G.resolve(src[seq]['english'],es,'eng',seq)
+ rs=[dict(seq=seq,id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng'],tib_range=list(tr[x['id']]),eng_range=list(er[x['id']]) if x['id'] in er else None) for x in spans];resolved+=rs
+ saved=json.loads((d/'final-ranges.json').read_text());assert rs==[{k:x[k] for k in KEYS} for x in saved]
+ for side,key in [('tib','wylie'),('eng','english')]:
+  chunk=re.search(r'<div class="'+side+r'"><div class="lab">.*?</div>\n(.*?)\n</div>',r.stdout.decode(),re.S).group(1)
+  chunk=re.sub(r'<span class="u"[^>]*><span class="nul">.*?</span></span>','',chunk,flags=re.S)
+  assert html.unescape(re.sub(r'<[^>]*>','',chunk))==src[seq][key]
+ labels=re.findall(r'data-l="s'+str(seq)+r'([^"S]+)"',r.stdout.decode());assert set(labels)==set(byid) and all(labels.count(i)==2 for i in byid)
+ sgproof=dict(seq=seq,span_count=len(spans),null_count=sum(x['eng'] is None for x in spans),word_pair_count=sum(x['d']==5 and x['eng'] is not None for x in spans),spec_sha256=sha(spbytes),spec_bytes=len(spbytes),body_sha256=sha(r.stdout),body_bytes=len(r.stdout),generator_exit=r.returncode)
+ segments.append(sgproof);dump('generator-proof/'+str(seq)+'/command.json',{'argv':argv,'cwd':str(W),'stdin':str(d/'spec.json'),'canonical_generator':pin(W/'tools/gen_alignment_page.py'),'runner':pin(A/'run_generator_readonly.py'),'PYTHONDONTWRITEBYTECODE':'1','source_connection':'SQLite URI mode=ro','exact_body':True,'source_fields_recovered':['wylie','english'],'all_labels_on_both_sides':True})
+dump('resolved-spans.json',resolved);dump('measured-segments.json',segments)
+# Frozen sources are physical byte originals. Add direct source mapping where known.
+for q in json.loads((B/'tibetan/evidence/physical-pins.json').read_text()):
+ p=Path(q['source']);assert pin(p)=={k:q[k] for k in ['sha256','bytes']};assert p.read_bytes()==Path(q['copy']).read_bytes();copy(p)
+# Pin raw source libraries without needlessly copying entire master/database.
+rawpins=[]
+for p in [W/'build/hgm_spine_v27_2.db',W/'data/hgm_dictionary_v27_2.json.gz',W/'data/full_parallel_corpus_v32.json.gz']:rawpins.append({'path':str(p),'resolved_path':str(p.resolve()),**pin(p)})
+dump('evidence/source-library-pins.json',rawpins)
+dump('evidence/frozen-input-check.json',frozen)
+dump('evidence/preflight-summary.json',{'baseline':HEAD,'selected_rows':3,'context_rows':len(rows),'unique_select_queries':len(queries),'query_references_checked':seenrefs,'master_queries_checked':len(masterproof),'original_generators_reused_after_byte_checks':6,'final_generators_independently_run':3,'spans':len(resolved),'nulls':sum(x['eng'] is None for x in resolved),'non_null_d5':sum(x['d']==5 and x['eng'] is not None for x in resolved)})
+dump('original-to-copy-manifest.json',manifest)
+print(json.dumps(json.loads((S/'evidence/preflight-summary.json').read_text()),indent=2))

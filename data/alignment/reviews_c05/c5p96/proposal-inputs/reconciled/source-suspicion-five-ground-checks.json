@@ -1,0 +1,126 @@
+[
+  {
+    "seq": 288,
+    "claim": "The bracket negation or later ma yin par requires a source correction.",
+    "found": "not yet perceived emptiness directly",
+    "refuted": true,
+    "grounds": {
+      "a": {
+        "verbatim_present": true,
+        "field": "english",
+        "range": [
+          526,
+          562
+        ]
+      },
+      "b": {
+        "result": "C15:433 has identical ACIP/Wylie/English. P7:33 shares this bracket but ends earlier than C05. These are textual comparisons, not established independent publication or ingestion lineage."
+      },
+      "c": {
+        "result": "No new source-correction claim for this selected segment; E-044/E-071/E-076/E-107/E-111/E-121 were consulted. The demonstrated defect is an original proposal mapping and is outside source errata."
+      },
+      "d": {
+        "result": "Both source clauses are defensible. The bracket explains tshur mthong; ma yin par negates the later appearance hypothesis. Correcting either source would be wrong; only the original span occurrence is rejected."
+      },
+      "e": {
+        "counts_rechecked": {
+          "english_whole_word_not": 2
+        },
+        "canonical_ranges": [
+          [
+            526,
+            529
+          ],
+          [
+            797,
+            800
+          ]
+        ],
+        "original_wrong_range": [
+          526,
+          529
+        ],
+        "final_correct_range": [
+          797,
+          800
+        ]
+      }
+    },
+    "evidence": [
+      "evidence/source-and-context.json",
+      "evidence/parallel-and-context-queries.json",
+      "material-decisions.json: 288-negation",
+      "../root-original-angle-findings.json"
+    ]
+  },
+  {
+    "seq": 287,
+    "claim": "Quotation lineation or the punctuation after the verse is a new source defect.",
+    "found": "mthong ngo , , zhes gsungs pa",
+    "refuted": true,
+    "grounds": {
+      "a": {
+        "verbatim_present": true,
+        "field": "wylie"
+      },
+      "b": {
+        "result": "C15:432 matches all three selected fields. Physical C05 and C15 excerpts show the quotation structure. No independent-publication status is inferred from those matches."
+      },
+      "c": {
+        "result": "Course shape explicitly permits double-shad verse lineation; known converter, heading, footnote and boundary classes were checked, with no new selected-row defect established."
+      },
+      "d": {
+        "result": "Quotation closing morphology and verse lineation are defensible. The physical English places the quoted drop/river/ripening lines before the opponent's According to you inference; no punctuation correction is warranted."
+      },
+      "e": {
+        "counts_rechecked": {
+          "source_english_characters": 559,
+          "source_quote_fragment_occurrences": 1
+        },
+        "result": "Selected quotes and physical whitespace-locator equality were rechecked; historical global register counts are not reasserted."
+      }
+    },
+    "evidence": [
+      "evidence/physical-excerpts.json",
+      "evidence/registered-classes.json",
+      "evidence/source-and-context.json"
+    ]
+  },
+  {
+    "seq": 288,
+    "claim": "The long external-object paragraph has a missing English tail in this segment.",
+    "found": "ripened and produced the appearance of the object.",
+    "refuted": true,
+    "grounds": {
+      "a": {
+        "verbatim_present": true,
+        "field": "english",
+        "tail": "ipened and produced the appearance of the object."
+      },
+      "b": {
+        "result": "C15:433 matches the complete fields and has the complete physical ending. P7:33 is 1417 English characters and lacks the final object.; its shorter extent cannot establish a missing tail in C05:288 or independent publication lineage."
+      },
+      "c": {
+        "result": "E-107 is the registered 1500-character cap class. C05:288 is below that cap and retains its physical ending; this selected row is not demonstrated to instantiate it."
+      },
+      "d": {
+        "result": "The complete English ending and source snang dgos are defensible. The English has a distributed causal explanation, not a required repair."
+      },
+      "e": {
+        "counts_rechecked": {
+          "C05_288_english_characters": 1425,
+          "C15_433_english_characters": 1425,
+          "P7_33_english_characters": 1417,
+          "exact_field_query_rows_per_query": 2,
+          "exact_field_queries": 9
+        },
+        "result": "All nine full exact-field queries were reopened; C05/C15 physical excerpts match the entire selected fields after ASCII-whitespace location normalization only."
+      }
+    },
+    "evidence": [
+      "evidence/physical-excerpts.json",
+      "evidence/parallel-and-context-queries.json",
+      "evidence/registered-classes.json"
+    ]
+  }
+]

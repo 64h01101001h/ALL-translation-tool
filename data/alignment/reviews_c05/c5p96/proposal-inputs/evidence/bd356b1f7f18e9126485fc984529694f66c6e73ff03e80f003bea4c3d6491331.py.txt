@@ -1,0 +1,41 @@
+import pathlib,json,sys,hashlib,sqlite3,importlib.util,html,re,gzip,subprocess,os
+E=pathlib.Path(__file__).parent;A=E.parents[1]
+W=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+spec=importlib.util.spec_from_file_location('canonical_generator',W/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(spec);spec.loader.exec_module(G)
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro');c.row_factory=sqlite3.Row
+rows={r['seq']:dict(r) for r in c.execute('select * from corpus_segments where course=? and seq between ? and ?',('C05',286,288))}
+extra=[]
+for term in ['na re','gang ba','bzhag pa','phyi rol','mi \'thad par','khas ma blangs',"rang 'dra'i rnam pa"]:
+ q='select distinct e.* from entries e left join entry_variants v on v.entry_id=e.id where e.wylie=? or v.wylie=? order by e.id'
+ rr=[dict(r) for r in c.execute(q,(term,term))]
+ vv=[dict(r) for r in c.execute('select * from entry_variants where entry_id in (select e.id from entries e left join entry_variants v on v.entry_id=e.id where e.wylie=? or v.wylie=?) order by entry_id,wylie',(term,term))]
+ extra.append({'query':q,'parameters':[term,term],'count':len(rr),'rows':rr,'variants':vv});print('EXTRA',term,[(r['wylie'],r['hgm_gloss']) for r in rr])
+dump(E/'additional-dictionary-complete-results.json',extra)
+proof=[]
+for seq,r in rows.items():
+ p=A/str(seq);s=json.loads((p/'spec.json').read_text())['segments'][0];ss=s['spans'];byid={sp['id']:sp for sp in ss}
+ tr=G.resolve(r['wylie'],ss,'tib',seq);er=G.resolve(r['english'],G.with_members(ss,[byid[i] for i in s['eng_order']],r['english']),'eng',seq)
+ intent={v['id']:v for v in json.loads((p/'occurrence-intent.json').read_text())}
+ for sp in ss:
+  if sp['eng'] is not None:assert er[sp['id']][0]==intent[sp['id']]['chosen_offset'],(seq,sp,er[sp['id']],intent[sp['id']])
+ data=(p/'body.html').read_text();t=html.unescape(re.sub('<[^>]*>','',re.search(r'<span class="u" data-d="1" data-l="s'+str(seq)+r'S">(.*?)</div>',data,re.S)[1]))
+ assert t.strip()==r['wylie'],(seq,'tib text')
+ start=data.index("GESHE MICHAEL'S ENGLISH") if "GESHE MICHAEL'S ENGLISH" in data else data.index('GESHE MICHAEL')
+ block=data[start:];block=block[block.index('</div>')+6:];block=block[:block.index('</div>')]
+ block=re.sub(r'<span class="u"[^>]*><span class="nul">.*?</span></span>','',block)
+ eng=html.unescape(re.sub('<[^>]*>','',block)).strip()
+ assert eng==r['english'],(seq,'eng text',eng)
+ assert (p/'body.html').read_bytes()==(p/'attempt-01-canonical/stdout.html').read_bytes()
+ record={'seq':seq,'counts':{'spans':len(ss),'d5':sum(x['d']==5 for x in ss),'null':sum(x['eng'] is None for x in ss)},'english_length_chars':len(r['english']),'source_verbatim':True,'all_actual_english_offsets_match_intent':True,'body_equals_native_stdout':True,'exit':0,'stderr_bytes':0,'body_bytes':(p/'body.html').stat().st_size,'sha256':{n:sha(p/n) for n in ['spec.json','body.html','errata.json','occurrence-intent.json']},'resolved_spans':[{'id':sp['id'],'d':sp['d'],'tib':sp['tib'],'eng':sp['eng'],'tib_range':tr.get(sp['id']),'english_range':er.get(sp['id'])} for sp in ss]}
+ dump(p/'mechanical-proof.json',record);proof.append({k:v for k,v in record.items() if k!='resolved_spans'});print('PROOF',seq,record['counts'],record['body_bytes'])
+base=json.loads((E/'input-baseline.json').read_text());head=subprocess.run(['git','rev-parse','HEAD'],cwd=W,capture_output=True,check=True)
+(E/'verify-head.stdout').write_bytes(head.stdout);(E/'verify-head.stderr').write_bytes(head.stderr)
+assert head.stdout.decode().strip()==base['commit']
+pins={x:sha(W/x) for x in ['data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']}
+assert all(base['sha256'][k]==v for k,v in pins.items())
+assert sha(W/'tools/gen_alignment_page.py')==sha(E/'governing-tools_gen_alignment_page.py')
+assert sha(W/'build/hgm_spine_v27_2.db')==next(x['sha256'] for x in json.loads((E/'source-pins.json').read_text()) if x['path'].endswith('hgm_spine_v27_2.db'))
+dump(E/'final-baseline-verification.json',{'actual_head':head.stdout.decode().strip(),'expected_head':base['commit'],'source_hashes':pins,'source_hashes_equal_baseline':True,'canonical_generator_unchanged':True,'spine_hash_unchanged':True,'generator_stdout_not_semantic_approval':True})
+dump(E/'batch-mechanical-summary.json',proof)

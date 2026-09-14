@@ -1,0 +1,64 @@
+{
+  "status": "PASS_RECONCILIATION_INTAKE_NOT_SEMANTIC_APPROVAL",
+  "utc": "2026-09-14T13:15:32.433461+00:00",
+  "frozen_manifest_sha256": "623f8d94496836db9a11272a2a57e2c9ce2dc054978b465905b026861f9897cf",
+  "frozen_files": 66,
+  "complete_original_dispositions": 258,
+  "all_retained_tuples_unchanged": true,
+  "final_count": 137,
+  "nulls": 5,
+  "nonnull_d5": 99,
+  "exact_canonical_seven_key_ranges": true,
+  "correct_hypothesis_negation": [
+    797,
+    800
+  ],
+  "generator_proof": "root-reconciliation-verification/report.json",
+  "independent_semantic_review": "ACTIVE; no acceptance or production mutation yet",
+  "prior_intake_attempt": {
+    "exit": 1,
+    "failure": "Whole-object equality failed because five reconciler null records also include cls/nul. All seven canonical fields match exactly; original fields and files preserved. Reviewer informed to emit required seven-key interface.",
+    "extra_fields": [
+      {
+        "seq": 286,
+        "id": "w9",
+        "extra_keys": [
+          "cls",
+          "nul"
+        ]
+      },
+      {
+        "seq": 287,
+        "id": "w25",
+        "extra_keys": [
+          "cls",
+          "nul"
+        ]
+      },
+      {
+        "seq": 287,
+        "id": "w32",
+        "extra_keys": [
+          "cls",
+          "nul"
+        ]
+      },
+      {
+        "seq": 288,
+        "id": "w45",
+        "extra_keys": [
+          "cls",
+          "nul"
+        ]
+      },
+      {
+        "seq": 288,
+        "id": "w57",
+        "extra_keys": [
+          "cls",
+          "nul"
+        ]
+      }
+    ]
+  }
+}

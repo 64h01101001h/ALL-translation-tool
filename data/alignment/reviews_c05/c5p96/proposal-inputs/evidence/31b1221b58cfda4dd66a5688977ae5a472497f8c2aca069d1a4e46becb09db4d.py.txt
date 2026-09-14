@@ -1,0 +1,45 @@
+"""Author selected correspondences; canonical resolver and generator remain unchanged."""
+import pathlib,json,copy
+F=pathlib.Path(__file__).resolve().parent;B=F.parent
+def load(a,s):return json.loads((B/a/str(s)/'spec.json').read_text())['segments'][0]
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+src={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+originals=json.loads((B/'proposal-verification/root-resolved-spans.json').read_text())
+lookup={(r['angle'],r['seq'],r['id']):r for r in originals}
+notes={
+286:"PROVISIONAL machine alignment. Actual producer: Codex (gpt-6-astra), reconciliation. GMR's source wording is preserved verbatim; no hgm_gloss change. go sa owns the tighter space, leaving the relative explanation unwrapped. The first ma yin par is a d3 negative predicate, are not; it is distinct from the later denial of our belief. mi is a fusion null because its negation is expressed inside cannot; gnod independently owns disprove, without splitting an unapproved negative affix. The complete dngos po gsum gyi gzhi mthun du phrase owns one thing which is three different things; the unrelated provisional glossary wet and flowing is not used. tshad and mtshungs separately own valid perceptions and identical. The first khas ma blangs contributes a separately alignable ma/not; its admission predicate is distributed in our belief. The second denial Neither did we ever say and remaining assertion/reporting particles are omitted because a participant-free contiguous equivalent cannot be isolated. The second opening dngos po is condensed in kinds that block and omitted, not nulled. Full decisions and original occurrences are preserved in the reconciliation evidence.",
+287:"PROVISIONAL machine alignment. Actual producer: Codex (gpt-6-astra), reconciliation. GMR's source wording is preserved verbatim; no hgm_gloss change. na re owns the opening claim. The authorial mdzad pa is omitted: the source says the commentary was composed by Vinitadeva, whereas makes this statement introduces his quotation. The later gsungs pa/de own statement/this in the opponent's inference. dul ba lhas stays whole, without a detached agentive s. med is a negative existential word at d5, not a standalone particle; it owns not while the English existential frame remains unwrapped. ga la yod owns the complete d3 rhetorical phrase how could there ever be. dbang/gis own forced/through, the causal force and instrumental link to karmic ripening. Despite the positive gang ba/whole glossary, gang ba is omitted here: the source's filled-with-pus relation is distributed in river of pus; C05:290 separately renders whole and full, so whole is not a secure isolated fullness exponent. mi 'thad par is an established negative lexical unit for mistaken. The final single rnag owns the subject pus in the pus is real pus; the predicate repetition is unwrapped. ngo has no separate declarative exponent; subject gyis has no separate word in the active English construction. Other omitted emphasis, copular and reporting material is distributed, not declared absent.",
+288:"PROVISIONAL machine alignment. Actual producer: Codex (gpt-6-astra), reconciliation. GMR's source wording, including the explanatory bracket, is preserved verbatim; no hgm_gloss change. The hypothetical negation ma owns not at English [797,800], after Suppose the blue were, never the bracket's not yet perceived emptiness at [526,529]. That bracket explains tshur mthong, whose established quoted designation only sees this side is retained. Positive full glossary readings for tshur mthong and dbang po'i mngon sum were checked; they do not license supplied framing or the neighboring appearance verb as dictionary words. dbang po owns sense, mngon sum owns directly, and snang ba owns appeared; the additional perception component is distributed and left unwrapped. Three sngon 'dzin occurrences own grasping blue and the two later perception of blue occurrences. Two separate seed chains own mental seed/plants/ripens and mental seed/planted/ripened; bzhag pa is planting here, not the unrelated provisional nothing but gloss. The first positive dependence transition la brten nas is distributed across the seed-growth explanation and omitted. Final la ma bltos par owns independent of, preserving the hypothetical independence from karmic planting and ripening. The final dngos po/gsum po/snang dgos own objects/three/would be appearing in the resulting three-object claim. The earlier temporal dngos po gsum snang ba is condensed in the setup and omitted; each of the objects is an English reprise. Both likeness of itself expressions remain complete d3 phrases rang 'dra'i rnam pa; their transmitting verbs and means relations retain their own occurrences. Other condensed, deictic, conditional and copular material is omitted rather than assigned a null; only active-subject gyis and kyis lack separate word exponents."
+}
+intent={}
+for s,angle in [(286,'english'),(287,'tibetan'),(288,'tibetan')]:
+ seg=copy.deepcopy(load(angle,s));spans=seg['spans'];ranges={sp['id']:copy.deepcopy(lookup[angle,s,sp['id']]) for sp in spans}
+ if s==286:
+  spans[5].update(d=3,eng='are not');r=ranges['w6'];r['eng_range']=[src[s]['english'].index('are not'),src[s]['english'].index('are not')+7]
+  spans[16]['tib']='dngos po gsum gyi gzhi mthun du';ranges['w17']['tib_range'][1]+=3
+ if s==287:
+  new={'id':'claim','d':5,'tib':'na re','eng':'claim'};spans.insert(1,new);ranges['claim']=copy.deepcopy(lookup['english',s,'w2'])
+  next(x for x in spans if x['id']=='w27')['d']=5
+  next(x for x in spans if x['id']=='w39')['tib']='bltas';ranges['w39']['tib_range'][1]-=3
+  ranges['w45']['eng_range']=copy.deepcopy(lookup['english',s,'w40']['eng_range'])
+  next(x for x in spans if x['id']=='w24')['cls']='final'
+ if s==288:
+  k=next(i for i,x in enumerate(spans) if x['id']=='w21')+1
+  spans.insert(k,{'id':'direct','d':5,'tib':'mngon sum','eng':'directly'})
+  at=src[s]['wylie'].index('mngon sum');ae=src[s]['english'].index('directly')
+  ranges['direct']={'tib_range':[at,at+9],'eng_range':[ae,ae+8]}
+ seg['note']=notes[s]
+ # Rename only after decisions. Original IDs and ranges remain intact in the disposition source.
+ ren={x['id']:f'w{i+1}' for i,x in enumerate(spans)}
+ ordered=sorted((x for x in spans if x['eng'] is not None),key=lambda x:ranges[x['id']]['eng_range'][0])
+ seg['eng_order']=[ren[x['id']] for x in ordered]
+ records=[]
+ for sp in spans:
+  old=sp['id'];sp['id']=ren[old]
+  records.append({'seq':s,**sp,'tib_range':ranges[old]['tib_range'],'eng_range':ranges[old]['eng_range']})
+ p=F/str(s);p.mkdir(exist_ok=True)
+ assert not (p/'spec.json').exists(),'Preserve existing attempts before revising.'
+ dump(p/'spec.json',{'course':'C05','segments':[seg]});dump(p/'errata.json',[])
+ intent[str(s)]=records
+dump(F/'intended-final-ranges.json',intent)
+print({s:len(r) for s,r in intent.items()})

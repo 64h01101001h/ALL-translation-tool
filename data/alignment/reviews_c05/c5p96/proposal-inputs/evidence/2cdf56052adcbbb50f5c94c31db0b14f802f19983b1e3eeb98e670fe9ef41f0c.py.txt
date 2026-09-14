@@ -1,0 +1,17 @@
+import pathlib,json,subprocess,os,sys,hashlib,shutil
+E=pathlib.Path(__file__).parent;A=E.parents[1]
+W=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+wrapper=A.parents[1]/'run_generator_readonly.py'
+for seq in [286,287,288]:
+    p=A/str(seq);attempt=p/'attempt-01-canonical';attempt.mkdir()
+    shutil.copyfile(p/'spec.json',attempt/'spec.json')
+    argv=[sys.executable,str(wrapper)]
+    with (attempt/'spec.json').open('rb') as inp,(attempt/'stdout.html').open('wb') as out,(attempt/'stderr.txt').open('wb') as err:
+        result=subprocess.run(argv,cwd=W,stdin=inp,stdout=out,stderr=err,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+    (attempt/'exit.txt').write_text(str(result.returncode)+'\n')
+    (attempt/'command.json').write_text(json.dumps({'argv':argv,'cwd':str(W),'stdin':'spec.json','stdout':'stdout.html','stderr':'stderr.txt','environment':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':result.returncode,'canonical_generator':str(W/'tools/gen_alignment_page.py'),'canonical_sha256':hashlib.sha256((W/'tools/gen_alignment_page.py').read_bytes()).hexdigest(),'connection_wrapper_sha256':hashlib.sha256(wrapper.read_bytes()).hexdigest()},indent=2)+'\n')
+    print(seq,'EXIT='+str(result.returncode),'BODY_BYTES='+str((attempt/'stdout.html').stat().st_size),'STDERR_BYTES='+str((attempt/'stderr.txt').stat().st_size))
+    print((attempt/'stderr.txt').read_text())
+    if result.returncode==0:
+        assert (attempt/'stderr.txt').stat().st_size==0
+        shutil.copyfile(attempt/'stdout.html',p/'body.html')

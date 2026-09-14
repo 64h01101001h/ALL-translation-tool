@@ -1,0 +1,16 @@
+"""Restrict only the canonical alignment generator's actual spine connection to mode=ro."""
+import os,sqlite3,json
+from pathlib import Path
+_target='/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db'
+_native_connect=sqlite3.connect
+_log=os.environ.get('TIBETAN_SQLITE_GUARD_LOG')
+def _event(v):
+ if _log:
+  with open(_log,'a') as f:f.write(json.dumps(v)+'\n')
+_event({'event':'sitecustomize_loaded','pid':os.getpid(),'file':__file__})
+def _readonly_spine(database,*args,**kwargs):
+ if os.fspath(database)==_target:
+  database=Path(_target).as_uri()+'?mode=ro';kwargs['uri']=True
+  _event({'event':'spine_connect_readonly','database':database,'uri':True,'pid':os.getpid()})
+ return _native_connect(database,*args,**kwargs)
+sqlite3.connect=_readonly_spine

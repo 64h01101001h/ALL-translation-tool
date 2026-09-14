@@ -1,0 +1,21 @@
+import json,re,hashlib,shutil,subprocess,os
+from pathlib import Path
+E=Path(__file__).parent;src=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII')
+rows=json.loads((E/'source-originals.json').read_text())['rows'];out=[]
+for course in ['C05','C15']:
+ p=src/(course+'ReadingASCII.txt');b=p.read_bytes();shutil.copyfile(p,E/'physical'/p.name)
+ rec={'source':str(p),'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b),'encoding_for_display':'latin-1; original bytes preserved','matches':[]}
+ for r in rows:
+  for field in ['acip','english']:
+   patt=rb'\s+'.join(re.escape(t.encode('ascii')) for t in r[field].split());matches=list(re.finditer(patt,b));mrec={'C05_seq':r['seq'],'field':field,'query_type':'exact ASCII tokens with whitespace flexibility','source_quoted':r[field],'count':len(matches),'offsets':[]}
+   for i,m in enumerate(matches):
+    name=f'{course}-C05-{r["seq"]}-{field}-{i}.bin';(E/'physical'/name).write_bytes(m.group());mrec['offsets'].append({'start':m.start(),'end':m.end(),'excerpt':name,'sha256':hashlib.sha256(m.group()).hexdigest()})
+   rec['matches'].append(mrec)
+ out.append(rec)
+ # Full physical local context from immediate preceding argument through subsequent explanation.
+ starts=[x['start'] for q in rec['matches'] for x in q['offsets']];ends=[x['end'] for q in rec['matches'] for x in q['offsets']]
+ if starts:
+  lo=max(0,min(starts)-2000);hi=min(len(b),max(ends)+7000);(E/'physical'/(course+'-argument-context.bin')).write_bytes(b[lo:hi]);rec['argument_context']={'start':lo,'end':hi}
+(E/'physical-verification.json').write_text(json.dumps(out,indent=2)+'\n')
+for r in out:print(r['source'],r['sha256'],[(x['C05_seq'],x['field'],x['count']) for x in r['matches']])
+print((E/'physical/C05-argument-context.bin').read_bytes().decode('latin-1'))

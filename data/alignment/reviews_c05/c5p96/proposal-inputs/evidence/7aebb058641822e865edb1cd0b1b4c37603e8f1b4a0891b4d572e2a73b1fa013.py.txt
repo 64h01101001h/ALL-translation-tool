@@ -1,0 +1,45 @@
+import os,json,sqlite3,pathlib,hashlib,shutil
+E=pathlib.Path(__file__).parent
+W=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro');c.row_factory=sqlite3.Row
+def dump(n,o):(E/n).write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+terms=['dngos po','gsum','phan tshun','go sa',"'gog pa","ma yin pa",'thal ba','rigs pa','gnod','brlan','brlan pa','rlan pa','gsher ba','phor pa','gang','gzhi mthun','khas len','khas blangs','khas blang','tshad','tshad ma','mtshungs','tshad mtshungs','nges par','dgos','nyi shu pa',"'grel bshad",'slob dpon','dul ba lha','rnag','thigs pa',"'ga' yang",'klung','las','rnam par smin pa','dbang','mthong',"'thad pa","'gro ba",'cig car','bltas','yi dvags','mig shes','dngos gnas','dngos gnas pa','skyon','med','brgal lan','ji snyed','phyi don','phyi rol don','sngon po','grub pa','tshur mthong','rgyud',"sngon 'dzin","dbang po'i mngon sum",'snga ma',"'gags pa",'phyi ma','skye ba','bag chags','bzhag','smin pa','brten','snang ba',"rang 'dra",'rnam pa','gtad pa',"sgo nas",'rang rang','bltos']
+results=[]
+for term in terms:
+    q='select distinct e.* from entries e left join entry_variants v on v.entry_id=e.id where e.wylie=? or v.wylie=? order by e.id'
+    rows=[dict(r) for r in c.execute(q,(term,term))]
+    vars=[dict(r) for r in c.execute('select * from entry_variants where entry_id in (select e.id from entries e left join entry_variants v on v.entry_id=e.id where e.wylie=? or v.wylie=?) order by entry_id,wylie',(term,term))]
+    results.append({'term':term,'query':q,'parameters':[term,term],'count':len(rows),'rows':rows,'variants':vars})
+    print(term,[(r['id'],r['wylie'],r['hgm_gloss'],r['tier']) for r in rows])
+dump('dictionary-complete-results.json',results)
+queries=[('wylie',x) for x in ['gzhi mthun','tshad mtshungs','brgal lan',"rang 'dra'i rnam pa", "dbang po'i mngon sum", "rnam par smin pa'i dbang",'dul ba lhas','brlan zhing gsher ba']]+[('english',x) for x in ['This kind of reasoning, where you attempt','Master Vinitadeva','No matter how many arguments','only sees this side']]
+out=[]
+for field,piece in queries:
+    q=f'select * from corpus_segments where {field} like ? order by course,seq'
+    rows=[dict(r) for r in c.execute(q,('%'+piece+'%',))]
+    out.append({'query':q,'parameters':['%'+piece+'%'],'count':len(rows),'rows':rows})
+    print('CORPUS',piece,len(rows),[(r['course'],r['seq']) for r in rows])
+dump('corpus-complete-results.json',out)
+rows=json.loads((E/'original-context-full-rows.json').read_text())
+out=[]
+for r in rows:
+    q='select * from corpus_segments where course<>? and (wylie=? or english=? or acip=?) order by course,seq'
+    matches=[dict(s) for s in c.execute(q,('C05',r['wylie'],r['english'],r['acip']))]
+    out.append({'source_seq':r['seq'],'query':q,'parameters':['C05',r['wylie'],r['english'],r['acip']],'count':len(matches),'rows':matches,'comparisons':[{'course':s['course'],'seq':s['seq'],'equal':{k:r[k]==s[k] for k in ['acip','wylie','english']}} for s in matches]})
+    print('EXACT_PARALLELS',r['seq'],out[-1]['comparisons'])
+dump('parallel-field-comparisons.json',out)
+physical=[]
+for course in ['C05','C16']:
+    p=pathlib.Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII'/f'{course}ReadingASCII.txt'
+    data=p.read_bytes();target=E/p.name;target.write_bytes(data)
+    txt=data.decode('utf-8-sig');norm=' '.join(txt.split())
+    checks=[{'seq':r['seq'],'acip_in_whitespace_normalized_source':r['acip'] in norm,'english_in_whitespace_normalized_source':r['english'] in norm} for r in rows]
+    physical.append({'path':str(p),'copy':str(target),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'encoding':'utf-8-sig','checks':checks})
+    # Preserve raw complete surrounding block: source paragraph through next requested context.
+    a=data.find(rows[0]['acip'][:40].encode());b=data.find(rows[-1]['acip'][:40].encode())
+    if a>=0 and b>=0:
+        b=data.find(b'\n\n',data.find(rows[-1]['english'][:45].encode(),b))+2
+        (E/f'{course}-physical-context.txt').write_bytes(data[a:b])
+        physical[-1]['excerpt_start']=a;physical[-1]['excerpt_end']=b
+dump('physical-source-verification.json',physical)
+print('PHYSICAL',physical)

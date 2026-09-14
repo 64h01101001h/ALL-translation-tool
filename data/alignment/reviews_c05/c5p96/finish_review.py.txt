@@ -1,0 +1,64 @@
+from pathlib import Path
+import json,hashlib,subprocess,sys,importlib.util,datetime,collections
+sys.dont_write_bytecode=True
+S=Path(__file__).resolve().parent;B=S.parent;W=B.parent.parent/'campaign-worktree';HEAD='129e86afae8431aacfb1ee1cee65d8635dd265b8'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def dump(n,x):(S/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+m=json.loads((S/'original-to-copy-manifest.json').read_text())
+# These are root bookkeeping and whole prior-layer export dumps, not proposal
+# or semantic evidence. Remove only unreferenced copies created by this review.
+exclude={'root-start-preflight','root-start-preflight-attempt02','root-start-preflight-correction'}
+removed=[r for r in m if Path(r['original']).is_relative_to(B) and Path(r['original']).relative_to(B).parts[0] in exclude]
+m=[r for r in m if r not in removed];needed={r['copy'] for r in m}
+for dest in {r['copy'] for r in removed}-needed:(S/dest).unlink()
+dump('evidence/preservation-scope.json',{'excluded_directories':sorted(exclude),'reason':'Nonsemantic root bookkeeping, baseline export dumps and helper/preflight repair evidence; original proposals and all substantive attempts remain preserved in full. No preceding-page audit or reproduction tree was copied.','excluded_original_reference_count':len(removed),'retained_original_reference_count_before_gate':len(m)})
+# Run the actual narrow head predicate against the three current generated bodies.
+p=W/'tools/test_no_supplied_span_head.py';raw=p.read_bytes();assert raw==subprocess.check_output(['git','-C',str(W),'show',HEAD+':tools/test_no_supplied_span_head.py'])
+target='governing/tools/test_no_supplied_span_head.py.txt';(S/target).write_bytes(raw)
+m.append(dict(original=str(p),copy=target,sha256=sha(raw),bytes=len(raw),original_git_commit=HEAD,repository_relative_path='tools/test_no_supplied_span_head.py'))
+spec=importlib.util.spec_from_file_location('head_gate',p);mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
+hits={str(seq):[x.groups() for x in mod.PAT.finditer((S/f'reviewed-final/{seq}/body.html').read_text())] for seq in (286,287,288)};assert not any(hits.values())
+dump('evidence/span-head-proof.json',{'canonical_gate_sha256':sha(raw),'gated_hits':hits,'allowances_needed':{},'semantic_phrase_review':'All sixteen d3 phrases separately justified in semantic-span-review.json; depth changes do not waive the semantic licensor requirement.'})
+dump('original-to-copy-manifest.json',m)
+numeric=json.loads((S/'evidence/independent-source-numerics.json').read_text())
+refutes=[
+ {'seq':288,'found':'not yet perceived emptiness directly','refuted':True,'reason':'The bracket describes the perceiver, while ma yin par negates the later appearance hypothesis. Source wording is defensible; the original alignment occurrence was wrong.','parallel_witness':'C15:433 has identical complete ACIP/Wylie/English; P7:33 shares the bracket. No independent publication or ingestion lineage is established by these matches. No independent C16/P1/TCS same-passage witness established.','grounds':{'a':'The found phrase is present verbatim at English [526,562]; full selected ACIP, Wylie and English checked.','b':'Digital comparands examined in full, with shared wording and the P7 tail difference preserved. Independence is unproven; no refutation is claimed solely from identity.','c':'E-044/E-071/E-076/E-107/E-111/E-121 consulted. This is a proposal alignment error, not a new source class or a duplicate source filing.','d':'Current bracket and later negative hypothesis are both defensible. Moving or deleting source not would be an incorrect correction.','e':'Two whole-word not occurrences independently measured; all recorded exact-field and lexical queries replayed.'},'counts_rechecked':{'english_whole_word_not':2,'canonical_not_ranges':numeric['whole_word_not_ranges']},'suggested_severity':None,'suggested_confidence':None},
+ {'seq':287,'found':'mthong ngo , , zhes gsungs pa','refuted':True,'reason':'Quotation closure and double-shad lineation are defensible; physical English clearly separates the quoted statement from the opponent inference.','parallel_witness':'C15:432 matches complete selected fields. Full physical C05/C15 files and raw excerpts confirm the quotation. Publication/ingestion independence is not established. No independent C16/P1/TCS same-passage witness established.','grounds':{'a':'The found fragment is present once in the selected Wylie; full ACIP has the corresponding closing morphology and punctuation.','b':'C15 identity is corroborative only. Exact physical slices retain line breaks and quotation layout; no independence claim is made.','c':'Course shape permits double-shad verse lineation. The registered converter/heading/footnote/boundary classes were checked and do not demonstrate a new selected-row defect.','d':'Ngo and zhes close/report the quotation normally. According to you introduces the next inference in the English. No correction is needed.','e':'Selected English length, fragment count, all query counts and physical locator counts recomputed. Historical register-wide census claims are not asserted as new evidence.'},'counts_rechecked':{'source_english_characters':numeric['C05_287_english_characters'],'source_quote_fragment_occurrences':numeric['quote_fragment_count'],'physical_C05_ACIP_matches':1,'physical_C05_English_matches':1,'physical_C15_ACIP_matches':1,'physical_C15_English_matches':1},'suggested_severity':None,'suggested_confidence':None},
+ {'seq':288,'found':'ripened and produced the appearance of the object.','refuted':True,'reason':'The complete tail exists in the selected spine and the full physical C05/C15 sources; the shorter P7 witness cannot demonstrate a missing C05 tail.','parallel_witness':'C15:433 matches C05:288 completely and ends object.; P7:33 ends the. Exact complete fields are preserved in independent-selected-parallels.json, without claiming independent publication. No independent C16/P1/TCS same-passage witness established.','grounds':{'a':'The found full ending is present verbatim in selected English; source snang dgos is present in ACIP/Wylie.','b':'C15 shares the complete reading; P7 has a shorter ending. These digital relationships alone establish neither independence nor a C05 defect.','c':'E-107 already records the 1500-character cap class. This 1425-character selected English preserves its physical ending and is not shown to instantiate that class.','d':'The English causal expansion and complete ending are defensible. No omitted lexical source tail is demonstrated.','e':'C05/C15 lengths 1425, P7 length 1417, nine exact-field queries with two rows each, and twelve unique full physical excerpt matches independently recomputed.'},'counts_rechecked':{'C05_288_english_characters':1425,'C15_433_english_characters':1425,'P7_33_english_characters':1417,'exact_field_queries':9,'rows_per_exact_field_query':2,'full_physical_excerpt_checks':12},'suggested_severity':None,'suggested_confidence':None}
+]
+dump('source-suspicion-refutations.json',refutes)
+# Complete immutable copy and interface validation precedes freezing.
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+assert isinstance(m,list) and len({r['original'] for r in m})==len(m)
+gitcache={};checked=0
+for r in m:
+ assert set(r) in ({'original','copy','sha256','bytes'},{'original','copy','sha256','bytes','original_git_commit','repository_relative_path'})
+ p=S/r['copy'];assert p.is_relative_to(S) and p.suffix in allowed and p.is_file()
+ b=p.read_bytes();assert sha(b)==r['sha256'] and len(b)==r['bytes']
+ assert Path(r['original']).is_absolute()
+ if 'original_git_commit' in r:
+  key=(r['original_git_commit'],r['repository_relative_path'])
+  if key not in gitcache:gitcache[key]=subprocess.check_output(['git','-C',str(W),'show',key[0]+':'+key[1]])
+  assert b==gitcache[key]
+ else:assert b==Path(r['original']).read_bytes()
+ checked+=1
+for angle in ('tibetan','english','reconciled'):
+ originals=[p for p in (B/angle).rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc']
+ assert all(str(p) in {r['original'] for r in m} for p in originals)
+for p in S.rglob('*'):
+ if p.is_file():assert p.suffix in allowed and '__pycache__' not in p.parts,p
+rs=json.loads((S/'resolved-spans.json').read_text());keys=['seq','id','d','tib','eng','tib_range','eng_range'];assert all(list(r)==keys for r in rs)
+review=json.loads((S/'review.json').read_text());assert review['verdict']=='APPROVE' and not review['open_findings'] and isinstance(review['segments'],list)
+for seg in review['segments']:
+ for name in ('spec','body'):
+  p=S/f"reviewed-final/{seg['seq']}/{name}.{'json' if name=='spec' else 'html'}"
+  assert sha(p.read_bytes())==seg[name+'_sha256'] and len(p.read_bytes())==seg[name+'_bytes']
+assert sum(x['span_count'] for x in review['segments'])==review['total_spans']==137
+assert sum(x['null_count'] for x in review['segments'])==review['total_nulls']==5
+assert sum(x['word_pair_count'] for x in review['segments'])==review['total_word_pairs']==99
+assert json.loads((S/'bank-ready-errata.json').read_text())==[] and json.loads((S/'span-head-allow-needed.json').read_text())=={}
+assert subprocess.check_output(['git','-C',str(W),'rev-parse','HEAD'],text=True).strip()==HEAD
+dump('manifest-verification.json',{'verdict':'PASS','manifest_records_checked':checked,'unique_copies':len({r['copy'] for r in m}),'immutable_git_objects_checked':len(gitcache),'all_original_proposal_and_reconciled_files_preserved':True,'all_bytes_sha256_sizes_match':True,'all_landing_extensions_supported':True,'historical_git_bytes_match':True,'exact_seven_key_ordered_tuples':137,'review_segments_list':True,'independent_generator_count':3,'generator_failure_count':0,'bank_ready_errata_count':0,'head_allowance_count':0,'governing_git_commit':HEAD})
+files=[{'path':str(p.relative_to(S)),'sha256':sha(p.read_bytes()),'bytes':p.stat().st_size} for p in sorted(S.rglob('*')) if p.is_file() and p.name!='review-freeze.json']
+dump('review-freeze.json',{'verdict':'APPROVE','created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'governing_git_commit':HEAD,'reconciled_frozen_manifest_sha256':'623f8d94496836db9a11272a2a57e2c9ce2dc054978b465905b026861f9897cf','total_spans':137,'total_nulls':5,'total_word_pairs':99,'open_findings':[],'files':files})
+print(json.dumps({'verdict':'APPROVE','manifest_records':checked,'frozen_files':len(files),'unique_copy_bytes':sum((S/p).stat().st_size for p in {r['copy'] for r in m}),'report':str(S/'review.md')}))

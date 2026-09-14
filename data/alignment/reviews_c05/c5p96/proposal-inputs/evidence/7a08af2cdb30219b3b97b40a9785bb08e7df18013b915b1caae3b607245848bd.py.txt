@@ -1,0 +1,40 @@
+import os, sys, json, hashlib, sqlite3, pathlib, subprocess, shutil
+W=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+E=pathlib.Path(__file__).parent
+B=E.parents[2]
+def dump(name,obj):
+    (E/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def sha(p): return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+def run(label,argv):
+    p=subprocess.run(argv,cwd=W,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+    (E/(label+'.stdout')).write_bytes(p.stdout);(E/(label+'.stderr')).write_bytes(p.stderr)
+    dump(label+'.command.json',{'argv':argv,'cwd':str(W),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':p.returncode})
+    print(label,p.returncode,p.stdout.decode(errors='replace'))
+    return p
+run('baseline-head',['git','rev-parse','HEAD'])
+paths=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json']
+for rel in paths:
+    out=E/('governing-'+rel.replace('/','_'));shutil.copyfile(W/rel,out)
+    run('read-'+rel.replace('/','_'),['cat',str(W/rel)])
+run('read-course-shape',['sed','-n','1,45p',str(W/'data/alignment/C05_CAMPAIGN.md')])
+for f in ['english-brief.md','source.json','context.json','baseline.json']:
+    shutil.copyfile(B/f,E/('input-'+f))
+shutil.copyfile(B.parent/'proposal-protocol.md',E/'input-proposal-protocol.md')
+refs=["Desktop/HGM DICTIONARY - TRANSLATION APP","ACIP Software Developmeent/Gofer Developmetn Files","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra","ACIP Software Developmeent/tibetan-spellchecker","Tibetan Translation Tool"]
+dump('reference-access.json',[{'path':str(pathlib.Path.home()/p),'readable':os.access(pathlib.Path.home()/p,os.R_OK)} for p in refs])
+for f in ['HANDOFF.md','README.md']:
+    run('read-handoff-'+f,['cat',str(pathlib.Path.home()/refs[0]/'Handoff'/f)])
+con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro');con.row_factory=sqlite3.Row
+dump('schema.json',[dict(r) for r in con.execute("select name,sql from sqlite_master where type='table'")])
+rows=[dict(r) for r in con.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',280,294))]
+dump('original-context-full-rows.json',rows)
+snap=json.loads((B/'source.json').read_text());ctx=json.loads((B/'context.json').read_text())
+checks=[]
+for typ,src in [('source',snap),('context',ctx)]:
+    for r in src:
+        db=next(x for x in rows if x['seq']==r['seq'])
+        checks.append({'snapshot':typ,'seq':r['seq'],'fields':{k:r[k]==db[k] for k in r}})
+dump('snapshot-verification.json',{'query':'select * from corpus_segments where course=? and seq between ? and ? order by seq','parameters':['C05',280,294],'count':len(rows),'checks':checks})
+for r in rows: print('ROW',r['course'],r['seq'],r['wylie'],'\n',r['english'])
+dump('source-pins.json',[{'path':str(W/p),'resolved_path':str((W/p).resolve()),'sha256':sha(W/p),'bytes':(W/p).stat().st_size} for p in ['build/hgm_spine_v27_2.db','data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']+paths])
+print('SCHEMA',[(r['name'],r['sql'][:300]) for r in con.execute("select name,sql from sqlite_master where type='table'")])

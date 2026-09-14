@@ -1,0 +1,159 @@
+from pathlib import Path
+import json,collections
+S=Path(__file__).resolve().parent;B=S.parent
+def dump(n,x):(S/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+rs=json.loads((S/'resolved-spans.json').read_text());segments=json.loads((S/'measured-segments.json').read_text())
+reasons={286:'''The initial concrete objects own objects in the nonblocking inference, excluding the article.
+The initial numeral owns three beside those objects, excluding the supplied determiner.
+The reciprocal compound licenses each other; its relation is mutual obstruction.
+The spatial noun licenses space alone; the following English relative clause elaborates it.
+The obstruction verb licenses block, distinct from the later denial verb.
+Complete negative copular predicate licenses are not at d3; bare not would discard predication.
+The consequence term is verbalized as implying in the opponent's inference.
+The reasoning noun with its source inflection licenses reasoning without This kind of.
+Grammatical negative mi is fused in cannot; no separate English word exponent exists. Do not split cannot.
+The injury/refutation verb is contextual disprove; our position is supplied argument structure.
+Complete deictic temporal phrase licenses in this situation at d3, excluding the following subject.
+Wet is the first quality of the glass contents, not a gloss of common instance.
+The quality conjunction is and between wet and flowing.
+Flowing is the second quality; gsher ba is the lexical compound.
+The vessel noun is glass; no article or contents are swallowed.
+Gang po is fullness of this vessel, expressed by full.
+The complete common-instance phrase including du licenses one thing which is three different things at d3. Neither bare gzhi mthun nor a d5 clause does so.
+The first admission negative owns not in It is not our belief. The later Neither clause has a separate source denial.
+Tshad is valid perceptions, distinguishable from the adjacent identity modifier and supported by the later C16 discussion.
+Mtshungs is identical; it does not jointly own valid perceptions or the necessity predicate.
+The certainty adverb is definitely in the final denial.
+The requirement verb is had to; English past auxiliary belongs to this modal rendering.'''.splitlines(),287:'''The indefinite person expression owns Someone at the opening objection.
+The reporting expression na re is rendered claim; following claim construction does not license a larger word span.
+The established title owns Twenty Verses, excluding the English article and source genitive suffix.
+The commentary compound owns Commentary, distinct from authorial composition.
+The teacher title owns Master.
+The source proper-name form dul ba lhas owns Vinitadeva as a whole; no artificial final-s atom is made.
+The source-from particle introduces the commentary citation as In.
+The complete locative de la owns there after the drop, not the earlier existential there.
+First rnag owns pus in drop of pus.
+The genitive explicitly supplies of in drop of pus.
+The drop noun owns drop without supplied single.
+Lexical negative existential med licenses not here at d5; it is not bare grammatical ma. The conditional follows separately.
+The conditional particle owns If at the beginning of the quoted premise.
+Second rnag owns pus in river of pus.
+The river noun owns river without uncertain whole/fullness attribution.
+The complete rhetorical existence question licenses how could there ever be at d3, excluding then and the river subject.
+The action/karma noun owns karma in their karma, not the earlier homographic source particle.
+This genitive owns of between ripening and their karma.
+The maturation compound owns ripening, excluding through and the article.
+The force noun is verbalized as forced; its adjacent instrumental has a separate through exponent.
+Gis owns through in the karmic-ripening means phrase. Its original null proposal is false here.
+The plural demonstrative owns They, the beings seeing pus.
+The object demonstrative owns it, the seen appearance; not this in the later statement.
+The seeing verb owns see in the quoted causal statement.
+Sentence-final ngo closes the quoted assertion. English declarative syntax has no standalone word for it; null is justified.
+The saying nominal owns statement in According to you, this statement; quotation-introduction statement is a different English occurrence.
+This de owns this immediately before that later statement.
+The established negative suitability expression licenses mistaken as a lexical predicate; splitting mi from positive thad would be false.
+The consequence marker is rendered would have to be in the opponent's inference, excluding mistaken.
+The beings noun owns beings in the three observers, without the English classifier kinds of.
+The numeral owns three in that observer subject.
+Agentive gyis has no standalone English exponent in the active beings look construction; null is justified.
+The first property of the contents is wet.
+This conjunction owns and between wet and flowing at 452, not the concluding and at 535.
+The second property is flowing, separate from the conjunction.
+The vessel is glass, excluding the article.
+This gang is full of the vessel, independent of omitted earlier gang ba in the river phrase.
+The target particle owns at in look at the glass.
+The simultaneity compound licenses together; sit down is supplied English expansion.
+The look verb owns look in the observer clause.
+Complete temporal tshe na licenses when at d3; source de'i is anaphoric and not attached to a fabricated English this.
+The established being-kind compound owns craving spirit, excluding the article.
+This genitive owns of between visual consciousness and the craving spirit.
+The established cognition compound owns visual consciousness.
+The validity expression owns valid perception; the English article is excluded.
+Last rnag owns the subject pus at 543, not the repeated predicate pus at 555.
+The actuality compound owns real; it does not acquire the repeated pus noun.
+The causal particle owns because at the start of the opponent's stated reason.'''.splitlines(),288:'''The fault noun owns problem; no such is separate framing.
+The lexical negative existential med owns no at d5, not an invented null.
+The complete demonstrative modifier licenses of this kind at d3 beside arguments.
+The objection/reply compound owns arguments in the opening concession.
+The complete unrestricted quantifier licenses No matter how many at d3; all three Tibetan words are necessary.
+First byas pa owns present as the act of making arguments, excluding you want to.
+The totality compound owns all, without the supplied pronoun they.
+First phyi don owns external objects in the announced denial.
+First denial verb owns denying, distinct from the later anaphoric restatement.
+Dbang du is the viewpoint construction, licensing from the point of view at d3; causal phyir does not own this phrase.
+Second byas pa owns made, the predicate of the same arguments.
+Tshul owns way; the repeated external-object denial is condensed in these arguments go.
+First sngon po owns color blue in the conditional subject, excluding the article.
+The complete external-object compound owns external object without an.
+The establishment verb is rendered exist in the hypothesis.
+The first conditional particle owns If, preceding the blue hypothesis.
+The established epistemic designation licenses only sees this side; one of those who and the explanatory bracket remain expansion.
+This genitive owns of connecting mental stream to the designated perceiver.
+Rgyud owns mental stream in that relation, excluding the article.
+First blue-apprehender expression licenses grasping blue in the sense-perception description.
+The faculty compound licenses sense alone; it does not swallow perception or a.
+Mngon sum has the locally usable directly gloss at 337. Its perception component is distributed; no manufactured member or broad capture of appeared is made.
+First appearance verb owns appeared, before directly, separate from the later hypothesis.
+The appearance conditional/temporal particle owns when before this color appeared.
+Second blue-apprehender expression owns perception of blue in the earlier-instance clause.
+Snga ma owns earlier; instance of is English nominal framing.
+The cessation verb owns ends; it does not include the following causal explanation.
+The temporal noun owns When introducing the ending of that earlier cognition.
+Third blue-apprehender expression owns perception of blue in the later-instance clause.
+Phyi ma owns later; the same/instance of remain supplied framing.
+The arising verb owns grows in the seed explanation; not the eventual ripens predicate.
+First bag chags owns mental seed as the object planted by the earlier cognition.
+First bzhag pa owns plants; the past Tibetan form is recast in the English present explanation.
+First maturation verb owns ripens at 767, ending the seed account.
+This appearance noun owns appearance in just this kind of appearance, in the negated hypothesis.
+Ma at Tibetan 385 owns not at English 797 after Suppose the blue were. The bracket not at 526 explains the perceiver and cannot be used.
+Third explicit blue noun owns blue after where in the proposed outer-object mechanism.
+This phyi rol owns outer; object is supplied in this local English elaboration.
+Complete reflexive likeness phrase licenses likeness of itself at d3; exclude a and do not assign likeness to bare rnam pa.
+First presentation/transmission verb owns transmitting in the proposed mechanism.
+Complete means phrase owns thereby at d3, linking transmission to appearing.
+This appearance verb owns appearing at 937 in the proposed mechanism, not the required result at 1152.
+The beings noun owns beings in the jointly observing subject.
+The numeral owns three in that same subject.
+Agentive gyis is expressed by active beings look syntax; no separate English word exponent exists.
+The contents property owns wet in the final observer clause.
+The conjunction owns and between wet and flowing, not a later causal conjunction.
+The second contents property owns flowing.
+The vessel noun owns glass in the observers' target.
+The fullness word owns full of that glass.
+The target particle owns at in look at.
+The simultaneity compound owns together; sit down is English expansion.
+The looking verb owns look, excluding the target particle.
+Complete temporal tshe na owns when at 1008, the observer setup; its deictic reprise does not own later objects.
+The distributive rang rang licenses each beside being's karma, not each of the objects in the transmission explanation.
+The action/karma noun owns karma in each being's karma.
+Instrumental kyis is rendered through active karma planted syntax, with no independent English word; null is justified.
+Second seed compound owns mental seed in the independent-of account.
+Second placement verb owns planted in that account, distinct from earlier plants.
+Second maturation verb owns ripened in that account, distinct from earlier ripens.
+Complete negative dependence phrase licenses independent of at d3. Positive la brten nas in the earlier seed account does not own it.
+Final dngos po owns objects at 1135 in the required result. Earlier temporal dngos po gsum snang ba is condensed and cannot double-own it.
+Final gsum po owns three at 1119 in that required result, excluding different.
+Second complete reflexive likeness phrase owns likeness of itself in the objects' required transmission, excluding a.
+Second transmission verb owns transmitting at 1202 in that consequence.
+Second complete means phrase licenses because at d3 as English introduces the transmission mechanism explaining the required appearance.
+The appearance-plus-necessity predicate licenses would be appearing at d3 in the three-object consequence. It does not own final produced the appearance of the object.'''.splitlines()}
+ledger=[]
+for seg in segments:
+ selected=[r for r in rs if r['seq']==seg['seq']];why=reasons[seg['seq']];assert len(selected)==len(why)
+ for r,reason in zip(selected,why):ledger.append({**r,'verdict':'ACCEPT','reason':reason})
+dump('semantic-span-review.json',ledger)
+# Check that all original proposals have precisely one retained disposition record.
+originals=[]
+for angle in ('tibetan','english'):
+ for seq in (286,287,288):
+  p=json.loads((B/angle/str(seq)/'spec.json').read_text())
+  originals += [(angle,seq,s['id']) for s in p['segments'][0]['spans']]
+dis=json.loads((B/'reconciled/dispositions.json').read_text());actual=[(d['angle'],d['seq'],d['id']) for d in dis]
+assert len(originals)==len(actual)==258 and len(set(actual))==258 and set(originals)==set(actual)
+for d in dis:
+ for i in d['final_ids']:assert any(r['seq']==d['seq'] and r['id']==i for r in rs)
+dump('evidence/original-disposition-coverage.json',{'original_count':len(originals),'disposition_count':len(dis),'duplicate_or_missing_originals':[],'all_final_references_exist':True,'disposition_counts':dict(collections.Counter(d['disposition'] for d in dis)),'semantic_review':'All 258 original disposition records read, including complete original tuples, reasons, source roles and evidence. Final adjudication is independently recorded per span and by material decision in review.md; presence of a disposition is not itself a semantic test.'})
+dump('review.json',{'verdict':'APPROVE','spec_verdict':'APPROVE','quality_verdict':'APPROVE','open_findings':[],'segments':segments,'total_spans':len(rs),'total_nulls':sum(r['eng'] is None for r in rs),'total_word_pairs':sum(r['d']==5 and r['eng'] is not None for r in rs),'bank_ready_errata_count':0,'review_status':'PROVISIONAL machine review; not human editorial acceptance','governing_git_commit':'129e86afae8431aacfb1ee1cee65d8635dd265b8'})
+dump('bank-ready-errata.json',[]);dump('span-head-allow-needed.json',{})
+print(json.dumps({'final_span_reviews':len(ledger),'original_dispositions_checked':len(dis),'verdict':'APPROVE'}))

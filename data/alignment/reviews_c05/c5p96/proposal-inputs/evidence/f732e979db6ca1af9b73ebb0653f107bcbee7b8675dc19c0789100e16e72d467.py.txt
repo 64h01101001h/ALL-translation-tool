@@ -1,0 +1,60 @@
+"""Read original evidence once; all output stays in this reconciliation directory."""
+import json, hashlib, os, sqlite3, pathlib, datetime
+F=pathlib.Path(__file__).resolve().parent; B=F.parent; W=B.parent.parent/'campaign-worktree'; E=F/'evidence'
+def dump(name,data): (E/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+def pin(p): return {'path':str(p),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+access=json.loads((B/'tibetan/evidence/required-access.json').read_text())
+for r in access:r['readable']=os.access(r['path'],os.R_OK);assert r['readable']
+dump('access.json',access)
+sources=[dict(x) for x in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',280,294))]
+snap=json.loads((B/'context.json').read_text())
+assert all(all(r[k]==s[k] for k in s) for r,s in zip(sources,snap)) and len(sources)==len(snap)==15
+dump('source-and-context.json',sources)
+lex=[]
+for file in ['root-lexical-preparation.json','root-additional-lexical-preparation.json']:
+ for i,q in enumerate(json.loads((B/file).read_text())):
+  rows=[dict(x) for x in c.execute(q['sql'],q['parameters'])];assert rows==q['rows'] and len(rows)==q['count']
+  lex.append({'original_file':file,'query_index':i,**q})
+for term in ['na re','med','gang ba','tshad ma','cig car du','dbang']:
+ sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id'
+ rows=[dict(x) for x in c.execute(sql,(term,term))];lex.append({'term':term,'sql':sql,'parameters':[term,term],'count':len(rows),'rows':rows})
+dump('lexical-queries.json',lex)
+queries=[]
+for file in ['root-parallel-preparation.json','root-broader-context/query-results.json']:
+ for i,q in enumerate(json.loads((B/file).read_text())):
+  rows=[dict(x) for x in c.execute(q['sql'],q['parameters'])];assert rows==q['rows'] and len(rows)==q['count']
+  queries.append({'original_file':file,'query_index':i,**q})
+dump('parallel-and-context-queries.json',queries)
+sql='select * from corpus_segments where wylie like ? order by course,seq';rows=[dict(x) for x in c.execute(sql,('%tshad mtshungs%',))]
+dump('tshad-mtshungs-query.json',{'sql':sql,'parameters':['%tshad mtshungs%'],'count':len(rows),'rows':rows})
+# Reopen physical excerpts without copying entire original trees; frozen physical files remain authoritative.
+physical=[]
+for s in [286,287,288]:
+ for course in ['C05','C15']:
+  for field in ['acip','english']:
+   p=B/f'tibetan/evidence/physical/{course}-C05-{s}-{field}-0.bin'
+   physical.append({**pin(p),'seq':s,'course':course,'field':field,'display_encoding':'latin-1, display only','text':p.read_bytes().decode('latin-1')})
+dump('physical-excerpts.json',physical)
+register=json.loads((W/'docs/errata_register.json').read_text())
+dump('registered-classes.json',{'source':pin(W/'docs/errata_register.json'),'selected':[r for r in register if r.get('item_id') in ['E-044','E-071','E-076','E-107','E-111','E-121'] or any(f'C05:{s}' in r.get('segment','') for s in [286,287,288])]})
+# Pin the complete frozen originals, without a recursive copy or another replay of an unchanged success.
+manifests={}
+for angle,file,expected in [('tibetan','tibetan/FROZEN-MANIFEST.json','8c05ce0c58d33d0202c5dc3cc873fb114510ebcdc12aeaee87862aadda8f3435'),('english','english/286/freeze-manifest.json','09d4068b25ec51f33baf73c976661dae247bcf17cd49fad90828aac0aec237b2')]:
+ p=B/file;assert pin(p)['sha256']==expected
+ m=json.loads(p.read_text());index={str((B/angle/r['path']).resolve()) if not pathlib.Path(r['path']).is_absolute() else r['path']:r for r in m['files']}
+ manifests[angle]={'manifest':pin(p),'index':index}
+proof=json.loads((B/'proposal-verification/report.json').read_text());checked=[]
+for r in proof:
+ angle,s=r['angle'],r['seq'];p=B/angle/str(s)
+ for name in ['spec.json','body.html','report.md','errata.json']:
+  f=p/name;actual=pin(f);original=manifests[angle]['index'][str(f)];assert actual['sha256']==original['sha256'] and actual['bytes']==original['bytes']
+ spec=pin(p/'spec.json');body=pin(p/'body.html');assert spec['sha256']==r['spec_sha256'] and body['sha256']==r['body_sha256']
+ replay=B/f'proposal-verification/{angle}-{s}.stdout';assert replay.read_bytes()==(p/'body.html').read_bytes()
+ assert (B/f'proposal-verification/{angle}-{s}.exit').read_text().strip()=='0'
+ checked.append({'angle':angle,'seq':s,'spec':spec,'body':body,'native_replay':pin(replay),'exit':0,'frozen_bytes_match':True})
+dump('original-identity-and-replay-references.json',{'manifests':{a:x['manifest'] for a,x in manifests.items()},'checks':checked,'original_ranges':pin(B/'proposal-verification/root-resolved-spans.json'),'note':'Root executed six actual canonical replays. Reconciler checked current complete specs/bodies against frozen manifests and exact native replay bytes; unchanged successful executions were reused with root authorization.'})
+refs=['source.json','context.json','reconciliation-brief.md','root-review-targets.md','root-original-angle-review-targets.md','root-original-angle-findings.json','root-current-source-reopen/proof.json','root-original-freeze-check/proof.json','tibetan/evidence/physical-verification.json','english/286/evidence/physical-source-verification.json','tibetan/evidence/dictionary-exact-and-variants.json','english/286/evidence/dictionary-complete-results.json','english/286/evidence/additional-dictionary-complete-results.json','english/286/evidence/corpus-complete-results.json']
+dump('input-references.json',[pin(B/x) for x in refs]+[pin(W/x) for x in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','data/alignment/span_head_allow.json']]+[pin(B.parent/'run_generator_readonly.py')])
+dump('capture-summary.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'Codex (gpt-6-astra), reconciliation','source_connection':'SQLite URI mode=ro','source_rows':len(sources),'lexical_queries':len(lex),'parallel_and_context_queries':len(queries),'six_originals_frozen_and_replayed':True,'baseline':'129e86afae8431aacfb1ee1cee65d8635dd265b8'})
+print(json.dumps({'source_rows':len(sources),'lexical_queries':len(lex),'parallel_context_queries':len(queries),'originals_checked':len(checked)}))

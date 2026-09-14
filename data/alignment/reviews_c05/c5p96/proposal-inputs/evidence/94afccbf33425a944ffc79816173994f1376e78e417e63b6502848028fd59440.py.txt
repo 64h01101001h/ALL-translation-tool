@@ -1,0 +1,21 @@
+import json,hashlib,gzip,os,subprocess
+from pathlib import Path
+E=Path(__file__).parent;A=E.parent;W=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree');H=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+d=[]
+for local,archive in [('data/hgm_dictionary_v27_2.json.gz',H/'release/hgm_dictionary_v27_2.json.gz'),('data/full_parallel_corpus_v32.json.gz',H/'data/full_parallel_corpus_v32.json.gz')]:
+ d.append({'local':str(W/local),'archive':str(archive),'local_sha256':sha(W/local),'archive_sha256':sha(archive),'bytes_identical':(W/local).read_bytes()==archive.read_bytes()})
+(E/'archive-pins.json').write_text(json.dumps(d,indent=2)+'\n')
+reg=json.loads((E/'governing/docs__errata_register.json').read_text());records=reg if isinstance(reg,list) else reg.get('entries',reg.get('errata',[]))
+checks={'query':'All register records: exact C05 seqs 286-288 and registered classes E-044/E-071/E-076/E-107/E-111/E-121 or heading glue','register_sha256':sha(E/'governing/docs__errata_register.json'),'type':type(reg).__name__,'top_keys':list(reg) if isinstance(reg,dict) else [],'total':len(records),'matches':[]}
+for r in records:
+ txt=json.dumps(r)
+ if any(x in txt for x in ['E-044','E-071','E-076','E-107','E-111','E-121','following section','following heading']) or ('C05' in txt and any(str(s) in txt for s in [286,287,288])):checks['matches'].append(r)
+checks['match_count']=len(checks['matches']);(E/'registered-class-check.json').write_text(json.dumps(checks,indent=2)+'\n')
+# Preserve the failed display-only UTF-8 decode as a native replay; original bytes were never changed.
+p=E/'physical/C05ReadingASCII.txt';argv=['python3','-c',"from pathlib import Path; Path("+repr(str(p))+").read_text()"]
+r=subprocess.run(argv,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+(E/'utf8-display-failure-replay.stdout').write_bytes(r.stdout);(E/'utf8-display-failure-replay.stderr').write_bytes(r.stderr);(E/'utf8-display-failure-replay.command.json').write_text(json.dumps({'argv':argv,'exit':r.returncode,'status':'Replay of initial display failure; physical_check.py subsequently displayed preserved byte excerpts with Latin-1, without changing source bytes.'},indent=2)+'\n')
+for rec in json.loads((E/'extended-local-argument.json').read_text())['rows']:
+ if 264<=rec['seq']<=279:print(rec['seq'],rec['wylie'],rec['english'])
+print('ARCHIVES',json.dumps(d));print('REGISTER',json.dumps(checks))

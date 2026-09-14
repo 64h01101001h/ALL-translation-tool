@@ -1,0 +1,37 @@
+"""Native final-generator calls and canonical range/fidelity proof; no engine edits."""
+import os,sys,pathlib,json,subprocess,hashlib,shutil,importlib.util,re,html,datetime
+F=pathlib.Path(__file__).resolve().parent;B=F.parent;W=B.parent.parent/'campaign-worktree'
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):return {'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+sys.path.insert(0,str(W/'tools'))
+import gen_alignment_page as G
+source={r['seq']:r for r in json.loads((F/'evidence/source-and-context.json').read_text())}
+intents=json.loads((F/'intended-final-ranges.json').read_text());results=[];all_ranges=[]
+for s in [286,287,288]:
+ p=F/str(s);spec=json.loads((p/'spec.json').read_text());seg=spec['segments'][0]
+ attempt=p/'attempts'/f'{len(list((p/"attempts").glob("*")))+1:02}'
+ attempt.mkdir(parents=True,exist_ok=False);shutil.copyfile(p/'spec.json',attempt/'spec.json')
+ argv=[sys.executable,'-B',str(B.parent/'run_generator_readonly.py')]
+ r=subprocess.run(argv,input=(p/'spec.json').read_bytes(),stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (attempt/'generator.stdout').write_bytes(r.stdout);(attempt/'generator.stderr').write_bytes(r.stderr);(attempt/'generator.exit').write_text(str(r.returncode)+'\n')
+ dump(attempt/'command.json',{'argv':argv,'cwd':str(W),'stdin':str(attempt/'spec.json'),'PYTHONDONTWRITEBYTECODE':'1','exit':r.returncode,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'runner':pin(B.parent/'run_generator_readonly.py'),'canonical_generator':pin(W/'tools/gen_alignment_page.py')})
+ assert r.returncode==0,r.stderr.decode()
+ spans=seg['spans'];byid={sp['id']:sp for sp in spans}
+ tr=G.resolve(source[s]['wylie'],spans,'tib',s)
+ esp=G.with_members(spans,[byid[k] for k in seg['eng_order']],source[s]['english']);er=G.resolve(source[s]['english'],esp,'eng',s)
+ resolved=[{'seq':s,**sp,'tib_range':list(tr[sp['id']]),'eng_range':list(er[sp['id']]) if sp['id'] in er else None} for sp in spans]
+ dump(attempt/'resolved-ranges.json',resolved)
+ assert resolved==intents[str(s)],[(a,b) for a,b in zip(resolved,intents[str(s)]) if a!=b]
+ plain={}
+ for side,key in [('tib','wylie'),('eng','english')]:
+  chunk=re.search(r'<div class="'+side+r'"><div class="lab">.*?</div>\n(.*?)\n</div>',r.stdout.decode(),re.S).group(1)
+  chunk=re.sub(r'<span class="u"[^>]*><span class="nul">.*?</span></span>','',chunk,flags=re.S)
+  plain[side]=html.unescape(re.sub(r'<[^>]*>','',chunk))
+  assert plain[side]==source[s][key],side
+ labels=re.findall(r'data-l="s'+str(s)+r'([^"S]+)"',r.stdout.decode())
+ assert set(labels)==set(byid) and all(labels.count(k)==2 for k in byid)
+ (p/'body.html').write_bytes(r.stdout);dump(p/'final-ranges.json',resolved)
+ proof={'seq':s,'exit':r.returncode,'span_count':len(spans),'depth_counts':{str(d):sum(x['d']==d for x in spans) for d in sorted({x['d'] for x in spans})},'null_count':sum(x['eng'] is None for x in spans),'spec':pin(p/'spec.json'),'body':pin(p/'body.html'),'stderr_bytes':len(r.stderr),'exact_intended_ranges':True,'exact_spine_fields_recovered':['wylie','english'],'each_label_on_both_sides':True,'native_attempt':str(attempt.relative_to(F)),'canonical_resolver':str(W/'tools/gen_alignment_page.py'),'mechanical_proof_is_not_semantic_approval':True}
+ dump(p/'proof.json',proof);results.append(proof);all_ranges.extend(resolved)
+dump(F/'final-ordered-tuples.json',all_ranges);dump(F/'generator-summary.json',results)
+print(json.dumps([{'seq':r['seq'],'exit':r['exit'],'spans':r['span_count'],'nulls':r['null_count'],'body_bytes':r['body']['bytes']} for r in results]))
