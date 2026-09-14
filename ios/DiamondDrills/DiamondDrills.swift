@@ -371,9 +371,14 @@ struct WeakSpotsSheet: View {
 ///                         unconnected deck here would compete with the real
 ///                         one.
 ///   the chunk-order drill's `plan` and `markers` — the core's OrderDrill
-///                         carries both and the pack bakes neither, which
-///                         until 2026-09-14 was an undeclared omission rather
-///                         than a decision. Declared now, with reasons.
+///                         carries both and the pack bakes neither INTO THE
+///                         `order` RECORDS, which until 2026-09-14 was an
+///                         undeclared omission rather than a decision.
+///                         Declared now, with reasons. Note the phone is not
+///                         short of reading-order guidance generally: the
+///                         `trainer` section bakes `plan` and `roles` for all
+///                         1,000 of its passages, and layer 3 shows them.
+///                         This is about the chunk-order DRILL only.
 ///                         `plan` is planReading's reading-order guidance, and
 ///                         the alignment bank says it is NOT established at
 ///                         this level: 51% against 59% over 112 spans, with

@@ -326,6 +326,7 @@ static void runIllustrationGallery(QWidget* parent, const QString& root,
                                    const QString& title);
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
+#include "allcore/chantline.h"
 #include "allcore/terminology.h"
 #include "allcore/tibcal.h"
 #include "allcore/tibcal_day.h"
@@ -27274,6 +27275,29 @@ public:
             demo("/sangs rgyas chos/");
             if (!clauses_.empty()) showAnchors(0);
             const QString a = anchors_->toPlainText();
+            // The corpus parallel below the scaffold quotes C01:8, whose
+            // English column holds a chant transliteration rather than a
+            // rendering. It used to sit under the words "His English for the
+            // WHOLE of that segment".
+            // Asserted, not guarded. `if (a.contains(...))` would be the
+            // same escape hatch as the "REQUIRED gate" that asserted nothing
+            // for months: if the fixture ever stops reaching this segment the
+            // gate must FAIL and say so, not quietly stop testing.
+            check(a.contains("sangye chudang"),
+                  "the fixture still reaches C01:8, whose English column is a "
+                  "chant transliteration \u2014 without it the check below "
+                  "tests nothing");
+            check(a.contains("Not a translation"),
+                  "a corpus segment whose English column is a chant "
+                  "transliteration is LABELLED as one, not offered as his "
+                  "English for those words");
+            {
+                const int at = a.indexOf("sangye chudang");
+                check(at < 0 ||
+                          !a.mid(at, 400).contains("His English for the WHOLE"),
+                      "and the claim that it is his English for the whole "
+                      "segment is not made over it");
+            }
             check(a.contains("Buddha"),
                   "Evidence Ribbon lists his curated gloss for sangs rgyas — "
                   "the longer auto-aligned span no longer deletes it");
@@ -27801,7 +27825,31 @@ private:
                                  "]</small> " +
                                  abridged(QString::fromStdString(s.english),
                                           220) +
-                                 (partial
+                                 // 702 of the corpus's segments carry a chant
+                                 // transliteration or an untranslated Sanskrit
+                                 // mantra in the English column rather than a
+                                 // rendering. This pane quoted one of those
+                                 // under the words "His English for the WHOLE
+                                 // of that segment", which is a false claim
+                                 // about him. It still SHOWS the line -- it is
+                                 // the corpus, and hiding it would be its own
+                                 // dishonesty -- but it says what it is.
+                                 (allcore::englishIsNotEnglish(s.english,
+                                                               s.acip)
+                                      ? QString("<div style='color:%1;"
+                                                "font-size:11px'>Not a "
+                                                "translation: this segment's "
+                                                "English column holds the "
+                                                "chanted transliteration, or "
+                                                "an untranslated mantra. It "
+                                                "is shown because it is what "
+                                                "the corpus has here \u2014 "
+                                                "it is not his English for "
+                                                "these words.</div>")
+                                            .arg(ux::darkChrome()
+                                                     ? ux::chromeMachine()
+                                                     : QString(ux::kMachine))
+                                 : partial
                                       ? QString("<div style='color:%1;"
                                                 "font-size:11px'>His English "
                                                 "for the WHOLE of that "
