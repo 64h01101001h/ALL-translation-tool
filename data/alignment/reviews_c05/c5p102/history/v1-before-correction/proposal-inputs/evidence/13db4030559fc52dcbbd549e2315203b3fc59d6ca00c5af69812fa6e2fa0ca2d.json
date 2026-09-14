@@ -1,0 +1,80 @@
+[
+  {
+    "label": "exact-bracketed-attribution",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%[Master Dharmakirti's]%"
+    ],
+    "count": 3,
+    "locations": [
+      "C05:306",
+      "C15:451",
+      "P7:45"
+    ],
+    "objects": [
+      "69f9fa60552f5b4a5a85ed90e377240eaec51ba9811bde19feb02e25e61da181",
+      "5b5c0979de9230d304bea42442eb58b7b45e7d2cb6e49c40a43fcfb4e57bcaad",
+      "f981481179c69da9cd7289a20df85913486707dc1e56418d49ce209d87c585b1"
+    ]
+  },
+  {
+    "label": "shared-second-line",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%chu 'bab klung la yi dvags rnag blo%"
+    ],
+    "count": 6,
+    "locations": [
+      "C05:247",
+      "C05:306",
+      "C15:393",
+      "C15:451",
+      "C16:823",
+      "C18:1116"
+    ],
+    "objects": [
+      "a4c1e848cc066fa077a56c8545c2842f6f929cc1d498ea01612e15bd980726cd",
+      "69f9fa60552f5b4a5a85ed90e377240eaec51ba9811bde19feb02e25e61da181",
+      "0c1e60dd7b481a8d9cdb10575918a2cf2281c117540f96c19e19735dfa214270",
+      "5b5c0979de9230d304bea42442eb58b7b45e7d2cb6e49c40a43fcfb4e57bcaad",
+      "f5926c1146e265191269a56377513e2e825c6dd2387c35743f663dc3fbce2192",
+      "f818bcf50f05789aee4da2c8c76701d67319c4acad98b5253021a5a9577f3a2c"
+    ]
+  },
+  {
+    "label": "full-first-line",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%rab rib dang ldan dbang po can%"
+    ],
+    "count": 4,
+    "locations": [
+      "C05:306",
+      "C15:451",
+      "ILL:2323",
+      "P7:45"
+    ],
+    "objects": [
+      "69f9fa60552f5b4a5a85ed90e377240eaec51ba9811bde19feb02e25e61da181",
+      "5b5c0979de9230d304bea42442eb58b7b45e7d2cb6e49c40a43fcfb4e57bcaad",
+      "46c821b0fd3c35bd8b41a27951004fd4e90ba78a8aa8db14482b4aa3060c43d5",
+      "f981481179c69da9cd7289a20df85913486707dc1e56418d49ce209d87c585b1"
+    ]
+  },
+  {
+    "label": "limited-witness-search",
+    "sql": "select * from corpus_segments where (course in ('C16','P1') or course like 'TCS%') and (english like ? or wylie like ? or wylie like ?) order by course,seq",
+    "parameters": [
+      "%sense power has a cataract%",
+      "%chu 'bab%rnag blo%",
+      "%rab rib dang ldan dbang po can%"
+    ],
+    "count": 1,
+    "locations": [
+      "C16:823"
+    ],
+    "objects": [
+      "f5926c1146e265191269a56377513e2e825c6dd2387c35743f663dc3fbce2192"
+    ]
+  }
+]

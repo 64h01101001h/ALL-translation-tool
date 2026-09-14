@@ -1,0 +1,11 @@
+from pathlib import Path
+import json,hashlib,datetime,os
+A=Path(__file__).resolve().parent;out=A/'freeze-manifest.json';assert not out.exists(),'Prior frozen proof boundary must be preserved and explicitly superseded, never overwritten.'
+files=[];groups={}
+for p in sorted(x for x in A.rglob('*') if x.is_file()):
+ data=p.read_bytes();sha=hashlib.sha256(data).hexdigest();rel=str(p.relative_to(A));files.append({'path':rel,'bytes':len(data),'sha256':sha});groups.setdefault(sha,[]).append(rel)
+summary=json.loads((A/'summary.json').read_text());manifest={'schema':'c05-independent-proposal-freeze-v1','status':'FROZEN; PROVISIONAL independent English-first proposal; not semantically accepted','producer':'Codex','angle':'English-first','frozen_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin_commit':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4','source_origin_course_boundary':294,'segments':[304,305,306],'future_acceptance_baseline_is_distinct':True,'files_exclude_manifest_itself':True,'file_count':len(files),'unique_file_content_sha256_count':len(groups),'full_evidence_object_count':len(list((A/'evidence/objects').glob('*.json'))),'counts':summary['segments'],'all_generator_exit_codes':[0,0,0],'all_generator_stderr_bytes':[0,0,0],'file_bytes':sum(f['bytes'] for f in files),'files':files,'identical_file_content_groups':{h:ps for h,ps in groups.items() if len(ps)>1},'correction_policy':'Any later correction must preserve this manifest and every file it hashes, and explicitly supersede this frozen proof boundary.'}
+out.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+for f in files:
+ p=A/f['path'];assert hashlib.sha256(p.read_bytes()).hexdigest()==f['sha256'];p.chmod(0o444)
+out.chmod(0o444);print(json.dumps({'filename':str(out),'schema':manifest['schema'],'sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'file_count':manifest['file_count'],'unique_file_content_sha256_count':manifest['unique_file_content_sha256_count'],'full_evidence_object_count':manifest['full_evidence_object_count'],'counts':[{k:s[k] for k in ('seq','spans','nulls','d5','errata')} for s in manifest['counts']]},indent=2))

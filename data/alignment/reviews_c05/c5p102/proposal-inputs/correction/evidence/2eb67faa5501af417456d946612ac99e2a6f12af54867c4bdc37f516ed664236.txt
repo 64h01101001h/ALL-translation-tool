@@ -1,0 +1,88 @@
+"""Apply F1/F2 only after complete exact-byte historical preservation."""
+from pathlib import Path
+import copy, gzip, hashlib, json, shutil, sqlite3, subprocess
+B=Path(__file__).resolve().parents[1];R=B/'reconciled';H=B/'reconciliation-history/v1-before-306-member-correction';W=B.parents[1]/'campaign-worktree'
+E=R/'evidence/correction-306-v2'
+PIN='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+def read(p): return json.loads(p.read_bytes())
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def replace(p,a,b):
+    t=p.read_text();assert t.count(a)==1,(str(p),a,t.count(a));p.write_text(t.replace(a,b))
+assert not E.exists()
+for rec in read(H/'original-to-history.json'):
+    assert pin(Path(rec['original']))==pin(Path(rec['copy']))=={k:rec[k] for k in ('bytes','sha256')}
+E.mkdir(parents=True)
+for name in ['prepare_correction.py','preserve_before.py','record_run.py']:
+    shutil.copy2(B/'root-306-correction-evidence'/name,E/(name+'.txt'))
+base=read(B/'proposal-baseline.json');governing=[]
+for rel in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py','engines/hgm_tools.py','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/pages_c03/c3p70.html']:
+    raw=subprocess.check_output(['git','show',PIN+':'+rel],cwd=W)
+    q=E/'governing'/(rel.replace('/','__')+('.txt' if rel.endswith('.py') else ''));q.parent.mkdir(exist_ok=True);q.write_bytes(raw)
+    rec={'original_commit':PIN,'repository_relative_path':rel,'copy':str(q.relative_to(R)),**pin(q)}
+    if rel in base['governing_git_pins']:assert {k:base['governing_git_pins'][rel][k] for k in ('bytes','sha256')}==pin(q)
+    if rel=='tools/gen_alignment_page.py':assert pin(W/rel)==pin(q)=={'bytes':21175,'sha256':'7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e'}
+    governing.append(rec)
+put(E/'governing-pins.json',governing)
+source_pins=[]
+for name,rec in base['source_pins'].items():
+    assert pin(Path(rec['path']))=={k:rec[k] for k in ('bytes','sha256')};source_pins.append({'name':name,**rec})
+put(E/'source-pins-before.json',source_pins)
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+rows=[dict(db.execute("select * from corpus_segments where course='C05' and seq=?",(n,)).fetchone()) for n in (304,305,306)];db.close()
+prior={r['seq']:r for r in read(R/'evidence/source-context.json')}
+assert all(r==prior[r['seq']] for r in rows);put(E/'source-rows.json',rows)
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));terms=['rnag','khrag','rnag khrag','rab rib','rab rib can'];records=[]
+for section,items in master.items():
+    if isinstance(items,list):
+        for i,r in enumerate(items):
+            if isinstance(r,dict) and any(r.get('wylie')==t or t in r.get('wylie_variants',[]) for t in terms):records.append({'original_location':f'{section}:{i}','record':r})
+assert len(records)==10;put(E/'complete-material-master-records.json',records)
+original_records=[]
+for angle,ids in [('english',['m1','m3']),('tibetan',['w10'])]:
+    sp=read(B/angle/'306/spec.json')['segments'][0];ir=read(B/angle/'306/intended-ranges.json')
+    for id in ids:original_records.append({'angle':angle,'id':id,'spec_path':str(B/angle/'306/spec.json'),'spec_pin':pin(B/angle/'306/spec.json'),'original_span':next(s for s in sp['spans'] if s['id']==id),'intended_record':next(s for s in ir['spans'] if s['id']==id),'original_note':sp['note']})
+put(E/'complete-original-records.json',original_records)
+spec=read(R/'306/spec.json');seg=spec['segments'][0];before=copy.deepcopy(spec)
+member={**original_records[0]['original_span'],'id':'mPus'};assert member=={'id':'mPus','d':7,'tib':'rnag','eng':'pus'}
+ids=[s['id'] for s in seg['spans']];assert 'mPus' not in ids;idx=ids.index('w5');assert ids[idx+1]=='w6';seg['spans'].insert(idx+1,member)
+assert [{**s} for s in seg['spans'] if s['id']!='mPus']==before['segments'][0]['spans'];assert seg['eng_order']==before['segments'][0]['eng_order'];put(R/'306/spec.json',spec)
+rnag_reason='The first rnag/pus is a unique, strictly tighter d7 member at W[47:51], E[145:148] inside w5 rnag khrag/pus and blood, W[47:57], E[145:158]. HGM glossary records for rnag and rnag khrag positively attest pus and pus and blood; their competing blood-related glosses are preserved in full. Keep this original English m1 as mPus and retain w6 khrag/blood as its next contiguous sibling. The immutable canonical with_members/resolve code supports multiple consecutive children; the former one-child cap is rejected. The complete parent and each local member have distinct sound correspondences.'
+cataract_reason='This is the FIRST rab rib/cataracts, W[86:93], E[227:236], a unique strictly tighter d7 member of w9 rab rib can/person with cataracts, W[86:97], E[215:236]. The person with cataracts is the subject who looks into the basin; can contributes the person-with frame in this established parent. Full HGM glossary records attest rab rib/cataract,cataracts and rab rib can/person with cataracts. The copied rationale about the later verse dbang po/dang ldan sense-power relation is rejected for this occurrence; that later relation belongs to w22/w24/w25. The existing w10 tuple and ranges are unchanged.'
+put(E/'current-correction-rationales.json',{'F1':rnag_reason,'F2':cataract_reason})
+t=read(R/'306/final-ordered-tuples.json');ts=t['tibetan_order'];i=next(i for i,s in enumerate(ts) if s['id']=='w5')
+ts.insert(i+1,{**member,'tib_range':[47,51],'eng_range':[145,148],'parent':'w5','immediately_after_d5':True,'reason':rnag_reason})
+assert ts[i+2]['id']=='w6';ts[i+2]['immediately_after_d5']=False;ts[i+2]['contiguous_member_group']=True
+next(s for s in ts if s['id']=='w10')['reason']=cataract_reason;put(R/'306/final-ordered-tuples.json',t)
+ds=read(R/'306/original-span-dispositions.json');changed=[]
+for d in ds:
+    key=(d['angle'],d['original_id']);old=copy.deepcopy(d)
+    if key==('english','m1'):d.update(disposition='retained',final_ids=['mPus'],reason=rnag_reason)
+    if key in [('english','m3'),('tibetan','w10')]:d['reason']=cataract_reason
+    if d!=old:
+        assert all(d[k]==v for k,v in old.items() if k not in ['reason','disposition','final_ids']);changed.append({'before':old,'after':d})
+assert len(changed)==3;put(R/'306/original-span-dispositions.json',ds);put(E/'disposition-delta.json',changed)
+om=read(R/'306/omissions-and-null-review.json');assert len(om['additional_omissions'])==2 and om['additional_omissions'][1].startswith('rnag/pus');om['additional_omissions']=om['additional_omissions'][:1];put(R/'306/omissions-and-null-review.json',om)
+# Current local helpers follow canonical contiguous-group semantics. Their exact old bytes remain in history and native receipts.
+p=R/'author.py'
+replace(p,'   if strict:assert immediate','   if strict:assert parent is not None and i>0 and spans[i-1][\'d\'] in (5,7)')
+text=p.read_text();oldline=next(line for line in text.splitlines() if line.startswith(" 'rnag-member':"));replace(p,oldline," 'rnag-member':"+repr(rnag_reason)+',')
+replace(p," 'possession':", " 'first-cataract':"+repr(cataract_reason)+",\n 'possession':")
+replace(p," if t in ['rab rib','dang ldan','dbang po']:return REASONS['possession']", " if seq==306 and t=='rnag' and s['d']==7:return REASONS['rnag-member']\n if seq==306 and t=='rab rib' and s['d']==7 and s['eng']=='cataracts':return REASONS['first-cataract']\n if t in ['rab rib','dang ldan','dbang po']:return REASONS['possession']")
+replace(p,"   sp[:]=[x for x in sp if x['id']!='w23']", "   sp[:]=[x for x in sp if x['id']!='w23']\n   sp.insert(next(i for i,x in enumerate(sp) if x['id']=='w5')+1,{'id':'mPus','d':7,'tib':'rnag','eng':'pus'})")
+replace(p,"     elif seq==306 and a=='english' and x['id']=='m1':disposition='omitted-member';selected=['w5'];why=REASONS['rnag-member']\n",'')
+replace(p,"[REASONS['simultaneous'],REASONS['rnag-member']]", "[REASONS['simultaneous']]")
+replace(p,"'mechanical_original_d7_exception':[{'angle':'english','seq':306,'id':'m2','finding':'Canonical generator accepts chained siblings; written brief requires d7 immediately after d5. Final selects only one child of rnag khrag.'}]", "'mechanical_original_d7_exception':[],'canonical_member_interpretation':'Multiple contiguous d7 siblings remain under their latest d5 parent; each must be unique and strictly tighter on both sides.'")
+replace(p,"if __name__=='__main__':main()", "if __name__=='__main__':raise SystemExit('Historical producer entry point is superseded; use the scoped correction caller. Existing successful generators must be reused.')")
+p=R/'finalize.py';replace(p,'only one immediate d7 child is kept under rnag khrag.','both unique tighter d7 children rnag/pus and khrag/blood are kept contiguously under rnag khrag.')
+replace(p,'strict immediate-parent d7 containment','strict contiguous-parent-group d7 containment')
+replace(p,"if __name__=='__main__':main()", "if __name__=='__main__':raise SystemExit('Superseded finalizer: current correction interfaces are finalized by the scoped correction caller.')")
+# These older commands write prior interfaces or replay historical final inputs; preserve them but fail closed on accidental rerun.
+for name in ['audit.py','verify_final.py','freeze.py']:
+    p=R/name
+    replace(p,"if __name__=='__main__':main()", "if __name__=='__main__':raise SystemExit('Superseded v1 producer: use root-306-correction-evidence/finalize_correction.py; prior native runs remain historical evidence.')")
+p=R/'freeze.py';replace(p,"'Strict immediate-parent d7 policy selects one child under rnag khrag; original English chained member acceptance is recorded without waiving the policy.'", "'Contiguous d7 siblings are supported by immutable canonical code; the restored rnag/pus and corrected first-cataract rationale require scoped independent re-review.'")
+vr=read(R/'evidence/original-range-verification.json');vr['mechanical_original_d7_exception']=[];vr['canonical_member_interpretation']='Multiple consecutive d7 children remain under their latest d5 parent. The prior one-child interpretation is superseded; exact old verification remains in reconciliation-history/v1-before-306-member-correction/reconciled/evidence/original-range-verification.json.';put(R/'evidence/original-range-verification.json',vr)
+put(E/'pre-generation.json',{'producer':'Independent Codex correction reconciler; authored neither original proposal','findings':['F1','F2'],'history_manifest':{'path':str(H/'original-to-history.json'),**pin(H/'original-to-history.json')},'source_origin':PIN,'source_origin_course_boundary':294,'acceptance_baseline':'Root-owned later capture; not asserted','changed_spec':pin(R/'306/spec.json'),'added_span':member,'existing_spans_and_eng_order_unchanged':True,'new_generator_runs_so_far':0,'semantic_review_boundary_untouched':True,'status':'PROVISIONAL; scoped independent re-review remains separate'})
+print(json.dumps({'prepared':True,'spec':pin(R/'306/spec.json'),'span_count':len(seg['spans']),'material_master_records':len(records),'disposition_changes':len(changed)},indent=2))

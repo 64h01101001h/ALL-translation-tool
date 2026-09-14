@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/english/verify_proofs.py", line 26, in <module>
+    D=A/str(seq);spec=json.loads((D/'spec.json').read_text())['segments'][0];want=json.loads((D/'intended-ranges.json').read_text());r=R();r.feed((D/'body.html').read_text());r.close();assert r.text=={'tib':src[seq]['wylie'],'eng':src[seq]['english']}
+                                                                                                                                           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/html/parser.py", line 169, in feed
+    self.goahead(0)
+    ~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/html/parser.py", line 297, in goahead
+    i = self.updatepos(i, k)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/_markupbase.py", line 54, in updatepos
+    self.offset = self.offset + j-i
+                  ~~~~~~~~~~~~^~~
+TypeError: unsupported operand type(s) for +: 'dict' and 'int'

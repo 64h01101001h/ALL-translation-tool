@@ -1,0 +1,22 @@
+"""Execute only corrected 306 once; reuse any already-successful native record."""
+from pathlib import Path
+import json, shutil, sys
+from record_run import run, pin
+B=Path(__file__).resolve().parents[1];R=B/'reconciled';W=B.parents[1]/'campaign-worktree';E=R/'evidence/correction-306-v2'
+N=R/'native/final-306-v2-member-correction'
+shutil.copy2(Path(__file__),E/(Path(__file__).name+'.txt'))
+raw=(R/'306/spec.json').read_bytes();want=json.loads((E/'pre-generation.json').read_text())['changed_spec'];assert pin(raw)==want
+if not N.exists():
+    p=run(N,[sys.executable,'-B',str(B/'english/run_canonical.py'),str(N/'runtime.json')],W,raw)
+    assert p.returncode==0 and not p.stderr
+else:
+    # If later wrapping failed, never replay the completed successful generation.
+    assert (N/'exit.txt').read_text()=='0\n' and not (N/'stderr.bin').read_bytes()
+assert (N/'stdin.bin').read_bytes()==raw
+ex=json.loads((N/'execution.json').read_text());assert ex['exit']==0
+for s,p in ex['streams'].items():assert pin((N/(s+'.bin')).read_bytes())==p
+runtime=json.loads((N/'runtime.json').read_text());assert runtime['unchanged']
+assert runtime['source_origin']=='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+body=(N/'stdout.bin').read_bytes();assert body and not (N/'stderr.bin').read_bytes()
+(R/'306/body.html').write_bytes(body)
+print(json.dumps({'generator_exit':0,'stderr_bytes':0,'spec':pin(raw),'body':pin(body),'actual_native_record':str(N),'new_generation_count_for_this_correction':1},indent=2))

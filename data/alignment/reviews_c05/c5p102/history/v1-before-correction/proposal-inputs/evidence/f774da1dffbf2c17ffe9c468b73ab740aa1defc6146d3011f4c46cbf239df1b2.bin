@@ -1,0 +1,206 @@
+{
+  "title": "Holy Geshe Michael Roach Dictionary (HGM Lexicon)",
+  "version": "0.27.2",
+  "date": "2026-08-04",
+  "description": "Tibetan-English dictionary strictly anchored to the English equivalents used by Geshe Michael Roach (HGM). Entry format is a hybrid of the Illuminator Tibetan-English Dictionary (Tony Duff) entry style and Jeffrey Hopkins' Tibetan-Sanskrit-English Dictionary structure. Hopkins glosses are included as reference only; the hgm_gloss field is the locked, authoritative equivalent.",
+  "sources": [
+    {
+      "id": "C01",
+      "title": "ACI Course I: The Principal Teachings of Buddhism (Course Readings)",
+      "note": "Root text of the Three Principal Paths (Lam gtso rnam gsum) of Je Tsongkapa with HGM translation; opening prayers; Khen Rinpoche Geshe Lobsang Tharchin foreword."
+    },
+    {
+      "id": "HOPKINS",
+      "title": "Jeffrey Hopkins, Tibetan-Sanskrit-English Dictionary (uma-tibet.org, June 2015)",
+      "note": "Reference comparanda only. Never overrides hgm_gloss."
+    },
+    {
+      "id": "HTG2016",
+      "title": "Geshe Michael Hypertext Glossary (user-compiled, 2016-05-16)",
+      "note": "8,028 ACIP-headword to HGM-English pairings mined from HGM translations. Bulk attestation layer."
+    },
+    {
+      "id": "HOPKINS-SCAFFOLD",
+      "title": "Hopkins Tibetan-Sanskrit-English Dictionary (June 2015) — headword scaffold ('the Great Dictionary')",
+      "note": "21,751 unique headwords parsed span-level (16pt headword font anchor); Hopkins glosses reference-only."
+    },
+    {
+      "id": "C01-ASCII",
+      "title": "Course I Reading, ASCII/ACIP edition (C01ReadingASCII.txt)",
+      "note": "889 ACIP Tibetan lines; 497 aligned Tibetan-English segments; makes the full Tibetan of Course I machine-readable and pairable."
+    },
+    {
+      "id": "C02-C18-ASCII",
+      "title": "Course II–XVIII Readings, ASCII/ACIP editions (17 files)",
+      "note": "Full ACI formal-study corpus. 8983 aligned Tibetan-English segments across 18 courses."
+    },
+    {
+      "id": "TCS-ASCII",
+      "title": "The Course Series supplements (TCS01–TCS09 + practice texts, 16 ASCII/ACIP files)",
+      "note": "Prayers, sadhanas, lama-devotion and long-life texts incl. Thousand Angels (dga' ldan lha brgya ma), Source of All My Good (yon tan gzhir ma), Naropa's Vajra Yogini sadhana, Pabongka sadhana, Naropa's Twelve Trials, Khen Rinpoche long-life prayer."
+    },
+    {
+      "id": "TCS10-18-ASCII",
+      "title": "The Course Series TCS10–TCS18 (11 ASCII/ACIP files)",
+      "note": "Incl. the Lama Chupa (Offering to the Lama) root text and full commentary, Kali Wang initiation text, and TCS10–TCS17 supplements."
+    },
+    {
+      "id": "SUNLIGHT",
+      "title": "Sunlight on the Path to Freedom — Choney Lama Drakpa Shedrup's commentary on the Diamond Cutter Sutra, tr. HGM (Diamond Cutter Classics vol. 72, 2019)",
+      "note": "Book-length translation; 1098 aligned segments incl. the quadrilingual Diamond Cutter Sutra appendix."
+    },
+    {
+      "id": "LSG-C1-C4",
+      "title": "ACI Tibetan Language Study Guides, Courses I–IV (vocabulary card decks, 4 PDFs)",
+      "note": "323 GMR phonetic lines; used as pronunciation ground truth. Tibetan layer font-locked (as C01 PDF)."
+    },
+    {
+      "id": "LSG-C5-C6",
+      "title": "ACI Tibetan Language Study Guides, Courses V–VI (2 PDFs)",
+      "note": "218 GMR phonetic lines; pronunciation ground truth pass 2."
+    },
+    "ACI Tibetan Language Study Guides, Courses VII-XVII (10 PDFs; 1,436 phonetic lines; card pass III)",
+    "Glyph-decode channel (glyph_decoder.py): TibetanMachine glyph runs from 12 guide PDFs decoded to exact wylie+Unicode; C13/C14/C16/C17 PDFs pending re-upload",
+    {
+      "id": "P1",
+      "title": "ACI Daily Practice 1 Reading PDF",
+      "note": "Mandala of the Steps to Enlightenment. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+    },
+    {
+      "id": "P3",
+      "title": "ACI Daily Practice 3 Reading PDF",
+      "note": "Practice III reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+    },
+    {
+      "id": "P4",
+      "title": "ACI Daily Practice 4 Reading PDF",
+      "note": "Practice IV reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+    },
+    {
+      "id": "P5",
+      "title": "ACI Daily Practice 5 Reading PDF",
+      "note": "Death meditation (Lam-rim chen-mo selections). TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+    },
+    {
+      "id": "P6",
+      "title": "ACI Daily Practice 6 Reading PDF",
+      "note": "Sutra practice reading incl. Sutra of the Four Practices. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+    },
+    {
+      "id": "P7",
+      "title": "ACI Daily Practice 7 Reading PDF",
+      "note": "Practice VII reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+    },
+    {
+      "id": "P8",
+      "title": "ACI Daily Practice 8 Reading PDF",
+      "note": "Practice VIII reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+    },
+    {
+      "id": "P9",
+      "title": "ACI Daily Practice 9 Reading PDF",
+      "note": "Practice IX reading. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+    },
+    {
+      "id": "P10",
+      "title": "ACI Daily Practice 10 Reading PDF",
+      "note": "A Thousand Angels of the Heaven of Bliss (Ganden Hlagyama) prayer book. TibetanMachine glyph-encoded; wylie recovered via glyph_decoder (dual-channel pypdf/pypdfium2 parse), phonetic round-trip + lexicon validation. Ingested v0.24."
+    },
+    {
+      "id": "DDA",
+      "title": "The Devil Debates An Angel (Diamond Cutter Classics Volume 111, (c)2026)",
+      "note": "By the First Panchen Lama, translated by Geshe Michael Roach. A struggle against our tendency to think that things are coming at us. ACIP-English aligned docx ingest, Sunlight/ILL recipe. Ingested v0.25."
+    },
+    {
+      "id": "LC",
+      "title": "Lokesh Chandra Tibetan-Sanskrit Dictionary (main ed. + 1992 Supplementary)",
+      "note": "Extracted from LkChDictionary.dic (Ven. Phil Baker ACIP reader). 88,973 headwords, 83,884 with IAST Sanskrit. Reference layer only, tagged {LC}; never overrides hgm_gloss. Ingested v0.27."
+    }
+  ],
+  "status_codes": {
+    "verified": "HGM English equivalent directly attested in an uploaded HGM source, with citation.",
+    "provisional": "Equivalent inferred from HGM usage patterns but not yet directly attested in uploaded sources; needs confirmation.",
+    "reference": "Entry included for structural completeness; gloss from Hopkins or Illuminator pending HGM attestation."
+  },
+  "pos_tags": [
+    "<noun>",
+    "<noun><phrase>",
+    "<verb>",
+    "<verb><phrase>",
+    "<adj>",
+    "<adj><phrase>",
+    "<adv>",
+    "<gerundial><phrase>",
+    "<particle>",
+    "<title>"
+  ],
+  "stats": {
+    "unified": 105634,
+    "hgm_attested": 12004,
+    "awaiting": 93554,
+    "matched_curated": 89,
+    "matched_glossary": 3857,
+    "hgm_only_appended": 4147,
+    "curated": 115,
+    "glossary": 8028,
+    "c01_attested_curated": 102,
+    "awaiting_present_in_c01_corpus": 648,
+    "pronunciation_flagged": 242,
+    "corpus_segments": 35601,
+    "entries_in_corpus": 29512,
+    "awaiting_with_contexts": 2408,
+    "auto_direct": 8,
+    "auto_mined": 3449,
+    "auto_quoted": 52,
+    "auto_demoted_candidates": 449,
+    "sunlight_new_mined": 370,
+    "sunlight_new_quoted": 8,
+    "card_attested_pronunciations": 1295,
+    "card_derived_entries": 423,
+    "card_attested": 1308,
+    "glyph_decoded_cards": 2044,
+    "books_v21_mined": 224,
+    "books_v21_demoted": 278,
+    "ill_v22_mined": 146,
+    "ill_v22_demoted": 246,
+    "w3_v23_mined": 77,
+    "w3_v23_demoted": 141,
+    "practice_v24_mined": 24,
+    "practice_v24_candidates": 76,
+    "practice_v24_segments": 782,
+    "practice_decoded_cards": 180,
+    "c_ascii_v24_1_segments": 24,
+    "dda_v25_segments": 516,
+    "tcs_v25_repairs": 1467,
+    "tcs_v25_new_segments": 32,
+    "dda_v25_mined": 1,
+    "dda_v25_candidates": 39,
+    "tcs2_v25_1_repairs": 924,
+    "tcs2_v25_1_new_segments": 2,
+    "hopkins_realigned_v26": 13589,
+    "with_sanskrit": 92071,
+    "with_hopkins": 21730,
+    "wylie_repaired_v26_1": 41,
+    "scaffold_added_v26_1": 11,
+    "gd_glossed": 338,
+    "lc_v27_new_entries": 79305,
+    "lc_v27_merged_entries": 8364,
+    "lc_v27_attested_new": 15151,
+    "tibetan_generated_v27_1": 79316,
+    "tibetan_coverage": 105637,
+    "phantoms_deleted_v27_2": 4,
+    "wylie_typos_fixed_v27_2": 31
+  },
+  "deviation_log": [
+    {
+      "id": "DEV-001",
+      "location": "C01 root text homage (ASCII seg 23)",
+      "note": "Source Tibetan reads rje btsun 'jam pa'i dbyangs la phyag 'tshal lo (homage to Gentle Voice), while HGM's English reads 'I bow to all the high and holy lamas' (= rje btsun bla ma rnams la...). Textual variant between the ACIP edition and the translated edition; both homage forms of the Lam gtso are attested in the tradition. Do not force a lexical pairing from this line."
+    },
+    {
+      "id": "DEV-002",
+      "note": "C09 Language Study Guide prints 'pqmpa' for pham pa (pampa) — card typo, not recorded as a pronunciation variant."
+    }
+  ],
+  "pronunciation_standard": "ACIP Standards for Simplified Tibetan and Sanskrit Pronunciation (ACIP Release 4 Catalog, pp. 173-178), refined by GMR course-phonetics conventions where the two diverge (o umlauts only before d/s; suffix-b voiced before voiced onsets; prenasal insertion only after open syllables; junction sandhi: sangs rgyas -> sangye, tshogs kyi -> tsokyi, bdag gis -> dakki). Engine validated 41/41 on catalog examples and 22/22 on course conventions. v0.7: word-segmented output per GMR convention — lexemes joined (ngenjung, semkye), formative suffixes attached (gelukpa), genitive 'i fused (yangdakpay), connective particles standalone (kyi, dang, la, yang), negation fused forward (masong), la-don enclitics fused back (raptu), hyphenated noun compounds via curated list (chu-ku, su-ku). Validated 11/11 screenshots, 17/17 catalog. v0.8: rules refined from 15 GMR vocabulary cards — o+n->u general (dunche, shendun, ngunsum; lexical exceptions ton/kon); du/te/ste/de/ru standalone, tu fused (chiktu), su hyphen-fused (se-su); rnams and tsam standalone; negation absorbs formatives (malupar); prenasal blocked only after p-final (delnjor, tangok, kyabdro); junction k+ng -> ng (tangok); lexical devoicers top/drup/drip. Validated 42/42 on combined card+screenshot+catalog battery."
+}

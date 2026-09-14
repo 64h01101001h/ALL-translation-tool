@@ -1,0 +1,41 @@
+"""Capture the committed boundary before a new three-segment landing.
+Read-only repository/source access. Refuses dirty tracked state or overwrite.
+Usage: python3 campaign-artifacts/capture_next_baseline.py 208 209 210
+"""
+from pathlib import Path
+import hashlib, json, os, sqlite3, subprocess, sys
+art=Path(__file__).resolve().parent
+wt=art.parent/'campaign-worktree'
+seqs=list(map(int,sys.argv[1:]))
+assert len(seqs)==3 and seqs==list(range(seqs[0],seqs[0]+3))
+batch=art/f'C05-{seqs[0]}-{seqs[-1]}'
+assert not (batch/'baseline.json').exists()
+def git(*args):return subprocess.check_output(['git','-C',str(wt),*args])
+assert not git('status','--porcelain','--untracked-files=no').strip()
+commit=git('rev-parse','HEAD').decode().strip()
+prior=json.loads((art/'C05-205-207/baseline.json').read_text())
+full=json.loads((wt/'data/alignment/alignment_full_v1.json').read_text())
+ev=json.loads((wt/'data/alignment/alignment_evidence_v1.json').read_text())
+boundary=seqs[0]-1
+assert sorted({x['seg'] for x in full['links'] if x['course']=='C05'})==list(range(1,boundary+1))
+hashes={}
+for name in prior['sha256']:
+    data=(wt/name).read_bytes()
+    if name not in ('data/hgm_dictionary_v27_2.json.gz', 'data/full_parallel_corpus_v32.json.gz'):
+        assert data==git('show',f'{commit}:{name}'),name
+    hashes[name]=hashlib.sha256(data).hexdigest()
+for name in ('data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz'):
+    assert hashes[name]==prior['sha256'][name]
+refs=json.loads((art/'C05-205-207/heartbeat-preflight.json').read_text())['references']
+assert all(Path(r['path']).is_dir() and os.access(r['path'],os.R_OK|os.X_OK) for r in refs)
+fields=prior['source_snapshot_fields']
+con=sqlite3.connect((wt/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True)
+con.row_factory=sqlite3.Row
+for snapshot in ('source.json','context.json'):
+    for row in json.loads((batch/snapshot).read_text()):
+        actual=dict(con.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',(row['course'],row['seq'])).fetchone())
+        assert set(row)==set(fields) and all(row[k]==actual[k] for k in fields),(snapshot,row['seq'])
+con.close()
+out=dict(commit=commit,course_boundary=boundary,full_links=len(full['links']),null_exponents=sum(x['eng'] is None for x in full['links']),evidence_headwords=len(ev['pairs']),evidence_pairs=sum(map(len,ev['pairs'].values())),sha256=hashes,required_reference_paths_readable=len(refs),source_snapshot_matches_spine=True,source_snapshot_fields=fields)
+(batch/'baseline.json').write_text(json.dumps(out,indent=2)+'\n')
+print(json.dumps(out,indent=2))

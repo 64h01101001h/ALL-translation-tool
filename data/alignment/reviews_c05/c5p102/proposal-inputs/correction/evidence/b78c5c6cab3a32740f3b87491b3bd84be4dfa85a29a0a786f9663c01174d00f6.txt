@@ -1,0 +1,27 @@
+"""Close a complete reconciliation inventory after all successful process receipts exist."""
+from pathlib import Path
+import collections, datetime, hashlib, json, shutil
+B=Path(__file__).resolve().parents[1];R=B/'reconciled';H=B/'reconciliation-history/v1-before-306-member-correction';E=R/'evidence/correction-306-v2'
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert read(E/'final-correction-proof.json')['old74_ordered_seven_key_tuples_unchanged']
+assert pin(R/'freeze.json')==pin(H/'reconciled/freeze.json')
+shutil.copy2(Path(__file__),E/(Path(__file__).name+'.txt'))
+# Preserve completed caller receipts under the new freeze. No generating process is rerun.
+for caller in ['prepare-caller','generate-caller','finalize-caller']:
+    root=B/'root-306-correction-evidence'/caller;assert read(root/'execution.json')['exit']==0
+    for p in root.iterdir():
+        q=E/'callers'/caller/p.name;q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q);assert pin(p)==pin(q)
+put(E/'history-mapping-reference.json',{'path':str(H/'original-to-history.json'),**pin(H/'original-to-history.json'),'history_files':len(read(H/'original-to-history.json')),'complete_prior_reconciled_file_count':1018,'prior_frozen_file_count':1010,'prior_freeze_sha256':'3212c15bf512c4cd5bc3b12467de2eb85c845f5a768190b7bb9c8f42e1704e94'})
+put(R/'evidence-index.json',[{'path':p.relative_to(R).as_posix(),**pin(p)} for p in sorted((R/'evidence').rglob('*')) if p.is_file()])
+old=read(H/'reconciled/freeze.json');groups=collections.defaultdict(list);files=[]
+for p in sorted(R.rglob('*')):
+    if not p.is_file() or p.relative_to(R).as_posix() in ['freeze.json','freeze.sha256']:continue
+    rec={'path':p.relative_to(R).as_posix(),**pin(p)};files.append(rec);groups[rec['sha256']].append(rec['path'])
+f={**old,'schema':'c05-independent-reconciliation-freeze-v2','frozen_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'Independent Codex correction reconciler; authored neither original proposal','status':'FROZEN PROVISIONAL corrected reconciliation; root independent review and scoped semantic re-review remain separate','counts':read(R/'summary.json'),'final_generators':'Passing304/305 exact native executions are reused. Exactly one corrected306 canonical run passed exit0 with empty stderr; actual input/stdout/runtime, complete source reconstruction and all ordered ranges are preserved. Historical306 execution remains intact.','remaining_concerns':[old['remaining_concerns'][0],'F1/F2 are corrected in current306; existing NEEDS_CORRECTION semantic review is untouched and root owns scoped re-review.'],'files':files,'file_count':len(files),'total_file_bytes':sum(x['bytes'] for x in files),'identical_byte_groups':{h:p for h,p in groups.items() if len(p)>1},'closure_exclusions':['freeze.json and freeze.sha256 only, as mutually dependent closure records; all other actual files are inventoried, including prior freeze-native receipts.'],'supersedes':{'prior_freeze':{'path':str(H/'reconciled/freeze.json'),**pin(H/'reconciled/freeze.json')},'original_to_history':{'path':str(H/'original-to-history.json'),**pin(H/'original-to-history.json')}},'counts_consumer':{'total_spans':75,'total_nulls':12,'total_word_pairs':43,'total_d5_including_nulls':44},'semantic_delta':'Only original English306 m1 restored as mPus; previous74 tuples and flat English orders unchanged. First cataract rationale corrected without changing its tuple.','correction_proof':'evidence/correction-306-v2/final-correction-proof.json'}
+put(R/'freeze.json',f);(R/'freeze.sha256').write_text(pin(R/'freeze.json')['sha256']+'  freeze.json\n')
+for r in files:assert pin(R/r['path'])=={k:r[k] for k in ('bytes','sha256')}
+assert {r['path'] for r in files}=={p.relative_to(R).as_posix() for p in R.rglob('*') if p.is_file()}-{'freeze.json','freeze.sha256'}
+print(json.dumps({'freeze':pin(R/'freeze.json'),'complete_file_count':len(files),'total_bytes':sum(r['bytes'] for r in files),'total_spans':75,'total_nulls':12,'total_word_pairs':43},indent=2))

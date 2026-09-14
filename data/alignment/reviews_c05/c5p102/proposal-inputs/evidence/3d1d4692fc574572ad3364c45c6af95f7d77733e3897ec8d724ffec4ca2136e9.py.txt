@@ -1,0 +1,18 @@
+from capture import *
+from author import ranges
+def main():
+ rows={x['seq']:x for x in json.loads((R/'evidence/source-context.json').read_text())};checks=[];count=0
+ c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+ for n in [304,305,306]:
+  fresh=dict(c.execute("select * from corpus_segments where course='C05' and seq=?",(n,)).fetchone());assert fresh==rows[n]
+  d=R/str(n);seg=json.loads((d/'spec.json').read_text())['segments'][0];body=(d/'body.html').read_bytes();resolved=ranges(seg,fresh,body,True);want=json.loads((d/'final-ordered-tuples.json').read_text())['tibetan_order'];assert len(resolved)==len(want)
+  for got,x in zip(resolved,want):assert all(got[k]==x[k] for k in ['id','d','tib','eng','tib_range','eng_range'])
+  decisions=json.loads((d/'original-span-dispositions.json').read_text());notes=json.loads((d/'original-proposal-notes.json').read_text());seen=set()
+  for x in decisions:
+   key=(x['angle'],x['original_id']);assert key not in seen;seen.add(key);a=x['angle'];orig=json.loads((B/a/str(n)/'spec.json').read_text())['segments'][0];original=next(s for s in orig['spans'] if s['id']==x['original_id']);assert x['original_span']==original;assert notes[a]==orig['note'];intent=next(s for s in json.loads((B/a/str(n)/'intended-ranges.json').read_text())['spans'] if s['id']==x['original_id']);assert x['original_actual_tib_range']==intent['tib_range'] and x['original_actual_eng_range']==intent['eng_range'];assert x['reason'] and x['disposition'];assert all(i in {s['id'] for s in seg['spans']} for i in x['final_ids'])
+  count+=len(decisions);native=R/'native'/f'final-{n}-v1';assert (native/'stdin.bin').read_bytes()==(d/'spec.json').read_bytes();assert (native/'stdout.bin').read_bytes()==body;assert (native/'exit.txt').read_text()=='0\n';assert not (native/'stderr.bin').read_bytes();checks.append({'seq':n,'source_row_equal':True,'source_text_reconstruction':'PASS','final_range_count':len(resolved),'original_dispositions':len(decisions),'exact_native_io':'PASS'})
+ assert count==141
+ for x in json.loads((R/'originals/copy-manifest.json').read_text()):assert Path(x['original']).read_bytes()==(R/x['copy']).read_bytes()
+ put(R/'final-verification.json',{'result':'PASS','producer':'Codex reconciler; independent skeptic remains separate','original_span_count':count,'segments':checks,'audit_revision':'An irrelevant always-true source-string predicate in the preserved audit-v1 helper was removed. It supplied no evidence. This verifier freshly reopens exact source rows and uses actual source reconstruction, canonical ranges, exact original dispositions and native byte equality assertions.'})
+ print(json.dumps({'result':'PASS','original_span_count':count,'segments':checks},indent=2))
+if __name__=='__main__':main()

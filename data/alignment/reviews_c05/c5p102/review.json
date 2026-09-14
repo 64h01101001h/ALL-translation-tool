@@ -1,0 +1,143 @@
+{
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "producer": "Independent Codex semantic reviewer; authored neither proposal angle nor reconciliation",
+  "page": "c5p102",
+  "course": "C05",
+  "source_governance_origin": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+  "source_origin_course_boundary": 294,
+  "future_acceptance_baseline": "Actual root-captured through303 baseline is now recorded separately; ce646 historical source/governance origin remains unchanged.",
+  "reconciliation_freeze_sha256": "45becb5b818c5db6381966f3ea4e2499efb6ff010da9d206b6c700eb6e72c356",
+  "segments": [
+    {
+      "seq": 304,
+      "span_count": 15,
+      "null_count": 4,
+      "word_pair_count": 7,
+      "spec_sha256": "4dbefe89a174f83a13fa8355622a82c7eaa15597ada2443868b22a09e27053a8",
+      "spec_bytes": 3386,
+      "body_sha256": "3026f967d3b0f0cefe04ee6af3eed3755a4ebb8603b17d06c1ea6b0d71175ddf",
+      "body_bytes": 3435,
+      "generator_exit": 0,
+      "exact_body": true,
+      "exact_source_reconstruction": true
+    },
+    {
+      "seq": 305,
+      "span_count": 22,
+      "null_count": 3,
+      "word_pair_count": 15,
+      "spec_sha256": "9c53afa63fdf8e7017bafba67f388356fd856f5e8a61819b1d5ca2b251f6aa0d",
+      "spec_bytes": 4190,
+      "body_sha256": "47c21b58d583f74f8f197fb6f0d638607cb9acbad847218a4c68e64d39423e60",
+      "body_bytes": 4185,
+      "generator_exit": 0,
+      "exact_body": true,
+      "exact_source_reconstruction": true
+    },
+    {
+      "seq": 306,
+      "span_count": 38,
+      "null_count": 5,
+      "word_pair_count": 21,
+      "spec_sha256": "6cab22351bdbb24d50d9a01f2fa0f22ef0c3c87dd94a95eff6228669acc65e6b",
+      "spec_bytes": 6835,
+      "body_sha256": "8d64f640cc64da104fd6dbb94a87e81988132cad67f4133793b43784d48a49a2",
+      "body_bytes": 6833,
+      "generator_exit": 0,
+      "exact_body": true,
+      "exact_source_reconstruction": true
+    }
+  ],
+  "total_spans": 75,
+  "total_nulls": 12,
+  "total_word_pairs": 43,
+  "total_d5_including_nulls": 44,
+  "original_dispositions_reviewed": 141,
+  "all_current_tuple_correspondences_sound": true,
+  "new_generator_runs": 1,
+  "generator_proof": "Only corrected306 freshly executed once: exit0, empty stderr, exact body/source/ranges. Exact passing304305 evidence reused. All previous74 ordered tuples/annotations unchanged; no unchanged full-source check or generator repeated.",
+  "open_findings": [],
+  "retained_errata": 0,
+  "bibliographic_concern": {
+    "seq": 306,
+    "status": "UNCERTAIN; refuted for filing under current evidence",
+    "original_candidate": "MEDIUM/PROBABLE, preserved unchanged",
+    "source_correction_authorized": false
+  },
+  "machine_review_only": true,
+  "proposal_status": "PROVISIONAL machine alignment; independently approved, root landing and human editorial acceptance remain separate",
+  "evidence_preflight": "See evidence/packaging-preflight.json for final full original/copy and Git-object verification",
+  "resolved_findings": [
+    {
+      "id": "F1",
+      "category": "SPEC_AND_QUALITY",
+      "seq": 306,
+      "span_ids": [
+        "w5",
+        "w6"
+      ],
+      "original_span": "english/306 m1",
+      "finding": "A sound rnag/pus d7 member was omitted solely under an unsupported one-child cap.",
+      "minimal_change": "Restore original English m1 as a uniquely named d7 child between current w5 and w6: tib rnag, eng pus, W[47:51], E[145:148], parent w5. Keep w6 as its next contiguous sibling and leave the flat eng_order unchanged. Update the disposition, omission/report rationales and any helper assertion that imposes the one-child cap. Regenerate only changed final306 and request scoped re-review.",
+      "evidence": [
+        "governing/tools/gen_alignment_page.py.txt:113-147",
+        "governing/docs/ALIGNMENT_LAYER_SPEC.md:7",
+        "governing/data/alignment/pages_c03/c3p70.html (C03:207 w3/y4/y5)",
+        "proposal-inputs/english/306/spec.json",
+        "reviewed-final/306/original-span-dispositions.json (english m1)"
+      ],
+      "proposed_tuple": {
+        "seq": 306,
+        "id": "mPus (illustrative unique ID)",
+        "d": 7,
+        "tib": "rnag",
+        "eng": "pus",
+        "tib_range": [
+          47,
+          51
+        ],
+        "eng_range": [
+          145,
+          148
+        ]
+      },
+      "current_spec_modified": false,
+      "status": "RESOLVED",
+      "actual_resolution": "Restored original English m1 as mPus: first rnag/pus W[47:51], E[145:148], under w5 W[47:57], E[145:158]. Positive HGM rnag/pus and whole rnag khrag/pus and blood support this occurrence; competing blood-related glosses do not displace the local composition. It precedes w6 khrag/blood in the contiguous child group permitted by immutable canonical with_members/resolve and the checked C03:207 example. F1 is resolved.",
+      "proof": "evidence/correction-scope-proof.json"
+    },
+    {
+      "id": "F2",
+      "category": "QUALITY",
+      "seq": 306,
+      "span_ids": [
+        "w10"
+      ],
+      "finding": "The w10 cataracts member's rationale explains the later verse cataract/dbang po/dang ldan occurrence instead of its actual earlier parent rab rib can/person with cataracts.",
+      "minimal_change": "Replace the w10 rationale in final-ordered-tuples.json and the corresponding Tibetan w10 / English m3 original-span-dispositions reasons with an occurrence-specific explanation of the first rab rib can parent. Preserve w10's existing tuple and ranges. Check any generated reason source to avoid restoring the copied error.",
+      "evidence": [
+        "reviewed-final/306/final-ordered-tuples.json (w10)",
+        "reviewed-final/306/original-span-dispositions.json (tibetan w10 and english m3)",
+        "span-review.json (306 w10)"
+      ],
+      "current_tuple_sound": true,
+      "status": "RESOLVED",
+      "actual_resolution": "First rab rib/cataracts W[86:93], E[227:236] is the unique tighter member of w9 rab rib can/person with cataracts W[86:97], E[215:236]. Its actual current reason correctly identifies the person who looks into the basin and distinguishes the later verse's dbang po/dang ldan relation. The tuple and ranges are unchanged; F2 is resolved in final-ordered-tuples and both original-disposition reasons.",
+      "proof": "evidence/correction-disposition-diff.json"
+    }
+  ],
+  "prior_boundary_generator_runs": 3,
+  "total_independent_generator_runs_across_boundaries": 4,
+  "previous_review_boundary": {
+    "path": "history/v1-before-correction",
+    "verdict": "NEEDS_CORRECTION",
+    "files_including_freeze": 798,
+    "freeze_sha256": "5e6b5ce71a08f0683f1c6a10c27cc0bf07441c908234d1e67bda36a4eb1ec68e"
+  },
+  "actual_acceptance_baseline_commit": "f1651c64b0ad9b0c7ea85f9961332ac1a3787e83",
+  "actual_acceptance_course_boundary": 303,
+  "actual_acceptance_baseline_file": "acceptance-baseline/baseline.json",
+  "review_scope": "Initial complete semantic review plus scoped F1/F2 correction; unchanged judgments and all five errata refutations carried forward"
+}

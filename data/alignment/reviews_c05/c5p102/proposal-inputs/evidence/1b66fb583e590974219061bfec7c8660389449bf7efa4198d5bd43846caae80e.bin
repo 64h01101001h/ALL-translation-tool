@@ -1,0 +1,17 @@
+import hashlib,json,os,pathlib,subprocess,sys
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+label=sys.argv[1]
+argv=sys.argv[2:]
+stem=ROOT/'native'/label
+assert not stem.with_suffix('.command.json').exists(), 'Preserve each prior attempt: choose a new label'
+data=sys.stdin.buffer.read()
+env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+r=subprocess.run(argv,input=data,capture_output=True,env=env,cwd=ROOT)
+for suffix,payload in [('stdin',data),('stdout',r.stdout),('stderr',r.stderr)]:
+ stem.with_suffix('.'+suffix).write_bytes(payload)
+stem.with_suffix('.exit').write_text(str(r.returncode)+'\n')
+record={'argv':argv,'cwd':str(ROOT),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':str(stem.with_suffix('.stdin')),'stdout':str(stem.with_suffix('.stdout')),'stderr':str(stem.with_suffix('.stderr')),'exit':r.returncode,'stdout_bytes':len(r.stdout),'stdout_sha256':hashlib.sha256(r.stdout).hexdigest(),'stderr_bytes':len(r.stderr)}
+stem.with_suffix('.command.json').write_text(json.dumps(record,indent=2)+'\n')
+sys.stdout.buffer.write(r.stdout);sys.stderr.buffer.write(r.stderr)
+print('\nCAPTURE '+json.dumps(record))
+sys.exit(r.returncode)

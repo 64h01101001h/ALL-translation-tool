@@ -1,0 +1,12 @@
+{
+  "confidence": "CONFIRMED",
+  "course": "C03",
+  "evidence": "Confirmed from this segment's own text. ACIP (source of record) reads GO 'PANG; the wylie field carries the same reading, go 'pang, so this is in the source, not the converter. The word is go 'phang (rank, station, state), which is what GMR translates: 'the state of All-Knowing'. Re-derived corpus counts: acip LIKE '%GO ''PANG%' returns exactly one row, C03:445; acip LIKE '%GO ''PHANG%' returns 219; the wylie field splits identically, 1 vs 219. Stronger still, the syllable 'pang occurs NOWHERE else in the corpus wylie: a-chung ('a) prefixes only voiced or aspirated radicals in Tibetan orthography ('g 'j 'd 'b 'dz 'kh 'ch 'th 'ph 'tsh), so 'p- is not a spellable syllable onset and 'pang cannot be a variant. Parallel-witness check: no other segment carries this passage (english LIKE '%habit of hoping for the%', english LIKE '%up to the final end%', wylie LIKE '%tshe ''di snang gi zhen pa%', wylie LIKE '%rang res ngan ''gro%' each return C03:445 alone). The exact collocation mkhyen pa'i go 'p… appears in seven other rows, every one of them 'phang: C01:84, C16:32, TCS02:315, TCS09:37, Sunlight:595, Sunlight:707, SPF:461. The nearest relative for the surrounding idiom, ILL:126 (thog mtha' bar gsum du gal che), shares only that closing idiom and says nothing about go 'phang. Registered classes checked and not applicable: no {SHl} drop, no fused footnote number, no folio marker, no glued heading; the ACIP trailing shad ',' absent from the wylie is the normal strip, and ACIP TSE for wylie tshe is the ACIP convention (TS = tsh), not an error. A dropped aspiration H in one row against 219 correct ones, yielding an impossible syllable, is a keystroke error.",
+  "expected": "THAMS CAD MKHYEN PA'I GO 'PHANG BSGRUB PA",
+  "found": "THAMS CAD MKHYEN PA'I GO 'PANG BSGRUB PA",
+  "item_id": "E-113",
+  "kind": "TIBETAN_SPELLING",
+  "note": "filed from the alignment batch, spine-verified on merge",
+  "segment": "C03:445",
+  "severity": "MEDIUM"
+}

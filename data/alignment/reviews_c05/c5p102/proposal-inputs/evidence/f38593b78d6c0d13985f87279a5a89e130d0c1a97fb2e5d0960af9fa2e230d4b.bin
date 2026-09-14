@@ -1,0 +1,352 @@
+[
+  {
+    "label": "complete-source-argument-neighbors",
+    "sql": "select * from corpus_segments where course=? and seq between ? and ? order by seq",
+    "parameters": [
+      "C05",
+      294,
+      314
+    ],
+    "row_count": 21,
+    "row_ids": [
+      1676,
+      1677,
+      1678,
+      1679,
+      1680,
+      1681,
+      1682,
+      1683,
+      1684,
+      1685,
+      1686,
+      1687,
+      1688,
+      1689,
+      1690,
+      1691,
+      1692,
+      1693,
+      1694,
+      1695,
+      1696
+    ]
+  },
+  {
+    "label": "source-snapshot-verification",
+    "fields": [
+      "id",
+      "course",
+      "seq",
+      "acip",
+      "wylie",
+      "english"
+    ],
+    "all_equal": true,
+    "row_ids": [
+      1686,
+      1687,
+      1688
+    ]
+  },
+  {
+    "label": "context-snapshot-verification",
+    "fields": [
+      "id",
+      "course",
+      "seq",
+      "acip",
+      "wylie",
+      "english"
+    ],
+    "all_equal": true,
+    "row_ids": [
+      1680,
+      1681,
+      1682,
+      1683,
+      1684,
+      1685,
+      1686,
+      1687,
+      1688,
+      1689,
+      1690,
+      1691,
+      1692,
+      1693,
+      1694
+    ]
+  },
+  {
+    "label": "all-three-field-identical-304",
+    "sql": "select * from corpus_segments where acip=? and wylie=? and english=? order by course,seq",
+    "parameters": [
+      "BYAS PA LA KHO NA RE, MI LA LUS 'KHRUD PA SOGS DNGOS GNAS PA MED PAR THAL, DE MI RANG GI BLOS RLOM PA TZAM YIN PA'I PHYIR, ZER NA,",
+      "byas pa la kho na re, mi la lus 'khrud pa sogs dngos gnas pa med par thal, de mi rang gi blos rlom pa tsam yin pa'i phyir, zer na",
+      "Someone may respond to this with another claim: When the human washes himself with the water and so on, it must not be something real, because it's nothing more than his own imagination."
+    ],
+    "row_count": 2,
+    "row_ids": [
+      1686,
+      6000
+    ]
+  },
+  {
+    "label": "all-three-field-identical-305",
+    "sql": "select * from corpus_segments where acip=? and wylie=? and english=? order by course,seq",
+    "parameters": [
+      "YI DVAGS LA YANG LTO BSREG PA SOGS DNGOS GNAS PA MED PAR THAL, DE YI DVAGS RANG GI BLOS RLOM PA TZAM YIN PA'I PHYIR, 'DOD NA, YI DVAGS KYI SDUG BSNGAL MED PAR THAL,",
+      "yi dvags la yang lto bsreg pa sogs dngos gnas pa med par thal, de yi dvags rang gi blos rlom pa tsam yin pa'i phyir, 'dod na, yi dvags kyi sdug bsngal med par thal",
+      "Are you saying then that when the pus and blood sizzle in the stomach of the craving spirit, and so on, it can't be something real? For that too is nothing more than his own imagination. You agree? Well then, the suffering of craving spirits must not exist at all."
+    ],
+    "row_count": 2,
+    "row_ids": [
+      1687,
+      6001
+    ]
+  },
+  {
+    "label": "all-three-field-identical-306",
+    "sql": "select * from corpus_segments where acip=? and wylie=? and english=? order by course,seq",
+    "parameters": [
+      "KHO NA RE, DE LTAR CIG CAR DU BLTAS PA'I TSE, RNAG KHRAG DNGOS GNAS PA MED PAR THAL, RAB RIB CAN GYIS BSE RU LA BLTAS PA DE'I TSE BSE RU'I NANG DU SKRA SHAD MED PA GANG ZHIG, RAB RIB DANG LDAN DBANG PO CAN MTSUNGS PA, , CHU 'BAB KLUNG LA YI DVAGS RNAG BLO YANG , , ZHES GSUNGS PA'I PHYIR, ZER NA,",
+      "kho na re, de ltar cig car du bltas pa'i tshe, rnag khrag dngos gnas pa med par thal, rab rib can gyis bse ru la bltas pa de'i tshe bse ru'i nang du skra shad med pa gang zhig, rab rib dang ldan dbang po can mtshungs pa, , chu 'bab klung la yi dvags rnag blo yang , , zhes gsungs pa'i phyir, zer na",
+      "Someone might make the following claim: Isn't it true that when all those beings sit down together and look at something, there isn't any actual pus and blood at all? Because isn't it true first of all that, when a person with cataracts looks into a porcelain basin, there is no strand of hair in the basin at all? And, secondly, doesn't [Master Dharmakirti's] text itself say, Identical to the case of someone where his sense power has a cataract, Is the mind of a craving spirit as well, which sees a stream of water as pus."
+    ],
+    "row_count": 2,
+    "row_ids": [
+      1688,
+      6002
+    ]
+  },
+  {
+    "label": "imagination",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "parameters": [
+      "%own imagination%"
+    ],
+    "row_count": 8,
+    "row_ids": [
+      1685,
+      1686,
+      1687,
+      5999,
+      6000,
+      6001,
+      29371,
+      34933
+    ]
+  },
+  {
+    "label": "wash-body",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%lus 'khrud%"
+    ],
+    "row_count": 6,
+    "row_ids": [
+      1684,
+      1686,
+      5998,
+      6000,
+      34930,
+      34932
+    ]
+  },
+  {
+    "label": "porcelain",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%bse ru%"
+    ],
+    "row_count": 14,
+    "row_ids": [
+      1629,
+      1681,
+      1688,
+      5944,
+      5995,
+      6002,
+      6841,
+      8911,
+      24009,
+      27849,
+      27850,
+      28953,
+      34699,
+      34934
+    ]
+  },
+  {
+    "label": "cataract",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%rab rib dang ldan dbang po can%"
+    ],
+    "row_count": 4,
+    "row_ids": [
+      1688,
+      6002,
+      29642,
+      34934
+    ]
+  },
+  {
+    "label": "stomach-sizzle",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%lto bsreg%"
+    ],
+    "row_count": 3,
+    "row_ids": [
+      1687,
+      6001,
+      34933
+    ]
+  },
+  {
+    "label": "illusory-hair",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%skra shad%"
+    ],
+    "row_count": 59,
+    "row_ids": [
+      1629,
+      1681,
+      1688,
+      5944,
+      5995,
+      6002,
+      6841,
+      8911,
+      33253,
+      28839,
+      28948,
+      28949,
+      28952,
+      28953,
+      28954,
+      28955,
+      28956,
+      28957,
+      28958,
+      28960,
+      28962,
+      28964,
+      28970,
+      29148,
+      29149,
+      29291,
+      29292,
+      29296,
+      29417,
+      29481,
+      29482,
+      29483,
+      29485,
+      29486,
+      29487,
+      29488,
+      29492,
+      29496,
+      29497,
+      29646,
+      29667,
+      29989,
+      30235,
+      30236,
+      30250,
+      30251,
+      30252,
+      30341,
+      31012,
+      32049,
+      34699,
+      34934,
+      36841,
+      36852,
+      37023,
+      37616,
+      37617,
+      18562,
+      18576
+    ]
+  },
+  {
+    "label": "simultaneous-look",
+    "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+    "parameters": [
+      "%cig car du bltas%"
+    ],
+    "row_count": 45,
+    "row_ids": [
+      1638,
+      1644,
+      1652,
+      1656,
+      1661,
+      1663,
+      1667,
+      1669,
+      1670,
+      1679,
+      1682,
+      1683,
+      1688,
+      1690,
+      1694,
+      5952,
+      5958,
+      5966,
+      5970,
+      5975,
+      5977,
+      5981,
+      5983,
+      5984,
+      5993,
+      5996,
+      5997,
+      6002,
+      6004,
+      6008,
+      6850,
+      6856,
+      6863,
+      6867,
+      8916,
+      8924,
+      8928,
+      32873,
+      34907,
+      34917,
+      34919,
+      34920,
+      34921,
+      34922,
+      34934
+    ]
+  },
+  {
+    "label": "author-context",
+    "sql": "select * from corpus_segments where course=? and seq between ? and ? order by seq",
+    "parameters": [
+      "ILL",
+      2319,
+      2326
+    ],
+    "row_count": 8,
+    "row_ids": [
+      29638,
+      29639,
+      29640,
+      29641,
+      29642,
+      29643,
+      29644,
+      29645
+    ]
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "confidence": "CONFIRMED",
+  "course": "corpus-wide",
+  "evidence": "Found by the skeptic pass on C03:429 (E-106), which asked why that field ends mid-sentence at 'there are five ' and measured length(english) = 1500 exactly. Census 2026-09-01 on build/hgm_spine_v27_2.db: 186 segments have length(english) = 1500 (DDA 28, C18 15, C12 14, C13 12, C11 11, Sunlight 11, C17 10, C03 9 - including C03:376, 429, 620, the Reading Eight/Nine/Ten note blocks - MB2 8, C16 7, and 25 further courses); 34 segments EXCEED 1,500, so at least one ingest path does not apply the cap and its reach is not uniform. What is lost is not always apparatus: wherever the cap falls inside a translation, the corpus has no English for the rest of the Tibetan and nothing can align it. The 186 are a floor for the affected rows (a row cut at exactly the cap is certain; a row that happened to be shorter is unaffected).",
+  "expected": "the whole English of the segment; a segment whose translation runs past 1,500 characters loses its tail with no marker, no count and no log line",
+  "found": "' '.join(eng)[:1500] in engines/hgm_tools.py - the spine ingest silently caps every segment's English at 1,500 characters",
+  "item_id": "E-107",
+  "kind": "INGEST_ARTEFACT",
+  "note": "OURS, NOT FIXED. The cap lives in the canonical ingest (engines/hgm_tools.py), so removing it changes the spine itself and must be re-proved against the full batteries (inviolable rule 2) before any layer is rebuilt on it; the C03:376/429/620 note blocks and any truncated translation would need re-scanning afterwards. Opened in TODO.md 2026-09-01 for Adam's ruling and the data project. No document edit is asked of ALL for this entry - it is a pipeline defect on our side.",
+  "segment": "class entry (186 segments end at exactly 1,500 characters)",
+  "severity": "HIGH"
+}

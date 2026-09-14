@@ -1,0 +1,10 @@
+"""Verify current corrected inputs from preserved native evidence; no generation.
+
+The complete previous verifier and its inputs remain under
+reconciliation-history/v1-before-306-member-correction/.
+This reports the correction reconciler's proof, never root or semantic approval.
+"""
+from pathlib import Path
+import runpy
+if __name__ == '__main__':
+    runpy.run_path(str(Path(__file__).resolve().parent / 'root-306-correction-evidence/verify_current_correction.py'), run_name='__main__')

@@ -1,0 +1,36 @@
+"""Current root-facing intake from preserved executions, with truthful producer provenance."""
+from pathlib import Path
+import collections, datetime, hashlib, json
+B=Path(__file__).resolve().parents[1];R=B/'reconciled';H=B/'reconciliation-history/v1-before-306-member-correction';E=R/'evidence/correction-306-v2';V=B/'root-reconciliation-verification'
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+freezes={}
+for angle,name in [('tibetan','freeze-manifest.json'),('english','freeze-manifest.json'),('reconciled','freeze.json')]:
+    p=B/angle/name;records=read(p)['files'];seen=set()
+    for r in records:
+        q=B/angle/r['path'];assert q.resolve().is_relative_to((B/angle).resolve()) and r['path'] not in seen;seen.add(r['path']);assert pin(q)=={k:r[k] for k in ('bytes','sha256')}
+    if angle=='reconciled':assert seen=={q.relative_to(R).as_posix() for q in R.rglob('*') if q.is_file()}-{'freeze.json','freeze.sha256'}
+    else:assert pin(p)==read(H/'root-reconciliation-intake.json')['freezes'][angle]['freeze']
+    freezes[angle]={'files':len(records),'freeze':pin(p)}
+for r in read(H/'original-to-history.json'):assert pin(Path(r['copy']))=={k:r[k] for k in ('bytes','sha256')}
+for r in read(B/'root-306-correction-evidence/semantic-boundary-before.json'):assert pin(B/'semantic-review'/r['path'])=={k:r[k] for k in ('bytes','sha256')}
+copy_records=read(R/'originals/copy-manifest.json')
+for r in copy_records:assert pin(Path(r['original']))==pin(R/r['copy'])=={k:r[k] for k in ('bytes','sha256')}
+proof=read(E/'final-correction-proof.json');resolved=read(V/'resolved-spans.json');assert len(resolved)==75
+report=read(V/'report.json');reuse=read(V/'execution-reuse.json');assert reuse==read(E/'execution-reuse.json')
+for n in [304,305,306]:
+    d=R/str(n);sp=read(d/'spec.json')['segments'][0]['spans'];tu=read(d/'final-ordered-tuples.json')['tibetan_order'];rs=[r for r in resolved if r['seq']==n];rp=next(r for r in report if r['seq']==n)
+    assert len(rs)==len(tu)==len(sp)==rp['spans']
+    assert rp['body_sha256']==pin(d/'body.html')['sha256'] and rp['body_bytes']==pin(d/'body.html')['bytes'] and rp['spec_sha256']==pin(d/'spec.json')['sha256']
+    for a,b in zip(rs,tu):assert list(a)==['seq','id','d','tib','eng','tib_range','eng_range'] and all(a[k]==b[k] for k in a if k!='seq')
+    native=Path(next(x for x in reuse if x['seq']==n)['canonical_native_directory']);ex=read(native/'execution.json');assert ex['exit']==0
+    assert (native/'stdin.bin').read_bytes()==(d/'spec.json').read_bytes();assert (native/'stdout.bin').read_bytes()==(d/'body.html').read_bytes()==(V/f'{n}.stdout').read_bytes()
+    assert (native/'exit.txt').read_bytes()==(V/f'{n}.exit').read_bytes()==b'0\n';assert not (native/'stderr.bin').read_bytes() and not (V/f'{n}.stderr').read_bytes()
+    for stream,p in ex['streams'].items():assert pin(native/(stream+'.bin'))==p
+dispositions=collections.Counter(r['disposition'] for n in [304,305,306] for r in read(R/str(n)/'original-span-dispositions.json'))
+assert sum(dispositions.values())==141 and dict(dispositions)==proof['original_disposition_counts']
+result={'status':'PASS_CORRECTION_INTAKE_NOT_ROOT_OR_FRESH_SEMANTIC_ACCEPTANCE','producer':'Independent Codex correction reconciler updating current root-facing interfaces; root has not yet independently reviewed this correction','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'freezes':freezes,'original_copy_records_exact':len(copy_records),'source_pins_and_historical_governance_exact':True,'counts':proof['counts_after'],'total_spans':75,'total_nulls':12,'total_word_pairs':43,'original_dispositions':dict(dispositions),'retained_tuple_annotation_changes':proof['retained_annotation_changes_unchanged'],'original_native_runs':'Six original actual executions preserved unchanged and complete streams verified; none repeated for correction.','final_native_runs':'Exactly one corrected306 canonical generation. Exact passing304/305 and successful corrected306 executions reused for packaging.','execution_reuse':{'path':str(V/'execution-reuse.json'),**pin(V/'execution-reuse.json')},'historical_root_intake':{'path':str(H/'root-reconciliation-intake.json'),**pin(H/'root-reconciliation-intake.json'),'meaning':'Complete earlier root readings, setup failure, counts, limitations and old freeze remain historical evidence, not claims about current root acceptance.'},'correction_read':'Full independent review.md/review.json and governing code; complete original English m1/m3 and Tibetan w10 records, exact source rows, all ten matching complete master records with competing glosses; every preserved original object/range/note and current seven-key tuple identity verified.','correction_proof':{'path':str(E/'final-correction-proof.json'),**pin(E/'final-correction-proof.json')},'semantic_review_boundary_unchanged':proof['semantic_review_boundary'],'count_clarification':'44 total d5 spans includes null yin in304; consumer word_pair_count43. Per segment spans/nulls/nonnull_d5:30415/4/7;30522/3/15;30638/5/21.','source_governance_origin':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4','source_origin_course_boundary':294,'future_acceptance_baseline':'Root-owned capture after303; not asserted here.','limitations':proof['limits']}
+put(B/'root-reconciliation-intake.json',result)
+print(json.dumps({'status':result['status'],'freeze':freezes['reconciled'],'counts':result['counts'],'original_dispositions':dict(dispositions)},indent=2))

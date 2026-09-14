@@ -1,0 +1,65 @@
+from pathlib import Path
+import json,sys,hashlib,importlib.util,importlib.machinery,sqlite3,runpy,subprocess,os,time
+from html.parser import HTMLParser
+R=Path(__file__).resolve().parent; B=R.parent; W=B.parents[1]/'campaign-worktree';PIN='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def load(name,p):
+ loader=importlib.machinery.SourceFileLoader(name,str(p)); spec=importlib.util.spec_from_loader(name,loader);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;loader.exec_module(m);return m
+base=json.loads((B/'proposal-baseline.json').read_text());gen=W/'tools/gen_alignment_page.py';spine=W/'build/hgm_spine_v27_2.db'
+assert sha(gen)==base['governing_git_pins']['tools/gen_alignment_page.py']['sha256'];assert gen.read_bytes()==(R/'governing/tools/gen_alignment_page.py.txt').read_bytes()
+H=load('hgm_tools',R/'governing/engines/hgm_tools.py.txt'); builder=load('build_alignment_layer',R/'governing/tools/build_alignment_layer.py.txt');builder.SPINE=str(spine)
+real_connect=sqlite3.connect
+connections=[]
+def ro(database,*a,**kw):
+ assert Path(database).resolve()==spine.resolve();kw['uri']=True;u=spine.as_uri()+'?mode=ro';connections.append(u);return real_connect(u,*a,**kw)
+sqlite3.connect=ro
+if len(sys.argv)>1 and sys.argv[1]=='generate':
+ audit=Path(sys.argv[2]);before=sha(spine)
+ try:runpy.run_path(str(gen),run_name='__main__')
+ finally:put(audit,{'generator_sha256':sha(gen),'source_origin':PIN,'sqlite_connections':connections,'spine_sha256_before':before,'spine_sha256_after':sha(spine),'generator_unchanged':gen.read_bytes()==(R/'governing/tools/gen_alignment_page.py.txt').read_bytes(),'dependency_sha256':{n:sha(R/'governing'/n) for n in ['tools/build_alignment_layer.py.txt','engines/hgm_tools.py.txt']}})
+ sys.exit(0)
+G=load('semantic_canonical_generator',gen)
+class Parse(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.stack=[];self.null=0;self.text={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}}
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs)
+  if tag=='div' and a.get('class') in self.text:self.side=a['class']
+  if tag=='span':
+   nul='nul' in a.get('class','').split();self.null+=int(nul);self.stack.append((a.get('data-l'),self.side,len(self.text[self.side]) if self.side else 0,nul,a.get('data-d')))
+ def handle_endtag(self,tag):
+  if tag=='span':
+   lab,side,start,nul,d=self.stack.pop()
+   if lab:self.ranges[side][lab]=([start,len(self.text[side])],int(d))
+   self.null-=int(nul)
+ def handle_data(self,data):
+  if self.side and self.stack and not self.null:self.text[self.side]+=data
+rows={x['seq']:x for x in json.loads((R/'evidence/independent-source-context.json').read_text()) if x['course']=='C05'}
+def resolve(seg,body):
+ spans=seg['spans'];ids={s['id']:s for s in spans};eo=seg['eng_order'];assert len(eo)==len(set(eo));assert set(eo)=={s['id'] for s in spans if s['eng'] is not None and s['d']!=7};row=rows[seg['seq']]
+ tr=G.resolve(row['wylie'],spans,'tib',seg['seq']);er=G.resolve(row['english'],G.with_members(spans,[ids[k] for k in eo],row['english']),'eng',seg['seq'])
+ p=Parse();p.feed(body.decode());assert p.text=={'tib':row['wylie'],'eng':row['english']};out=[];parent=None
+ for s in spans:
+  t=list(tr[s['id']]);e=list(er[s['id']]) if s['eng'] is not None else None;label=f"s{seg['seq']}{s['id']}"
+  assert p.ranges['tib'][label]==(t,s['d'])
+  if e is not None:assert p.ranges['eng'][label]==(e,s['d'])
+  else:assert s.get('nul') and p.ranges['eng'][label][0][0]==p.ranges['eng'][label][0][1]
+  if s['d']==7:
+   assert parent is not None and parent['d']==5
+   for side,rr in [('tib',tr),('eng',er)]:
+    if s[side] is None:continue
+    a,b=rr[s['id']];c,d=rr[parent['id']];assert c<=a<b<=d and (a,b)!=(c,d);assert row['wylie' if side=='tib' else 'english'].count(s[side],c,d)==1
+  else:parent=s if s['d']==5 else None
+  out.append({'seq':seg['seq'],'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s['eng'],'tib_range':t,'eng_range':e})
+ return out
+summary=[];resolved=[];original_checks=[]
+for n in [304,305,306]:
+ d=R/'native'/str(n);d.mkdir(parents=True,exist_ok=True);spec=R/'reviewed-final'/str(n)/'spec.json';body=R/'reviewed-final'/str(n)/'body.html';cmd=[sys.executable,str(Path(__file__).resolve()),'generate',str(d/'runtime.json')];put(d/'command.json',{'argv':cmd,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':str(spec)});(d/'stdin.bin').write_bytes(spec.read_bytes())
+ cp=subprocess.run(cmd,input=spec.read_bytes(),capture_output=True,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});(d/'stdout.bin').write_bytes(cp.stdout);(d/'stderr.bin').write_bytes(cp.stderr);(d/'exit.txt').write_text(str(cp.returncode)+'\n');assert cp.returncode==0 and not cp.stderr and cp.stdout==body.read_bytes()
+ seg=json.loads(spec.read_text())['segments'][0];rr=resolve(seg,cp.stdout);want=json.loads((B/'reconciled'/str(n)/'final-ordered-tuples.json').read_text())['tibetan_order'];assert all(all(x[k]==y[k] for k in ['id','d','tib','eng','tib_range','eng_range']) for x,y in zip(rr,want));assert len(rr)==len(want);resolved+=rr
+ summary.append({'seq':n,'span_count':len(rr),'null_count':sum(s['eng'] is None for s in rr),'word_pair_count':sum(s['eng'] is not None and s['d']==5 for s in rr),'spec_sha256':sha(spec),'spec_bytes':spec.stat().st_size,'body_sha256':sha(body),'body_bytes':body.stat().st_size,'generator_exit':cp.returncode,'exact_body':True,'exact_source_reconstruction':True})
+ for angle in ['tibetan','english']:
+  a=B/angle/str(n);ss=json.loads((a/'spec.json').read_text())['segments'][0];got=resolve(ss,(a/'body.html').read_bytes());disps=[x for x in json.loads((B/'reconciled'/str(n)/'original-span-dispositions.json').read_text()) if x['angle']==angle];assert len(got)==len(disps)
+  for g,x,s in zip(got,disps,ss['spans']):assert x['original_span']==s and x['original_actual_tib_range']==g['tib_range'] and x['original_actual_eng_range']==g['eng_range']
+  original_checks.append({'seq':n,'angle':angle,'original_spans':len(got),'complete_dispositions_equal':True,'canonical_resolver_and_original_body':'PASS','new_generator_run':False})
+put(R/'resolved-spans.json',resolved);put(R/'evidence/fresh-native-proof.json',{'result':'PASS','segments':summary,'original_checks':original_checks,'new_generator_runs':3,'source_origin':PIN});print(json.dumps(summary,indent=2))

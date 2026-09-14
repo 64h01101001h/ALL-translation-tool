@@ -1,0 +1,71 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,sys
+R=Path(__file__).resolve().parent;W=R.parents[2]/'campaign-worktree'
+PIN='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+ALLOWED={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def h(b):return hashlib.sha256(b).hexdigest()
+def read(p):return json.loads((R/p).read_text())
+def put(p,x):(R/p).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest=read('original-to-copy-manifest.json');results=[];failures=[]
+for x in manifest:
+ try:
+  assert set(x)=={'original','copy','sha256','bytes'} or set(x)=={'original','copy','sha256','bytes','original_git_commit','repository_relative_path'}
+  op=Path(x['original']);cp=R/x['copy'];assert op.is_absolute() and not Path(x['copy']).is_absolute();assert cp.resolve().is_relative_to(R)
+  assert cp.suffix in ALLOWED and cp.is_file()
+  if 'original_git_commit' in x:
+   assert x['original_git_commit']==PIN
+   original=subprocess.run(['git','-C',str(W),'show',x['original_git_commit']+':'+x['repository_relative_path']],check=True,capture_output=True).stdout
+  else:original=op.read_bytes()
+  copied=cp.read_bytes();assert copied==original;assert len(copied)==x['bytes'] and h(copied)==x['sha256']
+  results.append({'original':x['original'],'copy':x['copy'],'check':'Git object' if 'original_git_commit' in x else 'actual original bytes','sha256':h(copied),'bytes':len(copied),'result':'PASS'})
+ except Exception as e:failures.append({'record':x,'error':repr(e)})
+if failures:
+ p=R/'attempts'/'packaging-preflight-failure.json';assert not p.exists();p.write_text(json.dumps(failures,indent=2)+'\n');raise RuntimeError(f'{len(failures)} copy failures; preserved')
+proof=read('evidence/fresh-native-proof.json');review=read('review.json');rr=read('resolved-spans.json');sr=read('span-review.json');ds=read('original-disposition-review.json');err=read('errata-review.json')
+assert review['verdict']=='NEEDS_CORRECTION' and len(review['open_findings'])==2
+assert type(review['segments']) is list and len(rr)==len(sr)==74 and len(ds)==141
+assert review['segments']==proof['segments'];assert review['new_generator_runs']==proof['new_generator_runs']==3
+assert (review['total_spans'],review['total_nulls'],review['total_word_pairs'])==(74,12,43)
+rows={(x['course'],x['seq']):x for x in read('evidence/independent-source-context.json')}
+for c in range(303,308):
+ for f in ['acip','wylie','english']:assert rows[('C05',c)][f]==rows[('C15',c+145)][f]
+assert rows[('P7',43)]['english'].endswith('his')
+for c in [305,306]:assert rows[('C05',c)]['english']==rows[('P7',c-261)]['english']
+for seg in review['segments']:
+ n=seg['seq'];sp=R/f'reviewed-final/{n}/spec.json';bp=R/f'reviewed-final/{n}/body.html';assert h(sp.read_bytes())==seg['spec_sha256'];assert h(bp.read_bytes())==seg['body_sha256']
+ nd=R/f'native/{n}';assert (nd/'stdin.bin').read_bytes()==sp.read_bytes();assert (nd/'stdout.bin').read_bytes()==bp.read_bytes();assert (nd/'stderr.bin').read_bytes()==b'';assert (nd/'exit.txt').read_text()=='0\n'
+ specs=read(f'reviewed-final/{n}/spec.json')['segments'][0]['spans'];actual=[x for x in rr if x['seq']==n];assert len(specs)==len(actual)==seg['span_count'];assert sum(x['eng'] is None for x in actual)==seg['null_count'];assert sum(x['eng'] is not None and x['d']==5 for x in actual)==seg['word_pair_count']
+ for spn,a in zip(specs,actual):
+  assert set(a)=={'seq','id','d','tib','eng','tib_range','eng_range'}
+  for k in ['id','d','tib','eng']:assert a[k]==spn[k]
+  row=rows[('C05',n)];i,j=a['tib_range'];assert row['wylie'][i:j]==a['tib']
+  if a['eng'] is None:assert a['eng_range'] is None
+  else:i,j=a['eng_range'];assert row['english'][i:j]==a['eng']
+assert len(err)==5 and all(x['refuted'] and set(x['five_grounds'])==set('abcde') for x in err);assert read('bank-ready-errata.json')==[]
+allow=read('span-head-allow-needed.json');assert set(allow)=={'pages_c05'} and set(allow['pages_c05'])=={'c5p102/s304w4','c5p102/s305w5'}
+assert all('sogs' in v for v in allow['pages_c05'].values())
+sourcepins=json.loads((R.parent/'proposal-baseline.json').read_text())['source_pins']
+for label,pin in sourcepins.items():
+ raw=Path(pin['path']).read_bytes();assert len(raw)==pin['bytes'] and h(raw)==pin['sha256']
+candidate={'seq':306,'id':'original English m1','d':7,'tib':'rnag','eng':'pus','tib_range':[47,51],'eng_range':[145,148]}
+parent={'id':'w5','tib_range':[47,57],'eng_range':[145,158]};row=rows[('C05',306)]
+for f,rng,txt in [('tib','tib_range','wylie'),('eng','eng_range','english')]:
+ a,b=candidate[rng];c,d=parent[rng];assert c<=a<b<=d and (a,b)!=(c,d);assert row[txt][a:b]==candidate[f];assert row[txt][c:d].count(candidate[f])==1
+put('evidence/member-group-audit.json',{'verdict':'RESTORE_MEMBER','candidate':candidate,'parent':parent,'unique_and_strictly_tighter_both_sides':True,'existing_sibling':'w6 khrag/blood remains valid after the added child','canonical_authority':'governing/tools/gen_alignment_page.py.txt with_members and resolve','historical_example':'governing/data/alignment/pages_c03/c3p70.html C03:207 w3 contains y4 and y5','historical_example_git_commit':PIN,'new_generator_run':False,'basis':'Independently inspected canonical code and immutable actual historical nested HTML; original English m1 was already canonically resolved against the actual original body in fresh-native-proof.'})
+# Helper failure files are preserved diagnostic summaries, not fabricated process streams.
+put('attempts/README.json',{'query_helper_failures':3,'snapshots':'verify_evidence-v1.py.txt, verify_evidence-v2.py.txt, verify_evidence-v3.py.txt','stderr_files':'Recorded diagnostic summaries of observed errors, not complete stderr streams. No failure was rerun for logging.','new_canonical_failures':0,'other_read_errors':'../evidence/initial-read-failures.json','original_failed_attempts':'Original proposal/reconciliation files are preserved exactly via original-to-copy-manifest.json.'})
+allfiles=[p for p in R.rglob('*') if p.is_file()]
+assert not any('__pycache__' in p.parts for p in allfiles)
+assert not [str(p) for p in allfiles if p.suffix not in ALLOWED]
+preflight={'result':'PASS','source_origin':PIN,'manifest_records':len(manifest),'distinct_copies':len({x['copy'] for x in manifest}),'git_pinned_records':sum('original_git_commit' in x for x in manifest),'supported_extensions':sorted(ALLOWED),'actual_whitelist_source':str(R.parent.parent/'land_reviewed_page.py'),'all_original_copy_bytes_and_hashes_equal':True,'all_manifest_targets_supported':True,'source_pins_final_check':sourcepins,'schemas_and_native_saved_streams':'PASS; no native replay during packaging','source_parallel_checks':'C05:303–307 / C15:448–452 all3 fields exact; P7:43 truncated after his, P7:44–45 full corresponding English exact','resolved_span_count':74,'original_disposition_count':141,'bank_ready_errata':0,'checks':results}
+put('evidence/packaging-preflight.json',preflight)
+files=[]
+for p in sorted(R.rglob('*')):
+ if not p.is_file() or p==R/'freeze.json':continue
+ assert p.suffix in ALLOWED and '__pycache__' not in p.parts
+ raw=p.read_bytes();files.append({'path':str(p.relative_to(R)),'bytes':len(raw),'sha256':h(raw)})
+freeze={'schema':'c05-independent-semantic-review-freeze-v1','producer':'Independent Codex semantic reviewer','frozen_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'verdict':'NEEDS_CORRECTION','source_governance_origin':PIN,'source_origin_course_boundary':294,'future_acceptance_baseline':'Root-owned later capture after303; not asserted','reconciliation_input_freeze_sha256':'3212c15bf512c4cd5bc3b12467de2eb85c845f5a768190b7bb9c8f42e1704e94','total_spans':74,'total_nulls':12,'total_word_pairs':43,'open_findings':2,'retained_errata':0,'manifest_records':len(manifest),'file_count':len(files),'total_bytes':sum(x['bytes'] for x in files),'excluded':['freeze.json (self)'],'files':files}
+assert not (R/'freeze.json').exists();put('freeze.json',freeze)
+for f in files:
+ raw=(R/f['path']).read_bytes();assert len(raw)==f['bytes'] and h(raw)==f['sha256']
+print(json.dumps({'result':'FROZEN','verdict':'NEEDS_CORRECTION','manifest_records':len(manifest),'files':len(files),'freeze_bytes':(R/'freeze.json').stat().st_size,'freeze_sha256':h((R/'freeze.json').read_bytes()),'review_sha256':h((R/'review.json').read_bytes()),'report_sha256':h((R/'review.md').read_bytes())},indent=2))

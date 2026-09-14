@@ -1,0 +1,20 @@
+{
+  "schema": "command-tool-failure-transcript-v1",
+  "capture": "Exact observed command-tool stdout/stderr/exit transcription; generator and verifier records have separately captured native streams.",
+  "failures": [
+    {
+      "command": "cat 'campaign-artifacts/C05-304-306/proposal-protocol.md'",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "cat: campaign-artifacts/C05-304-306/proposal-protocol.md: No such file or directory\n",
+      "resolution": "Correct relative protocol path is campaign-artifacts/proposal-protocol.md; read in full."
+    },
+    {
+      "command_description": "Read master meta.sources with list comprehension assuming every element is a dictionary.",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 3, in <module>\nAttributeError: 'str' object has no attribute 'get'\n",
+      "resolution": "Repeated with isinstance(s, dict) guard; no ILL-specific metadata source entry found and none claimed."
+    }
+  ]
+}

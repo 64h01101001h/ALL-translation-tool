@@ -1,0 +1,12 @@
+{
+  "confidence": "CONFIRMED",
+  "course": "C05",
+  "evidence": "English field of C05:65 contains exactly one U+FFFD (hex EFBFBD) inside the bracket '[dhr�]'. The parallel C16:703 (same file re-ingested, not independent) carries the identical byte, so the loss predates the spine ingest. Class is spine-wide: 73 corpus_segments rows carry U+FFFD (e.g. C04:28 'prama��a', C08:26, C13:477, TCS02:91); docs/errata_register.json has NO entry for the mojibake/replacement-character class (searched for 'FFFD', 'mojibake', 'diacritic', 'prama', the character itself) and no record for C04:28 or C16:703, so the class is not yet registered. The corrupted text is GMR's Sanskrit apparatus, not Tibetan and not translation; the Tibetan/English pairing of the row is unaffected. Recommend a class entry (like E-107) rather than 73 per-row records. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — U+FFFD verbatim in the English; C16:703 same file re-ingested with the identical damaged byte; mojibake class absent from the register; dhṛ the correct etymology; LOW/CONFIRMED stand.",
+  "expected": "... A phenomenon [dharma] is that which possesses [dhṛ] a nature. ... (the bracketed Sanskrit root is dhṛ, 'to hold', the classical etymology of dharma; the damaged byte is U+FFFD REPLACEMENT CHARACTER standing where the IAST ṛ was)",
+  "found": "Where does the word \"knowledge\" [Sanskrit: abhidharma] come from? A phenomenon [dharma] is that which possesses [dhr�] a nature. And knowledge brings to [abhi] you, or leads you to [abhi] that highest of all existing phenomena: nirvana. 7 About the Expression \"Treasure House\"",
+  "item_id": "E-158",
+  "kind": "INGEST_ARTEFACT",
+  "note": "filed from the alignment batch, spine-verified on merge",
+  "segment": "C05:65",
+  "severity": "LOW"
+}

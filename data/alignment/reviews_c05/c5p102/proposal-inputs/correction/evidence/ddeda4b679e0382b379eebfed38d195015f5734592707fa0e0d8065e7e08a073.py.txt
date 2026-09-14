@@ -1,0 +1,35 @@
+"""Final read-only boundary audit; never replay generation or refresh packaged inputs."""
+from pathlib import Path
+import hashlib,json,re
+B=Path(__file__).resolve().parents[1];R=B/'reconciled';H=B/'reconciliation-history/v1-before-306-member-correction';C=B/'root-306-correction-evidence'
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+manifest=read(H/'original-to-history.json');changed=[]
+for r in manifest:
+    before={k:r[k] for k in ('bytes','sha256')};assert pin(Path(r['copy']))==before
+    p=Path(r['original']);assert p.is_file()
+    if pin(p)!=before:changed.append({'original':r['original'],'history':r['copy'],'before':before,'after':pin(p)})
+freeze=read(R/'freeze.json');actual={p.relative_to(R).as_posix() for p in R.rglob('*') if p.is_file()}
+assert actual=={r['path'] for r in freeze['files']}|{'freeze.json','freeze.sha256'}
+for r in freeze['files']:assert pin(R/r['path'])=={k:r[k] for k in ('bytes','sha256')}
+assert (R/'freeze.sha256').read_text()==pin(R/'freeze.json')['sha256']+'  freeze.json\n'
+semantic=read(C/'semantic-boundary-before.json');assert {r['path'] for r in semantic}=={p.relative_to(B/'semantic-review').as_posix() for p in (B/'semantic-review').rglob('*') if p.is_file()}
+for r in semantic:assert pin(B/'semantic-review'/r['path'])=={k:r[k] for k in ('bytes','sha256')}
+for r in read(R/'evidence/correction-306-v2/source-pins-before.json'):assert pin(Path(r['path']))=={k:r[k] for k in ('bytes','sha256')}
+for n in [304,305]:
+    for p in (H/'reconciled'/str(n)).rglob('*'):
+        if p.is_file():assert pin(p)==pin(R/str(n)/p.relative_to(H/'reconciled'/str(n)))
+old=read(H/'reconciled/306/spec.json');new=read(R/'306/spec.json');trimmed=json.loads(json.dumps(new));trimmed['segments'][0]['spans']=[s for s in trimmed['segments'][0]['spans'] if s['id']!='mPus'];assert trimmed==old
+body=(R/'306/body.html').read_bytes();stripped,n=re.subn(rb'<span\b(?=[^>]*data-l="s306mPus")[^>]*>([^<]*)</span>',rb'\1',body);assert n==2 and stripped==(H/'reconciled/306/body.html').read_bytes()
+ordered=read(B/'root-reconciliation-verification/resolved-spans.json');assert len(ordered)==75 and [r for r in ordered if r['id']!='mPus']==read(H/'root-reconciliation-verification/resolved-spans.json')
+intake=read(B/'root-reconciliation-intake.json');assert intake['freezes']['reconciled']['freeze']==pin(R/'freeze.json')
+package=read(C/'package-proof.json');assert pin(B/'semantic-input-review-package.txt')=={k:package['package'][k] for k in ('bytes','sha256')}
+for r in package['inputs']:assert pin(B/r['path'])=={k:r[k] for k in ('bytes','sha256')}
+for label in ['prepare-caller','generate-caller','finalize-caller','freeze-caller','intake-caller','package-caller']:
+    d=C/label;e=read(d/'execution.json');assert e['exit']==0 and not (d/'stderr.bin').read_bytes()
+    for s,p in e['streams'].items():assert pin(d/(s+'.bin'))==p
+put=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+put(C/'changed-original-to-history.json',changed)
+result={'status':'PASS_COMPLETE_CORRECTION_BOUNDARY','producer':'Independent Codex correction reconciler','reconciled_freeze':pin(R/'freeze.json'),'frozen_files':len(freeze['files']),'current_reconciled_actual_files':len(actual),'semantic_freeze':pin(B/'semantic-review/freeze.json'),'semantic_actual_files_unchanged':len(semantic),'history_mapping':{'path':str(H/'original-to-history.json'),**pin(H/'original-to-history.json'),'files':len(manifest)},'changed_original_paths':len(changed),'changed_original_to_history':{'path':str(C/'changed-original-to-history.json'),**pin(C/'changed-original-to-history.json')},'root_report':pin(B/'root-reconciliation-verification/report.json'),'resolved_spans':pin(B/'root-reconciliation-verification/resolved-spans.json'),'root_intake':pin(B/'root-reconciliation-intake.json'),'package':pin(B/'semantic-input-review-package.txt'),'counts':{'spans':75,'nulls':12,'nonnull_d5':43,'d5_including_nulls':44},'generator_runs_added':1,'all_previous74_seven_key_tuples_unchanged':True,'all304305_reconciled_files_unchanged':True,'all_original_and_source_pins_unchanged':True,'scope':'F1/F2 only; root owns independent intake and scoped semantic re-review. No acceptance baseline invented.'}
+put(C/'completion-proof.json',result);print(json.dumps(result,indent=2))

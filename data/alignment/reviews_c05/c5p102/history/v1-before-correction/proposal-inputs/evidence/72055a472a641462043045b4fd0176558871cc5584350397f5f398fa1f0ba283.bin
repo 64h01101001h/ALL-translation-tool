@@ -1,0 +1,42 @@
+import datetime,hashlib,json,pathlib,stat
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+def sha(b):return hashlib.sha256(b).hexdigest()
+assert not (ROOT/'freeze-manifest.json').exists(),'Preserve the prior freeze; corrections require an explicit superseding boundary.'
+index=json.loads((ROOT/'evidence/evidence-index.json').read_text())
+for item in index['records']:
+ b=(ROOT/item['path']).read_bytes();assert len(b)==item['bytes'] and sha(b)==item['sha256'],item['path']
+master=json.loads((ROOT/'evidence/master-rows.json').read_text())
+mapping=json.loads((ROOT/'evidence/span-evidence-map.json').read_text())
+for seq,group in mapping.items():
+ for sp in group['spans']:
+  for ref in sp['master_full_row_refs']:assert ref.split('#')[1] in master
+spine=json.loads((ROOT/'evidence/spine-rows.json').read_text())
+corpus=json.loads((ROOT/'evidence/corpus-original-record-map.json').read_text())
+for ref in corpus['records'].values():
+ row=json.loads(spine[str(ref['spine_row_id'])]['raw']);assert sha(json.dumps(row,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode())==ref['record_json_sha256']
+summary=json.loads((ROOT/'evidence/mechanical-summary.json').read_text())
+for m in summary:
+ seq=m['seq'];p=ROOT/str(seq)
+ assert (p/'spec.json').read_bytes()==(ROOT/'native'/f'gen-{seq}-v1.stdin').read_bytes()
+ assert (p/'body.html').read_bytes()==(ROOT/'native'/f'gen-{seq}-v1.stdout').read_bytes()
+ assert sha((p/'spec.json').read_bytes())==m['spec_sha256']
+ assert sha((p/'body.html').read_bytes())==m['body_sha256']
+ assert not (ROOT/'native'/f'gen-{seq}-v1.stderr').read_bytes()
+ assert (ROOT/'native'/f'gen-{seq}-v1.exit').read_text()=='0\n'
+ assert m['spec_sha256'] in (p/'report.md').read_text() and m['body_sha256'] in (p/'report.md').read_text()
+attempts=[]
+for p in sorted((ROOT/'native').glob('*.command.json')):
+ rec=json.loads(p.read_text());attempts.append({'command_record':str(p.relative_to(ROOT)),'exit':rec['exit']})
+failed=[r for r in attempts if r['exit']!=0]
+assert {pathlib.Path(r['command_record']).name for r in failed}=={'collect-evidence-v1.command.json','write-reports-v1.command.json'}
+assert (ROOT/'helpers/collect_evidence-v1-failed.py').exists() and (ROOT/'helpers/write_reports-v1-failed.py').exists()
+files=[];groups={}
+for p in sorted(ROOT.rglob('*')):
+ if p.is_file():
+  b=p.read_bytes();digest=sha(b);rel=str(p.relative_to(ROOT));files.append({'path':rel,'bytes':len(b),'sha256':digest});groups.setdefault(digest,[]).append(rel)
+manifest={'status':'FROZEN_ORIGINAL_INDEPENDENT_TIBETAN_PROPOSALS','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'Codex (GPT-6 Astra)','source_origin_commit':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4','source_origin_acceptance_boundary':294,'future_through303_acceptance':'distinct, not claimed','segments':[304,305,306],'counts':{'spans':sum(m['spans'] for m in summary),'null':sum(m['null'] for m in summary),'d5':sum(m['d5'] for m in summary),'nonnull_d5':sum(m['nonnull_d5'] for m in summary),'errata':0},'all_required_canonical_and_range_checks':'PASS; semantics remains provisional','scope':'All listed deliverables, original evidence, helpers, native generator/range/evidence executions and failed attempts. Freeze invocation receipts and this manifest/checksum are closure records emitted after the immutable content inventory; they are not self-hashed.','files':files,'identical_byte_file_mappings':[{'sha256':s,'paths':ps,'note':'Exact bytes verified; separate logical paths are retained where canonical stdin/spec, stdout/body, and native proof forms are required.'} for s,ps in groups.items() if len(ps)>1],'attempt_records':attempts,'failures_preserved':failed,'no_post_freeze_edit':'Any correction must preserve and explicitly supersede this boundary.'}
+data=(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n').encode();(ROOT/'freeze-manifest.json').write_bytes(data);digest=sha(data)
+(ROOT/'freeze-manifest.sha256').write_text(digest+'  freeze-manifest.json\n')
+for f in files:(ROOT/f['path']).chmod(stat.S_IRUSR|stat.S_IRGRP|stat.S_IROTH)
+(ROOT/'freeze-manifest.json').chmod(0o444);(ROOT/'freeze-manifest.sha256').chmod(0o444)
+print(json.dumps({'freeze_manifest':str(ROOT/'freeze-manifest.json'),'sha256':digest,'frozen_files':len(files),'counts':manifest['counts'],'per_segment':[{k:m[k] for k in ['seq','spans','null','d5','nonnull_d5','errata','generator_exit','body_sha256']} for m in summary]},indent=2))

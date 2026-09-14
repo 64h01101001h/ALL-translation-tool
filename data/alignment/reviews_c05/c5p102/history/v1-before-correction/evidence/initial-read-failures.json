@@ -1,0 +1,32 @@
+[
+  {
+    "command": "cat campaign-artifacts/shared/semantic-review-protocol.md",
+    "exit": 1,
+    "error": "No such file or directory",
+    "resolution": "Read actual campaign-artifacts/semantic-review-protocol.md."
+  },
+  {
+    "command": "cat campaign-worktree/RECONCILE_BRIEF.md campaign-worktree/REFUTE_BRIEF.md",
+    "exit": 1,
+    "error": "No such file or directory",
+    "resolution": "Read actual docs/alignment_briefs/ files."
+  },
+  {
+    "command": "inspect Tibetan master-rows using list slice",
+    "exit": 1,
+    "error": "KeyError: slice(None, 1, None)",
+    "resolution": "Inspected dict keys and verified exact keyed original master records; no generator was rerun."
+  },
+  {
+    "command": "Inspect reconciled/**/*allow* using read_text without is_file filter",
+    "exit": 1,
+    "error": "IsADirectoryError: reconciled/native/governing-data__alignment__span_head_allow.json is a directory",
+    "resolution": "Filter actual files; no source mutation or generator executed."
+  },
+  {
+    "command": "sed governing/engines/gen_alignment_page.py.txt",
+    "exit": 1,
+    "error": "No such file or directory",
+    "resolution": "Locate actual pinned tools/gen_alignment_page.py.txt."
+  }
+]

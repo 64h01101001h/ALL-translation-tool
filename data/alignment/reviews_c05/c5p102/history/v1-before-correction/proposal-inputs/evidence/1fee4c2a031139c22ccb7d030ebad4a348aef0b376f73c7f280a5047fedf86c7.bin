@@ -1,0 +1,6 @@
+import json,sqlite3,pathlib
+root=pathlib.Path.cwd();p=root/'evidence';w=root.parents[2]/'campaign-worktree';db=sqlite3.connect('file:'+str(w/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+sql='select * from corpus_segments where course=? and seq between ? and ? order by seq';args=['ILL',2319,2326]
+rows=[dict(x) for x in db.execute(sql,args)]
+(p/'author-context-query.json').write_text(json.dumps({'sql':sql,'parameters':args,'count':len(rows),'rows':rows},ensure_ascii=False,indent=2)+'\n')
+for r in rows: print(r['course'],r['seq'],r['wylie'],r['english'])

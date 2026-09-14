@@ -1,0 +1,58 @@
+from pathlib import Path
+import json,gzip,sqlite3,hashlib,subprocess
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parents[1]/'campaign-worktree'
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+M=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));C=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+ix={}; indexed=[]
+for i,x in enumerate(C):co=x['course'];ix[co]=ix.get(co,0)+1;indexed.append((i,ix[co],x))
+def masterhits(term):return [(coll,i,x) for coll in ['unified_entries','curated_entries','glossary_entries'] for i,x in enumerate(M[coll]) if x.get('wylie')==term or term in (x.get('wylie_variants') or [])]
+def objectcheck(h,x):assert json.loads((B/'english/evidence/objects'/(h+'.json')).read_text())==x
+proof=[];full={}
+for i,q in enumerate(json.loads((B/'english/evidence/queries.json').read_text())):
+ if q['source']=='original spine':
+  got=[dict(x) for x in con.execute(q['sql'],q['parameters'])];assert len(got)==q['count'] and len(got)==len(q['objects'])
+  for h,x in zip(q['objects'],got):objectcheck(h,x)
+ elif q['source']=='original master' and 'json_pointer' in q:
+  got=[M[q['json_pointer'].lstrip('/')]];assert len(got)==q['count'];objectcheck(q['object'],got[0])
+ elif q['source']=='original master':
+  got=masterhits(q['term']);assert len(got)==q['count'] and len(got)==len(q['hits'])
+  for (coll,j,x),hit in zip(got,q['hits']):assert hit['collection']==coll and hit['index']==j;objectcheck(hit['object'],x);full[f'{coll}:{j}']=x
+ else:
+  if 'parameters' in q:got=[(j,s,x) for j,s,x in indexed if any(x.get(f)==v for f,v in q['parameters'].items())]
+  else:got=[(j,s,x) for j,s,x in indexed if q['term'] in x.get('wylie','') or q['term'] in x.get('english','')]
+  assert len(got)==q['count'] and len(got)==len(q['hits'])
+  for (j,s,x),hit in zip(got,q['hits']):
+   assert hit['array_index']==j and hit['course_sequence_derived_1_based']==s;objectcheck(hit['object'],x)
+   if 'matching_fields' in hit:assert hit['matching_fields']==[f for f,v in q['parameters'].items() if x.get(f)==v] or set(hit['matching_fields'])=={f for f,v in q['parameters'].items() if x.get(f)==v}
+ proof.append({'angle':'english','query_index':i,'source':q['source'],'count':len(got),'exact_original_objects_equal':True})
+tm=json.loads((B/'tibetan/evidence/master-rows.json').read_text())
+for i,q in enumerate(json.loads((B/'tibetan/evidence/master-queries.json').read_text())):
+ got=masterhits(q['exact_wylie_or_variant']);refs=[f'{c}:{j}' for c,j,x in got];assert len(got)==q['count'] and set(refs)==set(q['refs'])
+ for c,j,x in got:ref=f'{c}:{j}';assert tm[ref]==x;full[ref]=x
+ proof.append({'angle':'tibetan','kind':'master','query_index':i,'count':len(got),'refs':refs,'exact_original_objects_equal':True})
+for i,q in enumerate(json.loads((B/'tibetan/evidence/spine-queries.json').read_text())):
+ got=[dict(x) for x in con.execute(q['sql'],q['parameters'])];assert len(got)==q['row_count'] and [x['id'] for x in got]==q['row_ids'];proof.append({'angle':'tibetan','kind':'spine','query_index':i,'count':len(got),'row_ids':[x['id'] for x in got]})
+put(R/'evidence/all-query-recheck.json',proof)
+reg=json.loads((R/'governing/docs/errata_register.json').read_text());es=reg['entries'] if isinstance(reg,dict) else reg;checks=[]
+for q in json.loads((B/'english/evidence/register-checks.json').read_text())['queries']:
+ hits=[(i,x) for i,x in enumerate(es) if q['substring_case_insensitive'].lower() in json.dumps(x,ensure_ascii=False).lower()];assert len(hits)==q['count']
+ for (i,x),h in zip(hits,q['matches']):assert i==h['array_index'];objectcheck(h['object'],x)
+ checks.append({'term':q['substring_case_insensitive'],'count':len(hits),'complete_entries':[x for _,x in hits]})
+for term in ['C05:304','C05:305','C05:306','with the water','YI DVAGS']:
+ checks.append({'term':term,'count':len([x for x in es if term.lower() in json.dumps(x,ensure_ascii=False).lower()])})
+put(R/'evidence/register-recheck.json',{'commit':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4','queries':checks,'scope':'Historical governing source baseline; future acceptance is a separate root task.'})
+physical=[]
+for q in json.loads((B/'english/evidence/physical-comparison.json').read_text()):
+ raw=Path(q['physical']).read_bytes();a,b=q['byte_range'];part=raw[a:b];lines=[s.strip() for s in part.decode('latin1').splitlines() if s.strip()];n=q['acip_physical_line_count'];co='C15' if 'C15' in q['physical'] else 'C05';row=dict(con.execute('select * from corpus_segments where course=? and seq=?',(co,q['seq'])).fetchone());assert ' '.join(lines[:n])==row['acip'];assert ' '.join(lines[n:])==row['english'];physical.append({'course':co,'seq':q['seq'],'path':q['physical'],'physical_sha256':sha(raw),'range':[a,b],'raw_latin1':part.decode('latin1'),'exact_acip_and_english_after_line_join':True})
+put(R/'evidence/physical-recheck.json',physical)
+freezes=[]
+for f,expected in [('reconciled/freeze.json','3212c15bf512c4cd5bc3b12467de2eb85c845f5a768190b7bb9c8f42e1704e94'),('tibetan/freeze-manifest.json','d83b6b839f46e6c7be04106e7f1e065e16282ec45f0fb13233daefcbde9561ca'),('english/freeze-manifest.json','f6dcf4aba79de3718a2077f5639b99b46ebf0ee41113e9606235895cd6a43a9c')]:
+ p=B/f;raw=p.read_bytes();assert sha(raw)==expected;j=json.loads(raw)
+ for x in j['files']:data=(p.parent/x['path']).read_bytes();assert len(data)==x['bytes'] and sha(data)==x['sha256']
+ freezes.append({'path':f,'sha256':expected,'files':len(j['files']),'result':'PASS'})
+put(R/'evidence/input-freeze-verification.json',freezes)
+# Additional full records for all queried terms, preserving all fields and competing senses.
+put(R/'evidence/all-original-master-records.json',[{'original_location':k,'record':v} for k,v in full.items()])
+old=json.loads((R/'evidence/initial-read-failures.json').read_text());old.append({'command':'inspect Tibetan master-rows using list slice','exit':1,'error':'KeyError: slice(None, 1, None)','resolution':'Inspected dict keys and verified exact keyed original master records; no generator was rerun.'});put(R/'evidence/initial-read-failures.json',old)
+print(json.dumps({'query_sets':len(proof),'english_queries':81,'tibetan_master_queries':46,'tibetan_spine_queries':14,'full_master_records':len(full),'register_queries':len(checks),'physical_extents':len(physical),'freezes':freezes},indent=2))

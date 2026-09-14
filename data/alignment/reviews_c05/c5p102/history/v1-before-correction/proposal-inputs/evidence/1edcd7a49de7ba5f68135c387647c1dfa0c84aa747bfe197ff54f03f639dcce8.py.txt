@@ -1,0 +1,103 @@
+from pathlib import Path
+import json, hashlib, subprocess, sys, os, datetime, gzip, sqlite3
+R=Path(__file__).resolve().parent; B=R.parent; W=B.parents[1]/'campaign-worktree'
+def sha(b): return hashlib.sha256(b).hexdigest()
+def put(p,x):
+ p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def capture(label,argv,stdin=b''):
+ d=R/'native'/label; d.mkdir(parents=True,exist_ok=False)
+ (d/'stdin.bin').write_bytes(stdin)
+ rec={'argv':list(map(str,argv)),'cwd':str(W),'environment_overrides':{'PYTHONDONTWRITEBYTECODE':'1'},'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+ put(d/'command.json',rec)
+ p=subprocess.run(rec['argv'],input=stdin,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+ (d/'stdout.bin').write_bytes(p.stdout);(d/'stderr.bin').write_bytes(p.stderr);(d/'exit.txt').write_text(str(p.returncode)+'\n')
+ rec.update(exit=p.returncode,finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),streams={name:{'bytes':len(data),'sha256':sha(data)} for name,data in [('stdin',stdin),('stdout',p.stdout),('stderr',p.stderr)]})
+ put(d/'execution.json',rec);return p
+def obj(x):
+ data=(json.dumps(x,ensure_ascii=False,indent=2,sort_keys=True)+'\n').encode(); h=sha(data);p=R/'evidence'/'objects'/(h+'.json');p.parent.mkdir(parents=True,exist_ok=True)
+ if not p.exists():p.write_bytes(data)
+ else:assert p.read_bytes()==data
+ return h
+def main():
+ manifests=[];mappings=[];schemas=[]
+ for angle,expected in [('tibetan','d83b6b839f46e6c7be04106e7f1e065e16282ec45f0fb13233daefcbde9561ca'),('english','f6dcf4aba79de3718a2077f5639b99b46ebf0ee41113e9606235895cd6a43a9c')]:
+  root=B/angle;f=root/'freeze-manifest.json';assert sha(f.read_bytes())==expected; m=json.loads(f.read_text());assert isinstance(m,dict) and isinstance(m['files'],list)
+  for rec in m['files']:
+   p=root/rec['path'];data=p.read_bytes();assert len(data)==rec['bytes'] and sha(data)==rec['sha256'],str(p)
+  manifests.append({'angle':angle,'path':str(f),'sha256':expected,'files_verified':len(m['files'])})
+  for p in sorted(root.rglob('*')):
+   if not p.is_file():continue
+   data=p.read_bytes();h=sha(data); dest=R/'originals'/'blobs'/h;dest.parent.mkdir(parents=True,exist_ok=True)
+   if not dest.exists():dest.write_bytes(data)
+   else:assert dest.read_bytes()==data
+   mappings.append({'original':str(p),'copy':str(dest.relative_to(R)),'bytes':len(data),'sha256':h,'within_manifest':p.relative_to(root).as_posix() in {r['path'] for r in m['files']}})
+   if p.suffix=='.json':
+    x=json.loads(data);schemas.append({'path':str(p),'shape':type(x).__name__,'keys':list(x) if isinstance(x,dict) else None,'items':len(x) if isinstance(x,(dict,list)) else None})
+ put(R/'originals'/'copy-manifest.json',mappings);put(R/'originals'/'schema-inspection.json',schemas);put(R/'originals'/'freeze-verification.json',manifests)
+ base=json.loads((B/'proposal-baseline.json').read_text());pins=[]
+ for name,rec in base['source_pins'].items():
+  data=Path(rec['path']).read_bytes();assert len(data)==rec['bytes'] and sha(data)==rec['sha256'];pins.append({'name':name,**rec,'verified':True})
+ put(R/'evidence'/'independent-source-pins.json',pins)
+ cx=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);cx.row_factory=sqlite3.Row
+ master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))
+ corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+ print('ORIGINAL SCHEMAS',type(master).__name__,list(master),type(corpus).__name__,list(corpus) if isinstance(corpus,dict) else len(corpus))
+ queries=[]
+ for i,q in enumerate(json.loads((B/'english/evidence/queries.json').read_text())):
+  refs=[]
+  if q['source']=='original spine':
+   hits=[dict(r) for r in cx.execute(q['sql'],q['parameters'])];assert len(hits)==q['count'];refs=[obj(x) for x in hits];assert refs==q['objects'];queries.append({'angle':'english','query_index':i,'kind':'spine','count':len(hits),'objects':refs,'sql':q['sql'],'parameters':q['parameters']})
+  elif q['source']=='original master' and 'term' in q:
+   hits=[]
+   for collection,entries in master.items():
+    if not isinstance(entries,list):continue
+    for j,x in enumerate(entries):
+     if isinstance(x,dict) and (x.get('wylie')==q['term'] or q['term'] in x.get('wylie_variants',[])):hits.append({'collection':collection,'index':j,'object':obj(x)})
+   assert hits==q['hits'];assert len(hits)==q['count'];queries.append({'angle':'english','query_index':i,'kind':'master','term':q['term'],'count':len(hits),'hits':hits})
+  elif q['source']=='original master':
+   assert obj(master['meta'])==q['object'];queries.append({'angle':'english','query_index':i,'kind':'master-meta','object':q['object']})
+  elif q['source']=='original external corpus':
+   # The original corpus schema is inspected before choosing its record array.
+   records=corpus['segments'] if isinstance(corpus,dict) and 'segments' in corpus else corpus
+   assert isinstance(records,list)
+   for hit in q['hits']:
+    x=records[hit['array_index']];assert obj(x)==hit['object'];refs.append(hit['object'])
+   if q.get('predicate','').startswith('exact OR'):
+    expected=[j for j,x in enumerate(records) if any(x.get(k)==v for k,v in q['parameters'].items())];assert expected==[h['array_index'] for h in q['hits']]
+   elif q.get('predicate')=='term in wylie OR term in english':
+    expected=[j for j,x in enumerate(records) if q['term'] in x.get('wylie','') or q['term'] in x.get('english','')];assert expected==[h['array_index'] for h in q['hits']]
+   else:
+    count=0; expected=[]
+    for j,x in enumerate(records):
+     if x.get('course')=='ILL':
+      count+=1
+      if 2320<=count<=2328:expected.append(j)
+    assert expected==[h['array_index'] for h in q['hits']]
+   assert len(refs)==q['count'];queries.append({'angle':'english','query_index':i,'kind':'external-corpus','query':q,'verified_objects':refs})
+  else:raise AssertionError(q)
+ tibrows=json.loads((B/'tibetan/evidence/master-rows.json').read_text())
+ for i,q in enumerate(json.loads((B/'tibetan/evidence/master-queries.json').read_text())):
+  hits=[]
+  for collection,entries in master.items():
+   if not isinstance(entries,list):continue
+   for j,x in enumerate(entries):
+    if isinstance(x,dict) and (x.get('wylie')==q['exact_wylie_or_variant'] or q['exact_wylie_or_variant'] in x.get('wylie_variants',[])):
+     ref=f'{collection}:{j}';assert x==tibrows[ref];hits.append({'original_ref':ref,'object':obj(x)})
+  assert [x['original_ref'] for x in hits]==q['refs'];assert len(hits)==q['count'];queries.append({'angle':'tibetan','query_index':i,'kind':'master','term':q['exact_wylie_or_variant'],'count':len(hits),'hits':hits})
+ for i,q in enumerate(json.loads((B/'tibetan/evidence/spine-queries.json').read_text())):
+  hits=[dict(r) for r in cx.execute(q['sql'],q['parameters'])];assert len(hits)==q['row_count'];assert [x['id'] for x in hits]==q['row_ids'];queries.append({'angle':'tibetan','query_index':i,'kind':'spine','query':q,'objects':[obj(x) for x in hits]})
+ put(R/'evidence'/'independent-query-verification.json',queries)
+ rows=[dict(x) for x in cx.execute("select * from corpus_segments where course='C05' and seq between 298 and 312 order by seq")]
+ for snapshot in ['source','context']:
+  original=json.loads((B/(snapshot+'.json')).read_text());selected=[{k:r[k] for k in original[0]} for r in rows if r['seq'] in [s['seq'] for s in original]];assert selected==original
+ put(R/'evidence'/'source-context.json',rows)
+ replays=[]
+ for angle in ['tibetan','english']:
+  for seq in [304,305,306]:
+   label=f'original-{angle}-{seq}'
+   argv=[sys.executable,str(B/'tibetan/helpers/canonical_ro.py')] if angle=='tibetan' else [sys.executable,str(B/'english/run_canonical.py'),str(R/'native'/label/'runtime.json')]
+   p=capture(label,argv,(B/angle/str(seq)/'spec.json').read_bytes());assert p.returncode==0 and not p.stderr;assert p.stdout==(B/angle/str(seq)/'body.html').read_bytes()
+   replays.append({'angle':angle,'seq':seq,'exit':p.returncode,'stderr_bytes':len(p.stderr),'body_bytes':len(p.stdout),'body_sha256':sha(p.stdout),'exact_original_body':True})
+ put(R/'evidence'/'six-original-replays.json',replays)
+ print(json.dumps({'frozen_inputs':manifests,'original_files_read_and_preserved':len(mappings),'queries_reexecuted':len(queries),'replays':replays},indent=2))
+if __name__=='__main__':main()

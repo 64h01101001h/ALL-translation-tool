@@ -1,0 +1,137 @@
+{
+  "status": "PASS_CORRECTION_INTAKE_NOT_ROOT_OR_FRESH_SEMANTIC_ACCEPTANCE",
+  "producer": "Independent Codex correction reconciler updating current root-facing interfaces; root has not yet independently reviewed this correction",
+  "utc": "2026-09-14T17:05:53.523920+00:00",
+  "freezes": {
+    "tibetan": {
+      "files": 156,
+      "freeze": {
+        "bytes": 35934,
+        "sha256": "d83b6b839f46e6c7be04106e7f1e065e16282ec45f0fb13233daefcbde9561ca"
+      }
+    },
+    "english": {
+      "files": 378,
+      "freeze": {
+        "bytes": 81438,
+        "sha256": "f6dcf4aba79de3718a2077f5639b99b46ebf0ee41113e9606235895cd6a43a9c"
+      }
+    },
+    "reconciled": {
+      "files": 1066,
+      "freeze": {
+        "bytes": 308944,
+        "sha256": "45becb5b818c5db6381966f3ea4e2499efb6ff010da9d206b6c700eb6e72c356"
+      }
+    }
+  },
+  "original_copy_records_exact": 542,
+  "source_pins_and_historical_governance_exact": true,
+  "counts": [
+    {
+      "seq": 304,
+      "spans": 15,
+      "nulls": 4,
+      "d5_total": 8,
+      "nonnull_d5": 7
+    },
+    {
+      "seq": 305,
+      "spans": 22,
+      "nulls": 3,
+      "d5_total": 15,
+      "nonnull_d5": 15
+    },
+    {
+      "seq": 306,
+      "spans": 38,
+      "nulls": 5,
+      "d5_total": 21,
+      "nonnull_d5": 21
+    }
+  ],
+  "total_spans": 75,
+  "total_nulls": 12,
+  "total_word_pairs": 43,
+  "original_dispositions": {
+    "retained": 123,
+    "depth-recast": 5,
+    "omitted": 2,
+    "recast": 11
+  },
+  "retained_tuple_annotation_changes": [
+    {
+      "seq": 306,
+      "angle": "english",
+      "original_id": "p1",
+      "final_id": "w11",
+      "changed_fields": {
+        "nul": {
+          "original": "Agentive case carried by the active English subject; no separate by exponent.",
+          "final": "Agentive is expressed by the active English subject; no separate by token."
+        }
+      }
+    },
+    {
+      "seq": 306,
+      "angle": "english",
+      "original_id": "m4",
+      "final_id": "w17",
+      "changed_fields": {
+        "nul": {
+          "original": "Genitive spatial relation folded into in the basin; no separate of exponent.",
+          "final": "Genitive member inside bse ru'i; relation is absorbed into in the basin, with no separate of."
+        }
+      }
+    },
+    {
+      "seq": 306,
+      "angle": "english",
+      "original_id": "p5",
+      "final_id": "w34",
+      "changed_fields": {
+        "nul": {
+          "original": "Quotation marker realized by the quotation structure; no separate English quotative word beyond gsungs = say.",
+          "final": "Quotative is expressed by the direct quotation boundary; no separate word in addition to say."
+        },
+        "cls": {
+          "original": "particle",
+          "final": "case"
+        }
+      }
+    }
+  ],
+  "original_native_runs": "Six original actual executions preserved unchanged and complete streams verified; none repeated for correction.",
+  "final_native_runs": "Exactly one corrected306 canonical generation. Exact passing304/305 and successful corrected306 executions reused for packaging.",
+  "execution_reuse": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/root-reconciliation-verification/execution-reuse.json",
+    "bytes": 7871,
+    "sha256": "16c30dc33e06d5da3c41def701450f0bbcf6f6481c05ec0cc60e8713133977f6"
+  },
+  "historical_root_intake": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/reconciliation-history/v1-before-306-member-correction/root-reconciliation-intake.json",
+    "bytes": 4095,
+    "sha256": "25cec4e53088cc20587669822699b3bf7406e1af605e199014a4da2903830a1d",
+    "meaning": "Complete earlier root readings, setup failure, counts, limitations and old freeze remain historical evidence, not claims about current root acceptance."
+  },
+  "correction_read": "Full independent review.md/review.json and governing code; complete original English m1/m3 and Tibetan w10 records, exact source rows, all ten matching complete master records with competing glosses; every preserved original object/range/note and current seven-key tuple identity verified.",
+  "correction_proof": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/reconciled/evidence/correction-306-v2/final-correction-proof.json",
+    "bytes": 4308,
+    "sha256": "bef26f3bdefe05e6abc1fd91ccaed4c94d24f6ef1bf3e4a80efc488b556c58fe"
+  },
+  "semantic_review_boundary_unchanged": {
+    "freeze_sha256": "5e6b5ce71a08f0683f1c6a10c27cc0bf07441c908234d1e67bda36a4eb1ec68e",
+    "all_files_verified_unchanged": 798,
+    "not_edited": true
+  },
+  "count_clarification": "44 total d5 spans includes null yin in304; consumer word_pair_count43. Per segment spans/nulls/nonnull_d5:30415/4/7;30522/3/15;30638/5/21.",
+  "source_governance_origin": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+  "source_origin_course_boundary": 294,
+  "future_acceptance_baseline": "Root-owned capture after303; not asserted here.",
+  "limitations": [
+    "No semantic approval is claimed. Root owns the scoped re-review request.",
+    "Source/master/GMR fields, supplied attribution and original MEDIUM/PROBABLE candidate remain unchanged; LOW/UNCERTAIN bibliography concern remains.",
+    "Correction role did not modify repository code, gates, original proposals or semantic-review."
+  ]
+}

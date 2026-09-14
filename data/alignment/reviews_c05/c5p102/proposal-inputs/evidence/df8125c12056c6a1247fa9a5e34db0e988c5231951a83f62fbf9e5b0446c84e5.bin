@@ -1,0 +1,41 @@
+{
+  "seq": 305,
+  "status": "No new errata proposed; errata.json is empty.",
+  "five_grounds": [
+    {
+      "ground": "Exact selected-row reading",
+      "source_ref": "../evidence/spine-rows.json#1687",
+      "acip_sha256": "d8737603efb8f068685493608668f14245921bac7500c70c10df874687f4a050",
+      "wylie_sha256": "0e367b08c5e4d1a948d08c4e0fecb3a722490207901fd64422535dbfa40ee832",
+      "english_sha256": "bfcfda5166373b1a90ad6ebdbb4f90d8d4eef799358fe9b0b0dbbbbe52075c2b",
+      "finding": "No new erratum: physical lines 3031–3035 confirm the selected wording. bsreg pa/sizzle is supported by the original HGM glossary. Registered-class and corpus checks give no source correction to file."
+    },
+    {
+      "ground": "Registered classes",
+      "source_ref": "../native/pin-docs__errata_register.json.stdout",
+      "query_ref": "../evidence/errata-register-queries.json",
+      "finding": "No re-filing. Target English is below the 1500-character cap; no following heading or English running-head row occurs in these selected segments."
+    },
+    {
+      "ground": "Available corpus parallels",
+      "source_ref": "../evidence/spine-queries.json",
+      "complete_original_rows_ref": "../evidence/spine-rows.json",
+      "original_corpus_map": "../evidence/corpus-original-record-map.json",
+      "finding": "The original master has bsreg pa → sizzle, lto → stomach, blos rlom pa → imagination, and curated sdug bsngal → suffering. C15:450 matches ACIP/Wylie/English exactly; P7:44 preserves the English with differing Tibetan punctuation and DWAGS spelling."
+    },
+    {
+      "ground": "HGM lexical evidence",
+      "source_ref": "../evidence/master-rows.json",
+      "query_ref": "../evidence/master-queries.json",
+      "span_ref": "../evidence/span-evidence-map.json",
+      "finding": "Original hgm_gloss/hgm_evidence tier fields retained. Comparative glosses do not supply GMR English; master evidence does not alone prove contextual correspondence."
+    },
+    {
+      "ground": "Original physical source and inference limit",
+      "source_ref": "../evidence/physical-C05ReadingASCII.txt",
+      "comparison_ref": "../evidence/physical-comparisons.json",
+      "finding": "ACIP occurs byte-exact. Physical English wraps across lines; whitespace-only joining matches the full selected English. Textual identity proves only compared fields; no publication-independence or ingestion-lineage conclusion is drawn."
+    }
+  ],
+  "unbanked_uncertainty": "Second yi dvags is pronominalized and omitted; source occurrence 3 owns final craving spirits. la/na are recast and omitted. The supplied pus and blood, modal can, auxiliary be, and emphatic at all remain unwrapped."
+}

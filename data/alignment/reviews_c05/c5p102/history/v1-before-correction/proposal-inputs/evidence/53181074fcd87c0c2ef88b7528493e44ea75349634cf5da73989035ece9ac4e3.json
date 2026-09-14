@@ -1,0 +1,94 @@
+{
+  "status": "PROPOSAL_SOURCE_BASELINE_ONLY; actual landing baseline waits for verified303",
+  "utc": "2026-09-14T15:13:19.048291+00:00",
+  "commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+  "course_boundary": 294,
+  "proposal_segments": [
+    304,
+    305,
+    306
+  ],
+  "source_pins": {
+    "spine": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+      "bytes": 249167872,
+      "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc"
+    },
+    "master": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/hgm_dictionary_v27_2.json.gz",
+      "bytes": 13393560,
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253"
+    },
+    "corpus": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/full_parallel_corpus_v32.json.gz",
+      "bytes": 8965675,
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+    },
+    "source": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/source.json",
+      "bytes": 2498,
+      "sha256": "70c91f06f9e4eb02c2b61f4baa0f605975dfe34d3da63793893fa3e829d8a66b"
+    },
+    "context": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/context.json",
+      "bytes": 20802,
+      "sha256": "d599d6759228835a766584e7a6768d56430c0ee1dc65f09e62fe3d172b9993a3"
+    },
+    "physical": {
+      "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    }
+  },
+  "governing_git_pins": {
+    "AGENTS.md": {
+      "original_git_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+      "repository_relative_path": "AGENTS.md",
+      "bytes": 11061,
+      "sha256": "f2ca43b37638c8b86c7b6c47fe3811382239549e1aad721d152493f035907bca"
+    },
+    "docs/ALIGNMENT_LAYER_SPEC.md": {
+      "original_git_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+      "repository_relative_path": "docs/ALIGNMENT_LAYER_SPEC.md",
+      "bytes": 12007,
+      "sha256": "9beb77df0d3e4243a727bacf13682e8429d07721d57457252d15286acfe78cc4"
+    },
+    "docs/alignment_briefs/PROPOSE_BRIEF.md": {
+      "original_git_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+      "repository_relative_path": "docs/alignment_briefs/PROPOSE_BRIEF.md",
+      "bytes": 8093,
+      "sha256": "7879afa8f549f91d13133d18fb45f84d916abef215d010dd85c801bd2b0319b7"
+    },
+    "data/alignment/C05_CAMPAIGN.md": {
+      "original_git_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+      "repository_relative_path": "data/alignment/C05_CAMPAIGN.md",
+      "bytes": 172368,
+      "sha256": "bb02458776cc1f2ca22e816bf5cc1f39f345e90902153a26d29d5ed6b3108259"
+    },
+    "tools/gen_alignment_page.py": {
+      "original_git_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+      "repository_relative_path": "tools/gen_alignment_page.py",
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    },
+    "tools/build_alignment_layer.py": {
+      "original_git_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+      "repository_relative_path": "tools/build_alignment_layer.py",
+      "bytes": 39760,
+      "sha256": "9b48b4a62ed77a4804d095ce303d054bf9d43786a2b7f30f106b3f98e9ea0b1f"
+    },
+    "docs/errata_register.json": {
+      "original_git_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+      "repository_relative_path": "docs/errata_register.json",
+      "bytes": 262017,
+      "sha256": "dc851e07fe913a904dc8b57f173f0bcbc4f13a884e65136f6560688576dc6c6c"
+    },
+    "data/alignment/span_head_allow.json": {
+      "original_git_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+      "repository_relative_path": "data/alignment/span_head_allow.json",
+      "bytes": 11010,
+      "sha256": "977dcf511d4045ee1b48f55dddfa840f110c5fc5f6a0ed45050b8fc673c1e474"
+    }
+  },
+  "note": "No W mutation hold. Read mutable governing refs from these exact immutable Git objects. Generator and original sources must remain unchanged; registration/ledger/allowance revisions may advance while proposals run. Preserve actual origin, never claim future acceptance."
+}

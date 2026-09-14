@@ -1,0 +1,72 @@
+import collections,hashlib,json,pathlib,re
+from html.parser import HTMLParser
+from canonical_ro import B,load_generator
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+def sha(b):return hashlib.sha256(b).hexdigest()
+class Parsed(HTMLParser):
+ def __init__(self):
+  super().__init__(convert_charrefs=True);self.stack=[];self.side=None;self.text={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}};self.null=0
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs)
+  if tag=='div' and a.get('class') in ['tib','eng']:self.side=a['class']
+  if tag=='span':
+   if a.get('class')=='nul':self.null+=1
+   lab=a.get('data-l');s=self.side
+   self.stack.append({'label':lab,'side':s,'start':len(self.text[s]) if s else 0,'null':a.get('class')=='nul','depth':a.get('data-d')})
+ def handle_endtag(self,tag):
+  if tag=='span':
+   item=self.stack.pop();s=item['side']
+   if item['label']:self.ranges[s][item['label']]={'range':[item['start'],len(self.text[s])],'depth':int(item['depth'])}
+   if item['null']:self.null-=1
+ def handle_data(self,data):
+  if self.side and self.stack and not self.null:self.text[self.side]+=data
+G=load_generator();source=json.loads((ROOT/'evidence/spine-rows.json').read_text());summary=[]
+for seq in [304,305,306]:
+ dest=ROOT/str(seq);spbytes=(dest/'spec.json').read_bytes();spec=json.loads(spbytes);seg=spec['segments'][0]
+ meta=json.loads((ROOT/'native'/f'gen-{seq}-v1.command.json').read_text())
+ body=(ROOT/'native'/f'gen-{seq}-v1.stdout').read_bytes();assert meta['exit']==0 and meta['stderr_bytes']==0
+ assert (ROOT/'native'/f'gen-{seq}-v1.stdin').read_bytes()==spbytes
+ assert sha(body)==meta['stdout_sha256']
+ # The saved body is exactly the real canonical stdout, without the capture wrapper status line.
+ (dest/'body.html').write_bytes(body)
+ row=source[str(seq+1382)];spans=seg['spans'];byid={s['id']:s for s in spans};assert len(byid)==len(spans)
+ tr=G.resolve(row['wylie'],spans,'tib',seq)
+ eo=seg['eng_order'];assert len(eo)==len(set(eo));assert set(eo)=={s['id'] for s in spans if s['eng'] is not None and s['d']!=7}
+ es=G.with_members(spans,[byid[i] for i in eo],row['english']);er=G.resolve(row['english'],es,'eng',seq)
+ intents=json.loads((dest/'intended-ranges.json').read_text())['spans'];expected={i['id']:i for i in intents}
+ parsed=Parsed();parsed.feed(body.decode());assert parsed.text=={'tib':row['wylie'],'eng':row['english']}
+ details=[];parent=None
+ for idx,s in enumerate(spans):
+  sid=s['id'];lab='s'+str(seq)+sid;i=expected[sid]
+  assert list(tr[sid])==i['tib_range'],(seq,sid,'TIB',tr[sid],i['tib_range'])
+  assert parsed.ranges['tib'][lab]['range']==i['tib_range']
+  assert parsed.ranges['tib'][lab]['depth']==s['d']
+  if s['eng'] is not None:
+   assert list(er[sid])==i['eng_range'],(seq,sid,'ENG',er[sid],i['eng_range'])
+   assert parsed.ranges['eng'][lab]['range']==i['eng_range']
+  else:assert s.get('nul') and parsed.ranges['eng'][lab]['range'][0]==parsed.ranges['eng'][lab]['range'][1]
+  if s['d']==7:
+   assert idx and spans[idx-1]['d']==5,(seq,sid,'not immediate d5 parent')
+   parent=spans[idx-1]
+   for side,ranges,text in [('tib',tr,row['wylie']),('eng',er,row['english'])]:
+    if s[side] is None:continue
+    a,b=ranges[sid];p,q=ranges[parent['id']]
+    assert p<=a<b<=q and [a,b]!=[p,q]
+    assert text.count(s[side],p,q)==1
+  else:parent=None
+  details.append({'id':sid,'d':s['d'],'tib_range':list(tr[sid]),'eng_range':list(er[sid]) if sid in er else None,'parent':parent['id'] if parent else None,'all_checks_pass':True})
+ for side in ['tib','eng']:
+  parsed_bank={lab:(d,text) for d,lab,text in B.spans_of(body.decode(),side)}
+  assert len(parsed_bank)==len(spans)+1,(seq,side,len(parsed_bank))
+  for s in spans:
+   d,text=parsed_bank['s'+str(seq)+s['id']]
+   assert d==s['d'] and text==(s[side] or ''),(seq,s['id'],side,text,s[side])
+ requests=[]
+ for s in spans:
+  if s['d'] in [5,7] and s['eng'] and re.match(r'^(?:the|a|an|and|or|his|our|your|I|you)\b',s['eng'],re.I):
+   assert s['tib']=='sogs' and s['eng']=='and so on'
+   requests.append({'page_span':'c5p102/s'+str(seq)+s['id'],'tibetan_licensor':'sogs','reason':'The established etcetera particle licenses the whole and so on closing gesture; exact master hgm_gloss and the selected original row support this. Proposal only; no allowance file was edited.'})
+ metrics={'seq':seq,'spans':len(spans),'nonnull':sum(s['eng'] is not None for s in spans),'null':sum(s['eng'] is None for s in spans),'d5':sum(s['d']==5 for s in spans),'nonnull_d5':sum(s['d']==5 and s['eng'] is not None for s in spans),'depth_counts':dict(collections.Counter(s['d'] for s in spans)),'errata':len(json.loads((dest/'errata.json').read_text())),'generator_exit':meta['exit'],'generator_stderr_bytes':meta['stderr_bytes'],'body_bytes':len(body),'body_sha256':sha(body),'spec_bytes':len(spbytes),'spec_sha256':sha(spbytes),'source_row_id':row['id'],'source_characters':{'wylie':len(row['wylie']),'english':len(row['english'])},'required_landing_allowances':requests,'range_checks':'PASS','full_source_text_reconstruction':'PASS','pinned_builder_parse':'PASS','span_details':details}
+ (dest/'mechanical-proof.json').write_text(json.dumps(metrics,ensure_ascii=False,indent=2)+'\n');summary.append({k:v for k,v in metrics.items() if k!='span_details'})
+(ROOT/'evidence/mechanical-summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps(summary,ensure_ascii=False,indent=2))

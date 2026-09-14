@@ -1,0 +1,48 @@
+from pathlib import Path
+import gzip,json,sqlite3,hashlib,re,subprocess
+A=Path(__file__).resolve().parent; E=A/'evidence'; W=A.parents[2]/'campaign-worktree'; COMMIT='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+objects={}
+def obj(x):
+ data=(json.dumps(x,ensure_ascii=False,sort_keys=True,indent=2)+'\n').encode(); h=hashlib.sha256(data).hexdigest();objects[h]=x;return h
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+src=[dict(r) for r in c.execute("select * from corpus_segments where course='C05' and seq between 296 and 314 order by seq")]
+queries=[{'source':'original spine','sql':"select * from corpus_segments where course='C05' and seq between 296 and 314 order by seq",'parameters':[],'count':len(src),'objects':[obj(r) for r in src]}]
+selected=[r for r in src if r['seq'] in (304,305,306)]
+for r in selected:
+ for f in ('acip','wylie','english'):
+  sql='select * from corpus_segments where '+f+'=? order by course,seq';rows=[dict(z) for z in c.execute(sql,(r[f],))];queries.append({'source':'original spine','sql':sql,'parameters':[r[f]],'purpose':'exact '+f+' witnesses for C05:'+str(r['seq']),'count':len(rows),'objects':[obj(z) for z in rows]})
+for f,term in [('wylie','blos rlom pa'),('wylie','rab rib dang ldan dbang po can'),('wylie',"chu 'bab klung la yi dvags rnag blo"),('english','porcelain'),('english','strand of hair'),('english','sizzle in the stomach')]:
+ sql='select * from corpus_segments where '+f+' like ? order by course,seq';rows=[dict(z) for z in c.execute(sql,('%'+term+'%',))];queries.append({'source':'original spine','sql':sql,'parameters':['%'+term+'%'],'count':len(rows),'objects':[obj(z) for z in rows]})
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));terms=['byas pa','kho na re','mi',"lus 'khrud pa","'khrud pa",'lus','sogs','dngos gnas pa','dngos gnas','med','thal','rang','blo','blos','rlom pa','blos rlom pa','tsam','phyir','yi dvags','lto','lto ba','bsreg pa','bsreg',"'dod",'sdug bsngal','de ltar','cig car du','cig car','bltas pa',"tshe",'rnag khrag','rnag','khrag','rab rib','rab rib can','bse ru','nang','skra shad','skra','shad','gang zhig','dang ldan','dbang po','mtshungs pa','chu',"'bab",'klung','zhes','gsungs']
+for term in terms:
+ hits=[]
+ for collection in ('unified_entries','curated_entries','glossary_entries'):
+  es=master[collection]; es=es.values() if isinstance(es,dict) else es
+  for i,x in enumerate(es):
+   if x.get('wylie')==term or term in (x.get('wylie_variants') or []):hits.append({'collection':collection,'index':i,'object':obj(x)})
+ queries.append({'source':'original master','predicate':'entry.wylie == term OR term in entry.wylie_variants','term':term,'count':len(hits),'hits':hits})
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes())); counters={};indexed=[]
+for i,x in enumerate(corpus):
+ course=x.get('course');counters[course]=counters.get(course,0)+1;indexed.append((i,counters[course],x))
+for r in selected:
+ hits=[]
+ for i,seq,x in indexed:
+  if any(x.get(f)==r[f] for f in ('acip','wylie','english')):
+   hits.append({'array_index':i,'course_sequence_derived_1_based':seq,'matching_fields':[f for f in ('acip','wylie','english') if x.get(f)==r[f]],'object':obj(x)})
+ queries.append({'source':'original external corpus','predicate':'exact OR match of selected acip,wylie,english','C05_seq':r['seq'],'parameters':{f:r[f] for f in ('acip','wylie','english')},'count':len(hits),'hits':hits})
+for term in ('blos rlom pa','rab rib dang ldan dbang po can',"chu 'bab klung la yi dvags rnag blo",'porcelain'):
+ hits=[{'array_index':i,'course_sequence_derived_1_based':seq,'object':obj(x)} for i,seq,x in indexed if term in x.get('wylie','') or term in x.get('english','')]
+ queries.append({'source':'original external corpus','predicate':'term in wylie OR term in english','term':term,'count':len(hits),'hits':hits})
+(E/'objects').mkdir(exist_ok=True)
+for h,x in objects.items():save(E/'objects'/(h+'.json'),x)
+save(E/'queries.json',queries)
+save(E/'snapshot-verification.json',{'spine_mode':'SQLite URI mode=ro','six_fields':['id','course','seq','acip','wylie','english'],'comparisons':[{'snapshot':n+'.json','row_count':len(json.loads((E/(n+'.json')).read_text())),'all_fields_equal':all(all(next(r for r in src if r['seq']==s['seq'])[k]==s[k] for k in ('id','course','seq','acip','wylie','english')) for s in json.loads((E/(n+'.json')).read_text()))} for n in ('source','context')]})
+# Preserve hgm_tools dependency, byte-exact at source origin.
+rel='engines/hgm_tools.py';data=subprocess.check_output(['git','-C',str(W),'show',COMMIT+':'+rel]);out=E/'git'/rel;out.parent.mkdir(exist_ok=True);out.write_bytes(data)
+save(E/'additional-dependency-pin.json',{'path':rel,'commit':COMMIT,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+print('objects',len(objects),'queries',len(queries))
+for q in queries:
+ if q['source']=='original master':
+  print(q['term'],q['count'],[(objects[h['object']].get('hgm_gloss'),objects[h['object']].get('hgm_evidence')) for h in q['hits']])
+ else:print(q['source'],q.get('purpose',q.get('term',q.get('parameters'))),q['count'])

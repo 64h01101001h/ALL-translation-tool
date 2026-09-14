@@ -1,0 +1,41 @@
+{
+  "seq": 306,
+  "status": "No new errata proposed; errata.json is empty.",
+  "five_grounds": [
+    {
+      "ground": "Exact selected-row reading",
+      "source_ref": "../evidence/spine-rows.json#1688",
+      "acip_sha256": "21e0ee20b0faf42ab37400ebd21ef83f6f76fd82068143b00347b64d4b85648c",
+      "wylie_sha256": "0b5b6d4bf4dbf60b6915f7f3dd0124cfcd21b392927bd6d77dcb21f20a4b990f",
+      "english_sha256": "b246161dd3bc3d3380a84334c1e571b8de20ba95fed8545861bb222d9e7b2612",
+      "finding": "No new erratum: physical lines 3037–3049 confirm all wording. The bracketed [Master Dharmakirti's] attribution remains an unresolved source attribution, not an aligned claim. ILL:2319–2326 supplies contextual verse evidence but does not by itself establish a correction or independent publication. No authorship correction is filed."
+    },
+    {
+      "ground": "Registered classes",
+      "source_ref": "../native/pin-docs__errata_register.json.stdout",
+      "query_ref": "../evidence/errata-register-queries.json",
+      "finding": "No re-filing. Target English is below the 1500-character cap; no following heading or English running-head row occurs in these selected segments."
+    },
+    {
+      "ground": "Available corpus parallels",
+      "source_ref": "../evidence/spine-queries.json",
+      "complete_original_rows_ref": "../evidence/spine-rows.json",
+      "original_corpus_map": "../evidence/corpus-original-record-map.json",
+      "finding": "Master glossary explicitly supports bse ru → porcelain basin/basin, rab rib can → person with cataracts, skra shad → strand of hair, dbang po → sense power, and mtshungs pa → identical to. C15:451 matches three text fields; P7:45 has the same English with Tibetan differences. ILL:2323 preserves a differing verse with [vi.71a] and a different English rendering."
+    },
+    {
+      "ground": "HGM lexical evidence",
+      "source_ref": "../evidence/master-rows.json",
+      "query_ref": "../evidence/master-queries.json",
+      "span_ref": "../evidence/span-evidence-map.json",
+      "finding": "Original hgm_gloss/hgm_evidence tier fields retained. Comparative glosses do not supply GMR English; master evidence does not alone prove contextual correspondence."
+    },
+    {
+      "ground": "Original physical source and inference limit",
+      "source_ref": "../evidence/physical-C05ReadingASCII.txt",
+      "comparison_ref": "../evidence/physical-comparisons.json",
+      "finding": "ACIP occurs byte-exact. Physical English wraps across lines; whitespace-only joining matches the full selected English. Textual identity proves only compared fields; no publication-independence or ingestion-lineage conclusion is drawn."
+    }
+  ],
+  "unbanked_uncertainty": "med selects n't in the second isn't, after look; the initial rhetorical Isn't is unwrapped. de ltar/par thal, possessor can, flowing 'bab, and zer na remain omitted as distributed/unresolved. Bracketed author, sit down, and expanded participants remain verbatim and unwrapped."
+}

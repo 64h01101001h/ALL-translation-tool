@@ -1,0 +1,61 @@
+from pathlib import Path
+import json,hashlib,os,subprocess,gzip,sqlite3,importlib.util
+R=Path(__file__).resolve().parent; B=R.parent; W=B.parents[1]/'campaign-worktree'; PIN='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+def digest(x): return hashlib.sha256(x).hexdigest()
+def put(p,x): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+base=json.loads((B/'proposal-baseline.json').read_text()); checks=[]
+for x in json.loads((B/'reconciled/evidence/required-access.json').read_text()):
+ p=Path(x['path']);assert p.is_dir() and os.access(p,os.R_OK); checks.append({'path':str(p),'readable':True})
+put(R/'evidence/required-access.json',checks)
+for n,x in base['source_pins'].items():
+ raw=Path(x['path']).read_bytes(); assert digest(raw)==x['sha256'] and len(raw)==x['bytes']
+put(R/'evidence/source-pin-verification.json',base['source_pins'])
+manifest=[];byhash={}; allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def preserve(p,rel=None):
+ raw=p.read_bytes(); h=digest(raw); ext=p.suffix.lower(); ext=ext if ext in allowed else (ext+'.txt' if ext in ['.py','.sql','.sh'] else '.bin')
+ rel=rel or byhash.get((h,len(raw))) or ('proposal-inputs/evidence/'+h+ext)
+ dest=R/rel;dest.parent.mkdir(parents=True,exist_ok=True)
+ if dest.exists():assert dest.read_bytes()==raw
+ else:dest.write_bytes(raw)
+ byhash.setdefault((h,len(raw)),rel); manifest.append({'original':str(p.resolve()),'copy':rel,'sha256':h,'bytes':len(raw)})
+for p in sorted(B.rglob('*')):
+ if not p.is_file() or p.is_relative_to(R) or '__pycache__' in p.parts:continue
+ parts=p.relative_to(B).parts; rel=None
+ if len(parts)>=3 and parts[0] in ['english','tibetan'] and parts[1] in ['304','305','306']:
+  rel='proposal-inputs/'+str(p.relative_to(B));rel+= '' if p.suffix.lower() in allowed else '.txt'
+ if len(parts)>=3 and parts[0]=='reconciled' and parts[1] in ['304','305','306']:
+  rel='reviewed-final/'+'/'.join(parts[1:]); rel+= '' if p.suffix.lower() in allowed else '.txt'
+ preserve(p,rel)
+for p in [B.parent/'semantic-review-protocol.md',B.parent/'proposal-protocol.md',B.parent/'copy_evidence_once.py',B.parent/'land_reviewed_page.py']:
+ if p.exists():preserve(p)
+for x in json.loads((B/'english/evidence/physical-evidence.json').read_text()):preserve(Path(x['path']))
+paths=list(base['governing_git_pins'])+['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','engines/hgm_tools.py','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','Handoff/HANDOFF.md','Handoff/README.md']
+for p in paths:
+ cp=subprocess.run(['git','-C',str(W),'show',PIN+':'+p],capture_output=True)
+ if cp.returncode:
+  if p.startswith('Handoff/'):continue
+  raise RuntimeError(cp.stderr.decode())
+ raw=cp.stdout;rel='governing/'+p+('.txt' if Path(p).suffix not in allowed else '');dest=R/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
+ rec={'original':str(W/p),'copy':rel,'sha256':digest(raw),'bytes':len(raw),'original_git_commit':PIN,'repository_relative_path':p};manifest.append(rec)
+ if p in base['governing_git_pins']:assert rec['sha256']==base['governing_git_pins'][p]['sha256']
+put(R/'original-to-copy-manifest.json',manifest)
+con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+sql="select * from corpus_segments where (course='C05' and seq between 298 and 312) or (course='C15' and seq between 448 and 452) or (course='P7' and seq between 43 and 45) or (course='ILL' and seq between 2319 and 2328) or (course='C05' and seq=247) or (course='C16' and seq=823) or (course='ILL' and seq in (530,531,1634)) or (course='GIE' and seq=497) order by course,seq"
+rows=[dict(x) for x in con.execute(sql)];put(R/'evidence/independent-source-context.json',rows)
+queries=[]
+for x in json.loads((B/'reconciled/evidence/attribution-recheck-queries.json').read_text()):
+ rr=[dict(y) for y in con.execute(x['sql'],x['parameters'])];assert len(rr)==x['count'];assert [f"{y['course']}:{y['seq']}" for y in rr]==x['locations'];queries.append({**x,'actual_rows':rr,'result':'PASS'})
+put(R/'evidence/independent-attribution-queries.json',queries)
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))
+readlist=json.loads((B/'root-material-record-reading-list.json').read_text());records=[]
+for x in readlist:
+ section,i=x['original_location'].split(':');record=master[section][int(i)];claimed=json.loads((B/'reconciled/evidence'/x['full_record_ref']).read_text());assert record==claimed
+ records.append({'original_location':x['original_location'],'record':record})
+# Supplemental positive terms, especially the omitted member and simultaneous expression.
+for section in ['unified_entries','glossary_entries','curated_entries']:
+ for i,record in enumerate(master[section]):
+  if record.get('wylie') in ['rnag','cig car du','sogs','dngos gnas pa','bsreg pa','lto','rab rib can','mtshungs pa','dbang po','skra','klung']:
+   records.append({'original_location':f'{section}:{i}','record':record})
+put(R/'evidence/independent-full-master-records.json',records)
+put(R/'evidence/initial-read-failures.json',[{'command':'cat campaign-artifacts/shared/semantic-review-protocol.md','exit':1,'error':'No such file or directory','resolution':'Read actual campaign-artifacts/semantic-review-protocol.md.'},{'command':'cat campaign-worktree/RECONCILE_BRIEF.md campaign-worktree/REFUTE_BRIEF.md','exit':1,'error':'No such file or directory','resolution':'Read actual docs/alignment_briefs/ files.'}])
+print(json.dumps({'manifest_records':len(manifest),'distinct_copies':len({x['copy'] for x in manifest}),'fresh_rows':len(rows),'full_master_records':len(records)}))

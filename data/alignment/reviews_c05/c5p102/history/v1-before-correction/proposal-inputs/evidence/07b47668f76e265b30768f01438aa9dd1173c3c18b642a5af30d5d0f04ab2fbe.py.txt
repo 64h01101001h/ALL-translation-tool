@@ -1,0 +1,43 @@
+from pathlib import Path
+import json,gzip,hashlib,sqlite3
+A=Path(__file__).resolve().parent;E=A/'evidence';W=A.parents[2]/'campaign-worktree'
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,sort_keys=True,indent=2)+'\n')
+def obj(x):
+ d=(json.dumps(x,ensure_ascii=False,sort_keys=True,indent=2)+'\n').encode();h=hashlib.sha256(d).hexdigest();(E/'objects'/(h+'.json')).write_bytes(d);return h
+# Canonical JSON identity in initial collector was sorted; normalize storage to those same bytes.
+for p in (E/'objects').glob('*.json'):
+ x=json.loads(p.read_text());h=obj(x);assert p.stem==h
+qs=json.loads((E/'queries.json').read_text());c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+for sql,params in [("select * from corpus_segments where course=? and seq between ? and ? order by seq",['ILL',2320,2328]),("select * from corpus_segments where course=? and seq between ? and ? order by seq",['C15',448,452])]:
+ rows=[dict(r) for r in c.execute(sql,params)];qs.append({'source':'original spine','sql':sql,'parameters':params,'count':len(rows),'objects':[obj(r) for r in rows]})
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));terms=['chos kyi grags pa','zla ba grags pa',"dbu ma la 'jug pa",'tshe na',"pa'i tshe"]
+for term in terms:
+ hits=[]
+ for collection in ('unified_entries','curated_entries','glossary_entries'):
+  es=master[collection];es=es.values() if isinstance(es,dict) else es
+  for i,x in enumerate(es):
+   if x.get('wylie')==term or term in (x.get('wylie_variants') or []):hits.append({'collection':collection,'index':i,'object':obj(x)});print(term,x.get('hgm_gloss'),x.get('hgm_evidence'))
+ qs.append({'source':'original master','predicate':'entry.wylie == term OR term in entry.wylie_variants','term':term,'count':len(hits),'hits':hits})
+for label,x in [('master_meta',master['meta'])]:qs.append({'source':'original master','json_pointer':'/'+label.replace('master_',''),'object':obj(x),'count':1})
+corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));counters={};hits=[]
+for i,x in enumerate(corpus):
+ co=x.get('course');counters[co]=counters.get(co,0)+1
+ if co=='ILL' and 2320<=counters[co]<=2328:hits.append({'array_index':i,'course_sequence_derived_1_based':counters[co],'object':obj(x)})
+qs.append({'source':'original external corpus','predicate':'course == ILL AND derived 1-based course-sequence between 2320 and 2328','count':len(hits),'hits':hits})
+save(E/'queries.json',qs)
+# Native physical files: exact full bytes plus selected contiguous raw extents, no UTF-8 decoding.
+physical=[]
+for co in ('C05','C15'):
+ p=Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII')/(co+'ReadingASCII.txt');d=p.read_bytes();copy=E/(co+'ReadingASCII.raw');copy.write_bytes(d)
+ starts=[d.find(t) for t in (b'BYAS PA LA KHO NA RE, MI MTSUNGS TE',b'BYAS PA LA KHO NA RE, MI LA LUS',b'YI DVAGS LA YANG LTO',b'KHO NA RE, DE LTAR CIG CAR',b'SKYON MED DE, DBU SEMS GNYIS')];end=d.find(b'YANG KHA CIG,',starts[-1]);assert all(n>=0 for n in starts) and end>starts[-1]
+ selected=[]
+ for i,start in enumerate(starts):
+  stop=starts[i+1] if i+1<len(starts) else end
+  part=d[start:stop];selected.append({'byte_range_zero_based_half_open':[start,stop],'bytes':len(part),'sha256':hashlib.sha256(part).hexdigest(),'latin1':part.decode('latin1')})
+ physical.append({'path':str(p),'copy':str(copy.relative_to(A)),'bytes':len(d),'sha256':hashlib.sha256(d).hexdigest(),'selected_extents':selected,'interpretation':'Line-wrapped original bytes; compared to spine after whitespace joining only. Lineation preserved here.'})
+save(E/'physical-evidence.json',physical)
+register=json.loads((E/'git/docs/errata_register.json').read_text());needles=['Dharmakirti','Chandrakirti','bse ru','skra shad','E-071','E-107','heading'];results=[]
+for t in needles:
+ matches=[{'array_index':i,'object':obj(x)} for i,x in enumerate(register) if t.lower() in json.dumps(x,ensure_ascii=False).lower()];results.append({'substring_case_insensitive':t,'count':len(matches),'matches':matches})
+save(E/'register-checks.json',{'pinned_commit':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4','queries':results})
+print('queries',len(qs),'physical',[{k:v for k,v in p.items() if k!='selected_extents'} for p in physical])

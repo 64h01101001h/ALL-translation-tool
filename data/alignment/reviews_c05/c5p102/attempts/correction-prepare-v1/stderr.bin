@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/semantic-review/correction_prepare.py.txt", line 28, in <module>
+    hh=hist[x['original']];assert hh['sha256']==x['sha256'] and hh['bytes']==x['bytes'];rec['original']=hh['copy'];raw=Path(rec['original']).read_bytes();remap.append({'historical_original':x['original'],'historical_original_now':rec['original'],'prior_copy':x['copy'],'current_copy':rec['copy'],'bytes':x['bytes'],'sha256':x['sha256']})
+       ~~~~^^^^^^^^^^^^^^^
+KeyError: '/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/proposal-protocol.md'

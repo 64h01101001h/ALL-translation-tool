@@ -1,0 +1,82 @@
+import gzip,hashlib,json,pathlib,sqlite3,subprocess
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+W=ROOT.parents[2]/'campaign-worktree'
+E=ROOT/'evidence'
+baseline=json.loads((ROOT.parent/'proposal-baseline.json').read_text())
+def save(name,obj): (E/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+pins={}
+for kind,pin in baseline['source_pins'].items():
+ p=pathlib.Path(pin['path']);b=p.read_bytes()
+ pins[kind]={'path':str(p),'resolved_path':str(p.resolve()),'bytes':len(b),'sha256':sha(b)}
+ assert pins[kind]['sha256']==pin['sha256'] and len(b)==pin['bytes'],kind
+save('source-pins.json',pins)
+for name in ['engines/hgm_tools.py','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md']:
+ cmd=['git','show',baseline['commit']+':'+name];r=subprocess.run(cmd,capture_output=True,cwd=W)
+ label='pin-'+name.replace('/','__')
+ for ext,b in [('stdout',r.stdout),('stderr',r.stderr),('stdin',b'')]: (ROOT/'native'/f'{label}.{ext}').write_bytes(b)
+ (ROOT/'native'/f'{label}.exit').write_text(str(r.returncode)+'\n')
+ (ROOT/'native'/f'{label}.command.json').write_text(json.dumps({'argv':cmd,'cwd':str(W),'exit':r.returncode,'sha256':sha(r.stdout),'bytes':len(r.stdout)},indent=2)+'\n')
+ assert r.returncode==0 and not r.stderr
+# Store original objects only once. Query memberships point into these stores.
+db=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+store={};queries=[]
+def query(label,sql,args):
+ rows=[dict(x) for x in db.execute(sql,args)]
+ for row in rows:store[str(row['id'])]=row
+ queries.append({'label':label,'sql':sql,'parameters':args,'row_count':len(rows),'row_ids':[r['id'] for r in rows]})
+ return rows
+rows=query('complete-source-argument-neighbors','select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',294,314])
+for snapshot in ['source','context']:
+ snap=json.loads((ROOT.parent/(snapshot+'.json')).read_text())
+ for row in snap:
+  orig=next(x for x in rows if x['id']==row['id'])
+  assert all(orig[k]==row[k] for k in ['id','course','seq','acip','wylie','english']),(snapshot,row['seq'])
+ queries.append({'label':snapshot+'-snapshot-verification','fields':['id','course','seq','acip','wylie','english'],'all_equal':True,'row_ids':[r['id'] for r in snap]})
+for seq in [304,305,306]:
+ row=next(x for x in rows if x['seq']==seq)
+ query('all-three-field-identical-'+str(seq),'select * from corpus_segments where acip=? and wylie=? and english=? order by course,seq',[row['acip'],row['wylie'],row['english']])
+for label,field,term in [('imagination','english','own imagination'),('wash-body','wylie',"lus 'khrud"),('porcelain','wylie','bse ru'),('cataract','wylie','rab rib dang ldan dbang po can'),('stomach-sizzle','wylie','lto bsreg'),('illusory-hair','wylie','skra shad'),('simultaneous-look','wylie',"cig car du bltas")]:
+ query(label,'select * from corpus_segments where '+field+' like ? order by course,seq',['%'+term+'%'])
+save('spine-rows.json',store);save('spine-queries.json',queries)
+with gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt') as f: corpus=json.load(f)
+matches={};corpus_store={};course_counter={}
+for idx,row in enumerate(corpus):
+ course_counter[row['course']]=course_counter.get(row['course'],0)+1
+ # Original corpus has no seq: independently derive one-based course ordinal.
+ seq=course_counter[row['course']]
+ for rid,srow in store.items():
+  if row['course']==srow['course'] and seq==srow['seq']:
+   assert all(row.get(k)==srow[k] for k in ['course','acip','wylie','english']),rid
+   corpus_store[str(idx)]=row
+   matches[rid]={'global_zero_based_index':idx,'course':row['course'],'one_based_course_ordinal':seq,'compared_fields':['course','acip','wylie','english'],'all_equal':True}
+assert len(matches)==len(store)
+save('corpus-rows.json',corpus_store);save('corpus-spine-mapping.json',{'source_count':len(corpus),'matches':matches})
+with gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt') as f:master=json.load(f)
+terms=['byas pa','kho na re','mi','lus',"'khrud pa",'sogs','dngos gnas pa','dngos gnas','med','thal','rang','blo','blos rlom pa','rlom pa','tsam','yin',"phyir",'yi dvags','lto','lto ba','bsreg pa',"'dod pa",'sdug bsngal','de ltar','cig car','cig car du',"bltas pa",'tshe','rnag khrag','rnag','khrag','rab rib','rab rib can','bse ru','nang','skra shad','gang zhig','ldan','dbang po','can','mtshungs pa','chu',"'bab",'klung','chu klung','gsungs']
+master_rows={};master_queries=[]
+for term in terms:
+ refs=[]
+ for collection in ['unified_entries','curated_entries','glossary_entries']:
+  for idx,row in enumerate(master[collection]):
+   if row.get('wylie')==term or term in row.get('wylie_variants',[]):
+    ref=collection+':'+str(idx);master_rows[ref]=row;refs.append(ref)
+ master_queries.append({'exact_wylie_or_variant':term,'count':len(refs),'refs':refs})
+save('master-rows.json',master_rows);save('master-queries.json',master_queries);save('master-meta.json',master['meta'])
+physical=pathlib.Path(pins['physical']['path']).read_bytes();(E/'physical-C05ReadingASCII.txt').write_bytes(physical)
+# Latin-1 is a reversible byte-to-codepoint view for ASCII searches, not an
+# assertion of the publication's encoding. Preserve the original bytes above.
+text=physical.decode('latin-1');phys=[]
+for seq in [304,305,306]:
+ r=next(x for x in rows if x['seq']==seq)
+ # Preserve full original file and locate exact distinctive strings, without normalization.
+ terms2=[r['acip'],r['english'],r['acip'][:50],r['english'][:50]]
+ for term in terms2:
+  offsets=[];i=0
+  while True:
+   i=text.find(term,i)
+   if i<0:break
+   offsets.append({'character_offset':i,'line':text[:i].count('\n')+1});i+=1
+  phys.append({'seq':seq,'exact_query':term,'matches':offsets,'count':len(offsets)})
+save('physical-queries.json',phys)
+print(json.dumps({'source_pin_checks':pins,'snapshot_rows_verified':{'source':3,'context':15},'spine_rows':len(store),'corpus_original_rows':len(corpus_store),'master_original_rows':len(master_rows),'query_counts':[(q['label'],q.get('row_count')) for q in queries]},ensure_ascii=False,indent=2))

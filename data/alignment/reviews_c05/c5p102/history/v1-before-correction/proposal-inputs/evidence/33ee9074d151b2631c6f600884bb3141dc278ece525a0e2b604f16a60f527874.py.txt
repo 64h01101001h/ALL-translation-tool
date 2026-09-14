@@ -1,0 +1,61 @@
+from capture import *
+import re
+def main():
+ cx=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);cx.row_factory=sqlite3.Row
+ row=lambda course,seq:dict(cx.execute('select * from corpus_segments where course=? and seq=?',(course,seq)).fetchone())
+ physical=[]
+ for q in json.loads((B/'english/evidence/physical-evidence.json').read_text()):
+  data=Path(q['path']).read_bytes();assert len(data)==q['bytes'] and sha(data)==q['sha256'];assert data==(B/'english'/q['copy']).read_bytes()
+  for ext in q['selected_extents']:
+   a,b=ext['byte_range_zero_based_half_open'];part=data[a:b];assert len(part)==ext['bytes'] and sha(part)==ext['sha256'];assert part.decode('latin1')==ext['latin1']
+ for q in json.loads((B/'english/evidence/physical-comparison.json').read_text()):
+  a,b=q['byte_range'];part=Path(q['physical']).read_bytes()[a:b];lines=[x.strip() for x in part.decode('latin1').splitlines() if x.strip()];n=q['acip_physical_line_count'];course='C15' if 'C15' in q['physical'] else 'C05';r=row(course,q['seq']);acip=' '.join(lines[:n]);english=' '.join(lines[n:]);assert acip==r['acip'] and english==r['english'];physical.append({'course':course,'seq':q['seq'],'source_path':q['physical'],'byte_range':q['byte_range'],'acip_lines':n,'acip_exact_after_whitespace_join':True,'english_exact_after_whitespace_join':True,'acip':acip,'english':english,'extent_sha256':sha(part)})
+ put(R/'evidence/physical-recheck.json',physical)
+ baseline=json.loads((B/'proposal-baseline.json').read_text());governance=[]
+ for name,rec in baseline['governing_git_pins'].items():
+  p=capture('governing-'+name.replace('/','__'),['git','show',rec['original_git_commit']+':'+name]);assert p.returncode==0 and not p.stderr;assert sha(p.stdout)==rec['sha256'] and len(p.stdout)==rec['bytes'];governance.append({'path':name,'commit':rec['original_git_commit'],'sha256':sha(p.stdout),'bytes':len(p.stdout)})
+ put(R/'evidence/independent-governance-verification.json',governance)
+ register=json.loads((B/'english/evidence/git/docs/errata_register.json').read_text());entries=register['entries'] if isinstance(register,dict) and 'entries' in register else register;assert isinstance(entries,list)
+ checks=[]
+ for q in json.loads((B/'english/evidence/register-checks.json').read_text())['queries']:
+  hits=[{'array_index':i,'object':obj(x)} for i,x in enumerate(entries) if q['substring_case_insensitive'].lower() in json.dumps(x,ensure_ascii=False).lower()];assert len(hits)==q['count'] and hits==q['matches'];checks.append({**q,'independently_rechecked':True})
+ put(R/'evidence/register-query-recheck.json',checks)
+ live=(W/'docs/errata_register.json').read_bytes();livej=json.loads(live);liveentries=livej['entries'] if isinstance(livej,dict) and 'entries' in livej else livej;assert isinstance(liveentries,list)
+ livechecks=[]
+ for term in ['Dharmakirti','Chandrakirti','C05:304','C05:305','C05:306','bse ru','skra shad']:
+  livechecks.append({'term':term,'hits':[{'index':i,'object':obj(x)} for i,x in enumerate(liveentries) if term.lower() in json.dumps(x,ensure_ascii=False).lower()]})
+ put(R/'evidence/current-register-check.json',{'scope':'Read-only duplicate/class check; not a future acceptance baseline.','bytes':len(live),'sha256':sha(live),'queries':livechecks})
+ queries=[]
+ for label,sql,params in [
+  ('exact-bracketed-attribution','select * from corpus_segments where english like ? order by course,seq',["%[Master Dharmakirti's]%"]),
+  ('shared-second-line','select * from corpus_segments where wylie like ? order by course,seq',["%chu 'bab klung la yi dvags rnag blo%"]),
+  ('full-first-line','select * from corpus_segments where wylie like ? order by course,seq',['%rab rib dang ldan dbang po can%']),
+  ('limited-witness-search','select * from corpus_segments where (course in (\'C16\',\'P1\') or course like \'TCS%\') and (english like ? or wylie like ? or wylie like ?) order by course,seq',['%sense power has a cataract%',"%chu 'bab%rnag blo%",'%rab rib dang ldan dbang po can%'])]:
+  hits=[dict(x) for x in cx.execute(sql,params)];queries.append({'label':label,'sql':sql,'parameters':params,'count':len(hits),'locations':[f"{x['course']}:{x['seq']}" for x in hits],'objects':[obj(x) for x in hits]})
+ put(R/'evidence/attribution-recheck-queries.json',queries)
+ comparisons=[]
+ for n in [304,305,306]:
+  source=row('C05',n)
+  for co,sn in [('C15',n+145),('P7',n-261)]:
+   witness=row(co,sn);comparisons.append({'source':f'C05:{n}','witness':f'{co}:{sn}','fields':{k:{'equal':source[k]==witness[k],'source':source[k],'witness':witness[k]} for k in ['acip','wylie','english']},'limit':'Only these complete digital fields are compared. Equality or differences establish no independent publication or ingestion lineage.'})
+ put(R/'evidence/parallel-comparisons.json',comparisons)
+ q247=row('C05',247);ill=row('ILL',2323);put(R/'evidence/attribution-quoted-witnesses.json',{'C05:247':q247,'ILL:2323':ill,'scope':'C05:247 quotes only the shared second line, not the unquoted first line. ILL:2323 contains variant versions of both lines; its numeral vi.71a is source apparatus, not independent bibliography.'})
+ # Every suspicion is evaluated on the actual five brief grounds, including dismissed candidates.
+ common={'b':'C15:449–451 and P7:43–45 compared in full; the first P7 English stops after his. Digital equality/difference does not establish independent publication or a specific ingestion history. Independent same-reading witness is not established.','c':'Pinned ce646d0 register queries were reexecuted and matched every stated count and record. Live register was checked separately for duplicates; no new class is asserted.','e':'All 81 English query records and all 46 Tibetan lexical plus 14 spine/snapshot records were independently verified; counts and exact original objects agree. Attribution-specific searches and physical extents were separately rerun.'}
+ candidates=[
+ {'seq':304,'found':'with the water','expected':'no correction','refuted':True,'reason':'Contextual English supplementation is defensible; no source defect follows from absence of chu in this abbreviated Tibetan row.','a':'Exact C05:304 English contains with the water; Tibetan source has no chu/chus.','d':'The preceding C05:302 discussion explicitly concerns washing with water, while C05:304 abbreviates the repeated situation.'},
+ {'seq':305,'found':'YI DVAGS','expected':'YI DWAGS','refuted':True,'reason':'Orthographic variation does not establish an error.','a':'The selected ACIP has DVAGS at all three spirit occurrences; P7:44 differs with DWAGS.','d':'Original glossary yi dvags and contextual usage support the found form. No spelling correction is justified by the alternate Wylie/ACIP witness.'},
+ {'seq':306,'found':'porcelain basin','expected':'rhinoceros','refuted':True,'reason':'The comparative sense cannot replace the current HGM vessel reading.','a':'porcelain basin is exact English, with BSE RU in ACIP and bse ru in Wylie.','d':'HGM21422 explicitly attests basin/porcelain sink/porcelain basin. Source context locates a perceived hair inside the basin. ILL:1634 is cup of horn and GIE:497/ILL:530–531 use rhinoceros in other contexts; none makes this a source error.'},
+ {'seq':306,'found':'strand of hair','expected':'comb','refuted':True,'reason':'Current optical-example context and HGM evidence support the found reading.','a':'Exact English strand of hair corresponds to SKRA SHAD, not a misquoted source.','d':'HGM889 explicitly includes strand of hair, hair and comb. Numerous reopened ILL passages use skra shad for illusory hair; skra alone has hair. The local negative existential concerns no perceived hair in the vessel.'},
+ {'seq':306,'found':"[Master Dharmakirti's]",'expected':"[Master Chandrakirti's] (original English proposal requires bibliographical confirmation)",'refuted':True,'reason':'Retain an unresolved attribution concern in evidence, but default to refuted for filing: available internal witnesses do not independently establish that the particular quoted text cannot be attributed to Dharmakirti or transmitted through his text. The suggested replacement has not been bibliographically confirmed.','a':'The full bracketed found string occurs verbatim in C05:306 English and both physical C05/C15 source extents; no Tibetan author is named in this row.','b':'C15:451 has identical ACIP/Wylie/English; P7:45 has the same full English with Tibetan differences. Neither independence nor same-ingestion is proved. C16:823 shares the shorter second-line quotation with C05:247, not the first-line continuation; no independent full same-reading bibliographic witness is established.','d':'C05:247 explicitly calls the shared second line Entering the Middle Way by Master Chandrakirti. ILL:2323 gives both variant lines at vi.71a; original name/title glosses distinguish Dharmakirti and Chandrakirti but do not establish textual authorship. This strongly motivates checking attribution, yet an expected replacement remains uncertain under the brief\'s default-to-refutation rule.','original_severity':'MEDIUM','original_confidence':'PROBABLE','suggested_severity':'LOW','suggested_confidence':'UNCERTAIN','retained_erratum':False}
+ ]
+ for q in candidates:
+  q['five_grounds']={k:q.pop(k) if k in q else common[k] for k in ['a','b','c','d','e']};q['evidence_refs']=['../evidence/attribution-recheck-queries.json','../evidence/independent-query-verification.json','../evidence/parallel-comparisons.json','../evidence/physical-recheck.json','../evidence/register-query-recheck.json','../evidence/current-register-check.json']
+ for seq in [304,305,306]:put(R/str(seq)/'errata-five-grounds.json',[q for q in candidates if q['seq']==seq])
+ scopes=[]
+ for n,t,e in [(304,'dngos gnas pa med par thal','must not be something real'),(305,'dngos gnas pa med par thal',"can't be something real"),(305,'sdug bsngal med par thal','suffering of craving spirits must not exist at all'),(306,'rnag khrag dngos gnas pa med par thal',"there isn't any actual pus and blood at all"),(306,'skra shad med pa gang zhig','there is no strand of hair in the basin at all')]:
+  r=row('C05',n);assert t in r['wylie'] and e in r['english'];scopes.append({'seq':n,'complete_tibetan_relation':t,'tib_range':[r['wylie'].index(t),r['wylie'].index(t)+len(t)],'complete_english_realization':e,'eng_range':[r['english'].index(e),r['english'].index(e)+len(e)],'judgment':'The complete proposition remains negative. Final d5 med links its genuine local exponent; unwrapped existential/copular/discourse realization does not become a positive claim. Full d3 capture was considered but not needed to preserve the relation and would reduce clear lexical coverage or sweep in supplied frame words.'})
+ put(R/'evidence/negative-scope-review.json',scopes)
+ put(R/'evidence/dispatch-corrections.json',{'actual_tibetan_freeze_filename':'tibetan/freeze-manifest.json','dispatch_filename':'tibetan/freeze.json','hash_matches_dispatch':True,'actual_english306_original_severity':'MEDIUM','dispatch_unverified_severity':'LOW','original_confidence':'PROBABLE','parent_acknowledgement':'Root explicitly clarified LOW was an unverified inference, not a ruling. Original values preserved.','proposal_origin_commit':baseline['commit'],'proposal_origin_boundary':294,'future_acceptance_baseline':'Distinct; no through303 acceptance captured or asserted by this role.','mutation_hold':'None requested or imposed.'})
+ print(json.dumps({'physical_extents_verified':len(physical),'governing_objects_verified':len(governance),'register_queries_verified':len(checks),'attribution_queries':[{k:v for k,v in q.items() if k in ['label','count','locations']} for q in queries],'suspicions_evaluated':len(candidates),'retained_errata':0},indent=2))
+if __name__=='__main__':main()

@@ -1,0 +1,108 @@
+{
+  "angle": "Tibetan-first",
+  "producer": "Codex (GPT-6 Astra)",
+  "original_source_origin": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+  "original_acceptance_boundary": 294,
+  "future_acceptance_boundary": "Not claimed; through303 landing belongs to a separate root baseline.",
+  "source_and_governance": "Source/master/corpus/physical hashes verified independently. Mutable governance/build dependencies read from exact historical Git objects. No W mutation hold.",
+  "records": [
+    {
+      "path": "evidence/author-context-query.json",
+      "bytes": 582,
+      "sha256": "91ad8a7e905c634cdde51399f43613fd9da2fb05ead0695cf9a99f5ca471a91c"
+    },
+    {
+      "path": "evidence/corpus-original-record-map.json",
+      "bytes": 58611,
+      "sha256": "024cc63131e2eb8492152ae15c86727ee4d89323f7f61cdbd32f5d7235728604"
+    },
+    {
+      "path": "evidence/corpus-spine-mapping.json",
+      "bytes": 333,
+      "sha256": "9c9627d6f3be0a5c813dfc5388dccb45c547a65a55a5b24e5e72d5d170ddc65b"
+    },
+    {
+      "path": "evidence/errata-register-queries.json",
+      "bytes": 734,
+      "sha256": "b6a735dd2f31491d97032f89fc03dc71bc62b47b2df7648ec5dec2a25b680a88"
+    },
+    {
+      "path": "evidence/final-source-checks.json",
+      "bytes": 1305,
+      "sha256": "477b3626442f58569b7309e50a712aff5b47b15a825d9c62c75929a9943ea1e0"
+    },
+    {
+      "path": "evidence/git-pins.json",
+      "bytes": 4106,
+      "sha256": "8f3386efd4bbca413715b8084d07171aa75d1628b4a02976184bfe69906db9d5"
+    },
+    {
+      "path": "evidence/master-meta.json",
+      "bytes": 11309,
+      "sha256": "f774da1dffbf2c17ffe9c468b73ab740aa1defc6146d3011f4c46cbf239df1b2"
+    },
+    {
+      "path": "evidence/master-queries.json",
+      "bytes": 6833,
+      "sha256": "1b17b1d4d7240c7b4709fd1f856a4c893670b49e2507681022f2f5ae40ade772"
+    },
+    {
+      "path": "evidence/master-rows.json",
+      "bytes": 132314,
+      "sha256": "eb4a461349532e9c48c5ae594b8cb559a6f35be8e9fe5f48e7d130fa34a0fb92"
+    },
+    {
+      "path": "evidence/mechanical-summary.json",
+      "bytes": 2807,
+      "sha256": "0315554465a9301cfe08b881c898e7b6502b73b22a2da6dca01baca3895bdd30"
+    },
+    {
+      "path": "evidence/physical-C05ReadingASCII.txt",
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    },
+    {
+      "path": "evidence/physical-comparisons.json",
+      "bytes": 2896,
+      "sha256": "e95092449c69ba21610a4330cdf419563be4929846208fa7140e5ae67b745c37"
+    },
+    {
+      "path": "evidence/physical-queries.json",
+      "bytes": 3399,
+      "sha256": "869c4ccb432730bfd8dbd283da0cecca1adcf2b2e60437bc35e816e749dfb762"
+    },
+    {
+      "path": "evidence/required-access.json",
+      "bytes": 1085,
+      "sha256": "4f9d5eaa536e0cc2e65d112a38a2b77a623972933c4b35ba66f87da3916df4fe"
+    },
+    {
+      "path": "evidence/source-pins.json",
+      "bytes": 2379,
+      "sha256": "c47b3d16c62a7126defb7b3c163173b022ceaa8b90fc094e17e20adba176c040"
+    },
+    {
+      "path": "evidence/span-evidence-map.json",
+      "bytes": 47111,
+      "sha256": "4b6a401b0f73cc62d7e636be498b236cac4ba2e187658a1a341446ff90c5a921"
+    },
+    {
+      "path": "evidence/spine-queries.json",
+      "bytes": 7733,
+      "sha256": "f38593b78d6c0d13985f87279a5a89e130d0c1a97fb2e5d0960af9fa2e230d4b"
+    },
+    {
+      "path": "evidence/spine-rows.json",
+      "bytes": 342092,
+      "sha256": "5b67d121f0ebc5c4800bbdffbdbce2987d8b337a709537ed512dc4a2740d5f18"
+    }
+  ],
+  "deduplication": "134 complete original SQLite rows stored once, including raw. Each original corpus object was independently reopened and checked for full object equality with parsed raw, with field-order reconstruction recorded in corpus-original-record-map.json. 96 complete master objects retained with their original collection/index and producer tiers.",
+  "complete_mappings": [
+    "spine-queries.json",
+    "corpus-original-record-map.json",
+    "master-queries.json",
+    "span-evidence-map.json",
+    "physical-comparisons.json"
+  ]
+}

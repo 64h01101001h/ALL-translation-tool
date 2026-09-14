@@ -1,0 +1,134 @@
+import json,pathlib,re
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+rows=json.loads((ROOT/'evidence/spine-rows.json').read_text())
+def out(seq,title,items,note,omissions):
+ row=rows[str(seq+1382)];spans=[];intents=[]
+ for n,item in enumerate(items,1):
+  tib,eng,d,reason,*opts=item;opt=opts[0] if opts else {}
+  sp={'id':f'w{n}','d':d,'tib':tib,'eng':eng}
+  if eng is None:sp.update({'cls':'case' if d in (6,7) else 'gram','nul':reason})
+  if opt.get('subword'):sp['subword']=True
+  spans.append(sp)
+  intent={'id':sp['id'],'reason':reason,'tib_occurrence':opt.get('tib_occurrence',1),'eng_occurrence':opt.get('eng_occurrence',1) if eng is not None else None}
+  for side,field,piece in [('tib','wylie',tib),('eng','english',eng)]:
+   if piece is None:intent[side+'_range']=None;continue
+   # A separately authored occurrence ledger. Canonical resolution is checked against it later.
+   raw=list(re.finditer(re.escape(piece),row[field]));hits=[]
+   for hit in raw:
+    a,b=hit.span()
+    if d==7 or opt.get('subword'):hits.append([a,b]);continue
+    word=lambda c:bool(re.match('[A-Za-z0-9\\u0F00-\\u0FFF]',c))
+    if word(piece[0]) and a and word(row[field][a-1]):continue
+    if word(piece[-1]) and b<len(row[field]) and word(row[field][b]):continue
+    hits.append([a,b])
+   occ=intent[side+'_occurrence'];assert len(hits)>=occ,(seq,side,piece,hits,occ)
+   intent[side+'_range']=hits[occ-1];intent[side+'_all_ranges']=hits
+  intents.append(intent)
+ english=sorted([i for i,s in zip(intents,spans) if s['eng'] is not None and s['d']!=7],key=lambda i:i['eng_range'])
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':[i['id'] for i in english],'note':'PROVISIONAL machine alignment by Codex (GPT-6 Astra), independent Tibetan-first proposal; not human approved and no hgm_gloss promotion. '+note}]}
+ dest=ROOT/str(seq)
+ (dest/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+ (dest/'intended-ranges.json').write_text(json.dumps({'source_row_ref':'../evidence/spine-rows.json#'+str(row['id']),'offset_convention':'zero-based Unicode codepoint, end-exclusive','spans':intents,'omissions':omissions},ensure_ascii=False,indent=2)+'\n')
+ (dest/'errata.json').write_text('[]\n')
+ print(seq,len(spans),sum(s['eng'] is None for s in spans),'null',sum(s['d']==5 for s in spans),'d5')
+
+out(304,'the human and imagination',[
+ ('byas pa la kho na re','Someone may respond to this with another claim',3,'Complete response formula, retained at phrase depth; no dictionary word is assigned the whole English formula.'),
+ ('mi','human',5,'First nominal mi names the human; excludes the article.'),
+ ("lus 'khrud pa",'washes himself',3,'Body-washing is recast reflexively. Complete verb-object phrase; lus is not banked as a dictionary equivalent of himself.'),
+ ('sogs','and so on',5,'Only the closing etcetera gesture; sogs licenses and.'),
+ ('dngos gnas pa','real',5,'Master-attested compound; excludes supplied something.'),
+ ('med','not',5,'Negative existential contribution; leaves the English auxiliary be unwrapped.'),
+ ('par',None,6,'Consequence complement linker; no separate English word beyond the med/thal construction.'),
+ ('thal','must',5,'Consequence force, excluding supplied it and be.'),
+ ('rang','own',5,'Reflexive emphasis only, excluding the possessive his.'),
+ ('gi',None,6,'Genitive is fused into the English possessive his; no separately alignable genitive token.'),
+ ('blos rlom pa','imagination',5,'Established master-attested expression; do not split off blo as a second mind word.'),
+ ('tsam','nothing more than',6,'Limiting particle carries the entire restrictive expression.'),
+ ('yin',None,5,"Copula is fused into it's; no separately alignable whole-word exponent under the permitted subword conventions."),
+ ("pa'i",None,6,'Nominal-genitive link to phyir, realized by the causal construction without a separate token.'),
+ ('phyir','because',6,'Causal particle; English order places it before the reason.')
+],"The complete response formula and body-washing recast are d3. The second mi is pronominalized in his and stays omitted; rang owns only own. The copula yin is fused into it's (null does not mean its meaning is absent). The supplied with the water stays unwrapped. Closing zer na is distributed into the opening claim frame and omitted. Full GMR English is unchanged.",[
+ {'tib':'la','occurrence':2,'reason':'Topic/experiencer construction is recast as When the human; no independent case mapping is claimed.'},
+ {'tib':'de mi','reason':'Referent and human are distributed into it\'s and his; no standalone lexical pair is defensible.'},
+ {'tib':'zer na','reason':'Closing hypothetical quotation frame is realized with the opening English claim formula; omitted rather than false-null.'},
+ {'english':'with the water','reason':'Explanatory context supplied from the preceding argument; no chu occurs in this Tibetan row.'}
+])
+out(305,'the craving spirit and imagination',[
+ ('yi dvags','craving spirit',5,'First yi dvags names the spirit whose stomach is involved.'),
+ ('yang','too',6,'Additive comparison is carried into the English reason sentence For that too, rather than attached to the first subject.'),
+ ('lto','stomach',5,'Master-attested stomach, excludes supplied in the and of the.'),
+ ('bsreg pa','sizzle',5,'Master-attested exact sizzle; supplied pus and blood are not captured.'),
+ ('sogs','and so on',5,'Closing etcetera gesture only; sogs licenses and.'),
+ ('dngos gnas pa','real',5,'Master-attested compound; excludes something.'),
+ ('med',"n't",5,'Negative existential contribution inside can\'t; modal can is not banked.',{'subword':True}),
+ ('par',None,6,'Consequence complement linker; no separate English token.'),
+ ('thal','then',5,'First consequence points to the first then in the question Are you saying then that.'),
+ ('de','that',5,'Reason demonstrative in For that too; not the complementizer that in the first sentence.',{'eng_occurrence':2}),
+ ('rang','own',5,'Reflexive emphasis only; excludes his.'),
+ ('gi',None,6,'Genitive is fused into possessive his; no separately alignable genitive token.'),
+ ('blos rlom pa','imagination',5,'Master-attested expression; keeps the mental-imagining construction intact.'),
+ ('tsam','nothing more than',6,'Restrictive particle with explicit English phrase.'),
+ ('yin','is',5,'Explicit reason-clause copula; no supplied subject included.'),
+ ("pa'i",None,6,'Nominal-genitive link to phyir is realized through the causal construction, with no extra token.'),
+ ('phyir','For',6,'Causal reason marker capitalized at the English sentence opening.'),
+ ("'dod",'agree',5,'Agreement verb; supplied You excluded.'),
+ ('yi dvags','craving spirits',5,'Third yi dvags is the sufferer class; second occurrence is pronominalized and omitted.',{'tib_occurrence':3}),
+ ('kyi','of',6,'Genitive of suffering; second English of, after suffering.',{'eng_occurrence':2}),
+ ('sdug bsngal','suffering',5,'Master curated suffering; excludes the.'),
+ ('med','not exist',5,'Second med negates the existence of suffering; the at all emphasis stays unwrapped.',{'tib_occurrence':2}),
+ ('par',None,6,'Second consequence complement linker has no separately alignable word.',{'tib_occurrence':2}),
+ ('thal','must',5,'Second consequence carries the final must.',{'tib_occurrence':2})
+],"The two consequence verbs own first then and final must; the two med occurrences own n't in can't and final not exist. The second yi dvags is distributed into his and omitted; first and third occurrences remain distinct. Additive yang is rendered by too in the English reason sentence. Supplied pus and blood stay unwrapped. No correction to GMR's English is made.",[
+ {'tib':'la','reason':'Spirit topic becomes possessor in stomach of the craving spirit; attribution to one English preposition is unresolved and omitted.'},
+ {'tib':'yi dvags','occurrence':2,'reason':'Pronominalized in his; no separate lexical spirit word here.'},
+ {'tib':'na','reason':'Conditional after agree is recast into the question and Well then; no single continuous counterpart is claimed.'},
+ {'english':'the pus and blood','reason':'Contextual supplied subject; no rnag khrag in this row.'},
+ {'english':'Are you saying / Well then / at all','reason':'Discourse or emphatic English remains outside the selected narrow lexical exponents.'}
+])
+out(306,'the cataract and the basin',[
+ ('kho na re','Someone might make the following claim',3,'Complete opponent claim formula retained at phrase depth.'),
+ ('cig car du','together',5,'Established temporal compound; captures together only, not the supplied sit down.'),
+ ('bltas','look',5,'First look verb, excludes supplied at something.'),
+ ("pa'i tshe",'when',3,'Temporal nominal phrase attached to the first looking event.'),
+ ('rnag khrag','pus and blood',5,'Master-attested compound at the first pus occurrence.'),
+ ('khrag','blood',7,'Unique strictly tighter member immediately after the rnag khrag parent; blood belongs inside pus and blood.'),
+ ('dngos gnas pa','actual',5,'Actuality compound, excludes any.'),
+ ('med',"n't",5,'Negation in the SECOND isn\'t, the existential claim after look; not the initial rhetorical Isn\'t.',{'subword':True,'eng_occurrence':2}),
+ ('rab rib can','person with cataracts',5,'Established possessor compound; excludes article a.'),
+ ('rab rib','cataracts',7,'Unique tighter cataract member inside person with cataracts.'),
+ ('gyis',None,6,'Agentive is expressed by the active English subject; no separate by token.'),
+ ('bse ru','porcelain basin',5,'First basin occurrence with the lexical porcelain modifier attested by the master.'),
+ ('la','into',6,'Directional object particle on the first basin, explicit into after looks.'),
+ ('bltas','looks',5,'Second look verb; active subject ends the preceding agentive construction.',{'tib_occurrence':2}),
+ ("pa de'i tshe",'when',3,'Temporal phrase attached to the second looking event.',{'eng_occurrence':2}),
+ ("bse ru'i",'basin',5,'Second inflected basin compound; excludes the and the first porcelain basin.',{'eng_occurrence':2}),
+ ("'i",None,7,'Genitive member inside bse ru\'i; relation is absorbed into in the basin, with no separate of.',{'tib_occurrence':3}),
+ ('nang du','in',3,'Complete locative expression, excludes article the.'),
+ ('skra shad','strand of hair',5,'Master-attested compound; excludes supplied article a.'),
+ ('med pa','no',5,'Negative existential in there is no strand; does not capture the auxiliary.'),
+ ('gang zhig','first of all',3,'First-conjunct marker in a two-reason proof; retained as a phrase construction.'),
+ ('rab rib','cataract',5,'Verse cataract occurrence, distinct from prior plural cataracts.',{'tib_occurrence':2}),
+ ('dang',None,6,'Comitative complement of ldan is expressed in has a cataract; no separate and/with token.'),
+ ('ldan','has',5,'Possession verb in the verse.'),
+ ('dbang po','sense power',5,'Established compound; excludes his.'),
+ ('mtshungs pa','Identical to',5,'Comparison adjective and its lexical complement preposition; exact capitalization retained.'),
+ ('chu','water',5,'Water in the verse stream, after the English word stream.'),
+ ('klung','stream',5,'Stream noun; no second separate flow word is claimed.'),
+ ('la',None,6,'Object relation to the stream is expressed by English sees taking a direct object; no separate case token.',{'tib_occurrence':2}),
+ ('yi dvags','craving spirit',5,'Verse spirit only; excludes a.'),
+ ('rnag','pus',5,'Final verse pus; the earlier pus belongs to the rnag khrag parent.',{'tib_occurrence':2,'eng_occurrence':2}),
+ ('blo','mind',5,'Mind is the overt noun; the explanatory relative which sees remains unwrapped.'),
+ ('yang','as well',6,'Additive in the quoted verse.'),
+ ('zhes',None,6,'Quotative is expressed by the direct quotation boundary; no separate word in addition to say.'),
+ ('gsungs','say',5,'Speech verb; supplied text itself and bracketed author stay unwrapped.'),
+ ("pa'i",None,6,'Nominal-genitive reason linker is realized by causal Because, without a separate token.',{'tib_occurrence':2}),
+ ('phyir','Because',6,'Causal marker precedes the first reason in English and governs the paired reasons.')
+],"All repeated occurrences are explicitly resolved: look/looks, when/when, first porcelain basin/second basin, cataracts/cataract, and compound pus/final verse pus. The med span selects n't in the second isn't, after look; the initial rhetorical Isn't is unwrapped. Sit down, explanatory participants, and [Master Dharmakirti's] text itself remain verbatim but unwrapped. The exact C15:451 parallel and differing ILL:2323 verse do not establish independent publication or settle authorship. Unresolved de ltar, thal, can, 'bab and closing zer na remain omitted with reasons in the occurrence ledger.",[
+ {'tib':'de ltar','reason':'Anaphoric manner is distributed across the expanded recalled situation; all those beings is not a lexical equivalent.'},
+ {'tib':'par thal','reason':'Consequence construction becomes the initial rhetorical question; no separate narrow counterpart is asserted.'},
+ {'tib':'can','occurrence':2,'reason':'Possessor is distributed into someone where his; it is not absent, but no separate lexical atom is proposed.'},
+ {'tib':"'bab",'reason':'Flowing-water sense is distributed within stream of water; klung owns stream, so a separate flow counterpart is not claimed.'},
+ {'tib':'zer na','reason':'Closing hypothetical quotation is distributed into the opening claim formula; omitted rather than false-null.'},
+ {'english':"sit down / all those beings / [Master Dharmakirti's] text itself / which sees",'reason':'Expanded context, bracketed attribution and explanatory material have no separate selected lexical exponents; unchanged source is retained.'}
+])

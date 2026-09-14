@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/english/finalize.py", line 20, in <module>
+    lines=[s.strip() for s in extent['latin1'].splitlines() if s.strip()];r=source[(co,seq)];assert lines[0]==r['acip'];assert ' '.join(lines[1:])==r['english'];checks.append({'physical':witness['path'],'seq':seq,'byte_range':extent['byte_range_zero_based_half_open'],'acip_exact_after_line_selection':True,'english_exact_after_joining_physical_lines':True})
+                                                                                                    ^^^^^^^^^^^^^^^^^^^
+AssertionError

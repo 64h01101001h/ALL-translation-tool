@@ -1,0 +1,12 @@
+{
+  "confidence": "CONFIRMED",
+  "course": "C03",
+  "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+  "expected": "our Lama to help us find the ability to do so.",
+  "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+  "item_id": "E-106",
+  "kind": "INGEST_ARTEFACT",
+  "note": "filed from the alignment batch, spine-verified on merge",
+  "segment": "C03:429",
+  "severity": "HIGH"
+}

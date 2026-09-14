@@ -1,0 +1,20 @@
+{
+  "sql": "select * from corpus_segments where course=? and seq between ? and ? order by seq",
+  "parameters": [
+    "ILL",
+    2319,
+    2326
+  ],
+  "count": 8,
+  "row_refs": [
+    "spine-rows.json#29638",
+    "spine-rows.json#29639",
+    "spine-rows.json#29640",
+    "spine-rows.json#29641",
+    "spine-rows.json#29642",
+    "spine-rows.json#29643",
+    "spine-rows.json#29644",
+    "spine-rows.json#29645"
+  ],
+  "deduplication": "Exact object equality checked; complete original rows stored once in spine-rows.json. The native author-context stdout and stdin are preserved."
+}

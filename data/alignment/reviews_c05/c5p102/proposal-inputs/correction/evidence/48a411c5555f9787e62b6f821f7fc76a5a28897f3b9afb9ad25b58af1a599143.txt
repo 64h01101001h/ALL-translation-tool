@@ -1,0 +1,29 @@
+"""Preserve the exact superseded boundary before any correction write."""
+from pathlib import Path
+import hashlib, json, shutil, datetime
+B=Path(__file__).resolve().parents[1]
+H=B/'reconciliation-history/v1-before-306-member-correction'
+def pin(p):
+    b=p.read_bytes(); return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x): p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not H.exists()
+assert pin(B/'reconciled/freeze.json')['sha256']=='3212c15bf512c4cd5bc3b12467de2eb85c845f5a768190b7bb9c8f42e1704e94'
+assert pin(B/'semantic-review/freeze.json')['sha256']=='5e6b5ce71a08f0683f1c6a10c27cc0bf07441c908234d1e67bda36a4eb1ec68e'
+for dirname,freeze in [('reconciled','freeze.json'),('semantic-review','freeze.json')]:
+    for r in json.loads((B/dirname/freeze).read_text())['files']:
+        assert pin(B/dirname/r['path'])=={k:r[k] for k in ('bytes','sha256')}
+H.mkdir(parents=True)
+sources=[p for p in B.iterdir() if p.is_file()]
+for p in B.iterdir():
+    if p.is_dir() and (p.name=='reconciled' or (p.name.startswith('root-') and p.name!='root-306-correction-evidence')):
+        sources.extend(q for q in p.rglob('*') if q.is_file())
+manifest=[]
+for p in sorted(sources):
+    q=H/p.relative_to(B);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+    assert pin(p)==pin(q)
+    manifest.append({'original':str(p),'copy':str(q),'relative_original':p.relative_to(B).as_posix(),'relative_copy':q.relative_to(H).as_posix(),**pin(p)})
+put(H/'original-to-history.json',manifest)
+semantic=[{'path':p.relative_to(B/'semantic-review').as_posix(),**pin(p)} for p in sorted((B/'semantic-review').rglob('*')) if p.is_file()]
+put(B/'root-306-correction-evidence/semantic-boundary-before.json',semantic)
+put(H/'preservation.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':len(manifest),'bytes':sum(r['bytes'] for r in manifest),'original_reconciled_freeze':pin(H/'reconciled/freeze.json'),'mapping':pin(H/'original-to-history.json'),'semantic_boundary':'Preserved in place, no writes authorized; complete pre-correction inventory outside boundary.'})
+print(json.dumps({'history':str(H),'mapping':pin(H/'original-to-history.json'),'files':len(manifest),'reconciled_files':sum(r['relative_original'].startswith('reconciled/') for r in manifest)},indent=2))

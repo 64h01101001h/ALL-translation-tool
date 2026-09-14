@@ -1,0 +1,69 @@
+{
+  "verdict": "APPROVE",
+  "scope": "F1/F2 only",
+  "resolved_findings": [
+    {
+      "id": "F1",
+      "category": "SPEC_AND_QUALITY",
+      "seq": 306,
+      "span_ids": [
+        "w5",
+        "w6"
+      ],
+      "original_span": "english/306 m1",
+      "finding": "A sound rnag/pus d7 member was omitted solely under an unsupported one-child cap.",
+      "minimal_change": "Restore original English m1 as a uniquely named d7 child between current w5 and w6: tib rnag, eng pus, W[47:51], E[145:148], parent w5. Keep w6 as its next contiguous sibling and leave the flat eng_order unchanged. Update the disposition, omission/report rationales and any helper assertion that imposes the one-child cap. Regenerate only changed final306 and request scoped re-review.",
+      "evidence": [
+        "governing/tools/gen_alignment_page.py.txt:113-147",
+        "governing/docs/ALIGNMENT_LAYER_SPEC.md:7",
+        "governing/data/alignment/pages_c03/c3p70.html (C03:207 w3/y4/y5)",
+        "proposal-inputs/english/306/spec.json",
+        "reviewed-final/306/original-span-dispositions.json (english m1)"
+      ],
+      "proposed_tuple": {
+        "seq": 306,
+        "id": "mPus (illustrative unique ID)",
+        "d": 7,
+        "tib": "rnag",
+        "eng": "pus",
+        "tib_range": [
+          47,
+          51
+        ],
+        "eng_range": [
+          145,
+          148
+        ]
+      },
+      "current_spec_modified": false,
+      "status": "RESOLVED",
+      "actual_resolution": "Restored original English m1 as mPus: first rnag/pus W[47:51], E[145:148], under w5 W[47:57], E[145:158]. Positive HGM rnag/pus and whole rnag khrag/pus and blood support this occurrence; competing blood-related glosses do not displace the local composition. It precedes w6 khrag/blood in the contiguous child group permitted by immutable canonical with_members/resolve and the checked C03:207 example. F1 is resolved.",
+      "proof": "evidence/correction-scope-proof.json"
+    },
+    {
+      "id": "F2",
+      "category": "QUALITY",
+      "seq": 306,
+      "span_ids": [
+        "w10"
+      ],
+      "finding": "The w10 cataracts member's rationale explains the later verse cataract/dbang po/dang ldan occurrence instead of its actual earlier parent rab rib can/person with cataracts.",
+      "minimal_change": "Replace the w10 rationale in final-ordered-tuples.json and the corresponding Tibetan w10 / English m3 original-span-dispositions reasons with an occurrence-specific explanation of the first rab rib can parent. Preserve w10's existing tuple and ranges. Check any generated reason source to avoid restoring the copied error.",
+      "evidence": [
+        "reviewed-final/306/final-ordered-tuples.json (w10)",
+        "reviewed-final/306/original-span-dispositions.json (tibetan w10 and english m3)",
+        "span-review.json (306 w10)"
+      ],
+      "current_tuple_sound": true,
+      "status": "RESOLVED",
+      "actual_resolution": "First rab rib/cataracts W[86:93], E[227:236] is the unique tighter member of w9 rab rib can/person with cataracts W[86:97], E[215:236]. Its actual current reason correctly identifies the person who looks into the basin and distinguishes the later verse's dbang po/dang ldan relation. The tuple and ranges are unchanged; F2 is resolved in final-ordered-tuples and both original-disposition reasons.",
+      "proof": "evidence/correction-disposition-diff.json"
+    }
+  ],
+  "unchanged_original_judgments_reused": true,
+  "unresolved_findings": [],
+  "retained_errata": 0,
+  "actual_acceptance_baseline": "f1651c64b0ad9b0c7ea85f9961332ac1a3787e83",
+  "prior_complete_review": "history/v1-before-correction/review.md",
+  "current_full_review": "review.md"
+}

@@ -1,0 +1,25 @@
+"""Rebuild the full convenience view from current inputs, without any generator replay."""
+from pathlib import Path
+import difflib, hashlib, json
+B=Path(__file__).resolve().parents[1];H=B/'reconciliation-history/v1-before-306-member-correction';target=B/'semantic-input-review-package.txt'
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+assert pin(target)==pin(H/'semantic-input-review-package.txt')
+chunks=['C05:304–306 CORRECTED PROVISIONAL INPUT PACKAGE. F1/F2 corrected only in306; existing semantic-review is unchanged NEEDS_CORRECTION history. Root owns independent intake and scoped re-review.\n'];manifest=[]
+def include(p):
+    if p.is_file():
+        raw=p.read_bytes();chunks.extend(['\n===== '+p.relative_to(B).as_posix()+' =====\n',raw.decode()]);manifest.append({'path':p.relative_to(B).as_posix(),**pin(p)})
+for name in ['source.json','context.json','root-review-targets.md','root-current-semantic-brief.md','root-member-group-clarification.md','root-reconciliation-verification/report.json','root-reconciliation-verification/resolved-spans.json','root-reconciliation-verification/execution-reuse.json','root-reconciliation-intake.json','reconciled/evidence/correction-306-v2/final-correction-proof.json','reconciled/evidence/correction-306-v2/current-correction-rationales.json']:
+    include(B/name)
+for n in [304,305,306]:
+    for angle in ['tibetan','english','reconciled']:
+        for name in ['spec.json','report.md','decisions.json','intended-ranges.json','original-span-dispositions.json','original-proposal-notes.json','final-ordered-tuples.json','omissions-and-null-review.json','final-omission-ranges.json','errata-five-grounds.json','proposed-head-allowances.json','verification.json','errata.json']:
+            include(B/angle/str(n)/name)
+    for angle in ['tibetan','english']:
+        old=B/angle/str(n)/'spec.json';new=B/'reconciled'/str(n)/'spec.json'
+        chunks.extend(['\n===== COMPLETE '+angle+' TO RECONCILED DIFF '+str(n)+' =====\n',''.join(difflib.unified_diff(old.read_text().splitlines(True),new.read_text().splitlines(True),fromfile=old.relative_to(B).as_posix(),tofile=new.relative_to(B).as_posix(),n=10))])
+chunks.extend(['\n===== PACKAGE INPUT HASHES =====\n',json.dumps(manifest,indent=2),'\n'])
+content=''.join(chunks);target.write_text(content)
+for r in manifest:assert pin(B/r['path'])=={k:r[k] for k in ('bytes','sha256')}
+(B/'root-306-correction-evidence/package-proof.json').write_text(json.dumps({'package':{'path':str(target),**pin(target)},'input_count':len(manifest),'inputs':manifest,'prior_package':{'path':str(H/'semantic-input-review-package.txt'),**pin(H/'semantic-input-review-package.txt')},'generator_runs':0,'historical_briefs':'Earlier root brief counts and reviewed freeze identify the preserved original semantic boundary; current correction proof/intake above explicitly supersede that input boundary for re-review.'},ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'package':pin(target),'included_current_inputs':len(manifest),'generator_runs':0},indent=2))

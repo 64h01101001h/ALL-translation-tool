@@ -1,0 +1,20 @@
+"""Execute the unmodified real generator with pinned imports and read-only SQLite.
+Only IO location/access adaptation: no resolution or fidelity gates are changed.
+"""
+from pathlib import Path
+import os,sys,json,hashlib,importlib.util,sqlite3,runpy
+A=Path(__file__).resolve().parent;W=A.parents[2]/'campaign-worktree';E=A/'evidence';PIN='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+audit_path=Path(sys.argv[1]);audit={'schema':'canonical-runtime-audit-v1','producer':'Codex','python':sys.version,'source_origin':PIN,'cwd':os.getcwd(),'generator':str(W/'tools/gen_alignment_page.py'),'adaptations':['preload exact pinned historical builder and hgm_tools dependencies','force the original spine connection to SQLite URI mode=ro'],'modules':[],'sqlite_connections':[]}
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def load_module(name,relative):
+ p=E/'git'/relative;spec=importlib.util.spec_from_file_location(name,p);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);audit['modules'].append({'name':name,'path':str(p),'sha256':sha(p),'bytes':p.stat().st_size,'original_commit':PIN});return m
+spine=(W/'build/hgm_spine_v27_2.db').resolve();gen=W/'tools/gen_alignment_page.py';expected=json.loads((A/'proposal-baseline.json').read_text());assert sha(gen)==expected['governing_git_pins']['tools/gen_alignment_page.py']['sha256'];assert sha(spine)==expected['source_pins']['spine']['sha256']
+audit['generator_before_sha256']=sha(gen);audit['spine_before_sha256']=sha(spine)
+load_module('hgm_tools','engines/hgm_tools.py');B=load_module('build_alignment_layer','tools/build_alignment_layer.py');B.SPINE=str(spine)
+native_connect=sqlite3.connect
+def read_only_connect(database,*args,**kwargs):
+ assert Path(database).resolve()==spine,'Only the authorized original spine may be opened';uri=spine.as_uri()+'?mode=ro';kwargs['uri']=True;audit['sqlite_connections'].append({'requested':str(database),'actual_uri':uri});return native_connect(uri,*args,**kwargs)
+sqlite3.connect=read_only_connect
+try:runpy.run_path(str(gen),run_name='__main__')
+finally:
+ audit['generator_after_sha256']=sha(gen);audit['spine_after_sha256']=sha(spine);audit['unchanged']=audit['generator_before_sha256']==audit['generator_after_sha256'] and audit['spine_before_sha256']==audit['spine_after_sha256'];audit_path.write_text(json.dumps(audit,indent=2)+'\n')

@@ -1,0 +1,26 @@
+from capture import *
+import collections
+def main():
+ assert json.loads((R/'final-verification.json').read_text())['result']=='PASS'
+ original=json.loads((R/'originals/freeze-verification.json').read_text())
+ for x in original:assert sha(Path(x['path']).read_bytes())==x['sha256']
+ summary=json.loads((R/'summary.json').read_text())
+ for x in summary:
+  d=R/str(x['seq']);assert sha((d/'spec.json').read_bytes())==x['spec_sha256'];assert sha((d/'body.html').read_bytes())==x['body_sha256'];assert len(json.loads((d/'errata.json').read_text()))==x['errata']
+ files=[];groups=collections.defaultdict(list)
+ for p in sorted(R.rglob('*')):
+  if not p.is_file():continue
+  rel=p.relative_to(R).as_posix()
+  if rel in ['freeze.json','freeze.sha256'] or rel.startswith('native/freeze-v1/'):continue
+  data=p.read_bytes();h=sha(data);files.append({'path':rel,'bytes':len(data),'sha256':h});groups[h].append(rel)
+ failures=[]
+ for p in sorted((R/'native').glob('*/exit.txt')):
+  if p.parent.name=='freeze-v1':continue
+  code=int(p.read_text())
+  if code:failures.append({'attempt':p.parent.relative_to(R).as_posix(),'exit':code,'stderr_sha256':sha((p.parent/'stderr.bin').read_bytes())})
+ freeze={'schema':'c05-independent-reconciliation-freeze-v1','producer':'Codex (GPT-6 Astra)','frozen_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'FROZEN PROVISIONAL reconciliation; fresh independent skeptical review and future acceptance are separate','source_governance_origin':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4','source_origin_course_boundary':294,'future_acceptance_baseline':'Must be captured separately after preceding landing through303; not asserted here.','original_freezes':original,'original_span_count':141,'counts':summary,'six_original_generators':'Each actually executed once by reconciler; exit0, empty stderr, exact frozen body bytes.','final_generators':'Three first-attempt exit0; exact stdin/stdout/body and source reconstruction proven.','remaining_concerns':['C05:306 original MEDIUM/PROBABLE attribution candidate was not retained as an erratum; internal evidence motivates bibliographic verification, and the unresolved concern is recorded LOW/UNCERTAIN.','Strict immediate-parent d7 policy selects one child under rnag khrag; original English chained member acceptance is recorded without waiving the policy.'],'files':files,'file_count':len(files),'total_file_bytes':sum(x['bytes'] for x in files),'identical_byte_groups':{h:paths for h,paths in groups.items() if len(paths)>1},'failed_helper_attempts_preserved':failures,'closure_exclusions':['freeze.json and freeze.sha256 are self-hash closure records','native/freeze-v1/* records the freeze invocation and completes after this inventory'],'immutability':'No edit belongs inside this frozen boundary; corrections must preserve and explicitly supersede it.'}
+ put(R/'freeze.json',freeze);h=sha((R/'freeze.json').read_bytes());(R/'freeze.sha256').write_text(h+'  freeze.json\n')
+ for x in files:
+  data=(R/x['path']).read_bytes();assert len(data)==x['bytes'] and sha(data)==x['sha256']
+ print(json.dumps({'freeze_sha256':h,'files':len(files),'original_spans':141,'final_spans':sum(x['spans'] for x in summary),'final_d5':sum(x['d5'] for x in summary),'final_nulls':sum(x['nulls'] for x in summary),'errata':0,'failed_helper_attempts_preserved':len(failures),'all_frozen_file_hashes_reverified':True},indent=2))
+if __name__=='__main__':main()

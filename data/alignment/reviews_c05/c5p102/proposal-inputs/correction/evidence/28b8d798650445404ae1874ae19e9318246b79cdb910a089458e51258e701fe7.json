@@ -1,0 +1,33 @@
+{
+  "result": "PASS",
+  "producer": "Independent Codex correction reconciler; root review and independent semantic re-review remain separate",
+  "original_span_count": 141,
+  "segments": [
+    {
+      "seq": 304,
+      "source_row_equal": true,
+      "source_text_reconstruction": "PASS",
+      "final_range_count": 15,
+      "original_dispositions": 26,
+      "exact_native_io": "PASS"
+    },
+    {
+      "seq": 305,
+      "source_row_equal": true,
+      "source_text_reconstruction": "PASS",
+      "final_range_count": 22,
+      "original_dispositions": 42,
+      "exact_native_io": "PASS"
+    },
+    {
+      "seq": 306,
+      "source_row_equal": true,
+      "source_text_reconstruction": "PASS",
+      "final_range_count": 38,
+      "original_dispositions": 73,
+      "exact_native_io": "PASS"
+    }
+  ],
+  "audit_revision": "F1/F2 correction: fresh 306 canonical ranges, parsed HTML, full source reconstruction, original dispositions, actual one-time native streams and exact historical preservation verified. Passing 304/305 artifacts and proofs are byte-identical and reused; no original generators repeated.",
+  "execution_reuse": "evidence/correction-306-v2/execution-reuse.json"
+}

@@ -1,0 +1,67 @@
+import gzip,hashlib,json,os,pathlib,sqlite3
+ROOT=pathlib.Path(__file__).resolve().parents[1];E=ROOT/'evidence';W=ROOT.parents[2]/'campaign-worktree'
+def save(name,obj):(E/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+spine=json.loads((E/'spine-rows.json').read_text());queries=json.loads((E/'spine-queries.json').read_text())
+extra=json.loads((E/'author-context-query.json').read_text())
+for row in extra['rows']:
+ rid=str(row['id'])
+ if rid in spine:assert spine[rid]==row
+ else:spine[rid]=row
+queries.append({'label':'author-context','sql':extra['sql'],'parameters':extra['parameters'],'row_count':extra['count'],'row_ids':[r['id'] for r in extra['rows']]})
+save('spine-rows.json',spine);save('spine-queries.json',queries)
+# Query output originally included overlapping full rows. Preserve only a mapping
+# after proving exact object equality to the shared original row store.
+save('author-context-query.json',{'sql':extra['sql'],'parameters':extra['parameters'],'count':extra['count'],'row_refs':['spine-rows.json#'+str(r['id']) for r in extra['rows']],'deduplication':'Exact object equality checked; complete original rows stored once in spine-rows.json. The native author-context stdout and stdin are preserved.'})
+with gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt') as f:corpus=json.load(f)
+course_count={};mapping={};lookup={(r['course'],r['seq']):r for r in spine.values()}
+for idx,row in enumerate(corpus):
+ c=row['course'];course_count[c]=course_count.get(c,0)+1;seq=course_count[c]
+ if (c,seq) not in lookup:continue
+ s=lookup[c,seq];raw=json.loads(s['raw']);assert row==raw and all(row[k]==s[k] for k in ['course','acip','wylie','english'])
+ mapping[str(idx)]={'course':c,'one_based_course_ordinal':seq,'spine_row_id':s['id'],'original_record_ref':'spine-rows.json#'+str(s['id'])+'/raw','original_field_order':list(row),'dictionary_values_equal_to_parsed_raw':True,'record_json_sha256':sha(json.dumps(row,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode())}
+assert len(mapping)==len(spine)
+prior=(E/'corpus-rows.json').read_bytes();prior_obj=json.loads(prior)
+assert all(json.loads(spine[str(mapping[k]['spine_row_id'])]['raw'])==v for k,v in prior_obj.items())
+save('corpus-original-record-map.json',{'source_path':str(W/'data/full_parallel_corpus_v32.json.gz'),'source_count':len(corpus),'record_count':len(mapping),'records':mapping,'deduplicated_file':{'former_path':'corpus-rows.json','bytes':len(prior),'sha256':sha(prior),'record_count':len(prior_obj),'disposition':'Exact original object values and field order reconstructable through records mapping; each original corpus witness is stored once as the SQLite raw field after equality validation.'}})
+(E/'corpus-rows.json').unlink()
+save('corpus-spine-mapping.json',{'source_count':len(corpus),'record_count':len(mapping),'record_map':'corpus-original-record-map.json','comparison':'Each complete original corpus object independently reopened and equals JSON-decoded original SQLite raw, with its course/acip/wylie/english fields equal. Course seq is independently counted; IDs are SQLite-only.'})
+# Physical originals are preserved as bytes; separately record exactly the
+# whitespace-only transformation required to compare their wrapped paragraphs.
+physical=(E/'physical-C05ReadingASCII.txt').read_bytes();lines=physical.decode('latin-1').splitlines();comp=[]
+for seq,a,b in [(304,3026,3029),(305,3032,3035),(306,3038,3049)]:
+ row=spine[str(seq+1382)];selected=lines[a-1:b];joined=' '.join(' '.join(selected).split())
+ assert joined==row['english']
+ comp.append({'seq':seq,'file':'physical-C05ReadingASCII.txt','line_start':a,'line_end':b,'line_numbering':'one-based','exact_lines':selected,'transformation':'Latin-1 reversible byte view; join source line breaks with spaces and collapse whitespace only. No wording changes. No claim about source character encoding.','english_equals_spine_after_whitespace_join':True,'acip_exact_full_row_query_ref':'physical-queries.json','original_byte_file_sha256':sha(physical)})
+save('physical-comparisons.json',comp)
+register=json.loads((ROOT/'native/pin-docs__errata_register.json.stdout').read_text())
+terms=['Dharmakirti','Chandrakirti','bse ru','C05:304','C05:305','C05:306']
+result=[]
+for term in terms:
+ hits=[{'index':i,'entry':r} for i,r in enumerate(register) if term.casefold() in json.dumps(r,ensure_ascii=False).casefold()]
+ result.append({'literal_casefold_search':term,'count':len(hits),'hits':hits})
+save('errata-register-queries.json',{'origin_commit':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4','source_ref':'../native/pin-docs__errata_register.json.stdout','entry_count':len(register),'queries':result})
+master=json.loads((E/'master-rows.json').read_text());mq=json.loads((E/'master-queries.json').read_text());byterm={q['exact_wylie_or_variant']:q for q in mq}
+fallback={"bltas":"bltas pa","'dod":"'dod pa","bse ru'i":"bse ru",'med pa':'med',"pa'i tshe":'tshe',"pa de'i tshe":'tshe','nang du':'nang'}
+evidence_map={}
+for seq in [304,305,306]:
+ spec=json.loads((ROOT/str(seq)/'spec.json').read_text())['segments'][0];entries=[]
+ for sp in spec['spans']:
+  term=sp['tib'] if sp['tib'] in byterm else fallback.get(sp['tib'])
+  refs=byterm[term]['refs'] if term else []
+  entries.append({'span_id':sp['id'],'tib':sp['tib'],'eng':sp['eng'],'source_row_ref':'spine-rows.json#'+str(seq+1382),'decision_and_occurrence_ref':'../'+str(seq)+'/intended-ranges.json#'+sp['id'],'master_query':term,'master_full_row_refs':['master-rows.json#'+r for r in refs],'master_status':'Original tier fields retained; contextual corpus correspondence must still be judged. A matching glossary entry alone never licenses a span.','note':'Inflected/surface form mapped to the named lexical query.' if term and term!=sp['tib'] else 'Phrase/grammar decision may rely on original local context rather than a standalone dictionary entry.' if not term else 'Exact headword/variant query.'})
+ evidence_map[str(seq)]={'source_rows':[seq+1382],'parallel_three_field_match_rows':[seq+1382,seq+5696],'corpus_queries_ref':'spine-queries.json','physical_ref':'physical-comparisons.json','spans':entries}
+save('span-evidence-map.json',evidence_map)
+home=pathlib.Path('/Users/adamderickandrade');required=[home/'Desktop/HGM DICTIONARY - TRANSLATION APP',home/'ACIP Software Developmeent/Gofer Developmetn Files',home/"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool",home/"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary",home/"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary",home/"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",home/'ACIP Software Developmeent/tibetan-spellchecker',home/'Tibetan Translation Tool']
+access=[{'path':str(p),'readable':os.access(p,os.R_OK)} for p in required];assert all(r['readable'] for r in access);save('required-access.json',access)
+sourcepins=json.loads((ROOT.parent/'proposal-baseline.json').read_text())['source_pins'];checks=[]
+for kind,pin in sourcepins.items():
+ b=pathlib.Path(pin['path']).read_bytes();assert sha(b)==pin['sha256'] and len(b)==pin['bytes'];checks.append({'kind':kind,'bytes':len(b),'sha256':sha(b),'unchanged':True})
+gen=(W/'tools/gen_alignment_page.py').read_bytes();assert sha(gen)=='7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e'
+save('final-source-checks.json',{'sources':checks,'worktree_generator_sha256':sha(gen),'no_current_governance_read':'Historical Git bytes used for builder, errata register and allowances. Worktree may advance beyond original through294 source baseline.'})
+for p in (ROOT/'native').glob('pin-*.command.json'):
+ rec=json.loads(p.read_text());stem=pathlib.Path(str(p)[:-len('.command.json')])
+ stdin=pathlib.Path(str(stem)+'.stdin');exitfile=pathlib.Path(str(stem)+'.exit')
+ if not stdin.exists():stdin.write_bytes(b'')
+ if not exitfile.exists():exitfile.write_text(str(rec['exit'])+'\n')
+print(json.dumps({'unique_spine_original_rows':len(spine),'mapped_complete_corpus_witnesses':len(mapping),'master_rows':len(master),'physical_english_checks':3,'source_hashes_unchanged':True,'registered_author_or_target_matches':sum(x['count'] for x in result)},indent=2))

@@ -1,0 +1,144 @@
+from capture import *
+import copy,re,collections
+from html.parser import HTMLParser
+sys.path.insert(0,str(B/'tibetan/helpers'))
+from canonical_ro import B as BUILDER,load_generator
+G=load_generator()
+class Parsed(HTMLParser):
+ def __init__(self):
+  super().__init__(convert_charrefs=True);self.side=None;self.stack=[];self.text={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}};self.null=0
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs)
+  if tag=='div' and a.get('class') in self.text:self.side=a['class']
+  if tag=='span':
+   nul='nul' in a.get('class','').split();self.null+=int(nul);self.stack.append((a.get('data-l'),self.side,len(self.text[self.side]) if self.side else 0,nul,a.get('data-d')))
+ def handle_endtag(self,tag):
+  if tag=='span':
+   lab,side,start,nul,d=self.stack.pop()
+   if lab:self.ranges[side][lab]={'range':[start,len(self.text[side])],'depth':int(d)}
+   self.null-=int(nul)
+ def handle_data(self,s):
+  if self.side and self.stack and not self.null:self.text[self.side]+=s
+def ranges(seg,row,body,strict):
+ spans=seg['spans'];ids={s['id']:s for s in spans};eo=seg['eng_order'];assert len(eo)==len(set(eo));assert set(eo)=={s['id'] for s in spans if s['eng'] is not None and s['d']!=7}
+ tr=G.resolve(row['wylie'],spans,'tib',seg['seq']);er=G.resolve(row['english'],G.with_members(spans,[ids[i] for i in eo],row['english']),'eng',seg['seq'])
+ p=Parsed();p.feed(body.decode());assert p.text=={'tib':row['wylie'],'eng':row['english']}
+ output=[];parent=None
+ for i,s in enumerate(spans):
+  lab=f"s{seg['seq']}{s['id']}";t=list(tr[s['id']]);e=list(er[s['id']]) if s['eng'] is not None else None
+  assert p.ranges['tib'][lab]=={'range':t,'depth':s['d']}
+  if e is not None:assert p.ranges['eng'][lab]=={'range':e,'depth':s['d']}
+  else:assert s.get('nul') and p.ranges['eng'][lab]['range'][0]==p.ranges['eng'][lab]['range'][1]
+  immediate=True
+  if s['d']==7:
+   immediate=i>0 and spans[i-1]['d']==5
+   if strict:assert immediate
+   assert parent is not None
+   for side,rs in [('tib',tr),('eng',er)]:
+    if s[side] is None:continue
+    a,b=rs[s['id']];c,d=rs[parent['id']];assert c<=a<b<=d and (a,b)!=(c,d);assert row['wylie' if side=='tib' else 'english'].count(s[side],c,d)==1
+  else:parent=s if s['d']==5 else None
+  output.append({**s,'tib_range':t,'eng_range':e,'parent':parent['id'] if s['d']==7 else None,'immediately_after_d5':immediate if s['d']==7 else None})
+ for side in ['tib','eng']:
+  bank={label:(depth,txt) for depth,label,txt in BUILDER.spans_of(body.decode(),side)};assert len(bank)==len(spans)+1
+  for s in spans:assert bank[f"s{seg['seq']}{s['id']}"]==(s['d'],s[side] or '')
+ return output
+REASONS={
+ 'body':'Complete lus (body) + washing verb is the contextual reflexive wash-one\'s-body construction. The d3 phrase owns washes himself; no lus/himself dictionary equation and no water or additional human is captured.',
+ 'imagination':'HGM24295, original unified_entries[24294], glossary tier, gives the entire blos rlom pa as imagination (and mistaken state of mind). The whole established expression is retained; rlom pa alone also has imagination but would strand blos and reduce the attested unit without a contextual reason.',
+ 'negative':'med is a negative existential verb (d5), not a free grammatical particle. Here the narrow negation is an attested exponent of the negative predicate; English copular/modal realization stays unwrapped. This does not make restrictive nothing more than into an existential negation and does not turn the full negative consequence positive.',
+ 'sogs':'sogs is an established lexical etcetera unit, d5; its closing gesture licenses the whole and so on, including and. It captures no supplied noun. Exact proposed landing allowance names sogs.',
+ 'too':'Single yang at W[12:16] carries addition by comparison to the human case; the reason sentence displaces that addition to too at E[141:144]. No other yang or too competes. The discourse link survives the sentence boundary; phyir owns For and tsam owns only the restrictive phrase.',
+ 'first-thal':'First par thal is distributed across Are you saying then that and can\'t, whereas the final thal has the clean must counterpart. Taking the first then alone at d5 would promote only an introductory discourse fragment as the consequence verb. Both first par and thal are omitted, not falsely nulled, while med retains the actual negative affix.',
+ 'simultaneous':'cig car du expresses simultaneous occurrence, here together. Original HGM glossary also lists sit down together; nevertheless the source has no sitting verb. d3 alone cannot give cig car du a sitting event. Keep together at d5, leave sit down and supplied participants unwrapped.',
+ 'temporal':'The entire local temporal linker is retained at d3: pa\'i tshe / pa de\'i tshe owns the corresponding when. tshe alone is not promoted to a dictionary when mapping; curated life is another sense. This does not contradict or change that master tier.',
+ 'med-isnt':'The first med of 306 is negative existence, locally there isn\'t any actual pus and blood. It owns the full existential isn\'t at E[128:133], excluding expletive there and quantifier any. Initial Isn\'t at E[40:45] and the later isn\'t before true are rhetorical and are not selected.',
+ 'basin':'HGM21422, original unified_entries[21421], glossary tier, explicitly gives basin, porcelain sink, porcelain basin. First bse ru owns porcelain basin; inflected second bse ru\'i owns the second basin. Comparative rhinoceros and ILL:1634 cup of horn are preserved as contextual comparanda, not corrections or promoted HGM equivalents.',
+ 'hair':'HGM889, original unified_entries[888], glossary tier, gives hair, strand of hair, comb. Current illusory-hair context selects strand of hair; skra alone has hair and is a unique tighter d7 member. shad is not independently made strand. No comb source correction follows.',
+ 'possession':'rab rib modifies the possessed dbang po through dang ldan: the sense power has cataract. dang ldan is itself an established HGM glossary compound with has, so retain that d5 unit and no separate dang null. The external possessor can is distributed across someone where his and omitted; it is not assigned has. The full relation is preserved in the source and explained without hiding the lexical links.',
+ 'locative':'Retain complete nang du at d3 for in; selecting nang at d5 plus a null du would split one locative construction unnecessarily. The genitive of bse ru\'i has no additional of token, explicitly fused into the same spatial construction.',
+ 'premise':'gang zhig marks the first of the two premises in this debate construction. first of all is the explicit local enumeration counterpart (also attested by its original HGM glossary); And secondly is the later English expansion of the paired-premise structure and remains unwrapped.',
+ 'rnag-member':'rnag/pus is semantically sound, but this final strict schema keeps the immediately following khrag/blood member of rnag khrag. The original English m2 follows another d7, not immediately the d5 parent: canonical acceptance is recorded but does not waive the brief. The complete parent still covers pus and blood; no false-null rnag is added.',
+ 'say':'gsungs alone owns say. zhes marks the direct-quotation boundary and has no additional English quotative token. Neither introduces a named Tibetan author or text itself; the bracketed attribution stays verbatim and unwrapped.',
+ 'copula304':'The yin copula is fused into it\'s; the permitted subword conventions do not include a standalone copular \'s. Explicit fusion null retained, not an assertion of absent copular meaning.',
+ 'copula305':'yin has an exact separate is at E[145:147] in this reason clause. Retain it despite the English proposal\'s broad omission of copular embedding; no participant is included.'
+}
+def reason(seq,s):
+ t=s['tib']
+ if t=="lus 'khrud pa":return REASONS['body']
+ if t=='blos rlom pa':return REASONS['imagination']
+ if t=='sogs':return REASONS['sogs']
+ if t=='med':return REASONS['med-isnt'] if seq==306 and s.get('eng')=="isn't" else REASONS['negative']
+ if seq==305 and t=='yang':return REASONS['too']
+ if t=='cig car du':return REASONS['simultaneous']
+ if 'tshe' in t:return REASONS['temporal']
+ if t.startswith('bse ru'):return REASONS['basin']
+ if t in ['skra shad','skra']:return REASONS['hair']
+ if t in ['rab rib','dang ldan','dbang po']:return REASONS['possession']
+ if t in ['nang du','nang','du']:return REASONS['locative']
+ if t=='gang zhig':return REASONS['premise']
+ if t in ['gsungs','zhes']:return REASONS['say']
+ if t=='yin':return REASONS['copula304' if seq==304 else 'copula305']
+ if s['eng'] is None:return 'Grammatical fusion independently retained: '+s['nul']
+ return 'Retained narrow source occurrence: '+t+' → '+str(s['eng'])+'. Original master fields and full row context were independently reopened; supplied articles, participants and framing are excluded.'
+def main():
+ rows={x['seq']:x for x in json.loads((R/'evidence/source-context.json').read_text())};all_original=[];summ=[]
+ for seq in [304,305,306]:
+  originals={a:json.loads((B/a/str(seq)/'spec.json').read_text())['segments'][0] for a in ['tibetan','english']}
+  actual={}
+  for a,seg in originals.items():
+   actual[a]=ranges(seg,rows[seq],(R/'native'/f'original-{a}-{seq}'/'stdout.bin').read_bytes(),False)
+   want={x['id']:x for x in json.loads((B/a/str(seq)/'intended-ranges.json').read_text())['spans']}
+   for x in actual[a]:assert x['tib_range']==want[x['id']]['tib_range'] and x['eng_range']==want[x['id']]['eng_range']
+  seg=copy.deepcopy(originals['tibetan']);sp=seg['spans']
+  if seq==305:
+   sp[:]=[x for x in sp if x['id'] not in ['w8','w9']];seg['eng_order'].remove('w9')
+  if seq==306:
+   sp[:]=[x for x in sp if x['id']!='w23']
+   for x in sp:
+    if x['id']=='w8':x['eng']="isn't";x.pop('subword',None)
+    if x['id']=='w20':x['tib']='med'
+    if x['id']=='w24':x['tib']='dang ldan'
+   i=next(i for i,x in enumerate(sp) if x['id']=='w19');sp.insert(i+1,{'id':'mHair','d':7,'tib':'skra','eng':'hair'})
+  notes={
+ 304:"The complete body-washing recast lus 'khrud pa owns washes himself at d3; lus is not equated with himself. Supplied with the water stays unwrapped. Whole blos rlom pa owns imagination; tsam owns restrictive nothing more than. med/not and thal/must preserve the negative consequence; the English copular frame remains unwrapped. The second mi/de are distributed into reference and possession, and omitted. gi and causal pa'i have no separate exponents; yin is fused into it's, not absent. Closing zer na coalesces with the opening claim formula and is omitted.",
+ 305:"yang is displaced to too at the start of the reason sentence; phyir owns For, tsam owns nothing more than, and yin owns the separate is. The first and third yi dvags own singular craving spirit and final plural craving spirits; the middle occurrence is pronominal in his and omitted. The two med occurrences retain the n't in can't and final not exist: both consequences remain negative. First par thal is distributed across the question and modal frame and omitted; final thal owns must. Supplied pus and blood, contextual prepositions and conditional na/discourse framing stay unwrapped. Genitive gi and causal pa'i have no separate exponent.",
+ 306:"cig car du owns together; sit down and expanded participants stay unwrapped. Complete temporal constructions own the two when occurrences. The first med owns the existential isn't after there, not the initial rhetorical Isn't; the second med owns no. First bse ru owns porcelain basin and inflected second bse ru'i owns the second basin, with no separate genitive exponent. skra shad owns strand of hair with skra/hair as its tighter member. The sense power is qualified by cataract through dang ldan/has; external can is distributed in someone where his and omitted. nang du/in is one locative phrase. gang zhig owns first of all. 'bab, de ltar and consequence/speech framing remain omitted with their distributed content explained. zhes has no extra quotative token; gsungs owns say. [Master Dharmakirti's] text itself remains verbatim and unwrapped. Internal attribution evidence leaves an unresolved bibliographic concern; no source correction is asserted."}
+  seg['note']='PROVISIONAL machine alignment by Codex (GPT-6 Astra), independently reconciled; not human approved and no hgm_gloss promotion. GMR English is verbatim. '+notes[seq]
+  dest=R/str(seq);put(dest/'spec.json',{'course':'C05','segments':[seg]});put(dest/'errata.json',[])
+  p=capture(f'final-{seq}-v1',[sys.executable,str(B/'tibetan/helpers/canonical_ro.py')],(dest/'spec.json').read_bytes());assert p.returncode==0 and not p.stderr;(dest/'body.html').write_bytes(p.stdout)
+  final=ranges(seg,rows[seq],p.stdout,True)
+  for x in final:x['reason']=reason(seq,x)
+  put(dest/'final-ordered-tuples.json',{'offsets':'zero-based Unicode codepoints, half-open','source_id':rows[seq]['id'],'tibetan_order':final,'english_order':seg['eng_order']})
+  decisions=[]
+  for a,original in originals.items():
+   intent=json.loads((B/a/str(seq)/'intended-ranges.json').read_text());ints={x['id']:x for x in intent['spans']}
+   for x in actual[a]:
+    old=next(s for s in original['spans'] if s['id']==x['id']); candidates=[f for f in final if f['tib_range']==x['tib_range'] and f['eng_range']==x['eng_range']]
+    disposition='retained' if candidates and candidates[0]['d']==x['d'] else 'depth-recast' if candidates else 'recast'
+    selected=[f['id'] for f in candidates]
+    if not candidates:
+     overlapping=[f for f in final if f['tib_range'][0]<=x['tib_range'][0] and x['tib_range'][1]<=f['tib_range'][1]]
+     selected=[f['id'] for f in overlapping]
+     if seq==305 and x['tib_range'][0] in [53,57]:disposition='omitted';why=REASONS['first-thal']
+     elif seq==306 and a=='english' and x['id']=='m1':disposition='omitted-member';selected=['w5'];why=REASONS['rnag-member']
+     elif seq==306 and x['tib']=='cig car du':selected=['w2'];why=REASONS['simultaneous']
+     elif seq==306 and x['tib']=='bltas' and x['eng']=='look at':selected=['w3'];why='Tightened look at to look: bltas supplies the verb; the English object-link at stays outside the dictionary span.'
+     elif seq==306 and x['tib']=='med' and x['eng']=="n't":selected=['w8'];why=REASONS['med-isnt']
+     elif seq==306 and x['tib']=='med pa':selected=['w20'];why='Tightened med pa to the negative existential med. The nominalizing pa belongs to premise structure; not separately aligned and not nulled.'
+     elif seq==306 and x['tib']=='bltas pa':selected=['w14'];why='Tightened verb to bltas; pa is retained in the following complete temporal phrase pa de\'i tshe.'
+     elif seq==306 and x['tib'] in ['dang','ldan','dang ldan']:selected=['w24'];why=REASONS['possession']
+     else:why=reason(seq,selected and next(f for f in final if f['id']==selected[0]) or x)
+    else:why=reason(seq,candidates[0])
+    rec={'angle':a,'seq':seq,'original_id':x['id'],'original_span':old,'original_actual_tib_range':x['tib_range'],'original_actual_eng_range':x['eng_range'],'original_intended_record':ints[x['id']],'original_note':original['note'],'original_evidence_file':str(B/a/str(seq)/('decisions.json' if a=='english' else 'intended-ranges.json')),'disposition':disposition,'final_ids':selected,'reason':why}
+    decisions.append(rec);all_original.append(rec)
+  assert len(decisions)==sum(len(s['spans']) for s in originals.values());put(dest/'original-span-dispositions.json',decisions)
+  omissions={a:(json.loads((B/a/str(seq)/('decisions.json' if a=='english' else 'intended-ranges.json')).read_text()).get('omissions',[])) for a in originals}
+  put(dest/'omissions-and-null-review.json',{'original_omissions_unchanged':omissions,'final_nulls':[{'id':x['id'],'tib_range':x['tib_range'],'reason':x['reason']} for x in final if x['eng'] is None],'additional_omissions':[REASONS['first-thal']] if seq==305 else [REASONS['simultaneous'],REASONS['rnag-member']] if seq==306 else [],'canonical_note':seg['note'],'rule':'Omission records mean distributed or unresolved content, not absent meaning; only the enumerated final nulls assert no separate exponent.'})
+  requests=[{'page_span':f"c5p102/s{seq}{x['id']}",'tibetan_licensor':'sogs','allowance_value':'sogs licenses the complete closing gesture and so on; no supplied noun included.','tib_range':x['tib_range'],'eng_range':x['eng_range']} for x in final if x['d'] in [5,7] and x['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',x['eng'],re.I)]
+  assert all(next(f for f in final if f"c5p102/s{seq}{f['id']}"==r['page_span'])['tib']=='sogs' for r in requests)
+  proof={'seq':seq,'spans':len(sp),'nonnull':sum(x['eng'] is not None for x in sp),'nulls':sum(x['eng'] is None for x in sp),'d5':sum(x['d']==5 for x in sp),'d7':sum(x['d']==7 for x in sp),'depth_counts':dict(collections.Counter(x['d'] for x in sp)),'errata':0,'generator_exit':p.returncode,'stderr_bytes':len(p.stderr),'spec_bytes':(dest/'spec.json').stat().st_size,'spec_sha256':sha((dest/'spec.json').read_bytes()),'body_bytes':len(p.stdout),'body_sha256':sha(p.stdout),'canonical_resolution_and_parsed_ranges_equal':True,'all_original_ranges_independently_verified':True,'full_source_text_reconstructed_verbatim':True,'historical_builder_reads_every_span':True,'strict_d7_checks_pass':True,'proposed_allowances':requests,'original_span_dispositions':len(decisions)}
+  put(dest/'verification.json',proof);summ.append(proof)
+ put(R/'evidence'/'original-range-verification.json',{'all141_spans':len(all_original)==141,'counts_by_segment':{str(n):sum(x['seq']==n for x in all_original) for n in [304,305,306]},'mechanical_original_d7_exception':[{'angle':'english','seq':306,'id':'m2','finding':'Canonical generator accepts chained siblings; written brief requires d7 immediately after d5. Final selects only one child of rnag khrag.'}]})
+ put(R/'summary.json',summ);print(json.dumps(summ,indent=2))
+if __name__=='__main__':main()

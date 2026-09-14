@@ -1,0 +1,62 @@
+from pathlib import Path
+import json,hashlib,subprocess,difflib
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parents[1]/'campaign-worktree';H=B/'reconciliation-history/v1-before-306-member-correction';A=R/'history/v1-before-correction'
+PIN='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+ALLOWED={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def digest(raw):return hashlib.sha256(raw).hexdigest()
+def read(p):return json.loads(p.read_bytes())
+def put(p,obj):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+oldfreeze=R/'freeze.json';assert digest(oldfreeze.read_bytes())=='5e6b5ce71a08f0683f1c6a10c27cc0bf07441c908234d1e67bda36a4eb1ec68e'
+old=read(oldfreeze);assert old['file_count']==797 and len(old['files'])==797
+assert not A.exists();past=[]
+for rec in old['files']+[{'path':'freeze.json','bytes':oldfreeze.stat().st_size,'sha256':digest(oldfreeze.read_bytes())}]:
+ p=R/rec['path'];raw=p.read_bytes();assert len(raw)==rec['bytes'] and digest(raw)==rec['sha256'];c=A/rec['path'];c.parent.mkdir(parents=True,exist_ok=True);c.write_bytes(raw);assert c.read_bytes()==raw
+ past.append({'original_at_prior_boundary':str(p),'history_copy':str(c.relative_to(R)),**rec})
+put(R/'evidence/prior-review-preservation.json',{'prior_freeze_sha256':digest(oldfreeze.read_bytes()),'prior_verdict':old['verdict'],'frozen_files':797,'preserved_files_including_freeze':798,'checks':past})
+historymanifest=H/'original-to-history.json';assert digest(historymanifest.read_bytes())=='1efe20fe21f495f13eb303d25beee92b6bb1767b7b67aa8ceda98df22fffb2f5'
+history=read(historymanifest);assert len(history)==1085;hist={}
+for x in history:
+ p=Path(x['copy']);raw=p.read_bytes();assert p.resolve().is_relative_to(H);assert len(raw)==x['bytes'] and digest(raw)==x['sha256'];hist[x['original']]=x
+manifest=[];remap=[]
+for x in read(A/'original-to-copy-manifest.json'):
+ rec={**x,'copy':'history/v1-before-correction/'+x['copy']};cp=R/rec['copy'];assert digest(cp.read_bytes())==x['sha256']
+ if 'original_git_commit' in x:
+  raw=subprocess.run(['git','-C',str(W),'show',x['original_git_commit']+':'+x['repository_relative_path']],check=True,capture_output=True).stdout
+ else:
+  op=Path(x['original']);raw=op.read_bytes()
+  if digest(raw)!=x['sha256'] or len(raw)!=x['bytes']:
+   hh=hist[x['original']];assert hh['sha256']==x['sha256'] and hh['bytes']==x['bytes'];rec['original']=hh['copy'];raw=Path(rec['original']).read_bytes();remap.append({'historical_original':x['original'],'historical_original_now':rec['original'],'prior_copy':x['copy'],'current_copy':rec['copy'],'bytes':x['bytes'],'sha256':x['sha256']})
+ assert raw==cp.read_bytes();manifest.append(rec)
+assert len(manifest)==1654
+newfreeze=B/'reconciled/freeze.json';assert digest(newfreeze.read_bytes())=='45becb5b818c5db6381966f3ea4e2499efb6ff010da9d206b6c700eb6e72c356';nf=read(newfreeze);assert nf['file_count']==1066
+for x in nf['files']:
+ raw=(B/'reconciled'/x['path']).read_bytes();assert len(raw)==x['bytes'] and digest(raw)==x['sha256']
+seen={x['path'] for x in nf['files']};assert seen=={str(p.relative_to(B/'reconciled')) for p in (B/'reconciled').rglob('*') if p.is_file()}-{'freeze.json','freeze.sha256'}
+dedup={}
+for p in A.rglob('*'):
+ if p.is_file():raw=p.read_bytes();dedup.setdefault((digest(raw),len(raw)),str(p.relative_to(R)))
+def preserve(p,rel=None):
+ raw=p.read_bytes();key=(digest(raw),len(raw));ext=p.suffix if p.suffix in ALLOWED else (p.suffix+'.txt' if p.suffix in ['.py','.sh','.sql'] else '.bin')
+ rel=rel or dedup.get(key) or f'proposal-inputs/correction/evidence/{key[0]}{ext}';c=R/rel;c.parent.mkdir(parents=True,exist_ok=True)
+ if c.exists() and c.read_bytes()!=raw:assert rel.startswith('reviewed-final/') and (A/rel).is_file()
+ c.write_bytes(raw);dedup.setdefault(key,rel);manifest.append({'original':str(p.resolve()),'copy':rel,'sha256':key[0],'bytes':key[1]})
+for p in sorted(B.rglob('*')):
+ if not p.is_file() or p.is_relative_to(R) or p.is_relative_to(H) or '__pycache__' in p.parts:continue
+ relparts=p.relative_to(B).parts
+ if relparts[0] in ['english','tibetan']:continue
+ rel=None
+ if len(relparts)>=3 and relparts[0]=='reconciled' and relparts[1] in ['304','305','306']:
+  rel='reviewed-final/'+'/'.join(relparts[1:]);rel+=''+('.txt' if p.suffix not in ALLOWED else '')
+ preserve(p,rel)
+preserve(historymanifest,'proposal-inputs/correction/original-to-history.json')
+put(R/'original-to-copy-manifest.json',manifest)
+put(R/'evidence/prior-original-remap.json',remap)
+put(R/'evidence/correction-input-proof.json',{'result':'PASS','prior_semantic_freeze_sha256':digest(oldfreeze.read_bytes()),'prior_review_files_preserved':798,'historical_root_files_verified':1085,'historical_root_mapping_sha256':digest(historymanifest.read_bytes()),'reconciled_freeze_sha256':digest(newfreeze.read_bytes()),'reconciled_files_verified':1066,'prior_manifest_records':1654,'remapped_changed_originals':len(remap),'current_manifest_records':len(manifest),'source_governance_origin':PIN})
+diffs=[]
+for q in [304,305,306]:
+ for p in sorted((R/f'reviewed-final/{q}').iterdir()):
+  oldp=A/p.relative_to(R)
+  if oldp.read_bytes()!=p.read_bytes():
+   diffs.extend(difflib.unified_diff(oldp.read_text().splitlines(True),p.read_text().splitlines(True),fromfile='before/'+str(p.relative_to(R)),tofile='after/'+str(p.relative_to(R))))
+(R/'evidence/correction-current-interface.diff.txt').write_text(''.join(diffs))
+print(json.dumps({'old_review_preserved':798,'root_history_verified':1085,'new_reconciliation_verified':1066,'old_manifest_records_remapped':len(remap),'manifest_records':len(manifest),'diff_lines':len(diffs)}))

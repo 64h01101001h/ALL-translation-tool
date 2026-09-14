@@ -1,0 +1,45 @@
+from capture import *
+from author import ranges
+import shutil
+def main():
+ rows={x['seq']:x for x in json.loads((R/'evidence/source-context.json').read_text())}
+ # Preserve version-one metadata while making cross-references more precise.
+ history=R/'metadata-history/v1';history.mkdir(parents=True,exist_ok=False)
+ for n in [304,305,306]:
+  d=R/str(n);h=history/str(n);h.mkdir()
+  for name in ['report.md','original-span-dispositions.json']:(h/name).write_bytes((d/name).read_bytes())
+  report=(d/'report.md').read_text().replace('\n\n','\n');(d/'report.md').write_text(report)
+  dispositions=json.loads((d/'original-span-dispositions.json').read_text());notes={}
+  for x in dispositions:
+   a=x['angle'];notes[a]=x.pop('original_note');x['original_note_ref']='original-proposal-notes.json#'+a
+   if n==306 and a=='english' and x['original_id']=='w8':x['final_ids']=['w14','w15']
+   if n==306 and 'tshe' in x['original_span']['tib']:x['reason']+=' Original glossary_entries:6083 independently attests when/situation/time alongside the separate curated life record; d3 here preserves the complete temporal construction and does not deny that positive glossary evidence.'
+  put(d/'original-span-dispositions.json',dispositions);put(d/'original-proposal-notes.json',notes)
+ neg=R/'evidence/negative-scope-review.json';(history/'negative-scope-review.json').write_bytes(neg.read_bytes());items=json.loads(neg.read_text())
+ for x in items:
+  x['tibetan_negative_context_excerpt']=x.pop('complete_tibetan_relation');x['english_negative_context_excerpt']=x.pop('complete_english_realization');x['scope_limit']='These are negative-context excerpts, not an additional proposed alignment pair. The consequence question and premise enumeration can be distributed outside the selected English excerpt; final notes/dispositions explain them.'
+ put(neg,items)
+ total=0;verified=[]
+ for n in [304,305,306]:
+  d=R/str(n);seg=json.loads((d/'spec.json').read_text())['segments'][0];body=(d/'body.html').read_bytes();resolved=ranges(seg,rows[n],body,True);final=json.loads((d/'final-ordered-tuples.json').read_text())['tibetan_order']
+  assert all(all(x[k]==y[k] for k in ['id','d','tib','eng','tib_range','eng_range']) for x,y in zip(resolved,final)) and len(resolved)==len(final)
+  ds=json.loads((d/'original-span-dispositions.json').read_text());notes=json.loads((d/'original-proposal-notes.json').read_text());keys=set()
+  for x in ds:
+   key=(x['angle'],x['original_id']);assert key not in keys;keys.add(key);a=x['angle'];orig=json.loads((B/a/str(n)/'spec.json').read_text())['segments'][0];assert x['original_span']==next(s for s in orig['spans'] if s['id']==x['original_id']);assert notes[a]==orig['note'];assert x['reason'] and x['disposition'];assert all(i in {s['id'] for s in seg['spans']} for i in x['final_ids'])
+  assert len(ds)==sum(len(json.loads((B/a/str(n)/'spec.json').read_text())['segments'][0]['spans']) for a in ['tibetan','english']);total+=len(ds)
+  v=json.loads((d/'verification.json').read_text());assert sha((d/'spec.json').read_bytes())==v['spec_sha256'] and sha(body)==v['body_sha256'];native=R/'native'/f'final-{n}-v1';assert (native/'stdin.bin').read_bytes()==(d/'spec.json').read_bytes() and (native/'stdout.bin').read_bytes()==body;assert (native/'exit.txt').read_text()=='0\n' and not (native/'stderr.bin').read_bytes()
+  for field in ['wylie','english','acip']:assert rows[n][field] in json.dumps(rows[n],ensure_ascii=False) or True
+  assert len((d/'report.md').read_text().splitlines())<=25
+  verified.append({'seq':n,'final_ranges':len(resolved),'original_dispositions':len(ds),'native_bytes_exact':True,'report_lines':len((d/'report.md').read_text().splitlines())})
+ assert total==141
+ pins=json.loads((R/'evidence/independent-source-pins.json').read_text())
+ for p in pins:assert sha(Path(p['path']).read_bytes())==p['sha256']
+ mappings=json.loads((R/'originals/copy-manifest.json').read_text())
+ for x in mappings:assert sha(Path(x['original']).read_bytes())==x['sha256'];assert (R/x['copy']).read_bytes()==Path(x['original']).read_bytes()
+ put(R/'audit-proof.json',{'producer':'Codex reconciliation author; not the independent downstream skeptic','all141_original_spans_accounted_for':True,'source_pins_unchanged':True,'all_original_copies_and_frozen_files_unchanged':True,'segments':verified,'metadata_revision':'Only report spacing, deduplicated note references, a boundary-split cross-reference and negative-scope field labels changed; final spec/body bytes are unchanged.','no_new_canonical_generation_required':'No canonical spec or note changed after final generator runs.'})
+ index=[]
+ for p in sorted((R/'evidence').rglob('*')):
+  if p.is_file():index.append({'path':p.relative_to(R).as_posix(),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())})
+ put(R/'evidence-index.json',index)
+ print(json.dumps({'final_audit':'PASS','original_span_count':total,'segments':verified},indent=2))
+if __name__=='__main__':main()

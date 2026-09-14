@@ -1,0 +1,152 @@
+{
+  "producer": "Independent Codex correction reconciler; root review and independent semantic re-review remain separate",
+  "status": "PASS_MECHANICAL_CORRECTION_PROOF; PROVISIONAL, independent re-review required",
+  "counts_before": [
+    {
+      "seq": 304,
+      "spans": 15,
+      "nulls": 4,
+      "d5_total": 8,
+      "nonnull_d5": 7
+    },
+    {
+      "seq": 305,
+      "spans": 22,
+      "nulls": 3,
+      "d5_total": 15,
+      "nonnull_d5": 15
+    },
+    {
+      "seq": 306,
+      "spans": 37,
+      "nulls": 5,
+      "d5_total": 21,
+      "nonnull_d5": 21
+    }
+  ],
+  "counts_after": [
+    {
+      "seq": 304,
+      "spans": 15,
+      "nulls": 4,
+      "d5_total": 8,
+      "nonnull_d5": 7
+    },
+    {
+      "seq": 305,
+      "spans": 22,
+      "nulls": 3,
+      "d5_total": 15,
+      "nonnull_d5": 15
+    },
+    {
+      "seq": 306,
+      "spans": 38,
+      "nulls": 5,
+      "d5_total": 21,
+      "nonnull_d5": 21
+    }
+  ],
+  "totals_before": {
+    "spans": 74,
+    "nulls": 12,
+    "word_pairs": 43
+  },
+  "totals_after": {
+    "spans": 75,
+    "nulls": 12,
+    "word_pairs": 43
+  },
+  "added_tuple": {
+    "seq": 306,
+    "id": "mPus",
+    "d": 7,
+    "tib": "rnag",
+    "eng": "pus",
+    "tib_range": [
+      47,
+      51
+    ],
+    "eng_range": [
+      145,
+      148
+    ]
+  },
+  "old74_ordered_seven_key_tuples_unchanged": true,
+  "flat_eng_order_unchanged": true,
+  "body_delta": "Removing exactly the two mPus markup wrappers reproduces every original306 body byte; text and note are unchanged.",
+  "F2_tuple_unchanged": true,
+  "changed_disposition_records": 3,
+  "all141_original_objects_ranges_notes_unchanged": true,
+  "original_disposition_counts": {
+    "retained": 123,
+    "depth-recast": 5,
+    "omitted": 2,
+    "recast": 11
+  },
+  "retained_annotation_changes_unchanged": [
+    {
+      "seq": 306,
+      "angle": "english",
+      "original_id": "p1",
+      "final_id": "w11",
+      "changed_fields": {
+        "nul": {
+          "original": "Agentive case carried by the active English subject; no separate by exponent.",
+          "final": "Agentive is expressed by the active English subject; no separate by token."
+        }
+      }
+    },
+    {
+      "seq": 306,
+      "angle": "english",
+      "original_id": "m4",
+      "final_id": "w17",
+      "changed_fields": {
+        "nul": {
+          "original": "Genitive spatial relation folded into in the basin; no separate of exponent.",
+          "final": "Genitive member inside bse ru'i; relation is absorbed into in the basin, with no separate of."
+        }
+      }
+    },
+    {
+      "seq": 306,
+      "angle": "english",
+      "original_id": "p5",
+      "final_id": "w34",
+      "changed_fields": {
+        "nul": {
+          "original": "Quotation marker realized by the quotation structure; no separate English quotative word beyond gsungs = say.",
+          "final": "Quotative is expressed by the direct quotation boundary; no separate word in addition to say."
+        },
+        "cls": {
+          "original": "particle",
+          "final": "case"
+        }
+      }
+    }
+  ],
+  "one_new_generator_run": true,
+  "generator_exit": 0,
+  "generator_stderr_bytes": 0,
+  "execution_reuse": "execution-reuse.json",
+  "semantic_review_boundary": {
+    "freeze_sha256": "5e6b5ce71a08f0683f1c6a10c27cc0bf07441c908234d1e67bda36a4eb1ec68e",
+    "all_files_verified_unchanged": 798,
+    "not_edited": true
+  },
+  "historical_mapping": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/reconciliation-history/v1-before-306-member-correction/original-to-history.json",
+    "bytes": 868057,
+    "sha256": "1efe20fe21f495f13eb303d25beee92b6bb1767b7b67aa8ceda98df22fffb2f5"
+  },
+  "source_origin": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+  "source_origin_course_boundary": 294,
+  "future_acceptance_baseline": "Separate root-owned capture after303; not asserted",
+  "retained_errata": 0,
+  "limits": [
+    "No semantic approval is claimed. Root owns the scoped re-review request.",
+    "Source/master/GMR fields, supplied attribution and original MEDIUM/PROBABLE candidate remain unchanged; LOW/UNCERTAIN bibliography concern remains.",
+    "Correction role did not modify repository code, gates, original proposals or semantic-review."
+  ]
+}

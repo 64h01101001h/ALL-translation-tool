@@ -1,0 +1,42 @@
+from pathlib import Path
+import json,hashlib,subprocess
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parents[1]/'campaign-worktree';F=B.parent/'workflow-refinement-20260914'
+BASE='f1651c64b0ad9b0c7ea85f9961332ac1a3787e83';DATA='bdd7309fb5e96be805276a3f9721d761828230b9';ORIGIN='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+def h(raw):return hashlib.sha256(raw).hexdigest()
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest=json.loads((R/'original-to-copy-manifest.json').read_text());remap=json.loads((R/'evidence/prior-original-remap.json').read_text())
+oldprotocol=F/'proposal-protocol.before.md';assert h(oldprotocol.read_bytes())=='6cf88efbfe2b7a68ea4d3d7fb507043b595760f9d60fd05b44a47e3268c6f752'
+for x in remap:
+ if x['historical_original']==str(B.parent/'proposal-protocol.md'):
+  for r in manifest:
+   if r['original']==x['historical_original_now'] and r['copy']==x['current_copy']:r['original']=str(oldprotocol)
+  x['historical_original_now']=str(oldprotocol);x['reason']='Root supplied exact append-only pre-refinement snapshot; prior consumed protocol bytes remain unchanged.'
+put(R/'evidence/prior-original-remap.json',remap)
+def preserve(p,rel):
+ raw=p.read_bytes();c=R/rel;c.parent.mkdir(parents=True,exist_ok=True)
+ if c.exists():assert c.read_bytes()==raw
+ else:c.write_bytes(raw)
+ manifest.append({'original':str(p),'copy':rel,'sha256':h(raw),'bytes':len(raw)})
+preserve(B/'baseline.json','acceptance-baseline/baseline.json')
+for p in sorted((B/'root-baseline-through303-caller').iterdir()):preserve(p,'acceptance-baseline/capture/'+p.name)
+preserve(oldprotocol,'acceptance-baseline/proposal-protocol.before.md');preserve(F/'proof.json','acceptance-baseline/protocol-append-proof.json')
+baseline=json.loads((B/'baseline.json').read_text());assert baseline['commit']==BASE and baseline['course_boundary']==303
+assert (B/'baseline.json').read_bytes()==(B/'root-baseline-through303-caller/stdout.bin').read_bytes()
+assert (B/'root-baseline-through303-caller/exit.txt').read_text()=='0\n' and not (B/'root-baseline-through303-caller/stderr.bin').read_bytes()
+checks=[]
+for rel,want in baseline['sha256'].items():
+ raw=(W/rel).read_bytes();assert h(raw)==want;checks.append({'path':str(W/rel),'sha256':want,'bytes':len(raw),'result':'PASS'})
+assert subprocess.run(['git','-C',str(W),'rev-parse',BASE],capture_output=True,check=True).stdout.decode().strip()==BASE
+subprocess.run(['git','-C',str(W),'merge-base','--is-ancestor',DATA,BASE],check=True,capture_output=True)
+rel='docs/errata_register.json';raw=subprocess.run(['git','-C',str(W),'show',BASE+':'+rel],check=True,capture_output=True).stdout
+dest='acceptance-baseline/governing/'+rel;c=R/dest;c.parent.mkdir(parents=True,exist_ok=True);c.write_bytes(raw)
+manifest.append({'original':str(W/rel),'copy':dest,'sha256':h(raw),'bytes':len(raw),'original_git_commit':BASE,'repository_relative_path':rel})
+register=json.loads(raw);entries=register if isinstance(register,list) else register['entries'];assert len(entries)==194
+assert any(x.get('item_id')=='E-194' for x in entries)
+inner=json.loads((B/'reconciled/originals/copy-manifest.json').read_text());innerchecks=[]
+for x in inner:
+ raw=Path(x['original']).read_bytes();copy=(B/'reconciled'/x['copy']).read_bytes();assert raw==copy and h(raw)==x['sha256'] and len(raw)==x['bytes'];innerchecks.append({'original':x['original'],'copy':x['copy'],'sha256':x['sha256'],'bytes':x['bytes'],'result':'PASS'})
+put(R/'evidence/current-reconciled-original-copy-proof.json',innerchecks)
+put(R/'original-to-copy-manifest.json',manifest)
+put(R/'evidence/acceptance-baseline-binding.json',{'result':'PASS','source_governance_origin':ORIGIN,'source_origin_course_boundary':294,'actual_acceptance_baseline':BASE,'actual_acceptance_course_boundary':303,'data_checkpoint_commit':DATA,'baseline_sha256':h((B/'baseline.json').read_bytes()),'counts':{k:baseline[k] for k in ['full_links','null_exponents','evidence_headwords','evidence_pairs']},'baseline_capture_exit':0,'baseline_capture_stderr_bytes':0,'baseline_output_bytes_exact':True,'current_register_entry_count':194,'current_register_last_item':'E-194','governing_origin_replaced':False,'baseline_hash_checks':checks,'reconciled_current_original_copy_records_verified':len(innerchecks),'protocol_note':'Old 4770-byte protocol remains the consumed historical version; root future-only appended version is not substituted into earlier evidence.'})
+print(json.dumps({'result':'PASS','acceptance_baseline':BASE,'source_origin':ORIGIN,'register_entries':194,'original_copy_records':len(innerchecks),'manifest_records':len(manifest)}))

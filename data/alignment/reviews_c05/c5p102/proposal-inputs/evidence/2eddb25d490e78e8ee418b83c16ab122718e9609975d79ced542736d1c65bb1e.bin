@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/reconciled/verify_final.py", line 18, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/reconciled/verify_final.py", line 5, in main
+    c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/tibetan/helpers/canonical_ro.py", line 25, in readonly_connect
+    assert path in [expected,'file:'+expected+'?mode=ro'],path
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: file:///Users/adamderickandrade/Documents/ChatGPT/Geshe%20Michael%20Roach%20Tib%20_%20Eng%20Alignment/campaign-worktree/build/hgm_spine_v27_2.db?mode=ro

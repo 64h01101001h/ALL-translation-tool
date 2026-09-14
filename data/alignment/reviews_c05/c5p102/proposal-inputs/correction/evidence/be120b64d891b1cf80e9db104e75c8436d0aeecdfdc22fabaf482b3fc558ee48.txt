@@ -1,0 +1,104 @@
+"""Verify the actual successful correction and refresh current interfaces; no generation."""
+from pathlib import Path
+import collections, copy, datetime, hashlib, json, re, shutil, sqlite3, sys
+B=Path(__file__).resolve().parents[1];R=B/'reconciled';H=B/'reconciliation-history/v1-before-306-member-correction';W=B.parents[1]/'campaign-worktree';E=R/'evidence/correction-306-v2';V=B/'root-reconciliation-verification'
+def read(p):return json.loads(p.read_bytes())
+def pin(p):
+    b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def record(p):return {'path':str(p),**pin(p)}
+shutil.copy2(Path(__file__),E/(Path(__file__).name+'.txt'))
+assert not (E/'final-correction-proof.json').exists()
+for r in read(H/'original-to-history.json'):assert pin(Path(r['copy']))=={k:r[k] for k in ('bytes','sha256')}
+for r in read(E/'source-pins-before.json'):assert pin(Path(r['path']))=={k:r[k] for k in ('bytes','sha256')}
+sb=read(B/'root-306-correction-evidence/semantic-boundary-before.json')
+assert [r['path'] for r in sb]==[p.relative_to(B/'semantic-review').as_posix() for p in sorted((B/'semantic-review').rglob('*')) if p.is_file()]
+for r in sb:assert pin(B/'semantic-review'/r['path'])=={k:r[k] for k in ('bytes','sha256')}
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+rows={n:dict(db.execute("select * from corpus_segments where course='C05' and seq=?",(n,)).fetchone()) for n in (304,305,306)};db.close()
+assert list(rows.values())==read(E/'source-rows.json')
+# This imports the exact immutable canonical resolver through the existing read-only adapter, never invokes generator main.
+sys.path.insert(0,str(R));from author import ranges,reason
+sp=read(R/'306/spec.json')['segments'][0];body=(R/'306/body.html').read_bytes()
+actual=ranges(sp,rows[306],body,True);wanted=read(R/'306/final-ordered-tuples.json')['tibetan_order']
+keys=['seq','id','d','tib','eng','tib_range','eng_range']
+rr=[{k:(306 if k=='seq' else r[k]) for k in keys} for r in actual]
+for a,b in zip(actual,wanted):assert all(a[k]==b[k] for k in ['id','d','tib','eng','tib_range','eng_range','parent','immediately_after_d5'])
+assert len(actual)==len(wanted)==38
+old_resolved=read(H/'root-reconciliation-verification/resolved-spans.json');old306=[r for r in old_resolved if r['seq']==306]
+assert [r for r in rr if r['id']!='mPus']==old306
+assert next(r for r in rr if r['id']=='mPus')==dict(seq=306,id='mPus',d=7,tib='rnag',eng='pus',tib_range=[47,51],eng_range=[145,148])
+assert sp['eng_order']==read(H/'reconciled/306/spec.json')['segments'][0]['eng_order']
+stripped,count=re.subn(rb'<span\b(?=[^>]*data-l="s306mPus")[^>]*>([^<]*)</span>',rb'\1',body)
+assert count==2 and stripped==(H/'reconciled/306/body.html').read_bytes()
+assert reason(306,next(r for r in wanted if r['id']=='w10'))==read(E/'current-correction-rationales.json')['F2']
+assert reason(306,next(r for r in wanted if r['id']=='mPus'))==read(E/'current-correction-rationales.json')['F1']
+for name in ['final-omission-ranges.json','original-proposal-notes.json','errata.json','errata-five-grounds.json']:
+    assert (R/'306'/name).read_bytes()==(H/'reconciled/306'/name).read_bytes()
+counts=[];original_total=0;disposition_counts=collections.Counter();annotation_changes=[];reuse=[]
+resolved=[r for r in old_resolved if r['seq']!=306]+rr
+assert len(resolved)==75 and all(list(r)==keys for r in resolved)
+for n in (304,305,306):
+    d=R/str(n);seg=read(d/'spec.json')['segments'][0];spans=seg['spans'];byid={s['id']:s for s in spans};current=[r for r in resolved if r['seq']==n]
+    nat=R/'native'/('final-306-v2-member-correction' if n==306 else f'final-{n}-v1');ex=read(nat/'execution.json')
+    assert ex['exit']==0 and (nat/'exit.txt').read_bytes()==b'0\n' and not (nat/'stderr.bin').read_bytes()
+    assert (nat/'stdin.bin').read_bytes()==(d/'spec.json').read_bytes();assert (nat/'stdout.bin').read_bytes()==(d/'body.html').read_bytes()
+    for stream,p in ex['streams'].items():assert pin(nat/(stream+'.bin'))==p
+    if n!=306:
+        for p in (H/'reconciled'/str(n)).rglob('*'):
+            if p.is_file():assert p.read_bytes()==(d/p.relative_to(H/'reconciled'/str(n))).read_bytes()
+        assert current==[{k:(n if k=='seq' else r[k]) for k in keys} for r in read(d/'final-ordered-tuples.json')['tibetan_order']]
+        assert (V/f'{n}.stdout').read_bytes()==(H/'root-reconciliation-verification'/f'{n}.stdout').read_bytes()==(d/'body.html').read_bytes()
+    claims=read(d/'original-span-dispositions.json');priorclaims=read(H/'reconciled'/str(n)/'original-span-dispositions.json')
+    assert len(claims)==len(priorclaims)
+    for claim,prior in zip(claims,priorclaims):
+        assert all(claim[k]==v for k,v in prior.items() if k not in ['reason','disposition','final_ids'])
+        angle=claim['angle'];original=next(s for s in read(B/angle/str(n)/'spec.json')['segments'][0]['spans'] if s['id']==claim['original_id'])
+        intended=next(s for s in read(B/angle/str(n)/'intended-ranges.json')['spans'] if s['id']==claim['original_id'])
+        assert claim['original_span']==original and claim['original_intended_record']==intended
+        assert claim['original_actual_tib_range']==intended['tib_range'] and claim['original_actual_eng_range']==intended['eng_range']
+        assert read(d/'original-proposal-notes.json')[angle]==read(B/angle/str(n)/'spec.json')['segments'][0]['note']
+        disposition_counts[claim['disposition']]+=1;original_total+=1
+        if claim['disposition']=='retained':
+            assert len(claim['final_ids'])==1;s=byid[claim['final_ids'][0]];cr=next(r for r in current if r['id']==s['id'])
+            assert all(original[k]==s[k] for k in ['d','tib','eng']);assert cr['tib_range']==intended['tib_range'] and cr['eng_range']==intended['eng_range']
+            old={k:v for k,v in original.items() if k!='id'};new={k:v for k,v in s.items() if k!='id'}
+            if old!=new:
+                delta={k:{'original':old.get(k),'final':new.get(k)} for k in set(old)|set(new) if old.get(k)!=new.get(k)}
+                assert set(delta)<= {'cls','nul'};annotation_changes.append(dict(seq=n,angle=angle,original_id=claim['original_id'],final_id=s['id'],changed_fields=delta))
+    for angle in ['tibetan','english']:
+        native=R/'native'/f'original-{angle}-{n}';ex0=read(native/'execution.json');assert ex0['exit']==0
+        assert (native/'stdin.bin').read_bytes()==(B/angle/str(n)/'spec.json').read_bytes();assert (native/'stdout.bin').read_bytes()==(B/angle/str(n)/'body.html').read_bytes()
+        assert (native/'exit.txt').read_text()=='0\n' and not (native/'stderr.bin').read_bytes()
+        for stream,p in ex0['streams'].items():assert pin(native/(stream+'.bin'))==p
+    counts.append(dict(seq=n,spans=len(spans),nulls=sum(s['eng'] is None for s in spans),d5_total=sum(s['d']==5 for s in spans),nonnull_d5=sum(s['d']==5 and s['eng'] is not None for s in spans)))
+    reuse.append({'seq':n,'mode':'one new canonical run, existing success reused for finalization' if n==306 else 'exact existing passing canonical execution reused; no new generator run','canonical_native_directory':str(nat),'native_execution':record(nat/'execution.json'),'spec':record(d/'spec.json'),'body':record(d/'body.html'),'source_row_proof':record(E/'source-rows.json'),'prior_root_report':record(H/'root-reconciliation-verification/report.json'),'prior_root_native_stream':record(H/'root-reconciliation-verification'/f'{n}.stdout'),'prior_root_native_command':record(H/'root-final-generator-check-caller/command.json')})
+assert original_total==141 and len(annotation_changes)==3
+assert annotation_changes==read(H/'root-reconciliation-intake.json')['retained_tuple_annotation_changes']
+for cp in read(R/'originals/copy-manifest.json'):assert pin(Path(cp['original']))==pin(R/cp['copy'])=={k:cp[k] for k in ('bytes','sha256')}
+put(E/'execution-reuse.json',reuse);put(E/'canonical-resolved-306.json',rr)
+summary=read(H/'reconciled/summary.json');p=copy.deepcopy(summary[-1]);p.update(spans=38,nonnull=33,d7=5,depth_counts=dict(collections.Counter(s['d'] for s in sp['spans'])),spec_bytes=pin(R/'306/spec.json')['bytes'],spec_sha256=pin(R/'306/spec.json')['sha256'],body_bytes=len(body),body_sha256=pin(R/'306/body.html')['sha256'],native_execution='native/final-306-v2-member-correction',strict_d7_interpretation='Unique strictly tighter siblings in the contiguous group below the latest d5 parent, following immutable canonical code.',correction_findings=['F1','F2'])
+put(R/'306/verification.json',p);summary[-1]=p;put(R/'summary.json',summary)
+report=(H/'reconciled/306/report.md').read_text()
+report=report.replace('only one immediate d7 child is kept under rnag khrag.','both unique tighter d7 children rnag/pus (mPus) and khrag/blood (w6) are kept contiguously under rnag khrag (w5).')
+report=report.replace('37 spans; 32 nonnull; 5 null; 21 d5; 4 d7','38 spans; 33 nonnull; 5 null; 21 d5; 5 d7')
+report=report.replace('BODY_BYTES=6729','BODY_BYTES='+str(len(body))).replace('../native/final-306-v1/','../native/final-306-v2-member-correction/')
+report=report.replace('6724 bytes; SHA-256 5f2eed1a8f9b77f947345802e278d3999cb51d664daf8fbdc94da9c77793f916',str(p['spec_bytes'])+' bytes; SHA-256 '+p['spec_sha256'])
+report=report.replace('6729 bytes; SHA-256 1fda9e473a5ef38d8ca6716d9412a83eccfd3264a3fac73d48d286a4bd15b1c6',str(p['body_bytes'])+' bytes; SHA-256 '+p['body_sha256'])
+report=report.replace('strict immediate-parent d7 containment','strict contiguous-parent-group d7 containment')
+report=report.replace('Fresh independent skeptical review is a separate downstream stage; this packet does not assert acceptance.','F2: w10 is the first rab rib/cataracts member under w9 rab rib can/person with cataracts, W[86:93], E[227:236]. Its tuple/ranges stay unchanged; the copied later verse rationale is rejected in current reasons, with all original reasons preserved.\nF1/F2 correction by a separate Codex reconciler: only corrected306 was generated once; exact passing304/305 evidence is reused. The earlier NEEDS_CORRECTION semantic review remains untouched; root owns scoped re-review. This packet does not assert semantic acceptance.\nComplete previous reconciliation and replaced root inputs: ../../reconciliation-history/v1-before-306-member-correction/original-to-history.json. Current change/proof detail: ../evidence/correction-306-v2/.')
+(R/'306/report.md').write_text(report)
+f=read(H/'reconciled/final-verification.json');f['producer']='Independent Codex correction reconciler; root review and independent semantic re-review remain separate';f['segments'][-1]['final_range_count']=38
+f['audit_revision']='F1/F2 correction: fresh 306 canonical ranges, parsed HTML, full source reconstruction, original dispositions, actual one-time native streams and exact historical preservation verified. Passing 304/305 artifacts and proofs are byte-identical and reused; no original generators repeated.';f['execution_reuse']='evidence/correction-306-v2/execution-reuse.json';put(R/'final-verification.json',f)
+a=read(H/'reconciled/audit-proof.json');a['producer']=f['producer'];a['segments'][-1].update(final_ranges=38,report_lines=len(report.splitlines()));a['metadata_revision']='Restored only original English306 m1 as mPus; corrected first-cataract rationale, changed three disposition judgments, removed unsupported extra omission. Source text, previous74 tuples, all nulls/d5 pairs and other semantics unchanged.';a.pop('no_new_canonical_generation_required');a['canonical_generation']='Exactly one corrected306 canonical execution; 304/305 and six original executions reused with exact bytes.';a['execution_reuse']='evidence/correction-306-v2/execution-reuse.json';put(R/'audit-proof.json',a)
+readme=(H/'reconciled/README.md').read_text();readme='Correction v2 applies only independent review findings F1/F2 in 306: restore mPus and correct the first person-with-cataracts rationale. Current totals: 75 spans, 12 nulls, 43 nonnull d5 word pairs (44 total d5 including null yin). Exactly one corrected306 generator run; passing304/305 and all six original native runs are reused. The prior NEEDS_CORRECTION semantic boundary remains untouched for root-owned scoped re-review. Complete exact prior files: ../reconciliation-history/v1-before-306-member-correction/original-to-history.json. Detailed delta and proof: evidence/correction-306-v2/.\n\n'+readme
+(R/'README.md').write_text(readme)
+rootreport=read(H/'root-reconciliation-verification/report.json');rootreport[-1].update(spans=38,depths=dict(collections.Counter(s['d'] for s in sp['spans'])),body_bytes=len(body),body_sha256=pin(R/'306/body.html')['sha256'],spec_sha256=pin(R/'306/spec.json')['sha256'])
+for r,u in zip(rootreport,reuse):r['proof_origin']=u['mode'];r['native_execution_path']=u['native_execution']['path'];r['proof_producer']='Codex correction reconciler updating root-facing interface; root independent review remains required'
+for ext,source in [('stdout','stdout.bin'),('stderr','stderr.bin'),('exit','exit.txt')]:shutil.copy2(R/'native/final-306-v2-member-correction'/source,V/f'306.{ext}')
+put(V/'report.json',rootreport);put(V/'resolved-spans.json',resolved);put(V/'execution-reuse.json',reuse)
+attempt=V/'attempts/correction-306-v2';attempt.mkdir(exist_ok=False)
+for name in ['report.json','resolved-spans.json','execution-reuse.json']:shutil.copy2(V/name,attempt/name)
+delta={'producer':f['producer'],'status':'PASS_MECHANICAL_CORRECTION_PROOF; PROVISIONAL, independent re-review required','counts_before':read(H/'root-reconciliation-intake.json')['counts'],'counts_after':counts,'totals_before':{'spans':74,'nulls':12,'word_pairs':43},'totals_after':{'spans':75,'nulls':12,'word_pairs':43},'added_tuple':next(r for r in rr if r['id']=='mPus'),'old74_ordered_seven_key_tuples_unchanged':True,'flat_eng_order_unchanged':True,'body_delta':'Removing exactly the two mPus markup wrappers reproduces every original306 body byte; text and note are unchanged.','F2_tuple_unchanged':True,'changed_disposition_records':3,'all141_original_objects_ranges_notes_unchanged':True,'original_disposition_counts':dict(disposition_counts),'retained_annotation_changes_unchanged':annotation_changes,'one_new_generator_run':True,'generator_exit':0,'generator_stderr_bytes':0,'execution_reuse':'execution-reuse.json','semantic_review_boundary':{'freeze_sha256':'5e6b5ce71a08f0683f1c6a10c27cc0bf07441c908234d1e67bda36a4eb1ec68e','all_files_verified_unchanged':len(sb),'not_edited':True},'historical_mapping':record(H/'original-to-history.json'),'source_origin':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4','source_origin_course_boundary':294,'future_acceptance_baseline':'Separate root-owned capture after303; not asserted','retained_errata':0,'limits':['No semantic approval is claimed. Root owns the scoped re-review request.','Source/master/GMR fields, supplied attribution and original MEDIUM/PROBABLE candidate remain unchanged; LOW/UNCERTAIN bibliography concern remains.','Correction role did not modify repository code, gates, original proposals or semantic-review.']}
+put(E/'final-correction-proof.json',delta)
+print(json.dumps({'status':delta['status'],'counts':counts,'old74_tuples_unchanged':True,'generator_runs_added':1,'semantic_files_unchanged':len(sb),'spec306':pin(R/'306/spec.json'),'body306':pin(R/'306/body.html')},indent=2))

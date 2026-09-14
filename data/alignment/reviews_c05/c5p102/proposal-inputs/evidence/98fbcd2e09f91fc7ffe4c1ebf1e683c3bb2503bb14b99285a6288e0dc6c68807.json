@@ -1,0 +1,23 @@
+{
+  "spine_mode": "SQLite URI mode=ro",
+  "six_fields": [
+    "id",
+    "course",
+    "seq",
+    "acip",
+    "wylie",
+    "english"
+  ],
+  "comparisons": [
+    {
+      "snapshot": "source.json",
+      "row_count": 3,
+      "all_fields_equal": true
+    },
+    {
+      "snapshot": "context.json",
+      "row_count": 15,
+      "all_fields_equal": true
+    }
+  ]
+}

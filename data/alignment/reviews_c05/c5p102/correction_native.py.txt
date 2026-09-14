@@ -1,0 +1,84 @@
+from pathlib import Path
+import json,sys,hashlib,importlib.util,importlib.machinery,sqlite3,runpy,subprocess,os,time
+from html.parser import HTMLParser
+R=Path(__file__).resolve().parent; B=R.parent; W=B.parents[1]/'campaign-worktree';PIN='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def load(name,p):
+ loader=importlib.machinery.SourceFileLoader(name,str(p)); spec=importlib.util.spec_from_loader(name,loader);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;loader.exec_module(m);return m
+base=json.loads((B/'proposal-baseline.json').read_text());gen=W/'tools/gen_alignment_page.py';spine=W/'build/hgm_spine_v27_2.db'
+assert sha(gen)==base['governing_git_pins']['tools/gen_alignment_page.py']['sha256'];assert gen.read_bytes()==(R/'governing/tools/gen_alignment_page.py.txt').read_bytes()
+H=load('hgm_tools',R/'governing/engines/hgm_tools.py.txt'); builder=load('build_alignment_layer',R/'governing/tools/build_alignment_layer.py.txt');builder.SPINE=str(spine)
+real_connect=sqlite3.connect
+connections=[]
+def ro(database,*a,**kw):
+ assert Path(database).resolve()==spine.resolve();kw['uri']=True;u=spine.as_uri()+'?mode=ro';connections.append(u);return real_connect(u,*a,**kw)
+sqlite3.connect=ro
+if len(sys.argv)>1 and sys.argv[1]=='generate':
+ audit=Path(sys.argv[2]);before=sha(spine)
+ try:runpy.run_path(str(gen),run_name='__main__')
+ finally:put(audit,{'generator_sha256':sha(gen),'source_origin':PIN,'sqlite_connections':connections,'spine_sha256_before':before,'spine_sha256_after':sha(spine),'generator_unchanged':gen.read_bytes()==(R/'governing/tools/gen_alignment_page.py.txt').read_bytes(),'dependency_sha256':{n:sha(R/'governing'/n) for n in ['tools/build_alignment_layer.py.txt','engines/hgm_tools.py.txt']}})
+ sys.exit(0)
+G=load('semantic_canonical_generator',gen)
+class Parse(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.stack=[];self.null=0;self.text={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}}
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs)
+  if tag=='div' and a.get('class') in self.text:self.side=a['class']
+  if tag=='span':
+   nul='nul' in a.get('class','').split();self.null+=int(nul);self.stack.append((a.get('data-l'),self.side,len(self.text[self.side]) if self.side else 0,nul,a.get('data-d')))
+ def handle_endtag(self,tag):
+  if tag=='span':
+   lab,side,start,nul,d=self.stack.pop()
+   if lab:self.ranges[side][lab]=([start,len(self.text[side])],int(d))
+   self.null-=int(nul)
+ def handle_data(self,data):
+  if self.side and self.stack and not self.null:self.text[self.side]+=data
+rows={x['seq']:x for x in json.loads((R/'evidence/independent-source-context.json').read_text()) if x['course']=='C05'}
+def resolve(seg,body):
+ spans=seg['spans'];ids={s['id']:s for s in spans};eo=seg['eng_order'];assert len(eo)==len(set(eo));assert set(eo)=={s['id'] for s in spans if s['eng'] is not None and s['d']!=7};row=rows[seg['seq']]
+ tr=G.resolve(row['wylie'],spans,'tib',seg['seq']);er=G.resolve(row['english'],G.with_members(spans,[ids[k] for k in eo],row['english']),'eng',seg['seq'])
+ p=Parse();p.feed(body.decode());assert p.text=={'tib':row['wylie'],'eng':row['english']};out=[];parent=None
+ for s in spans:
+  t=list(tr[s['id']]);e=list(er[s['id']]) if s['eng'] is not None else None;label=f"s{seg['seq']}{s['id']}"
+  assert p.ranges['tib'][label]==(t,s['d'])
+  if e is not None:assert p.ranges['eng'][label]==(e,s['d'])
+  else:assert s.get('nul') and p.ranges['eng'][label][0][0]==p.ranges['eng'][label][0][1]
+  if s['d']==7:
+   assert parent is not None and parent['d']==5
+   for side,rr in [('tib',tr),('eng',er)]:
+    if s[side] is None:continue
+    a,b=rr[s['id']];c,d=rr[parent['id']];assert c<=a<b<=d and (a,b)!=(c,d);assert row['wylie' if side=='tib' else 'english'].count(s[side],c,d)==1
+  else:parent=s if s['d']==5 else None
+  out.append({'seq':seg['seq'],'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s['eng'],'tib_range':t,'eng_range':e})
+ return out
+
+D=R/'native/306-v2';spec=R/'reviewed-final/306/spec.json';body=R/'reviewed-final/306/body.html'
+if sys.argv[1]=='run':
+ assert not D.exists();D.mkdir(parents=True)
+ cmd=[sys.executable,str(R/'native_check.py.txt'),'generate',str(D/'runtime.json')]
+ put(D/'command.json',{'argv':cmd,'cwd':str(W),'env':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin':str(spec),'scope':'Only corrected306; unchanged304305 native proofs reused'})
+ (D/'stdin.bin').write_bytes(spec.read_bytes())
+ cp=subprocess.run(cmd,input=spec.read_bytes(),capture_output=True,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (D/'stdout.bin').write_bytes(cp.stdout);(D/'stderr.bin').write_bytes(cp.stderr);(D/'exit.txt').write_text(str(cp.returncode)+'\n')
+ put(D/'execution.json',{'exit':cp.returncode,'streams':{k:{'bytes':len(v),'sha256':hashlib.sha256(v).hexdigest()} for k,v in [('stdin',spec.read_bytes()),('stdout',cp.stdout),('stderr',cp.stderr)]}})
+ print(json.dumps({'generator_exit':cp.returncode,'stdout_bytes':len(cp.stdout),'stderr_bytes':len(cp.stderr),'new_generator_runs':1}));sys.exit(cp.returncode)
+assert sys.argv[1]=='verify'
+assert (D/'exit.txt').read_text()=='0\n' and not (D/'stderr.bin').read_bytes() and (D/'stdout.bin').read_bytes()==body.read_bytes()
+assert sha(spec)=='6cab22351bdbb24d50d9a01f2fa0f22ef0c3c87dd94a95eff6228669acc65e6b' and sha(body)=='8d64f640cc64da104fd6dbb94a87e81988132cad67f4133793b43784d48a49a2'
+A=R/'history/v1-before-correction';oldspec=json.loads((A/'reviewed-final/306/spec.json').read_text());current=json.loads(spec.read_text());removed=json.loads(json.dumps(current));ss=removed['segments'][0]['spans'];newmember=next(x for x in ss if x['id']=='mPus');ss.remove(newmember);assert removed==oldspec
+assert newmember=={'id':'mPus','d':7,'tib':'rnag','eng':'pus'}
+ids=[x['id'] for x in current['segments'][0]['spans']];i=ids.index('mPus');assert ids[i-1:i+2]==['w5','mPus','w6']
+newrr=resolve(current['segments'][0],(D/'stdout.bin').read_bytes());oldrr=json.loads((A/'resolved-spans.json').read_text());old306=[x for x in oldrr if x['seq']==306];assert [x for x in newrr if x['id']!='mPus']==old306
+want=json.loads((R/'reviewed-final/306/final-ordered-tuples.json').read_text())['tibetan_order'];assert len(newrr)==len(want)==38
+for x,y in zip(newrr,want):assert all(x[k]==y[k] for k in x if k!='seq')
+member=next(x for x in newrr if x['id']=='mPus');assert member['tib_range']==[47,51] and member['eng_range']==[145,148]
+unchanged=[]
+for n in [304,305]:
+ for p in (R/f'reviewed-final/{n}').iterdir():assert p.read_bytes()==(A/p.relative_to(R)).read_bytes();unchanged.append(str(p.relative_to(R)))
+oldproof=json.loads((A/'evidence/fresh-native-proof.json').read_text());segments=[x for x in oldproof['segments'] if x['seq']!=306]
+segments.append({'seq':306,'span_count':38,'null_count':5,'word_pair_count':21,'spec_sha256':sha(spec),'spec_bytes':spec.stat().st_size,'body_sha256':sha(body),'body_bytes':body.stat().st_size,'generator_exit':0,'exact_body':True,'exact_source_reconstruction':True})
+resolved=[x for x in oldrr if x['seq']!=306]+newrr;put(R/'resolved-spans.json',resolved)
+put(R/'evidence/fresh-native-proof.json',{'result':'PASS','segments':segments,'new_generator_runs':1,'prior_boundary_generator_runs':3,'total_independent_generator_runs_across_boundaries':4,'source_origin':PIN,'original_checks_reused_from':'history/v1-before-correction/evidence/fresh-native-proof.json','execution_reuse':[{'seq':n,'native_directory':f'history/v1-before-correction/native/{n}','reason':'Exact current spec/body and all per-segment interfaces unchanged'} for n in [304,305]]+[{'seq':306,'native_directory':'native/306-v2','reason':'One fresh actual corrected generator execution'}],'all_previous74_tuple_ranges_unchanged':True})
+put(R/'evidence/correction-scope-proof.json',{'result':'PASS','source_origin':PIN,'spec_diff':'Exactly one new member object inserted; every old field, annotation, note and eng_order unchanged','new_member':member,'old74_ordered_tuple_ranges_unchanged':True,'unchanged304305_files':unchanged,'final_tuple_count':75,'new_generator_runs':1,'generator_stderr_bytes':0,'exact_current_body':True,'all_current306_resolver_and_parsed_ranges_equal':True,'historical_native_work_reused':True})
+print(json.dumps({'result':'PASS','counts':[75,12,43],'new_member':member,'old74_unchanged':True,'new_generator_runs':1}))

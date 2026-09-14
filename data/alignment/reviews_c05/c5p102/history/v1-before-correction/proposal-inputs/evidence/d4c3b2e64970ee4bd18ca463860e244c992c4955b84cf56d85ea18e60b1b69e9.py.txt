@@ -1,0 +1,16 @@
+from pathlib import Path
+import os,sys,json,subprocess,hashlib,datetime
+A=Path(__file__).resolve().parent;W=A.parents[2]/'campaign-worktree'
+def save(p,x):p.write_text(json.dumps(x,indent=2)+'\n')
+def digest(p):return {'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+for seq in (304,305,306):
+ d=A/str(seq);n=1
+ while (d/'attempts'/('%03d'%n)).exists():n+=1
+ att=d/'attempts'/('%03d'%n);att.mkdir(parents=True);inp=(d/'spec.json').read_bytes();(att/'stdin.json').write_bytes(inp);command=[sys.executable,str(A/'run_canonical.py'),str(att/'runtime.json')];env=os.environ.copy();env['PYTHONDONTWRITEBYTECODE']='1';p=subprocess.run(command,input=inp,cwd=W,env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE);(att/'stdout.html').write_bytes(p.stdout);(att/'stderr.txt').write_bytes(p.stderr);(att/'exit.txt').write_text(str(p.returncode)+'\n');save(att/'execution.json',{'schema':'native-generator-execution-v1','command':command,'cwd':str(W),'env_overrides':{'PYTHONDONTWRITEBYTECODE':'1'},'input':digest(att/'stdin.json'),'stdout':digest(att/'stdout.html'),'stderr':digest(att/'stderr.txt'),'exit_code':p.returncode,'finished_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()})
+ if p.returncode==0 and not p.stderr:
+  for out,target in [('body.html','stdout.html'),('generator.stdout.html','stdout.html'),('generator.stderr.txt','stderr.txt'),('generator.exit.txt','exit.txt')]:
+   dst=d/out
+   if dst.exists():dst.unlink()
+   os.link(att/target,dst)
+  save(d/'generator.json',{'schema':'canonical-generator-proof-v1','attempt':str(att.relative_to(A)),'exit_code':p.returncode,'stderr_bytes':len(p.stderr),'spec':digest(d/'spec.json'),'body':digest(d/'body.html'),'source_origin':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4','final_stdout_aliases':['body.html','generator.stdout.html',str((att/'stdout.html').relative_to(d))],'note':'All three stdout paths are hard links to the same bytes; native stderr and exit are preserved. Actual worktree generator, pinned historical builder dependencies, original source spine in SQLite URI mode=ro.'})
+ print(seq,'attempt',n,'EXIT='+str(p.returncode),'BODY_BYTES='+str(len(p.stdout)),p.stderr.decode('utf-8'))

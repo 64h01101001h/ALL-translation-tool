@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/reconciled/capture.py", line 103, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-304-306/reconciled/capture.py", line 88, in main
+    hits=[dict(r) for r in cx.execute(q['sql'],q['parameters'])];assert len(hits)==q['row_count'];assert [x['id'] for x in hits]==q['row_ids'];queries.append({'angle':'tibetan','query_index':i,'kind':'spine','query':q,'objects':[obj(x) for x in hits]})
+                                      ~^^^^^^^
+KeyError: 'sql'

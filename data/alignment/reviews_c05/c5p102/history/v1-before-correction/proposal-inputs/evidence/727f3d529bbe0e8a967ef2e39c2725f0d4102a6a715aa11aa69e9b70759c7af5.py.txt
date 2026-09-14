@@ -1,0 +1,34 @@
+from pathlib import Path
+import json,hashlib,sys
+from html.parser import HTMLParser
+A=Path(__file__).resolve().parent
+def h(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+class R(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.spanstack=[];self.offset={'tib':0,'eng':0};self.text={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}};self.inroot=False
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs)
+  if tag=='div' and a.get('class') in ('tib','eng'):self.side=a['class']
+  if tag=='span':
+   isnull='nul' in a.get('class','').split();lab=a.get('data-l');d=a.get('data-d');rec={'label':lab,'depth':d,'start':self.offset.get(self.side,0),'side':self.side,'null':isnull,'isroot':d=='1'}
+   if isnull:
+    for ancestor in self.spanstack:ancestor['hasnull']=True
+   self.spanstack.append(rec)
+   if d=='1':self.inroot=True
+ def handle_endtag(self,tag):
+  if tag=='span':
+   rec=self.spanstack.pop()
+   if rec['label'] and rec['depth']!='1' and not rec.get('hasnull') and not rec['null']:self.ranges[rec['side']][rec['label']]=[rec['start'],self.offset[rec['side']]]
+   if rec['isroot']:self.inroot=False
+ def handle_data(self,data):
+  if self.inroot and not any(r['null'] for r in self.spanstack):self.text[self.side]+=data;self.offset[self.side]+=len(data)
+src={r['seq']:r for r in json.loads((A/'evidence/source.json').read_text())};summ=[]
+for seq in (304,305,306):
+ D=A/str(seq);spec=json.loads((D/'spec.json').read_text())['segments'][0];want=json.loads((D/'intended-ranges.json').read_text());r=R();r.feed((D/'body.html').read_text());r.close();assert r.text=={'tib':src[seq]['wylie'],'eng':src[seq]['english']}
+ checks=[]
+ for sp in want['spans']:
+  lab='s'+str(seq)+sp['id'];gotT=r.ranges['tib'].get(lab);gotE=r.ranges['eng'].get(lab);assert gotT==sp['tib_range'],(seq,lab,gotT,sp['tib_range']);assert gotE==sp['eng_range'],(seq,lab,gotE,sp['eng_range']);checks.append({'id':sp['id'],'tib_actual':gotT,'eng_actual':gotE,'matches_intended':True})
+ gp=json.loads((D/'generator.json').read_text());att=A/gp['attempt'];assert (D/'body.html').read_bytes()==(att/'stdout.html').read_bytes();assert (D/'spec.json').read_bytes()==(att/'stdin.json').read_bytes();assert (D/'generator.exit.txt').read_text()=='0\n';assert (D/'generator.stderr.txt').stat().st_size==0
+ counts={'spans':len(spec['spans']),'nonnull_spans':sum(x['eng'] is not None for x in spec['spans']),'nulls':sum(x['eng'] is None for x in spec['spans']),'d5':sum(x['d']==5 for x in spec['spans']),'d7':sum(x['d']==7 for x in spec['spans']),'d3':sum(x['d']==3 for x in spec['spans']),'d6':sum(x['d']==6 for x in spec['spans']),'errata':len(json.loads((D/'errata.json').read_text()))}
+ proof={'schema':'english-first-body-fidelity-v1','source_row':{'course':'C05','seq':seq,'id':src[seq]['id']},'body_sha256':h(D/'body.html'),'spec_sha256':h(D/'spec.json'),'source_text_recovered_verbatim':True,'intended_ranges_match_all_rendered_spans':True,'native_stdout_equals_body':True,'native_input_equals_spec':True,'native_exit_code':0,'native_stderr_bytes':0,'counts':counts,'actual_ranges':checks};(D/'verification.json').write_text(json.dumps(proof,indent=2)+'\n');summ.append({'seq':seq,**counts,'body_bytes':(D/'body.html').stat().st_size,'body_sha256':h(D/'body.html'),'spec_sha256':h(D/'spec.json')})
+ print('C05:'+str(seq),'PASS',json.dumps(counts),'body',proof['body_sha256'])
+(A/'summary.json').write_text(json.dumps({'schema':'english-first-summary-v1','producer':'Codex','angle':'English-first','status':'frozen independent proposal after freeze-manifest.json is written','segments':summ},indent=2)+'\n')

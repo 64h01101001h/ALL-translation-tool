@@ -1,0 +1,38 @@
+"""Execute unchanged canonical bytes with the historical builder and read-only SQLite.
+No matching, depth, order, emission, or refusal behavior is replaced.
+"""
+import hashlib,json,pathlib,runpy,sqlite3,sys,types
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+W=ROOT.parents[2]/'campaign-worktree'
+BASE=json.loads((ROOT.parent/'proposal-baseline.json').read_text())
+def sha(b):return hashlib.sha256(b).hexdigest()
+def pinned_module(name,relative):
+ p=ROOT/'native'/('pin-'+relative.replace('/','__')+'.stdout')
+ b=p.read_bytes();pin=BASE['governing_git_pins'].get(relative)
+ if pin: assert sha(b)==pin['sha256']
+ else:
+  rec=json.loads(p.with_suffix('.command.json').read_text());assert sha(b)==rec['sha256']
+ module=types.ModuleType(name);module.__file__=str(W/relative)
+ sys.modules[name]=module
+ exec(compile(b,str(p),'exec'),module.__dict__)
+ return module
+H=pinned_module('hgm_tools','engines/hgm_tools.py')
+B=pinned_module('build_alignment_layer','tools/build_alignment_layer.py')
+native_connect=sqlite3.connect
+def readonly_connect(database,*args,**kwargs):
+ path=str(database)
+ expected=str(W/'build/hgm_spine_v27_2.db')
+ assert path in [expected,'file:'+expected+'?mode=ro'],path
+ kwargs['uri']=True
+ return native_connect('file:'+expected+'?mode=ro',*args,**kwargs)
+sqlite3.connect=readonly_connect
+def load_generator():
+ path=W/'tools/gen_alignment_page.py';b=path.read_bytes()
+ assert sha(b)==BASE['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+ g=types.ModuleType('canonical_generator');g.__file__=str(path)
+ exec(compile(b,str(path),'exec'),g.__dict__)
+ return g
+if __name__=='__main__':
+ path=W/'tools/gen_alignment_page.py'
+ assert sha(path.read_bytes())==BASE['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+ runpy.run_path(str(path),run_name='__main__')
