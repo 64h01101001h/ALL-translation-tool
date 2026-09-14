@@ -48757,10 +48757,19 @@ int main(int argc, char** argv) {
                                                 "sems can");
             lk(h.contains(QString::fromUtf8("≡")),
                "known term returns Geshe Michael Roach equivalents");
+            // This gate probed for "Chandra" and "Hopkins" and then said
+            // `refAt < 0 || hgmAt < refAt` -- so when neither string was
+            // found it passed for that reason alone. lookupResultsHtml emits
+            // neither of them; its reference zone is labelled REFERENCE ·
+            // LOCAL ONLY. The gate was therefore vacuously true and had never
+            // once tested the ordering it is named for.
             const int hgmAt = h.indexOf(QString::fromUtf8("≡"));
-            int refAt = h.indexOf("Chandra");
-            if (refAt < 0) refAt = h.indexOf("Hopkins");
-            lk(refAt < 0 || hgmAt < refAt,
+            const int refAt = h.indexOf("REFERENCE");
+            lk(refAt >= 0,
+               "the lookup page emits a reference zone at all — without one "
+               "there is nothing to order the binding layer against, and a "
+               "gate that passes on its absence is not a gate");
+            lk(hgmAt >= 0 && refAt >= 0 && hgmAt < refAt,
                "GMR binding layer precedes reference layers");
             const QString hh = lookupResultsHtml(spine, refdict, mvp,
                                                  whitney, colloq,

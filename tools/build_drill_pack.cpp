@@ -11,6 +11,7 @@
 // only ever renders Unicode it was handed. Anything that would not convert
 // arrives already flagged in ⟨ ⟩ and can never be mistaken for script.
 #include "allcore/chantline.h"
+#include "allcore/engines.h"
 #include "allcore/drills.h"
 #include "allcore/lattice.h"
 #include "allcore/spine.h"
@@ -444,6 +445,7 @@ int main(int argc, char** argv) {
         // parity pass, which is the same omission twice.
         out += "\"silent\":[";
         int nsp = 0;
+        bool sawGisFamily = false;
         {
             std::ifstream af("data/alignment/alignment_full_v1.json");
             std::string j((std::istreambuf_iterator<char>(af)),
@@ -463,6 +465,21 @@ int main(int argc, char** argv) {
                     return e == std::string::npos ? std::string()
                                                   : j.substr(b, e - b);
                 };
+                // `tib` is WYLIE. tib() converts ACIP, and the two are not
+                // the same alphabet: pushing wylie through it turns every d
+                // into a retroflex (dang -> ཌཎག, bdag -> བཌག, du -> ཌུ)
+                // and REFUSES every s-final word outright (gyis, rdzogs,
+                // sangs rgyas all came back ⟨flagged⟩). The refusals were
+                // caught by the ⟨ ⟩ guard below and dropped, which is why the
+                // whole gis-family was quietly missing from this drill and
+                // looked like scarcity in the bank. The fabrications were not
+                // caught by anything, because they convert "successfully".
+                //
+                // The peel section twenty lines down carries a comment warning
+                // about this exact mistake. It was fixed there and not here.
+                // Prefer the bank's ACIP field; fall back to the wylie one
+                // through the WYLIE converter, never through this one.
+                const std::string tibAcip = sfield("tib_acip");
                 const std::string tibw = sfield("tib");
                 const std::string course = sfield("course");
                 // the record runs from rec to the next '}'; "eng":null
@@ -472,7 +489,9 @@ int main(int argc, char** argv) {
                 const bool rendered =
                     !(nullAt != std::string::npos && recEnd != std::string::npos &&
                       nullAt < recEnd);
-                const std::string tibGlyph = tib(tibw);
+                const std::string tibGlyph =
+                    !tibAcip.empty() ? tib(tibAcip)
+                                     : allcore::wylieToUnicode(tibw).first;
                 if (!tibw.empty() && !course.empty() &&
                     tibGlyph.find("\u27e8") == std::string::npos) {
                     if (nsp) out += ",";
@@ -484,9 +503,25 @@ int main(int argc, char** argv) {
                            (rendered ? "true" : "false");
                     out += "}";
                     ++nsp;
+                    if (tibw == "gyis" || tibw == "kyis" || tibw == "gis")
+                        sawGisFamily = true;
                 }
                 at += 11;
             }
+        }
+        // The gis-family is the commonest agentive marking in the language. If
+        // none of gyis/kyis/gis survives into this drill, the wylie is being
+        // pushed through the ACIP converter again -- which refuses every
+        // s-final word, so the whole family vanishes and looks like scarcity
+        // in the bank rather than a converter picked wrong. That is exactly
+        // what had happened, and nothing noticed because the refusals were
+        // dropped by the ⟨ ⟩ guard on their way out.
+        if (nsp > 0 && !sawGisFamily) {
+            std::fprintf(stderr,
+                "REFUSED: the silent-particle drill contains no gyis/kyis/gis "
+                "at all.\n  That family cannot really be absent; check which "
+                "converter the wylie field is going through.\n");
+            return 1;
         }
         out += "],\"second\":[";
         int nse = 0;

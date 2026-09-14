@@ -59,6 +59,23 @@ int main(int argc, char** argv) {
     CHECK(prompt.user.find("HGM term anchors") != std::string::npos &&
               prompt.user.find("pillar") != std::string::npos,
           "user prompt injects verified anchors");
+    // The gloss reaching the model was gated; its TIER was not, though the
+    // prompt itself calls that mandatory. Without the tier the model cannot
+    // tell his curated English from the machine's auto-aligned match, and
+    // rule 1 stops holding at exactly the boundary where we can least see it.
+    {
+        std::string tier;
+        for (const auto& a : pre.anchors)
+            if (a.wylie == "ka ba") tier = a.tier;
+        CHECK(!tier.empty(),
+              "the ka ba anchor carries a tier at all");
+        CHECK(prompt.user.find("[" + tier + "]") != std::string::npos,
+              "and that tier TRAVELS to the model beside the gloss");
+        CHECK(prompt.user.find("auto-aligned tier = PROVISIONAL") !=
+                  std::string::npos,
+              "and the prompt tells the model what to do with a provisional "
+              "one, in words");
+    }
     CHECK(prompt.user.find("<<INPUT START>>") != std::string::npos &&
               prompt.user.find("SNGA DRO'I KA BA") != std::string::npos,
           "user prompt carries the passage");
