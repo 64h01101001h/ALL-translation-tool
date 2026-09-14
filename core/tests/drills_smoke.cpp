@@ -292,8 +292,8 @@ int main(int argc, char** argv) {
               "blank: an empty segment is refused with a reason");
     }
 
-    {   // An English field that was never English. 702 of the corpus's
-        // 42,013 segments carry a chant transliteration or an untranslated
+    {   // An English field that was never English. 1,066 of the corpus's
+        // 42,199 segments carry a chant transliteration or an untranslated
         // Sanskrit mantra where the translation should be, and every drill
         // that showed one printed it as "his English for this segment".
         // 64 were in the shipped pack when this was found.
