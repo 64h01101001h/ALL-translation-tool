@@ -1,6 +1,7 @@
 #include "allcore/wilsonparse.h"
 
 #include <algorithm>
+#include <cctype>
 
 #include "allcore/contractions.h"
 #include "allcore/engines.h"
@@ -85,8 +86,20 @@ bool verbEvidenceTok(const OverlayDoc& doc, int t) {
         const auto& e = doc.entries[doc.spans[ix].entry_ix];
         if (!e.tenses.empty()) return true;
         if (classifyVerbWithTenses(e.wylie, e.tenses)) return true;
+        // The third copy of this rule, and the third time it needs the same
+        // two guards. `la` carries 108 glosses, one beginning "to ", and it is
+        // the commonest particle in the language; `phyir`, `du`, `su` and `tu`
+        // carry one too. Without this a case particle is evidence of a verb.
+        // spotVerb got the guards on 2026-09-13 and verbEvidenceAt the same
+        // day; this one was missed both times.
+        std::string upper = e.wylie;
+        for (auto& ch : upper)
+            if (ch >= 'a' && ch <= 'z') ch = (char)(ch - 'a' + 'A');
+        if (classifyParticle(upper) != nullptr) continue;
         for (const auto& g : e.hgm_gloss)
-            if (g.rfind("to ", 0) == 0) return true;
+            if (g.rfind("to ", 0) == 0 && g.size() > 3 &&
+                std::isalpha((unsigned char)g[3]))
+                return true;
     }
     return false;
 }
@@ -228,19 +241,31 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                 // the designation unit is the WORD: prefer the longest
                 // GLOSSED span starting here (so sangs rgyas parses as one
                 // term, not two syllables), staying inside the clause
+                // Glossed beats unglossed; among glossed, HIS tier beats the
+                // machine's; extent is only the last tiebreak. Ranking by
+                // length inside the glossed set let a longer auto-aligned span
+                // stand in for a curated one, which is walk::bestGlossSpan's
+                // defect in a second place: 101,733 GMR-tier terms across the
+                // corpus were being shadowed this way.
                 int chosen = -1, bestLen = 0;
-                bool bestGlossed = false;
+                bool bestGlossed = false, bestProv = true;
                 for (int ix : at) {
                     const auto& s2 = doc.spans[ix];
                     if (s2.beg != t || s2.end > cl.end) continue;
-                    const bool g =
-                        !doc.entries[s2.entry_ix].hgm_gloss.empty();
+                    const auto& e2 = doc.entries[s2.entry_ix];
+                    const bool g = !e2.hgm_gloss.empty();
+                    const bool prov = e2.provisional();
                     const int len = s2.end - s2.beg;
-                    if (chosen < 0 || (g && !bestGlossed) ||
-                        (g == bestGlossed && len > bestLen)) {
+                    const bool better =
+                        chosen < 0 ||
+                        (g && !bestGlossed) ||
+                        (g == bestGlossed && g && !prov && bestProv) ||
+                        (g == bestGlossed && prov == bestProv && len > bestLen);
+                    if (better) {
                         chosen = ix;
                         bestLen = len;
                         bestGlossed = g;
+                        bestProv = prov;
                     }
                 }
                 if (chosen < 0) chosen = at.front();
