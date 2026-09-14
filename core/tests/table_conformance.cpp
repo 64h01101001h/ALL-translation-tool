@@ -220,6 +220,57 @@ int main(int argc, char** argv) {
               "7th and claims no reason");
     }
 
+    {   // wilsonParse ranks glossed-over-unglossed, then HIS tier, then
+        // extent. It used to stop at extent, so a longer auto-aligned span
+        // stood in for a curated one -- walk::bestGlossSpan's defect in a
+        // second place. RGYAL BA'I YON TAN came back "farthest shore" with
+        // `rgyal ba` sitting underneath, curated, reading "Victor".
+        auto doc = allcore::buildOverlay(spine,
+                                         "RGYAL BA'I YON TAN RAB RDZOGS");
+        auto ps = allcore::wilsonParse(
+            spine, doc,
+            allcore::refineClauses(
+                doc, allcore::splitClauses(doc.tokens, doc.barrier_after)));
+        bool sawVictor = false, sawShore = false;
+        for (const auto& pp : ps)
+            for (const auto& u : pp.units) {
+                if (u.detail.find("Victor") != std::string::npos) sawVictor = true;
+                if (u.detail.find("farthest shore") != std::string::npos)
+                    sawShore = true;
+            }
+        CHECK(sawVictor,
+              "conformance: wilsonParse shows the curated gloss for rgyal ba");
+        CHECK(!sawShore,
+              "conformance: and does not prefer the longer auto-aligned span "
+              "over it (rule 1)");
+    }
+    {   // verbEvidenceTok needed the same two guards spotVerb and
+        // verbEvidenceAt were given: a particle carrying a gloss that begins
+        // "to " is not evidence of a verb. `la` has one, and so do phyir, du,
+        // su and tu. This was the THIRD copy of that rule in the tree, and it
+        // decides whether MI/MA is read as a negation.
+        //
+        // MI LA SKYES KYANG is "even though born a human". Without the guard
+        // the `la` after `mi` looked like a verb, so `mi` was labelled a
+        // negation particle negating it. The fixture is C-segment 235's
+        // opening. The guard moves 87 units across 6,000 segments — also
+        // rescuing BAR, which was being called an infinitive marker where it
+        // is a postposition.
+        auto doc = allcore::buildOverlay(spine, "MI LA SKYES KYANG");
+        auto ps = allcore::wilsonParse(
+            spine, doc,
+            allcore::refineClauses(
+                doc, allcore::splitClauses(doc.tokens, doc.barrier_after)));
+        bool miNegation = false;
+        for (const auto& pp : ps)
+            for (const auto& u : pp.units)
+                if (u.text == "MI" && u.category == "negation particle")
+                    miNegation = true;
+        CHECK(!miNegation,
+              "conformance: mi before a CASE PARTICLE is not read as a "
+              "negation - a particle's \"to \" gloss is not verb evidence");
+    }
+
     std::printf("table_conformance: %s (%d failure(s))\n",
                 failures ? "FAILURES" : "ALL PASS", failures);
     return failures ? 1 : 0;
