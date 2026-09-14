@@ -370,6 +370,25 @@ struct WeakSpotsSheet: View {
 ///                         desktop, and the two cannot sync; a second
 ///                         unconnected deck here would compete with the real
 ///                         one.
+///   the chunk-order drill's `plan` and `markers` — the core's OrderDrill
+///                         carries both and the pack bakes neither, which
+///                         until 2026-09-14 was an undeclared omission rather
+///                         than a decision. Declared now, with reasons.
+///                         `plan` is planReading's reading-order guidance, and
+///                         the alignment bank says it is NOT established at
+///                         this level: 51% against 59% over 112 spans, with
+///                         only 21 separating them. Worse, it answers a
+///                         DIFFERENT question than this drill asks — this one
+///                         asks the order he WROTE the chunks in, and the
+///                         reading order is the Reading order drill. Putting
+///                         unestablished guidance about question B inside the
+///                         reveal for question A is how the two get conflated,
+///                         which is the confusion this drill's own warning
+///                         exists to prevent.
+///                         `markers` feeds the desktop's miss taxonomy — which
+///                         role you got wrong — and the phone has no miss
+///                         taxonomy for this drill to feed. It ships when that
+///                         does.
 ///   Translate & compare — needs the whole 105,634-entry dictionary run
 ///                         against a draft as you type it. Not bakeable.
 // The names here are the picker's whole vocabulary, so they are kept to a
