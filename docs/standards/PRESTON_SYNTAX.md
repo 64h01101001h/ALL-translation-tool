@@ -336,6 +336,37 @@ captures that, which is why both are recorded.
 
 **`mchis` was checked and is not a gap** — it carries tense forms already.
 
+## What a "corpus segment" actually is — and what that does to the figures
+
+Every verb-coverage number on this page is measured over `corpus_segments`, so
+it matters what one of those is. Measured 2026-09-13 over all 42,199:
+
+| | |
+|---|---:|
+| end with a **shad** | 79% |
+| end with a **terminating particle** | 5% |
+| end with both | 4% |
+
+A shad separates units of many sizes; the terminating particle is what closes a
+Tibetan **sentence**. So a corpus segment is a shad-delimited clause group, and
+**95% of them are not sentence-final.**
+
+That qualifies the verb figures rather than overturning them. A clause is still
+expected to carry a verb or imply one, so verb-absence in these units remains
+worth measuring — but some share of the "missing" verbs are simply in the
+*next* segment, and no figure here separates those from genuinely verbless
+constructions. Preston's warning on verse (vol. 1 p.xii) compounds it: metre
+drops syntactic elements, so a verse line's missing verb is a fact about the
+metre and not about the grammar.
+
+**A methodological note that cost two measurements today.** The first version
+of this measurement used the `wylie` column and reported 18%. That column has
+its punctuation **stripped**; `acip` preserves it. Same error shape as the
+verb-coverage figure that read 52% before the sample was filtered to Tibetan:
+in both cases the query ran, returned a plausible number, and was measuring
+something other than what it claimed. Check what a column contains before
+counting it.
+
 ## Deferred, with the reason: unifying the la don resolver
 
 `narrowLaDon` in cases.cpp and `caseLabel` in wilsonparse.cpp both resolve a la
